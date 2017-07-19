@@ -22,18 +22,6 @@ class HintPageParameterSerializer implements Serializable {
 
     private HintPageParameterSerializer() {}
 
-//    private final EntityModel entityModel;
-//
-//    public HintPageParameterSerializer(final EntityModel entityModel) {
-//        this.entityModel = entityModel;
-//    }
-
-//    public void hintStoreToPageParameters(
-//            final PageParameters pageParameters) {
-//        EntityModel entityModel = this.entityModel;
-//        hintStoreToPageParameters(pageParameters, entityModel);
-//    }
-
     public static void hintStoreToPageParameters(final PageParameters pageParameters, final EntityModel entityModel) {
         ObjectAdapterMemento objectAdapterMemento = entityModel.getObjectAdapterMemento();
         hintStoreToPageParameters(pageParameters, objectAdapterMemento);
@@ -53,17 +41,8 @@ class HintPageParameterSerializer implements Serializable {
         }
     }
 
-//    public void updateHintStore(final PageParameters pageParameters) {
-//        EntityModel entityModel = this.entityModel;
-//        updateHintStore(pageParameters, entityModel);
-//    }
 
-//    public static void updateHintStore(final PageParameters pageParameters, final EntityModel entityModel) {
-//        ObjectAdapterMemento objectAdapterMemento = entityModel.getObjectAdapterMemento();
-//        updateHintStore(pageParameters, objectAdapterMemento);
-//    }
-
-    public static void updateHintStore(
+    public static void updateHintStoreUNUSED(
             final PageParameters pageParameters,
             final ObjectAdapterMemento objectAdapterMemento) {
         if(objectAdapterMemento == null) {
