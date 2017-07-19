@@ -20,6 +20,8 @@ package org.apache.isis.viewer.wicket.ui.components.entity.fieldset;
 
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.base.Strings;
@@ -32,10 +34,12 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.RepeatingView;
 
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.component.FieldSet;
 import org.apache.isis.applib.layout.component.PropertyLayoutData;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.ObjectSpecificationException;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -172,6 +176,21 @@ public class PropertyGroup extends PanelAbstract<EntityModel> implements HasDyna
                             }
                         }
                     })
+                .filter(new Predicate<ObjectAssociation>() {
+                    @Override public boolean apply(@Nullable final ObjectAssociation objectAssociation) {
+                        if(objectAssociation == null) {
+                            return false;
+                        }
+                        final HiddenFacet facet = objectAssociation.getFacet(HiddenFacet.class);
+                        if(facet != null && !facet.isNoop()) {
+                            // static invisible.
+                            if(facet.where() == Where.EVERYWHERE || facet.where() == Where.OBJECT_FORMS) {
+                                return false;
+                            }
+                        }
+                        return true;
+                    }
+                })
                     .toList();
     }
 
