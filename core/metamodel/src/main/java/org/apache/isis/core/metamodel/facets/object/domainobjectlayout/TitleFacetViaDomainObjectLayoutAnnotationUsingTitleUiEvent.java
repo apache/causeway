@@ -32,6 +32,7 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacetAbstract;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -98,7 +99,16 @@ public class TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent extends 
             return translatedTitle.translate(translationService, translationContext);
         }
         final String title = titleUiEvent.getTitle();
-        return title; // could be null
+
+        if(title == null) {
+            // ie no subscribers out there...
+            final Facet underlyingFacet = getUnderlyingFacet();
+            if(underlyingFacet instanceof TitleFacet) {
+                final TitleFacet underlyingTitleFacet = (TitleFacet) underlyingFacet;
+                return underlyingTitleFacet.title(owningAdapter);
+            }
+        }
+        return title;
     }
 
     private TitleUiEvent<Object> newTitleUiEvent(final ObjectAdapter owningAdapter) {

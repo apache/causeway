@@ -78,14 +78,24 @@ public class CssClassFacetViaDomainObjectLayoutAnnotationUsingCssClassUiEvent ex
     }
 
     @Override
-    public String cssClass(final ObjectAdapter objectAdapter) {
+    public String cssClass(final ObjectAdapter owningAdapter) {
 
-        final CssClassUiEvent<Object> cssClassUiEvent = newCssClassUiEvent(objectAdapter);
+        final CssClassUiEvent<Object> cssClassUiEvent = newCssClassUiEvent(owningAdapter);
 
         eventBusService.post(cssClassUiEvent);
 
         final String cssClass = cssClassUiEvent.getCssClass();
-        return cssClass; // could be null
+
+        if(cssClass == null) {
+            // ie no subscribers out there...
+            final Facet underlyingFacet = getUnderlyingFacet();
+            if(underlyingFacet instanceof CssClassFacet) {
+                final CssClassFacet underlyingCssClassFacet = (CssClassFacet) underlyingFacet;
+                return underlyingCssClassFacet.cssClass(owningAdapter);
+            }
+        }
+
+        return cssClass;
     }
 
     private CssClassUiEvent<Object> newCssClassUiEvent(final ObjectAdapter owningAdapter) {
