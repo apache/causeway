@@ -66,6 +66,7 @@ import org.apache.wicket.request.cycle.RequestCycleListenerCollection;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.settings.DebugSettings;
 import org.apache.wicket.settings.RequestCycleSettings;
+import org.apache.wicket.util.IContextProvider;
 import org.apache.wicket.util.time.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -262,6 +263,23 @@ public class IsisWicketApplication
         // addListenerToStripRemovedComponentsFromAjaxTargetResponse();
 
         super.internalInit();
+    }
+
+    @Override
+    public Application setAjaxRequestTargetProvider(final IContextProvider<AjaxRequestTarget, Page> ajaxRequestTargetProvider) {
+        final Application application = super.setAjaxRequestTargetProvider(new IContextProvider<AjaxRequestTarget, Page>(){
+            @Override
+            public AjaxRequestTarget get(final Page context) {
+                return decorate(ajaxRequestTargetProvider.get(context));
+            }
+
+            AjaxRequestTarget decorate(final AjaxRequestTarget ajaxRequestTarget) {
+                ajaxRequestTarget.registerRespondListener(
+                        new TargetRespondListenerToResetQueryResultCache());
+                return ajaxRequestTarget;
+            }
+        } );
+        return application;
     }
 
     // idea here is to avoid XmlPartialPageUpdate spitting out warnings, eg:
