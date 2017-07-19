@@ -84,7 +84,7 @@ public class BreadcrumbPanel extends PanelAbstract<IModel<Void>> {
             @Override
             public String getIdValue(EntityModel choice) {
                 try {
-                    final PageParameters pageParameters = choice.getPageParameters();
+                    final PageParameters pageParameters = choice.getPageParametersWithoutUiHints();
                     final String oidStr = PageParameterNames.OBJECT_OID.getStringFrom(pageParameters);
                     final RootOid result = RootOid.deString(oidStr);
                     return OidMarshaller.INSTANCE.marshal(result);
@@ -136,7 +136,7 @@ public class BreadcrumbPanel extends PanelAbstract<IModel<Void>> {
                         breadcrumbModel.remove(oidStr);
                         return;
                     }
-                    setResponsePage(EntityPage.class, selectedModel.getPageParameters());
+                    setResponsePage(EntityPage.class, selectedModel.getPageParametersWithoutUiHints());
                 }
             });
         

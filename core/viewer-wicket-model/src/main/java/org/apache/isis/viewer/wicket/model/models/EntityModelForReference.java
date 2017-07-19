@@ -57,10 +57,7 @@ public class EntityModelForReference implements ObjectAdapterModel {
 
     @Override
     public PageParameters getPageParametersWithoutUiHints() {
-        PageParameters pageParameters = createPageParameters(getObject());
-        ObjectAdapterMemento oam = ObjectAdapterMemento.createOrNull(getObject());
-        HintPageParameterSerializer.hintStoreToPageParameters(pageParameters, oam);
-        return pageParameters;
+        return createPageParameters(getObject());
     }
 
     @Override

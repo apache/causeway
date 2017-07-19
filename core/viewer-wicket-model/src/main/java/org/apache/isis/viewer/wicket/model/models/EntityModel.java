@@ -212,6 +212,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements Obj
         return false;
     }
 
+    @Override
     public PageParameters getPageParametersWithoutUiHints() {
         return createPageParameters(getObject());
     }

@@ -39,6 +39,8 @@ public abstract class BookmarkableModel<T> extends ModelAbstract<T>  {
      */
     public abstract PageParameters getPageParameters();
 
+    public abstract PageParameters getPageParametersWithoutUiHints();
+
     public abstract boolean hasAsRootPolicy();
     
     public abstract String getTitle();

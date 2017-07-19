@@ -198,7 +198,8 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
     // BookmarkableModel
     //////////////////////////////////////////////////
 
-    public PageParameters getPageParameters() {
+    @Override
+    public PageParameters getPageParametersWithoutUiHints() {
         final ObjectAdapter adapter = getTargetAdapter();
         final ObjectAction objectAction = getActionMemento().getAction(getSpecificationLoader());
         final PageParameters pageParameters = createPageParameters(
@@ -213,6 +214,11 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
 
         return pageParameters;
     }
+
+    public PageParameters getPageParameters() {
+        return getPageParametersWithoutUiHints();
+    }
+
 
     @Override
     public String getTitle() {

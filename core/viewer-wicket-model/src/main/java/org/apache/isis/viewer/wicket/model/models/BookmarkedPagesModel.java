@@ -49,7 +49,7 @@ public class BookmarkedPagesModel extends ModelAbstract<List<BookmarkTreeNode>> 
         // hack: remove any garbage that might've got stored in 'rootNodes'
         cleanUpGarbage(rootNodes);
         
-        final PageParameters candidatePP = bookmarkableModel.getPageParameters();
+        final PageParameters candidatePP = bookmarkableModel.getPageParametersWithoutUiHints();
         RootOid oid = BookmarkTreeNode.oidFrom(candidatePP);
         if(oid == null) {
             // ignore

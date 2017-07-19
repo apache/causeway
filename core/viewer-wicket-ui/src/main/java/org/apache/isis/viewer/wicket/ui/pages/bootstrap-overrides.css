@@ -390,6 +390,7 @@ div.entityHeaderPanel .entityActions .cssMenuPanel .cssMenuItems:first-child {
     font-size: 1.8em;
     font-weight:normal;
     text-decoration:none;
+    padding-right: 30px;
 }
 
 
