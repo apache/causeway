@@ -405,6 +405,14 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
 
         addFactory(new GridFacetFactory());
 
+        // must come before DomainObjectLayoutFacetFactory
+        // (so subscribers on titleUi event etc can override)
+        addFactory(new TitleAnnotationFacetFactory());
+        addFactory(new TitleFacetViaMethodsFactory());
+        addFactory(new IconFacetMethodFactory());
+        addFactory(new CssClassFacetMethodFactory());
+
+
         addFactory(new DomainServiceLayoutFacetFactory());
         addFactory(new DomainObjectLayoutFacetFactory());
         // must come after MultiLine
@@ -413,13 +421,7 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(new ActionLayoutFacetFactory());
         addFactory(new CollectionLayoutFacetFactory());
 
-        // must come after DomainObjectLayoutFacetFactory
-        addFactory(new TitleAnnotationFacetFactory());
-        addFactory(new TitleFacetViaMethodsFactory());
-        addFactory(new IconFacetMethodFactory());
-        addFactory(new CssClassFacetMethodFactory());
 
-        
         addFactory(new NamedFacetOnTypeAnnotationFactory());
         addFactory(new NamedFacetOnMemberFactory());
         
