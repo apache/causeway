@@ -136,7 +136,7 @@ This table summarises all releases of Apache Isis to date.
 
 | xref:r1.7.0[1.7.0]
 | 18-oct-2014
-| Module functionality previously in 1.6.0 now retired; use http://isisaddons.org[Isis Addons] (non-ASF) instead.
+| Module functionality previously in 1.6.0 now retired; use link:http://www.isisaddons.org[Isis Addons] (non-ASF) instead.
 | 4
 | 9
 | 20

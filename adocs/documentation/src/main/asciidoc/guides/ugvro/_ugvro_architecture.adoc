@@ -46,7 +46,7 @@ can be many such implementations, each handling a different target domain type.
 
 This diagram shows how these services collaborate:
 
-image::{_imagesdir}reference-services-spi/RepresentationService/service-collaborations.png[width="800px",link="{_imagesdir}reference-services-spi/RepresentationService/service-collaborations.png"]
+image::{_imagesdir}RepresentationService/service-collaborations.png[width="800px",link="{_imagesdir}RepresentationService/service-collaborations.png"]
 
 
 Taken together these domain services offer a lot of flexibility in terms of the representations that can be generated

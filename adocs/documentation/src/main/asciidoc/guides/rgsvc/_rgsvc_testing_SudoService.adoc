@@ -120,7 +120,7 @@ public interface SudoService {
 <1> Called by `SudoService#sudo(...)`, prior to invoking its `Runnable` or `Callable`.
 <2> Called by `SudoService#sudo(...)`, after its `Runnable` or `Callable` has been invoked.
 
-The names of these methods were chosen based on link:href:https://shiro.apache.org/static/1.2.6/apidocs/org/apache/shiro/subject/Subject.html#runAs-org.apache.shiro.subject.PrincipalCollection-[similar names within Shiro].
+The names of these methods were chosen based on link:https://shiro.apache.org/static/1.2.6/apidocs/org/apache/shiro/subject/Subject.html#runAs-org.apache.shiro.subject.PrincipalCollection-[similar names within Shiro].
 
 
 

@@ -19,7 +19,7 @@ Notice: Licensed to the Apache Software Foundation (ASF) under one
  under the License.
 endif::env-github[]
 
-This directory contains the source documentation that constitutes both the Apache Isis' documentation (meaning the website and the users' guide, the reference guide and contributors' guide)   It is written using http://www.methods.co.nz/asciidoc/[Asciidoc], specifically the link:asciidoctor.org/[Asciidoctor] implementation.
+This directory contains the source documentation that constitutes both the Apache Isis' documentation (meaning the website and the users' guide, the reference guide and contributors' guide)   It is written using http://www.methods.co.nz/asciidoc/[Asciidoc], specifically the link:http://asciidoctor.org/[Asciidoctor] implementation.
 
 The website is created by running build tools (documented below) which create the HTML version of the site and guides.  You can therefore easily check the documentation before raising a pull request
 
@@ -83,8 +83,8 @@ The ruby script, `monitor.rb` emulates the `mvn site` command, regenerating any 
 
 To setup:
 
-* download and install ruby 2.0.0, from link:rubyinstaller.org/downloads[http://rubyinstaller.org/downloads/]
-* download devkit for the Ruby 2.0 installation, also from link:rubyinstaller.org/downloads[http://rubyinstaller.org/downloads/]. Then follow the link:https://github.com/oneclick/rubyinstaller/wiki/Development-Kit[installation instructions] on their wiki
+* download and install ruby 2.0.0, from link:http://rubyinstaller.org/downloads[http://rubyinstaller.org/downloads/]
+* download devkit for the Ruby 2.0 installation, also from link:http://rubyinstaller.org/downloads[http://rubyinstaller.org/downloads/]. Then follow the link:https://github.com/oneclick/rubyinstaller/wiki/Development-Kit[installation instructions] on their wiki
 
 
 [NOTE]

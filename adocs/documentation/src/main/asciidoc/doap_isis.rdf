@@ -31,7 +31,7 @@
     <description>Apache Isis is a framework for rapidly developing domain-driven apps in Java. Write your business logic in entities, domain services and repositories, and the framework dynamically (at runtime) generates a representation of that domain model as a webapp or as a RESTful API. For prototyping or production.</description>
     <bug-database rdf:resource="https://issues.apache.org/jira/browse/ISIS" />
     <mailing-list rdf:resource="http://isis.apache.org/support.html" />
-    <download-page rdf:resource="http://isis.apache.org/download.html" />
+    <download-page rdf:resource="http://isis.apache.org/downloads.html" />
     <programming-language>Java</programming-language>
     <category rdf:resource="http://projects.apache.org/category/web-framework" />
 

@@ -47,7 +47,7 @@ Suppose that you wanted to completely remove support for the (already deprecated
 isis.reflector.facets.exclude=org.apache.isis.core.metamodel.facets.object.actionorder.annotation.ActionOrderFacetAnnotationFactory
 ----
 
-Or, suppose you wanted to use the example https://github.com/apache/isis/blob/master/mothballed/misc/metamodel/namefile/src/main/java/org/apache/isis/example/metamodel/namefile/facets/NameFileFacetFactory.java["namefile"] `FacetFactory` as part of your programming conventions, use:
+Or, suppose you wanted to use the example https://github.com/apache/isis/blob/master/mothballed/misc/metamodel/namefile/src/main/java/org/apache/isis/metamodel/example/facets/NameFileFacetFactory.java["namefile"] `FacetFactory` as part of your programming conventions, use:
 
 [source,ini]
 ----

@@ -74,7 +74,7 @@ pass:[<br/>]
 * link:./guides/rgcfg/rgcfg.html[Core Config'n Properties^]  image:{_imagesdir}PDF-50.png[width="20px" link="./guides/rgcfg/rgcfg.pdf"]
 * link:./guides/rgcms/rgcms.html[Classes, Methods and Schema^]  image:{_imagesdir}PDF-50.png[width="20px" link="./guides/rgcms/rgcms.pdf"]
 * link:./guides/rgmvn/rgmvn.html[Apache Isis Maven plugin^]  image:{_imagesdir}PDF-50.png[width="20px" link="./guides/rgmvn/rgmvn.pdf"]
-* link:./guides/rgfis/rgfis.html[Framework Internal Services^]  image:{_imagesdir}PDF-50.png[width="20px" link="./guides/fwsvc/rgfis.pdf"]
+* link:./guides/rgfis/rgfis.html[Framework Internal Services^]  image:{_imagesdir}PDF-50.png[width="20px" link="./guides/rgfis/rgfis.pdf"]
 
 
 

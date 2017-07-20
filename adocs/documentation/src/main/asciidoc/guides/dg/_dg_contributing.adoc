@@ -113,9 +113,6 @@ why this is a problem, and how the patch fixes the problem when applied.
 
 
 
-Once your git repo is setup, the next thing you'll most likely want to do is to setup your development environment. See link:development-environment.html[here] for more details.
-
-
 
 
 
@@ -151,7 +148,7 @@ git checkout master
 git pull –ff-only
 </pre>
 
-If the `merge` or `pull` fails, it means that you must have made commits and there have been changes meanwhile on the remote `master`'s branch. You can use `gitk --all` to confirm. If this fails, see our link:git-cookbook.html[git cookbook] page for a procedure to retrospectively sort out this situation.
+If the `merge` or `pull` fails, it means that you must have made commits and there have been changes meanwhile on the remote `master`'s branch. You can use `gitk --all` to confirm. If this fails, see our xref:_dg_git-cookbook.adoc#[git cookbook] page for a procedure to retrospectively sort out this situation.
 
 
 

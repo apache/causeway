@@ -9,23 +9,23 @@ The (non-ASF) link:http://www.isisaddons.org[Isis Addons] website provides a num
 
 At the time of writing the addons available are:
 
-* link:github.com/isisaddons/isis-wicket-excel[Excel] component - to export a collection of domain objects as an Excel spreadsheet
+* link:http://github.com/isisaddons/isis-wicket-excel[Excel] component - to export a collection of domain objects as an Excel spreadsheet
 
-** see also the related link:github.com/isisaddons/isis-module-excel[Excel module] which can be used to read/import a spreadsheet as an collection of view models or entities
+** see also the related link:http://github.com/isisaddons/isis-module-excel[Excel module] which can be used to read/import a spreadsheet as an collection of view models or entities
 
-* link:github.com/isisaddons/isis-wicket-fullcalendar2[Fullcalendar2] component - to view a collection of domain objects (with a date) on a full-page calendar
+* link:http://github.com/isisaddons/isis-wicket-fullcalendar2[Fullcalendar2] component - to view a collection of domain objects (with a date) on a full-page calendar
 
-* link:github.com/isisaddons/isis-wicket-gmap3[Gmap3] component - to view a collection of domain objects with a location on a google map
+* link:http://github.com/isisaddons/isis-wicket-gmap3[Gmap3] component - to view a collection of domain objects with a location on a google map
 
 * (`1.15.0-SNAPSHOT`) link:github.com/isisaddons/isis-wicket-pdfjs[pdf.js] component - to view a Blob containing a PDF as an image
 
-* link:github.com/isisaddons/isis-wicket-summernote[summernote] component - to edit a string property using an RTF editor
+* link:http://github.com/isisaddons/isis-wicket-summernote[summernote] component - to edit a string property using an RTF editor
 
 ** (not yet compatible with `1.15.0-SNAPSHOT`)
 
-* link:github.com/isisaddons/isis-wicket-wickedcharts[wickedcharts] component - low-level integration with Highcharts charting library
+* link:http://github.com/isisaddons/isis-wicket-wickedcharts[wickedcharts] component - low-level integration with Highcharts charting library
 
-* link:github.com/isisaddons/isis-wicket-pdfjs[pdf.js] component - to view a Blob containing a PDF as an image
+* link:http://github.com/isisaddons/isis-wicket-pdfjs[pdf.js] component - to view a Blob containing a PDF as an image
 
 
 Check the link:http://www.isisaddons.org[Isis Addons] website for the most up-to-date list.

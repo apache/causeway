@@ -236,7 +236,7 @@ Update the Apache Isis (asciidoc) website:
 +
 A search for `archetypeGroupId=org.apache.isis.archetype` should find these pages.
 
-* update the link:../doap_isis.rdf[DOAP RDF] file (which provides a machine-parseable description of the project) should also be updated with details of the new release. Validate using the http://www.w3.org/RDF/Validator/[W3C RDF Validator] service. +
+* update the link:../../doap_isis.rdf[DOAP RDF] file (which provides a machine-parseable description of the project) should also be updated with details of the new release. Validate using the http://www.w3.org/RDF/Validator/[W3C RDF Validator] service. +
 +
 For more information on DOAP files, see these http://projects.apache.org/doap.html[Apache policy docs].
 
@@ -409,8 +409,8 @@ git push
 
 There are two libraries of modules, both non-ASF but open source, that should be released.
 
-* link:http://isisaddons.org[Isis Addons] - modules addressing technical concerns
-* link:http://catalog.incodehq.org[Incode Catalog] - modules for various generic business subdomains
+* link:http://www.isisaddons.org[Isis Addons] - modules addressing technical concerns
+* link:http://catalog.incode.org[Incode Catalog] - modules for various generic business subdomains
 
 These each use a common parent, `org.incode:incode-parent`.
 This must be released first, then both set of modules afterwards.
@@ -495,7 +495,7 @@ foreach -g incodehq/mavendeps sh bumpver_isis.sh 1.15.0-SNAPSHOT
 [[__cgcom_post-release-successful_release-non-asf-modules_isisaddons]]
 === Release Isis Addons
 
-Once the Apache Isis release is available, all of the (non-ASF) link:http://isisaddons.org[Isis Addons] should also be released.
+Once the Apache Isis release is available, all of the (non-ASF) link:http://www.isisaddons.org[Isis Addons] should also be released.
 
 Using this link:https://gist.github.com/danhaywood/21b5b885433fd8bc440da3fab88c91cb[gist] to invoke operations across all (or selected) addons:
 

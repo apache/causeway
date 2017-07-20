@@ -15,8 +15,8 @@ The ruby script, `monitor.rb` emulates the `mvn compile` command, regenerating a
 
 To setup:
 
-* download and install ruby 2.0.0, from link:rubyinstaller.org/downloads[http://rubyinstaller.org/downloads/]
-* download devkit for the Ruby 2.0 installation, also from link:rubyinstaller.org/downloads[http://rubyinstaller.org/downloads/]. Then follow the link:https://github.com/oneclick/rubyinstaller/wiki/Development-Kit[installation instructions] on their wiki
+* download and install ruby 2.0.0, from link:http://rubyinstaller.org/downloads[http://rubyinstaller.org/downloads/]
+* download devkit for the Ruby 2.0 installation, also from link:http://rubyinstaller.org/downloads[http://rubyinstaller.org/downloads/]. Then follow the link:https://github.com/oneclick/rubyinstaller/wiki/Development-Kit[installation instructions] on their wiki
 
 
 [NOTE]

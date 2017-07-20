@@ -15,7 +15,7 @@ The principal motivation is to allow more flexible representations to be generat
 
 In all there are three domain services that can influence the representations generated: this service, xref:../rgfis/rgfis.adoc#_rgfis_presentation-layer_ContentNegotiationService[`ContentNegotiationService`]and the xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_ContentMappingService[`ContentMappingService`].  The diagram below shows how these collaborate:
 
-image::{_imagesdir}reference-services-spi/RepresentationService/service-collaborations.png[width="700px",link="{_imagesdir}reference-services-spi/RepresentationService/service-collaborations.png"]
+image::{_imagesdir}RepresentationService/service-collaborations.png[width="700px",link="{_imagesdir}RepresentationService/service-collaborations.png"]
 
 The `RepresentationServiceForRestfulObjects` is the default implementation of this service; likewise `ContentNegotiationServiceXRoDomainType` is the default implementation of the `ContentNegotiationService`.  If you inspect the source code you'll see that the default implementation of this service's primary responsibility is to generate the default Restful Objects representations.  Therefore, if you what you want to do is to generate a _different _representation then in many cases replacing either this service _or_ the `ContentNegotiationService` will be equivalent (you'll notice that their SPIs are very similar).
 

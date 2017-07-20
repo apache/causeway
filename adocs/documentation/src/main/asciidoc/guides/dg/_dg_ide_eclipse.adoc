@@ -1,7 +1,7 @@
 [[_dg_ide_eclipse]]
 = Developing using Eclipse
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
-:_basedir: ../../../
+:_basedir: ../../
 :_imagesdir: images/
 :toc: right
 
@@ -83,11 +83,11 @@ See the earlier section on xref:../ugfun/ugfun.adoc#_ugfun_getting-started_datan
 Then, tell DataNucleus to use the project classpath:
 
 
-image::{_imagesdir}eclipse/eclipse-010-windows-preferences.png[width="750px",link="{_imagesdir}/appendices/dev-env/eclipse/eclipse-010-windows-preferences.png"]
+image::{_imagesdir}eclipse/eclipse-010-windows-preferences.png[width="750px",link="{_imagesdir}eclipse/eclipse-010-windows-preferences.png"]
 
 When the enhancer runs, it will print out to the console:
 
-image::{_imagesdir}eclipse/eclipse-120-console.png[width="500px",link="{_imagesdir}/appendices/dev-env/eclipse/eclipse-120-console.png"]
+image::{_imagesdir}eclipse/eclipse-120-console.png[width="500px",link="{_imagesdir}eclipse/eclipse-120-console.png"]
 
 
 [[__dg_ide_eclipse_workaround-for-path-limits]]
@@ -99,7 +99,7 @@ To fix this, we configure the enhancer to read from the `persistence.xml` file.
 
 As a prerequisite, first make sure that your domain object model has a `persistence.xml` file.  Then specify the `persistence-unit` in the project properties:
 
-image::{_imagesdir}eclipse/eclipse-025-project-properties.png[width="750px",link="{_imagesdir}/appendices/dev-env/eclipse/eclipse-025-project-properties.png"]
+image::{_imagesdir}eclipse/eclipse-025-project-properties.png[width="750px",link="{_imagesdir}eclipse/eclipse-025-project-properties.png.png"]
 
 
 === Workaround: If the enhancer fails
@@ -107,20 +107,20 @@ image::{_imagesdir}eclipse/eclipse-025-project-properties.png[width="750px",link
 On occasion it appears that Eclipse can attempt to run two instances of the DataNucleus enhancer. This is probably due to multiple Eclipse builders being defined; we've noticed multiple entries in the Eclipse's `Debug` view:
 
 
-image::{_imagesdir}eclipse/eclipse-210-enhancer-fails-duplicates.png[width="600px",link="{_imagesdir}/appendices/dev-env/eclipse/eclipse-210-enhancer-fails-duplicates.png"]
+image::{_imagesdir}eclipse/eclipse-210-enhancer-fails-duplicates.png[width="600px",link="{_imagesdir}eclipse/eclipse-210-enhancer-fails-duplicates.png"]
 
 
 At any rate, you'll know you've encountered this error if you see the following in the console:
 
 
-image::{_imagesdir}eclipse/eclipse-200-enhancer-fails-duplicates.png[width="600px",link="{_imagesdir}/appendices/dev-env/eclipse/eclipse-200-enhancer-fails-duplicates.png"]
+image::{_imagesdir}eclipse/eclipse-200-enhancer-fails-duplicates.png[width="600px",link="{_imagesdir}eclipse/eclipse-200-enhancer-fails-duplicates.png"]
 
 
 
 The best solution is to remove DataNucleus support and then to re-add it:
 
 
-image::{_imagesdir}eclipse/eclipse-220-enhancer-fails-duplicates.png[width="600px",link="{_imagesdir}/appendices/dev-env/eclipse/eclipse-220-enhancer-fails-duplicates.png"]
+image::{_imagesdir}eclipse/eclipse-220-enhancer-fails-duplicates.png[width="600px",link="{_imagesdir}eclipse/eclipse-220-enhancer-fails-duplicates.png"]
 
 
 If you consistently hit problems, then the final recourse is to disable the automatic enhancement and to remember to manually enhance your domain object model before each run.
@@ -161,7 +161,7 @@ In this section are a couple of options that will reduce the length of the chang
 
 === Setting up DCEVM
 
-link:github.com/dcevm/dcevm[DCEVM] enhances the JVM with true hot-swap adding/removing of methods as well as more
+link:http://github.com/dcevm/dcevm[DCEVM] enhances the JVM with true hot-swap adding/removing of methods as well as more
 reliable hot swapping of the implementation of existing methods.
 
 In the context of Apache Isis, this is very useful for contributed actions and mixins and also view models; you should

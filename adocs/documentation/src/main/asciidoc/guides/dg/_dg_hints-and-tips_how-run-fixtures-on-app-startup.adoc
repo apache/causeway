@@ -14,8 +14,8 @@ Use events?_
 
 
 The standard approach is to use xref:../ugtst/ugtst.adoc#_ugtst_fixture-scripts[fixture scripts].
-These can be run in on start-up typically by being specified in the xref:rgcsm.adoc#_rgcsm_classes_AppManifest-bootstrapping[`AppManifest`], see for
-example the xref:ug.adoc#_ug_getting-started_simpleapp-archetype[SimpleApp archetype].
+These can be run in on start-up typically by being specified in the xref:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[`AppManifest`], see for
+example the xref:../ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype].
 
 Alternatively just set "isis.fixtures" and "isis.persistor.datanucleus.install-fixtures" properties.
 

@@ -28,7 +28,7 @@ The development team for the original implementation consisted of just two devel
 
 == Supporting Open Source
 
-Much of Apache Isis' recent development has been driven out by the requirements of this application, so you can see for yourself how many of the features in Isis are used in real life.  Many of the (non-ASF) link:http://isisaddons.org[Isis Addons] also originate from the requirements of Estatio.
+Much of Apache Isis' recent development has been driven out by the requirements of this application, so you can see for yourself how many of the features in Isis are used in real life.  Many of the (non-ASF) link:http://www.isisaddons.org[Isis Addons] also originate from the requirements of Estatio.
 
 Estatio itself is also open source, licensed under Apache Software License and available on link:https://github.com/estatio/estatio[github].
 

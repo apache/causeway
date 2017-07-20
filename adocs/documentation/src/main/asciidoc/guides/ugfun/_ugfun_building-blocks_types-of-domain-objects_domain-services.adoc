@@ -59,7 +59,7 @@ It's worth extending the xref:../ugfun/ugfun.adoc#_ugfun_core-concepts_philosoph
 .The hexagonal architecture with Isis addons
 image::{_imagesdir}core-concepts/philosophy/hexagonal-architecture-addons.png[width="700px"]
 
-The (non-ASF) link:http://isisaddons.org[Isis Addons] provide SPI implementations of the common cross-cutting concerns.
+The (non-ASF) link:http://www.isisaddons.org[Isis Addons] provide SPI implementations of the common cross-cutting concerns.
 They also provide a number of APIs for domain objects to invoke (not shown in the diagram).
 You can also write your own domain services as well, for example to interface with some external CMS system, say.
 

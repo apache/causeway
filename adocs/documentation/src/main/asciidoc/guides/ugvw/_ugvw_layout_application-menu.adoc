@@ -149,7 +149,7 @@ viewer does _not_ place dividers between actions from different services on the 
 
 == Isis Add-on modules
 
-Some of the (non-ASF) link:http://isisaddons.org[Isis Addons] modules also provide services whose actions appear in top-level menus.
+Some of the (non-ASF) link:http://www.isisaddons.org[Isis Addons] modules also provide services whose actions appear in top-level menus.
 
 The http://github.com/isisaddons/isis-module-security[security]'s module places its domain service menus in three
 top-level menus:

@@ -48,7 +48,7 @@ public class DomainAppFixturesProvider implements FixtureScriptsSpecificationPro
 <5> if present, enables a "recreate objects and return first" action to be displayed in the UI
 
 
-The benefit of this design - decoupling the responsibilities of the superclass and the subclass - is that it ensures that there is always an instance of `FixtureScripts` available, even if the application itself doesn't provide one.  Some of the (non-ASF) link:http://isisaddons.org[Isis Addons] modules (eg http://github.com/isisaddons/isis-module-security[Isis addons' security] module) expect there to be a `FixtureScripts` service for seeding data, which has caused some confusion.
+The benefit of this design - decoupling the responsibilities of the superclass and the subclass - is that it ensures that there is always an instance of `FixtureScripts` available, even if the application itself doesn't provide one.  Some of the (non-ASF) link:http://www.isisaddons.org[Isis Addons] modules (eg http://github.com/isisaddons/isis-module-security[Isis addons' security] module) expect there to be a `FixtureScripts` service for seeding data, which has caused some confusion.
 
 By way of comparison, if using the older pre-1.9.0 approach then you would create a subclass:
 

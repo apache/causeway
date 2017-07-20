@@ -11,7 +11,7 @@ The optional xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_TableColumnO
 
 For example, suppose there is a `Customer` and an `Order`:
 
-[plantuml, {_imagesdir}/layouts/customer-order, png]
+[plantuml, {_imagesdir}layouts/customer-order, png]
 ....
 Customer "1" *--> "many" Order : orders
 

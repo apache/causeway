@@ -17,7 +17,7 @@
 * https://issues.apache.org/jira/browse/ISIS[JIRA]
 * http://github.com/apache/isis[Github mirror]
 * http://stackoverflow.com/questions/tagged/isis[Stack Overflow] (tagged=isis)
-* link:guides/dg.html#_dg_contributing[How to contribute]
+* link:guides/dg/dg.html#_dg_contributing[How to contribute]
 
 
 [[__help_commonly-used-resources]]
@@ -31,9 +31,9 @@
 [[__help_other-resources]]
 == Other Resources
 
-*  link:download.html[Source code repo] (on Apache)
+*  link:downloads.html[Source code repo] (on Apache)
 *  link:https://cwiki.apache.org/confluence/display/ISIS/Index[Confluence Wiki] (register then request perms via mailing list)
-*  link:doap_isis.rdf[DOAP RDF file] (as per link:http://projects.apache.org/doap.html[Apache requirements])
+*  link:./doap_isis.rdf[DOAP RDF file] (as per link:http://projects.apache.org/doap.html[Apache requirements])
 *  link:https://fisheye6.atlassian.com/changelog/isis-git[Fisheye]
 
 

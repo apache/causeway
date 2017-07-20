@@ -34,7 +34,7 @@ What all that means is that, if the underlying entities change, we are required 
 
 This diagram illustrates the three options available:
 
-image::{_imagesdir}reference-services-spi/ContentNegotiationService/facade-choices.png[width="700px",link="{_imagesdir}reference-services-spi/ContentNegotiationService/facade-choices.png"]
+image::{_imagesdir}ContentNegotiationService/facade-choices.png[width="700px",link="{_imagesdir}ContentNegotiationService/facade-choices.png"]
 
 
 
@@ -151,7 +151,7 @@ application/xml;profile=urn:org.restfulobjects:repr-types/object;x-ro-domain-typ
 
 will result in an XML serialization of that class:
 
-image::{_imagesdir}reference-services-spi/ContentNegotiationService/accept-xml.png[width="700px",link="{_imagesdir}reference-services-spi/ContentNegotiationService/accept-xml.png"]
+image::{_imagesdir}ContentNegotiationService/accept-xml.png[width="700px",link="{_imagesdir}ContentNegotiationService/accept-xml.png"]
 
 
 while similarly hitting the same URL with an `Accept` header of:
@@ -163,7 +163,7 @@ application/json;profile=urn:org.restfulobjects:repr-types/object;x-ro-domain-ty
 
 will result in the JSON serialization of that class:
 
-image::{_imagesdir}reference-services-spi/ContentNegotiationService/accept-json.png[width="700px",link="{_imagesdir}reference-services-spi/ContentNegotiationService/accept-json.png"]
+image::{_imagesdir}ContentNegotiationService/accept-json.png[width="700px",link="{_imagesdir}ContentNegotiationService/accept-json.png"]
 
 
 

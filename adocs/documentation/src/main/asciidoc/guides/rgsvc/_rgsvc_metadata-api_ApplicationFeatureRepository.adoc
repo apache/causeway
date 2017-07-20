@@ -11,7 +11,7 @@ class members (collectively: "application features") of the domain classes withi
 
 [TIP]
 ====
-This functionality was originally implemented as part of (non-ASF) link:http://isisaddons.org[Isis Addons] security
+This functionality was originally implemented as part of (non-ASF) link:http://www.isisaddons.org[Isis Addons] security
 module, where the string representations of the various features are used to represent permissions.
 ====
 

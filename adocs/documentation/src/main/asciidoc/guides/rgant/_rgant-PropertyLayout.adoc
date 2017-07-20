@@ -111,7 +111,7 @@ public class ToDoItem {
 }
 ----
 
-It is also possible to apply the annotation to actions of domain services that are acting as link:../../more-advanced-topics/how-to-01-062-How-to-decouple-dependencies-using-contributions.html[contributed properties].
+It is also possible to apply the annotation to actions of domain services that are acting as contributed properties.
 
 
 

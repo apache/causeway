@@ -81,7 +81,7 @@ Please note that when migrating from _rgsvc_core-domain-api_DomainObjectContaine
 
 == Removal of the `self-host` profile
 
-The `self-host` profile has been removed from the xref:guides/ug.adoc#_ug_getting-started_simpleapp-archetype[SimpleApp archetype].
+The `self-host` profile has been removed from the xref:guides/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype].
 Instead, run the application using either the `org.apache.isis.WebServer` main class, or `mvn jetty:run`, or build the
 WAR and deploy to a servlet container such as Tomcat.
 

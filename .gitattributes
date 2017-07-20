@@ -16,6 +16,7 @@
 *.xhtml text diff=html
 *.xml text
 *.txt text
+*.adoc text
 
 
 *.jar binary

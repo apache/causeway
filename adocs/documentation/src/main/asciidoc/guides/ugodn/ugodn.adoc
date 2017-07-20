@@ -12,7 +12,7 @@
 == DataNucleus Object Store
 
 The DataNucleus Object Store enables domain objects to be persisted to relational as well as NoSQL databases.
-The object store is implemented using link:http://datanuclues.org[DataNucleus].
+The object store is implemented using link:http://datanucleus.org[DataNucleus].
 
 This user guide discuss end-user features, configuration and customization of the DataNucleus object store.
 

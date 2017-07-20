@@ -397,7 +397,7 @@ Download either for a single domain object, or download all domain objects (enti
 
 For more information about layouts, see:
 
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_metadata-api_LayoutService[`LayoutService`] (whose functionality is exposed on the prototyping menu as an action) and lso the a xref:rgcms .adoc#_rgcms_classes_mixins_Object[mixin action]
+* xref:../rgsvc/rgsvc.adoc#_rgsvc_metadata-api_LayoutService[`LayoutService`] (whose functionality is exposed on the prototyping menu as an action) and lso the a xref:rgcms.adoc#_rgcms_classes_mixins_Object[mixin action]
 
 * xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_GridService[`GridService`] and its supporting services, xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_GridLoaderService[`GridLoaderService`] and xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_GridSystemService[`GridSystemService`]
 

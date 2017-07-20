@@ -7,7 +7,7 @@
 
 
 Although it has evolved since, the _Apache Isis_ framework started out as an open source implementation of the naked objects pattern.
-Indeed, the generic user interfaces provided by Apache Isis link:../../components/viewers/wicket/about.html[Wicket] viewer and the link:../../components/viewers/restfulobjects/about.html[Restful Objects] viewer are both "just" naked objects implementations; the first serves up a default generic representation of domain objects for human interaction, the latter serving up representation intended for machine consumption rather than human beings.
+Indeed, the generic user interfaces provided by Apache Isis link:../../guides/ugvw/ugvw.html[Wicket] viewer and the link:../../guides/ugvro/ugvro.html[Restful Objects] viewer are both "just" naked objects implementations; the first serves up a default generic representation of domain objects for human interaction, the latter serving up representation intended for machine consumption rather than human beings.
 
 If the idea of naked objects is of interest, then there are a couple of books on the topic that you might want to read.
 
@@ -17,7 +17,7 @@ If the idea of naked objects is of interest, then there are a couple of books on
 Richard Pawson and Robert Matthews, Wiley 2002
 
 
-image::{_imagesdir}/books/nakedobjects-book.jpg[width="159px",link="{_imagesdir}/books/nakedobjects-book.jpg"]
+image::{_imagesdir}books/nakedobjects-book.jpg[width="159px",link="{_imagesdir}books/nakedobjects-book.jpg"]
 
 
 This book describes the original ideas of Naked Objects.
@@ -38,7 +38,7 @@ The book is freely available online http://www.nakedobjects.org/book/[here]. Or,
 
 Dan Haywood, Pragmatic Bookshelf 2009
 
-image::{_imagesdir}/books/dhnako.jpg[width="167px",link="{_imagesdir}/books/dhnako.jpg"]
+image::{_imagesdir}books/dhnako.jpg[width="167px",link="{_imagesdir}books/dhnako.jpg"]
 
 This more recent book draws the parallel between domain-driven design and Naked Objects (4.0).
 In the spirit of the Pragmatic Bookshelf, it's a practical, hands-on sort of book, building up a case study as it goes and encouraging you to build your own app as you go.

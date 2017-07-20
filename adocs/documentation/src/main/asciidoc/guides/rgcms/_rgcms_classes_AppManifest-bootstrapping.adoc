@@ -77,7 +77,7 @@ public List<Class<?>> getModules() {
 }
 ----
 
-As can be seen, the various (non-ASF) link:http://isisaddons.org[Isis Addons] modules also each provide a module class that can be easily referenced.
+As can be seen, the various (non-ASF) link:http://www.isisaddons.org[Isis Addons] modules also each provide a module class that can be easily referenced.
 
 
 === `getAdditionalServices()`

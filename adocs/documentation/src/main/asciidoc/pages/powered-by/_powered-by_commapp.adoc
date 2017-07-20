@@ -11,7 +11,7 @@ of a business.  You can get a feel for it from this screenshot:
 
 image::{_imagesdir}powered-by/commapp/screenshot-1.png[width="900px",link="{_imagesdir}powered-by/commapp/screenshot-1.png"]
 
-which shows how the app integrates a number of the (non-ASF) link:http://isisaddons.org[Isis Addons]
+which shows how the app integrates a number of the (non-ASF) link:http://www.isisaddons.org[Isis Addons]
 (http://github.com/isisaddons/isis-module-excel[excel],
 http://github.com/isisaddons/isis-module-fullcalendar2[fullcalendar2] and
 http://github.com/isisaddons/isis-module-gmap3[gmap3]).  The app also uses the
@@ -33,7 +33,7 @@ both SQL and NoSQL through an open and standard http://datanucleus.org[persisten
 Our main focus in the code is given to the business domain, with business logic treated as a first class citizen.
 And because our code simply uses non-proprietary Java, we've been able to extend it the normal way.  Very little code in
 our application so far can be considered to be framework-specific, the few that is only because we chose to use some
-of the (non-ASF) link:http://isisaddons.org[Isis Addons] that provide our applications with high value, and which are
+of the (non-ASF) link:http://www.isisaddons.org[Isis Addons] that provide our applications with high value, and which are
 open source also.
 
 When creating our prototype and then subsequent application, we've found quite amazing support: most of the time the

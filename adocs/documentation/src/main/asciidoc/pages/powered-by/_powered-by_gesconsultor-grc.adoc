@@ -6,7 +6,7 @@
 :toc: right
 
 
-http://http://www.gesconsultor.com[GESCONSULTOR] GRC (currently SandaS GRC) is an IT Governance, Risk and Compliance
+link:http://www.gesconsultor.com[GESCONSULTOR] GRC (currently SandaS GRC) is an IT Governance, Risk and Compliance
 platform to help companies be compliant with IT-related ISO Standards, laws, regulations and best practices.  Its scope
 includes:
 
@@ -86,7 +86,7 @@ xref:../../guides/ugvw/ugvw.adoc#[Wicket viewer].  At the last count more than 4
 Bounded Contexts, are surfaced in the UI in this this way.
 
 At the Domain level, we also extensively use the xref:../../guides/ugfun/ugfun.adoc#_ugfun_building-blocks_events_domain-events[domain events]
-functionality available in Apache Isis, along with many of the (non-ASF) link:http://isisaddons.org[Isis Addons] (such
+functionality available in Apache Isis, along with many of the (non-ASF) link:http://www.isisaddons.org[Isis Addons] (such
 as http://github.com/isisaddons/isis-module-audit[audit], http://github.com/isisaddons/isis-module-security[security]
 and the http://github.com/isisaddons/isis-module-excel[excel] modules).
 

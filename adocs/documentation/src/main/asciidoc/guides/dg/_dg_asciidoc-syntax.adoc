@@ -17,7 +17,7 @@ For more info, see:
 
 * link:https://powerman.name/doc/asciidoc[online cheat sheet]
 
-* link:http://asciidoctor.org/docs/user-manual/[asciidoctor online user manual]
+* link:http://asciidoctor.org/docs/user-manual[asciidoctor online user manual]
 
 * link:http://www.methods.co.nz/asciidoc/userguide.html[asciidoc online user manual]
 

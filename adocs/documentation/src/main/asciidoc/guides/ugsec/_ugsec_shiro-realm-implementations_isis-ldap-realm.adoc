@@ -125,22 +125,22 @@ The setup here was initially based on http://krams915.blogspot.co.uk/2011/01/lda
 
 To start, create a partition in order to hold the mojo node (holding the groups):
 
-image::{_imagesdir}/configuration/configuring-shiro/ldap/activeds-ldap-mojo-partition.png[ActiveDS LDAP Users]
+image::{_imagesdir}configuration/configuring-shiro/ldap/activeds-ldap-mojo-partition.png[ActiveDS LDAP Users]
 
 Create the `ou=groups,o=mojo` hierarchy:
 
-image::{_imagesdir}/configuration/configuring-shiro/ldap/activeds-ldap-mojo-root-dse.png[ActiveDS LDAP Users]
+image::{_imagesdir}configuration/configuring-shiro/ldap/activeds-ldap-mojo-root-dse.png[ActiveDS LDAP Users]
 
 Configure SASL authentication. This means that the checking of user/password is done implicitly by virtue of Apache Isis connecting to LDAP using these credentials:
 
-image::{_imagesdir}/configuration/configuring-shiro/ldap/activeds-ldap-sasl-authentication.png[ActiveDS LDAP Users]
+image::{_imagesdir}configuration/configuring-shiro/ldap/activeds-ldap-sasl-authentication.png[ActiveDS LDAP Users]
 
 In order for SASL to work, it seems to be necessary to put users under `o=system`. (This is why the setup is slightly different than the tutorial mentioned above):
 
-image::{_imagesdir}/configuration/configuring-shiro/ldap/activeds-ldap-users.png[ActiveDS LDAP Users]
+image::{_imagesdir}configuration/configuring-shiro/ldap/activeds-ldap-users.png[ActiveDS LDAP Users]
 
 Configure the users into the groups:
 
-image::{_imagesdir}/configuration/configuring-shiro/ldap/activeds-ldap-groups.png[ActiveDS LDAP Users]
+image::{_imagesdir}configuration/configuring-shiro/ldap/activeds-ldap-groups.png[ActiveDS LDAP Users]
 
 
