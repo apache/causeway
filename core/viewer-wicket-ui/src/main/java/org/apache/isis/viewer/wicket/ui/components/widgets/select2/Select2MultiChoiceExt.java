@@ -51,8 +51,7 @@ public class Select2MultiChoiceExt
         super(id, model, EmptyChoiceProvider.INSTANCE);
         specId = scalarModel.getTypeOfSpecification().getSpecId();
 
-        //causing a more severe orphaned drop-down when triggered...
-        //setRequired(scalarModel.isRequired());
+        getSettings().setCloseOnSelect(true);
 
         setOutputMarkupPlaceholderTag(true);
     }
