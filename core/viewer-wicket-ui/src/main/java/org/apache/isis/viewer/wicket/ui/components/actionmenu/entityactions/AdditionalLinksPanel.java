@@ -85,15 +85,15 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
     }
 
 
-    protected AdditionalLinksPanel(final String id, final List<LinkAndLabel> links) {
-        super(id, new ListOfLinksModel(links));
+    protected AdditionalLinksPanel(final String id, final List<LinkAndLabel> linksDoNotUseDirectlyInsteadUseOfListOfLinksModel) {
+        super(id, new ListOfLinksModel(linksDoNotUseDirectlyInsteadUseOfListOfLinksModel));
 
         final List<LinkAndLabel> linkAndLabels = getModel().getObject();
 
         final WebMarkupContainer container = new WebMarkupContainer(ID_ADDITIONAL_LINK_LIST) {
             @Override
             public boolean isVisible() {
-                for (LinkAndLabel linkAndLabel : links) {
+                for (LinkAndLabel linkAndLabel : linkAndLabels) {
                     final AbstractLink link = linkAndLabel.getLink();
                     if(link.isVisible()) {
                         return true;
