@@ -22,19 +22,30 @@ package org.apache.isis.viewer.wicket.ui.components.scalars;
 import java.util.List;
 
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.validation.IValidatable;
+import org.apache.wicket.validation.IValidator;
+import org.apache.wicket.validation.ValidationError;
 import org.wicketstuff.select2.ChoiceProvider;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ObjectAdapterMementoProviderForChoices;
+import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
 
@@ -75,6 +86,32 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
         return formGroup;
     }
 
+    protected FormGroup createFormGroup(final FormComponent<?> formComponent) {
+        setOutputMarkupId(true);
+        select2.component().setOutputMarkupId(true);
+
+        final String name = scalarModel.getName();
+        select2.setLabel(Model.of(name));
+
+        final FormGroup formGroup = createFormGroupAndName(formComponent, ID_SCALAR_IF_REGULAR, ID_SCALAR_NAME);
+
+        addStandardSemantics();
+
+        if(getModel().isRequired()) {
+            formGroup.add(new CssClassAppender("mandatory"));
+        }
+        return formGroup;
+    }
+
+    protected void addStandardSemantics() {
+        select2.setRequired(getModel().isRequired());
+        select2.add(new Select2Validator(this.scalarModel));
+    }
+
+    @Override
+    protected Component getScalarValueComponent() {
+        return select2.component();
+    }
 
 
     /**
@@ -148,5 +185,58 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
         target.add(select2.component());
     }
 
+    static class Select2Validator implements IValidator<Object> {
+        private static final long serialVersionUID = 1L;
 
+        private final ScalarModel scalarModel;
+
+        public Select2Validator(final ScalarModel scalarModel) {
+
+            this.scalarModel = scalarModel;
+        }
+
+        @Override
+        public void validate(final IValidatable<Object> validatable) {
+            final Object proposedValueObj = validatable.getValue();
+
+            final ObjectAdapterMemento proposedValue;
+
+            if (proposedValueObj instanceof List) {
+                final List proposedValueObjAsList = (List) proposedValueObj;
+                if (proposedValueObjAsList.isEmpty()) {
+                    return;
+                }
+                final ObjectAdapterMemento oam = (ObjectAdapterMemento) proposedValueObjAsList.get(0);
+                final ObjectSpecId objectSpecId = oam.getObjectSpecId();
+                proposedValue = ObjectAdapterMemento
+                        .createForList(proposedValueObjAsList, objectSpecId);
+            } else {
+                proposedValue = (ObjectAdapterMemento) proposedValueObj;
+            }
+
+            final ObjectAdapter proposedAdapter = proposedValue.getObjectAdapter(
+                    AdapterManager.ConcurrencyChecking.NO_CHECK,
+                    getPersistenceSession(), getSpecificationLoader());
+
+            final String reasonIfAny = scalarModel.validate(proposedAdapter);
+            if (reasonIfAny != null) {
+                final ValidationError error = new ValidationError();
+                error.setMessage(reasonIfAny);
+                validatable.error(error);
+            }
+        }
+
+        PersistenceSession getPersistenceSession() {
+            return getIsisSessionFactory().getCurrentSession().getPersistenceSession();
+        }
+
+        SpecificationLoader getSpecificationLoader() {
+            return getIsisSessionFactory().getSpecificationLoader();
+        }
+
+        IsisSessionFactory getIsisSessionFactory() {
+            return IsisContext.getSessionFactory();
+        }
+
+    }
 }

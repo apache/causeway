@@ -164,7 +164,7 @@ public class Select2 implements Serializable {
         component().add(behavior);
     }
 
-    public final Select2 add(final IValidator<ObjectAdapterMemento> validator) {
+    public final Select2 add(final IValidator<Object> validator) {
         component().add(validator);
         return this;
     }

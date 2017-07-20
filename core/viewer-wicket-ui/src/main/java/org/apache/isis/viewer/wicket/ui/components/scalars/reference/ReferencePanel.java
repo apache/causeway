@@ -29,16 +29,13 @@ import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.validation.IValidatable;
-import org.apache.wicket.validation.IValidator;
-import org.apache.wicket.validation.ValidationError;
 import org.wicketstuff.select2.ChoiceProvider;
 import org.wicketstuff.select2.Settings;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -124,44 +121,13 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract implements PanelW
 
         syncWithInput();
 
-        setOutputMarkupId(true);
         entityLink.setOutputMarkupId(true);
-        select2.component().setOutputMarkupId(true);
 
-        final String name = scalarModel.getName();
-        select2.setLabel(Model.of(name));
+        FormComponent<?> formComponent = this.entityLink;
 
-        final FormGroup formGroup = createFormGroupAndName(this.entityLink, ID_SCALAR_IF_REGULAR, ID_SCALAR_NAME);
-
-
-        // add semantics
-        select2.setRequired(getModel().isRequired());
-        select2.add(new IValidator<ObjectAdapterMemento>() {
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public void validate(final IValidatable<ObjectAdapterMemento> validatable) {
-                final ObjectAdapterMemento proposedValue = validatable.getValue();
-                final ObjectAdapter proposedAdapter =
-                        proposedValue.getObjectAdapter(
-                                AdapterManager.ConcurrencyChecking.NO_CHECK,
-                                getPersistenceSession(), getSpecificationLoader());
-                final String reasonIfAny = scalarModel.validate(proposedAdapter);
-                if (reasonIfAny != null) {
-                    final ValidationError error = new ValidationError();
-                    error.setMessage(reasonIfAny);
-                    validatable.error(error);
-                }
-            }
-        });
-
-        return formGroup;
+        return createFormGroup(formComponent);
     }
 
-    @Override
-    protected Component getScalarValueComponent() {
-        return select2.component();
-    }
 
     private Select2 createSelect2AndSemantics() {
 
@@ -511,7 +477,6 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract implements PanelW
 
     @com.google.inject.Inject
     WicketViewerSettings wicketViewerSettings;
-
 
 }
 

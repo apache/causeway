@@ -24,24 +24,19 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.validation.IValidatable;
-import org.apache.wicket.validation.IValidator;
-import org.apache.wicket.validation.ValidationError;
 import org.wicketstuff.select2.ChoiceProvider;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.PanelWithChoices;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelSelect2Abstract;
-import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ObjectAdapterMementoProviderForValueChoices;
-import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 public class ValueChoicesSelect2Panel extends ScalarPanelSelect2Abstract implements PanelWithChoices {
 
@@ -57,65 +52,24 @@ public class ValueChoicesSelect2Panel extends ScalarPanelSelect2Abstract impleme
     // ///////////////////////////////////////////////////////////////////
 
     @Override
+    protected Component createComponentForCompact() {
+        return new Label(ID_SCALAR_IF_COMPACT, getModel().getObjectAsString());
+    }
+
+    @Override
     protected MarkupContainer createComponentForRegular() {
 
-        // same pattern as in ReferencePanel
         if(select2 == null) {
             this.select2 = createSelect2(ID_SCALAR_VALUE);
         } else {
             select2.clearInput();
         }
 
-        this.setOutputMarkupId(true);
-        select2.component().setOutputMarkupId(true);
+        FormComponent<?> formComponent = select2.component();
 
-        final String name = getModel().getName();
-        select2.setLabel(Model.of(name));
-
-        final FormGroup formGroup = createFormGroupAndName(select2.component(), ID_SCALAR_IF_REGULAR, ID_SCALAR_NAME);
-
-        if(getModel().isRequired()) {
-            formGroup.add(new CssClassAppender("mandatory"));
-        }
-
-        addStandardSemantics();
-
-        return formGroup;
+        return createFormGroup(formComponent);
     }
 
-    protected void addStandardSemantics() {
-        select2.setRequired(getModel().isRequired());
-
-        addValidatorForIsisValidation();
-    }
-
-    private void addValidatorForIsisValidation() {
-        final ScalarModel scalarModel = getModel();
-
-        select2.add(new IValidator<ObjectAdapterMemento>() {
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public void validate(final IValidatable<ObjectAdapterMemento> validatable) {
-                final ObjectAdapterMemento proposedValue = validatable.getValue();
-                final ObjectAdapter proposedAdapter =
-                        proposedValue.getObjectAdapter(
-                                AdapterManager.ConcurrencyChecking.NO_CHECK,
-                                getPersistenceSession(), getSpecificationLoader());
-                final String reasonIfAny = scalarModel.validate(proposedAdapter);
-                if (reasonIfAny != null) {
-                    final ValidationError error = new ValidationError();
-                    error.setMessage(reasonIfAny);
-                    validatable.error(error);
-                }
-            }
-        });
-    }
-
-
-    protected Component getScalarValueComponent() {
-        return select2.component();
-    }
 
     private List<ObjectAdapterMemento> getChoiceMementos(final ObjectAdapter[] argumentsIfAvailable) {
         final List<ObjectAdapter> choices =
@@ -127,10 +81,6 @@ public class ValueChoicesSelect2Panel extends ScalarPanelSelect2Abstract impleme
 
     // ///////////////////////////////////////////////////////////////////
 
-    @Override
-    protected Component createComponentForCompact() {
-        return new Label(ID_SCALAR_IF_COMPACT, getModel().getObjectAsString());
-    }
 
     // ///////////////////////////////////////////////////////////////////
 
@@ -231,6 +181,5 @@ public class ValueChoicesSelect2Panel extends ScalarPanelSelect2Abstract impleme
     protected String getScalarPanelType() {
         return "valueChoicesSelect2Panel";
     }
-
 
 }
