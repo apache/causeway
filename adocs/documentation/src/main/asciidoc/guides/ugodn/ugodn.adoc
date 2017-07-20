@@ -8,7 +8,7 @@
 
 
 
-[[_ugodn]]
+[[__ugodn]]
 == DataNucleus Object Store
 
 The DataNucleus Object Store enables domain objects to be persisted to relational as well as NoSQL databases.

@@ -14,7 +14,7 @@ Apache Isis is quite happy for the metamodel to be lazily created, and - to be f
 
 The framework thus provide mechanisms to search for all `@PersistenceCapable` entities under specified package(s), and registers them all eagerly.  In fact there are two:
 
-* as of 1.9.0 the recommended (and simpler) approach is to specify an xref:../rgcms/rgcms.adoc#_rgcms_classes_super_AppManifest[`AppManifest`], either as a xref:../rgcfg/rgcfg.adoc#_rgcfg_configuring-components[`isis.appManifest`] configuration property or programmatically.
+* as of 1.9.0 the recommended (and simpler) approach is to specify an xref:../rgcms/rgcms.adoc#_rgcms_classes_super_AppManifest[`AppManifest`], either as a xref:../rgcfg/rgcfg.adoc#_rgcfg_specifying-components[`isis.appManifest`] configuration property or programmatically.
 
 * for earlier versions the `isis.persistor.datanucleus.RegisterEntities.packagePrefix` configuration property can be specified.  To bootstrap as a webapp this is usually specified in `persistor_datanucleus.properties`.  (This is also supported in 1.9.0 if no `AppManifest` is specified.  For integration testing this can be specified programatically.
 

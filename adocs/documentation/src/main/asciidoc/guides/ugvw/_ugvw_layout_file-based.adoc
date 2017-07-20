@@ -46,7 +46,7 @@ The layout file distinguishes between two types of element:
 
 * those that define a grid structure, of: rows, columns, tab groups and tabs. +
 +
-The rows and columns are closely modelled on link:getbootstrap.com[Bootstrap 3] (used in the implementation of the xref:../ugvw/ugvw.adoc#[Wicket viewer]).
+The rows and columns are closely modelled on link:http://getbootstrap.com[Bootstrap 3] (used in the implementation of the xref:../ugvw/ugvw.adoc#[Wicket viewer]).
 
 * those that defines common components, of: fieldsets (previously called member groups or property groups), properties, collections, actions and also the title/icon of the domain object itself.
 
@@ -397,7 +397,7 @@ Download either for a single domain object, or download all domain objects (enti
 
 For more information about layouts, see:
 
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_metadata-api_LayoutService[`LayoutService`] (whose functionality is exposed on the prototyping menu as an action) and lso the a xref:rgcms.adoc#_rgcms_classes_mixins_Object[mixin action]
+* xref:../rgsvc/rgsvc.adoc#_rgsvc_metadata-api_LayoutService[`LayoutService`] (whose functionality is exposed on the prototyping menu as an action) and lso the a xref:../rgcms/rgcms.adoc#_rgcms_classes_mixins_Object[mixin action]
 
 * xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_GridService[`GridService`] and its supporting services, xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_GridLoaderService[`GridLoaderService`] and xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_GridSystemService[`GridSystemService`]
 

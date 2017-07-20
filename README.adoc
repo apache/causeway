@@ -146,7 +146,7 @@ If not all of these properties are required, then they can be hidden either usin
 
 === Themes
 
-Apache Isis' Wicket viewer uses http://getbootstrap.com[Twitter Bootstrap], which means that it can be themed. If more than one theme has been configured for the app, then the viewer allows the end-user to switch their theme:
+Apache Isis' Wicket viewer uses link:http://getbootstrap.com[Twitter Bootstrap], which means that it can be themed. If more than one theme has been configured for the app, then the viewer allows the end-user to switch their theme:
 
 image::https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/images/isis-in-pictures/190-switch-theme.png[link="https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/images/isis-in-pictures/190-switch-theme.png"]
 

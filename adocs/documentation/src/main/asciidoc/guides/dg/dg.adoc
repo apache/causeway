@@ -7,7 +7,7 @@
 :generate_pdf:
 
 
-[[_dg]]
+[[__dg]]
 == Developers' Guide
 
 This developers' guide is for:

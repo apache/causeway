@@ -7,8 +7,7 @@
 :generate_pdf:
 
 
-
-[[_rgfis]]
+[[__rgfis]]
 == Framework Internal Services
 
 This guide documents a number of domain services that are not part of the framework's formal API, they use classes that are outside of the applib.  They should be

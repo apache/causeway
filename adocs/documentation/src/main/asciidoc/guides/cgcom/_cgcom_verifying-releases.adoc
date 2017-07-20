@@ -18,7 +18,7 @@ This section describes some guidance on what a voter (members of the Apache Isis
 
 == Background
 
-Whenever a release manager announces a vote on a release (as per the xref:../cgcom/cgcom.adoc#_cgcom_release-process[release process]) on the link:../support.html[dev mailing list], it is the responsibility of the project's PMC to cast their vote on the release.  Anyone else can also vote, but only members of the Apache Isis PMC's vote are binding.
+Whenever a release manager announces a vote on a release (as per the xref:../cgcom/cgcom.adoc#_cgcom_release-process[release process]) on the xref:../../support.adoc#[dev mailing list], it is the responsibility of the project's PMC to cast their vote on the release.  Anyone else can also vote, but only members of the Apache Isis PMC's vote are binding.
 
 Per this http://www.apache.org/dev/release.html[ASF documentation], the legal requirements for an ASF release are:
 

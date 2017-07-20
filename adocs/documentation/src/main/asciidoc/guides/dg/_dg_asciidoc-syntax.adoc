@@ -11,9 +11,9 @@ This appendix describes the main syntax conventions when writing Asciidoctor/Asc
 
 For more info, see:
 
-* link:_resources/asciidoc-syntax-quick-reference.pdf[asciidoc-syntax-quick-reference.pdf]
+* link:resources/asciidoc-syntax-quick-reference.pdf[asciidoc-syntax-quick-reference.pdf]
 
-* link:_resources/asciidoc-writers-guide.pdf[asciidoc-writers-guide.pdf]
+* link:resources/asciidoc-writers-guide.pdf[asciidoc-writers-guide.pdf]
 
 * link:https://powerman.name/doc/asciidoc[online cheat sheet]
 

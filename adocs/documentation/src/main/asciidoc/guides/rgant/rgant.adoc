@@ -7,7 +7,7 @@
 :generate_pdf:
 
 
-[[_rgant]]
+[[__rgant]]
 == Annotations
 
 This guide describes the various annotations used by Apache Isis to provide additional metadata about the domain objects.

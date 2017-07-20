@@ -7,7 +7,7 @@
 :generate_pdf:
 
 
-[[_rgcfg]]
+[[__rgcfg]]
 == Configuration Properties
 
 Apache Isis' own configuration properties are simple key-value pairs, typically held in the `WEBINF/isis.properties`

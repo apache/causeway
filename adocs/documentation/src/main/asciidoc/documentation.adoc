@@ -27,7 +27,7 @@ pass:[<br/>]
 
 * *link:./pages/isis-in-pictures/isis-in-pictures.html[What is Apache Isis?^] ... in pictures*
 * link:./pages/powered-by/powered-by.html[Powered by Apache Isis^]
-* link:./pages/how-isis-works/how-isis-works.html[How Apache Isis Works^] image:{_imagesdir}tv_show-25.png[width="25px" link="how-isis-works./how-isis-works.html"]
+* link:./pages/how-isis-works/how-isis-works.html[How Apache Isis Works^] image:{_imagesdir}tv_show-25.png[width="25px" link="pages/how-isis-works/how-isis-works.html"]
 * link:./pages/common-use-cases/common-use-cases.html[Common Use Cases^]
 
 
@@ -122,7 +122,7 @@ pass:[<br/>]
 
 * http://github.com/estatio/estatio[Estatio^]
 * http://github.com/isisaddons/isis-app-todoapp[TodoApp^]
-* http://github.com/isisaddons/isis-app-kitchensink[Kitchensink^] (link:http://mmyco.co.uk:8180/kitchensink/[online demo, v1.10.0])
+* http://github.com/isisaddons/isis-app-kitchensink[Kitchensink^]
 * http://github.com/isisaddons/isis-app-neoapp[Neo4J Example^]
 * http://github.com/isisaddons/isis-app-quickstart[Quickstart^]
 

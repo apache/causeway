@@ -7,7 +7,7 @@
 :generate_pdf:
 
 
-[[_rgcms]]
+[[__rgcms]]
 == Classes, Methods and Schema
 
 This reference guide lists and describes various elements of the the Apache Isis Programming Model, specifically reserved and prefix xref:../rgcms/rgcms.adoc#_rgcms_methods[methods] (such as `title()` and `validate...()`) and various utility and supporting xref:../rgcms/rgcms.adoc#_rgcms_classes[classes].

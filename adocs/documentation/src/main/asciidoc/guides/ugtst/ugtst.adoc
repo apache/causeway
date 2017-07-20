@@ -8,7 +8,7 @@
 
 
 
-[[_ugtst]]
+[[__ugtst]]
 == Testing
 
 If you are going to use Apache Isis for developing complex business-critical applications, then being able to write

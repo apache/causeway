@@ -6,7 +6,7 @@
 
 
 
-The Wicket viewer uses http://getbootstrap.com/[Bootstrap] styles and components (courtesy of the https://github.com/l0rdn1kk0n/wicket-bootstrap[Wicket Bootstrap] integration).
+The Wicket viewer uses link:http://getbootstrap.com/[Bootstrap] styles and components (courtesy of the https://github.com/l0rdn1kk0n/wicket-bootstrap[Wicket Bootstrap] integration).
 
 Unless a xref:../ugvw/ugvw.adoc#_ugvw_customisation_default-theme[default theme has been specified], the viewer uses the default bootstrap theme. However,
 the viewer can also be configured to allow the end-user to switch theme to another theme, in particular one of those provided by http://bootswatch.com[bootswatch.com].

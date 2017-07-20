@@ -19,7 +19,7 @@ replaced by xref:guides/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditerService[`
 xref:guides/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`].  It is now possible to have multiple implementations
 of each.
 
-The (non-ASF) http://github.com/isisaddons/isis-module-auditing[Isis addons' auditing] module has been reworked to
+The (non-ASF) http://github.com/isisaddons/isis-module-audit[Isis addons' auditing] module has been reworked to
 implement xref:guides/rgsvc.adoc#_rgsvc_spi_AuditService[`AuditService`], while the new (non-ASF)
 http://github.com/isisaddons/isis-module-publishmq[Isis addons' publishmq] module implements
 xref:guides/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`] to publish interaction events to an ActiveMQ bus (and

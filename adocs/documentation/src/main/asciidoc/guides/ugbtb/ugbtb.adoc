@@ -7,7 +7,7 @@
 :generate_pdf:
 
 
-[[_ugbtb]]
+[[__ugbtb]]
 == Beyond the Basics
 
 This guide provides xref:../ugbtb/ugbtb.adoc#_ugbtb_other-techniques[more advanced] guidance on writing maintainable larger

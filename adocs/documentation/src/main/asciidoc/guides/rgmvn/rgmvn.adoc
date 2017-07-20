@@ -7,7 +7,7 @@
 :generate_pdf:
 
 
-[[_rgmvn]]
+[[__rgmvn]]
 == Apache Isis Maven plugin
 
 This reference guide describes the goals provided by Apache Isis' Maven plugin.
