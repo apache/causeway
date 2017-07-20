@@ -90,7 +90,7 @@ public class ObjectAdapterMementoProviderForReferenceObjectAutoComplete
             }
         };
 
-        return Collections2.transform(ids, function);
+        return Lists.newArrayList(Collections2.transform(ids, function));
     }
 
 }

@@ -41,6 +41,7 @@ import java.util.List;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
+import com.google.common.collect.Lists;
 
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
@@ -83,7 +84,7 @@ public class ObjectAdapterMementoProviderForReferenceChoices
                 return ObjectAdapterMemento.createPersistent(oid);
             }
         };
-        return Collections2.transform(ids, function);
+        return Lists.newArrayList(Collections2.transform(ids, function));
     }
 
 
