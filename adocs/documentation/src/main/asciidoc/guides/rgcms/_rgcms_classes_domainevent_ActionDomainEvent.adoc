@@ -45,8 +45,8 @@ public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
 }
 ----
 <1> The `Default` nested static class is the default for the xref:../rgant/rgant.adoc#_rgant_Action_domainEvent[`@Action#domainEvent()`]
-annotation attribute.  Whether this raises an event or not depends upon the
-`isis.reflector.facet.actionAnnotation.domainEvent.postForDefault` configuration property.
+annotation attribute.
+Whether this raises an event or not depends upon the `isis.reflector.facet.actionAnnotation.domainEvent.postForDefault` configuration property.
 <2> The `Noop` class is provided as a convenience to indicate that an event should _not_ be posted (irrespective of the configuration property setting).
 <3> Similarly, the `Doop` class is provided as a convenience to indicate that an event _should_ be raised (irrespective of the configuration property setting).
 <4> Deprecated, use xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_CommandContext[`CommandContext`] or (better)  xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_InteractionContext[`InteractionContext`]instead.

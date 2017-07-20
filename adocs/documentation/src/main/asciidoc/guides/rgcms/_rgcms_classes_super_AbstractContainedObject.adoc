@@ -5,12 +5,13 @@
 :_imagesdir: images/
 
 
-This class is a convenience superclass for domain objects and services, providing general purpose methods for interacting with the framework.  These include:
+This class is a convenience superclass for domain objects and services, providing general purpose methods for interacting with the framework.
+These include:
 
 * `allMatches(Query)` - search for all objects matching the specified `Query`. +
 +
 + Note that this, and other similar methods (eg `firstMatch(...)`, `uniqueMatch(...)`) will automatically flush the
-current transactoin.
+current transaction.
 
 * `newTransientInstance(Class)` - to create a new instance of an object, with any services injected into it
 

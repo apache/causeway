@@ -7,6 +7,8 @@
 
 The `HoldsUpdatedBy` role interface ...
 
+NOTE: FIXME ... incomplete
+
 [source,java]
 ----
 public interface HoldsUpdatedBy {

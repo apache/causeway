@@ -4,7 +4,6 @@
 :_basedir: ../../
 :_imagesdir: images/
 
-This class extends xref:../rgcms/rgcms.adoc#_rgcms_classes_super_AbstractContainedObject[`AbstractContainedObject`], adding
-in an implementation of `getId()` based upon the classes name.
+This class extends xref:../rgcms/rgcms.adoc#_rgcms_classes_super_AbstractContainedObject[`AbstractContainedObject`], adding in an implementation of `getId()` based upon the classes name.
 
 In practice there is little to gain from subclassing; simply inject xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer[`DomainObjectContainer`] for broadly equivalent functionality.

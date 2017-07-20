@@ -5,7 +5,8 @@
 :_imagesdir: images/
 
 
-The `HasUsername` interface is a mix-in for domain objects to be associated with a username.  Other services and modules can then contribute actions/collections to render such additional information relating to the activities of the user.
+The `HasUsername` interface is a mix-in for domain objects to be associated with a username.
+Other services and modules can then contribute actions/collections to render such additional information relating to the activities of the user.
 
 The interface is defined is:
 

@@ -6,8 +6,8 @@
 
 
 The `Dto` role interface is intended to be implemented by JAXB-annotated view models, that is, annotated using
-xref:../rgant/rgant.adoc#_rgant-XmlRootElement[`@XmlRootElement`].  It enables the ability to download the XML and
-XSD schema of those objects using two xref:../ugfun/ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_mixins[mixins], `Dto_downloadXml` and `Dto_downloadXsd`.
+xref:../rgant/rgant.adoc#_rgant-XmlRootElement[`@XmlRootElement`].
+It enables the ability to download the XML and XSD schema of those objects using two xref:../ugfun/ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_mixins[mixins], `Dto_downloadXml` and `Dto_downloadXsd`.
 
 The interface is just a marker interface (with no members), and is defined as:
 
@@ -23,13 +23,12 @@ The `Dto_downloadXml` mixin defines the following action:
 @Mixin
 public class Dto_downloadXml {
     public Dto_downloadXml(final Dto dto) { ... }     // <1>
-    public Object downloadXml(final String fileName) { ... }   // <2>
+    public Object $$(final String fileName) { ... }   // <2>
     ...
 }
 ----
 <1> provided as an action to any class that (trivially) implements the `Dto` interface
-<2> actually this method is called '$$' in the code, a "special case" that means to use the derive the action name
-from the class name.
+<2> The '$$' name is a "special case", indicating the the action's name be derived from the class name.
 
 This will return the XML text wrapped up in a xref:../rgcms/rgcms.adoc#_rgcms_classes_value-types_Clob[`Clob`].
 
@@ -40,22 +39,18 @@ The `Dto_downloadXsd` mixin is similar:
 @Mixin
 public class Dto_downloadXsd {
     public Dto_downloadXsd(final Dto dto) { ... }                                             // <1>
-    public Object downloadXsd(final String fileName, final IsisSchemes isisSchemas) { ... }   // <2>
+    public Object $$(final String fileName, final IsisSchemes isisSchemas) { ... }   // <2>
 }
 ----
 <1> provided as an action to any class that (trivially) implements the `Dto` interface
-<2> actually this is '$$' in the code, a "special case" that means to use the derive the action name from the class name.
+<2> The '$$' name is a "special case", indicating the the action's name be derived from the class name.
 
-If the domain object's JAXB annotations reference only a single XSD schema then this will return that XML text as
-a xref:../rgcms/rgcms.adoc#_rgcms_classes_value-types_Clob[`Clob`] of that XSD.  If there are multiple XSD schemas referenced
-then the action will return a zip of those schemas, wrapped up in a
-xref:../rgcms/rgcms.adoc#_rgcms_classes_value-types_Blob[`Blob`].  The `IsisSchemas` parameter to the action can be used to
-optionally ignore the common xref:../rgcms/rgcms.adoc#_rgcms_schema[Apache Isis schemas] (useful if there is only one other XSD schema
-referenced by the DTO).
+If the domain object's JAXB annotations reference only a single XSD schema then this will return that XML text as a xref:../rgcms/rgcms.adoc#_rgcms_classes_value-types_Clob[`Clob`] of that XSD.
+If there are multiple XSD schemas referenced then the action will return a zip of those schemas, wrapped up in a xref:../rgcms/rgcms.adoc#_rgcms_classes_value-types_Blob[`Blob`].
+The `IsisSchemas` parameter to the action can be used to optionally ignore the common xref:../rgcms/rgcms.adoc#_rgcms_schema[Apache Isis schemas] (useful if there is only one other XSD schema referenced by the DTO).
 
 
 
 == Related Services
 
-The `Dto_downloadXml` and `Dto_downloadXsd` delegate to the
-xref:../rgsvc/rgsvc.adoc#_rgsvc_integration-api_JaxbService[`JaxbService`] to actually generate the XML/XSD.
+The `Dto_downloadXml` and `Dto_downloadXsd` delegate to the xref:../rgsvc/rgsvc.adoc#_rgsvc_integration-api_JaxbService[`JaxbService`] to actually generate the XML/XSD.

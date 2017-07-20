@@ -6,8 +6,7 @@
 
 
 
-Subclass of xref:../rgcms/rgcms.adoc#_rgcms_classes_lifecycleevent_AbstractLifecycleEvent[`AbstractLifecycleEvent`], broadcast
-when an object is retrieved from the database.
+Subclass of xref:../rgcms/rgcms.adoc#_rgcms_classes_lifecycleevent_AbstractLifecycleEvent[`AbstractLifecycleEvent`], broadcast when an object is retrieved from the database.
 
 `ObjectLoadedEvent.Default` is the concrete implementation that is used.
 

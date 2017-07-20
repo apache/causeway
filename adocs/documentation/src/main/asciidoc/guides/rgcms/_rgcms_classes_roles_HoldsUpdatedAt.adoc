@@ -5,8 +5,7 @@
 :_imagesdir: images/
 
 
-The `HoldsUpdatedAt` role interface allows the (framework-provided) `TimestampService` to update each object with
-the current timestamp whenever it is modified in a transaction.
+The `HoldsUpdatedAt` role interface allows the (framework-provided) `TimestampService` to update each object with the current timestamp whenever it is modified in a transaction.
 
 The interface is defined as:
 
@@ -25,7 +24,8 @@ Entities that implement this interface often also implement xref:../rgcms/rgcms.
 
 == Alternative approaches
 
-An alternative way to maintain a timestamp is to use JDO's `@Version` annotation.  With this approach, it is the JDO/DataNucleus that maintains the version, rather than the framework's `TimestampService`.
+An alternative way to maintain a timestamp is to use JDO's `@Version` annotation.
+With this approach, it is the JDO/DataNucleus that maintains the version, rather than the framework's `TimestampService`.
 
 For example:
 

@@ -5,8 +5,8 @@
 :_imagesdir: images/
 
 
-This section catalogues the various lifecycle event classes defined by Apache Isis.  These events
-are fired automatically when a domain object is loaded, created, updated and so forth.
+This section catalogues the various lifecycle event classes defined by Apache Isis.
+These events are fired automatically when a domain object is loaded, created, updated and so forth.
 
 The lifecycle event classes are listed in the table below:
 
@@ -38,8 +38,7 @@ Impl'n (g: a:)
 ``isis-core-applib``
 |(abstract class). +
 `ObjectCreatedEvent.Default` is the concrete implementation that is used.
-|Broadcast when an object is first instantiated
-using the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer_object-creation-api[`DomainObjectContainer`]'s
+|Broadcast when an object is first instantiated using the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer_object-creation-api[`DomainObjectContainer`]'s
 `#newTransientInstance(...)` method.
 
 
@@ -49,7 +48,7 @@ using the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer_
 ``services.eventbus`` +
 ``isis-core-applib``
 |(abstract class). +
-`ObjectLoadedEvent.Default` is the concrete implementation that is  used.
+`ObjectLoadedEvent.Default` is the concrete implementation that is used.
 |Broadcast when an object is retrieved from the database.
 
 
@@ -60,8 +59,7 @@ using the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer_
 ``isis-core-applib``
 |(abstract class). +
 `ObjectPersistedEvent.Default` is the concrete implementation that is used.
-|Broadcast when an object is first saved (inserted) into the database using the
-xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer_object-persistence-api[`DomainObjectContainer`]'s
+|Broadcast when an object is first saved (inserted) into the database using the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer_object-persistence-api[`DomainObjectContainer`]'s
 `#persist(...)` method.
 
 
@@ -72,8 +70,7 @@ xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer_object-per
 ``isis-core-applib``
 |(abstract class). +
 `ObjectPersistingEvent.Default` is the concrete implementation that is used.
-|Broadcast when an object is about to be saved (inserted) into the database using the
-xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer_object-persistence-api[`DomainObjectContainer`]'s
+|Broadcast when an object is about to be saved (inserted) into the database using the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer_object-persistence-api[`DomainObjectContainer`]'s
 `#persist(...)` method.
 
 
@@ -84,8 +81,7 @@ xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer_object-per
 ``isis-core-applib``
 |(abstract class). +
 `ObjectRemovingEvent.Default` is the concrete implementation that is used.
-|Broadcast when an object is about to be deleted from the database using the
-xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer_object-persistence-api[`DomainObjectContainer`]'s
+|Broadcast when an object is about to be deleted from the database using the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer_object-persistence-api[`DomainObjectContainer`]'s
 `#remove(...)` method.
 
 
@@ -96,9 +92,8 @@ xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer_object-per
 ``isis-core-applib``
 |(abstract class). +
 `ObjectUpdatedEvent.Default` is the concrete implementation that is used.
-|Broadcast when an object has just been updated in the database.  This is done either explicitly when the current
-transaction is flushed using the
-xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer_object-persistence-api[`DomainObjectContainer`]'s
+|Broadcast when an object has just been updated in the database.
+This is done either explicitly when the current transaction is flushed using the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer_object-persistence-api[`DomainObjectContainer`]'s
 `#flush(...)` method, else is done implicitly when the transaction commits at the end of the user request.
 
 
@@ -109,9 +104,8 @@ xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer_object-per
 ``isis-core-applib``
 |(abstract class). +
 `ObjectUpdatingEvent.Default` is the concrete implementation that is used.
-|Broadcast when an object is about to be updated in the database.  This is done either explicitly when the current
-transaction is flushed using the
-xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer_object-persistence-api[`DomainObjectContainer`]'s
+|Broadcast when an object is about to be updated in the database.
+This is done either explicitly when the current transaction is flushed using the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer_object-persistence-api[`DomainObjectContainer`]'s
 `#flush(...)` method, else is done implicitly when the transaction commits at the end of the user request.
 
 

@@ -5,7 +5,8 @@
 :_imagesdir: images/
 
 
-This section catalogues the various convenience (non event) superclasses defined by Apache Isis.  These are listed in the table below.
+This section catalogues the various convenience (non event) superclasses defined by Apache Isis.
+These are listed in the table below.
 
 
 .Convenience Superclasses
