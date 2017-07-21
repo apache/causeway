@@ -11,18 +11,18 @@ interaction.  A command now represents the _intention_ to interact with the appl
 to edit a property.  This is captured as a JAXB DTO.  An interaction on the other hand captures the fact that a
 command has been performed.  Interactions are also captured as DTOs.  Interactions can include sub-interactions,
 representing the fact that an action can invoke another action by way of the
-xref:guides/rgsvc.adoc#_rgsvc_application-layer-api_WrapperFactory[`WrapperFactory`].
+xref:../guides/rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_WrapperFactory[`WrapperFactory`].
 
-The existing xref:guides/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditingService[`AuditingService`] and
-xref:guides/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublishingService[`PublishingService`] SPI services have both been deprecated, instead
-replaced by xref:guides/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditerService[`AuditerService`] and
-xref:guides/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`].  It is now possible to have multiple implementations
+The existing xref:../guides/rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditingService[`AuditingService`] and
+xref:../guides/rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublishingService[`PublishingService`] SPI services have both been deprecated, instead
+replaced by xref:../guides/rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditerService[`AuditerService`] and
+xref:../guides/rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`].  It is now possible to have multiple implementations
 of each.
 
 The (non-ASF) http://github.com/isisaddons/isis-module-audit[Isis addons' auditing] module has been reworked to
-implement xref:guides/rgsvc.adoc#_rgsvc_spi_AuditService[`AuditService`], while the new (non-ASF)
+implement xref:../guides/rgsvc/rgsvc.adoc#_rgsvc_spi_AuditService[`AuditService`], while the new (non-ASF)
 http://github.com/isisaddons/isis-module-publishmq[Isis addons' publishmq] module implements
-xref:guides/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`] to publish interaction events to an ActiveMQ bus (and
+xref:../guides/rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`] to publish interaction events to an ActiveMQ bus (and
 to allow such events to be replayed if necessary).
 
 The release also includes a great deal of internal refactorings and simplifications.

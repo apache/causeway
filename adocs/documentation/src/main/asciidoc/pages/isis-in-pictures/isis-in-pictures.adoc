@@ -12,7 +12,7 @@ On this page we want to show you what a modern Apache Isis application looks lik
 The screenshots below are taken from the Isis Addons' http://github.com/isisaddons/isis-app-todoapp[todoapp example] (non ASF), which you are free to fork and use as you will.
 The corresponding domain classes from which this UI was built can be found https://github.com/isisaddons/isis-app-todoapp/tree/master/dom/src/main/java/todoapp/dom/todoitem[here].
 
-The todoapp also integrates with a number of other http://www.isisaddons.org[Isis Addons] modules.
+The todoapp also integrates with a number of other link:http://www.isisaddons.org[Isis Addons] modules.
 Because we expect that most apps will end up using one or more of these addons, we've chosen to include screenshots of those too.
 
 
@@ -129,7 +129,7 @@ For example, when a collection of objects is rendered, this is just one of sever
 image::{_imagesdir}isis-in-pictures/070-pluggable-views.png[width="800px",link="{_imagesdir}isis-in-pictures/070-pluggable-views.png"]
 
 
-The (non-ASF) link:www.isisaddons.org[Isis Addons] library provides a number of such extensions.
+The (non-ASF) link:http://www.isisaddons.org[Isis Addons] library provides a number of such extensions.
 For example, the https://github.com/isisaddons/isis-wicket-gmap3[gmap3 component] will render any domain entity (such as `ToDoItem`) that implements its `Locatable` interface:
 
 image::{_imagesdir}isis-in-pictures/080-gmap3-view.png[width="800px",link="{_imagesdir}isis-in-pictures/080-gmap3-view.png"]

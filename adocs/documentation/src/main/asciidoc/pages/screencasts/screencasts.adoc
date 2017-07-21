@@ -253,7 +253,7 @@ Shows how to refactor a domain object to move (derived) collections out of the d
 
 
 |link:https://www.youtube.com/watch?v=-AQJb9GtIqI[024^] +
-Using a domain event xref:../../guides/rgcms.adoc#_rgcms_classes_super_AbstractSubscriber[subscriber] to xref:../../guides/ugfun/ugfun.adoc#_ugfun_building-blocks_events_domain-events[decouple] and abstract business rules (xref:../../guides/rgcms/rgcms.adoc#_rgcms_methods_prefixes_validate[validation]).
+Using a domain event xref:../../guides/rgcms/rgcms.adoc#_rgcms_classes_super_AbstractSubscriber[subscriber] to xref:../../guides/ugfun/ugfun.adoc#_ugfun_building-blocks_events_domain-events[decouple] and abstract business rules (xref:../../guides/rgcms/rgcms.adoc#_rgcms_methods_prefixes_validate[validation]).
 ||||||x|||||
 
 

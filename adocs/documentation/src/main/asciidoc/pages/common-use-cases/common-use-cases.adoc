@@ -23,7 +23,7 @@ Once you've sketched out your domain model, you can then either start-over using
 
 One of the original motivations for Apache Isis itself was to be able automatically generate a user interface for a domain object model.
 
-Apache Isis' has a pluggable architecture allowing different user interface technologies. The principal implementation (as configured by the link:./simple-archetype.html[simple archetype]) is the link:guides/ugvw.html#[Wicket viewer]. This provides an appealing default user interface, with the ability to customize the user interface by writing new http://wicket.apache.org[Apache Wicket] components. Some third-party components can be found in the (non-ASF) link:http://www.isisaddons.org[Isis Addons] (non-ASF) project, integrating the Wicket viewer with https://github.com/isisaddons/isis-wicket-gmap3[google maps], https://github.com/isisaddons/isis-wicket-fullcalendar2[a full calendar] and a https://github.com/isisaddons/isis-wicket-excel[export to Excel] component.
+Apache Isis' has a pluggable architecture allowing different user interface technologies. The principal implementation (as configured by the xref:../../guides/ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype]) is the xref:../../guides/ugvw/ugvw.adoc#[Wicket viewer]. This provides an appealing default user interface, with the ability to customize the user interface by writing new http://wicket.apache.org[Apache Wicket] components. Some third-party components can be found in the (non-ASF) link:http://www.isisaddons.org[Isis Addons] (non-ASF) project, integrating the Wicket viewer with https://github.com/isisaddons/isis-wicket-gmap3[google maps], https://github.com/isisaddons/isis-wicket-fullcalendar2[a full calendar] and a https://github.com/isisaddons/isis-wicket-excel[export to Excel] component.
 
 
 Deploying on Apache Isis means that the framework also manages object persistence. Again this is pluggable, but the principal implementation is the JDO/DataNucleus objectstore. Because JDO supports both SQL and NoSQL databases, you can then deploy on a variety of platforms, including the link:https://developers.google.com/appengine/[Google App Engine (GAE)] and link:http://neo4j.com/[Neo4J].
@@ -35,7 +35,7 @@ Deploying on Apache Isis means that the framework also manages object persistenc
 
 REST (Representation State Transfer) is an architectural style for building highly scalable distributed systems, using the same principles as the World Wide Web. Many commercial web APIs (twitter, facebook, Amazon) are implemented as either pure REST APIs or some approximation therein.
 
-The http://restfulobjects.org[Restful Objects specification] defines a means by a domain object model can be exposed as RESTful resources using JSON representations over HTTP. Apache Isis' link:guides/ugvro.html#[RestfulObjects viewer] is an implementation of that spec, making any Apache Isis domain object automatically available via REST.
+The http://restfulobjects.org[Restful Objects specification] defines a means by a domain object model can be exposed as RESTful resources using JSON representations over HTTP. Apache Isis' xref:../../guides/ugvro/ugvro.adoc#[RestfulObjects viewer] is an implementation of that spec, making any Apache Isis domain object automatically available via REST.
 
 There are two main use cases for deploying Apache Isis as a RESTful web service are:
 
