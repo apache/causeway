@@ -47,11 +47,11 @@ Suppose that you wanted to completely remove support for the (already deprecated
 isis.reflector.facets.exclude=org.apache.isis.core.metamodel.facets.object.actionorder.annotation.ActionOrderFacetAnnotationFactory
 ----
 
-Or, suppose you wanted to use the example https://github.com/apache/isis/blob/master/mothballed/misc/metamodel/namefile/src/main/java/org/apache/isis/metamodel/example/facets/NameFileFacetFactory.java["namefile"] `FacetFactory` as part of your programming conventions, use:
+Or, suppose you wanted to use add some custom facet factory of your own, use:
 
 [source,ini]
 ----
-isis.reflector.facets.include=org.apache.isis.example.metamodel.namefile.facets.NameFileFacetFactory
+isis.reflector.facets.include=com.mycompany.isis.facets.MyCoolFacetFactory
 ----
 
 To include/exclude more than one `FacetFactory`, specify as a comma-separated list.

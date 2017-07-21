@@ -209,8 +209,7 @@ public Batch transfer(final FermentationVessel vessel) {
 It's not clear if this is a bug in `dn-core 4.1.7`/`dn-rdbms 4.19`; an earlier thread on the mailing list from 2014 actually gave
 the opposite advice, see http://isis.markmail.org/thread/ipu2lzqqikqdglox[this thread] and in particular this http://markmail.org/message/hblptpw675mlw723[message].
 
-In fact we also have link:http://markmail.org/message/agnwmzocvdfht32f[a different case] which argues that the parent
-should only be set on the child, and the child _not_ added to the parent's collection.
+In fact we also have had a different case raised (url lost) which argues that the parent should only be set on the child, and the child _not_ added to the parent's collection.
 This concurs with the most recent testing.
 ====
 

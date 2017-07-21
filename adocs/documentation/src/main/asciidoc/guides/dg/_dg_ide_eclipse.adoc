@@ -99,7 +99,7 @@ To fix this, we configure the enhancer to read from the `persistence.xml` file.
 
 As a prerequisite, first make sure that your domain object model has a `persistence.xml` file.  Then specify the `persistence-unit` in the project properties:
 
-image::{_imagesdir}eclipse/eclipse-025-project-properties.png[width="750px",link="{_imagesdir}eclipse/eclipse-025-project-properties.png.png"]
+image::{_imagesdir}eclipse/eclipse-025-project-properties.png[width="750px",link="{_imagesdir}eclipse/eclipse-025-project-properties.png"]
 
 
 === Workaround: If the enhancer fails

@@ -29,7 +29,7 @@ These release notes using bash command line tools.  They should work on Linux an
 [[__cgcom_cutting-a-release_obtain-consensus]]
 == Obtain Consensus
 
-Before releasing `core`, ensure there is consensus on the link:../support.html[dev mailing list] that this is the right time for a release. The discussion should include confirming the version number to be used, and to confirm content.
+Before releasing `core`, ensure there is consensus on the xref:../../support.adoc#[dev mailing list] that this is the right time for a release. The discussion should include confirming the version number to be used, and to confirm content.
 
 These discussions should also confirm the version number of the module being released. This should be in line with our xref:../cgcom/cgcom.adoc#_cgcom_versioning-policy[semantic versioning policy].
 

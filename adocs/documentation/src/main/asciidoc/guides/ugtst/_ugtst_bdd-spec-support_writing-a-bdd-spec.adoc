@@ -72,7 +72,8 @@ public class RunSpecs {
 }
 ----
 
-The JSON formatter allows integration with enhanced reports, for example as provided by http://www.masterthought.net/section/cucumber-reporting[Masterthought.net] (screenshots at end of page). (Commented out) configuration for this is provided in the xref:../ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype].
+The JSON formatter allows integration with enhanced reports.
+(Commented out) configuration for this is provided in the xref:../ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype].
 
 The bootstrapping of Apache Isis can be moved into a `BootstrappingGlue` step definition:
 

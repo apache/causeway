@@ -122,7 +122,7 @@ git push origin --delete <i>branchname</i>
 ----
 
 
-For more detail, see these blogs/posts link:http://www.mariopareja.com/blog/archive/2010/01/11/how-to-push-a-new-local-branch-to-a-remote.aspx[here] and link:http://stackoverflow.com/questions/2003505/how-do-i-delete-a-git-branch-both-locally-and-in-github[here].
+For more detail, see this link:http://stackoverflow.com/questions/2003505/how-do-i-delete-a-git-branch-both-locally-and-in-github[stackoverflow post].
 
 
 

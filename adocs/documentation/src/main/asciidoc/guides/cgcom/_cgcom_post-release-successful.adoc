@@ -230,7 +230,7 @@ Update the Apache Isis (asciidoc) website:
 
 * Search these release procedures, and update any hard-coded reference to the release to the next release (so when they are followed next time the text will be correct).
 
-* Update the link:../downloads.html[downloads page] with a link to the source release zip file (under https://dist.apache.org/repos/dist/release/isis[https://dist.apache.org/repos/dist/release/isis])
+* Update the xref:../../downloads.adoc#[downloads page] with a link to the source release zip file (under https://dist.apache.org/repos/dist/release/isis[https://dist.apache.org/repos/dist/release/isis])
 
 * Update any pages (`.adoc`, `.md`, `.html` etc) that describe how to run the archetype, and ensure they reference the correct version. +
 +

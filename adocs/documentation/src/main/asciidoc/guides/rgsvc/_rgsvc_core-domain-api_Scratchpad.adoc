@@ -6,7 +6,7 @@
 
 
 
-The `Scratchpad` service is a link:../../more-advanced-topics/how-to-09-020-How-to-write-a-typical-domain-service.html[request-scoped] service to allow objects to exchange information even if they do not directly call each other.
+The `Scratchpad` (request-scoped) domain service allows objects to exchange information even if they do not directly call each other.
 
 
 

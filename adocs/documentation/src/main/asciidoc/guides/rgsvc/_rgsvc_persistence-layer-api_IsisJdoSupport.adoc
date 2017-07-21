@@ -176,7 +176,7 @@ is temporarily disabled while this method is performed.
 [[__rgsvc_persistence-layer-api_IsisJdoSupport_reloading-entities]]
 == Reloading entities
 
-An http://www.datanucleus.org/products/datanucleus/jdo/orm/relationships.html[(intentional) limitation] of JDO/DataNucleus is that persisting a child entity (in a 1:n bidirectional relationship) does not cause the parent's collection to be updated.
+An link:http://www.datanucleus.org:15080/products/accessplatform_5_0/jdo/mapping.html#one_many_relations[(intentional) limitation] of JDO/DataNucleus is that persisting a child entity (in a 1:n bidirectional relationship) does not cause the parent's collection to be updated.
 
 [source,java]
 ----

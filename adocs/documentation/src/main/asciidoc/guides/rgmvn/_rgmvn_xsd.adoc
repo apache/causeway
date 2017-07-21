@@ -287,7 +287,7 @@ packaged as any other code
 
 
 The referenced `catalog.xml` file instructs the `xjc` plugin how to resolve referenced schema locations.  Only a
-reference for the Apache Isis link:_rgcms_schema-common[common schema] is likely to be needed:
+reference for the Apache Isis xref../rgcms/rgcms.adoc#_rgcms_schema-common[common schema] is likely to be needed:
 
 [source,xml]
 ----

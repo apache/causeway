@@ -82,7 +82,7 @@ Learn more link:./guides/dg/dg.html#_dg_ide_intellij[here]
 
 |Commands and Auditing (v1.6.0) +
 
-_Configuring the command and auditing add-on modules for the xref:guides/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp]._ +
+_Configuring the command and auditing add-on modules for the xref:../../guides/ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp]._ +
 
 Learn more at the (non-ASF) Isis addons' http://github.com/isisaddons/isis-module-command[command] and http://github.com/isisaddons/isis-module-audit[audit] modules
 
@@ -91,7 +91,7 @@ Learn more at the (non-ASF) Isis addons' http://github.com/isisaddons/isis-modul
 
 |Security (v1.6.0) +
 
-_Configuring the security add-on module for for the xref:guides/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp]._ +
+_Configuring the security add-on module for for the xref:../../guides/ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp]._ +
 
 Learn more at the (non-ASF) http://github.com/isisaddons/isis-module-security[Isis addons' security] module
 

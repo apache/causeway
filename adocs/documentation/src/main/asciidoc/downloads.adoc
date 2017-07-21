@@ -15,7 +15,7 @@ Use for prototyping or production.
 
 == Getting Started
 
-If you just want to get going quickly, we suggest using our xref:guides/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[Maven archetype].
+If you just want to get going quickly, we suggest using our xref:guides/ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[Maven archetype].
 
 
 
@@ -98,7 +98,7 @@ git clone http://git.apache.org/isis.git
 
 
 The code is also mirrored on http://github.com/apache/isis[github], where you can browse it or fork it.
-And if you're interested in contributing back to Apache Isis, see link:contributors/contributing.html[here].
+If you're interested in contributing back to Apache Isis, see xref:guides/dg/dg.adoc#[here].
 
 
 

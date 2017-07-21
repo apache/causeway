@@ -6,7 +6,7 @@
 :numbered:
 
 
-[[_tg]]
+[[__tg]]
 == Tutorials
 
 This page contains a couple of tutorials for you to follow.

@@ -62,5 +62,5 @@ OO design techniques such as the link:https://en.wikipedia.org/wiki/Dependency_i
 
 [TIP]
 ====
-For further discussion on modular monolith's, check out Dan Haywood's link:https://www.infoq.com/articles/monolith-defense-1[pair] of link:https://www.infoq.com/articles/monolith-defense-2[articles] on InfoQ.
+For further discussion on modular monolith's, check out Dan Haywood's link:https://www.infoq.com/articles/monolith-defense-part-1[pair] of link:https://www.infoq.com/articles/monolith-defense-part-2[articles] on InfoQ.
 ====

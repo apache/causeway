@@ -253,4 +253,4 @@ take a look at link:http://stackoverflow.com/a/10041835/56880[this SO answer] on
 
 == See also
 
-See link:ugbtb.adoc#_ugbtb_deployment_jvm-flags[JVM args] for other JVM args and system properties that you might want to consider setting.
+See xref:ugbtb.adoc#_ugbtb_deployment_jvm-flags[JVM args] for other JVM args and system properties that you might want to consider setting.

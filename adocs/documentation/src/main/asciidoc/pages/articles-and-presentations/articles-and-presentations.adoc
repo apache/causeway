@@ -16,10 +16,10 @@ Some articles and recorded material relating to either Apache Isis (or its prede
 
 == 2013
 
-* Presentation, Oredev: link:http://www.oredev.org/2013/wed-fri-conference/rrraddd-ridiculously-rapid-domain-driven-and-restful-apps-with-apache-isis[RRRADDD! Ridiculously Rapid Domain-driven (and Restful) Apps With Apache Isis] (50 min. video)
+* Presentation, Oredev: link:http://oredev.org/oredev2013/2013/wed-fri-conference/rrraddd-ridiculously-rapid-domain-driven-and-restful-apps-with-apache-isis.html[RRRADDD! Ridiculously Rapid Domain-driven (and Restful) Apps With Apache Isis] (50 min. video)
 * *Article, Methods and Tools : link:http://www.methodsandtools.com/PDF/mt201302.pdf[Introducing Apache Isis]*
-* Article, SDJournal : link:http://sdjournal.org/software-developers-journal-open-012013-2/[Introducing Apache Isis]
-* Article, SDJournal: link:http://sdjournal.org/software-developers-journal-open-012013-2/[Restful Objects on Apache Isis]
+* Article, SDJournal : link:http://sdjournal.org[Introducing Apache Isis]
+* Article, SDJournal: link:http://sdjournal.org[Restful Objects on Apache Isis]
 * A Prezi link:http://prezi.com/cunfhjsf8dqg/braiv-apache-isis/[presentation on Naked Objects and Apache Isis], mixed by Thomas Eck
 
 
@@ -46,9 +46,8 @@ Some articles and recorded material relating to either Apache Isis (or its prede
 
 * *Article, Methods and Tools: link:http://www.methodsandtools.com/archive/archive.php?id=97[An Introduction to Domain Driven Design]*
 * Presentation, Skillsmatter: link:http://skillsmatter.com/podcast/design-architecture/exploring-domains-and-collaborating-with-domain-experts[Exploring Domains and Collaborating with Domain Experts] (1 hr video)
-* Presentation, Devoxx: link:http://www.parleys.com/#id=1671&st=5[Introducing Scimpi] (30 min video)
 * Article, PragPub: link:http://pragprog.com/magazines/2009-12[Going Naked]
-* *Book: link:./books.html[Domain Driven Design using Naked Objects], Dan Haywood*
+* *Book: xref:../books/books.adoc#__books_DDD-using-NO[Domain Driven Design using Naked Objects], Dan Haywood*
 
 
 == 2008:
@@ -58,7 +57,7 @@ Some articles and recorded material relating to either Apache Isis (or its prede
 
 == 2004:
 
-* *Richard Pawson's link:./guides/ugfun/resources/core-concepts/Pawson-Naked-Objects-thesis.pdf[PhD thesis on Naked Objects]*
+* *Richard Pawson's link:../../guides/ugfun/resources/core-concepts/Pawson-Naked-Objects-thesis.pdf[PhD thesis on Naked Objects]*
 * Article series, TheServerSide
 * Part 1 - link:http://www.theserverside.com/news/1365562/Part-1-The-Case-for-Naked-Objects-Getting-Back-to-the-Object-Oriented-Ideal[The Case for Naked Objects - Getting Back to the Object-Oriented Ideal]
 * *Part 2 - link:http://www.theserverside.com/news/1365568/Part-2-Challenging-the-Dominant-Design-of-the-4-Layer-Architecture[Challenging the Dominant Design of the 4-Layer Architecture]*
@@ -69,4 +68,4 @@ Some articles and recorded material relating to either Apache Isis (or its prede
 
 == 2002:
 
-* *Book: link:./books.html[Naked Objects], Richard Pawson and Robert Matthews.*
+* *Book: xref:../books/books.adoc#__books_Naked-Objects[Naked Objects], Richard Pawson and Robert Matthews.*
