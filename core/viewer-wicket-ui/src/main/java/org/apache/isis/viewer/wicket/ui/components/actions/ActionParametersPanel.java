@@ -50,20 +50,14 @@ public class ActionParametersPanel extends PanelAbstract<ActionModel> {
     private static final long serialVersionUID = 1L;
 
     private static final String ID_HEADER = "header";
-
-    static final String ID_ACTION_NAME = "actionName";
-
-
-    /**
-     * Gives a chance to hide the header part of this action panel,
-     * e.g. when shown in an action prompt
-     */
-    private boolean showHeader = true;
+    private static final String ID_ACTION_NAME = "actionName";
 
     public ActionParametersPanel(final String id, final ActionModel actionModel) {
         super(id, actionModel);
+    }
 
-        //buildGui(getActionModel());
+    ActionModel getActionModel() {
+        return super.getModel();
     }
 
     /**
@@ -80,68 +74,58 @@ public class ActionParametersPanel extends PanelAbstract<ActionModel> {
     protected void onInitialize() {
         super.onInitialize();
 
-
-        //
-        // <div wicket:id="header" class="iconAndTitle panel panel-default actionPanelHeaderNew">
-        //   <wicket:container wicket:id="entityIconAndTitle">[icon and title]</wicket:container>
-        //   <h3 wicket:id="actionName" class="actionName">[action name]</h3>
-        // </div>
-        // <div wicket:id="parameters"></div>
-        //
-
-
-        // buildGui(getModel());
         final ActionModel actionModel = getModel();
 
         if (!actionModel.hasParameters()) {
-            // buildGuiForNoParameters(actionModel);
-
+            // the factory should check for this already, so this should never occur...
             throw new IllegalStateException("model has no parameters!");
-        } else {
+        }
 
-            // buildGuiForParameters(getActionModel());
 
-            WebMarkupContainer header = new WebMarkupContainer(ID_HEADER) {
-                @Override
-                protected void onConfigure() {
-                    super.onConfigure();
-                    setVisible(showHeader);
-                }
-            };
-            addOrReplace(header);
-
-            ObjectAdapter targetAdapter = null;
-            try {
-                targetAdapter = actionModel.getTargetAdapter();
-
-                getComponentFactoryRegistry().addOrReplaceComponent(this, ComponentType.PARAMETERS, getActionModel());
-                getComponentFactoryRegistry().addOrReplaceComponent(header, ComponentType.ENTITY_ICON_AND_TITLE, actionModel
-                        .getParentEntityModel());
-
-                final String actionName = getActionModel().getActionMemento().getAction(actionModel.getSpecificationLoader()).getName();
-                header.add(new Label(ID_ACTION_NAME, Model.of(actionName)));
-
-            } catch (final ConcurrencyException ex) {
-
-                // second attempt should succeed, because the Oid would have
-                // been updated in the attempt
-                if (targetAdapter == null) {
-                    targetAdapter = getModel().getTargetAdapter();
-                }
-
-                // forward onto the target page with the concurrency exception
-                ActionResultResponse resultResponse = ActionResultResponseType.OBJECT.interpretResult(this.getActionModel(), targetAdapter, ex);
-                resultResponse.getHandlingStrategy().handleResults(resultResponse, getIsisSessionFactory());
-
-                final MessageService messageService = getServicesInjector().lookupService(MessageService.class);
-                messageService.warnUser(ex.getMessage());
+        WebMarkupContainer header = new WebMarkupContainer(ID_HEADER) {
+            @Override
+            protected void onConfigure() {
+                super.onConfigure();
+                setVisible(showHeader);
             }
+        };
+
+        addOrReplace(header);
+
+        ObjectAdapter targetAdapter = null;
+        try {
+            targetAdapter = actionModel.getTargetAdapter();
+
+            getComponentFactoryRegistry().addOrReplaceComponent(this, ComponentType.PARAMETERS, getActionModel());
+            getComponentFactoryRegistry().addOrReplaceComponent(header, ComponentType.ENTITY_ICON_AND_TITLE, actionModel
+                    .getParentEntityModel());
+
+            final String actionName = getActionModel().getActionMemento().getAction(actionModel.getSpecificationLoader()).getName();
+            header.add(new Label(ID_ACTION_NAME, Model.of(actionName)));
+
+        } catch (final ConcurrencyException ex) {
+
+            // second attempt should succeed, because the Oid would have
+            // been updated in the attempt
+            if (targetAdapter == null) {
+                targetAdapter = getModel().getTargetAdapter();
+            }
+
+            // forward onto the target page with the concurrency exception
+            ActionResultResponse resultResponse = ActionResultResponseType.OBJECT.interpretResult(this.getActionModel(), targetAdapter, ex);
+            resultResponse.getHandlingStrategy().handleResults(resultResponse, getIsisSessionFactory());
+
+            final MessageService messageService = getServicesInjector().lookupService(MessageService.class);
+            messageService.warnUser(ex.getMessage());
         }
     }
 
-    ActionModel getActionModel() {
-        return super.getModel();
-    }
+
+    /**
+     * Gives a chance to hide the header part of this action panel,
+     * e.g. when shown in an action prompt
+     */
+    private boolean showHeader = true;
 
     public void setShowHeader(boolean showHeader) {
         this.showHeader = showHeader;
