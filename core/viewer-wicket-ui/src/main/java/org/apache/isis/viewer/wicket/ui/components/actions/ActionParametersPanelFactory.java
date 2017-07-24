@@ -40,7 +40,7 @@ public class ActionParametersPanelFactory extends ComponentFactoryAbstract {
 
     @Override
     public ApplicationAdvice appliesTo(final IModel<?> model) {
-        return appliesIf(model instanceof ActionModel);
+        return appliesIf(model instanceof ActionModel && ((ActionModel)model).hasParameters());
     }
 
     @Override

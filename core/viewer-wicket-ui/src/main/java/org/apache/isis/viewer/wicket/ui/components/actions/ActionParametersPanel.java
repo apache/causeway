@@ -93,7 +93,11 @@ public class ActionParametersPanel extends PanelAbstract<ActionModel> {
         // buildGui(getModel());
         final ActionModel actionModel = getModel();
 
-        if (actionModel.hasParameters()) {
+        if (!actionModel.hasParameters()) {
+            // buildGuiForNoParameters(actionModel);
+
+            throw new IllegalStateException("model has no parameters!");
+        } else {
 
             // buildGuiForParameters(getActionModel());
 
@@ -132,10 +136,6 @@ public class ActionParametersPanel extends PanelAbstract<ActionModel> {
                 final MessageService messageService = getServicesInjector().lookupService(MessageService.class);
                 messageService.warnUser(ex.getMessage());
             }
-        } else {
-            // buildGuiForNoParameters(actionModel);
-
-            throw new IllegalStateException("model has no parameters!");
         }
     }
 
