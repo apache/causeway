@@ -9,13 +9,18 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
-import org.apache.isis.viewer.wicket.ui.panels.FormExecutorDefault;
+import org.apache.isis.viewer.wicket.ui.panels.FormExecutorStrategy;
 
-public class PropertyEditFormExecutor implements FormExecutorDefault.FormExecutorStrategy {
+public class PropertyFormExecutorStrategy implements FormExecutorStrategy<ScalarModel> {
 
     private final ScalarModel model;
 
-    public PropertyEditFormExecutor(final ScalarModel scalarModel) {
+    @Override
+    public ScalarModel getModel() {
+        return model;
+    }
+
+    public PropertyFormExecutorStrategy(final ScalarModel scalarModel) {
         model = scalarModel;
     }
 

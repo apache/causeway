@@ -92,6 +92,6 @@ class PropertyEditForm extends PromptFormAbstract<ScalarModel> {
     @Override
     protected FormExecutor getFormExecutor() {
         ScalarModel scalarModel = getScalarModel();
-        return new FormExecutorDefault<>(scalarModel, new PropertyEditFormExecutor(scalarModel));
+        return new FormExecutorDefault<>(new PropertyFormExecutorStrategy(scalarModel));
     }
 }

@@ -12,16 +12,20 @@ import org.apache.isis.viewer.wicket.model.models.BookmarkedPagesModel;
 import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponse;
 import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponseType;
 import org.apache.isis.viewer.wicket.ui.pages.BookmarkedPagesModelProvider;
-import org.apache.isis.viewer.wicket.ui.panels.FormExecutorDefault;
+import org.apache.isis.viewer.wicket.ui.panels.FormExecutorStrategy;
 
-public class ActionParametersFormExecutor implements FormExecutorDefault.FormExecutorStrategy {
+public class ActionFormExecutorStrategy implements FormExecutorStrategy<ActionModel> {
 
     private final ActionModel model;
 
-    public ActionParametersFormExecutor(final ActionModel actionModel) {
+    public ActionFormExecutorStrategy(final ActionModel actionModel) {
         model = actionModel;
     }
 
+    @Override
+    public ActionModel getModel() {
+        return model;
+    }
 
     public ObjectAdapter obtainTargetAdapter() {
         return model.getTargetAdapter();

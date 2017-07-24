@@ -58,10 +58,10 @@ public final class FormExecutorDefault<M extends BookmarkableModel<ObjectAdapter
 
     protected final M model;
     protected final WicketViewerSettings settings;
-    private final FormExecutorStrategy formExecutorStrategy;
+    private final FormExecutorStrategy<M> formExecutorStrategy;
 
-    public FormExecutorDefault(final M model, FormExecutorStrategy formExecutorStrategy) {
-        this.model = model;
+    public FormExecutorDefault(final FormExecutorStrategy<M> formExecutorStrategy) {
+        this.model = formExecutorStrategy.getModel();
         this.settings = getSettings();
         this.formExecutorStrategy = formExecutorStrategy;
     }
@@ -503,22 +503,6 @@ public final class FormExecutorDefault<M extends BookmarkableModel<ObjectAdapter
             final ObjectAdapter resultAdapter,
             final AjaxRequestTarget target) {
         formExecutorStrategy.redirectTo(resultAdapter, target);
-    }
-
-
-    public interface FormExecutorStrategy {
-        ObjectAdapter obtainTargetAdapter();
-
-        String getReasonInvalidIfAny();
-
-        void onExecuteAndProcessResults(final AjaxRequestTarget target);
-
-        ObjectAdapter obtainResultAdapter();
-
-        void redirectTo(
-                final ObjectAdapter resultAdapter,
-                final AjaxRequestTarget target);
-
     }
 
 }

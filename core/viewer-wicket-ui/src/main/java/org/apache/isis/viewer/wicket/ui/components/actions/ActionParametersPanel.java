@@ -80,7 +80,7 @@ public class ActionParametersPanel extends PanelAbstract<ActionModel> {
      * REVIEW: I wonder if this is necessary... there isn't anything exactly the same for property edits...
      */
     public void setActionPrompt(ActionPrompt actionPrompt) {
-        ActionParametersFormExecutor formExecutor = new ActionParametersFormExecutor(getActionModel());
+        ActionFormExecutorStrategy formExecutor = new ActionFormExecutorStrategy(getActionModel());
         formExecutor.setActionPrompt(actionPrompt);
     }
 
@@ -149,7 +149,7 @@ public class ActionParametersPanel extends PanelAbstract<ActionModel> {
             // returns false - if invalid args; if concurrency exception;
 
             final FormExecutor formExecutor =
-                    new FormExecutorDefault<>(actionModel, new ActionParametersFormExecutor(actionModel));
+                    new FormExecutorDefault<>(new ActionFormExecutorStrategy(actionModel));
             boolean succeeded = formExecutor.executeAndProcessResults(page, null, null);
             if(succeeded) {
                 // nothing to do

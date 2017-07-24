@@ -156,7 +156,8 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
 
     @Override
     protected FormExecutor getFormExecutor() {
-        return new FormExecutorDefault<>(getActionModel(), new ActionParametersFormExecutor(getActionModel()));
+        ActionModel actionModel = getActionModel();
+        return new FormExecutorDefault<>(new ActionFormExecutorStrategy(actionModel));
     }
 
 }
