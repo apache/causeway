@@ -13,7 +13,7 @@ import org.apache.isis.viewer.wicket.model.models.FormExecutor;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
-import org.apache.isis.viewer.wicket.ui.panels.FormExecutorAbstract;
+import org.apache.isis.viewer.wicket.ui.panels.FormExecutorDefault;
 import org.apache.isis.viewer.wicket.ui.panels.PromptFormAbstract;
 
 class PropertyEditForm extends PromptFormAbstract<ScalarModel> {
@@ -92,6 +92,6 @@ class PropertyEditForm extends PromptFormAbstract<ScalarModel> {
     @Override
     protected FormExecutor getFormExecutor() {
         ScalarModel scalarModel = getScalarModel();
-        return new FormExecutorAbstract<>(scalarModel, new PropertyEditFormExecutor(scalarModel));
+        return new FormExecutorDefault<>(scalarModel, new PropertyEditFormExecutor(scalarModel));
     }
 }

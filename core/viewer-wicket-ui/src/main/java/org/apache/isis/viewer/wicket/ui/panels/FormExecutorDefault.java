@@ -51,16 +51,16 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisBlobOr
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlUtil;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 
-public final class FormExecutorAbstract<M extends BookmarkableModel<ObjectAdapter> & ParentEntityModelProvider>
+public final class FormExecutorDefault<M extends BookmarkableModel<ObjectAdapter> & ParentEntityModelProvider>
         implements FormExecutor {
 
-    private static final Logger LOG = LoggerFactory.getLogger(FormExecutorAbstract.class);
+    private static final Logger LOG = LoggerFactory.getLogger(FormExecutorDefault.class);
 
     protected final M model;
     protected final WicketViewerSettings settings;
     private final FormExecutorStrategy formExecutorStrategy;
 
-    public FormExecutorAbstract(final M model, FormExecutorStrategy formExecutorStrategy) {
+    public FormExecutorDefault(final M model, FormExecutorStrategy formExecutorStrategy) {
         this.model = model;
         this.settings = getSettings();
         this.formExecutorStrategy = formExecutorStrategy;

@@ -9,9 +9,9 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
-import org.apache.isis.viewer.wicket.ui.panels.FormExecutorAbstract;
+import org.apache.isis.viewer.wicket.ui.panels.FormExecutorDefault;
 
-public class PropertyEditFormExecutor implements FormExecutorAbstract.FormExecutorStrategy {
+public class PropertyEditFormExecutor implements FormExecutorDefault.FormExecutorStrategy {
 
     private final ScalarModel model;
 

@@ -39,7 +39,7 @@ import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponse;
 import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponseType;
 import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditPanel;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
-import org.apache.isis.viewer.wicket.ui.panels.FormExecutorAbstract;
+import org.apache.isis.viewer.wicket.ui.panels.FormExecutorDefault;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
 /**
@@ -149,7 +149,7 @@ public class ActionParametersPanel extends PanelAbstract<ActionModel> {
             // returns false - if invalid args; if concurrency exception;
 
             final FormExecutor formExecutor =
-                    new FormExecutorAbstract<>(actionModel, new ActionParametersFormExecutor(actionModel));
+                    new FormExecutorDefault<>(actionModel, new ActionParametersFormExecutor(actionModel));
             boolean succeeded = formExecutor.executeAndProcessResults(page, null, null);
             if(succeeded) {
                 // nothing to do

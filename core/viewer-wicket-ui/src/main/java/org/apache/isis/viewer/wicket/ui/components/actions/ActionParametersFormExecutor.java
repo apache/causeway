@@ -12,9 +12,9 @@ import org.apache.isis.viewer.wicket.model.models.BookmarkedPagesModel;
 import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponse;
 import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponseType;
 import org.apache.isis.viewer.wicket.ui.pages.BookmarkedPagesModelProvider;
-import org.apache.isis.viewer.wicket.ui.panels.FormExecutorAbstract;
+import org.apache.isis.viewer.wicket.ui.panels.FormExecutorDefault;
 
-public class ActionParametersFormExecutor implements FormExecutorAbstract.FormExecutorStrategy {
+public class ActionParametersFormExecutor implements FormExecutorDefault.FormExecutorStrategy {
 
     private final ActionModel model;
 
