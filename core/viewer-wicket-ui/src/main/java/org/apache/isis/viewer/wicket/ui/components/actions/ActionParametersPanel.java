@@ -61,7 +61,8 @@ public class ActionParametersPanel extends PanelAbstract<ActionModel> {
 
 
     /**
-     * Gives a chance to hide the header part of this action panel, e.g. when shown in an action prompt
+     * Gives a chance to hide the header part of this action panel,
+     * e.g. when shown in an action prompt
      */
     private boolean showHeader = true;
 
@@ -103,7 +104,14 @@ public class ActionParametersPanel extends PanelAbstract<ActionModel> {
 
             // buildGuiForParameters(getActionModel());
 
-            WebMarkupContainer header = addHeader();
+            WebMarkupContainer header = new WebMarkupContainer(ID_HEADER) {
+                @Override
+                protected void onConfigure() {
+                    super.onConfigure();
+                    setVisible(showHeader);
+                }
+            };
+            addOrReplace(header);
 
             ObjectAdapter targetAdapter = null;
             try {
@@ -136,8 +144,8 @@ public class ActionParametersPanel extends PanelAbstract<ActionModel> {
 
             final Page page = this.getPage();
 
-            // returns false - if invalid args; if concurrency exception;
             // returns true - if redirecting to new page, or repainting all components.
+            // returns false - if invalid args; if concurrency exception;
 
             boolean succeeded = actionModel.getFormExecutor().executeAndProcessResults(page, null, null);
             if(succeeded) {
@@ -182,19 +190,5 @@ public class ActionParametersPanel extends PanelAbstract<ActionModel> {
     public void setShowHeader(boolean showHeader) {
         this.showHeader = showHeader;
     }
-
-    private WebMarkupContainer addHeader() {
-        WebMarkupContainer header = new WebMarkupContainer(ID_HEADER) {
-            @Override
-            protected void onConfigure() {
-                super.onConfigure();
-                setVisible(showHeader);
-            }
-        };
-        addOrReplace(header);
-        return header;
-    }
-
-
 
 }
