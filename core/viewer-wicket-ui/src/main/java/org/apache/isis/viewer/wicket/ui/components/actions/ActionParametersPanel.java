@@ -82,23 +82,82 @@ public class ActionParametersPanel extends PanelAbstract<ActionModel> {
         formExecutor.setActionPrompt(actionPrompt);
     }
 
-    @Override protected void onInitialize() {
+    @Override
+    protected void onInitialize() {
         super.onInitialize();
 
-        buildGui(getModel());
-    }
-
-    @Override
-    protected void onConfigure() {
-        super.onConfigure();
-
-    }
-
-    private void buildGui(final ActionModel actionModel) {
+        // buildGui(getModel());
+        final ActionModel actionModel = getModel();
         if (actionModel.hasParameters()) {
-            buildGuiForParameters(getActionModel());
+            // buildGuiForParameters(getActionModel());
+            final ActionModel actionModel1 = getActionModel();
+
+            WebMarkupContainer header = addHeader();
+
+            ObjectAdapter targetAdapter = null;
+            try {
+                targetAdapter = actionModel1.getTargetAdapter();
+
+                getComponentFactoryRegistry().addOrReplaceComponent(this, ComponentType.PARAMETERS, getActionModel());
+                getComponentFactoryRegistry().addOrReplaceComponent(header, ComponentType.ENTITY_ICON_AND_TITLE, actionModel1
+                        .getParentEntityModel());
+
+                final String actionName = getActionModel().getActionMemento().getAction(actionModel1.getSpecificationLoader()).getName();
+                header.add(new Label(ID_ACTION_NAME, Model.of(actionName)));
+
+            } catch (final ConcurrencyException ex) {
+
+                // second attempt should succeed, because the Oid would have
+                // been updated in the attempt
+                if (targetAdapter == null) {
+                    targetAdapter = getModel().getTargetAdapter();
+                }
+
+                // forward onto the target page with the concurrency exception
+                ActionResultResponse resultResponse = ActionResultResponseType.OBJECT.interpretResult(this.getActionModel(), targetAdapter, ex);
+                resultResponse.getHandlingStrategy().handleResults(resultResponse, getIsisSessionFactory());
+
+                final MessageService messageService = getServicesInjector().lookupService(MessageService.class);
+                messageService.warnUser(ex.getMessage());
+            }
         } else {
-            buildGuiForNoParameters(actionModel);
+            // buildGuiForNoParameters(actionModel);
+
+            final Page page = this.getPage();
+            boolean succeeded = actionModel.getFormExecutor().executeAndProcessResults(page, null, null);
+
+            if(succeeded) {
+                // nothing to do
+            } else {
+
+                // render the target entity again
+                //
+                // (One way this can occur is if an event subscriber has a defect and throws an exception; in which case
+                // the EventBus' exception handler will automatically veto.  This results in a growl message rather than
+                // an error page, but is probably 'good enough').
+                final ObjectAdapter targetAdapter = actionModel.getTargetAdapter();
+
+                final EntityPage entityPage =
+
+                        // disabling concurrency checking after the layout XML (grid) feature
+                        // was throwing an exception when rebuild grid after invoking action
+                        // not certain why that would be the case, but think it should be
+                        // safe to simply disable while recreating the page to re-render back to user.
+                        AdapterManager.ConcurrencyChecking.executeWithConcurrencyCheckingDisabled(
+                                new Callable<EntityPage>() {
+                                    @Override public EntityPage call() throws Exception {
+                                        return new EntityPage(targetAdapter, null);
+                                    }
+                                }
+                        );
+
+                getIsisSessionFactory().getCurrentSession().getPersistenceSession().getTransactionManager().flushTransaction();
+
+                // "redirect-after-post"
+                final RequestCycle requestCycle = RequestCycle.get();
+                requestCycle.setResponsePage(entityPage);
+
+            }
         }
     }
 
@@ -106,40 +165,8 @@ public class ActionParametersPanel extends PanelAbstract<ActionModel> {
         return super.getModel();
     }
 
-    public ActionParametersPanel setShowHeader(boolean showHeader) {
+    public void setShowHeader(boolean showHeader) {
         this.showHeader = showHeader;
-        return this;
-    }
-
-    private void buildGuiForParameters(final ActionModel actionModel) {
-
-        WebMarkupContainer header = addHeader();
-
-        ObjectAdapter targetAdapter = null;
-        try {
-            targetAdapter = actionModel.getTargetAdapter();
-
-            getComponentFactoryRegistry().addOrReplaceComponent(this, ComponentType.PARAMETERS, getActionModel());
-            getComponentFactoryRegistry().addOrReplaceComponent(header, ComponentType.ENTITY_ICON_AND_TITLE, actionModel.getParentEntityModel());
-
-            final String actionName = getActionModel().getActionMemento().getAction(actionModel.getSpecificationLoader()).getName();
-            header.add(new Label(ID_ACTION_NAME, Model.of(actionName)));
-
-        } catch (final ConcurrencyException ex) {
-
-            // second attempt should succeed, because the Oid would have
-            // been updated in the attempt
-            if (targetAdapter == null) {
-                targetAdapter = getModel().getTargetAdapter();
-            }
-            
-            // forward onto the target page with the concurrency exception
-            ActionResultResponse resultResponse = ActionResultResponseType.OBJECT.interpretResult(this.getActionModel(), targetAdapter, ex);
-            resultResponse.getHandlingStrategy().handleResults(resultResponse, getIsisSessionFactory());
-
-            final MessageService messageService = getServicesInjector().lookupService(MessageService.class);
-            messageService.warnUser(ex.getMessage());
-        }
     }
 
     private WebMarkupContainer addHeader() {
@@ -154,64 +181,6 @@ public class ActionParametersPanel extends PanelAbstract<ActionModel> {
         return header;
     }
 
-    private void buildGuiForNoParameters(final ActionModel formExecutor) {
-
-        final Page page = this.getPage();
-        boolean succeeded = formExecutor.getFormExecutor().executeAndProcessResults(page, null, null);
-
-        if(succeeded) {
-            // nothing to do
-        } else {
-
-            // render the target entity again
-            //
-            // (One way this can occur is if an event subscriber has a defect and throws an exception; in which case
-            // the EventBus' exception handler will automatically veto.  This results in a growl message rather than
-            // an error page, but is probably 'good enough').
-            final ObjectAdapter targetAdapter = formExecutor.getTargetAdapter();
-
-            final EntityPage entityPage =
-
-                    // disabling concurrency checking after the layout XML (grid) feature
-                    // was throwing an exception when rebuild grid after invoking action
-                    // not certain why that would be the case, but think it should be
-                    // safe to simply disable while recreating the page to re-render back to user.
-                    AdapterManager.ConcurrencyChecking.executeWithConcurrencyCheckingDisabled(
-                            new Callable<EntityPage>() {
-                                @Override public EntityPage call() throws Exception {
-                                    return new EntityPage(targetAdapter, null);
-                                }
-                            }
-                    );
-
-            getIsisSessionFactory().getCurrentSession().getPersistenceSession().getTransactionManager().flushTransaction();
-
-            // "redirect-after-post"
-            final RequestCycle requestCycle = RequestCycle.get();
-            requestCycle.setResponsePage(entityPage);
-
-        }
-    }
-
-    private static ActionResultResponse toEntityPage(final ActionModel model, final ObjectAdapter actualAdapter, final ConcurrencyException exIfAny) {
-        // this will not preserve the URL (because pageParameters are not copied over)
-        // but trying to preserve them seems to cause the 302 redirect to be swallowed somehow
-        final EntityPage entityPage =
-
-                // disabling concurrency checking after the layout XML (grid) feature
-                // was throwing an exception when rebuild grid after invoking action
-                // not certain why that would be the case, but think it should be
-                // safe to simply disable while recreating the page to re-render back to user.
-                AdapterManager.ConcurrencyChecking.executeWithConcurrencyCheckingDisabled(
-                        new Callable<EntityPage>() {
-                            @Override public EntityPage call() throws Exception {
-                                return new EntityPage(actualAdapter, exIfAny);
-                            }
-                        }
-                );
-
-        return ActionResultResponse.toPage(entityPage);
-    }
 
 
 }
