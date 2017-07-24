@@ -86,23 +86,34 @@ public class ActionParametersPanel extends PanelAbstract<ActionModel> {
     protected void onInitialize() {
         super.onInitialize();
 
+
+        //
+        // <div wicket:id="header" class="iconAndTitle panel panel-default actionPanelHeaderNew">
+        //   <wicket:container wicket:id="entityIconAndTitle">[icon and title]</wicket:container>
+        //   <h3 wicket:id="actionName" class="actionName">[action name]</h3>
+        // </div>
+        // <div wicket:id="parameters"></div>
+        //
+
+
         // buildGui(getModel());
         final ActionModel actionModel = getModel();
+
         if (actionModel.hasParameters()) {
+
             // buildGuiForParameters(getActionModel());
-            final ActionModel actionModel1 = getActionModel();
 
             WebMarkupContainer header = addHeader();
 
             ObjectAdapter targetAdapter = null;
             try {
-                targetAdapter = actionModel1.getTargetAdapter();
+                targetAdapter = actionModel.getTargetAdapter();
 
                 getComponentFactoryRegistry().addOrReplaceComponent(this, ComponentType.PARAMETERS, getActionModel());
-                getComponentFactoryRegistry().addOrReplaceComponent(header, ComponentType.ENTITY_ICON_AND_TITLE, actionModel1
+                getComponentFactoryRegistry().addOrReplaceComponent(header, ComponentType.ENTITY_ICON_AND_TITLE, actionModel
                         .getParentEntityModel());
 
-                final String actionName = getActionModel().getActionMemento().getAction(actionModel1.getSpecificationLoader()).getName();
+                final String actionName = getActionModel().getActionMemento().getAction(actionModel.getSpecificationLoader()).getName();
                 header.add(new Label(ID_ACTION_NAME, Model.of(actionName)));
 
             } catch (final ConcurrencyException ex) {
@@ -124,8 +135,11 @@ public class ActionParametersPanel extends PanelAbstract<ActionModel> {
             // buildGuiForNoParameters(actionModel);
 
             final Page page = this.getPage();
-            boolean succeeded = actionModel.getFormExecutor().executeAndProcessResults(page, null, null);
 
+            // returns false - if invalid args; if concurrency exception;
+            // returns true - if redirecting to new page, or repainting all components.
+
+            boolean succeeded = actionModel.getFormExecutor().executeAndProcessResults(page, null, null);
             if(succeeded) {
                 // nothing to do
             } else {

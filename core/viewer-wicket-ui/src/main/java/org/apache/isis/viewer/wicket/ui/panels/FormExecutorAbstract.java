@@ -69,6 +69,14 @@ public abstract class FormExecutorAbstract<M extends BookmarkableModel<ObjectAda
         return guiceBeanProvider.lookup(WicketViewerSettings.class);
     }
 
+    /**
+     *
+     * @param page
+     * @param targetIfAny
+     * @param feedbackFormIfAny
+     *
+     * @return <tt>false</tt> - if invalid args; if concurrency exception; <tt>true</tt> if redirecting to new page, or repainting all components
+     */
     @Override
     public boolean executeAndProcessResults(
             final Page page,
@@ -83,7 +91,7 @@ public abstract class FormExecutorAbstract<M extends BookmarkableModel<ObjectAda
         try {
 
             // may immediately throw a concurrency exception if
-            // the Isis Oid held in the underlying EntityModel is stale w.r.t. the the DB.
+            // the Isis Oid held in the underlying EntityModel is stale w.r.t. the DB.
             targetAdapter = obtainTargetAdapter();
 
             // no concurrency exception, so continue...
@@ -286,17 +294,17 @@ public abstract class FormExecutorAbstract<M extends BookmarkableModel<ObjectAda
         // but trying to preserve them seems to cause the 302 redirect to be swallowed somehow
         final EntityPage entityPage =
 
-                // disabling concurrency checking after the layout XML (grid) feature
-                // was throwing an exception when rebuild grid after invoking action
-                // not certain why that would be the case, but think it should be
-                // safe to simply disable while recreating the page to re-render back to user.
-                AdapterManager.ConcurrencyChecking.executeWithConcurrencyCheckingDisabled(
-                        new Callable<EntityPage>() {
-                            @Override public EntityPage call() throws Exception {
-                                return new EntityPage(targetAdapter, ex);
-                            }
-                        }
-                );
+        // disabling concurrency checking after the layout XML (grid) feature
+        // was throwing an exception when rebuild grid after invoking action
+        // not certain why that would be the case, but think it should be
+        // safe to simply disable while recreating the page to re-render back to user.
+        AdapterManager.ConcurrencyChecking.executeWithConcurrencyCheckingDisabled(
+                new Callable<EntityPage>() {
+                    @Override public EntityPage call() throws Exception {
+                        return new EntityPage(targetAdapter, ex);
+                    }
+                }
+        );
 
         // force any changes in state etc to happen now prior to the redirect;
         // in the case of an object being returned, this should cause our page mementos
