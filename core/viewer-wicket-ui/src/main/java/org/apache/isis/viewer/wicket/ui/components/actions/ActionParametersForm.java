@@ -21,6 +21,7 @@ import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
 import org.apache.isis.viewer.wicket.model.models.ActionArgumentModel;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
+import org.apache.isis.viewer.wicket.model.models.FormExecutor;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.scalars.PanelWithChoices;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
@@ -152,5 +153,9 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
         // get trampled over (ISIS-629).
     }
 
+    @Override
+    protected FormExecutor getFormExecutor() {
+        return new ActionParametersFormExecutor(getActionModel());
+    }
 
 }

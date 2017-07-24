@@ -23,8 +23,6 @@ import org.apache.isis.applib.annotation.PromptStyle;
 
 public interface FormExecutorContext extends ParentEntityModelProvider {
 
-    FormExecutor getFormExecutor();
-
     PromptStyle getPromptStyle();
 
     InlinePromptContext getInlinePromptContext();

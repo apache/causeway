@@ -55,10 +55,6 @@ public class PropertyEditPanel extends PanelAbstract<ScalarModel> {
             final ScalarModel scalarModel) {
         super(id, new ScalarModel(scalarModel.getParentEntityModel(), scalarModel.getPropertyMemento()));
 
-        final ScalarModel model = getModel();
-        final PropertyEditFormExecutor formExecutor = new PropertyEditFormExecutor(/*this, */model);
-        model.setFormExecutor(formExecutor);
-
         buildGui(scalarModel);
     }
 

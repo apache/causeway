@@ -201,7 +201,7 @@ public abstract class PromptFormAbstract<T extends IModel<ObjectAdapter> & FormE
 
         setLastFocusHint();
 
-        final FormExecutor formExecutor = formExecutorContext.getFormExecutor();
+        final FormExecutor formExecutor = getFormExecutor();
         boolean succeeded = formExecutor.executeAndProcessResults(target.getPage(), target, form);
 
         if (succeeded) {
@@ -212,6 +212,8 @@ public abstract class PromptFormAbstract<T extends IModel<ObjectAdapter> & FormE
         }
 
     }
+
+    protected abstract FormExecutor getFormExecutor();
 
 
     private void setLastFocusHint() {

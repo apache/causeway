@@ -33,6 +33,7 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
+import org.apache.isis.viewer.wicket.model.models.FormExecutor;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponse;
 import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponseType;
@@ -68,7 +69,7 @@ public class ActionParametersPanel extends PanelAbstract<ActionModel> {
 
     public ActionParametersPanel(final String id, final ActionModel actionModel) {
         super(id, actionModel);
-        actionModel.setFormExecutor(new ActionParametersFormExecutor(actionModel));
+
         //buildGui(getActionModel());
     }
 
@@ -78,8 +79,7 @@ public class ActionParametersPanel extends PanelAbstract<ActionModel> {
      * REVIEW: I wonder if this is necessary... there isn't anything exactly the same for property edits...
      */
     public void setActionPrompt(ActionPrompt actionPrompt) {
-        ActionParametersFormExecutor formExecutor =
-                (ActionParametersFormExecutor) getActionModel().getFormExecutor();
+        ActionParametersFormExecutor formExecutor = new ActionParametersFormExecutor(getActionModel());
         formExecutor.setActionPrompt(actionPrompt);
     }
 
@@ -147,7 +147,8 @@ public class ActionParametersPanel extends PanelAbstract<ActionModel> {
             // returns true - if redirecting to new page, or repainting all components.
             // returns false - if invalid args; if concurrency exception;
 
-            boolean succeeded = actionModel.getFormExecutor().executeAndProcessResults(page, null, null);
+            final FormExecutor formExecutor = new ActionParametersFormExecutor(actionModel);
+            boolean succeeded = formExecutor.executeAndProcessResults(page, null, null);
             if(succeeded) {
                 // nothing to do
             } else {

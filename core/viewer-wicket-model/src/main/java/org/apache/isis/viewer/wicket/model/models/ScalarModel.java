@@ -1045,24 +1045,6 @@ public class ScalarModel extends EntityModel implements LinksProvider,FormExecut
         super.onDetach();
     }
 
-    // //////////////////////////////////////
-
-
-    private FormExecutor formExecutor;
-
-
-    /**
-     * A hint passed from one Wicket UI component to another.
-     *
-     * Mot actually used by the model itself.
-     */
-    public FormExecutor getFormExecutor() {
-        return formExecutor;
-    }
-    public void setFormExecutor(final FormExecutor formExecutor) {
-        this.formExecutor = formExecutor;
-    }
-
 
 
     // //////////////////////////////////////

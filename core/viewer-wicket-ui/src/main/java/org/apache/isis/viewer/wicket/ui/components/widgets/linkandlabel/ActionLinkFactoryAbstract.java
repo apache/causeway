@@ -41,7 +41,6 @@ import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.components.actionprompt.ActionPromptHeaderPanel;
-import org.apache.isis.viewer.wicket.ui.components.actions.ActionParametersFormExecutor;
 import org.apache.isis.viewer.wicket.ui.components.actions.ActionParametersPanel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
@@ -122,7 +121,7 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
         } else {
 
             MarkupContainer scalarTypeContainer = inlinePromptContext.getScalarTypeContainer();
-            actionModel.setFormExecutor(new ActionParametersFormExecutor(/*scalarTypeContainer, */actionModel));
+
             actionModel.setInlinePromptContext(inlinePromptContext);
             getComponentFactoryRegistry().addOrReplaceComponent(scalarTypeContainer,
                     ScalarPanelAbstract2.ID_SCALAR_IF_REGULAR_INLINE_PROMPT_FORM, ComponentType.PARAMETERS, actionModel);

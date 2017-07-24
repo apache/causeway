@@ -348,8 +348,6 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
         for (final Map.Entry<Integer,ActionArgumentModel> argumentModel : argumentModelByIdx.entrySet()) {
             setArgument(argumentModel.getKey(), argumentModel.getValue().getObject());
         }
-
-        this.formExecutor = actionModel.formExecutor;
     }
 
     private void setArgumentsIfPossible(
@@ -677,23 +675,6 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
         // we copy into a new array list otherwise we get lazy evaluation =
         // reference to a non-serializable object
         return Lists.newArrayList(parameterMementoList);
-    }
-
-    //////////////////////////////////////////////////
-
-    private FormExecutor formExecutor;
-
-    /**
-     * A hint passed from one Wicket UI component to another.
-     *
-     * Mot actually used by the model itself.
-     */
-    public FormExecutor getFormExecutor() {
-        return formExecutor;
-    }
-
-    public void setFormExecutor(final FormExecutor formExecutor) {
-        this.formExecutor = formExecutor;
     }
 
 

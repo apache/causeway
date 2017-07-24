@@ -9,6 +9,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.viewer.wicket.model.hints.IsisPropertyEditCompletedEvent;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
+import org.apache.isis.viewer.wicket.model.models.FormExecutor;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
@@ -87,4 +88,8 @@ class PropertyEditForm extends PromptFormAbstract<ScalarModel> {
         super.onCancelSubmitted(target);
     }
 
+    @Override
+    protected FormExecutor getFormExecutor() {
+        return new PropertyEditFormExecutor(getScalarModel());
+    }
 }
