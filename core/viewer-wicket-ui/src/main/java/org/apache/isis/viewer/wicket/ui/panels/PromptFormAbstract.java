@@ -46,8 +46,10 @@ import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
+import org.apache.isis.viewer.wicket.model.models.BookmarkableModel;
 import org.apache.isis.viewer.wicket.model.models.FormExecutor;
 import org.apache.isis.viewer.wicket.model.models.FormExecutorContext;
+import org.apache.isis.viewer.wicket.model.models.ParentEntityModelProvider;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarModelSubscriber2;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.FormFeedbackPanel;
@@ -55,7 +57,10 @@ import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 
-public abstract class PromptFormAbstract<T extends IModel<ObjectAdapter> & FormExecutorContext>
+public abstract class PromptFormAbstract<T extends BookmarkableModel<ObjectAdapter>
+                                                    & ParentEntityModelProvider
+                                                    & IModel<ObjectAdapter>
+                                                    & FormExecutorContext>
         extends FormAbstract<ObjectAdapter>
         implements ScalarModelSubscriber2 {
 
@@ -231,7 +236,11 @@ public abstract class PromptFormAbstract<T extends IModel<ObjectAdapter> & FormE
 
     }
 
-    protected abstract FormExecutor getFormExecutor();
+    private FormExecutor getFormExecutor() {
+        return new FormExecutorDefault<>(getFormExecutorStrategy());
+    }
+
+    protected abstract FormExecutorStrategy<T> getFormExecutorStrategy();
 
 
     private void setLastFocusHint() {

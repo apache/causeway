@@ -45,6 +45,7 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.PanelWithChoices;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.panels.FormExecutorDefault;
+import org.apache.isis.viewer.wicket.ui.panels.FormExecutorStrategy;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 import org.apache.isis.viewer.wicket.ui.panels.PromptFormAbstract;
 
@@ -173,9 +174,9 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
     }
 
     @Override
-    protected FormExecutor getFormExecutor() {
+    protected FormExecutorStrategy<ActionModel> getFormExecutorStrategy() {
         ActionModel actionModel = getActionModel();
-        return new FormExecutorDefault<>(new ActionFormExecutorStrategy(actionModel));
+        return new ActionFormExecutorStrategy(actionModel);
     }
 
 }
