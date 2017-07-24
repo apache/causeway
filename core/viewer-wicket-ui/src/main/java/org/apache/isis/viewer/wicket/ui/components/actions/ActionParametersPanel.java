@@ -19,27 +19,19 @@
 
 package org.apache.isis.viewer.wicket.ui.components.actions;
 
-import java.util.concurrent.Callable;
-
-import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.request.cycle.RequestCycle;
 
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
-import org.apache.isis.viewer.wicket.model.models.FormExecutor;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponse;
 import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponseType;
 import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditPanel;
-import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
-import org.apache.isis.viewer.wicket.ui.panels.FormExecutorDefault;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
 /**
@@ -143,46 +135,7 @@ public class ActionParametersPanel extends PanelAbstract<ActionModel> {
         } else {
             // buildGuiForNoParameters(actionModel);
 
-            final Page page = this.getPage();
-
-            // returns true - if redirecting to new page, or repainting all components.
-            // returns false - if invalid args; if concurrency exception;
-
-            final FormExecutor formExecutor =
-                    new FormExecutorDefault<>(new ActionFormExecutorStrategy(actionModel));
-            boolean succeeded = formExecutor.executeAndProcessResults(page, null, null);
-            if(succeeded) {
-                // nothing to do
-            } else {
-
-                // render the target entity again
-                //
-                // (One way this can occur is if an event subscriber has a defect and throws an exception; in which case
-                // the EventBus' exception handler will automatically veto.  This results in a growl message rather than
-                // an error page, but is probably 'good enough').
-                final ObjectAdapter targetAdapter = actionModel.getTargetAdapter();
-
-                final EntityPage entityPage =
-
-                        // disabling concurrency checking after the layout XML (grid) feature
-                        // was throwing an exception when rebuild grid after invoking action
-                        // not certain why that would be the case, but think it should be
-                        // safe to simply disable while recreating the page to re-render back to user.
-                        AdapterManager.ConcurrencyChecking.executeWithConcurrencyCheckingDisabled(
-                                new Callable<EntityPage>() {
-                                    @Override public EntityPage call() throws Exception {
-                                        return new EntityPage(targetAdapter, null);
-                                    }
-                                }
-                        );
-
-                getIsisSessionFactory().getCurrentSession().getPersistenceSession().getTransactionManager().flushTransaction();
-
-                // "redirect-after-post"
-                final RequestCycle requestCycle = RequestCycle.get();
-                requestCycle.setResponsePage(entityPage);
-
-            }
+            throw new IllegalStateException("model has no parameters!");
         }
     }
 
