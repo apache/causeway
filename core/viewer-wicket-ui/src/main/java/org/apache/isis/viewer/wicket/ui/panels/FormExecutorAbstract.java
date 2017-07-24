@@ -51,17 +51,19 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisBlobOr
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlUtil;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 
-public abstract class FormExecutorAbstract<M extends BookmarkableModel<ObjectAdapter> & ParentEntityModelProvider>
+public final class FormExecutorAbstract<M extends BookmarkableModel<ObjectAdapter> & ParentEntityModelProvider>
         implements FormExecutor {
 
     private static final Logger LOG = LoggerFactory.getLogger(FormExecutorAbstract.class);
 
     protected final M model;
     protected final WicketViewerSettings settings;
+    private final FormExecutorStrategy formExecutorStrategy;
 
-    public FormExecutorAbstract(final M model) {
+    public FormExecutorAbstract(final M model, FormExecutorStrategy formExecutorStrategy) {
         this.model = model;
         this.settings = getSettings();
+        this.formExecutorStrategy = formExecutorStrategy;
     }
 
     protected WicketViewerSettings getSettings() {
@@ -480,19 +482,43 @@ public abstract class FormExecutorAbstract<M extends BookmarkableModel<ObjectAda
 
     ///////////////////////////////////////////////////////////////////////////////
 
-    protected abstract ObjectAdapter obtainTargetAdapter();
+    protected ObjectAdapter obtainTargetAdapter() {
+        return formExecutorStrategy.obtainTargetAdapter();
+    }
 
-    protected abstract String getReasonInvalidIfAny();
+    protected String getReasonInvalidIfAny() {
+        return formExecutorStrategy.getReasonInvalidIfAny();
+    }
 
-    protected abstract void onExecuteAndProcessResults(final AjaxRequestTarget target);
+    protected void onExecuteAndProcessResults(final AjaxRequestTarget target) {
+        formExecutorStrategy.onExecuteAndProcessResults(target);
+    }
 
-    protected abstract ObjectAdapter obtainResultAdapter();
+    protected ObjectAdapter obtainResultAdapter() {
+        return formExecutorStrategy.obtainResultAdapter();
+    }
 
 
-    protected abstract void redirectTo(
+    protected void redirectTo(
             final ObjectAdapter resultAdapter,
-            final AjaxRequestTarget target);
+            final AjaxRequestTarget target) {
+        formExecutorStrategy.redirectTo(resultAdapter, target);
+    }
 
 
+    public interface FormExecutorStrategy {
+        ObjectAdapter obtainTargetAdapter();
+
+        String getReasonInvalidIfAny();
+
+        void onExecuteAndProcessResults(final AjaxRequestTarget target);
+
+        ObjectAdapter obtainResultAdapter();
+
+        void redirectTo(
+                final ObjectAdapter resultAdapter,
+                final AjaxRequestTarget target);
+
+    }
 
 }

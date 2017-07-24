@@ -4,6 +4,8 @@ import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
 import org.apache.isis.viewer.wicket.model.models.BookmarkedPagesModel;
@@ -12,22 +14,24 @@ import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponseType;
 import org.apache.isis.viewer.wicket.ui.pages.BookmarkedPagesModelProvider;
 import org.apache.isis.viewer.wicket.ui.panels.FormExecutorAbstract;
 
-public class ActionParametersFormExecutor extends FormExecutorAbstract<ActionModel> {
+public class ActionParametersFormExecutor implements FormExecutorAbstract.FormExecutorStrategy {
+
+    private final ActionModel model;
 
     public ActionParametersFormExecutor(final ActionModel actionModel) {
-        super(actionModel);
+        model = actionModel;
     }
 
 
-    protected ObjectAdapter obtainTargetAdapter() {
+    public ObjectAdapter obtainTargetAdapter() {
         return model.getTargetAdapter();
     }
 
-    protected String getReasonInvalidIfAny() {
+    public String getReasonInvalidIfAny() {
         return model.getReasonInvalidIfAny();
     }
 
-    protected void onExecuteAndProcessResults(final AjaxRequestTarget target) {
+    public void onExecuteAndProcessResults(final AjaxRequestTarget target) {
 
         if (model.isBookmarkable()) {
             BookmarkedPagesModelProvider application = (BookmarkedPagesModelProvider) Session.get();
@@ -42,12 +46,12 @@ public class ActionParametersFormExecutor extends FormExecutorAbstract<ActionMod
         }
     }
 
-    protected ObjectAdapter obtainResultAdapter() {
+    public ObjectAdapter obtainResultAdapter() {
         return model.execute();
     }
 
 
-    protected void redirectTo(
+    public void redirectTo(
             final ObjectAdapter resultAdapter,
             final AjaxRequestTarget targetIfany) {
         ActionResultResponse resultResponse = ActionResultResponseType
@@ -66,5 +70,9 @@ public class ActionParametersFormExecutor extends FormExecutorAbstract<ActionMod
         this.actionPrompt = actionPrompt;
     }
 
+
+    protected IsisSessionFactory getIsisSessionFactory() {
+        return IsisContext.getSessionFactory();
+    }
 
 }

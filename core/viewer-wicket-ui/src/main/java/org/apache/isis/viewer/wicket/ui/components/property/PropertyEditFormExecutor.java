@@ -11,26 +11,28 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.panels.FormExecutorAbstract;
 
-public class PropertyEditFormExecutor extends FormExecutorAbstract<ScalarModel> {
+public class PropertyEditFormExecutor implements FormExecutorAbstract.FormExecutorStrategy {
+
+    private final ScalarModel model;
 
     public PropertyEditFormExecutor(final ScalarModel scalarModel) {
-        super(scalarModel);
+        model = scalarModel;
     }
 
-    protected ObjectAdapter obtainTargetAdapter() {
+    public ObjectAdapter obtainTargetAdapter() {
         return model.getParentEntityModel().load();
     }
 
-    protected String getReasonInvalidIfAny() {
+    public String getReasonInvalidIfAny() {
         return this.model.getReasonInvalidIfAny();
     }
 
 
-    protected void onExecuteAndProcessResults(final AjaxRequestTarget target) {
+    public void onExecuteAndProcessResults(final AjaxRequestTarget target) {
         // no-op
     }
 
-    protected ObjectAdapter obtainResultAdapter() {
+    public ObjectAdapter obtainResultAdapter() {
         ObjectAdapter targetAdapter = obtainTargetAdapter();
 
         final ObjectAdapter resultAdapter = this.model.applyValue(targetAdapter);
@@ -42,7 +44,7 @@ public class PropertyEditFormExecutor extends FormExecutorAbstract<ScalarModel> 
     }
 
 
-    protected void redirectTo(
+    public void redirectTo(
             final ObjectAdapter resultAdapter,
             final AjaxRequestTarget target) {
         // disabling concurrency checking after the layout XML (grid) feature
