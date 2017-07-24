@@ -224,7 +224,7 @@ public abstract class PromptFormAbstract<T extends BookmarkableModel<ObjectAdapt
 
         setLastFocusHint();
 
-        final FormExecutor formExecutor = getFormExecutor();
+        final FormExecutor formExecutor = new FormExecutorDefault<>(getFormExecutorStrategy());
         boolean succeeded = formExecutor.executeAndProcessResults(target.getPage(), target, form);
 
         if (succeeded) {
@@ -234,10 +234,6 @@ public abstract class PromptFormAbstract<T extends BookmarkableModel<ObjectAdapt
             target.add(form);
         }
 
-    }
-
-    private FormExecutor getFormExecutor() {
-        return new FormExecutorDefault<>(getFormExecutorStrategy());
     }
 
     protected abstract FormExecutorStrategy<T> getFormExecutorStrategy();

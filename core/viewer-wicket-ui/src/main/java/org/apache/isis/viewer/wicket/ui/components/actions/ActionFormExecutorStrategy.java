@@ -72,7 +72,6 @@ public class ActionFormExecutorStrategy implements FormExecutorStrategy<ActionMo
         return model.execute();
     }
 
-
     public void redirectTo(
             final ObjectAdapter resultAdapter,
             final AjaxRequestTarget targetIfany) {
@@ -83,14 +82,16 @@ public class ActionFormExecutorStrategy implements FormExecutorStrategy<ActionMo
 
 
     ///////////////////////////////////////////////////////
-    // Dependencies (from context)
-    ///////////////////////////////////////////////////////
 
     private ActionPrompt actionPrompt;
-
     void setActionPrompt(final ActionPrompt actionPrompt) {
         this.actionPrompt = actionPrompt;
     }
+
+
+    ///////////////////////////////////////////////////////
+    // Dependencies (from context)
+    ///////////////////////////////////////////////////////
 
 
     protected IsisSessionFactory getIsisSessionFactory() {
