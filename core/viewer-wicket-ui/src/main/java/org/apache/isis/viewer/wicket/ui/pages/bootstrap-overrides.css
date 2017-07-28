@@ -891,6 +891,10 @@ tr.headers th form input {
     height: inherit;
 }
 
+li.select2-results__option {
+    min-height: 30px;
+}
+
 .scalarNameAndValueComponentType .inlinePromptForm {
     border: 2px solid;
     padding: 10px;
