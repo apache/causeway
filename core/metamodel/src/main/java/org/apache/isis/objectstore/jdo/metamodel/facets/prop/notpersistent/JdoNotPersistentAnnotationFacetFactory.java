@@ -19,7 +19,6 @@
 package org.apache.isis.objectstore.jdo.metamodel.facets.prop.notpersistent;
 
 import javax.jdo.annotations.NotPersistent;
-import javax.jdo.annotations.PrimaryKey;
 
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -36,6 +35,13 @@ public class JdoNotPersistentAnnotationFacetFactory extends FacetFactoryAbstract
 
     @Override
     public void process(ProcessMethodContext processMethodContext) {
+
+        // only applies to JDO entities; ignore any view models
+        final Class<?> cls = processMethodContext.getCls();
+        if(!org.datanucleus.enhancement.Persistable.class.isAssignableFrom(cls)) {
+            return;
+        }
+
         final NotPersistent annotation = Annotations.getAnnotation(processMethodContext.getMethod(), NotPersistent.class);
         if (annotation == null) {
             return;

@@ -53,6 +53,12 @@ public class MaxLengthDerivedFromJdoColumnAnnotationFacetFactory extends FacetFa
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
 
+        // only applies to JDO entities; ignore any view models
+        final Class<?> cls = processMethodContext.getCls();
+        if(!org.datanucleus.enhancement.Persistable.class.isAssignableFrom(cls)) {
+            return;
+        }
+
         final Column annotation = Annotations.getAnnotation(processMethodContext.getMethod(), Column.class);
 
         if(String.class != processMethodContext.getMethod().getReturnType()) {
@@ -61,8 +67,8 @@ public class MaxLengthDerivedFromJdoColumnAnnotationFacetFactory extends FacetFa
 
         if (annotation == null || annotation.length() == -1) {
             return;
-        } 
-        
+        }
+
         final FacetedMethod holder = processMethodContext.getFacetHolder();
         
         MaxLengthFacet existingFacet = holder.getFacet(MaxLengthFacet.class);

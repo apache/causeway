@@ -37,6 +37,12 @@ public class JdoDatastoreIdentityAnnotationFacetFactory extends FacetFactoryAbst
     @Override
     public void process(ProcessClassContext processClassContext) {
         final Class<?> cls = processClassContext.getCls();
+
+        // only applies to JDO entities; ignore any view models
+        if(!org.datanucleus.enhancement.Persistable.class.isAssignableFrom(cls)) {
+            return;
+        }
+
         final DatastoreIdentity annotation = Annotations.getAnnotation(cls, DatastoreIdentity.class);
         if (annotation == null) {
             return;

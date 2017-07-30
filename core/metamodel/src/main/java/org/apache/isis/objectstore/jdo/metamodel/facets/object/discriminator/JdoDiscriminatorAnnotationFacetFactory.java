@@ -40,6 +40,12 @@ public class JdoDiscriminatorAnnotationFacetFactory extends FacetFactoryAbstract
     @Override
     public void process(ProcessClassContext processClassContext) {
 
+        // only applies to JDO entities; ignore any view models
+        final Class<?> cls = processClassContext.getCls();
+        if(!org.datanucleus.enhancement.Persistable.class.isAssignableFrom(cls)) {
+            return;
+        }
+
         final Discriminator annotation = Annotations.getAnnotation(processClassContext.getCls(), Discriminator.class);
         if (annotation == null) {
             return;

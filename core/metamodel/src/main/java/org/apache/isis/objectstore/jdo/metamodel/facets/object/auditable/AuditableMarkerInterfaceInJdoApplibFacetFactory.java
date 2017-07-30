@@ -39,6 +39,12 @@ public class AuditableMarkerInterfaceInJdoApplibFacetFactory extends FacetFactor
     @Override
     public void process(ProcessClassContext processClassContext) {
         final Class<?> cls = processClassContext.getCls();
+
+        // only applies to JDO entities; ignore any view models
+        if(!org.datanucleus.enhancement.Persistable.class.isAssignableFrom(cls)) {
+            return;
+        }
+
         if(!Auditable.class.isAssignableFrom(cls)) {
             return;
         }

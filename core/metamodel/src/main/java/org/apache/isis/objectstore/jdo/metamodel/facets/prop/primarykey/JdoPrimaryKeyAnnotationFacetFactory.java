@@ -35,6 +35,13 @@ public class JdoPrimaryKeyAnnotationFacetFactory extends FacetFactoryAbstract {
 
     @Override
     public void process(ProcessMethodContext processMethodContext) {
+
+        // ignore any view models
+        final Class<?> cls = processMethodContext.getCls();
+        if(!org.datanucleus.enhancement.Persistable.class.isAssignableFrom(cls)) {
+            return;
+        }
+
         final PrimaryKey annotation = Annotations.getAnnotation(processMethodContext.getMethod(), PrimaryKey.class);
         if (annotation == null) {
             return;

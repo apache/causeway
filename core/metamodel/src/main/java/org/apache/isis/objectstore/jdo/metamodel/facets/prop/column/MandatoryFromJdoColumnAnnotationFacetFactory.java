@@ -19,10 +19,12 @@
 package org.apache.isis.objectstore.jdo.metamodel.facets.prop.column;
 
 import java.util.List;
+
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.IdentityType;
+
 import com.google.common.base.Strings;
-import org.apache.isis.applib.ViewModel;
+
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -30,10 +32,10 @@ import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
-import org.apache.isis.core.metamodel.facets.properties.property.mandatory.MandatoryFacetForMandatoryAnnotationOnProperty;
-import org.apache.isis.core.metamodel.facets.properties.property.mandatory.MandatoryFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacetDefault;
+import org.apache.isis.core.metamodel.facets.properties.property.mandatory.MandatoryFacetForMandatoryAnnotationOnProperty;
+import org.apache.isis.core.metamodel.facets.properties.property.mandatory.MandatoryFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -54,6 +56,13 @@ public class MandatoryFromJdoColumnAnnotationFacetFactory extends FacetFactoryAb
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
+
+        // only applies to JDO entities; ignore any view models
+        final Class<?> cls = processMethodContext.getCls();
+        if(!org.datanucleus.enhancement.Persistable.class.isAssignableFrom(cls)) {
+            return;
+        }
+
         final Column annotation = Annotations.getAnnotation(processMethodContext.getMethod(), Column.class);
 
         final FacetedMethod holder = processMethodContext.getFacetHolder();
@@ -74,14 +83,6 @@ public class MandatoryFromJdoColumnAnnotationFacetFactory extends FacetFactoryAb
             if (existingFacet instanceof MandatoryFacetForPropertyAnnotation.Required) {
                 // do not replace this facet;
                 // an explicit @Property(optional=FALSE) annotation cannot be overridden by @Column annotation
-                return;
-            }
-
-            // TODO: this isn't really good enough; in theory there could be other implementations of view model
-            // rather than just implementing ViewModel.  However, we can't do a lookup of the ObjectSpecification for 'cls'
-            // because we would (I think) go into an infinite loop...
-            final Class<?> cls = processMethodContext.getCls();
-            if(ViewModel.class.isAssignableFrom(cls)) {
                 return;
             }
         }

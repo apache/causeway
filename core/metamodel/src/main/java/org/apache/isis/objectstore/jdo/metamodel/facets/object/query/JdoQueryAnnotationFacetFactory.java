@@ -55,6 +55,12 @@ public class JdoQueryAnnotationFacetFactory extends FacetFactoryAbstract impleme
     @Override
     public void process(ProcessClassContext processClassContext) {
         final Class<?> cls = processClassContext.getCls();
+
+        // only applies to JDO entities; ignore any view models
+        if(!org.datanucleus.enhancement.Persistable.class.isAssignableFrom(cls)) {
+            return;
+        }
+
         final Queries namedQueriesAnnotation = Annotations.getAnnotation(cls, Queries.class);
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
         

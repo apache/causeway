@@ -49,7 +49,7 @@ public class JdoMetaModelValidator extends MetaModelValidatorComposite {
                     // ok
                     
                 } else if(identityType == IdentityType.NONDURABLE) {
-                    // ok; for use with view models (http://www.datanucleus.org/products/accessplatform_3_2/datastores/rdbms_views.html)
+                    // ok; for use with DN view objects (http://www.datanucleus.org/products/accessplatform_3_2/datastores/rdbms_views.html)
                     
                 } else if(identityType == IdentityType.DATASTORE || identityType == IdentityType.UNSPECIFIED) {
                     
