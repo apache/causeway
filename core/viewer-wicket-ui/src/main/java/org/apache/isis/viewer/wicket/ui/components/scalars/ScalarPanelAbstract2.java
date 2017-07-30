@@ -286,8 +286,10 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
                     // safe to do this, the inlineAsEditIfAny(...) method checks for us
                     final ActionLink actionLinkInlineAsIfEdit = (ActionLink) linkAndLabelAsIfEdit.getLink();
 
-                    configureInlinePromptLinkCallback(inlinePromptLink, actionLinkInlineAsIfEdit);
-                    componentToHideIfAny = inlinePromptConfig.getComponentToHideIfAny();
+                    if(actionLinkInlineAsIfEdit.isVisible() && actionLinkInlineAsIfEdit.isEnabled()) {
+                        configureInlinePromptLinkCallback(inlinePromptLink, actionLinkInlineAsIfEdit);
+                        componentToHideIfAny = inlinePromptConfig.getComponentToHideIfAny();
+                    }
 
                     // don't render as an action
                     linkAndLabels = Lists.newArrayList(linkAndLabels);
