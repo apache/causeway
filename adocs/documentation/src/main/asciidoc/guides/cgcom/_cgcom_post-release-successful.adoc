@@ -388,7 +388,7 @@ For these artifacts you will need to search http://search.maven.org[Maven centra
 
 == Code formatting
 
-This is also a good time to make source code has been cleaned up and formatted according to the Apache Isis and ASF conventions. Use link:resources/Apache-code-style-formatting.xml[this] Eclipse template and link:resources/isis.importorder[this] import order.
+This is also a good time to make source code has been cleaned up and formatted according to the Apache Isis and ASF conventions. Use link:../dg/resources/eclipse/templates/Apache-code-style-formatting.xml[this] Eclipse template and link:../dg/resources/eclipse/isis.importorder[this] import order.
 
 
 

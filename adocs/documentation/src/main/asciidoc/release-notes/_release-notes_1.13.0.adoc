@@ -29,7 +29,7 @@ The release also includes a great deal of internal refactorings and simplificati
 
 Most applications written against v1.12.x should run against v1.13.0 with few if any changes.  That said, this release
 has removed a small number of features that were dependent on internal APIs, and some configuration properties are
-now removed/unsupported.  We therefore do recommend that you read and keep in mind the xref:migration-notes#_migration-notes_1.12.0-to-1.13.0.adoc[migration notes] when you upgrade your app.
+now removed/unsupported.  We therefore do recommend that you read and keep in mind the xref:../migration-notes/migration-notes.adoc#_migration-notes_1.12.0-to-1.13.0[migration notes] when you upgrade your app.
 
 
 
