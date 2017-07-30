@@ -23,12 +23,14 @@ import java.util.List;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
 
-import junit.framework.Assert;
+import org.datanucleus.enhancement.Persistable;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
+import org.apache.isis.core.metamodel.facets.FacetFactory;
+
+import junit.framework.Assert;
 
 
 public class GivenJdoPersistenceCapableAnnotationFacetFactoryTest extends
@@ -68,7 +70,7 @@ public class GivenJdoPersistenceCapableAnnotationFacetFactoryTest extends
 
     public void testPersistenceCapableAnnotationPickedUpOnClass() {
         @PersistenceCapable
-        class Customer {
+        abstract class Customer implements Persistable {
         }
 
         facetFactory.process(new FacetFactory.ProcessClassContext(Customer.class, methodRemover, facetHolder));
@@ -80,7 +82,7 @@ public class GivenJdoPersistenceCapableAnnotationFacetFactoryTest extends
 
     public void testIfNoPersistenceCapableAnnotationThenNoFacet() {
 
-        class Customer {
+        abstract class Customer implements Persistable {
         }
 
         facetFactory.process(new FacetFactory.ProcessClassContext(Customer.class, methodRemover, facetHolder));
@@ -91,7 +93,7 @@ public class GivenJdoPersistenceCapableAnnotationFacetFactoryTest extends
 
     public void testEntityAnnotationWithNoExplicitNameDefaultsToClassName() {
         @PersistenceCapable()
-        class Customer {
+        abstract class Customer implements Persistable {
         }
         facetFactory.process(new FacetFactory.ProcessClassContext(Customer.class, methodRemover, facetHolder));
 
@@ -102,7 +104,7 @@ public class GivenJdoPersistenceCapableAnnotationFacetFactoryTest extends
 
     public void testPersistenceCapableAnnotationWithNoExplicitIdentityTypeDefaultsToUnspecified() {
         @PersistenceCapable()
-        class Customer {
+        abstract class Customer implements Persistable {
         }
         facetFactory.process(new FacetFactory.ProcessClassContext(Customer.class, methodRemover, facetHolder));
 
@@ -113,7 +115,7 @@ public class GivenJdoPersistenceCapableAnnotationFacetFactoryTest extends
 
     public void testPersistenceCapableAnnotationWithExplicitNameAttributeProvided() {
         @PersistenceCapable(table = "CUS_CUSTOMER")
-        class Customer {
+        abstract class Customer implements Persistable {
         }
 
         facetFactory.process(new FacetFactory.ProcessClassContext(Customer.class, methodRemover, facetHolder));
@@ -125,7 +127,7 @@ public class GivenJdoPersistenceCapableAnnotationFacetFactoryTest extends
 
     public void testPersistenceCapableAnnotationWithExplicitIdentityTypeAttributeProvided() {
         @PersistenceCapable(identityType=IdentityType.DATASTORE)
-        class Customer {
+        abstract class Customer implements Persistable {
         }
 
         facetFactory.process(new FacetFactory.ProcessClassContext(Customer.class, methodRemover, facetHolder));
@@ -137,7 +139,7 @@ public class GivenJdoPersistenceCapableAnnotationFacetFactoryTest extends
 
     public void testNoMethodsRemoved() {
         @PersistenceCapable
-        class Customer {
+        abstract class Customer implements Persistable {
         }
 
         facetFactory.process(new FacetFactory.ProcessClassContext(Customer.class, methodRemover, facetHolder));

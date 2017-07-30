@@ -23,6 +23,8 @@ import java.util.List;
 import javax.jdo.annotations.Discriminator;
 import javax.jdo.annotations.PersistenceCapable;
 
+import org.datanucleus.enhancement.Persistable;
+
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
@@ -58,7 +60,7 @@ public class GivenJdoDiscriminatorAnnotationFacetFactoryTest extends AbstractFac
 
     public void testDiscriminatorValueAnnotationPickedUpOnClass() {
         @Discriminator("CUS")
-        class Customer {
+        abstract class Customer implements Persistable {
         }
 
         facetFactory.process(new FacetFactory.ProcessClassContext(Customer.class, methodRemover, facetHolder));
@@ -70,7 +72,7 @@ public class GivenJdoDiscriminatorAnnotationFacetFactoryTest extends AbstractFac
 
     public void testObjectSpecIdAnnotationPickedUpOnClass() {
         @Discriminator("CUS")
-        class Customer {
+        abstract class Customer implements Persistable {
         }
         
         facetFactory.process(new FacetFactory.ProcessClassContext(Customer.class, methodRemover, facetHolder));
@@ -82,7 +84,7 @@ public class GivenJdoDiscriminatorAnnotationFacetFactoryTest extends AbstractFac
     
     public void testIfNoEntityAnnotationThenNoFacet() {
 
-        class Customer {
+        abstract class Customer implements Persistable {
         }
 
         facetFactory.process(new FacetFactory.ProcessClassContext(Customer.class, methodRemover, facetHolder));
@@ -93,7 +95,7 @@ public class GivenJdoDiscriminatorAnnotationFacetFactoryTest extends AbstractFac
 
     public void testAnnotationValue() {
         @Discriminator("CUS")
-        class Customer {
+        abstract class Customer implements Persistable {
         }
 
         facetFactory.process(new FacetFactory.ProcessClassContext(Customer.class, methodRemover, facetHolder));
@@ -104,7 +106,7 @@ public class GivenJdoDiscriminatorAnnotationFacetFactoryTest extends AbstractFac
 
     public void testNoMethodsRemoved() {
         @PersistenceCapable
-        class Customer {
+        abstract class Customer implements Persistable {
         }
 
         facetFactory.process(new FacetFactory.ProcessClassContext(Customer.class, methodRemover, facetHolder));

@@ -24,12 +24,14 @@ import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
 
-import junit.framework.Assert;
+import org.datanucleus.enhancement.Persistable;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
+import org.apache.isis.core.metamodel.facets.FacetFactory;
+
+import junit.framework.Assert;
 
 
 public class GivenJdoDatastoreIdentityAnnotationFacetFactoryTest extends
@@ -63,7 +65,7 @@ public class GivenJdoDatastoreIdentityAnnotationFacetFactoryTest extends
 
     public void testDatastoreIdentityAnnotationPickedUpOnClass() {
         @DatastoreIdentity()
-        class Customer {
+        abstract class Customer implements Persistable {
         }
 
         facetFactory.process(new FacetFactory.ProcessClassContext(Customer.class, methodRemover, facetHolder));
@@ -75,7 +77,7 @@ public class GivenJdoDatastoreIdentityAnnotationFacetFactoryTest extends
 
     public void testIfNoDatastoreIdentityAnnotationThenNoFacet() {
 
-        class Customer {
+        abstract class Customer implements Persistable {
         }
 
         facetFactory.process(new FacetFactory.ProcessClassContext(Customer.class, methodRemover, facetHolder));
@@ -86,7 +88,7 @@ public class GivenJdoDatastoreIdentityAnnotationFacetFactoryTest extends
 
     public void testDatastoreIdentityAnnotationWithNoExplicitStrategyDefaultsToUnspecified() {
         @DatastoreIdentity()
-        class Customer {
+        abstract class Customer implements Persistable {
         }
         facetFactory.process(new FacetFactory.ProcessClassContext(Customer.class, methodRemover, facetHolder));
 
@@ -97,7 +99,7 @@ public class GivenJdoDatastoreIdentityAnnotationFacetFactoryTest extends
 
     public void testEntityAnnotationWithExplicitStrategyAttributeProvided() {
         @DatastoreIdentity(strategy=IdGeneratorStrategy.IDENTITY)
-        class Customer {
+        abstract class Customer implements Persistable {
         }
 
         facetFactory.process(new FacetFactory.ProcessClassContext(Customer.class, methodRemover, facetHolder));
@@ -109,7 +111,7 @@ public class GivenJdoDatastoreIdentityAnnotationFacetFactoryTest extends
 
     public void testNoMethodsRemoved() {
         @PersistenceCapable
-        class Customer {
+        abstract class Customer implements Persistable {
         }
 
         facetFactory.process(new FacetFactory.ProcessClassContext(Customer.class, methodRemover, facetHolder));

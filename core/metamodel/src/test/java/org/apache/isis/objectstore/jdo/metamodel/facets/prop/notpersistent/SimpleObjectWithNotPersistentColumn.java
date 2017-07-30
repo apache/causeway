@@ -20,8 +20,9 @@ package org.apache.isis.objectstore.jdo.metamodel.facets.prop.notpersistent;
 
 import javax.jdo.annotations.NotPersistent;
 
+import org.datanucleus.enhancement.Persistable;
 
-public class SimpleObjectWithNotPersistentColumn {
+public abstract class SimpleObjectWithNotPersistentColumn implements Persistable {
 
     private Long someColumn;
 

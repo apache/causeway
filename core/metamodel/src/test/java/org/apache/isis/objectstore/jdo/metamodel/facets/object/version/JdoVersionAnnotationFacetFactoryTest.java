@@ -23,6 +23,8 @@ import java.util.List;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Version;
 
+import org.datanucleus.enhancement.Persistable;
+
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
@@ -56,7 +58,7 @@ public class JdoVersionAnnotationFacetFactoryTest extends AbstractFacetFactoryTe
 
     public void testVersionAnnotationPickedUpOnClass() {
         @Version
-        class Customer {
+        abstract class Customer implements Persistable {
         }
 
         facetFactory.process(new FacetFactory.ProcessClassContext(Customer.class, methodRemover, facetHolder));
@@ -68,7 +70,7 @@ public class JdoVersionAnnotationFacetFactoryTest extends AbstractFacetFactoryTe
 
     public void testIfNoAnnotationThenNoFacet() {
 
-        class Customer {
+        abstract class Customer implements Persistable {
         }
 
         facetFactory.process(new FacetFactory.ProcessClassContext(Customer.class, methodRemover, facetHolder));
@@ -79,7 +81,7 @@ public class JdoVersionAnnotationFacetFactoryTest extends AbstractFacetFactoryTe
 
     public void testNoMethodsRemoved() {
         @PersistenceCapable
-        class Customer {
+        abstract class Customer implements Persistable {
         }
 
         facetFactory.process(new FacetFactory.ProcessClassContext(Customer.class, methodRemover, facetHolder));

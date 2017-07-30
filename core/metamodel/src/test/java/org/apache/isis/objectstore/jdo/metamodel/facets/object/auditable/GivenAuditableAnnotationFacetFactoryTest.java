@@ -22,6 +22,7 @@ import java.util.List;
 
 import javax.jdo.annotations.PersistenceCapable;
 
+import org.datanucleus.enhancement.Persistable;
 import org.junit.Assert;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -64,8 +65,7 @@ public class GivenAuditableAnnotationFacetFactoryTest extends
     }
 
     public void testAuditableAnnotationPickedUpOnClass() {
-        @Auditable
-        class Customer {
+        @Auditable abstract class Customer implements Persistable {
         }
 
         facetFactory.process(new FacetFactory.ProcessClassContext(Customer.class, methodRemover, facetHolder));
@@ -77,7 +77,7 @@ public class GivenAuditableAnnotationFacetFactoryTest extends
 
     public void testIfNoAuditableAnnotationThenNoFacet() {
 
-        class Customer {
+        abstract class Customer implements Persistable {
         }
 
         facetFactory.process(new FacetFactory.ProcessClassContext(Customer.class, methodRemover, facetHolder));
@@ -89,7 +89,7 @@ public class GivenAuditableAnnotationFacetFactoryTest extends
 
     public void testNoMethodsRemoved() {
         @PersistenceCapable
-        class Customer {
+        abstract class Customer implements Persistable {
         }
 
         facetFactory.process(new FacetFactory.ProcessClassContext(Customer.class, methodRemover, facetHolder));

@@ -20,8 +20,9 @@ package org.apache.isis.objectstore.jdo.metamodel.facets.prop.column;
 
 import javax.jdo.annotations.Column;
 
+import org.datanucleus.enhancement.Persistable;
 
-public class SimpleObjectWithColumnAllowsNullAnnotations {
+public abstract class SimpleObjectWithColumnAllowsNullAnnotations implements Persistable {
 
 
     private int primitiveWithNoAnnotation;

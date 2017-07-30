@@ -20,8 +20,9 @@ package org.apache.isis.objectstore.jdo.metamodel.facets.prop.primarykey;
 
 import javax.jdo.annotations.PrimaryKey;
 
+import org.datanucleus.enhancement.Persistable;
 
-public class SimpleObjectWithPrimaryKey {
+public abstract class SimpleObjectWithPrimaryKey implements Persistable {
 
     private Long id;
 
