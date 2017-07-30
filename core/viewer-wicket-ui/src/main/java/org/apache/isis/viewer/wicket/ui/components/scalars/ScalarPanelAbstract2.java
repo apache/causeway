@@ -269,16 +269,17 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
             // are using inline prompts
             Component componentToHideIfAny = inlinePromptLink;
 
+            // check if one of the associated actions is configured to use an inline form "as if edit"
+            final LinkAndLabel linkAndLabelAsIfEdit = inlineAsIfEditIfAny(linkAndLabels);
+
             if (this.scalarModel.getPromptStyle().isInline() && scalarModel.canEnterEditMode()) {
                 // we configure the prompt link if _this_ property is configured for inline edits...
                 configureInlinePromptLinkCallback(inlinePromptLink);
                 componentToHideIfAny = inlinePromptConfig.getComponentToHideIfAny();
 
             } else {
-                // even though the property isn't editable, it might be that one of the associated actions
-                // is configured to use an inline form "as if edit"
-                final LinkAndLabel linkAndLabelAsIfEdit = inlineAsIfEditIfAny(linkAndLabels);
 
+                // not editable property, but maybe one of the actions is.
                 if(linkAndLabelAsIfEdit != null) {
 
                     scalarModel.setHasActionWithInlineAsIfEdit(true);
@@ -290,11 +291,14 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
                         configureInlinePromptLinkCallback(inlinePromptLink, actionLinkInlineAsIfEdit);
                         componentToHideIfAny = inlinePromptConfig.getComponentToHideIfAny();
                     }
-
-                    // don't render as an action
-                    linkAndLabels = Lists.newArrayList(linkAndLabels);
-                    linkAndLabels.remove(linkAndLabelAsIfEdit);
                 }
+            }
+
+            if(linkAndLabelAsIfEdit != null) {
+                // irrespective of whether the property is itself editable, if the action is annotated as
+                // INLINE_AS_IF_EDIT then we never render it as an action
+                linkAndLabels = Lists.newArrayList(linkAndLabels);
+                linkAndLabels.remove(linkAndLabelAsIfEdit);
             }
 
             if(componentToHideIfAny != null) {
