@@ -27,6 +27,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
 import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.annotation.Collection;
@@ -282,6 +284,7 @@ public final class Annotations  {
                     MemberOrder.class,
                     javax.annotation.Nullable.class,
                     Title.class,
+                    XmlJavaTypeAdapter.class,
                     javax.jdo.annotations.Column.class
             )
     );
