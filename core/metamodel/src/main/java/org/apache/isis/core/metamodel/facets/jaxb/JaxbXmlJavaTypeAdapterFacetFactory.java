@@ -26,6 +26,8 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import com.google.common.collect.Lists;
 
+import org.datanucleus.enhancement.Persistable;
+
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -50,7 +52,23 @@ public class JaxbXmlJavaTypeAdapterFacetFactory extends FacetFactoryAbstract
             implements MetaModelValidatorRefiner {
 
     public JaxbXmlJavaTypeAdapterFacetFactory() {
-        super(FeatureType.PROPERTIES_ONLY);
+        super(FeatureType.OBJECTS_AND_PROPERTIES);
+    }
+
+    @Override
+    public void process(final ProcessClassContext processClassContext) {
+        final Class<?> cls = processClassContext.getCls();
+
+        final XmlJavaTypeAdapter annotation = Annotations.getAnnotation(cls, XmlJavaTypeAdapter.class);
+        if(annotation == null) {
+            return;
+        }
+
+        final FacetHolder holder = processClassContext.getFacetHolder();
+        final XmlJavaTypeAdapterFacetDefault facet = new XmlJavaTypeAdapterFacetDefault(holder,
+                annotation.value(), getSpecificationLoader());
+
+        FacetUtil.addFacet(facet);
     }
 
     @Override
@@ -110,10 +128,46 @@ public class JaxbXmlJavaTypeAdapterFacetFactory extends FacetFactoryAbstract
         metaModelValidator.add(validator);
     }
 
-    private static class AdapterValidator {
+    private static abstract class AdapterValidator {
+        abstract void validate(
+                final ObjectSpecification objectSpec,
+                final OneToOneAssociation property,
+                final ValidationFailures validationFailures);
+
+    }
+
+    private static class AdapterValidatorForReferenceTypes extends AdapterValidator {
+
+        @Override
+        void validate(
+                final ObjectSpecification objectSpec,
+                final OneToOneAssociation property,
+                final ValidationFailures validationFailures) {
+
+            final ObjectSpecification propertyTypeSpec = property.getSpecification();
+            final Class<?> propertyType = propertyTypeSpec.getCorrespondingClass();
+            if (!Persistable.class.isAssignableFrom(propertyType)) {
+                return;
+            }
+
+            final XmlJavaTypeAdapterFacet xmlJavaTypeAdapterFacet =
+                    propertyTypeSpec.getFacet(XmlJavaTypeAdapterFacet.class);
+            if(xmlJavaTypeAdapterFacet != null) {
+                return;
+            }
+
+            validationFailures.add("JAXB view model '%s' property '%s' is of type '%s' but that type is not annotated with @XmlJavaTypeAdapter.  The type must be annotated with @XmlJavaTypeAdapter(org.apache.isis.schema.utils.jaxbadapters.PersistentEntityAdapter.class) or equivalent.",
+                    objectSpec.getFullIdentifier(),
+                    property.getId(),
+                    propertyType.getName());
+
+        }
+    }
+
+    private static class AdapterValidatorForDateTypes extends AdapterValidator {
         private final Class<?> jodaType;
 
-        private AdapterValidator(final Class<?> jodaType) {
+        private AdapterValidatorForDateTypes(final Class<?> jodaType) {
             this.jodaType = jodaType;
         }
 
@@ -135,7 +189,7 @@ public class JaxbXmlJavaTypeAdapterFacetFactory extends FacetFactoryAbstract
             }
 
             // else
-            validationFailures.add("JAXB view model '%s' property '%s' is of type '%s' but is not annotated with @XmlJavaTypeAdapterFacet",
+            validationFailures.add("JAXB view model '%s' property '%s' is of type '%s' but is not annotated with @XmlJavaTypeAdapter.  The field/method must be annotated with @XmlJavaTypeAdapter(org.apache.isis.schema.utils.jaxbadapters.XxxAdapter.ForJaxb.class) or equivalent.",
                     objectSpec.getFullIdentifier(),
                     property.getId(),
                     jodaType.getName());
@@ -144,11 +198,12 @@ public class JaxbXmlJavaTypeAdapterFacetFactory extends FacetFactoryAbstract
 
     private final static List<AdapterValidator> adapterValidators =
             Lists.newArrayList(
-                    new AdapterValidator(java.sql.Timestamp.class),
-                    new AdapterValidator(org.joda.time.DateTime.class),
-                    new AdapterValidator(org.joda.time.LocalDate.class),
-                    new AdapterValidator(org.joda.time.LocalDateTime.class),
-                    new AdapterValidator(org.joda.time.LocalTime.class)
+                    new AdapterValidatorForReferenceTypes(),
+                    new AdapterValidatorForDateTypes(java.sql.Timestamp.class),
+                    new AdapterValidatorForDateTypes(org.joda.time.DateTime.class),
+                    new AdapterValidatorForDateTypes(org.joda.time.LocalDate.class),
+                    new AdapterValidatorForDateTypes(org.joda.time.LocalDateTime.class),
+                    new AdapterValidatorForDateTypes(org.joda.time.LocalTime.class)
             );
 
 }
