@@ -46,21 +46,32 @@ public class MetaModelValidatorVisiting extends MetaModelValidatorAbstract {
     @Override
     public final void validate(ValidationFailures validationFailures) {
 
+        validateAll(validationFailures);
+
+        summarize(validationFailures);
+    }
+
+    private void validateAll(final ValidationFailures validationFailures) {
+
         final Collection<ObjectSpecification> objectSpecs = specificationLoader.allSpecifications();
 
         // we take a protective copy in case any of the metamodel validators cause us to discover further object specs.
-        final List<ObjectSpecification> copyOfObjectSpecs = Lists.newArrayList(objectSpecs);
+        final List<ObjectSpecification> objectSpecsBefore = Lists.newArrayList(objectSpecs);
 
-        for (final ObjectSpecification objSpec : copyOfObjectSpecs) {
+        for (final ObjectSpecification objSpec : objectSpecsBefore) {
             if(!visitor.visit(objSpec, validationFailures)) {
                 break;
             }
         }
-        
+
+    }
+
+    private void summarize(final ValidationFailures validationFailures) {
         if(visitor instanceof SummarizingVisitor) {
             SummarizingVisitor summarizingVisitor = (SummarizingVisitor) visitor;
             summarizingVisitor.summarize(validationFailures);
         }
     }
+
 
 }
