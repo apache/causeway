@@ -20,6 +20,9 @@
 package org.apache.isis.core.metamodel.specloader.validator;
 
 import java.util.Collection;
+import java.util.List;
+
+import com.google.common.collect.Lists;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
@@ -42,16 +45,22 @@ public class MetaModelValidatorVisiting extends MetaModelValidatorAbstract {
         
     @Override
     public final void validate(ValidationFailures validationFailures) {
+
         final Collection<ObjectSpecification> objectSpecs = specificationLoader.allSpecifications();
-        for (final ObjectSpecification objSpec : objectSpecs) {
+
+        // we take a protective copy in case any of the metamodel validators cause us to discover further object specs.
+        final List<ObjectSpecification> copyOfObjectSpecs = Lists.newArrayList(objectSpecs);
+
+        for (final ObjectSpecification objSpec : copyOfObjectSpecs) {
             if(!visitor.visit(objSpec, validationFailures)) {
                 break;
             }
         }
+        
         if(visitor instanceof SummarizingVisitor) {
             SummarizingVisitor summarizingVisitor = (SummarizingVisitor) visitor;
             summarizingVisitor.summarize(validationFailures);
         }
     }
-    
+
 }
