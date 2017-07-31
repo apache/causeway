@@ -73,11 +73,6 @@ import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 
-/**
- * Models an action invocation, either the gathering of arguments for the
- * action's {@link Mode#PARAMETERS parameters}, or the handling of the
- * {@link Mode#RESULTS results} once invoked.
- */
 public class ActionModel extends BookmarkableModel<ObjectAdapter> implements FormExecutorContext {
 
     private static final long serialVersionUID = 1L;
@@ -86,15 +81,6 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
 
     private static final String NULL_ARG = "$nullArg$";
     private static final Pattern KEY_VALUE_PATTERN = Pattern.compile("([^=]+)=(.+)");
-
-    /**
-     * Whether we are obtaining arguments (eg in a dialog), or displaying the
-     * results
-     */
-    private enum Mode {
-        PARAMETERS, 
-        RESULTS
-    }
 
 
     public ActionModel copy() {
@@ -114,8 +100,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
      */
     public static ActionModel create(final EntityModel entityModel, final ObjectAction action) {
         final ActionMemento homePageActionMemento = ObjectAdapterMemento.Functions.fromAction().apply(action);
-        final Mode mode = action.getParameterCount() > 0? Mode.PARAMETERS : Mode.RESULTS;
-        return new ActionModel(entityModel, homePageActionMemento, mode);
+        return new ActionModel(entityModel, homePageActionMemento);
     }
 
     public static ActionModel createForPersistent(
@@ -201,7 +186,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
     @Override
     public PageParameters getPageParametersWithoutUiHints() {
         final ObjectAdapter adapter = getTargetAdapter();
-        final ObjectAction objectAction = getActionMemento().getAction(getSpecificationLoader());
+        final ObjectAction objectAction = getAction();
         final PageParameters pageParameters = createPageParameters(
                 adapter, objectAction, ConcurrencyChecking.NO_CHECK);
 
@@ -223,7 +208,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
     @Override
     public String getTitle() {
         final ObjectAdapter adapter = getTargetAdapter();
-        final ObjectAction objectAction = getActionMemento().getAction(getSpecificationLoader());
+        final ObjectAction objectAction = getAction();
         
         final StringBuilder buf = new StringBuilder();
         final ObjectAdapter[] argumentsAsArray = getArgumentsAsArray();
@@ -265,13 +250,8 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
         return objectAction.getId();
     }
 
-    public static Mode determineMode(final ObjectAction action) {
-        return action.getParameterCount() > 0 ? Mode.PARAMETERS : Mode.RESULTS;
-    }
-
     private final EntityModel entityModel;
     private final ActionMemento actionMemento;
-    private Mode actionMode;
 
     /**
      * Lazily populated in {@link #getArgumentModel(ActionParameterMemento)}
@@ -280,8 +260,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
 
 
     private ActionModel(final PageParameters pageParameters, final SpecificationLoader specificationLoader) {
-        this(newEntityModelFrom(pageParameters), newActionMementoFrom(pageParameters, specificationLoader), actionModeFrom(pageParameters,
-                specificationLoader));
+        this(newEntityModelFrom(pageParameters), newActionMementoFrom(pageParameters, specificationLoader));
 
         setArgumentsIfPossible(pageParameters);
         setContextArgumentIfPossible(pageParameters);
@@ -294,17 +273,6 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
         final ActionType actionType = PageParameterNames.ACTION_TYPE.getEnumFrom(pageParameters, ActionType.class);
         final String actionNameParms = PageParameterNames.ACTION_ID.getStringFrom(pageParameters);
         return new ActionMemento(owningSpec, actionType, actionNameParms, specificationLoader);
-    }
-
-    private static Mode actionModeFrom(
-            final PageParameters pageParameters,
-            final SpecificationLoader specificationLoader) {
-        final ActionMemento actionMemento = newActionMementoFrom(pageParameters, specificationLoader);
-        if(actionMemento.getAction(specificationLoader).getParameterCount() == 0) {
-            return Mode.RESULTS;
-        }
-        final List<String> listFrom = PageParameterNames.ACTION_ARGS.getListFrom(pageParameters);
-        return !listFrom.isEmpty()? Mode.RESULTS: Mode.PARAMETERS;
     }
 
 
@@ -323,10 +291,9 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
     }
 
 
-    private ActionModel(final EntityModel entityModel, final ActionMemento actionMemento, final Mode actionMode) {
+    private ActionModel(final EntityModel entityModel, final ActionMemento actionMemento) {
         this.entityModel = entityModel;
         this.actionMemento = actionMemento;
-        this.actionMode = actionMode;
     }
 
     @Override
@@ -340,9 +307,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
     private ActionModel(final ActionModel actionModel) {
         this.entityModel = actionModel.entityModel;
         this.actionMemento = actionModel.actionMemento;
-        this.actionMode = actionModel.actionMode;
-        //this.actionPrompt = actionModel.actionPrompt;
-        
+
         primeArgumentModels();
         final Map<Integer, ActionArgumentModel> argumentModelByIdx = actionModel.arguments;
         for (final Map.Entry<Integer,ActionArgumentModel> argumentModel : argumentModelByIdx.entrySet()) {
@@ -363,8 +328,13 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
         }
     }
 
+    private ObjectAction getAction() {
+        return getActionMemento().getAction(getSpecificationLoader());
+    }
+
+
     public boolean hasParameters() {
-        return actionMode == ActionModel.Mode.PARAMETERS;
+        return getAction().getParameterCount() > 0;
     }
 
     private boolean setContextArgumentIfPossible(final PageParameters pageParameters) {
@@ -467,8 +437,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
         
         // TODO: think we need another field to determine if args have been populated.
         final ObjectAdapter results = executeAction();
-        this.actionMode = Mode.RESULTS;
-        
+
         return results;
     }
 
@@ -483,7 +452,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
 
         final ObjectAdapter targetAdapter = getTargetAdapter();
         final ObjectAdapter[] arguments = getArgumentsAsArray();
-        final ObjectAction action = getActionMemento().getAction(getSpecificationLoader());
+        final ObjectAction action = getAction();
 
         // if this action is a mixin, then it will fill in the details automatically.
         final ObjectAdapter mixedInAdapter = null;
@@ -509,7 +478,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
     public String getReasonDisabledIfAny() {
 
         final ObjectAdapter targetAdapter = getTargetAdapter();
-        final ObjectAction objectAction = getActionMemento().getAction(getSpecificationLoader());
+        final ObjectAction objectAction = getAction();
 
         final Consent usability =
                 objectAction.isUsable(
@@ -524,7 +493,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
     public boolean isVisible() {
 
         final ObjectAdapter targetAdapter = getTargetAdapter();
-        final ObjectAction objectAction = getActionMemento().getAction(getSpecificationLoader());
+        final ObjectAction objectAction = getAction();
 
         final Consent visibility =
                 objectAction.isVisible(
@@ -538,7 +507,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
     public String getReasonInvalidIfAny() {
         final ObjectAdapter targetAdapter = getTargetAdapter();
         final ObjectAdapter[] proposedArguments = getArgumentsAsArray();
-        final ObjectAction objectAction = getActionMemento().getAction(getSpecificationLoader());
+        final ObjectAction objectAction = getAction();
         final Consent validity = objectAction.isProposedArgumentSetValid(targetAdapter, proposedArguments,
                 InteractionInitiatedBy.USER);
         return validity.isAllowed() ? null : validity.getReason();
@@ -550,11 +519,11 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
     }
 
     public ObjectAdapter[] getArgumentsAsArray() {
-    	if(this.arguments.size() < this.getActionMemento().getAction(getSpecificationLoader()).getParameterCount()) {
+    	if(this.arguments.size() < getAction().getParameterCount()) {
     		primeArgumentModels();
     	}
     	
-        final ObjectAction objectAction = getActionMemento().getAction(getSpecificationLoader());
+        final ObjectAction objectAction = getAction();
         final ObjectAdapter[] arguments = new ObjectAdapter[objectAction.getParameterCount()];
         for (int i = 0; i < arguments.length; i++) {
             final ActionArgumentModel actionArgumentModel = this.arguments.get(i);
@@ -564,14 +533,12 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
     }
 
     public void reset() {
-        this.actionMode = determineMode(actionMemento.getAction(getSpecificationLoader()));
     }
 
     public void clearArguments() {
         for (final ActionArgumentModel actionArgumentModel : arguments.values()) {
             actionArgumentModel.reset();
         }
-        this.actionMode = determineMode(actionMemento.getAction(getSpecificationLoader()));
     }
 
     /**
@@ -579,7 +546,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
      * of {@link BookmarkPolicy#AS_ROOT root}, and has safe {@link ObjectAction#getSemantics() semantics}.
      */
     public boolean isBookmarkable() {
-        final ObjectAction action = getActionMemento().getAction(getSpecificationLoader());
+        final ObjectAction action = getAction();
         final BookmarkPolicyFacet bookmarkPolicy = action.getFacet(BookmarkPolicyFacet.class);
         final boolean safeSemantics = action.getSemantics().isSafeInNature();
         return bookmarkPolicy.value() == BookmarkPolicy.AS_ROOT && safeSemantics;
@@ -658,7 +625,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
     // //////////////////////////////////////
     
     public List<ActionParameterMemento> primeArgumentModels() {
-        final ObjectAction objectAction = getActionMemento().getAction(getSpecificationLoader());
+        final ObjectAction objectAction = getAction();
 
         final List<ObjectActionParameter> parameters = objectAction.getParameters();
         final List<ActionParameterMemento> mementos = buildParameterMementos(parameters);
@@ -682,7 +649,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
 
     @Override
     public PromptStyle getPromptStyle() {
-        final ObjectAction objectAction = this.getActionMemento().getAction(getSpecificationLoader());
+        final ObjectAction objectAction = getAction();
         final ObjectSpecification objectActionOwner = objectAction.getOnType();
         if(objectActionOwner.isService()) {
             // tried to move this test into PromptStyleFacetFallback,
@@ -710,7 +677,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
     }
 
     public <T extends Facet> T getFacet(final Class<T> facetType) {
-        final FacetHolder facetHolder = getActionMemento().getAction(getSpecificationLoader());
+        final FacetHolder facetHolder = getAction();
         return facetHolder.getFacet(facetType);
     }
 
