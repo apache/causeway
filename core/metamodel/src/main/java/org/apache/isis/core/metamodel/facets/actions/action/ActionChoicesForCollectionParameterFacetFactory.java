@@ -25,6 +25,7 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -109,13 +110,20 @@ public class ActionChoicesForCollectionParameterFacetFactory extends FacetFactor
                                 parameter.getFacet(ActionParameterChoicesFacet.class);
                         final ActionParameterAutoCompleteFacet autoCompleteFacet =
                                 parameter.getFacet(ActionParameterAutoCompleteFacet.class);
-                        if(choicesFacet == null && autoCompleteFacet == null) {
-                            validationFailures.add(
-                                    "Collection action parameter found without supporting "
-                                    + "choices or autoComplete facet.  "
-                                    + "Class: %s action: %s parameter %d",
-                                    objectSpec.getFullIdentifier(), objectAction.getName(), paramNum);
+                        if (choicesFacet != null || autoCompleteFacet != null) {
+                            return;
                         }
+
+                        final ObjectSpecification parameterType = parameter.getSpecification();
+                        if(parameterType.containsDoOpFacet(AutoCompleteFacet.class)) {
+                            return;
+                        }
+
+                        validationFailures.add(
+                                "Collection action parameter found without supporting "
+                                + "choices or autoComplete facet.  "
+                                + "Class: %s action: %s parameter %d",
+                                objectSpec.getFullIdentifier(), objectAction.getName(), paramNum);
                     }
                 });
         metaModelValidator.add(validator);
