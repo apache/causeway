@@ -26,6 +26,7 @@ See also hints-n-tips chapters in the:
 
 include::_ugvw_hints-and-tips_per-user-themes.adoc[leveloffset=+1]
 include::_ugvw_hints-and-tips_i18n-label-in-wicket-viewer.adoc[leveloffset=+1]
+include::_ugvw_hints-and-tips_svg-support.adoc[leveloffset=+1]
 
 
 
