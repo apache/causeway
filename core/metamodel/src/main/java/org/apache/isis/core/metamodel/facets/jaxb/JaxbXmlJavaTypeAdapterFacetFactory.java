@@ -210,23 +210,35 @@ public class JaxbXmlJavaTypeAdapterFacetFactory extends FacetFactoryAbstract
     }
 
     private final static List<TypeValidator> TYPE_VALIDATORS =
-            Lists.<TypeValidator>newArrayList(
+            Lists.newArrayList(
                     new TypeValidator() {
                         @Override
                         void validate(
-                                final ObjectSpecification objectSpec, final ValidationFailures validationFailures) {
+                                final ObjectSpecification objectSpec,
+                                final ValidationFailures validationFailures) {
 
-                            // final Class<?> correspondingClass = objectSpec.getCorrespondingClass();
                             if(objectSpec.isAbstract()) {
                                 validationFailures.add("JAXB view model '%s' is abstract", objectSpec.getFullIdentifier());
                             }
-
                         }
                     },
                     new TypeValidator() {
                         @Override
                         void validate(
-                                final ObjectSpecification objectSpec, final ValidationFailures validationFailures) {
+                                final ObjectSpecification objectSpec,
+                                final ValidationFailures validationFailures) {
+
+                            final Class<?> correspondingClass = objectSpec.getCorrespondingClass();
+                            if(correspondingClass.isAnonymousClass() || correspondingClass.isLocalClass() || correspondingClass.isMemberClass()) {
+                                validationFailures.add("JAXB view model '%s' is an inner class", objectSpec.getFullIdentifier());
+                            }
+                        }
+                    },
+                    new TypeValidator() {
+                        @Override
+                        void validate(
+                                final ObjectSpecification objectSpec,
+                                final ValidationFailures validationFailures) {
 
                             final Class<?> correspondingClass = objectSpec.getCorrespondingClass();
                             final Constructor<?>[] constructors = correspondingClass.getDeclaredConstructors();
