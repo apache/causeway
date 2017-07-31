@@ -152,7 +152,9 @@ public class IsisSessionFactory implements ApplicationScopedComponent {
             for (Object service : copyOfServices) {
                 final String unused = titleService.titleOf(service);
             }
-            for (final ObjectSpecification objSpec : servicesInjector.getSpecificationLoader().allSpecifications()) {
+            final List<ObjectSpecification> objectSpecsCopy =
+                    Lists.newArrayList(servicesInjector.getSpecificationLoader().allSpecifications());
+            for (final ObjectSpecification objSpec : objectSpecsCopy) {
                 final Class<?> correspondingClass = objSpec.getCorrespondingClass();
                 if(correspondingClass.isEnum()) {
                     final Object[] enumConstants = correspondingClass.getEnumConstants();
