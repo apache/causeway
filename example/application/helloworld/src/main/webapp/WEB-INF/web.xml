@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+         http://www.apache.org/licenses/LICENSE-2.0
+         
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+<web-app id="WebApp_ID" version="2.4"
+    xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+
+    <display-name>Hello World</display-name>
+
+    <welcome-file-list>
+        <welcome-file>about/index.html</welcome-file>
+    </welcome-file-list>
+
+    <!-- shiro security configuration -->
+    <listener>
+        <listener-class>org.apache.shiro.web.env.EnvironmentLoaderListener</listener-class>
+    </listener>
+
+    <filter>
+        <filter-name>ShiroFilter</filter-name>
+        <filter-class>org.apache.shiro.web.servlet.ShiroFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>ShiroFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+
+
+    <!-- which configuration directory to read overloaded property files from -->
+    <!-- 
+    By default the framework will read configuration properties from the WEB-INF
+    directory (where this web.xml file resides).
+
+    If you want to read configuration files from some other external directory,
+    and the location of that external directory is the same/standardized for all
+    locations where you intend to deploy the WAR file, you can uncomment the
+    'isis.config.dir' context parameter, below, and set it to that standardized
+    location, eg:
+
+    <context-param>
+        <param-name>isis.config.dir</param-name>
+        <param-value>/usr/local/conf</param-value>
+    </context-param>
+
+    If however the location of the external directory changes from one deployment
+    to another (eg system testing, UAT, production etc) then you should be
+    able to override the context parameter through the servlet container's own
+    (proprietary) configuration files.
+
+    For example, if deploying to Tomcat, you can edit $CATALINA_BASE/conf/context.xml,
+    and add:
+
+    <Parameter name="isis.config.dir"
+               value="/usr/local/conf/systest"
+               override="false"/>
+
+    For more detail see: http://tomcat.apache.org/tomcat-7.0-doc/config/context.html#Context_Parameters
+    -->
+
+
+    <!--
+    determines which additional configuration files to search for 
+     -->
+    <context-param>
+        <param-name>isis.viewers</param-name>
+        <param-value>wicket,restfulobjects</param-value>
+    </context-param>
+
+
+
+    <!-- 
+    for diagnostics
+    -->
+    <filter>
+        <filter-name>IsisLogOnExceptionFilter</filter-name>
+        <filter-class>org.apache.isis.core.webapp.diagnostics.IsisLogOnExceptionFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>IsisLogOnExceptionFilter</filter-name>
+        <url-pattern>/wicket/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>IsisLogOnExceptionFilter</filter-name>
+        <url-pattern>/restful/*</url-pattern>
+    </filter-mapping>
+
+
+
+    <!-- cache static resources for 1 day -->
+    <filter>
+        <filter-name>ResourceCachingFilter</filter-name>
+        <filter-class>org.apache.isis.core.webapp.content.ResourceCachingFilter</filter-class>
+        <init-param>
+            <param-name>CacheTime</param-name>
+            <param-value>86400</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>ResourceCachingFilter</filter-name>
+        <url-pattern>*.css</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>ResourceCachingFilter</filter-name>
+        <url-pattern>*.png</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>ResourceCachingFilter</filter-name>
+        <url-pattern>*.jpg</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>ResourceCachingFilter</filter-name>
+        <url-pattern>*.jpeg</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>ResourceCachingFilter</filter-name>
+        <url-pattern>*.gif</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>ResourceCachingFilter</filter-name>
+        <url-pattern>*.svg</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>ResourceCachingFilter</filter-name>
+        <url-pattern>*.js</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>ResourceCachingFilter</filter-name>
+        <url-pattern>*.html</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>ResourceCachingFilter</filter-name>
+        <url-pattern>*.swf</url-pattern>
+    </filter-mapping>
+    
+    <servlet>
+        <servlet-name>Resource</servlet-name>
+        <servlet-class>org.apache.isis.core.webapp.content.ResourceServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Resource</servlet-name>
+        <url-pattern>*.css</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Resource</servlet-name>
+        <url-pattern>*.png</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Resource</servlet-name>
+        <url-pattern>*.jpg</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Resource</servlet-name>
+        <url-pattern>*.jpeg</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Resource</servlet-name>
+        <url-pattern>*.gif</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Resource</servlet-name>
+        <url-pattern>*.svg</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Resource</servlet-name>
+        <url-pattern>*.js</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Resource</servlet-name>
+        <url-pattern>*.html</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Resource</servlet-name>
+        <url-pattern>*.swf</url-pattern>
+    </servlet-mapping>
+
+
+    <servlet>
+        <servlet-name>WebjarsServlet</servlet-name>
+        <servlet-class>org.webjars.servlet.WebjarsServlet</servlet-class>
+        <init-param>
+            <param-name>disableCache</param-name>
+            <param-value>false</param-value>
+        </init-param>
+        <load-on-startup>2</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>WebjarsServlet</servlet-name>
+        <url-pattern>/webjars/*</url-pattern>
+    </servlet-mapping>
+
+
+
+    <!--
+    -
+    - config specific to the wicket-viewer
+    -
+    -->
+    <filter>
+        <filter-name>WicketFilter</filter-name>
+        <filter-class>org.apache.wicket.protocol.http.WicketFilter</filter-class>
+        <init-param>
+            <param-name>applicationClassName</param-name>
+            <param-value>domainapp.webapp.HelloWorldApplication</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>WicketFilter</filter-name>
+        <url-pattern>/wicket/*</url-pattern>
+    </filter-mapping>
+
+
+    <context-param>
+        <param-name>configuration</param-name>
+        <!-- 
+        <param-value>deployment</param-value>
+         -->
+        <param-value>development</param-value>
+    </context-param>
+    
+   
+    <!--
+    -
+    - config specific to the restfulobjects-viewer
+    -
+    -->
+
+    <!--
+    THE FOLLOWING CONFIGURATION IS NOT REQUIRED IF THE WICKET VIEWER IS IN USE.
+    IF THE WICKET VIEWER CONFIGURATION IS REMOVED, THEN UNCOMMENT
+    
+    <listener>
+        <listener-class>org.apache.isis.core.webapp.IsisWebAppBootstrapper</listener-class>
+    </listener>
+
+    <context-param>
+        <param-name>deploymentType</param-name>
+        <param-value>SERVER_PROTOTYPE</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>isis.viewers</param-name>
+        <param-value>restfulobjects</param-value>
+    </context-param>    
+    -->    
+    
+    <!-- bootstrap the RestEasy framework -->
+    <listener>
+        <listener-class>org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap</listener-class>
+    </listener>
+
+    <!-- used by RestEasy to determine the JAX-RS resources and other related configuration -->
+    <context-param>
+        <param-name>javax.ws.rs.Application</param-name>
+        <param-value>org.apache.isis.viewer.restfulobjects.server.RestfulObjectsApplication</param-value>
+    </context-param>
+    
+    <context-param>
+        <param-name>resteasy.servlet.mapping.prefix</param-name>
+        <param-value>/restful/</param-value>
+    </context-param>
+    
+
+    <!-- authenticate user, set up an Isis session -->
+    <filter>
+        <filter-name>IsisSessionFilterForRestfulObjects</filter-name>
+        <filter-class>org.apache.isis.core.webapp.IsisSessionFilter</filter-class>
+        <!-- authentication required for REST -->
+        <init-param>
+            <param-name>authenticationSessionStrategy</param-name>
+            <param-value>org.apache.isis.viewer.restfulobjects.server.authentication.AuthenticationSessionStrategyBasicAuth</param-value>
+        </init-param>
+        <init-param>
+            <!-- what to do if no session was found... -->
+            <param-name>whenNoSession</param-name>
+            <!-- ... 401 and a basic authentication challenge if request originates from web browser -->
+            <param-value>auto</param-value>
+        </init-param>
+        <init-param>
+            <param-name>passThru</param-name>
+            <param-value>/restful/swagger</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <!-- this is mapped to the entire app; however the IsisSessionFilter will "notice" if the session filter has already been
+             executed for the request pipeline, and if so will do nothing -->
+        <filter-name>IsisSessionFilterForRestfulObjects</filter-name>
+        <servlet-name>RestfulObjectsRestEasyDispatcher</servlet-name>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>IsisTransactionFilterForRestfulObjects</filter-name>
+        <filter-class>org.apache.isis.viewer.restfulobjects.server.webapp.IsisTransactionFilterForRestfulObjects</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>IsisTransactionFilterForRestfulObjects</filter-name>
+        <servlet-name>RestfulObjectsRestEasyDispatcher</servlet-name>
+    </filter-mapping>
+
+
+    <servlet>
+        <servlet-name>RestfulObjectsRestEasyDispatcher</servlet-name>
+        <servlet-class>org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>RestfulObjectsRestEasyDispatcher</servlet-name>
+        <url-pattern>/restful/*</url-pattern>
+    </servlet-mapping>
+
+
+</web-app>

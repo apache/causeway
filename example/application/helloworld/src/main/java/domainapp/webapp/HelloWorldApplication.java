@@ -33,24 +33,7 @@ import de.agilecoders.wicket.core.settings.IBootstrapSettings;
 import de.agilecoders.wicket.themes.markup.html.bootswatch.BootswatchTheme;
 import de.agilecoders.wicket.themes.markup.html.bootswatch.BootswatchThemeProvider;
 
-/**
- * As specified in <tt>web.xml</tt>.
- * 
- * <p>
- * See:
- * <pre>
- * &lt;filter>
- *   &lt;filter-name>wicket&lt;/filter-name>
- *    &lt;filter-class>org.apache.wicket.protocol.http.WicketFilter&lt;/filter-class>
- *    &lt;init-param>
- *      &lt;param-name>applicationClassName&lt;/param-name>
- *      &lt;param-value>domainapp.webapp.DomainApplication&lt;/param-value>
- *    &lt;/init-param>
- * &lt;/filter>
- * </pre>
- * 
- */
-public class DomainApplication extends IsisWicketApplication {
+public class HelloWorldApplication extends IsisWicketApplication {
 
     private static final long serialVersionUID = 1L;
 
@@ -69,20 +52,18 @@ public class DomainApplication extends IsisWicketApplication {
         final Module overrides = new AbstractModule() {
             @Override
             protected void configure() {
-                bind(String.class).annotatedWith(Names.named("applicationName")).toInstance("Simple App");
+                bind(String.class).annotatedWith(Names.named("applicationName")).toInstance("Hello World App");
                 bind(String.class).annotatedWith(Names.named("applicationCss")).toInstance("css/application.css");
                 bind(String.class).annotatedWith(Names.named("applicationJs")).toInstance("scripts/application.js");
-                bind(String.class).annotatedWith(Names.named("welcomeMessage")).toInstance(readLines(getClass(), "welcome.html", "This is a simple app"));
-                bind(String.class).annotatedWith(Names.named("aboutMessage")).toInstance("Simple App");
+                bind(String.class).annotatedWith(Names.named("welcomeMessage")).toInstance(readLines(getClass(), "welcome.html",
+                        "This is the hello world app"));
+                bind(String.class).annotatedWith(Names.named("aboutMessage")).toInstance("Hello World App");
                 bind(InputStream.class).annotatedWith(Names.named("metaInfManifest")).toProvider(
                         Providers.of(getServletContext().getResourceAsStream("/META-INF/MANIFEST.MF")));
-                // if uncommented, then overrides isis.appManifest in config file.
-                // bind(AppManifest.class).toInstance(new DomainAppAppManifest());
             }
         };
 
         return Modules.override(isisDefaults).with(overrides);
     }
-
 
 }

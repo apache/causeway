@@ -16,124 +16,92 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package domainapp.application.manifest;
+package org.apache.isis.applib;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 
-import domainapp.application.fixture.DomainAppApplicationModuleFixtureSubmodule;
-import domainapp.application.services.DomainAppApplicationModuleServicesSubmodule;
-import domainapp.modules.simple.dom.SimpleModuleDomSubmodule;
-
 /**
- * Bootstrap the application.
+ * Convenience adapter.
  */
-public class DomainAppAppManifest implements AppManifest {
+public abstract class AppManifestAbstract implements AppManifest {
 
-    private final List<Class<? extends FixtureScript>> fixtureScripts;
+    private final List<Class<?>> modules;
+    private final List<Class<?>> additionalServices;
     private final String authMechanism;
-    private final List<Class<?>> additionalModules;
+    private final List<Class<? extends FixtureScript>> fixtures;
+    private final String propertiesFile;
 
-    public DomainAppAppManifest() {
-        this(
+    public AppManifestAbstract(final List<Class<?>> modules) {
+        this(modules,
+                Collections.<Class<?>>emptyList(),
+                "shiro",
                 Collections.<Class<? extends FixtureScript>>emptyList(),
-                null,
-                Collections.<Class<?>>emptyList()
-        );
+                "isis-non-changing.properties");
     }
 
-    public DomainAppAppManifest(
-            final List<Class<? extends FixtureScript>> fixtureScripts,
+    public AppManifestAbstract(
+            final List<Class<?>> modules,
+            final List<Class<?>> additionalServices,
             final String authMechanism,
-            final List<Class<?>> additionalModules) {
-        this.fixtureScripts = elseEmptyIfNull(fixtureScripts);
-        this.authMechanism = authMechanism != null ? authMechanism : "shiro";
-        this.additionalModules = elseEmptyIfNull(additionalModules);
+            final List<Class<? extends FixtureScript>> fixtures,
+            final String propertiesFile) {
+        this.modules = modules;
+        this.additionalServices = additionalServices;
+        this.authMechanism = authMechanism;
+        this.fixtures = fixtures;
+        this.propertiesFile = propertiesFile;
     }
 
-    private static <T> List<T> elseEmptyIfNull(final List<T> list) {
-        return list == null ? Collections.<T>emptyList() : list;
-    }
-
-    /**
-     * Load all services and entities found in (the packages and subpackages within) these modules
-     */
     @Override
     public List<Class<?>> getModules() {
-        List<Class<?>> modules = Lists.newArrayList();
-        modules.addAll(Arrays.asList(
-                SimpleModuleDomSubmodule.class,
-                DomainAppApplicationModuleFixtureSubmodule.class,
-                DomainAppApplicationModuleServicesSubmodule.class
-        ));
-        modules.addAll(additionalModules);
         return modules;
     }
 
-    /**
-     * No additional services.
-     */
     @Override
     public List<Class<?>> getAdditionalServices() {
-        return Collections.emptyList();
+        return additionalServices;
     }
 
-    /**
-     * Use shiro for authentication.
-     */
     @Override
     public String getAuthenticationMechanism() {
         return authMechanism;
     }
 
-    /**
-     * Use shiro for authorization.
-     */
     @Override
     public String getAuthorizationMechanism() {
         return authMechanism;
     }
 
-    /**
-     * No fixtures.
-     */
     @Override
     public List<Class<? extends FixtureScript>> getFixtures() {
-        return fixtureScripts;
+        return fixtures;
     }
 
-    /**
-     * No overrides.
-     */
     @Override
     public Map<String, String> getConfigurationProperties() {
         final Map<String, String> props = Maps.newHashMap();
 
-        loadPropsInto(props, "isis-non-changing.properties");
-
-        if(!fixtureScripts.isEmpty()) {
-            props.put("isis.persistor.datanucleus.install-fixtures", "true");
+        if(propertiesFile != null) {
+            loadPropsInto(props, propertiesFile);
         }
 
         return props;
     }
 
-    static void loadPropsInto(final Map<String, String> props, final String propertiesFile) {
+    protected void loadPropsInto(final Map<String, String> props, final String propertiesFile) {
         final Properties properties = new Properties();
         try {
             try (final InputStream stream =
-                    DomainAppAppManifest.class.getResourceAsStream(propertiesFile)) {
+                    getClass().getResourceAsStream(propertiesFile)) {
                 properties.load(stream);
                 for (Object key : properties.keySet()) {
                     final Object value = properties.get(key);

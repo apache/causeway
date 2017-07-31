@@ -19,6 +19,8 @@
 
 package org.apache.isis.viewer.wicket.viewer;
 
+import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -29,8 +31,10 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 
 import com.google.common.base.Function;
+import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import com.google.common.io.Resources;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
@@ -538,6 +542,20 @@ public class IsisWicketApplication
             WicketSource.configure(this);
         }
     }
+
+    /**
+     * For convenience of subclasses.
+     */
+    protected static String readLines(final Class<?> contextClass, final String resourceName, final String fallback) {
+        try {
+            List<String> readLines = Resources.readLines(Resources.getResource(contextClass, resourceName), Charset.defaultCharset());
+            final String aboutText = Joiner.on("\n").join(readLines);
+            return aboutText;
+        } catch (IOException e) {
+            return fallback;
+        }
+    }
+
 
     // //////////////////////////////////////
 
