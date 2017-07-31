@@ -19,7 +19,9 @@
 
 package org.apache.isis.core.metamodel.facets.jaxb;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.List;
 
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -117,9 +119,13 @@ public class JaxbXmlJavaTypeAdapterFacetFactory extends FacetFactoryAbstract
                             return;
                         }
 
+                        for (final TypeValidator typeValidator : TYPE_VALIDATORS) {
+                            typeValidator.validate(objectSpec, validationFailures);
+                        }
+
                         final List<OneToOneAssociation> properties = objectSpec.getProperties(Contributed.EXCLUDED);
-                        for (OneToOneAssociation property : properties) {
-                            for (AdapterValidator adapterValidator : adapterValidators) {
+                        for (final OneToOneAssociation property : properties) {
+                            for (final PropertyValidator adapterValidator : PROPERTY_VALIDATORS) {
                                 adapterValidator.validate(objectSpec, property, validationFailures);
                             }
                         }
@@ -128,7 +134,14 @@ public class JaxbXmlJavaTypeAdapterFacetFactory extends FacetFactoryAbstract
         metaModelValidator.add(validator);
     }
 
-    private static abstract class AdapterValidator {
+    private static abstract class TypeValidator {
+        abstract void validate(
+                final ObjectSpecification objectSpec,
+                final ValidationFailures validationFailures);
+
+    }
+
+    private static abstract class PropertyValidator {
         abstract void validate(
                 final ObjectSpecification objectSpec,
                 final OneToOneAssociation property,
@@ -136,7 +149,7 @@ public class JaxbXmlJavaTypeAdapterFacetFactory extends FacetFactoryAbstract
 
     }
 
-    private static class AdapterValidatorForReferenceTypes extends AdapterValidator {
+    private static class PropertyValidatorForReferenceTypes extends PropertyValidator {
 
         @Override
         void validate(
@@ -164,10 +177,10 @@ public class JaxbXmlJavaTypeAdapterFacetFactory extends FacetFactoryAbstract
         }
     }
 
-    private static class AdapterValidatorForDateTypes extends AdapterValidator {
+    private static class PropertyValidatorForDateTypes extends PropertyValidator {
         private final Class<?> jodaType;
 
-        private AdapterValidatorForDateTypes(final Class<?> jodaType) {
+        private PropertyValidatorForDateTypes(final Class<?> jodaType) {
             this.jodaType = jodaType;
         }
 
@@ -196,14 +209,50 @@ public class JaxbXmlJavaTypeAdapterFacetFactory extends FacetFactoryAbstract
         }
     }
 
-    private final static List<AdapterValidator> adapterValidators =
+    private final static List<TypeValidator> TYPE_VALIDATORS =
+            Lists.<TypeValidator>newArrayList(
+                    new TypeValidator() {
+                        @Override
+                        void validate(
+                                final ObjectSpecification objectSpec, final ValidationFailures validationFailures) {
+
+                            // final Class<?> correspondingClass = objectSpec.getCorrespondingClass();
+                            if(objectSpec.isAbstract()) {
+                                validationFailures.add("JAXB view model '%s' is abstract", objectSpec.getFullIdentifier());
+                            }
+
+                        }
+                    },
+                    new TypeValidator() {
+                        @Override
+                        void validate(
+                                final ObjectSpecification objectSpec, final ValidationFailures validationFailures) {
+
+                            final Class<?> correspondingClass = objectSpec.getCorrespondingClass();
+                            final Constructor<?>[] constructors = correspondingClass.getDeclaredConstructors();
+                            for (Constructor<?> constructor : constructors) {
+                                if(constructor.getParameterTypes().length == 0) {
+                                    if (!Modifier.isPublic(constructor.getModifiers())) {
+                                        validationFailures
+                                                .add("JAXB view model '%s' has a no-arg constructor, however it is not public",
+                                                        objectSpec.getFullIdentifier());
+                                    }
+                                    return;
+                                }
+                            }
+                            validationFailures.add("JAXB view model '%s' does not have a public no-arg constructor", objectSpec.getFullIdentifier());
+                        }
+                    }
+            );
+
+    private final static List<PropertyValidator> PROPERTY_VALIDATORS =
             Lists.newArrayList(
-                    new AdapterValidatorForReferenceTypes(),
-                    new AdapterValidatorForDateTypes(java.sql.Timestamp.class),
-                    new AdapterValidatorForDateTypes(org.joda.time.DateTime.class),
-                    new AdapterValidatorForDateTypes(org.joda.time.LocalDate.class),
-                    new AdapterValidatorForDateTypes(org.joda.time.LocalDateTime.class),
-                    new AdapterValidatorForDateTypes(org.joda.time.LocalTime.class)
+                    new PropertyValidatorForReferenceTypes(),
+                    new PropertyValidatorForDateTypes(java.sql.Timestamp.class),
+                    new PropertyValidatorForDateTypes(org.joda.time.DateTime.class),
+                    new PropertyValidatorForDateTypes(org.joda.time.LocalDate.class),
+                    new PropertyValidatorForDateTypes(org.joda.time.LocalDateTime.class),
+                    new PropertyValidatorForDateTypes(org.joda.time.LocalTime.class)
             );
 
 }
