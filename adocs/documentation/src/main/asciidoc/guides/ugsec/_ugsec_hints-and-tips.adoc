@@ -26,4 +26,5 @@ See also hints-n-tips chapters in the:
 
 
 include::_ugsec_hints-and-tips_configuring-isis-to-use-bypass.adoc[leveloffset=+1]
+include::_ugsec_hints-and-tips_run-as.adoc[leveloffset=+1]
 include::_ugsec_hints-and-tips_shiro-caching.adoc[leveloffset=+1]
