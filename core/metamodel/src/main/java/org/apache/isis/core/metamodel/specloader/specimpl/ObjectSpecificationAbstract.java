@@ -154,7 +154,9 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
 
     private final List<ObjectSpecification> interfaces = Lists.newArrayList();
-    private final SubclassList subclasses = new SubclassList();
+    private final SubclassList directSubclasses = new SubclassList();
+    // built lazily
+    private SubclassList transitiveSubclasses;
 
     private final Class<?> correspondingClass;
     private final String fullName;
@@ -325,7 +327,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     }
 
     private void updateSubclasses(final ObjectSpecification subclass) {
-        this.subclasses.addSubclass(subclass);
+        this.directSubclasses.addSubclass(subclass);
     }
 
     protected void sortAndUpdateAssociations(final List<ObjectAssociation> associations) {
@@ -600,12 +602,46 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
     @Override
     public List<ObjectSpecification> subclasses() {
-        return subclasses.toList();
+        return subclasses(Depth.DIRECT);
+    }
+
+    @Override
+    public List<ObjectSpecification> subclasses(final Depth depth) {
+        if (depth == Depth.DIRECT) {
+            return directSubclasses.toList();
+        }
+
+        // depth == Depth.TRANSITIVE)
+        if (transitiveSubclasses == null) {
+            transitiveSubclasses = transitiveSubclasses();
+        }
+
+        return transitiveSubclasses.toList();
+    }
+
+    private synchronized SubclassList transitiveSubclasses() {
+        final SubclassList appendTo = new SubclassList();
+        appendSubclasses(this, appendTo);
+        transitiveSubclasses = appendTo;
+        return transitiveSubclasses;
+    }
+
+    private SubclassList appendSubclasses(
+            final ObjectSpecification objectSpecification,
+            final SubclassList appendTo) {
+
+        final List<ObjectSpecification> directSubclasses = objectSpecification.subclasses(Depth.DIRECT);
+        for (ObjectSpecification subclass : directSubclasses) {
+            appendTo.addSubclass(subclass);
+            appendSubclasses(subclass, appendTo);
+        }
+
+        return appendTo;
     }
 
     @Override
     public boolean hasSubclasses() {
-        return subclasses.hasSubclasses();
+        return directSubclasses.hasSubclasses();
     }
 
     @Override

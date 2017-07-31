@@ -33,6 +33,7 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.spec.Hierarchical;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
@@ -134,7 +135,7 @@ public class JdoQueryAnnotationFacetFactory extends FacetFactoryAbstract impleme
                                 return;
                             }
                             final ObjectSpecification fromSpec = getSpecificationLoader().loadSpecification(fromClassName);
-                            List<ObjectSpecification> subclasses = fromSpec.subclasses();
+                            List<ObjectSpecification> subclasses = fromSpec.subclasses(Hierarchical.Depth.TRANSITIVE);
                             if(subclasses.contains(objectSpec)) {
                                 return;
                             }

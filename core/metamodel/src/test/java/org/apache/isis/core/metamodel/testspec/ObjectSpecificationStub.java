@@ -302,6 +302,11 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     }
 
     @Override
+    public List<ObjectSpecification> subclasses(final Depth depth) {
+        return subclasses();
+    }
+
+    @Override
     public ObjectSpecification superclass() {
         return null;
     }

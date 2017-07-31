@@ -46,11 +46,24 @@ public interface Hierarchical {
      */
     boolean isOfType(ObjectSpecification specification);
 
+    public static enum Depth {
+        DIRECT,
+        TRANSITIVE
+    }
+
+    /**
+     * Direct subclasses only (same as {@link #subclasses(Depth)} with depth = {@link Depth#DIRECT}).
+     *
+     * @deprecated - use {@link #subclasses(Depth)}.
+     */
+    @Deprecated
+    List<ObjectSpecification> subclasses();
+
     /**
      * Get the list of specifications for the subclasses of the class
      * represented by this specification
      */
-    List<ObjectSpecification> subclasses();
+    List<ObjectSpecification> subclasses(Depth depth);
 
     /**
      * Get the specification for this specification's class's superclass.

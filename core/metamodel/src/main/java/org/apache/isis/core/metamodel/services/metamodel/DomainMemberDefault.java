@@ -46,6 +46,7 @@ import org.apache.isis.core.metamodel.facets.properties.choices.PropertyChoicesF
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
 import org.apache.isis.core.metamodel.facets.properties.validating.PropertyValidateFacet;
 import org.apache.isis.core.metamodel.services.devutils.MemberType;
+import org.apache.isis.core.metamodel.spec.Hierarchical;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
@@ -84,7 +85,7 @@ public class DomainMemberDefault implements DomainMember {
 
     @Override public String getClassType() {
         boolean service = false;
-        for(ObjectSpecification subspecs: spec.subclasses()) {
+        for(ObjectSpecification subspecs: spec.subclasses(Hierarchical.Depth.DIRECT)) {
             service = service || subspecs.isService();
         }
         return service || spec.isService() ?"2 Service":spec.isValue()?"3 Value":spec.isParentedOrFreeCollection()?"4 Collection":"1 Object";
