@@ -145,7 +145,7 @@ public class MetaModelServiceDefault implements MetaModelService3 {
     }
 
     protected boolean exclude(final ObjectSpecification spec) {
-        return isBuiltIn(spec) || spec.isAbstract();
+        return isBuiltIn(spec) || spec.isAbstract() || spec.isMixin();
     }
 
     protected boolean isBuiltIn(final ObjectSpecification spec) {
