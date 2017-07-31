@@ -133,7 +133,7 @@ public enum FeatureType {
      * for different features.
      */
     public final static List<FeatureType> EVERYTHING =
-            ImmutableList.of(OBJECT, PROPERTY, COLLECTION, ACTION, ACTION_PARAMETER_SCALAR);
+            ImmutableList.of(OBJECT, PROPERTY, COLLECTION, ACTION, ACTION_PARAMETER_SCALAR, ACTION_PARAMETER_COLLECTION);
 
     private final String name;
 
