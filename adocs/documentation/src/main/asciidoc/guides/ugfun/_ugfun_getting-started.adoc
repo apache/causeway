@@ -33,7 +33,7 @@ Even so we feel it's a good idea to be aware of this critical part of Apache Isi
 
 
 
-include::_ugfun_getting-started_prerequisites[leveloffset=+1]
+include::_ugfun_getting-started_prerequisites.adoc[leveloffset=+1]
 include::_ugfun_getting-started_helloworld-archetype.adoc[leveloffset=+1]
 include::_ugfun_getting-started_simpleapp-archetype.adoc[leveloffset=+1]
 include::_ugfun_getting-started_datanucleus-enhancer.adoc[leveloffset=+1]

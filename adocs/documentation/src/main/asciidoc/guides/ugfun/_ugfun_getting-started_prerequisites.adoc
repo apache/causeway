@@ -21,8 +21,3 @@ It should be just as straightforward for NetBeans too.
 For Eclipse the maven integration story is a little less refined.
 All is not lost, however; DataNucleus also has an implementation of the enhancer as an Eclipse plugin, which usually works well enough.
 
-
-include::_ugfun_getting-started_helloworld-archetype.adoc[leveloffset=+1]
-include::_ugfun_getting-started_simpleapp-archetype.adoc[leveloffset=+1]
-include::_ugfun_getting-started_datanucleus-enhancer.adoc[leveloffset=+1]
-
