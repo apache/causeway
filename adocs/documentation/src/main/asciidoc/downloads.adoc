@@ -27,10 +27,13 @@ Core:
 
 * https://www.apache.org/dyn/closer.cgi/isis/isis-core/isis-1.14.0-source-release.zip[isis-1.14.0] (https://www.apache.org/dist/isis/isis-core/isis-1.14.0-source-release.zip.asc[asc], https://www.apache.org/dist/isis/isis-core/isis-1.14.0-source-release.zip.md5[md5])
 
+////
+commented out until 1.15.0 is released ...
 
 HelloWorld Archetype (`1.15.0-SNAPSHOT` onwards):
 
 * https://www.apache.org/dyn/closer.cgi/isis/archetype/helloworld-archetype/helloworld-archetype-1.14.0-source-release.zip[helloworld-archetype-1.14.0] (https://www.apache.org/dist/isis/archetype/helloworld-archetype/helloworld-archetype-1.14.0-source-release.zip.asc[asc], https://www.apache.org/dist/isis/archetype/helloworld-archetype/helloworld-archetype-1.14.0-source-release.zip.md5[md5])
+////
 
 SimpleApp Archetype:
 
