@@ -36,8 +36,7 @@ public class Customer {
 ----
 <1> Prior to `1.13.2`, had to be prefixed by an "_"; this is no longer required because "$" is also recognized as a way of parsing the class name in order to infer the mixin's name (eg `Customer$placeOrder`).
 <2> typically contributed to concrete class
-<3> using the "$$" reserved name
-<4> supporting methods as usual
+<3> supporting methods as usual
 
 
 The mixin class can also be capitalized if desired.
@@ -48,17 +47,16 @@ Thus:
 public class Customer {
 
     @Mixin(method="act")
-    public static class PlaceOrder {                                            // <1>
-
+    public static class PlaceOrder {
         private final Customer customer;
-        public documents(Customer customer) { this.customer = customer; }       // <2>
+        public documents(Customer customer) { this.customer = customer; }
 
         @Action
         @ActionLayout(contributed = Contributed.AS_ACTION)
-        public List<Order> act(Product p, int quantity) {                        // <3>
+        public List<Order> act(Product p, int quantity) {
             ...
         }
-        public boolean hideAct() { ... }                                         // <4>
+        public boolean hideAct() { ... }
         public String validate0Act(Product p) { ...  }
     }
 }
@@ -72,7 +70,6 @@ In other words, all of the following are allowed:
 * `public static class _Documents { ... }`
 * `public static class _documents { ... }`
 
-The reserved method name "$$" can also be changed using xref:../rgant/rgant.adoc#_rgant_Mixin_method[`@Mixin#method()`] or xref:../rgant/rgant.adoc#_rgant_DomainObject_mixinMethod[`@DomainObject#mixinMethod()`].
 
 
 

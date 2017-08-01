@@ -16,7 +16,7 @@ For example:
 
 [source,java]
 ----
-@Mixin
+@Mixin(method="act")
 public class DocumentHolder_documents {
 
     private final DocumentHolder holder;
@@ -25,14 +25,12 @@ public class DocumentHolder_documents {
     @Action(semantics=SemanticsOf.SAFE)
     @ActionLayout(contributed = Contributed.AS_ASSOCIATION)
     @CollectionLayout(render = RenderType.EAGERLY)
-    public List<Document> $$() {                                    // <1>
+    public List<Document> act() {
         ...
     }
-    public boolean hide$$() { ... }                                 // <2>
+    public boolean hideAct() { ... }
 }
 ----
-<1> using "$$" as the reserved method name
-<2> supporting methods as usual
 
 
 Alternatively, if the xref:../rgant/rgant.adoc#_rgant_Mixin_method[`@Mixin#method()`] attribute is specified, then this can nominate a different abbreviation.
