@@ -22,6 +22,11 @@ This also creates a minimal application, but provides more structure and example
 
 Create a new directory, and `cd` into that directory.
 
+[WARNING]
+====
+This archetype was introduced in `1.15.0-SNAPSHOT`, and has not - yet - been released.
+====
+
 To build the app from the latest stable release, then run the following command:
 
 [source,bash]
@@ -228,6 +233,12 @@ image::{_imagesdir}getting-started/using-hello-world/080-edit-notes.png[width="6
 
 It's also possible to delete an object:
 
+image::{_imagesdir}getting-started/using-hello-world/090-delete-object.png[width="600px",link="{_imagesdir}getting-started/using-hello-world/090-delete-object.png"]
+
+The viewer displays a message confirming that the object has been deleted:
+
+
+image::{_imagesdir}getting-started/using-hello-world/100-object-deleted.png[width="600px",link="{_imagesdir}getting-started/using-hello-world/100-object-deleted.png"]
 
 The above functionality is implemented by link:https://github.com/apache/isis/blob/master/example/application/helloworld/src/main/java/domainapp/dom/impl/HelloWorldObject.java#L87[this code]:
 
