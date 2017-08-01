@@ -202,7 +202,7 @@ mvn -Dskip.mavenmixin-isisswagger
 +
 [TIP]
 ====
-By default, Swagger spec files are generated at `target/generated-resources/isis-swagger` (in the ``webapp`` module).
+By default, Swagger schema definition files are generated at `target/generated-resources/isis-swagger` (in the ``webapp`` module).
 ====
 
 * To package up the application as a docker image: +

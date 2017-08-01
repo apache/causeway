@@ -18,13 +18,9 @@
  */
 
 /**
- * Interaction events, corresponding to gestures in the user interface.
- * 
- * <p>
- * The applib does not provide any means of listening to these events directly, and typically
- * domain objects would not be interested in them either.  However, they can be subscribed to
- * using the wrapper progmodel (which effectively provides a drop-in replacement for the
- * {@link org.apache.isis.applib.DomainObjectContainer} that implements the <tt>WrapperFactory</tt>
- * interface).  
+ * Interaction events, corresponding to gestures in the user interface; emitted only by the
+ * {@link org.apache.isis.applib.services.wrapper.WrapperFactory}.
+ *
+ * @see <a href="http://isis.apache.org/guides/rgsvc/rgsvc.html#_rgsvc_application-layer-api_WrapperFactory">Reference Guide</a>
  */
 package org.apache.isis.applib.events;

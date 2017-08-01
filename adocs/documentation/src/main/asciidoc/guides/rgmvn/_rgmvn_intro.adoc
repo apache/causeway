@@ -81,7 +81,7 @@ We recommend the following:
 
 * run the `validate` goal in the `dom` submodule; this will give early warning if there are any syntactic errors in the model, eg orphaned supporting methods
 
-* run the `swagger` goal in the `integtest` submodule; this ensures that the generated Swagger spec files correctly include any contributed actions/associations.
+* run the `swagger` goal in the `integtest` submodule; this ensures that the generated Swagger schema definition files correctly include any contributed actions/associations.
 
 * run the `xsd` plugin in a new `xsd` submodule; contributed actions are irrelevant for this particular goal; having a separate submodule allows the configuration of both the `xsd` goal (to generate the XSD schemas) and any other XSD-related configuration to be kept in a single place.
 

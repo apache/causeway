@@ -7,7 +7,7 @@
 
 
 
-The `WrapperFactory` provides the ability to enforce business rules for programmatic interactions between domain objects.  If there is a (lack-of-) trust boundary between the caller and callee -- eg if they reside in different modules -- then the wrapper factory is a useful mechanism to ensure that any business constraints defined by te callee are honoured.
+The `WrapperFactory` provides the ability to enforce business rules for programmatic interactions between domain objects.  If there is a (lack-of-) trust boundary between the caller and callee -- eg if they reside in different modules -- then the wrapper factory is a useful mechanism to ensure that any business constraints defined by the callee are honoured.
 
 For example, if the calling object attempts to modify an unmodifiable property on the target object, then an exception will be thrown.  Said another way: interactions are performed "as if" they are through the viewer.
 

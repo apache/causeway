@@ -29,8 +29,6 @@
  * can submit.  Object store implementation are generally expected to support
  * the {@link org.apache.isis.applib.query.QueryBuiltInAbstract built-in queries},
  * meaning that there may not be any need to provide different implementations
- * of the repositories.  (This provides some of the benefits that .NET has
- * with its LINQ technology, though it is admittedly nowhere near as 
- * sophisticated).
+ * of the repositories.
  */
 package org.apache.isis.applib.query;

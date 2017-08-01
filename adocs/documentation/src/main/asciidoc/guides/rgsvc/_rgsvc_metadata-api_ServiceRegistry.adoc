@@ -5,7 +5,7 @@
 :_imagesdir: images/
 
 
-The `ServiceRegistry2` service collects together methods for accessing other domain services.
+The `ServiceRegistry2` service collects together methods for injecting or looking up domain services (either provided by the framework or application-specific) currently known to the runtime.
 
 [NOTE]
 ====

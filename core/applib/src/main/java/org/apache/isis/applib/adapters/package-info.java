@@ -18,8 +18,15 @@
  */
 
 /**
- * The classes in this package are used for implementing custom value types.  
+ * The classes in this package are used for implementing custom value types.
  * 
+ * <p>
+ *     <b>NOTE THAT</b> in addition to implementing the interfaces here, it is also necessary to provide appropriate
+ *   components for Wicket viewer to edit the values and to implement the appropriate SPI/extension points so that
+ *   DataNucleus can persist the objects to the database.
+ * </p>
+ *
+ *
  * <p>
  * The {@link org.apache.isis.applib.adapters.ValueSemanticsProvider} interface
  * allows the framework to recognize its corresponding type as being a value
@@ -32,6 +39,9 @@
  * is to annotate the class with the {@link org.apache.isis.applib.annotation.Value}
  * annotation.  However, if the value type source code cannot be modified (for
  * example, if it is a third-party type such as joda-time), then the association
- * can be made using configuration properties. 
+ * can be made using configuration properties.
+ *
+ * @deprecated
  */
+@Deprecated
 package org.apache.isis.applib.adapters;

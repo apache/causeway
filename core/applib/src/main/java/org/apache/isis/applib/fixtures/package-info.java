@@ -20,6 +20,12 @@
 /**
  * Defines the {@link org.apache.isis.applib.fixtures.InstallableFixture}
  * interface and supporting classes.
+ *
+ * <p>
+ *     <b>NOTE THAT</b> {@link org.apache.isis.applib.fixturescripts.FixtureScript} interface provides a more complete
+ *     approach to handling fixtures, and should generally be used in preference to
+ *     {@link org.apache.isis.applib.fixtures.InstallableFixture}.
+ * </p>
  * 
  * <p>
  * Fixtures are used to initialize the system, typically for either testing

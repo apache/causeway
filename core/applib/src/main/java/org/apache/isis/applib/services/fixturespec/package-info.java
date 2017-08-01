@@ -18,19 +18,11 @@
  */
 
 /**
- * Defines interfaces for domain objects that constitute the framework's
- * view of a &quot;user profile&quot;. 
- * 
- * <p>
- * Each user can hold a single {@link org.apache.isis.applib.profiles.Profile},
- * which in turn can hold option settings (eg preferred colour theme) and 
- * {@link org.apache.isis.applib.profiles.Perspective}s (a particular 
- * arrangement of the user interface; the terminology comes from the Eclipse
- * RCP/IDE platform).
- *  
- * <p>
- * The use and surfacing of these capabilities is dependent on the viewer;
- * most notably the drag-n-drop viewer does support the concept of a user
- * profile, but many others do not. 
+ * The {@link org.apache.isis.applib.services.fixturespec.FixtureScriptsSpecificationProvider} SPI service is an
+ * alternative to subclassing the {@link org.apache.isis.applib.fixturescripts.FixtureScripts} domain service.
+ * The logic that would normally be in the subclass moves to the provider service instead, and the framework
+ * instantiates a fallback default instance, {@link org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault}.
+ *
+ * @see <a href="http://isis.apache.org/migration-notes/migration-notes.html#_migration-notes_1.8.0-to-1.9.0_fixture-scripts-specification-provider">Reference guide</a>
  */
-package org.apache.isis.applib.profiles;
+package org.apache.isis.applib.services.fixturespec;

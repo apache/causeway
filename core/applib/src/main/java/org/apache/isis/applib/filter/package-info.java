@@ -25,5 +25,8 @@
  * <p>
  * It also defines a supporting {@link org.apache.isis.applib.filter.Filters utility class}
  * which can be used to combine {@link org.apache.isis.applib.filter.Filter}s.
+ *
+ * @deprecated
  */
+@Deprecated
 package org.apache.isis.applib.filter;

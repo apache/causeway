@@ -28,7 +28,7 @@ Defaults to [`PUBLIC`, `PRIVATE`] (meaning that two spec files will be created).
 +
 Defaults to `JSON`.
 
-* `output` - (optional) subdirectory under the `target` directory to generate the swagger spec files +
+* `output` - (optional) subdirectory under the `target` directory to generate the swagger schema definition files +
 +
 Defaults to `generated-resources/isis-swagger`
 
