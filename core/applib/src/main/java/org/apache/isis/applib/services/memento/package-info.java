@@ -26,5 +26,4 @@
  *
  * @deprecated
  */
-@Deprecated
 package org.apache.isis.applib.services.memento;

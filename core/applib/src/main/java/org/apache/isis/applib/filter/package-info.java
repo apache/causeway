@@ -28,5 +28,4 @@
  *
  * @deprecated
  */
-@Deprecated
 package org.apache.isis.applib.filter;

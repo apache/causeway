@@ -20,5 +20,4 @@
 /**
  * @deprecated
  */
-@Deprecated
 package org.apache.isis.applib.services.settings;
