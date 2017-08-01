@@ -17,7 +17,7 @@ This also creates a minimal application, but provides more structure and example
 ====
 
 
-[[_ugfun_getting-started_helloworld-archetype_generating-the-app]]
+[[__ugfun_getting-started_helloworld-archetype_generating-the-app]]
 == Generating the App
 
 Create a new directory, and `cd` into that directory.
@@ -76,7 +76,7 @@ The archetype generation process will then run; it only takes a few seconds.
 
 
 
-[[_ugfun_getting-started_helloworld-archetype_building-the-app]]
+[[__ugfun_getting-started_helloworld-archetype_building-the-app]]
 == Building the App
 
 Switch into the root directory of your newly generated app, and build your app:
@@ -92,7 +92,7 @@ where `myapp` is the `artifactId` entered above.
 
 
 
-[[_ugfun_getting-started_helloworld-archetype_running-the-app]]
+[[__ugfun_getting-started_helloworld-archetype_running-the-app]]
 == Running the App
 
 The `helloworld` archetype generates a single WAR file, configured to run both the xref:../ugvw/ugvw.adoc#[Wicket viewer] and the xref:../ugvro/ugvro.adoc#[Restful Objects viewer].
@@ -142,7 +142,7 @@ image::{_imagesdir}getting-started/helloworld-before-launch.png[width="600px",li
 
 
 
-[[_ugfun_getting-started_helloworld-archetype_using-the-app]]
+[[__ugfun_getting-started_helloworld-archetype_using-the-app]]
 == Using the App
 
 When you start the app, you'll be presented with a welcome page from which you can access the webapp using either the xref:../ugvw/ugvw.adoc#[Wicket viewer] or the xref:../ugvro/ugvro.adoc#[Restful Objects viewer]:
@@ -274,7 +274,7 @@ The Swagger UI is provided as a convenience; the REST API is actually a complete
 The REST API implemented by Apache Isis is specified in the link:http://www.restfulobjects.org[Restful Object spec].
 
 
-[[_ugfun_getting-started_helloworld-archetype_experimenting]]
+[[__ugfun_getting-started_helloworld-archetype_experimenting]]
 == Experimenting
 
 Once you are familiar with the generated app, try modifying it.
@@ -285,7 +285,7 @@ If you use IntelliJ IDEA or Eclipse, do also install the xref:../dg/dg.adoc#__dg
 If you run into issues, please don't hesitate to ask for help on the link:http://isis.apache.org/help.html[users mailing list].
 
 
-[[_ugfun_getting-started_helloworld-archetype_moving-on]]
+[[__ugfun_getting-started_helloworld-archetype_moving-on]]
 == Moving on
 
 When you are ready to start working on your own app, we _don't_ recommend building on top of the helloworld app.

@@ -30,7 +30,7 @@ From this you can easily rename these initial classes, and extend to build up yo
 
 
 
-[[_ugfun_getting-started_simpleapp-archetype_generating-the-app]]
+[[__ugfun_getting-started_simpleapp-archetype_generating-the-app]]
 == Generating the App
 
 Create a new directory, and `cd` into that directory.
@@ -90,7 +90,7 @@ The archetype generation process will then run; it only takes a few seconds.
 
 
 
-[[_ugfun_getting-started_simpleapp-archetype_building-the-app]]
+[[__ugfun_getting-started_simpleapp-archetype_building-the-app]]
 == Building the App
 
 Switch into the root directory of your newly generated app, and build your app:
@@ -106,7 +106,7 @@ where `myapp` is the `artifactId` entered above.
 
 
 
-[[_ugfun_getting-started_simpleapp-archetype_running-the-app]]
+[[__ugfun_getting-started_simpleapp-archetype_running-the-app]]
 == Running the App
 
 The `simpleapp` archetype generates a single WAR file, configured to run both the xref:../ugvw/ugvw.adoc#[Wicket viewer] and the xref:../ugvro/ugvro.adoc#[Restful Objects viewer].
@@ -199,7 +199,7 @@ image::{_imagesdir}getting-started/simpleapp-webapp-before-launch.png[width="600
 
 
 
-[[_ugfun_getting-started_simpleapp-archetype_running-with-fixtures]]
+[[__ugfun_getting-started_simpleapp-archetype_running-with-fixtures]]
 == Running with Fixtures
 
 It is also possible to start the application with a pre-defined set of data; useful for demos or manual exploratory testing.

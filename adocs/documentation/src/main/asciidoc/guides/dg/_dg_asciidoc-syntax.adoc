@@ -22,7 +22,7 @@ For more info, see:
 * link:http://www.methods.co.nz/asciidoc/userguide.html[asciidoc online user manual]
 
 
-[[__markup-docs_asciidoc_headings]]
+[[__dg_asciidoc-syntax_headings]]
 == Headings
 
 The number of preceding `=` signs indicates the heading level.
@@ -62,7 +62,7 @@ It's therefore a good place to summarize the content of the document.
 |===
 
 
-[[__markup-docs_asciidoc_paragraphs]]
+[[__dg_asciidoc_paragraphs]]
 == Paragraphs
 
 [cols="3a,2a", options="header"]
@@ -118,7 +118,7 @@ This will reduce change of merge conflicts, too.
 ****
 
 
-[[__markup-docs_asciidoc_bulleted-lists]]
+[[__dg_asciidoc_bulleted-lists]]
 == Bulleted lists
 
 [cols="3a,2a", options="header"]
@@ -164,7 +164,7 @@ More indenting
 |===
 
 
-[[__markup-docs_asciidoc_numbered-lists]]
+[[__dg_asciidoc_numbered-lists]]
 == Numbered lists
 
 There's no need to keep track of numbers, just use '1' or 'a' etc:
@@ -214,7 +214,7 @@ b. Another child bullet
 While it isn't necessary to maintain the ordering manually (could just use '1' for all bullets), this does generate warnings when the document is built.
 
 
-[[__markup-docs_asciidoc_links-and-xrefs]]
+[[__dg_asciidoc_links-and-xrefs]]
 == Links and Cross-references
 
 [cols="3a,2a,3a", options="header"]
@@ -258,7 +258,7 @@ xref:../../setting-up/concepts/concepts.adoc#_concepts_ci-as-a-service[CI as a s
 
 
 
-[[__markup-docs_asciidoc_tables]]
+[[__dg_asciidoc_tables]]
 == Tables
 
 ....
@@ -547,7 +547,7 @@ The `N.M+` notation tells Asciidoctor to span this cell over N columns and M row
 
 
 
-[[__markup-docs_asciidoc_admonitions]]
+[[__dg_asciidoc_admonitions]]
 == Admonitions
 
 Callout or highlight content of particular note.
@@ -625,7 +625,7 @@ Don't forget...
 |===
 
 
-[[__markup-docs_asciidoc_source-code]]
+[[__dg_asciidoc_source-code]]
 == Source code
 
 Use `[source]` macro to specify source content:
@@ -723,7 +723,7 @@ renders as:
 It's also possible to include source code snippets; see the guides linked previously
 
 
-[[__markup-docs_asciidoc_images]]
+[[__dg_asciidoc_images]]
 == Images
 
 Use the `image:` macro to reference images.
@@ -756,7 +756,7 @@ It's also possible to specify the width using `scaledwidth` (for PDF/HTML) or `w
 
 
 
-[[__markup-docs_asciidoc_child-documents]]
+[[__dg_asciidoc_child-documents]]
 == Child Documents
 
 
@@ -836,7 +836,7 @@ xxx-xxx/_images/.
 
 
 
-[[__markup-docs_asciidoc_metadata]]
+[[__dg_asciidoc_metadata]]
 == Metadata
 
 The top-level document must include the `_basedir` attribute; this points to the parent directory `src/main/asciidoc`.
@@ -857,7 +857,7 @@ For example, the `setting-up/concepts/concepts.adoc` file starts:
 
 
 
-[[__markup-docs_asciidoc_uml]]
+[[__dg_asciidoc_uml]]
 == UML diagrams
 
 Asciidoctor includes support for the link:http://plantuml.com/[plantuml], allowing simple UML diagrams to be easily sketched.
@@ -889,7 +889,7 @@ Car -- Person : < owns
 
 
 
-[[__markup-docs_asciidoc_ditaa]]
+[[__dg_asciidoc_ditaa]]
 == Ditaa diagrams
 
 Asciidoctor includes support for the link:http://ditaa.sourceforge.net/[ditaa], allowing boxes-and-lines diagrams to be easily sketched.
@@ -927,7 +927,7 @@ renders as:
 ----
 
 
-[[__markup-docs_asciidoc_graphviz]]
+[[__dg_asciidoc_graphviz]]
 == Graphviz diagrams
 
 
