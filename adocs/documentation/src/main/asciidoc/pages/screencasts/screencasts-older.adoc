@@ -63,7 +63,7 @@ Learn more xref:../../guides/dg/dg.adoc#[here]
 
 _How to import an Apache Isis maven-based application into IntelliJ and run the app._ +
 
-Learn more link:./guides/dg/dg.html#_dg_ide_intellij[here]
+Learn more xref:../../guides/dg/dg.adoc#_dg_ide_intellij[here]
 
 |video::lwKsyTbTSnA[youtube,width="420px",height="315px"]
 
