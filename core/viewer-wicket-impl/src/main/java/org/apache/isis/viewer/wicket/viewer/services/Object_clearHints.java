@@ -18,10 +18,9 @@
  */
 package org.apache.isis.viewer.wicket.viewer.services;
 
-import javax.inject.Inject;
-
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.Contributed;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -29,12 +28,8 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.hint.HintStore;
 
-@Mixin
+@Mixin(method="act")
 public class Object_clearHints {
-
-    public static class ActionDomainEvent
-            extends org.apache.isis.applib.services.eventbus.ActionDomainEvent<Object> {
-    }
 
     private final Object object;
 
@@ -42,18 +37,19 @@ public class Object_clearHints {
         this.object = object;
     }
 
-    public static class ClearHintsDomainEvent extends ActionDomainEvent { }
+    public static class ActionDomainEvent extends org.apache.isis.applib.services.eventbus.ActionDomainEvent<Object> { }
 
     @Action(
-            domainEvent = ClearHintsDomainEvent.class,
+            domainEvent = ActionDomainEvent.class,
             semantics = SemanticsOf.IDEMPOTENT
     )
     @ActionLayout(
-            cssClassFa = "fa-trash",
+            contributed = Contributed.AS_ACTION,
+            cssClassFa = "fa-circle-o",
             position = ActionLayout.Position.PANEL_DROPDOWN
     )
     @MemberOrder(name = "datanucleusIdLong", sequence = "400.1")
-    public Object $$() {
+    public Object act() {
         if (getHintStoreUsingWicketSession() != null) {
             final Bookmark bookmark = bookmarkService.bookmarkFor(object);
             getHintStoreUsingWicketSession().removeAll(bookmark);
@@ -61,7 +57,7 @@ public class Object_clearHints {
         return object;
     }
 
-    public boolean hide$$() {
+    public boolean hideAct() {
         return getHintStoreUsingWicketSession() == null;
     }
 

@@ -23,19 +23,25 @@ Once you've sketched out your domain model, you can then either start-over using
 
 One of the original motivations for Apache Isis itself was to be able automatically generate a user interface for a domain object model.
 
-Apache Isis' has a pluggable architecture allowing different user interface technologies. The principal implementation (as configured by the xref:../../guides/ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype]) is the xref:../../guides/ugvw/ugvw.adoc#[Wicket viewer]. This provides an appealing default user interface, with the ability to customize the user interface by writing new http://wicket.apache.org[Apache Wicket] components. Some third-party components can be found in the (non-ASF) link:http://www.isisaddons.org[Isis Addons] (non-ASF) project, integrating the Wicket viewer with https://github.com/isisaddons/isis-wicket-gmap3[google maps], https://github.com/isisaddons/isis-wicket-fullcalendar2[a full calendar] and a https://github.com/isisaddons/isis-wicket-excel[export to Excel] component.
+Apache Isis' has a pluggable architecture allowing different user interface technologies.
+ The principal implementation (as configured by the xref:../../guides/ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype]) is the xref:../../guides/ugvw/ugvw.adoc#[Wicket viewer].
+  This provides an appealing default user interface, with the ability to customize the user interface by writing new http://wicket.apache.org[Apache Wicket] components. Some third-party components can be found in the (non-ASF) link:http://www.isisaddons.org[Isis Addons] (non-ASF) project, integrating the Wicket viewer with https://github.com/isisaddons/isis-wicket-gmap3[google maps], https://github.com/isisaddons/isis-wicket-fullcalendar2[a full calendar] and a https://github.com/isisaddons/isis-wicket-excel[export to Excel] component.
 
 
-Deploying on Apache Isis means that the framework also manages object persistence. Again this is pluggable, but the principal implementation is the JDO/DataNucleus objectstore. Because JDO supports both SQL and NoSQL databases, you can then deploy on a variety of platforms, including the link:https://developers.google.com/appengine/[Google App Engine (GAE)] and link:http://neo4j.com/[Neo4J].
+Deploying on Apache Isis means that the framework also manages object persistence.
+Again this is pluggable, but the principal implementation is the JDO/DataNucleus objectstore.
+Because JDO supports both SQL and NoSQL databases, you can then deploy on a variety of platforms, including the link:https://developers.google.com/appengine/[Google App Engine (GAE)] and link:http://neo4j.com/[Neo4J].
 
 
 
 
 == Deploy as a RESTful web service
 
-REST (Representation State Transfer) is an architectural style for building highly scalable distributed systems, using the same principles as the World Wide Web. Many commercial web APIs (twitter, facebook, Amazon) are implemented as either pure REST APIs or some approximation therein.
+REST (Representation State Transfer) is an architectural style for building highly scalable distributed systems, using the same principles as the World Wide Web.
+Many commercial web APIs (twitter, facebook, Amazon) are implemented as either pure REST APIs or some approximation therein.
 
-The http://restfulobjects.org[Restful Objects specification] defines a means by a domain object model can be exposed as RESTful resources using JSON representations over HTTP. Apache Isis' xref:../../guides/ugvro/ugvro.adoc#[RestfulObjects viewer] is an implementation of that spec, making any Apache Isis domain object automatically available via REST.
+The http://restfulobjects.org[Restful Objects specification] defines a means by a domain object model can be exposed as RESTful resources using JSON representations over HTTP.
+Apache Isis' xref:../../guides/ugvro/ugvro.adoc#[RestfulObjects viewer] is an implementation of that spec, making any Apache Isis domain object automatically available via REST.
 
 There are two main use cases for deploying Apache Isis as a RESTful web service are:
 
@@ -47,18 +53,22 @@ For example, using Javascript/JQuery, or an RIA technology such as Flex, JavaFX,
 
 REST is designed to be machine-readable, and so is an excellent choice for synchronous data interchange scenarios.
 
-As for the auto-generated webapps, the framework manages object persistence, for example using the JDO/DataNucleus objectstore. It is perfectly possible to deploy the RESTful API alongside an auto-generated webapp; both work from the same domain object model.
+As for the auto-generated webapps, the framework manages object persistence, for example using the JDO/DataNucleus objectstore.
+It is perfectly possible to deploy the RESTful API alongside an auto-generated webapp; both work from the same domain object model.
 
 
 
 
 == Deploy on your own platform
 
-The programming model defined by Apache Isis deliberately minimizes the dependencies on the rest of the framework. In fact, the only hard dependency that the domain model classes have on Apache Isis is through the `org.apache.isis.applib` classes, mostly to pick up annotations such as `@Disabled`. The idea is to make it easy to be able to write take a domain object prototyped and/or tested using Apache Isis, but to deploy on some other framework's runtime.
+The programming model defined by Apache Isis deliberately minimizes the dependencies on the rest of the framework.
+In fact, the only hard dependency that the domain model classes have on Apache Isis is through the `org.apache.isis.applib` classes, mostly to pick up annotations such as `@Disabled`.
+The idea is to make it easy to be able to write take a domain object prototyped and/or tested using Apache Isis, but to deploy on some other framework's runtime.
 
-If you are interested in taking this approach, note that there is one important interface that must be implemented by your own framework, namely `DomainObjectContainer`. This interface represents the one-and-only "touchpoint" between the domain objects and the runtime. If you inspect the methods then you'll see it covers such concerns as persistence, and of raising warnings or errors.
+If you are interested in taking this approach, then you will need to provide your own implementations of any framework-provided services used by your code.
 
-Apache Isis' own runtime injects an (implementation of this) interface into each and every domain object. You will likely need to do something similar within your own framework, (or come up with an equivalent mechanism, eg Service Locator pattern).
+Apache Isis' own runtime injects an (implementation of this) interface into each and every domain object.
+You will likely need to do something similar within your own framework, (or come up with an equivalent mechanism, eg Service Locator pattern).
 
 
 

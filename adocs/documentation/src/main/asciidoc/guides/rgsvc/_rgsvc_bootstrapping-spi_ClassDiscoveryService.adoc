@@ -6,7 +6,8 @@
 
 
 
-The `ClassDiscovery` service is used to automatically discover subclasses of any given type on the classpath.  The primary use case is to support "convention-over-configuration" designs that work with a minimum of configuration.
+The `ClassDiscovery` service is used to automatically discover subclasses of any given type on the classpath.
+The primary use case is to support "convention-over-configuration" designs that work with a minimum of configuration.
 
 This service is used by the xref:../rgcms/rgcms.adoc#_rgcms_classes_super_FixtureScripts[`FixtureScripts`] service to automatically locate any xref:../rgcms/rgcms.adoc#_rgcms_classes_super_FixtureScript[`FixtureScript`] implementations.
 
@@ -36,15 +37,16 @@ Isis provides an implementation of this service, namely `o.a.i.applib.services.c
 
 [NOTE]
 ====
-This implementation is also used to discover domain services annotated with xref:../rgant/rgant.adoc#_rgant-DomainService[`@DomainService`].  Currently this logic uses the implementation directly, so is not pluggable.  However, the entire `ServicesInstaller`
+This implementation is also used to discover domain services annotated with xref:../rgant/rgant.adoc#_rgant-DomainService[`@DomainService`].
+Currently this logic uses the implementation directly, so is not pluggable.
 ====
 
 
 
 == Usage
 
-The usage will vary depending upon the conventions of the design.  As of 1.9.0, the usage of the service has been
-centralized such that the packages to be scanned are located from the xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[`AppManifest`]'s `#getModules()` method.
+The usage will vary depending upon the conventions of the design.
+As of 1.9.0, the usage of the service has been centralized such that the packages to be scanned are located from the xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[`AppManifest`]'s `#getModules()` method.
 
 For example, the xref:../ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype]'s app manifest includes:
 
@@ -71,12 +73,9 @@ Other usages of the `ClassDiscoveryService` are likely to work in a similar way,
 == Registering the Services
 
 Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the
-`AppManifest` to xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' core
-implementation of `ClassDiscoveryService2` service is automatically registered and injected (it is annotated with
-`@DomainService`) so no further configuration is required.
+`AppManifest` to xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' core implementation of `ClassDiscoveryService2` service is automatically registered and injected (it is annotated with `@DomainService`) so no further configuration is required.
 
-To use an alternative implementation, use
-xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
+To use an alternative implementation, use xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
 in the xref:../rgsvc/rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
 
 

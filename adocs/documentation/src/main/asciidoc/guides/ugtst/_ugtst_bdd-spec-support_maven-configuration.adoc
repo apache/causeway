@@ -7,7 +7,8 @@
 
 
 
-Apache Isis' BDD spec support is automatically configured if you use the xref:../ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype].  To set it up manually, update the `pom.xml` of your domain object model module:
+Apache Isis' BDD spec support is automatically configured if you use the xref:../ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype].
+To set it up manually, update the `pom.xml` of your domain object model module:
 
 [source,xml]
 ----
@@ -47,8 +48,13 @@ We also recommend that you configure the `maven-surefire-plugin` to pick up the 
 </plugin>
 ----
 
+[NOTE]
+====
+As of 1.14.0, this configuration has been replaced to use mavenmixins.
+====
 
-You may also find it more convenient to place the `.feature` files in `src/test/java`, rather than `src/test/resources`.  If you wish to do this, then your integtest module's `pom.xml` must contain:
+You may also find it more convenient to place the `.feature` files in `src/test/java`, rather than `src/test/resources`.
+If you wish to do this, then your integtest module's `pom.xml` must contain:
 
 [source,xml]
 ----

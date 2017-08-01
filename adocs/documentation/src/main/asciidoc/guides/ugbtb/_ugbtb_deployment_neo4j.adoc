@@ -4,6 +4,7 @@
 :_basedir: ../../
 :_imagesdir: images/
 
+
 As of 1.8.0 Apache Isis has experimental support for Neo4J, courtesy of DataNucleus' http://www.datanucleus.org/products/datanucleus/datastores/neo4j.html[Neo4J Datastore] implementation.
 
 The xref:../ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype] has been updated so that they can be optionally run under Neo4J.
@@ -14,6 +15,7 @@ In addition, the http://github.com/isisaddons/isis-app-neoapp[Isis addons' neoap
 ====
 
 The steps below describe the configuration steps required to update an existing app.
+
 
 == ConnectionURL
 
@@ -45,6 +47,7 @@ Add the following dependency to the `webapp` project's `pom.xml`:
 <1> for Isis v1.9.0, use the value shown.  for Isis v1.8.0, use 3.2.3.
 
 In the xref:../ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype] this is defined under the "neo4j" profile so can be activated using `-P neo4j`.
+
 
 == Try it out!
 

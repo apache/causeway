@@ -25,22 +25,22 @@ import java.util.zip.ZipOutputStream;
 
 import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
-import javax.inject.Inject;
 
-import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.FatalException;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.Contributed;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.jaxb.JaxbService;
+import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 
-@Mixin
+@Mixin(method="act")
 public class Dto_downloadXsd {
 
     private final Dto dto;
@@ -64,10 +64,11 @@ public class Dto_downloadXsd {
             restrictTo = RestrictTo.PROTOTYPING
     )
     @ActionLayout(
+            contributed = Contributed.AS_ACTION,
             cssClassFa = "fa-download"
     )
     @MemberOrder(sequence = "500.2")
-    public Object $$(
+    public Object act(
             @ParameterLayout(named = "File name")
             final String fileName,
             final JaxbService.IsisSchemas isisSchemas) {
@@ -75,7 +76,8 @@ public class Dto_downloadXsd {
         final Map<String, String> map = jaxbService.toXsd(dto, isisSchemas);
 
         if(map.isEmpty()) {
-            container.warnUser("No schemas were generated for " + dto.getClass().getName() + "; programming error?");
+            messageService.warnUser(String.format(
+                    "No schemas were generated for %s; programming error?", dto.getClass().getName()));
             return null;
         }
 
@@ -105,11 +107,11 @@ public class Dto_downloadXsd {
         }
     }
 
-    public String default0$$() {
+    public String default0Act() {
         return Util.withSuffix(dto.getClass().getName(), "xsd");
     }
 
-    public JaxbService.IsisSchemas default1$$() {
+    public JaxbService.IsisSchemas default1Act() {
         return JaxbService.IsisSchemas.IGNORE;
     }
 
@@ -119,7 +121,7 @@ public class Dto_downloadXsd {
 
 
     @javax.inject.Inject
-    DomainObjectContainer container;
+    MessageService messageService;
 
     @javax.inject.Inject
     JaxbService jaxbService;

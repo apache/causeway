@@ -137,7 +137,7 @@ public class SimpleObject_IntegTest extends SimpleModuleIntegTestAbstract {
         @Test
         public void should_be_populated() throws Exception {
             // when
-            final Long id = mixin(Persistable_datanucleusIdLong.class, simpleObject).exec();
+            final Long id = mixin(Persistable_datanucleusIdLong.class, simpleObject).prop();
 
             // then
             assertThat(id).isGreaterThanOrEqualTo(0);
@@ -149,7 +149,7 @@ public class SimpleObject_IntegTest extends SimpleModuleIntegTestAbstract {
         @Test
         public void should_be_populated() throws Exception {
             // when
-            final Timestamp timestamp = mixin(Persistable_datanucleusVersionTimestamp.class, simpleObject).exec();
+            final Timestamp timestamp = mixin(Persistable_datanucleusVersionTimestamp.class, simpleObject).prop();
             // then
             assertThat(timestamp).isNotNull();
         }

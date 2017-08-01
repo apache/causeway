@@ -25,7 +25,7 @@ import org.apache.isis.applib.annotation.Contributed;
 import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
-@Mixin(method = "exec")
+@Mixin(method = "prop")
 public class BookmarkHolder_object {
 
     private final BookmarkHolder bookmarkHolder;
@@ -43,7 +43,7 @@ public class BookmarkHolder_object {
     @ActionLayout(
         contributed = Contributed.AS_ASSOCIATION
     )
-    public Object exec() {
+    public Object prop() {
         return bookmarkService.lookup(bookmarkHolder);
     }
 

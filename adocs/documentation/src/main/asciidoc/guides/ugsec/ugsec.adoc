@@ -46,19 +46,27 @@ The remaining guides are:
 
 Apache Isis has built-in support for authentication and authorization:
 
-* By "authentication" we mean logging into the application using some credentials, typically a username and password.  Authentication also means looking up the set of roles to which a user belongs.
+* By "authentication" we mean logging into the application using some credentials, typically a username and password.
+Authentication also means looking up the set of roles to which a user belongs.
 
 * By "authorization" we mean permissions: granting roles to have access to features (object member) of the app.
 
-Isis has two levels of permissions.  _Read_ permission means that the user can view the object member; it will be rendered in the UI.  An action with only read permission will be shown disabled ("greyed out".  _Write_ permission means that the object member can be changed.  For actions this means that they can be invoked.
+Isis has two levels of permissions.
+_Read_ permission means that the user can view the object member; it will be rendered in the UI.  An action with only read permission will be shown disabled ("greyed out".
+_Write_ permission means that the object member can be changed.  For actions this means that they can be invoked.
 
-Isis provides an API for both authentication and authorization, and provides an implementation that integrates with link:http://shiro.apache.org[Apache Shiro].  Shiro in turn uses the concept of a _realm_ as a source for both authentication and optionally authorization.
+Isis provides an API for both authentication and authorization, and provides an implementation that integrates with link:http://shiro.apache.org[Apache Shiro].
+Shiro in turn uses the concept of a _realm_ as a source for both authentication and optionally authorization.
 
-Shiro ships with a simple text-based realm -- the `IniRealm` -- which reads users (and password), user roles and role permissions from the `WEB-INF/shiro.ini` file.  The xref:../ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype] is configured to use this realm.
+Shiro ships with a simple text-based realm -- the `IniRealm` -- which reads users (and password), user roles and role permissions from the `WEB-INF/shiro.ini` file.
+The xref:../ugfun/ugfun.adoc#_ugfun_getting-started_helloworld-archetype[HelloWorld] and xref:../ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp] archetypes are both configured to use this realm.
 
-Shiro also ships with an implementation of an LDAP-based realm; LDAP is often used to manage user/passwords and corresponding user groups.  Apache Isis in turn extends this with its `IsisLdapRealm`, which provides more flexibility for both group/role and role/permissions management.
+Shiro also ships with an implementation of an LDAP-based realm; LDAP is often used to manage user/passwords and corresponding user groups.
+Apache Isis in turn extends this with its `IsisLdapRealm`, which provides more flexibility for both group/role and role/permissions management.
 
-In addition, the (non-ASF) link:http://www.isisaddons.org[Isis Addons] provides the http://github.com/isisaddons/isis-module-security[Isis addons' security] module, which also provides an implementation of the Shiro `Realm` API.  However, the security module also represents users, roles and permissions as domain objects, allowing them to be administered through Apache Isis itself.  Moreover, the security module can optionally delegate password management to a subsidiary (delegate) realm (usually LDAP as discussed above).
+In addition, the (non-ASF) link:http://www.isisaddons.org[Isis Addons] provides the http://github.com/isisaddons/isis-module-security[Isis addons' security] module, which also provides an implementation of the Shiro `Realm` API.
+However, the security module also represents users, roles and permissions as domain objects, allowing them to be administered through Apache Isis itself.
+Moreover, the security module can optionally delegate password management to a subsidiary (delegate) realm (usually LDAP as discussed above).
 
 In addition to Apache Isis' Shiro-based implementation of its authentication and authorization APIs, Isis also provides a "bypass" implementation, useful for quick-n-dirty prototyping when you want to in effect disable (bypass) security completely.
 
@@ -69,14 +77,12 @@ A further aspect of security is auditing: recording what data was modified by wh
 
 Apache Isis provides the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_InteractionContext[`InteractionContext`]
 can be used to track the actions being invoked, and the xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditerService[`AuditerService`]
-captures what data was modified as a result (auditing).  When ``Interaction``s are persisted (eg by way of
-(non-ASF) http://github.com/isisaddons/isis-module-publishmq[Isis addons' publishmq] module) this provides excellent
-traceability.  The (non-ASF) http://github.com/isisaddons/isis-module-audit[Isis addons' audit] module provides an
-implementation of the `AuditerService`.
+captures what data was modified as a result (auditing).
+When ``Interaction``s are persisted (eg by way of (non-ASF) http://github.com/isisaddons/isis-module-publishmq[Isis addons' publishmq] module) this provides excellent
+traceability.
+The (non-ASF) http://github.com/isisaddons/isis-module-audit[Isis addons' audit] module provides an implementation of the `AuditerService`.
 
-For earlier versions of the framework the
-xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`] can be used to capture actions, while the (deprecated)
-xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditingService[`AuditingService`] used to capture data modified.
+For earlier versions of the framework the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`] can be used to capture actions, while the (deprecated) xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditingService[`AuditingService`] used to capture data modified.
 ====
 
 
@@ -85,10 +91,7 @@ include::_ugsec_configuring-isis-to-use-shiro.adoc[leveloffset=+1]
 
 include::_ugsec_shiro-realm-implementations.adoc[leveloffset=+1]
 
-
-
 include::_ugsec_shiro-isis-enhanced-wildcard-permission.adoc[leveloffset=+1]
-
 
 include::_ugsec_hints-and-tips.adoc[leveloffset=+1]
 

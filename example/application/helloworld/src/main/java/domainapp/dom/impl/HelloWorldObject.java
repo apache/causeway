@@ -87,7 +87,7 @@ public class HelloWorldObject implements Comparable<HelloWorldObject> {
     public void delete() {
         final String title = titleService.titleOf(this);
         messageService.informUser(String.format("'%s' deleted", title));
-        repositoryService.remove(this);
+        repositoryService.removeAndFlush(this);
     }
 
 

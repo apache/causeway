@@ -12,7 +12,8 @@ The release process consists of:
 * members of the Apache Isis PMC xref:../cgcom/cgcom.adoc#_cgcom_verifying-releases[verifying] and voting on the release
 * the release manager performing post-release tasks, for either a successful or an xref:../cgcom/cgcom.adoc#_cgcom_post-release-unsuccessful[unsuccessful] vote (former documented below)
 
-For a vote to succeed, there must be +3 votes from PMC members, and the vote must have been open at least 72 hours.  If there are not +3 votes after this time then it is perfectly permissible to keep the vote open longer.
+For a vote to succeed, there must be +3 votes from PMC members, and the vote must have been open at least 72 hours.
+If there are not +3 votes after this time then it is perfectly permissible to keep the vote open longer.
 
 This section describes the steps to perform if the vote has been successful.
 
@@ -25,7 +26,7 @@ Post the results to the `dev@isis.a.o` mailing list:
 
 [source,bash]
 ----
-[RESULT] [VOTE] Apache Isis Core release 1.14.0
+[RESULT] [VOTE] Apache Isis Core release 1.15.0
 ----
 
 using the body (alter last line as appropriate):
@@ -53,8 +54,9 @@ You can do this using the `scripts/promoterctag.sh` script; for example:
 
 [source,bash]
 ----
-sh scripts/promoterctag.sh isis-1.14.0 RC1
-sh scripts/promoterctag.sh simpleapp-archetype-1.14.0 RC1
+sh scripts/promoterctag.sh isis-1.15.0 RC1
+sh scripts/promoterctag.sh helloworld-archetype-1.15.0 RC1
+sh scripts/promoterctag.sh simpleapp-archetype-1.15.0 RC1
 ----
 
 This script pushes the tag under `refs/tags/rel`.  As per Apache policy (communicated on 10th Jan 2016 to Apache PMCs),
@@ -79,9 +81,13 @@ This moves the release artifacts into an Apache releases repository; from there 
 
 == Release Source Zip
 
-As described in the link:http://www.apache.org/dev/release-publishing.html#distribution_dist[Apache documentation], each Apache TLP has a `release/TLP-name` directory in the distribution Subversion repository at link:https://dist.apache.org/repos/dist[https://dist.apache.org/repos/dist]. Once a release vote passes, the release manager should `svn add` the artifacts (plus signature and hash files) into this location. The release is then automatically pushed to http://www.apache.org/dist/[http://www.apache.org/dist/] by `svnpubsub`. Only the most recent release of each supported release line should be contained here, old versions should be deleted.
+As described in the link:http://www.apache.org/dev/release-publishing.html#distribution_dist[Apache documentation], each Apache TLP has a `release/TLP-name` directory in the distribution Subversion repository at link:https://dist.apache.org/repos/dist[https://dist.apache.org/repos/dist].
+Once a release vote passes, the release manager should `svn add` the artifacts (plus signature and hash files) into this location.
+The release is then automatically pushed to http://www.apache.org/dist/[http://www.apache.org/dist/] by `svnpubsub`.
+Only the most recent release of each supported release line should be contained here, old versions should be deleted.
 
-Each project is responsible for the structure of its directory. The directory structure of Apache Isis reflects the directory structure in our git source code repo:
+Each project is responsible for the structure of its directory.
+The directory structure of Apache Isis reflects the directory structure in our git source code repo:
 
 [source]
 ----
@@ -99,7 +105,8 @@ If necessary, checkout this directory structure:
 svn co https://dist.apache.org/repos/dist/release/isis isis-dist
 ----
 
-Next, add the new release into the appropriate directory, and delete any previous release.  The `upd.sh` script (also downloadable from link:https://gist.github.com/danhaywood/aa79c18d993df1b1e2c5a9933e48bcbc[this gist]) can be used to automate this:
+Next, add the new release into the appropriate directory, and delete any previous release.
+The `upd.sh` script (also downloadable from link:https://gist.github.com/danhaywood/aa79c18d993df1b1e2c5a9933e48bcbc[this gist]) can be used to automate this:
 
 [source,bash]
 ----
@@ -137,6 +144,27 @@ popd
 
 
 #
+# helloworld-archetype
+#
+type="archetype"
+fullname="helloworld-archetype"
+pushd $type/$fullname
+
+curl -O $repo_root/$type/$fullname/$new_ver/$fullname-$new_ver-$md5
+svn add $fullname-$new_ver-$md5
+curl -O $repo_root/$type/$fullname/$new_ver/$fullname-$new_ver-$asc
+svn add $fullname-$new_ver-$asc
+curl -O $repo_root/$type/$fullname/$new_ver/$fullname-$new_ver-$zip
+svn add $fullname-$new_ver-$zip
+
+svn delete $fullname-$old_ver-$md5
+svn delete $fullname-$old_ver-$asc
+svn delete $fullname-$old_ver-$zip
+
+popd
+
+
+#
 # simpleapp-archetype
 #
 type="archetype"
@@ -159,14 +187,15 @@ popd
 
 [source,bash]
 ----
-sh upd.sh 1.14.0 1.15.0
+sh upd.sh 1.15.0 1.16.0
 ----
 
 The script downloads the artifacts from the Nexus release repository, adds the artifacts to subversion and deletes the previous version.
 
 
 
-Double check that the files are correct; there is sometimes a small delay in the files becoming available in the release repository.  It should be sufficient to check just the `md5` or `.asc` files that these look valid (aren't HTML 404 error pages):
+Double check that the files are correct; there is sometimes a small delay in the files becoming available in the release repository.
+It should be sufficient to check just the `md5` or `.asc` files that these look valid (aren't HTML 404 error pages):
 
 [source,bash]
 ----
@@ -192,13 +221,14 @@ From the root directory, generate the release notes for the current release, in 
 
 [source,bash]
 ----
-sh scripts/jira-release-notes.sh ISIS 1.14.0 > /tmp/1
+sh scripts/jira-release-notes.sh ISIS 1.15.0 > /tmp/1
 ----
 
 
 === Close tickets
 
-Close all JIRA tickets for the release, or moved to future releases if not yet addressed. Any tickets that were partially implemented should be closed, and new tickets created for the functionality on the ticket not yet implemented.
+Close all JIRA tickets for the release, or moved to future releases if not yet addressed.
+Any tickets that were partially implemented should be closed, and new tickets created for the functionality on the ticket not yet implemented.
 
 
 
@@ -224,7 +254,8 @@ Log the new release in the link:https://reporter.apache.org/addrelease.html?isis
 
 Update the Apache Isis (asciidoc) website:
 
-* Paste in the JIRA-generated release notes generated above, adding to top of `adocs/documentation/src/main/asciidoc/release-notes.adoc`.  Also add a summary line for the release.
+* Paste in the JIRA-generated release notes generated above, adding to top of `adocs/documentation/src/main/asciidoc/release-notes.adoc`.
+Also add a summary line for the release.
 
 * Search for any `-SNAPSHOT` suffices, and remove
 
@@ -236,7 +267,8 @@ Update the Apache Isis (asciidoc) website:
 +
 A search for `archetypeGroupId=org.apache.isis.archetype` should find these pages.
 
-* update the link:../../doap_isis.rdf[DOAP RDF] file (which provides a machine-parseable description of the project) should also be updated with details of the new release. Validate using the http://www.w3.org/RDF/Validator/[W3C RDF Validator] service. +
+* update the link:../../doap_isis.rdf[DOAP RDF] file (which provides a machine-parseable description of the project) should also be updated with details of the new release.
+Validate using the http://www.w3.org/RDF/Validator/[W3C RDF Validator] service. +
 +
 For more information on DOAP files, see these http://projects.apache.org/doap.html[Apache policy docs].
 
@@ -244,7 +276,6 @@ For more information on DOAP files, see these http://projects.apache.org/doap.ht
 
 
 Don't forget to commit the `.adoc` changes and publish to the isis-site repo.
-
 
 
 
@@ -257,14 +288,14 @@ For example, for a release of Apache Isis Core, use the following subject:
 
 [source,bash]
 ----
-[ANN] Apache Isis version 1.14.0 Released
+[ANN] Apache Isis version 1.15.0 Released
 ----
 
 And use the following body (summarizing the main points as required):
 
 [source]
 ----
-The Apache Isis team is pleased to announce the release of Apache Isis v1.14.0.
+The Apache Isis team is pleased to announce the release of Apache Isis v1.15.0.
 
 New features in this release include:
 * ...
@@ -278,8 +309,8 @@ Enjoy!
 
 --The Apache Isis team
 
-[1] http://isis.apache.org/release-notes.html#r1.14.0
-[2] http://isis.apache.org/migration-notes.html#_migration-notes_1.13.0-to-1.14.0
+[1] http://isis.apache.org/release-notes.html#r1.15.0
+[2] http://isis.apache.org/migration-notes.html#_migration-notes_1.14.0-to-1.15.0
 [3] http://search.maven.org
 [4] http://isis.apache.org/downloads.html
 ----
@@ -289,7 +320,8 @@ Enjoy!
 
 == Blog post
 
-link:https://blogs.apache.org/roller-ui/login.rol[Log onto] the http://blogs.apache.org/isis/[Apache blog] and create a new post. Copy-n-paste the above mailing list announcement should suffice.
+link:https://blogs.apache.org/roller-ui/login.rol[Log onto] the http://blogs.apache.org/isis/[Apache blog] and create a new post.
+Copy-n-paste the above mailing list announcement should suffice.
 
 
 
@@ -303,13 +335,13 @@ Because we release from a branch, the changes made in the branch (changes to `po
 ----
 git checkout master                           # update master with latest
 git pull
-git merge release-1.14.0-RC1                  # merge branch onto master
-git push origin --delete release-1.14.0-RC1   # remote branch no longer needed
-git branch -d release-1.14.0-RC1              # branch no longer needed
+git merge release-1.15.0-RC1                  # merge branch onto master
+git push origin --delete release-1.15.0-RC1   # remote branch no longer needed
+git branch -d release-1.15.0-RC1              # branch no longer needed
 ----
 
 
-Finally, update the simpleapp's root `pom.xml` to reference the next SNAPSHOT release (`1.15.0-SNAPSHOT`)
+Finally, update helloworld's `pom.xml` and simpleapp's root `pom.xml` to reference the next SNAPSHOT release (`1.16.0-SNAPSHOT`)
 
 
 
@@ -318,6 +350,7 @@ Finally, update the simpleapp's root `pom.xml` to reference the next SNAPSHOT re
 With the release complete, now is a good time to bump versions of dependencies (so that there is a full release cycle to identify any possible issues).
 
 You will probably want to create a new JIRA ticket for these updates (or if minor then use the "catch-all" JIRA ticket raised earlier for the next release).
+
 
 
 === Update parent of Core
@@ -342,7 +375,8 @@ where `NN` is the updated version number.
 
 === Update plugin versions
 
-The `maven-versions-plugin` should be used to determine if there are newer versions of any of the plugins used to build Apache Isis. Since this goes off to the internet, it may take a minute or two to run:
+The `maven-versions-plugin` should be used to determine if there are newer versions of any of the plugins used to build Apache Isis.
+Since this goes off to the internet, it may take a minute or two to run:
 
 [source,bash]
 ----
@@ -350,13 +384,15 @@ mvn versions:display-plugin-updates > /tmp/foo
 grep "\->" /tmp/foo | /bin/sort -u
 ----
 
-Review the generated output and make updates as you see fit. (However, if updating, please check by searching for known issues with newer versions).
+Review the generated output and make updates as you see fit.
+(However, if updating, please check by searching for known issues with newer versions).
 
 
 
 === Update dependency versions
 
-The `maven-versions-plugin` should be used to determine if there are newer versions of any of Isis' dependencies. Since this goes off to the internet, it may take a minute or two to run:
+The `maven-versions-plugin` should be used to determine if there are newer versions of any of Isis' dependencies.
+Since this goes off to the internet, it may take a minute or two to run:
 
 [source,bash]
 ----
@@ -364,7 +400,9 @@ mvn versions:display-dependency-updates > /tmp/foo
 grep "\->" /tmp/foo | /bin/sort -u
 ----
 
-Update any of the dependencies that are out-of-date. That said, do note that some dependencies may show up with a new dependency, when in fact the dependency is for an old, badly named version. Also, there may be new dependencies that you do not wish to move to, eg release candidates or milestones.
+Update any of the dependencies that are out-of-date.
+That said, do note that some dependencies may show up with a new dependency, when in fact the dependency is for an old, badly named version.
+Also, there may be new dependencies that you do not wish to move to, eg release candidates or milestones.
 
 For example, here is a report showing both of these cases:
 
@@ -388,7 +426,8 @@ For these artifacts you will need to search http://search.maven.org[Maven centra
 
 == Code formatting
 
-This is also a good time to make source code has been cleaned up and formatted according to the Apache Isis and ASF conventions. Use link:../dg/resources/eclipse/templates/Apache-code-style-formatting.xml[this] Eclipse template and link:../dg/resources/eclipse/isis.importorder[this] import order.
+This is also a good time to make source code has been cleaned up and formatted according to the Apache Isis and ASF conventions.
+Use link:../dg/resources/eclipse/templates/Apache-code-style-formatting.xml[this] Eclipse template and link:../dg/resources/eclipse/isis.importorder[this] import order.
 
 
 
@@ -434,15 +473,15 @@ The `org.incode:incode-parent` Maven module is used as a parent for both sets of
 +
 [source,bash]
 ----
-sh bumpver_isis.sh 1.14.0
+sh bumpver_isis.sh 1.15.0
 ----
 
 * update the README
 
 ** replace each version with next (ie the "How to Configure/Use" section, and the "Release to Maven Central" section at the end):
 
-*** replace 1.14.0-SNAPSHOT with 1.15.0-SNAPSHOT
-*** replace 1.13.0          with 1.14.0
+*** replace 1.15.0-SNAPSHOT with 1.16.0-SNAPSHOT
+*** replace 1.14.0          with 1.15.0
 
 ** update the "Change Log" section
 
@@ -450,7 +489,7 @@ sh bumpver_isis.sh 1.14.0
 +
 [source,bash]
 ----
-sh release.sh "1.14.0" "1.15.0-SNAPSHOT" "dan@haywood-associates.co.uk" "this is not really my password"
+sh release.sh "1.15.0" "1.16.0-SNAPSHOT" "dan@haywood-associates.co.uk" "this is not really my password"
 ----
 
 
@@ -464,15 +503,15 @@ The three `org.incode:mavendeps-isisXXX` module should be released next.
 +
 [source,bash]
 ----
-foreach -g incodehq/mavendeps sh bumpver_isis.sh 1.14.0
+foreach -g incodehq/mavendeps sh bumpver_isis.sh 1.15.0
 ----
 
 * update the README
 
 ** replace each version with next (ie the "How to Configure/Use" section, and the "Release to Maven Central" section at the end):
 
-*** replace 1.14.0-SNAPSHOT with 1.15.0-SNAPSHOT
-*** replace 1.13.0          with 1.14.0
+*** replace 1.15.0-SNAPSHOT with 1.16.0-SNAPSHOT
+*** replace 1.14.0          with 1.15.0
 
 ** update the "Change Log" section
 
@@ -480,14 +519,14 @@ foreach -g incodehq/mavendeps sh bumpver_isis.sh 1.14.0
 +
 [source,bash]
 ----
-foreach -g incodehq/mavendeps sh sh release.sh "1.14.0" "1.15.0-SNAPSHOT" "dan@haywood-associates.co.uk" \"this is not really my password\"
+foreach -g incodehq/mavendeps sh sh release.sh "1.15.0" "1.16.0-SNAPSHOT" "dan@haywood-associates.co.uk" \"this is not really my password\"
 ----
 
 * update its dependency on Apache Isis to reference the next SNAPSHOT: +
 +
 [source,bash]
 ----
-foreach -g incodehq/mavendeps sh bumpver_isis.sh 1.15.0-SNAPSHOT
+foreach -g incodehq/mavendeps sh bumpver_isis.sh 1.16.0-SNAPSHOT
 ----
 
 
@@ -503,7 +542,7 @@ Using this link:https://gist.github.com/danhaywood/21b5b885433fd8bc440da3fab88c9
 +
 [source,bash]
 ----
-foreach -g isisaddons sh bumpver_isis.sh 1.14.0
+foreach -g isisaddons sh bumpver_isis.sh 1.15.0
 ----
 +
 and use: +
@@ -533,8 +572,8 @@ to review changes made.
 
 ** replace each version with next (ie the "How to Configure/Use" section, and the "Release to Maven Central" section at the end):
 
-*** replace `1.14.0` with `1.15.0`
-*** replace `1.13.0` with `1.14.0` as necessary (pretty much everywhere apart from the "Change Log")
+*** replace `1.15.0` with `1.16.0`
+*** replace `1.14.0` with `1.15.0` as necessary (pretty much everywhere apart from the "Change Log")
 
 ** update the "Change Log" section
 
@@ -542,14 +581,14 @@ to review changes made.
 +
 [source,bash]
 ----
-foreach -g isisaddons/isis-[mw] sh release.sh "1.14.0" "1.15.0-SNAPSHOT" "dan@haywood-associates.co.uk" \"this is not really my password\"
+foreach -g isisaddons/isis-[mw] sh release.sh "1.15.0" "1.16.0-SNAPSHOT" "dan@haywood-associates.co.uk" \"this is not really my password\"
 ----
 
 * In the parent directory where the `last_modified.sh` script has been saved (see xref:../cgcom/cgcom.adoc#__cgcom_post-release-successful_release-non-asf-modules_prereqs[above]), use to check that all modules were released successfully: +
 +
 [source,bash]
 ----
-foreach -g isisaddons/isis-[mw] sh ../../last-modified.sh 1.14.0
+foreach -g isisaddons/isis-[mw] sh ../../last-modified.sh 1.15.0
 ----
 +
 [IMPORTANT]
@@ -561,7 +600,7 @@ Wait at least 10 minutes to check; sync'ing to Maven central from the Sonatype O
 +
 [source,bash]
 ----
-foreach -g isisaddons/isis-[mw] "git push origin master && git push origin 1.14.0"
+foreach -g isisaddons/isis-[mw] "git push origin master && git push origin 1.15.0"
 ----
 
 
@@ -576,7 +615,7 @@ Using this link:https://gist.github.com/danhaywood/21b5b885433fd8bc440da3fab88c9
 +
 [source,bash]
 ----
-foreach -g incodehq/incode-module sh bumpver_isis.sh 1.14.0
+foreach -g incodehq/incode-module sh bumpver_isis.sh 1.15.0
 ----
 
 * update the README for each repository. +
@@ -590,8 +629,8 @@ eg if using Windows, then:
 
 ** Replace each version with next (ie the "How to Configure/Use" section, and the "Release to Maven Central" section at the end):
 
-*** replace `1.14.0` with `1.15.0`
-*** replace `1.13.0` with `1.14.0` as necessary (pretty much everywhere apart from the "Change Log")
+*** replace `1.15.0` with `1.16.0`
+*** replace `1.14.0` with `1.15.0` as necessary (pretty much everywhere apart from the "Change Log")
 
 ** update the "Change Log" section
 
@@ -618,14 +657,14 @@ For example, `incode-module-base` must be released prior to `incode-module-alias
 +
 [source,bash]
 ----
-foreach -g incodehq/incode-module-[a-w] sh release.sh "1.14.0" "1.15.0-SNAPSHOT" "dan@haywood-associates.co.uk" \"this is not really my password\"
+foreach -g incodehq/incode-module-[a-w] sh release.sh "1.15.0" "1.16.0-SNAPSHOT" "dan@haywood-associates.co.uk" \"this is not really my password\"
 ----
 
 * In the parent directory where the `last_modified.sh` script has been saved (see xref:../cgcom/cgcom.adoc#__cgcom_post-release-successful_release-non-asf-modules_prereqs[above]), use to check that all modules were released successfully: +
 +
 [source,bash]
 ----
-foreach -g incodehq/incode-module-[a-w] sh ../../last-modified.sh 1.14.0
+foreach -g incodehq/incode-module-[a-w] sh ../../last-modified.sh 1.15.0
 ----
 +
 [IMPORTANT]
@@ -637,29 +676,29 @@ Wait at least 10 minutes to check; sync'ing to Maven central from the Sonatype O
 +
 [source,bash]
 ----
-foreach -g incodehq/incode-module-[a-w] "git push origin master && git push origin 1.14.0"
+foreach -g incodehq/incode-module-[a-w] "git push origin master && git push origin 1.15.0"
 ----
 
 
 [[__cgcom_post-release-successful_release-non-asf-modules_incode-catalog_cross-module-dependencies]]
 ==== Cross-module dependencies
 
-As of v1.14.0, the list of dependencies that needed to be updated (across all modules) were:
+As of v1.15.0, the list of dependencies that needed to be updated (across all modules) were:
 
-** `<isis-module-fakedata.version>1.14.0</isis-module-fakedata.version>`
-** `<isis-module-freemarker.version>1.14.0</isis-module-freemarker.version>`
-** `<isis-wicket-fullcalendar2-cpt.version>1.14.0</isis-wicket-fullcalendar2-cpt.version>`
-** `<isis-wicket-gmap3-cpt.version>1.14.0</isis-wicket-gmap3-cpt.version>`
-** `<isis-module-poly.version>1.14.0</isis-module-poly.version>`
-** `<isis-module-security.version>1.14.0</isis-module-security.version>`
-** `<incode-module-base.version>1.14.0</incode-module-base.version>`
-** `<incode-module-fixturesupport.version>1.14.0</incode-module-fixturesupport.version>`
-** `<incode-module-unittestsupport.version>1.14.0</incode-module-unittestsupport.version>`
-** `<incode-module-integtestsupport.version>1.14.0</incode-module-integtestsupport.version>`
-** `<incode-module-country.version>1.14.0</incode-module-country.version>`
-** `<incode-module-document.version>1.14.0</incode-module-document.version>`
-** `<incode-module-docrendering-freemarker.version>1.14.0</incode-module-docrendering-freemarker.version>`
-** `<incode-module-docrendering-stringinterpolator.version>1.14.0</incode-module-docrendering-stringinterpolator.version>`
-** `<incode-module-docrendering-xdocreport.version>1.14.0</incode-module-docrendering-xdocreport.version>`
+** `<isis-module-fakedata.version>1.15.0</isis-module-fakedata.version>`
+** `<isis-module-freemarker.version>1.15.0</isis-module-freemarker.version>`
+** `<isis-wicket-fullcalendar2-cpt.version>1.15.0</isis-wicket-fullcalendar2-cpt.version>`
+** `<isis-wicket-gmap3-cpt.version>1.15.0</isis-wicket-gmap3-cpt.version>`
+** `<isis-module-poly.version>1.15.0</isis-module-poly.version>`
+** `<isis-module-security.version>1.15.0</isis-module-security.version>`
+** `<incode-module-base.version>1.15.0</incode-module-base.version>`
+** `<incode-module-fixturesupport.version>1.15.0</incode-module-fixturesupport.version>`
+** `<incode-module-unittestsupport.version>1.15.0</incode-module-unittestsupport.version>`
+** `<incode-module-integtestsupport.version>1.15.0</incode-module-integtestsupport.version>`
+** `<incode-module-country.version>1.15.0</incode-module-country.version>`
+** `<incode-module-document.version>1.15.0</incode-module-document.version>`
+** `<incode-module-docrendering-freemarker.version>1.15.0</incode-module-docrendering-freemarker.version>`
+** `<incode-module-docrendering-stringinterpolator.version>1.15.0</incode-module-docrendering-stringinterpolator.version>`
+** `<incode-module-docrendering-xdocreport.version>1.15.0</incode-module-docrendering-xdocreport.version>`
 
 

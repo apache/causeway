@@ -46,7 +46,7 @@ public class HelloWorldObjects {
             final String name) {
         final HelloWorldObject object = new HelloWorldObject(name);
         serviceRegistry.injectServicesInto(object);
-        repositoryService.persist(object);
+        repositoryService.persistAndFlush(object);
         return object;
     }
 

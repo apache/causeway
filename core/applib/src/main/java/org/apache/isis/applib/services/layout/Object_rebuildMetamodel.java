@@ -18,13 +18,14 @@ package org.apache.isis.applib.services.layout;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.Contributed;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 
-@Mixin
+@Mixin(method="act")
 public class Object_rebuildMetamodel {
 
     private final Object object;
@@ -41,11 +42,12 @@ public class Object_rebuildMetamodel {
             restrictTo = RestrictTo.PROTOTYPING
     )
     @ActionLayout(
+            contributed = Contributed.AS_ACTION,
             cssClassFa = "fa-refresh",
             position = ActionLayout.Position.PANEL_DROPDOWN
     )
     @MemberOrder(name = "datanucleusIdLong", sequence = "800.1")
-    public void $$() {
+    public void act() {
         metaModelService.rebuild(object.getClass());
     }
 

@@ -16,15 +16,18 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-import groovy.xml.StreamingMarkupBuilder
 import groovy.xml.XmlUtil
-import javax.xml.transform.*
-import javax.xml.transform.stream.*
+
+import javax.xml.transform.OutputKeys
+import javax.xml.transform.Transformer
+import javax.xml.transform.TransformerFactory
+import javax.xml.transform.stream.StreamResult
+import javax.xml.transform.stream.StreamSource
 
 
 def cli = new CliBuilder(usage: 'updateGeneratedArchetypeSources.groovy -n [name] -v [version]')
 cli.with {
-    n(longOpt: 'name', args: 1, required: true, argName: 'name', 'Application name (eg \'simple\' or \'quickstart\')')
+    n(longOpt: 'name', args: 1, required: true, argName: 'name', 'Application name (eg \'simpleapp\' or \'helloworld\')')
     v(longOpt: 'version', args: 1, required: true, argName: 'version', 'Isis core version to use as parent POM')
 }
 

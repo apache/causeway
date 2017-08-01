@@ -61,6 +61,7 @@ git push --delete origin release-1.14.0-RC1
 [source,bash]
 ----
 git push --delete origin isis-1.14.0-RC1
+git push --delete origin helloworld-archetype-1.14.0-RC1
 git push --delete origin simpleapp-archetype-1.14.0-RC1
 ----
 
@@ -71,6 +72,8 @@ git push --delete origin simpleapp-archetype-1.14.0-RC1
 ----
 git tag -d isis-1.14.0
 git tag -d isis-1.14.0-RC1
+git tag -d helloworld-archetype-1.14.0
+git tag -d helloworld-archetype-1.14.0-RC1
 git tag -d simpleapp-archetype-1.14.0
 git tag -d simpleapp-archetype-1.14.0-RC1
 ----

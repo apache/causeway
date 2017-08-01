@@ -8,14 +8,12 @@
 
 The Apache Isis programming model requires that a number of naming conventions are followed.
 
-For example, the validator will detect any orphaned supporting methods (eg `hideXxx()`) if the corresponding property
-or action has been renamed or deleted but the supporting method was not also updated.  Another example is that a class
-cannot have a title specified both using `title()` method and also using `@Title` annotation.
+For example, the validator will detect any orphaned supporting methods (eg `hideXxx()`) if the corresponding property or action has been renamed or deleted but the supporting method was not also updated.
+Another example is that a class cannot have a title specified both using `title()` method and also using `@Title` annotation.
 
 When running the application these are enforced by the `MetaModelValidator` component that detects these errors, failing fast.
 
-The purpose of the `validate` goal of the `isis-maven-plugin` is to enforce these naming conventions at build time,
-typically enforced by way of a continuous integration server.
+The purpose of the `validate` goal of the `isis-maven-plugin` is to enforce these naming conventions at build time, typically enforced by way of a continuous integration server.
 
 The `validate` goal defines a single property:
 
@@ -25,8 +23,8 @@ The sections below explain how to configure the plugin within an app.
 
 [NOTE]
 ====
-The instructions given here relate to `1.10.0`.   This goal was also released for `1.9.0`, but with a slightly
-different configuration; see the final section for differences.
+The instructions given here relate to `1.10.0`.
+This goal was also released for `1.9.0`, but with a slightly different configuration; see the final section for differences.
 ====
 
 
@@ -110,7 +108,8 @@ mvn test -Dskip.isis-validate
 
 == Example of failure
 
-In the xref:../ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp] application the `SimpleObject` defines an `updateName` action.  This has a supporting method:
+In the xref:../ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp] application the `SimpleObject` defines an `updateName` action.
+This has a supporting method:
 
 
 [source,java]
@@ -161,7 +160,8 @@ If one were to attempt to run the application, the same error would appear in th
 
 == Custom validation rules
 
-It is also possible to customize the validation, explained xref:../ugbtb/ugbtb.adoc#_ugbtb_programming-model_custom-validator[here].  For example, you could enforce project-specific conventions by implementing a custom `MetaModelValidator`, and registering using a configuration property.
+It is also possible to customize the validation, explained xref:../ugbtb/ugbtb.adoc#_ugbtb_programming-model_custom-validator[here].
+For example, you could enforce project-specific conventions by implementing a custom `MetaModelValidator`, and registering using a configuration property.
 
 To support this using `AppManifest`s, override its `getConfigurationProperties()` method:
 
@@ -180,7 +180,8 @@ public class DomainAppDomManifest implements AppManifest {
 
 == 1.9.0 version
 
-The `1.9.0` version of the plugin requires slightly different configuration.  Rather than using an `AppManifest`, instead the configuration directory containing `isis.properties` is specified:
+The `1.9.0` version of the plugin requires slightly different configuration.
+Rather than using an `AppManifest`, instead the configuration directory containing `isis.properties` is specified:
 
 [source,xml]
 ----

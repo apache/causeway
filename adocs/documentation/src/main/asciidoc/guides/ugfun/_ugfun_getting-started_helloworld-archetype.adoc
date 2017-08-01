@@ -1,0 +1,296 @@
+[[_ugfun_getting-started_helloworld-archetype]]
+= HelloWorld Archetype (`1.15.0-SNAPSHOT`)
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../../
+:_imagesdir: images/
+
+
+The quickest way to start learning about Apache Isis is to run the `helloworld` archetype.
+This will generate a tiny Apache Isis app, consisting of a simple one-class domain model, called `HelloWorldObject`, and a supporting `HelloWorldObjects` domain service.
+Both the business logic and supporting bootstrapping classes are in a single Maven module (in different Java packages).
+
+[TIP]
+====
+We don't recommend that you use the helloworld archetype as the basis for your own applications.
+Instead, use the xref:ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[simpleapp archetype].
+This also creates a minimal application, but provides more structure and example tests, useful as you build out your own app.
+====
+
+
+[[_ugfun_getting-started_helloworld-archetype_generating-the-app]]
+== Generating the App
+
+Create a new directory, and `cd` into that directory.
+
+To build the app from the latest stable release, then run the following command:
+
+[source,bash]
+----
+mvn archetype:generate  \
+    -D archetypeGroupId=org.apache.isis.archetype \
+    -D archetypeArtifactId=helloworld-archetype \
+    -D archetypeVersion=1.15.0 \
+    -D groupId=com.mycompany \
+    -D artifactId=myapp \
+    -D version=1.0-SNAPSHOT \
+    -B
+----
+
+where:
+
+- `groupId` represents your own organization, and
+- `artifactId` is a unique identifier for this app within your organization.
+- `version` is the initial (snapshot) version of your app
+
+The archetype generation process will then run; it only takes a few seconds.
+
+We also maintain the archetype for the most current `-SNAPSHOT`; an app generated with this archetype will contain the latest features of Apache Isis, but the usual caveats apply: some features still in development may be unstable.
+
+The process is almost identical to that for stable releases, however the `archetype:generate` goal is called with slightly different arguments:
+
+[source,bash]
+----
+mvn archetype:generate  \
+    -D archetypeGroupId=org.apache.isis.archetype \
+    -D archetypeArtifactId=helloworld-archetype \
+    -D archetypeVersion=1.15.0-SNAPSHOT \
+    -D groupId=com.mycompany \
+    -D artifactId=myapp \
+    -D version=1.0-SNAPSHOT \
+    -D archetypeRepository=http://repository-estatio.forge.cloudbees.com/snapshot/ \
+    -B
+----
+
+where as before:
+
+- `groupId` represents your own organization, and
+- `artifactId` is a unique identifier for this app within your organization.
+- `version` is the initial (snapshot) version of your app
+
+but also:
+
+- `archetypeVersion` is the SNAPSHOT version of Apache Isis.
+- `archetypeRepository` specifies the location of our snapshot repo (hosted on link:http://www.cloudbees.com[CloudBees]), and
+
+The archetype generation process will then run; it only takes a few seconds.
+
+
+
+[[_ugfun_getting-started_helloworld-archetype_building-the-app]]
+== Building the App
+
+Switch into the root directory of your newly generated app, and build your app:
+
+[source,bash]
+----
+cd myapp
+mvn clean install
+----
+
+where `myapp` is the `artifactId` entered above.
+
+
+
+
+[[_ugfun_getting-started_helloworld-archetype_running-the-app]]
+== Running the App
+
+The `helloworld` archetype generates a single WAR file, configured to run both the xref:../ugvw/ugvw.adoc#[Wicket viewer] and the xref:../ugvro/ugvro.adoc#[Restful Objects viewer].
+The archetype also configures the DataNucleus/JDO Objectstore to use an in-memory HSQLDB connection.
+
+Once you've built the app, you can run the WAR in a variety of ways.
+
+
+=== Using mvn Jetty plugin
+
+First, you could run the WAR in a Maven-hosted Jetty instance, though you need to `cd` into the `webapp` module:
+
+[source,bash]
+----
+mvn jetty:run
+----
+
+
+You can also provide a system property to change the port:
+
+[source,bash]
+----
+mvn jetty:run -D jetty.port=9090
+----
+
+
+=== Using a regular servlet container
+
+You can also take the built WAR file and deploy it into a standalone servlet container such as [Tomcat](http://tomcat.apache.org).
+The default configuration does not require any configuration of the servlet container; just drop the WAR file into the `webapps` directory.
+
+
+
+=== From within the IDE
+
+Most of the time, though, you'll probably want to run the app from within your IDE.
+The mechanics of doing this will vary by IDE; see the xref:../dg/dg.adoc#_dg_ide[Developers' Guide] for details of setting up Eclipse or IntelliJ IDEA.
+Basically, though, it amounts to running `org.apache.isis.WebServer`, and ensuring that the xref:../ugfun/ugfun.adoc#_ugfun_getting-started_datanucleus-enhancer[DataNucleus enhancer] has properly processed all domain entities.
+
+Here's what the setup looks like in IntelliJ IDEA:
+
+image::{_imagesdir}getting-started/helloworld.png[width="600px",link="{_imagesdir}getting-started/helloworld.png"]
+
+with the maven goal to run the DataNucleus enhancer (discussed in more detail xref:ugfun.adoc#_ugfun_getting-started_datanucleus-enhancer[here]) before launch defined as:
+
+image::{_imagesdir}getting-started/helloworld-before-launch.png[width="600px",link="{_imagesdir}getting-started/helloworld-before-launch.png"]
+
+
+
+[[_ugfun_getting-started_helloworld-archetype_using-the-app]]
+== Using the App
+
+When you start the app, you'll be presented with a welcome page from which you can access the webapp using either the xref:../ugvw/ugvw.adoc#[Wicket viewer] or the xref:../ugvro/ugvro.adoc#[Restful Objects viewer]:
+
+image::{_imagesdir}getting-started/using-hello-world/010-root-page.png[width="600px",link="{_imagesdir}getting-started/using-hello-world/010-root-page.png"]
+
+The Wicket viewer provides a human usable web UI (implemented, as you might have guessed from its name, using link:http://wicket.apache.org[Apache Wicket]), so choose that and navigate to the login page:
+
+image::{_imagesdir}getting-started/using-hello-world/020-login-to-wicket-viewer.png[width="600px",link="{_imagesdir}getting-started/using-hello-world/020-login-to-wicket-viewer.png"]
+
+The app itself is configured to run using xref:../ugsec/ugsec.adoc#[shiro security], as configured in the `WEB-INF/shiro.ini` config file.  You can login with:
+
+* username: _sven_
+* password: _pass_
+
+
+Once you've logged in you'll see the default home page:
+
+image::{_imagesdir}getting-started/using-hello-world/030-home-page.png[width="600px",link="{_imagesdir}getting-started/using-hello-world/030-home-page.png"]
+
+
+The application is configured to run with an in-memory database, so initially there is no data.
+Create an object using the menu:
+
+image::{_imagesdir}getting-started/using-hello-world/040-create-object-from-menu.png[width="600px",link="{_imagesdir}getting-started/using-hello-world/040-create-object-from-menu.png"]
+
+which brings up a modal dialog:
+
+image::{_imagesdir}getting-started/using-hello-world/050-create-object-from-menu-prompt.png[width="600px",link="{_imagesdir}getting-started/using-hello-world/050-create-object-from-menu-prompt.png"]
+
+hitting OK returns the created object:
+
+image::{_imagesdir}getting-started/using-hello-world/060-created-object.png[width="600px",link="{_imagesdir}getting-started/using-hello-world/060-created-object.png"]
+
+The above functionality is implemented by link:https://github.com/apache/isis/blob/master/example/application/helloworld/src/main/java/domainapp/dom/impl/HelloWorldObjects.java#L43[this code]:
+
+[source,java]
+----
+@Action(semantics = SemanticsOf.NON_IDEMPOTENT)
+@MemberOrder(sequence = "1")
+public HelloWorldObject create(
+        @Parameter(maxLength = 40)
+        @ParameterLayout(named = "Name")
+        final String name) {
+    final HelloWorldObject object = new HelloWorldObject(name);
+    serviceRegistry.injectServicesInto(object);
+    repositoryService.persist(object);
+    return object;
+}
+----
+
+The `HelloWorldObject` contains a couple of properties, and a single action to update that property.
+
+* The `name` property is read-only, and can only be modified using the `updateName` action. +
++
+For example:
++
+image::{_imagesdir}getting-started/using-hello-world/070-update-name.png[width="600px",link="{_imagesdir}getting-started/using-hello-world/070-update-name.png"]
++
+The above functionality is implemented by link:https://github.com/apache/isis/blob/master/example/application/helloworld/src/main/java/domainapp/dom/impl/HelloWorldObject.java#L73[this code]: +
++
+[source,java]
+----
+@Action(
+    semantics = SemanticsOf.IDEMPOTENT,
+    command = CommandReification.ENABLED,
+    publishing = Publishing.ENABLED
+)
+public HelloWorldObject updateName(
+        @Parameter(maxLength = 40)
+        @ParameterLayout(named = "Name")
+        final String name) {
+    setName(name);
+    return this;
+}
+----
+
+* The `notes` property is editable, and can be edited in-place. +
++
+For example:
++
+image::{_imagesdir}getting-started/using-hello-world/080-edit-notes.png[width="600px",link="{_imagesdir}getting-started/using-hello-world/080-edit-notes.png"]
+
+It's also possible to delete an object:
+
+
+The above functionality is implemented by link:https://github.com/apache/isis/blob/master/example/application/helloworld/src/main/java/domainapp/dom/impl/HelloWorldObject.java#L87[this code]:
+
+[source,java]
+----
+@Action(semantics = SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE)
+public void delete() {
+    final String title = titleService.titleOf(this);
+    messageService.informUser(String.format("'%s' deleted", title));
+    repositoryService.removeAndFlush(this);
+}
+----
+
+This uses three services provided by the framework; these are injected into the domain object automatically.
+
+
+Going back to the home page (link:http://localhost:8080[localhost:8080]) we can use link:https://swagger.io/[Swagger UI] as a front-end to the REST API provided by the Restful Objects viewer.
+
+image::{_imagesdir}getting-started/using-hello-world/200-swagger-ui-before-reload.png[width="600px",link="{_imagesdir}getting-started/using-hello-world/200-swagger-ui-before-reload.png"]
+
+The Swagger UI is created dynamically from a Swagger schema definition (the schema definition file itself can be downloaded from the Wicket viewer's "Prototyping" menu).
+ This Swagger schema definition groups resources according to Apache Isis metadata:
+
+image::{_imagesdir}getting-started/using-hello-world/210-helloworld-resources.png[width="600px",link="{_imagesdir}getting-started/using-hello-world/210-helloworld-resources.png"]
+
+For example, an object can be created using the resource that represents the `HelloWorldObjects#create` action:
+
+image::{_imagesdir}getting-started/using-hello-world/220-create-object-thru-rest-api.png[width="600px",link="{_imagesdir}getting-started/using-hello-world/220-create-object-thru-rest-api.png"]
+
+The response indicates that the object was successfully created:
+
+image::{_imagesdir}getting-started/using-hello-world/230-create-object-thru-rest-api-response.png[width="600px",link="{_imagesdir}getting-started/using-hello-world/230-create-object-thru-rest-api-response.png"]
+
+The Swagger UI also provides a resource to retrieve any object:
+
+image::{_imagesdir}getting-started/using-hello-world/240-retrieve-object-using-rest-api.png[width="600px",link="{_imagesdir}getting-started/using-hello-world/240-retrieve-object-using-rest-api.png"]
+
+This results in a representation of the domain object (as per the requested `Response Content Type`, ie `ACCEPT` header):
+
+image::{_imagesdir}getting-started/using-hello-world/250-retrieve-object-using-rest-api-response.png[width="600px",link="{_imagesdir}getting-started/using-hello-world/250-retrieve-object-using-rest-api-response.png"]
+
+
+The Swagger UI is provided as a convenience; the REST API is actually a complete hypermedia API (in other words you can follow the links to access all the behaviour exposed in the regular Wicket app).
+The REST API implemented by Apache Isis is specified in the link:http://www.restfulobjects.org[Restful Object spec].
+
+
+[[_ugfun_getting-started_helloworld-archetype_experimenting]]
+== Experimenting
+
+Once you are familiar with the generated app, try modifying it.
+There is plenty of guidance on this site; start with this guide (fundamentals) and then look at the other guides available the main xref:../../documentation.adoc#[documentation] page.
+
+If you use IntelliJ IDEA or Eclipse, do also install the xref:../dg/dg.adoc#__dg_ide_intellij_live-templates[live templates (for IntelliJ)] / xref:../dg/dg.adoc#__dg_ide_eclipse_editor-templates[editor templates (for Eclipse)]; these will help you follow the Apache Isis naming conventions.
+
+If you run into issues, please don't hesitate to ask for help on the link:http://isis.apache.org/help.html[users mailing list].
+
+
+[[_ugfun_getting-started_helloworld-archetype_moving-on]]
+== Moving on
+
+When you are ready to start working on your own app, we _don't_ recommend building on top of the helloworld app.
+
+Instead, we suggest that you start with the xref:ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[simpleapp archetype] instead.
+Although a little more complex, it provides more structure and tests, all of which will help you as your application grows.
+
+

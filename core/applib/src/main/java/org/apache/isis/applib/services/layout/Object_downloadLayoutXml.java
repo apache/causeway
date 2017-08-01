@@ -18,15 +18,15 @@ package org.apache.isis.applib.services.layout;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.Contributed;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.value.Clob;
 
-@Mixin
+@Mixin(method="act")
 public class Object_downloadLayoutXml {
 
     private final Object object;
@@ -43,11 +43,12 @@ public class Object_downloadLayoutXml {
             restrictTo = RestrictTo.PROTOTYPING
     )
     @ActionLayout(
+            contributed = Contributed.AS_ACTION,
             cssClassFa = "fa-download",
             position = ActionLayout.Position.PANEL_DROPDOWN
     )
     @MemberOrder(name = "datanucleusIdLong", sequence = "700.1")
-    public Object $$(
+    public Object act(
             @ParameterLayout(named = "File name")
             final String fileName,
             final LayoutService.Style style) {
@@ -56,17 +57,14 @@ public class Object_downloadLayoutXml {
         return new Clob(Util.withSuffix(fileName, style.name().toLowerCase() + ".xml"), "text/xml", xml);
     }
 
-    public String default0$$() {
+    public String default0Act() {
         return Util.withSuffix(object.getClass().getSimpleName(), "layout");
     }
-    public LayoutService.Style default1$$() {
+    public LayoutService.Style default1Act() {
         return LayoutService.Style.NORMALIZED;
     }
 
     @javax.inject.Inject
     LayoutService layoutService;
-
-    @javax.inject.Inject
-    JaxbService jaxbService;
 
 }

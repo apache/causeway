@@ -8,7 +8,7 @@ export ISISRC=RC1
 export ISISCPT=$(echo $ISISART | cut -d- -f2)
 export ISISCPN=$(echo $ISISART | cut -d- -f1)
 
-for a in simpleapp 
+for a in simpleapp helloworld
 do
 	pushd example/application/$a
 	export ISISART=$a-archetype

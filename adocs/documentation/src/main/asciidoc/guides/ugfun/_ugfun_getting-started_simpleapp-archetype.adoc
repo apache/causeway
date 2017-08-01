@@ -5,14 +5,32 @@
 :_imagesdir: images/
 
 
-The quickest way to get started with Apache Isis is to run the simple archetype.  This will generate a very simple one-class domain model, called `SimpleObject`, with a single property `name`.
+The quickest way to get started building an application "for real" is to run the `simpleapp` archetype.
+Like the xref:ugfun.adoc#_ugfun_getting-started_helloworld-archetype[helloworld archetype], this too will generate a very simple one-class domain model (an entity called `SimpleObject` with a couple of properties).
 
-There is also a corresponding `SimpleObjects` domain service which acts as a repository for `SimpleObject` entity.  From this you can easily rename these initial classes, and extend to build up your own Apache Isis domain application.
+However, the generated application also provides more structure to assist you as your application grows.
+For example:
 
-Finally, the domain service also includes a `HomePageViewModel` which acts as a home page for the app.
+* the application is multi-module, separating out the business logic (`module-simple` Maven module) from the bootstrapping modules (`application` Maven module and the `webapp` module)
+
+* the `SimpleObjectRepository` service (to create/retrieve instances) is separate from the `SimpleObjectMenu` menu service (for the UI); the former is delegated to by the latter.
+
+* a `HomePageViewModel` service acts as a home page for the app.
+
+* there are example integration tests, BDD tests as well as unit tests
+
+* there are example fixture scripts for use both when prototyping and used by the integration and BDD tests
+
+* the xref:../rgmvn.adoc#[Apache Isis Maven plugin] to xref:../rgmvn.adoc#_rgmvn_validate[validate] your domain model is pre-configured
+
+* Maven plugins to package your app as a Docker image is pre-configured
+
+
+From this you can easily rename these initial classes, and extend to build up your own Apache Isis domain application.
 
 
 
+[[_ugfun_getting-started_simpleapp-archetype_generating-the-app]]
 == Generating the App
 
 Create a new directory, and `cd` into that directory.
@@ -72,6 +90,7 @@ The archetype generation process will then run; it only takes a few seconds.
 
 
 
+[[_ugfun_getting-started_simpleapp-archetype_building-the-app]]
 == Building the App
 
 Switch into the root directory of your newly generated app, and build your app:
@@ -87,9 +106,11 @@ where `myapp` is the `artifactId` entered above.
 
 
 
+[[_ugfun_getting-started_simpleapp-archetype_running-the-app]]
 == Running the App
 
-The `simpleapp` archetype generates a single WAR file, configured to run both the xref:../ugvw/ugvw.adoc#[Wicket viewer] and the xref:../ugvro/ugvro.adoc#[Restful Objects viewer].  The archetype also configures the DataNucleus/JDO Objectstore to use an in-memory HSQLDB connection.
+The `simpleapp` archetype generates a single WAR file, configured to run both the xref:../ugvw/ugvw.adoc#[Wicket viewer] and the xref:../ugvro/ugvro.adoc#[Restful Objects viewer].
+The archetype also configures the DataNucleus/JDO Objectstore to use an in-memory HSQLDB connection.
 
 Once you've built the app, you can run the WAR in a variety of ways.
 
@@ -114,137 +135,126 @@ mvn -pl webapp jetty:run -D jetty.port=9090
 
 === Using a regular servlet container
 
-You can also take the built WAR file and deploy it into a standalone servlet container such as [Tomcat](http://tomcat.apache.org).  The default configuration does not require any configuration of the servlet container; just drop the WAR file into the `webapps` directory.
+You can also take the built WAR file and deploy it into a standalone servlet container such as [Tomcat](http://tomcat.apache.org).
+The default configuration does not require any configuration of the servlet container; just drop the WAR file into the `webapps` directory.
+
+
+
+=== Using Docker
+
+It's also possible to package up the application as a docker image to run as a container.
+
+* To package up the application as a docker image (specifying the docker image name as a system property): +
++
+[source,bash]
+----
+mvn install -Dmavenmixin-docker -Ddocker-plugin.imageName=mycompany/myapp
+----
++
+Alternatively, define the `${docker-plugin.imageName}` in the `webapp` module and use simply: +
++
+[source,bash]
+----
+mvn install -Dmavenmixin-docker
+----
++
+The packaged image can be viewed using `docker images`.
+
+* To run a docker image previously packaged: +
++
+[source,bash]
+----
+docker container run -d -p 8080:8080 mycompany/myapp
+----
++
+This can then be accessed at link:http://localhost:8080[localhost:8080].
++
+See link:https://github.com/danhaywood/java-mavenmixin-docker#how-to-consume[mavenmixin-docker] for further details on how to run docker images.
+
+* To upload the application as a docker image to link:https://hub.docker.com[docker hub] (or some other docker registry): +
++
+[source,bash]
+----
+mvn -pl webapp deploy -Dmavenmixin-docker
+----
++
+This assumes that the `${docker-plugin.imageName}` property has been defined, _and_ also that docker registry credentials have been specified in `~/.m2/settings.xml`.
+Once more, see link:https://github.com/danhaywood/java-mavenmixin-docker#how-to-configure[mavenmixin-docker] for further details.
 
 
 
 === From within the IDE
 
-Most of the time, though, you'll probably want to run the app from within your IDE.  The mechanics of doing this will vary by IDE; see the xref:../dg/dg.adoc#_dg_ide[Developers' Guide] for details of setting up Eclipse or IntelliJ IDEA.  Basically, though, it amounts to running `org.apache.isis.WebServer`, and ensuring that the xref:../ugfun/ugfun.adoc#_ugfun_getting-started_datanucleus-enhancer[DataNucleus enhancer] has properly processed all domain entities.
+Most of the time, though, you'll probably want to run the app from within your IDE.
+The mechanics of doing this will vary by IDE; see the xref:../dg/dg.adoc#_dg_ide[Developers' Guide] for details of setting up Eclipse or IntelliJ IDEA.
+Basically, though, it amounts to running `org.apache.isis.WebServer`, and ensuring that the xref:../ugfun/ugfun.adoc#_ugfun_getting-started_datanucleus-enhancer[DataNucleus enhancer] has properly processed all domain entities.
 
 Here's what the setup looks like in IntelliJ IDEA:
 
 image::{_imagesdir}getting-started/simpleapp-webapp.png[width="600px",link="{_imagesdir}getting-started/simpleapp-webapp.png"]
 
+with the maven goal to run the DataNucleus enhancer (discussed in more detail xref:ugfun.adoc#_ugfun_getting-started_datanucleus-enhancer[here]) before launch defined as:
+
+image::{_imagesdir}getting-started/simpleapp-webapp-before-launch.png[width="600px",link="{_imagesdir}getting-started/simpleapp-webapp-before-launch.png"]
 
 
+
+[[_ugfun_getting-started_simpleapp-archetype_running-with-fixtures]]
 == Running with Fixtures
 
-It is also possible to start the application with a pre-defined set of data; useful for demos or manual exploratory testing.  This is done by specifying a xref:../ugtst/ugtst.adoc#_ugtst_fixture-scripts[fixture script] on the command line.
+It is also possible to start the application with a pre-defined set of data; useful for demos or manual exploratory testing.
+This is done by specifying a xref:../ugtst/ugtst.adoc#_ugtst_fixture-scripts[fixture script] on the command line.
 
 If you are running the app from an IDE, then you can specify the fixture script using the `--fixture` flag.  The archetype provides the `domainapp.fixture.scenarios.RecreateSimpleObjects` fixture script, for example:
 
 image::{_imagesdir}getting-started/simpleapp-webapp-with-fixtures.png[width="600px",link="{_imagesdir}getting-started/simpleapp-webapp-with-fixtures.png"]
 
-Alternatively, you can run with a different xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[`AppManifest`] using the `--appManifest` (or `-m`) flag.  The archetype provides
+Alternatively, you can run with a different xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[`AppManifest`] using the `--appManifest` (or `-m`) flag.
+The archetype provides
 `domainapp.app.DomainAppAppManifestWithFixtures` which specifies the aforementioned `RecreateSimpleObjects` fixture.
 
 
 
 == Using the App
 
-[NOTE]
-====
-These screenshots are for v1.10.0.
-====
+The generated application is almost identical similar to that generated by xref:ugfun.adoc#_ugfun_getting-started_helloworld-archetype[helloworld archetype]; a description of how to use it can be found xref:ugfun.adoc#_ugfun_getting-started_helloworld-archetype_using-the-app[here].
 
+One additional feature that the simpleapp contains over the helloworld app is a home page.
+This shows all domain objects (as installed by fixture scripts, described xref:ugfun.adoc#_ugfun_getting-started_simpleapp-archetype_running-with-fixtures[above]).
 
-When you start the app, you'll be presented with a welcome page from which you can access the webapp using either the xref:../ugvw/ugvw.adoc#[Wicket viewer] or the xref:../ugvro/ugvro.adoc#[Restful Objects viewer]:
+image::{_imagesdir}getting-started/using-simple-app/030-home-page.png[width="600px",link="{_imagesdir}getting-started/using-simple-app/030-home-page.png"]
 
-image::{_imagesdir}getting-started/using-simple-app/010-root-page.png[width="600px",link="{_imagesdir}getting-started/using-simple-app/010-root-page.png"]
+It's also possible to run fixture scripts from the app itself:
 
+image::{_imagesdir}getting-started/using-simple-app/040-run-fixture-script-menu.png[width="600px",link="{_imagesdir}getting-started/using-simple-app/040-run-fixture-script-menu.png"]
 
-The Wicket viewer provides a human usable web UI (implemented, as you might have guessed from its name, using link:http://wicket.apache.org[Apache Wicket]), so choose that and navigate to the login page:
+Some fixture scripts may allow their default behaviour to be tweaked ((eg specify how many objects to create):
 
-image::{_imagesdir}getting-started/using-simple-app/020-login-to-wicket-viewer.png[width="600px",link="{_imagesdir}getting-started/using-simple-app/020-login-to-wicket-viewer.png"]
+image::{_imagesdir}getting-started/using-simple-app/050-run-fixture-script-prompt.png[width="600px",link="{_imagesdir}getting-started/using-simple-app/050-run-fixture-script-prompt.png"]
 
-The app itself is configured to run using xref:../ugsec/ugsec.adoc#[shiro security], as configured in the `WEB-INF/shiro.ini` config file.  You can login with:
+The table summarises the resultant fixtures that were run:
 
-* username: _sven_
-* password: _pass_
+image::{_imagesdir}getting-started/using-simple-app/060-run-fixture-script-result.png[width="600px",link="{_imagesdir}getting-started/using-simple-app/060-run-fixture-script-result.png"]
 
-The application is configured to run with an in-memory database, and (unless you started the app with fixture scripts as described above), initially there is no data.  We can though run a fixture script from the app itself:
+Navigating back to the home page shows the newly created objects:
 
-image::{_imagesdir}getting-started/using-simple-app/030-home-page-run-fixture-scripts.png[width="600px",link="{_imagesdir}getting-started/using-simple-app/030-home-page-run-fixture-scripts.png"]
-
-The fixture script creates three objects, and the action returns the first of these:
-
-image::{_imagesdir}getting-started/using-simple-app/040-first-object.png[width="600px",link="{_imagesdir}getting-started/using-simple-app/040-first-object.png"]
-
-The application generated is deliberaetly very minimal; we don't want you to have to waste valuable time removing generated files.  The object contains a single "name" property, and a single action to update that property:
-
-image::{_imagesdir}getting-started/using-simple-app/050-update-name-prompt.png[width="600px",link="{_imagesdir}getting-started/using-simple-app/050-update-name-prompt.png"]
-
-When you hit OK, the object is updated:
-
-image::{_imagesdir}getting-started/using-simple-app/060-object-updated.png[width="600px",link="{_imagesdir}getting-started/using-simple-app/060-object-updated.png"]
-
-
-For your most signficant domain entities you'll likely have a domain service to retrieve or create instances of those obejcts.  In the generated app we have a "Simple Objects" domain service that lets us list all objects:
-
-image::{_imagesdir}getting-started/using-simple-app/070-list-all-prompt.png[width="600px",link="{_imagesdir}getting-started/using-simple-app/070-list-all-prompt.png"]
-
-whereby we see the three objects created by the fixture script (one having been updated):
-
-image::{_imagesdir}getting-started/using-simple-app/080-list-all.png[width="600px",link="{_imagesdir}getting-started/using-simple-app/080-list-all.png"]
-
-and we can also use the domain service to create new instances:
-
-image::{_imagesdir}getting-started/using-simple-app/090-create.png[width="600px",link="{_imagesdir}getting-started/using-simple-app/090-create.png"]
-
-prompting us for the mandatory information (the name):
-
-image::{_imagesdir}getting-started/using-simple-app/100-create-prompt.png[width="600px",link="{_imagesdir}getting-started/using-simple-app/100-create-prompt.png"]
-
-which, of course, returns the newly created object:
-
-image::{_imagesdir}getting-started/using-simple-app/110-object-created.png[width="600px",link="{_imagesdir}getting-started/using-simple-app/110-object-created.png"]
-
-When we list all objects again, we can see that the object was indeed created:
-
-image::{_imagesdir}getting-started/using-simple-app/120-list-all.png[width="600px",link="{_imagesdir}getting-started/using-simple-app/120-list-all.png"]
-
-Going back to the home page (link:http://localhost:8080[localhost:8080]) we can also access the Restful Objects viewer.  The generated application is configured to use HTTP Basic Auth:
-
-image::{_imagesdir}getting-started/using-simple-app/220-login-to-restful-viewer.png[width="600px",link="{_imagesdir}getting-started/using-simple-app/220-login-to-restful-viewer.png"]
-
-The Restful Objects viewer provides a REST API for computer-to-computer interaction, but we can still interact with it from a browser:
-
-image::{_imagesdir}getting-started/using-simple-app/230-home-page.png[width="600px",link="{_imagesdir}getting-started/using-simple-app/230-home-page.png"]
-
-[TIP]
-====
-Depending on your browser, you may need to install plugins.  For Chrome, we recommend json-view (which renders the JSON indented and automatically detects hyperlinks) and REST Postman.
-====
-
-The REST API is a complete hypermedia API, in other words you can follow the links to access all the behaviour exposed in the regular Wicket app.  For example, we can navigate to the `listAll/invoke` resource:
-
-image::{_imagesdir}getting-started/using-simple-app/240-list-all-invoke.png[width="600px",link="{_imagesdir}getting-started/using-simple-app/240-list-all-invoke.png"]
-
-which when invoked (with an HTTP GET) will return a representation of the domain objects.
-
-image::{_imagesdir}getting-started/using-simple-app/250-list-all-results.png[width="600px",link="{_imagesdir}getting-started/using-simple-app/250-list-all-results.png"]
-
-
-To log in, use `sven/pass`.
-
-
+image::{_imagesdir}getting-started/using-simple-app/070-home-page.png[width="600px",link="{_imagesdir}getting-started/using-simple-app/070-home-page.png"]
 
 
 
 == Modifying the App
 
-Once you are familiar with the generated app, you'll want to start modifying it.  There is plenty of guidance on this site; check out the 'programming model how-tos' section on the main xref:../../documentation.adoc#[documentation] page first).
+Once you are familiar with the generated app, you'll want to start modifying it.
+There is plenty of guidance on this site; start with this guide (fundamentals) and then look at the other guides available the main xref:../../documentation.adoc#[documentation] page.
 
 If you use IntelliJ IDEA or Eclipse, do also install the xref:../dg/dg.adoc#__dg_ide_intellij_live-templates[live templates (for IntelliJ)] / xref:../dg/dg.adoc#__dg_ide_eclipse_editor-templates[editor templates (for Eclipse)]; these will help you follow the Apache Isis naming conventions.
 
 
 
-
-
 == App Structure
 
-As noted above, the generated app is a very simple application consisting of a single domain object that can be easily renamed and extended. The intention is not to showcase all of Apache Isis' capabilities; rather it is to allow you to very easily modify the generated application (eg rename `SimpleObject` to `Customer`) without having to waste time deleting lots of generated code.
+As noted above, the generated app is a very simple application consisting of a single domain object that can be easily renamed and extended.
+The intention is not to showcase all of Apache Isis' capabilities; rather it is to allow you to very easily modify the generated application (eg rename `SimpleObject` to `Customer`) without having to waste time deleting lots of generated code.
 
 
 

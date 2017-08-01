@@ -204,14 +204,18 @@ isis.persistor.datanucleus.impl.datanucleus.schema.validateConstraints=true
 
 [NOTE]
 ====
-Previously Apache Isis would automatically add the auto-create property if they were absent from `isis.properties`, set to "true".  The framework does still add the property, but now sets it to "false".  This is to prevent the framework from unexpectedly modifying a target database if the application was misconfigured and the auto-create property not defined.
+Previously Apache Isis would automatically add the auto-create property if they were absent from `isis.properties`, set to "true".
+The framework does still add the property, but now sets it to "false".
+This is to prevent the framework from unexpectedly modifying a target database if the application was misconfigured and the auto-create property not defined.
 
-The framework will also automatically add the auto-validate property.  Previously this was set to "true" and it is _still_ set to "true"; there is no risk of the target database being modified as a result of this auto-validate property being defaulted by the framework.
+The framework will also automatically add the auto-validate property.
+Previously this was set to "true" and it is _still_ set to "true"; there is no risk of the target database being modified as a result of this auto-validate property being defaulted by the framework.
 ====
 
 [IMPORTANT]
 ====
-Setting `autoCreateAll` to `true` is important to do when running with an in-memory database.  If you don't do this then the tables will be created lazily anyway by DataNucleus, but in some circumstances this can lead to deadlocks.
+Setting `autoCreateAll` to `true` is important to do when running with an in-memory database.
+If you don't do this then the tables will be created lazily anyway by DataNucleus, but in some circumstances this can lead to deadlocks.
 ====
 
 
@@ -233,7 +237,10 @@ isis.persistor.datanucleus.impl.datanucleus.identifier.case=MixedCase
 
 == Run `mvn clean` !
 
-Be careful to ensure that your classes are only enhanced by the DataNucleus 4 enhancer, and _not_ by the DataNucleus 3 enhancer.  Or even, be careful that they are not doubly enhanced.  One of our committers had this situation and it led to all sorts of bizarre issues.  The solution, it turned out, was actually just to do a full `mvn clean`.
+Be careful to ensure that your classes are only enhanced by the DataNucleus 4 enhancer, and _not_ by the DataNucleus 3 enhancer.
+Or even, be careful that they are not doubly enhanced.
+One of our committers had this situation and it led to all sorts of bizarre issues.
+The solution, it turned out, was actually just to do a full `mvn clean`.
 
 If you are struggling and suspect you may have misconfigured the enhancer plugin, then you can decompile the bytecode (eg in IntelliJ) and take a look:
 

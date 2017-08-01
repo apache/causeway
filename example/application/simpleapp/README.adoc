@@ -205,19 +205,18 @@ mvn -Dskip.mavenmixin-isisswagger
 By default, Swagger spec files are generated at `target/generated-resources/isis-swagger` (in the ``webapp`` module).
 ====
 
-* To package up the application as a docker image: +
-+
-[source,bash]
-----
-mvn install -Dmavenmixin-docker
-----
-+
-This assumes that the `${docker-plugin.imageName}` property has been defined in the `webapp` module.
-Alternatively it can be specified on the command line using a system property, eg:
+* To package up the application as a docker image (specifying the docker image name as a system property): +
 +
 [source,bash]
 ----
 mvn install -Dmavenmixin-docker -Ddocker-plugin.imageName=mycompany/myapp
+----
++
+Alternatively, define the `${docker-plugin.imageName}` in the `webapp` module and use simply: +
++
+[source,bash]
+----
+mvn install -Dmavenmixin-docker
 ----
 +
 The packaged image can be viewed using `docker images`.
@@ -241,5 +240,5 @@ mvn -pl webapp deploy -Dmavenmixin-docker
 ----
 +
 This assumes that the `${docker-plugin.imageName}` property has been defined, _and_ also that docker registry credentials have been specified in `~/.m2/settings.xml`.
-See link:https://github.com/danhaywood/java-mavenmixin-docker#how-to-configure[mavenmixin-docker] for further details.
+Once more, see link:https://github.com/danhaywood/java-mavenmixin-docker#how-to-configure[mavenmixin-docker] for further details.
 

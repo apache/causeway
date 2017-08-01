@@ -25,10 +25,8 @@ import org.apache.isis.applib.annotation.Contributed;
 import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
-@Mixin(method = "exec")
+@Mixin(method = "act")
 public class BookmarkHolder_lookup {
-
-    public static class ActionDomainEvent extends IsisApplibModule.ActionDomainEvent<BookmarkHolder_lookup> {}
 
     private final BookmarkHolder bookmarkHolder;
 
@@ -36,6 +34,7 @@ public class BookmarkHolder_lookup {
         this.bookmarkHolder = bookmarkHolder;
     }
 
+    public static class ActionDomainEvent extends IsisApplibModule.ActionDomainEvent<BookmarkHolder_lookup> {}
 
     @Action(
             domainEvent = ActionDomainEvent.class,
@@ -45,7 +44,7 @@ public class BookmarkHolder_lookup {
             contributed = Contributed.AS_ACTION,
             cssClassFa = "fa-bookmark"
     )
-    public Object exec() {
+    public Object act() {
         return bookmarkService.lookup(bookmarkHolder);
     }
 

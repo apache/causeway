@@ -93,7 +93,9 @@ Most IDEs will automatically download the XSD schemas from the specified schema 
 
 === Rows, full-width cols, and tabs
 
-The example layout consists of three rows: a row for the object/icon, a row containing a properties, and a row containing collections.   In all three cases the row contains a single column spanning the full width of the page.  For the property and collection rows, the column contains a tab group.
+The example layout consists of three rows: a row for the object/icon, a row containing a properties, and a row containing collections.
+In all three cases the row contains a single column spanning the full width of the page.
+For the property and collection rows, the column contains a tab group.
 
 This corresponds to the following XML:
 
@@ -124,13 +126,15 @@ This corresponds to the following XML:
 ----
 
 
-You will notice that one of the ``col``umns has an ``unreferencedActions`` attribute, while one of the ``tabGroup``s has a similar ``unreferencedCollections`` attribute.  This topic is discussed in more detail xref:../ugfun/ugfun.adoc#__ugvw_layout_file-based_unreferenced[below].
+You will notice that one of the ``col``umns has an ``unreferencedActions`` attribute, while one of the ``tabGroup``s has a similar ``unreferencedCollections`` attribute.
+This topic is discussed in more detail xref:../ugfun/ugfun.adoc#__ugvw_layout_file-based_unreferenced[below].
 
 
 
 === Fieldsets
 
-The first tab containing properties is divided into two columns, each of which holds a single fieldset of multiple properties.  Those properties in turn can have associated actions.
+The first tab containing properties is divided into two columns, each of which holds a single fieldset of multiple properties.
+Those properties in turn can have associated actions.
 
 This corresponds to the following XML:
 
@@ -163,9 +167,11 @@ This corresponds to the following XML:
 
 The tab defines two columns, each span of 6 (meaning half the width of the page).
 
-In the first column there is a single fieldset.  Notice how actions - such as `duplicate` and `delete` - can be associated with this fieldset directly, meaning that they should be rendered on the fieldset's top panel.
+In the first column there is a single fieldset.
+Notice how actions - such as `duplicate` and `delete` - can be associated with this fieldset directly, meaning that they should be rendered on the fieldset's top panel.
 
-Thereafter the fieldset lists the properties in order.  Actions can be associated with properties too; here they are rendered underneath or to the right of the field.
+Thereafter the fieldset lists the properties in order.
+Actions can be associated with properties too; here they are rendered underneath or to the right of the field.
 
 Note also the `unreferencedProperties` attribute for the fieldset; this topic is discussed in more detail xref:../ugfun/ugfun.adoc#__ugvw_layout_file-based_unreferenced[below].
 
@@ -217,18 +223,23 @@ The rules are:
 
 * `unreferencedActions` attribute can be specified either on a column or on a fieldset.  +
 +
-It would normally be typical to use the column holding the `<domainObject/>` icon/title, that is as shown in the example.  The unreferenced actions then appear as top-level actions for the domain object.
+It would normally be typical to use the column holding the `<domainObject/>` icon/title, that is as shown in the example.
+The unreferenced actions then appear as top-level actions for the domain object.
 
 * `unreferencedCollections` attribute can be specified either on a column or on a tabgroup. +
 +
-If specified on a column, then that column will contain each of the unreferenced collections, stacked one on top of the other.  If specified on a tab group, then a separate tab will be created for each collection, with that tab containing only that single collection.
+If specified on a column, then that column will contain each of the unreferenced collections, stacked one on top of the other.
+If specified on a tab group, then a separate tab will be created for each collection, with that tab containing only that single collection.
 
 * `unreferencedProperties` attribute can be specified only on a fieldset.
 
-The purpose of these attributes is to indicate where in the layout any unreferenced members should be rendered.  Every grid _must_ nominate one region for each of these three member types, the reason being that to ensure that the layout can be used even if it is incomplete with respect to the object members inferred from the Java source code.  This might be because the developer forgot to update the layout, or it might be because of a new mixin (property, collection or action) contributed to many objects.
+The purpose of these attributes is to indicate where in the layout any unreferenced members should be rendered.
+Every grid _must_ nominate one region for each of these three member types, the reason being that to ensure that the layout can be used even if it is incomplete with respect to the object members inferred from the Java source code.
+This might be because the developer forgot to update the layout, or it might be because of a new mixin (property, collection or action) contributed to many objects.
 
 
-The framework ensures that in any given grid exactly one region is specified for each of the three `unreferenced...` attributes.  If the grid fails this validation, then a warning message will be displayed, and the invalid XML logged.  The layout XML will then be ignored.
+The framework ensures that in any given grid exactly one region is specified for each of the three `unreferenced...` attributes.
+If the grid fails this validation, then a warning message will be displayed, and the invalid XML logged.  The layout XML will then be ignored.
 
 
 
@@ -276,9 +287,8 @@ In the middle column the `notYetComplete` collection is rendered in "calendar" v
 it is rendered in "table" view.
 
 
-It is also possible to reference object properties and actions more than once.  This might be useful for a complex
-domain object with multiple tabs; certain properties or actions might appear on a summary tab (that shows the
-most commonly used info), but also on detail tabs.
+It is also possible to reference object properties and actions more than once.
+This might be useful for a complex domain object with multiple tabs; certain properties or actions might appear on a summary tab (that shows the most commonly used info), but also on detail tabs.
 
 === Custom CSS
 
@@ -337,7 +347,8 @@ from the top of the page slightly, using the following CSS:
 
 == Migrating from earlier versions
 
-As noted earlier on, it is possible to download layout XML files using the xref:../rgsvc/rgsvc.adoc#_rgsvc_metadata-api_LayoutService[`LayoutService`] (exposed on the prototyping menu); this will download a ZIP file of layout XML files for all domain entities and view models.  Alternatively the layout XML for a single domain object can be downloaded using the xref:../rgcms/rgcms.adoc#_rgcms_classes_mixins_Object[mixin action] (contributed to every domain object).
+As noted earlier on, it is possible to download layout XML files using the xref:../rgsvc/rgsvc.adoc#_rgsvc_metadata-api_LayoutService[`LayoutService`] (exposed on the prototyping menu); this will download a ZIP file of layout XML files for all domain entities and view models.
+Alternatively the layout XML for a single domain object can be downloaded using the xref:../rgcms/rgcms.adoc#_rgcms_classes_mixins_Object[mixin action] (contributed to every domain object).
 
 There are four "styles":
 
@@ -347,10 +358,8 @@ There are four "styles":
 * minimal
 
 
-Ignorig the "current" style (which merely downloads the currently cached layout), the other three styles allow the
-developer to choose how much metadata is to be specified in the XML, and how much (if any) will be obtained
-elsewhere, either from annotations in the metamodel or from an earlier `.layout.json` file if present.  The table
-below summarises the choices:
+Ignorig the "current" style (which merely downloads the currently cached layout), the other three styles allow the developer to choose how much metadata is to be specified in the XML, and how much (if any) will be obtained elsewhere, either from annotations in the metamodel or from an earlier `.layout.json` file if present.
+The table below summarises the choices:
 
 .Table caption
 [cols="<.>,^.>,^.>,^.>", options="header"]
@@ -383,11 +392,15 @@ below summarises the choices:
 
 As a developer, you therefore have a choice as to how you provide the metadata required for customised layouts:
 
-* if you want all layout metadata to be read from the `.layout.xml` file, then download the "complete" version, and copy the file alongside the domain class.  You can then remove all `@MemberGroupLayout`, `@MemberOrder`, `@ActionLayout`, `@PropertyLayout` and `@CollectionLayout` annotations from the source code of the domain class.
+* if you want all layout metadata to be read from the `.layout.xml` file, then download the "complete" version, and copy the file alongside the domain class.
+You can then remove all `@MemberGroupLayout`, `@MemberOrder`, `@ActionLayout`, `@PropertyLayout` and `@CollectionLayout` annotations from the source code of the domain class.
 
-* if you want to use layout XML file to describe the grid (columns, tabs etc) and specify which object members are associated with those regions of the grid, then download the "normalized" version.  You can then remove the `@MemberGroupLayout` and `@MemberOrder` annotations from the source code of the domain class, but retain the `@ActionLayout`, `@PropertyLayout` and `@CollectionLayout` annotations.
+* if you want to use layout XML file to describe the grid (columns, tabs etc) and specify which object members are associated with those regions of the grid, then download the "normalized" version.
+You can then remove the `@MemberGroupLayout` and `@MemberOrder` annotations from the source code of the domain class, but retain the `@ActionLayout`, `@PropertyLayout` and `@CollectionLayout` annotations.
 
-* if you want to use layout XML file ONLY to describe the grid, then download the "minimal" version.  The grid regions will be empty in this version, and the framework will use the `@MemberOrder` annotation to bind object members to those regions.  The only annotation that can be safely removed from the source code with this style is the `@MemberGroupLayout` annotation.
+* if you want to use layout XML file ONLY to describe the grid, then download the "minimal" version.
+The grid regions will be empty in this version, and the framework will use the `@MemberOrder` annotation to bind object members to those regions.
+The only annotation that can be safely removed from the source code with this style is the `@MemberGroupLayout` annotation.
 
 
 Download either for a single domain object, or download all domain objects (entities and view models).
@@ -408,7 +421,8 @@ For more information about layouts, see:
 
 == Required updates to the dom project's pom.xml
 
-Any `.layout.xml` files must be compiled and available in the classpath.  Ensure the following is defined in the dom project's `pom.xml`:
+Any `.layout.xml` files must be compiled and available in the classpath.
+Ensure the following is defined in the dom project's `pom.xml`:
 
 [source.xml]
 ----
@@ -430,4 +444,4 @@ Any `.layout.xml` files must be compiled and available in the classpath.  Ensure
 </resources>
 ----
 
-If using an Apache Isis xref:../ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype], then the POM is already correctly configured.
+If using an Apache Isis xref:../ugfun/ugfun.adoc#_ugfun_getting-started_helloworld-archetype[HelloWorld] xref:../ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp] archetypes, then the POM is already correctly configured.

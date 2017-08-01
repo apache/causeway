@@ -16,10 +16,9 @@
  */
 package org.apache.isis.applib.services.dto;
 
-import javax.inject.Inject;
-
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.Contributed;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.annotation.ParameterLayout;
@@ -28,7 +27,7 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.value.Clob;
 
-@Mixin
+@Mixin(method="act")
 public class Dto_downloadXml {
 
     private final Dto dto;
@@ -45,10 +44,11 @@ public class Dto_downloadXml {
             restrictTo = RestrictTo.PROTOTYPING
     )
     @ActionLayout(
+            contributed = Contributed.AS_ACTION,
             cssClassFa = "fa-download"
     )
     @MemberOrder(sequence = "500.1")
-    public Object $$(
+    public Object act(
             @ParameterLayout(named = "File name")
             final String fileName) {
 
@@ -56,7 +56,7 @@ public class Dto_downloadXml {
         return new Clob(Util.withSuffix(fileName, "xml"), "text/xml", xml);
     }
 
-    public String default0$$() {
+    public String default0Act() {
         return Util.withSuffix(dto.getClass().getName(), "xml");
     }
 

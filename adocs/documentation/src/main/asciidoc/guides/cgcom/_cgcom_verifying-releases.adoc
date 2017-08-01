@@ -95,7 +95,7 @@ Confirm that the versions of the Isis artifacts now cached in your local reposit
 
 ==== Verifying binary artifacts
 
-You can verify the binary releases by configuring your local Maven install to point to the Maven staging repository (or repositories) and then using them, eg to run the xref:../ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype1] and running the resultant app.
+You can verify the binary releases by configuring your local Maven install to point to the Maven staging repository (or repositories) and then using them, eg to run the xref:../ugfun/ugfun.adoc#_ugfun_getting-started_helloworld-archetype[HelloWorld archetype] or the xref:../ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype] and running the resultant app.
 
 Configuring your local Maven install amounts to updating the `~/.m2/settings.xml` file:
 
@@ -223,12 +223,14 @@ The script could be enhanced in many ways, feel free to contribute improvements!
 
 ==== Create an input file
 
-The input file is a plain `.txt` file containing all urls to the packages to be verified. Here's a sample of the release of Apache Isis 1.8.0:
+The input file is a plain `.txt` file containing all urls to the packages to be verified.
+Here's a sample of the release of Apache Isis 1.15.0:
 
 [source]
 ----
-https://repository.apache.org/content/repositories/orgapacheisis-063/org/apache/isis/core/isis/1.8.0/isis-1.8.0-source-release.zip
-https://repository.apache.org/content/repositories/orgapacheisis-065/org/apache/isis/archetype/simpleapp-archetype/1.8.0/simpleapp-archetype-1.8.0-source-release.zip
+https://repository.apache.org/content/repositories/orgapacheisis-063/org/apache/isis/core/isis/1.8.0/isis-1.15.0-source-release.zip
+https://repository.apache.org/content/repositories/orgapacheisis-065/org/apache/isis/archetype/helloworld-archetype/1.8.0/simpleapp-archetype-1.15.0-source-release.zip
+https://repository.apache.org/content/repositories/orgapacheisis-065/org/apache/isis/archetype/simpleapp-archetype/1.8.0/simpleapp-archetype-1.15.0-source-release.zip
 ----
 
 The actual list of packages to be verified will be provided through the mailing list.
@@ -271,16 +273,18 @@ In this report, each binary will have three links listed after its name '(licens
 
 
 
-== Test the archetype
+== Test the archetypes
 
 Assuming that everything builds ok, then test the archetypes (adjust version as necessary):
 
+* First the `helloworld` archetype: +
++
 [source,bash]
 ----
 mvn archetype:generate  \
     -D archetypeGroupId=org.apache.isis.archetype \
-    -D archetypeArtifactId=simpleapp-archetype \
-    -D archetypeVersion=1.14.0 \
+    -D archetypeArtifactId=helloworld-archetype \
+    -D archetypeVersion=1.15.0 \
     -D groupId=com.mycompany \
     -D artifactId=myapp \
     -D version=1.0-SNAPSHOT \
@@ -288,12 +292,32 @@ mvn archetype:generate  \
     -o
 
 cd myapp
-mvn clean install -o
-cd webapp
-mvn jetty:run
+mvn clean install jetty:run -o
 ----
++
+Adjust the version as necessary.
 
-Adjust the version as necessary.  If it runs up ok, then it's time to xref:../cgcom/cgcom.adoc#_cgcom_verifying-releases[vote]!
+* Next, the `simpleapp` archetype: +
++
+[source,bash]
+----
+mvn archetype:generate  \
+    -D archetypeGroupId=org.apache.isis.archetype \
+    -D archetypeArtifactId=simpleapp-archetype \
+    -D archetypeVersion=1.15.0 \
+    -D groupId=com.mycompany \
+    -D artifactId=myapp \
+    -D version=1.0-SNAPSHOT \
+    -B \
+    -o
+
+cd myapp
+mvn clean install -o && mvn -pl jetty:run -o
+----
++
+Adjust the version as necessary.
+
+If the archetypes run up ok, then it's time to xref:../cgcom/cgcom.adoc#_cgcom_verifying-releases[vote]!
 
 
 

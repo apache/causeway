@@ -11,11 +11,13 @@ BDD specifications contain:
 
 * a `XxxSpec.feature` file, describing the feature and the scenarios (given/when/then)s that constitute its acceptance criteria
 
-* a `RunSpecs.java` class file to run the specification (all boilerplate). This will run all `.feature` files in the same package or subpackages.
+* a `RunSpecs.java` class file to run the specification (all boilerplate).
+This will run all `.feature` files in the same package or subpackages.
 
 * one or several `XxxGlue` constituting the step definitions to be matched against. +
 +
-The "glue" (step definitions) are intended to be reused across features. We therefore recommend that they reside in a separate package, and are organized by the entity type upon which they act. +
+The "glue" (step definitions) are intended to be reused across features.
+We therefore recommend that they reside in a separate package, and are organized by the entity type upon which they act. +
 +
 For example, given a feature that involves `Customer` and `Order`, have the step definitions pertaining to `Customer` reside in `CustomerGlue`, and the step definitions pertaining to `Order` reside in `OrderGlue`. +
 +
@@ -38,18 +40,25 @@ Feature: List and Create New Simple Objects
     Then  there are 4 simple objects
 ----
 
-The `@SimpleObjectsFixture` is a custom tag we've specified to indicate the prerequisite fixtures to be loaded; more on this in a moment. The `@integration` tag, meanwhile, says that this feature should be run with integration-level scope.
+The `@SimpleObjectsFixture` is a custom tag we've specified to indicate the prerequisite fixtures to be loaded; more on this in a moment.
+The `@integration` tag, meanwhile, says that this feature should be run with integration-level scope.
 
 
 [NOTE]
 ====
-Although BDD specs are most commonly used for end-to-end tests (ie at the same scope as an integration test), the two concerns (expressability of a test to a business person vs granularity of the test) should not be conflated. There are a couple of http://silkandspinach.net/2013/01/18/a-testing-strategy/[good] blog http://claysnow.co.uk/the-testing-iceberg/[posts] discussing http://claysnow.co.uk/living-documentation-can-be-readable-and-fast/[this]. The basic idea is to avoid the overhead of a heavy-duty integration test if possible.
+Although BDD specs are most commonly used for end-to-end tests (ie at the same scope as an integration test), the two concerns (expressability of a test to a business person vs granularity of the test) should not be conflated.
+There are a couple of http://silkandspinach.net/2013/01/18/a-testing-strategy/[good] blog http://claysnow.co.uk/the-testing-iceberg/[posts] discussing http://claysnow.co.uk/living-documentation-can-be-readable-and-fast/[this].
+The basic idea is to avoid the overhead of a heavy-duty integration test if possible.
 
-Apache Isis does also support running BDD specs in unit test mode; by annotating the scenario with the `@unit` (rather than `@integration` tag).  When running under unit-level scope, the Apache Isis system is _not_ instantiated.  Instead, the `ScenarioExecution` class returns JMock mocks (except for the `WrapperFactory`, if configured).
+Apache Isis does also support running BDD specs in unit test mode; by annotating the scenario with the `@unit` (rather than `@integration` tag).
+When running under unit-level scope, the Apache Isis system is _not_ instantiated.
+Instead, the `ScenarioExecution` class returns JMock mocks (except for the `WrapperFactory`, if configured).
 
-To support unit testing scope Apache Isis provides the `InMemoryDB` class; a glorified hashmap of "persisted" objects.  Use of this utility class is optional.
+To support unit testing scope Apache Isis provides the `InMemoryDB` class; a glorified hashmap of "persisted" objects.
+Use of this utility class is optional.
 
-Writing a BDD spec that supports both modes of operation therefore takes more effort and we expect most users interested in BDD will use integration-testing scope; for these reasons we have chosen _not_ to include unit-testing support in the xref:../ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype].  For those who do require faster-executing test suite, it's worthwhile knowing that Apache Isis can support this.
+Writing a BDD spec that supports both modes of operation therefore takes more effort and we expect most users interested in BDD will use integration-testing scope; for these reasons we have chosen _not_ to include unit-testing support in the xref:../ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype].
+For those who do require faster-executing test suite, it's worthwhile knowing that Apache Isis can support this.
 
 ====
 
@@ -109,7 +118,8 @@ public class CatalogOfFixturesGlue extends CukeGlueAbstract {
 
 Note that this is annotated with a tag (`@SimpleObjectsFixture`) so that the correct fixture runs. (We might have a whole variety of these).
 
-The step definitions pertaining to `SimpleObject` domain entity then reside in the https://github.com/apache/isis/blob/07fe61ef3fb029ae36427f60da2afeeb931e4f88/example/application/simpleapp/integtests/src/test/java/domainapp/integtests/specglue/modules/simple/SimpleObjectGlue.java#L31[`SimpleObjectGlue`] class. This is where the heavy lifting gets done:
+The step definitions pertaining to `SimpleObject` domain entity then reside in the https://github.com/apache/isis/blob/07fe61ef3fb029ae36427f60da2afeeb931e4f88/example/application/simpleapp/integtests/src/test/java/domainapp/integtests/specglue/modules/simple/SimpleObjectGlue.java#L31[`SimpleObjectGlue`] class.
+This is where the heavy lifting gets done:
 
 [source,java]
 ----

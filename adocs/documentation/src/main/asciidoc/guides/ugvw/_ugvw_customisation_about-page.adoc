@@ -6,7 +6,9 @@
 
 
 
-Isis' Wicket viewer has an About page that, by default, will provide a dump of the JARs that make up the webapp. This page will also show the manifest attributes of the WAR archive itself, if there are any. One of these attributes may also be used as the application version number.
+Isis' Wicket viewer has an About page that, by default, will provide a dump of the JARs that make up the webapp.
+This page will also show the manifest attributes of the WAR archive itself, if there are any.
+One of these attributes may also be used as the application version number.
 
 
 == Screenshot
@@ -20,19 +22,17 @@ image::{_imagesdir}about-page/about-page.png[width="800px",link="{_imagesdir}abo
 Note that this screenshot shows an earlier version of the xref:../ugvw/ugvw.adoc#[Wicket viewer] UI (specifically, pre 1.8.0).
 ====
 
-Note that the `Build-Time` attribute has been used as the version number. The Wicket viewer is hard-coded to search for specific attributes and use as the application version. In order, it searches for:
+Note that the `Build-Time` attribute has been used as the version number.
+The Wicket viewer is hard-coded to search for specific attributes and use as the application version.
+In order, it searches for:
 
 * `Implementation-Version`
 * `Build-Time`
 
 If none of these are found, then no version is displayed.
 
-== Configuration
 
-[TIP]
-====
-This configuration is included within the xref:../ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype].
-====
+== Configuration
 
 === Adding attributes to the WAR's manifest
 
@@ -93,7 +93,9 @@ If you then build the webapp from the Maven command line (`mvn clean package`), 
 
 The manifest attributes are provided to the rest of the application by way of the Wicket viewer's integration with Google Guice.
 
-In your subclass of `IsisWicketApplication`, there is a method `newIsisWicketModule()`. In this method you need to bind an `InputStream` that will read the manifest attributes. This is all boilerplate so you can just copy-n-paste:
+In your subclass of `IsisWicketApplication`, there is a method `newIsisWicketModule()`.
+In this method you need to bind an `InputStream` that will read the manifest attributes.
+This is all boilerplate so you can just copy-n-paste:
 
 [source,java]
 ----

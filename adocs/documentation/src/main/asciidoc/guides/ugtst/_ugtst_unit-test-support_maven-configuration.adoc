@@ -5,7 +5,8 @@
 :_imagesdir: images/
 
 
-Apache Isis' unit test support is automatically configured if you use the xref:../ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype].  To set it up manually, update the `pom.xml` of your domain object model module:
+Apache Isis' unit test support is automatically configured if you use the xref:../ugfun/ugfun.adoc#_ugfun_getting-started_helloworld-archetype[HelloWorld] or the xref:../ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp] archetypes.
+To set it up manually, update the `pom.xml` of your domain object model module:
 
 [source,xml]
 ----
@@ -17,6 +18,11 @@ Apache Isis' unit test support is automatically configured if you use the xref:.
 ----
 <1> Normally `test`; usual Maven scoping rules apply.
 
+
+[NOTE]
+====
+As of `1.15.0-SNAPSHOT` this can also be done by adding a dependency to `org.apache.isis.mavendeps:isis-mavendeps-testing` module; see the xref:../ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype].
+====
 
 
 We also recommend that you configure the `maven-surefire-plugin` to pick up the following class patterns:
@@ -44,3 +50,8 @@ We also recommend that you configure the `maven-surefire-plugin` to pick up the 
     </configuration>
 </plugin>
 ----
+
+[NOTE]
+====
+As of `1.14.0` this can also be done using mavenmixins; see the xref:../ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype].
+====
