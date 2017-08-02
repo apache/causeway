@@ -236,12 +236,25 @@ public class ServicesInstallerFromAnnotation extends ServicesInstallerAbstract {
 
     private static String orderOf(final Class<?> cls) {
         final DomainServiceLayout domainServiceLayout = cls.getAnnotation(DomainServiceLayout.class);
-        String order = domainServiceLayout != null ? domainServiceLayout.menuOrder(): null;
-        if(order == null || order.equals("" + Integer.MAX_VALUE)) {
-            final DomainService domainService = cls.getAnnotation(DomainService.class);
-            order = domainService != null ? domainService.menuOrder() : "" + Integer.MAX_VALUE;
+        String dslayoutOrder = domainServiceLayout != null ? domainServiceLayout.menuOrder(): null;
+        final DomainService domainService = cls.getAnnotation(DomainService.class);
+        String dsOrder = domainService != null ? domainService.menuOrder() : "" + Integer.MAX_VALUE;
+
+        return minimumOf(dslayoutOrder, dsOrder);
+    }
+
+    private static String minimumOf(final String dslayoutOrder, final String dsOrder) {
+        if(isUndefined(dslayoutOrder)) {
+            return dsOrder;
         }
-        return order;
+        if(isUndefined(dsOrder)) {
+            return dslayoutOrder;
+        }
+        return dslayoutOrder.compareTo(dsOrder) < 0 ? dslayoutOrder : dsOrder;
+    }
+
+    private static boolean isUndefined(final String str) {
+        return str == null || str.equals("" + Integer.MAX_VALUE);
     }
 
     private static String nameOf(final Class<?> cls) {
