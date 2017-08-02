@@ -18,8 +18,6 @@
  */
 package domainapp.application;
 
-import com.google.common.collect.Lists;
-
 import org.apache.isis.applib.AppManifestAbstract;
 
 import domainapp.dom.HelloWorldModule;
@@ -30,7 +28,8 @@ import domainapp.dom.HelloWorldModule;
 public class HelloWorldAppManifest extends AppManifestAbstract {
 
     public HelloWorldAppManifest() {
-        super(Lists.<Class<?>>newArrayList(HelloWorldModule.class));
+        super(Builder.withModules(HelloWorldModule.class)
+                       .withPropertiesFile("isis-non-changing.properties"));
     }
 
 }

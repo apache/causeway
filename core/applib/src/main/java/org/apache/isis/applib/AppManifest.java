@@ -32,6 +32,7 @@ import java.util.Set;
 import javax.jdo.annotations.PersistenceCapable;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 import org.reflections.vfs.SystemDir;
 import org.reflections.vfs.Vfs;
@@ -391,4 +392,5 @@ public interface AppManifest {
 
 
     }
+
 }

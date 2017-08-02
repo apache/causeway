@@ -20,17 +20,18 @@ package org.apache.isis.applib;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 
 /**
- * Convenience adapter.
+ * Convenience adapter, configured using an {@link Builder}.
  */
 public abstract class AppManifestAbstract implements AppManifest {
 
@@ -38,82 +39,276 @@ public abstract class AppManifestAbstract implements AppManifest {
     private final List<Class<?>> additionalServices;
     private final String authMechanism;
     private final List<Class<? extends FixtureScript>> fixtures;
-    private final String propertiesFile;
+    private final Map<String, String> configurationProperties;
 
-    public AppManifestAbstract(final List<Class<?>> modules) {
-        this(modules,
-                Collections.<Class<?>>emptyList(),
-                "shiro",
-                Collections.<Class<? extends FixtureScript>>emptyList(),
-                "isis-non-changing.properties");
+    public AppManifestAbstract(final Builder builder) {
+
+        final List<Class<?>> builderModules = builder.modules;
+        overrideModules(builderModules);
+        this.modules = builderModules;
+
+        final List<Class<?>> builderAdditionalServices = builder.additionalServices;
+        overrideAdditionalServices(builderAdditionalServices);
+
+        this.additionalServices = builderAdditionalServices;
+
+        final String overriddenAuthMechanism = overrideAuthMechanism();
+        this.authMechanism = overriddenAuthMechanism != null ? overriddenAuthMechanism : builder.authMechanism;
+
+        final List<Class<? extends FixtureScript>> builderFixtures = builder.fixtures;
+        overrideFixtures(builderFixtures);
+        this.fixtures = builderFixtures;
+
+        // note uses this.fixtures, so must come afterwards...
+        this.configurationProperties = createConfigurationProperties(builder.propertyResources, builder.individualConfigProps, this.fixtures);
     }
 
-    public AppManifestAbstract(
-            final List<Class<?>> modules,
-            final List<Class<?>> additionalServices,
-            final String authMechanism,
-            final List<Class<? extends FixtureScript>> fixtures,
-            final String propertiesFile) {
-        this.modules = modules;
-        this.additionalServices = additionalServices;
-        this.authMechanism = authMechanism;
-        this.fixtures = fixtures;
-        this.propertiesFile = propertiesFile;
-    }
-
-    @Override
-    public List<Class<?>> getModules() {
-        return modules;
-    }
-
-    @Override
-    public List<Class<?>> getAdditionalServices() {
-        return additionalServices;
-    }
-
-    @Override
-    public String getAuthenticationMechanism() {
-        return authMechanism;
-    }
-
-    @Override
-    public String getAuthorizationMechanism() {
-        return authMechanism;
-    }
-
-    @Override
-    public List<Class<? extends FixtureScript>> getFixtures() {
-        return fixtures;
-    }
-
-    @Override
-    public Map<String, String> getConfigurationProperties() {
+    private Map<String, String> createConfigurationProperties(
+            final List<PropertyResource> propertyResources,
+            final List<ConfigurationProperty> individualConfigProps,
+            final List<Class<? extends FixtureScript>> fixtures) {
         final Map<String, String> props = Maps.newHashMap();
-
-        if(propertiesFile != null) {
-            loadPropsInto(props, propertiesFile);
+        for (PropertyResource propertyResource : propertyResources) {
+            propertyResource.loadPropsInto(props);
         }
-
+        for (ConfigurationProperty individualConfigProp : individualConfigProps) {
+            individualConfigProp.put(props);
+        }
+        if(!fixtures.isEmpty()) {
+            props.put("isis.persistor.datanucleus.install-fixtures","true");
+        }
+        overrideConfigurationProperties(props);
         return props;
     }
 
-    protected void loadPropsInto(final Map<String, String> props, final String propertiesFile) {
-        final Properties properties = new Properties();
-        try {
-            try (final InputStream stream =
-                    getClass().getResourceAsStream(propertiesFile)) {
-                properties.load(stream);
-                for (Object key : properties.keySet()) {
-                    final Object value = properties.get(key);
-                    if(key instanceof String && value instanceof String) {
-                        props.put((String)key, (String)value);
-                    }
-                }
+    @Override
+    public final List<Class<?>> getModules() {
+        return modules;
+    }
+
+    /**
+     * Optional hook to allow subclasses to tweak modules previously defined in constructor.
+     *
+     * <p>
+     *     Alternatively, can compose a different builder and pass into the constructor,
+     *     using {@link Builder#withAdditionalModules(Class[])}.
+     * </p>
+     */
+    protected void overrideModules(List<Class<?>> modules) {
+        // default implementation does nothing.
+    }
+
+    @Override
+    public final List<Class<?>> getAdditionalServices() {
+        return additionalServices;
+    }
+
+    /**
+     * Optional hook to allow subclasses to tweak services previously defined
+     *
+     * <p>
+     *     Alternatively, can compose a different builder and pass into the constructor,
+     *     using {@link Builder#withAdditionalServices(Class[])}
+     * </p>
+     */
+    protected void overrideAdditionalServices(final List<Class<?>> additionalServices) {
+        // default implementation does nothing.
+    }
+
+    @Override
+    public final String getAuthenticationMechanism() {
+        return authMechanism;
+    }
+
+    /**
+     * Optional hook to override both the {@link #getAuthenticationMechanism()} and {@link #getAuthorizationMechanism()}.
+     *
+     * <p>
+     *     Alternatively, can compose a different builder and pass into the constructor,
+     *     using {@link Builder#withAuthMechanism(String)} .
+     * </p>
+     */
+    protected String overrideAuthMechanism() {
+        return null;
+    }
+
+    @Override
+    public final String getAuthorizationMechanism() {
+        return authMechanism;
+    }
+
+    @Override
+    public final List<Class<? extends FixtureScript>> getFixtures() {
+        return fixtures;
+    }
+
+    /**
+     * Optional hook to allow subclasses to tweak fixtures previously specified
+     *
+     * <p>
+     *     Alternatively, can compose a different builder and pass into the constructor,
+     *     using {@link Builder#withFixtureScripts(Class[])} .
+     * </p>
+     */
+    protected void overrideFixtures(final List<Class<? extends FixtureScript>> fixtureScripts) {
+        // default implementation does nothing.
+    }
+
+    @Override
+    public final Map<String, String> getConfigurationProperties() {
+        return this.configurationProperties;
+    }
+
+
+    /**
+     * Optional hook to allow subclasses to tweak configuration properties previously specified
+     *
+     * <p>
+     *     Alternatively, can compose a different builder and pass into the constructor,
+     *     using {@link Builder#withConfigurationProperties(Map)} .
+     * </p>
+     */
+    protected void overrideConfigurationProperties(final Map<String, String> configurationProperties) {
+        // default implementation does nothing.
+    }
+
+    /**
+     * Used to build an {@link AppManifest} either {@link #build() directly}, or implicitly by passing into
+     * {@link AppManifestAbstract}'s {@link AppManifestAbstract#AppManifestAbstract(Builder) constructor}.
+     */
+    public static class Builder {
+
+
+        final List<Class<?>> modules = Lists.newArrayList();
+        List<Class<?>> additionalServices  = Lists.newArrayList();
+        String authMechanism = "shiro";
+        List<Class<? extends FixtureScript>> fixtures = Lists.newArrayList();
+
+        List<ConfigurationProperty> individualConfigProps = Lists.newArrayList();
+        List<PropertyResource> propertyResources = Lists.newArrayList();
+
+        private Map<String,String> configurationProperties = Maps.newHashMap();
+
+        private Builder() {}
+
+        /**
+         * Factory method.
+         */
+        public static Builder withModules(final List<Class<?>> modules) {
+            return new Builder().withAdditionalModules(modules);
+        }
+        public static Builder withModules(final Class<?>... modules) {
+            return withModules(Arrays.asList(modules));
+        }
+
+        public Builder withAdditionalModules(final Class<?>... modules) {
+            return withAdditionalModules(Arrays.asList(modules));
+        }
+
+        public Builder withAdditionalModules(final List<Class<?>> modules) {
+            if(modules == null) {
+                throw new IllegalArgumentException("List of modules must not be null");
             }
-        } catch (IOException e) {
-            throw new RuntimeException(
-                    String.format("Failed to load '%s' file ", propertiesFile), e);
+            this.modules.addAll(modules);
+            return this;
+        }
+
+        public Builder withAuthMechanism(final String authMechanism) {
+            this.authMechanism = authMechanism;
+            return this;
+        }
+
+        public Builder withAdditionalServices(final Class<?>... additionalServices) {
+            return withAdditionalServices(Arrays.asList(additionalServices));
+        }
+
+        public Builder withAdditionalServices(final List<Class<?>> additionalServices) {
+            if(additionalServices == null) {
+                throw new IllegalArgumentException("List of additional services must not be null");
+            }
+            this.additionalServices = Lists.newArrayList(additionalServices);
+            return this;
+        }
+
+        public Builder withFixtureScripts(final Class<? extends FixtureScript>... fixtures) {
+            return withFixtureScripts(Arrays.asList(fixtures));
+        }
+
+        public Builder withFixtureScripts(final List<Class<? extends FixtureScript>> fixtures) {
+            if(fixtures == null) {
+                throw new IllegalArgumentException("List of fixtures must not be null");
+            }
+            this.fixtures = Lists.newArrayList(fixtures);
+            return this;
+        }
+
+        public Builder withConfigurationProperties(final Map<String,String> configurationProperties) {
+            this.configurationProperties.putAll(configurationProperties);
+            return this;
+        }
+
+        public Builder withPropertiesFile(final String propertiesFile) {
+            return withPropertiesFile(propertiesFile, getClass());
+        }
+
+        public Builder withPropertiesFile(
+                final String propertiesFile,
+                final Class<?> propertiesFileContext) {
+            propertyResources.add(new PropertyResource(propertiesFileContext, propertiesFile));
+            return this;
+        }
+
+        public Builder withConfigurationProperty(final String key, final String value) {
+            individualConfigProps.add(new ConfigurationProperty(key,value));
+            return this;
+        }
+
+        public AppManifest build() {
+            return new AppManifestAbstract(this) {};
+        }
+
+    }
+
+    static class ConfigurationProperty {
+        private final String key;
+        private final String value;
+
+        ConfigurationProperty(final String key, final String value) {
+            this.key = key;
+            this.value = value;
+        }
+
+        void put(final Map<String, String> props) {
+            props.put(key, value);
         }
     }
 
+    static class PropertyResource {
+        private final Class<?> propertiesFileContext;
+        private final String propertiesFile;
+
+        PropertyResource(final Class<?> propertiesFileContext, final String propertiesFile) {
+            this.propertiesFileContext = propertiesFileContext;
+            this.propertiesFile = propertiesFile;
+        }
+
+        void loadPropsInto(
+                final Map<String, String> props) {
+            final Properties properties = new Properties();
+            try {
+                try (final InputStream stream = propertiesFileContext.getResourceAsStream(propertiesFile)) {
+                    properties.load(stream);
+                    for (Object key : properties.keySet()) {
+                        final Object value = properties.get(key);
+                        if (key instanceof String && value instanceof String) {
+                            props.put((String) key, (String) value);
+                        }
+                    }
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(
+                        String.format("Failed to load '%s' file ", this), e);
+            }
+        }
+    }
 }
