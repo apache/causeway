@@ -31,45 +31,17 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.applib.services.fixturespec.FixtureScriptsSpecification;
 import org.apache.isis.applib.services.fixturespec.FixtureScriptsSpecificationProvider;
-import org.apache.isis.core.integtestsupport.IntegrationTestAbstract;
+import org.apache.isis.core.integtestsupport.IntegrationTestAbstract2;
 import org.apache.isis.core.integtestsupport.IsisSystemForTest;
 import org.apache.isis.core.integtestsupport.scenarios.ScenarioExecutionForIntegration;
 
 import domainapp.modules.simple.SimpleModuleManifest;
 
-public abstract class SimpleModuleIntegTestAbstract extends IntegrationTestAbstract {
+public abstract class SimpleModuleIntegTestAbstract extends IntegrationTestAbstract2 {
 
     @BeforeClass
     public static void initSystem() {
-        org.apache.log4j.PropertyConfigurator.configure("logging-integtest.properties");
-        IsisSystemForTest isft = IsisSystemForTest.getElseNull();
-        if(isft == null) {
-            isft = new IsisSystemForTest.Builder()
-                    .withLoggingAt(org.apache.log4j.Level.INFO)
-                    .with(new SimpleModuleManifest() {
-                        @Override
-                        public Map<String, String> getConfigurationProperties() {
-                            final Map<String, String> map = Maps.newHashMap();
-                            Util.withJavaxJdoRunInMemoryProperties(map);
-                            Util.withDataNucleusProperties(map);
-                            Util.withIsisIntegTestProperties(map);
-                            // same as in isis.properties
-                            map.put("isis.objects.editing","false");
-                            return map;
-                        }
-
-                        @Override public List<Class<?>> getAdditionalServices() {
-                            return (List)Lists.newArrayList(ModuleFixtureScriptsSpecificationProvider.class);
-                        }
-                    })
-
-                    .build();
-            isft.setUpSystem();
-            IsisSystemForTest.set(isft);
-        }
-
-        // instantiating will install onto ThreadLocal
-        new ScenarioExecutionForIntegration();
+        bootstrapUsing(SimpleModuleManifest.BUILDER.withConfigurationProperty("isis.objects.editing","false"));
     }
 
     @DomainService(nature = NatureOfService.DOMAIN)

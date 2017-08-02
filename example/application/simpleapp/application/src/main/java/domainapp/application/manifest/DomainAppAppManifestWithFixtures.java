@@ -20,7 +20,7 @@ package domainapp.application.manifest;
 
 import java.util.List;
 
-import com.google.common.collect.Lists;
+import org.apache.isis.applib.fixturescripts.FixtureScript;
 
 import domainapp.modules.simple.fixture.scenario.CreateSimpleObjects;
 
@@ -29,12 +29,8 @@ import domainapp.modules.simple.fixture.scenario.CreateSimpleObjects;
  */
 public class DomainAppAppManifestWithFixtures extends DomainAppAppManifest {
 
-    public DomainAppAppManifestWithFixtures() {
-        this(null);
-    }
-
-    public DomainAppAppManifestWithFixtures(final String authMechanism) {
-        super((List)Lists.newArrayList(CreateSimpleObjects.class), authMechanism, null);
+    @Override protected void overrideFixtures(final List<Class<? extends FixtureScript>> fixtureScripts) {
+        fixtureScripts.add(CreateSimpleObjects.class);
     }
 
 }

@@ -28,7 +28,7 @@ import domainapp.dom.HelloWorldModule;
 public class HelloWorldAppManifest extends AppManifestAbstract {
 
     public HelloWorldAppManifest() {
-        super(Builder.withModules(HelloWorldModule.class)
+        super(Builder.forModules(HelloWorldModule.class)
                        .withPropertiesFile("isis-non-changing.properties"));
     }
 

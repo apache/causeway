@@ -194,11 +194,11 @@ public abstract class AppManifestAbstract implements AppManifest {
         /**
          * Factory method.
          */
-        public static Builder withModules(final List<Class<?>> modules) {
+        public static Builder forModules(final List<Class<?>> modules) {
             return new Builder().withAdditionalModules(modules);
         }
-        public static Builder withModules(final Class<?>... modules) {
-            return withModules(Arrays.asList(modules));
+        public static Builder forModules(final Class<?>... modules) {
+            return forModules(Arrays.asList(modules));
         }
 
         public Builder withAdditionalModules(final Class<?>... modules) {

@@ -23,7 +23,7 @@ package domainapp.application.manifest;
  */
 public class DomainAppAppManifestBypassSecurity extends DomainAppAppManifest {
 
-    public DomainAppAppManifestBypassSecurity() {
-        super(null, "bypass", null);
+    @Override protected String overrideAuthMechanism() {
+        return "bypass";
     }
 }

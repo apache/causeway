@@ -18,44 +18,17 @@
  */
 package domainapp.application.integtests;
 
-import java.util.Map;
-
-import com.google.common.collect.Maps;
-
 import org.junit.BeforeClass;
 
-import org.apache.isis.core.integtestsupport.IntegrationTestAbstract;
-import org.apache.isis.core.integtestsupport.IsisSystemForTest;
-import org.apache.isis.core.integtestsupport.scenarios.ScenarioExecutionForIntegration;
+import org.apache.isis.core.integtestsupport.IntegrationTestAbstract2;
 
 import domainapp.application.manifest.DomainAppAppManifest;
 
-public abstract class DomainAppIntegTestAbstract extends IntegrationTestAbstract {
+public abstract class DomainAppIntegTestAbstract extends IntegrationTestAbstract2 {
 
     @BeforeClass
     public static void initSystem() {
-        org.apache.log4j.PropertyConfigurator.configure("logging-integtest.properties");
-        IsisSystemForTest isft = IsisSystemForTest.getElseNull();
-        if(isft == null) {
-            isft = new IsisSystemForTest.Builder()
-                    .withLoggingAt(org.apache.log4j.Level.INFO)
-                    .with(new DomainAppAppManifest() {
-                        @Override
-                        public Map<String, String> getConfigurationProperties() {
-                            final Map<String, String> map = Maps.newHashMap();
-                            Util.withJavaxJdoRunInMemoryProperties(map);
-                            Util.withDataNucleusProperties(map);
-                            Util.withIsisIntegTestProperties(map);
-                            return map;
-                        }
-                    })
-                    .build();
-            isft.setUpSystem();
-            IsisSystemForTest.set(isft);
-        }
-
-        // instantiating will install onto ThreadLocal
-        new ScenarioExecutionForIntegration();
+        bootstrapUsing(new DomainAppAppManifest());
     }
 
 }

@@ -31,6 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.AppManifest;
+import org.apache.isis.applib.AppManifestAbstract;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.applib.services.xactn.TransactionService;
@@ -43,6 +44,14 @@ import org.apache.isis.objectstore.jdo.datanucleus.IsisConfigurationForJdoIntegT
 public abstract class IntegrationTestAbstract2 extends IntegrationTestAbstract {
 
     private static final Logger LOG = LoggerFactory.getLogger(IntegrationTestAbstract2.class);
+
+    /**
+     * Convenience, will call {@link AppManifestAbstract.Builder#build() build} on the provided
+     * {@link AppManifestAbstract.Builder Builder}, then delegate to {@link #bootstrapUsing(AppManifest)}.
+     */
+    protected static void bootstrapUsing(final AppManifestAbstract.Builder builder) {
+        bootstrapUsing(builder.build());
+    }
 
     /**
      * Intended to be called from the subclass' <code>@BeforeClass init()</code> method.
