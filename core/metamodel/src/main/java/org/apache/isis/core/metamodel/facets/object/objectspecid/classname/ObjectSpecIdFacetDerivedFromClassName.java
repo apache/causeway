@@ -28,6 +28,6 @@ public class ObjectSpecIdFacetDerivedFromClassName extends ObjectSpecIdFacetAbst
         this(cls.getCanonicalName(), holder);
     }
     public ObjectSpecIdFacetDerivedFromClassName(final String value, final FacetHolder holder) {
-        super(value, holder);
+        super(value, holder, Derivation.DERIVED);
     }
 }
