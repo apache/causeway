@@ -182,6 +182,13 @@ public class IsisJdoSupportImpl implements IsisJdoSupport {
 
     @Programmatic
     @Override
+    public <T> T executeQueryUnique(final Class<T> cls, final BooleanExpression expression) {
+        final TypesafeQuery<T> query = newTypesafeQuery(cls).filter(expression);
+        return executeUniqueAndClose(query);
+    }
+
+    @Programmatic
+    @Override
     public <T> TypesafeQuery<T> newTypesafeQuery(Class<T> cls) {
         return ((JDOPersistenceManager)getJdoPersistenceManager()).newTypesafeQuery(cls);
     }
@@ -191,6 +198,12 @@ public class IsisJdoSupportImpl implements IsisJdoSupport {
         final List<T> list = Lists.newArrayList(elements);
         query.closeAll();
         return list;
+    }
+
+    private static <T> T executeUniqueAndClose(final TypesafeQuery<T> query) {
+        final T result = query.executeUnique();
+        query.closeAll();
+        return result;
     }
 
     // //////////////////////////////////////
