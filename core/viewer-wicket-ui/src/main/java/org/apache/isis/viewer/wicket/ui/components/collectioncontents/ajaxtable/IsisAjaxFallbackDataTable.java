@@ -85,7 +85,17 @@ public class IsisAjaxFallbackDataTable<T, S> extends DataTable<T, S> {
 
         addBottomToolbar(new NoRecordsToolbar(this));
     }
-    
+
+    @Override
+    protected void onConfigure() {
+        super.onConfigure();
+    }
+
+    @Override
+    protected void onBeforeRender() {
+        super.onBeforeRender();
+    }
+
     @Override
     protected Item<T> newRowItem(final String id, final int index, final IModel<T> model)
     {
