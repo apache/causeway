@@ -104,6 +104,25 @@ public interface IsisJdoSupport {
     <T> List<T> executeQuery(final Class<T> cls, final BooleanExpression booleanExpression);
 
     /**
+     * To perform a common use-case of executing a (type-safe) query against the specified class,
+     * filtering a unique match using the provided {@link BooleanExpression}, then returning
+     * the result and closing the query.
+     *
+     * <p>
+     *     Typical usage:
+     *     <pre>
+     *          final QToDoItem q = QToDoItem.candidate();
+     *          return executeQueryUnique(ToDoItem.class,
+     *                              q.atPath.eq(atPath).and(
+     *                              q.description.eq(description))
+     *                              );
+     *     </pre>
+     * </p>
+     */
+    @Programmatic
+    <T> T executeQueryUnique(final Class<T> cls, final BooleanExpression booleanExpression);
+
+    /**
      * To support the execution of type-safe queries using DataNucleus' lower-level APIs
      * (eg for group by and so on).
      *
