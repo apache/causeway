@@ -34,7 +34,12 @@ public class DomainAppAppManifest extends AppManifestAbstract {
                     DomainAppApplicationModuleFixtureSubmodule.class,
                     DomainAppApplicationModuleServicesSubmodule.class
             )
-            .withPropertiesFile("isis-non-changing.properties", DomainAppAppManifest.class);
+            .withConfigurationPropertiesFile(DomainAppAppManifest.class,
+                    "isis.properties",
+                    "authentication_shiro.properties",
+                    "persistor_datanucleus.properties",
+                    "viewer_restfulobjects.properties", "viewer_wicket.properties"
+            );
 
     public DomainAppAppManifest() {
         super(BUILDER);

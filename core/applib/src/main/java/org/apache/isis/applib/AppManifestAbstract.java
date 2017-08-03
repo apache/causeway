@@ -247,15 +247,21 @@ public abstract class AppManifestAbstract implements AppManifest {
             return this;
         }
 
-        public Builder withPropertiesFile(final String propertiesFile) {
-            return withPropertiesFile(propertiesFile, getClass());
+        public Builder withConfigurationPropertiesFile(final String propertiesFile) {
+            return withConfigurationPropertiesFile(getClass(), propertiesFile);
         }
 
-        public Builder withPropertiesFile(
-                final String propertiesFile,
-                final Class<?> propertiesFileContext) {
-            propertyResources.add(new PropertyResource(propertiesFileContext, propertiesFile));
+        public Builder withConfigurationPropertiesFile(
+                final Class<?> propertiesFileContext, final String propertiesFile, final String... furtherPropertiesFiles) {
+            addPropertyResource(propertiesFileContext, propertiesFile);
+            for (final String otherFile : furtherPropertiesFiles) {
+                addPropertyResource(propertiesFileContext, otherFile);
+            }
             return this;
+        }
+
+        private void addPropertyResource(final Class<?> propertiesFileContext, final String propertiesFile) {
+            propertyResources.add(new PropertyResource(propertiesFileContext, propertiesFile));
         }
 
         public Builder withConfigurationProperty(final String key, final String value) {
