@@ -29,7 +29,7 @@ import domainapp.modules.simple.dom.impl.SimpleObjectRepository;
 
 @DomainObject(
         nature = Nature.VIEW_MODEL,
-        objectType = "homepage.HomePageViewModel"
+        objectType = "domainapp.application.services.homepage.HomePageViewModel"
 )
 public class HomePageViewModel {
 
