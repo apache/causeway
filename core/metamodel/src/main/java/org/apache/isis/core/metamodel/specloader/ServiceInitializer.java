@@ -112,6 +112,7 @@ public class ServiceInitializer {
             LOG.info("calling @PostConstruct on all domain services");
         }
 
+        Exception firstExceptionIfAny = null;
         for (final Map.Entry<Object, Method> entry : postConstructMethodsByService.entrySet()) {
             final Object service = entry.getKey();
             final Method method = entry.getValue();
@@ -124,11 +125,24 @@ public class ServiceInitializer {
             final int numParams = method.getParameterTypes().length;
             
             // unlike shutdown, we don't swallow exceptions; would rather fail early
-            if(numParams == 0) {
-                MethodExtensions.invoke(method, service);
-            } else {
-                MethodExtensions.invoke(method, service, new Object[] { props });
+            try {
+                if(numParams == 0) {
+                    MethodExtensions.invoke(method, service);
+                } else {
+                    MethodExtensions.invoke(method, service, new Object[] { props });
+                }
+            } catch(Exception ex) {
+                LOG.error(String.format(
+                            "@PostConstruct on %s#%s: failed",
+                            service.getClass().getName(), method.getName()),
+                        ex);
+                if(firstExceptionIfAny == null) {
+                    firstExceptionIfAny = ex;
+                }
             }
+        }
+        if(firstExceptionIfAny != null) {
+            throw new RuntimeException(firstExceptionIfAny);
         }
     }
 
@@ -152,7 +166,9 @@ public class ServiceInitializer {
                 MethodExtensions.invoke(method, service);
             } catch(Exception ex) {
                 // do nothing
-                LOG.warn("... @PreDestroy method threw exception - continuing anyway", ex);
+                LOG.warn(String.format(
+                        "@PreDestroy on %s#%s: failed, continuing anyway",
+                        service.getClass().getName(), method.getName()));
             }
         }
     }
