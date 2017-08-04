@@ -21,8 +21,6 @@ package org.apache.isis.applib;
 
 import java.util.List;
 
-import javax.inject.Inject;
-
 import com.google.common.base.Predicate;
 
 import org.apache.isis.applib.annotation.Programmatic;
@@ -30,6 +28,8 @@ import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.security.UserMemento;
 import org.apache.isis.applib.services.i18n.TranslatableString;
+import org.apache.isis.applib.services.registry.ServiceRegistry2;
+import org.apache.isis.applib.services.user.UserService;
 
 /**
  * Convenience super class for all classes that wish to interact with the
@@ -71,7 +71,10 @@ public abstract class AbstractContainedObject {
      * </p>
      *
      * @see DomainObjectContainer#newTransientInstance(Class)
+     *
+     * @deprecated - use {@link org.apache.isis.applib.services.factory.FactoryService#instantiate(Class)} or simply instantiate object directly and inject services using {@link ServiceRegistry2#injectServicesInto(Object)}.
      */
+    @Deprecated
     protected <T> T newTransientInstance(final Class<T> ofType) {
         return getContainer().newTransientInstance(ofType);
     }
@@ -90,7 +93,10 @@ public abstract class AbstractContainedObject {
      * </p>
      *
      * @see DomainObjectContainer#newViewModelInstance(Class, String)
+     *
+     * @deprecated - use JAXB view models, instantiated either using {@link org.apache.isis.applib.services.factory.FactoryService#instantiate(Class)} or simply instantiated directly with services injected using {@link ServiceRegistry2#injectServicesInto(Object)}.
      */
+    @Deprecated
     protected <T extends ViewModel> T newViewModelInstance(final Class<T> ofType, final String memento) {
         return getContainer().newViewModelInstance(ofType, memento);
     }
@@ -138,7 +144,10 @@ public abstract class AbstractContainedObject {
      * @see DomainObjectContainer#allInstances(Class, long...)
      *
      * @param range 2 longs, specifying 0-based start and count.
+     *
+     * @deprecated - use {@link org.apache.isis.applib.services.repository.RepositoryService#allInstances(Class, long...)}.
      */
+    @Deprecated
     protected <T> List<T> allInstances(final Class<T> ofType, long... range) {
         return getContainer().allInstances(ofType, range);
     }
@@ -171,14 +180,17 @@ public abstract class AbstractContainedObject {
      * @see #allMatches(Query)
      *
      * @param range 2 longs, specifying 0-based start and count.
+     *
+     * @deprecated - use {@link org.apache.isis.applib.services.repository.RepositoryService#allMatches(Class, Predicate, long...)}.
      */
+    @Deprecated
     @Programmatic
     protected <T> List<T> allMatches(final Class<T> ofType, final Predicate<? super T> predicate, long... range) {
         return getContainer().allMatches(ofType, predicate, range);
     }
     
     /**
-     * @deprecated - use {@link #allMatches(Class, Predicate, long...)} or (better) {@link #allMatches(Query)} instead
+     * @deprecated - use {@link org.apache.isis.applib.services.repository.RepositoryService#allMatches(Class, Predicate, long...)}.
      */
     @Deprecated
     protected <T> List<T> allMatches(final Class<T> ofType, final Filter<? super T> filter, long... range) {
@@ -212,7 +224,10 @@ public abstract class AbstractContainedObject {
      * @see DomainObjectContainer#allMatches(Class, Object, long...)
      *
      * @param range 2 longs, specifying 0-based start and count.
+     *
+     * @deprecated - convert to use {@link org.apache.isis.applib.services.repository.RepositoryService#allMatches(Query)}.
      */
+    @Deprecated
     protected <T> List<T> allMatches(final Class<T> ofType, final T pattern, long... range) {
         return getContainer().allMatches(ofType, pattern, range);
     }
@@ -243,7 +258,10 @@ public abstract class AbstractContainedObject {
      * @see DomainObjectContainer#allMatches(Class, String, long...)
      *
      * @param range 2 longs, specifying 0-based start and count.
+     *
+     * @deprecated - convert to use {@link org.apache.isis.applib.services.repository.RepositoryService#allMatches(Query)} instead
      */
+    @Deprecated
     protected <T> List<T> allMatches(final Class<T> ofType, final String title, long... range) {
         return getContainer().allMatches(ofType, title, range);
     }
@@ -263,7 +281,10 @@ public abstract class AbstractContainedObject {
      * </p>
      *
      * @see DomainObjectContainer#allMatches(Query)
+     *
+     * @deprecated - use {@link org.apache.isis.applib.services.repository.RepositoryService#allMatches(Query)}
      */
+    @Deprecated
     protected <T> List<T> allMatches(final Query<T> query) {
         return getContainer().allMatches(query);
     }
@@ -285,13 +306,16 @@ public abstract class AbstractContainedObject {
      * </p>
      *
      * @see DomainObjectContainer#firstMatch(Class, Predicate)
+     *
+     * @deprecated - use {@link org.apache.isis.applib.services.repository.RepositoryService#firstMatch(Class, Predicate)}
      */
+    @Deprecated
     protected <T> T firstMatch(final Class<T> ofType, final Predicate<T> predicate) {
         return getContainer().firstMatch(ofType, predicate);
     }
 
     /**
-     * @deprecated - use {@link #firstMatch(Class, Predicate)}
+     * @deprecated - use {@link org.apache.isis.applib.services.repository.RepositoryService#firstMatch(Class, Predicate)}
      */
     @Deprecated
     protected <T> T firstMatch(final Class<T> ofType, final Filter<T> filter) {
@@ -313,7 +337,10 @@ public abstract class AbstractContainedObject {
      * </p>
      *
      * @see DomainObjectContainer#firstMatch(Class, Object)
+     *
+     * @deprecated - convert to use {@link org.apache.isis.applib.services.repository.RepositoryService#firstMatch(Class, Predicate)} instead
      */
+    @Deprecated
     protected <T> T firstMatch(final Class<T> ofType, final T pattern) {
         return getContainer().firstMatch(ofType, pattern);
     }
@@ -333,7 +360,10 @@ public abstract class AbstractContainedObject {
      * </p>
      *
      * @see DomainObjectContainer#firstMatch(Class, String)
+     *
+     * @deprecated - convert to use {@link org.apache.isis.applib.services.repository.RepositoryService#firstMatch(Class, Predicate)} instead
      */
+    @Deprecated
     protected <T> T firstMatch(final Class<T> ofType, final String title) {
         return getContainer().firstMatch(ofType, title);
     }
@@ -352,7 +382,10 @@ public abstract class AbstractContainedObject {
      *
      * @see DomainObjectContainer#firstMatch(Query)
      * @see #uniqueMatch(Query)
+     *
+     * @deprecated - use {@link org.apache.isis.applib.services.repository.RepositoryService#firstMatch(Class, Predicate)}
      */
+    @Deprecated
     protected <T> T firstMatch(final Query<T> query) {
         return getContainer().firstMatch(query);
     }
@@ -379,13 +412,16 @@ public abstract class AbstractContainedObject {
      * </p>
      *
      * @see DomainObjectContainer#uniqueMatch(Class, Predicate)
+     *
+     * @deprecated - use {@link org.apache.isis.applib.services.repository.RepositoryService#uniqueMatch(Class, Predicate)}
      */
+    @Deprecated
     protected <T> T uniqueMatch(final Class<T> ofType, final Predicate<T> predicate) {
         return getContainer().uniqueMatch(ofType, predicate);
     }
 
     /**
-     * @deprecated - use {@link #uniqueMatch(Class, Predicate)}
+     * @deprecated - use {@link org.apache.isis.applib.services.repository.RepositoryService#uniqueMatch(Class, Predicate)}
      */
     @Deprecated
     protected <T> T uniqueMatch(final Class<T> ofType, final Filter<T> filter) {
@@ -411,7 +447,10 @@ public abstract class AbstractContainedObject {
      * </p>
      *
      * @see DomainObjectContainer#uniqueMatch(Class, String)
+     *
+     * @deprecated - convert to use {@link org.apache.isis.applib.services.repository.RepositoryService#uniqueMatch(Class, Predicate)} instead
      */
+    @Deprecated
     protected <T> T uniqueMatch(final Class<T> ofType, final String title) {
         return getContainer().uniqueMatch(ofType, title);
     }
@@ -438,7 +477,9 @@ public abstract class AbstractContainedObject {
      * </p>
      *
      * @see DomainObjectContainer#uniqueMatch(Class, Object)
+     * @deprecated - convert to use {@link org.apache.isis.applib.services.repository.RepositoryService#uniqueMatch(Class, Predicate)} instead
      */
+    @Deprecated
     protected <T> T uniqueMatch(final Class<T> ofType, final T pattern) {
         return getContainer().uniqueMatch(ofType, pattern);
     }
@@ -462,7 +503,10 @@ public abstract class AbstractContainedObject {
      *
      * @see #firstMatch(Query)
      * @see DomainObjectContainer#uniqueMatch(Query)
+     *
+     * @deprecated - use {@link org.apache.isis.applib.services.repository.RepositoryService#uniqueMatch(Query)}
      */
+    @Deprecated
     protected <T> T uniqueMatch(final Query<T> query) {
         return getContainer().uniqueMatch(query);
     }
@@ -514,7 +558,10 @@ public abstract class AbstractContainedObject {
      * </p>
      *
      * @see DomainObjectContainer#isPersistent(Object)
+     *
+     * @deprecated - use {@link org.apache.isis.applib.services.repository.RepositoryService#isPersistent(Object)}
      */
+    @Deprecated
     protected boolean isPersistent(final Object domainObject) {
         return getContainer().isPersistent(domainObject);
     }
@@ -544,7 +591,10 @@ public abstract class AbstractContainedObject {
      * @see #isPersistent(Object)
      * @see #persistIfNotAlready(Object)
      * @see DomainObjectContainer#persist(Object)
+     *
+     * @deprecated - use {@link org.apache.isis.applib.services.repository.RepositoryService#persist(Object)} or {@link org.apache.isis.applib.services.repository.RepositoryService#persistAndFlush(Object)}
      */
+    @Deprecated
     protected <T> T persist(final T transientDomainObject) {
         getContainer().persist(transientDomainObject);
         return transientDomainObject;
@@ -569,7 +619,10 @@ public abstract class AbstractContainedObject {
      * @see #isPersistent(Object)
      * @see #persist(Object)
      * @see {@link DomainObjectContainer#persistIfNotAlready(Object)}
+     *
+     * @deprecated - use {@link org.apache.isis.applib.services.repository.RepositoryService#persist(Object)} or {@link org.apache.isis.applib.services.repository.RepositoryService#persistAndFlush(Object)}
      */
+    @Deprecated
     protected <T> T persistIfNotAlready(final T domainObject) {
         getContainer().persistIfNotAlready(domainObject);
         return domainObject;
@@ -583,7 +636,10 @@ public abstract class AbstractContainedObject {
      * </p>
      *
      * @see DomainObjectContainer#remove(Object)
+     *
+     * @deprecated - use {@link org.apache.isis.applib.services.repository.RepositoryService#remove(Object)} or {@link org.apache.isis.applib.services.repository.RepositoryService#removeAndFlush(Object)}
      */
+    @Deprecated
     protected <T> T remove(final T persistentDomainObject) {
         getContainer().remove(persistentDomainObject);
         return persistentDomainObject;
@@ -596,8 +652,9 @@ public abstract class AbstractContainedObject {
      * The method simply delegates to the {@link DomainObjectContainer}.
      * </p>
      *
-     * @see DomainObjectContainer#removeIfNotAlready(Object)
+     * @deprecated - use {@link org.apache.isis.applib.services.repository.RepositoryService#remove(Object)} or {@link org.apache.isis.applib.services.repository.RepositoryService#removeAndFlush(Object)}
      */
+    @Deprecated
     protected <T> T removeIfNotAlready(final T persistentDomainObject) {
         getContainer().removeIfNotAlready(persistentDomainObject);
         return persistentDomainObject;
@@ -613,7 +670,10 @@ public abstract class AbstractContainedObject {
      * </p>
      *
      * @see DomainObjectContainer#informUser(String)
+     *
+     * @deprecated - use {@link org.apache.isis.applib.services.message.MessageService#informUser(String)}
      */
+    @Deprecated
     protected void informUser(final String message) {
         getContainer().informUser(message);
     }
@@ -626,7 +686,10 @@ public abstract class AbstractContainedObject {
      * </p>
      *
      * @see DomainObjectContainer#informUser(TranslatableString, Class, String)
+     *
+     * @deprecated - use {@link org.apache.isis.applib.services.message.MessageService#informUser(TranslatableString, Class, String)}
      */
+    @Deprecated
     protected void informUser(TranslatableString message, final Class<?> contextClass, final String contextMethod) {
         getContainer().informUser(message, contextClass, contextMethod);
     }
@@ -640,7 +703,10 @@ public abstract class AbstractContainedObject {
      * </p>
      *
      * @see DomainObjectContainer#warnUser(String)
+     *
+     * @deprecated - use {@link org.apache.isis.applib.services.message.MessageService#warnUser(String)}
      */
+    @Deprecated
     protected void warnUser(final String message) {
         getContainer().warnUser(message);
     }
@@ -654,7 +720,10 @@ public abstract class AbstractContainedObject {
      * </p>
      *
      * @see DomainObjectContainer#warnUser(TranslatableString, Class, String)
+     *
+     * @deprecated - use {@link org.apache.isis.applib.services.message.MessageService#warnUser(TranslatableString, Class, String)}
      */
+    @Deprecated
     protected void warnUser(TranslatableString message, final Class<?> contextClass, final String contextMethod) {
         getContainer().warnUser(message, contextClass, contextMethod);
     }
@@ -668,7 +737,10 @@ public abstract class AbstractContainedObject {
      * </p>
      *
      * @see DomainObjectContainer#raiseError(String)
+     *
+     * @deprecated - use {@link org.apache.isis.applib.services.message.MessageService#raiseError(String)}
      */
+    @Deprecated
     protected void raiseError(final String message) {
         getContainer().raiseError(message);
     }
@@ -682,7 +754,10 @@ public abstract class AbstractContainedObject {
      * </p>
      *
      * @see DomainObjectContainer#raiseError(TranslatableString, Class, String)
+     *
+     * @deprecated - use {@link org.apache.isis.applib.services.message.MessageService#raiseError(TranslatableString, Class, String)}
      */
+    @Deprecated
     protected String raiseError(TranslatableString message, final Class<?> contextClass, final String contextMethod) {
         return getContainer().raiseError(message, contextClass, contextMethod);
     }
@@ -697,19 +772,26 @@ public abstract class AbstractContainedObject {
      * </p>
      *
      * @see DomainObjectContainer#getUser()
+     *
+     * @deprecated - use {@link UserService#getUser()}
      */
+    @Deprecated
     protected UserMemento getUser() {
         return getContainer().getUser();
     }
 
     // //////////////////////////////////////
 
+    
     @javax.inject.Inject
     private DomainObjectContainer container;
 
     /**
      * This field is not persisted, nor displayed to the user.
+     *
+     * @deprecated
      */
+    @Deprecated
     protected DomainObjectContainer getContainer() {
         return this.container;
     }
