@@ -45,7 +45,9 @@ import org.apache.isis.applib.fixtures.FixtureType;
 import org.apache.isis.applib.fixtures.InstallableFixture;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.registry.ServiceRegistry2;
+import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.sessmgmt.SessionManagementService;
+import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.xactn.TransactionService;
 
@@ -998,6 +1000,12 @@ public abstract class FixtureScript
 
     @javax.inject.Inject
     protected ServiceRegistry2 serviceRegistry;
+
+    @javax.inject.Inject
+    protected RepositoryService repositoryService;
+
+    @javax.inject.Inject
+    protected UserService userService;
 
     @javax.inject.Inject
     protected WrapperFactory wrapperFactory;

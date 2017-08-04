@@ -28,6 +28,12 @@ import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.AppManifestAbstract;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.applib.fixturescripts.FixtureScripts;
+import org.apache.isis.applib.services.factory.FactoryService;
+import org.apache.isis.applib.services.registry.ServiceRegistry2;
+import org.apache.isis.applib.services.repository.RepositoryService;
+import org.apache.isis.applib.services.sessmgmt.SessionManagementService;
+import org.apache.isis.applib.services.user.UserService;
+import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.integtestsupport.scenarios.ScenarioExecutionForIntegration;
 import org.apache.isis.objectstore.jdo.datanucleus.IsisConfigurationForJdoIntegTests;
@@ -91,10 +97,28 @@ public abstract class IntegrationTestAbstract2 extends IntegrationTestAbstract {
     }
 
     @Inject
+    protected FixtureScripts fixtureScripts;
+
+    @Inject
+    protected FactoryService factoryService;
+
+    @javax.inject.Inject
+    protected ServiceRegistry2 serviceRegistry;
+
+    @Inject
+    RepositoryService repositoryService;
+
+    @javax.inject.Inject
+    protected UserService userService;
+
+    @javax.inject.Inject
+    protected WrapperFactory wrapperFactory;
+
+    @Inject
     protected TransactionService transactionService;
 
     @Inject
-    protected FixtureScripts fixtureScripts;
+    protected SessionManagementService sessionManagementService;
 
 }
 
