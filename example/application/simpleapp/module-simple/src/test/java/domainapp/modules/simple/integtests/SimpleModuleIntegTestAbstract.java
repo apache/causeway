@@ -28,8 +28,7 @@ public abstract class SimpleModuleIntegTestAbstract extends IntegrationTestAbstr
 
     @BeforeClass
     public static void initSystem() {
-        bootstrapUsing(new SimpleModuleManifest());
-        //bootstrapUsing(SimpleModuleManifest.BUILDER.withConfigurationProperty("isis.objects.editing","false"));
+        bootstrapUsing(SimpleModuleManifest.BUILDER.withConfigurationProperty("isis.objects.editing","false"));
     }
 
 }
