@@ -18,22 +18,9 @@
  */
 package domainapp.modules.simple.integtests;
 
-import java.util.List;
-import java.util.Map;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-
 import org.junit.BeforeClass;
 
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.fixturescripts.FixtureScripts;
-import org.apache.isis.applib.services.fixturespec.FixtureScriptsSpecification;
-import org.apache.isis.applib.services.fixturespec.FixtureScriptsSpecificationProvider;
 import org.apache.isis.core.integtestsupport.IntegrationTestAbstract2;
-import org.apache.isis.core.integtestsupport.IsisSystemForTest;
-import org.apache.isis.core.integtestsupport.scenarios.ScenarioExecutionForIntegration;
 
 import domainapp.modules.simple.SimpleModuleManifest;
 
@@ -41,15 +28,8 @@ public abstract class SimpleModuleIntegTestAbstract extends IntegrationTestAbstr
 
     @BeforeClass
     public static void initSystem() {
-        bootstrapUsing(SimpleModuleManifest.BUILDER.withConfigurationProperty("isis.objects.editing","false"));
+        bootstrapUsing(new SimpleModuleManifest());
+        //bootstrapUsing(SimpleModuleManifest.BUILDER.withConfigurationProperty("isis.objects.editing","false"));
     }
 
-    @DomainService(nature = NatureOfService.DOMAIN)
-    public static class ModuleFixtureScriptsSpecificationProvider implements FixtureScriptsSpecificationProvider {
-        @Override
-        public FixtureScriptsSpecification getSpecification() {
-            return FixtureScriptsSpecification.builder("domainapp.modules.simple").with(
-                    FixtureScripts.MultipleExecutionStrategy.EXECUTE_ONCE_BY_VALUE).build();
-        }
-    }
 }
