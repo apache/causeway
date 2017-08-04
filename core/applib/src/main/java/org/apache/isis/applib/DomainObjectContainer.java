@@ -28,15 +28,22 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.security.UserMemento;
+import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.i18n.TranslatableString;
+import org.apache.isis.applib.services.message.MessageService;
+import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.applib.services.user.UserService;
+import org.apache.isis.applib.services.xactn.TransactionService;
 
 /**
  * A domain service that acts as a framework's container for managing the 
  * domain objects, and which provides functionality to those domain objects
  * in order that they might interact or have knowledge of with the "outside world".
+ *
+ * @deprecated - use {@link MessageService}, {@link TitleService}, {@link RepositoryService}, {@link FactoryService}, {@link UserService}, {@link TransactionService}.
  */
+@Deprecated
 public interface DomainObjectContainer {
 
     //region > titleOf
@@ -127,7 +134,7 @@ public interface DomainObjectContainer {
      * 
      * @return  - is never used, always returns <tt>false</tt>.
      *
-     * @deprecated - use {@link EntityService#flushTransaction()}.
+     * @deprecated - use {@link TransactionService#flushTransaction()}.
      */
     @Programmatic
     @Deprecated
