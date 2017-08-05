@@ -109,7 +109,7 @@ For example, if releasing version `1.15.0`, the POM should read:
 ----
 <groupId>org.apache.isis.core</groupId>
 <artifactId>isis</artifactId>
-<version>1.16.0-SNAPSHOT</version>
+<version>1.15.0-SNAPSHOT</version>
 ----
 
 Also, check that there are no snapshot dependencies:
