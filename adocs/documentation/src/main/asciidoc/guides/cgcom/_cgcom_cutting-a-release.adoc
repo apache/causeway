@@ -12,16 +12,20 @@ The release process consists of:
 * Members of the Apache Isis PMC xref:../cgcom/cgcom.adoc#_cgcom_verifying-releases[verifying] and voting on the release
 * the release manager performing post-release tasks, for either a xref:../cgcom/cgcom.adoc#_cgcom_post-release-successful[successful] or an xref:../cgcom/cgcom.adoc#_cgcom_post-release-unsuccessful[unsuccessful] vote.
 
-Apache Isis itself consists of two separately releasable modules; relative to the link:https://git-wip-us.apache.org/repos/asf/isis/repo?p=isis.git;a=tree[source code root] there are:
+Apache Isis itself consists of three separately releasable modules; relative to the link:https://git-wip-us.apache.org/repos/asf/isis/repo?p=isis.git;a=tree[source code root] there are:
 
 * `core`
+* `component/example/archetypes/helloworld`
 * `component/example/archetypes/simpleapp`
 
-This section details the process for formally releasing Isis modules.  It describes the process for both `core` and then the archetype.  The subsequent sections describe how other committers can xref:../cgcom/cgcom.adoc#_cgcom_verifying-releases[verify a release] and how the release manager can then perform xref:../cgcom/cgcom.adoc#_cgcom_post-release[post-release] activities and set up for the next development iteration.
+This section details the process for formally releasing Isis modules.  It describes the process for both `core` and then the archetypes.
+The subsequent sections describe how other committers can xref:../cgcom/cgcom.adoc#_cgcom_verifying-releases[verify a release] and how the release manager can then perform xref:../cgcom/cgcom.adoc#_cgcom_post-release[post-release] activities and set up for the next development iteration.
 
-If you've not performed a release before, then note that there are some configuration xref:../cgcom/cgcom.adoc#_cgcom_release-process-prereqs[prerequisites] that must be configured first.  In particular, you'll need signed public/private keys, and the ASF Nexus staging repo inlocal `~/.m2/settings.xml` file.
+If you've not performed a release before, then note that there are some configuration xref:../cgcom/cgcom.adoc#_cgcom_release-process-prereqs[prerequisites] that must be configured first.
+In particular, you'll need signed public/private keys, and the ASF Nexus staging repo inlocal `~/.m2/settings.xml` file.
 
-These release notes using bash command line tools.  They should work on Linux and MacOS; for Windows, use mSysGit.
+These release notes using bash command line tools.
+They should work on Linux and MacOS; for Windows, use mSysGit.
 
 
 
@@ -29,19 +33,23 @@ These release notes using bash command line tools.  They should work on Linux an
 [[__cgcom_cutting-a-release_obtain-consensus]]
 == Obtain Consensus
 
-Before releasing `core`, ensure there is consensus on the xref:../../support.adoc#[dev mailing list] that this is the right time for a release. The discussion should include confirming the version number to be used, and to confirm content.
+Before releasing `core`, ensure there is consensus on the xref:../../support.adoc#[dev mailing list] that this is the right time for a release.
+The discussion should include confirming the version number to be used, and to confirm content.
 
-These discussions should also confirm the version number of the module being released. This should be in line with our xref:../cgcom/cgcom.adoc#_cgcom_versioning-policy[semantic versioning policy].
+These discussions should also confirm the version number of the module being released.
+This should be in line with our xref:../cgcom/cgcom.adoc#_cgcom_versioning-policy[semantic versioning policy].
 
 
-Make sure you have a JIRA ticket open against which to perform all commits.  In most cases a JIRA ticket will have been created at the beginning of the previous release cycle.
+Make sure you have a JIRA ticket open against which to perform all commits.
+In most cases a JIRA ticket will have been created at the beginning of the previous release cycle.
 
 
 
 [[__cgcom_cutting-a-release_set-environment-variables]]
 == Set environment variables
 
-We use environment variables to parameterize as many of the steps as possible.  For example:
+We use environment variables to parameterize as many of the steps as possible.
+For example:
 
 [source,bash]
 ----
@@ -57,7 +65,8 @@ export CATALINA_HOME=/c/java/apache-tomcat-8.0.30   # <3>
 env | grep ISIS | sort
 ----
 <1> adjust by platform
-<2> set to an "umbrella" ticket for all release activities.  (One should exist already, xref:../cgcom/cgcom.adoc#__cgcom_post-release-successful_update-jira_create-new-jira[created at] the beginning of the development cycle now completing).
+<2> set to an "umbrella" ticket for all release activities.
+(One should exist already, xref:../cgcom/cgcom.adoc#__cgcom_post-release-successful_update-jira_create-new-jira[created at] the beginning of the development cycle now completing).
 <3> adjust as required (Tomcat is used to smoke test the simpleapp archetype)
 
 Obviously, alter `$ISISDEV` and `$ISISREL` as required, and bump `$ISISRC` for re-releasing following an xref:../cgcom/cgcom.adoc#_cgcom_post-release-unsuccessful[unsuccessful] releases.
@@ -66,7 +75,8 @@ Obviously, alter `$ISISDEV` and `$ISISREL` as required, and bump `$ISISRC` for r
 ====
 Note that the branch name is *not* the same any of the eventual tag names (eg `isis-1.15.0` or `simpleapp-archetype-1.15.0`).
 
-If they did have the same name, then what would happen is that the `maven-release-plugin` would checkout the (HEAD of the) branch and thus upload a SNAPSHOT to the snapshot repository.  What it should of course do is checkout the tag and then upload that to the release staging repository.
+If they did have the same name, then what would happen is that the `maven-release-plugin` would checkout the (HEAD of the) branch and thus upload a SNAPSHOT to the snapshot repository.
+What it should of course do is checkout the tag and then upload that to the release staging repository.
 ====
 
 
@@ -74,7 +84,9 @@ If they did have the same name, then what would happen is that the `maven-releas
 [[__cgcom_cutting-a-release_pull-down-code-to-release]]
 == Pull down code to release
 
-Set the HEAD of your local git repo to the commit to be released.  This will usually be the tip of the origin's `master` branch.  Then, create a release branch for the version number being released; eg:
+Set the HEAD of your local git repo to the commit to be released.
+This will usually be the tip of the origin's `master` branch.
+Then, create a release branch for the version number being released; eg:
 
 [source,bash]
 ----
@@ -86,9 +98,12 @@ git checkout -b $ISISBRANCH
 All release preparation is done locally; if we are successful, this branch will be merged back into master.
 
 
-Double check that the version number of the parent pom should reflect the branch name that you are now on (with a `-SNAPSHOT` suffix).  his will normally have been done already during earlier development; but confirm that it has been updated. If it has not, make the change.
+Double check that the version number of the parent pom should reflect the branch name that you are now on (with a `-SNAPSHOT` suffix).
+his will normally have been done already during earlier development; but confirm that it has been updated.
+If it has not, make the change.
 
-Double check that the version number of the core POM (`core/pom.xml`) should reflect the branch name that you are now on.  For example, if releasing version `1.15.0`, the POM should read:
+Double check that the version number of the core POM (`core/pom.xml`) should reflect the branch name that you are now on.
+For example, if releasing version `1.15.0`, the POM should read:
 
 [source,xml]
 ----
@@ -116,7 +131,8 @@ Obviously, don't update Apache Isis' `SNAPSHOT` references; these get updated by
 [[__cgcom_cutting-a-release_releasing-core]]
 == Releasing Core
 
-First, we release `core`.  Switch to the appropriate directory:
+First, we release `core`.
+Switch to the appropriate directory:
 
 [source,bash]
 ----
@@ -141,7 +157,8 @@ env | grep ISIS | sort
 [[__cgcom_cutting-a-release_releasing-core_license-headers]]
 === License headers
 
-The Apache Release Audit Tool `RAT` (from the http://creadur.apache.org[Apache Creadur] project) checks for missing license header files. The parent `pom.xml` of each releasable module specifies the RAT Maven plugin, with a number of custom exclusions.
+The Apache Release Audit Tool `RAT` (from the http://creadur.apache.org[Apache Creadur] project) checks for missing license header files.
+The parent `pom.xml` of each releasable module specifies the RAT Maven plugin, with a number of custom exclusions.
 
 To run the RAT tool, use:
 
@@ -152,7 +169,10 @@ for a in `/bin/find . -name rat.txt -print`; do grep '!???' $a; done || \
 for a in `/bin/find . -name rat.txt -print`; do grep '!AL' $a; done
 ----
 
-where `rat.numUnapprovedLicenses` property is set to a high figure, temporarily overriding the default value of 0. This will allow the command to run over all submodules, rather than failing after the first one.   The command writes out a `target\rat.txt` for each submodule.  missing license notes are indicated using the key `!???`.  The `for` command collates all the errors.
+where `rat.numUnapprovedLicenses` property is set to a high figure, temporarily overriding the default value of 0.
+This will allow the command to run over all submodules, rather than failing after the first one.
+The command writes out a `target\rat.txt` for each submodule.  missing license notes are indicated using the key `!???`.
+The `for` command collates all the errors.
 
 Investigate and fix any reported violations, typically by either:
 
@@ -167,7 +187,8 @@ To add missing headers, use the groovy script `addmissinglicenses.groovy` (in th
 groovy ../scripts/addmissinglicenses.groovy -x
 ----
 
-(If the `-x` is omitted then the script is run in "dry run" mode).  Once you've fixed all issues, confirm once more that `apache-rat-plugin` no longer reports any license violations, this time leaving the `rat.numUnapprovedLicenses` property to its default, 0:
+(If the `-x` is omitted then the script is run in "dry run" mode).
+Once you've fixed all issues, confirm once more that `apache-rat-plugin` no longer reports any license violations, this time leaving the `rat.numUnapprovedLicenses` property to its default, 0:
 
 [source,bash]
 ----
@@ -179,9 +200,11 @@ for a in `find . -name rat.txt -print`; do grep '!???' $a; done
 [[__cgcom_cutting-a-release_releasing-core_missing-license-check]]
 === Missing License Check
 
-Although Apache Isis has no dependencies on artifacts with incompatible licenses, the POMs for some of these dependencies (in the Maven central repo) do not necessarily contain the required license information. Without appropriate additional configuration, this would result in the generated `DEPENDENCIES` file and generated Maven site indicating dependencies as having "unknown" licenses.
+Although Apache Isis has no dependencies on artifacts with incompatible licenses, the POMs for some of these dependencies (in the Maven central repo) do not necessarily contain the required license information.
+Without appropriate additional configuration, this would result in the generated `DEPENDENCIES` file and generated Maven site indicating dependencies as having "unknown" licenses.
 
-Fortunately, Maven allows the missing information to be provided by configuring the `maven-remote-resources-plugin`. This is stored in the `src/main/appended-resources/supplemental-models.xml` file, relative to the root of each releasable module.
+Fortunately, Maven allows the missing information to be provided by configuring the `maven-remote-resources-plugin`.
+This is stored in the `src/main/appended-resources/supplemental-models.xml` file, relative to the root of each releasable module.
 
 To capture the missing license information, use:
 
@@ -191,7 +214,8 @@ mvn license:download-licenses && \
 groovy ../scripts/checkmissinglicenses.groovy
 ----
 
-The Maven plugin creates a `license.xml` file in the `target/generated-resources` directory of each module.  The script then searches for these `licenses.xml` files, and compares them against the contents of the `supplemental-models.xml` file.
+The Maven plugin creates a `license.xml` file in the `target/generated-resources` directory of each module.
+The script then searches for these `licenses.xml` files, and compares them against the contents of the `supplemental-models.xml` file.
 
 For example, the output could be something like:
 
@@ -226,7 +250,8 @@ git commit -am "$ISISJIRA: updates to pom.xml etc for release"
 [[__cgcom_cutting-a-release_releasing-core_sanity-check]]
 === Sanity check
 
-Perform one last sanity check on the codebase.  Delete all Isis artifacts from your local Maven repo, then build using the `-o` offline flag:
+Perform one last sanity check on the codebase.
+Delete all Isis artifacts from your local Maven repo, then build using the `-o` offline flag:
 
 [source,bash]
 ----
@@ -238,7 +263,8 @@ mvn clean install -o
 [[__cgcom_cutting-a-release_releasing-core_release-prepare-dry-run]]
 === Release prepare "dry run"
 
-Most of the work is done using the `mvn release:prepare` goal.  Since this makes a lot of changes, we run it first in "dry run" mode; only if that works do we run the goal for real.
+Most of the work is done using the `mvn release:prepare` goal.
+Since this makes a lot of changes, we run it first in "dry run" mode; only if that works do we run the goal for real.
 
 Run the dry-run as follows:
 
@@ -262,7 +288,8 @@ Experiments in using `--batch-mode -Dgpg.passphrase=&quot;...&quot;` to fully au
 [[__cgcom_cutting-a-release_releasing-core_release-prepare-proper]]
 === Release prepare "proper"
 
-Assuming this completes successfully, re-run the command, but without the `dryRun` flag and specifying `resume=false` (to ignore the generated `release.properties` file that gets generated as a side-effect of using `git`). You can also set the `skipTests` flag since they would have been run during the previous dry run:
+Assuming this completes successfully, re-run the command, but without the `dryRun` flag and specifying `resume=false` (to ignore the generated `release.properties` file that gets generated as a side-effect of using `git`).
+You can also set the `skipTests` flag since they would have been run during the previous dry run:
 
 [source,bash]
 ----
@@ -319,9 +346,12 @@ popd
 [[__cgcom_cutting-a-release_releasing-core_release-perform-upload]]
 === Release perform (Upload)
 
-Once the release has been built locally, it should be uploaded for voting. This is done by deploying the Maven artifacts to a staging directory (this includes the source release ZIP file which will be voted upon).
+Once the release has been built locally, it should be uploaded for voting.
+This is done by deploying the Maven artifacts to a staging directory (this includes the source release ZIP file which will be voted upon).
 
-The Apache staging repository runs on Nexus server, hosted at https://repository.apache.org[repository.apache.org]. The process of uploading will create a staging repository that is associated with the host (IP address) performing the release. Once the repository is staged, the newly created staging repository is "closed" in order to make it available to others.
+The Apache staging repository runs on Nexus server, hosted at https://repository.apache.org[repository.apache.org].
+The process of uploading will create a staging repository that is associated with the host (IP address) performing the release.
+Once the repository is staged, the newly created staging repository is "closed" in order to make it available to others.
 
 Use:
 
@@ -331,7 +361,8 @@ mvn release:perform -P apache-release \
     -DworkingDirectory=$ISISTMP/$ISISART-$ISISREL/checkout
 ----
 
-The custom `workingDirectory` prevents file path issues if releasing on Windows.  The command checks out the codebase from the tag, then builds the artifacts, then uploads them to the Apache staging repository:
+The custom `workingDirectory` prevents file path issues if releasing on Windows.
+The command checks out the codebase from the tag, then builds the artifacts, then uploads them to the Apache staging repository:
 
 [source,bash]
 ----
@@ -359,7 +390,9 @@ re
 ...
 ----
 
-You may (again) be prompted for gpg passphrase.  All being well this command will complete successfully. Given that it is uploading code artifacts, it could take a while to complete.
+You may (again) be prompted for gpg passphrase.
+All being well this command will complete successfully.
+Given that it is uploading code artifacts, it could take a while to complete.
 
 
 
@@ -408,7 +441,8 @@ export ISISCPN=$(echo $ISISART | cut -d- -f1)
 
 env | grep ISIS | sort
 ----
-<1> `$ISISPAR` is the version of the Apache Isis core that will act as the archetype's parent. Usually this is the same as `$ISISREL`.
+<1> `$ISISPAR` is the version of the Apache Isis core that will act as the archetype's parent.
+Usually this is the same as `$ISISREL`.
 
 
 [[__cgcom_cutting-a-release_releasing-the-archetypes_simpleapp_check-the-example-app]]
@@ -544,7 +578,8 @@ mvn release:prepare -P apache-release \
 
 This is a good point to test the archetype; nothing has yet been uploaded.
 
-_In a different session_, create a new app from the archetype.  First set up environment variables:
+_In a different session_, create a new app from the archetype.
+First set up environment variables:
 
 [source,bash]
 ----
@@ -727,7 +762,8 @@ mvn release:prepare -P apache-release \
 
 This is a good point to test the archetype; nothing has yet been uploaded.
 
-_In a different session_, create a new app from the archetype.  First set up environment variables:
+_In a different session_, create a new app from the archetype.
+First set up environment variables:
 
 [source,bash]
 ----
@@ -874,14 +910,16 @@ And use the following body:
 
 [source,bash]
 ----
-I've cut a release for Apache Isis Core and the simpleapp archetype:
+I've cut a release for Apache Isis Core and the two archetypes:
 
 * Core 1.15.0
+* HelloWorld Archetype 1.15.0
 * SimpleApp Archetype 1.15.0
 
 The source code artifacts have been uploaded to staging repositories on repository.apache.org:
 
 * http://repository.apache.org/content/repositories/orgapacheisis-10xx/org/apache/isis/core/isis/1.15.0/isis-1.15.0-source-release.zip
+* http://repository.apache.org/content/repositories/orgapacheisis-10xx/org/apache/isis/archetype/helloworld-archetype/1.15.0/helloworld-archetype-1.15.0-source-release.zip
 * http://repository.apache.org/content/repositories/orgapacheisis-10xx/org/apache/isis/archetype/simpleapp-archetype/1.15.0/simpleapp-archetype-1.15.0-source-release.zip
 
 For each zip there is a corresponding signature file (append .asc to the zip's url).
