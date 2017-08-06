@@ -1,0 +1,674 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: 2016-06-16 15:34:40+\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+
+#: org.apache.isis.applib.services.metamodel.MetaModelServicesMenu#downloadMetaModel(java.lang.String)
+msgid ".csv file name"
+msgstr ""
+
+
+#: org.apache.isis.core.metamodel.services.jdosupport.Persistable_downloadJdoMetadata#$$(java.lang.String)
+msgid ".jdo file name"
+msgstr ""
+
+
+#: org.apache.isis.core.runtime.services.i18n.po.TranslationServicePoMenu#downloadTranslations(java.lang.String)
+msgid ".pot file name"
+msgstr ""
+
+
+#: org.apache.isis.applib.services.appfeat.ApplicationMemberType#ACTION
+msgid "Action"
+msgstr ""
+
+
+#: org.apache.isis.core.runtime.system.session.IsisSessionFactoryBuilder
+msgid "Are you sure?"
+msgstr "Weet je het zeker?"
+
+
+#: org.apache.isis.viewer.wicket.ui.pages.login.WicketSignInPage
+msgid "AutoLabel.CSS.required"
+msgstr ""
+
+
+#: org.apache.isis.core.runtime.system.session.IsisSessionFactoryBuilder
+msgid "Cancel"
+msgstr "Annuleer"
+
+
+#: domainapp.app.services.homepage.HomePageViewModel#clearHints()
+#: domainapp.dom.simple.SimpleObject#clearHints()
+msgid "Clear Hints"
+msgstr ""
+
+
+#: org.apache.isis.core.runtime.services.i18n.po.TranslationServicePoMenu#resetTranslationCache()
+msgid "Clear translation cache"
+msgstr ""
+
+
+#: org.apache.isis.applib.services.appfeat.ApplicationMemberType#COLLECTION
+msgid "Collection"
+msgstr ""
+
+
+#: org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage
+msgid "CollectionContentsAsAjaxTablePanelFactory.Table"
+msgstr "Table"
+
+
+#: org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage
+msgid "CollectionContentsAsUnresolvedPanel.Hide"
+msgstr "Hide"
+
+
+#: org.apache.isis.applib.services.layout.LayoutService$Style#COMPLETE
+msgid "Complete"
+msgstr ""
+
+
+#: org.apache.isis.applib.services.config.ConfigurationServiceMenu#configuration()
+msgid "Configuration"
+msgstr ""
+
+
+#: org.apache.isis.core.runtime.system.session.IsisSessionFactoryBuilder
+msgid "Confirm"
+msgstr "Bevestigen"
+
+
+#: domainapp.dom.simple.SimpleObjects#create()
+msgid "Create"
+msgstr "Creëren"
+
+
+#: org.apache.isis.applib.services.layout.LayoutService$Style#CURRENT
+msgid "Current"
+msgstr ""
+
+
+#: domainapp.dom.simple.SimpleObject#delete()
+msgid "Delete"
+msgstr ""
+
+
+#: domainapp.dom.simple.SimpleObject#downloadJdoMetadata()
+msgid "Download Jdo Metadata"
+msgstr ""
+
+
+#: domainapp.app.services.homepage.HomePageViewModel#downloadLayoutXml()
+#: domainapp.dom.simple.SimpleObject#downloadLayoutXml()
+msgid "Download Layout Xml"
+msgstr ""
+
+
+#: org.apache.isis.applib.services.layout.LayoutServiceMenu#downloadLayouts()
+msgid "Download Layouts (XML)"
+msgstr ""
+
+
+#: org.apache.isis.applib.services.metamodel.MetaModelServicesMenu#downloadMetaModel()
+msgid "Download Meta Model (CSV)"
+msgstr ""
+
+
+#: org.apache.isis.applib.services.swagger.SwaggerServiceMenu#downloadSwaggerSpec()
+msgid "Download Swagger Spec"
+msgstr ""
+
+
+#: org.apache.isis.core.runtime.services.i18n.po.TranslationServicePoMenu#downloadTranslations()
+msgid "Download Translations"
+msgstr ""
+
+
+#: org.apache.isis.applib.services.dto.Dto_downloadXml#$$(java.lang.String)
+#: org.apache.isis.applib.services.dto.Dto_downloadXsd#$$(java.lang.String,org.apache.isis.applib.services.jaxb.JaxbService$IsisSchemas)
+#: org.apache.isis.applib.services.layout.Object_downloadLayoutXml#$$(java.lang.String,org.apache.isis.applib.services.layout.LayoutService$Style)
+msgid "File name"
+msgstr ""
+
+
+#: domainapp.dom.simple.SimpleObject#updateName()
+msgid "Exclamation mark is not allowed"
+msgstr ""
+
+
+#: org.apache.isis.applib.services.swagger.SwaggerServiceMenu#downloadSwaggerSpec(java.lang.String,org.apache.isis.applib.services.swagger.SwaggerService$Visibility,org.apache.isis.applib.services.swagger.SwaggerService$Format)
+msgid "Filename"
+msgstr ""
+
+
+#: domainapp.dom.simple.SimpleObjects#findByName()
+msgid "Find By Name"
+msgstr "Zoek op Naam"
+
+
+#: org.apache.isis.applib.fixturescripts.FixtureResult#fixtureScriptClassName
+msgid "Fixture script"
+msgstr ""
+
+
+#: domainapp.fixture.scenarios.RecreateSimpleObjects#friendlyName
+#: org.apache.isis.applib.fixturescripts.FixtureScript#friendlyName
+msgid "Friendly Name"
+msgstr ""
+
+
+#: domainapp.dom.simple.SimpleObject
+msgid "General"
+msgstr "Algemeen"
+
+
+#: domainapp.app.services.homepage.HomePageService#homePage()
+msgid "Home Page"
+msgstr ""
+
+
+#: domainapp.dom.simple.SimpleObject#datanucleusIdLong()
+#: org.apache.isis.core.metamodel.services.jdosupport.Persistable_datanucleusIdLong#$$()
+msgid "Id"
+msgstr ""
+
+
+#: org.apache.isis.applib.annotation.SemanticsOf#IDEMPOTENT
+msgid "Idempotent"
+msgstr ""
+
+
+#: org.apache.isis.applib.annotation.SemanticsOf#IDEMPOTENT_ARE_YOU_SURE
+msgid "Idempotent Are You Sure"
+msgstr "Weet je het zeker?"
+
+
+#: org.apache.isis.applib.services.jaxb.JaxbService$IsisSchemas#IGNORE
+msgid "Ignore"
+msgstr ""
+
+
+#: org.apache.isis.applib.services.jaxb.JaxbService$IsisSchemas#INCLUDE
+msgid "Include"
+msgstr ""
+
+
+#: org.apache.isis.applib.services.swagger.SwaggerService$Format#JSON
+msgid "Json"
+msgstr "JSON"
+
+
+#: org.apache.isis.applib.services.config.ConfigurationProperty#key
+msgid "Key"
+msgstr ""
+
+
+#: domainapp.dom.simple.SimpleObjects#listAll()
+msgid "List All"
+msgstr "Lijst Alle"
+
+
+#: org.apache.isis.applib.services.bookmark.BookmarkHolderActionContributions#lookup()
+msgid "Lookup"
+msgstr ""
+
+
+#: domainapp.dom.simple.SimpleObject
+#: org.apache.isis.applib.services.layout.Object_downloadLayoutXml
+#: org.apache.isis.applib.services.layout.Object_rebuildMetamodel
+#: org.apache.isis.core.metamodel.services.jdosupport.Persistable_datanucleusIdLong
+#: org.apache.isis.core.metamodel.services.jdosupport.Persistable_datanucleusVersionLong
+#: org.apache.isis.core.metamodel.services.jdosupport.Persistable_datanucleusVersionTimestamp
+#: org.apache.isis.core.metamodel.services.jdosupport.Persistable_downloadJdoMetadata
+#: org.apache.isis.viewer.wicket.viewer.services.Object_clearHints
+msgid "Metadata"
+msgstr ""
+
+
+#: org.apache.isis.applib.services.layout.LayoutService$Style#MINIMAL
+msgid "Minimal"
+msgstr ""
+
+
+#: domainapp.dom.simple.SimpleObject
+#: domainapp.dom.simple.SimpleObject#name
+#: domainapp.dom.simple.SimpleObject#updateName(java.lang.String)
+#: domainapp.dom.simple.SimpleObjects#create(java.lang.String)
+#: domainapp.dom.simple.SimpleObjects#findByName(java.lang.String)
+msgid "Name"
+msgstr "Naam"
+
+
+#: org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureFactory#newApplicationFeature()
+msgid "New Application Feature"
+msgstr ""
+
+
+#: org.apache.isis.applib.annotation.SemanticsOf#NON_IDEMPOTENT
+msgid "Non Idempotent"
+msgstr ""
+
+
+#: org.apache.isis.applib.annotation.SemanticsOf#NON_IDEMPOTENT_ARE_YOU_SURE
+msgid "Non Idempotent Are You Sure"
+msgstr ""
+
+
+#: org.apache.isis.applib.services.layout.LayoutService$Style#NORMALIZED
+msgid "Normalized"
+msgstr ""
+
+
+#: domainapp.fixture.scenarios.RecreateSimpleObjects#number
+msgid "Number"
+msgstr ""
+
+
+#: org.apache.isis.applib.services.bookmark.BookmarkHolderAssociationContributions#object()
+msgid "Object"
+msgstr ""
+
+
+#: domainapp.dom.simple.SimpleObject#title()
+msgid "Object: {name}"
+msgstr ""
+
+
+#: domainapp.app.services.homepage.HomePageViewModel#objects
+msgid "Objects"
+msgstr ""
+
+
+#: org.apache.isis.applib.fixturescripts.FixtureScripts#runFixtureScript(org.apache.isis.applib.fixturescripts.FixtureScript,java.lang.String)
+#: org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault#runFixtureScript(org.apache.isis.applib.fixturescripts.FixtureScript,java.lang.String)
+#: org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault#runFixtureScriptWithAutoComplete(org.apache.isis.applib.fixturescripts.FixtureScript,java.lang.String)
+msgid "Parameters"
+msgstr ""
+
+
+#: org.apache.isis.applib.services.swagger.SwaggerService$Visibility#PRIVATE
+msgid "Private"
+msgstr ""
+
+
+#: org.apache.isis.applib.services.swagger.SwaggerService$Visibility#PRIVATE_WITH_PROTOTYPING
+msgid "Private With Prototyping"
+msgstr ""
+
+
+#: org.apache.isis.applib.services.appfeat.ApplicationMemberType#PROPERTY
+msgid "Property"
+msgstr ""
+
+
+#: org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault
+#: org.apache.isis.applib.services.layout.LayoutServiceMenu
+#: org.apache.isis.applib.services.metamodel.MetaModelServicesMenu
+#: org.apache.isis.applib.services.swagger.SwaggerServiceMenu
+#: org.apache.isis.core.runtime.services.i18n.po.TranslationServicePoMenu
+msgid "Prototyping"
+msgstr ""
+
+
+#: org.apache.isis.applib.services.swagger.SwaggerService$Visibility#PUBLIC
+msgid "Public"
+msgstr ""
+
+
+#: domainapp.app.services.homepage.HomePageViewModel#rebuildMetamodel()
+#: domainapp.dom.simple.SimpleObject#rebuildMetamodel()
+msgid "Rebuild Metamodel"
+msgstr ""
+
+
+#: org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault#recreateObjectsAndReturnFirst()
+msgid "Recreate Objects And Return First"
+msgstr ""
+
+
+#: org.apache.isis.applib.fixturescripts.FixtureResult#object
+msgid "Result"
+msgstr ""
+
+
+#: org.apache.isis.applib.fixturescripts.FixtureResult#className
+msgid "Result class"
+msgstr ""
+
+
+#: org.apache.isis.applib.fixturescripts.FixtureResult#key
+msgid "Result key"
+msgstr ""
+
+
+#: org.apache.isis.applib.fixturescripts.FixtureScripts#runFixtureScript()
+#: org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault#runFixtureScript()
+#: org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault#runFixtureScriptWithAutoComplete()
+msgid "Run Fixture Script"
+msgstr ""
+
+
+#: org.apache.isis.applib.annotation.SemanticsOf#SAFE
+msgid "Safe"
+msgstr ""
+
+
+#: org.apache.isis.applib.annotation.SemanticsOf#SAFE_AND_REQUEST_CACHEABLE
+msgid "Safe And Request Cacheable"
+msgstr ""
+
+
+#: domainapp.fixture.scenarios.RecreateSimpleObjects
+#: org.apache.isis.applib.fixturescripts.FixtureScript
+msgid "Script"
+msgstr ""
+
+
+#: org.apache.isis.applib.fixturescripts.FixtureScripts#runFixtureScript(org.apache.isis.applib.fixturescripts.FixtureScript,java.lang.String)
+#: org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault#runFixtureScript(org.apache.isis.applib.fixturescripts.FixtureScript,java.lang.String)
+#: org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault#runFixtureScriptWithAutoComplete(org.apache.isis.applib.fixturescripts.FixtureScript,java.lang.String)
+msgid "Script-specific parameters (if any).  The format depends on the script implementation (eg key=value, CSV, JSON, XML etc)"
+msgstr ""
+
+
+#: domainapp.dom.simple.SimpleObjects#title()
+msgid "Simple Objects"
+msgstr "Eenvoudige Objecten"
+
+
+#: org.apache.isis.core.runtime.services.i18n.po.TranslationServicePoMenu#switchToReadingTranslations()
+msgid "Switch To Reading Translations"
+msgstr ""
+
+
+#: org.apache.isis.core.runtime.services.i18n.po.TranslationServicePoMenu#switchToWritingTranslations()
+msgid "Switch To Writing Translations"
+msgstr ""
+
+
+#: domainapp.dom.simple.SimpleObject#updateName()
+msgid "Update Name"
+msgstr "Updaten Naam"
+
+
+#: org.apache.isis.applib.services.config.ConfigurationProperty#value
+msgid "Value"
+msgstr ""
+
+
+#: domainapp.dom.simple.SimpleObject#datanucleusVersionLong()
+#: domainapp.dom.simple.SimpleObject#datanucleusVersionTimestamp()
+#: org.apache.isis.core.metamodel.services.jdosupport.Persistable_datanucleusVersionLong#$$()
+#: org.apache.isis.core.metamodel.services.jdosupport.Persistable_datanucleusVersionTimestamp#$$()
+msgid "Version"
+msgstr ""
+
+
+#: org.apache.isis.applib.services.swagger.SwaggerService$Format#YAML
+msgid "Yaml"
+msgstr "YAML"
+
+
+#: org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage
+msgid "aboutLabel"
+msgstr "About"
+
+
+#: org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage
+msgid "cancelLabel"
+msgstr "Cancel"
+
+
+#: domainapp.dom.simple.SimpleObject
+msgid "datanucleusIdLong"
+msgstr "Id"
+
+
+#: org.wicketstuff.select2.Select2Choice
+msgid "inputTooShortPlural"
+msgstr "Please enter {number} more characters"
+
+
+#: org.wicketstuff.select2.Select2Choice
+msgid "inputTooShortSingular"
+msgstr "Please enter 1 more character"
+
+
+#: org.wicketstuff.select2.Select2Choice
+msgid "loadMore"
+msgstr "Load more"
+
+
+#: org.apache.isis.viewer.wicket.ui.pages.login.WicketSignInPage
+msgid "loginHeader"
+msgstr "Login"
+
+
+#: org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage
+msgid "logoutLabel"
+msgstr "Logout"
+
+
+#: domainapp.dom.simple.SimpleObject
+msgid "name"
+msgstr ""
+
+
+#: org.wicketstuff.select2.Select2Choice
+msgid "noMatches"
+msgstr "No matches"
+
+
+#: domainapp.app.services.homepage.HomePageViewModel
+msgid "objects"
+msgstr "Objects"
+
+
+#: org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage
+msgid "okLabel"
+msgstr "OK"
+
+
+#: org.apache.isis.viewer.wicket.ui.pages.login.WicketSignInPage
+msgid "passwordLabel"
+msgstr "Password"
+
+
+#: org.apache.isis.viewer.wicket.ui.pages.login.WicketSignInPage
+msgid "rememberMeLabel"
+msgstr "Remember Me"
+
+
+#: org.apache.isis.viewer.wicket.ui.pages.login.WicketSignInPage
+msgid "resetButtonLabel"
+msgstr "Reset"
+
+
+#: org.wicketstuff.select2.Select2Choice
+msgid "searching"
+msgstr "Searching..."
+
+
+#: org.wicketstuff.select2.Select2Choice
+msgid "selectionTooBigPlural"
+msgstr "You can only select {limit} items"
+
+
+#: org.wicketstuff.select2.Select2Choice
+msgid "selectionTooBigSingular"
+msgstr "You can only select 1 item"
+
+
+#: org.apache.isis.viewer.wicket.ui.pages.login.WicketSignInPage
+msgid "signInButtonLabel"
+msgstr "Sign in"
+
+
+#: org.apache.isis.viewer.wicket.ui.pages.login.WicketSignInPage
+msgid "usernameLabel"
+msgstr "Username"
+
+
+#: domainapp.app.services.homepage.HomePageViewModel#title()
+msgid "{num} objects"
+msgstr ""
+
+
+#: org.apache.isis.viewer.wicket.ui.pages.accmngt.signup.RegistrationFormPage
+#: org.apache.isis.viewer.wicket.ui.pages.accmngt.register.RegisterPage
+#: org.apache.isis.viewer.wicket.ui.pages.accmngt.password_reset.PasswordResetPage
+msgid "confirmPasswordLabel"
+msgstr "Confirm password"
+
+
+#: org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage
+msgid "datatable.no-records-found"
+msgstr "No Records Found"
+
+
+#: org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage
+msgid "editLabel"
+msgstr "Edit"
+
+
+#: org.apache.isis.viewer.wicket.ui.pages.accmngt.signup.RegistrationFormPage
+#: org.apache.isis.viewer.wicket.ui.pages.accmngt.register.RegisterPage
+msgid "emailIsNotAvailable"
+msgstr "The given email is already in use"
+
+
+#: org.apache.isis.viewer.wicket.ui.pages.accmngt.password_reset.PasswordResetPage
+msgid "emailPlaceholder"
+msgstr "Enter your email"
+
+
+#: org.apache.isis.viewer.wicket.ui.pages.accmngt.signup.RegistrationFormPage
+#: org.apache.isis.viewer.wicket.ui.pages.accmngt.register.RegisterPage
+msgid "emailPlaceholder"
+msgstr "Enter an email for the new account"
+
+
+#: org.apache.isis.viewer.wicket.ui.pages.accmngt.signup.RegistrationFormPage
+#: org.apache.isis.viewer.wicket.ui.pages.accmngt.register.RegisterPage
+#: org.apache.isis.viewer.wicket.ui.pages.accmngt.password_reset.PasswordResetPage
+msgid "emailLabel"
+msgstr "Email"
+
+
+#: org.apache.isis.viewer.wicket.ui.pages.accmngt.signup.RegistrationFormPage
+#: org.apache.isis.viewer.wicket.ui.pages.accmngt.register.RegisterPage
+#: org.apache.isis.viewer.wicket.ui.pages.accmngt.password_reset.PasswordResetPage
+msgid "emailSentMessage"
+msgstr "An email has been sent to '${email}' for verification."
+
+
+#: org.apache.isis.viewer.wicket.ui.pages.login.WicketSignInPage
+msgid "forgotPasswordLinkLabel"
+msgstr "Forgot your password?"
+
+
+#: org.apache.isis.viewer.wicket.ui.pages.accmngt.password_reset.PasswordResetPage
+msgid "passwordChangeSuccessful"
+msgstr "The password has been changed successfully. You can <a class=\"alert-success\" style=\"text-decoration:underline;\" href=\"${signInUrl}\">login</a> now."
+
+
+#: org.apache.isis.viewer.wicket.ui.pages.accmngt.password_reset.PasswordResetPage
+msgid "passwordChangeUnsuccessful"
+msgstr "There was a problem while updating the password. Please try again."
+
+
+#: org.apache.isis.viewer.wicket.ui.pages.accmngt.signup.RegistrationFormPage
+#: org.apache.isis.viewer.wicket.ui.pages.accmngt.register.RegisterPage
+#: org.apache.isis.viewer.wicket.ui.pages.accmngt.password_reset.PasswordResetPage
+msgid "passwordLabel"
+msgstr "Password"
+
+
+#: org.apache.isis.viewer.wicket.ui.pages.accmngt.signup.RegistrationFormPage
+#: org.apache.isis.viewer.wicket.ui.pages.accmngt.register.RegisterPage
+#: org.apache.isis.viewer.wicket.ui.pages.login.WicketSignInPage
+#: org.apache.isis.viewer.wicket.ui.pages.accmngt.password_reset.PasswordResetPage
+msgid "passwordPlaceholder"
+msgstr "Enter password"
+
+
+#: org.apache.isis.viewer.wicket.ui.pages.accmngt.password_reset.PasswordResetPage
+msgid "passwordResetExpiredOrInvalidToken"
+msgstr "You are trying to reset the password for an expired or invalid token"
+
+
+#: org.apache.isis.viewer.wicket.ui.pages.accmngt.password_reset.PasswordResetPage
+msgid "passwordResetHeader"
+msgstr "Forgot password"
+
+
+#: org.apache.isis.viewer.wicket.ui.pages.accmngt.password_reset.PasswordResetPage
+msgid "passwordResetSubmitLabel"
+msgstr "Submit"
+
+
+#: org.apache.isis.viewer.wicket.ui.pages.login.WicketSignInPage
+msgid "registerButtonLabel"
+msgstr "Register"
+
+
+#: org.apache.isis.viewer.wicket.ui.pages.accmngt.register.RegisterPage
+msgid "registerHeader"
+msgstr "Register"
+
+
+#: org.apache.isis.viewer.wicket.ui.pages.accmngt.password_reset.PasswordResetPage
+msgid "noSuchUserByEmail"
+msgstr "There is no account with this email"
+
+
+#: org.apache.isis.viewer.wicket.ui.pages.accmngt.password_reset.PasswordResetPage
+msgid "noUserForAnEmailValidToken"
+msgstr "The account seems to be either already deleted or has changed its email address. Please try again."
+
+
+#: org.apache.isis.viewer.wicket.ui.pages.login.WicketSignInPage
+msgid "signUpButtonLabel"
+msgstr "Don't have an account? Sign up now."
+
+
+#: org.apache.isis.viewer.wicket.ui.pages.accmngt.signup.RegistrationFormPage
+#: org.apache.isis.viewer.wicket.ui.pages.accmngt.register.RegisterPage
+#: org.apache.isis.viewer.wicket.ui.pages.accmngt.password_reset.PasswordResetPage
+msgid "signUpButtonLabel"
+msgstr "Verify email"
+
+
+#: org.apache.isis.viewer.wicket.ui.pages.accmngt.signup.RegistrationFormPage
+msgid "signUpHeader"
+msgstr "Sign Up"
+
+
+#: org.apache.isis.viewer.wicket.ui.pages.accmngt.signup.RegistrationFormPage
+#: org.apache.isis.viewer.wicket.ui.pages.accmngt.register.RegisterPage
+#: org.apache.isis.viewer.wicket.ui.pages.accmngt.password_reset.PasswordResetPage
+msgid "usernameIsNotAvailable"
+msgstr "The provided username is already in use"
+
+
+#: org.apache.isis.viewer.wicket.ui.pages.accmngt.signup.RegistrationFormPage
+#: org.apache.isis.viewer.wicket.ui.pages.accmngt.register.RegisterPage
+#: org.apache.isis.viewer.wicket.ui.pages.accmngt.password_reset.PasswordResetPage
+msgid "usernameLabel"
+msgstr "Username"
+
+
+#: org.apache.isis.viewer.wicket.ui.pages.accmngt.signup.RegistrationFormPage
+#: org.apache.isis.viewer.wicket.ui.pages.accmngt.register.RegisterPage
+#: org.apache.isis.viewer.wicket.ui.pages.login.WicketSignInPage
+#: org.apache.isis.viewer.wicket.ui.pages.accmngt.password_reset.PasswordResetPage
+msgid "usernamePlaceholder"
+msgstr "Username"
+

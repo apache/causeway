@@ -1,0 +1,72 @@
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+//  Licensed to the Apache Software Foundation (ASF) under one
+//  or more contributor license agreements.  See the NOTICE file
+//  distributed with this work for additional information
+//  regarding copyright ownership.  The ASF licenses this file
+//  to you under the Apache License, Version 2.0 (the
+//          "License"); you may not use this file except in compliance
+//  with the License.  You may obtain a copy of the License at
+//
+//  http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing,
+//  software distributed under the License is distributed on an
+//  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+//  KIND, either express or implied.  See the License for the
+//  specific language governing permissions and limitations
+//  under the License.
+//
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+// this gradle script compiles and enhances the dom classes.
+//
+// The script is intended to be used in conjunction with IntelliJ IDEA, to remove the necessity to run the DataNucleus
+// enhancer immediately before running the app, and therefore reduce the turn-around time.  The script is run as
+// in the background as a daemon while editing/developing; whenever a change is made to any source code, gradle will
+// automatically compile *and* enhance the code.
+//
+// To use, just type:
+//
+//      gradle -t --offline &
+//
+// It is also necessary to disable the IntelliJ's automatic building of the 'dom' project.  This is done using:
+//
+//      File > Settings > Build, Execution, Deployment > Compiler > Excludes
+//
+// and then exclude the .../dom/src/main/java directory
+//
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+defaultTasks 'compileJava', 'copyClasses'
+
+apply plugin: 'java'
+apply plugin: 'tangram.tools'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+version = (new XmlParser()).parse('pom.xml').parent.version.text()
+
+buildscript {
+  repositories {
+    maven { url "http://oss.jfrog.org/artifactory/oss-snapshot-local" }
+    jcenter()
+  }
+  dependencies {
+    classpath 'tangram:gradle-plugin:1.1.2'
+  }
+}
+repositories {
+    mavenLocal()
+    maven { url "http://oss.jfrog.org/artifactory/oss-snapshot-local" }
+    jcenter()
+}
+dependencies {
+    compile group: 'org.apache.isis.core', name: 'isis-core-applib', version: '1.14.0-SNAPSHOT'
+}
+task copyClasses << {
+    copy {
+        from 'build/classes/main'
+        into 'target/classes'
+    }
+}
