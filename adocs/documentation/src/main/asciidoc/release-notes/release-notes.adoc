@@ -24,9 +24,9 @@ This table summarises all releases of Apache Isis to date.
 | xref:r1.15.0[1.15.0]
 | (currently in development)
 | Inline prompts, Wicket 7.x
-|
-|
-|
+| 7
+| 25
+| 34
 |
 
 | xref:r1.14.0[1.14.0]
