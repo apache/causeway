@@ -38,8 +38,9 @@ public class DomainAppAppManifest extends AppManifestAbstract {
                     "isis.properties",
                     "authentication_shiro.properties",
                     "persistor_datanucleus.properties",
-                    "viewer_restfulobjects.properties", "viewer_wicket.properties"
-            );
+                    "viewer_restfulobjects.properties",
+                    "viewer_wicket.properties"
+            ).withAuthMechanism("shiro");
 
     public DomainAppAppManifest() {
         super(BUILDER);

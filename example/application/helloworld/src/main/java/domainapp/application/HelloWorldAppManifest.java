@@ -29,7 +29,8 @@ public class HelloWorldAppManifest extends AppManifestAbstract {
 
     public static final Builder BUILDER = Builder
             .forModules(HelloWorldModule.class)
-            .withConfigurationPropertiesFile(HelloWorldAppManifest.class, "isis.properties");
+            .withConfigurationPropertiesFile(HelloWorldAppManifest.class, "isis.properties")
+            .withAuthMechanism("shiro");
 
     public HelloWorldAppManifest() {
         super(BUILDER);
