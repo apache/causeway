@@ -7,8 +7,14 @@
 
 This section describes how to implement the `AppManifest` interface to bootstrap both an Apache Isis web application, and also its integration tests.
 
+[TIP]
+====
+(As of `1.15.0-SNAPSHOT`), the framework-provided `AppManifestAbstract` and `AppManifestAbstract.Builder` make it easy to write ``AppManifest`` that can be used both to bootstrap the application "proper", and to be tweaked for use within integration tests.
+====
 
 
+
+[[__rgcms_classes_AppManifest-bootstrapping_api]]
 == API
 
 
@@ -38,6 +44,7 @@ The following sections describe each of these methods in a little more detail.
 
 
 
+[[__rgcms_classes_AppManifest-bootstrapping_api_getModules]]
 === `getModules()`
 
 The most significant method (the only one which must return a non-`null` value) is the `getModules()` method.
@@ -84,6 +91,7 @@ public List<Class<?>> getModules() {
 As can be seen, the various (non-ASF) link:http://www.isisaddons.org[Isis Addons] modules also each provide a module class that can be easily referenced.
 
 
+[[__rgcms_classes_AppManifest-bootstrapping_api_getAdditionalServices]]
 === `getAdditionalServices()`
 
 We normally we recommend that services are defined exclusively through `getModules()`, and that this method should therefore return an empty list.
@@ -106,6 +114,7 @@ If this method returns a non-`null` value, then it overrides the value of `isis.
 
 
 
+[[__rgcms_classes_AppManifest-bootstrapping_api_getAuthenticationMechanism]]
 === `getAuthenticationMechanism()`
 
 If non-`null`, this method specifies the authentication mechanism to use.
@@ -121,6 +130,7 @@ This property is ignored for integration tests (which always uses the `"bypass"`
 
 
 
+[[__rgcms_classes_AppManifest-bootstrapping_api_getAuthorizationMechanism]]
 === `getAuthorizationMechanism()`
 
 If non-`null`, this method specifies the authorization mechanism to use.
@@ -137,6 +147,7 @@ This property is ignored for integration tests (which always uses the `"bypass"`
 
 
 
+[[__rgcms_classes_AppManifest-bootstrapping_api_getFixtures]]
 === `getFixtures()`
 
 If non-`null`, this method specifies the fixture script(s) to be run on startup.
@@ -159,6 +170,7 @@ This can most easily be done using the `getConfigurationProperties()` method, di
 
 
 
+[[__rgcms_classes_AppManifest-bootstrapping_api_getConfigurationProperties]]
 === `getConfigurationProperties()`
 
 This method allow arbitrary other configuration properties to be overridden.
@@ -176,10 +188,7 @@ public Map<String, String> getConfigurationProperties() {
 
 
 
-
-
-
-
+[[__rgcms_classes_AppManifest-bootstrapping_bootstrapping]]
 == Bootstrapping
 
 One of the primary goals of the `AppManifest` is to unify the bootstrapping of both integration tests and the webapp.
@@ -193,116 +202,123 @@ This will allow the architectural layering of the overall application to be enfo
 
 What then remains is to update the bootstrapping code itself.
 
+There are several different contexts in which the framework needs to be bootstrapped:
 
-
-
-=== Integration Tests
-
-A `AppManifest.Util` helper class provides a number of static methods that can be used to set up configuration properties appropriate for integration testing (eg run using an in-memory database).
-This allows the responsibility of returning the configuration properties to belong exlusively to the `AppManifest`.
-
-There are three such static methods:
-
-[source,java]
-----
-public interface AppManifest {
-  ...
-  public static class Util {
-    public static Map<String,String> 
-        withJavaxJdoRunInMemoryProperties(Map<String, String> map) { ... }   // <1>
-    public static Map<String,String> 
-        withDataNucleusProperties(Map<String, String> map) { ... }           // <2>
-    public static Map<String,String> 
-        withIsisIntegTestProperties(Map<String, String> map) { ... }         // <3>
-  }
-}
-----
-<1> sets up the `javax.jdo.option.Connection*` properties so as to run against an in-memory instance of HSQLDB
-<2> sets up DataNucleus to automatically create the databse schema, as well as a number of other standard properties
-(disable persistence by reachability, support mixed case identifiers, disable level 2 cache)
-<3> sets up standard properties for the Apache Isis framework, most specifically to enable fixtures to be installed.
-
-For example, the bootstrapping code for the xref:../ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype] looks something like:
-
-[source,java]
-----
-public class DomainAppSystemInitializer {
-    public static void initIsft() {
-        IsisSystemForTest isft = IsisSystemForTest.getElseNull();
-        if(isft == null) {
-            isft = new IsisSystemForTest.Builder()
-                    .withLoggingAt(org.apache.log4j.Level.INFO)
-                    .with(new DomainAppAppManifest() {
-                        @Override
-                        public Map<String, String> getConfigurationProperties() {
-                            final Map<String, String> map = Maps.newHashMap();
-                            Util.withJavaxJdoRunInMemoryProperties(map);
-                            Util.withDataNucleusProperties(map);
-                            Util.withIsisIntegTestProperties(map);
-                            return map;
-                        }
-                    })
-                    .build();
-            isft.setUpSystem();
-            IsisSystemForTest.set(isft);
-        }
-    }
-}
-----
-
-
-Previously the `IsisConfigurationJdoIntegTests` (subclass of `IsisConfiguration`) was provided to set up these configuration properties.
-This class is still supported, but is deprecated.
-
-
-
-=== Webapps
-
-To bootstrap an Apache Isis webapp (using the xref:../ugvw/ugvw.adoc#[Wicket viewer]), there are two choices:
-
-* either specify the `AppManifest` by overriding the `IsisWicketApplication#newWicketModule()`, eg: +
-+
-[source,java]
-----
-@Override
-protected Module newIsisWicketModule() {
-    final Module isisDefaults = super.newIsisWicketModule();
-    ...
-    final Module overrides = new AbstractModule() {
-        @Override
-        protected void configure() {
-            ...
-            bind(AppManifest.class).toInstance(new MyAppAppManifest());
-        }
-    };
-    return Modules.override(isisDefaults).with(overrides);
-}
-----
-
-* alternatively update `isis.properties`, using the `isis.appManifest` key to specify the `AppManifest` implementation, eg: +
+* the first is as a "regular" webapp (using the xref:../ugvw/ugvw.adoc#[Wicket viewer]).
+Here the `AppManifest` just needs to be specified as a configuration property, usually done using the `WEB-INF/isis.properties` configuration file: +
 +
 [source,ini]
 ----
 isis.appManifest=domainapp.app.MyAppAppManifest
 ----
 
-The first (programmatic) approach takes precedence over the second approach (configuration properties).
-
-[TIP]
-====
-If you use the `org.apache.isis.WebServer` class to launch your application from the xref:../ugbtb/ugbtb.adoc#_ugbtb_deployment_cmd-line[command line], then note that you can specify the `AppManifest` using the `-m` (or `--manifest`) flag:
-
+* the second is also as a webapp, but from within the context of the IDE. +
++
+Here, it's common to use the `org.apache.isis.WebServer` class to launch your application from the xref:../ugbtb/ugbtb.adoc#_ugbtb_deployment_cmd-line[command line].
+This allows the `AppManifest` to be specified using the `-m` (or `--manifest`) flag: +
++
 [source,ini]
 ----
 java org.apache.isis.WebServer -m com.mycompany.myapp.MyAppAppManifestWithFixtures
 ----
 
-====
+* the third case is within an integration test. +
++
+The code to boostrap an integration test is shown in the xref:../ugtst/ugtst.adoc#_ugtst_integ-test-support_bootstrapping[testing guide], but once again an `AppManifest` is required.
+
+In some cases an integration test uses the exact same `AppManifest` as the regular webapp.
+Sometimes though it is necessary to "tweak" the `AppManifest`:
+
+* it might use additional services, such as services to mock out external dependencies, or to provide fake data
+
+* it might override certain configuration properties, eg to run against an in-memory HSQLDB database.
+
+The next section describes some helper classes that (as of `1.15.0-SNAPSHOT`) the framework provides to help achieve this.
+
+
+[[__rgcms_classes_AppManifest-bootstrapping_bootstrapping_AppManifestAbstract]]
+=== AppManifestAbstract (`1.15.0-SNAPSHOT`)
+
+(As of `1.15.0-SNAPSHOT`), the `AppManifestAbstract` and its associated builder (`AppManifestAbstract.Builder`) make it easy to bootstrap the application both as a webapp and also as an integration test.
+
+Rather than implement `AppManifest` interface directly, instead your application subclasses from `AppManifestAbstract`.
+This takes an instance of a `AppManifestAbstract.Builder` in its constructor; the builder is what allows for variation between environments.
+
+Moreover, these classes recognise that configuration properties fall into two broad classes:
+
+* those that are fixed and do not change between environments. +
++
+In other words these describe how the application chooses to configure the framework itself, eg global disable of editing of properties, or enabling of auditing.
+
+* those that change between environments. +
++
+The classic example here is the JDBC URL.
+
+For example, the xref:../ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype]'s `AppManifest` is defined as:
+
+[source,java]
+----
+public class DomainAppAppManifest extends AppManifestAbstract {
+
+    public static final Builder BUILDER = Builder.forModules(
+                    SimpleModuleDomSubmodule.class,                         // <1>
+                    DomainAppApplicationModuleFixtureSubmodule.class,
+                    DomainAppApplicationModuleServicesSubmodule.class
+            )
+            .withConfigurationPropertiesFile(DomainAppAppManifest.class,    // <2>
+                    "isis.properties",
+                    "authentication_shiro.properties",
+                    "persistor_datanucleus.properties",
+                    "viewer_restfulobjects.properties",
+                    "viewer_wicket.properties"
+            ).withAuthMechanism("shiro");                                   // <3>
+
+    public DomainAppAppManifest() {
+        super(BUILDER);                                                     // <4>
+    }
+}
+----
+<1> the modules that make up the application; corresponds to `AppManifest#getModules()`
+<2> the (non-changing with environment) set of configuration properties, loaded relative to the manifest itself;  corresponds to `AppManifest#getConfigurationProperties()`
+<3> override of components; correponds to both `AppManifest#getAuthenticationMechanism()` and `AppManifest#getAuthorizationMechanism()`
+<4> Pass the builder up to the superclass.
+
+If the integration tests requires no tweaking, then the `AppManifest` can be used directly, for example:
+
+[source,java]
+----
+public abstract class DomainAppIntegTestAbstract extends IntegrationTestAbstract2 {
+    @BeforeClass
+    public static void initSystem() {
+        bootstrapUsing(new DomainAppAppManifest());
+    }
+}
+----
+
+On the other hand, if tweaking is required then exposing the builder as a `public static` field makes this easy to do:
+
+[source,java]
+----
+public abstract class DomainAppIntegTestAbstract extends IntegrationTestAbstract2 {
+    @BeforeClass
+    public static void initSystem() {
+        bootstrapUsing(DomainAppAppManifest.BUILDER
+                            .withAdditionalModules(...)
+                            .withAdditionalServices(...)
+                            .withConfigurationPropertiesFile("...")
+                            .withConfigurationProperty("...","...")
+                            .build()
+        );
+    }
+}
+----
 
 
 
 
 
+
+[[__rgcms_classes_AppManifest-bootstrapping_subsidiary-goals]]
 == Subsidiary Goals
 
 There are a number of subsidiary goals of the `AppManifest` class (though not all of these are fully implemented):
