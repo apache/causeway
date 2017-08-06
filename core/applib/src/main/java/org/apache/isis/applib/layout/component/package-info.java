@@ -18,6 +18,22 @@
  */
 
 /**
+ * The classes in this package provide layout metadata for a domain object's properties, collections and actions - the
+ * &quot;building blocks&quot; which then must be arranged into some sort of layout.
+ *
+ * <p>
+ *     The <code>bootstrap3</code> and <code>fixedcols</code> packages both provide different ways of doing the layout,
+ *     and both reference the classes in this package.
+ * </p>
  *
  */
+@javax.xml.bind.annotation.XmlSchema(
+        namespace = "http://isis.apache.org/applib/layout/component",
+        elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED,
+        xmlns = {
+                @javax.xml.bind.annotation.XmlNs(
+                        namespaceURI = "http://isis.apache.org/applib/layout/component", prefix = "cpt")
+        }        // specifying the location seems to cause JaxbService#toXsd() to not generate the schema; not sure why...
+        //, location = ..."http://isis.apache.org/schema/metamodel/layout/common/common.xsd"
+)
 package org.apache.isis.applib.layout.component;
