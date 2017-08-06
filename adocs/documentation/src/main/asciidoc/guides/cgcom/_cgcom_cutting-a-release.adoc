@@ -638,7 +638,7 @@ Start by switching to the directory containing the `helloworld` example:
 
 [source,bash]
 ----
-cd ../example/application/helloworld
+cd ../../../example/application/helloworld
 ----
 
 [[__cgcom_cutting-a-release_releasing-the-archetypes_helloworld_setup-environment-variables]]
@@ -877,12 +877,13 @@ and also push tags for both core and the archetype:
 ----
 git push origin refs/tags/isis-$ISISREL:refs/tags/isis-$ISISREL-$ISISRC
 git push origin refs/tags/simpleapp-archetype-$ISISREL:refs/tags/simpleapp-archetype-$ISISREL-$ISISRC
+git push origin refs/tags/helloworld-archetype-$ISISREL:refs/tags/helloworld-archetype-$ISISREL-$ISISRC
 git fetch
 ----
 
 [NOTE]
 ====
-The remote tag isn't visible locally but can be seen https://git-wip-us.apache.org/repos/asf/isis/repo?p=isis.git;a=summary[online].
+The remote tags aren't visible locally but can be seen https://git-wip-us.apache.org/repos/asf/isis/repo?p=isis.git;a=summary[online].
 ====
 
 
@@ -924,7 +925,7 @@ The source code artifacts have been uploaded to staging repositories on reposito
 
 For each zip there is a corresponding signature file (append .asc to the zip's url).
 
-In the source code repo the code has been tagged as isis-1.15.0-RC1 and simpleapp-archetype-1.15.0-RC1; see https://git-wip-us.apache.org/repos/asf?p=isis.git
+In the source code repo the code has been tagged as isis-1.15.0-RC1, helloworld-archetype-1.15.0-RC1 and simpleapp-archetype-1.15.0-RC1; see https://git-wip-us.apache.org/repos/asf?p=isis.git
 
 For instructions on how to verify the release (build from binaries and/or use in Maven directly), see http://isis.apache.org/guides/cgcom.html#_cgcom_verifying-releases
 
