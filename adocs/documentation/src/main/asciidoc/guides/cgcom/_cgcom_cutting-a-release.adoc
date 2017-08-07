@@ -520,8 +520,16 @@ popd
 mvn install -Dmavenmixin-docker -D docker-plugin.imageName=test/simpleapp
 docker container run -p 8080:8080 -d test/simpleapp
 ----
++
+[NOTE]
+====
+On Windows, you may need to enable the Docker daemon first, otherwise the "mvn install" command above will fail:
+
+image::{_imagesdir}docker-daemon.png[width="600px",link="{_imagesdir}docker-daemon.png"]
+====
 
 This too should be accessed at link:http://localhost:8080[localhost:8080].
+
 
 [TIP]
 ====
