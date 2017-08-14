@@ -6,11 +6,6 @@
 :toc: right
 
 
-[NOTE]
-====
-Apache Isis 1.15.0-SNAPSHOT is currently still in development
-====
-
 
 The main new feature is inline prompts: the ability to edit a property or invoke an action (associated with a property) without requiring a modal dialog box.
 There have also been several improvements in the ability to tab around the UI.

@@ -17,11 +17,11 @@ At the time of writing the addons available are:
 
 * link:http://github.com/isisaddons/isis-wicket-gmap3[Gmap3] component - to view a collection of domain objects with a location on a google map
 
-* (`1.15.0-SNAPSHOT`) link:http://github.com/isisaddons/isis-wicket-pdfjs[pdf.js] component - to view a Blob containing a PDF as an image
+* link:http://github.com/isisaddons/isis-wicket-pdfjs[pdf.js] component - to view a Blob containing a PDF as an image
 
 * link:http://github.com/isisaddons/isis-wicket-summernote[summernote] component - to edit a string property using an RTF editor
 
-** (not yet compatible with `1.15.0-SNAPSHOT`)
+** (not yet compatible with `1.15.0`)
 
 * link:http://github.com/isisaddons/isis-wicket-wickedcharts[wickedcharts] component - low-level integration with Highcharts charting library
 

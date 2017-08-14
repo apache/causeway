@@ -579,23 +579,40 @@ table.CodeRay td.code>pre{padding:0}
         <div class="col-sm-12">
          <h4>Getting started</h4>
          <br/>
-         <p>Start developing your own Apache Isis application using our <a href="guides/ugfun/ugfun.html#_ugfun_getting-started_simpleapp-archetype">simpleapp archetype</a>.  With the *nix bash shell, use:</p>
+         <p>Start developing your own Apache Isis application using either the minimal <a href="guides/ugfun/ugfun.html#_ugfun_getting-started_helloworld-archetype">helloworld archetype</a> or alternatively with the more structured <a href="guides/ugfun/ugfun.html#_ugfun_getting-started_simpleapp-archetype">simpleapp archetype</a>.  With the *nix bash shell, use:</p>
         </div>
        </div>
        <div class="row">
-        <div class="col-sm-12">
+        <div class="col-sm-6">
+         <div class=panel>
+                <pre>
+mvn archetype:generate  \
+    -D archetypeGroupId=org.apache.isis.archetype \
+    -D archetypeArtifactId=helloworld-archetype \
+    -D archetypeVersion=1.15.0 \
+    -D groupId=com.mycompany \
+    -D artifactId=myapp \
+    -D version=1.0-SNAPSHOT \
+    -B</pre>
+         </div>
+        </div>
+        <div class="col-sm-6">
          <div class=panel>
                 <pre>
 mvn archetype:generate  \
     -D archetypeGroupId=org.apache.isis.archetype \
     -D archetypeArtifactId=simpleapp-archetype \
-    -D archetypeVersion=1.14.0 \
+    -D archetypeVersion=1.15.0 \
     -D groupId=com.mycompany \
     -D artifactId=myapp \
     -D version=1.0-SNAPSHOT \
     -B</pre>
-          <p>Adjust as necessary if using Windows `cmd.exe` or Powershell.</p>
          </div>
+        </div>
+       </div>
+       <div class="row">
+        <div class="col-sm-12">
+          <p>Adjust as necessary if using Windows `cmd.exe` or Powershell.</p>
         </div>
        </div>
 

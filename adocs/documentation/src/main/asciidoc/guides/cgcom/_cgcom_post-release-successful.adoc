@@ -26,7 +26,7 @@ Post the results to the `dev@isis.a.o` mailing list:
 
 [source,bash]
 ----
-[RESULT] [VOTE] Apache Isis Core release 1.15.0
+[RESULT] [VOTE] Apache Isis Core release 1.16.0
 ----
 
 using the body (alter last line as appropriate):
@@ -54,9 +54,9 @@ You can do this using the `scripts/promoterctag.sh` script; for example:
 
 [source,bash]
 ----
-sh scripts/promoterctag.sh isis-1.15.0 RC1
-sh scripts/promoterctag.sh helloworld-archetype-1.15.0 RC1
-sh scripts/promoterctag.sh simpleapp-archetype-1.15.0 RC1
+sh scripts/promoterctag.sh isis-1.16.0 RC1
+sh scripts/promoterctag.sh helloworld-archetype-1.16.0 RC1
+sh scripts/promoterctag.sh simpleapp-archetype-1.16.0 RC1
 ----
 
 This script pushes the tag under `refs/tags/rel`.  As per Apache policy (communicated on 10th Jan 2016 to Apache PMCs),
@@ -187,7 +187,7 @@ popd
 
 [source,bash]
 ----
-sh upd.sh 1.15.0 1.16.0
+sh upd.sh 1.16.0 1.17.0
 ----
 
 The script downloads the artifacts from the Nexus release repository, adds the artifacts to subversion and deletes the previous version.
@@ -221,7 +221,7 @@ From the root directory, generate the release notes for the current release, in 
 
 [source,bash]
 ----
-sh scripts/jira-release-notes.sh ISIS 1.15.0 > /tmp/1
+sh scripts/jira-release-notes.sh ISIS 1.16.0 > /tmp/1
 ----
 
 
@@ -288,14 +288,14 @@ For example, for a release of Apache Isis Core, use the following subject:
 
 [source,bash]
 ----
-[ANN] Apache Isis version 1.15.0 Released
+[ANN] Apache Isis version 1.16.0 Released
 ----
 
 And use the following body (summarizing the main points as required):
 
 [source]
 ----
-The Apache Isis team is pleased to announce the release of Apache Isis v1.15.0.
+The Apache Isis team is pleased to announce the release of Apache Isis v1.16.0.
 
 New features in this release include:
 * ...
@@ -309,8 +309,8 @@ Enjoy!
 
 --The Apache Isis team
 
-[1] http://isis.apache.org/release-notes.html#r1.15.0
-[2] http://isis.apache.org/migration-notes.html#_migration-notes_1.14.0-to-1.15.0
+[1] http://isis.apache.org/release-notes.html#r1.16.0
+[2] http://isis.apache.org/migration-notes.html#_migration-notes_1.15.0-to-1.16.0
 [3] http://search.maven.org
 [4] http://isis.apache.org/downloads.html
 ----
@@ -335,13 +335,13 @@ Because we release from a branch, the changes made in the branch (changes to `po
 ----
 git checkout master                           # update master with latest
 git pull
-git merge release-1.15.0-RC1                  # merge branch onto master
-git push origin --delete release-1.15.0-RC1   # remote branch no longer needed
-git branch -d release-1.15.0-RC1              # branch no longer needed
+git merge release-1.16.0-RC1                  # merge branch onto master
+git push origin --delete release-1.16.0-RC1   # remote branch no longer needed
+git branch -d release-1.16.0-RC1              # branch no longer needed
 ----
 
 
-Finally, update helloworld's `pom.xml` and simpleapp's root `pom.xml` to reference the next SNAPSHOT release (`1.16.0-SNAPSHOT`)
+Finally, update helloworld's `pom.xml` and simpleapp's root `pom.xml` to reference the next SNAPSHOT release (`1.17.0-SNAPSHOT`)
 
 
 
@@ -469,7 +469,7 @@ For example, if the isisaddons modules are cloned to `/c/github/isisaddons/isis-
 
 [NOTE]
 ====
-TODO: need to rework this and the following two sections to instead just release the incode-catalog (`1.15.0-SNAPSHOT`).
+TODO: need to rework this and the following two sections to instead just release the incode-catalog (`1.16.0-SNAPSHOT`).
 
 This incorporates all of `incode-parent`, isisaddons.org` and `catalog.incode.org`.
 ====
@@ -481,15 +481,15 @@ The `org.incode:incode-parent` Maven module is used as a parent for both sets of
 +
 [source,bash]
 ----
-sh bumpver_isis.sh 1.15.0
+sh bumpver_isis.sh 1.16.0
 ----
 
 * update the README
 
 ** replace each version with next (ie the "How to Configure/Use" section, and the "Release to Maven Central" section at the end):
 
-*** replace 1.15.0-SNAPSHOT with 1.16.0-SNAPSHOT
-*** replace 1.14.0          with 1.15.0
+*** replace 1.16.0-SNAPSHOT with 1.17.0-SNAPSHOT
+*** replace 1.15.0          with 1.16.0
 
 ** update the "Change Log" section
 
@@ -497,7 +497,7 @@ sh bumpver_isis.sh 1.15.0
 +
 [source,bash]
 ----
-sh release.sh "1.15.0" "1.16.0-SNAPSHOT" "dan@haywood-associates.co.uk" "this is not really my password"
+sh release.sh "1.16.0" "1.17.0-SNAPSHOT" "dan@haywood-associates.co.uk" "this is not really my password"
 ----
 
 
@@ -513,7 +513,7 @@ Using this link:https://gist.github.com/danhaywood/21b5b885433fd8bc440da3fab88c9
 +
 [source,bash]
 ----
-foreach -g isisaddons sh bumpver_isis.sh 1.15.0
+foreach -g isisaddons sh bumpver_isis.sh 1.16.0
 ----
 +
 and use: +
@@ -543,8 +543,8 @@ to review changes made.
 
 ** replace each version with next (ie the "How to Configure/Use" section, and the "Release to Maven Central" section at the end):
 
-*** replace `1.15.0` with `1.16.0`
-*** replace `1.14.0` with `1.15.0` as necessary (pretty much everywhere apart from the "Change Log")
+*** replace `1.16.0` with `1.17.0`
+*** replace `1.15.0` with `1.16.0` as necessary (pretty much everywhere apart from the "Change Log")
 
 ** update the "Change Log" section
 
@@ -552,14 +552,14 @@ to review changes made.
 +
 [source,bash]
 ----
-foreach -g isisaddons/isis-[mw] sh release.sh "1.15.0" "1.16.0-SNAPSHOT" "dan@haywood-associates.co.uk" \"this is not really my password\"
+foreach -g isisaddons/isis-[mw] sh release.sh "1.16.0" "1.17.0-SNAPSHOT" "dan@haywood-associates.co.uk" \"this is not really my password\"
 ----
 
 * In the parent directory where the `last_modified.sh` script has been saved (see xref:../cgcom/cgcom.adoc#__cgcom_post-release-successful_release-non-asf-modules_prereqs[above]), use to check that all modules were released successfully: +
 +
 [source,bash]
 ----
-foreach -g isisaddons/isis-[mw] sh ../../last-modified.sh 1.15.0
+foreach -g isisaddons/isis-[mw] sh ../../last-modified.sh 1.16.0
 ----
 +
 [IMPORTANT]
@@ -571,7 +571,7 @@ Wait at least 10 minutes to check; sync'ing to Maven central from the Sonatype O
 +
 [source,bash]
 ----
-foreach -g isisaddons/isis-[mw] "git push origin master && git push origin 1.15.0"
+foreach -g isisaddons/isis-[mw] "git push origin master && git push origin 1.16.0"
 ----
 
 
@@ -586,7 +586,7 @@ Using this link:https://gist.github.com/danhaywood/21b5b885433fd8bc440da3fab88c9
 +
 [source,bash]
 ----
-foreach -g incodehq/incode-module sh bumpver_isis.sh 1.15.0
+foreach -g incodehq/incode-module sh bumpver_isis.sh 1.16.0
 ----
 
 * update the README for each repository. +
@@ -600,8 +600,8 @@ eg if using Windows, then:
 
 ** Replace each version with next (ie the "How to Configure/Use" section, and the "Release to Maven Central" section at the end):
 
-*** replace `1.15.0` with `1.16.0`
-*** replace `1.14.0` with `1.15.0` as necessary (pretty much everywhere apart from the "Change Log")
+*** replace `1.16.0` with `1.17.0`
+*** replace `1.15.0` with `1.16.0` as necessary (pretty much everywhere apart from the "Change Log")
 
 ** update the "Change Log" section
 
@@ -628,14 +628,14 @@ For example, `incode-module-base` must be released prior to `incode-module-alias
 +
 [source,bash]
 ----
-foreach -g incodehq/incode-module-[a-w] sh release.sh "1.15.0" "1.16.0-SNAPSHOT" "dan@haywood-associates.co.uk" \"this is not really my password\"
+foreach -g incodehq/incode-module-[a-w] sh release.sh "1.16.0" "1.17.0-SNAPSHOT" "dan@haywood-associates.co.uk" \"this is not really my password\"
 ----
 
 * In the parent directory where the `last_modified.sh` script has been saved (see xref:../cgcom/cgcom.adoc#__cgcom_post-release-successful_release-non-asf-modules_prereqs[above]), use to check that all modules were released successfully: +
 +
 [source,bash]
 ----
-foreach -g incodehq/incode-module-[a-w] sh ../../last-modified.sh 1.15.0
+foreach -g incodehq/incode-module-[a-w] sh ../../last-modified.sh 1.16.0
 ----
 +
 [IMPORTANT]
@@ -647,29 +647,29 @@ Wait at least 10 minutes to check; sync'ing to Maven central from the Sonatype O
 +
 [source,bash]
 ----
-foreach -g incodehq/incode-module-[a-w] "git push origin master && git push origin 1.15.0"
+foreach -g incodehq/incode-module-[a-w] "git push origin master && git push origin 1.16.0"
 ----
 
 
 [[__cgcom_post-release-successful_release-non-asf-modules_incode-catalog_cross-module-dependencies]]
 ==== Cross-module dependencies
 
-As of v1.15.0, the list of dependencies that needed to be updated (across all modules) were:
+As of v1.16.0, the list of dependencies that needed to be updated (across all modules) were:
 
-** `<isis-module-fakedata.version>1.15.0</isis-module-fakedata.version>`
-** `<isis-module-freemarker.version>1.15.0</isis-module-freemarker.version>`
-** `<isis-wicket-fullcalendar2-cpt.version>1.15.0</isis-wicket-fullcalendar2-cpt.version>`
-** `<isis-wicket-gmap3-cpt.version>1.15.0</isis-wicket-gmap3-cpt.version>`
-** `<isis-module-poly.version>1.15.0</isis-module-poly.version>`
-** `<isis-module-security.version>1.15.0</isis-module-security.version>`
-** `<incode-module-base.version>1.15.0</incode-module-base.version>`
-** `<incode-module-fixturesupport.version>1.15.0</incode-module-fixturesupport.version>`
-** `<incode-module-unittestsupport.version>1.15.0</incode-module-unittestsupport.version>`
-** `<incode-module-integtestsupport.version>1.15.0</incode-module-integtestsupport.version>`
-** `<incode-module-country.version>1.15.0</incode-module-country.version>`
-** `<incode-module-document.version>1.15.0</incode-module-document.version>`
-** `<incode-module-docrendering-freemarker.version>1.15.0</incode-module-docrendering-freemarker.version>`
-** `<incode-module-docrendering-stringinterpolator.version>1.15.0</incode-module-docrendering-stringinterpolator.version>`
-** `<incode-module-docrendering-xdocreport.version>1.15.0</incode-module-docrendering-xdocreport.version>`
+** `<isis-module-fakedata.version>1.16.0</isis-module-fakedata.version>`
+** `<isis-module-freemarker.version>1.16.0</isis-module-freemarker.version>`
+** `<isis-wicket-fullcalendar2-cpt.version>1.16.0</isis-wicket-fullcalendar2-cpt.version>`
+** `<isis-wicket-gmap3-cpt.version>1.16.0</isis-wicket-gmap3-cpt.version>`
+** `<isis-module-poly.version>1.16.0</isis-module-poly.version>`
+** `<isis-module-security.version>1.16.0</isis-module-security.version>`
+** `<incode-module-base.version>1.16.0</incode-module-base.version>`
+** `<incode-module-fixturesupport.version>1.16.0</incode-module-fixturesupport.version>`
+** `<incode-module-unittestsupport.version>1.16.0</incode-module-unittestsupport.version>`
+** `<incode-module-integtestsupport.version>1.16.0</incode-module-integtestsupport.version>`
+** `<incode-module-country.version>1.16.0</incode-module-country.version>`
+** `<incode-module-document.version>1.16.0</incode-module-document.version>`
+** `<incode-module-docrendering-freemarker.version>1.16.0</incode-module-docrendering-freemarker.version>`
+** `<incode-module-docrendering-stringinterpolator.version>1.16.0</incode-module-docrendering-stringinterpolator.version>`
+** `<incode-module-docrendering-xdocreport.version>1.16.0</incode-module-docrendering-xdocreport.version>`
 
 

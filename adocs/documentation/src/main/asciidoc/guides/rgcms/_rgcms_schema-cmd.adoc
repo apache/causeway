@@ -111,13 +111,13 @@ property.  The `actionDto` and `propertyDto` are the concrete subtypes:
 <1> the `memberDto` is an abstract type.   Its primary responsibility is simply to identify the member (action or
 property).
 <2> the formal identifier (fully qualified class name + member name) of the member being interacted with (action or property).
-<3> (`1.15.0-SNAPSHOT`) the "logical" formal identifier (object type, as per `@DomainObject(objectType=)`, + member name) of the member being interacted with (action or property).
+<3> the "logical" formal identifier (object type, as per `@DomainObject(objectType=)`, + member name) of the member being interacted with (action or property).
 <4> the `interactionType` attribute indicates whether the member is an action or a property.
 <5> the `actionDto` complex type captures the set of parameters (also including the argument values) with which to
 invoke the action.  The `paramsDto` type is defined xref:../rgcms/rgcms.adoc#__rgcms_schema-cmd_ancillary[below].
 <6> the `propertyDto` complex type captures the new value (possibly `null`) to set the property to.
 
-In general the `logicalMemberIdentifier` (`1.15.0-SNAPSHOT`) should be used in preference to the `memberIdentifier` because will not (necessarily) have to change if the class is moved during a refactoring.
+In general the `logicalMemberIdentifier` should be used in preference to the `memberIdentifier` because will not (necessarily) have to change if the class is moved during a refactoring.
 
 Note also that there is a corresponding xref:../rgcms/rgcms.adoc#__rgcms_schema-ixn_memberExecutionDto[`memberExecutionDto`]
 complex type in the "ixn" schema that is for the actual execution (capturing metrics about its execution and also the return value if an action invocation).

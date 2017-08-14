@@ -50,7 +50,7 @@ List<LocalProvider> localeProviders;
 
 then all implementations will be present in the list, ordered by priority; your custom implementation will be first in the list.
 
-As of `1.15.0-SNAPSHOT`, there is no need to specify the `menuOrder` attribute: its default value is now set to a lower value (specifically: `Integer.MAX_VALUE - 100`).
+(As of `1.15.0` onwards), there is no need to specify the `menuOrder` attribute: its default value is now set to a lower value (specifically: `Integer.MAX_VALUE - 100`).
 Thus, the code simplifies to:
 
 [source,java]

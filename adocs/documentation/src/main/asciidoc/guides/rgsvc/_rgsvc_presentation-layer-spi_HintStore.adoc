@@ -44,13 +44,13 @@ The core framework provides a default implementation of this service (`org.apach
 
 
 
-== View models (`1.15.0-SNAPSHOT`)
+== View models
 
 Hints are stored against the `Bookmark` of a domain object, essentially the identifier of the domain object.
 For a domain entity this identifier is fixed and unchanging but for a view models the identifier changes each time the view model's state changes (the identifier is basically a digest of the object's state).
 This means that any hints stored against the view model's bookmark are in effect lost as soon as the view model is modified.
 
-To address this issue the `HintStore` (as of `1.15.0-SNAPSHOT`) provides an optional interface that the view model can implement, the intent of which is to expose the "logical" identity of the view model.
+To address this issue the `HintStore` provides an optional interface that the view model can implement, the intent of which is to expose the "logical" identity of the view model.
 This interface is:
 
 

@@ -67,17 +67,6 @@ xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublishingService[`Publish
 |
 
 
-|xref:../rgfis/rgfis.adoc#_rgfis_persistence-layer_TransactionStateProviderInternal[`o.a.i.c.m.s.` +
-`transtate.` +
-`TransactionStateProviderInternal`]
-|Simply provides the ability to check as to the state of the current transaction.
-|`TransactionStateProvider-` +
-`InternalDefault` +
-`isis-core-runtime`
-|
-
-
-
 
 |===
 
@@ -95,4 +84,3 @@ include::_rgfis_persistence-layer_AuditingServiceInternal.adoc[leveloffset=+1]
 include::_rgfis_persistence-layer_ChangedObjectsServiceInternal.adoc[leveloffset=+1]
 include::_rgfis_persistence-layer_PersistenceSessionServiceInternal.adoc[leveloffset=+1]
 include::_rgfis_persistence-layer_PublishingServiceInternal.adoc[leveloffset=+1]
-include::_rgfis_persistence-layer_TransactionStateProviderInternal.adoc[leveloffset=+1]

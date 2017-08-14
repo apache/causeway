@@ -59,7 +59,7 @@ public Order addItem(Product product, @ParameterLayout(named="Quantity") int qua
 
 == Implementation
 
-The core framework provides a default implementation of this service (in `1.15.0-SNAPSHOT`, this is `o.a.i.core.runtime.services.message.MessageServiceDefault` ).
+The core framework provides a default implementation of this service, `o.a.i.core.runtime.services.message.MessageServiceDefault`.
 
 
 

@@ -6,10 +6,6 @@
 
 
 
-[NOTE]
-====
-Apache Isis 1.15.0-SNAPSHOT is currently still in development
-====
 
 == Overriding framework services (link:https://issues.apache.org/jira/browse/ISIS-1611[ISIS-1611])
 

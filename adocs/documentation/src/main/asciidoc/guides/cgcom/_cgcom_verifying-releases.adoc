@@ -234,13 +234,13 @@ The script could be enhanced in many ways, feel free to contribute improvements!
 ==== Create an input file
 
 The input file is a plain `.txt` file containing all urls to the packages to be verified.
-Here's a sample of the release of Apache Isis 1.15.0:
+Here's a sample of the release of Apache Isis 1.16.0:
 
 [source]
 ----
-https://repository.apache.org/content/repositories/orgapacheisis-063/org/apache/isis/core/isis/1.8.0/isis-1.15.0-source-release.zip
-https://repository.apache.org/content/repositories/orgapacheisis-065/org/apache/isis/archetype/helloworld-archetype/1.8.0/simpleapp-archetype-1.15.0-source-release.zip
-https://repository.apache.org/content/repositories/orgapacheisis-065/org/apache/isis/archetype/simpleapp-archetype/1.8.0/simpleapp-archetype-1.15.0-source-release.zip
+https://repository.apache.org/content/repositories/orgapacheisis-063/org/apache/isis/core/isis/1.8.0/isis-1.16.0-source-release.zip
+https://repository.apache.org/content/repositories/orgapacheisis-065/org/apache/isis/archetype/helloworld-archetype/1.8.0/simpleapp-archetype-1.16.0-source-release.zip
+https://repository.apache.org/content/repositories/orgapacheisis-065/org/apache/isis/archetype/simpleapp-archetype/1.8.0/simpleapp-archetype-1.16.0-source-release.zip
 ----
 
 The actual list of packages to be verified will be provided through the mailing list.
@@ -296,7 +296,7 @@ Assuming that everything builds ok, then test the archetypes (adjust version as 
 mvn archetype:generate  \
     -D archetypeGroupId=org.apache.isis.archetype \
     -D archetypeArtifactId=helloworld-archetype \
-    -D archetypeVersion=1.15.0 \
+    -D archetypeVersion=1.16.0 \
     -D groupId=com.mycompany \
     -D artifactId=myapp \
     -D version=1.0-SNAPSHOT \
@@ -316,7 +316,7 @@ Adjust the version as necessary.
 mvn archetype:generate  \
     -D archetypeGroupId=org.apache.isis.archetype \
     -D archetypeArtifactId=simpleapp-archetype \
-    -D archetypeVersion=1.15.0 \
+    -D archetypeVersion=1.16.0 \
     -D groupId=com.mycompany \
     -D artifactId=myapp \
     -D version=1.0-SNAPSHOT \
