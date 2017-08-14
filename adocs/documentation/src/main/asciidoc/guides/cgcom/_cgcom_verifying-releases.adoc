@@ -61,7 +61,7 @@ rm -rf ~/.m2/repository/org/apache/isis
 [[__cgcom_verifying-releases_verifying-source-artifacts]]
 == Verifying source artifacts
 
-You can either verify the source artifacts xref:../cgcom/cgcom.adoc#__cgcom_verifying-releases_manual-procedure[manually], or use a script that xref:../cgcom/cgcom.adoc#__cgcom_verifying-releases_automated-procedure[automates] the steps.
+You can either verify the source artifacts xref:../cgcom/cgcom.adoc#\__cgcom_verifying-releases_manual-procedure[manually], or use a script that xref:../cgcom/cgcom.adoc#__cgcom_verifying-releases_automated-procedure[automates] the steps.
 
 
 [[__cgcom_verifying-releases_manual-procedure]]
