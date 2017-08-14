@@ -519,21 +519,21 @@ This configuration property can be used to enforce a rule that the object type m
 `NotAbstract`
 |`true`,`false` +
 (`true`)
-| (`1.15.0-SNAPSHOT`) Ensures that all xref:../ugfun/ugfun.adoc#_ugfun_programming-model_view-models_jaxb[JAXB view model]s are not `abstract` (so can be instantiated).
+|Ensures that all xref:../ugfun/ugfun.adoc#_ugfun_programming-model_view-models_jaxb[JAXB view model]s are not `abstract` (so can be instantiated).
 
 |`isis.reflector.validator.` +
 `jaxbViewModel` +
 `NotInnerClass`
 |`true`,`false` +
 (`true`)
-| (`1.15.0-SNAPSHOT`) Ensures that all xref:../ugfun/ugfun.adoc#_ugfun_programming-model_view-models_jaxb[JAXB view model]s are not inner classes (so can be instantiated).
+| Ensures that all xref:../ugfun/ugfun.adoc#_ugfun_programming-model_view-models_jaxb[JAXB view model]s are not inner classes (so can be instantiated).
 
 |`isis.reflector.validator.` +
 `jaxbViewModel` +
 `NoArgConstructor`
 |`true`,`false` +
 (`false`)
-| (`1.15.0-SNAPSHOT`) Ensures that all xref:../ugfun/ugfun.adoc#_ugfun_programming-model_view-models_jaxb[JAXB view model]s have a `public` no-arg constructor. +
+| Ensures that all xref:../ugfun/ugfun.adoc#_ugfun_programming-model_view-models_jaxb[JAXB view model]s have a `public` no-arg constructor. +
 
 This isn't actually required (hence not enabled by default) but is arguably good practice.
 
@@ -542,14 +542,14 @@ This isn't actually required (hence not enabled by default) but is arguably good
 `ReferenceTypeAdapter`
 |`true`,`false` +
 (`true`)
-| (`1.15.0-SNAPSHOT`) Ensures that for all xref:../ugfun/ugfun.adoc#_ugfun_programming-model_view-models_jaxb[JAXB view model]s with properties that reference persistent entities, that those entities are annotated with `@XmlJavaTypeAdapter`.
+| Ensures that for all xref:../ugfun/ugfun.adoc#_ugfun_programming-model_view-models_jaxb[JAXB view model]s with properties that reference persistent entities, that those entities are annotated with `@XmlJavaTypeAdapter`.
 
 |`isis.reflector.validator.` +
 `jaxbViewModel` +
 `DateTimeTypeAdapter`
 |`true`,`false` +
 (`true`)
-| (`1.15.0-SNAPSHOT`) Ensures that for all xref:../ugfun/ugfun.adoc#_ugfun_programming-model_view-models_jaxb[JAXB view model]s with properties that are dates or times, that those properties are annotated with `@XmlJavaTypeAdapter`.
+| Ensures that for all xref:../ugfun/ugfun.adoc#_ugfun_programming-model_view-models_jaxb[JAXB view model]s with properties that are dates or times, that those properties are annotated with `@XmlJavaTypeAdapter`.
 
 |`isis.reflector.validator.` +
 `jdoqlFromClause`

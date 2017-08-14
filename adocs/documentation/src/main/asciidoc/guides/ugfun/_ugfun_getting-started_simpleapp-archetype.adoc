@@ -42,7 +42,7 @@ To build the app from the latest stable release, then run the following command:
 mvn archetype:generate  \
     -D archetypeGroupId=org.apache.isis.archetype \
     -D archetypeArtifactId=simpleapp-archetype \
-    -D archetypeVersion=1.14.0 \
+    -D archetypeVersion=1.15.0 \
     -D groupId=com.mycompany \
     -D artifactId=myapp \
     -D version=1.0-SNAPSHOT \
@@ -57,36 +57,6 @@ where:
 
 The archetype generation process will then run; it only takes a few seconds.
 
-
-We also maintain the archetype for the most current `-SNAPSHOT`; an app generated with this archetype will contain the latest features of Apache Isis, but the usual caveats apply: some features still in development may be unstable.
-
-The process is almost identical to that for stable releases, however the `archetype:generate` goal is called with slightly different arguments:
-
-[source,bash]
-----
-mvn archetype:generate  \
-    -D archetypeGroupId=org.apache.isis.archetype \
-    -D archetypeArtifactId=simpleapp-archetype \
-    -D archetypeVersion=1.15.0-SNAPSHOT \
-    -D groupId=com.mycompany \
-    -D artifactId=myapp \
-    -D version=1.0-SNAPSHOT \
-    -D archetypeRepository=http://repository-estatio.forge.cloudbees.com/snapshot/ \
-    -B
-----
-
-where as before:
-
-- `groupId` represents your own organization, and
-- `artifactId` is a unique identifier for this app within your organization.
-- `version` is the initial (snapshot) version of your app
-
-but also:
-
-- `archetypeVersion` is the SNAPSHOT version of Apache Isis.
-- `archetypeRepository` specifies the location of our snapshot repo (hosted on link:http://www.cloudbees.com[CloudBees]), and
-
-The archetype generation process will then run; it only takes a few seconds.
 
 
 

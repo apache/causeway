@@ -1,5 +1,5 @@
 [[_ugfun_getting-started_helloworld-archetype]]
-= HelloWorld Archetype (`1.15.0-SNAPSHOT`)
+= HelloWorld Archetype
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :_basedir: ../../
 :_imagesdir: images/
@@ -21,11 +21,6 @@ This also creates a minimal application, but provides more structure and example
 == Generating the App
 
 Create a new directory, and `cd` into that directory.
-
-[WARNING]
-====
-This archetype was introduced in `1.15.0-SNAPSHOT`, and has not - yet - been released.
-====
 
 To build the app from the latest stable release, then run the following command:
 
@@ -49,35 +44,6 @@ where:
 
 The archetype generation process will then run; it only takes a few seconds.
 
-We also maintain the archetype for the most current `-SNAPSHOT`; an app generated with this archetype will contain the latest features of Apache Isis, but the usual caveats apply: some features still in development may be unstable.
-
-The process is almost identical to that for stable releases, however the `archetype:generate` goal is called with slightly different arguments:
-
-[source,bash]
-----
-mvn archetype:generate  \
-    -D archetypeGroupId=org.apache.isis.archetype \
-    -D archetypeArtifactId=helloworld-archetype \
-    -D archetypeVersion=1.15.0-SNAPSHOT \
-    -D groupId=com.mycompany \
-    -D artifactId=myapp \
-    -D version=1.0-SNAPSHOT \
-    -D archetypeRepository=http://repository-estatio.forge.cloudbees.com/snapshot/ \
-    -B
-----
-
-where as before:
-
-- `groupId` represents your own organization, and
-- `artifactId` is a unique identifier for this app within your organization.
-- `version` is the initial (snapshot) version of your app
-
-but also:
-
-- `archetypeVersion` is the SNAPSHOT version of Apache Isis.
-- `archetypeRepository` specifies the location of our snapshot repo (hosted on link:http://www.cloudbees.com[CloudBees]), and
-
-The archetype generation process will then run; it only takes a few seconds.
 
 
 

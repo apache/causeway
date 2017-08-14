@@ -34,9 +34,13 @@
                     <bs3:row>
                         <bs3:col span="12">
                             <c:fieldSet name="Name">
-                                <c:action id="delete"/>
+                                <c:action id="delete">
+                                    <c:describedAs>Deletes this object from the persistent datastore</c:describedAs>
+                                </c:action>
                                 <c:property id="name" namedEscaped="true">
-                                    <c:action id="updateName"/>
+                                    <c:action id="updateName">
+                                        <c:describedAs>Updates the object's name</c:describedAs>
+                                    </c:action>
                                 </c:property>
                                 <c:property id="notes" namedEscaped="true" multiLine="10" hidden="ALL_TABLES"/>
                             </c:fieldSet>

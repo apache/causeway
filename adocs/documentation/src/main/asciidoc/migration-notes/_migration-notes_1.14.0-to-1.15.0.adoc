@@ -6,10 +6,6 @@
 
 
 
-[NOTE]
-====
-Apache Isis 1.15.0-SNAPSHOT is currently still in development
-====
 
 
 

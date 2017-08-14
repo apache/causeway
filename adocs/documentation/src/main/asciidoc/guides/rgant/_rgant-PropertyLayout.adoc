@@ -68,7 +68,7 @@ A typical use case is if the desired name is a reserved Java keyword, such as `d
 |xref:../rgant/rgant.adoc#_rgant-PropertyLayout_promptStyle[`promptStyle()`]
 |`DIALOG`, `INLINE`, `AS_CONFIGURED` +
 (`AS_CONFIGURED`)
-|(`1.15.0-SNAPSHOT`) how a property prompt should be displayed within the UI
+|how a property prompt should be displayed within the UI
 
 
 
@@ -85,7 +85,7 @@ A typical use case is if the desired name is a reserved Java keyword, such as `d
 |xref:../rgant/rgant.adoc#_rgant-PropertyLayout_unchanging[`unchanging()`]
 |`false`, `true` +
 (`false`)
-|(`1.15.0-SNAPSHOT`) indicates that the value held by the property never changes over time (even if other properties of the object do change).
+|indicates that the value held by the property never changes over time (even if other properties of the object do change).
 
 Used as a hint to the viewer not to redraw the property if possible after an AJAX update.
 

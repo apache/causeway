@@ -231,13 +231,13 @@ chmod +x verify-isis-release.sh
 ==== Create an input file
 
 The input file is a plain `urls.txt` file containing all urls to the packages to be verified.
-Here's a sample of the release from Apache Isis 1.15.0:
+Here's a sample of the release from Apache Isis 1.12.0:
 
 [source]
 ----
-http://repository.apache.org/content/repositories/orgapacheisis-1058/org/apache/isis/core/isis/1.15.0/isis-1.15.0-source-release.zip
-http://repository.apache.org/content/repositories/orgapacheisis-1059/org/apache/isis/archetype/helloworld-archetype/1.15.0/helloworld-archetype-1.15.0-source-release.zip
-http://repository.apache.org/content/repositories/orgapacheisis-1059/org/apache/isis/archetype/simpleapp-archetype/1.15.0/simpleapp-archetype-1.15.0-source-release.zip
+http://repository.apache.org/content/repositories/orgapacheisis-1058/org/apache/isis/core/isis/1.12.0/isis-1.12.0-source-release.zip
+http://repository.apache.org/content/repositories/orgapacheisis-1059/org/apache/isis/archetype/helloworld-archetype/1.12.0/helloworld-archetype-1.12.0-source-release.zip
+http://repository.apache.org/content/repositories/orgapacheisis-1059/org/apache/isis/archetype/simpleapp-archetype/1.12.0/simpleapp-archetype-1.12.0-source-release.zip
 ----
 
 You will find the actual list of URLs to be verified in the vote mail on the dev mailing list.
@@ -293,7 +293,7 @@ Assuming that everything builds ok, then test the archetypes (adjust version as 
 mvn archetype:generate  \
     -D archetypeGroupId=org.apache.isis.archetype \
     -D archetypeArtifactId=helloworld-archetype \
-    -D archetypeVersion=1.15.0 \
+    -D archetypeVersion=1.16.0 \
     -D groupId=com.mycompany \
     -D artifactId=myapp \
     -D version=1.0-SNAPSHOT \
@@ -313,7 +313,7 @@ Adjust the version as necessary.
 mvn archetype:generate  \
     -D archetypeGroupId=org.apache.isis.archetype \
     -D archetypeArtifactId=simpleapp-archetype \
-    -D archetypeVersion=1.15.0 \
+    -D archetypeVersion=1.16.0 \
     -D groupId=com.mycompany \
     -D artifactId=myapp \
     -D version=1.0-SNAPSHOT \

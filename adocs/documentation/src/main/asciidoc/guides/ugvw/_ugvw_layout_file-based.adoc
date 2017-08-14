@@ -177,7 +177,7 @@ Note also the `unreferencedProperties` attribute for the fieldset; this topic is
 
 [NOTE]
 ====
-As of `1.15.0-SNAPSHOT`, the ``<fieldset>``'s "name" attribute is optional.
+(As of `1.15.0`) the ``<fieldset>``'s "name" attribute is optional.
 If omitted, then the title panel is suppressed, freeing more real estate.
 
 Do be aware though that if there are any actions that have been placed on the fieldset's panel, then these _will *not* be displayed_.

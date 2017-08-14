@@ -21,7 +21,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.apache.isis.archetype</groupId>
     <artifactId>simpleapp-archetype</artifactId>
-    <version>1.15.0-SNAPSHOT</version>
+    <version>1.16.0-SNAPSHOT</version>
     <packaging>maven-archetype</packaging>
     <name>simpleapp-archetype</name>
     <build>
@@ -41,16 +41,36 @@
             </plugins>
         </pluginManagement>
     </build>
+    <description>This module defines a standard parent POM to use for various Incode applications and modules.  
+        Its primary purpose is to make it easy to use a set up maven mixins (https://github.com/odavid/maven-plugins)
+        within child POMs.  Specifically this means locking down the versions of plugins using pluginManagement.
+        
+        It does NOT define any mixins for Apache Isis.</description>
+    <url>https://github.com/incodehq/incode-build/simpleapp</url>
+    <developers>
+        <developer>
+            <id>danhaywood</id>
+            <name>Dan Haywood</name>
+            <email>dan@haywood-associates.co.uk</email>
+        </developer>
+    </developers>
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
     <scm>
-        <connection>scm:git:git@github.com:danhaywood/java-mavenmixin-standard.git</connection>
-        <developerConnection>scm:git:git@github.com:danhaywood/java-mavenmixin-standard.git</developerConnection>
-        <url>git@github.com:danhaywood/java-mavenmixin-standard.git</url>
+        <connection>scm:git:git@github.com:incodehq/incode-build.git/simpleapp</connection>
+        <developerConnection>scm:git:git@github.com:incodehq/incode-build.git/simpleapp</developerConnection>
+        <url>git@github.com:incodehq/incode-build.git/simpleapp</url>
       <tag>HEAD</tag>
   </scm>
     <parent>
         <groupId>org.apache.isis.core</groupId>
         <artifactId>isis</artifactId>
-        <version>1.15.0-SNAPSHOT</version>
+        <version>1.15.0</version>
         <relativePath>../../../core/pom.xml</relativePath>
     </parent>
     <properties>

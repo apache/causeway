@@ -25,7 +25,7 @@ For example, use the following subject for a vote on Apache Isis Core:
 
 [source,bash]
 ----
-[RESULT] [VOTE] Apache Isis Core release 1.14.0
+[RESULT] [VOTE] Apache Isis Core release 1.16.0
 ----
 
 using the body (alter last line as appropriate):
@@ -52,7 +52,7 @@ Tidy up remote branches in the git repo:
 +
 [source,bash]
 ----
-git push --delete origin release-1.14.0-RC1
+git push --delete origin release-1.16.0-RC1
 ----
 
 
@@ -60,9 +60,9 @@ git push --delete origin release-1.14.0-RC1
 +
 [source,bash]
 ----
-git push --delete origin isis-1.14.0-RC1
-git push --delete origin helloworld-archetype-1.14.0-RC1
-git push --delete origin simpleapp-archetype-1.14.0-RC1
+git push --delete origin isis-1.16.0-RC1
+git push --delete origin helloworld-archetype-1.16.0-RC1
+git push --delete origin simpleapp-archetype-1.16.0-RC1
 ----
 
 
@@ -70,12 +70,9 @@ git push --delete origin simpleapp-archetype-1.14.0-RC1
 +
 [source,bash]
 ----
-git tag -d isis-1.14.0
-git tag -d isis-1.14.0-RC1
-git tag -d helloworld-archetype-1.14.0
-git tag -d helloworld-archetype-1.14.0-RC1
-git tag -d simpleapp-archetype-1.14.0
-git tag -d simpleapp-archetype-1.14.0-RC1
+git tag -d isis-1.16.0
+git tag -d helloworld-archetype-1.16.0
+git tag -d simpleapp-archetype-1.16.0
 ----
 
 

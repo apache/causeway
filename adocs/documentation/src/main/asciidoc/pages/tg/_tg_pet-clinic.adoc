@@ -72,7 +72,7 @@ Adjust as necessary if using Windows `cmd.exe` or Powershell.
 
 [NOTE]
 ====
-You can use 1.13.2 (or later) version of the archetype if you wish, however be aware that the structure of the solution repo (mentioned above) will be different from the structure for applications generated from 1.13.2.
+You can use 1.13.2 (or later) version of the archetype if you wish, however be aware that the structure of the solution repo (mentioned above) will be different from the structure for applications generated using 1.13.2 onwards.
 ====
 
 

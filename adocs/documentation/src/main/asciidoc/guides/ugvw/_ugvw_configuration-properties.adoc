@@ -48,7 +48,7 @@ If you prefer you can place all configuration properties into `WEB-INF/isis.prop
 `bookmarkedPages.showChooser`
 | +ve int +
 (`_15_`)
-| (`1.15.0-SNAPSHOT`) whether to show the bookmark panel (top-left in the Wicket viewer)
+| whether to show the bookmark panel (top-left in the Wicket viewer)
 
 |`isis.viewer.wicket.` +
 `breadcrumbs.showChooser`
@@ -100,7 +100,7 @@ for further details).
 `developmentUtilities.enable`
 | `true`,`false` +
 (`_false_`)
-| (`1.15.0-SNAPSHOT`) when running in production mode, whether to show enable the Wicket development utilities anyway.
+| when running in production mode, whether to show enable the Wicket development utilities anyway.
 From a UI perspective, this will cause the DebugBar to be shown (top-right).
 
 If running in prototyping mode, the development utilities (debug bar) is always enabled.
@@ -155,7 +155,7 @@ This feature is primarily just to help track any memory leakage issues that migh
 |`dialog`,`inline`, +
 `inline_as_if_edit` +
 (`inline`)
-|(`1.15.0-SNAPSHOT`) whether the prompt for editing a domain object property or invoking an action (associated with a property) is shown inline within the property's form, or instead shown in a modal dialog box.
+| whether the prompt for editing a domain object property or invoking an action (associated with a property) is shown inline within the property's form, or instead shown in a modal dialog box.
 For actions, `inline_as_if_edit` will suppress the action's button, and instead let the action be invoked as if editing the property.
 The net effect is that being able to "edit" complex properties with multiple parts (eg a date) using a multi-argument editor (this editor, in fact, being the action's argument panel).
 
@@ -167,14 +167,14 @@ Note that `inline_as_if_edit` does not make sense for a configuration property d
 `redirectEvenIfSameObject`
 | `true`,`false` +
 (`_false_`)
-| (`1.15.0-SNAPSHOT`) By default, an action invocation that returns the same object will result in the page being updated.
+| By default, an action invocation that returns the same object will result in the page being updated.
 The same is true for property edits.
 
 If this setting is enabled, then the viewer will always render to a new page.
 
 [NOTE]
 ====
-Note that default behaviour is new in `1.15.0-SNAPSHOT`, and provides a better UI.
+Note that the default behaviour is new in `1.15.0`, providing a better end-user experience.
 Setting this option retains the behaviour of the viewer pre-1.15.0.
 ====
 
