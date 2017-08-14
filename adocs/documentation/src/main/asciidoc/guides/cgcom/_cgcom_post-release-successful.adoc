@@ -302,10 +302,11 @@ The Apache Isis team is pleased to announce the release of Apache Isis v1.16.0.
 New features in this release include:
 * ...
 
-Full release notes are available on the Apache Isis website at [1].  Please also read the migration notes [2].
+Full release notes are available on the Apache Isis website at [1].
+Please also read the migration notes [2].
 
-You can access this release directly from the Maven central repo [3], or download the release and build it from
-source [4].
+You can access this release directly from the Maven central repo [3].
+Alternatively, download the release and build it from source [4].
 
 Enjoy!
 
