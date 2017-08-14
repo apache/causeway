@@ -163,69 +163,7 @@ cd ~/verify-isis-release
 
 ==== Copy script to local machine
 
-Copy the following script, save to `verify-isis-release.sh`:
-
-
-[source,bash]
-----
-#!/bin/bash
-# Instructions:
-# - Create an empty directory
-# - Put a urls.txt file in it containing a list of all the urls of the zip files
-# - Run this script
-_download(){
-    for fil in `cat urls.txt`
-    do
-       echo 'Downloading '$fil
-       curl  -L -O $fil
-       curl  -L -O $fil.asc
-    done
-}
-_verify(){
-    for zip in *.zip
-    do
-       echo 'Verifying '$zip
-       gpg --verify $zip.asc $zip
-    done
-}
-_unpack(){
-    echo 'Unpacking '
-    unzip -q '*.zip'
-}
-_build(){
-    echo 'Removing Apache Isis from local repo '$module
-    rm -rf ~/.m2/repository/org/apache/isis
-    COUNTER=0
-    for module in ./isis*/ ./*archetype*/
-    do
-       COUNTER=$[COUNTER+1]
-       if [ $COUNTER -eq 1 ]
-       then
-         cd $module
-         echo 'Building Core '$module
-         mvn clean install -o
-         cd ..
-       else
-         cd $module
-         echo 'Building archetype '$module
-         mvn clean install
-         cd ..
-       fi
-    done
-}
-# The work starts here
-_download
-_verify
-_unpack
-_build
-----
-
-Make sure the script is executable:
-
-[source]
-----
-chmod +x verify-isis-release.sh
-----
+Download this link:https://gist.github.com/danhaywood/9b052f68ef56cfdbeb3eb1603c5f772a[gist], save to `verify-isis-release.sh`.
 
 
 ==== Create an input file
@@ -250,7 +188,7 @@ Execute...
 
 [source,bash]
 ----
-./verify-isis-release.sh
+sh verify-isis-release.sh
 ----
 
 \... and get yourself a cup of coffee.

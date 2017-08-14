@@ -1,9 +1,8 @@
 #!/bin/bash
 # Instructions:
 # -Create an empty directory
-# -Put a .txt file in it containing a list of all the urls of the zip files
+# -Put a url.txt file in it containing a list of all the urls of the zip files
 # -Run this script
-# TODO: enhance this script so it will stop when something is broken
 
 _execmustpass(){
     echo $@
@@ -57,7 +56,7 @@ _fetch_dependencies(){
 _build(){
     echo 'Removing Isis from local repo '$module
     rm -rf ~/.m2/repository/org/apache/isis
-    for module in ./*/
+    for module in ./isis*/ ./*archetype*/
     do
         cd $module
         grep -q "Isis Core" pom.xml
