@@ -16,6 +16,7 @@ This section describes some guidance on what a voter (members of the Apache Isis
 
 
 
+[[__cgcom_verifying-releases_background]]
 == Background
 
 Whenever a release manager announces a vote on a release (as per the xref:../cgcom/cgcom.adoc#_cgcom_release-process[release process]) on the xref:../../support.adoc#[dev mailing list], it is the responsibility of the project's PMC to cast their vote on the release.
@@ -33,6 +34,7 @@ Details of how to do this are also documented below.
 
 
 
+[[__cgcom_verifying-releases_prerequisites]]
 == Prerequisites
 
 To verify the source ZIP files, you will need to have imported the public keys used for signing Apache Isis releases.
@@ -56,6 +58,7 @@ rm -rf ~/.m2/repository/org/apache/isis
 ----
 
 
+[[__cgcom_verifying-releases_verifying-source-artifacts]]
 == Verifying source artifacts
 
 You can either verify the source artifacts xref:../cgcom/cgcom.adoc#__cgcom_verifying-releases_manual-procedure[manually], or use a script that xref:../cgcom/cgcom.adoc#__cgcom_verifying-releases_automated-procedure[automates] the steps.
@@ -167,12 +170,11 @@ Copy the following script, save to `verify-isis-release.sh`:
 ----
 #!/bin/bash
 # Instructions:
-# -Create an empty directory
-# -Put a .txt file in it containing a list of all the urls of the zip files
-# -Run this script
-# FIXME: enhance this script so it will stop when something is broken
+# - Create an empty directory
+# - Put a urls.txt file in it containing a list of all the urls of the zip files
+# - Run this script
 _download(){
-    for fil in `cat *.txt`
+    for fil in `cat urls.txt`
     do
        echo 'Downloading '$fil
        curl  -L -O $fil
@@ -194,7 +196,7 @@ _build(){
     echo 'Removing Apache Isis from local repo '$module
     rm -rf ~/.m2/repository/org/apache/isis
     COUNTER=0
-    for module in ./*/
+    for module in ./isis*/ ./*archetype*/
     do
        COUNTER=$[COUNTER+1]
        if [ $COUNTER -eq 1 ]
@@ -205,7 +207,7 @@ _build(){
          cd ..
        else
          cd $module
-         echo 'Building Module '$module
+         echo 'Building archetype '$module
          mvn clean install
          cd ..
        fi
@@ -225,25 +227,20 @@ Make sure the script is executable:
 chmod +x verify-isis-release.sh
 ----
 
-[NOTE]
-====
-The script could be enhanced in many ways, feel free to contribute improvements!
-====
-
 
 ==== Create an input file
 
-The input file is a plain `.txt` file containing all urls to the packages to be verified.
-Here's a sample of the release of Apache Isis 1.15.0:
+The input file is a plain `urls.txt` file containing all urls to the packages to be verified.
+Here's a sample of the release from Apache Isis 1.15.0:
 
 [source]
 ----
-https://repository.apache.org/content/repositories/orgapacheisis-063/org/apache/isis/core/isis/1.8.0/isis-1.15.0-source-release.zip
-https://repository.apache.org/content/repositories/orgapacheisis-065/org/apache/isis/archetype/helloworld-archetype/1.8.0/simpleapp-archetype-1.15.0-source-release.zip
-https://repository.apache.org/content/repositories/orgapacheisis-065/org/apache/isis/archetype/simpleapp-archetype/1.8.0/simpleapp-archetype-1.15.0-source-release.zip
+http://repository.apache.org/content/repositories/orgapacheisis-1058/org/apache/isis/core/isis/1.15.0/isis-1.15.0-source-release.zip
+http://repository.apache.org/content/repositories/orgapacheisis-1059/org/apache/isis/archetype/helloworld-archetype/1.15.0/helloworld-archetype-1.15.0-source-release.zip
+http://repository.apache.org/content/repositories/orgapacheisis-1059/org/apache/isis/archetype/simpleapp-archetype/1.15.0/simpleapp-archetype-1.15.0-source-release.zip
 ----
 
-The actual list of packages to be verified will be provided through the mailing list.
+You will find the actual list of URLs to be verified in the vote mail on the dev mailing list.
 
 
 

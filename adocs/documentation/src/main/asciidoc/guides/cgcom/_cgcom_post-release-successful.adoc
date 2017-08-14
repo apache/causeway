@@ -35,13 +35,15 @@ using the body (alter last line as appropriate):
 ----
 The vote has completed with the following result :
 
-  +1 (binding): <i>list of names</i>
-  +1 (non binding): <i>list of names</i>
+  +1 (binding): ... list of names ...
+  +1 (non binding): ... list of names ...
 
-  -1 (binding): <i>list of names</i>
-  -1 (non binding): <i>list of names</i>
+  -1 (binding): ... list of names ...
+  -1 (non binding): ... list of names ...
 
 The vote is SUCCESSFUL.
+
+I'll now go ahead and complete the post-release activities.
 ----
 
 
