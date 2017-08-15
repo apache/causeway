@@ -312,8 +312,8 @@ Enjoy!
 
 --The Apache Isis team
 
-[1] http://isis.apache.org/release-notes.html#r1.16.0
-[2] http://isis.apache.org/migration-notes.html#_migration-notes_1.15.0-to-1.16.0
+[1] http://isis.apache.org/release-notes/release-notes.html#_release-notes_1.16.0
+[2] http://isis.apache.org/migration-notes/migration-notes.html#_migration-notes_1.15.0-to-1.16.0
 [3] http://search.maven.org
 [4] http://isis.apache.org/downloads.html
 ----
