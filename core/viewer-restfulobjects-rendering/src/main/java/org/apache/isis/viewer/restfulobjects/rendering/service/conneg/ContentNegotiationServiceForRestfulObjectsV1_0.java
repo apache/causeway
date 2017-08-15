@@ -56,8 +56,6 @@ import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationSer
 )
 public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNegotiationService {
 
-    private static final DateFormat ETAG_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
-
     private boolean strictAcceptChecking;
 
     @PostConstruct
@@ -110,9 +108,13 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
 
         final Version version = objectAdapter.getVersion();
         if (version != null && version.getTime() != null) {
-            responseBuilder.tag(ETAG_FORMAT.format(version.getTime()));
+            responseBuilder.tag(etagFormat().format(version.getTime()));
         }
         return responseBuilder;
+    }
+
+    private DateFormat etagFormat() {
+        return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
     }
 
     @Override
