@@ -166,6 +166,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         // described by
         if (mode.includeDescribedBy() && !rendererContext.suppressDescribedByLinks()) {
             addLinkToDescribedBy();
+            addLinkToLayout();
         }
         if(isService && mode.includeUp()) {
             addLinkToUp();
@@ -218,6 +219,13 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
             renderer.with(objectAdapter.getSpecification());
             link.mapPut("value", renderer.render());
         }
+        getLinks().arrayAdd(link);
+    }
+
+    private void addLinkToLayout() {
+        final LinkBuilder linkBuilder = DomainTypeReprRenderer
+                .newLinkToLayoutBuilder(getRendererContext(), Rel.LAYOUT, objectAdapter.getSpecification());
+        final JsonRepresentation link = linkBuilder.build();
         getLinks().arrayAdd(link);
     }
 

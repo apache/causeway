@@ -27,7 +27,7 @@ import org.apache.isis.viewer.restfulobjects.applib.RestfulHttpMethod;
 public final class LinkBuilder {
 
     public static LinkBuilder newBuilder(final RendererContext resourceContext, final String rel, final RepresentationType representationType, final String hrefFormat, final Object... hrefArgs) {
-        return newBuilder(resourceContext, rel, representationType.getMediaType(), hrefFormat, hrefArgs);
+        return newBuilder(resourceContext, rel, representationType.getJsonElseXmlMediaType(), hrefFormat, hrefArgs);
     }
 
     public static LinkBuilder newBuilder(final RendererContext resourceContext, final String rel, final MediaType mediaType, final String hrefFormat, final Object... hrefArgs) {

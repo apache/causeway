@@ -31,6 +31,7 @@ import javax.ws.rs.core.Response;
 import com.google.common.base.Strings;
 
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -102,6 +103,26 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         renderer.with(objectSpec).includesSelf();
 
         return Responses.ofOk(renderer, Caching.ONE_DAY).build();
+    }
+
+    @Override
+    @GET
+    @Path("/{domainType}/layout")
+    @Produces({ MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_LAYOUT_BS3 })
+    public Response layout(@PathParam("domainType") final String domainType) {
+        init(RepresentationType.LAYOUT, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
+
+        final ObjectSpecification objectSpec = getSpecificationLoader().lookupBySpecId(ObjectSpecId.of(domainType));
+        final GridFacet gridFacet = objectSpec.getFacet(GridFacet.class);
+        final Response.ResponseBuilder builder;
+        if(gridFacet == null) {
+            builder = Responses.ofNotFound();
+            return builder.build();
+        } else {
+            builder = Response.status(Response.Status.OK).entity(gridFacet.getGrid()).type(RepresentationType.LAYOUT.getXmlMediaType());
+        }
+
+        return builder.build();
     }
 
     @Override

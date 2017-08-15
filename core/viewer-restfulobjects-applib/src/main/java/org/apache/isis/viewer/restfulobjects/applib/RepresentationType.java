@@ -93,6 +93,10 @@ public enum RepresentationType {
             RestfulMediaType.APPLICATION_JSON_DOMAIN_TYPE,
             null,
             DomainTypeRepresentation.class),
+    LAYOUT(
+            null,
+            RestfulMediaType.APPLICATION_XML_LAYOUT_BS3,
+            null),
     PROPERTY_DESCRIPTION(
             RestfulMediaType.APPLICATION_JSON_PROPERTY_DESCRIPTION,
             null,
@@ -128,7 +132,7 @@ public enum RepresentationType {
     private final Class<? extends JsonRepresentation> representationClass;
 
     private RepresentationType(final String jsonMediaTypeStr, final String xmlMediaTypeStr, final Class<? extends JsonRepresentation> representationClass) {
-        this(MediaType.valueOf(jsonMediaTypeStr), xmlMediaTypeStr != null? MediaType.valueOf(xmlMediaTypeStr): null, representationClass);
+        this(jsonMediaTypeStr != null ? MediaType.valueOf(jsonMediaTypeStr) : null, xmlMediaTypeStr != null? MediaType.valueOf(xmlMediaTypeStr): null, representationClass);
     }
 
     private RepresentationType(final MediaType jsonMediaType, final MediaType xmlMediaType, final Class<? extends JsonRepresentation> representationClass) {
@@ -154,6 +158,10 @@ public enum RepresentationType {
     }
     public MediaType getXmlMediaType() {
         return xmlMediaType;
+    }
+
+    public MediaType getJsonElseXmlMediaType() {
+        return jsonMediaType != null ? jsonMediaType : xmlMediaType;
     }
 
     /**

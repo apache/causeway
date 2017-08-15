@@ -56,6 +56,7 @@ public final class RestfulMediaType {
     public final static String APPLICATION_JSON_TYPE_ACTION_RESULT = JSON_BASE + "type-action-result";
 
     private static final String XML_BASE = "application/xml" + ";profile=" + PROFILE_PARAM_PREFIX;
+    public final static String APPLICATION_XML_LAYOUT_BS3 = XML_BASE + "layout-bs3";
 
 
     // currently only support a subset of representations in XML format

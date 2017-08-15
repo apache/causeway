@@ -59,6 +59,7 @@ public enum Rel {
 
     // implementation specific
     CONTRIBUTED_BY(RelDefinition.IMPL, "contributed-by"),
+    LAYOUT(RelDefinition.IMPL, "layout"),
     LOGOUT(RelDefinition.IMPL, "logout");
 
     private final RelDefinition relDef;

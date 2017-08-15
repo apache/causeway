@@ -39,8 +39,14 @@ public class DomainTypeReprRenderer extends ReprRendererAbstract<DomainTypeReprR
 
     public static LinkBuilder newLinkToBuilder(final RendererContext resourceContext, final Rel rel, final ObjectSpecification objectSpec) {
         final String typeFullName = objectSpec.getSpecId().asString();
-        final String url = "domain-types/" + typeFullName;
+        final String url = String.format("domain-types/%s", typeFullName);
         return LinkBuilder.newBuilder(resourceContext, rel.getName(), RepresentationType.DOMAIN_TYPE, url);
+    }
+
+    public static LinkBuilder newLinkToLayoutBuilder(final RendererContext resourceContext, final Rel rel, final ObjectSpecification objectSpec) {
+        final String typeFullName = objectSpec.getSpecId().asString();
+        final String url = String.format("domain-types/%s/layout", typeFullName);
+        return LinkBuilder.newBuilder(resourceContext, rel.getName(), RepresentationType.LAYOUT, url);
     }
 
     private ObjectSpecification objectSpecification;
@@ -66,6 +72,9 @@ public class DomainTypeReprRenderer extends ReprRendererAbstract<DomainTypeReprR
         if (includesSelf) {
             final JsonRepresentation selfLink = newLinkToBuilder(getRendererContext(), Rel.SELF, objectSpecification).build();
             getLinks().arrayAdd(selfLink);
+
+            final JsonRepresentation layoutLink = newLinkToLayoutBuilder(getRendererContext(), Rel.LAYOUT, objectSpecification).build();
+            getLinks().arrayAdd(layoutLink);
         }
 
         representation.mapPut("canonicalName", objectSpecification.getFullIdentifier());

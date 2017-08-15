@@ -26,8 +26,9 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
 import org.jboss.resteasy.annotations.ClientResponseType;
+
+import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
 
 @Path("/domain-types")
 public interface DomainTypeResource {
@@ -51,6 +52,12 @@ public interface DomainTypeResource {
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_DOMAIN_TYPE })
     @ClientResponseType(entityType = String.class)
     public abstract Response domainType(@PathParam("domainType") final String domainType);
+
+    @GET
+    @Path("/{domainType}/layout")
+    @Produces({ MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_LAYOUT_BS3 })
+    @ClientResponseType(entityType = String.class)
+    public abstract Response layout(@PathParam("domainType") final String domainType);
 
     @GET
     @Path("/{domainType}/properties/{propertyId}")

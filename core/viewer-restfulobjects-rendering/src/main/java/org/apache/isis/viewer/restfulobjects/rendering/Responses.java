@@ -35,6 +35,10 @@ public final class Responses {
         return of(RestfulResponse.HttpStatusCode.NO_CONTENT);
     }
 
+    public static Response.ResponseBuilder ofNotFound() {
+        return of(RestfulResponse.HttpStatusCode.NOT_FOUND);
+    }
+
     public static Response.ResponseBuilder ofOk(
             final ReprRenderer<?, ?> renderer,
             final Caching caching) {
