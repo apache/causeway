@@ -18,8 +18,10 @@ package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 
 import java.util.List;
 
+import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.facets.object.domainservicelayout.DomainServiceLayoutFacet;
 import org.apache.isis.core.metamodel.facets.object.notpersistable.NotPersistableFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.services.ServiceUtil;
@@ -177,6 +179,17 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
             // extensions
             getExtensions().mapPut("isService", isService);
             getExtensions().mapPut("isPersistent", objectAdapter.representsPersistent());
+            if(isService) {
+                final ObjectSpecification objectSpec = objectAdapter.getSpecification();
+                final DomainServiceLayoutFacet layoutFacet =
+                        objectSpec.getFacet(DomainServiceLayoutFacet.class);
+                if(layoutFacet != null) {
+                    final DomainServiceLayout.MenuBar menuBar = layoutFacet.getMenuBar();
+                    if(menuBar != null) {
+                        getExtensions().mapPut("menuBar", menuBar);
+                    }
+                }
+            }
         }
 
         return representation;
