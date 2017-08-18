@@ -49,7 +49,7 @@ public class Markup implements Serializable {
     }
 
     public String title() {
-    	return "Markup[lenght="+html.length()+"]";
+    	return "Markup[length="+html.length()+"]";
     }
 
     @Override
@@ -70,7 +70,7 @@ public class Markup implements Serializable {
 
     @Override
     public String toString() {
-        return "Markup[lenght="+html.length()+", html="+html+"]";
+        return "Markup[length="+html.length()+", html="+html+"]";
     }
     
 }
