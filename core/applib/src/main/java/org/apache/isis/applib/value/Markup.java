@@ -45,7 +45,7 @@ public class Markup implements Serializable {
     }
     
     public boolean isEqualTo(final Markup other) {
-        return this.html.equals(other.html);
+        return other==null ? false : this.html.equals(other.html);
     }
 
     public String title() {
