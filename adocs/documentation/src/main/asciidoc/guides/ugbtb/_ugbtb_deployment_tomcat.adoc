@@ -5,24 +5,57 @@
 :_imagesdir: images/
 
 
-Some pointers when deploying to Tomcat (or any other servlet container).
-
-== Externalized Configuration
-
-See the guidance xref:../ugbtb/ugbtb.adoc#_ugbtb_deployment_externalized-configuration[below].
+Some pointers on how to xref:ugbtb.adoc#_ugbtb_deployment_externalized-configuration[externalize configuration] when deploying to Tomcat.
+Other servlet containers have similar mechanisms.
 
 
-== JVM Args
+== Tomcat 8.0
 
-The xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_WrapperFactory[`WrapperFactory`] uses link:http://www.javassist.org[Javassist] to create on-the-fly classes acting as a proxy.  The cost of these proxies can be mitigated using:
+If deploying Tomcat 8.0, create a file called `$TOMCAT_HOME/conf/Catalina/localhost/todoapp.xml`, where `todoapp.xml` corresponds to the name of the webapp being deployed, eg `todoapp.war`.
 
-[source,ini]
+The contents of this file would be something like:
+
+[source,xml]
 ----
--XX:+CMSClassUnloadingEnabled -XX:+UseConcMarkSweepGC
+<?xml version="1.0" encoding="UTF-8"?>
+<Context>
+
+    <WatchedResource>WEB-INF/web.xml</WatchedResource>
+    <Manager pathname="" />
+
+    <Parameter name="shiroConfigLocations"
+               value="file:/var/todoapp/dev/shiro.ini"
+               override="false" />
+
+    <Parameter name="isis.config.dir"
+               value="/var/todoapp/dev/"
+               override="false" />
+
+    <Parameter name="spring.config.file"
+               value="file:/var/todoapp/dev/spring.properties"
+               override="false" />
+
+    <Parameter name="wicket.configuration"
+               value="development"
+               override="false" />
+
+</Context>
 ----
 
+[IMPORTANT]
+====
+Note that the `override` key should be set to "false", not "true".
+It indicates whether the application's own `web.xml` can override the setting.
+In most cases, you probably want to disallow that.
+====
 
+Thus, when `todoapp.war` is deployed to `$CATALINA_HOME/webapp`, then this configuration will be used.
 
-== Using a JNDI Datasource
+For more detail, see the Tomcat 8.0 documentation on link:http://tomcat.apache.org/tomcat-8.0-doc/config/context.html#Defining_a_context[defining a context] and on link:http://tomcat.apache.org/tomcat-8.0-doc/config/context.html#Context_Parameters[context parameters].
 
-See the guidance in the xref:../ugodn/ugodn.adoc#_ugodn_configuring_using-jndi-data-source[configuring datanucleus] section.
+== Tomcat 7.0
+
+If using Tomcat 7.0, the process is similar to that of Tomcat 8.0, however the override file resides in `$TOMCAT_HOME/conf`, rather than `$TOMCAT_HOME/conf/Catalina/localhost`.
+
+For more detail, see the Tomcat 7.0 documentation on link:http://tomcat.apache.org/tomcat-7.0-doc/config/context.html#Defining_a_context[defining a context] and on link:http://tomcat.apache.org/tomcat-7.0-doc/config/context.html#Context_Parameters[context parameters].
+

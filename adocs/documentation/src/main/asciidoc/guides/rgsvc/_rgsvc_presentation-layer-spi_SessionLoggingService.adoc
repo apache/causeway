@@ -35,7 +35,7 @@ public interface SessionLoggingService {
 == Implementations
 
 The framework provides an implementation, `SessionLoggingService.Stderr` that just prints out to standard error.
-This is not registered by default, but can be easily registered manually (in `1.15.0-SNAPSHOT`) using `AppManifestAbstract.Builder#withAdditionalServices(...)`.
+This is not registered by default, but can be easily registered manually using `AppManifestAbstract.Builder#withAdditionalServices(...)`.
 
 The (non-ASF) http://github.com/isisaddons/isis-module-sessionlogger[Sessionlogger module] provides an implementation that logs each session as a JDO entity.
 

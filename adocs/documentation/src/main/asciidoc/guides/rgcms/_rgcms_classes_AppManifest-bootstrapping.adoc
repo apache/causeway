@@ -9,7 +9,7 @@ This section describes how to implement the `AppManifest` interface to bootstrap
 
 [TIP]
 ====
-(As of `1.15.0-SNAPSHOT`), the framework-provided `AppManifestAbstract` and `AppManifestAbstract.Builder` make it easy to write ``AppManifest`` that can be used both to bootstrap the application "proper", and to be tweaked for use within integration tests.
+(As of `1.15.0`), the framework-provided `AppManifestAbstract` and `AppManifestAbstract.Builder` make it easy to write ``AppManifest`` that can be used both to bootstrap the application "proper", and to be tweaked for use within integration tests.
 ====
 
 
@@ -233,13 +233,13 @@ Sometimes though it is necessary to "tweak" the `AppManifest`:
 
 * it might override certain configuration properties, eg to run against an in-memory HSQLDB database.
 
-The next section describes some helper classes that (as of `1.15.0-SNAPSHOT`) the framework provides to help achieve this.
+The next section describes some helper classes that the framework provides to help achieve this.
 
 
 [[__rgcms_classes_AppManifest-bootstrapping_bootstrapping_AppManifestAbstract]]
-=== AppManifestAbstract (`1.15.0-SNAPSHOT`)
+=== AppManifestAbstract
 
-(As of `1.15.0-SNAPSHOT`), the `AppManifestAbstract` and its associated builder (`AppManifestAbstract.Builder`) make it easy to bootstrap the application both as a webapp and also as an integration test.
+(As of `1.15.0`), the `AppManifestAbstract` and its associated builder (`AppManifestAbstract.Builder`) make it easy to bootstrap the application both as a webapp and also as an integration test.
 
 Rather than implement `AppManifest` interface directly, instead your application subclasses from `AppManifestAbstract`.
 This takes an instance of a `AppManifestAbstract.Builder` in its constructor; the builder is what allows for variation between environments.

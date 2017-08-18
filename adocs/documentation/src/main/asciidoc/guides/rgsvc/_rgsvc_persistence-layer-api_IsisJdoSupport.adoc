@@ -122,7 +122,7 @@ You can find the full example of the JDOQL equivalent in the xref:../rgsvc/rgsvc
 ====
 
 
-The `executeUniqueQuery(...)` method (`1.15.0-SNAPSHOT`) is similar to `executeQuery(...)`, however expects the query to return at most a single object, which it returns (or `null` if none).
+The `executeUniqueQuery(...)` method (introduced in `1.15.0`) is similar to `executeQuery(...)`, however expects the query to return at most a single object, which it returns (or `null` if none).
 
 The `newTypesafeQuery(...)` method is a lower-level API that allows a type safe query to be instantiated for most sophisticated querying, eg using group by or order by clauses.
 See the
