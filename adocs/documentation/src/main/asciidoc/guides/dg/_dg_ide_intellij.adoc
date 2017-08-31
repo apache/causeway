@@ -121,6 +121,8 @@ Select all the categories (there should just be one), and hit OK.  then hit rest
 
 [WARNING]
 ====
+If importing into IntelliJ 2017.2.3 two categories are shown - "File templates" and "File templates (schemes)". Select all the categories.
+
 Apparently no categories are shown if importing into IntelliJ 2016.1.1 Community Edition (and perhaps other 2016
 versions).  The file does import ok into IntelliJ 15.0.x, so we think this is a bug in the 2016 version.
 
@@ -245,7 +247,7 @@ If any dependencies are already loaded in the project, then IntelliJ will automa
 
 You can press F4 (or use `File > Project Structure`) to see the resolved classpath for any of the modules loaded into the project.
 
-If you want to focus on one set of code (eg the Isis todoapp but not Apache Isis core) then you _could_ remove the module; but better is to ignore those modules.  This will remove from the the _Projects_ window but keep them available in the _Maven Projects_ window for when you next want to work on them:
+If you want to focus on one set of code (eg the Isis todoapp but not Apache Isis core) then you _could_ remove the module; but better is to ignore those modules.  This will remove them from the _Projects_ window but keep them available in the _Maven Projects_ window for when you next want to work on them:
 
 .IntelliJ Maven Module Management - Ignoring Modules
 image::{_imagesdir}intellij-idea/100-maven-module-mgmt/040-ignoring-modules.png[width="730px"]
