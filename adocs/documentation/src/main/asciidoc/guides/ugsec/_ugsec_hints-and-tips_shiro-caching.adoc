@@ -5,7 +5,7 @@
 :_imagesdir: images/
 
 
-We don't want to repeat the entire link:http://shiro.apache.org/documentation.html[Shiro documentation set] here, but we should flag a number of otherof other features that are worth checking out.
+We don't want to repeat the entire link:http://shiro.apache.org/documentation.html[Shiro documentation set] here, but we should flag a number of other features that are worth checking out.
 
 
 
