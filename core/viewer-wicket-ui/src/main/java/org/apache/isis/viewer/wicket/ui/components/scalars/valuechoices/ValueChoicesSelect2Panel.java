@@ -139,35 +139,11 @@ public class ValueChoicesSelect2Panel extends ScalarPanelSelect2Abstract impleme
     }
 
     @Override
-    protected void resetIfCurrentNotInChoices(final Select2 select2, final List<ObjectAdapterMemento> choicesMementos) {
+    protected void syncIfNull(final Select2 select2, final List<ObjectAdapterMemento> choicesMementos) {
         final ObjectAdapterMemento curr = getModel().getObjectAdapterMemento();
 
         if(curr == null) {
-
             select2.getModel().setObject(null);
-
-        } else {
-
-            if(!getModel().isCollection()) {
-
-                // dubious behaviour...
-
-//                // if currently held value is not compatible with choices, then replace with the first choice
-//                if(!choicesMementos.contains(curr)) {
-//
-//                    final ObjectAdapterMemento newAdapterMemento =
-//                            choicesMementos.isEmpty()
-//                                    ? null
-//                                    : choicesMementos.get(0);
-//
-//                    select2.getModel().setObject(newAdapterMemento);
-//                    getModel().setObjectMemento(newAdapterMemento, getPersistenceSession(), getSpecificationLoader());
-//                }
-
-            } else {
-
-                // nothing to do
-            }
         }
     }
 

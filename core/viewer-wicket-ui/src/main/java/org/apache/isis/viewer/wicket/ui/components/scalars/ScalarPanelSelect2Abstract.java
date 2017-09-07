@@ -127,7 +127,7 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
 
         if(choiceProvider instanceof ObjectAdapterMementoProviderForChoices) {
             final ObjectAdapterMementoProviderForChoices providerForChoices = (ObjectAdapterMementoProviderForChoices) choiceProvider;
-            resetIfCurrentNotInChoices(select2, providerForChoices.getChoiceMementos());
+            syncIfNull(select2, providerForChoices.getChoiceMementos());
         }
     }
 
@@ -139,7 +139,7 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
     /**
      * Mandatory hook (is called by {@link #setProviderAndCurrAndPending(Select2, ObjectAdapter[])})
      */
-    protected abstract void resetIfCurrentNotInChoices(final Select2 select2, final List<ObjectAdapterMemento> choicesMementos);
+    protected abstract void syncIfNull(final Select2 select2, final List<ObjectAdapterMemento> choicesMementos);
 
 
     // //////////////////////////////////////
