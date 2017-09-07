@@ -150,17 +150,19 @@ public class ValueChoicesSelect2Panel extends ScalarPanelSelect2Abstract impleme
 
             if(!getModel().isCollection()) {
 
-                // if currently held value is not compatible with choices, then replace with the first choice
-                if(!choicesMementos.contains(curr)) {
+                // dubious behaviour...
 
-                    final ObjectAdapterMemento newAdapterMemento =
-                            choicesMementos.isEmpty()
-                                    ? null
-                                    : choicesMementos.get(0);
-
-                    select2.getModel().setObject(newAdapterMemento);
-                    getModel().setObjectMemento(newAdapterMemento, getPersistenceSession(), getSpecificationLoader());
-                }
+//                // if currently held value is not compatible with choices, then replace with the first choice
+//                if(!choicesMementos.contains(curr)) {
+//
+//                    final ObjectAdapterMemento newAdapterMemento =
+//                            choicesMementos.isEmpty()
+//                                    ? null
+//                                    : choicesMementos.get(0);
+//
+//                    select2.getModel().setObject(newAdapterMemento);
+//                    getModel().setObjectMemento(newAdapterMemento, getPersistenceSession(), getSpecificationLoader());
+//                }
 
             } else {
 

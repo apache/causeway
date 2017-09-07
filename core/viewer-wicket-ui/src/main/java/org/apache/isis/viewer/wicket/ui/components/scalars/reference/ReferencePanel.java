@@ -367,17 +367,19 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract implements PanelW
                 return;
             }
 
-            if(!curr.containedIn(choiceMementos, getPersistenceSession(), getSpecificationLoader())) {
-                if(!choiceMementos.isEmpty() && autoSelect()) {
-                    final ObjectAdapterMemento newAdapterMemento = choiceMementos.get(0);
-                    select2.getModel().setObject(newAdapterMemento);
-                    getModel().setObject(newAdapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK,
-                            getPersistenceSession(), getSpecificationLoader()));
-                } else {
-                    select2.getModel().setObject(null);
-                    getModel().setObject(null);
-                }
-            }
+            // dubious behaviour...
+
+//            if(!curr.containedIn(choiceMementos, getPersistenceSession(), getSpecificationLoader())) {
+//                if(!choiceMementos.isEmpty() && autoSelect()) {
+//                    final ObjectAdapterMemento newAdapterMemento = choiceMementos.get(0);
+//                    select2.getModel().setObject(newAdapterMemento);
+//                    getModel().setObject(newAdapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK,
+//                            getPersistenceSession(), getSpecificationLoader()));
+//                } else {
+//                    select2.getModel().setObject(null);
+//                    getModel().setObject(null);
+//                }
+//            }
 
         } else {
 
