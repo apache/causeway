@@ -75,6 +75,7 @@ Once you've built the app, you can run the WAR in a variety of ways.
 === Using mvn Jetty plugin
 
 First, you could run the WAR in a Maven-hosted Jetty instance, though you need to `cd` into the `webapp` module:
+(using maven 3.5.0 / isis 1.15 there is no webapp module and there is no need to `cd`into a `webapp` module. just run mvn jetty:run to fire up the app )
 
 [source,bash]
 ----
