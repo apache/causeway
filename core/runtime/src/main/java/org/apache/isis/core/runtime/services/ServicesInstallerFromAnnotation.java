@@ -233,7 +233,7 @@ public class ServicesInstallerFromAnnotation extends ServicesInstallerAbstract {
 
     //endregion
 
-    //region > helpers: orderOf, nameOf, asList
+    //region > helpers: nameOf, asList
 
     private static String nameOf(final Class<?> cls) {
         final DomainServiceLayout domainServiceLayout = cls.getAnnotation(DomainServiceLayout.class);

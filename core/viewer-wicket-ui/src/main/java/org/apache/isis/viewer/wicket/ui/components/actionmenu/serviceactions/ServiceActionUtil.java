@@ -203,9 +203,6 @@ public final class ServiceActionUtil {
             collateServiceActions(serviceAdapter, ActionType.USER, serviceActions);
             collateServiceActions(serviceAdapter, ActionType.PROTOTYPE, serviceActions);
         }
-
-        //XXX ISIS-1715 honor member order
-        Collections.sort(serviceActions);
         
         final Set<String> serviceNamesInOrder = serviceNamesInOrder(serviceAdapters, serviceActions);
         final Map<String, List<ServiceAndAction>> serviceActionsByName = groupByServiceName(serviceActions);

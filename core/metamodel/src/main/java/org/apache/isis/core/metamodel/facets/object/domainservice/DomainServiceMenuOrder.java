@@ -22,40 +22,44 @@ package org.apache.isis.core.metamodel.facets.object.domainservice;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.core.commons.compare.SequenceCompare;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 
 public class DomainServiceMenuOrder {
-
-	public static int compare(ObjectAdapter serviceAdapter1, ObjectAdapter serviceAdapter2) {
-		
-		return SequenceCompare.compareNullLast(
-				orderOf(serviceAdapter1.getSpecification().getCorrespondingClass()),
-				orderOf(serviceAdapter2.getSpecification().getCorrespondingClass()) );
-	}
 	
-	// -- HELPER
-    
+	private final static String UNDEFINED = "" + Integer.MAX_VALUE;
+
+	//TODO can be safely removed
+//	public static int compare(ObjectAdapter serviceAdapter1, ObjectAdapter serviceAdapter2) {
+//		return SequenceCompare.compareNullLast(
+//				orderOf(serviceAdapter1.getSpecification().getCorrespondingClass()),
+//				orderOf(serviceAdapter2.getSpecification().getCorrespondingClass()) );
+//	}
+	
     public static String orderOf(final Class<?> cls) {
         final DomainServiceLayout domainServiceLayout = cls.getAnnotation(DomainServiceLayout.class);
         String dslayoutOrder = domainServiceLayout != null ? domainServiceLayout.menuOrder(): null;
         final DomainService domainService = cls.getAnnotation(DomainService.class);
-        String dsOrder = domainService != null ? domainService.menuOrder() : "" + Integer.MAX_VALUE;
-
-        return minimumOf(dslayoutOrder, dsOrder);
+        String dsOrder = domainService != null ? domainService.menuOrder() : null;
+        
+        String min = minimumOf(dslayoutOrder, dsOrder);
+        return min!=null ? min : UNDEFINED; 
     }
 
+	// -- HELPER
+
     private static String minimumOf(final String dslayoutOrder, final String dsOrder) {
-        if(isUndefined(dslayoutOrder)) {
+        if(isUndefined(dslayoutOrder))
             return dsOrder;
-        }
-        if(isUndefined(dsOrder)) {
+        if(isUndefined(dsOrder))
             return dslayoutOrder;
-        }
-        return dslayoutOrder.compareTo(dsOrder) < 0 ? dslayoutOrder : dsOrder;
+        
+        //XXX ISIS-1715 honor member order (use Dewey Decimal format)
+        return SequenceCompare.compareNullLast(dslayoutOrder, dsOrder) < 0
+        		? dslayoutOrder 
+        		: dsOrder;
     }
 
     private static boolean isUndefined(final String str) {
-        return str == null || str.equals("" + Integer.MAX_VALUE);
+        return str == null || str.equals(UNDEFINED);
     }
 
 }
