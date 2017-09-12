@@ -19,7 +19,7 @@ package org.apache.isis.viewer.wicket.ui.components.actionmenu.serviceactions;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 
-class ServiceAndAction {
+class ServiceAndAction implements Comparable<ServiceAndAction> {
     final String serviceName;
     final EntityModel serviceEntityModel;
     final ObjectAction objectAction;
@@ -41,4 +41,9 @@ class ServiceAndAction {
     public String toString() {
         return serviceName + " ~ " + objectAction.getIdentifier().toFullIdentityString();
     }
+
+	@Override
+	public int compareTo(ServiceAndAction other) {
+		return ServiceAndActionOrder.compare(this, other);
+	}
 }

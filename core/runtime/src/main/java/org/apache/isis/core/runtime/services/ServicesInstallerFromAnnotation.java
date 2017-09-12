@@ -46,6 +46,7 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.services.classdiscovery.ClassDiscoveryServiceUsingReflections;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
+import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceMenuOrder;
 import org.apache.isis.core.metamodel.util.DeweyOrderComparator;
 
 import static com.google.common.base.Predicates.and;
@@ -220,7 +221,7 @@ public class ServicesInstallerFromAnnotation extends ServicesInstallerAbstract {
         final List<Class<?>> domainServiceClasses = Lists.newArrayList(Iterables.filter(domainServiceTypes, instantiatable()));
         for (final Class<?> cls : domainServiceClasses) {
 
-            final String order = orderOf(cls);
+            final String order = DomainServiceMenuOrder.orderOf(cls);
             // we want the class name in order to instantiate it
             // (and *not* the value of the @DomainServiceLayout(named=...) annotation attribute)
             final String fullyQualifiedClassName = cls.getName();
@@ -233,29 +234,6 @@ public class ServicesInstallerFromAnnotation extends ServicesInstallerAbstract {
     //endregion
 
     //region > helpers: orderOf, nameOf, asList
-
-    private static String orderOf(final Class<?> cls) {
-        final DomainServiceLayout domainServiceLayout = cls.getAnnotation(DomainServiceLayout.class);
-        String dslayoutOrder = domainServiceLayout != null ? domainServiceLayout.menuOrder(): null;
-        final DomainService domainService = cls.getAnnotation(DomainService.class);
-        String dsOrder = domainService != null ? domainService.menuOrder() : "" + Integer.MAX_VALUE;
-
-        return minimumOf(dslayoutOrder, dsOrder);
-    }
-
-    private static String minimumOf(final String dslayoutOrder, final String dsOrder) {
-        if(isUndefined(dslayoutOrder)) {
-            return dsOrder;
-        }
-        if(isUndefined(dsOrder)) {
-            return dslayoutOrder;
-        }
-        return dslayoutOrder.compareTo(dsOrder) < 0 ? dslayoutOrder : dsOrder;
-    }
-
-    private static boolean isUndefined(final String str) {
-        return str == null || str.equals("" + Integer.MAX_VALUE);
-    }
 
     private static String nameOf(final Class<?> cls) {
         final DomainServiceLayout domainServiceLayout = cls.getAnnotation(DomainServiceLayout.class);
