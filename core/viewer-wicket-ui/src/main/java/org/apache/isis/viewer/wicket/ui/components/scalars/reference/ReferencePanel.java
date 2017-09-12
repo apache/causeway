@@ -356,7 +356,7 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract implements PanelW
 
     // called by setProviderAndCurrAndPending
     @Override
-    protected void resetIfCurrentNotInChoices(final Select2 select2, final List<ObjectAdapterMemento> choiceMementos) {
+    protected void syncIfNull(final Select2 select2, final List<ObjectAdapterMemento> choiceMementos) {
         final ObjectAdapterMemento curr = select2.getModelObject();
 
         if(!getModel().isCollection()) {
@@ -364,24 +364,7 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract implements PanelW
             if(curr == null) {
                 select2.getModel().setObject(null);
                 getModel().setObject(null);
-                return;
             }
-
-            if(!curr.containedIn(choiceMementos, getPersistenceSession(), getSpecificationLoader())) {
-                if(!choiceMementos.isEmpty() && autoSelect()) {
-                    final ObjectAdapterMemento newAdapterMemento = choiceMementos.get(0);
-                    select2.getModel().setObject(newAdapterMemento);
-                    getModel().setObject(newAdapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK,
-                            getPersistenceSession(), getSpecificationLoader()));
-                } else {
-                    select2.getModel().setObject(null);
-                    getModel().setObject(null);
-                }
-            }
-
-        } else {
-
-            // TODO
 
         }
     }

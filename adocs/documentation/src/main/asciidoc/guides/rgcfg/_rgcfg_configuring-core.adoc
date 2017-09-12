@@ -212,7 +212,7 @@ Lazy initialization can speed up bootstrapping, useful while developing and runn
 |`isis.services.` +
 `command.` +
 `actions`
-| `all`, `ignoreSafe`, `none` (`all`)
+| `all`, `ignoreSafe`, `none` (`none`)
 |Whether action invocations should be automatically reified into commands (for actions annotated with xref:../rgant/rgant.adoc#_rgant-Action_command[`@Action(command=CommandReification.AS_CONFIGURED)`].  +
 
 `ignoreQueryOnly` is an alias for `ignoreSafe`.
@@ -220,7 +220,7 @@ Lazy initialization can speed up bootstrapping, useful while developing and runn
 |`isis.services.` +
 `command.` +
 `properties`
-| `all`, `none` (`all`)
+| `all`, `none` (`none`)
 |(Whether property edits should be automatically reified into commands (for properties annotated with xref:../rgant/rgant.adoc#_rgant-Property_command[`@Property(command=CommandReification.AS_CONFIGURED)`].  +
 
 
