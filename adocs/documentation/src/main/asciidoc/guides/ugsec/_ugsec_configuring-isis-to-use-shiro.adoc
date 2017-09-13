@@ -16,7 +16,9 @@ Both the xref:../ugfun/ugfun.adoc#_ugfun_getting-started_helloworld-archetype[He
 
 == Telling Apache Isis to use Shiro
 
-To tell Apache Isis to use Shiro, update the `WEB-INF/isis.properties` file:
+To tell Apache Isis to use Shiro, set the "isis.authentication" and "isis.authorisation" properties.
+
+One way to do this is by updating the `WEB-INF/isis.properties` file:
 
 [source,ini]
 ----
@@ -24,7 +26,27 @@ isis.authentication=shiro
 isis.authorization=shiro
 ----
 
-This installs the appropriate implementation (the `ShiroAuthenticatorOrAuthorizor` class) that use Shiro's APIs to perform authentication and authorization:
+Alternatively (as of `1.15.0`) you can set them both programmatically from the `AppManifestAbstract.BUILDER` (see xref:../rgcms/rgcms.adoc#__rgcms_classes_AppManifest-bootstrapping_bootstrapping_AppManifestAbstract[here]).
+For example, the xref:../ugfun/ugfun.adoc#_ugfun_getting-started_helloworld-archetype[HelloWorld archetype] bootstraps using:
+
+[source,java]
+----
+public class HelloWorldAppManifest extends AppManifestAbstract {
+
+    public static final Builder BUILDER = Builder
+            .forModules(HelloWorldModule.class)
+            .withConfigurationPropertiesFile(
+                HelloWorldAppManifest.class, "isis.properties")
+            .withAuthMechanism("shiro");
+
+    public HelloWorldAppManifest() {
+        super(BUILDER);
+    }
+}
+----
+
+
+Either way, this installs the appropriate implementation (the `ShiroAuthenticatorOrAuthorizor` class) that use Shiro's APIs to perform authentication and authorization:
 
 image::{_imagesdir}security/security-apis-impl/configure-isis-to-use-shiro.png[width="600px",link="{_imagesdir}security/security-apis-impl/configure-isis-to-use-shiro.png"]
 
