@@ -17,6 +17,7 @@ Both the xref:../ugfun/ugfun.adoc#_ugfun_getting-started_helloworld-archetype[He
 == Telling Apache Isis to use Shiro
 
 To tell Apache Isis to use Shiro, update the `WEB-INF/isis.properties` file:
+(sure about this? The HelloWorld App uses Shiro without this properties set. Instead the use of Shiro is mentioned in ../domainapp/application/HelloworldAppManifest.java: .withAuthMechanism("shiro")?! )
 
 [source,ini]
 ----
