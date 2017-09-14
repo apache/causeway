@@ -13,13 +13,7 @@ In addition to primitives, the JDK Classes supported are:
 
 * the wrapper classes:
 
-** `java.lang.Boolean`
-** `java.lang.Character`
-**`java.lang.Double`
-**`java.lang.Float`
-**`java.lang.Integer`
-**`java.lang.Long`
-**`java.lang.Short`
+** `java.lang.Boolean`, `java.lang.Character`, `java.lang.Double`, `java.lang.Float`, `java.lang.Long`, `java.lang.Integer`, `java.lang.Short`, `java.lang.Byte`
 
 * `java.lang.String`
 
@@ -48,6 +42,11 @@ The value types defined by the framework itself (in the applib) are:
 +
 binary large object, eg PDFs or images
 
+* `o.a.i.applib.value.Markup`
+
++
+(As of `1.15.1-SNAPSHOT`), intended for use as a read-only property to display arbitrary HTML.
+
 * `o.a.i.applib.value.Clob`
 
 +
@@ -63,16 +62,11 @@ A currency and amount
 +
 A simple wrapper around a string, but never shown in plain-text.
 
-* `o.a.i.applib.value.Markup`
-
-+
-(As of `1.15.1-SNAPSHOT`), intended for use as a read-only property to display arbitrary HTML.
-
 
 
 include::_rgcms_classes_value-types_Blob.adoc[leveloffset=+1]
 include::_rgcms_classes_value-types_Clob.adoc[leveloffset=+1]
 //include::_rgcms_classes_value-types_Color.adoc[leveloffset=+1]
-include::_rgcms_classes_value-types_Money.adoc[leveloffset=+1]
-include::_rgcms_classes_value-types_Password.adoc[leveloffset=+1]
 include::_rgcms_classes_value-types_Markup.adoc[leveloffset=+1]
+//include::_rgcms_classes_value-types_Money.adoc[leveloffset=+1]
+//include::_rgcms_classes_value-types_Password.adoc[leveloffset=+1]
