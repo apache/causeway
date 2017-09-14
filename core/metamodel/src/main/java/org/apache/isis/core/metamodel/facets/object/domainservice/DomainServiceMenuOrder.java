@@ -27,13 +27,6 @@ public class DomainServiceMenuOrder {
 	
 	private final static String UNDEFINED = "" + Integer.MAX_VALUE;
 
-	//TODO can be safely removed
-//	public static int compare(ObjectAdapter serviceAdapter1, ObjectAdapter serviceAdapter2) {
-//		return SequenceCompare.compareNullLast(
-//				orderOf(serviceAdapter1.getSpecification().getCorrespondingClass()),
-//				orderOf(serviceAdapter2.getSpecification().getCorrespondingClass()) );
-//	}
-	
     public static String orderOf(final Class<?> cls) {
         final DomainServiceLayout domainServiceLayout = cls.getAnnotation(DomainServiceLayout.class);
         String dslayoutOrder = domainServiceLayout != null ? domainServiceLayout.menuOrder(): null;
