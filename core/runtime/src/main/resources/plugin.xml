@@ -68,6 +68,13 @@
                 converter-name="isis.password-string" />
     </extension>
 
+    <extension point="org.datanucleus.java_type">
+        <java-type
+                name="org.apache.isis.applib.value.Markup"
+                dfg="true"
+                converter-name="isis.markup-string" />
+    </extension>
+
     <!--
     http://www.datanucleus.org/extensions/type_converter.html
     -->
@@ -77,6 +84,17 @@
                 member-type="org.apache.isis.applib.value.Password"
                 datastore-type="java.lang.String"
                 converter-class="org.apache.isis.objectstore.jdo.datanucleus.typeconverters.IsisPasswordConverter"/>
+    </extension>
+
+    <!--
+    http://www.datanucleus.org/extensions/type_converter.html
+    -->
+    <extension point="org.datanucleus.type_converter">
+        <type-converter
+                name="isis.markup-string"
+                member-type="org.apache.isis.applib.value.Markup"
+                datastore-type="java.lang.String"
+                converter-class="org.apache.isis.objectstore.jdo.datanucleus.typeconverters.IsisMarkupConverter"/>
     </extension>
 
 </plugin>
