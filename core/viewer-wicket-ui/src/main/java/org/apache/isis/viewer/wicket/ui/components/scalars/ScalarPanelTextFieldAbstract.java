@@ -154,7 +154,7 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
         component.add(new ReplaceDisabledTagWithReadonlyTagBehaviour());
     }
 
-    private MarkupContainer createScalarIfRegularFormGroup() {
+    protected MarkupContainer createScalarIfRegularFormGroup() {
         Fragment textFieldFragment = createTextFieldFragment("scalarValueContainer");
         final String name = getModel().getName();
         textField.setLabel(Model.of(name));

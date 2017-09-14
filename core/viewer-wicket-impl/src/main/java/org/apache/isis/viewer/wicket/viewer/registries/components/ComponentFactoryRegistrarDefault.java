@@ -21,6 +21,7 @@ package org.apache.isis.viewer.wicket.viewer.registries.components;
 
 import com.google.inject.Singleton;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
+import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistrar;
 import org.apache.isis.viewer.wicket.ui.components.about.AboutPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.actionlink.ActionLinkPanelFactory;
@@ -54,6 +55,7 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.jdkmath.JavaMathBigIn
 import org.apache.isis.viewer.wicket.ui.components.scalars.jodatime.JodaDateTimePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jodatime.JodaLocalDatePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jodatime.JodaLocalDateTimePanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.primitive.*;
 import org.apache.isis.viewer.wicket.ui.components.scalars.reference.ReferencePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.string.StringPanelFactory;
@@ -169,6 +171,7 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
     }
 
     protected void addComponentFactoriesForValue(final ComponentFactoryList componentFactories) {
+    	componentFactories.add(new MarkupPanelFactory(ComponentType.VALUE));
         componentFactories.add(new StandaloneValuePanelFactory());
     }
 
@@ -176,6 +179,8 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
 
         componentFactories.add(new ReferencePanelFactory());
 
+        componentFactories.add(new MarkupPanelFactory(ComponentType.SCALAR_NAME_AND_VALUE));
+        
         componentFactories.add(new BooleanPanelFactory());
         componentFactories.add(new BytePanelFactory());
         componentFactories.add(new ShortPanelFactory());
