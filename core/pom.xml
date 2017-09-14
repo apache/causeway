@@ -139,7 +139,7 @@
 
         <jetty.version>9.3.10.v20160621</jetty.version>
 
-        <wicket.version>7.8.1</wicket.version>
+        <wicket.version>7.7.0</wicket.version>
 
         <wicket-webjars.version>0.5.4</wicket-webjars.version>
         <wicket-bootstrap.version>0.10.16</wicket-bootstrap.version>
@@ -416,15 +416,6 @@
             <url>http://download.java.net/maven/1</url>
             <snapshots>
               <enabled>false</enabled>
-            </snapshots>
-        </repository>
-
-        <!-- staging (originally added to be able to test the RC of Wicket 7.8.1) -->
-        <repository>
-            <id>Apache Staging Repository</id>
-            <url>https://repository.apache.org/content/groups/staging/</url>
-            <snapshots>
-                <enabled>false</enabled>
             </snapshots>
         </repository>
 
