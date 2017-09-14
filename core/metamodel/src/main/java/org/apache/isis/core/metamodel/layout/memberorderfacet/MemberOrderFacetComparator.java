@@ -20,8 +20,8 @@
 package org.apache.isis.core.metamodel.layout.memberorderfacet;
 
 import java.util.Comparator;
-import java.util.StringTokenizer;
 
+import org.apache.isis.core.commons.compare.SequenceCompare;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 
 public class MemberOrderFacetComparator implements Comparator<MemberOrderFacet> {
@@ -47,63 +47,9 @@ public class MemberOrderFacetComparator implements Comparator<MemberOrderFacet> 
         if (ensureInSameGroup && !m1.name().equals(m2.name())) {
             throw new IllegalArgumentException("Not in same group");
         }
+        
+        return SequenceCompare.compareNullLast(m1.sequence(), m2.sequence());
 
-        final String sequence1 = m1.sequence();
-        final String sequence2 = m2.sequence();
-
-        final String[] components1 = componentsFor(sequence1);
-        final String[] components2 = componentsFor(sequence2);
-
-        final int length1 = components1.length;
-        final int length2 = components2.length;
-
-        // shouldn't happen but just in case.
-        if (length1 == 0 && length2 == 0) {
-            return 0;
-        }
-
-        // continue to loop until we run out of components.
-        int n = 0;
-        while (true) {
-            final int length = n + 1;
-            // check if run out of components in either side
-            if (length1 < length && length2 >= length) {
-                return -1; // o1 before o2
-            }
-            if (length2 < length && length1 >= length) {
-                return +1; // o2 before o1
-            }
-            if (length1 < length && length2 < length) {
-                // run out of components
-                return 0;
-            }
-            // we have this component on each side
-
-            int componentCompare = 0;
-            try {
-                final Integer c1 = Integer.valueOf(components1[n]);
-                final Integer c2 = Integer.valueOf(components2[n]);
-                componentCompare = c1.compareTo(c2);
-            } catch (final NumberFormatException nfe) {
-                // not integers compare as strings
-                componentCompare = components1[n].compareTo(components2[n]);
-            }
-
-            if (componentCompare != 0) {
-                return componentCompare;
-            }
-            // this component is the same; lets look at the next
-            n++;
-        }
-    }
-
-    private static String[] componentsFor(final String sequence) {
-        final StringTokenizer tokens = new StringTokenizer(sequence, ".", false);
-        final String[] components = new String[tokens.countTokens()];
-        for (int i = 0; tokens.hasMoreTokens(); i++) {
-            components[i] = tokens.nextToken();
-        }
-        return components;
     }
 
 
