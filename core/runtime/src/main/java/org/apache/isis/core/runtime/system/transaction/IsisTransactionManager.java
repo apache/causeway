@@ -336,27 +336,31 @@ public class IsisTransactionManager implements SessionScopedComponent {
 
                 // just in case any different exception was raised...
                 abortCause = this.getCurrentTransaction().getAbortCause();
+
             } catch(RuntimeException ex) {
 
-                // ... or, capture this most recent exception
                 abortCause = ex;
+
             }
 
 
             if(abortCause != null) {
-                //
-                // previously (<1.15.0) we threw this exception.
-                // however, this results in an attempt to forward onto the error page, even if the error has been
-                // recognised at the UI layer.
-                //
-                // so instead we just return (mirroring DataNucleus' own logic on a failed attempt to abort, namely
-                // to just ignore the attempt to abort and carry on.)
-                //
-                // (have also manually verified that if the exception is NOT recognized by the UI layer, then the
-                //  exception does propagate to the top and we redirect to the error page correctly).
-                //
 
-                return;
+                // re-introduced the throwing of exceptions in 1.15.1 (same as 1.14.x)
+
+                // in 1.15.0 we were not throwing exceptions at this point, resulting in JDOUserException errors
+                // (eg malformed SQL) simply being silently ignored
+
+                // the reason that no exceptions were being thrown in 1.15.0 was because it was observed that
+                // throwing exceptions always resulted in forwarding to the error page, even if the error had been
+                // recognised at the UI layer.  This was the rationale given, at least.
+                //
+                // Not certain now it is correct; if it was to improve the UI experience.
+                //
+                // Certainly swallowing severe exceptions is much less acceptable.  Therefore reverting.
+
+                throw abortCause;
+
 
             } else {
                 // assume that any rendering of the problem has been done lower down the stack.
