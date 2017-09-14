@@ -109,6 +109,7 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2JsRefe
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.pages.accmngt.AccountConfirmationMap;
+import org.apache.isis.viewer.wicket.ui.pages.login.WicketLogoutPage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 import org.apache.isis.viewer.wicket.viewer.integration.isis.DeploymentTypeWicketAbstract;
 import org.apache.isis.viewer.wicket.viewer.integration.isis.WicketServer;
@@ -784,6 +785,8 @@ public class IsisWicketApplication
         // nb: action mount cannot contain {actionArgs}, because the default
         // parameters encoder doesn't seem to be able to handle multiple args
         mountPage("/action/${objectOid}/${actionOwningSpec}/${actionId}/${actionType}", PageType.ACTION_PROMPT);
+
+        mountPage("/logout", WicketLogoutPage.class);
     }
 
     protected void mountPage(final String mountPath, final PageType pageType) {
