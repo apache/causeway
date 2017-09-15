@@ -263,14 +263,12 @@ public class Col extends PanelAbstract<EntityModel> implements HasDynamicallyVis
             final RepeatingViewWithDynamicallyVisibleContent collectionRv =
                     new RepeatingViewWithDynamicallyVisibleContent(ID_COLLECTIONS);
 
-            final EntityModel entityModel = getModel();
-            final CollectionLayoutData snapshot = entityModel.getCollectionLayoutData();
-            
             for (CollectionLayoutData collection : collections) {
 
                 final String id = collectionRv.newChildId();
 
                 // we successively trample over the layout data; but that's ok, this is synchronous code anyway...
+                final EntityModel entityModel = getModel();
                 entityModel.setCollectionLayoutData(collection);
 
                 // the entityModel's getLayoutData() provides the hint as to which collection of the entity to render.
@@ -282,10 +280,6 @@ public class Col extends PanelAbstract<EntityModel> implements HasDynamicallyVis
             }
             div.add(collectionRv);
             visible = visible || collectionRv.isVisible();
-            
-            //XXX ISIS-1698 restore original state after trampling over
-            entityModel.setCollectionLayoutData(snapshot);
-            
         } else {
             Components.permanentlyHide(div, ID_COLLECTIONS);
         }
