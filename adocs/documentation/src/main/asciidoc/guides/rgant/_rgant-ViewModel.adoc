@@ -23,15 +23,7 @@ public class MyViewModel {
 ----
 <1> must have a no-arg constructor for subsequent "recreation" by the framework.
 
-
-To instantiate a view model, you can either instantiate directly using its constructor, or indirectly using `DomainObjectContainer#newTransientInstance()`.  If you use the former, also programmatically call `DomainObjectContainer#injectServicesInto(...)` to ensure that any dependencies are injected into the service.
-
-
-[TIP]
-====
-Note that there is a `DomainObjectContainer#newViewModelInstance(.)`; this is for view models that implement `ViewModel` interface and can be safely ignored.
-====
-
+View models should be instantiated using their constructor, using xref:../rgsvc/rgsvc.adoc#_rgsvc_metadata-api_ServiceRegistry[`ServiceRegistry`] to inject dependencies into the view model as per xref:../ugbtb/ugbtb.adoc#_ugbtb_hints-and-tips_view-model-instantiation[View Model Instantiation].
 
 The view model's memento will be derived from the value of the view model object's properties. Any xref:../rgant/rgant.adoc#_rgant-Property_notPersisted[`@Property#notPersisted()`] properties will be excluded from the memento, as will any xref:../rgant/rgant.adoc#_rgant-Programmatic[`@Programmatic`] properties. Properties that are merely xref:../rgant/rgant.adoc#_rgant-Property_hidden[hidden] _are_ included in the memento.
 
