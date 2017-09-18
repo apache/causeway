@@ -29,15 +29,13 @@ import java.util.Map;
 import java.util.concurrent.Callable;
 
 import javax.jdo.Extent;
+import javax.jdo.JDOQLTypedQuery;
 import javax.jdo.PersistenceManager;
 import javax.jdo.datastore.JDOConnection;
+import javax.jdo.query.BooleanExpression;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-
-import org.datanucleus.api.jdo.JDOPersistenceManager;
-import org.datanucleus.query.typesafe.BooleanExpression;
-import org.datanucleus.query.typesafe.TypesafeQuery;
 
 import org.apache.isis.applib.FatalException;
 import org.apache.isis.applib.annotation.DomainService;
@@ -158,12 +156,9 @@ public class IsisJdoSupportImpl implements IsisJdoSupport {
             
             // temporarily disable concurrency checking while this method is performed
             try {
-                ConcurrencyChecking.executeWithConcurrencyCheckingDisabled(new Callable<Void>() {
-                    @Override
-                    public Void call() {
-                        getJdoPersistenceManager().deletePersistentAll(instances);
-                        return null;
-                    }
+                ConcurrencyChecking.executeWithConcurrencyCheckingDisabled((Callable<Void>) () -> {
+                    getJdoPersistenceManager().deletePersistentAll(instances);
+                    return null;
                 });
             } catch (final Exception ex) {
                 throw new FatalException(ex);
@@ -176,31 +171,31 @@ public class IsisJdoSupportImpl implements IsisJdoSupport {
     @Programmatic
     @Override
     public <T> List<T> executeQuery(final Class<T> cls, final BooleanExpression expression) {
-        final TypesafeQuery<T> query = newTypesafeQuery(cls).filter(expression);
+        final JDOQLTypedQuery<T> query = newTypesafeQuery(cls).filter(expression);
         return executeListAndClose(query);
     }
 
     @Programmatic
     @Override
     public <T> T executeQueryUnique(final Class<T> cls, final BooleanExpression expression) {
-        final TypesafeQuery<T> query = newTypesafeQuery(cls).filter(expression);
+        final JDOQLTypedQuery<T> query = newTypesafeQuery(cls).filter(expression);
         return executeUniqueAndClose(query);
     }
 
     @Programmatic
     @Override
-    public <T> TypesafeQuery<T> newTypesafeQuery(Class<T> cls) {
-        return ((JDOPersistenceManager)getJdoPersistenceManager()).newTypesafeQuery(cls);
+    public <T> JDOQLTypedQuery<T> newTypesafeQuery(Class<T> cls) {
+        return getJdoPersistenceManager().newJDOQLTypedQuery(cls);
     }
 
-    private static <T> List<T> executeListAndClose(final TypesafeQuery<T> query) {
+    private static <T> List<T> executeListAndClose(final JDOQLTypedQuery<T> query) {
         final List<T> elements = query.executeList();
         final List<T> list = Lists.newArrayList(elements);
         query.closeAll();
         return list;
     }
 
-    private static <T> T executeUniqueAndClose(final TypesafeQuery<T> query) {
+    private static <T> T executeUniqueAndClose(final JDOQLTypedQuery<T> query) {
         final T result = query.executeUnique();
         query.closeAll();
         return result;

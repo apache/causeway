@@ -24,7 +24,6 @@ import com.google.common.base.Strings;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.lang.ClassUtil;
-import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 public final class ValueSemanticsProviderUtil {
@@ -45,7 +44,7 @@ public final class ValueSemanticsProviderUtil {
     public static Class<? extends ValueSemanticsProvider<?>> valueSemanticsProviderOrNull(final Class<?> candidateClass, final String classCandidateName) {
         @SuppressWarnings("rawtypes")
         final Class clazz = candidateClass != null ? ClassUtil.implementingClassOrNull(candidateClass.getName(), ValueSemanticsProvider.class, FacetHolder.class) : null;
-        return clazz != null ? clazz : ClassUtil.implementingClassOrNull(classCandidateName, ValueSemanticsProvider.class, FacetHolder.class);
+        return clazz != null ? clazz : (Class)ClassUtil.implementingClassOrNull(classCandidateName, ValueSemanticsProvider.class, FacetHolder.class);
     }
 
 }

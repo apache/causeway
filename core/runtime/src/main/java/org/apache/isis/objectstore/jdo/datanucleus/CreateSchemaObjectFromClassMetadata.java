@@ -31,9 +31,10 @@ import org.datanucleus.ClassLoaderResolver;
 import org.datanucleus.enhancer.EnhancementNucleusContextImpl;
 import org.datanucleus.metadata.AbstractClassMetaData;
 import org.datanucleus.metadata.MetaDataListener;
-import org.datanucleus.store.encryption.ConnectionEncryptionProvider;
+import org.datanucleus.store.ConnectionEncryptionProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 
 /**
  * Implementation note: the methods in this class are <tt>protected</tt> to allow for easy subclassing.

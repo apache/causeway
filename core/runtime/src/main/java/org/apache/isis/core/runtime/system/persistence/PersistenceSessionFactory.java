@@ -112,7 +112,7 @@ public class PersistenceSessionFactory implements ApplicationScopedComponent, Fi
         putIfNotPresent(props, "javax.jdo.PersistenceManagerFactoryClass", JDOPersistenceManagerFactory.class.getName());
 
         // previously we defaulted this property to "true", but that could cause the target database to be modified
-        putIfNotPresent(props, PropertyNames.PROPERTY_SCHEMA_AUTOCREATE_SCHEMA, Boolean.FALSE.toString());
+        putIfNotPresent(props, PropertyNames.PROPERTY_SCHEMA_AUTOCREATE_DATABASE, Boolean.FALSE.toString());
 
         putIfNotPresent(props, PropertyNames.PROPERTY_SCHEMA_VALIDATE_ALL, Boolean.TRUE.toString());
         putIfNotPresent(props, PropertyNames.PROPERTY_CACHE_L2_TYPE, "none");
