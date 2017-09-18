@@ -27,11 +27,14 @@ import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.isis.applib.events.system.FixturesInstalledEvent;
+import org.apache.isis.applib.events.system.FixturesInstallingEvent;
 import org.apache.isis.applib.fixtures.CompositeFixture;
 import org.apache.isis.applib.fixtures.FixtureType;
 import org.apache.isis.applib.fixtures.InstallableFixture;
 import org.apache.isis.applib.fixtures.LogonFixture;
-import org.apache.isis.applib.fixtures.switchuser.SwitchUserService;
+import org.apache.isis.applib.services.eventbus.EventBusService;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.lang.ObjectExtensions;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.runtime.system.DeploymentType;
@@ -39,7 +42,6 @@ import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 
-// REVIEW: could probably inline
 public class FixturesInstallerDelegate {
 
     private static final Logger LOG = LoggerFactory.getLogger(FixturesInstallerDelegate.class);
@@ -47,17 +49,12 @@ public class FixturesInstallerDelegate {
     //region > Constructor, fields
 
     private final IsisSessionFactory isisSessionFactory;
-    private final SwitchUserService switchUserService;
 
-    //endregion
     public FixturesInstallerDelegate(final IsisSessionFactory isisSessionFactory) {
         this.isisSessionFactory = isisSessionFactory;
-        switchUserService = isisSessionFactory.getServicesInjector().lookupService(SwitchUserService.class);
     }
 
-    //region > addFixture, getFixtures
-
-    protected final List<Object> fixtures = Lists.newArrayList();
+    private final List<Object> fixtures = Lists.newArrayList();
 
     /**
      * Automatically flattens any {@link List}s, recursively (depth-first) if
@@ -95,10 +92,25 @@ public class FixturesInstallerDelegate {
      * {@link org.apache.isis.core.runtime.fixtures.FixturesInstallerAbstract} to be
      * reused across multiple tests (REVIEW: does that make sense?)
      */
-    public final void installFixtures() {
-        installFixtures(getFixtures());
+    public void installFixtures() {
+        final IsisConfiguration configuration = getConfiguration();
+        final boolean fireEvents = configuration.getBoolean("isis.fixtures.fireEvents", true);
+        final EventBusService eventBusService = getEventBusService();
+        try {
+            if(fireEvents) {
+                eventBusService.post(new FixturesInstallingEvent(this));
+            }
+            installFixtures(Collections.unmodifiableList(fixtures));
+        } finally {
+            if(fireEvents) {
+                eventBusService.post(new FixturesInstalledEvent(this));
+            }
+        }
     }
 
+    private IsisConfiguration getConfiguration() {
+        return isisSessionFactory.getServicesInjector().lookupService(IsisConfiguration.class);
+    }
 
     private void installFixtures(final List<Object> fixtures) {
         for (final Object fixture : fixtures) {
@@ -189,7 +201,7 @@ public class FixturesInstallerDelegate {
      * <p>
      * Used to automatically logon if in {@link DeploymentType#SERVER_PROTOTYPE} mode.
      */
-    public LogonFixture getLogonFixture() {
+    LogonFixture getLogonFixture() {
         return logonFixture;
     }
 
@@ -202,7 +214,6 @@ public class FixturesInstallerDelegate {
         }
     }
 
-
     //endregion
 
     //region > dependencies (derived)
@@ -211,6 +222,9 @@ public class FixturesInstallerDelegate {
         return isisSessionFactory.getServicesInjector();
     }
 
+    private EventBusService getEventBusService() {
+        return getServicesInjector().lookupService(EventBusService.class);
+    }
 
     private PersistenceSession getPersistenceSession() {
         return isisSessionFactory.getCurrentSession().getPersistenceSession();

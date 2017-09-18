@@ -31,8 +31,7 @@ public abstract class FixturesInstallerAbstract {
     private final FixturesInstallerDelegate delegate;
     protected final IsisConfiguration configuration;
 
-    public FixturesInstallerAbstract(
-            final IsisSessionFactory isisSessionFactory) {
+    public FixturesInstallerAbstract(final IsisSessionFactory isisSessionFactory) {
         delegate = new FixturesInstallerDelegate(isisSessionFactory);
         configuration = isisSessionFactory.getConfiguration();
     }
