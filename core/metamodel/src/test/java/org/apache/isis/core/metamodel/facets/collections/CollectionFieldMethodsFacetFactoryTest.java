@@ -66,7 +66,7 @@ import org.apache.isis.core.metamodel.facets.members.hidden.forsession.HideForSe
 import org.apache.isis.core.metamodel.facets.members.hidden.staticmethod.HiddenFacetOnStaticMethod;
 import org.apache.isis.core.metamodel.facets.members.hidden.staticmethod.HiddenFacetStaticMethodFactory;
 import org.apache.isis.core.metamodel.facets.members.named.staticmethod.NamedFacetStaticMethod;
-import org.apache.isis.core.metamodel.facets.members.named.staticmethod.NamedFacetStaticMethodFactory;
+import org.apache.isis.core.metamodel.facets.members.named.staticmethod.NamedFacetStaticOrInstanceMethodFactory;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
@@ -662,7 +662,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     }
 
     public void testInstallsNamedFacetUsingNameMethodAndRemovesMethod() {
-        final NamedFacetStaticMethodFactory facetFactory = new NamedFacetStaticMethodFactory();
+        final NamedFacetStaticOrInstanceMethodFactory facetFactory = new NamedFacetStaticOrInstanceMethodFactory();
 
         facetFactory.setServicesInjector(stubServicesInjector);
 

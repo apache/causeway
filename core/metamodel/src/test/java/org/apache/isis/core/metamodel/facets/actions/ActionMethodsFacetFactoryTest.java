@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.facets.actions;
 
 import java.lang.reflect.Method;
-import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -65,7 +64,7 @@ import org.apache.isis.core.metamodel.facets.members.hidden.forsession.HideForSe
 import org.apache.isis.core.metamodel.facets.members.hidden.forsession.HideForSessionFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.members.hidden.staticmethod.HiddenFacetOnStaticMethod;
 import org.apache.isis.core.metamodel.facets.members.hidden.staticmethod.HiddenFacetStaticMethodFactory;
-import org.apache.isis.core.metamodel.facets.members.named.staticmethod.NamedFacetStaticMethodFactory;
+import org.apache.isis.core.metamodel.facets.members.named.staticmethod.NamedFacetStaticOrInstanceMethodFactory;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.method.ActionParameterAutoCompleteFacetViaMethod;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.method.ActionParameterAutoCompleteFacetViaMethodFactory;
@@ -424,7 +423,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testInstallsNamedFacetUsingNameMethodAndRemovesMethod() {
-        final NamedFacetStaticMethodFactory facetFactory = new NamedFacetStaticMethodFactory();
+        final NamedFacetStaticOrInstanceMethodFactory facetFactory = new NamedFacetStaticOrInstanceMethodFactory();
 
         facetFactory.setServicesInjector(mockServicesInjector);
 

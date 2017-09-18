@@ -60,7 +60,7 @@ import org.apache.isis.core.metamodel.facets.members.hidden.layout.HiddenFacetOn
 import org.apache.isis.core.metamodel.facets.members.hidden.method.HideForContextFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.members.hidden.staticmethod.HiddenFacetStaticMethodFactory;
 import org.apache.isis.core.metamodel.facets.members.named.annotprop.NamedFacetOnMemberFactory;
-import org.apache.isis.core.metamodel.facets.members.named.staticmethod.NamedFacetStaticMethodFactory;
+import org.apache.isis.core.metamodel.facets.members.named.staticmethod.NamedFacetStaticOrInstanceMethodFactory;
 import org.apache.isis.core.metamodel.facets.members.order.annotprop.MemberOrderFacetFactory;
 import org.apache.isis.core.metamodel.facets.members.render.annotprop.RenderFacetOrResolveFactory;
 import org.apache.isis.core.metamodel.facets.object.ViewModelSemanticCheckingFacetFactory;
@@ -282,7 +282,7 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
 
         // members in general
         
-        addFactory(new NamedFacetStaticMethodFactory());
+        addFactory(new NamedFacetStaticOrInstanceMethodFactory());
         
         addFactory(new DescribedAsFacetStaticMethodFactory());
         addFactory(new DisableForSessionFacetViaMethodFactory());

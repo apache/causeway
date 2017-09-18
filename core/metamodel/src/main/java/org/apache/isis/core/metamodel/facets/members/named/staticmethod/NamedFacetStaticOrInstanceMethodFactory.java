@@ -43,10 +43,9 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorFor
  * Sets up a {@link NamedFacet} if a {@value MethodPrefixConstants#NAME_PREFIX}
  * -prefixed method is present.
  *
- * @deprecated
+ * Can be either static (deprecated) or instance.
  */
-@Deprecated
-public class NamedFacetStaticMethodFactory extends MethodPrefixBasedFacetFactoryAbstract implements MetaModelValidatorRefiner {
+public class NamedFacetStaticOrInstanceMethodFactory extends MethodPrefixBasedFacetFactoryAbstract implements MetaModelValidatorRefiner {
 
     private static final String[] PREFIXES = { MethodPrefixConstants.NAME_PREFIX };
 
@@ -56,7 +55,7 @@ public class NamedFacetStaticMethodFactory extends MethodPrefixBasedFacetFactory
      * Note that the {@link Facet}s registered are the generic ones from
      * noa-architecture (where they exist)
      */
-    public NamedFacetStaticMethodFactory() {
+    public NamedFacetStaticOrInstanceMethodFactory() {
         super(FeatureType.MEMBERS, OrphanValidation.VALIDATE, PREFIXES);
     }
 
@@ -67,7 +66,7 @@ public class NamedFacetStaticMethodFactory extends MethodPrefixBasedFacetFactory
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
 
-        // namedXxx()
+        // nameXxx()
         attachNamedFacetIfNamedMethodIsFound(processMethodContext);
 
     }
@@ -77,18 +76,33 @@ public class NamedFacetStaticMethodFactory extends MethodPrefixBasedFacetFactory
         final String capitalizedName = StringExtensions.asJavaBaseNameStripAccessorPrefixIfRequired(method.getName());
 
         final Class<?> cls = processMethodContext.getCls();
-        final Method nameMethod = MethodFinderUtils.findMethod(cls, MethodScope.CLASS, MethodPrefixConstants.NAME_PREFIX + capitalizedName, String.class, new Class[0]);
-
-        if (nameMethod == null) {
-            return;
-        }
-
-        processMethodContext.removeMethod(nameMethod);
-        final String name = invokeNameMethod(nameMethod);
 
         final FacetHolder facetHolder = processMethodContext.getFacetHolder();
-        final NamedFacetStaticMethod facet = new NamedFacetStaticMethod(name, nameMethod, facetHolder);
-        FacetUtil.addFacet(validator.flagIfPresent(facet, processMethodContext));
+        final NamedFacet facet;
+
+        // search for static method first (deprecated functionality)
+        final Method staticNameMethod = MethodFinderUtils.findMethod(cls, MethodScope.CLASS, MethodPrefixConstants.NAME_PREFIX + capitalizedName, String.class, new Class[0]);
+        if (staticNameMethod != null) {
+            processMethodContext.removeMethod(staticNameMethod);
+
+            final String name = invokeNameMethod(staticNameMethod);
+            facet = new NamedFacetStaticMethod(name, staticNameMethod, facetHolder);
+        } else {
+
+            // search for instance method next
+            final Method instanceNameMethod = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.NAME_PREFIX + capitalizedName, String.class, new Class[0]);
+
+            if(instanceNameMethod != null) {
+                processMethodContext.removeMethod(instanceNameMethod);
+                facet = new NamedFacetInstanceMethod(instanceNameMethod, facetHolder);
+            } else {
+                facet = null;
+            }
+        }
+
+        if(facet != null) {
+            FacetUtil.addFacet(validator.flagIfPresent(facet, processMethodContext));
+        }
     }
 
     private static String invokeNameMethod(final Method nameMethod) {
