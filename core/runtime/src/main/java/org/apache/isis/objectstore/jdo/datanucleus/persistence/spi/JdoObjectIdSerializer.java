@@ -90,37 +90,14 @@ public final class JdoObjectIdSerializer {
             final DatastoreId dnOid = (DatastoreId) jdoOid;
             final Object keyValue = dnOid.getKeyAsObject();
 
-            if(false) {
+            if( keyValue instanceof String ||
+                    keyValue instanceof Long ||
+                    keyValue instanceof BigDecimal || // 1.8.0 did not support BigDecimal
+                    keyValue instanceof BigInteger ||
+                    keyValue instanceof Integer) {
 
-                //
-                // 1.8.0 original handling, appending a prefix "L_" or whatever
-                //
-                // if required by user community, we could add a property in isis.properties to enable if requested.
-                //
-                if(keyValue instanceof String) {
-                    return "S" + SEPARATOR + keyValue;
-                }
-                if(keyValue instanceof Long) {
-                    return "L" + SEPARATOR + keyValue;
-                }
-
-                if(keyValue instanceof BigInteger) {
-                    return "B" + SEPARATOR + keyValue;
-                }
-                if(keyValue instanceof Integer) {
-                    return "I" + SEPARATOR + keyValue;
-                }
-
-            } else {
-                if( keyValue instanceof String ||
-                        keyValue instanceof Long ||
-                        keyValue instanceof BigDecimal || // 1.8.0 did not support BigDecimal
-                        keyValue instanceof BigInteger ||
-                        keyValue instanceof Integer) {
-
-                    // no separator
-                    return "" + keyValue;
-                }
+                // no separator
+                return "" + keyValue;
             }
         }
 
@@ -201,7 +178,11 @@ public final class JdoObjectIdSerializer {
             // @javax.jdo.annotations.PersistenceCapable(identityType = IdentityType.DATASTORE)
             // for one of the common types (prettier handling)
 
-            return idStr + "[OID]" + spec.getFullIdentifier();
+            // in DN 4.1, we did this...
+            // return idStr + "[OID]" + spec.getFullIdentifier();
+
+            // in DN 5.1, we simply do this...
+            return idStr;
 
         }
     }
