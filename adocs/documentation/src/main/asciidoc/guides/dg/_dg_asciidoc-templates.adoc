@@ -159,9 +159,9 @@ a hyperlink to a bookmark within the reference guide for annotations, where:
 
 for example:
 
-`\xref:../rgant/rgant.adoc#_rgant-aaa_main[Core annotations]`
+`\xref:../rgant/rgant.adoc#_rgant_aaa_main[Core annotations]`
 
-|xref:../rgant/rgant.adoc#_rgant-aaa_main[Core annotations]
+|xref:../rgant/rgant.adoc#_rgant_aaa_main[Core annotations]
 
 
 
@@ -207,9 +207,9 @@ a hyperlink to a bookmark within the reference guide for domain services, where:
 
 for example:
 
-`\xref:../rgsvc/rgsvc.adoc#_rgcms_classes_AppManifest-bootstrapping[`AppManifest` bootstrapping]`
+`\xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[`AppManifest` bootstrapping]`
 
-|xref:../rgsvc/rgsvc.adoc#_rgcms_classes_AppManifest-bootstrapping[`AppManifest` bootstrapping]
+|xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[`AppManifest` bootstrapping]
 
 
 
@@ -269,9 +269,9 @@ a hyperlink to the "man page" for an (API) domain service within the reference g
 
 for example:
 
-`\xref:../rgsvc/rgsvc.adoc#_rgsvc_api_DomainObjectContainer[`DomainObjectContainer`]`
+`\xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer[`DomainObjectContainer`]`
 
-|xref:../rgsvc/rgsvc.adoc#_rgsvc_api_DomainObjectContainer[`DomainObjectContainer`]
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer[`DomainObjectContainer`]
 
 
 
@@ -284,9 +284,9 @@ a hyperlink to the "man page" for an (SPI) domain service within the reference g
 
 for example:
 
-`\xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_ContentMappingService[`ContentMappingService`]`
+`\xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_ContentMappingService[`ContentMappingService`]`
 
-|xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_ContentMappingService[`ContentMappingService`]
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_ContentMappingServicef[`ContentMappingService`]
 
 
 

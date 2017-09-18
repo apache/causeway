@@ -243,15 +243,15 @@ xref:dg.adoc#__dg_asciidoc_links-and-xrefs#[background]
 |Cross-reference to section in same asciidoc document
 
 |....
-xref:../../setting-up/concepts/concepts.adoc#[concepts]
+xref:../ugfun/ugfun.adoc#[Fundamentals]
 ....
-|xref:../../setting-up/concepts/concepts.adoc#[concepts]
+|xref:../ugfun/ugfun.adoc#[Fundamentals]
 |Cross-reference to top-level of different asciidoc document
 
 |....
-xref:../../setting-up/concepts/concepts.adoc#_concepts_ci-as-a-service[CI as a service]
+xref:../ugfun/ugfun.adoc#_ugfun_core-concepts[Core Concepts]
 ....
-|xref:../../setting-up/concepts/concepts.adoc#_concepts_ci-as-a-service[CI as a service]
+|xref:../ugfun/ugfun.adoc#_ugfun_core-concepts[Core Concepts]
 |Cross-reference to section within different asciidoc document
 
 |===

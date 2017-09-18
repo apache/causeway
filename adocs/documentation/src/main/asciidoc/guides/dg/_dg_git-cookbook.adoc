@@ -12,7 +12,7 @@ This appendix describes the commands often used while working with git.  In addi
 
 * xref:../dg/dg.adoc#_dg_building-isis[building Apache Isis]
 * xref:../dg/dg.adoc#_dg_contributing[Contributing]
-* xref:../dg/dg.adoc#_cgcom_policies_git-policy[Git policy]
+* xref:../cgcom/cgcom.adoc#_cgcom_policies_git-policy[Git policy]
 
 
 

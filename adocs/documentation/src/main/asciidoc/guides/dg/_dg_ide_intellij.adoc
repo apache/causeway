@@ -183,7 +183,7 @@ On the *Annotation Processors* page, enable and adjust for the 'default' setting
 image::{_imagesdir}intellij-idea/040-other-settings-compiler/020-annotation-processor.png[width="700px",link="{_imagesdir}intellij-idea/040-other-settings-compiler/020-annotation-processor.png"]
 
 This setting enables the generation of the `Q*` classes for DataNucleus type-safe queries, as well as being required
-for frameworks such as xref:../cgcom/cgcom.adoc#_cgcom_ide_project-lombok[Project Lombok].
+for frameworks such as xref:../dg/dg.adoc#_dg_project-lombok[Project Lombok].
 
 [NOTE]
 ====
@@ -485,7 +485,7 @@ If you hit an error of "duplicate classes":
 
 image::{_imagesdir}intellij-idea/060-troubleshooting/010-duplicate-classes.png[width="600px",link="{_imagesdir}intellij-idea/060-troubleshooting/010-duplicate-classes.png"]
 
-then make sure you have correctly configured the xref:../dg/dg.adoc#_dg_ide_intellij_other-settings-compiler[annotation processor]
+then make sure you have correctly configured the xref:../dg/dg.adoc#__dg_ide_intellij_other-settings-compiler[annotation processor]
 settings.  Pay attention in particular to the "Production sources directory" and "Test sources directory", that these
 are set up correctly.
 
