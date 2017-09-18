@@ -23,10 +23,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import javax.jdo.JDOQLTypedQuery;
 import javax.jdo.PersistenceManager;
-
-import org.datanucleus.query.typesafe.BooleanExpression;
-import org.datanucleus.query.typesafe.TypesafeQuery;
+import javax.jdo.query.BooleanExpression;
 
 import org.apache.isis.applib.annotation.Programmatic;
 
@@ -132,5 +131,5 @@ public interface IsisJdoSupport {
      * </p>
      */
     @Programmatic
-    <T> TypesafeQuery<T> newTypesafeQuery(Class<T> cls);
+    <T> JDOQLTypedQuery<T> newTypesafeQuery(Class<T> cls);
 }
