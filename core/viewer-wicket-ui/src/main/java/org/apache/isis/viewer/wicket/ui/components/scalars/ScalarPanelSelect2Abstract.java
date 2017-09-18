@@ -97,7 +97,8 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
 
         addStandardSemantics();
 
-        if(getModel().isRequired()) {
+        final ScalarModel model = getModel();
+        if(model.isRequired() && model.canEnterEditMode()) {
             formGroup.add(new CssClassAppender("mandatory"));
         }
         return formGroup;
