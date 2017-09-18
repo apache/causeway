@@ -84,14 +84,13 @@
 [6] https://github.com/moment/moment/blob/develop/LICENSE</license.additional-notes>
 
         <!-- Datanucleus Objectstore -->
-        <jdo-api.version>3.1</jdo-api.version>
+        <jdo-api.version>3.2.0-m7</jdo-api.version>
 
-        <datanucleus-core.version>4.1.7</datanucleus-core.version>
-        <datanucleus-api-jdo.version>4.1.1</datanucleus-api-jdo.version>
-        <datanucleus-jdo-query.version>4.0.5</datanucleus-jdo-query.version>
-        <datanucleus-rdbms.version>4.1.9</datanucleus-rdbms.version>
-
-        <datanucleus-jodatime.version>4.1.0-release</datanucleus-jodatime.version>
+        <datanucleus-core.version>5.1.2</datanucleus-core.version>
+        <datanucleus-api-jdo.version>5.1.2</datanucleus-api-jdo.version>
+        <datanucleus-jdo-query.version>5.0.2</datanucleus-jdo-query.version>
+        <datanucleus-rdbms.version>5.1.2</datanucleus-rdbms.version>
+        <datanucleus-jodatime.version>5.1.0-release</datanucleus-jodatime.version>
 	<!--
 	    ISIS-1288: seen integration tests to fail;
 	    domain object date holding 1-Aug-2015 after xactn retrieved as 31-Jul-2015
@@ -100,7 +99,7 @@
 
         <datanucleus-jodatime.version>4.1.1</datanucleus-jodatime.version>
 	-->
-        <datanucleus-maven-plugin.version>4.0.2</datanucleus-maven-plugin.version>
+        <datanucleus-maven-plugin.version>5.0.2</datanucleus-maven-plugin.version>
 
         <shiro.version>1.2.6</shiro.version>
 
@@ -1950,8 +1949,8 @@ ${license.additional-notes}
 
             <!-- DataNucleus -->
             <dependency>
-                <groupId>javax.jdo</groupId>
-                <artifactId>jdo-api</artifactId>
+                <groupId>org.datanucleus</groupId>
+                <artifactId>javax.jdo</artifactId>
                 <version>${jdo-api.version}</version>
             </dependency>
             <dependency>
