@@ -59,7 +59,8 @@ public class EmailServiceDefault implements EmailService {
         }
     }
 
-    //region > constants
+    // region > constants
+    private static final String ISIS_SERVICE_EMAIL_SENDER_USERNAME = "isis.service.email.sender.username";
     private static final String ISIS_SERVICE_EMAIL_SENDER_ADDRESS = "isis.service.email.sender.address";
     private static final String ISIS_SERVICE_EMAIL_SENDER_PASSWORD = "isis.service.email.sender.password";
 
@@ -85,9 +86,9 @@ public class EmailServiceDefault implements EmailService {
     private static final String ISIS_SERVICE_EMAIL_OVERRIDE_CC = "isis.service.email.override.cc";
     private static final String ISIS_SERVICE_EMAIL_OVERRIDE_BCC = "isis.service.email.override.bcc";
 
-    //endregion
+    // endregion
 
-    //region > init
+    // region > init
     private boolean initialized;
 
     /**
@@ -97,17 +98,21 @@ public class EmailServiceDefault implements EmailService {
     @Programmatic
     public void init() {
 
-        if(initialized) {
+        if (initialized) {
             return;
         }
 
         initialized = true;
 
-        if(!isConfigured()) {
+        if (!isConfigured()) {
             LOG.warn("NOT configured");
         } else {
             LOG.debug("configured");
         }
+    }
+
+    protected String getSenderEmailUsername() {
+        return configuration.getString(ISIS_SERVICE_EMAIL_SENDER_USERNAME);
     }
 
     protected String getSenderEmailAddress() {
@@ -154,9 +159,9 @@ public class EmailServiceDefault implements EmailService {
         return configuration.getString(ISIS_SERVICE_EMAIL_OVERRIDE_BCC);
     }
 
-    //endregion
+    // endregion
 
-    //region > isConfigured
+    // region > isConfigured
 
     @Override
     public boolean isConfigured() {
@@ -164,9 +169,9 @@ public class EmailServiceDefault implements EmailService {
         final String senderEmailPassword = getSenderEmailPassword();
         return !Strings.isNullOrEmpty(senderEmailAddress) && !Strings.isNullOrEmpty(senderEmailPassword);
     }
-    //endregion
+    // endregion
 
-    //region > send
+    // region > send
 
     @Override
     public boolean send(final List<String> toList, final List<String> ccList, final List<String> bccList, final String subject, final String body,
@@ -175,6 +180,7 @@ public class EmailServiceDefault implements EmailService {
         try {
             final ImageHtmlEmail email = new ImageHtmlEmail();
 
+            final String senderEmailUsername = getSenderEmailUsername();
             final String senderEmailAddress = getSenderEmailAddress();
             final String senderEmailPassword = getSenderEmailPassword();
             final String senderEmailHostName = getSenderEmailHostName();
@@ -183,7 +189,11 @@ public class EmailServiceDefault implements EmailService {
             final int socketTimeout = getSocketTimeout();
             final int socketConnectionTimeout = getSocketConnectionTimeout();
 
-            email.setAuthenticator(new DefaultAuthenticator(senderEmailAddress, senderEmailPassword));
+            if (senderEmailUsername != null) {
+                email.setAuthenticator(new DefaultAuthenticator(senderEmailUsername, senderEmailPassword));
+            } else {
+                email.setAuthenticator(new DefaultAuthenticator(senderEmailAddress, senderEmailPassword));
+            }
             email.setHostName(senderEmailHostName);
             email.setSmtpPort(senderEmailPort);
             email.setStartTLSEnabled(senderEmailTlsEnabled);
@@ -219,15 +229,15 @@ public class EmailServiceDefault implements EmailService {
             final String overrideBcc = getEmailOverrideBcc();
 
             final String[] toListElseOverride = actually(toList, overrideTo);
-            if(notEmpty(toListElseOverride)) {
+            if (notEmpty(toListElseOverride)) {
                 email.addTo(toListElseOverride);
             }
             final String[] ccListElseOverride = actually(ccList, overrideCc);
-            if(notEmpty(ccListElseOverride)) {
+            if (notEmpty(ccListElseOverride)) {
                 email.addCc(ccListElseOverride);
             }
             final String[] bccListElseOverride = actually(bccList, overrideBcc);
-            if(notEmpty(bccListElseOverride)) {
+            if (notEmpty(bccListElseOverride)) {
                 email.addBcc(bccListElseOverride);
             }
 
@@ -236,7 +246,7 @@ public class EmailServiceDefault implements EmailService {
         } catch (EmailException ex) {
             LOG.error("An error occurred while trying to send an email", ex);
             final Boolean throwExceptionOnFail = isThrowExceptionOnFail();
-            if(throwExceptionOnFail) {
+            if (throwExceptionOnFail) {
                 throw new EmailServiceException(ex);
             }
             return false;
@@ -244,10 +254,10 @@ public class EmailServiceDefault implements EmailService {
 
         return true;
     }
-    //endregion
+    // endregion
 
 
-    //region > helper methods
+    // region > helper methods
 
     static String[] actually(final List<String> original, final String overrideIfAny) {
         final List<String> addresses = Strings.isNullOrEmpty(overrideIfAny)
@@ -261,10 +271,10 @@ public class EmailServiceDefault implements EmailService {
     static boolean notEmpty(final String[] addresses) {
         return addresses != null && addresses.length > 0;
     }
-    //endregion
+    // endregion
 
 
-    //endregion
+    // endregion
 
     @javax.inject.Inject
     IsisConfiguration configuration;

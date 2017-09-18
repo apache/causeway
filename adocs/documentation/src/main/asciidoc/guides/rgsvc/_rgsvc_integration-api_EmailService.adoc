@@ -53,7 +53,7 @@ and these properties may optionally be configured (each has a default to use gma
 * `isis.service.email.port`
 * `isis.service.email.tls.enabled`
 
-These configuration properties can be specified either in `isis.properties` or in an xref:../ugbtb/ugbtb.adoc#_ugbtb_deployment_externalized-configuration[external configuration file].
+These configuration properties can be specified either in `isis.properties` or in an xref:../ugbtb/ugbtb.adoc#_ugbtb_deployment_externalized-configuration[external configuration file], or programmatically using the xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[`AppManifest`].
 
 If prototyping (that is, running the app using `org.apache.isis.WebServer`), the configuration properties can also be specified as system properties.
 For example, if you create a test email account on gmail, you can configure the service using:
@@ -67,6 +67,10 @@ where "xxx" is the gmail user account and "yyy" is its password
 
 
 In addition the following properties can be set:
+
+* `isis.service.email.sender.username` +
++
+(As of `1.15.1-SNAPSHOT`), rather than authenticate using the sender address, instead use the specified username.
 
 * `isis.service.email.throwExceptionOnFail` +
 +
