@@ -22,8 +22,6 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
-import org.apache.isis.objectstore.jdo.metamodel.facets.object.auditable.AuditableAnnotationInJdoApplibFacetFactory;
-import org.apache.isis.objectstore.jdo.metamodel.facets.object.auditable.AuditableMarkerInterfaceInJdoApplibFacetFactory;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.datastoreidentity.JdoDatastoreIdentityAnnotationFacetFactory;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.discriminator.JdoDiscriminatorAnnotationFacetFactory;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableAnnotationFacetFactory;
@@ -57,9 +55,6 @@ public class PersistenceSessionFactoryMetamodelRefiner implements MetaModelRefin
         // and also MandatoryFacetOnPropertyMandatoryAnnotationFactory
         // and also PropertyAnnotationFactory
         programmingModel.addFactory(new MandatoryFromJdoColumnAnnotationFacetFactory());
-
-        programmingModel.addFactory(new AuditableAnnotationInJdoApplibFacetFactory());
-        programmingModel.addFactory(new AuditableMarkerInterfaceInJdoApplibFacetFactory());
     }
 
     @Override
