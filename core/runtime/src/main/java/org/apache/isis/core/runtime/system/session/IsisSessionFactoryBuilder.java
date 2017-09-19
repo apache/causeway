@@ -199,22 +199,19 @@ public class IsisSessionFactoryBuilder {
 
 
             isisSessionFactory.doInSession(
-                    new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                specificationLoader.validateAndAssert();
+                    () -> {
+                        try {
+                            specificationLoader.validateAndAssert();
 
-                            } catch (final MetaModelInvalidException ex) {
-                                // no need to use a higher level, such as error(...); the calling code will expose any metamodel
-                                // validation errors in their own particular way.
-                                if(LOG.isDebugEnabled()) {
-                                    LOG.debug("Meta model invalid", ex);
-                                }
-                                IsisContext.setMetaModelInvalidException(ex);
+                        } catch (final MetaModelInvalidException ex) {
+                            // no need to use a higher level, such as error(...); the calling code will expose any metamodel
+                            // validation errors in their own particular way.
+                            if(LOG.isDebugEnabled()) {
+                                LOG.debug("Meta model invalid", ex);
                             }
-
+                            IsisContext.setMetaModelInvalidException(ex);
                         }
+
                     }
             );
 
