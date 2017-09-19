@@ -18,23 +18,13 @@
  */
 package org.apache.isis.objectstore.jdo.service;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
-import javax.jdo.annotations.PersistenceCapable;
-
-import com.google.common.base.Function;
 import com.google.common.base.Joiner;
-import com.google.common.base.Predicate;
-import com.google.common.base.Splitter;
-import com.google.common.base.Strings;
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
-import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,7 +35,11 @@ public class RegisterEntities {
 
     @SuppressWarnings("unused")
     private final static Logger LOG = LoggerFactory.getLogger(RegisterEntities.class);
-    
+
+    /**
+     * @deprecated - no longer used; instead an AppManifest must be specified.
+     */
+    @Deprecated
     public final static String PACKAGE_PREFIX_KEY = "isis.persistor.datanucleus.RegisterEntities.packagePrefix";
 
     // //////////////////////////////////////
@@ -60,13 +54,13 @@ public class RegisterEntities {
     }
     //endregion
 
-    public RegisterEntities(final Map<String, String> configuration, final SpecificationLoader specificationLoader) {
+    public RegisterEntities(final SpecificationLoader specificationLoader) {
         this.specificationLoader = specificationLoader;
 
         Set<Class<?>> persistenceCapableTypes = AppManifest.Registry.instance().getPersistenceCapableTypes();
 
         if(persistenceCapableTypes == null) {
-            persistenceCapableTypes = searchForPersistenceCapables(configuration);
+            throw new IllegalStateException("AppManifest is required");
         }
 
         final List<String> classNamesNotEnhanced = Lists.newArrayList();
@@ -86,88 +80,14 @@ public class RegisterEntities {
         }
     }
 
-    /**
-     * only called if no appManifest
-     */
-    Set<Class<?>> searchForPersistenceCapables(final Map<String, String> configuration) {
-
-        final String packagePrefixes = lookupPackagePrefixes(configuration);
-
-        final Set<Class<?>> persistenceCapableTypes = Sets.newLinkedHashSet();
-        final List<String> domPackages = parseDomPackages(packagePrefixes);
-        for (final String packageName : domPackages) {
-            Reflections reflections = new Reflections(packageName);
-            final Set<Class<?>> entityTypesInPackage =
-                    reflections.getTypesAnnotatedWith(PersistenceCapable.class);
-
-            if(!entitiesIn(entityTypesInPackage)) {
-                throw new IllegalArgumentException(String.format(
-                        "Bad configuration.\n\nCould not locate any @PersistenceCapable entities in package '%s'\n" +
-                                "Check value of '%s' key in WEB-INF/*.properties\n",
-                        packageName,
-                        PACKAGE_PREFIX_KEY));
-            }
-            persistenceCapableTypes.addAll(entityTypesInPackage);
-        }
-        return persistenceCapableTypes;
-    }
-
-    private String lookupPackagePrefixes(final Map<String, String> configuration) {
-        final String packagePrefixes = configuration.get(PACKAGE_PREFIX_KEY);
-        if(Strings.isNullOrEmpty(packagePrefixes)) {
-            throw new IllegalArgumentException(String.format(
-                    "Could not locate '%s' key in property files - aborting",
-                    PACKAGE_PREFIX_KEY));
-        }
-        return packagePrefixes;
-    }
-
-    private static List<String> parseDomPackages(String packagePrefixes) {
-        return Collections.unmodifiableList(Lists.newArrayList(Iterables.transform(Splitter.on(",").split(packagePrefixes), trim())));
-    }
-
     private static boolean ignore(final Class<?> entityType) {
-        try {
-            if(entityType.isAnonymousClass() || entityType.isLocalClass() || entityType.isMemberClass()) {
-                return true;
-            }
-            final PersistenceCapable persistenceCapable = entityType.getAnnotation(PersistenceCapable.class);
-            return persistenceCapable == null; // ignore if doesn't have @PersistenceCapable
-        } catch (NoClassDefFoundError ex) {
-            return true;
-        }
+        return entityType.isAnonymousClass() || entityType.isLocalClass() || entityType.isMemberClass() || entityType.isAnnotation();
     }
 
-    private static Function<String,String> trim() {
-        return new Function<String,String>(){
-            @Override
-            public String apply(String input) {
-                return input.trim();
-            }
-        };
-    }
 
-    private static boolean entitiesIn(Set<Class<?>> entityTypes) {
-        return Iterables.filter(entityTypes, notNullClass()).iterator().hasNext();
-    }
-
-    /**
-     * {@link Reflections} seems to return a set with 1 null element if none can be found, so we ignore these.
-     */
-    private static <T> Predicate<T> notNullClass() {
-        return new Predicate<T>() {
-            @Override
-            public boolean apply(T input) {
-                return input != null;
-            }
-        };
-    }
-
-    // //////////////////////////////////////
 
     SpecificationLoader getSpecificationLoader() {
         return specificationLoader;
     }
-
 
 }
