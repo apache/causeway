@@ -39,32 +39,25 @@ import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
 
-@javax.jdo.annotations.PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "helloworld" )
+import lombok.AccessLevel;
+
+@javax.jdo.annotations.PersistenceCapable(identityType = IdentityType.DATASTORE,schema = "helloworld" )
 @javax.jdo.annotations.DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @javax.jdo.annotations.Version(strategy= VersionStrategy.DATE_TIME, column ="version")
-@javax.jdo.annotations.Queries({
-        @javax.jdo.annotations.Query(
-                name = "findByName",
-                value = "SELECT "
-                        + "FROM domainapp.dom.impl.HelloWorldObject "
-                        + "WHERE name.indexOf(:name) >= 0 ")
-})
-@javax.jdo.annotations.Unique(name="HelloWorldObject_name_UNQ", members = {"name"})
-@DomainObject(auditing = Auditing.ENABLED)
+@DomainObject(auditing = Auditing.ENABLED, editing = Editing.DISABLED)
+@lombok.Getter @lombok.Setter
 public class HelloWorldObject implements Comparable<HelloWorldObject> {
 
     public HelloWorldObject(final String name) {
         this.name = name;
     }
 
+    @javax.jdo.annotations.Unique
     @javax.jdo.annotations.Column(allowsNull = "false", length = 40)
-    @lombok.Getter @lombok.Setter
-    @Property(editing = Editing.DISABLED)
     @Title(prepend = "Object: ")
     private String name;
 
     @javax.jdo.annotations.Column(allowsNull = "true", length = 4000)
-    @lombok.Getter @lombok.Setter
     @Property(editing = Editing.ENABLED)
     private String notes;
 
@@ -99,12 +92,15 @@ public class HelloWorldObject implements Comparable<HelloWorldObject> {
 
     //region > injected services
     @javax.inject.Inject
+    @javax.jdo.annotations.NotPersistent @lombok.Getter(AccessLevel.PRIVATE)
     RepositoryService repositoryService;
 
     @javax.inject.Inject
+    @javax.jdo.annotations.NotPersistent @lombok.Getter(AccessLevel.PRIVATE)
     TitleService titleService;
 
     @javax.inject.Inject
+    @javax.jdo.annotations.NotPersistent @lombok.Getter(AccessLevel.PRIVATE)
     MessageService messageService;
     //endregion
 
