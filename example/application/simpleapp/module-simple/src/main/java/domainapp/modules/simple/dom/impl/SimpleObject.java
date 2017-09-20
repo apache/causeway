@@ -23,6 +23,7 @@ import javax.jdo.annotations.VersionStrategy;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
@@ -57,6 +58,7 @@ import lombok.Setter;
 })
 @javax.jdo.annotations.Unique(name="SimpleObject_name_UNQ", members = {"name"})
 @DomainObject() // objectType inferred from @PersistenceCapable#schema
+@DomainObjectLayout() // trigger events etc.
 public class SimpleObject implements Comparable<SimpleObject> {
 
     public SimpleObject(final String name) {
