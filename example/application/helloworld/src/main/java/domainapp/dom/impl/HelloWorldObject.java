@@ -23,18 +23,26 @@ import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.VersionStrategy;
 
 import com.google.common.collect.Ordering;
+import com.google.common.eventbus.Subscribe;
 
+import org.axonframework.eventhandling.annotation.EventHandler;
+
+import org.apache.isis.applib.AbstractSubscriber;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Auditing;
 import org.apache.isis.applib.annotation.CommandReification;
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.DomainObjectLayout;
+import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Title;
+import org.apache.isis.applib.services.eventbus.IconUiEvent;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
@@ -51,6 +59,7 @@ import org.apache.isis.applib.services.title.TitleService;
 })
 @javax.jdo.annotations.Unique(name="HelloWorldObject_name_UNQ", members = {"name"})
 @DomainObject(auditing = Auditing.ENABLED)
+@DomainObjectLayout()
 public class HelloWorldObject implements Comparable<HelloWorldObject> {
 
     public HelloWorldObject(final String name) {
