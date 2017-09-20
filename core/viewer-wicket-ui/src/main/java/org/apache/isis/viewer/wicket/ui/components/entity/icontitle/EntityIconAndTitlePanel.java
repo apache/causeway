@@ -83,15 +83,22 @@ public class EntityIconAndTitlePanel extends PanelAbstract<ObjectAdapterModel> {
         buildGui();
         super.onBeforeRender();
     }
-
+    
     private void buildGui() {
         addOrReplaceLinkWrapper();
-        if(getModel().isInlinePrompt()) {
+        
+        if(isTitleSuppressed()) {
             // bit of a hack... allows us to suppress the title using CSS
-            add(new CssClassAppender("inlinePrompt"));
+       		add(new CssClassAppender("inlinePrompt"));
         }
 
         setOutputMarkupId(true);
+    }
+    
+    private boolean isTitleSuppressed() {
+    	return getModel().isInlinePrompt()
+    			//XXX ISIS-1699 never hide titles of object references in tables
+    			&& !getModel().getRenderingHint().isInTable();
     }
 
     private void addOrReplaceLinkWrapper() {
