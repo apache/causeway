@@ -139,8 +139,8 @@
 
         <jetty.version>9.4.3.v20170317</jetty.version>
 
-        <wicket.version>7.7.0</wicket.version>
-        <wicketstuff.version>7.7.0</wicketstuff.version>
+        <wicket.version>7.9.0</wicket.version>
+        <wicketstuff.version>7.8.1</wicketstuff.version>
 
         <wicket-webjars.version>0.5.4</wicket-webjars.version>
         <wicket-bootstrap.version>0.10.16</wicket-bootstrap.version>
