@@ -50,6 +50,12 @@ Configuration properties for the JDO/DataNucleus objectstore can be found in the
 |===
 
 
+[TIP]
+====
+In order for these events to fire the action/collection/propert must, at least, be configured with the relevant annotation (even if no attributes on that annotation are set).
+====
+
+
 [[__rgcfg_configuring-core_lifecycle-events]]
 == Lifecycle Events
 
@@ -124,6 +130,10 @@ Configuration properties for the JDO/DataNucleus objectstore can be found in the
 
 |===
 
+[TIP]
+====
+In order for these events to fire the class must be annotated using `@DomainObject` (even if no attributes on that annotation are set).
+====
 
 
 
@@ -165,6 +175,10 @@ Configuration properties for the JDO/DataNucleus objectstore can be found in the
 
 |===
 
+[TIP]
+====
+In order for these events to fire the class must be annotated using `@DomainObjectLayout` (even if no attributes on that annotation are set).
+====
 
 
 
