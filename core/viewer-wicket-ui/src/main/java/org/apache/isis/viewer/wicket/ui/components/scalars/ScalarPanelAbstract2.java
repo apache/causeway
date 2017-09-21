@@ -187,7 +187,7 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
         }
 
         final ScalarModel scalarModel = getModel();
-        final String disableReasonIfAny = scalarModel.whetherDisabled(getRendering().getWhere());
+        final String disableReasonIfAny = scalarModel.whetherDisabled(whereAreWeRendering());
 
         if (scalarModel.isViewMode()) {
             onInitializeWhenViewMode();
@@ -398,10 +398,10 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
     protected void onConfigure() {
 
         final ScalarModel scalarModel = getModel();
-
-        final boolean hidden = scalarModel.whetherHidden(getRendering().getWhere());
+        
+        final boolean hidden = scalarModel.whetherHidden(whereAreWeRendering());
         setVisibilityAllowed(!hidden);
-
+        
         super.onConfigure();
     }
 
@@ -474,7 +474,7 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
 
     // ///////////////////////////////////////////////////////////////////
 
-
+    
     public enum Rendering {
         /**
          * Does not show labels, eg for use in tables
@@ -490,10 +490,6 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
                 panel.getComponentForRegular().setVisible(false);
             }
 
-            @Override
-            public Where getWhere() {
-                return Where.PARENTED_TABLES;
-            }
         },
         /**
          * Does show labels, eg for use in forms.
@@ -509,20 +505,14 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
                 panel.scalarIfCompact.setVisible(false);
             }
 
-            @Override
-            public Where getWhere() {
-                return Where.OBJECT_FORMS;
-            }
         };
 
         public abstract String getLabelCaption(LabeledWebMarkupContainer labeledContainer);
 
         public abstract void buildGui(ScalarPanelAbstract2 panel);
 
-        public abstract Where getWhere();
-
         private static Rendering renderingFor(EntityModel.RenderingHint renderingHint) {
-            return renderingHint.isInTable()? Rendering.COMPACT: Rendering.REGULAR;
+            return renderingHint.isRegular()? Rendering.REGULAR :Rendering.COMPACT;
         }
     }
 
@@ -530,6 +520,33 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
         return Rendering.renderingFor(scalarModel.getRenderingHint());
     }
 
+    /**
+     * Returns the current rendering context of this component, one of 
+     * <ul>
+     * <li>standalone table</li>
+     * <li>parented table</li>
+     * <li>form</li>
+     * </ul>
+     * @return
+     */
+    protected Where whereAreWeRendering() {
+        switch (scalarModel.getRenderingHint()) {
+		case PARENTED_TITLE_COLUMN:
+			return Where.PARENTED_TABLES;
+		case STANDALONE_TITLE_COLUMN:
+			return Where.STANDALONE_TABLES;
+		case PROPERTY_COLUMN:
+			final ObjectAdapter parentAdapter =
+			 	scalarModel.getParentEntityModel().load(AdapterManager.ConcurrencyChecking.NO_CHECK);
+			final boolean parented = parentAdapter.isParentedCollection();
+			return parented ? Where.PARENTED_TABLES : Where.STANDALONE_TABLES;
+		case REGULAR:
+			return Where.OBJECT_FORMS;
+		default:
+			throw new RuntimeException("unmatched case "+scalarModel.getRenderingHint());
+		}
+    }
+    
 
     // ///////////////////////////////////////////////////////////////////
 
