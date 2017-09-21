@@ -78,30 +78,33 @@ public class RepositoryServiceInternalDefault implements RepositoryService {
 
     @Programmatic
     @Override
-    public void persist(final Object object) {
+    public <T> T persist(final T object) {
         if (isPersistent(object)) {
-            return;
+            return object;
         }
         final ObjectAdapter adapter = persistenceSessionServiceInternal.adapterFor(unwrapped(object));
 
         if(adapter == null) {
-            throw new PersistFailedException("Object not known to framework; instantiate using newTransientInstance(...) rather than simply new'ing up.");
+            throw new PersistFailedException("Object not known to framework (unable to create/obtain an adapter)");
         }
         if (adapter.isParentedCollection()) {
             // TODO check aggregation is supported
-            return;
+            return  object;
         }
         if (isPersistent(object)) {
             throw new PersistFailedException("Object already persistent; OID=" + adapter.getOid());
         }
         persistenceSessionServiceInternal.makePersistent(adapter);
+
+        return object;
     }
     
     @Programmatic
     @Override
-    public void persistAndFlush(final Object object) {
-	persist(object);
-	transactionService.flushTransaction();
+    public <T> T persistAndFlush(final T object) {
+        persist(object);
+        transactionService.flushTransaction();
+        return object;
     }
 
     @Override

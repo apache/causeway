@@ -72,7 +72,7 @@ public interface RepositoryService {
      * @see #isPersistent(Object)
      */
     @Programmatic
-    void persist(Object domainObject);
+    <T> T persist(T domainObject);
     
     /**
      * Persist the specified object (or do nothing if already persistent) and flushes changes to the database.
@@ -80,7 +80,7 @@ public interface RepositoryService {
      * @see #persist(Object)
      */
     @Programmatic
-    void persistAndFlush(Object domainObject);
+    <T> T persistAndFlush(T domainObject);
 
     /**
      * Deletes the domain object but only if is persistent.
