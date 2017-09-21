@@ -205,8 +205,10 @@ public class CollectionContentsAsAjaxTablePanel
 
         for (final String propertyId : propertyIds) {
             final ObjectAssociation property = propertyById.get(propertyId);
-            final ColumnAbstract<ObjectAdapter> nopc = createObjectAdapterPropertyColumn(property);
-            columns.add(nopc);
+            if(property != null) {
+                final ColumnAbstract<ObjectAdapter> nopc = createObjectAdapterPropertyColumn(property);
+                columns.add(nopc);
+            }
         }
     }
 
