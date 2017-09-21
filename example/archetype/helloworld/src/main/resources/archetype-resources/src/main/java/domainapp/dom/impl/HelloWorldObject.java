@@ -31,6 +31,7 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Auditing;
 import org.apache.isis.applib.annotation.CommandReification;
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
@@ -41,6 +42,8 @@ import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
+
+import lombok.AccessLevel;
 
 @javax.jdo.annotations.PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "${artifactId}" )
 @javax.jdo.annotations.DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
@@ -54,20 +57,20 @@ import org.apache.isis.applib.services.title.TitleService;
 })
 @javax.jdo.annotations.Unique(name="HelloWorldObject_name_UNQ", members = {"name"})
 @DomainObject(auditing = Auditing.ENABLED)
+@DomainObjectLayout()  // trigger events etc.
+@lombok.RequiredArgsConstructor(staticName = "create")
+@lombok.Getter @lombok.Setter
 public class HelloWorldObject implements Comparable<HelloWorldObject> {
 
-    public HelloWorldObject(final String name) {
-        this.name = name;
-    }
 
     @javax.jdo.annotations.Column(allowsNull = "false", length = 40)
-    @lombok.Getter @lombok.Setter
+    @lombok.NonNull
     @Property(editing = Editing.DISABLED)
     @Title(prepend = "Object: ")
     private String name;
 
+
     @javax.jdo.annotations.Column(allowsNull = "true", length = 4000)
-    @lombok.Getter @lombok.Setter
     @Property(editing = Editing.ENABLED)
     private String notes;
 
@@ -102,12 +105,15 @@ public class HelloWorldObject implements Comparable<HelloWorldObject> {
 
     //region > injected services
     @javax.inject.Inject
+    @lombok.Getter(AccessLevel.NONE) @lombok.Setter(AccessLevel.NONE)
     RepositoryService repositoryService;
 
     @javax.inject.Inject
+    @lombok.Getter(AccessLevel.NONE) @lombok.Setter(AccessLevel.NONE)
     TitleService titleService;
 
     @javax.inject.Inject
+    @lombok.Getter(AccessLevel.NONE) @lombok.Setter(AccessLevel.NONE)
     MessageService messageService;
     //endregion
 
