@@ -24,7 +24,6 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 import org.jmock.Expectations;
-import org.jmock.Sequence;
 import org.jmock.auto.Mock;
 import org.junit.Before;
 import org.junit.Rule;
@@ -32,6 +31,7 @@ import org.junit.Test;
 
 import org.apache.isis.applib.services.registry.ServiceRegistry2;
 import org.apache.isis.applib.services.repository.RepositoryService;
+import org.apache.isis.core.unittestsupport.jmocking.JMockActions;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 
@@ -65,14 +65,10 @@ public class SimpleObjectRepository_Test {
             final String someName = "Foobar";
 
             // given
-            final Sequence seq = context.sequence("create");
             context.checking(new Expectations() {
                 {
-                    oneOf(mockServiceRegistry).injectServicesInto(with(any(SimpleObject.class)));
-                    inSequence(seq);
-
                     oneOf(mockRepositoryService).persist(with(nameOf(someName)));
-                    inSequence(seq);
+                    will(JMockActions.returnArgument(0));
                 }
 
             });
