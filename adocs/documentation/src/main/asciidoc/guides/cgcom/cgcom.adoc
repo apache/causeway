@@ -38,8 +38,8 @@ The reference guides are:
 
 The remaining guides are:
 
-* xref:../dg/dg.adoc#[Developers' Guide] (this guide)
-* xref:../cgcom/cgcom.adoc#[Committers' Guide] (release procedures and related practices)
+* xref:../dg/dg.adoc#[Developers' Guide] (how to set up a development environment for Apache Isis and contribute back to the project)
+* xref:../cgcom/cgcom.adoc#[Committers' Guide] (this guide)
 
 
 
