@@ -935,7 +935,7 @@ For each zip there is a corresponding signature file (append .asc to the zip's u
 
 In the source code repo the code has been tagged as isis-1.16.0-RC1, helloworld-archetype-1.16.0-RC1 and simpleapp-archetype-1.16.0-RC1; see https://git-wip-us.apache.org/repos/asf?p=isis.git
 
-For instructions on how to verify the release (build from binaries and/or use in Maven directly), see http://isis.apache.org/guides/cgcom.html#_cgcom_verifying-releases
+For instructions on how to verify the release (build from binaries and/or use in Maven directly), see https://isis.apache.org/guides/cgcom/cgcom.html#_cgcom_verifying-releases
 
 Please verify the release and cast your vote.  The vote will be open for a minimum of 72 hours.
 
