@@ -214,9 +214,16 @@ public interface ObjectMember extends ObjectFeature {
                     String memberId2 = o2.getId();
                     String o1Sequence = o1Facet != null ? o1Facet.sequence() : "0";
                     String o2Sequence = o2Facet != null ? o2Facet.sequence() : "0";
-                    return o1Facet == null? +1:
-                            o2Facet == null? -1:
-                                    deweyOrderComparator.compare(o1Sequence, o2Sequence);
+                    if (o1Sequence == o2Sequence) {
+                        return 0;
+                    }
+                    if (o1Sequence == null) {
+                        return -1;
+                    }
+                    if (o2Sequence == null) {
+                        return 1;
+                    }
+                    return deweyOrderComparator.compare(o1Sequence, o2Sequence);
                 }
             };
         }
