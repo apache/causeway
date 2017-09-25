@@ -177,9 +177,12 @@ import org.apache.isis.core.metamodel.facets.value.chars.CharWrapperValueFacetUs
 import org.apache.isis.core.metamodel.facets.value.clobs.ClobValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.color.ColorValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.date.DateValueFacetUsingSemanticsProviderFactory;
+import org.apache.isis.core.metamodel.facets.value.datejdk8local.Jdk8LocalDateValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.datejodalocal.JodaLocalDateValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.datesql.JavaSqlDateValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.datetime.DateTimeValueFacetUsingSemanticsProviderFactory;
+import org.apache.isis.core.metamodel.facets.value.datetimejdk8local.Jdk8LocalDateTimeValueFacetUsingSemanticsProviderFactory;
+import org.apache.isis.core.metamodel.facets.value.datetimejdk8offset.Jdk8OffsetDateTimeValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.datetimejoda.JodaDateTimeValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.datetimejodalocal.JodaLocalDateTimeValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.dateutil.JavaUtilDateValueFacetUsingSemanticsProviderFactory;
@@ -514,6 +517,11 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(new JodaLocalDateTimeValueFacetUsingSemanticsProviderFactory());
         addFactory(new JodaDateTimeValueFacetUsingSemanticsProviderFactory());
 
+        // java 8 time values
+        addFactory(new Jdk8LocalDateValueFacetUsingSemanticsProviderFactory());
+        addFactory(new Jdk8OffsetDateTimeValueFacetUsingSemanticsProviderFactory());
+        addFactory(new Jdk8LocalDateTimeValueFacetUsingSemanticsProviderFactory());
+        
         // written to not trample over TypeOf if already installed
         addFactory(new CollectionFacetFactory());
         // must come after CollectionFacetFactory
