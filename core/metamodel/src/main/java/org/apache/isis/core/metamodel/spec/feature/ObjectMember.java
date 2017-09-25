@@ -25,10 +25,6 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-import com.google.common.base.Function;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
-
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -36,7 +32,10 @@ import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
-import org.apache.isis.core.metamodel.util.DeweyOrderComparator;
+import org.apache.isis.core.metamodel.layout.memberorderfacet.MemberOrderFacetComparator;
+
+import com.google.common.base.Function;
+import com.google.common.collect.Maps;
 
 /**
  * Provides reflective access to an action or a field on a domain object.
@@ -205,19 +204,14 @@ public interface ObjectMember extends ObjectFeature {
     public static class Comparators {
         public static Comparator<ObjectMember> byMemberOrderSequence() {
             return new Comparator<ObjectMember>() {
-                private final DeweyOrderComparator deweyOrderComparator = new DeweyOrderComparator();
-                @Override
-                public int compare(final ObjectMember o1, final ObjectMember o2) {
-                    final MemberOrderFacet o1Facet = o1.getFacet(MemberOrderFacet.class);
-                    final MemberOrderFacet o2Facet = o2.getFacet(MemberOrderFacet.class);
-                    String memberId1 = o1.getId();
-                    String memberId2 = o2.getId();
-                    String o1Sequence = o1Facet != null ? o1Facet.sequence() : "0";
-                    String o2Sequence = o2Facet != null ? o2Facet.sequence() : "0";
-                    return o1Facet == null? +1:
-                            o2Facet == null? -1:
-                                    deweyOrderComparator.compare(o1Sequence, o2Sequence);
-                }
+            	 private final MemberOrderFacetComparator memberOrderFacetComparator = 
+                 		new MemberOrderFacetComparator(false);
+                 @Override
+                 public int compare(final ObjectMember o1, final ObjectMember o2) {
+                 	return memberOrderFacetComparator.compare(
+                 			o1.getFacet(MemberOrderFacet.class),
+                 			o2.getFacet(MemberOrderFacet.class));
+                 }
             };
         }
 
