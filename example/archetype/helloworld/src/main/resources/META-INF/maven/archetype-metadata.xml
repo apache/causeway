@@ -72,6 +72,7 @@
             <includes>
                 <include>.gitattributes</include>
                 <include>.gitignore</include>
+                <include>enhance-all.sh</include>
                 <include>README.adoc</include>
             </includes>
         </fileSet>

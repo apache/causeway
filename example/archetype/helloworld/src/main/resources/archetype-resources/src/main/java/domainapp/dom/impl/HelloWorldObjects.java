@@ -47,10 +47,7 @@ public class HelloWorldObjects {
             @Parameter(maxLength = 40)
             @ParameterLayout(named = "Name")
             final String name) {
-        final HelloWorldObject object = new HelloWorldObject(name);
-        serviceRegistry.injectServicesInto(object);
-        repositoryService.persistAndFlush(object);
-        return object;
+        return repositoryService.persist(HelloWorldObject.create(name));
     }
 
     @Action(semantics = SemanticsOf.SAFE)

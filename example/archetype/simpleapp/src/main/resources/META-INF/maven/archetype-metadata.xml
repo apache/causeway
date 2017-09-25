@@ -44,17 +44,12 @@
                 <include>**/*.class</include>
             </includes>
         </fileSet>
-        <fileSet filtered="true" encoding="UTF-8">
-            <directory/>
-            <includes>
-                <include>pom-jdo-enhance-all.xml</include>
-            </includes>
-        </fileSet>
         <fileSet encoding="UTF-8">
             <directory/>
             <includes>
                 <include>.gitattributes</include>
                 <include>.gitignore</include>
+                <include>enhance-all.sh</include>
                 <include>README.adoc</include>
             </includes>
         </fileSet>

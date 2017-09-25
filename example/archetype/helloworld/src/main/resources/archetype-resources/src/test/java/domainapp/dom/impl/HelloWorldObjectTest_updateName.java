@@ -30,7 +30,7 @@ public class HelloWorldObjectTest_updateName {
     @Test
     public void happy_case() throws Exception {
         // given
-        final HelloWorldObject object = new HelloWorldObject("Foo");
+        final HelloWorldObject object = HelloWorldObject.create("Foo");
         assertThat(object.getName()).isEqualTo("Foo");
 
         // when
