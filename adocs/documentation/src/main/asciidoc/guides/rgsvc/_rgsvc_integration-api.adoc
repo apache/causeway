@@ -8,7 +8,8 @@
 The integration APIs provide functionality to the domain objects to integrate with other bounded contexts, for example sending an email or serializing an object out to XML.
 
 
-The table below summarizes the integration APIs defined by Apache Isis.  It also lists their corresponding implementation, either a default implementation provided by Apache Isis itself, or provided by one of the in (non-ASF) link:http://www.isisaddons.org[Isis Addons] modules.
+The table below summarizes the integration APIs defined by Apache Isis.
+It also lists their corresponding implementation, either a default implementation provided by Apache Isis itself, or provided by one of the (non-ASF) link:http://platform.incode.org[Incode Platform^] modules.
 
 
 .Integration API

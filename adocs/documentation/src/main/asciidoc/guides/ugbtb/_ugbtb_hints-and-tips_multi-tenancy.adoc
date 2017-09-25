@@ -5,9 +5,10 @@
 :_imagesdir: images/
 
 
-Of the various Isis Addons, the https://github.com/isisaddons/isis-module-security[security module] has the most features. One significant feature is the ability to associate users and objects with a "tenancy".
+Of the various modules provided by the (non-ASF) link:http://platform.incode.org[Incode Platform^], the security module has the most features.
+One significant feature is the ability to associate users and objects with a "tenancy".
 
 
-For more details, see the https://github.com/isisaddons/isis-module-security[security module] README.
+For more details, see the link:http://platform.incode.org[Incode Platform^]'s security module README.
 
 

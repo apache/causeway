@@ -55,7 +55,7 @@ public class DomainAppFixturesProvider implements FixtureScriptsSpecificationPro
 
 
 The benefit of this design - decoupling the responsibilities of the superclass and the subclass - is that it ensures that there is always an instance of `FixtureScripts` available, even if the application itself doesn't provide one.
-Some of the (non-ASF) link:http://www.isisaddons.org[Isis Addons] modules (eg http://github.com/isisaddons/isis-module-security[Isis addons' security] module) expect there to be a `FixtureScripts` service for seeding data, which has caused some confusion.
+.
 
 By way of comparison, if using the older pre-`1.9.0` approach then you would create a subclass:
 
@@ -192,7 +192,7 @@ public class RecreateSimpleObjects extends FixtureScript {                   // 
 ----
 <1> inherit from `org.apache.isis.applib.fixturescripts.FixtureScript`
 <2> a hard-coded list of values for the names.
-Note that the http://github.com/isisaddons/isis-module-fakedata[Isis addons' fakedata] module (non-ASF) could also have been used
+Note that the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s fakedata module could also have been used
 <3> whether the script is "discoverable"; in other words whether it should be rendered in the drop-down by the `FixtureScripts` service
 <4> input property: the number of objects to create, up to 10; for the calling test to specify, but note this is optional and has a default (see below).
 It's important that a wrapper class is used (ie `java.lang.Integer`, not `int`)
@@ -347,7 +347,7 @@ As of there are two other approaches.
 The first is to take advantage of a new `MultipleExecutionStrategy`, namely `EXECUTE_ONCE_BY_VALUE`.  Under this strategy the determination as to whether to run a given fixture script is by comparing the fixture script against all others that have run.
 If all fixture scripts implement value semantics, then they can effectively determine whether they need to run or not.
 
-This strategy was introduced in order to better support the `ExcelFixture` fixture script (provided by the (non-ASF) http://github.com/isisaddons/isis-module-excel[Isis addons' excel] module.
+This strategy was introduced in order to better support the `ExcelFixture` fixture script (provided by the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s excel module.
 The `ExcelFixture` takes an Excel spreadsheet and loads up each row.
 For those cases where we wish to ensure that the same spreadsheet is not loaded more than once, the `IGNORE` strategy would have required that a trivial subclass of `ExcelFixture` is created for each and every spreadsheet.
 The `EXECUTE_ONCE_BY_VALUE` on the other hand delegates the determination to the value semantics of the `ExcelFixture`, which is based on the contents of the spreadsheet.

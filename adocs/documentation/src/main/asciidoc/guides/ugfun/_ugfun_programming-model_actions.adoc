@@ -51,7 +51,7 @@ The `@ParameterLayout` annotation provides a UI hint to the framework.
 
 [TIP]
 ====
-The (non-ASF) Isis addons' http://github.com/isisaddons/isis-metamodel-paraname8[paraname8] metamodel extension allows the parameter name to be used in the UI, rather than the type.
+The (non-ASF) link:http://platform.incode.org[Incode Platform^]'s paraname8 metamodel extension allows the parameter name to be used in the UI, rather than the type.
 ====
 
 

@@ -17,6 +17,6 @@ If annotated with xref:../rgant/rgant.adoc#_rgant_DomainObjectLayout_titleUiEven
 This can be particularly useful for xref:../ugfun/ugfun.adoc#_ugfun_programming-model_view-models_jaxb[JAXB-style view models] which are used as DTOs and so must have no dependencies on the rest of the Apache Isis framework.
 
 It can also be more generally useful to allow one module to influence/fine-tune the title of entities provided by some other module.
-The obvious use case is when reusing library modules, eg as provided by (non-ASF) link:http://catalog.incode.org[Incode Catalog] modules.
+The obvious use case is when reusing library modules, eg as provided by (non-ASF) link:http://platform.incode.org[Incode Platform^].
 
 

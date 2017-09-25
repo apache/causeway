@@ -25,7 +25,8 @@ One of the original motivations for Apache Isis itself was to be able automatica
 
 Apache Isis' has a pluggable architecture allowing different user interface technologies.
  The principal implementation (as configured by the xref:../../guides/ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype]) is the xref:../../guides/ugvw/ugvw.adoc#[Wicket viewer].
-  This provides an appealing default user interface, with the ability to customize the user interface by writing new http://wicket.apache.org[Apache Wicket] components. Some third-party components can be found in the (non-ASF) link:http://www.isisaddons.org[Isis Addons] (non-ASF) project, integrating the Wicket viewer with https://github.com/isisaddons/isis-wicket-gmap3[google maps], https://github.com/isisaddons/isis-wicket-fullcalendar2[a full calendar] and a https://github.com/isisaddons/isis-wicket-excel[export to Excel] component.
+  This provides an appealing default user interface, with the ability to customize the user interface by writing new http://wicket.apache.org[Apache Wicket] components.
+Some third-party components can be found in the (non-ASF) link:http://platform.incode.org[Incode Platform^].
 
 
 Deploying on Apache Isis means that the framework also manages object persistence.

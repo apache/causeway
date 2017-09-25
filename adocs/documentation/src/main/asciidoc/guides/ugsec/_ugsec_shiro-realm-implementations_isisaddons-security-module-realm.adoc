@@ -6,10 +6,10 @@
 
 
 
-The https://github.com/isisaddons/isis-module-security[Isis Addons' security module] (not ASF) provides a complete
-security subdomain for users, roles, permissions; all are persisted as domain entities.
+The (non-ASF) link:http://platform.incode.org[Incode Platform^]'s security module provides a complete security subdomain for users, roles, permissions; all are persisted as domain entities.
 
-What that means, of course, that they can also be administered through your Isis application.  Moreover, the set of permissions (to features) is derived completely from your application's metamodel; in essence the permissions are "type-safe".  
+What that means, of course, that they can also be administered through your Isis application.
+Moreover, the set of permissions (to features) is derived completely from your application's metamodel; in essence the permissions are "type-safe".
 
 
 In order to play along, the module includes a Shiro realm, which fits in as follows:
@@ -30,7 +30,8 @@ In most cases this delegate realm will be the LDAP realm, and so the architectur
 image::{_imagesdir}security/security-apis-impl/configure-shiro-to-use-isisaddons-security-module-realm-with-delegate-realm.PNG[width="600px",link="{_imagesdir}security/security-apis-impl/configure-shiro-to-use-isisaddons-security-module-realm-with-delegate-realm.PNG"]
 
 
-The security module has many more features than are described here, all of which are described in the module's link:https://github.com/isisaddons/isis-module-security[README].  The README also explains in detail how to configure an existing app to use this module.
+The security module has many more features than are described here, all of which are described in the module's README.
+The README also explains in detail how to configure an existing app to use this module.
 
 You can also look at the Isisaddons https://github.com/isisaddons/isis-app-todoapp[todoapp example] (not ASF), which is preconfigured to use the security module.
 

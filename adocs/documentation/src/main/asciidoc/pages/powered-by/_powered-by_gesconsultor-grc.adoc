@@ -51,57 +51,45 @@ This is implemented with the Dojo javascript library, interfacing to Apache Isis
 
 === Risk Management
 
-Allows a company to manage __Risk Scenario__s through a _Risk Register_, and execute a full ISO 31000 compliant
-_Risk Assessment_.  A custom UI visualizes these risks as a heatmap:
+Allows a company to manage __Risk Scenario__s through a _Risk Register_, and execute a full ISO 31000 compliant _Risk Assessment_.
+A custom UI visualizes these risks as a heatmap:
 
 image::{_imagesdir}powered-by/gesconsultor-grc/fig-3-custom-ui-analyzing-risk-scenarios.png[width="800px",link="{_imagesdir}powered-by/gesconsultor-grc/fig-3-custom-ui-analyzing-risk-scenarios.png"]
 
 
 === Project Management
 
-Allows users to visually manage their projects and tasks through a KanBan-like interface.  Again, the viewer provides
-drag-n-drop capabilities:
+Allows users to visually manage their projects and tasks through a KanBan-like interface.
+Again, the viewer provides drag-n-drop capabilities:
 
 image::{_imagesdir}powered-by/gesconsultor-grc/fig-4-managing-projects.png[width="px",link="{_imagesdir}powered-by/gesconsultor-grc/fig-4-managing-projects.png"]
 
 
 === Dashboard and Indicators
 
-Being a "world-first", the GRC platform's implementation of the Information Security measurement standard (ISO 27004)
-allows companies to access real-time information available in the GRC platform and External Systems, associate
-_Decision Criteria_ to them and create beautiful __Dashboard__s and __Indicator__s.
+Being a "world-first", the GRC platform's implementation of the Information Security measurement standard (ISO 27004) allows companies to access real-time information available in the GRC platform and External Systems, associate _Decision Criteria_ to them and create beautiful __Dashboard__s and __Indicator__s.
 
 All the business rules are on a Domain fully implemented in Apache Isis.
 
 
 == Implementation details
 
-The GRC application require a more sophisticating and customizable viewer than is provided "out-of-the-box" by
-Apache Isis.  We chose http://wavemaker.com[Wavemaker] for implementing the viewer, also leveraging and integrating with
-various Wavemaker services.
+The GRC application require a more sophisticating and customizable viewer than is provided "out-of-the-box" by Apache Isis.
+We chose http://wavemaker.com[Wavemaker] for implementing the viewer, also leveraging and integrating with various Wavemaker services.
 
-Even so, while GRC does (as the figures above show) include custom views, the majority of the views exposed by GRC are
-automatically generated from the underlying domain entities; the GRC viewer is a proprietary version of Isis' own
-xref:../../guides/ugvw/ugvw.adoc#[Wicket viewer].  At the last count more than 400 domain entities, across 6 different
-Bounded Contexts, are surfaced in the UI in this this way.
+Even so, while GRC does (as the figures above show) include custom views, the majority of the views exposed by GRC are automatically generated from the underlying domain entities; the GRC viewer is a proprietary version of Isis' own xref:../../guides/ugvw/ugvw.adoc#[Wicket viewer].
+At the last count more than 400 domain entities, across 6 different Bounded Contexts, are surfaced in the UI in this this way.
 
-At the Domain level, we also extensively use the xref:../../guides/ugfun/ugfun.adoc#_ugfun_building-blocks_events_domain-events[domain events]
-functionality available in Apache Isis, along with many of the (non-ASF) link:http://www.isisaddons.org[Isis Addons] (such
-as http://github.com/isisaddons/isis-module-audit[audit], http://github.com/isisaddons/isis-module-security[security]
-and the http://github.com/isisaddons/isis-module-excel[excel] modules).
+At the Domain level, we also extensively use the xref:../../guides/ugfun/ugfun.adoc#_ugfun_building-blocks_events_domain-events[domain events] functionality available in Apache Isis, along with many of the (non-ASF) link:http://platform.incode.org[Incode Platform^] (such as audit, security and excel modules).
 
-The GRC platform currently has more than 5600 automated tests, about 2000 being
-xref:../../guides/ugtst/ugtst.adoc#_ugtst_bdd-spec-support[BDD tests] and 3600 xref:../../guides/ugtst/ugtst.adoc#_ugtst_integ-test-support[integration
-tests], all leveraging Apache Isis' extensive testing capabilities.
+The GRC platform currently has more than 5600 automated tests, about 2000 being xref:../../guides/ugtst/ugtst.adoc#_ugtst_bdd-spec-support[BDD tests] and 3600 xref:../../guides/ugtst/ugtst.adoc#_ugtst_integ-test-support[integration tests], all leveraging Apache Isis' extensive testing capabilities.
 
 
 == Summing up
 
-Three years after this major refactoring, the GRC platform was acquired by Telefonica to be used as its top-level
-Security Governance platform; a breakthrough in the Managed Security Services sector.
+Three years after this major refactoring, the GRC platform was acquired by Telefonica to be used as its top-level Security Governance platform; a breakthrough in the Managed Security Services sector.
 
-The original development team currently work on Telefonica offices; the Product Management is co-directed by the
-link:http://www.govertis.com[GOVERTIS company] that originally developed it, and Telefonica.
+The original development team currently work on Telefonica offices; the Product Management is co-directed by the link:http://www.govertis.com[GOVERTIS company] that originally developed it, and Telefonica.
 
 All this could not have been achieved as quickly nor as effectively without the Apache Isis platform.
 

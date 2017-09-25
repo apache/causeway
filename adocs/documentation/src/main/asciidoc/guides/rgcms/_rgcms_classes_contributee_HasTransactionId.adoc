@@ -26,11 +26,10 @@ public interface HasTransactionId {
 <1> unique identifier (a GUID) of this request/interaction.
 
 
-Modules that either have domain entity that implement and/or services that contribute this interface are:
+Modules in the (non-ASF) link:http://platform.incode.org[Incode Platform^] that either have domain entity that implement and/or services that contribute this interface are:
 
-* (non-ASF) http://github.com/isisaddons/isis-module-audit[Isis addons' audit] module (`AuditEntry` entity, `AuditingServiceContributions` service)
-* (non-ASF) http://github.com/isisaddons/isis-module-command[Isis addons' command] module (`CommandJdo` entity, `CommandServiceJdoContributions` service)
-* (non-ASF) http://github.com/isisaddons/isis-module-publishing[Isis addons' publishing] module (`PublishedEvent` entity, `PublishingServiceContributions`)
-* (non-ASF) http://github.com/isisaddons/isis-module-publishmq[Isis addons' publishmq] module (`PublishedEvent` entity)
+* audit module: `AuditEntry` entity, `AuditingServiceContributions` service
+* command module: `CommandJdo` entity, `CommandServiceJdoContributions` service
+* publishmq module: `PublishedEvent` entity
 
 

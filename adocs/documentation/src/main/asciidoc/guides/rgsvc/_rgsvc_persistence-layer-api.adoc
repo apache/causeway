@@ -9,7 +9,8 @@
 The persistence layer APIs provide domain objects with tools to manage the interactions with the persistence layer, for example adding on-the-fly caching to queries that are called many times within a loop.
 
 
-The table below summarizes the persistence layer APIs defined by Apache Isis.  It also lists their corresponding implementation, either a default implementation provided by Apache Isis itself, or provided by one of the in (non-ASF) link:http://www.isisaddons.org[Isis Addons] modules.
+The table below summarizes the persistence layer APIs defined by Apache Isis.
+It also lists their corresponding implementation, either a default implementation provided by Apache Isis itself, or provided by one of the (non-ASF) link:http://platform.incode.org[Incode Platform^] modules.
 
 
 .Persistence Layer API

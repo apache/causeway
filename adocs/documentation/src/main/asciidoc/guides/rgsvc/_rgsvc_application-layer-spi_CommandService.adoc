@@ -28,8 +28,7 @@ the action) through the `transactionId` GUID
 
 As of `1.13.0`, these other uses cases are now more fully supported through the
 xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_InteractionContext[`InteractionContext`] service and persistent implementations of the
-``Interaction`` object, eg as provided by the (non-ASF)
-http://github.com/isisaddons/isis-module-publishmq[Isis addons' publishmq] module.
+``Interaction`` object, eg as provided by the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s publishmq module.
 
 
 
@@ -74,7 +73,7 @@ The framework will automatically have set the `completedAt` property of the `Com
 
 == Implementation
 
-The (non-ASF) http://github.com/isisaddons/isis-module-command[Isis addons' command] module provides an implementation (`org.isisaddons.module.command.dom.CommandServiceJdo`) that persists ``Command``s using the JDO/DataNucleus object store.  It further provides a number of supporting services:
+The (non-ASF) link:http://platform.incode.org[Incode Platform^]'s command module provides an implementation (`org.isisaddons.module.command.dom.CommandServiceJdo`) that persists ``Command``s using the JDO/DataNucleus object store.  It further provides a number of supporting services:
 
 * `org.isisaddons.module.command.dom.CommandServiceJdoRepository` is a repository to search for persisted ``Command``s
 
@@ -91,10 +90,8 @@ The typical way to indicate that an action should be reified into a `Command` is
 
 == Registering the Services
 
-The (non-ASF) http://github.com/isisaddons/isis-module-command[Isis addons' command] module provides an implementation
-of this service (`CommandService`), and also provides a number of related domain services
-(`CommandJdoRepository` and `CommandServiceJdoContributions`).  This
-module also provides service implementations of the
+The (non-ASF) link:http://platform.incode.org[Incode Platform^]'s command module provides an implementation of this service (`CommandService`), and also provides a number of related domain services (`CommandJdoRepository` and `CommandServiceJdoContributions`).
+This module also provides service implementations of the
 xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`BackgroundCommandService`].
 
 Assuming that an `AppManifest` is being used to xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app])

@@ -9,12 +9,9 @@
 The `CommandContext` service is a xref:../rgant/rgant.adoc#_rgant-RequestScoped[request-scoped] service that reifies the invocation of an action on a domain object into an object itself. This reified information is encapsulated within the `Command` object.
 
 By default, the `Command` is held in-memory only; once the action invocation has completed, the `Command` object is gone. The optional
- supporting xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`] enables the implementation of `Command` to be pluggable. With an appropriate implementation (eg as provided by the (non-ASF) http://github.com/isisaddons/isis-module-command[Isis addons' command] module's xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`]) the `Command` may then be persisted.
+ supporting xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`] enables the implementation of `Command` to be pluggable. With an appropriate implementation (eg as provided by the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s command module's xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`]) the `Command` may then be persisted.
 
-As of `1.13.0`, the primary use case for persistent ``Command``s is in support of background commands; they
-act as a parent to any background commands that can be persisted either explicitly using the
-xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_BackgroundService[`BackgroundService`], or implicitly by way of the
-xref:../rgant/rgant.adoc#_rgant-Action_command[`@Action#command()`] annotation.
+As of `1.13.0`, the primary use case for persistent ``Command``s is in support of background commands; they act as a parent to any background commands that can be persisted either explicitly using the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_BackgroundService[`BackgroundService`], or implicitly by way of the xref:../rgant/rgant.adoc#_rgant-Action_command[`@Action#command()`] annotation.
 
 In previous versions of the framework, persistent ``Command``s also supported a number of other use cases:
 
@@ -23,8 +20,7 @@ In previous versions of the framework, persistent ``Command``s also supported a 
 * if a xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_AuderService[`AuditerService`] or xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_AuditService[`AuditingService`] (the latter now deprecated) is configured, they provide better audit information, since the `Command` (the 'cause' of an action) can be correlated to the audit records (the "effect" of the action) through the `transactionId` GUID
 
 As of `1.13.0`, these other uses cases are now more fully supported through the
-xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_InteractionContext[`InteractionContext`] service and persistent implementations of the ``Interaction`` object, eg as provided by the (non-ASF)
-http://github.com/isisaddons/isis-module-publishmq[Isis addons' publishmq] module.
+xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_InteractionContext[`InteractionContext`] service and persistent implementations of the ``Interaction`` object, eg as provided by the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s publishmq module.
 
 
 
@@ -151,7 +147,7 @@ public class ToDoItem ... {
 
 When a background command is invoked, the user is returned the command object itself (to provide a handle to the command being invoked).
 
-This requires that an implementation of xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`] that persists the commands (such as the (non-ASF) http://github.com/isisaddons/isis-module-command[Isis addons' command] module's `CommandService`) is configured. It also requires that a scheduler is configured to execute the background commands, see xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_BackgroundCommandService[`BackgroundCommandService`]).
+This requires that an implementation of xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`] that persists the commands (such as the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s command module's `CommandService`) is configured. It also requires that a scheduler is configured to execute the background commands, see xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_BackgroundCommandService[`BackgroundCommandService`]).
 
 
 

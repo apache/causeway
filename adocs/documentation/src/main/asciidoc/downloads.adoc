@@ -102,12 +102,18 @@ See link:https://gitbox.apache.org/setup/[gitbox setup] for more details on how 
 
 
 
-== Isis add-ons & Incode Catalog
+== Incode Platform
 
-There are also a number of (open source, but not ASF) supporting modules and extensions for you to use:
+The link:http://platform.incode.org[Incode Platform^] provides a number of (open source, but not ASF) supporting modules and extensions for you to use:
 
-* the link:http://www.isisaddons.org/[Isis Add-ons] provide technical extensions, such as security, commands, auditing and feature toggles
+* technical libraries, such as excel, word and freemarker
 
-* the link:http://catalog.incode.org[Incode Catalog] provides business modules, such as documents, notes and communications.
+* SPI implementations, such as security, commands, auditing and publishing
 
-Each module is in a separate github repo, with a demo app to illustrate the module's functionality.
+* framework extensions, such as flyway, quartz and feature toggles
+
+* wicket components, such as maps, calendars and PDF viewer
+
+* business modules, such as documents, notes and communications.
+
+Each module can be used independently or combined, and the Incode Platform also provides a quickstart application to get you started quickly.

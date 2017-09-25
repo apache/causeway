@@ -45,10 +45,9 @@ pass:[<br/>]
 * *link:pages/cheat-sheet/cheat-sheet.html[Cheat Sheet^]*
 * link:pages/icons/icons.html[Icons^]
 
-*3rd-party add-ons (not ASF)*
+*3rd-party modules (not ASF)*
 
-* http://www.isisaddons.org[Isis addons^]
-* http://catalog.incode.org[Incode Catalog^]
+* http://platform.incode.org[Incode Platform^]
 
 
 |===

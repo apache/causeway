@@ -154,7 +154,7 @@ The first exception encountered is then re-thrown (to preserve similar behaviour
 [[_migration-notes_1.14.0-to-1.15.0_incode-platform]]
 == (non-ASF) Incode Platform
 
-(*work in progress*) The supporting (non-ASF) link:http://isisaddons.org[Isis Addons] and link:http://catalog.incode.org[Incode Catalog] have also been reorganised into a single link:http://platform.incode.org["Incode Platform"].
+The various (non-ASF) link:http://isisaddons.org[Isis Addons] and link:http://catalog.incode.org[Incode Catalog] have also been combined into a single link:http://platform.incode.org["Incode Platform"].
 
 While each module can still be consumed individually, the new platform versions consistently (a change in any one module will result in a re-release of all).
 This should make these modules easier to consume, and easier to maintain/develop.

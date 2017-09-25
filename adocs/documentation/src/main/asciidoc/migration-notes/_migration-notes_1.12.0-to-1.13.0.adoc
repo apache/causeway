@@ -48,8 +48,7 @@ The xref:../guides/rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditingService
 by the xref:../guides/rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditerService[`AuditerService`].
 
 There can be more than one implementation of this new SPI, and a framework-provided implementation
-(`AuditerServiceLogging`) will log to a file.  The (non-ASF)
-http://github.com/isisaddons/isis-module-audit[Isis addons' audit] module also implements the new SPI.
+(`AuditerServiceLogging`) will log to a file.  The (non-ASF) link:http://platform.incode.org[Incode Platform^]'s audit module also implements the new SPI.
 
 
 == Publishing
@@ -59,8 +58,7 @@ xref:../guides/rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_EventSerializer[`Ev
 replaced by the xref:../guides/rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`].
 
 There can be more than one implementation of this new SPI, and a framework-provided implementation
-(`PublisherServiceLogging`) will log to a file.  The (non-ASF)
-http://github.com/isisaddons/isis-module-publishmq[Isis addons' publishmq] module also implements the new SPI.
+(`PublisherServiceLogging`) will log to a file.  The (non-ASF) link:http://platform.incode.org[Incode Platform^]'s publishmq module also implements the new SPI.
 
 The new service also supports the notion of published property edits; the new
 xref:../guides/rgant/rgant.adoc#_rgant_Property_publishing[`@Property#publishing()`] annotation attribute can be used to specify.  The `

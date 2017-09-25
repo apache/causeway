@@ -17,12 +17,11 @@ public interface HasUsername {
 }
 ----
 
-Modules that either have domain entity that implement and/or services that contribute this interface are:
+Modules in the (non-ASF) link:http://platform.incode.org[Incode Platform^] that either have domain entity that implement and/or services that contribute this interface are:
 
-* (non-ASF) http://github.com/isisaddons/isis-module-security[Isis addons' security] module ( `ApplicationUser` entity, `HasUsernameContributions` service)
-* (non-ASF) http://github.com/isisaddons/isis-module-audit[Isis addons' audit] module (`AuditEntry` entity,
-* (non-ASF) http://github.com/isisaddons/isis-module-command[Isis addons' command] module's `CommandJdo` entity, `HasUsernameContributions` service)
-* (non-ASF) http://github.com/isisaddons/isis-module-publishing[Isis addons' publishing] module (`PublishedEvent` entity)
-* (non-ASF) http://github.com/isisaddons/isis-module-sessionlogger[Isis addons' sessionlogger] module (`SessionLogEntry` entity, `HasUsernameContributions` service)
-* (non-ASF) http://github.com/isisaddons/isis-module-settings[Isis addons' settings] module (`UserSettingJdo` entity)
+* security module: `ApplicationUser` entity, `HasUsernameContributions` service
+* audit module: `AuditEntry` entity
+* command module: `CommandJdo` entity, `HasUsernameContributions` service
+* sessionlogger module: `SessionLogEntry` entity, `HasUsernameContributions` service
+* settings module: `UserSettingJdo` entity
 

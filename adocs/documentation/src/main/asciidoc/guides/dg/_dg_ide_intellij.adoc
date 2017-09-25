@@ -699,8 +699,7 @@ image::{_imagesdir}intellij-idea/070-advanced/040-dcevm-run-configuration.png[wi
 
 === Setting up JRebel
 
-See the repo for the (non-ASF) link:https://github.com/isisaddons/isis-jrebel-plugin[Isis JRebel] plugin.  With some
-modification, this should work for IntelliJ too.
+See the repo for the (non-ASF) link:https://github.com/isisaddons/isis-jrebel-plugin[Isis JRebel] plugin.
 
 Note that JRebel is a commercial product, requiring a license.  At the time of writing there is also currently a
 non-commercial free license (though note this comes with some usage conditions).

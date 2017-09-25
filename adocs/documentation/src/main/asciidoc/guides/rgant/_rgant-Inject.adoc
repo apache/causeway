@@ -95,7 +95,8 @@ public class Customer {
 [NOTE]
 ====
 An alternative and almost equivalent design would be to publish an event using the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] and implement the domain services as subscribers to
-the event.  This alternative design is used in the (non-ASF) http://github.com/isisaddons/isis-module-poly[Isis addons' poly] module, for example.
+the event.
+This alternative design is used in the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s poly module, for example.
 ====
 
 

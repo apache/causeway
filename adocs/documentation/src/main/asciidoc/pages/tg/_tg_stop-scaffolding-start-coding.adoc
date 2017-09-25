@@ -559,19 +559,21 @@ This can be helpful for "naive" code which would normally make the same query wi
 
 == Extending the Wicket UI
 
-Each element in the Wicket viewer (entity form, properties, collections, action button etc) is a component, each created by a internal API (`ComponentFactory`, described xref:../../guides/ugvw/ugvw.adoc#_ugvw_extending[here]). For collections there can be multiple views, and the Wicket viewer provides a view selector drop down (top right of each collection panel).
+Each element in the Wicket viewer (entity form, properties, collections, action button etc) is a component, each created by a internal API (`ComponentFactory`, described xref:../../guides/ugvw/ugvw.adoc#_ugvw_extending[here]).
+For collections there can be multiple views, and the Wicket viewer provides a view selector drop down (top right of each collection panel).
 
-Moreover, we can add additional views. In this section we'll explore some of these, already provided through http://www.isisaddons.org/[Isis addons] (not ASF).
+Moreover, we can add additional views. In this section we'll explore some of these, already provided through the (non-ASF) link:http://platform.incode.org[Incode Platform^].
+
 
 === Excel download
 
-The https://github.com/isisaddons/isis-wicket-excel[Excel download add-on] allows the collection to be downloaded as an Excel spreadsheet (`.xlsx`).
+The Incode Platform's Excel Wicket component allows the collection to be downloaded as an Excel spreadsheet (`.xlsx`).
 
 * Use the instructions on the add-on module's README to add in the excel download module (ie: update the POM).
 
 === Fullcalendar2
 
-The https://github.com/isisaddons/isis-wicket-fullcalendar2[Fullcalendar2 download add-on] allows entities to be rendered in a full-page calendar.
+The Incode Platform's Fullcalendar2 Wicket component allows entities to be rendered in a full-page calendar.
 
 * Use the instructions on the add-on module's README to add in the fullcalendar2 module (ie: update the POM).
 * on one of your entities, implement either the `CalendarEventable` interface or the (more complex) `Calendarable` interface.
@@ -580,7 +582,7 @@ The https://github.com/isisaddons/isis-wicket-fullcalendar2[Fullcalendar2 downlo
 
 === gmap3
 
-The https://github.com/isisaddons/isis-wicket-gmap3[Gmap3 download add-on] allows entities that implement certain APIs to be rendered in a full-page gmap3.
+The Incode Platform's Gmap3 Wicket componet allows entities that implement certain APIs to be rendered in a full-page gmap3.
 
 * Use the instructions on the add-on module's README to add in the gmap3 module (ie: update the POM).
 * on one of your entities, implement the `Locatable` interface
@@ -592,11 +594,15 @@ The https://github.com/isisaddons/isis-wicket-gmap3[Gmap3 download add-on] allow
 
 == Add-on modules (optional)
 
-In addition to providing Wicket viewer extensions, http://www.isisaddons.org/[Isis addons] also has a large number of modules. These address such cross-cutting concerns as security, command (profiling), auditing and publishing.
+In addition to providing Wicket viewer extensions, the (non-ASF) link:http://platform.incode.org[Incode Platform^] also has a large number of other modules.
+These address such cross-cutting concerns as security, command (profiling), auditing and publishing.
 
-* (optional): follow the https://github.com/isisaddons/isis-module-security[security module] README or http://youtu.be/bj8735nBRR4[screencast]
-* (optional): follow the https://github.com/isisaddons/isis-module-command[command module] README or http://youtu.be/g01tK58MxJ8[screencast]
-* (optional): follow the https://github.com/isisaddons/isis-module-audit[auditing module] README or (the same) http://youtu.be/g01tK58MxJ8[screencast]
+* (optional): follow the security module README.
+ There is also a http://youtu.be/bj8735nBRR4[screencast] that refers to the Incode Platform's predecessor, the isisaddons.org website.
+* (optional): follow the command module README.
+There is also a http://youtu.be/g01tK58MxJ8[screencast] that refers to the Incode Platform's predecessor, the isisaddons.org website.
+* (optional): follow the auditing module README.
+Or, see (the same) http://youtu.be/g01tK58MxJ8[screencast].
 
 
 

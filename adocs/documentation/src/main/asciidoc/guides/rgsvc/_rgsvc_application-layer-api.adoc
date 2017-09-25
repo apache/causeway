@@ -9,7 +9,8 @@
 Domain service APIs for the application layer allow the domain objects to control aspects of the application layer, such as sending info messages back to the end-user.
 
 
-The table below summarizes the application layer APIs defined by Apache Isis.  It also lists their corresponding implementation, either a default implementation provided by Apache Isis itself, or provided by one of the in (non-ASF) link:http://www.isisaddons.org[Isis Addons] modules.
+The table below summarizes the application layer APIs defined by Apache Isis.
+It also lists their corresponding implementation, either a default implementation provided by Apache Isis itself, or provided by one of the (non-ASF) link:http://platform.incode.org[Incode Platform^] modules.
 
 .Application Layer API
 [cols="2,4a,1,1", options="header"]

@@ -147,24 +147,18 @@ Because the number of items on the tertiary menu is expected to be small and mos
 viewer does _not_ place dividers between actions from different services on the tertiary menu.
 
 
-== Isis Add-on modules
+== Incode Platform modules
 
-Some of the (non-ASF) link:http://www.isisaddons.org[Isis Addons] modules also provide services whose actions appear in top-level menus.
+Some of the (non-ASF) link:http://platform.incode.org[Incode Platform^] modules also provide services whose actions appear in top-level menus.
 
-The http://github.com/isisaddons/isis-module-security[security]'s module places its domain service menus in three
+The security's module places its domain service menus in three
 top-level menus:
 
 * its `ApplicationUsers`, `ApplicationRoles`, `ApplicationPermission`, `ApplicationFeatureViewModels` and
  `ApplicationTenancies` domain services are all grouped together in a single "Security" top-level menu, on the
  SECONDARY menu bar
 
-* its `SecurityModuleAppFixturesService` domain service, which allows the security modules' fixture scripts to be run,
- is placed on a "Prototyping" top-level menu, also on the SECONDARY menu bar
-
 * its `MeService` domain service, which provides the `me()` action, is placed on the TERTIARY menu bar.
-
-Meanwhile the http://github.com/isisaddons/isis-module-devutils[devutils] module places its actions - to download layouts and
-so forth - on a "Prototyping" top-level menu, on the SECONDARY menu bar.
 
 Currently there is no facility to alter the placement of these services. However, their UI can be suppressed
 using security or using a xref:../ugbtb/ugbtb.adoc#_ugbtb_hints-and-tips_vetoing-visibility[vetoing subscriber].

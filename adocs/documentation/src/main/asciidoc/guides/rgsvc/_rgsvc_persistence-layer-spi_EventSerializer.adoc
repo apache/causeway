@@ -42,7 +42,7 @@ It's important to make sure that the publishing service implementation is able t
 
 == Implementation
 
-The (non-ASF) http://github.com/isisaddons/isis-module-publishing[Isis addons' publishing] module provides an implementation (`org.isisaddons.module.publishing.dom.eventserializer.RestfulObjectsSpecEventSerializer`) that represents the event payload using the representation defined by the link:http://restfulobjects.org[Restful Objects spec] of (transient) objects, grafting on the metadata as additional JSON nodes.
+The (obsolete) http://github.com/isisaddons-legacy/isis-module-publishing[Isis addons' publishing] module provides an implementation (`org.isisaddons.module.publishing.dom.eventserializer.RestfulObjectsSpecEventSerializer`) that represents the event payload using the representation defined by the link:http://restfulobjects.org[Restful Objects spec] of (transient) objects, grafting on the metadata as additional JSON nodes.
 
 For example, this is the JSON generated on an action invocation:
 
@@ -63,8 +63,7 @@ You could if you wish change the representation by registering your own implemen
 
 There is no default implementation of this service provided by the core Apache Isis framework.
 
-The (non-ASF) http://github.com/isisaddons/isis-module-publishing[Isis addons' publishing] module provides an
-implementation of this service (`RestfulObjectsSpecEventSerializer`) that serializes action invocations and published
+The (obsolete) http://github.com/isisaddons-legacy/isis-module-publishing[Isis addons' publishing] module provides an implementation of this service (`RestfulObjectsSpecEventSerializer`) that serializes action invocations and published
 objects into a format based on the Restful Objects specification.  It also (as you might imagine) provides an
 implementation of the xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublishingService[`PublishingService`].
 
@@ -75,6 +74,5 @@ then this can be activated by updating the `pom.xml` and updating the `AppManife
 
 == Related Services
 
-This service is intended (though not mandated) to be used by implementations of xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublishingService[`PublishingService`].  The (non-ASF) http://github.com/isisaddons/isis-module-publishing[Isis addons' publishing] module does use it (though the (non-ASF)
-http://github.com/isisaddons/isis-module-publishmq[Isis addons' publishmq] module does not).
+This service is intended (though not mandated) to be used by implementations of xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublishingService[`PublishingService`].  The (non-ASF) http://github.com/isisaddons-legacy/isis-module-publishing[Isis addons' publishing] module does use it (though the (non-ASF) link:http://platform.incode.org[Incode Platform^] publishmq module does not).
 

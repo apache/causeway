@@ -17,7 +17,7 @@ implemented using link:http://wicket.apache.org[Apache Wicket].
 
 This user guide discuss end-user features, configuration and customization of the Wicket viewer.
 
-It also discusses how to extend the viewer, and the (non-ASF) link:http://www.isisaddons.org[Isis Addons] wicket components.
+It also discusses how to extend the viewer, and the (non-ASF) link:http://platform.incode.org[Incode Platform^] wicket components.
 
 === Other Guides
 
@@ -57,5 +57,5 @@ include::_ugvw_customisation.adoc[leveloffset=+1]
 include::_ugvw_extending.adoc[leveloffset=+1]
 include::_ugvw_hints-and-tips.adoc[leveloffset=+1]
 
-include::_ugvw_isis-addons.adoc[leveloffset=+1]
+include::_ugvw_incode-platform.adoc[leveloffset=+1]
 

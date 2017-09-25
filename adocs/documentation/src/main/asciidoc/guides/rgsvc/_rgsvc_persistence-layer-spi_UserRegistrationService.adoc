@@ -60,10 +60,8 @@ This is needed so that the self-registered users are assigned automatically to y
 
 There is no default implementation of this service provided by the core Apache Isis framework.
 
-If using the (non-ASF) http://github.com/isisaddons/isis-module-security[Isis addons' security] module) for
-authentication and authorization, then note that it provides an adapter class,
-`SecurityModuleAppUserRegistrationServiceAbstract`, that provides most of the implementation.  You are still required
-to implement a subclass and register.
+If using the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s security module) for authentication and authorization, then note that it provides an adapter class, `SecurityModuleAppUserRegistrationServiceAbstract`, that provides most of the implementation.
+You are still required to implement a subclass and register.
 
 For example:
 

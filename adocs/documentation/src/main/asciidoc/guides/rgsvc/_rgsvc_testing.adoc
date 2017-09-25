@@ -11,7 +11,8 @@ The testing APIs provide functionality to domain objects for use when testing or
 The testing SPIs allow the framework to provide supporting functionality for use when testing or demoing an application.
 
 
-The table below summarizes the testing APIs defined by Apache Isis.  It also lists their corresponding implementation, either a default implementation provided by Apache Isis itself, or provided by one of the in (non-ASF) link:http://www.isisaddons.org[Isis Addons] modules.
+The table below summarizes the testing APIs defined by Apache Isis.
+It also lists their corresponding implementation, either a default implementation provided by Apache Isis itself, or provided by one of the (non-ASF) link:http://platform.incode.org[Incode Platform^] modules.
 
 
 .Testing API
@@ -84,7 +85,8 @@ SpecificationProvider`].
 
 
 
-The table below summarizes the testing SPIs defined by Apache Isis.  It also lists their corresponding implementation, either a default implementation provided by Apache Isis itself, or provided by one of the in (non-ASF) link:http://www.isisaddons.org[Isis Addons] modules.
+The table below summarizes the testing SPIs defined by Apache Isis.
+It also lists their corresponding implementation, either a default implementation provided by Apache Isis itself, or provided by one of the (non-ASF) link:http://platform.incode.org[Incode Platform^] modules.
 
 
 .Testing SPI

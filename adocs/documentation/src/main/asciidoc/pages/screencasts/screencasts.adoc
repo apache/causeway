@@ -308,7 +308,7 @@ Using link:https://projectlombok.org/[Project Lombok] to remove boilerplate from
 
 
 |link:https://www.youtube.com/watch?v=AXuxULuRtm0[029^] +
-Using the (non-ASF) http://github.com/isisaddons/isis-metamodel-paraname8[Isis addons' paraname8] module to remove boilerplate from your domain object (xref:../../guides/rgant/rgant.adoc#_rgant-ParameterLayout_named[`@ParameterLayout#named()`] annotation attribute on action parameters).
+Using the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s paraname8 metamodel extension to remove boilerplate from your domain object (xref:../../guides/rgant/rgant.adoc#_rgant-ParameterLayout_named[`@ParameterLayout#named()`] annotation attribute on action parameters).
 |||||x|||x|||
 
 
@@ -413,7 +413,7 @@ Using the xref:../../guides/rgcms/rgcms.adoc#_rgcms_classes_super_FixtureScript[
 
 
 |link:https://www.youtube.com/watch?v=-jMiD9n1L5U[040^] +
-Using the (non-ASF) http://github.com/isisaddons/isis-module-fakedata[Isis addons' fakedata] module's `FakeDataService` to provide fake (random) names within a fixture script.
+Using the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s fakedata module's `FakeDataService` to provide fake (random) names within a fixture script.
 ||x|||x||||||
 
 
@@ -476,29 +476,27 @@ include::_screencasts-playlists.adoc[]
 
 
 |link:https://www.youtube.com/watch?v=SoREp-8MQz0[047^] +
-Configuring an Apache Isis app to allow tables of objects to be downloaded as an Excel spreadsheet, using the (non-ASF) http://github.com/isisaddons/isis-wicket-excel[Isis addons' excel] wicket extension.
+Configuring an Apache Isis app to allow tables of objects to be downloaded as an Excel spreadsheet, using the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s excel wicket component.
 |||||x||||||
 
 
 |link:https://www.youtube.com/watch?v=bqjLx8gMOEw[048^] +
 Configuring an Apache Isis app to allow tables of domain objects with date information to be rendered on a full-page
-calendar, using the (non-ASF) http://github.com/isisaddons/isis-wicket-fullcalendar2[Isis addons' fullcalendar2] wicket
-extension.
+calendar, using the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s fullcalendar2 wicket
+component.
 |||||x||||||
 
 
 |link:https://www.youtube.com/watch?v=0YoFa44Xr6M[049^] +
 Using the xref:../../guides/rgant/rgant.adoc#_rgant-Programmatic[`@Programmatic`] annotation to exclude methods from a domain object
-(eg implementing methods of an interface as defined by the (non-ASF)
-http://github.com/isisaddons/isis-wicket-fullcalendar2[Isis addons' fullcalendar2 ] wicket extension) that would
+(eg implementing methods of an interface as defined by the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s fullcalendar2 wicket component) that would
 otherwise be part of the Apache Isis metamodel (and thus show up in the UI).
 ||||||||||x|
 
 
 |link:https://www.youtube.com/watch?v=mIwptdeZ67Q[050^] +
 Configuring an Apache Isis app to allow tables of domain objects with location information to be rendered on map,
- using the (non-ASF) http://github.com/isisaddons/isis-wicket-gmap3[Isis addons' gmap3] wicket
- extension.
+ using the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s gmap3 wicket component.
 |||||x||||||
 
 

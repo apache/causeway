@@ -10,7 +10,7 @@
 
 * Reusable building blocks +
 +
-Isis addons, catalog.incode.org
+(non-ASF) link:http://platform.incode.org[Incode Platform^]
 
 
 

@@ -6,7 +6,8 @@
 
 
 
-In v1.7.0 we've continued the work started in v1.6.0 in modularizing the framework. The most important change to note is that all Apache Isis core modules (with the Maven `groupId` of `org.apache.isis.module` have now MOVED to link:http://www.isisaddons.org[Isis Addons].
+In `1.7.0` we've continued the work started in `1.6.0` in modularizing the framework. The most important change to note is that all Apache Isis core modules (with the Maven `groupId` of `org.apache.isis.module` have now MOVED to link:http://www.isisaddons.org[Isis Addons].
+
 
 In addition, we've retired some obsolete (and unused) functionality, specifically the `ProfileStore` component.
 

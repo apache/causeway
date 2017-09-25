@@ -24,7 +24,7 @@ public class CustomerRepository {
     }
 }
 ----
-<1> the `@ParameterLayout(named=...)` attribute is required for Java 7; for Java 8 it can be omitted if the (non-ASF) http://github.com/isisaddons/isis-metamodel-paraname8[Isis addons' paraname8] metamodel extension is used.
+<1> the `@ParameterLayout(named=...)` attribute is required for Java 7; for Java 8 it can be omitted if the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s paraname8 metamodel extension is used.
 
 
 

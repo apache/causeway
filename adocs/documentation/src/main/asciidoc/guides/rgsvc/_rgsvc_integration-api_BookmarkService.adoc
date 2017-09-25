@@ -22,14 +22,12 @@ For example, a `Bookmark` could be converted into a barcode, and then this used 
 ====
 
 ``Bookmark``s are used by several other domain services as a means of storing areference to an arbitrary object
-(a polymorphic relationship).  For example, the (non-ASF)
-http://github.com/isisaddons/isis-module-audit[Isis addons' auditing] module's implementation of
-xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditerService[`AuditerService`] uses bookmarks to capture the object
-that is being audited.
+(a polymorphic relationship).  For example, the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s auditing module's implementation of xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditerService[`AuditerService`] uses bookmarks to capture the object that is being audited.
 
 [TIP]
 ====
-One downside of using ``Bookmark``s is that there is no way for the JDO/DataNucleus objectstore to enforce any kind of referental integrity.  However, the (non-ASF) http://github.com/isisaddons/isis-module-poly[Isis addons' poly] module describes and supports a design pattern to address this requirement.
+One downside of using ``Bookmark``s is that there is no way for the JDO/DataNucleus objectstore to enforce any kind of referental integrity.
+However, the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s poly module describes and supports a design pattern to address this requirement.
 ====
 
 
@@ -99,13 +97,9 @@ A more sophisticated implementation could look inside the passed `ev` argument a
 
 == Usage by other services
 
-Bookmarks are used by the (non-ASF) http://github.com/isisaddons/isis-module-command[Isis addons' command] module's
-implementation of  xref:../rgsvc/rgsvc.adoc#_rgsvc_api_BackgroundCommandService[`BackgroundCommandService`], which uses a
-bookmark to capture the target object on which an action will be invoked subsequently.
+Bookmarks are used by the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s command module's implementation of  xref:../rgsvc/rgsvc.adoc#_rgsvc_api_BackgroundCommandService[`BackgroundCommandService`], which uses a bookmark to capture the target object on which an action will be invoked subsequently.
 
-Bookmarks are also used by the (non-ASF) http://github.com/isisaddons/isis-module-publishing[Isis addons' publishing]
-module's implementation of xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublishingService[`PublishingService`], and by the
-(non-ASF) http://github.com/isisaddons/isis-module-audit[Isis addons' auditing] module's implementation of
+Bookmarks are also used by the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s auditing module's implementation of
 xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditerService[`AuditerService`].
 
 

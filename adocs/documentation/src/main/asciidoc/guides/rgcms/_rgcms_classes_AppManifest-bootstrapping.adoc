@@ -88,7 +88,7 @@ public List<Class<?>> getModules() {
 }
 ----
 
-As can be seen, the various (non-ASF) link:http://www.isisaddons.org[Isis Addons] modules also each provide a module class that can be easily referenced.
+As can be seen, the various (non-ASF) link:http://platform.incode.org[Incode Platform^] modules also each provide a module class that can be easily referenced.
 
 
 [[__rgcms_classes_AppManifest-bootstrapping_api_getAdditionalServices]]
@@ -97,7 +97,7 @@ As can be seen, the various (non-ASF) link:http://www.isisaddons.org[Isis Addons
 We normally we recommend that services are defined exclusively through `getModules()`, and that this method should therefore return an empty list.
 However, there are certain use cases where the a service must be explicitly specified either because the service required does not (for whatever reason) have a xref:../rgant/rgant.adoc#_rgant-DomainService[`@DomainService`] annotation.
 
-For example, the (non-ASF) http://github.com/isisaddons/isis-module-security[Isis addons' security] module (v1.9.0) allows the policy to evaluate conflicting permissions to be specified by explicitly registering either the `PermissionsEvaluationServiceAllowBeatsVeto` domain service or the `PermissionsEvaluationServiceVetoBeatsAllow` domain service:
+For example, the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s security module allows the policy to evaluate conflicting permissions to be specified by explicitly registering either the `PermissionsEvaluationServiceAllowBeatsVeto` domain service or the `PermissionsEvaluationServiceVetoBeatsAllow` domain service:
 
 [source,java]
 ----

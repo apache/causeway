@@ -75,7 +75,7 @@ A "list all" action such as this can be useful when exploring the domain with a 
 [TIP]
 ====
 Annotating action parameters with xref:../rgant/rgant.adoc#_rgant_ParameterLayout_named[`@ParameterLayout#named()`] can become somewhat tiresome.
-You can avoid doing this by configuring the (non-ASF) http://github.com/isisaddons/isis-metamodel-paraname8[Isis addons' paraname8] metamodel extension.
+You can avoid doing this by configuring the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s paraname8 metamodel extension.
 ====
 
 

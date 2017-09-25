@@ -50,17 +50,15 @@ The serialized form returned by `EventSerializer` must be in a form that the `Pu
 
 == Implementation
 
-The (non-ASF) http://github.com/isisaddons/isis-module-publishing[Isis addons' publishing] module provides an
-implementation (`org.isisaddons.module.publishing.dom.PublishingService`) that persists each
-event as a `PublishedEvent` entity.  This holds the serialized form of the event metadata and payload as translated
-into a string by the injected `EventSerializer`.  The module also provides its own implementation of `EventSerializer`,
+The (obsolete) http://github.com/isisaddons-legacy/isis-module-publishing[Isis addons' publishing] module provides an implementation (`org.isisaddons.module.publishing.dom.PublishingService`) that persists each event as a `PublishedEvent` entity.
+This holds the serialized form of the event metadata and payload as translated into a string by the injected `EventSerializer`.  The module also provides its own implementation of `EventSerializer`,
 namely `RestfulObjectsSpecEventSerializer`, which represents the event payload using the representation defined by the
 link:http://restfulobjects.org[Restful Objects spec] of (transient) objects, grafting on the metadata as additional
 JSON nodes.
 
-The `PublishedEvent` entity also has a `state` field taking the values either "QUEUED" or "PROCESSED".  The intention
-here is that an event bus can poll this table to grab pending events and dispatch them to downstream systems.  When
-``PublishedEvent``s are persisted initially they always take the value "QUEUED".
+The `PublishedEvent` entity also has a `state` field taking the values either "QUEUED" or "PROCESSED".
+The intention here is that an event bus can poll this table to grab pending events and dispatch them to downstream systems.
+When ``PublishedEvent``s are persisted initially they always take the value "QUEUED".
 
 The framework provides no default implementations of this service.
 
@@ -153,14 +151,11 @@ public class ToDoItemChangedPayloadFactory implements PublishingPayloadFactoryFo
 
 There is no default implementation of this service provided by the core Apache Isis framework.
 
-The (non-ASF) Isis addons' http://github.com/isisaddons/isis-module-publishing[publishing] module provides an
-implementation of this service. Assuming that an `AppManifest` is being used to
-xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then this can be activated by updating
-the `pom.xml` and updating the `AppManifest#getModules()` method.
+The (obsolete) Isis addons' http://github.com/isisaddons-legacy/isis-module-publishing[publishing] module provides an implementation of this service.
+Assuming that an `AppManifest` is being used to xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then this can be activated by updating the `pom.xml` and updating the `AppManifest#getModules()` method.
 
-The module also provides services that contribute to the UI.  If contributions are not required in the UI, these can be
-suppressed either using security or by implementing a
-xref:../ugbtb/ugbtb.adoc#_ugbtb_hints-and-tips_vetoing-visibility[vetoing subscriber].
+The module also provides services that contribute to the UI.
+If contributions are not required in the UI, these can be suppressed either using security or by implementing a xref:../ugbtb/ugbtb.adoc#_ugbtb_hints-and-tips_vetoing-visibility[vetoing subscriber].
 
 
 

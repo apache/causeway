@@ -8,7 +8,8 @@
 The core/domain APIs provide general-purpose services to the domain objects, for example obtaining the current time or user, or instantiating domain objects.
 
 
-The table below summarizes the core/domain APIs defined by Apache Isis.  It also lists their corresponding implementation, either a default implementation provided by Apache Isis itself, or provided by one of the in (non-ASF) link:http://www.isisaddons.org[Isis Addons] modules.
+The table below summarizes the core/domain APIs defined by Apache Isis.
+It also lists their corresponding implementation, either a default implementation provided by Apache Isis itself, or provided by one of the (non-ASF) link:http://platform.incode.org[Incode Platform^] modules.
 
 
 .Core/Domain Layer API
