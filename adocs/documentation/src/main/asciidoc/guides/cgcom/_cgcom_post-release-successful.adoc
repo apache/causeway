@@ -189,7 +189,7 @@ popd
 
 [source,bash]
 ----
-sh upd.sh 1.16.0 1.17.0
+sh upd.sh 1.15.1 1.16.0
 ----
 
 The script downloads the artifacts from the Nexus release repository, adds the artifacts to subversion and deletes the previous version.
@@ -547,7 +547,7 @@ to review changes made.
 ** replace each version with next (ie the "How to Configure/Use" section, and the "Release to Maven Central" section at the end):
 
 *** replace `1.16.0` with `1.17.0`
-*** replace `1.15.0` with `1.16.0` as necessary (pretty much everywhere apart from the "Change Log")
+*** replace `1.15.1` with `1.16.0` as necessary (pretty much everywhere apart from the "Change Log")
 
 ** update the "Change Log" section
 
@@ -604,7 +604,7 @@ eg if using Windows, then:
 ** Replace each version with next (ie the "How to Configure/Use" section, and the "Release to Maven Central" section at the end):
 
 *** replace `1.16.0` with `1.17.0`
-*** replace `1.15.0` with `1.16.0` as necessary (pretty much everywhere apart from the "Change Log")
+*** replace `1.15.1` with `1.16.0` as necessary (pretty much everywhere apart from the "Change Log")
 
 ** update the "Change Log" section
 

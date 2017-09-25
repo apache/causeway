@@ -175,7 +175,7 @@ If this setting is enabled, then the viewer will always render to a new page.
 [NOTE]
 ====
 Note that the default behaviour is new in `1.15.0`, providing a better end-user experience.
-Setting this option retains the behaviour of the viewer pre-1.15.0.
+Setting this option retains the behaviour of the viewer pre-`1.15.0`.
 ====
 
 

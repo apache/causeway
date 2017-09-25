@@ -55,8 +55,8 @@ For example:
 ----
 cd core
 export ISISTMP=/c/tmp                               # <1>
-export ISISDEV=1.17.0-SNAPSHOT
-export ISISREL=1.16.0
+export ISISDEV=1.16.0-SNAPSHOT
+export ISISREL=1.15.1
 export ISISRC=RC1
 export ISISBRANCH=release-$ISISREL-$ISISRC
 export ISISJIRA=ISIS-9999                           # <2>

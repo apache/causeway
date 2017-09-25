@@ -5,7 +5,7 @@
 :_imagesdir: images/
 
 
-As of 1.8.0 Apache Isis has experimental support for Neo4J, courtesy of DataNucleus' http://www.datanucleus.org/products/datanucleus/datastores/neo4j.html[Neo4J Datastore] implementation.
+As of `1.8.0`, Apache Isis has experimental support for Neo4J, courtesy of DataNucleus' http://www.datanucleus.org/products/datanucleus/datastores/neo4j.html[Neo4J Datastore] implementation.
 
 The xref:../ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype] has been updated so that they can be optionally run under Neo4J.
 

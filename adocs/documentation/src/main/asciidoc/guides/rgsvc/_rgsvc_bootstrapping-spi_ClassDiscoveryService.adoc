@@ -46,7 +46,7 @@ Currently this logic uses the implementation directly, so is not pluggable.
 == Usage
 
 The usage will vary depending upon the conventions of the design.
-As of 1.9.0, the usage of the service has been centralized such that the packages to be scanned are located from the xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[`AppManifest`]'s `#getModules()` method.
+As of `1.9.0`, the usage of the service has been centralized such that the packages to be scanned are located from the xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[`AppManifest`]'s `#getModules()` method.
 
 For example, the xref:../ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype]'s app manifest includes:
 

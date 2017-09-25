@@ -50,7 +50,7 @@ We also recommend that you configure the `maven-surefire-plugin` to pick up the 
 
 [NOTE]
 ====
-As of 1.14.0, this configuration has been replaced to use mavenmixins.
+As of `1.14.0`, this configuration has been replaced to use mavenmixins.
 ====
 
 You may also find it more convenient to place the `.feature` files in `src/test/java`, rather than `src/test/resources`.

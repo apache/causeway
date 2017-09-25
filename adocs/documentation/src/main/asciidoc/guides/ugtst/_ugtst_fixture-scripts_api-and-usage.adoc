@@ -18,11 +18,11 @@ Let's look at `FixtureScripts` domain service in more detail first.
 
 There are two ways in which you can provide a `FixtureScripts` service.
 
-The original (pre-1.9.0) approach is to subclass subclass `FixtureScripts` domain service, with your subclass specifying which package to search for.
+The original (pre-`1.9.0`) approach is to subclass subclass `FixtureScripts` domain service, with your subclass specifying which package to search for.
 Various other settings can also be provided, and - being a custom class - you can also add in additional actions.
 A common example is to provide a "one-shot" action to recreate a standard demo set of objects.
 
-As of 1.9.0 there is an alternative design.
+As of `1.9.0` there is an alternative design.
 Instead of subclassing `FixtureScripts` you instead implement the xref:../rgsvc/rgsvc.adoc#_rgsvc_testing_FixtureScriptsSpecificationProvider[`FixtureScriptsSpecificationProvider`] SPI.
 (As its name suggests), this provides a `FixtureScriptsSpecification` object that contains the same information as would otherwise have been in the `FixtureScripts` subclass.
 
@@ -57,7 +57,7 @@ public class DomainAppFixturesProvider implements FixtureScriptsSpecificationPro
 The benefit of this design - decoupling the responsibilities of the superclass and the subclass - is that it ensures that there is always an instance of `FixtureScripts` available, even if the application itself doesn't provide one.
 Some of the (non-ASF) link:http://www.isisaddons.org[Isis Addons] modules (eg http://github.com/isisaddons/isis-module-security[Isis addons' security] module) expect there to be a `FixtureScripts` service for seeding data, which has caused some confusion.
 
-By way of comparison, if using the older pre-1.9.0 approach then you would create a subclass:
+By way of comparison, if using the older pre-`1.9.0` approach then you would create a subclass:
 
 [source,java]
 ----

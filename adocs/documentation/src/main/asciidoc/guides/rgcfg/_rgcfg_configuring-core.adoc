@@ -185,7 +185,7 @@ In order for these events to fire the class must be annotated using `@DomainObje
 [[__rgcfg_configuring-core_fixture-events]]
 == Fixture Events
 
-(As of `1.15.1-SNAPSHOT`), events are fired to indicate the start and end of fixtures are being installed.
+(As of `1.15.1`), events are fired to indicate the start and end of fixtures are being installed.
 This are listened to by the xref:rgsvc.adoc#_rgsvc_persistence-layer-api_QueryResultsCache[`QueryResultsCache`] to disable caching during this period.
 
 .Core Configuration Properties for Fixture Events
@@ -200,7 +200,7 @@ This are listened to by the xref:rgsvc.adoc#_rgsvc_persistence-layer-api_QueryRe
 |`isis.fixtures.fireEvents`
 |`true`,`false` +
 (`true`)
-|(As of `1.15.1-SNAPSHOT`), whether fixture `FixturesInstallingEvent` and `FixturesInstalledEvent` events should be posted while the system is bootstrapping.
+|(As of `1.15.1`), whether fixture `FixturesInstallingEvent` and `FixturesInstalledEvent` events should be posted while the system is bootstrapping.
 
 
 

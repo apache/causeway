@@ -20,6 +20,10 @@ Description
 
 TLP releases:
 
+  * isis-1.15.1                                    : 25 Sep 2017
+  * helloworld-archetype-1.15.1                    : 25 Sep 2017
+  * simpleapp-archetype-1.15.1                     : 25 Sep 2017
+
   * isis-1.15.0                                    : 14 Aug 2017
   * helloworld-archetype-1.15.0                    : 14 Aug 2017
   * simpleapp-archetype-1.15.0                     : 14 Aug 2017

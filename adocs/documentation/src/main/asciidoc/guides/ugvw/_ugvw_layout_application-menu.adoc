@@ -113,7 +113,7 @@ Note that the last is also a prototype action (meaning it is only displayed in S
 In the UI it is rendered in italics.
 
 (It is possible to override this place of a given action by specifying `@MemberOrder(name=&quot;...&quot;)` where the name is
-that of a top-level menu. Prior to 1.8.0 this was the only way of doing things, as of 1.8.0 its use
+that of a top-level menu. Prior to `1.8.0` this was the only way of doing things, as of `1.8.0` its use
 is not recommended).
 
 == Tertiary menubar

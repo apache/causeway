@@ -7,7 +7,7 @@
 
 In the same way that Java packages act as a namespace for domain objects, it's good practice to map domain entities to their own (database) schemas.
 
-As of 1.9.0, all the link:http://www.isisaddons.org[Isis Addons] (non-ASF) modules do this.
+As of `1.9.0`, all the link:http://www.isisaddons.org[Isis Addons] (non-ASF) modules do this.
 For example:
 
 

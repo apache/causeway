@@ -5,7 +5,7 @@
 :_imagesdir: images/
 
 
-The `Markup` value type (introduced in `1.15.1-SNAPSHOT`) is intended to be used as a read-only property, to render arbitrary markup into the user interface.
+The `Markup` value type (introduced in `1.15.1`) is intended to be used as a read-only property, to render arbitrary markup into the user interface.
 
 For example:
 
