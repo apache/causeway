@@ -97,7 +97,7 @@ public class DateConverterForJdk8OffsetDateTimeTest {
 
 	private static OffsetDateTime sample( int year, int month, int dayOfMonth,
             int hour, int minute) {
-		return OffsetDateTime.of(year, month, dayOfMonth, 0, 0, 0, 0, 
+		return OffsetDateTime.of(year, month, dayOfMonth, hour, minute, 0, 0, 
 				OffsetDateTime.now().getOffset());
 	}
     
