@@ -39,6 +39,7 @@ Slides available *link:http://www.danhaywood.com/spa2016/#/[here]*
 * Article, SDJournal : link:http://sdjournal.org[Introducing Apache Isis]
 * Article, SDJournal: link:http://sdjournal.org[Restful Objects on Apache Isis]
 * A Prezi link:http://prezi.com/cunfhjsf8dqg/braiv-apache-isis/[presentation on Naked Objects and Apache Isis], mixed by Thomas Eck
+* Article, Linux Magzin (german): link:http://www.linux-magazin.de/Ausgaben/2013/07/Apache-Isis[Domain-Driven Design mit Apache Isis] by Frank Pientka
 
 
 == 2012
