@@ -30,9 +30,7 @@ import org.apache.isis.applib.annotation.MaxLength;
 import org.apache.isis.applib.annotation.MustSatisfy;
 import org.apache.isis.applib.annotation.NotPersisted;
 import org.apache.isis.applib.annotation.Optional;
-import org.apache.isis.applib.annotation.PostsPropertyChangedEvent;
 import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyInteraction;
 import org.apache.isis.applib.annotation.RegEx;
 import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.applib.services.eventbus.PropertyDomainEvent;
@@ -92,8 +90,6 @@ import org.apache.isis.core.metamodel.util.EventUtil;
 
 public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner {
 
-    private final MetaModelValidatorForDeprecatedAnnotation postsPropertyChangedEventValidator = new MetaModelValidatorForDeprecatedAnnotation(PostsPropertyChangedEvent.class);
-    private final MetaModelValidatorForDeprecatedAnnotation propertyInteractionValidator = new MetaModelValidatorForDeprecatedAnnotation(PropertyInteraction.class);
     private final MetaModelValidatorForDeprecatedAnnotation regexValidator = new MetaModelValidatorForDeprecatedAnnotation(RegEx.class);
     private final MetaModelValidatorForDeprecatedAnnotation optionalValidator = new MetaModelValidatorForDeprecatedAnnotation(Optional.class);
     private final MetaModelValidatorForDeprecatedAnnotation mandatoryValidator = new MetaModelValidatorForDeprecatedAnnotation(Mandatory.class);
@@ -425,8 +421,6 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
 
     @Override
     public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
-        metaModelValidator.add(postsPropertyChangedEventValidator);
-        metaModelValidator.add(propertyInteractionValidator);
         metaModelValidator.add(regexValidator);
         metaModelValidator.add(optionalValidator);
         metaModelValidator.add(mandatoryValidator);
@@ -446,8 +440,6 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
     public void setServicesInjector(final ServicesInjector servicesInjector) {
         super.setServicesInjector(servicesInjector);
         IsisConfiguration configuration = servicesInjector.getConfigurationServiceInternal();
-        postsPropertyChangedEventValidator.setConfiguration(configuration);
-        propertyInteractionValidator.setConfiguration(configuration);
         regexValidator.setConfiguration(configuration);
         optionalValidator.setConfiguration(configuration);
         mandatoryValidator.setConfiguration(configuration);
