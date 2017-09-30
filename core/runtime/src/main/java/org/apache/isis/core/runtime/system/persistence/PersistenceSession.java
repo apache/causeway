@@ -45,7 +45,6 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService2;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.applib.services.command.Command2;
 import org.apache.isis.applib.services.command.Command3;
 import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.command.spi.CommandService;
@@ -512,10 +511,6 @@ public class PersistenceSession implements
         if(command instanceof Command3) {
             final Command3 command3 = (Command3) command;
             command3.flushActionDomainEvents();
-        } else
-        if(command instanceof Command2) {
-            final Command2 command2 = (Command2) command;
-            command2.flushActionInteractionEvents();
         }
 
         interaction.clear();

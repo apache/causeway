@@ -532,9 +532,8 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
 
 
     /**
-     * Optional hook to allow the facet implementation for the deprecated {@link org.apache.isis.applib.annotation.PostsActionInvokedEvent} annotation
-     * to discard the event if the domain event is of a different type (specifically if was installed by virtue of a no
-     * @{@link org.apache.isis.applib.annotation.Action} or @{@link org.apache.isis.applib.annotation.ActionInteraction} annotations.
+     * Optional hook, previously added to allow (now removed) annotations to to discard the event if the domain event
+     * was incompatible.
      */
     protected ActionDomainEvent<?> verify(final ActionDomainEvent<?> event) {
         return event;

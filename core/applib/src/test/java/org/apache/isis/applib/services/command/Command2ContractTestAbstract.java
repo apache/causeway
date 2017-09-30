@@ -19,90 +19,94 @@
 package org.apache.isis.applib.services.command;
 
 import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
-import org.apache.isis.applib.services.eventbus.ActionInteractionEvent;
+
+import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 public abstract class Command2ContractTestAbstract {
 
-    Command2 command;
+    Command3 command;
 
-    ActionInteractionEvent<?> ev1;
-    ActionInteractionEvent<?> ev2;
+    ActionDomainEvent<Object> ev1;
+    ActionDomainEvent<Object> ev2;
 
     @Before
     public void setUp() throws Exception {
 
         final Object source = new Object();
-        ev1 = new ActionInteractionEvent.Default(source, null);
-        ev2 = new ActionInteractionEvent.Default(source, null);
+        ev1 = new ActionDomainEvent.Default();
+        ev1.setSource(source);
+        ev2 = new ActionDomainEvent.Default();
+        ev2.setSource(source);
         command = newCommand();
     }
 
-    protected abstract Command2 newCommand();
+    protected abstract Command3 newCommand();
 
     @Test
     public void givenEmpty() throws Exception {
         // then
-        assertNull(command.peekActionInteractionEvent());
-        assertNull(command.popActionInteractionEvent());
+        assertNull(command.peekActionDomainEvent());
+        assertNull(command.popActionDomainEvent());
     }
 
     @Test
     public void givenOne() throws Exception {
         // given
-        command.pushActionInteractionEvent(ev1);
+        command.pushActionDomainEvent(ev1);
 
         // then
-        assertEquals(ev1, command.peekActionInteractionEvent());
+        assertEquals(ev1, command.peekActionDomainEvent());
 
         // and when
-        assertEquals(ev1, command.popActionInteractionEvent());
+        assertEquals(ev1, command.popActionDomainEvent());
 
         // then
-        assertNull(command.peekActionInteractionEvent());
+        assertNull(command.peekActionDomainEvent());
     }
 
     @Test
     public void givenTwo() throws Exception {
         // given
-        command.pushActionInteractionEvent(ev1);
-        command.pushActionInteractionEvent(ev2);
+        command.pushActionDomainEvent(ev1);
+        command.pushActionDomainEvent(ev2);
 
         // then
-        assertEquals(ev2, command.peekActionInteractionEvent());
+        assertEquals(ev2, command.peekActionDomainEvent());
 
         // and when
-        assertEquals(ev2, command.popActionInteractionEvent());
+        assertEquals(ev2, command.popActionDomainEvent());
 
         // then
-        assertEquals(ev1, command.peekActionInteractionEvent());
+        assertEquals(ev1, command.peekActionDomainEvent());
 
         // and when
-        assertEquals(ev1, command.popActionInteractionEvent());
+        assertEquals(ev1, command.popActionDomainEvent());
 
         // then
-        assertNull(command.peekActionInteractionEvent());
+        assertNull(command.peekActionDomainEvent());
     }
 
     @Test
     public void pushSame() throws Exception {
 
         // given
-        command.pushActionInteractionEvent(ev1);
-        command.pushActionInteractionEvent(ev1);
+        command.pushActionDomainEvent(ev1);
+        command.pushActionDomainEvent(ev1);
 
         // then
-        assertEquals(ev1, command.peekActionInteractionEvent());
+        assertEquals(ev1, command.peekActionDomainEvent());
 
         // and when
-        assertEquals(ev1, command.popActionInteractionEvent());
+        assertEquals(ev1, command.popActionDomainEvent());
 
         // then
-        assertNull(command.peekActionInteractionEvent());
+        assertNull(command.peekActionDomainEvent());
     }
 
 
@@ -110,19 +114,19 @@ public abstract class Command2ContractTestAbstract {
     public void clear() throws Exception {
 
         // given
-        command.pushActionInteractionEvent(ev1);
-        command.pushActionInteractionEvent(ev2);
+        command.pushActionDomainEvent(ev1);
+        command.pushActionDomainEvent(ev2);
 
         // then
-        assertEquals(ev2, command.peekActionInteractionEvent());
+        assertEquals(ev2, command.peekActionDomainEvent());
 
         // and when
-        final List<ActionInteractionEvent<?>> events = command.flushActionInteractionEvents();
+        final List<ActionDomainEvent<?>> events = command.flushActionDomainEvents();
 
         // then
         assertEquals(ev1, events.get(0));
         assertEquals(ev2, events.get(1));
-        assertNull(command.peekActionInteractionEvent());
+        assertNull(command.peekActionDomainEvent());
 
     }
 

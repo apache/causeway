@@ -31,11 +31,9 @@ import com.google.common.collect.Lists;
 import org.apache.isis.applib.FatalException;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.applib.services.command.Command2;
 import org.apache.isis.applib.services.command.Command3;
 import org.apache.isis.applib.services.eventbus.AbstractDomainEvent;
 import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
-import org.apache.isis.applib.services.eventbus.ActionInteractionEvent;
 import org.apache.isis.applib.services.eventbus.CollectionDomainEvent;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.applib.services.eventbus.PropertyDomainEvent;
@@ -112,10 +110,6 @@ public class DomainEventHelper {
                     if(command instanceof Command3) {
                         final Command3 command3 = (Command3) command;
                         command3.pushActionDomainEvent(event);
-                    } else if(command instanceof Command2 && event instanceof ActionInteractionEvent) {
-                        final Command2 command2 = (Command3) command;
-                        final ActionInteractionEvent<?> aie = (ActionInteractionEvent<?>) event;
-                        command2.pushActionInteractionEvent(aie);
                     }
                 }
             }

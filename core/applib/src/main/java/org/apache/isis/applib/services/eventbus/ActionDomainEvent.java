@@ -39,13 +39,8 @@ public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
      * raises an event or not depends upon the "isis.reflector.facet.actionAnnotation.domainEvent.postForDefault"
      * configuration property.
      */
-    public static class Default extends ActionInteractionEvent<Object> {
+    public static class Default extends ActionDomainEvent<Object> {
         private static final long serialVersionUID = 1L;
-        public Default(){}
-        @Deprecated
-        public Default(Object source, Identifier identifier, Object... arguments) {
-            super(source, identifier, arguments);
-        }
     }
     //endregion
 
@@ -55,7 +50,7 @@ public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
      * Convenience class to use indicating that an event should <i>not</i> be posted (irrespective of the configuration
      * property setting for the {@link Default} event.
      */
-    public static class Noop extends ActionInteractionEvent<Object> {
+    public static class Noop extends ActionDomainEvent<Object> {
         private static final long serialVersionUID = 1L;
     }
     //endregion
@@ -66,7 +61,7 @@ public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
      * Convenience class meaning that an event <i>should</i> be posted (irrespective of the configuration
      * property setting for the {@link Default} event..
      */
-    public static class Doop extends ActionInteractionEvent<Object> {
+    public static class Doop extends ActionDomainEvent<Object> {
         private static final long serialVersionUID = 1L;
     }
     //endregion

@@ -33,7 +33,6 @@ import org.junit.Test;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionInteraction;
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.applib.annotation.CommandExecuteIn;
@@ -41,7 +40,6 @@ import org.apache.isis.applib.annotation.CommandPersistence;
 import org.apache.isis.applib.annotation.CommandReification;
 import org.apache.isis.applib.annotation.Idempotent;
 import org.apache.isis.applib.annotation.InvokeOn;
-import org.apache.isis.applib.annotation.PostsActionInvokedEvent;
 import org.apache.isis.applib.annotation.PublishedAction;
 import org.apache.isis.applib.annotation.PublishingPayloadFactoryForAction;
 import org.apache.isis.applib.annotation.QueryOnly;
@@ -49,8 +47,6 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
-import org.apache.isis.applib.services.eventbus.ActionInteractionEvent;
-import org.apache.isis.applib.services.eventbus.ActionInvokedEvent;
 import org.apache.isis.applib.services.publish.EventPayload;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
@@ -179,7 +175,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
 
             class Customer {
 
-                class SomeActionInvokedDomainEvent extends ActionInvokedEvent<Customer> {
+                class SomeActionInvokedDomainEvent extends ActionDomainEvent<Customer> {
                     public SomeActionInvokedDomainEvent(
                             final Customer source,
                             final Identifier identifier,
@@ -188,7 +184,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
                     }
                 }
 
-                @PostsActionInvokedEvent(SomeActionInvokedDomainEvent.class)
+                @Action(domainEvent = SomeActionInvokedDomainEvent.class)
                 public void someAction() {
                 }
             }
@@ -230,16 +226,10 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
 
             class Customer {
 
-                class SomeActionInvokedDomainEvent extends ActionInteractionEvent<Customer> {
-                    public SomeActionInvokedDomainEvent(
-                            final Customer source,
-                            final Identifier identifier,
-                            final Object... arguments) {
-                        super(source, identifier, arguments);
-                    }
+                class SomeActionInvokedDomainEvent extends ActionDomainEvent<Customer> {
                 }
 
-                @ActionInteraction(SomeActionInvokedDomainEvent.class)
+                @Action(domainEvent = SomeActionInvokedDomainEvent.class)
                 public void someAction() {
                 }
             }

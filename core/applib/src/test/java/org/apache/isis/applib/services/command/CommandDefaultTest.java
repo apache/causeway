@@ -20,7 +20,7 @@ package org.apache.isis.applib.services.command;
 
 public class CommandDefaultTest extends Command2ContractTestAbstract {
 
-    protected Command2 newCommand() {
+    protected Command3 newCommand() {
         return new CommandDefault();
     }
 

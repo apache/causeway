@@ -70,8 +70,8 @@ public abstract class AbstractDomainEvent<S> extends java.util.EventObject {
         }
 
         /**
-         * When the {@link org.apache.isis.applib.services.command.Command} is made available on the {@link org.apache.isis.applib.services.eventbus.ActionInteractionEvent}
-         * via {@link org.apache.isis.applib.services.eventbus.ActionInteractionEvent#getCommand()}.
+         * When the {@link org.apache.isis.applib.services.command.Command} is made available on the {@link org.apache.isis.applib.services.eventbus.ActionDomainEvent}
+         * via {@link org.apache.isis.applib.services.eventbus.ActionDomainEvent#getCommand()}.
          */
         public boolean isExecutingOrLater() {
             return isExecuting() || isExecuted();

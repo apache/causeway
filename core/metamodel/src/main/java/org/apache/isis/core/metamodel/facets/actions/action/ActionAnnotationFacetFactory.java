@@ -22,21 +22,18 @@ package org.apache.isis.core.metamodel.facets.actions.action;
 import java.lang.reflect.Method;
 
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionInteraction;
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.annotation.Command;
 import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.Idempotent;
-import org.apache.isis.applib.annotation.PostsActionInvokedEvent;
 import org.apache.isis.applib.annotation.Prototype;
 import org.apache.isis.applib.annotation.PublishedAction;
 import org.apache.isis.applib.annotation.QueryOnly;
 import org.apache.isis.applib.annotation.TypeOf;
 import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
-import org.apache.isis.applib.services.eventbus.ActionInvokedEvent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -57,12 +54,9 @@ import org.apache.isis.core.metamodel.facets.actions.action.hidden.HiddenFacetFo
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacetAbstract;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacetDefault;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacetForActionAnnotation;
-import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacetForActionInteractionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEventAbstract;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEventFromActionAnnotation;
-import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEventFromActionInteractionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEventFromDefault;
-import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForPostsActionInvokedEventAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.prototype.PrototypeFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.prototype.PrototypeFacetForPrototypeAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.publishing.PublishedActionFacetForActionAnnotation;
@@ -92,8 +86,6 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract
             implements MetaModelValidatorRefiner {
 
     private final MetaModelValidatorForDeprecatedAnnotation actionSemanticsValidator = new MetaModelValidatorForDeprecatedAnnotation(ActionSemantics.class);
-    private final MetaModelValidatorForDeprecatedAnnotation actionInteractionValidator = new MetaModelValidatorForDeprecatedAnnotation(ActionInteraction.class);
-    private final MetaModelValidatorForDeprecatedAnnotation postsActionInvokedEventValidator = new MetaModelValidatorForDeprecatedAnnotation(PostsActionInvokedEvent.class);
     private final MetaModelValidatorForDeprecatedAnnotation bulkValidator = new MetaModelValidatorForDeprecatedAnnotation(Bulk.class);
     private final MetaModelValidatorForDeprecatedAnnotation commandValidator = new MetaModelValidatorForDeprecatedAnnotation(Command.class);
     private final MetaModelValidatorForDeprecatedAnnotation queryOnlyValidator = new MetaModelValidatorForDeprecatedAnnotation(QueryOnly.class);
@@ -147,32 +139,15 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract
             //
             // Set up ActionDomainEventFacet, which will act as the hiding/disabling/validating advisor
             //
-            final PostsActionInvokedEvent postsActionInvokedEvent = Annotations.getAnnotation(actionMethod, PostsActionInvokedEvent.class);
-            final ActionInteraction actionInteraction =Annotations.getAnnotation(actionMethod, ActionInteraction.class);
             final Action action = Annotations.getAnnotation(actionMethod, Action.class);
             final Class<? extends ActionDomainEvent<?>> actionDomainEventType;
 
             final ActionDomainEventFacetAbstract actionDomainEventFacet;
 
 
-            // can't really do this, because would result in the event being fired for the
-            // hidden/disable/validate phases, most likely breaking existing code.
 
-//            // search for @PostsActionInvoked(value=...)
-//            if(postsActionInvokedEvent != null) {
-//                actionDomainEventType = postsActionInvokedEvent.value();
-//                actionDomainEventFacet = new ActionDomainEventFacetForPostsActionInvokedEventAnnotation(
-//                        actionDomainEventType, servicesInjector, getSpecificationLoader(), holder);
-//            } else
-
-            // search for @ActionInteraction(value=...)
-            if(actionInteraction != null) {
-                actionDomainEventType = actionInteraction.value();
-                actionDomainEventFacet = new ActionDomainEventFacetForActionInteractionAnnotation(
-                        actionDomainEventType, servicesInjector, getSpecificationLoader(), holder);
-            } else
             // search for @Action(domainEvent=...)
-            if(action != null && action.domainEvent() != null) {
+            if(action != null) {
                 actionDomainEventType = action.domainEvent();
                 actionDomainEventFacet = new ActionDomainEventFacetForActionAnnotation(
                         actionDomainEventType, servicesInjector, getSpecificationLoader(), holder);
@@ -195,24 +170,6 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract
             // emit the appropriate domain event and then delegate onto the underlying
 
             final ActionInvocationFacetForDomainEventAbstract actionInvocationFacet;
-            // deprecated
-            if (postsActionInvokedEvent != null) {
-                final Class<? extends ActionInvokedEvent<?>> actionInvokedEventType = postsActionInvokedEvent.value();
-                actionInvocationFacet = actionInteractionValidator.flagIfPresent(
-                        new ActionInvocationFacetForPostsActionInvokedEventAnnotation(
-                                actionInvokedEventType, actionMethod, typeSpec, returnSpec, holder,
-                                servicesInjector
-                        ), processMethodContext);
-            } else
-            // deprecated (but more recently)
-            if (actionInteraction != null) {
-                actionInvocationFacet = actionInteractionValidator.flagIfPresent(
-                        new ActionInvocationFacetForDomainEventFromActionInteractionAnnotation(
-                                actionDomainEventType, actionMethod, typeSpec, returnSpec, holder,
-                                servicesInjector
-                        ), processMethodContext);
-            } else
-            // current
             if (action != null) {
                 actionInvocationFacet = new ActionInvocationFacetForDomainEventFromActionAnnotation(
                         actionDomainEventType, actionMethod, typeSpec, returnSpec, holder,
@@ -457,8 +414,6 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract
     @Override
     public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
         metaModelValidator.add(actionSemanticsValidator);
-        metaModelValidator.add(actionInteractionValidator);
-        metaModelValidator.add(postsActionInvokedEventValidator);
         metaModelValidator.add(bulkValidator);
         metaModelValidator.add(commandValidator);
         metaModelValidator.add(queryOnlyValidator);
@@ -479,8 +434,6 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract
         final IsisConfiguration configuration = getConfiguration();
 
         actionSemanticsValidator.setConfiguration(configuration);
-        actionInteractionValidator.setConfiguration(configuration);
-        postsActionInvokedEventValidator.setConfiguration(configuration);
         bulkValidator.setConfiguration(configuration);
         commandValidator.setConfiguration(configuration);
         queryOnlyValidator.setConfiguration(configuration);
