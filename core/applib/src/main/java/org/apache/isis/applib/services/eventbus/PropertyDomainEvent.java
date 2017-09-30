@@ -21,7 +21,7 @@ package org.apache.isis.applib.services.eventbus;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.util.ObjectContracts;
 
-public abstract class PropertyDomainEvent<S,T> extends AbstractInteractionEvent<S> {
+public abstract class PropertyDomainEvent<S,T> extends AbstractDomainEvent<S> {
 
     private static final long serialVersionUID = 1L;
 

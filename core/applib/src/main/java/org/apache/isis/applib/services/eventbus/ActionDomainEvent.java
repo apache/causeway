@@ -28,7 +28,7 @@ import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.util.ObjectContracts;
 
-public abstract class ActionDomainEvent<S> extends AbstractInteractionEvent<S> {
+public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
 
     private static final long serialVersionUID = 1L;
 
@@ -213,8 +213,8 @@ public abstract class ActionDomainEvent<S> extends AbstractInteractionEvent<S> {
     //region > arguments
     private List<Object> arguments;
     /**
-     * The arguments being used to invoke the action; populated at {@link org.apache.isis.applib.services.eventbus.AbstractInteractionEvent.Phase#VALIDATE} and subsequent phases
-     * (but null for {@link org.apache.isis.applib.services.eventbus.AbstractInteractionEvent.Phase#HIDE hidden} and {@link org.apache.isis.applib.services.eventbus.AbstractInteractionEvent.Phase#DISABLE disable} phases).
+     * The arguments being used to invoke the action; populated at {@link Phase#VALIDATE} and subsequent phases
+     * (but null for {@link Phase#HIDE hidden} and {@link Phase#DISABLE disable} phases).
      */
     public List<Object> getArguments() {
         return arguments;

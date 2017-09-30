@@ -26,28 +26,6 @@ public final class IsisApplibModule {
 
     public abstract static class ActionDomainEvent<S> extends org.apache.isis.applib.services.eventbus.ActionDomainEvent<S> {
         public ActionDomainEvent() {}
-
-        /**
-         * @deprecated - use the {@link #ActionDomainEvent() no-arg constructor} instead to avoid boilerplate.
-         */
-        @Deprecated
-        public ActionDomainEvent(final S source, final Identifier identifier) {
-            super(source, identifier);
-        }
-        /**
-         * @deprecated - use the {@link #ActionDomainEvent() no-arg constructor} instead to avoid boilerplate.
-         */
-        @Deprecated
-        public ActionDomainEvent(final S source, final Identifier identifier, final Object... arguments) {
-            super(source, identifier, arguments);
-        }
-        /**
-         * @deprecated - use the {@link #ActionDomainEvent() no-arg constructor} instead to avoid boilerplate.
-         */
-        @Deprecated
-        public ActionDomainEvent(final S source, final Identifier identifier, final List<Object> arguments) {
-            super(source, identifier, arguments);
-        }
     }
 
     public abstract static class CollectionDomainEvent<S,T> extends org.apache.isis.applib.services.eventbus.CollectionDomainEvent<S,T> {

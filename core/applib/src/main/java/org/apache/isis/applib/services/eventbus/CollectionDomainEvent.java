@@ -21,7 +21,7 @@ package org.apache.isis.applib.services.eventbus;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.util.ObjectContracts;
 
-public abstract class CollectionDomainEvent<S,T> extends AbstractInteractionEvent<S> {
+public abstract class CollectionDomainEvent<S,T> extends AbstractDomainEvent<S> {
 
     private static final long serialVersionUID = 1L;
 
@@ -129,20 +129,20 @@ public abstract class CollectionDomainEvent<S,T> extends AbstractInteractionEven
     public static enum Of {
         /**
          * The collection is being accessed
-         * ({@link org.apache.isis.applib.services.eventbus.AbstractInteractionEvent.Phase#HIDE hide} and
-         * {@link org.apache.isis.applib.services.eventbus.AbstractInteractionEvent.Phase#DISABLE disable}) checks.
+         * ({@link Phase#HIDE hide} and
+         * {@link Phase#DISABLE disable}) checks.
          */
         ACCESS,
         /**
          * The collection is being added to
-         * ({@link org.apache.isis.applib.services.eventbus.AbstractInteractionEvent.Phase#VALIDATE validity} check and
-         * {@link org.apache.isis.applib.services.eventbus.AbstractInteractionEvent.Phase#EXECUTED execution}).
+         * ({@link Phase#VALIDATE validity} check and
+         * {@link Phase#EXECUTED execution}).
          */
         ADD_TO,
         /**
          * The collection is being removed from
-         * ({@link org.apache.isis.applib.services.eventbus.AbstractInteractionEvent.Phase#VALIDATE validity} check and
-         * {@link org.apache.isis.applib.services.eventbus.AbstractInteractionEvent.Phase#EXECUTED execution}).
+         * ({@link Phase#VALIDATE validity} check and
+         * {@link Phase#EXECUTED execution}).
          */
         REMOVE_FROM
     }

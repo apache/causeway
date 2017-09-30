@@ -34,7 +34,6 @@ import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.Command2;
 import org.apache.isis.applib.services.command.Command3;
 import org.apache.isis.applib.services.eventbus.AbstractDomainEvent;
-import org.apache.isis.applib.services.eventbus.AbstractInteractionEvent;
 import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
 import org.apache.isis.applib.services.eventbus.ActionInteractionEvent;
 import org.apache.isis.applib.services.eventbus.CollectionDomainEvent;
@@ -98,7 +97,6 @@ public class DomainEventHelper {
             }
 
             event.setEventPhase(phase);
-            event.setPhase(AbstractInteractionEvent.Phase.from(phase));
 
             if(phase.isExecuted()) {
                 event.setReturnValue(ObjectAdapter.Util.unwrap(resultAdapter));
@@ -209,7 +207,6 @@ public class DomainEventHelper {
             }
 
             event.setEventPhase(phase);
-            event.setPhase(AbstractInteractionEvent.Phase.from(phase));
 
             // just in case the actual new value held by the object is different from that applied
             setEventNewValue(event, newValue);
@@ -298,7 +295,6 @@ public class DomainEventHelper {
             }
 
             event.setEventPhase(phase);
-            event.setPhase(AbstractInteractionEvent.Phase.from(phase));
 
             getEventBusService().post(event);
             return event;
