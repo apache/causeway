@@ -30,14 +30,6 @@ public class DomainEventHelperTest_newPropertyDomainEvent_forClear {
     public static class SomeDomainObject {}
     
     public static class SomeDatePropertyChangedDomainEvent extends PropertyDomainEvent<SomeDomainObject, LocalDate> {
-        private static final long serialVersionUID = 1L;
-        public SomeDatePropertyChangedDomainEvent(
-                SomeDomainObject source,
-                Identifier identifier,
-                LocalDate oldValue,
-                LocalDate newValue) {
-            super(source, identifier, oldValue, newValue);
-        }
     }
 
     @Test
@@ -50,10 +42,10 @@ public class DomainEventHelperTest_newPropertyDomainEvent_forClear {
         
         final PropertyDomainEvent<Object, Object> ev =
                 new DomainEventHelper(null).newPropertyDomainEvent(PropertyDomainEvent.Default.class, identifier, sdo, oldValue, newValue);
-        assertThat(ev.getSource(), is((Object)sdo));
+        assertThat(ev.getSource(), is(sdo));
         assertThat(ev.getIdentifier(), is(identifier));
-        assertThat(ev.getOldValue(), is((Object)oldValue));
-        assertThat(ev.getNewValue(), is((Object)newValue));
+        assertThat(ev.getOldValue(), is(oldValue));
+        assertThat(ev.getNewValue(), is(newValue));
     }
 
 

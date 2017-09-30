@@ -23,7 +23,6 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import org.apache.isis.applib.services.eventbus.PropertyInteractionEvent;
 
 /**
  * @deprecated - use {@link Property#domainEvent()} instead.
@@ -33,10 +32,5 @@ import org.apache.isis.applib.services.eventbus.PropertyInteractionEvent;
 @Target({ElementType.TYPE, ElementType.METHOD})
 public @interface PropertyInteraction {
 
-    /**
-     * @deprecated - use {@link Property#domainEvent()} instead.
-     */
-    @Deprecated
-    Class<? extends PropertyInteractionEvent<?,?>> value() default PropertyInteractionEvent.Default.class;
 
 }

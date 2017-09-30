@@ -31,14 +31,10 @@ import org.junit.Test;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Optionality;
-import org.apache.isis.applib.annotation.PostsPropertyChangedEvent;
 import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyInteraction;
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.services.eventbus.PropertyChangedEvent;
 import org.apache.isis.applib.services.eventbus.PropertyDomainEvent;
-import org.apache.isis.applib.services.eventbus.PropertyInteractionEvent;
 import org.apache.isis.applib.spec.Specification;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -166,12 +162,9 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
         public void withDeprecatedPostsPropertyChangedEvent_andGetterFacet_andSetterFacet() {
 
             class Customer {
-                class NamedChangedDomainEvent extends PropertyChangedEvent<Customer, String> {
-                    public NamedChangedDomainEvent(final Customer source, final String oldValue, final String newValue) {
-                        super(source, oldValue, newValue);
-                    }
+                class NamedChangedDomainEvent extends PropertyDomainEvent<Customer, String> {
                 }
-                @PostsPropertyChangedEvent(NamedChangedDomainEvent.class)
+                @Property(domainEvent = NamedChangedDomainEvent.class)
                 public String getName() {
                     return null;
                 }
@@ -226,16 +219,9 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
         public void withPropertyInteractionEvent() {
 
             class Customer {
-                class NamedChangedDomainEvent extends PropertyInteractionEvent<Customer, String> {
-                    public NamedChangedDomainEvent(
-                            final Customer source,
-                            final Identifier identifier,
-                            final String oldValue,
-                            final String newValue) {
-                        super(source, identifier, oldValue, newValue);
-                    }
+                class NamedChangedDomainEvent extends PropertyDomainEvent<Customer, String> {
                 }
-                @PropertyInteraction(NamedChangedDomainEvent.class)
+                @Property(domainEvent = NamedChangedDomainEvent.class)
                 public String getName() {
                     return null;
                 }
@@ -285,13 +271,6 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
 
             class Customer {
                 class NamedChangedDomainEvent extends PropertyDomainEvent<Customer, String> {
-                    public NamedChangedDomainEvent(
-                            final Customer source,
-                            final Identifier identifier,
-                            final String oldValue,
-                            final String newValue) {
-                        super(source, identifier, oldValue, newValue);
-                    }
                 }
                 @Property(domainEvent= NamedChangedDomainEvent.class)
                 public String getName() {
