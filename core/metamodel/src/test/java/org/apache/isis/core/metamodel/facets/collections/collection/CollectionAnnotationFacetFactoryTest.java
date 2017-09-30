@@ -26,7 +26,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
@@ -45,17 +44,12 @@ import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.collections.collection.disabled.DisabledFacetForCollectionAnnotation;
 import org.apache.isis.core.metamodel.facets.collections.collection.hidden.HiddenFacetForCollectionAnnotation;
 import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionAddToFacetForDomainEventFromCollectionAnnotation;
-import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionAddToFacetForDomainEventFromCollectionInteractionAnnotation;
 import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionAddToFacetForDomainEventFromDefault;
-import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionAddToFacetForPostsCollectionAddedToEventAnnotation;
 import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacet;
 import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacetDefault;
 import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacetForCollectionAnnotation;
-import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacetForCollectionInteractionAnnotation;
 import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionRemoveFromFacetForDomainEventFromCollectionAnnotation;
-import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionRemoveFromFacetForDomainEventFromCollectionInteractionAnnotation;
 import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionRemoveFromFacetForDomainEventFromDefault;
-import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionRemoveFromFacetForPostsCollectionRemovedFromEventAnnotation;
 import org.apache.isis.core.metamodel.facets.collections.collection.typeof.TypeOfFacetOnCollectionFromCollectionAnnotation;
 import org.apache.isis.core.metamodel.facets.collections.collection.typeof.TypeOfFacetOnCollectionFromTypeOfAnnotation;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacet;
@@ -200,15 +194,15 @@ public class CollectionAnnotationFacetFactoryTest extends AbstractFacetFactoryJU
             // then
             final Facet addToFacet = facetedMethod.getFacet(CollectionAddToFacet.class);
             Assert.assertNotNull(addToFacet);
-            Assert.assertTrue(addToFacet instanceof CollectionAddToFacetForPostsCollectionAddedToEventAnnotation);
-            final CollectionAddToFacetForPostsCollectionAddedToEventAnnotation addToFacetImpl = (CollectionAddToFacetForPostsCollectionAddedToEventAnnotation) addToFacet;
+            Assert.assertTrue(addToFacet instanceof CollectionAddToFacetForDomainEventFromCollectionAnnotation);
+            final CollectionAddToFacetForDomainEventFromCollectionAnnotation addToFacetImpl = (CollectionAddToFacetForDomainEventFromCollectionAnnotation) addToFacet;
             assertThat(addToFacetImpl.value(), classEqualTo(Customer.OrdersAddedToOrRemovedFromDomainEvent.class));
 
             // then
             final Facet removeFromFacet = facetedMethod.getFacet(CollectionRemoveFromFacet.class);
             Assert.assertNotNull(removeFromFacet);
-            Assert.assertTrue(removeFromFacet instanceof CollectionRemoveFromFacetForPostsCollectionRemovedFromEventAnnotation);
-            final CollectionRemoveFromFacetForPostsCollectionRemovedFromEventAnnotation removeFromFacetImpl = (CollectionRemoveFromFacetForPostsCollectionRemovedFromEventAnnotation) removeFromFacet;
+            Assert.assertTrue(removeFromFacet instanceof CollectionRemoveFromFacetForDomainEventFromCollectionAnnotation);
+            final CollectionRemoveFromFacetForDomainEventFromCollectionAnnotation removeFromFacetImpl = (CollectionRemoveFromFacetForDomainEventFromCollectionAnnotation) removeFromFacet;
             assertThat(removeFromFacetImpl.value(), classEqualTo(Customer.OrdersAddedToOrRemovedFromDomainEvent.class));
         }
 
@@ -249,22 +243,22 @@ public class CollectionAnnotationFacetFactoryTest extends AbstractFacetFactoryJU
             // then
             final Facet domainEventFacet = facetedMethod.getFacet(CollectionDomainEventFacet.class);
             Assert.assertNotNull(domainEventFacet);
-            Assert.assertTrue(domainEventFacet instanceof CollectionDomainEventFacetForCollectionInteractionAnnotation);
-            final CollectionDomainEventFacetForCollectionInteractionAnnotation domainEventFacetImpl = (CollectionDomainEventFacetForCollectionInteractionAnnotation) domainEventFacet;
+            Assert.assertTrue(domainEventFacet instanceof CollectionDomainEventFacetForCollectionAnnotation);
+            final CollectionDomainEventFacetForCollectionAnnotation domainEventFacetImpl = (CollectionDomainEventFacetForCollectionAnnotation) domainEventFacet;
             assertThat(domainEventFacetImpl.value(), classEqualTo(Customer.OrdersChangedDomainEvent.class));
 
             // then
             final Facet addToFacet = facetedMethod.getFacet(CollectionAddToFacet.class);
             Assert.assertNotNull(addToFacet);
-            Assert.assertTrue(addToFacet instanceof CollectionAddToFacetForDomainEventFromCollectionInteractionAnnotation);
-            final CollectionAddToFacetForDomainEventFromCollectionInteractionAnnotation addToFacetImpl = (CollectionAddToFacetForDomainEventFromCollectionInteractionAnnotation) addToFacet;
+            Assert.assertTrue(addToFacet instanceof CollectionAddToFacetForDomainEventFromCollectionAnnotation);
+            final CollectionAddToFacetForDomainEventFromCollectionAnnotation addToFacetImpl = (CollectionAddToFacetForDomainEventFromCollectionAnnotation) addToFacet;
             assertThat(addToFacetImpl.value(), classEqualTo(Customer.OrdersChangedDomainEvent.class));
 
             // then
             final Facet removeFromFacet = facetedMethod.getFacet(CollectionRemoveFromFacet.class);
             Assert.assertNotNull(removeFromFacet);
-            Assert.assertTrue(removeFromFacet instanceof CollectionRemoveFromFacetForDomainEventFromCollectionInteractionAnnotation);
-            final CollectionRemoveFromFacetForDomainEventFromCollectionInteractionAnnotation removeFromFacetImpl = (CollectionRemoveFromFacetForDomainEventFromCollectionInteractionAnnotation) removeFromFacet;
+            Assert.assertTrue(removeFromFacet instanceof CollectionRemoveFromFacetForDomainEventFromCollectionAnnotation);
+            final CollectionRemoveFromFacetForDomainEventFromCollectionAnnotation removeFromFacetImpl = (CollectionRemoveFromFacetForDomainEventFromCollectionAnnotation) removeFromFacet;
             assertThat(removeFromFacetImpl.value(), classEqualTo(Customer.OrdersChangedDomainEvent.class));
         }
 
