@@ -65,12 +65,9 @@ import org.apache.isis.core.metamodel.facets.actions.action.hidden.HiddenFacetFo
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacetDefault;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacetForActionAnnotation;
-import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacetForActionInteractionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEventFromActionAnnotation;
-import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEventFromActionInteractionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEventFromDefault;
-import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForPostsActionInvokedEventAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.publishing.PublishedActionFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.publishing.PublishedActionFacetForPublishedActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.publishing.PublishedActionFacetFromConfiguration;
@@ -209,8 +206,8 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
 
             final Facet invocationFacet = facetedMethod.getFacet(ActionInvocationFacet.class);
             Assert.assertNotNull(invocationFacet);
-            Assert.assertTrue(invocationFacet instanceof ActionInvocationFacetForPostsActionInvokedEventAnnotation);
-            final ActionInvocationFacetForPostsActionInvokedEventAnnotation invocationFacetImpl = (ActionInvocationFacetForPostsActionInvokedEventAnnotation) invocationFacet;
+            Assert.assertTrue(invocationFacet instanceof ActionInvocationFacetForDomainEventFromActionAnnotation);
+            final ActionInvocationFacetForDomainEventFromActionAnnotation invocationFacetImpl = (ActionInvocationFacetForDomainEventFromActionAnnotation) invocationFacet;
             assertThat(invocationFacetImpl.getEventType(), classEqualTo(Customer.SomeActionInvokedDomainEvent.class));
         }
 
@@ -242,14 +239,14 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             // then
             final Facet domainEventFacet = facetedMethod.getFacet(ActionDomainEventFacet.class);
             Assert.assertNotNull(domainEventFacet);
-            Assert.assertTrue(domainEventFacet instanceof ActionDomainEventFacetForActionInteractionAnnotation);
-            final ActionDomainEventFacetForActionInteractionAnnotation domainEventFacetImpl = (ActionDomainEventFacetForActionInteractionAnnotation) domainEventFacet;
+            Assert.assertTrue(domainEventFacet instanceof ActionDomainEventFacetForActionAnnotation);
+            final ActionDomainEventFacetForActionAnnotation domainEventFacetImpl = (ActionDomainEventFacetForActionAnnotation) domainEventFacet;
             assertThat(domainEventFacetImpl.getEventType(), classEqualTo(Customer.SomeActionInvokedDomainEvent.class));
 
             final Facet invocationFacet = facetedMethod.getFacet(ActionInvocationFacet.class);
             Assert.assertNotNull(invocationFacet);
-            Assert.assertTrue(invocationFacet instanceof ActionInvocationFacetForDomainEventFromActionInteractionAnnotation);
-            final ActionInvocationFacetForDomainEventFromActionInteractionAnnotation invocationFacetImpl = (ActionInvocationFacetForDomainEventFromActionInteractionAnnotation) invocationFacet;
+            Assert.assertTrue(invocationFacet instanceof ActionDomainEventFacetForActionAnnotation);
+            final ActionDomainEventFacetForActionAnnotation invocationFacetImpl = (ActionDomainEventFacetForActionAnnotation) invocationFacet;
             assertThat(invocationFacetImpl.getEventType(), classEqualTo(Customer.SomeActionInvokedDomainEvent.class));
         }
 
