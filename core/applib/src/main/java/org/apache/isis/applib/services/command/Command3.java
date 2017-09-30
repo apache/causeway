@@ -26,7 +26,7 @@ import org.apache.isis.applib.services.iactn.InteractionContext;
  * @deprecated - the extensions to {@link Command} in this interface have been replaced by functionality in {@link InteractionContext}.
  */
 @Deprecated
-public interface Command3 extends Command2 {
+public interface Command3 extends Command {
 
     /**
      * @deprecated - use {@link Interaction#getCurrentExecution()}, {@link Interaction#getPriorExecution()}  and {@link Interaction#getExecutions()} instead.
