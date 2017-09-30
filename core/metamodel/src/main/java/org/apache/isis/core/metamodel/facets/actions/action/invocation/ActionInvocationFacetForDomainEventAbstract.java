@@ -532,8 +532,8 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
 
 
     /**
-     * Optional hook, previously added to allow (now removed) annotations to to discard the event if the domain event
-     * was incompatible.
+     * Optional hook, previously to allow facet implementations of (now removed) annotations to to discard the event if the domain event
+     * was incompatible.  Now a no-op I think.
      */
     protected ActionDomainEvent<?> verify(final ActionDomainEvent<?> event) {
         return event;

@@ -17,11 +17,12 @@
 package org.apache.isis.core.metamodel.facets;
 
 import java.util.Set;
+
 import org.junit.Test;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.eventbus.AbstractDomainEvent;
 import org.apache.isis.applib.services.eventbus.CollectionDomainEvent;
-import org.apache.isis.applib.services.eventbus.CollectionRemovedFromEvent;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -35,13 +36,6 @@ public class DomainEventHelperTest_newCollectionDomainEvent_forRemove {
     
     public static class SomeDomainObjectCollectionRemovedFromDomainEvent extends CollectionDomainEvent<SomeDomainObject, SomeReferencedObject> {
         private static final long serialVersionUID = 1L;
-        public SomeDomainObjectCollectionRemovedFromDomainEvent(
-                SomeDomainObject source,
-                Identifier identifier,
-                Of of,
-                SomeReferencedObject value) {
-            super(source, identifier, of, value);
-        }
     }
     
     @Test
@@ -51,11 +45,11 @@ public class DomainEventHelperTest_newCollectionDomainEvent_forRemove {
         Identifier identifier = Identifier.propertyOrCollectionIdentifier(SomeDomainObject.class, "references");
 
         final CollectionDomainEvent<Object, Object> ev = new DomainEventHelper(null).newCollectionDomainEvent(
-                CollectionRemovedFromEvent.Default.class, AbstractDomainEvent.Phase.EXECUTED, identifier, sdo, CollectionDomainEvent.Of.REMOVE_FROM, other);
-        assertThat(ev.getSource(), is((Object)sdo));
+                CollectionDomainEvent.Default.class, AbstractDomainEvent.Phase.EXECUTED, identifier, sdo, CollectionDomainEvent.Of.REMOVE_FROM, other);
+        assertThat(ev.getSource(), is(sdo));
         assertThat(ev.getIdentifier(), is(identifier));
         assertThat(ev.getOf(), is(CollectionDomainEvent.Of.REMOVE_FROM));
-        assertThat(ev.getValue(), is((Object)other));
+        assertThat(ev.getValue(), is(other));
     }
 
     @Test
@@ -65,11 +59,11 @@ public class DomainEventHelperTest_newCollectionDomainEvent_forRemove {
         Identifier identifier = Identifier.propertyOrCollectionIdentifier(SomeDomainObject.class, "references");
 
         final CollectionDomainEvent<Object, Object> ev = new DomainEventHelper(null).newCollectionDomainEvent(
-                CollectionRemovedFromEvent.Default.class, AbstractDomainEvent.Phase.EXECUTED, identifier, sdo, CollectionDomainEvent.Of.REMOVE_FROM, other);
-        assertThat(ev.getSource(), is((Object)sdo));
+                CollectionDomainEvent.Default.class, AbstractDomainEvent.Phase.EXECUTED, identifier, sdo, CollectionDomainEvent.Of.REMOVE_FROM, other);
+        assertThat(ev.getSource(), is(sdo));
         assertThat(ev.getIdentifier(), is(identifier));
         assertThat(ev.getOf(), is(CollectionDomainEvent.Of.REMOVE_FROM));
-        assertThat(ev.getValue(), is((Object)other));
+        assertThat(ev.getValue(), is(other));
     }
 
     @Test

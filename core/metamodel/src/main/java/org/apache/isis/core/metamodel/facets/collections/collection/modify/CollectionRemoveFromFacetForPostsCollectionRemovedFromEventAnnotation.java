@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.facets.collections.collection.modify;
 
 import org.apache.isis.applib.services.eventbus.CollectionDomainEvent;
-import org.apache.isis.applib.services.eventbus.CollectionRemovedFromEvent;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionRemoveFromFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
@@ -34,7 +33,7 @@ public class CollectionRemoveFromFacetForPostsCollectionRemovedFromEventAnnotati
         CollectionRemoveFromFacetForDomainEventFromAbstract {
 
     public CollectionRemoveFromFacetForPostsCollectionRemovedFromEventAnnotation(
-            final Class<? extends CollectionRemovedFromEvent<?, ?>> eventType,
+            final Class<? extends CollectionDomainEvent<?, ?>> eventType,
             final PropertyOrCollectionAccessorFacet getterFacet,
             final CollectionRemoveFromFacet collectionRemoveFromFacet,
             final CollectionDomainEventFacetAbstract collectionInteractionFacet,
@@ -45,7 +44,6 @@ public class CollectionRemoveFromFacetForPostsCollectionRemovedFromEventAnnotati
 
     @Override
     protected CollectionDomainEvent<?, ?> verify(final CollectionDomainEvent<?, ?> event) {
-        // will discard event if different type to that specified in the PostsCollectionRemovedFromEvent annotation.
         return event != null && value() == event.getClass() ? event : null;
     }
 

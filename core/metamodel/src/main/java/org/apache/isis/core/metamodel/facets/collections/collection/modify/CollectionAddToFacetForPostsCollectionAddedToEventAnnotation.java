@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets.collections.collection.modify;
 
-import org.apache.isis.applib.services.eventbus.CollectionAddedToEvent;
 import org.apache.isis.applib.services.eventbus.CollectionDomainEvent;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacet;
@@ -34,7 +33,7 @@ public class CollectionAddToFacetForPostsCollectionAddedToEventAnnotation
         extends CollectionAddToFacetForDomainEventFromAbstract {
 
     public CollectionAddToFacetForPostsCollectionAddedToEventAnnotation(
-            final Class<? extends CollectionAddedToEvent<?, ?>> eventType,
+            final Class<? extends CollectionDomainEvent<?, ?>> eventType,
             final PropertyOrCollectionAccessorFacet getterFacet,
             final CollectionAddToFacet collectionAddToFacet,
             final CollectionDomainEventFacetAbstract collectionInteractionFacet,
@@ -44,7 +43,6 @@ public class CollectionAddToFacetForPostsCollectionAddedToEventAnnotation
 
     @Override
     protected CollectionDomainEvent<?, ?> verify(final CollectionDomainEvent<?, ?> event) {
-        // will discard event if different type to that specified in the PostsCollectionAddedToEvent annotation.
         return event != null && value() == event.getClass() ? event : null;
     }
 

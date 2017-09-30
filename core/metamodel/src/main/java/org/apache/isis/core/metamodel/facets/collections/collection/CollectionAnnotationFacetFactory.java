@@ -25,12 +25,9 @@ import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 
 import org.apache.isis.applib.annotation.Collection;
-import org.apache.isis.applib.annotation.CollectionInteraction;
 import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.NotPersisted;
-import org.apache.isis.applib.annotation.PostsCollectionAddedToEvent;
-import org.apache.isis.applib.annotation.PostsCollectionRemovedFromEvent;
 import org.apache.isis.applib.annotation.TypeOf;
 import org.apache.isis.applib.services.eventbus.CollectionDomainEvent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -51,18 +48,13 @@ import org.apache.isis.core.metamodel.facets.collections.collection.hidden.Hidde
 import org.apache.isis.core.metamodel.facets.collections.collection.hidden.HiddenFacetForHiddenAnnotationOnCollection;
 import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionAddToFacetForDomainEventFromAbstract;
 import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionAddToFacetForDomainEventFromCollectionAnnotation;
-import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionAddToFacetForDomainEventFromCollectionInteractionAnnotation;
 import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionAddToFacetForDomainEventFromDefault;
-import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionAddToFacetForPostsCollectionAddedToEventAnnotation;
 import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacetAbstract;
 import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacetDefault;
 import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacetForCollectionAnnotation;
-import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacetForCollectionInteractionAnnotation;
 import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionRemoveFromFacetForDomainEventFromAbstract;
 import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionRemoveFromFacetForDomainEventFromCollectionAnnotation;
-import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionRemoveFromFacetForDomainEventFromCollectionInteractionAnnotation;
 import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionRemoveFromFacetForDomainEventFromDefault;
-import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionRemoveFromFacetForPostsCollectionRemovedFromEventAnnotation;
 import org.apache.isis.core.metamodel.facets.collections.collection.notpersisted.NotPersistedFacetForCollectionAnnotation;
 import org.apache.isis.core.metamodel.facets.collections.collection.notpersisted.NotPersistedFacetForNotPersistedAnnotationOnCollection;
 import org.apache.isis.core.metamodel.facets.collections.collection.typeof.TypeOfFacetOnCollectionFromCollectionAnnotation;
@@ -80,9 +72,6 @@ import org.apache.isis.core.metamodel.util.EventUtil;
 
 public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner {
 
-    private final MetaModelValidatorForDeprecatedAnnotation postsCollectionAddedToEventValidator = new MetaModelValidatorForDeprecatedAnnotation(PostsCollectionAddedToEvent.class);
-    private final MetaModelValidatorForDeprecatedAnnotation postsCollectionRemovedFromEventValidator = new MetaModelValidatorForDeprecatedAnnotation(PostsCollectionRemovedFromEvent.class);
-    private final MetaModelValidatorForDeprecatedAnnotation collectionInteractionValidator = new MetaModelValidatorForDeprecatedAnnotation(CollectionInteraction.class);
     private final MetaModelValidatorForDeprecatedAnnotation hiddenValidator = new MetaModelValidatorForDeprecatedAnnotation(Hidden.class);
     private final MetaModelValidatorForDeprecatedAnnotation disabledValidator = new MetaModelValidatorForDeprecatedAnnotation(Disabled.class);
     private final MetaModelValidatorForDeprecatedAnnotation notPersistedValidator = new MetaModelValidatorForDeprecatedAnnotation(NotPersisted.class);
@@ -115,43 +104,14 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract imple
         //
         // Set up CollectionDomainEventFacet, which will act as the hiding/disabling/validating advisor
         //
-        final PostsCollectionAddedToEvent postsCollectionAddedToEvent = Annotations.getAnnotation(method, PostsCollectionAddedToEvent.class);
-        final PostsCollectionRemovedFromEvent postsCollectionRemovedFromEvent = Annotations.getAnnotation(method, PostsCollectionRemovedFromEvent.class);
-        final CollectionInteraction collectionInteraction = Annotations.getAnnotation(method, CollectionInteraction.class);
         final Collection collection = Annotations.getAnnotation(method, Collection.class);
         final Class<? extends CollectionDomainEvent<?, ?>> collectionDomainEventType;
 
         final CollectionDomainEventFacetAbstract collectionDomainEventFacet;
 
-        // can't really do this, because would result in the event being fired for the
-        // hidden/disable/validate phases, most likely breaking existing code.
-        //
-        // in any case, which to use... addTo or removeFrom ?
 
-//        // search for @PostsCollectionAddedToEvent(value=...)
-//        if(postsCollectionAddedToEvent != null) {
-//            collectionDomainEventType = postsCollectionAddedToEvent.value();
-//            collectionDomainEventFacet = postsCollectionAddedToEventValidator.flagIfPresent(
-//                    new CollectionDomainEventFacetForPostsCollectionAddedToEventAnnotation(
-//                        collectionDomainEventType, servicesInjector, getSpecificationLoader(), holder));
-//        } else
-//        // search for @PostsCollectionRemovedFromEvent(value=...)
-//        if(postsCollectionRemovedFromEvent != null) {
-//            collectionDomainEventType = postsCollectionRemovedFromEvent.value();
-//            collectionDomainEventFacet = postsCollectionRemovedFromEventValidator.flagIfPresent(
-//                    new CollectionDomainEventFacetForPostsCollectionRemovedFromEventAnnotation(
-//                        collectionDomainEventType, servicesInjector, getSpecificationLoader(), holder));
-//        } else
-
-        // search for @CollectionInteraction(value=...)
-        if(collectionInteraction != null) {
-            collectionDomainEventType = collectionInteraction.value();
-            collectionDomainEventFacet = collectionInteractionValidator.flagIfPresent(
-                    new CollectionDomainEventFacetForCollectionInteractionAnnotation(
-                        collectionDomainEventType, servicesInjector, getSpecificationLoader(), holder), processMethodContext);
-        } else
         // search for @Collection(domainEvent=...)
-        if(collection != null && collection.domainEvent() != null) {
+        if(collection != null) {
             collectionDomainEventType = collection.domainEvent();
             collectionDomainEventFacet = new CollectionDomainEventFacetForCollectionAnnotation(
                     collectionDomainEventType, servicesInjector, getSpecificationLoader(), holder);
@@ -187,17 +147,6 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract imple
             // one of these facets to be created.
             final CollectionAddToFacetForDomainEventFromAbstract replacementFacet;
 
-            // deprecated
-            if (postsCollectionAddedToEvent != null) {
-                replacementFacet = new CollectionAddToFacetForPostsCollectionAddedToEventAnnotation(
-                        postsCollectionAddedToEvent.value(), getterFacet, collectionAddToFacet, collectionDomainEventFacet, holder, servicesInjector);
-            } else
-            // deprecated (but more recently)
-            if(collectionInteraction != null) {
-                replacementFacet = new CollectionAddToFacetForDomainEventFromCollectionInteractionAnnotation(
-                        collectionDomainEventType, getterFacet, collectionAddToFacet, collectionDomainEventFacet, holder, servicesInjector);
-            } else
-            // current
             if(collection != null) {
                 replacementFacet = new CollectionAddToFacetForDomainEventFromCollectionAnnotation(
                         collectionDomainEventType, getterFacet, collectionAddToFacet, collectionDomainEventFacet, holder, servicesInjector);
@@ -216,15 +165,6 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract imple
 
             final CollectionRemoveFromFacetForDomainEventFromAbstract replacementFacet;
 
-            // deprecated
-            if (postsCollectionRemovedFromEvent != null) {
-                replacementFacet = new CollectionRemoveFromFacetForPostsCollectionRemovedFromEventAnnotation(postsCollectionRemovedFromEvent.value(), getterFacet, collectionRemoveFromFacet, collectionDomainEventFacet, servicesInjector, holder);
-            } else
-            // deprecated (but more recently)
-            if(collectionInteraction != null) {
-                replacementFacet = new CollectionRemoveFromFacetForDomainEventFromCollectionInteractionAnnotation(collectionDomainEventType, getterFacet, collectionRemoveFromFacet, collectionDomainEventFacet, servicesInjector, holder);
-            } else
-            // current
             if(collection != null) {
                 replacementFacet = new CollectionRemoveFromFacetForDomainEventFromCollectionAnnotation(collectionDomainEventType, getterFacet, collectionRemoveFromFacet, collectionDomainEventFacet, servicesInjector, holder);
             } else
@@ -367,9 +307,6 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract imple
 
     @Override
     public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
-        metaModelValidator.add(postsCollectionAddedToEventValidator);
-        metaModelValidator.add(postsCollectionRemovedFromEventValidator);
-        metaModelValidator.add(collectionInteractionValidator);
         metaModelValidator.add(notPersistedValidator);
         metaModelValidator.add(typeOfValidator);
         metaModelValidator.add(hiddenValidator);
@@ -384,9 +321,6 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract imple
         super.setServicesInjector(servicesInjector);
         final IsisConfiguration configuration = getConfiguration();
 
-        postsCollectionAddedToEventValidator.setConfiguration(configuration);
-        postsCollectionRemovedFromEventValidator.setConfiguration(configuration);
-        collectionInteractionValidator.setConfiguration(configuration);
         typeOfValidator.setConfiguration(configuration);
         notPersistedValidator.setConfiguration(configuration);
         hiddenValidator.setConfiguration(configuration);

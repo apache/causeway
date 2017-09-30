@@ -28,15 +28,9 @@ import org.junit.Test;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Collection;
-import org.apache.isis.applib.annotation.CollectionInteraction;
-import org.apache.isis.applib.annotation.PostsCollectionAddedToEvent;
-import org.apache.isis.applib.annotation.PostsCollectionRemovedFromEvent;
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.services.eventbus.CollectionAddedToEvent;
 import org.apache.isis.applib.services.eventbus.CollectionDomainEvent;
-import org.apache.isis.applib.services.eventbus.CollectionInteractionEvent;
-import org.apache.isis.applib.services.eventbus.CollectionRemovedFromEvent;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -162,26 +156,10 @@ public class CollectionAnnotationFacetFactoryTest extends AbstractFacetFactoryJU
             class Order {
             }
             class Customer {
-                class OrdersAddedToDomainEvent extends CollectionAddedToEvent<Customer, Order> {
-                    public OrdersAddedToDomainEvent(
-                            final Customer source,
-                            final Identifier identifier,
-                            final Order value) {
-                        super(source, identifier, value);
-                    }
+                class OrdersAddedToOrRemovedFromDomainEvent extends CollectionDomainEvent<Customer, Order> {
                 }
 
-                class OrdersRemovedFromDomainEvent extends CollectionRemovedFromEvent<Customer, Order> {
-                    public OrdersRemovedFromDomainEvent(
-                            final Customer source,
-                            final Identifier identifier,
-                            final Order value) {
-                        super(source, identifier, value);
-                    }
-                }
-
-                @PostsCollectionAddedToEvent(OrdersAddedToDomainEvent.class)
-                @PostsCollectionRemovedFromEvent(OrdersRemovedFromDomainEvent.class)
+                @Collection(domainEvent = OrdersAddedToOrRemovedFromDomainEvent.class)
                 public List<Order> getOrders() {
                     return null;
                 }
@@ -224,14 +202,14 @@ public class CollectionAnnotationFacetFactoryTest extends AbstractFacetFactoryJU
             Assert.assertNotNull(addToFacet);
             Assert.assertTrue(addToFacet instanceof CollectionAddToFacetForPostsCollectionAddedToEventAnnotation);
             final CollectionAddToFacetForPostsCollectionAddedToEventAnnotation addToFacetImpl = (CollectionAddToFacetForPostsCollectionAddedToEventAnnotation) addToFacet;
-            assertThat(addToFacetImpl.value(), classEqualTo(Customer.OrdersAddedToDomainEvent.class));
+            assertThat(addToFacetImpl.value(), classEqualTo(Customer.OrdersAddedToOrRemovedFromDomainEvent.class));
 
             // then
             final Facet removeFromFacet = facetedMethod.getFacet(CollectionRemoveFromFacet.class);
             Assert.assertNotNull(removeFromFacet);
             Assert.assertTrue(removeFromFacet instanceof CollectionRemoveFromFacetForPostsCollectionRemovedFromEventAnnotation);
             final CollectionRemoveFromFacetForPostsCollectionRemovedFromEventAnnotation removeFromFacetImpl = (CollectionRemoveFromFacetForPostsCollectionRemovedFromEventAnnotation) removeFromFacet;
-            assertThat(removeFromFacetImpl.value(), classEqualTo(Customer.OrdersRemovedFromDomainEvent.class));
+            assertThat(removeFromFacetImpl.value(), classEqualTo(Customer.OrdersAddedToOrRemovedFromDomainEvent.class));
         }
 
         // @Test
@@ -240,19 +218,10 @@ public class CollectionAnnotationFacetFactoryTest extends AbstractFacetFactoryJU
             class Order {
             }
             class Customer {
-                class OrdersChangedDomainEvent extends CollectionInteractionEvent<Customer, Order> {
-                    public OrdersChangedDomainEvent(final Customer source, final Identifier identifier, final Of of) {
-                        super(source, identifier, of);
-                    }
-
-                    public OrdersChangedDomainEvent(
-                            final Customer source, final Identifier identifier, final Of of,
-                            final Order value) {
-                        super(source, identifier, of, value);
-                    }
+                class OrdersChangedDomainEvent extends CollectionDomainEvent<Customer, Order> {
                 }
 
-                @CollectionInteraction(OrdersChangedDomainEvent.class)
+                @Collection(domainEvent = OrdersChangedDomainEvent.class)
                 public List<Order> getOrders() {
                     return null;
                 }
@@ -306,16 +275,7 @@ public class CollectionAnnotationFacetFactoryTest extends AbstractFacetFactoryJU
             }
             class Customer {
                 class OrdersChanged extends CollectionDomainEvent<Customer, Order> {
-                    public OrdersChanged(final Customer source, final Identifier identifier, final Of of) {
-                        super(source, identifier, of);
-                    }
-
-                    public OrdersChanged(final Customer source, final Identifier identifier, final Of of,
-                            final Order value) {
-                        super(source, identifier, of, value);
-                    }
                 }
-
                 @Collection(domainEvent = OrdersChanged.class)
                 public List<Order> getOrders() {
                     return null;

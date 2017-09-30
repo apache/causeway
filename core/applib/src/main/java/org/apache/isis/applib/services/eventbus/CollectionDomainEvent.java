@@ -18,7 +18,6 @@
  */
 package org.apache.isis.applib.services.eventbus;
 
-import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.util.ObjectContracts;
 
 public abstract class CollectionDomainEvent<S,T> extends AbstractDomainEvent<S> {
@@ -32,17 +31,8 @@ public abstract class CollectionDomainEvent<S,T> extends AbstractDomainEvent<S> 
      * raises an event or not depends upon the "isis.reflector.facet.collectionAnnotation.domainEvent.postForDefault"
      * configuration property.
      */
-    public static class Default extends CollectionInteractionEvent<Object, Object> {
+    public static class Default extends CollectionDomainEvent<Object, Object> {
         private static final long serialVersionUID = 1L;
-        public Default(){}
-        @Deprecated
-        public Default(
-                final Object source,
-                final Identifier identifier,
-                final Of of,
-                final Object value) {
-            super(source, identifier, of, value);
-        }
     }
     //endregion
 
@@ -52,7 +42,7 @@ public abstract class CollectionDomainEvent<S,T> extends AbstractDomainEvent<S> 
      * Convenience class to use indicating that an event should <i>not</i> be posted (irrespective of the configuration
      * property setting for the {@link Default} event.
      */
-    public static class Noop extends CollectionInteractionEvent<Object, Object> {
+    public static class Noop extends CollectionDomainEvent<Object, Object> {
         private static final long serialVersionUID = 1L;
     }
     //endregion
@@ -63,13 +53,13 @@ public abstract class CollectionDomainEvent<S,T> extends AbstractDomainEvent<S> 
      * Convenience class meaning that an event <i>should</i> be posted (irrespective of the configuration
      * property setting for the {@link Default} event..
      */
-    public static class Doop extends CollectionInteractionEvent<Object, Object> {
+    public static class Doop extends CollectionDomainEvent<Object, Object> {
         private static final long serialVersionUID = 1L;
     }
     //endregion
 
 
-    //region > constructors
+    //region > constructor
 
     /**
      * If used then the framework will set state via (non-API) setters.
@@ -81,30 +71,6 @@ public abstract class CollectionDomainEvent<S,T> extends AbstractDomainEvent<S> 
     public CollectionDomainEvent() {
     }
 
-    /**
-     * @deprecated - the {@link #CollectionDomainEvent() no-arg constructor} is recommended instead, to reduce boilerplate.
-     */
-    @Deprecated
-    public CollectionDomainEvent(
-            final S source,
-            final Identifier identifier,
-            final Of of) {
-        super(source, identifier);
-        this.of = of;
-    }
-
-    /**
-     * @deprecated - the {@link #CollectionDomainEvent() no-arg constructor} is recommended instead, to reduce boilerplate.
-     */
-    @Deprecated
-    public CollectionDomainEvent(
-            final S source,
-            final Identifier identifier,
-            final Of of,
-            final T value) {
-        this(source, identifier, of);
-        this.value = value;
-    }
     //endregion
 
     //region > value

@@ -28,20 +28,6 @@ public final class IsisApplibModule {
 
     public abstract static class CollectionDomainEvent<S,T> extends org.apache.isis.applib.services.eventbus.CollectionDomainEvent<S,T> {
         public CollectionDomainEvent() { }
-        /**
-         * @deprecated - use the {@link #CollectionDomainEvent() no-arg constructor} instead to avoid boilerplate.
-         */
-        @Deprecated
-        public CollectionDomainEvent(final S source, final Identifier identifier, final Of of) {
-            super(source, identifier, of);
-        }
-        /**
-         * @deprecated - use the {@link #CollectionDomainEvent() no-arg constructor} instead to avoid boilerplate.
-         */
-        @Deprecated
-        public CollectionDomainEvent(final S source, final Identifier identifier, final Of of, final T value) {
-            super(source, identifier, of, value);
-        }
     }
 
     public abstract static class PropertyDomainEvent<S,T> extends org.apache.isis.applib.services.eventbus.PropertyDomainEvent<S,T> {
