@@ -175,14 +175,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
 
             class Customer {
 
-                class SomeActionInvokedDomainEvent extends ActionDomainEvent<Customer> {
-                    public SomeActionInvokedDomainEvent(
-                            final Customer source,
-                            final Identifier identifier,
-                            final Object... arguments) {
-                        super(source, identifier, arguments);
-                    }
-                }
+                class SomeActionInvokedDomainEvent extends ActionDomainEvent<Customer> { }
 
                 @Action(domainEvent = SomeActionInvokedDomainEvent.class)
                 public void someAction() {
@@ -266,12 +259,6 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             class Customer {
 
                 class SomeActionInvokedDomainEvent extends ActionDomainEvent<Customer> {
-                    public SomeActionInvokedDomainEvent(
-                            final Customer source,
-                            final Identifier identifier,
-                            final Object... arguments) {
-                        super(source, identifier, arguments);
-                    }
                 }
 
                 @Action(domainEvent= SomeActionInvokedDomainEvent.class)

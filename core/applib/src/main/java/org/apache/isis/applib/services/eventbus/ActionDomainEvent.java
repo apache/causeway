@@ -18,10 +18,8 @@
  */
 package org.apache.isis.applib.services.eventbus;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-import org.apache.isis.applib.Identifier;
+
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.command.Command;
@@ -67,8 +65,6 @@ public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
     //endregion
 
 
-    //region > constructors
-
     /**
      * If used then the framework will set state via (non-API) setters.
      *
@@ -78,47 +74,6 @@ public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
      */
     public ActionDomainEvent() {
     }
-
-    /**
-     * @deprecated - the {@link #ActionDomainEvent() no-arg constructor} is recommended instead, to reduce boilerplate.
-     */
-    @Deprecated
-    public ActionDomainEvent(
-            final S source,
-            final Identifier identifier) {
-        super(source, identifier);
-    }
-
-    /**
-     * @deprecated - the {@link #ActionDomainEvent() no-arg constructor} is recommended instead, to reduce boilerplate.
-     */
-    @Deprecated
-    public ActionDomainEvent(
-            final S source,
-            final Identifier identifier,
-            final Object... arguments) {
-        this(source, identifier,
-                asList(arguments));
-    }
-
-    private static List<Object> asList(final Object[] arguments) {
-        return arguments != null
-                ? Arrays.asList(arguments)
-                : Collections.emptyList();
-    }
-
-    /**
-     * @deprecated - the {@link #ActionDomainEvent() no-arg constructor} is recommended instead, to reduce boilerplate.
-     */
-    @Deprecated
-    public ActionDomainEvent(
-            final S source,
-            final Identifier identifier,
-            final List<Object> arguments) {
-        this(source, identifier);
-        this.arguments = Collections.unmodifiableList(arguments);
-    }
-    //endregion
 
     //region > command
     private Command command;

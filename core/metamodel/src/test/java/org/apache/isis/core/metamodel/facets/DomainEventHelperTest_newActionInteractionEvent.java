@@ -34,12 +34,6 @@ public class DomainEventHelperTest_newActionInteractionEvent {
     
     public static class SomeDomainObjectFooInvokedDomainEvent extends ActionDomainEvent<SomeDomainObject> {
         private static final long serialVersionUID = 1L;
-        public SomeDomainObjectFooInvokedDomainEvent(
-                final SomeDomainObject source,
-                final Identifier identifier,
-                final Object... arguments) {
-            super(source, identifier, arguments);
-        }
     }
     
     @Test
