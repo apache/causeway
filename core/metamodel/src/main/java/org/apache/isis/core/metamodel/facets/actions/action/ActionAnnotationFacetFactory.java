@@ -29,7 +29,6 @@ import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.Idempotent;
 import org.apache.isis.applib.annotation.Prototype;
-import org.apache.isis.applib.annotation.PublishedAction;
 import org.apache.isis.applib.annotation.QueryOnly;
 import org.apache.isis.applib.annotation.TypeOf;
 import org.apache.isis.applib.services.HasTransactionId;

@@ -30,7 +30,6 @@ import org.junit.Test;
 import org.apache.isis.applib.annotation.Audited;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Immutable;
-import org.apache.isis.applib.annotation.PublishedObject;
 import org.apache.isis.applib.annotation.PublishingChangeKind;
 import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.applib.services.publish.EventPayload;
@@ -303,7 +302,6 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
     public static class Publishing extends DomainObjectAnnotationFacetFactoryTest {
 
-        @PublishedObject
         class CustomerWithPublishedObjectAnnotation {
         }
 

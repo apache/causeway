@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets.actions.publish;
 
-import org.apache.isis.applib.annotation.PublishedAction;
 import org.apache.isis.core.metamodel.facets.SingleValueFacet;
 
 /**

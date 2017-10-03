@@ -40,7 +40,6 @@ import org.apache.isis.applib.annotation.CommandPersistence;
 import org.apache.isis.applib.annotation.CommandReification;
 import org.apache.isis.applib.annotation.Idempotent;
 import org.apache.isis.applib.annotation.InvokeOn;
-import org.apache.isis.applib.annotation.PublishedAction;
 import org.apache.isis.applib.annotation.QueryOnly;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
@@ -1093,7 +1092,6 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
 
             // given
             class Customer {
-                @org.apache.isis.applib.annotation.PublishedAction(CustomerSomeActionPayloadFactory.class)
                 public void someAction() {
                 }
             }

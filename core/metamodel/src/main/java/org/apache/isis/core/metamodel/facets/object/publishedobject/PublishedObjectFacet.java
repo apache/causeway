@@ -21,7 +21,6 @@ package org.apache.isis.core.metamodel.facets.object.publishedobject;
 
 import com.google.common.base.Predicate;
 
-import org.apache.isis.applib.annotation.PublishedObject;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.SingleValueFacet;
 
