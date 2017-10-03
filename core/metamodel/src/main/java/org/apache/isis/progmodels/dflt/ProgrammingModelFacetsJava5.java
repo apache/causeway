@@ -64,7 +64,6 @@ import org.apache.isis.core.metamodel.facets.members.named.staticmethod.NamedFac
 import org.apache.isis.core.metamodel.facets.members.order.annotprop.MemberOrderFacetFactory;
 import org.apache.isis.core.metamodel.facets.members.render.annotprop.RenderFacetOrResolveFactory;
 import org.apache.isis.core.metamodel.facets.object.ViewModelSemanticCheckingFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.actionorder.annotation.ActionOrderFacetAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.audit.markerifc.AuditableFacetMarkerInterfaceFactory;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.bookmarkable.BookmarkPolicyFacetViaBookmarkableAnnotationElseFallbackFactory;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedCallbackFacetFactory;
@@ -310,8 +309,6 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(new org.apache.isis.core.metamodel.facets.object.named.staticmethod.NamedFacetStaticMethodFactory());
 
         addFactory(new MemberOrderFacetFactory());
-        
-        addFactory(new ActionOrderFacetAnnotationFactory());
         
         addFactory(new FieldOrderFacetAnnotationFactory());
         addFactory(new MemberGroupLayoutFacetFactory());

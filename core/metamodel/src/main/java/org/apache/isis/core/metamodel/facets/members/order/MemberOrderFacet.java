@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.facets.members.order;
 
 import org.apache.isis.core.metamodel.facets.MultipleValueFacet;
-import org.apache.isis.core.metamodel.facets.object.actionorder.ActionOrderFacet;
 import org.apache.isis.core.metamodel.facets.object.fieldorder.FieldOrderFacet;
 
 /**
@@ -29,9 +28,7 @@ import org.apache.isis.core.metamodel.facets.object.fieldorder.FieldOrderFacet;
  * 
  * <p>
  * In the standard Apache Isis Programming Model, corresponds to annotating each
- * of the member methods with the <tt>@MemberOrder</tt>. An alternative appraoch
- * is to use the {@link ActionOrderFacet actionOrder} or {@link FieldOrderFacet
- * field order}.
+ * of the member methods with the <tt>@MemberOrder</tt>.
  * 
  * @see MemberOrderFacet
  * @see FieldOrderFacet

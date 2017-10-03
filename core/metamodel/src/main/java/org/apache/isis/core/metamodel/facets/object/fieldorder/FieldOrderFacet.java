@@ -21,7 +21,6 @@ package org.apache.isis.core.metamodel.facets.object.fieldorder;
 
 import org.apache.isis.core.metamodel.facets.SingleStringValueFacet;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
-import org.apache.isis.core.metamodel.facets.object.actionorder.ActionOrderFacet;
 
 /**
  * (One of the) mechanism(s) for determining the order in which the properties
