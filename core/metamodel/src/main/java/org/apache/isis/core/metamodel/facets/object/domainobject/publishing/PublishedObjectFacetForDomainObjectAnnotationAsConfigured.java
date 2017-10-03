@@ -24,7 +24,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 public class PublishedObjectFacetForDomainObjectAnnotationAsConfigured extends PublishedObjectFacetForDomainObjectAnnotation {
 
 
-    PublishedObjectFacetForDomainObjectAnnotationAsConfigured(final PublishingPayloadFactoryForObject publishingPayloadFactory, final FacetHolder holder) {
-        super(publishingPayloadFactory, holder);
+    PublishedObjectFacetForDomainObjectAnnotationAsConfigured(final FacetHolder holder) {
+        super(holder);
     }
 }

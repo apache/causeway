@@ -24,8 +24,8 @@ import org.apache.isis.core.metamodel.facets.object.publishedobject.PublishedObj
 
 public class PublishedObjectFacetFromConfiguration extends PublishedObjectFacetAbstract {
 
-    PublishedObjectFacetFromConfiguration(final PublishingPayloadFactoryForObject publishingPayloadFactory, final FacetHolder holder) {
-        super(publishingPayloadFactory, holder);
+    PublishedObjectFacetFromConfiguration(final FacetHolder holder) {
+        super(holder);
     }
 
 }

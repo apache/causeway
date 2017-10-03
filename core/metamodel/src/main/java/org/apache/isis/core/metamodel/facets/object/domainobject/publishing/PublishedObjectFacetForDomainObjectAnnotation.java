@@ -43,42 +43,20 @@ public class PublishedObjectFacetForDomainObjectAnnotation extends PublishedObje
                     case NONE:
                         return null;
                     default:
-                        final PublishingPayloadFactoryForObject publishingPayloadFactory = newPayloadFactory(domainObject);
                         return domainObject != null
-                            ? new PublishedObjectFacetForDomainObjectAnnotationAsConfigured(publishingPayloadFactory, holder)
-                            : new PublishedObjectFacetFromConfiguration(publishingPayloadFactory, holder);
+                            ? new PublishedObjectFacetForDomainObjectAnnotationAsConfigured(holder)
+                            : new PublishedObjectFacetFromConfiguration(holder);
                 }
             case DISABLED:
                 return null;
             case ENABLED:
-                return new PublishedObjectFacetForDomainObjectAnnotation(
-                        newPayloadFactory(domainObject), holder);
+                return new PublishedObjectFacetForDomainObjectAnnotation(holder);
         }
         return null;
     }
 
-    /**
-     * @return null means that the default payload factories will be used; this is handled within IsisTransaction.
-     */
-    protected static PublishingPayloadFactoryForObject newPayloadFactory(final DomainObject domainObject) {
-        if(domainObject == null) {
-            return null;
-        }
-        final Class<? extends PublishingPayloadFactoryForObject> value = domainObject.publishingPayloadFactory();
-        if(value == null) {
-            return null;
-        }
-        try {
-            return value.newInstance();
-        } catch (final InstantiationException e) {
-            return null;
-        } catch (final IllegalAccessException e) {
-            return null;
-        }
-    }
-
-    PublishedObjectFacetForDomainObjectAnnotation(final PublishingPayloadFactoryForObject publishingPayloadFactory, final FacetHolder holder) {
-        super(publishingPayloadFactory, holder);
+    PublishedObjectFacetForDomainObjectAnnotation(final FacetHolder holder) {
+        super(holder);
     }
 
 }
