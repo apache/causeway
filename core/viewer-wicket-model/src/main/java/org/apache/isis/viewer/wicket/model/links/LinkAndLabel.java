@@ -28,7 +28,6 @@ import com.google.common.collect.Lists;
 import org.apache.wicket.markup.html.link.AbstractLink;
 
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -62,7 +61,7 @@ public class LinkAndLabel implements Serializable {
         final CssClassFaPosition cssClassFaPosition = ObjectAction.Util.cssClassFaPositionFor(objectAction);
         final ActionLayout.Position actionLayoutPosition = ObjectAction.Util.actionLayoutPositionOf(objectAction);
         final PromptStyle promptStyle = ObjectAction.Util.promptStyleFor(objectAction);
-        final ActionSemantics.Of semantics = objectAction.getSemantics();
+        final SemanticsOf semantics = objectAction.getSemantics();
 
         return new LinkAndLabel(
                 link, name,
@@ -70,7 +69,7 @@ public class LinkAndLabel implements Serializable {
                 blobOrClob, explorationOrPrototype,
                 actionIdentifier,
                 cssClass, cssClassFa, cssClassFaPosition, actionLayoutPosition,
-                SemanticsOf.from(semantics),
+                semantics,
                 promptStyle,
                 Parameters.fromParameterCount(objectAction.getParameterCount()));
     }

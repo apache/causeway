@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.actions.semantics;
 
-import org.apache.isis.applib.annotation.ActionSemantics;
+import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.core.metamodel.facets.SingleValueFacet;
 
 /**
@@ -28,6 +28,6 @@ import org.apache.isis.core.metamodel.facets.SingleValueFacet;
  * <p>
  * Specifically, whether it is safe, idempotent or non-idempotent.
  */
-public interface ActionSemanticsFacet extends SingleValueFacet<ActionSemantics.Of> {
+public interface ActionSemanticsFacet extends SingleValueFacet<SemanticsOf> {
 
 }

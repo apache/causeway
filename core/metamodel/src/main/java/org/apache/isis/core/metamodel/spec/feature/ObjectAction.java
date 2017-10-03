@@ -27,7 +27,6 @@ import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -63,7 +62,7 @@ public interface ObjectAction extends ObjectMember {
     /**
      * The semantics of this action.
      */
-    ActionSemantics.Of getSemantics();
+    SemanticsOf getSemantics();
 
     /**
      * Returns the specification for the type of object that this action can be
@@ -225,7 +224,7 @@ public interface ObjectAction extends ObjectMember {
         }
 
         public static SemanticsOf semanticsOf(final ObjectAction objectAction) {
-        	return SemanticsOf.from(objectAction.getSemantics());
+        	return objectAction.getSemantics();
         }
         
         public static boolean isAreYouSureSemantics(final ObjectAction objectAction) {

@@ -106,29 +106,4 @@ public enum SemanticsOf {
         return this == IDEMPOTENT_ARE_YOU_SURE || this == NON_IDEMPOTENT_ARE_YOU_SURE;
     }
 
-    @Deprecated
-    public static ActionSemantics.Of from(final SemanticsOf semantics) {
-        if(semantics == null) return null;
-        if(semantics == SAFE_AND_REQUEST_CACHEABLE) return ActionSemantics.Of.SAFE_AND_REQUEST_CACHEABLE;
-        if(semantics == SAFE) return ActionSemantics.Of.SAFE;
-        if(semantics == IDEMPOTENT) return ActionSemantics.Of.IDEMPOTENT;
-        if(semantics == IDEMPOTENT_ARE_YOU_SURE) return ActionSemantics.Of.IDEMPOTENT_ARE_YOU_SURE;
-        if(semantics == NON_IDEMPOTENT) return ActionSemantics.Of.NON_IDEMPOTENT;
-        if(semantics == NON_IDEMPOTENT_ARE_YOU_SURE) return ActionSemantics.Of.NON_IDEMPOTENT_ARE_YOU_SURE;
-        // shouldn't happen
-        throw new IllegalArgumentException("Unrecognized of: " + semantics);
-    }
-
-    @Deprecated
-    public static SemanticsOf from(final ActionSemantics.Of semantics) {
-        if(semantics == null) return null;
-        if(semantics == ActionSemantics.Of.SAFE_AND_REQUEST_CACHEABLE) return SAFE_AND_REQUEST_CACHEABLE;
-        if(semantics == ActionSemantics.Of.SAFE) return SAFE;
-        if(semantics == ActionSemantics.Of.IDEMPOTENT) return IDEMPOTENT;
-        if(semantics == ActionSemantics.Of.IDEMPOTENT_ARE_YOU_SURE) return IDEMPOTENT_ARE_YOU_SURE;
-        if(semantics == ActionSemantics.Of.NON_IDEMPOTENT) return NON_IDEMPOTENT;
-        if(semantics == ActionSemantics.Of.NON_IDEMPOTENT_ARE_YOU_SURE) return NON_IDEMPOTENT_ARE_YOU_SURE;
-        // shouldn't happen
-        throw new IllegalArgumentException("Unrecognized semantics: " + semantics);
-    }
 }

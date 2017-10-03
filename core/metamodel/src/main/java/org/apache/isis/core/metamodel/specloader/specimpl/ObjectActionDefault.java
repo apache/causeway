@@ -31,9 +31,9 @@ import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.ApplicationException;
 import org.apache.isis.applib.RecoverableException;
-import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.annotation.InvokedOn;
+import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.services.command.Command;
@@ -139,9 +139,9 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
     }
 
     @Override
-    public ActionSemantics.Of getSemantics() {
+    public SemanticsOf getSemantics() {
         final ActionSemanticsFacet facet = getFacet(ActionSemanticsFacet.class);
-        return facet != null? facet.value(): ActionSemantics.Of.NON_IDEMPOTENT;
+        return facet != null? facet.value(): SemanticsOf.NON_IDEMPOTENT;
     }
 
     //endregion

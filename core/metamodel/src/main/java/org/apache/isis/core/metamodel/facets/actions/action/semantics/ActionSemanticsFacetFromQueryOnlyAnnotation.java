@@ -19,8 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.actions.action.semantics;
 
-import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.QueryOnly;
+import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacetAbstract;
@@ -32,7 +32,7 @@ import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFa
 public class ActionSemanticsFacetFromQueryOnlyAnnotation extends ActionSemanticsFacetAbstract {
 
     private ActionSemanticsFacetFromQueryOnlyAnnotation(final FacetHolder holder) {
-        super(ActionSemantics.Of.SAFE, holder);
+        super(SemanticsOf.SAFE, holder);
     }
 
     public static ActionSemanticsFacet create(final QueryOnly queryOnly, final FacetHolder holder) {

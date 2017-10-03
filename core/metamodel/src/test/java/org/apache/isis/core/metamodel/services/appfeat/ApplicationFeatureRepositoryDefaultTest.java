@@ -22,7 +22,6 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.hamcrest.Matchers;
 import org.jmock.Expectations;
 import org.jmock.Sequence;
@@ -34,7 +33,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.applib.DomainObjectContainer;
-import org.apache.isis.applib.annotation.ActionSemantics;
+import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.factory.FactoryService;
@@ -52,6 +51,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -169,7 +169,7 @@ public class ApplicationFeatureRepositoryDefaultTest {
                 will(returnValue(false));
 
                 allowing(mockAct).getSemantics();
-                will(returnValue(ActionSemantics.Of.SAFE));
+                will(returnValue(SemanticsOf.SAFE));
 
                 allowing(mockActThatIsHidden).getId();
                 will(returnValue("someActionThatIsHidden"));
@@ -178,7 +178,7 @@ public class ApplicationFeatureRepositoryDefaultTest {
                 will(returnValue(true));
 
                 allowing(mockActThatIsHidden).getSemantics();
-                will(returnValue(ActionSemantics.Of.SAFE));
+                will(returnValue(SemanticsOf.SAFE));
 
                 allowing(mockServiceRegistry).getRegisteredServices();
                 will(returnValue(Lists.newArrayList()));

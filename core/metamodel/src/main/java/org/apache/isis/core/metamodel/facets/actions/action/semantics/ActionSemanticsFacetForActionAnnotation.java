@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.facets.actions.action.semantics;
 
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
@@ -43,10 +42,10 @@ public class ActionSemanticsFacetForActionAnnotation extends ActionSemanticsFace
         }
 
         return new ActionSemanticsFacetForActionAnnotation(
-                SemanticsOf.from(semantics), holder);
+                semantics, holder);
     }
 
-    private ActionSemanticsFacetForActionAnnotation(Of of, final FacetHolder holder) {
+    private ActionSemanticsFacetForActionAnnotation(SemanticsOf of, final FacetHolder holder) {
         super(of, holder);
     }
 

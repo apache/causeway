@@ -20,7 +20,6 @@ package org.apache.isis.applib.services.eventbus;
 
 import java.util.List;
 
-import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
@@ -99,23 +98,23 @@ public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
 
     //region > actionSemantics
     public SemanticsOf getSemantics() {
-        return SemanticsOf.from(actionSemantics);
+        return actionSemantics;
     }
 
-    private ActionSemantics.Of actionSemantics;
+    private SemanticsOf actionSemantics;
 
     /**
      * @deprecated - use {@link #getSemantics()} instead.
      */
     @Deprecated
-    public ActionSemantics.Of getActionSemantics() {
+    public SemanticsOf getActionSemantics() {
         return actionSemantics;
     }
 
     /**
      * Not API - set by the framework.
      */
-    public void setActionSemantics(ActionSemantics.Of actionSemantics) {
+    public void setActionSemantics(SemanticsOf actionSemantics) {
         this.actionSemantics = actionSemantics;
     }
 

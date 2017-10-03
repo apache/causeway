@@ -22,7 +22,6 @@ package org.apache.isis.core.metamodel.facets.actions.action;
 import java.lang.reflect.Method;
 
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.annotation.Command;
 import org.apache.isis.applib.annotation.Disabled;
@@ -61,7 +60,6 @@ import org.apache.isis.core.metamodel.facets.actions.action.prototype.PrototypeF
 import org.apache.isis.core.metamodel.facets.actions.action.publishing.PublishedActionFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.semantics.ActionSemanticsFacetFallbackToNonIdempotent;
 import org.apache.isis.core.metamodel.facets.actions.action.semantics.ActionSemanticsFacetForActionAnnotation;
-import org.apache.isis.core.metamodel.facets.actions.action.semantics.ActionSemanticsFacetForActionSemanticsAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.semantics.ActionSemanticsFacetFromIdempotentAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.semantics.ActionSemanticsFacetFromQueryOnlyAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.typeof.TypeOfFacetForActionAnnotation;
@@ -83,7 +81,6 @@ import org.apache.isis.core.metamodel.util.EventUtil;
 public class ActionAnnotationFacetFactory extends FacetFactoryAbstract
             implements MetaModelValidatorRefiner {
 
-    private final MetaModelValidatorForDeprecatedAnnotation actionSemanticsValidator = new MetaModelValidatorForDeprecatedAnnotation(ActionSemantics.class);
     private final MetaModelValidatorForDeprecatedAnnotation bulkValidator = new MetaModelValidatorForDeprecatedAnnotation(Bulk.class);
     private final MetaModelValidatorForDeprecatedAnnotation commandValidator = new MetaModelValidatorForDeprecatedAnnotation(Command.class);
     private final MetaModelValidatorForDeprecatedAnnotation queryOnlyValidator = new MetaModelValidatorForDeprecatedAnnotation(QueryOnly.class);
@@ -256,12 +253,6 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract
             facet = idempotentValidator.flagIfPresent(ActionSemanticsFacetFromIdempotentAnnotation.create(idempotent, holder), processMethodContext);
         }
 
-        // else check for the deprecated @ActionSemantics ...
-        if(facet == null) {
-            final ActionSemantics actionSemantics = Annotations.getAnnotation(method, ActionSemantics.class);
-            facet = actionSemanticsValidator.flagIfPresent(ActionSemanticsFacetForActionSemanticsAnnotation.create(actionSemantics, holder), processMethodContext);
-        }
-
         // else check for @Action(semantics=...)
         if(facet == null) {
             final Action action = Annotations.getAnnotation(method, Action.class);
@@ -401,7 +392,6 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract
 
     @Override
     public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
-        metaModelValidator.add(actionSemanticsValidator);
         metaModelValidator.add(bulkValidator);
         metaModelValidator.add(commandValidator);
         metaModelValidator.add(queryOnlyValidator);
@@ -420,7 +410,6 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract
         super.setServicesInjector(servicesInjector);
         final IsisConfiguration configuration = getConfiguration();
 
-        actionSemanticsValidator.setConfiguration(configuration);
         bulkValidator.setConfiguration(configuration);
         commandValidator.setConfiguration(configuration);
         queryOnlyValidator.setConfiguration(configuration);

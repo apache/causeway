@@ -21,7 +21,6 @@ package org.apache.isis.core.metamodel.facets.actions.action;
 
 import java.lang.reflect.Method;
 import java.util.Collection;
-import java.util.List;
 import java.util.UUID;
 
 import org.jmock.Expectations;
@@ -31,10 +30,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionSemantics;
-import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.applib.annotation.CommandExecuteIn;
 import org.apache.isis.applib.annotation.CommandPersistence;
 import org.apache.isis.applib.annotation.CommandReification;
@@ -79,7 +75,6 @@ import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import static org.apache.isis.core.commons.matchers.IsisMatchers.classEqualTo;
-import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -447,7 +442,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             // then
             final ActionSemanticsFacet facet = facetedMethod.getFacet(ActionSemanticsFacet.class);
             Assert.assertNotNull(facet);
-            assertThat(facet.value(), is(Of.SAFE));
+            assertThat(facet.value(), is(SemanticsOf.SAFE));
         }
 
         @Test
@@ -470,14 +465,13 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             // then
             final ActionSemanticsFacet facet = facetedMethod.getFacet(ActionSemanticsFacet.class);
             Assert.assertNotNull(facet);
-            assertThat(facet.value(), is(Of.IDEMPOTENT));
+            assertThat(facet.value(), is(SemanticsOf.IDEMPOTENT));
         }
 
         @Test
         public void whenDeprecatedAnnotationSafe() {
 
             class Customer {
-                @ActionSemantics(Of.SAFE)
                 public void someAction() {
                 }
             }
@@ -493,7 +487,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             // then
             final ActionSemanticsFacet facet = facetedMethod.getFacet(ActionSemanticsFacet.class);
             Assert.assertNotNull(facet);
-            assertThat(facet.value(), is(Of.SAFE));
+            assertThat(facet.value(), is(SemanticsOf.SAFE));
         }
 
         @Test
@@ -516,7 +510,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             // then
             final ActionSemanticsFacet facet = facetedMethod.getFacet(ActionSemanticsFacet.class);
             Assert.assertNotNull(facet);
-            assertThat(facet.value(), is(Of.SAFE));
+            assertThat(facet.value(), is(SemanticsOf.SAFE));
         }
 
         @Test
@@ -539,7 +533,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             // then
             final ActionSemanticsFacet facet = facetedMethod.getFacet(ActionSemanticsFacet.class);
             Assert.assertNotNull(facet);
-            assertThat(facet.value(), is(Of.NON_IDEMPOTENT));
+            assertThat(facet.value(), is(SemanticsOf.NON_IDEMPOTENT));
         }
 
         @Test
@@ -561,7 +555,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             // then
             final ActionSemanticsFacet facet = facetedMethod.getFacet(ActionSemanticsFacet.class);
             Assert.assertNotNull(facet);
-            assertThat(facet.value(), is(Of.NON_IDEMPOTENT));
+            assertThat(facet.value(), is(SemanticsOf.NON_IDEMPOTENT));
         }
 
 
@@ -569,7 +563,6 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
         public void whenDeprecatedActionSemanticsAndAction() {
 
             class Customer {
-                @ActionSemantics(Of.SAFE)
                 @Action(semantics = SemanticsOf.IDEMPOTENT)
                 public void someAction() {
                 }
@@ -586,7 +579,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             // then
             final ActionSemanticsFacet facet = facetedMethod.getFacet(ActionSemanticsFacet.class);
             Assert.assertNotNull(facet);
-            assertThat(facet.value(), is(Of.SAFE));
+            assertThat(facet.value(), is(SemanticsOf.SAFE));
         }
 
         @Test
@@ -594,7 +587,6 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
 
             class Customer {
                 @QueryOnly
-                @ActionSemantics(Of.IDEMPOTENT)
                 public void someAction() {
                 }
             }
@@ -610,7 +602,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             // then
             final ActionSemanticsFacet facet = facetedMethod.getFacet(ActionSemanticsFacet.class);
             Assert.assertNotNull(facet);
-            assertThat(facet.value(), is(Of.SAFE));
+            assertThat(facet.value(), is(SemanticsOf.SAFE));
         }
 
         @Test
@@ -618,7 +610,6 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
 
             class Customer {
                 @Idempotent
-                @ActionSemantics(Of.SAFE)
                 public void someAction() {
                 }
             }
@@ -634,7 +625,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             // then
             final ActionSemanticsFacet facet = facetedMethod.getFacet(ActionSemanticsFacet.class);
             Assert.assertNotNull(facet);
-            assertThat(facet.value(), is(Of.IDEMPOTENT));
+            assertThat(facet.value(), is(SemanticsOf.IDEMPOTENT));
         }
 
 
@@ -812,7 +803,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             allowingCommandConfigurationToReturn("ignoreQueryOnly");
             final Method actionMethod = findMethod(ActionAnnotationFacetFactoryTest.Customer.class, "someAction");
 
-            facetedMethod.addFacet(new ActionSemanticsFacetAbstract(Of.SAFE, facetedMethod) {});
+            facetedMethod.addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.SAFE, facetedMethod) {});
 
             // when
             facetFactory.processCommand(new ProcessMethodContext(ActionAnnotationFacetFactoryTest.Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
@@ -829,7 +820,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             allowingCommandConfigurationToReturn("ignoreQueryOnly");
             final Method actionMethod = findMethod(ActionAnnotationFacetFactoryTest.Customer.class, "someAction");
 
-            facetedMethod.addFacet(new ActionSemanticsFacetAbstract(Of.IDEMPOTENT, facetedMethod) {});
+            facetedMethod.addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.IDEMPOTENT, facetedMethod) {});
 
             // when
             facetFactory.processCommand(new ProcessMethodContext(ActionAnnotationFacetFactoryTest.Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
@@ -900,7 +891,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             allowingCommandConfigurationToReturn("ignoreQueryOnly");
             final Method actionMethod = findMethod(Customer.class, "someAction");
 
-            facetedMethod.addFacet(new ActionSemanticsFacetAbstract(Of.SAFE, facetedMethod) {});
+            facetedMethod.addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.SAFE, facetedMethod) {});
 
             facetFactory.processCommand(new ProcessMethodContext(Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
 
@@ -925,7 +916,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             allowingCommandConfigurationToReturn("ignoreQueryOnly");
             final Method actionMethod = findMethod(Customer.class, "someAction");
 
-            facetedMethod.addFacet(new ActionSemanticsFacetAbstract(Of.IDEMPOTENT, facetedMethod) {});
+            facetedMethod.addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.IDEMPOTENT, facetedMethod) {});
 
             // when
             facetFactory.processCommand(new ProcessMethodContext(Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
@@ -1077,7 +1068,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             allowingPublishingConfigurationToReturn("ignoreQueryOnly");
             final Method actionMethod = findMethod(ActionAnnotationFacetFactoryTest.Customer.class, "someAction");
 
-            facetedMethod.addFacet(new ActionSemanticsFacetAbstract(Of.SAFE, facetedMethod) {});
+            facetedMethod.addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.SAFE, facetedMethod) {});
 
             // when
             facetFactory.processPublishing(new ProcessMethodContext(ActionAnnotationFacetFactoryTest.Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
@@ -1094,7 +1085,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             allowingPublishingConfigurationToReturn("ignoreQueryOnly");
             final Method actionMethod = findMethod(ActionAnnotationFacetFactoryTest.Customer.class, "someAction");
 
-            facetedMethod.addFacet(new ActionSemanticsFacetAbstract(Of.IDEMPOTENT, facetedMethod) {});
+            facetedMethod.addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.IDEMPOTENT, facetedMethod) {});
 
             // when
             facetFactory.processPublishing(new ProcessMethodContext(ActionAnnotationFacetFactoryTest.Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
@@ -1164,7 +1155,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             allowingPublishingConfigurationToReturn("ignoreQueryOnly");
             final Method actionMethod = findMethod(Customer.class, "someAction");
 
-            facetedMethod.addFacet(new ActionSemanticsFacetAbstract(Of.SAFE, facetedMethod) {});
+            facetedMethod.addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.SAFE, facetedMethod) {});
 
             facetFactory.processPublishing(new ProcessMethodContext(Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
 
@@ -1189,7 +1180,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             allowingPublishingConfigurationToReturn("ignoreQueryOnly");
             final Method actionMethod = findMethod(Customer.class, "someAction");
 
-            facetedMethod.addFacet(new ActionSemanticsFacetAbstract(Of.IDEMPOTENT, facetedMethod) {});
+            facetedMethod.addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.IDEMPOTENT, facetedMethod) {});
 
             // when
             facetFactory.processPublishing(new ProcessMethodContext(Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));

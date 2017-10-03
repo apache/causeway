@@ -170,7 +170,7 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
         }
         for (final ObjectAction action : actions) {
             final Class<?> returnType = correspondingClassFor(action.getReturnType());
-            final SemanticsOf actionSemantics = SemanticsOf.from(action.getSemantics());
+            final SemanticsOf actionSemantics = action.getSemantics();
             final boolean contributed = action instanceof ContributeeMember;
             addedMembers = newAction(classFeatureId, action, returnType, contributed, actionSemantics) || addedMembers;
         }

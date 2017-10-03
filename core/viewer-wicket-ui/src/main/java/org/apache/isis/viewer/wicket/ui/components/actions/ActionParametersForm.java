@@ -39,12 +39,10 @@ import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
 import org.apache.isis.viewer.wicket.model.models.ActionArgumentModel;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
-import org.apache.isis.viewer.wicket.model.models.FormExecutor;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.scalars.PanelWithChoices;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
-import org.apache.isis.viewer.wicket.ui.panels.FormExecutorDefault;
 import org.apache.isis.viewer.wicket.ui.panels.FormExecutorStrategy;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 import org.apache.isis.viewer.wicket.ui.panels.PromptFormAbstract;
@@ -120,7 +118,7 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
     private void applyAreYouSure(AjaxButton button) {
         ActionModel actionModel = getActionModel();
         final ObjectAction action = actionModel.getActionMemento().getAction(getSpecificationLoader());
-        SemanticsOf semanticsOf = SemanticsOf.from(action.getSemantics());
+        SemanticsOf semanticsOf = action.getSemantics();
 
         final ServicesInjector servicesInjector = getPersistenceSession().getServicesInjector();
 

@@ -20,22 +20,22 @@ package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 
 import java.util.EnumMap;
 
-import org.apache.isis.applib.annotation.ActionSemantics;
+import org.apache.isis.applib.annotation.SemanticsOf;
 
 public final class InvokeKeys {
     
-    private final static EnumMap<ActionSemantics.Of, String> map = new EnumMap<ActionSemantics.Of, String>(ActionSemantics.Of.class);
+    private final static EnumMap<SemanticsOf, String> map = new EnumMap<>(SemanticsOf.class);
     static {
-        map.put(ActionSemantics.Of.SAFE_AND_REQUEST_CACHEABLE, "invokeQueryOnly");
-        map.put(ActionSemantics.Of.SAFE, "invokeQueryOnly");
-        map.put(ActionSemantics.Of.IDEMPOTENT, "invokeIdempotent");
-        map.put(ActionSemantics.Of.NON_IDEMPOTENT, "invoke");
+        map.put(SemanticsOf.SAFE_AND_REQUEST_CACHEABLE, "invokeQueryOnly");
+        map.put(SemanticsOf.SAFE, "invokeQueryOnly");
+        map.put(SemanticsOf.IDEMPOTENT, "invokeIdempotent");
+        map.put(SemanticsOf.NON_IDEMPOTENT, "invoke");
     }
     
     private InvokeKeys() {
     }
     
-    public static String getKeyFor(ActionSemantics.Of actionSemantics) {
+    public static String getKeyFor(SemanticsOf actionSemantics) {
         return map.get(actionSemantics);
     }
 }
