@@ -17,8 +17,7 @@ xref:../rgant/rgant.adoc#_rgant-Action_command[`@Action#command()`] annotation.
 In previous versions of the framework, persistent ``Command``s also supported a number of other use cases:
 
 * they enable profiling of the running application (which actions are invoked then most often, what is their response time)
-* if xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`] or
-xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublishingService[`PublishingService`] (latter deprecated) is configured, they provide
+* if xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`] is configured, they provide
 better traceability as the `Command` is also correlated with any published events, again through the unique
 `transactionId` GUID
 * if xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_AuderService[`AuditerService`] or
@@ -110,9 +109,10 @@ persisted. This is closely related to the xref:../rgsvc/rgsvc.adoc#_rgsvc_applic
 
 The implementations of `CommandService` and `BackgroundCommandService` are intended to go together, so that persistent parent `Command`s can be associated with their child background `Command`s.
 
-The services provided by this module combines very well with the xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditingService[`AuditingService`].  The `CommandService` captures the _cause_ of an interaction (an action was invoked, a property was edited), while the `AuditingService3` captures the _effect_ of that interaction in terms of changed state.
+The services provided by this module combines very well with the xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditingService[`AuditingService`].
+The `CommandService` captures the _cause_ of an interaction (an action was invoked, a property was edited), while the `AuditingService3` captures the _effect_ of that interaction in terms of changed state.
 
-You may also want to configure the xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublishingService[`PublishingService`].
+You may also want to configure the xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`].
 
 All three of these services collaborate implicitly by way of the xref:../rgcms/rgcms.adoc#_rgcms_classes_mixins_HasTransactionId[`HasTransactionId`] interface.
 

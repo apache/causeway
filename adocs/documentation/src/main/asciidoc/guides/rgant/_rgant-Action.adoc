@@ -62,12 +62,7 @@ Currently this is only supported for no-arg actions.
 |xref:../rgant/rgant.adoc#_rgant-Action_publishing[`publishing()`]
 |`AS_CONFIGURED`, `ENABLED`, `DISABLED` +
 (`AS_CONFIGURED`)
-|whether the action invocation should be published to the registered xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublishingService[`PublishingService`].
-
-|`publishing-` +
-`PayloadFactory()`
-|subtype of `PublishingPayloadFactory-` `ForAction` (none)
-|specifies that a custom implementation of `PublishingPayloadFactoryForAction` be used to create the (payload of the) published event representing the action invocation
+|whether the action invocation should be published to the registered xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`].
 
 |xref:../rgant/rgant.adoc#_rgant-Action_restrictTo[`restrictTo()`]
 |`NO_RESTRICTIONS`,`PROTOTYPING` +

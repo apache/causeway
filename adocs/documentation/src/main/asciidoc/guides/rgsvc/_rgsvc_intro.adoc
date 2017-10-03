@@ -210,13 +210,11 @@ xref:../rgfis/rgfis.adoc#_rgfis_spi_PublisherServiceInternal[`PublisherServiceIn
 actions/properties annotated appropriate (with xref:../rgant/rgant.adoc#_rgant-Action_publishing[`@Action#publishing()`] or
 xref:../rgant/rgant.adoc#_rgant-Property_publishing[`@Property#publishing()`]).  +
 +
-The internal service delegates in turn to any registered
-xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublishingService[`PublishingService`] (deprecated) and also to any
-registered xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`]s (there may be more than one).
+The internal service delegates in turn to any registered xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`]s (there may be more than one).
 
 * At the end of each transaction, details of all changed objects are published, again through the (internal)
-xref:../rgfis/rgfis.adoc#_rgfis_spi_PublisherServiceInternal[`PublisherServiceInternal`] to any registered `PublishingService`
-or `PublisherService` implementations.  Only domain objects specified to be published with
+xref:../rgfis/rgfis.adoc#_rgfis_spi_PublisherServiceInternal[`PublisherServiceInternal`] to any registered `PublisherService` implementations.
+Only domain objects specified to be published with
 xref:../rgant/rgant.adoc#_rgant-DomainObject_publishing[`@DomainObject#publishing()`] are published. +
 +
 [NOTE]
