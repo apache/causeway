@@ -22,13 +22,13 @@ package org.apache.isis.core.metamodel.facets.object.publishedobject;
 import com.google.common.base.Predicate;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facets.SingleValueFacet;
+import org.apache.isis.core.metamodel.facets.MarkerFacet;
 
 /**
  * Indicates that changes to an object's properties are to be published has, specifying the means by which 
  * a canonical event representing these changes should be created.
  */
-public interface PublishedObjectFacet extends SingleValueFacet<PublishedObject.PayloadFactory> {
+public interface PublishedObjectFacet extends MarkerFacet {
 
     class Predicates {
         private Predicates(){}
