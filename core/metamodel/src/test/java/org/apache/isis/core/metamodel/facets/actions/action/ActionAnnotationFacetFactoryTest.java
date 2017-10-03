@@ -1057,20 +1057,6 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
 
     public static class Publishing extends ActionAnnotationFacetFactoryTest {
 
-        public static class CustomerSomeActionPayloadFactory implements PublishedAction.PayloadFactory {
-            @Override
-            public EventPayload payloadFor(final Identifier actionIdentifier, final Object target, final List<Object> arguments, final Object result) {
-                return null;
-            }
-        }
-
-        public static class CustomerSomeActionPublishingPayloadFactory implements PublishingPayloadFactoryForAction {
-            @Override
-            public EventPayload payloadFor(final Identifier actionIdentifier, final Object target, final List<Object> arguments, final Object result) {
-                return null;
-            }
-        }
-
         @Test
         public void givenHasTransactionId_thenIgnored() {
 
@@ -1080,29 +1066,6 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
 
             final Facet facet = facetedMethod.getFacet(PublishedActionFacet.class);
             assertNull(facet);
-
-            expectNoMethodsRemoved();
-        }
-
-        @Test
-        public void givenDeprecatedAnnotation() {
-
-            // given
-            class Customer {
-                public void someAction() {
-                }
-            }
-            final Method actionMethod = findMethod(Customer.class, "someAction");
-
-            // when
-            facetFactory.processPublishing(new ProcessMethodContext(Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
-
-            // then
-            final Facet facet = facetedMethod.getFacet(PublishedActionFacet.class);
-            assertNotNull(facet);
-            assertTrue(facet instanceof PublishedActionFacetForPublishedActionAnnotation);
-            final PublishedActionFacetForPublishedActionAnnotation facetImpl = (PublishedActionFacetForPublishedActionAnnotation) facet;
-            assertThat(facetImpl.value(), instanceOf(CustomerSomeActionPayloadFactory.class));
 
             expectNoMethodsRemoved();
         }
@@ -1140,8 +1103,6 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             final Facet facet = facetedMethod.getFacet(PublishedActionFacet.class);
             assertNotNull(facet);
             final PublishedActionFacetFromConfiguration facetImpl = (PublishedActionFacetFromConfiguration) facet;
-            final PublishedAction.PayloadFactory payloadFactory = facetImpl.value();
-            assertThat(payloadFactory, is(instanceOf(PublishedActionPayloadFactoryDefault.class)));
         }
 
         @Test(expected=IllegalStateException.class)
@@ -1219,8 +1180,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             // given
             class Customer {
                 @Action(
-                        publishing = org.apache.isis.applib.annotation.Publishing.AS_CONFIGURED,
-                        publishingPayloadFactory = CustomerSomeActionPublishingPayloadFactory.class
+                        publishing = org.apache.isis.applib.annotation.Publishing.AS_CONFIGURED
                 )
                 public void someAction() {
                 }
@@ -1238,11 +1198,6 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             final Facet facet = facetedMethod.getFacet(PublishedActionFacet.class);
             assertNotNull(facet);
             final PublishedActionFacetForActionAnnotation facetImpl = (PublishedActionFacetForActionAnnotation) facet;
-            final PublishedAction.PayloadFactory payloadFactory = facetImpl.value();
-            assertThat(payloadFactory, instanceOf(PublishedActionPayloadFactoryDefault.class));
-
-            final PublishedActionPayloadFactoryDefault legacyAdapter = (PublishedActionPayloadFactoryDefault) payloadFactory;
-            assertThat(legacyAdapter.getPayloadFactory(), instanceOf(CustomerSomeActionPublishingPayloadFactory.class));
 
             expectNoMethodsRemoved();
         }
@@ -1289,8 +1244,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             // given
             class Customer {
                 @Action(
-                        publishing = org.apache.isis.applib.annotation.Publishing.AS_CONFIGURED,
-                        publishingPayloadFactory = CustomerSomeActionPublishingPayloadFactory.class
+                        publishing = org.apache.isis.applib.annotation.Publishing.AS_CONFIGURED
                 )
                 public void someAction() {
                 }
@@ -1306,13 +1260,6 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             final Facet facet = facetedMethod.getFacet(PublishedActionFacet.class);
             assertNotNull(facet);
             assertTrue(facet instanceof PublishedActionFacetForActionAnnotation);
-
-            final PublishedActionFacetForActionAnnotation facetImpl = (PublishedActionFacetForActionAnnotation) facet;
-            final PublishedAction.PayloadFactory payloadFactory = facetImpl.value();
-            assertThat(payloadFactory, instanceOf(PublishedActionPayloadFactoryDefault.class));
-
-            final PublishedActionPayloadFactoryDefault legacyAdapter = (PublishedActionPayloadFactoryDefault) payloadFactory;
-            assertThat(legacyAdapter.getPayloadFactory(), instanceOf(CustomerSomeActionPublishingPayloadFactory.class));
 
             expectNoMethodsRemoved();
         }
