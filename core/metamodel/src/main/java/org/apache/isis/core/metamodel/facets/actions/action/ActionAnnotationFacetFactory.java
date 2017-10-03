@@ -88,7 +88,6 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract
     private final MetaModelValidatorForDeprecatedAnnotation commandValidator = new MetaModelValidatorForDeprecatedAnnotation(Command.class);
     private final MetaModelValidatorForDeprecatedAnnotation queryOnlyValidator = new MetaModelValidatorForDeprecatedAnnotation(QueryOnly.class);
     private final MetaModelValidatorForDeprecatedAnnotation idempotentValidator = new MetaModelValidatorForDeprecatedAnnotation(Idempotent.class);
-    private final MetaModelValidatorForDeprecatedAnnotation publishedActionValidator = new MetaModelValidatorForDeprecatedAnnotation(PublishedAction.class);
     private final MetaModelValidatorForDeprecatedAnnotation typeOfValidator = new MetaModelValidatorForDeprecatedAnnotation(TypeOf.class);
     private final MetaModelValidatorForDeprecatedAnnotation hiddenValidator = new MetaModelValidatorForDeprecatedAnnotation(Hidden.class);
     private final MetaModelValidatorForDeprecatedAnnotation disabledValidator = new MetaModelValidatorForDeprecatedAnnotation(Disabled.class);
@@ -348,17 +347,8 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract
             return;
         }
 
-        PublishedActionFacet facet;
-
-        // check for deprecated @PublishedAction annotation first
-        final PublishedAction annotation = Annotations.getAnnotation(processMethodContext.getMethod(), PublishedAction.class);
-        facet = publishedActionValidator.flagIfPresent(
-                PublishedActionFacetForPublishedActionAnnotation.create(annotation, holder), processMethodContext);
-
-        // else check for @Action(publishing=...)
-        if(facet == null) {
-            facet = PublishedActionFacetForActionAnnotation.create(action, getConfiguration(), holder);
-        }
+        // check for @Action(publishing=...)
+        PublishedActionFacet facet = PublishedActionFacetForActionAnnotation.create(action, getConfiguration(), holder);
 
         FacetUtil.addFacet(facet);
     }
@@ -416,7 +406,6 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract
         metaModelValidator.add(commandValidator);
         metaModelValidator.add(queryOnlyValidator);
         metaModelValidator.add(idempotentValidator);
-        metaModelValidator.add(publishedActionValidator);
         metaModelValidator.add(typeOfValidator);
         metaModelValidator.add(hiddenValidator);
         metaModelValidator.add(disabledValidator);
@@ -436,7 +425,6 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract
         commandValidator.setConfiguration(configuration);
         queryOnlyValidator.setConfiguration(configuration);
         idempotentValidator.setConfiguration(configuration);
-        publishedActionValidator.setConfiguration(configuration);
         typeOfValidator.setConfiguration(configuration);
         hiddenValidator.setConfiguration(configuration);
         disabledValidator.setConfiguration(configuration);
