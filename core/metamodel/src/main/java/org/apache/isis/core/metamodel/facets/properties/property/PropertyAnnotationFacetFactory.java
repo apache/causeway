@@ -26,7 +26,6 @@ import javax.annotation.Nullable;
 import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.Mandatory;
-import org.apache.isis.applib.annotation.MaxLength;
 import org.apache.isis.applib.annotation.MustSatisfy;
 import org.apache.isis.applib.annotation.NotPersisted;
 import org.apache.isis.applib.annotation.Optional;
@@ -63,7 +62,6 @@ import org.apache.isis.core.metamodel.facets.properties.property.mandatory.Manda
 import org.apache.isis.core.metamodel.facets.properties.property.mandatory.MandatoryFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.mandatory.MandatoryFacetInvertedByNullableAnnotationOnProperty;
 import org.apache.isis.core.metamodel.facets.properties.property.mandatory.MandatoryFacetInvertedByOptionalAnnotationOnProperty;
-import org.apache.isis.core.metamodel.facets.properties.property.maxlength.MaxLengthFacetForMaxLengthAnnotationOnProperty;
 import org.apache.isis.core.metamodel.facets.properties.property.maxlength.MaxLengthFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertyClearFacetForDomainEventFromDefault;
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertyClearFacetForDomainEventFromPropertyAnnotation;
@@ -95,7 +93,6 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
     private final MetaModelValidatorForDeprecatedAnnotation mandatoryValidator = new MetaModelValidatorForDeprecatedAnnotation(Mandatory.class);
     private final MetaModelValidatorForDeprecatedAnnotation hiddenValidator = new MetaModelValidatorForDeprecatedAnnotation(Hidden.class);
     private final MetaModelValidatorForDeprecatedAnnotation disabledValidator = new MetaModelValidatorForDeprecatedAnnotation(Disabled.class);
-    private final MetaModelValidatorForDeprecatedAnnotation maxLengthValidator = new MetaModelValidatorForDeprecatedAnnotation(MaxLength.class);
     private final MetaModelValidatorForDeprecatedAnnotation mustSatisfyValidator = new MetaModelValidatorForDeprecatedAnnotation(MustSatisfy.class);
     private final MetaModelValidatorForDeprecatedAnnotation notPersistedValidator = new MetaModelValidatorForDeprecatedAnnotation(NotPersisted.class);
     private final MetaModelValidatorForConflictingOptionality conflictingOptionalityValidator = new MetaModelValidatorForConflictingOptionality();
@@ -293,15 +290,9 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
         final Method method = processMethodContext.getMethod();
         final FacetHolder holder = processMethodContext.getFacetHolder();
 
-        // check for deprecated @MaxLength first
-        final MaxLength annotation = Annotations.getAnnotation(method, MaxLength.class);
-        MaxLengthFacet facet = maxLengthValidator.flagIfPresent(MaxLengthFacetForMaxLengthAnnotationOnProperty.create(annotation, holder), processMethodContext);
-
-        // else search for @Property(maxLength=...)
+        // search for @Property(maxLength=...)
         final Property property = Annotations.getAnnotation(method, Property.class);
-        if(facet == null) {
-            facet = MaxLengthFacetForPropertyAnnotation.create(property, holder);
-        }
+        MaxLengthFacet facet = MaxLengthFacetForPropertyAnnotation.create(property, holder);
 
         FacetUtil.addFacet(facet);
     }
@@ -426,7 +417,6 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
         metaModelValidator.add(mandatoryValidator);
         metaModelValidator.add(hiddenValidator);
         metaModelValidator.add(disabledValidator);
-        metaModelValidator.add(maxLengthValidator);
         metaModelValidator.add(mustSatisfyValidator);
         metaModelValidator.add(notPersistedValidator);
         metaModelValidator.add(conflictingOptionalityValidator);
@@ -445,7 +435,6 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
         mandatoryValidator.setConfiguration(configuration);
         hiddenValidator.setConfiguration(configuration);
         disabledValidator.setConfiguration(configuration);
-        maxLengthValidator.setConfiguration(configuration);
         mustSatisfyValidator.setConfiguration(configuration);
         notPersistedValidator.setConfiguration(configuration);
     }

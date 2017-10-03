@@ -35,7 +35,6 @@ import org.apache.isis.core.metamodel.facets.param.parameter.fileaccept.FileAcce
 import org.apache.isis.core.metamodel.facets.param.parameter.mandatory.MandatoryFacetForParameterAnnotation;
 import org.apache.isis.core.metamodel.facets.param.parameter.mandatory.MandatoryFacetInvertedByNullableAnnotationOnParameter;
 import org.apache.isis.core.metamodel.facets.param.parameter.mandatory.MandatoryFacetInvertedByOptionalAnnotationOnParameter;
-import org.apache.isis.core.metamodel.facets.param.parameter.maxlen.MaxLengthFacetForMaxLengthAnnotationOnParameter;
 import org.apache.isis.core.metamodel.facets.param.parameter.maxlen.MaxLengthFacetForParameterAnnotation;
 import org.apache.isis.core.metamodel.facets.param.parameter.mustsatisfy.MustSatisfySpecificationFacetForMustSatisfyAnnotationOnParameter;
 import org.apache.isis.core.metamodel.facets.param.parameter.mustsatisfy.MustSatisfySpecificationFacetForParameterAnnotation;
@@ -52,7 +51,6 @@ import java.lang.reflect.Method;
 
 public class ParameterAnnotationFacetFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner {
 
-    private final MetaModelValidatorForDeprecatedAnnotation maxLengthValidator = new MetaModelValidatorForDeprecatedAnnotation(MaxLength.class);
     private final MetaModelValidatorForDeprecatedAnnotation mustSatisfyValidator = new MetaModelValidatorForDeprecatedAnnotation(MustSatisfy.class);
     private final MetaModelValidatorForDeprecatedAnnotation regexValidator = new MetaModelValidatorForDeprecatedAnnotation(RegEx.class);
     private final MetaModelValidatorForDeprecatedAnnotation optionalValidator = new MetaModelValidatorForDeprecatedAnnotation(Optional.class);
@@ -86,15 +84,6 @@ public class ParameterAnnotationFacetFactory extends FacetFactoryAbstract implem
         final int paramNum = processParameterContext.getParamNum();
         final FacetedMethodParameter holder = processParameterContext.getFacetHolder();
         final Annotation[] parameterAnnotations = Annotations.getParameterAnnotations(method)[paramNum];
-
-        for (final Annotation parameterAnnotation : parameterAnnotations) {
-            if (parameterAnnotation instanceof MaxLength) {
-                final MaxLength annotation = (MaxLength) parameterAnnotation;
-                final org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet facet = MaxLengthFacetForMaxLengthAnnotationOnParameter.create(annotation, processParameterContext.getFacetHolder());
-                FacetUtil.addFacet(maxLengthValidator.flagIfPresent(facet, processParameterContext));
-                return;
-            }
-        }
 
         for (final Annotation parameterAnnotation : parameterAnnotations) {
             if (parameterAnnotation instanceof Parameter) {
@@ -230,7 +219,6 @@ public class ParameterAnnotationFacetFactory extends FacetFactoryAbstract implem
 
     @Override
     public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
-        metaModelValidator.add(maxLengthValidator);
         metaModelValidator.add(mustSatisfyValidator);
         metaModelValidator.add(regexValidator);
         metaModelValidator.add(optionalValidator);
@@ -241,7 +229,6 @@ public class ParameterAnnotationFacetFactory extends FacetFactoryAbstract implem
     public void setServicesInjector(final ServicesInjector servicesInjector) {
         super.setServicesInjector(servicesInjector);
         IsisConfiguration configuration = servicesInjector.getConfigurationServiceInternal();
-        maxLengthValidator.setConfiguration(configuration);
         mustSatisfyValidator.setConfiguration(configuration);
         regexValidator.setConfiguration(configuration);
         optionalValidator.setConfiguration(configuration);
