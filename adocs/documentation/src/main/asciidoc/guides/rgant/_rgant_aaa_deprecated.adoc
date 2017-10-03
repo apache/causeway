@@ -228,25 +228,11 @@ Also part of the toString representation of bookmarks, if using the Bookmark Ser
 |Domain
 |
 
-|`@Render`
-|Eagerly (or lazily) render the contents of a collection.
-|xref:../rgant/rgant.adoc#_rgant-CollectionLayout_render[`@CollectionLayout` +
-`#render()`]
-|UI
-|Yes
-
 |`@RenderedAsDayBefore`
 |Render dates as the day before; ie store [a,b) internally but render [a,b-1]) to end-user.
 |`#renderedAsDayBefore()` attribute for xref:../rgant/rgant.adoc#_rgant-PropertyLayout_renderedAsDayBefore[`@PropertyLayout`] and xref:../rgant/rgant.adoc#_rgant-ParameterLayout_renderedAsDayBefore[`@ParameterLayout`].
 |UI
 |
-
-|`@Resolve`
-|Eagerly (or lazily) render the contents of a collection (same as `@Render)`
-|xref:../rgant/rgant.adoc#_rgant-CollectionLayout_render[`@CollectionLayout` +
-`#render()`]
-|UI
-|Yes
 
 |`@SortedBy`
 |Display instances in collections in the order determined by the provided Comparator.
