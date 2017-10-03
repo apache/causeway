@@ -20,46 +20,29 @@
 package org.apache.isis.core.runtime.services.publish;
 
 import java.sql.Timestamp;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 import javax.enterprise.context.RequestScoped;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.PublishingChangeKind;
-import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.metrics.MetricsService;
-import org.apache.isis.applib.services.publish.EventMetadata;
-import org.apache.isis.applib.services.publish.EventType;
-import org.apache.isis.applib.services.publish.ObjectStringifier;
 import org.apache.isis.applib.services.publish.PublishedObjects;
 import org.apache.isis.applib.services.publish.PublisherService;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
-import org.apache.isis.core.metamodel.facets.FacetedMethod;
-import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
-import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
-import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFacet;
-import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.publishedobject.PublishedObjectFacet;
 import org.apache.isis.core.metamodel.services.ixn.InteractionDtoServiceInternal;
 import org.apache.isis.core.metamodel.services.publishing.PublishingServiceInternal;
@@ -69,7 +52,7 @@ import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
 /**
- * Wrapper around {@link PublishingService}.  Is a no-op if there is no injected service.
+ * Wrapper around {@link PublisherService}.  Is a no-op if there is no injected service.
  */
 @DomainService(
         nature = NatureOfService.DOMAIN,
@@ -77,30 +60,6 @@ import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 )
 @RequestScoped
 public class PublishingServiceInternalDefault implements PublishingServiceInternal {
-
-    private final static OidMarshaller OID_MARSHALLER = OidMarshaller.INSTANCE;
-
-    //region > static helper functions
-    private Function<ObjectAdapter, ObjectAdapter> notDestroyedElseEmpty() {
-        return new Function<ObjectAdapter, ObjectAdapter>() {
-            public ObjectAdapter apply(ObjectAdapter adapter) {
-                if (adapter == null) {
-                    return null;
-                }
-                if (!adapter.isDestroyed()) {
-                    return adapter;
-                }
-                // objectstores such as JDO prevent the underlying pojo from being touched once it has been deleted.
-                // we therefore replace that pojo with an 'empty' one.
-
-                Object replacementObject = getPersistenceSession()
-                        .instantiateAndInjectServices(adapter.getSpecification());
-                getPersistenceSession().remapRecreatedPojo(adapter, replacementObject);
-                return adapter;
-            }
-        };
-    }
-    //endregion
 
     //region > publishObjects
     @Override
@@ -116,55 +75,9 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
         final Map<ObjectAdapter, PublishingChangeKind> changeKindByEnlistedAdapter = Maps.newHashMap();
         changeKindByEnlistedAdapter.putAll(changedObjectsServiceInternal.getChangeKindByEnlistedAdapter());
 
-        publishObjectsToPublishingService(changeKindByEnlistedAdapter);
         publishObjectsToPublisherServices(changeKindByEnlistedAdapter);
     }
 
-    private void publishObjectsToPublishingService(final Map<ObjectAdapter, PublishingChangeKind> changeKindByEnlistedAdapter) {
-
-        if(publishingServiceIfAny == null) {
-            return;
-        }
-
-        final String currentUser = userService.getUser().getName();
-        final Timestamp timestamp = clockService.nowAsJavaSqlTimestamp();
-        final ObjectStringifier stringifier = objectStringifier();
-
-        for (final Map.Entry<ObjectAdapter, PublishingChangeKind> adapterAndChange : changeKindByEnlistedAdapter.entrySet()) {
-            final ObjectAdapter enlistedAdapter = adapterAndChange.getKey();
-            final PublishingChangeKind changeKind = adapterAndChange.getValue();
-
-            publishObjectToPublishingService(
-                    enlistedAdapter, changeKind, currentUser, timestamp, stringifier);
-        }
-    }
-
-    private void publishObjectToPublishingService(
-            final ObjectAdapter enlistedAdapter,
-            final PublishingChangeKind changeKind,
-            final String currentUser,
-            final Timestamp timestamp,
-            final ObjectStringifier stringifier) {
-
-        final PublishedObjectFacet publishedObjectFacet =
-                enlistedAdapter.getSpecification().getFacet(PublishedObjectFacet.class);
-        if(publishedObjectFacet == null) {
-            return;
-        }
-
-        final RootOid enlistedAdapterOid = (RootOid) enlistedAdapter.getOid();
-        final String enlistedAdapterClass = CommandUtil.targetClassNameFor(enlistedAdapter);
-        final Bookmark enlistedTarget = enlistedAdapterOid.asBookmark();
-
-        final EventMetadata metadata = newEventMetadata(
-                currentUser, timestamp, changeKind, enlistedAdapterClass, enlistedTarget);
-
-        final Object pojo = ObjectAdapter.Util.unwrap(undeletedElseEmpty(enlistedAdapter));
-        final EventPayload payload = payloadFactory.payloadFor(pojo, changeKind);
-
-        payload.withStringifier(stringifier);
-        publishingServiceIfAny.publish(metadata, payload);
-    }
 
     private void publishObjectsToPublisherServices(
             final Map<ObjectAdapter, PublishingChangeKind> changeKindByEnlistedAdapter) {
@@ -222,148 +135,11 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
         if(suppress) {
             return;
         }
-        publishActionToPublishingService(
-                objectAction, identifiedHolder, targetAdapter, parameterAdapters, resultAdapter
-        );
 
         publishToPublisherServices(execution);
     }
 
-    private void publishActionToPublishingService(
-            final ObjectAction objectAction,
-            final IdentifiedHolder identifiedHolder,
-            final ObjectAdapter targetAdapter,
-            final List<ObjectAdapter> parameterAdapters,
-            final ObjectAdapter resultAdapter) {
-        if(publishingServiceIfAny == null) {
-            return;
-        }
-        final String currentUser = userService.getUser().getName();
-        final Timestamp timestamp = clockService.nowAsJavaSqlTimestamp();
 
-        final PublishedActionFacet publishedActionFacet =
-                identifiedHolder.getFacet(PublishedActionFacet.class);
-        if(publishedActionFacet == null) {
-            return;
-        }
-
-        final RootOid adapterOid = (RootOid) targetAdapter.getOid();
-        final String oidStr = OID_MARSHALLER.marshal(adapterOid);
-        final Identifier actionIdentifier = objectAction.getIdentifier();
-        final String title = oidStr + ": " + actionIdentifier.toNameParmsIdentityString();
-
-        final String actionTargetClass = CommandUtil.targetClassNameFor(targetAdapter);
-        final String actionTargetAction = CommandUtil.targetMemberNameFor(objectAction);
-        final Bookmark actionTarget = CommandUtil.bookmarkFor(targetAdapter);
-        final String actionMemberIdentifier = CommandUtil.memberIdentifierFor(objectAction);
-
-        final List<String> parameterNames;
-        final List<Class<?>> parameterTypes;
-        final Class<?> returnType;
-
-        if(identifiedHolder instanceof FacetedMethod) {
-            // should always be the case
-
-            final FacetedMethod facetedMethod = (FacetedMethod) identifiedHolder;
-            returnType = facetedMethod.getType();
-
-            final List<FacetedMethodParameter> parameters = facetedMethod.getParameters();
-            parameterNames = immutableList(Iterables.transform(parameters, FacetedMethodParameter.Functions.GET_NAME));
-            parameterTypes = immutableList(Iterables.transform(parameters, FacetedMethodParameter.Functions.GET_TYPE));
-        } else {
-            parameterNames = null;
-            parameterTypes = null;
-            returnType = null;
-        }
-
-        final Interaction interaction = interactionContext.getInteraction();
-
-        final int nextEventSequence = interaction.next(Interaction.Sequence.PUBLISHED_EVENT.id());
-        final UUID transactionId = interaction.getTransactionId();
-        final EventMetadata metadata = new EventMetadata(
-                transactionId, nextEventSequence, EventType.ACTION_INVOCATION, currentUser, timestamp, title,
-                actionTargetClass, actionTargetAction, actionTarget, actionMemberIdentifier, parameterNames,
-                parameterTypes, returnType);
-
-        final PublishedAction.PayloadFactory payloadFactory = publishedActionFacet.value();
-
-        final ObjectStringifier stringifier = objectStringifier();
-
-        final EventPayload payload = payloadFactory.payloadFor(
-                identifiedHolder.getIdentifier(),
-                ObjectAdapter.Util.unwrap(undeletedElseEmpty(targetAdapter)),
-                ObjectAdapter.Util.unwrap(undeletedElseEmpty(parameterAdapters)),
-                ObjectAdapter.Util.unwrap(undeletedElseEmpty(resultAdapter)));
-        payload.withStringifier(stringifier);
-        publishingServiceIfAny.publish(metadata, payload);
-    }
-
-    private static <T> List<T> immutableList(final Iterable<T> iterable) {
-        return Collections.unmodifiableList(Lists.newArrayList(iterable));
-    }
-
-    private ObjectStringifier objectStringifier() {
-        return new ObjectStringifier() {
-                @Override
-                public String toString(Object object) {
-                    if(object == null) {
-                        return null;
-                    }
-                    final ObjectAdapter adapter = isisSessionFactory.getCurrentSession()
-                            .getPersistenceSession().adapterFor(object);
-                    Oid oid = adapter.getOid();
-                    return oid != null? oid.enString(): encodedValueOf(adapter);
-                }
-                private String encodedValueOf(ObjectAdapter adapter) {
-                    EncodableFacet facet = adapter.getSpecification().getFacet(EncodableFacet.class);
-                    return facet != null? facet.toEncodedString(adapter): adapter.toString();
-                }
-                @Override
-                public String classNameOf(Object object) {
-                    final ObjectAdapter adapter = getPersistenceSession().adapterFor(object);
-                    final String className = adapter.getSpecification().getFullIdentifier();
-                    return className;
-                }
-            };
-    }
-
-    private List<ObjectAdapter> undeletedElseEmpty(List<ObjectAdapter> parameters) {
-        return Lists.newArrayList(Iterables.transform(parameters, notDestroyedElseEmpty()));
-    }
-
-    private ObjectAdapter undeletedElseEmpty(ObjectAdapter adapter) {
-        return notDestroyedElseEmpty().apply(adapter);
-    }
-
-    private EventMetadata newEventMetadata(
-            final String currentUser,
-            final Timestamp timestamp,
-            final PublishingChangeKind changeKind,
-            final String enlistedAdapterClass,
-            final Bookmark enlistedTarget) {
-        final EventType eventType = PublishingServiceInternalDefault.eventTypeFor(changeKind);
-
-        final Interaction interaction = interactionContext.getInteraction();
-
-        final int nextEventSequence = interaction.next(Interaction.Sequence.PUBLISHED_EVENT.id());
-        final UUID transactionId = interaction.getTransactionId();
-        return new EventMetadata(
-                transactionId, nextEventSequence, eventType, currentUser, timestamp, enlistedTarget.toString(),
-                enlistedAdapterClass, null, enlistedTarget, null, null, null, null);
-    }
-
-    private static EventType eventTypeFor(PublishingChangeKind changeKind) {
-        if(changeKind == PublishingChangeKind.UPDATE) {
-            return EventType.OBJECT_UPDATED;
-        }
-        if(changeKind == PublishingChangeKind.CREATE) {
-            return EventType.OBJECT_CREATED;
-        }
-        if(changeKind == PublishingChangeKind.DELETE) {
-            return EventType.OBJECT_DELETED;
-        }
-        throw new IllegalArgumentException("unknown ChangeKind '" + changeKind + "'");
-    }
     //endregion
 
     //region > publishProperty
@@ -418,9 +194,6 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
     //region > injected services
     @javax.inject.Inject
     private List<PublisherService> publisherServices;
-
-    @javax.inject.Inject
-    private PublishingService publishingServiceIfAny;
 
     @javax.inject.Inject
     private ChangedObjectsServiceInternal changedObjectsServiceInternal;
