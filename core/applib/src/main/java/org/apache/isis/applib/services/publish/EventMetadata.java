@@ -31,8 +31,6 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
  * 
  * <p>
  * This is a class rather than an interface so that it may be easily extended in the future.
-
- * @see EventPayload
  */
 public class EventMetadata {
     
