@@ -21,8 +21,7 @@ package org.apache.isis.core.metamodel.facets.members.render.annotprop;
 
 import java.util.Properties;
 
-import org.apache.isis.applib.annotation.Render;
-import org.apache.isis.applib.annotation.Render.Type;
+import org.apache.isis.applib.annotation.RenderType;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.render.RenderFacetAbstract;
 
@@ -32,10 +31,10 @@ public class RenderFacetProperties extends RenderFacetAbstract {
         super(renderTypeFrom(properties), holder);
     }
 
-    private static Type renderTypeFrom(Properties properties) {
+    private static RenderType renderTypeFrom(Properties properties) {
         String value = properties.getProperty("value");
-        // same default as in Render.Type.value()
-        return value != null? Render.Type.valueOf(value): Render.Type.EAGERLY;
+        // same default as in RenderType.value()
+        return value != null? RenderType.valueOf(value): RenderType.EAGERLY;
     }
 
 }

@@ -36,7 +36,7 @@ public class RenderFacetForCollectionLayoutAnnotation extends RenderFacetAbstrac
     }
 
     private RenderFacetForCollectionLayoutAnnotation(final RenderType renderType, final FacetHolder holder) {
-        super(RenderType.typeOf(renderType), holder);
+        super(renderType, holder);
     }
 
 }

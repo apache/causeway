@@ -34,7 +34,7 @@ public class RenderFacetOnCollectionFromLayoutProperties extends RenderFacetAbst
     }
 
     private RenderFacetOnCollectionFromLayoutProperties(RenderType renderType, FacetHolder holder) {
-        super(RenderType.typeOf(renderType), holder);
+        super(renderType, holder);
     }
 
     private static RenderType render(Properties properties) {

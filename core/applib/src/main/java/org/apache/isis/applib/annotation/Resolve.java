@@ -43,21 +43,21 @@ public @interface Resolve {
          * @deprecated - use {@link RenderType#EAGERLY} instead.
          */
         @Deprecated
-        EAGERLY(Render.Type.EAGERLY),
+        EAGERLY(RenderType.EAGERLY),
         /**
          * @deprecated - use {@link RenderType#LAZILY} instead.
          */
         @Deprecated
-        LAZILY(Render.Type.LAZILY);
+        LAZILY(RenderType.LAZILY);
 
-        private final org.apache.isis.applib.annotation.Render.Type renderType;
+        private final org.apache.isis.applib.annotation.RenderType renderType;
 
-        private Type(Render.Type renderType) {
+        private Type(RenderType renderType) {
             this.renderType = renderType;
         }
 
         @Deprecated
-        public org.apache.isis.applib.annotation.Render.Type getRenderType() {
+        public org.apache.isis.applib.annotation.RenderType getRenderType() {
             return renderType;
         }
     }

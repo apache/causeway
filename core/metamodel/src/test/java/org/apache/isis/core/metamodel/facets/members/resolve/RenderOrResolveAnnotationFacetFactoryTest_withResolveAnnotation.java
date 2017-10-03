@@ -19,19 +19,19 @@
 
 package org.apache.isis.core.metamodel.facets.members.resolve;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
 import java.util.Collection;
 
-import org.apache.isis.applib.annotation.Render;
+import org.apache.isis.applib.annotation.RenderType;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.members.render.RenderFacet;
 import org.apache.isis.core.metamodel.facets.members.render.annotprop.RenderFacetOrResolveFactory;
 import org.apache.isis.core.metamodel.facets.members.render.annotprop.RenderFacetViaResolveAnnotation;
-import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class RenderOrResolveAnnotationFacetFactoryTest_withResolveAnnotation extends AbstractFacetFactoryTest {
 
@@ -67,7 +67,7 @@ public class RenderOrResolveAnnotationFacetFactoryTest_withResolveAnnotation ext
         assertNotNull(facet);
         assertTrue(facet instanceof RenderFacetViaResolveAnnotation);
         RenderFacet resolveFacet = (RenderFacet) facet;
-        assertThat(resolveFacet.value(), is(Render.Type.EAGERLY));
+        assertThat(resolveFacet.value(), is(RenderType.EAGERLY));
 
         assertNoMethodsRemoved();
     }
@@ -86,7 +86,7 @@ public class RenderOrResolveAnnotationFacetFactoryTest_withResolveAnnotation ext
         facetFactory.process(new ProcessMethodContext(Customer.class, null, null, facetedMethod.getMethod(), methodRemover, facetedMethod));
 
         final RenderFacet facet = facetedMethod.getFacet(RenderFacet.class);
-        assertThat(facet.value(), is(Render.Type.EAGERLY));
+        assertThat(facet.value(), is(RenderType.EAGERLY));
     }
 
     public void testAnnotationForLazilyPickedUpOnProperty() {
@@ -103,7 +103,7 @@ public class RenderOrResolveAnnotationFacetFactoryTest_withResolveAnnotation ext
         facetFactory.process(new ProcessMethodContext(Customer.class, null, null, facetedMethod.getMethod(), methodRemover, facetedMethod));
 
         final RenderFacet facet = facetedMethod.getFacet(RenderFacet.class);
-        assertThat(facet.value(), is(Render.Type.LAZILY));
+        assertThat(facet.value(), is(RenderType.LAZILY));
     }
 
     public void testAnnotationNoHintPickedUpOnCollection() {
@@ -121,7 +121,7 @@ public class RenderOrResolveAnnotationFacetFactoryTest_withResolveAnnotation ext
         assertNotNull(facet);
         assertTrue(facet instanceof RenderFacetViaResolveAnnotation);
         RenderFacet resolveFacet = (RenderFacet) facet;
-        assertThat(resolveFacet.value(), is(Render.Type.EAGERLY));
+        assertThat(resolveFacet.value(), is(RenderType.EAGERLY));
 
         assertNoMethodsRemoved();
     }
@@ -138,7 +138,7 @@ public class RenderOrResolveAnnotationFacetFactoryTest_withResolveAnnotation ext
         facetFactory.process(new ProcessMethodContext(Customer.class, null, null, facetedMethod.getMethod(), methodRemover, facetedMethod));
 
         final RenderFacet facet = facetedMethod.getFacet(RenderFacet.class);
-        assertThat(facet.value(), is(Render.Type.EAGERLY));
+        assertThat(facet.value(), is(RenderType.EAGERLY));
     }
 
     public void testAnnotationWithLazilyHintPickedUpOnCollection() {
@@ -153,7 +153,7 @@ public class RenderOrResolveAnnotationFacetFactoryTest_withResolveAnnotation ext
         facetFactory.process(new ProcessMethodContext(Customer.class, null, null, facetedMethod.getMethod(), methodRemover, facetedMethod));
 
         final RenderFacet facet = facetedMethod.getFacet(RenderFacet.class);
-        assertThat(facet.value(), is(Render.Type.LAZILY));
+        assertThat(facet.value(), is(RenderType.LAZILY));
     }
 
 

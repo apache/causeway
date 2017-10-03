@@ -19,20 +19,19 @@
 
 package org.apache.isis.core.metamodel.facets.members.resolve;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
 import java.util.Collection;
 
-import org.apache.isis.applib.annotation.Render;
-import org.apache.isis.applib.annotation.Render.Type;
+import org.apache.isis.applib.annotation.RenderType;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.members.render.RenderFacet;
 import org.apache.isis.core.metamodel.facets.members.render.annotprop.RenderFacetAnnotation;
 import org.apache.isis.core.metamodel.facets.members.render.annotprop.RenderFacetOrResolveFactory;
-import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class RenderOrResolveAnnotationFacetFactoryTest_withRenderAnnotation extends AbstractFacetFactoryTest {
 
@@ -55,7 +54,6 @@ public class RenderOrResolveAnnotationFacetFactoryTest_withRenderAnnotation exte
 
         class Customer {
             @SuppressWarnings("unused")
-            @Render
             public int getNumberOfOrders() {
                 return 0;
             }
@@ -68,7 +66,7 @@ public class RenderOrResolveAnnotationFacetFactoryTest_withRenderAnnotation exte
         assertNotNull(facet);
         assertTrue(facet instanceof RenderFacetAnnotation);
         RenderFacet resolveFacet = (RenderFacet) facet;
-        assertThat(resolveFacet.value(), is(Render.Type.EAGERLY));
+        assertThat(resolveFacet.value(), is(RenderType.EAGERLY));
 
         assertNoMethodsRemoved();
     }
@@ -77,7 +75,6 @@ public class RenderOrResolveAnnotationFacetFactoryTest_withRenderAnnotation exte
 
         class Customer {
             @SuppressWarnings("unused")
-            @Render(Type.EAGERLY)
             public int getNumberOfOrders() {
                 return 0;
             }
@@ -87,14 +84,13 @@ public class RenderOrResolveAnnotationFacetFactoryTest_withRenderAnnotation exte
         facetFactory.process(new ProcessMethodContext(Customer.class, null, null, facetedMethod.getMethod(), methodRemover, facetedMethod));
 
         final RenderFacet facet = facetedMethod.getFacet(RenderFacet.class);
-        assertThat(facet.value(), is(Render.Type.EAGERLY));
+        assertThat(facet.value(), is(RenderType.EAGERLY));
     }
 
     public void testAnnotationForLazilyPickedUpOnProperty() {
 
         class Customer {
             @SuppressWarnings("unused")
-            @Render(Type.LAZILY)
             public int getNumberOfOrders() {
                 return 0;
             }
@@ -104,13 +100,12 @@ public class RenderOrResolveAnnotationFacetFactoryTest_withRenderAnnotation exte
         facetFactory.process(new ProcessMethodContext(Customer.class, null, null, facetedMethod.getMethod(), methodRemover, facetedMethod));
 
         final RenderFacet facet = facetedMethod.getFacet(RenderFacet.class);
-        assertThat(facet.value(), is(Render.Type.LAZILY));
+        assertThat(facet.value(), is(RenderType.LAZILY));
     }
 
     public void testAnnotationNoHintPickedUpOnCollection() {
         class Customer {
             @SuppressWarnings("unused")
-            @Render
             public Collection<?> getOrders() {
                 return null;
             }
@@ -122,7 +117,7 @@ public class RenderOrResolveAnnotationFacetFactoryTest_withRenderAnnotation exte
         assertNotNull(facet);
         assertTrue(facet instanceof RenderFacetAnnotation);
         RenderFacet resolveFacet = (RenderFacet) facet;
-        assertThat(resolveFacet.value(), is(Render.Type.EAGERLY));
+        assertThat(resolveFacet.value(), is(RenderType.EAGERLY));
 
         assertNoMethodsRemoved();
     }
@@ -130,7 +125,6 @@ public class RenderOrResolveAnnotationFacetFactoryTest_withRenderAnnotation exte
     public void testAnnotationEagerlyHintPickedUpOnCollection() {
         class Customer {
             @SuppressWarnings("unused")
-            @Render(Type.EAGERLY)
             public Collection<?> getOrders() {
                 return null;
             }
@@ -139,13 +133,12 @@ public class RenderOrResolveAnnotationFacetFactoryTest_withRenderAnnotation exte
         facetFactory.process(new ProcessMethodContext(Customer.class, null, null, facetedMethod.getMethod(), methodRemover, facetedMethod));
 
         final RenderFacet facet = facetedMethod.getFacet(RenderFacet.class);
-        assertThat(facet.value(), is(Render.Type.EAGERLY));
+        assertThat(facet.value(), is(RenderType.EAGERLY));
     }
 
     public void testAnnotationWithLazilyHintPickedUpOnCollection() {
         class Customer {
             @SuppressWarnings("unused")
-            @Render(Type.LAZILY)
             public Collection<?> getOrders() {
                 return null;
             }
@@ -154,7 +147,7 @@ public class RenderOrResolveAnnotationFacetFactoryTest_withRenderAnnotation exte
         facetFactory.process(new ProcessMethodContext(Customer.class, null, null, facetedMethod.getMethod(), methodRemover, facetedMethod));
 
         final RenderFacet facet = facetedMethod.getFacet(RenderFacet.class);
-        assertThat(facet.value(), is(Render.Type.LAZILY));
+        assertThat(facet.value(), is(RenderType.LAZILY));
     }
 
 

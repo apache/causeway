@@ -19,18 +19,18 @@
 
 package org.apache.isis.core.metamodel.facets.members.render;
 
-import org.apache.isis.applib.annotation.Render;
+import org.apache.isis.applib.annotation.RenderType;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleValueFacetAbstract;
 
-public abstract class RenderFacetAbstract extends SingleValueFacetAbstract<Render.Type> implements RenderFacet {
+public abstract class RenderFacetAbstract extends SingleValueFacetAbstract<RenderType> implements RenderFacet {
 
     public static Class<? extends Facet> type() {
         return RenderFacet.class;
     }
 
-    public RenderFacetAbstract(Render.Type value, final FacetHolder holder) {
+    public RenderFacetAbstract(RenderType value, final FacetHolder holder) {
         super(type(), value, holder);
     }
     

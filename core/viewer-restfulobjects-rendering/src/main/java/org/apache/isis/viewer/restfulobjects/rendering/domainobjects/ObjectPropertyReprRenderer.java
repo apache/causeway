@@ -22,7 +22,7 @@ import java.util.Map;
 import com.fasterxml.jackson.databind.node.NullNode;
 import com.google.common.collect.Lists;
 
-import org.apache.isis.applib.annotation.Render.Type;
+import org.apache.isis.applib.annotation.RenderType;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -117,7 +117,7 @@ public class ObjectPropertyReprRenderer extends AbstractObjectMemberReprRenderer
 
         final RenderFacet renderFacet = objectMember.getFacet(RenderFacet.class);
         boolean eagerlyRender =
-                (renderFacet != null && renderFacet.value() == Type.EAGERLY && rendererContext.canEagerlyRender(valueAdapter))
+                (renderFacet != null && renderFacet.value() == RenderType.EAGERLY && rendererContext.canEagerlyRender(valueAdapter))
                         || (linkFollower != null && !linkFollower.isTerminated());
 
         if(valueAdapter == null) {

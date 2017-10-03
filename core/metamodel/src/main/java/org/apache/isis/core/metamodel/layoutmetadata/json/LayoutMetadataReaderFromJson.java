@@ -38,8 +38,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.annotation.MemberGroupLayout.ColumnSpans;
-import org.apache.isis.applib.annotation.Render;
-import org.apache.isis.applib.annotation.Render.Type;
+import org.apache.isis.applib.annotation.RenderType;
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
@@ -316,7 +315,7 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader2, Serv
             final RenderFacetRepr render = memberRepr.render;
             if(render != null) {
                 // same default as in Render.Type.value()
-                final Type renderType = render.value!=null?render.value: Render.Type.EAGERLY;
+                final RenderType renderType = render.value!=null?render.value: RenderType.EAGERLY;
                 props.setProperty("member." + memberName + ".render.value", renderType.toString());
             }
             

@@ -29,7 +29,7 @@ import com.google.common.collect.Lists;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
-import org.apache.isis.applib.annotation.Render;
+import org.apache.isis.applib.annotation.RenderType;
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet;
@@ -195,7 +195,7 @@ public class CollectionSelectorHelper implements Serializable {
         final OneToManyAssociation collection =
                 entityCollectionModel.getCollectionMemento().getCollection(entityCollectionModel.getSpecificationLoader());
         RenderFacet renderFacet = collection.getFacet(RenderFacet.class);
-        return renderFacet != null && renderFacet.value() == Render.Type.EAGERLY;
+        return renderFacet != null && renderFacet.value() == RenderType.EAGERLY;
     }
 
     private static boolean hasDefaultViewFacet(IModel<?> model) {

@@ -22,7 +22,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import org.apache.isis.applib.annotation.Render;
+import org.apache.isis.applib.annotation.RenderType;
 import org.apache.isis.applib.services.grid.GridService;
 import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadata;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
@@ -101,7 +101,7 @@ public class LayoutMetadataReaderFromJsonTest_readMetadata {
         
         assertThat(metadata.getColumns().get(3).collections.containsKey("similarItems"), is(true));
         assertThat(metadata.getColumns().get(3).collections.get("similarItems").render, is(not(nullValue())));
-        assertThat(metadata.getColumns().get(3).collections.get("similarItems").render.value, is(Render.Type.LAZILY));
+        assertThat(metadata.getColumns().get(3).collections.get("similarItems").render.value, is(RenderType.LAZILY));
 
         assertThat(metadata.getActions(), is(not(nullValue())));
         assertThat(metadata.getActions().size(), is(2));

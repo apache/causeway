@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.members.render.annotprop;
 
-import org.apache.isis.applib.annotation.Render;
+import org.apache.isis.applib.annotation.RenderType;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.render.RenderFacetAbstract;
 
@@ -29,7 +29,7 @@ import org.apache.isis.core.metamodel.facets.members.render.RenderFacetAbstract;
 @Deprecated
 public class RenderFacetAnnotation extends RenderFacetAbstract {
 
-    public RenderFacetAnnotation(final FacetHolder holder, Render.Type value) {
+    public RenderFacetAnnotation(final FacetHolder holder, RenderType value) {
         super(value, holder);
     }
 

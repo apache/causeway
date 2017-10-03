@@ -16,8 +16,8 @@
  */
 package org.apache.isis.core.metamodel.layoutmetadata;
 
-import org.apache.isis.applib.annotation.Render;
+import org.apache.isis.applib.annotation.RenderType;
 
 public class RenderFacetRepr {
-    public Render.Type value;
+    public RenderType value;
 }

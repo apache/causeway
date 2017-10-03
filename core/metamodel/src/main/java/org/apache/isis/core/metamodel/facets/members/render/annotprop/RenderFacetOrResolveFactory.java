@@ -21,7 +21,6 @@ package org.apache.isis.core.metamodel.facets.members.render.annotprop;
 
 import java.util.Properties;
 
-import org.apache.isis.applib.annotation.Render;
 import org.apache.isis.applib.annotation.Resolve;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -39,7 +38,6 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorFor
 public class RenderFacetOrResolveFactory extends FacetFactoryAbstract
         implements ContributeeMemberFacetFactory, MetaModelValidatorRefiner {
 
-    private final MetaModelValidatorForDeprecatedAnnotation renderValidator = new MetaModelValidatorForDeprecatedAnnotation(Render.class);
     private final MetaModelValidatorForDeprecatedAnnotation resolveValidator = new MetaModelValidatorForDeprecatedAnnotation(Resolve.class);
 
     public RenderFacetOrResolveFactory() {
@@ -50,9 +48,6 @@ public class RenderFacetOrResolveFactory extends FacetFactoryAbstract
     public void process(final ProcessMethodContext processMethodContext) {
         
         RenderFacet renderFacet = createFromMetadataPropertiesIfPossible(processMethodContext);
-        if(renderFacet == null) {
-            renderFacet = renderValidator.flagIfPresent(createFromRenderAnnotationIfPossible(processMethodContext), processMethodContext);
-        }
         if(renderFacet == null) {
             renderFacet = resolveValidator.flagIfPresent(createFromResolveAnnotationIfPossible(processMethodContext), processMethodContext);
         }
@@ -77,11 +72,6 @@ public class RenderFacetOrResolveFactory extends FacetFactoryAbstract
         return properties != null ? new RenderFacetProperties(properties, holder) : null;
     }
 
-    private static RenderFacet createFromRenderAnnotationIfPossible(final ProcessMethodContext processMethodContext) {
-        final Render renderAnnotation = Annotations.getAnnotation(processMethodContext.getMethod(), Render.class);
-        return renderAnnotation == null ? null : new RenderFacetAnnotation(processMethodContext.getFacetHolder(), renderAnnotation.value());
-    }
-
     // @Render was originally called @Resolve, so look for that annotation instead.
     @SuppressWarnings("deprecation")
     private static RenderFacet createFromResolveAnnotationIfPossible(final ProcessMethodContext processMethodContext) {
@@ -93,7 +83,6 @@ public class RenderFacetOrResolveFactory extends FacetFactoryAbstract
 
     @Override
     public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
-        metaModelValidator.add(renderValidator);
         metaModelValidator.add(resolveValidator);
     }
 
@@ -102,7 +91,6 @@ public class RenderFacetOrResolveFactory extends FacetFactoryAbstract
     public void setServicesInjector(final ServicesInjector servicesInjector) {
         super.setServicesInjector(servicesInjector);
         IsisConfiguration configuration = servicesInjector.getConfigurationServiceInternal();
-        renderValidator.setConfiguration(configuration);
         resolveValidator.setConfiguration(configuration);
     }
 

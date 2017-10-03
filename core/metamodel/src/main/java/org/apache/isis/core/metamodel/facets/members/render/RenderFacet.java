@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.members.render;
 
-import org.apache.isis.applib.annotation.Render;
+import org.apache.isis.applib.annotation.RenderType;
 import org.apache.isis.applib.annotation.Resolve;
 import org.apache.isis.core.metamodel.facets.SingleValueFacet;
 
@@ -30,6 +30,6 @@ import org.apache.isis.core.metamodel.facets.SingleValueFacet;
  * <p>
  * @see Resolve
  */
-public interface RenderFacet extends SingleValueFacet<Render.Type> {
+public interface RenderFacet extends SingleValueFacet<RenderType> {
 
 }
