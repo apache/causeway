@@ -61,18 +61,6 @@ The annotations listed in the table below are still supported by Apache Isis, bu
 |Domain
 |
 
-|`@CssClass`
-|Allow visual representation of individual objects or object members layout to be customized by application-specific CSS.
-|`#cssClass()` attribute for: xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_cssClass[`@DomainObjectLayout`], xref:../rgant/rgant.adoc#_rgant-PropertyLayout_cssClass[`@PropertyLayout`],  xref:../rgant/rgant.adoc#_rgant-CollectionLayout_cssClass[`@CollectionLayout`], xref:../rgant/rgant.adoc#_rgant-ActionLayout_cssClass[`@ActionLayout`] and xref:../rgant/rgant.adoc#_rgant-ParameterLayout_cssClass[`@ParameterLayout`]
-|UI
-|Yes
-
-|`@CssClassFa`
-|So that font awesome icons can be applied to action buttons/menu items and optionally as an object icon.
-|`cssClassFa()` attribute for: xref:../rgant/rgant.adoc#_rgant-ActionLayout_cssClassFa[`@ActionLayout`], xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_cssClassFa[`DomainObjectLayout`] and xref:../rgant/rgant.adoc#_rgant-ViewModelLayout_cssClassFa[`ViewModelLayout`]
-|UI
-|Yes
-
 |`@Debug`
 |Action only invokable in debug mode.
 |Not supported by either the xref:../ugvw/ugvw.adoc#[Wicket viewer] or the xref:../ugvro/ugvro.adoc#[RestfulObjects viewer]; use prototype mode instead (xref:../rgant/rgant.adoc#_rgant-Action_restrictTo[`@Action#restrictTo()`])
