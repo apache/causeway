@@ -34,9 +34,7 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.CommandExecuteIn;
 import org.apache.isis.applib.annotation.CommandPersistence;
 import org.apache.isis.applib.annotation.CommandReification;
-import org.apache.isis.applib.annotation.Idempotent;
 import org.apache.isis.applib.annotation.InvokeOn;
-import org.apache.isis.applib.annotation.QueryOnly;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.HasTransactionId;
@@ -426,7 +424,6 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
         public void whenDeprecatedQueryOnly() {
 
             class Customer {
-                @QueryOnly
                 public void someAction() {
                 }
             }
@@ -449,7 +446,6 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
         public void whenDeprecatedIdempotent() {
 
             class Customer {
-                @Idempotent
                 public void someAction() {
                 }
             }
@@ -586,7 +582,6 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
         public void whenDeprecatedQueryOnlyAndDeprecatedActionSemantics() {
 
             class Customer {
-                @QueryOnly
                 public void someAction() {
                 }
             }
@@ -609,7 +604,6 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
         public void whenDeprecatedIdempotentAndDeprecatedActionSemantics() {
 
             class Customer {
-                @Idempotent
                 public void someAction() {
                 }
             }
