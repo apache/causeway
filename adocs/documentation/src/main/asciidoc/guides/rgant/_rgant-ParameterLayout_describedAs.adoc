@@ -9,12 +9,10 @@ The `describedAs()` attribute is used to provide a short description of the acti
 
 Descriptions may be provided for objects, members (properties,
 collections and actions), and for individual parameters within an action
-method. `@DescribedAs` therefore works in a very similar manner to
-`@Named` <!--(see ?)-->.
-
+method.
 
 To provide a description for an individual action parameter, use the
-`@DescribedAs` annotation in-line i.e. immediately before the parameter
+`describedAs` attribute in-line i.e. immediately before the parameter
 declaration.
 
 For example:

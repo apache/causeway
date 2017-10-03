@@ -67,11 +67,6 @@ The annotations listed in the table below are still supported by Apache Isis, bu
 |UI
 |
 
-|`@DescribedAs`
-|Provide a longer description/tool-tip of an object or object member.
-|`#describedAs()` attribute for xref:../rgant/rgant.adoc#_rgant-DomainObject_describedAs[`@DomainObjectLayout`], xref:../rgant/rgant.adoc#_rgant-PropertyLayout_describedAs[`@PropertyLayout`], xref:../rgant/rgant.adoc#_rgant-CollectionLayout_describedAs[`@CollectionLayout`], xref:../rgant/rgant.adoc#_rgant-ActionLayout_describedAs[`@ActionLayout`] and xref:../rgant/rgant.adoc#_rgant-ParameterLayout_describedAs[`@ParameterLayout`]
-|UI
-|Yes
 
 |`@Disabled`
 |Object property cannot be edited, an object collection cannot be added to/removed from, or an object action cannot be invoked.
