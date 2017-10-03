@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
 
-import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.After;
 import org.junit.Assert;
@@ -111,7 +110,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
             @Test
             public void whenSpecified() {
 
-                final Class<?> cls = Customer.class;
+                final Class<?> cls = DomainObjectLayoutFactoryTest.Customer.class;
 
                 facetFactory.process(new FacetFactory.ProcessClassContext(cls, null, mockMethodRemover, facetHolder));
 
@@ -195,7 +194,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
             @Test
             public void whenSpecified() {
 
-                final Class<?> cls = Customer.class;
+                final Class<?> cls = DomainObjectLayoutFactoryTest.Customer.class;
 
                 facetFactory.process(new FacetFactory.ProcessClassContext(cls, null, mockMethodRemover, facetHolder));
 
@@ -274,7 +273,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
             @Test
             public void whenSpecified() {
 
-                final Class<?> cls = Customer.class;
+                final Class<?> cls = DomainObjectLayoutFactoryTest.Customer.class;
 
                 facetFactory.process(new FacetFactory.ProcessClassContext(cls, null, mockMethodRemover, facetHolder));
 
@@ -354,7 +353,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
             @Test
             public void whenSpecified() {
 
-                final Class<?> cls = Customer.class;
+                final Class<?> cls = DomainObjectLayoutFactoryTest.Customer.class;
 
                 facetFactory.process(new FacetFactory.ProcessClassContext(cls, null, mockMethodRemover, facetHolder));
 
@@ -432,7 +431,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
             @Test
             public void whenSpecified() {
 
-                final Class<?> cls = Customer.class;
+                final Class<?> cls = DomainObjectLayoutFactoryTest.Customer.class;
 
                 facetFactory.process(new FacetFactory.ProcessClassContext(cls, null, mockMethodRemover, facetHolder));
 
@@ -510,7 +509,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
             @Test
             public void whenSpecified() {
 
-                final Class<?> cls = Customer.class;
+                final Class<?> cls = DomainObjectLayoutFactoryTest.Customer.class;
 
                 facetFactory.process(new FacetFactory.ProcessClassContext(cls, null, mockMethodRemover, facetHolder));
 
@@ -588,7 +587,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
             @Test
             public void whenSpecified() {
 
-                final Class<?> cls = Customer.class;
+                final Class<?> cls = DomainObjectLayoutFactoryTest.Customer.class;
 
                 facetFactory.process(new FacetFactory.ProcessClassContext(cls, null, mockMethodRemover, facetHolder));
 

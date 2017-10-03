@@ -74,7 +74,6 @@ import org.apache.isis.core.metamodel.facets.object.callbacks.RemoveCallbackFace
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdateCallbackFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.choices.boundedmarkerifc.ChoicesFacetFromBoundedMarkerInterfaceFactory;
 import org.apache.isis.core.metamodel.facets.object.choices.enums.EnumFacetUsingValueFacetUsingSemanticsProviderFactory;
-import org.apache.isis.core.metamodel.facets.object.cssclass.annotation.CssClassFacetOnTypeAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.cssclass.method.CssClassFacetMethodFactory;
 import org.apache.isis.core.metamodel.facets.object.defaults.annotcfg.DefaultedFacetAnnotationElseConfigurationFactory;
 import org.apache.isis.core.metamodel.facets.object.describedas.annotation.DescribedAsFacetOnTypeAnnotationFactory;
@@ -350,7 +349,6 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(new HiddenFacetOnMemberFromPropertiesFactory());
 
         
-            addFactory(new CssClassFacetOnTypeAnnotationFactory());
         addFactory(new CssClassFacetOnMemberFactory());
         // must come after CssClassFacetOnMemberFactory
         addFactory(new CssClassFacetOnActionFromConfiguredRegexFactory());

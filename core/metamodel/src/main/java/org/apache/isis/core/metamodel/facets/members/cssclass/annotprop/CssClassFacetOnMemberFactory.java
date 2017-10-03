@@ -21,23 +21,15 @@ package org.apache.isis.core.metamodel.facets.members.cssclass.annotprop;
 
 import java.util.Properties;
 
-import org.apache.isis.applib.annotation.CssClass;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
-import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.ContributeeMemberFacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
 
-public class CssClassFacetOnMemberFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory, MetaModelValidatorRefiner {
+public class CssClassFacetOnMemberFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory {
 
-    private final MetaModelValidatorForDeprecatedAnnotation validator = new MetaModelValidatorForDeprecatedAnnotation(CssClass.class);
 
     public CssClassFacetOnMemberFactory() {
         super(FeatureType.MEMBERS);
@@ -46,9 +38,6 @@ public class CssClassFacetOnMemberFactory extends FacetFactoryAbstract implement
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
         CssClassFacet cssClassFacet = createFromMetadataPropertiesIfPossible(processMethodContext);
-        if(cssClassFacet == null) {
-            cssClassFacet = validator.flagIfPresent(createFromAnnotationIfPossible(processMethodContext), processMethodContext);
-        }
 
         // no-op if null
         FacetUtil.addFacet(cssClassFacet);
@@ -73,34 +62,6 @@ public class CssClassFacetOnMemberFactory extends FacetFactoryAbstract implement
     }
 
 
-    private CssClassFacet createFromAnnotationIfPossible(final ProcessMethodContext processMethodContext) {
-        final CssClass annotation = Annotations.getAnnotation(processMethodContext.getMethod(), CssClass.class);
-        return annotation != null ? new CssClassFacetOnMemberAnnotation(annotation.value(), processMethodContext.getFacetHolder()) : null;
-    }
-
-
-    // //////////////////////////////////////
-
-
-    @Override
-    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
-        metaModelValidator.add(validator);
-    }
-
-    // //////////////////////////////////////
-
-
-    //region > injected
-
-    @Override
-    public void setServicesInjector(final ServicesInjector servicesInjector) {
-        super.setServicesInjector(servicesInjector);
-        final IsisConfiguration configuration = getConfiguration();
-        validator.setConfiguration(configuration);
-    }
-
-
-    //endregion
 
 }
 
