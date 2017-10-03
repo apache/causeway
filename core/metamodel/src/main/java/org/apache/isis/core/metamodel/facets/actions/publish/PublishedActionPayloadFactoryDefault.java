@@ -22,7 +22,6 @@ import java.util.List;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.PublishedAction;
-import org.apache.isis.applib.annotation.PublishingPayloadFactoryForAction;
 import org.apache.isis.applib.services.publish.EventPayload;
 import org.apache.isis.applib.services.publish.EventPayloadForActionInvocation;
 

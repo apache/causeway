@@ -41,7 +41,6 @@ import org.apache.isis.applib.annotation.CommandReification;
 import org.apache.isis.applib.annotation.Idempotent;
 import org.apache.isis.applib.annotation.InvokeOn;
 import org.apache.isis.applib.annotation.PublishedAction;
-import org.apache.isis.applib.annotation.PublishingPayloadFactoryForAction;
 import org.apache.isis.applib.annotation.QueryOnly;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;

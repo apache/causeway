@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets.object.domainobject.publishing;
 
-import org.apache.isis.applib.annotation.PublishingPayloadFactoryForObject;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.publishedobject.PublishedObjectFacetAbstract;
 

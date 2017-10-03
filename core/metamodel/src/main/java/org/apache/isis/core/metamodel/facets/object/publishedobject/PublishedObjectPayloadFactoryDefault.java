@@ -20,7 +20,6 @@ package org.apache.isis.core.metamodel.facets.object.publishedobject;
 
 import org.apache.isis.applib.annotation.PublishedObject;
 import org.apache.isis.applib.annotation.PublishingChangeKind;
-import org.apache.isis.applib.annotation.PublishingPayloadFactoryForObject;
 import org.apache.isis.applib.services.publish.EventPayload;
 import org.apache.isis.applib.services.publish.EventPayloadForObjectChanged;
 

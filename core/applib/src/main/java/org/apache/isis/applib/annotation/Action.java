@@ -24,8 +24,8 @@ import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+
 import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
-import org.apache.isis.applib.services.publish.PublisherService;
 
 /**
  * Domain semantics for domain object collection.
@@ -157,11 +157,6 @@ public @interface Action {
      */
     Publishing publishing() default Publishing.AS_CONFIGURED;
 
-    /**
-     * @deprecated - not supported by {@link PublisherService}.
-     */
-    @Deprecated
-    Class<? extends PublishingPayloadFactoryForAction> publishingPayloadFactory() default PublishingPayloadFactoryForAction.class;
 
 
     // //////////////////////////////////////

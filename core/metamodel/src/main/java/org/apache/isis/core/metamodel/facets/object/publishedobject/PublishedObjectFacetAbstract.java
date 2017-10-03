@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.facets.object.publishedobject;
 
 import org.apache.isis.applib.annotation.PublishedObject;
-import org.apache.isis.applib.annotation.PublishingPayloadFactoryForObject;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleValueFacetAbstract;

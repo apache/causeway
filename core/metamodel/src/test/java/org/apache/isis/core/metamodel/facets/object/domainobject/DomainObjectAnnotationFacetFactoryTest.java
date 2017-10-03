@@ -32,7 +32,6 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Immutable;
 import org.apache.isis.applib.annotation.PublishedObject;
 import org.apache.isis.applib.annotation.PublishingChangeKind;
-import org.apache.isis.applib.annotation.PublishingPayloadFactoryForObject;
 import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.applib.services.publish.EventPayload;
 import org.apache.isis.core.metamodel.facetapi.Facet;

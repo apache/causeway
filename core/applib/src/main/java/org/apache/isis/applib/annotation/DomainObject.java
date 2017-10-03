@@ -31,7 +31,6 @@ import org.apache.isis.applib.services.eventbus.ObjectPersistingEvent;
 import org.apache.isis.applib.services.eventbus.ObjectRemovingEvent;
 import org.apache.isis.applib.services.eventbus.ObjectUpdatedEvent;
 import org.apache.isis.applib.services.eventbus.ObjectUpdatingEvent;
-import org.apache.isis.applib.services.publish.PublisherService;
 
 /**
  * Domain semantics for domain objects (entities and view models; for services see {@link org.apache.isis.applib.annotation.DomainService}).
@@ -64,18 +63,6 @@ public @interface DomainObject {
      * </p>
      */
     Publishing publishing() default Publishing.AS_CONFIGURED;
-
-    /**
-     * The factory to construct the payload factory.
-     *
-     * <p>
-     *     If not specified then a default implementation will be used.
-     * </p>
-     *
-     * @deprecated - not supported by {@link PublisherService}.
-     */
-    @Deprecated
-    Class<? extends PublishingPayloadFactoryForObject> publishingPayloadFactory() default PublishingPayloadFactoryForObject.class;
 
 
     // //////////////////////////////////////
