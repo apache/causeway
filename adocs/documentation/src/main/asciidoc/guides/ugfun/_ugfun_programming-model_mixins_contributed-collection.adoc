@@ -19,7 +19,7 @@ public class DocumentHolder_documents {
 
     @Action(semantics=SemanticsOf.SAFE)                         // <1>
     @ActionLayout(contributed = Contributed.AS_ASSOCIATION)     // <2>
-    @CollectionLayout(render = RenderType.EAGERLY)
+    @CollectionLayout(defaultView="table")
     public List<Document> coll() {                              // <3>
         ...
     }

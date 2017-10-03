@@ -356,7 +356,7 @@ Returning back to references, Isis also supports vector (multi-valued) reference
 *** you can also implement `equals()`, `hashCode()`, `toString()`
 * Add a xref:../../guides/ugfun/ugfun.adoc#_ugfun_programming-model_collections[collection] to one of the entities
 ** Use `SortedSet` as the class
-** Use the xref:../../guides/rgant/rgant.adoc#_rgant-CollectionLayout_render[`@CollectionLayout(render=...)`] annotation to indicate if the collection should be visible or hidden by default
+** Use the xref:../../guides/rgant/rgant.adoc#_rgant-CollectionLayout_defaultView[`@CollectionLayout(defaultView="table")`] annotation to indicate if the collection should be visible or hidden by default
 * optional: use the xref:../../guides/rgant/rgant.adoc#_rgant-CollectionLayout_sortedBy[`@CollectionLayout(sortedBy=...)`] annotation to specify a different comparator than the natural ordering
 
 

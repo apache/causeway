@@ -22,6 +22,8 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * @deprecated - use {@link CollectionLayout#defaultView()} set to &quot;table&quot; instead.
+ *
+ * This field is now ignored.
  */
 @XmlType(
         namespace = "http://isis.apache.org/applib/layout/component"

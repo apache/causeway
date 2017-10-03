@@ -60,12 +60,6 @@ A typical use case is if the desired name is a reserved Java keyword, such as `d
 |the page size for instances of this class when rendered within a table.
 
 
-|xref:../rgant/rgant.adoc#_rgant-CollectionLayout_render[`render()`]
-|`EAGERLY`, `LAZILY` +
-(`LAZILY`)
-|whether the collection should be (eagerly) rendered open or (lazily) rendered closed
-
-
 |xref:../rgant/rgant.adoc#_rgant-CollectionLayout_sortedBy[`sortedBy()`]
 |Subclass of `java.util.Comparator` for element type
 |indicates that the elements in the `java.util.SortedSet` collection should be sorted according to a specified `Comparator` rather than their natural sort order.
@@ -117,7 +111,6 @@ include::_rgant-CollectionLayout_describedAs.adoc[leveloffset=+1]
 include::_rgant-CollectionLayout_hidden.adoc[leveloffset=+1]
 include::_rgant-CollectionLayout_named.adoc[leveloffset=+1]
 include::_rgant-CollectionLayout_paged.adoc[leveloffset=+1]
-include::_rgant-CollectionLayout_render.adoc[leveloffset=+1]
 include::_rgant-CollectionLayout_sortedBy.adoc[leveloffset=+1]
 
 

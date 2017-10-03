@@ -104,14 +104,6 @@ public class CollectionLayoutFacetFactory extends FacetFactoryAbstract implement
         FacetUtil.addFacet(pagedFacet);
 
 
-        // renderType
-        RenderFacet renderFacet = RenderFacetOnCollectionFromLayoutProperties.create(properties, holder);
-        if(renderFacet == null) {
-            renderFacet = RenderFacetForCollectionLayoutAnnotation.create(collectionLayout, holder);
-        }
-        FacetUtil.addFacet(renderFacet);
-
-
         // sortedBy
         SortedByFacet sortedByFacet = SortedByFacetOnCollectionFromLayoutProperties.create(properties, holder);
         if(sortedByFacet == null) {

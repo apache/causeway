@@ -24,7 +24,7 @@ public class DocumentHolder_documents {
 
     @Action(semantics=SemanticsOf.SAFE)
     @ActionLayout(contributed = Contributed.AS_ASSOCIATION)
-    @CollectionLayout(render = RenderType.EAGERLY)
+    @CollectionLayout(defaultView="table")
     public List<Document> act() {
         ...
     }
