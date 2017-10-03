@@ -93,7 +93,6 @@ Other SPI:
 
 * xref:../rgsvc/rgsvc.adoc#_rgsvc_bootstrapping-spi_ClassDiscoveryService[`ClassDiscoveryService`] (SPI)
 * xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_ErrorReportingService[`ErrorReportingService`] (SPI)
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_EventSerializer[`EventSerializer`] (SPI)
 * xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_ExceptionRecognizer[`ExceptionRecognizer`] (SPI)
 * xref:../rgsvc/rgsvc.adoc#_rgsvc_testing_FixtureScriptsSpecificationProvider[`FixtureScriptsSpecificationProvider`] (SPI)
 * xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_LocaleProvider[`LocaleProvider`] (SPI)
