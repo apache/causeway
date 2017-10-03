@@ -109,11 +109,6 @@ Actions can still be invoked.
 |UI/domain
 |
 
-|`@MaxLength`
-|Maximum length of a property value (strings).
-|`#maxLength()` attribute for xref:../rgant/rgant.adoc#_rgant-Property_maxLength[`@Property`] or xref:../rgant/rgant.adoc#_rgant-Parameter_maxLength[`@Parameter`]
-|Domain
-|
 
 |`@MemberGroups`
 |Layout of properties and collections of a domain object or view model object.

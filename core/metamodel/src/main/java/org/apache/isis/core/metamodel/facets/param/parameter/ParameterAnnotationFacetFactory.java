@@ -19,7 +19,15 @@
 
 package org.apache.isis.core.metamodel.facets.param.parameter;
 
-import org.apache.isis.applib.annotation.*;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+
+import javax.annotation.Nullable;
+
+import org.apache.isis.applib.annotation.MustSatisfy;
+import org.apache.isis.applib.annotation.Optional;
+import org.apache.isis.applib.annotation.Parameter;
+import org.apache.isis.applib.annotation.RegEx;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -44,10 +52,6 @@ import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForConflictingOptionality;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
-
-import javax.annotation.Nullable;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
 
 public class ParameterAnnotationFacetFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner {
 
