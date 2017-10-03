@@ -22,24 +22,6 @@ The annotations listed in the table below are still supported by Apache Isis, bu
 |Layer
 |xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[File-based layout]?
 
-|`@ActionOrder`
-|Order of buttons and menu items representing actions.
-|xref:../rgant/rgant.adoc#_rgant-MemberOrder[`@MemberOrder`]
-|UI
-|Yes
-
-|`@ActionInteraction`
-|Enable subscribers on the Event Bus Service to either veto, validate or take further steps before/after an action has been invoked.
-|xref:../rgant/rgant.adoc#_rgant-Action_domainEvent[`@Action#domainEvent()`]
-|Domain
-|
-
-|`@ActionSemantics`
-|Query-only, idempotent or non-idempotent.
-|xref:../rgant/rgant.adoc#_rgant-Action_semantics[`@Action#semantics()`]
-|Domain
-|
-
 |`@Audited`
 |Audit changes to an object.
 |xref:../rgant/rgant.adoc#_rgant-DomainObject_auditing[`@DomainObject#` +
@@ -71,12 +53,6 @@ The annotations listed in the table below are still supported by Apache Isis, bu
 |Indicates an action is a bulk action, can be applied to multiple instances.
 |xref:../rgant/rgant.adoc#_rgant-Action_invokeOn[`@Action#invokeOn()`]
 |UI, Domain
-|
-
-|`@CollectionInteraction`
-|Enable subscribers on the Event Bus Service to either veto, validate or take further steps before/after a collection has been added to or removed from.
-|xref:../rgant/rgant.adoc#_rgant-Collection_domainEvent[`@Collection#domainEvent()`]
-|Domain
 |
 
 |`@Command`
@@ -121,12 +97,6 @@ The annotations listed in the table below are still supported by Apache Isis, bu
 |UI
 |
 
-|`@FieldOrder`
-|Order of properties and collections.
-|xref:../rgant/rgant.adoc#_rgant-MemberOrder[`@MemberOrder`]
-|UI
-|Yes
-
 |`@Hidden`
 |Object member is not visible, or on domain service (to indicate that none of its actions are visible).
 |For domain object members, use `#hidden()` attribute of xref:../rgant/rgant.adoc#_rgant-Action_hidden[`Action`], xref:../rgant/rgant.adoc#_rgant-Property_hidden[`Property`] or xref:../rgant/rgant.adoc#_rgant-Collection_hidden[`Collection`].  +
@@ -134,12 +104,6 @@ For domain service, use xref:../rgant/rgant.adoc#_rgant-DomainService_nature[`@D
 `nature=DOMAIN)`]
 |UI, Domain
 |Yes
-
-|`@Idempotent`
-|Whether an action is idempotent (can be invoked multiple times with same post-condition).
-|xref:../rgant/rgant.adoc#_rgant-Action_semantics[`@Action#semantics`]
-|Domain
-|
 
 |`@Ignore`
 |Exclude this method from the metamodel.
@@ -244,40 +208,6 @@ Also part of the toString representation of bookmarks, if using the Bookmark Ser
 |xref:../rgant/rgant.adoc#_rgant-DomainObject_plural[`@DomainObjectLayout` +
 `#plural()`]
 |UI
-|
-
-|`@PostsAction` +
-`InvokedEvent`
-|Post a domain event to the Event Bus Service indicating that an action has been invoked.
-|xref:../rgant/rgant.adoc#_rgant-Action_domainEvent[`@Action#domainEvent()`]
-|Domain
-|
-
-|`@PostsCollection` +
-`AddedToEvent`
-|Post a domain event to the Event Bus Service indicating that an element has been added to a collection.
-|xref:../rgant/rgant.adoc#_rgant-Collection_domainEvent[`@Collection#domainEvent()`]
-|Domain
-|
-
-|`@PostsCollection` +
-`RemovedFromEvent`
-|Post a domain event to the Event Bus Service indicating that an element has been removed from a collection.
-|xref:../rgant/rgant.adoc#_rgant-Collection_domainEvent[`@Collection#domainEvent()`]
-|Domain
-|
-
-|`@PostsProperty` +
-`ChangedEvent`
-|Post a domain event to the Event Bus Service indicating that the value of a property has changed.
-|xref:../rgant/rgant.adoc#_rgant-Property_domainEvent[`@Property#domainEvent()`]
-|Domain
-|
-
-|`@PropertyInteraction`
-|Enable subscribers on the Event Bus Service to either veto, validate or take further steps before/after a property has been modified or cleared.
-|xref:../rgant/rgant.adoc#_rgant-Property_domainEvent[`@Property#domainEvent()`]
-|Domain
 |
 
 |`@Prototype`

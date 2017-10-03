@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.facets.members.order;
 
 import org.apache.isis.core.metamodel.facets.MultipleValueFacet;
-import org.apache.isis.core.metamodel.facets.object.fieldorder.FieldOrderFacet;
 
 /**
  * The preferred mechanism for determining the order in which the members of the
@@ -31,7 +30,6 @@ import org.apache.isis.core.metamodel.facets.object.fieldorder.FieldOrderFacet;
  * of the member methods with the <tt>@MemberOrder</tt>.
  * 
  * @see MemberOrderFacet
- * @see FieldOrderFacet
  */
 public interface MemberOrderFacet extends MultipleValueFacet {
 
