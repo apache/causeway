@@ -97,7 +97,6 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
         implements MetaModelValidatorRefiner, PostConstructMethodCache {
 
     private final MetaModelValidatorForDeprecatedAnnotation auditedValidator = new MetaModelValidatorForDeprecatedAnnotation(Audited.class);
-    private final MetaModelValidatorForDeprecatedAnnotation publishedObjectValidator = new MetaModelValidatorForDeprecatedAnnotation(PublishedObject.class);
     private final MetaModelValidatorForDeprecatedAnnotation autoCompleteValidator = new MetaModelValidatorForDeprecatedAnnotation(AutoComplete.class);
     private final MetaModelValidatorForDeprecatedAnnotation boundedValidator = new MetaModelValidatorForDeprecatedAnnotation(Bounded.class);
     private final MetaModelValidatorForDeprecatedAnnotation immutableValidator = new MetaModelValidatorForDeprecatedAnnotation(Immutable.class);
@@ -173,19 +172,9 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
             return;
         }
 
-        PublishedObjectFacet publishedObjectFacet;
-
-        // check for the deprecated @PublishedObject annotation first
-        final PublishedObject publishedObject = Annotations.getAnnotation(processClassContext.getCls(),
-                PublishedObject.class);
-        publishedObjectFacet = publishedObjectValidator.flagIfPresent(
-                                    PublishedObjectFacetForPublishedObjectAnnotation.create(publishedObject, facetHolder));
-
-        // else check from @DomainObject(publishing=...)
-        if(publishedObjectFacet == null) {
-            publishedObjectFacet=
-                    PublishedObjectFacetForDomainObjectAnnotation.create(domainObject, getConfiguration(), facetHolder);
-        }
+        // check from @DomainObject(publishing=...)
+        PublishedObjectFacet publishedObjectFacet = PublishedObjectFacetForDomainObjectAnnotation
+                .create(domainObject, getConfiguration(), facetHolder);
 
         // then add
         FacetUtil.addFacet(publishedObjectFacet);
@@ -579,7 +568,6 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
 
         }));
 
-        metaModelValidator.add(publishedObjectValidator);
         metaModelValidator.add(auditedValidator);
         metaModelValidator.add(autoCompleteValidator);
         metaModelValidator.add(boundedValidator);
@@ -598,7 +586,6 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
         super.setServicesInjector(servicesInjector);
         IsisConfiguration configuration = getConfiguration();
 
-        publishedObjectValidator.setConfiguration(configuration);
         auditedValidator.setConfiguration(configuration);
         autoCompleteValidator.setConfiguration(configuration);
         boundedValidator.setConfiguration(configuration);
