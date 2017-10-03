@@ -30,6 +30,7 @@ import com.google.common.collect.Sets;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.annotation.PublishingChangeKind;
 import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.applib.services.WithTransactionScope;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -66,7 +67,7 @@ public class ChangedObjectsServiceInternal implements WithTransactionScope {
 
 
     // used for publishing
-    private final Map<ObjectAdapter,PublishedObject.ChangeKind> changeKindByEnlistedAdapter = Maps.newLinkedHashMap();
+    private final Map<ObjectAdapter,PublishingChangeKind> changeKindByEnlistedAdapter = Maps.newLinkedHashMap();
 
     @Programmatic
     public boolean isEnlisted(ObjectAdapter adapter) {
@@ -91,7 +92,7 @@ public class ChangedObjectsServiceInternal implements WithTransactionScope {
             return;
         }
 
-        enlistForPublishing(adapter, PublishedObject.ChangeKind.CREATE);
+        enlistForPublishing(adapter, PublishingChangeKind.CREATE);
 
         for (ObjectAssociation property : adapter.getSpecification().getAssociations(Contributed.EXCLUDED, ObjectAssociation.Filters.PROPERTIES)) {
             final AdapterAndProperty aap = AdapterAndProperty.of(adapter, property);
@@ -125,7 +126,7 @@ public class ChangedObjectsServiceInternal implements WithTransactionScope {
             return;
         }
 
-        enlistForPublishing(adapter, PublishedObject.ChangeKind.UPDATE);
+        enlistForPublishing(adapter, PublishingChangeKind.UPDATE);
 
         for (ObjectAssociation property : adapter.getSpecification().getAssociations(Contributed.EXCLUDED, ObjectAssociation.Filters.PROPERTIES)) {
             final AdapterAndProperty aap = AdapterAndProperty.of(adapter, property);
@@ -159,7 +160,7 @@ public class ChangedObjectsServiceInternal implements WithTransactionScope {
             return;
         }
 
-        final boolean enlisted = enlistForPublishing(adapter, PublishedObject.ChangeKind.DELETE);
+        final boolean enlisted = enlistForPublishing(adapter, PublishingChangeKind.DELETE);
         if(!enlisted) {
             return;
         }
@@ -182,8 +183,8 @@ public class ChangedObjectsServiceInternal implements WithTransactionScope {
     /**
      * @return <code>true</code> if successfully enlisted, <code>false</code> if was already enlisted
      */
-    private boolean enlistForPublishing(final ObjectAdapter adapter, final PublishedObject.ChangeKind current) {
-        final PublishedObject.ChangeKind previous = changeKindByEnlistedAdapter.get(adapter);
+    private boolean enlistForPublishing(final ObjectAdapter adapter, final PublishingChangeKind current) {
+        final PublishingChangeKind previous = changeKindByEnlistedAdapter.get(adapter);
         if(previous == null) {
             changeKindByEnlistedAdapter.put(adapter, current);
             return true;
@@ -260,7 +261,7 @@ public class ChangedObjectsServiceInternal implements WithTransactionScope {
 
 
     @Programmatic
-    public Map<ObjectAdapter, PublishedObject.ChangeKind> getChangeKindByEnlistedAdapter() {
+    public Map<ObjectAdapter, PublishingChangeKind> getChangeKindByEnlistedAdapter() {
         return changeKindByEnlistedAdapter;
     }
 

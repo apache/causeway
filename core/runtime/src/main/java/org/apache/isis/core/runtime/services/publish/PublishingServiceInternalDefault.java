@@ -36,7 +36,7 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.annotation.PublishedObject.ChangeKind;
+import org.apache.isis.applib.annotation.PublishingChangeKind;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.command.Command;
@@ -115,14 +115,14 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
 
         // take a copy of enlisted adapters ... the JDO implementation of the PublishingService
         // creates further entities which would be enlisted; taking copy of the map avoids ConcurrentModificationException
-        final Map<ObjectAdapter, ChangeKind> changeKindByEnlistedAdapter = Maps.newHashMap();
+        final Map<ObjectAdapter, PublishingChangeKind> changeKindByEnlistedAdapter = Maps.newHashMap();
         changeKindByEnlistedAdapter.putAll(changedObjectsServiceInternal.getChangeKindByEnlistedAdapter());
 
         publishObjectsToPublishingService(changeKindByEnlistedAdapter);
         publishObjectsToPublisherServices(changeKindByEnlistedAdapter);
     }
 
-    private void publishObjectsToPublishingService(final Map<ObjectAdapter, ChangeKind> changeKindByEnlistedAdapter) {
+    private void publishObjectsToPublishingService(final Map<ObjectAdapter, PublishingChangeKind> changeKindByEnlistedAdapter) {
 
         if(publishingServiceIfAny == null) {
             return;
@@ -132,9 +132,9 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
         final Timestamp timestamp = clockService.nowAsJavaSqlTimestamp();
         final ObjectStringifier stringifier = objectStringifier();
 
-        for (final Map.Entry<ObjectAdapter, ChangeKind> adapterAndChange : changeKindByEnlistedAdapter.entrySet()) {
+        for (final Map.Entry<ObjectAdapter, PublishingChangeKind> adapterAndChange : changeKindByEnlistedAdapter.entrySet()) {
             final ObjectAdapter enlistedAdapter = adapterAndChange.getKey();
-            final ChangeKind changeKind = adapterAndChange.getValue();
+            final PublishingChangeKind changeKind = adapterAndChange.getValue();
 
             publishObjectToPublishingService(
                     enlistedAdapter, changeKind, currentUser, timestamp, stringifier);
@@ -143,7 +143,7 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
 
     private void publishObjectToPublishingService(
             final ObjectAdapter enlistedAdapter,
-            final ChangeKind changeKind,
+            final PublishingChangeKind changeKind,
             final String currentUser,
             final Timestamp timestamp,
             final ObjectStringifier stringifier) {
@@ -171,9 +171,9 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
     }
 
     private void publishObjectsToPublisherServices(
-            final Map<ObjectAdapter, ChangeKind> changeKindByEnlistedAdapter) {
+            final Map<ObjectAdapter, PublishingChangeKind> changeKindByEnlistedAdapter) {
 
-        final Map<ObjectAdapter, ChangeKind> changeKindByPublishedAdapter =
+        final Map<ObjectAdapter, PublishingChangeKind> changeKindByPublishedAdapter =
                 Maps.filterKeys(
                         changeKindByEnlistedAdapter,
                         PublishedObjectFacet.Predicates.isPublished());
@@ -195,7 +195,7 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
     private PublishedObjects newPublishedObjects(
             final int numberLoaded,
             final int numberObjectPropertiesModified,
-            final Map<ObjectAdapter, ChangeKind> changeKindByPublishedAdapter) {
+            final Map<ObjectAdapter, PublishingChangeKind> changeKindByPublishedAdapter) {
 
         final Command command = commandContext.getCommand();
         final UUID transactionUuid = command.getTransactionId();
@@ -342,7 +342,7 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
     private EventMetadata newEventMetadata(
             final String currentUser,
             final Timestamp timestamp,
-            final ChangeKind changeKind,
+            final PublishingChangeKind changeKind,
             final String enlistedAdapterClass,
             final Bookmark enlistedTarget) {
         final EventType eventType = PublishingServiceInternalDefault.eventTypeFor(changeKind);
@@ -356,14 +356,14 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
                 enlistedAdapterClass, null, enlistedTarget, null, null, null, null);
     }
 
-    private static EventType eventTypeFor(ChangeKind changeKind) {
-        if(changeKind == ChangeKind.UPDATE) {
+    private static EventType eventTypeFor(PublishingChangeKind changeKind) {
+        if(changeKind == PublishingChangeKind.UPDATE) {
             return EventType.OBJECT_UPDATED;
         }
-        if(changeKind == ChangeKind.CREATE) {
+        if(changeKind == PublishingChangeKind.CREATE) {
             return EventType.OBJECT_CREATED;
         }
-        if(changeKind == ChangeKind.DELETE) {
+        if(changeKind == PublishingChangeKind.DELETE) {
             return EventType.OBJECT_DELETED;
         }
         throw new IllegalArgumentException("unknown ChangeKind '" + changeKind + "'");
