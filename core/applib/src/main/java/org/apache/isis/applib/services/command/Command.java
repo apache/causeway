@@ -33,7 +33,6 @@ import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.publish.EventMetadata;
-import org.apache.isis.applib.services.publish.EventPayload;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.schema.cmd.v1.CommandDto;
 

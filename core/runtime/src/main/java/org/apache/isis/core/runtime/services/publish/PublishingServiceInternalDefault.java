@@ -45,7 +45,6 @@ import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.metrics.MetricsService;
 import org.apache.isis.applib.services.publish.EventMetadata;
-import org.apache.isis.applib.services.publish.EventPayload;
 import org.apache.isis.applib.services.publish.EventType;
 import org.apache.isis.applib.services.publish.ObjectStringifier;
 import org.apache.isis.applib.services.publish.PublishedObjects;
@@ -153,8 +152,6 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
         if(publishedObjectFacet == null) {
             return;
         }
-
-        final PublishedObject.PayloadFactory payloadFactory = publishedObjectFacet.value();
 
         final RootOid enlistedAdapterOid = (RootOid) enlistedAdapter.getOid();
         final String enlistedAdapterClass = CommandUtil.targetClassNameFor(enlistedAdapter);
