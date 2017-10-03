@@ -22,7 +22,6 @@ package org.apache.isis.core.metamodel.facets.naming.describedas;
 import java.lang.reflect.Method;
 import java.util.Collection;
 
-import org.apache.isis.applib.annotation.DescribedAs;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
@@ -31,15 +30,12 @@ import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacetAbstract;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.members.describedas.annotprop.DescribedAsFacetOnMemberFactory;
-import org.apache.isis.core.metamodel.facets.object.describedas.annotation.DescribedAsFacetOnTypeAnnotationFactory;
-import org.apache.isis.core.metamodel.facets.param.describedas.annotderived.DescribedAsFacetOnParameterAnnotationElseDerivedFromTypeFactory;
 
 public class DescribedAsAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testDescribedAsAnnotationPickedUpOnClass() {
         final DescribedAsFacetOnTypeAnnotationFactory facetFactory = new DescribedAsFacetOnTypeAnnotationFactory();
 
-        @DescribedAs("some description")
         class Customer {
         }
 
@@ -59,7 +55,6 @@ public class DescribedAsAnnotationFacetFactoryTest extends AbstractFacetFactoryT
 
         class Customer {
             @SuppressWarnings("unused")
-            @DescribedAs("some description")
             public int getNumberOfOrders() {
                 return 0;
             }
@@ -82,7 +77,6 @@ public class DescribedAsAnnotationFacetFactoryTest extends AbstractFacetFactoryT
 
         class Customer {
             @SuppressWarnings("unused")
-            @DescribedAs("some description")
             public Collection<?> getOrders() {
                 return null;
             }
@@ -105,7 +99,6 @@ public class DescribedAsAnnotationFacetFactoryTest extends AbstractFacetFactoryT
 
         class Customer {
             @SuppressWarnings("unused")
-            @DescribedAs("some description")
             public void someAction() {
             }
         }
@@ -127,7 +120,7 @@ public class DescribedAsAnnotationFacetFactoryTest extends AbstractFacetFactoryT
 
         class Customer {
             @SuppressWarnings("unused")
-            public void someAction(@DescribedAs("some description") final int x) {
+            public void someAction(final int x) {
             }
         }
         final Method actionMethod = findMethod(Customer.class, "someAction", new Class[] { int.class });

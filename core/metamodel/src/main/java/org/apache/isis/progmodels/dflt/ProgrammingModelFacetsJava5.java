@@ -76,7 +76,6 @@ import org.apache.isis.core.metamodel.facets.object.choices.boundedmarkerifc.Cho
 import org.apache.isis.core.metamodel.facets.object.choices.enums.EnumFacetUsingValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.object.cssclass.method.CssClassFacetMethodFactory;
 import org.apache.isis.core.metamodel.facets.object.defaults.annotcfg.DefaultedFacetAnnotationElseConfigurationFactory;
-import org.apache.isis.core.metamodel.facets.object.describedas.annotation.DescribedAsFacetOnTypeAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.disabled.method.DisabledObjectFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.object.domainobject.DomainObjectAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.domainobjectlayout.DomainObjectLayoutFacetFactory;
@@ -321,7 +320,6 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(new ActionParameterDefaultFacetDerivedFromTypeFactory());
 
         
-        addFactory(new DescribedAsFacetOnTypeAnnotationFactory());
         addFactory(new DescribedAsFacetOnMemberFactory());
         addFactory(new DescribedAsFacetOnParameterAnnotationElseDerivedFromTypeFactory());
 
