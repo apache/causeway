@@ -341,10 +341,8 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
                 final List<ObjectAdapter> parameterAdapters = Arrays.asList(argumentAdapters);
 
                 getPublishingServiceInternal().publishAction(
-                        priorExecution,
-                        owningAction, identifiedHolder,
-                        targetAdapter, parameterAdapters,
-                        returnedAdapter);
+                        priorExecution
+                );
             }
         }
 

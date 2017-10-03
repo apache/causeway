@@ -42,10 +42,8 @@ import org.apache.isis.applib.services.publish.PublishedObjects;
 import org.apache.isis.applib.services.publish.PublisherService;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facets.object.publishedobject.PublishedObjectFacet;
 import org.apache.isis.core.metamodel.services.publishing.PublishingServiceInternal;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.runtime.services.changes.ChangedObjectsServiceInternal;
 
 /**
@@ -114,12 +112,7 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
 
     @Programmatic
     public void publishAction(
-            final Interaction.Execution execution,
-            final ObjectAction objectAction,
-            final IdentifiedHolder identifiedHolder,
-            final ObjectAdapter targetAdapter,
-            final List<ObjectAdapter> parameterAdapters,
-            final ObjectAdapter resultAdapter) {
+            final Interaction.Execution execution) {
 
         if(suppress) {
             return;
