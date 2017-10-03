@@ -30,9 +30,7 @@ import org.junit.Test;
 import org.apache.isis.applib.annotation.Audited;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Immutable;
-import org.apache.isis.applib.annotation.PublishingChangeKind;
 import org.apache.isis.applib.services.HasTransactionId;
-import org.apache.isis.applib.services.publish.EventPayload;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
@@ -62,7 +60,6 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertThat;
 
 public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
@@ -156,7 +153,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
             public void configured_value_set_to_all() {
                 allowingConfigurationToReturn("isis.services.audit.objects", "all");
 
-                facetFactory.processAuditing(new ProcessClassContext(Customer.class, null, mockMethodRemover, facetHolder));
+                facetFactory.processAuditing(new ProcessClassContext(DomainObjectAnnotationFacetFactoryTest.Customer.class, null, mockMethodRemover, facetHolder));
 
                 final Facet facet = facetHolder.getFacet(AuditableFacet.class);
                 assertThat(facet, is(notNullValue()));
@@ -169,7 +166,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
             public void configured_value_set_to_none() {
                 allowingConfigurationToReturn("isis.services.audit.objects", "none");
 
-                facetFactory.process(new ProcessClassContext(Customer.class, null, mockMethodRemover, facetHolder));
+                facetFactory.process(new ProcessClassContext(DomainObjectAnnotationFacetFactoryTest.Customer.class, null, mockMethodRemover, facetHolder));
 
                 final Facet facet = facetHolder.getFacet(AuditableFacet.class);
                 Assert.assertNull(facet);
@@ -181,7 +178,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
             public void configured_value_set_to_not_recognized() {
                 allowingConfigurationToReturn("isis.services.audit.objects", "foobar");
 
-                facetFactory.process(new ProcessClassContext(Customer.class, null, mockMethodRemover, facetHolder));
+                facetFactory.process(new ProcessClassContext(DomainObjectAnnotationFacetFactoryTest.Customer.class, null, mockMethodRemover, facetHolder));
 
                 final Facet facet = facetHolder.getFacet(AuditableFacet.class);
                 Assert.assertNull(facet);
@@ -213,7 +210,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
             @Test
             public void does_not_have_annotation() {
 
-                facetFactory.process(new ProcessClassContext(Customer.class, null, mockMethodRemover, facetHolder));
+                facetFactory.process(new ProcessClassContext(DomainObjectAnnotationFacetFactoryTest.Customer.class, null, mockMethodRemover, facetHolder));
 
                 final Facet facet = facetHolder.getFacet(AuditableFacet.class);
                 Assert.assertNull(facet);
@@ -315,21 +312,6 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
         class CustomerWithDomainObjectAndPublishingSetToEnabled {
         }
 
-        public static class CustomerPayloadFactory implements PublishingPayloadFactoryForObject {
-            @Override
-            public EventPayload payloadFor(final Object changedObject, final PublishingChangeKind publishingChangeKind) {
-                return null;
-            }
-        }
-
-        @DomainObject(publishing = org.apache.isis.applib.annotation.Publishing.AS_CONFIGURED, publishingPayloadFactory = CustomerPayloadFactory.class)
-        class CustomerWithDomainObjectAndPublishingSetToAsConfiguredWithCustomPayloadFactory {
-        }
-
-        @DomainObject(publishing = org.apache.isis.applib.annotation.Publishing.ENABLED, publishingPayloadFactory = CustomerPayloadFactory.class)
-        class CustomerWithDomainObjectAndPublishingSetToEnabledWithCustomPayloadFactory {
-        }
-
         @Test
         public void ignoreHasTransactionId() {
 
@@ -349,7 +331,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
             public void configured_value_set_to_all() {
                 allowingConfigurationToReturn("isis.services.publish.objects", "all");
 
-                facetFactory.process(new ProcessClassContext(Customer.class, null, mockMethodRemover, facetHolder));
+                facetFactory.process(new ProcessClassContext(DomainObjectAnnotationFacetFactoryTest.Customer.class, null, mockMethodRemover, facetHolder));
 
                 final Facet facet = facetHolder.getFacet(PublishedObjectFacet.class);
                 Assert.assertNotNull(facet);
@@ -362,7 +344,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
             public void configured_value_set_to_none() {
                 allowingConfigurationToReturn("isis.services.publish.objects", "none");
 
-                facetFactory.process(new ProcessClassContext(Customer.class, null, mockMethodRemover, facetHolder));
+                facetFactory.process(new ProcessClassContext(DomainObjectAnnotationFacetFactoryTest.Customer.class, null, mockMethodRemover, facetHolder));
 
                 final Facet facet = facetHolder.getFacet(PublishedObjectFacet.class);
                 Assert.assertNull(facet);
@@ -374,7 +356,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
             public void configured_value_set_to_not_recognized() {
                 allowingConfigurationToReturn("isis.services.publish.objects", "foobar");
 
-                facetFactory.process(new ProcessClassContext(Customer.class, null, mockMethodRemover, facetHolder));
+                facetFactory.process(new ProcessClassContext(DomainObjectAnnotationFacetFactoryTest.Customer.class, null, mockMethodRemover, facetHolder));
 
                 final Facet facet = facetHolder.getFacet(PublishedObjectFacet.class);
                 Assert.assertNull(facet);
@@ -383,38 +365,6 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
             }
         }
 
-        public static class WithPublishedObjectAnnotation extends Publishing {
-
-            @Before
-            public void setUp() throws Exception {
-                super.setUp();
-                allowingConfigurationToReturn("isis.services.publish.objects", null);
-            }
-
-            @Test
-            public void has_annotation() {
-
-                facetFactory.process(new ProcessClassContext(CustomerWithPublishedObjectAnnotation.class, null, mockMethodRemover, facetHolder));
-
-                final Facet facet = facetHolder.getFacet(PublishedObjectFacet.class);
-                Assert.assertNotNull(facet);
-                Assert.assertTrue(facet instanceof PublishedObjectFacetForPublishedObjectAnnotation);
-
-                expectNoMethodsRemoved();
-            }
-
-            @Test
-            public void does_not_have_annotation() {
-
-                facetFactory.process(new ProcessClassContext(Customer.class, null, mockMethodRemover, facetHolder));
-
-                final Facet facet = facetHolder.getFacet(PublishedObjectFacet.class);
-                Assert.assertNull(facet);
-
-                expectNoMethodsRemoved();
-            }
-
-        }
 
         public static class WithDomainObjectAnnotationWithPublishingSetToAsConfigured extends Publishing {
 
@@ -427,27 +377,6 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
                 final Facet facet = facetHolder.getFacet(PublishedObjectFacet.class);
                 Assert.assertNotNull(facet);
                 Assert.assertTrue(facet instanceof PublishedObjectFacetForDomainObjectAnnotationAsConfigured);
-
-                expectNoMethodsRemoved();
-            }
-
-            @Test
-            public void configured_value_set_to_all_forCustomPayloadFactory() {
-                allowingConfigurationToReturn("isis.services.publish.objects", "all");
-
-                facetFactory.process(new ProcessClassContext(CustomerWithDomainObjectAndPublishingSetToAsConfiguredWithCustomPayloadFactory.class, null, mockMethodRemover, facetHolder));
-
-                final Facet facet = facetHolder.getFacet(PublishedObjectFacet.class);
-                Assert.assertNotNull(facet);
-                Assert.assertTrue(facet instanceof PublishedObjectFacetForDomainObjectAnnotationAsConfigured);
-
-                final PublishedObject.PayloadFactory payloadFactory = ((PublishedObjectFacetForDomainObjectAnnotationAsConfigured) facet).value();
-
-                assertThat(payloadFactory, instanceOf(PublishedObjectPayloadFactoryDefault.class));
-                final PublishedObjectPayloadFactoryDefault legacyAdapter = (PublishedObjectPayloadFactoryDefault) payloadFactory;
-
-                final PublishingPayloadFactoryForObject specifiedPayloadFactory = legacyAdapter.getPayloadFactory();
-                assertThat(specifiedPayloadFactory, instanceOf(CustomerPayloadFactory.class));
 
                 expectNoMethodsRemoved();
             }
@@ -493,26 +422,6 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
                 expectNoMethodsRemoved();
             }
 
-            @Test
-            public void irrespective_of_configured_value_forCustomPayloadFactory() {
-                allowingConfigurationToReturn("isis.services.publish.objects", null);
-
-                facetFactory.process(new ProcessClassContext(CustomerWithDomainObjectAndPublishingSetToEnabledWithCustomPayloadFactory.class, null, mockMethodRemover, facetHolder));
-
-                final Facet facet = facetHolder.getFacet(PublishedObjectFacet.class);
-                Assert.assertNotNull(facet);
-                Assert.assertTrue(facet instanceof PublishedObjectFacetForDomainObjectAnnotation);
-
-                final PublishedObject.PayloadFactory payloadFactory = ((PublishedObjectFacetForDomainObjectAnnotation) facet).value();
-
-                assertThat(payloadFactory, instanceOf(PublishedObjectPayloadFactoryDefault.class));
-                final PublishedObjectPayloadFactoryDefault legacyAdapter = (PublishedObjectPayloadFactoryDefault) payloadFactory;
-
-                final PublishingPayloadFactoryForObject specifiedPayloadFactory = legacyAdapter.getPayloadFactory();
-                assertThat(specifiedPayloadFactory, instanceOf(CustomerPayloadFactory.class));
-
-                expectNoMethodsRemoved();
-            }
         }
 
         public static class WithDomainObjectAnnotationWithPublishingSetToDisabled extends Publishing {
@@ -605,7 +514,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
         @Test
         public void whenNoDomainObjectAnnotation() {
 
-            facetFactory.process(new ProcessClassContext(Customer.class, null, mockMethodRemover, facetHolder));
+            facetFactory.process(new ProcessClassContext(DomainObjectAnnotationFacetFactoryTest.Customer.class, null, mockMethodRemover, facetHolder));
 
             final Facet facet = facetHolder.getFacet(AutoCompleteFacet.class);
             Assert.assertNull(facet);
@@ -662,7 +571,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
         @Test
         public void whenNoDomainObjectAnnotation() {
 
-            facetFactory.process(new ProcessClassContext(Customer.class, null, mockMethodRemover, facetHolder));
+            facetFactory.process(new ProcessClassContext(DomainObjectAnnotationFacetFactoryTest.Customer.class, null, mockMethodRemover, facetHolder));
 
             final Facet facet = facetHolder.getFacet(ChoicesFacet.class);
             Assert.assertNull(facet);
@@ -697,7 +606,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
             public void configured_value_set_to_true() {
                 allowingConfigurationToReturn(EditingObjectsConfiguration.EDIT_OBJECTS_KEY, "true");
 
-                facetFactory.process(new ProcessClassContext(Customer.class, null, mockMethodRemover, facetHolder));
+                facetFactory.process(new ProcessClassContext(DomainObjectAnnotationFacetFactoryTest.Customer.class, null, mockMethodRemover, facetHolder));
 
                 final Facet facet = facetHolder.getFacet(ImmutableFacet.class);
                 Assert.assertNull(facet);
@@ -709,7 +618,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
             public void configured_value_set_to_false() {
                 allowingConfigurationToReturn(EditingObjectsConfiguration.EDIT_OBJECTS_KEY, "false");
 
-                facetFactory.process(new ProcessClassContext(Customer.class, null, mockMethodRemover, facetHolder));
+                facetFactory.process(new ProcessClassContext(DomainObjectAnnotationFacetFactoryTest.Customer.class, null, mockMethodRemover, facetHolder));
 
                 final Facet facet = facetHolder.getFacet(ImmutableFacet.class);
                 Assert.assertNotNull(facet);
@@ -722,7 +631,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
             public void configured_value_set_to_not_recognized() {
                 allowingConfigurationToReturn(EditingObjectsConfiguration.EDIT_OBJECTS_KEY, "foobar");
 
-                facetFactory.process(new ProcessClassContext(Customer.class, null, mockMethodRemover, facetHolder));
+                facetFactory.process(new ProcessClassContext(DomainObjectAnnotationFacetFactoryTest.Customer.class, null, mockMethodRemover, facetHolder));
 
                 final Facet facet = facetHolder.getFacet(ImmutableFacet.class);
                 Assert.assertNull(facet);
@@ -755,7 +664,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
             @Test
             public void does_not_have_annotation() {
 
-                facetFactory.process(new ProcessClassContext(Customer.class, null, mockMethodRemover, facetHolder));
+                facetFactory.process(new ProcessClassContext(DomainObjectAnnotationFacetFactoryTest.Customer.class, null, mockMethodRemover, facetHolder));
 
                 final Facet facet = facetHolder.getFacet(ImmutableFacet.class);
                 Assert.assertNull(facet);
@@ -887,7 +796,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
         @Test
         public void whenNoDomainObjectAnnotation() {
 
-            facetFactory.process(new ProcessClassContext(Customer.class, null, mockMethodRemover, facetHolder));
+            facetFactory.process(new ProcessClassContext(DomainObjectAnnotationFacetFactoryTest.Customer.class, null, mockMethodRemover, facetHolder));
 
             final Facet facet = facetHolder.getFacet(ObjectSpecIdFacet.class);
             Assert.assertNull(facet);
@@ -1006,7 +915,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
         @Test
         public void whenNoDomainObjectAnnotation() {
 
-            facetFactory.process(new ProcessClassContext(Customer.class, null, mockMethodRemover, facetHolder));
+            facetFactory.process(new ProcessClassContext(DomainObjectAnnotationFacetFactoryTest.Customer.class, null, mockMethodRemover, facetHolder));
 
             final Facet facet = facetHolder.getFacet(ViewModelFacet.class);
             Assert.assertNull(facet);
