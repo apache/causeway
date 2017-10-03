@@ -48,7 +48,6 @@ import org.apache.isis.core.metamodel.services.ixn.InteractionDtoServiceInternal
 import org.apache.isis.core.metamodel.services.publishing.PublishingServiceInternal;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.runtime.services.changes.ChangedObjectsServiceInternal;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
 /**
@@ -193,35 +192,32 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
 
     //region > injected services
     @javax.inject.Inject
-    private List<PublisherService> publisherServices;
+    List<PublisherService> publisherServices;
 
     @javax.inject.Inject
-    private ChangedObjectsServiceInternal changedObjectsServiceInternal;
+    ChangedObjectsServiceInternal changedObjectsServiceInternal;
 
     @javax.inject.Inject
-    private InteractionDtoServiceInternal interactionDtoServiceInternal;
+    InteractionDtoServiceInternal interactionDtoServiceInternal;
 
     @javax.inject.Inject
-    private CommandContext commandContext;
+    CommandContext commandContext;
 
     @javax.inject.Inject
-    private InteractionContext interactionContext;
+    InteractionContext interactionContext;
 
     @javax.inject.Inject
-    private ClockService clockService;
+    ClockService clockService;
 
     @javax.inject.Inject
-    private UserService userService;
+    UserService userService;
 
     @javax.inject.Inject
-    private MetricsService metricsService;
+    MetricsService metricsService;
 
     @javax.inject.Inject
-    private IsisSessionFactory isisSessionFactory;
+    IsisSessionFactory isisSessionFactory;
 
-    private PersistenceSession getPersistenceSession() {
-        return isisSessionFactory.getCurrentSession().getPersistenceSession();
-    }
     //endregion
 
 }
