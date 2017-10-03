@@ -44,11 +44,9 @@ import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facets.object.publishedobject.PublishedObjectFacet;
-import org.apache.isis.core.metamodel.services.ixn.InteractionDtoServiceInternal;
 import org.apache.isis.core.metamodel.services.publishing.PublishingServiceInternal;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.runtime.services.changes.ChangedObjectsServiceInternal;
-import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
 /**
  * Wrapper around {@link PublisherService}.  Is a no-op if there is no injected service.
@@ -60,7 +58,7 @@ import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 @RequestScoped
 public class PublishingServiceInternalDefault implements PublishingServiceInternal {
 
-    //region > publishObjects
+
     @Override
     @Programmatic
     public void publishObjects() {
@@ -71,15 +69,9 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
 
         // take a copy of enlisted adapters ... the JDO implementation of the PublishingService
         // creates further entities which would be enlisted; taking copy of the map avoids ConcurrentModificationException
+
         final Map<ObjectAdapter, PublishingChangeKind> changeKindByEnlistedAdapter = Maps.newHashMap();
         changeKindByEnlistedAdapter.putAll(changedObjectsServiceInternal.getChangeKindByEnlistedAdapter());
-
-        publishObjectsToPublisherServices(changeKindByEnlistedAdapter);
-    }
-
-
-    private void publishObjectsToPublisherServices(
-            final Map<ObjectAdapter, PublishingChangeKind> changeKindByEnlistedAdapter) {
 
         final Map<ObjectAdapter, PublishingChangeKind> changeKindByPublishedAdapter =
                 Maps.filterKeys(
@@ -118,9 +110,7 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
         return new PublishedObjectsDefault(transactionUuid, nextEventSequence, userName, timestamp, numberLoaded, numberObjectPropertiesModified, changeKindByPublishedAdapter);
     }
 
-    //endregion
 
-    //region > publishAction
 
     @Programmatic
     public void publishAction(
@@ -139,10 +129,6 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
     }
 
 
-    //endregion
-
-    //region > publishProperty
-
     @Override
     public void publishProperty(
             final Interaction.Execution execution) {
@@ -155,10 +141,6 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
     }
 
 
-    //endregion
-
-    //region > helper: publishToPublisherServices
-
     private void publishToPublisherServices(final Interaction.Execution<?,?> execution) {
 
         if(publisherServices == null || publisherServices.isEmpty()) {
@@ -170,11 +152,7 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
         }
     }
 
-    //endregion
 
-    //region > suppress
-
-    // this service is request scoped
     boolean suppress;
 
     @Programmatic
@@ -188,7 +166,6 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
         }
     }
 
-    //endregion
 
     //region > injected services
     @javax.inject.Inject
@@ -196,9 +173,6 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
 
     @javax.inject.Inject
     ChangedObjectsServiceInternal changedObjectsServiceInternal;
-
-    @javax.inject.Inject
-    InteractionDtoServiceInternal interactionDtoServiceInternal;
 
     @javax.inject.Inject
     CommandContext commandContext;
@@ -214,9 +188,6 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
 
     @javax.inject.Inject
     MetricsService metricsService;
-
-    @javax.inject.Inject
-    IsisSessionFactory isisSessionFactory;
 
     //endregion
 
