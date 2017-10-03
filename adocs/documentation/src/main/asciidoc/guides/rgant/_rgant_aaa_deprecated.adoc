@@ -286,18 +286,6 @@ Also part of the toString representation of bookmarks, if using the Bookmark Ser
 |UI
 |Yes
 
-|`@PublishedAction`
-|Action invocation should be serialized and published by configured PublishingService (if any), eg to other systems.
-|xref:../rgant/rgant.adoc#_rgant-Action_publishing[`@Action#publishing()`]
-|Domain
-|
-
-|`@PublishedObject`
-|Change to object should be serialized and published by configured PublishingService (if any), eg to other systems.
-|xref:../rgant/rgant.adoc#_rgant-DomainObject_publishing[`@DomainObject#publishing()`]
-|Domain
-|
-
 |`@QueryOnly`
 |Whether an action is query-only (has no side-effects).
 |xref:../rgant/rgant.adoc#_rgant-Action_semantics[`@Action#semantics()`]
