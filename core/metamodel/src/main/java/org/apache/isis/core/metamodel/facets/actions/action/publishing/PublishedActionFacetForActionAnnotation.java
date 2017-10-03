@@ -54,45 +54,22 @@ public class PublishedActionFacetForActionAnnotation extends PublishedActionFace
                         }
                         // else fall through
                     default:
-                        final PublishingPayloadFactoryForAction publishingPayloadFactory = newPayloadFactory(action);
                         return action != null
-                                ? new PublishedActionFacetForActionAnnotationAsConfigured(publishingPayloadFactory, holder)
-                                : new PublishedActionFacetFromConfiguration(publishingPayloadFactory, holder);
+                                ? new PublishedActionFacetForActionAnnotationAsConfigured(holder)
+                                : new PublishedActionFacetFromConfiguration(holder);
                 }
             case DISABLED:
                 return null;
             case ENABLED:
-                return new PublishedActionFacetForActionAnnotation(
-                        newPayloadFactory(action), holder);
+                return new PublishedActionFacetForActionAnnotation(holder);
         }
         return null;
     }
 
-    /**
-     * @return null means that the default payload factories will be used; this is handled within IsisTransaction.
-     */
-    private static PublishingPayloadFactoryForAction newPayloadFactory(final Action action) {
-        if(action == null) {
-            return null;
-        }
-        final Class<? extends PublishingPayloadFactoryForAction> payloadFactoryClass = action.publishingPayloadFactory();
-        if(payloadFactoryClass == null) {
-            return null;
-        }
-
-        try {
-            return payloadFactoryClass.newInstance();
-        } catch (final InstantiationException e) {
-            return null;
-        } catch (final IllegalAccessException e) {
-            return null;
-        }
-    }
 
     public PublishedActionFacetForActionAnnotation(
-            final PublishingPayloadFactoryForAction publishingPayloadFactory,
             final FacetHolder holder) {
-        super(publishingPayloadFactory, holder);
+        super(holder);
     }
 
 }

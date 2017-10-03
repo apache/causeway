@@ -25,9 +25,8 @@ import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFace
 public class PublishedActionFacetFromConfiguration extends PublishedActionFacetAbstract {
 
     public PublishedActionFacetFromConfiguration(
-            final PublishingPayloadFactoryForAction publishingPayloadFactory,
             final FacetHolder holder) {
-        super(publishingPayloadFactory, holder);
+        super(holder);
     }
 
 }

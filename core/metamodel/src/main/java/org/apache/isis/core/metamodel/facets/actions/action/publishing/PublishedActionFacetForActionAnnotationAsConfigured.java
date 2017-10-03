@@ -24,9 +24,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 public class PublishedActionFacetForActionAnnotationAsConfigured extends PublishedActionFacetForActionAnnotation {
 
     public PublishedActionFacetForActionAnnotationAsConfigured(
-            final PublishingPayloadFactoryForAction publishingPayloadFactory,
             final FacetHolder holder) {
-        super(publishingPayloadFactory, holder);
+        super(holder);
     }
 
 }
