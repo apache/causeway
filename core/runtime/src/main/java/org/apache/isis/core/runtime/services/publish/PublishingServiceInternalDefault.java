@@ -49,7 +49,6 @@ import org.apache.isis.applib.services.publish.EventType;
 import org.apache.isis.applib.services.publish.ObjectStringifier;
 import org.apache.isis.applib.services.publish.PublishedObjects;
 import org.apache.isis.applib.services.publish.PublisherService;
-import org.apache.isis.applib.services.publish.PublishingService;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;

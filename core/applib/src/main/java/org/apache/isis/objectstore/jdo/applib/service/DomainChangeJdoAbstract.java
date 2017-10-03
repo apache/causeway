@@ -41,7 +41,6 @@ import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.metamodel.MetaModelService2;
 import org.apache.isis.applib.services.metamodel.MetaModelService3;
 import org.apache.isis.applib.services.publish.PublisherService;
-import org.apache.isis.applib.services.publish.PublishingService;
 import org.apache.isis.applib.util.ObjectContracts;
 
 import static org.apache.isis.applib.annotation.Optionality.MANDATORY;
