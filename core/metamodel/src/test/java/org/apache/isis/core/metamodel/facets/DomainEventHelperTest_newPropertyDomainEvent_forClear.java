@@ -18,11 +18,14 @@ package org.apache.isis.core.metamodel.facets;
 
 import org.joda.time.LocalDate;
 import org.junit.Test;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.eventbus.PropertyDomainEvent;
 
+import static junit.framework.Assert.assertEquals;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThat;
 
 public class DomainEventHelperTest_newPropertyDomainEvent_forClear {
@@ -42,10 +45,10 @@ public class DomainEventHelperTest_newPropertyDomainEvent_forClear {
         
         final PropertyDomainEvent<Object, Object> ev =
                 new DomainEventHelper(null).newPropertyDomainEvent(PropertyDomainEvent.Default.class, identifier, sdo, oldValue, newValue);
-        assertThat(ev.getSource(), is(sdo));
+        assertSame(ev.getSource(), sdo);
         assertThat(ev.getIdentifier(), is(identifier));
-        assertThat(ev.getOldValue(), is(oldValue));
-        assertThat(ev.getNewValue(), is(newValue));
+        assertEquals(ev.getOldValue(), oldValue);
+        assertNull(ev.getNewValue());
     }
 
 
@@ -59,10 +62,10 @@ public class DomainEventHelperTest_newPropertyDomainEvent_forClear {
         
         final PropertyDomainEvent<SomeDomainObject, LocalDate> ev =
                 new DomainEventHelper(null).newPropertyDomainEvent(SomeDatePropertyChangedDomainEvent.class, identifier, sdo, oldValue, newValue);
-        assertThat(ev.getSource(), is(sdo));
+        assertSame(ev.getSource(), sdo);
         assertThat(ev.getIdentifier(), is(identifier));
         assertThat(ev.getOldValue(), is(oldValue));
-        assertThat(ev.getNewValue(), is(nullValue()));
+        assertNull(ev.getNewValue());
     }
     
 }

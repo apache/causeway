@@ -25,6 +25,7 @@ import org.apache.isis.applib.services.eventbus.AbstractDomainEvent;
 import org.apache.isis.applib.services.eventbus.CollectionDomainEvent;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThat;
 
 public class DomainEventHelperTest_newCollectionDomainEvent_forAdd {
@@ -46,10 +47,10 @@ public class DomainEventHelperTest_newCollectionDomainEvent_forAdd {
 
         final CollectionDomainEvent<Object, Object> ev = new DomainEventHelper(null).newCollectionDomainEvent(
                 CollectionDomainEvent.Default.class, null, identifier, sdo, CollectionDomainEvent.Of.ADD_TO, other);
-        assertThat(ev.getSource(), is(sdo));
+        assertSame(ev.getSource(), sdo);
         assertThat(ev.getIdentifier(), is(identifier));
         assertThat(ev.getOf(), is(CollectionDomainEvent.Of.ADD_TO));
-        assertThat(ev.getValue(), is(other));
+        assertSame(ev.getValue(), other);
     }
 
     @Test
@@ -60,10 +61,10 @@ public class DomainEventHelperTest_newCollectionDomainEvent_forAdd {
 
         final CollectionDomainEvent<Object, Object> ev = new DomainEventHelper(null).newCollectionDomainEvent(
                 CollectionDomainEvent.Default.class, AbstractDomainEvent.Phase.EXECUTED, identifier, sdo, CollectionDomainEvent.Of.ADD_TO, other);
-        assertThat(ev.getSource(), is(sdo));
+        assertSame(ev.getSource(), sdo);
         assertThat(ev.getIdentifier(), is(identifier));
         assertThat(ev.getOf(), is(CollectionDomainEvent.Of.ADD_TO));
-        assertThat(ev.getValue(), is(other));
+        assertSame(ev.getValue(), other);
     }
 
     @Test
