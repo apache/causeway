@@ -21,24 +21,19 @@ package org.apache.isis.core.metamodel.facets.members.render.annotprop;
 
 import java.util.Properties;
 
-import org.apache.isis.applib.annotation.Resolve;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
-import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.ContributeeMemberFacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.members.render.RenderFacet;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
 
 public class RenderFacetOrResolveFactory extends FacetFactoryAbstract
         implements ContributeeMemberFacetFactory, MetaModelValidatorRefiner {
 
-    private final MetaModelValidatorForDeprecatedAnnotation resolveValidator = new MetaModelValidatorForDeprecatedAnnotation(Resolve.class);
 
     public RenderFacetOrResolveFactory() {
         super(FeatureType.MEMBERS);
@@ -48,9 +43,6 @@ public class RenderFacetOrResolveFactory extends FacetFactoryAbstract
     public void process(final ProcessMethodContext processMethodContext) {
         
         RenderFacet renderFacet = createFromMetadataPropertiesIfPossible(processMethodContext);
-        if(renderFacet == null) {
-            renderFacet = resolveValidator.flagIfPresent(createFromResolveAnnotationIfPossible(processMethodContext), processMethodContext);
-        }
 
         // no-op if null
         FacetUtil.addFacet(renderFacet);
@@ -72,27 +64,14 @@ public class RenderFacetOrResolveFactory extends FacetFactoryAbstract
         return properties != null ? new RenderFacetProperties(properties, holder) : null;
     }
 
-    // @Render was originally called @Resolve, so look for that annotation instead.
-    @SuppressWarnings("deprecation")
-    private static RenderFacet createFromResolveAnnotationIfPossible(final ProcessMethodContext processMethodContext) {
-        final org.apache.isis.applib.annotation.Resolve resolveAnnotation = 
-        Annotations.getAnnotation(processMethodContext.getMethod(), org.apache.isis.applib.annotation.Resolve.class);
-        return resolveAnnotation == null ? null : new RenderFacetViaResolveAnnotation(processMethodContext.getFacetHolder(), resolveAnnotation.value());
-    }
 
 
     @Override
     public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
-        metaModelValidator.add(resolveValidator);
+
     }
 
 
-    @Override
-    public void setServicesInjector(final ServicesInjector servicesInjector) {
-        super.setServicesInjector(servicesInjector);
-        IsisConfiguration configuration = servicesInjector.getConfigurationServiceInternal();
-        resolveValidator.setConfiguration(configuration);
-    }
 
 
 }

@@ -20,15 +20,11 @@
 package org.apache.isis.core.metamodel.facets.members.render;
 
 import org.apache.isis.applib.annotation.RenderType;
-import org.apache.isis.applib.annotation.Resolve;
 import org.apache.isis.core.metamodel.facets.SingleValueFacet;
 
 /**
  * Indicates that a class member should be rendered eagerly/lazily and so should
  * be presented in the viewer in an appropriate manner.
- * 
- * <p>
- * @see Resolve
  */
 public interface RenderFacet extends SingleValueFacet<RenderType> {
 
