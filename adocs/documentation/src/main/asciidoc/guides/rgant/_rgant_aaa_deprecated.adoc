@@ -110,12 +110,6 @@ Actions can still be invoked.
 |
 
 
-|`@MemberGroups`
-|Layout of properties and collections of a domain object or view model object.
-|xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[dynamic `.layout.xml`] files
-|UI
-|Yes
-
 |`@MustSatisfy`
 |Specify arbitrary specification constraints on a property or action parameter.
 |`#mustSatisfy()` attribute for xref:../rgant/rgant.adoc#_rgant-Property_mustSatisfy[`@Property`] or xref:../rgant/rgant.adoc#_rgant-Parameter_mustSatisfy[`@Parameter`]

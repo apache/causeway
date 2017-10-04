@@ -53,6 +53,8 @@ org.apache.isis.applib.annotation
     Named.java - entire annotation, use @XxxLayout(named=...) instead, where Xxx is Property, Collection, Action, Parameter, DomainObject, ViewModel
     Plural.java - entire annotation, use @DomainObjectLayout(plural=...) instead
 
+    MemberGroups.java - entire annotation, use Xxx.layout.xml instead
+
 
 
 TO REMOVE:
@@ -104,8 +106,6 @@ org.apache.isis.applib.annotation
     Optional.java - entire annotation, use @Property(optionality=...) and @Parameter(optionality=...), or @javax.annotations.Nullable
 
     Mask.java - entire annotation, not supported by either Wicket viewer or RO viewer
-
-    MemberGroups.java - entire annotation, use Xxx.layout.xml instead
 
     MustSatisfy.java - entire annotation, use @Property(mustSatisfy=....) or @Parameter(mustSatisfy=...) instead
     RegEx.java - entire annotation, use @Property(regexPatternFlags=...) or @Parameter(regexPatternFlags=...) instead

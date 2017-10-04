@@ -24,7 +24,6 @@ import java.util.Properties;
 
 import org.apache.isis.applib.annotation.MemberGroupLayout;
 import org.apache.isis.applib.annotation.MemberGroupLayout.ColumnSpans;
-import org.apache.isis.applib.annotation.MemberGroups;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -68,10 +67,6 @@ public class MemberGroupLayoutFacetFactory extends FacetFactoryAbstract implemen
         final MemberGroupLayout mglAnnot = Annotations.getAnnotation(cls, MemberGroupLayout.class);
         if (mglAnnot != null) {
             return new MemberGroupLayoutFacetAnnotation(mglAnnot, holder);
-        }
-        final MemberGroups mgAnnot = Annotations.getAnnotation(cls, MemberGroups.class);
-        if (mgAnnot != null) {
-            return new MemberGroupsFacetAnnotation(mgAnnot, processClassContext.getFacetHolder());
         }
         return new MemberGroupLayoutFacetFallback(holder);
     }
