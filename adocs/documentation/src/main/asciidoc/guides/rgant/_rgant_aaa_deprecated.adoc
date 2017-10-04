@@ -175,12 +175,6 @@ Also part of the toString representation of bookmarks, if using the Bookmark Ser
 |Domain
 |
 
-|`@RenderedAsDayBefore`
-|Render dates as the day before; ie store [a,b) internally but render [a,b-1]) to end-user.
-|`#renderedAsDayBefore()` attribute for xref:../rgant/rgant.adoc#_rgant-PropertyLayout_renderedAsDayBefore[`@PropertyLayout`] and xref:../rgant/rgant.adoc#_rgant-ParameterLayout_renderedAsDayBefore[`@ParameterLayout`].
-|UI
-|
-
 |`@SortedBy`
 |Display instances in collections in the order determined by the provided Comparator.
 |xref:../rgant/rgant.adoc#_rgant-CollectionLayout_sortedBy[`@CollectionLayout` +

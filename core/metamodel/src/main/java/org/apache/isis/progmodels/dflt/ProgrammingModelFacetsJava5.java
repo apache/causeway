@@ -128,7 +128,6 @@ import org.apache.isis.core.metamodel.facets.param.describedas.annotderived.Desc
 import org.apache.isis.core.metamodel.facets.param.layout.ParameterLayoutFacetFactory;
 import org.apache.isis.core.metamodel.facets.param.mandatory.dflt.MandatoryFacetOnParametersDefaultFactory;
 import org.apache.isis.core.metamodel.facets.param.parameter.ParameterAnnotationFacetFactory;
-import org.apache.isis.core.metamodel.facets.param.renderedasdaybefore.annotation.RenderedAsDayBeforeFacetOnParameterAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.param.typicallen.annotation.TypicalLengthFacetOnParameterAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.param.typicallen.fromtype.TypicalLengthFacetOnParameterDerivedFromTypeFacetFactory;
 import org.apache.isis.core.metamodel.facets.param.validating.maskannot.MaskFacetOnParameterAnnotationFactory;
@@ -146,7 +145,6 @@ import org.apache.isis.core.metamodel.facets.properties.mandatory.staticmethod.M
 import org.apache.isis.core.metamodel.facets.properties.multiline.annotation.MultiLineFacetOnPropertyFactory;
 import org.apache.isis.core.metamodel.facets.properties.property.PropertyAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.PropertyLayoutFacetFactory;
-import org.apache.isis.core.metamodel.facets.properties.renderedasdaybefore.annotation.RenderedAsDayBeforeAnnotationOnPropertyFacetFactory;
 import org.apache.isis.core.metamodel.facets.properties.typicallen.annotation.TypicalLengthOnPropertyFacetFactory;
 import org.apache.isis.core.metamodel.facets.properties.typicallen.fromtype.TypicalLengthFacetOnPropertyDerivedFromTypeFacetFactory;
 import org.apache.isis.core.metamodel.facets.properties.update.PropertyModifyFacetFactory;
@@ -435,9 +433,6 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         
         addFactory(new TypicalLengthFacetOnParameterAnnotationFactory());
         
-        addFactory(new RenderedAsDayBeforeAnnotationOnPropertyFacetFactory());
-        
-        addFactory(new RenderedAsDayBeforeFacetOnParameterAnnotationFactory());
 
         // built-in value types for Java language
         addFactory(new BooleanPrimitiveValueFacetUsingSemanticsProviderFactory());
