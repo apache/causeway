@@ -57,6 +57,9 @@ org.apache.isis.applib.annotation
 
     RenderedAsDayBefore.java - entire annotation, use @PropertyLayout(renderedAsDayBefore=...) and @ParameterLayout(renderedAsDayBefore=...)
 
+    SortedBy.java - entire annotation, use @CollectionLayout(sortedBy=...) instead
+
+
 
 TO REMOVE:
 
@@ -110,7 +113,6 @@ org.apache.isis.applib.annotation
 
     MustSatisfy.java - entire annotation, use @Property(mustSatisfy=....) or @Parameter(mustSatisfy=...) instead
     RegEx.java - entire annotation, use @Property(regexPatternFlags=...) or @Parameter(regexPatternFlags=...) instead; or alternatively NEW SUPPORT for JSR-303 @Pattern annotation (http://beanvalidation.org/1.0/spec/, chapter 6).
-    SortedBy.java - entire annotation, use @CollectionLayout(sortedBy=...) instead
     TypeOf.java - entire annotation, use @Collection(typeOf=...) or @Action(typeOf=...) instead.
     TypicalLength.java - entire annotation, use @PropertyLayout(typicalLength=...) instead.
 
