@@ -123,12 +123,6 @@ Actions can still be invoked.
 |Yes
 
 
-|`@MultiLine`
-|Render string property over multiple lines (a textarea rather than a textbox).
-|`#multiLine()` attribute for xref:../rgant/rgant.adoc#_rgant-Property_multiLine[`@Property`] or xref:../rgant/rgant.adoc#_rgant-Parameter_multiLine[`@Parameter`]
-|UI
-|Yes
-
 |`@MustSatisfy`
 |Specify arbitrary specification constraints on a property or action parameter.
 |`#mustSatisfy()` attribute for xref:../rgant/rgant.adoc#_rgant-Property_mustSatisfy[`@Property`] or xref:../rgant/rgant.adoc#_rgant-Parameter_mustSatisfy[`@Parameter`]
