@@ -170,13 +170,6 @@ Also part of the toString representation of bookmarks, if using the Bookmark Ser
 |UI
 |Yes
 
-|`@Plural`
-|For the irregular plural form of an entity type.
-|xref:../rgant/rgant.adoc#_rgant-DomainObject_plural[`@DomainObjectLayout` +
-`#plural()`]
-|UI
-|
-
 |`@Prototype`
 |Indicates that an action should only be visible in 'prototype' mode.
 |xref:../rgant/rgant.adoc#_rgant-Action_restrictTo[`@Action#restrictTo()`]

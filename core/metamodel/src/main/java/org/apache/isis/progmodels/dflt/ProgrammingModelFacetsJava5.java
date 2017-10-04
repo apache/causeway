@@ -106,7 +106,6 @@ import org.apache.isis.core.metamodel.facets.object.objectvalidprops.impl.Object
 import org.apache.isis.core.metamodel.facets.object.paged.annotation.PagedFacetOnTypeAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.parented.aggregated.AggregatedAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.parseable.annotcfg.ParseableFacetAnnotationElseConfigurationFactory;
-import org.apache.isis.core.metamodel.facets.object.plural.annotation.PluralAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.plural.staticmethod.PluralFacetStaticMethodFactory;
 import org.apache.isis.core.metamodel.facets.object.recreatable.DisabledFacetOnCollectionDerivedFromViewModelFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.recreatable.DisabledFacetOnPropertyDerivedFromRecreatableObjectFacetFactory;
@@ -409,8 +408,6 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
 
         addFactory(new ParseableFacetAnnotationElseConfigurationFactory());
         
-        addFactory(new PluralAnnotationFacetFactory());
-
         addFactory(new PagedFacetOnTypeAnnotationFactory());
 
         addFactory(new PagedFacetOnCollectionFactory());
