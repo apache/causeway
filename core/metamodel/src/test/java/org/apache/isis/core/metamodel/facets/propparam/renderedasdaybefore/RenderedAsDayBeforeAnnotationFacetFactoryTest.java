@@ -23,7 +23,6 @@ import java.lang.reflect.Method;
 
 import org.joda.time.LocalDate;
 
-import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.RenderedAsDayBefore;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
@@ -62,7 +61,7 @@ public class RenderedAsDayBeforeAnnotationFacetFactoryTest extends AbstractFacet
 
         class Customer {
             @SuppressWarnings("unused")
-            public void someAction(@RenderedAsDayBefore @Named("End Date") final LocalDate endDate) {
+            public void someAction(@RenderedAsDayBefore final LocalDate endDate) {
             }
         }
         final Method method = findMethod(Customer.class, "someAction", new Class[] { LocalDate.class });

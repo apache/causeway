@@ -129,11 +129,6 @@ Actions can still be invoked.
 |Domain
 |
 
-|`@Named`
-|Override name inferred from class. Required for parameter names (prior to Java8).
-|`#named()` attribute for xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_named[`@DomainServiceLayout`], xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_named[`@DomainObjectLayout`], xref:../rgant/rgant.adoc#_rgant-PropertyLayout_named[`@PropertyLayout`], xref:../rgant/rgant.adoc#_rgant-CollectionLayout_named[`@CollectionLayout`], xref:../rgant/rgant.adoc#_rgant-ActionLayout_named[`@ActionLayout`] and xref:../rgant/rgant.adoc#_rgant-ParameterLayout_named[`@ParameterLayout`]
-|UI
-|Yes
 
 |`@NotContributed`
 |Indicates that a domain service action is not rendered as an action on the (entity) types of its parameters.

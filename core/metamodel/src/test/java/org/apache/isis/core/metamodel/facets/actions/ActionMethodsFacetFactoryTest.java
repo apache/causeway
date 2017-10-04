@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.facets.actions;
 
 import java.lang.reflect.Method;
-import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -28,7 +27,6 @@ import java.util.Set;
 
 import org.jmock.Expectations;
 
-import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.security.UserMemento;
 import org.apache.isis.applib.services.i18n.TranslationService;
@@ -161,7 +159,6 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         class Customer {
             @SuppressWarnings("unused")
-            @Named("Renamed an action with a named annotation")
             public void anActionWithNamedAnnotation() {
             }
         }
