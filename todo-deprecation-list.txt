@@ -1,5 +1,7 @@
 
 
+
+
 DONE:
 
 org.apache.isis.applib
@@ -34,108 +36,107 @@ org.apache.isis.applib.annotation
 
     ActionOrder.java - entire annotation, use @MemberOrder instead
     FieldOrder.java - entire annotation, use @MemberOrder instead
- 
+
     CollectionLayout.java
         render() - use @CollectionLayout(defaultView=...) instead
     RenderType.java - supporting enum for @Render annotation
     Render.java - entire annotation, use @CollectionLayout(defaultView=...) instead
     Resolve.java - entire annotation, use @CollectionLayout(defaultView=...) instead
-    
+
     CssClass.java - entire annotation, use @XxxLayout(cssClass=...) instead, where Xxx is Property, Collection, Action, Parameter, DomainObject, ViewModel
     CssClassFa.java - entire annotation, use @XxxLayout(cssClass=...) instead, where Xxx is Property, Collection, Action, Parameter, DomainObject, ViewModel
- 
+
     DescribedAs.java - entire annotation, use @XxxLayout(describedAs=...) instead
- 
+
     MaxLength.java - entire annotation, use @Property(maxLength=...) and @Parameter(maxLength=...)
     MultiLine.java - entire annotation, use @PropertyLayout(multiLine=...) and @ParameterLayout(multiLine=...) instead.
     Named.java - entire annotation, use @XxxLayout(named=...) instead, where Xxx is Property, Collection, Action, Parameter, DomainObject, ViewModel
     Plural.java - entire annotation, use @DomainObjectLayout(plural=...) instead
 
- 
-        
+
+
 TO REMOVE:
- 
+
 org.apache.isis.applib
- 
+
     AbstractContainedObject.java - entire class
     AbstractDomainObject.java  - entire class
     AbstractFactoryAndRepository.java  - entire class
- 
+
     DomainObjectContainer.java  - entire class
- 
 
 
-        
+
+
 org.apache.isis.applib.annotation
- 
- 
- 
+
+
+
     Aggregated.java - entire annotation, not supported internally
     NotPersistable.java - entire annotation, not supported and does nothing
- 
+
     AutoComplete.java - entire annotation, use @DomainObject(autoComplete...=...)
     Bookmarkable.java - entire annotation, use @DomainObjectLayout(bookmarking=...)
     Bounded.java - entire annotation, use @DomainObject(bounded=...)
- 
+
     Bulk.java - entire annotation, use @Action(invokeOn=...)
     Bulk.InteractionContext - entire service, use ActionInvocationContext service instead
     InvokedOn.java - entire enum, along with @Bulk annotation.
- 
- 
+
+
     Audited.java - entire annotation, use @DomainObject(audited=...)
- 
+
     Command.java - entire annotation, use @Action(command=...) instead
     CommandExecuteIn.java - entire annotation, use @Action(commandExecuteIn=...) instead
     CommandPersistence.java - entire annotation, use @Action(commandPersistence=...) instead
- 
+
     Debug.java - entire annotation, use @Action#(restrictTo=...) instead
     Exploration.java - entire annotation, use @Action(restrictTo=....) instead
     Prototype.java  - entire annotation, use @Action(restrictTo=....) instead
- 
+
     Disabled.java - entire annotation, use @Property(editingDisabledReason=...) instead
     Hidden.java - entire annotation, use @Property(hidden=...), @Collection(hidden=...), @Action(hidden=...)
- 
+
     Ignore.java - entire annotation, use @Programmatic instead.
     Immutable.java - entire annotation, use @DomainObject(editing=...) instead
- 
+
     Mandatory.java - entire annotation, use @Property(optionality=...) and @Parameter(optionality=...), or @javax.annotations.Nullable
     Optional.java - entire annotation, use @Property(optionality=...) and @Parameter(optionality=...), or @javax.annotations.Nullable
- 
+
     Mask.java - entire annotation, not supported by either Wicket viewer or RO viewer
- 
-    MemberGroupLayout.java - entire annotation, use Xxx.layout.xml instead
+
     MemberGroups.java - entire annotation, use Xxx.layout.xml instead
- 
+
     MustSatisfy.java - entire annotation, use @Property(mustSatisfy=....) or @Parameter(mustSatisfy=...) instead
     RegEx.java - entire annotation, use @Property(regexPatternFlags=...) or @Parameter(regexPatternFlags=...) instead
     RenderedAsDayBefore.java - entire annotation, use @PropertyLayout(renderedAsDayBefore=...) and @ParameterLayout(renderedAsDayBefore=...)
     SortedBy.java - entire annotation, use @CollectionLayout(sortedBy=...) instead
     TypeOf.java - entire annotation, use @Collection(typeOf=...) or @Action(typeOf=...) instead.
     TypicalLength.java - entire annotation, use @PropertyLayout(typicalLength=...) instead.
- 
+
     NotContributed.java - entire annotation, use @DomainService(nature=...) or mixins instead.
     NotInServiceMenu.java - entire annotation, use @DomainService(nature=...) or mixins instead.
- 
+
     NotPersisted.java - entire annotation, use @Property(notPersisted=...) instead
- 
+
     ObjectType.java - entire annotation, use @DomainObject(objectType=...) or @javax.jdo.annotations.Discriminator instead.
     Paged.java - entire annotation, use @DomainObjectLayout(paged=...) or @CollectionLayout(paged=...) instead.
- 
+
     Parameter.java
         minLength() attribute; not supported.  For autocomplete, use @MinLength annotation.
- 
+
     When.java - entire enum, no replacement (believe is unused within the framwork)
 
-    
+
 org.apache.isis.applib.clock
     Clock.java -
         getTimeAsCalendar()  (1 usage found)
         getTimeAsDate()  (1 usage found)
- 
+
 org.apache.isis.applib.events - entire package.  These event classes supported only by WrapperFactory;
                                 redundant as @Xxx(domainEvent=...) on member achieves much the same effect using event bus
 org.apache.isis.applib.filter  - entire package of Filter classes; use guava Predicate instead.
- 
+
 org.apache.isis.applib.fixturescripts
     FixtureScript.java  - various methods to simplify API
         add(...) - use addResult(...) instead
@@ -145,16 +146,16 @@ org.apache.isis.applib.fixturescripts
         lookup(String, Class<T>) - use ExecutionContext#lookup(...) instead
     FixtureScripts.java - remove deprecated methods;
                           framework provides an implementation of this service, and use FixtureScriptsSpecificatoinProvider to configure instead.
- 
+
 org.apache.isis.applib.marker - remove these marker interaces (tend to use annotations in preference)
-    ImmutableOncePersisted.java 
+    ImmutableOncePersisted.java
     ImmutableUntilPersisted.java
     NeverImmutable.java
     NonPersistable.java
     ProgramPersistable.java
 org.apache.isis.applib.services.actinvoc
     ActionInvocationContext.java -remove unused constructors
- 
+
 org.apache.isis.applib.services.audit  (2 usages found)
     AuditingService3.java - remove entire service, use AuditerService instead
 org.apache.isis.applib.services.background  (10 usages found)
@@ -162,23 +163,23 @@ org.apache.isis.applib.services.background  (10 usages found)
     BackgroundCommandService.java - remove methods using AIM, instead keep those using CommandDto (in BackgroundCommandService2)
     BackgroundService.java
         asActionInvocationMemento(Method, Object, Object[]) - remove this internal API, no longer called by framework
- 
+
 org.apache.isis.applib.services.bookmark  (8 usages found)
     BookmarkService.java - deprecated methods, have overloads in BookmarkService2 subtype [suggest we retain these for now]
 org.apache.isis.applib.services.classdiscovery 
     ClassDiscoveryService.java , push down into ClassDiscoveryService2
- 
+
 org.apache.isis.applib.services.command
     Command2.java  - methods for working with interaction events (remove with those event types)
         flushActionInteractionEvents()
         peekActionInteractionEvent()
-        popActionInteractionEvent() 
+        popActionInteractionEvent()
         pushActionInteractionEvent(ActionInteractionEvent<?>)
- 
+
 org.apache.isis.applib.services.command.spi
     CommandService.java
         startTransaction(Command, UUID) - no longer required to do anything, so remove
- 
+
 org.apache.isis.applib.services.eventbus
     AbstractInteractionEvent.java - remove
     ActionInteractionEvent.java - remove
@@ -190,10 +191,10 @@ org.apache.isis.applib.services.eventbus
     PropertyInteractionEvent.java - remove
 org.apache.isis.applib.services.memento  (19 usages found)
     MementoService.java - remove entire service (previously to support view models, but now @ViewModel and JAXB)
- 
+
 org.apache.isis.applib.services.metamodel
     MetaModelService2.java - push down to subtype, retain overloads for now
- 
+
 org.apache.isis.applib.services.publish - remove classes pertaining to original PublishingService (payload factories etc).
     EventMetadata.java - remove class
     EventPayload.java - remove class
@@ -202,24 +203,24 @@ org.apache.isis.applib.services.publish - remove classes pertaining to original 
     PublishedEventStateType.java - remove class
     PublishingService.java - remove domain service interface
     StatusMessageMessageType.java - remove class
- 
+
 org.apache.isis.applib.services.settings
     SettingTypes.java - remove, used only by 3rd party code (incode platform settings module)
- 
+
 org.apache.isis.applib.services.wrapper
     WrapperObject.java
         save() and wrapped() - remove to avoid name clashes, use __isis_Xxx() methods instead
- 
+
 org.apache.isis.applib.snapshot
     Snapshottable.java - remove ?  [suggest we retain the Snapshot service for now]
- 
- 
+
+
 org.apache.isis.applib.value 
     DateTime.java
         longValue() - use #millisSinceEpoch()
     Time.java
         longValue() - use #millisSinceEpoch()
- 
+
 org.apache.isis.core.objectstore.jdo.applib.annotations - remove package entirely
     Auditable.java - use @DomainObject(audited=...) instead.
 org.apache.isis.objectstore.jdo.applib
@@ -231,25 +232,13 @@ org.apache.isis.objectstore.jdo.applib.service
     Util.java - remove
 org.apache.isis.objectstore.jdo.applib.service.support
     IsisJdoSupport.java - replaced by org.apache.isis.applib.services.jdosupport.IsisJdoSupport
- 
-Notes:
-sometimes there are multiple versions of a type, eg BookmarkService2 and BookmarkService, where BookmarkService2 extends BookmarkService.  In these cases, suggest push down the methods from supertype, and then delete that supertype, but don't rename the subtype (not in this release, at least).
 
-Also propose:
-make AppManifest mandatory
-remove support for Xxx.layout.json
-remove support for contributed services (use mixins instead)
- 
-Also for 2.0.0, new features/deprecations:
-automatically wrap domain services (perhaps behind a config property)
-automatically infer \@Programmatic for all \@DomainService(nature=DOMAIN)
-deprecate use of guava predicates, but don't remove (too big a change, weren't deprecated previously)
-deprecate FixtureScripts service with view to removing from applib ... the framework provides an implementation by default
-get rid of automatic initialization of fields (perhaps behind a config property)
-deprecate the Apache Isis' DateTime classes for removal in the future) ... and probably all of the custom value types, subclasses of Magnitude
- 
- 
-Propose to retain:
+
+
+
+PROPOSE TO RETAIN:
+
+
 Below is the code currently deprecated in the applib, but I propose to retain even in 2.0.0 (on the grounds that a replacement for them is not fully designed):
 org.apache.isis.applib.adapters  - custom value type support
  
@@ -286,8 +275,33 @@ org.apache.isis.applib.services.command
         popActionDomainEvent()
         pushActionDomainEvent(ActionDomainEvent<?>)  (
 
+    MemberGroupLayout.java - entire annotation, use Xxx.layout.xml instead
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+Notes:
+
+sometimes there are multiple versions of a type, eg BookmarkService2 and BookmarkService, where BookmarkService2 extends BookmarkService.  In these cases, suggest pull up the methods from the subtype(s) into the supertype, and then delete those subtypes... ie we end up with a new expanded version of BookmarkService.
+
+
+Also propose:
+    make AppManifest mandatory
+    remove support for Xxx.layout.json
+    remove support for contributed services (use mixins instead)
+
+Also for 2.0.0, new features/deprecations:
+    automatically wrap domain services (perhaps behind a config property)
+    automatically infer \@Programmatic for all \@DomainService(nature=DOMAIN)
+    deprecate use of guava predicates, but don't remove (too big a change, weren't deprecated previously)
+    deprecate FixtureScripts service with view to removing from applib ... the framework provides an implementation by default
+    get rid of automatic initialization of fields (perhaps behind a config property)
+    deprecate the Apache Isis' DateTime classes for removal in the future) ... and probably all of the custom value types, subclasses of Magnitude
+
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
 OTHER STUFF:
@@ -327,7 +341,6 @@ combine isis-core-wicket-applib with isis-core-applib
 
 
 update .xsd for layout, make render optional and deprecated.    
-
 
 
 
