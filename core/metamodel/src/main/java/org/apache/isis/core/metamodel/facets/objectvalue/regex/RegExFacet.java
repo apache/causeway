@@ -21,7 +21,6 @@ package org.apache.isis.core.metamodel.facets.objectvalue.regex;
 
 import org.apache.isis.core.metamodel.facets.MultipleValueFacet;
 import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
-import org.apache.isis.core.metamodel.facets.object.mask.MaskFacet;
 
 /**
  * Whether the (string) property or a parameter must correspond to a specific

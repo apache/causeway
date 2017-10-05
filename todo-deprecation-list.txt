@@ -48,6 +48,7 @@ org.apache.isis.applib.annotation
 
     DescribedAs.java - entire annotation, use @XxxLayout(describedAs=...) instead
 
+    Mask.java - entire annotation, not supported by either Wicket viewer or RO viewer
     MaxLength.java - entire annotation, use @Property(maxLength=...) and @Parameter(maxLength=...)
     MultiLine.java - entire annotation, use @PropertyLayout(multiLine=...) and @ParameterLayout(multiLine=...) instead.
     Named.java - entire annotation, use @XxxLayout(named=...) instead, where Xxx is Property, Collection, Action, Parameter, DomainObject, ViewModel
@@ -114,7 +115,6 @@ org.apache.isis.applib.annotation
     Mandatory.java - entire annotation, use @Property(optionality=...) and @Parameter(optionality=...), or @javax.annotations.Nullable
     Optional.java - entire annotation, use @Property(optionality=...) and @Parameter(optionality=...), or @javax.annotations.Nullable
 
-    Mask.java - entire annotation, not supported by either Wicket viewer or RO viewer
 
     MustSatisfy.java - entire annotation, use @Property(mustSatisfy=....) or @Parameter(mustSatisfy=...) instead
     RegEx.java - entire annotation, use @Property(regexPatternFlags=...) or @Parameter(regexPatternFlags=...) instead; or alternatively NEW SUPPORT for JSR-303 @Pattern annotation (http://beanvalidation.org/1.0/spec/, chapter 6).

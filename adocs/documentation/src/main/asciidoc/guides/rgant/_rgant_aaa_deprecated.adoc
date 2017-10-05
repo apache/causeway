@@ -103,12 +103,6 @@ Actions can still be invoked.
 |Domain
 |
 
-|`@Mask`
-|How to parse/render values (never properly supported)
-|(None)
-|UI/domain
-|
-
 
 |`@MustSatisfy`
 |Specify arbitrary specification constraints on a property or action parameter.
