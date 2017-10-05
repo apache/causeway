@@ -22,13 +22,10 @@ package org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.bookmarkable
 import java.util.List;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
-import org.apache.isis.applib.annotation.Bookmarkable;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
-import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
@@ -38,13 +35,10 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 
 public class BookmarkPolicyFacetViaBookmarkableAnnotationElseFallbackFactory extends FacetFactoryAbstract implements  MetaModelValidatorRefiner {
-
-    private final MetaModelValidatorForDeprecatedAnnotation validator = new MetaModelValidatorForDeprecatedAnnotation(Bookmarkable.class);
 
     public BookmarkPolicyFacetViaBookmarkableAnnotationElseFallbackFactory() {
         super(FeatureType.OBJECTS_AND_ACTIONS);
@@ -52,21 +46,13 @@ public class BookmarkPolicyFacetViaBookmarkableAnnotationElseFallbackFactory ext
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
-        final Bookmarkable annotation = Annotations.getAnnotation(processClassContext.getCls(), Bookmarkable.class);
-        FacetUtil.addFacet(create(annotation, processClassContext.getFacetHolder(), null));
+        FacetUtil.addFacet(new BookmarkPolicyFacetFallback(processClassContext.getFacetHolder()));
     }
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        final Bookmarkable annotation = Annotations.getAnnotation(processMethodContext.getMethod(), Bookmarkable.class);
-        final BookmarkPolicyFacet facet = create(annotation, processMethodContext.getFacetHolder(), processMethodContext);
-        FacetUtil.addFacet(facet);
+        FacetUtil.addFacet(new BookmarkPolicyFacetFallback(processMethodContext.getFacetHolder()));
     }
-
-    private BookmarkPolicyFacet create(final Bookmarkable annotation, final FacetHolder holder, final ProcessMethodContext processMethodContext) {
-        return annotation == null ? new BookmarkPolicyFacetFallback(holder) : validator.flagIfPresent(new BookmarkPolicyFacetViaBookmarkableAnnotation(annotation.value(), holder), processMethodContext);
-    }
-
 
     /**
      * Violation if there is an action that is bookmarkable but does not have safe action semantics.
@@ -96,15 +82,8 @@ public class BookmarkPolicyFacetViaBookmarkableAnnotationElseFallbackFactory ext
                 return true;
             }
         }));
-        metaModelValidator.add(validator);
     }
 
-    @Override
-    public void setServicesInjector(final ServicesInjector servicesInjector) {
-        super.setServicesInjector(servicesInjector);
-        IsisConfiguration configuration = servicesInjector.getConfigurationServiceInternal();
-        validator.setConfiguration(configuration);
-    }
 
 
 }

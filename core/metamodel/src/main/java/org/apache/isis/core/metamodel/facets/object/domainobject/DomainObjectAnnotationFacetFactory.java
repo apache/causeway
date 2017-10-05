@@ -26,7 +26,6 @@ import javax.annotation.PostConstruct;
 
 import com.google.common.collect.Maps;
 
-import org.apache.isis.applib.annotation.AutoComplete;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Immutable;
 import org.apache.isis.applib.annotation.Nature;
@@ -60,7 +59,6 @@ import org.apache.isis.core.metamodel.facets.object.callbacks.RemovingLifecycleE
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatedLifecycleEventFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingLifecycleEventFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.auditing.AuditableFacetForDomainObjectAnnotation;
-import org.apache.isis.core.metamodel.facets.object.domainobject.autocomplete.AutoCompleteFacetForAutoCompleteAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.autocomplete.AutoCompleteFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.choices.ChoicesFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.editing.ImmutableFacetForDomainObjectAnnotation;
@@ -92,7 +90,6 @@ import org.apache.isis.objectstore.jdo.metamodel.facets.object.persistencecapabl
 public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
         implements MetaModelValidatorRefiner, PostConstructMethodCache {
 
-    private final MetaModelValidatorForDeprecatedAnnotation autoCompleteValidator = new MetaModelValidatorForDeprecatedAnnotation(AutoComplete.class);
     private final MetaModelValidatorForDeprecatedAnnotation immutableValidator = new MetaModelValidatorForDeprecatedAnnotation(Immutable.class);
     private final MetaModelValidatorForDeprecatedAnnotation objectTypeValidator = new MetaModelValidatorForDeprecatedAnnotation(ObjectType.class);
     private final MetaModelValidatorForValidationFailures autoCompleteInvalid = new MetaModelValidatorForValidationFailures();
@@ -170,40 +167,12 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
         final Class<?> cls = processClassContext.getCls();
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
-        // check for the deprecated @AutoComplete annotation first
-        final AutoComplete autoCompleteAnnot = Annotations.getAnnotation(cls, AutoComplete.class);
-        Facet facet = autoCompleteValidator.flagIfPresent(createFor(facetHolder, autoCompleteAnnot, cls));
-
-        // else check from @DomainObject(auditing=...)
-        if(facet == null) {
-            final DomainObject domainObjectAnnot = Annotations.getAnnotation(cls, DomainObject.class);
-            facet = createFor(domainObjectAnnot, facetHolder, cls);
-        }
+        // check from @DomainObject(auditing=...)
+        final DomainObject domainObjectAnnot = Annotations.getAnnotation(cls, DomainObject.class);
+        Facet facet = createFor(domainObjectAnnot, facetHolder, cls);
 
         // then add
         FacetUtil.addFacet(facet);
-    }
-
-    private AutoCompleteFacet createFor(
-            final FacetHolder facetHolder,
-            final AutoComplete annotation,
-            final Class<?> cls) {
-        if(annotation == null) {
-            return null;
-        }
-
-        final Class<?> repositoryClass = annotation.repository();
-        final String actionName = annotation.action();
-
-        if(!isServiceType(cls, "@AutoComplete", repositoryClass)) {
-            return null;
-        }
-        final Method repositoryMethod = findRepositoryMethod(cls, "@AutoComplete", repositoryClass, actionName);
-        if(repositoryMethod == null) {
-            return null;
-        }
-        return new AutoCompleteFacetForAutoCompleteAnnotation(
-                        facetHolder, repositoryClass, repositoryMethod, servicesInjector);
     }
 
     private AutoCompleteFacet createFor(
@@ -543,7 +512,6 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
 
         }));
 
-        metaModelValidator.add(autoCompleteValidator);
         metaModelValidator.add(immutableValidator);
         metaModelValidator.add(objectTypeValidator);
 
@@ -559,7 +527,6 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
         super.setServicesInjector(servicesInjector);
         IsisConfiguration configuration = getConfiguration();
 
-        autoCompleteValidator.setConfiguration(configuration);
         immutableValidator.setConfiguration(configuration);
         objectTypeValidator.setConfiguration(configuration);
 

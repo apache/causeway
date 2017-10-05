@@ -21,8 +21,6 @@ package org.apache.isis.core.metamodel.facets.actions.bookmarkable;
 
 import java.lang.reflect.Method;
 
-import org.apache.isis.applib.annotation.BookmarkPolicy;
-import org.apache.isis.applib.annotation.Bookmarkable;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
@@ -49,7 +47,6 @@ public class BookmarkableAnnotationFacetFactoryTest_action extends AbstractFacet
 
     public void testBookmarkableAnnotationPickedUpOnClass() {
         class Customer {
-            @Bookmarkable(BookmarkPolicy.AS_CHILD)
             public void placeOrder(){}
         }
         final Method actionMethod = findMethod(Customer.class, "placeOrder");

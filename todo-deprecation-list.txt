@@ -10,13 +10,9 @@ org.apache.isis.applib
     DomainObjectContainer.java  - entire class
 
 
-
-
 org.apache.isis.applib.annotation
 
 
-    AutoComplete.java - entire annotation, use @DomainObject(autoComplete...=...)
-    Bookmarkable.java - entire annotation, use @DomainObjectLayout(bookmarking=...)
 
     Bulk.java - entire annotation, use @Action(invokeOn=...)
     Bulk.InteractionContext - entire service, use ActionInvocationContext service instead
@@ -319,6 +315,10 @@ org.apache.isis.applib.annotation
     PublishedObject.java - entire annotation, use @DomainObject(publishing=...) instead
     PublishingPayloadFactoryForAction.java - entire annotation, replaced with simpler PublisherService SPI
     PublishingPayloadFactoryForObject.java - entire annotation, replaced with simpler PublisherService SPI
+
+    AutoComplete.java - entire annotation, use @DomainObject(autoComplete...=...)
+
+    Bookmarkable.java - entire annotation, use @DomainObjectLayout(bookmarking=...)
 
     ActionSemantics.java  - entire annotation, use @Action(semantics=...)
     Idempotent.java - entire annotation, use @Action(semantics=...) instead.

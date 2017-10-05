@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.facets.object.bookmarkpolicy;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
-import org.apache.isis.applib.annotation.Bookmarkable;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
@@ -48,7 +47,6 @@ public class BookmarkableAnnotationFacetFactoryTest_class extends AbstractFacetF
     }
 
     public void testBookmarkableAnnotationPickedUpOnClass() {
-        @Bookmarkable(BookmarkPolicy.AS_CHILD)
         class Customer {
         }
 
