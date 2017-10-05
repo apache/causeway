@@ -27,7 +27,6 @@ import org.apache.isis.applib.annotation.Command;
 import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.Prototype;
-import org.apache.isis.applib.annotation.TypeOf;
 import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -59,7 +58,6 @@ import org.apache.isis.core.metamodel.facets.actions.action.publishing.Published
 import org.apache.isis.core.metamodel.facets.actions.action.semantics.ActionSemanticsFacetFallbackToNonIdempotent;
 import org.apache.isis.core.metamodel.facets.actions.action.semantics.ActionSemanticsFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.typeof.TypeOfFacetForActionAnnotation;
-import org.apache.isis.core.metamodel.facets.actions.action.typeof.TypeOfFacetOnActionForTypeOfAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.bulk.BulkFacet;
 import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
 import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacet;
@@ -79,7 +77,6 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract
 
     private final MetaModelValidatorForDeprecatedAnnotation bulkValidator = new MetaModelValidatorForDeprecatedAnnotation(Bulk.class);
     private final MetaModelValidatorForDeprecatedAnnotation commandValidator = new MetaModelValidatorForDeprecatedAnnotation(Command.class);
-    private final MetaModelValidatorForDeprecatedAnnotation typeOfValidator = new MetaModelValidatorForDeprecatedAnnotation(TypeOf.class);
     private final MetaModelValidatorForDeprecatedAnnotation hiddenValidator = new MetaModelValidatorForDeprecatedAnnotation(Hidden.class);
     private final MetaModelValidatorForDeprecatedAnnotation disabledValidator = new MetaModelValidatorForDeprecatedAnnotation(Disabled.class);
     private final MetaModelValidatorForDeprecatedAnnotation prototypeValidator = new MetaModelValidatorForDeprecatedAnnotation(Prototype.class);
@@ -335,21 +332,13 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract
             return;
         }
 
-        TypeOfFacet typeOfFacet = null;
-
-        // check for deprecated @TypeOf
-        final TypeOf annotation = Annotations.getAnnotation(method, TypeOf.class);
-        typeOfFacet = typeOfValidator.flagIfPresent(
-                TypeOfFacetOnActionForTypeOfAnnotation.create(annotation, getSpecificationLoader(), holder), processMethodContext);
-
         // check for @Action(typeOf=...)
-        if(typeOfFacet == null) {
-            final Action action = Annotations.getAnnotation(method, Action.class);
-            if (action != null) {
-                final Class<?> typeOf = action.typeOf();
-                if(typeOf != null && typeOf != Object.class) {
-                    typeOfFacet = new TypeOfFacetForActionAnnotation(typeOf, getSpecificationLoader(), holder);
-                }
+        TypeOfFacet typeOfFacet = null;
+        final Action action = Annotations.getAnnotation(method, Action.class);
+        if (action != null) {
+            final Class<?> typeOf = action.typeOf();
+            if(typeOf != null && typeOf != Object.class) {
+                typeOfFacet = new TypeOfFacetForActionAnnotation(typeOf, getSpecificationLoader(), holder);
             }
         }
 
@@ -375,7 +364,6 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract
     public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
         metaModelValidator.add(bulkValidator);
         metaModelValidator.add(commandValidator);
-        metaModelValidator.add(typeOfValidator);
         metaModelValidator.add(hiddenValidator);
         metaModelValidator.add(disabledValidator);
         metaModelValidator.add(prototypeValidator);
@@ -391,7 +379,6 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract
 
         bulkValidator.setConfiguration(configuration);
         commandValidator.setConfiguration(configuration);
-        typeOfValidator.setConfiguration(configuration);
         hiddenValidator.setConfiguration(configuration);
         disabledValidator.setConfiguration(configuration);
         prototypeValidator.setConfiguration(configuration);

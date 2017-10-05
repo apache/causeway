@@ -175,11 +175,6 @@ Also part of the toString representation of bookmarks, if using the Bookmark Ser
 |Domain
 |
 
-|`@TypeOf`
-|The type of entity stored within a collection, or as the result of invoking an action, if cannot be otherwise inferred, eg from generics.
-|`#typeOf()` attribute for xref:../rgant/rgant.adoc#_rgant-Collection_typeOf[`@Collection`] and xref:../rgant/rgant.adoc#_rgant-Action_typeOf[`@Action`]
-|Domain
-|
 
 
 |===

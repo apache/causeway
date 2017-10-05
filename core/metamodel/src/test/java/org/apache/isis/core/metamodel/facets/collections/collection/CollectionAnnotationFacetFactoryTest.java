@@ -51,7 +51,6 @@ import org.apache.isis.core.metamodel.facets.collections.collection.modify.Colle
 import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionRemoveFromFacetForDomainEventFromCollectionAnnotation;
 import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionRemoveFromFacetForDomainEventFromDefault;
 import org.apache.isis.core.metamodel.facets.collections.collection.typeof.TypeOfFacetOnCollectionFromCollectionAnnotation;
-import org.apache.isis.core.metamodel.facets.collections.collection.typeof.TypeOfFacetOnCollectionFromTypeOfAnnotation;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacetAbstract;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionRemoveFromFacet;
@@ -453,36 +452,6 @@ public class CollectionAnnotationFacetFactoryTest extends AbstractFacetFactoryJU
 
     public static class TypeOf extends CollectionAnnotationFacetFactoryTest {
 
-        @Test
-        public void whenDeprecatedTypeOfAnnotation() {
-
-            class Order {
-            }
-            class Customer {
-                @org.apache.isis.applib.annotation.TypeOf(Order.class)
-                public List<Order> getOrders() {
-                    return null;
-                }
-
-                public void setOrders(final List<Order> orders) {
-                }
-            }
-
-            // given
-            final Class<?> cls = Customer.class;
-            collectionMethod = findMethod(Customer.class, "getOrders");
-
-            // when
-            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls,
-                    null, null, collectionMethod, mockMethodRemover, facetedMethod);
-            facetFactory.processTypeOf(processMethodContext);
-
-            // then
-            final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
-            Assert.assertNotNull(facet);
-            Assert.assertTrue(facet instanceof TypeOfFacetOnCollectionFromTypeOfAnnotation);
-            assertThat(facet.value(), classEqualTo(Order.class));
-        }
 
         @Test
         public void whenCollectionAnnotation() {

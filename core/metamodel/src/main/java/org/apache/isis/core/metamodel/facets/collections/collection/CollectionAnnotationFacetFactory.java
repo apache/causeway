@@ -28,7 +28,6 @@ import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.NotPersisted;
-import org.apache.isis.applib.annotation.TypeOf;
 import org.apache.isis.applib.services.eventbus.CollectionDomainEvent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -58,7 +57,6 @@ import org.apache.isis.core.metamodel.facets.collections.collection.modify.Colle
 import org.apache.isis.core.metamodel.facets.collections.collection.notpersisted.NotPersistedFacetForCollectionAnnotation;
 import org.apache.isis.core.metamodel.facets.collections.collection.notpersisted.NotPersistedFacetForNotPersistedAnnotationOnCollection;
 import org.apache.isis.core.metamodel.facets.collections.collection.typeof.TypeOfFacetOnCollectionFromCollectionAnnotation;
-import org.apache.isis.core.metamodel.facets.collections.collection.typeof.TypeOfFacetOnCollectionFromTypeOfAnnotation;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionRemoveFromFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
@@ -75,7 +73,6 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract imple
     private final MetaModelValidatorForDeprecatedAnnotation hiddenValidator = new MetaModelValidatorForDeprecatedAnnotation(Hidden.class);
     private final MetaModelValidatorForDeprecatedAnnotation disabledValidator = new MetaModelValidatorForDeprecatedAnnotation(Disabled.class);
     private final MetaModelValidatorForDeprecatedAnnotation notPersistedValidator = new MetaModelValidatorForDeprecatedAnnotation(NotPersisted.class);
-    private final MetaModelValidatorForDeprecatedAnnotation typeOfValidator = new MetaModelValidatorForDeprecatedAnnotation(TypeOf.class);
 
 
     public CollectionAnnotationFacetFactory() {
@@ -241,18 +238,10 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract imple
             return;
         }
 
-        TypeOfFacet facet;
-
-        // check for deprecated @TypeOf
-        final TypeOf annotation = Annotations.getAnnotation(method, TypeOf.class);
-        facet = typeOfValidator.flagIfPresent(
-                TypeOfFacetOnCollectionFromTypeOfAnnotation.create(annotation, facetHolder, getSpecificationLoader()), processMethodContext);
-
-        // else check for @Collection(typeOf=...)
+        // check for @Collection(typeOf=...)
         final Collection collection = Annotations.getAnnotation(method, Collection.class);
-        if(facet == null) {
-            facet = TypeOfFacetOnCollectionFromCollectionAnnotation.create(collection, facetHolder, getSpecificationLoader());
-        }
+        TypeOfFacet facet = TypeOfFacetOnCollectionFromCollectionAnnotation
+                .create(collection, facetHolder, getSpecificationLoader());
 
         // else infer from return type
         if(facet == null) {
@@ -308,7 +297,6 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract imple
     @Override
     public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
         metaModelValidator.add(notPersistedValidator);
-        metaModelValidator.add(typeOfValidator);
         metaModelValidator.add(hiddenValidator);
         metaModelValidator.add(disabledValidator);
     }
@@ -321,7 +309,6 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract imple
         super.setServicesInjector(servicesInjector);
         final IsisConfiguration configuration = getConfiguration();
 
-        typeOfValidator.setConfiguration(configuration);
         notPersistedValidator.setConfiguration(configuration);
         hiddenValidator.setConfiguration(configuration);
         disabledValidator.setConfiguration(configuration);

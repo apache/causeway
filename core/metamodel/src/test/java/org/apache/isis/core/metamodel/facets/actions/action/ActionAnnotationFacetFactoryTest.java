@@ -62,7 +62,6 @@ import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInv
 import org.apache.isis.core.metamodel.facets.actions.action.publishing.PublishedActionFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.publishing.PublishedActionFacetFromConfiguration;
 import org.apache.isis.core.metamodel.facets.actions.action.typeof.TypeOfFacetForActionAnnotation;
-import org.apache.isis.core.metamodel.facets.actions.action.typeof.TypeOfFacetOnActionForTypeOfAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.bulk.BulkFacet;
 import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
 import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacet;
@@ -1302,32 +1301,6 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
 
     public static class TypeOf extends ActionAnnotationFacetFactoryTest {
 
-        @Test
-        public void whenDeprecatedTypeOfAnnotationOnActionReturningCollection() {
-
-            class Order {
-            }
-            class Customer {
-                @org.apache.isis.applib.annotation.TypeOf(Order.class)
-                public Collection someAction() {
-                    return null;
-                }
-            }
-
-            // given
-            final Class<?> cls = Customer.class;
-            actionMethod = findMethod(cls, "someAction");
-
-            // when
-            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, null, actionMethod, mockMethodRemover, facetedMethod);
-            facetFactory.processTypeOf(processMethodContext);
-
-            // then
-            final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
-            Assert.assertNotNull(facet);
-            Assert.assertTrue(facet instanceof TypeOfFacetOnActionForTypeOfAnnotation);
-            assertThat(facet.value(), classEqualTo(Order.class));
-        }
 
         @Test
         public void whenDeprecatedTypeOfAnnotationOnActionNotReturningCollection() {
@@ -1335,7 +1308,6 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             class Order {
             }
             class Customer {
-                @org.apache.isis.applib.annotation.TypeOf(Order.class)
                 public Customer someAction() {
                     return null;
                 }
