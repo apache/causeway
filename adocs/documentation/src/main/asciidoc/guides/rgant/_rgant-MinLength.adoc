@@ -13,8 +13,7 @@ For example:
 [source,java]
 ----
 public ToDoItem add(
-        @TypicalLength(20)
-        final ToDoItem toDoItem) {
+    final ToDoItem toDoItem) {
     getDependencies().add(toDoItem);
     return this;
 }

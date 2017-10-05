@@ -19,8 +19,6 @@
 
 package org.apache.isis.applib.adapters;
 
-import org.apache.isis.applib.annotation.TypicalLength;
-
 /**
  * Provides a mechanism for parsing and rendering string representations of
  * objects.

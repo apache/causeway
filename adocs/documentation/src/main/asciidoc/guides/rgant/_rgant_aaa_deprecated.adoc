@@ -181,11 +181,6 @@ Also part of the toString representation of bookmarks, if using the Bookmark Ser
 |Domain
 |
 
-|`@TypicalLength`
-|The typical length of a string property, eg to determine a sensible length for a textbox.
-|`#typicalLength()` attribute for xref:../rgant/rgant.adoc#_rgant-PropertyLayout_typicalLength[`@PropertyLayout`] and xref:../rgant/rgant.adoc#_rgant-ParameterLayout_typicalLength[`@ParameterLayout`]
-|UI
-|Yes
 
 |===
 

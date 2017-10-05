@@ -21,23 +21,15 @@ package org.apache.isis.core.metamodel.facets.properties.typicallen.annotation;
 
 import java.util.Properties;
 
-import org.apache.isis.applib.annotation.TypicalLength;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
-import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.ContributeeMemberFacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
 
-public class TypicalLengthOnPropertyFacetFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory , MetaModelValidatorRefiner {
+public class TypicalLengthOnPropertyFacetFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory  {
 
-    private final MetaModelValidatorForDeprecatedAnnotation validator = new MetaModelValidatorForDeprecatedAnnotation(TypicalLength.class);
 
     public TypicalLengthOnPropertyFacetFactory() {
         super(FeatureType.PROPERTIES_ONLY);
@@ -46,9 +38,6 @@ public class TypicalLengthOnPropertyFacetFactory extends FacetFactoryAbstract im
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
         TypicalLengthFacet facet = createFromMetadataPropertiesIfPossible(processMethodContext);
-        if(facet == null) {
-            facet = validator.flagIfPresent(createFromAnnotationIfPossible(processMethodContext), processMethodContext);
-        }
 
         // no-op if null
         FacetUtil.addFacet(facet);
@@ -69,27 +58,6 @@ public class TypicalLengthOnPropertyFacetFactory extends FacetFactoryAbstract im
         
         final Properties properties = pcwmp.metadataProperties("typicalLength");
         return properties != null ? new TypicalLengthFacetOnPropertyFromProperties(properties, holder) : null;
-    }
-
-    private static TypicalLengthFacet createFromAnnotationIfPossible(final ProcessMethodContext processMethodContext) {
-        final TypicalLength annotation = 
-                Annotations.getAnnotation(processMethodContext.getMethod(), TypicalLength.class);
-        return annotation != null 
-                ? new TypicalLengthFacetOnPropertyAnnotation(annotation.value(), processMethodContext.getFacetHolder()) 
-                : null;
-    }
-
-
-    @Override
-    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
-        metaModelValidator.add(validator);
-    }
-
-    @Override
-    public void setServicesInjector(final ServicesInjector servicesInjector) {
-        super.setServicesInjector(servicesInjector);
-        IsisConfiguration configuration = servicesInjector.getConfigurationServiceInternal();
-        validator.setConfiguration(configuration);
     }
 
 

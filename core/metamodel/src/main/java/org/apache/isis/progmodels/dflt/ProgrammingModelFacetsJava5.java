@@ -113,7 +113,6 @@ import org.apache.isis.core.metamodel.facets.object.recreatable.RecreatableObjec
 import org.apache.isis.core.metamodel.facets.object.regex.annotation.RegExFacetOnTypeAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.title.methods.TitleFacetViaMethodsFactory;
-import org.apache.isis.core.metamodel.facets.object.typicallen.annotation.TypicalLengthFacetOnTypeAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.validating.mustsatisfyspec.MustSatisfySpecificationFromMustSatisfyAnnotationOnTypeFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.validating.validateobject.method.ValidateObjectFacetMethodFactory;
 import org.apache.isis.core.metamodel.facets.object.value.annotcfg.ValueFacetAnnotationOrConfigurationFactory;
@@ -128,7 +127,6 @@ import org.apache.isis.core.metamodel.facets.param.describedas.annotderived.Desc
 import org.apache.isis.core.metamodel.facets.param.layout.ParameterLayoutFacetFactory;
 import org.apache.isis.core.metamodel.facets.param.mandatory.dflt.MandatoryFacetOnParametersDefaultFactory;
 import org.apache.isis.core.metamodel.facets.param.parameter.ParameterAnnotationFacetFactory;
-import org.apache.isis.core.metamodel.facets.param.typicallen.annotation.TypicalLengthFacetOnParameterAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.param.typicallen.fromtype.TypicalLengthFacetOnParameterDerivedFromTypeFacetFactory;
 import org.apache.isis.core.metamodel.facets.param.validating.maskannot.MaskFacetOnParameterAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessorFactory;
@@ -428,11 +426,9 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(new TypicalLengthFacetOnParameterDerivedFromTypeFacetFactory());
 
         
-        addFactory(new TypicalLengthFacetOnTypeAnnotationFactory());
         addFactory(new TypicalLengthOnPropertyFacetFactory());
         
-        addFactory(new TypicalLengthFacetOnParameterAnnotationFactory());
-        
+
 
         // built-in value types for Java language
         addFactory(new BooleanPrimitiveValueFacetUsingSemanticsProviderFactory());

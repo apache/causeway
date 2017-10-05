@@ -21,16 +21,12 @@ package org.apache.isis.core.metamodel.facets.propparam.typicallength;
 
 import java.lang.reflect.Method;
 
-import org.apache.isis.applib.annotation.TypicalLength;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
-import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessParameterContext;
-import org.apache.isis.core.metamodel.facets.param.typicallen.annotation.TypicalLengthFacetOnParameterAnnotation;
-import org.apache.isis.core.metamodel.facets.param.typicallen.annotation.TypicalLengthFacetOnParameterAnnotationFactory;
-import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.metamodel.facets.properties.typicallen.annotation.TypicalLengthOnPropertyFacetFactory;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
+import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
 import org.apache.isis.core.metamodel.facets.properties.typicallen.annotation.TypicalLengthFacetOnPropertyAnnotation;
+import org.apache.isis.core.metamodel.facets.properties.typicallen.annotation.TypicalLengthOnPropertyFacetFactory;
 
 public class TypicalLengthAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -39,7 +35,6 @@ public class TypicalLengthAnnotationFacetFactoryTest extends AbstractFacetFactor
 
         class Customer {
             @SuppressWarnings("unused")
-            @TypicalLength(30)
             public String getFirstName() {
                 return null;
             }
@@ -55,23 +50,5 @@ public class TypicalLengthAnnotationFacetFactoryTest extends AbstractFacetFactor
         assertEquals(30, typicalLengthFacetAnnotation.value());
     }
 
-    public void testTypicalLengthAnnotationPickedUpOnActionParameter() {
-        final TypicalLengthFacetOnParameterAnnotationFactory facetFactory = new TypicalLengthFacetOnParameterAnnotationFactory();
-
-        class Customer {
-            @SuppressWarnings("unused")
-            public void someAction(@TypicalLength(20) final int foo) {
-            }
-        }
-        final Method method = findMethod(Customer.class, "someAction", new Class[] { int.class });
-
-        facetFactory.processParams(new ProcessParameterContext(Customer.class, method, 0, null, facetedMethodParameter));
-
-        final Facet facet = facetedMethodParameter.getFacet(TypicalLengthFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof TypicalLengthFacetOnParameterAnnotation);
-        final TypicalLengthFacetOnParameterAnnotation typicalLengthFacetAnnotation = (TypicalLengthFacetOnParameterAnnotation) facet;
-        assertEquals(20, typicalLengthFacetAnnotation.value());
-    }
 
 }
