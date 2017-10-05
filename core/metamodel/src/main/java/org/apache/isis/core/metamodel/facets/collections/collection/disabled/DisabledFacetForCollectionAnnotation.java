@@ -21,7 +21,6 @@ package org.apache.isis.core.metamodel.facets.collections.collection.disabled;
 
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
@@ -58,7 +57,7 @@ public class DisabledFacetForCollectionAnnotation extends DisabledFacetAbstractI
     }
 
     private DisabledFacetForCollectionAnnotation(final String reason, final FacetHolder holder) {
-        super(When.ALWAYS, Where.EVERYWHERE, reason, holder);
+        super(Where.EVERYWHERE, reason, holder);
     }
 
 }

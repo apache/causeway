@@ -26,7 +26,6 @@ import java.util.Set;
 
 import org.jmock.auto.Mock;
 
-import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.security.UserMemento;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
@@ -711,7 +710,6 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
 
         final HiddenFacetOnStaticMethod facet = facetedMethod.getFacet(HiddenFacetOnStaticMethod.class);
         assertNotNull(facet);
-        assertEquals(When.ALWAYS, facet.when());
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(alwaysHideMethod));
     }
@@ -745,7 +743,6 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
         assertNotNull(facet);
         assertTrue(facet instanceof DisabledFacetAbstractAlwaysEverywhere);
         final DisabledFacetAbstractAlwaysEverywhere disabledFacetAlways = (DisabledFacetAbstractAlwaysEverywhere) facet;
-        assertEquals(When.ALWAYS, disabledFacetAlways.when());
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(protectMethod));
     }

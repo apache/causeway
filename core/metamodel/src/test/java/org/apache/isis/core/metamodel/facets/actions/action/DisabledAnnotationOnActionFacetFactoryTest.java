@@ -20,8 +20,8 @@
 package org.apache.isis.core.metamodel.facets.actions.action;
 
 import java.lang.reflect.Method;
+
 import org.apache.isis.applib.annotation.Disabled;
-import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
@@ -68,7 +68,7 @@ public class DisabledAnnotationOnActionFacetFactoryTest extends AbstractFacetFac
 
     public void testDisabledWhenAlwaysAnnotationPickedUpOn() {
         class Customer {
-            @Disabled(when = When.ALWAYS)
+            @Disabled
             public void someAction() {
             }
         }
@@ -82,12 +82,10 @@ public class DisabledAnnotationOnActionFacetFactoryTest extends AbstractFacetFac
         final DisabledFacet disabledFacet = (DisabledFacet) facet;
         assertThat(disabledFacet.disabledReason(null), is("Always disabled"));
 
-        assertEquals(When.ALWAYS, disabledFacetAbstract.when());
     }
 
     public void testDisabledWhenNeverAnnotationPickedUpOn() {
         class Customer {
-            @Disabled(when = When.NEVER)
             public void someAction() {
             }
         }
@@ -98,40 +96,7 @@ public class DisabledAnnotationOnActionFacetFactoryTest extends AbstractFacetFac
         final Facet facet = facetedMethod.getFacet(DisabledFacet.class);
         final DisabledFacetAbstract disabledFacetAbstract = (DisabledFacetAbstract) facet;
 
-        assertEquals(When.NEVER, disabledFacetAbstract.when());
-    }
-
-    public void testDisabledWhenOncePersistedAnnotationPickedUpOn() {
-        class Customer {
-            @Disabled(when = When.ONCE_PERSISTED)
-            public void someAction() {
-            }
-        }
-        final Method actionMethod = findMethod(Customer.class, "someAction");
-
-        facetFactory.processDisabled(new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetedMethod));
-
-        final Facet facet = facetedMethod.getFacet(DisabledFacet.class);
-        final DisabledFacetAbstract disabledFacetAbstract = (DisabledFacetAbstract) facet;
-
-        assertEquals(When.ONCE_PERSISTED, disabledFacetAbstract.when());
-    }
-
-    public void testDisabledWhenUntilPersistedAnnotationPickedUpOn() {
-        class Customer {
-            @Disabled(when = When.UNTIL_PERSISTED)
-            public void someAction() {
-            }
-        }
-        final Method actionMethod = findMethod(Customer.class, "someAction");
-
-        facetFactory.processDisabled(new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetedMethod));
-
-        final Facet facet = facetedMethod.getFacet(DisabledFacet.class);
-        final DisabledFacetAbstract disabledFacetAbstract = (DisabledFacetAbstract) facet;
-
-        assertEquals(When.UNTIL_PERSISTED, disabledFacetAbstract.when());
-        assertEquals(Where.ANYWHERE, disabledFacetAbstract.where());
+        assertNull(disabledFacetAbstract);
     }
 
 
@@ -148,14 +113,13 @@ public class DisabledAnnotationOnActionFacetFactoryTest extends AbstractFacetFac
         final Facet facet = facetedMethod.getFacet(DisabledFacet.class);
         final DisabledFacetAbstract disabledFacetAbstract = (DisabledFacetAbstract) facet;
 
-        assertEquals(When.ALWAYS, disabledFacetAbstract.when());
         assertEquals(Where.PARENTED_TABLES, disabledFacetAbstract.where());
     }
 
 
-    public void testDisabledWhenAndWhereAnnotationPickedUpOn() {
+    public void testDisabledWhereAnnotationPickedUpOn() {
         class Customer {
-            @Disabled(where = Where.PARENTED_TABLES, when=When.UNTIL_PERSISTED)
+            @Disabled(where = Where.PARENTED_TABLES)
             public void someAction() {
             }
         }
@@ -166,7 +130,6 @@ public class DisabledAnnotationOnActionFacetFactoryTest extends AbstractFacetFac
         final Facet facet = facetedMethod.getFacet(DisabledFacet.class);
         final DisabledFacetAbstract disabledFacetAbstract = (DisabledFacetAbstract) facet;
 
-        assertEquals(When.UNTIL_PERSISTED, disabledFacetAbstract.when());
         assertEquals(Where.PARENTED_TABLES, disabledFacetAbstract.where());
     }
 

@@ -34,7 +34,6 @@ import org.junit.Test;
 
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.registry.ServiceRegistry2;
@@ -131,7 +130,7 @@ public class ApplicationFeatureRepositoryDefaultTest {
                 will(returnValue(collections));
 
                 allowing(mockSpec).getFacet(HiddenFacet.class);
-                will(returnValue(new HiddenFacetAbstract(When.ALWAYS, Where.EVERYWHERE, mockSpec) {
+                will(returnValue(new HiddenFacetAbstract(Where.EVERYWHERE, mockSpec) {
                     @Override
                     protected String hiddenReason(final ObjectAdapter target, final Where whereContext) {
                         return null;

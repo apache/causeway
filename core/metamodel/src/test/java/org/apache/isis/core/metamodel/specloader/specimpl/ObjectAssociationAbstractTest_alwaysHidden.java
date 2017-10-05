@@ -25,7 +25,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -169,7 +168,7 @@ public class ObjectAssociationAbstractTest_alwaysHidden {
     public void whenNoop() throws Exception {
 
         // given
-        addHiddenFacet(When.ALWAYS, Where.EVERYWHERE, facetedMethod, true);
+        addHiddenFacet(Where.EVERYWHERE, facetedMethod, true);
 
         // when, then
         assertFalse(objectAssociation.isAlwaysHidden());
@@ -179,7 +178,7 @@ public class ObjectAssociationAbstractTest_alwaysHidden {
     public void whenNotAlwaysEverywhere() throws Exception {
 
         // given
-        addHiddenFacet(When.ONCE_PERSISTED, Where.EVERYWHERE, facetedMethod, false);
+        addHiddenFacet(Where.EVERYWHERE, facetedMethod, false);
 
         // when, then
         assertFalse(objectAssociation.isAlwaysHidden());
@@ -189,7 +188,7 @@ public class ObjectAssociationAbstractTest_alwaysHidden {
     public void whenAlwaysNotEverywhere() throws Exception {
 
         // given
-        addHiddenFacet(When.ALWAYS, Where.OBJECT_FORMS, facetedMethod, false);
+        addHiddenFacet(Where.OBJECT_FORMS, facetedMethod, false);
 
         // when, then
         assertFalse(objectAssociation.isAlwaysHidden());
@@ -199,7 +198,7 @@ public class ObjectAssociationAbstractTest_alwaysHidden {
     public void whenAlwaysEverywhere() throws Exception {
 
         // given
-        addHiddenFacet(When.ALWAYS, Where.EVERYWHERE, facetedMethod, false);
+        addHiddenFacet(Where.EVERYWHERE, facetedMethod, false);
 
         // when, then
         assertTrue(objectAssociation.isAlwaysHidden());
@@ -209,14 +208,17 @@ public class ObjectAssociationAbstractTest_alwaysHidden {
     public void whenAlwaysAnywhere() throws Exception {
 
         // given
-        addHiddenFacet(When.ALWAYS, Where.ANYWHERE, facetedMethod, false);
+        addHiddenFacet(Where.ANYWHERE, facetedMethod, false);
 
         // when, then
         assertTrue(objectAssociation.isAlwaysHidden());
     }
 
-    private static void addHiddenFacet(final When when, final Where where, final FacetedMethod holder, final boolean noop) {
-        HiddenFacet facet = new HiddenFacetAbstract(HiddenFacet.class, when, where, holder) {
+    private static void addHiddenFacet(
+            final Where where,
+            final FacetedMethod holder,
+            final boolean noop) {
+        HiddenFacet facet = new HiddenFacetAbstract(HiddenFacet.class, where, holder) {
             @Override
             protected String hiddenReason(final ObjectAdapter target, final Where whereContext) {
                 return null;

@@ -53,7 +53,7 @@ public class HiddenFacetOnTypeAnnotationFactory extends FacetFactoryAbstract imp
     }
 
     private static HiddenFacet create(final Hidden annotation, final FacetHolder holder) {
-        return annotation == null ? null : new HiddenFacetOnTypeAnnotation(annotation.when(), holder);
+        return annotation == null ? null : new HiddenFacetOnTypeAnnotation(null, holder);
     }
 
     @Override

@@ -30,14 +30,13 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facets.WhenAndWhereValueFacet;
+import org.apache.isis.core.metamodel.facets.WhereValueFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupLayoutFacet;
@@ -338,7 +337,7 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
             @Override
             public boolean accept(final ObjectAssociation property) {
                 final HiddenFacet hiddenFacet = property.getFacet(HiddenFacet.class);
-                return hiddenFacet == null || hiddenFacet.when() != When.ALWAYS || hiddenFacet.where() != Where.ANYWHERE;
+                return hiddenFacet == null || hiddenFacet.where() != Where.ANYWHERE;
             }
         };
 
@@ -352,12 +351,12 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
                 public boolean accept(final ObjectAssociation association) {
                     final List<Facet> facets = association.getFacets(new Filter<Facet>() {
                         @Override public boolean accept(final Facet facet) {
-                            return facet instanceof WhenAndWhereValueFacet && facet instanceof HiddenFacet;
+                            return facet instanceof WhereValueFacet && facet instanceof HiddenFacet;
                         }
                     });
                     for (Facet facet : facets) {
-                        final WhenAndWhereValueFacet wawF = (WhenAndWhereValueFacet) facet;
-                        if (wawF.where().includes(context) && wawF.when() == When.ALWAYS) {
+                        final WhereValueFacet wawF = (WhereValueFacet) facet;
+                        if (wawF.where().includes(context) ) {
                             return false;
                         }
                     }

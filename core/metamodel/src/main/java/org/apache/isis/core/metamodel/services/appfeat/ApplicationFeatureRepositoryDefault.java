@@ -36,7 +36,6 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
@@ -381,8 +380,7 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
         final HiddenFacet facet = spec.getFacet(HiddenFacet.class);
         return facet != null &&
                 !facet.isNoop() &&
-                (facet.where() == Where.EVERYWHERE || facet.where() == Where.ANYWHERE) &&
-                facet.when() == When.ALWAYS;
+                (facet.where() == Where.EVERYWHERE || facet.where() == Where.ANYWHERE);
     }
 
     protected boolean isBuiltIn(final ObjectSpecification spec) {

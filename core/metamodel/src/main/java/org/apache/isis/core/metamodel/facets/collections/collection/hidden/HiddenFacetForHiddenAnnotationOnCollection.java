@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.facets.collections.collection.hidden;
 
 import org.apache.isis.applib.annotation.Hidden;
-import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
@@ -36,11 +35,11 @@ public class HiddenFacetForHiddenAnnotationOnCollection extends HiddenFacetAbstr
         if (hiddenAnnotation == null) {
             return null;
         }
-        return new HiddenFacetForHiddenAnnotationOnCollection(hiddenAnnotation.when(), hiddenAnnotation.where(), facetHolder);
+        return new HiddenFacetForHiddenAnnotationOnCollection(hiddenAnnotation.where(), facetHolder);
     }
 
-    private HiddenFacetForHiddenAnnotationOnCollection(final When when, Where where, final FacetHolder holder) {
-        super(HiddenFacetForHiddenAnnotationOnCollection.class, when, where, holder);
+    private HiddenFacetForHiddenAnnotationOnCollection(Where where, final FacetHolder holder) {
+        super(HiddenFacetForHiddenAnnotationOnCollection.class, where, holder);
     }
 
 

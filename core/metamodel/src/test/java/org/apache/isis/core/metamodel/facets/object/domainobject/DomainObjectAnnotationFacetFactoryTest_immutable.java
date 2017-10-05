@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.facets.object.domainobject;
 
 import org.apache.isis.applib.annotation.Immutable;
-import org.apache.isis.applib.annotation.When;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
@@ -55,13 +54,13 @@ public class DomainObjectAnnotationFacetFactoryTest_immutable extends AbstractFa
         assertNotNull(facet);
         assertTrue(facet instanceof ImmutableFacetForImmutableAnnotation);
         final ImmutableFacetForImmutableAnnotation immutableFacetAnnotation = (ImmutableFacetForImmutableAnnotation) facet;
-        assertEquals(When.ALWAYS, immutableFacetAnnotation.when());
 
+        assertNotNull(immutableFacetAnnotation);
         assertNoMethodsRemoved();
     }
 
     public void testImmutableAnnotationAlwaysPickedUpOnClass() {
-        @Immutable(When.ALWAYS)
+        @Immutable
         class Customer {
         }
 
@@ -71,13 +70,11 @@ public class DomainObjectAnnotationFacetFactoryTest_immutable extends AbstractFa
         assertNotNull(facet);
         assertTrue(facet instanceof ImmutableFacetForImmutableAnnotation);
         final ImmutableFacetForImmutableAnnotation immutableFacetAnnotation = (ImmutableFacetForImmutableAnnotation) facet;
-        assertEquals(When.ALWAYS, immutableFacetAnnotation.when());
 
         assertNoMethodsRemoved();
     }
 
     public void testImmutableAnnotationNeverPickedUpOnClass() {
-        @Immutable(When.NEVER)
         class Customer {
         }
 
@@ -85,39 +82,7 @@ public class DomainObjectAnnotationFacetFactoryTest_immutable extends AbstractFa
 
         final Facet facet = facetedMethod.getFacet(ImmutableFacet.class);
         final ImmutableFacetForImmutableAnnotation immutableFacetAnnotation = (ImmutableFacetForImmutableAnnotation) facet;
-        assertEquals(When.NEVER, immutableFacetAnnotation.when());
-
-        assertNoMethodsRemoved();
-    }
-
-    public void testImmutableAnnotationOncePersistedPickedUpOnClass() {
-        @Immutable(When.ONCE_PERSISTED)
-        class Customer {
-        }
-
-        facetFactory.processEditing(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
-
-        final Facet facet = facetedMethod.getFacet(ImmutableFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof ImmutableFacetForImmutableAnnotation);
-        final ImmutableFacetForImmutableAnnotation immutableFacetAnnotation = (ImmutableFacetForImmutableAnnotation) facet;
-        assertEquals(When.ONCE_PERSISTED, immutableFacetAnnotation.when());
-
-        assertNoMethodsRemoved();
-    }
-
-    public void testImmutableAnnotationUntilPersistedPickedUpOnClass() {
-        @Immutable(When.UNTIL_PERSISTED)
-        class Customer {
-        }
-
-        facetFactory.processEditing(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
-
-        final Facet facet = facetedMethod.getFacet(ImmutableFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof ImmutableFacetForImmutableAnnotation);
-        final ImmutableFacetForImmutableAnnotation immutableFacetAnnotation = (ImmutableFacetForImmutableAnnotation) facet;
-        assertEquals(When.UNTIL_PERSISTED, immutableFacetAnnotation.when());
+        assertNull(immutableFacetAnnotation);
 
         assertNoMethodsRemoved();
     }

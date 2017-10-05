@@ -20,9 +20,28 @@
 package org.apache.isis.core.metamodel.facets;
 
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-public interface WhenAndWhereValueFacet extends WhenValueFacet {
+public abstract class WhereValueFacetAbstract extends FacetAbstract implements WhereValueFacet {
+    private final Where where;
 
-    public Where where();
-    
+    public WhereValueFacetAbstract(
+            final Class<? extends Facet> facetType,
+            final FacetHolder holder,
+            final Where where) {
+        super(facetType, holder, Derivation.NOT_DERIVED);
+        this.where = where;
+    }
+
+    @Override
+    public Where where() {
+        return where;
+    }
+
+    @Override
+    protected String toStringValues() {
+        return super.toStringValues() + "; where =" + where.getFriendlyName();
+    }
 }

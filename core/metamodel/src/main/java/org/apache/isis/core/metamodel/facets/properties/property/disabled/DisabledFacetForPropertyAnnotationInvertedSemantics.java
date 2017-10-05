@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets.properties.property.disabled;
 
-import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAbstractImpl;
@@ -27,7 +26,7 @@ import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAbstr
 public class DisabledFacetForPropertyAnnotationInvertedSemantics extends DisabledFacetAbstractImpl {
 
     DisabledFacetForPropertyAnnotationInvertedSemantics(final FacetHolder holder) {
-        super(When.ALWAYS, Where.EVERYWHERE, null, holder, Semantics.ENABLED);
+        super(Where.EVERYWHERE, null, holder, Semantics.ENABLED);
     }
 
 }

@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets.object.value;
 
-import org.apache.isis.applib.annotation.When;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -28,7 +27,7 @@ import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacetAbst
 public class ImmutableFacetViaValueSemantics extends ImmutableFacetAbstract {
 
     public ImmutableFacetViaValueSemantics(final FacetHolder holder) {
-        super(When.ALWAYS, holder);
+        super(holder);
     }
 
     @Override

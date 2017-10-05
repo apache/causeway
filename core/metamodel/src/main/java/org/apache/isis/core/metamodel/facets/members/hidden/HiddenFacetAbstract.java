@@ -19,13 +19,12 @@
 
 package org.apache.isis.core.metamodel.facets.members.hidden;
 
-import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.events.VisibilityEvent;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.WhenAndWhereValueFacetAbstract;
+import org.apache.isis.core.metamodel.facets.WhereValueFacetAbstract;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 
@@ -46,17 +45,20 @@ import org.apache.isis.core.metamodel.interactions.VisibilityContext;
  *     of facets returned contains no duplicates.
  * </p>
  */
-public abstract class HiddenFacetAbstract extends WhenAndWhereValueFacetAbstract implements HiddenFacet {
+public abstract class HiddenFacetAbstract extends WhereValueFacetAbstract implements HiddenFacet {
 
-    public HiddenFacetAbstract(final Class<? extends Facet> facetType, final When when, Where where, final FacetHolder holder) {
-        super(facetType, holder, when, where);
+    public HiddenFacetAbstract(
+            final Class<? extends Facet> facetType,
+            Where where,
+            final FacetHolder holder) {
+        super(facetType, holder, where);
     }
 
     /**
      * For testing only.
      */
-    public HiddenFacetAbstract(final When when, Where where, final FacetHolder holder) {
-        super(HiddenFacetAbstract.class, holder, when, where);
+    public HiddenFacetAbstract(Where where, final FacetHolder holder) {
+        super(HiddenFacetAbstract.class, holder, where);
     }
 
     @Override

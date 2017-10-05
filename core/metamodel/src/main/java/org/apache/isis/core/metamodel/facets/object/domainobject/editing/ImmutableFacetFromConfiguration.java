@@ -20,7 +20,7 @@
 package org.apache.isis.core.metamodel.facets.object.domainobject.editing;
 
 import com.google.common.base.Strings;
-import org.apache.isis.applib.annotation.When;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -32,7 +32,7 @@ public class ImmutableFacetFromConfiguration extends ImmutableFacetAbstract {
     private final String reason;
 
     public ImmutableFacetFromConfiguration(final String reason, final FacetHolder holder) {
-        super(When.ALWAYS, holder);
+        super(holder);
         this.reason = reason;
     }
 

@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets.properties.propertylayout;
 
-import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.component.PropertyLayoutData;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -38,7 +37,7 @@ public class HiddenFacetForPropertyXml extends HiddenFacetAbstract {
     }
 
     private HiddenFacetForPropertyXml(final Where where, final FacetHolder holder) {
-        super(HiddenFacetForPropertyXml.class, When.ALWAYS, where, holder);
+        super(HiddenFacetForPropertyXml.class, where, holder);
     }
 
     @Override

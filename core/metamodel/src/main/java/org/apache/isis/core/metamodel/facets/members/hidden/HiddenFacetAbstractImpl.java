@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets.members.hidden;
 
-import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -27,15 +26,18 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 public abstract class HiddenFacetAbstractImpl extends HiddenFacetAbstract {
 
-    public HiddenFacetAbstractImpl(final Class<? extends Facet> facetType, final When when, Where where, final FacetHolder holder) {
-        super(facetType, when, where, holder);
+    public HiddenFacetAbstractImpl(
+            final Class<? extends Facet> facetType,
+            Where where,
+            final FacetHolder holder) {
+        super(facetType, where, holder);
     }
 
     /**
      * For testing only.
      */
-    public HiddenFacetAbstractImpl(final When when, Where where, final FacetHolder holder) {
-        super(HiddenFacetAbstractImpl.class, when, where, holder);
+    public HiddenFacetAbstractImpl(Where where, final FacetHolder holder) {
+        super(HiddenFacetAbstractImpl.class, where, holder);
     }
 
     @Override
@@ -44,24 +46,7 @@ public abstract class HiddenFacetAbstractImpl extends HiddenFacetAbstract {
             return null;
         }
         
-        if (when() == When.ALWAYS) {
-            return "Always hidden";
-        }
-        if (when() == When.NEVER) {
-            return null;
-        }
-
-        // remaining tests depend on target in question.
-        if (targetAdapter == null) {
-            return null;
-        }
-
-        if (when() == When.UNTIL_PERSISTED) {
-            return targetAdapter.isTransient() ? "Hidden until persisted" : null;
-        } else if (when() == When.ONCE_PERSISTED) {
-            return targetAdapter.representsPersistent() ? "Hidden once persisted" : null;
-        }
-        return null;
+        return "Always hidden";
     }
 
 }

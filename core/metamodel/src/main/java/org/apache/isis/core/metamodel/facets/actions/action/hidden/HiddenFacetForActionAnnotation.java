@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.facets.actions.action.hidden;
 
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -45,7 +44,7 @@ public class HiddenFacetForActionAnnotation extends HiddenFacetAbstract {
     }
 
     private HiddenFacetForActionAnnotation(final Where where, final FacetHolder holder) {
-        super(HiddenFacetForActionAnnotation.class, When.ALWAYS, where, holder);
+        super(HiddenFacetForActionAnnotation.class, where, holder);
     }
 
     @Override

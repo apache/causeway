@@ -20,8 +20,8 @@
 package org.apache.isis.core.metamodel.facets.actions.action;
 
 import java.lang.reflect.Method;
+
 import org.apache.isis.applib.annotation.Hidden;
-import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
@@ -62,7 +62,7 @@ public class HiddenAnnotationOnActionFacetFactoryTest extends AbstractFacetFacto
 
     public void testHiddenWhenAlwaysAnnotationPickedUpOn() {
         class Customer {
-            @Hidden(when=When.ALWAYS)
+            @Hidden()
             public void someAction() {
             }
         }
@@ -72,54 +72,10 @@ public class HiddenAnnotationOnActionFacetFactoryTest extends AbstractFacetFacto
 
         final HiddenFacetForHiddenAnnotationOnAction facet = facetedMethod.getFacet(HiddenFacetForHiddenAnnotationOnAction.class);
 
-        assertEquals(When.ALWAYS, facet.when());
+        assertNotNull(facet);
+
     }
 
-    public void testHiddenWhenNeverAnnotationPickedUpOn() {
-        class Customer {
-            @Hidden(when=When.NEVER)
-            public void someAction() {
-            }
-        }
-        final Method actionMethod = findMethod(Customer.class, "someAction");
-
-        facetFactory.processHidden(new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetedMethod));
-
-        final HiddenFacetForHiddenAnnotationOnAction facet = facetedMethod.getFacet(HiddenFacetForHiddenAnnotationOnAction.class);
-
-        assertEquals(When.NEVER, facet.when());
-    }
-
-    public void testHiddenWhenOncePersistedAnnotationPickedUpOn() {
-        class Customer {
-            @Hidden(when=When.ONCE_PERSISTED)
-            public void someAction() {
-            }
-        }
-        final Method actionMethod = findMethod(Customer.class, "someAction");
-
-        facetFactory.processHidden(new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetedMethod));
-
-        final HiddenFacetForHiddenAnnotationOnAction facet = facetedMethod.getFacet(HiddenFacetForHiddenAnnotationOnAction.class);
-
-        assertEquals(When.ONCE_PERSISTED, facet.when());
-    }
-
-    public void testHiddenWhenUntilPersistedAnnotationPickedUpOn() {
-        class Customer {
-            @Hidden(when=When.UNTIL_PERSISTED)
-            public void someAction() {
-            }
-        }
-        final Method actionMethod = findMethod(Customer.class, "someAction");
-
-        facetFactory.processHidden(new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetedMethod));
-
-        final HiddenFacetForHiddenAnnotationOnAction facet = facetedMethod.getFacet(HiddenFacetForHiddenAnnotationOnAction.class);
-
-        assertEquals(When.UNTIL_PERSISTED, facet.when());
-        assertEquals(Where.ANYWHERE, facet.where());
-    }
 
     public void testHiddenWhereCollectionTableAnnotationPickedUpOn() {
         class Customer {
@@ -134,13 +90,12 @@ public class HiddenAnnotationOnActionFacetFactoryTest extends AbstractFacetFacto
         final HiddenFacetForHiddenAnnotationOnAction facet = facetedMethod.getFacet(HiddenFacetForHiddenAnnotationOnAction.class);
 
         assertEquals(Where.PARENTED_TABLES, facet.where());
-        assertEquals(When.ALWAYS, facet.when());
     }
 
 
     public void testHiddenWhenAndWhereTableAnnotationPickedUpOn() {
         class Customer {
-            @Hidden(where=Where.PARENTED_TABLES, when=When.UNTIL_PERSISTED)
+            @Hidden(where=Where.PARENTED_TABLES)
             public void someAction() {
             }
         }
@@ -151,7 +106,6 @@ public class HiddenAnnotationOnActionFacetFactoryTest extends AbstractFacetFacto
         final HiddenFacetForHiddenAnnotationOnAction facet = facetedMethod.getFacet(HiddenFacetForHiddenAnnotationOnAction.class);
 
         assertEquals(Where.PARENTED_TABLES, facet.where());
-        assertEquals(When.UNTIL_PERSISTED, facet.when());
     }
 
 }

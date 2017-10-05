@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets.object.hidden.annotation;
 
-import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.hidden.HiddenFacetAbstractImpl;
@@ -30,8 +29,8 @@ import org.apache.isis.core.metamodel.facets.members.hidden.HiddenFacetAbstractI
 @Deprecated
 public class HiddenFacetOnTypeAnnotation extends HiddenFacetAbstractImpl {
 
-    public HiddenFacetOnTypeAnnotation(final When when, final FacetHolder holder) {
-        super(HiddenFacetOnTypeAnnotation.class, when, Where.ANYWHERE, holder);
+    public HiddenFacetOnTypeAnnotation(final Object whenUNUSED, final FacetHolder holder) {
+        super(HiddenFacetOnTypeAnnotation.class, Where.ANYWHERE, holder);
     }
 
 }

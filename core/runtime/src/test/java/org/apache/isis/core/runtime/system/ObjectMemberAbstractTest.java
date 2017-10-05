@@ -28,7 +28,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
@@ -163,7 +162,7 @@ public class ObjectMemberAbstractTest {
     @Test
     public void testVisibleWhenHiddenFacetSetToAlways() {
         testMember.addFacet(new HideForContextFacetNone(testMember));
-        testMember.addFacet(new HiddenFacetAbstract(When.ALWAYS, Where.ANYWHERE, testMember) {
+        testMember.addFacet(new HiddenFacetAbstract(Where.ANYWHERE, testMember) {
             @Override
             public String hiddenReason(final ObjectAdapter target, final Where whereContext) {
                 return null;
@@ -176,7 +175,7 @@ public class ObjectMemberAbstractTest {
     @Test
     public void testVisibleWhenTargetPersistentAndHiddenFacetSetToOncePersisted() {
         testMember.addFacet(new HideForContextFacetNone(testMember));
-        testMember.addFacet(new HiddenFacetAbstractImpl(When.ONCE_PERSISTED, Where.ANYWHERE, testMember){});
+        testMember.addFacet(new HiddenFacetAbstractImpl(Where.ANYWHERE, testMember){});
 
         context.checking(new Expectations() {{
             allowing(mockPersistable).dnIsPersistent();
@@ -192,7 +191,7 @@ public class ObjectMemberAbstractTest {
     @Test
     public void testVisibleWhenTargetPersistentAndHiddenFacetSetToUntilPersisted() {
         testMember.addFacet(new HideForContextFacetNone(testMember));
-        testMember.addFacet(new HiddenFacetAbstractImpl(When.UNTIL_PERSISTED, Where.ANYWHERE, testMember){});
+        testMember.addFacet(new HiddenFacetAbstractImpl(Where.ANYWHERE, testMember){});
 
         context.checking(new Expectations() {{
             allowing(mockPersistable).dnIsPersistent();
@@ -209,7 +208,7 @@ public class ObjectMemberAbstractTest {
     @Test
     public void testVisibleWhenTargetTransientAndHiddenFacetSetToUntilPersisted() {
         testMember.addFacet(new HideForContextFacetNone(testMember));
-        testMember.addFacet(new HiddenFacetAbstractImpl(When.UNTIL_PERSISTED, Where.ANYWHERE, testMember){});
+        testMember.addFacet(new HiddenFacetAbstractImpl(Where.ANYWHERE, testMember){});
 
         context.checking(new Expectations() {{
             allowing(mockPersistable).dnIsPersistent();

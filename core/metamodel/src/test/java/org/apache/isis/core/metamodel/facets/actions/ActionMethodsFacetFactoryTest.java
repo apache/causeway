@@ -27,7 +27,6 @@ import java.util.Set;
 
 import org.jmock.Expectations;
 
-import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.security.UserMemento;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -476,7 +475,6 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         final HiddenFacetOnStaticMethod facet = facetedMethod.getFacet(HiddenFacetOnStaticMethod.class);
         assertNotNull(facet);
-        assertEquals(When.ALWAYS, facet.when());
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(alwaysHideMethod));
     }
@@ -513,7 +511,6 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         assertNotNull(facet);
         assertTrue(facet instanceof DisabledFacetAbstract);
         final DisabledFacetAbstract disabledFacetAbstract = (DisabledFacetAbstract) facet;
-        assertEquals(When.ALWAYS, disabledFacetAbstract.when());
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(protectMethod));
     }

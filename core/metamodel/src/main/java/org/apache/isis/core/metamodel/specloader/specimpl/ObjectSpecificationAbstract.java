@@ -38,7 +38,6 @@ import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.filter.Filters;
@@ -1098,7 +1097,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
     private boolean isAlwaysHidden(final FacetHolder holder) {
         final HiddenFacet hiddenFacet = holder.getFacet(HiddenFacet.class);
-        return hiddenFacet != null && hiddenFacet.when() == When.ALWAYS && hiddenFacet.where() == Where.ANYWHERE;
+        return hiddenFacet != null && hiddenFacet.where() == Where.ANYWHERE;
     }
 
     

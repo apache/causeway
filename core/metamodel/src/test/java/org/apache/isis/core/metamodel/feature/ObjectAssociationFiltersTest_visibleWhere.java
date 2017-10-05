@@ -34,7 +34,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
-import org.apache.isis.applib.annotation.When;
+
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -59,7 +59,6 @@ public class ObjectAssociationFiltersTest_visibleWhere {
     private HiddenFacet mockHiddenFacet;
 
     // given
-    private When when;
     private Where where;
 
     // when
@@ -72,33 +71,29 @@ public class ObjectAssociationFiltersTest_visibleWhere {
     @Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
-                {When.ALWAYS, Where.ANYWHERE, Where.ANYWHERE, false},
-                {When.UNTIL_PERSISTED, Where.ANYWHERE, Where.ANYWHERE, true},
-                {When.ONCE_PERSISTED, Where.ANYWHERE, Where.ANYWHERE, true},
-                {When.NEVER, Where.ANYWHERE, Where.ANYWHERE, true},
-                {When.ALWAYS, Where.OBJECT_FORMS, Where.OBJECT_FORMS, false},
-                {When.ALWAYS, Where.OBJECT_FORMS, Where.ALL_TABLES, true},
-                {When.ALWAYS, Where.OBJECT_FORMS, Where.PARENTED_TABLES, true},
-                {When.ALWAYS, Where.OBJECT_FORMS, Where.REFERENCES_PARENT, true},
-                {When.ALWAYS, Where.OBJECT_FORMS, Where.STANDALONE_TABLES, true},
-                {When.ALWAYS, Where.STANDALONE_TABLES, Where.OBJECT_FORMS, true},
-                {When.ALWAYS, Where.STANDALONE_TABLES, Where.PARENTED_TABLES, true},
-                {When.ALWAYS, Where.STANDALONE_TABLES, Where.REFERENCES_PARENT, true},
-                {When.ALWAYS, Where.STANDALONE_TABLES, Where.STANDALONE_TABLES, false},
-                {When.ALWAYS, Where.PARENTED_TABLES, Where.OBJECT_FORMS, true},
-                {When.ALWAYS, Where.PARENTED_TABLES, Where.PARENTED_TABLES, false},
-                {When.ALWAYS, Where.PARENTED_TABLES, Where.REFERENCES_PARENT, true},
-                {When.ALWAYS, Where.PARENTED_TABLES, Where.STANDALONE_TABLES, true},
-                {When.ALWAYS, Where.ALL_TABLES, Where.OBJECT_FORMS, true},
-                {When.ALWAYS, Where.ALL_TABLES, Where.PARENTED_TABLES, false},
-                {When.ALWAYS, Where.ALL_TABLES, Where.STANDALONE_TABLES, false},
-                {When.ALWAYS, Where.ALL_TABLES, Where.REFERENCES_PARENT, true},
+                {Where.ANYWHERE, Where.ANYWHERE, false},
+                {Where.OBJECT_FORMS, Where.OBJECT_FORMS, false},
+                {Where.OBJECT_FORMS, Where.ALL_TABLES, true},
+                {Where.OBJECT_FORMS, Where.PARENTED_TABLES, true},
+                {Where.OBJECT_FORMS, Where.REFERENCES_PARENT, true},
+                {Where.OBJECT_FORMS, Where.STANDALONE_TABLES, true},
+                {Where.STANDALONE_TABLES, Where.OBJECT_FORMS, true},
+                {Where.STANDALONE_TABLES, Where.PARENTED_TABLES, true},
+                {Where.STANDALONE_TABLES, Where.REFERENCES_PARENT, true},
+                {Where.STANDALONE_TABLES, Where.STANDALONE_TABLES, false},
+                {Where.PARENTED_TABLES, Where.OBJECT_FORMS, true},
+                {Where.PARENTED_TABLES, Where.PARENTED_TABLES, false},
+                {Where.PARENTED_TABLES, Where.REFERENCES_PARENT, true},
+                {Where.PARENTED_TABLES, Where.STANDALONE_TABLES, true},
+                {Where.ALL_TABLES, Where.OBJECT_FORMS, true},
+                {Where.ALL_TABLES, Where.PARENTED_TABLES, false},
+                {Where.ALL_TABLES, Where.STANDALONE_TABLES, false},
+                {Where.ALL_TABLES, Where.REFERENCES_PARENT, true},
                 });
     }
 
     public ObjectAssociationFiltersTest_visibleWhere(
-            final When when, final Where where, final Where context, final boolean visible) {
-        this.when = when;
+            final Where where, final Where context, final boolean visible) {
         this.where = where;
         this.whereContext = context;
         this.expectedVisibility = visible;
@@ -109,9 +104,6 @@ public class ObjectAssociationFiltersTest_visibleWhere {
         context.checking(new Expectations(){{
             allowing(mockHiddenFacet).where();
             will(returnValue(where));
-
-            allowing(mockHiddenFacet).when();
-            will(returnValue(when));
 
             allowing(mockObjectAssociation).getFacets(with(any(Filter.class)));
             will(returnValue(Lists.newArrayList(mockHiddenFacet)));

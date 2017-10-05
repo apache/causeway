@@ -19,11 +19,11 @@
 
 package org.apache.isis.core.metamodel.facets;
 
-import org.apache.isis.applib.annotation.When;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 
-public interface WhenValueFacet extends Facet {
+public interface WhereValueFacet extends Facet {
 
-    public When when();
+    public Where where();
     
 }

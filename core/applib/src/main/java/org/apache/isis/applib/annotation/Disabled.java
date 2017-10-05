@@ -34,11 +34,6 @@ import java.lang.annotation.Target;
 @Deprecated
 public @interface Disabled {
 
-    /**
-     * @deprecated.  There is no corresponding attribute in {@link org.apache.isis.applib.annotation.Property}, {@link org.apache.isis.applib.annotation.Collection}; the feature is assumed to be disabled ALWAYS.
-     */
-    @Deprecated
-    When when() default When.ALWAYS;
 
     /**
      * @deprecated - see {@link Property#editing()} and {@link Collection#editing()}.

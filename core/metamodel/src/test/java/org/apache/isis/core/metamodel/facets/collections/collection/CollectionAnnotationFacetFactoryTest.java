@@ -27,7 +27,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import org.apache.isis.applib.annotation.Collection;
-import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.eventbus.CollectionDomainEvent;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -401,7 +400,6 @@ public class CollectionAnnotationFacetFactoryTest extends AbstractFacetFactoryJU
             Assert.assertTrue(hiddenFacet instanceof HiddenFacetForCollectionAnnotation);
             final HiddenFacetForCollectionAnnotation hiddenFacetImpl = (HiddenFacetForCollectionAnnotation) hiddenFacet;
             assertThat(hiddenFacetImpl.where(), is(Where.REFERENCES_PARENT));
-            assertThat(hiddenFacetImpl.when(), is(When.ALWAYS));
 
             final Facet hiddenFacetForColl = facetedMethod.getFacet(HiddenFacetForCollectionAnnotation.class);
             Assert.assertNotNull(hiddenFacetForColl);
@@ -445,7 +443,6 @@ public class CollectionAnnotationFacetFactoryTest extends AbstractFacetFactoryJU
             Assert.assertTrue(disabledFacet instanceof DisabledFacetForCollectionAnnotation);
             final DisabledFacetForCollectionAnnotation disabledFacetImpl = (DisabledFacetForCollectionAnnotation) disabledFacet;
             assertThat(disabledFacet.where(), is(Where.EVERYWHERE));
-            assertThat(disabledFacet.when(), is(When.ALWAYS));
             assertThat(disabledFacetImpl.getReason(), is("you cannot edit the orders collection"));
         }
     }

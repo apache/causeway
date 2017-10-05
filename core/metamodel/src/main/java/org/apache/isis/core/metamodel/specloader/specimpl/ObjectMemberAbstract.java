@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Objects;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.services.bookmark.Bookmark;
@@ -234,7 +233,6 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         final HiddenFacet facet = getFacet(HiddenFacet.class);
         return facet != null &&
                 !facet.isNoop() &&
-                facet.when() == When.ALWAYS &&
                 (facet.where() == Where.EVERYWHERE || facet.where() == Where.ANYWHERE)
                 ;
 

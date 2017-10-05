@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.facets.properties.property.hidden;
 
 import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -44,7 +43,7 @@ public class HiddenFacetForPropertyAnnotation extends HiddenFacetAbstract {
     }
 
     private HiddenFacetForPropertyAnnotation(final Where where, final FacetHolder holder) {
-        super(HiddenFacetForPropertyAnnotation.class, When.ALWAYS, where, holder);
+        super(HiddenFacetForPropertyAnnotation.class, where, holder);
     }
 
     @Override

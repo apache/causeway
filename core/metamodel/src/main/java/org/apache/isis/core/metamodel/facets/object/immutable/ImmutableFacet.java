@@ -19,9 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.object.immutable;
 
-import org.apache.isis.applib.annotation.When;
+import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.WhenValueFacet;
 import org.apache.isis.core.metamodel.facets.object.value.EqualByContentFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.interactions.DisablingInteractionAdvisor;
@@ -39,7 +38,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
  * @see EqualByContentFacet
  * @see ValueFacet
  */
-public interface ImmutableFacet extends WhenValueFacet, DisablingInteractionAdvisor {
+public interface ImmutableFacet extends Facet, DisablingInteractionAdvisor {
 
     /**
      * Clone this facet onto another {@link FacetHolder}.
@@ -54,31 +53,17 @@ public interface ImmutableFacet extends WhenValueFacet, DisablingInteractionAdvi
     public final static class Utils {
 
         private Utils(){}
-        public static boolean isAlwaysImmutable(final ObjectSpecification specification) {
+        public static boolean isAlwaysImmutable(
+                final ObjectSpecification specification) {
+
             // this is a workaround for a dubious test
             if (specification == null) {
                 return false;
             }
 
-            final ImmutableFacet immutableFacet = specification.getFacet(ImmutableFacet.class);
-            if (immutableFacet == null) {
-                return false;
-            }
-            return immutableFacet.when() == When.ALWAYS;
+            return specification.getFacet(ImmutableFacet.class) != null;
         }
 
-        public static boolean isImmutableOncePersisted(final ObjectSpecification specification) {
-            // this is a workaround for a dubious test
-            if (specification == null) {
-                return false;
-            }
-
-            final ImmutableFacet immutableFacet = specification.getFacet(ImmutableFacet.class);
-            if (immutableFacet == null) {
-                return false;
-            }
-            return immutableFacet.when() == When.ONCE_PERSISTED;
-        }
 
     }
 }

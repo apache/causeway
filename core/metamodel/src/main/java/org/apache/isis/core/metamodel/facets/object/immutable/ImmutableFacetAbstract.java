@@ -19,22 +19,21 @@
 
 package org.apache.isis.core.metamodel.facets.object.immutable;
 
-import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.events.UsabilityEvent;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.WhenValueFacetAbstract;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 
-public abstract class ImmutableFacetAbstract extends WhenValueFacetAbstract implements ImmutableFacet {
+public abstract class ImmutableFacetAbstract extends FacetAbstract implements ImmutableFacet {
 
     public static Class<? extends Facet> type() {
         return ImmutableFacet.class;
     }
 
-    public ImmutableFacetAbstract(final When value, final FacetHolder holder) {
-        super(type(), holder, value);
+    public ImmutableFacetAbstract(final FacetHolder holder) {
+        super(type(), holder, Derivation.NOT_DERIVED);
     }
 
     /**
@@ -53,24 +52,9 @@ public abstract class ImmutableFacetAbstract extends WhenValueFacetAbstract impl
         }
     }
 
-    public String disabledReason(final ObjectAdapter targetAdapter) {
-        if (when() == When.ALWAYS) {
-            return "Always immmutable";
-        } else if (when() == When.NEVER) {
-            return null;
-        }
-
-        // remaining tests depend on target in question.
-        if (targetAdapter == null) {
-            return null;
-        }
-
-        if (when() == When.UNTIL_PERSISTED) {
-            return targetAdapter.isTransient() ? "Immutable until persisted" : null;
-        } else if (when() == When.ONCE_PERSISTED) {
-            return targetAdapter.representsPersistent() ? "Immutable once persisted" : null;
-        }
-        return null;
+    public String disabledReason(
+            final ObjectAdapter targetAdapter) {
+        return "Always immmutable";
     }
 
 }

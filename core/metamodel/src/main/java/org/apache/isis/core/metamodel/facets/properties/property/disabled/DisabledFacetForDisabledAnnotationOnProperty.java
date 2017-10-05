@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.facets.properties.property.disabled;
 
 import org.apache.isis.applib.annotation.Disabled;
-import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
@@ -34,12 +33,12 @@ public class DisabledFacetForDisabledAnnotationOnProperty extends DisabledFacetA
 
     public static DisabledFacet create(final Disabled annotation, final FacetHolder facetHolder) {
         return annotation != null
-                ? new DisabledFacetForDisabledAnnotationOnProperty(annotation.when(), annotation.where(), annotation.reason(), facetHolder)
+                ? new DisabledFacetForDisabledAnnotationOnProperty(annotation.where(), annotation.reason(), facetHolder)
                 : null;
     }
 
-    private DisabledFacetForDisabledAnnotationOnProperty(final When when, Where where, String reason, final FacetHolder holder) {
-        super(when, where, reason, holder);
+    private DisabledFacetForDisabledAnnotationOnProperty(final Where where, String reason, final FacetHolder holder) {
+        super(where, reason, holder);
     }
 
 

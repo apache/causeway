@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facets.members.hidden;
 
 import java.util.Properties;
 import com.google.common.base.Strings;
-import org.apache.isis.applib.annotation.When;
+
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -40,7 +40,7 @@ public abstract class HiddenFacetFromLayoutPropertiesAbstract extends HiddenFace
     }
 
     protected HiddenFacetFromLayoutPropertiesAbstract(final Where where, final FacetHolder holder) {
-        super(HiddenFacetFromLayoutPropertiesAbstract.class, When.ALWAYS, where, holder);
+        super(HiddenFacetFromLayoutPropertiesAbstract.class, where, holder);
     }
 
     @Override

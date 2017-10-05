@@ -35,13 +35,6 @@ import java.lang.annotation.Target;
 public @interface Hidden {
 
     /**
-     * @deprecated.  There is no corresponding attribute in {@link org.apache.isis.applib.annotation.Property}, {@link org.apache.isis.applib.annotation.Collection} and {@link org.apache.isis.applib.annotation.Action}, if the
-     * corresponding <code>hidden()</code> attribute is set then the feature is assumed to be hidden ALWAYS.
-     */
-    @Deprecated
-    When when() default When.ALWAYS;
-
-    /**
      * @deprecated - see {@link Property#hidden()}, {@link Collection#hidden()} and {@link Action#hidden()}.
      */
     @Deprecated
