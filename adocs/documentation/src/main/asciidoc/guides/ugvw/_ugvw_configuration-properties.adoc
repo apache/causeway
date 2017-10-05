@@ -25,7 +25,7 @@ If you prefer you can place all configuration properties into `WEB-INF/isis.prop
 
 
 .Wicket Viewer Configuration Properties
-[cols="2a,1,3", options="header"]
+[cols="2a,1,3a", options="header"]
 |===
 |Property
 |Value +
