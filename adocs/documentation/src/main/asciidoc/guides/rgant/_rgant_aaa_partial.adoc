@@ -15,13 +15,6 @@ These annotations have only incomplete/partial support, primarily relating to th
 |Purpose
 |Layer
 
-|`@Aggregated`
-|Indicates that the object is aggregated, or wholly owned, by a root object. +
-
-This information could in theory provide useful semantics for some object store implementations, eg to store the aggregated objects "inline".  +
-
-Currently neither the JDO ObjectStore nor any of the viewers exploit this metadata.
-|Domain, Persistence
 
 |`@Defaulted`
 |Indicates that a (value) class has a default value. +

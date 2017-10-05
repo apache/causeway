@@ -21,7 +21,6 @@ package org.apache.isis.applib.adapters;
 
 import java.math.BigDecimal;
 
-import org.apache.isis.applib.annotation.Aggregated;
 import org.apache.isis.applib.annotation.Defaulted;
 import org.apache.isis.applib.annotation.Encodable;
 import org.apache.isis.applib.annotation.EqualByContent;
