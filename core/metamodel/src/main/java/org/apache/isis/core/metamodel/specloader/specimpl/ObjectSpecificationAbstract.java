@@ -38,7 +38,6 @@ import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.annotation.NotPersistable;
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
@@ -69,7 +68,6 @@ import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupLayoutFacet;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
-import org.apache.isis.core.metamodel.facets.object.notpersistable.NotPersistableFacet;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.facets.object.parented.ParentedCollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
@@ -86,7 +84,6 @@ import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.ObjectSpecificationException;
-import org.apache.isis.core.metamodel.spec.Persistability;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
@@ -162,8 +159,6 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     private ObjectSpecId specId;
 
     private ObjectSpecification superclassSpec;
-
-    private Persistability persistability = Persistability.USER_PERSISTABLE;
 
     private TitleFacet titleFacet;
     private IconFacet iconFacet;
@@ -356,24 +351,8 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         titleFacet = getFacet(TitleFacet.class);
         iconFacet = getFacet(IconFacet.class);
         cssClassFacet = getFacet(CssClassFacet.class);
-
-        this.persistability = determinePersistability();
     }
 
-    private Persistability determinePersistability() {
-        final NotPersistableFacet notPersistableFacet = getFacet(NotPersistableFacet.class);
-        if (notPersistableFacet == null) {
-            return Persistability.USER_PERSISTABLE;
-        }
-        final NotPersistable.By initiatedBy = notPersistableFacet.value();
-        if (initiatedBy == NotPersistable.By.USER_OR_PROGRAM) {
-            return Persistability.TRANSIENT;
-        } else if (initiatedBy == NotPersistable.By.USER) {
-            return Persistability.PROGRAM_PERSISTABLE;
-        } else {
-            return Persistability.USER_PERSISTABLE;
-        }
-    }
 
     //endregion
 
@@ -497,11 +476,6 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     public String getHelp() {
         final HelpFacet helpFacet = getFacet(HelpFacet.class);
         return helpFacet == null ? null : helpFacet.value();
-    }
-
-    @Override
-    public Persistability persistability() {
-        return persistability;
     }
 
 

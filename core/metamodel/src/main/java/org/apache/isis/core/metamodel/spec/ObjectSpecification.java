@@ -248,15 +248,6 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
     // Facets
     // //////////////////////////////////////////////////////////////
 
-    /**
-     * Determines if objects of this specification can be persisted or not. If
-     * it can be persisted (i.e. it return something other than
-     * {@link Persistability}.TRANSIENT ObjectAdapter.isPersistent() will
-     * indicated whether the object is persistent or not. If they cannot be
-     * persisted then {@link ObjectAdapter}. {@link #persistability()} should be
-     * ignored.
-     */
-    Persistability persistability();
 
     /**
      * Determines if the object represents an value or object.

@@ -1077,9 +1077,6 @@ public class PersistenceSession implements
         if (adapter.representsPersistent()) {
             throw new NotPersistableException("Object already persistent: " + adapter);
         }
-        if (!adapter.getSpecification().persistability().isPersistable()) {
-            throw new NotPersistableException("Object is not persistable: " + adapter);
-        }
         final ObjectSpecification specification = adapter.getSpecification();
         if (specification.isService()) {
             throw new NotPersistableException("Cannot persist services: " + adapter);
@@ -1135,7 +1132,7 @@ public class PersistenceSession implements
 
 
     private static boolean objectSpecNotPersistable(final ObjectAdapter adapter) {
-        return !adapter.getSpecification().persistability().isPersistable() || adapter.isParentedCollection();
+        return adapter.isParentedCollection();
     }
 
 

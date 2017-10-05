@@ -45,7 +45,6 @@ import org.apache.isis.core.metamodel.services.configinternal.ConfigurationServi
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.Persistability;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -63,8 +62,6 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
      * lazily derived, see {@link #getSpecId()} 
      */
     private ObjectSpecId specId;
-
-    private Persistability persistable;
 
     private ServicesInjector servicesInjector;
 
@@ -87,7 +84,6 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     public ObjectSpecificationStub(final String name) {
         this.name = name;
         title = "";
-        persistable = Persistability.USER_PERSISTABLE;
     }
 
     @Override
@@ -292,11 +288,6 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     }
 
     @Override
-    public Persistability persistability() {
-        return persistable;
-    }
-
-    @Override
     public List<ObjectSpecification> subclasses() {
         return subclasses;
     }
@@ -324,11 +315,6 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     @Override
     public Identifier getIdentifier() {
         return Identifier.classIdentifier(name);
-    }
-
-    // TODO: not used
-    public void setupPersistable(final Persistability persistable) {
-        this.persistable = persistable;
     }
 
     @Override

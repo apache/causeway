@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.Set;
 
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 
 import com.google.common.collect.Sets;
 
@@ -49,7 +48,6 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.Persistability;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
@@ -97,11 +95,9 @@ public class ObjectFixtureService {
     @MemberOrder(sequence = "1")
     public void save(final Object object) {
         final ObjectAdapter adapter = getPersistenceSession().adapterFor(object);
-        if (adapter.getSpecification().persistability() != Persistability.TRANSIENT) {
-            LOG.info("Saving object for fixture: " + adapter);
-            addObjectAndAssociates(adapter);
-            saveAll();
-        }
+        LOG.info("Saving object for fixture: " + adapter);
+        addObjectAndAssociates(adapter);
+        saveAll();
     }
 
     private void addObjectAndAssociates(final ObjectAdapter adapter) {

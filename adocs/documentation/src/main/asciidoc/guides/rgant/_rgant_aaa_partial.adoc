@@ -33,25 +33,6 @@ For these reasons the `@Encodable` annotation is generally never applied directl
 Currently neither the Wicket viewer nor the RO viewer use this API.  The Wicket viewer uses Wicket APIs, while RO viewer has its own mechanisms (parsing data from input JSON representations, etc.)
 |Persistence
 
-|`@NotPersistable`
-|Indicates that a domain object may not be programmatically persisted. +
-+
-This annotation  indicates that transient instances of this class may be created but may not be persisted. The framework will not provide the user with an option to 'save' the object, and attempting to persist such an object programmatically would be an error.
-
-For example:
-
-[source,java]
-----
-@NotPersistable(By.USER)
-public class InputForm {
-    ...
-}
-----
-
-By default the annotated object is effectively transient (ie default to `By.USER_OR_PROGRAM`).
-
-This annotation is not supported by: Wicket viewer (which does not support transient objects).  See also link:https://issues.apache.org/jira/browse/ISIS-743[ISIS-743] contemplating the removal of this annotation.
-|Domain, Persistence
 
 |`@Parseable`
 |Indicates that a (value) class can be reconstructed from a string. +

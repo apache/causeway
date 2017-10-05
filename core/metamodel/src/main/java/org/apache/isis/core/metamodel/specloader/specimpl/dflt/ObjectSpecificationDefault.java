@@ -404,7 +404,6 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         final ToString str = new ToString(this);
         str.append("class", getFullIdentifier());
         str.append("type", (isParentedOrFreeCollection() ? "Collection" : "Object"));
-        str.append("persistable", persistability());
         str.append("superclass", superclass() == null ? "Object" : superclass().getFullIdentifier());
         return str.toString();
     }
