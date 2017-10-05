@@ -22,13 +22,6 @@ The annotations listed in the table below are still supported by Apache Isis, bu
 |Layer
 |xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[File-based layout]?
 
-|`@Bookmarkable`
-|Whether (and how) to create a bookmark for visited object.
-|xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_bookmarking[`@DomainObjectLayout` +
-`#bookmarking()`]
-|UI
-|
-
 |`@Bulk`
 |Indicates an action is a bulk action, can be applied to multiple instances.
 |xref:../rgant/rgant.adoc#_rgant-Action_invokeOn[`@Action#invokeOn()`]
@@ -38,13 +31,7 @@ The annotations listed in the table below are still supported by Apache Isis, bu
 |`@Command`
 |Action invocation should be reified as a command object, optionally persistable for profiling and enhanced auditing, and background/async support.
 |xref:../rgant/rgant.adoc#_rgant-Action_command[`@Action#command()`]
-|Domain
-|
-
-|`@Debug`
-|Action only invokable in debug mode.
-|Not supported by either the xref:../ugvw/ugvw.adoc#[Wicket viewer] or the xref:../ugvro/ugvro.adoc#[RestfulObjects viewer]; use prototype mode instead (xref:../rgant/rgant.adoc#_rgant-Action_restrictTo[`@Action#restrictTo()`])
-|UI
+q|Domain
 |
 
 
@@ -53,12 +40,6 @@ The annotations listed in the table below are still supported by Apache Isis, bu
 |`#editing()` attribute for xref:../rgant/rgant.adoc#_rgant-Property_editing[`@Property`],  xref:../rgant/rgant.adoc#_rgant-Collection_editing[`@Collection`] and xref:../rgant/rgant.adoc#_rgant-DomainObject_editing[`@DomainObject`]
 |UI, Domain
 |Yes
-
-|`@Exploration`
-|Action available in special 'exploration' mode.
-|Not supported by either the xref:../ugvw/ugvw.adoc#[Wicket viewer] or the xref:../ugvro/ugvro.adoc#[RestfulObjects viewer]; use prototype mode instead (xref:../rgant/rgant.adoc#_rgant-Action_restrictTo[`@Action#restrictTo()`])
-|UI
-|
 
 |`@Hidden`
 |Object member is not visible, or on domain service (to indicate that none of its actions are visible).
@@ -125,18 +106,6 @@ Also part of the toString representation of bookmarks, if using the Bookmark Ser
 |Domain
 |
 
-
-|`@Prototype`
-|Indicates that an action should only be visible in 'prototype' mode.
-|xref:../rgant/rgant.adoc#_rgant-Action_restrictTo[`@Action#restrictTo()`]
-|UI
-|Yes
-
-|`@QueryOnly`
-|Whether an action is query-only (has no side-effects).
-|xref:../rgant/rgant.adoc#_rgant-Action_semantics[`@Action#semantics()`]
-|Domain
-|
 
 |`@RegEx`
 |Validate change to value of string property.

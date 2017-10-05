@@ -30,7 +30,6 @@ import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacetFallback;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -38,9 +37,9 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorCom
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 
-public class BookmarkPolicyFacetViaBookmarkableAnnotationElseFallbackFactory extends FacetFactoryAbstract implements  MetaModelValidatorRefiner {
+public class BookmarkPolicyFacetFallbackFactory extends FacetFactoryAbstract implements  MetaModelValidatorRefiner {
 
-    public BookmarkPolicyFacetViaBookmarkableAnnotationElseFallbackFactory() {
+    public BookmarkPolicyFacetFallbackFactory() {
         super(FeatureType.OBJECTS_AND_ACTIONS);
     }
 

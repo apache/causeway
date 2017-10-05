@@ -23,42 +23,26 @@ import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
-import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.bookmarkable.BookmarkPolicyFacetViaBookmarkableAnnotation;
-import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.bookmarkable.BookmarkPolicyFacetViaBookmarkableAnnotationElseFallbackFactory;
+import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.bookmarkable.BookmarkPolicyFacetFallbackFactory;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 public class BookmarkableAnnotationFacetFactoryTest_class extends AbstractFacetFactoryTest {
 
-    private BookmarkPolicyFacetViaBookmarkableAnnotationElseFallbackFactory facetFactory;
+    private BookmarkPolicyFacetFallbackFactory facetFactory;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new BookmarkPolicyFacetViaBookmarkableAnnotationElseFallbackFactory();
+        facetFactory = new BookmarkPolicyFacetFallbackFactory();
     }
 
     @Override
     protected void tearDown() throws Exception {
         facetFactory = null;
         super.tearDown();
-    }
-
-    public void testBookmarkableAnnotationPickedUpOnClass() {
-        class Customer {
-        }
-
-        facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
-
-        final Facet facet = facetedMethod.getFacet(BookmarkPolicyFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof BookmarkPolicyFacetViaBookmarkableAnnotation);
-        BookmarkPolicyFacet bookmarkableFacet = (BookmarkPolicyFacet) facet;
-        assertThat(bookmarkableFacet.value(), is(BookmarkPolicy.AS_CHILD));
-        
-        assertNoMethodsRemoved();
     }
 
     public void testBookmarkablePolicyInferredPickedUpOnClassAndDefaultsToAlways() {

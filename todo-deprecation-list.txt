@@ -13,21 +13,14 @@ org.apache.isis.applib
 org.apache.isis.applib.annotation
 
 
-
     Bulk.java - entire annotation, use @Action(invokeOn=...)
     Bulk.InteractionContext - entire service, use ActionInvocationContext service instead
     InvokedOn.java - entire enum, along with @Bulk annotation.
-
-
-    Audited.java - entire annotation, use @DomainObject(audited=...)
 
     Command.java - entire annotation, use @Action(command=...) instead
     CommandExecuteIn.java - entire annotation, use @Action(commandExecuteIn=...) instead
     CommandPersistence.java - entire annotation, use @Action(commandPersistence=...) instead
 
-    Debug.java - entire annotation, use @Action#(restrictTo=...) instead
-    Exploration.java - entire annotation, use @Action(restrictTo=....) instead
-    Prototype.java  - entire annotation, use @Action(restrictTo=....) instead
 
     Disabled.java - entire annotation, use @Property(editingDisabledReason=...) instead
     Hidden.java - entire annotation, use @Property(hidden=...), @Collection(hidden=...), @Action(hidden=...)
@@ -158,47 +151,6 @@ org.apache.isis.objectstore.jdo.applib.service.support
 
 
 
-PROPOSE TO RETAIN:
-
-
-Below is the code currently deprecated in the applib, but I propose to retain even in 2.0.0 (on the grounds that a replacement for them is not fully designed):
-org.apache.isis.applib.adapters  - custom value type support
- 
- 
-org.apache.isis.applib.annotation
- 
-    Encodable.java - entire annotation, part of custom value types support
-    Parseable.java - entire annotation, part of custom value types support
- 
- 
-org.apache.isis.applib.fixtures  - "legacy" fixture support package ... by and large can use FixtureScripts (though not sure if there's feature parity in all cases)
-    AbstractFixture.java
-    AbstractFixtureSusa.java
-    BaseFixture.java
-    CompositeFixture.java
-    DateFixture.java
-    LogonFixture.java
-org.apache.isis.applib.fixtures.switchuser
-    SwitchUserService.java
-    SwitchUserServiceAware.java
- 
-org.apache.isis.applib.services.command
-    Command.java  - methods that pertain to the execution of the command and its completion (for that, use Interaction) [suggest we retain for now]
-        getCompletedAt()
-        getException()
-        getResult()
-        getStartedAt()
-        next(String)
-        setCompletedAt(Timestamp)
-        setStartedAt(Timestamp)
-    Command3.java  - metods for working with domain events (equiv functionality in Interaction)  [suggest we retain for now]
-        flushActionDomainEvents()
-        peekActionDomainEvent() 
-        popActionDomainEvent()
-        pushActionDomainEvent(ActionDomainEvent<?>)  (
-
-    MemberGroupLayout.java - entire annotation, use Xxx.layout.xml instead
-
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
@@ -229,7 +181,15 @@ Also for 2.0.0, new features/deprecations:
 OTHER STUFF:
 
 
+remove explorationXxx() prefix
+remove prototypeXxx() prefix
+remove debugXxx() prefix
+
+
 debug() stuff
+
+DebugDataInputExtended & DebugDataOutputExtended  .... seem to be unused
+
 
 ObjectFixtureService
 
@@ -280,6 +240,52 @@ link:https://issues.apache.org/jira/browse/ISIS-743[ISIS-743] - @NotPersistable 
 
 *************************************************************************
 
+PROPOSE TO RETAIN:
+
+
+Below is the code currently deprecated in the applib, but I propose to retain even in 2.0.0 (on the grounds that a replacement for them is not fully designed):
+org.apache.isis.applib.adapters  - custom value type support
+
+
+org.apache.isis.applib.annotation
+
+    Encodable.java - entire annotation, part of custom value types support
+    Parseable.java - entire annotation, part of custom value types support
+
+
+org.apache.isis.applib.fixtures  - "legacy" fixture support package ... by and large can use FixtureScripts (though not sure if there's feature parity in all cases)
+    AbstractFixture.java
+    AbstractFixtureSusa.java
+    BaseFixture.java
+    CompositeFixture.java
+    DateFixture.java
+    LogonFixture.java
+org.apache.isis.applib.fixtures.switchuser
+    SwitchUserService.java
+    SwitchUserServiceAware.java
+
+org.apache.isis.applib.services.command
+    Command.java  - methods that pertain to the execution of the command and its completion (for that, use Interaction) [suggest we retain for now]
+        getCompletedAt()
+        getException()
+        getResult()
+        getStartedAt()
+        next(String)
+        setCompletedAt(Timestamp)
+        setStartedAt(Timestamp)
+    Command3.java  - metods for working with domain events (equiv functionality in Interaction)  [suggest we retain for now]
+        flushActionDomainEvents()
+        peekActionDomainEvent()
+        popActionDomainEvent()
+        pushActionDomainEvent(ActionDomainEvent<?>)  (
+
+    MemberGroupLayout.java - entire annotation, use Xxx.layout.xml instead
+
+
+
+
+*************************************************************************
+
 DONE:
 
     removed support for Xxx.layout.json
@@ -316,6 +322,7 @@ org.apache.isis.applib.annotation
     PublishingPayloadFactoryForAction.java - entire annotation, replaced with simpler PublisherService SPI
     PublishingPayloadFactoryForObject.java - entire annotation, replaced with simpler PublisherService SPI
 
+
     AutoComplete.java - entire annotation, use @DomainObject(autoComplete...=...)
 
     Bookmarkable.java - entire annotation, use @DomainObjectLayout(bookmarking=...)
@@ -329,6 +336,8 @@ org.apache.isis.applib.annotation
 
     Aggregated.java - entire annotation, not supported internally
 
+    Audited.java - entire annotation, use @DomainObject(audited=...)
+
     Bounded.java - entire annotation, use @DomainObject(bounded=...)
 
     CollectionLayout.java
@@ -339,6 +348,10 @@ org.apache.isis.applib.annotation
 
     CssClass.java - entire annotation, use @XxxLayout(cssClass=...) instead, where Xxx is Property, Collection, Action, Parameter, DomainObject, ViewModel
     CssClassFa.java - entire annotation, use @XxxLayout(cssClass=...) instead, where Xxx is Property, Collection, Action, Parameter, DomainObject, ViewModel
+
+    Debug.java - entire annotation, use @Action#(restrictTo=...) instead
+    Exploration.java - entire annotation, use @Action(restrictTo=....) instead
+    Prototype.java  - entire annotation, use @Action(restrictTo=....) instead
 
     DescribedAs.java - entire annotation, use @XxxLayout(describedAs=...) instead
 

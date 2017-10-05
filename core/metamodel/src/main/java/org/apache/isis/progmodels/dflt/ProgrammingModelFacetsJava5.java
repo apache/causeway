@@ -21,7 +21,6 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facets.actions.action.ActionAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.actions.action.ActionChoicesForCollectionParameterFacetFactory;
 import org.apache.isis.core.metamodel.facets.actions.defaults.method.ActionDefaultsFacetViaMethodFactory;
-import org.apache.isis.core.metamodel.facets.actions.exploration.annotation.PrototypeFacetForExplorationAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.actions.homepage.annotation.HomePageFacetAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.actions.layout.ActionLayoutFacetFactory;
 import org.apache.isis.core.metamodel.facets.actions.notcontributed.annotation.NotContributedFacetAnnotationFactory;
@@ -56,7 +55,7 @@ import org.apache.isis.core.metamodel.facets.members.hidden.staticmethod.HiddenF
 import org.apache.isis.core.metamodel.facets.members.named.staticmethod.NamedFacetStaticMethodFactory;
 import org.apache.isis.core.metamodel.facets.members.order.annotprop.MemberOrderFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.ViewModelSemanticCheckingFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.bookmarkable.BookmarkPolicyFacetViaBookmarkableAnnotationElseFallbackFactory;
+import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.bookmarkable.BookmarkPolicyFacetFallbackFactory;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedCallbackFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.callbacks.LoadCallbackFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.callbacks.PersistCallbackFacetFactory;
@@ -278,7 +277,7 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         
         addFactory(new MemberGroupLayoutFacetFactory());
 
-        addFactory(new BookmarkPolicyFacetViaBookmarkableAnnotationElseFallbackFactory());
+        addFactory(new BookmarkPolicyFacetFallbackFactory());
         addFactory(new HomePageFacetAnnotationFactory());
 
         addFactory(new DefaultedFacetAnnotationElseConfigurationFactory());
@@ -294,8 +293,6 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
 
         addFactory(new EncodableFacetAnnotationElseConfigurationFactory());
         
-        addFactory(new PrototypeFacetForExplorationAnnotationFactory());
-
         addFactory(new NotContributedFacetAnnotationFactory());
 
         addFactory(new NotInServiceMenuFacetAnnotationFactory());

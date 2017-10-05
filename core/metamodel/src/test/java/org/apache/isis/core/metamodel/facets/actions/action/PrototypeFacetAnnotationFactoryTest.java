@@ -21,7 +21,6 @@ package org.apache.isis.core.metamodel.facets.actions.action;
 
 import java.lang.reflect.Method;
 
-import org.apache.isis.applib.annotation.Prototype;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
@@ -52,7 +51,6 @@ public class PrototypeFacetAnnotationFactoryTest extends AbstractFacetFactoryTes
     public void testAnnotationPickedUp() {
         class Customer {
             @SuppressWarnings("unused")
-            @Prototype
             public void someAction() {
             }
         }
