@@ -52,7 +52,7 @@ public class HiddenAnnotationOnPropertyFacetFactoryTest extends AbstractFacetFac
         }
         final Method actionMethod = findMethod(Customer.class, "getNumberOfOrders");
 
-        facetFactory.processHidden(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
+        facetFactory.processHidden(new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(HiddenFacetForHiddenAnnotationOnProperty.class);
         assertNotNull(facet);

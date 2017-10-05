@@ -56,7 +56,7 @@ public class DisabledAnnotationOnPropertyFacetFactoryTest extends AbstractFacetF
         }
         final Method actionMethod = findMethod(Customer.class, "getNumberOfOrders");
 
-        facetFactory.processEditing(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
+        facetFactory.processEditing(new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(DisabledFacet.class);
         assertNotNull(facet);
@@ -77,7 +77,7 @@ public class DisabledAnnotationOnPropertyFacetFactoryTest extends AbstractFacetF
         }
         final Method actionMethod = findMethod(Customer.class, "getNumberOfOrders");
 
-        facetFactory.processEditing(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
+        facetFactory.processEditing(new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(DisabledFacet.class);
         assertNotNull(facet);

@@ -50,7 +50,7 @@ public class NotPersistedAnnotationOnCollectionFacetFactoryTest extends Abstract
         }
         final Method method = findMethod(Customer.class, "getOrders");
 
-        facetFactory.processNotPersisted(new ProcessMethodContext(Customer.class, null, null, method, methodRemover, facetedMethod));
+        facetFactory.processNotPersisted(new ProcessMethodContext(Customer.class, null, method, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(NotPersistedFacet.class);
         assertNotNull(facet);

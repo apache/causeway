@@ -57,7 +57,7 @@ public class DisabledAnnotationOnActionFacetFactoryTest extends AbstractFacetFac
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        facetFactory.processDisabled(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
+        facetFactory.processDisabled(new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(DisabledFacet.class);
         assertNotNull(facet);
@@ -74,7 +74,7 @@ public class DisabledAnnotationOnActionFacetFactoryTest extends AbstractFacetFac
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        facetFactory.processDisabled(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
+        facetFactory.processDisabled(new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(DisabledFacet.class);
         final DisabledFacetAbstract disabledFacetAbstract = (DisabledFacetAbstract) facet;
@@ -93,7 +93,7 @@ public class DisabledAnnotationOnActionFacetFactoryTest extends AbstractFacetFac
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        facetFactory.processDisabled(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
+        facetFactory.processDisabled(new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(DisabledFacet.class);
         final DisabledFacetAbstract disabledFacetAbstract = (DisabledFacetAbstract) facet;
@@ -109,7 +109,7 @@ public class DisabledAnnotationOnActionFacetFactoryTest extends AbstractFacetFac
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        facetFactory.processDisabled(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
+        facetFactory.processDisabled(new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(DisabledFacet.class);
         final DisabledFacetAbstract disabledFacetAbstract = (DisabledFacetAbstract) facet;
@@ -125,7 +125,7 @@ public class DisabledAnnotationOnActionFacetFactoryTest extends AbstractFacetFac
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        facetFactory.processDisabled(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
+        facetFactory.processDisabled(new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(DisabledFacet.class);
         final DisabledFacetAbstract disabledFacetAbstract = (DisabledFacetAbstract) facet;
@@ -143,7 +143,7 @@ public class DisabledAnnotationOnActionFacetFactoryTest extends AbstractFacetFac
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        facetFactory.processDisabled(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
+        facetFactory.processDisabled(new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(DisabledFacet.class);
         final DisabledFacetAbstract disabledFacetAbstract = (DisabledFacetAbstract) facet;
@@ -161,7 +161,7 @@ public class DisabledAnnotationOnActionFacetFactoryTest extends AbstractFacetFac
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        facetFactory.processDisabled(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
+        facetFactory.processDisabled(new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(DisabledFacet.class);
         final DisabledFacetAbstract disabledFacetAbstract = (DisabledFacetAbstract) facet;

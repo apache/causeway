@@ -102,7 +102,8 @@ public class MustSatisfySpecificationFacetFactoryProcessPropertyTest {
                 oneOf(mockFacetedMethod).addFacet(with(anInstanceOf(MustSatisfySpecificationFacetForMustSatisfyAnnotationOnProperty.class)));
             }
         });
-        facetFactory.processMustSatisfy(new ProcessMethodContext(domainObjectClassWithAnnotation.getClass(), null, null, firstNameMethodWith, mockMethodRemover, mockFacetedMethod));
+        facetFactory.processMustSatisfy(new ProcessMethodContext(domainObjectClassWithAnnotation.getClass(), null,
+                firstNameMethodWith, mockMethodRemover, mockFacetedMethod));
     }
 
     @Test
@@ -113,7 +114,8 @@ public class MustSatisfySpecificationFacetFactoryProcessPropertyTest {
                 never(mockFacetedMethod).addFacet(with(anInstanceOf(MustSatisfySpecificationFacetForMustSatisfyAnnotationOnProperty.class)));
             }
         });
-        facetFactory.processMustSatisfy(new ProcessMethodContext(domainObjectClassWithAnnotation.getClass(), null, null, firstNameMethodWithout, mockMethodRemover, mockFacetedMethod));
+        facetFactory.processMustSatisfy(new ProcessMethodContext(domainObjectClassWithAnnotation.getClass(), null,
+                firstNameMethodWithout, mockMethodRemover, mockFacetedMethod));
     }
 
 }

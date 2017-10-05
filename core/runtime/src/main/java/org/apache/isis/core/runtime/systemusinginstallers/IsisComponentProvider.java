@@ -49,7 +49,6 @@ import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.commons.lang.ClassUtil;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
-import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.ReflectorConstants;
@@ -258,11 +257,9 @@ public abstract class IsisComponentProvider {
 
         final MetaModelValidator mmv = createMetaModelValidator();
 
-        final List<LayoutMetadataReader> layoutMetadataReaders = createLayoutMetadataReaders();
-
         return JavaReflectorHelper.createObjectReflector(
                 configuration, programmingModel, metaModelRefiners,
-                layoutMetadataReaders, mmv,
+                mmv,
                 servicesInjector);
     }
 
@@ -282,22 +279,6 @@ public abstract class IsisComponentProvider {
         return programmingModel;
     }
 
-    protected List<LayoutMetadataReader> createLayoutMetadataReaders() {
-        final List<LayoutMetadataReader> layoutMetadataReaders = Lists.newArrayList();
-        final String[] layoutMetadataReaderClassNames =
-                configuration.getList(
-                        ReflectorConstants.LAYOUT_METADATA_READER_LIST,
-                        ReflectorConstants.LAYOUT_METADATA_READER_LIST_DEFAULT);
-
-        if (layoutMetadataReaderClassNames != null) {
-            for (final String layoutMetadataReaderClassName : layoutMetadataReaderClassNames) {
-                final LayoutMetadataReader layoutMetadataReader =
-                        InstanceUtil.createInstance(layoutMetadataReaderClassName, LayoutMetadataReader.class);
-                layoutMetadataReaders.add(layoutMetadataReader);
-            }
-        }
-        return layoutMetadataReaders;
-    }
 
 
     //endregion

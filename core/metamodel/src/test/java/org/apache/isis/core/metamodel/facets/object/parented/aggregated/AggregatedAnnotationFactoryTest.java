@@ -48,7 +48,7 @@ public class AggregatedAnnotationFactoryTest extends AbstractFacetFactoryTest {
         class Customer {
         }
 
-        facetFactory.process(new ProcessClassContext(Customer.class, null, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
         assertThat(facetFactory.classesWithAnnotation.size(), is(1));
     }

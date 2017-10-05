@@ -80,7 +80,7 @@ public class ActionLayoutXmlLayoutAnnotationFacetFactoryTest extends AbstractFac
             }
         });
 
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, method, mockMethodRemover,
+        facetFactory.process(new ProcessMethodContext(Customer.class, null, method, mockMethodRemover,
                 facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(ActionPositionFacet.class);
@@ -115,7 +115,7 @@ public class ActionLayoutXmlLayoutAnnotationFacetFactoryTest extends AbstractFac
             }
         });
 
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, method, mockMethodRemover,
+        facetFactory.process(new ProcessMethodContext(Customer.class, null, method, mockMethodRemover,
                 facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(ActionPositionFacet.class);
@@ -150,7 +150,7 @@ public class ActionLayoutXmlLayoutAnnotationFacetFactoryTest extends AbstractFac
                 }
             });
 
-            facetFactory.process(new ProcessMethodContext(Customer.class, null, null, method, mockMethodRemover,
+            facetFactory.process(new ProcessMethodContext(Customer.class, null, method, mockMethodRemover,
                     facetedMethod));
 
             Facet facet = facetedMethod.getFacet(CssClassFaFacet.class);
@@ -186,7 +186,7 @@ public class ActionLayoutXmlLayoutAnnotationFacetFactoryTest extends AbstractFac
                 }
             });
 
-            facetFactory.process(new ProcessMethodContext(Customer.class, null, null, method, mockMethodRemover,
+            facetFactory.process(new ProcessMethodContext(Customer.class, null, method, mockMethodRemover,
                     facetedMethod));
 
             Facet facet = facetedMethod.getFacet(CssClassFaFacet.class);

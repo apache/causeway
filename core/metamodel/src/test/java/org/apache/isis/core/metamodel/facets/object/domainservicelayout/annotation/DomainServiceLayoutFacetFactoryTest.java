@@ -54,7 +54,7 @@ public class DomainServiceLayoutFacetFactoryTest extends AbstractFacetFactoryTes
         class Customers {
         }
 
-        facetFactory.process(new ProcessClassContext(Customers.class, null, methodRemover, facetHolder));
+        facetFactory.process(new ProcessClassContext(Customers.class, methodRemover, facetHolder));
 
         final Facet facet = facetHolder.getFacet(DomainServiceLayoutFacet.class);
         assertNotNull(facet);
@@ -74,7 +74,7 @@ public class DomainServiceLayoutFacetFactoryTest extends AbstractFacetFactoryTes
         class Customers {
         }
 
-        facetFactory.process(new ProcessClassContext(Customers.class, null, methodRemover, facetHolder));
+        facetFactory.process(new ProcessClassContext(Customers.class, methodRemover, facetHolder));
 
         final Facet facet = facetHolder.getFacet(DomainServiceLayoutFacet.class);
         assertNotNull(facet);
@@ -93,7 +93,7 @@ public class DomainServiceLayoutFacetFactoryTest extends AbstractFacetFactoryTes
         class Customers {
         }
 
-        facetFactory.process(new ProcessClassContext(Customers.class, null, methodRemover, facetHolder));
+        facetFactory.process(new ProcessClassContext(Customers.class, methodRemover, facetHolder));
 
         final Facet facet = facetHolder.getFacet(DomainServiceLayoutFacet.class);
         assertNotNull(facet);
@@ -113,7 +113,7 @@ public class DomainServiceLayoutFacetFactoryTest extends AbstractFacetFactoryTes
         class Customers {
         }
 
-        facetFactory.process(new ProcessClassContext(Customers.class, null, methodRemover, facetHolder));
+        facetFactory.process(new ProcessClassContext(Customers.class, methodRemover, facetHolder));
 
         final Facet facet = facetHolder.getFacet(DomainServiceLayoutFacet.class);
         assertNotNull(facet);

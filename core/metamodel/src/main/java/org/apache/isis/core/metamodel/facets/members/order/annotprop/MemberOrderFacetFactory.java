@@ -19,11 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.members.order.annotprop;
 
-import java.util.Properties;
-
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.services.i18n.TranslationService;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.Annotations;
@@ -39,11 +36,8 @@ public class MemberOrderFacetFactory extends FacetFactoryAbstract implements Con
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        
-        MemberOrderFacet memberOrderFacet = createFromMetadataPropertiesIfPossible(processMethodContext);
-        if(memberOrderFacet == null) {
-            memberOrderFacet = createFromAnnotationIfPossible(processMethodContext);
-        }
+
+        MemberOrderFacet memberOrderFacet = createFromAnnotationIfPossible(processMethodContext);
 
         // no-op if facet is null
         FacetUtil.addFacet(memberOrderFacet);
@@ -51,28 +45,7 @@ public class MemberOrderFacetFactory extends FacetFactoryAbstract implements Con
 
     @Override
     public void process(final ProcessContributeeMemberContext processMemberContext) {
-        final MemberOrderFacet memberOrderFacet = createFromMetadataPropertiesIfPossible(processMemberContext);
 
-        // no-op if facet is null
-        FacetUtil.addFacet(memberOrderFacet);
-    }
-
-    private MemberOrderFacet createFromMetadataPropertiesIfPossible(
-            final ProcessContextWithMetadataProperties<? extends FacetHolder> pcwmp) {
-        
-        final FacetHolder holder = pcwmp.getFacetHolder();
-        
-        final MemberOrderFacet memberOrderFacet;
-        final Properties properties = pcwmp.metadataProperties("memberOrder");
-        if(properties != null) {
-            memberOrderFacet = new MemberOrderFacetProperties(
-                    properties,
-                    servicesInjector.lookupService(TranslationService.class),
-                    holder);
-        } else {
-            memberOrderFacet = null;
-        }
-        return memberOrderFacet;
     }
 
     private MemberOrderFacet createFromAnnotationIfPossible(final ProcessMethodContext processMethodContext) {

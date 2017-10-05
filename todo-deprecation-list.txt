@@ -293,6 +293,9 @@ sometimes there are multiple versions of a type, eg BookmarkService2 and Bookmar
 Also propose:
     make AppManifest mandatory
     remove support for Xxx.layout.json
+
+    - "reflector.layoutMetadataReaders" config prop
+
     remove support for contributed services (use mixins instead)
 
 Also for 2.0.0, new features/deprecations:

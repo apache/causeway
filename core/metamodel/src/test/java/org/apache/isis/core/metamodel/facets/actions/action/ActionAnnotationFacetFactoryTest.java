@@ -181,7 +181,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
 
 
             // when
-            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, null, actionMethod, mockMethodRemover, facetedMethod);
+            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, actionMethod, mockMethodRemover, facetedMethod);
             facetFactory.processInvocation(processMethodContext);
 
             // then
@@ -220,7 +220,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             expectRemoveMethod(actionMethod);
 
             // when
-            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, null, actionMethod, mockMethodRemover, facetedMethod);
+            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, actionMethod, mockMethodRemover, facetedMethod);
             facetFactory.processInvocation(processMethodContext);
 
             // then
@@ -259,7 +259,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             expectRemoveMethod(actionMethod);
 
             // when
-            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, null, actionMethod, mockMethodRemover, facetedMethod);
+            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, actionMethod, mockMethodRemover, facetedMethod);
             facetFactory.processInvocation(processMethodContext);
 
             // then
@@ -299,7 +299,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
 
 
             // when
-            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, null, actionMethod, mockMethodRemover, facetedMethod);
+            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, actionMethod, mockMethodRemover, facetedMethod);
             facetFactory.processInvocation(processMethodContext);
 
             // then
@@ -333,7 +333,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             actionMethod = findMethod(cls, "someAction");
 
             // when
-            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, null, actionMethod, mockMethodRemover, facetedMethod);
+            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, actionMethod, mockMethodRemover, facetedMethod);
             facetFactory.processHidden(processMethodContext);
 
             // then
@@ -364,7 +364,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             actionMethod = findMethod(cls, "someAction");
 
             // when
-            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, null, actionMethod, mockMethodRemover, facetedMethod);
+            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, actionMethod, mockMethodRemover, facetedMethod);
             facetFactory.processRestrictTo(processMethodContext);
 
             // then
@@ -386,7 +386,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             actionMethod = findMethod(cls, "someAction");
 
             // when
-            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, null, actionMethod, mockMethodRemover, facetedMethod);
+            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, actionMethod, mockMethodRemover, facetedMethod);
             facetFactory.processRestrictTo(processMethodContext);
 
             // then
@@ -407,7 +407,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             actionMethod = findMethod(cls, "someAction");
 
             // when
-            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, null, actionMethod, mockMethodRemover, facetedMethod);
+            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, actionMethod, mockMethodRemover, facetedMethod);
             facetFactory.processRestrictTo(processMethodContext);
 
             // then
@@ -432,7 +432,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             actionMethod = findMethod(cls, "someAction");
 
             // when
-            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, null, actionMethod, mockMethodRemover, facetedMethod);
+            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, actionMethod, mockMethodRemover, facetedMethod);
             facetFactory.processSemantics(processMethodContext);
 
             // then
@@ -454,7 +454,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             actionMethod = findMethod(cls, "someAction");
 
             // when
-            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, null, actionMethod, mockMethodRemover, facetedMethod);
+            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, actionMethod, mockMethodRemover, facetedMethod);
             facetFactory.processSemantics(processMethodContext);
 
             // then
@@ -476,7 +476,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             actionMethod = findMethod(cls, "someAction");
 
             // when
-            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, null, actionMethod, mockMethodRemover, facetedMethod);
+            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, actionMethod, mockMethodRemover, facetedMethod);
             facetFactory.processSemantics(processMethodContext);
 
             // then
@@ -499,7 +499,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             actionMethod = findMethod(cls, "someAction");
 
             // when
-            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, null, actionMethod, mockMethodRemover, facetedMethod);
+            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, actionMethod, mockMethodRemover, facetedMethod);
             facetFactory.processSemantics(processMethodContext);
 
             // then
@@ -522,7 +522,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             actionMethod = findMethod(cls, "someAction");
 
             // when
-            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, null, actionMethod, mockMethodRemover, facetedMethod);
+            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, actionMethod, mockMethodRemover, facetedMethod);
             facetFactory.processSemantics(processMethodContext);
 
             // then
@@ -544,7 +544,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             actionMethod = findMethod(cls, "someAction");
 
             // when
-            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, null, actionMethod, mockMethodRemover, facetedMethod);
+            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, actionMethod, mockMethodRemover, facetedMethod);
             facetFactory.processSemantics(processMethodContext);
 
             // then
@@ -568,7 +568,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             actionMethod = findMethod(cls, "someAction");
 
             // when
-            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, null, actionMethod, mockMethodRemover, facetedMethod);
+            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, actionMethod, mockMethodRemover, facetedMethod);
             facetFactory.processSemantics(processMethodContext);
 
             // then
@@ -590,7 +590,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             actionMethod = findMethod(cls, "someAction");
 
             // when
-            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, null, actionMethod, mockMethodRemover, facetedMethod);
+            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, actionMethod, mockMethodRemover, facetedMethod);
             facetFactory.processSemantics(processMethodContext);
 
             // then
@@ -612,7 +612,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             actionMethod = findMethod(cls, "someAction");
 
             // when
-            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, null, actionMethod, mockMethodRemover, facetedMethod);
+            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, actionMethod, mockMethodRemover, facetedMethod);
             facetFactory.processSemantics(processMethodContext);
 
             // then
@@ -640,7 +640,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             actionMethod = findMethod(cls, "someAction");
 
             // when
-            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, null, actionMethod, mockMethodRemover, facetedMethod);
+            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, actionMethod, mockMethodRemover, facetedMethod);
             facetFactory.processBulk(processMethodContext);
 
             // then
@@ -664,7 +664,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             actionMethod = findMethod(cls, "someAction");
 
             // when
-            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, null, actionMethod, mockMethodRemover, facetedMethod);
+            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, actionMethod, mockMethodRemover, facetedMethod);
             facetFactory.processBulk(processMethodContext);
 
             // then
@@ -687,7 +687,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             actionMethod = findMethod(cls, "someAction");
 
             // when
-            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, null, actionMethod, mockMethodRemover, facetedMethod);
+            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, actionMethod, mockMethodRemover, facetedMethod);
             facetFactory.processBulk(processMethodContext);
 
             // then
@@ -710,7 +710,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             actionMethod = findMethod(cls, "someAction");
 
             // when
-            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, null, actionMethod, mockMethodRemover, facetedMethod);
+            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, actionMethod, mockMethodRemover, facetedMethod);
             facetFactory.processBulk(processMethodContext);
 
             // then
@@ -734,7 +734,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             actionMethod = findMethod(cls, "someAction");
 
             // when
-            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, null, actionMethod, mockMethodRemover, facetedMethod);
+            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, actionMethod, mockMethodRemover, facetedMethod);
             facetFactory.processBulk(processMethodContext);
 
             // then
@@ -754,7 +754,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             final Method actionMethod = findMethod(SomeTransactionalId.class, "someAction");
 
             // when
-            facetFactory.processCommand(new ProcessMethodContext(SomeTransactionalId.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
+            facetFactory.processCommand(new ProcessMethodContext(SomeTransactionalId.class, null, actionMethod, mockMethodRemover, facetedMethod));
 
             // then
             final Facet facet = facetedMethod.getFacet(CommandFacet.class);
@@ -776,7 +776,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             final Method actionMethod = findMethod(Customer.class, "someAction");
 
             // when
-            facetFactory.processCommand(new ProcessMethodContext(Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
+            facetFactory.processCommand(new ProcessMethodContext(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
 
             // then
             final Facet facet = facetedMethod.getFacet(CommandFacet.class);
@@ -799,7 +799,8 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             facetedMethod.addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.SAFE, facetedMethod) {});
 
             // when
-            facetFactory.processCommand(new ProcessMethodContext(ActionAnnotationFacetFactoryTest.Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
+            facetFactory.processCommand(new ProcessMethodContext(ActionAnnotationFacetFactoryTest.Customer.class, null,
+                    actionMethod, mockMethodRemover, facetedMethod));
 
             // then
             final Facet facet = facetedMethod.getFacet(CommandFacet.class);
@@ -816,7 +817,8 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             facetedMethod.addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.IDEMPOTENT, facetedMethod) {});
 
             // when
-            facetFactory.processCommand(new ProcessMethodContext(ActionAnnotationFacetFactoryTest.Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
+            facetFactory.processCommand(new ProcessMethodContext(ActionAnnotationFacetFactoryTest.Customer.class, null,
+                    actionMethod, mockMethodRemover, facetedMethod));
 
             // then
             final Facet facet = facetedMethod.getFacet(CommandFacet.class);
@@ -835,7 +837,8 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             final Method actionMethod = findMethod(ActionAnnotationFacetFactoryTest.Customer.class, "someAction");
 
             // when
-            facetFactory.processCommand(new ProcessMethodContext(ActionAnnotationFacetFactoryTest.Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
+            facetFactory.processCommand(new ProcessMethodContext(ActionAnnotationFacetFactoryTest.Customer.class, null,
+                    actionMethod, mockMethodRemover, facetedMethod));
         }
 
         @Test
@@ -846,7 +849,8 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             final Method actionMethod = findMethod(ActionAnnotationFacetFactoryTest.Customer.class, "someAction");
 
             // when
-            facetFactory.processCommand(new ProcessMethodContext(ActionAnnotationFacetFactoryTest.Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
+            facetFactory.processCommand(new ProcessMethodContext(ActionAnnotationFacetFactoryTest.Customer.class, null,
+                    actionMethod, mockMethodRemover, facetedMethod));
 
             // then
             final Facet facet = facetedMethod.getFacet(PublishedActionFacet.class);
@@ -862,7 +866,8 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             allowingCommandConfigurationToReturn("all");
 
             // when
-            facetFactory.processCommand(new ProcessMethodContext(ActionAnnotationFacetFactoryTest.Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
+            facetFactory.processCommand(new ProcessMethodContext(ActionAnnotationFacetFactoryTest.Customer.class, null,
+                    actionMethod, mockMethodRemover, facetedMethod));
 
             // then
             final Facet facet = facetedMethod.getFacet(CommandFacet.class);
@@ -886,7 +891,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
 
             facetedMethod.addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.SAFE, facetedMethod) {});
 
-            facetFactory.processCommand(new ProcessMethodContext(Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
+            facetFactory.processCommand(new ProcessMethodContext(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
 
             final Facet facet = facetedMethod.getFacet(CommandFacet.class);
             assertNull(facet);
@@ -912,7 +917,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             facetedMethod.addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.IDEMPOTENT, facetedMethod) {});
 
             // when
-            facetFactory.processCommand(new ProcessMethodContext(Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
+            facetFactory.processCommand(new ProcessMethodContext(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
 
             // then
             final Facet facet = facetedMethod.getFacet(CommandFacet.class);
@@ -936,7 +941,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             allowingCommandConfigurationToReturn("ignoreQueryOnly");
             final Method actionMethod = findMethod(Customer.class, "someAction");
 
-            facetFactory.processCommand(new ProcessMethodContext(Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
+            facetFactory.processCommand(new ProcessMethodContext(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
         }
 
         @Test
@@ -953,7 +958,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             allowingCommandConfigurationToReturn("none");
             final Method actionMethod = findMethod(Customer.class, "someAction");
 
-            facetFactory.processCommand(new ProcessMethodContext(Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
+            facetFactory.processCommand(new ProcessMethodContext(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
 
             final Facet facet = facetedMethod.getFacet(CommandFacet.class);
             assertNull(facet);
@@ -977,7 +982,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             allowingCommandConfigurationToReturn("all");
 
             // when
-            facetFactory.processCommand(new ProcessMethodContext(Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
+            facetFactory.processCommand(new ProcessMethodContext(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
 
             // then
             final Facet facet = facetedMethod.getFacet(CommandFacet.class);
@@ -1004,7 +1009,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             allowingCommandConfigurationToReturn("none");
 
             // when
-            facetFactory.processCommand(new ProcessMethodContext(Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
+            facetFactory.processCommand(new ProcessMethodContext(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
 
             // then
             final Facet facet = facetedMethod.getFacet(CommandFacet.class);
@@ -1029,7 +1034,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             allowingCommandConfigurationToReturn("none");
 
             // when
-            facetFactory.processCommand(new ProcessMethodContext(Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
+            facetFactory.processCommand(new ProcessMethodContext(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
 
             // then
             final Facet facet = facetedMethod.getFacet(CommandFacet.class);
@@ -1046,7 +1051,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
 
             final Method actionMethod = findMethod(SomeTransactionalId.class, "someAction");
 
-            facetFactory.processPublishing(new ProcessMethodContext(SomeTransactionalId.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
+            facetFactory.processPublishing(new ProcessMethodContext(SomeTransactionalId.class, null, actionMethod, mockMethodRemover, facetedMethod));
 
             final Facet facet = facetedMethod.getFacet(PublishedActionFacet.class);
             assertNull(facet);
@@ -1064,7 +1069,8 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             facetedMethod.addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.SAFE, facetedMethod) {});
 
             // when
-            facetFactory.processPublishing(new ProcessMethodContext(ActionAnnotationFacetFactoryTest.Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
+            facetFactory.processPublishing(new ProcessMethodContext(ActionAnnotationFacetFactoryTest.Customer.class, null,
+                    actionMethod, mockMethodRemover, facetedMethod));
 
             // then
             final Facet facet = facetedMethod.getFacet(PublishedActionFacet.class);
@@ -1081,7 +1087,8 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             facetedMethod.addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.IDEMPOTENT, facetedMethod) {});
 
             // when
-            facetFactory.processPublishing(new ProcessMethodContext(ActionAnnotationFacetFactoryTest.Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
+            facetFactory.processPublishing(new ProcessMethodContext(ActionAnnotationFacetFactoryTest.Customer.class, null,
+                    actionMethod, mockMethodRemover, facetedMethod));
 
             // then
             final Facet facet = facetedMethod.getFacet(PublishedActionFacet.class);
@@ -1097,7 +1104,8 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             final Method actionMethod = findMethod(ActionAnnotationFacetFactoryTest.Customer.class, "someAction");
 
             // when
-            facetFactory.processPublishing(new ProcessMethodContext(ActionAnnotationFacetFactoryTest.Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
+            facetFactory.processPublishing(new ProcessMethodContext(ActionAnnotationFacetFactoryTest.Customer.class, null,
+                    actionMethod, mockMethodRemover, facetedMethod));
 
         }
 
@@ -1109,7 +1117,8 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             final Method actionMethod = findMethod(ActionAnnotationFacetFactoryTest.Customer.class, "someAction");
 
             // when
-            facetFactory.processPublishing(new ProcessMethodContext(ActionAnnotationFacetFactoryTest.Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
+            facetFactory.processPublishing(new ProcessMethodContext(ActionAnnotationFacetFactoryTest.Customer.class, null,
+                    actionMethod, mockMethodRemover, facetedMethod));
 
             // then
             final Facet facet = facetedMethod.getFacet(PublishedActionFacet.class);
@@ -1128,7 +1137,8 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             allowingPublishingConfigurationToReturn("all");
 
             // when
-            facetFactory.processPublishing(new ProcessMethodContext(ActionAnnotationFacetFactoryTest.Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
+            facetFactory.processPublishing(new ProcessMethodContext(ActionAnnotationFacetFactoryTest.Customer.class, null,
+                    actionMethod, mockMethodRemover, facetedMethod));
 
             // then
             final Facet facet = facetedMethod.getFacet(PublishedActionFacet.class);
@@ -1150,7 +1160,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
 
             facetedMethod.addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.SAFE, facetedMethod) {});
 
-            facetFactory.processPublishing(new ProcessMethodContext(Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
+            facetFactory.processPublishing(new ProcessMethodContext(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
 
             final Facet facet = facetedMethod.getFacet(PublishedActionFacet.class);
             assertNull(facet);
@@ -1176,7 +1186,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             facetedMethod.addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.IDEMPOTENT, facetedMethod) {});
 
             // when
-            facetFactory.processPublishing(new ProcessMethodContext(Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
+            facetFactory.processPublishing(new ProcessMethodContext(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
 
             // then
             final Facet facet = facetedMethod.getFacet(PublishedActionFacet.class);
@@ -1198,7 +1208,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             allowingPublishingConfigurationToReturn("ignoreQueryOnly");
             final Method actionMethod = findMethod(Customer.class, "someAction");
 
-            facetFactory.processPublishing(new ProcessMethodContext(Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
+            facetFactory.processPublishing(new ProcessMethodContext(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
         }
 
         @Test
@@ -1213,7 +1223,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             allowingPublishingConfigurationToReturn("none");
             final Method actionMethod = findMethod(Customer.class, "someAction");
 
-            facetFactory.processPublishing(new ProcessMethodContext(Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
+            facetFactory.processPublishing(new ProcessMethodContext(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
 
             final Facet facet = facetedMethod.getFacet(PublishedActionFacet.class);
             assertNull(facet);
@@ -1238,7 +1248,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             allowingPublishingConfigurationToReturn("all");
 
             // when
-            facetFactory.processPublishing(new ProcessMethodContext(Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
+            facetFactory.processPublishing(new ProcessMethodContext(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
 
             // then
             final Facet facet = facetedMethod.getFacet(PublishedActionFacet.class);
@@ -1265,7 +1275,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             allowingPublishingConfigurationToReturn("none");
 
             // when
-            facetFactory.processPublishing(new ProcessMethodContext(Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
+            facetFactory.processPublishing(new ProcessMethodContext(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
 
             // then
             final Facet facet = facetedMethod.getFacet(PublishedActionFacet.class);
@@ -1290,7 +1300,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             allowingPublishingConfigurationToReturn("none");
 
             // when
-            facetFactory.processPublishing(new ProcessMethodContext(Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
+            facetFactory.processPublishing(new ProcessMethodContext(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
 
             // then
             final Facet facet = facetedMethod.getFacet(PublishedActionFacet.class);
@@ -1318,7 +1328,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             actionMethod = findMethod(cls, "someAction");
 
             // when
-            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, null, actionMethod, mockMethodRemover, facetedMethod);
+            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, actionMethod, mockMethodRemover, facetedMethod);
             facetFactory.processTypeOf(processMethodContext);
 
             // then
@@ -1343,7 +1353,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             actionMethod = findMethod(cls, "someAction");
 
             // when
-            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, null, actionMethod, mockMethodRemover, facetedMethod);
+            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, actionMethod, mockMethodRemover, facetedMethod);
             facetFactory.processTypeOf(processMethodContext);
 
             // then
@@ -1370,7 +1380,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             actionMethod = findMethod(cls, "someAction");
 
             // when
-            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, null, actionMethod, mockMethodRemover, facetedMethod);
+            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, actionMethod, mockMethodRemover, facetedMethod);
             facetFactory.processTypeOf(processMethodContext);
 
             // then
@@ -1394,7 +1404,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             actionMethod = findMethod(cls, "someAction");
 
             // when
-            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, null, actionMethod, mockMethodRemover, facetedMethod);
+            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, actionMethod, mockMethodRemover, facetedMethod);
             facetFactory.processTypeOf(processMethodContext);
 
             // then
@@ -1420,7 +1430,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             actionMethod = findMethod(cls, "someAction");
 
             // when
-            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, null, actionMethod, mockMethodRemover, facetedMethod);
+            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, actionMethod, mockMethodRemover, facetedMethod);
             facetFactory.processTypeOf(processMethodContext);
 
             // then

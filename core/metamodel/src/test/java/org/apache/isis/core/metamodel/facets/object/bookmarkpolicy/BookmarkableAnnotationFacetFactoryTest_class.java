@@ -19,16 +19,16 @@
 
 package org.apache.isis.core.metamodel.facets.object.bookmarkpolicy;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.Bookmarkable;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.bookmarkable.BookmarkPolicyFacetViaBookmarkableAnnotation;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.bookmarkable.BookmarkPolicyFacetViaBookmarkableAnnotationElseFallbackFactory;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class BookmarkableAnnotationFacetFactoryTest_class extends AbstractFacetFactoryTest {
 
@@ -52,7 +52,7 @@ public class BookmarkableAnnotationFacetFactoryTest_class extends AbstractFacetF
         class Customer {
         }
 
-        facetFactory.process(new ProcessClassContext(Customer.class, null, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(BookmarkPolicyFacet.class);
         assertNotNull(facet);
@@ -67,7 +67,7 @@ public class BookmarkableAnnotationFacetFactoryTest_class extends AbstractFacetF
         class Customer {
         }
 
-        facetFactory.process(new ProcessClassContext(Customer.class, null, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(BookmarkPolicyFacet.class);
         assertNotNull(facet);

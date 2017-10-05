@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.facets.properties.propertylayout;
 
 import java.lang.reflect.Method;
-import java.util.Properties;
 
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -49,14 +48,13 @@ public class NamedFacetForPropertyLayoutAnnotationFactoryTest extends AbstractFa
         final Method method = findMethod(Customer.class, "getFirstName");
 
         // when
-        final ProcessMethodContext processMethodContext = new ProcessMethodContext(Customer.class, null, null, method,
+        final ProcessMethodContext processMethodContext = new ProcessMethodContext(Customer.class, null, method,
                 methodRemover, facetedMethod);
 
         final FacetHolder holder = facetFactory.facetHolderFrom(processMethodContext);
-        final Properties properties = facetFactory.metadataPropertiesFrom(processMethodContext);
         final PropertyLayout propertyLayout = facetFactory.propertyLayoutAnnotationFrom(processMethodContext);
 
-        facetFactory.processNamed(holder, properties, propertyLayout);
+        facetFactory.processNamed(holder, propertyLayout);
 
         // then
         final NamedFacet facet = facetedMethod.getFacet(NamedFacet.class);
@@ -79,14 +77,13 @@ public class NamedFacetForPropertyLayoutAnnotationFactoryTest extends AbstractFa
         final Method method = findMethod(Customer.class, "getFirstName");
 
         // when
-        final ProcessMethodContext processMethodContext = new ProcessMethodContext(Customer.class, null, null, method,
+        final ProcessMethodContext processMethodContext = new ProcessMethodContext(Customer.class, null, method,
                 methodRemover, facetedMethod);
 
         final FacetHolder holder = facetFactory.facetHolderFrom(processMethodContext);
-        final Properties properties = facetFactory.metadataPropertiesFrom(processMethodContext);
         final PropertyLayout propertyLayout = facetFactory.propertyLayoutAnnotationFrom(processMethodContext);
 
-        facetFactory.processNamed(holder, properties, propertyLayout);
+        facetFactory.processNamed(holder, propertyLayout);
 
         // then
         final NamedFacet facet = facetedMethod.getFacet(NamedFacet.class);

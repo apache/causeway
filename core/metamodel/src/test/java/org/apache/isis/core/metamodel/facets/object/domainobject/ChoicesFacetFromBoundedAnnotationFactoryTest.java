@@ -49,7 +49,7 @@ public class ChoicesFacetFromBoundedAnnotationFactoryTest extends AbstractFacetF
         class Customer {
         }
 
-        facetFactory.processBounded(new ProcessClassContext(Customer.class, null, methodRemover, facetedMethod));
+        facetFactory.processBounded(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(ChoicesFacet.class);
         assertNotNull(facet);

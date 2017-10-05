@@ -108,7 +108,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         }
         final Method propertyAccessorMethod = findMethod(Customer.class, "getFirstName");
 
-        facetFactory.process(new ProcessMethodContext(CustomerStatic.class, null, null, propertyAccessorMethod, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(CustomerStatic.class, null, propertyAccessorMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(PropertyOrCollectionAccessorFacet.class);
         assertNotNull(facet);
@@ -137,7 +137,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final Method propertyAccessorMethod = findMethod(Customer.class, "getFirstName");
         final Method propertySetterMethod = findMethod(Customer.class, "setFirstName", new Class[] { String.class });
 
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, propertyAccessorMethod, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(Customer.class, null, propertyAccessorMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(PropertySetterFacet.class);
         assertNotNull(facet);
@@ -166,7 +166,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final Method propertyAccessorMethod = findMethod(Customer.class, "getFirstName");
         final Method propertySetterMethod = findMethod(Customer.class, "setFirstName", new Class[] { String.class });
 
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, propertyAccessorMethod, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(Customer.class, null, propertyAccessorMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(PropertyInitializationFacet.class);
         assertNotNull(facet);
@@ -194,7 +194,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         }
         final Method propertyAccessorMethod = findMethod(Customer.class, "getFirstName");
 
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, propertyAccessorMethod, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(Customer.class, null, propertyAccessorMethod, methodRemover, facetedMethod));
 
         assertNull(facetedMethod.getFacet(NotPersistedFacet.class));
         assertNull(facetedMethod.getFacet(NotPersistedFacet.class));
@@ -223,7 +223,8 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final Method propertyAccessorMethod = findMethod(Customer.class, "getFirstName");
         final Method propertyModifyMethod = findMethod(Customer.class, "modifyFirstName", new Class[] { String.class });
 
-        final ProcessMethodContext processMethodContext = new ProcessMethodContext(Customer.class, null, null, propertyAccessorMethod, methodRemover, facetedMethod);
+        final ProcessMethodContext processMethodContext = new ProcessMethodContext(Customer.class, null,
+                propertyAccessorMethod, methodRemover, facetedMethod);
         facetFactoryForModify.process(processMethodContext);
         facetFactoryForSetter.process(processMethodContext);
 
@@ -260,7 +261,8 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         }
         final Method propertyAccessorMethod = findMethod(Customer.class, "getFirstName");
 
-        final ProcessMethodContext processMethodContext = new ProcessMethodContext(Customer.class, null, null, propertyAccessorMethod, methodRemover, facetedMethod);
+        final ProcessMethodContext processMethodContext = new ProcessMethodContext(Customer.class, null,
+                propertyAccessorMethod, methodRemover, facetedMethod);
         facetFactory.process(processMethodContext);
         facetFactoryForModify.process(processMethodContext);
         disabledFacetOnPropertyInferredFactory.process(processMethodContext);
@@ -299,7 +301,8 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final Method propertySetterMethod = findMethod(Customer.class, "setFirstName", new Class[] { String.class });
         final Method propertyModifyMethod = findMethod(Customer.class, "modifyFirstName", new Class[] { String.class });
 
-        final ProcessMethodContext processMethodContext = new ProcessMethodContext(Customer.class, null, null, propertyAccessorMethod, methodRemover, facetedMethod);
+        final ProcessMethodContext processMethodContext = new ProcessMethodContext(Customer.class, null,
+                propertyAccessorMethod, methodRemover, facetedMethod);
         facetFactory.process(processMethodContext);
         facetFactoryForModify.process(processMethodContext);
 
@@ -331,7 +334,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final Method propertyAccessorMethod = findMethod(Customer.class, "getFirstName");
         final Method propertyClearMethod = findMethod(Customer.class, "clearFirstName");
 
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, propertyAccessorMethod, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(Customer.class, null, propertyAccessorMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(PropertyClearFacet.class);
         assertNotNull(facet);
@@ -360,7 +363,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final Method propertyAccessorMethod = findMethod(Customer.class, "getFirstName");
         final Method propertySetterMethod = findMethod(Customer.class, "setFirstName", new Class[] { String.class });
 
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, propertyAccessorMethod, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(Customer.class, null, propertyAccessorMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(PropertyClearFacet.class);
         assertNotNull(facet);
@@ -388,7 +391,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final Method propertyAccessorMethod = findMethod(Customer.class, "getFirstName");
         final Method propertyChoicesMethod = findMethod(Customer.class, "choicesFirstName");
 
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, propertyAccessorMethod, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(Customer.class, null, propertyAccessorMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(PropertyChoicesFacet.class);
         assertNotNull(facet);
@@ -429,7 +432,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final Method propertyAccessorMethod = findMethod(Customer.class, "getFirstName");
         final Method propertyAutoCompleteMethod = findMethod(Customer.class, "autoCompleteFirstName", new Class[]{String.class});
         
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, propertyAccessorMethod, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(Customer.class, null, propertyAccessorMethod, methodRemover, facetedMethod));
         
         final Facet facet = facetedMethod.getFacet(PropertyAutoCompleteFacet.class);
         assertNotNull(facet);
@@ -459,7 +462,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final Method propertyAccessorMethod = findMethod(Customer.class, "getFirstName");
         final Method propertyDefaultMethod = findMethod(Customer.class, "defaultFirstName");
 
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, propertyAccessorMethod, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(Customer.class, null, propertyAccessorMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(PropertyDefaultFacet.class);
         assertNotNull(facet);
@@ -489,7 +492,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final Method propertyAccessorMethod = findMethod(Customer.class, "getFirstName");
         final Method propertyValidateMethod = findMethod(Customer.class, "validateFirstName", new Class[] { String.class });
 
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, propertyAccessorMethod, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(Customer.class, null, propertyAccessorMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(PropertyValidateFacet.class);
         assertNotNull(facet);
@@ -519,7 +522,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final Method propertyAccessorMethod = findMethod(Customer.class, "getFirstName");
         final Method propertyDisableMethod = findMethod(Customer.class, "disableFirstName", new Class[] {});
 
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, propertyAccessorMethod, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(Customer.class, null, propertyAccessorMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(DisableForContextFacet.class);
         assertNotNull(facet);
@@ -549,7 +552,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final Method propertyAccessorMethod = findMethod(Customer.class, "getFirstName");
         final Method propertyDisableMethod = findMethod(Customer.class, "disableFirstName");
 
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, propertyAccessorMethod, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(Customer.class, null, propertyAccessorMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(DisableForContextFacet.class);
         assertNotNull(facet);
@@ -579,7 +582,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final Method propertyAccessorMethod = findMethod(Customer.class, "getFirstName");
         final Method propertyHideMethod = findMethod(Customer.class, "hideFirstName", new Class[] {});
 
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, propertyAccessorMethod, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(Customer.class, null, propertyAccessorMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(HideForContextFacet.class);
         assertNotNull(facet);
@@ -609,7 +612,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final Method propertyAccessorMethod = findMethod(Customer.class, "getFirstName");
         final Method propertyHideMethod = findMethod(Customer.class, "hideFirstName");
 
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, propertyAccessorMethod, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(Customer.class, null, propertyAccessorMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(HideForContextFacet.class);
         assertNotNull(facet);
@@ -637,7 +640,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         final Method propertyAccessorMethod = findMethod(Customer.class, "getFirstName");
 
-        facetFactory.process(new ProcessMethodContext(CustomerEx.class, null, null, propertyAccessorMethod, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(CustomerEx.class, null, propertyAccessorMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(PropertyOrCollectionAccessorFacet.class);
         assertNotNull(facet);
@@ -682,7 +685,8 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final Method propertyHideMethod = findMethod(CustomerEx.class, "hideFirstName");
         final Method propertyDisableMethod = findMethod(CustomerEx.class, "disableFirstName");
 
-        final ProcessMethodContext processMethodContext = new ProcessMethodContext(CustomerEx.class, null, null, propertyAccessorMethod, methodRemover, facetedMethod);
+        final ProcessMethodContext processMethodContext = new ProcessMethodContext(CustomerEx.class, null,
+                propertyAccessorMethod, methodRemover, facetedMethod);
         facetFactory.process(processMethodContext);
         facetFactoryForHide.process(processMethodContext);
         facetFactoryForDisable.process(processMethodContext);
@@ -758,7 +762,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final Method propertyAccessorMethod = findMethod(CustomerStatic.class, "getFirstName");
         final Method nameMethod = findMethod(CustomerStatic.class, "nameFirstName");
 
-        facetFactory.process(new ProcessMethodContext(CustomerStatic.class, null, null, propertyAccessorMethod, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(CustomerStatic.class, null, propertyAccessorMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(NamedFacet.class);
         assertNotNull(facet);
@@ -777,7 +781,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final Method propertyAccessorMethod = findMethod(CustomerStatic.class, "getFirstName");
         final Method descriptionMethod = findMethod(CustomerStatic.class, "descriptionFirstName");
 
-        facetFactory.process(new ProcessMethodContext(CustomerStatic.class, null, null, propertyAccessorMethod, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(CustomerStatic.class, null, propertyAccessorMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(DescribedAsFacet.class);
         assertNotNull(facet);
@@ -796,7 +800,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final Method propertyAccessorMethod = findMethod(CustomerStatic.class, "getFirstName");
         final Method propertyAlwaysHideMethod = findMethod(CustomerStatic.class, "alwaysHideFirstName");
 
-        facetFactory.process(new ProcessMethodContext(CustomerStatic.class, null, null, propertyAccessorMethod, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(CustomerStatic.class, null, propertyAccessorMethod, methodRemover, facetedMethod));
 
         final HiddenFacetOnStaticMethod facet = facetedMethod.getFacet(HiddenFacetOnStaticMethod.class);
         assertNotNull(facet);
@@ -812,7 +816,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final Method propertyAccessorMethod = findMethod(CustomerStatic.class, "getLastName");
         final Method propertyAlwaysHideMethod = findMethod(CustomerStatic.class, "alwaysHideLastName");
 
-        facetFactory.process(new ProcessMethodContext(CustomerStatic.class, null, null, propertyAccessorMethod, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(CustomerStatic.class, null, propertyAccessorMethod, methodRemover, facetedMethod));
 
         assertNull(facetedMethod.getFacet(HiddenFacetOnStaticMethod.class));
 
@@ -827,7 +831,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final Method propertyAccessorMethod = findMethod(CustomerStatic.class, "getFirstName");
         final Method propertyProtectMethod = findMethod(CustomerStatic.class, "protectFirstName");
 
-        facetFactory.process(new ProcessMethodContext(CustomerStatic.class, null, null, propertyAccessorMethod, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(CustomerStatic.class, null, propertyAccessorMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(DisabledFacet.class);
         assertNotNull(facet);
@@ -844,7 +848,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final Method propertyAccessorMethod = findMethod(CustomerStatic.class, "getLastName");
         final Method propertyProtectMethod = findMethod(CustomerStatic.class, "protectLastName");
 
-        facetFactory.process(new ProcessMethodContext(CustomerStatic.class, null, null, propertyAccessorMethod, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(CustomerStatic.class, null, propertyAccessorMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(DisabledFacet.class);
         assertNull(facet);
@@ -860,7 +864,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final Method propertyAccessorMethod = findMethod(CustomerStatic.class, "getFirstName");
         final Method hideMethod = findMethod(CustomerStatic.class, "hideFirstName", new Class[] { UserMemento.class });
 
-        facetFactory.process(new ProcessMethodContext(CustomerStatic.class, null, null, propertyAccessorMethod, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(CustomerStatic.class, null, propertyAccessorMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(HideForSessionFacet.class);
         assertNotNull(facet);
@@ -880,7 +884,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final Method propertyAccessorMethod = findMethod(CustomerStatic.class, "getFirstName");
         final Method disableMethod = findMethod(CustomerStatic.class, "disableFirstName", new Class[] { UserMemento.class });
 
-        facetFactory.process(new ProcessMethodContext(CustomerStatic.class, null, null, propertyAccessorMethod, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(CustomerStatic.class, null, propertyAccessorMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(DisableForSessionFacet.class);
         assertNotNull(facet);

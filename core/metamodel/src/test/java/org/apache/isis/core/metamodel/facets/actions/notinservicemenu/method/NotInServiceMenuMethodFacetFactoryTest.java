@@ -26,7 +26,6 @@ import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.NotInServiceMenuFacet;
 import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.NotInServiceMenuFacetAbstract;
-import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.method.NotInServiceMenuFacetViaMethodFactory;
 
 public class NotInServiceMenuMethodFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -60,7 +59,7 @@ public class NotInServiceMenuMethodFacetFactoryTest extends AbstractFacetFactory
         final Method actionMethod = findMethod(CustomerRepository.class, "someAction");
 
         // when
-        facetFactory.process(new ProcessMethodContext(CustomerRepository.class, null, null, actionMethod, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(CustomerRepository.class, null, actionMethod, methodRemover, facetedMethod));
 
         // then
         final Facet facet = facetedMethod.getFacet(NotInServiceMenuFacet.class);

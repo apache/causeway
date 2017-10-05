@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.facets.object.membergroups.annotprop;
 
 import java.util.List;
-import java.util.Properties;
 
 import org.apache.isis.applib.annotation.MemberGroupLayout;
 import org.apache.isis.applib.annotation.MemberGroupLayout.ColumnSpans;
@@ -59,11 +58,6 @@ public class MemberGroupLayoutFacetFactory extends FacetFactoryAbstract implemen
         
         final Class<?> cls = processClassContext.getCls();
 
-        final Properties properties = processClassContext.metadataProperties("memberGroupLayout");
-        if(properties != null) {
-            return new MemberGroupLayoutFacetProperties(properties, holder);
-        }
-        
         final MemberGroupLayout mglAnnot = Annotations.getAnnotation(cls, MemberGroupLayout.class);
         if (mglAnnot != null) {
             return new MemberGroupLayoutFacetAnnotation(mglAnnot, holder);

@@ -49,7 +49,7 @@ public class ChoicesFacetFromBoundedMarkerInterfaceFactoryTest extends AbstractF
         class Customer implements Bounded {
         }
 
-        facetFactory.process(new ProcessClassContext(Customer.class, null, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(ChoicesFacet.class);
         assertNotNull(facet);

@@ -46,7 +46,7 @@ public class OptionalAnnotationOnPropertyFacetFactoryTest extends AbstractFacetF
         }
         final Method method = findMethod(Customer.class, "getFirstName");
 
-        facetFactory.processOptional(new ProcessMethodContext(Customer.class, null, null, method, methodRemover, facetedMethod));
+        facetFactory.processOptional(new ProcessMethodContext(Customer.class, null, method, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(MandatoryFacet.class);
         assertNotNull(facet);
@@ -64,7 +64,7 @@ public class OptionalAnnotationOnPropertyFacetFactoryTest extends AbstractFacetF
         }
         final Method method = findMethod(Customer.class, "getNumberOfOrders");
 
-        facetFactory.processOptional(new ProcessMethodContext(Customer.class, null, null, method, methodRemover, facetedMethod));
+        facetFactory.processOptional(new ProcessMethodContext(Customer.class, null, method, methodRemover, facetedMethod));
 
         assertNull(facetedMethod.getFacet(MandatoryFacet.class));
     }

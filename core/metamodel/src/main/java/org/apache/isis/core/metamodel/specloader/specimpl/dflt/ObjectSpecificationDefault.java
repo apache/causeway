@@ -23,7 +23,6 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -110,9 +109,8 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     @Override
     public void introspectTypeHierarchyAndMembers() {
 
-        metadataProperties = null;
         if(isNotIntrospected()) {
-            metadataProperties = facetedMethodsBuilder.introspectClass();
+            facetedMethodsBuilder.introspectClass();
         }
         
         // name
@@ -165,19 +163,19 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
 
         // associations and actions
         if(isNotIntrospected()) {
-            final List<ObjectAssociation> associations = createAssociations(metadataProperties);
+            final List<ObjectAssociation> associations = createAssociations();
             sortAndUpdateAssociations(associations);
         }
 
         if(isNotIntrospected()) {
-            final List<ObjectAction> actions = createActions(metadataProperties);
+            final List<ObjectAction> actions = createActions();
             sortCacheAndUpdateActions(actions);
         }
 
 
 
         if(isNotIntrospected()) {
-            facetedMethodsBuilder.introspectClassPostProcessing(metadataProperties);    
+            facetedMethodsBuilder.introspectClassPostProcessing();
         }
         
         if(isNotIntrospected()) {
@@ -207,8 +205,8 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     //endregion
 
     //region > create associations and actions
-    private List<ObjectAssociation> createAssociations(Properties properties) {
-        final List<FacetedMethod> associationFacetedMethods = facetedMethodsBuilder.getAssociationFacetedMethods(properties);
+    private List<ObjectAssociation> createAssociations() {
+        final List<FacetedMethod> associationFacetedMethods = facetedMethodsBuilder.getAssociationFacetedMethods();
         final List<ObjectAssociation> associations = Lists.newArrayList();
         for (FacetedMethod facetedMethod : associationFacetedMethods) {
             final ObjectAssociation association = createAssociation(facetedMethod);
@@ -230,8 +228,8 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         }
     }
 
-    private List<ObjectAction> createActions(Properties metadataProperties) {
-        final List<FacetedMethod> actionFacetedMethods = facetedMethodsBuilder.getActionFacetedMethods(metadataProperties);
+    private List<ObjectAction> createActions() {
+        final List<FacetedMethod> actionFacetedMethods = facetedMethodsBuilder.getActionFacetedMethods();
         final List<ObjectAction> actions = Lists.newArrayList();
         for (FacetedMethod facetedMethod : actionFacetedMethods) {
             final ObjectAction action = createAction(facetedMethod);

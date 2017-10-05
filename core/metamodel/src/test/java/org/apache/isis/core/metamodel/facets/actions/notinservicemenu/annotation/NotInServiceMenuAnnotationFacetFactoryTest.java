@@ -53,7 +53,7 @@ public class NotInServiceMenuAnnotationFacetFactoryTest extends AbstractFacetFac
         }
         final Method actionMethod = findMethod(CustomerRepository.class, "someAction");
 
-        facetFactory.process(new ProcessMethodContext(CustomerRepository.class, null, null, actionMethod, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(CustomerRepository.class, null, actionMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(NotInServiceMenuFacet.class);
         assertNotNull(facet);

@@ -51,14 +51,13 @@ public class LabelAtFacetForPropertyLayoutAnnotationFactoryTest extends Abstract
         final Method method = findMethod(Customer.class, "getFirstName");
 
         final ProcessMethodContext processMethodContext =
-                new ProcessMethodContext(Customer.class, null, null, method, methodRemover, facetedMethod);
+                new ProcessMethodContext(Customer.class, null, method, methodRemover, facetedMethod);
 
         // when
         final FacetHolder holder = facetFactory.facetHolderFrom(processMethodContext);
-        final Properties properties = facetFactory.metadataPropertiesFrom(processMethodContext);
         final PropertyLayout propertyLayout = facetFactory.propertyLayoutAnnotationFrom(processMethodContext);
 
-        facetFactory.processLabelAt(holder, properties, propertyLayout);
+        facetFactory.processLabelAt(holder, propertyLayout);
 
         // then
         final Facet facet = facetedMethod.getFacet(LabelAtFacet.class);

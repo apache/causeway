@@ -57,7 +57,7 @@ public class DisabledAnnotationOnCollectionFacetFactoryTest extends AbstractFace
         }
         final Method actionMethod = findMethod(Customer.class, "getOrders");
 
-        facetFactory.processEditing(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
+        facetFactory.processEditing(new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(DisabledFacet.class);
         assertNotNull(facet);

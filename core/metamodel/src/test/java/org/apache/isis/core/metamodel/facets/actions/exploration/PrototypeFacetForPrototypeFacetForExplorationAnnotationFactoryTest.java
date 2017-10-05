@@ -56,7 +56,7 @@ public class PrototypeFacetForPrototypeFacetForExplorationAnnotationFactoryTest 
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(PrototypeFacet.class);
         assertNotNull(facet);

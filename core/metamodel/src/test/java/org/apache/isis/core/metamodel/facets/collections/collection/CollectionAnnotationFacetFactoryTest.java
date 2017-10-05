@@ -174,7 +174,7 @@ public class CollectionAnnotationFacetFactoryTest extends AbstractFacetFactoryJU
 
             // when
             final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls,
-                    null, null, collectionMethod, mockMethodRemover, facetedMethod);
+                    null, collectionMethod, mockMethodRemover, facetedMethod);
             facetFactory.processModify(processMethodContext);
 
             // then
@@ -236,7 +236,7 @@ public class CollectionAnnotationFacetFactoryTest extends AbstractFacetFactoryJU
 
             // when
             final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls,
-                    null, null, collectionMethod, mockMethodRemover, facetedMethod);
+                    null, collectionMethod, mockMethodRemover, facetedMethod);
             facetFactory.processModify(processMethodContext);
 
             // then
@@ -291,7 +291,7 @@ public class CollectionAnnotationFacetFactoryTest extends AbstractFacetFactoryJU
 
             // when
             final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls,
-                    null, null, collectionMethod, mockMethodRemover, facetedMethod);
+                    null, collectionMethod, mockMethodRemover, facetedMethod);
             facetFactory.processModify(processMethodContext);
 
             // then
@@ -343,7 +343,7 @@ public class CollectionAnnotationFacetFactoryTest extends AbstractFacetFactoryJU
 
             // when
             final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls,
-                    null, null, collectionMethod, mockMethodRemover, facetedMethod);
+                    null, collectionMethod, mockMethodRemover, facetedMethod);
             facetFactory.processModify(processMethodContext);
 
             // then
@@ -392,7 +392,7 @@ public class CollectionAnnotationFacetFactoryTest extends AbstractFacetFactoryJU
 
             // when
             final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls,
-                    null, null, collectionMethod, mockMethodRemover, facetedMethod);
+                    null, collectionMethod, mockMethodRemover, facetedMethod);
             facetFactory.processHidden(processMethodContext);
 
             // then
@@ -436,7 +436,7 @@ public class CollectionAnnotationFacetFactoryTest extends AbstractFacetFactoryJU
 
             // when
             final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls,
-                    null, null, collectionMethod, mockMethodRemover, facetedMethod);
+                    null, collectionMethod, mockMethodRemover, facetedMethod);
             facetFactory.processEditing(processMethodContext);
 
             // then
@@ -474,7 +474,7 @@ public class CollectionAnnotationFacetFactoryTest extends AbstractFacetFactoryJU
 
             // when
             final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls,
-                    null, null, collectionMethod, mockMethodRemover, facetedMethod);
+                    null, collectionMethod, mockMethodRemover, facetedMethod);
             facetFactory.processTypeOf(processMethodContext);
 
             // then
@@ -504,7 +504,7 @@ public class CollectionAnnotationFacetFactoryTest extends AbstractFacetFactoryJU
 
             // when
             final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls,
-                    null, null, collectionMethod, mockMethodRemover, facetedMethod);
+                    null, collectionMethod, mockMethodRemover, facetedMethod);
             facetFactory.processTypeOf(processMethodContext);
 
             // then
@@ -534,7 +534,7 @@ public class CollectionAnnotationFacetFactoryTest extends AbstractFacetFactoryJU
 
             // when
             final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls,
-                    null, null, collectionMethod, mockMethodRemover, facetedMethod);
+                    null, collectionMethod, mockMethodRemover, facetedMethod);
             facetFactory.processTypeOf(processMethodContext);
 
             // then

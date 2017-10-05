@@ -183,7 +183,8 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
 
 
             // when
-            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null, null, propertyMethod, mockMethodRemover, facetedMethod);
+            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
+                    propertyMethod, mockMethodRemover, facetedMethod);
             facetFactory.processModify(processMethodContext);
 
             // then
@@ -235,7 +236,8 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             allowingLoadSpecificationRequestsFor(cls, propertyMethod.getReturnType());
 
             // when
-            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null, null, propertyMethod, mockMethodRemover, facetedMethod);
+            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
+                    propertyMethod, mockMethodRemover, facetedMethod);
             facetFactory.processModify(processMethodContext);
 
             // then
@@ -286,7 +288,8 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             allowingLoadSpecificationRequestsFor(cls, propertyMethod.getReturnType());
 
             // when
-            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null, null, propertyMethod, mockMethodRemover, facetedMethod);
+            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
+                    propertyMethod, mockMethodRemover, facetedMethod);
             facetFactory.processModify(processMethodContext);
 
             // then
@@ -338,7 +341,8 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             }});
 
             // when
-            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null, null, propertyMethod, mockMethodRemover, facetedMethod);
+            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
+                    propertyMethod, mockMethodRemover, facetedMethod);
             facetFactory.processModify(processMethodContext);
 
             // then
@@ -383,7 +387,8 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             propertyMethod = findMethod(Customer.class, "getName");
 
             // when
-            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null, null, propertyMethod, mockMethodRemover, facetedMethod);
+            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
+                    propertyMethod, mockMethodRemover, facetedMethod);
             facetFactory.processHidden(processMethodContext);
 
             // then
@@ -423,7 +428,8 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             propertyMethod = findMethod(Customer.class, "getName");
 
             // when
-            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null, null, propertyMethod, mockMethodRemover, facetedMethod);
+            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
+                    propertyMethod, mockMethodRemover, facetedMethod);
             facetFactory.processEditing(processMethodContext);
 
             // then
@@ -458,7 +464,8 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             propertyMethod = findMethod(Customer.class, "getName");
 
             // when
-            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null, null, propertyMethod, mockMethodRemover, facetedMethod);
+            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
+                    propertyMethod, mockMethodRemover, facetedMethod);
             facetFactory.processMaxLength(processMethodContext);
 
             // then
@@ -509,7 +516,8 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
 
 
             // when
-            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null, null, propertyMethod, mockMethodRemover, facetedMethod);
+            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
+                    propertyMethod, mockMethodRemover, facetedMethod);
             facetFactory.processMustSatisfy(processMethodContext);
 
             // then
@@ -547,7 +555,8 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             propertyMethod = findMethod(Customer.class, "getName");
 
             // when
-            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null, null, propertyMethod, mockMethodRemover, facetedMethod);
+            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
+                    propertyMethod, mockMethodRemover, facetedMethod);
             facetFactory.processNotPersisted(processMethodContext);
 
             // then
@@ -579,7 +588,8 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             propertyMethod = findMethod(Customer.class, "getName");
 
             // when
-            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null, null, propertyMethod, mockMethodRemover, facetedMethod);
+            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
+                    propertyMethod, mockMethodRemover, facetedMethod);
             facetFactory.processOptional(processMethodContext);
 
             // then
@@ -607,7 +617,8 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             propertyMethod = findMethod(Customer.class, "getName");
 
             // when
-            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null, null, propertyMethod, mockMethodRemover, facetedMethod);
+            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
+                    propertyMethod, mockMethodRemover, facetedMethod);
             facetFactory.processOptional(processMethodContext);
 
             // then
@@ -635,7 +646,8 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             propertyMethod = findMethod(Customer.class, "getName");
 
             // when
-            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null, null, propertyMethod, mockMethodRemover, facetedMethod);
+            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
+                    propertyMethod, mockMethodRemover, facetedMethod);
             facetFactory.processOptional(processMethodContext);
 
             // then
@@ -661,7 +673,8 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             propertyMethod = findMethod(Customer.class, "getName");
 
             // when
-            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null, null, propertyMethod, mockMethodRemover, facetedMethod);
+            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
+                    propertyMethod, mockMethodRemover, facetedMethod);
             facetFactory.processOptional(processMethodContext);
 
             // then
@@ -692,7 +705,8 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             propertyMethod = findMethod(Customer.class, "getName");
 
             // when
-            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null, null, propertyMethod, mockMethodRemover, facetedMethod);
+            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
+                    propertyMethod, mockMethodRemover, facetedMethod);
             facetFactory.processRegEx(processMethodContext);
 
             // then
@@ -721,7 +735,8 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             propertyMethod = findMethod(Customer.class, "getName");
 
             // when
-            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null, null, propertyMethod, mockMethodRemover, facetedMethod);
+            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
+                    propertyMethod, mockMethodRemover, facetedMethod);
             facetFactory.processRegEx(processMethodContext);
 
             // then
@@ -748,7 +763,8 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             propertyMethod = findMethod(Customer.class, "getName");
 
             // when
-            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null, null, propertyMethod, mockMethodRemover, facetedMethod);
+            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
+                    propertyMethod, mockMethodRemover, facetedMethod);
             facetFactory.processRegEx(processMethodContext);
 
             // then
@@ -775,7 +791,8 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             propertyMethod = findMethod(Customer.class, "getName");
 
             // when
-            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null, null, propertyMethod, mockMethodRemover, facetedMethod);
+            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
+                    propertyMethod, mockMethodRemover, facetedMethod);
             facetFactory.processRegEx(processMethodContext);
 
             // then

@@ -41,7 +41,6 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
-import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.FreeStandingList;
@@ -94,12 +93,10 @@ public class SpecificationLoader implements ApplicationScopedComponent {
 
     private final MetaModelValidator metaModelValidator;
     private final SpecificationCacheDefault cache = new SpecificationCacheDefault();
-    private final List<LayoutMetadataReader> layoutMetadataReaders;
 
     public SpecificationLoader(
             final ProgrammingModel programmingModel,
             final MetaModelValidator metaModelValidator,
-            final List<LayoutMetadataReader> layoutMetadataReaders,
             final ServicesInjector servicesInjector) {
 
         this.servicesInjector = servicesInjector;
@@ -107,7 +104,6 @@ public class SpecificationLoader implements ApplicationScopedComponent {
         this.metaModelValidator = metaModelValidator;
 
         this.facetProcessor = new FacetProcessor(programmingModel);
-        this.layoutMetadataReaders = layoutMetadataReaders;
     }
 
     @Override
@@ -137,9 +133,6 @@ public class SpecificationLoader implements ApplicationScopedComponent {
 
         // wire subcomponents into each other
         facetProcessor.setServicesInjector(servicesInjector);
-        for (final LayoutMetadataReader layoutMetadataReader : layoutMetadataReaders) {
-            servicesInjector.injectInto(layoutMetadataReader);
-        }
 
         // initialize subcomponents
         programmingModel.init();
@@ -404,7 +397,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
         } else {
             final FacetedMethodsBuilderContext facetedMethodsBuilderContext =
                     new FacetedMethodsBuilderContext(
-                            this, facetProcessor, layoutMetadataReaders);
+                            this, facetProcessor);
             return new ObjectSpecificationDefault(cls, facetedMethodsBuilderContext,
                     servicesInjector, facetProcessor, natureOfServiceIfAny);
         }

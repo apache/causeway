@@ -53,7 +53,7 @@ public class CreatedCallbackFacetFactoryTest extends AbstractFacetFactoryTest {
         }
         final Method method = findMethod(Customer.class, "created");
 
-        facetFactory.process(new ProcessClassContext(Customer.class, null, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(CreatedCallbackFacet.class);
         assertNotNull(facet);

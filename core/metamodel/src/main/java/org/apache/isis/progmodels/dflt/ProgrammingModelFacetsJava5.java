@@ -20,7 +20,6 @@ package org.apache.isis.progmodels.dflt;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facets.actions.action.ActionAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.actions.action.ActionChoicesForCollectionParameterFacetFactory;
-import org.apache.isis.core.metamodel.facets.actions.contributing.paged.PagedFacetOnActionFactory;
 import org.apache.isis.core.metamodel.facets.actions.defaults.method.ActionDefaultsFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.actions.exploration.annotation.PrototypeFacetForExplorationAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.actions.homepage.annotation.HomePageFacetAnnotationFactory;
@@ -40,28 +39,22 @@ import org.apache.isis.core.metamodel.facets.collections.disabled.fromimmutable.
 import org.apache.isis.core.metamodel.facets.collections.javautilcollection.CollectionFacetFactory;
 import org.apache.isis.core.metamodel.facets.collections.layout.CollectionLayoutFacetFactory;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToRemoveFromAndValidateFacetFactory;
-import org.apache.isis.core.metamodel.facets.collections.paged.PagedFacetOnCollectionFactory;
 import org.apache.isis.core.metamodel.facets.collections.parented.ParentedFacetSinceCollectionFactory;
 import org.apache.isis.core.metamodel.facets.collections.sortedby.annotation.SortedByFacetAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.fallback.FallbackFacetFactory;
 import org.apache.isis.core.metamodel.facets.jaxb.JaxbXmlJavaTypeAdapterFacetFactory;
 import org.apache.isis.core.metamodel.facets.members.cssclass.annotprop.CssClassFacetOnActionFromConfiguredRegexFactory;
-import org.apache.isis.core.metamodel.facets.members.cssclass.annotprop.CssClassFacetOnMemberFactory;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.annotprop.CssClassFaFacetOnMemberFactory;
 import org.apache.isis.core.metamodel.facets.members.describedas.annotprop.DescribedAsFacetOnMemberFactory;
 import org.apache.isis.core.metamodel.facets.members.describedas.staticmethod.DescribedAsFacetStaticMethodFactory;
 import org.apache.isis.core.metamodel.facets.members.disabled.forsession.DisableForSessionFacetViaMethodFactory;
-import org.apache.isis.core.metamodel.facets.members.disabled.layout.DisabledFacetOnMemberFromPropertiesFactory;
 import org.apache.isis.core.metamodel.facets.members.disabled.method.DisableForContextFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.members.disabled.staticmethod.DisabledFacetStaticMethodFacetFactory;
 import org.apache.isis.core.metamodel.facets.members.hidden.forsession.HideForSessionFacetViaMethodFactory;
-import org.apache.isis.core.metamodel.facets.members.hidden.layout.HiddenFacetOnMemberFromPropertiesFactory;
 import org.apache.isis.core.metamodel.facets.members.hidden.method.HideForContextFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.members.hidden.staticmethod.HiddenFacetStaticMethodFactory;
-import org.apache.isis.core.metamodel.facets.members.named.annotprop.NamedFacetOnMemberFactory;
 import org.apache.isis.core.metamodel.facets.members.named.staticmethod.NamedFacetStaticMethodFactory;
 import org.apache.isis.core.metamodel.facets.members.order.annotprop.MemberOrderFacetFactory;
-import org.apache.isis.core.metamodel.facets.members.render.annotprop.RenderFacetOrResolveFactory;
 import org.apache.isis.core.metamodel.facets.object.ViewModelSemanticCheckingFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.audit.markerifc.AuditableFacetMarkerInterfaceFactory;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.bookmarkable.BookmarkPolicyFacetViaBookmarkableAnnotationElseFallbackFactory;
@@ -137,10 +130,8 @@ import org.apache.isis.core.metamodel.facets.properties.disabled.fromimmutable.D
 import org.apache.isis.core.metamodel.facets.properties.disabled.inferred.DisabledFacetOnPropertyInferredFactory;
 import org.apache.isis.core.metamodel.facets.properties.mandatory.dflt.MandatoryFacetOnProperyDefaultFactory;
 import org.apache.isis.core.metamodel.facets.properties.mandatory.staticmethod.MandatoryFacetOnPropertyStaticMethodFactory;
-import org.apache.isis.core.metamodel.facets.properties.multiline.annotation.MultiLineFacetOnPropertyFactory;
 import org.apache.isis.core.metamodel.facets.properties.property.PropertyAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.PropertyLayoutFacetFactory;
-import org.apache.isis.core.metamodel.facets.properties.typicallen.annotation.TypicalLengthOnPropertyFacetFactory;
 import org.apache.isis.core.metamodel.facets.properties.typicallen.fromtype.TypicalLengthFacetOnPropertyDerivedFromTypeFacetFactory;
 import org.apache.isis.core.metamodel.facets.properties.update.PropertyModifyFacetFactory;
 import org.apache.isis.core.metamodel.facets.properties.update.PropertySetAndClearFacetFactory;
@@ -274,7 +265,6 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         
         addFactory(new HiddenFacetStaticMethodFactory());
         addFactory(new HideForContextFacetViaMethodFactory());
-        addFactory(new RenderFacetOrResolveFactory());
 
         addFactory(new CreatedCallbackFacetFactory());
         addFactory(new LoadCallbackFacetFactory());
@@ -311,7 +301,6 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(new BigDecimalFacetOnParameterFromJavaxValidationAnnotationFactory());
         addFactory(new BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotationFactory());
 
-        addFactory(new DisabledFacetOnMemberFromPropertiesFactory());
         addFactory(new EncodableFacetAnnotationElseConfigurationFactory());
         
         addFactory(new PrototypeFacetForExplorationAnnotationFactory());
@@ -329,10 +318,7 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(new HiddenFacetOnTypeAnnotationFactory());
         // must come after the TitleAnnotationFacetFactory, because can act as an override
         
-        addFactory(new HiddenFacetOnMemberFromPropertiesFactory());
 
-        
-        addFactory(new CssClassFacetOnMemberFactory());
         // must come after CssClassFacetOnMemberFactory
         addFactory(new CssClassFacetOnActionFromConfiguredRegexFactory());
 
@@ -355,7 +341,6 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(new MustSatisfySpecificationFromMustSatisfyAnnotationOnTypeFacetFactory());
 
         
-        addFactory(new MultiLineFacetOnPropertyFactory());
 
         // must come after RecreatableObjectFacetFactory
         addFactory(new DomainObjectAnnotationFacetFactory());
@@ -393,17 +378,11 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(new ActionLayoutFacetFactory());
         addFactory(new CollectionLayoutFacetFactory());
 
-        addFactory(new NamedFacetOnMemberFactory());
-        
         addFactory(new NotPersistableFacetAnnotationFactory());
         addFactory(new NotPersistableFacetMarkerInterfaceFactory());
 
         addFactory(new ParseableFacetAnnotationElseConfigurationFactory());
         
-        addFactory(new PagedFacetOnCollectionFactory());
-
-        addFactory(new PagedFacetOnActionFactory());
-
 
         // must come after any facets that install titles
         
@@ -412,8 +391,6 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(new TypicalLengthFacetOnPropertyDerivedFromTypeFacetFactory());
         addFactory(new TypicalLengthFacetOnParameterDerivedFromTypeFacetFactory());
 
-        
-        addFactory(new TypicalLengthOnPropertyFacetFactory());
         
 
 

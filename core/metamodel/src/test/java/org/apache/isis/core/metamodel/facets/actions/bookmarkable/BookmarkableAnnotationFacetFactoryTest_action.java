@@ -54,7 +54,7 @@ public class BookmarkableAnnotationFacetFactoryTest_action extends AbstractFacet
         }
         final Method actionMethod = findMethod(Customer.class, "placeOrder");
 
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(BookmarkPolicyFacet.class);
         assertNotNull(facet);

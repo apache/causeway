@@ -23,7 +23,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
 
 import com.google.common.base.Function;
@@ -130,10 +129,6 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     private final SpecificationLoader specificationLoader;
     private final FacetProcessor facetProcessor;
 
-    /**
-     * Only populated once {@link #introspectTypeHierarchyAndMembers()} is called.
-     */
-    protected Properties metadataProperties;
 
 
     private final List<ObjectAssociation> associations = Lists.newArrayList();
@@ -957,7 +952,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             public ObjectAssociation apply(ObjectActionDefault input) {
                 final ObjectSpecification returnType = input.getReturnType();
                 final ObjectAssociationAbstract association = createObjectAssociation(input, returnType);
-                facetProcessor.processMemberOrder(metadataProperties, association);
+                facetProcessor.processMemberOrder(association);
                 return association;
             }
 
@@ -1050,7 +1045,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             @Override
             public ObjectAssociation apply(final ObjectActionDefault mixinAction) {
                 final ObjectAssociationAbstract association = createObjectAssociation(mixinAction);
-                facetProcessor.processMemberOrder(metadataProperties, association);
+                facetProcessor.processMemberOrder(association);
                 return association;
             }
 
@@ -1120,7 +1115,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
                 ObjectActionContributee contributeeAction =
                         new ObjectActionContributee(servicePojo, contributedAction, contributeeParam, this,
                                 servicesInjector);
-                facetProcessor.processMemberOrder(metadataProperties, contributeeAction);
+                facetProcessor.processMemberOrder(contributeeAction);
                 contributeeActions.add(contributeeAction);
             }
         }
@@ -1208,7 +1203,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
             ObjectActionMixedIn mixedInAction =
                     new ObjectActionMixedIn(mixinType, mixinFacet.value(), mixinAction, this, servicesInjector);
-            facetProcessor.processMemberOrder(metadataProperties, mixedInAction);
+            facetProcessor.processMemberOrder(mixedInAction);
             actions.add(mixedInAction);
         }
         mixedInActionsToAppendTo.addAll(actions);

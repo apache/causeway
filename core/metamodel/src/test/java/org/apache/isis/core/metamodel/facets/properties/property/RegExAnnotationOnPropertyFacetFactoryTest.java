@@ -49,7 +49,7 @@ public class RegExAnnotationOnPropertyFacetFactoryTest extends AbstractFacetFact
         }
         final Method method = findMethod(Customer.class, "getFirstName");
 
-        facetFactory.processRegEx(new ProcessMethodContext(Customer.class, null, null, method, methodRemover, facetedMethod));
+        facetFactory.processRegEx(new ProcessMethodContext(Customer.class, null, method, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(RegExFacet.class);
         assertNotNull(facet);
@@ -70,7 +70,7 @@ public class RegExAnnotationOnPropertyFacetFactoryTest extends AbstractFacetFact
         }
         final Method method = findMethod(Customer.class, "getNumberOfOrders");
 
-        facetFactory.processRegEx(new ProcessMethodContext(Customer.class, null, null, method, methodRemover, facetedMethod));
+        facetFactory.processRegEx(new ProcessMethodContext(Customer.class, null, method, methodRemover, facetedMethod));
 
         assertNull(facetedMethod.getFacet(RegExFacet.class));
     }

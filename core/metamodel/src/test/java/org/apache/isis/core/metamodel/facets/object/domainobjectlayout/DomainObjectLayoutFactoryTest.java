@@ -112,7 +112,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
 
                 final Class<?> cls = DomainObjectLayoutFactoryTest.Customer.class;
 
-                facetFactory.process(new FacetFactory.ProcessClassContext(cls, null, mockMethodRemover, facetHolder));
+                facetFactory.process(new FacetFactory.ProcessClassContext(cls, mockMethodRemover, facetHolder));
 
                 final Facet facet = facetHolder.getFacet(BookmarkPolicyFacet.class);
                 assertNotNull(facet);
@@ -129,7 +129,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
 
                 final Class<?> cls = CustomerWithDefaults.class;
 
-                facetFactory.process(new FacetFactory.ProcessClassContext(cls, null, mockMethodRemover, facetHolder));
+                facetFactory.process(new FacetFactory.ProcessClassContext(cls, mockMethodRemover, facetHolder));
 
                 final Facet facet = facetHolder.getFacet(BookmarkPolicyFacet.class);
                 assertNull(facet);
@@ -145,7 +145,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
 
                 final Class<?> cls = CustomerViewModel.class;
 
-                facetFactory.process(new FacetFactory.ProcessClassContext(cls, null, mockMethodRemover, facetHolder));
+                facetFactory.process(new FacetFactory.ProcessClassContext(cls, mockMethodRemover, facetHolder));
 
                 final Facet facet = facetHolder.getFacet(BookmarkPolicyFacet.class);
                 assertNotNull(facet);
@@ -163,7 +163,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
 
                 final Class<?> cls = CustomerViewModelWithDefaults.class;
 
-                facetFactory.process(new FacetFactory.ProcessClassContext(cls, null, mockMethodRemover, facetHolder));
+                facetFactory.process(new FacetFactory.ProcessClassContext(cls, mockMethodRemover, facetHolder));
 
                 final Facet facet = facetHolder.getFacet(BookmarkPolicyFacet.class);
                 assertNull(facet);
@@ -196,7 +196,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
 
                 final Class<?> cls = DomainObjectLayoutFactoryTest.Customer.class;
 
-                facetFactory.process(new FacetFactory.ProcessClassContext(cls, null, mockMethodRemover, facetHolder));
+                facetFactory.process(new FacetFactory.ProcessClassContext(cls, mockMethodRemover, facetHolder));
 
                 final Facet facet = facetHolder.getFacet(CssClassFacet.class);
                 assertNotNull(facet);
@@ -213,7 +213,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
 
                 final Class<?> cls = CustomerWithDefaults.class;
 
-                facetFactory.process(new FacetFactory.ProcessClassContext(cls, null, mockMethodRemover, facetHolder));
+                facetFactory.process(new FacetFactory.ProcessClassContext(cls, mockMethodRemover, facetHolder));
 
                 final Facet facet = facetHolder.getFacet(CssClassFacet.class);
                 assertNull(facet);
@@ -229,7 +229,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
 
                 final Class<?> cls = CustomerViewModel.class;
 
-                facetFactory.process(new FacetFactory.ProcessClassContext(cls, null, mockMethodRemover, facetHolder));
+                facetFactory.process(new FacetFactory.ProcessClassContext(cls, mockMethodRemover, facetHolder));
 
                 final Facet facet = facetHolder.getFacet(CssClassFacet.class);
                 assertNotNull(facet);
@@ -246,7 +246,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
 
                 final Class<?> cls = CustomerViewModelWithDefaults.class;
 
-                facetFactory.process(new FacetFactory.ProcessClassContext(cls, null, mockMethodRemover, facetHolder));
+                facetFactory.process(new FacetFactory.ProcessClassContext(cls, mockMethodRemover, facetHolder));
 
                 final Facet facet = facetHolder.getFacet(CssClassFacet.class);
                 assertNull(facet);
@@ -275,7 +275,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
 
                 final Class<?> cls = DomainObjectLayoutFactoryTest.Customer.class;
 
-                facetFactory.process(new FacetFactory.ProcessClassContext(cls, null, mockMethodRemover, facetHolder));
+                facetFactory.process(new FacetFactory.ProcessClassContext(cls, mockMethodRemover, facetHolder));
 
                 final Facet facet = facetHolder.getFacet(CssClassFaFacet.class);
                 assertNotNull(facet);
@@ -293,7 +293,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
 
                 final Class<?> cls = CustomerWithDefaults.class;
 
-                facetFactory.process(new FacetFactory.ProcessClassContext(cls, null, mockMethodRemover, facetHolder));
+                facetFactory.process(new FacetFactory.ProcessClassContext(cls, mockMethodRemover, facetHolder));
 
                 final Facet facet = facetHolder.getFacet(CssClassFaFacet.class);
                 assertNull(facet);
@@ -309,7 +309,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
 
                 final Class<?> cls = CustomerViewModel.class;
 
-                facetFactory.process(new FacetFactory.ProcessClassContext(cls, null, mockMethodRemover, facetHolder));
+                facetFactory.process(new FacetFactory.ProcessClassContext(cls, mockMethodRemover, facetHolder));
 
                 final Facet facet = facetHolder.getFacet(CssClassFaFacet.class);
                 assertNotNull(facet);
@@ -327,7 +327,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
 
                 final Class<?> cls = CustomerViewModelWithDefaults.class;
 
-                facetFactory.process(new FacetFactory.ProcessClassContext(cls, null, mockMethodRemover, facetHolder));
+                facetFactory.process(new FacetFactory.ProcessClassContext(cls, mockMethodRemover, facetHolder));
 
                 final Facet facet = facetHolder.getFacet(CssClassFaFacet.class);
                 assertNull(facet);
@@ -355,7 +355,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
 
                 final Class<?> cls = DomainObjectLayoutFactoryTest.Customer.class;
 
-                facetFactory.process(new FacetFactory.ProcessClassContext(cls, null, mockMethodRemover, facetHolder));
+                facetFactory.process(new FacetFactory.ProcessClassContext(cls, mockMethodRemover, facetHolder));
 
                 final Facet facet = facetHolder.getFacet(DescribedAsFacet.class);
                 assertNotNull(facet);
@@ -372,7 +372,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
 
                 final Class<?> cls = CustomerWithDefaults.class;
 
-                facetFactory.process(new FacetFactory.ProcessClassContext(cls, null, mockMethodRemover, facetHolder));
+                facetFactory.process(new FacetFactory.ProcessClassContext(cls, mockMethodRemover, facetHolder));
 
                 final Facet facet = facetHolder.getFacet(DescribedAsFacet.class);
                 assertNull(facet);
@@ -388,7 +388,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
 
                 final Class<?> cls = CustomerViewModel.class;
 
-                facetFactory.process(new FacetFactory.ProcessClassContext(cls, null, mockMethodRemover, facetHolder));
+                facetFactory.process(new FacetFactory.ProcessClassContext(cls, mockMethodRemover, facetHolder));
 
                 final Facet facet = facetHolder.getFacet(DescribedAsFacet.class);
                 assertNotNull(facet);
@@ -405,7 +405,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
 
                 final Class<?> cls = CustomerViewModelWithDefaults.class;
 
-                facetFactory.process(new FacetFactory.ProcessClassContext(cls, null, mockMethodRemover, facetHolder));
+                facetFactory.process(new FacetFactory.ProcessClassContext(cls, mockMethodRemover, facetHolder));
 
                 final Facet facet = facetHolder.getFacet(DescribedAsFacet.class);
                 assertNull(facet);
@@ -433,7 +433,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
 
                 final Class<?> cls = DomainObjectLayoutFactoryTest.Customer.class;
 
-                facetFactory.process(new FacetFactory.ProcessClassContext(cls, null, mockMethodRemover, facetHolder));
+                facetFactory.process(new FacetFactory.ProcessClassContext(cls, mockMethodRemover, facetHolder));
 
                 final Facet facet = facetHolder.getFacet(NamedFacet.class);
                 assertNotNull(facet);
@@ -450,7 +450,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
 
                 final Class<?> cls = CustomerWithDefaults.class;
 
-                facetFactory.process(new FacetFactory.ProcessClassContext(cls, null, mockMethodRemover, facetHolder));
+                facetFactory.process(new FacetFactory.ProcessClassContext(cls, mockMethodRemover, facetHolder));
 
                 final Facet facet = facetHolder.getFacet(NamedFacet.class);
                 assertNull(facet);
@@ -466,7 +466,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
 
                 final Class<?> cls = CustomerViewModel.class;
 
-                facetFactory.process(new FacetFactory.ProcessClassContext(cls, null, mockMethodRemover, facetHolder));
+                facetFactory.process(new FacetFactory.ProcessClassContext(cls, mockMethodRemover, facetHolder));
 
                 final Facet facet = facetHolder.getFacet(NamedFacet.class);
                 assertNotNull(facet);
@@ -483,7 +483,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
 
                 final Class<?> cls = CustomerViewModelWithDefaults.class;
 
-                facetFactory.process(new FacetFactory.ProcessClassContext(cls, null, mockMethodRemover, facetHolder));
+                facetFactory.process(new FacetFactory.ProcessClassContext(cls, mockMethodRemover, facetHolder));
 
                 final Facet facet = facetHolder.getFacet(NamedFacet.class);
                 assertNull(facet);
@@ -511,7 +511,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
 
                 final Class<?> cls = DomainObjectLayoutFactoryTest.Customer.class;
 
-                facetFactory.process(new FacetFactory.ProcessClassContext(cls, null, mockMethodRemover, facetHolder));
+                facetFactory.process(new FacetFactory.ProcessClassContext(cls, mockMethodRemover, facetHolder));
 
                 final Facet facet = facetHolder.getFacet(PagedFacet.class);
                 assertNotNull(facet);
@@ -528,7 +528,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
 
                 final Class<?> cls = CustomerWithDefaults.class;
 
-                facetFactory.process(new FacetFactory.ProcessClassContext(cls, null, mockMethodRemover, facetHolder));
+                facetFactory.process(new FacetFactory.ProcessClassContext(cls,mockMethodRemover, facetHolder));
 
                 final Facet facet = facetHolder.getFacet(PagedFacet.class);
                 assertNull(facet);
@@ -544,7 +544,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
 
                 final Class<?> cls = CustomerViewModel.class;
 
-                facetFactory.process(new FacetFactory.ProcessClassContext(cls, null, mockMethodRemover, facetHolder));
+                facetFactory.process(new FacetFactory.ProcessClassContext(cls, mockMethodRemover, facetHolder));
 
                 final Facet facet = facetHolder.getFacet(PagedFacet.class);
                 assertNotNull(facet);
@@ -561,7 +561,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
 
                 final Class<?> cls = CustomerViewModelWithDefaults.class;
 
-                facetFactory.process(new FacetFactory.ProcessClassContext(cls, null, mockMethodRemover, facetHolder));
+                facetFactory.process(new FacetFactory.ProcessClassContext(cls, mockMethodRemover, facetHolder));
 
                 final Facet facet = facetHolder.getFacet(PagedFacet.class);
                 assertNull(facet);
@@ -589,7 +589,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
 
                 final Class<?> cls = DomainObjectLayoutFactoryTest.Customer.class;
 
-                facetFactory.process(new FacetFactory.ProcessClassContext(cls, null, mockMethodRemover, facetHolder));
+                facetFactory.process(new FacetFactory.ProcessClassContext(cls, mockMethodRemover, facetHolder));
 
                 final Facet facet = facetHolder.getFacet(PluralFacet.class);
                 assertNotNull(facet);
@@ -606,7 +606,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
 
                 final Class<?> cls = CustomerWithDefaults.class;
 
-                facetFactory.process(new FacetFactory.ProcessClassContext(cls, null, mockMethodRemover, facetHolder));
+                facetFactory.process(new FacetFactory.ProcessClassContext(cls, mockMethodRemover, facetHolder));
 
                 final Facet facet = facetHolder.getFacet(PluralFacet.class);
                 assertNull(facet);
@@ -622,7 +622,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
 
                 final Class<?> cls = CustomerViewModel.class;
 
-                facetFactory.process(new FacetFactory.ProcessClassContext(cls, null, mockMethodRemover, facetHolder));
+                facetFactory.process(new FacetFactory.ProcessClassContext(cls, mockMethodRemover, facetHolder));
 
                 final Facet facet = facetHolder.getFacet(PluralFacet.class);
                 assertNotNull(facet);
@@ -639,7 +639,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
 
                 final Class<?> cls = CustomerViewModelWithDefaults.class;
 
-                facetFactory.process(new FacetFactory.ProcessClassContext(cls, null, mockMethodRemover, facetHolder));
+                facetFactory.process(new FacetFactory.ProcessClassContext(cls, mockMethodRemover, facetHolder));
 
                 final Facet facet = facetHolder.getFacet(PluralFacet.class);
                 assertNull(facet);

@@ -21,7 +21,6 @@ package org.apache.isis.core.metamodel.facets.members.cssclassfa.annotprop;
 
 import java.lang.reflect.Method;
 import java.util.Map;
-import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -30,7 +29,6 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 
 import org.apache.isis.core.commons.config.ConfigurationConstants;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.ContributeeMemberFacetFactory;
@@ -40,17 +38,13 @@ import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaPositi
 
 public class CssClassFaFacetOnMemberFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory {
     
-
     public CssClassFaFacetOnMemberFactory() {
         super(FeatureType.ACTIONS_ONLY);
     }
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        CssClassFaFacet cssClassFaFacet = createFromMetadataPropertiesIfPossible(processMethodContext);
-        if (cssClassFaFacet == null) {
-            cssClassFaFacet = createFromConfiguredRegexIfPossible(processMethodContext);
-        }
+        CssClassFaFacet cssClassFaFacet = createFromConfiguredRegexIfPossible(processMethodContext);
 
         // no-op if null
         FacetUtil.addFacet(cssClassFaFacet);
@@ -58,19 +52,8 @@ public class CssClassFaFacetOnMemberFactory extends FacetFactoryAbstract impleme
 
     @Override
     public void process(ProcessContributeeMemberContext processMemberContext) {
-        CssClassFaFacet cssClassFaFacet = createFromMetadataPropertiesIfPossible(processMemberContext);
-        // no-op if null
-        FacetUtil.addFacet(cssClassFaFacet);
     }
 
-    private static CssClassFaFacet createFromMetadataPropertiesIfPossible(
-            final ProcessContextWithMetadataProperties<? extends FacetHolder> pcwmp) {
-
-        final FacetHolder holder = pcwmp.getFacetHolder();
-
-        final Properties properties = pcwmp.metadataProperties("cssClassFa");
-        return properties != null ? new CssClassFaFacetOnMemberFromProperties(properties, holder) : null;
-    }
 
     // region > faIconFromPattern
 

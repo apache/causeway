@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.facets.properties.propertylayout;
 
 import java.lang.reflect.Method;
-import java.util.Properties;
 
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -51,128 +50,90 @@ public class PropertyLayoutFacetFactory extends FacetFactoryAbstract implements 
     public void process(final ProcessMethodContext processMethodContext) {
 
         final FacetHolder holder = facetHolderFrom(processMethodContext);
-        final Properties properties = metadataPropertiesFrom(processMethodContext);
         final PropertyLayout propertyLayout = propertyLayoutAnnotationFrom(processMethodContext);
 
-        processCssClass(holder, properties, propertyLayout);
+        processCssClass(holder, propertyLayout);
 
-        processDescribedAs(holder, properties, propertyLayout);
+        processDescribedAs(holder, propertyLayout);
 
-        processPromptStyle(holder, properties, propertyLayout);
+        processPromptStyle(holder, propertyLayout);
 
-        processHidden(holder, properties, propertyLayout);
+        processHidden(holder, propertyLayout);
 
-        processLabelAt(holder, properties, propertyLayout);
+        processLabelAt(holder, propertyLayout);
 
-        processMultiLine(holder, properties, propertyLayout);
+        processMultiLine(holder, propertyLayout);
 
-        processNamed(holder, properties, propertyLayout);
+        processNamed(holder, propertyLayout);
 
-        processRenderedAdjusted(holder, properties, propertyLayout);
+        processRenderedAdjusted(holder, propertyLayout);
 
-        processTypicalLength(holder, properties, propertyLayout);
+        processTypicalLength(holder, propertyLayout);
 
-        processUnchanging(holder, properties, propertyLayout);
+        processUnchanging(holder, propertyLayout);
     }
 
-    void processCssClass(final FacetHolder holder, final Properties properties, final PropertyLayout propertyLayout) {
-        CssClassFacet cssClassFacet = CssClassFacetOnPropertyFromLayoutProperties.create(properties, holder);
-        if(cssClassFacet == null) {
-            cssClassFacet = CssClassFacetForPropertyLayoutAnnotation.create(propertyLayout, holder);
-        }
+    void processCssClass(final FacetHolder holder, final PropertyLayout propertyLayout) {
+        CssClassFacet cssClassFacet = CssClassFacetForPropertyLayoutAnnotation.create(propertyLayout, holder);
         FacetUtil.addFacet(cssClassFacet);
     }
 
     void processDescribedAs(
             final FacetHolder holder,
-            final Properties properties,
             final PropertyLayout propertyLayout) {
-        DescribedAsFacet describedAsFacet = DescribedAsFacetOnPropertyFromLayoutProperties.create(properties, holder);
-        if(describedAsFacet == null) {
-            describedAsFacet = DescribedAsFacetForPropertyLayoutAnnotation.create(propertyLayout, holder);
-        }
+        DescribedAsFacet describedAsFacet = DescribedAsFacetForPropertyLayoutAnnotation.create(propertyLayout, holder);
         FacetUtil.addFacet(describedAsFacet);
     }
 
-    void processPromptStyle(final FacetHolder holder, final Properties properties, final PropertyLayout propertyLayout) {
-        PromptStyleFacet promptStyleFacet = PromptStyleFacetOnPropertyFromLayoutProperties
-                .create(properties, holder);
-        if(promptStyleFacet == null) {
-            promptStyleFacet = PromptStyleFacetForPropertyLayoutAnnotation
-                    .create(propertyLayout, getConfiguration(), holder);
-        }
+    void processPromptStyle(final FacetHolder holder, final PropertyLayout propertyLayout) {
+        PromptStyleFacet promptStyleFacet = PromptStyleFacetForPropertyLayoutAnnotation
+                .create(propertyLayout, getConfiguration(), holder);
 
         FacetUtil.addFacet(promptStyleFacet);
     }
 
-    void processHidden(final FacetHolder holder, final Properties properties, final PropertyLayout propertyLayout) {
-        HiddenFacet hiddenFacet = HiddenFacetOnPropertyFromLayoutProperties.create(properties, holder);
-        if(hiddenFacet == null) {
-            hiddenFacet = HiddenFacetForPropertyLayoutAnnotation.create(propertyLayout, holder);
-        }
+    void processHidden(final FacetHolder holder, final PropertyLayout propertyLayout) {
+        HiddenFacet hiddenFacet = HiddenFacetForPropertyLayoutAnnotation.create(propertyLayout, holder);
         FacetUtil.addFacet(hiddenFacet);
     }
 
     void processLabelAt(
             final FacetHolder holder,
-            final Properties properties,
             final PropertyLayout propertyLayout) {
-        LabelAtFacet labelAtFacet = LabelAtFacetOnPropertyFromLayoutProperties.create(properties, holder);
-        if(labelAtFacet == null) {
-            labelAtFacet = LabelAtFacetForPropertyLayoutAnnotation.create(propertyLayout, holder);
-        }
+        LabelAtFacet labelAtFacet = LabelAtFacetForPropertyLayoutAnnotation.create(propertyLayout, holder);
         FacetUtil.addFacet(labelAtFacet);
     }
 
-    void processMultiLine(final FacetHolder holder, final Properties properties, final PropertyLayout propertyLayout) {
-        MultiLineFacet multiLineFacet = MultiLineFacetOnPropertyFromLayoutProperties.create(properties, holder);
-        if(multiLineFacet == null) {
-            multiLineFacet = MultiLineFacetForPropertyLayoutAnnotation.create(propertyLayout, holder);
-        }
+    void processMultiLine(final FacetHolder holder, final PropertyLayout propertyLayout) {
+        MultiLineFacet multiLineFacet = MultiLineFacetForPropertyLayoutAnnotation.create(propertyLayout, holder);
         FacetUtil.addFacet(multiLineFacet);
     }
 
-    void processNamed(final FacetHolder holder, final Properties properties, final PropertyLayout propertyLayout) {
-        NamedFacet namedFacet = NamedFacetOnPropertyFromLayoutProperties.create(properties, holder);
-        if(namedFacet == null) {
-            namedFacet = NamedFacetForPropertyLayoutAnnotation.create(propertyLayout, holder);
-        }
+    void processNamed(final FacetHolder holder, final PropertyLayout propertyLayout) {
+        NamedFacet namedFacet = NamedFacetForPropertyLayoutAnnotation.create(propertyLayout, holder);
         FacetUtil.addFacet(namedFacet);
     }
 
     void processRenderedAdjusted(
             final FacetHolder holder,
-            final Properties properties,
             final PropertyLayout propertyLayout) {
-        RenderedAdjustedFacet renderedAdjustedFacet = RenderedAdjustedFacetOnPropertyFromLayoutProperties
-                .create(properties, holder);
-        if(renderedAdjustedFacet == null) {
-            renderedAdjustedFacet = RenderedAdjustedFacetForPropertyLayoutAnnotation.create(propertyLayout, holder);
-        }
+        RenderedAdjustedFacet renderedAdjustedFacet = RenderedAdjustedFacetForPropertyLayoutAnnotation
+                .create(propertyLayout, holder);
         FacetUtil.addFacet(renderedAdjustedFacet);
     }
 
     void processTypicalLength(
             final FacetHolder holder,
-            final Properties properties,
             final PropertyLayout propertyLayout) {
-        TypicalLengthFacet typicalLengthFacet = TypicalLengthFacetOnPropertyFromLayoutProperties
-                .create(properties, holder);
-        if(typicalLengthFacet == null) {
-            typicalLengthFacet = TypicalLengthFacetForPropertyLayoutAnnotation.create(propertyLayout, holder);
-        }
+        TypicalLengthFacet typicalLengthFacet = TypicalLengthFacetForPropertyLayoutAnnotation
+                .create(propertyLayout, holder);
         FacetUtil.addFacet(typicalLengthFacet);
     }
 
     void processUnchanging(
             final FacetHolder holder,
-            final Properties properties,
             final PropertyLayout propertyLayout) {
-        UnchangingFacet unchangingFacet = UnchangingFacetOnPropertyFromLayoutProperties
-                .create(properties, holder);
-        if(unchangingFacet == null) {
-            unchangingFacet = UnchangingFacetForPropertyLayoutAnnotation.create(propertyLayout, holder);
-        }
+        UnchangingFacet unchangingFacet = UnchangingFacetForPropertyLayoutAnnotation.create(propertyLayout, holder);
         FacetUtil.addFacet(unchangingFacet);
     }
 
@@ -180,58 +141,48 @@ public class PropertyLayoutFacetFactory extends FacetFactoryAbstract implements 
     public void process(ProcessContributeeMemberContext processMemberContext) {
         final FacetHolder holder = processMemberContext.getFacetHolder();
 
-        Properties properties = metadataPropertiesFrom(processMemberContext);
-
 
         // cssClass
-        CssClassFacet cssClassFacet = CssClassFacetOnPropertyFromLayoutProperties.create(properties, holder);
+        CssClassFacet cssClassFacet = null;
         FacetUtil.addFacet(cssClassFacet);
 
 
         // describedAs
-        DescribedAsFacet describedAsFacet = DescribedAsFacetOnPropertyFromLayoutProperties.create(properties, holder);
+        DescribedAsFacet describedAsFacet = null;
         FacetUtil.addFacet(describedAsFacet);
 
 
         // hidden
-        HiddenFacet hiddenFacet = HiddenFacetOnPropertyFromLayoutProperties.create(properties, holder);
+        HiddenFacet hiddenFacet = null;
         FacetUtil.addFacet(hiddenFacet);
 
 
         // labelAt
-        LabelAtFacet labelAtFacet = LabelAtFacetOnPropertyFromLayoutProperties.create(properties, holder);
+        LabelAtFacet labelAtFacet = null;
         FacetUtil.addFacet(labelAtFacet);
 
 
         // multiLine
-        MultiLineFacet multiLineFacet = MultiLineFacetOnPropertyFromLayoutProperties.create(properties, holder);
+        MultiLineFacet multiLineFacet = null;
         FacetUtil.addFacet(multiLineFacet);
 
 
         // named
-        NamedFacet namedFacet = NamedFacetOnPropertyFromLayoutProperties.create(properties, holder);
+        NamedFacet namedFacet = null;
         FacetUtil.addFacet(namedFacet);
 
 
         // renderedAsDayBefore
-        RenderedAdjustedFacet renderedAdjustedFacet = RenderedAdjustedFacetOnPropertyFromLayoutProperties.create(properties, holder);
+        RenderedAdjustedFacet renderedAdjustedFacet = null;
         FacetUtil.addFacet(renderedAdjustedFacet);
 
 
         // typicalLength
-        TypicalLengthFacet typicalLengthFacet = TypicalLengthFacetOnPropertyFromLayoutProperties.create(properties, holder);
+        TypicalLengthFacet typicalLengthFacet = null;
         FacetUtil.addFacet(typicalLengthFacet);
 
     }
 
-    Properties metadataPropertiesFrom(final ProcessMethodContext processMethodContext) {
-        Properties properties = processMethodContext.metadataProperties("propertyLayout");
-        if(properties == null) {
-            // alternate key
-            properties = processMethodContext.metadataProperties("layout");
-        }
-        return properties;
-    }
 
     FacetedMethod facetHolderFrom(final ProcessMethodContext processMethodContext) {
         return processMethodContext.getFacetHolder();
@@ -242,14 +193,5 @@ public class PropertyLayoutFacetFactory extends FacetFactoryAbstract implements 
         return Annotations.getAnnotation(method, PropertyLayout.class);
     }
 
-
-    Properties metadataPropertiesFrom(final ProcessContributeeMemberContext processMemberContext) {
-        Properties properties = processMemberContext.metadataProperties("propertyLayout");
-        if(properties == null) {
-            // alternate key
-            properties = processMemberContext.metadataProperties("layout");
-        }
-        return properties;
-    }
 
 }

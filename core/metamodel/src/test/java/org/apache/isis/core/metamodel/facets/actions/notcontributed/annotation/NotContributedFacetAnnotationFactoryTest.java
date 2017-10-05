@@ -55,7 +55,7 @@ public class NotContributedFacetAnnotationFactoryTest extends AbstractFacetFacto
         }
         final Method actionMethod = findMethod(CustomerRepository.class, "someAction");
 
-        facetFactory.process(new ProcessMethodContext(CustomerRepository.class, null, null, actionMethod, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(CustomerRepository.class, null, actionMethod, methodRemover, facetedMethod));
 
         final NotContributedFacet facet = facetedMethod.getFacet(NotContributedFacet.class);
         assertNotNull(facet);
@@ -73,7 +73,7 @@ public class NotContributedFacetAnnotationFactoryTest extends AbstractFacetFacto
         }
         final Method actionMethod = findMethod(CustomerRepository.class, "someAction");
         
-        facetFactory.process(new ProcessMethodContext(CustomerRepository.class, null, null, actionMethod, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(CustomerRepository.class, null, actionMethod, methodRemover, facetedMethod));
         
         final NotContributedFacet facet = facetedMethod.getFacet(NotContributedFacet.class);
         assertNotNull(facet);
@@ -91,7 +91,7 @@ public class NotContributedFacetAnnotationFactoryTest extends AbstractFacetFacto
         }
         final Method actionMethod = findMethod(CustomerRepository.class, "someAction");
         
-        facetFactory.process(new ProcessMethodContext(CustomerRepository.class, null, null, actionMethod, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(CustomerRepository.class, null, actionMethod, methodRemover, facetedMethod));
         
         final NotContributedFacet facet = facetedMethod.getFacet(NotContributedFacet.class);
         assertNotNull(facet);

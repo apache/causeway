@@ -52,7 +52,7 @@ public class HiddenAnnotationOnActionFacetFactoryTest extends AbstractFacetFacto
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        facetFactory.processHidden(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
+        facetFactory.processHidden(new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetedMethod));
 
         final HiddenFacetForHiddenAnnotationOnAction facet = facetedMethod.getFacet(HiddenFacetForHiddenAnnotationOnAction.class);
         assertNotNull(facet);
@@ -68,7 +68,7 @@ public class HiddenAnnotationOnActionFacetFactoryTest extends AbstractFacetFacto
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        facetFactory.processHidden(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
+        facetFactory.processHidden(new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetedMethod));
 
         final HiddenFacetForHiddenAnnotationOnAction facet = facetedMethod.getFacet(HiddenFacetForHiddenAnnotationOnAction.class);
 
@@ -83,7 +83,7 @@ public class HiddenAnnotationOnActionFacetFactoryTest extends AbstractFacetFacto
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        facetFactory.processHidden(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
+        facetFactory.processHidden(new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetedMethod));
 
         final HiddenFacetForHiddenAnnotationOnAction facet = facetedMethod.getFacet(HiddenFacetForHiddenAnnotationOnAction.class);
 
@@ -98,7 +98,7 @@ public class HiddenAnnotationOnActionFacetFactoryTest extends AbstractFacetFacto
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        facetFactory.processHidden(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
+        facetFactory.processHidden(new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetedMethod));
 
         final HiddenFacetForHiddenAnnotationOnAction facet = facetedMethod.getFacet(HiddenFacetForHiddenAnnotationOnAction.class);
 
@@ -113,7 +113,7 @@ public class HiddenAnnotationOnActionFacetFactoryTest extends AbstractFacetFacto
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        facetFactory.processHidden(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
+        facetFactory.processHidden(new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetedMethod));
 
         final HiddenFacetForHiddenAnnotationOnAction facet = facetedMethod.getFacet(HiddenFacetForHiddenAnnotationOnAction.class);
 
@@ -129,7 +129,7 @@ public class HiddenAnnotationOnActionFacetFactoryTest extends AbstractFacetFacto
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        facetFactory.processHidden(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
+        facetFactory.processHidden(new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetedMethod));
 
         final HiddenFacetForHiddenAnnotationOnAction facet = facetedMethod.getFacet(HiddenFacetForHiddenAnnotationOnAction.class);
 
@@ -146,7 +146,7 @@ public class HiddenAnnotationOnActionFacetFactoryTest extends AbstractFacetFacto
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        facetFactory.processHidden(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
+        facetFactory.processHidden(new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetedMethod));
 
         final HiddenFacetForHiddenAnnotationOnAction facet = facetedMethod.getFacet(HiddenFacetForHiddenAnnotationOnAction.class);
 

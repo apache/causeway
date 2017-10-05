@@ -19,9 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets.members.describedas.annotprop;
 
-import java.util.Properties;
-
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.ContributeeMemberFacetFactory;
@@ -39,11 +36,7 @@ public class DescribedAsFacetOnMemberFactory extends FacetFactoryAbstract implem
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
 
-        DescribedAsFacet facet = createFromMetadataPropertiesIfPossible(processMethodContext);
-        
-        if (facet == null) {
-            facet = createFromAnnotationOnReturnTypeIfPossible(processMethodContext);
-        }
+        DescribedAsFacet facet = createFromAnnotationOnReturnTypeIfPossible(processMethodContext);
 
         // no-op if null
         FacetUtil.addFacet(facet);
@@ -51,20 +44,9 @@ public class DescribedAsFacetOnMemberFactory extends FacetFactoryAbstract implem
 
     @Override
     public void process(ProcessContributeeMemberContext processMemberContext) {
-        DescribedAsFacet facet = createFromMetadataPropertiesIfPossible(processMemberContext);
-        // no-op if null
-        FacetUtil.addFacet(facet);
     }
     
-    private static DescribedAsFacet createFromMetadataPropertiesIfPossible(
-            final ProcessContextWithMetadataProperties<? extends FacetHolder> pcwmp) {
-        
-        final FacetHolder holder = pcwmp.getFacetHolder();
-        
-        final Properties properties = pcwmp.metadataProperties("describedAs");
-        return properties != null ? new DescribedAsFacetOnMemberFromProperties(properties, holder) : null;
-    }
-    
+
 
     private DescribedAsFacet createFromAnnotationOnReturnTypeIfPossible(final ProcessMethodContext processMethodContext) {
         final Class<?> returnType = processMethodContext.getMethod().getReturnType();

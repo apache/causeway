@@ -48,7 +48,7 @@ public class MandatoryAnnotationFacetFactoryTest extends AbstractFacetFactoryTes
         }
         final Method method = findMethod(Customer.class, "getFirstName");
 
-        facetFactory.processOptional(new ProcessMethodContext(Customer.class, null, null, method, methodRemover, facetedMethod));
+        facetFactory.processOptional(new ProcessMethodContext(Customer.class, null, method, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(MandatoryFacet.class);
         assertNotNull(facet);
