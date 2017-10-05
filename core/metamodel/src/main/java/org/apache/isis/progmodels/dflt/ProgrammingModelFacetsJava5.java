@@ -64,7 +64,6 @@ import org.apache.isis.core.metamodel.facets.object.callbacks.PersistCallbackFac
 import org.apache.isis.core.metamodel.facets.object.callbacks.PersistCallbackViaSaveMethodFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.callbacks.RemoveCallbackFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdateCallbackFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.choices.boundedmarkerifc.ChoicesFacetFromBoundedMarkerInterfaceFactory;
 import org.apache.isis.core.metamodel.facets.object.choices.enums.EnumFacetUsingValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.object.cssclass.method.CssClassFacetMethodFactory;
 import org.apache.isis.core.metamodel.facets.object.defaults.annotcfg.DefaultedFacetAnnotationElseConfigurationFactory;
@@ -282,7 +281,6 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
 
         addFactory(new BookmarkPolicyFacetViaBookmarkableAnnotationElseFallbackFactory());
         addFactory(new HomePageFacetAnnotationFactory());
-        addFactory(new ChoicesFacetFromBoundedMarkerInterfaceFactory());
 
         addFactory(new DefaultedFacetAnnotationElseConfigurationFactory());
         addFactory(new PropertyDefaultFacetDerivedFromTypeFactory());

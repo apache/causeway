@@ -81,6 +81,8 @@ org.apache.isis.applib.annotation
 
 org.apache.isis.applib.marker
 
+    Bounded.java
+
     NotPersistable.java
     ProgramPersistable.java
 
@@ -176,7 +178,6 @@ org.apache.isis.applib.fixturescripts
 
 org.apache.isis.applib.marker - remove these marker interaces (tend to use annotations in preference)
     Auditable.java
-    Bounded.java
 
 
 org.apache.isis.applib.services.actinvoc
