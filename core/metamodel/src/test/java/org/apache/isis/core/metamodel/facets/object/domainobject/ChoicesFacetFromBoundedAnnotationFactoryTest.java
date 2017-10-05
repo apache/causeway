@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets.object.domainobject;
 
-import org.apache.isis.applib.annotation.Bounded;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
@@ -45,7 +44,6 @@ public class ChoicesFacetFromBoundedAnnotationFactoryTest extends AbstractFacetF
     }
 
     public void testBoundedAnnotationPickedUpOnClass() {
-        @Bounded
         class Customer {
         }
 

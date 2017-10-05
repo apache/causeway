@@ -43,12 +43,6 @@ The annotations listed in the table below are still supported by Apache Isis, bu
 |UI
 |
 
-|`@Bounded`
-|Bounded (and limited) number of instances of an entity type, translates into a drop-down for any property of that type.
-|xref:../rgant/rgant.adoc#_rgant-DomainObject_bounded[`@DomainObject#bounded()`]
-|Domain
-|
-
 |`@Bulk`
 |Indicates an action is a bulk action, can be applied to multiple instances.
 |xref:../rgant/rgant.adoc#_rgant-Action_invokeOn[`@Action#invokeOn()`]

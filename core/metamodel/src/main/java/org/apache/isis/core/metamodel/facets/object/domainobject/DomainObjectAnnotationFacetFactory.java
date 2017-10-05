@@ -28,7 +28,6 @@ import com.google.common.collect.Maps;
 
 import org.apache.isis.applib.annotation.Audited;
 import org.apache.isis.applib.annotation.AutoComplete;
-import org.apache.isis.applib.annotation.Bounded;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Immutable;
 import org.apache.isis.applib.annotation.Nature;
@@ -66,7 +65,6 @@ import org.apache.isis.core.metamodel.facets.object.domainobject.auditing.Audita
 import org.apache.isis.core.metamodel.facets.object.domainobject.autocomplete.AutoCompleteFacetForAutoCompleteAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.autocomplete.AutoCompleteFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.choices.ChoicesFacetForDomainObjectAnnotation;
-import org.apache.isis.core.metamodel.facets.object.domainobject.choices.ChoicesFacetFromBoundedAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.editing.ImmutableFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.objectspecid.ObjectSpecIdFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.objectspecid.ObjectSpecIdFacetForJdoPersistenceCapableAnnotation;
@@ -98,7 +96,6 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
 
     private final MetaModelValidatorForDeprecatedAnnotation auditedValidator = new MetaModelValidatorForDeprecatedAnnotation(Audited.class);
     private final MetaModelValidatorForDeprecatedAnnotation autoCompleteValidator = new MetaModelValidatorForDeprecatedAnnotation(AutoComplete.class);
-    private final MetaModelValidatorForDeprecatedAnnotation boundedValidator = new MetaModelValidatorForDeprecatedAnnotation(Bounded.class);
     private final MetaModelValidatorForDeprecatedAnnotation immutableValidator = new MetaModelValidatorForDeprecatedAnnotation(Immutable.class);
     private final MetaModelValidatorForDeprecatedAnnotation objectTypeValidator = new MetaModelValidatorForDeprecatedAnnotation(ObjectType.class);
     private final MetaModelValidatorForValidationFailures autoCompleteInvalid = new MetaModelValidatorForValidationFailures();
@@ -284,19 +281,8 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
         final DomainObject domainObject = Annotations.getAnnotation(cls, DomainObject.class);
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
-        // check for the deprecated @Bounded annotation first
-        final Bounded annotation = Annotations.getAnnotation(processClassContext.getCls(), Bounded.class);
-        Facet facet = boundedValidator.flagIfPresent(
-            ChoicesFacetFromBoundedAnnotation.create(annotation, processClassContext.getFacetHolder(),
-                    getDeploymentCategory(),
-                    getAuthenticationSessionProvider(),
-                    persistenceSessionServiceInternal));
-
-        // else check from @DomainObject(bounded=...)
-        if(facet == null) {
-            facet = ChoicesFacetForDomainObjectAnnotation.create(domainObject, facetHolder, getDeploymentCategory(),
-                    getAuthenticationSessionProvider(), persistenceSessionServiceInternal);
-        }
+        // check from @DomainObject(bounded=...)
+        Facet facet = ChoicesFacetForDomainObjectAnnotation.create(domainObject, facetHolder, getDeploymentCategory(), getAuthenticationSessionProvider(), persistenceSessionServiceInternal);
 
         // then add
         FacetUtil.addFacet(facet);
@@ -570,7 +556,6 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
 
         metaModelValidator.add(auditedValidator);
         metaModelValidator.add(autoCompleteValidator);
-        metaModelValidator.add(boundedValidator);
         metaModelValidator.add(immutableValidator);
         metaModelValidator.add(objectTypeValidator);
 
@@ -588,7 +573,6 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
 
         auditedValidator.setConfiguration(configuration);
         autoCompleteValidator.setConfiguration(configuration);
-        boundedValidator.setConfiguration(configuration);
         immutableValidator.setConfiguration(configuration);
         objectTypeValidator.setConfiguration(configuration);
 

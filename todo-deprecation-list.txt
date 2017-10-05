@@ -35,7 +35,7 @@ org.apache.isis.applib.annotation
     PublishedObject.java - entire annotation, use @DomainObject(publishing=...) instead
     PublishingPayloadFactoryForAction.java - entire annotation, replaced with simpler PublisherService SPI
     PublishingPayloadFactoryForObject.java - entire annotation, replaced with simpler PublisherService SPI
-        
+
     ActionSemantics.java  - entire annotation, use @Action(semantics=...)
     Idempotent.java - entire annotation, use @Action(semantics=...) instead.
     QueryOnly.java - entire annotation, use @Action(semantics=...) instead.
@@ -45,6 +45,7 @@ org.apache.isis.applib.annotation
 
     Aggregated.java - entire annotation, not supported internally
 
+    Bounded.java - entire annotation, use @DomainObject(bounded=...)
 
     CollectionLayout.java
         render() - use @CollectionLayout(defaultView=...) instead
@@ -113,7 +114,6 @@ org.apache.isis.applib.annotation
 
     AutoComplete.java - entire annotation, use @DomainObject(autoComplete...=...)
     Bookmarkable.java - entire annotation, use @DomainObjectLayout(bookmarking=...)
-    Bounded.java - entire annotation, use @DomainObject(bounded=...)
 
     Bulk.java - entire annotation, use @Action(invokeOn=...)
     Bulk.InteractionContext - entire service, use ActionInvocationContext service instead
