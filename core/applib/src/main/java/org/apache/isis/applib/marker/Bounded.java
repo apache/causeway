@@ -24,6 +24,9 @@ package org.apache.isis.applib.marker;
  * are loaded on first use and are not refreshed.
  * 
  * Use {@link Bounded} annotation in preference to this marker interface.
+ *
+ * @deprecated
  */
+@Deprecated
 public interface Bounded {
 }

@@ -33,8 +33,11 @@ import org.apache.isis.applib.services.audit.AuditingService3;
  * 
  * <p>
  * Alternatively can use the similarly named {@link org.apache.isis.applib.annotation.Audited annotation}.
- * 
+ *
+ *
+ * @deprecated
  */
+@Deprecated
 public interface Auditable {
 
 }
