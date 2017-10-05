@@ -88,7 +88,6 @@ import org.apache.isis.core.metamodel.facets.object.ignore.javalang.RemoveMethod
 import org.apache.isis.core.metamodel.facets.object.ignore.jdo.RemoveJdoEnhancementTypesFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.ignore.jdo.RemoveJdoPrefixedMethodsFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.immutable.immutableannot.CopyImmutableFacetOntoMembersFactory;
-import org.apache.isis.core.metamodel.facets.object.immutable.immutablemarkerifc.ImmutableFacetMarkerInterfaceFactory;
 import org.apache.isis.core.metamodel.facets.object.membergroups.annotprop.MemberGroupLayoutFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacetForMixinAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.classname.ObjectSpecIdFacetDerivedFromClassNameFactory;
@@ -324,7 +323,6 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(new DisabledObjectFacetViaMethodFactory());
 
         addFactory(new CopyImmutableFacetOntoMembersFactory());
-        addFactory(new ImmutableFacetMarkerInterfaceFactory());
 
         addFactory(new RecreatableObjectFacetFactory());
         addFactory(new JaxbXmlJavaTypeAdapterFacetFactory());
