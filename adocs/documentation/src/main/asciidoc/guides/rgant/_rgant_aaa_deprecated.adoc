@@ -151,11 +151,6 @@ Also part of the toString representation of bookmarks, if using the Bookmark Ser
 |Domain
 |
 
-|`@Paged`
-|Number of instances to display in tables representing (standalone or parented) collections.
-|`#paged()` attribute for xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_paged[`@DomainObjectLayout`] or xref:../rgant/rgant.adoc#_rgant-CollectionLayout_paged[`@CollectionLayout`]
-|UI
-|Yes
 
 |`@Prototype`
 |Indicates that an action should only be visible in 'prototype' mode.

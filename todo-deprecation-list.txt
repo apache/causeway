@@ -57,6 +57,7 @@ org.apache.isis.applib.annotation
 
     RenderedAsDayBefore.java - entire annotation, use @PropertyLayout(renderedAsDayBefore=...) and @ParameterLayout(renderedAsDayBefore=...)
 
+    Paged.java - entire annotation, use @DomainObjectLayout(paged=...) or @CollectionLayout(paged=...) instead.
     SortedBy.java - entire annotation, use @CollectionLayout(sortedBy=...) instead
 
     TypicalLength.java - entire annotation, use @PropertyLayout(typicalLength=...) instead.
@@ -124,7 +125,6 @@ org.apache.isis.applib.annotation
     NotPersisted.java - entire annotation, use @Property(notPersisted=...) instead
 
     ObjectType.java - entire annotation, use @DomainObject(objectType=...) or @javax.jdo.annotations.Discriminator instead.
-    Paged.java - entire annotation, use @DomainObjectLayout(paged=...) or @CollectionLayout(paged=...) instead.
 
     Parameter.java
         minLength() attribute; not supported.  For autocomplete, use @MinLength annotation.

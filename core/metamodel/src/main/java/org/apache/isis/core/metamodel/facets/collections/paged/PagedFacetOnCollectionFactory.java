@@ -21,27 +21,19 @@ package org.apache.isis.core.metamodel.facets.collections.paged;
 
 import java.util.Properties;
 
-import org.apache.isis.applib.annotation.Paged;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
-import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.ContributeeMemberFacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.paged.PagedFacet;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
 
 /**
  * @deprecated
  */
 @Deprecated
 public class PagedFacetOnCollectionFactory extends FacetFactoryAbstract
-        implements ContributeeMemberFacetFactory, MetaModelValidatorRefiner {
+        implements ContributeeMemberFacetFactory {
 
-    private final MetaModelValidatorForDeprecatedAnnotation validator = new MetaModelValidatorForDeprecatedAnnotation(Paged.class);
 
 
     public PagedFacetOnCollectionFactory() {
@@ -52,9 +44,6 @@ public class PagedFacetOnCollectionFactory extends FacetFactoryAbstract
     public void process(final ProcessMethodContext processMethodContext) {
         
         PagedFacet pagedFacet = createFromMetadataPropertiesIfPossible(processMethodContext);
-        if(pagedFacet == null) {
-            pagedFacet = validator.flagIfPresent(createFromPagedAnnotationIfPossible(processMethodContext), processMethodContext);
-        }
         // no-op if null
         FacetUtil.addFacet(pagedFacet);
     }
@@ -70,30 +59,6 @@ public class PagedFacetOnCollectionFactory extends FacetFactoryAbstract
         final Properties properties = processMethodContext.metadataProperties("paged");
         return properties != null ? new PagedFacetPropertiesOnCollection(properties, processMethodContext.getFacetHolder()) : null;
     }
-
-    private PagedFacet createFromPagedAnnotationIfPossible(final ProcessMethodContext processMethodContext) {
-        final Paged annotation = Annotations.getAnnotation(processMethodContext.getMethod(), Paged.class);
-        return annotation != null ? new PagedFacetForPagedAnnotationOnCollection(processMethodContext.getFacetHolder(), annotation.value()) : null;
-    }
-
-
-    @Override
-    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
-        metaModelValidator.add(validator);
-    }
-
-    // //////////////////////////////////////
-
-
-
-    @Override
-    public void setServicesInjector(final ServicesInjector servicesInjector) {
-        super.setServicesInjector(servicesInjector);
-        final IsisConfiguration configuration = getConfiguration();
-
-        validator.setConfiguration(configuration);
-    }
-
 
 
 
