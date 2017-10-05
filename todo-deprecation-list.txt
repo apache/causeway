@@ -80,8 +80,9 @@ org.apache.isis.applib.annotation
     NotPersistable.java - entire annotation, not supported and does nothing
 
 
-org.apache.isis.applib.marker
+org.apache.isis.applib.marker - remove these marker interfaces (tend to use annotations in preference)
 
+    Auditable.java
     Bounded.java
 
     NotPersistable.java
@@ -175,9 +176,6 @@ org.apache.isis.applib.fixturescripts
     FixtureScripts.java - remove deprecated methods;
                           framework provides an implementation of this service, and use FixtureScriptsSpecificatoinProvider to configure instead.
 
-
-org.apache.isis.applib.marker - remove these marker interaces (tend to use annotations in preference)
-    Auditable.java
 
 
 org.apache.isis.applib.services.actinvoc

@@ -27,7 +27,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.applib.annotation.Audited;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Immutable;
 import org.apache.isis.applib.services.HasTransactionId;
@@ -36,7 +35,6 @@ import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacet;
 import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
-import org.apache.isis.core.metamodel.facets.object.domainobject.auditing.AuditableFacetForAuditedAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.auditing.AuditableFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.auditing.AuditableFacetForDomainObjectAnnotationAsConfigured;
 import org.apache.isis.core.metamodel.facets.object.domainobject.auditing.AuditableFacetFromConfiguration;
@@ -118,7 +116,6 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
     public static class Auditing extends DomainObjectAnnotationFacetFactoryTest {
 
-        @Audited
         class CustomerWithAuditedAnnotation {
         }
 
@@ -185,39 +182,6 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
                 expectNoMethodsRemoved();
             }
-        }
-
-        public static class WithAuditedAnnotation extends Auditing {
-
-            @Before
-            public void setUp() throws Exception {
-                super.setUp();
-                allowingConfigurationToReturn("isis.services.audit.objects", null);
-            }
-
-            @Test
-            public void has_annotation() {
-
-                facetFactory.process(new ProcessClassContext(CustomerWithAuditedAnnotation.class, mockMethodRemover, facetHolder));
-
-                final Facet facet = facetHolder.getFacet(AuditableFacet.class);
-                Assert.assertNotNull(facet);
-                Assert.assertTrue(facet instanceof AuditableFacetForAuditedAnnotation);
-
-                expectNoMethodsRemoved();
-            }
-
-            @Test
-            public void does_not_have_annotation() {
-
-                facetFactory.process(new ProcessClassContext(DomainObjectAnnotationFacetFactoryTest.Customer.class, mockMethodRemover, facetHolder));
-
-                final Facet facet = facetHolder.getFacet(AuditableFacet.class);
-                Assert.assertNull(facet);
-
-                expectNoMethodsRemoved();
-            }
-
         }
 
         public static class WithDomainObjectAnnotationWithAuditingSetToAsConfigured extends Auditing {

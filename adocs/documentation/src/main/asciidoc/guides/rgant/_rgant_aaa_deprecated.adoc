@@ -22,13 +22,6 @@ The annotations listed in the table below are still supported by Apache Isis, bu
 |Layer
 |xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[File-based layout]?
 
-|`@Audited`
-|Audit changes to an object.
-|xref:../rgant/rgant.adoc#_rgant-DomainObject_auditing[`@DomainObject#` +
-`auditing()`]
-|Domain
-|
-
 |`@AutoComplete`
 |Repository method to search for entities
 |xref:../rgant/rgant.adoc#_rgant-DomainObject_autoCompleteRepository[`@DomainObject` +
