@@ -118,7 +118,7 @@ public List<ToDoItem> findByAtPathAndCategory(final String atPath, final Categor
 
 [NOTE]
 ====
-You can find the full example of the JDOQL equivalent in the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer_generic-repository-api[`DomainObjectContainer`]
+You can find the full example of the JDOQL equivalent in the xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-api_RepositoryService[`RepositoryService`]
 ====
 
 

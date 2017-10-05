@@ -83,7 +83,8 @@ repositoryService.persist(cust);
 
 You should be aware that by default Apache Isis queues up calls to `#persist()` and `#remove()`.  These are then executed either when the request completes (and the transaction commits), or if the queue is flushed.  This can be done either implicitly by the framework, or as the result of a direct call to `#flush()`.
 
-By default the framework itself will cause `#flush()` to be called whenever a query is executed by way of `#allMatches(Query)`, as documented xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer_generic-repository-api[above].  However, this behaviour can be disabled using the  xref:../rgcfg/rgcfg.adoc#_rgcfg_configuring-core[configuration property] `isis.services.container.disableAutoFlush`.
+By default the framework itself will cause `#flush()` to be called whenever a query is executed by way of `#allMatches(Query)`.
+However, this behaviour can be disabled using the  xref:../rgcfg/rgcfg.adoc#_rgcfg_configuring-core[configuration property] `isis.services.container.disableAutoFlush`.
 
 
 
