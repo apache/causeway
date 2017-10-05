@@ -731,15 +731,6 @@ To be safe, we recommend that you first run your application using `isis.reflect
 See xref:../ugbtb/ugbtb.adoc#_ugbtb_programming-model_finetuning[finetuning the programming model] for more details.
 
 
-|`isis.reflector.` +
-`layoutMetadataReaders`
-|`FQCN`,`FQCN2`,...
-|Fully qualified class names of classes to be instantiated to read layout metadata, as used in for xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[file-based layout]s. +
-
-See xref:../ugbtb/ugbtb.adoc#_ugbtb_programming-model_layout-metadata-reader[Layout Metadata Reader] for more information.
-
-
-
 |`isis.viewers.` +
 `paged.parented`
 |positive integer (12)

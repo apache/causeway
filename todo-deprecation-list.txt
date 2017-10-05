@@ -1,8 +1,12 @@
 
 
-
-
 DONE:
+
+    removed support for Xxx.layout.json
+    - "reflector.layoutMetadataReaders" config prop
+
+
+
 
 org.apache.isis.applib
 
@@ -292,9 +296,6 @@ sometimes there are multiple versions of a type, eg BookmarkService2 and Bookmar
 
 Also propose:
     make AppManifest mandatory
-    remove support for Xxx.layout.json
-
-    - "reflector.layoutMetadataReaders" config prop
 
     remove support for contributed services (use mixins instead)
 

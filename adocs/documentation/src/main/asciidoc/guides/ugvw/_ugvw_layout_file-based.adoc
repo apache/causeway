@@ -30,14 +30,6 @@ The `Xxx.layout.xml` file is just the serialized form of a xref:../rgcms/rgcms.a
 is that IDEs such as IntelliJ and Eclipse can provide "intellisense", making iteasy to author such layout files.
 
 
-[NOTE]
-====
-It is also possible to describe layouts using a `.layout.json` file.
-However, `.layout.json` support is deprecated; the ``.layout.xml`` file also enables much more sophisticated layouts than those afforded by ``.layout.json``.
-
-If you have an application with older `.layout.json` files, then it is possible to download initial `.layout.xml` files using the xref:../rgsvc/rgsvc.adoc#_rgsvc_metadata-api_LayoutService[`LayoutService`] (exposed as an action on the prototyping menu).
-The `.layout.json` file will be ignored once a `.layout.xml` file is present.
-====
 
 
 == Grids vs Components
@@ -358,7 +350,7 @@ There are four "styles":
 * minimal
 
 
-Ignorig the "current" style (which merely downloads the currently cached layout), the other three styles allow the developer to choose how much metadata is to be specified in the XML, and how much (if any) will be obtained elsewhere, either from annotations in the metamodel or from an earlier `.layout.json` file if present.
+Ignorig the "current" style (which merely downloads the currently cached layout), the other three styles allow the developer to choose how much metadata is to be specified in the XML, and how much (if any) will be obtained from annotations in the metamodel.
 The table below summarises the choices:
 
 .Table caption

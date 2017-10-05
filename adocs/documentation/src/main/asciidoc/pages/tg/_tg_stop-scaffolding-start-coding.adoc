@@ -511,7 +511,7 @@ Why are contributions so useful? Because the service action will match not on th
 That means that you can apply the http://en.wikipedia.org/wiki/Dependency_inversion_principle[dependency inversion principle] to ensure that the modules of your application have acyclic dependencies; but in the UI it can still appear as if there are bidirectional dependencies between those modules.
 The lack of bidirectional dependencies can help save your app degrading into a http://en.wikipedia.org/wiki/Big_ball_of_mud[big ball of mud].
 
-Finally, note that the layout of contributed actions/collections/properties can be specified using the `.layout.json` file (and it is highly recommended that you do so).
+Finally, note that the layout of contributed actions/collections/properties can be specified using the `.layout.xml` file (and it is highly recommended that you do so).
 
 === Contributed Actions
 
@@ -532,7 +532,7 @@ Finally, note that the layout of contributed actions/collections/properties can 
 * For this action:
 ** add the xref:../../guides/rgant/rgant.adoc#_rgant-ActionLayout_contributedAs[`@ActionLayout(contributedAs=ASSOCIATION)`] annotation
 ** should be rendered in the UI "as if" a collection of the entity
-* use `.layout.json` to position as required
+* use `.layout.xml` to position as required
 
 
 === Contributed Properties
@@ -542,7 +542,7 @@ Finally, note that the layout of contributed actions/collections/properties can 
 * For this action:
 ** add the xref:../../guides/rgant/rgant.adoc#_rgant-ActionLayout_contributedAs[`@ActionLayout(contributedAs=ASSOCIATION)`] annotation
 * should be rendered in the UI "as if" a property of the entity
-* use `.layout.json` to position as required
+* use `.layout.xml` to position as required
 
 
 
