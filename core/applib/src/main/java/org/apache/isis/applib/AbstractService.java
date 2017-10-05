@@ -21,7 +21,7 @@ package org.apache.isis.applib;
 
 import org.apache.isis.applib.annotation.Programmatic;
 
-public abstract class AbstractService extends AbstractContainedObject {
+public abstract class AbstractService {
 
     @Programmatic
     public String getId() {

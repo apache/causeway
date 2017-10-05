@@ -30,7 +30,7 @@ import java.io.Serializable;
  * <p>
  * See discussion in {@link QueryBuiltInAbstract} for further details.
  */
-public class QueryFindAllInstances<T> extends QueryBuiltInAbstract<T> {
+public class QueryFindAllInstances<T> extends QueryAbstract<T> {
 
     private static final long serialVersionUID = 1L;
 

@@ -576,7 +576,7 @@ public abstract class FixtureScript
             if(localNameOverride != null) {
                 childFixtureScript.setLocalName(localNameOverride);
             }
-            callingFixtureScript.getContainer().injectServicesInto(childFixtureScript);
+            callingFixtureScript.container.injectServicesInto(childFixtureScript);
 
             executeChildIfNotAlready(childFixtureScript);
 

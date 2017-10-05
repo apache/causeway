@@ -23,31 +23,38 @@ import org.apache.isis.applib.query.QueryFindAllInstances;
 import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 /**
  * Corresponds to {@link QueryFindAllInstances}
  */
-public class PersistenceQueryFindAllInstances extends PersistenceQueryBuiltInAbstract {
+public class PersistenceQueryFindAllInstances extends PersistenceQueryAbstract  {
+
+    protected long index;
+    protected long countedSoFar;
 
     public PersistenceQueryFindAllInstances(
             final ObjectSpecification specification,
-            final SpecificationLoader specificationLoader,
             final long... range) {
-        super(specification, specificationLoader, range);
+        super(specification, range);
         index=0;
         countedSoFar=0;
     }
-    
 
-    /**
-     * Returns true so it matches all instances.
-     */
-    @Override
+
     public boolean matches(final ObjectAdapter object) {
-        return matchesRange(true);
+
+        if (getCount() == 0 && getStart() == 0){
+            return true;
+        }
+        if (index++ < start){
+            return false;
+        }
+        if (countedSoFar++ < count){
+            return true;
+        }
+        return false;
     }
-    
+
     @Override
     public String toString() {
         final ToString str = ToString.createAnonymous(this);

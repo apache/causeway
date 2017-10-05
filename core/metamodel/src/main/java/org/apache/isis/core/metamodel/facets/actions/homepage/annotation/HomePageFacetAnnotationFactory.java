@@ -23,7 +23,6 @@ import java.util.List;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import org.apache.isis.applib.annotation.HomePage;
-import org.apache.isis.applib.services.homepage.AbstractHomePageDashboardService;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -72,10 +71,6 @@ public class HomePageFacetAnnotationFactory extends FacetFactoryAbstract impleme
             @Override
             public boolean visit(ObjectSpecification objectSpec, ValidationFailures validationFailures) {
                 final List<ObjectAction> objectActions = objectSpec.getObjectActions(Contributed.EXCLUDED);
-                if(objectSpec.getCorrespondingClass() == AbstractHomePageDashboardService.class) {
-                    // ignore this one
-                    return true;
-                }
                 for (ObjectAction objectAction : objectActions) {
                     if(objectAction.containsFacet(HomePageFacet.class)) {
                         final String fullIdentifier = objectAction.getIdentifier().toClassAndNameIdentityString();

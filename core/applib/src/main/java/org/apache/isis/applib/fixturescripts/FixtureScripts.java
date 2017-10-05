@@ -31,6 +31,7 @@ import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.AbstractService;
+import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.ViewModel;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.MemberOrder;
@@ -47,6 +48,7 @@ import org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault;
 import org.apache.isis.applib.services.fixturespec.FixtureScriptsSpecification;
 import org.apache.isis.applib.services.memento.MementoService;
 import org.apache.isis.applib.services.memento.MementoService.Memento;
+import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.applib.util.ObjectContracts;
 
 /**
@@ -354,12 +356,13 @@ public abstract class FixtureScripts extends AbstractService {
             if(!template.isDiscoverable()) {
                 return null;
             }
-            return getContainer().newViewModelInstance(fixtureScriptCls, mementoFor(template));
+            return container.newViewModelInstance(fixtureScriptCls, mementoFor(template));
         } catch(final Exception ex) {
             // ignore if does not have a no-arg constructor or cannot be instantiated
             return null;
         }
     }
+
 
     //endregion
 
@@ -386,7 +389,7 @@ public abstract class FixtureScripts extends AbstractService {
         // if this method is called programmatically, the caller may have simply new'd up the fixture script
         // (rather than use container.newTransientInstance(...).  To allow this use case, we need to ensure that
         // domain services are injected into the fixture script.
-        getContainer().injectServicesInto(fixtureScript);
+        container.injectServicesInto(fixtureScript);
 
         return fixtureScript.run(parameters);
     }
@@ -482,12 +485,12 @@ public abstract class FixtureScripts extends AbstractService {
         if(object == null) {
             return null;
         }
-        if (object instanceof ViewModel || getContainer().isPersistent(object)) {
+        if (object instanceof ViewModel || container.isPersistent(object)) {
             // continue
         } else {
             switch(getNonPersistedObjectsStrategy()) {
                 case PERSIST:
-                    getContainer().flush();
+                    container.flush();
                     break;
                 case IGNORE:
                     return null;
@@ -504,7 +507,7 @@ public abstract class FixtureScripts extends AbstractService {
     @Programmatic
     String titleOf(final FixtureResult fixtureResult) {
         final Object object = fixtureResult.getObject();
-        return object != null? getContainer().titleOf(object): "(null)";
+        return object != null? titleService.titleOf(object): "(null)";
     }
 
     //endregion
@@ -512,16 +515,22 @@ public abstract class FixtureScripts extends AbstractService {
     //region > injected services
 
     @javax.inject.Inject
-    private MementoService mementoService;
+    DomainObjectContainer container;
     
     @javax.inject.Inject
-    private BookmarkService bookmarkService;
+    TitleService titleService;
 
     @javax.inject.Inject
-    private ClassDiscoveryService classDiscoveryService;
+    MementoService mementoService;
 
     @javax.inject.Inject
-    private ExecutionParametersService executionParametersService;
+    BookmarkService bookmarkService;
+
+    @javax.inject.Inject
+    ClassDiscoveryService classDiscoveryService;
+
+    @javax.inject.Inject
+    ExecutionParametersService executionParametersService;
 
     //endregion
 

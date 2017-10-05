@@ -25,8 +25,6 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
-import com.google.common.base.Predicate;
-
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.PersistFailedException;
 import org.apache.isis.applib.RecoverableException;
@@ -34,9 +32,6 @@ import org.apache.isis.applib.RepositoryException;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.filter.Filter;
-import org.apache.isis.applib.filter.Filters;
-import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.security.UserMemento;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
@@ -50,15 +45,12 @@ import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.xactn.TransactionService;
-import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
-import org.apache.isis.core.metamodel.services.container.query.QueryFindByPattern;
-import org.apache.isis.core.metamodel.services.container.query.QueryFindByTitle;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
@@ -453,138 +445,10 @@ public class DomainObjectContainerDefault
 
     //endregion
 
-    //region > allInstances, allMatches, uniqueMatch, firstMatch
-
-    @Programmatic
-    @Override
-    public <T> List<T> allInstances(final Class<T> type, long... range) {
-        return repositoryService.allInstances(type, range);
-    }
 
     // //////////////////////////////////////////////////////////////////
 
-    @Programmatic
-    @Override
-    public <T> List<T> allMatches(final Class<T> cls, final Predicate<? super T> predicate, long... range) {
-        return repositoryService.allMatches(cls, predicate, range);
-    }
 
-    @Programmatic
-    @Deprecated
-    @Override
-    public <T> List<T> allMatches(final Class<T> cls, final Filter<? super T> filter, long... range) {
-        return allMatches(cls, Filters.asPredicate(filter), range);
-    }
-
-    @Programmatic
-    @Override
-    public <T> List<T> allMatches(final Class<T> type, final T pattern, long... range) {
-        Assert.assertTrue("pattern not compatible with type", type.isAssignableFrom(pattern.getClass()));
-        return allMatches(new QueryFindByPattern<T>(type, pattern, range));
-    }
-
-    @Programmatic
-    @Override
-    public <T> List<T> allMatches(final Class<T> type, final String title, long... range) {
-        return allMatches(new QueryFindByTitle<T>(type, title, range));
-    }
-
-    @Programmatic
-    @Override
-    public <T> List<T> allMatches(final Query<T> query) {
-        return repositoryService.allMatches(query);
-    }
-
-    // //////////////////////////////////////////////////////////////////
-
-    @Programmatic
-    @Override
-    public <T> T firstMatch(final Class<T> cls, final Predicate<T> predicate) {
-        return repositoryService.firstMatch(cls, predicate);
-    }
-
-    @Programmatic
-    @Deprecated
-    @Override
-    public <T> T firstMatch(final Class<T> cls, final Filter<T> filter) {
-        return firstMatch(cls, Filters.asPredicate(filter));
-    }
-
-    @Programmatic
-    @Override
-    public <T> T firstMatch(final Class<T> type, final T pattern) {
-        final List<T> instances = allMatches(type, pattern, 0, 1); // No need to fetch more than 1
-        return firstInstanceElseNull(instances);
-    }
-
-    @Programmatic
-    @Override
-    public <T> T firstMatch(final Class<T> type, final String title) {
-        final List<T> instances = allMatches(type, title, 0, 1); // No need to fetch more than 1
-        return firstInstanceElseNull(instances);
-    }
-
-    @Programmatic
-    @Override
-    @SuppressWarnings("unchecked")
-    public <T> T firstMatch(final Query<T> query) {
-        // NB: this impl does NOT delegate to RepositoryService, because this implementation incorrectly always performs a flush
-        // irrespective of the autoflush setting.  (The RepositoryService corrects that error).
-        flush(); // auto-flush any pending changes
-        final ObjectAdapter firstMatching = persistenceSessionServiceInternal.firstMatchingQuery(query);
-        return (T) ObjectAdapter.Util.unwrap(firstMatching);
-    }
-
-    // //////////////////////////////////////////////////////////////////
-
-    @Programmatic
-    @Override
-    public <T> T uniqueMatch(final Class<T> type, final Predicate<T> predicate) {
-        return repositoryService.uniqueMatch(type, predicate);
-    }
-
-    @Programmatic
-    @Deprecated
-    @Override
-    public <T> T uniqueMatch(final Class<T> type, final Filter<T> filter) {
-        final List<T> instances = allMatches(type, filter, 0, 2); // No need to fetch more than 2.
-        if (instances.size() > 1) {
-            throw new RepositoryException("Found more than one instance of " + type + " matching filter " + filter);
-        }
-        return firstInstanceElseNull(instances);
-    }
-
-    @Programmatic
-    @Override
-    public <T> T uniqueMatch(final Class<T> type, final T pattern) {
-        final List<T> instances = allMatches(type, pattern, 0, 2); // No need to fetch more than 2.
-        if (instances.size() > 1) {
-            throw new RepositoryException("Found more that one instance of " + type + " matching pattern " + pattern);
-        }
-        return firstInstanceElseNull(instances);
-    }
-
-    @Programmatic
-    @Override
-    public <T> T uniqueMatch(final Class<T> type, final String title) {
-        final List<T> instances = allMatches(type, title, 0, 2); // No need to fetch more than 2.
-        if (instances.size() > 1) {
-            throw new RepositoryException("Found more that one instance of " + type + " with title " + title);
-        }
-        return firstInstanceElseNull(instances);
-    }
-
-    @Programmatic
-    @Override
-    public <T> T uniqueMatch(final Query<T> query) {
-        return repositoryService.uniqueMatch(query);
-    }
-
-    private static <T> T firstInstanceElseNull(final List<T> instances) {
-        return instances.size() == 0 ? null : instances.get(0);
-    }
-
-    //endregion
 
     //region > ExceptionRecognizer
 

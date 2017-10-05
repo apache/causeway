@@ -19,19 +19,16 @@
 
 package org.apache.isis.progmodel.wrapper.dom.employees;
 
-import org.apache.isis.applib.AbstractDomainObject;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.progmodel.wrapper.dom.claims.Approver;
 import org.apache.isis.progmodel.wrapper.dom.claims.Claimant;
 
-public class Employee extends AbstractDomainObject implements Claimant, Approver {
+public class Employee implements Claimant, Approver {
 
-    // {{ Title
     public String title() {
         return getName();
     }
 
-    // }}
 
     // {{ Name
     private String name;

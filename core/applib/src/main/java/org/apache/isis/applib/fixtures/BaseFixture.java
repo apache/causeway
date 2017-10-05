@@ -18,7 +18,6 @@
  */
 package org.apache.isis.applib.fixtures;
 
-import org.apache.isis.applib.AbstractContainedObject;
 import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
@@ -27,7 +26,7 @@ import org.apache.isis.applib.fixturescripts.FixtureScript;
  * @deprecated - use {@link FixtureScript} instead.
  */
 @Deprecated
-abstract class BaseFixture extends AbstractContainedObject implements InstallableFixture {
+abstract class BaseFixture implements InstallableFixture {
 
     private final FixtureType fixtureType;
     FixtureClock clock = null;

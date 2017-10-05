@@ -33,7 +33,7 @@ package org.apache.isis.applib;
  *
  * @see org.apache.isis.applib.DomainObjectContainer
  */
-public abstract class AbstractViewModel extends AbstractContainedObject implements ViewModel {
+public abstract class AbstractViewModel implements ViewModel {
 
     @Override
     public abstract String viewModelMemento();
