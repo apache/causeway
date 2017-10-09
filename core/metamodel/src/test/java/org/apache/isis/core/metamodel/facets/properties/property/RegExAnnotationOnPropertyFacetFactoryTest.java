@@ -20,8 +20,11 @@
 package org.apache.isis.core.metamodel.facets.properties.property;
 
 import java.lang.reflect.Method;
+
+import javax.validation.constraints.Pattern;
+
 import org.junit.Before;
-import org.apache.isis.applib.annotation.RegEx;
+
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
@@ -42,7 +45,7 @@ public class RegExAnnotationOnPropertyFacetFactoryTest extends AbstractFacetFact
 
         class Customer {
             @SuppressWarnings("unused")
-            @RegEx(validation = "^A.*", caseSensitive = false)
+            @Pattern(regexp = "^A.*", flags = { Pattern.Flag.CASE_INSENSITIVE })
             public String getFirstName() {
                 return null;
             }
@@ -55,15 +58,14 @@ public class RegExAnnotationOnPropertyFacetFactoryTest extends AbstractFacetFact
         assertNotNull(facet);
         assertTrue(facet instanceof RegExFacetForRegExAnnotationOnProperty);
         final RegExFacetForRegExAnnotationOnProperty regExFacet = (RegExFacetForRegExAnnotationOnProperty) facet;
-        assertEquals("^A.*", regExFacet.validation());
-        assertEquals(false, regExFacet.caseSensitive());
+        assertEquals("^A.*", regExFacet.regexp());
+        assertEquals(2, regExFacet.patternFlags());
     }
 
     public void testRegExAnnotationIgnoredForNonStringsProperty() {
 
         class Customer {
             @SuppressWarnings("unused")
-            @RegEx(validation = "^A.*", caseSensitive = false)
             public int getNumberOfOrders() {
                 return 0;
             }

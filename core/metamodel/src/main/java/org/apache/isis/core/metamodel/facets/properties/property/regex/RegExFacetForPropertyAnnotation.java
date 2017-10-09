@@ -56,24 +56,13 @@ public class RegExFacetForPropertyAnnotation extends RegExFacetAbstract {
     }
 
     private RegExFacetForPropertyAnnotation(final String pattern, final int patternFlags, final FacetHolder holder, final String replacement) {
-        super(pattern, "", (patternFlags & Pattern.CASE_INSENSITIVE) == Pattern.CASE_INSENSITIVE, holder, replacement);
-        this.pattern = Pattern.compile(pattern, patternFlags);
-    }
-
-    /**
-     * Unused (for the TitledFacet)
-     */
-    @Override
-    public String format(String text) {
-        return text;
+        super(pattern, patternFlags, replacement, holder);
+        this.pattern = Pattern.compile(pattern, patternFlags());
     }
 
     @Override
     public boolean doesNotMatch(final String text) {
-        if (text == null) {
-            return true;
-        }
-        return !pattern.matcher(text).matches();
+        return text == null || !pattern.matcher(text).matches();
     }
 
 

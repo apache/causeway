@@ -91,7 +91,6 @@ import org.apache.isis.core.metamodel.facets.object.plural.staticmethod.PluralFa
 import org.apache.isis.core.metamodel.facets.object.recreatable.DisabledFacetOnCollectionDerivedFromViewModelFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.recreatable.DisabledFacetOnPropertyDerivedFromRecreatableObjectFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.recreatable.RecreatableObjectFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.regex.annotation.RegExFacetOnTypeAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.title.methods.TitleFacetViaMethodsFactory;
 import org.apache.isis.core.metamodel.facets.object.validating.validateobject.method.ValidateObjectFacetMethodFactory;
@@ -354,8 +353,6 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
 
         // must come after any facets that install titles
         
-        addFactory(new RegExFacetOnTypeAnnotationFactory());
-
         addFactory(new TypicalLengthFacetOnPropertyDerivedFromTypeFacetFactory());
         addFactory(new TypicalLengthFacetOnParameterDerivedFromTypeFacetFactory());
 

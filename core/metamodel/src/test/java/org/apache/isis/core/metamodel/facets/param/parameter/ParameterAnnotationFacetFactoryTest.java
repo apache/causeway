@@ -300,8 +300,8 @@ public class ParameterAnnotationFacetFactoryTest extends AbstractFacetFactoryJUn
             final RegExFacet regExFacet = facetedMethodParameter.getFacet(RegExFacet.class);
             Assert.assertNotNull(regExFacet);
             Assert.assertTrue(regExFacet instanceof RegExFacetForParameterAnnotation);
-            assertThat(regExFacet.caseSensitive(), is(false));
-            assertThat(regExFacet.validation(), is("[123].*"));
+            assertThat(regExFacet.patternFlags(), is(10));
+            assertThat(regExFacet.regexp(), is("[123].*"));
         }
 
         @Test

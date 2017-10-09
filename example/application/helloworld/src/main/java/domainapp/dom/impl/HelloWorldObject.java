@@ -96,7 +96,9 @@ public class HelloWorldObject implements Comparable<HelloWorldObject> {
 
     @Override
     public int compareTo(final HelloWorldObject other) {
-        return Ordering.natural().onResultOf(HelloWorldObject::getName).compare(this, other);
+        return Ordering.natural()
+                .onResultOf(HelloWorldObject::getName)
+                .compare(this, other);
     }
 
 

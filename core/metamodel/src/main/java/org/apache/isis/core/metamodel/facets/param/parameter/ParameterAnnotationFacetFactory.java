@@ -23,9 +23,9 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
 import javax.annotation.Nullable;
+import javax.validation.constraints.Pattern;
 
 import org.apache.isis.applib.annotation.Parameter;
-import org.apache.isis.applib.annotation.RegEx;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -35,7 +35,6 @@ import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.regex.RegExFacet;
-import org.apache.isis.core.metamodel.facets.objectvalue.regex.TitleFacetFormattedByRegex;
 import org.apache.isis.core.metamodel.facets.param.parameter.fileaccept.FileAcceptFacetForParameterAnnotation;
 import org.apache.isis.core.metamodel.facets.param.parameter.mandatory.MandatoryFacetForParameterAnnotation;
 import org.apache.isis.core.metamodel.facets.param.parameter.mandatory.MandatoryFacetInvertedByNullableAnnotationOnParameter;
@@ -43,14 +42,11 @@ import org.apache.isis.core.metamodel.facets.param.parameter.maxlen.MaxLengthFac
 import org.apache.isis.core.metamodel.facets.param.parameter.mustsatisfy.MustSatisfySpecificationFacetForParameterAnnotation;
 import org.apache.isis.core.metamodel.facets.param.parameter.regex.RegExFacetForParameterAnnotation;
 import org.apache.isis.core.metamodel.facets.param.parameter.regex.RegExFacetFromRegExAnnotationOnParameter;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForConflictingOptionality;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
 
 public class ParameterAnnotationFacetFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner {
 
-    private final MetaModelValidatorForDeprecatedAnnotation regexValidator = new MetaModelValidatorForDeprecatedAnnotation(RegEx.class);
     private final MetaModelValidatorForConflictingOptionality conflictingOptionalityValidator = new MetaModelValidatorForConflictingOptionality();
 
     public ParameterAnnotationFacetFactory() {
@@ -119,16 +115,11 @@ public class ParameterAnnotationFacetFactory extends FacetFactoryAbstract implem
 
         for (final Annotation parameterAnnotation : parameterAnnotations) {
             final Class<?> parameterType = parameterTypes[paramNum];
-            if (parameterAnnotation instanceof RegEx) {
-                final RegEx annotation = (RegEx) parameterAnnotation;
-                final RegExFacet facet = RegExFacetFromRegExAnnotationOnParameter.create(annotation, parameterType, holder);
-                FacetUtil.addFacet(regexValidator.flagIfPresent(facet, processParameterContext));
-                final RegExFacet regExFacet = facet;
+            if (parameterAnnotation instanceof Pattern) {
 
-                // regex also adds a title facet
-                if(regExFacet != null) {
-                    FacetUtil.addFacet(new TitleFacetFormattedByRegex(regExFacet));
-                }
+                final Pattern annotation = (Pattern) parameterAnnotation;
+                final RegExFacet facet = RegExFacetFromRegExAnnotationOnParameter.create(annotation, parameterType, holder);
+                FacetUtil.addFacet(facet);
                 return;
             }
         }
@@ -197,15 +188,7 @@ public class ParameterAnnotationFacetFactory extends FacetFactoryAbstract implem
 
     @Override
     public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
-        metaModelValidator.add(regexValidator);
         metaModelValidator.add(conflictingOptionalityValidator);
-    }
-
-    @Override
-    public void setServicesInjector(final ServicesInjector servicesInjector) {
-        super.setServicesInjector(servicesInjector);
-        IsisConfiguration configuration = servicesInjector.getConfigurationServiceInternal();
-        regexValidator.setConfiguration(configuration);
     }
 
 

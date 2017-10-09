@@ -22,8 +22,6 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import javax.annotation.meta.When;
-
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.After;
@@ -712,8 +710,8 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             final RegExFacet regExFacet = facetedMethod.getFacet(RegExFacet.class);
             Assert.assertNotNull(regExFacet);
             Assert.assertTrue(regExFacet instanceof RegExFacetForPropertyAnnotation);
-            assertThat(regExFacet.caseSensitive(), is(true));
-            assertThat(regExFacet.validation(), is("[123].*"));
+            assertThat(regExFacet.patternFlags(), is(10));
+            assertThat(regExFacet.regexp(), is("[123].*"));
         }
 
         @Test

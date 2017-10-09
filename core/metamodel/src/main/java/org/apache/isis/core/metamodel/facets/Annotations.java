@@ -27,6 +27,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import javax.validation.constraints.Pattern;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import com.google.common.collect.Lists;
@@ -282,6 +283,7 @@ public final class Annotations  {
                     Collection.class,
                     CollectionLayout.class,
                     MemberOrder.class,
+                    Pattern.class,
                     javax.annotation.Nullable.class,
                     Title.class,
                     XmlJavaTypeAdapter.class,

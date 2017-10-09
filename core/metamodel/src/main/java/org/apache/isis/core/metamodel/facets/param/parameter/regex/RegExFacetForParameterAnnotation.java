@@ -51,28 +51,21 @@ public class RegExFacetForParameterAnnotation extends RegExFacetAbstract {
         final String replacement = parameter.regexPatternReplacement();
         final int patternFlags = parameter.regexPatternFlags();
 
-        return new RegExFacetForParameterAnnotation(pattern, patternFlags, holder, replacement);
+        return new RegExFacetForParameterAnnotation(pattern, patternFlags, replacement, holder);
     }
 
-    private RegExFacetForParameterAnnotation(final String pattern, final int patternFlags, final FacetHolder holder, final String replacement) {
-        super(pattern, "", false, holder, replacement);
+    private RegExFacetForParameterAnnotation(
+            final String pattern,
+            final int patternFlags,
+            final String replacement,
+            final FacetHolder holder) {
+        super(pattern, patternFlags, replacement, holder);
         this.pattern = Pattern.compile(pattern, patternFlags);
-    }
-
-    /**
-     * Unused (for the TitledFacet)
-     */
-    @Override
-    public String format(String text) {
-        return text;
     }
 
     @Override
     public boolean doesNotMatch(final String text) {
-        if (text == null) {
-            return true;
-        }
-        return !pattern.matcher(text).matches();
+        return text == null || !pattern.matcher(text).matches();
     }
 
 
