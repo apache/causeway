@@ -23,7 +23,6 @@ import java.lang.reflect.Method;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Bulk;
-import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -40,7 +39,6 @@ import org.apache.isis.core.metamodel.facets.actions.action.bulk.BulkFacetForBul
 import org.apache.isis.core.metamodel.facets.actions.action.bulk.BulkFacetObjectOnly;
 import org.apache.isis.core.metamodel.facets.actions.action.command.CommandFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.hidden.HiddenFacetForActionAnnotation;
-import org.apache.isis.core.metamodel.facets.actions.action.hidden.HiddenFacetForHiddenAnnotationOnAction;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacetAbstract;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacetDefault;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacetForActionAnnotation;
@@ -69,7 +67,6 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract
             implements MetaModelValidatorRefiner {
 
     private final MetaModelValidatorForDeprecatedAnnotation bulkValidator = new MetaModelValidatorForDeprecatedAnnotation(Bulk.class);
-    private final MetaModelValidatorForDeprecatedAnnotation hiddenValidator = new MetaModelValidatorForDeprecatedAnnotation(Hidden.class);
 
 
 
@@ -168,17 +165,9 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract
         final Method method = processMethodContext.getMethod();
         final FacetHolder holder = processMethodContext.getFacetHolder();
 
-        // check for deprecated @Hidden
-        final Hidden hiddenAnnotation = Annotations.getAnnotation(processMethodContext.getMethod(), Hidden.class);
-        HiddenFacet facet = hiddenValidator
-                .flagIfPresent(HiddenFacetForHiddenAnnotationOnAction.create(hiddenAnnotation, holder),
-                        processMethodContext);
-
-        // else search for @Action(hidden=...)
+        // search for @Action(hidden=...)
         final Action action = Annotations.getAnnotation(method, Action.class);
-        if(facet == null) {
-            facet = HiddenFacetForActionAnnotation.create(action, holder);
-        }
+        HiddenFacet facet = HiddenFacetForActionAnnotation.create(action, holder);
         FacetUtil.addFacet(facet);
     }
 
@@ -320,7 +309,6 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract
     @Override
     public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
         metaModelValidator.add(bulkValidator);
-        metaModelValidator.add(hiddenValidator);
     }
 
     // ///////////////////////////////////////////////////////////////
@@ -332,7 +320,6 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract
         final IsisConfiguration configuration = getConfiguration();
 
         bulkValidator.setConfiguration(configuration);
-        hiddenValidator.setConfiguration(configuration);
     }
 
 

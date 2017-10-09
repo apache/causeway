@@ -23,7 +23,6 @@ import java.lang.reflect.Method;
 
 import javax.annotation.Nullable;
 
-import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.Mandatory;
 import org.apache.isis.applib.annotation.MustSatisfy;
 import org.apache.isis.applib.annotation.NotPersisted;
@@ -54,7 +53,6 @@ import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedF
 import org.apache.isis.core.metamodel.facets.properties.property.command.CommandFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.disabled.DisabledFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.fileaccept.FileAcceptFacetForPropertyAnnotation;
-import org.apache.isis.core.metamodel.facets.properties.property.hidden.HiddenFacetForHiddenAnnotationOnProperty;
 import org.apache.isis.core.metamodel.facets.properties.property.hidden.HiddenFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.mandatory.MandatoryFacetForMandatoryAnnotationOnProperty;
 import org.apache.isis.core.metamodel.facets.properties.property.mandatory.MandatoryFacetForPropertyAnnotation;
@@ -89,7 +87,6 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
     private final MetaModelValidatorForDeprecatedAnnotation regexValidator = new MetaModelValidatorForDeprecatedAnnotation(RegEx.class);
     private final MetaModelValidatorForDeprecatedAnnotation optionalValidator = new MetaModelValidatorForDeprecatedAnnotation(Optional.class);
     private final MetaModelValidatorForDeprecatedAnnotation mandatoryValidator = new MetaModelValidatorForDeprecatedAnnotation(Mandatory.class);
-    private final MetaModelValidatorForDeprecatedAnnotation hiddenValidator = new MetaModelValidatorForDeprecatedAnnotation(Hidden.class);
     private final MetaModelValidatorForDeprecatedAnnotation mustSatisfyValidator = new MetaModelValidatorForDeprecatedAnnotation(MustSatisfy.class);
     private final MetaModelValidatorForDeprecatedAnnotation notPersistedValidator = new MetaModelValidatorForDeprecatedAnnotation(NotPersisted.class);
     private final MetaModelValidatorForConflictingOptionality conflictingOptionalityValidator = new MetaModelValidatorForConflictingOptionality();
@@ -203,15 +200,9 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
         final Method method = processMethodContext.getMethod();
         final FacetHolder holder = processMethodContext.getFacetHolder();
 
-        // check for deprecated @Hidden first
-        final Hidden hiddenAnnotation = Annotations.getAnnotation(processMethodContext.getMethod(), Hidden.class);
-        HiddenFacet facet = hiddenValidator.flagIfPresent(HiddenFacetForHiddenAnnotationOnProperty.create(hiddenAnnotation, holder), processMethodContext);
-
-        // else search for @Property(hidden=...)
+        // search for @Property(hidden=...)
         final Property property = Annotations.getAnnotation(method, Property.class);
-        if(facet == null) {
-            facet = HiddenFacetForPropertyAnnotation.create(property, holder);
-        }
+        HiddenFacet facet = HiddenFacetForPropertyAnnotation.create(property, holder);
 
         FacetUtil.addFacet(facet);
     }
@@ -405,7 +396,6 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
         metaModelValidator.add(regexValidator);
         metaModelValidator.add(optionalValidator);
         metaModelValidator.add(mandatoryValidator);
-        metaModelValidator.add(hiddenValidator);
         metaModelValidator.add(mustSatisfyValidator);
         metaModelValidator.add(notPersistedValidator);
         metaModelValidator.add(conflictingOptionalityValidator);
@@ -422,7 +412,6 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
         regexValidator.setConfiguration(configuration);
         optionalValidator.setConfiguration(configuration);
         mandatoryValidator.setConfiguration(configuration);
-        hiddenValidator.setConfiguration(configuration);
         mustSatisfyValidator.setConfiguration(configuration);
         notPersistedValidator.setConfiguration(configuration);
     }

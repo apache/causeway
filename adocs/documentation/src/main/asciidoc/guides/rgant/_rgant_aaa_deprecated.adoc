@@ -28,13 +28,6 @@ The annotations listed in the table below are still supported by Apache Isis, bu
 |UI, Domain
 |
 
-|`@Hidden`
-|Object member is not visible, or on domain service (to indicate that none of its actions are visible).
-|For domain object members, use `#hidden()` attribute of xref:../rgant/rgant.adoc#_rgant-Action_hidden[`Action`], xref:../rgant/rgant.adoc#_rgant-Property_hidden[`Property`] or xref:../rgant/rgant.adoc#_rgant-Collection_hidden[`Collection`].  +
-For domain service, use xref:../rgant/rgant.adoc#_rgant-DomainService_nature[`@DomainService(` +
-`nature=DOMAIN)`]
-|UI, Domain
-|Yes
 
 |`@Ignore`
 |Exclude this method from the metamodel.

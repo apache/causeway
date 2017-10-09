@@ -73,7 +73,6 @@ import org.apache.isis.core.metamodel.facets.object.domainservicelayout.DomainSe
 import org.apache.isis.core.metamodel.facets.object.encodeable.annotcfg.EncodableFacetAnnotationElseConfigurationFactory;
 import org.apache.isis.core.metamodel.facets.object.facets.annotation.FacetsFacetAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.grid.GridFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.hidden.annotation.HiddenFacetOnTypeAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.hidden.method.HiddenObjectFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.object.icon.method.IconFacetMethodFactory;
 import org.apache.isis.core.metamodel.facets.object.ignore.annotation.RemoveAnnotatedMethodsFacetFactory;
@@ -302,9 +301,6 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(new NotContributedFacetDerivedFromDomainServiceFacetFactory());
         addFactory(new NotInServiceMenuFacetDerivedFromDomainServiceFacetFactory());
 
-        
-        addFactory(new HiddenFacetOnTypeAnnotationFactory());
-        // must come after the TitleAnnotationFacetFactory, because can act as an override
         
 
         // must come after CssClassFacetOnMemberFactory

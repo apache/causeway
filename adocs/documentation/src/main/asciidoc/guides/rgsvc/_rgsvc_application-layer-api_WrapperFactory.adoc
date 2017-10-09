@@ -7,9 +7,11 @@
 
 
 
-The `WrapperFactory` provides the ability to enforce business rules for programmatic interactions between domain objects.  If there is a (lack-of-) trust boundary between the caller and callee -- eg if they reside in different modules -- then the wrapper factory is a useful mechanism to ensure that any business constraints defined by the callee are honoured.
+The `WrapperFactory` provides the ability to enforce business rules for programmatic interactions between domain objects.
+If there is a (lack-of-) trust boundary between the caller and callee -- eg if they reside in different modules -- then the wrapper factory is a useful mechanism to ensure that any business constraints defined by the callee are honoured.
 
-For example, if the calling object attempts to modify an unmodifiable property on the target object, then an exception will be thrown.  Said another way: interactions are performed "as if" they are through the viewer.
+For example, if the calling object attempts to modify an unmodifiable property on the target object, then an exception will be thrown.
+Said another way: interactions are performed "as if" they are through the viewer.
 
 [NOTE]
 ====
@@ -51,8 +53,10 @@ public interface WrapperFactory {
     ...
  }
 ----
-<1> wraps the underlying domain object.  If it is already wrapped, returns the object back unchanged.
-<2> Obtains the underlying domain object, if wrapped.  If the object is not wrapped, returns back unchanged.
+<1> wraps the underlying domain object.
+If it is already wrapped, returns the object back unchanged.
+<2> Obtains the underlying domain object, if wrapped.
+If the object is not wrapped, returns back unchanged.
 <3> whether the supplied object has been wrapped.
 <4> enumerates how the wrapper interacts with the underlying domain object.
 <5> validate all business rules and then execute.
@@ -63,14 +67,17 @@ public interface WrapperFactory {
 
 
 
-The service works by returning a "wrapper" around a supplied domain object (a link:http://www.javassist.org[javassist] proxy), and it is this wrapper that ensures that the hide/disable/validate rules implies by the Apache Isis programming model are enforced. The wrapper can be interacted with as follows:
+The service works by returning a "wrapper" around a supplied domain object (a link:http://www.javassist.org[javassist] proxy), and it is this wrapper that ensures that the hide/disable/validate rules implies by the Apache Isis programming model are enforced.
+The wrapper can be interacted with as follows:
 
 * a `get...()` method for properties or collections
 * a `set...()` method for properties
 * an `addTo...()` or `removeFrom...()` method for collections
 * any action
 
-Calling any of the above methods may result in a (subclass of) `InteractionException` if the object disallows it. For example, if a property is annotated with `@Hidden` then a `HiddenException` will be thrown. Similarly if an action has a `validateXxx()` method and the supplied arguments are invalid then an `InvalidException` will be thrown.
+Calling any of the above methods may result in a (subclass of) `InteractionException` if the object disallows it.
+For example, if a property is annotated with `@Hidden` then a `HiddenException` will be thrown.
+Similarly if an action has a `validateXxx()` method and the supplied arguments are invalid then an `InvalidException` will be thrown.
 
 In addition, the following methods may also be called:
 
@@ -114,7 +121,8 @@ public class CustomerAgent {
 
 [NOTE]
 ====
-It ought to be possible to implement an xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_ExceptionRecognizer[`ExceptionRecognizer`]s that would allow the above boilerplate to be removed.  This recognizer service would recognize the `InteractionException` and convert to a suitable message.
+It ought to be possible to implement an xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_ExceptionRecognizer[`ExceptionRecognizer`]s that would allow the above boilerplate to be removed.
+This recognizer service would recognize the `InteractionException` and convert to a suitable message.
 
 At the time of writing Apache Isis does not provide an out-of-the-box implementation of such an `ExceptionRecognizer`; but it should be simple enough to write one…
 ====
@@ -141,21 +149,23 @@ public interface WrapperFactory {
 }
 ----
 <1> all ``InteractionListener``s that have been registered.
-<2> registers an `InteractionListener`, to be notified of interactions on all wrappers.  The listener will be notified of interactions even on wrappers created before the listener was installed. (From an implementation perspective this is because the wrappers delegate back to the container to fire the events).
+<2> registers an `InteractionListener`, to be notified of interactions on all wrappers.
+The listener will be notified of interactions even on wrappers created before the listener was installed.
+(From an implementation perspective this is because the wrappers delegate back to the container to fire the events).
 <3> remove an `InteractionListener`, to no longer be notified of interactions on wrappers.
 <4> used by the framework itself
 
-The original intent of this API was to enable test transcripts to be captured (in a BDD-like fashion) from integration tests.  No such feature has yet been implemented however.  Also, the capabilities have by and large been superceded by Apache Isis' support for domain events.  We may therefore deprecate this API in the future.
+The original intent of this API was to enable test transcripts to be captured (in a BDD-like fashion) from integration tests.
+No such feature has yet been implemented however.
+Also, the capabilities have by and large been superceded by Apache Isis' support for domain events.
+We may therefore deprecate this API in the future.
 
 
 
 
 == Registering the Service
 
-Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the
-`AppManifest` to xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' core
-implementation of `WrapperFactory` service is automatically registered and injected (it is annotated with
-`@DomainService`) so no further configuration is required.
+Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the `AppManifest` to xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' core implementation of `WrapperFactory` service is automatically registered and injected (it is annotated with `@DomainService`) so no further configuration is required.
 
 To use an alternative implementation, use
 xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained

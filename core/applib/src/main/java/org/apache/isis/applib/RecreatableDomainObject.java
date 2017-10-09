@@ -19,9 +19,6 @@
 
 package org.apache.isis.applib;
 
-import org.apache.isis.applib.annotation.Hidden;
-
-
 /**
  * Indicates that the domain object can be recreated from a string.
  *
@@ -45,13 +42,11 @@ public interface RecreatableDomainObject {
      * This method is called by the framework in order that the view model may be recreated subsequently
      * through {@link #__isis_recreate(String)}.
      */
-    @Hidden
     public String __isis_memento();
     
     /**
      * Used to recreate a recreatable object with a memento obtained from {@link #__isis_recreate(String)}.
      */
-    @Hidden
     public void __isis_recreate(String memento);
 
 }

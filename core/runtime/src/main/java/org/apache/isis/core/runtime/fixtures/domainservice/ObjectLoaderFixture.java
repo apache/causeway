@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.runtime.fixtures.domainservice;
 
-import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.fixtures.FixtureType;
 import org.apache.isis.applib.fixtures.InstallableFixture;
 import org.apache.isis.core.runtime.fixturedomainservice.ObjectFixtureService;
@@ -40,7 +39,6 @@ public class ObjectLoaderFixture implements InstallableFixture {
     }
 
     @Override
-    @Hidden
     public FixtureType getType() {
         return FixtureType.DOMAIN_OBJECTS;
     }
