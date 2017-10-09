@@ -30,15 +30,6 @@ The annotations listed in the table below are still supported by Apache Isis, bu
 |
 
 
-|`@NotContributed`
-|Indicates that a domain service action is not rendered as an action on the (entity) types of its parameters.
-For 1-arg query-only actions, controls whether the domain service action is rendered as a property or collection on the entity type of its parameter.
-|Use xref:../rgant/rgant.adoc#_rgant-DomainService_nature[`@DomainService#nature()`] to specify whether any of the actions in a domain service should appear in the menu bars (applies at type level, not action level).
-For individual actions, use xref:../rgant/rgant.adoc#_rgant-ActionLayout_contributedAs[`@ActionLayout#` +
-`contributedAs()`] to specify whether any individual action should be contributed only as an action or as an association (property or collection).
-|UI
-|
-
 |`@NotInServiceMenu`
 |Indicates that a domain service should not be rendered in the application menu (at top of page in Wicket viewer).
 |xref:../rgant/rgant.adoc#_rgant-DomainService_nature[`@DomainService#nature()`] to signify that none of the actions in a domain service should appear in the menu bars

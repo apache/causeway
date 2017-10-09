@@ -19,8 +19,9 @@
 package org.apache.isis.core.metamodel.facets.actions.notcontributed.derived;
 
 
+import org.apache.isis.applib.annotation.Contributed;
 import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.annotation.NotContributed;
+import org.apache.isis.applib.annotation.NotContributedAs;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.notcontributed.NotContributedFacetAbstract;
 
@@ -30,7 +31,7 @@ public class NotContributedFacetDerivedFromDomainServiceFacet extends NotContrib
     private final NatureOfService natureOfService;
 
     public NotContributedFacetDerivedFromDomainServiceFacet(final NatureOfService natureOfService, final FacetHolder holder) {
-        super(NotContributed.As.EITHER, holder, Derivation.DERIVED);
+        super(NotContributedAs.EITHER, Contributed.AS_NEITHER , holder, Derivation.DERIVED);
         this.natureOfService = natureOfService;
     }
 

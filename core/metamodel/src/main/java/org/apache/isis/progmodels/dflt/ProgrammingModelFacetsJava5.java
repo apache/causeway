@@ -23,7 +23,6 @@ import org.apache.isis.core.metamodel.facets.actions.action.ActionChoicesForColl
 import org.apache.isis.core.metamodel.facets.actions.defaults.method.ActionDefaultsFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.actions.homepage.annotation.HomePageFacetAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.actions.layout.ActionLayoutFacetFactory;
-import org.apache.isis.core.metamodel.facets.actions.notcontributed.annotation.NotContributedFacetAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.actions.notcontributed.derived.NotContributedFacetDerivedFromDomainServiceFacetFactory;
 import org.apache.isis.core.metamodel.facets.actions.notcontributed.derived.NotContributedFacetDerivedFromMixinFacetFactory;
 import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.annotation.NotInServiceMenuFacetAnnotationFactory;
@@ -292,8 +291,6 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
 
         addFactory(new EncodableFacetAnnotationElseConfigurationFactory());
         
-        addFactory(new NotContributedFacetAnnotationFactory());
-
         addFactory(new NotInServiceMenuFacetAnnotationFactory());
 
         addFactory(new NotInServiceMenuFacetViaMethodFactory());

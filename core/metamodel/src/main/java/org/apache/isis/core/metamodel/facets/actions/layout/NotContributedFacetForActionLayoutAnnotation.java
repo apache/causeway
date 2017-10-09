@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facets.actions.layout;
 
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Contributed;
-import org.apache.isis.applib.annotation.NotContributed;
+import org.apache.isis.applib.annotation.NotContributedAs;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.notcontributed.NotContributedFacet;
 import org.apache.isis.core.metamodel.facets.actions.notcontributed.NotContributedFacetAbstract;
@@ -35,15 +35,18 @@ public class NotContributedFacetForActionLayoutAnnotation extends NotContributed
             return null;
         }
         final Contributed contributed = actionLayout.contributed();
-        final NotContributed.As as = NotContributed.As.from(contributed);
+        final NotContributedAs as = NotContributedAs.notFrom(contributed);
         if(as == null) {
             return null;
         }
-        return new NotContributedFacetForActionLayoutAnnotation(as, holder);
+        return new NotContributedFacetForActionLayoutAnnotation(as, contributed, holder);
     }
 
-    private NotContributedFacetForActionLayoutAnnotation(final NotContributed.As as, final FacetHolder holder) {
-        super(as, holder);
+    private NotContributedFacetForActionLayoutAnnotation(
+            final NotContributedAs as,
+            final Contributed contributed,
+            final FacetHolder holder) {
+        super(as, contributed, holder);
     }
 
 }

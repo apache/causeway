@@ -11,9 +11,6 @@ org.apache.isis.applib
 org.apache.isis.applib.annotation
 
 
-
-
-
     Mandatory.java - entire annotation, use @Property(optionality=...) and @Parameter(optionality=...), or @javax.annotations.Nullable
     Optional.java - entire annotation, use @Property(optionality=...) and @Parameter(optionality=...), or @javax.annotations.Nullable
 
@@ -41,6 +38,7 @@ org.apache.isis.applib.clock
 org.apache.isis.applib.events - entire package.  These event classes supported only by WrapperFactory;
                                 redundant as @Xxx(domainEvent=...) on member achieves much the same effect using event bus
 org.apache.isis.applib.filter  - entire package of Filter classes; use guava Predicate instead.
+
 
 org.apache.isis.applib.fixturescripts
     FixtureScript.java  - various methods to simplify API

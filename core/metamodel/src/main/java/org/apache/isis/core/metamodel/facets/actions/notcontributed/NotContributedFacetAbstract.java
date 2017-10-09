@@ -19,41 +19,56 @@
 
 package org.apache.isis.core.metamodel.facets.actions.notcontributed;
 
-import org.apache.isis.applib.annotation.NotContributed.As;
+import org.apache.isis.applib.annotation.Contributed;
+import org.apache.isis.applib.annotation.NotContributedAs;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 public abstract class NotContributedFacetAbstract extends FacetAbstract implements NotContributedFacet {
 
-    private final As as;
+    private final NotContributedAs as;
+    private final Contributed contributed;
 
     public static Class<? extends Facet> type() {
         return NotContributedFacet.class;
     }
 
-    public NotContributedFacetAbstract(final As as, final FacetHolder holder) {
-        this(as, holder, Derivation.NOT_DERIVED);
+    public NotContributedFacetAbstract(
+            final NotContributedAs as,
+            final Contributed contributed,
+            final FacetHolder holder) {
+        this(as, contributed, holder, Derivation.NOT_DERIVED);
     }
 
-    public NotContributedFacetAbstract(final As as, final FacetHolder holder, final Derivation derivation) {
+    public NotContributedFacetAbstract(
+            final NotContributedAs as,
+            final Contributed contributed,
+            final FacetHolder holder,
+            final Derivation derivation) {
         super(type(), holder, derivation);
         this.as = as;
+        this.contributed = contributed;
     }
 
     @Override
-    public As value() {
+    public NotContributedAs value() {
         return as;
     }
 
     @Override
+    public Contributed inverseValue() {
+        return contributed;
+    }
+
+    @Override
     public boolean toActions() {
-        return value() == As.EITHER || value() == As.ACTION;
+        return value() == NotContributedAs.EITHER || value() == NotContributedAs.ACTION;
     }
 
     @Override
     public boolean toAssociations() {
-        return value() == As.EITHER || value() == As.ASSOCIATION;
+        return value() == NotContributedAs.EITHER || value() == NotContributedAs.ASSOCIATION;
     }
 
 }
