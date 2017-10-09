@@ -20,7 +20,7 @@
 package org.apache.isis.core.metamodel.facets.properties.property;
 
 import java.lang.reflect.Method;
-import org.apache.isis.applib.annotation.Disabled;
+
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
@@ -49,7 +49,6 @@ public class DisabledAnnotationOnPropertyFacetFactoryTest extends AbstractFacetF
 
     public void testDisabledAnnotationPickedUpOnProperty() {
         class Customer {
-            @Disabled
             public int getNumberOfOrders() {
                 return 0;
             }
@@ -70,7 +69,6 @@ public class DisabledAnnotationOnPropertyFacetFactoryTest extends AbstractFacetF
 
     public void testDisabledAnnotationWithReason() {
         class Customer {
-            @Disabled(reason="Oh no you don't!")
             public int getNumberOfOrders() {
                 return 0;
             }

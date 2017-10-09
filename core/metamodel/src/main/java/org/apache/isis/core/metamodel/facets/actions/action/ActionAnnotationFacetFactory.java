@@ -23,7 +23,6 @@ import java.lang.reflect.Method;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Bulk;
-import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
@@ -40,7 +39,6 @@ import org.apache.isis.core.metamodel.facets.actions.action.bulk.BulkFacetForAct
 import org.apache.isis.core.metamodel.facets.actions.action.bulk.BulkFacetForBulkAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.bulk.BulkFacetObjectOnly;
 import org.apache.isis.core.metamodel.facets.actions.action.command.CommandFacetForActionAnnotation;
-import org.apache.isis.core.metamodel.facets.actions.action.disabled.DisabledFacetForDisabledAnnotationOnAction;
 import org.apache.isis.core.metamodel.facets.actions.action.hidden.HiddenFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.hidden.HiddenFacetForHiddenAnnotationOnAction;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacetAbstract;
@@ -60,7 +58,6 @@ import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacet;
 import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFacet;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
-import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.CollectionUtils;
@@ -73,7 +70,6 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract
 
     private final MetaModelValidatorForDeprecatedAnnotation bulkValidator = new MetaModelValidatorForDeprecatedAnnotation(Bulk.class);
     private final MetaModelValidatorForDeprecatedAnnotation hiddenValidator = new MetaModelValidatorForDeprecatedAnnotation(Hidden.class);
-    private final MetaModelValidatorForDeprecatedAnnotation disabledValidator = new MetaModelValidatorForDeprecatedAnnotation(Disabled.class);
 
 
 
@@ -86,7 +82,6 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract
 
         processInvocation(processMethodContext);
         processHidden(processMethodContext);
-        processDisabled(processMethodContext);
         processRestrictTo(processMethodContext);
         processSemantics(processMethodContext);
         processBulk(processMethodContext);
@@ -184,21 +179,6 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract
         if(facet == null) {
             facet = HiddenFacetForActionAnnotation.create(action, holder);
         }
-        FacetUtil.addFacet(facet);
-    }
-
-    void processDisabled(final ProcessMethodContext processMethodContext) {
-        final Method method = processMethodContext.getMethod();
-        final FacetHolder holder = processMethodContext.getFacetHolder();
-
-        // check for deprecated @Disabled
-        final Disabled annotation = Annotations.getAnnotation(method, Disabled.class);
-        DisabledFacet facet = disabledValidator
-                .flagIfPresent(DisabledFacetForDisabledAnnotationOnAction.create(annotation, holder),
-                        processMethodContext);
-
-        // there is no equivalent in @Action(...)
-
         FacetUtil.addFacet(facet);
     }
 
@@ -341,7 +321,6 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract
     public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
         metaModelValidator.add(bulkValidator);
         metaModelValidator.add(hiddenValidator);
-        metaModelValidator.add(disabledValidator);
     }
 
     // ///////////////////////////////////////////////////////////////
@@ -354,7 +333,6 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract
 
         bulkValidator.setConfiguration(configuration);
         hiddenValidator.setConfiguration(configuration);
-        disabledValidator.setConfiguration(configuration);
     }
 
 

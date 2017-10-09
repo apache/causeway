@@ -23,7 +23,6 @@ import java.lang.reflect.Method;
 
 import javax.annotation.Nullable;
 
-import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.Mandatory;
 import org.apache.isis.applib.annotation.MustSatisfy;
@@ -53,7 +52,6 @@ import org.apache.isis.core.metamodel.facets.objectvalue.regex.TitleFacetFormatt
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
 import org.apache.isis.core.metamodel.facets.properties.property.command.CommandFacetForPropertyAnnotation;
-import org.apache.isis.core.metamodel.facets.properties.property.disabled.DisabledFacetForDisabledAnnotationOnProperty;
 import org.apache.isis.core.metamodel.facets.properties.property.disabled.DisabledFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.fileaccept.FileAcceptFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.hidden.HiddenFacetForHiddenAnnotationOnProperty;
@@ -92,7 +90,6 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
     private final MetaModelValidatorForDeprecatedAnnotation optionalValidator = new MetaModelValidatorForDeprecatedAnnotation(Optional.class);
     private final MetaModelValidatorForDeprecatedAnnotation mandatoryValidator = new MetaModelValidatorForDeprecatedAnnotation(Mandatory.class);
     private final MetaModelValidatorForDeprecatedAnnotation hiddenValidator = new MetaModelValidatorForDeprecatedAnnotation(Hidden.class);
-    private final MetaModelValidatorForDeprecatedAnnotation disabledValidator = new MetaModelValidatorForDeprecatedAnnotation(Disabled.class);
     private final MetaModelValidatorForDeprecatedAnnotation mustSatisfyValidator = new MetaModelValidatorForDeprecatedAnnotation(MustSatisfy.class);
     private final MetaModelValidatorForDeprecatedAnnotation notPersistedValidator = new MetaModelValidatorForDeprecatedAnnotation(NotPersisted.class);
     private final MetaModelValidatorForConflictingOptionality conflictingOptionalityValidator = new MetaModelValidatorForConflictingOptionality();
@@ -223,16 +220,9 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
         final Method method = processMethodContext.getMethod();
         final FacetHolder holder = processMethodContext.getFacetHolder();
 
-        // check for deprecated @Disabled first
-        final Disabled annotation = Annotations.getAnnotation(method, Disabled.class);
-        final DisabledFacet disabledFacet = DisabledFacetForDisabledAnnotationOnProperty.create(annotation, holder);
-        DisabledFacet facet = disabledValidator.flagIfPresent(disabledFacet, processMethodContext);
-
-        // else search for @Property(editing=...)
+        // search for @Property(editing=...)
         final Property property = Annotations.getAnnotation(method, Property.class);
-        if(facet == null) {
-            facet = DisabledFacetForPropertyAnnotation.create(property, holder);
-        }
+        DisabledFacet facet = DisabledFacetForPropertyAnnotation.create(property, holder);
 
         FacetUtil.addFacet(facet);
     }
@@ -416,7 +406,6 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
         metaModelValidator.add(optionalValidator);
         metaModelValidator.add(mandatoryValidator);
         metaModelValidator.add(hiddenValidator);
-        metaModelValidator.add(disabledValidator);
         metaModelValidator.add(mustSatisfyValidator);
         metaModelValidator.add(notPersistedValidator);
         metaModelValidator.add(conflictingOptionalityValidator);
@@ -434,7 +423,6 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
         optionalValidator.setConfiguration(configuration);
         mandatoryValidator.setConfiguration(configuration);
         hiddenValidator.setConfiguration(configuration);
-        disabledValidator.setConfiguration(configuration);
         mustSatisfyValidator.setConfiguration(configuration);
         notPersistedValidator.setConfiguration(configuration);
     }

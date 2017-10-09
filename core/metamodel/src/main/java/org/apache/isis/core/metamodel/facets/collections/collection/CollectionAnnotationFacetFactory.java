@@ -25,7 +25,6 @@ import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 
 import org.apache.isis.applib.annotation.Collection;
-import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.NotPersisted;
 import org.apache.isis.applib.services.eventbus.CollectionDomainEvent;
@@ -42,7 +41,6 @@ import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredF
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromGenerics;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.collections.collection.disabled.DisabledFacetForCollectionAnnotation;
-import org.apache.isis.core.metamodel.facets.collections.collection.disabled.DisabledFacetForDisabledAnnotationOnCollection;
 import org.apache.isis.core.metamodel.facets.collections.collection.hidden.HiddenFacetForCollectionAnnotation;
 import org.apache.isis.core.metamodel.facets.collections.collection.hidden.HiddenFacetForHiddenAnnotationOnCollection;
 import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionAddToFacetForDomainEventFromAbstract;
@@ -71,7 +69,6 @@ import org.apache.isis.core.metamodel.util.EventUtil;
 public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner {
 
     private final MetaModelValidatorForDeprecatedAnnotation hiddenValidator = new MetaModelValidatorForDeprecatedAnnotation(Hidden.class);
-    private final MetaModelValidatorForDeprecatedAnnotation disabledValidator = new MetaModelValidatorForDeprecatedAnnotation(Disabled.class);
     private final MetaModelValidatorForDeprecatedAnnotation notPersistedValidator = new MetaModelValidatorForDeprecatedAnnotation(NotPersisted.class);
 
 
@@ -195,15 +192,9 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract imple
         final Method method = processMethodContext.getMethod();
         final FacetHolder holder = processMethodContext.getFacetHolder();
 
-        // check for deprecated @Disabled
-        final Disabled annotation = Annotations.getAnnotation(method, Disabled.class);
-        DisabledFacet facet = disabledValidator.flagIfPresent(DisabledFacetForDisabledAnnotationOnCollection.create(annotation, holder), processMethodContext);
-
-        // else check for @Collection(editing=...)
+        // check for @Collection(editing=...)
         final Collection collection = Annotations.getAnnotation(method, Collection.class);
-        if(facet == null) {
-            facet = DisabledFacetForCollectionAnnotation.create(collection, holder);
-        }
+        DisabledFacet facet = DisabledFacetForCollectionAnnotation.create(collection, holder);
 
         FacetUtil.addFacet(facet);
     }
@@ -298,7 +289,6 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract imple
     public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
         metaModelValidator.add(notPersistedValidator);
         metaModelValidator.add(hiddenValidator);
-        metaModelValidator.add(disabledValidator);
     }
 
     // //////////////////////////////////////
@@ -311,7 +301,6 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract imple
 
         notPersistedValidator.setConfiguration(configuration);
         hiddenValidator.setConfiguration(configuration);
-        disabledValidator.setConfiguration(configuration);
     }
 
 

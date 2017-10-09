@@ -17,7 +17,6 @@ org.apache.isis.applib.annotation
 
 
 
-    Disabled.java - entire annotation, use @Property(editingDisabledReason=...) instead
     Hidden.java - entire annotation, use @Property(hidden=...), @Collection(hidden=...), @Action(hidden=...)
 
     Ignore.java - entire annotation, use @Programmatic instead.
@@ -330,6 +329,8 @@ org.apache.isis.applib.annotation
     Bookmarkable.java - entire annotation, use @DomainObjectLayout(bookmarking=...)
 
     Command.java - entire annotation, use @Action(command=...) instead
+
+    Disabled.java - entire annotation, use @Property(editingDisabledReason=...) instead
 
     ActionSemantics.java  - entire annotation, use @Action(semantics=...)
     Idempotent.java - entire annotation, use @Action(semantics=...) instead.
