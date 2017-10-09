@@ -21,6 +21,7 @@ package org.apache.isis.viewer.wicket.ui.components.collection.selector;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
@@ -29,11 +30,9 @@ import com.google.common.collect.Lists;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
-import org.apache.isis.applib.annotation.RenderType;
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet;
-import org.apache.isis.core.metamodel.facets.members.render.RenderFacet;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
@@ -194,9 +193,14 @@ public class CollectionSelectorHelper implements Serializable {
 
         final OneToManyAssociation collection =
                 entityCollectionModel.getCollectionMemento().getCollection(entityCollectionModel.getSpecificationLoader());
-        RenderFacet renderFacet = collection.getFacet(RenderFacet.class);
-        return renderFacet != null && renderFacet.value() == RenderType.EAGERLY;
+        return renderEagerly(collection);
     }
+
+    private static boolean renderEagerly(final OneToManyAssociation otma) {
+        final DefaultViewFacet defaultViewFacet = otma.getFacet(DefaultViewFacet.class);
+        return defaultViewFacet != null && Objects.equals(defaultViewFacet.value(), "table");
+    }
+
 
     private static boolean hasDefaultViewFacet(IModel<?> model) {
         final EntityCollectionModel entityCollectionModel = toEntityCollectionModel(model);

@@ -18,15 +18,15 @@ package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import com.google.common.collect.Lists;
 
-import org.apache.isis.applib.annotation.RenderType;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
-import org.apache.isis.core.metamodel.facets.members.render.RenderFacet;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
@@ -74,8 +74,8 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
     }
 
     private boolean renderEagerly() {
-        final RenderFacet renderFacet = objectMember.getFacet(RenderFacet.class);
-        return renderFacet != null && renderFacet.value() == RenderType.EAGERLY;
+        final DefaultViewFacet defaultViewFacet = objectMember.getFacet(DefaultViewFacet.class);
+        return defaultViewFacet != null && Objects.equals(defaultViewFacet.value(), "table");
     }
 
     // ///////////////////////////////////////////////////
@@ -114,8 +114,7 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
     }
 
     private boolean renderEagerly(ObjectAdapter valueAdapter) {
-        final RenderFacet renderFacet = objectMember.getFacet(RenderFacet.class);
-        return renderFacet != null && renderFacet.value() == RenderType.EAGERLY && rendererContext.canEagerlyRender(valueAdapter);
+        return renderEagerly() && rendererContext.canEagerlyRender(valueAdapter);
     }
 
     // ///////////////////////////////////////////////////

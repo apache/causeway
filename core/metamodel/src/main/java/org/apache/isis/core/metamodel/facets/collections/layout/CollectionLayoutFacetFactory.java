@@ -33,7 +33,6 @@ import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet;
 import org.apache.isis.core.metamodel.facets.collections.sortedby.SortedByFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
-import org.apache.isis.core.metamodel.facets.members.render.RenderFacet;
 import org.apache.isis.core.metamodel.facets.object.paged.PagedFacet;
 
 
@@ -140,11 +139,6 @@ public class CollectionLayoutFacetFactory extends FacetFactoryAbstract implement
         // paged
         PagedFacet pagedFacet = null;
         FacetUtil.addFacet(pagedFacet);
-
-
-        // renderType
-        RenderFacet renderFacet = null;
-        FacetUtil.addFacet(renderFacet);
 
 
         // sortedBy

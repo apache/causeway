@@ -18,16 +18,16 @@ package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import com.fasterxml.jackson.databind.node.NullNode;
 import com.google.common.collect.Lists;
 
-import org.apache.isis.applib.annotation.RenderType;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.members.render.RenderFacet;
+import org.apache.isis.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacet;
@@ -115,10 +115,9 @@ public class ObjectPropertyReprRenderer extends AbstractObjectMemberReprRenderer
             return JsonValueEncoder.appendValueAndFormat(spec, valueAdapter, representation, format, rendererContext.suppressMemberExtensions());
         }
 
-        final RenderFacet renderFacet = objectMember.getFacet(RenderFacet.class);
         boolean eagerlyRender =
-                (renderFacet != null && renderFacet.value() == RenderType.EAGERLY && rendererContext.canEagerlyRender(valueAdapter))
-                        || (linkFollower != null && !linkFollower.isTerminated());
+                (renderEagerly() && rendererContext.canEagerlyRender(valueAdapter))
+                || (linkFollower != null && !linkFollower.isTerminated());
 
         if(valueAdapter == null) {
             final NullNode value = NullNode.getInstance();
@@ -144,6 +143,11 @@ public class ObjectPropertyReprRenderer extends AbstractObjectMemberReprRenderer
             representation.mapPut("value", valueJsonRepr);
             return valueJsonRepr;
         }
+    }
+
+    private boolean renderEagerly() {
+        final DefaultViewFacet defaultViewFacet = objectMember.getFacet(DefaultViewFacet.class);
+        return defaultViewFacet != null && Objects.equals(defaultViewFacet.value(), "table");
     }
 
     private static <T extends Facet> T getFacet(Class<T> facetType, FacetHolder... holders) {
