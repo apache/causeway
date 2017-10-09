@@ -28,7 +28,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Immutable;
 import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
@@ -49,7 +48,6 @@ import org.apache.isis.core.metamodel.facets.object.domainobject.publishing.Publ
 import org.apache.isis.core.metamodel.facets.object.domainobject.publishing.PublishedObjectFacetFromConfiguration;
 import org.apache.isis.core.metamodel.facets.object.domainobject.recreatable.RecreatableObjectFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
-import org.apache.isis.core.metamodel.facets.object.immutable.immutableannot.ImmutableFacetForImmutableAnnotation;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.facets.object.publishedobject.PublishedObjectFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
@@ -541,7 +539,6 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
     public static class Editing extends DomainObjectAnnotationFacetFactoryTest {
 
-        @Immutable
         class CustomerWithImmutableAnnotation {
         }
 
@@ -598,39 +595,6 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
             }
         }
 
-        public static class WithImmutableAnnotation extends Editing {
-
-            @Before
-            public void setUp() throws Exception {
-                super.setUp();
-                ignoringConfiguration();
-            }
-
-            @Test
-            public void has_annotation() {
-
-                final ProcessClassContext processClassContext = new ProcessClassContext(CustomerWithImmutableAnnotation.class, mockMethodRemover, facetHolder);
-                facetFactory.process(processClassContext);
-
-                final Facet facet = facetHolder.getFacet(ImmutableFacet.class);
-                Assert.assertNotNull(facet);
-                Assert.assertTrue(facet instanceof ImmutableFacetForImmutableAnnotation);
-
-                expectNoMethodsRemoved();
-            }
-
-            @Test
-            public void does_not_have_annotation() {
-
-                facetFactory.process(new ProcessClassContext(DomainObjectAnnotationFacetFactoryTest.Customer.class, mockMethodRemover, facetHolder));
-
-                final Facet facet = facetHolder.getFacet(ImmutableFacet.class);
-                Assert.assertNull(facet);
-
-                expectNoMethodsRemoved();
-            }
-
-        }
 
         public static class WithDomainObjectAnnotationWithEditingSetToAsConfigured extends Editing {
 

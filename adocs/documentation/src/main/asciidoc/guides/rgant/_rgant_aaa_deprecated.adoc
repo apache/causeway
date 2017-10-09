@@ -29,14 +29,6 @@ The annotations listed in the table below are still supported by Apache Isis, bu
 |
 
 
-|`@Immutable`
-|An object's state cannot be changed (properties cannot be edited, collections cannot be added to or removed from).
-Actions can still be invoked.
-|xref:../rgant/rgant.adoc#_rgant-DomainObject_editing[`@DomainObject#editing()`]
-|Domain
-|
-
-
 |`@MustSatisfy`
 |Specify arbitrary specification constraints on a property or action parameter.
 |`#mustSatisfy()` attribute for xref:../rgant/rgant.adoc#_rgant-Property_mustSatisfy[`@Property`] or xref:../rgant/rgant.adoc#_rgant-Parameter_mustSatisfy[`@Parameter`]

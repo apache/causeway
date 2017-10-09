@@ -27,7 +27,6 @@ import javax.annotation.PostConstruct;
 import com.google.common.collect.Maps;
 
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Immutable;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.applib.services.HasTransactionId;
@@ -68,7 +67,6 @@ import org.apache.isis.core.metamodel.facets.object.domainobject.objectspecid.Ob
 import org.apache.isis.core.metamodel.facets.object.domainobject.publishing.PublishedObjectFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.recreatable.RecreatableObjectFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
-import org.apache.isis.core.metamodel.facets.object.immutable.immutableannot.ImmutableFacetForImmutableAnnotation;
 import org.apache.isis.core.metamodel.facets.object.mixin.MetaModelValidatorForMixinTypes;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation;
@@ -90,7 +88,6 @@ import org.apache.isis.objectstore.jdo.metamodel.facets.object.persistencecapabl
 public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
         implements MetaModelValidatorRefiner, PostConstructMethodCache {
 
-    private final MetaModelValidatorForDeprecatedAnnotation immutableValidator = new MetaModelValidatorForDeprecatedAnnotation(Immutable.class);
     private final MetaModelValidatorForDeprecatedAnnotation objectTypeValidator = new MetaModelValidatorForDeprecatedAnnotation(ObjectType.class);
     private final MetaModelValidatorForValidationFailures autoCompleteInvalid = new MetaModelValidatorForValidationFailures();
     private final MetaModelValidatorForMixinTypes mixinTypeValidator = new MetaModelValidatorForMixinTypes("@DomainObject#nature=MIXIN");
@@ -251,15 +248,9 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
         final DomainObject domainObject = Annotations.getAnnotation(cls, DomainObject.class);
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
-        // check for the deprecated annotation first
-        final Immutable annotation = Annotations.getAnnotation(processClassContext.getCls(), Immutable.class);
-        ImmutableFacet facet = immutableValidator.flagIfPresent(
-                ImmutableFacetForImmutableAnnotation.create(annotation, processClassContext.getFacetHolder()));
-
-        // else check from @DomainObject(editing=...)
-        if(facet == null) {
-            facet = ImmutableFacetForDomainObjectAnnotation.create(domainObject, getConfiguration(), facetHolder);
-        }
+        // check from @DomainObject(editing=...)
+        ImmutableFacet facet = ImmutableFacetForDomainObjectAnnotation
+                .create(domainObject, getConfiguration(), facetHolder);
 
         // then add
         FacetUtil.addFacet(facet);
@@ -512,7 +503,6 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
 
         }));
 
-        metaModelValidator.add(immutableValidator);
         metaModelValidator.add(objectTypeValidator);
 
         metaModelValidator.add(autoCompleteInvalid);
@@ -527,7 +517,6 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
         super.setServicesInjector(servicesInjector);
         IsisConfiguration configuration = getConfiguration();
 
-        immutableValidator.setConfiguration(configuration);
         objectTypeValidator.setConfiguration(configuration);
 
         this.persistenceSessionServiceInternal = servicesInjector.getPersistenceSessionServiceInternal();

@@ -24,7 +24,6 @@ import java.math.BigDecimal;
 import org.apache.isis.applib.annotation.Defaulted;
 import org.apache.isis.applib.annotation.Encodable;
 import org.apache.isis.applib.annotation.EqualByContent;
-import org.apache.isis.applib.annotation.Immutable;
 import org.apache.isis.applib.annotation.Parseable;
 import org.apache.isis.applib.annotation.Value;
 
