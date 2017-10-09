@@ -20,14 +20,19 @@
 package org.apache.isis.core.metamodel.facets.properties.property;
 
 import java.lang.reflect.Method;
-import org.apache.isis.applib.annotation.Optional;
+
+import javax.annotation.Nullable;
+
+import org.apache.isis.applib.annotation.Optionality;
+import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
-import org.apache.isis.core.metamodel.facets.properties.property.mandatory.MandatoryFacetInvertedByOptionalAnnotationOnProperty;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
+import org.apache.isis.core.metamodel.facets.properties.property.mandatory.MandatoryFacetForPropertyAnnotation;
+import org.apache.isis.core.metamodel.facets.properties.property.mandatory.MandatoryFacetInvertedByNullableAnnotationOnProperty;
 
-public class OptionalAnnotationOnPropertyFacetFactoryTest extends AbstractFacetFactoryTest {
+public class PropertyOptionalityOrNullableAnnotationOnPropertyFacetFactoryTest extends AbstractFacetFactoryTest {
 
     private PropertyAnnotationFacetFactory facetFactory;
 
@@ -36,10 +41,10 @@ public class OptionalAnnotationOnPropertyFacetFactoryTest extends AbstractFacetF
         facetFactory = new PropertyAnnotationFacetFactory();
     }
 
-    public void testOptionalAnnotationPickedUpOnProperty() {
+    public void testPropertyAnnotationWithOptionalityPickedUpOnProperty() {
 
         class Customer {
-            @Optional
+            @Property(optionality = Optionality.OPTIONAL)
             public String getFirstName() {
                 return null;
             }
@@ -50,14 +55,47 @@ public class OptionalAnnotationOnPropertyFacetFactoryTest extends AbstractFacetF
 
         final Facet facet = facetedMethod.getFacet(MandatoryFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof MandatoryFacetInvertedByOptionalAnnotationOnProperty);
+        assertTrue(facet instanceof MandatoryFacetForPropertyAnnotation.Optional);
     }
 
-    public void testOptionalAnnotationIgnoredForPrimitiveOnProperty() {
+    public void testPropertyAnnotationIgnoredForPrimitiveOnProperty() {
 
         class Customer {
             @SuppressWarnings("unused")
-            @Optional
+            @Property(optionality = Optionality.OPTIONAL)
+            public int getNumberOfOrders() {
+                return 0;
+            }
+        }
+        final Method method = findMethod(Customer.class, "getNumberOfOrders");
+
+        facetFactory.processOptional(new ProcessMethodContext(Customer.class, null, method, methodRemover, facetedMethod));
+
+        assertNotNull(facetedMethod.getFacet(MandatoryFacet.class));
+    }
+
+    public void testNullableAnnotationPickedUpOnProperty() {
+
+        class Customer {
+            @Nullable
+            public String getFirstName() {
+                return null;
+            }
+        }
+        final Method method = findMethod(Customer.class, "getFirstName");
+
+        facetFactory.processOptional(new ProcessMethodContext(Customer.class, null, method, methodRemover, facetedMethod));
+
+        final Facet facet = facetedMethod.getFacet(MandatoryFacet.class);
+        assertNotNull(facet);
+        assertTrue(facet instanceof MandatoryFacetInvertedByNullableAnnotationOnProperty);
+    }
+
+    public void testNullableAnnotationIgnoredForPrimitiveOnProperty() {
+
+        class Customer {
+            @SuppressWarnings("unused")
+            @Nullable
             public int getNumberOfOrders() {
                 return 0;
             }

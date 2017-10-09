@@ -14,27 +14,19 @@ The annotations listed in the table below are still supported by Apache Isis, bu
 
 
 .Deprecated Annotations
-[cols="2,4a,3a,1,1", options="header"]
+[cols="2,4a,3a,1", options="header"]
 |===
 |Annotation
 |Purpose
 |Use instead
 |Layer
-|xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[File-based layout]?
 
-
-|`@Optional`
-|Specifies that a property or action parameter is not mandatory.
-|`#optionality()` attribute for xref:../rgant/rgant.adoc#_rgant-Property_optionality[`@Property`] or  xref:../rgant/rgant.adoc#_rgant-Parameter_optionality[`@Parameter`]
-|Domain
-|
 
 
 |`@RegEx`
 |Validate change to value of string property.
 |`#regexPattern()` for xref:../rgant/rgant.adoc#_rgant-Property_regexPattern[`@Property`] or  xref:../rgant/rgant.adoc#_rgant-Property_regexPattern[`@Parameter`].
 |Domain
-|
 
 
 

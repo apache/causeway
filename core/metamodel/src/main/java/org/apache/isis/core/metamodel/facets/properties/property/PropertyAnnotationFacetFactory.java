@@ -23,7 +23,6 @@ import java.lang.reflect.Method;
 
 import javax.annotation.Nullable;
 
-import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.RegEx;
 import org.apache.isis.applib.services.HasTransactionId;
@@ -53,7 +52,6 @@ import org.apache.isis.core.metamodel.facets.properties.property.fileaccept.File
 import org.apache.isis.core.metamodel.facets.properties.property.hidden.HiddenFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.mandatory.MandatoryFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.mandatory.MandatoryFacetInvertedByNullableAnnotationOnProperty;
-import org.apache.isis.core.metamodel.facets.properties.property.mandatory.MandatoryFacetInvertedByOptionalAnnotationOnProperty;
 import org.apache.isis.core.metamodel.facets.properties.property.maxlength.MaxLengthFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertyClearFacetForDomainEventFromDefault;
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertyClearFacetForDomainEventFromPropertyAnnotation;
@@ -79,7 +77,6 @@ import org.apache.isis.core.metamodel.util.EventUtil;
 public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner {
 
     private final MetaModelValidatorForDeprecatedAnnotation regexValidator = new MetaModelValidatorForDeprecatedAnnotation(RegEx.class);
-    private final MetaModelValidatorForDeprecatedAnnotation optionalValidator = new MetaModelValidatorForDeprecatedAnnotation(Optional.class);
     private final MetaModelValidatorForConflictingOptionality conflictingOptionalityValidator = new MetaModelValidatorForConflictingOptionality();
 
 
@@ -297,15 +294,7 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
 
         final FacetHolder holder = processMethodContext.getFacetHolder();
 
-        // check for deprecated @Optional
-        final Optional optionalAnnotation = Annotations.getAnnotation(method, Optional.class);
-        FacetUtil.addFacet(
-                optionalValidator.flagIfPresent(
-                    MandatoryFacetInvertedByOptionalAnnotationOnProperty.create(optionalAnnotation, method, holder),
-                    processMethodContext));
-
         // check for @Nullable
-        final MandatoryFacet facet;
         final Nullable nullableAnnotation = Annotations.getAnnotation(method, Nullable.class);
         final MandatoryFacet facet2 =
                 MandatoryFacetInvertedByNullableAnnotationOnProperty.create(nullableAnnotation, method, holder);
@@ -364,7 +353,6 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
     @Override
     public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
         metaModelValidator.add(regexValidator);
-        metaModelValidator.add(optionalValidator);
         metaModelValidator.add(conflictingOptionalityValidator);
     }
 
@@ -377,7 +365,6 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
         super.setServicesInjector(servicesInjector);
         IsisConfiguration configuration = servicesInjector.getConfigurationServiceInternal();
         regexValidator.setConfiguration(configuration);
-        optionalValidator.setConfiguration(configuration);
     }
 
 }

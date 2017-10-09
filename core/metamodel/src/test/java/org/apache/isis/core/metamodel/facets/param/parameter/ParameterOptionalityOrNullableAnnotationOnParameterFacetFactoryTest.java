@@ -20,14 +20,19 @@
 package org.apache.isis.core.metamodel.facets.param.parameter;
 
 import java.lang.reflect.Method;
-import org.apache.isis.applib.annotation.Optional;
+
+import javax.annotation.Nullable;
+
+import org.apache.isis.applib.annotation.Optionality;
+import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessParameterContext;
-import org.apache.isis.core.metamodel.facets.param.parameter.mandatory.MandatoryFacetInvertedByOptionalAnnotationOnParameter;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
+import org.apache.isis.core.metamodel.facets.param.parameter.mandatory.MandatoryFacetForParameterAnnotation;
+import org.apache.isis.core.metamodel.facets.param.parameter.mandatory.MandatoryFacetInvertedByNullableAnnotationOnParameter;
 
-public class OptionalAnnotationOnParameterFacetFactoryTest extends AbstractFacetFactoryTest {
+public class ParameterOptionalityOrNullableAnnotationOnParameterFacetFactoryTest extends AbstractFacetFactoryTest {
 
     private ParameterAnnotationFacetFactory facetFactory;
 
@@ -35,11 +40,12 @@ public class OptionalAnnotationOnParameterFacetFactoryTest extends AbstractFacet
         super.setUp();
         facetFactory = new ParameterAnnotationFacetFactory();
     }
-    public void testOptionalAnnotationPickedUpOnActionParameter() {
+
+    public void testParameterAnnotationWithOptionalityPickedUpOnActionParameter() {
 
         class Customer {
             @SuppressWarnings("unused")
-            public void someAction(@Optional final String foo) {
+            public void someAction(@Parameter(optionality = Optionality.OPTIONAL) final String foo) {
             }
         }
         final Method method = findMethod(Customer.class, "someAction", new Class[] { String.class });
@@ -48,14 +54,45 @@ public class OptionalAnnotationOnParameterFacetFactoryTest extends AbstractFacet
 
         final Facet facet = facetedMethodParameter.getFacet(MandatoryFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof MandatoryFacetInvertedByOptionalAnnotationOnParameter);
+        assertTrue(facet instanceof MandatoryFacetForParameterAnnotation.Optional);
     }
 
-    public void testOptionalAnnotationIgnoredForPrimitiveOnActionParameter() {
+    public void testParameterAnnotationWithOptionalityIgnoredForPrimitiveOnActionParameter() {
 
         class Customer {
             @SuppressWarnings("unused")
-            public void someAction(@Optional final int foo) {
+            public void someAction(@Parameter(optionality = Optionality.OPTIONAL) final int foo) {
+            }
+        }
+        final Method method = findMethod(Customer.class, "someAction", new Class[] { int.class });
+
+        facetFactory.processParamsOptional(new ProcessParameterContext(Customer.class, method, 0, null, facetedMethodParameter));
+
+        assertNull(facetedMethod.getFacet(MandatoryFacet.class));
+    }
+
+
+    public void testNullableAnnotationPickedUpOnActionParameter() {
+
+        class Customer {
+            @SuppressWarnings("unused")
+            public void someAction(@Nullable final String foo) {
+            }
+        }
+        final Method method = findMethod(Customer.class, "someAction", new Class[] { String.class });
+
+        facetFactory.processParamsOptional(new ProcessParameterContext(Customer.class, method, 0, null, facetedMethodParameter));
+
+        final Facet facet = facetedMethodParameter.getFacet(MandatoryFacet.class);
+        assertNotNull(facet);
+        assertTrue(facet instanceof MandatoryFacetInvertedByNullableAnnotationOnParameter);
+    }
+
+    public void testNullableAnnotationIgnoredForPrimitiveOnActionParameter() {
+
+        class Customer {
+            @SuppressWarnings("unused")
+            public void someAction(@Nullable final int foo) {
             }
         }
         final Method method = findMethod(Customer.class, "someAction", new Class[] { int.class });

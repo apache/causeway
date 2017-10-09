@@ -24,11 +24,9 @@ import java.lang.reflect.Method;
 
 import javax.annotation.Nullable;
 
-import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.RegEx;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
@@ -41,7 +39,6 @@ import org.apache.isis.core.metamodel.facets.objectvalue.regex.TitleFacetFormatt
 import org.apache.isis.core.metamodel.facets.param.parameter.fileaccept.FileAcceptFacetForParameterAnnotation;
 import org.apache.isis.core.metamodel.facets.param.parameter.mandatory.MandatoryFacetForParameterAnnotation;
 import org.apache.isis.core.metamodel.facets.param.parameter.mandatory.MandatoryFacetInvertedByNullableAnnotationOnParameter;
-import org.apache.isis.core.metamodel.facets.param.parameter.mandatory.MandatoryFacetInvertedByOptionalAnnotationOnParameter;
 import org.apache.isis.core.metamodel.facets.param.parameter.maxlen.MaxLengthFacetForParameterAnnotation;
 import org.apache.isis.core.metamodel.facets.param.parameter.mustsatisfy.MustSatisfySpecificationFacetForParameterAnnotation;
 import org.apache.isis.core.metamodel.facets.param.parameter.regex.RegExFacetForParameterAnnotation;
@@ -54,7 +51,6 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorFor
 public class ParameterAnnotationFacetFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner {
 
     private final MetaModelValidatorForDeprecatedAnnotation regexValidator = new MetaModelValidatorForDeprecatedAnnotation(RegEx.class);
-    private final MetaModelValidatorForDeprecatedAnnotation optionalValidator = new MetaModelValidatorForDeprecatedAnnotation(Optional.class);
     private final MetaModelValidatorForConflictingOptionality conflictingOptionalityValidator = new MetaModelValidatorForConflictingOptionality();
 
     public ParameterAnnotationFacetFactory() {
@@ -158,16 +154,6 @@ public class ParameterAnnotationFacetFactory extends FacetFactoryAbstract implem
 
         for (final Annotation parameterAnnotation : parameterAnnotations) {
             final Class<?> parameterType = parameterTypes[paramNum];
-            if (parameterAnnotation instanceof Optional) {
-                final Optional annotation = (Optional) parameterAnnotation;
-                FacetUtil.addFacet(optionalValidator.flagIfPresent(
-                        MandatoryFacetInvertedByOptionalAnnotationOnParameter.create(
-                                annotation, parameterType, holder), processParameterContext));
-            }
-        }
-
-        for (final Annotation parameterAnnotation : parameterAnnotations) {
-            final Class<?> parameterType = parameterTypes[paramNum];
             if (parameterAnnotation instanceof javax.annotation.Nullable) {
                 final Nullable annotation = (Nullable) parameterAnnotation;
                 final MandatoryFacet facet =
@@ -212,7 +198,6 @@ public class ParameterAnnotationFacetFactory extends FacetFactoryAbstract implem
     @Override
     public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
         metaModelValidator.add(regexValidator);
-        metaModelValidator.add(optionalValidator);
         metaModelValidator.add(conflictingOptionalityValidator);
     }
 
@@ -221,7 +206,6 @@ public class ParameterAnnotationFacetFactory extends FacetFactoryAbstract implem
         super.setServicesInjector(servicesInjector);
         IsisConfiguration configuration = servicesInjector.getConfigurationServiceInternal();
         regexValidator.setConfiguration(configuration);
-        optionalValidator.setConfiguration(configuration);
     }
 
 

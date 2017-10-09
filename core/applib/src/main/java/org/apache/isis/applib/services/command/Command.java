@@ -18,11 +18,12 @@ package org.apache.isis.applib.services.command;
 
 import java.sql.Timestamp;
 
+import javax.annotation.Nullable;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.CommandExecuteIn;
 import org.apache.isis.applib.annotation.CommandPersistence;
-import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.HasTransactionId;
@@ -342,7 +343,7 @@ public interface Command extends HasTransactionId {
      * @deprecated - see {@link Interaction#getCurrentExecution()} and  {@link org.apache.isis.applib.services.iactn.Interaction.Execution#getThrew()} instead.
      */
     @Deprecated
-    @Optional
+    @Nullable
     String getException();
 
     /**
