@@ -51,23 +51,25 @@ public abstract class NotContributedFacetAbstract extends FacetAbstract implemen
     }
 
     @Override
-    public NotContributedAs value() {
+    public NotContributedAs notContributed() {
         return as;
     }
 
     @Override
-    public Contributed inverseValue() {
+    public Contributed contributed() {
         return contributed;
     }
 
     @Override
     public boolean toActions() {
-        return value() == NotContributedAs.EITHER || value() == NotContributedAs.ACTION;
+        // not contributed to actions if...
+        return contributed() == Contributed.AS_NEITHER || contributed() == Contributed.AS_ASSOCIATION;
     }
 
     @Override
     public boolean toAssociations() {
-        return value() == NotContributedAs.EITHER || value() == NotContributedAs.ASSOCIATION;
+        // not contributed to associations if...
+        return contributed() == Contributed.AS_NEITHER || contributed() == Contributed.AS_ACTION;
     }
 
 }

@@ -156,7 +156,8 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
             assertThat(facet, CoreMatchers.is(not(nullValue())));
             assertThat(facet instanceof NotContributedFacetForActionLayoutAnnotation, CoreMatchers.is(true));
             final NotContributedFacetForActionLayoutAnnotation facetImpl = (NotContributedFacetForActionLayoutAnnotation) facet;
-            assertThat(facetImpl.value(), CoreMatchers.equalTo(NotContributedFacet.NotContributedAs.ACTION));
+            assertThat(facetImpl.notContributed(), CoreMatchers.equalTo(NotContributedFacet.NotContributedAs.ACTION));
+            assertThat(facetImpl.contributed(), CoreMatchers.equalTo(Contributed.AS_ASSOCIATION));
 
         }
 
@@ -194,7 +195,8 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
             assertThat(facet, CoreMatchers.is(not(nullValue())));
             assertThat(facet instanceof NotContributedFacetForActionLayoutAnnotation, CoreMatchers.is(true));
             final NotContributedFacetForActionLayoutAnnotation facetImpl = (NotContributedFacetForActionLayoutAnnotation) facet;
-            assertThat(facetImpl.value(), CoreMatchers.equalTo(NotContributedFacet.NotContributedAs.ASSOCIATION));
+            assertThat(facetImpl.notContributed(), CoreMatchers.equalTo(NotContributedFacet.NotContributedAs.ASSOCIATION));
+            assertThat(facetImpl.contributed(), CoreMatchers.equalTo(Contributed.AS_ACTION));
         }
 
         @Test
@@ -230,7 +232,9 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
             assertThat(facet, CoreMatchers.is(not(nullValue())));
             assertThat(facet instanceof NotContributedFacetForActionLayoutAnnotation, CoreMatchers.is(true));
             final NotContributedFacetForActionLayoutAnnotation facetImpl = (NotContributedFacetForActionLayoutAnnotation) facet;
-            assertThat(facetImpl.value(), CoreMatchers.equalTo(NotContributedFacet.NotContributedAs.EITHER));
+            assertThat(facetImpl.notContributed(), CoreMatchers.equalTo(NotContributedFacet.NotContributedAs.EITHER));
+            assertThat(facetImpl.contributed(), CoreMatchers.equalTo(Contributed.AS_NEITHER));
+
         }
 
         @Test
@@ -267,7 +271,8 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
             assertThat(facet, CoreMatchers.is(not(nullValue())));
             assertThat(facet instanceof NotContributedFacetForActionLayoutAnnotation, CoreMatchers.is(true));
             final NotContributedFacetForActionLayoutAnnotation facetImpl = (NotContributedFacetForActionLayoutAnnotation) facet;
-            assertThat(facetImpl.value(), CoreMatchers.equalTo(NotContributedFacet.NotContributedAs.EITHER));
+            assertThat(facetImpl.notContributed(), CoreMatchers.equalTo(NotContributedFacet.NotContributedAs.EITHER));
+            assertThat(facetImpl.contributed(), CoreMatchers.equalTo(Contributed.AS_NEITHER));
 
         }
 

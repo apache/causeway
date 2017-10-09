@@ -32,8 +32,8 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
  */
 public interface NotContributedFacet extends Facet {
 
-    public NotContributedAs value();
-    public Contributed inverseValue();
+    public NotContributedAs notContributed();
+    public Contributed contributed();
 
     public boolean toActions();
     public boolean toAssociations();
