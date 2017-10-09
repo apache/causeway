@@ -20,12 +20,13 @@
 package org.apache.isis.core.metamodel.facets.properties.property;
 
 import java.lang.reflect.Method;
-import org.apache.isis.applib.annotation.NotPersisted;
+
+import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
-import org.apache.isis.core.metamodel.facets.properties.property.notpersisted.NotPersistedFacetForNotPersistedAnnotationOnProperty;
+import org.apache.isis.core.metamodel.facets.properties.property.notpersisted.NotPersistedFacetForPropertyAnnotation;
 
 public class NotPersistedAnnotationOnPropertyFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -36,11 +37,11 @@ public class NotPersistedAnnotationOnPropertyFacetFactoryTest extends AbstractFa
         facetFactory = new PropertyAnnotationFacetFactory();
     }
 
-    public void testNotPersistedAnnotationPickedUpOnProperty() {
+    public void testAnnotationPickedUpOnProperty() {
 
         class Customer {
             @SuppressWarnings("unused")
-            @NotPersisted()
+            @Property(notPersisted = true)
             public String getFirstName() {
                 return null;
             }
@@ -51,7 +52,7 @@ public class NotPersistedAnnotationOnPropertyFacetFactoryTest extends AbstractFa
 
         final Facet facet = facetedMethod.getFacet(NotPersistedFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof NotPersistedFacetForNotPersistedAnnotationOnProperty);
+        assertTrue(facet instanceof NotPersistedFacetForPropertyAnnotation);
 
         assertNoMethodsRemoved();
     }

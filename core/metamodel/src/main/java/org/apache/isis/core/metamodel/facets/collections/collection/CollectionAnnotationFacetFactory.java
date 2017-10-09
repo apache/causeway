@@ -25,13 +25,10 @@ import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 
 import org.apache.isis.applib.annotation.Collection;
-import org.apache.isis.applib.annotation.NotPersisted;
 import org.apache.isis.applib.services.eventbus.CollectionDomainEvent;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
@@ -51,23 +48,16 @@ import org.apache.isis.core.metamodel.facets.collections.collection.modify.Colle
 import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionRemoveFromFacetForDomainEventFromCollectionAnnotation;
 import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionRemoveFromFacetForDomainEventFromDefault;
 import org.apache.isis.core.metamodel.facets.collections.collection.notpersisted.NotPersistedFacetForCollectionAnnotation;
-import org.apache.isis.core.metamodel.facets.collections.collection.notpersisted.NotPersistedFacetForNotPersistedAnnotationOnCollection;
 import org.apache.isis.core.metamodel.facets.collections.collection.typeof.TypeOfFacetOnCollectionFromCollectionAnnotation;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionRemoveFromFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.CollectionUtils;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
 import org.apache.isis.core.metamodel.util.EventUtil;
 
-public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner {
-
-    private final MetaModelValidatorForDeprecatedAnnotation notPersistedValidator = new MetaModelValidatorForDeprecatedAnnotation(NotPersisted.class);
-
+public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract {
 
     public CollectionAnnotationFacetFactory() {
         super(FeatureType.COLLECTIONS_AND_ACTIONS);
@@ -194,17 +184,9 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract imple
         final Method method = processMethodContext.getMethod();
         final FacetHolder holder = processMethodContext.getFacetHolder();
 
-        // check for deprecated @NotPersisted first
-        final NotPersisted annotation = Annotations.getAnnotation(method, NotPersisted.class);
-        final NotPersistedFacet facet1 = NotPersistedFacetForNotPersistedAnnotationOnCollection.create(annotation, holder);
-        FacetUtil.addFacet(notPersistedValidator.flagIfPresent(facet1, processMethodContext));
-        NotPersistedFacet facet = facet1;
-
-        // else search for @Collection(notPersisted=...)
+        // search for @Collection(notPersisted=...)
         final Collection collection = Annotations.getAnnotation(method, Collection.class);
-        if(facet == null) {
-            facet = NotPersistedFacetForCollectionAnnotation.create(collection, holder);
-        }
+        NotPersistedFacet facet = NotPersistedFacetForCollectionAnnotation.create(collection, holder);
 
         FacetUtil.addFacet(facet);
     }
@@ -273,24 +255,6 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract imple
         return null;
     }
 
-
-    // //////////////////////////////////////
-
-    @Override
-    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
-        metaModelValidator.add(notPersistedValidator);
-    }
-
-    // //////////////////////////////////////
-
-
-    @Override
-    public void setServicesInjector(final ServicesInjector servicesInjector) {
-        super.setServicesInjector(servicesInjector);
-        final IsisConfiguration configuration = getConfiguration();
-
-        notPersistedValidator.setConfiguration(configuration);
-    }
 
 
 }

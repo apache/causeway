@@ -17,8 +17,6 @@ org.apache.isis.applib.annotation
 
     RegEx.java - entire annotation, use @Property(regexPatternFlags=...) or @Parameter(regexPatternFlags=...) instead; or alternatively NEW SUPPORT for JSR-303 @Pattern annotation (http://beanvalidation.org/1.0/spec/, chapter 6).
 
-    NotPersisted.java - entire annotation, use @Property(notPersisted=...) instead
-
     ObjectType.java - entire annotation, use @DomainObject(objectType=...) or @javax.jdo.annotations.Discriminator instead.
 
     Parameter.java
@@ -380,6 +378,9 @@ org.apache.isis.applib.annotation
     NotInServiceMenu.java - entire annotation, use @DomainService(nature=...) or mixins instead.
 
     NotContributed.java - entire annotation, use @DomainService(nature=...) or mixins instead.
+
+    NotPersisted.java - entire annotation, use @Property(notPersisted=...) instead
+
 
     NotPersistable.java - entire annotation, not supported and does nothing
 
