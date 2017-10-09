@@ -173,49 +173,9 @@ public class ObjectMemberAbstractTest {
     }
 
     @Test
-    public void testVisibleWhenTargetPersistentAndHiddenFacetSetToOncePersisted() {
+    public void testVisibleWhenHiddenFacetSet() {
         testMember.addFacet(new HideForContextFacetNone(testMember));
         testMember.addFacet(new HiddenFacetAbstractImpl(Where.ANYWHERE, testMember){});
-
-        context.checking(new Expectations() {{
-            allowing(mockPersistable).dnIsPersistent();
-            will(returnValue(true));
-            allowing(mockPersistable).dnIsDeleted();
-            will(returnValue(false));
-        }});
-
-
-        assertFalse(testMember.isVisible(persistentAdapter, InteractionInitiatedBy.USER, Where.ANYWHERE).isAllowed());
-    }
-
-    @Test
-    public void testVisibleWhenTargetPersistentAndHiddenFacetSetToUntilPersisted() {
-        testMember.addFacet(new HideForContextFacetNone(testMember));
-        testMember.addFacet(new HiddenFacetAbstractImpl(Where.ANYWHERE, testMember){});
-
-        context.checking(new Expectations() {{
-            allowing(mockPersistable).dnIsPersistent();
-            will(returnValue(true));
-            allowing(mockPersistable).dnIsDeleted();
-            will(returnValue(false));
-        }});
-
-
-        final Consent visible = testMember.isVisible(persistentAdapter, InteractionInitiatedBy.USER, Where.ANYWHERE);
-        assertTrue(visible.isAllowed());
-    }
-
-    @Test
-    public void testVisibleWhenTargetTransientAndHiddenFacetSetToUntilPersisted() {
-        testMember.addFacet(new HideForContextFacetNone(testMember));
-        testMember.addFacet(new HiddenFacetAbstractImpl(Where.ANYWHERE, testMember){});
-
-        context.checking(new Expectations() {{
-            allowing(mockPersistable).dnIsPersistent();
-            will(returnValue(false));
-            allowing(mockPersistable).dnIsDeleted();
-            will(returnValue(false));
-        }});
 
         final Consent visible = testMember.isVisible(transientAdapter, InteractionInitiatedBy.USER, Where.ANYWHERE);
         assertFalse(visible.isAllowed());

@@ -94,7 +94,6 @@ import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingLifecycleE
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
-import org.apache.isis.core.metamodel.interactions.ActionInteractionContext;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.core.metamodel.spec.FreeStandingList;
@@ -187,7 +186,6 @@ public class PersistenceSession implements
     private final MetricsService metricsService;
     private final ClockService clockService;
     private final UserService userService;
-    private final ActionInteractionContext actionInteractionContext;
 
 
     /**
@@ -245,7 +243,6 @@ public class PersistenceSession implements
         this.factoryService = lookupService(FactoryService.class);
         this.clockService = lookupService(ClockService.class);
         this.userService = lookupService(UserService.class);
-        this.actionInteractionContext = lookupService(ActionInteractionContext.class);
 
         // sub-components
         final AdapterManager adapterManager = this;

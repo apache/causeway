@@ -47,11 +47,10 @@ import java.util.HashMap;
  * 
  * <p>
  * By default any {@link Value value} types are assumed to follow the
- * equal-by-content rule, though this can be overridden if required. Value types
- * are usually also {@link Immutable immutable} (though there are some classic
+ * equal-by-content rule, though this can be overridden if required.
+ * Value types are usually also immutable (though there are some classic
  * exceptions to this, such as {@link Date}).
  * 
- * @see Immutable
  * @see Value
  *
  * <p>
@@ -62,5 +61,4 @@ import java.util.HashMap;
 @Target({ ElementType.TYPE, ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface EqualByContent {
-    When value() default When.ALWAYS;
 }

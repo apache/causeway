@@ -22,6 +22,7 @@ package org.apache.isis.core.metamodel.facets.collections.collection;
 import java.lang.reflect.Method;
 import java.util.Collection;
 
+import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
@@ -50,6 +51,7 @@ public class DisabledAnnotationOnCollectionFacetFactoryTest extends AbstractFace
 
     public void testDisabledAnnotationPickedUpOnCollection() {
         class Customer {
+            @org.apache.isis.applib.annotation.Collection(editing = Editing.DISABLED)
             public Collection<?> getOrders() {
                 return null;
             }
