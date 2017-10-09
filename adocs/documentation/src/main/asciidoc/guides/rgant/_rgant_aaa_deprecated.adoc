@@ -23,12 +23,6 @@ The annotations listed in the table below are still supported by Apache Isis, bu
 |xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[File-based layout]?
 
 
-|`@MustSatisfy`
-|Specify arbitrary specification constraints on a property or action parameter.
-|`#mustSatisfy()` attribute for xref:../rgant/rgant.adoc#_rgant-Property_mustSatisfy[`@Property`] or xref:../rgant/rgant.adoc#_rgant-Parameter_mustSatisfy[`@Parameter`]
-|Domain
-|
-
 
 |`@NotInServiceMenu`
 |Indicates that a domain service should not be rendered in the application menu (at top of page in Wicket viewer).

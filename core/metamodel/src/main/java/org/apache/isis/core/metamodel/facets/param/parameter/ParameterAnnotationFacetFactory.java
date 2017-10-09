@@ -24,7 +24,6 @@ import java.lang.reflect.Method;
 
 import javax.annotation.Nullable;
 
-import org.apache.isis.applib.annotation.MustSatisfy;
 import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.RegEx;
@@ -44,7 +43,6 @@ import org.apache.isis.core.metamodel.facets.param.parameter.mandatory.Mandatory
 import org.apache.isis.core.metamodel.facets.param.parameter.mandatory.MandatoryFacetInvertedByNullableAnnotationOnParameter;
 import org.apache.isis.core.metamodel.facets.param.parameter.mandatory.MandatoryFacetInvertedByOptionalAnnotationOnParameter;
 import org.apache.isis.core.metamodel.facets.param.parameter.maxlen.MaxLengthFacetForParameterAnnotation;
-import org.apache.isis.core.metamodel.facets.param.parameter.mustsatisfy.MustSatisfySpecificationFacetForMustSatisfyAnnotationOnParameter;
 import org.apache.isis.core.metamodel.facets.param.parameter.mustsatisfy.MustSatisfySpecificationFacetForParameterAnnotation;
 import org.apache.isis.core.metamodel.facets.param.parameter.regex.RegExFacetForParameterAnnotation;
 import org.apache.isis.core.metamodel.facets.param.parameter.regex.RegExFacetFromRegExAnnotationOnParameter;
@@ -55,7 +53,6 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorFor
 
 public class ParameterAnnotationFacetFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner {
 
-    private final MetaModelValidatorForDeprecatedAnnotation mustSatisfyValidator = new MetaModelValidatorForDeprecatedAnnotation(MustSatisfy.class);
     private final MetaModelValidatorForDeprecatedAnnotation regexValidator = new MetaModelValidatorForDeprecatedAnnotation(RegEx.class);
     private final MetaModelValidatorForDeprecatedAnnotation optionalValidator = new MetaModelValidatorForDeprecatedAnnotation(Optional.class);
     private final MetaModelValidatorForConflictingOptionality conflictingOptionalityValidator = new MetaModelValidatorForConflictingOptionality();
@@ -105,15 +102,6 @@ public class ParameterAnnotationFacetFactory extends FacetFactoryAbstract implem
         final int paramNum = processParameterContext.getParamNum();
         final FacetedMethodParameter holder = processParameterContext.getFacetHolder();
         final Annotation[] parameterAnnotations = Annotations.getParameterAnnotations(method)[paramNum];
-
-        for (final Annotation parameterAnnotation : parameterAnnotations) {
-            if (parameterAnnotation instanceof MustSatisfy) {
-                final MustSatisfy annotation = (MustSatisfy) parameterAnnotation;
-                final Facet facet = MustSatisfySpecificationFacetForMustSatisfyAnnotationOnParameter.create(annotation, processParameterContext.getFacetHolder(), servicesInjector);
-                FacetUtil.addFacet(mustSatisfyValidator.flagIfPresent(facet, processParameterContext));
-                return;
-            }
-        }
 
         for (final Annotation parameterAnnotation : parameterAnnotations) {
             if (parameterAnnotation instanceof Parameter) {
@@ -223,7 +211,6 @@ public class ParameterAnnotationFacetFactory extends FacetFactoryAbstract implem
 
     @Override
     public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
-        metaModelValidator.add(mustSatisfyValidator);
         metaModelValidator.add(regexValidator);
         metaModelValidator.add(optionalValidator);
         metaModelValidator.add(conflictingOptionalityValidator);
@@ -233,7 +220,6 @@ public class ParameterAnnotationFacetFactory extends FacetFactoryAbstract implem
     public void setServicesInjector(final ServicesInjector servicesInjector) {
         super.setServicesInjector(servicesInjector);
         IsisConfiguration configuration = servicesInjector.getConfigurationServiceInternal();
-        mustSatisfyValidator.setConfiguration(configuration);
         regexValidator.setConfiguration(configuration);
         optionalValidator.setConfiguration(configuration);
     }

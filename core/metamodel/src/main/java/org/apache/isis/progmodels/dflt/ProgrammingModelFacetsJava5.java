@@ -95,7 +95,6 @@ import org.apache.isis.core.metamodel.facets.object.recreatable.RecreatableObjec
 import org.apache.isis.core.metamodel.facets.object.regex.annotation.RegExFacetOnTypeAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.title.methods.TitleFacetViaMethodsFactory;
-import org.apache.isis.core.metamodel.facets.object.validating.mustsatisfyspec.MustSatisfySpecificationFromMustSatisfyAnnotationOnTypeFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.validating.validateobject.method.ValidateObjectFacetMethodFactory;
 import org.apache.isis.core.metamodel.facets.object.value.annotcfg.ValueFacetAnnotationOrConfigurationFactory;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.method.ActionParameterAutoCompleteFacetViaMethodFactory;
@@ -316,11 +315,6 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(new MixinFacetForMixinAnnotationFactory());
 
 
-        
-
-        addFactory(new MustSatisfySpecificationFromMustSatisfyAnnotationOnTypeFacetFactory());
-
-        
 
         // must come after RecreatableObjectFacetFactory
         addFactory(new DomainObjectAnnotationFacetFactory());

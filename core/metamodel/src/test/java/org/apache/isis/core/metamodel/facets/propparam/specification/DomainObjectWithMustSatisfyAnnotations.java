@@ -19,13 +19,10 @@
 
 package org.apache.isis.core.metamodel.facets.propparam.specification;
 
-import org.apache.isis.applib.annotation.MustSatisfy;
-
 public class DomainObjectWithMustSatisfyAnnotations {
 
     private String firstName;
 
-    @MustSatisfy(SpecificationAlwaysSatisfied.class)
     public String getFirstName() {
         return firstName;
     }
@@ -36,7 +33,6 @@ public class DomainObjectWithMustSatisfyAnnotations {
 
     private String lastName;
 
-    @MustSatisfy(SpecificationRequiresFirstLetterToBeUpperCase.class)
     public String getLastName() {
         return lastName;
     }
@@ -45,7 +41,7 @@ public class DomainObjectWithMustSatisfyAnnotations {
         this.lastName = lastName;
     }
 
-    public void changeLastName(@MustSatisfy(SpecificationRequiresFirstLetterToBeUpperCase.class) final String lastName) {
+    public void changeLastName(final String lastName) {
         setLastName(lastName);
     }
 
