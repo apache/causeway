@@ -50,7 +50,6 @@ import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredF
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromGenerics;
 import org.apache.isis.core.metamodel.facets.actions.action.command.CommandFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.command.CommandFacetForActionAnnotationAsConfigured;
-import org.apache.isis.core.metamodel.facets.actions.action.command.CommandFacetForCommandAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.command.CommandFacetFromConfiguration;
 import org.apache.isis.core.metamodel.facets.actions.action.hidden.HiddenFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet;
@@ -763,33 +762,6 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
         }
 
         @Test
-        public void givenDeprecatedAnnotation() {
-            // given
-            class Customer {
-                @org.apache.isis.applib.annotation.Command(
-                        executeIn = org.apache.isis.applib.annotation.Command.ExecuteIn.BACKGROUND,
-                        persistence = org.apache.isis.applib.annotation.Command.Persistence.IF_HINTED
-                )
-                public void someAction() {
-                }
-            }
-            final Method actionMethod = findMethod(Customer.class, "someAction");
-
-            // when
-            facetFactory.processCommand(new ProcessMethodContext(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
-
-            // then
-            final Facet facet = facetedMethod.getFacet(CommandFacet.class);
-            assertNotNull(facet);
-            assertTrue(facet instanceof CommandFacetForCommandAnnotation);
-            final CommandFacetForCommandAnnotation facetImpl = (CommandFacetForCommandAnnotation) facet;
-
-            assertThat(facetImpl.persistence(), is(org.apache.isis.applib.annotation.Command.Persistence.IF_HINTED));
-
-            expectNoMethodsRemoved();
-        }
-
-        @Test
         public void given_noAnnotation_and_configurationSetToIgnoreQueryOnly_andSafeSemantics_thenNone() {
 
             // given
@@ -825,8 +797,8 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             assertNotNull(facet);
             assert(facet instanceof  CommandFacetFromConfiguration);
             final CommandFacetFromConfiguration facetImpl = (CommandFacetFromConfiguration) facet;
-            assertThat(facetImpl.persistence(), is(org.apache.isis.applib.annotation.Command.Persistence.PERSISTED));
-            assertThat(facetImpl.executeIn(), is(org.apache.isis.applib.annotation.Command.ExecuteIn.FOREGROUND));
+            assertThat(facetImpl.persistence(), is(org.apache.isis.applib.annotation.CommandPersistence.PERSISTED));
+            assertThat(facetImpl.executeIn(), is(org.apache.isis.applib.annotation.CommandExecuteIn.FOREGROUND));
         }
 
         @Test(expected=IllegalStateException.class)
@@ -923,8 +895,8 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             final Facet facet = facetedMethod.getFacet(CommandFacet.class);
             assertNotNull(facet);
             final CommandFacetForActionAnnotationAsConfigured facetImpl = (CommandFacetForActionAnnotationAsConfigured) facet;
-            assertThat(facetImpl.persistence(), is(org.apache.isis.applib.annotation.Command.Persistence.IF_HINTED));
-            assertThat(facetImpl.executeIn(), is(org.apache.isis.applib.annotation.Command.ExecuteIn.BACKGROUND));
+            assertThat(facetImpl.persistence(), is(org.apache.isis.applib.annotation.CommandPersistence.IF_HINTED));
+            assertThat(facetImpl.executeIn(), is(org.apache.isis.applib.annotation.CommandExecuteIn.BACKGROUND));
         }
 
         @Test(expected=IllegalStateException.class)
@@ -988,8 +960,8 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             final Facet facet = facetedMethod.getFacet(CommandFacet.class);
             assertNotNull(facet);
             final CommandFacetForActionAnnotationAsConfigured facetImpl = (CommandFacetForActionAnnotationAsConfigured) facet;
-            assertThat(facetImpl.persistence(), is(org.apache.isis.applib.annotation.Command.Persistence.IF_HINTED));
-            assertThat(facetImpl.executeIn(), is(org.apache.isis.applib.annotation.Command.ExecuteIn.BACKGROUND));
+            assertThat(facetImpl.persistence(), is(org.apache.isis.applib.annotation.CommandPersistence.IF_HINTED));
+            assertThat(facetImpl.executeIn(), is(org.apache.isis.applib.annotation.CommandExecuteIn.BACKGROUND));
         }
 
         @Test

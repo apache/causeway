@@ -27,8 +27,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import org.apache.isis.applib.annotation.Command.ExecuteIn;
-import org.apache.isis.applib.annotation.Command.Persistence;
+import org.apache.isis.applib.annotation.CommandExecuteIn;
+import org.apache.isis.applib.annotation.CommandPersistence;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
@@ -239,10 +239,10 @@ public class CommandDefault implements Command3 {
 
     //region > executionType (property)
 
-    private ExecuteIn executionType;
+    private CommandExecuteIn executionType;
 
     @Override
-    public ExecuteIn getExecuteIn() {
+    public CommandExecuteIn getExecuteIn() {
         return executionType;
     }
 
@@ -250,7 +250,7 @@ public class CommandDefault implements Command3 {
      * <b>NOT API</b>: intended to be called only by the framework.
      */
     @Override
-    public void setExecuteIn(ExecuteIn executionType) {
+    public void setExecuteIn(CommandExecuteIn executionType) {
         this.executionType = executionType;
     }
 
@@ -322,15 +322,15 @@ public class CommandDefault implements Command3 {
 
     //region > persistence
 
-    private Persistence persistence;
+    private CommandPersistence persistence;
     
     @Override
-    public Persistence getPersistence() {
+    public CommandPersistence getPersistence() {
         return persistence;
     }
     
     @Override
-    public void setPersistence(Persistence persistence) {
+    public void setPersistence(CommandPersistence persistence) {
         this.persistence = persistence; 
     }
 

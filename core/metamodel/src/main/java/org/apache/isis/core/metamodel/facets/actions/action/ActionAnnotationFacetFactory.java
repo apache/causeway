@@ -23,7 +23,6 @@ import java.lang.reflect.Method;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Bulk;
-import org.apache.isis.applib.annotation.Command;
 import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.services.HasTransactionId;
@@ -41,7 +40,6 @@ import org.apache.isis.core.metamodel.facets.actions.action.bulk.BulkFacetForAct
 import org.apache.isis.core.metamodel.facets.actions.action.bulk.BulkFacetForBulkAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.bulk.BulkFacetObjectOnly;
 import org.apache.isis.core.metamodel.facets.actions.action.command.CommandFacetForActionAnnotation;
-import org.apache.isis.core.metamodel.facets.actions.action.command.CommandFacetForCommandAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.disabled.DisabledFacetForDisabledAnnotationOnAction;
 import org.apache.isis.core.metamodel.facets.actions.action.hidden.HiddenFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.hidden.HiddenFacetForHiddenAnnotationOnAction;
@@ -74,7 +72,6 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract
             implements MetaModelValidatorRefiner {
 
     private final MetaModelValidatorForDeprecatedAnnotation bulkValidator = new MetaModelValidatorForDeprecatedAnnotation(Bulk.class);
-    private final MetaModelValidatorForDeprecatedAnnotation commandValidator = new MetaModelValidatorForDeprecatedAnnotation(Command.class);
     private final MetaModelValidatorForDeprecatedAnnotation hiddenValidator = new MetaModelValidatorForDeprecatedAnnotation(Hidden.class);
     private final MetaModelValidatorForDeprecatedAnnotation disabledValidator = new MetaModelValidatorForDeprecatedAnnotation(Disabled.class);
 
@@ -274,17 +271,8 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract
             return;
         }
 
-        CommandFacet commandFacet;
-
-        // check for deprecated @Command annotation first
-        final Command annotation = Annotations.getAnnotation(method, Command.class);
-        commandFacet = commandValidator.flagIfPresent(
-                CommandFacetForCommandAnnotation.create(annotation, processMethodContext.getFacetHolder()), processMethodContext);
-
-        // else check for @Action(command=...)
-        if(commandFacet == null) {
-            commandFacet = CommandFacetForActionAnnotation.create(action, getConfiguration(), holder);
-        }
+        // check for @Action(command=...)
+        CommandFacet commandFacet = CommandFacetForActionAnnotation.create(action, getConfiguration(), holder);
 
         FacetUtil.addFacet(commandFacet);
     }
@@ -352,7 +340,6 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract
     @Override
     public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
         metaModelValidator.add(bulkValidator);
-        metaModelValidator.add(commandValidator);
         metaModelValidator.add(hiddenValidator);
         metaModelValidator.add(disabledValidator);
     }
@@ -366,7 +353,6 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract
         final IsisConfiguration configuration = getConfiguration();
 
         bulkValidator.setConfiguration(configuration);
-        commandValidator.setConfiguration(configuration);
         hiddenValidator.setConfiguration(configuration);
         disabledValidator.setConfiguration(configuration);
     }

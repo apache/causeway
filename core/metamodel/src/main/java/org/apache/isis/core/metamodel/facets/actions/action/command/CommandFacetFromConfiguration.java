@@ -19,8 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.actions.action.command;
 
-import org.apache.isis.applib.annotation.Command.ExecuteIn;
-import org.apache.isis.applib.annotation.Command.Persistence;
+import org.apache.isis.applib.annotation.CommandExecuteIn;
+import org.apache.isis.applib.annotation.CommandPersistence;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
 import org.apache.isis.core.metamodel.facets.actions.command.CommandFacetAbstract;
@@ -28,12 +28,12 @@ import org.apache.isis.core.metamodel.facets.actions.command.CommandFacetAbstrac
 public class CommandFacetFromConfiguration extends CommandFacetAbstract {
 
     public static CommandFacet create(final FacetHolder holder) {
-        return new CommandFacetFromConfiguration(Persistence.PERSISTED, ExecuteIn.FOREGROUND, holder);
+        return new CommandFacetFromConfiguration(CommandPersistence.PERSISTED, CommandExecuteIn.FOREGROUND, holder);
     }
 
     private CommandFacetFromConfiguration(
-            final Persistence persistence, 
-            final ExecuteIn executeIn,
+            final CommandPersistence persistence,
+            final CommandExecuteIn executeIn,
             final FacetHolder holder) {
         super(persistence, executeIn, Enablement.ENABLED, holder);
     }

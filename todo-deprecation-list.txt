@@ -15,9 +15,6 @@ org.apache.isis.applib.annotation
     Bulk.InteractionContext - entire service, use ActionInvocationContext service instead
     InvokedOn.java - entire enum, along with @Bulk annotation.
 
-    Command.java - entire annotation, use @Action(command=...) instead
-    CommandExecuteIn.java - entire annotation, use @Action(commandExecuteIn=...) instead
-    CommandPersistence.java - entire annotation, use @Action(commandPersistence=...) instead
 
 
     Disabled.java - entire annotation, use @Property(editingDisabledReason=...) instead
@@ -331,6 +328,8 @@ org.apache.isis.applib.annotation
     AutoComplete.java - entire annotation, use @DomainObject(autoComplete...=...)
 
     Bookmarkable.java - entire annotation, use @DomainObjectLayout(bookmarking=...)
+
+    Command.java - entire annotation, use @Action(command=...) instead
 
     ActionSemantics.java  - entire annotation, use @Action(semantics=...)
     Idempotent.java - entire annotation, use @Action(semantics=...) instead.

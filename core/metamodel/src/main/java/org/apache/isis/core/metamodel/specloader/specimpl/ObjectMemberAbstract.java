@@ -483,8 +483,8 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
             command.setPersistence(commandFacet.persistence());
         } else {
             // if no facet, assume do want to execute right now, but only persist (eventually) if hinted.
-            command.setExecuteIn(org.apache.isis.applib.annotation.Command.ExecuteIn.FOREGROUND);
-            command.setPersistence(org.apache.isis.applib.annotation.Command.Persistence.IF_HINTED);
+            command.setExecuteIn(org.apache.isis.applib.annotation.CommandExecuteIn.FOREGROUND);
+            command.setPersistence(org.apache.isis.applib.annotation.CommandPersistence.IF_HINTED);
         }
     }
 

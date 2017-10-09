@@ -18,15 +18,15 @@
  */
 package org.apache.isis.core.metamodel.facets.properties.property.command;
 
-import org.apache.isis.applib.annotation.Command.ExecuteIn;
-import org.apache.isis.applib.annotation.Command.Persistence;
+import org.apache.isis.applib.annotation.CommandExecuteIn;
+import org.apache.isis.applib.annotation.CommandPersistence;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 public class CommandFacetForPropertyAnnotationAsConfigured extends CommandFacetForPropertyAnnotation {
 
     CommandFacetForPropertyAnnotationAsConfigured(
-            final Persistence persistence,
-            final ExecuteIn executeIn,
+            final CommandPersistence persistence,
+            final CommandExecuteIn executeIn,
             final Enablement enablement,
             final FacetHolder holder) {
         super(persistence, executeIn, enablement, holder);

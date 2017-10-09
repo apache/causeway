@@ -196,7 +196,7 @@ public abstract class PropertySetterOrClearFacetForDomainEventAbstract
         final String propertyId = owningProperty.getIdentifier().toClassAndNameIdentityString();
 
         if( command.getExecutor() == Command.Executor.USER &&
-                command.getExecuteIn() == org.apache.isis.applib.annotation.Command.ExecuteIn.BACKGROUND) {
+                command.getExecuteIn() == org.apache.isis.applib.annotation.CommandExecuteIn.BACKGROUND) {
 
             // deal with background commands
 

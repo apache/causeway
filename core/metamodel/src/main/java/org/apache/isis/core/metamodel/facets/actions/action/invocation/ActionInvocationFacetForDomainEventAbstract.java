@@ -188,7 +188,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
 
         final ObjectAdapter returnedAdapter;
         if( command.getExecutor() == Command.Executor.USER &&
-            command.getExecuteIn() == org.apache.isis.applib.annotation.Command.ExecuteIn.BACKGROUND) {
+            command.getExecuteIn() == org.apache.isis.applib.annotation.CommandExecuteIn.BACKGROUND) {
 
             // deal with background commands
 

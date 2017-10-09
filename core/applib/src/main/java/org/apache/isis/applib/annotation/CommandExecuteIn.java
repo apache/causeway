@@ -40,24 +40,6 @@ public enum CommandExecuteIn {
      */
     BACKGROUND;
 
-    @Deprecated
-    public static CommandExecuteIn from(final Command.ExecuteIn executeIn) {
-        if(executeIn == null) return null;
-        if(executeIn == Command.ExecuteIn.FOREGROUND) return FOREGROUND;
-        if(executeIn == Command.ExecuteIn.BACKGROUND) return BACKGROUND;
-        // shouldn't happen
-        throw new IllegalArgumentException("Unrecognized : executeIn" + executeIn);
-    }
-
-    @Deprecated
-    public static Command.ExecuteIn from(final CommandExecuteIn commandExecuteIn) {
-        if(commandExecuteIn == null) return null;
-        if(commandExecuteIn == FOREGROUND) return Command.ExecuteIn.FOREGROUND;
-        if(commandExecuteIn == BACKGROUND) return Command.ExecuteIn.BACKGROUND;
-        // shouldn't happen
-        throw new IllegalArgumentException("Unrecognized : executeIn" + commandExecuteIn);
-    }
-
     public static class Type {
 
         private Type() {}
