@@ -17,9 +17,6 @@ org.apache.isis.applib.annotation
 
     RegEx.java - entire annotation, use @Property(regexPatternFlags=...) or @Parameter(regexPatternFlags=...) instead; or alternatively NEW SUPPORT for JSR-303 @Pattern annotation (http://beanvalidation.org/1.0/spec/, chapter 6).
 
-    NotContributed.java - entire annotation, use @DomainService(nature=...) or mixins instead.
-    NotInServiceMenu.java - entire annotation, use @DomainService(nature=...) or mixins instead.
-
     NotPersisted.java - entire annotation, use @Property(notPersisted=...) instead
 
     ObjectType.java - entire annotation, use @DomainObject(objectType=...) or @javax.jdo.annotations.Discriminator instead.
@@ -147,6 +144,9 @@ Also propose:
     make AppManifest mandatory
 
     remove support for contributed services (use mixins instead)
+
+    remove support for "notInServiceMenu" prefix
+
 
 Also for 2.0.0, new features/deprecations:
     automatically wrap domain services (perhaps behind a config property)
@@ -377,6 +377,9 @@ org.apache.isis.applib.annotation
 
     TypeOf.java - entire annotation, use @Collection(typeOf=...) or @Action(typeOf=...) instead.
 
+    NotInServiceMenu.java - entire annotation, use @DomainService(nature=...) or mixins instead.
+
+    NotContributed.java - entire annotation, use @DomainService(nature=...) or mixins instead.
 
     NotPersistable.java - entire annotation, not supported and does nothing
 

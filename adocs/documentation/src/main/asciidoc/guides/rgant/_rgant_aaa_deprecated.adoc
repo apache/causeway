@@ -23,13 +23,6 @@ The annotations listed in the table below are still supported by Apache Isis, bu
 |xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[File-based layout]?
 
 
-
-|`@NotInServiceMenu`
-|Indicates that a domain service should not be rendered in the application menu (at top of page in Wicket viewer).
-|xref:../rgant/rgant.adoc#_rgant-DomainService_nature[`@DomainService#nature()`] to signify that none of the actions in a domain service should appear in the menu bars
-|UI
-|
-
 |`@NotPersisted`
 |Indicates that an object property is not persisted (meaning it is excluded from view model mementos, and should not be audited).
 |`#notPersisted()` attribute of xref:../rgant/rgant.adoc#_rgant-Property_notPersisted[`@Property`] and xref:../rgant/rgant.adoc#_rgant-Collection_notPersisted[`@Collection`]

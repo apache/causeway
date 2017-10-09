@@ -25,7 +25,6 @@ import org.apache.isis.core.metamodel.facets.actions.homepage.annotation.HomePag
 import org.apache.isis.core.metamodel.facets.actions.layout.ActionLayoutFacetFactory;
 import org.apache.isis.core.metamodel.facets.actions.notcontributed.derived.NotContributedFacetDerivedFromDomainServiceFacetFactory;
 import org.apache.isis.core.metamodel.facets.actions.notcontributed.derived.NotContributedFacetDerivedFromMixinFacetFactory;
-import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.annotation.NotInServiceMenuFacetAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.derived.NotInServiceMenuFacetDerivedFromDomainServiceFacetFactory;
 import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.method.NotInServiceMenuFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.actions.validate.method.ActionValidationFacetViaMethodFactory;
@@ -290,8 +289,6 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
 
         addFactory(new EncodableFacetAnnotationElseConfigurationFactory());
         
-        addFactory(new NotInServiceMenuFacetAnnotationFactory());
-
         addFactory(new NotInServiceMenuFacetViaMethodFactory());
 
         addFactory(new NotContributedFacetDerivedFromDomainServiceFacetFactory());
