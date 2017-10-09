@@ -626,53 +626,6 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
     public static class Bulk extends ActionAnnotationFacetFactoryTest {
 
         @Test
-        public void whenDeprecatedBulkAnnotation() {
-
-            class Customer {
-                @org.apache.isis.applib.annotation.Bulk()
-                public void someAction() {
-                }
-            }
-
-            // given
-            final Class<?> cls = Customer.class;
-            actionMethod = findMethod(cls, "someAction");
-
-            // when
-            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, actionMethod, mockMethodRemover, facetedMethod);
-            facetFactory.processBulk(processMethodContext);
-
-            // then
-            final BulkFacet facet = facetedMethod.getFacet(BulkFacet.class);
-            Assert.assertNotNull(facet);
-            assertThat(facet.value(), is(org.apache.isis.applib.annotation.Bulk.AppliesTo.BULK_AND_REGULAR));
-
-        }
-
-        @Test
-        public void whenDeprecatedBulkAnnotationAppliesToBulkOnly() {
-
-            class Customer {
-                @org.apache.isis.applib.annotation.Bulk(org.apache.isis.applib.annotation.Bulk.AppliesTo.BULK_ONLY)
-                public void someAction() {
-                }
-            }
-
-            // given
-            final Class<?> cls = Customer.class;
-            actionMethod = findMethod(cls, "someAction");
-
-            // when
-            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, actionMethod, mockMethodRemover, facetedMethod);
-            facetFactory.processBulk(processMethodContext);
-
-            // then
-            final BulkFacet facet = facetedMethod.getFacet(BulkFacet.class);
-            Assert.assertNotNull(facet);
-            assertThat(facet.value(), is(org.apache.isis.applib.annotation.Bulk.AppliesTo.BULK_ONLY));
-        }
-
-        @Test
         public void whenObjectOnly() {
 
             class Customer {
@@ -715,7 +668,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             // then
             final BulkFacet facet = facetedMethod.getFacet(BulkFacet.class);
             Assert.assertNotNull(facet);
-            assertThat(facet.value(), is(org.apache.isis.applib.annotation.Bulk.AppliesTo.BULK_ONLY));
+            assertThat(facet.value(), is(InvokeOn.COLLECTION_ONLY));
 
         }
 
@@ -739,7 +692,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             // then
             final BulkFacet facet = facetedMethod.getFacet(BulkFacet.class);
             Assert.assertNotNull(facet);
-            assertThat(facet.value(), is(org.apache.isis.applib.annotation.Bulk.AppliesTo.BULK_AND_REGULAR));
+            assertThat(facet.value(), is(InvokeOn.OBJECT_AND_COLLECTION));
 
         }
 

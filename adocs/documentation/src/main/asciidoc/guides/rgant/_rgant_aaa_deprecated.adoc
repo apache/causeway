@@ -22,12 +22,6 @@ The annotations listed in the table below are still supported by Apache Isis, bu
 |Layer
 |xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[File-based layout]?
 
-|`@Bulk`
-|Indicates an action is a bulk action, can be applied to multiple instances.
-|xref:../rgant/rgant.adoc#_rgant-Action_invokeOn[`@Action#invokeOn()`]
-|UI, Domain
-|
-
 
 |`@MustSatisfy`
 |Specify arbitrary specification constraints on a property or action parameter.

@@ -19,18 +19,18 @@
 
 package org.apache.isis.core.metamodel.facets.actions.bulk;
 
-import org.apache.isis.applib.annotation.Bulk;
+import org.apache.isis.applib.annotation.InvokeOn;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleValueFacetAbstract;
 
-public abstract class BulkFacetAbstract extends SingleValueFacetAbstract<Bulk.AppliesTo> implements BulkFacet {
+public abstract class BulkFacetAbstract extends SingleValueFacetAbstract<InvokeOn> implements BulkFacet {
 
     public static Class<? extends Facet> type() {
         return BulkFacet.class;
     }
 
-    public BulkFacetAbstract(Bulk.AppliesTo appliesTo, final FacetHolder holder) {
+    public BulkFacetAbstract(InvokeOn appliesTo, final FacetHolder holder) {
         super(type(), appliesTo, holder);
     }
 

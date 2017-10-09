@@ -39,7 +39,6 @@ import org.datanucleus.enhancement.Persistable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService2;
@@ -95,6 +94,7 @@ import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingLifecycleE
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
+import org.apache.isis.core.metamodel.interactions.ActionInteractionContext;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.core.metamodel.spec.FreeStandingList;
@@ -187,7 +187,7 @@ public class PersistenceSession implements
     private final MetricsService metricsService;
     private final ClockService clockService;
     private final UserService userService;
-    private final Bulk.InteractionContext bulkInteractionContext;
+    private final ActionInteractionContext actionInteractionContext;
 
 
     /**
@@ -245,7 +245,7 @@ public class PersistenceSession implements
         this.factoryService = lookupService(FactoryService.class);
         this.clockService = lookupService(ClockService.class);
         this.userService = lookupService(UserService.class);
-        this.bulkInteractionContext = lookupService(Bulk.InteractionContext.class);
+        this.actionInteractionContext = lookupService(ActionInteractionContext.class);
 
         // sub-components
         final AdapterManager adapterManager = this;
@@ -336,8 +336,6 @@ public class PersistenceSession implements
         commandContext.setCommand(command);
         interactionContext.setInteraction(interaction);
 
-        Bulk.InteractionContext.current.set(bulkInteractionContext);
-
         this.state = State.OPEN;
     }
 
@@ -420,8 +418,6 @@ public class PersistenceSession implements
             // ignore
             LOG.error("close: failed to end transaction; continuing to avoid memory leakage");
         }
-
-        Bulk.InteractionContext.current.set(null);
 
         // tell the proxy of all request-scoped services to invoke @PreDestroy
         // (if any) on all underlying services stored on their thread-locals...

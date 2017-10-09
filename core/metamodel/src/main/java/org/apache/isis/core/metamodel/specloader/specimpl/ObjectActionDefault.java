@@ -31,7 +31,6 @@ import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.ApplicationException;
 import org.apache.isis.applib.RecoverableException;
-import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.annotation.InvokedOn;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
@@ -566,14 +565,6 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
                 actionInvocationContext.setInvokedOn(InvokedOn.OBJECT);
                 actionInvocationContext.setDomainObjects(Collections.singletonList(targetPojo));
             }
-
-            final Bulk.InteractionContext bulkInteractionContext = getBulkInteractionContext();
-
-            if (bulkInteractionContext != null && bulkInteractionContext.getInvokedAs() == null) {
-
-                bulkInteractionContext.setInvokedAs(Bulk.InteractionContext.InvokedAs.REGULAR);
-                bulkInteractionContext.setDomainObjects(Collections.singletonList(targetPojo));
-            }
         }
     }
 
@@ -649,10 +640,6 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
 
     //region > services (lookup)
 
-
-    protected Bulk.InteractionContext getBulkInteractionContext() {
-        return lookupService(Bulk.InteractionContext.class);
-    }
 
     protected org.apache.isis.applib.services.actinvoc.ActionInvocationContext getActionInvocationContext() {
         return lookupService(org.apache.isis.applib.services.actinvoc.ActionInvocationContext.class);

@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.facets.actions.action.bulk;
 
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.annotation.InvokeOn;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.bulk.BulkFacet;
@@ -39,11 +38,11 @@ public class BulkFacetForActionAnnotation extends BulkFacetAbstract {
             return null;
         }
 
-        return new BulkFacetForActionAnnotation(InvokeOn.from(invokeOn), holder);
+        return new BulkFacetForActionAnnotation(invokeOn, holder);
     }
 
     private BulkFacetForActionAnnotation(
-            final Bulk.AppliesTo appliesTo,
+            final InvokeOn appliesTo,
             final FacetHolder holder) {
         super(appliesTo, holder);
     }

@@ -22,20 +22,16 @@ package org.apache.isis.core.metamodel.facets.actions.action;
 import java.lang.reflect.Method;
 
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.actions.action.bulk.BulkFacetForActionAnnotation;
-import org.apache.isis.core.metamodel.facets.actions.action.bulk.BulkFacetForBulkAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.bulk.BulkFacetObjectOnly;
 import org.apache.isis.core.metamodel.facets.actions.action.command.CommandFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.hidden.HiddenFacetForActionAnnotation;
@@ -56,17 +52,11 @@ import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacet;
 import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFacet;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.CollectionUtils;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
 import org.apache.isis.core.metamodel.util.EventUtil;
 
-public class ActionAnnotationFacetFactory extends FacetFactoryAbstract
-            implements MetaModelValidatorRefiner {
-
-    private final MetaModelValidatorForDeprecatedAnnotation bulkValidator = new MetaModelValidatorForDeprecatedAnnotation(Bulk.class);
+public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
 
 
 
@@ -205,16 +195,10 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract
         final Action action = Annotations.getAnnotation(method, Action.class);
         final FacetHolder holder = processMethodContext.getFacetHolder();
 
-        BulkFacet facet;
+        // check for @Action(invokeOn=...)
+        BulkFacet facet = BulkFacetForActionAnnotation.create(action, holder);
 
-        // check for the deprecated @Bulk annotation first
-        final Bulk annotation = Annotations.getAnnotation(method, Bulk.class);
-        facet = bulkValidator.flagIfPresent(BulkFacetForBulkAnnotation.create(annotation, holder), processMethodContext);
-
-        // else check for @Action(invokeOn=...)
-        if(facet == null) {
-            facet = BulkFacetForActionAnnotation.create(action, holder);
-        }
+        // fallback
         if(facet == null) {
             facet = new BulkFacetObjectOnly(holder);
         }
@@ -302,24 +286,6 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract
         }
 
         FacetUtil.addFacet(typeOfFacet);
-    }
-
-    // ///////////////////////////////////////////////////////////////
-
-    @Override
-    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
-        metaModelValidator.add(bulkValidator);
-    }
-
-    // ///////////////////////////////////////////////////////////////
-
-
-    @Override
-    public void setServicesInjector(final ServicesInjector servicesInjector) {
-        super.setServicesInjector(servicesInjector);
-        final IsisConfiguration configuration = getConfiguration();
-
-        bulkValidator.setConfiguration(configuration);
     }
 
 

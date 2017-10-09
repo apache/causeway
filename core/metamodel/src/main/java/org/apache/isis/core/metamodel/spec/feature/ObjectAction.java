@@ -27,7 +27,7 @@ import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.Bulk;
+import org.apache.isis.applib.annotation.InvokeOn;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
@@ -492,7 +492,7 @@ public interface ObjectAction extends ObjectMember {
                 public boolean accept(ObjectAction oa) {
 
                     final BulkFacet bulkFacet = oa.getFacet(BulkFacet.class);
-                    if(bulkFacet == null || bulkFacet.isNoop() || bulkFacet.value() == Bulk.AppliesTo.REGULAR_ONLY) {
+                    if(bulkFacet == null || bulkFacet.isNoop() || bulkFacet.value() == InvokeOn.OBJECT_ONLY) {
                         return false;
                     }
                     if (oa.getParameterCount() != 0) {
@@ -520,7 +520,7 @@ public interface ObjectAction extends ObjectMember {
                 @Override
                 public boolean accept(ObjectAction t) {
                     BulkFacet facet = t.getFacet(BulkFacet.class);
-                    return facet == null || facet.value() != Bulk.AppliesTo.BULK_ONLY;
+                    return facet == null || facet.value() != InvokeOn.COLLECTION_ONLY;
                 }
             };
         }

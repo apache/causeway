@@ -29,7 +29,6 @@ import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.link.Link;
 
 import org.apache.isis.applib.RecoverableException;
-import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.annotation.InvokedOn;
 import org.apache.isis.applib.services.actinvoc.ActionInvocationContext;
 import org.apache.isis.applib.services.command.Command;
@@ -111,12 +110,6 @@ public final class BulkActionsLinkFactory implements ActionLinkFactory {
                         actionInvocationContext.setDomainObjects(domainObjects);
                     }
 
-                    final Bulk.InteractionContext bulkInteractionContext = getServicesInjector().lookupService(Bulk.InteractionContext.class);
-                    if (bulkInteractionContext != null) {
-                        bulkInteractionContext.setInvokedAs(Bulk.InteractionContext.InvokedAs.BULK);
-                        bulkInteractionContext.setDomainObjects(domainObjects);
-                    }
-
 
 
                     ObjectAdapter lastReturnedAdapter = null;
@@ -133,9 +126,6 @@ public final class BulkActionsLinkFactory implements ActionLinkFactory {
                         int numParameters = objectAction.getParameterCount();
                         if(numParameters != 0) {
                             return;
-                        }
-                        if (bulkInteractionContext != null) {
-                            bulkInteractionContext.setIndex(i++);
                         }
 
                         final ObjectAdapter mixedInAdapter = null;
