@@ -28,7 +28,6 @@ import com.google.common.collect.Maps;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
-import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.applib.services.eventbus.ObjectCreatedEvent;
 import org.apache.isis.applib.services.eventbus.ObjectLoadedEvent;
@@ -63,7 +62,6 @@ import org.apache.isis.core.metamodel.facets.object.domainobject.choices.Choices
 import org.apache.isis.core.metamodel.facets.object.domainobject.editing.ImmutableFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.objectspecid.ObjectSpecIdFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.objectspecid.ObjectSpecIdFacetForJdoPersistenceCapableAnnotation;
-import org.apache.isis.core.metamodel.facets.object.domainobject.objectspecid.ObjectSpecIdFacetFromObjectTypeAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.publishing.PublishedObjectFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.recreatable.RecreatableObjectFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
@@ -77,7 +75,6 @@ import org.apache.isis.core.metamodel.services.persistsession.PersistenceSession
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForValidationFailures;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
@@ -88,7 +85,6 @@ import org.apache.isis.objectstore.jdo.metamodel.facets.object.persistencecapabl
 public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
         implements MetaModelValidatorRefiner, PostConstructMethodCache {
 
-    private final MetaModelValidatorForDeprecatedAnnotation objectTypeValidator = new MetaModelValidatorForDeprecatedAnnotation(ObjectType.class);
     private final MetaModelValidatorForValidationFailures autoCompleteInvalid = new MetaModelValidatorForValidationFailures();
     private final MetaModelValidatorForMixinTypes mixinTypeValidator = new MetaModelValidatorForMixinTypes("@DomainObject#nature=MIXIN");
 
@@ -261,15 +257,8 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
         final DomainObject domainObject = Annotations.getAnnotation(cls, DomainObject.class);
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
-        // check for the deprecated annotation first
-        final ObjectType annotation = Annotations.getAnnotation(processClassContext.getCls(), ObjectType.class);
-        Facet facet = objectTypeValidator.flagIfPresent(
-                ObjectSpecIdFacetFromObjectTypeAnnotation.create(annotation, processClassContext.getFacetHolder()));
-
-        // else check from @DomainObject(objectType=...)
-        if(facet == null) {
-            facet = ObjectSpecIdFacetForDomainObjectAnnotation.create(domainObject, facetHolder);
-        }
+        // check from @DomainObject(objectType=...)
+        Facet facet = ObjectSpecIdFacetForDomainObjectAnnotation.create(domainObject, facetHolder);
 
         // else check for @PersistenceCapable(schema=...)
         if(facet == null) {
@@ -503,8 +492,6 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
 
         }));
 
-        metaModelValidator.add(objectTypeValidator);
-
         metaModelValidator.add(autoCompleteInvalid);
         metaModelValidator.add(mixinTypeValidator);
     }
@@ -516,8 +503,6 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
     public void setServicesInjector(final ServicesInjector servicesInjector) {
         super.setServicesInjector(servicesInjector);
         IsisConfiguration configuration = getConfiguration();
-
-        objectTypeValidator.setConfiguration(configuration);
 
         this.persistenceSessionServiceInternal = servicesInjector.getPersistenceSessionServiceInternal();
 

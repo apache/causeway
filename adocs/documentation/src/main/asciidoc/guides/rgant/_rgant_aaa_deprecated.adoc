@@ -22,12 +22,6 @@ The annotations listed in the table below are still supported by Apache Isis, bu
 |Layer
 |xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[File-based layout]?
 
-|`@ObjectType`
-|For constructing the external identifier (URI) of an entity instance (part of its URL in both Wicket viewer and Restful Objects viewer).
-Also part of the toString representation of bookmarks, if using the Bookmark Service
-|xref:../rgant/rgant.adoc#_rgant-DomainObject_objectType[`@DomainObject#objectType()`]
-|Domain
-|
 
 |`@Optional`
 |Specifies that a property or action parameter is not mandatory.

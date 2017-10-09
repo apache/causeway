@@ -25,7 +25,6 @@ import java.util.List;
 
 import com.google.common.base.Function;
 
-import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
