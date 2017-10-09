@@ -29,14 +29,6 @@ The annotations listed in the table below are still supported by Apache Isis, bu
 |
 
 
-|`@Ignore`
-|Exclude this method from the metamodel.
-|xref:../rgant/rgant.adoc#_rgant-Programmatic[`@Programmatic`]. +
-
-`@Ignore` was deprecated because it can easily clash with `@org.junit.Ignore`.
-|Domain
-|
-
 |`@Immutable`
 |An object's state cannot be changed (properties cannot be edited, collections cannot be added to or removed from).
 Actions can still be invoked.

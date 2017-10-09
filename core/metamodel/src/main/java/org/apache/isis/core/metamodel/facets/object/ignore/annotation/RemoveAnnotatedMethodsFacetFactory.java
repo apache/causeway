@@ -27,7 +27,6 @@ import javax.annotation.PreDestroy;
 
 import com.google.common.eventbus.Subscribe;
 
-import org.apache.isis.applib.annotation.Ignore;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.core.commons.lang.ClassUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -68,8 +67,7 @@ public class RemoveAnnotatedMethodsFacetFactory extends FacetFactoryAbstract {
         for (final Method method : methods) {
             removeAnnotatedMethods(methodRemover, method, PreDestroy.class);
             removeAnnotatedMethods(methodRemover, method, PostConstruct.class);
-            removeAnnotatedMethods(methodRemover, method, Ignore.class);
-            removeAnnotatedMethods(methodRemover, method, Programmatic.class);
+                removeAnnotatedMethods(methodRemover, method, Programmatic.class);
             removeAnnotatedMethods(methodRemover, method, Subscribe.class);
             if(eventHandlerClass != null) {
                 removeAnnotatedMethods(methodRemover, method, eventHandlerClass);

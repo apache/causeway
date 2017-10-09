@@ -16,7 +16,6 @@ org.apache.isis.applib.annotation
     InvokedOn.java - entire enum, along with @Bulk annotation.
 
 
-    Ignore.java - entire annotation, use @Programmatic instead.
     Immutable.java - entire annotation, use @DomainObject(editing=...) instead
 
     Mandatory.java - entire annotation, use @Property(optionality=...) and @Parameter(optionality=...), or @javax.annotations.Nullable
@@ -357,6 +356,8 @@ org.apache.isis.applib.annotation
     Prototype.java  - entire annotation, use @Action(restrictTo=....) instead
 
     DescribedAs.java - entire annotation, use @XxxLayout(describedAs=...) instead
+
+    Ignore.java - entire annotation, use @Programmatic instead.
 
     Mask.java - entire annotation, not supported by either Wicket viewer or RO viewer
     MaxLength.java - entire annotation, use @Property(maxLength=...) and @Parameter(maxLength=...)
