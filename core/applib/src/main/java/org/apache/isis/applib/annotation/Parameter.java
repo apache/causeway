@@ -19,11 +19,15 @@
 
 package org.apache.isis.applib.annotation;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
 import org.apache.isis.applib.spec.Specification;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
-
-import java.lang.annotation.*;
 
 /**
  * Domain semantics for domain object collection.
@@ -33,17 +37,6 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Parameter {
 
-    /**
-     * The minimum entry length of an autocomplete search argument.
-     *
-     * <p>
-     *     The default value (<code>-1</code>) indicates that no minLength has been specified.
-     * </p>
-     *
-     * @deprecated  - should use {@link MinLength} instead, because the autocomplete search argument is not, formally speaking, an action parameter (it is merely the parameter of one of the action's supporting methods).
-     */
-    @Deprecated
-    int minLength() default -1;
 
 
     /**

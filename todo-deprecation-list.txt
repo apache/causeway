@@ -11,15 +11,10 @@ org.apache.isis.applib
 org.apache.isis.applib.annotation
 
 
-    Mandatory.java - entire annotation, use @Property(optionality=...) and @Parameter(optionality=...), or @javax.annotations.Nullable
-    Optional.java - entire annotation, use @Property(optionality=...) and @Parameter(optionality=...), or @javax.annotations.Nullable
-
 
     RegEx.java - entire annotation, use @Property(regexPatternFlags=...) or @Parameter(regexPatternFlags=...) instead; or alternatively NEW SUPPORT for JSR-303 @Pattern annotation (http://beanvalidation.org/1.0/spec/, chapter 6).
 
 
-    Parameter.java
-        minLength() attribute; not supported.  For autocomplete, use @MinLength annotation.
 
 
 
@@ -374,6 +369,11 @@ org.apache.isis.applib.annotation
 
     TypeOf.java - entire annotation, use @Collection(typeOf=...) or @Action(typeOf=...) instead.
 
+
+    Mandatory.java - entire annotation, use @Property(optionality=...) and @Parameter(optionality=...), or @javax.annotations.Nullable
+    Optional.java - entire annotation, use @Property(optionality=...) and @Parameter(optionality=...), or @javax.annotations.Nullable
+
+
     NotInServiceMenu.java - entire annotation, use @DomainService(nature=...) or mixins instead.
 
     NotContributed.java - entire annotation, use @DomainService(nature=...) or mixins instead.
@@ -382,6 +382,8 @@ org.apache.isis.applib.annotation
 
     NotPersistable.java - entire annotation, not supported and does nothing
 
+    Parameter.java
+        minLength() attribute; not supported.  For autocomplete, use @MinLength annotation.
 
     ObjectType.java - entire annotation, use @DomainObject(objectType=...) or @javax.jdo.annotations.Discriminator instead.
 

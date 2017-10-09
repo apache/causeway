@@ -28,4 +28,3 @@ public List<ToDoItem> autoComplete0Add(
 ----
 
 
-The `@Parameter(minLength=...)`e can also be used (even though strictly speaking the search argument is not a parameter of the action).

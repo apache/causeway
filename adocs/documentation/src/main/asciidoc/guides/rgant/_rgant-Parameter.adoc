@@ -32,12 +32,6 @@ The table below summarizes the annotation's attributes.
 |maximum number of characters for string parameters; ignored otherwise
 
 
-|`minLength()`
-|Positive integer
-|Deprecated; use xref:../rgant/rgant.adoc#_rgant_minLength[`@MinLength`] instead. +
-
-Can be used to specify the minimum length for xref:../rgcms/rgcms.adoc#_rgcms_methods_prefixes_autoComplete[`autoComplete...()`] supporting method; but because this _is a_ supporting method rather than the action method itself, we now feel it is misleading to use the `@Parameter` annotation in this situation.
-
 
 |xref:../rgant/rgant.adoc#_rgant-Parameter_mustSatisfy[`mustSatisfy()`]
 |implementation of `o.a.i.applib.spec.Specification`
