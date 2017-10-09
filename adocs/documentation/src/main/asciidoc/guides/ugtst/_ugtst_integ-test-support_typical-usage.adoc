@@ -108,7 +108,9 @@ What about when a todo item is already completed?  The `disableCompleted()` meth
 <2> the expectedExceptions link:http://junit.org/junit4/javadoc/latest/org/junit/rules/ExpectedException.html[JUnit rule] (defined by a superclass) verifies that the appropiate exception is indeed thrown (in the "when")
 
 
-And what about the fact that the underlying "complete" property is disabled (the `@Disabled` annotation?).  If the `ToDoItem` is put into edit mode in the UI, the complete checkbox should remain read-only.  Here's a verify similar test that verifies this also:
+And what about the fact that the underlying "complete" property is annotated as being disabled?
+If the `ToDoItem` is put into edit mode in the UI, the complete checkbox should remain read-only.
+Here's a verify similar test that verifies this also:
 
 [source,java]
 ----

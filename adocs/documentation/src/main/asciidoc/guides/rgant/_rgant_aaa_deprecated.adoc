@@ -28,19 +28,6 @@ The annotations listed in the table below are still supported by Apache Isis, bu
 |UI, Domain
 |
 
-|`@Command`
-|Action invocation should be reified as a command object, optionally persistable for profiling and enhanced auditing, and background/async support.
-|xref:../rgant/rgant.adoc#_rgant-Action_command[`@Action#command()`]
-q|Domain
-|
-
-
-|`@Disabled`
-|Object property cannot be edited, an object collection cannot be added to/removed from, or an object action cannot be invoked.
-|`#editing()` attribute for xref:../rgant/rgant.adoc#_rgant-Property_editing[`@Property`],  xref:../rgant/rgant.adoc#_rgant-Collection_editing[`@Collection`] and xref:../rgant/rgant.adoc#_rgant-DomainObject_editing[`@DomainObject`]
-|UI, Domain
-|Yes
-
 |`@Hidden`
 |Object member is not visible, or on domain service (to indicate that none of its actions are visible).
 |For domain object members, use `#hidden()` attribute of xref:../rgant/rgant.adoc#_rgant-Action_hidden[`Action`], xref:../rgant/rgant.adoc#_rgant-Property_hidden[`Property`] or xref:../rgant/rgant.adoc#_rgant-Collection_hidden[`Collection`].  +

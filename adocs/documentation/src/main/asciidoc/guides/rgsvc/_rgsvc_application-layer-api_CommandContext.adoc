@@ -137,7 +137,7 @@ The xref:../rgant/rgant.adoc#_rgant-Action_command[`@Action#command()`] annotati
 [source,java]
 ----
 public class ToDoItem ... {
-    @Command(executeIn=ExecuteIn.BACKGROUND)
+    @Action(commandExecuteIn=CommandExecuteIn.BACKGROUND)
     public ToDoItem scheduleImplicitly() {
         completeSlowly(3000);
         return this;
