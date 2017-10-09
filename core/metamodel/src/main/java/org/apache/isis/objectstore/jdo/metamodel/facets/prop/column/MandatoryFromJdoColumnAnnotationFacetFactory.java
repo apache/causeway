@@ -34,7 +34,6 @@ import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacetDefault;
-import org.apache.isis.core.metamodel.facets.properties.property.mandatory.MandatoryFacetForMandatoryAnnotationOnProperty;
 import org.apache.isis.core.metamodel.facets.properties.property.mandatory.MandatoryFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
@@ -73,11 +72,6 @@ public class MandatoryFromJdoColumnAnnotationFacetFactory extends FacetFactoryAb
             if (existingFacet instanceof OptionalFacetDerivedFromJdoPrimaryKeyAnnotation) {
                 // do not replace this facet; 
                 // we must keep an optional facet here for different reasons
-                return;
-            }
-            if (existingFacet instanceof MandatoryFacetForMandatoryAnnotationOnProperty) {
-                // do not replace this facet; 
-                // an explicit @Mandatory annotation cannot be overridden by @Column annotation
                 return;
             }
             if (existingFacet instanceof MandatoryFacetForPropertyAnnotation.Required) {

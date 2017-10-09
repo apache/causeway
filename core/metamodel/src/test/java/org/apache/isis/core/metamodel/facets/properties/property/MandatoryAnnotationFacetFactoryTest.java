@@ -21,12 +21,14 @@ package org.apache.isis.core.metamodel.facets.properties.property;
 
 import java.lang.reflect.Method;
 import org.junit.Before;
-import org.apache.isis.applib.annotation.Mandatory;
+
+import org.apache.isis.applib.annotation.Optionality;
+import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
-import org.apache.isis.core.metamodel.facets.properties.property.mandatory.MandatoryFacetForMandatoryAnnotationOnProperty;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
+import org.apache.isis.core.metamodel.facets.properties.property.mandatory.MandatoryFacetForPropertyAnnotation;
 
 public class MandatoryAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -41,7 +43,7 @@ public class MandatoryAnnotationFacetFactoryTest extends AbstractFacetFactoryTes
     public void testMandatoryAnnotationPickedUpOnProperty() {
 
         class Customer {
-            @Mandatory
+            @Property(optionality = Optionality.MANDATORY)
             public String getFirstName() {
                 return null;
             }
@@ -52,7 +54,7 @@ public class MandatoryAnnotationFacetFactoryTest extends AbstractFacetFactoryTes
 
         final Facet facet = facetedMethod.getFacet(MandatoryFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof MandatoryFacetForMandatoryAnnotationOnProperty);
+        assertTrue(facet instanceof MandatoryFacetForPropertyAnnotation);
     }
 
 

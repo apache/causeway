@@ -37,8 +37,4 @@ public class SomeSubtype extends SomeSuperType {
 }
 ----
 
-[TIP]
-====
-The `@Property(optionality=...)` annotation is equivalent to the older but still supported `@Optional` annotation and `@Mandatory` annotations.
-====
 

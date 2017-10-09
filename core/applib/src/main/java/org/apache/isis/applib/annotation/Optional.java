@@ -32,12 +32,6 @@ import java.lang.annotation.Target;
  * Isis' default is that properties/parameters are mandatory unless otherwise
  * annotated as optional; this is most typically done using this annotation.
  * 
- * <p>
- * Note that there is another related annotation, {@link Mandatory}, which can be
- * used to force a property or parameter as being mandatory.  This is only
- * rarely required; see the {@link Mandatory} annotation javadoc for further discussion.
- * 
- * @see Mandatory
  *
  * @deprecated - use {@link Property#optionality()} and {@link Parameter#optionality()}  (with {@link Optionality#OPTIONAL}) instead.
  */
