@@ -8,26 +8,45 @@
 The quickest way to get started building an application "for real" is to run the `simpleapp` archetype.
 Like the xref:ugfun.adoc#_ugfun_getting-started_helloworld-archetype[helloworld archetype], this too will generate a very simple one-class domain model (an entity called `SimpleObject` with a couple of properties).
 
-However, the generated application also provides more structure to assist you as your application grows.
-For example:
+However, the generated application also provides more structure to assist you as your application grows:
 
-* the application is multi-module, separating out the business logic (`module-simple` Maven module) from the bootstrapping modules (`application` Maven module and the `webapp` module)
+image::{_imagesdir}getting-started/using-simple-app/structure/structure.png[width="800px",link="{_imagesdir}getting-started/using-simple-app/structure/structure.png"]
 
-* the `SimpleObjectRepository` service (to create/retrieve instances) is separate from the `SimpleObjectMenu` menu service (for the UI); the former is delegated to by the latter.
+where `xxx` is the name of the `artifactId` that you supply when you run the archetype.
 
-* a `HomePageViewModel` service acts as a home page for the app.
+Specifically:
 
-* there are example integration tests, BDD tests as well as unit tests
+* the application is multi-module, separating out the business logic (`xxx-module-simple` Maven module) from the bootstrapping modules (`xxx-application` Maven module and the `xxx-webapp` module)
 
-* there are example fixture scripts for use both when prototyping and used by the integration and BDD tests
+* in the `xxx-module-simple` module, the `SimpleObjectRepository` service (to create/retrieve instances) is separate from the `SimpleObjectMenu` menu service (for the UI); the former is delegated to by the latter.
 
-* the xref:../rgmvn.adoc#[Apache Isis Maven plugin] to xref:../rgmvn.adoc#_rgmvn_validate[validate] your domain model is pre-configured
+* in the `xxx-application` module, a `HomePageViewModel` service acts as a home page for the app.
 
-* Maven plugins to package your app as a Docker image is pre-configured
+* there are example integration tests and BDD tests as well as unit tests
+
++
+There are "cross-module" integration tests in the `xxx-application` module.
+These bootstrap the application as a single entity so that these tests can exercise functionality in any and all modules.
+The BDD tests are also defined here are also "cross-module".
++
+There are also "per-module" integration tests in the `xxx-module-simple` module.
+
+* there are example fixture scripts for use both when prototyping and used by the integration and BDD tests.
+These tend to be defined in each individual module, ie `xxx-module-simple`.
+
+* the xref:../rgmvn.adoc#[Apache Isis Maven plugin] is configured to xref:../rgmvn/rgmvn.adoc#_rgmvn_validate[validate] your domain model in the `module-simple` module
+
+* the xref:../rgmvn.adoc#[Apache Isis Maven plugin] is also configured to generate a xref:../rgmvn/rgmvn.adoc#_rgmvn_swagger[swagger] spec file for the entire application, in the `xxx-application` module
+
+* Maven plugins to package your app as a Docker image is pre-configured, in the `xxx-webapp` module.
 
 
 From this you can easily rename these initial classes, and extend to build up your own Apache Isis domain application.
 
+[TIP]
+====
+The (non-ASF) Incode Platform's link:http://platform.incode.org/quickstart/quickstart.html[quickstart archetype] builds upon the simpleapp archetype, but adds in support for various Incode Platform modules such as security, auditing, commands and publishing.
+====
 
 
 [[__ugfun_getting-started_simpleapp-archetype_generating-the-app]]

@@ -27,3 +27,6 @@ include::_ugodn_hints-and-tips_overriding-jdo-annotations.adoc[leveloffset=+1]
 include::_ugodn_hints-and-tips_subtype-entity-not-fully-populated.adoc[leveloffset=+1]
 include::_ugodn_hints-and-tips_java8.adoc[leveloffset=+1]
 
+include::_ugodn_hints-and-tips_diagnosing-n-plus-1.adoc[leveloffset=+1]
+include::_ugodn_hints-and-tips_typesafe-queries-and-fetchgroups.adoc[leveloffset=+1]
+
