@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.facets.actions.notcontributed;
 
 import org.apache.isis.applib.annotation.Contributed;
-import org.apache.isis.applib.annotation.NotContributedAs;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;

@@ -28,7 +28,6 @@ import org.apache.isis.applib.annotation.Contributed;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.annotation.NotContributedAs;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
@@ -157,7 +156,7 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
             assertThat(facet, CoreMatchers.is(not(nullValue())));
             assertThat(facet instanceof NotContributedFacetForActionLayoutAnnotation, CoreMatchers.is(true));
             final NotContributedFacetForActionLayoutAnnotation facetImpl = (NotContributedFacetForActionLayoutAnnotation) facet;
-            assertThat(facetImpl.value(), CoreMatchers.equalTo(NotContributedAs.ACTION));
+            assertThat(facetImpl.value(), CoreMatchers.equalTo(NotContributedFacet.NotContributedAs.ACTION));
 
         }
 
@@ -195,7 +194,7 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
             assertThat(facet, CoreMatchers.is(not(nullValue())));
             assertThat(facet instanceof NotContributedFacetForActionLayoutAnnotation, CoreMatchers.is(true));
             final NotContributedFacetForActionLayoutAnnotation facetImpl = (NotContributedFacetForActionLayoutAnnotation) facet;
-            assertThat(facetImpl.value(), CoreMatchers.equalTo(NotContributedAs.ASSOCIATION));
+            assertThat(facetImpl.value(), CoreMatchers.equalTo(NotContributedFacet.NotContributedAs.ASSOCIATION));
         }
 
         @Test
@@ -231,7 +230,7 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
             assertThat(facet, CoreMatchers.is(not(nullValue())));
             assertThat(facet instanceof NotContributedFacetForActionLayoutAnnotation, CoreMatchers.is(true));
             final NotContributedFacetForActionLayoutAnnotation facetImpl = (NotContributedFacetForActionLayoutAnnotation) facet;
-            assertThat(facetImpl.value(), CoreMatchers.equalTo(NotContributedAs.EITHER));
+            assertThat(facetImpl.value(), CoreMatchers.equalTo(NotContributedFacet.NotContributedAs.EITHER));
         }
 
         @Test
@@ -268,7 +267,7 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
             assertThat(facet, CoreMatchers.is(not(nullValue())));
             assertThat(facet instanceof NotContributedFacetForActionLayoutAnnotation, CoreMatchers.is(true));
             final NotContributedFacetForActionLayoutAnnotation facetImpl = (NotContributedFacetForActionLayoutAnnotation) facet;
-            assertThat(facetImpl.value(), CoreMatchers.equalTo(NotContributedAs.EITHER));
+            assertThat(facetImpl.value(), CoreMatchers.equalTo(NotContributedFacet.NotContributedAs.EITHER));
 
         }
 

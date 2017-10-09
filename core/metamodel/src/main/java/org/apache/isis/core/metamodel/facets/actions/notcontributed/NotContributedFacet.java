@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.facets.actions.notcontributed;
 
 import org.apache.isis.applib.annotation.Contributed;
-import org.apache.isis.applib.annotation.NotContributedAs;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 
 /**
@@ -38,4 +37,30 @@ public interface NotContributedFacet extends Facet {
 
     public boolean toActions();
     public boolean toAssociations();
+
+    /**
+     * @deprecated
+     */
+    @Deprecated enum NotContributedAs {
+        ACTION,
+        ASSOCIATION,
+        EITHER,
+        NEITHER; /* ie contributed as both ! */
+
+        /**
+         * @deprecated
+         */
+        @Deprecated
+        public static NotContributedAs notFrom(final Contributed contributed) {
+            if(contributed == null) { return null; }
+            switch (contributed) {
+                case AS_ACTION: return NotContributedAs.ASSOCIATION;
+                case AS_ASSOCIATION: return NotContributedAs.ACTION;
+                case AS_NEITHER: return NotContributedAs.EITHER;
+                case AS_BOTH: return null;
+            }
+            return null;
+        }
+
+    }
 }
