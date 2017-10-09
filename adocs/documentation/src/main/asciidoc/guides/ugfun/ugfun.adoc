@@ -5,6 +5,7 @@
 :_imagesdir: images/
 :numbered:
 :generate_pdf:
+:toc:
 
 
 [[__ugfun]]
