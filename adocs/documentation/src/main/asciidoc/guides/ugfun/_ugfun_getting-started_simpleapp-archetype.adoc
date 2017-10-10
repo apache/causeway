@@ -67,18 +67,19 @@ For example, you might have a `myapp-module-customer` holding a `Customer` entit
 image::{_imagesdir}getting-started/using-simple-app/structure/structure/Slide2.PNG[width="800px",link="{_imagesdir}getting-started/using-simple-app/structure/structure/Slide2.PNG"]
 
 We can use Maven dependency management to ensure that there are no cyclic dependencies (order "knows about" product but product does not know about orders) and ensure that the codebase remains decoupled.
+When Java9 modules are commonplace, we'll also be able to restrict visibility of classes between modules.
 
 [WARNING]
 ====
 Note that while Maven dependencies are transitive (in the example the `myapp-application` needs only depend directly on `myapp-module-order`, the modules defined in the `AppManifest` are _not_ transitive: all modules must be listed.
 ====
 
-Let us review the contents of each of the generated modules.
+Let's now review the contents of each of the generated modules.
 
 
 === myapp (parent)
 
-The parent module is a fairly conventional, declaring its child modules (`<dependencyManagement>`) and aggregating them using the `<module>`.
+The parent module is a fairly conventional, declaring its child modules (using `<dependencyManagement>` elements) and aggregating them (using `<module>` elements).
 
 [NOTE]
 ====
@@ -150,8 +151,8 @@ public class DomainAppAppManifest extends AppManifestAbstract {
 }
 ----
 
-The manifest uses the builder defined by `AppManifestAbstract` and declares 3 modules.
-These identify the entities, domain services and fixtures defined in the `myapp-module-simple` module, and two locations within the `myapp-application` module itself (for additional fixtures and services, namely the home page which we'll discuss below).
+The manifest uses the builder defined by `AppManifestAbstract` and references 3 (Isis) modules.
+These are simply classes that identify packages to search for entities, domain services and fixtures; one defined in the `myapp-module-simple` module, and two package within the `myapp-application` module itself (for additional fixtures and services, namely the home page which we'll discuss below).
 
 The manifest also defines a number of static configuration files, all loaded from the classpath.
 Each file contains configuration setting for a different part of the runtime (`isis.properties` for the core framework, shiro for security, datanucleus for the objectstore, and the two viewers).
@@ -305,8 +306,8 @@ Under `src/main/java` we have:
 >>>>>> SimpleObjectData.java
 >>>>> teardown/
 >>>>>> SimpleModuleTearDown.java
-META-INF/
-> persistence.xml
+> META-INF/
+>> persistence.xml
 ----
 
 Note once more that the module class (`SimpleModuleDomSubmodule`) is referenced in the app manifest class, meaning that all the entities, domain services and fixtures within it are included within the application.
