@@ -25,7 +25,7 @@ import org.apache.isis.applib.fixturescripts.FixtureScript;
 import domainapp.modules.simple.fixture.scenario.CreateSimpleObjects;
 
 /**
- * Run the app but without setting up any fixtures.
+ * Run the app but setting up any fixtures.
  */
 public class DomainAppAppManifestWithFixtures extends DomainAppAppManifest {
 
