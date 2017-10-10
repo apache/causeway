@@ -78,7 +78,7 @@ image::{_imagesdir}eclipse/eclipse-110-project-support.png[width="600px",link="{
 DataNucleus' enhancer uses the domain object model's own classpath to reference DataNucleus JARs.
 So, even though your domain objects are unlikely to depend on DataNucleus, these references must still be present.
 
-See the earlier section on xref:../ugfun/ugfun.adoc#_ugfun_getting-started_datanucleus-enhancer[DataNucleus enhancer] for details of the contents of the `pom.xml`.
+See the section in xref:dg.adoc#_dg_hints-and-tips_datanucleus-enhancer[DataNucleus enhancer] for details of the contents of the `pom.xml`.
 Chances are it is already set up from running the xref:../ugfun/ugfun.adoc#_ugfun_getting-started_helloworld-archetype[HelloWorld] or the xref:../ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp] archetype.
 
 

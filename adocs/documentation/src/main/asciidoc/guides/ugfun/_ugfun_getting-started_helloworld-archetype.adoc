@@ -5,6 +5,7 @@
 :_imagesdir: images/
 
 
+
 The quickest way to start learning about Apache Isis is to run the `helloworld` archetype.
 This will generate a tiny Apache Isis app, consisting of a simple one-class domain model, called `HelloWorldObject`, and a supporting `HelloWorldObjects` domain service.
 Both the business logic and supporting bootstrapping classes are in a single Maven module (in different Java packages).
@@ -15,6 +16,9 @@ We don't recommend that you use the helloworld archetype as the basis for your o
 Instead, use the xref:ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[simpleapp archetype].
 This also creates a minimal application, but provides more structure and example tests, useful as you build out your own app.
 ====
+
+
+include::_ugfun_getting-started_prerequisites.adoc[leveloffset=+1]
 
 
 [[__ugfun_getting-started_helloworld-archetype_generating-the-app]]
@@ -355,13 +359,13 @@ The default configuration does not require any configuration of the servlet cont
 
 Most of the time, though, you'll probably want to run the app from within your IDE.
 The mechanics of doing this will vary by IDE; see the xref:../dg/dg.adoc#_dg_ide[Developers' Guide] for details of setting up Eclipse or IntelliJ IDEA.
-Basically, though, it amounts to running `org.apache.isis.WebServer`, and ensuring that the xref:../ugfun/ugfun.adoc#_ugfun_getting-started_datanucleus-enhancer[DataNucleus enhancer] has properly processed all domain entities.
+Basically, though, it amounts to running `org.apache.isis.WebServer`, and ensuring that the xref:../dg/dg.adoc#_dg_hints-and-tips_datanucleus-enhancer[DataNucleus enhancer] has properly processed all domain entities.
 
 Here's what the setup looks like in IntelliJ IDEA:
 
 image::{_imagesdir}getting-started/helloworld.png[width="600px",link="{_imagesdir}getting-started/helloworld.png"]
 
-with the maven goal to run the DataNucleus enhancer (discussed in more detail xref:ugfun.adoc#_ugfun_getting-started_datanucleus-enhancer[here]) before launch defined as:
+with the maven goal to run the DataNucleus enhancer (discussed in more detail xref:../dg/dg.adoc#_dg_hints-and-tips_datanucleus-enhancer[here]) before launch defined as:
 
 image::{_imagesdir}getting-started/helloworld-before-launch.png[width="600px",link="{_imagesdir}getting-started/helloworld-before-launch.png"]
 
