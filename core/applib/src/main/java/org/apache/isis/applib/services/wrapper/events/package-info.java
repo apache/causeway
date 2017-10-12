@@ -23,4 +23,4 @@
  *
  * @see <a href="http://isis.apache.org/guides/rgsvc/rgsvc.html#_rgsvc_application-layer-api_WrapperFactory">Reference Guide</a>
  */
-package org.apache.isis.applib.events;
+package org.apache.isis.applib.services.wrapper.events;

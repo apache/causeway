@@ -17,35 +17,49 @@
  *  under the License.
  */
 
-package org.apache.isis.applib.events;
+package org.apache.isis.applib.services.wrapper.events;
 
 import org.apache.isis.applib.Identifier;
 
 /**
- * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents an access (reading) of a property, collection or title.
+ * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents a check as to whether a particular argument for an action is valid
+ * or not.
  * 
  * <p>
- * Analogous to {@link ValidityEvent} (which corresponds to modifying a property
- * or collection etc), however the {@link #getReason()} will always be
- * <tt>null</tt>. (If access is not allowed then a vetoing
- * {@link VisibilityEvent} would have been fired).
+ * If {@link #getReason()} is not <tt>null</tt> then provides the reason why the
+ * set of arguments are invalid; otherwise the arguments are valid.
  * 
- * @see UsabilityEvent
- * @see VisibilityEvent
- * @see ValidityEvent
+ * <p>
+ * Called after each of the {@link ActionArgumentEvent}s.
  *
  * @deprecated - superceded by <code>domainEvent</code> support ({@link org.apache.isis.applib.services.eventbus.PropertyDomainEvent}, {@link org.apache.isis.applib.IsisApplibModule.CollectionDomainEvent}, {@link org.apache.isis.applib.services.eventbus.ActionDomainEvent}).
  */
 @Deprecated
-public abstract class AccessEvent extends InteractionEvent {
+public class ActionInvocationEvent extends ValidityEvent {
 
-    /**
-     * 
-     */
     private static final long serialVersionUID = 1L;
 
-    public AccessEvent(final Object source, final Identifier identifier) {
-        super(source, identifier);
+    public ActionInvocationEvent(final Object source, final Identifier actionIdentifier, final Object[] args) {
+        super(source, actionIdentifier);
+        this.args = args;
+    }
+
+    private Object[] args;
+
+    public Object[] getArgs() {
+        return args;
+    }
+
+    public void setArgs(final Object[] args) {
+        this.args = args;
+    }
+
+    /**
+     * Does not apply
+     */
+    @Override
+    public Object getProposed() {
+        return null;
     }
 
 }

@@ -20,7 +20,7 @@
 package org.apache.isis.core.metamodel.facets.members.hidden;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.events.VisibilityEvent;
+import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;

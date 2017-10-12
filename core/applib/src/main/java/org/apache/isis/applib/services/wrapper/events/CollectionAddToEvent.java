@@ -17,20 +17,42 @@
  *  under the License.
  */
 
-package org.apache.isis.applib.events;
+package org.apache.isis.applib.services.wrapper.events;
+
+import org.apache.isis.applib.Identifier;
 
 /**
- * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> makes it easier to process different events that hold a single proposed
- * argument (such as {@link CollectionAddToEvent} and
- * {@link PropertyModifyEvent}).
+ * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents a check as to whether a particular object to be added to a
+ * collection is valid or not.
+ * 
+ * <p>
+ * If {@link #getReason()} is not <tt>null</tt> then provides the reason why the
+ * object is invalid; otherwise the object is valid.
+ * 
+ * @see CollectionRemoveFromEvent
  *
  * @deprecated - superceded by <code>domainEvent</code> support ({@link org.apache.isis.applib.services.eventbus.PropertyDomainEvent}, {@link org.apache.isis.applib.IsisApplibModule.CollectionDomainEvent}, {@link org.apache.isis.applib.services.eventbus.ActionDomainEvent}).
  */
 @Deprecated
-public interface ProposedHolderEvent {
+public class CollectionAddToEvent extends ValidityEvent {
 
-    Object getProposed();
+    private static final long serialVersionUID = 1L;
 
-    String getMemberNaturalName();
+    private final Object proposed;
+
+    public CollectionAddToEvent(final Object source, final Identifier collectionIdentifier, final Object proposed) {
+        super(source, collectionIdentifier);
+        this.proposed = proposed;
+    }
+
+    /**
+     * The object that is being added.
+     * 
+     * @return
+     */
+    @Override
+    public Object getProposed() {
+        return proposed;
+    }
 
 }

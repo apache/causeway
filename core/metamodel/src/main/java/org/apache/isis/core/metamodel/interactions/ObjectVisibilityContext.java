@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.interactions;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.events.ObjectVisibilityEvent;
+import org.apache.isis.applib.services.wrapper.events.ObjectVisibilityEvent;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -30,7 +30,7 @@ import static org.apache.isis.core.metamodel.adapter.ObjectAdapter.Util.unwrap;
 
 /**
  * See {@link org.apache.isis.core.metamodel.interactions.InteractionContext} for overview; analogous to
- * {@link org.apache.isis.applib.events.ObjectVisibilityEvent}.
+ * {@link ObjectVisibilityEvent}.
  */
 public class ObjectVisibilityContext extends VisibilityContext<ObjectVisibilityEvent> implements ProposedHolder {
 

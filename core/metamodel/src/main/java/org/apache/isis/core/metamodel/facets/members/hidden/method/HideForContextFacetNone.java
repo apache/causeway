@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.members.hidden.method;
 
-import org.apache.isis.applib.events.VisibilityEvent;
+import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 

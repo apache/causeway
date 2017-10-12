@@ -17,49 +17,35 @@
  *  under the License.
  */
 
-package org.apache.isis.applib.events;
+package org.apache.isis.applib.services.wrapper.events;
 
 import org.apache.isis.applib.Identifier;
 
 /**
- * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents a check to determine whether a proposed change is valid.
+ * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents an access (reading) of a property, collection or title.
  * 
  * <p>
- * Multiple subclasses, including:
- * <ul>
- * <li>modifying a property</li>
- * <li>adding to/removing from a collection</li>
- * <li>checking a single argument for an action invocation</li>
- * <li>checking all arguments for an action invocation</li>
- * <li>checking all properties for an object before saving</li>
- * </ul>
+ * Analogous to {@link ValidityEvent} (which corresponds to modifying a property
+ * or collection etc), however the {@link #getReason()} will always be
+ * <tt>null</tt>. (If access is not allowed then a vetoing
+ * {@link VisibilityEvent} would have been fired).
  * 
- * <p>
- * If {@link #getReason()} is <tt>null</tt>, then is usable; otherwise is
- * disabled.
- * 
- * @see AccessEvent
- * @see VisibilityEvent
  * @see UsabilityEvent
+ * @see VisibilityEvent
+ * @see ValidityEvent
  *
  * @deprecated - superceded by <code>domainEvent</code> support ({@link org.apache.isis.applib.services.eventbus.PropertyDomainEvent}, {@link org.apache.isis.applib.IsisApplibModule.CollectionDomainEvent}, {@link org.apache.isis.applib.services.eventbus.ActionDomainEvent}).
  */
 @Deprecated
-public abstract class ValidityEvent extends InteractionEvent implements ProposedHolderEvent {
+public abstract class AccessEvent extends InteractionEvent {
 
+    /**
+     * 
+     */
     private static final long serialVersionUID = 1L;
 
-    public ValidityEvent(final Object source, final Identifier identifier) {
+    public AccessEvent(final Object source, final Identifier identifier) {
         super(source, identifier);
     }
 
-    @Override
-    public Object getSource() {
-        return super.getSource();
-    }
-    
-    @Override
-    public String getReasonMessage() {
-    	return String.format("Source: %s. %s", this.getSource(), super.getReasonMessage());
-    }
 }

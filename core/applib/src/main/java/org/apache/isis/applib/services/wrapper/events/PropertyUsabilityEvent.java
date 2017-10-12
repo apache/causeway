@@ -17,33 +17,26 @@
  *  under the License.
  */
 
-package org.apache.isis.applib.events;
+package org.apache.isis.applib.services.wrapper.events;
 
 import org.apache.isis.applib.Identifier;
 
 /**
- * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents an access (reading) of an object's title.
+ * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents a check as to whether a property is usable or has been disabled.
  * 
  * <p>
- * The {@link #getReason()} will always be <tt>null</tt>; access is always
- * allowed.
+ * If {@link #getReason()} is not <tt>null</tt> then provides the reason why the
+ * property is disabled; otherwise property is enabled.
  *
  * @deprecated - superceded by <code>domainEvent</code> support ({@link org.apache.isis.applib.services.eventbus.PropertyDomainEvent}, {@link org.apache.isis.applib.IsisApplibModule.CollectionDomainEvent}, {@link org.apache.isis.applib.services.eventbus.ActionDomainEvent}).
  */
 @Deprecated
-public class ObjectTitleEvent extends AccessEvent {
+public class PropertyUsabilityEvent extends UsabilityEvent {
 
     private static final long serialVersionUID = 1L;
 
-    private final String title;
-
-    public ObjectTitleEvent(final Object source, final Identifier classIdentifier, final String title) {
-        super(source, classIdentifier);
-        this.title = title;
-    }
-
-    public String getTitle() {
-        return title;
+    public PropertyUsabilityEvent(final Object source, final Identifier propertyIdentifier) {
+        super(source, propertyIdentifier);
     }
 
 }

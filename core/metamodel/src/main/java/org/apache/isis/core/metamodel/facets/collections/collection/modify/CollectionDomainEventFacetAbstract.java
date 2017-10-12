@@ -19,9 +19,9 @@
 
 package org.apache.isis.core.metamodel.facets.collections.collection.modify;
 
-import org.apache.isis.applib.events.UsabilityEvent;
-import org.apache.isis.applib.events.ValidityEvent;
-import org.apache.isis.applib.events.VisibilityEvent;
+import org.apache.isis.applib.services.wrapper.events.UsabilityEvent;
+import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
+import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
 import org.apache.isis.applib.services.eventbus.AbstractDomainEvent;
 import org.apache.isis.applib.services.eventbus.CollectionDomainEvent;
 import org.apache.isis.applib.services.i18n.TranslatableString;

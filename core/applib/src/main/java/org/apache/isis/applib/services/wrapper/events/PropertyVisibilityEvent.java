@@ -17,34 +17,26 @@
  *  under the License.
  */
 
-package org.apache.isis.applib.events;
+package org.apache.isis.applib.services.wrapper.events;
 
 import org.apache.isis.applib.Identifier;
 
 /**
- * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents an access (reading) of a property.
+ * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents a check as to whether a property is visible or has been hidden.
  * 
  * <p>
- * Analogous to {@link PropertyModifyEvent}, however the {@link #getReason()}
- * will always be <tt>null</tt>. (If access is not allowed then a
- * {@link PropertyVisibilityEvent} would have been fired).
+ * If {@link #getReason()} is not <tt>null</tt> then provides the reason why the
+ * property is invisible; otherwise property is visible.
  *
  * @deprecated - superceded by <code>domainEvent</code> support ({@link org.apache.isis.applib.services.eventbus.PropertyDomainEvent}, {@link org.apache.isis.applib.IsisApplibModule.CollectionDomainEvent}, {@link org.apache.isis.applib.services.eventbus.ActionDomainEvent}).
  */
 @Deprecated
-public class PropertyAccessEvent extends AccessEvent {
+public class PropertyVisibilityEvent extends VisibilityEvent {
 
     private static final long serialVersionUID = 1L;
 
-    public PropertyAccessEvent(final Object source, final Identifier propertyIdentifier, final Object value) {
+    public PropertyVisibilityEvent(final Object source, final Identifier propertyIdentifier) {
         super(source, propertyIdentifier);
-        this.value = value;
-    }
-
-    private final Object value;
-
-    public Object getValue() {
-        return value;
     }
 
 }

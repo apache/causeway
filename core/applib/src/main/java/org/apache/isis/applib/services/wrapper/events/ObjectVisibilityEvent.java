@@ -17,37 +17,26 @@
  *  under the License.
  */
 
-package org.apache.isis.applib.events;
+package org.apache.isis.applib.services.wrapper.events;
 
 import org.apache.isis.applib.Identifier;
 
 /**
- * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents a check as to whether a particular object to be removed from a
- * collection is valid or not.
+ * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents a check as to whether an object is visible or has been hidden.
  * 
  * <p>
  * If {@link #getReason()} is not <tt>null</tt> then provides the reason why the
- * object is invalid; otherwise the object is valid.
- * 
- * @see CollectionAddToEvent
+ * object is invisible; otherwise action is visible.
  *
  * @deprecated - superceded by <code>domainEvent</code> support ({@link org.apache.isis.applib.services.eventbus.PropertyDomainEvent}, {@link org.apache.isis.applib.IsisApplibModule.CollectionDomainEvent}, {@link org.apache.isis.applib.services.eventbus.ActionDomainEvent}).
  */
 @Deprecated
-public class CollectionRemoveFromEvent extends ValidityEvent {
+public class ObjectVisibilityEvent extends VisibilityEvent {
 
     private static final long serialVersionUID = 1L;
 
-    private final Object proposed;
-
-    public CollectionRemoveFromEvent(final Object source, final Identifier collectionIdentifier, final Object proposed) {
-        super(source, collectionIdentifier);
-        this.proposed = proposed;
-    }
-
-    @Override
-    public Object getProposed() {
-        return proposed;
+    public ObjectVisibilityEvent(final Object source, final Identifier classIdentifier) {
+        super(source, classIdentifier);
     }
 
 }

@@ -24,8 +24,8 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
-import org.apache.isis.applib.events.CollectionMethodEvent;
-import org.apache.isis.applib.events.InteractionEvent;
+import org.apache.isis.applib.services.wrapper.events.CollectionMethodEvent;
+import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 
 abstract class AbstractCollectionInvocationHandler<T, C> extends DelegatingInvocationHandlerDefault<C> {

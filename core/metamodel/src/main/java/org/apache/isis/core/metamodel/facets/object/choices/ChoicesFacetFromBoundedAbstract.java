@@ -23,8 +23,8 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
-import org.apache.isis.applib.events.UsabilityEvent;
-import org.apache.isis.applib.events.ValidityEvent;
+import org.apache.isis.applib.services.wrapper.events.UsabilityEvent;
+import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.query.QueryFindAllInstances;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;

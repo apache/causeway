@@ -17,33 +17,60 @@
  *  under the License.
  */
 
-package org.apache.isis.applib.events;
+package org.apache.isis.applib.services.wrapper.events;
 
 import org.apache.isis.applib.Identifier;
 
 /**
- * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents a check as to whether the current values of the
- * properties/collections of an object are valid (for example, prior to saving
- * that object).
+ * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents a check as to whether a particular argument for an action is valid
+ * or not.
  * 
  * <p>
  * If {@link #getReason()} is not <tt>null</tt> then provides the reason why the
- * object is invalid, otherwise ok.
+ * argument is invalid; otherwise the argument is valid.
+ * 
+ * <p>
+ * Called once per argument, and before {@link ActionInvocationEvent}.
  *
  * @deprecated - superceded by <code>domainEvent</code> support ({@link org.apache.isis.applib.services.eventbus.PropertyDomainEvent}, {@link org.apache.isis.applib.IsisApplibModule.CollectionDomainEvent}, {@link org.apache.isis.applib.services.eventbus.ActionDomainEvent}).
  */
 @Deprecated
-public class ObjectValidityEvent extends ValidityEvent {
+public class ActionArgumentEvent extends ValidityEvent {
 
     private static final long serialVersionUID = 1L;
 
-    public ObjectValidityEvent(final Object source, final Identifier classIdentifier) {
-        super(source, classIdentifier);
+    private final Object[] args;
+    private final int position;
+    private final Object proposed;
+
+    public ActionArgumentEvent(final Object source, final Identifier actionIdentifier, final Object[] args, final int position) {
+        super(source, actionIdentifier);
+        this.args = args;
+        this.position = position;
+        this.proposed = args[position];
+    }
+
+    public Object[] getArgs() {
+        return args;
+    }
+
+    /**
+     * The position (0-based) of the invalid argument.
+     * 
+     * @return
+     */
+    public int getPosition() {
+        return position;
     }
 
     @Override
     public Object getProposed() {
-        return getSource();
+        return proposed;
     }
-
+    
+    @Override
+    public String getReasonMessage() {
+    	return String.format("Invalid action argument. Position: %s. Proposed value: %s. Reason: %s", this.getPosition(), this.getProposed(), super.getReasonMessage());
+    }
+    
 }

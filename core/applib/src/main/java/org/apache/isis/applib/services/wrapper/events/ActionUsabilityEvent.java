@@ -17,28 +17,26 @@
  *  under the License.
  */
 
-package org.apache.isis.applib.events;
+package org.apache.isis.applib.services.wrapper.events;
 
 import org.apache.isis.applib.Identifier;
 
 /**
- * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents an access (reading) of a collection.
+ * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents a check as to whether an action is usable or has been disabled.
  * 
  * <p>
- * Analogous to {@link CollectionAddToEvent} or
- * {@link CollectionRemoveFromEvent}, however the {@link #getReason()} will
- * always be <tt>null</tt>. (If access is not allowed then a vetoing
- * {@link CollectionVisibilityEvent} would have been fired).
+ * If {@link #getReason()} is not <tt>null</tt> then provides the reason why the
+ * action is disabled; otherwise action is enabled.
  *
  * @deprecated - superceded by <code>domainEvent</code> support ({@link org.apache.isis.applib.services.eventbus.PropertyDomainEvent}, {@link org.apache.isis.applib.IsisApplibModule.CollectionDomainEvent}, {@link org.apache.isis.applib.services.eventbus.ActionDomainEvent}).
  */
 @Deprecated
-public class CollectionAccessEvent extends AccessEvent {
+public class ActionUsabilityEvent extends UsabilityEvent {
 
     private static final long serialVersionUID = 1L;
 
-    public CollectionAccessEvent(final Object source, final Identifier collectionIdentifier) {
-        super(source, collectionIdentifier);
+    public ActionUsabilityEvent(final Object source, final Identifier actionIdentifier) {
+        super(source, actionIdentifier);
     }
 
 }

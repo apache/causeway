@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.properties.validating.dflt;
 
-import org.apache.isis.applib.events.ValidityEvent;
+import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;

@@ -24,7 +24,7 @@ import java.util.Map;
 import com.google.common.collect.ImmutableMap;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.events.InteractionEvent;
+import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;

@@ -17,40 +17,33 @@
  *  under the License.
  */
 
-package org.apache.isis.applib.events;
+package org.apache.isis.applib.services.wrapper.events;
 
 import org.apache.isis.applib.Identifier;
 
 /**
- * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents a check as to whether a particular value for a property is valid
- * or not.
+ * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents an access (reading) of an object's title.
  * 
  * <p>
- * If {@link #getReason()} is not <tt>null</tt> then provides the reason why the
- * value is invalid; otherwise the value is valid.
+ * The {@link #getReason()} will always be <tt>null</tt>; access is always
+ * allowed.
  *
  * @deprecated - superceded by <code>domainEvent</code> support ({@link org.apache.isis.applib.services.eventbus.PropertyDomainEvent}, {@link org.apache.isis.applib.IsisApplibModule.CollectionDomainEvent}, {@link org.apache.isis.applib.services.eventbus.ActionDomainEvent}).
  */
 @Deprecated
-public class PropertyModifyEvent extends ValidityEvent {
+public class ObjectTitleEvent extends AccessEvent {
 
     private static final long serialVersionUID = 1L;
 
-    private final Object proposed;
+    private final String title;
 
-    public PropertyModifyEvent(final Object source, final Identifier propertyIdentifier, final Object proposed) {
-        super(source, propertyIdentifier);
-        this.proposed = proposed;
+    public ObjectTitleEvent(final Object source, final Identifier classIdentifier, final String title) {
+        super(source, classIdentifier);
+        this.title = title;
     }
 
-    /**
-     * If <tt>null</tt>, then the property was cleared.
-     * 
-     * @return
-     */
-    @Override
-    public Object getProposed() {
-        return proposed;
+    public String getTitle() {
+        return title;
     }
 
 }

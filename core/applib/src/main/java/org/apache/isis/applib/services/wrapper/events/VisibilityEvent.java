@@ -17,26 +17,31 @@
  *  under the License.
  */
 
-package org.apache.isis.applib.events;
+package org.apache.isis.applib.services.wrapper.events;
 
 import org.apache.isis.applib.Identifier;
 
 /**
- * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents a check as to whether a property is visible or has been hidden.
+ * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents a check to determine whether a member of an object is visible or
+ * has been hidden.
  * 
  * <p>
- * If {@link #getReason()} is not <tt>null</tt> then provides the reason why the
- * property is invisible; otherwise property is visible.
+ * If {@link #getReason()} is <tt>null</tt>, then is usable; otherwise is
+ * invisible.
+ * 
+ * @see AccessEvent
+ * @see UsabilityEvent
+ * @see ValidityEvent
  *
  * @deprecated - superceded by <code>domainEvent</code> support ({@link org.apache.isis.applib.services.eventbus.PropertyDomainEvent}, {@link org.apache.isis.applib.IsisApplibModule.CollectionDomainEvent}, {@link org.apache.isis.applib.services.eventbus.ActionDomainEvent}).
  */
 @Deprecated
-public class PropertyVisibilityEvent extends VisibilityEvent {
+public abstract class VisibilityEvent extends InteractionEvent {
 
     private static final long serialVersionUID = 1L;
 
-    public PropertyVisibilityEvent(final Object source, final Identifier propertyIdentifier) {
-        super(source, propertyIdentifier);
+    public VisibilityEvent(final Object source, final Identifier identifier) {
+        super(source, identifier);
     }
 
 }

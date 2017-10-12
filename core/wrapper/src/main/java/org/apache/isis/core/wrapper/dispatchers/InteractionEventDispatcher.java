@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.wrapper.dispatchers;
 
-import org.apache.isis.applib.events.InteractionEvent;
+import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
 
 public interface InteractionEventDispatcher {
 

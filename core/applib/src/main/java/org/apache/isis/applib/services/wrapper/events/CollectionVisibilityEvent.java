@@ -17,26 +17,26 @@
  *  under the License.
  */
 
-package org.apache.isis.applib.events;
+package org.apache.isis.applib.services.wrapper.events;
 
 import org.apache.isis.applib.Identifier;
 
 /**
- * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents a check as to whether a property is usable or has been disabled.
+ * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents a check as to whether a collection is visible or has been hidden.
  * 
  * <p>
  * If {@link #getReason()} is not <tt>null</tt> then provides the reason why the
- * property is disabled; otherwise property is enabled.
+ * collection is invisible; otherwise collection is visible.
  *
  * @deprecated - superceded by <code>domainEvent</code> support ({@link org.apache.isis.applib.services.eventbus.PropertyDomainEvent}, {@link org.apache.isis.applib.IsisApplibModule.CollectionDomainEvent}, {@link org.apache.isis.applib.services.eventbus.ActionDomainEvent}).
  */
 @Deprecated
-public class PropertyUsabilityEvent extends UsabilityEvent {
+public class CollectionVisibilityEvent extends VisibilityEvent {
 
     private static final long serialVersionUID = 1L;
 
-    public PropertyUsabilityEvent(final Object source, final Identifier propertyIdentifier) {
-        super(source, propertyIdentifier);
+    public CollectionVisibilityEvent(final Object source, final Identifier identifier) {
+        super(source, identifier);
     }
 
 }

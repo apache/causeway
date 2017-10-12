@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.applib.events;
+package org.apache.isis.applib.services.wrapper.events;
 
 import java.util.EventObject;
 import java.util.List;

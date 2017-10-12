@@ -17,60 +17,37 @@
  *  under the License.
  */
 
-package org.apache.isis.applib.events;
+package org.apache.isis.applib.services.wrapper.events;
 
 import org.apache.isis.applib.Identifier;
 
 /**
- * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents a check as to whether a particular argument for an action is valid
- * or not.
+ * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents a check as to whether a particular object to be removed from a
+ * collection is valid or not.
  * 
  * <p>
  * If {@link #getReason()} is not <tt>null</tt> then provides the reason why the
- * argument is invalid; otherwise the argument is valid.
+ * object is invalid; otherwise the object is valid.
  * 
- * <p>
- * Called once per argument, and before {@link ActionInvocationEvent}.
+ * @see CollectionAddToEvent
  *
  * @deprecated - superceded by <code>domainEvent</code> support ({@link org.apache.isis.applib.services.eventbus.PropertyDomainEvent}, {@link org.apache.isis.applib.IsisApplibModule.CollectionDomainEvent}, {@link org.apache.isis.applib.services.eventbus.ActionDomainEvent}).
  */
 @Deprecated
-public class ActionArgumentEvent extends ValidityEvent {
+public class CollectionRemoveFromEvent extends ValidityEvent {
 
     private static final long serialVersionUID = 1L;
 
-    private final Object[] args;
-    private final int position;
     private final Object proposed;
 
-    public ActionArgumentEvent(final Object source, final Identifier actionIdentifier, final Object[] args, final int position) {
-        super(source, actionIdentifier);
-        this.args = args;
-        this.position = position;
-        this.proposed = args[position];
-    }
-
-    public Object[] getArgs() {
-        return args;
-    }
-
-    /**
-     * The position (0-based) of the invalid argument.
-     * 
-     * @return
-     */
-    public int getPosition() {
-        return position;
+    public CollectionRemoveFromEvent(final Object source, final Identifier collectionIdentifier, final Object proposed) {
+        super(source, collectionIdentifier);
+        this.proposed = proposed;
     }
 
     @Override
     public Object getProposed() {
         return proposed;
     }
-    
-    @Override
-    public String getReasonMessage() {
-    	return String.format("Invalid action argument. Position: %s. Proposed value: %s. Reason: %s", this.getPosition(), this.getProposed(), super.getReasonMessage());
-    }
-    
+
 }

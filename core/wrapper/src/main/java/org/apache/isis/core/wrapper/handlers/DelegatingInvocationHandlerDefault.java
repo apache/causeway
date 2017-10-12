@@ -22,7 +22,7 @@ package org.apache.isis.core.wrapper.handlers;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import org.apache.isis.applib.events.InteractionEvent;
+import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.WrapperFactory.ExecutionMode;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;

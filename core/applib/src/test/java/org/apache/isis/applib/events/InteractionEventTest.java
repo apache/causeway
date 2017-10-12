@@ -32,6 +32,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
 
 @RunWith(JMock.class)
 public class InteractionEventTest {

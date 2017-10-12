@@ -17,26 +17,49 @@
  *  under the License.
  */
 
-package org.apache.isis.applib.events;
+package org.apache.isis.applib.services.wrapper.events;
 
 import org.apache.isis.applib.Identifier;
 
 /**
- * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents a check as to whether a collection is usable or has been disabled.
+ * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents a check as to whether the proposed values of the value type is
+ * valid.
  * 
  * <p>
  * If {@link #getReason()} is not <tt>null</tt> then provides the reason why the
- * collection is disabled; otherwise collection is enabled.
+ * proposed value is invalid, otherwise the new value is acceptable.
  *
  * @deprecated - superceded by <code>domainEvent</code> support ({@link org.apache.isis.applib.services.eventbus.PropertyDomainEvent}, {@link org.apache.isis.applib.IsisApplibModule.CollectionDomainEvent}, {@link org.apache.isis.applib.services.eventbus.ActionDomainEvent}).
  */
 @Deprecated
-public class CollectionUsabilityEvent extends UsabilityEvent {
+public class ParseValueEvent extends ValidityEvent {
 
     private static final long serialVersionUID = 1L;
 
-    public CollectionUsabilityEvent(final Object source, final Identifier identifier) {
-        super(source, identifier);
+    private static Object coalesce(final Object source, final String proposed) {
+        return source != null ? source : proposed;
+    }
+
+    private final String proposed;
+
+    public ParseValueEvent(final Object source, final Identifier classIdentifier, final String proposed) {
+        super(coalesce(source, proposed), classIdentifier);
+        this.proposed = proposed;
+    }
+
+    /**
+     * Will be the source provided in the
+     * {@link #ParseValueEvent(Object, Identifier, String) constructor} if not
+     * null, otherwise will fallback to the proposed value.
+     */
+    @Override
+    public Object getSource() {
+        return super.getSource();
+    }
+
+    @Override
+    public String getProposed() {
+        return proposed;
     }
 
 }

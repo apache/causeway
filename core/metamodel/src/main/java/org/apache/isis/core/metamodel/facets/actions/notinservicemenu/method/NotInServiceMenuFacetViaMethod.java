@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facets.actions.notinservicemenu.method;
 
 import java.lang.reflect.Method;
 
-import org.apache.isis.applib.events.VisibilityEvent;
+import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;

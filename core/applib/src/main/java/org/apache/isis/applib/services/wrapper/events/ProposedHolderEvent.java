@@ -17,49 +17,20 @@
  *  under the License.
  */
 
-package org.apache.isis.applib.events;
-
-import org.apache.isis.applib.Identifier;
+package org.apache.isis.applib.services.wrapper.events;
 
 /**
- * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents a check as to whether a particular argument for an action is valid
- * or not.
- * 
- * <p>
- * If {@link #getReason()} is not <tt>null</tt> then provides the reason why the
- * set of arguments are invalid; otherwise the arguments are valid.
- * 
- * <p>
- * Called after each of the {@link ActionArgumentEvent}s.
+ * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> makes it easier to process different events that hold a single proposed
+ * argument (such as {@link CollectionAddToEvent} and
+ * {@link PropertyModifyEvent}).
  *
  * @deprecated - superceded by <code>domainEvent</code> support ({@link org.apache.isis.applib.services.eventbus.PropertyDomainEvent}, {@link org.apache.isis.applib.IsisApplibModule.CollectionDomainEvent}, {@link org.apache.isis.applib.services.eventbus.ActionDomainEvent}).
  */
 @Deprecated
-public class ActionInvocationEvent extends ValidityEvent {
+public interface ProposedHolderEvent {
 
-    private static final long serialVersionUID = 1L;
+    Object getProposed();
 
-    public ActionInvocationEvent(final Object source, final Identifier actionIdentifier, final Object[] args) {
-        super(source, actionIdentifier);
-        this.args = args;
-    }
-
-    private Object[] args;
-
-    public Object[] getArgs() {
-        return args;
-    }
-
-    public void setArgs(final Object[] args) {
-        this.args = args;
-    }
-
-    /**
-     * Does not apply
-     */
-    @Override
-    public Object getProposed() {
-        return null;
-    }
+    String getMemberNaturalName();
 
 }

@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.members.disabled.forsession;
 
-import org.apache.isis.applib.events.UsabilityEvent;
+import org.apache.isis.applib.services.wrapper.events.UsabilityEvent;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.facetapi.Facet;
