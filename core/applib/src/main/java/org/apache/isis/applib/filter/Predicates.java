@@ -31,40 +31,15 @@ public final class Predicates {
     }
 
     public static <T> Predicate<T> and(final Predicate<T>... predicates) {
-        return new Predicate<T>() {
-            @Override
-            public boolean apply(final T f) {
-                for(final Predicate<T> predicate : predicates) {
-                    if(!predicate.apply(f)) {
-                        return false;
-                    }
-                }
-                return true;
-            }
-        };
+        return com.google.common.base.Predicates.and(predicates);
     }
 
     public static <T> Predicate<T> or(final Predicate<T>... predicates) {
-        return new Predicate<T>() {
-            @Override
-            public boolean apply(final T f) {
-                for(final Predicate<T> predicate : predicates) {
-                    if(predicate.apply(f)) {
-                        return true;
-                    }
-                }
-                return false;
-            }
-        };
+        return com.google.common.base.Predicates.or(predicates);
     }
 
     public static <T> Predicate<T> not(final Predicate<T> f1) {
-        return new Predicate<T>() {
-            @Override
-            public boolean apply(final T f) {
-                return !f1.apply(f);
-            }
-        };
+        return com.google.common.base.Predicates.not(f1);
     }
 
     public static <T> Predicate<T> any() {
