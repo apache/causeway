@@ -155,10 +155,9 @@ The listener will be notified of interactions even on wrappers created before th
 <3> remove an `InteractionListener`, to no longer be notified of interactions on wrappers.
 <4> used by the framework itself
 
-The original intent of this API was to enable test transcripts to be captured (in a BDD-like fashion) from integration tests.
-No such feature has yet been implemented however.
-Also, the capabilities have by and large been superceded by Apache Isis' support for domain events.
-We may therefore deprecate this API in the future.
+
+One possible use case for this API is to enable test transcripts to be captured (in a BDD-like fashion) from integration tests.
+As the time of writing, no such feature has yet been implemented.
 
 
 

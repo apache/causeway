@@ -14,8 +14,9 @@ org.apache.isis.applib.clock
         getTimeAsCalendar()  (1 usage found)
         getTimeAsDate()  (1 usage found)
 
-org.apache.isis.applib.events - entire package.  These event classes supported only by WrapperFactory;
-                                redundant as @Xxx(domainEvent=...) on member achieves much the same effect using event bus
+
+
+
 org.apache.isis.applib.filter  - entire package of Filter classes; use guava Predicate instead.
 
 
@@ -255,6 +256,11 @@ org.apache.isis.applib.services.command
 DONE (ADDED)
 
     new support for JSR-303 @Pattern annotation (http://beanvalidation.org/1.0/spec/, chapter 6) ... replaces @RegEx
+
+
+DONE (MOVED)
+
+    org.apache.isis.applib.events - move to services.wrapper.events.  (Still useful as provide context for exceptions).
 
 
 
