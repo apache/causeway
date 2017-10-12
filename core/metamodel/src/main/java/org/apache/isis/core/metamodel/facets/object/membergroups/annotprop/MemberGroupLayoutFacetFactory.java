@@ -21,8 +21,6 @@ package org.apache.isis.core.metamodel.facets.object.membergroups.annotprop;
 
 import java.util.List;
 
-import com.google.common.base.Predicate;
-
 import org.apache.isis.applib.annotation.MemberGroupLayout;
 import org.apache.isis.applib.annotation.MemberGroupLayout.ColumnSpans;
 import org.apache.isis.applib.annotation.Where;
@@ -113,9 +111,10 @@ public class MemberGroupLayoutFacetFactory extends FacetFactoryAbstract implemen
             @SuppressWarnings("unchecked")
             private int numCollectionsOf(ObjectSpecification objectSpec) {
                 List<ObjectAssociation> objectCollections = objectSpec.getAssociations(
-                        Contributed.EXCLUDED, com.google.common.base.Predicates.and(new Predicate<ObjectAssociation>[] {
+                        Contributed.EXCLUDED, com.google.common.base.Predicates.and(
                                 ObjectAssociation.Filters.staticallyVisible(Where.OBJECT_FORMS),
-                                ObjectAssociation.Filters.COLLECTIONS }));
+                                ObjectAssociation.Filters.COLLECTIONS )
+                );
                 return objectCollections.size();
             }
         };

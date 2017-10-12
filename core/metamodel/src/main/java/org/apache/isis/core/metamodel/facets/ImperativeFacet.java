@@ -25,7 +25,7 @@ import java.util.List;
 import com.google.common.collect.Lists;
 
 import com.google.common.base.Predicate;
-import org.apache.isis.applib.filter.Predicates;
+
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.core.commons.lang.ObjectExtensions;
 import org.apache.isis.core.metamodel.facetapi.DecoratingFacet;
@@ -139,7 +139,7 @@ public interface ImperativeFacet extends Facet {
         }
 
         public static Intent getIntent(final ObjectMember member, final Method method) {
-            final List<Facet> allFacets = member.getFacets(Predicates.anyOfType(Facet.class));
+            final List<Facet> allFacets = member.getFacets(com.google.common.base.Predicates.<Facet>alwaysTrue());
             final List<ImperativeFacet> imperativeFacets = Lists.newArrayList();
             for (final Facet facet : allFacets) {
                 final ImperativeFacet imperativeFacet = ImperativeFacet.Util.getImperativeFacet(facet);

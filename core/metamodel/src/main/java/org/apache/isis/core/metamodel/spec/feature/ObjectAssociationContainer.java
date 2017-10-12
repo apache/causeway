@@ -22,7 +22,7 @@ package org.apache.isis.core.metamodel.spec.feature;
 import java.util.List;
 
 import com.google.common.base.Predicate;
-import org.apache.isis.applib.filter.Predicates;
+
 import org.apache.isis.core.metamodel.spec.ObjectSpecificationException;
 
 public interface ObjectAssociationContainer {

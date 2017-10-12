@@ -120,8 +120,9 @@ public final class Util {
         final List<ObjectAssociation> list =
                 objectSpecification.getAssociations(
                         Contributed.INCLUDED,
-                        com.google.common.base.Predicates.and(new Predicate<ObjectAssociation>[] { associationPredicate,
-                                associationsWith(visibility) }));
+                        com.google.common.base.Predicates.and(
+                                associationPredicate,
+                                associationsWith(visibility) ));
 
         return cast(list);
     }

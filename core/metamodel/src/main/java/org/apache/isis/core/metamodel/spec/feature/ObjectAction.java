@@ -381,32 +381,32 @@ public interface ObjectAction extends ObjectMember {
                 final ObjectAdapter target,
                 final InteractionInitiatedBy interactionInitiatedBy,
                 final Where where) {
-            return org.apache.isis.applib.filter.Predicates.dynamicallyVisible(target, interactionInitiatedBy, where);
+            return Predicates.dynamicallyVisible(target, interactionInitiatedBy, where);
         }
 
         public static com.google.common.base.Predicate withId(final String actionId) {
-            return org.apache.isis.applib.filter.Predicates.withId(actionId);
+            return Predicates.withId(actionId);
         }
 
         public static com.google.common.base.Predicate withNoValidationRules() {
-            return org.apache.isis.applib.filter.Predicates.withNoValidationRules();
+            return Predicates.withNoValidationRules();
         }
 
         public static com.google.common.base.Predicate ofType(final ActionType type) {
-            return org.apache.isis.applib.filter.Predicates.ofType(type);
+            return Predicates.ofType(type);
         }
 
         public static com.google.common.base.Predicate bulk() {
-            return org.apache.isis.applib.filter.Predicates.bulk();
+            return Predicates.bulk();
         }
 
         // UNUSED?
         public static com.google.common.base.Predicate notBulkOnly() {
-            return org.apache.isis.applib.filter.Predicates.notBulkOnly();
+            return Predicates.notBulkOnly();
         }
 
         public static com.google.common.base.Predicate memberOrderOf(ObjectAssociation association) {
-            return org.apache.isis.applib.filter.Predicates.memberOrderOf(association);
+            return Predicates.memberOrderOf(association);
         }
     }
 
