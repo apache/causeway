@@ -101,7 +101,7 @@ public interface ImperativeFacet extends Facet {
 
     public static Filter<Facet> FILTER = new Filter<Facet>() {
         @Override
-        public boolean accept(final Facet facet) {
+        public boolean apply(final Facet facet) {
             return ImperativeFacet.Util.isImperativeFacet(facet);
         }
     };

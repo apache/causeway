@@ -40,7 +40,7 @@ public final class FacetUtil {
         final FacetHolder facetHolder = facet.getFacetHolder();
         final List<Facet> facets = facetHolder.getFacets(new Filter<Facet>() {
             @Override
-            public boolean accept(final Facet each) {
+            public boolean apply(final Facet each) {
                 return facet.facetType() == each.facetType() && facet.getClass() == each.getClass();
             }
         });
@@ -122,7 +122,7 @@ public final class FacetUtil {
         final List<Facet> allFacets = new ArrayList<>(facetsByClass.values());
         for (final Facet facet : allFacets) {
             // facets that implement MultiTypedFacet will be held more than once.  The 'contains' check ensures they are only returned once, however.
-            if (filter.accept(facet) && !filteredFacets.contains(facet)) {
+            if (filter.apply(facet) && !filteredFacets.contains(facet)) {
                 filteredFacets.add(facet);
             }
         }

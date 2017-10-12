@@ -34,9 +34,9 @@ public final class Filters {
     public static <T> Filter<T> and(final Filter<T>... filters) {
         return new Filter<T>() {
             @Override
-            public boolean accept(final T f) {
+            public boolean apply(final T f) {
                 for(final Filter<T> filter: filters) {
-                    if(!filter.accept(f)) {     
+                    if(!filter.apply(f)) {
                         return false;
                     }
                 }
@@ -48,9 +48,9 @@ public final class Filters {
     public static <T> Filter<T> or(final Filter<T>... filters) {
         return new Filter<T>() {
             @Override
-            public boolean accept(final T f) {
+            public boolean apply(final T f) {
                 for(final Filter<T> filter: filters) {
-                    if(filter.accept(f)) { 
+                    if(filter.apply(f)) {
                         return true;
                     }
                 }
@@ -62,8 +62,8 @@ public final class Filters {
     public static <T> Filter<T> not(final Filter<T> f1) {
         return new Filter<T>() {
             @Override
-            public boolean accept(final T f) {
-                return !f1.accept(f);
+            public boolean apply(final T f) {
+                return !f1.apply(f);
             }
         };
     }
@@ -71,7 +71,7 @@ public final class Filters {
     public static <T> Filter<T> any() {
         return new Filter<T>() {
             @Override
-            public boolean accept(final T t) {
+            public boolean apply(final T t) {
                 return true;
             }
         };
@@ -84,7 +84,7 @@ public final class Filters {
     public static <T> Filter<T> none() {
         return new Filter<T>() {
             @Override
-            public boolean accept(final T f) {
+            public boolean apply(final T f) {
                 return false;
             }
         };
@@ -98,7 +98,7 @@ public final class Filters {
         return new Predicate<T>() {
             @Override
             public boolean apply(T candidate) {
-                return filter.accept(candidate);
+                return filter.apply(candidate);
             }
         };
     }

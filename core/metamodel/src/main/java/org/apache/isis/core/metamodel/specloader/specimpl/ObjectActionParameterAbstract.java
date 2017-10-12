@@ -145,7 +145,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
         final List<ObjectActionParameter> parameters = this.getAction().getParameters(new Filter<ObjectActionParameter>() {
 
             @Override
-            public boolean accept(final ObjectActionParameter t) {
+            public boolean apply(final ObjectActionParameter t) {
                 return equalsShortIdentifier(t.getSpecification(), getSpecification());
             }
 
@@ -170,7 +170,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
         final List<ObjectActionParameter> parameters = getAction().getParameters(new Filter<ObjectActionParameter>() {
 
             @Override
-            public boolean accept(final ObjectActionParameter t) {
+            public boolean apply(final ObjectActionParameter t) {
                 return equalsShortIdentifier(t.getSpecification(), getSpecification());
             }
 

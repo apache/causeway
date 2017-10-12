@@ -127,7 +127,7 @@ public class ObjectAssociationFiltersTest_visibleWhere {
     @Test
     public void test() {
         final Filter<ObjectAssociation> filter = ObjectAssociation.Filters.staticallyVisible(whereContext);
-        assertThat(filter.accept(mockObjectAssociation), is(expectedVisibility));
+        assertThat(filter.apply(mockObjectAssociation), is(expectedVisibility));
     }
 
 }

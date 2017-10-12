@@ -149,7 +149,7 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
 
         final List<ObjectAssociation> selectedFields = Lists.newArrayList();
         for (int i = 0; i < allFields.size(); i++) {
-            if (filter.accept(allFields.get(i))) {
+            if (filter.apply(allFields.get(i))) {
                 selectedFields.add(allFields.get(i));
             }
         }

@@ -135,7 +135,7 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
          */
         public static final Filter<ObjectActionParameter> PARAMETER_ASSOCIATIONS = new Filter<ObjectActionParameter>() {
             @Override
-            public boolean accept(final ObjectActionParameter parameter) {
+            public boolean apply(final ObjectActionParameter parameter) {
                 return parameter.getSpecification().isNotCollection();
             }
         };

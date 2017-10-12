@@ -78,82 +78,82 @@ public class FacetFiltersTest extends TestCase {
 
     public void testIsAWhenIs() {
         final Filter<Facet> filter = FacetFilters.isA(FooFacet.class);
-        assertTrue(filter.accept(fooFacet));
+        assertTrue(filter.apply(fooFacet));
     }
 
     public void testIsAWhenIsNot() {
         final Filter<Facet> filter = FacetFilters.isA(FooFacet.class);
-        assertFalse(filter.accept(barFacet));
+        assertFalse(filter.apply(barFacet));
     }
 
     public void testIsAWhenIsSubclass() {
         final Filter<Facet> filter = FacetFilters.isA(FooFacet.class);
-        assertTrue(filter.accept(fooSubFacet));
+        assertTrue(filter.apply(fooSubFacet));
     }
 
     public void testIsAWhenIsNotBecauseASuperclass() {
         final Filter<Facet> filter = FacetFilters.isA(FooFacet.class);
-        assertFalse(filter.accept(fooSuperFacet));
+        assertFalse(filter.apply(fooSuperFacet));
     }
 
     public void testAndTrueTrue() {
         final Filter<Facet> and = Filters.and(FacetFilters.ANY, FacetFilters.ANY);
-        assertTrue(and.accept(fooFacet));
+        assertTrue(and.apply(fooFacet));
     }
 
     public void testAndTrueFalse() {
         final Filter<Facet> and = Filters.and(FacetFilters.ANY, FacetFilters.NONE);
-        assertFalse(and.accept(fooFacet));
+        assertFalse(and.apply(fooFacet));
     }
 
     public void testAndFalseTrue() {
         final Filter<Facet> and = Filters.and(FacetFilters.NONE, FacetFilters.ANY);
-        assertFalse(and.accept(fooFacet));
+        assertFalse(and.apply(fooFacet));
     }
 
     public void testAndFalseFalse() {
         final Filter<Facet> and = Filters.and(FacetFilters.NONE, FacetFilters.NONE);
-        assertFalse(and.accept(fooFacet));
+        assertFalse(and.apply(fooFacet));
     }
 
     public void testOrTrueTrue() {
         final Filter<Facet> or = Filters.or(FacetFilters.ANY, FacetFilters.ANY);
-        assertTrue(or.accept(fooFacet));
+        assertTrue(or.apply(fooFacet));
     }
 
     public void testOrTrueFalse() {
         final Filter<Facet> or = Filters.or(FacetFilters.ANY, FacetFilters.NONE);
-        assertTrue(or.accept(fooFacet));
+        assertTrue(or.apply(fooFacet));
     }
 
     public void testorFalseTrue() {
         final Filter<Facet> or = Filters.or(FacetFilters.NONE, FacetFilters.ANY);
-        assertTrue(or.accept(fooFacet));
+        assertTrue(or.apply(fooFacet));
     }
 
     public void testOrFalseFalse() {
         final Filter<Facet> or = Filters.and(FacetFilters.NONE, FacetFilters.NONE);
-        assertFalse(or.accept(fooFacet));
+        assertFalse(or.apply(fooFacet));
     }
 
     public void testNotTrue() {
         final Filter<Facet> not = Filters.not(FacetFilters.ANY);
-        assertFalse(not.accept(fooFacet));
+        assertFalse(not.apply(fooFacet));
     }
 
     public void testNotFalse() {
         final Filter<Facet> not = Filters.not(FacetFilters.NONE);
-        assertTrue(not.accept(fooFacet));
+        assertTrue(not.apply(fooFacet));
     }
 
     public void testAny() {
         final Filter<Facet> any = Filters.any();
-        assertTrue(any.accept(fooFacet));
+        assertTrue(any.apply(fooFacet));
     }
 
     public void testNone() {
         final Filter<Facet> none = Filters.none();
-        assertFalse(none.accept(fooFacet));
+        assertFalse(none.apply(fooFacet));
     }
 
 }

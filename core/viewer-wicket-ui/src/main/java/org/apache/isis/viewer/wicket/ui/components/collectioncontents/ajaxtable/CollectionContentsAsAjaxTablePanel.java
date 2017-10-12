@@ -237,7 +237,7 @@ public class CollectionContentsAsAjaxTablePanel
         }
         return new Filter<ObjectAssociation>() {
             @Override
-            public boolean accept(ObjectAssociation association) {
+            public boolean apply(ObjectAssociation association) {
                 final HiddenFacet facet = association.getFacet(HiddenFacet.class);
                 if(facet == null) {
                     return true;

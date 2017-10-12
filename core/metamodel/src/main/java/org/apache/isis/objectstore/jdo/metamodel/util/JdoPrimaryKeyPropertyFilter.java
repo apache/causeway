@@ -39,7 +39,7 @@ import org.apache.isis.objectstore.jdo.metamodel.facets.prop.primarykey.JdoPrima
  */
 public final class JdoPrimaryKeyPropertyFilter implements Filter<ObjectAssociation> {
     @Override
-    public boolean accept(final ObjectAssociation noa) {
+    public boolean apply(final ObjectAssociation noa) {
         return noa.isOneToOneAssociation() &&
                 noa.containsFacet(JdoPrimaryKeyFacet.class) &&
                 noa.containsFacet(PropertyOrCollectionAccessorFacet.class);

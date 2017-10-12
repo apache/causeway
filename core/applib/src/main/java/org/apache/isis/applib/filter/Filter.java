@@ -46,6 +46,6 @@ public interface Filter<T> {
      * @return <tt>true</tt> if this pojo is acceptable, <tt>false</tt>
      *         otherwise.
      */
-    public boolean accept(T t);
+    public boolean apply(T t);
 
 }

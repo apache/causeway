@@ -248,7 +248,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
         final List<ObjectActionParameter> allParameters = getParameters();
         final List<ObjectActionParameter> selectedParameters = Lists.newArrayList();
         for (int i = 0; i < allParameters.size(); i++) {
-            if (filter.accept(allParameters.get(i))) {
+            if (filter.apply(allParameters.get(i))) {
                 selectedParameters.add(allParameters.get(i));
             }
         }

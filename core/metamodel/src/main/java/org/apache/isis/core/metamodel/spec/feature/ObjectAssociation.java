@@ -253,7 +253,7 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
         @Deprecated
         public final static Filter<ObjectAssociation> PROPERTIES = new Filter<ObjectAssociation>() {
             @Override
-            public boolean accept(final ObjectAssociation association) {
+            public boolean apply(final ObjectAssociation association) {
                 return association.isOneToOneAssociation();
             }
         };
@@ -266,7 +266,7 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
         @Deprecated
         public final static Filter<ObjectAssociation> REFERENCE_PROPERTIES = new Filter<ObjectAssociation>() {
             @Override
-            public boolean accept(final ObjectAssociation association) {
+            public boolean apply(final ObjectAssociation association) {
                 return association.isOneToOneAssociation() && 
                        !association.getSpecification().containsDoOpFacet(ValueFacet.class);
             }
@@ -280,7 +280,7 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
         @Deprecated
         public final static Filter<ObjectAssociation> WHERE_VISIBLE_IN_COLLECTION_TABLE = new Filter<ObjectAssociation>() {
             @Override
-            public boolean accept(final ObjectAssociation association) {
+            public boolean apply(final ObjectAssociation association) {
                 final HiddenFacet hiddenFacet = association.getFacet(HiddenFacet.class);
                 return hiddenFacet == null || !hiddenFacet.where().inParentedTable();
             }
@@ -294,7 +294,7 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
         @Deprecated
         public final static Filter<ObjectAssociation> WHERE_VISIBLE_IN_STANDALONE_TABLE = new Filter<ObjectAssociation>() {
             @Override
-            public boolean accept(final ObjectAssociation association) {
+            public boolean apply(final ObjectAssociation association) {
                 final HiddenFacet hiddenFacet = association.getFacet(HiddenFacet.class);
                 return hiddenFacet == null || !hiddenFacet.where().inStandaloneTable();
             }
@@ -308,7 +308,7 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
         @Deprecated
         public final static Filter<ObjectAssociation> ALL = new Filter<ObjectAssociation>() {
             @Override
-            public boolean accept(final ObjectAssociation property) {
+            public boolean apply(final ObjectAssociation property) {
                 return true;
             }
         };
@@ -321,7 +321,7 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
         @Deprecated
         public final static Filter<ObjectAssociation> COLLECTIONS = new Filter<ObjectAssociation>() {
             @Override
-            public boolean accept(final ObjectAssociation property) {
+            public boolean apply(final ObjectAssociation property) {
                 return property.isOneToManyAssociation();
             }
         };
@@ -335,7 +335,7 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
         @Deprecated
         public static final Filter<ObjectAssociation> VISIBLE_AT_LEAST_SOMETIMES = new Filter<ObjectAssociation>() {
             @Override
-            public boolean accept(final ObjectAssociation property) {
+            public boolean apply(final ObjectAssociation property) {
                 final HiddenFacet hiddenFacet = property.getFacet(HiddenFacet.class);
                 return hiddenFacet == null || hiddenFacet.where() != Where.ANYWHERE;
             }
@@ -348,9 +348,9 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
         public static final Filter<ObjectAssociation> staticallyVisible(final Where context) {
             return new Filter<ObjectAssociation>() {
                 @Override
-                public boolean accept(final ObjectAssociation association) {
+                public boolean apply(final ObjectAssociation association) {
                     final List<Facet> facets = association.getFacets(new Filter<Facet>() {
-                        @Override public boolean accept(final Facet facet) {
+                        @Override public boolean apply(final Facet facet) {
                             return facet instanceof WhereValueFacet && facet instanceof HiddenFacet;
                         }
                     });
@@ -375,7 +375,7 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
                 final Where where) {
             return new Filter<ObjectAssociation>() {
                 @Override
-                public boolean accept(final ObjectAssociation objectAssociation) {
+                public boolean apply(final ObjectAssociation objectAssociation) {
                     final Consent visible = objectAssociation.isVisible(target, interactionInitiatedBy, where);
                     return visible.isAllowed();
                 }
@@ -392,7 +392,7 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
                 final Where where) {
             return new Filter<ObjectAssociation>() {
                 @Override
-                public boolean accept(final ObjectAssociation objectAssociation) {
+                public boolean apply(final ObjectAssociation objectAssociation) {
                     final Consent usable = objectAssociation.isUsable(adapter, interactionInitiatedBy, where);
                     return usable.isAllowed();
                 }

@@ -95,7 +95,7 @@ public final class Util {
     static Filter<ObjectAssociation> associationsWith(final SwaggerService.Visibility visibility) {
         return new Filter<ObjectAssociation>() {
           @Override
-          public boolean accept(final ObjectAssociation objectAssociation) {
+          public boolean apply(final ObjectAssociation objectAssociation) {
               return !visibility.isPublic() || isVisibleForPublic(objectAssociation);
           }
       };
@@ -141,7 +141,7 @@ public final class Util {
 
         return objectSpec.getObjectActions(actionTypes, Contributed.INCLUDED, new Filter<ObjectAction>() {
             @Override
-            public boolean accept(final ObjectAction objectAction) {
+            public boolean apply(final ObjectAction objectAction) {
                 return !classExcluder.exclude(objectAction) &&
                         !visibility.isPublic() || isVisibleForPublic(objectAction);
             }

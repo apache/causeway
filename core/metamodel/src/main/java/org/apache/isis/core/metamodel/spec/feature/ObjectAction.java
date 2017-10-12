@@ -433,7 +433,7 @@ public interface ObjectAction extends ObjectMember {
                 final Where where) {
             return new Filter<ObjectAction>() {
                 @Override
-                public boolean accept(final ObjectAction objectAction) {
+                public boolean apply(final ObjectAction objectAction) {
                     final Consent visible = objectAction.isVisible(target, interactionInitiatedBy, where);
                     return visible.isAllowed();
                 }
@@ -447,7 +447,7 @@ public interface ObjectAction extends ObjectMember {
         public static Filter<ObjectAction> withId(final String actionId) {
             return new Filter<ObjectAction>() {
                 @Override
-                public boolean accept(ObjectAction objectAction) {
+                public boolean apply(ObjectAction objectAction) {
                     return objectAction.getId().equals(actionId);
                 }
             };
@@ -460,7 +460,7 @@ public interface ObjectAction extends ObjectMember {
         public static Filter<ObjectAction> withNoValidationRules() {
             return new Filter<ObjectAction>() {
                 @Override
-                public boolean accept(final ObjectAction objectAction) {
+                public boolean apply(final ObjectAction objectAction) {
                     final List<Facet> validatingFacets = objectAction.getFacets(FacetFilters
                             .isA(ValidatingInteractionAdvisor.class));
                     return validatingFacets.isEmpty();
@@ -475,7 +475,7 @@ public interface ObjectAction extends ObjectMember {
         public static Filter<ObjectAction> ofType(final ActionType type) {
             return new Filter<ObjectAction>() {
                 @Override
-                public boolean accept(ObjectAction oa) {
+                public boolean apply(ObjectAction oa) {
                     return oa.getType() == type;
                 }
             };
@@ -489,7 +489,7 @@ public interface ObjectAction extends ObjectMember {
             return new Filter<ObjectAction>() {
 
                 @Override
-                public boolean accept(ObjectAction oa) {
+                public boolean apply(ObjectAction oa) {
 
                     final BulkFacet bulkFacet = oa.getFacet(BulkFacet.class);
                     if(bulkFacet == null || bulkFacet.isNoop() || bulkFacet.value() == InvokeOn.OBJECT_ONLY) {
@@ -518,7 +518,7 @@ public interface ObjectAction extends ObjectMember {
             return new Filter<ObjectAction>() {
 
                 @Override
-                public boolean accept(ObjectAction t) {
+                public boolean apply(ObjectAction t) {
                     BulkFacet facet = t.getFacet(BulkFacet.class);
                     return facet == null || facet.value() != InvokeOn.COLLECTION_ONLY;
                 }
@@ -533,7 +533,7 @@ public interface ObjectAction extends ObjectMember {
         private static Filter<ObjectAction> wizardActions(final ObjectSpecification objectSpecification) {
             return new Filter<ObjectAction>() {
                 @Override
-                public boolean accept(ObjectAction input) {
+                public boolean apply(ObjectAction input) {
                     if (objectSpecification == null) {
                         return false;
                     }
@@ -550,7 +550,7 @@ public interface ObjectAction extends ObjectMember {
             return new Filter<ObjectAction>() {
 
                 @Override
-                public boolean accept(ObjectAction t) {
+                public boolean apply(ObjectAction t) {
                     final MemberOrderFacet memberOrderFacet = t.getFacet(MemberOrderFacet.class);
                     if (memberOrderFacet == null || Strings.isNullOrEmpty(memberOrderFacet.name())) {
                         return false;
@@ -575,7 +575,7 @@ public interface ObjectAction extends ObjectMember {
             return new Filter<ObjectAction>() {
 
                 @Override
-                public boolean accept(ObjectAction t) {
+                public boolean apply(ObjectAction t) {
                     final MemberOrderFacet memberOrderFacet = t.getFacet(MemberOrderFacet.class);
                     if (memberOrderFacet == null || Strings.isNullOrEmpty(memberOrderFacet.name())) {
                         return true;

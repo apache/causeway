@@ -48,7 +48,7 @@ public class CollectionContentsAsSummaryFactory extends ComponentFactoryAbstract
     private static final String NAME = "summary";
 
     final static Filter<ObjectAssociation> OF_TYPE_BIGDECIMAL = new Filter<ObjectAssociation>(){
-        public boolean accept(final ObjectAssociation objectAssoc) {
+        public boolean apply(final ObjectAssociation objectAssoc) {
             ObjectSpecification objectSpec = objectAssoc.getSpecification();
             return objectSpec.containsDoOpFacet(BigDecimalValueFacet.class);
         }};

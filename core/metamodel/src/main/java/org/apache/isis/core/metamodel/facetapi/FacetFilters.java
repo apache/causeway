@@ -36,7 +36,7 @@ public final class FacetFilters {
      */
     public static final Filter<Facet> NONE = new Filter<Facet>() {
         @Override
-        public boolean accept(final Facet facet) {
+        public boolean apply(final Facet facet) {
             return false;
         }
     };
@@ -44,10 +44,10 @@ public final class FacetFilters {
     public static Filter<Facet> isA(final Class<?> superClass) {
         return new Filter<Facet>() {
             @Override
-            public boolean accept(final Facet facet) {
+            public boolean apply(final Facet facet) {
                 if (facet instanceof DecoratingFacet) {
                     final DecoratingFacet<?> decoratingFacet = (DecoratingFacet<?>) facet;
-                    return accept(decoratingFacet.getDecoratedFacet());
+                    return apply(decoratingFacet.getDecoratedFacet());
                 }
                 return superClass.isAssignableFrom(facet.getClass());
             }
