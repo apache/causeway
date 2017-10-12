@@ -39,7 +39,7 @@ import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
 import com.google.common.base.Predicate;
-import org.apache.isis.applib.filter.Filters;
+import org.apache.isis.applib.filter.Predicates;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.core.commons.lang.ClassExtensions;
@@ -709,7 +709,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         final List<ObjectAssociation> allAssociations = getAssociations(contributed);
         return Lists.newArrayList(
                 FluentIterable.from(allAssociations)
-                        .filter(Filters.asPredicate(predicate))
+                        .filter((Predicate) predicate)
                         .toSortedList(ObjectMember.Comparators.byMemberOrderSequence())
         );
     }
@@ -764,7 +764,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         final List<ObjectAction> actions = Lists.newArrayList();
         for (final ActionType type : types) {
             final Collection<ObjectAction> filterActions =
-                    Collections2.filter(objectActionsByType.get(type), Filters.asPredicate(predicate));
+                    Collections2.filter(objectActionsByType.get(type), (Predicate) predicate);
             actions.addAll(filterActions);
         }
         return Lists.newArrayList(
@@ -776,7 +776,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     @Override
     public List<ObjectAction> getObjectActions(
             final Contributed contributed) {
-        return getObjectActions(ActionType.ALL, contributed, Filters.<ObjectAction>any());
+        return getObjectActions(ActionType.ALL, contributed, Predicates.<ObjectAction>any());
     }
 
     @Override
@@ -882,7 +882,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     private List<ObjectAssociation> createContributeeAssociations(final Object servicePojo) {
         final Class<?> serviceClass = servicePojo.getClass();
         final ObjectSpecification specification = specificationLoader.loadSpecification(serviceClass);
-        final List<ObjectAction> serviceActions = specification.getObjectActions(ActionType.USER, Contributed.INCLUDED, Filters
+        final List<ObjectAction> serviceActions = specification.getObjectActions(ActionType.USER, Contributed.INCLUDED, Predicates
                 .<ObjectAction>any());
 
         final List<ObjectActionDefault> contributedActions = Lists.newArrayList();
@@ -1006,7 +1006,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     }
 
     private List objectActionsOf(final ObjectSpecification specification) {
-        return specification.getObjectActions(ActionType.ALL, Contributed.INCLUDED, Filters.<ObjectAction>any());
+        return specification.getObjectActions(ActionType.ALL, Contributed.INCLUDED, Predicates.<ObjectAction>any());
     }
 
     private Function<ObjectActionDefault, ObjectAssociation> createMixedInAssociationFunctor(
@@ -1066,7 +1066,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             return;
         }
         final List<ObjectAction> contributeeActions = Lists.newArrayList();
-        final List<ObjectAction> serviceActions = specification.getObjectActions(ActionType.ALL, Contributed.INCLUDED, Filters
+        final List<ObjectAction> serviceActions = specification.getObjectActions(ActionType.ALL, Contributed.INCLUDED, Predicates
                 .<ObjectAction>any());
         for (final ObjectAction serviceAction : serviceActions) {
             if (isAlwaysHidden(serviceAction)) {
@@ -1158,7 +1158,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         }
 
         final List<ObjectAction> actions = Lists.newArrayList();
-        final List<ObjectAction> mixinActions = mixinSpec.getObjectActions(ActionType.ALL, Contributed.INCLUDED, Filters
+        final List<ObjectAction> mixinActions = mixinSpec.getObjectActions(ActionType.ALL, Contributed.INCLUDED, Predicates
                 .<ObjectAction>any());
         for (final ObjectAction mixinTypeAction : mixinActions) {
             if (isAlwaysHidden(mixinTypeAction)) {

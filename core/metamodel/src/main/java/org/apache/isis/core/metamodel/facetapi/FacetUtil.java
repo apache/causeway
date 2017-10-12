@@ -28,6 +28,8 @@ import com.google.common.collect.Lists;
 
 import com.google.common.base.Predicate;
 
+import org.apache.isis.applib.filter.Predicates;
+
 public final class FacetUtil {
 
     private FacetUtil() {
@@ -170,7 +172,7 @@ public final class FacetUtil {
             final Facet facet = source.getFacet(facetType);
 
         }
-        List<Facet> facets = source.getFacets(org.apache.isis.applib.filter.Filters.<Facet>any());
+        List<Facet> facets = source.getFacets(Predicates.<Facet>any());
         for (Facet facet : facets) {
             target.addFacet(facet);
         }

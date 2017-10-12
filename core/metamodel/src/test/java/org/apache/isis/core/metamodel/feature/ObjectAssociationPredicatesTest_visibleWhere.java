@@ -47,7 +47,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 @RunWith(Parameterized.class)
-public class ObjectAssociationFiltersTest_visibleWhere {
+public class ObjectAssociationPredicatesTest_visibleWhere {
 
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
@@ -92,7 +92,7 @@ public class ObjectAssociationFiltersTest_visibleWhere {
                 });
     }
 
-    public ObjectAssociationFiltersTest_visibleWhere(
+    public ObjectAssociationPredicatesTest_visibleWhere(
             final Where where, final Where context, final boolean visible) {
         this.where = where;
         this.whereContext = context;

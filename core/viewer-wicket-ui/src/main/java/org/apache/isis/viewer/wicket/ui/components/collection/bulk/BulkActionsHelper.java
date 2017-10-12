@@ -26,7 +26,7 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
-import org.apache.isis.applib.filter.Filters;
+import org.apache.isis.applib.filter.Predicates;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -58,11 +58,11 @@ public class BulkActionsHelper implements Serializable {
 
         final ObjectSpecification typeSpec = model.getTypeOfSpecification();
 
-        List<ObjectAction> objectActions = typeSpec.getObjectActions(ActionType.USER, Contributed.INCLUDED, Filters.<ObjectAction>any());
+        List<ObjectAction> objectActions = typeSpec.getObjectActions(ActionType.USER, Contributed.INCLUDED, Predicates.<ObjectAction>any());
 
         final DeploymentCategory deploymentCategory = isisSessionFactory.getDeploymentCategory();
         if ( !deploymentCategory.isProduction()) {
-            List<ObjectAction> prototypeActions   = typeSpec.getObjectActions(ActionType.PROTOTYPE, Contributed.INCLUDED, Filters.<ObjectAction>any());
+            List<ObjectAction> prototypeActions   = typeSpec.getObjectActions(ActionType.PROTOTYPE, Contributed.INCLUDED, Predicates.<ObjectAction>any());
             objectActions.addAll(prototypeActions);
         }
 
@@ -73,7 +73,7 @@ public class BulkActionsHelper implements Serializable {
 
 
     @SuppressWarnings("deprecation")
-    private static final Predicate<ObjectAction> BULK = Filters.asPredicate(ObjectAction.Filters.bulk());
+    private static final Predicate<ObjectAction> BULK = ObjectAction.Filters.bulk();
 
     /**
      * Protected so can be overridden in testing if required.

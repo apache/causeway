@@ -19,13 +19,12 @@
 
 package org.apache.isis.viewer.wicket.ui.components.actionmenu.serviceactions;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.filter.Filters;
+import org.apache.isis.applib.filter.Predicates;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
@@ -265,7 +264,7 @@ public final class ServiceActionUtil {
         }
 
         for (final ObjectAction objectAction : serviceSpec.getObjectActions(
-                actionType, Contributed.INCLUDED, Filters.<ObjectAction>any())) {
+                actionType, Contributed.INCLUDED, Predicates.<ObjectAction>any())) {
 
             // skip if annotated to not be included in repository menu using legacy mechanism
             if (objectAction.getFacet(NotInServiceMenuFacet.class) != null) {

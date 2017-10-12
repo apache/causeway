@@ -303,7 +303,7 @@ public interface ObjectAction extends ObjectMember {
             final ObjectSpecification adapterSpec = adapter.getSpecification();
 
             @SuppressWarnings({ "unchecked", "deprecation" })
-            Predicate<ObjectAction> predicate = org.apache.isis.applib.filter.Filters.and(
+            Predicate<ObjectAction> predicate = org.apache.isis.applib.filter.Predicates.and(
                     Filters.memberOrderNotAssociationOf(adapterSpec),
                     Filters.dynamicallyVisible(adapter, InteractionInitiatedBy.USER, Where.ANYWHERE),
                     Filters.notBulkOnly(),
@@ -344,7 +344,7 @@ public interface ObjectAction extends ObjectMember {
             final ObjectSpecification objectSpecification = adapter.getSpecification();
 
             @SuppressWarnings({ "unchecked", "deprecation" })
-            Predicate<ObjectAction> predicate = org.apache.isis.applib.filter.Filters.and(
+            Predicate<ObjectAction> predicate = org.apache.isis.applib.filter.Predicates.and(
                     Filters.memberOrderOf(association),
                     // visibility needs to be determined at point of rendering, by ActionLink itself
                     // Filters.dynamicallyVisible(adapter, InteractionInitiatedBy.USER, Where.ANYWHERE),
@@ -385,33 +385,32 @@ public interface ObjectAction extends ObjectMember {
                 final ObjectAdapter target,
                 final InteractionInitiatedBy interactionInitiatedBy,
                 final Where where) {
-            return org.apache.isis.applib.filter.Filters
-                    .asPredicate(Filters.dynamicallyVisible(target, interactionInitiatedBy, where));
+            return org.apache.isis.applib.filter.Predicates.dynamicallyVisible(target, interactionInitiatedBy, where);
         }
 
         public static com.google.common.base.Predicate withId(final String actionId) {
-            return org.apache.isis.applib.filter.Filters.asPredicate(Filters.withId(actionId));
+            return org.apache.isis.applib.filter.Predicates.withId(actionId);
         }
 
         public static com.google.common.base.Predicate withNoValidationRules() {
-            return org.apache.isis.applib.filter.Filters.asPredicate(Filters.withNoValidationRules());
+            return org.apache.isis.applib.filter.Predicates.withNoValidationRules();
         }
 
         public static com.google.common.base.Predicate ofType(final ActionType type) {
-            return org.apache.isis.applib.filter.Filters.asPredicate(Filters.ofType(type));
+            return org.apache.isis.applib.filter.Predicates.ofType(type);
         }
 
         public static com.google.common.base.Predicate bulk() {
-            return org.apache.isis.applib.filter.Filters.asPredicate(Filters.bulk());
+            return org.apache.isis.applib.filter.Predicates.bulk();
         }
 
         // UNUSED?
         public static com.google.common.base.Predicate notBulkOnly() {
-            return org.apache.isis.applib.filter.Filters.asPredicate(Filters.notBulkOnly());
+            return org.apache.isis.applib.filter.Predicates.notBulkOnly();
         }
 
         public static com.google.common.base.Predicate memberOrderOf(ObjectAssociation association) {
-            return org.apache.isis.applib.filter.Filters.asPredicate(Filters.memberOrderOf(association));
+            return org.apache.isis.applib.filter.Predicates.memberOrderOf(association);
         }
     }
 
@@ -527,7 +526,7 @@ public interface ObjectAction extends ObjectMember {
         }
 
         public static Predicate<ObjectAction> excludeWizardActions(final ObjectSpecification objectSpecification) {
-            return org.apache.isis.applib.filter.Filters.not(wizardActions(objectSpecification));
+            return org.apache.isis.applib.filter.Predicates.not(wizardActions(objectSpecification));
             // return wizardActions(objectSpecification);
         }
 

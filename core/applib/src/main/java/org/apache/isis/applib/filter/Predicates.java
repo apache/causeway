@@ -20,15 +20,14 @@
 package org.apache.isis.applib.filter;
 
 import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
 
 /**
- * @deprecated - use {@link com.google.common.base.Predicate} and {@link Predicates} instead.
+ * @deprecated - use {@link com.google.common.base.Predicate} and {@link com.google.common.base.Predicates} instead.
  */
 @Deprecated
-public final class Filters {
+public final class Predicates {
 
-    private Filters() {
+    private Predicates() {
     }
 
     public static <T> Predicate<T> and(final Predicate<T>... predicates) {
@@ -92,15 +91,6 @@ public final class Filters {
 
     public static <T> Predicate<T> noneOfType(final Class<T> clazz) {
         return none();
-    }
-
-    public static <T> com.google.common.base.Predicate asPredicate(final Predicate<T> predicate) {
-        return new com.google.common.base.Predicate<T>() {
-            @Override
-            public boolean apply(T candidate) {
-                return predicate.apply(candidate);
-            }
-        };
     }
 
 }

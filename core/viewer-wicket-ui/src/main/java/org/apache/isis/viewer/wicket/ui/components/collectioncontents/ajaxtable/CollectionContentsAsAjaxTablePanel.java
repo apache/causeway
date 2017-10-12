@@ -33,7 +33,7 @@ import org.apache.wicket.model.Model;
 
 import org.apache.isis.applib.annotation.Where;
 import com.google.common.base.Predicate;
-import org.apache.isis.applib.filter.Filters;
+import org.apache.isis.applib.filter.Predicates;
 import org.apache.isis.applib.layout.component.Grid;
 import org.apache.isis.applib.services.tablecol.TableColumnOrderService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -179,7 +179,7 @@ public class CollectionContentsAsAjaxTablePanel
                     : null;
         
         @SuppressWarnings("unchecked")
-        final Predicate<ObjectAssociation> predicate = Filters.and(
+        final Predicate<ObjectAssociation> predicate = Predicates.and(
                 ObjectAssociation.Filters.PROPERTIES, 
                 ObjectAssociation.Filters.staticallyVisible(whereContext),
                 associationDoesNotReferenceParent(parentSpecIfAny));
@@ -234,7 +234,7 @@ public class CollectionContentsAsAjaxTablePanel
 
     static Predicate<ObjectAssociation> associationDoesNotReferenceParent(final ObjectSpecification parentSpec) {
         if(parentSpec == null) {
-            return Filters.any();
+            return Predicates.any();
         }
         return new Predicate<ObjectAssociation>() {
             @Override

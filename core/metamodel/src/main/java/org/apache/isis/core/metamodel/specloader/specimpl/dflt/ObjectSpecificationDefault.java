@@ -32,7 +32,7 @@ import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.annotation.NatureOfService;
 import com.google.common.base.Predicate;
-import org.apache.isis.applib.filter.Filters;
+import org.apache.isis.applib.filter.Predicates;
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -290,21 +290,21 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     @Override
     public ObjectAction getObjectAction(final ActionType type, final String id, final List<ObjectSpecification> parameters) {
         final List<ObjectAction> actions = 
-                getObjectActions(type, Contributed.INCLUDED, Filters.<ObjectAction>any());
+                getObjectActions(type, Contributed.INCLUDED, Predicates.<ObjectAction>any());
         return firstAction(actions, id, parameters);
     }
 
     @Override
     public ObjectAction getObjectAction(final ActionType type, final String id) {
         final List<ObjectAction> actions = 
-                getObjectActions(type, Contributed.INCLUDED, Filters.<ObjectAction>any()); 
+                getObjectActions(type, Contributed.INCLUDED, Predicates.<ObjectAction>any());
         return firstAction(actions, id);
     }
 
     @Override
     public ObjectAction getObjectAction(final String id) {
         final List<ObjectAction> actions = 
-                getObjectActions(ActionType.ALL, Contributed.INCLUDED, Filters.<ObjectAction>any()); 
+                getObjectActions(ActionType.ALL, Contributed.INCLUDED, Predicates.<ObjectAction>any());
         return firstAction(actions, id);
     }
 
@@ -368,7 +368,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     }
     
     private void cataloguePropertiesAndCollections(final Map<Method, ObjectMember> membersByMethod) {
-        final Predicate<ObjectAssociation> noop = Filters.anyOfType(ObjectAssociation.class);
+        final Predicate<ObjectAssociation> noop = Predicates.anyOfType(ObjectAssociation.class);
         final List<ObjectAssociation> fields = getAssociations(Contributed.EXCLUDED, noop);
         for (int i = 0; i < fields.size(); i++) {
             final ObjectAssociation field = fields.get(i);

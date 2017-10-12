@@ -27,6 +27,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import javax.annotation.Nullable;
 
 import com.google.common.base.Function;
+import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.google.common.base.Strings;
 import com.google.common.collect.FluentIterable;
@@ -40,7 +41,6 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.MemberGroupLayout;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.applib.layout.component.ActionLayoutData;
 import org.apache.isis.applib.layout.component.ActionLayoutDataOwner;
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
@@ -178,7 +178,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
                 ObjectMember.Util.mapById(
                         FluentIterable
                             .from(objectSpec.getObjectActions(Contributed.INCLUDED))
-                            .filter(Filters.asPredicate(ObjectAction.Filters.notBulkOnly()))
+                            .filter((Predicate) ObjectAction.Filters.notBulkOnly())
                             .toList());
 
         final BS3Grid bs3Grid = (BS3Grid) grid;

@@ -20,7 +20,7 @@
 package org.apache.isis.core.metamodel.facetapi;
 
 import com.google.common.base.Predicate;
-import org.apache.isis.applib.filter.Filters;
+import org.apache.isis.applib.filter.Predicates;
 
 public final class FacetFilters {
 
@@ -30,7 +30,7 @@ public final class FacetFilters {
     /**
      * {@link Predicate <Facet>#accept(Facet) Accepts} everything.
      */
-    public static final Predicate<Facet> ANY = Filters.anyOfType(Facet.class);
+    public static final Predicate<Facet> ANY = Predicates.anyOfType(Facet.class);
     /**
      * {@link Predicate <Facet>#accept(Facet) Accepts} nothing.
      */

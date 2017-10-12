@@ -31,6 +31,7 @@ import com.google.common.collect.Maps;
 
 import org.apache.isis.applib.annotation.Where;
 import com.google.common.base.Predicate;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -172,65 +173,65 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
          * Only fields that are for properties (ie 1:1 associations)
          */
         public final static com.google.common.base.Predicate PROPERTIES =
-                org.apache.isis.applib.filter.Filters.asPredicate(Filters.PROPERTIES);
+                org.apache.isis.applib.filter.Predicates.PROPERTIES;
 
         /**
          * Only fields that are for reference properties (ie 1:1 associations)
          */
         public final static com.google.common.base.Predicate REFERENCE_PROPERTIES =
-                org.apache.isis.applib.filter.Filters.asPredicate(Filters.REFERENCE_PROPERTIES);
+                org.apache.isis.applib.filter.Predicates.REFERENCE_PROPERTIES;
 
         /**
          * Only fields that are for properties (ie 1:1 associations)
          */
         public final static com.google.common.base.Predicate WHERE_VISIBLE_IN_COLLECTION_TABLE =
-                org.apache.isis.applib.filter.Filters.asPredicate(Filters.WHERE_VISIBLE_IN_COLLECTION_TABLE);
+                org.apache.isis.applib.filter.Predicates.WHERE_VISIBLE_IN_COLLECTION_TABLE;
 
         /**
          * Only fields that are for properties (ie 1:1 associations)
          */
         public final static com.google.common.base.Predicate WHERE_VISIBLE_IN_STANDALONE_TABLE =
-                org.apache.isis.applib.filter.Filters.asPredicate(Filters.WHERE_VISIBLE_IN_STANDALONE_TABLE);
+                org.apache.isis.applib.filter.Predicates.WHERE_VISIBLE_IN_STANDALONE_TABLE;
 
         /**
          * All fields (that is, excludes out nothing).
          */
         public final static com.google.common.base.Predicate ALL =
-                org.apache.isis.applib.filter.Filters.asPredicate(Filters.ALL);
+                org.apache.isis.applib.filter.Predicates.ALL;
 
         /**
          * Only fields that are for collections (ie 1:m associations)
          */
         public final static com.google.common.base.Predicate COLLECTIONS =
-                org.apache.isis.applib.filter.Filters.asPredicate(Filters.COLLECTIONS);
+                org.apache.isis.applib.filter.Predicates.COLLECTIONS;
 
         /**
          * Only properties that are visible statically, ie have not been
          * unconditionally hidden at compile time.
          */
         public static final com.google.common.base.Predicate VISIBLE_AT_LEAST_SOMETIMES =
-                org.apache.isis.applib.filter.Filters.asPredicate(Filters.VISIBLE_AT_LEAST_SOMETIMES);
+                org.apache.isis.applib.filter.Predicates.VISIBLE_AT_LEAST_SOMETIMES;
 
         public static final com.google.common.base.Predicate staticallyVisible(final Where context) {
-            return org.apache.isis.applib.filter.Filters.asPredicate(Filters.staticallyVisible(context));
+            return org.apache.isis.applib.filter.Predicates.staticallyVisible(context);
         }
 
         public static final com.google.common.base.Predicate dynamicallyVisible(
                 final ObjectAdapter target,
                 final InteractionInitiatedBy interactionInitiatedBy,
                 final Where where) {
-            return org.apache.isis.applib.filter.Filters.asPredicate(Filters.dynamicallyVisible(target,
-                    interactionInitiatedBy, where
-            ));
+            return org.apache.isis.applib.filter.Predicates.dynamicallyVisible(target,
+                        interactionInitiatedBy, where
+                );
         }
 
         public static final com.google.common.base.Predicate enabled(
                 final ObjectAdapter adapter,
                 final InteractionInitiatedBy interactionInitiatedBy,
                 final Where where) {
-            return org.apache.isis.applib.filter.Filters.asPredicate(Filters.enabled(adapter,
-                    interactionInitiatedBy, where
-            ));
+            return org.apache.isis.applib.filter.Predicates.enabled(adapter,
+                        interactionInitiatedBy, where
+                );
         }
 
     }
