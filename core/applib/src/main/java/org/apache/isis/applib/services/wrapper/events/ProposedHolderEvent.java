@@ -24,9 +24,7 @@ package org.apache.isis.applib.services.wrapper.events;
  * argument (such as {@link CollectionAddToEvent} and
  * {@link PropertyModifyEvent}).
  *
- * @deprecated - superceded by <code>domainEvent</code> support ({@link org.apache.isis.applib.services.eventbus.PropertyDomainEvent}, {@link org.apache.isis.applib.IsisApplibModule.CollectionDomainEvent}, {@link org.apache.isis.applib.services.eventbus.ActionDomainEvent}).
  */
-@Deprecated
 public interface ProposedHolderEvent {
 
     Object getProposed();

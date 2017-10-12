@@ -28,9 +28,7 @@ import org.apache.isis.applib.Identifier;
  * The {@link #getReason()} will always be <tt>null</tt>; access is always
  * allowed.
  *
- * @deprecated - superceded by <code>domainEvent</code> support ({@link org.apache.isis.applib.services.eventbus.PropertyDomainEvent}, {@link org.apache.isis.applib.IsisApplibModule.CollectionDomainEvent}, {@link org.apache.isis.applib.services.eventbus.ActionDomainEvent}).
  */
-@Deprecated
 public class ObjectTitleEvent extends AccessEvent {
 
     private static final long serialVersionUID = 1L;

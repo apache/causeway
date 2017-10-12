@@ -30,9 +30,7 @@ import org.apache.isis.applib.Identifier;
  * always be <tt>null</tt>. (If access is not allowed then a vetoing
  * {@link CollectionVisibilityEvent} would have been fired).
  *
- * @deprecated - superceded by <code>domainEvent</code> support ({@link org.apache.isis.applib.services.eventbus.PropertyDomainEvent}, {@link org.apache.isis.applib.IsisApplibModule.CollectionDomainEvent}, {@link org.apache.isis.applib.services.eventbus.ActionDomainEvent}).
  */
-@Deprecated
 public class CollectionAccessEvent extends AccessEvent {
 
     private static final long serialVersionUID = 1L;

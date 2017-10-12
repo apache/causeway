@@ -33,9 +33,7 @@ import org.apache.isis.applib.Identifier;
  * @see UsabilityEvent
  * @see ValidityEvent
  *
- * @deprecated - superceded by <code>domainEvent</code> support ({@link org.apache.isis.applib.services.eventbus.PropertyDomainEvent}, {@link org.apache.isis.applib.IsisApplibModule.CollectionDomainEvent}, {@link org.apache.isis.applib.services.eventbus.ActionDomainEvent}).
  */
-@Deprecated
 public abstract class VisibilityEvent extends InteractionEvent {
 
     private static final long serialVersionUID = 1L;

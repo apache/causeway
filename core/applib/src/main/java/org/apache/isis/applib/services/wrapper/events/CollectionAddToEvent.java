@@ -31,9 +31,7 @@ import org.apache.isis.applib.Identifier;
  * 
  * @see CollectionRemoveFromEvent
  *
- * @deprecated - superceded by <code>domainEvent</code> support ({@link org.apache.isis.applib.services.eventbus.PropertyDomainEvent}, {@link org.apache.isis.applib.IsisApplibModule.CollectionDomainEvent}, {@link org.apache.isis.applib.services.eventbus.ActionDomainEvent}).
  */
-@Deprecated
 public class CollectionAddToEvent extends ValidityEvent {
 
     private static final long serialVersionUID = 1L;
