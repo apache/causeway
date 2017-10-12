@@ -21,7 +21,7 @@ import java.util.concurrent.Callable;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.applib.events.system.FixturesInstallingEvent;
+import org.apache.isis.applib.fixturescripts.events.FixturesInstallingEvent;
 import org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault;
 
 import static org.hamcrest.CoreMatchers.is;

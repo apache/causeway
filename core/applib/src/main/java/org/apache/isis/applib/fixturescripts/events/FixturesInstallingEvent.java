@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.applib.events.system;
+package org.apache.isis.applib.fixturescripts.events;
 
 import java.util.EventObject;
 

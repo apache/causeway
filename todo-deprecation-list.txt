@@ -260,7 +260,8 @@ DONE (ADDED)
 
 DONE (MOVED)
 
-    org.apache.isis.applib.events - move to services.wrapper.events.  (Still useful as provide context for exceptions).
+    org.apache.isis.applib.events        - moved to services.wrapper.events.  (Still useful as provide context for exceptions, for a "transcript" framework).
+    org.apache.isis.applib.events.system - move to fixturescripts.events.
 
 
 
