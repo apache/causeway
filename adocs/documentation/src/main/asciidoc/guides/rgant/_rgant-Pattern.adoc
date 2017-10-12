@@ -8,7 +8,23 @@
 
 The `@javax.validation.constraints.Pattern` annotation is recognized by Apache Isis as a means to specify a regular expression constraint for properties and action parameters of type `java.lang.String`.
 
-For example:
+For example, here's the annotation being used on an action parameter:
+
+[source,java]
+----
+public Customer updateName(
+                    @javax.validation.constraints.Pattern(
+                        regexp="[A-Z].+"
+                        message="Must begin with a capital."
+                    )
+                    final String name) {
+    setName(name);
+    return this
+}
+...
+----
+
+and here's an example of its use on a property:
 
 [source,java]
 ----
@@ -23,8 +39,7 @@ public String getName() {
 ----
 
 
-It is also possible to specify against a field if Lombok is being used:
-
+For properties, it is also possible to specify against a field if Lombok is being used:
 
 [source,java]
 ----

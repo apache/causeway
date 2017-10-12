@@ -26,7 +26,7 @@ import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.objectvalue.regex.RegExFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.regex.RegExFacetAbstract;
 
-public class RegExFacetFromRegExAnnotationOnParameter extends RegExFacetAbstract {
+public class RegExFacetForPatternAnnotationOnParameter extends RegExFacetAbstract {
 
     private final Pattern pattern;
 
@@ -42,10 +42,10 @@ public class RegExFacetFromRegExAnnotationOnParameter extends RegExFacetAbstract
         final javax.validation.constraints.Pattern.Flag[] flags = annotation.flags();
         final String message = annotation.message();
 
-        return new RegExFacetFromRegExAnnotationOnParameter(regexp, flags, message, holder);
+        return new RegExFacetForPatternAnnotationOnParameter(regexp, flags, message, holder);
     }
 
-    private RegExFacetFromRegExAnnotationOnParameter(
+    private RegExFacetForPatternAnnotationOnParameter(
             final String regexp,
             final javax.validation.constraints.Pattern.Flag[] flags,
             final String message, final FacetHolder holder) {

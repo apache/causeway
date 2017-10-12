@@ -41,7 +41,7 @@ import org.apache.isis.core.metamodel.facets.param.parameter.mandatory.Mandatory
 import org.apache.isis.core.metamodel.facets.param.parameter.maxlen.MaxLengthFacetForParameterAnnotation;
 import org.apache.isis.core.metamodel.facets.param.parameter.mustsatisfy.MustSatisfySpecificationFacetForParameterAnnotation;
 import org.apache.isis.core.metamodel.facets.param.parameter.regex.RegExFacetForParameterAnnotation;
-import org.apache.isis.core.metamodel.facets.param.parameter.regex.RegExFacetFromRegExAnnotationOnParameter;
+import org.apache.isis.core.metamodel.facets.param.parameter.regex.RegExFacetForPatternAnnotationOnParameter;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForConflictingOptionality;
 
@@ -118,7 +118,8 @@ public class ParameterAnnotationFacetFactory extends FacetFactoryAbstract implem
             if (parameterAnnotation instanceof Pattern) {
 
                 final Pattern annotation = (Pattern) parameterAnnotation;
-                final RegExFacet facet = RegExFacetFromRegExAnnotationOnParameter.create(annotation, parameterType, holder);
+                final RegExFacet facet = RegExFacetForPatternAnnotationOnParameter
+                        .create(annotation, parameterType, holder);
                 FacetUtil.addFacet(facet);
                 return;
             }

@@ -63,7 +63,7 @@ import org.apache.isis.core.metamodel.facets.properties.property.mustsatisfy.Mus
 import org.apache.isis.core.metamodel.facets.properties.property.notpersisted.NotPersistedFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.publishing.PublishedPropertyFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.regex.RegExFacetForPropertyAnnotation;
-import org.apache.isis.core.metamodel.facets.properties.property.regex.RegExFacetForRegExAnnotationOnProperty;
+import org.apache.isis.core.metamodel.facets.properties.property.regex.RegExFacetForPatternAnnotationOnProperty;
 import org.apache.isis.core.metamodel.facets.properties.publish.PublishedPropertyFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
@@ -314,7 +314,7 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
 
         // check for @Pattern first
         final Pattern annotation = Annotations.getAnnotation(processMethodContext.getMethod(), Pattern.class);
-        RegExFacet facet = RegExFacetForRegExAnnotationOnProperty.create(annotation, returnType, holder);
+        RegExFacet facet = RegExFacetForPatternAnnotationOnProperty.create(annotation, returnType, holder);
 
         // else search for @Property(pattern=...)
         final Property property = Annotations.getAnnotation(method, Property.class);

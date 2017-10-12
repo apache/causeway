@@ -29,7 +29,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessParameterContext;
 import org.apache.isis.core.metamodel.facets.objectvalue.regex.RegExFacet;
-import org.apache.isis.core.metamodel.facets.param.parameter.regex.RegExFacetFromRegExAnnotationOnParameter;
+import org.apache.isis.core.metamodel.facets.param.parameter.regex.RegExFacetForPatternAnnotationOnParameter;
 
 public class RegExAnnotationOnParameterFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -54,8 +54,8 @@ public class RegExAnnotationOnParameterFacetFactoryTest extends AbstractFacetFac
 
         final Facet facet = facetedMethodParameter.getFacet(RegExFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof RegExFacetFromRegExAnnotationOnParameter);
-        final RegExFacetFromRegExAnnotationOnParameter regExFacet = (RegExFacetFromRegExAnnotationOnParameter) facet;
+        assertTrue(facet instanceof RegExFacetForPatternAnnotationOnParameter);
+        final RegExFacetForPatternAnnotationOnParameter regExFacet = (RegExFacetForPatternAnnotationOnParameter) facet;
         assertEquals("^A.*", regExFacet.regexp());
         assertEquals(2, regExFacet.patternFlags());
     }
