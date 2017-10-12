@@ -19,11 +19,10 @@
 
 package org.apache.isis.applib.filter;
 
-import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 
 /**
- * @deprecated - use {@link Predicate} and {@link Predicates} instead.
+ * @deprecated - use {@link com.google.common.base.Predicate} and {@link Predicates} instead.
  */
 @Deprecated
 public final class Filters {
@@ -31,12 +30,12 @@ public final class Filters {
     private Filters() {
     }
 
-    public static <T> Filter<T> and(final Filter<T>... filters) {
-        return new Filter<T>() {
+    public static <T> Predicate<T> and(final Predicate<T>... predicates) {
+        return new Predicate<T>() {
             @Override
             public boolean apply(final T f) {
-                for(final Filter<T> filter: filters) {
-                    if(!filter.apply(f)) {
+                for(final Predicate<T> predicate : predicates) {
+                    if(!predicate.apply(f)) {
                         return false;
                     }
                 }
@@ -45,12 +44,12 @@ public final class Filters {
         };
     }
 
-    public static <T> Filter<T> or(final Filter<T>... filters) {
-        return new Filter<T>() {
+    public static <T> Predicate<T> or(final Predicate<T>... predicates) {
+        return new Predicate<T>() {
             @Override
             public boolean apply(final T f) {
-                for(final Filter<T> filter: filters) {
-                    if(filter.apply(f)) {
+                for(final Predicate<T> predicate : predicates) {
+                    if(predicate.apply(f)) {
                         return true;
                     }
                 }
@@ -59,8 +58,8 @@ public final class Filters {
         };
     }
 
-    public static <T> Filter<T> not(final Filter<T> f1) {
-        return new Filter<T>() {
+    public static <T> Predicate<T> not(final Predicate<T> f1) {
+        return new Predicate<T>() {
             @Override
             public boolean apply(final T f) {
                 return !f1.apply(f);
@@ -68,8 +67,8 @@ public final class Filters {
         };
     }
 
-    public static <T> Filter<T> any() {
-        return new Filter<T>() {
+    public static <T> Predicate<T> any() {
+        return new Predicate<T>() {
             @Override
             public boolean apply(final T t) {
                 return true;
@@ -77,12 +76,12 @@ public final class Filters {
         };
     }
 
-    public final static <T> Filter<T> anyOfType(final Class<T> clazz) {
+    public final static <T> Predicate<T> anyOfType(final Class<T> clazz) {
         return any();
     }
 
-    public static <T> Filter<T> none() {
-        return new Filter<T>() {
+    public static <T> Predicate<T> none() {
+        return new Predicate<T>() {
             @Override
             public boolean apply(final T f) {
                 return false;
@@ -90,15 +89,15 @@ public final class Filters {
         };
     }
 
-    public static <T> Filter<T> noneOfType(final Class<T> clazz) {
+    public static <T> Predicate<T> noneOfType(final Class<T> clazz) {
         return none();
     }
 
-    public static <T> Predicate<T> asPredicate(final Filter<T> filter) {
-        return new Predicate<T>() {
+    public static <T> com.google.common.base.Predicate asPredicate(final Predicate<T> predicate) {
+        return new com.google.common.base.Predicate<T>() {
             @Override
             public boolean apply(T candidate) {
-                return filter.apply(candidate);
+                return predicate.apply(candidate);
             }
         };
     }

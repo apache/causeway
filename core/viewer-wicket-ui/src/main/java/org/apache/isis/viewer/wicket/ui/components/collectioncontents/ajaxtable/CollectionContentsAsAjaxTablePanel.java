@@ -32,7 +32,7 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.filter.Filter;
+import org.apache.isis.applib.filter.Predicate;
 import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.applib.layout.component.Grid;
 import org.apache.isis.applib.services.tablecol.TableColumnOrderService;
@@ -179,12 +179,13 @@ public class CollectionContentsAsAjaxTablePanel
                     : null;
         
         @SuppressWarnings("unchecked")
-        final Filter<ObjectAssociation> filter = Filters.and(
+        final Predicate<ObjectAssociation> predicate = Filters.and(
                 ObjectAssociation.Filters.PROPERTIES, 
                 ObjectAssociation.Filters.staticallyVisible(whereContext),
                 associationDoesNotReferenceParent(parentSpecIfAny));
         
-        final List<? extends ObjectAssociation> propertyList = typeOfSpec.getAssociations(Contributed.INCLUDED, filter);
+        final List<? extends ObjectAssociation> propertyList = typeOfSpec.getAssociations(Contributed.INCLUDED,
+                predicate);
         final Map<String, ObjectAssociation> propertyById = Maps.newLinkedHashMap();
         for (final ObjectAssociation property : propertyList) {
             propertyById.put(property.getId(), property);
@@ -231,11 +232,11 @@ public class CollectionContentsAsAjaxTablePanel
         }
     }
 
-    static Filter<ObjectAssociation> associationDoesNotReferenceParent(final ObjectSpecification parentSpec) {
+    static Predicate<ObjectAssociation> associationDoesNotReferenceParent(final ObjectSpecification parentSpec) {
         if(parentSpec == null) {
             return Filters.any();
         }
-        return new Filter<ObjectAssociation>() {
+        return new Predicate<ObjectAssociation>() {
             @Override
             public boolean apply(ObjectAssociation association) {
                 final HiddenFacet facet = association.getFacet(HiddenFacet.class);

@@ -25,13 +25,12 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.common.base.Function;
-import com.google.common.base.Predicate;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.filter.Filter;
+import org.apache.isis.applib.filter.Predicate;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -159,8 +158,8 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
     public static class Predicates {
         private Predicates(){}
         
-        public static Predicate<ObjectAssociation> being(final Contributed contributed) {
-            return new Predicate<ObjectAssociation>(){
+        public static com.google.common.base.Predicate being(final Contributed contributed) {
+            return new com.google.common.base.Predicate<ObjectAssociation>(){
                 @Override
                 public boolean apply(final ObjectAssociation t) {
                     return contributed.isIncluded() || 
@@ -172,51 +171,51 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
         /**
          * Only fields that are for properties (ie 1:1 associations)
          */
-        public final static Predicate<ObjectAssociation> PROPERTIES =
+        public final static com.google.common.base.Predicate PROPERTIES =
                 org.apache.isis.applib.filter.Filters.asPredicate(Filters.PROPERTIES);
 
         /**
          * Only fields that are for reference properties (ie 1:1 associations)
          */
-        public final static Predicate<ObjectAssociation> REFERENCE_PROPERTIES =
+        public final static com.google.common.base.Predicate REFERENCE_PROPERTIES =
                 org.apache.isis.applib.filter.Filters.asPredicate(Filters.REFERENCE_PROPERTIES);
 
         /**
          * Only fields that are for properties (ie 1:1 associations)
          */
-        public final static Predicate<ObjectAssociation> WHERE_VISIBLE_IN_COLLECTION_TABLE =
+        public final static com.google.common.base.Predicate WHERE_VISIBLE_IN_COLLECTION_TABLE =
                 org.apache.isis.applib.filter.Filters.asPredicate(Filters.WHERE_VISIBLE_IN_COLLECTION_TABLE);
 
         /**
          * Only fields that are for properties (ie 1:1 associations)
          */
-        public final static Predicate<ObjectAssociation> WHERE_VISIBLE_IN_STANDALONE_TABLE =
+        public final static com.google.common.base.Predicate WHERE_VISIBLE_IN_STANDALONE_TABLE =
                 org.apache.isis.applib.filter.Filters.asPredicate(Filters.WHERE_VISIBLE_IN_STANDALONE_TABLE);
 
         /**
          * All fields (that is, excludes out nothing).
          */
-        public final static Predicate<ObjectAssociation> ALL =
+        public final static com.google.common.base.Predicate ALL =
                 org.apache.isis.applib.filter.Filters.asPredicate(Filters.ALL);
 
         /**
          * Only fields that are for collections (ie 1:m associations)
          */
-        public final static Predicate<ObjectAssociation> COLLECTIONS =
+        public final static com.google.common.base.Predicate COLLECTIONS =
                 org.apache.isis.applib.filter.Filters.asPredicate(Filters.COLLECTIONS);
 
         /**
          * Only properties that are visible statically, ie have not been
          * unconditionally hidden at compile time.
          */
-        public static final Predicate<ObjectAssociation> VISIBLE_AT_LEAST_SOMETIMES =
+        public static final com.google.common.base.Predicate VISIBLE_AT_LEAST_SOMETIMES =
                 org.apache.isis.applib.filter.Filters.asPredicate(Filters.VISIBLE_AT_LEAST_SOMETIMES);
 
-        public static final Predicate<ObjectAssociation> staticallyVisible(final Where context) {
+        public static final com.google.common.base.Predicate staticallyVisible(final Where context) {
             return org.apache.isis.applib.filter.Filters.asPredicate(Filters.staticallyVisible(context));
         }
 
-        public static final Predicate<ObjectAssociation> dynamicallyVisible(
+        public static final com.google.common.base.Predicate dynamicallyVisible(
                 final ObjectAdapter target,
                 final InteractionInitiatedBy interactionInitiatedBy,
                 final Where where) {
@@ -225,7 +224,7 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
             ));
         }
 
-        public static final Predicate<ObjectAssociation> enabled(
+        public static final com.google.common.base.Predicate enabled(
                 final ObjectAdapter adapter,
                 final InteractionInitiatedBy interactionInitiatedBy,
                 final Where where) {
@@ -251,7 +250,7 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
          * @deprecated -use {@link com.google.common.base.Predicate equivalent}
          */
         @Deprecated
-        public final static Filter<ObjectAssociation> PROPERTIES = new Filter<ObjectAssociation>() {
+        public final static Predicate<ObjectAssociation> PROPERTIES = new Predicate<ObjectAssociation>() {
             @Override
             public boolean apply(final ObjectAssociation association) {
                 return association.isOneToOneAssociation();
@@ -264,7 +263,7 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
          * @deprecated -use {@link com.google.common.base.Predicate equivalent}
          */
         @Deprecated
-        public final static Filter<ObjectAssociation> REFERENCE_PROPERTIES = new Filter<ObjectAssociation>() {
+        public final static Predicate<ObjectAssociation> REFERENCE_PROPERTIES = new Predicate<ObjectAssociation>() {
             @Override
             public boolean apply(final ObjectAssociation association) {
                 return association.isOneToOneAssociation() && 
@@ -278,7 +277,7 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
          * @deprecated -use {@link com.google.common.base.Predicate equivalent}
          */
         @Deprecated
-        public final static Filter<ObjectAssociation> WHERE_VISIBLE_IN_COLLECTION_TABLE = new Filter<ObjectAssociation>() {
+        public final static Predicate<ObjectAssociation> WHERE_VISIBLE_IN_COLLECTION_TABLE = new Predicate<ObjectAssociation>() {
             @Override
             public boolean apply(final ObjectAssociation association) {
                 final HiddenFacet hiddenFacet = association.getFacet(HiddenFacet.class);
@@ -292,7 +291,7 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
          * @deprecated -use {@link com.google.common.base.Predicate equivalent}
          */
         @Deprecated
-        public final static Filter<ObjectAssociation> WHERE_VISIBLE_IN_STANDALONE_TABLE = new Filter<ObjectAssociation>() {
+        public final static Predicate<ObjectAssociation> WHERE_VISIBLE_IN_STANDALONE_TABLE = new Predicate<ObjectAssociation>() {
             @Override
             public boolean apply(final ObjectAssociation association) {
                 final HiddenFacet hiddenFacet = association.getFacet(HiddenFacet.class);
@@ -306,7 +305,7 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
          * @deprecated -use {@link com.google.common.base.Predicate equivalent}
          */
         @Deprecated
-        public final static Filter<ObjectAssociation> ALL = new Filter<ObjectAssociation>() {
+        public final static Predicate<ObjectAssociation> ALL = new Predicate<ObjectAssociation>() {
             @Override
             public boolean apply(final ObjectAssociation property) {
                 return true;
@@ -319,7 +318,7 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
          * @deprecated -use {@link com.google.common.base.Predicate equivalent}
          */
         @Deprecated
-        public final static Filter<ObjectAssociation> COLLECTIONS = new Filter<ObjectAssociation>() {
+        public final static Predicate<ObjectAssociation> COLLECTIONS = new Predicate<ObjectAssociation>() {
             @Override
             public boolean apply(final ObjectAssociation property) {
                 return property.isOneToManyAssociation();
@@ -333,7 +332,7 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
          * @deprecated -use {@link com.google.common.base.Predicate equivalent}
          */
         @Deprecated
-        public static final Filter<ObjectAssociation> VISIBLE_AT_LEAST_SOMETIMES = new Filter<ObjectAssociation>() {
+        public static final Predicate<ObjectAssociation> VISIBLE_AT_LEAST_SOMETIMES = new Predicate<ObjectAssociation>() {
             @Override
             public boolean apply(final ObjectAssociation property) {
                 final HiddenFacet hiddenFacet = property.getFacet(HiddenFacet.class);
@@ -345,11 +344,11 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
         * @deprecated -use {@link com.google.common.base.Predicate equivalent}
         */
         @Deprecated
-        public static final Filter<ObjectAssociation> staticallyVisible(final Where context) {
-            return new Filter<ObjectAssociation>() {
+        public static final Predicate<ObjectAssociation> staticallyVisible(final Where context) {
+            return new Predicate<ObjectAssociation>() {
                 @Override
                 public boolean apply(final ObjectAssociation association) {
-                    final List<Facet> facets = association.getFacets(new Filter<Facet>() {
+                    final List<Facet> facets = association.getFacets(new Predicate<Facet>() {
                         @Override public boolean apply(final Facet facet) {
                             return facet instanceof WhereValueFacet && facet instanceof HiddenFacet;
                         }
@@ -369,11 +368,11 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
          * @deprecated -use {@link com.google.common.base.Predicate equivalent}
          */
         @Deprecated
-        public static Filter<ObjectAssociation> dynamicallyVisible(
+        public static Predicate<ObjectAssociation> dynamicallyVisible(
                 final ObjectAdapter target,
                 final InteractionInitiatedBy interactionInitiatedBy,
                 final Where where) {
-            return new Filter<ObjectAssociation>() {
+            return new Predicate<ObjectAssociation>() {
                 @Override
                 public boolean apply(final ObjectAssociation objectAssociation) {
                     final Consent visible = objectAssociation.isVisible(target, interactionInitiatedBy, where);
@@ -386,11 +385,11 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
          * @deprecated -use {@link com.google.common.base.Predicate equivalent}
          */
         @Deprecated
-        public static Filter<ObjectAssociation> enabled(
+        public static Predicate<ObjectAssociation> enabled(
                 final ObjectAdapter adapter,
                 final InteractionInitiatedBy interactionInitiatedBy,
                 final Where where) {
-            return new Filter<ObjectAssociation>() {
+            return new Predicate<ObjectAssociation>() {
                 @Override
                 public boolean apply(final ObjectAssociation objectAssociation) {
                     final Consent usable = objectAssociation.isUsable(adapter, interactionInitiatedBy, where);

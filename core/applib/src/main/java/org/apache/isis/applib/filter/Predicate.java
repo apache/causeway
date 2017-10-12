@@ -19,8 +19,6 @@
 
 package org.apache.isis.applib.filter;
 
-import com.google.common.base.Predicate;
-
 
 /**
  * For use by repository implementations to allow a set of objects returned by a
@@ -34,15 +32,15 @@ import com.google.common.base.Predicate;
  * would accept a representation of a HQL query; an XML-based objectstore might
  * accept an XPath query, etc.)
  * 
- * @deprecated - use {@link Predicate} instead.
+ * @deprecated - use {@link com.google.common.base.Predicate} instead.
  */
 @Deprecated
-public interface Filter<T> {
+public interface Predicate<T> {
 
     /**
      * Whether or not the supplied pojo meets this criteria.
      * 
-     * @param pojo
+     * @param t
      * @return <tt>true</tt> if this pojo is acceptable, <tt>false</tt>
      *         otherwise.
      */

@@ -23,7 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.isis.applib.filter.Filter;
+import org.apache.isis.applib.filter.Predicate;
 
 /**
  * For base subclasses or, more likely, to help write tests.
@@ -100,8 +100,8 @@ public class FacetHolderImpl implements FacetHolder {
     }
 
     @Override
-    public List<Facet> getFacets(final Filter<Facet> filter) {
-        return FacetUtil.getFacets(facetsByClass, filter);
+    public List<Facet> getFacets(final Predicate<Facet> predicate) {
+        return FacetUtil.getFacets(facetsByClass, predicate);
     }
 
 }

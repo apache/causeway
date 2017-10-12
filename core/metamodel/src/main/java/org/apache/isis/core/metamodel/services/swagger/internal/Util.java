@@ -22,7 +22,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.isis.applib.filter.Filter;
+import org.apache.isis.applib.filter.Predicate;
 import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.applib.services.swagger.SwaggerService;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
@@ -92,8 +92,8 @@ public final class Util {
                 correspondingClass == Void.class;
     }
 
-    static Filter<ObjectAssociation> associationsWith(final SwaggerService.Visibility visibility) {
-        return new Filter<ObjectAssociation>() {
+    static Predicate<ObjectAssociation> associationsWith(final SwaggerService.Visibility visibility) {
+        return new Predicate<ObjectAssociation>() {
           @Override
           public boolean apply(final ObjectAssociation objectAssociation) {
               return !visibility.isPublic() || isVisibleForPublic(objectAssociation);
@@ -115,13 +115,13 @@ public final class Util {
 
     static <T extends ObjectAssociation> List<T> associationsOf(
             final ObjectSpecification objectSpecification,
-            final Filter<ObjectAssociation> associationFilter, final SwaggerService.Visibility visibility) {
+            final Predicate<ObjectAssociation> associationPredicate, final SwaggerService.Visibility visibility) {
         @SuppressWarnings("rawtypes")
         final List<ObjectAssociation> list =
                 objectSpecification.getAssociations(
                         Contributed.INCLUDED,
                         Filters.and(
-                                associationFilter,
+                                associationPredicate,
                                 associationsWith(visibility)
                         ));
 
@@ -139,7 +139,7 @@ public final class Util {
             final ClassExcluder classExcluder) {
         final List<ActionType> actionTypes = actionTypesFor(visibility);
 
-        return objectSpec.getObjectActions(actionTypes, Contributed.INCLUDED, new Filter<ObjectAction>() {
+        return objectSpec.getObjectActions(actionTypes, Contributed.INCLUDED, new Predicate<ObjectAction>() {
             @Override
             public boolean apply(final ObjectAction objectAction) {
                 return !classExcluder.exclude(objectAction) &&

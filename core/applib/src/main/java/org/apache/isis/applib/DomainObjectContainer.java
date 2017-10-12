@@ -21,12 +21,7 @@ package org.apache.isis.applib;
 
 import java.util.List;
 
-import com.google.common.base.Function;
-import com.google.common.base.Predicate;
-
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.filter.Filter;
-import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.security.UserMemento;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.i18n.TranslatableString;

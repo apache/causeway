@@ -22,7 +22,7 @@ package org.apache.isis.core.metamodel.spec.feature;
 import java.util.List;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.filter.Filter;
+import org.apache.isis.applib.filter.Predicate;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
@@ -62,9 +62,9 @@ public interface ObjectActionContainer {
      * Returns an array of actions of the specified type, including or excluding
      * contributed actions as required.
      */
-    List<ObjectAction> getObjectActions(ActionType type, Contributed contributee, Filter<ObjectAction> filter);
+    List<ObjectAction> getObjectActions(ActionType type, Contributed contributee, Predicate<ObjectAction> predicate);
 
-    List<ObjectAction> getObjectActions(List<ActionType> types, Contributed contributee, Filter<ObjectAction> filter);
+    List<ObjectAction> getObjectActions(List<ActionType> types, Contributed contributee, Predicate<ObjectAction> predicate);
 
     List<ObjectAction> getObjectActions(Contributed contributee);
 

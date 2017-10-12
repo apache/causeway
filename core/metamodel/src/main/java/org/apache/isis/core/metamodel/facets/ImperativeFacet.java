@@ -24,7 +24,7 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
-import org.apache.isis.applib.filter.Filter;
+import org.apache.isis.applib.filter.Predicate;
 import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.core.commons.lang.ObjectExtensions;
@@ -99,7 +99,7 @@ public interface ImperativeFacet extends Facet {
     public Intent getIntent(Method method);
 
 
-    public static Filter<Facet> FILTER = new Filter<Facet>() {
+    public static Predicate<Facet> PREDICATE = new Predicate<Facet>() {
         @Override
         public boolean apply(final Facet facet) {
             return ImperativeFacet.Util.isImperativeFacet(facet);

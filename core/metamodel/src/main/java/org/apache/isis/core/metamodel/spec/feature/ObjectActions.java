@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.spec.feature;
 
-import org.apache.isis.applib.filter.Filter;
+import org.apache.isis.applib.filter.Predicate;
 
 /**
  * @deprecated
@@ -42,7 +42,7 @@ public final class ObjectActions {
      * @deprecated - use {@link ObjectAction.Filters#memberOrderOf(ObjectAssociation)}
      */
     @Deprecated
-    public static Filter<ObjectAction> memberOrderOf(ObjectAssociation association) {
+    public static Predicate<ObjectAction> memberOrderOf(ObjectAssociation association) {
         return ObjectAction.Filters.memberOrderOf(association);
     }
 

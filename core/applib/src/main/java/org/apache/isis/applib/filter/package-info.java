@@ -18,13 +18,13 @@
  */
 
 /**
- * This package defines a {@link org.apache.isis.applib.filter.Filter} interface,
+ * This package defines a {@link org.apache.isis.applib.filter.Predicate} interface,
  * useful in particular for writing (naive) repositories but also useful
  * more generally.
  * 
  * <p>
  * It also defines a supporting {@link org.apache.isis.applib.filter.Filters utility class}
- * which can be used to combine {@link org.apache.isis.applib.filter.Filter}s.
+ * which can be used to combine {@link org.apache.isis.applib.filter.Predicate}s.
  *
  * @deprecated
  */

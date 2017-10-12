@@ -20,7 +20,7 @@
 package org.apache.isis.core.metamodel.spec.feature;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.filter.Filter;
+import org.apache.isis.applib.filter.Predicate;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -31,45 +31,45 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation.Filters;
 public class ObjectAssociationFilters {
     /** @deprecated */
     @Deprecated
-    public static final Filter<ObjectAssociation> PROPERTIES;
+    public static final Predicate<ObjectAssociation> PROPERTIES;
     /** @deprecated */
     @Deprecated
-    public static final Filter<ObjectAssociation> REFERENCE_PROPERTIES;
+    public static final Predicate<ObjectAssociation> REFERENCE_PROPERTIES;
     /** @deprecated */
     @Deprecated
-    public static final Filter<ObjectAssociation> WHERE_VISIBLE_IN_COLLECTION_TABLE;
+    public static final Predicate<ObjectAssociation> WHERE_VISIBLE_IN_COLLECTION_TABLE;
     /** @deprecated */
     @Deprecated
-    public static final Filter<ObjectAssociation> WHERE_VISIBLE_IN_STANDALONE_TABLE;
+    public static final Predicate<ObjectAssociation> WHERE_VISIBLE_IN_STANDALONE_TABLE;
     /** @deprecated */
     @Deprecated
-    public static final Filter<ObjectAssociation> ALL;
+    public static final Predicate<ObjectAssociation> ALL;
     /** @deprecated */
     @Deprecated
-    public static final Filter<ObjectAssociation> COLLECTIONS;
+    public static final Predicate<ObjectAssociation> COLLECTIONS;
     /** @deprecated */
     @Deprecated
-    public static final Filter<ObjectAssociation> VISIBLE_AT_LEAST_SOMETIMES;
+    public static final Predicate<ObjectAssociation> VISIBLE_AT_LEAST_SOMETIMES;
 
     public ObjectAssociationFilters() {
     }
 
     /** @deprecated */
     @Deprecated
-    public static final Filter<ObjectAssociation> staticallyVisible(Where context) {
+    public static final Predicate<ObjectAssociation> staticallyVisible(Where context) {
         return Filters.staticallyVisible(context);
     }
 
     /** @deprecated */
     @Deprecated
-    public static Filter<ObjectAssociation> dynamicallyVisible(
+    public static Predicate<ObjectAssociation> dynamicallyVisible(
             AuthenticationSession session, ObjectAdapter target, Where where) {
         return Filters.dynamicallyVisible(target, InteractionInitiatedBy.USER, where);
     }
 
     /** @deprecated */
     @Deprecated
-    public static Filter<ObjectAssociation> enabled(AuthenticationSession session, ObjectAdapter adapter, Where where) {
+    public static Predicate<ObjectAssociation> enabled(AuthenticationSession session, ObjectAdapter adapter, Where where) {
         return Filters.enabled(adapter, InteractionInitiatedBy.USER, where);
     }
 

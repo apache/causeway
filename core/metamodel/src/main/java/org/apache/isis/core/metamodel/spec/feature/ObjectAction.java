@@ -21,7 +21,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import com.google.common.base.Predicate;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
@@ -31,7 +30,7 @@ import org.apache.isis.applib.annotation.InvokeOn;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.filter.Filter;
+import org.apache.isis.applib.filter.Predicate;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.core.commons.lang.StringFunctions;
@@ -162,7 +161,7 @@ public interface ObjectAction extends ObjectMember {
      * @return
      */
     List<ObjectActionParameter> getParameters(
-            @SuppressWarnings("deprecation") Filter<ObjectActionParameter> filter);
+            @SuppressWarnings("deprecation") Predicate<ObjectActionParameter> predicate);
 
     /**
      * Returns the parameter with provided id.
@@ -304,13 +303,14 @@ public interface ObjectAction extends ObjectMember {
             final ObjectSpecification adapterSpec = adapter.getSpecification();
 
             @SuppressWarnings({ "unchecked", "deprecation" })
-            Filter<ObjectAction> filter = org.apache.isis.applib.filter.Filters.and(
+            Predicate<ObjectAction> predicate = org.apache.isis.applib.filter.Filters.and(
                     Filters.memberOrderNotAssociationOf(adapterSpec),
                     Filters.dynamicallyVisible(adapter, InteractionInitiatedBy.USER, Where.ANYWHERE),
                     Filters.notBulkOnly(),
                     Filters.excludeWizardActions(adapterSpec));
 
-            final List<ObjectAction> userActions = adapterSpec.getObjectActions(actionType, Contributed.INCLUDED, filter);
+            final List<ObjectAction> userActions = adapterSpec.getObjectActions(actionType, Contributed.INCLUDED,
+                    predicate);
             topLevelActions.addAll(userActions);
         }
 
@@ -344,14 +344,15 @@ public interface ObjectAction extends ObjectMember {
             final ObjectSpecification objectSpecification = adapter.getSpecification();
 
             @SuppressWarnings({ "unchecked", "deprecation" })
-            Filter<ObjectAction> filter = org.apache.isis.applib.filter.Filters.and(
+            Predicate<ObjectAction> predicate = org.apache.isis.applib.filter.Filters.and(
                     Filters.memberOrderOf(association),
                     // visibility needs to be determined at point of rendering, by ActionLink itself
                     // Filters.dynamicallyVisible(adapter, InteractionInitiatedBy.USER, Where.ANYWHERE),
                     Filters.notBulkOnly(),
                     Filters.excludeWizardActions(objectSpecification));
 
-            final List<ObjectAction> userActions = objectSpecification.getObjectActions(type, Contributed.INCLUDED, filter);
+            final List<ObjectAction> userActions = objectSpecification.getObjectActions(type, Contributed.INCLUDED,
+                    predicate);
             associatedActions.addAll(userActions);
             return userActions;
         }
@@ -380,7 +381,7 @@ public interface ObjectAction extends ObjectMember {
         private Predicates() {
         }
 
-        public static Predicate<ObjectAction> dynamicallyVisible(
+        public static com.google.common.base.Predicate dynamicallyVisible(
                 final ObjectAdapter target,
                 final InteractionInitiatedBy interactionInitiatedBy,
                 final Where where) {
@@ -388,28 +389,28 @@ public interface ObjectAction extends ObjectMember {
                     .asPredicate(Filters.dynamicallyVisible(target, interactionInitiatedBy, where));
         }
 
-        public static Predicate<ObjectAction> withId(final String actionId) {
+        public static com.google.common.base.Predicate withId(final String actionId) {
             return org.apache.isis.applib.filter.Filters.asPredicate(Filters.withId(actionId));
         }
 
-        public static Predicate<ObjectAction> withNoValidationRules() {
+        public static com.google.common.base.Predicate withNoValidationRules() {
             return org.apache.isis.applib.filter.Filters.asPredicate(Filters.withNoValidationRules());
         }
 
-        public static Predicate<ObjectAction> ofType(final ActionType type) {
+        public static com.google.common.base.Predicate ofType(final ActionType type) {
             return org.apache.isis.applib.filter.Filters.asPredicate(Filters.ofType(type));
         }
 
-        public static Predicate<ObjectAction> bulk() {
+        public static com.google.common.base.Predicate bulk() {
             return org.apache.isis.applib.filter.Filters.asPredicate(Filters.bulk());
         }
 
         // UNUSED?
-        public static Predicate<ObjectAction> notBulkOnly() {
+        public static com.google.common.base.Predicate notBulkOnly() {
             return org.apache.isis.applib.filter.Filters.asPredicate(Filters.notBulkOnly());
         }
 
-        public static Predicate<ObjectAction> memberOrderOf(ObjectAssociation association) {
+        public static com.google.common.base.Predicate memberOrderOf(ObjectAssociation association) {
             return org.apache.isis.applib.filter.Filters.asPredicate(Filters.memberOrderOf(association));
         }
     }
@@ -427,11 +428,11 @@ public interface ObjectAction extends ObjectMember {
          * @deprecated -use {@link com.google.common.base.Predicate equivalent}
          */
         @Deprecated
-        public static Filter<ObjectAction> dynamicallyVisible(
+        public static Predicate<ObjectAction> dynamicallyVisible(
                 final ObjectAdapter target,
                 final InteractionInitiatedBy interactionInitiatedBy,
                 final Where where) {
-            return new Filter<ObjectAction>() {
+            return new Predicate<ObjectAction>() {
                 @Override
                 public boolean apply(final ObjectAction objectAction) {
                     final Consent visible = objectAction.isVisible(target, interactionInitiatedBy, where);
@@ -444,8 +445,8 @@ public interface ObjectAction extends ObjectMember {
          * @deprecated -use {@link com.google.common.base.Predicate equivalent}
          */
         @Deprecated
-        public static Filter<ObjectAction> withId(final String actionId) {
-            return new Filter<ObjectAction>() {
+        public static Predicate<ObjectAction> withId(final String actionId) {
+            return new Predicate<ObjectAction>() {
                 @Override
                 public boolean apply(ObjectAction objectAction) {
                     return objectAction.getId().equals(actionId);
@@ -457,8 +458,8 @@ public interface ObjectAction extends ObjectMember {
          * @deprecated -use {@link com.google.common.base.Predicate equivalent}
          */
         @Deprecated
-        public static Filter<ObjectAction> withNoValidationRules() {
-            return new Filter<ObjectAction>() {
+        public static Predicate<ObjectAction> withNoValidationRules() {
+            return new Predicate<ObjectAction>() {
                 @Override
                 public boolean apply(final ObjectAction objectAction) {
                     final List<Facet> validatingFacets = objectAction.getFacets(FacetFilters
@@ -472,8 +473,8 @@ public interface ObjectAction extends ObjectMember {
          * @deprecated -use {@link com.google.common.base.Predicate equivalent}
          */
         @Deprecated
-        public static Filter<ObjectAction> ofType(final ActionType type) {
-            return new Filter<ObjectAction>() {
+        public static Predicate<ObjectAction> ofType(final ActionType type) {
+            return new Predicate<ObjectAction>() {
                 @Override
                 public boolean apply(ObjectAction oa) {
                     return oa.getType() == type;
@@ -485,8 +486,8 @@ public interface ObjectAction extends ObjectMember {
          * @deprecated -use {@link com.google.common.base.Predicate equivalent}
          */
         @Deprecated
-        public static Filter<ObjectAction> bulk() {
-            return new Filter<ObjectAction>() {
+        public static Predicate<ObjectAction> bulk() {
+            return new Predicate<ObjectAction>() {
 
                 @Override
                 public boolean apply(ObjectAction oa) {
@@ -514,8 +515,8 @@ public interface ObjectAction extends ObjectMember {
         }
 
         @Deprecated
-        public static Filter<ObjectAction> notBulkOnly() {
-            return new Filter<ObjectAction>() {
+        public static Predicate<ObjectAction> notBulkOnly() {
+            return new Predicate<ObjectAction>() {
 
                 @Override
                 public boolean apply(ObjectAction t) {
@@ -525,13 +526,13 @@ public interface ObjectAction extends ObjectMember {
             };
         }
 
-        public static Filter<ObjectAction> excludeWizardActions(final ObjectSpecification objectSpecification) {
+        public static Predicate<ObjectAction> excludeWizardActions(final ObjectSpecification objectSpecification) {
             return org.apache.isis.applib.filter.Filters.not(wizardActions(objectSpecification));
             // return wizardActions(objectSpecification);
         }
 
-        private static Filter<ObjectAction> wizardActions(final ObjectSpecification objectSpecification) {
-            return new Filter<ObjectAction>() {
+        private static Predicate<ObjectAction> wizardActions(final ObjectSpecification objectSpecification) {
+            return new Predicate<ObjectAction>() {
                 @Override
                 public boolean apply(ObjectAction input) {
                     if (objectSpecification == null) {
@@ -544,10 +545,10 @@ public interface ObjectAction extends ObjectMember {
         }
 
         @SuppressWarnings("deprecation")
-        public static Filter<ObjectAction> memberOrderOf(ObjectAssociation association) {
+        public static Predicate<ObjectAction> memberOrderOf(ObjectAssociation association) {
             final String assocName = association.getName();
             final String assocId = association.getId();
-            return new Filter<ObjectAction>() {
+            return new Predicate<ObjectAction>() {
 
                 @Override
                 public boolean apply(ObjectAction t) {
@@ -564,7 +565,7 @@ public interface ObjectAction extends ObjectMember {
             };
         }
 
-        public static Filter<ObjectAction> memberOrderNotAssociationOf(final ObjectSpecification adapterSpec) {
+        public static Predicate<ObjectAction> memberOrderNotAssociationOf(final ObjectSpecification adapterSpec) {
 
             final List<ObjectAssociation> associations = adapterSpec.getAssociations(Contributed.INCLUDED);
             final List<String> associationNames = Lists.transform(associations,
@@ -572,7 +573,7 @@ public interface ObjectAction extends ObjectMember {
             final List<String> associationIds = Lists.transform(associations,
                     com.google.common.base.Functions.compose(StringFunctions.toLowerCase(), ObjectAssociation.Functions.toId()));
 
-            return new Filter<ObjectAction>() {
+            return new Predicate<ObjectAction>() {
 
                 @Override
                 public boolean apply(ObjectAction t) {

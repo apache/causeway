@@ -36,7 +36,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.wrapper.events.PropertyModifyEvent;
 import org.apache.isis.applib.services.wrapper.events.PropertyUsabilityEvent;
 import org.apache.isis.applib.services.wrapper.events.PropertyVisibilityEvent;
-import org.apache.isis.applib.filter.Filter;
+import org.apache.isis.applib.filter.Predicate;
 import org.apache.isis.applib.services.wrapper.DisabledException;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -211,7 +211,7 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
 
         context.checking(new Expectations() {
             {
-                allowing(mockPasswordMember).getFacets(with(any(Filter.class)));
+                allowing(mockPasswordMember).getFacets(with(any(Predicate.class)));
                 will(returnValue(facets));
                 
                 allowing(mockPasswordMember).isVisible(mockEmployeeAdapter, InteractionInitiatedBy.USER, Where.ANYWHERE);
@@ -256,7 +256,7 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
         facets = Arrays.asList((Facet)new PropertySetterFacetViaSetterMethod(setPasswordMethod, mockPasswordMember));
         context.checking(new Expectations() {
             {
-                allowing(mockPasswordMember).getFacets(with(any(Filter.class)));
+                allowing(mockPasswordMember).getFacets(with(any(Predicate.class)));
                 will(returnValue(facets));
 
                 oneOf(mockPasswordMember).set(mockEmployeeAdapter, mockPasswordAdapter, InteractionInitiatedBy.USER);
@@ -274,7 +274,7 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
         ));
         context.checking(new Expectations() {
             {
-                allowing(mockPasswordMember).getFacets(with(any(Filter.class)));
+                allowing(mockPasswordMember).getFacets(with(any(Predicate.class)));
                 will(returnValue(facets));
                 
                 oneOf(mockPasswordMember).get(mockEmployeeAdapter, InteractionInitiatedBy.USER);

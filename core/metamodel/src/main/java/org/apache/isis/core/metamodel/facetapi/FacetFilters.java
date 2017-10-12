@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.facetapi;
 
-import org.apache.isis.applib.filter.Filter;
+import org.apache.isis.applib.filter.Predicate;
 import org.apache.isis.applib.filter.Filters;
 
 public final class FacetFilters {
@@ -28,21 +28,21 @@ public final class FacetFilters {
     }
 
     /**
-     * {@link Filter<Facet>#accept(Facet) Accepts} everything.
+     * {@link Predicate <Facet>#accept(Facet) Accepts} everything.
      */
-    public static final Filter<Facet> ANY = Filters.anyOfType(Facet.class);
+    public static final Predicate<Facet> ANY = Filters.anyOfType(Facet.class);
     /**
-     * {@link Filter<Facet>#accept(Facet) Accepts} nothing.
+     * {@link Predicate <Facet>#accept(Facet) Accepts} nothing.
      */
-    public static final Filter<Facet> NONE = new Filter<Facet>() {
+    public static final Predicate<Facet> NONE = new Predicate<Facet>() {
         @Override
         public boolean apply(final Facet facet) {
             return false;
         }
     };
 
-    public static Filter<Facet> isA(final Class<?> superClass) {
-        return new Filter<Facet>() {
+    public static Predicate<Facet> isA(final Class<?> superClass) {
+        return new Predicate<Facet>() {
             @Override
             public boolean apply(final Facet facet) {
                 if (facet instanceof DecoratingFacet) {

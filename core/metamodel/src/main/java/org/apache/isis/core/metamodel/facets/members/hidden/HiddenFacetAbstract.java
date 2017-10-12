@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.members.hidden;
 
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.filter.Predicate;
 import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -40,7 +41,7 @@ import org.apache.isis.core.metamodel.interactions.VisibilityContext;
  *     this is used by the {@link org.apache.isis.core.metamodel.layoutmetadata.json.LayoutMetadataReaderFromJson} exporter</li>
  * </ul>
  * <p>
- *     Note that the {@link org.apache.isis.core.metamodel.facetapi.FacetUtil#getFacets(java.util.Map, org.apache.isis.applib.filter.Filter)}
+ *     Note that the {@link org.apache.isis.core.metamodel.facetapi.FacetUtil#getFacets(java.util.Map, Predicate)}
  *     (which among other things is used to return all facets matching a particular facet type) ensures that the list
  *     of facets returned contains no duplicates.
  * </p>

@@ -26,7 +26,6 @@ import java.util.Map;
 import java.util.Set;
 
 import com.google.common.base.Function;
-import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Iterables;
@@ -39,7 +38,7 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.filter.Filter;
+import org.apache.isis.applib.filter.Predicate;
 import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
@@ -701,16 +700,16 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
     @Deprecated
     @Override
-    public List<ObjectAssociation> getAssociations(Filter<ObjectAssociation> filter) {
-        return getAssociations(Contributed.INCLUDED, filter);
+    public List<ObjectAssociation> getAssociations(Predicate<ObjectAssociation> predicate) {
+        return getAssociations(Contributed.INCLUDED, predicate);
     }
 
     @Override
-    public List<ObjectAssociation> getAssociations(Contributed contributed, final Filter<ObjectAssociation> filter) {
+    public List<ObjectAssociation> getAssociations(Contributed contributed, final Predicate<ObjectAssociation> predicate) {
         final List<ObjectAssociation> allAssociations = getAssociations(contributed);
         return Lists.newArrayList(
                 FluentIterable.from(allAssociations)
-                        .filter(Filters.asPredicate(filter))
+                        .filter(Filters.asPredicate(predicate))
                         .toSortedList(ObjectMember.Comparators.byMemberOrderSequence())
         );
     }
@@ -736,7 +735,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     public List<ObjectAction> getObjectActions(
             final List<ActionType> types,
             final Contributed contributed, 
-            final Filter<ObjectAction> filter) {
+            final Predicate<ObjectAction> predicate) {
 
         // update our list of actions if requesting for contributed actions
         // and they have not yet been added
@@ -765,7 +764,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         final List<ObjectAction> actions = Lists.newArrayList();
         for (final ActionType type : types) {
             final Collection<ObjectAction> filterActions =
-                    Collections2.filter(objectActionsByType.get(type), Filters.asPredicate(filter));
+                    Collections2.filter(objectActionsByType.get(type), Filters.asPredicate(predicate));
             actions.addAll(filterActions);
         }
         return Lists.newArrayList(
@@ -784,8 +783,8 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     public List<ObjectAction> getObjectActions(
             final ActionType type, 
             final Contributed contributed, 
-            final Filter<ObjectAction> filter) {
-        return getObjectActions(Collections.singletonList(type), contributed, filter);
+            final Predicate<ObjectAction> predicate) {
+        return getObjectActions(Collections.singletonList(type), contributed, predicate);
     }
 
     //endregion
@@ -985,7 +984,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
         final List<ObjectAssociation> mixedInAssociations = Lists.newArrayList(
                 Iterables.transform(
-                        Iterables.filter(mixinActions, new Predicate<ObjectActionDefault>() {
+                        Iterables.filter(mixinActions, new com.google.common.base.Predicate<ObjectActionDefault>() {
                             @Override public boolean apply(final ObjectActionDefault input) {
                                 final NotContributedFacet notContributedFacet = input.getFacet(NotContributedFacet.class);
                                 if (notContributedFacet == null || !notContributedFacet.toActions()) {

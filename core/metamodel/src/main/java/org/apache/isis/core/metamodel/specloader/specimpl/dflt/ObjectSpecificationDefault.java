@@ -31,7 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.filter.Filter;
+import org.apache.isis.applib.filter.Predicate;
 import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.commons.util.ToString;
@@ -368,11 +368,11 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     }
     
     private void cataloguePropertiesAndCollections(final Map<Method, ObjectMember> membersByMethod) {
-        final Filter<ObjectAssociation> noop = Filters.anyOfType(ObjectAssociation.class);
+        final Predicate<ObjectAssociation> noop = Filters.anyOfType(ObjectAssociation.class);
         final List<ObjectAssociation> fields = getAssociations(Contributed.EXCLUDED, noop);
         for (int i = 0; i < fields.size(); i++) {
             final ObjectAssociation field = fields.get(i);
-            final List<Facet> facets = field.getFacets(ImperativeFacet.FILTER);
+            final List<Facet> facets = field.getFacets(ImperativeFacet.PREDICATE);
             for (final Facet facet : facets) {
                 final ImperativeFacet imperativeFacet = ImperativeFacet.Util.getImperativeFacet(facet);
                 for (final Method imperativeFacetMethod : imperativeFacet.getMethods()) {
@@ -386,7 +386,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         final List<ObjectAction> userActions = getObjectActions(Contributed.INCLUDED);
         for (int i = 0; i < userActions.size(); i++) {
             final ObjectAction userAction = userActions.get(i);
-            final List<Facet> facets = userAction.getFacets(ImperativeFacet.FILTER);
+            final List<Facet> facets = userAction.getFacets(ImperativeFacet.PREDICATE);
             for (final Facet facet : facets) {
                 final ImperativeFacet imperativeFacet = ImperativeFacet.Util.getImperativeFacet(facet);
                 for (final Method imperativeFacetMethod : imperativeFacet.getMethods()) {

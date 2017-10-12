@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.spec.feature;
 
 import java.util.List;
 
-import org.apache.isis.applib.filter.Filter;
+import org.apache.isis.applib.filter.Predicate;
 import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.core.metamodel.spec.ObjectSpecificationException;
 
@@ -47,7 +47,7 @@ public interface ObjectAssociationContainer {
      * that match the supplied filter.
      */
     @Deprecated
-    List<ObjectAssociation> getAssociations(Filter<ObjectAssociation> filter);
+    List<ObjectAssociation> getAssociations(Predicate<ObjectAssociation> predicate);
 
     /**
      * Return all {@link ObjectAssociation}s matching the supplied filter.
@@ -58,7 +58,7 @@ public interface ObjectAssociationContainer {
      * 
      * @see Filters
      */
-    List<ObjectAssociation> getAssociations(Contributed contributed, Filter<ObjectAssociation> filter);
+    List<ObjectAssociation> getAssociations(Contributed contributed, Predicate<ObjectAssociation> predicate);
 
     /**
      * All {@link ObjectAssociation association}s that represent

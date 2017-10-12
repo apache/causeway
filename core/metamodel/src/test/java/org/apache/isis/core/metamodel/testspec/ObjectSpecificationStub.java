@@ -26,7 +26,7 @@ import java.util.List;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.filter.Filter;
+import org.apache.isis.applib.filter.Predicate;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.exceptions.IsisException;
@@ -123,8 +123,8 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
 
     @Deprecated
     @Override
-    public List<ObjectAssociation> getAssociations(final Filter<ObjectAssociation> filter) {
-        return getAssociations(Contributed.INCLUDED, filter);
+    public List<ObjectAssociation> getAssociations(final Predicate<ObjectAssociation> predicate) {
+        return getAssociations(Contributed.INCLUDED, predicate);
     }
 
     @Override
@@ -144,12 +144,12 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     }
 
     @Override
-    public List<ObjectAssociation> getAssociations(final Contributed contributed, final Filter<ObjectAssociation> filter) {
+    public List<ObjectAssociation> getAssociations(final Contributed contributed, final Predicate<ObjectAssociation> predicate) {
         final List<ObjectAssociation> allFields = getAssociations(Contributed.EXCLUDED);
 
         final List<ObjectAssociation> selectedFields = Lists.newArrayList();
         for (int i = 0; i < allFields.size(); i++) {
-            if (filter.apply(allFields.get(i))) {
+            if (predicate.apply(allFields.get(i))) {
                 selectedFields.add(allFields.get(i));
             }
         }
@@ -366,12 +366,12 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     }
 
     @Override
-    public List<ObjectAction> getObjectActions(final ActionType type, final Contributed contributed, final Filter<ObjectAction> filter) {
+    public List<ObjectAction> getObjectActions(final ActionType type, final Contributed contributed, final Predicate<ObjectAction> predicate) {
         return null;
     }
 
     @Override
-    public List<ObjectAction> getObjectActions(final List<ActionType> types, final Contributed contributed, final Filter<ObjectAction> filter) {
+    public List<ObjectAction> getObjectActions(final List<ActionType> types, final Contributed contributed, final Predicate<ObjectAction> predicate) {
         return null;
     }
 

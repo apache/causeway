@@ -21,7 +21,7 @@ package org.apache.isis.objectstore.jdo.metamodel.util;
 
 import javax.jdo.annotations.PrimaryKey;
 
-import org.apache.isis.applib.filter.Filter;
+import org.apache.isis.applib.filter.Predicate;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -37,7 +37,7 @@ import org.apache.isis.objectstore.jdo.metamodel.facets.prop.primarykey.JdoPrima
  * Note that it is NOT necessary for there to be a facet to
  * {@link PropertySetterFacet set} the property.
  */
-public final class JdoPrimaryKeyPropertyFilter implements Filter<ObjectAssociation> {
+public final class JdoPrimaryKeyPropertyPredicate implements Predicate<ObjectAssociation> {
     @Override
     public boolean apply(final ObjectAssociation noa) {
         return noa.isOneToOneAssociation() &&

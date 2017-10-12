@@ -36,7 +36,7 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.filter.Filter;
+import org.apache.isis.applib.filter.Predicate;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -105,7 +105,7 @@ public class ObjectAssociationFiltersTest_visibleWhere {
             allowing(mockHiddenFacet).where();
             will(returnValue(where));
 
-            allowing(mockObjectAssociation).getFacets(with(any(Filter.class)));
+            allowing(mockObjectAssociation).getFacets(with(any(Predicate.class)));
             will(returnValue(Lists.newArrayList(mockHiddenFacet)));
         }});
     }
@@ -126,8 +126,8 @@ public class ObjectAssociationFiltersTest_visibleWhere {
 
     @Test
     public void test() {
-        final Filter<ObjectAssociation> filter = ObjectAssociation.Filters.staticallyVisible(whereContext);
-        assertThat(filter.apply(mockObjectAssociation), is(expectedVisibility));
+        final Predicate<ObjectAssociation> predicate = ObjectAssociation.Filters.staticallyVisible(whereContext);
+        assertThat(predicate.apply(mockObjectAssociation), is(expectedVisibility));
     }
 
 }

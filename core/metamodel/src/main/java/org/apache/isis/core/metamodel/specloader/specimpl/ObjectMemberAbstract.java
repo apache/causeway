@@ -24,7 +24,7 @@ import java.util.Objects;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.filter.Filter;
+import org.apache.isis.applib.filter.Predicate;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
@@ -150,8 +150,8 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
     }
 
     @Override
-    public List<Facet> getFacets(final Filter<Facet> filter) {
-        return getFacetHolder().getFacets(filter);
+    public List<Facet> getFacets(final Predicate<Facet> predicate) {
+        return getFacetHolder().getFacets(predicate);
     }
 
     @Override
