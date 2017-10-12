@@ -33,7 +33,7 @@ import org.apache.wicket.model.Model;
 
 import org.apache.isis.applib.annotation.Where;
 import com.google.common.base.Predicate;
-import org.apache.isis.applib.filter.Predicates;
+
 import org.apache.isis.applib.layout.component.Grid;
 import org.apache.isis.applib.services.tablecol.TableColumnOrderService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -177,12 +177,11 @@ public class CollectionContentsAsAjaxTablePanel
                     ? getModel().getParentObjectAdapterMemento().getObjectAdapter(ConcurrencyChecking.NO_CHECK,
                         getPersistenceSession(), getSpecificationLoader()).getSpecification()
                     : null;
-        
+
         @SuppressWarnings("unchecked")
-        final Predicate<ObjectAssociation> predicate = Predicates.and(
-                ObjectAssociation.Filters.PROPERTIES, 
-                ObjectAssociation.Filters.staticallyVisible(whereContext),
-                associationDoesNotReferenceParent(parentSpecIfAny));
+        final Predicate<ObjectAssociation> predicate = com.google.common.base.Predicates
+                .and(ObjectAssociation.Filters.PROPERTIES, ObjectAssociation.Filters.staticallyVisible(whereContext),
+                        associationDoesNotReferenceParent(parentSpecIfAny));
         
         final List<? extends ObjectAssociation> propertyList = typeOfSpec.getAssociations(Contributed.INCLUDED,
                 predicate);
@@ -234,7 +233,7 @@ public class CollectionContentsAsAjaxTablePanel
 
     static Predicate<ObjectAssociation> associationDoesNotReferenceParent(final ObjectSpecification parentSpec) {
         if(parentSpec == null) {
-            return Predicates.any();
+            return com.google.common.base.Predicates.alwaysTrue();
         }
         return new Predicate<ObjectAssociation>() {
             @Override

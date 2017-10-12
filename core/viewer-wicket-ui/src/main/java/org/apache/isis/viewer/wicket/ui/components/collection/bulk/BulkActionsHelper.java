@@ -26,7 +26,6 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
-import org.apache.isis.applib.filter.Predicates;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -58,11 +57,13 @@ public class BulkActionsHelper implements Serializable {
 
         final ObjectSpecification typeSpec = model.getTypeOfSpecification();
 
-        List<ObjectAction> objectActions = typeSpec.getObjectActions(ActionType.USER, Contributed.INCLUDED, Predicates.<ObjectAction>any());
+        List<ObjectAction> objectActions = typeSpec.getObjectActions(ActionType.USER, Contributed.INCLUDED,
+                com.google.common.base.Predicates.<ObjectAction>alwaysTrue());
 
         final DeploymentCategory deploymentCategory = isisSessionFactory.getDeploymentCategory();
         if ( !deploymentCategory.isProduction()) {
-            List<ObjectAction> prototypeActions   = typeSpec.getObjectActions(ActionType.PROTOTYPE, Contributed.INCLUDED, Predicates.<ObjectAction>any());
+            List<ObjectAction> prototypeActions   = typeSpec.getObjectActions(ActionType.PROTOTYPE, Contributed.INCLUDED,
+                    com.google.common.base.Predicates.<ObjectAction>alwaysTrue());
             objectActions.addAll(prototypeActions);
         }
 

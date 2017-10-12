@@ -30,29 +30,8 @@ public final class Predicates {
     private Predicates() {
     }
 
-    public static <T> Predicate<T> and(final Predicate<T>... predicates) {
-        return com.google.common.base.Predicates.and(predicates);
-    }
-
-    public static <T> Predicate<T> or(final Predicate<T>... predicates) {
-        return com.google.common.base.Predicates.or(predicates);
-    }
-
-    public static <T> Predicate<T> not(final Predicate<T> f1) {
-        return com.google.common.base.Predicates.not(f1);
-    }
-
-    public static <T> Predicate<T> any() {
+    public final static <T> Predicate<T> anyOfType(final Class<T> clazz) {
         return com.google.common.base.Predicates.alwaysTrue();
     }
-
-    public final static <T> Predicate<T> anyOfType(final Class<T> clazz) {
-        return any();
-    }
-
-    public static <T> Predicate<T> none() {
-        return com.google.common.base.Predicates.alwaysFalse();
-    }
-
 
 }

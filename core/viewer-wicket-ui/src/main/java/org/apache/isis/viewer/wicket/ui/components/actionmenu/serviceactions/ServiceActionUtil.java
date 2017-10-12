@@ -24,7 +24,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.filter.Predicates;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
@@ -264,7 +263,7 @@ public final class ServiceActionUtil {
         }
 
         for (final ObjectAction objectAction : serviceSpec.getObjectActions(
-                actionType, Contributed.INCLUDED, Predicates.<ObjectAction>any())) {
+                actionType, Contributed.INCLUDED, com.google.common.base.Predicates.<ObjectAction>alwaysTrue())) {
 
             // skip if annotated to not be included in repository menu using legacy mechanism
             if (objectAction.getFacet(NotInServiceMenuFacet.class) != null) {

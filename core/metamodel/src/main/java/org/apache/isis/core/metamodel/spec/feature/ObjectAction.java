@@ -303,11 +303,10 @@ public interface ObjectAction extends ObjectMember {
             final ObjectSpecification adapterSpec = adapter.getSpecification();
 
             @SuppressWarnings({ "unchecked", "deprecation" })
-            Predicate<ObjectAction> predicate = org.apache.isis.applib.filter.Predicates.and(
-                    Filters.memberOrderNotAssociationOf(adapterSpec),
-                    Filters.dynamicallyVisible(adapter, InteractionInitiatedBy.USER, Where.ANYWHERE),
-                    Filters.notBulkOnly(),
-                    Filters.excludeWizardActions(adapterSpec));
+            Predicate<ObjectAction> predicate = com.google.common.base.Predicates
+                    .and(Filters.memberOrderNotAssociationOf(adapterSpec),
+                            Filters.dynamicallyVisible(adapter, InteractionInitiatedBy.USER, Where.ANYWHERE),
+                            Filters.notBulkOnly(), Filters.excludeWizardActions(adapterSpec));
 
             final List<ObjectAction> userActions = adapterSpec.getObjectActions(actionType, Contributed.INCLUDED,
                     predicate);
@@ -344,12 +343,9 @@ public interface ObjectAction extends ObjectMember {
             final ObjectSpecification objectSpecification = adapter.getSpecification();
 
             @SuppressWarnings({ "unchecked", "deprecation" })
-            Predicate<ObjectAction> predicate = org.apache.isis.applib.filter.Predicates.and(
-                    Filters.memberOrderOf(association),
-                    // visibility needs to be determined at point of rendering, by ActionLink itself
-                    // Filters.dynamicallyVisible(adapter, InteractionInitiatedBy.USER, Where.ANYWHERE),
-                    Filters.notBulkOnly(),
-                    Filters.excludeWizardActions(objectSpecification));
+            Predicate<ObjectAction> predicate = com.google.common.base.Predicates
+                    .and(Filters.memberOrderOf(association), Filters.notBulkOnly(),
+                            Filters.excludeWizardActions(objectSpecification));
 
             final List<ObjectAction> userActions = objectSpecification.getObjectActions(type, Contributed.INCLUDED,
                     predicate);
@@ -526,7 +522,7 @@ public interface ObjectAction extends ObjectMember {
         }
 
         public static Predicate<ObjectAction> excludeWizardActions(final ObjectSpecification objectSpecification) {
-            return org.apache.isis.applib.filter.Predicates.not(wizardActions(objectSpecification));
+            return com.google.common.base.Predicates.not(wizardActions(objectSpecification));
             // return wizardActions(objectSpecification);
         }
 

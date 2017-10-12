@@ -23,7 +23,7 @@ import java.util.Collection;
 import java.util.List;
 
 import com.google.common.base.Predicate;
-import org.apache.isis.applib.filter.Predicates;
+
 import org.apache.isis.applib.services.swagger.SwaggerService;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.spec.ActionType;
@@ -120,10 +120,8 @@ public final class Util {
         final List<ObjectAssociation> list =
                 objectSpecification.getAssociations(
                         Contributed.INCLUDED,
-                        Predicates.and(
-                                associationPredicate,
-                                associationsWith(visibility)
-                        ));
+                        com.google.common.base.Predicates.and(new Predicate<ObjectAssociation>[] { associationPredicate,
+                                associationsWith(visibility) }));
 
         return cast(list);
     }

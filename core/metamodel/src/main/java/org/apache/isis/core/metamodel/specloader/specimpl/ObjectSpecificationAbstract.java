@@ -39,7 +39,7 @@ import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
 import com.google.common.base.Predicate;
-import org.apache.isis.applib.filter.Predicates;
+
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.core.commons.lang.ClassExtensions;
@@ -776,7 +776,8 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     @Override
     public List<ObjectAction> getObjectActions(
             final Contributed contributed) {
-        return getObjectActions(ActionType.ALL, contributed, Predicates.<ObjectAction>any());
+        return getObjectActions(ActionType.ALL, contributed,
+                com.google.common.base.Predicates.<ObjectAction>alwaysTrue());
     }
 
     @Override
@@ -882,8 +883,8 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     private List<ObjectAssociation> createContributeeAssociations(final Object servicePojo) {
         final Class<?> serviceClass = servicePojo.getClass();
         final ObjectSpecification specification = specificationLoader.loadSpecification(serviceClass);
-        final List<ObjectAction> serviceActions = specification.getObjectActions(ActionType.USER, Contributed.INCLUDED, Predicates
-                .<ObjectAction>any());
+        final List<ObjectAction> serviceActions = specification.getObjectActions(ActionType.USER, Contributed.INCLUDED,
+                com.google.common.base.Predicates.<ObjectAction>alwaysTrue());
 
         final List<ObjectActionDefault> contributedActions = Lists.newArrayList();
         for (final ObjectAction serviceAction : serviceActions) {
@@ -1006,7 +1007,8 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     }
 
     private List objectActionsOf(final ObjectSpecification specification) {
-        return specification.getObjectActions(ActionType.ALL, Contributed.INCLUDED, Predicates.<ObjectAction>any());
+        return specification.getObjectActions(ActionType.ALL, Contributed.INCLUDED,
+                com.google.common.base.Predicates.<ObjectAction>alwaysTrue());
     }
 
     private Function<ObjectActionDefault, ObjectAssociation> createMixedInAssociationFunctor(
@@ -1066,8 +1068,8 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             return;
         }
         final List<ObjectAction> contributeeActions = Lists.newArrayList();
-        final List<ObjectAction> serviceActions = specification.getObjectActions(ActionType.ALL, Contributed.INCLUDED, Predicates
-                .<ObjectAction>any());
+        final List<ObjectAction> serviceActions = specification.getObjectActions(ActionType.ALL, Contributed.INCLUDED,
+                com.google.common.base.Predicates.<ObjectAction>alwaysTrue());
         for (final ObjectAction serviceAction : serviceActions) {
             if (isAlwaysHidden(serviceAction)) {
                 continue;
@@ -1158,8 +1160,8 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         }
 
         final List<ObjectAction> actions = Lists.newArrayList();
-        final List<ObjectAction> mixinActions = mixinSpec.getObjectActions(ActionType.ALL, Contributed.INCLUDED, Predicates
-                .<ObjectAction>any());
+        final List<ObjectAction> mixinActions = mixinSpec.getObjectActions(ActionType.ALL, Contributed.INCLUDED,
+                com.google.common.base.Predicates.<ObjectAction>alwaysTrue());
         for (final ObjectAction mixinTypeAction : mixinActions) {
             if (isAlwaysHidden(mixinTypeAction)) {
                 continue;

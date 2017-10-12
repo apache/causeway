@@ -289,22 +289,25 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
 
     @Override
     public ObjectAction getObjectAction(final ActionType type, final String id, final List<ObjectSpecification> parameters) {
-        final List<ObjectAction> actions = 
-                getObjectActions(type, Contributed.INCLUDED, Predicates.<ObjectAction>any());
+        final List<ObjectAction> actions =
+                getObjectActions(type, Contributed.INCLUDED,
+                        com.google.common.base.Predicates.<ObjectAction>alwaysTrue());
         return firstAction(actions, id, parameters);
     }
 
     @Override
     public ObjectAction getObjectAction(final ActionType type, final String id) {
-        final List<ObjectAction> actions = 
-                getObjectActions(type, Contributed.INCLUDED, Predicates.<ObjectAction>any());
+        final List<ObjectAction> actions =
+                getObjectActions(type, Contributed.INCLUDED,
+                        com.google.common.base.Predicates.<ObjectAction>alwaysTrue());
         return firstAction(actions, id);
     }
 
     @Override
     public ObjectAction getObjectAction(final String id) {
-        final List<ObjectAction> actions = 
-                getObjectActions(ActionType.ALL, Contributed.INCLUDED, Predicates.<ObjectAction>any());
+        final List<ObjectAction> actions =
+                getObjectActions(ActionType.ALL, Contributed.INCLUDED,
+                        com.google.common.base.Predicates.<ObjectAction>alwaysTrue());
         return firstAction(actions, id);
     }
 

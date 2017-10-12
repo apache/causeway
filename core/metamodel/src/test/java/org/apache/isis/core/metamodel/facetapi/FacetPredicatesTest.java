@@ -22,7 +22,6 @@ package org.apache.isis.core.metamodel.facetapi;
 import junit.framework.TestCase;
 
 import com.google.common.base.Predicate;
-import org.apache.isis.applib.filter.Predicates;
 
 public class FacetPredicatesTest extends TestCase {
 
@@ -97,62 +96,70 @@ public class FacetPredicatesTest extends TestCase {
     }
 
     public void testAndTrueTrue() {
-        final Predicate<Facet> and = Predicates.and(FacetFilters.ANY, FacetFilters.ANY);
+        final Predicate<Facet> and = com.google.common.base.Predicates
+                .and(new Predicate<Facet>[] { FacetFilters.ANY, FacetFilters.ANY });
         assertTrue(and.apply(fooFacet));
     }
 
     public void testAndTrueFalse() {
-        final Predicate<Facet> and = Predicates.and(FacetFilters.ANY, FacetFilters.NONE);
+        final Predicate<Facet> and = com.google.common.base.Predicates
+                .and(new Predicate<Facet>[] { FacetFilters.ANY, FacetFilters.NONE });
         assertFalse(and.apply(fooFacet));
     }
 
     public void testAndFalseTrue() {
-        final Predicate<Facet> and = Predicates.and(FacetFilters.NONE, FacetFilters.ANY);
+        final Predicate<Facet> and = com.google.common.base.Predicates
+                .and(new Predicate<Facet>[] { FacetFilters.NONE, FacetFilters.ANY });
         assertFalse(and.apply(fooFacet));
     }
 
     public void testAndFalseFalse() {
-        final Predicate<Facet> and = Predicates.and(FacetFilters.NONE, FacetFilters.NONE);
+        final Predicate<Facet> and = com.google.common.base.Predicates
+                .and(new Predicate<Facet>[] { FacetFilters.NONE, FacetFilters.NONE });
         assertFalse(and.apply(fooFacet));
     }
 
     public void testOrTrueTrue() {
-        final Predicate<Facet> or = Predicates.or(FacetFilters.ANY, FacetFilters.ANY);
+        final Predicate<Facet> or = com.google.common.base.Predicates
+                .or(new Predicate<Facet>[] { FacetFilters.ANY, FacetFilters.ANY });
         assertTrue(or.apply(fooFacet));
     }
 
     public void testOrTrueFalse() {
-        final Predicate<Facet> or = Predicates.or(FacetFilters.ANY, FacetFilters.NONE);
+        final Predicate<Facet> or = com.google.common.base.Predicates
+                .or(new Predicate<Facet>[] { FacetFilters.ANY, FacetFilters.NONE });
         assertTrue(or.apply(fooFacet));
     }
 
     public void testorFalseTrue() {
-        final Predicate<Facet> or = Predicates.or(FacetFilters.NONE, FacetFilters.ANY);
+        final Predicate<Facet> or = com.google.common.base.Predicates
+                .or(new Predicate<Facet>[] { FacetFilters.NONE, FacetFilters.ANY });
         assertTrue(or.apply(fooFacet));
     }
 
     public void testOrFalseFalse() {
-        final Predicate<Facet> or = Predicates.and(FacetFilters.NONE, FacetFilters.NONE);
+        final Predicate<Facet> or = com.google.common.base.Predicates
+                .and(new Predicate<Facet>[] { FacetFilters.NONE, FacetFilters.NONE });
         assertFalse(or.apply(fooFacet));
     }
 
     public void testNotTrue() {
-        final Predicate<Facet> not = Predicates.not(FacetFilters.ANY);
+        final Predicate<Facet> not = com.google.common.base.Predicates.not(FacetFilters.ANY);
         assertFalse(not.apply(fooFacet));
     }
 
     public void testNotFalse() {
-        final Predicate<Facet> not = Predicates.not(FacetFilters.NONE);
+        final Predicate<Facet> not = com.google.common.base.Predicates.not(FacetFilters.NONE);
         assertTrue(not.apply(fooFacet));
     }
 
     public void testAny() {
-        final Predicate<Facet> any = Predicates.any();
+        final Predicate<Facet> any = com.google.common.base.Predicates.alwaysTrue();
         assertTrue(any.apply(fooFacet));
     }
 
     public void testNone() {
-        final Predicate<Facet> none = Predicates.none();
+        final Predicate<Facet> none = com.google.common.base.Predicates.alwaysFalse();
         assertFalse(none.apply(fooFacet));
     }
 
