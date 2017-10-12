@@ -23,7 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.isis.applib.filter.Predicate;
+import com.google.common.base.Predicate;
 
 /**
  * For base subclasses or, more likely, to help write tests.

@@ -22,7 +22,7 @@ package org.apache.isis.core.metamodel.spec.feature;
 import java.util.List;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.filter.Predicate;
+import com.google.common.base.Predicate;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 

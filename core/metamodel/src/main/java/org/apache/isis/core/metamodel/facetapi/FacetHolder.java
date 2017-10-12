@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facetapi;
 
 import java.util.List;
 
-import org.apache.isis.applib.filter.Predicate;
+import com.google.common.base.Predicate;
 
 /**
  * Anything in the metamodel (which also includes peers in the reflector) that

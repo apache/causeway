@@ -26,7 +26,7 @@ import java.util.Map;
 
 import com.google.common.collect.Lists;
 
-import org.apache.isis.applib.filter.Predicate;
+import com.google.common.base.Predicate;
 
 public final class FacetUtil {
 

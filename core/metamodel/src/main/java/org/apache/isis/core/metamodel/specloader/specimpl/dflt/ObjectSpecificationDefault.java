@@ -31,7 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.filter.Predicate;
+import com.google.common.base.Predicate;
 import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.commons.util.ToString;

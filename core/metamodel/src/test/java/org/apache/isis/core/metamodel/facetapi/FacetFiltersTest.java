@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facetapi;
 
 import junit.framework.TestCase;
 
-import org.apache.isis.applib.filter.Predicate;
+import com.google.common.base.Predicate;
 import org.apache.isis.applib.filter.Filters;
 
 public class FacetFiltersTest extends TestCase {

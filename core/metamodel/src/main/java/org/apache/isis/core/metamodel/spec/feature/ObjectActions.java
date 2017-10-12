@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.spec.feature;
 
-import org.apache.isis.applib.filter.Predicate;
+import com.google.common.base.Predicate;
 
 /**
  * @deprecated

@@ -24,7 +24,7 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
-import org.apache.isis.applib.filter.Predicate;
+import com.google.common.base.Predicate;
 import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.core.commons.lang.ObjectExtensions;
