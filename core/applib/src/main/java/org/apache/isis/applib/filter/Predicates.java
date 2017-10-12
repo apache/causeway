@@ -68,12 +68,7 @@ public final class Predicates {
     }
 
     public static <T> Predicate<T> any() {
-        return new Predicate<T>() {
-            @Override
-            public boolean apply(final T t) {
-                return true;
-            }
-        };
+        return com.google.common.base.Predicates.alwaysTrue();
     }
 
     public final static <T> Predicate<T> anyOfType(final Class<T> clazz) {
@@ -81,16 +76,8 @@ public final class Predicates {
     }
 
     public static <T> Predicate<T> none() {
-        return new Predicate<T>() {
-            @Override
-            public boolean apply(final T f) {
-                return false;
-            }
-        };
+        return com.google.common.base.Predicates.alwaysFalse();
     }
 
-    public static <T> Predicate<T> noneOfType(final Class<T> clazz) {
-        return none();
-    }
 
 }
