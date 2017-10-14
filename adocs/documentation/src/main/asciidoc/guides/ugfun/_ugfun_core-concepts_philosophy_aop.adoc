@@ -61,5 +61,5 @@ The link:http://en.wikipedia.org/wiki/Single_responsibility_principle[single res
 Apache Isis' support for contributions (not only contributed actions, but also contributed properties and contributed collections) enables this.
 And again, to loop back to the topic of this section, it's an AOP concept that being implemented by the framework.
 
-The nice thing about aspect orientation is that for the most part you can ignore these cross-cutting concerns and - at least initially at least - just focus on implementing your domain object.
+The nice thing about aspect orientation is that for the most part you can ignore these cross-cutting concerns and - at least initially - just focus on implementing your domain object.
 Later when your app starts to grow and you start to break it out into smaller modules, you can leverage Apache Isis' AOP support for (xref:../ugfun/ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_mixins[mixins]), (xref:../ugfun/ugfun.adoc#_ugfun_programming-model_domain-services_contributions[contributed services]) and interceptors (the xref:../ugfun/ugfun.adoc#_ugfun_building-blocks_events_domain-events[event bus]) to ensure that your codebase remains maintainable.
