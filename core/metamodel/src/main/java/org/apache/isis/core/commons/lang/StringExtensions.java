@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.commons.lang;
 
-import java.io.File;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -134,17 +133,6 @@ public final class StringExtensions {
         return Character.isUpperCase(c) || Character.isDigit(c) && !Character.isDigit(previousChar);
     }
 
-    public static String asSimpleName(final String extendee) {
-        final int lastDot = extendee.lastIndexOf('.');
-        if (lastDot == -1) {
-            return extendee;
-        }
-        if (lastDot == extendee.length() - 1) {
-            throw new IllegalArgumentException("Name cannot end in '.'");
-        }
-        return extendee.substring(lastDot + 1);
-    }
-    
     public static String asCamel(final String extendee) {
         final StringBuffer b = new StringBuffer(extendee.length());
         final StringTokenizer t = new StringTokenizer(extendee);
@@ -181,10 +169,6 @@ public final class StringExtensions {
         return capitalize(asCamel(extendee));
     }
 
-    public static String asMemberIdFor(final String extendee) {
-        return asLowerFirst(asCamel(extendee));
-    }
-
     // ////////////////////////////////////////////////////////////
     // capitalize, lowerFirst, firstWord
     // ////////////////////////////////////////////////////////////
@@ -212,12 +196,6 @@ public final class StringExtensions {
         return extendee.substring(0, 1).toLowerCase() + extendee.substring(1);
     }
 
-    public static String asFirstWord(final String extendee) {
-        final String[] split = extendee.split(" ");
-        return split[0];
-    }
-
-
     // ////////////////////////////////////////////////////////////
     // in, combinePaths, splitOnCommas
     // ////////////////////////////////////////////////////////////
@@ -229,17 +207,6 @@ public final class StringExtensions {
             }
         }
         return false;
-    }
-
-    public static String combinePaths(final String extendee, final String... furtherPaths) {
-        final StringBuilder pathBuf = new StringBuilder(extendee);
-        for (final String furtherPath : furtherPaths) {
-            if (pathBuf.charAt(pathBuf.length() - 1) != File.separatorChar) {
-                pathBuf.append(File.separatorChar);
-            }
-            pathBuf.append(furtherPath);
-        }
-        return pathBuf.toString();
     }
 
     public static List<String> splitOnCommas(final String commaSeparatedExtendee) {
@@ -297,21 +264,6 @@ public final class StringExtensions {
     // removeTabs, removeLeadingWhiteSpace, stripLeadingSlash, stripNewLines,
     // normalize
     // ////////////////////////////////////////////////////////////
-
-    public static String removeTabs(final String extendee) {
-        // quick return - jvm java should always return here
-        if (extendee.indexOf('\t') == -1) {
-            return extendee;
-        }
-        final StringBuffer buf = new StringBuffer();
-        for (int i = 0; i < extendee.length(); i++) {
-            // a bit clunky to stay with j# api
-            if (extendee.charAt(i) != '\t') {
-                buf.append(extendee.charAt(i));
-            }
-        }
-        return buf.toString();
-    }
 
     public static String removeLeadingWhiteSpace(final String extendee) {
         if (extendee == null) {
