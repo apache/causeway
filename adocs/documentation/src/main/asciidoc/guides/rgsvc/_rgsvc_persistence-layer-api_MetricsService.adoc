@@ -28,8 +28,7 @@ public interface MetricsService {
 ----
 <1> The number of objects that have, so far in this request, been loaded from the database. Corresponds to the number of times that `javax.jdo.listener.LoadLifecycleListener#postLoad(InstanceLifecycleEvent)` is fired.
 <2> The number of objects that have, so far in this request, been dirtied/will need updating in the database); a good measure of the footprint of the interaction.  Corresponds to the number of times that `javax.jdo.listener.DirtyLifecycleListener#preDirty(InstanceLifecycleEvent)` callback is fired.
-<3> The number of individual properties of objects that were modified; a good measure of the amount of work being done in the interaction.  Corresponds to the number of times that the xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditingService[`AuditingService`]'s (or
-xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditerService[`AuditerService`]'s) `audit(...)` method will be called as the transaction
+<3> The number of individual properties of objects that were modified; a good measure of the amount of work being done in the interaction.  Corresponds to the number of times that the xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditerService[`AuditerService`]'s `audit(...)` method will be called as the transaction
 completes.
 
 The framework provides a default implementation of this API, namely `o.a.i.c.r.s.metrics.MetricsServiceDefault`.

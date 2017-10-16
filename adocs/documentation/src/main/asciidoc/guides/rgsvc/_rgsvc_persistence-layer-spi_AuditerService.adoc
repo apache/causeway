@@ -9,12 +9,6 @@
 
 The `AuditerService` auditing service provides a simple mechanism to capture changes to data. It is called for each property that has changed on any domain object, as a set of pre- and post-values.
 
-[NOTE]
-====
-This service is intended to replace the now-deprecated xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditingService[`AuditingService3`].
-The difference between the two is that this service recognises that the `transactionId` is now (as of `1.13.0`)
-actually a request/interaction Id, and that an additional `sequence
-====
 
 
 == SPI
@@ -123,8 +117,4 @@ Prior to `1.13.0` the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_Comm
 of capturing the cause.  As of `1.13.0`, ``Command``s are now primarily to capture the _intent_ of an action,
 not the actual action invocation itself.
 ====
-
-The `AuditerService` is intended to replace the (now-deprecated)
-xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditingService3[`AuditingService3`], as the latter does not support the concept of multiple
-transactions within a single interaction.
 

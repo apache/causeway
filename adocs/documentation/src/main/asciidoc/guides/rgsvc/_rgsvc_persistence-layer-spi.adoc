@@ -24,7 +24,7 @@ It also lists their corresponding implementation, either a default implementatio
 
 
 
-|xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditingService[`o.a.i.applib.` +
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditerService[`o.a.i.applib.` +
 `services.audit` +
 `AuditerService`]
 |Create an audit record for every changed property of every changed object within a transaction.
@@ -33,15 +33,6 @@ also +
 `AuditerServiceUsingJdo` +
 ``o.ia.m.audit`` +
 ``isis-module-audit``
-|
-
-
-|xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditingService[`o.a.i.applib.` +
-`services.audit` +
-`AuditingService3`]
-|(deprecated, replaced by xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditerService[`AuditerService`]); creates
-an audit record for every changed property of every changed object within a transaction.
-|
 |
 
 
@@ -91,6 +82,5 @@ Where an implementation is available (on the classpath) then it is always regist
 
 
 include::_rgsvc_persistence-layer-spi_AuditerService.adoc[leveloffset=+1]
-include::_rgsvc_persistence-layer-spi_AuditingService.adoc[leveloffset=+1]
 include::_rgsvc_persistence-layer-spi_PublisherService.adoc[leveloffset=+1]
 include::_rgsvc_persistence-layer-spi_UserRegistrationService.adoc[leveloffset=+1]

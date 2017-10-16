@@ -224,8 +224,7 @@ xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_TransactionService[`Transa
 ====
 
 * Also at the end of each transaction, details of all changed properties are passed to any registered
-xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditerService[`AuditerService`] or
-xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditingService[`AuditingService`] (the latter deprecated) by way of the (internal)
+xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditerService[`AuditerService`](s) by way of the (internal)
 xref:../rgfis/rgfis.adoc#_rgfis_persistence-layer_AuditingServiceInternal[`AuditingServiceInternal`] domain service.
 
 Implementations of xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`] can use the `Command#getMemento()`

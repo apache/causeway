@@ -7,21 +7,10 @@ TO REMOVE:
 
 
 
-org.apache.isis.applib
-
-
-    DomainObjectContainer.java  - entire class
-
-
-
-
 
 org.apache.isis.applib.clock
     Clock
 
-
-org.apache.isis.applib.services.audit  (2 usages found)
-    AuditingService3.java - remove entire service, use AuditerService instead
 
 org.apache.isis.applib.services.bookmark  (8 usages found)
     BookmarkService.java - deprecated methods, have overloads in BookmarkService2 subtype [suggest we retain these for now]
@@ -382,6 +371,10 @@ org.apache.isis.applib.fixturescripts
 
 org.apache.isis.applib.services.actinvoc
     ActionInvocationContext.java -remove unused constructors
+
+
+org.apache.isis.applib.services.audit  (2 usages found)
+    AuditingService3.java - remove entire service, use AuditerService instead
 
 
 org.apache.isis.applib.services.background  (10 usages found)
