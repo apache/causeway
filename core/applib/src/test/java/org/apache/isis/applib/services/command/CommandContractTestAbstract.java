@@ -28,9 +28,9 @@ import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-public abstract class Command2ContractTestAbstract {
+public abstract class CommandContractTestAbstract {
 
-    Command3 command;
+    Command command;
 
     ActionDomainEvent<Object> ev1;
     ActionDomainEvent<Object> ev2;
@@ -46,7 +46,7 @@ public abstract class Command2ContractTestAbstract {
         command = newCommand();
     }
 
-    protected abstract Command3 newCommand();
+    protected abstract Command newCommand();
 
     @Test
     public void givenEmpty() throws Exception {

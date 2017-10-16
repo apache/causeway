@@ -17,6 +17,7 @@
 package org.apache.isis.applib.services.command;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 import javax.annotation.Nullable;
 
@@ -45,8 +46,7 @@ import org.apache.isis.schema.cmd.v1.CommandDto;
  *     The {@link Command} interface also captures details of the corresponding action invocation (or property edit),
  *     specifically when that action/edit {@link Command#getStartedAt() started} or
  *     {@link Command#getCompletedAt() completed}, and its result, either a {@link Command#getResult() return value}
- *     or an {@link Command#getException() exception}.  The {@link Command3} sub-interface also captures the stack
- *     of {@link ActionDomainEvent}s.
+ *     or an {@link Command#getException() exception}.  Also captures a stack of {@link ActionDomainEvent}s.
  * </p>
  *
  * <p>
@@ -228,6 +228,34 @@ public interface Command extends HasTransactionId {
      * <b>NOT API</b>: intended to be called only by the framework.
      */
     void setExecuteIn(final CommandExecuteIn executeIn);
+
+    /**
+     * @deprecated - use {@link Interaction#getCurrentExecution()}, {@link Interaction#getPriorExecution()}  and {@link Interaction#getExecutions()} instead.
+     */
+    @Deprecated
+    @Programmatic
+    ActionDomainEvent<?> peekActionDomainEvent();
+
+    /**
+     * @deprecated - replaced by equivalent functionality in {@link Interaction}.
+     */
+    @Deprecated
+    @Programmatic
+    void pushActionDomainEvent(ActionDomainEvent<?> event);
+
+    /**
+     * @deprecated - replaced by equivalent functionality in {@link Interaction}.
+     */
+    @Deprecated
+    @Programmatic
+    ActionDomainEvent<?> popActionDomainEvent();
+
+    /**
+     * @deprecated - use {@link Interaction#getCurrentExecution()}, {@link Interaction#getPriorExecution()}  and {@link Interaction#getExecutions()} instead.
+     */
+    @Deprecated
+    @Programmatic
+    List<ActionDomainEvent<?>> flushActionDomainEvents();
 
     //endregion
 

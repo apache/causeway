@@ -143,13 +143,12 @@ org.apache.isis.applib.services.command
         next(String)
         setCompletedAt(Timestamp)
         setStartedAt(Timestamp)
-    Command3.java  - metods for working with domain events (equiv functionality in Interaction)  [suggest we retain for now]
         flushActionDomainEvents()
         peekActionDomainEvent()
         popActionDomainEvent()
         pushActionDomainEvent(ActionDomainEvent<?>)  (
 
-    MemberGroupLayout.java - entire annotation, use Xxx.layout.xml instead
+    MemberGroupsLayout.java - retain
 
 
 
@@ -385,6 +384,9 @@ org.apache.isis.applib.services.command
         peekActionInteractionEvent()
         popActionInteractionEvent()
         pushActionInteractionEvent(ActionInteractionEvent<?>)
+
+org.apache.isis.applib.services.command
+    Command3 rolled up into Command
 
 
 org.apache.isis.applib.services.eventbus

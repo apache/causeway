@@ -18,9 +18,9 @@
  */
 package org.apache.isis.applib.services.command;
 
-public class CommandDefaultTest extends Command2ContractTestAbstract {
+public class CommandDefaultTest extends CommandContractTestAbstract {
 
-    protected Command3 newCommand() {
+    protected Command newCommand() {
         return new CommandDefault();
     }
 

@@ -34,7 +34,7 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
 import org.apache.isis.applib.util.ObjectContracts;
 
-public class CommandDefault implements Command3 {
+public class CommandDefault implements Command {
 
     //region > constructor
 

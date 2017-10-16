@@ -31,7 +31,6 @@ import com.google.common.collect.Lists;
 import org.apache.isis.applib.FatalException;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.applib.services.command.Command3;
 import org.apache.isis.applib.services.eventbus.AbstractDomainEvent;
 import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
 import org.apache.isis.applib.services.eventbus.CollectionDomainEvent;
@@ -107,10 +106,7 @@ public class DomainEventHelper {
             // ... and associate command with event
             if(command != null) {
                 if(phase.isExecuting()) {
-                    if(command instanceof Command3) {
-                        final Command3 command3 = (Command3) command;
-                        command3.pushActionDomainEvent(event);
-                    }
+                    command.pushActionDomainEvent(event);
                 }
             }
 
