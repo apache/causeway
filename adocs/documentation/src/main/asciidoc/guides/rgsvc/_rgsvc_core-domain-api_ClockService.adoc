@@ -89,13 +89,3 @@ public class NntpClockServiceInitializer  {
 
 
 
-
-== Registering the Service
-
-Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the
-`AppManifest` to xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' core
-implementation of `ClockService` is automatically registered (it is annotated with `@DomainService`) so no further
-configuration is required.
-
-If you want to use a different implementation of `Clock`, eg delegating to NNTP, then do _not_ register directly, but
-instead subclass from `o.a.i.applib.clock.Clock` singleton (as described in the section above).

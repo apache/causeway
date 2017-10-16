@@ -34,12 +34,8 @@ completes.
 The framework provides a default implementation of this API, namely `o.a.i.c.r.s.metrics.MetricsServiceDefault`.
 
 
-== Registering the Service
+To use an alternative implementation, implement the `MetricsService` interface and use xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:../rgsvc/rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
 
-Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the
-`AppManifest` to xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' default
-implementation of `MetricsService` class is automatically registered (it is annotated with `@DomainService`)
-so no further configuration is required.
 
 
 == Related Services

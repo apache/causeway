@@ -155,6 +155,28 @@ public class PropertyEdit extends Execution {
 <1> The object used as the new value of the property.  Could be `null` if the property is being cleared.
 
 
+=== Alternate Implementations
+
+Apache Isis' default
+implementation of `InteractionContext` class is automatically registered (it is annotated with `@DomainService`).
+
+To use an alternative implementation, subclass and use xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:../rgsvc/rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
+
+
+The framework also takes responsibility for instantiating the `Interaction`, using the
+xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_FactoryService[`FactoryService`].
+
+[NOTE]
+====
+Unlike the similar xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_CommandContext[`CommandContext`] (discussed
+xref:../rgsvc/rgsvc.adoc#__rgsvc_application-layer-api_InteractionContext_Related-Classes[below]) there is no domain service to different
+implementations of `Interaction` to be used.
+If this were to be needed, then a custom implementation of
+ xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_FactoryService[`FactoryService`] could always used).
+====
+
+
+
 
 == Interacting with the services
 
@@ -164,24 +186,6 @@ xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`Publishe
 xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`].
 
 
-
-== Registering the Service
-
-Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the
-`AppManifest` to xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' default
-implementation of `InteractionContext` class is automatically registered (it is annotated with `@DomainService`)
-so no further configuration is required.
-
-The framework also takes responsibility for instantiating the `Interaction`, using the
-xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_FactoryService[`FactoryService`].
-
-[NOTE]
-====
-Unlike the similar xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_CommandContext[`CommandContext`] (discussed
-xref:../rgsvc/rgsvc.adoc#__rgsvc_application-layer-api_InteractionContext_Related-Classes[below]) there is no domain service to different
-implementations of `Interaction` to be used.  If this were to be needed, then a custom implementation of
- xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_FactoryService[`FactoryService`] could always used).
-====
 
 
 

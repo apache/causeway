@@ -68,6 +68,8 @@ For example, these might include text on how to recover from the error, or worka
 
 == Implementation
 
+There is no default implementation of this service.
+
 The (non-ASF) http://github.com/isisaddons/isis-app-kitchensink[Isis addons' kitchensink] app provides an example
 implementation:
 
@@ -98,11 +100,4 @@ which is rendered as:
 
 image::{_imagesdir}reference-services-spi/ErrorReportingService/kitchensink-example.png[width="860px",link="{_imagesdir}reference-services-spi/ErrorReportingService/kitchensink-example.png"]
 
-
-
-
-== Registering the Services
-
-There is no default implementation of this service.
-To register your own implementation (and assuming that an `AppManifest` is being used to xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]), then just ensure that the implementation is on the classpath and the module containing the implementation is returned in `AppManifest#getModules()`.
 

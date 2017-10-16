@@ -81,39 +81,17 @@ If the implementation recognizes the exception then it returns a user-friendly m
 
 The framework provides two default implementations:
 
-* `o.a.i.core.metamodel.services.container.DomainObjectContainerDefault` provided by Apache Isis core is itself an `ExceptionRecognizer`, and will handle ``ConcurrencyException``s.  It will also handle any application exceptions raised by the system (subclasses of `o.a.i.applib.RecoverableException`).
+* `o.a.i.core.metamodel.services.exceprecog.ExceptionRecognizerDocDefault` provided by Apache Isis core is itself an `ExceptionRecognizer`, and will handle ``ConcurrencyException``s.  It will also handle any application exceptions raised by the system (subclasses of `o.a.i.applib.RecoverableException`).
 
-* `o.a.i.objectstore.jdo.applib.service.exceprecog.ExceptionRecognizerCompositeForJdoObjectStore` bundles up a number of more fine-grained implementations:
+* `o.a.i.applib.services.exceprecog.jdo.ExceptionRecognizerCompositeForJdoObjectStore` bundles up a number of more fine-grained implementations:
 ** `ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException`
 ** `ExceptionRecognizerForJDOObjectNotFoundException`
 ** `ExceptionRecognizerForJDODataStoreException`
 
 
-If you want to recognize and handle additional exceptions (for example to capture error messages specific to the JDBC driver you might be using), then create a fine-grained implementation of `ExceptionRecognizer` for the particular error message (there are some convenience implementations of the interface that you can subclass from if required) and register in `isis.properties`.
+If you want to recognize and handle additional exceptions (for example to capture error messages specific to the JDBC driver you might be using), then create a fine-grained implementation of `ExceptionRecognizer` for the particular error message (there are some convenience implementations of the interface that you can subclass from if required) and annotated with `@DomainService` in the usual way.
+Make sure that the service resides under a module registered in `AppManifest`.
 
-
-
-
-== Registering the Services
-
-Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the
-`AppManifest` to xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then the default
-implementations provided by the framework (`DomainObjectContainerDefault` and
-`ExceptionRecognizerCompositeForJdoObjectStore`) will be registered.
-
-In addition, you can register any further exception recognizers in `isis.properties`:
-
-[source,ini]
-----
-isis.services=...,\
-              com.mycompany.myapp.MyExceptionRecognizer,\
-              ...
-----
-
-[NOTE]
-====
-Prior to 1.9.0, the `ExceptionRecognizerCompositeForJdoObjectStore` also required manual registration.
-====
 
 If the JDO exception recognizers are not required (rather unlikely), then they can be disabled en-masse using the xref:../rgcfg/rgcfg.adoc#_rgcfg_configuring-core[configuration property] `isis.services.ExceptionRecognizerCompositeForJdoObjectStore.disable`.
 

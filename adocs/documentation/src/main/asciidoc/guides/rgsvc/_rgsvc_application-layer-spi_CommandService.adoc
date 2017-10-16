@@ -64,13 +64,23 @@ flag and persistence hint (`Command#isPersistHint()`) indicate that it should be
 The framework will automatically have set the `completedAt` property of the `Command`.
 
 
+
 == Implementation
 
-The (non-ASF) link:http://platform.incode.org[Incode Platform^]'s command module provides an implementation (`org.isisaddons.module.command.dom.CommandServiceJdo`) that persists ``Command``s using the JDO/DataNucleus object store.  It further provides a number of supporting services:
+The (non-ASF) link:http://platform.incode.org[Incode Platform^]'s command module provides an implementation (`org.isisaddons.module.command.dom.CommandServiceJdo`) that persists ``Command``s using the JDO/DataNucleus object store.
+It further provides a number of supporting services:
 
 * `org.isisaddons.module.command.dom.CommandServiceJdoRepository` is a repository to search for persisted ``Command``s
 
 * `org.isisaddons.module.command.dom.CommandServiceJdoContributions` contributes actions for searching for persisted child and sibling ``Command``s.
+
+* implementation of the
+xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`BackgroundCommandService`].
+
+All of these can be activated by updating the `pom.xml` and updating the `AppManifest#getModules()` method.
+
+If contributions are not required in the UI, these can be suppressed either using security or by implementing a
+xref:../ugbtb/ugbtb.adoc#_ugbtb_hints-and-tips_vetoing-visibility[vetoing subscriber].
 
 
 
@@ -80,18 +90,6 @@ The typical way to indicate that an action should be reified into a `Command` is
 
 
 
-
-== Registering the Services
-
-The (non-ASF) link:http://platform.incode.org[Incode Platform^]'s command module provides an implementation of this service (`CommandService`), and also provides a number of related domain services (`CommandJdoRepository` and `CommandServiceJdoContributions`).
-This module also provides service implementations of the
-xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`BackgroundCommandService`].
-
-Assuming that an `AppManifest` is being used to xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app])
-then this can be activated by updating the `pom.xml` and updating the `AppManifest#getModules()` method.
-
-If contributions are not required in the UI, these can be suppressed either using security or by implementing a
-xref:../ugbtb/ugbtb.adoc#_ugbtb_hints-and-tips_vetoing-visibility[vetoing subscriber].
 
 
 

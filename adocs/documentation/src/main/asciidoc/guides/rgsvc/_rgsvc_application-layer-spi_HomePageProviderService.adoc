@@ -30,11 +30,3 @@ public interface HomePageProviderService {
 The default implementation is provided by `o.a.i.core.runtime.services.homepage.HomePageProviderServiceDefault`.
 
 
-
-== Registering the Service
-
-Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the
-`AppManifest` to xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' core
-implementation of `HomePageProviderService` is automatically registered (it is annotated with `@DomainService`) so no further
-configuration is required.
-

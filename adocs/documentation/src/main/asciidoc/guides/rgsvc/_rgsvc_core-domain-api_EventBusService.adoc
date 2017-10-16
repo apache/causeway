@@ -47,6 +47,8 @@ public abstract class EventBusService {
 Isis provides a default implementation of the service, `o.a.i.objectstore.jdo.datanucleus.service.eventbus.EventBusServiceJdo`.
 
 
+To use an alternative implementation, implement the `EventBusService` domain service and use xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:../rgsvc/rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
+
 
 
 
@@ -381,17 +383,6 @@ Late registration refers to the idea that a domain service can register itself w
 
 
 
-
-== Registering the Services
-
-Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the
-`AppManifest` to xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' core
-implementation of `EventBusService` service is automatically registered and injected (it is annotated with
-`@DomainService`) so no further configuration is required.
-
-To use an alternative implementation, use
-xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
-in the xref:../rgsvc/rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
 
 
 

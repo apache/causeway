@@ -52,24 +52,11 @@ repositoryService.persist(cust);
 The core framework provides a default implementation of this service (`o.a.i.core.metamodel.services.factory.FactoryServiceDefault`).
 
 
-
-
-== Registering the Service
-
-Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the
-`AppManifest` to xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' core
-implementation of `FactoryService` service is automatically registered and injected (it is annotated with
-`@DomainService`) so no further configuration is required.
-
-To use an alternative implementation, use
-xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
-in the xref:../rgsvc/rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
+To use an alternative implementation, implement `FactoryService` interface and use xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:../rgsvc/rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
 
 
 == Related Services
 
 The xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-api_RepositoryService[`RepositoryService`] is often used in conjunction with the `FactoryService`, to persist domain objects after they have been instantiated and populated.
 
-An alternative to using the factory service is to simply instantiate the object ("new is the new new") and then use the
-xref:../rgsvc/rgsvc.adoc#_rgsvc_metadata-api_ServiceRegistry[`ServiceRegistry`] service to inject other domain services into the
-instantiated object.
+An alternative to using the factory service is to simply instantiate the object ("new is the new new") and then use the xref:../rgsvc/rgsvc.adoc#_rgsvc_metadata-api_ServiceRegistry[`ServiceRegistry`] service to inject other domain services into the instantiated object.

@@ -56,6 +56,8 @@ In fact, the `MementoServiceDefault` implementation does provide a mechanism to 
 not part of the `MementoService` public API. Note also that the encoding method is not pluggable.
 ====
 
+To use an alternative implementation, implement `MementoService` interface and use xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:../rgsvc/rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
+
 The types of objects that are supported by the `MementoService` are implementation-specific, but would typically
 include all the usual value types as well as Apache Isis' `Bookmark` class (to represent references to arbitrary
 entities). Nulls can also be set.
@@ -134,13 +136,3 @@ xref:../rgfis/rgfis.adoc#_rgfis_application-layer_CommandDtoServiceInternal[`Com
 
 
 
-== Registering the Service
-
-Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the
-`AppManifest` to xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' core
-implementation of `MementoService` service is automatically registered and injected (it is annotated with
-`@DomainService`) so no further configuration is required.
-
-To use an alternative implementation, use
-xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
-in the xref:../rgsvc/rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).

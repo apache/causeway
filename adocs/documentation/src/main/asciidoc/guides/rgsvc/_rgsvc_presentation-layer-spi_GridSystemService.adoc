@@ -57,17 +57,7 @@ the service with the lowest xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_
 The framework provides `GridSystemServiceBS3`, an implementation that encodes the bootstrap3 grid system.
 (The framework also provides xref:../ugvw/ugvw.adoc#[Wicket viewer] components that are capable of interpreting and rendering this metadata).
 
-
-== Registering the Services
-
-Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the
-`AppManifest` to xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]), then the
- Bootstrap3 default implementation of `GridSystemService` is automatically registered and injected, and no further
- configuration is required.
-
-To use an alternative implementation, use
-xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
-in the xref:../rgsvc/rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
+To use an alternative implementation, implement `GridSystemService` interface and use xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:../rgsvc/rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
 
 
 == Related Services
