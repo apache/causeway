@@ -126,20 +126,6 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
             final InteractionInitiatedBy interactionInitiatedBy);
  
 
-    
-    public static class Filters {
-        private Filters(){}
-        
-        /**
-         * Filters only parameters that are for objects (ie 1:1 associations)
-         */
-        public static final Predicate<ObjectActionParameter> PARAMETER_ASSOCIATIONS = new Predicate<ObjectActionParameter>() {
-            @Override
-            public boolean apply(final ObjectActionParameter parameter) {
-                return parameter.getSpecification().isNotCollection();
-            }
-        };
-    }
     public static class Functions {
         public static final Function<ObjectActionParameter, String> GET_NAME = new Function<ObjectActionParameter, String>() {
             @Override public String apply(final ObjectActionParameter input) {

@@ -539,15 +539,4 @@ public interface ObjectAction extends ObjectMember {
 
     //endregion
 
-    //region > Filters
-
-    public static final class Filters {
-
-        private Filters() {
-        }
-
-    }
-
-    //endregion
-
 }
