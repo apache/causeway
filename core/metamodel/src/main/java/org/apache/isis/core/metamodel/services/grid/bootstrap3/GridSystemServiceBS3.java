@@ -178,7 +178,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
                 ObjectMember.Util.mapById(
                         FluentIterable
                             .from(objectSpec.getObjectActions(Contributed.INCLUDED))
-                            .filter((Predicate) ObjectAction.Filters.notBulkOnly())
+                            .filter((Predicate) ObjectAction.Predicates.notBulkOnly())
                             .toList());
 
         final BS3Grid bs3Grid = (BS3Grid) grid;

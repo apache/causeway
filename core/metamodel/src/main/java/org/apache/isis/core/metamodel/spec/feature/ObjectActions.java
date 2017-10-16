@@ -39,11 +39,11 @@ public final class ObjectActions {
     }
 
     /**
-     * @deprecated - use {@link ObjectAction.Filters#memberOrderOf(ObjectAssociation)}
+     * @deprecated - use {@link ObjectAction.Predicates#memberOrderOf(ObjectAssociation)}
      */
     @Deprecated
     public static Predicate<ObjectAction> memberOrderOf(ObjectAssociation association) {
-        return ObjectAction.Filters.memberOrderOf(association);
+        return ObjectAction.Predicates.memberOrderOf(association);
     }
 
 }

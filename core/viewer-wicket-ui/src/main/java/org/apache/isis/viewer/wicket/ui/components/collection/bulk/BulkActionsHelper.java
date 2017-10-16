@@ -74,7 +74,7 @@ public class BulkActionsHelper implements Serializable {
 
 
     @SuppressWarnings("deprecation")
-    private static final Predicate<ObjectAction> BULK = ObjectAction.Filters.bulk();
+    private static final Predicate<ObjectAction> BULK = ObjectAction.Predicates.bulk();
 
     /**
      * Protected so can be overridden in testing if required.

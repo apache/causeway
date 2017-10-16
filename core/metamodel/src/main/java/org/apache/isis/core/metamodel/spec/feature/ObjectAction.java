@@ -304,9 +304,9 @@ public interface ObjectAction extends ObjectMember {
 
             @SuppressWarnings({ "unchecked", "deprecation" })
             Predicate<ObjectAction> predicate = com.google.common.base.Predicates
-                    .and(Filters.memberOrderNotAssociationOf(adapterSpec),
-                            Filters.dynamicallyVisible(adapter, InteractionInitiatedBy.USER, Where.ANYWHERE),
-                            Filters.notBulkOnly(), Filters.excludeWizardActions(adapterSpec));
+                    .and(Predicates.memberOrderNotAssociationOf(adapterSpec),
+                            Predicates.dynamicallyVisible(adapter, InteractionInitiatedBy.USER, Where.ANYWHERE),
+                            Predicates.notBulkOnly(), Predicates.excludeWizardActions(adapterSpec));
 
             final List<ObjectAction> userActions = adapterSpec.getObjectActions(actionType, Contributed.INCLUDED,
                     predicate);
@@ -344,8 +344,8 @@ public interface ObjectAction extends ObjectMember {
 
             @SuppressWarnings({ "unchecked", "deprecation" })
             Predicate<ObjectAction> predicate = com.google.common.base.Predicates
-                    .and(Filters.memberOrderOf(association), Filters.notBulkOnly(),
-                            Filters.excludeWizardActions(objectSpecification));
+                    .and(Predicates.memberOrderOf(association), Predicates.notBulkOnly(),
+                            Predicates.excludeWizardActions(objectSpecification));
 
             final List<ObjectAction> userActions = objectSpecification.getObjectActions(type, Contributed.INCLUDED,
                     predicate);
@@ -379,73 +379,6 @@ public interface ObjectAction extends ObjectMember {
 
 
         public static com.google.common.base.Predicate ofType(final ActionType type) {
-            return Predicates.ofType(type);
-        }
-
-        public static com.google.common.base.Predicate bulk() {
-            return Predicates.bulk();
-        }
-    }
-
-    //endregion
-
-    //region > Filters
-
-    public static final class Filters {
-
-        private Filters() {
-        }
-
-        /**
-         * @deprecated -use {@link com.google.common.base.Predicate equivalent}
-         */
-        @Deprecated
-        public static Predicate<ObjectAction> dynamicallyVisible(
-                final ObjectAdapter target,
-                final InteractionInitiatedBy interactionInitiatedBy,
-                final Where where) {
-            return new Predicate<ObjectAction>() {
-                @Override
-                public boolean apply(final ObjectAction objectAction) {
-                    final Consent visible = objectAction.isVisible(target, interactionInitiatedBy, where);
-                    return visible.isAllowed();
-                }
-            };
-        }
-
-        /**
-         * @deprecated -use {@link com.google.common.base.Predicate equivalent}
-         */
-        @Deprecated
-        public static Predicate<ObjectAction> withId(final String actionId) {
-            return new Predicate<ObjectAction>() {
-                @Override
-                public boolean apply(ObjectAction objectAction) {
-                    return objectAction.getId().equals(actionId);
-                }
-            };
-        }
-
-        /**
-         * @deprecated -use {@link com.google.common.base.Predicate equivalent}
-         */
-        @Deprecated
-        public static Predicate<ObjectAction> withNoValidationRules() {
-            return new Predicate<ObjectAction>() {
-                @Override
-                public boolean apply(final ObjectAction objectAction) {
-                    final List<Facet> validatingFacets = objectAction.getFacets(FacetFilters
-                            .isA(ValidatingInteractionAdvisor.class));
-                    return validatingFacets.isEmpty();
-                }
-            };
-        }
-
-        /**
-         * @deprecated -use {@link com.google.common.base.Predicate equivalent}
-         */
-        @Deprecated
-        public static Predicate<ObjectAction> ofType(final ActionType type) {
             return new Predicate<ObjectAction>() {
                 @Override
                 public boolean apply(ObjectAction oa) {
@@ -454,11 +387,7 @@ public interface ObjectAction extends ObjectMember {
             };
         }
 
-        /**
-         * @deprecated -use {@link com.google.common.base.Predicate equivalent}
-         */
-        @Deprecated
-        public static Predicate<ObjectAction> bulk() {
+        public static com.google.common.base.Predicate bulk() {
             return new Predicate<ObjectAction>() {
 
                 @Override
@@ -482,6 +411,51 @@ public interface ObjectAction extends ObjectMember {
                         }
                     }
                     return true;
+                }
+            };
+        }
+
+        /**
+         * @deprecated -use {@link Predicate equivalent}
+         */
+        @Deprecated
+        public static Predicate<ObjectAction> dynamicallyVisible(
+                final ObjectAdapter target,
+                final InteractionInitiatedBy interactionInitiatedBy,
+                final Where where) {
+            return new Predicate<ObjectAction>() {
+                @Override
+                public boolean apply(final ObjectAction objectAction) {
+                    final Consent visible = objectAction.isVisible(target, interactionInitiatedBy, where);
+                    return visible.isAllowed();
+                }
+            };
+        }
+
+        /**
+         * @deprecated -use {@link Predicate equivalent}
+         */
+        @Deprecated
+        public static Predicate<ObjectAction> withId(final String actionId) {
+            return new Predicate<ObjectAction>() {
+                @Override
+                public boolean apply(ObjectAction objectAction) {
+                    return objectAction.getId().equals(actionId);
+                }
+            };
+        }
+
+        /**
+         * @deprecated -use {@link Predicate equivalent}
+         */
+        @Deprecated
+        public static Predicate<ObjectAction> withNoValidationRules() {
+            return new Predicate<ObjectAction>() {
+                @Override
+                public boolean apply(final ObjectAction objectAction) {
+                    final List<Facet> validatingFacets = objectAction.getFacets(FacetFilters
+                            .isA(ValidatingInteractionAdvisor.class));
+                    return validatingFacets.isEmpty();
                 }
             };
         }
@@ -561,6 +535,17 @@ public interface ObjectAction extends ObjectMember {
                 }
             };
         }
+    }
+
+    //endregion
+
+    //region > Filters
+
+    public static final class Filters {
+
+        private Filters() {
+        }
+
     }
 
     //endregion
