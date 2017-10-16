@@ -28,7 +28,7 @@ import org.apache.isis.applib.services.xmlsnapshot.XmlSnapshotService;
  * snapshot is to be created using the {@link XmlSnapshotService}, indicating
  * paths to be {@link XmlSnapshotService.Snapshot#} automatically include additional paths within the snapshot.
  */
-public interface SnapshottableWithInclusions extends Snapshottable {
+public interface SnapshottableWithInclusions {
 
     /**
      * Paths to include in the snapshot.

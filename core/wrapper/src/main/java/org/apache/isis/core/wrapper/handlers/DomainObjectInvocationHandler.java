@@ -47,7 +47,6 @@ import org.apache.isis.applib.services.wrapper.HiddenException;
 import org.apache.isis.applib.services.wrapper.InteractionException;
 import org.apache.isis.applib.services.wrapper.InvalidException;
 import org.apache.isis.applib.services.wrapper.WrapperFactory.ExecutionMode;
-import org.apache.isis.applib.services.wrapper.WrapperObject;
 import org.apache.isis.applib.services.wrapper.WrappingObject;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
@@ -91,29 +90,17 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     protected Method titleMethod;
 
     /**
-     * The <tt>__isis_save()</tt> method from {@link WrapperObject#__isis_save()}.
+     * The <tt>__isis_save()</tt> method from {@link WrappingObject#__isis_save()}.
      */
     protected Method __isis_saveMethod;
 
     /**
-     * The <tt>save()</tt> method from {@link WrapperObject#save()}.
-     */
-    @Deprecated
-    protected Method saveMethod;
-
-    /**
-     * The <tt>__isis_wrapped()</tt> method from {@link WrapperObject#__isis_wrapped()}.
+     * The <tt>__isis_wrapped()</tt> method from {@link WrappingObject#__isis_wrapped()}.
      */
     protected Method __isis_wrappedMethod;
 
     /**
-     * The <tt>wrapped()</tt> method from {@link WrapperObject#wrapped()}.
-     */
-    @Deprecated
-    protected Method wrappedMethod;
-
-    /**
-     * The <tt>__isis_executionMode()</tt> method from {@link WrapperObject#__isis_executionMode()}.
+     * The <tt>__isis_executionMode()</tt> method from {@link WrappingObject#__isis_executionMode()}.
      */
     protected Method __isis_executionMode;
 
@@ -143,11 +130,9 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             // ignore
         }
         try {
-            __isis_saveMethod = WrapperObject.class.getMethod("__isis_save", new Class[]{});
-            __isis_wrappedMethod = WrapperObject.class.getMethod("__isis_wrapped", new Class[]{});
-            __isis_executionMode = WrapperObject.class.getMethod("__isis_executionMode", new Class[]{});
-            saveMethod = WrapperObject.class.getMethod("save", new Class[] {});
-            wrappedMethod = WrapperObject.class.getMethod("wrapped", new Class[] {});
+            __isis_saveMethod = WrappingObject.class.getMethod("__isis_save", new Class[]{});
+            __isis_wrappedMethod = WrappingObject.class.getMethod("__isis_wrapped", new Class[]{});
+            __isis_executionMode = WrappingObject.class.getMethod("__isis_executionMode", new Class[]{});
 
             dnPersistableMethods.addAll(
                     Lists.newArrayList(
@@ -791,11 +776,11 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     }
 
     protected boolean isSaveMethod(final Method method) {
-        return method.equals(saveMethod) || method.equals(__isis_saveMethod);
+        return method.equals(__isis_saveMethod);
     }
 
     protected boolean isWrappedMethod(final Method method) {
-        return method.equals(wrappedMethod) || method.equals(__isis_wrappedMethod);
+        return method.equals(__isis_wrappedMethod);
     }
 
     protected boolean isExecutionModeMethod(final Method method) {

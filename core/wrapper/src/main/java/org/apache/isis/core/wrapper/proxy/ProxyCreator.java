@@ -24,7 +24,6 @@ import java.util.Map;
 
 import com.google.common.collect.MapMaker;
 
-import org.apache.isis.applib.services.wrapper.WrapperObject;
 import org.apache.isis.applib.services.wrapper.WrappingObject;
 import org.apache.isis.core.commons.lang.ArrayExtensions;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.JavassistEnhanced;
@@ -59,7 +58,7 @@ public class ProxyCreator {
         final Class<T> clazz = (Class<T>) toProxy.getClass();
 
         if (clazz.isInterface()) {
-            return Util.createInstance(clazz, handler, WrapperObject.class);
+            return Util.createInstance(clazz, handler, WrappingObject.class);
         } else {
             final ProxyFactory proxyFactory = proxyFactoryFor(clazz);
 
