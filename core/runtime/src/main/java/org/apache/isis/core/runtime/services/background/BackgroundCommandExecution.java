@@ -125,37 +125,6 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
                     final boolean legacy = false; // memento.startsWith("<memento");
                     if(legacy) {
 
-//                        final ActionInvocationMemento aim = new ActionInvocationMemento(mementoService, memento);
-//
-//                        final String actionId = aim.getActionId();
-//
-//                        final Bookmark targetBookmark = aim.getTarget();
-//                        final Object targetObject = bookmarkService.lookup(
-//                                                        targetBookmark, BookmarkService2.FieldResetPolicy.RESET);
-//
-//                        final ObjectAdapter targetAdapter = adapterFor(targetObject);
-//                        final ObjectSpecification specification = targetAdapter.getSpecification();
-//
-//                        final ObjectAction objectAction = findActionElseNull(specification, actionId);
-//                        if(objectAction == null) {
-//                            throw new RuntimeException(String.format("Unknown action '%s'", actionId));
-//                        }
-//
-//                        // TODO: background commands won't work for mixin actions...
-//                        // ... we obtain the target from the bookmark service (above), which will
-//                        // simply fail for a mixin.  Instead we would need to serialize out the mixedInAdapter
-//                        // and also capture the mixinType within the aim memento.
-//                        final ObjectAdapter mixedInAdapter = null;
-//
-//                        final ObjectAdapter[] argAdapters = argAdaptersFor(aim);
-//                        final ObjectAdapter resultAdapter = objectAction.execute(
-//                                targetAdapter, mixedInAdapter, argAdapters, InteractionInitiatedBy.FRAMEWORK);
-//
-//                        if(resultAdapter != null) {
-//                            Bookmark resultBookmark = CommandUtil.bookmarkFor(resultAdapter);
-//                            backgroundCommand.setResult(resultBookmark);
-//                            backgroundInteraction.getCurrentExecution().setReturned(resultAdapter.getObject());
-//                        }
 
                     } else {
 
@@ -305,30 +274,6 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
         return null;
     }
 
-//    private ObjectAdapter[] argAdaptersFor(final ActionInvocationMemento aim)  {
-//        final int numArgs = aim.getNumArgs();
-//        final List<ObjectAdapter> argumentAdapters = Lists.newArrayList();
-//        for(int i=0; i<numArgs; i++) {
-//            final ObjectAdapter argAdapter = argAdapterFor(aim, i);
-//            argumentAdapters.add(argAdapter);
-//        }
-//        return argumentAdapters.toArray(new ObjectAdapter[]{});
-//    }
-//
-//    private ObjectAdapter argAdapterFor(final ActionInvocationMemento aim, int num) {
-//        final Class<?> argType;
-//        try {
-//            argType = aim.getArgType(num);
-//            final Object arg = aim.getArg(num, argType);
-//            if(arg == null) {
-//                return null;
-//            }
-//            return argAdapterFor(argType, arg);
-//
-//        } catch (ClassNotFoundException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
 
     protected ObjectAdapter targetAdapterFor(final OidDto targetOidDto) {
 
