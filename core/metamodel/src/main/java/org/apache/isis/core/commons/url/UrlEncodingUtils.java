@@ -20,9 +20,7 @@ package org.apache.isis.core.commons.url;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.net.URLEncoder;
 
-import com.google.common.base.Charsets;
 import com.google.common.base.Function;
 
 public final class UrlEncodingUtils {
@@ -64,15 +62,5 @@ public final class UrlEncodingUtils {
     public static String urlDecodeNullSafe(final String string) {
         return FUNCTION_NULLSAFE.apply(string);
     }
-
-    public static String urlEncode(final String str) {
-        try {
-            return URLEncoder.encode(str, Charsets.UTF_8.name());
-        } catch (final UnsupportedEncodingException e) {
-            // shouldn't happen
-            throw new RuntimeException(e);
-        }
-    }
-
 
 }
