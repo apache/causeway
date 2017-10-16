@@ -254,8 +254,7 @@ public class DomainObjectContainerDefault
     @Programmatic
     @Override
     public boolean isPersistent(final Object domainObject) {
-        final ObjectAdapter adapter = persistenceSessionServiceInternal.adapterFor(unwrapped(domainObject));
-        return adapter.representsPersistent();
+        return repositoryService.isPersistent(domainObject);
     }
 
     /**

@@ -218,7 +218,7 @@ public interface DomainObjectContainer {
     boolean isPersistent(Object domainObject);
 
     /**
-     * @deprecated - use {@link org.apache.isis.applib.services.repository.RepositoryService#persist(Object)} instead. Please note that {@link org.apache.isis.applib.services.repository.RepositoryService#persist(Object)} will not throw an exception if the Domain Object is already persistent, so the implementation will be the same as that of {@link org.apache.isis.applib.services.repository.RepositoryService#persistIfNotAlready(Object)} (or the equivalent, deprecated {@link org.apache.isis.applib.DomainObjectContainer#persistIfNotAlready(Object)}) instead.
+     * @deprecated - use {@link org.apache.isis.applib.services.repository.RepositoryService#persist(Object)} instead. Please note that {@link org.apache.isis.applib.services.repository.RepositoryService#persist(Object)} will not throw an exception if the Domain Object is already persistent, so the implementation will be the same as that of {@link org.apache.isis.applib.services.repository.RepositoryService#persist(Object)} (or the equivalent, deprecated {@link org.apache.isis.applib.DomainObjectContainer#persistIfNotAlready(Object)}) instead.
      */
     @Deprecated
     @Programmatic
