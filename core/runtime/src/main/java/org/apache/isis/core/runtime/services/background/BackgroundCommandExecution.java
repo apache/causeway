@@ -41,7 +41,6 @@ import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.core.runtime.services.memento.MementoServiceDefault;
 import org.apache.isis.core.runtime.sessiontemplate.AbstractIsisSessionTemplate;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
@@ -68,16 +67,8 @@ import org.apache.isis.schema.utils.CommonDtoUtils;
  */
 public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemplate {
 
-    private final MementoServiceDefault mementoService;
 
-    public BackgroundCommandExecution() {
-        // same as configured by BackgroundServiceDefault
-        mementoService = new MementoServiceDefault().withNoEncoding();
-    }
-    
-    // //////////////////////////////////////
 
-    
     protected void doExecute(Object context) {
 
         final PersistenceSession persistenceSession = getPersistenceSession();
@@ -121,72 +112,64 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
                 try {
                     backgroundCommand.setExecutor(Executor.BACKGROUND);
 
-                    final boolean legacy = false; // memento.startsWith("<memento");
-                    if(legacy) {
+                    final CommandDto dto = jaxbService.fromXml(CommandDto.class, memento);
 
+                    final MemberDto memberDto = dto.getMember();
+                    final String memberId = memberDto.getMemberIdentifier();
 
-                    } else {
+                    final OidsDto oidsDto = CommandDtoUtils.targetsFor(dto);
+                    final List<OidDto> targetOidDtos = oidsDto.getOid();
 
-                        final CommandDto dto = jaxbService.fromXml(CommandDto.class, memento);
+                    final InteractionType interactionType = memberDto.getInteractionType();
+                    if(interactionType == InteractionType.ACTION_INVOCATION) {
 
-                        final MemberDto memberDto = dto.getMember();
-                        final String memberId = memberDto.getMemberIdentifier();
+                        final ActionDto actionDto = (ActionDto) memberDto;
 
-                        final OidsDto oidsDto = CommandDtoUtils.targetsFor(dto);
-                        final List<OidDto> targetOidDtos = oidsDto.getOid();
+                        for (OidDto targetOidDto : targetOidDtos) {
 
-                        final InteractionType interactionType = memberDto.getInteractionType();
-                        if(interactionType == InteractionType.ACTION_INVOCATION) {
+                            final ObjectAdapter targetAdapter = adapterFor(targetOidDto);
+                            final ObjectAction objectAction = findObjectAction(targetAdapter, memberId);
 
-                            final ActionDto actionDto = (ActionDto) memberDto;
+                            // we pass 'null' for the mixedInAdapter; if this action _is_ a mixin then
+                            // it will switch the targetAdapter to be the mixedInAdapter transparently
+                            final ObjectAdapter[] argAdapters = argAdaptersFor(actionDto);
+                            final ObjectAdapter resultAdapter = objectAction.execute(
+                                    targetAdapter, null, argAdapters, InteractionInitiatedBy.FRAMEWORK);
 
-                            for (OidDto targetOidDto : targetOidDtos) {
+                            //
+                            // for the result adapter, we could alternatively have used...
+                            // (priorExecution populated by the push/pop within the interaction object)
+                            //
+                            // final Interaction.Execution priorExecution = backgroundInteraction.getPriorExecution();
+                            // Object unused = priorExecution.getReturned();
+                            //
 
-                                final ObjectAdapter targetAdapter = adapterFor(targetOidDto);
-                                final ObjectAction objectAction = findObjectAction(targetAdapter, memberId);
-
-                                // we pass 'null' for the mixedInAdapter; if this action _is_ a mixin then
-                                // it will switch the targetAdapter to be the mixedInAdapter transparently
-                                final ObjectAdapter[] argAdapters = argAdaptersFor(actionDto);
-                                final ObjectAdapter resultAdapter = objectAction.execute(
-                                        targetAdapter, null, argAdapters, InteractionInitiatedBy.FRAMEWORK);
-
-                                //
-                                // for the result adapter, we could alternatively have used...
-                                // (priorExecution populated by the push/pop within the interaction object)
-                                //
-                                // final Interaction.Execution priorExecution = backgroundInteraction.getPriorExecution();
-                                // Object unused = priorExecution.getReturned();
-                                //
-
-                                // REVIEW: this doesn't really make sense if >1 action
-                                // in any case, the capturing of the action interaction should be the
-                                // responsibility of auditing/profiling
-                                if(resultAdapter != null) {
-                                    Bookmark resultBookmark = CommandUtil.bookmarkFor(resultAdapter);
-                                    backgroundCommand.setResult(resultBookmark);
-                                }
-                            }
-                        } else {
-
-                            final PropertyDto propertyDto = (PropertyDto) memberDto;
-
-                            for (OidDto targetOidDto : targetOidDtos) {
-
-                                final Bookmark bookmark = Bookmark.from(targetOidDto);
-                                final Object targetObject = bookmarkService.lookup(bookmark);
-
-                                final ObjectAdapter targetAdapter = adapterFor(targetObject);
-
-                                final OneToOneAssociation property = findOneToOneAssociation(targetAdapter, memberId);
-
-                                final ObjectAdapter newValueAdapter = newValueAdapterFor(propertyDto);
-
-                                property.set(targetAdapter, newValueAdapter, InteractionInitiatedBy.FRAMEWORK);
-                                // there is no return value for property modifications.
+                            // REVIEW: this doesn't really make sense if >1 action
+                            // in any case, the capturing of the action interaction should be the
+                            // responsibility of auditing/profiling
+                            if(resultAdapter != null) {
+                                Bookmark resultBookmark = CommandUtil.bookmarkFor(resultAdapter);
+                                backgroundCommand.setResult(resultBookmark);
                             }
                         }
+                    } else {
 
+                        final PropertyDto propertyDto = (PropertyDto) memberDto;
+
+                        for (OidDto targetOidDto : targetOidDtos) {
+
+                            final Bookmark bookmark = Bookmark.from(targetOidDto);
+                            final Object targetObject = bookmarkService.lookup(bookmark);
+
+                            final ObjectAdapter targetAdapter = adapterFor(targetObject);
+
+                            final OneToOneAssociation property = findOneToOneAssociation(targetAdapter, memberId);
+
+                            final ObjectAdapter newValueAdapter = newValueAdapterFor(propertyDto);
+
+                            property.set(targetAdapter, newValueAdapter, InteractionInitiatedBy.FRAMEWORK);
+                            // there is no return value for property modifications.
+                        }
                     }
 
                 } catch (RuntimeException e) {
