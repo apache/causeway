@@ -8,11 +8,6 @@
 The `MessageService` allows domain objects to raise information, warning or error messages.
 These messages can either be simple strings, or can be translated.
 
-[NOTE]
-====
-The methods in this service replace similar methods (now deprecated) in xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer[`DomainObjectContainer`].
-====
-
 
 == API and Usage
 

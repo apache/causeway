@@ -366,52 +366,6 @@ public class DomainObjectContainerDefault
 
     //endregion
 
-    //region > info, warn, error messages
-
-    @Deprecated
-    @Programmatic
-    @Override
-    public void informUser(final String message) {
-        messageService.informUser(message);
-    }
-
-    @Deprecated
-    @Programmatic
-    @Override
-    public String informUser(final TranslatableString message, final Class<?> contextClass, final String contextMethod) {
-        return messageService.informUser(message, contextClass, contextMethod);
-    }
-
-    @Deprecated
-    @Programmatic
-    @Override
-    public void warnUser(final String message) {
-        messageService.warnUser(message);
-    }
-
-    @Deprecated
-    @Programmatic
-    @Override
-    public String warnUser(final TranslatableString message, final Class<?> contextClass, final String contextMethod) {
-        return messageService.warnUser(message, contextClass, contextMethod);
-    }
-
-    @Deprecated
-    @Programmatic
-    @Override
-    public void raiseError(final String message) {
-        messageService.raiseError(message);
-    }
-
-    @Deprecated
-    @Programmatic
-    @Override
-    public String raiseError(final TranslatableString message, final Class<?> contextClass, final String contextMethod) {
-        return messageService.raiseError(message, contextClass, contextMethod);
-    }
-
-
-    //endregion
 
 
     // //////////////////////////////////////////////////////////////////
@@ -489,9 +443,6 @@ public class DomainObjectContainerDefault
 
     @javax.inject.Inject
     FactoryService factoryService;
-
-    @javax.inject.Inject
-    MessageService messageService;
 
     @javax.inject.Inject
     RepositoryService repositoryService;

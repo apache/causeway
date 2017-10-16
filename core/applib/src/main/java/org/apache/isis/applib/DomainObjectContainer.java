@@ -272,52 +272,6 @@ public interface DomainObjectContainer {
 
     //endregion
 
-    //region > info, warn, error (DEPRECATED)
-
-    /**
-     * @deprecated - use {@link org.apache.isis.applib.services.message.MessageService#informUser(String)} instead.
-     */
-    @Deprecated
-    @Programmatic
-    void informUser(String message);
-
-    /**
-     * @deprecated - use {@link org.apache.isis.applib.services.message.MessageService#informUser(TranslatableString, Class, String)} instead.
-     */
-    @Deprecated
-    @Programmatic
-    String informUser(TranslatableString message, final Class<?> contextClass, final String contextMethod);
-
-    /**
-     * @deprecated - use {@link org.apache.isis.applib.services.message.MessageService#warnUser(String)} instead.
-     */
-    @Deprecated
-    @Programmatic
-    void warnUser(String message);
-
-    /**
-     * @deprecated - use {@link org.apache.isis.applib.services.message.MessageService#warnUser(TranslatableString, Class, String)} instead.
-     */
-    @Deprecated
-    @Programmatic
-    String warnUser(TranslatableString message, final Class<?> contextClass, final String contextMethod);
-
-    /**
-     * @deprecated - use {@link org.apache.isis.applib.services.message.MessageService#raiseError(String)} instead.
-     */
-    @Deprecated
-    @Programmatic
-    void raiseError(String message);
-
-    /**
-     * @deprecated - use {@link org.apache.isis.applib.services.message.MessageService#raiseError(TranslatableString, Class, String)} instead.
-     */
-    @Deprecated
-    @Programmatic
-    String raiseError(TranslatableString message, final Class<?> contextClass, final String contextMethod);
-
-    //endregion
-
     //region > properties (DEPRECATED)
 
     /**
