@@ -68,9 +68,7 @@ public abstract class DomainChangeJdoAbstract {
         COMMAND,
         AUDIT_ENTRY,
         /**
-         * As per {@link PublishingService}.
-         *
-         * @deprecated - replaced by {@link #PUBLISHED_INTERACTION} (because {@link PublishingService} has been replaced by {@link PublisherService}).
+         * @deprecated - replaced by {@link #PUBLISHED_INTERACTION} (because <code>PublishingService</code> has been replaced by {@link PublisherService}).
          */
         @Deprecated
         PUBLISHED_EVENT,

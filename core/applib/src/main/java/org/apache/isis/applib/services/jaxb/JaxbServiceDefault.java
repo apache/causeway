@@ -14,7 +14,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.schema.services.jaxb;
+package org.apache.isis.applib.services.jaxb;
 
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
