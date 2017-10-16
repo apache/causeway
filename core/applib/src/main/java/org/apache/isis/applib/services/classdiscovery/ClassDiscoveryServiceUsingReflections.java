@@ -49,20 +49,8 @@ import org.apache.isis.applib.fixturescripts.FixtureScript;
 )
 public class ClassDiscoveryServiceUsingReflections
             extends AbstractService 
-            implements ClassDiscoveryService2 {
+            implements ClassDiscoveryService {
 
-    @Programmatic
-    @Override
-    public <T> Set<Class<? extends T>> findSubTypesOfClasses(Class<T> type) {
-        Vfs.setDefaultURLTypes(getUrlTypes());
-
-        final Reflections reflections = new Reflections(
-                ClasspathHelper.forClassLoader(Thread.currentThread().getContextClassLoader()),
-                ClasspathHelper.forClass(Object.class),
-                new SubTypesScanner(false)
-        );
-        return reflections.getSubTypesOf(type);
-    }
 
     @Programmatic
     @Override

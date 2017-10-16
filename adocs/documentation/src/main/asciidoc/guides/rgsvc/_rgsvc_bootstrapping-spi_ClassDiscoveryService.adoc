@@ -1,12 +1,12 @@
 [[_rgsvc_bootstrapping-spi_ClassDiscoveryService]]
-= `ClassDiscoveryService2`
+= `ClassDiscoveryService`
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :_basedir: ../../
 :_imagesdir: images/
 
 
 
-The `ClassDiscoveryService2` service is used to automatically discover subclasses of any given type on the classpath.
+The `ClassDiscoveryService` service is used to automatically discover subclasses of any given type on the classpath.
 The primary use case is to support "convention-over-configuration" designs that work with a minimum of configuration.
 
 This service is used by the xref:../rgcms/rgcms.adoc#_rgcms_classes_super_FixtureScripts[`FixtureScripts`] service to automatically locate any xref:../rgcms/rgcms.adoc#_rgcms_classes_super_FixtureScript[`FixtureScript`] implementations.
@@ -19,7 +19,7 @@ The SPI defined by the service is:
 
 [source,java]
 ----
-public interface ClassDiscoveryService2  {
+public interface ClassDiscoveryService  {
     @Programmatic
     <T> Set<Class<? extends T>> findSubTypesOfClasses(Class<T> type, String packagePrefix);
     @Deprecated
@@ -73,7 +73,7 @@ Other usages of the `ClassDiscoveryService` are likely to work in a similar way,
 == Registering the Services
 
 Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the
-`AppManifest` to xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' core implementation of `ClassDiscoveryService2` service is automatically registered and injected (it is annotated with `@DomainService`) so no further configuration is required.
+`AppManifest` to xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' core implementation of `ClassDiscoveryService` service is automatically registered and injected (it is annotated with `@DomainService`) so no further configuration is required.
 
 To use an alternative implementation, use xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
 in the xref:../rgsvc/rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).

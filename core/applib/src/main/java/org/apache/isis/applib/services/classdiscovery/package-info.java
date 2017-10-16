@@ -18,7 +18,7 @@
  */
 
 /**
- * The {@link org.apache.isis.applib.services.classdiscovery.ClassDiscoveryService2} service is used to automatically
+ * The {@link org.apache.isis.applib.services.classdiscovery.ClassDiscoveryService} service is used to automatically
  * discover subclasses of any given type on the classpath. The primary use case is to support
  * "convention-over-configuration" designs that work with a minimum of configuration.
  *

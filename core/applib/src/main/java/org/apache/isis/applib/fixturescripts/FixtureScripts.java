@@ -43,12 +43,10 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.classdiscovery.ClassDiscoveryService;
-import org.apache.isis.applib.services.classdiscovery.ClassDiscoveryService2;
 import org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault;
 import org.apache.isis.applib.services.fixturespec.FixtureScriptsSpecification;
 import org.apache.isis.applib.services.memento.MementoService;
 import org.apache.isis.applib.services.memento.MementoService.Memento;
-import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
@@ -259,12 +257,7 @@ public abstract class FixtureScripts extends AbstractService {
     }
 
     private <T> Set<Class<? extends T>> findSubTypesOfClasses(Class<T> cls, final String packagePrefix) {
-        if(classDiscoveryService instanceof ClassDiscoveryService2) {
-            final ClassDiscoveryService2 classDiscoveryService2 = (ClassDiscoveryService2) classDiscoveryService;
-            return classDiscoveryService2.findSubTypesOfClasses(cls, packagePrefix);
-        } else {
-            return classDiscoveryService.findSubTypesOfClasses(cls);
-        }
+        return classDiscoveryService.findSubTypesOfClasses(cls, packagePrefix);
     }
 
     private FixtureScript newFixtureScript(final Class<? extends FixtureScript> fixtureScriptCls) {

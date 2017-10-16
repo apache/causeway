@@ -12,8 +12,6 @@ org.apache.isis.applib.clock
     Clock
 
 
-org.apache.isis.applib.services.classdiscovery
-    ClassDiscoveryService.java , push down into ClassDiscoveryService2
 
 
 org.apache.isis.applib.services.memento  (19 usages found)
@@ -386,8 +384,11 @@ org.apache.isis.applib.services.background  (10 usages found)
 
 
 org.apache.isis.applib.services.bookmark  (8 usages found)
-    BookmarkService.java - deprecated methods, have overloads in BookmarkService2 subtype [suggest we retain these for now]
+    BookmarkService2.java - pull up its methods into BookmarkService supertype, and delete
 
+
+org.apache.isis.applib.services.classdiscovery
+    ClassDiscoveryService2.java , pull up its methods into ClassDiscoveryService supertype, and delete
 
 
 
