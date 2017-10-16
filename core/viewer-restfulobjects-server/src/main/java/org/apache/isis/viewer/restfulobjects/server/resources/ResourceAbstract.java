@@ -35,7 +35,7 @@ import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.url.UrlEncodingUtils;
+import org.apache.isis.core.commons.url.UrlDecoderUtil;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
@@ -53,7 +53,6 @@ import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationSer
 import org.apache.isis.viewer.restfulobjects.rendering.util.Util;
 import org.apache.isis.viewer.restfulobjects.server.ResourceContext;
 import org.apache.isis.viewer.restfulobjects.server.util.OidUtils;
-import org.apache.isis.viewer.restfulobjects.server.util.UrlDecoderUtils;
 
 public abstract class ResourceAbstract {
 
@@ -96,7 +95,7 @@ public abstract class ResourceAbstract {
 
     private String getUrlDecodedQueryStringIfAny() {
         final String queryStringIfAny = httpServletRequest.getQueryString();
-        return UrlEncodingUtils.urlDecodeNullSafe(queryStringIfAny);
+        return UrlDecoderUtil.urlDecodeNullSafe(queryStringIfAny);
     }
 
     protected void init(
@@ -143,7 +142,7 @@ public abstract class ResourceAbstract {
         ObjectAdapter objectAdapter = getObjectAdapterElseNull(domainType, instanceId);
 
         if (objectAdapter == null) {
-            final String instanceIdUnencoded = UrlDecoderUtils.urlDecode(instanceId);
+            final String instanceIdUnencoded = org.apache.isis.viewer.restfulobjects.server.util.UrlDecoderUtils.urlDecode(instanceId);
             throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.NOT_FOUND, "could not determine adapter for OID: '%s:%s'", domainType, instanceIdUnencoded);
         }
         return objectAdapter;

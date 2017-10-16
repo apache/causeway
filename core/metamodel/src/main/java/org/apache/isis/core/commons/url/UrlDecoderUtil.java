@@ -16,13 +16,30 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.core.commons.url;
 
-/**
- * Provides helper classes for writing alternative implementations
- * that just persist to a proprietary XML format.
- *
- * <p>
- * Specifically, these classes are used by the <i>XmlObjectStore</i>
- * and the <i>XmlProfileStore</i>.
- */
-package org.apache.isis.core.commons.xml;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+
+public final class UrlDecoderUtil {
+
+    private UrlDecoderUtil() {
+    }
+
+    public static String urlDecode(final String input) {
+        try {
+            return URLDecoder.decode(input, "UTF-8");
+        } catch (final UnsupportedEncodingException e) {
+            return "";
+        }
+    }
+
+    public static String urlDecodeNullSafe(final String input) {
+        if (input == null) {
+            return null;
+        }
+
+        return urlDecode(input);
+    }
+
+}
