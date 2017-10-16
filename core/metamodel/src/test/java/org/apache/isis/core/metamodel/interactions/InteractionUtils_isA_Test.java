@@ -17,13 +17,18 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facetapi;
+package org.apache.isis.core.metamodel.interactions;
 
 import com.google.common.base.Predicate;
 
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
+
 import junit.framework.TestCase;
 
-public class FacetPredicatesTest extends TestCase {
+public class InteractionUtils_isA_Test extends TestCase {
 
     public class FooSuperFacet extends FacetAbstract {
         public FooSuperFacet(final Class<? extends Facet> facetType, final FacetHolder holder) {
@@ -76,23 +81,23 @@ public class FacetPredicatesTest extends TestCase {
     }
 
     public void testIsAWhenIs() {
-        final Predicate<Facet> predicate = Facet.Predicates.isA(FooFacet.class);
-        assertTrue(predicate.apply(fooFacet));
+        final Predicate<Facet> predicate = InteractionUtils.isA(FooFacet.class);
+        TestCase.assertTrue(predicate.apply(fooFacet));
     }
 
     public void testIsAWhenIsNot() {
-        final Predicate<Facet> predicate = Facet.Predicates.isA(FooFacet.class);
-        assertFalse(predicate.apply(barFacet));
+        final Predicate<Facet> predicate = InteractionUtils.isA(FooFacet.class);
+        TestCase.assertFalse(predicate.apply(barFacet));
     }
 
     public void testIsAWhenIsSubclass() {
-        final Predicate<Facet> predicate = Facet.Predicates.isA(FooFacet.class);
-        assertTrue(predicate.apply(fooSubFacet));
+        final Predicate<Facet> predicate = InteractionUtils.isA(FooFacet.class);
+        TestCase.assertTrue(predicate.apply(fooSubFacet));
     }
 
     public void testIsAWhenIsNotBecauseASuperclass() {
-        final Predicate<Facet> predicate = Facet.Predicates.isA(FooFacet.class);
-        assertFalse(predicate.apply(fooSuperFacet));
+        final Predicate<Facet> predicate = InteractionUtils.isA(FooFacet.class);
+        TestCase.assertFalse(predicate.apply(fooSuperFacet));
     }
 
 }

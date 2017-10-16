@@ -19,8 +19,6 @@
 
 package org.apache.isis.core.metamodel.facetapi;
 
-import com.google.common.base.Predicate;
-
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
 
 public interface Facet {
@@ -97,23 +95,4 @@ public interface Facet {
     public boolean alwaysReplace();
 
 
-
-    public static final class Predicates {
-
-        private Predicates() {
-        }
-
-        public static Predicate<Facet> isA(final Class<?> superClass) {
-            return new Predicate<Facet>() {
-                @Override
-                public boolean apply(final Facet facet) {
-                    if (facet instanceof DecoratingFacet) {
-                        final DecoratingFacet<?> decoratingFacet = (DecoratingFacet<?>) facet;
-                        return apply(decoratingFacet.getDecoratedFacet());
-                    }
-                    return superClass.isAssignableFrom(facet.getClass());
-                }
-            };
-        }
-    }
 }
