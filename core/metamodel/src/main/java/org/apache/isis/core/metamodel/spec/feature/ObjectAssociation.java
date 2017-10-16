@@ -269,6 +269,24 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
                 );
         }
 
+        /**
+         * @deprecated -use {@link Predicate equivalent}
+         */
+        @Deprecated
+        public static Predicate<ObjectAssociation> enabled2(
+                final ObjectAdapter adapter,
+                final InteractionInitiatedBy interactionInitiatedBy,
+                final Where where) {
+            return new Predicate<ObjectAssociation>() {
+                @Override
+                public boolean apply(final ObjectAssociation objectAssociation) {
+                    final Consent usable = objectAssociation.isUsable(adapter, interactionInitiatedBy, where);
+                    return usable.isAllowed();
+                }
+            };
+        }
+
+
         public static final Predicate<ObjectAssociation> staticallyVisible(final Where where) {
             return new Predicate<ObjectAssociation>() {
                 @Override
@@ -305,35 +323,9 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
                 }
             };
         }
+
     }
     
-    // //////////////////////////////////////////////////////
-    // Filters
-    // //////////////////////////////////////////////////////
-
-    public static class Filters {
-
-        private Filters() {
-        }
-
-        /**
-         * @deprecated -use {@link com.google.common.base.Predicate equivalent}
-         */
-        @Deprecated
-        public static Predicate<ObjectAssociation> enabled(
-                final ObjectAdapter adapter,
-                final InteractionInitiatedBy interactionInitiatedBy,
-                final Where where) {
-            return new Predicate<ObjectAssociation>() {
-                @Override
-                public boolean apply(final ObjectAssociation objectAssociation) {
-                    final Consent usable = objectAssociation.isUsable(adapter, interactionInitiatedBy, where);
-                    return usable.isAllowed();
-                }
-            };
-        }
-
-    }
 
     // //////////////////////////////////////////////////////
     // Comparators
