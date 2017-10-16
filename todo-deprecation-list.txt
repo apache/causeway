@@ -21,10 +21,7 @@ org.apache.isis.applib.clock
 
 
 org.apache.isis.applib.fixturescripts
-    FixtureScript - various methods to simplify API
-        execute(...) and executeChild(...) - use ExecutionContext#executeChild(FixtureScript, String, FixtureScript)} instead
-        executeIfNotAlready(FixtureScript) - removed; this shouldn't have had public visibility.
-        lookup(String, Class<T>) - use ExecutionContext#lookup(...) instead
+
     FixtureScripts.java - remove deprecated methods;
                           framework provides an implementation of this service, and use FixtureScriptsSpecificatoinProvider to configure instead.
 
@@ -429,6 +426,14 @@ org.apache.isis.applib.fixturescripts
         add(...) - use addResult(...) instead
         asKeyValueMap(String) - removed; this shouldn't have had public visibility.
 
+    FixtureScript - various methods to simplify API
+        execute(...) and executeChild(...) - use ExecutionContext#executeChild(FixtureScript, String, FixtureScript)} instead
+        executeIfNotAlready(FixtureScript) - removed; this shouldn't have had public visibility.
+        lookup(String, Class<T>) - use ExecutionContext#lookup(...) instead
+        run(String) - no longer publically available (internal API for FixtureScripts to call).
+
+
+    FixtureScripts.MultipleExecutionStrategy#IGNORE removed, replaced by EXECUTE_ONCE_BY_CLASS
 
 org.apache.isis.viewer.restfulobjects.rendering.service.conmap.ContentMappingService
     - replaced by non-applib

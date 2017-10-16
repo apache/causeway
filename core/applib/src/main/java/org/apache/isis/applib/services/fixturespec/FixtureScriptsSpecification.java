@@ -111,7 +111,7 @@ public class FixtureScriptsSpecification {
     public static class Builder {
         private final String packagePrefix;
         private FixtureScripts.NonPersistedObjectsStrategy nonPersistedObjectsStrategy = FixtureScripts.NonPersistedObjectsStrategy.PERSIST;
-        private FixtureScripts.MultipleExecutionStrategy multipleExecutionStrategy = FixtureScripts.MultipleExecutionStrategy.IGNORE;
+        private FixtureScripts.MultipleExecutionStrategy multipleExecutionStrategy = FixtureScripts.MultipleExecutionStrategy.EXECUTE_ONCE_BY_CLASS;
         private Class<? extends FixtureScript> recreateScriptClass = null;
         private Class<? extends FixtureScript> defaultScriptClass = null;
         private DropDownPolicy dropDownPolicy = DropDownPolicy.CHOICES;

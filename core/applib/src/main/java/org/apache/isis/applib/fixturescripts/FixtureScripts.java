@@ -84,11 +84,6 @@ public abstract class FixtureScripts extends AbstractService {
      */
     public enum MultipleExecutionStrategy {
         /**
-         * @deprecated - renamed to {@link #EXECUTE_ONCE_BY_CLASS}.
-         */
-        @Deprecated
-        IGNORE,
-        /**
          * Any given fixture script (or more precisely, any fixture script instance for a particular fixture script
          * class) can only be run once.
          *
@@ -127,8 +122,6 @@ public abstract class FixtureScripts extends AbstractService {
          *     loaded more than once (so the {@link #EXECUTE} strategy doesn't apply either).  The solution is for
          *     <tt>ExcelFixture</tt> to have value semantics (a digest of the spreadsheet argument).
          * </p>
-         *
-         * @see #IGNORE
          */
         EXECUTE_ONCE_BY_VALUE,
         /**
@@ -148,14 +141,6 @@ public abstract class FixtureScripts extends AbstractService {
          */
         EXECUTE;
 
-        /**
-         * @deprecated - use {@link #isExecuteOnceByClass()}.
-         * @return
-         */
-        @Deprecated
-        public boolean isIgnore() {
-            return this == IGNORE;
-        }
         public boolean isExecuteOnceByClass() {
             return this == EXECUTE_ONCE_BY_CLASS;
         }
@@ -175,7 +160,7 @@ public abstract class FixtureScripts extends AbstractService {
     /**
      * Defaults to {@link FixtureScripts.NonPersistedObjectsStrategy#PERSIST persist}
      * strategy (if non-persisted objects are {@link FixtureScripts#newFixtureResult(FixtureScript, String, Object, boolean) added} to a {@link FixtureResultList}),
-     * defaults {@link #getMultipleExecutionStrategy()} to {@link FixtureScripts.MultipleExecutionStrategy#IGNORE ignore}
+     * defaults {@link #getMultipleExecutionStrategy()} to {@link FixtureScripts.MultipleExecutionStrategy#EXECUTE_ONCE_BY_CLASS}
      * if multiple instances of the same fixture script class are encountered.
      *
      * @param packagePrefix - to search for fixture script implementations, eg "com.mycompany".  Note that this is ignored if an {@link org.apache.isis.applib.AppManifest} is in use.
@@ -391,7 +376,7 @@ public abstract class FixtureScripts extends AbstractService {
         // domain services are injected into the fixture script.
         container.injectServicesInto(fixtureScript);
 
-        return fixtureScript.run(parameters);
+        return runScript(fixtureScript, parameters);
     }
     public FixtureScript default0RunFixtureScript() {
         return getFixtureScriptList().isEmpty() ? null: getFixtureScriptList().get(0);
@@ -418,6 +403,11 @@ public abstract class FixtureScripts extends AbstractService {
     public String validateRunFixtureScript(final FixtureScript fixtureScript, final String parameters) {
         return fixtureScript.validateRun(parameters);
     }
+
+    protected List<FixtureResult> runScript(final FixtureScript fixtureScript, final String parameters) {
+        return fixtureScript.run(parameters);
+    }
+
 
     //endregion
 

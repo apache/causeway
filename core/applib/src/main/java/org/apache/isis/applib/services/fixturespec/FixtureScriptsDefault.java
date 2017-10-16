@@ -203,12 +203,13 @@ public class FixtureScriptsDefault extends FixtureScripts {
         if(recreateScript == null) {
             return null;
         }
-        final List<FixtureResult> results = recreateScript.run(null);
+        final List<FixtureResult> results = runScript(recreateScript, null);
         if(results.isEmpty()) {
             return null;
         }
         return results.get(0).getObject();
     }
+
     public boolean hideRecreateObjectsAndReturnFirst() {
         return getSpecification().getRecreateScriptClass() == null;
     }
