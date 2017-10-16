@@ -21,15 +21,7 @@ package org.apache.isis.core.commons.lang;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.util.Collection;
-import java.util.Enumeration;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.SortedMap;
-import java.util.SortedSet;
-import java.util.Vector;
 
 /**
  * Helpers to co-erce non-generic values into type-safe generics without
@@ -46,48 +38,8 @@ public final class ObjectExtensions {
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> Enumeration<T> asEnumerationT(final Object extendee, final Class<T> castTo) {
-        return (Enumeration<T>) extendee;
-    }
-
-    @SuppressWarnings("unchecked")
-    public static <T> Iterator<T> asIteratorT(final Object extendee, final Class<T> castTo) {
-        return (Iterator<T>) extendee;
-    }
-
-    @SuppressWarnings("unchecked")
-    public static <T> Collection<T> asCollectionT(final Object extendee, final Class<T> castTo) {
-        return (Collection<T>) extendee;
-    }
-
-    @SuppressWarnings("unchecked")
     public static <T> List<T> asListT(final Object extendee, final Class<T> castTo) {
         return (List<T>) extendee;
-    }
-
-    @SuppressWarnings("unchecked")
-    public static <T> Vector<T> asVectorT(final Object extendee, final Class<T> castTo) {
-        return (Vector<T>) extendee;
-    }
-
-    @SuppressWarnings("unchecked")
-    public static <T> Set<T> asSetT(final Object extendee, final Class<T> castTo) {
-        return (Set<T>) extendee;
-    }
-
-    @SuppressWarnings("unchecked")
-    public static <T> SortedSet<T> asSortedSetT(final Object extendee, final Class<T> castTo) {
-        return (SortedSet<T>) extendee;
-    }
-
-    @SuppressWarnings("unchecked")
-    public static <K, V> Map<K, V> asMapKV(final Object extendee, final Class<K> keyCastTo, final Class<V> valueCastTo) {
-        return (Map<K, V>) extendee;
-    }
-
-    @SuppressWarnings("unchecked")
-    public static <K, V> SortedMap<K, V> asSortedMapKV(final Object extendee, final Class<K> keyCastTo, final Class<V> valueCastTo) {
-        return (SortedMap<K, V>) extendee;
     }
 
     public static Object[] asArray(final Object extendee) {
