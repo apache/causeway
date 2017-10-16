@@ -17,9 +17,6 @@ org.apache.isis.applib.clock
 org.apache.isis.applib.services.memento  (19 usages found)
     MementoService.java - remove entire service (previously to support view models, but now @ViewModel and JAXB)
 
-org.apache.isis.applib.services.metamodel
-    MetaModelService2.java - push down to subtype, retain overloads for now
-
 
 
 
@@ -416,6 +413,9 @@ org.apache.isis.applib.services.eventbus
     CollectionRemovedFromEvent.java  - remove
     PropertyChangedEvent.java - remove
     PropertyInteractionEvent.java - remove
+
+org.apache.isis.applib.services.metamodel
+    MetaModelService2.java and MetaModelService3 - pulled up to MetaModelService supertype
 
 
 

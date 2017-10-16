@@ -34,7 +34,7 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.grid.GridService;
 import org.apache.isis.applib.services.metamodel.DomainMember;
-import org.apache.isis.applib.services.metamodel.MetaModelService3;
+import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -49,7 +49,7 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
 )
-public class MetaModelServiceDefault implements MetaModelService3 {
+public class MetaModelServiceDefault implements MetaModelService {
 
     @SuppressWarnings("unused")
     private final static Logger LOG = LoggerFactory.getLogger(MetaModelServiceDefault.class);

@@ -46,7 +46,7 @@ import org.apache.isis.applib.services.eventbus.AbstractDomainEvent;
 import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.InteractionContext;
-import org.apache.isis.applib.services.metamodel.MetaModelService2;
+import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.xactn.TransactionService;
@@ -450,7 +450,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
         }
 
         final Class<?> domainType = resultAdapter.getSpecification().getCorrespondingClass();
-        final MetaModelService2.Sort sort = getMetaModelService().sortOf(domainType);
+        final MetaModelService.Sort sort = getMetaModelService().sortOf(domainType);
         switch (sort) {
         case JDO_ENTITY:
             final Object domainObject = resultAdapter.getObject();
@@ -470,8 +470,8 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
         }
     }
 
-    private MetaModelService2 getMetaModelService() {
-        return servicesInjector.lookupServiceElseFail(MetaModelService2.class);
+    private MetaModelService getMetaModelService() {
+        return servicesInjector.lookupServiceElseFail(MetaModelService.class);
     }
 
     private TransactionService getTransactionService() {

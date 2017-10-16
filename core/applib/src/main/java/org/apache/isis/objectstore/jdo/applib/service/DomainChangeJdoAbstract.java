@@ -38,8 +38,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.message.MessageService;
-import org.apache.isis.applib.services.metamodel.MetaModelService2;
-import org.apache.isis.applib.services.metamodel.MetaModelService3;
+import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.applib.services.publish.PublisherService;
 import org.apache.isis.applib.util.ObjectContracts;
 
@@ -268,7 +267,7 @@ public abstract class DomainChangeJdoAbstract {
         if (targetObject == null) {
             return null;
         }
-        final MetaModelService2.Sort sortOfObject = metaModelService.sortOf(getTarget(), MetaModelService3.Mode.RELAXED);
+        final MetaModelService.Sort sortOfObject = metaModelService.sortOf(getTarget(), MetaModelService.Mode.RELAXED);
         return !(sortOfObject.isViewModel() || sortOfObject.isJdoEntity())
                 ? "Can only open view models or entities"
                 : null;
@@ -381,6 +380,6 @@ public abstract class DomainChangeJdoAbstract {
     protected MessageService messageService;
 
     @javax.inject.Inject
-    protected MetaModelService3 metaModelService;
+    protected MetaModelService metaModelService;
 
 }
