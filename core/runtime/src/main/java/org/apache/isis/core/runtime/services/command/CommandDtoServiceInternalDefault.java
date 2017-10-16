@@ -28,7 +28,6 @@ import com.google.common.collect.Lists;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.services.background.ActionInvocationMemento;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.command.Command;
@@ -106,43 +105,6 @@ public class CommandDtoServiceInternalDefault implements CommandDtoServiceIntern
 
     // //////////////////////////////////////
 
-    @Deprecated
-    @Programmatic
-    @Override
-    public ActionInvocationMemento asActionInvocationMemento(
-            final Method method,
-            final Object domainObject,
-            final Object[] args) {
-        
-        final ObjectSpecificationDefault targetObjSpec = getJavaSpecificationOfOwningClass(method);
-        final ObjectMember member = targetObjSpec.getMember(method);
-        if(member == null) {
-            return null;
-        }
-
-        if(!(member instanceof ObjectAction)) {
-            throw new UnsupportedOperationException(String.format(
-                    "Method %s does not correspond to an action.", method.getName()));
-        }
-
-        final ObjectAction action = (ObjectAction) member;
-        final String actionIdentifier = CommandUtil.memberIdentifierFor(action);
-        
-        final Bookmark domainObjectBookmark = bookmarkService.bookmarkFor(domainObject);
-
-        final List<Class<?>> argTypes = Lists.newArrayList();
-        final List<Object> argObjs = Lists.newArrayList();
-        CommandUtil.buildMementoArgLists(mementoService, bookmarkService, method, args, argTypes, argObjs);
-
-        final ActionInvocationMemento aim = 
-                new ActionInvocationMemento(mementoService, 
-                        actionIdentifier, 
-                        domainObjectBookmark,
-                        argTypes,
-                        argObjs);
-       
-        return aim;
-    }
 
     @Override
     public CommandDto asCommandDto(

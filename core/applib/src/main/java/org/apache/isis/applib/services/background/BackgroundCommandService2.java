@@ -20,21 +20,12 @@ import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.schema.cmd.v1.CommandDto;
 
 /**
- * Persists a {@link org.apache.isis.schema.cmd.v1.CommandDto memento-ized} command such that it can be executed asynchronously,
- * for example through a Quartz scheduler.
- *
- * <p>
- *     If an implementation of {@link BackgroundCommandService} also implements this interface, then its version of {@link #schedule(ActionInvocationMemento, Command, String, String, String)}  will be used instead.
- * </p>
+ * Persists a {@link org.apache.isis.schema.cmd.v1.CommandDto memento-ized} command such that it can be
+ * executed asynchronously, for example through a Quartz scheduler.
  *
  */
 public interface BackgroundCommandService2 extends BackgroundCommandService {
 
-    /**
-     * Will be called instead of
-     * {@link BackgroundCommandService#schedule(ActionInvocationMemento, Command, String, String, String)}
-     * (ie if the implementation implements this interface rather than simply {@link BackgroundCommandService}).
-     */
     void schedule(
             final CommandDto dto,
             final Command parentCommand,

@@ -16,8 +16,6 @@
  */
 package org.apache.isis.applib.services.background;
 
-import java.lang.reflect.Method;
-
 import org.apache.isis.applib.annotation.Programmatic;
 
 /**
@@ -49,13 +47,5 @@ public interface BackgroundService {
     @Programmatic
     <T> T execute(final T object);
 
-    /**
-     * Not API: for framework use only.
-     *
-     * @deprecated - no longer called by the framework (moved to <tt>InteractionDtoServiceInternal</tt>, an internal SPI service).
-     */
-    @Deprecated
-    @Programmatic
-    ActionInvocationMemento asActionInvocationMemento(Method m, Object domainObject, Object[] args);
 
 }

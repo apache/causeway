@@ -18,17 +18,8 @@ org.apache.isis.applib.clock
     Clock
 
 
-
-org.apache.isis.applib.services.actinvoc
-    ActionInvocationContext.java -remove unused constructors
-
 org.apache.isis.applib.services.audit  (2 usages found)
     AuditingService3.java - remove entire service, use AuditerService instead
-org.apache.isis.applib.services.background  (10 usages found)
-    ActionInvocationMemento.java - remove entire class, use InteractionDto and CommandDto are used internally instead
-    BackgroundCommandService.java - remove methods using AIM, instead keep those using CommandDto (in BackgroundCommandService2)
-    BackgroundService.java
-        asActionInvocationMemento(Method, Object, Object[]) - remove this internal API, no longer called by framework
 
 org.apache.isis.applib.services.bookmark  (8 usages found)
     BookmarkService.java - deprecated methods, have overloads in BookmarkService2 subtype [suggest we retain these for now]
@@ -427,6 +418,21 @@ org.apache.isis.applib.fixturescripts
     FixtureScripts.java - remove deprecated constructors;
 
     FixtureScripts.MultipleExecutionStrategy#IGNORE removed, replaced by EXECUTE_ONCE_BY_CLASS
+
+
+org.apache.isis.applib.services.actinvoc
+    ActionInvocationContext.java -remove unused constructors
+
+
+org.apache.isis.applib.services.background  (10 usages found)
+    ActionInvocationMemento.java - remove entire class, use InteractionDto and CommandDto are used internally instead
+    BackgroundCommandService.java - remove methods using AIM, instead keep those using CommandDto (in BackgroundCommandService2)
+    BackgroundService.java
+        asActionInvocationMemento(Method, Object, Object[]) - remove this internal API, no longer called by framework
+
+    Remove support for legacy persisted commands (beginning "<memento>...")
+
+
 
 org.apache.isis.viewer.restfulobjects.rendering.service.conmap.ContentMappingService
     - replaced by non-applib
