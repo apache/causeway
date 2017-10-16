@@ -47,7 +47,7 @@ import org.apache.isis.applib.services.classdiscovery.ClassDiscoveryServiceUsing
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.factory.InstanceUtil;
-import org.apache.isis.core.commons.lang.ClassUtil;
+import org.apache.isis.core.commons.lang.ClassFunctions;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
@@ -185,7 +185,7 @@ public abstract class IsisComponentProvider {
                     "If an appManifest is provided then it must return a non-empty set of modules");
         }
 
-        return Iterables.transform(modules, ClassUtil.Functions.packageNameOf());
+        return Iterables.transform(modules, ClassFunctions.packageNameOf());
     }
 
     protected String classNamesFrom(final List<?> objectsOrClasses) {

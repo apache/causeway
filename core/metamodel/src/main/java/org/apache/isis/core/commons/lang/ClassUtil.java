@@ -24,9 +24,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Nullable;
-
-import com.google.common.base.Function;
 import com.google.common.collect.Maps;
 
 public final class ClassUtil {
@@ -146,15 +143,6 @@ public final class ClassUtil {
         return false;
     }
 
-    public static boolean directlyImplements(final Class<?> extendee, final String interfaceTypeName) {
-        try {
-            final Class<?> interfaceType = Thread.currentThread().getContextClassLoader().loadClass(interfaceTypeName);
-            return directlyImplements(extendee, interfaceType);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public static Class<?> forName(final String fullName) {
         final Class<?> primitiveCls = primitives.get(fullName);
         if (primitiveCls != null) {
@@ -181,13 +169,6 @@ public final class ClassUtil {
     public static class Functions {
         private Functions(){}
 
-        public static Function<Class<?>, String> packageNameOf() {
-            return new Function<Class<?>, String>() {
-                @Nullable @Override public String apply(final Class<?> input) {
-                    return input.getPackage().getName();
-                }
-            };
-        }
     }
 
 }
