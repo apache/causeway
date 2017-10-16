@@ -19,9 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets.object.publishedobject;
 
-import com.google.common.base.Predicate;
-
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.MarkerFacet;
 
 /**
@@ -30,18 +27,4 @@ import org.apache.isis.core.metamodel.facets.MarkerFacet;
  */
 public interface PublishedObjectFacet extends MarkerFacet {
 
-    class Predicates2 {
-        private Predicates2(){}
-
-        public static Predicate<ObjectAdapter> isPublished() {
-            return new Predicate<ObjectAdapter>() {
-                @Override
-                public boolean apply(final ObjectAdapter objectAdapter) {
-                    final PublishedObjectFacet publishedObjectFacet =
-                            objectAdapter.getSpecification().getFacet(PublishedObjectFacet.class);
-                    return publishedObjectFacet != null;
-                }
-            };
-        }
-    }
 }

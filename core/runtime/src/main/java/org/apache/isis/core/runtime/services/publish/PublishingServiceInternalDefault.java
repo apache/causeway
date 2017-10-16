@@ -26,6 +26,7 @@ import java.util.UUID;
 
 import javax.enterprise.context.RequestScoped;
 
+import com.google.common.base.Predicate;
 import com.google.common.collect.Maps;
 
 import org.apache.isis.applib.annotation.DomainService;
@@ -74,7 +75,7 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
         final Map<ObjectAdapter, PublishingChangeKind> changeKindByPublishedAdapter =
                 Maps.filterKeys(
                         changeKindByEnlistedAdapter,
-                        PublishedObjectFacet.Predicates2.isPublished());
+                        isPublished());
 
         if(changeKindByPublishedAdapter.isEmpty()) {
             return;
@@ -159,6 +160,17 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
         }
     }
 
+
+    private static Predicate<ObjectAdapter> isPublished() {
+        return new Predicate<ObjectAdapter>() {
+            @Override
+            public boolean apply(final ObjectAdapter objectAdapter) {
+                final PublishedObjectFacet publishedObjectFacet =
+                        objectAdapter.getSpecification().getFacet(PublishedObjectFacet.class);
+                return publishedObjectFacet != null;
+            }
+        };
+    }
 
     //region > injected services
     @javax.inject.Inject
