@@ -51,8 +51,7 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
 )
-public class DomainObjectContainerDefault
-        implements DomainObjectContainer, ExceptionRecognizer {
+public class DomainObjectContainerDefault implements DomainObjectContainer {
 
 
     //region > newViewModelInstance
@@ -221,63 +220,6 @@ public class DomainObjectContainerDefault
 
 
 
-    //region > ExceptionRecognizer
-
-    static class ExceptionRecognizerForConcurrencyException
-            extends ExceptionRecognizerForType {
-        public ExceptionRecognizerForConcurrencyException() {
-            super(Category.CONCURRENCY, ConcurrencyException.class, prefix("Another user has just changed this data"));
-        }
-    }
-    static class ExceptionRecognizerForRecoverableException extends ExceptionRecognizerForType {
-        public ExceptionRecognizerForRecoverableException() {
-            super(Category.CLIENT_ERROR, RecoverableException.class);
-        }
-    }
-
-
-    private final ExceptionRecognizer recognizer =
-            new ExceptionRecognizerComposite(
-                    new ExceptionRecognizerForConcurrencyException(),
-                    new ExceptionRecognizerForRecoverableException()
-                );
-    
-    /**
-     * Framework-provided implementation of {@link ExceptionRecognizer},
-     * which will automatically recognize any {@link org.apache.isis.applib.RecoverableException}s or
-     * any {@link ConcurrencyException}s.
-     */
-    @Programmatic
-    @Override
-    public String recognize(Throwable ex) {
-        return recognizer.recognize(ex);
-    }
-
-    @Programmatic
-    @Override
-    public Recognition recognize2(final Throwable ex) {
-        return recognizer.recognize2(ex);
-    }
-    //endregion
-
-    //region > init, shutdown
-
-    @Programmatic
-    @PostConstruct
-    @Override
-    public void init(Map<String, String> properties) {
-        serviceRegistry.injectServicesInto(recognizer);
-        recognizer.init(properties);
-    }
-
-    @Programmatic
-    @PreDestroy
-    @Override
-    public void shutdown() {
-        recognizer.shutdown();
-    }
-
-    //endregion
 
     //region > helpers
 
@@ -291,9 +233,6 @@ public class DomainObjectContainerDefault
 
     @javax.inject.Inject
     SpecificationLoader specificationLoader;
-
-    @javax.inject.Inject
-    ServiceRegistry serviceRegistry;
 
     @javax.inject.Inject
     RepositoryService repositoryService;
