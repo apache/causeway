@@ -63,26 +63,6 @@ public class DomainObjectContainerDefault
         implements DomainObjectContainer, ExceptionRecognizer {
 
 
-    //region > titleOf
-
-    @Deprecated
-    @Programmatic
-    @Override
-    public String titleOf(final Object domainObject) {
-        return titleService.titleOf(domainObject);
-    }
-
-    //endregion
-
-    //region > iconNameOf
-
-    @Programmatic
-    @Override
-    public String iconNameOf(final Object domainObject) {
-        return titleService.iconNameOf(domainObject);
-    }
-
-    //endregion
 
     //region > newXxxInstance, remove
 

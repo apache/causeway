@@ -14,6 +14,8 @@ org.apache.isis.applib
 
 
 
+
+
 org.apache.isis.applib.clock
     Clock
 
@@ -35,12 +37,6 @@ org.apache.isis.applib.services.metamodel
 
 
 
-
-org.apache.isis.applib.value 
-    DateTime.java
-        longValue() - use #millisSinceEpoch()
-    Time.java
-        longValue() - use #millisSinceEpoch()
 
 org.apache.isis.core.objectstore.jdo.applib.annotations - remove package entirely
     Auditable.java - use @DomainObject(audited=...) instead.
@@ -451,3 +447,17 @@ org.apache.isis.applib.services.wrapper
 
 org.apache.isis.applib.snapshot
     Snapshottable.java - remove, since unused
+
+
+org.apache.isis.applib.value
+    DateTime.java
+        longValue() - use #millisSinceEpoch()
+    Time.java
+        longValue() - use #millisSinceEpoch()
+
+
+org.apache.isis.applib
+
+    DomainObjectContainer.java
+    - titleOf      .. removed
+    - iconNameOf   .. removed

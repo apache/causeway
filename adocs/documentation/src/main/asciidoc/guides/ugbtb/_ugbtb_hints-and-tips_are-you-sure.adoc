@@ -62,8 +62,8 @@ The code for this is pretty simple:
 [source,java]
 ----
 public List<ToDoItem> delete(@ParameterLayout(named="Are you sure?") boolean areYouSure) {
-    container.removeIfNotAlready(this);
-    container.informUser("Deleted " + container.titleOf(this));
+    repositoryService.remove(this);
+    messageService.informUser("Deleted " + titleService.titleOf(this));
     return toDoItems.notYetComplete();          // <1>
 }
 public String validateDelete(boolean areYouSure) {

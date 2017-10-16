@@ -41,34 +41,6 @@ import org.apache.isis.applib.services.xactn.TransactionService;
 @Deprecated
 public interface DomainObjectContainer {
 
-    //region > titleOf
-
-    /**
-     * Return the title of the object, as rendered in the UI by the 
-     * Isis viewers.
-     *
-     * @deprecated - use {@link TitleService#titleOf(Object)} instead.
-     */
-    @Deprecated
-    @Programmatic
-    String titleOf(Object domainObject);
-
-    //endregion
-
-    //region > iconNameOf
-
-    /**
-     * Return the icon name of the object, as rendered in the UI by the
-     * Isis viewers.
-     *
-     * @deprecated - use {@link TitleService#iconNameOf(Object)} instead.
-     */
-    @Deprecated
-    @Programmatic
-    String iconNameOf(Object domainObject);
-
-    //endregion
-
     //region > resolve, objectChanged (DEPRECATED)
 
     /**

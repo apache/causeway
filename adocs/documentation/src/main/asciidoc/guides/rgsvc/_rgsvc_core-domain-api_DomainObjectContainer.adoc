@@ -25,7 +25,6 @@ include::_rgsvc_core-domain-api_DomainObjectContainer_object-creation-api.adoc[l
 include::_rgsvc_core-domain-api_DomainObjectContainer_object-persistence-api.adoc[leveloffset=+2]
 include::_rgsvc_core-domain-api_DomainObjectContainer_messages-api.adoc[leveloffset=+2]
 include::_rgsvc_core-domain-api_DomainObjectContainer_security-api.adoc[leveloffset=+2]
-include::_rgsvc_core-domain-api_DomainObjectContainer_presentation-api.adoc[leveloffset=+2]
 include::_rgsvc_core-domain-api_DomainObjectContainer_properties-api.adoc[leveloffset=+2]
 include::_rgsvc_core-domain-api_DomainObjectContainer_services-api.adoc[leveloffset=+2]
 include::_rgsvc_core-domain-api_DomainObjectContainer_validation-api.adoc[leveloffset=+2]
