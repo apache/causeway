@@ -39,8 +39,11 @@ import org.apache.isis.applib.clock.Clock;
  * <li>withinDatePeriod(int days, int months, int years)</li>
  * <li>withinPreviousDatePeriod(int days, int months, int years)</li>
  * </ul>
+ *
+ * @deprecated
  */
 @Value(semanticsProviderName = "org.apache.isis.core.metamodel.facets.value.date.DateValueSemanticsProvider")
+@Deprecated
 public class Date extends Magnitude<Date> {
     private static final long serialVersionUID = 1L;
     private final DateTime date;

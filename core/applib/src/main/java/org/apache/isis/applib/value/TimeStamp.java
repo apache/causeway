@@ -28,8 +28,11 @@ import org.apache.isis.applib.clock.Clock;
  * relationship between two objects.
  * 
  * @see DateTime
+ *
+ * @deprecated
  */
 @Value(semanticsProviderName = "org.apache.isis.core.metamodel.facets.value.timestamp.TimeStampValueSemanticsProvider")
+@Deprecated
 public class TimeStamp extends Magnitude<TimeStamp> {
 
     private static final long serialVersionUID = 1L;
