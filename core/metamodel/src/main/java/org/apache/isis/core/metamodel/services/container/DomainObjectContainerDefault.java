@@ -330,16 +330,6 @@ public class DomainObjectContainerDefault
 
     //endregion
 
-    //region > security (DEPRECATED)
-
-    @Deprecated
-    @Programmatic
-    @Override
-    public UserMemento getUser() {
-        return userService.getUser();
-    }
-
-    //endregion
 
     //region > properties
 
@@ -449,9 +439,6 @@ public class DomainObjectContainerDefault
 
     @javax.inject.Inject
     ServiceRegistry serviceRegistry;
-
-    @javax.inject.Inject
-    UserService userService;
 
     @javax.inject.Inject
     WrapperFactory wrapperFactory;

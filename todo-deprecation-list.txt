@@ -463,3 +463,4 @@ org.apache.isis.applib
     - iconNameOf    ... use TitleService#iconNameOf(...) instead
     - flush()       ... use TransactionService#flushTransaction instead
     - informUser, warnUser, raiseError ... use MessageService
+    - getUser ... use UserService

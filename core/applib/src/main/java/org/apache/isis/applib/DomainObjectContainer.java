@@ -297,16 +297,5 @@ public interface DomainObjectContainer {
 
     //endregion
 
-    //region > security
-
-    /**
-     * @deprecated - use {@link UserService#getUser()} instead
-     */
-    @Deprecated
-    @Programmatic
-    UserMemento getUser();
-
-    //endregion
-
 
 }
