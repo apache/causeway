@@ -472,3 +472,8 @@ org.apache.isis.applib
     - newInstance - no replacement
     - mixin - use FactoryService#mixin
     - isPersistent, persistIfNotAlready, removeIfNotAlready - use RepositoryService instead
+
+
+org.apache.isis.objectstore.jdo.applib.service
+
+    deletes Util ... with no replacement
