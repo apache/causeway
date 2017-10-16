@@ -34,7 +34,7 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
-public class DomainObjectContainerDefaultTest_recognizes {
+public class ExceptionRecognizerDocDefault_recognizes_Test {
 
     static class SomeRandomException extends Exception {
         private static final long serialVersionUID = 1L;
@@ -45,23 +45,23 @@ public class DomainObjectContainerDefaultTest_recognizes {
 
     private Exception ex;
     
-    private DomainObjectContainerDefault container;
+    private ExceptionRecognizerDocDefault excepRecognizer;
     
     @Before
     public void setUp() throws Exception {
-        container = new DomainObjectContainerDefault();
+        excepRecognizer = new ExceptionRecognizerDocDefault();
     }
     
     @Test
     public void whenConcurrencyException_is_recognized() throws Exception {
         ex = new ConcurrencyException("foo", RootOid.create(ObjectSpecId.of("CUS"), "123"));
-        assertThat(container.recognize(ex), is(not(nullValue())));
+        assertThat(excepRecognizer.recognize(ex), is(not(nullValue())));
     }
 
     @Test
     public void whenSomeRandomException_is_not_recognized() throws Exception {
         ex = new SomeRandomException();
-        assertThat(container.recognize(ex), is(nullValue()));
+        assertThat(excepRecognizer.recognize(ex), is(nullValue()));
     }
     
 }
