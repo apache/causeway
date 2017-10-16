@@ -19,14 +19,6 @@ org.apache.isis.applib.clock
 
 
 
-
-org.apache.isis.applib.fixturescripts
-
-    FixtureScripts.java - remove deprecated methods;
-                          framework provides an implementation of this service, and use FixtureScriptsSpecificatoinProvider to configure instead.
-
-
-
 org.apache.isis.applib.services.actinvoc
     ActionInvocationContext.java -remove unused constructors
 
@@ -432,6 +424,7 @@ org.apache.isis.applib.fixturescripts
         lookup(String, Class<T>) - use ExecutionContext#lookup(...) instead
         run(String) - no longer publically available (internal API for FixtureScripts to call).
 
+    FixtureScripts.java - remove deprecated constructors;
 
     FixtureScripts.MultipleExecutionStrategy#IGNORE removed, replaced by EXECUTE_ONCE_BY_CLASS
 

@@ -154,77 +154,7 @@ public abstract class FixtureScripts extends AbstractService {
 
     //endregion
 
-
     //region > constructors
-
-    /**
-     * Defaults to {@link FixtureScripts.NonPersistedObjectsStrategy#PERSIST persist}
-     * strategy (if non-persisted objects are {@link FixtureScripts#newFixtureResult(FixtureScript, String, Object, boolean) added} to a {@link FixtureResultList}),
-     * defaults {@link #getMultipleExecutionStrategy()} to {@link FixtureScripts.MultipleExecutionStrategy#EXECUTE_ONCE_BY_CLASS}
-     * if multiple instances of the same fixture script class are encountered.
-     *
-     * @param packagePrefix - to search for fixture script implementations, eg "com.mycompany".  Note that this is ignored if an {@link org.apache.isis.applib.AppManifest} is in use.
-     *
-     * @deprecated - use {@link #FixtureScripts(FixtureScriptsSpecification)} instead.
-     */
-    @Deprecated
-    public FixtureScripts(final String packagePrefix) {
-        this(FixtureScriptsSpecification.builder(packagePrefix)
-                                        .build());
-    }
-
-    /**
-     * Defaults to {@link FixtureScripts.NonPersistedObjectsStrategy#PERSIST persist}
-     * strategy (if non-persisted objects are {@link FixtureScripts#newFixtureResult(FixtureScript, String, Object, boolean) added} to a {@link FixtureResultList}).
-     *
-     * @param packagePrefix - to search for fixture script implementations, eg "com.mycompany".    Note that this is ignored if an {@link org.apache.isis.applib.AppManifest} is in use.
-     * @param multipleExecutionStrategy - whether more than one instance of the same fixture script class can be run multiple times.  See {@link MultipleExecutionStrategy} for more details.
-     *
-     * @deprecated - use {@link #FixtureScripts(FixtureScriptsSpecification)} instead.
-     */
-    @Deprecated
-    public FixtureScripts(
-            final String packagePrefix,
-            final MultipleExecutionStrategy multipleExecutionStrategy) {
-        this(FixtureScriptsSpecification.builder(packagePrefix)
-                                        .with(multipleExecutionStrategy)
-                .build());
-    }
-
-    /**
-     * Defaults {@link #getMultipleExecutionStrategy()} to {@link FixtureScripts.MultipleExecutionStrategy#IGNORE ignore}
-     * if multiple instances of the same fixture script class are encountered.
-     *
-     * @param packagePrefix  - to search for fixture script implementations, eg "com.mycompany".    Note that this is ignored if an {@link org.apache.isis.applib.AppManifest} is in use.
-     * @param nonPersistedObjectsStrategy - how to handle any non-persisted objects that are {@link #newFixtureResult(FixtureScript, String, Object, boolean) added} to a {@link org.apache.isis.applib.fixturescripts.FixtureResultList}.
-     *
-     * @deprecated - use {@link #FixtureScripts(FixtureScriptsSpecification)} instead.
-     */
-    @Deprecated
-    public FixtureScripts(
-            final String packagePrefix, final NonPersistedObjectsStrategy nonPersistedObjectsStrategy) {
-        this(FixtureScriptsSpecification.builder(packagePrefix)
-                                        .with(nonPersistedObjectsStrategy)
-                                        .build());
-    }
-
-    /**
-     * @param packagePrefix  - to search for fixture script implementations, eg "com.mycompany".    Note that this is ignored if an {@link org.apache.isis.applib.AppManifest} is in use.
-     * @param nonPersistedObjectsStrategy - how to handle any non-persisted objects that are {@link #newFixtureResult(FixtureScript, String, Object, boolean) added} to a {@link org.apache.isis.applib.fixturescripts.FixtureResultList}.
-     * @param multipleExecutionStrategy - whether more than one instance of the same fixture script class can be run multiple times
-     *
-     * @deprecated - use {@link #FixtureScripts(FixtureScriptsSpecification)} instead.
-     */
-    @Deprecated
-    public FixtureScripts(
-            final String packagePrefix,
-            final NonPersistedObjectsStrategy nonPersistedObjectsStrategy,
-            final MultipleExecutionStrategy multipleExecutionStrategy) {
-        this(FixtureScriptsSpecification.builder(packagePrefix)
-                                        .with(nonPersistedObjectsStrategy)
-                                        .with(multipleExecutionStrategy)
-                                        .build());
-    }
 
     /**
      * @param specification - specifies how the service will find instances and execute them.
@@ -234,7 +164,6 @@ public abstract class FixtureScripts extends AbstractService {
     }
 
     //endregion
-
 
     //region > packagePrefix, nonPersistedObjectsStrategy, multipleExecutionStrategy
 

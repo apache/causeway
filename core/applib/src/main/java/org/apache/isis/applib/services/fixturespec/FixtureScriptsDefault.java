@@ -74,7 +74,8 @@ public class FixtureScriptsDefault extends FixtureScripts {
     public static final String PACKAGE_PREFIX = FixtureScriptsDefault.class.getPackage().getName();
 
     public FixtureScriptsDefault() {
-        super(PACKAGE_PREFIX);
+        super(FixtureScriptsSpecification.builder(PACKAGE_PREFIX)
+                .build());
     }
 
 
