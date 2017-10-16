@@ -15,15 +15,13 @@ org.apache.isis.applib
 
 
 org.apache.isis.applib.clock
-    Clock.java -
-        getTimeAsCalendar()
-        getTimeAsDate()
+    Clock
+
+
 
 
 org.apache.isis.applib.fixturescripts
-    FixtureScript.java  - various methods to simplify API
-        add(...) - use addResult(...) instead
-        asKeyValueMap(String) - removed; this shouldn't have had public visibility.
+    FixtureScript - various methods to simplify API
         execute(...) and executeChild(...) - use ExecutionContext#executeChild(FixtureScript, String, FixtureScript)} instead
         executeIfNotAlready(FixtureScript) - removed; this shouldn't have had public visibility.
         lookup(String, Class<T>) - use ExecutionContext#lookup(...) instead
@@ -421,9 +419,20 @@ org.apache.isis.applib.filter
     - entire package of Filter classes; use guava Predicate instead.
 
 
+org.apache.isis.applib.clock
+    Clock.java -
+        getTimeAsCalendar()
+        getTimeAsDate()
+
+org.apache.isis.applib.fixturescripts
+    FixtureScript.ExecutionContext - various methods to simplify API
+        add(...) - use addResult(...) instead
+        asKeyValueMap(String) - removed; this shouldn't have had public visibility.
+
 
 org.apache.isis.viewer.restfulobjects.rendering.service.conmap.ContentMappingService
     - replaced by non-applib
 
 org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationServiceForRestfulObjects
     - unused
+

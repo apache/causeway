@@ -262,18 +262,10 @@ public abstract class FixtureScript
          */
         public static final ExecutionContext NOOP = new ExecutionContext((String)null, null) {
             @Override
-            public <T> T add(final FixtureScript script, final T object) {
-                return object;
-            }
-            @Override
             public <T> T addResult(final FixtureScript script, final T object) {
                 return object;
             }
 
-            @Override
-            public <T> T add(final FixtureScript script, final String key, final T object) {
-                return object;
-            }
             @Override
             public <T> T addResult(final FixtureScript script, final String key, final T object) {
                 return object;
@@ -302,14 +294,6 @@ public abstract class FixtureScript
             this.fixtureScripts = fixtureScripts;
             fixtureResultList = new FixtureResultList(fixtureScripts, this);
             this.executionParameters = executionParameters;
-        }
-
-        /**
-         * @deprecated - this shouldn't have public visibility.
-         */
-        @Deprecated
-        public static Map<String, String> asKeyValueMap(final String parameters) {
-            return ExecutionParameters.asKeyValueMap(parameters);
         }
 
         @Programmatic
@@ -492,28 +476,10 @@ public abstract class FixtureScript
             return fixtureResultList.getResults();
         }
 
-        /**
-         * @deprecated - use {@link #addResult(FixtureScript, Object)} instead.
-         */
-        @Deprecated
-        @Programmatic
-        public <T> T add(final FixtureScript script, final T object) {
-            return addResult(script, object);
-        }
-
         @Programmatic
         public <T> T addResult(final FixtureScript script, final T object) {
             fixtureResultList.add(script, object);
             return object;
-        }
-
-        /**
-         * @deprecated - use {@link #addResult(FixtureScript, String, Object)} instead.
-         */
-        @Programmatic
-        @Deprecated
-        public <T> T add(final FixtureScript script, final String key, final T object) {
-            return addResult(script, key, object);
         }
 
         @Programmatic
