@@ -182,7 +182,10 @@ public interface DomainObjectContainer {
      * validation of properties, collections and object-level is vetoing.
      * 
      * @see #validate(Object)
+     *
+     * @deprecated - semantics of when this can be called in the object's lifecycle is not well-defined
      */
+    @Deprecated
     @Programmatic
     boolean isValid(Object domainObject);
 
@@ -195,7 +198,10 @@ public interface DomainObjectContainer {
      * </p>
      *
      * @see #isValid(Object)
+     *
+     * @deprecated - semantics of when this can be called in the object's lifecycle is not well-defined
      */
+    @Deprecated
     @Programmatic
     String validate(Object domainObject);
 
