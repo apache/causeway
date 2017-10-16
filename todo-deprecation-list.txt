@@ -34,9 +34,6 @@ org.apache.isis.applib.services.metamodel
     MetaModelService2.java - push down to subtype, retain overloads for now
 
 
-org.apache.isis.applib.services.settings
-    SettingTypes.java - remove, used only by 3rd party code (incode platform settings module)
-
 org.apache.isis.applib.services.wrapper
     WrapperObject.java
         save() and wrapped() - remove to avoid name clashes, use __isis_Xxx() methods instead
@@ -449,3 +446,7 @@ org.apache.isis.applib.services.publish - remove classes pertaining to original 
     PublishedEventStateType.java - remove class
     PublishingService.java - remove domain service interface
     StatusMessageMessageType.java - remove class
+
+org.apache.isis.applib.services.settings
+    SettingTypes.java - remove, used only by 3rd party code (incode platform settings module)
+

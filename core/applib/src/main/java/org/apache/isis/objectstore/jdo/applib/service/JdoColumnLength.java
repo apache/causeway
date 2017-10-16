@@ -25,7 +25,6 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.audit.AuditEntryPropertyIdType;
 import org.apache.isis.applib.services.audit.AuditEntryPropertyValueType;
 import org.apache.isis.applib.types.DescriptionType;
-import org.apache.isis.applib.services.settings.SettingTypes;
 import org.apache.isis.applib.types.MemberIdentifierType;
 import org.apache.isis.applib.types.TargetActionType;
 import org.apache.isis.applib.types.TargetClassType;
@@ -90,17 +89,17 @@ public final class JdoColumnLength {
          * @deprecated
          */
         @Deprecated
-        public static final int SETTING_KEY = SettingTypes.KeyType.Meta.MAX_LEN;
+        public static final int SETTING_KEY = 20;
         /**
          * @deprecated
          */
         @Deprecated
-        public static final int SETTING_TYPE = SettingTypes.TypeType.Meta.MAX_LEN;
+        public static final int SETTING_TYPE = 128;
         /**
          * @deprecated
          */
         @Deprecated
-        public static final int VALUE_RAW = SettingTypes.ValueRawType.Meta.MAX_LEN;
+        public static final int VALUE_RAW = 255;
     }
 
     /**
