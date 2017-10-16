@@ -174,31 +174,6 @@ public interface DomainObjectContainer {
 
     //endregion
 
-    //region > injectServicesInto, lookupService, lookupServices (DEPRECATED)
-
-    /**
-     * @deprecated - use {@link org.apache.isis.applib.services.registry.ServiceRegistry#injectServicesInto(Object)} instead.
-     */
-    @Deprecated
-    @Programmatic
-    <T> T injectServicesInto(final T domainObject);
-
-    /**
-     * @deprecated - use {@link org.apache.isis.applib.services.registry.ServiceRegistry#lookupService(Class)} instead.
-     */
-    @Deprecated
-    @Programmatic
-    <T> T lookupService(Class<T> service);
-
-    /**
-     * @deprecated - use {@link org.apache.isis.applib.services.registry.ServiceRegistry#lookupServices(Class)} instead.
-     */
-    @Deprecated
-    @Programmatic
-    <T> Iterable<T> lookupServices(Class<T> service);
-
-
-    //endregion
 
     //region > isValid, validate
 

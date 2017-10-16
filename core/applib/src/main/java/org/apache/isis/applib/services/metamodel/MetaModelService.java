@@ -33,13 +33,13 @@ import org.apache.isis.applib.annotation.Programmatic;
 public interface MetaModelService {
 
     /**
-     * Provides a reverse lookup of a domain class' object type, as defined by {@link DomainObject#objectType()} or the (now-deprecated) {@link org.apache.isis.applib.annotation.ObjectType} annotation, or any other mechanism that corresponds to Isis' <code>ObjectSpecIdFacet</code>.
+     * Provides a reverse lookup of a domain class' object type, as defined by {@link DomainObject#objectType()} (or any other mechanism that corresponds to Isis' <code>ObjectSpecIdFacet</code>).
      */
     @Programmatic
     Class<?> fromObjectType(final String objectType);
 
     /**
-     * Provides a lookup of a domain class' object type, as defined by {@link DomainObject#objectType()} or the (now-deprecated) {@link org.apache.isis.applib.annotation.ObjectType} annotation, or any other mechanism that corresponds to Isis' <code>ObjectSpecIdFacet</code>.
+     * Provides a lookup of a domain class' object type, as defined by {@link DomainObject#objectType()} (or any other mechanism that corresponds to Isis' <code>ObjectSpecIdFacet</code>).
      */
     @Programmatic
     String toObjectType(final Class<?> domainType);

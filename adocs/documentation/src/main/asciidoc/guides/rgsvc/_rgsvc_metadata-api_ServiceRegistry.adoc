@@ -7,10 +7,6 @@
 
 The `ServiceRegistry2` service collects together methods for injecting or looking up domain services (either provided by the framework or application-specific) currently known to the runtime.
 
-[NOTE]
-====
-The methods in this service replace similar methods (now deprecated) in xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer[`DomainObjectContainer`].
-====
 
 
 == API

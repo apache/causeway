@@ -34,7 +34,7 @@ container.persist(cust);
 ----
 
 As an alternative to using `newTransientInstance(...)` or `mixin(...)`, you could also simply `new()` up the object.
-Doing this will not inject any domain services, but they can be injected manually using xref:rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer_services-api[#injectServicesInto(...)`].
+Doing this will not inject any domain services, but they can be injected manually using the xref:rgsvc.adoc#_rgsvc_metadata-api_ServiceRegistry[`ServiceRegistry`].
 
 [NOTE]
 ====

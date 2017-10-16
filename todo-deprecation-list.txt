@@ -465,3 +465,4 @@ org.apache.isis.applib
     - informUser, warnUser, raiseError ... use MessageService
     - getUser                          ... use UserService
     - getProperty, getPropertyNames    ... use ConfigurationService
+    - injectServicesInto, lookupService, lookupServices   ... use ServicesRegistry

@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.metamodel.services.container;
 
-import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
@@ -32,18 +31,13 @@ import org.apache.isis.applib.RepositoryException;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.security.UserMemento;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType;
 import org.apache.isis.applib.services.factory.FactoryService;
-import org.apache.isis.applib.services.i18n.TranslatableString;
-import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
-import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
@@ -160,39 +154,6 @@ public class DomainObjectContainerDefault
 
     //endregion
 
-    //region > injectServicesInto, lookupService, lookupServices (DEPRECATED)
-
-    /**
-     * @deprecated - use {@link ServiceRegistry#injectServicesInto(Object)} instead.
-     */
-    @Deprecated
-    @Programmatic
-    @Override
-    public <T> T injectServicesInto(T domainObject) {
-        return serviceRegistry.injectServicesInto(domainObject);
-    }
-
-    /**
-     * @deprecated - use {@link ServiceRegistry#lookupService(Class)} instead.
-     */
-    @Deprecated
-    @Programmatic
-    @Override
-    public <T> T lookupService(final Class<T> service) {
-        return serviceRegistry.lookupService(service);
-    }
-
-    /**
-     * @deprecated - use {@link ServiceRegistry#lookupServices(Class)} instead.
-     */
-    @Deprecated
-    @Programmatic
-    @Override
-    public <T> Iterable<T> lookupServices(final Class<T> service) {
-        return serviceRegistry.lookupServices(service);
-    }
-
-    //endregion
 
     //region > resolve, objectChanged (DEPRECATED)
 
@@ -377,7 +338,7 @@ public class DomainObjectContainerDefault
     @PostConstruct
     @Override
     public void init(Map<String, String> properties) {
-        injectServicesInto(recognizer);
+        serviceRegistry.injectServicesInto(recognizer);
         recognizer.init(properties);
     }
 
