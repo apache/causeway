@@ -168,61 +168,7 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
             };
         }
 
-        /**
-         * Only fields that are for properties (ie 1:1 associations)
-         */
-        public final static com.google.common.base.Predicate PROPERTIES =
-                Predicates.PROPERTIES;
 
-        /**
-         * Only fields that are for reference properties (ie 1:1 associations)
-         */
-        public final static com.google.common.base.Predicate REFERENCE_PROPERTIES =
-                Predicates.REFERENCE_PROPERTIES;
-
-        /**
-         * Only fields that are for properties (ie 1:1 associations)
-         */
-        public final static com.google.common.base.Predicate WHERE_VISIBLE_IN_COLLECTION_TABLE =
-                Predicates.WHERE_VISIBLE_IN_COLLECTION_TABLE;
-
-        /**
-         * Only fields that are for properties (ie 1:1 associations)
-         */
-        public final static com.google.common.base.Predicate WHERE_VISIBLE_IN_STANDALONE_TABLE =
-                Predicates.WHERE_VISIBLE_IN_STANDALONE_TABLE;
-
-        /**
-         * All fields (that is, excludes out nothing).
-         */
-        public final static com.google.common.base.Predicate ALL =
-                Predicates.ALL;
-
-        /**
-         * Only fields that are for collections (ie 1:m associations)
-         */
-        public final static com.google.common.base.Predicate COLLECTIONS =
-                Predicates.COLLECTIONS;
-
-        /**
-         * Only properties that are visible statically, ie have not been
-         * unconditionally hidden at compile time.
-         */
-        public static final com.google.common.base.Predicate VISIBLE_AT_LEAST_SOMETIMES =
-                Predicates.VISIBLE_AT_LEAST_SOMETIMES;
-
-        public static final com.google.common.base.Predicate staticallyVisible(final Where context) {
-            return Predicates.staticallyVisible(context);
-        }
-
-        public static final com.google.common.base.Predicate dynamicallyVisible(
-                final ObjectAdapter target,
-                final InteractionInitiatedBy interactionInitiatedBy,
-                final Where where) {
-            return Predicates.dynamicallyVisible(target,
-                        interactionInitiatedBy, where
-                );
-        }
 
         public static final com.google.common.base.Predicate enabled(
                 final ObjectAdapter adapter,
@@ -340,11 +286,7 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
             }
         };
 
-        /**
-        * @deprecated -use {@link com.google.common.base.Predicate equivalent}
-        */
-        @Deprecated
-        public static final Predicate<ObjectAssociation> staticallyVisible(final Where context) {
+        public static final Predicate<ObjectAssociation> staticallyVisible(final Where where) {
             return new Predicate<ObjectAssociation>() {
                 @Override
                 public boolean apply(final ObjectAssociation association) {
@@ -355,7 +297,7 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
                     });
                     for (Facet facet : facets) {
                         final WhereValueFacet wawF = (WhereValueFacet) facet;
-                        if (wawF.where().includes(context) ) {
+                        if (wawF.where().includes(where)) {
                             return false;
                         }
                     }

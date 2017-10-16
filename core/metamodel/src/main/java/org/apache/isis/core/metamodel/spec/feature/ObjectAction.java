@@ -377,20 +377,6 @@ public interface ObjectAction extends ObjectMember {
         private Predicates() {
         }
 
-        public static com.google.common.base.Predicate dynamicallyVisible(
-                final ObjectAdapter target,
-                final InteractionInitiatedBy interactionInitiatedBy,
-                final Where where) {
-            return Predicates.dynamicallyVisible(target, interactionInitiatedBy, where);
-        }
-
-        public static com.google.common.base.Predicate withId(final String actionId) {
-            return Predicates.withId(actionId);
-        }
-
-        public static com.google.common.base.Predicate withNoValidationRules() {
-            return Predicates.withNoValidationRules();
-        }
 
         public static com.google.common.base.Predicate ofType(final ActionType type) {
             return Predicates.ofType(type);
@@ -398,15 +384,6 @@ public interface ObjectAction extends ObjectMember {
 
         public static com.google.common.base.Predicate bulk() {
             return Predicates.bulk();
-        }
-
-        // UNUSED?
-        public static com.google.common.base.Predicate notBulkOnly() {
-            return Predicates.notBulkOnly();
-        }
-
-        public static com.google.common.base.Predicate memberOrderOf(ObjectAssociation association) {
-            return Predicates.memberOrderOf(association);
         }
     }
 

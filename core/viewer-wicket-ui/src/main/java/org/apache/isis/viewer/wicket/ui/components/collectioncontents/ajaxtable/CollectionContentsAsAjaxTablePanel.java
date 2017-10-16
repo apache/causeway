@@ -39,6 +39,8 @@ import org.apache.isis.applib.services.tablecol.TableColumnOrderService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facets.WhereValueFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
@@ -180,7 +182,23 @@ public class CollectionContentsAsAjaxTablePanel
 
         @SuppressWarnings("unchecked")
         final Predicate<ObjectAssociation> predicate = com.google.common.base.Predicates
-                .and(ObjectAssociation.Filters.PROPERTIES, ObjectAssociation.Filters.staticallyVisible(whereContext),
+                .and(ObjectAssociation.Filters.PROPERTIES, new Predicate<ObjectAssociation>() {
+                            @Override
+                            public boolean apply(final ObjectAssociation association) {
+                                final List<Facet> facets = association.getFacets(new Predicate<Facet>() {
+                                    @Override public boolean apply(final Facet facet) {
+                                        return facet instanceof WhereValueFacet && facet instanceof HiddenFacet;
+                                    }
+                                });
+                                for (Facet facet : facets) {
+                                    final WhereValueFacet wawF = (WhereValueFacet) facet;
+                                    if (wawF.where().includes(whereContext)) {
+                                        return false;
+                                    }
+                                }
+                                return true;
+                            }
+                        },
                         associationDoesNotReferenceParent(parentSpecIfAny));
         
         final List<? extends ObjectAssociation> propertyList = typeOfSpec.getAssociations(Contributed.INCLUDED,

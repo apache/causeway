@@ -20,6 +20,7 @@ package org.apache.isis.core.metamodel.feature;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import com.google.common.collect.Lists;
 
@@ -38,6 +39,7 @@ import org.junit.runners.Parameterized.Parameters;
 import org.apache.isis.applib.annotation.Where;
 import com.google.common.base.Predicate;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facets.WhereValueFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
@@ -126,7 +128,23 @@ public class ObjectAssociationPredicatesTest_visibleWhere {
 
     @Test
     public void test() {
-        final Predicate<ObjectAssociation> predicate = ObjectAssociation.Filters.staticallyVisible(whereContext);
+        final Predicate<ObjectAssociation> predicate = new Predicate<ObjectAssociation>() {
+            @Override
+            public boolean apply(final ObjectAssociation association) {
+                final List<Facet> facets = association.getFacets(new Predicate<Facet>() {
+                    @Override public boolean apply(final Facet facet) {
+                        return facet instanceof WhereValueFacet && facet instanceof HiddenFacet;
+                    }
+                });
+                for (Facet facet : facets) {
+                    final WhereValueFacet wawF = (WhereValueFacet) facet;
+                    if (wawF.where().includes(whereContext)) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        };
         assertThat(predicate.apply(mockObjectAssociation), is(expectedVisibility));
     }
 

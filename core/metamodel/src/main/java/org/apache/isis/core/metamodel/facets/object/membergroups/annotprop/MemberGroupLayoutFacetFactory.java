@@ -117,6 +117,7 @@ public class MemberGroupLayoutFacetFactory extends FacetFactoryAbstract implemen
                 );
                 return objectCollections.size();
             }
+
         };
     }
 
