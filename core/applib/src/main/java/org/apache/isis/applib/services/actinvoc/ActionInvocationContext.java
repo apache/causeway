@@ -47,7 +47,10 @@ public class ActionInvocationContext {
      * Intended only to support unit testing.
      */
     public static ActionInvocationContext onObject(final Object domainObject) {
-        return new ActionInvocationContext(InvokedOn.OBJECT, Collections.singletonList(domainObject));
+        ActionInvocationContext aic = new ActionInvocationContext();
+        aic.setInvokedOn(InvokedOn.OBJECT);
+        aic.setDomainObjects(Collections.singletonList(domainObject));
+        return aic;
     }
 
     /**
@@ -61,7 +64,10 @@ public class ActionInvocationContext {
      * Intended only to support unit testing.
      */
     public static ActionInvocationContext onCollection(final List<Object> domainObjects) {
-        return new ActionInvocationContext(InvokedOn.COLLECTION, domainObjects);
+        ActionInvocationContext aic = new ActionInvocationContext();
+        aic.setInvokedOn(InvokedOn.COLLECTION);
+        aic.setDomainObjects(domainObjects);
+        return aic;
     }
 
     // //////////////////////////////////////
@@ -72,27 +78,7 @@ public class ActionInvocationContext {
 
     private int index;
 
-    // //////////////////////////////////////
 
-    public ActionInvocationContext() {
-    }
-
-    /**
-     * @deprecated - now a {@link javax.enterprise.context.RequestScoped} service
-     */
-    @Deprecated
-    public ActionInvocationContext(final InvokedOn invokedOn, final Object... domainObjects) {
-        this(invokedOn, Arrays.asList(domainObjects));
-    }
-
-    /**
-     * @deprecated - now a {@link javax.enterprise.context.RequestScoped} service
-     */
-    @Deprecated
-    public ActionInvocationContext(final InvokedOn invokedOn, final List<Object> domainObjects) {
-        this.invokedOn = invokedOn;
-        this.domainObjects = domainObjects;
-    }
 
     // //////////////////////////////////////
 
