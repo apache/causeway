@@ -12,11 +12,6 @@ You can use it during prototyping to write naive queries (find all rows, then fi
 As an alternative, you could also use link:http://www.datanucleus.org/products/accessplatform_4_0/jdo/jdoql_typesafe.html[JDO typesafe queries] through the xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-api_IsisJdoSupport[`IsisJdoSupport`] service.
 
 
-[NOTE]
-====
-The methods in this service replace similar methods (now deprecated) in xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer[`DomainObjectContainer`].
-====
-
 
 == API
 

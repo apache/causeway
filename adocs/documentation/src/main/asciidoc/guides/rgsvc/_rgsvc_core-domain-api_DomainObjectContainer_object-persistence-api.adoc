@@ -7,7 +7,12 @@
 
 
 
-The persistence API is used to persist newly created objects (as per xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer_object-creation-api[`#newTransientInstance(...)`], above and to delete (remove) objects that are persistent.
+The (deprecated) persistence API is used to persist newly created objects (as per xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer_object-creation-api[`#newTransientInstance(...)`], above and to delete (remove) objects that are persistent.
+
+[TIP]
+====
+Instead, use xref:rgsvc.adoc#_rgsvc_persistence-layer-api_RepositoryService[`RepositoryService`] API.
+====
 
 Note that there is no API for updating existing objects; the framework (or rather, JDO/DataNucleus) performs object dirty tracking and so any objects that are modified in the course of a request will be automatically updated).
 
@@ -17,24 +22,21 @@ Note that there is no API for updating existing objects; the framework (or rathe
 ----
 public interface DomainObjectContainer {
 
-    boolean isPersistent(Object domainObject);          // <1>
-    boolean isViewModel(Object domainObject);           // <2>
-
-    void persist(Object domainObject);                  // <3>
-    void persistIfNotAlready(Object domainObject);      // <4>
-
-    void remove(Object persistentDomainObject);         // <5>
-    void removeIfNotAlready(Object domainObject);       // <6>
+    boolean isViewModel(Object domainObject);           // <1>
+    void persist(Object domainObject);                  // <2>
+    void remove(Object persistentDomainObject);         // <3>
 
     ...
 }
 ----
-<1> test whether a particular domain object is persistent or not.
-<2> test whether a particular domain object is a view model or not.  Note that this includes any domain objects annotated with xref:../rgant/rgant.adoc#_rgant-DomainObject_nature[`@DomainObject#nature=Nature.EXTERNAL_ENTITY)`] or xref:../rgant/rgant.adoc#_rgant-DomainObject_nature[`@DomainObject#nature=Nature.INMEMORY_ENTITY`]
-<3> persist a transient object.  Note though that this will throw an exception if the object is already persistent; this can happen if JDO/DataNucleus's link:http://www.datanucleus.org/products/accessplatform_4_0/jdo/orm/cascading.html[persistence-by-reachability] is in effect.  For this reason it is generally better to use `persistIfNotAlready(...)`. Also note that `persist(...)` has been deprecate.  When moving to xref:rgsvc.adoc#_rgsvc_persistence-layer-api_RepositoryService[`RepositoryService#persist()`] take into account that its behavior is identical to <4>, being a no-op if the object is persistent, instead of throwing an exception.
-<4> persist an object but only if know to not have been persistent.  But if the object is persistent, is a no-op
-<5> remove (ie DELETE) a persistent object.  For similar reasons to the persistence, it is generally better to use:
-<6> remove (ie DELETE) an object only if known to be persistent.  But if the object has already been deleted, then is a no-op.
+<1> test whether a particular domain object is a view model or not.
+Note that this includes any domain objects annotated with xref:../rgant/rgant.adoc#_rgant-DomainObject_nature[`@DomainObject#nature=Nature.EXTERNAL_ENTITY)`] or xref:../rgant/rgant.adoc#_rgant-DomainObject_nature[`@DomainObject#nature=Nature.INMEMORY_ENTITY`]
+<2> persist a transient object.
+Note though that this will throw an exception if the object is already persistent; this can happen if JDO/DataNucleus's link:http://www.datanucleus.org/products/accessplatform_4_0/jdo/orm/cascading.html[persistence-by-reachability] is in effect.
+For this reason it is generally better to use xref:rgsvc.adoc#_rgsvc_persistence-layer-api_RepositoryService[`RepositoryService#persist()`], which is a no-op if the object is persistent.
+<5> remove (ie DELETE) a persistent object.
+However, the object must be persistent already, otherwise an exception will be thrown.
+It is generally therefore better to use use xref:rgsvc.adoc#_rgsvc_persistence-layer-api_RepositoryService[`RepositoryService#remove()`], which is a no-op if the object is not persistent.
 
 For example:
 
@@ -47,6 +49,4 @@ container.persistIfNotAlready(cust);
 ----
 
 You should be aware that by default Apache Isis queues up calls to `#persist()` and `#remove()`.  These are then executed either when the request completes (and the transaction commits), or if the queue is flushed.  This can be done either implicitly by the framework, or as the result of a direct call to `TransactionService#flushTransaction()`.
-
-
 

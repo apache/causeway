@@ -161,28 +161,14 @@ public interface DomainObjectContainer {
 
     //endregion
 
-    //region > isPersistent, persist, remove (DEPRECATED)
+    //region > persist, remove (DEPRECATED)
 
     /**
-     * @deprecated - use {@link org.apache.isis.applib.services.repository.RepositoryService#isPersistent(Object)} instead.
-     */
-    @Deprecated
-    @Programmatic
-    boolean isPersistent(Object domainObject);
-
-    /**
-     * @deprecated - use {@link org.apache.isis.applib.services.repository.RepositoryService#persist(Object)} instead. Please note that {@link org.apache.isis.applib.services.repository.RepositoryService#persist(Object)} will not throw an exception if the Domain Object is already persistent, so the implementation will be the same as that of {@link org.apache.isis.applib.services.repository.RepositoryService#persist(Object)} (or the equivalent, deprecated {@link org.apache.isis.applib.DomainObjectContainer#persistIfNotAlready(Object)}) instead.
+     * @deprecated - use {@link org.apache.isis.applib.services.repository.RepositoryService#persist(Object)} instead. Please note that {@link org.apache.isis.applib.services.repository.RepositoryService#persist(Object)} will not throw an exception if the Domain Object is already persistent, so the implementation will be the same as that of {@link org.apache.isis.applib.services.repository.RepositoryService#persist(Object)}instead.
      */
     @Deprecated
     @Programmatic
     void persist(Object domainObject);
-
-    /**
-     * @deprecated - use {@link org.apache.isis.applib.services.repository.RepositoryService#persist(Object)} instead.
-     */
-    @Deprecated
-    @Programmatic
-    void persistIfNotAlready(Object domainObject);
 
     /**
      * @deprecated - use {@link org.apache.isis.applib.services.repository.RepositoryService#remove(Object)} instead.
@@ -190,13 +176,6 @@ public interface DomainObjectContainer {
     @Deprecated
     @Programmatic
     void remove(Object persistentDomainObject);
-
-    /**
-     * @deprecated - use {@link org.apache.isis.applib.services.repository.RepositoryService#remove(Object)} instead.
-     */
-    @Deprecated
-    @Programmatic
-    void removeIfNotAlready(Object domainObject);
 
     //endregion
 

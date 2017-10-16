@@ -471,3 +471,4 @@ org.apache.isis.applib
     - newPersistentInstance - no replacement
     - newInstance - no replacement
     - mixin - use FactoryService#mixin
+    - isPersistent, persistIfNotAlready, removeIfNotAlready - use RepositoryService instead

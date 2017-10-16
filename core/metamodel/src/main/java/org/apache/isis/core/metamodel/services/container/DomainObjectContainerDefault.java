@@ -92,12 +92,6 @@ public class DomainObjectContainerDefault
         persistenceSessionServiceInternal.remove(adapter);
     }
 
-    @Programmatic
-    @Override
-    public void removeIfNotAlready(final Object object) {
-        repositoryService.remove(object);
-    }
-
     //endregion
 
 
@@ -197,12 +191,6 @@ public class DomainObjectContainerDefault
     //region > persistence
 
 
-    @Programmatic
-    @Override
-    public boolean isPersistent(final Object domainObject) {
-        return repositoryService.isPersistent(domainObject);
-    }
-
     /**
      * {@inheritDoc}
      */
@@ -222,15 +210,6 @@ public class DomainObjectContainerDefault
             throw new PersistFailedException("Object already persistent; OID=" + adapter.getOid());
         }
         persistenceSessionServiceInternal.makePersistent(adapter);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Programmatic
-    @Override
-    public void persistIfNotAlready(final Object object) {
-        repositoryService.persist(object);
     }
 
 
@@ -308,12 +287,6 @@ public class DomainObjectContainerDefault
 
     @javax.inject.Inject
     SpecificationLoader specificationLoader;
-
-    @javax.inject.Inject
-    FactoryService factoryService;
-
-    @javax.inject.Inject
-    RepositoryService repositoryService;
 
     @javax.inject.Inject
     ServiceRegistry serviceRegistry;
