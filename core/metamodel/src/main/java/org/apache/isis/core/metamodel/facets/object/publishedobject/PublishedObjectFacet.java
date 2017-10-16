@@ -30,8 +30,8 @@ import org.apache.isis.core.metamodel.facets.MarkerFacet;
  */
 public interface PublishedObjectFacet extends MarkerFacet {
 
-    class Predicates {
-        private Predicates(){}
+    class Predicates2 {
+        private Predicates2(){}
 
         public static Predicate<ObjectAdapter> isPublished() {
             return new Predicate<ObjectAdapter>() {

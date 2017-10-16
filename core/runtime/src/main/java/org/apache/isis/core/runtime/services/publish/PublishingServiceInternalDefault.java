@@ -74,7 +74,7 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
         final Map<ObjectAdapter, PublishingChangeKind> changeKindByPublishedAdapter =
                 Maps.filterKeys(
                         changeKindByEnlistedAdapter,
-                        PublishedObjectFacet.Predicates.isPublished());
+                        PublishedObjectFacet.Predicates2.isPublished());
 
         if(changeKindByPublishedAdapter.isEmpty()) {
             return;
