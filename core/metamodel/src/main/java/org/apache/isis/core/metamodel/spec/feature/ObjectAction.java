@@ -39,7 +39,6 @@ import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetFilters;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
 import org.apache.isis.core.metamodel.facets.actions.bulk.BulkFacet;
 import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacet;
@@ -453,7 +452,7 @@ public interface ObjectAction extends ObjectMember {
             return new Predicate<ObjectAction>() {
                 @Override
                 public boolean apply(final ObjectAction objectAction) {
-                    final List<Facet> validatingFacets = objectAction.getFacets(FacetFilters
+                    final List<Facet> validatingFacets = objectAction.getFacets(Facet.Filters
                             .isA(ValidatingInteractionAdvisor.class));
                     return validatingFacets.isEmpty();
                 }

@@ -24,7 +24,6 @@ import java.util.List;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.consent.InteractionResultSet;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetFilters;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 public final class InteractionUtils {
@@ -34,7 +33,7 @@ public final class InteractionUtils {
 
     public static InteractionResult isVisibleResult(final FacetHolder facetHolder, final VisibilityContext<?> context) {
         final InteractionResult result = new InteractionResult(context.createInteractionEvent());
-        final List<Facet> facets = facetHolder.getFacets(FacetFilters.isA(HidingInteractionAdvisor.class));
+        final List<Facet> facets = facetHolder.getFacets(Facet.Filters.isA(HidingInteractionAdvisor.class));
         for (final Facet facet : facets) {
             final HidingInteractionAdvisor advisor = (HidingInteractionAdvisor) facet;
             result.advise(advisor.hides(context), advisor);
@@ -44,7 +43,7 @@ public final class InteractionUtils {
 
     public static InteractionResult isUsableResult(final FacetHolder facetHolder, final UsabilityContext<?> context) {
         final InteractionResult result = new InteractionResult(context.createInteractionEvent());
-        final List<Facet> facets = facetHolder.getFacets(FacetFilters.isA(DisablingInteractionAdvisor.class));
+        final List<Facet> facets = facetHolder.getFacets(Facet.Filters.isA(DisablingInteractionAdvisor.class));
         for (final Facet facet : facets) {
             final DisablingInteractionAdvisor advisor = (DisablingInteractionAdvisor) facet;
             final String disables = advisor.disables(context);
@@ -55,7 +54,7 @@ public final class InteractionUtils {
 
     public static InteractionResult isValidResult(final FacetHolder facetHolder, final ValidityContext<?> context) {
         final InteractionResult result = new InteractionResult(context.createInteractionEvent());
-        final List<Facet> facets = facetHolder.getFacets(FacetFilters.isA(ValidatingInteractionAdvisor.class));
+        final List<Facet> facets = facetHolder.getFacets(Facet.Filters.isA(ValidatingInteractionAdvisor.class));
         for (final Facet facet : facets) {
             final ValidatingInteractionAdvisor advisor = (ValidatingInteractionAdvisor) facet;
             result.advise(advisor.invalidates(context), advisor);
