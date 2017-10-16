@@ -19,11 +19,9 @@
 
 package org.apache.isis.core.commons.lang;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
 
 public final class InputStreamExtensions {
 
@@ -67,10 +65,5 @@ public final class InputStreamExtensions {
         return count;
     }
 
-    public static InputStream asUtf8ByteStream(final String string) throws UnsupportedEncodingException {
-        final byte[] data = string.getBytes("utf-8");
-        final InputStream in = new ByteArrayInputStream(data);
-        return in;
-    }
 
 }

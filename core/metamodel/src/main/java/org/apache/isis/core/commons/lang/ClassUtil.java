@@ -166,9 +166,4 @@ public final class ClassUtil {
         }
     }
 
-    public static class Functions {
-        private Functions(){}
-
-    }
-
 }
