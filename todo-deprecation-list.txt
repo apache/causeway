@@ -17,8 +17,6 @@ org.apache.isis.applib.clock
 
 
 
-org.apache.isis.applib.filter  - entire package of Filter classes; use guava Predicate instead.
-
 
 org.apache.isis.applib.fixturescripts
     FixtureScript.java  - various methods to simplify API
@@ -414,4 +412,6 @@ org.apache.isis.applib.marker - remove these marker interfaces (tend to use anno
 
 
 
+
+org.apache.isis.applib.filter  - entire package of Filter classes; use guava Predicate instead.
 
