@@ -19,12 +19,9 @@
 
 package org.apache.isis.core.metamodel.spec.feature;
 
-import com.google.common.base.Function;
-
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 /**
  * Provides reflective access to a field on a domain object that is used to
@@ -47,25 +44,10 @@ public interface OneToOneAssociation extends ObjectAssociation, OneToOneFeature,
      * Determines if the specified reference is valid for setting this field in
      * the specified object, represented as a {@link Consent}.
      */
-    public Consent isAssociationValid(
+    Consent isAssociationValid(
             final ObjectAdapter targetAdapter,
             final ObjectAdapter proposedAdapter,
             final InteractionInitiatedBy interactionInitiatedBy);
 
-
-    // //////////////////////////////////////////////////////
-    // Functions
-    // //////////////////////////////////////////////////////
-    
-    public static class Functions {
-        public static Function<String, OneToOneAssociation> fromId(final ObjectSpecification noSpec) {
-            return new Function<String, OneToOneAssociation>() {
-                @Override
-                public OneToOneAssociation apply(final String id) {
-                    return (OneToOneAssociation) noSpec.getAssociation(id);
-                }
-            };
-        }
-    }
 
 }
