@@ -18,10 +18,6 @@
  */
 package org.apache.isis.viewer.restfulobjects.applib.util;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -29,12 +25,18 @@ import java.util.List;
 
 import javax.ws.rs.core.CacheControl;
 
-import org.apache.isis.core.commons.matchers.IsisMatchers;
-import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
+import com.google.common.net.MediaType;
+
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.hamcrest.TypeSafeMatcher;
 import org.junit.Test;
 
-import com.google.common.collect.Lists;
-import com.google.common.net.MediaType;
+import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
+
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class ParserTest {
 
@@ -71,7 +73,7 @@ public class ParserTest {
         final String asString = parser.asString(v);
         final List<String> valueOf = parser.valueOf(asString);
 
-        assertThat(v, IsisMatchers.sameContentsAs(valueOf));
+        assertThat(v, sameContentsAs(valueOf));
     }
 
     @Test
@@ -129,7 +131,7 @@ public class ParserTest {
         final String asString = parser.asString(list);
         final List<MediaType> valueOf = parser.valueOf(asString);
 
-        assertThat(list, IsisMatchers.sameContentsAs(valueOf));
+        assertThat(list, sameContentsAs(valueOf));
     }
 
     @Test
@@ -193,5 +195,21 @@ public class ParserTest {
                                          // equals() method
         return cacheControl;
     }
+
+    private static <T> Matcher<List<T>> sameContentsAs(final List<T> expected) {
+        return new TypeSafeMatcher<List<T>>() {
+
+            @Override
+            public void describeTo(final Description description) {
+                description.appendText("same sequence as " + expected);
+            }
+
+            @Override
+            public boolean matchesSafely(final List<T> actual) {
+                return actual.containsAll(expected) && expected.containsAll(actual);
+            }
+        };
+    }
+
 
 }

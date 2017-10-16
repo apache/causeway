@@ -19,17 +19,19 @@
 
 package org.apache.isis.core.runtime.system;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
 import java.lang.reflect.Method;
 import java.util.List;
 
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.hamcrest.TypeSafeMatcher;
 import org.junit.Test;
 
-import org.apache.isis.core.commons.matchers.IsisMatchers;
 import org.apache.isis.core.metamodel.specloader.traverser.TypeExtractorMethodParameters;
+
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class TypeExtractorMethodsParametersTest {
 
@@ -51,8 +53,28 @@ public class TypeExtractorMethodsParametersTest {
         final TypeExtractorMethodParameters extractor = new TypeExtractorMethodParameters(method);
 
         assertThat(extractor.getClasses().size(), is(2));
-        assertThat(extractor.getClasses(), IsisMatchers.containsElementThat(equalTo(java.util.List.class)));
-        assertThat(extractor.getClasses(), IsisMatchers.containsElementThat(equalTo(Customer.class)));
+        assertThat(extractor.getClasses(), containsElementThat(equalTo(java.util.List.class)));
+        assertThat(extractor.getClasses(), containsElementThat(equalTo(Customer.class)));
     }
+
+    static Matcher<List<?>> containsElementThat(final Matcher<?> elementMatcher) {
+        return new TypeSafeMatcher<List<?>>() {
+            @Override
+            public boolean matchesSafely(final List<?> list) {
+                for (final Object o : list) {
+                    if (elementMatcher.matches(o)) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            @Override
+            public void describeTo(final Description description) {
+                description.appendText("contains element that ").appendDescriptionOf(elementMatcher);
+            }
+        };
+    }
+
 
 }
