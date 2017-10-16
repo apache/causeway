@@ -5,6 +5,7 @@
 TO REMOVE:
 
 
+org.apache.isis.core.runtime.services.eventbus.adapter.EventBusImplementationForGuava
 
 
 org.apache.isis.applib.clock
@@ -418,6 +419,12 @@ org.apache.isis.applib.services.publish - remove classes pertaining to original 
     PublishedEventStateType.java - remove class
     PublishingService.java - remove domain service interface
     StatusMessageMessageType.java - remove class
+
+org.apache.isis.applib.services.registry
+    ServiceRegistry2 - roll up to ServiceRegistry
+
+
+
 
 org.apache.isis.applib.services.settings
     SettingTypes.java - remove, used only by 3rd party code (incode platform settings module)

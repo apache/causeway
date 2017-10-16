@@ -18,7 +18,7 @@
  */
 
 /**
- * The {@link org.apache.isis.applib.services.registry.ServiceRegistry2} service collects together methods injecting
+ * The {@link org.apache.isis.applib.services.registry.ServiceRegistry} service collects together methods injecting
  * or looking up domain services (either provided by the framework or application-specific) currently known to the
  * runtime.
  *

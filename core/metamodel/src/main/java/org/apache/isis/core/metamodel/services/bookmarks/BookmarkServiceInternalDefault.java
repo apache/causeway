@@ -31,7 +31,7 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkHolder;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
-import org.apache.isis.applib.services.registry.ServiceRegistry2;
+import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
@@ -156,7 +156,7 @@ public class BookmarkServiceInternalDefault implements BookmarkService {
     private void cacheServicesByClassNameIfNecessary() {
         if (servicesByClassName == null) {
             final Map<String,Object> servicesByClassName = Maps.newHashMap();
-            final List<Object> registeredServices = serviceRegistry2.getRegisteredServices();
+            final List<Object> registeredServices = serviceRegistry.getRegisteredServices();
             for (Object registeredService : registeredServices) {
                 final String serviceClassName = registeredService.getClass().getName();
                 servicesByClassName.put(serviceClassName, registeredService);
@@ -170,9 +170,9 @@ public class BookmarkServiceInternalDefault implements BookmarkService {
     PersistenceSessionServiceInternal persistenceSessionServiceInternal;
 
     @javax.inject.Inject
-    private WrapperFactory wrapperFactory;
+    WrapperFactory wrapperFactory;
 
     @Inject
-    ServiceRegistry2 serviceRegistry2;
+    ServiceRegistry serviceRegistry;
 
 }

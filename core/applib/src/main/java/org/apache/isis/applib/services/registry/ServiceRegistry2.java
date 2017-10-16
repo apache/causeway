@@ -19,12 +19,6 @@
 
 package org.apache.isis.applib.services.registry;
 
-import java.util.List;
-
-import org.apache.isis.applib.annotation.Programmatic;
-
 public interface ServiceRegistry2 extends ServiceRegistry {
 
-    @Programmatic
-    List<Object> getRegisteredServices();
 }

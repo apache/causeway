@@ -40,7 +40,7 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.RestrictTo;
-import org.apache.isis.applib.services.registry.ServiceRegistry2;
+import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.exceptions.IsisException;
@@ -259,6 +259,6 @@ public class ObjectFixtureService {
     IsisConfiguration configuration;
 
     @javax.inject.Inject
-    ServiceRegistry2 serviceRegistry;
+    ServiceRegistry serviceRegistry;
 
 }

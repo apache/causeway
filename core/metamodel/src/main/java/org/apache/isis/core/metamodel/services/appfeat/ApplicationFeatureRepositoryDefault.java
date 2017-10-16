@@ -31,7 +31,6 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
@@ -41,7 +40,7 @@ import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.isis.applib.services.appfeat.ApplicationMemberType;
 import org.apache.isis.applib.services.config.ConfigurationService;
-import org.apache.isis.applib.services.registry.ServiceRegistry2;
+import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleIntValueFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
@@ -557,10 +556,7 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
     //region  > services (injected)
 
     @javax.inject.Inject
-    ServiceRegistry2 serviceRegistry;
-
-    @javax.inject.Inject
-    DomainObjectContainer container;
+    ServiceRegistry serviceRegistry;
 
     @javax.inject.Inject
     ConfigurationService configurationService;

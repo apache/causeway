@@ -35,7 +35,6 @@ import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 
 import org.apache.isis.applib.AbstractViewModel;
-import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
@@ -44,7 +43,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.fixtures.FixtureType;
 import org.apache.isis.applib.fixtures.InstallableFixture;
 import org.apache.isis.applib.services.factory.FactoryService;
-import org.apache.isis.applib.services.registry.ServiceRegistry2;
+import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.sessmgmt.SessionManagementService;
 import org.apache.isis.applib.services.user.UserService;
@@ -894,7 +893,7 @@ public abstract class FixtureScript
     protected FactoryService factoryService;
 
     @javax.inject.Inject
-    protected ServiceRegistry2 serviceRegistry;
+    protected ServiceRegistry serviceRegistry;
 
     @javax.inject.Inject
     protected RepositoryService repositoryService;

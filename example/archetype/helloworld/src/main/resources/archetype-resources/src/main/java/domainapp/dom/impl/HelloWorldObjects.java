@@ -72,7 +72,7 @@ public class HelloWorldObjects {
     RepositoryService repositoryService;
 
     @javax.inject.Inject
-    ServiceRegistry2 serviceRegistry;
+    ServiceRegistry serviceRegistry;
     //endregion
 
 }

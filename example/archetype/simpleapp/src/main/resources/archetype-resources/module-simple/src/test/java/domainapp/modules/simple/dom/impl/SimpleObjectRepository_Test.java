@@ -46,7 +46,7 @@ public class SimpleObjectRepository_Test {
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
     @Mock
-    ServiceRegistry2 mockServiceRegistry;
+    ServiceRegistry mockServiceRegistry;
     
     @Mock
     RepositoryService mockRepositoryService;

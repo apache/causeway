@@ -24,7 +24,7 @@ import java.util.List;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.services.registry.ServiceRegistry2;
+import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.ServicesInjectorAware;
@@ -33,7 +33,7 @@ import org.apache.isis.core.metamodel.services.ServicesInjectorAware;
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
 )
-public class ServiceRegistryDefault implements ServiceRegistry2, ServicesInjectorAware {
+public class ServiceRegistryDefault implements ServiceRegistry, ServicesInjectorAware {
 
 
     @Programmatic

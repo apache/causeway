@@ -36,7 +36,7 @@ import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.factory.FactoryService;
-import org.apache.isis.applib.services.registry.ServiceRegistry2;
+import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.members.hidden.HiddenFacetAbstract;
@@ -76,13 +76,10 @@ public class ApplicationFeatureRepositoryDefaultTest {
     ObjectAction mockActThatIsHidden;
 
     @Mock
-    DomainObjectContainer mockContainer;
-
-    @Mock
     FactoryService mockFactoryService;
 
     @Mock
-    ServiceRegistry2 mockServiceRegistry;
+    ServiceRegistry mockServiceRegistry;
 
     @Mock
     SpecificationLoader mockSpecificationLoader;
@@ -92,7 +89,6 @@ public class ApplicationFeatureRepositoryDefaultTest {
     @Before
     public void setUp() throws Exception {
         applicationFeatureRepository = new ApplicationFeatureRepositoryDefault();
-        applicationFeatureRepository.container = mockContainer;
         applicationFeatureRepository.serviceRegistry = mockServiceRegistry;
         applicationFeatureRepository.specificationLoader = mockSpecificationLoader;
 

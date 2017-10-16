@@ -58,7 +58,7 @@ The `IntegrationTestAbstract2` also provides a number of helper/convenience meth
 
 * xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_FactoryService[`FactoryService`]
 
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_metadata-api_ServiceRegistry[`ServiceRegistry2`]
+* xref:../rgsvc/rgsvc.adoc#_rgsvc_metadata-api_ServiceRegistry[`ServiceRegistry`]
 
 * xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_WrapperFactory[`WrapperFactory`] +
 +

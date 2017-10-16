@@ -54,5 +54,5 @@ public class SimpleObjectRepository {
     @javax.inject.Inject
     RepositoryService repositoryService;
     @javax.inject.Inject
-    ServiceRegistry2 serviceRegistry;
+    ServiceRegistry serviceRegistry;
 }
