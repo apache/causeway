@@ -33,7 +33,7 @@ public final class ThrowableExtensions {
             // an application exception from the domain code is re-thrown as an
             // IsisException with same semantics
             // TODO: should probably be using ApplicationException here
-            throw new IsisApplicationException(targetException);
+            throw new IsisApplicationException(error, targetException);
         }
         if (targetException instanceof RuntimeException) {
             throw (RuntimeException) targetException;
