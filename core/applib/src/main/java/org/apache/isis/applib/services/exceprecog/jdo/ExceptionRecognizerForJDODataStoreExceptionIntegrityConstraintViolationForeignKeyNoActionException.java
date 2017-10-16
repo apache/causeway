@@ -16,16 +16,17 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.objectstore.jdo.applib.service.exceprecog;
+package org.apache.isis.applib.services.exceprecog.jdo;
 
+import javax.jdo.JDODataStoreException;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType;
 
-public class ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException extends ExceptionRecognizerForType {
+public class ExceptionRecognizerForJDODataStoreExceptionIntegrityConstraintViolationForeignKeyNoActionException extends ExceptionRecognizerForType {
 
-    public ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException() {
+    public ExceptionRecognizerForJDODataStoreExceptionIntegrityConstraintViolationForeignKeyNoActionException() {
         super(Category.CONSTRAINT_VIOLATION,
-              ofTypeIncluding(java.sql.SQLIntegrityConstraintViolationException.class, "unique constraint or index violation"),
-                prefix("Data already exists"));
+              ofTypeIncluding(JDODataStoreException.class, "integrity constraint violation: foreign key no action"),
+                prefix("Related data exists"));
     }
 
 }

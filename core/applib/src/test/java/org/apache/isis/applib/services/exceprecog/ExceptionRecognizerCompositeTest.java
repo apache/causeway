@@ -46,6 +46,11 @@ public class ExceptionRecognizerCompositeTest {
         public String recognize(Throwable ex) {
             return message;
         }
+
+        @Override public Recognition recognize2(final Throwable ex) {
+            return Recognition.of(Category.OTHER, message);
+        }
+
         @Override
         public void init(Map<String, String> properties) {
         }

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.objectstore.jdo.applib.service.exceprecog;
+package org.apache.isis.applib.services.exceprecog.jdo;
 
 import java.util.Collections;
 
@@ -24,6 +24,8 @@ import com.google.common.collect.ImmutableBiMap;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import org.apache.isis.applib.services.exceprecog.jdo.ExceptionRecognizerCompositeForJdoObjectStore;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;

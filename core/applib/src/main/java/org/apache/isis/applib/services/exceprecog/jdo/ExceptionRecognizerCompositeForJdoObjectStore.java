@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.objectstore.jdo.applib.service.exceprecog;
+package org.apache.isis.applib.services.exceprecog.jdo;
 
 import java.util.Map;
 

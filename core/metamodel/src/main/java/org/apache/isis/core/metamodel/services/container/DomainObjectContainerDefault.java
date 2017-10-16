@@ -253,6 +253,11 @@ public class DomainObjectContainerDefault
         return recognizer.recognize(ex);
     }
 
+    @Programmatic
+    @Override
+    public Recognition recognize2(final Throwable ex) {
+        return recognizer.recognize2(ex);
+    }
     //endregion
 
     //region > init, shutdown
