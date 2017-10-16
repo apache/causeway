@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.services.container;
+package org.apache.isis.core.metamodel.services.exceprecog;
 
 import org.junit.Before;
 import org.junit.Rule;

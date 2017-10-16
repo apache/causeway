@@ -19,12 +19,6 @@ org.apache.isis.applib.services.memento  (19 usages found)
 
 
 
-
-org.apache.isis.core.objectstore.jdo.applib.annotations - remove package entirely
-    Auditable.java - use @DomainObject(audited=...) instead.
-org.apache.isis.objectstore.jdo.applib
-    Auditable.java - use @DomainObject(audited=...) instead.
-
 org.apache.isis.objectstore.jdo.applib.service
     DomainChangeJdoAbstract.java - move to incode platform
     JdoColumnLength.java - remove class (all constants defined in other classes)
@@ -481,6 +475,10 @@ org.apache.isis.objectstore.jdo.applib.service
     deletes Util ... with no replacement
 
 
+org.apache.isis.core.objectstore.jdo.applib.annotations - remove package entirely
+    Auditable.java - use @DomainObject(audited=...) instead.
+org.apache.isis.objectstore.jdo.applib
+    Auditable.java interface - use @DomainObject(audited=...) instead.
 
 
 org.apache.isis.objectstore.jdo.applib.service.support
