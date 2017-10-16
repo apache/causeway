@@ -56,16 +56,7 @@ public class DomainObjectContainerDefault
         implements DomainObjectContainer, ExceptionRecognizer {
 
 
-
-    //region > newXxxInstance, remove
-
-    @Deprecated
-    @Programmatic
-    @Override
-    @SuppressWarnings("unchecked")
-    public <T> T newTransientInstance(final Class<T> ofClass) {
-        return factoryService.instantiate(ofClass);
-    }
+    //region > newViewModelInstance
 
     @Programmatic
     @SuppressWarnings("unchecked")
@@ -83,54 +74,9 @@ public class DomainObjectContainerDefault
         }
     }
 
-    /**
-     * @deprecated - Aggregated objects are no longer supported
-     */
-    @Deprecated
-    @Programmatic
-    @Override
-    @SuppressWarnings("unchecked")
-    public <T> T newAggregatedInstance(final Object parent, final Class<T> ofClass) {
-        throw new RuntimeException("Aggregated objects are no longer supported");
-    }
+    //endregion
 
-    /**
-     * Returns a new instance of the specified class that will have been
-     * persisted.
-     */
-    @Deprecated
-    @Programmatic
-    @Override
-    public <T> T newPersistentInstance(final Class<T> ofClass) {
-        final T newInstance = newTransientInstance(ofClass);
-        persist(newInstance);
-        return newInstance;
-    }
-
-    /**
-     * Returns a new instance of the specified class that has the same persisted
-     * state as the specified object.
-     *
-     * @deprecated - use {@link FactoryService#instantiate(Class)}.
-     */
-    @Programmatic
-    @Override
-    @Deprecated
-    public <T> T newInstance(final Class<T> ofClass, final Object object) {
-        if (isPersistent(object)) {
-            return newPersistentInstance(ofClass);
-        } else {
-            return newTransientInstance(ofClass);
-        }
-    }
-
-
-    @Deprecated
-    @Programmatic
-    @Override
-    public <T> T mixin(final Class<T> mixinClass, final Object mixedIn) {
-        return factoryService.mixin(mixinClass, mixedIn);
-    }
+    //region >  remove
 
     @Programmatic
     @Override

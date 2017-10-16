@@ -466,3 +466,8 @@ org.apache.isis.applib
     - getUser                          ... use UserService
     - getProperty, getPropertyNames    ... use ConfigurationService
     - injectServicesInto, lookupService, lookupServices   ... use ServicesRegistry
+    - newTransientInstance - use FactoryService#instantiate
+    - newAggregatedInstance - no replacement
+    - newPersistentInstance - no replacement
+    - newInstance - no replacement
+    - mixin - use FactoryService#mixin

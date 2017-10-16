@@ -19,12 +19,8 @@
 
 package org.apache.isis.applib;
 
-import java.util.List;
-
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.security.UserMemento;
 import org.apache.isis.applib.services.factory.FactoryService;
-import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.metamodel.MetaModelService3;
 import org.apache.isis.applib.services.repository.RepositoryService;
@@ -109,69 +105,15 @@ public interface DomainObjectContainer {
 
     //endregion
 
-    //region > new{Transient/Persistent}Instance
+    //region > newViewModelInstance
 
-    /**
-    * @deprecated - use {@link org.apache.isis.applib.services.factory.FactoryService#instantiate(Class)} instead.
-     */
-    @Deprecated
-    @Programmatic
-    <T> T newTransientInstance(final Class<T> ofType);
 
     /**
      * Create a new {@link ViewModel} instance of the specified type, initializing with the specified memento.
      *
-     * <p>
-     *     Rather than use this constructor it is generally preferable to simply instantiate a
-     *     class annotated with {@link org.apache.isis.applib.annotation.ViewModel annotation}.
-     *     If services need injecting into it, use {@link #injectServicesInto(Object)}.
-     * </p>
      */
     @Programmatic
     <T> T newViewModelInstance(final Class<T> ofType, final String memento);
-
-    /**
-     * @deprecated - not supported, will throw a RuntimeException
-     */
-    @Deprecated
-    @Programmatic
-    <T> T newAggregatedInstance(Object parent, Class<T> ofType);
-
-    /**
-     * (Deprecated) returns a new instance of the specified class that will have been
-     * persisted.
-     *
-     * @deprecated - in almost all cases the workflow is to {@link #newTransientInstance(Class)}, populate the object
-     * (eg with the arguments to an action) and then to
-     * {@link #persist(Object) persist) the object.  It is exceptionally rare for
-     * an object to be created, and with no further data required - be in a state
-     * to be persisted immediately.
-     */
-    @Programmatic
-    @Deprecated
-    <T> T newPersistentInstance(final Class<T> ofType);
-
-    /**
-     * Returns a new instance of the specified class that has the same persisted
-     * state (either transient or persisted) as the provided object.
-     * 
-     * <p>
-     * This method has been deprecated because it is a rare use case, causing
-     * unnecessary interface bloat for very little gain.
-     * <p></p>
-     * 
-     * @deprecated
-     */
-    @Programmatic
-    @Deprecated
-    <T> T newInstance(final Class<T> ofType, final Object object);
-
-    /**
-     * @deprecated - use {@link org.apache.isis.applib.services.factory.FactoryService#mixin(Class, Object)} instead.
-     */
-    @Deprecated
-    @Programmatic
-    <T> T mixin( Class<T> mixinClass, Object mixedIn);
 
     //endregion
 

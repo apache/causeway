@@ -7,10 +7,6 @@
 
 The `FactoryService` collects together methods for instantiating domain objects.
 
-[NOTE]
-====
-The methods in this service replace similar methods (now deprecated) in xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer[`DomainObjectContainer`].
-====
 
 
 == API
