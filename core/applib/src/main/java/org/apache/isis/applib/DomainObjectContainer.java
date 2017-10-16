@@ -272,30 +272,5 @@ public interface DomainObjectContainer {
 
     //endregion
 
-    //region > properties (DEPRECATED)
-
-    /**
-     * @deprecated - use {@link org.apache.isis.applib.services.config.ConfigurationService#getProperty(String)} instead.
-     */
-    @Deprecated
-    @Programmatic
-    String getProperty(String name);
-
-    /**
-     * @deprecated - use {@link org.apache.isis.applib.services.config.ConfigurationService#getProperty(String, String)} instead.
-     */
-    @Deprecated
-    @Programmatic
-    String getProperty(String name, String defaultValue);
-
-    /**
-     * @deprecated - use {@link org.apache.isis.applib.services.config.ConfigurationService#getPropertyNames()} instead.
-     */
-    @Deprecated
-    @Programmatic
-    List<String> getPropertyNames();
-
-    //endregion
-
 
 }

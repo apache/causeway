@@ -23,7 +23,6 @@ The sections below discuss the functions provided by the service, broken out int
 
 include::_rgsvc_core-domain-api_DomainObjectContainer_object-creation-api.adoc[leveloffset=+2]
 include::_rgsvc_core-domain-api_DomainObjectContainer_object-persistence-api.adoc[leveloffset=+2]
-include::_rgsvc_core-domain-api_DomainObjectContainer_properties-api.adoc[leveloffset=+2]
 include::_rgsvc_core-domain-api_DomainObjectContainer_services-api.adoc[leveloffset=+2]
 include::_rgsvc_core-domain-api_DomainObjectContainer_validation-api.adoc[leveloffset=+2]
 

@@ -331,31 +331,6 @@ public class DomainObjectContainerDefault
     //endregion
 
 
-    //region > properties
-
-    @Deprecated
-    @Programmatic
-    @Override
-    public String getProperty(final String name) {
-        return configurationService.getProperty(name);
-    }
-
-    @Deprecated
-    @Programmatic
-    @Override
-    public String getProperty(final String name, final String defaultValue) {
-        return configurationService.getProperty(name, defaultValue);
-    }
-
-    @Deprecated
-    @Programmatic
-    @Override
-    public List<String> getPropertyNames() {
-        return configurationService.getPropertyNames();
-    }
-
-    //endregion
-
 
 
     // //////////////////////////////////////////////////////////////////
@@ -427,9 +402,6 @@ public class DomainObjectContainerDefault
 
     @javax.inject.Inject
     SpecificationLoader specificationLoader;
-
-    @javax.inject.Inject
-    org.apache.isis.applib.services.config.ConfigurationService configurationService;
 
     @javax.inject.Inject
     FactoryService factoryService;
