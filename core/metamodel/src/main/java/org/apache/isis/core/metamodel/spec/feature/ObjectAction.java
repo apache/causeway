@@ -38,7 +38,6 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
 import org.apache.isis.core.metamodel.facets.actions.bulk.BulkFacet;
 import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacet;
@@ -49,7 +48,6 @@ import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaPositi
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
 import org.apache.isis.core.metamodel.facets.object.wizard.WizardFacet;
-import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
 import org.apache.isis.core.metamodel.layout.memberorderfacet.MemberOrderFacetComparator;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -414,10 +412,6 @@ public interface ObjectAction extends ObjectMember {
             };
         }
 
-        /**
-         * @deprecated -use {@link Predicate equivalent}
-         */
-        @Deprecated
         public static Predicate<ObjectAction> dynamicallyVisible(
                 final ObjectAdapter target,
                 final InteractionInitiatedBy interactionInitiatedBy,
@@ -431,20 +425,6 @@ public interface ObjectAction extends ObjectMember {
             };
         }
 
-        /**
-         * @deprecated -use {@link Predicate equivalent}
-         */
-        @Deprecated
-        public static Predicate<ObjectAction> withId(final String actionId) {
-            return new Predicate<ObjectAction>() {
-                @Override
-                public boolean apply(ObjectAction objectAction) {
-                    return objectAction.getId().equals(actionId);
-                }
-            };
-        }
-
-        @Deprecated
         public static Predicate<ObjectAction> notBulkOnly() {
             return new Predicate<ObjectAction>() {
 
@@ -474,7 +454,6 @@ public interface ObjectAction extends ObjectMember {
             };
         }
 
-        @SuppressWarnings("deprecation")
         public static Predicate<ObjectAction> memberOrderOf(ObjectAssociation association) {
             final String assocName = association.getName();
             final String assocId = association.getId();
