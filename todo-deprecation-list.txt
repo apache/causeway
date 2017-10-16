@@ -1,5 +1,17 @@
 
+
+
+
 TO REMOVE:
+
+org.apache.isis.viewer.restfulobjects.rendering.service.conmap
+
+    ContentMappingService
+
+org.apache.isis.viewer.restfulobjects.rendering.service
+
+    RepresentationServiceForRestfulObjects
+
 
 
 org.apache.isis.applib
@@ -13,6 +25,7 @@ org.apache.isis.applib.clock
     Clock.java -
         getTimeAsCalendar()  (1 usage found)
         getTimeAsDate()  (1 usage found)
+
 
 
 
@@ -260,6 +273,7 @@ DONE (MOVED)
 
     org.apache.isis.applib.events        - moved to services.wrapper.events.  (Still useful as provide context for exceptions, for a "transcript" framework).
     org.apache.isis.applib.events.system - move to fixturescripts.events.
+    org.apache.isis.applib.conmap.ContentMappingService to applib.services.conmap
 
 
 

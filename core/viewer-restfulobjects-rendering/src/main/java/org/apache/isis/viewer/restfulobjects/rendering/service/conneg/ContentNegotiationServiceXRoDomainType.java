@@ -138,7 +138,7 @@ public class ContentNegotiationServiceXRoDomainType extends ContentNegotiationSe
     }
 
     /**
-     * Delegates to either the applib {@link org.apache.isis.applib.conmap.ContentMappingService}, else the
+     * Delegates to either the applib {@link org.apache.isis.applib.services.conmap.ContentMappingService}, else the
      * original non-applib {@link ContentMappingService}.
      */
     protected Object map(
@@ -146,7 +146,7 @@ public class ContentNegotiationServiceXRoDomainType extends ContentNegotiationSe
             final List<MediaType> acceptableMediaTypes,
             final RepresentationType representationType) {
 
-        for (org.apache.isis.applib.conmap.ContentMappingService contentMappingService : contentMappingServices) {
+        for (org.apache.isis.applib.services.conmap.ContentMappingService contentMappingService : contentMappingServices) {
             Object mappedObject = contentMappingService.map(domainObject, acceptableMediaTypes);
             if(mappedObject != null) {
                 return mappedObject;
@@ -164,7 +164,7 @@ public class ContentNegotiationServiceXRoDomainType extends ContentNegotiationSe
     }
 
     @javax.inject.Inject
-    List<org.apache.isis.applib.conmap.ContentMappingService> contentMappingServices;
+    List<org.apache.isis.applib.services.conmap.ContentMappingService> contentMappingServices;
 
     @javax.inject.Inject
     List<ContentMappingService> legacyContentMappingServices;

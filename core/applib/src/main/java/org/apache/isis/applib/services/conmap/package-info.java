@@ -18,10 +18,10 @@
  */
 
 /**
- * The {@link org.apache.isis.applib.conmap.ContentMappingService} supports the (default implementation of the)
+ * The {@link org.apache.isis.applib.services.conmap.ContentMappingService} supports the (default implementation of the)
  * <code>ContentNegotiationService</code> enabling the RestfulObjects viewer to represent domain objects in some other
  * format as specified by the HTTP <code>Accept</code> header.
  *
  * @see <a href="http://isis.apache.org/guides/rgsvc/rgsvc.html#_rgsvc_presentation-layer-spi_ContentMappingService">Reference Guide</a>
  */
-package org.apache.isis.applib.conmap;
+package org.apache.isis.applib.services.conmap;
