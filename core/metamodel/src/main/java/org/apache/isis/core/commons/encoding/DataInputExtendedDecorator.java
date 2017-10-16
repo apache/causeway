@@ -199,15 +199,5 @@ public class DataInputExtendedDecorator implements DataInputExtended {
         return underlying.skipBytes(n);
     }
 
-    // //////////////////////////////////////////
-    // // Closeable
-    // //////////////////////////////////////////
-    //
-    // public void close() throws IOException {
-    // if (underlying instanceof Closeable) {
-    // Closeable closeable = (Closeable) underlying;
-    // closeable.close();
-    // }
-    // }
 
 }
