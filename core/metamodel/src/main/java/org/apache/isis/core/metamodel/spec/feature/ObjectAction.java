@@ -444,21 +444,6 @@ public interface ObjectAction extends ObjectMember {
             };
         }
 
-        /**
-         * @deprecated -use {@link Predicate equivalent}
-         */
-        @Deprecated
-        public static Predicate<ObjectAction> withNoValidationRules() {
-            return new Predicate<ObjectAction>() {
-                @Override
-                public boolean apply(final ObjectAction objectAction) {
-                    final List<Facet> validatingFacets = objectAction.getFacets(Facet.Predicates
-                            .isA(ValidatingInteractionAdvisor.class));
-                    return validatingFacets.isEmpty();
-                }
-            };
-        }
-
         @Deprecated
         public static Predicate<ObjectAction> notBulkOnly() {
             return new Predicate<ObjectAction>() {
