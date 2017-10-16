@@ -32,10 +32,6 @@ public class MethodExtensions {
     private MethodExtensions() {
     }
 
-    public static boolean isPublic(final Method method) {
-        return Modifier.isPublic(method.getModifiers());
-    }
-
     public static boolean isStatic(final Method method) {
         return Modifier.isStatic(method.getModifiers());
     }
