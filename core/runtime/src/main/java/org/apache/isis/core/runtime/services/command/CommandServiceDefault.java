@@ -38,13 +38,6 @@ public class CommandServiceDefault implements CommandService {
         return new CommandDefault();
     }
 
-    @Deprecated
-    @Programmatic
-    @Override
-    public void startTransaction(final Command command, final UUID transactionId) {
-        // nothing to do.
-    }
-
     @Programmatic
     @Override
     public void complete(final Command command) {

@@ -26,26 +26,7 @@ org.apache.isis.applib.services.bookmark  (8 usages found)
 org.apache.isis.applib.services.classdiscovery 
     ClassDiscoveryService.java , push down into ClassDiscoveryService2
 
-org.apache.isis.applib.services.command
-    Command2.java  - methods for working with interaction events (remove with those event types)
-        flushActionInteractionEvents()
-        peekActionInteractionEvent()
-        popActionInteractionEvent()
-        pushActionInteractionEvent(ActionInteractionEvent<?>)
 
-org.apache.isis.applib.services.command.spi
-    CommandService.java
-        startTransaction(Command, UUID) - no longer required to do anything, so remove
-
-org.apache.isis.applib.services.eventbus
-    AbstractInteractionEvent.java - remove
-    ActionInteractionEvent.java - remove
-    ActionInvokedEvent.java - remove
-    CollectionAddedToEvent.java - remove
-    CollectionInteractionEvent.java - remove
-    CollectionRemovedFromEvent.java  - remove
-    PropertyChangedEvent.java - remove
-    PropertyInteractionEvent.java - remove
 org.apache.isis.applib.services.memento  (19 usages found)
     MementoService.java - remove entire service (previously to support view models, but now @ViewModel and JAXB)
 
@@ -431,6 +412,32 @@ org.apache.isis.applib.services.background  (10 usages found)
         asActionInvocationMemento(Method, Object, Object[]) - remove this internal API, no longer called by framework
 
     Remove support for legacy persisted commands (beginning "<memento>...")
+
+org.apache.isis.applib.services.command.spi
+    CommandService.java
+        startTransaction(Command, UUID) - no longer required to do anything, so remove
+
+
+
+
+org.apache.isis.applib.services.command
+    Command2.java  - methods for working with interaction events (remove with those event types)
+        flushActionInteractionEvents()
+        peekActionInteractionEvent()
+        popActionInteractionEvent()
+        pushActionInteractionEvent(ActionInteractionEvent<?>)
+
+
+org.apache.isis.applib.services.eventbus
+    AbstractInteractionEvent.java - remove
+    ActionInteractionEvent.java - remove
+    ActionInvokedEvent.java - remove
+    CollectionAddedToEvent.java - remove
+    CollectionInteractionEvent.java - remove
+    CollectionRemovedFromEvent.java  - remove
+    PropertyChangedEvent.java - remove
+    PropertyInteractionEvent.java - remove
+
 
 
 

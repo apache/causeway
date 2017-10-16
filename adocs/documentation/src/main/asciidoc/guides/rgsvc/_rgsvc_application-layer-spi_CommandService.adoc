@@ -51,21 +51,16 @@ The `CommandService` service defines the following very simple API:
 ----
 public interface CommandService {
     Command create();                                               // <1>
-    @Deprecated
-    void startTransaction(Command command, UUID transactionId);     // <2>
-    boolean persistIfPossible(Command command);                     // <3>
-    void complete(Command command);                                 // <4>
+    boolean persistIfPossible(Command command);                     // <2>
+    void complete(Command command);                                 // <3>
 }
 ----
 <1> Instantiate the appropriate instance of the `Command` (as defined by the
 xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_CommandContext[`CommandContext`] service).  Its members will be populated automatically by
 the framework.
-<2> this method (as of `1.13.0`) is *NO LONGER CALLED* and is deprecated: the framework automatically populates the ``Command``'s `timestamp`,
-`user` and `transactionId` fields, so there is no need for the service implementation to initialize any of these.  In
-particular, the ``Command`` will already have been initialized with the provided `transactionId` argument.
-<3> Set the hint that the `Command` should be persisted if possible (when completed, see below).
-<4> "Complete" the command, typically meaning that the command should be persisted it if its `Command#getPersistence()`
-flag and persistence hint (`Command#isPersistHint()`) indicate that it should be.  +
+<2> Set the hint that the `Command` should be persisted if possible (when completed, see below).
+<3> "Complete" the command, typically meaning that the command should be persisted it if its `Command#getPersistence()`
+flag and persistence hint (`Command#isPersistHint()`) indicate that it should be.
 +
 The framework will automatically have set the `completedAt` property of the `Command`.
 
