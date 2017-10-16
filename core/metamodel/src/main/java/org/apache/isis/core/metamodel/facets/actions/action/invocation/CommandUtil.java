@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets.actions.action.invocation;
 
-import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 
@@ -27,22 +26,14 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.services.bookmark.BookmarkService;
-import org.apache.isis.applib.services.memento.MementoService;
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
-import org.apache.isis.core.metamodel.facetapi.FacetUtil;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacetInferred;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
-import org.apache.isis.core.metamodel.specloader.specimpl.MixedInMember2;
-import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionDefault;
 
 /**
  * Factoring out the commonality between <tt>ActionInvocationFacetViaMethod</tt> and <tt>BackgroundServiceDefault</tt>.
@@ -112,25 +103,7 @@ public class CommandUtil {
         buf.append(name).append(": ").append(titleOf).append("\n");
     }
 
-    public static void buildMementoArgLists(
-            final MementoService mementoService,
-            final BookmarkService bookmarkService,
-            final Method method,
-            final Object[] args, final List<Class<?>> argTypes, final List<Object> argObjs) {
-        for (int i = 0; i < args.length; i++) {
-            Object input = args[i];
-            if (mementoService.canSet(input)) {
-                argTypes.add(method.getParameterTypes()[i]);
-                argObjs.add(input);
-            } else {
-                Bookmark argBookmark = bookmarkService.bookmarkFor(input);
-                argTypes.add(Bookmark.class);
-                argObjs.add(argBookmark);
-            }
-        }
-    }
-    
-    
+
     public static ObjectAdapter[] adaptersFor(final Object[] args, final AdapterManager adapterManager) {
         List<Object> argList = Arrays.asList(args);
         Iterable<ObjectAdapter> adapterList = 
@@ -139,13 +112,4 @@ public class CommandUtil {
         return Lists.newArrayList(adapterList).toArray(new ObjectAdapter[]{});
     }
 
-    public static Object[] objectsFor(ObjectAdapter[] arguments) {
-        List<ObjectAdapter> argList = Arrays.asList(arguments);
-        Iterable<Object> adapterList = 
-                Iterables.transform(
-                        argList, ObjectAdapter.Functions.getObject());
-        return Lists.newArrayList(adapterList).toArray(new Object[]{});
-    }
-
-    
 }
