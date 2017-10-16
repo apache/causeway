@@ -4,13 +4,6 @@
 
 TO REMOVE:
 
-org.apache.isis.viewer.restfulobjects.rendering.service.conmap
-
-    ContentMappingService
-
-org.apache.isis.viewer.restfulobjects.rendering.service
-
-    RepresentationServiceForRestfulObjects
 
 
 
@@ -23,12 +16,8 @@ org.apache.isis.applib
 
 org.apache.isis.applib.clock
     Clock.java -
-        getTimeAsCalendar()  (1 usage found)
-        getTimeAsDate()  (1 usage found)
-
-
-
-
+        getTimeAsCalendar()
+        getTimeAsDate()
 
 
 org.apache.isis.applib.fixturescripts
@@ -427,5 +416,14 @@ org.apache.isis.applib.marker - remove these marker interfaces (tend to use anno
 
 
 
-org.apache.isis.applib.filter  - entire package of Filter classes; use guava Predicate instead.
+org.apache.isis.applib.filter
 
+    - entire package of Filter classes; use guava Predicate instead.
+
+
+
+org.apache.isis.viewer.restfulobjects.rendering.service.conmap.ContentMappingService
+    - replaced by non-applib
+
+org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationServiceForRestfulObjects
+    - unused
