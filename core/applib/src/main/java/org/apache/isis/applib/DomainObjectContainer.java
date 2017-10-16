@@ -26,6 +26,7 @@ import org.apache.isis.applib.security.UserMemento;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.message.MessageService;
+import org.apache.isis.applib.services.metamodel.MetaModelService3;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.applib.services.user.UserService;
@@ -209,6 +210,10 @@ public interface DomainObjectContainer {
 
     //region > isViewModel
 
+    /**
+     * @deprecated - use {@link org.apache.isis.applib.services.metamodel.MetaModelService3#sortOf(Class, MetaModelService3.Mode)} instead.
+     */
+    @Deprecated
     @Programmatic
     boolean isViewModel(Object domainObject);
 
