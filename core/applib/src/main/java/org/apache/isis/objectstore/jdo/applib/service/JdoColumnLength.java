@@ -22,12 +22,8 @@ import org.apache.isis.applib.annotation.CommandExecuteIn;
 import org.apache.isis.applib.security.UserMemento;
 import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.services.publish.EventMetadata;
-import org.apache.isis.applib.services.publish.EventType;
 import org.apache.isis.applib.services.audit.AuditEntryPropertyIdType;
 import org.apache.isis.applib.services.audit.AuditEntryPropertyValueType;
-import org.apache.isis.applib.services.publish.PublishedEventStateType;
-import org.apache.isis.applib.services.publish.StatusMessageMessageType;
 import org.apache.isis.applib.types.DescriptionType;
 import org.apache.isis.applib.services.settings.SettingTypes;
 import org.apache.isis.applib.types.MemberIdentifierType;
@@ -154,17 +150,17 @@ public final class JdoColumnLength {
          * @deprecated
          */
         @Deprecated
-        public static final int TITLE = EventMetadata.TitleType.Meta.MAX_LEN;
+        public static final int TITLE = 255;
         /**
          * @deprecated
          */
         @Deprecated
-        public static final int EVENT_TYPE = EventType.Type.Meta.MAX_LEN;
+        public static final int EVENT_TYPE = 20;
         /**
          * @deprecated
          */
         @Deprecated
-        public static final int STATE = PublishedEventStateType.Meta.MAX_LEN;
+        public static final int STATE = 20;
     }
 
     /**
@@ -176,7 +172,7 @@ public final class JdoColumnLength {
          * @deprecated
          */
         @Deprecated
-        public static final int MESSAGE = StatusMessageMessageType.Meta.MAX_LEN;
+        public static final int MESSAGE = 255;
         /**
          * @deprecated
          */

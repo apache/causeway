@@ -33,14 +33,6 @@ org.apache.isis.applib.services.memento  (19 usages found)
 org.apache.isis.applib.services.metamodel
     MetaModelService2.java - push down to subtype, retain overloads for now
 
-org.apache.isis.applib.services.publish - remove classes pertaining to original PublishingService (payload factories etc).
-    EventMetadata.java - remove class
-    EventPayload.java - remove class
-    EventPayloadForActionInvocation.java - remove class
-    EventPayloadForObjectChanged.java - remove class
-    PublishedEventStateType.java - remove class
-    PublishingService.java - remove domain service interface
-    StatusMessageMessageType.java - remove class
 
 org.apache.isis.applib.services.settings
     SettingTypes.java - remove, used only by 3rd party code (incode platform settings module)
@@ -447,3 +439,13 @@ org.apache.isis.viewer.restfulobjects.rendering.service.conmap.ContentMappingSer
 org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationServiceForRestfulObjects
     - unused
 
+org.apache.isis.applib.services.publish - remove classes pertaining to original PublishingService (payload factories etc).
+    EventMetadata.java - remove class
+    EventType.java - remove class
+    EventPayload.java - remove class
+    EventPayloadForActionInvocation.java - remove class
+    EventPayloadForObjectChanged.java - remove class
+
+    PublishedEventStateType.java - remove class
+    PublishingService.java - remove domain service interface
+    StatusMessageMessageType.java - remove class

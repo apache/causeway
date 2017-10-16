@@ -21,10 +21,9 @@ import java.util.UUID;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.applib.services.publish.EventMetadata;
 
 /**
- * As per {@link Command#getMemberIdentifier()}, {@link org.apache.isis.applib.services.audit.AuditerService#audit(UUID, int, String, Bookmark, String, String, String, String, String, Timestamp)} and {@link EventMetadata#getActionIdentifier()}.
+ * As per {@link Command#getMemberIdentifier()} and {@link org.apache.isis.applib.services.audit.AuditerService#audit(UUID, int, String, Bookmark, String, String, String, String, String, Timestamp)}.
  */
 public class MemberIdentifierType {
 
