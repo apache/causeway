@@ -19,9 +19,6 @@
 
 package org.apache.isis.core.commons.lang;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
 
 import org.apache.isis.applib.RecoverableException;
@@ -29,22 +26,6 @@ import org.apache.isis.core.commons.exceptions.IsisApplicationException;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 
 public final class ThrowableExtensions {
-
-    public static String stackTraceFor(final Throwable extendee) {
-        ByteArrayOutputStream baos = null;
-        try {
-            baos = new ByteArrayOutputStream();
-            extendee.printStackTrace(new PrintStream(baos));
-            return baos.toString();
-        } finally {
-            if (baos != null) {
-                try {
-                    baos.close();
-                } catch (final IOException ignore) {
-                }
-            }
-        }
-    }
 
     public static void throwWithinIsisException(final InvocationTargetException e, final String error) {
         final Throwable targetException = e.getTargetException();
