@@ -303,9 +303,9 @@ public interface ObjectAction extends ObjectMember {
 
             @SuppressWarnings({ "unchecked", "deprecation" })
             Predicate<ObjectAction> predicate = com.google.common.base.Predicates
-                    .and(Predicates.memberOrderNotAssociationOf(adapterSpec),
-                            Predicates.dynamicallyVisible(adapter, InteractionInitiatedBy.USER, Where.ANYWHERE),
-                            Predicates.notBulkOnly(), Predicates.excludeWizardActions(adapterSpec));
+                    .and(ObjectAction.Predicates.memberOrderNotAssociationOf(adapterSpec),
+                            ObjectAction.Predicates.dynamicallyVisible(adapter, InteractionInitiatedBy.USER, Where.ANYWHERE),
+                            ObjectAction.Predicates.notBulkOnly(), ObjectAction.Predicates.excludeWizardActions(adapterSpec));
 
             final List<ObjectAction> userActions = adapterSpec.getObjectActions(actionType, Contributed.INCLUDED,
                     predicate);
@@ -343,8 +343,8 @@ public interface ObjectAction extends ObjectMember {
 
             @SuppressWarnings({ "unchecked", "deprecation" })
             Predicate<ObjectAction> predicate = com.google.common.base.Predicates
-                    .and(Predicates.memberOrderOf(association), Predicates.notBulkOnly(),
-                            Predicates.excludeWizardActions(objectSpecification));
+                    .and(ObjectAction.Predicates.memberOrderOf(association), ObjectAction.Predicates.notBulkOnly(),
+                            ObjectAction.Predicates.excludeWizardActions(objectSpecification));
 
             final List<ObjectAction> userActions = objectSpecification.getObjectActions(type, Contributed.INCLUDED,
                     predicate);
@@ -452,7 +452,7 @@ public interface ObjectAction extends ObjectMember {
             return new Predicate<ObjectAction>() {
                 @Override
                 public boolean apply(final ObjectAction objectAction) {
-                    final List<Facet> validatingFacets = objectAction.getFacets(Facet.Filters
+                    final List<Facet> validatingFacets = objectAction.getFacets(Facet.Predicates
                             .isA(ValidatingInteractionAdvisor.class));
                     return validatingFacets.isEmpty();
                 }

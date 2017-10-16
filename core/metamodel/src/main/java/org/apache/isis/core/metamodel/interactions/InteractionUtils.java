@@ -33,7 +33,7 @@ public final class InteractionUtils {
 
     public static InteractionResult isVisibleResult(final FacetHolder facetHolder, final VisibilityContext<?> context) {
         final InteractionResult result = new InteractionResult(context.createInteractionEvent());
-        final List<Facet> facets = facetHolder.getFacets(Facet.Filters.isA(HidingInteractionAdvisor.class));
+        final List<Facet> facets = facetHolder.getFacets(Facet.Predicates.isA(HidingInteractionAdvisor.class));
         for (final Facet facet : facets) {
             final HidingInteractionAdvisor advisor = (HidingInteractionAdvisor) facet;
             result.advise(advisor.hides(context), advisor);
@@ -43,7 +43,7 @@ public final class InteractionUtils {
 
     public static InteractionResult isUsableResult(final FacetHolder facetHolder, final UsabilityContext<?> context) {
         final InteractionResult result = new InteractionResult(context.createInteractionEvent());
-        final List<Facet> facets = facetHolder.getFacets(Facet.Filters.isA(DisablingInteractionAdvisor.class));
+        final List<Facet> facets = facetHolder.getFacets(Facet.Predicates.isA(DisablingInteractionAdvisor.class));
         for (final Facet facet : facets) {
             final DisablingInteractionAdvisor advisor = (DisablingInteractionAdvisor) facet;
             final String disables = advisor.disables(context);
@@ -54,7 +54,7 @@ public final class InteractionUtils {
 
     public static InteractionResult isValidResult(final FacetHolder facetHolder, final ValidityContext<?> context) {
         final InteractionResult result = new InteractionResult(context.createInteractionEvent());
-        final List<Facet> facets = facetHolder.getFacets(Facet.Filters.isA(ValidatingInteractionAdvisor.class));
+        final List<Facet> facets = facetHolder.getFacets(Facet.Predicates.isA(ValidatingInteractionAdvisor.class));
         for (final Facet facet : facets) {
             final ValidatingInteractionAdvisor advisor = (ValidatingInteractionAdvisor) facet;
             result.advise(advisor.invalidates(context), advisor);

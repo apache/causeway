@@ -76,80 +76,80 @@ public class FacetPredicatesTest extends TestCase {
     }
 
     public void testIsAWhenIs() {
-        final Predicate<Facet> predicate = Facet.Filters.isA(FooFacet.class);
+        final Predicate<Facet> predicate = Facet.Predicates.isA(FooFacet.class);
         assertTrue(predicate.apply(fooFacet));
     }
 
     public void testIsAWhenIsNot() {
-        final Predicate<Facet> predicate = Facet.Filters.isA(FooFacet.class);
+        final Predicate<Facet> predicate = Facet.Predicates.isA(FooFacet.class);
         assertFalse(predicate.apply(barFacet));
     }
 
     public void testIsAWhenIsSubclass() {
-        final Predicate<Facet> predicate = Facet.Filters.isA(FooFacet.class);
+        final Predicate<Facet> predicate = Facet.Predicates.isA(FooFacet.class);
         assertTrue(predicate.apply(fooSubFacet));
     }
 
     public void testIsAWhenIsNotBecauseASuperclass() {
-        final Predicate<Facet> predicate = Facet.Filters.isA(FooFacet.class);
+        final Predicate<Facet> predicate = Facet.Predicates.isA(FooFacet.class);
         assertFalse(predicate.apply(fooSuperFacet));
     }
 
     public void testAndTrueTrue() {
         final Predicate<Facet> and = com.google.common.base.Predicates
-                .and(Facet.Filters.ANY, Facet.Filters.ANY );
+                .and(Facet.Predicates.ANY, Facet.Predicates.ANY );
         assertTrue(and.apply(fooFacet));
     }
 
     public void testAndTrueFalse() {
         final Predicate<Facet> and = com.google.common.base.Predicates
-                .and(Facet.Filters.ANY, Facet.Filters.NONE );
+                .and(Facet.Predicates.ANY, Facet.Predicates.NONE );
         assertFalse(and.apply(fooFacet));
     }
 
     public void testAndFalseTrue() {
         final Predicate<Facet> and = com.google.common.base.Predicates
-                .and(Facet.Filters.NONE, Facet.Filters.ANY );
+                .and(Facet.Predicates.NONE, Facet.Predicates.ANY );
         assertFalse(and.apply(fooFacet));
     }
 
     public void testAndFalseFalse() {
         final Predicate<Facet> and = com.google.common.base.Predicates
-                .and(Facet.Filters.NONE, Facet.Filters.NONE );
+                .and(Facet.Predicates.NONE, Facet.Predicates.NONE );
         assertFalse(and.apply(fooFacet));
     }
 
     public void testOrTrueTrue() {
         final Predicate<Facet> or = com.google.common.base.Predicates
-                .or(Facet.Filters.ANY, Facet.Filters.ANY );
+                .or(Facet.Predicates.ANY, Facet.Predicates.ANY );
         assertTrue(or.apply(fooFacet));
     }
 
     public void testOrTrueFalse() {
         final Predicate<Facet> or = com.google.common.base.Predicates
-                .or(Facet.Filters.ANY, Facet.Filters.NONE );
+                .or(Facet.Predicates.ANY, Facet.Predicates.NONE );
         assertTrue(or.apply(fooFacet));
     }
 
     public void testorFalseTrue() {
         final Predicate<Facet> or = com.google.common.base.Predicates
-                .or(Facet.Filters.NONE, Facet.Filters.ANY );
+                .or(Facet.Predicates.NONE, Facet.Predicates.ANY );
         assertTrue(or.apply(fooFacet));
     }
 
     public void testOrFalseFalse() {
         final Predicate<Facet> or = com.google.common.base.Predicates
-                .and(Facet.Filters.NONE, Facet.Filters.NONE );
+                .and(Facet.Predicates.NONE, Facet.Predicates.NONE );
         assertFalse(or.apply(fooFacet));
     }
 
     public void testNotTrue() {
-        final Predicate<Facet> not = com.google.common.base.Predicates.not(Facet.Filters.ANY);
+        final Predicate<Facet> not = com.google.common.base.Predicates.not(Facet.Predicates.ANY);
         assertFalse(not.apply(fooFacet));
     }
 
     public void testNotFalse() {
-        final Predicate<Facet> not = com.google.common.base.Predicates.not(Facet.Filters.NONE);
+        final Predicate<Facet> not = com.google.common.base.Predicates.not(Facet.Predicates.NONE);
         assertTrue(not.apply(fooFacet));
     }
 

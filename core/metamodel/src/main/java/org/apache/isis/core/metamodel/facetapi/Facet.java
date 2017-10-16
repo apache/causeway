@@ -96,9 +96,11 @@ public interface Facet {
      */
     public boolean alwaysReplace();
 
-    public static final class Filters {
 
-        private Filters() {
+    
+    public static final class Predicates {
+
+        private Predicates() {
         }
 
         /**
