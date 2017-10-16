@@ -131,7 +131,7 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     @SuppressWarnings("unchecked")
     public List<OneToOneAssociation> getProperties(final Contributed contributed) {
         @SuppressWarnings("rawtypes")
-        final List list = getAssociations(Contributed.EXCLUDED, ObjectAssociation.Filters.PROPERTIES);
+        final List list = getAssociations(Contributed.EXCLUDED, ObjectAssociation.Predicates.PROPERTIES);
         return new ArrayList<OneToOneAssociation>(list);
     }
 
@@ -139,7 +139,7 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     @SuppressWarnings("unchecked")
     public List<OneToManyAssociation> getCollections(final Contributed contributed) {
         @SuppressWarnings("rawtypes")
-        final List list = getAssociations(Contributed.EXCLUDED, ObjectAssociation.Filters.COLLECTIONS);
+        final List list = getAssociations(Contributed.EXCLUDED, ObjectAssociation.Predicates.COLLECTIONS);
         return new ArrayList<>(list);
     }
 

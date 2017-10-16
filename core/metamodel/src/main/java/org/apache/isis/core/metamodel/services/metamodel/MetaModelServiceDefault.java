@@ -100,7 +100,7 @@ public class MetaModelServiceDefault implements MetaModelService3 {
             if (exclude(spec)) {
                 continue;
             }
-            final List<ObjectAssociation> properties = spec.getAssociations(Contributed.EXCLUDED, ObjectAssociation.Filters.PROPERTIES);
+            final List<ObjectAssociation> properties = spec.getAssociations(Contributed.EXCLUDED, ObjectAssociation.Predicates.PROPERTIES);
             for (final ObjectAssociation property : properties) {
                 final OneToOneAssociation otoa = (OneToOneAssociation) property;
                 if (exclude(otoa)) {
@@ -108,7 +108,7 @@ public class MetaModelServiceDefault implements MetaModelService3 {
                 }
                 rows.add(new DomainMemberDefault(spec, otoa));
             }
-            final List<ObjectAssociation> associations = spec.getAssociations(Contributed.EXCLUDED, ObjectAssociation.Filters.COLLECTIONS);
+            final List<ObjectAssociation> associations = spec.getAssociations(Contributed.EXCLUDED, ObjectAssociation.Predicates.COLLECTIONS);
             for (final ObjectAssociation collection : associations) {
                 final OneToManyAssociation otma = (OneToManyAssociation) collection;
                 if (exclude(otma)) {

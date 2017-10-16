@@ -156,6 +156,96 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
     // //////////////////////////////////////////////////////
 
     public static class Predicates {
+        /**
+         * Filters only fields that are for properties (ie 1:1 associations)
+         *
+         * @deprecated -use {@link Predicate equivalent}
+         */
+        @Deprecated
+        public final static Predicate<ObjectAssociation> PROPERTIES = new Predicate<ObjectAssociation>() {
+            @Override
+            public boolean apply(final ObjectAssociation association) {
+                return association.isOneToOneAssociation();
+            }
+        };
+        /**
+         * Filters only fields that are for reference properties (ie 1:1 associations)
+         *
+         * @deprecated -use {@link Predicate equivalent}
+         */
+        @Deprecated
+        public final static Predicate<ObjectAssociation> REFERENCE_PROPERTIES = new Predicate<ObjectAssociation>() {
+            @Override
+            public boolean apply(final ObjectAssociation association) {
+                return association.isOneToOneAssociation() &&
+                       !association.getSpecification().containsDoOpFacet(ValueFacet.class);
+            }
+        };
+        /**
+         * Filters only fields that are for properties (ie 1:1 associations)
+         *
+         * @deprecated -use {@link Predicate equivalent}
+         */
+        @Deprecated
+        public final static Predicate<ObjectAssociation> WHERE_VISIBLE_IN_COLLECTION_TABLE = new Predicate<ObjectAssociation>() {
+            @Override
+            public boolean apply(final ObjectAssociation association) {
+                final HiddenFacet hiddenFacet = association.getFacet(HiddenFacet.class);
+                return hiddenFacet == null || !hiddenFacet.where().inParentedTable();
+            }
+        };
+        /**
+         * Filters only fields that are for properties (ie 1:1 associations)
+         *
+         * @deprecated -use {@link Predicate equivalent}
+         */
+        @Deprecated
+        public final static Predicate<ObjectAssociation> WHERE_VISIBLE_IN_STANDALONE_TABLE = new Predicate<ObjectAssociation>() {
+            @Override
+            public boolean apply(final ObjectAssociation association) {
+                final HiddenFacet hiddenFacet = association.getFacet(HiddenFacet.class);
+                return hiddenFacet == null || !hiddenFacet.where().inStandaloneTable();
+            }
+        };
+        /**
+         * Returns all fields (that is, filters out nothing).
+         *
+         * @deprecated -use {@link Predicate equivalent}
+         */
+        @Deprecated
+        public final static Predicate<ObjectAssociation> ALL = new Predicate<ObjectAssociation>() {
+            @Override
+            public boolean apply(final ObjectAssociation property) {
+                return true;
+            }
+        };
+        /**
+         * Filters only fields that are for collections (ie 1:m associations)
+         *
+         * @deprecated -use {@link Predicate equivalent}
+         */
+        @Deprecated
+        public final static Predicate<ObjectAssociation> COLLECTIONS = new Predicate<ObjectAssociation>() {
+            @Override
+            public boolean apply(final ObjectAssociation property) {
+                return property.isOneToManyAssociation();
+            }
+        };
+        /**
+         * Filters only properties that are visible statically, ie have not been
+         * unconditionally hidden at compile time.
+         *
+         * @deprecated -use {@link Predicate equivalent}
+         */
+        @Deprecated
+        public static final Predicate<ObjectAssociation> VISIBLE_AT_LEAST_SOMETIMES = new Predicate<ObjectAssociation>() {
+            @Override
+            public boolean apply(final ObjectAssociation property) {
+                final HiddenFacet hiddenFacet = property.getFacet(HiddenFacet.class);
+                return hiddenFacet == null || hiddenFacet.where() != Where.ANYWHERE;
+            }
+        };
+
         private Predicates(){}
         
         public static com.google.common.base.Predicate being(final Contributed contributed) {
@@ -179,113 +269,6 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
                 );
         }
 
-    }
-    
-    // //////////////////////////////////////////////////////
-    // Filters
-    // //////////////////////////////////////////////////////
-
-    public static class Filters {
-
-        private Filters() {
-        }
-
-        /**
-         * Filters only fields that are for properties (ie 1:1 associations)
-         *
-         * @deprecated -use {@link com.google.common.base.Predicate equivalent}
-         */
-        @Deprecated
-        public final static Predicate<ObjectAssociation> PROPERTIES = new Predicate<ObjectAssociation>() {
-            @Override
-            public boolean apply(final ObjectAssociation association) {
-                return association.isOneToOneAssociation();
-            }
-        };
-
-        /**
-         * Filters only fields that are for reference properties (ie 1:1 associations)
-         *
-         * @deprecated -use {@link com.google.common.base.Predicate equivalent}
-         */
-        @Deprecated
-        public final static Predicate<ObjectAssociation> REFERENCE_PROPERTIES = new Predicate<ObjectAssociation>() {
-            @Override
-            public boolean apply(final ObjectAssociation association) {
-                return association.isOneToOneAssociation() && 
-                       !association.getSpecification().containsDoOpFacet(ValueFacet.class);
-            }
-        };
-        
-        /**
-         * Filters only fields that are for properties (ie 1:1 associations)
-         *
-         * @deprecated -use {@link com.google.common.base.Predicate equivalent}
-         */
-        @Deprecated
-        public final static Predicate<ObjectAssociation> WHERE_VISIBLE_IN_COLLECTION_TABLE = new Predicate<ObjectAssociation>() {
-            @Override
-            public boolean apply(final ObjectAssociation association) {
-                final HiddenFacet hiddenFacet = association.getFacet(HiddenFacet.class);
-                return hiddenFacet == null || !hiddenFacet.where().inParentedTable();
-            }
-        };
-
-        /**
-         * Filters only fields that are for properties (ie 1:1 associations)
-         *
-         * @deprecated -use {@link com.google.common.base.Predicate equivalent}
-         */
-        @Deprecated
-        public final static Predicate<ObjectAssociation> WHERE_VISIBLE_IN_STANDALONE_TABLE = new Predicate<ObjectAssociation>() {
-            @Override
-            public boolean apply(final ObjectAssociation association) {
-                final HiddenFacet hiddenFacet = association.getFacet(HiddenFacet.class);
-                return hiddenFacet == null || !hiddenFacet.where().inStandaloneTable();
-            }
-        };
-
-        /**
-         * Returns all fields (that is, filters out nothing).
-         *
-         * @deprecated -use {@link com.google.common.base.Predicate equivalent}
-         */
-        @Deprecated
-        public final static Predicate<ObjectAssociation> ALL = new Predicate<ObjectAssociation>() {
-            @Override
-            public boolean apply(final ObjectAssociation property) {
-                return true;
-            }
-        };
-
-        /**
-         * Filters only fields that are for collections (ie 1:m associations)
-         *
-         * @deprecated -use {@link com.google.common.base.Predicate equivalent}
-         */
-        @Deprecated
-        public final static Predicate<ObjectAssociation> COLLECTIONS = new Predicate<ObjectAssociation>() {
-            @Override
-            public boolean apply(final ObjectAssociation property) {
-                return property.isOneToManyAssociation();
-            }
-        };
-
-        /**
-         * Filters only properties that are visible statically, ie have not been
-         * unconditionally hidden at compile time.
-         *
-         * @deprecated -use {@link com.google.common.base.Predicate equivalent}
-         */
-        @Deprecated
-        public static final Predicate<ObjectAssociation> VISIBLE_AT_LEAST_SOMETIMES = new Predicate<ObjectAssociation>() {
-            @Override
-            public boolean apply(final ObjectAssociation property) {
-                final HiddenFacet hiddenFacet = property.getFacet(HiddenFacet.class);
-                return hiddenFacet == null || hiddenFacet.where() != Where.ANYWHERE;
-            }
-        };
-
         public static final Predicate<ObjectAssociation> staticallyVisible(final Where where) {
             return new Predicate<ObjectAssociation>() {
                 @Override
@@ -307,7 +290,7 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
         }
 
         /**
-         * @deprecated -use {@link com.google.common.base.Predicate equivalent}
+         * @deprecated -use {@link Predicate equivalent}
          */
         @Deprecated
         public static Predicate<ObjectAssociation> dynamicallyVisible(
@@ -321,6 +304,16 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
                     return visible.isAllowed();
                 }
             };
+        }
+    }
+    
+    // //////////////////////////////////////////////////////
+    // Filters
+    // //////////////////////////////////////////////////////
+
+    public static class Filters {
+
+        private Filters() {
         }
 
         /**

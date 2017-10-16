@@ -202,7 +202,7 @@ public class BookmarkTreeNode implements Serializable {
         if(candidateBookmarkableModel instanceof EntityModel) {
             EntityModel entityModel = (EntityModel) candidateBookmarkableModel;
             final ObjectAdapter candidateAdapter = entityModel.getObject();
-            final List<ObjectAssociation> properties = candidateAdapter.getSpecification().getAssociations(Contributed.EXCLUDED, ObjectAssociation.Filters.REFERENCE_PROPERTIES);
+            final List<ObjectAssociation> properties = candidateAdapter.getSpecification().getAssociations(Contributed.EXCLUDED, ObjectAssociation.Predicates.REFERENCE_PROPERTIES);
             for (ObjectAssociation objectAssoc : properties) {
                 final ObjectAdapter possibleParentAdapter = objectAssoc.get(candidateAdapter, InteractionInitiatedBy.USER);
                 if(possibleParentAdapter == null) {

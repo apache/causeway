@@ -123,10 +123,10 @@ public class ApplicationFeatureRepositoryDefaultTest {
                 allowing(mockSpec).getFullIdentifier();
                 will(returnValue(Bar.class.getName()));
 
-                allowing(mockSpec).getAssociations(with(Contributed.INCLUDED), with(ObjectAssociation.Filters.PROPERTIES));
+                allowing(mockSpec).getAssociations(with(Contributed.INCLUDED), with(ObjectAssociation.Predicates.PROPERTIES));
                 will(returnValue(properties));
 
-                allowing(mockSpec).getAssociations(with(Contributed.INCLUDED), with(ObjectAssociation.Filters.COLLECTIONS));
+                allowing(mockSpec).getAssociations(with(Contributed.INCLUDED), with(ObjectAssociation.Predicates.COLLECTIONS));
                 will(returnValue(collections));
 
                 allowing(mockSpec).getFacet(HiddenFacet.class);

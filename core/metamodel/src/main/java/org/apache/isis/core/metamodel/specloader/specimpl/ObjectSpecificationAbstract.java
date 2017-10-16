@@ -717,14 +717,14 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public List<OneToOneAssociation> getProperties(Contributed contributed) {
-        final List list = getAssociations(contributed, ObjectAssociation.Filters.PROPERTIES);
+        final List list = getAssociations(contributed, ObjectAssociation.Predicates.PROPERTIES);
         return list;
     }
 
     @Override
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public List<OneToManyAssociation> getCollections(Contributed contributed) {
-        final List list = getAssociations(contributed, ObjectAssociation.Filters.COLLECTIONS);
+        final List list = getAssociations(contributed, ObjectAssociation.Predicates.COLLECTIONS);
         return list;
     }
 

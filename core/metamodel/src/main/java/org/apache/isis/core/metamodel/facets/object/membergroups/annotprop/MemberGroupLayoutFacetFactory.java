@@ -112,8 +112,8 @@ public class MemberGroupLayoutFacetFactory extends FacetFactoryAbstract implemen
             private int numCollectionsOf(ObjectSpecification objectSpec) {
                 List<ObjectAssociation> objectCollections = objectSpec.getAssociations(
                         Contributed.EXCLUDED, com.google.common.base.Predicates.and(
-                                ObjectAssociation.Filters.staticallyVisible(Where.OBJECT_FORMS),
-                                ObjectAssociation.Filters.COLLECTIONS )
+                                ObjectAssociation.Predicates.staticallyVisible(Where.OBJECT_FORMS),
+                                ObjectAssociation.Predicates.COLLECTIONS )
                 );
                 return objectCollections.size();
             }

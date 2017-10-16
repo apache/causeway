@@ -104,13 +104,13 @@ public final class Util {
     static List<OneToOneAssociation> propertiesOf(
             final ObjectSpecification objectSpecification,
             final SwaggerService.Visibility visibility) {
-        return associationsOf(objectSpecification, ObjectAssociation.Filters.PROPERTIES, visibility);
+        return associationsOf(objectSpecification, ObjectAssociation.Predicates.PROPERTIES, visibility);
     }
 
     static List<OneToManyAssociation> collectionsOf(
             final ObjectSpecification objectSpecification,
             final SwaggerService.Visibility visibility) {
-        return associationsOf(objectSpecification, ObjectAssociation.Filters.COLLECTIONS, visibility);
+        return associationsOf(objectSpecification, ObjectAssociation.Predicates.COLLECTIONS, visibility);
     }
 
     static <T extends ObjectAssociation> List<T> associationsOf(

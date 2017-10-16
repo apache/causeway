@@ -134,8 +134,8 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
             return;
         }
 
-        final List<ObjectAssociation> properties = spec.getAssociations(Contributed.INCLUDED, ObjectAssociation.Filters.PROPERTIES);
-        final List<ObjectAssociation> collections = spec.getAssociations(Contributed.INCLUDED, ObjectAssociation.Filters.COLLECTIONS);
+        final List<ObjectAssociation> properties = spec.getAssociations(Contributed.INCLUDED, ObjectAssociation.Predicates.PROPERTIES);
+        final List<ObjectAssociation> collections = spec.getAssociations(Contributed.INCLUDED, ObjectAssociation.Predicates.COLLECTIONS);
         final List<ObjectAction> actions = spec.getObjectActions(Contributed.INCLUDED);
 
         if (properties.isEmpty() && collections.isEmpty() && actions.isEmpty()) {

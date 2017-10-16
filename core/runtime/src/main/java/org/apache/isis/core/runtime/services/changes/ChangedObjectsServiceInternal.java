@@ -94,7 +94,7 @@ public class ChangedObjectsServiceInternal implements WithTransactionScope {
 
         enlistForPublishing(adapter, PublishingChangeKind.CREATE);
 
-        for (ObjectAssociation property : adapter.getSpecification().getAssociations(Contributed.EXCLUDED, ObjectAssociation.Filters.PROPERTIES)) {
+        for (ObjectAssociation property : adapter.getSpecification().getAssociations(Contributed.EXCLUDED, ObjectAssociation.Predicates.PROPERTIES)) {
             final AdapterAndProperty aap = AdapterAndProperty.of(adapter, property);
             if(property.isNotPersisted()) {
                 continue;
@@ -128,7 +128,7 @@ public class ChangedObjectsServiceInternal implements WithTransactionScope {
 
         enlistForPublishing(adapter, PublishingChangeKind.UPDATE);
 
-        for (ObjectAssociation property : adapter.getSpecification().getAssociations(Contributed.EXCLUDED, ObjectAssociation.Filters.PROPERTIES)) {
+        for (ObjectAssociation property : adapter.getSpecification().getAssociations(Contributed.EXCLUDED, ObjectAssociation.Predicates.PROPERTIES)) {
             final AdapterAndProperty aap = AdapterAndProperty.of(adapter, property);
             if(property.isNotPersisted()) {
                 continue;
@@ -165,7 +165,7 @@ public class ChangedObjectsServiceInternal implements WithTransactionScope {
             return;
         }
 
-        for (ObjectAssociation property : adapter.getSpecification().getAssociations(Contributed.EXCLUDED, ObjectAssociation.Filters.PROPERTIES)) {
+        for (ObjectAssociation property : adapter.getSpecification().getAssociations(Contributed.EXCLUDED, ObjectAssociation.Predicates.PROPERTIES)) {
             final AdapterAndProperty aap = AdapterAndProperty.of(adapter, property);
             if(property.isNotPersisted()) {
                 continue;

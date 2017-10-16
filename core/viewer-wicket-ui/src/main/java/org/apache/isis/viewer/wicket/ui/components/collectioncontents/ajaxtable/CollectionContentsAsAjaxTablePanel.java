@@ -182,7 +182,7 @@ public class CollectionContentsAsAjaxTablePanel
 
         @SuppressWarnings("unchecked")
         final Predicate<ObjectAssociation> predicate = com.google.common.base.Predicates
-                .and(ObjectAssociation.Filters.PROPERTIES, new Predicate<ObjectAssociation>() {
+                .and(ObjectAssociation.Predicates.PROPERTIES, new Predicate<ObjectAssociation>() {
                             @Override
                             public boolean apply(final ObjectAssociation association) {
                                 final List<Facet> facets = association.getFacets(new Predicate<Facet>() {
