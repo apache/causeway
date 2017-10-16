@@ -8,13 +8,13 @@
 View models are similar to entities in that (unlike domain services) there can be many instances of any given type.
 End users interact with view models in the same way as a domain entity, indeed they are unlikely to distinguish one from the other.
 
-However, whereas a domain entities is mapped to a datastore, view models are not.
+However, whereas domain entities are mapped to a datastore, view models are not.
 Instead they are recreated dynamically by serializing their state, ultimately into the URL itself (meaning their state it is in effect implicitly managed by the client browser).
 You will notice that the URL for view models (as shown in xref:../ugvw/ugvw.adoc#[Wicket viewer] or xref:../ugvro/ugvro.adoc#[RestfulObjects viewer]) tends to be quite long.
 
 This capability opens up a number of more advanced use cases:
 
-* In the same way that an (RDBMS) database view can aggregate and abstract from multiple underlying database tables, so a view model sits on top of one or many underlying entities.
+* In the same way that an (RDBMS) database view can aggregate and abstract from multiple underlying database tables, a view model sits on top of one or many underlying entities.
 
 * A view model could also be used as a proxy for some externally managed entity, accessed over a web service or REST API; it could even be a representation of state held in-memory (such as user preferences, for example).
 
@@ -95,7 +95,7 @@ It takes a little practice though, because even when building the domain layer "
 You certainly _shouldn't_ try to build out a domain layer that could support every conceivable use case before starting to think about view models.
 
 Instead, you should iterate.
-Identify the use case/story/end-user objective that you will deliver value to the business.
+Identify the use case/story/end-user objective that will deliver value to the business.
 Then build out the minimum domain entities to support that use case (refining the xref:../ugfun/ugfun.adoc#__ugfun_core-concepts_philosophy_domain-driven-design_ubiquitous-language[ubiquitous language] as you go).
 Then, identify if there any view models that could be introduced which would simplify the end-user interactions with the system (perhaps automating several related use cases together).
 ****
