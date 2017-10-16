@@ -259,16 +259,6 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
         }
 
 
-
-        public static final com.google.common.base.Predicate enabled(
-                final ObjectAdapter adapter,
-                final InteractionInitiatedBy interactionInitiatedBy,
-                final Where where) {
-            return Predicates.enabled(adapter,
-                        interactionInitiatedBy, where
-                );
-        }
-
         /**
          * @deprecated -use {@link Predicate equivalent}
          */
