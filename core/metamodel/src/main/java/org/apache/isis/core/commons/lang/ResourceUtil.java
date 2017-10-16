@@ -20,7 +20,6 @@
 package org.apache.isis.core.commons.lang;
 
 import java.io.InputStream;
-import java.net.URL;
 
 /**
  * Adapted from Ibatis Common, now with some additional guava stuff.
@@ -28,37 +27,6 @@ import java.net.URL;
 public class ResourceUtil {
     
     private ResourceUtil(){}
-
-    /**
-     * Returns the URL, or null if not available.
-     */
-    public static URL getResourceURL(final String resource) {
-
-        // try thread's classloader
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        URL url = classLoader.getResource(resource);
-        if (url != null) {
-            return url;
-        }
-
-        // try this class' classloader
-        classLoader = ResourceUtil.class.getClassLoader();
-        url = classLoader.getResource(resource);
-        if (url != null) {
-            return url;
-        }
-
-        // try system class loader (could return null)
-        // wrapping in a try...catch because when running tests by Maven for a
-        // non-existing
-        // resource, seems to bomb out. Is okay when run from Eclipse. A bit of
-        // a puzzle.
-        try {
-            return ClassLoader.getSystemResource(resource);
-        } catch (final NullPointerException ignore) {
-            return null;
-        }
-    }
 
     public static InputStream getResourceAsStream(final String resource) {
 
