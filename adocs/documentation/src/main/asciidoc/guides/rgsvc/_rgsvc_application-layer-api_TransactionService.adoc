@@ -7,10 +7,6 @@
 
 The `TransactionService2` provides a small number of methods to allow domain objects to influence user transactions.
 
-[NOTE]
-====
-The methods in this service replace similar methods (now deprecated) in xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer[`DomainObjectContainer`].
-====
 
 
 == API

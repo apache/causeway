@@ -41,7 +41,6 @@ import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.xactn.TransactionService;
@@ -244,18 +243,7 @@ public class DomainObjectContainerDefault
 
     //endregion
 
-    //region > flush, commit (deprecated)
-
-    /**
-     * @deprecated
-     */
-    @Deprecated
-    @Programmatic
-    @Override
-    public boolean flush() {
-        transactionService.flushTransaction();
-        return false;
-    }
+    //region > commit (deprecated)
 
     /**
      * @deprecated
@@ -510,12 +498,6 @@ public class DomainObjectContainerDefault
 
     @javax.inject.Inject
     ServiceRegistry serviceRegistry;
-
-    @javax.inject.Inject
-    TransactionService transactionService;
-
-    @javax.inject.Inject
-    TitleService titleService;
 
     @javax.inject.Inject
     UserService userService;

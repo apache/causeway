@@ -459,5 +459,7 @@ org.apache.isis.applib.value
 org.apache.isis.applib
 
     DomainObjectContainer.java
-    - titleOf      .. removed
-    - iconNameOf   .. removed
+    - titleOf       ... use TitleService#titleOf(...) instead
+    - iconNameOf    ... use TitleService#iconNameOf(...) instead
+    - flush()       ... use TransactionService#flushTransaction instead
+

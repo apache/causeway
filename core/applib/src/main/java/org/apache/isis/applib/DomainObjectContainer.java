@@ -90,22 +90,7 @@ public interface DomainObjectContainer {
 
     //endregion
 
-    //region > flush, commit (DEPRECATED)
-
-    /**
-     * Flush all changes to the object store.
-     * 
-     * <p>
-     * Occasionally useful to ensure that newly persisted domain objects
-     * are flushed to the database prior to a subsequent repository query. 
-     * 
-     * @return  - is never used, always returns <tt>false</tt>.
-     *
-     * @deprecated - use {@link TransactionService#flushTransaction()}.
-     */
-    @Programmatic
-    @Deprecated
-    boolean flush();
+    //region > commit (DEPRECATED)
 
     /**
      * Commit all changes to the object store.

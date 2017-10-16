@@ -26,7 +26,6 @@ public interface DomainObjectContainer {
     void remove(Object persistentDomainObject);         // <5>
     void removeIfNotAlready(Object domainObject);       // <6>
 
-    boolean flush();                                    // <7>
     ...
 }
 ----
@@ -36,7 +35,6 @@ public interface DomainObjectContainer {
 <4> persist an object but only if know to not have been persistent.  But if the object is persistent, is a no-op
 <5> remove (ie DELETE) a persistent object.  For similar reasons to the persistence, it is generally better to use:
 <6> remove (ie DELETE) an object only if known to be persistent.  But if the object has already been deleted, then is a no-op.
-<7> flushes all pending changes to the objectstore.  Explained further below.
 
 For example:
 
@@ -48,10 +46,7 @@ cust.setLastName("Mercury");
 container.persistIfNotAlready(cust);
 ----
 
-You should be aware that by default Apache Isis queues up calls to `#persist()` and `#remove()`.  These are then executed either when the request completes (and the transaction commits), or if the queue is flushed.  This can be done either implicitly by the framework, or as the result of a direct call to `#flush()`.
-
-By default the framework itself will cause `#flush()` to be called whenever a query is executed by way of `#allMatches(Query)`, as documented xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-api_RepositoryService[above].
-However, this behaviour can be disabled using the  xref:../rgcfg/rgcfg.adoc#_rgcfg_configuring-core[configuration property] `isis.services.container.disableAutoFlush`.
+You should be aware that by default Apache Isis queues up calls to `#persist()` and `#remove()`.  These are then executed either when the request completes (and the transaction commits), or if the queue is flushed.  This can be done either implicitly by the framework, or as the result of a direct call to `TransactionService#flushTransaction()`.
 
 
 
