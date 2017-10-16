@@ -97,25 +97,11 @@ public interface Facet {
     public boolean alwaysReplace();
 
 
-    
+
     public static final class Predicates {
 
         private Predicates() {
         }
-
-        /**
-         * {@link Predicate <Facet>#accept(Facet) Accepts} everything.
-         */
-        public static final Predicate<Facet> ANY = com.google.common.base.Predicates.alwaysTrue();
-        /**
-         * {@link Predicate <Facet>#accept(Facet) Accepts} nothing.
-         */
-        public static final Predicate<Facet> NONE = new Predicate<Facet>() {
-            @Override
-            public boolean apply(final Facet facet) {
-                return false;
-            }
-        };
 
         public static Predicate<Facet> isA(final Class<?> superClass) {
             return new Predicate<Facet>() {
