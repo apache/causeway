@@ -56,7 +56,7 @@ a configured `EmailService`
 
 |xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_ExceptionRecognizer[`o.a.i.applib.` +
 `services.exceprecog` +
-`ExceptionRecognizer2`]
+`ExceptionRecognizer`]
 |Convert certain exceptions (eg foreign or unique key violation in the database) into a format that can be rendered to the end-user.
 |`ExceptionRecognizer-` +
 `CompositeFor-` +

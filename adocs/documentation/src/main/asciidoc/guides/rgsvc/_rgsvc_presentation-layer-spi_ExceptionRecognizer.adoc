@@ -20,7 +20,7 @@ The SPI defined by this service is:
 
 [source,java]
 ----
-public interface ExceptionRecognizer2 ... {
+public interface ExceptionRecognizer ... {
     public enum Category {                          // <1>
         ...
     }
@@ -48,7 +48,7 @@ The categories are:
 
 [source,java]
 ----
-public interface ExceptionRecognizer2 ... {
+public interface ExceptionRecognizer ... {
     public enum Category {
         CONSTRAINT_VIOLATION,           // <1>
         NOT_FOUND,                      // <2>
@@ -89,7 +89,7 @@ The framework provides two default implementations:
 ** `ExceptionRecognizerForJDODataStoreException`
 
 
-If you want to recognize and handle additional exceptions (for example to capture error messages specific to the JDBC driver you might be using), then create a fine-grained implementation of `ExceptionRecognizer2` for the particular error message (there are some convenience implementations of the interface that you can subclass from if required) and register in `isis.properties`.
+If you want to recognize and handle additional exceptions (for example to capture error messages specific to the JDBC driver you might be using), then create a fine-grained implementation of `ExceptionRecognizer` for the particular error message (there are some convenience implementations of the interface that you can subclass from if required) and register in `isis.properties`.
 
 
 

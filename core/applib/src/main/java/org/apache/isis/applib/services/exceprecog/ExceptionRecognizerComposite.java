@@ -44,7 +44,7 @@ import org.apache.isis.applib.services.registry.ServiceRegistry;
  * recognize various types of constraint violations.  These are grouped together as a single
  * set through the use of this class.
  */
-public class ExceptionRecognizerComposite implements ExceptionRecognizer2 {
+public class ExceptionRecognizerComposite implements ExceptionRecognizer {
 
     private final List<ExceptionRecognizer> exceptionRecognizers = Lists.newArrayList();
 
@@ -89,25 +89,20 @@ public class ExceptionRecognizerComposite implements ExceptionRecognizer2 {
 
 
     /**
-     * Returns the non-<tt>null</tt> recognition of the first {@link #add(ExceptionRecognizer) add}ed
-     * (that is also an {@link org.apache.isis.applib.services.exceprecog.ExceptionRecognizer2}).
+     * Returns the non-<tt>null</tt> recognition of the first {@link #add(ExceptionRecognizer) add}ed {@link org.apache.isis.applib.services.exceprecog.ExceptionRecognizer}.
      *
      * <p>
-     *     If none (as {@link org.apache.isis.applib.services.exceprecog.ExceptionRecognizer2}) recognize
-     *     the exception, then falls back to using {@link #recognize(Throwable)}, returning a
-     *     {@link org.apache.isis.applib.services.exceprecog.ExceptionRecognizer2.Recognition} with a
-     *     category of {@link org.apache.isis.applib.services.exceprecog.ExceptionRecognizer2.Category#CLIENT_ERROR}.
+     *     If none recognize the exception, then falls back to using {@link #recognize(Throwable)}, returning a
+     *     {@link org.apache.isis.applib.services.exceprecog.ExceptionRecognizer.Recognition} with a
+     *     category of {@link org.apache.isis.applib.services.exceprecog.ExceptionRecognizer.Category#CLIENT_ERROR}.
      * </p>
      */
     @Programmatic
     public final Recognition recognize2(final Throwable ex) {
         for (final ExceptionRecognizer ers : exceptionRecognizers) {
-            if(ers instanceof ExceptionRecognizer2) {
-                final ExceptionRecognizer2 recognizer2 = (ExceptionRecognizer2) ers;
-                final Recognition recognition = recognizer2.recognize2(ex);
-                if(recognition != null) {
-                    return recognition;
-                }
+            final Recognition recognition = ers.recognize2(ex);
+            if(recognition != null) {
+                return recognition;
             }
         }
         // backward compatible so far as possible.

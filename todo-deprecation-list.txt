@@ -150,6 +150,9 @@ org.apache.isis.applib.fixtures.switchuser
     SwitchUserService.java
     SwitchUserServiceAware.java
 
+
+
+
 org.apache.isis.applib.services.command
     Command.java  - methods that pertain to the execution of the command and its completion (for that, use Interaction) [suggest we retain for now]
         getCompletedAt()
@@ -412,6 +415,12 @@ org.apache.isis.applib.services.eventbus
     CollectionRemovedFromEvent.java  - remove
     PropertyChangedEvent.java - remove
     PropertyInteractionEvent.java - remove
+
+
+org.apache.isis.applib.services.exceprecog
+
+    rolls ExceptionRecognizer2 up into ExceptionRecognizer
+
 
 org.apache.isis.applib.services.metamodel
     MetaModelService2.java and MetaModelService3 - pulled up to MetaModelService supertype

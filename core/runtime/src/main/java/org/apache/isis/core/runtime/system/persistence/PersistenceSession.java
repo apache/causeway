@@ -50,7 +50,6 @@ import org.apache.isis.applib.services.command.spi.CommandService;
 import org.apache.isis.applib.services.eventbus.AbstractLifecycleEvent;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
-import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer2;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.InteractionContext;
@@ -945,13 +944,11 @@ public class PersistenceSession implements
             Class<ExceptionRecognizer> serviceClass = ExceptionRecognizer.class;
             final List<ExceptionRecognizer> exceptionRecognizers = lookupServices(serviceClass);
             for (ExceptionRecognizer exceptionRecognizer : exceptionRecognizers) {
-                if(exceptionRecognizer instanceof ExceptionRecognizer2) {
-                    final ExceptionRecognizer2 recognizer = (ExceptionRecognizer2) exceptionRecognizer;
-                    final ExceptionRecognizer2.Recognition recognition = recognizer.recognize2(e);
-                    if(recognition != null) {
-                        if(recognition.getCategory() == ExceptionRecognizer2.Category.NOT_FOUND) {
-                            throw new ObjectNotFoundException(rootOid, e);
-                        }
+                final ExceptionRecognizer.Recognition recognition =
+                        exceptionRecognizer.recognize2(e);
+                if(recognition != null) {
+                    if(recognition.getCategory() == ExceptionRecognizer.Category.NOT_FOUND) {
+                        throw new ObjectNotFoundException(rootOid, e);
                     }
                 }
             }
