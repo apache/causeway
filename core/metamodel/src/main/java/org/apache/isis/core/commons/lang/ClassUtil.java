@@ -181,23 +181,6 @@ public final class ClassUtil {
     public static class Functions {
         private Functions(){}
 
-        public static Function<Class<?>, String> nameOf() {
-            return new Function<Class<?>, String>() {
-                @Nullable @Override public String apply(final Class<?> input) {
-                    return input.getName();
-                }
-            };
-        }
-
-        public static Function<Class<?>, Package> packageOf() {
-            return new Function<Class<?>, Package>() {
-                @Nullable @Override
-                public Package apply(final Class<?> input) {
-                    return input.getPackage();
-                }
-            };
-        }
-
         public static Function<Class<?>, String> packageNameOf() {
             return new Function<Class<?>, String>() {
                 @Nullable @Override public String apply(final Class<?> input) {
