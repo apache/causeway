@@ -16,12 +16,10 @@
  */
 package org.apache.isis.schema.utils.jaxbadapters;
 
-import javax.inject.Inject;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
-import org.apache.isis.applib.services.bookmark.BookmarkService2;
 import org.apache.isis.schema.common.v1.OidDto;
 
 public class PersistentEntityAdapter extends XmlAdapter<OidDto, Object> {
@@ -31,7 +29,7 @@ public class PersistentEntityAdapter extends XmlAdapter<OidDto, Object> {
 
         final Bookmark bookmark = Bookmark.from(oidDto);
 
-        return bookmarkService.lookup(bookmark, BookmarkService2.FieldResetPolicy.DONT_RESET);
+        return bookmarkService.lookup(bookmark, BookmarkService.FieldResetPolicy.DONT_RESET);
     }
 
     @Override
@@ -43,9 +41,6 @@ public class PersistentEntityAdapter extends XmlAdapter<OidDto, Object> {
         return bookmark.toOidDto();
     }
 
-    private static String coalesce(final String first, final String second) {
-        return first != null? first: second;
-    }
 
 
     protected BookmarkService getBookmarkService() {
@@ -53,5 +48,5 @@ public class PersistentEntityAdapter extends XmlAdapter<OidDto, Object> {
     }
 
     @javax.inject.Inject
-    BookmarkService2 bookmarkService;
+    BookmarkService bookmarkService;
 }

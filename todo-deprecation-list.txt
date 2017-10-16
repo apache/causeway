@@ -12,9 +12,7 @@ org.apache.isis.applib.clock
     Clock
 
 
-org.apache.isis.applib.services.bookmark  (8 usages found)
-    BookmarkService.java - deprecated methods, have overloads in BookmarkService2 subtype [suggest we retain these for now]
-org.apache.isis.applib.services.classdiscovery 
+org.apache.isis.applib.services.classdiscovery
     ClassDiscoveryService.java , push down into ClassDiscoveryService2
 
 
@@ -384,6 +382,14 @@ org.apache.isis.applib.services.background  (10 usages found)
         asActionInvocationMemento(Method, Object, Object[]) - remove this internal API, no longer called by framework
 
     Remove support for legacy persisted commands (beginning "<memento>...")
+
+
+
+org.apache.isis.applib.services.bookmark  (8 usages found)
+    BookmarkService.java - deprecated methods, have overloads in BookmarkService2 subtype [suggest we retain these for now]
+
+
+
 
 org.apache.isis.applib.services.command.spi
     CommandService.java

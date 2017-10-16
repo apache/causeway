@@ -41,7 +41,7 @@ import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.services.bookmark.BookmarkService2;
+import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.Command3;
@@ -2292,13 +2292,13 @@ public class PersistenceSession implements
 
     public Object lookup(
             final Bookmark bookmark,
-            final BookmarkService2.FieldResetPolicy fieldResetPolicy) {
+            final BookmarkService.FieldResetPolicy fieldResetPolicy) {
         RootOid oid = RootOid.create(bookmark);
         final ObjectAdapter adapter = adapterFor(oid);
         if(adapter == null) {
             return null;
         }
-        if(fieldResetPolicy == BookmarkService2.FieldResetPolicy.RESET && !adapter.getSpecification().isViewModel()) {
+        if(fieldResetPolicy == BookmarkService.FieldResetPolicy.RESET && !adapter.getSpecification().isViewModel()) {
             refreshRootInTransaction(adapter);
         } else {
             loadObjectInTransaction(oid);

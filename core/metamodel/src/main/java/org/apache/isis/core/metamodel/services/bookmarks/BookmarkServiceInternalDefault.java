@@ -30,7 +30,7 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkHolder;
-import org.apache.isis.applib.services.bookmark.BookmarkService2;
+import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.registry.ServiceRegistry2;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
@@ -48,7 +48,7 @@ import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
 )
-public class BookmarkServiceInternalDefault implements BookmarkService2 {
+public class BookmarkServiceInternalDefault implements BookmarkService {
 
 
     @Programmatic

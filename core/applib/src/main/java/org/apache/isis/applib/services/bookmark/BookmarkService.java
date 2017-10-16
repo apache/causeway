@@ -32,21 +32,21 @@ import org.apache.isis.applib.annotation.Programmatic;
 public interface BookmarkService {
 
     /**
-     * @deprecated - use {@link BookmarkService2#lookup(BookmarkHolder, BookmarkService2.FieldResetPolicy)} instead.
+     * @deprecated - use {@link BookmarkService#lookup(BookmarkHolder, BookmarkService.FieldResetPolicy)} instead.
      */
     @Deprecated
     @Programmatic
     Object lookup(BookmarkHolder bookmarkHolder);
 
     /**
-     * @deprecated - use {@link BookmarkService2#lookup(Bookmark, BookmarkService2.FieldResetPolicy)} instead.
+     * @deprecated - use {@link BookmarkService#lookup(Bookmark, BookmarkService.FieldResetPolicy)} instead.
      */
     @Deprecated
     @Programmatic
     Object lookup(Bookmark bookmark);
 
     /**
-     * @deprecated - use {@link BookmarkService2#lookup(Bookmark, BookmarkService2.FieldResetPolicy, Class)} instead.
+     * @deprecated - use {@link BookmarkService#lookup(Bookmark, BookmarkService.FieldResetPolicy, Class)} instead.
      */
     @Deprecated
     @Programmatic
@@ -57,5 +57,35 @@ public interface BookmarkService {
 
     @Programmatic
     Bookmark bookmarkFor(Class<?> cls, String identifier);
-    
+
+    @Programmatic
+    Object lookup(BookmarkHolder bookmarkHolder, FieldResetPolicy fieldResetPolicy);
+
+    @Programmatic
+    Object lookup(Bookmark bookmark, FieldResetPolicy fieldResetPolicy);
+
+    /**
+     * As {@link #lookup(Bookmark, FieldResetPolicy)}, but downcasting to the specified type.
+     */
+    @Programmatic <T> T lookup(Bookmark bookmark, FieldResetPolicy fieldResetPolicy, Class<T> cls);
+
+    enum FieldResetPolicy {
+        /**
+         * Will cause all fields of an object to be re-initialized.
+         *
+         * If the object is unresolved then the object's missing data should be retrieved from the persistence
+         * mechanism and be used to set up the value objects and associations.
+         *
+         * If the object is a view model, then is ignored; the behaviour is as for {@link #DONT_RESET}
+         * @deprecated - retained for previous behaviour, but in most/all cases,
+         */
+        @Deprecated
+        RESET,
+        /**
+         * Required in order to recreate view models.
+         */
+        DONT_RESET
+    }
+
+
 }

@@ -36,7 +36,7 @@ import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.services.bookmark.BookmarkService2;
+import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.metamodel.MetaModelService2;
 import org.apache.isis.applib.services.metamodel.MetaModelService3;
@@ -248,7 +248,7 @@ public abstract class DomainChangeJdoAbstract {
     public Object openTargetObject() {
         try {
             return bookmarkService != null
-                    ? bookmarkService.lookup(getTarget(), BookmarkService2.FieldResetPolicy.DONT_RESET)
+                    ? bookmarkService.lookup(getTarget(), BookmarkService.FieldResetPolicy.DONT_RESET)
                     : null;
         } catch(RuntimeException ex) {
             if(ex.getClass().getName().contains("ObjectNotFoundException")) {
@@ -375,7 +375,7 @@ public abstract class DomainChangeJdoAbstract {
     // //////////////////////////////////////
     
     @javax.inject.Inject
-    protected BookmarkService2 bookmarkService;
+    protected BookmarkService bookmarkService;
     
     @javax.inject.Inject
     protected MessageService messageService;

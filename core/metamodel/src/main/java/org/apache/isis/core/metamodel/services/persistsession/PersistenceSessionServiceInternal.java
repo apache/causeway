@@ -21,7 +21,7 @@ import java.util.List;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.services.bookmark.BookmarkService2;
+import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.xactn.Transaction;
 import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -78,7 +78,7 @@ public interface PersistenceSessionServiceInternal extends AdapterManager {
      * @return
      */
     @Programmatic
-    Object lookup(Bookmark bookmark, final BookmarkService2.FieldResetPolicy fieldResetPolicy);
+    Object lookup(Bookmark bookmark, final BookmarkService.FieldResetPolicy fieldResetPolicy);
 
     @Programmatic
     Bookmark bookmarkFor(Object domainObject);

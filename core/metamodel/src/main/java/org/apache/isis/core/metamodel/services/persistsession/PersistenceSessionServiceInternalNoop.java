@@ -24,7 +24,7 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.services.bookmark.BookmarkService2;
+import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.xactn.Transaction;
 import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -86,7 +86,7 @@ public class PersistenceSessionServiceInternalNoop implements PersistenceSession
     @Override
     public Object lookup(
             final Bookmark bookmark,
-            final BookmarkService2.FieldResetPolicy fieldResetPolicy) {
+            final BookmarkService.FieldResetPolicy fieldResetPolicy) {
         throw new UnsupportedOperationException("Not supported by this implementation of PersistenceSessionServiceInternal");
     }
 
