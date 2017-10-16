@@ -7,7 +7,6 @@ TO REMOVE:
 
 
 
-
 org.apache.isis.applib.clock
     Clock
 
@@ -19,22 +18,9 @@ org.apache.isis.applib.services.memento  (19 usages found)
 
 
 
-org.apache.isis.objectstore.jdo.applib.service
-    DomainChangeJdoAbstract.java - move to incode platform
-    JdoColumnLength.java - remove class (all constants defined in other classes)
-                         - https://github.com/apache/isis/blob/rel/isis-1.15.1/core/applib/src/main/java/org/apache/isis/objectstore/jdo/applib/service/JdoColumnLength.java
-
-
-
-
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-
-
-Notes:
-
-sometimes there are multiple versions of a type, eg BookmarkService2 and BookmarkService, where BookmarkService2 extends BookmarkService.  In these cases, suggest pull up the methods from the subtype(s) into the supertype, and then delete those subtypes... ie we end up with a new expanded version of BookmarkService.
 
 
 Also propose:
@@ -471,8 +457,15 @@ org.apache.isis.applib
 
 
 org.apache.isis.objectstore.jdo.applib.service
-
-    deletes Util ... with no replacement
+    DomainChangeJdoAbstract.java
+        - deleted, not replacement (used only by incode platform)
+        - https://github.com/apache/isis/blob/rel/isis-1.15.1/core/applib/src/main/java/org/apache/isis/objectstore/jdo/applib/service/DomainChangeJdoAbstract.java
+    JdoColumnLength.java
+        - ditto
+        - https://github.com/apache/isis/blob/rel/isis-1.15.1/core/applib/src/main/java/org/apache/isis/objectstore/jdo/applib/service/JdoColumnLength.java
+    Util.java
+        - ditto
+        - https://github.com/apache/isis/blob/rel/isis-1.15.1/core/applib/src/main/java/org/apache/isis/objectstore/jdo/applib/service/Util.java
 
 
 org.apache.isis.core.objectstore.jdo.applib.annotations - remove package entirely
