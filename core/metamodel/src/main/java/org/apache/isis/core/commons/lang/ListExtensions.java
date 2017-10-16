@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.commons.lang;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -54,50 +53,6 @@ public final class ListExtensions {
     }
 
 
-    /**
-     * @see #listToString(List, String)
-     * @see #stringToList(String)
-     */
-    public static String listToString(final List<String> list) {
-        return listToString(list, DEFAULT_DELIMITER);
-    }
-
-    /**
-     * @see #listToString(List, String)
-     * @see #stringToList(String)
-     */
-    public static String listToString(final List<String> list, final String delimiter) {
-        if (list.size() == 0) {
-            return null;
-        }
-        final StringBuilder buf = new StringBuilder();
-        boolean first = true;
-        for (final String str : list) {
-            if (first) {
-                first = false;
-            } else {
-                buf.append(delimiter);
-            }
-            buf.append(str);
-        }
-        return buf.toString();
-    }
-
-    /**
-     * @see #stringToList(String, String)
-     * @see #listToString(List)
-     */
-    public static List<String> stringToList(final String commaSeparated) {
-        return appendDelimitedStringToList(commaSeparated, new ArrayList<String>());
-    }
-
-    /**
-     * @see #stringToList(String)
-     * @see #listToString(List, String)
-     */
-    public static List<String> stringToList(final String delimited, final String delimiter) {
-        return appendDelimitedStringToList(delimited, delimiter, new ArrayList<String>());
-    }
 
     /**
      * @see #appendDelimitedStringToList(String, String, List)
