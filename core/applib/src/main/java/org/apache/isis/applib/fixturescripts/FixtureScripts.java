@@ -48,7 +48,11 @@ import org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault;
 import org.apache.isis.applib.services.fixturespec.FixtureScriptsSpecification;
 import org.apache.isis.applib.services.memento.MementoService;
 import org.apache.isis.applib.services.memento.MementoService.Memento;
+import org.apache.isis.applib.services.message.MessageService;
+import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
+import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.util.ObjectContracts;
 
 /**
@@ -303,7 +307,7 @@ public abstract class FixtureScripts extends AbstractService {
         // if this method is called programmatically, the caller may have simply new'd up the fixture script
         // (rather than use container.newTransientInstance(...).  To allow this use case, we need to ensure that
         // domain services are injected into the fixture script.
-        container.injectServicesInto(fixtureScript);
+        serviceRegistry.injectServicesInto(fixtureScript);
 
         return runScript(fixtureScript, parameters);
     }
@@ -404,12 +408,12 @@ public abstract class FixtureScripts extends AbstractService {
         if(object == null) {
             return null;
         }
-        if (object instanceof ViewModel || container.isPersistent(object)) {
+        if (object instanceof ViewModel || repositoryService.isPersistent(object)) {
             // continue
         } else {
             switch(getNonPersistedObjectsStrategy()) {
                 case PERSIST:
-                    container.flush();
+                    transactionService.flushTransaction();
                     break;
                 case IGNORE:
                     return null;
@@ -444,6 +448,15 @@ public abstract class FixtureScripts extends AbstractService {
 
     @javax.inject.Inject
     BookmarkService bookmarkService;
+
+    @javax.inject.Inject
+    ServiceRegistry serviceRegistry;
+
+    @javax.inject.Inject
+    RepositoryService repositoryService;
+
+    @javax.inject.Inject
+    TransactionService transactionService;
 
     @javax.inject.Inject
     ClassDiscoveryService classDiscoveryService;

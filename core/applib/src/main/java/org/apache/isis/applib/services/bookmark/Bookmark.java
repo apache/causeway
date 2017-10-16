@@ -40,6 +40,10 @@ public class Bookmark implements Serializable {
 
     protected static final char SEPARATOR = ':';
 
+    public static Bookmark create(final String str) {
+        return str != null? new Bookmark(str): null;
+    }
+
     public OidDto toOidDto() {
         final OidDto oidDto = new OidDto();
 

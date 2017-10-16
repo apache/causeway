@@ -18,18 +18,24 @@ package org.apache.isis.core.specsupport.scenarios;
 
 import java.util.Map;
 import java.util.Set;
+
 import com.google.common.collect.Maps;
+
 import org.hamcrest.Description;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.api.Action;
 import org.jmock.api.Invocation;
+
 import org.apache.isis.applib.DomainObjectContainer;
+import org.apache.isis.applib.services.factory.FactoryService;
+import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.core.unittestsupport.jmocking.JavassistImposteriser;
 
 class DomainServiceProviderMockery implements DomainServiceProvider {
 
-    private DomainObjectContainer mockContainer = null;
+    private RepositoryService mockRepositoryService = null;
+    private FactoryService mockFactoryService = null;
     private final Map<Class<?>, Object> mocks = Maps.newHashMap();
     
     private Mockery context;
@@ -47,42 +53,51 @@ class DomainServiceProviderMockery implements DomainServiceProvider {
         mocks.clear();
     }
 
+
+    @SuppressWarnings("unchecked")
     @Override
-    public DomainObjectContainer getContainer() {
-        if(mockContainer == null) {
-            mockContainer = getService(DomainObjectContainer.class);
+    public <T> T getService(Class<T> serviceClass) {
+        Object mock = doGetService(serviceClass);
+
+        if(FactoryService.class.isAssignableFrom(serviceClass)) {
+            mockFactoryService = (FactoryService) mock;
+
             context.checking(new Expectations() {
                 {
-                    allowing(mockContainer).newTransientInstance(with(Expectations.<Class<?>>anything()));
+                    allowing(mockFactoryService).instantiate(with(Expectations.<Class<?>>anything()));
                     will(new Action() {
-                        
+
                         @SuppressWarnings("rawtypes")
                         public Object invoke(Invocation invocation) throws Throwable {
                             Class cls = (Class) invocation.getParameter(0);
                             return scenarioExecution.injectServices(cls.newInstance());
                         }
-                        
+
                         public void describeTo(Description description) {
                             description.appendText("newTransientInstance");
                         }
                     });
-                    
-                    allowing(mockContainer).persistIfNotAlready(with(anything()));
                 }
             });
         }
-        return mockContainer;
+        if(RepositoryService.class.isAssignableFrom(serviceClass)) {
+            mockRepositoryService = (RepositoryService) mock;
+            context.checking(new Expectations() {
+                {
+                    allowing(mockRepositoryService).persist(with(anything()));
+                }
+            });
+        }
+        return (T) mock;
     }
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public <T> T getService(Class<T> serviceClass) {
+    protected <T> Object doGetService(final Class<T> serviceClass) {
         Object mock = mocks.get(serviceClass);
         if(mock == null) {
             mock = context.mock(serviceClass);
         }
         mocks.put(serviceClass, mock);
-        return (T) mock;
+        return mock;
     }
 
     @Override

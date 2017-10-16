@@ -30,8 +30,6 @@ import org.apache.isis.applib.DomainObjectContainer;
  */
 public interface DomainServiceProvider {
 
-    public abstract DomainObjectContainer getContainer();
-
     public abstract <T> T getService(Class<T> serviceClass);
 
     /**

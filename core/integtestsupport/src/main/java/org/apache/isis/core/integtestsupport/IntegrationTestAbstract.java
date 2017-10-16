@@ -34,6 +34,7 @@ import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.fixtures.FixtureClock;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.applib.services.clock.ClockService;
+import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.scratchpad.Scratchpad;
 import org.apache.isis.applib.services.sessmgmt.SessionManagementService;
@@ -186,7 +187,7 @@ public abstract class IntegrationTestAbstract {
      * Convenience method
      */
     protected <T> T mixin(final Class<T> mixinClass, final Object mixedIn) {
-        return container().mixin(mixinClass, mixedIn);
+        return service(FactoryService.class).mixin(mixinClass, mixedIn);
     }
 
     
@@ -208,7 +209,7 @@ public abstract class IntegrationTestAbstract {
             return new Statement() {
                 @Override
                 public void evaluate() throws Throwable {
-                    isft.getContainer().injectServicesInto(target);
+                    isft.getIsisSessionFactory().getServicesInjector().injectServicesInto(target);
                     isft.beginTran();
                     try {
                         base.evaluate();

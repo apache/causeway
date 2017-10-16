@@ -34,7 +34,6 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType;
-import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
@@ -85,7 +84,7 @@ public class DomainObjectContainerDefault
             throw new IllegalArgumentException("Must specify a reference for disposing an object");
         }
         final ObjectAdapter adapter = persistenceSessionServiceInternal.adapterFor(unwrapped(persistentObject));
-        if (!isPersistent(persistentObject)) {
+        if (!repositoryService.isPersistent(persistentObject)) {
             throw new RepositoryException("Object not persistent: " + adapter);
         }
 
@@ -206,7 +205,7 @@ public class DomainObjectContainerDefault
             // TODO check aggregation is supported
             return;
         }
-        if (isPersistent(domainObject)) {
+        if (repositoryService.isPersistent(domainObject)) {
             throw new PersistFailedException("Object already persistent; OID=" + adapter.getOid());
         }
         persistenceSessionServiceInternal.makePersistent(adapter);
@@ -290,6 +289,9 @@ public class DomainObjectContainerDefault
 
     @javax.inject.Inject
     ServiceRegistry serviceRegistry;
+
+    @javax.inject.Inject
+    RepositoryService repositoryService;
 
     @javax.inject.Inject
     WrapperFactory wrapperFactory;

@@ -19,13 +19,16 @@
 package org.apache.isis.applib.services.exceprecog;
 
 import java.util.Map;
+
 import org.jmock.auto.Mock;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.apache.isis.applib.DomainObjectContainer;
+
 import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
+
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
@@ -56,7 +59,7 @@ public class ExceptionRecognizerCompositeTest {
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
 
     @Mock
-    private DomainObjectContainer mockContainer;
+    private ServiceRegistry mockServiceRegistry;
 
     @Mock
     private TranslationService mockTranslationService;
@@ -64,10 +67,10 @@ public class ExceptionRecognizerCompositeTest {
     @Before
     public void setUp() throws Exception {
         composite = new ExceptionRecognizerComposite();
-        composite.container = mockContainer;
+        composite.serviceRegistry = mockServiceRegistry;
         composite.translationService = mockTranslationService;
 
-        context.ignoring(mockContainer);
+        context.ignoring(mockServiceRegistry);
         context.ignoring(mockTranslationService);
     }
     

@@ -344,10 +344,6 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         }
     }
 
-    public DomainObjectContainer getContainer() {
-        return getService(DomainObjectContainer.class);
-    }
-
     //endregion
 
     //region > isisSystem (populated during setup)

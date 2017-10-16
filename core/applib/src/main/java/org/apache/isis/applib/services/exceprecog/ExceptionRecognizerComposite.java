@@ -27,9 +27,9 @@ import javax.annotation.PreDestroy;
 
 import com.google.common.collect.Lists;
 
-import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.applib.services.registry.ServiceRegistry;
 
 /**
  * Convenience implementation of {@link ExceptionRecognizer} that loops through a list of
@@ -141,9 +141,9 @@ public class ExceptionRecognizerComposite implements ExceptionRecognizer2 {
     }
 
     protected void injectServices() {
-        if(container != null) {
+        if(serviceRegistry != null) {
             for (final ExceptionRecognizer ers : exceptionRecognizers) {
-                container.injectServicesInto(ers);
+                serviceRegistry.injectServicesInto(ers);
             }
         }
     }
@@ -168,7 +168,7 @@ public class ExceptionRecognizerComposite implements ExceptionRecognizer2 {
     // //////////////////////////////////////
 
     @javax.inject.Inject
-    DomainObjectContainer container;
+    ServiceRegistry serviceRegistry;
     @javax.inject.Inject
     TranslationService translationService;
 

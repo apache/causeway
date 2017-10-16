@@ -542,7 +542,7 @@ public abstract class FixtureScript
             if(localNameOverride != null) {
                 childFixtureScript.setLocalName(localNameOverride);
             }
-            callingFixtureScript.container.injectServicesInto(childFixtureScript);
+            callingFixtureScript.serviceRegistry.injectServicesInto(childFixtureScript);
 
             executeChildIfNotAlready(childFixtureScript);
 
@@ -864,7 +864,7 @@ public abstract class FixtureScript
      * Convenience method
      */
     protected <T> T mixin(final Class<T> mixinClass, final Object mixedIn) {
-        return container.mixin(mixinClass, mixedIn);
+        return factoryService.mixin(mixinClass, mixedIn);
     }
 
     /**
@@ -889,9 +889,6 @@ public abstract class FixtureScript
 
     @javax.inject.Inject
     protected FixtureScripts fixtureScripts;
-
-    @javax.inject.Inject
-    protected DomainObjectContainer container;
 
     @javax.inject.Inject
     protected FactoryService factoryService;
