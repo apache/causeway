@@ -40,8 +40,6 @@ Also for 2.0.0, new features/deprecations:
 OTHER STUFF:
 
 
-remove prototypeXxx() prefix
-remove debugXxx() prefix
 
 
 debug() stuff
