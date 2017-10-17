@@ -24,13 +24,6 @@ org.apache.isis.applib.services.memento  (19 usages found)
 
 
 
-Also propose:
-    make AppManifest mandatory
-
-    remove support for contributed services (use mixins instead)
-
-
-
 Also for 2.0.0, new features/deprecations:
     automatically wrap domain services (perhaps behind a config property)
     automatically infer \@Programmatic for all \@DomainService(nature=DOMAIN)
@@ -47,7 +40,6 @@ Also for 2.0.0, new features/deprecations:
 OTHER STUFF:
 
 
-remove explorationXxx() prefix
 remove prototypeXxx() prefix
 remove debugXxx() prefix
 
@@ -150,6 +142,11 @@ org.apache.isis.applib.services.command
 
 *************************************************************************
 
+DEPRECATED:
+
+    deprecate support for contributed services (use mixins instead)
+
+
 DONE (ADDED)
 
     new support for JSR-303 @Pattern annotation (http://beanvalidation.org/1.0/spec/, chapter 6) ... replaces @RegEx
@@ -162,13 +159,23 @@ DONE (MOVED)
     org.apache.isis.applib.conmap.ContentMappingService to applib.services.conmap
 
 
-
 DONE (REMOVED):
+
+    make AppManifest mandatory
 
     removed support for Xxx.layout.json
     - "reflector.layoutMetadataReaders" config prop
 
+    removed support for static method prefixes
+    * "notInServiceMenu"
+    * "named"
+    * "plural"
+    * "alwaysHide"
+    * "protect"
+    * "description"
+    * "optional"
 
+    remove explorationXxx() prefix
 
 org.apache.isis.applib
 
@@ -490,10 +497,3 @@ org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationServiceFor
     - unused
 
 
-removed support for "notInServiceMenu" prefix
-removed named static method
-removed plural static method
-removed "alwaysHide" static
-removed "protect" static
-removed "description" static
-removed "optional" (if static)

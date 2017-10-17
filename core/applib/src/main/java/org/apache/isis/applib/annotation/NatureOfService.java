@@ -30,20 +30,15 @@ public enum NatureOfService {
     VIEW,
     /**
      * The service's actions appear on menus but do not contribute.
-     *
-     * <p>
-     * Equivalent to annotating all actions with (the now deprecated) {@link org.apache.isis.applib.annotation.NotContributed} annotation.
-     * </p>
      */
     VIEW_MENU_ONLY,
     /**
      * The service's actions can be contributed to domain objects as actions, properties or collections but do not
      * appear on menus.
      *
-     * <p>
-     * Equivalent to annotating all actions with (the now deprecated) {@link org.apache.isis.applib.annotation.NotInServiceMenu} annotation.
-     * </p>
+     * @deprecated - use mixins instead
      */
+    @Deprecated
     VIEW_CONTRIBUTIONS_ONLY,
     /**
      * The services actions should only be visible in the REST API exposed by the Restful Objects viewer.
@@ -51,10 +46,6 @@ public enum NatureOfService {
     VIEW_REST_ONLY,
     /**
      * The service's actions do not appear on menus and are not contributed.
-     *
-     * <p>
-     * Equivalent to annotating all actions with both (the now deprecated) {@link org.apache.isis.applib.annotation.NotInServiceMenu} and {@link org.apache.isis.applib.annotation.NotContributed} annotations).
-     * </p>
      */
     DOMAIN;
 

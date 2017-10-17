@@ -41,7 +41,7 @@ import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.actions.defaults.ActionDefaultsFacet;
 import org.apache.isis.core.metamodel.facets.actions.defaults.method.ActionDefaultsFacetViaMethod;
 import org.apache.isis.core.metamodel.facets.actions.defaults.method.ActionDefaultsFacetViaMethodFactory;
-import org.apache.isis.core.metamodel.facets.actions.interaction.ActionNamedExplorationFacetFactory;
+import org.apache.isis.core.metamodel.facets.actions.interaction.ActionNamedFacetFactory;
 import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacet;
 import org.apache.isis.core.metamodel.facets.actions.validate.ActionValidationFacet;
 import org.apache.isis.core.metamodel.facets.actions.validate.method.ActionValidationFacetViaMethod;
@@ -139,7 +139,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testProvidesDefaultNameForActionButIgnoresAnyNamedAnnotation() {
-        final ActionNamedExplorationFacetFactory facetFactory = new ActionNamedExplorationFacetFactory();
+        final ActionNamedFacetFactory facetFactory = new ActionNamedFacetFactory();
 
         facetFactory.setServicesInjector(mockServicesInjector);
 
@@ -164,7 +164,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
 
     public void testPicksUpExplorationPrefixAndSetsNameAppropriatelyAlso() {
-        final ActionNamedExplorationFacetFactory facetFactory = new ActionNamedExplorationFacetFactory();
+        final ActionNamedFacetFactory facetFactory = new ActionNamedFacetFactory();
 
         facetFactory.setServicesInjector(mockServicesInjector);
 

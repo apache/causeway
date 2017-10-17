@@ -44,7 +44,6 @@ public abstract class MethodPrefixBasedFacetFactoryAbstract
 
     private final List<String> prefixes;
 
-    protected static final Object[] NO_PARAMETERS = new Object[0];
     protected static final Class<?>[] NO_PARAMETERS_TYPES = new Class<?>[0];
 
     private final OrphanValidation orphanValidation;
