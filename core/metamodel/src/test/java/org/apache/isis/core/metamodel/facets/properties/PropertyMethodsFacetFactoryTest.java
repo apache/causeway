@@ -27,29 +27,19 @@ import org.apache.isis.applib.security.UserMemento;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
-import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
-import org.apache.isis.core.metamodel.facets.members.describedas.staticmethod.DescribedAsFacetStaticMethod;
-import org.apache.isis.core.metamodel.facets.members.describedas.staticmethod.DescribedAsFacetStaticMethodFactory;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
-import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAbstractAlwaysEverywhere;
 import org.apache.isis.core.metamodel.facets.members.disabled.forsession.DisableForSessionFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.forsession.DisableForSessionFacetViaMethod;
 import org.apache.isis.core.metamodel.facets.members.disabled.forsession.DisableForSessionFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.members.disabled.method.DisableForContextFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.method.DisableForContextFacetViaMethod;
 import org.apache.isis.core.metamodel.facets.members.disabled.method.DisableForContextFacetViaMethodFactory;
-import org.apache.isis.core.metamodel.facets.members.disabled.staticmethod.DisabledFacetStaticMethodFacetFactory;
 import org.apache.isis.core.metamodel.facets.members.hidden.forsession.HideForSessionFacet;
 import org.apache.isis.core.metamodel.facets.members.hidden.forsession.HideForSessionFacetViaMethod;
 import org.apache.isis.core.metamodel.facets.members.hidden.forsession.HideForSessionFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.members.hidden.method.HideForContextFacet;
 import org.apache.isis.core.metamodel.facets.members.hidden.method.HideForContextFacetViaMethod;
 import org.apache.isis.core.metamodel.facets.members.hidden.method.HideForContextFacetViaMethodFactory;
-import org.apache.isis.core.metamodel.facets.members.hidden.staticmethod.HiddenFacetOnStaticMethod;
-import org.apache.isis.core.metamodel.facets.members.hidden.staticmethod.HiddenFacetStaticMethodFactory;
-import org.apache.isis.core.metamodel.facets.members.named.staticmethod.NamedFacetStaticMethod;
-import org.apache.isis.core.metamodel.facets.members.named.staticmethod.NamedFacetStaticMethodFactory;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
 import org.apache.isis.core.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor;
@@ -754,107 +744,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         }
     }
 
-    public void testInstallsNamedFacetUsingNameMethodAndRemovesMethod() {
-        final NamedFacetStaticMethodFactory facetFactory = new NamedFacetStaticMethodFactory();
 
-        facetFactory.setServicesInjector(stubServicesInjector);
-
-        final Method propertyAccessorMethod = findMethod(CustomerStatic.class, "getFirstName");
-        final Method nameMethod = findMethod(CustomerStatic.class, "nameFirstName");
-
-        facetFactory.process(new ProcessMethodContext(CustomerStatic.class, null, propertyAccessorMethod, methodRemover, facetedMethod));
-
-        final Facet facet = facetedMethod.getFacet(NamedFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof NamedFacetStaticMethod);
-        final NamedFacetStaticMethod namedFacet = (NamedFacetStaticMethod) facet;
-        assertEquals("Given name", namedFacet.value());
-
-        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(nameMethod));
-    }
-
-    public void testInstallsDescribedAsFacetUsingDescriptionAndRemovesMethod() {
-        final DescribedAsFacetStaticMethodFactory facetFactory = new DescribedAsFacetStaticMethodFactory();
-
-        facetFactory.setServicesInjector(stubServicesInjector);
-
-        final Method propertyAccessorMethod = findMethod(CustomerStatic.class, "getFirstName");
-        final Method descriptionMethod = findMethod(CustomerStatic.class, "descriptionFirstName");
-
-        facetFactory.process(new ProcessMethodContext(CustomerStatic.class, null, propertyAccessorMethod, methodRemover, facetedMethod));
-
-        final Facet facet = facetedMethod.getFacet(DescribedAsFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof DescribedAsFacetStaticMethod);
-        final DescribedAsFacetStaticMethod describedAsFacet = (DescribedAsFacetStaticMethod) facet;
-        assertEquals("Some old description", describedAsFacet.value());
-
-        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(descriptionMethod));
-    }
-
-    public void testInstallsHiddenFacetUsingAlwaysHideAndRemovesMethod() {
-        final HiddenFacetStaticMethodFactory facetFactory = new HiddenFacetStaticMethodFactory();
-
-        facetFactory.setServicesInjector(stubServicesInjector);
-
-        final Method propertyAccessorMethod = findMethod(CustomerStatic.class, "getFirstName");
-        final Method propertyAlwaysHideMethod = findMethod(CustomerStatic.class, "alwaysHideFirstName");
-
-        facetFactory.process(new ProcessMethodContext(CustomerStatic.class, null, propertyAccessorMethod, methodRemover, facetedMethod));
-
-        final HiddenFacetOnStaticMethod facet = facetedMethod.getFacet(HiddenFacetOnStaticMethod.class);
-        assertNotNull(facet);
-
-        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(propertyAlwaysHideMethod));
-    }
-
-    public void testInstallsHiddenFacetUsingAlwaysHideWhenNotAndRemovesMethod() {
-        final HiddenFacetStaticMethodFactory facetFactory = new HiddenFacetStaticMethodFactory();
-
-        facetFactory.setServicesInjector(stubServicesInjector);
-
-        final Method propertyAccessorMethod = findMethod(CustomerStatic.class, "getLastName");
-        final Method propertyAlwaysHideMethod = findMethod(CustomerStatic.class, "alwaysHideLastName");
-
-        facetFactory.process(new ProcessMethodContext(CustomerStatic.class, null, propertyAccessorMethod, methodRemover, facetedMethod));
-
-        assertNull(facetedMethod.getFacet(HiddenFacetOnStaticMethod.class));
-
-        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(propertyAlwaysHideMethod));
-    }
-
-    public void testInstallsDisabledFacetUsingProtectAndRemovesMethod() {
-        final DisabledFacetStaticMethodFacetFactory facetFactory = new DisabledFacetStaticMethodFacetFactory();
-
-        facetFactory.setServicesInjector(stubServicesInjector);
-
-        final Method propertyAccessorMethod = findMethod(CustomerStatic.class, "getFirstName");
-        final Method propertyProtectMethod = findMethod(CustomerStatic.class, "protectFirstName");
-
-        facetFactory.process(new ProcessMethodContext(CustomerStatic.class, null, propertyAccessorMethod, methodRemover, facetedMethod));
-
-        final Facet facet = facetedMethod.getFacet(DisabledFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof DisabledFacetAbstractAlwaysEverywhere);
-
-        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(propertyProtectMethod));
-    }
-
-    public void testDoesNotInstallDisabledFacetUsingProtectWhenNotAndRemovesMethod() {
-        final DisabledFacetStaticMethodFacetFactory facetFactory = new DisabledFacetStaticMethodFacetFactory();
-
-        facetFactory.setServicesInjector(stubServicesInjector);
-
-        final Method propertyAccessorMethod = findMethod(CustomerStatic.class, "getLastName");
-        final Method propertyProtectMethod = findMethod(CustomerStatic.class, "protectLastName");
-
-        facetFactory.process(new ProcessMethodContext(CustomerStatic.class, null, propertyAccessorMethod, methodRemover, facetedMethod));
-
-        final Facet facet = facetedMethod.getFacet(DisabledFacet.class);
-        assertNull(facet);
-
-        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(propertyProtectMethod));
-    }
 
     public void testInstallsHiddenForSessionFacetAndRemovesMethod() {
         final HideForSessionFacetViaMethodFactory facetFactory = new HideForSessionFacetViaMethodFactory();

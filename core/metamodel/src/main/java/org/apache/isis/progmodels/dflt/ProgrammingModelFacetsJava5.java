@@ -26,7 +26,6 @@ import org.apache.isis.core.metamodel.facets.actions.layout.ActionLayoutFacetFac
 import org.apache.isis.core.metamodel.facets.actions.notcontributed.derived.NotContributedFacetDerivedFromDomainServiceFacetFactory;
 import org.apache.isis.core.metamodel.facets.actions.notcontributed.derived.NotContributedFacetDerivedFromMixinFacetFactory;
 import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.derived.NotInServiceMenuFacetDerivedFromDomainServiceFacetFactory;
-import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.method.NotInServiceMenuFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.actions.validate.method.ActionValidationFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.all.i18n.TranslationFacetFactory;
 import org.apache.isis.core.metamodel.facets.collections.accessor.CollectionAccessorFacetViaAccessorFactory;
@@ -43,14 +42,10 @@ import org.apache.isis.core.metamodel.facets.jaxb.JaxbXmlJavaTypeAdapterFacetFac
 import org.apache.isis.core.metamodel.facets.members.cssclass.annotprop.CssClassFacetOnActionFromConfiguredRegexFactory;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.annotprop.CssClassFaFacetOnMemberFactory;
 import org.apache.isis.core.metamodel.facets.members.describedas.annotprop.DescribedAsFacetOnMemberFactory;
-import org.apache.isis.core.metamodel.facets.members.describedas.staticmethod.DescribedAsFacetStaticMethodFactory;
 import org.apache.isis.core.metamodel.facets.members.disabled.forsession.DisableForSessionFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.members.disabled.method.DisableForContextFacetViaMethodFactory;
-import org.apache.isis.core.metamodel.facets.members.disabled.staticmethod.DisabledFacetStaticMethodFacetFactory;
 import org.apache.isis.core.metamodel.facets.members.hidden.forsession.HideForSessionFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.members.hidden.method.HideForContextFacetViaMethodFactory;
-import org.apache.isis.core.metamodel.facets.members.hidden.staticmethod.HiddenFacetStaticMethodFactory;
-import org.apache.isis.core.metamodel.facets.members.named.staticmethod.NamedFacetStaticMethodFactory;
 import org.apache.isis.core.metamodel.facets.members.order.annotprop.MemberOrderFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.ViewModelSemanticCheckingFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.bookmarkable.BookmarkPolicyFacetFallbackFactory;
@@ -87,7 +82,6 @@ import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacetForMixinAnno
 import org.apache.isis.core.metamodel.facets.object.objectspecid.classname.ObjectSpecIdFacetDerivedFromClassNameFactory;
 import org.apache.isis.core.metamodel.facets.object.objectvalidprops.impl.ObjectValidPropertiesFacetImplFactory;
 import org.apache.isis.core.metamodel.facets.object.parseable.annotcfg.ParseableFacetAnnotationElseConfigurationFactory;
-import org.apache.isis.core.metamodel.facets.object.plural.staticmethod.PluralFacetStaticMethodFactory;
 import org.apache.isis.core.metamodel.facets.object.recreatable.DisabledFacetOnCollectionDerivedFromViewModelFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.recreatable.DisabledFacetOnPropertyDerivedFromRecreatableObjectFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.recreatable.RecreatableObjectFacetFactory;
@@ -117,7 +111,6 @@ import org.apache.isis.core.metamodel.facets.properties.defaults.method.Property
 import org.apache.isis.core.metamodel.facets.properties.disabled.fromimmutable.DisabledFacetOnPropertyDerivedFromImmutableFactory;
 import org.apache.isis.core.metamodel.facets.properties.disabled.inferred.DisabledFacetOnPropertyInferredFactory;
 import org.apache.isis.core.metamodel.facets.properties.mandatory.dflt.MandatoryFacetOnProperyDefaultFactory;
-import org.apache.isis.core.metamodel.facets.properties.mandatory.staticmethod.MandatoryFacetOnPropertyStaticMethodFactory;
 import org.apache.isis.core.metamodel.facets.properties.property.PropertyAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.PropertyLayoutFacetFactory;
 import org.apache.isis.core.metamodel.facets.properties.typicallen.fromtype.TypicalLengthFacetOnPropertyDerivedFromTypeFacetFactory;
@@ -222,8 +215,6 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(new PropertyAutoCompleteFacetMethodFactory());
         addFactory(new PropertyDefaultFacetViaMethodFactory());
         
-        addFactory(new MandatoryFacetOnPropertyStaticMethodFactory());
-
         // collections
         addFactory(new CollectionAccessorFacetViaAccessorFactory());
         addFactory(new CollectionClearFacetFactory());
@@ -242,16 +233,11 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
 
         // members in general
         
-        addFactory(new NamedFacetStaticMethodFactory());
-        
-        addFactory(new DescribedAsFacetStaticMethodFactory());
         addFactory(new DisableForSessionFacetViaMethodFactory());
         addFactory(new DisableForContextFacetViaMethodFactory());
         
-        addFactory(new DisabledFacetStaticMethodFacetFactory());
         addFactory(new HideForSessionFacetViaMethodFactory());
         
-        addFactory(new HiddenFacetStaticMethodFactory());
         addFactory(new HideForContextFacetViaMethodFactory());
 
         addFactory(new CreatedCallbackFacetFactory());
@@ -264,9 +250,6 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(new ValidateObjectFacetMethodFactory());
         addFactory(new ObjectValidPropertiesFacetImplFactory());
         
-        addFactory(new PluralFacetStaticMethodFactory());
-        
-        addFactory(new org.apache.isis.core.metamodel.facets.object.named.staticmethod.NamedFacetStaticMethodFactory());
 
         addFactory(new MemberOrderFacetFactory());
         
@@ -288,8 +271,6 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
 
         addFactory(new EncodableFacetAnnotationElseConfigurationFactory());
         
-        addFactory(new NotInServiceMenuFacetViaMethodFactory());
-
         addFactory(new NotContributedFacetDerivedFromDomainServiceFacetFactory());
         addFactory(new NotInServiceMenuFacetDerivedFromDomainServiceFacetFactory());
 

@@ -29,7 +29,6 @@ Also propose:
 
     remove support for contributed services (use mixins instead)
 
-    remove support for "notInServiceMenu" prefix
 
 
 Also for 2.0.0, new features/deprecations:
@@ -64,9 +63,6 @@ ObjectFixtureService
 
 inline paraname8 from incode platform
 
-remove named static method
-remove plural static method
-
 
 
 PublishingServiceInternalDefault
@@ -87,7 +83,6 @@ not thread-safe:
     }
 
 
-? deprecate When enum ?
 
     
 ~~~
@@ -494,3 +489,11 @@ org.apache.isis.viewer.restfulobjects.rendering.service.conmap.ContentMappingSer
 org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationServiceForRestfulObjects
     - unused
 
+
+removed support for "notInServiceMenu" prefix
+removed named static method
+removed plural static method
+removed "alwaysHide" static
+removed "protect" static
+removed "description" static
+removed "optional" (if static)
