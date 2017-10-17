@@ -40,7 +40,7 @@ Even if a domain expert understands the intent of these tests, the actual implem
 +
 The natural language specification then maps down onto some glue code that is used to drive the application.  But the benefits of taking a BDD approach include the fact that your domain expert will be able to read the tests/specifications, and that when you run the specs, you also get documentation of the application's behaviour ("living documentation").
 
-It's up to you whether you use BDD specs for your apps; it will depend on your development process and company culture.  But you if don't then you certainly should write integration tests: acceptance criteria for user stories should be automated!
+It's up to you whether you use BDD specs for your apps; it will depend on your development process and company culture.  But if you don't then you certainly should write integration tests: acceptance criteria for user stories should be automated!
 
 
 
@@ -50,7 +50,7 @@ It's up to you whether you use BDD specs for your apps; it will depend on your d
 
 When we talk about integration tests/specs here, we mean tests that exercise the domain object logic, through to the actual database.  But we also want the tests to exercise the app from the users's perspective, which means including the user interface.
 
-For most other frameworks that would require having to test the application in a very heavy weight/fragile fashion using a tool such as link:http://docs.seleniumhq.org/[Selenium], driving a web browser to navigate .  In this regard though, Apache Isis has a significant trick up its sleeve.  Because Apache Isis implements the naked objects pattern, it means that the UI is generated automatically from the UI.  This therefore allows for other implementations of the UI.
+For most other frameworks that would require having to test the application in a very heavy weight/fragile fashion using a tool such as link:http://docs.seleniumhq.org/[Selenium], driving a web browser to navigate .  In this regard though, Apache Isis has a significant trick up its sleeve.  Because Apache Isis implements the naked objects pattern, it means that the UI is generated automatically from declared domain-objects, -views and -services. This therefore allows for other implementations of the UI.
 
 The xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_WrapperFactory[`WrapperFactory`] domain service allows a test to wrap domain objects and thus to interact with said objects "as if" through the UI:
 

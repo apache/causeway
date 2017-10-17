@@ -9,7 +9,7 @@ We tend to use Maven modules as a way to group related domain objects together; 
 By convention there will be a single top-level package corresponding to the module.
 
 For example, the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s document module has a top-level package of `org.incode.module.document`.
-Within the module there may be various subpackages, but its the module defines the namespace.
+Within the module there may be various subpackages, but it's the module that defines the namespace.
 
 The bootstrapping of Apache Isis also relies on module classes.
 (Currently) the only role of these classes is to identify a fully qualified package name, for example `org.incode.modules.document`.

@@ -18,23 +18,20 @@ In this appendix we provide some simple but useful bash scripts to help you mana
 
 == Prerequisites
 
-We recommend that you adopt a convention for your directories.  For example, open source repositories (such as the Isis Addons and Incode Catalog mentioned above) reside in link:https://github.com/[github.com], while your own proprietary code might reside in some other service, eg link:https://bitbucket.org/[bitbucket].  For example:
+We recommend that you adopt a convention for your directories.  For example, open source repositories (such as Apache Isis itself or the Incode Platform) reside in link:https://github.com/[github.com], while your own proprietary code might reside in some other service, eg link:https://bitbucket.org/[bitbucket].  For example:
 
 [source]
 ----
 /users/home/me/
     BITBUCKET/
         mycompany/
-            myapp-moduleA
-            myapp-moduleB
-            myapp
+            myapp/
+            otherapp/
     GITHUB/
-        isisaddons/
-            isis-module-docx
-            isis-module-security
+        apache/
+            isis/
         incodehq/
-            incode-module-commchannel
-            incode-module-classification
+            incode-platform/
 ----
 
 
@@ -47,16 +44,13 @@ Create a file `_repos.txt` that catalogues the repositories, eg:
 #
 # our code
 #
-/users/home/me/BITBUCKET/mycompany/myapp-moduleA
-/users/home/me/BITBUCKET/mycompany/myapp-moduleB
 /users/home/me/BITBUCKET/mycompany/myapp
+/users/home/me/BITBUCKET/mycompany/otherapp
 #
 # open source modules
 #
-/users/home/me/GITHUB/isisaddons/isis-module-docx
-/users/home/me/GITHUB/isisaddons/isis-module-security
-/users/home/me/GITHUB/incodehq/incode-module-commchannel
-/users/home/me/GITHUB/incodehq/incode-module-classification
+/users/home/me/GITHUB/apache/isis
+/users/home/me/GITHUB/incodehq/incode-platform
 ----
 
 
@@ -79,10 +73,10 @@ For example,
 
 [source,bash]
 ----
-repo doc
+repo plat
 ----
 
-would switch to `/users/home/me/GITHUB/isisaddons/isis-module-docx`, the first module that matches the fragment.
+would switch to `/users/home/me/GITHUB/incodehq/incode-platform`, the first module that matches the fragment.
 
 
 Meanwhile:
@@ -96,10 +90,10 @@ would perform a `git status` on every git repository, while
 
 [source,bash]
 ----
-foreach -g isisaddons git fetch
+foreach -g plat git fetch
 ----
 
-would perform a `git fetch` but only to those repositories which match "isisaddons" (`-g` flag standing for `grep`).
+would perform a `git fetch` but only to those repositories which match "plat" (`-g` flag standing for `grep`).
 
 
 To load the functions into your profile (`.bashrc` or `.profile` or similar), use:

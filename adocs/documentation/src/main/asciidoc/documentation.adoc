@@ -58,36 +58,37 @@ pass:[<br/>]
 
 |*User Guides:*
 
-* *link:guides/ugfun/ugfun.html[Fundamentals^]*  image:{_imagesdir}PDF-50.png[width="20px" link="./guides/ugfun/ugfun.pdf"]
-* link:guides/ugvw/ugvw.html[Wicket Viewer^]  image:{_imagesdir}PDF-50.png[width="20px" link="./guides/ugvw/ugvw.pdf"]
-* link:guides/ugvro/ugvro.html[Restful Objects Viewer^]  image:{_imagesdir}PDF-50.png[width="20px" link="./guides/ugvro/ugvro.pdf"]
-* link:guides/ugodn/ugodn.html[DataNucleus Object Store^]  image:{_imagesdir}PDF-50.png[width="20px" link="./guides/ugvro/ugvro.pdf"]
-* link:guides/ugsec/ugsec.html[Security^]  image:{_imagesdir}PDF-50.png[width="20px" link="./guides/ugsec/ugsec.pdf"]
-* *link:guides/ugtst/ugtst.html[Testing^]*  image:{_imagesdir}PDF-50.png[width="20px" link="./guides/ugtst/ugtst.pdf"]
-* link:guides/ugbtb/ugbtb.html[Beyond the Basics^]  image:{_imagesdir}PDF-50.png[width="20px" link="./guides/ugbtb/ugbtb.pdf"]
+* *link:guides/ugfun/ugfun.html[Fundamentals^]*
+* link:guides/ugvw/ugvw.html[Wicket Viewer^]
+* link:guides/ugvro/ugvro.html[Restful Objects Viewer^]
+* link:guides/ugodn/ugodn.html[DataNucleus Object Store^]
+* link:guides/ugsec/ugsec.html[Security^]
+* *link:guides/ugtst/ugtst.html[Testing^]*
+* link:guides/ugbtb/ugbtb.html[Beyond the Basics^]
 
 
 |*Reference Guides:*
 
-* *link:guides/rgant/rgant.html[Annotations^]*  image:{_imagesdir}PDF-50.png[width="20px" link="./guides/rgant/rgant.pdf"]
-* *link:guides/rgsvc/rgsvc.html[Domain Services^]*  image:{_imagesdir}PDF-50.png[width="20px" link="./guides/rgsvc/rgsvc.pdf"]
-* link:guides/rgcfg/rgcfg.html[Core Config'n Properties^]  image:{_imagesdir}PDF-50.png[width="20px" link="./guides/rgcfg/rgcfg.pdf"]
-* link:guides/rgcms/rgcms.html[Classes, Methods and Schema^]  image:{_imagesdir}PDF-50.png[width="20px" link="./guides/rgcms/rgcms.pdf"]
-* link:guides/rgmvn/rgmvn.html[Apache Isis Maven plugin^]  image:{_imagesdir}PDF-50.png[width="20px" link="./guides/rgmvn/rgmvn.pdf"]
-* link:guides/rgfis/rgfis.html[Framework Internal Services^]  image:{_imagesdir}PDF-50.png[width="20px" link="./guides/rgfis/rgfis.pdf"]
+* *link:guides/rgant/rgant.html[Annotations^]*
+* *link:guides/rgsvc/rgsvc.html[Domain Services^]*
+* link:guides/rgcfg/rgcfg.html[Core Config'n Properties^]
+* link:guides/rgcms/rgcms.html[Classes, Methods and Schema^]
+* link:guides/rgmvn/rgmvn.html[Apache Isis Maven plugin^]
+* link:guides/rgfis/rgfis.html[Framework Internal Services^]
 
 
 
 |*"Supporting" Guides:*
 
-* *link:guides/dg/dg.html[Developers' Guide^]*  image:{_imagesdir}PDF-50.png[width="20px" link="./guides/dg/dg.pdf"]
-** Setting up link:guides/dg/dg.html#_dg_ide_intellij[IntelliJ^] or link:guides/dg/dg.html#_dg_ide_eclipse[Eclipse^]
-** link:guides/dg/dg.html#_dg_contributing[Contributing patches^] (pull requests)
+* *link:guides/dg/dg.html[Developers' Guide^]*
+** link:guides/dg/dg.html#_dg_ide_intellij[IntelliJ^] + link:guides/dg/dg.html#_dg_ide_eclipse[Eclipse^]
+** link:guides/dg/dg.html#_dg_contributing[Pull requests^]
 ** link:guides/dg/dg.html#_dg_asciidoc-syntax[Asciidoc syntax^]
 
-* link:guides/cgcom/cgcom.html[Committers' Guide^]  image:{_imagesdir}PDF-50.png[width="20px" link="./guides/cgcom/cgcom.pdf"]
-** link:guides/cgcom/cgcom.html#_cgcom_cutting-a-release[Cutting a release^]
-** link:guides/cgcom/cgcom.html#_cgcom_verifying-releases[Verifying a release^]
+* link:guides/cgcom/cgcom.html[Committers' Guide^]
+** link:guides/cgcom/cgcom.html#_cgcom_cutting-a-release[Cutting^] + link:guides/cgcom/cgcom.html#_cgcom_verifying-releases[Verifying^]
+
+* *link:guides/htg.html[Hints-n-Tips^]*
 
 
 |===
