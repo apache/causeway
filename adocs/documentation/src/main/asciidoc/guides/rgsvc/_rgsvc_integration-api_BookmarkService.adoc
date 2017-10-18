@@ -21,7 +21,7 @@ A `Bookmark` is little more than an API equivalent of Apache Isis' internal `Oid
 For example, a `Bookmark` could be converted into a barcode, and then this used for automated scanning of correspondence from a customer.
 ====
 
-``Bookmark``s are used by several other domain services as a means of storing areference to an arbitrary object
+``Bookmark``s are used by several other domain services as a mean of storing a reference to an arbitrary object
 (a polymorphic relationship).  For example, the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s auditing module's implementation of xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditerService[`AuditerService`] uses bookmarks to capture the object that is being audited.
 
 [TIP]
