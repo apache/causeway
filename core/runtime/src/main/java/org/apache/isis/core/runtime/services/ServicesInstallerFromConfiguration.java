@@ -26,19 +26,14 @@ import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.config.ConfigurationConstants;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.util.DeweyOrderComparator;
-import org.apache.isis.core.runtime.fixturedomainservice.ObjectFixtureService;
-import org.apache.isis.core.runtime.system.DeploymentType;
-import org.apache.isis.core.runtime.system.SystemConstants;
 
 public class ServicesInstallerFromConfiguration extends ServicesInstallerAbstract  {
 
@@ -48,23 +43,6 @@ public class ServicesInstallerFromConfiguration extends ServicesInstallerAbstrac
 
     private static final String SERVICES = "services";
     public static final String SERVICES_KEY = ConfigurationConstants.ROOT + SERVICES;
-
-    /**
-     * @deprecated
-     */
-    @Deprecated
-    private static final String EXPLORATION_OBJECTS = "exploration-objects";
-
-    /**
-     * @deprecated - just adds to the cognitive load...
-     */
-    @Deprecated
-    private static final String SERVICES_PREFIX = "services.prefix";
-    /**
-     * @deprecated
-     */
-    @Deprecated
-    private static final String SERVICES_PREFIX_KEY = ConfigurationConstants.ROOT + SERVICES_PREFIX;
 
     private final static Pattern POSITIONED_SERVICE_REGEX = Pattern.compile("((\\d+):)(.*)");
 
@@ -129,17 +107,15 @@ public class ServicesInstallerFromConfiguration extends ServicesInstallerAbstrac
 
     // //////////////////////////////////////
 
-    public void appendServices(
+    void appendServices(
             final SortedMap<String, SortedSet<String>> positionedServices) {
 
         appendConfiguredServices(positionedServices);
-        appendObjectFixtureService(positionedServices, getConfiguration());
     }
 
     private void appendConfiguredServices(
             final SortedMap<String, SortedSet<String>> positionedServices) {
 
-        String servicePrefix = getConfiguration().getString(SERVICES_PREFIX_KEY);
         final String configuredServices = getConfiguration().getString(SERVICES_KEY);
         if (configuredServices == null) {
             return;
@@ -158,38 +134,7 @@ public class ServicesInstallerFromConfiguration extends ServicesInstallerAbstrac
                 serviceName = matcher.group(3);
             }
 
-            final String service = fullyQualifiedServiceName(servicePrefix, serviceName);
-            ServicesInstallerUtils.appendInPosition(positionedServices, "" + order, service);
-        }
-    }
-
-    static String fullyQualifiedServiceName(String servicePrefix, String serviceName) {
-        final StringBuilder buf = new StringBuilder();
-
-        if(!Strings.isNullOrEmpty(servicePrefix)) {
-            buf.append(servicePrefix);
-            if(!servicePrefix.endsWith(".")) {
-                buf.append(".");
-            }
-        }
-
-        buf.append(serviceName);
-        return buf.toString();
-    }
-
-    /**
-     * @deprecated
-     */
-    @Deprecated
-    private static void appendObjectFixtureService(
-            final SortedMap<String, SortedSet<String>> positionedServices, final IsisConfiguration configuration) {
-
-        if (configuration.getBoolean(ConfigurationConstants.ROOT + EXPLORATION_OBJECTS)) {
-            final DeploymentType explorationDeploymentType = DeploymentType.lookup(configuration.getString(
-                    SystemConstants.DEPLOYMENT_TYPE_KEY));
-            if (explorationDeploymentType.isExploring()) {
-                ServicesInstallerUtils.appendInPosition(positionedServices, "" + Integer.MAX_VALUE, ObjectFixtureService.class.getName());
-            }
+            ServicesInstallerUtils.appendInPosition(positionedServices, "" + order, serviceName);
         }
     }
 

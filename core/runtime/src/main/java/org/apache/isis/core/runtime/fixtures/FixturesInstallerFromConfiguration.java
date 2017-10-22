@@ -25,7 +25,6 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.factory.InstanceUtil;
-import org.apache.isis.core.runtime.fixtures.domainservice.ObjectLoaderFixture;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
 public class FixturesInstallerFromConfiguration extends FixturesInstallerAbstract {
@@ -59,9 +58,6 @@ public class FixturesInstallerFromConfiguration extends FixturesInstallerAbstrac
                 final Object fixture = InstanceUtil.createInstance(fixtureFullyQualifiedName);
                 fixtureLoaded = true;
                 delegate.addFixture(fixture);
-            }
-            if (configuration.getBoolean(EXPLORATION_OBJECTS)) {
-                delegate.addFixture(new ObjectLoaderFixture());
             }
             if (!fixtureLoaded) {
                 LOG.debug("No fixtures loaded from configuration");
