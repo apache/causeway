@@ -31,7 +31,7 @@ import java.lang.annotation.Target;
  * @see org.apache.isis.applib.annotation.PropertyLayout
  */
 @Inherited
-@Target({ ElementType.PARAMETER })
+@Target({ ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ParameterLayout {
 

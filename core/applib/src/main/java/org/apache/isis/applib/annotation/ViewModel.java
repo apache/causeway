@@ -44,7 +44,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @see ViewModel
  */
 @Inherited
-@Target({ ElementType.TYPE })
+@Target({ ElementType.TYPE, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ViewModel {
 

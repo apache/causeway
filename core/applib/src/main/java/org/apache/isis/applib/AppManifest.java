@@ -20,6 +20,7 @@
 package org.apache.isis.applib;
 
 import java.io.UnsupportedEncodingException;
+import java.lang.annotation.Annotation;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
@@ -32,7 +33,6 @@ import java.util.Set;
 import javax.jdo.annotations.PersistenceCapable;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 
 import org.reflections.vfs.SystemDir;
 import org.reflections.vfs.Vfs;
@@ -221,6 +221,17 @@ public interface AppManifest {
         }
         public void setFixtureScriptTypes(final Set<Class<? extends FixtureScript>> fixtureScriptTypes) {
             this.fixtureScriptTypes = fixtureScriptTypes;
+        }
+        //endregion
+
+        //region > metaAnnotationTypes
+        private Set<Class<? extends Annotation>> metaAnnotationTypes;
+
+        public Set<Class<? extends Annotation>> getMetaAnnotationTypes() {
+            return metaAnnotationTypes;
+        }
+        public void setMetaAnnotationTypes(final Set<Class<? extends Annotation>> metaAnnotationTypes) {
+            this.metaAnnotationTypes = metaAnnotationTypes;
         }
         //endregion
 

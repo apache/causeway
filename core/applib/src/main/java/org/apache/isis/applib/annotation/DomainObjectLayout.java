@@ -33,7 +33,7 @@ import org.apache.isis.applib.services.eventbus.TitleUiEvent;
  * Layout hints for domain objects.
  */
 @Inherited
-@Target({ ElementType.TYPE })
+@Target({ ElementType.TYPE, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface DomainObjectLayout {
 

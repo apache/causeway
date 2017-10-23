@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.runtime.systemusinginstallers;
 
+import java.lang.annotation.Annotation;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -40,6 +41,7 @@ import org.reflections.vfs.Vfs;
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.Meta;
 import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
@@ -140,6 +142,7 @@ public abstract class IsisComponentProvider {
 
         final Reflections reflections = new Reflections(packages);
         final Set<Class<?>> domainServiceTypes = reflections.getTypesAnnotatedWith(DomainService.class);
+        final Set<Class<? extends Annotation>> annotationTypes = (Set)reflections.getTypesAnnotatedWith(Meta.class);
         final Set<Class<?>> persistenceCapableTypes = reflections.getTypesAnnotatedWith(PersistenceCapable.class);
         final Set<Class<? extends FixtureScript>> fixtureScriptTypes = reflections.getSubTypesOf(FixtureScript.class);
 
@@ -160,6 +163,7 @@ public abstract class IsisComponentProvider {
         registry.setDomainServiceTypes(domainServiceTypes);
         registry.setPersistenceCapableTypes(persistenceCapableTypes);
         registry.setFixtureScriptTypes(fixtureScriptTypes);
+        registry.setMetaAnnotationTypes(annotationTypes);
         registry.setMixinTypes(mixinTypes);
     }
 

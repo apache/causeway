@@ -29,7 +29,7 @@ import java.lang.annotation.*;
  * </p>
  */
 @Inherited
-@Target({ ElementType.TYPE })
+@Target({ ElementType.TYPE, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface DomainService {
 

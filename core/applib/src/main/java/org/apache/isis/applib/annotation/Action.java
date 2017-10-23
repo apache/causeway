@@ -31,7 +31,7 @@ import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
  * Domain semantics for domain object collection.
  */
 @Inherited
-@Target({ ElementType.METHOD })
+@Target({ ElementType.METHOD, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Action {
 

@@ -36,7 +36,7 @@ import org.apache.isis.applib.value.Clob;
  * Domain semantics for domain object property.
  */
 @Inherited
-@Target({ ElementType.METHOD, ElementType.FIELD })
+@Target({ ElementType.METHOD, ElementType.FIELD, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Property {
 
@@ -127,7 +127,7 @@ public @interface Property {
      * Whether the property edit should be published.
      *
      * <p>
-     * Requires that an implementation of the {@link org.apache.isis.applib.services.publish.PublishingService}
+     * Requires that an implementation of the {@link org.apache.isis.applib.services.publish.PublisherService}
      * or {@link org.apache.isis.applib.services.publish.PublisherService} is registered with the framework.
      * </p>
      */

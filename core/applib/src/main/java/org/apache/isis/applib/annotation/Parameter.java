@@ -33,7 +33,7 @@ import org.apache.isis.applib.value.Clob;
  * Domain semantics for domain object collection.
  */
 @Inherited
-@Target({ ElementType.PARAMETER })
+@Target({ ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Parameter {
 

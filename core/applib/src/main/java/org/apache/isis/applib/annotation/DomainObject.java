@@ -36,7 +36,7 @@ import org.apache.isis.applib.services.eventbus.ObjectUpdatingEvent;
  * Domain semantics for domain objects (entities and view models; for services see {@link org.apache.isis.applib.annotation.DomainService}).
  */
 @Inherited
-@Target({ ElementType.TYPE })
+@Target({ ElementType.TYPE, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface DomainObject {
 

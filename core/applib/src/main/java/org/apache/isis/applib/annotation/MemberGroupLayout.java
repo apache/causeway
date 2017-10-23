@@ -47,7 +47,7 @@ import com.google.common.collect.Lists;
  * </p>
  */
 @Inherited
-@Target({ ElementType.TYPE })
+@Target({ ElementType.TYPE, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface MemberGroupLayout {
 
