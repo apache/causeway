@@ -31,7 +31,9 @@ Also for 2.0.0, new features/deprecations:
     deprecate FixtureScripts service with view to removing from applib ... the framework provides an implementation by default
     get rid of automatic initialization of fields (perhaps behind a config property)
     deprecate the Apache Isis' DateTime classes for removal in the future) ... and probably all of the custom value types, subclasses of Magnitude
-
+    flag to make @Action mandatory, @Programmatic the default
+    merge metamodel and runtime
+    remove *Installer
 
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -41,7 +43,6 @@ OTHER STUFF:
 
 
 
-ObjectFixtureService + supporting classes
 
 SwitchUserService
 AbstractFixtureSusa
@@ -492,3 +493,5 @@ org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationServiceFor
     - unused
 
 
+
+ObjectFixtureService + supporting classes
