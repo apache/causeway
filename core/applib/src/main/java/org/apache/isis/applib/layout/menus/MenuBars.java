@@ -97,7 +97,6 @@ public class MenuBars implements Serializable {
 
 
 
-    @XmlTransient
     public MenuBar menuBarFor(final DomainServiceLayout.MenuBar menuBar) {
         switch (menuBar) {
         case PRIMARY:
