@@ -24,9 +24,11 @@ import javax.annotation.PostConstruct;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.MinLength;
+import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
@@ -59,6 +61,10 @@ import org.apache.isis.applib.services.eventbus.EventBusService;
  *     automatically registered programmatically if no other instance of {@link FixtureScripts} is found.
  * </p>
  */
+@DomainService(
+        nature = NatureOfService.VIEW_MENU_ONLY,
+        objectType = "isisApplib.FixtureScriptsDefault"
+)
 @DomainServiceLayout(
         named="Prototyping",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY,

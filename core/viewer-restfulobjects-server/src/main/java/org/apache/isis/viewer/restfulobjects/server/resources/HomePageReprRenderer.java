@@ -56,7 +56,8 @@ public class HomePageReprRenderer extends ReprRendererAbstract<HomePageReprRende
         }
 
         addLinkToUser(getRendererContext().getAuthenticationSession());
-        addLinkToServices(((ResourceContext)getRendererContext()).getPersistenceSession().getServices());
+        addLinkToMenuBars();
+        addLinkToServices(getRendererContext().getPersistenceSession().getServices());
         addLinkToVersion();
         addLinkToDomainTypes(((ResourceContext)getRendererContext()).getSpecificationLoader().allSpecifications());
 
@@ -115,6 +116,12 @@ public class HomePageReprRenderer extends ReprRendererAbstract<HomePageReprRende
             link.mapPut("value", renderer.render());
         }
 
+        getLinks().arrayAdd(link);
+    }
+
+    private void addLinkToMenuBars() {
+        final JsonRepresentation link = LinkBuilder
+                .newBuilder(getRendererContext(), Rel.MENUBARS.getName(), RepresentationType.MENUBARS, "menuBars").build();
         getLinks().arrayAdd(link);
     }
 

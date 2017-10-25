@@ -24,6 +24,7 @@ import org.apache.isis.viewer.restfulobjects.server.resources.DomainObjectResour
 import org.apache.isis.viewer.restfulobjects.server.resources.DomainServiceResourceServerside;
 import org.apache.isis.viewer.restfulobjects.server.resources.DomainTypeResourceServerside;
 import org.apache.isis.viewer.restfulobjects.server.resources.HomePageResourceServerside;
+import org.apache.isis.viewer.restfulobjects.server.resources.MenuBarsResourceServerside;
 import org.apache.isis.viewer.restfulobjects.server.resources.SwaggerSpecResource;
 import org.apache.isis.viewer.restfulobjects.server.resources.UserResourceServerside;
 import org.apache.isis.viewer.restfulobjects.server.resources.VersionResourceServerside;
@@ -36,6 +37,7 @@ public class RestfulObjectsApplication extends AbstractJaxRsApplication {
         addClass(HomePageResourceServerside.class);
         addClass(DomainTypeResourceServerside.class);
         addClass(UserResourceServerside.class);
+        addClass(MenuBarsResourceServerside.class);
         addClass(DomainObjectResourceServerside.class);
         addClass(DomainServiceResourceServerside.class);
         addClass(VersionResourceServerside.class);
