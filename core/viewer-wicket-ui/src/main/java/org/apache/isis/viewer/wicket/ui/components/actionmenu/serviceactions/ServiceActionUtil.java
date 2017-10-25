@@ -20,8 +20,6 @@
 package org.apache.isis.viewer.wicket.ui.components.actionmenu.serviceactions;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import com.google.common.base.Function;
 import com.google.common.base.Strings;
@@ -29,8 +27,6 @@ import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableBiMap;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
@@ -42,8 +38,6 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.Model;
 
-import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.applib.layout.menus.ActionLayoutData;
 import org.apache.isis.applib.layout.menus.Menu;
 import org.apache.isis.applib.layout.menus.MenuBar;
@@ -51,15 +45,7 @@ import org.apache.isis.applib.layout.menus.MenuBars;
 import org.apache.isis.applib.layout.menus.MenuSection;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.NotInServiceMenuFacet;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
-import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
-import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.spec.ActionType;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.runtime.system.IsisSystem;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactoryBuilder;
@@ -77,7 +63,10 @@ public final class ServiceActionUtil {
 
     private ServiceActionUtil(){}
 
-    static void addLeafItem(final CssMenuItem menuItem, final ListItem<CssMenuItem> listItem, final MarkupContainer parent) {
+    static void addLeafItem(
+            final CssMenuItem menuItem,
+            final ListItem<CssMenuItem> listItem,
+            final MarkupContainer parent) {
         
     	Fragment leafItem;
         if (!menuItem.isSeparator()) {
@@ -179,7 +168,12 @@ public final class ServiceActionUtil {
         return itemsWithSeparators;
     }
 
-    static void addFolderItem(final CssMenuItem subMenuItem, final ListItem<CssMenuItem> listItem, final MarkupContainer parent, final SeparatorStrategy separatorStrategy) {
+    static void addFolderItem(
+            final CssMenuItem subMenuItem,
+            final ListItem<CssMenuItem> listItem,
+            final MarkupContainer parent,
+            final SeparatorStrategy separatorStrategy) {
+
         listItem.add(new CssClassAppender("dropdown-submenu"));
 
         Fragment folderItem = new Fragment("content", "folderItem", parent);
@@ -259,128 +253,10 @@ public final class ServiceActionUtil {
         return menuItems;
     }
 
-    /**
-     * Builds a hierarchy of {@link CssMenuItem}s, following the provided map of {@link ServiceAndAction}s (keyed by their service Name).
-     */
-    private static List<CssMenuItem> buildMenuItems(
-            final Set<String> serviceNamesInOrder,
-            final Map<String, List<ServiceAndAction>> serviceActionsByName) {
 
-        final List<CssMenuItem> menuItems = Lists.newArrayList();
-        for (String serviceName : serviceNamesInOrder) {
-            final CssMenuItem serviceMenuItem = CssMenuItem.newMenuItem(serviceName).build();
-            final List<ServiceAndAction> serviceActionsForName = serviceActionsByName.get(serviceName);
-            for (ServiceAndAction serviceAndAction : serviceActionsForName) {
-
-                final CssMenuItem.Builder subMenuItemBuilder = serviceMenuItem.newSubMenuItem(serviceAndAction);
-                if (subMenuItemBuilder == null) {
-                    // either service or this action is not visible
-                    continue;
-                }
-                subMenuItemBuilder.build();
-            }
-            if (serviceMenuItem.hasSubMenuItems()) {
-                menuItems.add(serviceMenuItem);
-            }
-        }
-        return menuItems;
-    }
-
-
-    // //////////////////////////////////////
-
-    /**
-     * Spin through all object actions of the service adapter, and add to the provided List of {@link ServiceAndAction}s.
-     */
-    private static void collateServiceActions(
-            final ObjectAdapter serviceAdapter,
-            final ActionType actionType,
-            final List<ServiceAndAction> serviceActions) {
-
-        final ObjectSpecification serviceSpec = serviceAdapter.getSpecification();
-
-        // skip if annotated to not be included in repository menu using @DomainService
-        final DomainServiceFacet domainServiceFacet = serviceSpec.getFacet(DomainServiceFacet.class);
-        if (domainServiceFacet != null) {
-            final NatureOfService natureOfService = domainServiceFacet.getNatureOfService();
-            if (natureOfService == NatureOfService.VIEW_REST_ONLY ||
-                    natureOfService == NatureOfService.VIEW_CONTRIBUTIONS_ONLY ||
-                    natureOfService == NatureOfService.DOMAIN) {
-                return;
-            }
-        }
-
-        for (final ObjectAction objectAction : serviceSpec.getObjectActions(
-                actionType, Contributed.INCLUDED, Filters.<ObjectAction>any())) {
-
-            // skip if annotated to not be included in repository menu using legacy mechanism
-            if (objectAction.getFacet(NotInServiceMenuFacet.class) != null) {
-                continue;
-            }
-
-            final MemberOrderFacet memberOrderFacet = objectAction.getFacet(MemberOrderFacet.class);
-            String serviceName = memberOrderFacet != null? memberOrderFacet.name(): null;
-            if(Strings.isNullOrEmpty(serviceName)){
-                serviceName = serviceSpec.getFacet(NamedFacet.class).value();
-            }
-            final EntityModel serviceModel = new EntityModel(serviceAdapter);
-            serviceActions.add(new ServiceAndAction(serviceName, serviceModel, objectAction));
-        }
-    }
-
-    /**
-     * The unique service names, as they appear in order of the provided List of {@link ServiceAndAction}s.
-     * @param serviceAdapters
-     */
-    private static Set<String> serviceNamesInOrder(
-            final List<ObjectAdapter> serviceAdapters, final List<ServiceAndAction> serviceActions) {
-        final Set<String> serviceNameOrder = Sets.newLinkedHashSet();
-
-        // first, order as defined in isis.properties
-        for (ObjectAdapter serviceAdapter : serviceAdapters) {
-            final ObjectSpecification serviceSpec = serviceAdapter.getSpecification();
-            String serviceName = serviceSpec.getFacet(NamedFacet.class).value();
-            serviceNameOrder.add(serviceName);
-        }
-        // then, any other services (eg due to misspellings, at the end)
-        for (ServiceAndAction serviceAction : serviceActions) {
-            if(!serviceNameOrder.contains(serviceAction.serviceName)) {
-                serviceNameOrder.add(serviceAction.serviceName);
-            }
-        }
-        return serviceNameOrder;
-    }
-
-    /**
-     * Group the provided {@link ServiceAndAction}s by their service name.
-     */
-    private static Map<String, List<ServiceAndAction>> groupByServiceName(final List<ServiceAndAction> serviceActions) {
-        final Map<String, List<ServiceAndAction>> serviceActionsByName = Maps.newTreeMap();
-
-        // map available services
-        ObjectAdapter lastServiceAdapter = null;
-
-        for (ServiceAndAction serviceAction : serviceActions) {
-            List<ServiceAndAction> serviceActionsForName = serviceActionsByName.get(serviceAction.serviceName);
-
-            final ObjectAdapter serviceAdapter =
-                    serviceAction.serviceEntityModel.load(AdapterManager.ConcurrencyChecking.NO_CHECK);
-
-            if(serviceActionsForName == null) {
-                serviceActionsForName = Lists.newArrayList();
-                serviceActionsByName.put(serviceAction.serviceName, serviceActionsForName);
-            } else {
-                // capture whether this action is from a different service; if so, add a separator before it
-                serviceAction.separator = lastServiceAdapter != serviceAdapter;
-            }
-            serviceActionsForName.add(serviceAction);
-            lastServiceAdapter = serviceAdapter;
-        }
-
-        return serviceActionsByName;
-    }
-    
-    private static void addConfirmationDialog(Component component, final ServicesInjector servicesInjector) {
+    private static void addConfirmationDialog(
+            final Component component,
+            final ServicesInjector servicesInjector) {
         
         final TranslationService translationService =
                 servicesInjector.lookupService(TranslationService.class);
