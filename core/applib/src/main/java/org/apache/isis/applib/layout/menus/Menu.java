@@ -36,10 +36,11 @@ import org.apache.isis.applib.annotation.DomainServiceLayout;
         name = "menu"
         , propOrder = {
             "named",
+            "cssClassFa",
             "sections"
         }
 )
-public class Menu implements Serializable, HasNamed, HasCssClassFa {
+public class Menu implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -53,13 +54,11 @@ public class Menu implements Serializable, HasNamed, HasCssClassFa {
 
     private String named;
 
-    @Override
     @XmlElement(required = true)
     public String getNamed() {
         return named;
     }
 
-    @Override
     public void setNamed(String named) {
         this.named = named;
     }
@@ -68,13 +67,11 @@ public class Menu implements Serializable, HasNamed, HasCssClassFa {
 
     private String cssClassFa;
 
-    @Override
     @XmlAttribute(required = false)
     public String getCssClassFa() {
         return cssClassFa;
     }
 
-    @Override
     public void setCssClassFa(final String cssClassFa) {
         this.cssClassFa = cssClassFa;
     }

@@ -18,12 +18,11 @@
  */
 package org.apache.isis.applib.layout.menus;
 
-import javax.xml.bind.annotation.XmlElement;
+import java.util.List;
 
-public interface HasOid {
+import org.apache.isis.applib.layout.component.Owner;
 
-    @XmlElement(required = true)
-    String getOid();
-    void setOid(String named);
-
+public interface ActionLayoutDataOwner extends Owner {
+    List<ActionLayoutData> getActions();
+    void setActions(List<ActionLayoutData> actions);
 }

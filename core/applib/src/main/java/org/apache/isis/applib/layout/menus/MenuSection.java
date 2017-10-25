@@ -21,14 +21,11 @@ package org.apache.isis.applib.layout.menus;
 import java.io.Serializable;
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
 import com.google.common.collect.Lists;
 
-import org.apache.isis.applib.layout.component.ActionLayoutData;
-import org.apache.isis.applib.layout.component.ActionLayoutDataOwner;
 
 /**
  * Corresponds to a domain service that contributes its actions under a particular {@link MenuBar}.
@@ -36,43 +33,27 @@ import org.apache.isis.applib.layout.component.ActionLayoutDataOwner;
 @XmlType(
         name = "section"
         , propOrder = {
-            "oid",
             "actions"
         }
 )
-public class MenuSection implements Serializable, HasOid, ActionLayoutDataOwner {
+public class MenuSection implements Serializable, ActionLayoutDataOwner {
 
     private static final long serialVersionUID = 1L;
 
     public MenuSection() {
     }
 
-    public MenuSection(String oid) {
-        this.oid = oid;
-    }
-
-    private String oid;
-
-    @Override
-    @XmlAttribute(required = true)
-    public String getOid() {
-        return oid;
-    }
-
-    @Override
-    public void setOid(final String oid) {
-        this.oid = oid;
-    }
-
 
     private List<ActionLayoutData> actions = Lists.newArrayList();
 
     // no wrapper
+    @Override
     @XmlElement(name = "action", required = false)
     public List<ActionLayoutData> getActions() {
         return actions;
     }
 
+    @Override
     public void setActions(List<ActionLayoutData> actionLayoutDatas) {
         this.actions = actionLayoutDatas;
     }

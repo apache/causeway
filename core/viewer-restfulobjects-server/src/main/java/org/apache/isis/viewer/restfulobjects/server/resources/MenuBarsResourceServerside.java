@@ -37,7 +37,7 @@ import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filters;
-import org.apache.isis.applib.layout.component.ActionLayoutData;
+import org.apache.isis.applib.layout.menus.ActionLayoutData;
 import org.apache.isis.applib.layout.menus.Menu;
 import org.apache.isis.applib.layout.menus.MenuBar;
 import org.apache.isis.applib.layout.menus.MenuBars;
@@ -122,11 +122,10 @@ public class MenuBarsResourceServerside extends ResourceAbstract implements Menu
                     menu.getSections().add(menuSection);
                     menuSection = new MenuSection();
                 }
-                // populated lazily
-                menuSection.setOid(serviceAndAction.serviceAdapter.getOid().enString());
 
                 ObjectAction objectAction = serviceAndAction.objectAction;
-                ActionLayoutData action = new ActionLayoutData(objectAction.getId());
+                final String serviceOid = serviceAndAction.serviceAdapter.getOid().enString();
+                ActionLayoutData action = new ActionLayoutData(serviceOid, objectAction.getId());
                 action.setNamed(objectAction.getName());
                 menuSection.getActions().add(action);
             }

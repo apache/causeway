@@ -20,7 +20,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.applib.layout.component.ActionLayoutData;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -49,15 +48,15 @@ public class MenuBars_roundtrip_Test {
         Menu menu = new Menu();
         menu.setNamed("Parties");
 
-        MenuSection organisationMenu = new MenuSection("parties.OrganisationMenu:1");
-        organisationMenu.getActions().add(new ActionLayoutData("findByReference"));
-        organisationMenu.getActions().add(new ActionLayoutData("findByName"));
-        organisationMenu.getActions().add(new ActionLayoutData("create"));
+        MenuSection organisationMenu = new MenuSection();
+        organisationMenu.getActions().add(new ActionLayoutData("parties.OrganisationMenu:1", "findByReference"));
+        organisationMenu.getActions().add(new ActionLayoutData("parties.OrganisationMenu:1", "findByName"));
+        organisationMenu.getActions().add(new ActionLayoutData("parties.OrganisationMenu:1", "create"));
         menu.getSections().add(organisationMenu);
 
-        MenuSection personMenu = new MenuSection("parties.PersonMenu:1");
-        personMenu.getActions().add(new ActionLayoutData("findByUsername"));
-        personMenu.getActions().add(new ActionLayoutData("create"));
+        MenuSection personMenu = new MenuSection();
+        personMenu.getActions().add(new ActionLayoutData("parties.PersonMenu:1", "findByUsername"));
+        personMenu.getActions().add(new ActionLayoutData("parties.PersonMenu:1", "create"));
         menu.getSections().add(personMenu);
 
         menuBars.getPrimary().getMenus().add(menu);
