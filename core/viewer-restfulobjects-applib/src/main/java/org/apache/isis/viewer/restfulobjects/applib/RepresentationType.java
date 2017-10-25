@@ -97,6 +97,10 @@ public enum RepresentationType {
             null,
             RestfulMediaType.APPLICATION_XML_LAYOUT_BS3,
             null),
+    MENUBARS(
+            null,
+            RestfulMediaType.APPLICATION_XML_LAYOUT_MENUBARS,
+            null),
     PROPERTY_DESCRIPTION(
             RestfulMediaType.APPLICATION_JSON_PROPERTY_DESCRIPTION,
             null,
