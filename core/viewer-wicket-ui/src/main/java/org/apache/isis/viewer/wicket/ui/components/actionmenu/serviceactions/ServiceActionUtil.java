@@ -19,13 +19,36 @@
 
 package org.apache.isis.viewer.wicket.ui.components.actionmenu.serviceactions;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.google.common.base.Function;
+import com.google.common.base.Strings;
+import com.google.common.collect.FluentIterable;
+import com.google.common.collect.ImmutableBiMap;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
+
+import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.AbstractLink;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.markup.html.panel.Fragment;
+import org.apache.wicket.model.Model;
+
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.filter.Filters;
+import org.apache.isis.applib.layout.menus.ActionLayoutData;
+import org.apache.isis.applib.layout.menus.Menu;
+import org.apache.isis.applib.layout.menus.MenuBar;
+import org.apache.isis.applib.layout.menus.MenuBars;
+import org.apache.isis.applib.layout.menus.MenuSection;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
@@ -44,20 +67,6 @@ import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ServiceActionsModel;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.CssClassFaBehavior;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
-import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.Component;
-import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.AbstractLink;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.markup.html.panel.Fragment;
-import org.apache.wicket.model.Model;
-
-import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipBehavior;
 import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipConfig;
@@ -194,23 +203,60 @@ public final class ServiceActionUtil {
         folderItem.add(subMenuItemsView);
     }
 
-    public static List<CssMenuItem> buildMenu(final ServiceActionsModel appActionsModel) {
+    public static List<CssMenuItem> buildMenu(
+            final MenuBars menuBars,
+            final ServiceActionsModel serviceActionsModel) {
 
-        final List<ObjectAdapter> serviceAdapters = appActionsModel.getObject();
+        final MenuBar menuBar = menuBars.menuBarFor(serviceActionsModel.getMenuBar());
 
-        final List<ServiceAndAction> serviceActions = Lists.newArrayList();
-        for (final ObjectAdapter serviceAdapter : serviceAdapters) {
-            collateServiceActions(serviceAdapter, ActionType.USER, serviceActions);
-            collateServiceActions(serviceAdapter, ActionType.PROTOTYPE, serviceActions);
+        final List<ObjectAdapter> serviceAdapters = serviceActionsModel.getObject();
+        final ImmutableMap<ObjectAdapter, String> oidByServiceAdapter = FluentIterable.from(serviceAdapters)
+                .toMap(new Function<ObjectAdapter, String>() {
+                    @Override
+                    public String apply(final ObjectAdapter objectAdapter) {
+                        return objectAdapter.getOid().enStringNoVersion();
+                    }
+                });
+        final ImmutableBiMap<String, ObjectAdapter> serviceAdapterByOid = ImmutableBiMap
+                .copyOf(oidByServiceAdapter).inverse();
+
+        final List<CssMenuItem> menuItems = Lists.newArrayList();
+        for (final Menu menu : menuBar.getMenus()) {
+
+            final CssMenuItem serviceMenu = CssMenuItem.newMenuItem(menu.getNamed()).build();
+
+
+            for (final MenuSection menuSection : menu.getSections()) {
+
+                boolean firstSection = true;
+
+                for (final ActionLayoutData actionLayoutData : menuSection.getActions()) {
+                    final String oid = actionLayoutData.getOid();
+                    final ObjectAdapter serviceAdapter = serviceAdapterByOid.get(oid);
+                    final EntityModel entityModel = new EntityModel(serviceAdapter);
+                    final ObjectAction objectAction = serviceAdapter.getSpecification()
+                            .getObjectAction(actionLayoutData.getId());
+                    final ServiceAndAction serviceAndAction =
+                            new ServiceAndAction(actionLayoutData.getNamed(), entityModel, objectAction);
+
+                    if(firstSection) {
+                        serviceAndAction.separator = true;
+                        firstSection = false;
+                    }
+
+                    final CssMenuItem.Builder subMenuItemBuilder = serviceMenu.newSubMenuItem(serviceAndAction);
+                    if (subMenuItemBuilder == null) {
+                        // either service or this action is not visible
+                        continue;
+                    }
+                    subMenuItemBuilder.build();
+                }
+            }
+            if (serviceMenu.hasSubMenuItems()) {
+                menuItems.add(serviceMenu);
+            }
         }
-        
-        final Set<String> serviceNamesInOrder = serviceNamesInOrder(serviceAdapters, serviceActions);
-        final Map<String, List<ServiceAndAction>> serviceActionsByName = groupByServiceName(serviceActions);
-
-        // prune any service names that have no service actions
-        serviceNamesInOrder.retainAll(serviceActionsByName.keySet());
-
-        return buildMenuItems(serviceNamesInOrder, serviceActionsByName);
+        return menuItems;
     }
 
     /**

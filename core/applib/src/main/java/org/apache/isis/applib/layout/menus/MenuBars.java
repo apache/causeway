@@ -22,7 +22,10 @@ import java.io.Serializable;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
+
+import org.apache.isis.applib.annotation.DomainServiceLayout;
 
 /**
  * Describes the collection of domain services into menubars, broadly corresponding to the aggregation of information within {@link org.apache.isis.applib.annotation.DomainServiceLayout}.
@@ -92,5 +95,19 @@ public class MenuBars implements Serializable {
         this.metadataError = metadataError;
     }
 
+
+
+    @XmlTransient
+    public MenuBar menuBarFor(final DomainServiceLayout.MenuBar menuBar) {
+        switch (menuBar) {
+        case PRIMARY:
+            return getPrimary();
+        case SECONDARY:
+            return getSecondary();
+        case TERTIARY:
+            return getTertiary();
+        }
+        return null;
+    }
 
 }
