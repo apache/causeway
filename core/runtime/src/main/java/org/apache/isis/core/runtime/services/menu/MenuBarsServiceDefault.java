@@ -25,6 +25,7 @@ import java.util.Set;
 import javax.inject.Inject;
 
 import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
 import com.google.common.base.Strings;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Lists;
@@ -35,7 +36,6 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.applib.layout.menus.ActionLayoutData;
 import org.apache.isis.applib.layout.menus.Menu;
 import org.apache.isis.applib.layout.menus.MenuBar;
@@ -210,7 +210,7 @@ public class MenuBarsServiceDefault implements MenuBarsService {
         }
 
         for (final ObjectAction objectAction : serviceSpec.getObjectActions(
-                actionType, Contributed.INCLUDED, Filters.<ObjectAction>any())) {
+                actionType, Contributed.INCLUDED, Predicates.<ObjectAction>alwaysTrue())) {
 
             // skip if annotated to not be included in repository menu using legacy mechanism
             if (objectAction.getFacet(NotInServiceMenuFacet.class) != null) {
