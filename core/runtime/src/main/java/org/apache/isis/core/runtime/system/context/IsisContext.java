@@ -78,7 +78,25 @@ public final class IsisContext {
      * Resets
      */
     public static void testReset() {
+        destroy();
+    }
+    
+    /**
+     * Resets
+     * @deprecated replaced by {@link #destroy()}
+     * 
+     */
+    public static void testReset() {
+    	destroy();
+    }
+    
+    /**
+     * Destroys this context and clears any state associated with it. 
+     * It marks the end of IsisContext's lifecycle. Subsequent calls have no effect. 
+     */
+    public static void destroy() {
         sessionFactory = null;
+        metamodelInvalidException = null;
     }
 
     //endregion
