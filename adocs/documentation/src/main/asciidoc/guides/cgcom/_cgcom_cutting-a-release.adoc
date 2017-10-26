@@ -525,8 +525,15 @@ docker container run -p 8080:8080 -d test/simpleapp
 ====
 On Windows, you may need to enable the Docker daemon first, otherwise the "mvn install" command above will fail:
 
-image::{_imagesdir}docker-daemon.png[width="600px",link="{_imagesdir}docker-daemon.png"]
+image::{_imagesdir}docker/docker-daemon.png[width="600px",link="{_imagesdir}docker/docker-daemon.png"]
+
+You might also need to ensure that the "Unidentified networks" are configured to be private:
+
+image::{_imagesdir}docker/026-docker-nat-private.png[width="400px",link="{_imagesdir}docker/026-docker-nat-private.png"]
+
+This can be done using the "Local Security Policy" application.
 ====
+
 
 This too should be accessed at link:http://localhost:8080[localhost:8080].
 

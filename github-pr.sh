@@ -17,7 +17,7 @@ set -o errexit
 # - merge temporary branch into mainline, and commit
 #
 #
-# Usage: github-pr.sh isis 1162 31
+# Usage: github-pr.sh -p ISIS -j 1162 -g 31
 #
 #        where 
 #               - isis is the JIRA project and repo

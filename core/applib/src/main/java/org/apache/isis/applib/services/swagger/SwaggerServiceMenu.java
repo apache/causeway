@@ -16,6 +16,9 @@
  */
 package org.apache.isis.applib.services.swagger;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import org.apache.isis.applib.IsisApplibModule;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -43,6 +46,41 @@ public class SwaggerServiceMenu {
     public static abstract class ActionDomainEvent extends IsisApplibModule.ActionDomainEvent<SwaggerServiceMenu> {
     }
 
+
+    public static class OpenSwaggerUiDomainEvent extends ActionDomainEvent {}
+
+    @Action(
+            semantics = SemanticsOf.SAFE,
+            domainEvent = OpenSwaggerUiDomainEvent.class,
+            restrictTo = RestrictTo.PROTOTYPING
+    )
+    @ActionLayout(
+            cssClassFa = "fa-download"
+    )
+    @MemberOrder(sequence="500.600.1")
+    public URL openSwaggerUi() throws MalformedURLException {
+        return new java.net.URL("http:///swagger-ui/index.html");
+    }
+
+
+
+    public static class OpenRestApiDomainEvent extends ActionDomainEvent {}
+
+    @Action(
+            semantics = SemanticsOf.SAFE,
+            domainEvent = OpenSwaggerUiDomainEvent.class,
+            restrictTo = RestrictTo.PROTOTYPING
+    )
+    @ActionLayout(
+            cssClassFa = "fa-external-link"
+    )
+    @MemberOrder(sequence="500.600.2")
+    public URL openRestApi() throws MalformedURLException {
+        return new java.net.URL("http:///restful/");
+    }
+
+
+
     public static class DownloadSwaggerSpecDomainEvent extends ActionDomainEvent {}
 
     @Action(
@@ -51,9 +89,9 @@ public class SwaggerServiceMenu {
             restrictTo = RestrictTo.PROTOTYPING
     )
     @ActionLayout(
-            cssClassFa = "fa-download"
+            cssClassFa = "fa-external-link"
     )
-    @MemberOrder(sequence="500.600.1")
+    @MemberOrder(sequence="500.600.3")
     public Clob downloadSwaggerSchemaDefinition(
             @ParameterLayout(named = "Filename")
             final String fileNamePrefix,
@@ -73,6 +111,8 @@ public class SwaggerServiceMenu {
     public SwaggerService.Format default2DownloadSwaggerSchemaDefinition() {
         return SwaggerService.Format.YAML;
     }
+
+
 
     @javax.inject.Inject
     SwaggerService swaggerService;
