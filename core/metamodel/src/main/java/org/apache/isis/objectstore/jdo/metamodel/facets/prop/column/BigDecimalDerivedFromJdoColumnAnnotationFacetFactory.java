@@ -65,7 +65,7 @@ public class BigDecimalDerivedFromJdoColumnAnnotationFacetFactory extends FacetF
 
         BigDecimalValueFacet existingFacet = (BigDecimalValueFacet) holder.getFacet(BigDecimalValueFacet.class);
 
-        final Column jdoColumnAnnotation = Annotations.getAnnotation(processMethodContext.getMethod(), Column.class);
+        final Column jdoColumnAnnotation = Annotations.getAnnotations(processMethodContext.getMethod(), Column.class);
 
         if (jdoColumnAnnotation == null) {
             if(existingFacet != null && !existingFacet.isNoop()) {

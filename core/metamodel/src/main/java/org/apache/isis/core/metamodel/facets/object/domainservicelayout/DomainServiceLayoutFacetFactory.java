@@ -41,8 +41,8 @@ public class DomainServiceLayoutFacetFactory extends FacetFactoryAbstract {
 
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
-        final DomainService domainService = Annotations.getAnnotation(cls, DomainService.class);
-        final DomainServiceLayout domainServiceLayout = Annotations.getAnnotation(cls, DomainServiceLayout.class);
+        final DomainService domainService = Annotations.getAnnotations(cls, DomainService.class);
+        final DomainServiceLayout domainServiceLayout = Annotations.getAnnotations(cls, DomainServiceLayout.class);
 
         if (domainService == null && domainServiceLayout == null) {
             return;

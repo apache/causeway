@@ -30,8 +30,6 @@ import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncoderDecoderUtil;
 import org.apache.isis.core.metamodel.progmodel.DeprecatedMarker;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 
 /**
  * @deprecated
@@ -54,7 +52,7 @@ public class EncodableFacetAnnotationElseConfigurationFactory extends FacetFacto
     private EncodableFacet create(final Class<?> cls, final FacetHolder holder) {
 
         // create from annotation, if present
-        final Encodable annotation = Annotations.getAnnotation(cls, Encodable.class);
+        final Encodable annotation = Annotations.getAnnotations(cls, Encodable.class);
         if (annotation != null) {
             final EncodableFacetAnnotation facet = new EncodableFacetAnnotation(cls, holder, servicesInjector);
             if (facet.isValid()) {

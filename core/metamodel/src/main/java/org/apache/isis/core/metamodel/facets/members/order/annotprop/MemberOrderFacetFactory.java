@@ -49,7 +49,7 @@ public class MemberOrderFacetFactory extends FacetFactoryAbstract implements Con
     }
 
     private MemberOrderFacet createFromAnnotationIfPossible(final ProcessMethodContext processMethodContext) {
-        final MemberOrder annotation = Annotations.getAnnotation(processMethodContext.getMethod(), MemberOrder.class);
+        final MemberOrder annotation = Annotations.getAnnotations(processMethodContext.getMethod(), MemberOrder.class);
         if (annotation != null) {
             return new MemberOrderFacetAnnotation(
                     annotation.name(),

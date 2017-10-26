@@ -16,6 +16,8 @@
  * under the License. */
 package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
 
+import java.util.List;
+
 import com.google.common.base.Strings;
 
 import org.apache.isis.applib.annotation.DomainObjectLayout;
@@ -25,7 +27,7 @@ import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacetAbstr
 
 public class CssClassFacetForDomainObjectLayoutAnnotation extends CssClassFacetAbstract {
 
-    public static CssClassFacet create(final DomainObjectLayout domainObjectLayout, final FacetHolder holder) {
+    public static CssClassFacet create(final List<DomainObjectLayout> domainObjectLayout, final FacetHolder holder) {
         if (domainObjectLayout == null) {
             return null;
         }

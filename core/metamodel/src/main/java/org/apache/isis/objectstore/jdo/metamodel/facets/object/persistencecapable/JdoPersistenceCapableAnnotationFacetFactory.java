@@ -45,7 +45,7 @@ public class JdoPersistenceCapableAnnotationFacetFactory extends FacetFactoryAbs
             return;
         }
 
-        final PersistenceCapable annotation = Annotations.getAnnotation(cls, PersistenceCapable.class);
+        final PersistenceCapable annotation = Annotations.getAnnotations(cls, PersistenceCapable.class);
         if (annotation == null) {
             return;
         }

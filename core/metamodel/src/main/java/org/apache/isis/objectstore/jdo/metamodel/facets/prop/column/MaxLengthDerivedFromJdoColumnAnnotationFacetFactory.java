@@ -59,13 +59,17 @@ public class MaxLengthDerivedFromJdoColumnAnnotationFacetFactory extends FacetFa
             return;
         }
 
-        final Column annotation = Annotations.getAnnotation(processMethodContext.getMethod(), Column.class);
+        final List<Column> annotations = Annotations.getAnnotations(processMethodContext.getMethod(), Column.class);
 
         if(String.class != processMethodContext.getMethod().getReturnType()) {
             return;
         } 
 
-        if (annotation == null || annotation.length() == -1) {
+        if (annotations.isEmpty()) {
+            return;
+        }
+        final Column annotation = annotations.get(0);
+        if(annotation.length() == -1) {
             return;
         }
 

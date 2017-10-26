@@ -48,7 +48,7 @@ public class CollectionLayoutFacetFactory extends FacetFactoryAbstract implement
         final FacetHolder holder = processMethodContext.getFacetHolder();
 
         Properties properties = null;
-        final CollectionLayout collectionLayout = Annotations.getAnnotation(processMethodContext.getMethod(), CollectionLayout.class);
+        final CollectionLayout collectionLayout = Annotations.getAnnotations(processMethodContext.getMethod(), CollectionLayout.class);
 
 
         // cssClass

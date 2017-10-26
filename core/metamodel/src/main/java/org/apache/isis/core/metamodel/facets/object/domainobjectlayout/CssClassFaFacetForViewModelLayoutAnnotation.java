@@ -16,6 +16,8 @@
  * under the License. */
 package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
 
+import java.util.List;
+
 import com.google.common.base.Strings;
 
 import org.apache.isis.applib.annotation.ViewModelLayout;
@@ -26,7 +28,7 @@ import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaPositi
 
 public class CssClassFaFacetForViewModelLayoutAnnotation extends CssClassFaFacetAbstract {
 
-    public static CssClassFaFacet create(final ViewModelLayout viewModelLayout, final FacetHolder holder) {
+    public static CssClassFaFacet create(final List<ViewModelLayout> viewModelLayout, final FacetHolder holder) {
         if (viewModelLayout == null) {
             return null;
         }

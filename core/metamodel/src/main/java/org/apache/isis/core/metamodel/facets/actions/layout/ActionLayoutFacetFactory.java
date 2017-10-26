@@ -52,7 +52,7 @@ public class ActionLayoutFacetFactory extends FacetFactoryAbstract implements Co
 
         final FacetHolder holder = processMethodContext.getFacetHolder();
 
-        final ActionLayout actionLayout = Annotations.getAnnotation(processMethodContext.getMethod(), ActionLayout.class);
+        final ActionLayout actionLayout = Annotations.getAnnotations(processMethodContext.getMethod(), ActionLayout.class);
 
 
         // bookmarkable

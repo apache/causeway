@@ -17,6 +17,8 @@
 
 package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
 
+import java.util.List;
+
 import com.google.common.base.Strings;
 
 import org.apache.isis.applib.annotation.DomainObjectLayout;
@@ -27,7 +29,7 @@ import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaPositi
 
 public class CssClassFaFacetForDomainObjectLayoutAnnotation extends CssClassFaFacetAbstract {
 
-    public static CssClassFaFacet create(final DomainObjectLayout domainObjectLayout, final FacetHolder holder) {
+    public static CssClassFaFacet create(final List<DomainObjectLayout> domainObjectLayout, final FacetHolder holder) {
         if (domainObjectLayout == null) {
             return null;
         }

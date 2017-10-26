@@ -190,7 +190,7 @@ public class PropertyLayoutFacetFactory extends FacetFactoryAbstract implements 
 
     PropertyLayout propertyLayoutAnnotationFrom(final ProcessMethodContext processMethodContext) {
         final Method method = processMethodContext.getMethod();
-        return Annotations.getAnnotation(method, PropertyLayout.class);
+        return Annotations.getAnnotations(method, PropertyLayout.class);
     }
 
 

@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,7 +42,7 @@ public class IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent extends Ic
     private static final Logger LOG = LoggerFactory.getLogger(IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent.class);
 
     public static Facet create(
-            final DomainObjectLayout domainObjectLayout,
+            final List<DomainObjectLayout> domainObjectLayout,
             final ServicesInjector servicesInjector,
             final IsisConfiguration configuration, final FacetHolder facetHolder) {
         if(domainObjectLayout == null) {

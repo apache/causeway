@@ -85,7 +85,7 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract {
         //
         // Set up CollectionDomainEventFacet, which will act as the hiding/disabling/validating advisor
         //
-        final Collection collection = Annotations.getAnnotation(method, Collection.class);
+        final Collection collection = Annotations.getAnnotations(method, Collection.class);
         final Class<? extends CollectionDomainEvent<?, ?>> collectionDomainEventType;
 
         final CollectionDomainEventFacetAbstract collectionDomainEventFacet;
@@ -163,7 +163,7 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract {
         final FacetHolder holder = processMethodContext.getFacetHolder();
 
         // check for @Collection(hidden=...)
-        final Collection collection = Annotations.getAnnotation(method, Collection.class);
+        final Collection collection = Annotations.getAnnotations(method, Collection.class);
         HiddenFacet facet = HiddenFacetForCollectionAnnotation.create(collection, holder);
 
         FacetUtil.addFacet(facet);
@@ -174,7 +174,7 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract {
         final FacetHolder holder = processMethodContext.getFacetHolder();
 
         // check for @Collection(editing=...)
-        final Collection collection = Annotations.getAnnotation(method, Collection.class);
+        final Collection collection = Annotations.getAnnotations(method, Collection.class);
         DisabledFacet facet = DisabledFacetForCollectionAnnotation.create(collection, holder);
 
         FacetUtil.addFacet(facet);
@@ -185,7 +185,7 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract {
         final FacetHolder holder = processMethodContext.getFacetHolder();
 
         // search for @Collection(notPersisted=...)
-        final Collection collection = Annotations.getAnnotation(method, Collection.class);
+        final Collection collection = Annotations.getAnnotations(method, Collection.class);
         NotPersistedFacet facet = NotPersistedFacetForCollectionAnnotation.create(collection, holder);
 
         FacetUtil.addFacet(facet);
@@ -203,7 +203,7 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract {
         }
 
         // check for @Collection(typeOf=...)
-        final Collection collection = Annotations.getAnnotation(method, Collection.class);
+        final Collection collection = Annotations.getAnnotations(method, Collection.class);
         TypeOfFacet facet = TypeOfFacetOnCollectionFromCollectionAnnotation
                 .create(collection, facetHolder, getSpecificationLoader());
 

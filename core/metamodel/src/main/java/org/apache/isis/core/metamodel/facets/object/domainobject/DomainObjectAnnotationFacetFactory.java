@@ -111,7 +111,7 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
 
     void processAuditing(final ProcessClassContext processClassContext) {
         final Class<?> cls = processClassContext.getCls();
-        final DomainObject domainObject = Annotations.getAnnotation(cls, DomainObject.class);
+        final DomainObject domainObject = Annotations.getAnnotations(cls, DomainObject.class);
         final FacetHolder holder = processClassContext.getFacetHolder();
 
         //
@@ -136,7 +136,7 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
 
     void processPublishing(final ProcessClassContext processClassContext) {
         final Class<?> cls = processClassContext.getCls();
-        final DomainObject domainObject = Annotations.getAnnotation(cls, DomainObject.class);
+        final DomainObject domainObject = Annotations.getAnnotations(cls, DomainObject.class);
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
         //
@@ -161,7 +161,7 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
         // check from @DomainObject(auditing=...)
-        final DomainObject domainObjectAnnot = Annotations.getAnnotation(cls, DomainObject.class);
+        final DomainObject domainObjectAnnot = Annotations.getAnnotations(cls, DomainObject.class);
         Facet facet = createFor(domainObjectAnnot, facetHolder, cls);
 
         // then add
@@ -229,7 +229,7 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
 
     void processBounded(final ProcessClassContext processClassContext) {
         final Class<?> cls = processClassContext.getCls();
-        final DomainObject domainObject = Annotations.getAnnotation(cls, DomainObject.class);
+        final DomainObject domainObject = Annotations.getAnnotations(cls, DomainObject.class);
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
         // check from @DomainObject(bounded=...)
@@ -241,7 +241,7 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
 
     void processEditing(final ProcessClassContext processClassContext) {
         final Class<?> cls = processClassContext.getCls();
-        final DomainObject domainObject = Annotations.getAnnotation(cls, DomainObject.class);
+        final DomainObject domainObject = Annotations.getAnnotations(cls, DomainObject.class);
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
         // check from @DomainObject(editing=...)
@@ -254,7 +254,7 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
 
     void processObjectType(final ProcessClassContext processClassContext) {
         final Class<?> cls = processClassContext.getCls();
-        final DomainObject domainObject = Annotations.getAnnotation(cls, DomainObject.class);
+        final DomainObject domainObject = Annotations.getAnnotations(cls, DomainObject.class);
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
         // check from @DomainObject(objectType=...)
@@ -275,7 +275,7 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
 
     void processNature(final ProcessClassContext processClassContext) {
         final Class<?> cls = processClassContext.getCls();
-        final DomainObject domainObject = Annotations.getAnnotation(cls, DomainObject.class);
+        final DomainObject domainObject = Annotations.getAnnotations(cls, DomainObject.class);
 
         if(domainObject == null) {
             return;
@@ -308,7 +308,7 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
     private void processLifecycleEvents(final ProcessClassContext processClassContext) {
 
         final Class<?> cls = processClassContext.getCls();
-        final DomainObject domainObject = Annotations.getAnnotation(cls, DomainObject.class);
+        final DomainObject domainObject = Annotations.getAnnotations(cls, DomainObject.class);
         if(domainObject == null) {
             return;
         }

@@ -76,7 +76,7 @@ public final class Annotations  {
     /**
      * Searches for annotation on provided class, and if not found for the
      * superclass.
-     * 
+     *
      * <p>
      * Added to allow bytecode-mangling libraries such as CGLIB to be supported.
      */
@@ -87,19 +87,6 @@ public final class Annotations  {
         final T annotation = cls.getAnnotation(annotationClass);
         if (annotation != null) {
             return annotation;
-        }
-
-        // meta annotations
-        final Set<Class<? extends Annotation>> metaAnnotationTypes = AppManifest.Registry.instance().getMetaAnnotationTypes();
-        final Annotation[] clsAnnotations = cls.getAnnotations();
-        for (final Annotation clsAnnotation : clsAnnotations) {
-            final Class<? extends Annotation> annotationType = clsAnnotation.annotationType();
-            if(metaAnnotationTypes.contains(annotationType)) {
-                final T annotationOnMetaAnnotation = annotationType.getAnnotation(annotationClass);
-                if(annotationOnMetaAnnotation != null) {
-                    return annotationOnMetaAnnotation;
-                }
-            }
         }
 
         // search superclasses
@@ -126,6 +113,61 @@ public final class Annotations  {
         return null;
     }
 
+
+    /**
+     * Searches for annotation on provided class, and if not found for the
+     * superclass.
+     */
+    public static <T extends Annotation> List<T> getAnnotations(final Class<?> cls, final Class<T> annotationClass) {
+        final List<T> annotations = Lists.newArrayList();
+        if (cls == null) {
+            return annotations;
+        }
+        final T annotation = cls.getAnnotation(annotationClass);
+        if (annotation != null) {
+            annotations.add(annotation);
+        }
+
+        // meta annotations
+        final Set<Class<? extends Annotation>> metaAnnotationTypes = AppManifest.Registry.instance().getMetaAnnotationTypes();
+        final Annotation[] clsAnnotations = cls.getAnnotations();
+        for (final Annotation clsAnnotation : clsAnnotations) {
+            final Class<? extends Annotation> annotationType = clsAnnotation.annotationType();
+            if(metaAnnotationTypes.contains(annotationType)) {
+                final T annotationOnMetaAnnotation = annotationType.getAnnotation(annotationClass);
+                if(annotationOnMetaAnnotation != null) {
+                    annotations.add(annotationOnMetaAnnotation);
+                }
+            }
+        }
+        if(!annotations.isEmpty()) {
+            return annotations;
+        }
+
+        // search superclasses
+        final Class<?> superclass = cls.getSuperclass();
+        if (superclass != null) {
+            try {
+                final List<T> annotationsFromSuperclass = getAnnotations(superclass, annotationClass);
+                if (!annotationsFromSuperclass.isEmpty()) {
+                    return annotationsFromSuperclass;
+                }
+            } catch (final SecurityException e) {
+                // fall through
+            }
+        }
+
+        // search implemented interfaces
+        final Class<?>[] interfaces = cls.getInterfaces();
+        for (final Class<?> iface : interfaces) {
+            final List<T> annotationsFromInterface = getAnnotations(iface, annotationClass);
+            if (!annotationsFromInterface.isEmpty()) {
+                return annotationsFromInterface;
+            }
+        }
+        return annotations;
+    }
+
     /**
      * Searches for annotation on provided method, and if not found for any
      * inherited methods up from the superclass.
@@ -148,51 +190,13 @@ public final class Annotations  {
         // search for field
         if ( shouldSearchForField(annotationClass) ) {
 
-            final List<String> fieldNameCandidates = fieldNameCandidatesFor(methodName);
+            List<String> fieldNameCandidates = fieldNameCandidatesFor(methodName);
             for (String fieldNameCandidate : fieldNameCandidates) {
                 try {
                     final Field field = methodDeclaringClass.getDeclaredField(fieldNameCandidate);
                     final T fieldAnnotation = field.getAnnotation(annotationClass);
                     if(fieldAnnotation != null) {
                         return fieldAnnotation;
-                    }
-                } catch (NoSuchFieldException e) {
-                    // fall through
-                }
-            }
-        }
-
-        // meta annotations
-        final Set<Class<? extends Annotation>> metaAnnotationTypes = AppManifest.Registry.instance().getMetaAnnotationTypes();
-
-        // search for annotation on a meta-annotation on the method
-        final Annotation[] annotations = method.getAnnotations();
-        for (Annotation methodAnnotation : annotations) {
-            Class<? extends Annotation> annotationType = methodAnnotation.annotationType();
-            if(metaAnnotationTypes.contains(annotationType)) {
-                final T annotationOnMetaAnnotation = annotationType.getAnnotation(annotationClass);
-                if(annotationOnMetaAnnotation != null) {
-                    return annotationOnMetaAnnotation;
-                }
-            }
-        }
-
-        // search for annotation on a meta-annotation on the field
-        if ( shouldSearchForField(annotationClass) ) {
-
-            List<String> fieldNameCandidates = fieldNameCandidatesFor(methodName);
-            for (String fieldNameCandidate : fieldNameCandidates) {
-                try {
-                    final Field field = methodDeclaringClass.getDeclaredField(fieldNameCandidate);
-                    final Annotation[] fieldAnnotations = field.getAnnotations();
-                    for (Annotation fieldAnnotation : fieldAnnotations) {
-                        final Class<? extends Annotation> annotationType = fieldAnnotation.annotationType();
-                        if(metaAnnotationTypes.contains(annotationType)) {
-                            final T annotationOnMetaAnnotation = annotationType.getAnnotation(annotationClass);
-                            if(annotationOnMetaAnnotation != null) {
-                                return annotationOnMetaAnnotation;
-                            }
-                        }
                     }
                 } catch (NoSuchFieldException e) {
                     // fall through
@@ -223,6 +227,121 @@ public final class Annotations  {
         }
 
         return null;
+    }
+
+    /**
+     * Searches for annotation on provided method, and if not found for any
+     * inherited methods up from the superclass.
+     */
+    public static <T extends Annotation> List<T> getAnnotations(
+            final Method method,
+            final Class<T> annotationClass) {
+        final List<T> annotations = Lists.newArrayList();
+        if (method == null) {
+            return annotations;
+        }
+
+        boolean annotationOnMethod = false;
+        final Class<?> methodDeclaringClass = method.getDeclaringClass();
+        final String methodName = method.getName();
+
+        final T annotation = method.getAnnotation(annotationClass);
+        if (annotation != null) {
+            annotations.add(annotation);
+            annotationOnMethod = true;
+        }
+
+
+        // search for field
+        if ( !annotationOnMethod && shouldSearchForField(annotationClass) ) {
+
+            final List<String> fieldNameCandidates = fieldNameCandidatesFor(methodName);
+            for (String fieldNameCandidate : fieldNameCandidates) {
+                try {
+                    final Field field = methodDeclaringClass.getDeclaredField(fieldNameCandidate);
+                    final T fieldAnnotation = field.getAnnotation(annotationClass);
+                    if(fieldAnnotation != null) {
+                        annotations.add(fieldAnnotation);
+                    }
+                } catch (NoSuchFieldException e) {
+                    // fall through
+                }
+            }
+        }
+
+        // meta annotations
+        final Set<Class<? extends Annotation>> metaAnnotationTypes = AppManifest.Registry.instance().getMetaAnnotationTypes();
+
+        // search for annotation on a meta-annotation on the method
+        boolean metaAnnotationOnMethod = false;
+        final Annotation[] methodAnnotations = method.getAnnotations();
+        for (Annotation methodAnnotation : methodAnnotations) {
+            Class<? extends Annotation> annotationType = methodAnnotation.annotationType();
+            if(metaAnnotationTypes.contains(annotationType)) {
+                final T annotationOnMetaAnnotation = annotationType.getAnnotation(annotationClass);
+                if(annotationOnMetaAnnotation != null) {
+                    annotations.add(annotationOnMetaAnnotation);
+                    metaAnnotationOnMethod = true;
+                }
+            }
+        }
+
+        // search for annotation on a meta-annotation on the field
+        if ( !metaAnnotationOnMethod && shouldSearchForField(annotationClass) ) {
+
+            List<String> fieldNameCandidates = fieldNameCandidatesFor(methodName);
+            for (String fieldNameCandidate : fieldNameCandidates) {
+                try {
+                    final Field field = methodDeclaringClass.getDeclaredField(fieldNameCandidate);
+                    final Annotation[] fieldAnnotations = field.getAnnotations();
+                    for (Annotation fieldAnnotation : fieldAnnotations) {
+                        final Class<? extends Annotation> annotationType = fieldAnnotation.annotationType();
+                        if(metaAnnotationTypes.contains(annotationType)) {
+                            final T annotationOnMetaAnnotation = annotationType.getAnnotation(annotationClass);
+                            if(annotationOnMetaAnnotation != null) {
+                                annotations.add(annotationOnMetaAnnotation);
+                            }
+                        }
+                    }
+                } catch (NoSuchFieldException e) {
+                    // fall through
+                }
+            }
+        }
+
+        if(!annotations.isEmpty()) {
+            return annotations;
+        }
+
+        // search superclasses
+        final Class<?> superclass = methodDeclaringClass.getSuperclass();
+        if (superclass != null) {
+            try {
+                final Method parentClassMethod = superclass.getMethod(methodName, method.getParameterTypes());
+                final List<T> annotationsFromSuperclass = getAnnotations(parentClassMethod, annotationClass);
+                if(!annotationsFromSuperclass.isEmpty()) {
+                    return annotationsFromSuperclass;
+                }
+            } catch (final SecurityException | NoSuchMethodException e) {
+                // fall through
+            }
+        }
+
+        // search implemented interfaces
+        final Class<?>[] interfaces = methodDeclaringClass.getInterfaces();
+        for (final Class<?> iface : interfaces) {
+            try {
+                final Method ifaceMethod = iface.getMethod(methodName, method.getParameterTypes());
+                final List<T> annotationsFromInterfaces = getAnnotations(ifaceMethod, annotationClass);
+                if(!annotationsFromInterfaces.isEmpty()) {
+                    return annotationsFromInterfaces;
+                }
+            } catch (final SecurityException | NoSuchMethodException e) {
+                // fall through
+            }
+        }
+
+        return annotations;
     }
 
     /**

@@ -19,6 +19,8 @@
 package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
 
 
+import java.util.List;
+
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.paged.PagedFacet;
@@ -27,7 +29,7 @@ import org.apache.isis.core.metamodel.facets.object.paged.PagedFacetAbstract;
 
 public class PagedFacetForDomainObjectLayoutAnnotation extends PagedFacetAbstract {
 
-    public static PagedFacet create(final DomainObjectLayout domainObjectLayout, final FacetHolder holder) {
+    public static PagedFacet create(final List<DomainObjectLayout> domainObjectLayout, final FacetHolder holder) {
         if(domainObjectLayout == null) {
             return null;
         }

@@ -43,7 +43,7 @@ public class JdoDatastoreIdentityAnnotationFacetFactory extends FacetFactoryAbst
             return;
         }
 
-        final DatastoreIdentity annotation = Annotations.getAnnotation(cls, DatastoreIdentity.class);
+        final DatastoreIdentity annotation = Annotations.getAnnotations(cls, DatastoreIdentity.class);
         if (annotation == null) {
             return;
         }
