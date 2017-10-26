@@ -78,6 +78,7 @@ public final class IsisContext {
      * @deprecated replaced by {@link #destroy()}
      * 
      */
+    @Deprecated
     public static void testReset() {
     	destroy();
     }
