@@ -72,14 +72,6 @@ public final class IsisContext {
         }
         IsisContext.sessionFactory = sessionFactory;
     }
-
-
-    /**
-     * Resets
-     */
-    public static void testReset() {
-        destroy();
-    }
     
     /**
      * Resets
