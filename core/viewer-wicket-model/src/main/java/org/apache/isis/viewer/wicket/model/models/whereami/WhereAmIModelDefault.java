@@ -28,32 +28,32 @@ import org.apache.isis.viewer.wicket.model.models.EntityModel;
 
 class WhereAmIModelDefault implements WhereAmIModel {
 
-	private final List<Object> chainOfParents = new ArrayList<>();
-	private final EntityModel endOfChain;
+	private final List<Object> reversedChainOfParents = new ArrayList<>();
+	private final EntityModel startOfChain;
 	
-	public WhereAmIModelDefault(EntityModel endOfChain) {
-		this.endOfChain = endOfChain;
+	public WhereAmIModelDefault(EntityModel startOfChain) {
+		this.startOfChain = startOfChain;
 		
-		final Object startPojo = endOfChain.getObject().getObject();
+		final Object startPojo = startOfChain.getObject().getObject();
 
 		ParentChain.caching()
 		.streamReversedParentChainOf(startPojo)
-		.forEach(chainOfParents::add);
+		.forEach(reversedChainOfParents::add);
 	}
 	
 	@Override
-	public EntityModel getEndOfChain() {
-		return endOfChain;
+	public EntityModel getStartOfChain() {
+		return startOfChain;
 	}
 	
 	@Override
 	public boolean isShowWhereAmI() {
-		return !chainOfParents.isEmpty();
+		return !reversedChainOfParents.isEmpty();
 	}
 
 	@Override
-	public Stream<EntityModel> streamParentChain() {
-		return chainOfParents.stream()
+	public Stream<EntityModel> streamParentChainReversed() {
+		return reversedChainOfParents.stream()
 		.map(this::toEntityModel);
 	}
 	
@@ -61,7 +61,7 @@ class WhereAmIModelDefault implements WhereAmIModel {
 
 	private EntityModel toEntityModel(Object domainObject) {
 		return new EntityModel(
-				endOfChain.getPersistenceSession()
+				startOfChain.getPersistenceSession()
 				.adapterFor(domainObject)	);
 	}
 	

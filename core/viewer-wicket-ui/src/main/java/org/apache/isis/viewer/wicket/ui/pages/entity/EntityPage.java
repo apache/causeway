@@ -226,11 +226,11 @@ public class EntityPage extends PageAbstract {
     	
     	final RepeatingView listItems = new RepeatingView("whereAmI-items");
     	
-    	whereAmIModel.streamParentChain().forEach(entityModel->
+    	whereAmIModel.streamParentChainReversed().forEach(entityModel->
     		listItems.add(new EntityIconAndTitlePanel(listItems.newChildId(), entityModel))	
 		);
     	
-    	listItems.add(new Label(listItems.newChildId(), whereAmIModel.getEndOfChain().getTitle()));
+    	listItems.add(new Label(listItems.newChildId(), whereAmIModel.getStartOfChain().getTitle()));
     	
     	whereAmIContainer.addOrReplace(listItems);
     	

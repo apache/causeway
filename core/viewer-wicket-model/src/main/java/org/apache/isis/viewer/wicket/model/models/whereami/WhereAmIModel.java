@@ -23,16 +23,36 @@ import java.util.stream.Stream;
 
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 
+/**
+ * Represents a navigable chain of parent nodes starting at the current node. 
+ * 
+ * @author a.huber@corax.at
+ * 
+ * @since 2.0.0
+ *
+ */
 public interface WhereAmIModel {
 
-	public static WhereAmIModel of(EntityModel endOfChain) {
-		return new WhereAmIModelDefault(endOfChain);
+	public static WhereAmIModel of(EntityModel startOfChain) {
+		return new WhereAmIModelDefault(startOfChain);
 	}
 
+	/**
+	 * The navigable parent chain requires a minimum length of 2 in order to be shown.
+	 * @return whether the where-am-I hint should be shown or hidden
+	 */
 	public boolean isShowWhereAmI();
 	
-	public Stream<EntityModel> streamParentChain();
+	/**
+	 * Streams the linked nodes of this model's navigable parent chain in reverse order.
+	 * @return reversed order stream of linked parent nodes, which does not include the start node
+	 */
+	public Stream<EntityModel> streamParentChainReversed();
 	
-	public EntityModel getEndOfChain();
+	/**
+	 *  
+	 * @return the immutable start node of the navigable parent chain
+	 */
+	public EntityModel getStartOfChain();
 	
 }
