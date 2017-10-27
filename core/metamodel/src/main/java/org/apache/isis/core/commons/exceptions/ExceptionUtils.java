@@ -26,6 +26,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.isis.core.commons.reflection.Reflect;
+
 /**
  * <p>Provides utilities for manipulating and examining 
  * <code>Throwable</code> objects.</p>
@@ -67,7 +69,7 @@ public class ExceptionUtils {
     static {
         Method causeMethod;
         try {
-            causeMethod = Throwable.class.getMethod("getCause", null);
+            causeMethod = Throwable.class.getMethod("getCause", Reflect.emptyClasses);
         } catch (Exception e) {
             causeMethod = null;
         }
@@ -243,10 +245,10 @@ public class ExceptionUtils {
             return true;
         }
 
-        Class cls = throwable.getClass();
+        Class<?> cls = throwable.getClass();
         for (final String causeMethodName : CAUSE_METHOD_NAMES) {
             try {
-                Method method = cls.getMethod(causeMethodName, null);
+                Method method = cls.getMethod(causeMethodName, Reflect.emptyClasses);
                 if (method != null && Throwable.class.isAssignableFrom(method.getReturnType())) {
                     return true;
                 }
@@ -287,7 +289,7 @@ public class ExceptionUtils {
      * @return the array of throwables, never null
      */
     public static Throwable[] getThrowables(Throwable throwable) {
-        List list = getThrowableList(throwable);
+        List<Throwable> list = getThrowableList(throwable);
         return (Throwable[]) list.toArray(new Throwable[list.size()]);
     }
 
@@ -310,8 +312,8 @@ public class ExceptionUtils {
      * @return the list of throwables, never null
      * @since Commons Lang 2.2
      */
-    public static List getThrowableList(Throwable throwable) {
-        List list = new ArrayList();
+    public static List<Throwable> getThrowableList(Throwable throwable) {
+        List<Throwable> list = new ArrayList<Throwable>();
         while (throwable != null && list.contains(throwable) == false) {
             list.add(throwable);
             throwable = ExceptionUtils.getCause(throwable);

@@ -23,8 +23,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
-import com.google.common.primitives.Primitives;
-
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 
 public class MethodExtensions {

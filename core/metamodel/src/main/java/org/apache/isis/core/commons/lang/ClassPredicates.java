@@ -18,7 +18,6 @@
  */
 package org.apache.isis.core.commons.lang;
 
-import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 
 public final class ClassPredicates {

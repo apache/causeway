@@ -22,14 +22,13 @@ package org.apache.isis.core.commons.lang;
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import com.google.common.collect.Lists;
-
 import org.apache.isis.core.commons.exceptions.IsisException;
+
+import com.google.common.collect.Lists;
 
 public final class ArrayExtensions {
 
@@ -72,7 +71,8 @@ public final class ArrayExtensions {
         return converted;
     }
 
-    public static <T> T[] combine(final T[]... arrays) {
+    @SafeVarargs
+	public static <T> T[] combine(final T[]... arrays) {
         final List<T> combinedList = Lists.newArrayList();
         for (final T[] array : arrays) {
             Collections.addAll(combinedList, array);
@@ -93,7 +93,8 @@ public final class ArrayExtensions {
         return argList.toArray(new String[] {});
     }
 
-    public static <T> T coalesce(final T... objects) {
+    @SafeVarargs
+	public static <T> T coalesce(final T... objects) {
         for (final T object : objects) {
             if (object != null) {
                 return object;
