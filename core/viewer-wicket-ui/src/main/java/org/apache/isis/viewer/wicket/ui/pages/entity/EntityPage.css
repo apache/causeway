@@ -16,3 +16,32 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+ 
+ /* === whereAmI feature === */
+
+.whereAmI {
+    color: #555;
+}
+.whereAmI img {
+    width: 16px !important;
+    height: 16px !important;
+}
+ul.whereAmI {
+    padding: 8px 12px;
+    list-style: none;
+    background-color: #eee;
+}
+
+/* Display list items side by side */
+ul.whereAmI li {
+    display: inline;
+}
+
+/* Add a slash symbol (/) before/behind each list item */
+ul.whereAmI li+li:before {
+    padding: 4px;
+    color: black;
+    content: "/\00a0";
+}
+
+/* -------------------------- */
