@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.object.domainobject.publishing;
 
+import java.util.List;
+
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -29,11 +31,11 @@ import org.apache.isis.core.metamodel.facets.object.publishedobject.PublishedObj
 public class PublishedObjectFacetForDomainObjectAnnotation extends PublishedObjectFacetAbstract {
 
     public static PublishedObjectFacet create(
-            final DomainObject domainObject,
+            final List<DomainObject> domainObjects,
             final IsisConfiguration configuration,
             final FacetHolder holder) {
 
-        final Publishing publishing = domainObject != null ? domainObject.publishing() : Publishing.AS_CONFIGURED;
+        final Publishing publishing = domainObjects != null ? domainObjects.publishing() : Publishing.AS_CONFIGURED;
 
         switch (publishing) {
             case AS_CONFIGURED:
@@ -43,7 +45,7 @@ public class PublishedObjectFacetForDomainObjectAnnotation extends PublishedObje
                     case NONE:
                         return null;
                     default:
-                        return domainObject != null
+                        return domainObjects != null
                             ? new PublishedObjectFacetForDomainObjectAnnotationAsConfigured(holder)
                             : new PublishedObjectFacetFromConfiguration(holder);
                 }

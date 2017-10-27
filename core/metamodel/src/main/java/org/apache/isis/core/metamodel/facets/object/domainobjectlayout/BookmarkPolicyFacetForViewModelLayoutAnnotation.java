@@ -30,12 +30,14 @@ import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolic
 
 public class BookmarkPolicyFacetForViewModelLayoutAnnotation extends BookmarkPolicyFacetAbstract {
 
-    public static BookmarkPolicyFacet create(final List<ViewModelLayout> viewModelLayout, final FacetHolder holder) {
-        if(viewModelLayout == null) {
-            return null;
-        }
-        final BookmarkPolicy bookmarkPolicy = viewModelLayout.bookmarking();
-        return bookmarkPolicy != BookmarkPolicy.NEVER ? new BookmarkPolicyFacetForViewModelLayoutAnnotation(bookmarkPolicy, holder) : null;
+    public static BookmarkPolicyFacet create(final List<ViewModelLayout> viewModelLayouts, final FacetHolder holder) {
+
+        return viewModelLayouts.stream()
+                .map(ViewModelLayout::bookmarking)
+                .filter(bookmarkPolicy -> bookmarkPolicy != BookmarkPolicy.NEVER)
+                .findFirst()
+                .map(bookmarkPolicy -> new BookmarkPolicyFacetForViewModelLayoutAnnotation(bookmarkPolicy, holder))
+                .orElse(null);
     }
 
     private BookmarkPolicyFacetForViewModelLayoutAnnotation(final BookmarkPolicy bookmarkPolicy, final FacetHolder holder) {

@@ -36,10 +36,12 @@ public enum Editing {
     ENABLED,
     /**
      * Do not allow the properties to be edited, or the collections to be added to/removed from.
-     *
-     * <p>
-     *     Corresponds to the {@link Immutable} annotation).
-     * </p>
      */
-    DISABLED
+    DISABLED,
+    /**
+     * Ignore the value provided by this annotation (meaning that the framework will keep searching, in meta
+     * annotations or superclasses/interfaces).
+     */
+    NOT_SPECIFIED
+
 }

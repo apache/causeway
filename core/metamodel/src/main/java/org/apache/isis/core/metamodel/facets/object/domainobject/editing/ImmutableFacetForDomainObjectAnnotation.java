@@ -19,7 +19,10 @@
 
 package org.apache.isis.core.metamodel.facets.object.domainobject.editing;
 
+import java.util.List;
+
 import com.google.common.base.Strings;
+
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -35,33 +38,39 @@ public class ImmutableFacetForDomainObjectAnnotation extends ImmutableFacetAbstr
     private final String reason;
 
     public static ImmutableFacet create(
-            final DomainObject domainObject,
+            final List<DomainObject> domainObjects,
             final IsisConfiguration configuration,
             final FacetHolder holder) {
 
-        final Editing editing       = domainObject != null? domainObject.editing() : Editing.AS_CONFIGURED;
-        final String disabledReason = domainObject != null? domainObject.editingDisabledReason(): "Disabled";
+        final EditingObjectsConfiguration setting = EditingObjectsConfiguration.parse(configuration);
 
-        switch (editing) {
-            case AS_CONFIGURED:
+        return domainObjects.stream()
+                .filter(domainObject -> domainObject.editing() != Editing.NOT_SPECIFIED)
+                .findFirst()
+                .map(domainObject -> {
+                    final String disabledReason = domainObject.editingDisabledReason();
+                    switch (domainObject.editing()) {
+                    case AS_CONFIGURED:
 
-                if(holder.containsDoOpFacet(ImmutableFacet.class)) {
-                    // do not replace
-                    return null;
-                }
+                        if(holder.containsDoOpFacet(ImmutableFacet.class)) {
+                            // do not replace
+                            return null;
+                        }
 
-                final EditingObjectsConfiguration setting = EditingObjectsConfiguration.parse(configuration);
-                return setting == EditingObjectsConfiguration.FALSE
-                        ? domainObject != null
-                                ? new ImmutableFacetForDomainObjectAnnotationAsConfigured(disabledReason, holder)
-                                : new ImmutableFacetFromConfiguration(disabledReason, holder)
-                        : null;
-            case DISABLED:
-                return new ImmutableFacetForDomainObjectAnnotation(disabledReason, holder);
-            case ENABLED:
-                return null;
-        }
-        return null;
+                        return setting == EditingObjectsConfiguration.FALSE
+                                ? (ImmutableFacet) new ImmutableFacetForDomainObjectAnnotationAsConfigured(disabledReason, holder)
+                                : null;
+                    case DISABLED:
+                        return new ImmutableFacetForDomainObjectAnnotation(disabledReason, holder);
+                    case ENABLED:
+                        return null;
+                    }
+                    throw new IllegalStateException("domainObject.editing() not recognised, is " + domainObject.editing());
+                })
+                .orElseGet(() -> setting == EditingObjectsConfiguration.FALSE
+                        ? new ImmutableFacetFromConfiguration("Disabled", holder)
+                        : null
+                );
     }
 
     public ImmutableFacetForDomainObjectAnnotation(final String reason, final FacetHolder holder) {

@@ -17,6 +17,7 @@
 package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
 
 import java.util.List;
+import java.util.Objects;
 
 import com.google.common.base.Strings;
 
@@ -27,12 +28,17 @@ import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacetAbstr
 
 public class CssClassFacetForDomainObjectLayoutAnnotation extends CssClassFacetAbstract {
 
-    public static CssClassFacet create(final List<DomainObjectLayout> domainObjectLayout, final FacetHolder holder) {
-        if (domainObjectLayout == null) {
+    public static CssClassFacet create(final List<DomainObjectLayout> domainObjectLayouts, final FacetHolder holder) {
+        if (domainObjectLayouts.isEmpty()) {
             return null;
         }
-        final String cssClass = Strings.emptyToNull(domainObjectLayout.cssClass());
-        return cssClass != null ? new CssClassFacetForDomainObjectLayoutAnnotation(cssClass, holder) : null;
+        return domainObjectLayouts.stream()
+                .map(DomainObjectLayout::cssClass)
+                .map(Strings::emptyToNull)
+                .filter(Objects::nonNull)
+                .map(cssClass -> new CssClassFacetForDomainObjectLayoutAnnotation(cssClass, holder))
+                .findFirst()
+                .orElse(null);
     }
 
     private CssClassFacetForDomainObjectLayoutAnnotation(

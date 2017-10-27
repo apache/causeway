@@ -20,7 +20,9 @@ package org.apache.isis.core.metamodel.facets.object.domainobject;
 
 import java.lang.reflect.Method;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
@@ -111,7 +113,7 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
 
     void processAuditing(final ProcessClassContext processClassContext) {
         final Class<?> cls = processClassContext.getCls();
-        final DomainObject domainObject = Annotations.getAnnotations(cls, DomainObject.class);
+        final List<DomainObject> domainObjects = Annotations.getAnnotations(cls, DomainObject.class);
         final FacetHolder holder = processClassContext.getFacetHolder();
 
         //
@@ -127,7 +129,7 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
 
         // check for @DomainObject(auditing=....)
         AuditableFacet auditableFacet = AuditableFacetForDomainObjectAnnotation
-                .create(domainObject, getConfiguration(), holder);
+                .create(domainObjects, getConfiguration(), holder);
 
         // then add
         FacetUtil.addFacet(auditableFacet);
@@ -136,7 +138,7 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
 
     void processPublishing(final ProcessClassContext processClassContext) {
         final Class<?> cls = processClassContext.getCls();
-        final DomainObject domainObject = Annotations.getAnnotations(cls, DomainObject.class);
+        final List<DomainObject> domainObjects = Annotations.getAnnotations(cls, DomainObject.class);
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
         //
@@ -150,7 +152,7 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
 
         // check from @DomainObject(publishing=...)
         PublishedObjectFacet publishedObjectFacet = PublishedObjectFacetForDomainObjectAnnotation
-                .create(domainObject, getConfiguration(), facetHolder);
+                .create(domainObjects, getConfiguration(), facetHolder);
 
         // then add
         FacetUtil.addFacet(publishedObjectFacet);
@@ -161,37 +163,41 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
         // check from @DomainObject(auditing=...)
-        final DomainObject domainObjectAnnot = Annotations.getAnnotations(cls, DomainObject.class);
-        Facet facet = createFor(domainObjectAnnot, facetHolder, cls);
+        final List<DomainObject> domainObjects = Annotations.getAnnotations(cls, DomainObject.class);
+        Facet facet = createFor(domainObjects, facetHolder, cls);
 
         // then add
         FacetUtil.addFacet(facet);
     }
 
     private AutoCompleteFacet createFor(
-            final DomainObject domainObject,
+            final List<DomainObject> domainObjects,
             final FacetHolder facetHolder,
             final Class<?> cls) {
-        if(domainObject == null) {
+        if(domainObjects.isEmpty()) {
             return null;
         }
 
-        final Class<?> repositoryClass = domainObject.autoCompleteRepository();
-        if(repositoryClass == Object.class) {
-            return null;
-        }
-        final String actionName = domainObject.autoCompleteAction();
-
-        if(!isServiceType(cls, "@DomainObject", repositoryClass)) {
-            return null;
-        }
-        final Method repositoryMethod = findRepositoryMethod(cls, "@DomainObject", repositoryClass, actionName);
-        if(repositoryMethod == null) {
-            return null;
+        class Annot {
+            private Annot(final DomainObject domainObject) {
+                this.autoCompleteRepository = domainObject.autoCompleteRepository();
+                this.autoCompleteAction = domainObject.autoCompleteAction();
+            }
+            Class<?> autoCompleteRepository;
+            String autoCompleteAction;
+            Method repositoryMethod;
         }
 
-        return new AutoCompleteFacetForDomainObjectAnnotation(
-                        facetHolder, repositoryClass, repositoryMethod, servicesInjector);
+        return domainObjects.stream()
+                .map(Annot::new)
+                .filter(a -> a.autoCompleteRepository != Object.class)
+                .filter(a -> isServiceType(cls, "@DomainObject", a.autoCompleteRepository))
+                .peek(a -> a.repositoryMethod = findRepositoryMethod(cls, "@DomainObject", a.autoCompleteRepository, a.autoCompleteAction))
+                .filter(a -> a.repositoryMethod == null)
+                .findFirst()
+                .map(a -> new AutoCompleteFacetForDomainObjectAnnotation(
+                        facetHolder, a.autoCompleteRepository, a.repositoryMethod, servicesInjector))
+                .orElse(null);
     }
 
     private boolean isServiceType(
@@ -229,11 +235,11 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
 
     void processBounded(final ProcessClassContext processClassContext) {
         final Class<?> cls = processClassContext.getCls();
-        final DomainObject domainObject = Annotations.getAnnotations(cls, DomainObject.class);
+        final List<DomainObject> domainObjects = Annotations.getAnnotations(cls, DomainObject.class);
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
         // check from @DomainObject(bounded=...)
-        Facet facet = ChoicesFacetForDomainObjectAnnotation.create(domainObject, facetHolder, getDeploymentCategory(), getAuthenticationSessionProvider(), persistenceSessionServiceInternal);
+        Facet facet = ChoicesFacetForDomainObjectAnnotation.create(domainObjects, facetHolder, getDeploymentCategory(), getAuthenticationSessionProvider(), persistenceSessionServiceInternal);
 
         // then add
         FacetUtil.addFacet(facet);
@@ -241,12 +247,12 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
 
     void processEditing(final ProcessClassContext processClassContext) {
         final Class<?> cls = processClassContext.getCls();
-        final DomainObject domainObject = Annotations.getAnnotations(cls, DomainObject.class);
+        final List<DomainObject> domainObjects = Annotations.getAnnotations(cls, DomainObject.class);
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
         // check from @DomainObject(editing=...)
         ImmutableFacet facet = ImmutableFacetForDomainObjectAnnotation
-                .create(domainObject, getConfiguration(), facetHolder);
+                .create(domainObjects, getConfiguration(), facetHolder);
 
         // then add
         FacetUtil.addFacet(facet);
@@ -254,11 +260,11 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
 
     void processObjectType(final ProcessClassContext processClassContext) {
         final Class<?> cls = processClassContext.getCls();
-        final DomainObject domainObject = Annotations.getAnnotations(cls, DomainObject.class);
+        final List<DomainObject> domainObjects = Annotations.getAnnotations(cls, DomainObject.class);
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
         // check from @DomainObject(objectType=...)
-        Facet facet = ObjectSpecIdFacetForDomainObjectAnnotation.create(domainObject, facetHolder);
+        Facet facet = ObjectSpecIdFacetForDomainObjectAnnotation.create(domainObjects, facetHolder);
 
         // else check for @PersistenceCapable(schema=...)
         if(facet == null) {
@@ -275,9 +281,9 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
 
     void processNature(final ProcessClassContext processClassContext) {
         final Class<?> cls = processClassContext.getCls();
-        final DomainObject domainObject = Annotations.getAnnotations(cls, DomainObject.class);
+        final List<DomainObject> domainObjects = Annotations.getAnnotations(cls, DomainObject.class);
 
-        if(domainObject == null) {
+        if(domainObjects == null) {
             return;
         }
 
@@ -285,21 +291,21 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
 
         final PostConstructMethodCache postConstructMethodCache = this;
         final ViewModelFacet recreatableObjectFacet = RecreatableObjectFacetForDomainObjectAnnotation.create(
-                domainObject, getSpecificationLoader(), persistenceSessionServiceInternal, servicesInjector,
+                domainObjects, getSpecificationLoader(), persistenceSessionServiceInternal, servicesInjector,
                 facetHolder, postConstructMethodCache);
 
         if(recreatableObjectFacet != null) {
             FacetUtil.addFacet(recreatableObjectFacet);
         } else {
-            if(domainObject.nature() == Nature.MIXIN) {
 
-                if(!mixinTypeValidator.ensureMixinType(cls)) {
-                    return;
-                }
+            final List<DomainObject> mixinDomainObjects =
+                    domainObjects.stream()
+                        .filter(domainObject -> domainObject.nature() == Nature.MIXIN)
+                        .filter(domainObject -> mixinTypeValidator.ensureMixinType(cls))
+                        .collect(Collectors.toList());
 
-                final MixinFacet mixinFacet = MixinFacetForDomainObjectAnnotation.create(domainObject, cls, facetHolder, servicesInjector);
-                FacetUtil.addFacet(mixinFacet);
-            }
+            final MixinFacet mixinFacet = MixinFacetForDomainObjectAnnotation.create(mixinDomainObjects, cls, facetHolder, servicesInjector);
+            FacetUtil.addFacet(mixinFacet);
         }
 
     }
@@ -308,139 +314,146 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
     private void processLifecycleEvents(final ProcessClassContext processClassContext) {
 
         final Class<?> cls = processClassContext.getCls();
-        final DomainObject domainObject = Annotations.getAnnotations(cls, DomainObject.class);
-        if(domainObject == null) {
+        final List<DomainObject> domainObjects = Annotations.getAnnotations(cls, DomainObject.class);
+        if(domainObjects == null) {
             return;
         }
         final FacetHolder holder = processClassContext.getFacetHolder();
 
-        processLifecycleEventCreated(domainObject, holder);
-        processLifecycleEventLoaded(domainObject, holder);
-        processLifecycleEventPersisted(domainObject, holder);
-        processLifecycleEventPersisting(domainObject, holder);
-        processLifecycleEventRemoving(domainObject, holder);
-        processLifecycleEventUpdated(domainObject, holder);
-        processLifecycleEventUpdating(domainObject, holder);
+        processLifecycleEventCreated(domainObjects, holder);
+        processLifecycleEventLoaded(domainObjects, holder);
+        processLifecycleEventPersisted(domainObjects, holder);
+        processLifecycleEventPersisting(domainObjects, holder);
+        processLifecycleEventRemoving(domainObjects, holder);
+        processLifecycleEventUpdated(domainObjects, holder);
+        processLifecycleEventUpdating(domainObjects, holder);
 
     }
 
-    private void processLifecycleEventCreated(final DomainObject domainObject, final FacetHolder holder) {
-        final Class<? extends ObjectCreatedEvent<?>> lifecycleEvent = domainObject.createdLifecycleEvent();
+    private void processLifecycleEventCreated(final List<DomainObject> domainObjects, final FacetHolder holder) {
 
-        final CreatedLifecycleEventFacetForDomainObjectAnnotation facet =
-                new CreatedLifecycleEventFacetForDomainObjectAnnotation(
-                        holder, lifecycleEvent, getSpecificationLoader());
-
-        if(EventUtil.eventTypeIsPostable(
-                facet.getEventType(),
-                ObjectCreatedEvent.Noop.class,
-                ObjectCreatedEvent.Default.class,
-                "isis.reflector.facet.domainObjectAnnotation.createdLifecycleEvent.postForDefault",
-                getConfiguration())) {
-            FacetUtil.addFacet(facet);
-        }
+        domainObjects.stream()
+                .map(DomainObject::createdLifecycleEvent)
+                .filter(lifecycleEvent ->
+                    EventUtil.eventTypeIsPostable(
+                            lifecycleEvent,
+                            ObjectCreatedEvent.Noop.class,
+                            ObjectCreatedEvent.Default.class,
+                            "isis.reflector.facet.domainObjectAnnotation.createdLifecycleEvent.postForDefault",
+                            getConfiguration())
+                )
+                .findFirst()
+                .map(lifecycleEvent -> new CreatedLifecycleEventFacetForDomainObjectAnnotation(
+                        holder, lifecycleEvent, getSpecificationLoader()))
+                .ifPresent(FacetUtil::addFacet);
     }
 
-    private void processLifecycleEventLoaded(final DomainObject domainObject, final FacetHolder holder) {
-        final Class<? extends ObjectLoadedEvent<?>> lifecycleEvent = domainObject.loadedLifecycleEvent();
+    private void processLifecycleEventLoaded(final List<DomainObject> domainObjects, final FacetHolder holder) {
 
-        final LoadedLifecycleEventFacetForDomainObjectAnnotation facet =
-                new LoadedLifecycleEventFacetForDomainObjectAnnotation(
-                        holder, lifecycleEvent, getSpecificationLoader());
-
-        if(EventUtil.eventTypeIsPostable(
-                facet.getEventType(),
-                ObjectLoadedEvent.Noop.class,
-                ObjectLoadedEvent.Default.class,
-                "isis.reflector.facet.domainObjectAnnotation.loadedLifecycleEvent.postForDefault",
-                getConfiguration())) {
-            FacetUtil.addFacet(facet);
-        }
+        domainObjects.stream()
+                .map(DomainObject::loadedLifecycleEvent)
+                .filter(lifecycleEvent ->
+                        EventUtil.eventTypeIsPostable(
+                                lifecycleEvent,
+                                ObjectLoadedEvent.Noop.class,
+                                ObjectLoadedEvent.Default.class,
+                                "isis.reflector.facet.domainObjectAnnotation.loadedLifecycleEvent.postForDefault",
+                                getConfiguration())
+                )
+                .findFirst()
+                .map(lifecycleEvent -> new LoadedLifecycleEventFacetForDomainObjectAnnotation(
+                        holder, lifecycleEvent, getSpecificationLoader()))
+                .ifPresent(FacetUtil::addFacet);
     }
 
-    private void processLifecycleEventPersisting(final DomainObject domainObject, final FacetHolder holder) {
-        final Class<? extends ObjectPersistingEvent<?>> lifecycleEvent = domainObject.persistingLifecycleEvent();
+    private void processLifecycleEventPersisting(final List<DomainObject> domainObjects, final FacetHolder holder) {
 
-        final PersistingLifecycleEventFacetForDomainObjectAnnotation facet =
-                new PersistingLifecycleEventFacetForDomainObjectAnnotation(
-                        holder, lifecycleEvent, getSpecificationLoader());
-
-        if(EventUtil.eventTypeIsPostable(
-                facet.getEventType(),
-                ObjectPersistingEvent.Noop.class,
-                ObjectPersistingEvent.Default.class,
-                "isis.reflector.facet.domainObjectAnnotation.persistingLifecycleEvent.postForDefault",
-                getConfiguration())) {
-            FacetUtil.addFacet(facet);
-        }
+        domainObjects.stream()
+                .map(DomainObject::persistingLifecycleEvent)
+                .filter(lifecycleEvent ->
+                        EventUtil.eventTypeIsPostable(
+                                lifecycleEvent,
+                                ObjectPersistingEvent.Noop.class,
+                                ObjectPersistingEvent.Default.class,
+                                "isis.reflector.facet.domainObjectAnnotation.persistingLifecycleEvent.postForDefault",
+                                getConfiguration())
+                )
+                .findFirst()
+                .map(lifecycleEvent -> new PersistingLifecycleEventFacetForDomainObjectAnnotation(
+                        holder, lifecycleEvent, getSpecificationLoader()))
+                .ifPresent(FacetUtil::addFacet);
     }
 
-    private void processLifecycleEventPersisted(final DomainObject domainObject, final FacetHolder holder) {
-        final Class<? extends ObjectPersistedEvent<?>> lifecycleEvent = domainObject.persistedLifecycleEvent();
+    private void processLifecycleEventPersisted(final List<DomainObject> domainObjects, final FacetHolder holder) {
 
-        final PersistedLifecycleEventFacetForDomainObjectAnnotation facet =
-                new PersistedLifecycleEventFacetForDomainObjectAnnotation(
-                        holder, lifecycleEvent, getSpecificationLoader());
-
-        if(EventUtil.eventTypeIsPostable(
-                facet.getEventType(),
-                ObjectPersistedEvent.Noop.class,
-                ObjectPersistedEvent.Default.class,
-                "isis.reflector.facet.domainObjectAnnotation.persistedLifecycleEvent.postForDefault",
-                getConfiguration())) {
-            FacetUtil.addFacet(facet);
-        }
+        domainObjects.stream()
+                .map(DomainObject::persistedLifecycleEvent)
+                .filter(lifecycleEvent ->
+                        EventUtil.eventTypeIsPostable(
+                                lifecycleEvent,
+                                ObjectPersistedEvent.Noop.class,
+                                ObjectPersistedEvent.Default.class,
+                                "isis.reflector.facet.domainObjectAnnotation.persistedLifecycleEvent.postForDefault",
+                                getConfiguration())
+                )
+                .findFirst()
+                .map(lifecycleEvent -> new PersistedLifecycleEventFacetForDomainObjectAnnotation(
+                        holder, lifecycleEvent, getSpecificationLoader()))
+                .ifPresent(FacetUtil::addFacet);
     }
 
-    private void processLifecycleEventRemoving(final DomainObject domainObject, final FacetHolder holder) {
-        final Class<? extends ObjectRemovingEvent<?>> lifecycleEvent = domainObject.removingLifecycleEvent();
+    private void processLifecycleEventRemoving(final List<DomainObject> domainObjects, final FacetHolder holder) {
 
-        final RemovingLifecycleEventFacetForDomainObjectAnnotation facet =
-                new RemovingLifecycleEventFacetForDomainObjectAnnotation(
-                        holder, lifecycleEvent, getSpecificationLoader());
-
-        if(EventUtil.eventTypeIsPostable(
-                facet.getEventType(),
-                ObjectRemovingEvent.Noop.class,
-                ObjectRemovingEvent.Default.class,
-                "isis.reflector.facet.domainObjectAnnotation.removingLifecycleEvent.postForDefault",
-                getConfiguration())) {
-            FacetUtil.addFacet(facet);
-        }
+        domainObjects.stream()
+                .map(DomainObject::removingLifecycleEvent)
+                .filter(lifecycleEvent ->
+                        EventUtil.eventTypeIsPostable(
+                                lifecycleEvent,
+                                ObjectRemovingEvent.Noop.class,
+                                ObjectRemovingEvent.Default.class,
+                                "isis.reflector.facet.domainObjectAnnotation.removingLifecycleEvent.postForDefault",
+                                getConfiguration())
+                )
+                .findFirst()
+                .map(lifecycleEvent -> new RemovingLifecycleEventFacetForDomainObjectAnnotation(
+                        holder, lifecycleEvent, getSpecificationLoader()))
+                .ifPresent(FacetUtil::addFacet);
     }
 
-    private void processLifecycleEventUpdated(final DomainObject domainObject, final FacetHolder holder) {
-        final Class<? extends ObjectUpdatedEvent<?>> lifecycleEvent = domainObject.updatedLifecycleEvent();
+    private void processLifecycleEventUpdated(final List<DomainObject> domainObjects, final FacetHolder holder) {
 
-        final UpdatedLifecycleEventFacetForDomainObjectAnnotation facet =
-                new UpdatedLifecycleEventFacetForDomainObjectAnnotation(
-                        holder, lifecycleEvent, getSpecificationLoader());
-
-        if(EventUtil.eventTypeIsPostable(
-                facet.getEventType(),
-                ObjectUpdatedEvent.Noop.class,
-                ObjectUpdatedEvent.Default.class,
-                "isis.reflector.facet.domainObjectAnnotation.updatedLifecycleEvent.postForDefault",
-                getConfiguration())) {
-            FacetUtil.addFacet(facet);
-        }
+        domainObjects.stream()
+                .map(DomainObject::updatedLifecycleEvent)
+                .filter(lifecycleEvent ->
+                        EventUtil.eventTypeIsPostable(
+                                lifecycleEvent,
+                                ObjectUpdatedEvent.Noop.class,
+                                ObjectUpdatedEvent.Default.class,
+                                "isis.reflector.facet.domainObjectAnnotation.updatedLifecycleEvent.postForDefault",
+                                getConfiguration())
+                )
+                .findFirst()
+                .map(lifecycleEvent -> new UpdatedLifecycleEventFacetForDomainObjectAnnotation(
+                        holder, lifecycleEvent, getSpecificationLoader()))
+                .ifPresent(FacetUtil::addFacet);
     }
 
-    private void processLifecycleEventUpdating(final DomainObject domainObject, final FacetHolder holder) {
-        final Class<? extends ObjectUpdatingEvent<?>> lifecycleEvent = domainObject.updatingLifecycleEvent();
+    private void processLifecycleEventUpdating(final List<DomainObject> domainObjects, final FacetHolder holder) {
 
-        final UpdatingLifecycleEventFacetForDomainObjectAnnotation facet =
-                new UpdatingLifecycleEventFacetForDomainObjectAnnotation(
-                        holder, lifecycleEvent, getSpecificationLoader());
-
-        if(EventUtil.eventTypeIsPostable(
-                facet.getEventType(),
-                ObjectUpdatingEvent.Noop.class,
-                ObjectUpdatingEvent.Default.class,
-                "isis.reflector.facet.domainObjectAnnotation.updatingLifecycleEvent.postForDefault",
-                getConfiguration())) {
-            FacetUtil.addFacet(facet);
-        }
+        domainObjects.stream()
+                .map(DomainObject::updatingLifecycleEvent)
+                .filter(lifecycleEvent ->
+                        EventUtil.eventTypeIsPostable(
+                                lifecycleEvent,
+                                ObjectUpdatingEvent.Noop.class,
+                                ObjectUpdatingEvent.Default.class,
+                                "isis.reflector.facet.domainObjectAnnotation.updatingLifecycleEvent.postForDefault",
+                                getConfiguration())
+                )
+                .findFirst()
+                .map(lifecycleEvent -> new UpdatingLifecycleEventFacetForDomainObjectAnnotation(
+                        holder, lifecycleEvent, getSpecificationLoader()))
+                .ifPresent(FacetUtil::addFacet);
     }
 
     // //////////////////////////////////////

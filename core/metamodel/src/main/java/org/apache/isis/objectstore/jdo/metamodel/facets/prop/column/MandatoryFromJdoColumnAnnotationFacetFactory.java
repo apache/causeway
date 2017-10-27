@@ -62,7 +62,7 @@ public class MandatoryFromJdoColumnAnnotationFacetFactory extends FacetFactoryAb
             return;
         }
 
-        final Column annotation = Annotations.getAnnotations(processMethodContext.getMethod(), Column.class);
+        final Column annotation = Annotations.getAnnotation(processMethodContext.getMethod(), Column.class);
 
         final FacetedMethod holder = processMethodContext.getFacetHolder();
         
@@ -82,7 +82,7 @@ public class MandatoryFromJdoColumnAnnotationFacetFactory extends FacetFactoryAb
         }
         
         boolean required = whetherRequired(processMethodContext, annotation);
-        MandatoryFacet facet = annotation != null 
+        MandatoryFacet facet = annotation != null
                 ? new MandatoryFacetDerivedFromJdoColumn(holder, required) 
                 : new MandatoryFacetInferredFromAbsenceOfJdoColumn(holder, required);
                 

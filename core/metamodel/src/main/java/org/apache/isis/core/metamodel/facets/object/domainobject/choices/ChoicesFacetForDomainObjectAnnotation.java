@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.object.domainobject.choices;
 
+import java.util.List;
+
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
@@ -30,7 +32,7 @@ import org.apache.isis.core.metamodel.services.persistsession.PersistenceSession
 public class ChoicesFacetForDomainObjectAnnotation extends ChoicesFacetFromBoundedAbstract {
 
     public static Facet create(
-            final DomainObject domainObject,
+            final List<DomainObject> domainObject,
             final FacetHolder facetHolder,
             final DeploymentCategory deploymentCategory,
             final AuthenticationSessionProvider authenticationSessionProvider,
