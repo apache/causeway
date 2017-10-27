@@ -53,7 +53,7 @@ public class LowestCommonSuperclassClosureTest {
         assertLowestCommonOfListIs(listOf(Lion.class, Lion.class), Lion.class);
     }
     
-    private static void assertLowestCommonOfListIs(List<Class<? extends Object>> list, Class<?> expected) {
+    private static void assertLowestCommonOfListIs(List<Class<?>> list, Class<?> expected) {
         EntityCollectionModel.LowestCommonSuperclassClosure closure = new EntityCollectionModel.LowestCommonSuperclassClosure();
         IterableExtensions.fold(list, closure);
         assertThat(closure.getLowestCommonSuperclass(), IsisMatchers.classEqualTo(expected));
