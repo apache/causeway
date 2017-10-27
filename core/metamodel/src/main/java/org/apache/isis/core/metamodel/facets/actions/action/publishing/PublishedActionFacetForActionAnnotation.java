@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.actions.action.publishing;
 
+import java.util.List;
+
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -30,44 +32,63 @@ import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFa
 public class PublishedActionFacetForActionAnnotation extends PublishedActionFacetAbstract {
 
     public static PublishedActionFacet create(
-            final Action action,
+            final List<Action> actions,
             final IsisConfiguration configuration,
             final FacetHolder holder) {
 
-        final Publishing publishing = action != null ? action.publishing() : Publishing.AS_CONFIGURED;
+        final PublishActionsConfiguration setting = PublishActionsConfiguration.parse(configuration);
 
-        switch (publishing) {
-            case AS_CONFIGURED:
+        return actions.stream()
+                .map(Action::publishing)
+                .filter(publishing -> publishing != Publishing.NOT_SPECIFIED)
+                .findFirst()
+                .map(publishing -> {
+                    switch (publishing) {
+                    case AS_CONFIGURED:
 
-                final PublishActionsConfiguration setting = PublishActionsConfiguration.parse(configuration);
-                switch (setting) {
+                        switch (setting) {
+                        case NONE:
+                            return null;
+                        case IGNORE_SAFE:
+                            if (hasSafeSemantics(holder)) {
+                                return null;
+                            }
+                            // else fall through
+                        default:
+                            return (PublishedActionFacet)new PublishedActionFacetForActionAnnotationAsConfigured(holder);
+                        }
+                    case DISABLED:
+                        return null;
+                    case ENABLED:
+                        return new PublishedActionFacetForActionAnnotation(holder);
+                    }
+                    throw new IllegalStateException("publishing '" + publishing + "' not recognised");
+                })
+                .orElseGet(() -> {
+                    switch (setting) {
                     case NONE:
                         return null;
                     case IGNORE_SAFE:
-                        final ActionSemanticsFacet actionSemanticsFacet = holder.getFacet(ActionSemanticsFacet.class);
-                        if(actionSemanticsFacet == null) {
-                            throw new IllegalStateException("Require ActionSemanticsFacet in order to process");
-                        }
-
-                        if(actionSemanticsFacet.value().isSafeInNature()) {
-                            return  null;
+                        if (hasSafeSemantics(holder)) {
+                            return null;
                         }
                         // else fall through
                     default:
-                        return action != null
-                                ? new PublishedActionFacetForActionAnnotationAsConfigured(holder)
-                                : new PublishedActionFacetFromConfiguration(holder);
-                }
-            case DISABLED:
-                return null;
-            case ENABLED:
-                return new PublishedActionFacetForActionAnnotation(holder);
-        }
-        return null;
+                        return new PublishedActionFacetFromConfiguration(holder);
+                    }
+                });
     }
 
+    private static boolean hasSafeSemantics(final FacetHolder holder) {
+        final ActionSemanticsFacet actionSemanticsFacet = holder.getFacet(ActionSemanticsFacet.class);
+        if(actionSemanticsFacet == null) {
+            throw new IllegalStateException("Require ActionSemanticsFacet in order to process");
+        }
 
-    public PublishedActionFacetForActionAnnotation(
+        return actionSemanticsFacet.value().isSafeInNature();
+    }
+
+    PublishedActionFacetForActionAnnotation(
             final FacetHolder holder) {
         super(holder);
     }

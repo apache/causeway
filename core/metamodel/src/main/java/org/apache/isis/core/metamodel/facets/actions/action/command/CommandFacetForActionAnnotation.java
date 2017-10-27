@@ -18,6 +18,8 @@
  */
 package org.apache.isis.core.metamodel.facets.actions.action.command;
 
+import java.util.List;
+
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.CommandExecuteIn;
 import org.apache.isis.applib.annotation.CommandPersistence;
@@ -31,46 +33,68 @@ import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFa
 public class CommandFacetForActionAnnotation extends CommandFacetAbstract {
 
     public static CommandFacet create(
-            final Action action,
+            final List<Action> actions,
             final IsisConfiguration configuration,
             final FacetHolder holder) {
 
-        final CommandReification command = action != null ? action.command() : CommandReification.AS_CONFIGURED;
-        final CommandPersistence commandPersistence = action != null ? action.commandPersistence() : CommandPersistence.PERSISTED;
-        final CommandExecuteIn commandExecuteIn = action != null? action.commandExecuteIn() :  CommandExecuteIn.FOREGROUND;
+        final CommandActionsConfiguration setting = CommandActionsConfiguration.parse(configuration);
 
-        final CommandPersistence persistence = commandPersistence;
-        final CommandExecuteIn executeIn = commandExecuteIn;
+        return actions.stream()
+                .filter(action -> action.command() != CommandReification.NOT_SPECIFIED)
+                .findFirst()
+                .map(action -> {
 
-        switch (command) {
-            case AS_CONFIGURED:
-                final CommandActionsConfiguration setting = CommandActionsConfiguration.parse(configuration);
-                switch (setting) {
+                    final CommandReification command = action.command();
+                    final CommandPersistence persistence = action.commandPersistence();
+                    final CommandExecuteIn executeIn = action.commandExecuteIn();
+
+                    switch (command) {
+                    case AS_CONFIGURED:
+                        switch (setting) {
+                        case NONE:
+                            return null;
+                        case IGNORE_SAFE:
+                            if (hasSafeSemantics(holder)) {
+                                return null;
+                            }
+                            // else fall through
+                        default:
+                            return (CommandFacet)new CommandFacetForActionAnnotationAsConfigured(
+                                    persistence, executeIn, Enablement.ENABLED, holder);
+                        }
+                    case DISABLED:
+                        return null;
+                    case ENABLED:
+                        return new CommandFacetForActionAnnotation(persistence, executeIn, Enablement.ENABLED, holder);
+                    }
+                    throw new IllegalStateException("command '" + command + "' not recognised");
+                })
+                .orElseGet(() -> {
+                    switch (setting) {
                     case NONE:
                         return null;
                     case IGNORE_SAFE:
-                        final ActionSemanticsFacet actionSemanticsFacet = holder.getFacet(ActionSemanticsFacet.class);
-                        if(actionSemanticsFacet == null) {
-                            throw new IllegalStateException("Require ActionSemanticsFacet in order to process");
-                        }
-                        if(actionSemanticsFacet.value().isSafeInNature()) {
-                            return  null;
+                        if (hasSafeSemantics(holder)) {
+                            return null;
                         }
                         // else fall through
                     default:
-                        return action != null
-                                ? new CommandFacetForActionAnnotationAsConfigured(persistence, executeIn, Enablement.ENABLED, holder)
-                                : CommandFacetFromConfiguration.create(holder);
-                }
-            case DISABLED:
-                return null;
-            case ENABLED:
-                return new CommandFacetForActionAnnotation(persistence, executeIn, Enablement.ENABLED, holder);
-        }
+                        return CommandFacetFromConfiguration.create(holder);
+                    }
 
-        return null;
+                });
     }
 
+    private static boolean hasSafeSemantics(final FacetHolder holder) {
+        final ActionSemanticsFacet actionSemanticsFacet = holder.getFacet(ActionSemanticsFacet.class);
+        if(actionSemanticsFacet == null) {
+            throw new IllegalStateException("Require ActionSemanticsFacet in order to process");
+        }
+        if(actionSemanticsFacet.value().isSafeInNature()) {
+            return true;
+        }
+        return false;
+    }
 
     CommandFacetForActionAnnotation(
             final CommandPersistence persistence,

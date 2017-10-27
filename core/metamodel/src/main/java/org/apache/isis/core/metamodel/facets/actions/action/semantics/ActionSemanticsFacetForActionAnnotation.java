@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.actions.action.semantics;
 
+import java.util.List;
+
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -28,7 +30,7 @@ import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFa
 public class ActionSemanticsFacetForActionAnnotation extends ActionSemanticsFacetAbstract {
 
     public static ActionSemanticsFacet create(
-            final Action action,
+            final List<Action> action,
             final FacetHolder holder) {
 
         if(action == null) {

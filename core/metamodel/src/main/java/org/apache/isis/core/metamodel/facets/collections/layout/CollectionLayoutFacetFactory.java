@@ -19,6 +19,7 @@
 package org.apache.isis.core.metamodel.facets.collections.layout;
 
 
+import java.util.List;
 import java.util.Properties;
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -48,62 +49,43 @@ public class CollectionLayoutFacetFactory extends FacetFactoryAbstract implement
         final FacetHolder holder = processMethodContext.getFacetHolder();
 
         Properties properties = null;
-        final CollectionLayout collectionLayout = Annotations.getAnnotations(processMethodContext.getMethod(), CollectionLayout.class);
+        final List<CollectionLayout> collectionLayouts = Annotations.getAnnotations(processMethodContext.getMethod(), CollectionLayout.class);
 
 
         // cssClass
-        CssClassFacet cssClassFacet = null;
-        if(cssClassFacet == null) {
-            cssClassFacet = CssClassFacetForCollectionLayoutAnnotation.create(collectionLayout, holder);
-        }
+        CssClassFacet cssClassFacet = CssClassFacetForCollectionLayoutAnnotation.create(collectionLayouts, holder);
         FacetUtil.addFacet(cssClassFacet);
 
 
         // describedAs
-        DescribedAsFacet describedAsFacet = null;
-        if(describedAsFacet == null) {
-            describedAsFacet = DescribedAsFacetForCollectionLayoutAnnotation.create(collectionLayout, holder);
-        }
+        DescribedAsFacet describedAsFacet =
+                DescribedAsFacetForCollectionLayoutAnnotation.create(collectionLayouts, holder);
         FacetUtil.addFacet(describedAsFacet);
 
 
         // hidden
-        HiddenFacet hiddenFacet = null;
-        if(hiddenFacet == null) {
-            hiddenFacet = HiddenFacetForCollectionLayoutAnnotation.create(collectionLayout, holder);
-        }
+        HiddenFacet hiddenFacet = HiddenFacetForCollectionLayoutAnnotation.create(collectionLayouts, holder);
         FacetUtil.addFacet(hiddenFacet);
 
 
         // defaultView
-        DefaultViewFacet defaultViewFacet = null;
-        if(defaultViewFacet == null) {
-            defaultViewFacet = DefaultViewFacetForCollectionLayoutAnnotation.create(collectionLayout, holder);
-        }
+        DefaultViewFacet defaultViewFacet =
+                DefaultViewFacetForCollectionLayoutAnnotation.create(collectionLayouts, holder);
         FacetUtil.addFacet(defaultViewFacet);
         
 
         // named
-        NamedFacet namedFacet = null;
-        if(namedFacet == null) {
-            namedFacet = NamedFacetForCollectionLayoutAnnotation.create(collectionLayout, holder);
-        }
+        NamedFacet namedFacet = NamedFacetForCollectionLayoutAnnotation.create(collectionLayouts, holder);
         FacetUtil.addFacet(namedFacet);
 
 
         // paged
-        PagedFacet pagedFacet = null;
-        if(pagedFacet == null) {
-            pagedFacet = PagedFacetForCollectionLayoutAnnotation.create(collectionLayout, holder);
-        }
+        PagedFacet pagedFacet = PagedFacetForCollectionLayoutAnnotation.create(collectionLayouts, holder);
         FacetUtil.addFacet(pagedFacet);
 
 
         // sortedBy
-        SortedByFacet sortedByFacet = null;
-        if(sortedByFacet == null) {
-            sortedByFacet = SortedByFacetForCollectionLayoutAnnotation.create(collectionLayout, holder);
-        }
+        SortedByFacet sortedByFacet = SortedByFacetForCollectionLayoutAnnotation.create(collectionLayouts, holder);
         FacetUtil.addFacet(sortedByFacet);
 
     }

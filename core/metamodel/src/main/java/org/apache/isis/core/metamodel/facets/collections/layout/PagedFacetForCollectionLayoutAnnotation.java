@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.collections.layout;
 
+import java.util.List;
+
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.paged.PagedFacet;
@@ -26,7 +28,7 @@ import org.apache.isis.core.metamodel.facets.object.paged.PagedFacetAbstract;
 
 public class PagedFacetForCollectionLayoutAnnotation extends PagedFacetAbstract {
 
-    public static PagedFacet create(CollectionLayout collectionLayout, FacetHolder holder) {
+    public static PagedFacet create(List<CollectionLayout> collectionLayout, FacetHolder holder) {
         if(collectionLayout == null) {
             return null;
         }

@@ -52,7 +52,7 @@ public class EncodableFacetAnnotationElseConfigurationFactory extends FacetFacto
     private EncodableFacet create(final Class<?> cls, final FacetHolder holder) {
 
         // create from annotation, if present
-        final Encodable annotation = Annotations.getAnnotations(cls, Encodable.class);
+        final Encodable annotation = Annotations.getAnnotation(cls, Encodable.class);
         if (annotation != null) {
             final EncodableFacetAnnotation facet = new EncodableFacetAnnotation(cls, holder, servicesInjector);
             if (facet.isValid()) {

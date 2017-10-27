@@ -46,7 +46,7 @@ public class ParseableFacetAnnotationElseConfigurationFactory extends FacetFacto
     }
 
     private ParseableFacetAbstract create(final Class<?> cls, final FacetHolder holder) {
-        final Parseable annotation = Annotations.getAnnotations(cls, Parseable.class);
+        final Parseable annotation = Annotations.getAnnotation(cls, Parseable.class);
 
         // create from annotation, if present
         if (annotation != null) {

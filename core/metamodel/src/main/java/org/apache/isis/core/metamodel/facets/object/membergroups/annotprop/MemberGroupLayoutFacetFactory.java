@@ -57,7 +57,7 @@ public class MemberGroupLayoutFacetFactory extends FacetFactoryAbstract implemen
         
         final Class<?> cls = processClassContext.getCls();
 
-        final MemberGroupLayout mglAnnot = Annotations.getAnnotations(cls, MemberGroupLayout.class);
+        final MemberGroupLayout mglAnnot = Annotations.getAnnotation(cls, MemberGroupLayout.class);
         if (mglAnnot != null) {
             return new MemberGroupLayoutFacetAnnotation(mglAnnot, holder);
         }

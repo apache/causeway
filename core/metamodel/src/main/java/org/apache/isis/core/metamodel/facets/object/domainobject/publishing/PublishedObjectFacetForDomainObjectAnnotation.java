@@ -35,26 +35,29 @@ public class PublishedObjectFacetForDomainObjectAnnotation extends PublishedObje
             final IsisConfiguration configuration,
             final FacetHolder holder) {
 
-        final Publishing publishing = domainObjects != null ? domainObjects.publishing() : Publishing.AS_CONFIGURED;
+        final PublishObjectsConfiguration setting = PublishObjectsConfiguration.parse(configuration);
 
-        switch (publishing) {
-            case AS_CONFIGURED:
-
-                final PublishObjectsConfiguration setting = PublishObjectsConfiguration.parse(configuration);
-                switch (setting) {
-                    case NONE:
+        return domainObjects.stream()
+                .map(DomainObject::publishing)
+                .filter(publishing -> publishing != Publishing.NOT_SPECIFIED)
+                .findFirst()
+                .map(publishing -> {
+                    switch (publishing) {
+                    case AS_CONFIGURED:
+                        return setting == PublishObjectsConfiguration.NONE
+                                ? (PublishedObjectFacet)new PublishedObjectFacetForDomainObjectAnnotationAsConfigured(holder)
+                                : null;
+                    case DISABLED:
                         return null;
-                    default:
-                        return domainObjects != null
-                            ? new PublishedObjectFacetForDomainObjectAnnotationAsConfigured(holder)
-                            : new PublishedObjectFacetFromConfiguration(holder);
-                }
-            case DISABLED:
-                return null;
-            case ENABLED:
-                return new PublishedObjectFacetForDomainObjectAnnotation(holder);
-        }
-        return null;
+                    case ENABLED:
+                        return new PublishedObjectFacetForDomainObjectAnnotation(holder);
+                    }
+                    throw new IllegalStateException("domainObject.publishing() not recognised, is " + publishing);
+
+                }).orElseGet(() -> setting == PublishObjectsConfiguration.NONE
+                        ? null
+                        : new PublishedObjectFacetFromConfiguration(holder));
+
     }
 
     PublishedObjectFacetForDomainObjectAnnotation(final FacetHolder holder) {

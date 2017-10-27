@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.collections.layout;
 
+import java.util.List;
+
 import com.google.common.base.Strings;
 
 import org.apache.isis.applib.annotation.CollectionLayout;
@@ -32,7 +34,7 @@ public class DefaultViewFacetForCollectionLayoutAnnotation extends DefaultViewFa
         super(value, holder);
     }
 
-    public static DefaultViewFacet create(CollectionLayout collectionLayout, FacetHolder holder) {
+    public static DefaultViewFacet create(List<CollectionLayout> collectionLayout, FacetHolder holder) {
         if (collectionLayout == null) {
             return null;
         }

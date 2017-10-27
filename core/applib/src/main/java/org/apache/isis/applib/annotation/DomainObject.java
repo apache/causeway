@@ -96,8 +96,13 @@ public @interface DomainObject {
      * <p>
      *     Takes precedence over auto-complete.
      * </p>
+     *
+     * <p>
+     *     Note: this replaces bounded=true|false prior to v2.x
+     * </p>
+     *
      */
-    boolean bounded() default false;
+    Bounding bounding() default Bounding.NOT_SPECIFIED;
 
 
     // //////////////////////////////////////
