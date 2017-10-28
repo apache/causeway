@@ -94,11 +94,11 @@ public enum RepresentationType {
             null,
             DomainTypeRepresentation.class),
     LAYOUT(
-            null,
+            RestfulMediaType.APPLICATION_JSON_LAYOUT_BS3,
             RestfulMediaType.APPLICATION_XML_LAYOUT_BS3,
             null),
     MENUBARS(
-            null,
+            RestfulMediaType.APPLICATION_JSON_LAYOUT_MENUBARS,
             RestfulMediaType.APPLICATION_XML_LAYOUT_MENUBARS,
             null),
     PROPERTY_DESCRIPTION(

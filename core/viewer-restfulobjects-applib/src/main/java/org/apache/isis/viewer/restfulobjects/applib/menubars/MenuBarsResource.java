@@ -46,6 +46,13 @@ public interface MenuBarsResource {
     /**
      * Not part of the Restful Objects spec.
      */
+    @GET
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_LAYOUT_MENUBARS })
+    public Response menuBarsJson();
+
+    /**
+     * Not part of the Restful Objects spec.
+     */
     @DELETE
     public Response deleteMenuBarsNotAllowed();
 

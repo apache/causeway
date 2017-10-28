@@ -57,7 +57,9 @@ public final class RestfulMediaType {
 
     private static final String XML_BASE = "application/xml" + ";profile=" + PROFILE_PARAM_PREFIX;
     public final static String APPLICATION_XML_LAYOUT_BS3 = XML_BASE + "layout-bs3";
+    public final static String APPLICATION_JSON_LAYOUT_BS3 = JSON_BASE + "layout-bs3";
 
+    public final static String APPLICATION_JSON_LAYOUT_MENUBARS = JSON_BASE + "layout-menubars";
     public final static String APPLICATION_XML_LAYOUT_MENUBARS = XML_BASE + "layout-menubars";
 
 

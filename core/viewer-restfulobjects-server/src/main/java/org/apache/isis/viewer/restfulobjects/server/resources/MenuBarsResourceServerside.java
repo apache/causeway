@@ -31,12 +31,23 @@ import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.applib.menubars.MenuBarsResource;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
+import org.apache.isis.viewer.restfulobjects.server.resources.serialization.SerializationStrategy;
 
 public class MenuBarsResourceServerside extends ResourceAbstract implements MenuBarsResource {
 
     @Override
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_USER })
+    @Produces({ MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_LAYOUT_MENUBARS })
     public Response menuBars() {
+        return doMenuBars(SerializationStrategy.XML);
+    }
+
+    @Override
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_LAYOUT_MENUBARS })
+    public Response menuBarsJson() {
+        return doMenuBars(SerializationStrategy.JSON);
+    }
+
+    private Response doMenuBars(final SerializationStrategy serializationStrategy) {
         init(RepresentationType.MENUBARS, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
         final Response.ResponseBuilder builder;
@@ -46,11 +57,12 @@ public class MenuBarsResourceServerside extends ResourceAbstract implements Menu
 
         final MenuBars menuBars = menuBarsService.menuBars();
 
-        builder = Response.status(Response.Status.OK).entity(menuBars).type(RepresentationType.MENUBARS.getXmlMediaType());
+        builder = Response.status(Response.Status.OK)
+                .entity(serializationStrategy.entity(menuBars))
+                .type(serializationStrategy.type(RepresentationType.MENUBARS));
 
         return builder.build();
     }
-
 
     @Override
     public Response deleteMenuBarsNotAllowed() {
