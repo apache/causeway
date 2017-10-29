@@ -18,6 +18,8 @@
  */
 package org.apache.isis.viewer.restfulobjects.server.resources.serialization;
 
+import java.util.List;
+
 import javax.ws.rs.core.MediaType;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -55,7 +57,9 @@ public enum SerializationStrategy {
             }
         }
 
-        @Override public MediaType type(final RepresentationType representationType) {
+
+        @Override
+        public MediaType type(final RepresentationType representationType) {
             return representationType.getJsonMediaType();
         }
     };
@@ -63,4 +67,16 @@ public enum SerializationStrategy {
     public abstract Object entity(final Object jaxbAnnotatedObject);
 
     public abstract MediaType type(final RepresentationType representationType);
+
+    public static SerializationStrategy determineFrom(final List<MediaType> acceptableMediaTypes) {
+        for (MediaType acceptableMediaType : acceptableMediaTypes) {
+            if(acceptableMediaType.isCompatible(MediaType.APPLICATION_JSON_TYPE)) {
+                return SerializationStrategy.JSON;
+            }
+            if(acceptableMediaType.isCompatible(MediaType.APPLICATION_XML_TYPE)) {
+                return SerializationStrategy.XML;
+            }
+        }
+        return SerializationStrategy.JSON;
+    }
 }

@@ -31,6 +31,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.layout.links.LinkData;
 
 /**
  * Describes the layout of a single collection, broadly corresponds to the {@link org.apache.isis.applib.annotation.CollectionLayout} annotation.
@@ -51,6 +52,7 @@ import org.apache.isis.applib.annotation.Where;
                 ,"sortedBy"
                 , "actions"
                 , "metadataError"
+                , "link"
         }
 )
 public class CollectionLayoutData
@@ -245,6 +247,24 @@ public class CollectionLayoutData
     }
 
 
+
+    private LinkData link;
+
+    /**
+     * The link to access this resource from the REST API (Restful Objects viewer).
+     *
+     * <p>
+     *     Populated by the framework automatically.
+     * </p>
+     */
+    @XmlElement(required = false)
+    public LinkData getLink() {
+        return link;
+    }
+
+    public void setLink(final LinkData link) {
+        this.link = link;
+    }
 
 
 

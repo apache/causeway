@@ -59,6 +59,9 @@ public final class RestfulMediaType {
     public final static String APPLICATION_XML_LAYOUT_BS3 = XML_BASE + "layout-bs3";
     public final static String APPLICATION_JSON_LAYOUT_BS3 = JSON_BASE + "layout-bs3";
 
+    public final static String APPLICATION_XML_OBJECT_LAYOUT_BS3 = XML_BASE + "object-layout-bs3";
+    public final static String APPLICATION_JSON_OBJECT_LAYOUT_BS3 = JSON_BASE + "object-layout-bs3";
+
     public final static String APPLICATION_JSON_LAYOUT_MENUBARS = JSON_BASE + "layout-menubars";
     public final static String APPLICATION_XML_LAYOUT_MENUBARS = XML_BASE + "layout-menubars";
 

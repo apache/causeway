@@ -110,16 +110,14 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
     @Override
     @GET
     @Path("/{domainType}/layout")
-    @Produces({ MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_LAYOUT_BS3 })
+    @Produces({
+            MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_LAYOUT_BS3,
+            MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_LAYOUT_BS3
+    })
     public Response layout(@PathParam("domainType") final String domainType) {
-        return doLayout(domainType, SerializationStrategy.XML);
-    }
-
-    private Response doLayout(
-            final String domainType,
-            final SerializationStrategy serializationStrategy) {
 
         init(RepresentationType.LAYOUT, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
+        final SerializationStrategy serializationStrategy = SerializationStrategy.determineFrom(getResourceContext().getAcceptableMediaTypes());
 
         final ObjectSpecification objectSpec = getSpecificationLoader().lookupBySpecId(ObjectSpecId.of(domainType));
         final GridFacet gridFacet = objectSpec.getFacet(GridFacet.class);
@@ -135,14 +133,6 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         }
 
         return builder.build();
-    }
-
-    @Override
-    @GET
-    @Path("/{domainType}/layout")
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_LAYOUT_BS3 })
-    public Response layoutJson(@PathParam("domainType") final String domainType) {
-        return doLayout(domainType, SerializationStrategy.JSON);
     }
 
     @Override

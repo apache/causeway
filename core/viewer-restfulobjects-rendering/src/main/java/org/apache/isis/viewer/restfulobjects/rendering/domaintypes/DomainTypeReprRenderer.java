@@ -43,7 +43,10 @@ public class DomainTypeReprRenderer extends ReprRendererAbstract<DomainTypeReprR
         return LinkBuilder.newBuilder(resourceContext, rel.getName(), RepresentationType.DOMAIN_TYPE, url);
     }
 
-    public static LinkBuilder newLinkToLayoutBuilder(final RendererContext resourceContext, final Rel rel, final ObjectSpecification objectSpec) {
+    public static LinkBuilder newLinkToLayoutBuilder(
+            final RendererContext resourceContext,
+            final ObjectSpecification objectSpec) {
+        final Rel rel = Rel.LAYOUT;
         final String typeFullName = objectSpec.getSpecId().asString();
         final String url = String.format("domain-types/%s/layout", typeFullName);
         return LinkBuilder.newBuilder(resourceContext, rel.getName(), RepresentationType.LAYOUT, url);
@@ -73,7 +76,7 @@ public class DomainTypeReprRenderer extends ReprRendererAbstract<DomainTypeReprR
             final JsonRepresentation selfLink = newLinkToBuilder(getRendererContext(), Rel.SELF, objectSpecification).build();
             getLinks().arrayAdd(selfLink);
 
-            final JsonRepresentation layoutLink = newLinkToLayoutBuilder(getRendererContext(), Rel.LAYOUT, objectSpecification).build();
+            final JsonRepresentation layoutLink = newLinkToLayoutBuilder(getRendererContext(), objectSpecification).build();
             getLinks().arrayAdd(layoutLink);
         }
 

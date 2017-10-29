@@ -53,6 +53,14 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         return LinkBuilder.newBuilder(rendererContext, rel.getName(), RepresentationType.DOMAIN_OBJECT, url).withTitle(objectAdapter.titleString(null));
     }
 
+    public static LinkBuilder newLinkToObjectLayoutBuilder(final RendererContext rendererContext, final ObjectAdapter objectAdapter) {
+        final Rel rel = Rel.OBJECT_LAYOUT;
+        String domainType = OidUtils.getDomainType(objectAdapter);
+        String instanceId = OidUtils.getInstanceId(objectAdapter);
+        final String url = "objects/" + domainType + "/" + instanceId + "/object-layout";
+        return LinkBuilder.newBuilder(rendererContext, rel.getName(), RepresentationType.DOMAIN_OBJECT, url).withTitle(objectAdapter.titleString(null));
+    }
+
     private static enum Mode {
         REGULAR, 
         PERSIST_LINK_ARGUMENTS, 
@@ -166,7 +174,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         // described by
         if (mode.includeDescribedBy() && !rendererContext.suppressDescribedByLinks()) {
             addLinkToDescribedBy();
-            addLinkToLayout();
+            addLinkToObjectLayout();
         }
         if(isService && mode.includeUp()) {
             addLinkToUp();
@@ -222,9 +230,9 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         getLinks().arrayAdd(link);
     }
 
-    private void addLinkToLayout() {
-        final LinkBuilder linkBuilder = DomainTypeReprRenderer
-                .newLinkToLayoutBuilder(getRendererContext(), Rel.LAYOUT, objectAdapter.getSpecification());
+    private void addLinkToObjectLayout() {
+        final LinkBuilder linkBuilder = DomainObjectReprRenderer
+                .newLinkToObjectLayoutBuilder(getRendererContext(), objectAdapter);
         final JsonRepresentation link = linkBuilder.build();
         getLinks().arrayAdd(link);
     }

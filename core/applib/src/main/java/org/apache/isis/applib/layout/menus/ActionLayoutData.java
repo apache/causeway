@@ -27,6 +27,7 @@ import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
+import org.apache.isis.applib.layout.links.LinkData;
 
 /**
  * Describes the layout of a single action, broadly corresponding to {@link org.apache.isis.applib.annotation.ActionLayout}.
@@ -51,6 +52,7 @@ import org.apache.isis.applib.annotation.BookmarkPolicy;
         , "cssClassFa"
         , "describedAs"
         , "metadataError"
+        , "link"
     }
 )
 public class ActionLayoutData implements Serializable {
@@ -207,6 +209,26 @@ public class ActionLayoutData implements Serializable {
     public void setMetadataError(final String metadataError) {
         this.metadataError = metadataError;
     }
+
+
+    private LinkData link;
+
+    /**
+     * The link to access this resource from the REST API (Restful Objects viewer).
+     *
+     * <p>
+     *     Populated by the framework automatically.
+     * </p>
+     */
+    @XmlElement(required = false)
+    public LinkData getLink() {
+        return link;
+    }
+
+    public void setLink(final LinkData link) {
+        this.link = link;
+    }
+
 
 
     @Override

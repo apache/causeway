@@ -29,7 +29,9 @@ public final class InvokeKeys {
         map.put(ActionSemantics.Of.SAFE_AND_REQUEST_CACHEABLE, "invokeQueryOnly");
         map.put(ActionSemantics.Of.SAFE, "invokeQueryOnly");
         map.put(ActionSemantics.Of.IDEMPOTENT, "invokeIdempotent");
+        map.put(ActionSemantics.Of.IDEMPOTENT_ARE_YOU_SURE, "invokeIdempotent");
         map.put(ActionSemantics.Of.NON_IDEMPOTENT, "invoke");
+        map.put(ActionSemantics.Of.NON_IDEMPOTENT_ARE_YOU_SURE, "invoke");
     }
     
     private InvokeKeys() {

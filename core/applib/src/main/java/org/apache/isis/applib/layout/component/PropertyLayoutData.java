@@ -32,6 +32,7 @@ import com.google.common.collect.Lists;
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.layout.links.LinkData;
 
 /**
  * Describes the layout of a single property, broadly corresponds to the {@link org.apache.isis.applib.annotation.PropertyLayout} annotation.
@@ -46,6 +47,7 @@ import org.apache.isis.applib.annotation.Where;
                 , "describedAs"
                 , "actions"
                 , "metadataError"
+                , "link"
         }
 )
 public class PropertyLayoutData
@@ -267,6 +269,26 @@ public class PropertyLayoutData
 
     public void setMetadataError(final String metadataError) {
         this.metadataError = metadataError;
+    }
+
+
+
+    private LinkData link;
+
+    /**
+     * The link to access this resource from the REST API (Restful Objects viewer).
+     *
+     * <p>
+     *     Populated by the framework automatically.
+     * </p>
+     */
+    @XmlElement(required = false)
+    public LinkData getLink() {
+        return link;
+    }
+
+    public void setLink(final LinkData link) {
+        this.link = link;
     }
 
 
