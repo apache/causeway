@@ -39,5 +39,10 @@ public enum LabelPosition {
      */
     RIGHT,
     TOP,
-    NONE
+    NONE,
+    /**
+     * Ignore the value provided by this annotation (meaning that the framework will keep searching, in meta
+     * annotations or superclasses/interfaces).
+     */
+    NOT_SPECIFIED
 }

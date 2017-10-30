@@ -28,13 +28,23 @@ import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaPositi
 
 public class CssClassFaFacetForViewModelLayoutAnnotation extends CssClassFaFacetAbstract {
 
-    public static CssClassFaFacet create(final List<ViewModelLayout> viewModelLayout, final FacetHolder holder) {
-        if (viewModelLayout == null) {
-            return null;
+    public static CssClassFaFacet create(final List<ViewModelLayout> viewModelLayouts, final FacetHolder holder) {
+
+        class Annot {
+            private Annot(final ViewModelLayout viewModelLayout) {
+                this.cssClassFa = Strings.emptyToNull(viewModelLayout.cssClassFa());
+                this.cssClassFaPosition = CssClassFaPosition.from(viewModelLayout.cssClassFaPosition());
+            }
+            String cssClassFa;
+            CssClassFaPosition cssClassFaPosition;
         }
-        final String cssClassFa = Strings.emptyToNull(viewModelLayout.cssClassFa());
-        final CssClassFaPosition position = CssClassFaPosition.from(viewModelLayout.cssClassFaPosition());
-        return cssClassFa != null ? new CssClassFaFacetForViewModelLayoutAnnotation(cssClassFa, position, holder) : null;
+
+        return viewModelLayouts.stream()
+                .map(Annot::new)
+                .filter(a -> a.cssClassFa != null )
+                .findFirst()
+                .map(a -> new CssClassFaFacetForViewModelLayoutAnnotation(a.cssClassFa, a.cssClassFaPosition, holder))
+                .orElse(null);
     }
 
     public CssClassFaFacetForViewModelLayoutAnnotation(final String value, CssClassFaPosition position,

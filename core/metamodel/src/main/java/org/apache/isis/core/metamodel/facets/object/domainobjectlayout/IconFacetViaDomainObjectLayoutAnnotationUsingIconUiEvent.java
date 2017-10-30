@@ -42,27 +42,28 @@ public class IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent extends Ic
     private static final Logger LOG = LoggerFactory.getLogger(IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent.class);
 
     public static Facet create(
-            final List<DomainObjectLayout> domainObjectLayout,
+            final List<DomainObjectLayout> domainObjectLayouts,
             final ServicesInjector servicesInjector,
-            final IsisConfiguration configuration, final FacetHolder facetHolder) {
-        if(domainObjectLayout == null) {
-            return null;
-        }
-        final Class<? extends IconUiEvent<?>> iconUiEventClass = domainObjectLayout.iconUiEvent();
+            final IsisConfiguration configuration,
+            final FacetHolder facetHolder) {
 
-        if(!EventUtil.eventTypeIsPostable(
-                iconUiEventClass,
-                IconUiEvent.Noop.class,
-                IconUiEvent.Default.class,
-                "isis.reflector.facet.domainObjectLayoutAnnotation.iconUiEvent.postForDefault",
-                configuration)) {
-            return null;
-        }
+        return domainObjectLayouts.stream()
+                .map(DomainObjectLayout::iconUiEvent)
+                .filter(iconUiEvent -> EventUtil.eventTypeIsPostable(
+                        iconUiEvent,
+                        IconUiEvent.Noop.class,
+                        IconUiEvent.Default.class,
+                        "isis.reflector.facet.domainObjectLayoutAnnotation.iconUiEvent.postForDefault",
+                        configuration))
+                .findFirst()
+                .map(iconUiEvent -> {
 
-        final EventBusService eventBusService = servicesInjector.lookupService(EventBusService.class);
+                    final EventBusService eventBusService = servicesInjector.lookupService(EventBusService.class);
 
-        return new IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent(
-                iconUiEventClass, eventBusService, facetHolder);
+                    return new IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent(
+                            iconUiEvent, eventBusService, facetHolder);
+                })
+                .orElse(null);
     }
 
     private final Class<? extends IconUiEvent<?>> iconUiEventClass;

@@ -179,7 +179,7 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
         }
 
         class Annot {
-            private Annot(final DomainObject domainObject) {
+            Annot(final DomainObject domainObject) {
                 this.autoCompleteRepository = domainObject.autoCompleteRepository();
                 this.autoCompleteAction = domainObject.autoCompleteAction();
             }
@@ -189,7 +189,7 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
         }
 
         return domainObjects.stream()
-                .map(Annot::new)
+                .map(domainObject -> new Annot(domainObject))
                 .filter(a -> a.autoCompleteRepository != Object.class)
                 .filter(a -> isServiceType(cls, "@DomainObject", a.autoCompleteRepository))
                 .peek(a -> a.repositoryMethod = findRepositoryMethod(cls, "@DomainObject", a.autoCompleteRepository, a.autoCompleteAction))

@@ -46,6 +46,10 @@ public enum Contributed {
     /**
      * The action is not contributed as either an action or as an association.
      */
-    AS_NEITHER;
-
+    AS_NEITHER,
+    /**
+     * Ignore the value provided by this annotation (meaning that the framework will keep searching, in meta
+     * annotations or superclasses/interfaces).
+     */
+    NOT_SPECIFIED
 }

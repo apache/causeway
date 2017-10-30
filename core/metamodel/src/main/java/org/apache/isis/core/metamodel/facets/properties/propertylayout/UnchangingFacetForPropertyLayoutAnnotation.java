@@ -19,19 +19,37 @@
 
 package org.apache.isis.core.metamodel.facets.properties.propertylayout;
 
+import java.util.List;
+
 import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.annotation.Repainting;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.properties.renderunchanged.UnchangingFacet;
 import org.apache.isis.core.metamodel.facets.properties.renderunchanged.UnchangingFacetAbstract;
 
 public class UnchangingFacetForPropertyLayoutAnnotation extends UnchangingFacetAbstract {
 
-    public static UnchangingFacet create(PropertyLayout propertyLayout, FacetHolder holder) {
-        if(propertyLayout == null) {
-            return null;
-        }
-        final boolean isUnchanging = propertyLayout.unchanging();
-        return new UnchangingFacetForPropertyLayoutAnnotation(isUnchanging, holder);
+    public static UnchangingFacet create(
+            final List<PropertyLayout> propertyLayouts,
+            final FacetHolder holder) {
+
+        return propertyLayouts.stream()
+                .map(PropertyLayout::repainting)
+                .filter(repainting -> repainting != Repainting.NOT_SPECIFIED)
+                .findFirst()
+                .map(repainting -> {
+                    boolean unchanging;
+                    switch (repainting) {
+                    case REPAINT:
+                        unchanging = false;
+                        return new UnchangingFacetForPropertyLayoutAnnotation(unchanging, holder);
+                    case NO_REPAINT:
+                        unchanging = true;
+                        return new UnchangingFacetForPropertyLayoutAnnotation(unchanging, holder);
+                    }
+                    throw new IllegalStateException("repainting '" + repainting + "' not recognised");
+                })
+                .orElse(null);
     }
 
     private UnchangingFacetForPropertyLayoutAnnotation(final boolean unchanging, FacetHolder holder) {

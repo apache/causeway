@@ -48,7 +48,7 @@ public @interface DomainObject {
      * registered with the framework.
      * </p>
      */
-    Auditing auditing() default Auditing.AS_CONFIGURED;
+    Auditing auditing() default Auditing.NOT_SPECIFIED;
 
 
     // //////////////////////////////////////

@@ -16,6 +16,8 @@
  */
 package org.apache.isis.core.metamodel.facets.properties.promptstyle;
 
+import java.util.Collections;
+
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
@@ -65,7 +67,7 @@ public class PromptStyleFacetFromPropertyAnnotation_Test {
             }});
 
             PromptStyleFacet facet = PromptStyleFacetForPropertyLayoutAnnotation
-                    .create(mockPropertyLayout, mockConfiguration, mockFacetHolder);
+                    .create(Collections.singletonList(mockPropertyLayout), mockConfiguration, mockFacetHolder);
 
             Assert.assertThat(facet, is((Matcher) anInstanceOf(PromptStyleFacetForPropertyLayoutAnnotation.class)));
             Assert.assertThat(facet.value(), is(PromptStyle.DIALOG));
@@ -83,7 +85,7 @@ public class PromptStyleFacetFromPropertyAnnotation_Test {
 
 
             PromptStyleFacet facet = PromptStyleFacetForPropertyLayoutAnnotation
-                    .create(mockPropertyLayout, mockConfiguration, mockFacetHolder);
+                    .create(Collections.singletonList(mockPropertyLayout), mockConfiguration, mockFacetHolder);
 
             Assert.assertThat(facet, is((Matcher) anInstanceOf(PromptStyleFacetForPropertyLayoutAnnotation.class)));
             Assert.assertThat(facet.value(), is(PromptStyle.INLINE));
@@ -104,7 +106,7 @@ public class PromptStyleFacetFromPropertyAnnotation_Test {
             }});
 
             PromptStyleFacet facet = PromptStyleFacetForPropertyLayoutAnnotation
-                    .create(mockPropertyLayout, mockConfiguration, mockFacetHolder);
+                    .create(Collections.singletonList(mockPropertyLayout), mockConfiguration, mockFacetHolder);
 
             Assert.assertThat(facet, is((Matcher) anInstanceOf(PromptStyleFacetAsConfigured.class)));
             Assert.assertThat(facet.value(), is(PromptStyle.INLINE));
@@ -124,7 +126,7 @@ public class PromptStyleFacetFromPropertyAnnotation_Test {
             }});
 
             PromptStyleFacet facet = PromptStyleFacetForPropertyLayoutAnnotation
-                    .create(mockPropertyLayout, mockConfiguration, mockFacetHolder);
+                    .create(Collections.singletonList(mockPropertyLayout), mockConfiguration, mockFacetHolder);
 
             Assert.assertThat(facet, is(nullValue()));
         }
@@ -143,7 +145,7 @@ public class PromptStyleFacetFromPropertyAnnotation_Test {
             }});
 
             PromptStyleFacet facet = PromptStyleFacetForPropertyLayoutAnnotation
-                    .create(mockPropertyLayout, mockConfiguration, mockFacetHolder);
+                    .create(Collections.singletonList(mockPropertyLayout), mockConfiguration, mockFacetHolder);
 
             Assert.assertThat(facet.value(), is(PromptStyle.INLINE));
             Assert.assertThat(facet, is((Matcher) anInstanceOf(PromptStyleFacetFallBackToInline.class)));
@@ -163,7 +165,7 @@ public class PromptStyleFacetFromPropertyAnnotation_Test {
             }});
 
             PromptStyleFacet facet = PromptStyleFacetForPropertyLayoutAnnotation
-                    .create(mockPropertyLayout, mockConfiguration, mockFacetHolder);
+                    .create(Collections.singletonList(mockPropertyLayout), mockConfiguration, mockFacetHolder);
 
             Assert.assertThat(facet, is(nullValue()));
         }

@@ -20,7 +20,7 @@
 package org.apache.isis.core.metamodel.facets.properties.propertylayout;
 
 import java.lang.reflect.Method;
-import java.util.Properties;
+import java.util.List;
 
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.PropertyLayout;
@@ -55,9 +55,9 @@ public class LabelAtFacetForPropertyLayoutAnnotationFactoryTest extends Abstract
 
         // when
         final FacetHolder holder = facetFactory.facetHolderFrom(processMethodContext);
-        final PropertyLayout propertyLayout = facetFactory.propertyLayoutAnnotationFrom(processMethodContext);
+        final List<PropertyLayout> propertyLayouts = facetFactory.propertyLayoutsFrom(processMethodContext);
 
-        facetFactory.processLabelAt(holder, propertyLayout);
+        facetFactory.processLabelAt(holder, propertyLayouts);
 
         // then
         final Facet facet = facetedMethod.getFacet(LabelAtFacet.class);

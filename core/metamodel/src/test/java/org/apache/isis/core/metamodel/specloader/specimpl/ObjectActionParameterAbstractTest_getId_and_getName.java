@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
+import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 
 import org.jmock.Expectations;
@@ -27,7 +28,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import com.google.common.base.Predicate;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -164,7 +164,7 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
                 one(actionParamPeer).getFacet(NamedFacet.class);
                 will(returnValue(null));
 
-                one(parentAction).getParameters((Predicate<ObjectActionParameter>) with(anything()));
+                one(parentAction).getParameters((Predicate<ObjectActionParameter>) with(Expectations.<Predicate>anything()));
                 will(returnValue(Lists.newArrayList(objectActionParameter)));
             }
         });
@@ -183,7 +183,7 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
                 one(actionParamPeer).getFacet(NamedFacet.class);
                 will(returnValue(null));
 
-                one(parentAction).getParameters((Predicate<ObjectActionParameter>) with(anything()));
+                one(parentAction).getParameters(with(Expectations.<Predicate>anything()));
                 will(returnValue(Lists.newArrayList(stubObjectActionParameterString, objectActionParameter, stubObjectActionParameterString2)));
             }
         });
@@ -202,7 +202,7 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
                 one(actionParamPeer).getFacet(NamedFacet.class);
                 will(returnValue(null));
 
-                one(parentAction).getParameters((Predicate<ObjectActionParameter>) with(anything()));
+                one(parentAction).getParameters(with(Expectations.<Predicate>anything()));
                 will(returnValue(Lists.newArrayList(stubObjectActionParameterString, objectActionParameter, stubObjectActionParameterString2)));
             }
         });

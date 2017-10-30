@@ -74,7 +74,7 @@ public @interface Property {
     /**
      * Indicates where the property is not visible to the user.
      */
-    Where hidden() default Where.NOWHERE;
+    Where hidden() default Where.NOT_SPECIFIED;
 
 
 
@@ -102,7 +102,7 @@ public @interface Property {
     /**
      * Whether the property edit should be reified into a {@link org.apache.isis.applib.services.command.Command} object.
      */
-    CommandReification command() default CommandReification.AS_CONFIGURED;
+    CommandReification command() default CommandReification.NOT_SPECIFIED;
 
     /**
      * How the {@link org.apache.isis.applib.services.command.Command Command} object provided by the
@@ -131,7 +131,7 @@ public @interface Property {
      * or {@link org.apache.isis.applib.services.publish.PublisherService} is registered with the framework.
      * </p>
      */
-    Publishing publishing() default Publishing.AS_CONFIGURED;
+    Publishing publishing() default Publishing.NOT_SPECIFIED;
 
 
 
@@ -163,13 +163,13 @@ public @interface Property {
     // //////////////////////////////////////
 
     /**
-     * Indicates that the property should be excluded from snapshots.
+     * Indicates whether the property should be included or excluded from mementos.
      *
      * <p>
-     *     To ensure that the property is actually not persisted in the objectstore, also annotate with {@link NotPersistent}.
+     *     To ensure that the property is actually not persisted in the objectstore, also annotate with the JDO annotation {@link NotPersistent}.
      * </p>
      */
-    boolean notPersisted() default false;
+    MementoSerialization mementoSerialization() default MementoSerialization.NOT_SPECIFIED;
 
 
 

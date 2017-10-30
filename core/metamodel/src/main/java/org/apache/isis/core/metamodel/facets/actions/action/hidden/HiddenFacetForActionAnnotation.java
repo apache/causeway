@@ -31,18 +31,15 @@ import org.apache.isis.core.metamodel.facets.members.hidden.HiddenFacetAbstract;
 public class HiddenFacetForActionAnnotation extends HiddenFacetAbstract {
 
     public static HiddenFacet create(
-            final List<Action> action,
+            final List<Action> actions,
             final FacetHolder holder) {
 
-        if (action == null) {
-            return null;
-        }
-
-        final Where where = action.hidden();
-        if (where != null && where != Where.NOT_SPECIFIED) {
-            return new HiddenFacetForActionAnnotation(where, holder);
-        }
-        return null;
+        return actions.stream()
+                .map(Action::hidden)
+                .filter(where -> where != null && where != Where.NOT_SPECIFIED)
+                .findFirst()
+                .map(where -> new HiddenFacetForActionAnnotation(where, holder))
+                .orElse(null);
     }
 
     private HiddenFacetForActionAnnotation(final Where where, final FacetHolder holder) {

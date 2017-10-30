@@ -31,6 +31,8 @@ import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.PromptStyle;
+import org.apache.isis.applib.annotation.RenderDayPolicy;
+import org.apache.isis.applib.annotation.Repainting;
 import org.apache.isis.applib.annotation.Where;
 
 /**
@@ -186,15 +188,31 @@ public class PropertyLayoutData
 
 
 
-    private Boolean renderedAsDayBefore;
-
+    /**
+     * @deprecated - use {@link #getRenderDay()} instead.
+     */
+    @Deprecated
     @XmlAttribute(required = false)
     public Boolean getRenderedAsDayBefore() {
-        return renderedAsDayBefore;
+        return getRenderDay() != null ? getRenderDay() == RenderDayPolicy.AS_DAY_BEFORE : null;
     }
 
     public void setRenderedAsDayBefore(Boolean renderedAsDayBefore) {
-        this.renderedAsDayBefore = renderedAsDayBefore;
+        if(getRenderDay() == null && renderedAsDayBefore != null) {
+            setRenderDay(renderedAsDayBefore ? RenderDayPolicy.AS_DAY_BEFORE : RenderDayPolicy.AS_DAY);
+        }
+    }
+
+
+    private RenderDayPolicy renderDay;
+
+    @XmlAttribute(required = false)
+    public RenderDayPolicy getRenderDay() {
+        return renderDay;
+    }
+
+    public void setRenderDay(final RenderDayPolicy renderDay) {
+        this.renderDay = renderDay;
     }
 
 
@@ -210,18 +228,28 @@ public class PropertyLayoutData
     }
 
 
-    private Boolean unchanging;
-
     @XmlAttribute(required = false)
     public Boolean getUnchanging() {
-        return unchanging;
+        return getRepainting() != null ? getRepainting() == Repainting.NO_REPAINT : null;
     }
 
     public void setUnchanging(Boolean unchanging) {
-        this.unchanging = unchanging;
+        if(getRepainting() == null && unchanging != null) {
+            setRepainting(unchanging ? Repainting.NO_REPAINT : Repainting.REPAINT);
+        }
     }
 
 
+    private Repainting repainting;
+
+    @XmlAttribute(required = false)
+    public Repainting getRepainting() {
+        return repainting;
+    }
+
+    public void setRepainting(final Repainting repainting) {
+        this.repainting = repainting;
+    }
 
     private List<ActionLayoutData> actions = Lists.newArrayList();
 

@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.properties.property;
 
 import java.lang.reflect.Method;
+import java.util.List;
 
 import javax.annotation.Nullable;
 import javax.validation.constraints.Pattern;
@@ -62,8 +63,8 @@ import org.apache.isis.core.metamodel.facets.properties.property.modify.Property
 import org.apache.isis.core.metamodel.facets.properties.property.mustsatisfy.MustSatisfySpecificationFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.notpersisted.NotPersistedFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.publishing.PublishedPropertyFacetForPropertyAnnotation;
-import org.apache.isis.core.metamodel.facets.properties.property.regex.RegExFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.regex.RegExFacetForPatternAnnotationOnProperty;
+import org.apache.isis.core.metamodel.facets.properties.property.regex.RegExFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.publish.PublishedPropertyFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
@@ -109,25 +110,18 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
         //
         // Set up PropertyDomainEventFacet, which will act as the hiding/disabling/validating advisor
         //
-        final Property property = Annotations.getAnnotations(method, Property.class);
-        final Class<? extends PropertyDomainEvent<?, ?>> propertyDomainEventType;
+        final List<Property> properties = Annotations.getAnnotations(method, Property.class);
 
-        final PropertyDomainEventFacetAbstract propertyDomainEventFacet;
-
-
-        // search for @Property(domainEvent=...)
-        if(property != null) {
-            propertyDomainEventType = property.domainEvent();
-            propertyDomainEventFacet = new PropertyDomainEventFacetForPropertyAnnotation(
-                    propertyDomainEventType, getterFacet, servicesInjector, getSpecificationLoader(), holder);
-
-        } else
-        // else use default event type
-        {
-            propertyDomainEventType = PropertyDomainEvent.Default.class;
-            propertyDomainEventFacet = new PropertyDomainEventFacetDefault(
-                    propertyDomainEventType, getterFacet, servicesInjector, getSpecificationLoader(), holder);
-        }
+        // search for @Property(domainEvent=...), else use default event type
+        final PropertyDomainEventFacetAbstract propertyDomainEventFacet = properties.stream()
+                .map(Property::domainEvent)
+                .filter(domainEvent -> domainEvent != PropertyDomainEvent.Default.class)
+                .findFirst()
+                .map(domainEvent -> (PropertyDomainEventFacetAbstract) new PropertyDomainEventFacetForPropertyAnnotation(
+                        domainEvent, getterFacet, servicesInjector, getSpecificationLoader(), holder))
+                .orElse(new PropertyDomainEventFacetDefault(
+                        PropertyDomainEvent.Default.class, getterFacet, servicesInjector, getSpecificationLoader(),
+                        holder));
 
         if(EventUtil.eventTypeIsPostable(
                 propertyDomainEventFacet.getEventType(),
@@ -149,14 +143,14 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
             // the current setter facet will end up as the underlying facet
             final PropertySetterFacet replacementFacet;
 
-            if(property != null) {
+            if(propertyDomainEventFacet instanceof PropertyDomainEventFacetForPropertyAnnotation) {
                 replacementFacet = new PropertySetterFacetForDomainEventFromPropertyAnnotation(
-                        propertyDomainEventType, getterFacet, setterFacet, propertyDomainEventFacet, holder, servicesInjector);
+                        propertyDomainEventFacet.getEventType(), getterFacet, setterFacet, propertyDomainEventFacet, holder, servicesInjector);
             } else
             // default
             {
                 replacementFacet = new PropertySetterFacetForDomainEventFromDefault(
-                        propertyDomainEventType, getterFacet, setterFacet, propertyDomainEventFacet, holder, servicesInjector);
+                        propertyDomainEventFacet.getEventType(), getterFacet, setterFacet, propertyDomainEventFacet, holder, servicesInjector);
             }
             FacetUtil.addFacet(replacementFacet);
         }
@@ -166,14 +160,14 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
             // the current clear facet will end up as the underlying facet
             final PropertyClearFacet replacementFacet;
 
-            if(property != null) {
+            if(propertyDomainEventFacet instanceof PropertyDomainEventFacetForPropertyAnnotation) {
                 replacementFacet = new PropertyClearFacetForDomainEventFromPropertyAnnotation(
-                        propertyDomainEventType, getterFacet, clearFacet, propertyDomainEventFacet, holder, servicesInjector);
+                        propertyDomainEventFacet.getEventType(), getterFacet, clearFacet, propertyDomainEventFacet, holder, servicesInjector);
             } else
             // default
             {
                 replacementFacet = new PropertyClearFacetForDomainEventFromDefault(
-                        propertyDomainEventType, getterFacet, clearFacet, propertyDomainEventFacet, holder, servicesInjector);
+                        propertyDomainEventFacet.getEventType(), getterFacet, clearFacet, propertyDomainEventFacet, holder, servicesInjector);
             }
             FacetUtil.addFacet(replacementFacet);
         }
@@ -185,8 +179,8 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
         final FacetHolder holder = processMethodContext.getFacetHolder();
 
         // search for @Property(hidden=...)
-        final Property property = Annotations.getAnnotations(method, Property.class);
-        HiddenFacet facet = HiddenFacetForPropertyAnnotation.create(property, holder);
+        final List<Property> properties = Annotations.getAnnotations(method, Property.class);
+        HiddenFacet facet = HiddenFacetForPropertyAnnotation.create(properties, holder);
 
         FacetUtil.addFacet(facet);
     }
@@ -196,8 +190,8 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
         final FacetHolder holder = processMethodContext.getFacetHolder();
 
         // search for @Property(editing=...)
-        final Property property = Annotations.getAnnotations(method, Property.class);
-        DisabledFacet facet = DisabledFacetForPropertyAnnotation.create(property, holder);
+        final List<Property> properties = Annotations.getAnnotations(method, Property.class);
+        DisabledFacet facet = DisabledFacetForPropertyAnnotation.create(properties, holder);
 
         FacetUtil.addFacet(facet);
     }
@@ -206,7 +200,7 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
 
         final Class<?> cls = processMethodContext.getCls();
         final Method method = processMethodContext.getMethod();
-        final Property property = Annotations.getAnnotations(method, Property.class);
+        final List<Property> properties = Annotations.getAnnotations(method, Property.class);
         final FacetedMethod facetHolder = processMethodContext.getFacetHolder();
 
         final FacetHolder holder = facetHolder;
@@ -221,7 +215,7 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
         }
 
         // check for @Property(command=...)
-        final CommandFacet commandFacet = CommandFacetForPropertyAnnotation.create(property, getConfiguration(), holder);
+        final CommandFacet commandFacet = CommandFacetForPropertyAnnotation.create(properties, getConfiguration(), holder);
 
         FacetUtil.addFacet(commandFacet);
     }
@@ -229,7 +223,7 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
     void processPublishing(final ProcessMethodContext processMethodContext) {
 
         final Method method = processMethodContext.getMethod();
-        final Property property = Annotations.getAnnotations(method, Property.class);
+        final List<Property> properties = Annotations.getAnnotations(method, Property.class);
         final FacetHolder holder = processMethodContext.getFacetHolder();
 
         //
@@ -244,7 +238,7 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
 
         // check for @Property(publishing=...)
         final PublishedPropertyFacet facet = PublishedPropertyFacetForPropertyAnnotation
-                .create(property, getConfiguration(), holder);
+                .create(properties, getConfiguration(), holder);
 
         FacetUtil.addFacet(facet);
     }
@@ -256,8 +250,8 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
         final FacetHolder holder = processMethodContext.getFacetHolder();
 
         // search for @Property(maxLength=...)
-        final Property property = Annotations.getAnnotations(method, Property.class);
-        MaxLengthFacet facet = MaxLengthFacetForPropertyAnnotation.create(property, holder);
+        final List<Property> properties = Annotations.getAnnotations(method, Property.class);
+        MaxLengthFacet facet = MaxLengthFacetForPropertyAnnotation.create(properties, holder);
 
         FacetUtil.addFacet(facet);
     }
@@ -267,8 +261,8 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
         final FacetHolder holder = processMethodContext.getFacetHolder();
 
         // search for @Property(mustSatisfy=...)
-        final Property property = Annotations.getAnnotations(method, Property.class);
-        Facet facet = MustSatisfySpecificationFacetForPropertyAnnotation.create(property, holder, servicesInjector);
+        final List<Property> properties = Annotations.getAnnotations(method, Property.class);
+        Facet facet = MustSatisfySpecificationFacetForPropertyAnnotation.create(properties, holder, servicesInjector);
 
         FacetUtil.addFacet(facet);
     }
@@ -278,8 +272,8 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
         final FacetHolder holder = processMethodContext.getFacetHolder();
 
         // search for @Property(notPersisted=...)
-        final Property property = Annotations.getAnnotations(method, Property.class);
-        NotPersistedFacet facet = NotPersistedFacetForPropertyAnnotation.create(property, holder);
+        final List<Property> properties = Annotations.getAnnotations(method, Property.class);
+        NotPersistedFacet facet = NotPersistedFacetForPropertyAnnotation.create(properties, holder);
 
         FacetUtil.addFacet(facet);
     }
@@ -291,7 +285,7 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
         final FacetHolder holder = processMethodContext.getFacetHolder();
 
         // check for @Nullable
-        final Nullable nullableAnnotation = Annotations.getAnnotations(method, Nullable.class);
+        final Nullable nullableAnnotation = Annotations.getAnnotation(method, Nullable.class);
         final MandatoryFacet facet2 =
                 MandatoryFacetInvertedByNullableAnnotationOnProperty.create(nullableAnnotation, method, holder);
         FacetUtil.addFacet(facet2);
@@ -299,8 +293,8 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
                     facet2, "Conflicting @Nullable with other optionality annotation");
 
         // search for @Property(optional=...)
-        final Property property = Annotations.getAnnotations(method, Property.class);
-        final MandatoryFacet facet3 = MandatoryFacetForPropertyAnnotation.create(property, method, holder);
+        final List<Property> properties = Annotations.getAnnotations(method, Property.class);
+        final MandatoryFacet facet3 = MandatoryFacetForPropertyAnnotation.create(properties, method, holder);
         FacetUtil.addFacet(facet3);
         conflictingOptionalityValidator.flagIfConflict(
                     facet3, "Conflicting Property#optionality with other optionality annotation");
@@ -313,13 +307,13 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
         final Class<?> returnType = processMethodContext.getMethod().getReturnType();
 
         // check for @Pattern first
-        final Pattern annotation = Annotations.getAnnotations(processMethodContext.getMethod(), Pattern.class);
-        RegExFacet facet = RegExFacetForPatternAnnotationOnProperty.create(annotation, returnType, holder);
+        final List<Pattern> patterns = Annotations.getAnnotations(processMethodContext.getMethod(), Pattern.class);
+        RegExFacet facet = RegExFacetForPatternAnnotationOnProperty.create(patterns, returnType, holder);
 
         // else search for @Property(pattern=...)
-        final Property property = Annotations.getAnnotations(method, Property.class);
+        final List<Property> properties = Annotations.getAnnotations(method, Property.class);
         if (facet == null) {
-            facet = RegExFacetForPropertyAnnotation.create(property, returnType, holder);
+            facet = RegExFacetForPropertyAnnotation.create(properties, returnType, holder);
         }
 
         FacetUtil.addFacet(facet);
@@ -332,8 +326,8 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
 
 
         // else search for @Property(maxLength=...)
-        final Property property = Annotations.getAnnotations(method, Property.class);
-        FileAcceptFacet facet = FileAcceptFacetForPropertyAnnotation.create(property, holder);
+        final List<Property> properties = Annotations.getAnnotations(method, Property.class);
+        FileAcceptFacet facet = FileAcceptFacetForPropertyAnnotation.create(properties, holder);
 
         FacetUtil.addFacet(facet);
     }

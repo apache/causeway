@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.properties.propertylayout;
 
+import java.util.List;
+
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.objectvalue.multiline.MultiLineFacet;
@@ -26,12 +28,15 @@ import org.apache.isis.core.metamodel.facets.objectvalue.multiline.MultiLineFace
 
 public class MultiLineFacetForPropertyLayoutAnnotation extends MultiLineFacetAbstract {
 
-    public static MultiLineFacet create(PropertyLayout propertyLayout, FacetHolder holder) {
-        if(propertyLayout == null) {
-            return null;
-        }
-        final int multiLine = propertyLayout.multiLine();
-        return multiLine > 1 ? new MultiLineFacetForPropertyLayoutAnnotation(multiLine, false, holder) : null;
+    public static MultiLineFacet create(
+            final List<PropertyLayout> propertyLayouts, final FacetHolder holder) {
+
+        return propertyLayouts.stream()
+                .map(PropertyLayout::multiLine)
+                .filter(multiLine -> multiLine > 1)
+                .findFirst()
+                .map(multiLine -> new MultiLineFacetForPropertyLayoutAnnotation(multiLine, false, holder))
+                .orElse(null);
     }
 
     private MultiLineFacetForPropertyLayoutAnnotation(int numberOfLines, boolean preventWrapping, FacetHolder holder) {

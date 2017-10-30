@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.properties.propertylayout;
 
 import java.lang.reflect.Method;
+import java.util.List;
 
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -52,9 +53,9 @@ public class NamedFacetForPropertyLayoutAnnotationFactoryTest extends AbstractFa
                 methodRemover, facetedMethod);
 
         final FacetHolder holder = facetFactory.facetHolderFrom(processMethodContext);
-        final PropertyLayout propertyLayout = facetFactory.propertyLayoutAnnotationFrom(processMethodContext);
+        final List<PropertyLayout> propertyLayouts = facetFactory.propertyLayoutsFrom(processMethodContext);
 
-        facetFactory.processNamed(holder, propertyLayout);
+        facetFactory.processNamed(holder, propertyLayouts);
 
         // then
         final NamedFacet facet = facetedMethod.getFacet(NamedFacet.class);
@@ -81,9 +82,9 @@ public class NamedFacetForPropertyLayoutAnnotationFactoryTest extends AbstractFa
                 methodRemover, facetedMethod);
 
         final FacetHolder holder = facetFactory.facetHolderFrom(processMethodContext);
-        final PropertyLayout propertyLayout = facetFactory.propertyLayoutAnnotationFrom(processMethodContext);
+        final List<PropertyLayout> propertyLayouts = facetFactory.propertyLayoutsFrom(processMethodContext);
 
-        facetFactory.processNamed(holder, propertyLayout);
+        facetFactory.processNamed(holder, propertyLayouts);
 
         // then
         final NamedFacet facet = facetedMethod.getFacet(NamedFacet.class);

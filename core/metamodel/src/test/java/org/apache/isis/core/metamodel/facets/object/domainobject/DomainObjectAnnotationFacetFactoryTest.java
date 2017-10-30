@@ -27,6 +27,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import org.apache.isis.applib.annotation.Bounding;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -482,11 +483,11 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
     public static class Bounded extends DomainObjectAnnotationFacetFactoryTest {
 
-        @DomainObject(bounded = true)
+        @DomainObject(bounding = Bounding.BOUNDED)
         class CustomerWithDomainObjectAndBoundedSetToTrue {
         }
 
-        @DomainObject(bounded = false)
+        @DomainObject(bounding = Bounding.UNBOUNDED)
         class CustomerWithDomainObjectAndBoundedSetToFalse {
         }
 

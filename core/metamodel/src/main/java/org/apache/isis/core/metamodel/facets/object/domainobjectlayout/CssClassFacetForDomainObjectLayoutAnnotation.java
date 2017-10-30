@@ -29,9 +29,6 @@ import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacetAbstr
 public class CssClassFacetForDomainObjectLayoutAnnotation extends CssClassFacetAbstract {
 
     public static CssClassFacet create(final List<DomainObjectLayout> domainObjectLayouts, final FacetHolder holder) {
-        if (domainObjectLayouts.isEmpty()) {
-            return null;
-        }
         return domainObjectLayouts.stream()
                 .map(DomainObjectLayout::cssClass)
                 .map(Strings::emptyToNull)

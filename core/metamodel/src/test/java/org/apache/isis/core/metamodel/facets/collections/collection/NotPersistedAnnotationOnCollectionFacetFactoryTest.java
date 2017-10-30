@@ -22,6 +22,7 @@ package org.apache.isis.core.metamodel.facets.collections.collection;
 import java.lang.reflect.Method;
 import java.util.Collection;
 
+import org.apache.isis.applib.annotation.MementoSerialization;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
@@ -43,7 +44,7 @@ public class NotPersistedAnnotationOnCollectionFacetFactoryTest extends Abstract
         }
         class Customer {
             @SuppressWarnings("unused")
-            @org.apache.isis.applib.annotation.Collection(notPersisted = true)
+            @org.apache.isis.applib.annotation.Collection(mementoSerialization = MementoSerialization.EXCLUDED)
             public Collection<Order> getOrders() {
                 return null;
             }

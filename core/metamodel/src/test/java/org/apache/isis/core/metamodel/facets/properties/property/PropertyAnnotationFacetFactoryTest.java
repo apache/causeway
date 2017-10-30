@@ -29,6 +29,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import org.apache.isis.applib.annotation.MementoSerialization;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Where;
@@ -537,9 +538,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
         public void withAnnotation() {
 
             class Customer {
-                @Property(
-                        notPersisted = true
-                )
+                @Property(mementoSerialization = MementoSerialization.EXCLUDED)
                 public String getName() {
                     return null;
                 }

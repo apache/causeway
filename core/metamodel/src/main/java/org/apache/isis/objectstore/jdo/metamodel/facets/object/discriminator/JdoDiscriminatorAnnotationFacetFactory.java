@@ -46,7 +46,7 @@ public class JdoDiscriminatorAnnotationFacetFactory extends FacetFactoryAbstract
             return;
         }
 
-        final Discriminator annotation = Annotations.getAnnotations(processClassContext.getCls(), Discriminator.class);
+        final Discriminator annotation = Annotations.getAnnotation(processClassContext.getCls(), Discriminator.class);
         if (annotation == null) {
             return;
         }

@@ -45,7 +45,7 @@ public @interface ActionLayout {
      *     identically).
      * </p>
      */
-    BookmarkPolicy bookmarking() default BookmarkPolicy.NEVER;
+    BookmarkPolicy bookmarking() default BookmarkPolicy.NOT_SPECIFIED;
 
     // //////////////////////////////////////
 
@@ -112,7 +112,7 @@ public @interface ActionLayout {
      * Ignored if the action has not been associated with a property.
      * </p>
      */
-    Position position() default Position.BELOW;
+    Position position() default Position.NOT_SPECIFIED;
 
     @XmlType(
             namespace = "http://isis.apache.org/applib/layout/component"
@@ -121,7 +121,8 @@ public @interface ActionLayout {
         BELOW,
         RIGHT,
         PANEL,
-        PANEL_DROPDOWN
+        PANEL_DROPDOWN,
+        NOT_SPECIFIED
     }
 
     /**
@@ -142,7 +143,7 @@ public @interface ActionLayout {
      *     Has no meaning for actions of domain entities.
      * </p>
      */
-    Contributed contributed() default Contributed.AS_BOTH;
+    Contributed contributed() default Contributed.NOT_SPECIFIED;
 
 
 }

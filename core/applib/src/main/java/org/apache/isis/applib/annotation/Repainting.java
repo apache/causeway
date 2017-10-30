@@ -16,27 +16,22 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.applib.annotation;
 
 import javax.xml.bind.annotation.XmlType;
 
+/**
+ * Whether a component is unchanging and so does not require repainting.
+ */
 @XmlType(
         namespace = "http://isis.apache.org/applib/layout/component"
 )
-public enum BookmarkPolicy {
+public enum Repainting {
+    REPAINT,
     /**
-     * Can be bookmarked, and is a top-level 'root' (or parent) bookmark.
+     * Equivalent to <tt>@PropertyLayout(unchanging=true)</tt> prior to Isis 2.x
      */
-    AS_ROOT,
-    /**
-     * Can be bookmarked, but only as a child or some other parent/root bookmark
-     */
-    AS_CHILD,
-    /**
-     * An unimportant entity that should never be bookmarked.
-     */
-    NEVER,
+    NO_REPAINT,
     /**
      * Ignore the value provided by this annotation (meaning that the framework will keep searching, in meta
      * annotations or superclasses/interfaces).

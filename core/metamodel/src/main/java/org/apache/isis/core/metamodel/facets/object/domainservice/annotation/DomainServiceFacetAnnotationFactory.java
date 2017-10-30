@@ -60,7 +60,7 @@ public class DomainServiceFacetAnnotationFactory extends FacetFactoryAbstract im
     @Override
     public void process(ProcessClassContext processClassContext) {
         final Class<?> cls = processClassContext.getCls();
-        final DomainService annotation = Annotations.getAnnotations(cls, DomainService.class);
+        final DomainService annotation = Annotations.getAnnotation(cls, DomainService.class);
         if (annotation == null) {
             return;
         }

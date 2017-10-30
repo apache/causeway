@@ -19,6 +19,9 @@
 package org.apache.isis.core.metamodel.facets.object.domainservicelayout;
 
 
+import java.util.List;
+import java.util.Objects;
+
 import com.google.common.base.Strings;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -28,12 +31,17 @@ import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
 
 public class NamedFacetForDomainServiceLayoutAnnotation extends NamedFacetAbstract {
 
-    public static NamedFacet create(final DomainServiceLayout domainServiceLayout, final FacetHolder holder) {
-        if(domainServiceLayout == null) {
-            return null;
-        }
-        final String named = Strings.emptyToNull(domainServiceLayout.named());
-        return named != null ? new NamedFacetForDomainServiceLayoutAnnotation(named, holder) : null;
+    public static NamedFacet create(
+            final List<DomainServiceLayout> domainServiceLayouts,
+            final FacetHolder holder) {
+
+        return domainServiceLayouts.stream()
+                .map(DomainServiceLayout::named)
+                .map(Strings::emptyToNull)
+                .filter(Objects::nonNull)
+                .findFirst()
+                .map(named -> new NamedFacetForDomainServiceLayoutAnnotation(named, holder))
+                .orElse(null);
     }
 
     private NamedFacetForDomainServiceLayoutAnnotation(String value, FacetHolder holder) {

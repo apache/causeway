@@ -41,6 +41,11 @@ public enum InvokeOn {
      *     Corresponds to (the deprecated) <code>@Bulk(appliesTo=BULK_ONLY)</code> annotation.
      * </p>
      */
-    COLLECTION_ONLY;
+    COLLECTION_ONLY,
+    /**
+     * Ignore the value provided by this annotation (meaning that the framework will keep searching, in meta
+     * annotations or superclasses/interfaces).
+     */
+    NOT_SPECIFIED
 
 }

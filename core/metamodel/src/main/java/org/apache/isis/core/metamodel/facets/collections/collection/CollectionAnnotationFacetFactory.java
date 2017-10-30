@@ -23,6 +23,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
+import java.util.List;
 
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.services.eventbus.CollectionDomainEvent;
@@ -85,28 +86,25 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract {
         //
         // Set up CollectionDomainEventFacet, which will act as the hiding/disabling/validating advisor
         //
-        final Collection collection = Annotations.getAnnotations(method, Collection.class);
-        final Class<? extends CollectionDomainEvent<?, ?>> collectionDomainEventType;
-
-        final CollectionDomainEventFacetAbstract collectionDomainEventFacet;
-
+        final List<Collection> collections = Annotations.getAnnotations(method, Collection.class);
 
         // search for @Collection(domainEvent=...)
-        if(collection != null) {
-            collectionDomainEventType = collection.domainEvent();
-            collectionDomainEventFacet = new CollectionDomainEventFacetForCollectionAnnotation(
-                    collectionDomainEventType, servicesInjector, getSpecificationLoader(), holder);
-
-        } else
-        // else use default event type
-        {
-            collectionDomainEventType = CollectionDomainEvent.Default.class;
-            collectionDomainEventFacet = new CollectionDomainEventFacetDefault(
-                    collectionDomainEventType, servicesInjector, getSpecificationLoader(), holder);
-        }
+        final CollectionDomainEventFacetAbstract collectionDomainEventFacet = collections.stream()
+                .map(Collection::domainEvent)
+                .filter(domainEvent -> domainEvent != CollectionDomainEvent.Default.class)
+                .findFirst()
+                .map(domainEvent ->
+                        (CollectionDomainEventFacetAbstract)
+                                new CollectionDomainEventFacetForCollectionAnnotation(
+                                        domainEvent, servicesInjector, getSpecificationLoader(), holder))
+                .orElse(
+                        new CollectionDomainEventFacetDefault(
+                                CollectionDomainEvent.Default.class, servicesInjector, getSpecificationLoader(), holder)
+                );
         if(!CollectionDomainEvent.Noop.class.isAssignableFrom(collectionDomainEventFacet.getEventType())) {
             FacetUtil.addFacet(collectionDomainEventFacet);
         }
+
         if(EventUtil.eventTypeIsPostable(
                 collectionDomainEventFacet.getEventType(),
                 CollectionDomainEvent.Noop.class,
@@ -128,14 +126,14 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract {
             // one of these facets to be created.
             final CollectionAddToFacetForDomainEventFromAbstract replacementFacet;
 
-            if(collection != null) {
+            if(collectionDomainEventFacet instanceof CollectionDomainEventFacetForCollectionAnnotation) {
                 replacementFacet = new CollectionAddToFacetForDomainEventFromCollectionAnnotation(
-                        collectionDomainEventType, getterFacet, collectionAddToFacet, collectionDomainEventFacet, holder, servicesInjector);
+                        collectionDomainEventFacet.getEventType(), getterFacet, collectionAddToFacet, collectionDomainEventFacet, holder, servicesInjector);
             } else
             // default
             {
                 replacementFacet = new CollectionAddToFacetForDomainEventFromDefault(
-                        collectionDomainEventType, getterFacet, collectionAddToFacet, collectionDomainEventFacet, holder, servicesInjector);
+                        collectionDomainEventFacet.getEventType(), getterFacet, collectionAddToFacet, collectionDomainEventFacet, holder, servicesInjector);
             }
             FacetUtil.addFacet(replacementFacet);
         }
@@ -146,12 +144,12 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract {
 
             final CollectionRemoveFromFacetForDomainEventFromAbstract replacementFacet;
 
-            if(collection != null) {
-                replacementFacet = new CollectionRemoveFromFacetForDomainEventFromCollectionAnnotation(collectionDomainEventType, getterFacet, collectionRemoveFromFacet, collectionDomainEventFacet, servicesInjector, holder);
+            if(collectionDomainEventFacet instanceof CollectionDomainEventFacetForCollectionAnnotation) {
+                replacementFacet = new CollectionRemoveFromFacetForDomainEventFromCollectionAnnotation(collectionDomainEventFacet.getEventType(), getterFacet, collectionRemoveFromFacet, collectionDomainEventFacet, servicesInjector, holder);
             } else
             // default
             {
-                replacementFacet = new CollectionRemoveFromFacetForDomainEventFromDefault(collectionDomainEventType, getterFacet, collectionRemoveFromFacet, collectionDomainEventFacet, servicesInjector, holder);
+                replacementFacet = new CollectionRemoveFromFacetForDomainEventFromDefault(collectionDomainEventFacet.getEventType(), getterFacet, collectionRemoveFromFacet, collectionDomainEventFacet, servicesInjector, holder);
             }
             FacetUtil.addFacet(replacementFacet);
         }
@@ -163,8 +161,8 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract {
         final FacetHolder holder = processMethodContext.getFacetHolder();
 
         // check for @Collection(hidden=...)
-        final Collection collection = Annotations.getAnnotations(method, Collection.class);
-        HiddenFacet facet = HiddenFacetForCollectionAnnotation.create(collection, holder);
+        final List<Collection> collections = Annotations.getAnnotations(method, Collection.class);
+        HiddenFacet facet = HiddenFacetForCollectionAnnotation.create(collections, holder);
 
         FacetUtil.addFacet(facet);
     }
@@ -174,8 +172,8 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract {
         final FacetHolder holder = processMethodContext.getFacetHolder();
 
         // check for @Collection(editing=...)
-        final Collection collection = Annotations.getAnnotations(method, Collection.class);
-        DisabledFacet facet = DisabledFacetForCollectionAnnotation.create(collection, holder);
+        final List<Collection> collections = Annotations.getAnnotations(method, Collection.class);
+        DisabledFacet facet = DisabledFacetForCollectionAnnotation.create(collections, holder);
 
         FacetUtil.addFacet(facet);
     }
@@ -185,8 +183,8 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract {
         final FacetHolder holder = processMethodContext.getFacetHolder();
 
         // search for @Collection(notPersisted=...)
-        final Collection collection = Annotations.getAnnotations(method, Collection.class);
-        NotPersistedFacet facet = NotPersistedFacetForCollectionAnnotation.create(collection, holder);
+        final List<Collection> collections = Annotations.getAnnotations(method, Collection.class);
+        NotPersistedFacet facet = NotPersistedFacetForCollectionAnnotation.create(collections, holder);
 
         FacetUtil.addFacet(facet);
     }
@@ -203,9 +201,9 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract {
         }
 
         // check for @Collection(typeOf=...)
-        final Collection collection = Annotations.getAnnotations(method, Collection.class);
+        final List<Collection> collections = Annotations.getAnnotations(method, Collection.class);
         TypeOfFacet facet = TypeOfFacetOnCollectionFromCollectionAnnotation
-                .create(collection, facetHolder, getSpecificationLoader());
+                .create(collections, facetHolder, getSpecificationLoader());
 
         // else infer from return type
         if(facet == null) {

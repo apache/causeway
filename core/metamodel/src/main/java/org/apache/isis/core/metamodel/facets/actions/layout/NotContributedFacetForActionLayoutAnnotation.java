@@ -19,6 +19,8 @@
 package org.apache.isis.core.metamodel.facets.actions.layout;
 
 
+import java.util.List;
+
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Contributed;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -29,16 +31,18 @@ import org.apache.isis.core.metamodel.facets.actions.notcontributed.NotContribut
 public class NotContributedFacetForActionLayoutAnnotation extends NotContributedFacetAbstract {
 
     public static NotContributedFacet create(
-            final ActionLayout actionLayout, final FacetHolder holder) {
-        if(actionLayout == null) {
-            return null;
-        }
-        final Contributed contributed = actionLayout.contributed();
-        final NotContributedAs as = NotContributedAs.notFrom(contributed);
-        if(as == null) {
-            return null;
-        }
-        return new NotContributedFacetForActionLayoutAnnotation(as, contributed, holder);
+            final List<ActionLayout> actionLayouts,
+            final FacetHolder holder) {
+
+        return actionLayouts.stream()
+                .map(ActionLayout::contributed)
+                .filter(contributed -> contributed != Contributed.NOT_SPECIFIED)
+                .findFirst()
+                .map(contributed -> {
+                    NotContributedAs as = NotContributedAs.notFrom(contributed);
+                    return new NotContributedFacetForActionLayoutAnnotation(as, contributed, holder);
+                })
+                .orElse(null);
     }
 
     private NotContributedFacetForActionLayoutAnnotation(

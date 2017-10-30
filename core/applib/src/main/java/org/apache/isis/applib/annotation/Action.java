@@ -93,7 +93,7 @@ public @interface Action {
      * {@link SemanticsOf#IDEMPOTENT idempotent} or
      * {@link SemanticsOf#NON_IDEMPOTENT non-idempotent}.
      */
-    SemanticsOf semantics() default SemanticsOf.NON_IDEMPOTENT;
+    SemanticsOf semantics() default SemanticsOf.NOT_SPECIFIED;
 
 
     // //////////////////////////////////////
@@ -116,7 +116,7 @@ public @interface Action {
      * Has no meaning if annotated on an action of a domain service.
      * </p>
      */
-    InvokeOn invokeOn() default InvokeOn.OBJECT_ONLY;
+    InvokeOn invokeOn() default InvokeOn.NOT_SPECIFIED;
 
     // //////////////////////////////////////
 
@@ -151,11 +151,11 @@ public @interface Action {
      * Whether the action invocation should be published.
      *
      * <p>
-     * Requires that an implementation of the {@link org.apache.isis.applib.services.publish.PublishingService}
+     * Requires that an implementation of the {@link org.apache.isis.applib.services.publish.PublisherService}
      * or {@link org.apache.isis.applib.services.publish.PublisherService} is registered with the framework.
      * </p>
      */
-    Publishing publishing() default Publishing.AS_CONFIGURED;
+    Publishing publishing() default Publishing.NOT_SPECIFIED;
 
 
 

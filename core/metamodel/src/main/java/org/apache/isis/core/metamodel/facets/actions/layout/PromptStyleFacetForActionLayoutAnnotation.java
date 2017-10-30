@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.actions.layout;
 
+import java.util.List;
+
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -27,7 +29,6 @@ import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleConfi
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacetAbstract;
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured;
-import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacetFallBackToInline;
 
 public class PromptStyleFacetForActionLayoutAnnotation extends PromptStyleFacetAbstract {
 
@@ -39,48 +40,46 @@ public class PromptStyleFacetForActionLayoutAnnotation extends PromptStyleFacetA
     }
 
     public static PromptStyleFacet create(
-            final ActionLayout actionLayout,
+            final List<ActionLayout> actionLayouts,
             final IsisConfiguration configuration,
             final FacetHolder holder) {
 
-        PromptStyle promptStyle = actionLayout != null? actionLayout.promptStyle() : null;
+        return actionLayouts.stream()
+                .map(ActionLayout::promptStyle)
+                .filter(promptStyle -> promptStyle != PromptStyle.NOT_SPECIFIED)
+                .findFirst()
+                .map(promptStyle -> {
 
-        if(promptStyle == null) {
-            if (holder.containsDoOpNotDerivedFacet(PromptStyleFacet.class)) {
-                // do not replace
-                return null;
-            }
+                    switch (promptStyle) {
+                    case DIALOG:
+                    case INLINE:
+                    case INLINE_AS_IF_EDIT:
+                        return new PromptStyleFacetForActionLayoutAnnotation(promptStyle, holder);
 
-            return new PromptStyleFacetFallBackToInline(holder);
-        } else {
+                    case AS_CONFIGURED:
 
-            switch (promptStyle) {
-                case DIALOG:
-                case INLINE:
-                case INLINE_AS_IF_EDIT:
-                    return new PromptStyleFacetForActionLayoutAnnotation(promptStyle, holder);
+                        // do not replace
+                        if (holder.containsDoOpFacet(PromptStyleFacet.class)) {
+                            return null;
+                        }
 
-                case AS_CONFIGURED:
+                        promptStyle = PromptStyleConfiguration.parse(configuration);
+                        return new PromptStyleFacetAsConfigured(promptStyle, holder);
 
-                    // do not replace
-                    if (holder.containsDoOpFacet(PromptStyleFacet.class)) {
-                        return null;
+
                     }
-
-                    promptStyle = PromptStyleConfiguration.parse(configuration);
-                    return new PromptStyleFacetAsConfigured(promptStyle, holder);
-
-                default:
-
+                    throw new IllegalStateException("promptStyle '" + promptStyle + "' not recognised");
+                })
+                .orElseGet(() -> {
                     // do not replace
-                    if (holder.containsDoOpFacet(PromptStyleFacet.class)) {
-                        return null;
-                    }
+                        if (holder.containsDoOpFacet(PromptStyleFacet.class)) {
+                            return null;
+                        }
 
-                    promptStyle = PromptStyleConfiguration.parse(configuration);
-                    return new PromptStyleFacetAsConfigured(promptStyle, holder);
-            }
-        }
+                        PromptStyle promptStyle = PromptStyleConfiguration.parse(configuration);
+                        return new PromptStyleFacetAsConfigured(promptStyle, holder);
+                    }
+                );
 
     }
 

@@ -84,7 +84,7 @@ public class ValueFacetAnnotationOrConfigurationFactory extends FacetFactoryAbst
     private ValueFacet create(final Class<?> cls, final FacetHolder holder) {
 
         // create from annotation, if present
-        final Value annotation = Annotations.getAnnotations(cls, Value.class);
+        final Value annotation = Annotations.getAnnotation(cls, Value.class);
         if (annotation != null) {
             final ValueFacetAnnotation facet = new ValueFacetAnnotation(cls, holder, servicesInjector);
             if (facet.isValid()) {

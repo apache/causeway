@@ -62,7 +62,7 @@ public class JdoQueryAnnotationFacetFactory extends FacetFactoryAbstract impleme
             return;
         }
 
-        final Queries namedQueriesAnnotation = Annotations.getAnnotations(cls, Queries.class);
+        final Queries namedQueriesAnnotation = Annotations.getAnnotation(cls, Queries.class);
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
         
         if (namedQueriesAnnotation != null) {
@@ -71,7 +71,7 @@ public class JdoQueryAnnotationFacetFactory extends FacetFactoryAbstract impleme
             return;
         }
 
-        final Query namedQueryAnnotation = Annotations.getAnnotations(cls, Query.class);
+        final Query namedQueryAnnotation = Annotations.getAnnotation(cls, Query.class);
         if (namedQueryAnnotation != null) {
             FacetUtil.addFacet(new JdoQueryFacetAnnotation(
                     namedQueryAnnotation, facetHolder));

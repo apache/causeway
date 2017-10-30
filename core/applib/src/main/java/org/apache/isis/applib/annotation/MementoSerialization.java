@@ -16,27 +16,25 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.applib.annotation;
 
-import javax.xml.bind.annotation.XmlType;
-
-@XmlType(
-        namespace = "http://isis.apache.org/applib/layout/component"
-)
-public enum BookmarkPolicy {
+/**
+ * Whether the property or collection is included if the domain object is serialized into a memento.
+ */
+public enum MementoSerialization {
     /**
-     * Can be bookmarked, and is a top-level 'root' (or parent) bookmark.
+     * Property or collection is included in any mementos.
+     * This is the fallback/default if not explicitly excluded.
      */
-    AS_ROOT,
+    INCLUDED,
     /**
-     * Can be bookmarked, but only as a child or some other parent/root bookmark
+     * Property or collection's state is excluded from any mementos.
+     *
+     * <p>
+     *     Corresponds to <tt>@Property(notPersisted=true)</tt> or <tt>@Collection(notPersisted=true)</tt> prior to Isis 2.x
+     * </p>
      */
-    AS_CHILD,
-    /**
-     * An unimportant entity that should never be bookmarked.
-     */
-    NEVER,
+    EXCLUDED,
     /**
      * Ignore the value provided by this annotation (meaning that the framework will keep searching, in meta
      * annotations or superclasses/interfaces).

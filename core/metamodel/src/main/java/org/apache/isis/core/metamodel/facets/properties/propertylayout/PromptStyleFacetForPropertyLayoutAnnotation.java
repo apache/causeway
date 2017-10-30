@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.properties.propertylayout;
 
+import java.util.List;
+
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -27,7 +29,6 @@ import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleConfi
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacetAbstract;
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured;
-import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacetFallBackToInline;
 
 public class PromptStyleFacetForPropertyLayoutAnnotation extends PromptStyleFacetAbstract {
 
@@ -39,50 +40,46 @@ public class PromptStyleFacetForPropertyLayoutAnnotation extends PromptStyleFace
     }
 
     public static PromptStyleFacet create(
-            final PropertyLayout propertyLayout,
+            final List<PropertyLayout> propertyLayouts,
             final IsisConfiguration configuration,
             final FacetHolder holder) {
 
-        PromptStyle promptStyle = propertyLayout != null? propertyLayout.promptStyle() : null;
+        return propertyLayouts.stream()
+                .map(PropertyLayout::promptStyle)
+                .filter(promptStyle -> promptStyle != PromptStyle.NOT_SPECIFIED)
+                .findFirst()
+                .map(promptStyle -> {
 
-        if(promptStyle == null) {
-            if (holder.containsDoOpFacet(PromptStyleFacet.class)) {
-                // do not replace
-                return null;
-            }
+                    switch (promptStyle) {
+                    case DIALOG:
+                    case INLINE:
+                        return new PromptStyleFacetForPropertyLayoutAnnotation(promptStyle, holder);
+                    case INLINE_AS_IF_EDIT:
+                        return new PromptStyleFacetForPropertyLayoutAnnotation(PromptStyle.INLINE, holder);
 
-            return new PromptStyleFacetFallBackToInline(holder);
-        } else {
+                    case AS_CONFIGURED:
 
-            switch (promptStyle) {
-                case DIALOG:
-                case INLINE:
-                    return new PromptStyleFacetForPropertyLayoutAnnotation(promptStyle, holder);
-                case INLINE_AS_IF_EDIT:
-                    return new PromptStyleFacetForPropertyLayoutAnnotation(PromptStyle.INLINE, holder);
+                        // do not replace
+                        if (holder.containsDoOpFacet(PromptStyleFacet.class)) {
+                            return null;
+                        }
 
-                case AS_CONFIGURED:
+                        promptStyle = PromptStyleConfiguration.parse(configuration);
+                        return new PromptStyleFacetAsConfigured(promptStyle, holder);
 
-                    // do not replace
-                    if (holder.containsDoOpFacet(PromptStyleFacet.class)) {
-                        return null;
                     }
+                    throw new IllegalStateException("promptStyle '" + promptStyle + "' not recognised");
+                })
+                .orElseGet(() -> {
 
-                    promptStyle = PromptStyleConfiguration.parse(configuration);
-                    return new PromptStyleFacetAsConfigured(promptStyle, holder);
+                        // do not replace
+                        if (holder.containsDoOpFacet(PromptStyleFacet.class)) {
+                            return null;
+                        }
 
-                default:
-
-                    // do not replace
-                    if (holder.containsDoOpFacet(PromptStyleFacet.class)) {
-                        return null;
-                    }
-
-                    promptStyle = PromptStyleConfiguration.parse(configuration);
-                    return new PromptStyleFacetAsConfigured(promptStyle, holder);
-            }
-        }
-
+                        PromptStyle promptStyle = PromptStyleConfiguration.parse(configuration);
+                        return new PromptStyleFacetAsConfigured(promptStyle, holder);
+                });
     }
 
     @Override

@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.collections.collection.disabled;
 
+import java.util.List;
+
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Where;
@@ -29,31 +31,34 @@ import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAbstr
 public class DisabledFacetForCollectionAnnotation extends DisabledFacetAbstractImpl {
 
     public static DisabledFacet create(
-            final Collection collection,
+            final List<Collection> collections,
             final FacetHolder holder) {
 
-        if (collection == null) {
-            return null;
-        }
+        return collections.stream()
+                .filter(collection -> collection.editing() != Editing.NOT_SPECIFIED)
+                .findFirst()
+                .map(collection -> {
+                    final Editing editing = collection.editing();
+                    final String disabledReason = collection.editingDisabledReason();
 
-        final Editing editing = collection.editing();
-        final String disabledReason = collection.editingDisabledReason();
+                    switch (editing) {
+                    case AS_CONFIGURED:
 
-        switch (editing) {
-            case AS_CONFIGURED:
+                        // nothing needs to be done here; the DomainObjectFactory (processing @DomainObject annotation)
+                        // will install an ImmutableFacetForDomainObjectAnnotation on the domain object and then a
+                        // DisabledFacetOnCollectionDerivedFromImmutable facet will be installed.
 
-                // nothing needs to be done here; the DomainObjectFactory (processing @DomainObject annotation)
-                // will install an ImmutableFacetForDomainObjectAnnotation on the domain object and then a
-                // DisabledFacetOnCollectionDerivedFromImmutable facet will be installed.
+                        return null;
 
-                return null;
+                    case DISABLED:
+                        return (DisabledFacet)new DisabledFacetForCollectionAnnotation(disabledReason, holder);
 
-            case DISABLED:
-                return new DisabledFacetForCollectionAnnotation(disabledReason, holder);
-            case ENABLED:
-                return null;
-        }
-        return null;
+                    case ENABLED:
+                        return null;
+                    }
+                    throw new IllegalStateException("editing '" + editing + "' not recognised");
+                })
+                .orElse(null);
     }
 
     private DisabledFacetForCollectionAnnotation(final String reason, final FacetHolder holder) {

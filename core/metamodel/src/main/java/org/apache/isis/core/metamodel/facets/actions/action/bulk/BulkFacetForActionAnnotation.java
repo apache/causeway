@@ -29,18 +29,16 @@ import org.apache.isis.core.metamodel.facets.actions.bulk.BulkFacetAbstract;
 
 public class BulkFacetForActionAnnotation extends BulkFacetAbstract {
 
-    public static BulkFacet create(final List<Action> action, final FacetHolder holder) {
+    public static BulkFacet create(
+            final List<Action> actions,
+            final FacetHolder holder) {
 
-        if(action == null) {
-            return null;
-        }
-
-        final InvokeOn invokeOn = action.invokeOn();
-        if(invokeOn == null) {
-            return null;
-        }
-
-        return new BulkFacetForActionAnnotation(invokeOn, holder);
+        return actions.stream()
+                .map(Action::invokeOn)
+                .filter(invokeOn -> invokeOn != null && invokeOn != InvokeOn.NOT_SPECIFIED)
+                .findFirst()
+                .map(invokeOn -> new BulkFacetForActionAnnotation(invokeOn, holder))
+                .orElse(null);
     }
 
     private BulkFacetForActionAnnotation(

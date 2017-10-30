@@ -97,9 +97,7 @@ public abstract class MustSatisfySpecificationFacetAbstract extends FacetAbstrac
         }
         try {
             return (Specification) value.newInstance();
-        } catch (final InstantiationException e) {
-            return null;
-        } catch (final IllegalAccessException e) {
+        } catch (final InstantiationException | IllegalAccessException e) {
             return null;
         }
     }

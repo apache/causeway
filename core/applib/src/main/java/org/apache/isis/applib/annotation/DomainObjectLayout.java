@@ -141,6 +141,6 @@ s     */
     /**
      * Whether (and how) this domain object can be bookmarked in the UI.
      */
-    BookmarkPolicy bookmarking() default BookmarkPolicy.NEVER;
+    BookmarkPolicy bookmarking() default BookmarkPolicy.NOT_SPECIFIED;
 
 }

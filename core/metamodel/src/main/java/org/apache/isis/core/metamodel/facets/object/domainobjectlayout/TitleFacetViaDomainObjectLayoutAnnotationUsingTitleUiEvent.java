@@ -51,8 +51,8 @@ public class TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent extends 
 
         return domainObjectLayouts.stream()
                 .map(DomainObjectLayout::titleUiEvent)
-                .filter(titleUiEventClass -> EventUtil.eventTypeIsPostable(
-                        titleUiEventClass,
+                .filter(titleUiEvent -> EventUtil.eventTypeIsPostable(
+                        titleUiEvent,
                         TitleUiEvent.Noop.class,
                         TitleUiEvent.Default.class,
                         "isis.reflector.facet.domainObjectLayoutAnnotation.titleUiEvent.postForDefault",

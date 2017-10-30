@@ -82,7 +82,7 @@ public class JaxbXmlJavaTypeAdapterFacetFactory extends FacetFactoryAbstract
     public void process(final ProcessClassContext processClassContext) {
         final Class<?> cls = processClassContext.getCls();
 
-        final XmlJavaTypeAdapter annotation = Annotations.getAnnotations(cls, XmlJavaTypeAdapter.class);
+        final XmlJavaTypeAdapter annotation = Annotations.getAnnotation(cls, XmlJavaTypeAdapter.class);
         if(annotation == null) {
             return;
         }
@@ -99,7 +99,7 @@ public class JaxbXmlJavaTypeAdapterFacetFactory extends FacetFactoryAbstract
 
         final Method method = processMethodContext.getMethod();
 
-        final XmlJavaTypeAdapter annotation = Annotations.getAnnotations(method, XmlJavaTypeAdapter.class);
+        final XmlJavaTypeAdapter annotation = Annotations.getAnnotation(method, XmlJavaTypeAdapter.class);
         if(annotation == null) {
             return;
         }

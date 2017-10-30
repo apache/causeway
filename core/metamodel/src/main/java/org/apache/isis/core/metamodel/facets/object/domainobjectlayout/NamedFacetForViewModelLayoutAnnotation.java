@@ -18,24 +18,31 @@
  */
 package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
 
-
 import java.util.List;
+import java.util.Objects;
 
 import com.google.common.base.Strings;
+
+import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.ViewModelLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
-
+import org.apache.isis.core.metamodel.facets.object.domainservicelayout.NamedFacetForDomainServiceLayoutAnnotation;
 
 public class NamedFacetForViewModelLayoutAnnotation extends NamedFacetAbstract {
 
-    public static NamedFacet create(final List<ViewModelLayout> viewModelLayout, final FacetHolder holder) {
-        if(viewModelLayout == null) {
-            return null;
-        }
-        final String named = Strings.emptyToNull(viewModelLayout.named());
-        return named != null ? new NamedFacetForViewModelLayoutAnnotation(named, holder) : null;
+    public static NamedFacet create(
+            final List<ViewModelLayout> viewModelLayouts,
+            final FacetHolder holder) {
+
+        return viewModelLayouts.stream()
+                .map(ViewModelLayout::named)
+                .map(Strings::emptyToNull)
+                .filter(Objects::nonNull)
+                .findFirst()
+                .map(named -> new NamedFacetForViewModelLayoutAnnotation(named, holder))
+                .orElse(null);
     }
 
     private NamedFacetForViewModelLayoutAnnotation(final String value, final FacetHolder holder) {

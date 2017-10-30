@@ -19,27 +19,29 @@
 
 package org.apache.isis.core.metamodel.facets.properties.property.hidden;
 
+import java.util.List;
+
+import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.actions.action.hidden.HiddenFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.members.hidden.HiddenFacetAbstract;
 
 public class HiddenFacetForPropertyAnnotation extends HiddenFacetAbstract {
 
-    public static HiddenFacet create(final Property property, final FacetHolder holder) {
+    public static HiddenFacet create(
+            final List<Property> properties,
+            final FacetHolder holder) {
 
-        if (property == null) {
-            return null;
-        }
-
-        final Where where = property.hidden();
-        if (where != null && where != Where.NOT_SPECIFIED) {
-            return new HiddenFacetForPropertyAnnotation(where, holder);
-        }
-
-        return null;
+        return properties.stream()
+                .map(Property::hidden)
+                .filter(where -> where != null && where != Where.NOT_SPECIFIED)
+                .findFirst()
+                .map(where -> new HiddenFacetForPropertyAnnotation(where, holder))
+                .orElse(null);
     }
 
     private HiddenFacetForPropertyAnnotation(final Where where, final FacetHolder holder) {

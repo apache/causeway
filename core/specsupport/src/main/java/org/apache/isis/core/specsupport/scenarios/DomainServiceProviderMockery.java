@@ -27,7 +27,6 @@ import org.jmock.Mockery;
 import org.jmock.api.Action;
 import org.jmock.api.Invocation;
 
-import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.core.unittestsupport.jmocking.JavassistImposteriser;
@@ -84,7 +83,7 @@ class DomainServiceProviderMockery implements DomainServiceProvider {
             mockRepositoryService = (RepositoryService) mock;
             context.checking(new Expectations() {
                 {
-                    allowing(mockRepositoryService).persist(with(anything()));
+                    allowing(mockRepositoryService).persist(with(Expectations.<T>anything()));
                 }
             });
         }

@@ -19,6 +19,9 @@
 
 package org.apache.isis.core.metamodel.facets.properties.propertylayout;
 
+import java.util.List;
+import java.util.Objects;
+
 import com.google.common.base.Strings;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -27,12 +30,17 @@ import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacetAbs
 
 public class DescribedAsFacetForPropertyLayoutAnnotation extends DescribedAsFacetAbstract {
 
-    public static DescribedAsFacet create(PropertyLayout propertyLayout, FacetHolder holder) {
-        if(propertyLayout == null) {
-            return null;
-        }
-        final String describedAs = Strings.emptyToNull(propertyLayout.describedAs());
-        return describedAs != null ? new DescribedAsFacetForPropertyLayoutAnnotation(describedAs, holder) : null;
+    public static DescribedAsFacet create(
+            final List<PropertyLayout> propertyLayouts,
+            final FacetHolder holder) {
+
+        return propertyLayouts.stream()
+                .map(PropertyLayout::describedAs)
+                .map(Strings::emptyToNull)
+                .filter(Objects::nonNull)
+                .findFirst()
+                .map(describedAs -> new DescribedAsFacetForPropertyLayoutAnnotation(describedAs, holder))
+                .orElse(null);
     }
 
     private DescribedAsFacetForPropertyLayoutAnnotation(String value, FacetHolder holder) {

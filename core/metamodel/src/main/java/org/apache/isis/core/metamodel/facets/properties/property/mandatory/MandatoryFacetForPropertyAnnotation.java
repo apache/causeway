@@ -20,6 +20,8 @@
 package org.apache.isis.core.metamodel.facets.properties.property.mandatory;
 
 import java.lang.reflect.Method;
+import java.util.List;
+
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -33,31 +35,33 @@ public abstract class MandatoryFacetForPropertyAnnotation extends MandatoryFacet
     }
 
     public static MandatoryFacet create(
-            final Property property,
+            final List<Property> properties,
             final Method method,
             final FacetHolder holder) {
-
-        if (property == null) {
-            return null;
-        }
 
         final Class<?> returnType = method.getReturnType();
         if (returnType.isPrimitive()) {
             return new MandatoryFacetForPropertyAnnotation.Primitive(holder);
         }
 
-        final Optionality optionality = property.optionality();
-        switch (optionality) {
-            case DEFAULT:
-                // do nothing here; instead will rely on MandatoryFromJdoColumnAnnotationFacetFactory to perform
-                // the remaining processing
-                return null;
-            case MANDATORY:
-                return new MandatoryFacetForPropertyAnnotation.Required(holder);
-            case OPTIONAL:
-                return new MandatoryFacetForPropertyAnnotation.Optional(holder);
-        }
-        return null;
+        return properties.stream()
+                .map(Property::optionality)
+                .filter(optionality -> optionality != Optionality.NOT_SPECIFIED)
+                .findFirst()
+                .map(optionality -> {
+                    switch (optionality) {
+                        case DEFAULT:
+                            // do nothing here; instead will rely on MandatoryFromJdoColumnAnnotationFacetFactory to perform
+                            // the remaining processing
+                            return null;
+                        case MANDATORY:
+                            return new MandatoryFacetForPropertyAnnotation.Required(holder);
+                        case OPTIONAL:
+                            return new MandatoryFacetForPropertyAnnotation.Optional(holder);
+                    }
+                    throw new IllegalStateException("optionality '" + optionality + "' not recognised");
+                })
+                .orElse(null);
     }
 
     public static class Primitive extends MandatoryFacetForPropertyAnnotation {

@@ -62,7 +62,12 @@ public enum PromptStyle {
      * </p>
      *
      */
-    INLINE_AS_IF_EDIT;
+    INLINE_AS_IF_EDIT,
+    /**
+     * Ignore the value provided by this annotation (meaning that the framework will keep searching, in meta
+     * annotations or superclasses/interfaces).
+     */
+    NOT_SPECIFIED;
 
     public boolean isDialog() { return this == DIALOG; }
     public boolean isInline() { return this == INLINE; }

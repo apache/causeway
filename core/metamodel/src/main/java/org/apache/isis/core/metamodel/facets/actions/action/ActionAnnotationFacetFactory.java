@@ -102,24 +102,21 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
             // Set up ActionDomainEventFacet, which will act as the hiding/disabling/validating advisor
             //
             final List<Action> actions = Annotations.getAnnotations(actionMethod, Action.class);
-            final Class<? extends ActionDomainEvent<?>> actionDomainEventType;
 
-            final ActionDomainEventFacetAbstract actionDomainEventFacet;
+            // search for @Action(domainEvent=...), else use the default event type
+            final ActionDomainEventFacetAbstract actionDomainEventFacet =
+                    actions.stream()
+                    .map(Action::domainEvent)
+                    .filter(domainEvent -> domainEvent != ActionDomainEvent.Default.class)
+                    .findFirst()
+                    .map(domainEvent ->
+                            (ActionDomainEventFacetAbstract) new ActionDomainEventFacetForActionAnnotation(
+                                    domainEvent, servicesInjector, getSpecificationLoader(), holder))
+                    .orElse(
+                            new ActionDomainEventFacetDefault(
+                                    ActionDomainEvent.Default.class, servicesInjector, getSpecificationLoader(), holder)
+                    );
 
-
-
-            // search for @Action(domainEvent=...)
-            if(actions != null) {
-                actionDomainEventType = actions.domainEvent();
-                actionDomainEventFacet = new ActionDomainEventFacetForActionAnnotation(
-                        actionDomainEventType, servicesInjector, getSpecificationLoader(), holder);
-            } else
-            // else use default event type
-            {
-                actionDomainEventType = ActionDomainEvent.Default.class;
-                actionDomainEventFacet = new ActionDomainEventFacetDefault(
-                        actionDomainEventType, servicesInjector, getSpecificationLoader(), holder);
-            }
             if(EventUtil.eventTypeIsPostable(
                     actionDomainEventFacet.getEventType(),
                     ActionDomainEvent.Noop.class,
@@ -132,16 +129,16 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
             // emit the appropriate domain event and then delegate onto the underlying
 
             final ActionInvocationFacetForDomainEventAbstract actionInvocationFacet;
-            if (actions != null) {
+            if (actionDomainEventFacet instanceof ActionDomainEventFacetForActionAnnotation) {
                 actionInvocationFacet = new ActionInvocationFacetForDomainEventFromActionAnnotation(
-                        actionDomainEventType, actionMethod, typeSpec, returnSpec, holder,
+                        actionDomainEventFacet.getEventType(), actionMethod, typeSpec, returnSpec, holder,
                         servicesInjector
                 );
             } else
             // default
             {
                 actionInvocationFacet = new ActionInvocationFacetForDomainEventFromDefault(
-                        actionDomainEventType, actionMethod, typeSpec, returnSpec, holder,
+                        actionDomainEventFacet.getEventType(), actionMethod, typeSpec, returnSpec, holder,
                         servicesInjector
                 );
             }
@@ -264,14 +261,13 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
         }
 
         // check for @Action(typeOf=...)
-        TypeOfFacet typeOfFacet = null;
         final List<Action> actions = Annotations.getAnnotations(method, Action.class);
-        if (actions != null) {
-            final Class<?> typeOf = actions.typeOf();
-            if(typeOf != null && typeOf != Object.class) {
-                typeOfFacet = new TypeOfFacetForActionAnnotation(typeOf, getSpecificationLoader(), holder);
-            }
-        }
+        TypeOfFacet typeOfFacet = actions.stream()
+                .map(Action::typeOf)
+                .filter(typeOf -> typeOf != null && typeOf != Object.class)
+                .findFirst()
+                .map(typeOf -> new TypeOfFacetForActionAnnotation(typeOf, getSpecificationLoader(), holder))
+                .orElse(null);
 
         // infer from return type
         if(typeOfFacet == null) {

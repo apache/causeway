@@ -42,7 +42,7 @@ public class JdoPrimaryKeyAnnotationFacetFactory extends FacetFactoryAbstract {
             return;
         }
 
-        final PrimaryKey annotation = Annotations.getAnnotations(processMethodContext.getMethod(), PrimaryKey.class);
+        final PrimaryKey annotation = Annotations.getAnnotation(processMethodContext.getMethod(), PrimaryKey.class);
         if (annotation == null) {
             return;
         }

@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.collections.layout;
 
 import java.util.List;
+import java.util.Objects;
 
 import com.google.common.base.Strings;
 
@@ -34,12 +35,16 @@ public class DefaultViewFacetForCollectionLayoutAnnotation extends DefaultViewFa
         super(value, holder);
     }
 
-    public static DefaultViewFacet create(List<CollectionLayout> collectionLayout, FacetHolder holder) {
-        if (collectionLayout == null) {
-            return null;
-        }
+    public static DefaultViewFacet create(
+            final List<CollectionLayout> collectionLayouts,
+            final FacetHolder holder) {
 
-        final String defaultView = Strings.emptyToNull(collectionLayout.defaultView());
-        return defaultView != null ? new DefaultViewFacetForCollectionLayoutAnnotation(defaultView, holder) : null;
+        return collectionLayouts.stream()
+                .map(CollectionLayout::defaultView)
+                .map(Strings::emptyToNull)
+                .filter(Objects::nonNull)
+                .findFirst()
+                .map(defaultView -> new DefaultViewFacetForCollectionLayoutAnnotation(defaultView, holder))
+                .orElse(null);
     }
 }

@@ -66,7 +66,12 @@ public enum SemanticsOf {
      * <p>
      * An example is increasing the quantity of a line item in an Order by 1.
      */
-    NON_IDEMPOTENT_ARE_YOU_SURE;
+    NON_IDEMPOTENT_ARE_YOU_SURE,
+    /**
+     * Ignore the value provided by this annotation (meaning that the framework will keep searching, in meta
+     * annotations or superclasses/interfaces).
+     */
+    NOT_SPECIFIED;
 
     public String getFriendlyName() {
         return Enums.getFriendlyNameOf(this);

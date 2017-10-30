@@ -20,6 +20,7 @@ package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
 
 
 import java.util.List;
+import java.util.Objects;
 
 import com.google.common.base.Strings;
 import org.apache.isis.applib.annotation.ViewModelLayout;
@@ -30,12 +31,14 @@ import org.apache.isis.core.metamodel.facets.object.plural.PluralFacetAbstract;
 
 public class PluralFacetForViewModelLayoutAnnotation extends PluralFacetAbstract {
 
-    public static PluralFacet create(final List<ViewModelLayout> viewModelLayout, final FacetHolder holder) {
-        if(viewModelLayout == null) {
-            return null;
-        }
-        final String plural = Strings.emptyToNull(viewModelLayout.plural());
-        return plural != null ? new PluralFacetForViewModelLayoutAnnotation(plural, holder) : null;
+    public static PluralFacet create(final List<ViewModelLayout> viewModelLayouts, final FacetHolder holder) {
+        return viewModelLayouts.stream()
+                .map(ViewModelLayout::plural)
+                .map(Strings::emptyToNull)
+                .filter(Objects::nonNull)
+                .findFirst()
+                .map(plural -> new PluralFacetForViewModelLayoutAnnotation(plural, holder))
+                .orElse(null);
     }
 
     private PluralFacetForViewModelLayoutAnnotation(final String value, final FacetHolder holder) {

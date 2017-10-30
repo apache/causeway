@@ -30,21 +30,16 @@ import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFa
 public class ActionSemanticsFacetForActionAnnotation extends ActionSemanticsFacetAbstract {
 
     public static ActionSemanticsFacet create(
-            final List<Action> action,
+            final List<Action> actions,
             final FacetHolder holder) {
 
-        if(action == null) {
-            return null;
-        }
-
-        final SemanticsOf semantics = action.semantics();
-        if(action.semantics() == null) {
-            // don't think this can happen, therefore will return a facet with the default, ie NON_IDEMPOTENT
-            return null;
-        }
-
-        return new ActionSemanticsFacetForActionAnnotation(
-                semantics, holder);
+        return actions.stream()
+                .map(Action::semantics)
+                .filter(semanticsOf -> semanticsOf != SemanticsOf.NOT_SPECIFIED)
+                .findFirst()
+                .map(semanticsOf ->
+                        (ActionSemanticsFacet)new ActionSemanticsFacetForActionAnnotation(semanticsOf, holder))
+                .orElse(new ActionSemanticsFacetForActionAnnotation(SemanticsOf.NON_IDEMPOTENT, holder));
     }
 
     private ActionSemanticsFacetForActionAnnotation(SemanticsOf of, final FacetHolder holder) {
