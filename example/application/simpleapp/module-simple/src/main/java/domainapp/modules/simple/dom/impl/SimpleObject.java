@@ -25,17 +25,15 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.Parameter;
-import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Title;
-import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.applib.util.ObjectContracts;
 
+import domainapp.modules.simple.dom.types.Name;
 import lombok.AccessLevel;
 
 @javax.jdo.annotations.PersistenceCapable(
@@ -62,11 +60,11 @@ import lombok.AccessLevel;
 @lombok.RequiredArgsConstructor(staticName = "create")
 public class SimpleObject implements Comparable<SimpleObject> {
 
-    @javax.jdo.annotations.Column(allowsNull = "false", length = 40)
+
+    @javax.jdo.annotations.Column(allowsNull = "false", length = Name.MAX_LEN)
     @lombok.NonNull
-    @Property() // editing disabled by default, see isis.properties
     @Title(prepend = "Object: ")
-    private String name;
+    @Name private String name;
 
     @javax.jdo.annotations.Column(allowsNull = "true", length = 4000)
     @Property(editing = Editing.ENABLED)
@@ -76,9 +74,7 @@ public class SimpleObject implements Comparable<SimpleObject> {
     //region > updateName (action)
     @Action(semantics = SemanticsOf.IDEMPOTENT)
     public SimpleObject updateName(
-            @Parameter(maxLength = 40)
-            @ParameterLayout(named = "Name")
-            final String name) {
+            @Name final String name) {
         setName(name);
         return this;
     }
@@ -87,9 +83,6 @@ public class SimpleObject implements Comparable<SimpleObject> {
         return getName();
     }
 
-    public TranslatableString validate0UpdateName(final String name) {
-        return name != null && name.contains("!") ? TranslatableString.tr("Exclamation mark is not allowed") : null;
-    }
     //endregion
 
     //region > delete (action)
