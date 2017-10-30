@@ -294,7 +294,7 @@ public final class Annotations  {
 
 
         // search for field
-        if ( !shouldSearchForField(annotationClass) ) {
+        if ( shouldSearchForField(annotationClass) ) {
 
             final List<String> fieldNameCandidates = fieldNameCandidatesFor(method.getName());
             for (String fieldNameCandidate : fieldNameCandidates) {

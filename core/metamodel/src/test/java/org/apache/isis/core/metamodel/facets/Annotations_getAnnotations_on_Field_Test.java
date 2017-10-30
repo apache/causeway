@@ -12,36 +12,26 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import org.apache.isis.applib.annotation.Meta;
+import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.Publishing;
 
 import static org.hamcrest.CoreMatchers.is;
 
-public class Annotations_getAnnotations_on_Method_Test {
+public class Annotations_getAnnotations_on_Field_Test {
 
-
-    @Inherited
-    @Target({ ElementType.METHOD, ElementType.ANNOTATION_TYPE })
-    @Retention(RetentionPolicy.RUNTIME)
-    public @interface DomainObj { // cf @DomainObject
-        enum Publishng { // cf Publishing enum
-            YES,
-            NO,
-            NOT_SPECIFIED
-        }
-        Publishng publishng() default Publishng.NOT_SPECIFIED;
-    }
 
     @Meta
-    @DomainObj(publishng = DomainObj.Publishng.YES)
+    @Property(publishing = Publishing.ENABLED)
     @Inherited
-    @Target({ ElementType.METHOD, ElementType.ANNOTATION_TYPE })
+    @Target({ ElementType.FIELD, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     @interface Published {
     }
 
     @Meta
-    @DomainObj(publishng = DomainObj.Publishng.NO)
+    @Property(publishing = Publishing.DISABLED)
     @Inherited
-    @Target({ ElementType.METHOD, ElementType.ANNOTATION_TYPE })
+    @Target({ ElementType.FIELD, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     @interface NotPublished {
     }
@@ -49,7 +39,7 @@ public class Annotations_getAnnotations_on_Method_Test {
     @Meta
     @Published
     @Inherited
-    @Target({ ElementType.METHOD, ElementType.ANNOTATION_TYPE })
+    @Target({ ElementType.FIELD, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     @interface MetaPublished {
     }
@@ -58,16 +48,20 @@ public class Annotations_getAnnotations_on_Method_Test {
     public void direct() throws Exception {
 
         class SomeDomainObject {
-            @DomainObj(publishng = DomainObj.Publishng.YES)
-            public void updateName(String name) {}
+            @Property(publishing = Publishing.ENABLED)
+            private String name;
+
+            public String getName() {
+                return name;
+            }
         }
 
-        Method method = SomeDomainObject.class.getMethod("updateName", String.class);
-        final List<DomainObj> annotations = Annotations.getAnnotations(method, DomainObj.class);
+        Method method = SomeDomainObject.class.getMethod("getName");
+        final List<Property> annotations = Annotations.getAnnotations(method, Property.class);
 
         Assert.assertThat(annotations.size(), is(1));
 
-        Assert.assertThat(annotations.get(0).publishng(), is(DomainObj.Publishng.YES));
+        Assert.assertThat(annotations.get(0).publishing(), is(Publishing.ENABLED));
     }
 
     @Test
@@ -75,15 +69,18 @@ public class Annotations_getAnnotations_on_Method_Test {
 
         class SomeDomainObject {
             @Published
-            public void updateName(String name) {}
+            private String name;
+            public String getName() {
+                return name;
+            }
         }
 
-        Method method = SomeDomainObject.class.getMethod("updateName", String.class);
-        final List<DomainObj> annotations = Annotations.getAnnotations(method, DomainObj.class);
+        Method method = SomeDomainObject.class.getMethod("getName");
+        final List<Property> annotations = Annotations.getAnnotations(method, Property.class);
 
         Assert.assertThat(annotations.size(), is(1));
 
-        Assert.assertThat(annotations.get(0).publishng(), is(DomainObj.Publishng.YES));
+        Assert.assertThat(annotations.get(0).publishing(), is(Publishing.ENABLED));
     }
 
     @Test
@@ -91,15 +88,18 @@ public class Annotations_getAnnotations_on_Method_Test {
 
         class SomeDomainObject {
             @MetaPublished
-            public void updateName(String name) {}
+            private String name;
+            public String getName() {
+                return name;
+            }
         }
 
-        Method method = SomeDomainObject.class.getMethod("updateName", String.class);
-        final List<DomainObj> annotations = Annotations.getAnnotations(method, DomainObj.class);
+        Method method = SomeDomainObject.class.getMethod("getName");
+        final List<Property> annotations = Annotations.getAnnotations(method, Property.class);
 
         Assert.assertThat(annotations.size(), is(1));
 
-        Assert.assertThat(annotations.get(0).publishng(), is(DomainObj.Publishng.YES));
+        Assert.assertThat(annotations.get(0).publishing(), is(Publishing.ENABLED));
     }
 
     @Test
@@ -108,16 +108,19 @@ public class Annotations_getAnnotations_on_Method_Test {
         class SomeDomainObject {
             @MetaPublished
             @Published
-            public void updateName(String name) {}
+            private String name;
+            public String getName() {
+                return name;
+            }
         }
 
-        Method method = SomeDomainObject.class.getMethod("updateName", String.class);
-        final List<DomainObj> annotations = Annotations.getAnnotations(method, DomainObj.class);
+        Method method = SomeDomainObject.class.getMethod("getName");
+        final List<Property> annotations = Annotations.getAnnotations(method, Property.class);
 
         Assert.assertThat(annotations.size(), is(2));
 
-        Assert.assertThat(annotations.get(0).publishng(), is(DomainObj.Publishng.YES));
-        Assert.assertThat(annotations.get(1).publishng(), is(DomainObj.Publishng.YES));
+        Assert.assertThat(annotations.get(0).publishing(), is(Publishing.ENABLED));
+        Assert.assertThat(annotations.get(1).publishing(), is(Publishing.ENABLED));
     }
 
     @Test
@@ -126,16 +129,19 @@ public class Annotations_getAnnotations_on_Method_Test {
         class SomeDomainObject {
             @MetaPublished
             @NotPublished
-            public void updateName(String name) {}
+            private String name;
+            public String getName() {
+                return name;
+            }
         }
 
-        Method method = SomeDomainObject.class.getMethod("updateName", String.class);
-        final List<DomainObj> annotations = Annotations.getAnnotations(method, DomainObj.class);
+        Method method = SomeDomainObject.class.getMethod("getName");
+        final List<Property> annotations = Annotations.getAnnotations(method, Property.class);
 
         Assert.assertThat(annotations.size(), is(2));
 
-        Assert.assertThat(annotations.get(0).publishng(), is(DomainObj.Publishng.NO));
-        Assert.assertThat(annotations.get(1).publishng(), is(DomainObj.Publishng.YES));
+        Assert.assertThat(annotations.get(0).publishing(), is(Publishing.DISABLED));
+        Assert.assertThat(annotations.get(1).publishing(), is(Publishing.ENABLED));
     }
 
     @Test
@@ -144,18 +150,21 @@ public class Annotations_getAnnotations_on_Method_Test {
         class SomeDomainObject {
             @MetaPublished
             @Published
-            @DomainObj(publishng = DomainObj.Publishng.NO)
-            public void updateName(String name) {}
+            @Property(publishing = Publishing.DISABLED)
+            private String name;
+            public String getName() {
+                return name;
+            }
         }
 
-        Method method = SomeDomainObject.class.getMethod("updateName", String.class);
-        final List<DomainObj> annotations = Annotations.getAnnotations(method, DomainObj.class);
+        Method method = SomeDomainObject.class.getMethod("getName");
+        final List<Property> annotations = Annotations.getAnnotations(method, Property.class);
 
         Assert.assertThat(annotations.size(), is(3));
 
-        Assert.assertThat(annotations.get(0).publishng(), is(DomainObj.Publishng.NO));
-        Assert.assertThat(annotations.get(1).publishng(), is(DomainObj.Publishng.YES));
-        Assert.assertThat(annotations.get(2).publishng(), is(DomainObj.Publishng.YES));
+        Assert.assertThat(annotations.get(0).publishing(), is(Publishing.DISABLED));
+        Assert.assertThat(annotations.get(1).publishing(), is(Publishing.ENABLED));
+        Assert.assertThat(annotations.get(2).publishing(), is(Publishing.ENABLED));
     }
 
 
@@ -165,18 +174,21 @@ public class Annotations_getAnnotations_on_Method_Test {
         class SomeDomainObject {
             @MetaPublished
             @NotPublished
-            @DomainObj(publishng = DomainObj.Publishng.YES)
-            public void updateName(String name) {}
+            @Property(publishing = Publishing.ENABLED)
+            private String name;
+            public String getName() {
+                return name;
+            }
         }
 
-        Method method = SomeDomainObject.class.getMethod("updateName", String.class);
-        final List<DomainObj> annotations = Annotations.getAnnotations(method, DomainObj.class);
+        Method method = SomeDomainObject.class.getMethod("getName");
+        final List<Property> annotations = Annotations.getAnnotations(method, Property.class);
 
         Assert.assertThat(annotations.size(), is(3));
 
-        Assert.assertThat(annotations.get(0).publishng(), is(DomainObj.Publishng.YES));
-        Assert.assertThat(annotations.get(1).publishng(), is(DomainObj.Publishng.NO));
-        Assert.assertThat(annotations.get(2).publishng(), is(DomainObj.Publishng.YES));
+        Assert.assertThat(annotations.get(0).publishing(), is(Publishing.ENABLED));
+        Assert.assertThat(annotations.get(1).publishing(), is(Publishing.DISABLED));
+        Assert.assertThat(annotations.get(2).publishing(), is(Publishing.ENABLED));
     }
 
 }
