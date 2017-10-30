@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(
         namespace = "http://isis.apache.org/applib/layout/component"
 )
-public enum RenderDayPolicy {
+public enum RenderDay {
     AS_DAY,
     /**
      * Equivalent to <tt>@PropertyLayout(renderAsDayBefore=true)</tt> prior to Isis 2.x

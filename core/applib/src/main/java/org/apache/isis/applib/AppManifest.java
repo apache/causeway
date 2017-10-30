@@ -20,7 +20,6 @@
 package org.apache.isis.applib;
 
 import java.io.UnsupportedEncodingException;
-import java.lang.annotation.Annotation;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
@@ -224,16 +223,6 @@ public interface AppManifest {
         }
         //endregion
 
-        //region > metaAnnotationTypes
-        private Set<Class<? extends Annotation>> metaAnnotationTypes;
-
-        public Set<Class<? extends Annotation>> getMetaAnnotationTypes() {
-            return metaAnnotationTypes;
-        }
-        public void setMetaAnnotationTypes(final Set<Class<? extends Annotation>> metaAnnotationTypes) {
-            this.metaAnnotationTypes = metaAnnotationTypes;
-        }
-        //endregion
 
         //region > domainServiceTypes
         private Set<Class<?>> domainServiceTypes;

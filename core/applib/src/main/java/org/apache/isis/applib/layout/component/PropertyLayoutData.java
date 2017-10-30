@@ -31,7 +31,7 @@ import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.PromptStyle;
-import org.apache.isis.applib.annotation.RenderDayPolicy;
+import org.apache.isis.applib.annotation.RenderDay;
 import org.apache.isis.applib.annotation.Repainting;
 import org.apache.isis.applib.annotation.Where;
 
@@ -194,24 +194,24 @@ public class PropertyLayoutData
     @Deprecated
     @XmlAttribute(required = false)
     public Boolean getRenderedAsDayBefore() {
-        return getRenderDay() != null ? getRenderDay() == RenderDayPolicy.AS_DAY_BEFORE : null;
+        return getRenderDay() != null ? getRenderDay() == RenderDay.AS_DAY_BEFORE : null;
     }
 
     public void setRenderedAsDayBefore(Boolean renderedAsDayBefore) {
         if(getRenderDay() == null && renderedAsDayBefore != null) {
-            setRenderDay(renderedAsDayBefore ? RenderDayPolicy.AS_DAY_BEFORE : RenderDayPolicy.AS_DAY);
+            setRenderDay(renderedAsDayBefore ? RenderDay.AS_DAY_BEFORE : RenderDay.AS_DAY);
         }
     }
 
 
-    private RenderDayPolicy renderDay;
+    private RenderDay renderDay;
 
     @XmlAttribute(required = false)
-    public RenderDayPolicy getRenderDay() {
+    public RenderDay getRenderDay() {
         return renderDay;
     }
 
-    public void setRenderDay(final RenderDayPolicy renderDay) {
+    public void setRenderDay(final RenderDay renderDay) {
         this.renderDay = renderDay;
     }
 

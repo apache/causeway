@@ -42,7 +42,6 @@ import org.apache.isis.core.metamodel.facets.actions.defaults.ActionDefaultsFace
 import org.apache.isis.core.metamodel.facets.actions.defaults.method.ActionDefaultsFacetViaMethod;
 import org.apache.isis.core.metamodel.facets.actions.defaults.method.ActionDefaultsFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.actions.interaction.ActionNamedFacetFactory;
-import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacet;
 import org.apache.isis.core.metamodel.facets.actions.validate.ActionValidationFacet;
 import org.apache.isis.core.metamodel.facets.actions.validate.method.ActionValidationFacetViaMethod;
 import org.apache.isis.core.metamodel.facets.actions.validate.method.ActionValidationFacetViaMethodFactory;
@@ -162,33 +161,6 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         assertEquals("An Action With Named Annotation", namedFacet.value());
     }
 
-
-    public void testPicksUpExplorationPrefixAndSetsNameAppropriatelyAlso() {
-        final ActionNamedFacetFactory facetFactory = new ActionNamedFacetFactory();
-
-        facetFactory.setServicesInjector(mockServicesInjector);
-
-        // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
-        allowing_specificationLoader_loadSpecification_any_willReturn(this.voidSpec);
-
-        class Customer {
-            @SuppressWarnings("unused")
-            public void explorationAnActionWithExplorationPrefix() {
-            }
-        }
-        final Method method = findMethod(Customer.class, "explorationAnActionWithExplorationPrefix");
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, method, methodRemover, facetedMethod));
-
-        Facet facet = facetedMethod.getFacet(PrototypeFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof PrototypeFacet);
-
-        facet = facetedMethod.getFacet(NamedFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof NamedFacet);
-        final NamedFacet namedFacet = (NamedFacet) facet;
-        assertEquals("An Action With Exploration Prefix", namedFacet.value());
-    }
 
     public void testInstallsValidateMethodNoArgsFacetAndRemovesMethod() {
         final ActionValidationFacetViaMethodFactory facetFactory = new ActionValidationFacetViaMethodFactory();

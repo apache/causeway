@@ -22,7 +22,7 @@ package org.apache.isis.core.metamodel.facets.properties.propertylayout;
 import java.util.List;
 
 import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.RenderDayPolicy;
+import org.apache.isis.applib.annotation.RenderDay;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.objectvalue.renderedadjusted.RenderedAdjustedFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.renderedadjusted.RenderedAdjustedFacetAbstract;
@@ -35,7 +35,7 @@ public class RenderedAdjustedFacetForPropertyLayoutAnnotation extends RenderedAd
 
         return propertyLayouts.stream()
                 .map(PropertyLayout::renderDay)
-                .filter(renderDay -> renderDay != RenderDayPolicy.NOT_SPECIFIED)
+                .filter(renderDay -> renderDay != RenderDay.NOT_SPECIFIED)
                 .findFirst()
                 .map(renderDay -> {
                     switch (renderDay) {

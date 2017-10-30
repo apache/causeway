@@ -34,7 +34,8 @@ public class RegExFacetForPatternAnnotationOnProperty extends RegExFacetAbstract
     private final Pattern pattern;
 
     public static RegExFacet create(
-            final List<javax.validation.constraints.Pattern> patterns, final Class<?> returnType, final FacetHolder holder) {
+            final List<javax.validation.constraints.Pattern> patterns,
+            final Class<?> returnType, final FacetHolder holder) {
 
         if (!Annotations.isString(returnType)) {
             return null;

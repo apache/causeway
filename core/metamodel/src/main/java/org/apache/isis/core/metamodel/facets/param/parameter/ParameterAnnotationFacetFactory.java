@@ -19,8 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.param.parameter;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.util.List;
 
 import javax.annotation.Nullable;
 import javax.validation.constraints.Pattern;
@@ -34,7 +34,6 @@ import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
-import org.apache.isis.core.metamodel.facets.objectvalue.regex.RegExFacet;
 import org.apache.isis.core.metamodel.facets.param.parameter.fileaccept.FileAcceptFacetForParameterAnnotation;
 import org.apache.isis.core.metamodel.facets.param.parameter.mandatory.MandatoryFacetForParameterAnnotation;
 import org.apache.isis.core.metamodel.facets.param.parameter.mandatory.MandatoryFacetInvertedByNullableAnnotationOnParameter;
@@ -76,16 +75,9 @@ public class ParameterAnnotationFacetFactory extends FacetFactoryAbstract implem
         final Method method = processParameterContext.getMethod();
         final int paramNum = processParameterContext.getParamNum();
         final FacetedMethodParameter holder = processParameterContext.getFacetHolder();
-        final Annotation[] parameterAnnotations = Annotations.getParameterAnnotations(method)[paramNum];
+        final List<Parameter> parameters = Annotations.getAnnotations(method, paramNum, Parameter.class);
 
-        for (final Annotation parameterAnnotation : parameterAnnotations) {
-            if (parameterAnnotation instanceof Parameter) {
-                final Parameter parameter = (Parameter) parameterAnnotation;
-                FacetUtil.addFacet(
-                        MaxLengthFacetForParameterAnnotation.create(parameter, holder));
-                return;
-            }
-        }
+        FacetUtil.addFacet(MaxLengthFacetForParameterAnnotation.create(parameters, holder));
     }
 
     void processParamsMustSatisfy(final ProcessParameterContext processParameterContext) {
@@ -93,16 +85,10 @@ public class ParameterAnnotationFacetFactory extends FacetFactoryAbstract implem
         final Method method = processParameterContext.getMethod();
         final int paramNum = processParameterContext.getParamNum();
         final FacetedMethodParameter holder = processParameterContext.getFacetHolder();
-        final Annotation[] parameterAnnotations = Annotations.getParameterAnnotations(method)[paramNum];
+        final List<Parameter> parameters = Annotations.getAnnotations(method, paramNum, Parameter.class);
 
-        for (final Annotation parameterAnnotation : parameterAnnotations) {
-            if (parameterAnnotation instanceof Parameter) {
-                final Parameter parameter = (Parameter) parameterAnnotation;
-                FacetUtil.addFacet(
-                        MustSatisfySpecificationFacetForParameterAnnotation.create(parameter, holder, servicesInjector));
-                return;
-            }
-        }
+        FacetUtil.addFacet(
+                MustSatisfySpecificationFacetForParameterAnnotation.create(parameters, holder, servicesInjector));
     }
 
     void processParamsRegEx(final ProcessParameterContext processParameterContext) {
@@ -111,29 +97,16 @@ public class ParameterAnnotationFacetFactory extends FacetFactoryAbstract implem
         final int paramNum = processParameterContext.getParamNum();
         final FacetedMethodParameter holder = processParameterContext.getFacetHolder();
         final Class<?>[] parameterTypes = method.getParameterTypes();
-        final Annotation[] parameterAnnotations = Annotations.getParameterAnnotations(method)[paramNum];
+        final Class<?> parameterType = parameterTypes[paramNum];
 
-        for (final Annotation parameterAnnotation : parameterAnnotations) {
-            final Class<?> parameterType = parameterTypes[paramNum];
-            if (parameterAnnotation instanceof Pattern) {
 
-                final Pattern annotation = (Pattern) parameterAnnotation;
-                final RegExFacet facet = RegExFacetForPatternAnnotationOnParameter
-                        .create(annotation, parameterType, holder);
-                FacetUtil.addFacet(facet);
-                return;
-            }
-        }
+        final List<Pattern> patterns = Annotations.getAnnotations(method, paramNum, Pattern.class);
+        FacetUtil.addFacet(
+                RegExFacetForPatternAnnotationOnParameter.create(patterns, parameterType, holder));
 
-        for (final Annotation parameterAnnotation : parameterAnnotations) {
-            if (parameterAnnotation instanceof Parameter) {
-                final Parameter parameter = (Parameter) parameterAnnotation;
-                final Class<?> parameterType = parameterTypes[paramNum];
-                FacetUtil.addFacet(
-                        RegExFacetForParameterAnnotation.create(parameter, parameterType, holder));
-                return;
-            }
-        }
+        final List<Parameter> parameters = Annotations.getAnnotations(method, paramNum, Parameter.class);
+        FacetUtil.addFacet(
+                RegExFacetForParameterAnnotation.create(parameters, parameterType, holder));
     }
 
     void processParamsOptional(final ProcessParameterContext processParameterContext) {
@@ -142,31 +115,22 @@ public class ParameterAnnotationFacetFactory extends FacetFactoryAbstract implem
         final int paramNum = processParameterContext.getParamNum();
         final FacetedMethodParameter holder = processParameterContext.getFacetHolder();
         final Class<?>[] parameterTypes = method.getParameterTypes();
-        final Annotation[] parameterAnnotations = Annotations.getParameterAnnotations(method)[paramNum];
+        final Class<?> parameterType = parameterTypes[paramNum];
 
-        for (final Annotation parameterAnnotation : parameterAnnotations) {
-            final Class<?> parameterType = parameterTypes[paramNum];
-            if (parameterAnnotation instanceof javax.annotation.Nullable) {
-                final Nullable annotation = (Nullable) parameterAnnotation;
-                final MandatoryFacet facet =
-                        MandatoryFacetInvertedByNullableAnnotationOnParameter.create(annotation, parameterType, holder);
-                FacetUtil.addFacet(facet);
-                conflictingOptionalityValidator.flagIfConflict(
-                        facet, "Conflicting @Nullable with other optionality annotation");
-            }
-        }
+        final List<Nullable> nullabilities = Annotations.getAnnotations(method, paramNum, Nullable.class);
+        final MandatoryFacet facet =
+                MandatoryFacetInvertedByNullableAnnotationOnParameter.create(nullabilities, parameterType, holder);
+        FacetUtil.addFacet(facet);
+        conflictingOptionalityValidator.flagIfConflict(
+                facet, "Conflicting @Nullable with other optionality annotation");
 
-        for (final Annotation parameterAnnotation : parameterAnnotations) {
-            if (parameterAnnotation instanceof Parameter) {
-                final Parameter parameter = (Parameter) parameterAnnotation;
-                final Class<?> parameterType = parameterTypes[paramNum];
-                final MandatoryFacet facet =
-                        MandatoryFacetForParameterAnnotation.create(parameter, parameterType, holder);
-                FacetUtil.addFacet(facet);
-                conflictingOptionalityValidator.flagIfConflict(
-                        facet, "Conflicting @Parameter#optionality with other optionality annotation");
-            }
-        }
+        final List<Parameter> parameters = Annotations.getAnnotations(method, paramNum, Parameter.class);
+        final MandatoryFacet mandatoryFacet =
+                MandatoryFacetForParameterAnnotation.create(parameters, parameterType, holder);
+        FacetUtil.addFacet(mandatoryFacet);
+        conflictingOptionalityValidator.flagIfConflict(
+                mandatoryFacet, "Conflicting @Parameter#optionality with other optionality annotation");
+
     }
 
     void processParamsFileAccept(final ProcessParameterContext processParameterContext) {
@@ -174,16 +138,9 @@ public class ParameterAnnotationFacetFactory extends FacetFactoryAbstract implem
         final Method method = processParameterContext.getMethod();
         final int paramNum = processParameterContext.getParamNum();
         final FacetedMethodParameter holder = processParameterContext.getFacetHolder();
-        final Annotation[] parameterAnnotations = Annotations.getParameterAnnotations(method)[paramNum];
+        final List<Parameter> parameters = Annotations.getAnnotations(method, paramNum, Parameter.class);
 
-        for (final Annotation parameterAnnotation : parameterAnnotations) {
-            if (parameterAnnotation instanceof Parameter) {
-                final Parameter parameter = (Parameter) parameterAnnotation;
-                FacetUtil.addFacet(
-                        FileAcceptFacetForParameterAnnotation.create(parameter, holder));
-                return;
-            }
-        }
+        FacetUtil.addFacet(FileAcceptFacetForParameterAnnotation.create(parameters, holder));
     }
 
 

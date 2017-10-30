@@ -19,20 +19,28 @@
 
 package org.apache.isis.core.metamodel.facets.param.layout;
 
+import java.util.List;
+
 import com.google.common.base.Strings;
+
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
+import org.apache.isis.core.metamodel.facets.properties.propertylayout.NamedFacetForPropertyLayoutAnnotation;
 
 public class NamedFacetForParameterLayoutAnnotation extends NamedFacetAbstract {
 
-    public static NamedFacet create(ParameterLayout parameterLayout, FacetHolder holder) {
-        if(parameterLayout == null) {
-            return null;
-        }
-        final String named = Strings.emptyToNull(parameterLayout.named());
-        return named != null ? new NamedFacetForParameterLayoutAnnotation(named, parameterLayout.namedEscaped(), holder) : null;
+    public static NamedFacet create(
+            final List<ParameterLayout> parameterLayouts,
+            final FacetHolder holder) {
+
+        return parameterLayouts.stream()
+                .filter(parameterLayout -> Strings.emptyToNull(parameterLayout.named()) != null)
+                .findFirst()
+                .map(parameterLayout -> new NamedFacetForParameterLayoutAnnotation(
+                                                parameterLayout.named(), parameterLayout.namedEscaped(), holder))
+                .orElse(null);
     }
 
     private NamedFacetForParameterLayoutAnnotation(

@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.param.layout;
 
+import java.util.List;
+
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -27,12 +29,16 @@ import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacetAbs
 
 public class LabelAtFacetForParameterLayoutAnnotation extends LabelAtFacetAbstract {
 
-    public static LabelAtFacet create(final ParameterLayout parameterLayout, FacetHolder holder) {
-        if (parameterLayout == null) {
-            return null;
-        }
-        final LabelPosition labelPosition = parameterLayout.labelPosition();
-        return labelPosition != null ? new LabelAtFacetForParameterLayoutAnnotation(labelPosition, holder) : null;
+    public static LabelAtFacet create(
+            final List<ParameterLayout> parameterLayouts,
+            final FacetHolder holder) {
+
+        return parameterLayouts.stream()
+                .map(ParameterLayout::labelPosition)
+                .filter(labelPosition -> labelPosition != LabelPosition.NOT_SPECIFIED)
+                .findFirst()
+                .map(labelPosition -> new LabelAtFacetForParameterLayoutAnnotation(labelPosition, holder))
+                .orElse(null);
     }
 
     private LabelAtFacetForParameterLayoutAnnotation(final LabelPosition value, final FacetHolder holder) {

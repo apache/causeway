@@ -91,7 +91,7 @@ public @interface PropertyLayout {
      * <pre>
      * public LocalDate getStartDate() { ... }
      *
-     * &#64;PropertyLayout(renderedAsDayBefore=true)
+     * &#64;PropertyLayout(renderDay=RenderDay.AS_DAY_BEFORE)
      * public LocalDate getEndDate() { ... }
      * </pre>
      *
@@ -101,7 +101,7 @@ public @interface PropertyLayout {
      * In the domain object, itself, however, the value stored is 1-jun-2013.
      * </p>
      */
-    RenderDayPolicy renderDay() default RenderDayPolicy.NOT_SPECIFIED;
+    RenderDay renderDay() default RenderDay.NOT_SPECIFIED;
 
     /**
      * The typical entry length of a field, use to determine the optimum width for display

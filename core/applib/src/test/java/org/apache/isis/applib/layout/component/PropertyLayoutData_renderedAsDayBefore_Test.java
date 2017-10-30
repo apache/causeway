@@ -3,7 +3,7 @@ package org.apache.isis.applib.layout.component;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.applib.annotation.RenderDayPolicy;
+import org.apache.isis.applib.annotation.RenderDay;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -27,7 +27,7 @@ public class PropertyLayoutData_renderedAsDayBefore_Test {
         data.setRenderedAsDayBefore(true);
 
         // then
-        assertThat(data.getRenderDay(), is(RenderDayPolicy.AS_DAY_BEFORE));
+        assertThat(data.getRenderDay(), is(RenderDay.AS_DAY_BEFORE));
         assertThat(data.getRenderedAsDayBefore(), is(true));
 
     }
@@ -39,7 +39,7 @@ public class PropertyLayoutData_renderedAsDayBefore_Test {
         data.setRenderedAsDayBefore(false);
 
         // then
-        assertThat(data.getRenderDay(), is(RenderDayPolicy.AS_DAY));
+        assertThat(data.getRenderDay(), is(RenderDay.AS_DAY));
         assertThat(data.getRenderedAsDayBefore(), is(false));
 
     }
@@ -48,13 +48,13 @@ public class PropertyLayoutData_renderedAsDayBefore_Test {
     public void ignore_from_setRenderedAsDayBefore_once_set_to_DAY_BEFORE() throws Exception {
 
         // given
-        data.setRenderDay(RenderDayPolicy.AS_DAY_BEFORE);
+        data.setRenderDay(RenderDay.AS_DAY_BEFORE);
 
         // when
         data.setRenderedAsDayBefore(false);
 
         // then (ignored)
-        assertThat(data.getRenderDay(), is(RenderDayPolicy.AS_DAY_BEFORE));
+        assertThat(data.getRenderDay(), is(RenderDay.AS_DAY_BEFORE));
         assertThat(data.getRenderedAsDayBefore(), is(true));
     }
 
@@ -62,13 +62,13 @@ public class PropertyLayoutData_renderedAsDayBefore_Test {
     public void ignore_from_setRenderedAsDayBefore_once_set_to_DAY() throws Exception {
 
         // given
-        data.setRenderDay(RenderDayPolicy.AS_DAY);
+        data.setRenderDay(RenderDay.AS_DAY);
 
         // when
         data.setRenderedAsDayBefore(true);
 
         // then (ignored)
-        assertThat(data.getRenderDay(), is(RenderDayPolicy.AS_DAY));
+        assertThat(data.getRenderDay(), is(RenderDay.AS_DAY));
         assertThat(data.getRenderedAsDayBefore(), is(false));
     }
 

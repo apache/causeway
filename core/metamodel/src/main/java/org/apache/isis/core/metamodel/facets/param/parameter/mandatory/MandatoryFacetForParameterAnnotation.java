@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.param.parameter.mandatory;
 
+import java.util.List;
+
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -32,30 +34,32 @@ public abstract class MandatoryFacetForParameterAnnotation extends MandatoryFace
     }
 
     public static MandatoryFacet create(
-            final Parameter parameter,
+            final List<Parameter> parameters,
             final Class<?> parameterType,
             final FacetHolder holder) {
-
-        if (parameter == null) {
-            return null;
-        }
 
         if (parameterType.isPrimitive()) {
             return new MandatoryFacetForParameterAnnotation.Primitive(holder);
         }
 
-        final Optionality optionality = parameter.optionality();
-        switch (optionality) {
-            case DEFAULT:
-                // do nothing here; instead will rely on MandatoryFromJdoColumnAnnotationFacetFactory to perform
-                // the remaining processing
-                return null;
-            case MANDATORY:
-                return new MandatoryFacetForParameterAnnotation.Required(holder);
-            case OPTIONAL:
-                return new MandatoryFacetForParameterAnnotation.Optional(holder);
-        }
-        return null;
+
+        return parameters.stream()
+                .map(Parameter::optionality)
+                .filter(optionality -> optionality != Optionality.NOT_SPECIFIED)
+                .findFirst()
+                .map(optionality -> {
+                    switch (optionality) {
+                        case DEFAULT:
+                            // do nothing here
+                            return null;
+                        case MANDATORY:
+                            return new MandatoryFacetForParameterAnnotation.Required(holder);
+                        case OPTIONAL:
+                            return new MandatoryFacetForParameterAnnotation.Optional(holder);
+                    }
+                    throw new IllegalStateException("optionality '" + optionality + "' not recognised");
+                })
+                .orElse(null);
     }
 
     public static class Primitive extends MandatoryFacetForParameterAnnotation {

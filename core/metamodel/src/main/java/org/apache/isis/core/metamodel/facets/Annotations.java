@@ -26,16 +26,13 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.validation.constraints.Pattern;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Lists;
 
-import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
@@ -114,34 +111,52 @@ public final class Annotations  {
     }
 
 
+    static class AnnotationAndDepth<T extends Annotation>
+            implements Comparable<AnnotationAndDepth<T>> {
+        AnnotationAndDepth(final T annotation, final int depth) {
+            this.annotation = annotation;
+            this.depth = depth;
+        }
+        T annotation;
+
+        private static <T extends Annotation> List<T> sorted(
+                final List<AnnotationAndDepth<T>> annotationAndDepths) {
+            Collections.sort(annotationAndDepths);
+            return annotationAndDepths.stream()
+                    .map(AnnotationAndDepth::getAnnotation)
+                    .collect(Collectors.toList());
+        }
+
+        T getAnnotation() {
+            return annotation;
+        }
+        int depth;
+
+        @Override
+        public int compareTo(final AnnotationAndDepth<T> o) {
+            return depth - o.depth;
+        }
+    }
+
+
     /**
      * Searches for annotation on provided class, and if not found for the
      * superclass.
      */
-    public static <T extends Annotation> List<T> getAnnotations(final Class<?> cls, final Class<T> annotationClass) {
-        final List<T> annotations = Lists.newArrayList();
+    public static <T extends Annotation> List<T> getAnnotations(
+            final Class<?> cls,
+            final Class<T> annotationClass) {
+
         if (cls == null) {
-            return annotations;
-        }
-        final T annotation = cls.getAnnotation(annotationClass);
-        if (annotation != null) {
-            annotations.add(annotation);
+            return Collections.emptyList();
         }
 
-        // meta annotations
-        final Set<Class<? extends Annotation>> metaAnnotationTypes = AppManifest.Registry.instance().getMetaAnnotationTypes();
-        final Annotation[] clsAnnotations = cls.getAnnotations();
-        for (final Annotation clsAnnotation : clsAnnotations) {
-            final Class<? extends Annotation> annotationType = clsAnnotation.annotationType();
-            if(metaAnnotationTypes.contains(annotationType)) {
-                final T annotationOnMetaAnnotation = annotationType.getAnnotation(annotationClass);
-                if(annotationOnMetaAnnotation != null) {
-                    annotations.add(annotationOnMetaAnnotation);
-                }
-            }
+        final List<AnnotationAndDepth<T>> annotationAndDepths = Lists.newArrayList();
+        for (final Annotation annotation : cls.getAnnotations()) {
+            append(annotation, annotationClass, annotationAndDepths);
         }
-        if(!annotations.isEmpty()) {
-            return annotations;
+        if(!annotationAndDepths.isEmpty()) {
+            return AnnotationAndDepth.sorted(annotationAndDepths);
         }
 
         // search superclasses
@@ -165,7 +180,35 @@ public final class Annotations  {
                 return annotationsFromInterface;
             }
         }
-        return annotations;
+        return Collections.emptyList();
+    }
+
+    private static <T extends Annotation> void append(
+            final Annotation annotation,
+            final Class<T> annotationClass,
+            final List<AnnotationAndDepth<T>> annotationAndDepths) {
+        appendWithDepth(annotation, annotationClass, annotationAndDepths, 0);
+    }
+
+    private static <T extends Annotation> void appendWithDepth(
+            final Annotation annotation,
+            final Class<T> annotationClass,
+            final List<AnnotationAndDepth<T>> annotationAndDepths,
+            final int depth) {
+        final Class<? extends Annotation> annotationType = annotation.annotationType();
+
+        // directly annotated
+        if(annotationClass.isAssignableFrom(annotationType)) {
+            annotationAndDepths.add(new AnnotationAndDepth<>((T) annotation, depth));
+        }
+
+        // if meta-annotation
+        if(annotationType.getAnnotation(Meta.class) != null) {
+            final Annotation[] annotationsOnAnnotation = annotationType.getAnnotations();
+            for (final Annotation annotationOnAnnotation : annotationsOnAnnotation) {
+                appendWithDepth(annotationOnAnnotation, annotationClass, annotationAndDepths, depth+1);
+            }
+        }
     }
 
     /**
@@ -236,88 +279,45 @@ public final class Annotations  {
     public static <T extends Annotation> List<T> getAnnotations(
             final Method method,
             final Class<T> annotationClass) {
-        final List<T> annotations = Lists.newArrayList();
         if (method == null) {
-            return annotations;
+            return Collections.emptyList();
         }
 
-        boolean annotationOnMethod = false;
-        final Class<?> methodDeclaringClass = method.getDeclaringClass();
-        final String methodName = method.getName();
-
-        final T annotation = method.getAnnotation(annotationClass);
-        if (annotation != null) {
-            annotations.add(annotation);
-            annotationOnMethod = true;
+        final List<AnnotationAndDepth<T>> annotationAndDepths = Lists.newArrayList();
+        for (final Annotation annotation : method.getAnnotations()) {
+            append(annotation, annotationClass, annotationAndDepths);
         }
+        if(!annotationAndDepths.isEmpty()) {
+            return AnnotationAndDepth.sorted(annotationAndDepths);
+        }
+
 
 
         // search for field
-        if ( !annotationOnMethod && shouldSearchForField(annotationClass) ) {
+        if ( !shouldSearchForField(annotationClass) ) {
 
-            final List<String> fieldNameCandidates = fieldNameCandidatesFor(methodName);
+            final List<String> fieldNameCandidates = fieldNameCandidatesFor(method.getName());
             for (String fieldNameCandidate : fieldNameCandidates) {
                 try {
-                    final Field field = methodDeclaringClass.getDeclaredField(fieldNameCandidate);
-                    final T fieldAnnotation = field.getAnnotation(annotationClass);
-                    if(fieldAnnotation != null) {
-                        annotations.add(fieldAnnotation);
+                    final Field field = method.getDeclaringClass().getDeclaredField(fieldNameCandidate);
+                    for(final Annotation annotation: field.getAnnotations()) {
+                        append(annotation, annotationClass, annotationAndDepths);
                     }
                 } catch (NoSuchFieldException e) {
                     // fall through
                 }
             }
         }
-
-        // meta annotations
-        final Set<Class<? extends Annotation>> metaAnnotationTypes = AppManifest.Registry.instance().getMetaAnnotationTypes();
-
-        // search for annotation on a meta-annotation on the method
-        boolean metaAnnotationOnMethod = false;
-        final Annotation[] methodAnnotations = method.getAnnotations();
-        for (Annotation methodAnnotation : methodAnnotations) {
-            Class<? extends Annotation> annotationType = methodAnnotation.annotationType();
-            if(metaAnnotationTypes.contains(annotationType)) {
-                final T annotationOnMetaAnnotation = annotationType.getAnnotation(annotationClass);
-                if(annotationOnMetaAnnotation != null) {
-                    annotations.add(annotationOnMetaAnnotation);
-                    metaAnnotationOnMethod = true;
-                }
-            }
+        if(!annotationAndDepths.isEmpty()) {
+            return AnnotationAndDepth.sorted(annotationAndDepths);
         }
 
-        // search for annotation on a meta-annotation on the field
-        if ( !metaAnnotationOnMethod && shouldSearchForField(annotationClass) ) {
-
-            List<String> fieldNameCandidates = fieldNameCandidatesFor(methodName);
-            for (String fieldNameCandidate : fieldNameCandidates) {
-                try {
-                    final Field field = methodDeclaringClass.getDeclaredField(fieldNameCandidate);
-                    final Annotation[] fieldAnnotations = field.getAnnotations();
-                    for (Annotation fieldAnnotation : fieldAnnotations) {
-                        final Class<? extends Annotation> annotationType = fieldAnnotation.annotationType();
-                        if(metaAnnotationTypes.contains(annotationType)) {
-                            final T annotationOnMetaAnnotation = annotationType.getAnnotation(annotationClass);
-                            if(annotationOnMetaAnnotation != null) {
-                                annotations.add(annotationOnMetaAnnotation);
-                            }
-                        }
-                    }
-                } catch (NoSuchFieldException e) {
-                    // fall through
-                }
-            }
-        }
-
-        if(!annotations.isEmpty()) {
-            return annotations;
-        }
 
         // search superclasses
-        final Class<?> superclass = methodDeclaringClass.getSuperclass();
+        final Class<?> superclass = method.getDeclaringClass().getSuperclass();
         if (superclass != null) {
             try {
-                final Method parentClassMethod = superclass.getMethod(methodName, method.getParameterTypes());
+                final Method parentClassMethod = superclass.getMethod(method.getName(), method.getParameterTypes());
                 final List<T> annotationsFromSuperclass = getAnnotations(parentClassMethod, annotationClass);
                 if(!annotationsFromSuperclass.isEmpty()) {
                     return annotationsFromSuperclass;
@@ -328,10 +328,10 @@ public final class Annotations  {
         }
 
         // search implemented interfaces
-        final Class<?>[] interfaces = methodDeclaringClass.getInterfaces();
+        final Class<?>[] interfaces = method.getDeclaringClass().getInterfaces();
         for (final Class<?> iface : interfaces) {
             try {
-                final Method ifaceMethod = iface.getMethod(methodName, method.getParameterTypes());
+                final Method ifaceMethod = iface.getMethod(method.getName(), method.getParameterTypes());
                 final List<T> annotationsFromInterfaces = getAnnotations(ifaceMethod, annotationClass);
                 if(!annotationsFromInterfaces.isEmpty()) {
                     return annotationsFromInterfaces;
@@ -341,7 +341,7 @@ public final class Annotations  {
             }
         }
 
-        return annotations;
+        return Collections.emptyList();
     }
 
     /**
@@ -543,95 +543,25 @@ public final class Annotations  {
      * <p>
      * Added to allow bytecode-mangling libraries such as CGLIB to be supported.
      */
-    public static Annotation[][] getParameterAnnotations(final Method method) {
-        if (method == null) {
-            return new Annotation[0][0];
-        }
-        final Annotation[][] allParamAnnotations = method.getParameterAnnotations();
+    public static <T extends Annotation> List<T> getAnnotations(
+            final Method method,
+            final int paramNum,
+            final Class<T> annotationClass) {
 
-        boolean foundAnnotationsForAnyParameter = false;
-        for (final Annotation[] singleParamAnnotations : allParamAnnotations) {
-            if (singleParamAnnotations.length > 0) {
-                foundAnnotationsForAnyParameter = true;
-                break;
-            }
-        }
-        if (foundAnnotationsForAnyParameter) {
-            return expandMeta(allParamAnnotations);
+        if(method == null || paramNum < 0 || paramNum >= method.getParameterCount()) {
+            return Collections.emptyList();
         }
 
-        final Class<?> methodDeclaringClass = method.getDeclaringClass();
-
-        // search superclasses
-        final Class<?> superclass = methodDeclaringClass.getSuperclass();
-        if (superclass != null) {
-            try {
-                final Method parentClassMethod = superclass.getMethod(method.getName(), method.getParameterTypes());
-                return getParameterAnnotations(parentClassMethod);
-            } catch (final SecurityException | NoSuchMethodException e) {
-                // fall through
-            }
+        final List<AnnotationAndDepth<T>> annotationAndDepths = Lists.newArrayList();
+        final Annotation[] parameterAnnotations = method.getParameterAnnotations()[paramNum];
+        for (Annotation annotation : parameterAnnotations) {
+            append(annotation, annotationClass, annotationAndDepths);
+        }
+        if(!annotationAndDepths.isEmpty()) {
+            return AnnotationAndDepth.sorted(annotationAndDepths);
         }
 
-        // search implemented interfaces
-        final Class<?>[] interfaces = methodDeclaringClass.getInterfaces();
-        for (final Class<?> iface : interfaces) {
-            try {
-                final Method ifaceMethod = iface.getMethod(method.getName(), method.getParameterTypes());
-                return getParameterAnnotations(ifaceMethod);
-            } catch (final SecurityException | NoSuchMethodException e) {
-                // fall through
-            }
-        }
-
-        return noParamAnnotationsFor(method);
-    }
-
-    static Annotation[][] expandMeta(final Annotation[][] allParamAnnotations) {
-        Set<Class<? extends Annotation>> metaAnnotationTypes = AppManifest.Registry.instance().getMetaAnnotationTypes();
-        if(metaAnnotationTypes.isEmpty()) {
-            return allParamAnnotations;
-        }
-        List<Annotation[]> allParamAnnotationList = Lists.newArrayList();
-        for (Annotation[] allParamAnnotation : allParamAnnotations) {
-            List<Annotation> expandedParamAnnotations = Lists.newArrayList();
-            for (Annotation paramAnnotation : allParamAnnotation) {
-                append(paramAnnotation, expandedParamAnnotations);
-            }
-            allParamAnnotationList.add(expandedParamAnnotations.toArray(new Annotation[]{}));
-        }
-        return allParamAnnotationList.toArray(new Annotation[][]{});
-    }
-
-    static void append(final Annotation annotation, final List<Annotation> annotationsToAppendTo) {
-        Set<Class<? extends Annotation>> metaAnnotationTypes = AppManifest.Registry.instance().getMetaAnnotationTypes();
-        expandMeta(annotation, metaAnnotationTypes, annotationsToAppendTo);
-    }
-
-    static void expandMeta(
-            final Annotation annotation,
-            final Set<Class<? extends Annotation>> metaAnnotationTypes,
-            final List<Annotation> annotationsToAppendTo) {
-        final Class<? extends Annotation> annotationType = annotation.annotationType();
-        if(metaAnnotationTypes.contains(annotationType)) {
-            Annotation[] annotations = annotationType.getAnnotations();
-            annotationsToAppendTo.addAll(FluentIterable.from(Arrays.asList(annotations)).filter(
-                    new Predicate<Annotation>() {
-                        @Override
-                        public boolean apply(final Annotation annotation) {
-                            Class<? extends Annotation> annotType = annotation.annotationType();
-                            return annotType != null &&
-                                   annotType.getName().startsWith("org.apache.isis") &&
-                                   annotType != Meta.class;
-                        }
-                    }).toList());
-        } else {
-            annotationsToAppendTo.add(annotation);
-        }
-    }
-
-    private static Annotation[][] noParamAnnotationsFor(final Method method) {
-        return new Annotation[method.getParameterTypes().length][0];
+        return Collections.emptyList();
     }
 
 }
