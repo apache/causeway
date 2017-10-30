@@ -5,7 +5,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Meta;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
@@ -15,7 +14,7 @@ import org.apache.isis.applib.spec.AbstractSpecification2;
 
 @Meta
 // @Column(length = Name.MAX_LEN) // requires DN 5.x
-@Property(mustSatisfy = Name.NoExclamationMarks.class, maxLength = Name.MAX_LEN, editing = Editing.ENABLED)
+@Property(mustSatisfy = Name.NoExclamationMarks.class, maxLength = Name.MAX_LEN)
 @Parameter(mustSatisfy = Name.NoExclamationMarks.class, maxLength = Name.MAX_LEN)
 @ParameterLayout(named = "Name")
 @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
