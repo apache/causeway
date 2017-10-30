@@ -61,7 +61,7 @@ public abstract class EventBusServiceDefault extends EventBusService {
         if(domainService instanceof RequestScopedService) {
             // ok; allow to be registered multiple times (each xactn) since stored in a set.
         } else {
-            if (Annotations.getAnnotations(domainService.getClass(), RequestScoped.class) != null) {
+            if (Annotations.getAnnotation(domainService.getClass(), RequestScoped.class) != null) {
                 throw new IllegalArgumentException("Request-scoped services must register their proxy, not themselves");
             }
             // a singleton
