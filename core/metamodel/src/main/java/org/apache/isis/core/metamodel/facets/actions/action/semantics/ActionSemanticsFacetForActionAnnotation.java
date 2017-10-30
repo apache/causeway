@@ -39,7 +39,7 @@ public class ActionSemanticsFacetForActionAnnotation extends ActionSemanticsFace
                 .findFirst()
                 .map(semanticsOf ->
                         (ActionSemanticsFacet)new ActionSemanticsFacetForActionAnnotation(semanticsOf, holder))
-                .orElse(new ActionSemanticsFacetForActionAnnotation(SemanticsOf.NON_IDEMPOTENT, holder));
+                .orElse(new ActionSemanticsFacetFallbackToNonIdempotent(holder));
     }
 
     private ActionSemanticsFacetForActionAnnotation(SemanticsOf of, final FacetHolder holder) {

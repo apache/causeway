@@ -39,6 +39,10 @@ public abstract class MandatoryFacetForPropertyAnnotation extends MandatoryFacet
             final Method method,
             final FacetHolder holder) {
 
+        if(properties.isEmpty()) {
+            return null;
+        }
+
         final Class<?> returnType = method.getReturnType();
         if (returnType.isPrimitive()) {
             return new MandatoryFacetForPropertyAnnotation.Primitive(holder);

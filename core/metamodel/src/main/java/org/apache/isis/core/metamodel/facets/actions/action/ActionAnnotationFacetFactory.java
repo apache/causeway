@@ -44,7 +44,6 @@ import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInv
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEventFromDefault;
 import org.apache.isis.core.metamodel.facets.actions.action.prototype.PrototypeFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.publishing.PublishedActionFacetForActionAnnotation;
-import org.apache.isis.core.metamodel.facets.actions.action.semantics.ActionSemanticsFacetFallbackToNonIdempotent;
 import org.apache.isis.core.metamodel.facets.actions.action.semantics.ActionSemanticsFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.typeof.TypeOfFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.bulk.BulkFacet;
@@ -179,11 +178,6 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
         final List<Action> actions = Annotations.getAnnotations(method, Action.class);
         ActionSemanticsFacet facet =
                 ActionSemanticsFacetForActionAnnotation.create(actions, holder);
-
-        // else fallback
-        if(facet == null) {
-            facet = new ActionSemanticsFacetFallbackToNonIdempotent(holder);
-        }
 
         FacetUtil.addFacet(facet);
     }
