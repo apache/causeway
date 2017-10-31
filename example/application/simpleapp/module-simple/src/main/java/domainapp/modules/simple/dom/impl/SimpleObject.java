@@ -21,6 +21,8 @@ package domainapp.modules.simple.dom.impl;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.VersionStrategy;
 
+import com.google.common.collect.Ordering;
+
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
@@ -31,10 +33,9 @@ import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
-import org.apache.isis.applib.util.ObjectContracts;
 
 import domainapp.modules.simple.dom.types.Name;
-import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
 
 @javax.jdo.annotations.PersistenceCapable(
         identityType=IdentityType.DATASTORE,
@@ -55,35 +56,32 @@ import lombok.AccessLevel;
 })
 @javax.jdo.annotations.Unique(name="SimpleObject_name_UNQ", members = {"name"})
 @DomainObject() // objectType inferred from @PersistenceCapable#schema
-@DomainObjectLayout() // trigger events etc.
-@lombok.Getter @lombok.Setter
-@lombok.RequiredArgsConstructor(staticName = "create")
+@DomainObjectLayout() // to trigger UI events
+@RequiredArgsConstructor
 public class SimpleObject implements Comparable<SimpleObject> {
 
 
     @javax.jdo.annotations.Column(allowsNull = "false", length = Name.MAX_LEN)
-    @lombok.NonNull
+    @lombok.Getter @lombok.Setter @lombok.NonNull
     @Title(prepend = "Object: ")
     @Name private String name;
 
     @javax.jdo.annotations.Column(allowsNull = "true", length = 4000)
+    @lombok.Getter @lombok.Setter
     @Property(editing = Editing.ENABLED)
     private String notes;
 
 
-    //region > updateName (action)
     @Action(semantics = SemanticsOf.IDEMPOTENT)
     public SimpleObject updateName(
             @Name final String name) {
         setName(name);
         return this;
     }
-
     public String default0UpdateName() {
         return getName();
     }
 
-    //endregion
 
     //region > delete (action)
     @Action(semantics = SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE)
@@ -98,26 +96,23 @@ public class SimpleObject implements Comparable<SimpleObject> {
     //region > toString, compareTo
     @Override
     public String toString() {
-        return ObjectContracts.toString(this, "name");
+        return getName();
     }
 
     @Override
     public int compareTo(final SimpleObject other) {
-        return ObjectContracts.compare(this, other, "name");
+        return Ordering.natural().onResultOf(SimpleObject::getName).compare(this, other);
     }
     //endregion
 
     //region > injected services
     @javax.inject.Inject
-    @lombok.Getter(AccessLevel.NONE) @lombok.Setter(AccessLevel.NONE)
     RepositoryService repositoryService;
 
     @javax.inject.Inject
-    @lombok.Getter(AccessLevel.NONE) @lombok.Setter(AccessLevel.NONE)
     TitleService titleService;
 
     @javax.inject.Inject
-    @lombok.Getter(AccessLevel.NONE) @lombok.Setter(AccessLevel.NONE)
     MessageService messageService;
     //endregion
 

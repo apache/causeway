@@ -45,7 +45,7 @@ public class SimpleObjectRepository {
     }
 
     public SimpleObject create(final String name) {
-        return repositoryService.persist(SimpleObject.create(name));
+        return repositoryService.persist(new SimpleObject(name));
     }
 
     @javax.inject.Inject
