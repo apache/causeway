@@ -21,14 +21,17 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.Collection;
+import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import javax.xml.bind.Marshaller;
 
+import com.google.common.base.Joiner;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,20 +41,26 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.layout.component.Grid;
+import org.apache.isis.applib.layout.menus.MenuBars;
 import org.apache.isis.applib.services.grid.GridService;
 import org.apache.isis.applib.services.jaxb.JaxbService;
-import org.apache.isis.applib.services.layout.LayoutService;
+import org.apache.isis.applib.services.layout.LayoutService2;
+import org.apache.isis.applib.services.menu.MenuBarsService;
 import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
+import org.apache.isis.core.metamodel.services.grid.bootstrap3.GridSystemServiceBS3;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
+
+import static org.apache.isis.core.metamodel.services.grid.GridServiceDefault.COMMON_SCHEMA_LOCATION;
+import static org.apache.isis.core.metamodel.services.grid.GridServiceDefault.COMMON_TNS;
 
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
 )
-public class LayoutServiceDefault implements LayoutService {
+public class LayoutServiceDefault implements LayoutService2 {
 
     private static final Logger LOG = LoggerFactory.getLogger(LayoutServiceDefault.class);
 
@@ -137,6 +146,27 @@ public class LayoutServiceDefault implements LayoutService {
     }
 
 
+    @Programmatic
+    @Override
+    public String toMenuBarsXml() {
+        MenuBars menuBars = menuBarsService.menuBars();
+
+        // TODO: need something equivalent to GridSystemServiceBS3
+
+        final List<String> parts = Lists.newArrayList();
+        parts.add(COMMON_TNS);
+        parts.add(COMMON_SCHEMA_LOCATION);
+        parts.add(GridSystemServiceBS3.TNS);
+        parts.add(GridSystemServiceBS3.SCHEMA_LOCATION);
+
+        final String tnsAndSchemaLocation = Joiner.on(" ").join(parts);
+
+        return jaxbService.toXml(menuBars,
+                ImmutableMap.<String,Object>of(
+                        Marshaller.JAXB_SCHEMA_LOCATION,
+                        tnsAndSchemaLocation
+                ));
+    }
 
 
     @javax.inject.Inject
@@ -148,5 +178,7 @@ public class LayoutServiceDefault implements LayoutService {
     @javax.inject.Inject
     GridService gridService;
 
+    @javax.inject.Inject
+    MenuBarsService menuBarsService;
 
 }
