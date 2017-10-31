@@ -65,7 +65,8 @@ A simple example might be read-only configuration data that is read from a confi
 == Application-layer view models
 
 Domain entities (whether locally persisted using JDO/DataNucleus or managed externally) are the bread-and-butter of Apache Isis applications: the focus after all, should be on the business domain concepts and ensuring that they are solid.
-Generally those domain entities will make sense to the business domain experts: they form the _ubiquitous language_ of the domain.  These domain entities are part of the domain layer.
+Generally those domain entities will make sense to the business domain experts: they form the _ubiquitous language_ of the domain.
+These domain entities are part of the domain layer.
 
 That said, it may not always be practical to expect end-users of the application to interact solely with those domain entities.
 For example, it may be useful to show a dashboard of the most significant data in the system to a user, often pulling in and aggregating information from multiple points of the app.
@@ -138,3 +139,44 @@ Details of how to consume such DTOs can be found xref:../ugfun/ugfun.adoc#_ugfun
 ====
 
 
+[[__ugfun_building-blocks_view-models_for-rest-clients]]
+== For REST Clients
+
+The xref:../ugvro/ugvro.adoc#[Restful Objects] viewer automatically provides a REST API for both domain entities.
+Or, you can use it to only expose view models, taking care to map the state of the domain entity/ies into a view model.
+
+Which beckons the question: when is it safe to safe to expose domain entities directly as REST resources, and when should view models be exposed instead.
+
+If you go searching google you'll find plenty of discussion on this topic (eg link:https://stackoverflow.com/questions/36174516/rest-api-dtos-or-not[here] and link:https://juristr.com/blog/2012/10/lessions-learned-dont-expose-ef-entities-to-the-client-directly/[here]).
+Almost all of these recommend exposing only DTOs (which is to say view models), not domain entities, in REST APIs.
+
+Not so fast, though: the real question is whether the REST API you are exposing is a public API or an internal private API.
+
+* If it's a public API, which is to say that there are third-party clients out over which you have no control, then view models are the way to go.
+
++
+In this case view models provide an isolation layer which allow you to modify the structure of the underlying domain entities without breaking this API.
+
+* If it's a private API, which is to say that the only clients of the REST API are under your  control, then view models are an unnecessary overhead.
+
++
+In this case, just expose domain entities directly.
+
+The caveat to the "private API" option is that private APIs have a habit of becoming public APIs.
+Even if the REST API is only exposed within your organisation's intranet, other teams may "discover" your REST API and start writing applications that consume it.
+If that REST API is exposing domain entities, you could easily break those other teams' clients if you refactor.
+
+[NOTE]
+====
+The link:https://projects.spring.io/spring-data-rest/[Spring Data REST] subproject has a similar capability of being able to expose domain entities as REST resources.
+This link:https://stackoverflow.com/questions/38874746/is-it-problematic-that-spring-data-rest-exposes-entities-via-rest-resources-with[SO question], which debates the pros-and-cons, is also worth a read.
+====
+
+If your REST API is intended to be public (or you can't be sure that it will remain private), the exposing view models will entail a lot of marshalling of state from domain entities into view models.
+There are numerous open source tools that can help with that, for example link:http://modelmapper.org/[Model Mapper], link:http://dozer.sourceforge.net/[Dozer] and link:https://github.com/orika-mapper/orika[Orika].
+
+Or, rather than marshalling state, the view model could hold a reference to the underlying domain entity/ies and dynamically read from it (ie, all the view model's properties are derived from the entity's).
+
+A third option is to define an RDBMS view, and then map a "non-durable" entity to that view.
+The RDBMS view then becomes the public API that must be preserved.
+The DataNucleus documents link:http://www.datanucleus.org:15080/products/accessplatform_5_1/jdo/mapping.html#schema_rdbms_views[describe] how to create non-durable views; a "real-world" example can also be found link:https://github.com/estatio/estatio/blob/rel/tag-1.20.20171025-1442/estatioapp/module/lease/dom/src/main/java/org/estatio/dom/lease/invoicing/viewmodel/InvoiceSummaryForInvoiceRun.java#L53[here] (in Estatio).
