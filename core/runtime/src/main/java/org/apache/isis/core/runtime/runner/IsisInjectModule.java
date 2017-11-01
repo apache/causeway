@@ -111,7 +111,7 @@ public class IsisInjectModule extends AbstractModule {
         final IsisComponentProviderUsingInstallers componentProvider =
                 new IsisComponentProviderUsingInstallers(appManifest, isisConfiguration);
 
-        final IsisSessionFactoryBuilder builder = new IsisSessionFactoryBuilder(componentProvider, deploymentCategory);
+        final IsisSessionFactoryBuilder builder = new IsisSessionFactoryBuilder(componentProvider, deploymentCategory, componentProvider.getAppManifest());
 
         // as a side-effect, if the metamodel turns out to be invalid, then
         // this will push the MetaModelInvalidException into IsisContext.

@@ -47,6 +47,9 @@ public class GridServiceDefault implements GridService {
     public static final String COMMON_TNS = "http://isis.apache.org/applib/layout/component";
     public static final String COMMON_SCHEMA_LOCATION = "http://isis.apache.org/applib/layout/component/component.xsd";
 
+    public static final String LINKS_TNS = "http://isis.apache.org/applib/layout/links";
+    public static final String LINKS_SCHEMA_LOCATION = "http://isis.apache.org/applib/layout/links/links.xsd";
+
     // //////////////////////////////////////
 
     @Override
@@ -141,8 +144,13 @@ public class GridServiceDefault implements GridService {
     @Programmatic
     public String tnsAndSchemaLocation(final Grid grid) {
         final List<String> parts = Lists.newArrayList();
+
         parts.add(COMMON_TNS);
         parts.add(COMMON_SCHEMA_LOCATION);
+
+        parts.add(LINKS_TNS);
+        parts.add(LINKS_SCHEMA_LOCATION);
+
         for (GridSystemService gridSystemService : gridSystemServices) {
             final Class<? extends Grid> gridImpl = gridSystemService.gridImplementation();
             if(gridImpl.isAssignableFrom(grid.getClass())) {

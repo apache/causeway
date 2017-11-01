@@ -81,7 +81,7 @@ public class Menu implements Serializable {
     private List<MenuSection> sections = Lists.newArrayList();
 
     // no wrapper
-    @XmlElement(name = "section", required = false)
+    @XmlElement(name = "section", required = true)
     public List<MenuSection> getSections() {
         return sections;
     }

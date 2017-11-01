@@ -24,6 +24,7 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
+import com.google.common.base.Joiner;
 import com.google.common.base.Predicate;
 import com.google.common.base.Strings;
 import com.google.common.collect.FluentIterable;
@@ -41,6 +42,7 @@ import org.apache.isis.applib.layout.menus.Menu;
 import org.apache.isis.applib.layout.menus.MenuBar;
 import org.apache.isis.applib.layout.menus.MenuBars;
 import org.apache.isis.applib.layout.menus.MenuSection;
+import org.apache.isis.applib.services.menu.MenuBarsLoaderService;
 import org.apache.isis.applib.services.menu.MenuBarsService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.NotInServiceMenuFacet;
@@ -48,6 +50,7 @@ import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.isis.core.metamodel.facets.object.domainservicelayout.DomainServiceLayoutFacet;
+import org.apache.isis.core.metamodel.services.grid.GridServiceDefault;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
@@ -57,27 +60,47 @@ import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 @DomainService(nature = NatureOfService.DOMAIN)
 public class MenuBarsServiceDefault implements MenuBarsService {
 
+    public static final String MENUS_TNS = "http://isis.apache.org/applib/layout/menus";
+    public static final String MENUS_SCHEMA_LOCATION = "http://isis.apache.org/applib/layout/menus/menus.xsd";
+
+    public static final String LINKS_TNS = GridServiceDefault.LINKS_TNS;
+    public static final String LINKS_SCHEMA_LOCATION = GridServiceDefault.LINKS_SCHEMA_LOCATION;
+
     MenuBars menuBars;
 
-    @Override @Programmatic
+    @Override
+    @Programmatic
     public MenuBars menuBars() {
 
-        if(menuBars == null) {
+        if(menuBars == null || menuBarsLoaderService.supportsReloading()) {
 
-            MenuBars menuBars = new MenuBars();
+            MenuBars menuBars = menuBarsLoaderService.menuBars();
 
-            final List<ObjectAdapter> serviceAdapters =
-                    isisSessionFactory.getCurrentSession().getPersistenceSession().getServices();
-
-            append(serviceAdapters, menuBars.getPrimary(), DomainServiceLayout.MenuBar.PRIMARY);
-            append(serviceAdapters, menuBars.getSecondary(), DomainServiceLayout.MenuBar.SECONDARY);
-            append(serviceAdapters, menuBars.getTertiary(), DomainServiceLayout.MenuBar.TERTIARY);
+            if(menuBars == null) {
+                menuBars = deriveMenuBarsFromMetaModelFacets();
+            }
 
             this.menuBars = menuBars;
         }
 
+        menuBars.setTnsAndSchemaLocation(tnsAndSchemaLocation());
+
         return menuBars;
     }
+
+    private MenuBars deriveMenuBarsFromMetaModelFacets() {
+        final MenuBars menuBars;// fallback
+        menuBars = new MenuBars();
+
+        final List<ObjectAdapter> serviceAdapters =
+                isisSessionFactory.getCurrentSession().getPersistenceSession().getServices();
+
+        append(serviceAdapters, menuBars.getPrimary(), DomainServiceLayout.MenuBar.PRIMARY);
+        append(serviceAdapters, menuBars.getSecondary(), DomainServiceLayout.MenuBar.SECONDARY);
+        append(serviceAdapters, menuBars.getTertiary(), DomainServiceLayout.MenuBar.TERTIARY);
+        return menuBars;
+    }
+
 
     private void append(
             final List<ObjectAdapter> serviceAdapters,
@@ -237,8 +260,25 @@ public class MenuBarsServiceDefault implements MenuBarsService {
         };
     }
 
+
+    private String tnsAndSchemaLocation() {
+        final List<String> parts = Lists.newArrayList();
+
+        parts.add(MENUS_TNS);
+        parts.add(MENUS_SCHEMA_LOCATION);
+
+        parts.add(LINKS_TNS);
+        parts.add(LINKS_SCHEMA_LOCATION);
+
+        return Joiner.on(" ").join(parts);
+    }
+
+
     @Inject
     IsisSessionFactory isisSessionFactory;
+
+    @Inject
+    MenuBarsLoaderService menuBarsLoaderService;
 
 
 }

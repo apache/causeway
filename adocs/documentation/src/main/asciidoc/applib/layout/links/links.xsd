@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+        xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        elementFormDefault="qualified"
+        targetNamespace="http://isis.apache.org/applib/layout/links"
+        version="1.0">
+
+    <xs:complexType name="link">
+        <xs:sequence>
+            <xs:element name="rel" type="xs:string"/>
+            <xs:element name="method" type="xs:string"/>
+            <xs:element name="href" type="xs:string"/>
+            <xs:element name="type" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>

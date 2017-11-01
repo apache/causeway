@@ -48,7 +48,7 @@ public class MenuBar implements Serializable {
     private List<Menu> menus = Lists.newArrayList();
 
     // no wrapper
-    @XmlElement(name = "menu", required = false)
+    @XmlElement(name = "menu", required = true)
     public List<Menu> getMenus() {
         return menus;
     }

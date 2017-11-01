@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mnu:menuBars xsi:schemaLocation="http://isis.apache.org/applib/layout/menus http://isis.apache.org/applib/layout/menus/menus.xsd" xmlns:mnu="http://isis.apache.org/applib/layout/menus" xmlns:lnk="http://isis.apache.org/applib/layout/links" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <mnu:primary>
+        <mnu:menu>
+            <mnu:named>Hello World Objects</mnu:named>
+            <mnu:section>
+                <mnu:action oid="helloworld.HelloWorldObjects:1" id="create">
+                    <mnu:named>Create</mnu:named>
+                </mnu:action>
+                <mnu:action oid="helloworld.HelloWorldObjects:1" id="listAll">
+                    <mnu:named>List All</mnu:named>
+                </mnu:action>
+                <mnu:action oid="helloworld.HelloWorldObjects:1" id="findByName">
+                    <mnu:named>Find By Name</mnu:named>
+                </mnu:action>
+            </mnu:section>
+        </mnu:menu>
+    </mnu:primary>
+    <mnu:secondary>
+        <mnu:menu>
+            <mnu:named>Prototyping</mnu:named>
+            <mnu:section>
+                <mnu:action oid="isisApplib.FixtureScriptsDefault:1" id="runFixtureScript">
+                    <mnu:named>Run Fixture Script</mnu:named>
+                </mnu:action>
+                <mnu:action oid="isisApplib.FixtureScriptsDefault:1" id="runFixtureScriptWithAutoComplete">
+                    <mnu:named>Run Fixture Script</mnu:named>
+                </mnu:action>
+                <mnu:action oid="isisApplib.FixtureScriptsDefault:1" id="recreateObjectsAndReturnFirst">
+                    <mnu:named>Recreate Objects And Return First</mnu:named>
+                </mnu:action>
+            </mnu:section>
+            <mnu:section>
+                <mnu:action oid="isisApplib.LayoutServiceMenu:1" id="downloadLayouts">
+                    <mnu:named>Download Layouts (ZIP)</mnu:named>
+                </mnu:action>
+                <mnu:action oid="isisApplib.LayoutServiceMenu:1" id="downloadMenuBarsLayout">
+                    <mnu:named>Download Menu Bars Layout (XML)</mnu:named>
+                </mnu:action>
+            </mnu:section>
+            <mnu:section>
+                <mnu:action oid="isisApplib.MetaModelServicesMenu:1" id="downloadMetaModel">
+                    <mnu:named>Download Meta Model (CSV)</mnu:named>
+                </mnu:action>
+            </mnu:section>
+            <mnu:section>
+                <mnu:action oid="isisApplib.SwaggerServiceMenu:1" id="openSwaggerUi">
+                    <mnu:named>Open Swagger Ui</mnu:named>
+                </mnu:action>
+                <mnu:action oid="isisApplib.SwaggerServiceMenu:1" id="openRestApi">
+                    <mnu:named>Open Rest Api</mnu:named>
+                </mnu:action>
+                <mnu:action oid="isisApplib.SwaggerServiceMenu:1" id="downloadSwaggerSchemaDefinition">
+                    <mnu:named>Download Swagger Schema Definition</mnu:named>
+                </mnu:action>
+            </mnu:section>
+            <mnu:section>
+                <mnu:action oid="isisApplib.TranslationServicePoMenu:1" id="downloadTranslations">
+                    <mnu:named>Download Translations</mnu:named>
+                </mnu:action>
+                <mnu:action oid="isisApplib.TranslationServicePoMenu:1" id="resetTranslationCache">
+                    <mnu:named>Clear translation cache</mnu:named>
+                </mnu:action>
+                <mnu:action oid="isisApplib.TranslationServicePoMenu:1" id="switchToReadingTranslations">
+                    <mnu:named>Switch To Reading Translations</mnu:named>
+                </mnu:action>
+                <mnu:action oid="isisApplib.TranslationServicePoMenu:1" id="switchToWritingTranslations">
+                    <mnu:named>Switch To Writing Translations</mnu:named>
+                </mnu:action>
+            </mnu:section>
+            <mnu:section>
+                <mnu:action oid="isisApplib.HsqlDbManagerMenu:1" id="hsqlDbManager">
+                    <mnu:named>HSQL DB Manager</mnu:named>
+                </mnu:action>
+            </mnu:section>
+        </mnu:menu>
+    </mnu:secondary>
+    <mnu:tertiary>
+        <mnu:menu>
+            <mnu:named>Configuration Service Menu</mnu:named>
+            <mnu:section>
+                <mnu:action oid="isisApplib.ConfigurationServiceMenu:1" id="configuration">
+                    <mnu:named>Configuration</mnu:named>
+                </mnu:action>
+            </mnu:section>
+        </mnu:menu>
+    </mnu:tertiary>
+</mnu:menuBars>

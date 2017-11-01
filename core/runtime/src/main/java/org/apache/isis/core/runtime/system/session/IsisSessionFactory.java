@@ -28,6 +28,7 @@ import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.fixtures.LogonFixture;
 import org.apache.isis.applib.services.i18n.TranslationService;
@@ -71,7 +72,7 @@ public class IsisSessionFactory implements ApplicationScopedComponent {
     @SuppressWarnings("unused")
     private final static Logger LOG = LoggerFactory.getLogger(IsisSessionFactory.class);
 
-    //region > constructor, fields
+    //region > constructor, fields, accessors
 
     private final DeploymentCategory deploymentCategory;
     private final IsisConfiguration configuration;
@@ -80,10 +81,12 @@ public class IsisSessionFactory implements ApplicationScopedComponent {
     private final AuthenticationManager authenticationManager;
     private final AuthorizationManager authorizationManager;
     private final PersistenceSessionFactory persistenceSessionFactory;
+    private final AppManifest appManifest;
 
     public IsisSessionFactory(
             final DeploymentCategory deploymentCategory,
-            final ServicesInjector servicesInjector) {
+            final ServicesInjector servicesInjector,
+            final AppManifest appManifest) {
 
         this.servicesInjector = servicesInjector;
         this.deploymentCategory = deploymentCategory;
@@ -93,8 +96,12 @@ public class IsisSessionFactory implements ApplicationScopedComponent {
         this.authenticationManager = servicesInjector.getAuthenticationManager();
         this.authorizationManager = servicesInjector.getAuthorizationManager();
         this.persistenceSessionFactory = servicesInjector.lookupServiceElseFail(PersistenceSessionFactory.class);
+        this.appManifest = appManifest;
     }
 
+    public AppManifest getAppManifest() {
+        return appManifest;
+    }
 
     //endregion
 

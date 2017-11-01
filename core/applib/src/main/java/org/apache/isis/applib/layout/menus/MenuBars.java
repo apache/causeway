@@ -22,6 +22,7 @@ import java.io.Serializable;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.DomainServiceLayout;
@@ -46,6 +47,17 @@ public class MenuBars implements Serializable {
     private static final long serialVersionUID = 1L;
 
     public MenuBars() {
+    }
+
+    private String tnsAndSchemaLocation;
+
+    @XmlTransient
+    public String getTnsAndSchemaLocation() {
+        return tnsAndSchemaLocation;
+    }
+
+    public void setTnsAndSchemaLocation(final String tnsAndSchemaLocation) {
+        this.tnsAndSchemaLocation = tnsAndSchemaLocation;
     }
 
     private MenuBar primary = new MenuBar();

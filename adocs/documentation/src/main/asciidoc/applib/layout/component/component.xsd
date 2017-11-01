@@ -1,4 +1,14 @@
-<?xml version="1.0" encoding="UTF-8"?><xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://isis.apache.org/applib/layout/component" elementFormDefault="qualified" targetNamespace="http://isis.apache.org/applib/layout/component" version="1.0">
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:lnk="http://isis.apache.org/applib/layout/links"
+           xmlns:tns="http://isis.apache.org/applib/layout/component"
+           elementFormDefault="qualified"
+           targetNamespace="http://isis.apache.org/applib/layout/component"
+           version="1.0">
+
+  <xs:import
+          namespace="http://isis.apache.org/applib/layout/links"
+          schemaLocation="../links/links.xsd"/>
 
   <xs:element name="action" type="tns:action"/>
 
@@ -16,6 +26,7 @@
       <xs:element minOccurs="0" name="describedAs" type="xs:string"/>
       <xs:element minOccurs="0" name="plural" type="xs:string"/>
       <xs:element minOccurs="0" name="metadataError" type="xs:string"/>
+      <xs:element minOccurs="0" name="link" type="lnk:link"/>
     </xs:sequence>
     <xs:attribute name="bookmarking" type="tns:bookmarkPolicy"/>
     <xs:attribute name="cssClass" type="xs:string"/>
@@ -29,6 +40,7 @@
       <xs:element minOccurs="0" name="named" type="xs:string"/>
       <xs:element minOccurs="0" name="describedAs" type="xs:string"/>
       <xs:element minOccurs="0" name="metadataError" type="xs:string"/>
+      <xs:element minOccurs="0" name="link" type="lnk:link"/>
     </xs:sequence>
     <xs:attribute name="bookmarking" type="tns:bookmarkPolicy"/>
     <xs:attribute name="cssClass" type="xs:string"/>
@@ -37,10 +49,8 @@
     <xs:attribute name="hidden" type="tns:where"/>
     <xs:attribute name="id" type="xs:string" use="required"/>
     <xs:attribute name="namedEscaped" type="xs:boolean"/>
-
-    <xs:attribute name="promptStyle" type="tns:promptStyle"/>
-
     <xs:attribute name="position" type="tns:position"/>
+    <xs:attribute name="promptStyle" type="tns:promptStyle"/>
   </xs:complexType>
 
   <xs:complexType name="fieldSet">
@@ -49,7 +59,7 @@
       <xs:element maxOccurs="unbounded" minOccurs="0" ref="tns:property"/>
       <xs:element minOccurs="0" name="metadataError" type="xs:string"/>
     </xs:sequence>
-    <xs:attribute name="name" type="xs:string" use="optional"/>
+    <xs:attribute name="name" type="xs:string"/>
     <xs:attribute name="id" type="xs:string"/>
     <xs:attribute name="unreferencedActions" type="xs:boolean"/>
     <xs:attribute name="unreferencedProperties" type="xs:boolean"/>
@@ -61,6 +71,7 @@
       <xs:element minOccurs="0" name="describedAs" type="xs:string"/>
       <xs:element maxOccurs="unbounded" minOccurs="0" ref="tns:action"/>
       <xs:element minOccurs="0" name="metadataError" type="xs:string"/>
+      <xs:element minOccurs="0" name="link" type="lnk:link"/>
     </xs:sequence>
     <xs:attribute name="cssClass" type="xs:string"/>
     <xs:attribute name="hidden" type="tns:where"/>
@@ -68,9 +79,7 @@
     <xs:attribute name="labelPosition" type="tns:labelPosition"/>
     <xs:attribute name="multiLine" type="xs:int"/>
     <xs:attribute name="namedEscaped" type="xs:boolean"/>
-
     <xs:attribute name="promptStyle" type="tns:promptStyle"/>
-
     <xs:attribute name="renderedAsDayBefore" type="xs:boolean"/>
     <xs:attribute name="typicalLength" type="xs:int"/>
     <xs:attribute name="unchanging" type="xs:boolean"/>
@@ -83,6 +92,7 @@
       <xs:element minOccurs="0" name="sortedBy" type="xs:string"/>
       <xs:element maxOccurs="unbounded" minOccurs="0" ref="tns:action"/>
       <xs:element minOccurs="0" name="metadataError" type="xs:string"/>
+      <xs:element minOccurs="0" name="link" type="lnk:link"/>
     </xs:sequence>
     <xs:attribute name="cssClass" type="xs:string"/>
     <xs:attribute name="defaultView" type="xs:string"/>
@@ -107,15 +117,6 @@
     </xs:restriction>
   </xs:simpleType>
 
-  <xs:simpleType name="promptStyle">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="DIALOG"/>
-      <xs:enumeration value="INLINE"/>
-      <xs:enumeration value="INLINE_AS_IF_EDIT"/>
-      <xs:enumeration value="AS_CONFIGURED"/>
-    </xs:restriction>
-  </xs:simpleType>
-
   <xs:simpleType name="where">
     <xs:restriction base="xs:string">
       <xs:enumeration value="EVERYWHERE"/>
@@ -137,6 +138,15 @@
       <xs:enumeration value="RIGHT"/>
       <xs:enumeration value="PANEL"/>
       <xs:enumeration value="PANEL_DROPDOWN"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="promptStyle">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="AS_CONFIGURED"/>
+      <xs:enumeration value="DIALOG"/>
+      <xs:enumeration value="INLINE"/>
+      <xs:enumeration value="INLINE_AS_IF_EDIT"/>
     </xs:restriction>
   </xs:simpleType>
 

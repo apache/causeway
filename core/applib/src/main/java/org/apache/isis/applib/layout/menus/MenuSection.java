@@ -48,7 +48,7 @@ public class MenuSection implements Serializable, ActionLayoutDataOwner {
 
     // no wrapper
     @Override
-    @XmlElement(name = "action", required = false)
+    @XmlElement(name = "action", required = true)
     public List<ActionLayoutData> getActions() {
         return actions;
     }
