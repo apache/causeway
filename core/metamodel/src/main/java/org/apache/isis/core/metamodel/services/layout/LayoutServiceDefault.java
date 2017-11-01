@@ -141,8 +141,8 @@ public class LayoutServiceDefault implements LayoutService2 {
 
     @Programmatic
     @Override
-    public String toMenuBarsXml() {
-        final MenuBars menuBars = menuBarsService.menuBars();
+    public String toMenuBarsXml(final MenuBarsService.Type type) {
+        final MenuBars menuBars = menuBarsService.menuBars(type);
 
         return jaxbService.toXml(menuBars,
                 ImmutableMap.<String,Object>of(

@@ -71,7 +71,18 @@ public class MenuBarsServiceDefault implements MenuBarsService {
     @Override
     @Programmatic
     public MenuBars menuBars() {
+        return menuBars(Type.DEFAULT);
+    }
 
+    @Override
+    @Programmatic
+    public MenuBars menuBars(final Type type) {
+
+        if(type == Type.FALLBACK) {
+            return deriveMenuBarsFromMetaModelFacets();
+        }
+
+        // else load (and only fallback if nothing could be loaded)...
         if(menuBars == null || menuBarsLoaderService.supportsReloading()) {
 
             MenuBars menuBars = menuBarsLoaderService.menuBars();
@@ -82,8 +93,6 @@ public class MenuBarsServiceDefault implements MenuBarsService {
 
             this.menuBars = menuBars;
         }
-
-        menuBars.setTnsAndSchemaLocation(tnsAndSchemaLocation());
 
         return menuBars;
     }
@@ -98,6 +107,9 @@ public class MenuBarsServiceDefault implements MenuBarsService {
         append(serviceAdapters, menuBars.getPrimary(), DomainServiceLayout.MenuBar.PRIMARY);
         append(serviceAdapters, menuBars.getSecondary(), DomainServiceLayout.MenuBar.SECONDARY);
         append(serviceAdapters, menuBars.getTertiary(), DomainServiceLayout.MenuBar.TERTIARY);
+
+        menuBars.setTnsAndSchemaLocation(tnsAndSchemaLocation());
+
         return menuBars;
     }
 

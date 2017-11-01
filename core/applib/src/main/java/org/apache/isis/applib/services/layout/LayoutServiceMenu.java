@@ -29,6 +29,7 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.services.menu.MenuBarsService;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 
@@ -66,7 +67,7 @@ public class LayoutServiceMenu {
     )
     @ActionLayout(
             cssClassFa = "fa-download",
-            named = "Download Layouts (ZIP)"
+            named = "Download Object Layouts (ZIP)"
     )
     @MemberOrder(sequence="500.400.1")
     public Blob downloadLayouts(final LayoutService.Style style) {
@@ -95,16 +96,20 @@ public class LayoutServiceMenu {
     )
     @MemberOrder(sequence="500.400.2")
     public Clob downloadMenuBarsLayout(
-            @ParameterLayout(named = "File name")
-            final String fileName) {
+            @ParameterLayout(named = "File name") final String fileName,
+            final MenuBarsService.Type type) {
 
-        final String xml = layoutService.toMenuBarsXml();
+        final String xml = layoutService.toMenuBarsXml(type);
 
         return new Clob(Util.withSuffix(fileName,  ".xml"), "text/xml", xml);
     }
 
     public String default0DownloadMenuBarsLayout() {
         return "menubars.layout.xml";
+    }
+
+    public MenuBarsService.Type default1DownloadMenuBarsLayout() {
+        return MenuBarsService.Type.DEFAULT;
     }
 
 
