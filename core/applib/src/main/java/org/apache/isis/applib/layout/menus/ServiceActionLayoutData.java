@@ -43,7 +43,7 @@ import org.apache.isis.applib.layout.links.Link;
 @XmlType(
     name = "action"
     , propOrder = {
-        "oid"
+        "objectType"
         , "id"
         , "named"
         , "namedEscaped"
@@ -62,21 +62,21 @@ public class ServiceActionLayoutData implements Serializable {
 
     public ServiceActionLayoutData() {
     }
-    public ServiceActionLayoutData(final String oid, final String id) {
-        this.oid = oid;
+    public ServiceActionLayoutData(final String objectType, final String id) {
+        this.objectType = objectType;
         this.id = id;
     }
 
 
-    private String oid;
+    private String objectType;
 
     @XmlAttribute(required = true)
-    public String getOid() {
-        return oid;
+    public String getObjectType() {
+        return objectType;
     }
 
-    public void setOid(final String oid) {
-        this.oid = oid;
+    public void setObjectType(final String objectType) {
+        this.objectType = objectType;
     }
 
 
@@ -234,7 +234,7 @@ public class ServiceActionLayoutData implements Serializable {
     @Override
     public String toString() {
         return "ActionLayoutData{" +
-                "oid='" + oid + '\'' +
+                "oid='" + objectType + '\'' +
                 ", id='" + id + '\'' +
                 '}';
     }

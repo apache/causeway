@@ -157,8 +157,8 @@ public class MenuBarsServiceDefault implements MenuBarsService {
                 }
 
                 ObjectAction objectAction = serviceAndAction.objectAction;
-                final String serviceOid = serviceAndAction.serviceAdapter.getOid().enString();
-                ServiceActionLayoutData action = new ServiceActionLayoutData(serviceOid, objectAction.getId());
+                final String objectType = serviceAndAction.serviceAdapter.getSpecification().getSpecId().asString();
+                ServiceActionLayoutData action = new ServiceActionLayoutData(objectType, objectAction.getId());
                 action.setNamed(objectAction.getName());
                 menuSection.getActions().add(action);
             }

@@ -33,6 +33,7 @@ import org.apache.isis.applib.layout.menus.MenuBars;
 import org.apache.isis.applib.layout.menus.MenuSection;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.menu.MenuBarsService;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulHttpMethod;
@@ -82,13 +83,12 @@ public class MenuBarsResourceServerside extends ResourceAbstract implements Menu
             for (MenuSection section : sections) {
                 List<ServiceActionLayoutData> actions = section.getActions();
                 for (ServiceActionLayoutData actionLayoutData : actions) {
-                    String oid = actionLayoutData.getOid();
-                    Bookmark bookmark = new Bookmark(oid);
+                    final String objectType = actionLayoutData.getObjectType();
                     Link link = new Link(
                             Rel.ACTION.getName(),
                             RestfulHttpMethod.GET.getJavaxRsMethod(),
                             getResourceContext().urlFor(
-                                    "objects/" + bookmark.getObjectType() + "/" + bookmark.getIdentifier() + "/actions/" + actionLayoutData.getId()
+                                    "objects/" + objectType + "/" + PersistenceSession.SERVICE_IDENTIFIER + "/actions/" + actionLayoutData.getId()
                             ),
                             RepresentationType.OBJECT_ACTION.getJsonMediaType().toString());
                     actionLayoutData.setLink(link);

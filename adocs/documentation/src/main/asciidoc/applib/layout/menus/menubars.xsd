@@ -55,7 +55,7 @@
             <xs:element minOccurs="0" name="metadataError" type="xs:string"/>
             <xs:element minOccurs="0" name="link" type="lnk:link"/>
         </xs:sequence>
-        <xs:attribute name="oid" type="xs:string" use="required"/>
+        <xs:attribute name="objectType" type="xs:string" use="required"/>
         <xs:attribute name="id" type="xs:string" use="required"/>
         <xs:attribute name="namedEscaped" type="xs:boolean"/>
         <xs:attribute name="bookmarking" type="cpt:bookmarkPolicy"/>

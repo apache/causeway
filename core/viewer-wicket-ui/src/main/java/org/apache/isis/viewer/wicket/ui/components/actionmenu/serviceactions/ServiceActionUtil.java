@@ -38,16 +38,18 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.Model;
 
-import org.apache.isis.applib.layout.menus.ServiceActionLayoutData;
 import org.apache.isis.applib.layout.menus.Menu;
 import org.apache.isis.applib.layout.menus.MenuBar;
 import org.apache.isis.applib.layout.menus.MenuBars;
 import org.apache.isis.applib.layout.menus.MenuSection;
+import org.apache.isis.applib.layout.menus.ServiceActionLayoutData;
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.runtime.system.IsisSystem;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactoryBuilder;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ServiceActionsModel;
@@ -225,7 +227,9 @@ public final class ServiceActionUtil {
                 boolean firstSection = true;
 
                 for (final ServiceActionLayoutData actionLayoutData : menuSection.getActions()) {
-                    final String oid = actionLayoutData.getOid();
+                    final String objectType = actionLayoutData.getObjectType();
+                    final Bookmark bookmark = new Bookmark(objectType, PersistenceSession.SERVICE_IDENTIFIER);
+                    final String oid = bookmark.toString();
                     final ObjectAdapter serviceAdapter = serviceAdapterByOid.get(oid);
                     final EntityModel entityModel = new EntityModel(serviceAdapter);
                     final ObjectAction objectAction = serviceAdapter.getSpecification()
