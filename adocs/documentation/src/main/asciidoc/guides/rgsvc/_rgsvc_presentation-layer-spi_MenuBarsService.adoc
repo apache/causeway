@@ -6,7 +6,7 @@
 
 
 
-The `MenuBarsService` is responsible for returning an XML representation of the domain service actions.
+The `MenuBarsService` is responsible for returning a `MenuBars` instance, a data structure representing the arrangement of domain service actions across multiple menu bars, menus and sections.
 This is used by the Wicket viewer to build up the menu, and is also served as the "menuBars" resource by the xref:../ugvro/ugvro.adoc#[Restful Objects] viewer.
 
 
@@ -37,5 +37,4 @@ TODO: need to document `MenuBars` in the rgcms.adoc guide.
 == Implementation
 
 The framework provides a default implementation of this service, namely `o.a.i.core.runtime.services.menu.MenuBarsServiceDefault`.
-
-
+This uses the xref:rgsvc.adoc#_rgsvc_presentation-layer-spi_MenuBarsLoaderService[MenuBarsLoaderService]

@@ -29,7 +29,7 @@ import javax.xml.bind.annotation.XmlType;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.layout.links.LinkData;
+import org.apache.isis.applib.layout.links.Link;
 
 /**
  * Describes the layout of a single action, broadly corresponding to {@link org.apache.isis.applib.annotation.ActionLayout}.
@@ -257,7 +257,7 @@ public class ActionLayoutData implements Serializable, Owned<ActionLayoutDataOwn
     }
 
 
-    private LinkData link;
+    private Link link;
 
     /**
      * The link to access this resource from the REST API (Restful Objects viewer).
@@ -267,11 +267,11 @@ public class ActionLayoutData implements Serializable, Owned<ActionLayoutDataOwn
      * </p>
      */
     @XmlElement(required = false)
-    public LinkData getLink() {
+    public Link getLink() {
         return link;
     }
 
-    public void setLink(final LinkData link) {
+    public void setLink(final Link link) {
         this.link = link;
     }
 

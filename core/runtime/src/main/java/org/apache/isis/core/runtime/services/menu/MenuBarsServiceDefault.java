@@ -37,7 +37,7 @@ import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.filter.Filters;
-import org.apache.isis.applib.layout.menus.ActionLayoutData;
+import org.apache.isis.applib.layout.menus.ServiceActionLayoutData;
 import org.apache.isis.applib.layout.menus.Menu;
 import org.apache.isis.applib.layout.menus.MenuBar;
 import org.apache.isis.applib.layout.menus.MenuBars;
@@ -146,7 +146,7 @@ public class MenuBarsServiceDefault implements MenuBarsService {
 
                 ObjectAction objectAction = serviceAndAction.objectAction;
                 final String serviceOid = serviceAndAction.serviceAdapter.getOid().enString();
-                ActionLayoutData action = new ActionLayoutData(serviceOid, objectAction.getId());
+                ServiceActionLayoutData action = new ServiceActionLayoutData(serviceOid, objectAction.getId());
                 action.setNamed(objectAction.getName());
                 menuSection.getActions().add(action);
             }

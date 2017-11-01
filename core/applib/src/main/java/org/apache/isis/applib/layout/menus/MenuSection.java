@@ -44,17 +44,17 @@ public class MenuSection implements Serializable, ActionLayoutDataOwner {
     }
 
 
-    private List<ActionLayoutData> actions = Lists.newArrayList();
+    private List<ServiceActionLayoutData> actions = Lists.newArrayList();
 
     // no wrapper
     @Override
     @XmlElement(name = "action", required = true)
-    public List<ActionLayoutData> getActions() {
+    public List<ServiceActionLayoutData> getActions() {
         return actions;
     }
 
     @Override
-    public void setActions(List<ActionLayoutData> actionLayoutDatas) {
+    public void setActions(List<ServiceActionLayoutData> actionLayoutDatas) {
         this.actions = actionLayoutDatas;
     }
 

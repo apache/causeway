@@ -32,7 +32,7 @@ import com.google.common.collect.Lists;
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.layout.links.LinkData;
+import org.apache.isis.applib.layout.links.Link;
 
 /**
  * Describes the layout of a single property, broadly corresponds to the {@link org.apache.isis.applib.annotation.PropertyLayout} annotation.
@@ -273,7 +273,7 @@ public class PropertyLayoutData
 
 
 
-    private LinkData link;
+    private Link link;
 
     /**
      * The link to access this resource from the REST API (Restful Objects viewer).
@@ -283,11 +283,11 @@ public class PropertyLayoutData
      * </p>
      */
     @XmlElement(required = false)
-    public LinkData getLink() {
+    public Link getLink() {
         return link;
     }
 
-    public void setLink(final LinkData link) {
+    public void setLink(final Link link) {
         this.link = link;
     }
 

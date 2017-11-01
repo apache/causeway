@@ -25,8 +25,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.layout.links.LinkData;
-import org.apache.isis.applib.layout.menus.ActionLayoutData;
+import org.apache.isis.applib.layout.links.Link;
+import org.apache.isis.applib.layout.menus.ServiceActionLayoutData;
 import org.apache.isis.applib.layout.menus.Menu;
 import org.apache.isis.applib.layout.menus.MenuBar;
 import org.apache.isis.applib.layout.menus.MenuBars;
@@ -80,11 +80,11 @@ public class MenuBarsResourceServerside extends ResourceAbstract implements Menu
         for (Menu menu : menus) {
             List<MenuSection> sections = menu.getSections();
             for (MenuSection section : sections) {
-                List<ActionLayoutData> actions = section.getActions();
-                for (ActionLayoutData actionLayoutData : actions) {
+                List<ServiceActionLayoutData> actions = section.getActions();
+                for (ServiceActionLayoutData actionLayoutData : actions) {
                     String oid = actionLayoutData.getOid();
                     Bookmark bookmark = new Bookmark(oid);
-                    LinkData link = new LinkData(
+                    Link link = new Link(
                             Rel.ACTION.getName(),
                             RestfulHttpMethod.GET.getJavaxRsMethod(),
                             getResourceContext().urlFor(

@@ -23,6 +23,6 @@ import java.util.List;
 import org.apache.isis.applib.layout.component.Owner;
 
 public interface ActionLayoutDataOwner extends Owner {
-    List<ActionLayoutData> getActions();
-    void setActions(List<ActionLayoutData> actions);
+    List<ServiceActionLayoutData> getActions();
+    void setActions(List<ServiceActionLayoutData> actions);
 }

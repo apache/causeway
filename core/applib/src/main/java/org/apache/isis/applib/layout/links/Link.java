@@ -35,14 +35,14 @@ import javax.xml.bind.annotation.XmlType;
     }
 )
 @XmlAccessorType(XmlAccessType.FIELD)
-public class LinkData implements Serializable {
+public class Link implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public LinkData() {
+    public Link() {
     }
 
-    public LinkData(
+    public Link(
             final String rel,
             final String method,
             final String href,

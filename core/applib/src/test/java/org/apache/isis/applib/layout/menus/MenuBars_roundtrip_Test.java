@@ -49,14 +49,14 @@ public class MenuBars_roundtrip_Test {
         menu.setNamed("Parties");
 
         MenuSection organisationMenu = new MenuSection();
-        organisationMenu.getActions().add(new ActionLayoutData("parties.OrganisationMenu:1", "findByReference"));
-        organisationMenu.getActions().add(new ActionLayoutData("parties.OrganisationMenu:1", "findByName"));
-        organisationMenu.getActions().add(new ActionLayoutData("parties.OrganisationMenu:1", "create"));
+        organisationMenu.getActions().add(new ServiceActionLayoutData("parties.OrganisationMenu:1", "findByReference"));
+        organisationMenu.getActions().add(new ServiceActionLayoutData("parties.OrganisationMenu:1", "findByName"));
+        organisationMenu.getActions().add(new ServiceActionLayoutData("parties.OrganisationMenu:1", "create"));
         menu.getSections().add(organisationMenu);
 
         MenuSection personMenu = new MenuSection();
-        personMenu.getActions().add(new ActionLayoutData("parties.PersonMenu:1", "findByUsername"));
-        personMenu.getActions().add(new ActionLayoutData("parties.PersonMenu:1", "create"));
+        personMenu.getActions().add(new ServiceActionLayoutData("parties.PersonMenu:1", "findByUsername"));
+        personMenu.getActions().add(new ServiceActionLayoutData("parties.PersonMenu:1", "create"));
         menu.getSections().add(personMenu);
 
         menuBars.getPrimary().getMenus().add(menu);

@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
-import org.apache.isis.applib.layout.links.LinkData;
+import org.apache.isis.applib.layout.links.Link;
 
 /**
  * Describes the layout of a single action, broadly corresponding to {@link org.apache.isis.applib.annotation.ActionLayout}.
@@ -55,14 +55,14 @@ import org.apache.isis.applib.layout.links.LinkData;
         , "link"
     }
 )
-public class ActionLayoutData implements Serializable {
+public class ServiceActionLayoutData implements Serializable {
 
 
     private static final long serialVersionUID = 1L;
 
-    public ActionLayoutData() {
+    public ServiceActionLayoutData() {
     }
-    public ActionLayoutData(final String oid, final String id) {
+    public ServiceActionLayoutData(final String oid, final String id) {
         this.oid = oid;
         this.id = id;
     }
@@ -211,7 +211,7 @@ public class ActionLayoutData implements Serializable {
     }
 
 
-    private LinkData link;
+    private Link link;
 
     /**
      * The link to access this resource from the REST API (Restful Objects viewer).
@@ -221,11 +221,11 @@ public class ActionLayoutData implements Serializable {
      * </p>
      */
     @XmlElement(required = false)
-    public LinkData getLink() {
+    public Link getLink() {
         return link;
     }
 
-    public void setLink(final LinkData link) {
+    public void setLink(final Link link) {
         this.link = link;
     }
 

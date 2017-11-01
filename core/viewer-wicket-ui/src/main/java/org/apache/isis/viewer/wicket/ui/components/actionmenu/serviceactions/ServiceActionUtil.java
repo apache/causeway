@@ -38,7 +38,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.Model;
 
-import org.apache.isis.applib.layout.menus.ActionLayoutData;
+import org.apache.isis.applib.layout.menus.ServiceActionLayoutData;
 import org.apache.isis.applib.layout.menus.Menu;
 import org.apache.isis.applib.layout.menus.MenuBar;
 import org.apache.isis.applib.layout.menus.MenuBars;
@@ -224,7 +224,7 @@ public final class ServiceActionUtil {
 
                 boolean firstSection = true;
 
-                for (final ActionLayoutData actionLayoutData : menuSection.getActions()) {
+                for (final ServiceActionLayoutData actionLayoutData : menuSection.getActions()) {
                     final String oid = actionLayoutData.getOid();
                     final ObjectAdapter serviceAdapter = serviceAdapterByOid.get(oid);
                     final EntityModel entityModel = new EntityModel(serviceAdapter);
