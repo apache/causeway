@@ -36,7 +36,6 @@ import com.google.common.collect.Lists;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.Meta;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
@@ -187,14 +186,21 @@ public final class Annotations  {
             final Annotation annotation,
             final Class<T> annotationClass,
             final List<AnnotationAndDepth<T>> annotationAndDepths) {
-        appendWithDepth(annotation, annotationClass, annotationAndDepths, 0);
+        appendWithDepth(annotation, annotationClass, annotationAndDepths, 0, Lists.newArrayList());
     }
 
     private static <T extends Annotation> void appendWithDepth(
             final Annotation annotation,
             final Class<T> annotationClass,
             final List<AnnotationAndDepth<T>> annotationAndDepths,
-            final int depth) {
+            final int depth,
+            final List<Annotation> visited) {
+        if (visited.contains(annotation)) {
+            return;
+        } else {
+            // prevent infinite loop
+            visited.add(annotation);
+        }
         final Class<? extends Annotation> annotationType = annotation.annotationType();
 
         // directly annotated
@@ -203,12 +209,12 @@ public final class Annotations  {
         }
 
         // if meta-annotation
-        if(annotationType.getAnnotation(Meta.class) != null) {
+        //if(annotationType.getAnnotation(Meta.class) != null) {
             final Annotation[] annotationsOnAnnotation = annotationType.getAnnotations();
             for (final Annotation annotationOnAnnotation : annotationsOnAnnotation) {
-                appendWithDepth(annotationOnAnnotation, annotationClass, annotationAndDepths, depth+1);
+                appendWithDepth(annotationOnAnnotation, annotationClass, annotationAndDepths, depth+1, visited);
             }
-        }
+        //}
     }
 
     /**

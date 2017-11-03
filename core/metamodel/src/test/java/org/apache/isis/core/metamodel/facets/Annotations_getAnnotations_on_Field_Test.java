@@ -11,7 +11,6 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
-import org.apache.isis.applib.annotation.Meta;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Publishing;
 
@@ -20,7 +19,6 @@ import static org.hamcrest.CoreMatchers.is;
 public class Annotations_getAnnotations_on_Field_Test {
 
 
-    @Meta
     @Property(publishing = Publishing.ENABLED)
     @Inherited
     @Target({ ElementType.FIELD, ElementType.ANNOTATION_TYPE })
@@ -28,7 +26,6 @@ public class Annotations_getAnnotations_on_Field_Test {
     @interface Published {
     }
 
-    @Meta
     @Property(publishing = Publishing.DISABLED)
     @Inherited
     @Target({ ElementType.FIELD, ElementType.ANNOTATION_TYPE })
@@ -36,7 +33,6 @@ public class Annotations_getAnnotations_on_Field_Test {
     @interface NotPublished {
     }
 
-    @Meta
     @Published
     @Inherited
     @Target({ ElementType.FIELD, ElementType.ANNOTATION_TYPE })

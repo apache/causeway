@@ -11,8 +11,6 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
-import org.apache.isis.applib.annotation.Meta;
-
 import static org.hamcrest.CoreMatchers.is;
 
 public class Annotations_getAnnotations_on_Method_Test {
@@ -30,7 +28,6 @@ public class Annotations_getAnnotations_on_Method_Test {
         Publishng publishng() default Publishng.NOT_SPECIFIED;
     }
 
-    @Meta
     @DomainObj(publishng = DomainObj.Publishng.YES)
     @Inherited
     @Target({ ElementType.METHOD, ElementType.ANNOTATION_TYPE })
@@ -38,7 +35,6 @@ public class Annotations_getAnnotations_on_Method_Test {
     @interface Published {
     }
 
-    @Meta
     @DomainObj(publishng = DomainObj.Publishng.NO)
     @Inherited
     @Target({ ElementType.METHOD, ElementType.ANNOTATION_TYPE })
@@ -46,7 +42,6 @@ public class Annotations_getAnnotations_on_Method_Test {
     @interface NotPublished {
     }
 
-    @Meta
     @Published
     @Inherited
     @Target({ ElementType.METHOD, ElementType.ANNOTATION_TYPE })
