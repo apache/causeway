@@ -37,8 +37,7 @@ import org.apache.isis.applib.FatalException;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.layout.component.Grid;
-import org.apache.isis.applib.layout.menus.MenuBars;
+import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBars;
 import org.apache.isis.applib.services.grid.GridService;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.layout.LayoutService2;
@@ -142,7 +141,7 @@ public class LayoutServiceDefault implements LayoutService2 {
     @Programmatic
     @Override
     public String toMenuBarsXml(final MenuBarsService.Type type) {
-        final MenuBars menuBars = menuBarsService.menuBars(type);
+        final BS3MenuBars menuBars = menuBarsService.menuBars(type);
 
         return jaxbService.toXml(menuBars,
                 ImmutableMap.<String,Object>of(

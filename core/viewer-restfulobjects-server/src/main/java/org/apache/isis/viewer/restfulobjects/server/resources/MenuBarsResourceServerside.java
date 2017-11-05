@@ -26,12 +26,11 @@ import javax.ws.rs.core.Response;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.links.Link;
-import org.apache.isis.applib.layout.menus.ServiceActionLayoutData;
-import org.apache.isis.applib.layout.menus.Menu;
-import org.apache.isis.applib.layout.menus.MenuBar;
-import org.apache.isis.applib.layout.menus.MenuBars;
-import org.apache.isis.applib.layout.menus.MenuSection;
-import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.layout.component.ServiceActionLayoutData;
+import org.apache.isis.applib.layout.menubars.bootstrap3.BS3Menu;
+import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBar;
+import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBars;
+import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuSection;
 import org.apache.isis.applib.services.menu.MenuBarsService;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
@@ -62,7 +61,7 @@ public class MenuBarsResourceServerside extends ResourceAbstract implements Menu
         final MenuBarsService menuBarsService =
                 getResourceContext().getServicesInjector().lookupService(MenuBarsService.class);
 
-        final MenuBars menuBars = menuBarsService.menuBars();
+        final BS3MenuBars menuBars = menuBarsService.menuBars();
 
         // TODO: use add a visitor instead to iterate over (cf Grid)
         addLinksFor(menuBars.getPrimary());
@@ -76,11 +75,11 @@ public class MenuBarsResourceServerside extends ResourceAbstract implements Menu
         return builder.build();
     }
 
-    private void addLinksFor(final MenuBar menuBar) {
-        List<Menu> menus = menuBar.getMenus();
-        for (Menu menu : menus) {
-            List<MenuSection> sections = menu.getSections();
-            for (MenuSection section : sections) {
+    private void addLinksFor(final BS3MenuBar menuBar) {
+        List<BS3Menu> menus = menuBar.getMenus();
+        for (BS3Menu menu : menus) {
+            List<BS3MenuSection> sections = menu.getSections();
+            for (BS3MenuSection section : sections) {
                 List<ServiceActionLayoutData> actions = section.getActions();
                 for (ServiceActionLayoutData actionLayoutData : actions) {
                     final String objectType = actionLayoutData.getObjectType();

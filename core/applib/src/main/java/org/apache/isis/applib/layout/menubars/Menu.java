@@ -16,23 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.services.menu;
+package org.apache.isis.applib.layout.menubars;
 
-import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBars;
+public interface Menu {
 
-public interface MenuBarsLoaderService {
-
-    /**
-     * Whether dynamic reloading of layouts is enabled.
-     */
-    @Programmatic
-    boolean supportsReloading();
-
-    /**
-     * Returns a new instance of a {@link BS3MenuBars}, else <tt>null</tt>.
-     */
-    @Programmatic
-    BS3MenuBars menuBars();
 
 }

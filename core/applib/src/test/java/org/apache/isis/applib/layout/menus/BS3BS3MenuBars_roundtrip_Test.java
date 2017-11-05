@@ -20,13 +20,17 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import org.apache.isis.applib.layout.component.ServiceActionLayoutData;
+import org.apache.isis.applib.layout.menubars.bootstrap3.BS3Menu;
+import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBars;
+import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuSection;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-public class MenuBars_roundtrip_Test {
+public class BS3BS3MenuBars_roundtrip_Test {
 
     private JaxbService jaxbService;
 
@@ -44,17 +48,17 @@ public class MenuBars_roundtrip_Test {
     public void happyCase() throws Exception {
 
         // given
-        MenuBars menuBars = new MenuBars();
-        Menu menu = new Menu();
+        BS3MenuBars menuBars = new BS3MenuBars();
+        BS3Menu menu = new BS3Menu();
         menu.setNamed("Parties");
 
-        MenuSection organisationMenu = new MenuSection();
+        BS3MenuSection organisationMenu = new BS3MenuSection();
         organisationMenu.getActions().add(new ServiceActionLayoutData("parties.OrganisationMenu", "findByReference"));
         organisationMenu.getActions().add(new ServiceActionLayoutData("parties.OrganisationMenu", "findByName"));
         organisationMenu.getActions().add(new ServiceActionLayoutData("parties.OrganisationMenu", "create"));
         menu.getSections().add(organisationMenu);
 
-        MenuSection personMenu = new MenuSection();
+        BS3MenuSection personMenu = new BS3MenuSection();
         personMenu.getActions().add(new ServiceActionLayoutData("parties.PersonMenu", "findByUsername"));
         personMenu.getActions().add(new ServiceActionLayoutData("parties.PersonMenu", "create"));
         menu.getSections().add(personMenu);
@@ -66,8 +70,8 @@ public class MenuBars_roundtrip_Test {
         System.out.println(xml);
 
         // when
-        MenuBars menuBars2 =
-                jaxbService.fromXml(MenuBars.class, xml);
+        BS3MenuBars menuBars2 =
+                jaxbService.fromXml(BS3MenuBars.class, xml);
 
         // then
         String xml2 = jaxbService.toXml(menuBars2);

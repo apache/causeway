@@ -40,7 +40,6 @@ import org.apache.isis.applib.layout.component.CollectionLayoutData;
 import org.apache.isis.applib.layout.component.DomainObjectLayoutData;
 import org.apache.isis.applib.layout.component.DomainObjectLayoutDataOwner;
 import org.apache.isis.applib.layout.component.FieldSet;
-import org.apache.isis.applib.layout.component.Grid;
 import org.apache.isis.applib.layout.component.HasBookmarking;
 import org.apache.isis.applib.layout.component.HasCssClass;
 import org.apache.isis.applib.layout.component.HasCssClassFa;
@@ -113,7 +112,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
-public abstract class GridSystemServiceAbstract<G extends Grid> implements GridSystemService<G> {
+public abstract class GridSystemServiceAbstract<G extends org.apache.isis.applib.layout.grid.Grid> implements GridSystemService<G> {
 
     private static final Logger LOG = LoggerFactory.getLogger(GridSystemServiceAbstract.class);
 

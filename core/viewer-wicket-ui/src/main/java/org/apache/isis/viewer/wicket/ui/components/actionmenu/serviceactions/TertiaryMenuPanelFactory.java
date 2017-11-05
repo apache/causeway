@@ -25,7 +25,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.applib.annotation.DomainServiceLayout;
-import org.apache.isis.applib.layout.menus.MenuBars;
+import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBars;
 import org.apache.isis.applib.services.menu.MenuBarsService;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
@@ -66,7 +66,7 @@ public class TertiaryMenuPanelFactory extends ComponentFactoryAbstract {
         final MenuBarsService menuBarsService =
                 getIsisSessionFactory().getServicesInjector().lookupService(MenuBarsService.class);
 
-        final MenuBars menuBars = menuBarsService.menuBars();
+        final BS3MenuBars menuBars = menuBarsService.menuBars();
 
         final List<CssMenuItem> menuItems = ServiceActionUtil.buildMenu(menuBars, serviceActionsModel);
         return new TertiaryActionsPanel(id, menuItems);

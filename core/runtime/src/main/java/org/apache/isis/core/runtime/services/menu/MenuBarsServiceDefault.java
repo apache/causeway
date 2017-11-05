@@ -37,11 +37,11 @@ import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.filter.Filters;
-import org.apache.isis.applib.layout.menus.ServiceActionLayoutData;
-import org.apache.isis.applib.layout.menus.Menu;
-import org.apache.isis.applib.layout.menus.MenuBar;
-import org.apache.isis.applib.layout.menus.MenuBars;
-import org.apache.isis.applib.layout.menus.MenuSection;
+import org.apache.isis.applib.layout.component.ServiceActionLayoutData;
+import org.apache.isis.applib.layout.menubars.bootstrap3.BS3Menu;
+import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBar;
+import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBars;
+import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuSection;
 import org.apache.isis.applib.services.menu.MenuBarsLoaderService;
 import org.apache.isis.applib.services.menu.MenuBarsService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -66,17 +66,17 @@ public class MenuBarsServiceDefault implements MenuBarsService {
     public static final String LINKS_TNS = GridServiceDefault.LINKS_TNS;
     public static final String LINKS_SCHEMA_LOCATION = GridServiceDefault.LINKS_SCHEMA_LOCATION;
 
-    MenuBars menuBars;
+    BS3MenuBars menuBars;
 
     @Override
     @Programmatic
-    public MenuBars menuBars() {
+    public BS3MenuBars menuBars() {
         return menuBars(Type.DEFAULT);
     }
 
     @Override
     @Programmatic
-    public MenuBars menuBars(final Type type) {
+    public BS3MenuBars menuBars(final Type type) {
 
         if(type == Type.FALLBACK) {
             return deriveMenuBarsFromMetaModelFacets();
@@ -85,7 +85,7 @@ public class MenuBarsServiceDefault implements MenuBarsService {
         // else load (and only fallback if nothing could be loaded)...
         if(menuBars == null || menuBarsLoaderService.supportsReloading()) {
 
-            MenuBars menuBars = menuBarsLoaderService.menuBars();
+            BS3MenuBars menuBars = menuBarsLoaderService.menuBars();
 
             if(menuBars == null) {
                 menuBars = deriveMenuBarsFromMetaModelFacets();
@@ -97,9 +97,9 @@ public class MenuBarsServiceDefault implements MenuBarsService {
         return menuBars;
     }
 
-    private MenuBars deriveMenuBarsFromMetaModelFacets() {
-        final MenuBars menuBars;// fallback
-        menuBars = new MenuBars();
+    private BS3MenuBars deriveMenuBarsFromMetaModelFacets() {
+        final BS3MenuBars menuBars;// fallback
+        menuBars = new BS3MenuBars();
 
         final List<ObjectAdapter> serviceAdapters =
                 isisSessionFactory.getCurrentSession().getPersistenceSession().getServices();
@@ -116,7 +116,7 @@ public class MenuBarsServiceDefault implements MenuBarsService {
 
     private void append(
             final List<ObjectAdapter> serviceAdapters,
-            final MenuBar menuBar,
+            final BS3MenuBar menuBar,
             final DomainServiceLayout.MenuBar menuBarPos) {
 
         List<ServiceAndAction> serviceActions = Lists.newArrayList();
@@ -133,27 +133,27 @@ public class MenuBarsServiceDefault implements MenuBarsService {
         // prune any service names that have no service actions
         serviceNamesInOrder.retainAll(serviceActionsByName.keySet());
 
-        List<Menu> menus = buildMenuItems(serviceNamesInOrder, serviceActionsByName);
+        List<BS3Menu> menus = buildMenuItems(serviceNamesInOrder, serviceActionsByName);
         menuBar.getMenus().addAll(menus);
     }
 
-    private static List<Menu> buildMenuItems(
+    private static List<BS3Menu> buildMenuItems(
             final Set<String> serviceNamesInOrder,
             final Map<String, List<ServiceAndAction>> serviceActionsByName) {
 
-        final List<Menu> menus = Lists.newArrayList();
+        final List<BS3Menu> menus = Lists.newArrayList();
         for (String serviceName : serviceNamesInOrder) {
 
-            Menu menu = new Menu(serviceName);
+            BS3Menu menu = new BS3Menu(serviceName);
             menus.add(menu);
 
-            MenuSection menuSection = new MenuSection();
+            BS3MenuSection menuSection = new BS3MenuSection();
             final List<ServiceAndAction> serviceActionsForName = serviceActionsByName.get(serviceName);
             for (ServiceAndAction serviceAndAction : serviceActionsForName) {
 
                 if(serviceAndAction.separator && !menuSection.getActions().isEmpty()) {
                     menu.getSections().add(menuSection);
-                    menuSection = new MenuSection();
+                    menuSection = new BS3MenuSection();
                 }
 
                 ObjectAction objectAction = serviceAndAction.objectAction;

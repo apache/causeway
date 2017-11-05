@@ -16,23 +16,11 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.applib.layout.component;
 
-/**
- * The classes in this package provide layout metadata for a domain object's properties, collections and actions - the
- * &quot;building blocks&quot; which then must be arranged into some sort of layout.
- *
- * <p>
- *     The <code>bootstrap3</code> and <code>fixedcols</code> packages both provide different ways of doing the layout,
- *     and both reference the classes in this package.
- * </p>
- *
- */
-@javax.xml.bind.annotation.XmlSchema(
-        namespace = "http://isis.apache.org/applib/layout/menus",
-        elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED,
-        xmlns = {
-                @javax.xml.bind.annotation.XmlNs(
-                        namespaceURI = "http://isis.apache.org/applib/layout/menus", prefix = "mnu")
+import java.util.List;
+
+public interface ServiceActionLayoutDataOwner extends Owner {
+    List<ServiceActionLayoutData> getActions();
+    void setActions(List<ServiceActionLayoutData> actions);
 }
-)
-package org.apache.isis.applib.layout.menus;

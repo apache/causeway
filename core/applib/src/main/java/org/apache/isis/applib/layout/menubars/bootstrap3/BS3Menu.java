@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.layout.menus;
+package org.apache.isis.applib.layout.menubars.bootstrap3;
 
 import java.io.Serializable;
 import java.util.List;
@@ -28,6 +28,7 @@ import javax.xml.bind.annotation.XmlType;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.annotation.DomainServiceLayout;
+import org.apache.isis.applib.layout.menubars.Menu;
 
 /**
  * Describes the collection of domain services into menubars, broadly corresponding to the aggregation of information of {@link DomainServiceLayout} that have the same value of {@link DomainServiceLayout#named()}.
@@ -40,14 +41,14 @@ import org.apache.isis.applib.annotation.DomainServiceLayout;
             "sections"
         }
 )
-public class Menu implements Serializable {
+public class BS3Menu implements Menu, Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public Menu() {
+    public BS3Menu() {
     }
 
-    public Menu(String named) {
+    public BS3Menu(String named) {
         this.named = named;
     }
 
@@ -78,15 +79,15 @@ public class Menu implements Serializable {
 
 
 
-    private List<MenuSection> sections = Lists.newArrayList();
+    private List<BS3MenuSection> sections = Lists.newArrayList();
 
     // no wrapper
     @XmlElement(name = "section", required = true)
-    public List<MenuSection> getSections() {
+    public List<BS3MenuSection> getSections() {
         return sections;
     }
 
-    public void setSections(List<MenuSection> menuSections) {
+    public void setSections(List<BS3MenuSection> menuSections) {
         this.sections = sections;
     }
 

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.layout.menus;
+package org.apache.isis.applib.layout.menubars.bootstrap3;
 
 import java.io.Serializable;
 import java.util.List;
@@ -26,35 +26,39 @@ import javax.xml.bind.annotation.XmlType;
 
 import com.google.common.collect.Lists;
 
-import org.apache.isis.applib.annotation.DomainServiceLayout;
+import org.apache.isis.applib.layout.component.ServiceActionLayoutData;
+import org.apache.isis.applib.layout.component.ServiceActionLayoutDataOwner;
+import org.apache.isis.applib.layout.menubars.MenuSection;
 
 /**
- * Describes the collection of domain services into menubars, broadly corresponding to the aggregation of information of {@link org.apache.isis.applib.annotation.DomainServiceLayout} that have the same value of {@link DomainServiceLayout#named()}.
+ * Corresponds to a domain service that contributes its actions under a particular {@link BS3MenuBar}.
  */
 @XmlType(
-        name = "menuBar"
+        name = "section"
         , propOrder = {
-            "menus"
+            "actions"
         }
 )
-public class MenuBar implements Serializable {
+public class BS3MenuSection implements MenuSection, Serializable, ServiceActionLayoutDataOwner {
 
     private static final long serialVersionUID = 1L;
 
-    public MenuBar() {
+    public BS3MenuSection() {
     }
 
 
-    private List<Menu> menus = Lists.newArrayList();
+    private List<ServiceActionLayoutData> actions = Lists.newArrayList();
 
     // no wrapper
-    @XmlElement(name = "menu", required = true)
-    public List<Menu> getMenus() {
-        return menus;
+    @Override
+    @XmlElement(name = "action", required = true)
+    public List<ServiceActionLayoutData> getActions() {
+        return actions;
     }
 
-    public void setMenus(List<Menu> menus) {
-        this.menus = menus;
+    @Override
+    public void setActions(List<ServiceActionLayoutData> actionLayoutDatas) {
+        this.actions = actionLayoutDatas;
     }
 
 

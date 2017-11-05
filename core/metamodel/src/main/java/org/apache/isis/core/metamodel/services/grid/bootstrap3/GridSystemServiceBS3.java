@@ -46,7 +46,6 @@ import org.apache.isis.applib.layout.component.ActionLayoutDataOwner;
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
 import org.apache.isis.applib.layout.component.DomainObjectLayoutData;
 import org.apache.isis.applib.layout.component.FieldSet;
-import org.apache.isis.applib.layout.component.Grid;
 import org.apache.isis.applib.layout.component.PropertyLayoutData;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Col;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Grid;

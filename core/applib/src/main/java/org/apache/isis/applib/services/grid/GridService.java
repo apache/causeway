@@ -23,7 +23,6 @@ import org.apache.isis.applib.annotation.MemberGroupLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.layout.component.Grid;
 
 public interface GridService {
 

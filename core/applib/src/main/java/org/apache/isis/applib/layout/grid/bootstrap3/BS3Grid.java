@@ -35,9 +35,9 @@ import org.apache.isis.applib.layout.component.ActionLayoutData;
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
 import org.apache.isis.applib.layout.component.DomainObjectLayoutData;
 import org.apache.isis.applib.layout.component.FieldSet;
-import org.apache.isis.applib.layout.component.Grid;
-import org.apache.isis.applib.layout.component.GridAbstract;
 import org.apache.isis.applib.layout.component.PropertyLayoutData;
+import org.apache.isis.applib.layout.grid.Grid;
+import org.apache.isis.applib.layout.grid.GridAbstract;
 import org.apache.isis.applib.services.dto.Dto;
 
 /**

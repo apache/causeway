@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.layout.menus;
+package org.apache.isis.applib.layout.menubars.bootstrap3;
 
 import java.io.Serializable;
 import java.util.List;
@@ -26,36 +26,36 @@ import javax.xml.bind.annotation.XmlType;
 
 import com.google.common.collect.Lists;
 
+import org.apache.isis.applib.annotation.DomainServiceLayout;
+import org.apache.isis.applib.layout.menubars.MenuBar;
 
 /**
- * Corresponds to a domain service that contributes its actions under a particular {@link MenuBar}.
+ * Describes the collection of domain services into menubars, broadly corresponding to the aggregation of information of {@link org.apache.isis.applib.annotation.DomainServiceLayout} that have the same value of {@link DomainServiceLayout#named()}.
  */
 @XmlType(
-        name = "section"
+        name = "menuBar"
         , propOrder = {
-            "actions"
+            "menus"
         }
 )
-public class MenuSection implements Serializable, ServiceActionLayoutDataOwner {
+public class BS3MenuBar implements MenuBar, Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public MenuSection() {
+    public BS3MenuBar() {
     }
 
 
-    private List<ServiceActionLayoutData> actions = Lists.newArrayList();
+    private List<BS3Menu> menus = Lists.newArrayList();
 
     // no wrapper
-    @Override
-    @XmlElement(name = "action", required = true)
-    public List<ServiceActionLayoutData> getActions() {
-        return actions;
+    @XmlElement(name = "menu", required = true)
+    public List<BS3Menu> getMenus() {
+        return menus;
     }
 
-    @Override
-    public void setActions(List<ServiceActionLayoutData> actionLayoutDatas) {
-        this.actions = actionLayoutDatas;
+    public void setMenus(List<BS3Menu> menus) {
+        this.menus = menus;
     }
 
 

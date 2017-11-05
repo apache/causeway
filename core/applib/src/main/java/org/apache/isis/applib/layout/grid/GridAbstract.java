@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.layout.component;
+package org.apache.isis.applib.layout.grid;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -27,6 +27,13 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.layout.component.ActionLayoutData;
+import org.apache.isis.applib.layout.component.ActionLayoutDataOwner;
+import org.apache.isis.applib.layout.component.CollectionLayoutData;
+import org.apache.isis.applib.layout.component.CollectionLayoutDataOwner;
+import org.apache.isis.applib.layout.component.FieldSet;
+import org.apache.isis.applib.layout.component.FieldSetOwner;
+import org.apache.isis.applib.layout.component.PropertyLayoutData;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Grid;
 import org.apache.isis.applib.services.layout.LayoutService;
 
@@ -39,7 +46,6 @@ import org.apache.isis.applib.services.layout.LayoutService;
  */
 @XmlTransient // ignore this class
 public abstract class GridAbstract implements Grid {
-
 
     private Class<?> domainClass;
 

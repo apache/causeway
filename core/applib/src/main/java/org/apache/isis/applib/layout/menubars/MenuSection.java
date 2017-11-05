@@ -16,13 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.layout.menus;
+package org.apache.isis.applib.layout.menubars;
 
-import java.util.List;
+public interface MenuSection {
 
-import org.apache.isis.applib.layout.component.Owner;
 
-public interface ServiceActionLayoutDataOwner extends Owner {
-    List<ServiceActionLayoutData> getActions();
-    void setActions(List<ServiceActionLayoutData> actions);
 }

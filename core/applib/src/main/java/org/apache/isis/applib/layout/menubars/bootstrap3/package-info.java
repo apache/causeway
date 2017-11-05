@@ -16,24 +16,23 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.object.grid;
-
-import org.apache.isis.applib.services.grid.GridSystemService;
-import org.apache.isis.applib.services.layout.LayoutService;
-import org.apache.isis.core.metamodel.facetapi.Facet;
 
 /**
- * Obtain the current grid, derived either from a <code>.layout.xml</code> file, and normalized, or synthesized from
- * existing layout metadata (annotations or <code>layout.json</code>).
+ * The classes in this package provide layout metadata for a domain object's properties, collections and actions - the
+ * &quot;building blocks&quot; which then must be arranged into some sort of layout.
  *
  * <p>
- *     Most of the heavy lifting is done by delegating to the {@link LayoutService} and {@link GridSystemService}
- *     services.
+ *     The <code>bootstrap3</code> and <code>fixedcols</code> packages both provide different ways of doing the layout,
+ *     and both reference the classes in this package.
  * </p>
+ *
  */
-public interface GridFacet extends Facet {
-
-    Grid getGrid();
-
-
+@javax.xml.bind.annotation.XmlSchema(
+        namespace = "http://isis.apache.org/applib/layout/menubars/bootstrap3",
+        elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED,
+        xmlns = {
+                @javax.xml.bind.annotation.XmlNs(
+                        namespaceURI = "http://isis.apache.org/applib/layout/menubars/bootstrap3", prefix = "mb3")
 }
+)
+package org.apache.isis.applib.layout.menubars.bootstrap3;

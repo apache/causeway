@@ -26,7 +26,7 @@ import com.google.common.io.Resources;
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.layout.menus.MenuBars;
+import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBars;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.menu.MenuBarsLoaderService;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
@@ -41,13 +41,13 @@ public class MenuBarsLoaderServiceDefault implements MenuBarsLoaderService {
     }
 
     @Override
-    public MenuBars menuBars() {
+    public BS3MenuBars menuBars() {
         final AppManifest appManifest = isisSessionFactory.getAppManifest();
         try {
             final URL resource = Resources.getResource(appManifest.getClass(), "menubars.layout.xml");
             String xml = Resources.toString(resource, Charsets.UTF_8);
 
-            return jaxbService.fromXml(MenuBars.class, xml);
+            return jaxbService.fromXml(BS3MenuBars.class, xml);
         } catch (Exception e) {
             return null;
         }

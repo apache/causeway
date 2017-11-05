@@ -16,11 +16,16 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.layout.component;
+package org.apache.isis.applib.layout.grid;
 
 import java.util.LinkedHashMap;
 
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.layout.component.ActionLayoutData;
+import org.apache.isis.applib.layout.component.CollectionLayoutData;
+import org.apache.isis.applib.layout.component.DomainObjectLayoutData;
+import org.apache.isis.applib.layout.component.FieldSet;
+import org.apache.isis.applib.layout.component.PropertyLayoutData;
 import org.apache.isis.applib.services.layout.LayoutService;
 
 /**

@@ -31,7 +31,6 @@ import javax.ws.rs.core.Response;
 import com.google.common.base.Strings;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.layout.component.Grid;
 import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;

@@ -19,7 +19,7 @@
 package org.apache.isis.applib.services.menu;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.layout.menus.MenuBars;
+import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBars;
 
 public interface MenuBarsService {
 
@@ -40,8 +40,8 @@ public interface MenuBarsService {
      * @return
      */
     @Programmatic
-    MenuBars menuBars();
+    BS3MenuBars menuBars();
 
     @Programmatic
-    MenuBars menuBars(final Type type);
+    BS3MenuBars menuBars(final Type type);
 }
