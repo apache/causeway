@@ -36,7 +36,7 @@ import com.google.common.collect.Lists;
             "actions"
         }
 )
-public class MenuSection implements Serializable, ActionLayoutDataOwner {
+public class MenuSection implements Serializable, ServiceActionLayoutDataOwner {
 
     private static final long serialVersionUID = 1L;
 

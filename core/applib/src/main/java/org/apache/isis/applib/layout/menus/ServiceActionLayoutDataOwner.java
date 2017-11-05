@@ -22,7 +22,7 @@ import java.util.List;
 
 import org.apache.isis.applib.layout.component.Owner;
 
-public interface ActionLayoutDataOwner extends Owner {
+public interface ServiceActionLayoutDataOwner extends Owner {
     List<ServiceActionLayoutData> getActions();
     void setActions(List<ServiceActionLayoutData> actions);
 }

@@ -178,7 +178,7 @@ public class ServiceActionLayoutData implements Serializable {
 
 
 
-    private ActionLayoutDataOwner owner;
+    private ServiceActionLayoutDataOwner owner;
     /**
      * Owner.
      *
@@ -187,11 +187,11 @@ public class ServiceActionLayoutData implements Serializable {
      * </p>
      */
     @XmlTransient
-    public ActionLayoutDataOwner getOwner() {
+    public ServiceActionLayoutDataOwner getOwner() {
         return owner;
     }
 
-    public void setOwner(final ActionLayoutDataOwner owner) {
+    public void setOwner(final ServiceActionLayoutDataOwner owner) {
         this.owner = owner;
     }
 
