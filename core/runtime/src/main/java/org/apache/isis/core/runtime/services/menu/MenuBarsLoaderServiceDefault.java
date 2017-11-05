@@ -18,7 +18,6 @@
  */
 package org.apache.isis.core.runtime.services.menu;
 
-import java.io.IOException;
 import java.net.URL;
 
 import com.google.common.base.Charsets;
@@ -44,12 +43,12 @@ public class MenuBarsLoaderServiceDefault implements MenuBarsLoaderService {
     @Override
     public MenuBars menuBars() {
         final AppManifest appManifest = isisSessionFactory.getAppManifest();
-        final URL resource = Resources.getResource(appManifest.getClass(), "menubars.layout.xml");
         try {
+            final URL resource = Resources.getResource(appManifest.getClass(), "menubars.layout.xml");
             String xml = Resources.toString(resource, Charsets.UTF_8);
 
             return jaxbService.fromXml(MenuBars.class, xml);
-        } catch (IOException e) {
+        } catch (Exception e) {
             return null;
         }
     }
