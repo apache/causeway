@@ -90,4 +90,23 @@ public class Menu implements Serializable {
         this.sections = sections;
     }
 
+
+    private Boolean unreferencedActions;
+
+    /**
+     * Whether this menu should be used to hold any unreferenced actions.
+     *
+     * <p>
+     *     Any menubars layout must have precisely one menu that has this attribute set.
+     * </p>
+     */
+    @XmlAttribute(required = false)
+    public Boolean isUnreferencedActions() {
+        return unreferencedActions;
+    }
+
+    public void setUnreferencedActions(final Boolean unreferencedActions) {
+        this.unreferencedActions = unreferencedActions;
+    }
+
 }
