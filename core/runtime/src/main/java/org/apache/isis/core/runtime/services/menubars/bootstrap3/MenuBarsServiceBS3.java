@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.runtime.services.menu;
+package org.apache.isis.core.runtime.services.menubars.bootstrap3;
 
 import java.util.List;
 import java.util.Map;
@@ -58,10 +58,13 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
 @DomainService(nature = NatureOfService.DOMAIN)
-public class MenuBarsServiceDefault implements MenuBarsService {
+public class MenuBarsServiceBS3 implements MenuBarsService {
 
-    public static final String MENUS_TNS = "http://isis.apache.org/applib/layout/menus";
-    public static final String MENUS_SCHEMA_LOCATION = "http://isis.apache.org/applib/layout/menus/menus.xsd";
+    public static final String MB3_TNS = "http://isis.apache.org/applib/layout/menubars/bootstrap3";
+    public static final String MB3_SCHEMA_LOCATION = "http://isis.apache.org/applib/layout/menubars/bootstrap3/menubars.xsd";
+
+    public static final String COMPONENT_TNS = GridServiceDefault.COMPONENT_TNS;
+    public static final String COMPONENT_SCHEMA_LOCATION = GridServiceDefault.COMPONENT_SCHEMA_LOCATION;
 
     public static final String LINKS_TNS = GridServiceDefault.LINKS_TNS;
     public static final String LINKS_SCHEMA_LOCATION = GridServiceDefault.LINKS_SCHEMA_LOCATION;
@@ -98,8 +101,7 @@ public class MenuBarsServiceDefault implements MenuBarsService {
     }
 
     private BS3MenuBars deriveMenuBarsFromMetaModelFacets() {
-        final BS3MenuBars menuBars;// fallback
-        menuBars = new BS3MenuBars();
+        final BS3MenuBars menuBars = new BS3MenuBars();
 
         final List<ObjectAdapter> serviceAdapters =
                 isisSessionFactory.getCurrentSession().getPersistenceSession().getServices();
@@ -276,8 +278,11 @@ public class MenuBarsServiceDefault implements MenuBarsService {
     private String tnsAndSchemaLocation() {
         final List<String> parts = Lists.newArrayList();
 
-        parts.add(MENUS_TNS);
-        parts.add(MENUS_SCHEMA_LOCATION);
+        parts.add(MB3_TNS);
+        parts.add(MB3_SCHEMA_LOCATION);
+
+        parts.add(COMPONENT_TNS);
+        parts.add(COMPONENT_SCHEMA_LOCATION);
 
         parts.add(LINKS_TNS);
         parts.add(LINKS_SCHEMA_LOCATION);

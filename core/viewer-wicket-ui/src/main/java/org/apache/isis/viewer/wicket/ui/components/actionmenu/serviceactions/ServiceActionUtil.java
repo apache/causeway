@@ -38,11 +38,11 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.Model;
 
-import org.apache.isis.applib.layout.menubars.bootstrap3.BS3Menu;
-import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBar;
-import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBars;
-import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuSection;
 import org.apache.isis.applib.layout.component.ServiceActionLayoutData;
+import org.apache.isis.applib.layout.menubars.Menu;
+import org.apache.isis.applib.layout.menubars.MenuBar;
+import org.apache.isis.applib.layout.menubars.MenuBars;
+import org.apache.isis.applib.layout.menubars.MenuSection;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -200,10 +200,10 @@ public final class ServiceActionUtil {
     }
 
     public static List<CssMenuItem> buildMenu(
-            final BS3MenuBars menuBars,
+            final MenuBars menuBars,
             final ServiceActionsModel serviceActionsModel) {
 
-        final BS3MenuBar menuBar = menuBars.menuBarFor(serviceActionsModel.getMenuBar());
+        final MenuBar menuBar = menuBars.menuBarFor(serviceActionsModel.getMenuBar());
 
         final List<ObjectAdapter> serviceAdapters = serviceActionsModel.getObject();
         final ImmutableMap<ObjectAdapter, String> oidByServiceAdapter = FluentIterable.from(serviceAdapters)
@@ -217,12 +217,12 @@ public final class ServiceActionUtil {
                 .copyOf(oidByServiceAdapter).inverse();
 
         final List<CssMenuItem> menuItems = Lists.newArrayList();
-        for (final BS3Menu menu : menuBar.getMenus()) {
+        for (final Menu menu : menuBar.getMenus()) {
 
             final CssMenuItem serviceMenu = CssMenuItem.newMenuItem(menu.getNamed()).build();
 
 
-            for (final BS3MenuSection menuSection : menu.getSections()) {
+            for (final MenuSection menuSection : menu.getSections()) {
 
                 boolean firstSection = true;
 

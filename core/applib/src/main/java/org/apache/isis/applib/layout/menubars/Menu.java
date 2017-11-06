@@ -18,7 +18,15 @@
  */
 package org.apache.isis.applib.layout.menubars;
 
+import java.util.List;
+
+import org.apache.isis.applib.annotation.Programmatic;
+
 public interface Menu {
 
+    @Programmatic
+    String getNamed();
 
+    @Programmatic
+    List<MenuSection> getSections();
 }

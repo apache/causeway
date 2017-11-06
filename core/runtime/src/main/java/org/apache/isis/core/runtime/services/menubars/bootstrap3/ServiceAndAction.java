@@ -1,4 +1,4 @@
-package org.apache.isis.core.runtime.services.menu;
+package org.apache.isis.core.runtime.services.menubars.bootstrap3;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;

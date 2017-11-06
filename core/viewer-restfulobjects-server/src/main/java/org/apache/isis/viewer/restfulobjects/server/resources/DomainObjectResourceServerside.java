@@ -36,6 +36,7 @@ import org.apache.isis.applib.layout.component.ActionLayoutData;
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
 import org.apache.isis.applib.layout.component.DomainObjectLayoutData;
 import org.apache.isis.applib.layout.component.PropertyLayoutData;
+import org.apache.isis.applib.layout.grid.Grid;
 import org.apache.isis.applib.layout.links.Link;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.core.commons.url.UrlEncodingUtils;

@@ -34,6 +34,7 @@ import org.apache.wicket.model.Model;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.filter.Filters;
+import org.apache.isis.applib.layout.grid.Grid;
 import org.apache.isis.applib.services.tablecol.TableColumnOrderService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;

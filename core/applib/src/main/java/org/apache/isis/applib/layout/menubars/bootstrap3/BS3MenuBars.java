@@ -18,17 +18,16 @@
  */
 package org.apache.isis.applib.layout.menubars.bootstrap3;
 
-import java.io.Serializable;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.layout.component.ServiceActionLayoutData;
-import org.apache.isis.applib.layout.menubars.MenuBars;
+import org.apache.isis.applib.layout.menubars.Menu;
+import org.apache.isis.applib.layout.menubars.MenuSection;
 
 /**
  * Describes the collection of domain services into menubars, broadly corresponding to the aggregation of information within {@link org.apache.isis.applib.annotation.DomainServiceLayout}.
@@ -45,22 +44,11 @@ import org.apache.isis.applib.layout.menubars.MenuBars;
             "metadataError"
         }
 )
-public class BS3MenuBars implements MenuBars, Serializable {
+public class BS3MenuBars extends org.apache.isis.applib.layout.menubars.MenuBarsAbstract {
 
     private static final long serialVersionUID = 1L;
 
     public BS3MenuBars() {
-    }
-
-    private String tnsAndSchemaLocation;
-
-    @XmlTransient
-    public String getTnsAndSchemaLocation() {
-        return tnsAndSchemaLocation;
-    }
-
-    public void setTnsAndSchemaLocation(final String tnsAndSchemaLocation) {
-        this.tnsAndSchemaLocation = tnsAndSchemaLocation;
     }
 
     private BS3MenuBar primary = new BS3MenuBar();
@@ -93,24 +81,6 @@ public class BS3MenuBars implements MenuBars, Serializable {
         this.tertiary = tertiary;
     }
 
-
-
-    private String metadataError;
-
-    /**
-     * For diagnostics; populated by the framework if and only if a metadata error.
-     */
-    @XmlElement(required = false)
-    public String getMetadataError() {
-        return metadataError;
-    }
-
-    public void setMetadataError(final String metadataError) {
-        this.metadataError = metadataError;
-    }
-
-
-
     public BS3MenuBar menuBarFor(final DomainServiceLayout.MenuBar menuBar) {
         switch (menuBar) {
         case PRIMARY:
@@ -132,28 +102,45 @@ public class BS3MenuBars implements MenuBars, Serializable {
 
     private void traverseMenuBar(final BS3MenuBar menuBar, final Visitor visitor) {
         visitor.preVisit(menuBar);
-        final List<BS3Menu> menus = menuBar.getMenus();
-        for (BS3Menu menu : menus) {
+        visitor.visit(menuBar);
+        for (Menu menu : menuBar.getMenus()) {
             traverseMenu(menu, visitor);
         }
         visitor.postVisit(menuBar);
     }
 
-    private void traverseMenu(final BS3Menu menu, final Visitor visitor) {
+    private void traverseMenu(final Menu menu, final Visitor visitor) {
         visitor.preVisit(menu);
-        final List<BS3MenuSection> sections = menu.getSections();
-        for (BS3MenuSection section : sections) {
+        visitor.visit(menu);
+        final List<MenuSection> sections = menu.getSections();
+        for (MenuSection section : sections) {
             traverseSection(section, visitor);
         }
         visitor.postVisit(menu);
     }
 
-    private void traverseSection(final BS3MenuSection section, final Visitor visitor) {
+    private void traverseSection(final MenuSection section, final Visitor visitor) {
         visitor.preVisit(section);
+        visitor.visit(section);
         final List<ServiceActionLayoutData> actions = section.getActions();
         for (ServiceActionLayoutData action : actions) {
             visitor.visit(action);
         }
         visitor.postVisit(section);
     }
+
+    private String metadataError;
+
+    /**
+     * For diagnostics; populated by the framework if and only if a metadata error.
+     */
+    @XmlElement(required = false)
+    public String getMetadataError() {
+        return metadataError;
+    }
+
+    public void setMetadataError(final String metadataError) {
+        this.metadataError = metadataError;
+    }
+
 }

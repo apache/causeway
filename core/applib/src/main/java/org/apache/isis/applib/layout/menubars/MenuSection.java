@@ -18,7 +18,13 @@
  */
 package org.apache.isis.applib.layout.menubars;
 
+import java.util.List;
+
+import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.layout.component.ServiceActionLayoutData;
+
 public interface MenuSection {
 
-
+    @Programmatic
+    List<ServiceActionLayoutData> getActions();
 }

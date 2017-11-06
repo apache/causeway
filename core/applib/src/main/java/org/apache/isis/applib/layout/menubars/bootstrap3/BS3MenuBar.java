@@ -27,6 +27,7 @@ import javax.xml.bind.annotation.XmlType;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.annotation.DomainServiceLayout;
+import org.apache.isis.applib.layout.menubars.Menu;
 import org.apache.isis.applib.layout.menubars.MenuBar;
 
 /**
@@ -46,15 +47,15 @@ public class BS3MenuBar implements MenuBar, Serializable {
     }
 
 
-    private List<BS3Menu> menus = Lists.newArrayList();
+    private List<Menu> menus = Lists.newArrayList();
 
     // no wrapper
     @XmlElement(name = "menu", required = true)
-    public List<BS3Menu> getMenus() {
+    public List<Menu> getMenus() {
         return menus;
     }
 
-    public void setMenus(List<BS3Menu> menus) {
+    public void setMenus(List<Menu> menus) {
         this.menus = menus;
     }
 

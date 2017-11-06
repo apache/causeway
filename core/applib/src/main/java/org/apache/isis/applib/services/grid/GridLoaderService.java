@@ -17,6 +17,7 @@
 package org.apache.isis.applib.services.grid;
 
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.layout.grid.Grid;
 
 public interface GridLoaderService {
 

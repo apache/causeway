@@ -47,6 +47,7 @@ import org.apache.isis.applib.layout.component.HasDescribedAs;
 import org.apache.isis.applib.layout.component.HasHidden;
 import org.apache.isis.applib.layout.component.HasNamed;
 import org.apache.isis.applib.layout.component.PropertyLayoutData;
+import org.apache.isis.applib.layout.grid.Grid;
 import org.apache.isis.applib.services.grid.GridSystemService;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.jaxb.JaxbService;

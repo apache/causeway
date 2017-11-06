@@ -14,23 +14,20 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.applib.layout.menus;
+package org.apache.isis.applib.layout.menubars.bootstrap3;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import org.apache.isis.applib.layout.component.ServiceActionLayoutData;
-import org.apache.isis.applib.layout.menubars.bootstrap3.BS3Menu;
-import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBars;
-import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuSection;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-public class BS3BS3MenuBars_roundtrip_Test {
+public class BS3MenuBars_roundtrip_Test {
 
     private JaxbService jaxbService;
 

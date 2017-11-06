@@ -31,7 +31,7 @@ import org.junit.Test;
 import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBars;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 
-public class BS3BS3MenuBarsTest {
+public class BS3MenuBarsTest {
 
     private JaxbService jaxbService;
 

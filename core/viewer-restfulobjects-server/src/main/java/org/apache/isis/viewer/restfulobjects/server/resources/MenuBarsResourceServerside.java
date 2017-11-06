@@ -18,19 +18,14 @@
  */
 package org.apache.isis.viewer.restfulobjects.server.resources;
 
-import java.util.List;
-
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.layout.links.Link;
 import org.apache.isis.applib.layout.component.ServiceActionLayoutData;
-import org.apache.isis.applib.layout.menubars.bootstrap3.BS3Menu;
-import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBar;
-import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBars;
-import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuSection;
+import org.apache.isis.applib.layout.links.Link;
+import org.apache.isis.applib.layout.menubars.MenuBars;
 import org.apache.isis.applib.services.menu.MenuBarsService;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
@@ -61,12 +56,8 @@ public class MenuBarsResourceServerside extends ResourceAbstract implements Menu
         final MenuBarsService menuBarsService =
                 getResourceContext().getServicesInjector().lookupService(MenuBarsService.class);
 
-        final BS3MenuBars menuBars = menuBarsService.menuBars();
-
-        // TODO: use add a visitor instead to iterate over (cf Grid)
-        addLinksFor(menuBars.getPrimary());
-        addLinksFor(menuBars.getSecondary());
-        addLinksFor(menuBars.getTertiary());
+        final MenuBars menuBars = menuBarsService.menuBars();
+        addLinksForServiceActions(menuBars);
 
         builder = Response.status(Response.Status.OK)
                 .entity(serializationStrategy.entity(menuBars))
@@ -75,25 +66,21 @@ public class MenuBarsResourceServerside extends ResourceAbstract implements Menu
         return builder.build();
     }
 
-    private void addLinksFor(final BS3MenuBar menuBar) {
-        List<BS3Menu> menus = menuBar.getMenus();
-        for (BS3Menu menu : menus) {
-            List<BS3MenuSection> sections = menu.getSections();
-            for (BS3MenuSection section : sections) {
-                List<ServiceActionLayoutData> actions = section.getActions();
-                for (ServiceActionLayoutData actionLayoutData : actions) {
-                    final String objectType = actionLayoutData.getObjectType();
-                    Link link = new Link(
-                            Rel.ACTION.getName(),
-                            RestfulHttpMethod.GET.getJavaxRsMethod(),
-                            getResourceContext().urlFor(
-                                    "objects/" + objectType + "/" + PersistenceSession.SERVICE_IDENTIFIER + "/actions/" + actionLayoutData.getId()
-                            ),
-                            RepresentationType.OBJECT_ACTION.getJsonMediaType().toString());
-                    actionLayoutData.setLink(link);
-                }
+    void addLinksForServiceActions(final MenuBars menuBars) {
+        menuBars.visit(new MenuBars.VisitorAdapter() {
+            @Override
+            public void visit(final ServiceActionLayoutData actionLayoutData) {
+                final String objectType = actionLayoutData.getObjectType();
+                Link link = new Link(
+                        Rel.ACTION.getName(),
+                        RestfulHttpMethod.GET.getJavaxRsMethod(),
+                        getResourceContext().urlFor(
+                                "objects/" + objectType + "/" + PersistenceSession.SERVICE_IDENTIFIER + "/actions/" + actionLayoutData.getId()
+                        ),
+                        RepresentationType.OBJECT_ACTION.getJsonMediaType().toString());
+                actionLayoutData.setLink(link);
             }
-        }
+        });
     }
 
     @Override

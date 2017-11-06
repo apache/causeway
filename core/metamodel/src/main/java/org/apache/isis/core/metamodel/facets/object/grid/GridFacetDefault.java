@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.facets.object.grid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.isis.applib.layout.grid.Grid;
 import org.apache.isis.applib.services.grid.GridService;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
