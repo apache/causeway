@@ -20,22 +20,38 @@ For example, the xref:../ugfun/ugfun.html#_ugfun_getting-started_helloworld-arch
 
 [source,xml]
 ----
-<mnu:menuBars xmlns:mnu="http://isis.apache.org/applib/layout/menus" xmlns:lnk="http://isis.apache.org/applib/layout/links">
-  <mnu:primary>
-    <mnu:menu>
-      <mnu:named>Hello World Objects</mnu:named>
-      <mnu:section>
-        <mnu:action oid="helloworld.HelloWorldObjects:1" id="create">
-          <mnu:named>Create</mnu:named>
-        </mnu:action>
+<mb3:menuBars
+    xsi:schemaLocation="..."
+    xmlns:cpt="http://isis.apache.org/applib/layout/component"
+    xmlns:lnk="http://isis.apache.org/applib/layout/links"
+    xmlns:mb3="http://isis.apache.org/applib/layout/menubars/bootstrap3"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <mb3:primary>
+        <mb3:menu>
+            <mb3:named>Hello World Objects</mb3:named>
+            <mb3:section>
+                <mb3:serviceAction objectType="helloworld.HelloWorldObjects" id="create">
+                    <cpt:named>Create</cpt:named>
+                </mb3:serviceAction>
+                ...
+            </mb3:section>
+        </mb3:menu>
+        <mb3:menu unreferencedActions="true">
+            <mb3:named>Other</mb3:named>
+        </mb3:menu>
         ...
-      </mnu:section>
-      ...
-    </mnu:menu>
-  </mnu:primary>
-  ...
-</mnu:menuBars>
+    </mb3:primary>
+    <mb3:secondary>
+        ...
+    </mb3:secondary>
+    <mb3:tertiary>
+        ...
+    </mb3:tertiary>
+</mb3:menuBars>
 ----
+
+Note that exactly one `<mb3:menu>` must have the `unreferencedActions` flag set.
+Any service actions that are not explicitly listed will be added to this menu.
 
 The representation returned by home page resource (section 5.2 of the RO spec v1.0) has been extended to provide a link to this resource:
 
@@ -55,40 +71,40 @@ The representation returned by home page resource (section 5.2 of the RO spec v1
 }
 ----
 
-The representation returned by the `/menuBars` resource (assuming an HTTP header of `Accept: applicatoin/xml`) is a superset of the `menu.layout.xml`; each action also includes a `link` to the corresponding Restful Objects resource:
+The representation returned by the `/menuBars` resource (assuming an HTTP header of `Accept: application/xml`) is a superset of the `menu.layout.xml`; each action also includes a `link` to the corresponding Restful Objects resource:
 
 [source,xml]
 ----
-<mnu:action oid="helloworld.HelloWorldObjects:1" id="create">
-  <mnu:named>Create</mnu:named>
-  <mnu:link>
-    <lnk:rel>urn:org.restfulobjects:rels/action</lnk:rel>
-    <lnk:method>GET</lnk:method>
-    <lnk:href>
-      http://localhost:8080/restful/objects/helloworld.HelloWorldObjects/1/actions/create
-    </lnk:href>
-    <lnk:type>
-      application/json;profile="urn:org.restfulobjects:repr-types/object-action"
-    </lnk:type>
-  </mnu:link>
-</mnu:action>
+<mb3:serviceAction objectType="helloworld.HelloWorldObjects" id="create">
+  <cpt:named>Create</cpt:named>
+    <cpt:link>
+      <lnk:rel>urn:org.restfulobjects:rels/action</lnk:rel>
+        <lnk:method>GET</lnk:method>
+        <lnk:href>
+          http://localhost:8080/restful/objects/helloworld.HelloWorldObjects/1/actions/create
+        </lnk:href>
+        <lnk:type>
+          application/json;profile="urn:org.restfulobjects:repr-types/object-action"
+        </lnk:type>
+  </cpt:link>
+</mb3:serviceAction>
 ----
 
 This can also be obtained in JSON format in the usual way (by specifying an HTTP header of `Accept: application/json`):
 
 [source,json]
 ----
-"action": [
+"serviceAction": [
 {
-  "oid": "helloworld.HelloWorldObjects:1",
+  "objectType": "helloworld.HelloWorldObjects",
   "id": "create",
   "named": "Create",
   "link": {
     "rel": "urn:org.restfulobjects:rels/action",
     "method": "GET",
     "href": "http://localhost:8080/restful/objects/helloworld.HelloWorldObjects/1/actions/create",
-    "type": "application/json;profile='urn:org.restfulobjects:repr-types/object-action'"
-   }
+    "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/object-action\""
+  }
 }
 ----
 

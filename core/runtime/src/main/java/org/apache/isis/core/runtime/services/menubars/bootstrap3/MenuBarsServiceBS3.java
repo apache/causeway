@@ -168,7 +168,7 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
         if(!deploymentCategoryProvider.getDeploymentCategory().isProduction()) {
             messageService.warnUser("Menubars metadata errors; check the error log");
         }
-        LOG.error("Grid metadata errors:\n\n" + jaxbService.toXml(menuBars) + "\n\n");
+        LOG.error("Menubar layout metadata errors:\n\n" + jaxbService.toXml(menuBars) + "\n\n");
 
         return null;
     }
