@@ -231,10 +231,16 @@ public class ServiceActionLayoutData implements Serializable {
 
 
 
+    @XmlTransient
+    public String getObjectTypeAndId() {
+        return getObjectType() + "#" + getId();
+    }
+
+
     @Override
     public String toString() {
-        return "ActionLayoutData{" +
-                "oid='" + objectType + '\'' +
+        return "ServiceActionLayoutData{" +
+                "objectType='" + objectType + '\'' +
                 ", id='" + id + '\'' +
                 '}';
     }

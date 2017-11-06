@@ -36,7 +36,7 @@
     <xs:complexType name="menu">
         <xs:sequence>
             <xs:element name="named" type="xs:string"/>
-            <xs:element maxOccurs="unbounded" name="section" type="tns:section"/>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="section" type="tns:section"/>
         </xs:sequence>
         <xs:attribute name="cssClassFa" type="xs:string"/>
         <xs:attribute name="unreferencedActions" type="xs:boolean"/>

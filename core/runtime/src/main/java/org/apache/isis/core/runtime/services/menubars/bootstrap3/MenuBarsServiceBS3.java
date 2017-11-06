@@ -18,6 +18,7 @@
  */
 package org.apache.isis.core.runtime.services.menubars.bootstrap3;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -32,6 +33,9 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.NatureOfService;
@@ -42,9 +46,12 @@ import org.apache.isis.applib.layout.menubars.bootstrap3.BS3Menu;
 import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBar;
 import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBars;
 import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuSection;
+import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.menu.MenuBarsLoaderService;
 import org.apache.isis.applib.services.menu.MenuBarsService;
+import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.NotInServiceMenuFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
@@ -59,6 +66,8 @@ import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
 @DomainService(nature = NatureOfService.DOMAIN)
 public class MenuBarsServiceBS3 implements MenuBarsService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(MenuBarsServiceBS3.class);
 
     public static final String MB3_TNS = "http://isis.apache.org/applib/layout/menubars/bootstrap3";
     public static final String MB3_SCHEMA_LOCATION = "http://isis.apache.org/applib/layout/menubars/bootstrap3/menubars.xsd";
@@ -81,8 +90,10 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
     @Programmatic
     public BS3MenuBars menuBars(final Type type) {
 
+        final BS3MenuBars fallbackMenuBars = deriveMenuBarsFromMetaModelFacets();
+
         if(type == Type.FALLBACK) {
-            return deriveMenuBarsFromMetaModelFacets();
+            return fallbackMenuBars;
         }
 
         // else load (and only fallback if nothing could be loaded)...
@@ -90,14 +101,76 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
 
             BS3MenuBars menuBars = menuBarsLoaderService.menuBars();
 
-            if(menuBars == null) {
-                menuBars = deriveMenuBarsFromMetaModelFacets();
+            final BS3Menu unreferencedActionsMenu = validate(menuBars);
+
+            if (unreferencedActionsMenu != null) {
+                // add in any missing actions from the fallback
+                final LinkedHashMap<String, ServiceActionLayoutData> referencedActionsByObjectTypeAndId =
+                        menuBars.getAllServiceActionsByObjectTypeAndId();
+
+                fallbackMenuBars.visit(new BS3MenuBars.VisitorAdapter(){
+
+                    @Override
+                    public void visit(final BS3MenuSection menuSection) {
+                        BS3MenuSection section = null;
+                        for (ServiceActionLayoutData serviceAction : menuSection.getServiceActions()) {
+                            final String objectTypeAndId = serviceAction.getObjectTypeAndId();
+                            if (!referencedActionsByObjectTypeAndId.containsKey(objectTypeAndId)) {
+                                if(section == null) {
+                                    section = new BS3MenuSection();
+                                    unreferencedActionsMenu.getSections().add(section);
+                                }
+                                // detach from fallback, attach to this
+                                serviceAction.setOwner(section);
+                                section.getServiceActions().add(serviceAction);
+                            }
+                        }
+                    }
+                });
+
+            } else {
+                // just use fallback
+                menuBars = fallbackMenuBars;
             }
 
             this.menuBars = menuBars;
         }
 
         return menuBars;
+    }
+
+    BS3Menu validate(final BS3MenuBars menuBars) {
+
+        if (menuBars == null) {
+            return null;
+        }
+
+        final List<BS3Menu> menusWithUnreferencedActionsFlagSet = Lists.newArrayList();
+        menuBars.visit(new BS3MenuBars.VisitorAdapter(){
+            @Override public void visit(final BS3Menu menu) {
+                if(isSet(menu.isUnreferencedActions())) {
+                    menusWithUnreferencedActionsFlagSet.add(menu);
+                }
+            }
+            private Boolean isSet(final Boolean flag) {
+                return flag != null && flag;
+            }
+
+        });
+
+        final int size = menusWithUnreferencedActionsFlagSet.size();
+        if (size == 1) {
+            return menusWithUnreferencedActionsFlagSet.get(0);
+        }
+
+        menuBars.setMetadataError(
+                "Exactly one menu must have 'unreferencedActions' flag set; found " + size + " such menus");
+        if(!deploymentCategoryProvider.getDeploymentCategory().isProduction()) {
+            messageService.warnUser("Menubars metadata errors; check the error log");
+        }
+        LOG.error("Grid metadata errors:\n\n" + jaxbService.toXml(menuBars) + "\n\n");
+
+        return null;
     }
 
     private BS3MenuBars deriveMenuBarsFromMetaModelFacets() {
@@ -111,6 +184,11 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
         append(serviceAdapters, menuBars.getTertiary(), DomainServiceLayout.MenuBar.TERTIARY);
 
         menuBars.setTnsAndSchemaLocation(tnsAndSchemaLocation());
+
+        final BS3Menu otherMenu = new BS3Menu();
+        otherMenu.setNamed("Other");
+        otherMenu.setUnreferencedActions(true);
+        menuBars.getPrimary().getMenus().add(otherMenu);
 
         return menuBars;
     }
@@ -297,6 +375,14 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
     @Inject
     MenuBarsLoaderService menuBarsLoaderService;
 
+    @javax.inject.Inject
+    DeploymentCategoryProvider deploymentCategoryProvider;
+
+    @javax.inject.Inject
+    MessageService messageService;
+
+    @javax.inject.Inject
+    JaxbService jaxbService;
 
 }
 

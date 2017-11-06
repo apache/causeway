@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.layout.component.ServiceActionLayoutData;
-import org.apache.isis.applib.layout.menubars.MenuSection;
+import org.apache.isis.applib.layout.menubars.MenuBars;
 
 /**
  * Describes the collection of domain services into menubars, broadly corresponding to the aggregation of information within {@link org.apache.isis.applib.annotation.DomainServiceLayout}.
@@ -92,40 +92,96 @@ public class BS3MenuBars extends org.apache.isis.applib.layout.menubars.MenuBars
         return null;
     }
 
+    public interface Visitor extends MenuBars.Visitor {
+        void preVisit(final BS3MenuBar menuBar);
+        void visit(final BS3MenuBar menuBar);
+        void postVisit(final BS3MenuBar menuBar);
+
+        void preVisit(final BS3Menu menu);
+        void visit(final BS3Menu menu);
+        void postVisit(final BS3Menu menu);
+
+        void preVisit(final BS3MenuSection menuSection);
+        void visit(final BS3MenuSection section);
+        void postVisit(final BS3MenuSection menuSection);
+    }
+
+    public static class VisitorAdapter implements BS3MenuBars.Visitor {
+        @Override public void preVisit(final BS3MenuBar menuBar) { }
+        @Override public void visit(final BS3MenuBar menuBar) { }
+        @Override public void postVisit(final BS3MenuBar menuBar) { }
+
+        @Override public void preVisit(final BS3Menu menu) { }
+        @Override public void visit(final BS3Menu menu) { }
+        @Override public void postVisit(final BS3Menu menu) { }
+
+        @Override public void preVisit(final BS3MenuSection menuSection) { }
+        @Override public void visit(final BS3MenuSection section) { }
+        @Override public void postVisit(final BS3MenuSection menuSection) { }
+
+        @Override public void visit(final ServiceActionLayoutData serviceActionLayoutData) { }
+    }
+
     @Override
-    public void visit(final Visitor visitor) {
+    public void visit(final MenuBars.Visitor visitor) {
         traverseMenuBar(getPrimary(), visitor);
         traverseMenuBar(getSecondary(), visitor);
         traverseMenuBar(getTertiary(), visitor);
     }
 
-    private void traverseMenuBar(final BS3MenuBar menuBar, final Visitor visitor) {
-        visitor.preVisit(menuBar);
-        visitor.visit(menuBar);
+    private void traverseMenuBar(final BS3MenuBar menuBar, final MenuBars.Visitor visitor) {
+
+        final Visitor bs3Visitor = visitor instanceof Visitor ? (Visitor) visitor : null;
+
+        if(bs3Visitor != null) {
+            bs3Visitor.preVisit(menuBar);
+            bs3Visitor.visit(menuBar);
+        }
+
         for (BS3Menu menu : menuBar.getMenus()) {
             traverseMenu(menu, visitor);
         }
-        visitor.postVisit(menuBar);
+
+        if(bs3Visitor != null) {
+            bs3Visitor.postVisit(menuBar);
+        }
     }
 
-    private void traverseMenu(final BS3Menu menu, final Visitor visitor) {
-        visitor.preVisit(menu);
-        visitor.visit(menu);
+    private void traverseMenu(final BS3Menu menu, final MenuBars.Visitor visitor) {
+
+        final Visitor bs3Visitor = visitor instanceof Visitor ? (Visitor) visitor : null;
+
+        if(bs3Visitor != null) {
+            bs3Visitor.preVisit(menu);
+            bs3Visitor.visit(menu);
+        }
+
         final List<BS3MenuSection> sections = menu.getSections();
         for (BS3MenuSection section : sections) {
             traverseSection(section, visitor);
         }
-        visitor.postVisit(menu);
+
+        if(bs3Visitor != null) {
+            bs3Visitor.postVisit(menu);
+        }
     }
 
-    private void traverseSection(final MenuSection section, final Visitor visitor) {
-        visitor.preVisit(section);
-        visitor.visit(section);
+    private void traverseSection(final BS3MenuSection section, final MenuBars.Visitor visitor) {
+
+        final Visitor bs3Visitor = visitor instanceof Visitor ? (Visitor) visitor : null;
+        if(bs3Visitor != null) {
+            bs3Visitor.preVisit(section);
+            bs3Visitor.visit(section);
+        }
+
         final List<ServiceActionLayoutData> actions = section.getServiceActions();
         for (ServiceActionLayoutData action : actions) {
             visitor.visit(action);
         }
-        visitor.postVisit(section);
+
+        if(bs3Visitor != null) {
+            bs3Visitor.postVisit(section);
+        }
     }
 
     private String metadataError;

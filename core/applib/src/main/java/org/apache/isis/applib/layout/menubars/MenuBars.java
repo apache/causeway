@@ -18,6 +18,8 @@
  */
 package org.apache.isis.applib.layout.menubars;
 
+import java.util.LinkedHashMap;
+
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.layout.component.ServiceActionLayoutData;
@@ -34,39 +36,13 @@ public interface MenuBars {
     MenuBar menuBarFor(DomainServiceLayout.MenuBar menuBar);
 
     interface Visitor {
-        void preVisit(final MenuBar menuBar);
-        void visit(final MenuBar menuBar);
-        void postVisit(final MenuBar menuBar);
-
-        void preVisit(final Menu menu);
-        void visit(final Menu menu);
-        void postVisit(final Menu menu);
-
-        void preVisit(final MenuSection menuSection);
-        void visit(final MenuSection section);
-        void postVisit(final MenuSection menuSection);
-
         void visit(final ServiceActionLayoutData serviceActionLayoutData);
-
-    }
-
-    class VisitorAdapter implements MenuBars.Visitor {
-        @Override public void preVisit(final MenuBar menuBar) { }
-        @Override public void visit(final MenuBar menuBar) { }
-        @Override public void postVisit(final MenuBar menuBar) { }
-
-        @Override public void preVisit(final Menu menu) { }
-        @Override public void visit(final Menu menu) { }
-        @Override public void postVisit(final Menu menu) { }
-
-        @Override public void preVisit(final MenuSection menuSection) { }
-        @Override public void visit(final MenuSection section) { }
-        @Override public void postVisit(final MenuSection menuSection) { }
-
-        @Override public void visit(final ServiceActionLayoutData serviceActionLayoutData) { }
     }
 
     @Programmatic
     void visit(final MenuBars.Visitor visitor);
+
+    @Programmatic
+    LinkedHashMap<String, ServiceActionLayoutData> getAllServiceActionsByObjectTypeAndId();
 
 }

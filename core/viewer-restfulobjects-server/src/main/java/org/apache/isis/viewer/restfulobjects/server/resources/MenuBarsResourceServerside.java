@@ -67,16 +67,17 @@ public class MenuBarsResourceServerside extends ResourceAbstract implements Menu
     }
 
     void addLinksForServiceActions(final MenuBars menuBars) {
-        menuBars.visit(new MenuBars.VisitorAdapter() {
+        menuBars.visit(new MenuBars.Visitor() {
             @Override
             public void visit(final ServiceActionLayoutData actionLayoutData) {
                 final String objectType = actionLayoutData.getObjectType();
+                final String relativeUrl = String.format(
+                        "objects/%s/%s/actions/%s",
+                        objectType, PersistenceSession.SERVICE_IDENTIFIER, actionLayoutData.getId());
                 Link link = new Link(
                         Rel.ACTION.getName(),
                         RestfulHttpMethod.GET.getJavaxRsMethod(),
-                        getResourceContext().urlFor(
-                                "objects/" + objectType + "/" + PersistenceSession.SERVICE_IDENTIFIER + "/actions/" + actionLayoutData.getId()
-                        ),
+                        getResourceContext().urlFor(relativeUrl),
                         RepresentationType.OBJECT_ACTION.getJsonMediaType().toString());
                 actionLayoutData.setLink(link);
             }
