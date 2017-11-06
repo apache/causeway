@@ -26,5 +26,5 @@ import org.apache.isis.applib.layout.component.ServiceActionLayoutData;
 public interface MenuSection {
 
     @Programmatic
-    List<ServiceActionLayoutData> getActions();
+    List<ServiceActionLayoutData> getServiceActions();
 }

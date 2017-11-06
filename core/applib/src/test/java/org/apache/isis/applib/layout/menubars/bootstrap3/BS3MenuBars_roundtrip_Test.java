@@ -50,14 +50,14 @@ public class BS3MenuBars_roundtrip_Test {
         menu.setNamed("Parties");
 
         BS3MenuSection organisationMenu = new BS3MenuSection();
-        organisationMenu.getActions().add(new ServiceActionLayoutData("parties.OrganisationMenu", "findByReference"));
-        organisationMenu.getActions().add(new ServiceActionLayoutData("parties.OrganisationMenu", "findByName"));
-        organisationMenu.getActions().add(new ServiceActionLayoutData("parties.OrganisationMenu", "create"));
+        organisationMenu.getServiceActions().add(new ServiceActionLayoutData("parties.OrganisationMenu", "findByReference"));
+        organisationMenu.getServiceActions().add(new ServiceActionLayoutData("parties.OrganisationMenu", "findByName"));
+        organisationMenu.getServiceActions().add(new ServiceActionLayoutData("parties.OrganisationMenu", "create"));
         menu.getSections().add(organisationMenu);
 
         BS3MenuSection personMenu = new BS3MenuSection();
-        personMenu.getActions().add(new ServiceActionLayoutData("parties.PersonMenu", "findByUsername"));
-        personMenu.getActions().add(new ServiceActionLayoutData("parties.PersonMenu", "create"));
+        personMenu.getServiceActions().add(new ServiceActionLayoutData("parties.PersonMenu", "findByUsername"));
+        personMenu.getServiceActions().add(new ServiceActionLayoutData("parties.PersonMenu", "create"));
         menu.getSections().add(personMenu);
 
         menuBars.getPrimary().getMenus().add(menu);

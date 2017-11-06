@@ -26,7 +26,6 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.layout.component.ServiceActionLayoutData;
-import org.apache.isis.applib.layout.menubars.Menu;
 import org.apache.isis.applib.layout.menubars.MenuSection;
 
 /**
@@ -103,17 +102,17 @@ public class BS3MenuBars extends org.apache.isis.applib.layout.menubars.MenuBars
     private void traverseMenuBar(final BS3MenuBar menuBar, final Visitor visitor) {
         visitor.preVisit(menuBar);
         visitor.visit(menuBar);
-        for (Menu menu : menuBar.getMenus()) {
+        for (BS3Menu menu : menuBar.getMenus()) {
             traverseMenu(menu, visitor);
         }
         visitor.postVisit(menuBar);
     }
 
-    private void traverseMenu(final Menu menu, final Visitor visitor) {
+    private void traverseMenu(final BS3Menu menu, final Visitor visitor) {
         visitor.preVisit(menu);
         visitor.visit(menu);
-        final List<MenuSection> sections = menu.getSections();
-        for (MenuSection section : sections) {
+        final List<BS3MenuSection> sections = menu.getSections();
+        for (BS3MenuSection section : sections) {
             traverseSection(section, visitor);
         }
         visitor.postVisit(menu);
@@ -122,7 +121,7 @@ public class BS3MenuBars extends org.apache.isis.applib.layout.menubars.MenuBars
     private void traverseSection(final MenuSection section, final Visitor visitor) {
         visitor.preVisit(section);
         visitor.visit(section);
-        final List<ServiceActionLayoutData> actions = section.getActions();
+        final List<ServiceActionLayoutData> actions = section.getServiceActions();
         for (ServiceActionLayoutData action : actions) {
             visitor.visit(action);
         }

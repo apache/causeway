@@ -29,7 +29,6 @@ import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.layout.menubars.Menu;
-import org.apache.isis.applib.layout.menubars.MenuSection;
 
 /**
  * Describes the collection of domain services into menubars, broadly corresponding to the aggregation of information of {@link DomainServiceLayout} that have the same value of {@link DomainServiceLayout#named()}.
@@ -80,15 +79,15 @@ public class BS3Menu implements Menu, Serializable {
 
 
 
-    private List<MenuSection> sections = Lists.newArrayList();
+    private List<BS3MenuSection> sections = Lists.newArrayList();
 
     // no wrapper
     @XmlElement(name = "section", required = true)
-    public List<MenuSection> getSections() {
+    public List<BS3MenuSection> getSections() {
         return sections;
     }
 
-    public void setSections(List<MenuSection> menuSections) {
+    public void setSections(List<BS3MenuSection> menuSections) {
         this.sections = sections;
     }
 

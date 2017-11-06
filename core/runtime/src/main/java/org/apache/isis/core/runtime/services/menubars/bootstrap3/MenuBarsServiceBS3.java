@@ -153,7 +153,7 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
             final List<ServiceAndAction> serviceActionsForName = serviceActionsByName.get(serviceName);
             for (ServiceAndAction serviceAndAction : serviceActionsForName) {
 
-                if(serviceAndAction.separator && !menuSection.getActions().isEmpty()) {
+                if(serviceAndAction.separator && !menuSection.getServiceActions().isEmpty()) {
                     menu.getSections().add(menuSection);
                     menuSection = new BS3MenuSection();
                 }
@@ -162,9 +162,9 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
                 final String objectType = serviceAndAction.serviceAdapter.getSpecification().getSpecId().asString();
                 ServiceActionLayoutData action = new ServiceActionLayoutData(objectType, objectAction.getId());
                 action.setNamed(objectAction.getName());
-                menuSection.getActions().add(action);
+                menuSection.getServiceActions().add(action);
             }
-            if(!menuSection.getActions().isEmpty()) {
+            if(!menuSection.getServiceActions().isEmpty()) {
                 menu.getSections().add(menuSection);
             }
         }

@@ -39,10 +39,10 @@ import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.applib.layout.component.ServiceActionLayoutData;
-import org.apache.isis.applib.layout.menubars.Menu;
-import org.apache.isis.applib.layout.menubars.MenuBar;
 import org.apache.isis.applib.layout.menubars.MenuBars;
 import org.apache.isis.applib.layout.menubars.MenuSection;
+import org.apache.isis.applib.layout.menubars.bootstrap3.BS3Menu;
+import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBar;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -203,7 +203,8 @@ public final class ServiceActionUtil {
             final MenuBars menuBars,
             final ServiceActionsModel serviceActionsModel) {
 
-        final MenuBar menuBar = menuBars.menuBarFor(serviceActionsModel.getMenuBar());
+        // TODO: remove hard-coded dependency on BS3
+        final BS3MenuBar menuBar = (BS3MenuBar) menuBars.menuBarFor(serviceActionsModel.getMenuBar());
 
         final List<ObjectAdapter> serviceAdapters = serviceActionsModel.getObject();
         final ImmutableMap<ObjectAdapter, String> oidByServiceAdapter = FluentIterable.from(serviceAdapters)
@@ -217,16 +218,15 @@ public final class ServiceActionUtil {
                 .copyOf(oidByServiceAdapter).inverse();
 
         final List<CssMenuItem> menuItems = Lists.newArrayList();
-        for (final Menu menu : menuBar.getMenus()) {
+        for (final BS3Menu menu : menuBar.getMenus()) {
 
             final CssMenuItem serviceMenu = CssMenuItem.newMenuItem(menu.getNamed()).build();
-
 
             for (final MenuSection menuSection : menu.getSections()) {
 
                 boolean firstSection = true;
 
-                for (final ServiceActionLayoutData actionLayoutData : menuSection.getActions()) {
+                for (final ServiceActionLayoutData actionLayoutData : menuSection.getServiceActions()) {
                     final String objectType = actionLayoutData.getObjectType();
                     final Bookmark bookmark = new Bookmark(objectType, PersistenceSession.SERVICE_IDENTIFIER);
                     final String oid = bookmark.toString();

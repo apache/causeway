@@ -31,12 +31,12 @@ import org.apache.isis.applib.layout.component.ServiceActionLayoutDataOwner;
 import org.apache.isis.applib.layout.menubars.MenuSection;
 
 /**
- * Corresponds to a domain service that contributes its actions under a particular {@link BS3MenuBar}.
+ * Corresponds to a domain service that contributes its serviceActions under a particular {@link BS3MenuBar}.
  */
 @XmlType(
         name = "section"
         , propOrder = {
-            "actions"
+            "serviceActions"
         }
 )
 public class BS3MenuSection implements MenuSection, Serializable, ServiceActionLayoutDataOwner {
@@ -47,18 +47,18 @@ public class BS3MenuSection implements MenuSection, Serializable, ServiceActionL
     }
 
 
-    private List<ServiceActionLayoutData> actions = Lists.newArrayList();
+    private List<ServiceActionLayoutData> serviceActions = Lists.newArrayList();
 
     // no wrapper
     @Override
-    @XmlElement(name = "action", required = true)
-    public List<ServiceActionLayoutData> getActions() {
-        return actions;
+    @XmlElement(name = "serviceAction", required = true)
+    public List<ServiceActionLayoutData> getServiceActions() {
+        return serviceActions;
     }
 
     @Override
-    public void setActions(List<ServiceActionLayoutData> actionLayoutDatas) {
-        this.actions = actionLayoutDatas;
+    public void setServiceActions(List<ServiceActionLayoutData> actionLayoutDatas) {
+        this.serviceActions = actionLayoutDatas;
     }
 
 

@@ -38,10 +38,10 @@ import org.apache.isis.applib.layout.links.Link;
  * </p>
  */
 @XmlRootElement(
-        name = "action"
+        name = "serviceAction"
 )
 @XmlType(
-    name = "action"
+    name = "serviceAction"
     , propOrder = {
         "objectType"
         , "id"

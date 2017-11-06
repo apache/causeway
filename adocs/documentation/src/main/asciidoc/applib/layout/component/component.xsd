@@ -18,6 +18,8 @@
 
   <xs:element name="fieldSet" type="tns:fieldSet"/>
 
+  <xs:element name="serviceAction" type="tns:serviceAction"/>
+
   <xs:element name="property" type="tns:property"/>
 
   <xs:complexType name="domainObject">
@@ -51,6 +53,21 @@
     <xs:attribute name="namedEscaped" type="xs:boolean"/>
     <xs:attribute name="position" type="tns:position"/>
     <xs:attribute name="promptStyle" type="tns:promptStyle"/>
+  </xs:complexType>
+
+  <xs:complexType name="serviceAction">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="named" type="xs:string"/>
+      <xs:element minOccurs="0" name="describedAs" type="xs:string"/>
+      <xs:element minOccurs="0" name="metadataError" type="xs:string"/>
+      <xs:element minOccurs="0" name="link" type="lnk:link"/>
+    </xs:sequence>
+    <xs:attribute name="objectType" type="xs:string" use="required"/>
+    <xs:attribute name="id" type="xs:string" use="required"/>
+    <xs:attribute name="namedEscaped" type="xs:boolean"/>
+    <xs:attribute name="bookmarking" type="tns:bookmarkPolicy"/>
+    <xs:attribute name="cssClass" type="xs:string"/>
+    <xs:attribute name="cssClassFa" type="xs:string"/>
   </xs:complexType>
 
   <xs:complexType name="fieldSet">

@@ -21,6 +21,6 @@ package org.apache.isis.applib.layout.component;
 import java.util.List;
 
 public interface ServiceActionLayoutDataOwner extends Owner {
-    List<ServiceActionLayoutData> getActions();
-    void setActions(List<ServiceActionLayoutData> actions);
+    List<ServiceActionLayoutData> getServiceActions();
+    void setServiceActions(List<ServiceActionLayoutData> actions);
 }

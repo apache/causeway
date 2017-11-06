@@ -18,12 +18,6 @@
  */
 package org.apache.isis.applib.layout.menubars;
 
-import java.util.List;
-
-import org.apache.isis.applib.annotation.Programmatic;
-
 public interface MenuBar {
 
-    @Programmatic
-    List<Menu> getMenus();
 }
