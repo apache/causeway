@@ -101,6 +101,8 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
 
             BS3MenuBars menuBars = menuBarsLoaderService.menuBars();
 
+            menuBars.setTnsAndSchemaLocation(tnsAndSchemaLocation());
+
             final BS3Menu unreferencedActionsMenu = validate(menuBars);
 
             if (unreferencedActionsMenu != null) {

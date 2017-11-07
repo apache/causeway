@@ -5,64 +5,64 @@
 :_imagesdir: images/
 
 
-The `org.apache.isis.applib.layout.menus` package defines a number of classes that allow the layout of domain service actions to be organised across menu bars, menus and menu sections.
+The `org.apache.isis.applib.layout.menubars` package and subpackages define a number of interfaces classes that allow the layout of domain service actions to be organised across menu bars, menus and menu sections.
 
-These classes fall into two main categories:
+The classes define a hierarchical structure of menu bars, menus and menu sections.
+Similar to the xref:rgcms.adoc#_rgcms_classes_layout[object layout] classes, the concrete menu classes support bootstrap3; support for other layout systems is possible.
 
-* menu classes, that define a hierarchical structure of menu bars, menus and menu sections, and;
+The component class `ServiceActionLayoutData` defines action metadata, being broadly equivalent to the "layout" annotations for actions, ie xref:../rgant/rgant.adoc#_rgant-ActionLayout[`@ActionLayout`].
+This is similar to the `ActionLayoutData` component class used for object layouts, but also captures the identity of the "owning" domain service.
+Service actions are grouped into menu sections.
 
-+
-Unlike the xref:rgcms.adoc#_rgcms_classes_layout[object layout] classes, the menu classes have no dependency on any particular layout architecture (that is, they don't attempt to model some particular grid system such as bootstrap3).
-
-* a component class `(ServiceActionLayoutData`) that captures the layout metadata for a domain services action.
-These are grouped into menu sections.
-
-+
-The component class is broadly equivalent to the "layout" annotations for actions, ie xref:../rgant/rgant.adoc#_rgant-ActionLayout[`@ActionLayout`].
-
-The menu classes and the component class should be reusable across all any and all UI implementations, so this is a less abstract (though equally general) design as compared to the xref:rgcms.adoc#_rgcms_classes_layout[object layout] design.
-
-All of the classes in this package are JAXB-annotated, meaning that they can be serialized to/from XML (in the `http://isis.apache.org/applib/layout/menus` XSD namespace).
+All of the classes in this package are JAXB-annotated, meaning that they can be serialized to/from XML (in the `http://isis.apache.org/applib/layout/menubars/bootstrap3` XSD namespace).
 This ability to serialize to/from XML is used by the xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_MenuBarsLoaderService[`MenuBarsLoaderService`], the default implementation of which reads the grid layout for a domain class from a `.layout.xml` file on the classpath.
 It also allows the menu bars to be exposed through the REST API provided by the xref:../ugvro/ugvro.adoc#[Restful Objects viewer], as either XML or JSON.
 
-The service action component also allow a link to be associated with it.
+The service action component also allows a link to be associated with it.
 Each such link is populated by the framework automatically when exposing the menu bars layout through the REST API, pointing back to the standard Restful Objects resources.
 This design greatly assists in the implementation of generic REST clients.
 
 
-[[_rgcms_classes_menubars]]
+[[_rgcms_classes_menubars_menus]]
 == Menus
 
-Both the menu and component classes reside in the `org.apache.isis.applib.layout.menus` package, consisting of:
+The menu classes reside in the `org.apache.isis.applib.layout.menubars.bootstrap3` package, consisting of:
 
-* `MenuBars`
-
-+
-The top-level structure that define three fields: a primary `MenuBar`, secondary `MenuBar` and tertiary `MenuBar`.
-The xref:../ugvw/ugvw.adoc#[Wicket viewer] places the primary bar to the left, the secondary bar aligned right, and the tertiary bar (expected to consist of just one `Menu`) under the user names.
-
-* `MenuBar`
+* `BS3MenuBars`
 
 +
-consisting of one or many ``Menu``s.
+The top-level structure that define three fields: a primary `BS3MenuBar`, secondary `BS3MenuBar` and tertiary `BS3MenuBar`.
+The xref:../ugvw/ugvw.adoc#[Wicket viewer] places the primary bar to the left, the secondary bar aligned right, and the tertiary bar (expected to consist of just one `BS3Menu`) under the user names.
 
-* `Menu`
+* `BS3MenuBar`
 
 +
-consisting of one or many ``MenuSection``s.
+consisting of one or many ``BS3Menu``s.
+
+* `BS3Menu`
+
++
+consisting of one or many ``BS3MenuSection``s.
 The xref:../ugvw/ugvw.adoc#[Wicket viewer] renders a separator between each section.
 
-* `MenuSection`
+* `BS3MenuSection`
 
 +
 consisting of one or many actions (``ServiceActionLayoutData``s)
 
-* `ServiceActionLayoutData` class, which correspond to the xref:../rgant/rgant.adoc#_rgant-ActionLayout[`@ActionLayout`] annotation.
+
+[[_rgcms_classes_menubars_components]]
+== Components
+
+The service action class reside in the `org.apache.isis.applib.layout.component` package, consisting of just:
+
+* `ServiceActionLayoutData` class
 
 +
+which correspond to the xref:../rgant/rgant.adoc#_rgant-ActionLayout[`@ActionLayout`] annotation.
+
 This is similar to `ActionLayoutData` (of the xref:rgcms.adoc#_rgcms_classes_layout[object layout] classes), however it also identifies the domain service to which it belongs.
-(This isn't required for the object layouts because that is implicit).
+(This isn't required for the object layouts because the owner in that case is implicit).
 
 
 
