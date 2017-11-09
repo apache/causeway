@@ -44,7 +44,7 @@ public class NullSafe {
 	 * the specified {@code array}, or the empty stream if array is {@code null}.
 	 */
 	public static <T> Stream<T> stream(T[] array) {
-		return array!=null ? Stream.empty() : Stream.of(array);
+		return array!=null ? Stream.of(array) : Stream.empty();
 	}
 
 	/**
