@@ -48,7 +48,7 @@ public class HelloWorldObjectTest_delete {
     public void happy_case() throws Exception {
 
         // given
-        final HelloWorldObject object = HelloWorldObject.create("Foo");
+        final HelloWorldObject object = new HelloWorldObject("Foo");
         object.titleService = mockTitleService;
         object.messageService = mockMessageService;
         object.repositoryService = mockRepositoryService;

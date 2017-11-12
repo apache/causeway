@@ -22,7 +22,7 @@ import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.VersionStrategy;
 
-import com.google.common.collect.Ordering;
+import com.google.common.collect.ComparisonChain;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Auditing;
@@ -40,36 +40,30 @@ import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
 
-import lombok.AccessLevel;
-
 @javax.jdo.annotations.PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "helloworld" )
 @javax.jdo.annotations.DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @javax.jdo.annotations.Version(strategy= VersionStrategy.DATE_TIME, column ="version")
-@javax.jdo.annotations.Queries({
-        @javax.jdo.annotations.Query(
-                name = "findByName",
-                value = "SELECT "
-                        + "FROM domainapp.dom.impl.HelloWorldObject "
-                        + "WHERE name.indexOf(:name) >= 0 ")
-})
 @javax.jdo.annotations.Unique(name="HelloWorldObject_name_UNQ", members = {"name"})
 @DomainObject(auditing = Auditing.ENABLED)
-@DomainObjectLayout()  // trigger events etc.
-@lombok.RequiredArgsConstructor(staticName = "create")
-@lombok.Getter @lombok.Setter
+@DomainObjectLayout()  // causes UI events to be triggered
 public class HelloWorldObject implements Comparable<HelloWorldObject> {
 
+    public HelloWorldObject(final String name) {
+        this.name = name;
+    }
 
     @javax.jdo.annotations.Column(allowsNull = "false", length = 40)
-    @lombok.NonNull
     @Property(editing = Editing.DISABLED)
     @Title(prepend = "Object: ")
     private String name;
-
+    public String getName() { return name; }
+    public void setName(final String name) { this.name = name; }
 
     @javax.jdo.annotations.Column(allowsNull = "true", length = 4000)
     @Property(editing = Editing.ENABLED)
     private String notes;
+    public String getNotes() { return notes; }
+    public void setNotes(final String notes) { this.notes = notes; }
 
 
     @Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED)
@@ -80,7 +74,6 @@ public class HelloWorldObject implements Comparable<HelloWorldObject> {
         setName(name);
         return this;
     }
-
     public String default0UpdateName() {
         return getName();
     }
@@ -93,25 +86,29 @@ public class HelloWorldObject implements Comparable<HelloWorldObject> {
         repositoryService.removeAndFlush(this);
     }
 
+    @Override
+    public String toString() {
+        return getName();
+    }
 
     @Override
     public int compareTo(final HelloWorldObject other) {
-        return Ordering.natural().onResultOf(HelloWorldObject::getName).compare(this, other);
+        return ComparisonChain.start()
+                .compare(this.getName(), other.getName())
+                .result();
     }
 
 
-    //region > injected services
+    @javax.jdo.annotations.NotPersistent
     @javax.inject.Inject
-    @lombok.Getter(AccessLevel.NONE) @lombok.Setter(AccessLevel.NONE)
     RepositoryService repositoryService;
 
+    @javax.jdo.annotations.NotPersistent
     @javax.inject.Inject
-    @lombok.Getter(AccessLevel.NONE) @lombok.Setter(AccessLevel.NONE)
     TitleService titleService;
 
+    @javax.jdo.annotations.NotPersistent
     @javax.inject.Inject
-    @lombok.Getter(AccessLevel.NONE) @lombok.Setter(AccessLevel.NONE)
     MessageService messageService;
-    //endregion
 
 }
