@@ -529,7 +529,7 @@ image::{_imagesdir}docker/docker-daemon.png[width="600px",link="{_imagesdir}dock
 
 You might also need to ensure that the "Unidentified networks" are configured to be private:
 
-image::{_imagesdir}docker/026-docker-nat-private.png[width="400px",link="{_imagesdir}docker/026-docker-nat-private.png"]
+image::{_imagesdir}docker/026-docker-nat-private.png[width="600px",link="{_imagesdir}docker/026-docker-nat-private.png"]
 
 This can be done using the "Local Security Policy" application.
 ====

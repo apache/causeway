@@ -1,6 +1,19 @@
-<?xml version="1.0" encoding="UTF-8"?><xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:cpt="http://isis.apache.org/applib/layout/component" xmlns:tns="http://isis.apache.org/applib/layout/grid/bootstrap3" elementFormDefault="qualified" targetNamespace="http://isis.apache.org/applib/layout/grid/bootstrap3" version="1.0">
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+        xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        xmlns:cpt="http://isis.apache.org/applib/layout/component"
+        xmlns:tns="http://isis.apache.org/applib/layout/grid/bootstrap3"
+        elementFormDefault="qualified"
+        targetNamespace="http://isis.apache.org/applib/layout/grid/bootstrap3"
+        version="1.0">
 
-    <xs:import namespace="http://isis.apache.org/applib/layout/component" schemaLocation="../../component/component.xsd"/>
+    <xs:import
+            namespace="http://isis.apache.org/applib/layout/component"
+            schemaLocation="../../component/component.xsd"/>
+
+    <xs:import
+            namespace="http://isis.apache.org/applib/layout/links"
+            schemaLocation="../../links/links.xsd"/>
 
     <xs:element name="clearFixHidden" type="tns:clearFixHidden"/>
 

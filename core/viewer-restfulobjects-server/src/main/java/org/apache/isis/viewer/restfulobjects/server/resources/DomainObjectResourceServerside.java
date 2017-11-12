@@ -17,6 +17,7 @@
 package org.apache.isis.viewer.restfulobjects.server.resources;
 
 import java.io.InputStream;
+import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -31,26 +32,37 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.layout.component.ActionLayoutData;
+import org.apache.isis.applib.layout.component.CollectionLayoutData;
+import org.apache.isis.applib.layout.component.DomainObjectLayoutData;
+import org.apache.isis.applib.layout.component.PropertyLayoutData;
+import org.apache.isis.applib.layout.grid.Grid;
+import org.apache.isis.applib.layout.links.Link;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.core.commons.url.UrlDecoderUtil;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
+import org.apache.isis.viewer.restfulobjects.applib.RestfulHttpMethod;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainObjectResource;
+import org.apache.isis.viewer.restfulobjects.rendering.Responses;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.MemberReprMode;
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
 import org.apache.isis.viewer.restfulobjects.rendering.service.conneg.PrettyPrinting;
 import org.apache.isis.viewer.restfulobjects.rendering.util.Util;
+import org.apache.isis.viewer.restfulobjects.server.resources.serialization.SerializationStrategy;
 
 @Path("/objects")
 public class DomainObjectResourceServerside extends ResourceAbstract implements DomainObjectResource {
@@ -169,6 +181,109 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
     @Override
     public Response postMethodNotAllowed(@PathParam("domainType") String domainType, @PathParam("instanceId") String instanceId) {
         throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.METHOD_NOT_ALLOWED, "Posting to object resource is not allowed.");
+    }
+
+
+    // //////////////////////////////////////////////////////////
+    // domain object layout
+    // //////////////////////////////////////////////////////////
+
+
+    @Override
+    @GET
+    @Path("/{domainType}/{instanceId}/object-layout")
+    @Consumes({ MediaType.WILDCARD })
+    @Produces({
+            MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_LAYOUT_BS3,
+            MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_LAYOUT_BS3
+    })
+    @PrettyPrinting
+    public Response layout(
+            @PathParam("domainType")
+            final String domainType,
+            @PathParam("instanceId")
+            final String instanceId) {
+
+        init(RepresentationType.OBJECT_LAYOUT, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
+
+        final SerializationStrategy serializationStrategy;
+        final List<MediaType> acceptableMediaTypes = getResourceContext().getAcceptableMediaTypes();
+        if(acceptableMediaTypes.contains(MediaType.APPLICATION_XML_TYPE) || acceptableMediaTypes.contains(RepresentationType.OBJECT_LAYOUT.getXmlMediaType())) {
+            serializationStrategy = SerializationStrategy.XML;
+        } else {
+            serializationStrategy = SerializationStrategy.JSON;
+        }
+
+        final ObjectSpecification objectSpec = getSpecificationLoader().lookupBySpecId(ObjectSpecId.of(domainType));
+        final GridFacet gridFacet = objectSpec.getFacet(GridFacet.class);
+        final Response.ResponseBuilder builder;
+        if(gridFacet == null) {
+            builder = Responses.ofNotFound();
+            return builder.build();
+        } else {
+            Grid grid = gridFacet.getGrid();
+            addLinks(domainType, instanceId, grid);
+            builder = Response.status(Response.Status.OK)
+                    .entity(serializationStrategy.entity(grid))
+                    .type(serializationStrategy.type(RepresentationType.OBJECT_LAYOUT));
+        }
+
+        return builder.build();
+    }
+
+    private void addLinks(
+            final String domainType,
+            final String instanceId,
+            final Grid grid) {
+        grid.visit(new Grid.VisitorAdapter() {
+            @Override
+            public void visit(final DomainObjectLayoutData domainObjectLayoutData) {
+                Link link = new Link(
+                        Rel.ELEMENT.getName(),
+                        RestfulHttpMethod.GET.getJavaxRsMethod(),
+                        getResourceContext().urlFor(
+                            "objects/" + domainType + "/" + instanceId
+                        ),
+                        RepresentationType.DOMAIN_OBJECT.getJsonMediaType().toString());
+                domainObjectLayoutData.setLink(link);
+            }
+
+            @Override
+            public void visit(final ActionLayoutData actionLayoutData) {
+                Link link = new Link(
+                        Rel.ACTION.getName(),
+                        RestfulHttpMethod.GET.getJavaxRsMethod(),
+                        getResourceContext().urlFor(
+                            "objects/" + domainType + "/" + instanceId + "/actions/" + actionLayoutData.getId()
+                        ),
+                        RepresentationType.OBJECT_ACTION.getJsonMediaType().toString());
+                actionLayoutData.setLink(link);
+            }
+
+            @Override
+            public void visit(final PropertyLayoutData propertyLayoutData) {
+                Link link = new Link(
+                        Rel.PROPERTY.getName(),
+                        RestfulHttpMethod.GET.getJavaxRsMethod(),
+                        getResourceContext().urlFor(
+                            "objects/" + domainType + "/" + instanceId + "/properties/" + propertyLayoutData.getId()
+                        ),
+                        RepresentationType.OBJECT_PROPERTY.getJsonMediaType().toString());
+                propertyLayoutData.setLink(link);
+            }
+
+            @Override
+            public void visit(final CollectionLayoutData collectionLayoutData) {
+                Link link = new Link(
+                        Rel.COLLECTION.getName(),
+                        RestfulHttpMethod.GET.getJavaxRsMethod(),
+                        getResourceContext().urlFor(
+                            "objects/" + domainType + "/" + instanceId + "/collections/" + collectionLayoutData.getId()
+                        ),
+                        RepresentationType.OBJECT_COLLECTION.getJsonMediaType().toString());
+                collectionLayoutData.setLink(link);
+            }
+        });
     }
 
     // //////////////////////////////////////////////////////////

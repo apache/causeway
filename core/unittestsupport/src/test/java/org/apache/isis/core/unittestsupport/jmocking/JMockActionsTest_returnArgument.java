@@ -19,15 +19,15 @@
 
 package org.apache.isis.core.unittestsupport.jmocking;
 
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
-
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
+
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 
 public class JMockActionsTest_returnArgument {
 
@@ -41,7 +41,7 @@ public class JMockActionsTest_returnArgument {
     public void poke() {
         context.checking(new Expectations() {
             {
-                one(collaborator).selectOneOf(with(any(Integer.class)), with(any(Integer.class)), with(any(Integer.class)));
+                oneOf(collaborator).selectOneOf(with(any(Integer.class)), with(any(Integer.class)), with(any(Integer.class)));
                 will(JMockActions.returnArgument(1)); // ie the 2nd argument, which is '20'
             }
         });

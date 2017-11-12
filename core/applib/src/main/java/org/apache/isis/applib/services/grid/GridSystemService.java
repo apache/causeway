@@ -17,12 +17,12 @@
 package org.apache.isis.applib.services.grid;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.layout.component.Grid;
+import org.apache.isis.applib.layout.grid.Grid;
 
 /**
  * Provides an implementation of {@link Grid}.
  */
-public interface GridSystemService<G extends Grid> {
+public interface GridSystemService<G extends org.apache.isis.applib.layout.grid.Grid> {
 
     /**
      * Which grid (implementation) is defined by this service.

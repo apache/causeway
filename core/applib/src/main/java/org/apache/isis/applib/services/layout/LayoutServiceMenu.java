@@ -26,9 +26,12 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.services.menu.MenuBarsService;
 import org.apache.isis.applib.value.Blob;
+import org.apache.isis.applib.value.Clob;
 
 @DomainService(
         nature = NatureOfService.VIEW_MENU_ONLY,
@@ -64,7 +67,7 @@ public class LayoutServiceMenu {
     )
     @ActionLayout(
             cssClassFa = "fa-download",
-            named = "Download Layouts (XML)"
+            named = "Download Object Layouts (ZIP)"
     )
     @MemberOrder(sequence="500.400.1")
     public Blob downloadLayouts(final LayoutService.Style style) {
@@ -79,12 +82,43 @@ public class LayoutServiceMenu {
         return LayoutService.Style.NORMALIZED;
     }
 
+    public static class DownloadMenuBarsLayoutDomainEvent extends ActionDomainEvent {
+    }
+
+    @Action(
+            domainEvent = DownloadMenuBarsLayoutDomainEvent.class,
+            semantics = SemanticsOf.SAFE,
+            restrictTo = RestrictTo.PROTOTYPING
+    )
+    @ActionLayout(
+            cssClassFa = "fa-download",
+            named = "Download Menu Bars Layout (XML)"
+    )
+    @MemberOrder(sequence="500.400.2")
+    public Clob downloadMenuBarsLayout(
+            @ParameterLayout(named = "File name") final String fileName,
+            final MenuBarsService.Type type) {
+
+        final String xml = layoutService.toMenuBarsXml(type);
+
+        return new Clob(Util.withSuffix(fileName,  ".xml"), "text/xml", xml);
+    }
+
+    public String default0DownloadMenuBarsLayout() {
+        return "menubars.layout.xml";
+    }
+
+    public MenuBarsService.Type default1DownloadMenuBarsLayout() {
+        return MenuBarsService.Type.DEFAULT;
+    }
+
 
     // //////////////////////////////////////
 
 
     @javax.inject.Inject
-    LayoutService layoutService;
+    LayoutService2 layoutService;
+
 
 
 

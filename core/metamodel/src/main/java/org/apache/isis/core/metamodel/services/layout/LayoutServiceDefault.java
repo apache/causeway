@@ -37,10 +37,12 @@ import org.apache.isis.applib.FatalException;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.layout.component.Grid;
+import org.apache.isis.applib.layout.grid.Grid;
+import org.apache.isis.applib.layout.menubars.MenuBars;
 import org.apache.isis.applib.services.grid.GridService;
 import org.apache.isis.applib.services.jaxb.JaxbService;
-import org.apache.isis.applib.services.layout.LayoutService;
+import org.apache.isis.applib.services.layout.LayoutService2;
+import org.apache.isis.applib.services.menu.MenuBarsService;
 import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -51,7 +53,7 @@ import org.apache.isis.objectstore.jdo.metamodel.facets.object.persistencecapabl
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
 )
-public class LayoutServiceDefault implements LayoutService {
+public class LayoutServiceDefault implements LayoutService2 {
 
     private static final Logger LOG = LoggerFactory.getLogger(LayoutServiceDefault.class);
 
@@ -137,6 +139,17 @@ public class LayoutServiceDefault implements LayoutService {
     }
 
 
+    @Programmatic
+    @Override
+    public String toMenuBarsXml(final MenuBarsService.Type type) {
+        final MenuBars menuBars = menuBarsService.menuBars(type);
+
+        return jaxbService.toXml(menuBars,
+                ImmutableMap.<String,Object>of(
+                        Marshaller.JAXB_SCHEMA_LOCATION,
+                        menuBars.getTnsAndSchemaLocation()
+                ));
+    }
 
 
     @javax.inject.Inject
@@ -148,5 +161,7 @@ public class LayoutServiceDefault implements LayoutService {
     @javax.inject.Inject
     GridService gridService;
 
+    @javax.inject.Inject
+    MenuBarsService menuBarsService;
 
 }

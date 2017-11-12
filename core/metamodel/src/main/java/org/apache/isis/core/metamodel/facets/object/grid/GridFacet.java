@@ -18,7 +18,7 @@
  */
 package org.apache.isis.core.metamodel.facets.object.grid;
 
-import org.apache.isis.applib.layout.component.Grid;
+import org.apache.isis.applib.layout.grid.Grid;
 import org.apache.isis.applib.services.grid.GridSystemService;
 import org.apache.isis.applib.services.layout.LayoutService;
 import org.apache.isis.core.metamodel.facetapi.Facet;

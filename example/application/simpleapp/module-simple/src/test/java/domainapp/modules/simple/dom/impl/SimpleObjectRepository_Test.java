@@ -29,7 +29,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.core.unittestsupport.jmocking.JMockActions;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
@@ -43,9 +42,6 @@ public class SimpleObjectRepository_Test {
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
     @Mock
-    ServiceRegistry mockServiceRegistry;
-    
-    @Mock
     RepositoryService mockRepositoryService;
 
     SimpleObjectRepository simpleObjectRepository;
@@ -54,7 +50,6 @@ public class SimpleObjectRepository_Test {
     public void setUp() throws Exception {
         simpleObjectRepository = new SimpleObjectRepository();
         simpleObjectRepository.repositoryService = mockRepositoryService;
-        simpleObjectRepository.serviceRegistry = mockServiceRegistry;
     }
 
     public static class Create extends SimpleObjectRepository_Test {

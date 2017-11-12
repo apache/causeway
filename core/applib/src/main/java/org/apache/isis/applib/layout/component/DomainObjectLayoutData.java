@@ -27,6 +27,7 @@ import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
+import org.apache.isis.applib.layout.links.Link;
 
 /**
  * Describes the layout of the title and icon of a domain object, broadly corresponding to {@link org.apache.isis.applib.annotation.DomainObjectLayout}.
@@ -41,6 +42,7 @@ import org.apache.isis.applib.annotation.BookmarkPolicy;
             , "describedAs"
             , "plural"
             , "metadataError"
+            , "link"
         }
 )
 public class DomainObjectLayoutData implements Serializable, Owned<DomainObjectLayoutDataOwner>,
@@ -201,6 +203,26 @@ public class DomainObjectLayoutData implements Serializable, Owned<DomainObjectL
     public void setOwner(final DomainObjectLayoutDataOwner owner) {
         this.owner = owner;
     }
+
+
+    private Link link;
+
+    /**
+     * The link to access this resource from the REST API (Restful Objects viewer).
+     *
+     * <p>
+     *     Populated by the framework automatically.
+     * </p>
+     */
+    @XmlElement(required = false)
+    public Link getLink() {
+        return link;
+    }
+
+    public void setLink(final Link link) {
+        this.link = link;
+    }
+
 
 
 

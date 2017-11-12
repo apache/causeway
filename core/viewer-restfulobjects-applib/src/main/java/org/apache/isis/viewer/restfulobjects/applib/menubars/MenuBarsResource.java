@@ -40,7 +40,10 @@ public interface MenuBarsResource {
      * Not part of the Restful Objects spec.
      */
     @GET
-    @Produces({ MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_LAYOUT_MENUBARS })
+    @Produces({
+            MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_JSON_LAYOUT_MENUBARS,
+            MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_LAYOUT_MENUBARS
+    })
     public Response menuBars();
 
     /**

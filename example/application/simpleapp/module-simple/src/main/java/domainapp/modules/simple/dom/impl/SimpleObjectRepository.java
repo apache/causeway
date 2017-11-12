@@ -20,10 +20,11 @@ package domainapp.modules.simple.dom.impl;
 
 import java.util.List;
 
+import org.datanucleus.query.typesafe.TypesafeQuery;
+
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.query.QueryDefault;
-import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.applib.services.jdosupport.IsisJdoSupport;
 import org.apache.isis.applib.services.repository.RepositoryService;
 
 @DomainService(
@@ -37,11 +38,13 @@ public class SimpleObjectRepository {
     }
 
     public List<SimpleObject> findByName(final String name) {
-        return repositoryService.allMatches(
-                new QueryDefault<>(
-                        SimpleObject.class,
-                        "findByName",
-                        "name", name));
+        TypesafeQuery<SimpleObject> q = isisJdoSupport.newTypesafeQuery(SimpleObject.class);
+        final QSimpleObject cand = QSimpleObject.candidate();
+        q = q.filter(
+                cand.name.indexOf(q.stringParameter("name")).ne(-1)
+        );
+        return q.setParameter("name", name)
+                .executeList();
     }
 
     public SimpleObject create(final String name) {
@@ -50,6 +53,7 @@ public class SimpleObjectRepository {
 
     @javax.inject.Inject
     RepositoryService repositoryService;
+
     @javax.inject.Inject
-    ServiceRegistry serviceRegistry;
+    IsisJdoSupport isisJdoSupport;
 }

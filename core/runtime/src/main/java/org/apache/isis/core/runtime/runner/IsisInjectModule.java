@@ -22,6 +22,8 @@ package org.apache.isis.core.runtime.runner;
 import java.util.List;
 import java.util.Map;
 
+import javax.ws.rs.HEAD;
+
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
@@ -127,7 +129,7 @@ public class IsisInjectModule extends AbstractModule {
                 new IsisComponentProviderUsingInstallers(appManifestToUse, isisConfiguration);
 
         final IsisSessionFactoryBuilder builder =
-                new IsisSessionFactoryBuilder(componentProvider, deploymentCategory);
+                new IsisSessionFactoryBuilder(componentProvider, deploymentCategory, componentProvider.getAppManifest());
 
         // as a side-effect, if the metamodel turns out to be invalid, then
         // this will push the MetaModelInvalidException into IsisContext.

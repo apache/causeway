@@ -20,6 +20,8 @@ package domainapp.dom.impl;
 
 import java.util.List;
 
+import org.datanucleus.query.typesafe.TypesafeQuery;
+
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.MemberOrder;
@@ -28,7 +30,7 @@ import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.query.QueryDefault;
+import org.apache.isis.applib.services.jdosupport.IsisJdoSupport;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.repository.RepositoryService;
 
@@ -44,17 +46,19 @@ public class HelloWorldObjects {
             @Parameter(maxLength = 40)
             @ParameterLayout(named = "Name")
             final String name) {
-        return repositoryService.persist(HelloWorldObject.create(name));
+        return repositoryService.persist(new HelloWorldObject(name));
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @MemberOrder(sequence = "2")
     public List<HelloWorldObject> findByName(final String name) {
-        return repositoryService.allMatches(
-                new QueryDefault<>(
-                        HelloWorldObject.class,
-                        "findByName",
-                        "name", name));
+        TypesafeQuery<HelloWorldObject> q = isisJdoSupport.newTypesafeQuery(HelloWorldObject.class);
+        final QHelloWorldObject cand = QHelloWorldObject.candidate();
+        q = q.filter(
+                cand.name.indexOf(q.stringParameter("name")).ne(-1)
+        );
+        return q.setParameter("name", name)
+                .executeList();
     }
 
     @Action(semantics = SemanticsOf.SAFE, restrictTo = RestrictTo.PROTOTYPING)
@@ -63,13 +67,10 @@ public class HelloWorldObjects {
         return repositoryService.allInstances(HelloWorldObject.class);
     }
 
-
-    //region > injected services
     @javax.inject.Inject
     RepositoryService repositoryService;
 
     @javax.inject.Inject
-    ServiceRegistry serviceRegistry;
-    //endregion
+    IsisJdoSupport isisJdoSupport;
 
 }

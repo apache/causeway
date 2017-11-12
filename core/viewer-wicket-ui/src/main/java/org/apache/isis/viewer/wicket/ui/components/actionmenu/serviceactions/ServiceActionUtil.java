@@ -38,16 +38,18 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.Model;
 
-import org.apache.isis.applib.layout.menus.ActionLayoutData;
-import org.apache.isis.applib.layout.menus.Menu;
-import org.apache.isis.applib.layout.menus.MenuBar;
-import org.apache.isis.applib.layout.menus.MenuBars;
-import org.apache.isis.applib.layout.menus.MenuSection;
+import org.apache.isis.applib.layout.component.ServiceActionLayoutData;
+import org.apache.isis.applib.layout.menubars.MenuBars;
+import org.apache.isis.applib.layout.menubars.MenuSection;
+import org.apache.isis.applib.layout.menubars.bootstrap3.BS3Menu;
+import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBar;
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.runtime.system.IsisSystem;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactoryBuilder;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ServiceActionsModel;
@@ -201,7 +203,8 @@ public final class ServiceActionUtil {
             final MenuBars menuBars,
             final ServiceActionsModel serviceActionsModel) {
 
-        final MenuBar menuBar = menuBars.menuBarFor(serviceActionsModel.getMenuBar());
+        // TODO: remove hard-coded dependency on BS3
+        final BS3MenuBar menuBar = (BS3MenuBar) menuBars.menuBarFor(serviceActionsModel.getMenuBar());
 
         final List<ObjectAdapter> serviceAdapters = serviceActionsModel.getObject();
         final ImmutableMap<ObjectAdapter, String> oidByServiceAdapter = FluentIterable.from(serviceAdapters)
@@ -215,7 +218,7 @@ public final class ServiceActionUtil {
                 .copyOf(oidByServiceAdapter).inverse();
 
         final List<CssMenuItem> menuItems = Lists.newArrayList();
-        for (final Menu menu : menuBar.getMenus()) {
+        for (final BS3Menu menu : menuBar.getMenus()) {
 
             final CssMenuItem serviceMenu = CssMenuItem.newMenuItem(menu.getNamed()).build();
 
@@ -223,8 +226,10 @@ public final class ServiceActionUtil {
 
                 boolean firstSection = true;
 
-                for (final ActionLayoutData actionLayoutData : menuSection.getActions()) {
-                    final String oid = actionLayoutData.getOid();
+                for (final ServiceActionLayoutData actionLayoutData : menuSection.getServiceActions()) {
+                    final String objectType = actionLayoutData.getObjectType();
+                    final Bookmark bookmark = new Bookmark(objectType, PersistenceSession.SERVICE_IDENTIFIER);
+                    final String oid = bookmark.toString();
                     final ObjectAdapter serviceAdapter = serviceAdapterByOid.get(oid);
                     final EntityModel entityModel = new EntityModel(serviceAdapter);
                     final ObjectAction objectAction = serviceAdapter.getSpecification()

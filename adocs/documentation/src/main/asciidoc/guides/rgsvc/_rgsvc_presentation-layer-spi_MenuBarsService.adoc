@@ -6,36 +6,30 @@
 
 
 
-The `MenuBarsService` is responsible for returning an XML representation of the domain service actions.
+The `MenuBarsService` is responsible for returning a xref:../rgcms/rgcms.adoc#_rgcms_classes_menubars[`MenuBars`] instance, a data structure representing the arrangement of domain service actions across multiple menu bars, menus and sections.
 This is used by the Wicket viewer to build up the menu, and is also served as the "menuBars" resource by the xref:../ugvro/ugvro.adoc#[Restful Objects] viewer.
 
 
-[NOTE]
-====
-TODO: need to flesh this out...
-====
 
-
-== SPI
+== SPI and Implementation
 
 The SPI defined by this service is:
 
 [source,java]
 ----
 public interface MenuBarsService {
-    MenuBars menuBars();                    // <1>
+    enum Strategy {                         // <1>
+        DEFAULT,
+        FALLBACK
+    }
+    MenuBars menuBars();                    // <2>
+    MenuBars menuBars(Strategy strategy);   // <3>
 }
 ----
-<1> An instance of `MenuBars`.
+<1> Select whether to return the "default" `MenuBars` instance - which may be obtained from anywhere, eg read from the classpath, or to "fallback"" and derive from the metamodel facet/annotations.
+<2> Convenience API to return the default `MenuBars` instance
+<3> Returns an instance of `MenuBars` according the specified strategy.
 
-[NOTE]
-====
-TODO: need to document `MenuBars` in the rgcms.adoc guide.
-====
-
-
-== Implementation
 
 The framework provides a default implementation of this service, namely `o.a.i.core.runtime.services.menu.MenuBarsServiceDefault`.
-
-
+This uses the xref:rgsvc.adoc#_rgsvc_presentation-layer-spi_MenuBarsLoaderService[MenuBarsLoaderService] to load a serialized form of `MenuBars` instance, called `menubars.layout.xml`, from the classpath.

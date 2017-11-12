@@ -31,6 +31,7 @@ import javax.ws.rs.core.Response;
 import com.google.common.base.Strings;
 
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.layout.grid.Grid;
 import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -63,6 +64,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.TypeActionRes
 import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.TypeListReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
 import org.apache.isis.viewer.restfulobjects.rendering.util.Util;
+import org.apache.isis.viewer.restfulobjects.server.resources.serialization.SerializationStrategy;
 import org.apache.isis.viewer.restfulobjects.server.util.UrlParserUtils;
 
 /**
@@ -108,9 +110,14 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
     @Override
     @GET
     @Path("/{domainType}/layout")
-    @Produces({ MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_LAYOUT_BS3 })
+    @Produces({
+            MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_LAYOUT_BS3,
+            MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_LAYOUT_BS3
+    })
     public Response layout(@PathParam("domainType") final String domainType) {
+
         init(RepresentationType.LAYOUT, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
+        final SerializationStrategy serializationStrategy = SerializationStrategy.determineFrom(getResourceContext().getAcceptableMediaTypes());
 
         final ObjectSpecification objectSpec = getSpecificationLoader().lookupBySpecId(ObjectSpecId.of(domainType));
         final GridFacet gridFacet = objectSpec.getFacet(GridFacet.class);
@@ -119,7 +126,10 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
             builder = Responses.ofNotFound();
             return builder.build();
         } else {
-            builder = Response.status(Response.Status.OK).entity(gridFacet.getGrid()).type(RepresentationType.LAYOUT.getXmlMediaType());
+            Grid grid = gridFacet.getGrid();
+            builder = Response.status(Response.Status.OK)
+                    .entity(serializationStrategy.entity(grid))
+                    .type(serializationStrategy.type(RepresentationType.LAYOUT));
         }
 
         return builder.build();

@@ -11,7 +11,8 @@ Some articles and recorded material relating to either Apache Isis (or its prede
 
 == 2017
 
-* Article, infoq.com: "In Defence of the Monolith" (link:https://www.infoq.com/articles/monolith-defense-part-1[part 1] and link:https://www.infoq.com/articles/monolith-defense-part-2[part 2]), also re-published in an link:https://www.infoq.com/minibooks/emag-microservices-monoliths[e-book].
+* Presentation, IMWorld 2017, Bucharest: link:https://www.youtube.com/watch?v=KdFUwDhf1o8&feature=youtu.be[Thinking outside the box - why you should build, not buy] (45 min video)
+* *Article, infoq.com: "In Defence of the Monolith" (link:https://www.infoq.com/articles/monolith-defense-part-1[part 1] and link:https://www.infoq.com/articles/monolith-defense-part-2[part 2]), also re-published in an link:https://www.infoq.com/minibooks/emag-microservices-monoliths[e-book]*.
 
 
 

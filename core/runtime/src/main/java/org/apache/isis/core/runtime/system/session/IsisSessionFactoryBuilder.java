@@ -58,22 +58,27 @@ public class IsisSessionFactoryBuilder {
 
     private boolean initialized = false;
 
-    //region > constructors, fields
+    //region > constructors, accessors
 
     private final IsisComponentProvider componentProvider;
     private final DeploymentCategory deploymentCategory;
+    private final AppManifest appManifest;
 
     private final IsisLocaleInitializer localeInitializer;
     private final IsisTimeZoneInitializer timeZoneInitializer;
 
-    public IsisSessionFactoryBuilder(final AppManifest manifest) {
-        this(new IsisComponentProviderDefault2(manifest, null), DeploymentCategory.PRODUCTION);
+    public IsisSessionFactoryBuilder(final AppManifest appManifest) {
+        this(new IsisComponentProviderDefault2(appManifest, null), DeploymentCategory.PRODUCTION, appManifest);
     }
 
-    public IsisSessionFactoryBuilder(final IsisComponentProvider componentProvider, final DeploymentCategory deploymentCategory) {
+    public IsisSessionFactoryBuilder(
+            final IsisComponentProvider componentProvider,
+            final DeploymentCategory deploymentCategory,
+            final AppManifest appManifest) {
 
         this.componentProvider = componentProvider;
         this.deploymentCategory = deploymentCategory;
+        this.appManifest = appManifest;
 
         this.localeInitializer = new IsisLocaleInitializer();
         this.timeZoneInitializer = new IsisTimeZoneInitializer();
@@ -82,8 +87,12 @@ public class IsisSessionFactoryBuilder {
     public DeploymentCategory getDeploymentCategory() {
         return deploymentCategory;
     }
-    //endregion
 
+    public AppManifest getAppManifest() {
+        return appManifest;
+    }
+
+    //endregion
 
     //region > buildSessionFactory
 
@@ -151,7 +160,7 @@ public class IsisSessionFactoryBuilder {
             servicesInjector.validateServices();
 
             // instantiate the IsisSessionFactory
-            isisSessionFactory = new IsisSessionFactory(deploymentCategory, servicesInjector);
+            isisSessionFactory = new IsisSessionFactory(deploymentCategory, servicesInjector, appManifest);
 
 
             // now, add the IsisSessionFactory itself into ServicesInjector, so it can be @javax.inject.Inject'd

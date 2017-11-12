@@ -23,7 +23,7 @@ import org.apache.isis.applib.annotation.MemberGroupLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.layout.component.Grid;
+import org.apache.isis.applib.layout.grid.Grid;
 
 public interface GridService {
 
@@ -62,7 +62,7 @@ public interface GridService {
      * Returns a normalized grid for the domain class obtained previously using {@link #load(Class)}.
      *
      * <p>
-     *     If a &quot;normalized&quot; grid is persisted as the <code>layout.xml/code>, then the expectation is that
+     *     If a &quot;normalized&quot; grid is persisted as the <code>layout.xml</code>, then the expectation is that
      *     the {@link MemberOrder} and {@link MemberGroupLayout} annotations can be removed from the domain class
      *     because the binding of properties/collections/actions will be within the XML.  However, the layout
      *     annotations ({@link DomainObjectLayout}, {@link ActionLayout}, {@link PropertyLayout} and

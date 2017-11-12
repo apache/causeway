@@ -161,6 +161,9 @@ public class PersistenceSession implements
      * Append regular <a href="http://www.datanucleus.org/products/accessplatform/persistence_properties.html">datanucleus properties</a> to this key
      */
     public static final String DATANUCLEUS_PROPERTIES_ROOT = ROOT_KEY + "impl.";
+
+    public static final String SERVICE_IDENTIFIER = "1";
+
     //endregion
 
     //region > constructor, fields, finalize()
@@ -2117,7 +2120,7 @@ public class PersistenceSession implements
     private RootOid newIdentifier(final Object pojo, final Type type) {
         final ObjectSpecification spec = objectSpecFor(pojo);
         if(spec.isService()) {
-            return newRootId(spec, "1", type);
+            return newRootId(spec, SERVICE_IDENTIFIER, type);
         }
 
         final ViewModelFacet recreatableObjectFacet = spec.getFacet(ViewModelFacet.class);

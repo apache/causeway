@@ -20,6 +20,8 @@ package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 
 import java.util.EnumMap;
 
+import javax.ws.rs.HEAD;
+
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 public final class InvokeKeys {
@@ -29,7 +31,9 @@ public final class InvokeKeys {
         map.put(SemanticsOf.SAFE_AND_REQUEST_CACHEABLE, "invokeQueryOnly");
         map.put(SemanticsOf.SAFE, "invokeQueryOnly");
         map.put(SemanticsOf.IDEMPOTENT, "invokeIdempotent");
+        map.put(SemanticsOf.IDEMPOTENT_ARE_YOU_SURE, "invokeIdempotent");
         map.put(SemanticsOf.NON_IDEMPOTENT, "invoke");
+        map.put(SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE, "invoke");
     }
     
     private InvokeKeys() {

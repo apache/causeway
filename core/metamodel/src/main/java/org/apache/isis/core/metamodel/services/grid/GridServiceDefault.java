@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.layout.component.Grid;
+import org.apache.isis.applib.layout.grid.Grid;
 import org.apache.isis.applib.services.grid.GridLoaderService;
 import org.apache.isis.applib.services.grid.GridService;
 import org.apache.isis.applib.services.grid.GridSystemService;
@@ -44,8 +44,11 @@ public class GridServiceDefault implements GridService {
 
     private static final Logger LOG = LoggerFactory.getLogger(GridServiceDefault.class);
 
-    public static final String COMMON_TNS = "http://isis.apache.org/applib/layout/component";
-    public static final String COMMON_SCHEMA_LOCATION = "http://isis.apache.org/applib/layout/component/component.xsd";
+    public static final String COMPONENT_TNS = "http://isis.apache.org/applib/layout/component";
+    public static final String COMPONENT_SCHEMA_LOCATION = "http://isis.apache.org/applib/layout/component/component.xsd";
+
+    public static final String LINKS_TNS = "http://isis.apache.org/applib/layout/links";
+    public static final String LINKS_SCHEMA_LOCATION = "http://isis.apache.org/applib/layout/links/links.xsd";
 
     // //////////////////////////////////////
 
@@ -77,28 +80,25 @@ public class GridServiceDefault implements GridService {
     @Programmatic
     public Grid defaultGridFor(Class<?> domainClass) {
 
-        for (GridSystemService gridSystemService : gridNormalizerServices()) {
+        for (GridSystemService gridSystemService : gridSystemServices()) {
             Grid grid = gridSystemService.defaultGrid(domainClass);
             if(grid != null) {
                 return grid;
             }
         }
-        throw new IllegalStateException("No GridNormalizerService available to create grid for '" + domainClass.getName() + "'");
+        throw new IllegalStateException("No GridSystemService available to create grid for '" + domainClass.getName() + "'");
     }
 
     @Override
     public Grid normalize(final Grid grid) {
 
-        // if have .layout.json and then add a .layout.xml without restarting, then note that the .layout.xml won't
-        // be picked up.  To do so would require normalizing repeatedly in order to trample over the .layout.json's
-        // original facets
         if(grid.isNormalized()) {
             return grid;
         }
 
         final Class<?> domainClass = grid.getDomainClass();
 
-        for (GridSystemService gridSystemService : gridNormalizerServices()) {
+        for (GridSystemService gridSystemService : gridSystemServices()) {
             gridSystemService.normalize(grid, domainClass);
         }
 
@@ -115,7 +115,7 @@ public class GridServiceDefault implements GridService {
     public Grid complete(final Grid grid) {
 
         final Class<?> domainClass = grid.getDomainClass();
-        for (GridSystemService gridSystemService : gridNormalizerServices()) {
+        for (GridSystemService gridSystemService : gridSystemServices()) {
             gridSystemService.complete(grid, domainClass);
         }
 
@@ -127,7 +127,7 @@ public class GridServiceDefault implements GridService {
     public Grid minimal(final Grid grid) {
 
         final Class<?> domainClass = grid.getDomainClass();
-        for (GridSystemService gridSystemService : gridNormalizerServices()) {
+        for (GridSystemService gridSystemService : gridSystemServices()) {
             gridSystemService.minimal(grid, domainClass);
         }
 
@@ -141,8 +141,13 @@ public class GridServiceDefault implements GridService {
     @Programmatic
     public String tnsAndSchemaLocation(final Grid grid) {
         final List<String> parts = Lists.newArrayList();
-        parts.add(COMMON_TNS);
-        parts.add(COMMON_SCHEMA_LOCATION);
+
+        parts.add(COMPONENT_TNS);
+        parts.add(COMPONENT_SCHEMA_LOCATION);
+
+        parts.add(LINKS_TNS);
+        parts.add(LINKS_SCHEMA_LOCATION);
+
         for (GridSystemService gridSystemService : gridSystemServices) {
             final Class<? extends Grid> gridImpl = gridSystemService.gridImplementation();
             if(gridImpl.isAssignableFrom(grid.getClass())) {
@@ -167,7 +172,7 @@ public class GridServiceDefault implements GridService {
      * </p>
      */
     @Programmatic
-    protected List<GridSystemService<?>> gridNormalizerServices() {
+    protected List<GridSystemService<?>> gridSystemServices() {
 
         if (filteredGridSystemServices == null) {
             List<GridSystemService<?>> services = Lists.newArrayList();
@@ -175,8 +180,8 @@ public class GridServiceDefault implements GridService {
             for (GridSystemService gridSystemService : this.gridSystemServices) {
                 final Class gridImplementation = gridSystemService.gridImplementation();
                 final boolean notSeenBefore = FluentIterable.from(services).filter(new Predicate<GridSystemService<?>>() {
-                    @Override public boolean apply(@Nullable final GridSystemService<?> gridNormalizerService) {
-                        return gridNormalizerService.gridImplementation() == gridImplementation;
+                    @Override public boolean apply(@Nullable final GridSystemService<?> systemService) {
+                        return systemService.gridImplementation() == gridImplementation;
                     }
                 }).isEmpty();
                 if(notSeenBefore) {
