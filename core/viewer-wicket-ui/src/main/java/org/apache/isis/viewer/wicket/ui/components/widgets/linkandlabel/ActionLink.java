@@ -30,7 +30,7 @@ import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
 import org.apache.wicket.util.time.Duration;
-import org.apache.isis.applib.annotation.SemanticsOf;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -120,7 +120,8 @@ public abstract class ActionLink extends AjaxLink<ObjectAdapter> implements IAja
     }
 
     public String getReasonDisabledIfAny() {
-        return getActionModel().getReasonDisabledIfAny();
+        // no point evaluating if not visible
+        return isVisible() ? getActionModel().getReasonDisabledIfAny() : null;
     }
 
     @Override

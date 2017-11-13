@@ -21,11 +21,8 @@ package org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions;
 
 import org.apache.wicket.markup.html.link.AbstractLink;
 
-import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
-import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -69,17 +66,20 @@ public final class EntityActionLinkFactory extends ActionLinkFactoryAbstract {
 
         
         final AbstractLink link = newLink(linkId, objectAction);
-        
-        final Consent usability =
-                objectAction.isUsable(
-                        objectAdapter,
-                        InteractionInitiatedBy.USER,
-                        Where.OBJECT_FORMS);
-        final String disabledReasonIfAny = usability.getReason();
-        if(disabledReasonIfAny != null) {
-            link.setEnabled(false);
-        }
 
+        // similarly for whether disabled, done at point of rendering
+
+        // final Consent usability =
+        //            objectAction.isUsable(
+        //                    objectAdapter,
+        //                    InteractionInitiatedBy.USER,
+        //                    Where.OBJECT_FORMS);
+        // final String disabledReasonIfAny = usability.getReason();
+        // if(disabledReasonIfAny != null) {
+        //    link.setEnabled(false);
+        // }
+
+        final String disabledReasonIfAny = null;
         return newLinkAndLabel(objectAdapter, objectAction, link, disabledReasonIfAny);
     }
 
