@@ -97,7 +97,7 @@ public abstract class IsisComponentProvider {
         findAndRegisterTypes(appManifest);
         specifyServicesAndRegisteredEntitiesUsing(appManifest);
 
-        overrideConfigurationUsing(appManifest);
+        addToConfigurationUsing(appManifest);
 
         this.services = new ServicesInstallerFromConfigurationAndAnnotation(getConfiguration()).getServices();
 
@@ -207,11 +207,11 @@ public abstract class IsisComponentProvider {
         };
     }
 
-    private void overrideConfigurationUsing(final AppManifest appManifest) {
+    private void addToConfigurationUsing(final AppManifest appManifest) {
         final Map<String, String> configurationProperties = appManifest.getConfigurationProperties();
         if (configurationProperties != null) {
             for (Map.Entry<String, String> configProp : configurationProperties.entrySet()) {
-                putConfigurationProperty(configProp.getKey(), configProp.getValue());
+                addConfigurationProperty(configProp.getKey(), configProp.getValue());
             }
         }
     }
@@ -224,6 +224,16 @@ public abstract class IsisComponentProvider {
             return;
         }
         this.configuration.put(key, value);
+    }
+
+    /**
+     * TODO: hacky, {@link IsisConfiguration} is meant to be immutable...
+     */
+    void addConfigurationProperty(final String key, final String value) {
+        if(value == null) {
+            return;
+        }
+        this.configuration.add(key, value);
     }
 
     //endregion
