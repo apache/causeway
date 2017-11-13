@@ -62,7 +62,7 @@ public @interface DomainObject {
      * registered with the framework.
      * </p>
      */
-    Publishing publishing() default Publishing.AS_CONFIGURED;
+    Publishing publishing() default Publishing.NOT_SPECIFIED;
 
 
     // //////////////////////////////////////
@@ -115,7 +115,7 @@ public @interface DomainObject {
      *     Note that non-editable objects can nevertheless have actions invoked upon them.
      * </p>
      */
-    Editing editing() default Editing.AS_CONFIGURED;
+    Editing editing() default Editing.NOT_SPECIFIED;
 
 
     /**

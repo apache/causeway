@@ -87,7 +87,7 @@ public @interface Property {
      *     Note that non-editable objects can nevertheless have actions invoked upon them.
      * </p>
      */
-    Editing editing() default Editing.AS_CONFIGURED;
+    Editing editing() default Editing.NOT_SPECIFIED;
 
     /**
      * If {@link #editing()} is set to {@link Editing#DISABLED},
@@ -184,7 +184,7 @@ public @interface Property {
      *     with its {@link javax.jdo.annotations.Column#allowsNull() allowNulls()} attribute set to true.
      * </p>
      */
-    Optionality optionality() default Optionality.DEFAULT;
+    Optionality optionality() default Optionality.NOT_SPECIFIED;
 
 
 

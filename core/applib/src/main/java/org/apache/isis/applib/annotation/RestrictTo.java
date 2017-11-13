@@ -23,5 +23,6 @@ package org.apache.isis.applib.annotation;
  */
 public enum RestrictTo {
     PROTOTYPING,
-    NO_RESTRICTIONS;
+    NO_RESTRICTIONS,
+    NOT_SPECIFIED;
 }

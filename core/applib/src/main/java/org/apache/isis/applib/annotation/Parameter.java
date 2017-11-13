@@ -58,7 +58,7 @@ public @interface Parameter {
      *     to mean that the parameter is required.
      * </p>
      */
-    Optionality optionality() default Optionality.DEFAULT;
+    Optionality optionality() default Optionality.NOT_SPECIFIED;
 
 
 

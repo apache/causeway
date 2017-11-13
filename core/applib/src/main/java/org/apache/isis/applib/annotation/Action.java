@@ -82,7 +82,7 @@ public @interface Action {
      *     {@link ActionLayout#contributed()}.
      * </p>
      */
-    Where hidden() default Where.NOWHERE;
+    Where hidden() default Where.NOT_SPECIFIED;
 
 
     // //////////////////////////////////////
@@ -124,7 +124,7 @@ public @interface Action {
     /**
      * Whether the action invocation should be reified into a {@link org.apache.isis.applib.services.command.Command} object.
      */
-    CommandReification command() default CommandReification.AS_CONFIGURED;
+    CommandReification command() default CommandReification.NOT_SPECIFIED;
 
     /**
      * How the {@link org.apache.isis.applib.services.command.Command Command} object provided by the
@@ -178,7 +178,7 @@ public @interface Action {
      *     By default there are no restrictions, with the action being available in all environments.
      * </p>
      */
-    RestrictTo restrictTo() default RestrictTo.NO_RESTRICTIONS;
+    RestrictTo restrictTo() default RestrictTo.NOT_SPECIFIED;
 
 
 }
