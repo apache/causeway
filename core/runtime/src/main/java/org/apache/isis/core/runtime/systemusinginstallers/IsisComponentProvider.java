@@ -174,8 +174,11 @@ public abstract class IsisComponentProvider {
 
         final List<Class<?>> additionalServices = appManifest.getAdditionalServices();
         if(additionalServices != null) {
+            String existingServicesCsv = configuration.getString(ServicesInstallerFromConfiguration.SERVICES_KEY);
+            String additionalServicesCsv = classNamesFrom(additionalServices);
+            String servicesCsv = Joiner.on(",").join(existingServicesCsv, additionalServicesCsv);
             putConfigurationProperty(
-                    ServicesInstallerFromConfiguration.SERVICES_KEY, classNamesFrom(additionalServices));
+                    ServicesInstallerFromConfiguration.SERVICES_KEY, servicesCsv);
         }
     }
 
