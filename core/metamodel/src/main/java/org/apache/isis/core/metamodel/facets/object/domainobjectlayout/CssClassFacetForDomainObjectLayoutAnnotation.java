@@ -22,11 +22,23 @@ import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacetAbstract;
+import org.apache.isis.core.metamodel.facets.object.cssclass.method.CssClassFacetMethod;
 
 public class CssClassFacetForDomainObjectLayoutAnnotation extends CssClassFacetAbstract {
 
     public static CssClassFacet create(final DomainObjectLayout domainObjectLayout, final FacetHolder holder) {
         if (domainObjectLayout == null) {
+            return null;
+        }
+        CssClassFacet facet = holder.getFacet(CssClassFacet.class);
+        // this is a bit hacky, explicitly checking whether a different implementation is already added.
+        // normally we would just re-order the list of facet factories in ProgrammingModelsFacetJava5, however in
+        // this case @DomainObjectLayout is responsible for two different variations of CssClassFacet, either as
+        // a result of the cssClass attribute, but also as a result of the cssClassUiEvent.  The former has lower
+        // "priority" to the cssClass() method, but the latter has *higher* priority.  Hence the special casing
+        // that is required here.
+        if(facet != null && facet instanceof CssClassFacetMethod) {
+            // don't overwrite
             return null;
         }
         final String cssClass = Strings.emptyToNull(domainObjectLayout.cssClass());
