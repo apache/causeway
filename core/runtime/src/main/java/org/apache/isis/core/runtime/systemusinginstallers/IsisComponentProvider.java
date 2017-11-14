@@ -174,12 +174,19 @@ public abstract class IsisComponentProvider {
 
         final List<Class<?>> additionalServices = appManifest.getAdditionalServices();
         if(additionalServices != null) {
-            String existingServicesCsv = configuration.getString(ServicesInstallerFromConfiguration.SERVICES_KEY);
-            String additionalServicesCsv = classNamesFrom(additionalServices);
-            String servicesCsv = Joiner.on(",").join(existingServicesCsv, additionalServicesCsv);
-            putConfigurationProperty(
-                    ServicesInstallerFromConfiguration.SERVICES_KEY, servicesCsv);
+            final String additionalServicesCsv = classNamesFrom(additionalServices);
+            appendToPropertyCsvValue(ServicesInstallerFromConfiguration.SERVICES_KEY, additionalServicesCsv);
         }
+    }
+
+    private void appendToPropertyCsvValue(final String servicesKey, final String additionalServicesCsv) {
+        final String existingServicesCsv = configuration.getString(servicesKey);
+        final String servicesCsv = join(existingServicesCsv, additionalServicesCsv);
+        putConfigurationProperty(servicesKey, servicesCsv);
+    }
+
+    private static String join(final String csv1, final String csv2) {
+        return csv1 != null ? Joiner.on(",").join(csv1, csv2) : null;
     }
 
     private Iterable<String> modulePackageNamesFrom(final AppManifest appManifest) {
