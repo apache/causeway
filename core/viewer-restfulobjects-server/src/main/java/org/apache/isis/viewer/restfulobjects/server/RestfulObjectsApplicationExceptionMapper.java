@@ -18,29 +18,19 @@
  */
 package org.apache.isis.viewer.restfulobjects.server;
 
-import java.util.List;
-
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
-import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
 import org.apache.isis.core.commons.exceptions.ExceptionUtils;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
-import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.applib.util.JsonMapper;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 
 //@Path("/") // FIXME: workaround for TomEE ... but breaks the RestEasy TCK tests so commented out:-(
 @Provider
-public class RestfulObjectsApplicationExceptionMapper implements ExceptionMapper<RestfulObjectsApplicationException> {
-
-    @Context
-    HttpHeaders httpHeaders;
+public class RestfulObjectsApplicationExceptionMapper extends ExceptionMapperAbstract<RestfulObjectsApplicationException> {
 
     @Override
     public Response toResponse(final RestfulObjectsApplicationException ex) {
@@ -51,66 +41,61 @@ public class RestfulObjectsApplicationExceptionMapper implements ExceptionMapper
             builder.header(RestfulResponse.Header.WARNING.getName(), RestfulResponse.Header.WARNING.render(message));
         }
 
-        // xml handling (only if also not text/html, ie what browsers would send).
-        boolean html = false;
-        final List<MediaType> acceptableMediaTypes = httpHeaders.getAcceptableMediaTypes();
-        for (MediaType acceptableMediaType : acceptableMediaTypes) {
-            html = html || (acceptableMediaType.getType().equals("text") && acceptableMediaType.getSubtype().equals("html"));
-        }
-        boolean xml = false;
-        if(!html) {
-            for (MediaType acceptableMediaType : acceptableMediaTypes) {
-                xml = xml || acceptableMediaType.getSubtype().equals("xml");
+        setContentTypeOn(builder);
+
+        final boolean xml = isXmlButNotHtml();
+        String body = null;
+        if(!xml) {
+            final JsonRepresentation bodyRepr = ex.getBody();
+            if (bodyRepr != null) {
+                body = bodyRepr.toString();
             }
+        }
+        if (body == null) {
+            body = toBody(ex);
         }
 
-        // body and content-type
-        final JsonRepresentation bodyRepr = ex.getBody();
-        final Throwable cause = ex.getCause();
-        if (bodyRepr != null) {
-            if(!xml) {
-                final String body = bodyRepr.toString();
-                builder.entity(body);
-                builder.type(MediaType.APPLICATION_JSON); // generic; the spec doesn't define what the media type should be
-            } else {
-                builder.type(MediaType.APPLICATION_XML);
-            }
-        } else if(cause == null) {
-            if(!xml) {
-                builder.type(MediaType.APPLICATION_JSON); // generic; the spec doesn't define what the media type should be
-            } else {
-                builder.type(MediaType.APPLICATION_XML);
-            }
-        } else {
-            if(!xml) {
-                String body;
-                try {
-                    body = JsonMapper.instance().write(RestfulObjectsApplicationExceptionPojo.create(cause));
-                } catch (final Exception e) {
-                    // fallback
-                    body = "{ \"exception\": \"" + ExceptionUtils.getFullStackTrace(cause) + "\" }";
-                }
-                builder.entity(body);
-                builder.type(RestfulMediaType.APPLICATION_JSON_ERROR);
-            } else {
-                final RestfulObjectsApplicationExceptionPojo exceptionPojo = RestfulObjectsApplicationExceptionPojo.create(cause);
-                final StringBuilder buf = new StringBuilder();
-                buf.append("<exception>\n");
-                buf.append("  <httpStatusCode>").append(exceptionPojo.getHttpStatusCode()).append("</httpStatusCode>/n");
-                buf.append("  <message>").append(exceptionPojo.getMessage()).append("</message>/n");
-                buf.append("  <stackTrace>/n");
-                for (String line : exceptionPojo.getStackTrace()) {
-                    buf.append("    <stackTraceElement>").append(line).append("    </stackTraceElement>/n");
-                }
-                buf.append("  </stackTrace>/n");
-                buf.append("</exception>");
-                builder.entity(buf.toString());
-                builder.type(RestfulMediaType.APPLICATION_XML_ERROR);
-            }
+        if(body != null) {
+            builder.entity(body);
         }
 
         return builder.build();
     }
 
+    protected String toBody(final RestfulObjectsApplicationException ex) {
+        if(ex.getHttpStatusCode() == RestfulResponse.HttpStatusCode.NOT_FOUND) {
+            final ExceptionPojo exceptionPojo = new ExceptionPojo(ex);
+            try {
+                return JsonMapper.instance().write(exceptionPojo);
+            } catch (final Exception e) {
+                // fallback
+                return null;
+            }
+        }
 
+        final boolean xml = isXmlButNotHtml();
+        final ExceptionPojoWithDetail exceptionPojo = new ExceptionPojoWithDetail(ex);
+        if (!xml) {
+            try {
+                return JsonMapper.instance().write(exceptionPojo);
+            } catch (final Exception e) {
+                // fallback
+                return "{ \"exception\": \"" + ExceptionUtils.getFullStackTrace(ex) + "\" }";
+            }
+        } else {
+            final StringBuilder buf = new StringBuilder();
+            buf.append("<exception>\n");
+            buf.append("  <httpStatusCode>").append(exceptionPojo.getHttpStatusCode())
+                    .append("</httpStatusCode>/n");
+            buf.append("  <message>").append(exceptionPojo.getMessage()).append("</message>/n");
+            buf.append("  <stackTrace>/n");
+            for (String line : exceptionPojo.getStackTrace()) {
+                buf.append("    <stackTraceElement>").append(line).append("    </stackTraceElement>/n");
+            }
+            buf.append("  </stackTrace>/n");
+            buf.append("</exception>");
+
+            return buf.toString();
+        }
+    }
 }

@@ -46,8 +46,10 @@ public class RestfulObjectsApplication extends AbstractJaxRsApplication {
 
         final RestfulObjectsJaxbWriterForXml roWriter = new RestfulObjectsJaxbWriterForXml();
         addSingleton(roWriter);
+
         addSingleton(new RestfulObjectsApplicationExceptionMapper());
         addSingleton(new RuntimeExceptionMapper());
+        addSingleton(new ObjectNotFoundExceptionMapper());
 
         addSingleton(new AcceptHeaderServiceForRest.RequestFilter());
         addSingleton(new AcceptHeaderServiceForRest.ResponseFilter());

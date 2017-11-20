@@ -19,12 +19,16 @@
 package org.apache.isis.viewer.restfulobjects.server;
 
 import java.util.List;
+
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
+
 import com.google.common.base.Throwables;
+
 import org.jboss.resteasy.spi.Failure;
+
 import org.apache.isis.core.commons.exceptions.ExceptionUtils;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
@@ -38,13 +42,14 @@ public class RuntimeExceptionMapper implements ExceptionMapper<RuntimeException>
 
     @Override
     public Response toResponse(final RuntimeException ex) {
-        // since have rendered...
+
         final IsisTransaction currentTransaction = getIsisSessionFactory().getCurrentSession()
                 .getPersistenceSession().getTransactionManager().getCurrentTransaction();
 
         final Throwable rootCause = Throwables.getRootCause(ex);
         final List<Throwable> causalChain = Throwables.getCausalChain(ex);
         for (Throwable throwable : causalChain) {
+
             if(throwable == rootCause) {
                 currentTransaction.clearAbortCause();
             }

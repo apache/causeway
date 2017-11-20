@@ -19,45 +19,31 @@
 package org.apache.isis.viewer.restfulobjects.server;
 
 import java.util.List;
+
 import com.google.common.collect.Lists;
-import org.apache.isis.viewer.restfulobjects.rendering.HasHttpStatusCode;
 
-class RestfulObjectsApplicationExceptionPojo {
-
-    public static RestfulObjectsApplicationExceptionPojo create(final Throwable ex) {
-        return new RestfulObjectsApplicationExceptionPojo(ex);
-    }
+class ExceptionPojoWithDetail extends ExceptionPojo {
 
     private static String format(final StackTraceElement stackTraceElement) {
         return stackTraceElement.toString();
     }
 
     private final String className;
-    private final int httpStatusCode;
-    private final String message;
-    private final List<String> stackTrace = Lists.newArrayList();
-    private RestfulObjectsApplicationExceptionPojo causedBy;
 
-    public RestfulObjectsApplicationExceptionPojo(final Throwable ex) {
+    private final List<String> stackTrace = Lists.newArrayList();
+    private ExceptionPojoWithDetail causedBy;
+
+    public ExceptionPojoWithDetail(final Throwable ex) {
+        super(ex);
         this.className = ex.getClass().getName();
-        this.httpStatusCode = getHttpStatusCodeIfAny(ex);
-        this.message = ex.getMessage();
         final StackTraceElement[] stackTraceElements = ex.getStackTrace();
         for (final StackTraceElement stackTraceElement : stackTraceElements) {
             this.stackTrace.add(format(stackTraceElement));
         }
         final Throwable cause = ex.getCause();
         if (cause != null && cause != ex) {
-            this.causedBy = new RestfulObjectsApplicationExceptionPojo(cause);
+            this.causedBy = new ExceptionPojoWithDetail(cause);
         }
-    }
-
-    private int getHttpStatusCodeIfAny(final Throwable ex) {
-        if (!(ex instanceof HasHttpStatusCode)) {
-            return 0;
-        }
-        final HasHttpStatusCode hasHttpStatusCode = (HasHttpStatusCode) ex;
-        return hasHttpStatusCode.getHttpStatusCode().getStatusCode();
     }
 
     @SuppressWarnings("unused")
@@ -66,22 +52,12 @@ class RestfulObjectsApplicationExceptionPojo {
     }
 
     @SuppressWarnings("unused")
-    public int getHttpStatusCode() {
-        return httpStatusCode;
-    }
-
-    @SuppressWarnings("unused")
-    public String getMessage() {
-        return message;
-    }
-
-    @SuppressWarnings("unused")
     public List<String> getStackTrace() {
         return stackTrace;
     }
 
     @SuppressWarnings("unused")
-    public RestfulObjectsApplicationExceptionPojo getCausedBy() {
+    public ExceptionPojoWithDetail getCausedBy() {
         return causedBy;
     }
 
