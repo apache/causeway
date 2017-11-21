@@ -248,7 +248,7 @@ public final class JsonValueEncoder {
                     return adapterFor(repr.asLong());
                 }
                 if (repr.isInt()) {
-                    return adapterFor(repr.asInt());
+                    return adapterFor(repr.asLong());
                 }
                 if (repr.isBigInteger()) {
                     return adapterFor(repr.asBigInteger().longValue());
