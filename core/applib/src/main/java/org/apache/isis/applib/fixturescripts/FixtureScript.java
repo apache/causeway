@@ -83,6 +83,9 @@ public abstract class FixtureScript
     public FixtureScript(final String friendlyName, final String localName) {
         this(friendlyName, localName, Discoverability.NON_DISCOVERABLE);
     }
+    public FixtureScript(final String friendlyName, final String localName, final PrintStream printStream) {
+        this(friendlyName, localName, Discoverability.NON_DISCOVERABLE, printStream);
+    }
 
     /**
      * @param friendlyName - if null, will be derived from class name
@@ -93,13 +96,26 @@ public abstract class FixtureScript
             final String friendlyName, 
             final String localName, 
             final Discoverability discoverability) {
+        this(friendlyName, localName, discoverability,
+                // enable tracing by default, to stdout
+                System.out);
+    }
+    /**
+     * @param friendlyName - if null, will be derived from class name
+     * @param localName - if null, will be derived from class name
+     * @param discoverability - whether this fixture script can be rendered as a choice to execute through {@link org.apache.isis.applib.fixturescripts.FixtureScripts#runFixtureScript(FixtureScript, String)}}.
+     */
+    public FixtureScript(
+            final String friendlyName,
+            final String localName,
+            final Discoverability discoverability,
+            final PrintStream printStream) {
         this.localName = localNameElseDerived(localName);
         this.friendlyName = friendlyNameElseDerived(friendlyName);
         this.parentPath = "";
         this.discoverability = discoverability;
 
-        // enable tracing by default, to stdout
-        withTracing();
+        withTracing(printStream);
     }
     protected String localNameElseDerived(final String str) {
         return str != null ? str : StringUtil.asLowerDashed(friendlyNameElseDerived(str));
