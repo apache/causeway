@@ -599,12 +599,8 @@ public abstract class FixtureScript
 
         private <T extends FixtureScript> T executeChildIfNotAlready(final T childFixtureScript) {
 
-            if(childFixtureScript instanceof ValueFixtureScript) {
-                return executeChildIfNotAlreadyWithValueSemantics(childFixtureScript);
-            }
-
             final FixtureScripts.MultipleExecutionStrategy executionStrategy =
-                    fixtureScripts.getMultipleExecutionStrategy();
+                    determineExecutionStrategy(childFixtureScript);
 
             final FixtureScript previouslyExecutedScript;
             switch (executionStrategy) {
@@ -635,6 +631,19 @@ public abstract class FixtureScript
             default:
                 throw new IllegalArgumentException("Execution strategy: '" + executionStrategy + "' not recognized");
             }
+        }
+
+        private <T extends FixtureScript> FixtureScripts.MultipleExecutionStrategy determineExecutionStrategy(final T childFixtureScript) {
+            final FixtureScripts.MultipleExecutionStrategy executionStrategy;
+
+            if(childFixtureScript instanceof FixtureScriptWithExecutionStrategy) {
+                final FixtureScriptWithExecutionStrategy fixtureScriptWithExecutionStrategy =
+                        (FixtureScriptWithExecutionStrategy) childFixtureScript;
+                executionStrategy = fixtureScriptWithExecutionStrategy.getMultipleExecutionStrategy();
+            } else {
+                executionStrategy = fixtureScripts.getMultipleExecutionStrategy();
+            }
+            return executionStrategy;
         }
 
         private <T extends FixtureScript> T executeChildIfNotAlreadyWithValueSemantics(final T childFixtureScript) {

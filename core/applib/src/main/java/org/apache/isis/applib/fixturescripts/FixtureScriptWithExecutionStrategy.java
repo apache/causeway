@@ -18,11 +18,15 @@
  */
 package org.apache.isis.applib.fixturescripts;
 
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.fixturespec.FixtureScriptsSpecification;
 
 /**
  * Overrides the {@link FixtureScriptsSpecification#getMultipleExecutionStrategy() globally-defined}
- * {@link FixtureScripts.MultipleExecutionStrategy} strategy, allowing individual fixtures to indicate that they have
- * value semantics (ie be executed as per {@link FixtureScripts.MultipleExecutionStrategy#EXECUTE_ONCE_BY_VALUE}.
+ * {@link FixtureScripts.MultipleExecutionStrategy} strategy, allowing individual fixtures to indicate that they have their own execution strategy.
  */
-public interface ValueFixtureScript {}
+public interface FixtureScriptWithExecutionStrategy {
+
+    @Programmatic
+    FixtureScripts.MultipleExecutionStrategy getMultipleExecutionStrategy();
+}

@@ -20,7 +20,7 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.fixturescripts.FixtureResultList;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.applib.fixturescripts.FixtureScripts;
-import org.apache.isis.applib.fixturescripts.ValueFixtureScript;
+import org.apache.isis.applib.fixturescripts.FixtureScriptWithExecutionStrategy;
 
 /**
  * Pulls together the various state that influences the behaviour of {@link FixtureScripts} service.
@@ -91,7 +91,7 @@ public class FixtureScriptsSpecification {
 
     /**
      * Note that this can be overridden on a fixture-by-fixture basis if the fixture implements
-     * {@link ValueFixtureScript}.
+     * {@link FixtureScriptWithExecutionStrategy}.
      */
     @Programmatic
     public FixtureScripts.MultipleExecutionStrategy getMultipleExecutionStrategy() {
@@ -135,7 +135,7 @@ public class FixtureScriptsSpecification {
 
         /**
          * Note that this can be overridden on a fixture-by-fixture basis if the fixture implements
-         * {@link ValueFixtureScript}.
+         * {@link FixtureScriptWithExecutionStrategy}.
          */
         public Builder with(FixtureScripts.MultipleExecutionStrategy multipleExecutionStrategy) {
             this.multipleExecutionStrategy = multipleExecutionStrategy;
