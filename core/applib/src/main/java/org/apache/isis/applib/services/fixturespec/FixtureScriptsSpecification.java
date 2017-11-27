@@ -20,6 +20,7 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.fixturescripts.FixtureResultList;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.applib.fixturescripts.FixtureScripts;
+import org.apache.isis.applib.fixturescripts.ValueFixtureScript;
 
 /**
  * Pulls together the various state that influences the behaviour of {@link FixtureScripts} service.
@@ -88,6 +89,10 @@ public class FixtureScriptsSpecification {
         return nonPersistedObjectsStrategy;
     }
 
+    /**
+     * Note that this can be overridden on a fixture-by-fixture basis if the fixture implements
+     * {@link ValueFixtureScript}.
+     */
     @Programmatic
     public FixtureScripts.MultipleExecutionStrategy getMultipleExecutionStrategy() {
         return multipleExecutionStrategy;
@@ -127,6 +132,11 @@ public class FixtureScriptsSpecification {
             this.nonPersistedObjectsStrategy = nonPersistedObjectsStrategy;
             return this;
         }
+
+        /**
+         * Note that this can be overridden on a fixture-by-fixture basis if the fixture implements
+         * {@link ValueFixtureScript}.
+         */
         public Builder with(FixtureScripts.MultipleExecutionStrategy multipleExecutionStrategy) {
             this.multipleExecutionStrategy = multipleExecutionStrategy;
             return this;

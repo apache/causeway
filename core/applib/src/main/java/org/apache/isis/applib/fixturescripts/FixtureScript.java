@@ -578,9 +578,9 @@ public abstract class FixtureScript
             }
             callingFixtureScript.getContainer().injectServicesInto(childFixtureScript);
 
-            executeChildIfNotAlready(childFixtureScript);
+            final T childOrPreviouslyExecuted = executeChildIfNotAlready(childFixtureScript);
 
-            return childFixtureScript;
+            return childOrPreviouslyExecuted;
         }
 
 
@@ -597,12 +597,58 @@ public abstract class FixtureScript
             executeChildIfNotAlready(fixtureScript);
         }
 
-        private void executeChildIfNotAlready(final FixtureScript fixtureScript) {
-            if(shouldExecute(fixtureScript)) {
-                trace(fixtureScript, As.EXEC);
-                fixtureScript.execute(this);
+        private <T extends FixtureScript> T executeChildIfNotAlready(final T childFixtureScript) {
+
+            if(childFixtureScript instanceof ValueFixtureScript) {
+                return executeChildIfNotAlreadyWithValueSemantics(childFixtureScript);
+            }
+
+            final FixtureScripts.MultipleExecutionStrategy executionStrategy =
+                    fixtureScripts.getMultipleExecutionStrategy();
+
+            final FixtureScript previouslyExecutedScript;
+            switch (executionStrategy) {
+
+            case IGNORE:
+            case EXECUTE_ONCE_BY_CLASS:
+                previouslyExecutedScript = fixtureScriptByClass.get(childFixtureScript.getClass());
+                if (previouslyExecutedScript == null) {
+                    trace(childFixtureScript, As.EXEC);
+                    childFixtureScript.execute(this);
+                    this.previouslyExecuted.add(childFixtureScript);
+                    fixtureScriptByClass.put(childFixtureScript.getClass(), childFixtureScript);
+                    return childFixtureScript;
+                } else {
+                    trace(childFixtureScript, As.SKIP);
+                    return (T)previouslyExecutedScript;
+                }
+
+            case EXECUTE_ONCE_BY_VALUE:
+                return executeChildIfNotAlreadyWithValueSemantics(childFixtureScript);
+
+            case EXECUTE:
+                trace(childFixtureScript, As.EXEC);
+                childFixtureScript.execute(this);
+                this.previouslyExecuted.add(childFixtureScript);
+                return childFixtureScript;
+
+            default:
+                throw new IllegalArgumentException("Execution strategy: '" + executionStrategy + "' not recognized");
+            }
+        }
+
+        private <T extends FixtureScript> T executeChildIfNotAlreadyWithValueSemantics(final T childFixtureScript) {
+            final FixtureScript previouslyExecutedScript;
+            previouslyExecutedScript = fixtureScriptByValue.get(childFixtureScript);
+            if (previouslyExecutedScript == null) {
+                trace(childFixtureScript, As.EXEC);
+                childFixtureScript.execute(this);
+                this.previouslyExecuted.add(childFixtureScript);
+                fixtureScriptByValue.put(childFixtureScript, childFixtureScript);
+                return childFixtureScript;
             } else {
-                trace(fixtureScript, As.SKIP);
+                trace(childFixtureScript, As.SKIP);
+                return (T)previouslyExecutedScript;
             }
         }
 
@@ -631,48 +677,18 @@ public abstract class FixtureScript
 
         //endregion
 
-        //region > shouldExecute
-        private boolean shouldExecute(final FixtureScript fixtureScript) {
-
-            final boolean previouslyExecuted = this.previouslyExecuted.contains(fixtureScript);
-            if(!previouslyExecuted) {
-                this.previouslyExecuted.add(fixtureScript);
-            }
-
-            final FixtureScripts.MultipleExecutionStrategy executionStrategy =
-                    fixtureScripts.getMultipleExecutionStrategy();
-
-            switch (executionStrategy) {
-
-                case IGNORE:
-                case EXECUTE_ONCE_BY_CLASS:
-                    return shouldExecuteForExecuteOnceByClassStrategy(fixtureScript);
-
-                case EXECUTE_ONCE_BY_VALUE:
-                    return !previouslyExecuted;
-
-                case EXECUTE:
-                    return true;
-
-                default:
-                    throw new IllegalArgumentException("Execution strategy: '" + executionStrategy + "' not recognized");
-            }
-
-        }
-
         /**
          * used and populated only if the {@link FixtureScripts.MultipleExecutionStrategy#EXECUTE_ONCE_BY_CLASS}
          * strategy is in use.
          */
-        private final Map<String,Class> fixtureScriptClasses = Maps.newLinkedHashMap();
+        private final Map<Class<? extends FixtureScript>, FixtureScript> fixtureScriptByClass = Maps.newLinkedHashMap();
 
-        private boolean shouldExecuteForExecuteOnceByClassStrategy(final FixtureScript fixtureScript) {
-            final boolean alreadyExecuted = fixtureScriptClasses.values().contains(fixtureScript.getClass());
-            if(!alreadyExecuted) {
-                fixtureScriptClasses.put(fixtureScript.getQualifiedName(), fixtureScript.getClass());
-            }
-            return !alreadyExecuted;
-        }
+        /**
+         * used and populated only if the {@link FixtureScripts.MultipleExecutionStrategy#EXECUTE_ONCE_BY_VALUE}
+         * strategy is in use.
+         */
+        private final Map<FixtureScript, FixtureScript> fixtureScriptByValue = Maps.newLinkedHashMap();
+
         //endregion
 
         //region > tracing
