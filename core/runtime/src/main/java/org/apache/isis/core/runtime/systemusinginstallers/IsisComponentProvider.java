@@ -161,6 +161,9 @@ public abstract class IsisComponentProvider {
                 }))
         );
 
+        // add in any explicitly registered services...
+        domainServiceTypes.addAll(appManifest.getAdditionalServices());
+
         // Reflections seems to have a bug whereby it will return some classes outside the
         // set of packages that we want (think this is to do with the fact that it matches based on
         // the prefix and gets it wrong); so we double check and filter out types outside our

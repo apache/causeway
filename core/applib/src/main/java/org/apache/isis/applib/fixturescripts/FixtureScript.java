@@ -573,6 +573,9 @@ public abstract class FixtureScript
         @Programmatic
         public void executeChild(final FixtureScript callingFixtureScript, final String localNameOverride, final FixtureScript childFixtureScript) {
 
+            if(childFixtureScript == null) {
+                return;
+            }
             executeChildT(callingFixtureScript, localNameOverride, childFixtureScript);
         }
 
