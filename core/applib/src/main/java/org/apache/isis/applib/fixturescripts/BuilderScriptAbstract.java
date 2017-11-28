@@ -51,17 +51,6 @@ public abstract class BuilderScriptAbstract<T extends BuilderScriptAbstract>
         return (T)executionContext.executeChildT(parentFixtureScript, this);
     }
 
-    @Programmatic
-    public T build(ExecutionContext executionContext) {
-
-        final FixtureScript anonymousParent = new FixtureScript() {
-            @Override
-            protected void execute(ExecutionContext executionContext) { }
-        };
-
-        return build(anonymousParent, executionContext);
-    }
-
 
 }
 
