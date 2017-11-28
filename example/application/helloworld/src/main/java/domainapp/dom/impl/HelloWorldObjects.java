@@ -22,6 +22,9 @@ import java.util.List;
 
 import org.datanucleus.query.typesafe.TypesafeQuery;
 
+import org.apache.isis.applib.ApplicationException;
+import org.apache.isis.applib.NonRecoverableException;
+import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.MemberOrder;
@@ -58,6 +61,30 @@ public class HelloWorldObjects {
         );
         return q.setParameter("name", name)
                 .executeList();
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @MemberOrder(sequence = "2.1")
+    public void throwRuntimeException() {
+        throw new RuntimeException("all gone wrong - a RuntimeException!");
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @MemberOrder(sequence = "2.2")
+    public void throwRecoverableException() {
+        throw new RecoverableException("all gone wrong - a RecoverableException!");
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @MemberOrder(sequence = "2.3")
+    public void throwNonRecoverableException() {
+        throw new NonRecoverableException("all gone wrong - a NonRecoverableException!");
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @MemberOrder(sequence = "2.4")
+    public void throwApplicableException() {
+        throw new ApplicationException("all gone wrong - an ApplicationException!");
     }
 
     @Action(semantics = SemanticsOf.SAFE, restrictTo = RestrictTo.PROTOTYPING)

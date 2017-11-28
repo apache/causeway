@@ -20,6 +20,9 @@ package org.apache.isis.viewer.restfulobjects.server;
 
 import org.apache.isis.viewer.restfulobjects.rendering.service.acceptheader.AcceptHeaderServiceForRest;
 import org.apache.isis.viewer.restfulobjects.server.conneg.RestfulObjectsJaxbWriterForXml;
+import org.apache.isis.viewer.restfulobjects.server.mappers.ExceptionMapperForObjectNotFound;
+import org.apache.isis.viewer.restfulobjects.server.mappers.ExceptionMapperForRestfulObjectsApplication;
+import org.apache.isis.viewer.restfulobjects.server.mappers.ExceptionMapperForRuntimeException;
 import org.apache.isis.viewer.restfulobjects.server.resources.DomainObjectResourceServerside;
 import org.apache.isis.viewer.restfulobjects.server.resources.DomainServiceResourceServerside;
 import org.apache.isis.viewer.restfulobjects.server.resources.DomainTypeResourceServerside;
@@ -47,9 +50,9 @@ public class RestfulObjectsApplication extends AbstractJaxRsApplication {
         final RestfulObjectsJaxbWriterForXml roWriter = new RestfulObjectsJaxbWriterForXml();
         addSingleton(roWriter);
 
-        addSingleton(new RestfulObjectsApplicationExceptionMapper());
-        addSingleton(new RuntimeExceptionMapper());
-        addSingleton(new ObjectNotFoundExceptionMapper());
+        addSingleton(new ExceptionMapperForRestfulObjectsApplication());
+        addSingleton(new ExceptionMapperForRuntimeException());
+        addSingleton(new ExceptionMapperForObjectNotFound());
 
         addSingleton(new AcceptHeaderServiceForRest.RequestFilter());
         addSingleton(new AcceptHeaderServiceForRest.ResponseFilter());

@@ -16,30 +16,52 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.restfulobjects.server;
+package org.apache.isis.viewer.restfulobjects.server.mappers.entity;
 
 import java.util.List;
+
 import javax.jdo.JDOException;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+
 import com.google.common.collect.Lists;
 
-class RuntimeExceptionPojo {
-
-    public static RuntimeExceptionPojo create(final Exception ex) {
-        return new RuntimeExceptionPojo(ex);
-    }
+@XmlRootElement(
+        name = "exceptionDetail"
+)
+@XmlType(
+        name = "exceptionDetail"
+        , propOrder = {
+            "className",
+            "message",
+            "stackTrace",
+            "causedBy"
+        }
+)
+@XmlAccessorType(XmlAccessType.FIELD)
+public class ExceptionDetail {
 
     private static String format(final StackTraceElement stackTraceElement) {
         return stackTraceElement.toString();
     }
 
-    private final String className;
-    private final String message;
-    private final List<String> stackTrace = Lists.newArrayList();
-    private RuntimeExceptionPojo causedBy;
+    private String className;
+    private String message;
 
-    public RuntimeExceptionPojo(final Throwable ex) {
+    @XmlElementWrapper()
+    @XmlElement(name="element")
+    private List<String> stackTrace = Lists.newArrayList();
+    private ExceptionDetail causedBy;
+
+    public ExceptionDetail() {
+    }
+    public ExceptionDetail(final Throwable ex) {
         this.className = ex.getClass().getName();
-        this.message = messageFor(ex);
+        this.message = ex.getMessage();
         final StackTraceElement[] stackTraceElements = ex.getStackTrace();
         for (final StackTraceElement stackTraceElement : stackTraceElements) {
             this.stackTrace.add(format(stackTraceElement));
@@ -47,7 +69,7 @@ class RuntimeExceptionPojo {
 
         final Throwable cause = causeOf(ex);
         if (cause != null && cause != ex) {
-            this.causedBy = new RuntimeExceptionPojo(cause);
+            this.causedBy = new ExceptionDetail(cause);
         }
     }
 
@@ -62,28 +84,4 @@ class RuntimeExceptionPojo {
         }
     }
 
-    private static String messageFor(final Throwable ex) {
-        final String message = ex.getMessage();
-        return message != null ? message : ex.getClass().getName();
-    }
-
-    @SuppressWarnings("unused")
-    public String getClassName() {
-        return className;
-    }
-
-    @SuppressWarnings("unused")
-    public String getMessage() {
-        return message;
-    }
-
-    @SuppressWarnings("unused")
-    public List<String> getStackTrace() {
-        return stackTrace;
-    }
-
-    @SuppressWarnings("unused")
-    public RuntimeExceptionPojo getCausedBy() {
-        return causedBy;
-    }
 }

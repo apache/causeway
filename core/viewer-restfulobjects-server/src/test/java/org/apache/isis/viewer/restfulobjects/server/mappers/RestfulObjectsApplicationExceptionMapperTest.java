@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.restfulobjects.server;
+package org.apache.isis.viewer.restfulobjects.server.mappers;
 
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
@@ -39,7 +39,7 @@ import static org.junit.Assert.assertThat;
 
 public class RestfulObjectsApplicationExceptionMapperTest {
 
-    private RestfulObjectsApplicationExceptionMapper exceptionMapper;
+    private ExceptionMapperForRestfulObjectsApplication exceptionMapper;
 
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
@@ -49,7 +49,7 @@ public class RestfulObjectsApplicationExceptionMapperTest {
 
     @Before
     public void setUp() throws Exception {
-        exceptionMapper = new RestfulObjectsApplicationExceptionMapper();
+        exceptionMapper = new ExceptionMapperForRestfulObjectsApplication();
         exceptionMapper.httpHeaders = mockHttpHeaders;
     }
 
@@ -71,7 +71,7 @@ public class RestfulObjectsApplicationExceptionMapperTest {
 
         // and then
         final String entity = (String) response.getEntity();
-        assertThat(entity, is(nullValue()));
+        assertThat(entity, is(not(nullValue())));
     }
 
     @Test
@@ -89,7 +89,7 @@ public class RestfulObjectsApplicationExceptionMapperTest {
 
         // and then
         final String entity = (String) response.getEntity();
-        assertThat(entity, is(nullValue()));
+        assertThat(entity, is(not(nullValue())));
     }
 
     @Test
@@ -108,7 +108,7 @@ public class RestfulObjectsApplicationExceptionMapperTest {
 
         // then
         assertThat((String) response.getMetadata().get("Warning").get(0), is("199 RestfulObjects foobar"));
-        assertThat(jsonRepr.getString("message"), is("barfoo"));
+        assertThat(jsonRepr.getString("message"), is("foobar"));
         final JsonRepresentation causedByRepr = jsonRepr.getRepresentation("causedBy");
         assertThat(causedByRepr, is(nullValue()));
     }
@@ -118,9 +118,9 @@ public class RestfulObjectsApplicationExceptionMapperTest {
 
         // given
         context.allowing(mockHttpHeaders);
-        final Exception cause = new Exception("bozfoz");
-        final Exception exception = new Exception("barfoo", cause);
-        final RestfulObjectsApplicationException ex = RestfulObjectsApplicationException.createWithCauseAndMessage(HttpStatusCode.BAD_REQUEST, exception, "foobar");
+        final Exception rootCause = new Exception("bozfoz");
+        final Exception cause = new Exception("barfoo", rootCause);
+        final RestfulObjectsApplicationException ex = RestfulObjectsApplicationException.createWithCauseAndMessage(HttpStatusCode.BAD_REQUEST, cause, "foobar");
 
         // when
         final Response response = exceptionMapper.toResponse(ex);
@@ -130,10 +130,13 @@ public class RestfulObjectsApplicationExceptionMapperTest {
 
         // then
         assertThat((String) response.getMetadata().get("Warning").get(0), is("199 RestfulObjects foobar"));
-        assertThat(jsonRepr.getString("message"), is("barfoo"));
-        final JsonRepresentation causedByRepr = jsonRepr.getRepresentation("causedBy");
-        assertThat(causedByRepr, is(not(nullValue())));
-        assertThat(causedByRepr.getString("message"), is(cause.getMessage()));
+        assertThat(jsonRepr.getString("message"), is("foobar"));
+        final JsonRepresentation detail = jsonRepr.getRepresentation("detail");
+        assertThat(detail, is(not(nullValue())));
+        assertThat(detail.getString("message"), is("foobar"));
+        final JsonRepresentation causedBy = detail.getRepresentation("causedBy");
+        assertThat(causedBy, is(not(nullValue())));
+        assertThat(causedBy.getString("message"), is(cause.getMessage()));
     }
 
 }

@@ -16,37 +16,40 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.restfulobjects.server;
+package org.apache.isis.viewer.restfulobjects.server.mappers.entity;
 
-import org.apache.isis.viewer.restfulobjects.rendering.HasHttpStatusCode;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
-class ExceptionPojo {
+@XmlRootElement(
+        name = "exception"
+)
+@XmlType(
+        name = "exception"
+        , propOrder = {
+            "httpStatusCode",
+            "message",
+            "detail",
+    }
+)
+@XmlAccessorType(XmlAccessType.FIELD)
+public class ExceptionPojo {
 
-    static int getHttpStatusCodeIfAny(final Throwable ex) {
-        if (!(ex instanceof HasHttpStatusCode)) {
-            return 0;
-        }
-        final HasHttpStatusCode hasHttpStatusCode = (HasHttpStatusCode) ex;
-        return hasHttpStatusCode.getHttpStatusCode().getStatusCode();
+    int httpStatusCode;
+    private String message;
+    private ExceptionDetail detail;
+
+    public ExceptionPojo() { }
+
+    public ExceptionPojo(final int statusCode, final String message, final ExceptionDetail detail) {
+        this.httpStatusCode = statusCode;
+        this.message = message;
+        this.detail = detail;
     }
 
-
-    private final int httpStatusCode;
-    private final String message;
-
-    public ExceptionPojo(final Throwable ex) {
-        this.httpStatusCode = getHttpStatusCodeIfAny(ex);
-        this.message = ex.getMessage();
-    }
-
-    @SuppressWarnings("unused")
-    public int getHttpStatusCode() {
-        return httpStatusCode;
-    }
-
-    @SuppressWarnings("unused")
     public String getMessage() {
         return message;
     }
-
 }
