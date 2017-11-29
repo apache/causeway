@@ -20,7 +20,7 @@ package org.apache.isis.applib.fixturescripts;
 
 import org.apache.isis.applib.annotation.Programmatic;
 
-public abstract class BuilderScriptAbstract<T extends BuilderScriptAbstract>
+public abstract class BuilderScriptAbstract<T,F extends BuilderScriptAbstract<T,F>>
         extends FixtureScript implements FixtureScriptWithExecutionStrategy {
 
     private final FixtureScripts.MultipleExecutionStrategy executionStrategy;
@@ -42,13 +42,25 @@ public abstract class BuilderScriptAbstract<T extends BuilderScriptAbstract>
     }
 
     @Programmatic
-    public T build(
+    public F build(
             final FixtureScript parentFixtureScript,
             ExecutionContext executionContext) {
 
         // returns the fixture script that is run
         // (either this one, or possibly one previously executed).
-        return (T)executionContext.executeChildT(parentFixtureScript, this);
+        return (F)executionContext.executeChildT(parentFixtureScript, this);
+    }
+
+    public abstract T getObject();
+
+    protected <E extends EnumWithBuilderScript<T, F>, T, F extends BuilderScriptAbstract<T,F>> T objectFor(
+            final E datum,
+            final FixtureScript.ExecutionContext ec) {
+        if(datum == null) {
+            return null;
+        }
+        final F fixtureScript = datum.toFixtureScript();
+        return ec.executeChildT(this, fixtureScript).getObject();
     }
 
 
