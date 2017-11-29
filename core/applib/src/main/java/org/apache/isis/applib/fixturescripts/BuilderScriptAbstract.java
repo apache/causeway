@@ -18,6 +18,10 @@
  */
 package org.apache.isis.applib.fixturescripts;
 
+import java.util.List;
+
+import com.google.common.collect.Lists;
+
 import org.apache.isis.applib.annotation.Programmatic;
 
 public abstract class BuilderScriptAbstract<T,F extends BuilderScriptAbstract<T,F>>
@@ -51,9 +55,22 @@ public abstract class BuilderScriptAbstract<T,F extends BuilderScriptAbstract<T,
         return (F)executionContext.executeChildT(parentFixtureScript, this);
     }
 
+    @Override
+    protected final void execute(final ExecutionContext executionContext) {
+
+        final F onFixture = (F) BuilderScriptAbstract.this;
+        for (final Block<T,F> prereq : prereqs) {
+            prereq.execute(onFixture, executionContext);
+        }
+
+        doExecute(executionContext);
+    }
+
+    protected abstract void doExecute(final ExecutionContext executionContext);
+
     public abstract T getObject();
 
-    protected <E extends EnumWithBuilderScript<T, F>, T, F extends BuilderScriptAbstract<T,F>> T objectFor(
+    public <E extends EnumWithBuilderScript<T, F>, T, F extends BuilderScriptAbstract<T,F>> T objectFor(
             final E datum,
             final FixtureScript.ExecutionContext ec) {
         if(datum == null) {
@@ -63,6 +80,15 @@ public abstract class BuilderScriptAbstract<T,F extends BuilderScriptAbstract<T,
         return ec.executeChildT(this, fixtureScript).getObject();
     }
 
+    private final List<Block> prereqs = Lists.newArrayList();
+    public  F set(Block<T,F> prereq) {
+        prereqs.add(prereq);
+        return (F)this;
+    }
+
+    public interface Block<T,F extends BuilderScriptAbstract<T,F>> {
+        void execute(final F onFixture, final ExecutionContext executionContext);
+    }
 
 }
 
