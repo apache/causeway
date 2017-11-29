@@ -25,7 +25,7 @@ import com.google.common.collect.Lists;
 import org.apache.isis.applib.annotation.Programmatic;
 
 public abstract class BuilderScriptAbstract<T,F extends BuilderScriptAbstract<T,F>>
-        extends FixtureScript implements FixtureScriptWithExecutionStrategy {
+        extends FixtureScript implements WithPrereqs<T,F>, FixtureScriptWithExecutionStrategy {
 
     private final FixtureScripts.MultipleExecutionStrategy executionStrategy;
 
@@ -50,23 +50,23 @@ public abstract class BuilderScriptAbstract<T,F extends BuilderScriptAbstract<T,
             final FixtureScript parentFixtureScript,
             ExecutionContext executionContext) {
 
+        execPrereqs(executionContext);
+
         // returns the fixture script that is run
         // (either this one, or possibly one previously executed).
         return (F)executionContext.executeChildT(parentFixtureScript, this);
     }
 
     @Override
-    protected final void execute(final ExecutionContext executionContext) {
-
+    public void execPrereqs(final ExecutionContext executionContext) {
         final F onFixture = (F) BuilderScriptAbstract.this;
-        for (final Block<T,F> prereq : prereqs) {
+        for (final WithPrereqs.Block<T,F> prereq : prereqs) {
             prereq.execute(onFixture, executionContext);
         }
-
-        doExecute(executionContext);
     }
 
-    protected abstract void doExecute(final ExecutionContext executionContext);
+    @Override
+    protected abstract void execute(final ExecutionContext executionContext);
 
     public abstract T getObject();
 
@@ -80,14 +80,12 @@ public abstract class BuilderScriptAbstract<T,F extends BuilderScriptAbstract<T,
         return ec.executeChildT(this, fixtureScript).getObject();
     }
 
-    private final List<Block> prereqs = Lists.newArrayList();
-    public  F set(Block<T,F> prereq) {
+    private final List<WithPrereqs.Block<T,F>> prereqs = Lists.newArrayList();
+
+    @Override
+    public F setPrereq(WithPrereqs.Block<T,F> prereq) {
         prereqs.add(prereq);
         return (F)this;
-    }
-
-    public interface Block<T,F extends BuilderScriptAbstract<T,F>> {
-        void execute(final F onFixture, final ExecutionContext executionContext);
     }
 
 }

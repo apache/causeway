@@ -621,11 +621,19 @@ public abstract class FixtureScript
             final FixtureScripts.MultipleExecutionStrategy executionStrategy =
                     determineExecutionStrategy(childFixtureScript);
 
-            final FixtureScript previouslyExecutedScript;
+            FixtureScript previouslyExecutedScript;
             switch (executionStrategy) {
 
             case IGNORE:
             case EXECUTE_ONCE_BY_CLASS:
+                previouslyExecutedScript = fixtureScriptByClass.get(childFixtureScript.getClass());
+                if (previouslyExecutedScript == null) {
+                    if (childFixtureScript instanceof WithPrereqs) {
+                        final WithPrereqs withPrereqs = (WithPrereqs) childFixtureScript;
+                        withPrereqs.execPrereqs(this);
+                    }
+                }
+                // the prereqs might now result in a match, so we check again.
                 previouslyExecutedScript = fixtureScriptByClass.get(childFixtureScript.getClass());
                 if (previouslyExecutedScript == null) {
                     trace(childFixtureScript, As.EXEC);
@@ -666,7 +674,14 @@ public abstract class FixtureScript
         }
 
         private <T extends FixtureScript> T executeChildIfNotAlreadyWithValueSemantics(final T childFixtureScript) {
-            final FixtureScript previouslyExecutedScript;
+            FixtureScript previouslyExecutedScript = fixtureScriptByValue.get(childFixtureScript);
+            if (previouslyExecutedScript == null) {
+                if (childFixtureScript instanceof WithPrereqs) {
+                    final WithPrereqs withPrereqs = (WithPrereqs) childFixtureScript;
+                    withPrereqs.execPrereqs(this);
+                }
+            }
+            // the prereqs might now result in a match, so we check again.
             previouslyExecutedScript = fixtureScriptByValue.get(childFixtureScript);
             if (previouslyExecutedScript == null) {
                 trace(childFixtureScript, As.EXEC);
