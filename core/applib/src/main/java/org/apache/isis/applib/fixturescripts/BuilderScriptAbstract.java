@@ -50,6 +50,9 @@ public abstract class BuilderScriptAbstract<T,F extends BuilderScriptAbstract<T,
             final FixtureScript parentFixtureScript,
             ExecutionContext executionContext) {
 
+        final F onFixture = (F) BuilderScriptAbstract.this;
+        parentFixtureScript.container.injectServicesInto(onFixture);
+
         execPrereqs(executionContext);
 
         // returns the fixture script that is run
