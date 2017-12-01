@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.apache.isis.core</groupId>
         <artifactId>isis</artifactId>
-        <version>1.16.0-SNAPSHOT</version>
+        <version>1.15.1.20171201-0933</version>
 	</parent>
 
 	<artifactId>isis-core-wrapper</artifactId>
