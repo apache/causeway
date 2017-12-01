@@ -73,13 +73,13 @@ public abstract class BuilderScriptAbstract<T,F extends BuilderScriptAbstract<T,
 
     public abstract T getObject();
 
-    public <E extends EnumWithBuilderScript<T, F>, T, F extends BuilderScriptAbstract<T,F>> T objectFor(
+    public <E extends PersonaWithBuilderScript<T, F>, T, F extends BuilderScriptAbstract<T,F>> T objectFor(
             final E datum,
             final FixtureScript.ExecutionContext ec) {
         if(datum == null) {
             return null;
         }
-        final F fixtureScript = datum.toFixtureScript();
+        final F fixtureScript = datum.toBuilderScript();
         return ec.executeChildT(this, fixtureScript).getObject();
     }
 

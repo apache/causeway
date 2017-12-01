@@ -56,7 +56,6 @@ import org.apache.isis.applib.util.ObjectContracts;
  */
 public abstract class FixtureScripts extends AbstractService {
 
-
     //region > Specification, nonPersistedObjectsStrategy, multipleExecutionStrategy enums
 
     /**
