@@ -758,6 +758,16 @@ See xref:../ugbtb/ugbtb.adoc#_ugbtb_programming-model_layout-metadata-reader[Lay
 (`LEFT`)
 |Default for label position for all properties if not explicitly specified using xref:../rgant/rgant.adoc#_rgant-PropertyLayout_labelPosition[`@PropertyLayout#labelPosition()`]
 
+
+Further discussion xref:rgcfg.adoc#__rgcfg_configuring-core_isis-viewers-propertyLayout-labelPosition[below].
+
+|`isis.viewers.` +
+`collectionLayout.defaultView`
+|`hidden`, `table` +
+(`hidden`)
+|(`1.16.0-SNAPSHOT`) Default for the default view for all (parented) collections if not explicitly specified using xref:../rgant/rgant.adoc#_rgant-CollectionLayout_defaultView[`@CollectionLayout#defaultView()`]
+
+Further discussion xref:rgcfg.adoc#__rgcfg_configuring-core_isis-viewers-collectionLayout-defaultView[below].
 |===
 
 
@@ -846,3 +856,21 @@ isis.viewers.propertyLayout.labelPosition=LEFT
 
 If these are not present then Apache Isis will render according to internal defaults.
 At the time of writing, this means labels are to the left for all datatypes except multiline strings.
+
+
+[[__rgcfg_configuring-core_isis-viewers-collectionLayout-defaultView]]
+=== `collectionLayout.defaultView` (`1.16.0-SNAPSHOT`)
+
+Prior to `1.16.0-SNAPSHOT`, the framework renders (parented) collections as "hidden", ie collapsed.
+This can be overridden on a case-by-case basis using the xref:../rgant/rgant.adoc#_rgant-CollectionLayout_defaultView[`@CollectionLayout#defaultView()`] or the corresponding `<collectionLayout defaultView="...">` element in the `Xxx.layout.xml` layout file.
+The framework provices only one other view, "table".
+
+If the majority of collections should be displayed as "table" form, then it is more convenient to specify the default view globally.
+This can be done using a configuration property in `isis.properties`:
+
+[source,ini]
+----
+isis.viewers.collectionLayout.defaultView=table
+----
+
+If this configuration property is not present then Apache Isis will render according to its historical default, namely "hidden".
