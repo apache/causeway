@@ -73,14 +73,21 @@ public abstract class BuilderScriptAbstract<T,F extends BuilderScriptAbstract<T,
 
     public abstract T getObject();
 
-    public <E extends PersonaWithBuilderScript<T, F>, T, F extends BuilderScriptAbstract<T,F>> T objectFor(
-            final E datum,
+    public <P extends PersonaWithBuilderScript<T, F>, T, F extends BuilderScriptAbstract<T,F>> T objectFor(
+            final P persona,
             final FixtureScript.ExecutionContext ec) {
-        if(datum == null) {
+        if(persona == null) {
             return null;
         }
-        final F fixtureScript = datum.toBuilderScript();
+        final F fixtureScript = persona.builder();
         return ec.executeChildT(this, fixtureScript).getObject();
+    }
+
+    public <P extends PersonaWithFinder<T>, T> T findUsing(final P persona) {
+        if(persona == null) {
+            return null;
+        }
+        return persona.findUsing(serviceRegistry);
     }
 
     private final List<WithPrereqs.Block<T,F>> prereqs = Lists.newArrayList();
@@ -90,6 +97,7 @@ public abstract class BuilderScriptAbstract<T,F extends BuilderScriptAbstract<T,
         prereqs.add(prereq);
         return (F)this;
     }
+
 
 }
 
