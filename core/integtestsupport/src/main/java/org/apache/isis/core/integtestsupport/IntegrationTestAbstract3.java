@@ -19,7 +19,6 @@
 package org.apache.isis.core.integtestsupport;
 
 import java.io.PrintStream;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -46,7 +45,8 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.event.Level;
 
 import org.apache.isis.applib.AppManifest;
-import org.apache.isis.applib.AppManifestAbstract;
+import org.apache.isis.applib.AppManifestAbstract2;
+import org.apache.isis.applib.Module;
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.clock.Clock;
@@ -55,10 +55,10 @@ import org.apache.isis.applib.fixtures.FixtureClock;
 import org.apache.isis.applib.fixturescripts.BuilderScriptAbstract;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.applib.fixturescripts.FixtureScripts;
-import org.apache.isis.applib.modules.Module;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.jdosupport.IsisJdoSupport;
+import org.apache.isis.applib.services.metamodel.MetaModelService4;
 import org.apache.isis.applib.services.registry.ServiceRegistry2;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.sessmgmt.SessionManagementService;
@@ -178,11 +178,11 @@ public abstract class IntegrationTestAbstract3 {
 
     private void bootstrapIfRequired() {
 
-        final AppManifestAbstract.Builder builder =
-                Module.Util.builderFor(module)
-                      .withAdditionalModules(additionalModuleClasses); // eg fake module, as passed into constructor
+        final AppManifestAbstract2.Builder2 builder =
+                AppManifestAbstract2.Builder2.forModule(module);
+        builder.withAdditionalModules(additionalModuleClasses); // eg fake module, as passed into constructor
 
-        final AppManifest appManifest = builder.build();
+        final AppManifestAbstract2 appManifest = (AppManifestAbstract2) builder.build();
 
         bootstrapUsing(appManifest);
     }
@@ -367,14 +367,12 @@ public abstract class IntegrationTestAbstract3 {
         isft.beginTran();
     }
 
+    @Inject
+    MetaModelService4 metaModelService4;
+
     protected void setupModuleRefData() {
-        final List<Module> dependencies = Module.Util.transitiveDependenciesOf(module);
-        for (Module dependency : dependencies) {
-            final FixtureScript fixture = dependency.getRefDataSetupFixture();
-            if(fixture != null) {
-                runFixtureScript(fixture);
-            }
-        }
+        FixtureScript refDataSetupFixture = metaModelService4.getAppManifest2().getRefDataSetupFixture();
+        runFixtureScript(refDataSetupFixture);
     }
 
     @After
@@ -388,19 +386,11 @@ public abstract class IntegrationTestAbstract3 {
 
         transactionService.nextTransaction();
 
-        final List<Module> dependencies = Module.Util.transitiveDependenciesOf(module);
-        Collections.reverse(dependencies);
-
-        for (Module dependency : dependencies) {
-            final FixtureScript fixture = dependency.getTeardownFixture();
-            if(fixture != null) {
-                runFixtureScript(fixture);
-            }
-        }
+        FixtureScript fixtureScript = metaModelService4.getAppManifest2().getTeardownFixture();
+        runFixtureScript(fixtureScript);
 
         // reinstate clock
         setFixtureClockDate(timeBeforeTest);
-
     }
 
     protected void runFixtureScript(final FixtureScript... fixtureScriptList) {
