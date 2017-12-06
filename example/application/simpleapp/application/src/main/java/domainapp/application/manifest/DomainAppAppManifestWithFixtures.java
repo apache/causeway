@@ -22,7 +22,7 @@ import java.util.List;
 
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 
-import domainapp.modules.simple.fixture.scenario.CreateSimpleObjects;
+import domainapp.modules.simple.fixture.SimpleObjectBuilder;
 
 /**
  * Run the app but setting up any fixtures.
@@ -30,7 +30,7 @@ import domainapp.modules.simple.fixture.scenario.CreateSimpleObjects;
 public class DomainAppAppManifestWithFixtures extends DomainAppAppManifest {
 
     @Override protected void overrideFixtures(final List<Class<? extends FixtureScript>> fixtureScripts) {
-        fixtureScripts.add(CreateSimpleObjects.class);
+        fixtureScripts.add(SimpleObjectBuilder.class);
     }
 
 }

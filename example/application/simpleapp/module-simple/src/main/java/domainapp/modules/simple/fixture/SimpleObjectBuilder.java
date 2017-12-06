@@ -17,15 +17,9 @@
  *  under the License.
  */
 
-package domainapp.modules.simple.fixture.scenario;
+package domainapp.modules.simple.fixture;
 
-import java.util.List;
-
-import javax.annotation.Nullable;
-
-import com.google.common.collect.Lists;
-
-import org.apache.isis.applib.fixturescripts.FixtureScript;
+import org.apache.isis.applib.fixturescripts.BuilderScriptAbstract;
 
 import domainapp.modules.simple.dom.impl.SimpleObject;
 import domainapp.modules.simple.dom.impl.SimpleObjectMenu;
@@ -34,41 +28,20 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 @Accessors(chain = true)
-public class CreateSimpleObjects extends FixtureScript {
+public class SimpleObjectBuilder extends BuilderScriptAbstract<SimpleObject, SimpleObjectBuilder> {
 
-    /**
-     * The number of objects to create, up to 10; optional, defaults to 3.
-     */
-    @Nullable
     @Getter @Setter
-    private Integer number;
+    private String name;
 
-    /**
-     * The objects created by this fixture (output).
-     */
     @Getter
-    private final List<SimpleObject> simpleObjects = Lists.newArrayList();
+    private SimpleObject object;
 
     @Override
     protected void execute(final ExecutionContext ec) {
 
-        int max = SimpleObjectData.values().length;
+        checkParam("name", ec, String.class);
 
-        // defaults
-        final int number = defaultParam("number", ec, 3);
-
-        // validate
-        if(number < 0 || number > max) {
-            throw new IllegalArgumentException(String.format("number must be in range [0,%d)", max));
-        }
-
-        // execute
-        for (int i = 0; i < number; i++) {
-            final SimpleObjectData data = SimpleObjectData.values()[i];
-            final SimpleObject simpleObject =  data.createWith(wrap(simpleObjectMenu));
-            ec.addResult(this, simpleObject);
-            simpleObjects.add(simpleObject);
-        }
+        object = wrap(simpleObjectMenu).create(name);
     }
 
     @javax.inject.Inject

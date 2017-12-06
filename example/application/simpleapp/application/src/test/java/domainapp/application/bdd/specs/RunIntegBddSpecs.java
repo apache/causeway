@@ -36,7 +36,8 @@ import cucumber.api.junit.Cucumber;
                 "classpath:domainapp.modules.simple.specglue"
         },
         strict = true,
-        tags = { "~@backlog", "~@ignore" })
+        tags = { "~@backlog", "~@ignore" }
+)
 public class RunIntegBddSpecs {
     // intentionally empty 
 }

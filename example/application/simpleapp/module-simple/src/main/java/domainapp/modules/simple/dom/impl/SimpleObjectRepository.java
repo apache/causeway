@@ -47,6 +47,16 @@ public class SimpleObjectRepository {
                 .executeList();
     }
 
+    public SimpleObject findByNameExact(final String name) {
+        TypesafeQuery<SimpleObject> q = isisJdoSupport.newTypesafeQuery(SimpleObject.class);
+        final QSimpleObject cand = QSimpleObject.candidate();
+        q = q.filter(
+                cand.name.eq(q.stringParameter("name"))
+        );
+        return q.setParameter("name", name)
+                .executeUnique();
+    }
+
     public SimpleObject create(final String name) {
         return repositoryService.persist(new SimpleObject(name));
     }

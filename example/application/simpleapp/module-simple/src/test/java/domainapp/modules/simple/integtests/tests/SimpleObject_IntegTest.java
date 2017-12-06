@@ -35,9 +35,7 @@ import org.apache.isis.core.metamodel.services.jdosupport.Persistable_datanucleu
 
 import domainapp.modules.simple.dom.impl.SimpleObject;
 import domainapp.modules.simple.dom.impl.SimpleObjectMenu;
-import domainapp.modules.simple.fixture.scenario.CreateSimpleObjects;
-import domainapp.modules.simple.fixture.scenario.SimpleObjectData;
-import domainapp.modules.simple.fixture.teardown.SimpleModuleTearDown;
+import domainapp.modules.simple.fixture.SimpleObject_persona;
 import domainapp.modules.simple.integtests.SimpleModuleIntegTestAbstract;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -54,13 +52,7 @@ public class SimpleObject_IntegTest extends SimpleModuleIntegTestAbstract {
 
     @Before
     public void setUp() throws Exception {
-        // given
-        fixtureScripts.runFixtureScript(new SimpleModuleTearDown(), null);
-        CreateSimpleObjects fs = new CreateSimpleObjects().setNumber(1);
-        fixtureScripts.runFixtureScript(fs, null);
-        transactionService.nextTransaction();
-
-        simpleObject = SimpleObjectData.FOO.findWith(wrap(simpleObjectMenu));
+        simpleObject = SimpleObject_persona.FOO.findUsing(serviceRegistry);
 
         assertThat(simpleObject).isNotNull();
     }

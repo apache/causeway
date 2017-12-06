@@ -16,6 +16,9 @@
  */
 package domainapp.application.bdd.specglue;
 
+import javax.inject.Inject;
+
+import org.apache.isis.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.core.specsupport.specs.CukeGlueAbstract;
 
 import cucumber.api.java.Before;
@@ -25,7 +28,10 @@ public class CatalogOfFixturesGlue extends CukeGlueAbstract {
 
     @Before(value={"@integration", "@DomainAppDemo"}, order=20000)
     public void integrationFixtures() throws Throwable {
-        scenarioExecution().install(new DomainAppDemo());
+        fixtureScripts.runFixtureScript(new DomainAppDemo(), null);
     }
+
+    @Inject
+    FixtureScripts fixtureScripts;
 
 }

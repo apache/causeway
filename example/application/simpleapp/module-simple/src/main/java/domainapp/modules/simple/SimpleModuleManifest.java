@@ -19,19 +19,14 @@
 package domainapp.modules.simple;
 
 import org.apache.isis.applib.AppManifestAbstract;
-
-import domainapp.modules.simple.dom.SimpleModuleDomSubmodule;
-import domainapp.modules.simple.fixture.SimpleModuleFixtureSubmodule;
+import org.apache.isis.applib.Module;
 
 /**
  * Used by <code>isis-maven-plugin</code> (build-time validation of the module) and also by module-level integration tests.
  */
 public class SimpleModuleManifest extends AppManifestAbstract {
 
-    public static final Builder BUILDER = Builder.forModules(
-            SimpleModuleDomSubmodule.class,
-            SimpleModuleFixtureSubmodule.class
-    );
+    public static final Builder BUILDER = Module.Util.builderFor(new SimpleModule());
 
     public SimpleModuleManifest() {
         super(BUILDER);

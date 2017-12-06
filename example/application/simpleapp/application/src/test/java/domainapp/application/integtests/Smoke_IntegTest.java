@@ -24,10 +24,11 @@ import javax.inject.Inject;
 
 import org.junit.Test;
 
+import org.apache.isis.applib.AppManifest2;
 import org.apache.isis.applib.fixturescripts.FixtureScripts;
+import org.apache.isis.applib.services.metamodel.MetaModelService4;
 import org.apache.isis.applib.services.xactn.TransactionService;
 
-import domainapp.application.fixture.teardown.DomainAppTearDown;
 import domainapp.modules.simple.dom.impl.SimpleObject;
 import domainapp.modules.simple.dom.impl.SimpleObjectMenu;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -41,12 +42,15 @@ public class Smoke_IntegTest extends DomainAppIntegTestAbstract {
     @Inject
     SimpleObjectMenu menu;
 
+    @Inject
+    MetaModelService4 metaModelService4;
+
     @Test
     public void create() throws Exception {
 
         // given
-        DomainAppTearDown fs = new DomainAppTearDown();
-        fixtureScripts.runFixtureScript(fs, null);
+        AppManifest2 appManifest2 = metaModelService4.getAppManifest2();
+        fixtureScripts.runFixtureScript(appManifest2.getTeardownFixture(), null);
         transactionService.nextTransaction();
 
 

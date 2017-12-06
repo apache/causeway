@@ -17,14 +17,19 @@
  *  under the License.
  */
 
-package domainapp.modules.simple.fixture.scenario;
+package domainapp.modules.simple.fixture;
+
+import org.apache.isis.applib.fixturescripts.PersonaWithBuilderScript;
+import org.apache.isis.applib.fixturescripts.PersonaWithFinder;
+import org.apache.isis.applib.services.registry.ServiceRegistry2;
 
 import domainapp.modules.simple.dom.impl.SimpleObject;
-import domainapp.modules.simple.dom.impl.SimpleObjectMenu;
+import domainapp.modules.simple.dom.impl.SimpleObjectRepository;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public enum SimpleObjectData {
+public enum SimpleObject_persona implements PersonaWithBuilderScript<SimpleObject, SimpleObjectBuilder>,
+        PersonaWithFinder<SimpleObject> {
 
     FOO("Foo"),
     BAR("Bar"),
@@ -39,11 +44,14 @@ public enum SimpleObjectData {
 
     private final String name;
 
-    public SimpleObject createWith(final SimpleObjectMenu menu) {
-        return menu.create(name);
+    @Override
+    public SimpleObjectBuilder builder() {
+        return new SimpleObjectBuilder().setName(name);
     }
 
-    public SimpleObject findWith(final SimpleObjectMenu menu) {
-        return menu.findByName(name).get(0);
+    @Override
+    public SimpleObject findUsing(final ServiceRegistry2 serviceRegistry) {
+        SimpleObjectRepository simpleObjectRepository = serviceRegistry.lookupService(SimpleObjectRepository.class);
+        return simpleObjectRepository.findByNameExact(name);
     }
 }
