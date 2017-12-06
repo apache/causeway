@@ -27,7 +27,6 @@ import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.applib.fixturescripts.FixtureScriptWithExecutionStrategy;
 import org.apache.isis.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.applib.fixturescripts.PersonaWithBuilderScript;
-import org.apache.isis.applib.services.registry.ServiceRegistry2;
 
 public class PersonaEnumPersistAll<E extends Enum<E> & PersonaWithBuilderScript<T,F>, T, F extends BuilderScriptAbstract<T,F>>
         extends FixtureScript
@@ -35,8 +34,8 @@ public class PersonaEnumPersistAll<E extends Enum<E> & PersonaWithBuilderScript<
 
     private final Class<E> personaEnumClass;
 
-    public PersonaEnumPersistAll(final Class<E> demoDataClass) {
-        this.personaEnumClass = demoDataClass;
+    public PersonaEnumPersistAll(final Class<E> personaEnumClass) {
+        this.personaEnumClass = personaEnumClass;
     }
 
     /**
