@@ -16,8 +16,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package domainapp.application.fixture;
 
-public final class DomainAppApplicationModuleFixtureSubmodule {
-    private DomainAppApplicationModuleFixtureSubmodule(){}
+package org.apache.isis.applib;
+
+import org.apache.isis.applib.fixturescripts.FixtureScript;
+
+public interface AppManifest2 extends AppManifest {
+
+    FixtureScript getTeardownFixture();
+    FixtureScript getRefDataSetupFixture();
+
 }

@@ -12,6 +12,9 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import org.apache.isis.applib.Module;
+import org.apache.isis.applib.ModuleAbstract;
+
 import static org.junit.Assert.assertTrue;
 
 public class Module_Util_transitiveDependenciesOf_Test {
@@ -40,8 +43,8 @@ public class Module_Util_transitiveDependenciesOf_Test {
 
     final Module moduleF = new ModuleImpl("F");
     final Module moduleE = new ModuleImpl("E") {
-        @Override public Set<Class<?>> getAdditionalServices() {
-            return Sets.<Class<?>>newHashSet(ServiceX.class);
+        {
+            withAdditionalServices(ServiceX.class);
         }
         @Override
         public Set<Class<?>> getDependenciesAsClass() {
@@ -62,9 +65,8 @@ public class Module_Util_transitiveDependenciesOf_Test {
         public Set<Class<?>> getDependenciesAsClass() {
             return Sets.newHashSet(ModuleQ.class, ModuleR.class);
         }
-        @Override
-        public Set<Class<?>> getAdditionalServices() {
-            return Sets.newHashSet(ServiceY.class, ServiceZ.class);
+        {
+            withAdditionalServices(ServiceY.class, ServiceZ.class);
         }
     };
     final Module moduleB = new ModuleImpl("B") {

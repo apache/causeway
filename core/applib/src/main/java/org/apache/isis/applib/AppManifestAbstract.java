@@ -24,9 +24,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 
@@ -41,26 +43,48 @@ public abstract class AppManifestAbstract implements AppManifest {
     private final List<Class<? extends FixtureScript>> fixtures;
     private final Map<String, String> configurationProperties;
 
-    public AppManifestAbstract(final Builder builder) {
+    public AppManifestAbstract(final AppManifestBuilder<?> builder) {
 
-        final List<Class<?>> builderModules = builder.modules;
+        final List<Class<?>> builderModules = builder.getAllModulesAsClass();
         overrideModules(builderModules);
         this.modules = builderModules;
 
-        final List<Class<?>> builderAdditionalServices = builder.additionalServices;
+        final List<Class<?>> builderAdditionalServices = Lists.newArrayList(builder.getAllAdditionalServices());
         overrideAdditionalServices(builderAdditionalServices);
 
         this.additionalServices = builderAdditionalServices;
 
-        final String overriddenAuthMechanism = overrideAuthMechanism();
-        this.authMechanism = overriddenAuthMechanism != null ? overriddenAuthMechanism : builder.authMechanism;
-
-        final List<Class<? extends FixtureScript>> builderFixtures = builder.fixtures;
-        overrideFixtures(builderFixtures);
-        this.fixtures = builderFixtures;
+        this.authMechanism = determineAuthMechanism(builder);
+        this.fixtures = determineFixtures(builder);
 
         // note uses this.fixtures, so must come afterwards...
-        this.configurationProperties = createConfigurationProperties(builder.propertyResources, builder.individualConfigProps, this.fixtures);
+        this.configurationProperties = createConfigurationProperties(
+                builder.getAllPropertyResources(), builder.getAllIndividualConfigProps(),
+                this.fixtures);
+    }
+
+    private String determineAuthMechanism(final AppManifestBuilder<?> builder) {
+        final String overriddenAuthMechanism = overrideAuthMechanism();
+        if (overriddenAuthMechanism != null) {
+            return overriddenAuthMechanism;
+        } else {
+            if(builder instanceof Builder) {
+                return ((Builder) builder).authMechanism;
+            } else {
+                return null;
+            }
+        }
+    }
+
+    private List<Class<? extends FixtureScript>> determineFixtures(final AppManifestBuilder<?> builder) {
+        final List<Class<? extends FixtureScript>> builderFixtures;
+        if(builder instanceof Builder) {
+            builderFixtures = ((Builder) builder).fixtures;
+        } else {
+            builderFixtures = Lists.newArrayList();
+        }
+        overrideFixtures(builderFixtures);
+        return builderFixtures;
     }
 
     private Map<String, String> createConfigurationProperties(
@@ -174,13 +198,12 @@ public abstract class AppManifestAbstract implements AppManifest {
 
     /**
      * Used to build an {@link AppManifest} either {@link #build() directly}, or implicitly by passing into
-     * {@link AppManifestAbstract}'s {@link AppManifestAbstract#AppManifestAbstract(Builder) constructor}.
+     * {@link AppManifestAbstract}'s {@link AppManifestAbstract#AppManifestAbstract(AppManifestBuilder) constructor}.
      */
-    public static class Builder {
-
+    public static class Builder implements AppManifestBuilder<Builder> {
 
         final List<Class<?>> modules = Lists.newArrayList();
-        List<Class<?>> additionalServices  = Lists.newArrayList();
+        Set<Class<?>> additionalServices = Sets.newLinkedHashSet();
         String authMechanism = "shiro";
         List<Class<? extends FixtureScript>> fixtures = Lists.newArrayList();
 
@@ -189,7 +212,7 @@ public abstract class AppManifestAbstract implements AppManifest {
 
         private Map<String,String> configurationProperties = Maps.newHashMap();
 
-        private Builder() {}
+        Builder() {}
 
         /**
          * Factory method.
@@ -226,7 +249,7 @@ public abstract class AppManifestAbstract implements AppManifest {
             if(additionalServices == null) {
                 throw new IllegalArgumentException("List of additional services must not be null");
             }
-            this.additionalServices = Lists.newArrayList(additionalServices);
+            this.additionalServices = Sets.newLinkedHashSet(additionalServices);
             return this;
         }
 
@@ -267,6 +290,26 @@ public abstract class AppManifestAbstract implements AppManifest {
         public Builder withConfigurationProperty(final String key, final String value) {
             individualConfigProps.add(new ConfigurationProperty(key,value));
             return this;
+        }
+
+        @Override
+        public List<Class<?>> getAllModulesAsClass() {
+            return modules;
+        }
+
+        @Override
+        public Set<Class<?>> getAllAdditionalServices() {
+            return additionalServices;
+        }
+
+        @Override
+        public List<PropertyResource> getAllPropertyResources() {
+            return propertyResources;
+        }
+
+        @Override
+        public List<ConfigurationProperty> getAllIndividualConfigProps() {
+            return individualConfigProps;
         }
 
         public AppManifest build() {

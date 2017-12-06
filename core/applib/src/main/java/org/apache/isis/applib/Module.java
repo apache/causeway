@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.modules;
+package org.apache.isis.applib;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -26,7 +26,6 @@ import java.util.Set;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
-import org.apache.isis.applib.AppManifestAbstract;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 
 public interface Module {
