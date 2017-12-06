@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.applib.clock;
 
 import java.sql.Timestamp;
@@ -29,9 +28,8 @@ import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 
-import org.apache.isis.applib.FatalException;
-import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.Defaults;
+import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.fixtures.FixtureClock;
 
 /**
@@ -51,7 +49,7 @@ import org.apache.isis.applib.fixtures.FixtureClock;
  * {@link FixtureClock#getInstance()}.
  */
 public abstract class Clock {
-    private static Clock instance;
+    static Clock instance;
     private static boolean isReplaceable = true;
 
     /**
