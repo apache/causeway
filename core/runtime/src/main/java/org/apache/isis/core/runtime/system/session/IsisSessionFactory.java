@@ -38,6 +38,7 @@ import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.services.appmanifest.AppManifestProvider;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.ServiceInitializer;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
@@ -67,7 +68,8 @@ import org.apache.isis.core.runtime.system.transaction.IsisTransactionManagerExc
  *     it can be {@link Inject}'d into other domain services.
  * </p>
  */
-public class IsisSessionFactory implements ApplicationScopedComponent {
+public class IsisSessionFactory
+        implements ApplicationScopedComponent, AppManifestProvider {
 
     @SuppressWarnings("unused")
     private final static Logger LOG = LoggerFactory.getLogger(IsisSessionFactory.class);
@@ -99,6 +101,7 @@ public class IsisSessionFactory implements ApplicationScopedComponent {
         this.appManifest = appManifest;
     }
 
+    @Programmatic
     public AppManifest getAppManifest() {
         return appManifest;
     }

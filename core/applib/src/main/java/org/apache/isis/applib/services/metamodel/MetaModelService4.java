@@ -16,8 +16,24 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package domainapp.modules.simple.fixture;
+package org.apache.isis.applib.services.metamodel;
 
-public final class SimpleModuleFixtureSubmodule {
-    private SimpleModuleFixtureSubmodule(){}
+import org.apache.isis.applib.AppManifest;
+import org.apache.isis.applib.AppManifest2;
+import org.apache.isis.applib.annotation.Programmatic;
+
+public interface MetaModelService4 extends MetaModelService3 {
+
+    /**
+     * @return as {@link #getAppManifest()}, downcasted (else null).
+     */
+    @Programmatic
+    AppManifest2 getAppManifest2();
+
+    /**
+     * @return the {@link AppManifest} used to bootstrap the application.
+     */
+    @Programmatic
+    AppManifest getAppManifest();
+
 }

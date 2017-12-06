@@ -16,8 +16,17 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package domainapp.application.services;
 
-public final class DomainAppApplicationModuleServicesSubmodule {
-    private DomainAppApplicationModuleServicesSubmodule(){}
+package org.apache.isis.core.metamodel.services.appmanifest;
+
+import org.apache.isis.applib.AppManifest;
+import org.apache.isis.applib.annotation.Programmatic;
+
+/**
+ * Implemented by an internal domain service.
+ */
+public interface AppManifestProvider {
+
+    @Programmatic
+    AppManifest getAppManifest();
 }
