@@ -19,10 +19,10 @@ package org.apache.isis.core.integtestsupport.scenarios;
 import org.apache.isis.applib.fixtures.InstallableFixture;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.integtestsupport.IntegrationBootstrapAbstract;
 import org.apache.isis.core.integtestsupport.IsisSystemForTest;
 import org.apache.isis.core.specsupport.scenarios.ScenarioExecution;
 import org.apache.isis.core.specsupport.scenarios.ScenarioExecutionScope;
-
 
 /**
  * An extension of {@link ScenarioExecution} for use within (coarse grained)
@@ -33,7 +33,10 @@ import org.apache.isis.core.specsupport.scenarios.ScenarioExecutionScope;
  * {@link #install(InstallableFixture...)} (to tear down/setup data)
  * and of {@link #beginTran() begin} and {@link #endTran(boolean) end} (
  * for transaction management.
+ *
+ * @deprecated - subclass glue from {@link IntegrationBootstrapAbstract} instead, and inject services into glue
  */
+@Deprecated
 public class ScenarioExecutionForIntegration extends ScenarioExecution  {
 
     private IsisSystemForTest isft;

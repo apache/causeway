@@ -5,7 +5,8 @@ import java.util.Map;
 
 import com.google.common.collect.Maps;
 
-import org.apache.isis.core.specsupport.scenarios.ScenarioExecution;
+import org.apache.isis.applib.services.registry.ServiceRegistry2;
+import org.apache.isis.core.integtestsupport.IsisSystem;
 
 import cucumber.api.java.ObjectFactory;
 import cucumber.runtime.CucumberException;
@@ -27,9 +28,10 @@ public class ObjectFactoryForIntegration implements ObjectFactory {
         T instance = type.cast(this.instances.get(type));
         if (instance == null) {
             instance = this.newInstance(type);
-            if(ScenarioExecution.peek() != null) {
+            IsisSystem isisSystem = IsisSystem.getElseNull();
+            if(isisSystem != null) {
                 instance = this.cacheInstance(type, instance);
-                ScenarioExecution.current().injectServices(instance);
+                isisSystem.getService(ServiceRegistry2.class).injectServicesInto(instance);
             } else {
                 // don't cache
             }

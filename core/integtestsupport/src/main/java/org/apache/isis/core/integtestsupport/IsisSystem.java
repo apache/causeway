@@ -19,11 +19,9 @@
 
 package org.apache.isis.core.integtestsupport;
 
-import java.util.List;
 import java.util.Set;
 
 import com.google.common.base.Joiner;
-import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.DomainObjectContainer;
@@ -51,7 +49,6 @@ import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.systemusinginstallers.IsisComponentProvider;
 import org.apache.isis.core.security.authentication.AuthenticationRequestNameOnly;
 
-import static org.junit.Assert.fail;
 
 /**
  * Wraps a plain {@link IsisSessionFactoryBuilder}.
@@ -61,60 +58,6 @@ import static org.junit.Assert.fail;
  * </p>
  */
 public class IsisSystem {
-
-    //region > Listener, ListenerAdapter
-    public interface Listener {
-
-        void init(IsisConfiguration configuration) throws Exception;
-
-        void preOpenSession(boolean firstTime) throws Exception;
-        void postOpenSession(boolean firstTime) throws Exception;
-
-        void preNextSession() throws Exception;
-        void postNextSession() throws Exception;
-
-        void preCloseSession() throws Exception;
-        void postCloseSession() throws Exception;
-    }
-
-    public static abstract class ListenerAdapter implements Listener {
-
-        private IsisConfiguration configuration;
-
-        public void init(IsisConfiguration configuration) throws Exception {
-            this.configuration = configuration;
-        }
-
-        protected IsisConfiguration getConfiguration() {
-            return configuration;
-        }
-
-        @Override
-        public void preOpenSession(boolean firstTime) throws Exception {
-        }
-
-        @Override
-        public void postOpenSession(boolean firstTime) throws Exception {
-        }
-
-        @Override
-        public void preNextSession() throws Exception {
-        }
-
-        @Override
-        public void postNextSession() throws Exception {
-        }
-
-        @Override
-        public void preCloseSession() throws Exception {
-        }
-
-        @Override
-        public void postCloseSession() throws Exception {
-        }
-    }
-
-    //endregion
 
     //region > getElseNull, get, set
 
@@ -149,8 +92,6 @@ public class IsisSystem {
 
         protected AppManifest appManifestIfAny;
 
-        protected final List <Listener> listeners = Lists.newArrayList();
-
         protected org.apache.log4j.Level level;
 
         public T with(IsisConfiguration configuration) {
@@ -178,8 +119,7 @@ public class IsisSystem {
                     new IsisSystem(
                             appManifestIfAny,
                             configuration,
-                            authenticationRequest,
-                            listeners);
+                            authenticationRequest);
             return (S)configure(isisSystem);
         }
 
@@ -210,13 +150,6 @@ public class IsisSystem {
             return isisSystem;
         }
 
-        public Builder with(Listener listener) {
-            if(listener != null) {
-                listeners.add(listener);
-            }
-            return this;
-        }
-
     }
 
     public static Builder builder() {
@@ -238,12 +171,10 @@ public class IsisSystem {
     protected IsisSystem(
             final AppManifest appManifestIfAny,
             final IsisConfiguration configurationOverride,
-            final AuthenticationRequest authenticationRequestIfAny,
-            final List<Listener> listeners) {
+            final AuthenticationRequest authenticationRequestIfAny) {
         this.appManifestIfAny = appManifestIfAny;
         this.configurationOverride = configurationOverride;
         this.authenticationRequestIfAny = authenticationRequestIfAny;
-        this.listeners = listeners;
     }
 
     //endregion
@@ -271,29 +202,24 @@ public class IsisSystem {
 
     IsisSystem setUpSystem() throws RuntimeException {
         try {
-            initIfRequiredThenOpenSession(FireListeners.FIRE);
+            initIfRequiredThenOpenSession();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
         return this;
     }
 
-    protected void initIfRequiredThenOpenSession(FireListeners fireListeners) throws Exception {
+    protected void initIfRequiredThenOpenSession() throws Exception {
 
         // exit as quickly as possible for this case...
         final MetaModelInvalidException mmie = IsisContext.getMetaModelInvalidExceptionIfAny();
         if(mmie != null) {
             final Set<String> validationErrors = mmie.getValidationErrors();
             final String validationMsg = Joiner.on("\n").join(validationErrors);
-            fail(validationMsg);
-            return;
+            throw new AssertionError(validationMsg);
         }
 
         boolean firstTime = isisSessionFactory == null;
-        if(fireListeners.shouldFire()) {
-            fireInitAndPreOpenSession(firstTime);
-        }
-
         if(firstTime) {
             IsisLoggingConfigurer isisLoggingConfigurer = new IsisLoggingConfigurer(getLevel());
             isisLoggingConfigurer.configureLogging(".", new String[] {});
@@ -326,7 +252,7 @@ public class IsisSystem {
                 for (String validationError : validationErrors) {
                     buf.append(validationError).append("\n");
                 }
-                fail("Metamodel is invalid: \n" + buf.toString());
+                throw new AssertionError("Metamodel is invalid: \n" + buf.toString());
             }
         }
 
@@ -334,10 +260,6 @@ public class IsisSystem {
         authenticationSession = authenticationManager.authenticate(authenticationRequestIfAny);
 
         openSession();
-
-        if(fireListeners.shouldFire()) {
-            firePostOpenSession(firstTime);
-        }
     }
 
     public DomainObjectContainer getContainer() {
@@ -365,33 +287,16 @@ public class IsisSystem {
 
     //endregion
 
-    //region > teardown
+    //region > openSession, closeSession, nextSession
 
-    private void closeSession(final FireListeners fireListeners) throws Exception {
-        if(fireListeners.shouldFire()) {
-            firePreCloseSession();
-        }
-        if(isisSessionFactory.inSession()) {
-            isisSessionFactory.closeSession();
-        }
-        if(fireListeners.shouldFire()) {
-            firePostCloseSession();
-        }
-    }
 
     public void nextSession() throws Exception {
-        firePreNextSession();
         closeSession();
         openSession();
-        firePostNextSession();
     }
 
-    //endregion
-
-    //region > openSession, closeSession
     public void openSession() throws Exception {
         openSession(authenticationSession);
-
     }
 
     public void openSession(AuthenticationSession authenticationSession) throws Exception {
@@ -399,66 +304,12 @@ public class IsisSystem {
     }
 
     public void closeSession() throws Exception {
-        closeSession(FireListeners.FIRE);
+        if(isisSessionFactory.inSession()) {
+            isisSessionFactory.closeSession();
+        }
     }
 
     //endregion
-
-    //region > listeners
-
-    private List <Listener> listeners;
-
-    protected enum FireListeners {
-        FIRE,
-        DONT_FIRE;
-        public boolean shouldFire() {
-            return this == FIRE;
-        }
-    }
-
-
-    private void fireInitAndPreOpenSession(boolean firstTime) throws Exception {
-        if(firstTime) {
-            for(Listener listener: listeners) {
-                listener.init(componentProvider.getConfiguration());
-            }
-        }
-        for(Listener listener: listeners) {
-            listener.preOpenSession(firstTime);
-        }
-    }
-
-    private void firePostOpenSession(boolean firstTime) throws Exception {
-        for(Listener listener: listeners) {
-            listener.postOpenSession(firstTime);
-        }
-    }
-
-    private void firePreCloseSession() throws Exception {
-        for(Listener listener: listeners) {
-            listener.preCloseSession();
-        }
-    }
-
-    private void firePostCloseSession() throws Exception {
-        for(Listener listener: listeners) {
-            listener.postCloseSession();
-        }
-    }
-
-    private void firePreNextSession() throws Exception {
-        for(Listener listener: listeners) {
-            listener.preNextSession();
-        }
-    }
-
-    private void firePostNextSession() throws Exception {
-        for(Listener listener: listeners) {
-            listener.postNextSession();
-        }
-    }
-    //endregion
-
 
     //region > beginTran, endTran, commitTran, abortTran
 
@@ -485,10 +336,9 @@ public class IsisSystem {
                 // nothing to do
                 break;
             case MUST_ABORT:
-                fail("Transaction is in state of '" + state + "'");
-                break;
+                throw new AssertionError("Transaction is in state of '" + state + "'");
             default:
-                fail("Unknown transaction state '" + state + "'");
+                throw new AssertionError("Unknown transaction state '" + state + "'");
         }
 
     }
@@ -512,8 +362,7 @@ public class IsisSystem {
         final IsisTransactionManager transactionManager = getTransactionManager();
         final IsisTransaction transaction = transactionManager.getCurrentTransaction();
         if(transaction == null) {
-            fail("No transaction exists");
-            return;
+            throw new AssertionError("No transaction exists");
         }
 
         transactionManager.endTransaction();
@@ -525,13 +374,11 @@ public class IsisSystem {
             case ABORTED:
                 break;
             case IN_PROGRESS:
-                fail("Transaction is still in state of '" + state + "'");
-                break;
+                throw new AssertionError("Transaction is still in state of '" + state + "'");
             case MUST_ABORT:
-                fail("Transaction is still in state of '" + state + "'");
-                break;
+                throw new AssertionError("Transaction is still in state of '" + state + "'");
             default:
-                fail("Unknown transaction state '" + state + "'");
+                throw new AssertionError("Unknown transaction state '" + state + "'");
         }
     }
 
@@ -545,21 +392,19 @@ public class IsisSystem {
         final IsisTransactionManager transactionManager = getTransactionManager();
         final IsisTransaction transaction = transactionManager.getCurrentTransaction();
         if(transaction == null) {
-            fail("No transaction exists");
-            return;
+            throw new AssertionError("No transaction exists");
         }
         final State state = transaction.getState();
         switch(state) {
             case COMMITTED:
             case ABORTED:
             case MUST_ABORT:
-                fail("Transaction is in state of '" + state + "'");
-                break;
+                throw new AssertionError("Transaction is in state of '" + state + "'");
             case IN_PROGRESS:
                 transactionManager.endTransaction();
                 break;
             default:
-                fail("Unknown transaction state '" + state + "'");
+                throw new AssertionError("Unknown transaction state '" + state + "'");
         }
     }
 
@@ -573,22 +418,20 @@ public class IsisSystem {
         final IsisTransactionManager transactionManager = getTransactionManager();
         final IsisTransaction transaction = transactionManager.getCurrentTransaction();
         if(transaction == null) {
-            fail("No transaction exists");
-            return;
+            throw new AssertionError("No transaction exists");
         }
         final State state = transaction.getState();
         switch(state) {
             case ABORTED:
                 break;
             case COMMITTED:
-                fail("Transaction is in state of '" + state + "'");
-                break;
+                throw new AssertionError("Transaction is in state of '" + state + "'");
             case MUST_ABORT:
             case IN_PROGRESS:
                 transactionManager.abortTransaction();
                 break;
             default:
-                fail("Unknown transaction state '" + state + "'");
+                throw new AssertionError("Unknown transaction state '" + state + "'");
         }
     }
 

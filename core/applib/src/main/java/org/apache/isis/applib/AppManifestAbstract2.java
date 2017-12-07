@@ -38,7 +38,10 @@ public abstract class AppManifestAbstract2 extends AppManifestAbstract implement
         }
     }
 
-    public static class Builder extends AppManifestAbstract.Builder {
+    interface ModuleProvider {
+        Module getModule();
+    }
+    public static class Builder extends AppManifestAbstract.Builder implements ModuleProvider {
 
         public static AppManifestAbstract.Builder forModule(Module module) {
             return module instanceof ModuleAbstract
@@ -47,6 +50,11 @@ public abstract class AppManifestAbstract2 extends AppManifestAbstract implement
         }
 
         private final Module module;
+
+        @Override
+        public Module getModule() {
+            return module;
+        }
 
         private Builder(Module module) {
             this.module = module;
@@ -81,12 +89,17 @@ public abstract class AppManifestAbstract2 extends AppManifestAbstract implement
      * A {@link AppManifestAbstract.Builder} implementation that delegates to the wrapped {@link ModuleAbstract} for transitive modules,
      * services and configuration properties, but continues to manage fixture scripts and auth mechanisms.
      */
-    public static class BuilderWrappingModuleAbstract extends AppManifestAbstract.Builder {
+    public static class BuilderWrappingModuleAbstract extends AppManifestAbstract.Builder implements ModuleProvider {
 
         private final ModuleAbstract moduleAbstract;
 
         private BuilderWrappingModuleAbstract(ModuleAbstract moduleAbstract) {
             this.moduleAbstract = moduleAbstract;
+        }
+
+        @Override
+        public Module getModule() {
+            return moduleAbstract;
         }
 
         @Override
@@ -170,16 +183,10 @@ public abstract class AppManifestAbstract2 extends AppManifestAbstract implement
     private final Module module;
     public AppManifestAbstract2(final AppManifestAbstract.Builder builder) {
         super(builder);
-        if (!(builder instanceof Builder)) {
-            throw new IllegalArgumentException("Requires an AppManifestAbstract2.Builder2");
+        if (!(builder instanceof ModuleProvider)) {
+            throw new IllegalArgumentException("Requires a Builder that implements ModuleProvider");
         }
-        Builder builder2 = (Builder) builder;
-        this.module = builder2.module;
-    }
-
-    public <M extends Module & AppManifestBuilder<?>> AppManifestAbstract2(final M module) {
-        super(module);
-        this.module = module;
+        this.module = ((ModuleProvider)builder).getModule();
     }
 
     @Programmatic

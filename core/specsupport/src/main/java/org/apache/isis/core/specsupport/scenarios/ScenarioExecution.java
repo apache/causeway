@@ -61,7 +61,10 @@ import static org.junit.Assert.fail;
  * Subclasses may tailor the world for specific types of tests; for example the
  * <tt>IntegrationScenarioExecution</tt> provides additional support for fixtures and 
  * transaction management, used both by integration-scoped specs and by integration tests.
+ *
+ * @deprecated - to be removed in 2.0, will support BDD for integration tests only
  */
+@Deprecated
 public abstract class ScenarioExecution {
     
     private static ThreadLocal<ScenarioExecution> current = new ThreadLocal<ScenarioExecution>();

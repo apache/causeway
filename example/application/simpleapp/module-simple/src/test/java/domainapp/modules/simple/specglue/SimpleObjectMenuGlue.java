@@ -21,7 +21,7 @@ import java.util.UUID;
 
 import javax.inject.Inject;
 
-import org.apache.isis.core.specsupport.specs.CukeGlueAbstract;
+import org.apache.isis.core.integtestsupport.IntegrationAbstract;
 
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.When;
@@ -30,17 +30,12 @@ import domainapp.modules.simple.dom.impl.SimpleObjectMenu;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-public class SimpleObjectMenuGlue extends CukeGlueAbstract {
+public class SimpleObjectMenuGlue extends IntegrationAbstract {
 
     @Given("^there are.* (\\d+) simple objects$")
     public void there_are_N_simple_objects(int n) throws Throwable {
-        try {
-            final List<SimpleObject> list = wrap(simpleObjectMenu).listAll();
-            assertThat(list.size(), is(n));
-            putVar("java.util.List", "simpleObjects", list);
-        } finally {
-            assertMocksSatisfied();
-        }
+        final List<SimpleObject> list = wrap(simpleObjectMenu).listAll();
+        assertThat(list.size(), is(n));
     }
     
     @When("^.*create a .*simple object$")
