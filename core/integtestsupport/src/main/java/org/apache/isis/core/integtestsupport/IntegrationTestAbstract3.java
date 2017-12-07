@@ -161,16 +161,18 @@ public abstract class IntegrationTestAbstract3 extends IntegrationBootstrapAbstr
         super(logConfig, module, additionalModuleClasses);
     }
 
+    @Override
     @Before
-    public void beforeTest() {
+    public void bootstrapAndSetupIfRequired() {
 
         super.bootstrapAndSetupIfRequired();
 
         log("### TEST: " + this.getClass().getCanonicalName());
     }
 
+    @Override
     @After
-    public void afterTest() {
+    public void tearDownAllModules() {
         super.tearDownAllModules();
     }
 
