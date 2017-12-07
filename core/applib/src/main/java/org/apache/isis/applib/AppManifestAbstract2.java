@@ -36,16 +36,6 @@ public abstract class AppManifestAbstract2 extends AppManifestAbstract implement
 
         private Builder2(Module module) {
             this.module = module;
-
-            final List<Module> transitiveDependencies = Module.Util.transitiveDependenciesOf(module);
-            final Class[] moduleTransitiveDependencies = asClasses(transitiveDependencies);
-
-            final List<Class<?>> additionalModules = Module.Util.transitiveDependenciesAsClassOf(module);
-            final List<Class<?>> additionalServices = Module.Util.transitiveAdditionalServicesOf(module);
-
-            withAdditionalModules(moduleTransitiveDependencies);
-            withAdditionalModules(additionalModules);
-            withAdditionalServices(additionalServices);
         }
 
         public static Builder2 forModule(Module module) {
@@ -63,9 +53,22 @@ public abstract class AppManifestAbstract2 extends AppManifestAbstract implement
 
         @Override
         public AppManifest build() {
-            return new AppManifestAbstract2(this) {};
-        }
+            if(module instanceof ModuleAbstract) {
+                return new AppManifestAbstract2((ModuleAbstract) module){};
+            } else {
+                final List<Module> transitiveDependencies = Module.Util.transitiveDependenciesOf(module);
+                final Class[] moduleTransitiveDependencies = asClasses(transitiveDependencies);
 
+                final List<Class<?>> additionalModules = Module.Util.transitiveDependenciesAsClassOf(module);
+                final List<Class<?>> additionalServices = Module.Util.transitiveAdditionalServicesOf(module);
+
+                withAdditionalModules(moduleTransitiveDependencies);
+                withAdditionalModules(additionalModules);
+                withAdditionalServices(additionalServices);
+
+                return new AppManifestAbstract2(this) {};
+            }
+        }
     }
 
     private final Module module;
@@ -76,6 +79,11 @@ public abstract class AppManifestAbstract2 extends AppManifestAbstract implement
         }
         Builder2 builder2 = (Builder2) builder;
         this.module = builder2.module;
+    }
+
+    public <M extends Module & AppManifestBuilder<?>> AppManifestAbstract2(final M module) {
+        super(module);
+        this.module = module;
     }
 
     @Programmatic

@@ -26,7 +26,7 @@ import org.apache.isis.applib.AppManifestAbstract;
 import static junit.framework.TestCase.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-public class IntegrationTestAbstract3_haveSameModules_Test {
+public class IsisSystemBootstrapper_haveSameModules_Test {
 
     public static class SomeModule{}
     public static class OtherModule{}
@@ -43,12 +43,12 @@ public class IntegrationTestAbstract3_haveSameModules_Test {
     @Test
     public void when_they_do() throws Exception {
 
-        assertTrue(IntegrationTestAbstract3.haveSameModules(m1, m2));
-        assertTrue(IntegrationTestAbstract3.haveSameModules(m1, m1_different_order));
+        assertTrue(IsisSystemBootstrapper.haveSameModules(m1, m2));
+        assertTrue(IsisSystemBootstrapper.haveSameModules(m1, m1_different_order));
     }
 
     @Test
     public void when_they_dont() throws Exception {
-        assertFalse(IntegrationTestAbstract3.haveSameModules(m1, m3));
+        assertFalse(IsisSystemBootstrapper.haveSameModules(m1, m3));
     }
 }

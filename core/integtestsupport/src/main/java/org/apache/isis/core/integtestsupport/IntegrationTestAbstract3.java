@@ -20,16 +20,11 @@ package org.apache.isis.core.integtestsupport;
 
 import java.io.PrintStream;
 import java.util.List;
-import java.util.UUID;
 
-import javax.annotation.Nullable;
 import javax.inject.Inject;
-import javax.jdo.PersistenceManagerFactory;
 
-import com.google.common.base.Function;
 import com.google.common.base.Strings;
 import com.google.common.base.Throwables;
-import com.google.common.collect.FluentIterable;
 
 import org.apache.log4j.PropertyConfigurator;
 import org.joda.time.LocalDate;
@@ -45,7 +40,6 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.event.Level;
 
 import org.apache.isis.applib.AppManifest;
-import org.apache.isis.applib.AppManifestAbstract2;
 import org.apache.isis.applib.Module;
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.RecoverableException;
@@ -68,9 +62,6 @@ import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.integtestsupport.logging.LogConfig;
 import org.apache.isis.core.integtestsupport.logging.LogStream;
-import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
-import org.apache.isis.objectstore.jdo.datanucleus.IsisConfigurationForJdoIntegTests;
 
 /**
  * Reworked base class for integration tests, uses a {@link Module} to bootstrap, rather than an {@link AppManifest}.
@@ -79,6 +70,8 @@ public abstract class IntegrationTestAbstract3 {
 
     private static final Logger LOG = LoggerFactory.getLogger(IntegrationTestAbstract3.class);
     private final LogConfig logConfig;
+    private final IsisSystemBootstrapper isisSystemBootstrapper;
+
 
     protected static PrintStream logPrintStream() {
         return logPrintStream(Level.DEBUG);
@@ -111,8 +104,10 @@ public abstract class IntegrationTestAbstract3 {
     private Long t0;
     public IntegrationTestAbstract3(
             final LogConfig logConfig,
-            final Module module, final Class... additionalModuleClasses) {
+            final Module module,
+            final Class... additionalModuleClasses) {
         this.logConfig = logConfig;
+
         final boolean firstTime = !setupLogging.get();
         if(firstTime) {
             PropertyConfigurator.configure(logConfig.getLoggingPropertyFile());
@@ -130,26 +125,7 @@ public abstract class IntegrationTestAbstract3 {
             this.module = module;
             this.additionalModuleClasses = additionalModuleClasses;
         }
-    }
-
-    private void log(final String message) {
-        switch (logConfig.getTestLoggingLevel()) {
-        case ERROR:
-            LOG.error(message);
-            break;
-        case WARN:
-            LOG.warn(message);
-            break;
-        case INFO:
-            LOG.info(message);
-            break;
-        case DEBUG:
-            LOG.debug(message);
-            break;
-        case TRACE:
-            LOG.trace(message);
-            break;
-        }
+        this.isisSystemBootstrapper = new IsisSystemBootstrapper(logConfig, module, additionalModuleClasses);
     }
 
     private LocalDate timeBeforeTest;
@@ -159,116 +135,18 @@ public abstract class IntegrationTestAbstract3 {
 
         System.setProperty("isis.integTest", "true");
 
-        bootstrapIfRequired();
-
-        if(t0 != null) {
-            long t1 = System.currentTimeMillis();
-            log("##########################################################################");
-            log("# Bootstrapped in " + (t1- t0) + " millis");
-            log("##########################################################################");
-        }
-        log("### TEST: " + this.getClass().getCanonicalName());
+        isisSystemBootstrapper.bootstrapIfRequired(t0);
+        isisSystemBootstrapper.injectServicesInto(this);
 
         beginTransaction();
 
+        isisSystemBootstrapper.setupModuleRefData();
+
+        log("### TEST: " + this.getClass().getCanonicalName());
+
         timeBeforeTest = Clock.getTimeAsLocalDate();
-
-        setupModuleRefData();
     }
 
-    private void bootstrapIfRequired() {
-
-        final AppManifestAbstract2.Builder2 builder =
-                AppManifestAbstract2.Builder2.forModule(module);
-        builder.withAdditionalModules(additionalModuleClasses); // eg fake module, as passed into constructor
-
-        final AppManifestAbstract2 appManifest = (AppManifestAbstract2) builder.build();
-
-        bootstrapUsing(appManifest);
-    }
-
-    /**
-     * The {@link AppManifest} used to bootstrap the {@link IsisSystemForTest} (on the thread-local)
-     */
-    private static ThreadLocal<AppManifest> isftAppManifest = new ThreadLocal<>();
-
-    private void bootstrapUsing(AppManifest appManifest) {
-
-        final SystemState systemState = determineSystemState(appManifest);
-        switch (systemState) {
-
-        case BOOTSTRAPPED_SAME_MODULES:
-            // nothing to do
-            break;
-        case BOOTSTRAPPED_DIFFERENT_MODULES:
-            // TODO: this doesn't work correctly yet;
-            teardownSystem();
-            setupSystem(appManifest);
-            break;
-        case NOT_BOOTSTRAPPED:
-            setupSystem(appManifest);
-            TickingFixtureClock.replaceExisting();
-            break;
-        }
-    }
-
-    private static void teardownSystem() {
-        final IsisSessionFactory isisSessionFactory = IsisSystemForTest.get().getService(IsisSessionFactory.class);
-
-        // TODO: this ought to be part of isisSessionFactory's responsibilities
-        final IsisJdoSupport isisJdoSupport = isisSessionFactory.getServicesInjector()
-                .lookupService(IsisJdoSupport.class);
-        final PersistenceManagerFactory pmf =
-                isisJdoSupport.getJdoPersistenceManager().getPersistenceManagerFactory();
-        isisSessionFactory.destroyServicesAndShutdown();
-        pmf.close();
-
-        IsisContext.testReset();
-    }
-
-    private static void setupSystem(final AppManifest appManifest) {
-
-        final IsisConfigurationForJdoIntegTests configuration = new IsisConfigurationForJdoIntegTests();
-        configuration.putDataNucleusProperty("javax.jdo.option.ConnectionURL","jdbc:hsqldb:mem:test-" + UUID.randomUUID().toString());
-        final IsisSystemForTest.Builder isftBuilder =
-                new IsisSystemForTest.Builder()
-                        .withLoggingAt(org.apache.log4j.Level.INFO)
-                        .with(appManifest)
-                        .with(configuration);
-
-        IsisSystemForTest isft = isftBuilder.build();
-        isft.setUpSystem();
-
-        // save both the system and the manifest
-        // used to bootstrap the system onto thread-loca
-        IsisSystemForTest.set(isft);
-        isftAppManifest.set(appManifest);
-    }
-
-    enum SystemState {
-        NOT_BOOTSTRAPPED,
-        BOOTSTRAPPED_SAME_MODULES,
-        BOOTSTRAPPED_DIFFERENT_MODULES
-    }
-
-    private static SystemState determineSystemState(final AppManifest appManifest) {
-        IsisSystemForTest isft = IsisSystemForTest.getElseNull();
-        if (isft == null)
-            return SystemState.NOT_BOOTSTRAPPED;
-
-        final AppManifest appManifestFromPreviously = isftAppManifest.get();
-        return haveSameModules(appManifest, appManifestFromPreviously)
-                ? SystemState.BOOTSTRAPPED_SAME_MODULES
-                : SystemState.BOOTSTRAPPED_DIFFERENT_MODULES;
-    }
-
-    static boolean haveSameModules(
-            final AppManifest m1,
-            final AppManifest m2) {
-        final List<Class<?>> m1Modules = m1.getModules();
-        final List<Class<?>> m2Modules = m2.getModules();
-        return m1Modules.containsAll(m2Modules) && m2Modules.containsAll(m1Modules);
-    }
 
     private static class IsisTransactionRule implements MethodRule {
 
@@ -283,7 +161,7 @@ public abstract class IntegrationTestAbstract3 {
                     // Instead we expect it to be bootstrapped via @Before
                     try {
                         base.evaluate();
-                        final IsisSystemForTest isft = IsisSystemForTest.get();
+                        final IsisSystem isft = IsisSystem.get();
                         isft.endTran();
                     } catch(final Throwable e) {
                         // determine if underlying cause is an applib-defined exception,
@@ -294,7 +172,7 @@ public abstract class IntegrationTestAbstract3 {
 
                         if(recoverableException != null) {
                             try {
-                                final IsisSystemForTest isft = IsisSystemForTest.get();
+                                final IsisSystem<?> isft = IsisSystem.get();
                                 isft.getContainer().flush(); // don't care if npe
                                 isft.getService(IsisJdoSupport.class).getJdoPersistenceManager().flush();
                             } catch (Exception ignore) {
@@ -303,7 +181,7 @@ public abstract class IntegrationTestAbstract3 {
                         }
                         // attempt to close this
                         try {
-                            final IsisSystemForTest isft = IsisSystemForTest.getElseNull();
+                            final IsisSystem<?> isft = IsisSystem.getElseNull();
                             isft.closeSession(); // don't care if npe
                         } catch(Exception ignore) {
                             // ignore
@@ -311,7 +189,7 @@ public abstract class IntegrationTestAbstract3 {
 
                         // attempt to start another
                         try {
-                            final IsisSystemForTest isft = IsisSystemForTest.getElseNull();
+                            final IsisSystem<?> isft = IsisSystem.getElseNull();
                             isft.openSession(); // don't care if npe
                         } catch(Exception ignore) {
                             // ignore
@@ -361,18 +239,8 @@ public abstract class IntegrationTestAbstract3 {
     }
 
     private void beginTransaction() {
-        final IsisSystemForTest isft = IsisSystemForTest.get();
-
-        isft.getContainer().injectServicesInto(this);
+        final IsisSystem isft = IsisSystem.get();
         isft.beginTran();
-    }
-
-    @Inject
-    MetaModelService4 metaModelService4;
-
-    protected void setupModuleRefData() {
-        FixtureScript refDataSetupFixture = metaModelService4.getAppManifest2().getRefDataSetupFixture();
-        runFixtureScript(refDataSetupFixture);
     }
 
     @After
@@ -386,54 +254,22 @@ public abstract class IntegrationTestAbstract3 {
 
         transactionService.nextTransaction();
 
-        FixtureScript fixtureScript = metaModelService4.getAppManifest2().getTeardownFixture();
-        runFixtureScript(fixtureScript);
+        isisSystemBootstrapper.tearDownAllModules();
 
         // reinstate clock
         setFixtureClockDate(timeBeforeTest);
     }
 
+
     protected void runFixtureScript(final FixtureScript... fixtureScriptList) {
-        if (fixtureScriptList.length == 1) {
-            this.fixtureScripts.runFixtureScript(fixtureScriptList[0], null);
-        } else {
-            this.fixtureScripts.runFixtureScript(new FixtureScript() {
-                protected void execute(ExecutionContext executionContext) {
-                    FixtureScript[] fixtureScripts = fixtureScriptList;
-                    for (FixtureScript fixtureScript : fixtureScripts) {
-                        executionContext.executeChild(this, fixtureScript);
-                    }
-                }
-            }, null);
-        }
-
-        transactionService.nextTransaction();
+        this.fixtureScripts.runFixtureScript(fixtureScriptList);
     }
 
 
-    protected <T,F extends BuilderScriptAbstract<T,F>> T runBuilderScript(final F fixture) {
-
-        serviceRegistry.injectServicesInto(fixture);
-
-        fixture.run(null);
-
-
-        final T object = fixture.getObject();
-        transactionService.nextTransaction();
-
-        return object;
+    protected <T,F extends BuilderScriptAbstract<T,F>> T runBuilderScript(final F fixtureScript) {
+        return this.fixtureScripts.runBuilderScript(fixtureScript);
     }
 
-
-    private static Class[] asClasses(final List<Module> dependencies) {
-        final List<? extends Class<? extends Module>> dependenciesAsClasses =
-                FluentIterable.from(dependencies).transform(new Function<Module, Class<? extends Module>>() {
-                    @Nullable @Override public Class apply(@Nullable final Module module) {
-                        return module.getClass();
-                    }
-                }).toList();
-        return dependenciesAsClasses.toArray(new Class[] {});
-    }
 
     /**
      * For convenience of subclasses, remove some boilerplate
@@ -454,6 +290,9 @@ public abstract class IntegrationTestAbstract3 {
      * To use instead of {@link #getFixtureClock()}'s {@link FixtureClock#setDate(int, int, int)} ()}.
      */
     protected void setFixtureClockDate(final LocalDate date) {
+        if(date == null) {
+            return;
+        }
         setFixtureClockDate(date.getYear(), date.getMonthOfYear(), date.getDayOfMonth());
     }
 
@@ -482,6 +321,25 @@ public abstract class IntegrationTestAbstract3 {
     }
 
 
+    private void log(final String message) {
+        switch (logConfig.getTestLoggingLevel()) {
+        case ERROR:
+            LOG.error(message);
+            break;
+        case WARN:
+            LOG.warn(message);
+            break;
+        case INFO:
+            LOG.info(message);
+            break;
+        case DEBUG:
+            LOG.debug(message);
+            break;
+        case TRACE:
+            LOG.trace(message);
+            break;
+        }
+    }
 
     /**
      * For convenience of subclasses, remove some boilerplate
@@ -490,6 +348,8 @@ public abstract class IntegrationTestAbstract3 {
         return wrapperFactory.unwrap(obj);
     }
 
+    @Inject
+    protected MetaModelService4 metaModelService4;
     @Inject
     protected FixtureScripts fixtureScripts;
     @Inject

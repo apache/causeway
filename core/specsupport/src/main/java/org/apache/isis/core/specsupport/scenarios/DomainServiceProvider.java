@@ -30,9 +30,9 @@ import org.apache.isis.applib.DomainObjectContainer;
  */
 public interface DomainServiceProvider {
 
-    public abstract DomainObjectContainer getContainer();
+    DomainObjectContainer getContainer();
 
-    public abstract <T> T getService(Class<T> serviceClass);
+    <T> T getService(Class<T> serviceClass);
 
     /**
      * Replaces the service implementation with some other.
@@ -42,5 +42,5 @@ public interface DomainServiceProvider {
      * service implementation afterwards.
      * </p>
      */
-    public abstract <T> void replaceService(T original, T replacement);
+    <T> void replaceService(T original, T replacement);
 }

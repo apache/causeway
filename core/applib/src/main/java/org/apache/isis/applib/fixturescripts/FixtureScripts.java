@@ -40,13 +40,14 @@ import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.RestrictTo;
-import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.classdiscovery.ClassDiscoveryService;
 import org.apache.isis.applib.services.classdiscovery.ClassDiscoveryService2;
 import org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault;
 import org.apache.isis.applib.services.fixturespec.FixtureScriptsSpecification;
 import org.apache.isis.applib.services.memento.MementoService;
 import org.apache.isis.applib.services.memento.MementoService.Memento;
+import org.apache.isis.applib.services.registry.ServiceRegistry2;
+import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.util.ObjectContracts;
 
 /**
@@ -385,7 +386,7 @@ public abstract class FixtureScripts extends AbstractService {
         // if this method is called programmatically, the caller may have simply new'd up the fixture script
         // (rather than use container.newTransientInstance(...).  To allow this use case, we need to ensure that
         // domain services are injected into the fixture script.
-        getContainer().injectServicesInto(fixtureScript);
+        serviceRegistry.injectServicesInto(fixtureScript);
 
         return fixtureScript.run(parameters);
     }
@@ -418,6 +419,38 @@ public abstract class FixtureScripts extends AbstractService {
     //endregion
 
     //region > programmatic API
+
+    @Programmatic
+    public void runFixtureScript(final FixtureScript... fixtureScriptList) {
+        if (fixtureScriptList.length == 1) {
+            runFixtureScript(fixtureScriptList[0], null);
+        } else {
+            runFixtureScript(new FixtureScript() {
+                protected void execute(ExecutionContext executionContext) {
+                    FixtureScript[] fixtureScripts = fixtureScriptList;
+                    for (FixtureScript fixtureScript : fixtureScripts) {
+                        executionContext.executeChild(this, fixtureScript);
+                    }
+                }
+            }, null);
+        }
+
+        transactionService.nextTransaction();
+    }
+
+    @Programmatic
+    public <T,F extends BuilderScriptAbstract<T,F>> T runBuilderScript(final F fixtureScript) {
+
+        serviceRegistry.injectServicesInto(fixtureScript);
+
+        fixtureScript.run(null);
+
+        final T object = fixtureScript.getObject();
+        transactionService.nextTransaction();
+
+        return object;
+    }
+
     @Programmatic
     public FixtureScript findFixtureScriptFor(final Class<? extends FixtureScript> fixtureScriptClass) {
         final List<FixtureScript> fixtureScripts = getFixtureScriptList();
@@ -511,16 +544,19 @@ public abstract class FixtureScripts extends AbstractService {
     //region > injected services
 
     @javax.inject.Inject
-    private MementoService mementoService;
-    
-    @javax.inject.Inject
-    private BookmarkService bookmarkService;
+    MementoService mementoService;
 
     @javax.inject.Inject
-    private ClassDiscoveryService classDiscoveryService;
+    TransactionService transactionService;
 
     @javax.inject.Inject
-    private ExecutionParametersService executionParametersService;
+    ClassDiscoveryService classDiscoveryService;
+
+    @javax.inject.Inject
+    ExecutionParametersService executionParametersService;
+
+    @javax.inject.Inject
+    ServiceRegistry2 serviceRegistry;
 
     //endregion
 
