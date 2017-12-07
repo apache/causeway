@@ -55,8 +55,12 @@ import static org.junit.Assert.fail;
 
 /**
  * Wraps a plain {@link IsisSessionFactoryBuilder}.
+ *
+ * <p>
+ *     This is a simplification of <tt>IsisSystemForTest</tt>, removing dependencies on junit and specsupport.
+ * </p>
  */
-public class IsisSystem<S extends IsisSystem> {
+public class IsisSystem {
 
     //region > Listener, ListenerAdapter
     public interface Listener {
@@ -265,13 +269,13 @@ public class IsisSystem<S extends IsisSystem> {
     // populated at #setupSystem
     protected IsisComponentProvider componentProvider;
 
-    S setUpSystem() throws RuntimeException {
+    IsisSystem setUpSystem() throws RuntimeException {
         try {
             initIfRequiredThenOpenSession(FireListeners.FIRE);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        return (S)this;
+        return this;
     }
 
     protected void initIfRequiredThenOpenSession(FireListeners fireListeners) throws Exception {

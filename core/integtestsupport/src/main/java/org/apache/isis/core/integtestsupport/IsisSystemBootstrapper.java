@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.AppManifest2;
+import org.apache.isis.applib.AppManifestAbstract;
 import org.apache.isis.applib.AppManifestAbstract2;
 import org.apache.isis.applib.Module;
 import org.apache.isis.applib.clock.TickingFixtureClock;
@@ -67,8 +68,8 @@ public class IsisSystemBootstrapper {
 
     public void bootstrapIfRequired(final Long t0) {
 
-        final AppManifestAbstract2.Builder2 builder =
-                AppManifestAbstract2.Builder2.forModule(module);
+        final AppManifestAbstract.Builder builder =
+                AppManifestAbstract2.Builder.forModule(module);
         builder.withAdditionalModules(additionalModuleClasses); // eg fake module, as passed into constructor
 
         final AppManifestAbstract2 appManifest = (AppManifestAbstract2) builder.build();
@@ -190,7 +191,7 @@ public class IsisSystemBootstrapper {
     }
 
 
-    private static IsisSystem<?> getIsisSystem() {
+    private static IsisSystem getIsisSystem() {
         return IsisSystem.get();
     }
 

@@ -172,7 +172,7 @@ public abstract class IntegrationTestAbstract3 {
 
                         if(recoverableException != null) {
                             try {
-                                final IsisSystem<?> isft = IsisSystem.get();
+                                final IsisSystem isft = IsisSystem.get();
                                 isft.getContainer().flush(); // don't care if npe
                                 isft.getService(IsisJdoSupport.class).getJdoPersistenceManager().flush();
                             } catch (Exception ignore) {
@@ -181,7 +181,7 @@ public abstract class IntegrationTestAbstract3 {
                         }
                         // attempt to close this
                         try {
-                            final IsisSystem<?> isft = IsisSystem.getElseNull();
+                            final IsisSystem isft = IsisSystem.getElseNull();
                             isft.closeSession(); // don't care if npe
                         } catch(Exception ignore) {
                             // ignore
@@ -189,7 +189,7 @@ public abstract class IntegrationTestAbstract3 {
 
                         // attempt to start another
                         try {
-                            final IsisSystem<?> isft = IsisSystem.getElseNull();
+                            final IsisSystem isft = IsisSystem.getElseNull();
                             isft.openSession(); // don't care if npe
                         } catch(Exception ignore) {
                             // ignore

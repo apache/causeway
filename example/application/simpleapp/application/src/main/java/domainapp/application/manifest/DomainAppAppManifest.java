@@ -28,7 +28,7 @@ import domainapp.application.DomainAppApplicationModule;
 public class DomainAppAppManifest extends AppManifestAbstract2 {
 
     public DomainAppAppManifest() {
-        super(Builder2
+        super(Builder
                 .forModule(new DomainAppApplicationModule())
                 .withConfigurationPropertiesFile(DomainAppAppManifest.class,
                     "isis.properties",
