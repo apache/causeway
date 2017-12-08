@@ -555,6 +555,18 @@ public abstract class FixtureScript
          * Executes a child {@link FixtureScript fixture script}, injecting services into it first, and (for any results
          * that are {@link org.apache.isis.applib.fixturescripts.FixtureScript.ExecutionContext#addResult(FixtureScript, Object)} added),
          * uses a key that is derived from the fixture's class name.
+         */
+        @Programmatic
+        public void executeChildren(final FixtureScript callingFixtureScript, final PersonaWithBuilderScript<?,?>... personaWithBuilderScript) {
+            for (PersonaWithBuilderScript<?, ?> builder : personaWithBuilderScript) {
+                executeChild(callingFixtureScript, builder.builder());
+            }
+        }
+
+        /**
+         * Executes a child {@link FixtureScript fixture script}, injecting services into it first, and (for any results
+         * that are {@link org.apache.isis.applib.fixturescripts.FixtureScript.ExecutionContext#addResult(FixtureScript, Object)} added),
+         * uses a key that is derived from the fixture's class name.
          *
          * @return the child fixture script.
          */
