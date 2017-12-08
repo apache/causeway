@@ -551,15 +551,23 @@ public abstract class FixtureScript
             executeChildT(callingFixtureScript, childFixtureScript);
         }
 
-        /**
-         * Executes a child {@link FixtureScript fixture script}, injecting services into it first, and (for any results
-         * that are {@link org.apache.isis.applib.fixturescripts.FixtureScript.ExecutionContext#addResult(FixtureScript, Object)} added),
-         * uses a key that is derived from the fixture's class name.
-         */
         @Programmatic
-        public void executeChildren(final FixtureScript callingFixtureScript, final PersonaWithBuilderScript<?,?>... personaWithBuilderScript) {
-            for (PersonaWithBuilderScript<?, ?> builder : personaWithBuilderScript) {
+        public void executeChildren(final FixtureScript callingFixtureScript, final PersonaWithBuilderScript<?,?>... personaWithBuilderScripts) {
+            for (PersonaWithBuilderScript<?, ?> builder : personaWithBuilderScripts) {
                 executeChild(callingFixtureScript, builder.builder());
+            }
+        }
+
+        @Programmatic
+        public <T extends Enum<?> & PersonaWithBuilderScript<?,?>> void executeChildren(
+                final FixtureScript callingFixtureScript, final Class<T> personaClass) {
+            executeChildren(callingFixtureScript, personaClass.getEnumConstants());
+        }
+
+        @Programmatic
+        public void executeChildren(final FixtureScript callingFixtureScript, final FixtureScript... fixtureScripts) {
+            for (FixtureScript fixtureScript : fixtureScripts) {
+                executeChild(callingFixtureScript, fixtureScript);
             }
         }
 
