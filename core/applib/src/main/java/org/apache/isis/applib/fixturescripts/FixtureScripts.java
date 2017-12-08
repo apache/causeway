@@ -18,6 +18,7 @@
  */
 package org.apache.isis.applib.fixturescripts;
 
+import java.io.PrintStream;
 import java.lang.reflect.Constructor;
 import java.util.Collections;
 import java.util.Comparator;
@@ -363,6 +364,24 @@ public abstract class FixtureScripts extends AbstractService {
 
     //endregion
 
+    //region > fixtureTracing (thread-local)
+
+    private final ThreadLocal<PrintStream> fixtureTracing = new ThreadLocal<PrintStream>(){{
+        set(System.out);
+    }};
+
+    @Programmatic
+    public PrintStream getFixtureTracing() {
+        return fixtureTracing.get();
+    }
+
+    @Programmatic
+    public void setFixtureTracing(PrintStream fixtureTracing) {
+        this.fixtureTracing.set(fixtureTracing);
+    }
+
+    //endregion
+
     //region > runFixtureScript (prototype action)
 
     /**
@@ -388,7 +407,7 @@ public abstract class FixtureScripts extends AbstractService {
         // domain services are injected into the fixture script.
         serviceRegistry.injectServicesInto(fixtureScript);
 
-        return fixtureScript.run(parameters);
+        return fixtureScript.withTracing(fixtureTracing.get()).run(parameters);
     }
     public FixtureScript default0RunFixtureScript() {
         return getFixtureScriptList().isEmpty() ? null: getFixtureScriptList().get(0);

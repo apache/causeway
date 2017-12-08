@@ -96,9 +96,7 @@ public abstract class FixtureScript
             final String friendlyName, 
             final String localName, 
             final Discoverability discoverability) {
-        this(friendlyName, localName, discoverability,
-                // enable tracing by default, to stdout
-                System.out);
+        this(friendlyName, localName, discoverability, /* no tracing */ null);
     }
     /**
      * @param friendlyName - if null, will be derived from class name

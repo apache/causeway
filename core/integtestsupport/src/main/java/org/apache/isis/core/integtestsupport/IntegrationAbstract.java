@@ -49,7 +49,6 @@ public abstract class IntegrationAbstract {
         this.fixtureScripts.runFixtureScript(fixtureScriptList);
     }
 
-
     protected <T,F extends BuilderScriptAbstract<T,F>> T runBuilderScript(final F fixtureScript) {
         return this.fixtureScripts.runBuilderScript(fixtureScript);
     }

@@ -68,7 +68,6 @@ public abstract class IntegrationBootstrapAbstract extends IntegrationAbstract {
         final boolean firstTime = !setupLogging.get();
         if(firstTime) {
             PropertyConfigurator.configure(logConfig.getLoggingPropertyFile());
-            System.setOut(logConfig.getFixtureTracing());
             setupLogging.set(true);
             t0 = System.currentTimeMillis();
         }
@@ -97,6 +96,7 @@ public abstract class IntegrationBootstrapAbstract extends IntegrationAbstract {
 
         isisSystemBootstrapper.bootstrapIfRequired(t0);
         isisSystemBootstrapper.injectServicesInto(this);
+        fixtureScripts.setFixtureTracing(logConfig.getFixtureTracing());
 
         beginTransaction();
 
