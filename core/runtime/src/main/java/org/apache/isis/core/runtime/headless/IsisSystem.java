@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.integtestsupport;
+package org.apache.isis.core.runtime.headless;
 
 import java.util.Set;
 
@@ -38,6 +38,7 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidExcep
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.fixtures.FixturesInstallerDelegate;
+import org.apache.isis.core.runtime.headless.auth.AuthenticationRequestNameOnly;
 import org.apache.isis.core.runtime.logging.IsisLoggingConfigurer;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
@@ -47,7 +48,6 @@ import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction.State;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.systemusinginstallers.IsisComponentProvider;
-import org.apache.isis.core.security.authentication.AuthenticationRequestNameOnly;
 
 
 /**

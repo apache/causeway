@@ -21,7 +21,6 @@ package org.apache.isis.applib;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.apache.isis.applib.annotation.Programmatic;
@@ -32,161 +31,10 @@ import org.apache.isis.applib.fixturescripts.FixtureScript;
  */
 public abstract class AppManifestAbstract2 extends AppManifestAbstract implements AppManifest2 {
 
-    public static class Default extends AppManifestAbstract2 {
-        public Default(final AppManifestAbstract.Builder builder) {
-            super(builder);
-        }
-    }
-
-    interface ModuleProvider {
-        Module getModule();
-    }
-    public static class Builder extends AppManifestAbstract.Builder implements ModuleProvider {
-
-        public static AppManifestAbstract.Builder forModule(Module module) {
-            return module instanceof ModuleAbstract
-                    ? new BuilderWrappingModuleAbstract((ModuleAbstract)module)
-                    : new Builder(module);
-        }
-
-        private final Module module;
-
-        @Override
-        public Module getModule() {
-            return module;
-        }
-
-        private Builder(Module module) {
-            this.module = module;
-
-            final List<Module> transitiveDependencies = Module.Util.transitiveDependenciesOf(module);
-            final Class[] moduleTransitiveDependencies = asClasses(transitiveDependencies);
-
-            final List<Class<?>> additionalModules = Module.Util.transitiveDependenciesAsClassOf(module);
-            final List<Class<?>> additionalServices = Module.Util.transitiveAdditionalServicesOf(module);
-
-            withAdditionalModules(moduleTransitiveDependencies);
-            withAdditionalModules(additionalModules);
-            withAdditionalServices(additionalServices);
-        }
-
-        private static Class[] asClasses(final List<Module> dependencies) {
-            final List<Class<? extends Module>> list = new ArrayList<>();
-            for (Module dependency : dependencies) {
-                Class<? extends Module> aClass = dependency.getClass();
-                list.add(aClass);
-            }
-            return list.toArray(new Class[] {});
-        }
-
-        @Override
-        public AppManifest build() {
-            return new Default(this);
-        }
-    }
-
-    /**
-     * A {@link AppManifestAbstract.Builder} implementation that delegates to the wrapped {@link ModuleAbstract} for transitive modules,
-     * services and configuration properties, but continues to manage fixture scripts and auth mechanisms.
-     */
-    public static class BuilderWrappingModuleAbstract extends AppManifestAbstract.Builder implements ModuleProvider {
-
-        private final ModuleAbstract moduleAbstract;
-
-        private BuilderWrappingModuleAbstract(ModuleAbstract moduleAbstract) {
-            this.moduleAbstract = moduleAbstract;
-        }
-
-        @Override
-        public Module getModule() {
-            return moduleAbstract;
-        }
-
-        @Override
-        public AppManifestAbstract.Builder withAdditionalModules(final Class<?>... modules) {
-            moduleAbstract.withAdditionalModules(modules);
-            return this;
-        }
-
-        @Override
-        public AppManifestAbstract.Builder withAdditionalModules(final List<Class<?>> modules) {
-            moduleAbstract.withAdditionalModules(modules);
-            return this;
-        }
-
-        @Override
-        public AppManifestAbstract.Builder withAdditionalServices(final Class<?>... additionalServices) {
-            moduleAbstract.withAdditionalServices(additionalServices);
-            return this;
-        }
-
-        @Override
-        public AppManifestAbstract.Builder withAdditionalServices(final List<Class<?>> additionalServices) {
-            moduleAbstract.withAdditionalServices(additionalServices);
-            return this;
-        }
-
-        @Override
-        public AppManifestAbstract.Builder withConfigurationProperties(final Map<String, String> configurationProperties) {
-            moduleAbstract.withConfigurationProperties(configurationProperties);
-            return this;
-        }
-
-        @Override
-        public AppManifestAbstract.Builder withConfigurationPropertiesFile(final String propertiesFile) {
-            moduleAbstract.withConfigurationPropertiesFile(propertiesFile);
-            return this;
-        }
-
-        @Override
-        public AppManifestAbstract.Builder withConfigurationPropertiesFile(
-                final Class<?> propertiesFileContext,
-                final String propertiesFile,
-                final String... furtherPropertiesFiles) {
-            moduleAbstract.withConfigurationPropertiesFile(propertiesFileContext, propertiesFile, furtherPropertiesFiles);
-            return this;
-        }
-
-        @Override
-        public AppManifestAbstract.Builder withConfigurationProperty(final String key, final String value) {
-            moduleAbstract.withConfigurationProperty(key, value);
-            return this;
-        }
-
-        @Override
-        public List<Class<?>> getAllModulesAsClass() {
-            return moduleAbstract.getAllModulesAsClass();
-        }
-
-        @Override
-        public Set<Class<?>> getAllAdditionalServices() {
-            return moduleAbstract.getAllAdditionalServices();
-        }
-
-        @Override
-        public List<PropertyResource> getAllPropertyResources() {
-            return moduleAbstract.getAllPropertyResources();
-        }
-
-        @Override
-        public List<ConfigurationProperty> getAllIndividualConfigProps() {
-            return moduleAbstract.getAllIndividualConfigProps();
-        }
-
-        @Override
-        public AppManifest build() {
-            return new Default(this);
-        }
-
-    }
-
     private final Module module;
-    public AppManifestAbstract2(final AppManifestAbstract.Builder builder) {
+    public AppManifestAbstract2(final AppManifestAbstract2.Builder builder) {
         super(builder);
-        if (!(builder instanceof ModuleProvider)) {
-            throw new IllegalArgumentException("Requires a Builder that implements ModuleProvider");
-        }
-        this.module = ((ModuleProvider)builder).getModule();
+        this.module = builder.getModule();
     }
 
     @Programmatic
@@ -228,5 +76,68 @@ public abstract class AppManifestAbstract2 extends AppManifestAbstract implement
     }
 
 
+    /**
+     * Default implementation of {@link AppManifestAbstract2} that is built using a {@link AppManifestAbstract2.Builder}.
+     */
+    public static class Default extends AppManifestAbstract2 {
+        public Default(final AppManifestAbstract2.Builder builder) {
+            super(builder);
+        }
+    }
+
+    public static class Builder extends AppManifestAbstract.BuilderAbstract<Builder> {
+
+        /**
+         * Factory method.
+         */
+        public static AppManifestAbstract2.Builder forModule(Module module) {
+            return new Builder(module);
+        }
+
+        private final Module module;
+
+        private Builder(Module module) {
+            this.module = module;
+            withTransitiveFrom(module);
+        }
+
+        public Module getModule() {
+            return module;
+        }
+
+        public Builder withAdditionalDependency(final Module dependency) {
+            withTransitiveFrom(dependency);
+            return this;
+        }
+
+        public Builder withAdditionalDependencies(final Set<Module> dependencies) {
+            for (final Module dependency : dependencies) {
+                withAdditionalDependency(dependency);
+            }
+            return this;
+        }
+
+        private void withTransitiveFrom(final Module module) {
+            withAdditionalModules(asClasses(Module.Util.transitiveDependenciesOf(module)));
+            withAdditionalModules(Module.Util.transitiveDependenciesAsClassOf(module));
+            withAdditionalServices(Module.Util.transitiveAdditionalServicesOf(module));
+            withConfigurationPropertyResources(Module.Util.transitivePropertyResourcesOf(module));
+            withConfigurationProperties(Module.Util.transitiveIndividualConfigPropsOf(module));
+        }
+
+        private static Class[] asClasses(final List<Module> dependencies) {
+            final List<Class<? extends Module>> list = new ArrayList<>();
+            for (Module dependency : dependencies) {
+                Class<? extends Module> aClass = dependency.getClass();
+                list.add(aClass);
+            }
+            return list.toArray(new Class[] {});
+        }
+
+        @Override
+        public AppManifest2 build() {
+            return new Default(this);
+        }
+    }
 
 }

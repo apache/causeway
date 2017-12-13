@@ -19,12 +19,12 @@ package domainapp.application.bdd.specglue;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.fixturescripts.FixtureScripts;
-import org.apache.isis.core.integtestsupport.IntegrationAbstract;
+import org.apache.isis.core.runtime.headless.HeadlessAbstract;
 
 import cucumber.api.java.Before;
 import domainapp.application.fixture.scenarios.DomainAppDemo;
 
-public class CatalogOfFixturesGlue extends IntegrationAbstract {
+public class CatalogOfFixturesGlue extends HeadlessAbstract {
 
     @Before(value={"@DomainAppDemo"}, order=20000)
     public void integrationFixtures() throws Throwable {

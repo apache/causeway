@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.integtestsupport;
+package org.apache.isis.core.runtime.headless;
 
 import java.io.PrintStream;
 
@@ -31,12 +31,21 @@ import org.slf4j.event.Level;
 import org.apache.isis.applib.Module;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.core.commons.factory.InstanceUtil;
-import org.apache.isis.core.integtestsupport.logging.LogConfig;
-import org.apache.isis.core.integtestsupport.logging.LogStream;
+import org.apache.isis.core.runtime.headless.logging.LogConfig;
+import org.apache.isis.core.runtime.headless.logging.LogStream;
 
-public abstract class IntegrationBootstrapAbstract extends IntegrationAbstract {
+/**
+ * Provides headless access to the system, first bootstrapping the system if required.
+ *
+ * <p>
+ *     This acts as a common superclass from which framework-provided adapter classes for integration tests
+ *     (<tt>IntegrationTestAbstract3</tt>) and for BDD spec glue (<tt>CukeGlueIntegrationScopeAbstract</tt> inherit,
+ *     to bootstrap the system with a given module for headless access.
+ * </p>
+ */
+public abstract class HeadlessWithBootstrappingAbstract extends HeadlessAbstract {
 
-    private static final Logger LOG = LoggerFactory.getLogger(IntegrationBootstrapAbstract.class);
+    private static final Logger LOG = LoggerFactory.getLogger(HeadlessWithBootstrappingAbstract.class);
 
     private final LogConfig logConfig;
     protected static PrintStream logPrintStream(Level level) {
@@ -52,13 +61,13 @@ public abstract class IntegrationBootstrapAbstract extends IntegrationAbstract {
 
     protected Long t0;
 
-    protected IntegrationBootstrapAbstract(
+    protected HeadlessWithBootstrappingAbstract(
             final Module module,
             final Class... additionalModuleClasses) {
         this(new LogConfig(Level.INFO), module, additionalModuleClasses);
     }
 
-    protected IntegrationBootstrapAbstract(
+    protected HeadlessWithBootstrappingAbstract(
             final LogConfig logConfig,
             final Module module,
             final Class... additionalModuleClasses) {
@@ -72,7 +81,10 @@ public abstract class IntegrationBootstrapAbstract extends IntegrationAbstract {
             t0 = System.currentTimeMillis();
         }
 
-        final String moduleFqcn = System.getProperty("isis.integTest.module");
+        String moduleFqcn = System.getProperty("isis.headless.module");
+        if(moduleFqcn == null) {
+            moduleFqcn = System.getProperty("isis.integTest.module"); // to deprecate
+        }
 
         final Module moduleToUse;
         final Class[] additionalModuleClassesToUse;
@@ -92,7 +104,8 @@ public abstract class IntegrationBootstrapAbstract extends IntegrationAbstract {
 
     protected void bootstrapAndSetupIfRequired() {
 
-        System.setProperty("isis.integTest", "true");
+        System.setProperty("isis.headless", "true");
+        System.setProperty("isis.integTest", "true"); // to deprecate
 
         isisSystemBootstrapper.bootstrapIfRequired(t0);
         isisSystemBootstrapper.injectServicesInto(this);

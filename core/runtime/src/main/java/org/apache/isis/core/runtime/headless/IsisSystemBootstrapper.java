@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.integtestsupport;
+package org.apache.isis.core.runtime.headless;
 
 import java.util.List;
 import java.util.UUID;
@@ -28,7 +28,6 @@ import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.AppManifest2;
-import org.apache.isis.applib.AppManifestAbstract;
 import org.apache.isis.applib.AppManifestAbstract2;
 import org.apache.isis.applib.Module;
 import org.apache.isis.applib.clock.TickingFixtureClock;
@@ -37,7 +36,7 @@ import org.apache.isis.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.applib.services.jdosupport.IsisJdoSupport;
 import org.apache.isis.applib.services.metamodel.MetaModelService4;
 import org.apache.isis.applib.services.registry.ServiceRegistry2;
-import org.apache.isis.core.integtestsupport.logging.LogConfig;
+import org.apache.isis.core.runtime.headless.logging.LogConfig;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.objectstore.jdo.datanucleus.IsisConfigurationForJdoIntegTests;
@@ -68,11 +67,10 @@ public class IsisSystemBootstrapper {
 
     public void bootstrapIfRequired(final Long t0) {
 
-        final AppManifestAbstract.Builder builder =
-                AppManifestAbstract2.Builder.forModule(module);
+        final AppManifestAbstract2.Builder builder = AppManifestAbstract2.Builder.forModule(module);
         builder.withAdditionalModules(additionalModuleClasses); // eg fake module, as passed into constructor
 
-        final AppManifestAbstract2 appManifest = (AppManifestAbstract2) builder.build();
+        final AppManifest2 appManifest = builder.build();
 
         bootstrapUsing(appManifest, t0);
     }

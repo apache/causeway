@@ -6,7 +6,7 @@ import java.util.Map;
 import com.google.common.collect.Maps;
 
 import org.apache.isis.applib.services.registry.ServiceRegistry2;
-import org.apache.isis.core.integtestsupport.IsisSystem;
+import org.apache.isis.core.runtime.headless.IsisSystem;
 
 import cucumber.api.java.ObjectFactory;
 import cucumber.runtime.CucumberException;

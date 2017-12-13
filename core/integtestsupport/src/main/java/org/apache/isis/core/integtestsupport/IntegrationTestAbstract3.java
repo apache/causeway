@@ -38,12 +38,14 @@ import org.apache.isis.applib.Module;
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.services.jdosupport.IsisJdoSupport;
-import org.apache.isis.core.integtestsupport.logging.LogConfig;
+import org.apache.isis.core.runtime.headless.logging.LogConfig;
+import org.apache.isis.core.runtime.headless.HeadlessWithBootstrappingAbstract;
+import org.apache.isis.core.runtime.headless.IsisSystem;
 
 /**
  * Reworked base class for integration tests, uses a {@link Module} to bootstrap, rather than an {@link AppManifest}.
  */
-public abstract class IntegrationTestAbstract3 extends IntegrationBootstrapAbstract {
+public abstract class IntegrationTestAbstract3 extends HeadlessWithBootstrappingAbstract {
 
     private static final Logger LOG = LoggerFactory.getLogger(IntegrationTestAbstract3.class);
 

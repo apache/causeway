@@ -1,4 +1,4 @@
-package org.apache.isis.applib.modules;
+package org.apache.isis.applib;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -11,9 +11,6 @@ import com.google.common.collect.Sets;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-
-import org.apache.isis.applib.Module;
-import org.apache.isis.applib.ModuleAbstract;
 
 import static org.junit.Assert.assertTrue;
 
@@ -47,7 +44,7 @@ public class Module_Util_transitiveDependenciesOf_Test {
             withAdditionalServices(ServiceX.class);
         }
         @Override
-        public Set<Class<?>> getDependenciesAsClass() {
+        public Set<Class<?>> getAdditionalModules() {
             return Sets.<Class<?>>newHashSet(ModuleP.class);
         }
     };
@@ -62,7 +59,7 @@ public class Module_Util_transitiveDependenciesOf_Test {
             return Sets.newHashSet(moduleE, moduleD);
         }
         @Override
-        public Set<Class<?>> getDependenciesAsClass() {
+        public Set<Class<?>> getAdditionalModules() {
             return Sets.newHashSet(ModuleQ.class, ModuleR.class);
         }
         {

@@ -44,6 +44,8 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidExcep
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.fixtures.FixturesInstallerDelegate;
+import org.apache.isis.core.runtime.headless.IsisComponentProviderDefault;
+import org.apache.isis.core.runtime.headless.IsisSystem;
 import org.apache.isis.core.runtime.logging.IsisLoggingConfigurer;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;

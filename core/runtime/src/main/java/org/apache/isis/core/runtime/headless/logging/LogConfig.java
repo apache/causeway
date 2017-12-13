@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.integtestsupport.logging;
+package org.apache.isis.core.runtime.headless.logging;
 
 import java.io.PrintStream;
 

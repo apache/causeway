@@ -18,15 +18,14 @@
  */
 package domainapp.modules.simple;
 
-import org.apache.isis.applib.AppManifestAbstract;
-import org.apache.isis.applib.Module;
+import org.apache.isis.applib.AppManifestAbstract2;
 
 /**
  * Used by <code>isis-maven-plugin</code> (build-time validation of the module) and also by module-level integration tests.
  */
-public class SimpleModuleManifest extends AppManifestAbstract {
+public class SimpleModuleManifest extends AppManifestAbstract2 {
 
-    public static final Builder BUILDER = Module.Util.builderFor(new SimpleModule());
+    public static final Builder BUILDER = Builder.forModule(new SimpleModule());
 
     public SimpleModuleManifest() {
         super(BUILDER);

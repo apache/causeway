@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.integtestsupport;
+package org.apache.isis.core.runtime.headless;
 
 import javax.inject.Inject;
 
@@ -39,10 +39,13 @@ import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.xactn.TransactionService;
 
 /**
- * Reworked base class for integration tests or BDD spec glue.
+ * Reworked base class for headless access.
+ *
+ * <p>
+ *     The most common cases are integration tests or BDD spec glue.
+ * </p>
  */
-public abstract class IntegrationAbstract {
-
+public abstract class HeadlessAbstract {
 
 
     protected void runFixtureScript(final FixtureScript... fixtureScriptList) {

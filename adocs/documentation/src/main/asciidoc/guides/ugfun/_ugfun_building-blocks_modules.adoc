@@ -15,10 +15,12 @@ The bootstrapping of Apache Isis also relies on module classes.
 (Currently) the only role of these classes is to identify a fully qualified package name, for example `org.incode.modules.document`.
 The framework then performs classpath scanning across all such packages to locate any domain entities provided by that module (though some modules have no entities), all domain services provided by the module (every module is likely to define at least one), and also any fixture scripts provided by the module.
 
-[TIP]
-====
 In the same way that the Java module act as a namespace for domain objects, it's good practice to map domain entities to their own (database) schemas.
-====
+
+In previous versions a module class did not need to implement any specific interface; all the framework used was the package of the provided class.
+As of `1.16.0-SNAPSHOT` however, the xref:../rgcms/rgcms.adoc#_rgcms_classes_Module[`Module`] interface allows a module to specify its direct dependencies; from these all transitive dependencies are calculated.
+This should match the compile-time dependencies declared within Maven.
+The `Module` interface also allows a module to declare any configuration properties that should be contributed, as well as fixture scripts for reference data, and to tear down (for integration testing).
 
 
 
