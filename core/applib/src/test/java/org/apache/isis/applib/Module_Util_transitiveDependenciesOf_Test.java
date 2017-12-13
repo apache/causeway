@@ -173,7 +173,7 @@ public class Module_Util_transitiveDependenciesOf_Test {
 
     void assertTransitiveDependenciesAsClass(
             final Module module, final List<Class<?>> expected) {
-        final List<Class<?>> dependenciesAsClass = Module.Util.transitiveDependenciesAsClassOf(module);
+        final List<Class<?>> dependenciesAsClass = Module.Util.transitiveAdditionalModulesOf(module);
         assertTrue(dependenciesAsClass.containsAll(expected));
         assertTrue(expected.containsAll(dependenciesAsClass));
     }

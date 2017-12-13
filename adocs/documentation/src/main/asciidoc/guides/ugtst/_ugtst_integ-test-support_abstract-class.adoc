@@ -35,18 +35,17 @@ public abstract class DomainAppIntegTest
 }
 ----
 
-However, the `IntegrationTestAbstract3` class also allows the module to be specified externally, using the `isis.headles.module` system property, eg by updating the `pom.xml`.
+However, the `IntegrationTestAbstract3` class also allows the module to be specified externally, using either the `isis.integTest.module` or the (more general) `isis.headless.module` system property, eg by updating the `pom.xml`.
 
 For example:
 
 [source,xml]
 ----
 <properties>
-    <isis.headless.module>
+    <isis.integTest.module>
         org.estatio.module.application.EstatioApplicationModule
-    </isis.headless.module>
+    </isis.integTest.module>
 </properties>
-
 ----
 
 This is required when the codebase is organised as multiple "logical" modules within a single Maven "physical" module (ie `src/main/java` compilation unit).

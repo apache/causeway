@@ -139,12 +139,17 @@ public interface Module {
          *     No guarantees are made as to the order of these additional module classes.
          * </p>
          */
-        static List<Class<?>> transitiveDependenciesAsClassOf(Module module) {
+        static List<Class<?>> transitiveAdditionalModulesOf(Module module) {
             final Set<Class<?>> modules = Sets.newHashSet();
             final List<Module> transitiveDependencies = transitiveDependenciesOf(module);
             for (Module transitiveDependency : transitiveDependencies) {
                 final Set<Class<?>> additionalModules = transitiveDependency.getAdditionalModules();
                 if(additionalModules != null && !additionalModules.isEmpty()) {
+                    for (Class<?> clazz : additionalModules) {
+                        if(Module.class.isAssignableFrom(clazz)) {
+                            throw new IllegalArgumentException("Module " + transitiveDependency + " has returned " + clazz + " from getAdditionalModules().  This class implements 'Module' interface so should instead be returned from getDependencies()");
+                        }
+                    }
                     modules.addAll(additionalModules);
                 }
             }

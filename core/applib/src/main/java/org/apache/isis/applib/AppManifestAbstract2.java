@@ -119,7 +119,7 @@ public abstract class AppManifestAbstract2 extends AppManifestAbstract implement
 
         private void withTransitiveFrom(final Module module) {
             withAdditionalModules(asClasses(Module.Util.transitiveDependenciesOf(module)));
-            withAdditionalModules(Module.Util.transitiveDependenciesAsClassOf(module));
+            withAdditionalModules(Module.Util.transitiveAdditionalModulesOf(module));
             withAdditionalServices(Module.Util.transitiveAdditionalServicesOf(module));
             withConfigurationPropertyResources(Module.Util.transitivePropertyResourcesOf(module));
             withConfigurationProperties(Module.Util.transitiveIndividualConfigPropsOf(module));

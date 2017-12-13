@@ -106,7 +106,11 @@ public class IsisSystemBootstrapper {
             break;
         case BOOTSTRAPPED_DIFFERENT_MODULES:
             // TODO: this doesn't work correctly yet; not tearing down HSQLDB correctly.
-            teardownSystem();
+            if(false) {
+                teardownSystem();
+            } else {
+                throw new RuntimeException("Bootstrapping different modules is not yet supported");
+            }
             // fall through
         case NOT_BOOTSTRAPPED:
 
