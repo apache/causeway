@@ -76,10 +76,7 @@ public abstract class HeadlessWithBootstrappingAbstract extends HeadlessAbstract
             setupLogging.set(true);
         }
 
-        String moduleFqcn = System.getProperty("isis.headless.module");
-        if(moduleFqcn == null) {
-            moduleFqcn = System.getProperty("isis.integTest.module"); // to deprecate
-        }
+        final String moduleFqcn = System.getProperty("isis.headless.module");
 
         final Module moduleToUse =
                 !Strings.isNullOrEmpty(moduleFqcn)
@@ -95,7 +92,6 @@ public abstract class HeadlessWithBootstrappingAbstract extends HeadlessAbstract
     protected void bootstrapAndSetupIfRequired() {
 
         System.setProperty("isis.headless", "true");
-        System.setProperty("isis.integTest", "true"); // to deprecate
 
         isisSystemBootstrapper.bootstrapIfRequired();
         isisSystemBootstrapper.injectServicesInto(this);
