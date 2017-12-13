@@ -59,18 +59,14 @@ public abstract class HeadlessWithBootstrappingAbstract extends HeadlessAbstract
 
     private final IsisSystemBootstrapper isisSystemBootstrapper;
 
-    protected Long t0;
-
     protected HeadlessWithBootstrappingAbstract(
-            final Module module,
-            final Class... additionalModuleClasses) {
-        this(new LogConfig(Level.INFO), module, additionalModuleClasses);
+            final Module module) {
+        this(new LogConfig(Level.INFO), module);
     }
 
     protected HeadlessWithBootstrappingAbstract(
             final LogConfig logConfig,
-            final Module module,
-            final Class... additionalModuleClasses) {
+            final Module module) {
 
         this.logConfig = logConfig;
 
@@ -78,7 +74,6 @@ public abstract class HeadlessWithBootstrappingAbstract extends HeadlessAbstract
         if(firstTime) {
             PropertyConfigurator.configure(logConfig.getLoggingPropertyFile());
             setupLogging.set(true);
-            t0 = System.currentTimeMillis();
         }
 
         String moduleFqcn = System.getProperty("isis.headless.module");
@@ -86,17 +81,12 @@ public abstract class HeadlessWithBootstrappingAbstract extends HeadlessAbstract
             moduleFqcn = System.getProperty("isis.integTest.module"); // to deprecate
         }
 
-        final Module moduleToUse;
-        final Class[] additionalModuleClassesToUse;
-        if(!Strings.isNullOrEmpty(moduleFqcn)) {
-            moduleToUse = InstanceUtil.createInstance(moduleFqcn, Module.class);
-            additionalModuleClassesToUse = new Class<?>[] { };
-        } else {
-            moduleToUse = module;
-            additionalModuleClassesToUse = additionalModuleClasses;
-        }
+        final Module moduleToUse =
+                !Strings.isNullOrEmpty(moduleFqcn)
+                        ? InstanceUtil.createInstance(moduleFqcn, Module.class)
+                        : module;
         this.isisSystemBootstrapper =
-                new IsisSystemBootstrapper(logConfig, moduleToUse, additionalModuleClassesToUse);
+                new IsisSystemBootstrapper(logConfig, moduleToUse);
     }
 
 
@@ -107,7 +97,7 @@ public abstract class HeadlessWithBootstrappingAbstract extends HeadlessAbstract
         System.setProperty("isis.headless", "true");
         System.setProperty("isis.integTest", "true"); // to deprecate
 
-        isisSystemBootstrapper.bootstrapIfRequired(t0);
+        isisSystemBootstrapper.bootstrapIfRequired();
         isisSystemBootstrapper.injectServicesInto(this);
         fixtureScripts.setFixtureTracing(logConfig.getFixtureTracing());
 

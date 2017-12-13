@@ -27,8 +27,8 @@ public interface AppManifest2 extends AppManifest {
     @Programmatic
     Module getModule();
     @Programmatic
-    FixtureScript getTeardownFixture();
-    @Programmatic
     FixtureScript getRefDataSetupFixture();
+    @Programmatic
+    FixtureScript getTeardownFixture();
 
 }

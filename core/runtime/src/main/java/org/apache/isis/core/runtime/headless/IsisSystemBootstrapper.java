@@ -52,27 +52,38 @@ public class IsisSystemBootstrapper {
 
 
     private final LogConfig logConfig;
-    private final Module module;
-    private final Class[] additionalModuleClasses;
+    private final AppManifest2 appManifest2;
 
     public IsisSystemBootstrapper(
             final LogConfig logConfig,
-            final Module module,
-            final Class... additionalModuleClasses) {
-
-        this.logConfig = logConfig;
-        this.module = module;
-        this.additionalModuleClasses = additionalModuleClasses;
+            final Module module) {
+        this(logConfig, AppManifestAbstract2.Builder.forModule(module).build());
     }
 
-    public void bootstrapIfRequired(final Long t0) {
+    public IsisSystemBootstrapper(
+            final LogConfig logConfig,
+            final AppManifest2 appManifest2) {
 
-        final AppManifestAbstract2.Builder builder = AppManifestAbstract2.Builder.forModule(module);
-        builder.withAdditionalModules(additionalModuleClasses); // eg fake module, as passed into constructor
+        this.logConfig = logConfig;
+        this.appManifest2 = appManifest2;
+    }
 
-        final AppManifest2 appManifest = builder.build();
+    public AppManifest2 getAppManifest2() {
+        return appManifest2;
+    }
 
-        bootstrapUsing(appManifest, t0);
+    /**
+     * Corresponding to {@link AppManifest2} provided in {@link #IsisSystemBootstrapper(LogConfig, AppManifest2)}, or
+     * (equivalently) the {@link Module} provided directly in {@link #IsisSystemBootstrapper(LogConfig, Module)}.
+     */
+    public Module getModule() {
+        return appManifest2.getModule();
+    }
+
+    public IsisSystem bootstrapIfRequired() {
+        bootstrapUsing(appManifest2);
+
+        return IsisSystem.get();
     }
 
     /**
@@ -85,7 +96,7 @@ public class IsisSystemBootstrapper {
     }
 
 
-    private void bootstrapUsing(AppManifest2 appManifest2, Long t0) {
+    private void bootstrapUsing(AppManifest2 appManifest2) {
 
         final SystemState systemState = determineSystemState(appManifest2);
         switch (systemState) {
@@ -98,15 +109,16 @@ public class IsisSystemBootstrapper {
             teardownSystem();
             // fall through
         case NOT_BOOTSTRAPPED:
-            setupSystem(appManifest2);
-            TickingFixtureClock.replaceExisting();
 
-            if(t0 != null) {
-                long t1 = System.currentTimeMillis();
-                log("##########################################################################");
-                log("# Bootstrapped in " + (t1- t0) + " millis");
-                log("##########################################################################");
-            }
+            long t0 = System.currentTimeMillis();
+            setupSystem(appManifest2);
+            long t1 = System.currentTimeMillis();
+
+            log("##########################################################################");
+            log("# Bootstrapped in " + (t1- t0) + " millis");
+            log("##########################################################################");
+
+            TickingFixtureClock.replaceExisting();
 
             break;
         }

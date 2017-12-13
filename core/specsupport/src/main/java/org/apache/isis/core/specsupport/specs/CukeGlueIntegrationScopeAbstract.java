@@ -30,7 +30,7 @@ public abstract class CukeGlueIntegrationScopeAbstract extends HeadlessWithBoots
 
     protected CukeGlueIntegrationScopeAbstract(final Module module,
             final Class... additionalModuleClasses) {
-        super(module, additionalModuleClasses);
+        super(module);
     }
 
     @Before(order=100)

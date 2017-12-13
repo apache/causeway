@@ -150,17 +150,14 @@ public abstract class IntegrationTestAbstract3 extends HeadlessWithBootstrapping
     }
 
 
-    protected IntegrationTestAbstract3(
-            final Module module,
-            final Class... additionalModuleClasses) {
-        this(new LogConfig(Level.INFO), module, additionalModuleClasses);
+    protected IntegrationTestAbstract3(final Module module) {
+        this(new LogConfig(Level.INFO), module);
     }
 
     protected IntegrationTestAbstract3(
             final LogConfig logConfig,
-            final Module module,
-            final Class... additionalModuleClasses) {
-        super(logConfig, module, additionalModuleClasses);
+            final Module module) {
+        super(logConfig, module);
     }
 
     @Override
