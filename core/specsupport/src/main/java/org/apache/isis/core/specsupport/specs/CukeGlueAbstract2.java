@@ -16,31 +16,15 @@ O *  Licensed to the Apache Software Foundation (ASF) under one or more
  */
 package org.apache.isis.core.specsupport.specs;
 
-import org.apache.isis.applib.Module;
-import org.apache.isis.core.runtime.headless.HeadlessWithBootstrappingAbstract;
-
-import cucumber.api.java.After;
-import cucumber.api.java.Before;
+import org.apache.isis.core.runtime.headless.HeadlessAbstract;
 
 /**
- * For BDD spec using headless access, there needs to be (at least) one BDD spec glue that inherits from this adapter
- * class, specifying the {@link Module} to use to bootstrap the system.
+ * Base class for BDD spec glue.
+ *
+ * <p>
+ *     Note that there also needs to be at least one spec glue that inherits from{@link CukeGlueBootstrappingAbstract}.
+ * </p>
  */
-public abstract class CukeGlueIntegrationScopeAbstract extends HeadlessWithBootstrappingAbstract {
-
-    protected CukeGlueIntegrationScopeAbstract(final Module module,
-            final Class... additionalModuleClasses) {
-        super(module);
-    }
-
-    @Before(order=100)
-    public void beforeScenario() {
-        super.bootstrapAndSetupIfRequired();
-    }
-
-    @After
-    public void afterScenario(cucumber.api.Scenario sc) {
-        super.tearDownAllModules();
-    }
+public abstract class CukeGlueAbstract2 extends HeadlessAbstract {
 
 }

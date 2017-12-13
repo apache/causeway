@@ -23,7 +23,10 @@ import cucumber.api.junit.Cucumber;
 
 /**
  * Base class for all Cucumber specs run at unit-scope; runs the spec as a JUnit test.
+ *
+ * @deprecated - with no replacement
  */
+@Deprecated
 @RunWith(Cucumber.class)
 @CucumberOptions(
         format = {

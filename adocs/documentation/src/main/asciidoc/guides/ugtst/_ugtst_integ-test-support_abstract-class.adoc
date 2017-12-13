@@ -8,7 +8,7 @@
 
 When writing integration tests, it's easiest to inherit from a base class:
 
-* as of (`1.16.0`), use `IntegrationTestAbstract3`
+* as of (`1.16.0=SNAPSHOT`), use `IntegrationTestAbstract3`
 * as of (`1.15.0`), use `IntegrationTestAbstract2`
 * for earlier releases, use (its superclass) `IntegrationTestAbstract`.
 
@@ -17,7 +17,7 @@ This base class xref:ugtst.adoc#_ugtst_integ-test-support_bootstrapping[bootstra
 
 
 [[__ugtst_integ-test-support_abstract-class_IntegrationTestAbstract3]]
-== `IntegrationTestAbstract3`
+== `IntegrationTestAbstract3` (`1.16.0-SNAPSHOT`)
 
 (As of `1.16.0-SNAPSHOT`) we recommend that your integration tests inherit from Apache Isis' `IntegrationTestAbstract3` class.
 The primary benefit over `IntegrationTestAbstract2` (discussed xref:ugtst.adoc#__ugtst_integ-test-support_abstract-class_IntegrationTestAbstract2[below] is that it allows the test to be bootstrapped by passing in a `Module` rather than an `AppManifest`.
@@ -35,17 +35,16 @@ public abstract class DomainAppIntegTest
 }
 ----
 
-
-However, the `IntegrationTestAbstract3` class also allows the module to be specified externally, using the `isis.integTest.module` system property, eg by updating the `pom.xml`.
+However, the `IntegrationTestAbstract3` class also allows the module to be specified externally, using the `isis.headles.module` system property, eg by updating the `pom.xml`.
 
 For example:
 
 [source,xml]
 ----
 <properties>
-    <isis.integTest.module>
+    <isis.headless.module>
         org.estatio.module.application.EstatioApplicationModule
-    </isis.integTest.module>
+    </isis.headless.module>
 </properties>
 
 ----

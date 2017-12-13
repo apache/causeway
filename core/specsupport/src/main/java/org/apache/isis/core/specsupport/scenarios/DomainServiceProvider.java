@@ -27,7 +27,10 @@ import org.apache.isis.applib.DomainObjectContainer;
  * For {@link ScenarioExecution scenario}s with integration-scope, these will be
  * configured services for an end-to-end running system.  For scenarios with
  * unit-scope, these will typically be mocks.
+ * 
+ * @deprecated - with no replacement
  */
+@Deprecated
 public interface DomainServiceProvider {
 
     DomainObjectContainer getContainer();

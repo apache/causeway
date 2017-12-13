@@ -27,6 +27,10 @@ import org.jmock.api.Invocation;
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.unittestsupport.jmocking.JavassistImposteriser;
 
+/**
+ * @deprecated - with no replacement
+ */
+@Deprecated
 class DomainServiceProviderMockery implements DomainServiceProvider {
 
     private DomainObjectContainer mockContainer = null;

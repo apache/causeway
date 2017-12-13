@@ -46,7 +46,10 @@ import org.apache.isis.applib.DomainObjectContainer;
  * <p>
  * Finally, note that the {@link #init(Object, String) init} hook method allows subclasses to
  * customize the state of any objects created.
+ *
+ * @deprecated - with no replacement
  */
+@Deprecated
 public class InMemoryDB {
     
     private final ScenarioExecution scenarioExecution;

@@ -1,5 +1,5 @@
 [[_ugtst_bdd-spec-support_writing-a-bdd-spec]]
-= Writing a BDD spec
+= Writing a BDD spec (`1.16.0-SNAPSHOT`)
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :_basedir: ../../
 :_imagesdir: images/
@@ -21,49 +21,38 @@ We therefore recommend that they reside in a separate package, and are organized
 +
 For example, given a feature that involves `Customer` and `Order`, have the step definitions pertaining to `Customer` reside in `CustomerGlue`, and the step definitions pertaining to `Order` reside in `OrderGlue`. +
 +
-The `glue` attribute of the Cucumber-JVM JUnit runner eallows you to indicate which package(s) should be recursively searched to find any glue.
+The `glue` attribute of the Cucumber-JVM JUnit runner allows you to indicate which package(s) should be recursively searched to find any glue.
 
-* a system initializer class.  You can reuse the  system initializer from any integration tests (as described in xref:../ugtst/ugtst.adoc#_ugtst_integ-test-support[Integration Test Support], bootstrapping section).
++
+There also needs to be one glue class that is used to bootstrap the runtime.
 
 
 Here's an example of a feature from the xref:../ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype]:
 
 [source,java]
 ----
-@SimpleObjectsFixture
+@DomainAppDemo
 Feature: List and Create New Simple Objects
 
-  @integration
   Scenario: Existing simple objects can be listed and new ones created
-    Given there are initially 3 simple objects
+    Given there are initially 10 simple objects
     When  I create a new simple object
-    Then  there are 4 simple objects
+    Then  there are 11 simple objects
 ----
 
-The `@SimpleObjectsFixture` is a custom tag we've specified to indicate the prerequisite fixtures to be loaded; more on this in a moment.
-The `@integration` tag, meanwhile, says that this feature should be run with integration-level scope.
+The "@DomainAppDemo" is a custom tag we've specified to indicate the prerequisite fixtures to be loaded; more on this in a moment.
 
 
 [NOTE]
 ====
-Although BDD specs are most commonly used for end-to-end tests (ie at the same scope as an integration test), the two concerns (expressability of a test to a business person vs granularity of the test) should not be conflated.
-There are a couple of http://silkandspinach.net/2013/01/18/a-testing-strategy/[good] blog http://claysnow.co.uk/the-testing-iceberg/[posts] discussing http://claysnow.co.uk/living-documentation-can-be-readable-and-fast/[this].
-The basic idea is to avoid the overhead of a heavy-duty integration test if possible.
+Prior to `1.16.0-SNAPSHOT` the BDD spec support provided by the framework aimed to allow tests to be written either as integration tests or as unit tests.
+While there are good reasons for attempting this (see http://silkandspinach.net/2013/01/18/a-testing-strategy/[these] http://claysnow.co.uk/the-testing-iceberg/[blog] http://claysnow.co.uk/living-documentation-can-be-readable-and-fast/[posts]), the downside is that the programming model to support unit tests is quite different from "normal" Isis code.
 
-Apache Isis does also support running BDD specs in unit test mode; by annotating the scenario with the `@unit` (rather than `@integration` tag).
-When running under unit-level scope, the Apache Isis system is _not_ instantiated.
-Instead, the `ScenarioExecution` class returns JMock mocks (except for the `WrapperFactory`, if configured).
-
-To support unit testing scope Apache Isis provides the `InMemoryDB` class; a glorified hashmap of "persisted" objects.
-Use of this utility class is optional.
-
-Writing a BDD spec that supports both modes of operation therefore takes more effort and we expect most users interested in BDD will use integration-testing scope; for these reasons we have chosen _not_ to include unit-testing support in the xref:../ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype].
-For those who do require faster-executing test suite, it's worthwhile knowing that Apache Isis can support this.
-
+This feature is therefore being dropped.
+As of `1.16.0-SNAPSHOT`, BDD specs are assumed to run only as integration tests.
 ====
 
-
-The `RunSpecs` class to run this feature (and any other features in this package or subpackages) is just boilerplate
+The `RunBddSpecs` class to run this feature (and any other features in this package or subpackages) is just boilerplate
 
 [source,java]
 ----
@@ -73,10 +62,14 @@ The `RunSpecs` class to run this feature (and any other features in this package
                 "html:target/cucumber-html-report"
                 ,"json:target/cucumber.json"
         },
-        glue={"classpath:domainapp.integtests.specglue"},
+        glue={
+                "classpath:domainapp.application.bdd.specglue",
+                "classpath:domainapp.modules.simple.specglue"
+        },
         strict = true,
-        tags = { "~@backlog", "~@ignore" })
-public class RunSpecs {
+        tags = { "~@backlog", "~@ignore" }
+)
+public class RunBddSpecs {
     // intentionally empty
 }
 ----
@@ -84,69 +77,70 @@ public class RunSpecs {
 The JSON formatter allows integration with enhanced reports.
 (Commented out) configuration for this is provided in the xref:../ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype].
 
-The bootstrapping of Apache Isis can be moved into a `BootstrappingGlue` step definition:
+The bootstrapping of Apache Isis itself lives in a `BootstrappingGlue` step definition:
 
 [source,java]
 ----
-public class BootstrappingGlue extends CukeGlueAbstract {
-    @Before(value={"@integration"}, order=100)
-    public void beforeScenarioIntegrationScope() {
-        org.apache.log4j.PropertyConfigurator.configure("logging.properties");
-        SimpleAppSystemInitializer.initIsft();
-
-        before(ScenarioExecutionScope.INTEGRATION);
-    }
-    @After
-    public void afterScenario(cucumber.api.Scenario sc) {
-        assertMocksSatisfied();
-        after(sc);
+public class BootstrappingGlue extends CukeGlueBootstrappingAbstract {  // <1>
+    public BootstrappingGlue() {
+        super(new DomainAppApplicationModule());                        // <2>
     }
 }
 ----
+<1> superclass contains the bootstrapping logic.
+This reuses many of the same classes as the integration testing framework
+<2> the `Module` to use to bootstrap the application in headless mode.
 
-The fixture to run also lives in its own step definition, https://github.com/apache/isis/blob/07fe61ef3fb029ae36427f60da2afeeb931e4f88/example/application/simpleapp/integtests/src/test/java/domainapp/integtests/specglue/CatalogOfFixturesGlue.java#L24[`CatalogOfFixturesGlue`]:
+The fixture to run also lives in its own step definition, `CatalogOfFixturesGlue`:
 
 [source,java]
 ----
-public class CatalogOfFixturesGlue extends CukeGlueAbstract {
-    @Before(value={"@integration", "@SimpleObjectsFixture"}, order=20000)
-    public void integrationFixtures() throws Throwable {
-        scenarioExecution().install(new RecreateSimpleObjects());
+public class CatalogOfFixturesGlue extends CukeGlueAbstract2 {
+    @Before(value={"@DomainAppDemo"}, order=20000)
+    public void runDomainAppDemo() {
+        fixtureScripts.runFixtureScript(new DomainAppDemo(), null); // <1>
     }
 }
 ----
+<1> The `fixtureScripts` service is inherited from the superclass.
 
-Note that this is annotated with a tag (`@SimpleObjectsFixture`) so that the correct fixture runs. (We might have a whole variety of these).
+This will only activate for feature files tagged with "@DomainAppDemo".
 
-The step definitions pertaining to `SimpleObject` domain entity then reside in the https://github.com/apache/isis/blob/07fe61ef3fb029ae36427f60da2afeeb931e4f88/example/application/simpleapp/integtests/src/test/java/domainapp/integtests/specglue/modules/simple/SimpleObjectGlue.java#L31[`SimpleObjectGlue`] class.
+Finally, the step definitions pertaining to `SimpleObject` domain entity then reside in the `SimpleObjectGlue` class.
 This is where the heavy lifting gets done:
 
 [source,java]
 ----
-public class SimpleObjectGlue extends CukeGlueAbstract {
-    @Given("^there are.* (\\d+) simple objects$")
-    public void there_are_N_simple_objects(int n) throws Throwable {
-        try {
-            final List<SimpleObject> findAll = service(SimpleObjects.class).listAll();
-            assertThat(findAll.size(), is(n));
-            putVar("list", "all", findAll);
+public class SimpleObjectMenuGlue extends CukeGlueAbstract2 {
 
-        } finally {
-            assertMocksSatisfied();
-        }
+    @Given("^there are.* (\\d+) simple objects$")                           // <1>
+    public void there_are_N_simple_objects(int n) throws Throwable {
+        final List<SimpleObject> list = wrap(simpleObjectMenu).listAll();   // <2>
+        assertThat(list.size(), is(n));
     }
-    @When("^I create a new simple object$")
-    public void I_create_a_new_simple_object() throws Throwable {
-        service(SimpleObjects.class).create(UUID.randomUUID().toString());
+
+    @When("^.*create a .*simple object$")
+    public void create_a_simple_object() throws Throwable {
+        wrap(simpleObjectMenu).create(UUID.randomUUID().toString());
     }
+
+    @Inject
+    SimpleObjectMenu simpleObjectMenu;                                      // <3>
 }
 ----
+<1> regex to match to feature file specification
+<2> the inherited `wrap(...)` method delegates to `WrapperFactory#wrap(...)`
+<3> injected in the usual way
+
+[TIP]
+====
+The xref:rgsvc.adoc#_rgsvc_api_Scratchpad[`Scratchpad`] domain service is one way in which glue classes can pass state between each other.
+Or, for more type safety, you could develop your own custom domain services for each scenario, and inject these in as regular services.
+See link:http://www.thinkcode.se/blog/2017/04/01/sharing-state-between-steps-in-cucumberjvm-using-picocontainer[this blog] post for more details.
+====
 
 [TIP]
 ====
 If using Java 8, note that Cucumber JVM supports a link:https://cucumber.io/docs/reference/jvm#java-8-lambdas[simplified syntax using lambdas].
 ====
-
-
-
 

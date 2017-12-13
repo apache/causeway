@@ -21,7 +21,7 @@ import java.util.UUID;
 
 import javax.inject.Inject;
 
-import org.apache.isis.core.runtime.headless.HeadlessAbstract;
+import org.apache.isis.core.specsupport.specs.CukeGlueAbstract2;
 
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.When;
@@ -30,7 +30,7 @@ import domainapp.modules.simple.dom.impl.SimpleObjectMenu;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-public class SimpleObjectMenuGlue extends HeadlessAbstract {
+public class SimpleObjectMenuGlue extends CukeGlueAbstract2 {
 
     @Given("^there are.* (\\d+) simple objects$")
     public void there_are_N_simple_objects(int n) throws Throwable {

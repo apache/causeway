@@ -38,6 +38,6 @@ import cucumber.api.junit.Cucumber;
         strict = true,
         tags = { "~@backlog", "~@ignore" }
 )
-public class RunIntegBddSpecs {
+public class RunBddSpecs {
     // intentionally empty 
 }

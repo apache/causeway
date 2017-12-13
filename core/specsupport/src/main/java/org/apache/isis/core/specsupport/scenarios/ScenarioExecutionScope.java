@@ -20,7 +20,10 @@ package org.apache.isis.core.specsupport.scenarios;
 /**
  * The scope at which the specification will run; acts as a factory to create
  * an instance of the appropriate subclass of {@link ScenarioExecution}.
+ *
+ * @deprecated - with no replacement
  */
+@Deprecated
 public class ScenarioExecutionScope {
     
     public final static ScenarioExecutionScope UNIT = new ScenarioExecutionScope(ScenarioExecutionForUnit.class);

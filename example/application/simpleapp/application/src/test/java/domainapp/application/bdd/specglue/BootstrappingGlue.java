@@ -16,11 +16,11 @@ O *  Licensed to the Apache Software Foundation (ASF) under one or more
  */
 package domainapp.application.bdd.specglue;
 
-import org.apache.isis.core.specsupport.specs.CukeGlueIntegrationScopeAbstract;
+import org.apache.isis.core.specsupport.specs.CukeGlueBootstrappingAbstract;
 
 import domainapp.application.DomainAppApplicationModule;
 
-public class BootstrappingGlue extends CukeGlueIntegrationScopeAbstract {
+public class BootstrappingGlue extends CukeGlueBootstrappingAbstract {
 
     public BootstrappingGlue() {
         super(new DomainAppApplicationModule());
