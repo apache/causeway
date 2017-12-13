@@ -41,7 +41,7 @@ public class ObjectContracts {
      */
     @Deprecated
     @SuppressWarnings("unchecked")
-    public static <T> int compare(T p, T q, String propertyNames) {
+    public static <T> int compare(final T p, final T q, final String propertyNames) {
         final Iterable<String> propertyNamesIter = csvToIterable(propertyNames);
         return compare(p, q, propertyNamesIter);
     }
@@ -53,9 +53,9 @@ public class ObjectContracts {
      */
     @Deprecated
     @SuppressWarnings("unchecked")
-    public static <T> int compare(T p, T q, String... propertyNames) {
+    public static <T> int compare(final T p, final T q, final String... propertyNames) {
         final Iterable<String> propertyNamesIter = varargsToIterable(propertyNames);
-        return compare((T) p, (T) q, propertyNamesIter);
+        return compare(p, q, propertyNamesIter);
     }
 
     private static <T> int compare(final T p, final T q, final Iterable<String> propertyNamesIter) {

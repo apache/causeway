@@ -18,11 +18,11 @@ package org.apache.isis.applib.util;
 
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
 
 import com.google.common.base.Function;
 import com.google.common.base.Objects;
+import com.google.common.base.Objects.ToStringHelper;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ComparisonChain;
 import com.google.common.collect.Iterables;
@@ -34,26 +34,35 @@ import com.google.common.collect.Ordering;
  * polymorphic associations such as task#object).
  */
 public class ObjectContracts2 {
-    private final List<ObjectContracts.ToStringEvaluator> evaluators = Lists.newArrayList();
 
-    public ObjectContracts2() {
-    }
+    //region > compare
 
-    /** @deprecated */
+    /**
+     * Evaluates which of p and q is first.
+     *
+     * @deprecated - please be aware that this utility heavily uses reflection.  We don't actually intend to deprecate this method (it's useful while prototyping), but we wanted to bring this to your attention!
+     * @param propertyNames - the property name or names, CSV format.  If multiple properties, use the {@link #compare(Object, Object, String...) varargs} overloaded version of this method.
+     */
     @Deprecated
-    public static <T> int compare(T p, T q, String propertyNames) {
-        Iterable<String> propertyNamesIter = csvToIterable(propertyNames);
+    @SuppressWarnings("unchecked")
+    public static <T> int compare(final T p, final T q, final String propertyNames) {
+        final Iterable<String> propertyNamesIter = csvToIterable(propertyNames);
         return compare(p, q, propertyNamesIter);
     }
 
-    /** @deprecated */
+    /**
+     * Evaluates which of p and q is first.
+     *
+     * @deprecated - please be aware that this utility heavily uses reflection.  We don't actually intend to deprecate this method (it's useful while prototyping), but we wanted to bring this to your attention!
+     */
     @Deprecated
-    public static <T> int compare(T p, T q, String... propertyNames) {
-        Iterable<String> propertyNamesIter = varargsToIterable(propertyNames);
-        return compare(p, q, (Iterable)propertyNamesIter);
+    @SuppressWarnings("unchecked")
+    public static <T> int compare(final T p, final T q, final String... propertyNames) {
+        final Iterable<String> propertyNamesIter = varargsToIterable(propertyNames);
+        return compare(p, q, propertyNamesIter);
     }
 
-    private static <T> int compare(T p, T q, Iterable<String> propertyNamesIter) {
+    private static <T> int compare(final T p, final T q, final Iterable<String> propertyNamesIter) {
         if(p == null) { return -1;}
         if(q == null) { return +1;}
         if(p.getClass() != q.getClass()) {
@@ -65,206 +74,228 @@ public class ObjectContracts2 {
             }).compare(p, q);
         }
 
-        Iterable<Clause> clauses = clausesFor(propertyNamesIter);
+        final Iterable<Clause> clauses = clausesFor(propertyNamesIter);
         ComparisonChain chain = ComparisonChain.start();
-
-        Clause clause;
-        Comparable propertyValueOfP;
-        Comparable propertyValueOfQ;
-        for(Iterator var5 = clauses.iterator(); var5.hasNext(); chain = chain.compare(propertyValueOfP, propertyValueOfQ, clause.getDirection().getOrdering())) {
-            clause = (Clause)var5.next();
-            propertyValueOfP = (Comparable)clause.getValueOf(p);
-            propertyValueOfQ = (Comparable)clause.getValueOf(q);
+        for (final Clause clause : clauses) {
+            final Comparable<T> propertyValueOfP = (Comparable<T>) clause.getValueOf(p);
+            final Comparable<T> propertyValueOfQ = (Comparable<T>) clause.getValueOf(q);
+            chain = chain.compare(propertyValueOfP, propertyValueOfQ, clause.getDirection().getOrdering());
         }
-
         return chain.result();
     }
+    //endregion
 
-    /** @deprecated */
+    //region > compareBy
+    /**
+     * Returns a {@link Comparator} to evaluate objects by their property name(s).
+     * @deprecated - please be aware that this utility heavily uses reflection.  We don't actually intend to deprecate this method (it's useful while prototyping), but we wanted to bring this to your attention!
+     * @param propertyNames - the property name or names, CSV format.  If multiple properties, use the {@link #compareBy(String...)} varargs} overloaded version of this method.
+     */
     @Deprecated
-    public static <T> Comparator<T> compareBy(final String propertyNames) {
+    @SuppressWarnings("unchecked")
+    public static <T> Comparator<T> compareBy(final String propertyNames){
         return new Comparator<T>() {
+            @Override
             public int compare(T p, T q) {
                 return ObjectContracts.compare(p, q, propertyNames);
             }
         };
     }
-
-    /** @deprecated */
+    /**
+     * Returns a {@link Comparator} to evaluate objects by their property name(s).
+     * @deprecated - please be aware that this utility heavily uses reflection.  We don't actually intend to deprecate this method (it's useful while prototyping), but we wanted to bring this to your attention!
+     */
     @Deprecated
-    public static <T> Comparator<T> compareBy(final String... propertyNames) {
+    @SuppressWarnings("unchecked")
+    public static <T> Comparator<T> compareBy(final String... propertyNames){
         return new Comparator<T>() {
+            @Override
             public int compare(T p, T q) {
                 return ObjectContracts.compare(p, q, propertyNames);
             }
         };
     }
+    //endregion
 
-    /** @deprecated */
+    //region > toString
+
+    /**
+     * Returns a string representation of the object consisting of the specified property name(s).
+     * @deprecated - please be aware that this utility heavily uses reflection.  We don't actually intend to deprecate this method (it's useful while prototyping), but we wanted to bring this to your attention!
+     * @param propertyNames - the property name or names, CSV format.  If multiple properties, use the {@link #toString(Object, String...)} varargs} overloaded version of this method.
+     */
     @Deprecated
     public static String toString(Object p, String propertyNames) {
-        return (new ObjectContracts()).toStringOf(p, propertyNames);
+        return new ObjectContracts().toStringOf(p, propertyNames);
     }
-
-    /** @deprecated */
+    /**
+     * Returns a string representation of the object consisting of the specified property name(s).
+     * @deprecated - please be aware that this utility heavily uses reflection.  We don't actually intend to deprecate this method (it's useful while prototyping), but we wanted to bring this to your attention!
+     */
     @Deprecated
     public static String toString(Object p, String... propertyNames) {
-        return (new ObjectContracts()).toStringOf(p, propertyNames);
+        return new ObjectContracts().toStringOf(p, propertyNames);
     }
+    //endregion
 
-    /** @deprecated */
+    //region > hashCode
+    /**
+     * Returns the hashCode for the object using the specified property name(s).
+     * @deprecated - please be aware that this utility heavily uses reflection.  We don't actually intend to deprecate this method (it's useful while prototyping), but we wanted to bring this to your attention!
+     * @param propertyNames - the property name or names, CSV format.  If multiple properties, use the {@link #hashCode(Object, String...)} varargs} overloaded version of this method.
+     */
     @Deprecated
     public static int hashCode(Object obj, String propertyNames) {
-        Iterable<String> propertyNamesIter = csvToIterable(propertyNames);
+        final Iterable<String> propertyNamesIter = csvToIterable(propertyNames);
         return hashCode(obj, propertyNamesIter);
     }
 
-    /** @deprecated */
+    /**
+     * Returns the hashCode for the object using the specified property name(s).
+     * @deprecated - please be aware that this utility heavily uses reflection.  We don't actually intend to deprecate this method (it's useful while prototyping), but we wanted to bring this to your attention!
+     */
     @Deprecated
     public static int hashCode(Object obj, String... propertyNames) {
-        Iterable<String> propertyNamesIter = varargsToIterable(propertyNames);
-        return hashCode(obj, (Iterable)propertyNamesIter);
+        final Iterable<String> propertyNamesIter = varargsToIterable(propertyNames);
+        return hashCode(obj, propertyNamesIter);
     }
 
-    private static int hashCode(Object obj, Iterable<String> propertyNamesIter) {
-        List<Object> propertyValues = Lists.newArrayList();
-        Iterator var3 = clausesFor(propertyNamesIter).iterator();
-
-        while(var3.hasNext()) {
-            Clause clause = (Clause)var3.next();
-            Object propertyValue = clause.getValueOf(obj);
-            if (propertyValue != null) {
+    private static int hashCode(final Object obj, final Iterable<String> propertyNamesIter) {
+        final List<Object> propertyValues = Lists.newArrayList();
+        for (final Clause clause : clausesFor(propertyNamesIter)) {
+            final Object propertyValue = clause.getValueOf(obj);
+            if(propertyValue != null) {
                 propertyValues.add(propertyValue);
             }
         }
-
         return Objects.hashCode(propertyValues.toArray());
     }
+    //endregion
 
-    /** @deprecated */
+    //region > equals
+
+    /**
+     * Returns whether two objects are equal, considering just the specified property name(s).
+     * @deprecated - please be aware that this utility heavily uses reflection.  We don't actually intend to deprecate this method (it's useful while prototyping), but we wanted to bring this to your attention!
+     * @param propertyNames - the property name or names, CSV format.  If multiple properties, use the {@link #equals(Object, Object, String...)} varargs} overloaded version of this method.
+     */
     @Deprecated
     public static boolean equals(Object p, Object q, String propertyNames) {
-        if (p == null && q == null) {
+        if(p==null && q==null) {
             return true;
-        } else if (p != null && q != null) {
-            if (p.getClass() != q.getClass()) {
-                return false;
-            } else {
-                Iterable<String> propertyNamesIter = csvToIterable(propertyNames);
-                return equals(p, q, propertyNamesIter);
-            }
-        } else {
+        }
+        if(p==null || q==null) {
             return false;
         }
+        if(p.getClass() != q.getClass()) {
+            return false;
+        }
+        final Iterable<String> propertyNamesIter = csvToIterable(propertyNames);
+        return equals(p, q, propertyNamesIter);
     }
 
-    /** @deprecated */
+    /**
+     * Returns whether two objects are equal, considering just the specified property name(s).
+     * @deprecated - please be aware that this utility heavily uses reflection.  We don't actually intend to deprecate this method (it's useful while prototyping), but we wanted to bring this to your attention!
+     */
     @Deprecated
     public static boolean equals(Object p, Object q, String... propertyNames) {
-        if (p == null && q == null) {
+        if(p==null && q==null) {
             return true;
-        } else if (p != null && q != null) {
-            if (p.getClass() != q.getClass()) {
-                return false;
-            } else {
-                Iterable<String> propertyNamesIter = varargsToIterable(propertyNames);
-                return equals(p, q, (Iterable)propertyNamesIter);
-            }
-        } else {
+        }
+        if(p==null || q==null) {
             return false;
         }
+        if(p.getClass() != q.getClass()) {
+            return false;
+        }
+        final Iterable<String> propertyNamesIter = varargsToIterable(propertyNames);
+        return equals(p, q, propertyNamesIter);
     }
 
-    private static boolean equals(Object p, Object q, Iterable<String> propertyNamesIter) {
-        Iterable<Clause> clauses = clausesFor(propertyNamesIter);
-        Iterator var4 = clauses.iterator();
-
-        Object pValue;
-        Object qValue;
-        do {
-            if (!var4.hasNext()) {
-                return true;
+    private static boolean equals(final Object p, final Object q, final Iterable<String> propertyNamesIter) {
+        final Iterable<Clause> clauses = clausesFor(propertyNamesIter);
+        for (final Clause clause : clauses) {
+            final Object pValue = clause.getValueOf(p);
+            final Object qValue = clause.getValueOf(q);
+            if(!Objects.equal(pValue, qValue)) {
+                return false;
             }
-
-            Clause clause = (Clause)var4.next();
-            pValue = clause.getValueOf(p);
-            qValue = clause.getValueOf(q);
-        } while(Objects.equal(pValue, qValue));
-
-        return false;
+        }
+        return true;
     }
+    //endregion
 
-    private static Iterable<Clause> clausesFor(Iterable<String> iterable) {
+    //region > helpers
+    private static Iterable<Clause> clausesFor(final Iterable<String> iterable) {
         return Iterables.transform(iterable, new Function<String, Clause>() {
+            @Override
             public Clause apply(String input) {
                 return Clause.parse(input);
             }
         });
     }
 
-    private static Iterable<String> csvToIterable(String propertyNames) {
+    private static Iterable<String> csvToIterable(final String propertyNames) {
         return Splitter.on(',').split(propertyNames);
     }
 
-    private static List<String> varargsToIterable(String[] iterable) {
+    private static List<String> varargsToIterable(final String[] iterable) {
         return Arrays.asList(iterable);
     }
+    //endregion
 
+    //region > toStringOf
+
+    private final List<ObjectContracts.ToStringEvaluator> evaluators = Lists.newArrayList();
     public ObjectContracts2 with(ObjectContracts.ToStringEvaluator evaluator) {
-        this.evaluators.add(evaluator);
+        evaluators.add(evaluator);
         return this;
     }
 
-    /** @deprecated */
+    /**
+     * Returns a string representation of two objects, considering just the specified property name(s).
+     * @deprecated - please be aware that this utility heavily uses reflection.  We don't actually intend to deprecate this method (it's useful while prototyping), but we wanted to bring this to your attention!
+     * @param propertyNames - the property name or names, CSV format.  If multiple properties, use the {@link #toString(Object, String...)} varargs} overloaded version of this method.
+     */
     @Deprecated
     public String toStringOf(Object p, String propertyNames) {
-        Iterable<String> propertyNamesIter = csvToIterable(propertyNames);
-        return this.toStringOf(p, propertyNamesIter);
+        final Iterable<String> propertyNamesIter = csvToIterable(propertyNames);
+        return toStringOf(p, propertyNamesIter);
     }
 
-    /** @deprecated */
+    /**
+     * Returns a string representation of two objects, considering just the specified property name(s).
+     * @deprecated - please be aware that this utility heavily uses reflection.  We don't actually intend to deprecate this method (it's useful while prototyping), but we wanted to bring this to your attention!
+     */
     @Deprecated
     public String toStringOf(Object p, String... propertyNames) {
-        Iterable<String> propertyNamesIter = varargsToIterable(propertyNames);
-        return this.toStringOf(p, (Iterable)propertyNamesIter);
+        final Iterable<String> propertyNamesIter = varargsToIterable(propertyNames);
+        return toStringOf(p, propertyNamesIter);
     }
 
-    private String toStringOf(Object p, Iterable<String> propertyNamesIter) {
-        Objects.ToStringHelper stringHelper = Objects.toStringHelper(p);
-        Iterator var4 = clausesFor(propertyNamesIter).iterator();
-
-        while(var4.hasNext()) {
-            Clause clause = (Clause)var4.next();
-            stringHelper.add(clause.getPropertyName(), this.asString(clause, p));
+    private String toStringOf(final Object p, final Iterable<String> propertyNamesIter) {
+        final ToStringHelper stringHelper = Objects.toStringHelper(p);
+        for (final Clause clause : clausesFor(propertyNamesIter)) {
+            stringHelper.add(clause.getPropertyName(), asString(clause, p));
         }
-
         return stringHelper.toString();
     }
 
-    private String asString(Clause clause, Object p) {
-        Object value = clause.getValueOf(p);
-        if (value == null) {
+    private String asString(final Clause clause, Object p) {
+        final Object value = clause.getValueOf(p);
+        if(value == null) {
             return null;
-        } else {
-            Iterator var4 = this.evaluators.iterator();
-
-            ObjectContracts.ToStringEvaluator evaluator;
-            do {
-                if (!var4.hasNext()) {
-                    return value.toString();
-                }
-
-                evaluator = (ObjectContracts.ToStringEvaluator)var4.next();
-            } while(!evaluator.canEvaluate(value));
-
-            return evaluator.evaluate(value);
         }
+        for (ObjectContracts.ToStringEvaluator evaluator : evaluators) {
+            if(evaluator.canEvaluate(value)) {
+                return evaluator.evaluate(value);
+            }
+        }
+        return value.toString();
     }
 
-    public interface ToStringEvaluator {
-        boolean canEvaluate(Object var1);
+    //endregion
 
-        String evaluate(Object var1);
-    }
+
 }
-
