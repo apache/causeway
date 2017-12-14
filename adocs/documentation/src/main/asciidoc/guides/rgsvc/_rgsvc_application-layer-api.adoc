@@ -68,6 +68,16 @@ xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandSer
 The xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_InteractionContext[`InteractionContext`] manages the actual execution of the command.
 
 
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_DtoMappingHelper[`o.a.i.applib.` +
+`services.dto` +
+`DtoMappingHelper`]
+|Maps domain objects internal identifier to an `OidDto` for use in serialized representations.
+|`DtoMappingHelper` +
+``o.a.i.core`` +
+``isis-core-applib``
+|(`1.16.0-SNAPSHOT`) API is also a concrete class.
+
+
 |xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_InteractionContext[`o.a.i.applib.` +
 `services.iactn` +
 `InteractionContext`]
@@ -152,6 +162,7 @@ include::_rgsvc_application-layer-api_AcceptHeaderService.adoc[leveloffset=+1]
 include::_rgsvc_application-layer-api_ActionInvocationContext.adoc[leveloffset=+1]
 include::_rgsvc_application-layer-api_BackgroundService.adoc[leveloffset=+1]
 include::_rgsvc_application-layer-api_CommandContext.adoc[leveloffset=+1]
+include::_rgsvc_application-layer-api_DtoMappingHelper.adoc[leveloffset=+1]
 include::_rgsvc_application-layer-api_InteractionContext.adoc[leveloffset=+1]
 include::_rgsvc_application-layer-api_MessageService.adoc[leveloffset=+1]
 include::_rgsvc_application-layer-api_SessionManagementService.adoc[leveloffset=+1]

@@ -28,7 +28,8 @@ public class Scratchpad {
 }
 ----
 
-This class (`o.a.i.applib.services.scratchpad.Scratchpad`) is also the implementation.  And, as you can see, the service is just a request-scoped wrapper around a `java.util.Map`.
+This class (`o.a.i.applib.services.scratchpad.Scratchpad`) is also the implementation.
+And, as you can see, the service is just a request-scoped wrapper around a `java.util.Map`.
 
 
 
