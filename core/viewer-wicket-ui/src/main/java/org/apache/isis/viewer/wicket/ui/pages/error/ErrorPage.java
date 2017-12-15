@@ -62,14 +62,16 @@ public class ErrorPage extends PageAbstract {
             final boolean authorizationException = exceptionModel.isAuthorizationException();
 
             final List<StackTraceDetail> stackTrace = exceptionModel.getStackTrace();
-            final List<String> stackDetails = Lists.transform(stackTrace, new Function<StackTraceDetail, String>() {
-                @Nullable @Override public String apply(final StackTraceDetail stackTraceDetail) {
-                    return stackTraceDetail.getLine();
-                }
-            });
+            final List<String> stackDetailList = transform(stackTrace);
 
-            final ErrorDetails errorDetails = new ErrorDetails(mainMessage, recognized, authorizationException,
-                    stackDetails);
+            final List<List<StackTraceDetail>> stackTraces = exceptionModel.getStackTraces();
+            final List<List<String>> stackDetailLists = Lists.newArrayList();
+            for (List<StackTraceDetail> trace : stackTraces) {
+                stackDetailLists.add(transform(trace));
+            }
+
+            final ErrorDetails errorDetails =
+                    new ErrorDetails(mainMessage, recognized, authorizationException, stackDetailList, stackDetailLists);
 
             final Ticket ticket = errorReportingService.reportError(errorDetails);
 
@@ -81,6 +83,14 @@ public class ErrorPage extends PageAbstract {
 
         themeDiv.add(new ExceptionStackTracePanel(ID_EXCEPTION_STACK_TRACE, exceptionModel));
 
+    }
+
+    protected List<String> transform(final List<StackTraceDetail> stackTrace) {
+        return Lists.transform(stackTrace, new Function<StackTraceDetail, String>() {
+                    @Nullable @Override public String apply(final StackTraceDetail stackTraceDetail) {
+                        return stackTraceDetail.getLine();
+                    }
+                });
     }
 
 }

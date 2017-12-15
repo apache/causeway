@@ -33,17 +33,20 @@ public class ErrorDetails {
     private final String mainMessage;
     private final boolean recognized;
     private final boolean authorizationCause;
-    private final List<String> stackTraceDetailList;
+    private final List<String> stackTraceDetailListCombined;
+    private final List<List<String>> stackDetailListPerCause;
 
     public ErrorDetails(
             final String mainMessage,
             final boolean recognized,
             final boolean authorizationCause,
-            final List<String> stackTraceDetailList) {
+            final List<String> stackTraceDetailListCombined,
+            final List<List<String>> stackDetailListPerCause) {
         this.mainMessage = mainMessage;
         this.recognized = recognized;
         this.authorizationCause = authorizationCause;
-        this.stackTraceDetailList = stackTraceDetailList;
+        this.stackTraceDetailListCombined = stackTraceDetailListCombined;
+        this.stackDetailListPerCause = stackDetailListPerCause;
     }
 
     public String getMainMessage() {
@@ -58,8 +61,22 @@ public class ErrorDetails {
         return authorizationCause;
     }
 
+    /**
+     * @deprecated  - renamed to {@link #getStackTraceDetailCombined()}.
+     */
+    @Deprecated
     public List<String> getStackTraceDetailList() {
-        return stackTraceDetailList;
+        return stackTraceDetailListCombined;
     }
 
+    public List<String> getStackTraceDetailCombined() {
+        return stackTraceDetailListCombined;
+    }
+
+    /**
+     * One per exception cause.
+     */
+    public List<List<String>> getStackTraceDetailPerCause() {
+        return stackDetailListPerCause;
+    }
 }

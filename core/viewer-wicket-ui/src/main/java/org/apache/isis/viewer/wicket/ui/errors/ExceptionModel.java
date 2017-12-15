@@ -38,6 +38,7 @@ public class ExceptionModel extends ModelAbstract<List<StackTraceDetail>> {
     private static final String MAIN_MESSAGE_IF_NOT_RECOGNIZED = "Sorry, an unexpected error occurred.";
     
     private List<StackTraceDetail> stackTraceDetailList;
+    private List<List<StackTraceDetail>> stackTraceDetailLists;
     private boolean recognized;
     private boolean authorizationCause;
 
@@ -75,6 +76,7 @@ public class ExceptionModel extends ModelAbstract<List<StackTraceDetail>> {
             }
         }
         stackTraceDetailList = asStackTrace(ex);
+        stackTraceDetailLists = asStackTraces(ex);
     }
 
 
@@ -135,6 +137,9 @@ public class ExceptionModel extends ModelAbstract<List<StackTraceDetail>> {
     public List<StackTraceDetail> getStackTrace() {
         return stackTraceDetailList;
     }
+    public List<List<StackTraceDetail>> getStackTraces() {
+        return stackTraceDetailLists;
+    }
 
     private static List<StackTraceDetail> asStackTrace(Throwable ex) {
         List<StackTraceDetail> stackTrace = Lists.newArrayList();
@@ -148,15 +153,28 @@ public class ExceptionModel extends ModelAbstract<List<StackTraceDetail>> {
             } else {
                 firstTime = false;
             }
-            stackTrace.add(StackTraceDetail.exceptionClassName(cause));
-            stackTrace.add(StackTraceDetail.exceptionMessage(cause));
-            addStackTraceElements(cause, stackTrace);
+            append(cause, stackTrace);
         }
         return stackTrace;
     }
 
-    private static void addStackTraceElements(Throwable ex, List<StackTraceDetail> stackTrace) {
-        for (StackTraceElement el : ex.getStackTrace()) {
+    private static List<List<StackTraceDetail>> asStackTraces(Throwable ex) {
+        List<List<StackTraceDetail>> stackTraces = Lists.newArrayList();
+
+        List<Throwable> causalChain = Throwables.getCausalChain(ex);
+        boolean firstTime = true;
+        for(Throwable cause: causalChain) {
+            List<StackTraceDetail> stackTrace = Lists.newArrayList();
+            append(cause, stackTrace);
+            stackTraces.add(stackTrace);
+        }
+        return stackTraces;
+    }
+
+    private static void append(final Throwable cause, final List<StackTraceDetail> stackTrace) {
+        stackTrace.add(StackTraceDetail.exceptionClassName(cause));
+        stackTrace.add(StackTraceDetail.exceptionMessage(cause));
+        for (StackTraceElement el : cause.getStackTrace()) {
             stackTrace.add(StackTraceDetail.element(el));
         }
     }
