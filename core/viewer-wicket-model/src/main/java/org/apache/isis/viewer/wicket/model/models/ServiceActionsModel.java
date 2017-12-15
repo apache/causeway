@@ -61,7 +61,8 @@ public class ServiceActionsModel extends ModelAbstract<List<ObjectAdapter>> {
             public boolean apply(ObjectAdapter input) {
                 final DomainServiceLayoutFacet facet = input.getSpecification().getFacet
                         (DomainServiceLayoutFacet.class);
-                return facet != null && facet.getMenuBar() == menuBar;
+                return (facet != null && facet.getMenuBar() == menuBar) ||
+                       (facet == null && menuBar == DomainServiceLayout.MenuBar.PRIMARY);
             }
         };
     }
