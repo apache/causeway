@@ -541,6 +541,13 @@ public abstract class FixtureScript
             return fixtureResultList.lookup(key, cls);
         }
 
+        @Programmatic
+        public void executeChild(
+                final FixtureScript callingFixtureScript,
+                final PersonaWithBuilderScript<?, ?> personaWithBuilderScript) {
+            executeChildren(callingFixtureScript, personaWithBuilderScript);
+        }
+
         /**
          * Executes a child {@link FixtureScript fixture script}, injecting services into it first, and (for any results
          * that are {@link org.apache.isis.applib.fixturescripts.FixtureScript.ExecutionContext#addResult(FixtureScript, Object)} added),
@@ -552,20 +559,25 @@ public abstract class FixtureScript
         }
 
         @Programmatic
-        public void executeChildren(final FixtureScript callingFixtureScript, final PersonaWithBuilderScript<?,?>... personaWithBuilderScripts) {
+        public void executeChildren(
+                final FixtureScript callingFixtureScript,
+                final PersonaWithBuilderScript<?, ?>... personaWithBuilderScripts) {
             for (PersonaWithBuilderScript<?, ?> builder : personaWithBuilderScripts) {
                 executeChild(callingFixtureScript, builder.builder());
             }
         }
 
         @Programmatic
-        public <T extends Enum<?> & PersonaWithBuilderScript<?,?>> void executeChildren(
-                final FixtureScript callingFixtureScript, final Class<T> personaClass) {
+        public <T extends Enum<?> & PersonaWithBuilderScript<?, ?>> void executeChildren(
+                final FixtureScript callingFixtureScript,
+                final Class<T> personaClass) {
             executeChildren(callingFixtureScript, personaClass.getEnumConstants());
         }
 
         @Programmatic
-        public void executeChildren(final FixtureScript callingFixtureScript, final FixtureScript... fixtureScripts) {
+        public void executeChildren(
+                final FixtureScript callingFixtureScript,
+                final FixtureScript... fixtureScripts) {
             for (FixtureScript fixtureScript : fixtureScripts) {
                 executeChild(callingFixtureScript, fixtureScript);
             }

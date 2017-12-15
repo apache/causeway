@@ -28,6 +28,7 @@ import org.apache.isis.applib.fixtures.FixtureClock;
 import org.apache.isis.applib.fixturescripts.BuilderScriptAbstract;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.applib.fixturescripts.FixtureScripts;
+import org.apache.isis.applib.fixturescripts.PersonaWithBuilderScript;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.metamodel.MetaModelService4;
@@ -54,6 +55,10 @@ public abstract class HeadlessAbstract {
 
     protected <T,F extends BuilderScriptAbstract<T,F>> T runBuilderScript(final F fixtureScript) {
         return this.fixtureScripts.runBuilderScript(fixtureScript);
+    }
+
+    protected <P extends PersonaWithBuilderScript<T,F>, T,F extends BuilderScriptAbstract<T,F>> T runBuilderScript(final P persona) {
+        return runBuilderScript(persona.builder());
     }
 
 
