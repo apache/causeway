@@ -270,6 +270,8 @@ The BDD specs and integration tests are named according to the naming convention
 
 === myapp-module-simple
 
+NOTE: this is out of date for 1.16.0-SNAPSHOT
+
 This module is where the domain object model lives, that is the business logic of the application itself.
 This typically comprises entities, domain services, mixins and view models.
 

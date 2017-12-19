@@ -26,26 +26,42 @@ import org.apache.isis.applib.fixturescripts.FixtureScriptWithExecutionStrategy;
 import org.apache.isis.applib.fixturescripts.FixtureScripts;
 
 
-public class TickingClockFixture extends FixtureScript implements FixtureScriptWithExecutionStrategy {
+public class TickingClockFixture
+        extends FixtureScript
+        implements FixtureScriptWithExecutionStrategy {
+
+    //region > date property
+    private String date;
+    public String getDate() {
+        return date;
+    }
+    public TickingClockFixture setDate(final String date) {
+        this.date = date;
+        return this;
+    }
+    //endregion
 
     @Override
-    protected void execute(ExecutionContext executionContext) {
+    protected void execute(ExecutionContext ec) {
+
+        checkParam("date", ec, String.class);
 
         final Clock instance = Clock.getInstance();
 
         if(instance instanceof TickingFixtureClock) {
             TickingFixtureClock.reinstateExisting();
-            executionContext.executeChild(this, ClockFixture.setTo("2014-05-18"));
+            ec.executeChild(this, ClockFixture.setTo(date));
             TickingFixtureClock.replaceExisting();
         }
 
         if(instance instanceof FixtureClock) {
-            executionContext.executeChild(this, ClockFixture.setTo("2014-05-18"));
+            ec.executeChild(this, ClockFixture.setTo(date));
         }
     }
 
     @Override
     public FixtureScripts.MultipleExecutionStrategy getMultipleExecutionStrategy() {
-        return FixtureScripts.MultipleExecutionStrategy.EXECUTE_ONCE_BY_CLASS;
+        return FixtureScripts.MultipleExecutionStrategy.EXECUTE;
     }
+
 }

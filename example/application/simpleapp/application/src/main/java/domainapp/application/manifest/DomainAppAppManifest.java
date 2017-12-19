@@ -27,16 +27,18 @@ import domainapp.application.DomainAppApplicationModule;
  */
 public class DomainAppAppManifest extends AppManifestAbstract2 {
 
-    public DomainAppAppManifest() {
-        super(Builder
-                .forModule(new DomainAppApplicationModule())
-                .withConfigurationPropertiesFile(DomainAppAppManifest.class,
+    public static final Builder BUILDER = Builder
+            .forModule(new DomainAppApplicationModule())
+            .withConfigurationPropertiesFile(DomainAppAppManifest.class,
                     "isis.properties",
                     "authentication_shiro.properties",
                     "persistor_datanucleus.properties",
                     "viewer_restfulobjects.properties",
                     "viewer_wicket.properties")
-                .withAuthMechanism("shiro"));
+            .withAuthMechanism("shiro");
+
+    public DomainAppAppManifest() {
+        super(BUILDER);
     }
 
 }

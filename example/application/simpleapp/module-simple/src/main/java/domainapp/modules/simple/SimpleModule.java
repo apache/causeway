@@ -29,13 +29,6 @@ import domainapp.modules.simple.fixture.SimpleObject_persona;
 public class SimpleModule extends ModuleAbstract {
 
     @Override
-    public FixtureScript getRefDataSetupFixture() {
-        // the intention of this method is to initialize ref data rather than operational/transactional data
-        // the line below demonstrates how to persist every instance of SimpleObject_persona enum easily
-        return new PersonaEnumPersistAll(SimpleObject_persona.class);
-    }
-
-    @Override
     public FixtureScript getTeardownFixture() {
         return new TeardownFixtureAbstract2() {
             @Override

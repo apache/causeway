@@ -36,7 +36,7 @@ public abstract class AppManifestAbstract implements AppManifest {
     private final List<Class<?>> modules;
     private final List<Class<?>> additionalServices;
     private final String authMechanism;
-    private final List<Class<? extends FixtureScript>> fixtures;
+    private final List<Class<? extends FixtureScript>> fixtureClasses;
     private final Map<String, String> configurationProperties;
 
     public AppManifestAbstract(final BuilderAbstract<?> builder) {
@@ -51,12 +51,12 @@ public abstract class AppManifestAbstract implements AppManifest {
         this.additionalServices = builderAdditionalServices;
 
         this.authMechanism = determineAuthMechanism(builder);
-        this.fixtures = determineFixtures(builder);
+        this.fixtureClasses = determineFixtures(builder);
 
         // note uses this.fixtures, so must come afterwards...
         this.configurationProperties = createConfigurationProperties(
                 builder.getAllPropertyResources(), builder.getAllIndividualConfigProps(),
-                this.fixtures);
+                this.fixtureClasses);
     }
 
     private String determineAuthMechanism(final ModuleOrBuilderAbstract<?> builder) {
@@ -159,7 +159,7 @@ public abstract class AppManifestAbstract implements AppManifest {
 
     @Override
     public final List<Class<? extends FixtureScript>> getFixtures() {
-        return fixtures;
+        return fixtureClasses;
     }
 
     /**
@@ -170,7 +170,7 @@ public abstract class AppManifestAbstract implements AppManifest {
      *     using {@link Builder#withFixtureScripts(Class[])} .
      * </p>
      */
-    protected void overrideFixtures(final List<Class<? extends FixtureScript>> fixtureScripts) {
+    protected void overrideFixtures(final List<Class<? extends FixtureScript>> fixtureScriptClasses) {
         // default implementation does nothing.
     }
 
