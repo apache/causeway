@@ -18,9 +18,14 @@
  */
 package org.apache.isis.applib.fixturescripts.clock;
 
+import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
 import org.apache.isis.applib.clock.Clock;
-import org.apache.isis.applib.clock.TickingFixtureClock;
 import org.apache.isis.applib.fixtures.FixtureClock;
+import org.apache.isis.applib.fixtures.TickingFixtureClock;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.applib.fixturescripts.FixtureScriptWithExecutionStrategy;
 import org.apache.isis.applib.fixturescripts.FixtureScripts;
@@ -44,19 +49,85 @@ public class TickingClockFixture
     @Override
     protected void execute(ExecutionContext ec) {
 
+        // check that some value has been set
         checkParam("date", ec, String.class);
 
         final Clock instance = Clock.getInstance();
 
         if(instance instanceof TickingFixtureClock) {
-            TickingFixtureClock.reinstateExisting();
-            ec.executeChild(this, ClockFixture.setTo(date));
-            TickingFixtureClock.replaceExisting();
+            try {
+                TickingFixtureClock.reinstateExisting();
+                setTo(date);
+            } finally {
+                TickingFixtureClock.replaceExisting();
+            }
         }
 
         if(instance instanceof FixtureClock) {
-            ec.executeChild(this, ClockFixture.setTo(date));
+            setTo(date);
         }
+    }
+
+    private void setTo(final String date) {
+
+        if (!(Clock.getInstance() instanceof FixtureClock)) {
+            throw new IllegalStateException("Clock has not been initialized as a FixtureClock");
+        }
+        final FixtureClock fixtureClock = (FixtureClock) FixtureClock.getInstance();
+
+        // process if can be parsed as a LocalDateTime
+        LocalDateTime ldt = parseAsLocalDateTime(date);
+        if (ldt != null) {
+            fixtureClock.setDate(ldt.getYear(), ldt.getMonthOfYear(), ldt.getDayOfMonth());
+            fixtureClock.setTime(ldt.getHourOfDay(), ldt.getMinuteOfHour());
+            return;
+        }
+
+        // else process if can be parsed as a LocalDate
+        LocalDate ld = parseAsLocalDate(date);
+        if (ld != null) {
+            fixtureClock.setDate(ld.getYear(), ld.getMonthOfYear(), ld.getDayOfMonth());
+            return;
+        }
+
+        // else
+        throw new IllegalArgumentException(String.format(
+                "'%s' could not be parsed as a local date/time or local date", date));
+
+    }
+
+    private static LocalDate parseAsLocalDate(String dateStr) {
+        for (DateTimeFormatter formatter : new DateTimeFormatter[] {
+                DateTimeFormat.fullDateTime(),
+                DateTimeFormat.mediumDateTime(),
+                DateTimeFormat.shortDateTime(),
+                DateTimeFormat.forPattern("yyyy-MM-dd"),
+                DateTimeFormat.forPattern("yyyyMMdd"),
+        }) {
+            try {
+                return formatter.parseLocalDate(dateStr);
+            } catch (Exception e) {
+                // continue;
+            }
+        }
+        return null;
+    }
+
+    private static LocalDateTime parseAsLocalDateTime(String dateStr) {
+        for (DateTimeFormatter formatter : new DateTimeFormatter[] {
+                DateTimeFormat.fullDateTime(),
+                DateTimeFormat.mediumDateTime(),
+                DateTimeFormat.shortDateTime(),
+                DateTimeFormat.forPattern("yyyyMMddhhmmss"),
+                DateTimeFormat.forPattern("yyyyMMddhhmm")
+        }) {
+            try {
+                return formatter.parseLocalDateTime(dateStr);
+            } catch (Exception e) {
+                // continue;
+            }
+        }
+        return null;
     }
 
     @Override

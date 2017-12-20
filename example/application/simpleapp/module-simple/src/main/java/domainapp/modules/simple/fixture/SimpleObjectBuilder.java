@@ -22,7 +22,7 @@ package domainapp.modules.simple.fixture;
 import org.apache.isis.applib.fixturescripts.BuilderScriptAbstract;
 
 import domainapp.modules.simple.dom.impl.SimpleObject;
-import domainapp.modules.simple.dom.impl.SimpleObjectMenu;
+import domainapp.modules.simple.dom.impl.SimpleObjects;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -41,10 +41,10 @@ public class SimpleObjectBuilder extends BuilderScriptAbstract<SimpleObject, Sim
 
         checkParam("name", ec, String.class);
 
-        object = wrap(simpleObjectMenu).create(name);
+        object = wrap(simpleObjects).create(name);
     }
 
     @javax.inject.Inject
-    SimpleObjectMenu simpleObjectMenu;
+    SimpleObjects simpleObjects;
 
 }

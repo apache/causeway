@@ -23,7 +23,7 @@ import javax.inject.Inject;
 import org.joda.time.LocalDate;
 
 import org.apache.isis.applib.clock.Clock;
-import org.apache.isis.applib.clock.TickingFixtureClock;
+import org.apache.isis.applib.fixtures.TickingFixtureClock;
 import org.apache.isis.applib.fixtures.FixtureClock;
 import org.apache.isis.applib.fixturescripts.BuilderScriptAbstract;
 import org.apache.isis.applib.fixturescripts.FixtureScript;

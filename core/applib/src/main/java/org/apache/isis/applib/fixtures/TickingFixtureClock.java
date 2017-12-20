@@ -16,10 +16,12 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.clock;
+package org.apache.isis.applib.fixtures;
 
 import java.util.Calendar;
 import java.util.TimeZone;
+
+import org.apache.isis.applib.clock.Clock;
 
 public class TickingFixtureClock extends Clock {
     private static final TimeZone UTC_TIME_ZONE;
@@ -65,9 +67,7 @@ public class TickingFixtureClock extends Clock {
      * Makes {@link Clock#remove()} visible.
      */
     public static boolean reinstateExisting() {
-
         Clock.instance = existingInstance;
-
         return true;
     }
 

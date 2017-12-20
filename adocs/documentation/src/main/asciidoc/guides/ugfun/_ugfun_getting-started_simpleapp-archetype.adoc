@@ -5,6 +5,9 @@
 :_imagesdir: images/
 
 
+NOTE: this document has been updated for `1.16.0-SNAPSHOT`.
+
+
 The quickest way to get started building an application "for real" is to run the `simpleapp` archetype.
 Like the xref:ugfun.adoc#_ugfun_getting-started_helloworld-archetype[helloworld archetype], this too will generate a very simple one-class domain model (an entity called `SimpleObject` with a couple of properties).
 
@@ -96,19 +99,29 @@ Of course, you are always free to move the classes to a different package if you
 
 === myapp-application
 
-The `myapp-application` module has three main packages, the most important being `domainapp.application.manifest`.
-
-Classes for this package can be found under `src/main/java`:
+The production classes for `myapp-application` module (in `src/main/java`) are:
 
 [monotree]
 ----
 > domainapp/
 >> application/
+>>> DomainAppApplicationModule.java
+>>> fixture/
+>>>> DomainAppFixtureScriptsSpecificationProvider.java
+>>>> scenarios/
+>>>>> DomainAppDemo.java
 >>> manifest/
 >>>> DomainAppAppManifest.java
 >>>> DomainAppAppManifestBypassSecurity.java
 >>>> DomainAppAppManifestWithFixtures.java
 >>>> DomainAppAppManifestWithFixturesBypassSecurity.java
+>>>> menubars.layout.xml
+>>> services
+>>>> homepage
+>>>>> HomePageService.java
+>>>>> HomePageViewModel.java
+>>>>> HomePageViewModel.layout.xml
+>>>>> HomePageViewModel.layout.png
 ----
 
 There are also supporting files in this package in `src/main/resources`:
@@ -130,20 +143,17 @@ It is quite short:
 
 [source,java]
 ----
-public class DomainAppAppManifest extends AppManifestAbstract {
+public class DomainAppAppManifest extends AppManifestAbstract2 {
 
-    public static final Builder BUILDER = Builder.forModules(
-                    SimpleModuleDomSubmodule.class,
-                    DomainAppApplicationModuleFixtureSubmodule.class,
-                    DomainAppApplicationModuleServicesSubmodule.class
-            )
+    public static final Builder BUILDER = Builder
+            .forModule(new DomainAppApplicationModule())
             .withConfigurationPropertiesFile(DomainAppAppManifest.class,
                     "isis.properties",
                     "authentication_shiro.properties",
                     "persistor_datanucleus.properties",
                     "viewer_restfulobjects.properties",
-                    "viewer_wicket.properties"
-            ).withAuthMechanism("shiro");
+                    "viewer_wicket.properties")
+            .withAuthMechanism("shiro");
 
     public DomainAppAppManifest() {
         super(BUILDER);
@@ -151,32 +161,33 @@ public class DomainAppAppManifest extends AppManifestAbstract {
 }
 ----
 
-The manifest uses the builder defined by `AppManifestAbstract` and references 3 (Isis) modules.
-These are simply classes that identify packages to search for entities, domain services and fixtures; one defined in the `myapp-module-simple` module, and two package within the `myapp-application` module itself (for additional fixtures and services, namely the home page which we'll discuss below).
+The manifest uses the builder defined by `AppManifestAbstract2` and references a single top-level (Isis) module, namely `DomainAppApplicationModule`:
 
-The manifest also defines a number of static configuration files, all loaded from the classpath.
+[source,java]
+----
+public class DomainAppApplicationModule extends ModuleAbstract {
+    @Override
+    public Set<Module> getDependencies() {
+        return Sets.<Module>newHashSet(new SimpleModule());
+    }
+}
+----
+
+where `SimpleModule` in defined in the `mypp-module-simple` module (below).
+
+The primary purpose of the module class is to identify packages and subpackages that the framework should scan for entities and domain services.
+The transitive dependencies between modules are automatically resolved.
+The net effect is that all the domain services and entities in this module as well as those modules referenced are included into the app.
+
+Going back to the manifest, it also defines a number of static configuration files, all loaded from the classpath.
 Each file contains configuration setting for a different part of the runtime (`isis.properties` for the core framework, shiro for security, datanucleus for the objectstore, and the two viewers).
+
+The `menubars.layout.xml` file also resides in the same package as the manifest; this defines the menubar structure.
 
 There are also several variations on the app manifest; these can be used to bootstrap the application with fixtures, or disabling security.
 
-
-The next package is `domainapp.application.services`:
-
-[monotree]
-----
-> domainapp/
->> application/
->>> services/
->>>> DomainAppApplicationModuleServicesSubmodule.java
->>>> homepage/
->>>>> HomePageService.java
->>>>> HomePageViewModel.java
->>>>> HomePageViewModel.layout.xml
->>>>> HomePageViewModel.png
-----
-
-The `DomainAppApplicationModuleServicesSubmodule` class is referenced as a module within the app manifest, meaning that the `HomePageService` that sits in a subpackage underneath it is picked up automatically.
-This domain service simply has a single action annotated with `@HomePage`:
+The `domainapp.application.services` package contains the `HomePageService` domain service.
+This simply has a single action annotated with `@HomePage`:
 
 [source,java]
 ----
@@ -190,25 +201,9 @@ public HomePageViewModel homePage() {
 which returns the `HomePageViewModel` for use as the home page.
 The `HomePageViewModel` itself just renders a collection of ``SimpleObject``s in a list (`HomePageViewModel.layout.xml` defines the UI layout).
 
-The final package in the application module is `domainapp.application.fixture`:
-
-[monotree]
-----
-> domainapp/
->> application/
->>> fixture/
->>>> DomainAppApplicationModuleFixtureSubmodule.java
->>>> DomainAppFixtureScriptsSpecificationProvider.java
->>>> scenarios/
->>>>> DomainAppDemo.java
->>>> teardown/
->>>>> DomainAppTearDown.java
-----
-
-The important class here is `DomainAppDemo`, which is a fixture script that can be used to setup the application with some dummy data.
+The final package in the application module is `domainapp.application.fixture`.
+The important class here is `DomainAppDemo`, a fixture script that can be used to setup the application with some dummy data.
 This is used in the app itself when running in prototype mode (against an in-memory database), and can also be used by integration tests.
-
-The `DomainAppApplicationModuleFixtureSubmodule` is referenced by the app manifest, meaning that the framework knows to search for domain services and fixtures under its package.
 
 There is in fact also a domain service defined here, namely `DomainAppFixtureScriptsSpecificationProvider`.
 This is just used to configure the run fixture script menu item shown on the "Prototyping" menu.
@@ -229,6 +224,8 @@ The BDD specs (run using Cucumber) reside under `domain.application.bdd`:
 >>>>> SimpleObjectSpec_listAllAndCreate.feature
 ----
 
+Here the `BootstrappingGlue` glue class inherits from the framework's `CukeGlueBootstrappingAbstract` class, and bootstraps using the `DomainAppApplicationModule` mentioned above.
+
 There is just one feature file: `SimpleObjectSpec_listAllAndCreate.feature`, which is pretty simple:
 
 [source,feature]
@@ -236,18 +233,17 @@ There is just one feature file: `SimpleObjectSpec_listAllAndCreate.feature`, whi
 @DomainAppDemo
 Feature: List and Create New Simple Objects
 
-  @integration
   Scenario: Existing simple objects can be listed and new ones created
-    Given there are initially 3 simple objects
+    Given there are initially 10 simple objects
     When  I create a new simple object
-    Then  there are 4 simple objects
+    Then  there are 11 simple objects
 ----
 
-The `@DomainAppDemo` annotation causes the `DomainAppDemo` fixture script to be run; this sets up 3 objects.
-The "glue" defines both in the `myapp-application` module and in the `myapp-module-simple` module
 
-The tests themselves are run by the `RunIntegBddSpecs.java` class; this is standard Cucumber bootstrapping.
+The `@DomainAppDemo` annotation causes the `DomainAppDemo` fixture script to be run; this is the purpose of the `CatalogOfFixturesGlue` glue class.
 
+The specs themselves are run by the `RunIntegBddSpecs.java` class, which specifies which packages to search for "glue".
+This is just standard Cucumber bootstrapping.
 
 The integration tests meanwhile are in `domainapp.application.integtests`:
 
@@ -260,17 +256,15 @@ The integration tests meanwhile are in `domainapp.application.integtests`:
 >>>> Smoke_IntegTest.java
 ----
 
-The `Smoke_IntegTest` inherits `DomainAppIntegTestAbstract`, with the latter bootstrapping the framework using the `DomainAppAppManifest` already discussed that is used for running the application itself.
+The `Smoke_IntegTest` inherits `DomainAppIntegTestAbstract`, which in turn inherits from `IntegrationTestAbstract3` and uses the `DomainAppApplicationModule` previously discussed.
 Moreover, the `Smoke_IntegTest` uses the same `DomainAppDemo` fixture script.
 The application and the smoke tests therefore run with the exact same state, making debugging easy.
 
-The BDD specs and integration tests are named according to the naming convention required by the "surefire" mavenmixin that configures the maven surefire plugin.
+With regard to the naming of these various BDD specs and integration tests, they follow the naming convention required by the (non-ASF) link:http://github.com/danhaywood/java-mavenmixin-surefire["surefire" mavenmixin] that configures the maven surefire plugin.
 
 
 
 === myapp-module-simple
-
-NOTE: this is out of date for 1.16.0-SNAPSHOT
 
 This module is where the domain object model lives, that is the business logic of the application itself.
 This typically comprises entities, domain services, mixins and view models.
@@ -292,9 +286,9 @@ Under `src/main/java` we have:
 > domainapp/
 >> modules/
 >>> simple/
+>>>> SimpleModule.java
 >>>> SimpleModuleManifest.java
 >>>> dom/
->>>>> SimpleModuleDomSubmodule.java
 >>>>> impl/
 >>>>>> SimpleObject.java
 >>>>>> SimpleObject.layout.xml
@@ -302,35 +296,39 @@ Under `src/main/java` we have:
 >>>>>> SimpleObjectMenu.java
 >>>>>> SimpleObjectRepository.java
 >>>> fixture/
->>>>> SimpleModuleFixtureSubmodule.java
->>>>> scenario/
->>>>>> CreateSimpleObjects.java
->>>>>> SimpleObjectData.java
->>>>> teardown/
->>>>>> SimpleModuleTearDown.java
+>>>>> SimpleObject_persona.java
+>>>>> SimpleObjectBuilder.java
 > META-INF/
 >> persistence.xml
 ----
 
-Note once more that the module class (`SimpleModuleDomSubmodule`) is referenced in the app manifest class, meaning that all the entities, domain services and fixtures within it are included within the application.
-Speaking of which...
+The `SimpleModule` is the (single) module class referenced from the previously discussed `DomainAppApplicationModule`, meaning that all the entities, domain services and fixtures within it are included within the application.
 
-`SimpleObject` is the (one-and-only) domain entity defined (with `SimpleObject.layout.xml` defines its layout in the UI).
-In contrast to the helloworld app, though, there are _two_ associated domain services:
+* `SimpleObject` is the (one-and-only) domain entity defined (with `SimpleObject.layout.xml` defines its layout in the UI).
 
-* `SimpleObjectMenu` domain service's actions appear as menu items, to create and find ``SimpleObject``s.
-This delegates in turn to:
+* `SimpleObjects` domain service's whos actions appear as menu items and which acts as a repository to create and find ``SimpleObject``s.
 
-* `SimpleObjectRepository`, which is a repository domain service that actually does the fetching and creating in the database.
+The `SimpleModule` class also defines a teardown fixture, automatically called by integration tests.
 
-Splitting out domain services like this is quite common since it allows more flexibility with the menu structure.
+[source,java]
+----
+public class SimpleModule extends ModuleAbstract {
+    @Override
+    public FixtureScript getTeardownFixture() {
+        return new TeardownFixtureAbstract2() {
+            @Override
+            protected void execute(ExecutionContext ec) {
+                deleteFrom(SimpleObject.class);
+            }
+        };
+    }
+    ...
+}
+----
 
-The module also defines its own manifest, `SimpleModuleManifest`.
-This is used to run Isis' own xref:../rgmvn/rgmvn.adoc#[maven plugin] to xref:../rgmvn/rgmvn.adoc#_rgmvn_validate[validate] the domain object model (eg to detect orphaned supported methods).
-
-Under `fixture.scenario` subpackage are fixture scripts that are used by integration tests and by the demo fixture script defined in the `myapp-application` module (discussed above).
-
+In the `fixture` subpackage is the `SimpleObject_persona` "persona" which uses the corresponding `SimpleObjectBuilder` builder script; further discussion on this pattern xref:../ugtst/ugtst.adoc#_ugtst_fixture-scripts_api-and-usage_persona-and-builders[here].
 These fixtures are also used by "local" integration tests, which reside under `src/test/java`.
+
 There are also unit tests and "glue" for the BDD specs:
 
 [monotree]
@@ -354,8 +352,12 @@ There are also unit tests and "glue" for the BDD specs:
 The simpleapp application has both "local" integration tests (defined within the `myapp-module-simple` module) and also "global" integration tests (the "smoke" tests in `myapp-application` module).
 There's a role for both: local integration tests should fully exercise the module but may need to mock out collaborations between modules, while global integration tests exercise the whole application (but an over-reliance on these can cause test run times to bloat).
 
-The surefire mavenmixin plugin configured in the `pom.xml` establishes the convention that integration tests include the name "IntegTest", while unit tests contain merely "Test".
-The `SimpleModuleIntegTestAbstract` also uses the `SimpleAppManifest` (mentioned above) to define a "cut-down" version of the application that just bootstraps the simple module.
+With regard to the naming of these various BDD specs and integration tests, they follow the naming convention required by the (non-ASF) link:http://github.com/danhaywood/java-mavenmixin-surefire["surefire" mavenmixin] that configures the maven surefire plugin.
+Integration tests include the name "IntegTest", while unit tests contain merely "Test".
+
+The module also defines its own manifest, `SimpleModuleManifest`.
+This is used to run Isis' own xref:../rgmvn/rgmvn.adoc#[maven plugin] to xref:../rgmvn/rgmvn.adoc#_rgmvn_validate[validate] the domain object model (eg to detect orphaned supported methods).
+
 
 
 === myapp-webapp
@@ -372,7 +374,8 @@ Under `src/main/java` there is:
 >>> welcome.html
 ----
 
-The `DomainApplication` is required to bootstrap the Wicket viewer (it is configured in `WEB-INF/web.xml`).
+The `DomainApplication` is required to bootstrap the Wicket viewer (it is configured in `WEB-INF/web.xml`, discussed below).
+Within `DomainApplication` is the bootstrapping of the Wicket viewer.
 Internally it uses Google Guice to configure various static resources served up by Wicket:
 
 [source,java]
@@ -395,7 +398,6 @@ public class DomainApplication extends IsisWicketApplication {
 The `configure()` method is the place to change the name of the application for example, or to change the initial about and welcome messages.
 The text of the welcome page shown by the Wicket viewer can be found in `welcome.html`, loaded from the classpath and in the same package as `DomainApplication`.
 
-
 Under `src/main/webapp` we have various resources that are used to configure the webapp, or that are served up by the running webapp:
 
 [monotree]
@@ -415,7 +417,31 @@ Under `src/main/webapp` we have various resources that are used to configure the
 >> web.xml
 ----
 
-Most important of these is `WEB-INF/web.xml`, which bootstraps both the Wicket viewer and the Restful Objects viewer (the REST API derived from the domain object model).
+Most important of these is `WEB-INF/web.xml`, which bootstraps both the Wicket viewer and the Restful Objects viewer (the REST API derived from the domain object model):
+
+[source,xml]
+.web.xml
+----
+<web-app ...>
+  ...
+  <filter>
+    <filter-name>WicketFilter</filter-name>
+    <filter-class>org.apache.wicket.protocol.http.WicketFilter</filter-class>
+    <init-param>
+      <param-name>applicationClassName</param-name>
+      <param-value>domainapp.webapp.DomainApplication</param-value>
+    </init-param>
+  </filter>
+  ...
+  <context-param>
+    <param-name>javax.ws.rs.Application</param-name>
+    <param-value>
+      org.apache.isis.viewer.restfulobjects.server.RestfulObjectsApplication
+    </param-value>
+  </context-param>
+  ...
+</web-app>
+----
 
 The `about/index.html` is the page shown at the root of the package, providing links to either the Wicket viewer or to the Swagger UI.
 In a production application this is usually replaced with a page that does an HTTP 302 redirect to the Wicket viewer.
@@ -476,7 +502,6 @@ mvn clean install
 ----
 
 where `myapp` is the `artifactId` entered above.
-
 
 
 

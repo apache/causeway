@@ -25,7 +25,7 @@ import org.apache.isis.applib.fixturescripts.setup.PersonaEnumPersistAll;
 import org.apache.isis.applib.services.registry.ServiceRegistry2;
 
 import domainapp.modules.simple.dom.impl.SimpleObject;
-import domainapp.modules.simple.dom.impl.SimpleObjectRepository;
+import domainapp.modules.simple.dom.impl.SimpleObjects;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -52,8 +52,8 @@ public enum SimpleObject_persona implements PersonaWithBuilderScript<SimpleObjec
 
     @Override
     public SimpleObject findUsing(final ServiceRegistry2 serviceRegistry) {
-        SimpleObjectRepository simpleObjectRepository = serviceRegistry.lookupService(SimpleObjectRepository.class);
-        return simpleObjectRepository.findByNameExact(name);
+        SimpleObjects simpleObjects = serviceRegistry.lookupService(SimpleObjects.class);
+        return simpleObjects.findByNameExact(name);
     }
 
     public static class PersistAll

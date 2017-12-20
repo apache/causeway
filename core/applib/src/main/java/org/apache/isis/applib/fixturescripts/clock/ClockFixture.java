@@ -82,7 +82,6 @@ class ClockFixture extends FixtureScript implements FixtureScriptWithExecutionSt
                 "'%s' could not be parsed as a local date/time or local date", date));
     }
 
-    //region > parseAsLocalDateTime
     private static LocalDate parseAsLocalDate(String dateStr) {
         for (DateTimeFormatter formatter : new DateTimeFormatter[] {
                 DateTimeFormat.fullDateTime(),

@@ -49,7 +49,7 @@ import org.apache.isis.applib.fixtures.FixtureClock;
  * {@link FixtureClock#getInstance()}.
  */
 public abstract class Clock {
-    static Clock instance;
+    protected static Clock instance;
     private static boolean isReplaceable = true;
 
     /**
