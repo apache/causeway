@@ -87,11 +87,13 @@ public class ExceptionStackTracePanel extends Panel {
             add(panel);
         }
 
-        final boolean suppressExceptionDetail = exceptionModel.isAuthorizationException() || exceptionModel.isRecognized();
+        final boolean suppressExceptionDetail =
+                exceptionModel.isAuthorizationException() ||
+                exceptionModel.isRecognized() ||
+                (ticket != null && ticket.getStackTracePolicy() == Ticket.StackTracePolicy.HIDE);
         if(suppressExceptionDetail) {
             Components.permanentlyHide(this, ID_EXCEPTION_DETAIL_DIV);
         } else {
-
                 MarkupContainer container = new WebMarkupContainer(ID_EXCEPTION_DETAIL_DIV) {
                 private static final long serialVersionUID = 1L;
                 @Override
