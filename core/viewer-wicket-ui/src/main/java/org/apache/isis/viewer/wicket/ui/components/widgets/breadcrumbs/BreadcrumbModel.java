@@ -54,15 +54,30 @@ public class BreadcrumbModel implements Serializable {
         return Collections.unmodifiableList(entityModels);
     }
 
+    /**
+     * May be null if called for a view model or for home page.
+     */
+    private String mostRecentlyVisitedOidStr;
+
+    public void visitedHomePage() {
+        mostRecentlyVisitedOidStr = null;
+    }
+
+    public EntityModel getMostRecentlyVisited() {
+        return mostRecentlyVisitedOidStr != null ? lookup(mostRecentlyVisitedOidStr) : null;
+    }
+
     public void visited(final EntityModel entityModel) {
 
         // ignore view models
         if(entityModel.getTypeOfSpecification().isViewModel()) {
+            mostRecentlyVisitedOidStr = null;
             return;
         }
 
         final String oidStr = oidStrFrom(entityModel);
-        
+        mostRecentlyVisitedOidStr = oidStr;
+
         remove(oidStr);
         addToStart(oidStr, entityModel);
         

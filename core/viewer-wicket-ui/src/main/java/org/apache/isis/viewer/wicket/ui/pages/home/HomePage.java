@@ -36,6 +36,8 @@ import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.actions.ActionFormExecutorStrategy;
+import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModel;
+import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModelProvider;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.isis.viewer.wicket.ui.panels.FormExecutorDefault;
 import org.apache.isis.viewer.wicket.ui.util.Components;
@@ -69,6 +71,10 @@ public class HomePage extends PageAbstract {
             Components.permanentlyHide(themeDiv, ComponentType.ACTION_PROMPT);
             getComponentFactoryRegistry().addOrReplaceComponent(themeDiv, ComponentType.WELCOME, null);
         }
+
+        final BreadcrumbModelProvider session = (BreadcrumbModelProvider) getSession();
+        final BreadcrumbModel breadcrumbModel = session.getBreadcrumbModel();
+        breadcrumbModel.visitedHomePage();
     }
 
     private static class ObjectAndAction {
