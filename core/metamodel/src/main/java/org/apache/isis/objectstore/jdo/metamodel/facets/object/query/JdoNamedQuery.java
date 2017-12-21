@@ -20,12 +20,7 @@ package org.apache.isis.objectstore.jdo.metamodel.facets.object.query;
 
 import javax.jdo.annotations.Query;
 
-import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
 
 /**
  * Value object that represents the information of a
@@ -37,10 +32,15 @@ public final class JdoNamedQuery {
 
     private final String name;
     private final String query;
+    private final String language;
     private final ObjectSpecification objSpec;
 
-    public JdoNamedQuery(final String name, final String query,
+    private JdoNamedQuery(
+            final String name,
+            final String query,
+            final String language,
             final ObjectSpecification noSpec) {
+        this.language = language;
 
         assert name != null;
         assert query != null;
@@ -51,9 +51,10 @@ public final class JdoNamedQuery {
         this.objSpec = noSpec;
     }
 
-    public JdoNamedQuery(final Query jdoNamedQuery,
+    public JdoNamedQuery(
+            final Query jdoNamedQuery,
             final ObjectSpecification objSpec) {
-        this(jdoNamedQuery.name(), jdoNamedQuery.value(), objSpec);
+        this(jdoNamedQuery.name(), jdoNamedQuery.value(), jdoNamedQuery.language(), objSpec);
     }
 
     public String getName() {
@@ -62,6 +63,10 @@ public final class JdoNamedQuery {
 
     public String getQuery() {
         return query;
+    }
+
+    public String getLanguage() {
+        return language;
     }
 
     public ObjectSpecification getObjectSpecification() {
