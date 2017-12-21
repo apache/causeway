@@ -18,12 +18,18 @@
  */
 package org.apache.isis.applib;
 
-import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
 
+import javax.annotation.Nullable;
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlTransient;
+
+import com.google.common.base.Function;
+import com.google.common.base.Predicate;
+import com.google.common.collect.FluentIterable;
+import com.google.common.collect.Sets;
 
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 
@@ -42,7 +48,25 @@ public abstract class ModuleAbstract
     @Override
     @XmlTransient
     public Set<Module> getDependencies() {
-        return Collections.emptySet();
+        return Sets.newLinkedHashSet();
+    }
+
+    @XmlElement(name = "module", required = true)
+    private Set<ModuleAbstract> getModuleDependencies() {
+        return FluentIterable.from(getDependencies())
+                    .filter(new Predicate<Module>() {
+                        @Override
+                        public boolean apply(@Nullable final Module module) {
+                            return module instanceof ModuleAbstract;
+                        }
+                    })
+                    .transform(new Function<Module, ModuleAbstract>() {
+                        @Nullable @Override
+                        public ModuleAbstract apply(@Nullable final Module module) {
+                            return (ModuleAbstract) module;
+                        }
+                    })
+                    .toSet();
     }
 
     /**
