@@ -21,33 +21,9 @@ package org.apache.isis.applib.services.xactn;
 
 import org.apache.isis.applib.annotation.Programmatic;
 
-public interface TransactionService {
+public interface Transaction2 extends Transaction {
 
-    /**
-     * Flush all changes to the object store.
-     *
-     * <p>
-     * Occasionally useful to ensure that newly persisted domain objects
-     * are flushed to the database prior to a subsequent repository query.
-     * </p>
-     *
-     * <p>
-     *     Equivalent to {@link Transaction#flush()} (with {@link Transaction} obtained using {@link #currentTransaction()}).
-     * </p>
-     */
     @Programmatic
-    void flushTransaction();
-
-    /**
-     * See also {@link TransactionService3#nextTransaction(TransactionService3.Policy)} with a {@link TransactionService3.Policy} of {@link TransactionService3.Policy#UNLESS_MARKED_FOR_ABORT}.
-     */
-    @Programmatic
-    void nextTransaction();
-
-    /**
-     * Returns a representation of the current transaction.
-     */
-    @Programmatic
-    Transaction currentTransaction();
+    TransactionState getTransactionState();
 
 }

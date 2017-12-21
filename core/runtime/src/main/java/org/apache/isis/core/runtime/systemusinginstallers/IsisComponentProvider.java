@@ -226,7 +226,13 @@ public abstract class IsisComponentProvider {
     }
 
     private static String join(final String csv1, final String csv2) {
-        return csv1 != null ? Joiner.on(",").join(csv1, csv2) : null;
+        if (csv1 == null) {
+            return csv2;
+        }
+        if (csv2 == null) {
+            return csv1;
+        }
+        return Joiner.on(",").join(csv1, csv2);
     }
 
     private Iterable<String> modulePackageNamesFrom(final AppManifest appManifest) {

@@ -23,6 +23,10 @@ import org.apache.isis.applib.annotation.Programmatic;
 
 public interface TransactionService2 extends TransactionService {
 
+    /**
+     * Generally this is equivalent to using {@link #currentTransaction()} and {@link Transaction2#getTransactionState()}.
+     * However, if there is no current transaction, then this will return {@link TransactionState#NONE}.
+     */
     @Programmatic
     TransactionState getTransactionState();
 

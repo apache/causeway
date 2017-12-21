@@ -23,8 +23,8 @@ import javax.inject.Inject;
 import org.joda.time.LocalDate;
 
 import org.apache.isis.applib.clock.Clock;
-import org.apache.isis.applib.fixtures.TickingFixtureClock;
 import org.apache.isis.applib.fixtures.FixtureClock;
+import org.apache.isis.applib.fixtures.TickingFixtureClock;
 import org.apache.isis.applib.fixturescripts.BuilderScriptAbstract;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.applib.fixturescripts.FixtureScripts;
@@ -37,7 +37,7 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.sessmgmt.SessionManagementService;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
-import org.apache.isis.applib.services.xactn.TransactionService;
+import org.apache.isis.applib.services.xactn.TransactionService3;
 
 /**
  * Reworked base class for headless access.
@@ -134,7 +134,7 @@ public abstract class HeadlessAbstract {
     @Inject
     protected WrapperFactory wrapperFactory;
     @Inject
-    protected TransactionService transactionService;
+    protected TransactionService3 transactionService;
     @Inject
     protected SessionManagementService sessionManagementService;
 
