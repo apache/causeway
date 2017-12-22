@@ -135,7 +135,7 @@
         <!-- using 2.3.3 throws SQL exception in simpleapp integtests -->
         <hsqldb.version>2.3.4</hsqldb.version>
         <log4jdbc-remix.version>0.2.7</log4jdbc-remix.version>
-        <resteasy-jaxrs.version>3.0.17.Final</resteasy-jaxrs.version>
+        <resteasy-jaxrs.version>3.0.24.Final</resteasy-jaxrs.version>
 
         <jetty.version>9.4.3.v20170317</jetty.version>
 
