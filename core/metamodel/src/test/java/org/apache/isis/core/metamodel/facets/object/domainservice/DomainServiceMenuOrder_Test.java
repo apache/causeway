@@ -27,7 +27,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-public class DomainServiceMenuOrder_UnitTest {
+public class DomainServiceMenuOrder_Test {
 
     @DomainService(menuOrder = "100")
     public static class ServiceWithDomainService100 {

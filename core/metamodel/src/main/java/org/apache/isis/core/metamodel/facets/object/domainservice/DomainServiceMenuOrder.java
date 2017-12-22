@@ -19,22 +19,24 @@
 
 package org.apache.isis.core.metamodel.facets.object.domainservice;
 
+import org.apache.isis.applib.annotation.Constants;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.core.commons.compare.SequenceCompare;
 
 public class DomainServiceMenuOrder {
-	
-	private final static String UNDEFINED = "" + Integer.MAX_VALUE;
 
+    private DomainServiceMenuOrder(){}
+	
     public static String orderOf(final Class<?> cls) {
-        final DomainServiceLayout domainServiceLayout = cls.getAnnotation(DomainServiceLayout.class);
-        String dslayoutOrder = domainServiceLayout != null ? domainServiceLayout.menuOrder(): null;
         final DomainService domainService = cls.getAnnotation(DomainService.class);
+        final DomainServiceLayout domainServiceLayout = cls.getAnnotation(DomainServiceLayout.class);
+
         String dsOrder = domainService != null ? domainService.menuOrder() : null;
-        
+        String dslayoutOrder = domainServiceLayout != null ? domainServiceLayout.menuOrder(): null;
+
         String min = minimumOf(dslayoutOrder, dsOrder);
-        return min!=null ? min : UNDEFINED; 
+        return min!=null ? min : Constants.MENU_ORDER_DEFAULT;
     }
 
 	// -- HELPER
@@ -52,7 +54,7 @@ public class DomainServiceMenuOrder {
     }
 
     private static boolean isUndefined(final String str) {
-        return str == null || str.equals(UNDEFINED);
+        return str == null || str.equals(Constants.MENU_ORDER_DEFAULT);
     }
 
 }

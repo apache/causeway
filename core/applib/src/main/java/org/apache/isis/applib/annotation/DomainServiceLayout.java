@@ -75,5 +75,5 @@ public @interface DomainServiceLayout {
      *     default order greater than Integer.MAX_VALUE - 50).
      * </p>
      */
-    String menuOrder() default "" + (Integer.MAX_VALUE - 100);
+    String menuOrder() default Constants.MENU_ORDER_DEFAULT;
 }

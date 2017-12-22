@@ -18,7 +18,6 @@
  */
 package org.apache.isis.core.metamodel.facets.object.domainservicelayout;
 
-
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -26,6 +25,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceMenuOrder;
 import org.apache.isis.core.metamodel.facets.object.domainservicelayout.annotation.DomainServiceLayoutFacetAnnotation;
 
 
@@ -48,15 +48,7 @@ public class DomainServiceLayoutFacetFactory extends FacetFactoryAbstract {
             return;
         }
 
-        final String domainServiceMenuOrder =
-                domainService != null && !domainService.menuOrder().equals("" + (Integer.MAX_VALUE - 100))
-                        ? domainService.menuOrder()
-                        : null;
-        final String domainServiceLayoutMenuOrder =
-                domainServiceLayout != null && !domainServiceLayout.menuOrder().equals("" + (Integer.MAX_VALUE - 100))
-                        ? domainServiceLayout.menuOrder()
-                        : null;
-        final String menuOrder = coalesce(domainServiceLayoutMenuOrder, domainServiceMenuOrder);
+        final String menuOrder = DomainServiceMenuOrder.orderOf(cls);
 
         DomainServiceLayout.MenuBar menuBar =
                 domainServiceLayout != null
@@ -70,7 +62,6 @@ public class DomainServiceLayoutFacetFactory extends FacetFactoryAbstract {
 
         FacetUtil.addFacet(NamedFacetForDomainServiceLayoutAnnotation.create(domainServiceLayout, facetHolder));
     }
-
 
     private static String coalesce(final String... reasons) {
         for (final String reason : reasons) {
