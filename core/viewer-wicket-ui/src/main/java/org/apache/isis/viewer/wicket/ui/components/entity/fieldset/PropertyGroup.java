@@ -29,6 +29,7 @@ import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
+import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.RepeatingView;
@@ -52,6 +53,7 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelUtil;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
 import org.apache.isis.viewer.wicket.ui.panels.HasDynamicallyVisibleContent;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
@@ -69,13 +71,14 @@ public class PropertyGroup extends PanelAbstract<EntityModel> implements HasDyna
 
     private final FieldSet fieldSet;
     private final boolean visible;
+    private final List<ScalarPanelAbstract2> childComponents;
 
     public PropertyGroup(final String id, final EntityModel model, final FieldSet fieldSet) {
         super(id, model);
         this.fieldSet = fieldSet;
 
         // the UI is only ever built once.
-        buildGui();
+        childComponents = buildGui();
 
         final ImmutableList<ObjectAssociation> associations = getObjectAssociations();
         this.visible = !associations.isEmpty();
@@ -86,7 +89,13 @@ public class PropertyGroup extends PanelAbstract<EntityModel> implements HasDyna
     }
 
 
-    private void buildGui() {
+
+    private List<ScalarPanelAbstract2> buildGui() {
+
+        final List<ScalarPanelAbstract2> childComponents = Lists.newArrayList();
+
+        setOutputMarkupPlaceholderTag(true);
+        setOutputMarkupId(true);
 
         final WebMarkupContainer div = new WebMarkupContainer(ID_MEMBER_GROUP);
 
@@ -101,7 +110,11 @@ public class PropertyGroup extends PanelAbstract<EntityModel> implements HasDyna
         for (final ObjectAssociation association : associations) {
             final WebMarkupContainer propertyRvContainer = new WebMarkupContainer(propertyRv.newChildId());
             propertyRv.addOrReplace(propertyRvContainer);
-            addPropertyToForm(getModel(), (OneToOneAssociation) association, propertyRvContainer, memberGroupActions);
+            final Component component = addPropertyToForm(getModel(), (OneToOneAssociation) association,
+                    propertyRvContainer, memberGroupActions);
+            if(component instanceof ScalarPanelAbstract2) {
+                childComponents.add((ScalarPanelAbstract2) component);
+            }
         }
 
         WebMarkupContainer panelHeading = new WebMarkupContainer("panelHeading");
@@ -132,6 +145,8 @@ public class PropertyGroup extends PanelAbstract<EntityModel> implements HasDyna
         } else {
             this.addOrReplace(div);
         }
+
+        return childComponents;
     }
 
     private ImmutableList<ObjectAssociation> getObjectAssociations() {
@@ -193,7 +208,7 @@ public class PropertyGroup extends PanelAbstract<EntityModel> implements HasDyna
                     .toList();
     }
 
-    private void addPropertyToForm(
+    private Component addPropertyToForm(
             final EntityModel entityModel,
             final OneToOneAssociation otoa,
             final WebMarkupContainer container,
@@ -203,8 +218,7 @@ public class PropertyGroup extends PanelAbstract<EntityModel> implements HasDyna
 
         final ScalarModel scalarModel = entityModel.getPropertyModel(pm);
 
-
-        getComponentFactoryRegistry()
+        final Component component = getComponentFactoryRegistry()
                 .addOrReplaceComponent(container, ID_PROPERTY, ComponentType.SCALAR_NAME_AND_VALUE, scalarModel);
 
         final ObjectAdapter adapter = entityModel.load(AdapterManager.ConcurrencyChecking.NO_CHECK);
@@ -213,11 +227,26 @@ public class PropertyGroup extends PanelAbstract<EntityModel> implements HasDyna
 
         entityActions.addAll(
                 LinkAndLabelUtil.asActionLinksForAdditionalLinksPanel(entityModel, associatedActions, null));
+
+        return component;
+    }
+
+    @Override
+    public void onConfigure() {
+        for (final ScalarPanelAbstract2 childComponent : childComponents) {
+            childComponent.configure();
+        }
+        super.onConfigure();
     }
 
     @Override
     public boolean isVisible() {
-        return visible;
+        for (final ScalarPanelAbstract2 childComponent : childComponents) {
+            if(childComponent.isVisibilityAllowed()) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }
