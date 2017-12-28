@@ -17,14 +17,13 @@
  *  under the License.
  */
 
-/**
- * The @{@link org.apache.isis.applib.services.acceptheader.AcceptHeaderService} domain service is a
- * <code>@RequestScoped</code> service that simply exposes the HTTP Accept header to the domain.
- *
- * <p>
- * Its intended use is to support multiple versions of a REST API, where the responsibility for content negotiation (determining which version of the REST API is to be used) is managed by
- * </p>
- *
- * @see <a href="http://isis.apache.org/guides/rgsvc/rgsvc.html#_rgsvc_presentation-layer-api_AcceptHeaderService">Reference guide</a>
- */
-package org.apache.isis.applib.services.acceptheader;
+package org.apache.isis.applib.services.bookmarkui;
+
+import org.apache.isis.applib.annotation.Programmatic;
+
+public interface BookmarkUiService {
+
+    @Programmatic
+    void clear();
+
+}

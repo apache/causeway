@@ -21,6 +21,6 @@
  * The {@link org.apache.isis.applib.services.guice.GuiceBeanProvider} domain service acts as a bridge between
  * Apache Isis' Wicket viewer internal bootstrapping using Google Guice.
  *
- * @see <a href="http://isis.apache.org/guides/rgsvc/rgsvc.html#_rgsvc_integration-api_GuiceBeanProvider">Reference guide</a>
+ * @see <a href="http://isis.apache.org/guides/rgsvc/rgsvc.html#_rgsvc_presentation-api_GuiceBeanProvider">Reference guide</a>
  */
 package org.apache.isis.applib.services.guice;

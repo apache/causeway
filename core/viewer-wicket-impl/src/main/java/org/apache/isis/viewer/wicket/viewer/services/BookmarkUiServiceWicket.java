@@ -16,15 +16,26 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.viewer.wicket.viewer.services;
 
-/**
- * The @{@link org.apache.isis.applib.services.acceptheader.AcceptHeaderService} domain service is a
- * <code>@RequestScoped</code> service that simply exposes the HTTP Accept header to the domain.
- *
- * <p>
- * Its intended use is to support multiple versions of a REST API, where the responsibility for content negotiation (determining which version of the REST API is to be used) is managed by
- * </p>
- *
- * @see <a href="http://isis.apache.org/guides/rgsvc/rgsvc.html#_rgsvc_presentation-layer-api_AcceptHeaderService">Reference guide</a>
- */
-package org.apache.isis.applib.services.acceptheader;
+import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.services.bookmarkui.BookmarkUiService;
+import org.apache.isis.viewer.wicket.viewer.integration.wicket.AuthenticatedWebSessionForIsis;
+
+@DomainService(
+        nature = NatureOfService.DOMAIN,
+        menuOrder = "" + Integer.MAX_VALUE
+)
+public class BookmarkUiServiceWicket implements BookmarkUiService {
+
+    @Override
+    public void clear() {
+        final AuthenticatedWebSessionForIsis session = AuthenticatedWebSessionForIsis.get();
+        if (session == null) {
+            return;
+        }
+        session.getBreadcrumbModel().clear();
+        session.getBookmarkedPagesModel().clear();
+    }
+}

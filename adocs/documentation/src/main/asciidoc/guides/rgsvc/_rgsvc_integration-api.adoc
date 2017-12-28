@@ -38,16 +38,6 @@ It also lists their corresponding implementation, either a default implementatio
 `Contributions`
 
 
-|xref:../rgsvc/rgsvc.adoc#_rgsvc_integration-api_DeepLinkService[`o.a.i.applib` +
-`services.deeplink` +
-`DeepLinkService`]
-|Obtain a URL to a domain object (eg for use within an email or report)
-|`DeepLinkServiceWicket` +
-``o.a.i.viewer`` +
-``isis-viewer-wicket-impl``
-|Implementation only usable within Wicket viewer
-
-
 |xref:../rgsvc/rgsvc.adoc#_rgsvc_integration-api_EmailService[`o.a.i.applib.` +
 `services.email` +
 `EmailService`]
@@ -55,16 +45,6 @@ It also lists their corresponding implementation, either a default implementatio
 |`EmailServiceDefault` +
 ``o.a.i.core`` +
 ``isis-core-runtime``
-|
-
-
-|xref:../rgsvc/rgsvc.adoc#_rgsvc_integration-api_GuiceBeanProvider[`o.a.i.applib.` +
-`services.guice` +
-`GuiceBeanProvider`]
-|Access to internal framework services initialized using Guice DI.
-|`GuiceBeanProviderWicket` +
-``o.a.i.core`` +
-``isis-viewer-wicket-impl``
 |
 
 
@@ -114,9 +94,7 @@ Key:
 
 
 include::_rgsvc_integration-api_BookmarkService.adoc[leveloffset=+1]
-include::_rgsvc_integration-api_DeepLinkService.adoc[leveloffset=+1]
 include::_rgsvc_integration-api_EmailService.adoc[leveloffset=+1]
-include::_rgsvc_integration-api_GuiceBeanProvider.adoc[leveloffset=+1]
 include::_rgsvc_integration-api_JaxbService.adoc[leveloffset=+1]
 include::_rgsvc_integration-api_MementoService.adoc[leveloffset=+1]
 include::_rgsvc_integration-api_XmlSnapshotService.adoc[leveloffset=+1]

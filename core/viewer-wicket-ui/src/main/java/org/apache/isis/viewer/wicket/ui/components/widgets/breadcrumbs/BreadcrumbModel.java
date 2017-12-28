@@ -172,4 +172,10 @@ public class BreadcrumbModel implements Serializable {
         list.remove(bookmark);
     }
 
+    public synchronized void clear() {
+        bookmarkByOidStr.clear();
+        oidStrByBookmark.clear();
+        list.clear();
+        mostRecentlyVisitedOidStr = null;
+    }
 }

@@ -57,7 +57,7 @@ Bookmarks and Mementos:
 
 * xref:../rgsvc/rgsvc.adoc#_rgsvc_integration-api_BookmarkService[`BookmarkService`]
 * xref:../rgsvc/rgsvc.adoc#_rgsvc_integration-api_MementoService[`MementoService`]
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_integration-api_DeepLinkService[`DeepLinkService`]
+* xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-api_DeepLinkService[`DeepLinkService`]
 * xref:../rgsvc/rgsvc.adoc#_rgsvc_integration-api_JaxbService[`JaxbService`]
 * xref:../rgsvc/rgsvc.adoc#_rgsvc_integration-api_XmlSnapshotService[`XmlSnapshotService`]
 
@@ -74,7 +74,7 @@ Layout and UI Management:
 
 REST Support:
 
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_AcceptHeaderService[`AcceptHeaderService`]
+* xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-api_AcceptHeaderService[`AcceptHeaderService`]
 * xref:../rgsvc/rgsvc.adoc#_rgsvc_metadata-api_SwaggerService[`SwaggerService`]
 * xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_ContentMappingService[`ContentMappingService`] (SPI)
 
@@ -86,7 +86,7 @@ Metamodel:
 Other API:
 
 * xref:../rgsvc/rgsvc.adoc#_rgsvc_testing_FixtureScriptsDefault[`FixtureScriptsDefault`]
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_integration-api_GuiceBeanProvider[`GuiceBeanProvider`]
+* xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-api_GuiceBeanProvider[`GuiceBeanProvider`]
 * xref:../rgsvc/rgsvc.adoc#_rgsvc_testing_SudoService[`SudoService`]
 * xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_TransactionService[`TransactionService`]
 
