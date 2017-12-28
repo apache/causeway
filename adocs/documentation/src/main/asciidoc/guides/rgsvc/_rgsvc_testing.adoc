@@ -35,15 +35,14 @@ It also lists their corresponding implementation, either a default implementatio
 |API is also a concrete class
 
 
-|xref:../rgsvc/rgsvc.adoc#_rgsvc_testing_FixtureScriptsDefault[`o.a.i.applib.` +
-`services.` +
-`fixturespec` +
-`FixtureScriptsDefault`]
-|Fallback implementation of xref:../rgcms/rgcms.adoc#_rgcms_classes_super_FixtureScripts[`FixtureScripts`], providing the ability to execute fixture scripts.
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_testing_FixtureScripts[`o.a.i.applib.` +
+`fixturescripts` +
+`FixtureScripts`]
+|Provides the ability to execute fixture scripts.
 |`FixtureScriptsDefault` +
 ``o.a.i.core`` +
 ``isis-core-applib``
-|Interacts with xref:../rgsvc/rgsvc.adoc#_rgsvc_testing_FixtureScriptsSpecificationProvider[`FixtureScripts-
+|Default implementation uses xref:../rgsvc/rgsvc.adoc#_rgsvc_testing_FixtureScriptsSpecificationProvider[`FixtureScripts-
 SpecificationProvider`].
 
 
@@ -52,7 +51,7 @@ SpecificationProvider`].
 `services.fixturespec` +
 `FixtureScripts-` +
 `SpecificationProvider`]
-|Provides settings for xref:../rgsvc/rgsvc.adoc#_rgsvc_testing_FixtureScriptsDefault[`FixtureScriptsDefault`] fallback domain service for executing fixture scripts.
+|Provides settings for xref:../rgsvc/rgsvc.adoc#_rgsvc_testing_FixtureScripts[`FixtureScripts`] default domain service (`FixtureScriptsDefault`) for executing fixture scripts.
 |
 |
 
@@ -107,7 +106,7 @@ It also lists their corresponding implementation, either a default implementatio
 
 
 include::_rgsvc_testing_ExecutionParametersService.adoc[leveloffset=+1]
-include::_rgsvc_testing_FixtureScriptsDefault.adoc[leveloffset=+1]
+include::_rgsvc_testing_FixtureScripts.adoc[leveloffset=+1]
 include::_rgsvc_testing_FixtureScriptsSpecificationProvider.adoc[leveloffset=+1]
 include::_rgsvc_testing_SudoService.adoc[leveloffset=+1]
 include::_rgsvc_testing_SwitchUserService.adoc[leveloffset=+1]

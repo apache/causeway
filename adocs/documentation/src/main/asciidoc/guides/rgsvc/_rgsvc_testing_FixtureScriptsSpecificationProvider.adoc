@@ -6,10 +6,9 @@
 
 
 
-The `FixtureScriptsSpecificationProvider` configures the xref:../rgsvc/rgsvc.adoc#_rgsvc_testing_FixtureScriptsDefault[`FixtureScriptsDefault`] domain service, providing the location to search for fixture scripts and other settings.
+The `FixtureScriptsSpecificationProvider` configures the xref:../rgsvc/rgsvc.adoc#_rgsvc_testing_FixtureScripts[`FixtureScripts`] domain service, providing the location to search for fixture scripts and other settings.
 
-The service is only used if the `FixtureScriptsDefault` service is instantiated as a fallback by the framework.
-If the application provides its own subclass of xref:../rgcms/rgcms.adoc#_rgcms_classes_super_FixtureScripts[`FixtureScripts`] superclass, then this provider service is not used.
+The service is used only by the default implementation of `FixtureScripts`, namely `FixtureScriptsDefault`.
 
 [TIP]
 ====

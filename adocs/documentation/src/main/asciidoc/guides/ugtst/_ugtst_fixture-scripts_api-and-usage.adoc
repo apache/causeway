@@ -17,7 +17,7 @@ Let's look at `FixtureScripts` domain service in more detail first.
 [[_ugtst_fixture-scripts_api-and-usage_FixtureScripts]]
 == `FixtureScripts`
 
-The framework provides a default implementation of `FixtureScripts` domain service, namely the xref:../rgsvc/rgsvc.adoc#_rgsvc_testing_FixtureScriptsDefault[`FixtureScriptsDefault`] domain service.
+The framework provides a default implementation of `FixtureScripts` domain service, namely the xref:../rgsvc/rgsvc.adoc#_rgsvc_testing_FixtureScripts[`FixtureScriptsDefault`] domain service.
 This is annotated to be rendered on the secondary "Prototyping" menu.
 
 The behaviour of this domain menu service can be refined by providing an implementation of the optional xref:../rgsvc/rgsvc.adoc#_rgsvc_testing_FixtureScriptsSpecificationProvider[`FixtureScriptsSpecificationProvider`] SPI.

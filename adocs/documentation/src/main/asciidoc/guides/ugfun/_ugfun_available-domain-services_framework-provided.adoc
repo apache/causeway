@@ -85,7 +85,7 @@ Metamodel:
 
 Other API:
 
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_testing_FixtureScriptsDefault[`FixtureScriptsDefault`]
+* xref:../rgsvc/rgsvc.adoc#_rgsvc_testing_FixtureScripts[`FixtureScripts`]
 * xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-api_GuiceBeanProvider[`GuiceBeanProvider`]
 * xref:../rgsvc/rgsvc.adoc#_rgsvc_testing_SudoService[`SudoService`]
 * xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_TransactionService[`TransactionService`]
