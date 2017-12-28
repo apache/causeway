@@ -2232,9 +2232,9 @@ ${license.additional-notes}
 
         <module>maven-plugin</module>
 
-        <module>mavendeps-intellij</module>
-        <module>mavendeps-webapp</module>
-        <module>mavendeps-testing</module>
+        <module>mavendeps/intellij</module>
+        <module>mavendeps/webapp</module>
+        <module>mavendeps/testing</module>
     </modules>
 
 </project>

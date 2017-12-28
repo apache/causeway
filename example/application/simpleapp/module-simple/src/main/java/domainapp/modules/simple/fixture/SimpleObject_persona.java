@@ -45,12 +45,12 @@ public enum SimpleObject_persona implements PersonaWithBuilderScript<SimpleObjec
 
     private final String name;
 
-    @Override
+//    @Override
     public SimpleObjectBuilder builder() {
         return new SimpleObjectBuilder().setName(name);
     }
 
-    @Override
+    //@Override
     public SimpleObject findUsing(final ServiceRegistry2 serviceRegistry) {
         SimpleObjects simpleObjects = serviceRegistry.lookupService(SimpleObjects.class);
         return simpleObjects.findByNameExact(name);

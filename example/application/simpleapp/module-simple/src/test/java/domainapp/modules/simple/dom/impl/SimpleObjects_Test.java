@@ -83,7 +83,6 @@ public class SimpleObjects_Test {
                     return name.equals(item.getName());
                 }
 
-                @Override
                 public void describeTo(final Description description) {
                     description.appendText("has name of '" + name + "'");
                 }

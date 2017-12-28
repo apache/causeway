@@ -96,7 +96,6 @@ public class SimpleObject implements Comparable<SimpleObject> {
         return getName();
     }
 
-    @Override
     public int compareTo(final SimpleObject other) {
         return ComparisonChain.start()
                 .compare(this.getName(), other.getName())

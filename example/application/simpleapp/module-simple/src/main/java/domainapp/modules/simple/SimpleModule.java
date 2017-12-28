@@ -19,12 +19,10 @@
 package domainapp.modules.simple;
 
 import org.apache.isis.applib.fixturescripts.FixtureScript;
-import org.apache.isis.applib.fixturescripts.setup.PersonaEnumPersistAll;
 import org.apache.isis.applib.fixturescripts.teardown.TeardownFixtureAbstract2;
 import org.apache.isis.applib.ModuleAbstract;
 
 import domainapp.modules.simple.dom.impl.SimpleObject;
-import domainapp.modules.simple.fixture.SimpleObject_persona;
 
 public class SimpleModule extends ModuleAbstract {
 

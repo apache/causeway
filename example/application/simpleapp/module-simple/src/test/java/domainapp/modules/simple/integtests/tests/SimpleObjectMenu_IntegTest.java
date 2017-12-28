@@ -105,7 +105,7 @@ public class SimpleObjectMenu_IntegTest extends SimpleModuleIntegTestAbstract {
                     return false;
                 }
 
-                @Override
+                //@Override
                 public void describeTo(Description description) {
                     description.appendText("exception with causal chain containing " + cls.getSimpleName());
                 }
