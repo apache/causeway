@@ -53,12 +53,6 @@ This service is provided as a convenience for applications, it is not (currently
 
 
 
-== Registering the Service
-
-Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the
-`AppManifest` to xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' core
-implementation of `SwaggerService` service is automatically registered and injected (it is annotated with `@DomainService`) so no further configuration is required.
-
 
 == Related Services
 

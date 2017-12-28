@@ -106,10 +106,9 @@ To indicate that a changed object should be published is to annotate it with the
 
 
 
-== Registering the Services
+== Alternative Implementations
 
 The (non-ASF) link:http://platform.incode.org[Incode Platform^];s publishmq module provides an implementation of this service.
-Assuming that an `AppManifest` is being used to xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then this can be activated by updating the `pom.xml` and updating the `AppManifest#getModules()` method.
 
 The module also provide services that contribute to the UI.
 If contributions are not required in the UI, these can be suppressed either using security or by implementing a xref:../ugbtb/ugbtb.adoc#_ugbtb_hints-and-tips_vetoing-visibility[vetoing subscriber].

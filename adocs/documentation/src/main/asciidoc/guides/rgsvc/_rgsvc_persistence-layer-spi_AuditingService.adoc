@@ -65,12 +65,10 @@ The typical way to indicate that an object should be audited is to annotate it w
 
 
 
-== Registering the Services
+== Alternative Implementations
 
 The (non-ASF) http://platform.incode.org/modules/spi/audit/spi-audit.html[Incode Platform's audit module] provides an implementation of this service (`AuditingService`), and also provides a number of related domain services (`AuditingServiceMenu`,
 `AuditingServiceRepository` and `AuditingServiceContributions`).
-
-Assuming that an `AppManifest` is being used to xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then this can be activated by updating the `pom.xml` and updating the `AppManifest#getModules()` method.
 
 If menu items or contributions are not required in the UI, these can be suppressed either using security or by implementing a xref:../ugbtb/ugbtb.adoc#_ugbtb_hints-and-tips_vetoing-visibility[vetoing subscriber].
 

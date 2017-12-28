@@ -63,19 +63,6 @@ The service inspects the ``Grid``'s concrete class to determine which actual `Gr
 The framework provides a default implementation of this service, namely `GridServiceDefault`.
 
 
-== Registering the Services
-
-Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the
-`AppManifest` to xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]), then the
- default implementation of `GridLoaderService` is automatically registered and injected, and no further
- configuration is required.
-
-To use an alternative implementation, use
-xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
-in the xref:../rgsvc/rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
-That said, there should be little reason to use a different implementation; if behaviour does need to be changed, it would also be possible to replace the implementation of either the `GridLoaderService` or the `GridSystemService`.
-
-
 
 == Related Services
 

@@ -27,11 +27,10 @@ The API of this service:
 ----
 public class SwitchUserService {
     void switchUser(String username, String... roles);      // <1>
-    void switchUser(String username, List<String> roles);   // <2>
+    void switchUser(String username, List<String> roles);   // <1>
 }
 ----
 <1> Switches the current user with the list of specified roles.
-<2> Switches the current user with the list of specified roles.
 
 
 

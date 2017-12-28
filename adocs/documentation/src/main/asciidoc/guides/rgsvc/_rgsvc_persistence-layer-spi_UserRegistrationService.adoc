@@ -51,18 +51,6 @@ The core Apache Isis framework itself defines only an API; there is no default i
 
 That said, if you have configured your app to use the (non-ASF) http://platform.incode.org/modules/spi/security/spi-security.html[Incode Platform's security module] then note that the security module does provide an abstract implementation (`SecurityModuleAppUserRegistrationServiceAbstract`) of the `UserRegistrationService`. You will need to extend that service and provide implementation for the two abstract methods: `getInitialRole()` and `getAdditionalInitialRoles()`.
 
-This is needed so that the self-registered users are assigned automatically to your application role(s) and be able to use the application. Without any role such user will be able only to see/use the logout link of the application.
-
-
-
-
-== Registering the Services
-
-There is no default implementation of this service provided by the core Apache Isis framework.
-
-If using the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s security module) for authentication and authorization, then note that it provides an adapter class, `SecurityModuleAppUserRegistrationServiceAbstract`, that provides most of the implementation.
-You are still required to implement a subclass and register.
-
 For example:
 
 [source,java]
@@ -82,6 +70,9 @@ public class AppUserRegistrationService extends SecurityModuleAppUserRegistratio
     private ApplicationRoles applicationRoles;
 }
 ----
+
+This is needed so that the self-registered users are assigned automatically to your application role(s) and be able to use the application. Without any role such user will be able only to see/use the logout link of the application.
+
 
 
 

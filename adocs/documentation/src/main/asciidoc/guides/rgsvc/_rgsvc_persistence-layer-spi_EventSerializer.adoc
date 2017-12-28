@@ -42,6 +42,8 @@ It's important to make sure that the publishing service implementation is able t
 
 == Implementation
 
+There is no default implementation of this service provided by the core Apache Isis framework.
+
 The (obsolete) http://github.com/isisaddons-legacy/isis-module-publishing[Isis addons' publishing] module provides an implementation (`org.isisaddons.module.publishing.dom.eventserializer.RestfulObjectsSpecEventSerializer`) that represents the event payload using the representation defined by the link:http://restfulobjects.org[Restful Objects spec] of (transient) objects, grafting on the metadata as additional JSON nodes.
 
 For example, this is the JSON generated on an action invocation:
@@ -56,19 +58,6 @@ image::{_imagesdir}reference-services-spi/EventSerializer/changed-object-publish
 
 You could if you wish change the representation by registering your own implementation of this API in `isis.properties`:
 
-
-
-
-== Registering the Services
-
-There is no default implementation of this service provided by the core Apache Isis framework.
-
-The (obsolete) http://github.com/isisaddons-legacy/isis-module-publishing[Isis addons' publishing] module provides an implementation of this service (`RestfulObjectsSpecEventSerializer`) that serializes action invocations and published
-objects into a format based on the Restful Objects specification.  It also (as you might imagine) provides an
-implementation of the xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublishingService[`PublishingService`].
-
-Assuming that an `AppManifest` is being used to xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app])
-then this can be activated by updating the `pom.xml` and updating the `AppManifest#getModules()` method.
 
 
 

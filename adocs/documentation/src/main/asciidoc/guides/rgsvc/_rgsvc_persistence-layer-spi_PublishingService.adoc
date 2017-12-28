@@ -50,6 +50,8 @@ The serialized form returned by `EventSerializer` must be in a form that the `Pu
 
 == Implementation
 
+There is no default implementation of this service provided by the core Apache Isis framework.
+
 The (obsolete) http://github.com/isisaddons-legacy/isis-module-publishing[Isis addons' publishing] module provides an implementation (`org.isisaddons.module.publishing.dom.PublishingService`) that persists each event as a `PublishedEvent` entity.
 This holds the serialized form of the event metadata and payload as translated into a string by the injected `EventSerializer`.  The module also provides its own implementation of `EventSerializer`,
 namely `RestfulObjectsSpecEventSerializer`, which represents the event payload using the representation defined by the
@@ -144,18 +146,6 @@ public class ToDoItemChangedPayloadFactory implements PublishingPayloadFactoryFo
 }
 ----
 
-
-
-
-== Registering the Services
-
-There is no default implementation of this service provided by the core Apache Isis framework.
-
-The (obsolete) Isis addons' http://github.com/isisaddons-legacy/isis-module-publishing[publishing] module provides an implementation of this service.
-Assuming that an `AppManifest` is being used to xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then this can be activated by updating the `pom.xml` and updating the `AppManifest#getModules()` method.
-
-The module also provides services that contribute to the UI.
-If contributions are not required in the UI, these can be suppressed either using security or by implementing a xref:../ugbtb/ugbtb.adoc#_ugbtb_hints-and-tips_vetoing-visibility[vetoing subscriber].
 
 
 

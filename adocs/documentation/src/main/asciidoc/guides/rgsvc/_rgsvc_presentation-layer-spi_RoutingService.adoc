@@ -64,13 +64,6 @@ The route from the first service that returns `true` from its `canRoute(...)` me
 
 
 
-== Registering the Services
-
-Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the
-`AppManifest` to xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis'
-default implementation of `RoutingService` service is automatically registered and injected (it is annotated with
-`@DomainService`) so no further configuration is required.
-
 
 
 == Related Services
