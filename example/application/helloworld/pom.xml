@@ -142,12 +142,6 @@
         </pluginRepository>
     </pluginRepositories>
 
-    <modules>
-        <module>module-simple</module>
-        <module>application</module>
-        <module>webapp</module>
-    </modules>
-
     <dependencyManagement>
         <dependencies>
             <dependency>
