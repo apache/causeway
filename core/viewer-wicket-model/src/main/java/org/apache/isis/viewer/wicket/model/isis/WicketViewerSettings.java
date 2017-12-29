@@ -38,12 +38,6 @@ public interface WicketViewerSettings extends Serializable {
     int getMaxTitleLengthInParentedTables();
 
     /**
-     * The prefix, if any, of any CSS class name that identifies property columns within tables.
-     * @return
-     */
-    String getCssPrefix();
-
-    /**
      * The pattern used for rendering and parsing dates.
      *
      * <p>

@@ -29,7 +29,6 @@ import org.apache.wicket.model.IModel;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel.RenderingHint;
@@ -54,18 +53,18 @@ public final class ObjectAdapterPropertyColumn extends ColumnAbstract<ObjectAdap
 
     private final String propertyExpression;
     private final boolean escaped;
-    private final String cssPrefix;
+    private final String parentTypeName;
 
     public ObjectAdapterPropertyColumn(
             final IModel<String> columnNameModel,
             final String sortProperty,
             final String propertyName,
             final boolean escaped,
-            final WicketViewerSettings settings) {
+            final String parentTypeName) {
         super(columnNameModel, sortProperty);
         this.propertyExpression = propertyName;
         this.escaped = escaped;
-        this.cssPrefix = settings.getCssPrefix();
+        this.parentTypeName = parentTypeName;
     }
 
     public Component getHeader(final String componentId)
@@ -79,8 +78,7 @@ public final class ObjectAdapterPropertyColumn extends ColumnAbstract<ObjectAdap
     public String getCssClass() {
         final String cssClass = super.getCssClass();
         return (!Strings.isNullOrEmpty(cssClass) ? (cssClass + " ") : "") +
-               (!Strings.isNullOrEmpty(cssPrefix) ? cssPrefix + "-" : "") +
-                propertyExpression;
+               parentTypeName + "-" + propertyExpression;
     }
 
     @Override
