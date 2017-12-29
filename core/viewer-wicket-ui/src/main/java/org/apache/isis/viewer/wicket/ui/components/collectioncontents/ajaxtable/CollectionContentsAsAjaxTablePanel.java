@@ -125,6 +125,9 @@ public class CollectionContentsAsAjaxTablePanel
 
                     // perhaps something to tackle in a separate ticket....
                     ajaxRequestTarget.add(dataTable);
+
+                    // hmm... just reading this;
+                    // could perhaps use ajaxRequestTarget.addJavaScript(JGrowlUtils....)
                 }
             };
             toggleboxColumn.setOnConcurrencyExceptionHandler(handler2);
@@ -258,7 +261,7 @@ public class CollectionContentsAsAjaxTablePanel
         final NamedFacet facet = property.getFacet(NamedFacet.class);
         final boolean escaped = facet == null || facet.escaped();
 
-        return new ObjectAdapterPropertyColumn(Model.of(property.getName()), property.getId(), property.getId(), escaped);
+        return new ObjectAdapterPropertyColumn(Model.of(property.getName()), property.getId(), property.getId(), escaped, getSettings());
     }
 
 

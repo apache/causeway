@@ -604,7 +604,4 @@ public final class StringExtensions {
         return buf.toString();
     }
 
-
-
-    
 }

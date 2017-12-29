@@ -51,6 +51,11 @@ public class WicketViewerSettingsDefault implements WicketViewerSettings {
         return getConfiguration().getInteger("isis.viewer.wicket.maxTitleLengthInParentedTables", getMaxTitleLengthInTables());
     }
 
+    @Override
+    public String getCssPrefix() {
+        return getConfiguration().getString("isis.viewer.wicket.cssPrefix", "isis");
+    }
+
     /**
      * Fallback for either {@link #getMaxTitleLengthInParentedTables()} and {@link #getMaxTitleLengthInParentedTables()}
      */
