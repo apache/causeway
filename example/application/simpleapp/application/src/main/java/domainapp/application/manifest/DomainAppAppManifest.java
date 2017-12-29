@@ -30,7 +30,7 @@ public class DomainAppAppManifest extends AppManifestAbstract2 {
     public static final Builder BUILDER = Builder
             .forModule(new DomainAppApplicationModule())
             .withConfigurationPropertiesFile(DomainAppAppManifest.class,
-                    "isis.properties",
+                    "isis-non-changing.properties",
                     "authentication_shiro.properties",
                     "persistor_datanucleus.properties",
                     "viewer_restfulobjects.properties",
