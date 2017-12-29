@@ -24,6 +24,9 @@ import java.util.List;
 import java.util.Set;
 
 import com.google.common.base.Function;
+import com.google.common.base.Optional;
+import com.google.common.base.Throwables;
+import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Lists;
 
 import org.apache.wicket.Application;
@@ -33,6 +36,7 @@ import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.Session;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
+import org.apache.wicket.core.request.handler.ListenerInvocationNotAllowedException;
 import org.apache.wicket.core.request.handler.PageProvider;
 import org.apache.wicket.core.request.handler.RenderPageRequestHandler;
 import org.apache.wicket.core.request.handler.RenderPageRequestHandler.RedirectPolicy;
@@ -40,6 +44,7 @@ import org.apache.wicket.protocol.http.PageExpiredException;
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.component.IRequestablePage;
 import org.apache.wicket.request.cycle.AbstractRequestCycleListener;
+import org.apache.wicket.request.cycle.PageRequestHandlerTracker;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.slf4j.Logger;
@@ -48,9 +53,12 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType;
+import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSession;
@@ -180,6 +188,33 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
             return new RenderPageRequestHandler(new PageProvider(mmvErrorPage), RedirectPolicy.ALWAYS_REDIRECT);
         }
 
+        // adapted from http://markmail.org/message/un7phzjbtmrrperc
+        if(ex instanceof ListenerInvocationNotAllowedException) {
+            final ListenerInvocationNotAllowedException linaex = (ListenerInvocationNotAllowedException) ex;
+            if(linaex.getComponent() != null && "cancelButton".equals(linaex.getComponent().getId())) {
+                // no message.
+                // this seems to occur when press ESC twice in rapid succession on a modal dialog.
+            } else {
+                addMessage(null);
+
+            }
+            return respondGracefully(cycle);
+        }
+
+        final List<Throwable> causalChain = Throwables.getCausalChain(ex);
+        final Optional<Throwable> hiddenIfAny = FluentIterable.from(causalChain).filter(
+                ObjectMember.HiddenException.isInstanceOf()).first();
+        if(hiddenIfAny.isPresent()) {
+            addMessage("hidden");
+            return respondGracefully(cycle);
+        }
+        final Optional<Throwable> disabledIfAny = FluentIterable.from(causalChain).filter(
+                ObjectMember.DisabledException.isInstanceOf()).first();
+        if(disabledIfAny.isPresent()) {
+            addTranslatedMessage(disabledIfAny.get().getMessage());
+            return respondGracefully(cycle);
+        }
+
         PageProvider errorPageProvider = errorPageProviderFor(ex);
         // avoid infinite redirect loops
         RedirectPolicy redirectPolicy = ex instanceof PageExpiredException
@@ -188,6 +223,32 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
         return errorPageProvider != null 
                 ? new RenderPageRequestHandler(errorPageProvider, redirectPolicy)
                 : null;
+    }
+
+    private IRequestHandler respondGracefully(final RequestCycle cycle) {
+        final IRequestablePage page = PageRequestHandlerTracker.getFirstHandler(cycle).getPage();
+        final PageProvider pageProvider = new PageProvider(page);
+        return new RenderPageRequestHandler(pageProvider);
+    }
+
+    private void addMessage(final String message) {
+        final String translatedMessage = translate(message);
+        addTranslatedMessage(translatedMessage);
+    }
+
+    private void addTranslatedMessage(final String translatedSuffixIfAny) {
+        final String translatedPrefix = translate("Action no longer available");
+        final String message = translatedSuffixIfAny != null
+                ? String.format("%s (%s)", translatedPrefix, translatedSuffixIfAny)
+                : translatedPrefix;
+        getMessageBroker().addMessage(message);
+    }
+
+    private String translate(final String text) {
+        if(text == null) {
+            return null;
+        }
+        return getTranslationService().translate(WebRequestCycleForIsis.class.getName(), text);
     }
 
     protected PageProvider errorPageProviderFor(Exception ex) {
@@ -275,7 +336,7 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
     public void setPageClassRegistry(PageClassRegistry pageClassRegistry) {
         this.pageClassRegistry = pageClassRegistry;
     }
-    
+
     //region > Dependencies (from isis' context)
     protected ServicesInjector getServicesInjector() {
         return getIsisSessionFactory().getServicesInjector();
@@ -293,9 +354,19 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
         return getIsisSessionFactory().getCurrentSession().getAuthenticationSession();
     }
 
+    protected MessageBroker getMessageBroker() {
+        return getAuthenticationSession().getMessageBroker();
+    }
+
     IsisSessionFactory getIsisSessionFactory() {
         return IsisContext.getSessionFactory();
     }
+
+
+    TranslationService getTranslationService() {
+        return getServicesInjector().lookupService(TranslationService.class);
+    }
+
 
     //endregion
 
