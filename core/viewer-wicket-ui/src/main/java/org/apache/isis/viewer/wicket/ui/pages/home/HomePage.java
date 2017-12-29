@@ -66,7 +66,7 @@ public class HomePage extends PageAbstract {
             final ActionModel actionModel = ActionModel.create(new EntityModel(objectAndAction.objectAdapter), objectAndAction.action);
             final FormExecutorDefault<ActionModel> formExecutor =
                     new FormExecutorDefault<>( new ActionFormExecutorStrategy(actionModel));
-            formExecutor.executeAndProcessResults(getPage(), null, null);
+            formExecutor.executeAndProcessResults(getPage(), null, null, actionModel.isWithinPrompt());
         } else {
             Components.permanentlyHide(themeDiv, ComponentType.ACTION_PROMPT);
             getComponentFactoryRegistry().addOrReplaceComponent(themeDiv, ComponentType.WELCOME, null);

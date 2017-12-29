@@ -51,6 +51,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
+import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer2;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType;
 import org.apache.isis.applib.services.i18n.TranslationService;
@@ -70,6 +71,7 @@ import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.error.ErrorPage;
 import org.apache.isis.viewer.wicket.ui.pages.login.WicketSignInPage;
 import org.apache.isis.viewer.wicket.ui.pages.mmverror.MmvErrorPage;
+import org.apache.isis.viewer.wicket.ui.panels.PromptFormAbstract;
 
 /**
  * Isis-specific implementation of the Wicket's {@link RequestCycle},
@@ -191,13 +193,21 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
         // adapted from http://markmail.org/message/un7phzjbtmrrperc
         if(ex instanceof ListenerInvocationNotAllowedException) {
             final ListenerInvocationNotAllowedException linaex = (ListenerInvocationNotAllowedException) ex;
-            if(linaex.getComponent() != null && "cancelButton".equals(linaex.getComponent().getId())) {
+            if(linaex.getComponent() != null && PromptFormAbstract.ID_CANCEL_BUTTON.equals(linaex.getComponent().getId())) {
                 // no message.
                 // this seems to occur when press ESC twice in rapid succession on a modal dialog.
             } else {
                 addMessage(null);
 
             }
+            return respondGracefully(cycle);
+        }
+
+        // handle recognised exceptions gracefully also
+        final List<ExceptionRecognizer2> exceptionRecognizers =
+                getServicesInjector().lookupServices(ExceptionRecognizer2.class);
+        String recognizedMessageIfAny = new ExceptionRecognizerComposite(exceptionRecognizers).recognize(ex);
+        if(recognizedMessageIfAny != null) {
             return respondGracefully(cycle);
         }
 

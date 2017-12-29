@@ -52,7 +52,7 @@ public class ExceptionRecognizerComposite implements ExceptionRecognizer2 {
         this(Arrays.asList(exceptionRecognizers));
     }
     
-    public ExceptionRecognizerComposite(final List<ExceptionRecognizer> exceptionRecognizers) {
+    public ExceptionRecognizerComposite(final List<? extends ExceptionRecognizer> exceptionRecognizers) {
         for (final ExceptionRecognizer er : exceptionRecognizers) {
             add(er);
         }

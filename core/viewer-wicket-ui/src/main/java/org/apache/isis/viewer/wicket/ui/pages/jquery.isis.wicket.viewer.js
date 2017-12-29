@@ -61,7 +61,11 @@ $(function() {
     };
 
     var isisFadeInVeil = function(attributes, jqxhr, settings) {
-        // use timeouts because JQuery's delay(...) cannot be stopped. 
+        // use timeouts because JQuery's delay(...) cannot be stopped.
+        if(isisVeilTimeoutId) {
+            // already queued a fade-in
+            return;
+        }
         isisVeilTimeoutId = setTimeout(function() {
             $("#veil").fadeIn(750);
         }, 250);

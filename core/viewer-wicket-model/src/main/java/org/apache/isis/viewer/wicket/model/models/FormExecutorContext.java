@@ -28,4 +28,16 @@ public interface FormExecutorContext extends ParentEntityModelProvider {
     InlinePromptContext getInlinePromptContext();
 
     void reset();
+
+    boolean isWithinPrompt();
+
+    class Util{
+        private Util(){}
+
+        public static boolean isWithinPrompt(final FormExecutorContext formExecutorContext) {
+            final PromptStyle promptStyle = formExecutorContext.getPromptStyle();
+            return promptStyle.isInlineOrInlineAsIfEdit() &&
+                    formExecutorContext.getInlinePromptContext() != null;
+        }
+    }
 }

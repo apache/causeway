@@ -687,6 +687,11 @@ public class ScalarModel extends EntityModel implements LinksProvider,FormExecut
         kind.reset(this);
     }
 
+    @Override
+    public boolean isWithinPrompt() {
+        return FormExecutorContext.Util.isWithinPrompt(this);
+    }
+
     public EntityModel getParentEntityModel() {
         return parentEntityModel;
     }
