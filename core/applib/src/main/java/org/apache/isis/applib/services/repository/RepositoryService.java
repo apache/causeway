@@ -173,7 +173,10 @@ public interface RepositoryService {
      * this method is only really suitable for initial development/prototyping, or for classes with very few
      * instances.  Use {@link #firstMatch(Query)} for production code.
      * </p>
+     *
+     * @deprecated - use {@link #uniqueMatch(Class, Predicate)} or {@link #allMatches(Class, Predicate, long...)}
      */
+    @Deprecated
     @Programmatic
     <T> T firstMatch(final Class<T> ofType, final Predicate<T> predicate);
 
@@ -186,7 +189,10 @@ public interface RepositoryService {
      * </p>
      *
      * @see #uniqueMatch(Query)
+     *
+     * @deprecated - use {@link #uniqueMatch(Query)} or {@link #allMatches(Query)}.
      */
+    @Deprecated
     @Programmatic
     <T> T firstMatch(Query<T> query);
 
@@ -216,8 +222,7 @@ public interface RepositoryService {
      * </p>
      *
      * <p>
-     *     This method is the recommended way of querying for (precisely) one instance.  See also {@link #firstMatch(Query)}
-     *     for less strict querying.
+     *     This method is the recommended way of querying for (precisely) one instance.  See also {@link #allMatches(Query)}
      * </p>
      *
      * @see #firstMatch(Query)
