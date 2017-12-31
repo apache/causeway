@@ -11,7 +11,7 @@ These configuration properties are typically stored in `WEB-INF/persistor_datanu
 
 
 .JDO/DataNucleus Objectstore Configuration Properties
-[cols="2a,1,3a", options="header"]
+[cols="2a,2a,2a", options="header"]
 |===
 |Property
 |Value +
@@ -20,23 +20,44 @@ These configuration properties are typically stored in `WEB-INF/persistor_datanu
 
 |`isis.persistor.` +
 `datanucleus.` +
+`standaloneCollection.` +
+`bulkLoad`
+|`true`, `false` +
+(`false`)
+|(`1.16.0-SNAPSHOT`) Enables bulk load of standalone collections.
+
+Further xref:../ugodn/ugodn.adoc#_ugodn_configuring_bulk-load[discussion below].
+
+|`isis.persistor.` +
+`datanucleus.` +
 `classMetadataLoadedListener`
 |`FQCN`
-|The default (`o.a.i.os.jdo.dn.CreateSchemaObjectFromClassMetadata`) creates a DB schema object
+`o.a.i.os.` +
+`jdo.dn.` +
+`CreateSchemaObject` +
+`FromClassMetadata`
+|The default implementation creates a DB schema object.
 
+There generally is no need to change this from its default.
 
-|`isis.persistor.datanucleus.` +
-`RegisterEntities.packagePrefix`
-|fully qualified package names (CSV)
-|that specifies the entities early rather than allow DataNucleus to find the entities lazily.  Further xref:../ugodn/ugodn.adoc#_ugodn_configuring_eagerly-registering-entities[discussion below].
+|`isis.persistor.` +
+`datanucleus.` +
+`RegisterEntities.` +
+`packagePrefix`
+|fully qualified package names +
+(CSV)
+|(As of `1.16.0-SNAPSHOT`), this property is ignored.
 
-This property is IGNORED if the xref:../rgcfg/rgcfg.adoc#_rgcfg_specifying-components[`isis.appManifest`] configuration property is specified, or if an xref:../rgcms/rgcms.adoc#_rgcms_classes_super_AppManifest[`AppManifest`] is provided programmatically.
+The property is now an implementation detail, automatically derived from the set of modules provided in the xref:../rgcms/rgcms.adoc#_rgcms_classes_super_AppManifest[`AppManifest`].
+
+It holds the set of packages to search so that DataNucleus builds its metamodel eagerly rather than lazily.
+Further xref:../ugodn/ugodn.adoc#_ugodn_configuring_eagerly-registering-entities[discussion below].
 
 
 |`isis.persistor.datanucleus.` +
 `PublishingService.serializedForm`
 | zipped
-|
+|(`PublishingService` is deprecated, and so therefore so is this property).
 
 |===
 

@@ -185,7 +185,8 @@ Setting this option retains the behaviour of the viewer pre-`1.15.0`.
 | Ignored for 1.8.0+; in earlier versions forced regular case rather than title case in the UI
 
 |`isis.viewer.wicket.` +
-`replaceDisabledTagWithReadonlyTag`
+`replaceDisabledTag`- +
+`WithReadonlyTag`
 | `true`,`false` +
 (`_true_`)
 | Whether to replace 'disabled' tag with 'readonly' (for link:https://www.w3.org/TR/2014/REC-html5-20141028/forms.html#the-readonly-attribute[w3 spec]-compliant browsers such as for Firefox and Chrome 54+) which prevent copy from 'disabled' fields.

@@ -22,6 +22,8 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Modifier;
 import java.sql.Timestamp;
 import java.text.MessageFormat;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -30,12 +32,15 @@ import javax.jdo.FetchGroup;
 import javax.jdo.FetchPlan;
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
+import javax.jdo.identity.SingleFieldIdentity;
 import javax.jdo.listener.InstanceLifecycleListener;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import org.datanucleus.enhancement.Persistable;
+import org.datanucleus.exceptions.NucleusObjectNotFoundException;
+import org.datanucleus.identity.DatastoreIdImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -935,7 +940,7 @@ public class PersistenceSession implements
                             LOG.debug("getObject; oid=" + oid);
                         }
 
-                        final Object pojo = loadPojo(oid);
+                        final Object pojo = loadPersistentPojo(oid);
                         return mapRecreatedPojo(oid, pojo);
                     }
                 });
@@ -944,9 +949,9 @@ public class PersistenceSession implements
 
     //endregion
 
-    //region > loadPojo
+    //region > loadPersistentPojo
 
-    public Object loadPojo(final RootOid rootOid) {
+    private Object loadPersistentPojo(final RootOid rootOid) {
 
         Object result;
         try {
@@ -978,6 +983,63 @@ public class PersistenceSession implements
             throw new ObjectNotFoundException(rootOid);
         }
         return result;
+    }
+
+    private Map<RootOid,Object> loadPersistentPojos(final List<RootOid> rootOids) {
+
+        if(rootOids.isEmpty()) {
+            return zip(rootOids, Collections.emptyList());
+        }
+
+        final List<Object> dnOids = Lists.newArrayList();
+        for (final RootOid rootOid : rootOids) {
+            final Object id = JdoObjectIdSerializer.toJdoObjectId(rootOid);
+            if(id instanceof SingleFieldIdentity) {
+                dnOids.add(id);
+            } else if (id instanceof String && ((String) id).contains("[OID]")) {
+                final DatastoreIdImpl datastoreId = new DatastoreIdImpl((String)id);
+                dnOids.add(datastoreId);
+            } else {
+                // application identity
+                final DatastoreIdImpl datastoreId = new DatastoreIdImpl(clsOf(rootOid).getName(), id);
+                dnOids.add(datastoreId);
+            }
+        }
+        FetchPlan fetchPlan = persistenceManager.getFetchPlan();
+        fetchPlan.addGroup(FetchGroup.DEFAULT);
+        final List<Object> persistentPojos = Lists.newArrayList();
+        try {
+            final Collection<Object> pojos = persistenceManager.getObjectsById(dnOids, true);
+            for (final Object pojo : pojos) {
+                try {
+                    persistentPojos.add(pojo);
+                } catch(Exception ex) {
+                    persistentPojos.add(null);
+                }
+            }
+        } catch(NucleusObjectNotFoundException nonfe) {
+            // at least one not found; fall back to loading one by one
+            for (final Object dnOid : dnOids) {
+                try {
+                    final Object persistentPojo = persistenceManager.getObjectById(dnOid);
+                    persistentPojos.add(persistentPojo);
+                } catch(Exception ex) {
+                    persistentPojos.add(null);
+                }
+            }
+        }
+        Map<RootOid, Object> pojoByOid = zip(rootOids, persistentPojos);
+        return pojoByOid;
+    }
+
+    private static Map<RootOid, Object> zip(final List<RootOid> rootOids, final Collection<Object> pojos) {
+        final Map<RootOid,Object> pojoByOid = Maps.newLinkedHashMap();
+        int i = 0;
+        for (final Object pojo : pojos) {
+            final RootOid rootOid = rootOids.get(i++);
+            pojoByOid.put(rootOid, pojo);
+        }
+        return pojoByOid;
     }
 
     private Class<?> clsOf(final RootOid oid) {
@@ -1517,6 +1579,61 @@ public class PersistenceSession implements
         }
     }
 
+    public Map<RootOid, ObjectAdapter> adaptersFor(final List<RootOid> rootOids) {
+        return adaptersFor(rootOids, ConcurrencyChecking.NO_CHECK);
+    }
+
+    public Map<RootOid,ObjectAdapter> adaptersFor(
+            final List<RootOid> rootOids,
+            final ConcurrencyChecking concurrencyChecking) {
+
+        final Map<RootOid, ObjectAdapter> adapterByOid = Maps.newLinkedHashMap();
+
+        List<RootOid> notYetLoadedOids = Lists.newArrayList();
+        for (RootOid rootOid : rootOids) {
+            // attempt to locate adapter for the Oid
+            ObjectAdapter adapter = getAdapterFor(rootOid);
+            // handle view models or transient
+            if (adapter == null) {
+                if (rootOid.isTransient() || rootOid.isViewModel()) {
+                    final Object pojo = recreatePojoTransientOrViewModel(rootOid);
+                    adapter = mapRecreatedPojo(rootOid, pojo);
+                    sync(concurrencyChecking, adapter, rootOid);
+                }
+            }
+            if (adapter != null) {
+                adapterByOid.put(rootOid, adapter);
+            } else {
+                // persistent oid, to load in bulk
+                notYetLoadedOids.add(rootOid);
+            }
+        }
+
+        // recreate, in bulk, all those not yet loaded
+        final Map<RootOid, Object> pojoByOid = loadPersistentPojos(notYetLoadedOids);
+        for (Map.Entry<RootOid, Object> entry : pojoByOid.entrySet()) {
+            final RootOid rootOid = entry.getKey();
+            final Object pojo = entry.getValue();
+            if(pojo != null) {
+                ObjectAdapter adapter;
+                try {
+                    adapter = mapRecreatedPojo(rootOid, pojo);
+                    adapterByOid.put(rootOid, adapter);
+                } catch(ObjectNotFoundException ex) {
+                    throw ex; // just rethrow
+                } catch(RuntimeException ex) {
+                    throw new PojoRecreationException(rootOid, ex);
+                }
+                sync(concurrencyChecking, adapter, rootOid);
+            } else {
+                // null indicates it couldn't be loaded
+                // do nothing here...
+            }
+        }
+
+        return adapterByOid;
+    }
+
     /**
      * As per {@link #adapterFor(RootOid, ConcurrencyChecking)}, with
      * {@link ConcurrencyChecking#NO_CHECK no checking}.
@@ -1567,7 +1684,12 @@ public class PersistenceSession implements
         if (adapter == null) {
             // else recreate
             try {
-                final Object pojo = recreatePojo(rootOid);
+                final Object pojo;
+                if(rootOid.isTransient() || rootOid.isViewModel()) {
+                    pojo = recreatePojoTransientOrViewModel(rootOid);
+                } else {
+                    pojo = loadPersistentPojo(rootOid);
+                }
                 adapter = mapRecreatedPojo(rootOid, pojo);
             } catch(ObjectNotFoundException ex) {
                 throw ex; // just rethrow
@@ -1576,6 +1698,17 @@ public class PersistenceSession implements
             }
         }
 
+        // sync versions of original, with concurrency checking if required
+        sync(concurrencyChecking, adapter, rootOid);
+
+        return adapter;
+    }
+
+
+
+    private void sync(
+            final ConcurrencyChecking concurrencyChecking,
+            final ObjectAdapter adapter, final RootOid rootOid) {
         // sync versions of original, with concurrency checking if required
         Oid adapterOid = adapter.getOid();
         if(adapterOid instanceof RootOid) {
@@ -1589,8 +1722,8 @@ public class PersistenceSession implements
                     final Version otherVersion = originalOid.getVersion();
                     final Version thisVersion = recreatedOid.getVersion();
                     if( thisVersion != null &&
-                        otherVersion != null &&
-                        thisVersion.different(otherVersion)) {
+                            otherVersion != null &&
+                            thisVersion.different(otherVersion)) {
 
                         if(concurrencyCheckingGloballyEnabled && ConcurrencyChecking.isCurrentlyEnabled()) {
                             LOG.info("concurrency conflict detected on " + recreatedOid + " (" + otherVersion + ")");
@@ -1615,20 +1748,9 @@ public class PersistenceSession implements
                 }
             }
         }
-
-        return adapter;
     }
 
-
-    private Object recreatePojo(RootOid oid) {
-        if(oid.isTransient() || oid.isViewModel()) {
-            return recreatePojoDefault(oid);
-        } else {
-            return loadPojo(oid);
-        }
-    }
-
-    private Object recreatePojoDefault(final RootOid rootOid) {
+    private Object recreatePojoTransientOrViewModel(final RootOid rootOid) {
         final ObjectSpecification spec =
                 specificationLoader.lookupBySpecId(rootOid.getObjectSpecId());
         final Object pojo;
