@@ -13,7 +13,7 @@ Furthermore, DataNucleus will search for various other XML mapping files, eg `ma
 
 
 include::_ugodn_configuring_properties.adoc[leveloffset=+1]
-include::_ugodn_configuring_persistence-xml.adoc[leveloffset=+1]
-include::_ugodn_configuring_eagerly-registering-entities.adoc[leveloffset=+1]
+include::_ugodn_configuring_bulk-load.adoc[leveloffset=+1]
 include::_ugodn_configuring_disabling-persistence-by-reachability.adoc[leveloffset=+1]
+include::_ugodn_configuring_persistence-xml.adoc[leveloffset=+1]
 include::_ugodn_configuring_using-jndi-data-source.adoc[leveloffset=+1]
