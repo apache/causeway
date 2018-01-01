@@ -31,11 +31,11 @@ Further xref:../ugodn/ugodn.adoc#_ugodn_configuring_bulk-load[discussion below].
 |`isis.persistor.` +
 `datanucleus.` +
 `classMetadataLoadedListener`
-|`FQCN`
-`o.a.i.os.` +
+|fully qualified class name +
+(`o.a.i.os.` +
 `jdo.dn.` +
 `CreateSchemaObject` +
-`FromClassMetadata`
+`FromClassMetadata`)
 |The default implementation creates a DB schema object.
 
 There generally is no need to change this from its default.
@@ -44,8 +44,7 @@ There generally is no need to change this from its default.
 `datanucleus.` +
 `RegisterEntities.` +
 `packagePrefix`
-|fully qualified package names +
-(CSV)
+|fully qualified package names, CSV
 |(As of `1.16.0-SNAPSHOT`), this property is derived automatically derived from the set of modules provided in the xref:../rgcms/rgcms.adoc#_rgcms_classes_super_AppManifest[`AppManifest`], and so does not need to be specified explicitly.
 
 It holds the set of packages to search so that DataNucleus builds its metamodel eagerly rather than lazily.
@@ -54,7 +53,7 @@ It holds the set of packages to search so that DataNucleus builds its metamodel 
 |`isis.persistor.datanucleus.` +
 `PublishingService.serializedForm`
 | zipped
-|(`PublishingService` is deprecated, and so therefore so is this property).
+|(`PublishingService` is deprecated, and therefore so is this property).
 
 |===
 
