@@ -670,6 +670,18 @@ If enabled, this configuration property will ensure that domain services only de
 Only intended for "emergency use" as a workaround while pending fix/patch to Apache Isis itself.  (Note that there is no "datanucleus" in the property).
 
 
+|`isis.reflector.` +
+`explicitAnnotations.` +
+`action`
+|`true`,`false` +
+(`false`)
+|(`1.16.0-SNAPSHOT`) Whether action methods need to be explicitly annotated using `@Action`.
+
+The default is that any non-`@Programmatic` methods that are not otherwise recognised as properties, collections or supporting methods, are assumed to be actions.
+Setting this property reverses this policy, effectively requiring that all actions need to be annotated with `@Action`.
+
+Note that properties and collections are still implicitly inferred by virtue of being "getters".
+
 |`isis.reflector.facet.` +
 `cssClass.patterns`
 |regex:css1, regex2:css2,...

@@ -44,6 +44,7 @@ import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFac
 import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.services.configinternal.ConfigurationServiceInternal;
 import org.apache.isis.core.metamodel.spec.FreeStandingList;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -402,9 +403,11 @@ public class SpecificationLoader implements ApplicationScopedComponent {
             return new ObjectSpecificationOnStandaloneList(servicesInjector,
                     facetProcessor);
         } else {
+            final ConfigurationServiceInternal configService = servicesInjector.lookupService(
+                    ConfigurationServiceInternal.class);
             final FacetedMethodsBuilderContext facetedMethodsBuilderContext =
                     new FacetedMethodsBuilderContext(
-                            this, facetProcessor, layoutMetadataReaders);
+                            this, facetProcessor, layoutMetadataReaders, configService);
             return new ObjectSpecificationDefault(cls, facetedMethodsBuilderContext,
                     servicesInjector, facetProcessor, natureOfServiceIfAny);
         }
