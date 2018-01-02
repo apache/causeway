@@ -155,16 +155,17 @@ public class IsisSessionFactory
             //
 
             final List<Object> services = servicesInjector.getRegisteredServices();
-            // take a copy of all services to avoid occasionall concurrent modification exceptions
+            // take a copy of all services to avoid occasional concurrent modification exceptions
             // that can sometimes occur in the loop
             final List<Object> copyOfServices = Lists.newArrayList(services);
             final TitleService titleService = servicesInjector.lookupServiceElseFail(TitleService.class);
             for (Object service : copyOfServices) {
                 final String unused = titleService.titleOf(service);
             }
-            final List<ObjectSpecification> objectSpecsCopy =
-                    Lists.newArrayList(servicesInjector.getSpecificationLoader().allSpecifications());
-            for (final ObjectSpecification objSpec : objectSpecsCopy) {
+
+            // (previously we took a protective copy to avoid a concurrent modification exception,
+            // but this is now done by SpecificationLoader itself)
+            for (final ObjectSpecification objSpec : servicesInjector.getSpecificationLoader().allSpecifications()) {
                 final Class<?> correspondingClass = objSpec.getCorrespondingClass();
                 if(correspondingClass.isEnum()) {
                     final Object[] enumConstants = correspondingClass.getEnumConstants();

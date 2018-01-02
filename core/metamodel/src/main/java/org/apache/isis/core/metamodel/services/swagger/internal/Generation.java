@@ -31,7 +31,6 @@ import com.google.common.base.Joiner;
 import com.google.common.base.Strings;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
 
@@ -45,12 +44,12 @@ import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.services.ServiceUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 import io.swagger.models.Info;
 import io.swagger.models.ModelImpl;
@@ -129,10 +128,9 @@ class Generation {
     }
 
     void appendServicePathsAndDefinitions() {
-        // take copy to avoid concurrent modification exception
-        final Collection<ObjectSpecification> allSpecs = Lists.newArrayList(specificationLoader.allSpecifications());
-
-        for (final ObjectSpecification objectSpec :  allSpecs) {
+        // (previously we took a protective copy to avoid a concurrent modification exception,
+        // but this is now done by SpecificationLoader itself)
+        for (final ObjectSpecification objectSpec : specificationLoader.allSpecifications()) {
 
             final DomainServiceFacet domainServiceFacet = objectSpec.getFacet(DomainServiceFacet.class);
             if (domainServiceFacet == null) {
@@ -182,9 +180,9 @@ class Generation {
     }
 
     void appendObjectPathsAndDefinitions() {
-        // take copy to avoid concurrent modification exception
-        final Collection<ObjectSpecification> allSpecs = Lists.newArrayList(specificationLoader.allSpecifications());
-        for (final ObjectSpecification objectSpec : allSpecs) {
+        // (previously we took a protective copy to avoid a concurrent modification exception,
+        // but this is now done by SpecificationLoader itself)
+        for (final ObjectSpecification objectSpec : specificationLoader.allSpecifications()) {
 
             final DomainServiceFacet domainServiceFacet = objectSpec.getFacet(DomainServiceFacet.class);
             if (domainServiceFacet != null) {

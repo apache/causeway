@@ -175,7 +175,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
 
     private void cacheBySpecId() {
         final Map<ObjectSpecId, ObjectSpecification> specById = Maps.newHashMap();
-        for (final ObjectSpecification objSpec : allSpecifications()) {
+        for (final ObjectSpecification objSpec : allCachedSpecifications()) {
             final ObjectSpecId objectSpecId = objSpec.getSpecId();
             if (objectSpecId == null) {
                 continue;
@@ -460,10 +460,20 @@ public class SpecificationLoader implements ApplicationScopedComponent {
 
     //region > allSpecifications
     /**
-     * Return all the loaded specifications.
+     * Returns (a new list holding a copy of) all the loaded specifications.
+     *
+     * <p>
+     *     A new list is returned to avoid concurrent modification exceptions for if the caller then
+     *     iterates over all the specifications and performs an activity that might give rise to new
+     *     ObjectSpec's being discovered, eg performing metamodel validation.
+     * </p>
      */
     @Programmatic
     public Collection<ObjectSpecification> allSpecifications() {
+        return Lists.newArrayList(allCachedSpecifications());
+    }
+
+    private Collection<ObjectSpecification> allCachedSpecifications() {
         return cache.allSpecifications();
     }
 

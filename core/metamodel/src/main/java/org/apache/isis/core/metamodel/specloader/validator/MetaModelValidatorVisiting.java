@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.metamodel.specloader.validator;
 
+import java.util.Collection;
 import java.util.List;
 
 import com.google.common.collect.Lists;
@@ -65,9 +66,9 @@ public class MetaModelValidatorVisiting extends MetaModelValidatorAbstract {
             final ValidationFailures validationFailures) {
 
         // all currently known specs
-        // (we take a protective copy in case any of the metamodel validators cause us to discover further object specs)
-        final List<ObjectSpecification> specsToValidate =
-                Lists.newArrayList(specificationLoader.allSpecifications());
+        // (previously we took a protective copy to avoid a concurrent modification exception,
+        // but this is now done by SpecificationLoader itself)
+        final Collection<ObjectSpecification> specsToValidate = specificationLoader.allSpecifications();
 
         // don't validate any specs already processed
         specsToValidate.removeAll(specsAlreadyValidated);
