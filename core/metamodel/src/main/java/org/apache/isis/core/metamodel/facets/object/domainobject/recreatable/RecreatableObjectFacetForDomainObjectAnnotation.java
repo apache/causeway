@@ -62,7 +62,6 @@ public class RecreatableObjectFacetForDomainObjectAnnotation extends
                 }
                 return new RecreatableObjectFacetForDomainObjectAnnotation(
                         holder,
-                        nature == Nature.VIEW_MODEL ? ArchitecturalLayer.APPLICATION : ArchitecturalLayer.DOMAIN,
                         specificationLoader, adapterManager, servicesInjector, postConstructMethodCache);
         }
         // shouldn't happen, the above switch should match all cases.
@@ -71,12 +70,11 @@ public class RecreatableObjectFacetForDomainObjectAnnotation extends
 
     private RecreatableObjectFacetForDomainObjectAnnotation(
             final FacetHolder holder,
-            final ArchitecturalLayer architecturalLayer,
             final SpecificationLoader specificationLoader,
             final AdapterManager adapterManager,
             final ServicesInjector servicesInjector,
             final PostConstructMethodCache postConstructMethodCache) {
-        super(holder, architecturalLayer, RecreationMechanism.INITIALIZES, specificationLoader, adapterManager, servicesInjector,
+        super(holder, RecreationMechanism.INITIALIZES, specificationLoader, adapterManager, servicesInjector,
                 postConstructMethodCache);
     }
 

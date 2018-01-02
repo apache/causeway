@@ -30,7 +30,7 @@ public class RecreatableObjectFacetForRecreatableObjectInterface extends Recreat
             final FacetHolder holder,
             final PostConstructMethodCache postConstructMethodCache,
             final ServicesInjector servicesInjector) {
-        super(holder, ArchitecturalLayer.APPLICATION, RecreationMechanism.INITIALIZES, postConstructMethodCache, servicesInjector);
+        super(holder, RecreationMechanism.INITIALIZES, postConstructMethodCache, servicesInjector);
     }
 
     @Override

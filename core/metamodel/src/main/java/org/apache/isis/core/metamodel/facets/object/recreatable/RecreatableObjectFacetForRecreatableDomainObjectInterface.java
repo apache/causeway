@@ -30,7 +30,7 @@ public class RecreatableObjectFacetForRecreatableDomainObjectInterface extends R
             final FacetHolder holder,
             final PostConstructMethodCache postConstructMethodCache,
             final ServicesInjector servicesInjector) {
-        super(holder, ArchitecturalLayer.DOMAIN, RecreationMechanism.INITIALIZES, postConstructMethodCache, servicesInjector);
+        super(holder, RecreationMechanism.INITIALIZES, postConstructMethodCache, servicesInjector);
     }
 
     @Override

@@ -32,7 +32,7 @@ public class RecreatableObjectFacetForXmlRootElementAnnotation extends Recreatab
             final FacetHolder holder,
             final ServicesInjector servicesInjector,
             final PostConstructMethodCache postConstructMethodCache) {
-        super(holder, ArchitecturalLayer.APPLICATION, RecreationMechanism.INSTANTIATES,
+        super(holder, RecreationMechanism.INSTANTIATES,
                 postConstructMethodCache, servicesInjector);
     }
 

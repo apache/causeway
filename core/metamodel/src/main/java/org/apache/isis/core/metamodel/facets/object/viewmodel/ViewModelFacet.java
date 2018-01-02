@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets.object.viewmodel;
 
-import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 
 /**
@@ -39,11 +38,6 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
  */
 public interface ViewModelFacet extends Facet {
 
-
-    public enum ArchitecturalLayer {
-        APPLICATION,
-        DOMAIN
-    }
 
     public enum RecreationMechanism {
         /**
@@ -108,9 +102,4 @@ public interface ViewModelFacet extends Facet {
      */
     Object clone(Object pojo);
 
-    /**
-     * Currently metadata only, capturing the nature of the view model, eg {@link Nature#EXTERNAL_ENTITY} is a {@link ArchitecturalLayer#DOMAIN domain} layer where as {@link Nature#VIEW_MODEL} is {@link ArchitecturalLayer#APPLICATION application} layer.
-     * @return
-     */
-    ArchitecturalLayer getArchitecturalLayer();
 }

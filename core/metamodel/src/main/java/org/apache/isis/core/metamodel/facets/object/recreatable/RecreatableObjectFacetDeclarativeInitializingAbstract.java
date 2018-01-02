@@ -48,13 +48,12 @@ public abstract class RecreatableObjectFacetDeclarativeInitializingAbstract exte
 
     public RecreatableObjectFacetDeclarativeInitializingAbstract(
             final FacetHolder holder,
-            final ArchitecturalLayer architecturalLayer,
             final RecreationMechanism recreationMechanism,
             final SpecificationLoader specificationLoader,
             final AdapterManager adapterManager,
             final ServicesInjector servicesInjector,
             final PostConstructMethodCache postConstructMethodCache) {
-        super(holder, architecturalLayer, recreationMechanism, postConstructMethodCache, servicesInjector);
+        super(holder, recreationMechanism, postConstructMethodCache, servicesInjector);
         this.specificationLoader = specificationLoader;
         this.adapterManager = adapterManager;
     }
