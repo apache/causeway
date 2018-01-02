@@ -54,27 +54,15 @@ public class RecreatableObjectFacetForDomainObjectAnnotation extends
                 return null;
 
             case VIEW_MODEL:
+            case EXTERNAL_ENTITY:
+            case INMEMORY_ENTITY:
                 final ViewModelFacet existingFacet = holder.getFacet(ViewModelFacet.class);
                 if (existingFacet != null) {
-                    if (existingFacet.getArchitecturalLayer() == ArchitecturalLayer.APPLICATION) {
-                        // if compatible existing facet, then just ignore
-                        // (otherwise the metamodel
-                        return null;
-                    }
-                    // otherwise, we continue through and add the new facet making the existing one the
-                    // underlying.  The metamodel validator on RecreatableObjectFacetFactory will then mark the
-                    // model as invalid because of incompatible semantics.
+                    return null;
                 }
                 return new RecreatableObjectFacetForDomainObjectAnnotation(
                         holder,
-                        ArchitecturalLayer.APPLICATION,
-                        specificationLoader, adapterManager, servicesInjector, postConstructMethodCache);
-
-            case EXTERNAL_ENTITY:
-            case INMEMORY_ENTITY:
-                return new RecreatableObjectFacetForDomainObjectAnnotation(
-                        holder,
-                        ArchitecturalLayer.DOMAIN,
+                        nature == Nature.VIEW_MODEL ? ArchitecturalLayer.APPLICATION : ArchitecturalLayer.DOMAIN,
                         specificationLoader, adapterManager, servicesInjector, postConstructMethodCache);
         }
         // shouldn't happen, the above switch should match all cases.
