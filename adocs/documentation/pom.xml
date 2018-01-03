@@ -410,6 +410,7 @@
                                         <echo message=""/>
                                         <echo message="TO COMPLETE:"/>
                                         <echo message=""/>
+                                        <echo message="   cd ../../../isis-site"/>
                                         <echo message="   sh preview.sh"/>
                                         <echo message="   git commit -am 'some message'"/>
                                         <echo message="   git push"/>
