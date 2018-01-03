@@ -35,6 +35,7 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
 import org.apache.isis.applib.services.jdosupport.IsisJdoSupport;
 import org.apache.isis.applib.services.repository.RepositoryService;
+import org.apache.isis.applib.services.xactn.TransactionService;
 
 @DomainService(
         nature = NatureOfService.VIEW_MENU_ONLY,
@@ -91,6 +92,20 @@ public class SimpleObjects {
             final String name) {
         return repositoryService.persist(new SimpleObject(name));
     }
+
+    @Action
+    @MemberOrder(sequence = "4")
+    public void createAndDelete(
+            @ParameterLayout(named="Name")
+            final String name) {
+        final SimpleObject simpleObject = create(name);
+        transactionService.nextTransaction();
+        simpleObject.delete();
+        transactionService.nextTransaction();
+    }
+
+    @javax.inject.Inject
+    TransactionService transactionService;
 
     @javax.inject.Inject
     RepositoryService repositoryService;
