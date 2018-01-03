@@ -52,6 +52,7 @@
 
         <build.dir>${project.basedir}/target/site</build.dir>
 
+        <isis-site-latest.dir>../../../isis-site/latest</isis-site-latest.dir>
         <isis-site-content.dir>../../../isis-site/content</isis-site-content.dir>
         <isis-site-search.dir>../../../isis-site/search</isis-site-search.dir>
         <message>updating content (built from adocs/documentation in isis.git repo)</message>
@@ -215,10 +216,17 @@
                                     <target>
                                         <echo message=""/>
                                         <echo message=""/>
-                                        <echo message="deleting everything in ${isis-site-content.dir}"/>
+                                        <echo message="deleting everything in ${isis-site-latest.dir}"/>
                                         <echo message=""/>
                                         <delete includeemptydirs="true">
-                                            <fileset dir="${isis-site-content.dir}" includes="**/*"/>
+                                            <fileset dir="${isis-site-latest.dir}" includes="**/*"/>
+                                        </delete>
+                                        <echo message=""/>
+                                        <echo message=""/>
+                                        <echo message="deleting everything in ${isis-site-content.dir} (excluding 'versions' subdir)"/>
+                                        <echo message=""/>
+                                        <delete includeemptydirs="true">
+                                            <fileset dir="${isis-site-content.dir}" includes="**/*" excludes="versions/**"/>
                                         </delete>
                                     </target>
                                 </configuration>
@@ -255,9 +263,9 @@
 
                                         <echo message=""/>
                                         <echo message=""/>
-                                        <echo message="copying from ${build.dir} to ${isis-site-content.dir}"/>
+                                        <echo message="copying from ${build.dir} to ${isis-site-latest.dir}"/>
                                         <echo message=""/>
-                                        <copy todir="${isis-site-content.dir}" overwrite="true" force="true">
+                                        <copy todir="${isis-site-latest.dir}" overwrite="true" force="true">
                                             <fileset dir="${build.dir}"/>
                                         </copy>
 
@@ -267,82 +275,81 @@
                                         <exec executable="node" dir="${isis-site-search.dir}">
                                             <arg value="--max_old_space_size=2048"/>
                                             <arg value="_scripts/index.js"/>
-                                            <arg value="../content/"/>
+                                            <arg value="../latest/"/>
                                             <arg value="-o"/>
-                                            <arg value="../content/elasticlunr/index.json"/>
+                                            <arg value="../latest/elasticlunr/index.json"/>
                                             <arg value="-V"/>
                                         </exec>
 
                                         <echo message=""/>
                                         <echo message=""/>
-                                        <echo message="converting CRLF to LF for all text files under ${isis-site-content.dir}"/>
+                                        <echo message="converting CRLF to LF for all text files under ${isis-site-latest.dir}"/>
 
                                         <echo message="... .html files"/>
-                                        <fixcrlf srcdir="${isis-site-content.dir}"
+                                        <fixcrlf srcdir="${isis-site-latest.dir}"
                                                  includes="**/*.html"
                                                  eol="lf"
                                                  eof="remove"
                                                  fixlast="true"/>
 
                                         <echo message="... .xml files"/>
-                                        <fixcrlf srcdir="${isis-site-content.dir}"
+                                        <fixcrlf srcdir="${isis-site-latest.dir}"
                                                  includes="**/*.xml"
                                                  eol="lf"
                                                  eof="remove"
                                                  fixlast="false"/>
 
-
                                         <echo message="... .xsd files"/>
-                                        <fixcrlf srcdir="${isis-site-content.dir}"
+                                        <fixcrlf srcdir="${isis-site-latest.dir}"
                                                  includes="**/*.xsd"
                                                  eol="lf"
                                                  eof="remove"
                                                  fixlast="false"/>
 
                                         <echo message="... .css files"/>
-                                        <fixcrlf srcdir="${isis-site-content.dir}"
+                                        <fixcrlf srcdir="${isis-site-latest.dir}"
                                                  includes="**/*.css"
                                                  eol="lf"
                                                  eof="remove"
                                                  fixlast="false"/>
 
                                         <echo message="... .svg files"/>
-                                        <fixcrlf srcdir="${isis-site-content.dir}"
+                                        <fixcrlf srcdir="${isis-site-latest.dir}"
                                                  includes="**/*.svg"
                                                  eol="lf"
                                                  eof="remove"
                                                  fixlast="false"/>
 
                                         <echo message="... .less files"/>
-                                        <fixcrlf srcdir="${isis-site-content.dir}"
+                                        <fixcrlf srcdir="${isis-site-latest.dir}"
                                                  includes="**/*.less"
                                                  eol="lf"
                                                  eof="remove"
                                                  fixlast="false"/>
 
                                         <echo message="... .scss files"/>
-                                        <fixcrlf srcdir="${isis-site-content.dir}"
+                                        <fixcrlf srcdir="${isis-site-latest.dir}"
                                                  includes="**/*.scss"
                                                  eol="lf"
                                                  eof="remove"
                                                  fixlast="false"/>
 
                                         <echo message="... .js files"/>
-                                        <fixcrlf srcdir="${isis-site-content.dir}"
+                                        <fixcrlf srcdir="${isis-site-latest.dir}"
                                                  includes="**/*.js"
                                                  eol="lf"
                                                  eof="remove"
                                                  fixlast="false"/>
 
                                         <echo message="... .sh files"/>
-                                        <fixcrlf srcdir="${isis-site-content.dir}"
+                                        <fixcrlf srcdir="${isis-site-latest.dir}"
                                                  includes="**/*.sh"
                                                  eol="lf"
                                                  eof="remove"
                                                  fixlast="false"/>
 
                                         <echo message="... .rdf files"/>
-                                        <fixcrlf srcdir="${isis-site-content.dir}"
+                                        <fixcrlf srcdir="${isis-site-latest.dir}"
                                                  includes="**/*.rdf"
                                                  eol="lf"
                                                  eof="remove"
@@ -352,10 +359,18 @@
                                              apply fixcrlf, so just copy over again... -->
                                         <echo message=""/>
                                         <echo message=""/>
-                                        <echo message="copying over slick CSS and SCSS from ${build.dir} to ${isis-site-content.dir}"/>
+                                        <echo message="copying over slick CSS and SCSS from ${build.dir} to ${isis-site-latest.dir}"/>
+                                        <echo message=""/>
+                                        <copy todir="${isis-site-latest.dir}" overwrite="true" force="true">
+                                            <fileset dir="${build.dir}"  includes="**/css/slick/**/*"/>
+                                        </copy>
+
+                                        <echo message=""/>
+                                        <echo message=""/>
+                                        <echo message="copying from ${isis-site-latest.dir} to ${isis-site-content.dir}"/>
                                         <echo message=""/>
                                         <copy todir="${isis-site-content.dir}" overwrite="true" force="true">
-                                            <fileset dir="${build.dir}"  includes="**/css/slick/**/*"/>
+                                            <fileset dir="isis-site-latest.dir"/>
                                         </copy>
 
                                     </target>
@@ -420,46 +435,7 @@
             </activation>
             <build>
                 <plugins>
-                    <plugin>
-                        <groupId>org.codehaus.gmaven</groupId>
-                        <artifactId>groovy-maven-plugin</artifactId>
-                        <version>2.0</version>
-                        <executions>
-                            <execution>
-                                <id>install</id>
-                                <phase>install</phase>
-                                <goals>
-                                    <goal>execute</goal>
-                                </goals>
-                                <configuration>
-                                    <source>
-                                        def siteDir = new File("${isis-site-content.dir}", "..")
-
-                                        "git add content --all".execute(null, siteDir).in.text
-                                        "git reset content/guides".execute(null, siteDir).in.text
-
-                                        def gitStatusOutput = "git status --porcelain".execute(null, siteDir).in.text
-
-                                        def lines = gitStatusOutput.readLines()
-                                        lines.each{ line ->
-                                            def file=line.drop(3)
-                                            if(file.endsWith(".html")) {
-                                                def pdfFile = file.replaceAll(".html",".pdf")
-                                                "git add $file".execute(null, siteDir).in.text
-                                                "git add $pdfFile".execute(null, siteDir).in.text
-                                            }
-                                        }
-
-                                        // the commit doesn't seem to do anything; so instead using antrun plugin below to complete.
-                                        // "git commit --message '${message}'".execute(null, siteDir).text
-                                        // "git reset --hard".execute(null, siteDir).in.text
-
-                                        return null
-                                    </source>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
+<!--
                     <plugin>
                         <artifactId>maven-antrun-plugin</artifactId>
                         <version>1.8</version>
@@ -473,7 +449,7 @@
                                         <echo message=""/>
                                         <echo message="git commit -m '${message}' "/>
                                         <echo message=""/>
-                                        <exec executable="git" dir="${isis-site-content.dir}">
+                                        <exec executable="git" dir="${isis-site-latest.dir}">
                                             <arg value="commit"/>
                                             <arg value="-m"/>
                                             <arg value="${message}"/>
@@ -481,11 +457,11 @@
 
                                         <echo message=""/>
                                         <echo message=""/>
-                                        <echo message="git reset --hard"/>
+                                        <echo message="git reset &#45;&#45;hard"/>
                                         <echo message=""/>
-                                        <exec executable="git" dir="${isis-site-content.dir}">
+                                        <exec executable="git" dir="${isis-site-latest.dir}">
                                             <arg value="reset"/>
-                                            <arg value="--hard"/>
+                                            <arg value="&#45;&#45;hard"/>
                                         </exec>
                                         <echo message=""/>
                                     </target>
@@ -496,6 +472,7 @@
                             </execution>
                         </executions>
                     </plugin>
+                    -->
                 </plugins>
             </build>
         </profile>
