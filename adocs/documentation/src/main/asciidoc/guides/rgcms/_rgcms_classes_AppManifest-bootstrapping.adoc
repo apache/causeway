@@ -247,7 +247,12 @@ The next section describes some helper classes that the framework provides to he
 [[__rgcms_classes_AppManifest-bootstrapping_bootstrapping_AppManifestAbstract]]
 === AppManifestAbstract
 
-(As of `1.15.0`), the `AppManifestAbstract` and its associated builder (`AppManifestAbstract.Builder`) make it easy to bootstrap the application both as a webapp and also as an integration test.
+[IMPORTANT]
+====
+The framework-provided `AppManifestAbstract2` and `AppManifestAbstract2.Builder` supercede `AppManifestAbstract`, making it easy to write an `AppManifest` defined by a set of xref:rgcms.adoc#_rgcms_classes_Module[`Module`] implementations.
+====
+
+The `AppManifestAbstract` and its associated builder (`AppManifestAbstract.Builder`) make it easy to bootstrap the application both as a webapp and also as an integration test.
 
 Rather than implement `AppManifest` interface directly, instead your application subclasses from `AppManifestAbstract`.
 This takes an instance of a `AppManifestAbstract.Builder` in its constructor; the builder is what allows for variation between environments.

@@ -8,11 +8,8 @@
 The recommended way to run integration tests is against an HSQLDB in-memory database.
 This can be done using the application's usual xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[`AppManifest`], and then overriding JDBC URL and similar.
 
-Different releases of the framework have provided differing ways to accomplish this.
-(As of `1.15.0`) using `IntegrationTestAbstract2`'s `bootstrapUsing` method will make these configuration properties as the default.
-In earlier releases either the helper methods in `AppManifest.Util` class or the `IsisConfigurationForJdoIntegTests` (implementation of `IsisConfiguration`) can be used.
+If inheriting from `IntegrationTestAbstract3`'s then these configuration properties are set up automatically:
 
-Whichever approach is used, these are the configuration properties that will be overridden:
 
 .Default Configuration Properties for Integration Tests
 [cols="2a,1,3a", options="header"]

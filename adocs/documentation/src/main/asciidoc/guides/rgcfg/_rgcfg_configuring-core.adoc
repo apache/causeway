@@ -185,7 +185,7 @@ In order for these events to fire the class must be annotated using `@DomainObje
 [[__rgcfg_configuring-core_fixture-events]]
 == Fixture Events
 
-(As of `1.15.1`), events are fired to indicate the start and end of fixtures are being installed.
+Fixture events are fired to indicate the start and end of fixtures are being installed.
 This are listened to by the xref:rgsvc.adoc#_rgsvc_persistence-layer-api_QueryResultsCache[`QueryResultsCache`] to disable caching during this period.
 
 .Core Configuration Properties for Fixture Events
@@ -200,7 +200,7 @@ This are listened to by the xref:rgsvc.adoc#_rgsvc_persistence-layer-api_QueryRe
 |`isis.fixtures.fireEvents`
 |`true`,`false` +
 (`true`)
-|(As of `1.15.1`), whether fixture `FixturesInstallingEvent` and `FixturesInstalledEvent` events should be posted while the system is bootstrapping.
+|Whether fixture `FixturesInstallingEvent` and `FixturesInstalledEvent` events should be posted while the system is bootstrapping.
 
 
 
@@ -447,8 +447,7 @@ In the (probably remote) chance that this functionality isn't required, they can
 |(Whether the framework should support `inject...()` as a prefix for injecting domain services into other domain objects.
 +
 By default this is disabled.
-The default prior to `1.13.0` was enabled.
-If the setting is left as disabled then this may reduce application start-up times.
+This can help reduce application start-up times.
 
 
 |`isis.services.` +

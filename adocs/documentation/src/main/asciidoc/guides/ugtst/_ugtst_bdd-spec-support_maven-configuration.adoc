@@ -21,7 +21,7 @@ To set it up manually, update the `pom.xml` of your domain object model module:
 <1> Normally `test`; usual Maven scoping rules apply.
 
 
-As of `1.14.0`, the configuration is wrapped up as maven mixins:
+The configuration is wrapped up as maven mixins:
 
 [source,xml]
 ----

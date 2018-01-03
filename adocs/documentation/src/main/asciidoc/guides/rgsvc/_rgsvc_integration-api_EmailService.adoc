@@ -70,7 +70,7 @@ In addition the following properties can be set:
 
 * `isis.service.email.sender.username` +
 +
-(As of `1.15.1`), rather than authenticate using the sender address, instead use the specified username.
+Rather than authenticate using the sender address, instead use the specified username.
 
 * `isis.service.email.throwExceptionOnFail` +
 +

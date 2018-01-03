@@ -58,9 +58,9 @@ URLs, you will find that the schemas are also downloadable from this location.
 to the xref:../rgcms/rgcms.adoc#_rgcms_schema_interaction[interaction] that executes the command, and to any
 xref:../rgcms/rgcms.adoc#_rgcms_schema_changes[changes] to domain objects occurring as a side-effect of that interaction.
 <6> the name of the user who created the command (whose intention it is to invoke the action/edit the property).
-<7> the target object (or objects) to be invoked.  As of `1.13.0`, a bulk action will create multiple commands,
-each with only a single target, but a future version of the framework may also support a single bulk command against
-this multiple targets (ie all-or-nothing).
+<7> the target object (or objects) to be invoked.
+A bulk action will create multiple commands, each with only a single target.
+(A future version of the framework may also support a single bulk command against this multiple targets, ie all-or-nothing).
 <8> the `memberDto`, defined below, the captures the action/property and arguments/new value.
 
 The `CommandDto` DTO corresponding to the `commandDto` root element can be marshalled to/from XML using the

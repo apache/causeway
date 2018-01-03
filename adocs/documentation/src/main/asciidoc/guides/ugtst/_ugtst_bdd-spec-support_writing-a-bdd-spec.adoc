@@ -42,13 +42,8 @@ Feature: List and Create New Simple Objects
 
 The "@DomainAppDemo" is a custom tag we've specified to indicate the prerequisite fixtures to be loaded; more on this in a moment.
 
-
-[NOTE]
+[IMPORTANT]
 ====
-Prior to `1.16.0` the BDD spec support provided by the framework aimed to allow tests to be written either as integration tests or as unit tests.
-While there are good reasons for attempting this (see http://silkandspinach.net/2013/01/18/a-testing-strategy/[these] http://claysnow.co.uk/the-testing-iceberg/[blog] http://claysnow.co.uk/living-documentation-can-be-readable-and-fast/[posts]), the downside is that the programming model to support unit tests is quite different from "normal" Isis code.
-
-This feature is therefore deprecated and will be removed in a future release.
 BDD specs are assumed to run only as integration tests.
 ====
 

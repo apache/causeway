@@ -38,20 +38,6 @@ public interface ContentMappingService {
 <2> as per the caller's HTTP `Accept` header
 
 
-In versions prior to `v1.12.0`, this interface resided in a different package, internal to the
-xref:../ugvro/ugvro.adoc#[Restful Objects] viewer, and defined a slightly different signature that used an internal enum:
-
-[source,java]
-----
-public interface ContentMappingService {
-    Object map(Object object,
-               List<MediaType> acceptableMediaTypes,
-               RepresentationType representationType);   // <1>
-
-}
-
-----
-<1> enum representing the requested representation; only ever take a value of ``DOMAIN_OBJECT`` or ``ACTION_RESULT``.
 
 
 

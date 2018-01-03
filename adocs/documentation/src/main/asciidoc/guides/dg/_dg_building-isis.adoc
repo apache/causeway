@@ -213,10 +213,6 @@ export MAVEN_OPTS="-Xms512m -Xmx1024m"
 ----
 
 
-[NOTE]
-====
-Previously we suggested `-XX:MaxPermSize=256m`, but this option has been removed in Java 8.  (As of `1.9.0`, Apache Isis is built using Java 8 but with source and target set to JDK 1.7).
-====
 
 
 [[__dg_building-isis_building-all-of-apache-isis]]

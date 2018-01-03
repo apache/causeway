@@ -11,7 +11,7 @@ The `PublishingService` API is intended for coarse-grained publish/subscribe for
 
 [WARNING]
 ====
-As of `1.13.0` this service is deprecated, replaced with xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`].
+This service is deprecated, replaced with xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`].
 ====
 
 

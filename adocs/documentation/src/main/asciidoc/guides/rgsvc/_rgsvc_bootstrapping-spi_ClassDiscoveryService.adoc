@@ -43,30 +43,8 @@ Currently this logic uses the implementation directly, so is not pluggable.
 
 
 
-== Usage
+== Related Services
 
-The usage will vary depending upon the conventions of the design.
-As of `1.9.0`, the usage of the service has been centralized such that the packages to be scanned are located from the xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[`AppManifest`]'s `#getModules()` method.
+The xref:rgsvc.adoc#_rgsvc_testing_FixtureScripts[`FixtureScripts`] domain service uses `ClassDiscoveryService` to discover ``FixtureScript``s implementations to present in the UI.
 
-For example, the xref:../ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype]'s app manifest includes:
-
-[source,java]
-----
-public class DomainAppAppManifest implements AppManifest {
-    @Override
-    public List<Class<?>> getModules() {
-        return Arrays.asList(
-                DomainAppDomainModule.class,  // domain (entities and repositories)
-                DomainAppFixtureModule.class, // fixtures
-                DomainAppAppModule.class      // home page service etc
-        );
-    }
-    ...
-}
-----
-
-where the three module classes in effect define three different package prefixes to search under (for domain services, fixture scripts and persistent entities).
-
-Other usages of the `ClassDiscoveryService` are likely to work in a similar way, requiring some sort of scope to be specified.
-
-
+Note that the bootstrapping of the framework itself does _not_ use this service (though it does use the same underlying library as the default implementation of this service, namely `org.reflections.Reflections`).

@@ -8,7 +8,7 @@
 
 If your JAXB view model contains fields using the JODA datatypes (`LocalDate` and so on), then `@XmlJavaTypeAdapter` additional annotations in order to "teach" JAXB how to serialize out the state.
 
-(As of `1.15.0`) you can use adapters provided in the Apache Isis applib.
+The Apache Isis applib provides a number of adapters to use out-of-the-box.
 For example:
 
 

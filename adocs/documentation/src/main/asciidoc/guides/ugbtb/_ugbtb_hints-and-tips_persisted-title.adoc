@@ -46,7 +46,7 @@ public class TitlingService extends AbstractSubscriber {
 }
 ----
 
-Prior to 1.10.0 (when lifecycle events were introduced), this could also be be done by accessing the JDO API directly:
+It is also possible to accomplish this by accessing the JDO API directly:
 
 [source,java]
 ----

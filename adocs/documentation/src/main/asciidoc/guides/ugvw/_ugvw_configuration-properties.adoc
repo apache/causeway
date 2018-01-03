@@ -283,8 +283,10 @@ In prototype mode, though, a fixed key will still be used; this saves the develo
 (`_false_`)
 | Whether the WicketSource plugin should be enabled; by default it is not enabled.
 
-Prior to `1.12.0` this was enabled by default for prototyping (not production).
-However it can significantly slow down rendering, hence the introduction of this configuration setting.
+[WARNING]
+====
+Enabling this setting can significantly slow down rendering performance of the Wicket viewer.
+====
 
 |===
 
