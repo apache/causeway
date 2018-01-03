@@ -5,7 +5,7 @@
 :_imagesdir: images/
 
 
-The `BookmarkService2` API provides the ability to obtain a serializable ``o.a.i.applib.bookmarks.Bookmark`` for any (persisted) domain object, and to lookup domain objects given a ``Bookmark``.  This can then in turn be converted to and from a string.
+The `BookmarkService2` domain service (and its various supertypes) provides the ability to obtain a serializable ``o.a.i.applib.bookmarks.Bookmark`` for any (persisted) domain object, and to lookup domain objects given a ``Bookmark``.  This can then in turn be converted to and from a string.
 
 For example, a `Customer` object with:
 

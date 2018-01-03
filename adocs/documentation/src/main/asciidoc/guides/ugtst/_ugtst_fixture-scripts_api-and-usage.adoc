@@ -213,7 +213,7 @@ public class SimpleObjectIntegTest extends SimpleAppIntegTest {
 
 
 [[_ugtst_fixture-scripts_api-and-usage_persona-and-builders]]
-== Personas and Builders (`1.16.0-SNAPSHOT`)
+== Personas and Builders
 
 Good integration tests are probably the best way to understand the behaviour of the domain model: better, even, than reading the code itself.
 This requires though that the tests are as minimal as possible so that the developer reading the test knows that everything mentioned in the test is essential to the functionality under test.
@@ -256,7 +256,7 @@ public interface PersonaWithFinder<T> {
 }
 ----
 
-(As of `1.16.0-SNAPSHOT`) the xref:../ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype] provides a sample implementation of these interfaces:
+The xref:../ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype] provides a sample implementation of these interfaces:
 
 [source,java]
 ----

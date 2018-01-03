@@ -71,9 +71,9 @@ If no instance is found then `null `will be returned, while if there is more tha
 Generally this method is preferred for looking up an object by its (primary or alternate) key.
 <11> As the previous, but with client-side filtering using a `Predicate`.
 Only really intended for prototyping.
-<12> (Deprecated as of `1.16.0-SNAPSHOT`) Returns the first instance that matches the supplied query.  If no instance is found then `null `will be returned.
+<12> (Deprecated) returns the first instance that matches the supplied query.  If no instance is found then `null `will be returned.
 No exception is thrown if more than one matches, so this is less strict that `uniqueMatch(...)`.
-<13> (Deprecated as of `1.16.0-SNAPSHOT`) As the previous, but with client-side filtering using a `Predicate`.
+<13> (Deprecated) As the previous, but with client-side filtering using a `Predicate`.
 Only really intended for prototyping.
 
 

@@ -11,12 +11,8 @@ This section describes how to implement the `AppManifest` interface to bootstrap
 
 [TIP]
 ====
-As of `1.15.0`, the framework-provided `AppManifestAbstract` and `AppManifestAbstract.Builder` make it easy to write ``AppManifest`` that can be used both to bootstrap the application "proper", and to be tweaked for use within integration tests.
-====
-
-[TIP]
-====
-As of `1.16.0-SNAPSHOT`, the framework-provided `AppManifestAbstract2` and `AppManifestAbstract2.Builder` makes it even easier to write an `AppManifest`, this time using an implementation of a xref:rgcms.adoc#_rgcms_classes_Module[`Module`].
+The framework-provided `AppManifestAbstract2` and `AppManifestAbstract2.Builder` makes it easy to write an `AppManifest`, defined by a set of xref:rgcms.adoc#_rgcms_classes_Module[`Module`] implementations.
+The app manifest can then be used both to bootstrap the application "proper", or for integration tests.
 ====
 
 

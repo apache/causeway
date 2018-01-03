@@ -1,5 +1,5 @@
 [[_ugtst_bdd-spec-support_writing-a-bdd-spec]]
-= Writing a BDD spec (`1.16.0-SNAPSHOT`)
+= Writing a BDD spec
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :_basedir: ../../
 :_imagesdir: images/
@@ -45,11 +45,11 @@ The "@DomainAppDemo" is a custom tag we've specified to indicate the prerequisit
 
 [NOTE]
 ====
-Prior to `1.16.0-SNAPSHOT` the BDD spec support provided by the framework aimed to allow tests to be written either as integration tests or as unit tests.
+Prior to `1.16.0` the BDD spec support provided by the framework aimed to allow tests to be written either as integration tests or as unit tests.
 While there are good reasons for attempting this (see http://silkandspinach.net/2013/01/18/a-testing-strategy/[these] http://claysnow.co.uk/the-testing-iceberg/[blog] http://claysnow.co.uk/living-documentation-can-be-readable-and-fast/[posts]), the downside is that the programming model to support unit tests is quite different from "normal" Isis code.
 
-This feature is therefore being dropped.
-As of `1.16.0-SNAPSHOT`, BDD specs are assumed to run only as integration tests.
+This feature is therefore deprecated and will be removed in a future release.
+BDD specs are assumed to run only as integration tests.
 ====
 
 The `RunBddSpecs` class to run this feature (and any other features in this package or subpackages) is just boilerplate

@@ -33,7 +33,7 @@ This is intended primarily for actions pertaining to the user themselves, eg the
 image::{_imagesdir}application-menu/tertiary.png[width="300px",link="{_imagesdir}application-menu/tertiary.png"]
 
 
-The Apache Isis framework provides two mechanisms to control the arrangement of domain service actions across menubars and menus, either using annotations or (as of `1.16.0-SNAPSHOT`) using a file-based layout.
+The Apache Isis framework provides two mechanisms to control the arrangement of domain service actions across menubars and menus, either using annotations or using a file-based layout.
 
 include::_ugvw_menubars-layout_annotation-based.adoc[leveloffset=+1]
 include::_ugvw_menubars-layout_file-based.adoc[leveloffset=+1]

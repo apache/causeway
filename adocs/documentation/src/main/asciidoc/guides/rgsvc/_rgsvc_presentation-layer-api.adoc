@@ -35,11 +35,11 @@ It also lists their corresponding implementation.
 |xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-api_BookmarkUiService[`o.a.i.applib.` +
 `services.bookmarkui` +
 `BookmarkUiService`]
-|Manage bookmarks and breadcrumbs in the UIO.
+|Manage bookmarks and breadcrumbs in the (Wicket) UI.
 |`BookmarkUiServiceWicket` +
 ``o.a.i.core`` +
 ``isis-core-viewer-wicket-impl``
-|(`1.16.0-SNAPSHOT`) Implementation only usable within the xref:../ugvw/ugvw.adoc#[Wicket viewer].
+|(Implementation only usable within the xref:../ugvw/ugvw.adoc#[Wicket viewer].
 
 
 |xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-api_DeepLinkService[`o.a.i.applib` +

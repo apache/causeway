@@ -7,7 +7,7 @@
 
 
 
-The `AuditingService3` auditing service provides a simple mechanism to capture changes to data.
+The `AuditingService3` auditing service (and its various supertypes)provides a simple mechanism to capture changes to data.
 It is called for each property that has changed on any domain object, as a set of pre- and post-values.
 
 [NOTE]

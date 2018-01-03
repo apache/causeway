@@ -65,7 +65,7 @@ The xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_InteractionContext[`In
 |`DtoMappingHelper` +
 ``o.a.i.core`` +
 ``isis-core-applib``
-|(`1.16.0-SNAPSHOT`) API is also a concrete class.
+|API is also a concrete class.
 
 
 |xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_InteractionContext[`o.a.i.applib.` +

@@ -675,7 +675,7 @@ Only intended for "emergency use" as a workaround while pending fix/patch to Apa
 `action`
 |`true`,`false` +
 (`false`)
-|(`1.16.0-SNAPSHOT`) Whether action methods need to be explicitly annotated using `@Action`.
+|Whether action methods need to be explicitly annotated using `@Action`.
 
 The default is that any non-`@Programmatic` methods that are not otherwise recognised as properties, collections or supporting methods, are assumed to be actions.
 Setting this property reverses this policy, effectively requiring that all actions need to be annotated with `@Action`.
@@ -777,7 +777,7 @@ Further discussion xref:rgcfg.adoc#__rgcfg_configuring-core_isis-viewers-propert
 `collectionLayout.defaultView`
 |`hidden`, `table` +
 (`hidden`)
-|(`1.16.0-SNAPSHOT`) Default for the default view for all (parented) collections if not explicitly specified using xref:../rgant/rgant.adoc#_rgant-CollectionLayout_defaultView[`@CollectionLayout#defaultView()`]
+|Default for the default view for all (parented) collections if not explicitly specified using xref:../rgant/rgant.adoc#_rgant-CollectionLayout_defaultView[`@CollectionLayout#defaultView()`]
 
 Further discussion xref:rgcfg.adoc#__rgcfg_configuring-core_isis-viewers-collectionLayout-defaultView[below].
 |===
@@ -871,11 +871,10 @@ At the time of writing, this means labels are to the left for all datatypes exce
 
 
 [[__rgcfg_configuring-core_isis-viewers-collectionLayout-defaultView]]
-=== `collectionLayout.defaultView` (`1.16.0-SNAPSHOT`)
+=== `collectionLayout.defaultView`
 
-Prior to `1.16.0-SNAPSHOT`, the framework renders (parented) collections as "hidden", ie collapsed.
+By default the framework renders (parented) collections as "hidden", ie collapsed.
 This can be overridden on a case-by-case basis using the xref:../rgant/rgant.adoc#_rgant-CollectionLayout_defaultView[`@CollectionLayout#defaultView()`] or the corresponding `<collectionLayout defaultView="...">` element in the `Xxx.layout.xml` layout file.
-The framework provices only one other view, "table".
 
 If the majority of collections should be displayed as "table" form, then it is more convenient to specify the default view globally.
 This can be done using a configuration property in `isis.properties`:
@@ -884,5 +883,3 @@ This can be done using a configuration property in `isis.properties`:
 ----
 isis.viewers.collectionLayout.defaultView=table
 ----
-
-If this configuration property is not present then Apache Isis will render according to its historical default, namely "hidden".

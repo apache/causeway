@@ -5,7 +5,7 @@
 :_imagesdir: images/
 
 
-The `BackgroundService2` domain service, and also the companion
+The `BackgroundService2` domain service (and its various supertypes), and also the companion
 xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_BackgroundCommandService[`BackgroundCommandService2`] SPI service, enable commands
 to be persisted such that they may be invoked in the background.
 

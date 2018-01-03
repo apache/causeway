@@ -113,7 +113,7 @@ This mixin calls xref:../rgsvc/rgsvc.adoc#_rgsvc_metadata-api_LayoutService[`Lay
 
 
 [[__rgcms_classes_mixins_Object_openRestApi]]
-== `openRestApi()` (`1.16.0-SNAPSHOT`)
+== `openRestApi()`
 
 The `Object_openRestApi` mixin provides an action to navigate to the URL of the xref:../ugvro/ugvro.adoc#[Restful Objects resource] corresponding to the domain object.
 It has the following signature:

@@ -33,7 +33,7 @@ In the future this API may be expanded; one obvious possibility is to return a p
 
 == Implementation
 
-(As of `1.16.0-SNAPSHOT`) the framework provides a default implementation of this service, `o.a.i.core.runtime.services.UserProfileServiceDefault`.
+The framework provides a default implementation of this service, `o.a.i.core.runtime.services.UserProfileServiceDefault`.
 This simply returns the user's name as the user's profile name.
 
 An example implementation can also be found in the (non-ASF)

@@ -5,7 +5,7 @@
 :_imagesdir: images/
 
 
-The `ObjectContracts` test (and, as of `1.16.0-SNAPSHOT`, its replacement `ObjectContracts2`) provides a series of methods to make it easy for your domain objects to:
+The `ObjectContracts2` utility class provides a series of methods to make it easy for your domain objects to:
 
 * implement `Comparable` (eg so can be stored in ``java.util.SortedSet``s)
 * implement `toString()`
@@ -35,7 +35,7 @@ public class ToDoItem implements Comparable<ToDoItem> {
 
 [WARNING]
 ====
-Note that `ObjectContracts` makes heavy use of Java Reflection.  While it's great to get going quickly in prototyping, we recommend you use your IDE to code generate implementations of these methods for production code.
+Note that `ObjectContracts2` makes heavy use of Java Reflection.  While it's great to get going quickly in prototyping, we recommend you use your IDE to code generate implementations of these methods for production code.
 
 Moreover (and perhaps even more importantly) `ObjectContracts` implementation can cause DataNucleus to recursively rehydrate a larger number of associated entities (More detail below).
 
