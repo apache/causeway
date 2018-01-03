@@ -221,6 +221,15 @@
                                         <delete includeemptydirs="true">
                                             <fileset dir="${isis-site-latest.dir}" includes="**/*"/>
                                         </delete>
+
+                                        <echo message=""/>
+                                        <echo message=""/>
+                                        <echo message="deleting everything in ${isis-site-content.dir}/versions/SNAPSHOT"/>
+                                        <echo message=""/>
+                                        <delete includeemptydirs="true">
+                                            <fileset dir="${isis-site-content.dir}/versions/SNAPSHOT" includes="**/*"/>
+                                        </delete>
+
                                         <echo message=""/>
                                         <echo message=""/>
                                         <echo message="deleting everything in ${isis-site-content.dir} (excluding 'versions' subdir)"/>
@@ -263,7 +272,7 @@
 
                                         <echo message=""/>
                                         <echo message=""/>
-                                        <echo message="copying from ${build.dir} to ${isis-site-latest.dir}"/>
+                                        <echo message="copying all from ${build.dir} to ${isis-site-latest.dir}"/>
                                         <echo message=""/>
                                         <copy todir="${isis-site-latest.dir}" overwrite="true" force="true">
                                             <fileset dir="${build.dir}"/>
@@ -362,27 +371,46 @@
                                         <echo message="copying over slick CSS and SCSS from ${build.dir} to ${isis-site-latest.dir}"/>
                                         <echo message=""/>
                                         <copy todir="${isis-site-latest.dir}" overwrite="true" force="true">
-                                            <fileset dir="${build.dir}"  includes="**/css/slick/**/*"/>
+                                            <fileset dir="${build.dir}" includes="**/css/slick/**/*"/>
                                         </copy>
 
                                         <echo message=""/>
                                         <echo message=""/>
-                                        <echo message="copying from ${isis-site-latest.dir} to ${isis-site-content.dir}/versions/SNAPSHOT"/>
+                                        <echo message="copying all (except index.html) from ${isis-site-latest.dir} to ${isis-site-content.dir}/versions/SNAPSHOT"/>
                                         <echo message=""/>
                                         <copy todir="${isis-site-content.dir}/versions/SNAPSHOT" overwrite="true" force="true">
-                                            <fileset dir="${isis-site-latest.dir}"/>
+                                            <fileset dir="${isis-site-latest.dir}" excludes="index.html"/>
                                         </copy>
+
+                                        <echo message=""/>
+                                        <echo message=""/>
+                                        <echo message="copying the redirect index.html from ${isis-site-content.dir}/versions/current to ${isis-site-content.dir}/versions/SNAPSHOT"/>
+                                        <echo message=""/>
+                                        <copy todir="${isis-site-content.dir}/versions/SNAPSHOT" overwrite="true" force="true">
+                                            <fileset dir="${isis-site-content.dir}/versions/current" includes="index.html"/>
+                                        </copy>
+
+                                        <echo message=""/>
+                                        <echo message=""/>
+                                        <echo message="copying all (except index.html) from ${isis-site-content.dir}/versions/current to ${isis-site-content.dir}"/>
+                                        <echo message=""/>
+                                        <copy todir="${isis-site-content.dir}" overwrite="true" force="true">
+                                            <fileset dir="${isis-site-content.dir}/versions/current" excludes="index.html"/>
+                                        </copy>
+
+                                        <echo message=""/>
+                                        <echo message=""/>
+                                        <echo message="copying index.html from ${isis-site-latest.dir} to ${isis-site-content.dir}"/>
+                                        <echo message=""/>
+                                        <copy todir="${isis-site-content.dir}" overwrite="true" force="true">
+                                            <fileset dir="${isis-site-latest.dir}" includes="index.html"/>
+                                        </copy>
+
                                         <echo message=""/>
                                         <echo message=""/>
                                         <echo message="TO COMPLETE:"/>
                                         <echo message=""/>
-                                        <echo message="1. copy either the 'current' or 'SNAPSHOT' back to ./content directory"/>
-                                        <echo message="   a) cp -r content/versions/current content/."/>
-                                        <echo message="   or:"/>
-                                        <echo message="   b) cp -r content/versions/SNAPSHOT content/."/>
-                                        <echo message="2. preview the changes:"/>
                                         <echo message="   sh preview.sh"/>
-                                        <echo message="3. commit and push changes"/>
                                         <echo message="   git commit -am 'some message'"/>
                                         <echo message="   git push"/>
                                         <echo message=""/>
