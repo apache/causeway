@@ -367,11 +367,26 @@
 
                                         <echo message=""/>
                                         <echo message=""/>
-                                        <echo message="copying from ${isis-site-latest.dir} to ${isis-site-content.dir}"/>
+                                        <echo message="copying from ${isis-site-latest.dir} to ${isis-site-content.dir}/versions/SNAPSHOT"/>
                                         <echo message=""/>
-                                        <copy todir="${isis-site-content.dir}" overwrite="true" force="true">
+                                        <copy todir="${isis-site-content.dir}/versions/SNAPSHOT" overwrite="true" force="true">
                                             <fileset dir="${isis-site-latest.dir}"/>
                                         </copy>
+                                        <echo message=""/>
+                                        <echo message=""/>
+                                        <echo message="TO COMPLETE:"/>
+                                        <echo message=""/>
+                                        <echo message="1. copy either the 'current' or 'SNAPSHOT' back to ./content directory"/>
+                                        <echo message="   a) cp -r content/versions/current content/."/>
+                                        <echo message="   or:"/>
+                                        <echo message="   b) cp -r content/versions/SNAPSHOT content/."/>
+                                        <echo message="2. preview the changes:"/>
+                                        <echo message="   sh preview.sh"/>
+                                        <echo message="3. commit and push changes"/>
+                                        <echo message="   git commit -am 'some message'"/>
+                                        <echo message="   git push"/>
+                                        <echo message=""/>
+                                        <echo message=""/>
 
                                     </target>
                                 </configuration>
