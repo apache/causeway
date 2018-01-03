@@ -370,7 +370,7 @@
                                         <echo message="copying from ${isis-site-latest.dir} to ${isis-site-content.dir}"/>
                                         <echo message=""/>
                                         <copy todir="${isis-site-content.dir}" overwrite="true" force="true">
-                                            <fileset dir="isis-site-latest.dir"/>
+                                            <fileset dir="${isis-site-latest.dir}"/>
                                         </copy>
 
                                     </target>
