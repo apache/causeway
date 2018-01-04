@@ -412,7 +412,7 @@ If releasing using Windows and Maven >= 3.3.3, then there is an issue that requi
 
 In Maven 3.3.3 the `mvn.bat` file was removed, replaced instead with `mvn.cmd`.
 However, `maven-archetype-plugin:2.4` only uses `mvn.bat`; this causes the `archetype:create-from-project` goal to fail.
-The fix is to simple: just copy `mvn.cmd` to `mvn.bat`.
+The fix is simple: just copy `mvn.cmd` to `mvn.bat`.
 ====
 
 
