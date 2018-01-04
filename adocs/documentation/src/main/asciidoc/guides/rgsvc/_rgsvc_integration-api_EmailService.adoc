@@ -14,7 +14,7 @@ The that sends email as an HTML message, using an external SMTP provider.
 
 
 
-== API & Implementation
+== API
 
 The API for the service is:
 
@@ -36,14 +36,137 @@ Will return `false` if failed to send
 <4> indicates whether the implementation was configured and initialized correctly.
 If this returns `false` then any attempt to call `send(...)` will fail.
 
-As noted in the introduction, the core framework provides a default implementation (`EmailServiceDefault`) that sends email as an HTML message, using an external SMTP provider.
 
-To use an alternative implementation, implement the `EmailService` interface and use xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:../rgsvc/rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
+== Implementation
+
+As noted in the introduction, the core framework provides a default implementation, `EmailServiceDefault`.
+This sends email as an HTML message, using an external SMTP provider.
 
 
-== Configuration
+=== Configuration Properties
 
-To use this service the following properties must be configured:
+The default implementation defines the following configuration properties:
+
+[cols="2a,1,3a", options="header"]
+|===
+|Property
+|Value +
+(default value)
+|Description
+
+| `isis.service.` +
+`email.` +
+`override.bcc` +
+| email address
+|intended to simplify testing, if specified then the email's `bcc` address will be that specified (rather than the email address(es) passed in as an argument to `EmailService#send(...)`).  +
+
+NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
+
+
+| `isis.service.` +
+`email.` +
+`override.cc` +
+| email address
+|intended to simplify testing, if specified then the email's `cc` address will be that specified (rather than the email address(es) passed in as an argument to `EmailService#send(...)`).  +
+
+NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
+
+
+| `isis.service.` +
+`email.` +
+`override.to` +
+| email address
+|intended to simplify testing, if specified then the email's `to` address will be that specified (rather than the email address(es) passed in as an argument to `EmailService#send(...)`).  +
+
+NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
+
+
+
+| `isis.service.` +
+`email.` +
+`port` +
+| port number (`_587_`)
+|The port number for the SMTP service on the the external SMTP host (used by xref:../rgsvc/rgsvc.adoc#_rgsvc_integration-api_EmailService[`EmailService`]).  +
+
+NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
+
+
+| `isis.service.` +
+`email.` +
+`sender.address` +
+| email address
+|The email address to use for sending out email (used by xref:../rgsvc/rgsvc.adoc#_rgsvc_integration-api_EmailService[`EmailService`]).
+*Mandatory*.  +
+
+NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
+
+
+| `isis.service.` +
+`email.` +
+`sender.hostname` +
+| host (`_smtp.gmail.com_`)
+|The hostname of the external SMTP provider (used by xref:../rgsvc/rgsvc.adoc#_rgsvc_integration-api_EmailService[`EmailService`]).  +
+
+NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
+
+
+| `isis.service.` +
+`email.` +
+`sender.password` +
+| email password
+|The corresponding password for the email address to use for sending out email (used by xref:../rgsvc/rgsvc.adoc#_rgsvc_integration-api_EmailService[`EmailService`]).
+*Mandatory*.  +
+
+NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
+
+
+| `isis.service.` +
+`email.` +
+`socket` +
+`ConnectionTimeout`
+|milliseconds +
+(2000)
+|The socket connection timeout
+
+NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
+
+
+| `isis.service.` +
+`email.` +
+`socketTimeout`
+|milliseconds +
+(2000)
+|The socket timeout
+
+NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
+
+
+
+| `isis.service.` +
+`email.` +
+`throwExceptionOnFail`
+|`true`,`false` +
+(`true`)
+|Whether to throw an exception if there the email cannot be sent (probably because of some misconfiguration).
+
+This behaviour is (now) the default; the old behaviour (of just returning `false` from the `send()` method) can be re-enabled by setting this property to `false`.
+
+NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
+
+
+| `isis.service.` +
+`email.` +
+`tls.enabled`
+|`true`,`false` +
+(`true`)
+|Whether to enable TLS for the email SMTP connection (used by xref:../rgsvc/rgsvc.adoc#_rgsvc_integration-api_EmailService[`EmailService`]).  +
+
+NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
+
+|===
+
+
+Thus, use this service the following properties must be configured:
 
 * `isis.service.email.sender.address`
 * `isis.service.email.sender.password`
@@ -71,7 +194,7 @@ In addition the following properties can be set:
 
 * `isis.service.email.sender.username` +
 +
-(As of `1.15.1`), rather than authenticate using the sender address, instead use the specified username.
+Rather than authenticate using the sender address, instead use the specified username.
 
 * `isis.service.email.throwExceptionOnFail` +
 +
@@ -112,7 +235,6 @@ This implies a couple of additional constraints:
 (If necessary, one can be created on the fly using `IsisContext.doInSession(...)`)
 
 To ensure that your alternative implementation takes the place of the default implementation, register it explicitly in `isis.properties`.
-
 
 
 

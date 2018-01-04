@@ -401,7 +401,7 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
         
         final boolean hidden = scalarModel.whetherHidden(whereAreWeRendering());
         setVisibilityAllowed(!hidden);
-        
+
         super.onConfigure();
     }
 

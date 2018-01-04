@@ -33,9 +33,10 @@ In the future this API may be expanded; one obvious possibility is to return a p
 
 == Implementation
 
-There is no default implementation of this service provided by the core Apache Isis framework.
+The framework provides a default implementation of this service, `o.a.i.core.runtime.services.UserProfileServiceDefault`.
+This simply returns the user's name as the user's profile name.
 
-An example implementation can be found in the (non-ASF)
+An example implementation can also be found in the (non-ASF)
 http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp]:
 
 image::{_imagesdir}reference-services-spi/UserProfileService/todoapp.png[width="800px",link="{_imagesdir}reference-services-spi/UserProfileService/todoapp.png"]
@@ -43,5 +44,5 @@ image::{_imagesdir}reference-services-spi/UserProfileService/todoapp.png[width="
 
 [NOTE]
 ====
-Currently this feature is not integrated with Apache Isis' authentication mechanisms; the information provided is purely metadata provided for presentation purposes only.
+This feature does not integrate with Apache Isis' authentication mechanisms; the information returned is used purely for presentation purposes.
 ====

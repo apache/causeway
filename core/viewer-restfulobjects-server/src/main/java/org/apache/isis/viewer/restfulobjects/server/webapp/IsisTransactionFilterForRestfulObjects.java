@@ -52,7 +52,11 @@ public class IsisTransactionFilterForRestfulObjects implements Filter {
             final boolean inTransaction = isisSessionFactory.inTransaction();
             if(inTransaction) {
                 // user/logout will have invalidated the current transaction and also persistence session.
-                isisTransactionManager.endTransaction();
+                try {
+                    isisTransactionManager.endTransaction();
+                } catch (Exception ex) {
+                    // ignore.  Any exceptions will have been mapped into a suitable response already.
+                }
             }
         }
     }

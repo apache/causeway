@@ -55,7 +55,7 @@ public class SwaggerServiceMenu {
             restrictTo = RestrictTo.PROTOTYPING
     )
     @ActionLayout(
-            cssClassFa = "fa-download"
+            cssClassFa = "fa-external-link"
     )
     @MemberOrder(sequence="500.600.1")
     public URL openSwaggerUi() throws MalformedURLException {
@@ -89,7 +89,7 @@ public class SwaggerServiceMenu {
             restrictTo = RestrictTo.PROTOTYPING
     )
     @ActionLayout(
-            cssClassFa = "fa-external-link"
+            cssClassFa = "fa-download"
     )
     @MemberOrder(sequence="500.600.3")
     public Clob downloadSwaggerSchemaDefinition(

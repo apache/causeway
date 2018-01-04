@@ -31,6 +31,7 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
@@ -74,6 +75,7 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
 
     protected IsisConfigurationDefault stubConfiguration;
     protected SpecificationLoader mockSpecificationLoader;
+    protected IsisConfiguration mockConfiguration;
     protected ProgrammableMethodRemover methodRemover;
 
     protected FacetHolder facetHolder;
@@ -109,6 +111,7 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
 
         mockDeploymentCategoryProvider = context.mock(DeploymentCategoryProvider.class);
         mockAuthenticationSessionProvider = context.mock(AuthenticationSessionProvider.class);
+        mockConfiguration = context.mock(IsisConfiguration.class);
         stubServicesInjector = context.mock(ServicesInjector.class);
         mockTranslationService = context.mock(TranslationService.class);
         stubConfiguration = new IsisConfigurationDefault();

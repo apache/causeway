@@ -792,10 +792,6 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
             Assert.assertNotNull(facet);
 
             Assert.assertTrue(facet instanceof RecreatableObjectFacetForDomainObjectAnnotation);
-            final RecreatableObjectFacetForDomainObjectAnnotation facetForDomainObjectAnnotation =
-                    (RecreatableObjectFacetForDomainObjectAnnotation) facet;
-
-            assertThat(facetForDomainObjectAnnotation.getArchitecturalLayer(), is(ViewModelFacet.ArchitecturalLayer.APPLICATION));
 
             expectNoMethodsRemoved();
         }
@@ -810,10 +806,6 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
             Assert.assertNotNull(facet);
 
             Assert.assertTrue(facet instanceof RecreatableObjectFacetForDomainObjectAnnotation);
-            final RecreatableObjectFacetForDomainObjectAnnotation facetForDomainObjectAnnotation =
-                    (RecreatableObjectFacetForDomainObjectAnnotation) facet;
-
-            assertThat(facetForDomainObjectAnnotation.getArchitecturalLayer(), is(ViewModelFacet.ArchitecturalLayer.DOMAIN));
 
             expectNoMethodsRemoved();
         }
@@ -827,10 +819,6 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
             Assert.assertNotNull(facet);
 
             Assert.assertTrue(facet instanceof RecreatableObjectFacetForDomainObjectAnnotation);
-            final RecreatableObjectFacetForDomainObjectAnnotation facetForDomainObjectAnnotation =
-                    (RecreatableObjectFacetForDomainObjectAnnotation) facet;
-
-            assertThat(facetForDomainObjectAnnotation.getArchitecturalLayer(), is(ViewModelFacet.ArchitecturalLayer.DOMAIN));
 
             expectNoMethodsRemoved();
         }

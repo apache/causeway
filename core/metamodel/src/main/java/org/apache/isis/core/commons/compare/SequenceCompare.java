@@ -22,6 +22,8 @@ import java.util.StringTokenizer;
 
 public class SequenceCompare {
 
+    private SequenceCompare(){}
+
     public static int compareNullLast(String sequence1, String sequence2) {
         if (sequence1 == null && sequence2 == null) {
             return 0;

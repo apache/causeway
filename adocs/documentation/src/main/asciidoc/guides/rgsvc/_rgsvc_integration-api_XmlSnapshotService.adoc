@@ -192,10 +192,6 @@ public interface XmlSnapshotService {
 
 The core framework provides an implementation of this service (`o.a.i.core.runtime.services.xmlsnapshot.XmlSnapshotServiceDefault`).
 
-To use an alternative implementation, implement use the `XmlSnapshotService` interface and xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:../rgsvc/rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
-
-
-
 
 == Related Services
 

@@ -27,22 +27,22 @@ import static org.junit.Assert.assertThat;
 public class IsisConfigurationDefault_safe_Test {
 
     @Test
-    public void not_a_password() throws Exception {
+    public void not_a_password() {
         assertThat(IsisConfigurationDefault.safe("foo", "bar"), is(equalTo("bar")));
     }
 
     @Test
-    public void a_password() throws Exception {
-        assertThat(IsisConfigurationDefault.safe("xyz.password.abc", "bar"), is(equalTo("*******")));
+    public void a_password() {
+        assertThat(IsisConfigurationDefault.safe("xyz.password.abc", "bar"), is(equalTo("********")));
     }
 
     @Test
-    public void a_PassWord() throws Exception {
-        assertThat(IsisConfigurationDefault.safe("xyz.PassWord.abc", "bar"), is(equalTo("*******")));
+    public void a_PassWord() {
+        assertThat(IsisConfigurationDefault.safe("xyz.PassWord.abc", "bar"), is(equalTo("********")));
     }
 
     @Test
-    public void is_null() throws Exception {
+    public void is_null() {
         assertThat(IsisConfigurationDefault.safe(null, "bar"), is(equalTo("bar")));
     }
 

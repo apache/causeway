@@ -49,8 +49,7 @@ public interface UserRegistrationService {
 
 The core Apache Isis framework itself defines only an API; there is no default implementation. Rather, the implementation will depend on the security mechanism being used.
 
-If using the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s security module) for authentication and authorization, then note that it provides an adapter class, `SecurityModuleAppUserRegistrationServiceAbstract`, that provides most of the implementation.
-You are still required to implement a subclass and register.
+That said, if you have configured your app to use the (non-ASF) http://platform.incode.org/modules/spi/security/spi-security.html[Incode Platform's security module] then note that the security module does provide an abstract implementation (`SecurityModuleAppUserRegistrationServiceAbstract`) of the `UserRegistrationService`. You will need to extend that service and provide implementation for the two abstract methods: `getInitialRole()` and `getAdditionalInitialRoles()`.
 
 For example:
 

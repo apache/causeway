@@ -33,12 +33,11 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaPosition;
-import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.ActionLink;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.links.ListOfLinksModel;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.CssClassFaBehavior;
+import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.ActionLink;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
@@ -151,8 +150,6 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
 
                 final String cssClass = linkAndLabel.getCssClass();
                 CssClassAppender.appendCssClassTo(link, cssClass);
-
-                viewTitleLabel.add(new CssClassAppender(StringExtensions.asLowerDashed(linkAndLabel.getLabel())));
 
                 link.addOrReplace(viewTitleLabel);
 

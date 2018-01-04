@@ -44,7 +44,10 @@ import static org.junit.Assert.fail;
  * <p>
  * Simply declares that an instance of {@link ScenarioExecution} (or a subclass)
  * must be instantiated by the Cucumber-JVM runtime and injected into the step definitions.
+ * 
+ * @deprecated  - use {@link CukeGlueAbstract2} instead.
  */
+@Deprecated
 public abstract class CukeGlueAbstract {
 
     /**

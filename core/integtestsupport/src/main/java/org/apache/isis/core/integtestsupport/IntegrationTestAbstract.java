@@ -60,7 +60,10 @@ import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
  * uses JUnit rules to automatically perform {@link IsisTransactionRule transaction management} and
  * uses JUnit rules for {@link ExpectedException exception handling}.  In {@link CukeGlueAbstract} these
  * are required (by Cucumber-JVM) to be explicitly handled in the step definitions.
+ *
+ * @deprecated - to be replaced by {@link IntegrationTestAbstract3}
  */
+@Deprecated
 public abstract class IntegrationTestAbstract {
 
     /**

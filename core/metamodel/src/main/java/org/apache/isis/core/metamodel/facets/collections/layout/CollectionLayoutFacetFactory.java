@@ -18,9 +18,9 @@
  */
 package org.apache.isis.core.metamodel.facets.collections.layout;
 
-
 import java.util.List;
 import java.util.Properties;
+
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -70,7 +70,7 @@ public class CollectionLayoutFacetFactory extends FacetFactoryAbstract implement
 
         // defaultView
         DefaultViewFacet defaultViewFacet =
-                DefaultViewFacetForCollectionLayoutAnnotation.create(collectionLayouts, holder);
+                DefaultViewFacetForCollectionLayoutAnnotation.create(collectionLayouts, getConfiguration(), holder);
         FacetUtil.addFacet(defaultViewFacet);
         
 

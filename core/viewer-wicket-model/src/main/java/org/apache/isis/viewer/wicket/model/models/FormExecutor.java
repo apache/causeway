@@ -35,5 +35,5 @@ public interface FormExecutor extends Serializable {
     boolean executeAndProcessResults(
             final Page page,
             final AjaxRequestTarget targetIfAny,
-            final Form<?> feedbackFormIfAny);
+            final Form<?> feedbackFormIfAny, final boolean promptStyle);
 }

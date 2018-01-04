@@ -117,6 +117,7 @@ public class BookmarkedPagesModel extends ModelAbstract<List<BookmarkTreeNode>> 
 
     public void clear() {
         rootNodes.clear();
+        current = null;
     }
 
     public boolean isEmpty() {

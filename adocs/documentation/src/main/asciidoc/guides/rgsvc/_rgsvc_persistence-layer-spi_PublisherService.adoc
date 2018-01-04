@@ -116,6 +116,9 @@ To indicate that a changed object should be published is to annotate it with the
 
 
 
+== Alternative Implementations
+
+The (non-ASF) link:http://platform.incode.org[Incode Platform^];s publishmq module provides an implementation of this service.
 
 
 

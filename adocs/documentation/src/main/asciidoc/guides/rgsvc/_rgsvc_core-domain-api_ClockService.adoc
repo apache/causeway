@@ -7,13 +7,17 @@
 
 
 
-Most applications deal with dates and times in one way or another. For example, if an `Order` is placed, then the `Customer` may have 30 days to pay the `Invoice`, otherwise a penalty may be levied.
+Most applications deal with dates and times in one way or another.
+For example, if an `Order` is placed, then the `Customer` may have 30 days to pay the `Invoice`, otherwise a penalty may be levied.
 
 However, such date/time related functionality can quickly complicate automated testing: "today+30" will be a different value every time the test is run.
 
-Even disregarding testing, there may be a requirement to ensure that date/times are obtained from an NNTP server (rather than the system PC). While instantiating a `java.util.Date` to current the current time is painless enough, we would not want complex technical logic for querying an NNTP server spread around domain logic code.
+Even disregarding testing, there may be a requirement to ensure that date/times are obtained from an NNTP server (rather than the system PC).
+While instantiating a `java.util.Date` to current the current time is painless enough, we would not want complex technical logic for querying an NNTP server spread around domain logic code.
 
-Therefore it's common to provide a domain service whose responsibility is to provide the current time.  This service can be injected into any domain object (and can be mocked out for unit testing). Apache Isis provides such a facade through the `ClockService`.
+Therefore it's common to provide a domain service whose responsibility is to provide the current time.
+This service can be injected into any domain object (and can be mocked out for unit testing).
+Apache Isis provides such a facade through the `ClockService`.
 
 
 
@@ -58,11 +62,13 @@ The `FixtureClock` will behave as the system clock, unless its is explicitly set
 
 === Alternative Implementations
 
-Suppose you want (as discussed in the introduction to this service) to use a clock that delegates to NNTP.  For most domain services this would amount to implementing the appropriate service and registering in `isis.properties` so that it is used in preference to any implementations provided by default by the framework.
+Suppose you want (as discussed in the introduction to this service) to use a clock that delegates to NNTP.
+For most domain services this would amount to implementing the appropriate service and registering the owning module so that it is used in preference to any implementations provided by default by the framework.
 
 In the case of the `ClockService`, though, this approach (unfortunately) will not work, because parts of Apache Isis (still) delegate to the `Clock` singleton rather than using the `ClockService` domain service.
 
-The workaround, therefore, is to implement your functionality as a subclass of `Clock`.  You can write a domain service that will ensure that your implementation is used ahead of any implementations provided by the framework.
+The workaround, therefore, is to implement your functionality as a subclass of `Clock`.
+You can write a domain service that will ensure that your implementation is used ahead of any implementations provided by the framework.
 
 For example:
 

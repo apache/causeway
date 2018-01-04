@@ -206,20 +206,18 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
 
         init(RepresentationType.OBJECT_LAYOUT, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
-        final SerializationStrategy serializationStrategy;
         final List<MediaType> acceptableMediaTypes = getResourceContext().getAcceptableMediaTypes();
-        if(acceptableMediaTypes.contains(MediaType.APPLICATION_XML_TYPE) || acceptableMediaTypes.contains(RepresentationType.OBJECT_LAYOUT.getXmlMediaType())) {
-            serializationStrategy = SerializationStrategy.XML;
-        } else {
-            serializationStrategy = SerializationStrategy.JSON;
-        }
+        final SerializationStrategy serializationStrategy =
+                acceptableMediaTypes.contains(MediaType.APPLICATION_XML_TYPE) ||
+                acceptableMediaTypes.contains(RepresentationType.OBJECT_LAYOUT.getXmlMediaType())
+                    ? SerializationStrategy.XML
+                    : SerializationStrategy.JSON;
 
         final ObjectSpecification objectSpec = getSpecificationLoader().lookupBySpecId(ObjectSpecId.of(domainType));
         final GridFacet gridFacet = objectSpec.getFacet(GridFacet.class);
         final Response.ResponseBuilder builder;
         if(gridFacet == null) {
             builder = Responses.ofNotFound();
-            return builder.build();
         } else {
             Grid grid = gridFacet.getGrid();
             addLinks(domainType, instanceId, grid);

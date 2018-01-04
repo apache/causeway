@@ -54,13 +54,33 @@ It relies on the `LocaleProvider` service (to return the `Locale` of the current
 
 The framework also provides a supporting `TranslationServicePoMenu` provides menu items under the "Prototyping" secondary menu for controlling this service and downloading `.pot` files for translation.
 
+If the menu items are not required then these can be suppressed either using security or by implementing a xref:../ugbtb/ugbtb.adoc#_ugbtb_hints-and-tips_vetoing-visibility[vetoing subscriber].
+
 For more details on the implementation, see xref:../ugbtb/ugbtb.adoc#_ugbtb_i18n[i18n support].
 
 
 If the menu items are not required then these can be suppressed either using security or by implementing a xref:../ugbtb/ugbtb.adoc#_ugbtb_hints-and-tips_vetoing-visibility[vetoing subscriber].
 
-To use an alternative implementation, implement the `TranslationService` interface and use xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:../rgsvc/rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
+=== Configuration Properties
 
+The default implementation of this domain service recognises the following configuration properties:
+
+[cols="2a,1,3a", options="header"]
+|===
+|Property
+|Value +
+(default value)
+|Description
+
+|`isis.services.` +
+`translation.` +
+`po.mode`
+| `read`,`write`
+|Whether to force the `TranslationService` into either read or write mode. +
+
+See xref:../ugbtb/ugbtb.adoc#_ugbtb_i18n[i18n support] to learn more about the translation service.
+
+|===
 
 
 

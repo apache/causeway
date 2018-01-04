@@ -9,7 +9,7 @@ As explained xref:../ugfun/ugfun.adoc#_ugfun_building-blocks_identifiers_title-a
 
 xref:../ugfun/ugfun.adoc#_ugfun_ui-hints_object-titles-and-icons[Normally] the code to return title and icon of an object is part of the domain object's implementation.
 However, UI events allow this title and icon to be provided instead by a subscriber.
-(As of `1.15.0` onwards), UI events have higher precedence than the other mechanisms of supplying a title
+UI events have higher precedence than the other mechanisms of supplying a title.
 
 If annotated with xref:../rgant/rgant.adoc#_rgant_DomainObjectLayout_titleUiEvent[`@DomainObjectLayout#titleUiEvent()`], the appropriate (subclass of) `TitleUiEvent` will be emitted.
  Similarly for xref:../rgant/rgant.adoc#_rgant_DomainObjectLayout_iconUiEvent[`iconUiEvent()`] and xref:../rgant/rgant.adoc#_rgant_DomainObjectLayout_cssClassUiEvent[`cssClassUiEvent()`].

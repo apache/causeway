@@ -115,16 +115,23 @@ public class PersistenceQueryFindUsingApplibQueryProcessor extends PersistenceQu
         
         try {
             final List<?> results = (List<?>) jdoQuery.executeWithMap(argumentsByParameterName);
+            if(results == null) {
+                return Collections.emptyList();
+            }
             final List<?> resultsToReturn =
                     cardinality == QueryCardinality.MULTIPLE
                             ? results
-                            : results.isEmpty()
-                                ? Collections.emptyList()
-                                : results.subList(0, 1);
+                            : firstIfAnyOf(results);
             return Lists.newArrayList(resultsToReturn);
         } finally {
             jdoQuery.closeAll();
         }
+    }
+
+    private List<?> firstIfAnyOf(final List<?> results) {
+        return results.isEmpty()
+                ? Collections.emptyList()
+                : results.subList(0, 1);
     }
 
     private static Map<String, Object> unwrap(final Map<String, ObjectAdapter> argumentAdaptersByParameterName) {

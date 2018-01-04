@@ -70,8 +70,7 @@ For example, these might include text on how to recover from the error, or worka
 
 There is no default implementation of this service.
 
-The (non-ASF) http://github.com/isisaddons/isis-app-kitchensink[Isis addons' kitchensink] app provides an example
-implementation:
+The (non-ASF) http://github.com/isisaddons/isis-app-kitchensink[Isis addons' kitchensink] app provides an example implementation:
 
 [source,java]
 ----

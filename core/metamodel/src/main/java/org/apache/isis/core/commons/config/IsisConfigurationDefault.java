@@ -28,7 +28,6 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
-import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -36,6 +35,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.services.config.ConfigurationProperty;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.resource.ResourceStreamSource;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
@@ -178,11 +178,7 @@ public class IsisConfigurationDefault implements ConfigurationServiceInternal {
     }
 
     static String safe(final String key, final String value) {
-        return Strings.isNullOrEmpty(key)
-                ? value
-                : (key.toLowerCase().contains("password")
-                        ? "*******"
-                        : value);
+        return ConfigurationProperty.Util.maskIfProtected(key, value);
     }
 
     @Override

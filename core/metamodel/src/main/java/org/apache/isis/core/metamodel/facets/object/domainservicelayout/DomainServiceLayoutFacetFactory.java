@@ -18,7 +18,6 @@
  */
 package org.apache.isis.core.metamodel.facets.object.domainservicelayout;
 
-
 import java.util.List;
 
 import org.apache.isis.applib.annotation.DomainService;
@@ -29,6 +28,7 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.domainservicelayout.annotation.DomainServiceLayoutFacetAnnotation;
+
 
 
 public class DomainServiceLayoutFacetFactory extends FacetFactoryAbstract {
@@ -76,7 +76,6 @@ public class DomainServiceLayoutFacetFactory extends FacetFactoryAbstract {
 
         FacetUtil.addFacet(NamedFacetForDomainServiceLayoutAnnotation.create(domainServiceLayouts, facetHolder));
     }
-
 
     private static String coalesce(final String... reasons) {
         for (final String reason : reasons) {

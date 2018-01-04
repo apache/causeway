@@ -16,8 +16,7 @@ Here's how:
 [source,java]
 ----
 @DomainService(
-        nature = NatureOfService.DOMAIN,
-        menuOrder = "1"                             // <1>
+        nature = NatureOfService.DOMAIN
 )
 public class MyLocaleProvider implements LocaleProvider {
     @Override
@@ -26,9 +25,10 @@ public class MyLocaleProvider implements LocaleProvider {
     }
 }
 ----
-<1> takes precedence over the default implementation.
 
 The framework uses the value of the `menuOrder` attribute to determine priority; lowest number wins.
+
+However, there is no need to specify the `menuOrder` attribute: its default value is now set to a lower value (specifically: `Integer.MAX_VALUE - 100`) than all of the framework-provided implementations, and thus always takes precedence.
 
 Thus, if a single instance is to be injected, eg:
 
@@ -50,19 +50,6 @@ List<LocalProvider> localeProviders;
 
 then all implementations will be present in the list, ordered by priority; your custom implementation will be first in the list.
 
-(As of `1.15.0` onwards), there is no need to specify the `menuOrder` attribute: its default value is now set to a lower value (specifically: `Integer.MAX_VALUE - 100`).
-Thus, the code simplifies to:
-
-[source,java]
-----
-@DomainService(nature = NatureOfService.DOMAIN)
-public class MyLocaleProvider implements LocaleProvider {
-    @Override
-    public Locale getLocale() {
-        return ...
-    }
-}
-----
 
 
 

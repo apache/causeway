@@ -91,6 +91,57 @@
         </plugins>
     </build>
 
+    <repositories>
+        <repository>
+            <id>apache.snapshots</id>
+            <name>Apache Snapshots</name>
+            <url>https://repository.apache.org/content/repositories/snapshots/</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>cloudbees.estatio.snapshots</id>
+            <url>http://repository-estatio.forge.cloudbees.com/snapshot/</url>
+            <name>CloudBees Snapshots (and Interim Releases)</name>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+                <checksumPolicy>fail</checksumPolicy>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+                <checksumPolicy>fail</checksumPolicy>
+            </snapshots>
+            <layout>default</layout>
+        </repository>
+        <repository>
+            <id>sonatype-snapshots</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>cloudbees.estatio.snapshots</id>
+            <name>CloudBees Snapshots (and Interim Releases)</name>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+                <checksumPolicy>fail</checksumPolicy>
+            </releases>
+            <url>http://repository-estatio.forge.cloudbees.com/snapshot/</url>
+            <layout>default</layout>
+        </pluginRepository>
+    </pluginRepositories>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -112,11 +163,6 @@
         <dependency>
             <groupId>org.apache.isis.mavendeps</groupId>
             <artifactId>isis-mavendeps-webapp</artifactId>
-            <type>pom</type>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.isis.mavendeps</groupId>
-            <artifactId>isis-mavendeps-intellij</artifactId>
             <type>pom</type>
         </dependency>
         <dependency>
@@ -143,7 +189,18 @@
             </activation>
             <build>
                 <directory>target-ide</directory>
-            </build>
+		        <plugins>
+		        	<!-- eclipse doesn't seem to support maven mixins config, so repeat here -->
+					<plugin>
+						<artifactId>maven-compiler-plugin</artifactId>
+						<configuration>
+							<source>${compiler-plugin.source}</source>
+							<target>${compiler-plugin.target}</target>
+							<compilerArgument />
+						</configuration>
+					</plugin>
+		        </plugins>
+		    </build>
         </profile>
     </profiles>
 

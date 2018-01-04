@@ -66,8 +66,6 @@ public class ToDoItem ... {
 
 
 
-
-
 == Unit testing support
 
 The `ActionInvocationContext` class also has a couple of static factory methods intended to support unit testing:

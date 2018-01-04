@@ -161,9 +161,3 @@ As the time of writing, no such feature has yet been implemented.
 
 
 
-
-== Implementation
-
-The core framework provides a default implementation of this service, `o.a.i.core.wrapper.WrapperFactoryDefault`.
-
-To use an alternative implementation, implement the `WrapperFactory` interface and use xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:../rgsvc/rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).

@@ -49,6 +49,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.runtime.system.IsisSystem;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactoryBuilder;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -206,7 +207,9 @@ public final class ServiceActionUtil {
         // TODO: remove hard-coded dependency on BS3
         final BS3MenuBar menuBar = (BS3MenuBar) menuBars.menuBarFor(serviceActionsModel.getMenuBar());
 
-        final List<ObjectAdapter> serviceAdapters = serviceActionsModel.getObject();
+        // we no longer use ServiceActionsModel#getObject() because the model only holds the services for the
+        // menuBar in question, whereas the "Other" menu may reference a service which is defined for some other menubar
+        final List<ObjectAdapter> serviceAdapters = IsisContext.getSessionFactory().getCurrentSession().getPersistenceSession().getServices();
         final ImmutableMap<ObjectAdapter, String> oidByServiceAdapter = FluentIterable.from(serviceAdapters)
                 .toMap(new Function<ObjectAdapter, String>() {
                     @Override

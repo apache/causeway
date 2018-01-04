@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.progmodel;
 
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 import com.google.common.collect.Lists;
@@ -144,7 +145,12 @@ public abstract class ProgrammingModelAbstract implements ProgrammingModel {
     @Override
     public final void removeFactory(final Class<? extends FacetFactory> factoryClass) {
         assertNotInitialized();
-        facetFactoryInstancesOrClasses.remove(factoryClass);
+        for (Iterator<Object> iterator = facetFactoryInstancesOrClasses.iterator(); iterator.hasNext(); ) {
+            final Object factoryInstanceOrClass = iterator.next();
+            if(factoryInstanceOrClass == factoryClass || factoryClass.isAssignableFrom(factoryInstanceOrClass.getClass())) {
+                iterator.remove();
+            }
+        }
     }
 
     @Override

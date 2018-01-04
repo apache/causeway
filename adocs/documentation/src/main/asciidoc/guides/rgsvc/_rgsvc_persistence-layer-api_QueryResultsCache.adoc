@@ -113,8 +113,6 @@ This refactoring will be worthwhile provided that enough of the orders being pro
 
 
 
-
-
 == Related Services
 
 The xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_Scratchpad[`Scratchpad`] service is also intended for actions that are called many times, allowing arbitrary information to be shared between them. Those methods could be called from some outer loop in domain code, or by the framework itself if the action invoked has the xref:../rgant/rgant.adoc#_rgant-Action_invokeOn[`@Action#invokeOn()`] annotation attribute set to `OBJECT_AND_COLLECTION` or `COLLECTION_ONLY`.

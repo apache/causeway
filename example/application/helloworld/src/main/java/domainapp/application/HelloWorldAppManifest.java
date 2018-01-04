@@ -18,18 +18,18 @@
  */
 package domainapp.application;
 
-import org.apache.isis.applib.AppManifestAbstract;
+import org.apache.isis.applib.AppManifestAbstract2;
 
 import domainapp.dom.HelloWorldModule;
 
 /**
  * Bootstrap the application.
  */
-public class HelloWorldAppManifest extends AppManifestAbstract {
+public class HelloWorldAppManifest extends AppManifestAbstract2 {
 
     public static final Builder BUILDER = Builder
-            .forModules(HelloWorldModule.class)
-            .withConfigurationPropertiesFile(HelloWorldAppManifest.class, "isis.properties")
+            .forModule(new HelloWorldModule())
+            .withConfigurationPropertiesFile(HelloWorldAppManifest.class, "isis-non-changing.properties")
             .withAuthMechanism("shiro");
 
     public HelloWorldAppManifest() {

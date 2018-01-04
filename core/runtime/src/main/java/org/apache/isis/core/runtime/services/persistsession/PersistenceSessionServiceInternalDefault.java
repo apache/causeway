@@ -162,6 +162,11 @@ public class PersistenceSessionServiceInternalDefault implements PersistenceSess
     }
 
     @Override
+    public void abortTransaction() {
+        getTransactionManager().abortTransaction();
+    }
+
+    @Override
     public Transaction currentTransaction() {
         return getTransactionManager().getCurrentTransaction();
     }
@@ -188,7 +193,7 @@ public class PersistenceSessionServiceInternalDefault implements PersistenceSess
             return TransactionState.NONE;
         }
         IsisTransaction.State state = transaction.getState();
-        return state.getRuntimeContextState();
+        return state.getTransactionState();
     }
 
     protected PersistenceSession getPersistenceSession() {

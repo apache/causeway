@@ -18,14 +18,13 @@
  */
 package domainapp.application.fixture.scenarios;
 
-import javax.annotation.Nullable;
+import javax.inject.Inject;
 
+import org.apache.isis.applib.AppManifest2;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
+import org.apache.isis.applib.services.metamodel.MetaModelService;
 
-import domainapp.application.fixture.teardown.DomainAppTearDown;
-import domainapp.modules.simple.fixture.scenario.CreateSimpleObjects;
-import lombok.Getter;
-import lombok.Setter;
+import domainapp.modules.simple.fixture.SimpleObject_persona;
 
 public class DomainAppDemo extends FixtureScript {
 
@@ -33,16 +32,14 @@ public class DomainAppDemo extends FixtureScript {
         withDiscoverability(Discoverability.DISCOVERABLE);
     }
 
-    @Nullable
-    @Getter @Setter
-    private Integer number;
-
     @Override
     protected void execute(final ExecutionContext ec) {
-
-        // execute
-        ec.executeChild(this, new DomainAppTearDown());
-        ec.executeChild(this, new CreateSimpleObjects().setNumber(number));
-
+        AppManifest2 appManifest2 = metaModelService.getAppManifest2();
+        ec.executeChild(this, appManifest2.getTeardownFixture());
+        ec.executeChild(this, appManifest2.getRefDataSetupFixture());
+        ec.executeChild(this, new SimpleObject_persona.PersistAll());
     }
+
+    @Inject
+    MetaModelService metaModelService;
 }

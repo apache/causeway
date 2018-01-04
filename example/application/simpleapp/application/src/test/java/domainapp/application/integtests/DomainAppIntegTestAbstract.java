@@ -18,17 +18,14 @@
  */
 package domainapp.application.integtests;
 
-import org.junit.BeforeClass;
+import org.apache.isis.core.integtestsupport.IntegrationTestAbstract3;
 
-import org.apache.isis.core.integtestsupport.IntegrationTestAbstract2;
+import domainapp.application.DomainAppApplicationModule;
 
-import domainapp.application.manifest.DomainAppAppManifest;
+public abstract class DomainAppIntegTestAbstract extends IntegrationTestAbstract3 {
 
-public abstract class DomainAppIntegTestAbstract extends IntegrationTestAbstract2 {
-
-    @BeforeClass
-    public static void initSystem() {
-        bootstrapUsing(new DomainAppAppManifest());
+    public DomainAppIntegTestAbstract() {
+        super(new DomainAppApplicationModule());
     }
 
 }

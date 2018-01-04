@@ -21,16 +21,6 @@ It also lists their corresponding implementation, either a default implementatio
 |Implementation
 |Notes
 
-|xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_AcceptHeaderService[`o.a.i.applib.` +
-`services.acceptheader` +
-`AcceptHeaderService`]
-|Request-scoped access to HTTP Accept headers.
-|`AcceptHeaderServiceDefault` +
-``o.a.i.core`` +
-``isis-viewer-restfulobjects-rendering``
-|Populated only when the domain objects are accessed using the xref:../ugvro/ugvro.adoc#[Restful Objects viewer].
-
-
 |xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_ActionInvocationContext[`o.a.i.applib.` +
 `services.actinv` +
 `ActionInvocation-` +
@@ -66,6 +56,16 @@ depends on: +
 xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`] for persistent `Command`, else in-memory impl. used.
 
 The xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_InteractionContext[`InteractionContext`] manages the actual execution of the command.
+
+
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_DtoMappingHelper[`o.a.i.applib.` +
+`services.dto` +
+`DtoMappingHelper`]
+|Maps domain objects internal identifier to an `OidDto` for use in serialized representations.
+|`DtoMappingHelper` +
+``o.a.i.core`` +
+``isis-core-applib``
+|API is also a concrete class.
 
 
 |xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_InteractionContext[`o.a.i.applib.` +
@@ -148,10 +148,10 @@ Key:
 
 
 
-include::_rgsvc_application-layer-api_AcceptHeaderService.adoc[leveloffset=+1]
 include::_rgsvc_application-layer-api_ActionInvocationContext.adoc[leveloffset=+1]
 include::_rgsvc_application-layer-api_BackgroundService.adoc[leveloffset=+1]
 include::_rgsvc_application-layer-api_CommandContext.adoc[leveloffset=+1]
+include::_rgsvc_application-layer-api_DtoMappingHelper.adoc[leveloffset=+1]
 include::_rgsvc_application-layer-api_InteractionContext.adoc[leveloffset=+1]
 include::_rgsvc_application-layer-api_MessageService.adoc[leveloffset=+1]
 include::_rgsvc_application-layer-api_SessionManagementService.adoc[leveloffset=+1]

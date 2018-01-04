@@ -6,44 +6,65 @@
 
 
 
-When writing integration tests, it's easiest to inherit from a base class:
-
-* as of (`1.15.0`), use `IntegrationTestAbstract2`
-* for earlier releases, use (its superclass) `IntegrationTestAbstract`.
+When writing integration tests, it's easiest to inherit from the `IntegrationTestAbstract3` base class.
 
 This base class xref:ugtst.adoc#_ugtst_integ-test-support_bootstrapping[bootstraps] the framework (caching the framework on a thread-local), and provides various utility methods and framework-provided services for use by your application's subclass tests.
 
 
 
-[[__ugtst_integ-test-support_abstract-class_IntegrationTestAbstract2]]
-== `IntegrationTestAbstract2`
+[[__ugtst_integ-test-support_abstract-class_IntegrationTestAbstract3]]
+== `IntegrationTestAbstract3`
 
-(As of `1.15.0`) we recommend that your integration tests inherit from Apache Isis' `IntegrationTestAbstract2` class:
+We recommend that your integration tests inherit from Apache Isis' `IntegrationTestAbstract3` class.
+The primary benefit over its predecessor, `IntegrationTestAbstract2` (discussed xref:ugtst.adoc#__ugtst_integ-test-support_abstract-class_IntegrationTestAbstract2[below] is that it allows the test to be bootstrapped by passing in a `Module` rather than an `AppManifest`.
+
+For example:
 
 [source,java]
 ----
-public abstract class DomainAppIntegTest extends IntegrationTestAbstract2 {
-    ...
+public abstract class DomainAppIntegTest
+                        extends IntegrationTestAbstract3 {
+
+    public DomainAppIntegTestAbstract() {
+        super(new DomainAppApplicationModule());
+    }
 }
 ----
 
+The `IntegrationTestAbstract3` class also allows the module to be specified externally, using either the `isis.integTest.module` or the (more general) `isis.headless.module` system property, eg by updating the `pom.xml`.
 
-Although not mandatory, this provides a number of helper/convenience methods and JUnit rules:
+For example:
+
+[source,xml]
+----
+<properties>
+    <isis.integTest.module>
+        org.estatio.module.application.EstatioApplicationModule
+    </isis.integTest.module>
+</properties>
+----
+
+This is required when the codebase is organised as multiple "logical" modules within a single Maven "physical" module (ie `src/main/java` compilation unit).
+The integration testing framework will bootstrap the module specified by the system property and cache for all tests discovered within the physical module.
+
+
+
+This test class provides a number of helper/convenience methods and JUnit rules:
 
 [source,java]
 ----
-    @Rule
-    public IsisTransactionRule isisTransactionRule =                         // <1>
-        new IsisTransactionRule();
-    @Rule
-    public JUnitRuleMockery2 context =                                       // <2>
-        JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
-    @Rule
-    public ExpectedException expectedExceptions =                            // <3>
-        ExpectedException.none();
-    @Rule
-    public ExceptionRecognizerTranslate exceptionRecognizerTranslations =    // <4>
-        ExceptionRecognizerTranslate.create();
+@Rule
+public IsisTransactionRule isisTransactionRule =                         // <1>
+    new IsisTransactionRule();
+@Rule
+public JUnitRuleMockery2 context =                                       // <2>
+    JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
+@Rule
+public ExpectedException expectedExceptions =                            // <3>
+    ExpectedException.none();
+@Rule
+public ExceptionRecognizerTranslate exceptionRecognizerTranslations =    // <4>
+    ExceptionRecognizerTranslate.create();
 ----
 <1> ensures an Apache Isis session/transaction running for each test
 <2> sets up a JMock context (using Apache Isis' extension to JMock as described in xref:../ugtst/ugtst.adoc#_ugtst_unit-test-support_jmock-extensions[JMock Extensions].
@@ -52,38 +73,8 @@ Although not mandatory, this provides a number of helper/convenience methods and
 
 All of these rules could be inlined in your own base class; as we say, they are a convenience.
 
-The `IntegrationTestAbstract2` also provides a number of helper/convenience methods, though most of these have been deprecated because the functionality they expose is now readily accessible through various domain services; most notably these are:
-
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-api_RepositoryService[`RepositoryService`]
-
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_FactoryService[`FactoryService`]
-
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_metadata-api_ServiceRegistry[`ServiceRegistry`]
-
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_WrapperFactory[`WrapperFactory`] +
-+
-to wrap objects simulating interaction through the user interface)
-
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_TransactionService[`TransactionService`] +
-+
-most commonly used to commit changes after the fixture setup) and,
-
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_SessionManagementService[`SessionManagementService`] +
-+
-for tests that check interactions over multiple separate sessions.
+The class also provides a number of injected domain services,  notably
+xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-api_RepositoryService[`RepositoryService`], xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_FactoryService[`FactoryService`], xref:../rgsvc/rgsvc.adoc#_rgsvc_metadata-api_ServiceRegistry[`ServiceRegistry2`], xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_WrapperFactory[`WrapperFactory`] (to wrap objects simulating interaction through the user interface), xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_TransactionService[`TransactionService`] (most commonly used to commit changes after the fixture setup) and xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_SessionManagementService[`SessionManagementService`] (for tests that check interactions over multiple separate sessions).
 
 
 
-[[__ugtst_integ-test-support_abstract-class_IntegrationTestAbstract]]
-== `IntegrationTestAbstract`
-
-For earlier releases we recommend that your base class inherit from Apache Isis' `IntegrationTestAbstract` class:
-
-[source,java]
-----
-public abstract class DomainAppIntegTest extends IntegrationTestAbstract {
-    ...
-}
-----
-
-This provides most of the benefits of `IntegrationTestAbstract2` (it is the latter's superclass, in fact), but the xref:ugtst.adoc#_ugtst_integ-test-support_bootstrapping[bootstrapping] is more verbose.

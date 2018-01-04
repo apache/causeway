@@ -90,6 +90,14 @@ public class DeweyOrderComparatorTest {
         );
     }
 
+    @Test
+    public void X() throws Exception {
+        assertThatSorting(
+                ofS("45.1", "10.10"),
+                ofL("10.10", "45.1")
+        );
+    }
+
     private static Collection<String> ofS(String... str) {
         return Arrays.asList(str);
     }

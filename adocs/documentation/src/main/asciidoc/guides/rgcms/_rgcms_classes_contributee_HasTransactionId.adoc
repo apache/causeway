@@ -10,8 +10,7 @@ auditing entries or commands, or for xref:../rgsvc/rgsvc.adoc#_rgsvc_application
 
 [NOTE]
 ====
-Prior to `1.13.0`, this identifier was the GUID of the Isis transaction in which the object was created (hence the name).
-As of `1.13.0`, this identifier actually is for the request/interaction in which the object was created, so is actually now mis-named.
+This identifier actually is for the request/interaction in which the object was created, so is actually now mis-named.
 ====
 
 The interface is defined is:

@@ -112,6 +112,9 @@ public interface PersistenceSessionServiceInternal extends AdapterManager {
     void commit();
 
     @Programmatic
+    void abortTransaction();
+
+    @Programmatic
     Transaction currentTransaction();
 
 

@@ -56,5 +56,3 @@ xref:../ugfun/ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_view-mod
 exposed in the UI through mixins to xref:../rgcms/rgcms.adoc#_rgcms_classes_mixins_Dto[`Dto`] interface.
 
 
-
-

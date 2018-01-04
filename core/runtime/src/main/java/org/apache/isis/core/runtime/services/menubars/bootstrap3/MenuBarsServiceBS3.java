@@ -100,6 +100,9 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
         if(menuBars == null || menuBarsLoaderService.supportsReloading()) {
 
             BS3MenuBars menuBars = menuBarsLoaderService.menuBars();
+            if(menuBars == null) {
+                menuBars = fallbackMenuBars;
+            }
 
             menuBars.setTnsAndSchemaLocation(tnsAndSchemaLocation());
 

@@ -28,10 +28,12 @@ import java.util.List;
 import java.util.Set;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.ListExtensions;
 import org.apache.isis.core.commons.lang.MethodUtil;
@@ -39,6 +41,7 @@ import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
+import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
@@ -135,11 +138,15 @@ public class FacetedMethodsBuilder {
     private final SpecificationLoader specificationLoader;
 
 
+    private final boolean explicitAnnotationsForActions;
+
     // ////////////////////////////////////////////////////////////////////////////
     // Constructor & finalize
     // ////////////////////////////////////////////////////////////////////////////
 
-    public FacetedMethodsBuilder(final ObjectSpecificationAbstract spec, final FacetedMethodsBuilderContext facetedMethodsBuilderContext) {
+    public FacetedMethodsBuilder(
+            final ObjectSpecificationAbstract spec,
+            final FacetedMethodsBuilderContext facetedMethodsBuilderContext) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("creating JavaIntrospector for " + spec.getFullIdentifier());
         }
@@ -152,6 +159,9 @@ public class FacetedMethodsBuilder {
 
         this.facetProcessor = facetedMethodsBuilderContext.facetProcessor;
         this.specificationLoader = facetedMethodsBuilderContext.specificationLoader;
+
+        this.explicitAnnotationsForActions = facetedMethodsBuilderContext.configService.getBoolean("isis.reflector.explicitAnnotations.action");
+
     }
 
     @Override
@@ -461,8 +471,17 @@ public class FacetedMethodsBuilder {
             }
         }
 
+        if(explicitActionAnnotationConfigured()) {
+            if(!Annotations.isAnnotationPresent(actionMethod, Action.class)) {
+                return false;
+            }
+        }
         LOG.debug("  identified action {0}", actionMethod);
         return true;
+    }
+
+    private boolean explicitActionAnnotationConfigured() {
+        return explicitAnnotationsForActions;
     }
 
     private boolean loadParamSpecs(final Method actionMethod) {

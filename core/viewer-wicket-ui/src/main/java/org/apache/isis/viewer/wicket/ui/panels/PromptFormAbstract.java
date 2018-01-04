@@ -40,7 +40,6 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.util.string.AppendingStringBuffer;
 
-import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
@@ -65,7 +64,7 @@ public abstract class PromptFormAbstract<T extends BookmarkableModel<ObjectAdapt
         implements ScalarModelSubscriber2 {
 
     private static final String ID_OK_BUTTON = "okButton";
-    private static final String ID_CANCEL_BUTTON = "cancelButton";
+    public static final String ID_CANCEL_BUTTON = "cancelButton";
 
     private static final String ID_FEEDBACK = "feedback";
 
@@ -225,7 +224,9 @@ public abstract class PromptFormAbstract<T extends BookmarkableModel<ObjectAdapt
         setLastFocusHint();
 
         final FormExecutor formExecutor = new FormExecutorDefault<>(getFormExecutorStrategy());
-        boolean succeeded = formExecutor.executeAndProcessResults(target.getPage(), target, form);
+
+        final boolean withinPrompt = formExecutorContext.isWithinPrompt();
+        boolean succeeded = formExecutor.executeAndProcessResults(target.getPage(), target, form, withinPrompt);
 
         if (succeeded) {
             completePrompt(target);
@@ -271,15 +272,16 @@ public abstract class PromptFormAbstract<T extends BookmarkableModel<ObjectAdapt
 
     private void completePrompt(final AjaxRequestTarget target) {
 
-        final PromptStyle promptStyle = formExecutorContext.getPromptStyle();
-        if (promptStyle.isInlineOrInlineAsIfEdit() &&
-            formExecutorContext.getInlinePromptContext() != null) {
-
+        if (isWithinPrompt()) {
             formExecutorContext.reset();
             rebuildGuiAfterInlinePromptDone(target);
         } else {
             closePromptIfAny(target);
         }
+    }
+
+    private boolean isWithinPrompt() {
+        return FormExecutorContext.Util.isWithinPrompt(this.formExecutorContext);
     }
 
     private void rebuildGuiAfterInlinePromptDone(final AjaxRequestTarget target) {

@@ -535,6 +535,11 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
     public void reset() {
     }
 
+    @Override
+    public boolean isWithinPrompt() {
+        return Util.isWithinPrompt(this);
+    }
+
     public void clearArguments() {
         for (final ActionArgumentModel actionArgumentModel : arguments.values()) {
             actionArgumentModel.reset();

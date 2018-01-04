@@ -52,7 +52,6 @@ repositoryService.persist(cust);
 The core framework provides a default implementation of this service (`o.a.i.core.metamodel.services.factory.FactoryServiceDefault`).
 
 
-To use an alternative implementation, implement `FactoryService` interface and use xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:../rgsvc/rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
 
 
 == Related Services

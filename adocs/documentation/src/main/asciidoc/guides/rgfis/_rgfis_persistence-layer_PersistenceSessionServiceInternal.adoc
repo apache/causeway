@@ -9,7 +9,7 @@ The (internal) `PersistenceSessionServiceInternal` domain service acts as a faca
 
 [NOTE]
 ====
-The default implementation of this service is not (as of `1.13.0`) request-scoped, however all of the methods delegate
+The default implementation of this service is not request-scoped, however all of the methods delegate
 to the `PersistenceSession` of the current `IsisSession` - obtained from the thread-local of `IsisSessionFactory` singleton service.
 So, in effect the service does act as if it is request scoped.
 ====

@@ -18,6 +18,7 @@
  */
 package org.apache.isis.applib.fixturescripts;
 
+import java.io.PrintStream;
 import java.lang.reflect.Constructor;
 import java.util.Collections;
 import java.util.Comparator;
@@ -53,13 +54,13 @@ import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.util.ObjectContracts;
 
+
 /**
  * Rather than subclassing, instead implement
  * {@link org.apache.isis.applib.services.fixturespec.FixtureScriptsSpecificationProvider}.  The framework will
  * automatically provide a default implementation configured using that provider service.
  */
 public abstract class FixtureScripts extends AbstractService {
-
 
     //region > Specification, nonPersistedObjectsStrategy, multipleExecutionStrategy enums
 
@@ -277,6 +278,24 @@ public abstract class FixtureScripts extends AbstractService {
 
     //endregion
 
+    //region > fixtureTracing (thread-local)
+
+    private final ThreadLocal<PrintStream> fixtureTracing = new ThreadLocal<PrintStream>(){{
+        set(System.out);
+    }};
+
+    @Programmatic
+    public PrintStream getFixtureTracing() {
+        return fixtureTracing.get();
+    }
+
+    @Programmatic
+    public void setFixtureTracing(PrintStream fixtureTracing) {
+        this.fixtureTracing.set(fixtureTracing);
+    }
+
+    //endregion
+
     //region > runFixtureScript (prototype action)
 
     /**
@@ -302,7 +321,7 @@ public abstract class FixtureScripts extends AbstractService {
         // domain services are injected into the fixture script.
         serviceRegistry.injectServicesInto(fixtureScript);
 
-        return runScript(fixtureScript, parameters);
+        return fixtureScript.withTracing(fixtureTracing.get()).run(parameters);
     }
     public FixtureScript default0RunFixtureScript() {
         return getFixtureScriptList().isEmpty() ? null: getFixtureScriptList().get(0);
@@ -338,6 +357,38 @@ public abstract class FixtureScripts extends AbstractService {
     //endregion
 
     //region > programmatic API
+
+    @Programmatic
+    public void runFixtureScript(final FixtureScript... fixtureScriptList) {
+        if (fixtureScriptList.length == 1) {
+            runFixtureScript(fixtureScriptList[0], null);
+        } else {
+            runFixtureScript(new FixtureScript() {
+                protected void execute(ExecutionContext executionContext) {
+                    FixtureScript[] fixtureScripts = fixtureScriptList;
+                    for (FixtureScript fixtureScript : fixtureScripts) {
+                        executionContext.executeChild(this, fixtureScript);
+                    }
+                }
+            }, null);
+        }
+
+        transactionService.nextTransaction();
+    }
+
+    @Programmatic
+    public <T,F extends BuilderScriptAbstract<T,F>> T runBuilderScript(final F fixtureScript) {
+
+        serviceRegistry.injectServicesInto(fixtureScript);
+
+        fixtureScript.run(null);
+
+        final T object = fixtureScript.getObject();
+        transactionService.nextTransaction();
+
+        return object;
+    }
+
     @Programmatic
     public FixtureScript findFixtureScriptFor(final Class<? extends FixtureScript> fixtureScriptClass) {
         final List<FixtureScript> fixtureScripts = getFixtureScriptList();
@@ -456,7 +507,6 @@ public abstract class FixtureScripts extends AbstractService {
 
     @javax.inject.Inject
     ExecutionParametersService executionParametersService;
-
     //endregion
 
 }

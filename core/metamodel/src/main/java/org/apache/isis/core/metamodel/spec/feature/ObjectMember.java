@@ -36,6 +36,8 @@ import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.core.metamodel.layout.memberorderfacet.MemberOrderFacetComparator;
 
+import com.google.common.base.Predicate;
+
 /**
  * Provides reflective access to an action or a field on a domain object.
  */
@@ -159,9 +161,43 @@ public interface ObjectMember extends ObjectFeature {
             this(null);
         }
         public AuthorizationException(final RuntimeException ex) {
-            super("Not authorized or no such object", ex);
+            this("Not authorized or no such object", ex);
         }
 
+        public AuthorizationException(final String message, final RuntimeException ex) {
+            super(message, ex);
+        }
+    }
+
+    class HiddenException extends AuthorizationException {
+        public HiddenException() {
+            super(null);
+        }
+
+        public static Predicate<Throwable> isInstanceOf() {
+            return new Predicate<Throwable>() {
+                @Override
+                public boolean apply(@Nullable final Throwable throwable) {
+                    return throwable instanceof HiddenException;
+                }
+            };
+        }
+    }
+
+    class DisabledException extends AuthorizationException {
+
+        public DisabledException(final String message) {
+            super(message, null);
+        }
+
+        public static Predicate<Throwable> isInstanceOf() {
+            return new Predicate<Throwable>() {
+                @Override
+                public boolean apply(@Nullable final Throwable throwable) {
+                    return throwable instanceof DisabledException;
+                }
+            };
+        }
     }
 
     class Functions {

@@ -45,7 +45,7 @@ binary large object, eg PDFs or images
 * `o.a.i.applib.value.Markup`
 
 +
-(As of `1.15.1`), intended for use as a read-only property to display arbitrary HTML.
+Intended for use as a read-only property to display arbitrary HTML.
 
 * `o.a.i.applib.value.Clob`
 

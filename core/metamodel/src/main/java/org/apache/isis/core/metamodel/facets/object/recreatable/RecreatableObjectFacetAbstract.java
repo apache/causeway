@@ -33,7 +33,6 @@ import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificati
 
 public abstract class RecreatableObjectFacetAbstract extends MarkerFacetAbstract implements ViewModelFacet {
 
-    private final ArchitecturalLayer architecturalLayer;
     private final PostConstructMethodCache postConstructMethodCache;
     private final ViewModelFacet.RecreationMechanism recreationMechanism;
     protected final ServicesInjector servicesInjector;
@@ -44,12 +43,10 @@ public abstract class RecreatableObjectFacetAbstract extends MarkerFacetAbstract
 
     public RecreatableObjectFacetAbstract(
             final FacetHolder holder,
-            final ArchitecturalLayer architecturalLayer,
             final RecreationMechanism recreationMechanism,
             final PostConstructMethodCache postConstructMethodCache,
             final ServicesInjector servicesInjector) {
         super(type(), holder);
-        this.architecturalLayer = architecturalLayer;
         this.postConstructMethodCache = postConstructMethodCache;
         this.recreationMechanism = recreationMechanism;
         this.servicesInjector = servicesInjector;
@@ -77,11 +74,6 @@ public abstract class RecreatableObjectFacetAbstract extends MarkerFacetAbstract
     public Object clone(Object pojo) {
         ViewModel.Cloneable viewModelCloneable = (ViewModel.Cloneable) pojo;
         return viewModelCloneable.clone();
-    }
-
-    @Override
-    public ArchitecturalLayer getArchitecturalLayer() {
-        return architecturalLayer;
     }
 
     @Override

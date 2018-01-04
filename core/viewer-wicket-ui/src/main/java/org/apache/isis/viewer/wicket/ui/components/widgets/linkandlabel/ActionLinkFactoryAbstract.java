@@ -145,7 +145,7 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
 
                 final FormExecutor formExecutor =
                         new FormExecutorDefault<>(new ActionFormExecutorStrategy(actionModel));
-                boolean succeeded = formExecutor.executeAndProcessResults(page, null, null);
+                boolean succeeded = formExecutor.executeAndProcessResults(page, null, null, actionModel.isWithinPrompt());
 
                 if(succeeded) {
 

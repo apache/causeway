@@ -6,7 +6,7 @@
 
 
 
-The `ClassDiscoveryService` service is used to automatically discover subclasses of any given type on the classpath.
+The `ClassDiscoveryService2` service (and its various supertypes) is used to automatically discover subclasses of any given type on the classpath.
 The primary use case is to support "convention-over-configuration" designs that work with a minimum of configuration.
 
 This service is used by the xref:../rgcms/rgcms.adoc#_rgcms_classes_super_FixtureScripts[`FixtureScripts`] service to automatically locate any xref:../rgcms/rgcms.adoc#_rgcms_classes_super_FixtureScript[`FixtureScript`] implementations.
@@ -46,31 +46,9 @@ To use an alternative implementation, implement the `ClassDiscoveryService` inte
 
 
 
-== Usage
 
-The usage will vary depending upon the conventions of the design.
-As of `1.9.0`, the usage of the service has been centralized such that the packages to be scanned are located from the xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[`AppManifest`]'s `#getModules()` method.
+== Related Services
 
-For example, the xref:../ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype]'s app manifest includes:
+The xref:rgsvc.adoc#_rgsvc_testing_FixtureScripts[`FixtureScripts`] domain service uses `ClassDiscoveryService` to discover ``FixtureScript``s implementations to present in the UI.
 
-[source,java]
-----
-public class DomainAppAppManifest implements AppManifest {
-    @Override
-    public List<Class<?>> getModules() {
-        return Arrays.asList(
-                DomainAppDomainModule.class,  // domain (entities and repositories)
-                DomainAppFixtureModule.class, // fixtures
-                DomainAppAppModule.class      // home page service etc
-        );
-    }
-    ...
-}
-----
-
-where the three module classes in effect define three different package prefixes to search under (for domain services, fixture scripts and persistent entities).
-
-Other usages of the `ClassDiscoveryService` are likely to work in a similar way, requiring some sort of scope to be specified.
-
-
-
+Note that the bootstrapping of the framework itself does _not_ use this service (though it does use the same underlying library as the default implementation of this service, namely `org.reflections.Reflections`).

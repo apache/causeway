@@ -18,17 +18,15 @@
  */
 package domainapp.modules.simple.integtests;
 
-import org.junit.BeforeClass;
+import org.apache.isis.core.integtestsupport.IntegrationTestAbstract3;
 
-import org.apache.isis.core.integtestsupport.IntegrationTestAbstract2;
+import domainapp.modules.simple.SimpleModule;
 
-import domainapp.modules.simple.SimpleModuleManifest;
+public abstract class SimpleModuleIntegTestAbstract extends IntegrationTestAbstract3 {
 
-public abstract class SimpleModuleIntegTestAbstract extends IntegrationTestAbstract2 {
-
-    @BeforeClass
-    public static void initSystem() {
-        bootstrapUsing(SimpleModuleManifest.BUILDER.withConfigurationProperty("isis.objects.editing","false"));
+    public SimpleModuleIntegTestAbstract() {
+        super(new SimpleModule().withConfigurationProperty("isis.objects.editing","false"));
     }
+
 
 }

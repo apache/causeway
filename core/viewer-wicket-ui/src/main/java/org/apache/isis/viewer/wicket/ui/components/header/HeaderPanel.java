@@ -20,8 +20,6 @@ package org.apache.isis.viewer.wicket.ui.components.header;
 
 import java.util.Locale;
 
-import com.google.inject.name.Named;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
@@ -107,8 +105,7 @@ public class HeaderPanel extends PanelAbstract<Model<String>> {
                 }
                 try {
                     final UserProfileService userProfileService = lookupService(UserProfileService.class);
-                    final String userProfileName = userProfileService != null ? userProfileService.userProfileName() : null;
-                    return userProfileName != null? userProfileName: getAuthenticationSession().getUserName();
+                    return userProfileService.userProfileName();
                 } catch (final Exception e) {
                     return getAuthenticationSession().getUserName();
                 }
@@ -135,4 +132,5 @@ public class HeaderPanel extends PanelAbstract<Model<String>> {
         container.add(menuBarComponent);
 
     }
+
 }

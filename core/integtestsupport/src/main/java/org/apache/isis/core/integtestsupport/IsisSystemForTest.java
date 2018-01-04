@@ -44,6 +44,8 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidExcep
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.fixtures.FixturesInstallerDelegate;
+import org.apache.isis.core.runtime.headless.IsisComponentProviderDefault;
+import org.apache.isis.core.runtime.headless.IsisSystem;
 import org.apache.isis.core.runtime.logging.IsisLoggingConfigurer;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
@@ -60,7 +62,10 @@ import static org.junit.Assert.fail;
 
 /**
  * Wraps a plain {@link IsisSessionFactoryBuilder}, and provides a number of features to assist with testing.
+ *
+ * @deprecated - to be replaced by {@link IsisSystem}.
  */
+@Deprecated
 public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServiceProvider {
 
     //region > Listener, ListenerAdapter

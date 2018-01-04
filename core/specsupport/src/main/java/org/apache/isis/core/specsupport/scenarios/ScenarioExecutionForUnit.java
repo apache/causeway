@@ -29,7 +29,10 @@ import org.jmock.internal.ExpectationBuilder;
  * Expectations can be {@link Mockery#checking(org.jmock.internal.ExpectationBuilder) set} 
  * and interactions {@link Mockery#assertIsSatisfied() verified} by accessing
  * the underlying {@link Mockery}.
+ *
+ * @deprecated - to be removed in 2.0, will support BDD for integration tests only
  */
+@Deprecated
 public class ScenarioExecutionForUnit extends ScenarioExecution {
 
     private final DomainServiceProviderMockery dspm;

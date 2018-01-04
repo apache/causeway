@@ -29,7 +29,7 @@ public class Scratchpad {
 ----
 
 This class (`o.a.i.applib.services.scratchpad.Scratchpad`) is also the implementation.
-The service is just a request-scoped wrapper around a `java.util.Map`.
+And, as you can see, the service is just a request-scoped wrapper around a `java.util.Map`.
 
 
 To use an alternative implementation, subclass and use xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:../rgsvc/rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
@@ -103,9 +103,6 @@ Scratchpad scratchpad;
 <2> ... and add one if there isn't one (ie for the first object returned).
 
 If using the xref:../ugvw/ugvw.adoc#[Wicket viewer], the `ToDoItemBulkUpdate` view model returned from the last action invoked will be displayed. Thereafter this view model can be used to perform a bulk update of the "enlisted" items.
-
-
-
 
 
 

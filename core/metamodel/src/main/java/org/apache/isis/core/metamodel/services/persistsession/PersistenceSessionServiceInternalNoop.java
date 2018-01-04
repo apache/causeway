@@ -126,6 +126,11 @@ public class PersistenceSessionServiceInternalNoop implements PersistenceSession
     }
 
     @Override
+    public void abortTransaction() {
+        throw new UnsupportedOperationException("Not supported by this implementation of PersistenceSessionServiceInternal");
+    }
+
+    @Override
     public void executeWithinTransaction(TransactionalClosure transactionalClosure) {
         transactionalClosure.execute();
     }

@@ -12,7 +12,7 @@ The release process consists of:
 * Members of the Apache Isis PMC xref:../cgcom/cgcom.adoc#_cgcom_verifying-releases[verifying] and voting on the release
 * the release manager performing post-release tasks, for either a xref:../cgcom/cgcom.adoc#_cgcom_post-release-successful[successful] or an xref:../cgcom/cgcom.adoc#_cgcom_post-release-unsuccessful[unsuccessful] vote.
 
-Apache Isis itself consists of three separately releasable modules; relative to the link:https://git-wip-us.apache.org/repos/asf/isis/repo?p=isis.git;a=tree[source code root] there are:
+Apache Isis itself consists of three separately releasable modules; relative to the link:https://github.com/apache/isis[source code root] there are:
 
 * `core`
 * `component/example/archetypes/helloworld`
@@ -55,8 +55,8 @@ For example:
 ----
 cd core
 export ISISTMP=/c/tmp                               # <1>
-export ISISDEV=1.16.0-SNAPSHOT
-export ISISREL=1.15.1
+export ISISDEV=2.1.0-SNAPSHOT
+export ISISREL=2.0.0
 export ISISRC=RC1
 export ISISBRANCH=release-$ISISREL-$ISISRC
 export ISISJIRA=ISIS-9999                           # <2>
@@ -73,7 +73,7 @@ Obviously, alter `$ISISDEV` and `$ISISREL` as required, and bump `$ISISRC` for r
 
 [IMPORTANT]
 ====
-Note that the branch name is *not* the same any of the eventual tag names (eg `isis-1.16.0` or `simpleapp-archetype-1.16.0`).
+Note that the branch name is *not* the same any of the eventual tag names (eg `isis-2.0.0` or `simpleapp-archetype-2.0.0`).
 
 If they did have the same name, then what would happen is that the `maven-release-plugin` would checkout the (HEAD of the) branch and thus upload a SNAPSHOT to the snapshot repository.
 What it should of course do is checkout the tag and then upload that to the release staging repository.
@@ -103,13 +103,13 @@ his will normally have been done already during earlier development; but confirm
 If it has not, make the change.
 
 Double check that the version number of the core POM (`core/pom.xml`) should reflect the branch name that you are now on.
-For example, if releasing version `1.16.0`, the POM should read:
+For example, if releasing version `2.0.0`, the POM should read:
 
 [source,xml]
 ----
 <groupId>org.apache.isis.core</groupId>
 <artifactId>isis</artifactId>
-<version>1.16.0-SNAPSHOT</version>
+<version>2.0.0-SNAPSHOT</version>
 ----
 
 Also, check that there are no snapshot dependencies:
@@ -412,7 +412,7 @@ If releasing using Windows and Maven >= 3.3.3, then there is an issue that requi
 
 In Maven 3.3.3 the `mvn.bat` file was removed, replaced instead with `mvn.cmd`.
 However, `maven-archetype-plugin:2.4` only uses `mvn.bat`; this causes the `archetype:create-from-project` goal to fail.
-The fix is to simple: just copy `mvn.cmd` to `mvn.bat`.
+The fix is simple: just copy `mvn.cmd` to `mvn.bat`.
 ====
 
 
@@ -523,7 +523,9 @@ docker container run -p 8080:8080 -d test/simpleapp
 +
 [NOTE]
 ====
-On Windows, you may need to enable the Docker daemon first, otherwise the "mvn install" command above will fail:
+On Windows, make sure that Docker is first switched to using linux containers, not Windows containers (because the `Dockerfile` in the application references a linux base image).
+
+You may also need to enable the Docker daemon first, otherwise the "mvn install" command above will fail:
 
 image::{_imagesdir}docker/docker-daemon.png[width="600px",link="{_imagesdir}docker/docker-daemon.png"]
 
@@ -898,7 +900,7 @@ git fetch
 
 [NOTE]
 ====
-The remote tags aren't visible locally but can be seen https://git-wip-us.apache.org/repos/asf/isis/repo?p=isis.git;a=summary[online].
+The remote tags aren't visible locally but can be seen link:https://github.com/apache/isis/tags[online].
 ====
 
 
@@ -940,7 +942,7 @@ The source code artifacts have been uploaded to staging repositories on reposito
 
 For each zip there is a corresponding signature file (append .asc to the zip's url).
 
-In the source code repo the code has been tagged as isis-1.16.0-RC1, helloworld-archetype-1.16.0-RC1 and simpleapp-archetype-1.16.0-RC1; see https://git-wip-us.apache.org/repos/asf?p=isis.git
+In the source code repo the code has been tagged as isis-1.16.0-RC1, helloworld-archetype-1.16.0-RC1 and simpleapp-archetype-1.16.0-RC1; see https://github.com/apache/isis/tags
 
 For instructions on how to verify the release (build from binaries and/or use in Maven directly), see https://isis.apache.org/guides/cgcom/cgcom.html#_cgcom_verifying-releases
 

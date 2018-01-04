@@ -19,7 +19,6 @@
 package org.apache.isis.core.metamodel.facets.object.domainobject;
 
 import java.lang.reflect.Method;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -475,8 +474,7 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
                 }
 
                 final Map<ObjectSpecId, ObjectSpecification> specById = Maps.newHashMap();
-                final Collection<ObjectSpecification> allSpecifications = getSpecificationLoader().allSpecifications();
-                for (final ObjectSpecification otherSpec : allSpecifications) {
+                for (final ObjectSpecification otherSpec : getSpecificationLoader().allSpecifications()) {
 
                     if(thisSpec == otherSpec) {
                         continue;

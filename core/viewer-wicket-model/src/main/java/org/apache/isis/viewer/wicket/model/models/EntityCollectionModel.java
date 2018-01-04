@@ -20,12 +20,15 @@
 package org.apache.isis.viewer.wicket.model.models;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 
 import com.google.common.base.Function;
 import com.google.common.base.Predicates;
+import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
@@ -38,6 +41,7 @@ import org.apache.isis.core.commons.lang.Closure;
 import org.apache.isis.core.commons.lang.IterableExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.collections.sortedby.SortedByFacet;
 import org.apache.isis.core.metamodel.facets.object.paged.PagedFacet;
@@ -46,6 +50,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
@@ -67,9 +72,10 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
 
     private static final long serialVersionUID = 1L;
 
+    private static final String KEY_BULK_LOAD = "isis.persistor.datanucleus.standaloneCollection.bulkLoad";
+
     private static final int PAGE_SIZE_DEFAULT_FOR_PARENTED = 12;
     private static final int PAGE_SIZE_DEFAULT_FOR_STANDALONE = 25;
-
 
     public enum Type {
         /**
@@ -81,12 +87,38 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
         STANDALONE {
             @Override
             List<ObjectAdapter> load(final EntityCollectionModel entityCollectionModel) {
-                return Lists.newArrayList(
-                        Iterables.filter(
-                                Iterables.transform(entityCollectionModel.mementoList,
-                                        ObjectAdapterMemento.Functions.fromMemento(ConcurrencyChecking.NO_CHECK,
-                                                entityCollectionModel.getPersistenceSession(), entityCollectionModel.getSpecificationLoader())),
-                                Predicates.notNull()));
+
+                final boolean bulkLoad = entityCollectionModel.getPersistenceSession().getConfiguration()
+                        .getBoolean(KEY_BULK_LOAD, false);
+                final Iterable<ObjectAdapter> values = bulkLoad
+                                ? loadInBulk(entityCollectionModel)
+                                : loadOneByOne(entityCollectionModel);
+                return Lists.newArrayList(values);
+            }
+
+            private Iterable<ObjectAdapter> loadInBulk(final EntityCollectionModel model) {
+                final List<ObjectAdapterMemento> mementoList = model.mementoList;
+
+                final PersistenceSession persistenceSession = model.getPersistenceSession();
+
+                final List<RootOid> rootOids = FluentIterable.from(mementoList)
+                        .transform(ObjectAdapterMemento.Functions.toOid()).toList();
+
+                final Map<RootOid, ObjectAdapter> adaptersByOid = persistenceSession.adaptersFor(rootOids);
+                final Collection<ObjectAdapter> adapterList = adaptersByOid.values();
+                return FluentIterable.from(adapterList)
+                        .filter(Predicates.<ObjectAdapter>notNull());
+            }
+
+            private Iterable<ObjectAdapter> loadOneByOne(final EntityCollectionModel model) {
+                final List<ObjectAdapterMemento> mementoList = model.mementoList;
+                return FluentIterable.from(mementoList)
+                            .transform(
+                                ObjectAdapterMemento.Functions.fromMemento(
+                                        ConcurrencyChecking.NO_CHECK,
+                                        model.getPersistenceSession(),
+                                        model.getSpecificationLoader()))
+                            .filter(Predicates.notNull());
             }
 
             @Override

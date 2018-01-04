@@ -45,10 +45,3 @@ The order from the first service that returns a non null value will be used.
 
 
 
-== Registering the Services
-
-Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the
-`AppManifest` to xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]), then the
- default implementation of `TableColumnOrderService` is automatically registered and injected, and no further
- configuration is required.
-

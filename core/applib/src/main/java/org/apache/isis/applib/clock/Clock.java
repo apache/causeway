@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.applib.clock;
 
 import java.sql.Timestamp;
@@ -49,7 +48,7 @@ import org.apache.isis.applib.fixtures.FixtureClock;
  * {@link FixtureClock#getInstance()}.
  */
 public abstract class Clock {
-    private static Clock instance;
+    protected static Clock instance;
     private static boolean isReplaceable = true;
 
     /**

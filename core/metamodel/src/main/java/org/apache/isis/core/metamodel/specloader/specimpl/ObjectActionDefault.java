@@ -351,13 +351,13 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
         // see it?
         final Consent visibility = isVisible(target, interactionInitiatedBy, where);
         if (visibility.isVetoed()) {
-            throw new AuthorizationException();
+            throw new HiddenException();
         }
 
         // use it?
         final Consent usability = isUsable(target, interactionInitiatedBy, where);
         if(usability.isVetoed()) {
-            throw new AuthorizationException();
+            throw new DisabledException(usability.getReason());
         }
 
         // do it?

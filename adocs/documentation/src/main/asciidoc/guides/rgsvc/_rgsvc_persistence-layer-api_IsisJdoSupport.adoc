@@ -70,7 +70,8 @@ These "Q..." classes mirror the structure of domain entity, but expose propertie
 
 [NOTE]
 ====
-Most IDEs (including IntelliJ and Eclipse) enable annotation processing by default, as does Maven.
+The IntelliJ IDE automatically enables annotation processing by default, as does Maven.
+Using Eclipse IDE you may need to configure annotation processing manually; see the xref:../dg/dg.adoc#__dg_ide_eclipse_enable-annotation-processing[Developers' Guide].
 The DataNucleus' link:http://www.datanucleus.org/products/accessplatform_4_0/jdo/jdoql_typesafe.html[documentation] offers some guidance on confirming that APT is enabled.
 ====
 
@@ -279,8 +280,3 @@ public List<Order> findOrders(...) {
 
 
 
-== Implementation
-
-The core framework provides a default implementation of this service, `o.a.i.objectstore.jdo.datanucleus.service.support.IsisJdoSupportImpl`
-
-To use an alternative implementation, implement the `IsisJdoSupport` interface and use xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:../rgsvc/rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).

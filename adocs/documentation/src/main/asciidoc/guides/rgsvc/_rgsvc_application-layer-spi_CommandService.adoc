@@ -9,12 +9,9 @@
 The `CommandService` service supports the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_CommandContext[`CommandContext`] service such
 that `Command` objects (that reify the invocation of an action/edit of a property on a domain object) can be persisted.
 
-As of `1.13.0`, the primary use case for persistent ``Command``s is in support of background commands; they
-act as a parent to any background commands that can be persisted either explicitly using the
-xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_BackgroundService[`BackgroundService`], or implicitly by way of the
-xref:../rgant/rgant.adoc#_rgant-Action_command[`@Action#command()`] annotation.
+The primary use case for persistent ``Command``s is in support of background commands; they act as a parent to any background commands that can be persisted either explicitly using the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_BackgroundService[`BackgroundService`], or implicitly by way of the xref:../rgant/rgant.adoc#_rgant-Action_command[`@Action#command()`] annotation.
 
-In previous versions of the framework, persistent ``Command``s also supported a number of other use cases:
+There are a number of related use cases:
 
 * they enable profiling of the running application (which actions are invoked then most often, what is their response time)
 * if xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`] is configured, they provide
@@ -24,7 +21,7 @@ better traceability as the `Command` is also correlated with any published event
 information, since the `Command` (the 'cause' of an action) can be correlated to the audit records (the "effect" of
 the action) through the `transactionId` GUID
 
-As of `1.13.0`, these other uses cases are now more fully supported through the
+However, while persistent ``Command``s _can_ be used for these use cases, it is recommended instead to use the
 xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_InteractionContext[`InteractionContext`] service and persistent implementations of the
 ``Interaction`` object, eg as provided by the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s publishmq module.
 
@@ -57,11 +54,10 @@ public interface CommandService {
 <1> Instantiate the appropriate instance of the `Command` (as defined by the
 xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_CommandContext[`CommandContext`] service).  Its members will be populated automatically by
 the framework.
-<2> Set the hint that the `Command` should be persisted if possible (when completed, see below).
-<3> "Complete" the command, typically meaning that the command should be persisted it if its `Command#getPersistence()`
-flag and persistence hint (`Command#isPersistHint()`) indicate that it should be.
-+
-The framework will automatically have set the `completedAt` property of the `Command`.
+<2> Deprecated and *IS NOT CALLED* by the framework.
+The framework automatically populates the ``Command``'s `timestamp`, `user` and `transactionId` fields, so there is no need for the service implementation to initialize any of these.
+In particular, the ``Command`` will already have been initialized with the provided `transactionId` argument.
+<3> Set the hint that the `Command` should be persisted if possible (when completed, see below).
 
 
 
@@ -84,12 +80,12 @@ xref:../ugbtb/ugbtb.adoc#_ugbtb_hints-and-tips_vetoing-visibility[vetoing subscr
 
 
 
-== Usage
+== Alternative Implementations
 
-The typical way to indicate that an action should be reified into a `Command` is by annotating the action using xref:../rgant/rgant.adoc#_rgant-Action_command[`@Action#command()`].
+The (non-ASF) link:http://platform.incode.org[Incode Platform^]'s command module provides an implementation of this service (`CommandService`), and also provides a number of related domain services (`CommandJdoRepository` and `CommandServiceJdoContributions`).
+This module also provides service implementations of the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`BackgroundCommandService`].
 
-
-
+If contributions are not required in the UI, these can be suppressed either using security or by implementing a xref:../ugbtb/ugbtb.adoc#_ugbtb_hints-and-tips_vetoing-visibility[vetoing subscriber].
 
 
 

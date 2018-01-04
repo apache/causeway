@@ -36,11 +36,22 @@ public class Ticket implements Serializable {
     private final String reference;
     private final String userMessage;
     private final String details;
+    private final StackTracePolicy stackTracePolicy;
+
+    public enum StackTracePolicy {
+        SHOW,
+        HIDE
+    }
 
     public Ticket(final String reference, final String userMessage, final String details) {
+        this(reference, userMessage, details, StackTracePolicy.HIDE);
+    }
+
+    public Ticket(final String reference, final String userMessage, final String details, final StackTracePolicy stackTracePolicy) {
         this.reference = reference;
         this.userMessage = userMessage;
         this.details = details;
+        this.stackTracePolicy = stackTracePolicy;
     }
 
     /**
@@ -76,5 +87,17 @@ public class Ticket implements Serializable {
      */
     public String getDetails() {
         return details;
+    }
+
+    /**
+     * Whether the stack trace for the exception should be displayed or be hidden.
+     *
+     * <p>
+     *     The default is to hide it on the basis that the reporting service will have reported the stack trace to
+     *     the support team, meaning there's no need to expose this info to the end-user.
+     * </p>
+     */
+    public StackTracePolicy getStackTracePolicy() {
+        return stackTracePolicy;
     }
 }

@@ -28,11 +28,11 @@ import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 public class PreAndPostValues {
 
     public static class Predicates {
-        public final static Predicate<Map.Entry<?, PreAndPostValues>> CHANGED = new Predicate<Map.Entry<?, PreAndPostValues>>() {
+        public final static Predicate<Map.Entry<?, PreAndPostValues>> SHOULD_AUDIT = new Predicate<Map.Entry<?, PreAndPostValues>>() {
             @Override
             public boolean apply(Map.Entry<?, PreAndPostValues> input) {
                 final PreAndPostValues papv = input.getValue();
-                return papv.differ();
+                return papv.shouldAudit();
             }
         };
     }
@@ -95,10 +95,16 @@ public class PreAndPostValues {
         return getPre() + " -> " + getPost();
     }
 
-    public boolean differ() {
+    public boolean shouldAudit() {
+        // don't audit objects that were created and then immediately deleted within the same xactn
+        if (getPre() == IsisTransaction.Placeholder.NEW && getPost() == IsisTransaction.Placeholder.DELETED) {
+            return false;
+        }
+        // but do always audit objects that have just been created or deleted
         if (getPre() == IsisTransaction.Placeholder.NEW || getPost() == IsisTransaction.Placeholder.DELETED) {
             return true;
         }
+        // else - for updated objects - audit only if the property value has changed
         return !Objects.equal(getPre(), getPost());
     }
 }

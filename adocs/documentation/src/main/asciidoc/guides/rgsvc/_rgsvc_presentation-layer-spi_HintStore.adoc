@@ -93,7 +93,6 @@ public class CustomerAndOrders implements HintStore.HintIdProvider {
 
 
 
-
 == Related Services
 
 The xref:../ugvw/ugvw.adoc#[Wicket viewer] exposes the xref:../rgcms/rgcms.adoc#__rgcms_classes_mixins_Object_clearHints["clear hints"]

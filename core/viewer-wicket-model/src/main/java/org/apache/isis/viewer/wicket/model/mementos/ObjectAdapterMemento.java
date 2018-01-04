@@ -615,9 +615,9 @@ public class ObjectAdapterMemento implements Serializable {
                 final SpecificationLoader specificationLoader) {
             return new Function<ObjectAdapterMemento, ObjectAdapter>() {
                 @Override
-                public ObjectAdapter apply(final ObjectAdapterMemento from) {
+                public ObjectAdapter apply(final ObjectAdapterMemento memento) {
                     try {
-                        return from.getObjectAdapter(concurrencyChecking, persistenceSession, specificationLoader);
+                        return memento.getObjectAdapter(concurrencyChecking, persistenceSession, specificationLoader);
                     } catch (ObjectNotFoundException e) {
                         // this can happen if for example the object is not visible (due to the security tenanted facet)
                         return null;
@@ -653,6 +653,15 @@ public class ObjectAdapterMemento implements Serializable {
                     return objectAdapter.getObject();
                 }
             };
+        }
+
+        public static Function<ObjectAdapterMemento, RootOid> toOid() {
+            return new Function<ObjectAdapterMemento, RootOid>() {
+                                @Override
+                                public RootOid apply(final ObjectAdapterMemento objectAdapterMemento) {
+                                    return RootOid.create(objectAdapterMemento.asBookmark());
+                                }
+                            };
         }
     }
 

@@ -28,6 +28,8 @@ import org.datanucleus.enhancement.Persistable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.isis.applib.AppManifest;
+import org.apache.isis.applib.AppManifest2;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
@@ -36,6 +38,7 @@ import org.apache.isis.applib.services.grid.GridService;
 import org.apache.isis.applib.services.metamodel.DomainMember;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
+import org.apache.isis.core.metamodel.services.appmanifest.AppManifestProvider;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
@@ -226,12 +229,24 @@ public class MetaModelServiceDefault implements MetaModelService {
         return sortOf(domainType, mode);
     }
 
+    @Override
+    public AppManifest2 getAppManifest2() {
+        AppManifest appManifest = getAppManifest();
+        return appManifest instanceof AppManifest2 ? (AppManifest2) appManifest : null;
+    }
 
+    @Override
+    public AppManifest getAppManifest() {
+        return appManifestProvider.getAppManifest();
+    }
 
     @javax.inject.Inject
     SpecificationLoader specificationLookup;
 
     @javax.inject.Inject
     GridService gridService;
+
+    @javax.inject.Inject
+    AppManifestProvider appManifestProvider;
 
 }

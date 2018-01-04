@@ -22,15 +22,16 @@ package org.apache.isis.core.metamodel.services.xactn;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.services.xactn.Transaction;
-import org.apache.isis.applib.services.xactn.TransactionService2;
+import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.services.xactn.TransactionState;
+import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
 )
-public class TransactionServiceDefault implements TransactionService2 {
+public class TransactionServiceDefault implements TransactionService {
 
 
     @Override
@@ -40,7 +41,34 @@ public class TransactionServiceDefault implements TransactionService2 {
 
     @Override
     public void nextTransaction() {
-        persistenceSessionServiceInternal.commit();
+        nextTransaction(TransactionService.Policy.UNLESS_MARKED_FOR_ABORT);
+    }
+
+    @Override
+    public void nextTransaction(TransactionService.Policy policy) {
+        final TransactionState transactionState = getTransactionState();
+        switch (transactionState) {
+        case NONE:
+            break;
+        case IN_PROGRESS:
+            persistenceSessionServiceInternal.commit();
+            break;
+        case MUST_ABORT:
+            switch (policy) {
+            case UNLESS_MARKED_FOR_ABORT:
+                throw new IsisException("Transaction is marked to abort");
+            case ALWAYS:
+                persistenceSessionServiceInternal.abortTransaction();
+                currentTransaction().clearAbortCause();
+                break;
+            }
+            break;
+        case COMMITTED:
+            break;
+        case ABORTED:
+            break;
+        }
+
         persistenceSessionServiceInternal.beginTran();
     }
 
@@ -56,5 +84,6 @@ public class TransactionServiceDefault implements TransactionService2 {
 
     @javax.inject.Inject
     PersistenceSessionServiceInternal persistenceSessionServiceInternal;
+
 
 }

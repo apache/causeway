@@ -7,7 +7,7 @@
 
 In the same way that Java packages act as a namespace for domain objects, it's good practice to map domain entities to their own (database) schemas.
 
-As of `1.9.0`, all the (non-ASF) link:http://platform.incode.org[Incode Platform^] modules do this.
+All the (non-ASF) link:http://platform.incode.org[Incode Platform^] modules do this.
 For example:
 
 
@@ -60,17 +60,11 @@ See the section on xref:../ugodn/ugodn.adoc#_ugodn_configuring[configuring DataN
 
 == Listener to create schema
 
-JDO/DataNucleus does not automatically create these schema objects, but it _does_ provide a listener callback API on the initialization of each class into the JDO metamodel.
+Apache Isis automatically creates owning schema objects for the tables that correspond to each entity class in the JDO metamodel.
 
-[TIP]
-====
-Actually, the above statement isn't quite true.
-In DN 3.2.x (as used by Apache Isis up to v1.8.0) there was no support for schemas.
-As of Apache Isis 1.9.0 and DN 4.0 there is now support.
-But we implemented this feature initially against DN 3.2.x, and it still works, so for now we've decided to leave it in.
-====
-
-Therefore Apache Isis attaches a listener, `CreateSchemaObjectFromClassMetadata`, that checks for the schema's existence, and creates the schema if required.
+This is done by installing a listener, `CreateSchemaObjectFromClassMetadata`, on a callback provided by JDO/DataNucleus.
+The listener is invoked on the initialization of each class.
+It checks for the schema's existence, and creates the schema if required.
 
 The guts of its implementation is:
 

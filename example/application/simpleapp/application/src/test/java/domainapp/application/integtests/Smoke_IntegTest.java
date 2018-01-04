@@ -24,31 +24,17 @@ import javax.inject.Inject;
 
 import org.junit.Test;
 
-import org.apache.isis.applib.fixturescripts.FixtureScripts;
-import org.apache.isis.applib.services.xactn.TransactionService;
-
-import domainapp.application.fixture.teardown.DomainAppTearDown;
 import domainapp.modules.simple.dom.impl.SimpleObject;
-import domainapp.modules.simple.dom.impl.SimpleObjectMenu;
+import domainapp.modules.simple.dom.impl.SimpleObjects;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class Smoke_IntegTest extends DomainAppIntegTestAbstract {
 
     @Inject
-    FixtureScripts fixtureScripts;
-    @Inject
-    TransactionService transactionService;
-    @Inject
-    SimpleObjectMenu menu;
+    SimpleObjects menu;
 
     @Test
-    public void create() throws Exception {
-
-        // given
-        DomainAppTearDown fs = new DomainAppTearDown();
-        fixtureScripts.runFixtureScript(fs, null);
-        transactionService.nextTransaction();
-
+    public void create() {
 
         // when
         List<SimpleObject> all = wrap(menu).listAll();
@@ -86,7 +72,6 @@ public class Smoke_IntegTest extends DomainAppIntegTestAbstract {
 
         // then
         assertThat(wrap(fred).getName()).isEqualTo("Freddy");
-
 
 
         // when

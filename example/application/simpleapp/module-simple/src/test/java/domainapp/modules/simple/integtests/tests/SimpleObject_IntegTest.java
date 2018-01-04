@@ -25,50 +25,31 @@ import javax.inject.Inject;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.applib.services.wrapper.DisabledException;
 import org.apache.isis.applib.services.wrapper.InvalidException;
-import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.metamodel.services.jdosupport.Persistable_datanucleusIdLong;
 import org.apache.isis.core.metamodel.services.jdosupport.Persistable_datanucleusVersionTimestamp;
 
 import domainapp.modules.simple.dom.impl.SimpleObject;
-import domainapp.modules.simple.dom.impl.SimpleObjectMenu;
-import domainapp.modules.simple.fixture.scenario.CreateSimpleObjects;
-import domainapp.modules.simple.fixture.scenario.SimpleObjectData;
-import domainapp.modules.simple.fixture.teardown.SimpleModuleTearDown;
+import domainapp.modules.simple.fixture.SimpleObject_persona;
 import domainapp.modules.simple.integtests.SimpleModuleIntegTestAbstract;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SimpleObject_IntegTest extends SimpleModuleIntegTestAbstract {
 
-    @Inject
-    FixtureScripts fixtureScripts;
-    @Inject
-    SimpleObjectMenu simpleObjectMenu;
-    @Inject
-    TransactionService transactionService;
-
     SimpleObject simpleObject;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         // given
-        fixtureScripts.runFixtureScript(new SimpleModuleTearDown(), null);
-        CreateSimpleObjects fs = new CreateSimpleObjects().setNumber(1);
-        fixtureScripts.runFixtureScript(fs, null);
-        transactionService.nextTransaction();
-
-        simpleObject = SimpleObjectData.FOO.findWith(wrap(simpleObjectMenu));
-
-        assertThat(simpleObject).isNotNull();
+        simpleObject = fixtureScripts.runBuilderScript(SimpleObject_persona.FOO.builder());
     }
 
     public static class Name extends SimpleObject_IntegTest {
 
         @Test
-        public void accessible() throws Exception {
+        public void accessible() {
             // when
             final String name = wrap(simpleObject).getName();
 
@@ -77,7 +58,7 @@ public class SimpleObject_IntegTest extends SimpleModuleIntegTestAbstract {
         }
 
         @Test
-        public void not_editable() throws Exception {
+        public void not_editable() {
             // expect
             expectedExceptions.expect(DisabledException.class);
 
@@ -90,7 +71,7 @@ public class SimpleObject_IntegTest extends SimpleModuleIntegTestAbstract {
     public static class UpdateName extends SimpleObject_IntegTest {
 
         @Test
-        public void can_be_updated_directly() throws Exception {
+        public void can_be_updated_directly() {
 
             // when
             wrap(simpleObject).updateName("new name");
@@ -101,7 +82,7 @@ public class SimpleObject_IntegTest extends SimpleModuleIntegTestAbstract {
         }
 
         @Test
-        public void failsValidation() throws Exception {
+        public void failsValidation() {
 
             // expect
             expectedExceptions.expect(InvalidException.class);
@@ -119,7 +100,7 @@ public class SimpleObject_IntegTest extends SimpleModuleIntegTestAbstract {
         TitleService titleService;
 
         @Test
-        public void interpolatesName() throws Exception {
+        public void interpolatesName() {
 
             // given
             final String name = wrap(simpleObject).getName();
@@ -135,7 +116,7 @@ public class SimpleObject_IntegTest extends SimpleModuleIntegTestAbstract {
     public static class DataNucleusId extends SimpleObject_IntegTest {
 
         @Test
-        public void should_be_populated() throws Exception {
+        public void should_be_populated() {
             // when
             final Long id = mixin(Persistable_datanucleusIdLong.class, simpleObject).prop();
 
@@ -147,13 +128,12 @@ public class SimpleObject_IntegTest extends SimpleModuleIntegTestAbstract {
     public static class DataNucleusVersionTimestamp extends SimpleObject_IntegTest {
 
         @Test
-        public void should_be_populated() throws Exception {
+        public void should_be_populated() {
             // when
             final Timestamp timestamp = mixin(Persistable_datanucleusVersionTimestamp.class, simpleObject).prop();
             // then
             assertThat(timestamp).isNotNull();
         }
     }
-
 
 }

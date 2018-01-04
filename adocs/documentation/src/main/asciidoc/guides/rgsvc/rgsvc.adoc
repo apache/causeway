@@ -48,6 +48,7 @@ The remaining guides are:
 
 
 include::_rgsvc_intro.adoc[leveloffset=+1]
+include::_rgsvc_presentation-layer-api.adoc[leveloffset=+1]
 include::_rgsvc_presentation-layer-spi.adoc[leveloffset=+1]
 include::_rgsvc_application-layer-api.adoc[leveloffset=+1]
 include::_rgsvc_application-layer-spi.adoc[leveloffset=+1]

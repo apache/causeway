@@ -134,6 +134,7 @@ public class IsisSessionFactoryBuilder {
                     DeploymentCategoryProvider.class, new DeploymentCategoryProviderDefault(deploymentCategory));
             servicesInjector.addFallbackIfRequired(ConfigurationServiceInternal.class, configuration);
 
+            
             // fixtureScripts
             servicesInjector.addFallbackIfRequired(FixtureScripts.class, new FixtureScriptsDefault());
 

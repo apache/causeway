@@ -24,6 +24,7 @@ import java.util.Set;
 import java.util.SortedSet;
 import com.google.common.collect.Sets;
 import org.apache.isis.applib.annotation.CollectionLayout;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
@@ -39,7 +40,12 @@ import static org.junit.Assert.assertThat;
 public class NamedFacetForCollectionLayoutAnnotationFactoryTest extends AbstractFacetFactoryTest {
 
     public void testCollectionLayoutAnnotationNamed() {
-        final CollectionLayoutFacetFactory facetFactory = new CollectionLayoutFacetFactory();
+        final CollectionLayoutFacetFactory facetFactory = new CollectionLayoutFacetFactory() {
+            @Override protected IsisConfiguration getConfiguration() {
+                return stubConfiguration;
+            }
+        };
+
 
         class Customer {
             @SuppressWarnings("unused")
@@ -60,7 +66,11 @@ public class NamedFacetForCollectionLayoutAnnotationFactoryTest extends Abstract
     }
 
     public void testCollectionLayoutAnnotationNamedEscapedFalse() {
-        final CollectionLayoutFacetFactory facetFactory = new CollectionLayoutFacetFactory();
+        final CollectionLayoutFacetFactory facetFactory = new CollectionLayoutFacetFactory() {
+            @Override protected IsisConfiguration getConfiguration() {
+                return stubConfiguration;
+            }
+        };
 
         class Customer {
             @SuppressWarnings("unused")

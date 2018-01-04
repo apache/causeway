@@ -62,8 +62,8 @@ The benefit is that subscribers can be more targetted as to the events that they
 
 [NOTE]
 ====
-As of `1.10.0` the framework provides no-arg constructor and will initialize the domain event using (non-API) setters
-rather than through the constructor.  This substantially reduces the boilerplate.
+The framework provides a no-arg constructor and will initialize the domain event using (non-API) setters rather than through the constructor.
+This substantially reduces the boilerplate in the subclasses because no explicit constructor is required..
 ====
 
 

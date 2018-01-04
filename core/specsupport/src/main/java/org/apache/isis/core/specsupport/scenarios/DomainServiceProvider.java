@@ -27,10 +27,13 @@ import org.apache.isis.applib.DomainObjectContainer;
  * For {@link ScenarioExecution scenario}s with integration-scope, these will be
  * configured services for an end-to-end running system.  For scenarios with
  * unit-scope, these will typically be mocks.
+ * 
+ * @deprecated - with no replacement
  */
+@Deprecated
 public interface DomainServiceProvider {
 
-    public abstract <T> T getService(Class<T> serviceClass);
+    <T> T getService(Class<T> serviceClass);
 
     /**
      * Replaces the service implementation with some other.
@@ -40,5 +43,5 @@ public interface DomainServiceProvider {
      * service implementation afterwards.
      * </p>
      */
-    public abstract <T> void replaceService(T original, T replacement);
+    <T> void replaceService(T original, T replacement);
 }

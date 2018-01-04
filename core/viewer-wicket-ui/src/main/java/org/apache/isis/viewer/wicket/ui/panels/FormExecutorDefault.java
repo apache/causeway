@@ -92,6 +92,7 @@ public final class FormExecutorDefault<M extends BookmarkableModel<ObjectAdapter
      * @param page
      * @param targetIfAny
      * @param feedbackFormIfAny
+     * @param withinPrompt
      *
      * @return <tt>false</tt> - if invalid args; if concurrency exception; <tt>true</tt> if redirecting to new page, or repainting all components
      */
@@ -99,7 +100,8 @@ public final class FormExecutorDefault<M extends BookmarkableModel<ObjectAdapter
     public boolean executeAndProcessResults(
             final Page page,
             final AjaxRequestTarget targetIfAny,
-            final Form<?> feedbackFormIfAny) {
+            final Form<?> feedbackFormIfAny,
+            final boolean withinPrompt) {
 
         Command command = null;
         ObjectAdapter targetAdapter = null;
@@ -219,9 +221,8 @@ public final class FormExecutorDefault<M extends BookmarkableModel<ObjectAdapter
                 message = recognizeException(ex, targetIfAny, feedbackFormIfAny);
             }
 
-            // if we did recognize the message, then display to user as a growl pop-up
-            if (message != null) {
-
+            // if we did recognize the message, and not inline prompt, then display to user as a growl pop-up
+            if (message != null && !withinPrompt) {
                 // ... display as growl pop-up
                 final MessageBroker messageBroker = getAuthenticationSession().getMessageBroker();
                 messageBroker.setApplicationError(message);
@@ -237,7 +238,6 @@ public final class FormExecutorDefault<M extends BookmarkableModel<ObjectAdapter
             throw ex;
         }
     }
-
 
     private boolean resultDiffersOrAlwaysRedirect(
             final ObjectAdapter targetAdapter,

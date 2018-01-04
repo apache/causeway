@@ -38,6 +38,7 @@ import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.services.appmanifest.AppManifestProvider;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.ServiceInitializer;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
@@ -67,7 +68,8 @@ import org.apache.isis.core.runtime.system.transaction.IsisTransactionManagerExc
  *     it can be {@link Inject}'d into other domain services.
  * </p>
  */
-public class IsisSessionFactory implements ApplicationScopedComponent {
+public class IsisSessionFactory
+        implements ApplicationScopedComponent, AppManifestProvider {
 
     @SuppressWarnings("unused")
     private final static Logger LOG = LoggerFactory.getLogger(IsisSessionFactory.class);
@@ -99,6 +101,7 @@ public class IsisSessionFactory implements ApplicationScopedComponent {
         this.appManifest = appManifest;
     }
 
+    @Programmatic
     public AppManifest getAppManifest() {
         return appManifest;
     }
@@ -152,16 +155,17 @@ public class IsisSessionFactory implements ApplicationScopedComponent {
             //
 
             final List<Object> services = servicesInjector.getRegisteredServices();
-            // take a copy of all services to avoid occasionall concurrent modification exceptions
+            // take a copy of all services to avoid occasional concurrent modification exceptions
             // that can sometimes occur in the loop
             final List<Object> copyOfServices = Lists.newArrayList(services);
             final TitleService titleService = servicesInjector.lookupServiceElseFail(TitleService.class);
             for (Object service : copyOfServices) {
                 final String unused = titleService.titleOf(service);
             }
-            final List<ObjectSpecification> objectSpecsCopy =
-                    Lists.newArrayList(servicesInjector.getSpecificationLoader().allSpecifications());
-            for (final ObjectSpecification objSpec : objectSpecsCopy) {
+
+            // (previously we took a protective copy to avoid a concurrent modification exception,
+            // but this is now done by SpecificationLoader itself)
+            for (final ObjectSpecification objSpec : servicesInjector.getSpecificationLoader().allSpecifications()) {
                 final Class<?> correspondingClass = objSpec.getCorrespondingClass();
                 if(correspondingClass.isEnum()) {
                     final Object[] enumConstants = correspondingClass.getEnumConstants();

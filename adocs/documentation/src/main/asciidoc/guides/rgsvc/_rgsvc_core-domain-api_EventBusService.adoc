@@ -25,7 +25,7 @@ Two implementations are available, using either link:https://code.google.com/p/g
 
 
 [[__rgsvc_core-domain-api_EventBusService_api-and-implementation]]
-== API & Implementation
+== API
 
 The API defined by `EventBusService` is:
 
@@ -44,7 +44,7 @@ public abstract class EventBusService {
 <2> allows domain services to register themselves.  This should be done in their xref:../rgant/rgant.adoc#_rgant-PostConstruct[`@PostConstruct`] initialization method (for both singleton and xref:../rgant/rgant.adoc#_rgant-RequestScoped[`@RequestScoped`] domain services.
 <3> exists for symmetry, but need never be called (it is in fact deliberately a no-op).
 
-Isis provides a default implementation of the service, `o.a.i.objectstore.jdo.datanucleus.service.eventbus.EventBusServiceJdo`.
+
 
 
 To use an alternative implementation, implement the `EventBusService` domain service and use xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:../rgsvc/rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
@@ -313,9 +313,31 @@ public class ReserveStockSubscriber {
 ----
 
 
-== Implementation SPI
+[[__rgsvc_core-domain-api_EventBusService_Configuration]]
+== Implementation
 
-The implementation of `EventBusService` provided by Apache Isis will by default use link:https://code.google.com/p/guava-libraries/[Guava]'s https://code.google.com/p/guava-libraries/wiki/EventBusExplained[`EventBus`] as the underlying in-memory event bus.  Alternatively the link:http://www.axonframework.org/[AxonFramework]'s link:http://www.axonframework.org/docs/2.4/single.html#d5e1489[SimpleEventBus] can be used.  Which is used is specified through configuration property (described xref:../rgsvc/rgsvc.adoc#__rgsvc_core-domain-api_EventBusService_Configuration[below]).
+The framework provides a default implementation of the service, `o.a.i.objectstore.jdo.datanucleus.service.eventbus.EventBusServiceJdo`.
+
+
+=== Configuration Properties
+
+The default implementation of this service defines the following configuration properties:
+
+[cols="2a,1,3a", options="header"]
+|===
+|Property
+|Value +
+(default value)
+|Description
+
+| `isis.services.` +
+`eventbus.` +
+`implementation` +
+| `guava`, `axon`, +
+FQCN (`_guava_`)
+|which implementation to use by the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] as the underlying event bus.
+
+The implementation of `EventBusService` provided by Apache Isis will by default use link:https://code.google.com/p/guava-libraries/[Guava]'s https://code.google.com/p/guava-libraries/wiki/EventBusExplained[`EventBus`] as the underlying in-memory event bus.  Alternatively the link:http://www.axonframework.org/[AxonFramework]'s link:http://www.axonframework.org/docs/2.4/single.html#d5e1489[SimpleEventBus] can be used.
 
 [NOTE]
 .Guava vs Axon, which to use?
@@ -326,7 +348,29 @@ The Axon `SimpleEventBus`-based implementation on the other hand is fully synchr
 ====
 
 
-It is also possible to use some other implementation.
+| `isis.services.` +
+`eventbus.` +
+`allowLate` +
+`Registration` +
+|`true`,`false` +
+(`false`)
+|whether a domain service can register with the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] after any events have posted. +
+
+Late registration refers to the idea that a domain service can register itself with the `EventBusService` after events have been posted.
+Since domain services are set up at boot time, this almost certainly constitutes a bug in the code and so by default late registration is _not_ allowed.
+Setting the above property to `true` disables this check.
+
+Since this almost certainly constitutes a bug in application code, by default this is disallowed.
+
+
+|===
+
+
+
+
+=== SPI
+
+It is also possible to define use some other underlying event bus implementation, by implementing the `EventBusImplementation` SPI:
 
 [source,java]
 ----
@@ -342,46 +386,12 @@ As is probably obvious, the `EventBusService` just delegates down to these metho
 If you do provide your own implementation of this SPI, be aware that your subscribers will need to use whatever convention is required (eg different annotations) such that the events are correctly routed through to your subscribers.
 
 
-
-[[__rgsvc_core-domain-api_EventBusService_Configuration]]
-== Configuration
-
-The implementation of `EventBusService` provided by Apache Isis will by default use link:https://code.google.com/p/guava-libraries/[Guava]'s https://code.google.com/p/guava-libraries/wiki/EventBusExplained[`EventBus`] as the underlying in-memory event bus.  Alternatively the link:http://www.axonframework.org/[AxonFramework]'s link:http://www.axonframework.org/docs/2.4/single.html#d5e1489[SimpleEventBus] can be used.
-
-To specify which, add the xref:../rgcfg/rgcfg.adoc#_rgcfg_configuring-core[configuration property] `isis.services.eventbus.implementation`:
-
-[source,ini]
-----
-isis.services.eventbus.implementation=guava
-----
-
-or
-
-[source,ini]
-----
-isis.services.eventbus.implementation=axon
-----
-
 If you have written your own implementation of the `EventBusServiceImplementation` SPI, then specify instead its fully-qualified class name:
 
 [source,ini]
 ----
 isis.services.eventbus.implementation=com.mycompany.isis.MyEventBusServiceImplementation
 ----
-
-
-
-In addition, there is one further configuration property, whether to allow "late registration":
-
-[source,ini]
-----
-isis.services.eventbus.allowLateRegistration=false
-----
-
-Late registration refers to the idea that a domain service can register itself with the `EventBusService` after events have been posted.  Since domain services are set up at boot time, this almost certainly constitutes a bug in the code and so by default late registration is _not_ allowed.  Setting the above property to `true` disables this check.
-
-
-
 
 
 

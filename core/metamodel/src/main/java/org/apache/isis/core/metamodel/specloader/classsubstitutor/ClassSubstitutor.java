@@ -22,6 +22,7 @@ package org.apache.isis.core.metamodel.specloader.classsubstitutor;
 import java.util.Set;
 import com.google.common.collect.Sets;
 import org.apache.isis.applib.DomainObjectContainer;
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.core.commons.lang.ClassUtil;
 
 /**
@@ -62,6 +63,14 @@ public class ClassSubstitutor {
         if (shouldIgnore(cls)) {
             return null;
         }
+
+        // primarily to ignore unit test fixtures if they happen to be on the classpath.
+        // (we can't simply ignore them; for example ApplicationFeatureType enum
+        // uses anonymous inner classes and these *are* part of the metamodel)
+        if(cls.isAnonymousClass()) {
+            return cls.getSuperclass();
+        }
+
         final Class<?> superclass = cls.getSuperclass();
         if(superclass != null && superclass.isEnum()) {
             return superclass;
@@ -99,6 +108,12 @@ public class ClassSubstitutor {
         if (cls.isArray()) {
             return shouldIgnore(cls.getComponentType());
         }
+
+        // ignore any classes
+        if(cls.getAnnotation(Programmatic.class) != null) {
+            return true;
+        }
+
         return classesToIgnore.contains(cls) || classNamesToIgnore.contains(cls.getCanonicalName());
     }
 

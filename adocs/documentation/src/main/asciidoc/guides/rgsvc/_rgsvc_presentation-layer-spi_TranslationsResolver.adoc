@@ -40,7 +40,6 @@ Isis' xref:../ugvw/ugvw.adoc#[Wicket viewer] provides an implementation of this 
 Currently there is no equivalent implementation for the xref:../ugvro/ugvro.adoc#[RestfulObjects viewer].
 ====
 
-To use an alternative implementation, implement the `TranslationsResolver` interface and use xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:../rgsvc/rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
 
 
 

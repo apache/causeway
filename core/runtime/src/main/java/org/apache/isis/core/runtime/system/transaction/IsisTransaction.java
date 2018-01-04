@@ -31,6 +31,7 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.applib.services.WithTransactionScope;
 import org.apache.isis.applib.services.xactn.Transaction;
+import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.commons.components.TransactionScopedComponent;
@@ -39,7 +40,6 @@ import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.publishing.PublishingServiceInternal;
-import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
@@ -59,7 +59,6 @@ import org.apache.isis.core.runtime.services.persistsession.PersistenceSessionSe
  * mechanism (for example, the <tt>ObjectStore</tt>) is also committed.
  */
 public class IsisTransaction implements TransactionScopedComponent, Transaction {
-
 
     public static class Placeholder {
         public static Placeholder NEW = new Placeholder("[NEW]");
@@ -153,7 +152,7 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
             return this == MUST_ABORT;
         }
 
-        public TransactionState getRuntimeContextState() {
+        public TransactionState getTransactionState() {
             return transactionState;
         }
     }
@@ -238,6 +237,22 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
     private void setState(final State state) {
         this.state = state;
     }
+
+    @Override
+    public TransactionState getTransactionState() {
+
+        if (getState() == null) {
+            return TransactionState.NONE;
+        }
+
+        final TransactionState transactionState = getState().getTransactionState();
+        if (transactionState == null) {
+            return TransactionState.NONE;
+        }
+
+        return transactionState;
+    }
+
 
     //endregion
 

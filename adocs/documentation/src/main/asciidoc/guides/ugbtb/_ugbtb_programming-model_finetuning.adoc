@@ -67,11 +67,4 @@ This http://isis.markmail.org/thread/472c3mrvcgnripst[thread] from the users mai
 
 
 
-[NOTE]
-====
-Previously (prior to `1.13.0`) the framework also supported the "isis.reflector.facets" configuration property, to
-specify a completely new implementation of the (internal API) `ProgrammingModel`.  This is no longer supported; use
-"isis.reflector.facets.include" and "isis.reflector.facet.exclude" to adjust the framework's default implementation
-(called `ProgrammingModelFacetsJava5`).
-====
 

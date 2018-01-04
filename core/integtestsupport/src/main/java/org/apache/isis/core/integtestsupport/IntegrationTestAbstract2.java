@@ -40,7 +40,10 @@ import org.apache.isis.objectstore.jdo.datanucleus.IsisConfigurationForJdoIntegT
 
 /**
  * Extended base class for integration tests.
+ *
+ * @deprecated - to be replaced by {@link IntegrationTestAbstract3}
  */
+@Deprecated
 public abstract class IntegrationTestAbstract2 extends IntegrationTestAbstract {
 
     private static final Logger LOG = LoggerFactory.getLogger(IntegrationTestAbstract2.class);

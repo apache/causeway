@@ -30,7 +30,8 @@ import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
 import org.apache.wicket.util.time.Duration;
-import org.apache.isis.applib.annotation.SemanticsOf;
+
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -120,16 +121,47 @@ public abstract class ActionLink extends AjaxLink<ObjectAdapter> implements IAja
     }
 
     public String getReasonDisabledIfAny() {
-        return getActionModel().getReasonDisabledIfAny();
+        // no point evaluating if not visible
+        return isVisible() ? getActionModel().getReasonDisabledIfAny() : null;
+    }
+
+    @Override
+    protected void onConfigure() {
+        super.onConfigure();
+        // according to
+        //   http://wicketinaction.com/2011/11/implement-wicket-component-visibility-changes-properly/
+        // and
+        //   http://apache-wicket.1842946.n4.nabble.com/vote-release-Wicket-1-4-14-td3056628.html#a3063795
+        // should be using onConfigure rather than overloading.
+        //
+        // eg:
+        //        setVisible(determineIfVisible());
+        //        setEnabled(determineIfEnabled());
+        //
+        // and no longer override isVisible() and isEnabled().
+        //
+        // however, in the case of a button already rendered as visible/enabled that (due to changes
+        // elsewhere in the state of the server-side system) should then become invisible/disabled, it seems
+        // that onConfigure isn't called and so the action continues to display the prompt.
+        // A check is only made when hit OK of the prompt.  This is too late to display a message, so (until
+        // figure out a better way) gonna continue to override isVisible() and isEnabled()
     }
 
     @Override
     public boolean isVisible() {
+        return determineIfVisible();
+    }
+
+    private boolean determineIfVisible() {
         return getActionModel().isVisible();
     }
 
-    @Override
+    @Programmatic
     public boolean isEnabled() {
+        return determineIfEnabled();
+    }
+
+    private boolean determineIfEnabled() {
         try {
             final String reasonDisabledIfAny = getReasonDisabledIfAny();
             return reasonDisabledIfAny == null;

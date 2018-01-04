@@ -35,10 +35,6 @@
 
     <packaging>pom</packaging>
 
-    <prerequisites>
-        <maven>3.0.4</maven>
-    </prerequisites>
-
     <properties>
         <isis.version>2.0.0-SNAPSHOT</isis.version>
 
@@ -84,7 +80,7 @@
             </snapshots>
         </repository>
         <repository>
-            <id>Cloudbees snapshots</id>
+            <id>cloudbees.estatio.snapshots</id>
             <url>http://repository-estatio.forge.cloudbees.com/snapshot/</url>
             <name>CloudBees Snapshots (and Interim Releases)</name>
             <releases>
@@ -110,7 +106,7 @@
 
     <pluginRepositories>
         <pluginRepository>
-            <id>estatio.snapshots</id>
+            <id>cloudbees.estatio.snapshots</id>
             <name>CloudBees Snapshots (and Interim Releases)</name>
             <releases>
                 <enabled>true</enabled>
@@ -191,7 +187,18 @@
             </activation>
             <build>
                 <directory>target-ide</directory>
-            </build>
+		        <plugins>
+		        	<!-- eclipse doesn't seem to support maven mixins config, so repeat here -->
+					<plugin>
+						<artifactId>maven-compiler-plugin</artifactId>
+						<configuration>
+							<source>${compiler-plugin.source}</source>
+							<target>${compiler-plugin.target}</target>
+							<compilerArgument />
+						</configuration>
+					</plugin>
+		        </plugins>
+		    </build>
         </profile>
     </profiles>
 

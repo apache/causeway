@@ -25,6 +25,6 @@
  * Its intended use is to support multiple versions of a REST API, where the responsibility for content negotiation (determining which version of the REST API is to be used) is managed by
  * </p>
  *
- * @see <a href="http://isis.apache.org/guides/rgsvc/rgsvc.html#_rgsvc_application-layer-api_AcceptHeaderService">Reference guide</a>
+ * @see <a href="http://isis.apache.org/guides/rgsvc/rgsvc.html#_rgsvc_presentation-layer-api_AcceptHeaderService">Reference guide</a>
  */
 package org.apache.isis.applib.services.acceptheader;

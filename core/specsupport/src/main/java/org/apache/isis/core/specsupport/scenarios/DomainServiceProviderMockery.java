@@ -31,6 +31,10 @@ import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.core.unittestsupport.jmocking.JavassistImposteriser;
 
+/**
+ * @deprecated - with no replacement
+ */
+@Deprecated
 class DomainServiceProviderMockery implements DomainServiceProvider {
 
     private RepositoryService mockRepositoryService = null;

@@ -6,7 +6,8 @@
 
 
 
-Sometimes in our fixture scripts we want to perform a business action running as a particular user.  This might be for the usual reason - so that our fixtures accurately reflect the reality of the system with all business constraints enforced using the `WrapperFactory` - or more straightforwardly it might be simply that the action depends on the identity of the user invoking the action.
+Sometimes in our fixture scripts we want to perform a business action running as a particular user.
+This might be for the usual reason - so that our fixtures accurately reflect the reality of the system with all business constraints enforced using the `WrapperFactory` - or more straightforwardly it might be simply that the action depends on the identity of the user invoking the action.
 
 An example of the latter case is in the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp]'s `ToDoItem` class:
 
@@ -56,4 +57,5 @@ toDoItem = sudoService.sudo(username,
         });
 ----
 
-Behind the scenes the `SudoService` simply talks to the `DomainObjectContainer` to override the user returned by the `getUser()` API.  It is possible to override both users and roles.
+Behind the scenes the `SudoService` simply talks to the `DomainObjectContainer` to override the user returned by the `getUser()` API.
+It is possible to override both users and roles.

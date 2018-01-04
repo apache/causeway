@@ -6,20 +6,15 @@
 
 
 
-The `MementoService` was originally introduced to simplify the implementation of
-xref:../ugfun/ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_view-models[ViewModel]s which are required by the framework to return string representation of
-all of their backing state, moreover which is safe for use within a URL.  This usage is deprecated; use xref:../ugfun/ugfun.adoc#_ugfun_programming-model_view-models_jaxb[JAXB view models] instead.
+The `MementoService` was originally introduced to simplify the implementation of xref:../ugfun/ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_view-models[ViewModel]s which are required by the framework to return string representation of all of their backing state, moreover which is safe for use within a URL.
+This usage is deprecated; use xref:../ugfun/ugfun.adoc#_ugfun_programming-model_view-models_jaxb[JAXB view models] instead.
 
-The service can also be used to create a memento of arbitrary objects, however this usage is also deprecated.  (Prior
-to `1.13.0` it was used internally by the core implementation of
-xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_BackgroundService[`BackgroundService`] to capture the state of action invocations so that
-they can be executed by a background process; this is now done using
-xref:../rgfis/rgfis.adoc#_rgfis_application-layer_CommandDtoServiceInternal[`CommandDtoServiceInternal`]).
+The service can also be used to create a memento of arbitrary objects, however this usage is also deprecated.
 
 
-[NOTE]
+[WARNING]
 ====
-As of `1.13.0` this service is deprecated, replaced by internal domain services.
+This service is deprecated, with replaced by internal domain services (not public API).
 ====
 
 
@@ -121,17 +116,6 @@ public class ExternalEntity implements ViewModel {
 <1> part of the `ViewModel` API
 <2> part of the `ViewModel` API
 
-
-
-
-
-== Related Services
-
-(Prior to `1.13.0`), the memento service was used by the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_CommandContext[`CommandContext`]
-service and also
-xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_BackgroundCommandService[`BackgroundCommandService`]. These both use a memento to capture a
-representation of an action invocation.  This is now done using
-xref:../rgfis/rgfis.adoc#_rgfis_application-layer_CommandDtoServiceInternal[`CommandDtoServiceInternal`].
 
 
 

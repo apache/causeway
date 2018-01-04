@@ -16,24 +16,14 @@ O *  Licensed to the Apache Software Foundation (ASF) under one or more
  */
 package domainapp.application.bdd.specglue;
 
-import org.apache.isis.core.specsupport.scenarios.ScenarioExecutionScope;
-import org.apache.isis.core.specsupport.specs.CukeGlueAbstract;
+import org.apache.isis.core.specsupport.specs.CukeGlueBootstrappingAbstract;
 
-import cucumber.api.java.After;
-import cucumber.api.java.Before;
-import domainapp.application.integtests.DomainAppIntegTestAbstract;
+import domainapp.application.DomainAppApplicationModule;
 
-public class BootstrappingGlue extends CukeGlueAbstract {
+public class BootstrappingGlue extends CukeGlueBootstrappingAbstract {
 
-    @Before(value={"@integration"}, order=100)
-    public void beforeScenarioIntegrationScope() {
-        DomainAppIntegTestAbstract.initSystem();
-        before(ScenarioExecutionScope.INTEGRATION);
+    public BootstrappingGlue() {
+        super(new DomainAppApplicationModule());
     }
 
-    @After
-    public void afterScenario(cucumber.api.Scenario sc) {
-        assertMocksSatisfied();
-        after(sc);
-    }
 }

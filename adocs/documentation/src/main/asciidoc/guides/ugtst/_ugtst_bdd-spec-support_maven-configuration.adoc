@@ -21,37 +21,33 @@ To set it up manually, update the `pom.xml` of your domain object model module:
 <1> Normally `test`; usual Maven scoping rules apply.
 
 
-We also recommend that you configure the `maven-surefire-plugin` to pick up the following class patterns:
-
+The configuration is wrapped up as maven mixins:
 
 [source,xml]
 ----
-<plugin>
-    <groupId>org.apache.maven.plugins</groupId>
-    <artifactId>maven-surefire-plugin</artifactId>
-    <version>2.10</version>
-    <configuration>
-        <includes>
-            <include>**/*Test.java</include>
-            <include>**/*Test_*.java</include>
-            <include>**/*Spec*.java</include>
-        </includes>
-        <excludes>
-            <exclude>**/Test*.java</exclude>
-            <exclude>**/*ForTesting.java</exclude>
-            <exclude>**/*Abstract*.java</exclude>
-        </excludes>
-        <useFile>true</useFile>
-        <printSummary>true</printSummary>
-        <outputDirectory>${project.build.directory}/surefire-reports</outputDirectory>
-    </configuration>
-</plugin>
-----
+<plugins>
+    <plugin>
+        <groupId>com.github.odavid.maven.plugins</groupId>
+        <artifactId>mixin-maven-plugin</artifactId>
+        <version>0.1-alpha-39</version>
+        <extensions>true</extensions>
+        <configuration>
+            <mixins>
+                ...
+                <mixin>
+                    <groupId>com.danhaywood.mavenmixin</groupId>
+                    <artifactId>surefire</artifactId>
+                </mixin>
+                <mixin>
+                    <groupId>com.danhaywood.mavenmixin</groupId>
+                    <artifactId>cucumberreporting</artifactId>
+                </mixin>
+            </mixins>
+        </configuration>
+    </plugin>
+</plugins>
 
-[NOTE]
-====
-As of `1.14.0`, this configuration has been replaced to use mavenmixins.
-====
+----
 
 You may also find it more convenient to place the `.feature` files in `src/test/java`, rather than `src/test/resources`.
 If you wish to do this, then your integtest module's `pom.xml` must contain:

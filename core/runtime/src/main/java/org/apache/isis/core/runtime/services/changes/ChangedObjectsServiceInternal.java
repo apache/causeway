@@ -226,7 +226,7 @@ public class ChangedObjectsServiceInternal implements WithTransactionScope {
     }
 
     private Set<Map.Entry<AdapterAndProperty, PreAndPostValues>> capturePostValuesAndDrain(final Map<AdapterAndProperty, PreAndPostValues> changedObjectProperties) {
-        final Map<AdapterAndProperty, PreAndPostValues> processedObjectProperties1 = Maps.newLinkedHashMap();
+        final Map<AdapterAndProperty, PreAndPostValues> processedObjectProperties = Maps.newLinkedHashMap();
 
         while(!changedObjectProperties.isEmpty()) {
 
@@ -245,12 +245,12 @@ public class ChangedObjectsServiceInternal implements WithTransactionScope {
                 }
 
                 // if we encounter the same objectProperty again, this will simply overwrite it
-                processedObjectProperties1.put(aap, papv);
+                processedObjectProperties.put(aap, papv);
             }
         }
 
         return Collections.unmodifiableSet(
-                Sets.filter(processedObjectProperties1.entrySet(), PreAndPostValues.Predicates.CHANGED));
+                Sets.filter(processedObjectProperties.entrySet(), PreAndPostValues.Predicates.SHOULD_AUDIT));
     }
 
     protected boolean shouldIgnore(final ObjectAdapter adapter) {

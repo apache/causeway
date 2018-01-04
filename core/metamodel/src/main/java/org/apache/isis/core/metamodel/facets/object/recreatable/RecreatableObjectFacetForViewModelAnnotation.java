@@ -34,7 +34,7 @@ public class RecreatableObjectFacetForViewModelAnnotation extends
             final AdapterManager adapterManager,
             final ServicesInjector servicesInjector,
             final PostConstructMethodCache postConstructMethodCache) {
-        super(holder, ArchitecturalLayer.APPLICATION, RecreationMechanism.INITIALIZES,
+        super(holder, RecreationMechanism.INITIALIZES,
                 specificationLoader, adapterManager, servicesInjector, postConstructMethodCache);
     }
 
