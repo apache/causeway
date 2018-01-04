@@ -55,8 +55,8 @@ For example:
 ----
 cd core
 export ISISTMP=/c/tmp                               # <1>
-export ISISDEV=1.16.0-SNAPSHOT
-export ISISREL=1.15.1
+export ISISDEV=2.1.0-SNAPSHOT
+export ISISREL=2.0.0
 export ISISRC=RC1
 export ISISBRANCH=release-$ISISREL-$ISISRC
 export ISISJIRA=ISIS-9999                           # <2>
@@ -73,7 +73,7 @@ Obviously, alter `$ISISDEV` and `$ISISREL` as required, and bump `$ISISRC` for r
 
 [IMPORTANT]
 ====
-Note that the branch name is *not* the same any of the eventual tag names (eg `isis-1.16.0` or `simpleapp-archetype-1.16.0`).
+Note that the branch name is *not* the same any of the eventual tag names (eg `isis-2.0.0` or `simpleapp-archetype-2.0.0`).
 
 If they did have the same name, then what would happen is that the `maven-release-plugin` would checkout the (HEAD of the) branch and thus upload a SNAPSHOT to the snapshot repository.
 What it should of course do is checkout the tag and then upload that to the release staging repository.
@@ -103,13 +103,13 @@ his will normally have been done already during earlier development; but confirm
 If it has not, make the change.
 
 Double check that the version number of the core POM (`core/pom.xml`) should reflect the branch name that you are now on.
-For example, if releasing version `1.16.0`, the POM should read:
+For example, if releasing version `2.0.0`, the POM should read:
 
 [source,xml]
 ----
 <groupId>org.apache.isis.core</groupId>
 <artifactId>isis</artifactId>
-<version>1.16.0-SNAPSHOT</version>
+<version>2.0.0-SNAPSHOT</version>
 ----
 
 Also, check that there are no snapshot dependencies:
