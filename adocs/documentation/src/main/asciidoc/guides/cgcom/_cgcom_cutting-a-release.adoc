@@ -12,7 +12,7 @@ The release process consists of:
 * Members of the Apache Isis PMC xref:../cgcom/cgcom.adoc#_cgcom_verifying-releases[verifying] and voting on the release
 * the release manager performing post-release tasks, for either a xref:../cgcom/cgcom.adoc#_cgcom_post-release-successful[successful] or an xref:../cgcom/cgcom.adoc#_cgcom_post-release-unsuccessful[unsuccessful] vote.
 
-Apache Isis itself consists of three separately releasable modules; relative to the link:https://git-wip-us.apache.org/repos/asf/isis/repo?p=isis.git;a=tree[source code root] there are:
+Apache Isis itself consists of three separately releasable modules; relative to the link:https://github.com/apache/isis[source code root] there are:
 
 * `core`
 * `component/example/archetypes/helloworld`
@@ -523,7 +523,9 @@ docker container run -p 8080:8080 -d test/simpleapp
 +
 [NOTE]
 ====
-On Windows, you may need to enable the Docker daemon first, otherwise the "mvn install" command above will fail:
+On Windows, make sure that Docker is first switched to using linux containers, not Windows containers (because the `Dockerfile` in the application references a linux base image).
+
+You may also need to enable the Docker daemon first, otherwise the "mvn install" command above will fail:
 
 image::{_imagesdir}docker/docker-daemon.png[width="600px",link="{_imagesdir}docker/docker-daemon.png"]
 
@@ -898,7 +900,7 @@ git fetch
 
 [NOTE]
 ====
-The remote tags aren't visible locally but can be seen https://git-wip-us.apache.org/repos/asf/isis/repo?p=isis.git;a=summary[online].
+The remote tags aren't visible locally but can be seen link:https://github.com/apache/isis/tags[online].
 ====
 
 
@@ -940,7 +942,7 @@ The source code artifacts have been uploaded to staging repositories on reposito
 
 For each zip there is a corresponding signature file (append .asc to the zip's url).
 
-In the source code repo the code has been tagged as isis-1.16.0-RC1, helloworld-archetype-1.16.0-RC1 and simpleapp-archetype-1.16.0-RC1; see https://git-wip-us.apache.org/repos/asf?p=isis.git
+In the source code repo the code has been tagged as isis-1.16.0-RC1, helloworld-archetype-1.16.0-RC1 and simpleapp-archetype-1.16.0-RC1; see https://github.com/apache/isis/tags
 
 For instructions on how to verify the release (build from binaries and/or use in Maven directly), see https://isis.apache.org/guides/cgcom/cgcom.html#_cgcom_verifying-releases
 

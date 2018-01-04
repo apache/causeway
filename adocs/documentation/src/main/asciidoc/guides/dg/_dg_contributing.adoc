@@ -14,9 +14,10 @@ Thanks for considering to help out, your contributions are appreciated!
 
 == Recommended Workflow (github)
 
-Apache Isis' source code is hosted in an Apache git repo (https://git-wip-us.apache.org/repos/asf/isis.git[https], http://git-wip-us.apache.org/repos/asf/isis.git[http]), with a clone on github (https://github.com/apache/isis.git[https], or ssh: `git@github.com:apache/isis.git`.
+Apache Isis' source code is hosted in at github (https://github.com/apache/isis.git[https], or ssh: `git@github.com:apache/isis.git`).
 
-As you might imagine, only committers are permitted to push changes to the central git repo. As a contributor, we recommend that you fork the https://github.com/apache/isis.git[apache/isis] repo in github, and then use your fork as a way of publishing your patches for the Apache Isis committers to apply.
+As you might imagine, only committers are permitted to push changes to the github repo.
+As a contributor, we recommend that you fork the https://github.com/apache/isis.git[apache/isis] github repo, and then use your fork as a way of publishing your patches for the Apache Isis committers to apply.
 
 The diagram below illustrates the process:
 
@@ -35,18 +36,6 @@ That is:
 . An Apache Isis committer will review your change, and apply it if suitable.
 
 
-
-
-== Alternative Workflow (JIRA patches)
-
-As an alternative, you may decide to clone directly from https://github.com/apache/isis.git[github.com/apache/isis] rather than create your own fork:
-
-
-image::{_imagesdir}contributing/git-workflow-2.png[width="600px",link="{_imagesdir}contributing/git-workflow-2.png"]
-
-In this case your `upstream` repo is the same as your `origin` repo, which might seem more straightforward. On the other hand, if you go this route then you'll need create patches locally and attach them to the JIRA ticket.
-
-For the Apache Isis committers it really doesn't matter which route you take, so go with whatever's most comfortable.
 
 
 

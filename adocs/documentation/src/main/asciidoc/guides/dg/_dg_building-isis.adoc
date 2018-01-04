@@ -37,17 +37,12 @@ If using Mac, you might also want to check out Atlassian's http://www.atlassian.
 [[__dg_building-isis_git_installation_cloning-the-apache-isis-repo]]
 ==== Cloning the Apache Isis repo
 
-First, clone the Apache Isis repo.
-
-If you are a *committer*, then clone from the Apache read/write repo:
+First, clone the Apache Isis repo:
 
 [source,bash]
 ----
-git clone https://git-wip-us.apache.org/repos/asf/isis.git
+git clone https://github.com/apache/isis.git
 ----
-
-
-If you are *not a committer*, please see the xref:../dg/dg.adoc#_dg_contributing[contributing] page for details on which repo to clone from.
 
 
 [[__dg_building-isis_git_installation_configuring-git]]
