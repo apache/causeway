@@ -190,39 +190,46 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
             return new RenderPageRequestHandler(new PageProvider(mmvErrorPage), RedirectPolicy.ALWAYS_REDIRECT);
         }
 
-        // adapted from http://markmail.org/message/un7phzjbtmrrperc
-        if(ex instanceof ListenerInvocationNotAllowedException) {
-            final ListenerInvocationNotAllowedException linaex = (ListenerInvocationNotAllowedException) ex;
-            if(linaex.getComponent() != null && PromptFormAbstract.ID_CANCEL_BUTTON.equals(linaex.getComponent().getId())) {
-                // no message.
-                // this seems to occur when press ESC twice in rapid succession on a modal dialog.
-            } else {
-                addMessage(null);
+        try {
 
+            // adapted from http://markmail.org/message/un7phzjbtmrrperc
+            if(ex instanceof ListenerInvocationNotAllowedException) {
+                final ListenerInvocationNotAllowedException linaex = (ListenerInvocationNotAllowedException) ex;
+                if(linaex.getComponent() != null && PromptFormAbstract.ID_CANCEL_BUTTON.equals(linaex.getComponent().getId())) {
+                    // no message.
+                    // this seems to occur when press ESC twice in rapid succession on a modal dialog.
+                } else {
+                    addMessage(null);
+
+                }
+                return respondGracefully(cycle);
             }
-            return respondGracefully(cycle);
-        }
 
-        // handle recognised exceptions gracefully also
-        final List<ExceptionRecognizer2> exceptionRecognizers =
-                getServicesInjector().lookupServices(ExceptionRecognizer2.class);
-        String recognizedMessageIfAny = new ExceptionRecognizerComposite(exceptionRecognizers).recognize(ex);
-        if(recognizedMessageIfAny != null) {
-            return respondGracefully(cycle);
-        }
 
-        final List<Throwable> causalChain = Throwables.getCausalChain(ex);
-        final Optional<Throwable> hiddenIfAny = FluentIterable.from(causalChain).filter(
-                ObjectMember.HiddenException.isInstanceOf()).first();
-        if(hiddenIfAny.isPresent()) {
-            addMessage("hidden");
-            return respondGracefully(cycle);
-        }
-        final Optional<Throwable> disabledIfAny = FluentIterable.from(causalChain).filter(
-                ObjectMember.DisabledException.isInstanceOf()).first();
-        if(disabledIfAny.isPresent()) {
-            addTranslatedMessage(disabledIfAny.get().getMessage());
-            return respondGracefully(cycle);
+            // handle recognised exceptions gracefully also
+            final List<ExceptionRecognizer2> exceptionRecognizers =
+                    getServicesInjector().lookupServices(ExceptionRecognizer2.class);
+            String recognizedMessageIfAny = new ExceptionRecognizerComposite(exceptionRecognizers).recognize(ex);
+            if(recognizedMessageIfAny != null) {
+                return respondGracefully(cycle);
+            }
+
+            final List<Throwable> causalChain = Throwables.getCausalChain(ex);
+            final Optional<Throwable> hiddenIfAny = FluentIterable.from(causalChain).filter(
+                    ObjectMember.HiddenException.isInstanceOf()).first();
+            if(hiddenIfAny.isPresent()) {
+                addMessage("hidden");
+                return respondGracefully(cycle);
+            }
+            final Optional<Throwable> disabledIfAny = FluentIterable.from(causalChain).filter(
+                    ObjectMember.DisabledException.isInstanceOf()).first();
+            if(disabledIfAny.isPresent()) {
+                addTranslatedMessage(disabledIfAny.get().getMessage());
+                return respondGracefully(cycle);
+            }
+
+        } catch(Exception ignoreFailedAttemptToGracefullyHandle) {
+            // if any of this graceful responding fails, then fall back to original handling
         }
 
         PageProvider errorPageProvider = errorPageProviderFor(ex);
