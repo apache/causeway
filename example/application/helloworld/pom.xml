@@ -45,7 +45,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <maven-war-plugin.warName>${project.parent.artifactId}</maven-war-plugin.warName>
+        <maven-war-plugin.warName>${project.artifactId}</maven-war-plugin.warName>
     </properties>
 
     <build>
