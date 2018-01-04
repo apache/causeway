@@ -22,35 +22,31 @@ package domainapp.modules.simple.specglue;
 import java.util.List;
 import java.util.UUID;
 
-import org.apache.isis.core.specsupport.specs.CukeGlueAbstract;
+import javax.inject.Inject;
+
+import org.apache.isis.core.specsupport.specs.CukeGlueAbstract2;
 
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.When;
 import domainapp.modules.simple.dom.impl.SimpleObject;
-import domainapp.modules.simple.dom.impl.SimpleObjectMenu;
+import domainapp.modules.simple.dom.impl.SimpleObjects;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-public class SimpleObjectMenuGlue extends CukeGlueAbstract {
+public class SimpleObjectMenuGlue extends CukeGlueAbstract2 {
 
     @Given("^there are.* (${symbol_escape}${symbol_escape}d+) simple objects${symbol_dollar}")
     public void there_are_N_simple_objects(int n) throws Throwable {
-        try {
-            final List<SimpleObject> list = simpleObjectMenu().listAll();
-            assertThat(list.size(), is(n));
-            putVar("java.util.List", "simpleObjects", list);
-        } finally {
-            assertMocksSatisfied();
-        }
+        final List<SimpleObject> list = wrap(simpleObjects).listAll();
+        assertThat(list.size(), is(n));
     }
     
     @When("^.*create a .*simple object${symbol_dollar}")
     public void create_a_simple_object() throws Throwable {
-        simpleObjectMenu().create(UUID.randomUUID().toString());
+        wrap(simpleObjects).create(UUID.randomUUID().toString());
     }
 
-    private SimpleObjectMenu simpleObjectMenu() {
-        return service(SimpleObjectMenu.class);
-    }
+    @Inject
+    SimpleObjects simpleObjects;
 
 }

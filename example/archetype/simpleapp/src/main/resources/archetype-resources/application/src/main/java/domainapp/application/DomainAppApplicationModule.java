@@ -19,8 +19,22 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package domainapp.modules.simple.fixture;
+package domainapp.application;
 
-public final class SimpleModuleFixtureSubmodule {
-    private SimpleModuleFixtureSubmodule(){}
+import java.util.Set;
+
+import com.google.common.collect.Sets;
+
+import org.apache.isis.applib.Module;
+import org.apache.isis.applib.ModuleAbstract;
+
+import domainapp.modules.simple.SimpleModule;
+
+public class DomainAppApplicationModule extends ModuleAbstract {
+
+    @Override
+    public Set<Module> getDependencies() {
+        return Sets.<Module>newHashSet(new SimpleModule());
+    }
+
 }

@@ -23,6 +23,8 @@ package domainapp.modules.simple.dom.impl;
 
 import java.util.List;
 
+import org.datanucleus.query.typesafe.TypesafeQuery;
+
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
@@ -31,8 +33,12 @@ import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.ParameterLayout;
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
+import org.apache.isis.applib.services.jdosupport.IsisJdoSupport;
+import org.apache.isis.applib.services.repository.RepositoryService;
+import org.apache.isis.applib.services.xactn.TransactionService;
 
 @DomainService(
         nature = NatureOfService.VIEW_MENU_ONLY,
@@ -43,13 +49,13 @@ import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
         named = "Simple Objects",
         menuOrder = "10"
 )
-public class SimpleObjectMenu {
+public class SimpleObjects {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT)
     @MemberOrder(sequence = "1")
     public List<SimpleObject> listAll() {
-        return simpleObjectRepository.listAll();
+        return repositoryService.allInstances(SimpleObject.class);
     }
 
 
@@ -60,21 +66,40 @@ public class SimpleObjectMenu {
             @ParameterLayout(named="Name")
             final String name
     ) {
-        return simpleObjectRepository.findByName(name);
+        TypesafeQuery<SimpleObject> q = isisJdoSupport.newTypesafeQuery(SimpleObject.class);
+        final QSimpleObject cand = QSimpleObject.candidate();
+        q = q.filter(
+                cand.name.indexOf(q.stringParameter("name")).ne(-1)
+        );
+        return q.setParameter("name", name)
+                .executeList();
+    }
+
+    @Programmatic
+    public SimpleObject findByNameExact(final String name) {
+        TypesafeQuery<SimpleObject> q = isisJdoSupport.newTypesafeQuery(SimpleObject.class);
+        final QSimpleObject cand = QSimpleObject.candidate();
+        q = q.filter(
+                cand.name.eq(q.stringParameter("name"))
+        );
+        return q.setParameter("name", name)
+                .executeUnique();
     }
 
 
-    public static class CreateDomainEvent extends ActionDomainEvent<SimpleObjectMenu> {}
+    public static class CreateDomainEvent extends ActionDomainEvent<SimpleObjects> {}
     @Action(domainEvent = CreateDomainEvent.class)
     @MemberOrder(sequence = "3")
     public SimpleObject create(
             @ParameterLayout(named="Name")
             final String name) {
-        return simpleObjectRepository.create(name);
+        return repositoryService.persist(new SimpleObject(name));
     }
 
+    @javax.inject.Inject
+    RepositoryService repositoryService;
 
     @javax.inject.Inject
-    SimpleObjectRepository simpleObjectRepository;
+    IsisJdoSupport isisJdoSupport;
 
 }

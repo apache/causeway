@@ -33,17 +33,13 @@
 
     <packaging>pom</packaging>
 
-    <prerequisites>
-        <maven>3.0.4</maven>
-    </prerequisites>
-
     <properties>
-        <isis.version>1.15.1</isis.version>
+        <isis.version>1.16.0</isis.version>
 
         <lombok.version>1.16.18</lombok.version>
 
-        <compiler-plugin.source>1.7</compiler-plugin.source>
-        <compiler-plugin.target>1.7</compiler-plugin.target>
+        <compiler-plugin.source>1.8</compiler-plugin.source>
+        <compiler-plugin.target>1.8</compiler-plugin.target>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -80,7 +76,7 @@
             </snapshots>
         </repository>
         <repository>
-            <id>Cloudbees snapshots</id>
+            <id>cloudbees.estatio.snapshots</id>
             <url>http://repository-estatio.forge.cloudbees.com/snapshot/</url>
             <name>CloudBees Snapshots (and Interim Releases)</name>
             <releases>
@@ -103,7 +99,7 @@
 
     <pluginRepositories>
         <pluginRepository>
-            <id>estatio.snapshots</id>
+            <id>cloudbees.estatio.snapshots</id>
             <name>CloudBees Snapshots (and Interim Releases)</name>
             <releases>
                 <updatePolicy>never</updatePolicy>
@@ -177,7 +173,18 @@
             </activation>
             <build>
                 <directory>target-ide</directory>
-            </build>
+		        <plugins>
+		        	<!-- eclipse doesn't seem to support maven mixins config, so repeat here -->
+					<plugin>
+						<artifactId>maven-compiler-plugin</artifactId>
+						<configuration>
+							<source>${compiler-plugin.source}</source>
+							<target>${compiler-plugin.target}</target>
+							<compilerArgument />
+						</configuration>
+					</plugin>
+		        </plugins>
+		    </build>
         </profile>
     </profiles>
 

@@ -19,8 +19,35 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package domainapp.application.fixture;
 
-public final class DomainAppApplicationModuleFixtureSubmodule {
-    private DomainAppApplicationModuleFixtureSubmodule(){}
+package domainapp.modules.simple.fixture;
+
+import org.apache.isis.applib.fixturescripts.BuilderScriptAbstract;
+
+import domainapp.modules.simple.dom.impl.SimpleObject;
+import domainapp.modules.simple.dom.impl.SimpleObjects;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
+
+@Accessors(chain = true)
+public class SimpleObjectBuilder extends BuilderScriptAbstract<SimpleObject, SimpleObjectBuilder> {
+
+    @Getter @Setter
+    private String name;
+
+    @Getter
+    private SimpleObject object;
+
+    @Override
+    protected void execute(final ExecutionContext ec) {
+
+        checkParam("name", ec, String.class);
+
+        object = wrap(simpleObjects).create(name);
+    }
+
+    @javax.inject.Inject
+    SimpleObjects simpleObjects;
+
 }
