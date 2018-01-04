@@ -18,7 +18,6 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.actions;
 
-import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -26,10 +25,8 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
-import org.apache.isis.viewer.wicket.model.models.BookmarkedPagesModel;
 import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponse;
 import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponseType;
-import org.apache.isis.viewer.wicket.ui.pages.BookmarkedPagesModelProvider;
 import org.apache.isis.viewer.wicket.ui.panels.FormExecutorStrategy;
 
 public class ActionFormExecutorStrategy implements FormExecutorStrategy<ActionModel> {
@@ -56,9 +53,11 @@ public class ActionFormExecutorStrategy implements FormExecutorStrategy<ActionMo
     public void onExecuteAndProcessResults(final AjaxRequestTarget target) {
 
         if (model.isBookmarkable()) {
+/*
             BookmarkedPagesModelProvider application = (BookmarkedPagesModelProvider) Session.get();
             BookmarkedPagesModel bookmarkedPagesModel = application.getBookmarkedPagesModel();
             bookmarkedPagesModel.bookmarkPage(model);
+*/
         }
 
         if (actionPrompt != null) {

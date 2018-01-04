@@ -93,20 +93,6 @@ public class SimpleObjects {
         return repositoryService.persist(new SimpleObject(name));
     }
 
-    @Action
-    @MemberOrder(sequence = "4")
-    public void createAndDelete(
-            @ParameterLayout(named="Name")
-            final String name) {
-        final SimpleObject simpleObject = create(name);
-        transactionService.nextTransaction();
-        simpleObject.delete();
-        transactionService.nextTransaction();
-    }
-
-    @javax.inject.Inject
-    TransactionService transactionService;
-
     @javax.inject.Inject
     RepositoryService repositoryService;
 
