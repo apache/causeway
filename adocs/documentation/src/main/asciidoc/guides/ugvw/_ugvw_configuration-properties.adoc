@@ -90,7 +90,8 @@ further details.  The string must be in ISO date format (see link:https://github
 for further details).
 
 |`isis.viewer.wicket.` +
-`disableDependentChoiceAutoSelection`
+`disableDependent` +
+`ChoiceAutoSelection`
 | `true`,`false` +
 (`_false_`)
 | For dependent choices, whether to automatically select the first dependent (eg subcategory) when the parameter on which it depends (category) changes.
@@ -120,13 +121,15 @@ This feature is primarily just to help track any memory leakage issues that migh
 
 
 |`isis.viewer.wicket.` +
-`maxTitleLengthInParentedTables`
+`maxTitleLength` +
+`InParentedTables`
 | +ve integer +
 (`_12_`)
 | See discussion xref:../ugvw/ugvw.adoc#_ugvw_configuration-properties_abbreviating-titles[below].
 
 |`isis.viewer.wicket.` +
-`maxTitleLengthInStandaloneTables`
+`maxTitleLength` +
+`InStandaloneTables`
 | +ve integer, +
 (`_12_`)
 | See discussion xref:../ugvw/ugvw.adoc#_ugvw_configuration-properties_abbreviating-titles[below].
@@ -138,13 +141,15 @@ This feature is primarily just to help track any memory leakage issues that migh
 | See discussion xref:../ugvw/ugvw.adoc#_ugvw_configuration-properties_abbreviating-titles[below].
 
 |`isis.viewer.wicket.` +
-`preventDoubleClickForFormSubmit`
+`preventDoubleClick` +
+`ForFormSubmit`
 | `true`,`false` +
 (`_true_`)
 | Whether to disable a form submit button after it has been clicked, to prevent users causing an error if they do a double click.
 
 |`isis.viewer.wicket.` +
-`preventDoubleClickForNoArgAction`
+`preventDoubleClick` +
+`ForNoArgAction`
 | `true`,`false` +
 (`_true_`)
 | Whether to disable a no-arg action button after it has been clicked, to prevent users causing an error if they do a double click.
@@ -287,6 +292,56 @@ In prototype mode, though, a fixed key will still be used; this saves the develo
 ====
 Enabling this setting can significantly slow down rendering performance of the Wicket viewer.
 ====
+
+|===
+
+
+Also:
+
+[cols="2a,1,3a", options="header"]
+|===
+|Property
+|Value +
+(default value)
+|Description
+
+|`isis.viewers.` +
+`paged.parented`
+|positive integer (12)
+|Default page size for parented collections (as owned by an object, eg `Customer#getOrders()`)
+
+
+|`isis.viewers.` +
+`paged.standalone`
+|positive integer (25)
+|Default page size for standalone collections (as returned from an action invocation)
+
+
+|`isis.viewers.` +
+`propertyLayout.` +
+`labelPosition`
+|`TOP`, `LEFT` +
+(`LEFT`)
+|Default for label position for all properties if not explicitly specified using xref:../rgant/rgant.adoc#_rgant-PropertyLayout_labelPosition[`@PropertyLayout#labelPosition()`]
+
+
+If you want a consistent look-n-feel throughout the app, eg all property labels to the top, then it'd be rather frustrating to have to annotate every property.
+
+If these are not present then Apache Isis will render according to internal defaults.
+At the time of writing, this means labels are to the left for all datatypes except multiline strings.
+
+
+|`isis.viewers.` +
+`collectionLayout.` +
+`defaultView`
+|`hidden`, `table` +
+(`hidden`)
+|Default for the default view for all (parented) collections if not explicitly specified using xref:../rgant/rgant.adoc#_rgant-CollectionLayout_defaultView[`@CollectionLayout#defaultView()`]
+
+By default the framework renders (parented) collections as "hidden", ie collapsed.
+These can be overridden on a case-by-case basis using the xref:../rgant/rgant.adoc#_rgant-CollectionLayout_defaultView[`@CollectionLayout#defaultView()`] or the corresponding `<collectionLayout defaultView="...">` element in the `Xxx.layout.xml` layout file.
+
+If the majority of collections should be displayed as "table" form, then it is more convenient to specify the default view globally.
 
 |===
 

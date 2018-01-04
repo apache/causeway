@@ -13,7 +13,7 @@ This configures this service, for example telling it which package to search for
 
 
 
-== API & Implementation
+== API
 
 The API for the service is:
 
@@ -27,11 +27,36 @@ public abstract class FixtureScripts ... {
 }
 ----
 
-The implementation is `o.a.i.applib.services.fixturespec.FixtureScriptsDefault`
+
+== Implementation
+
+The default implementation is `o.a.i.applib.services.fixturespec.FixtureScriptsDefault`
 
 
+=== Configuration Properties
+
+The default implementation of this domain service supports the following configuration properties:
+
+.Core Configuration Properties for Fixture Events
+[cols="2a,1,3a", options="header"]
+|===
+|Property
+|Value +
+(default value)
+|Description
 
 
-== Related Services
+|`isis.fixtures.fireEvents`
+|`true`,`false` +
+(`true`)
+|Whether fixture `FixturesInstallingEvent` and `FixturesInstalledEvent` events should be posted while the system is bootstrapping.
 
-The service interacts with xref:../rgsvc/rgsvc.adoc#_rgsvc_testing_FixtureScriptsSpecificationProvider[`FixtureScriptsSpecificationProvider`].
+Fixture events are fired to indicate the start and end of fixtures are being installed.
+This are listened to by the xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-api_QueryResultsCache[`QueryResultsCache`] to disable caching during this period.
+
+|===
+
+
+=== Related Services
+
+The default implementation of this domain service interacts with xref:../rgsvc/rgsvc.adoc#_rgsvc_testing_FixtureScriptsSpecificationProvider[`FixtureScriptsSpecificationProvider`].

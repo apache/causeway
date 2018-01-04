@@ -43,6 +43,28 @@ handful of resources that supported that profile.
 
 |===
 
+In addition:
+
+[cols="2a,1,3a", options="header"]
+|===
+|Property
+|Value +
+(default value)
+|Description
+
+|`isis.services.` +
+`ContentNegotiation-` +
+`ServiceXRoDomainType` +
+.`prettyPrint`
+| `true`,`false` +
+(depends)
+|If a domain object has been mapped to the specified JAXB `x-ro-domain-type`, then determines whether the result is pretty-printed or not. +
+
+If no configuration property is available, then the defaults is determined by the xref:../rgcfg/rgcfg.adoc#_rgcfg_deployment-types[deployment type]: production mode disables pretty printing, while prototype mode enables it.
+
+|===
+
+
 
 [[__ugvro_configuration-properties_deprecated]]
 == Deprecated
@@ -50,10 +72,8 @@ handful of resources that supported that profile.
 There are also a number of configuration properties that can be used to suppress or simplify the default RO-spec
 representations.
 
-These configuration properties pre-date the support, introduced in `1.11.0`, for the Apache Isis profile, and
-are limited by the fact that they are global configuration settings, so cannot be influenced on a request-by-request
-basis (as is the case with the `Accept` header used for the Apache Isis profile). They have therefore been
-deprecated, and may be removed in the future.
+These configuration properties pre-date the support for the Apache Isis profile, and are limited by the fact that they are global configuration settings, so cannot be influenced on a request-by-request basis (as is the case with the `Accept` header used for the Apache Isis profile).
+They have therefore been deprecated, and may be removed in the future.
 
 Nevertheless, those configuration properties are:
 

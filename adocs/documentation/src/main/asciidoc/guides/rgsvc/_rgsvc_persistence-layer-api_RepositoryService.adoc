@@ -245,20 +245,31 @@ For more details, see xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-api_Isis
 
 == Implementation
 
-The core framework provides a default implementation of this service (`o.a.i.core.metamodel.services.repository.RepositoryServiceDefault`).
+The default implementation of this domain service is `o.a.i.core.metamodel.services.repository.RepositoryServiceDefault`.
 
 
+=== Configuration Properties
+
+The default implementation of this domain service supports the following configuration properties:
+
+[cols="2a,1,3a", options="header"]
+|===
+|Property
+|Value +
+(default value)
+|Description
+
+|`isis.services.` +
+`container.` +
+`disableAutoFlush`
+|`true`,`false` +
+(`false`)
+|Whether the `RepositoryService` (or `DomainObjectContainer` that delegates to it) should automatically flush pending changes prior to querying (via `allMatches()`, `firstMatch()` and so on).
+
+|===
 
 
-=== (Disabling) Auto-flush
+== Usage Notes
 
-Normally any queries are automatically preceded by flushing pending commands to persist or remove objects.
-
-This property `isis.services.container.disableAutoFlush` allows this behaviour to be disabled.
-
-
-
-== Related Services
-
-the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_FactoryService[`FactoryService`] is often used in conjunction with the `RepositoryService`, to instantiate domain objects before persisting.
+The xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_FactoryService[`FactoryService`] is often used in conjunction with the `RepositoryService`, to instantiate domain objects before persisting.
 

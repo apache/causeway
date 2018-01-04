@@ -15,7 +15,7 @@ This functionality was originally implemented as part of (non-ASF) link:http://p
 ====
 
 
-== API & Implementation
+== API
 
 The API defined by the service is:
 
@@ -44,11 +44,37 @@ public enum ApplicationMemberType {
 These methods are designed primarily to return lists of strings for use in drop-downs.
 
 
+== Implementation
+
+The default implementation of this service is `ApplicationFeatureRepositoryDefault`.
 
 
+=== Configuration Properties
 
-== Related Services
+The default implementation of this domain service supports the following configuration properties:
 
-The default implementation of this service - `ApplicationFeatureRepositoryDefault` uses the `ApplicationFeatureFactory` service to instantiate `ApplicationFeature` instances.
+[cols="2a,1,3a", options="header"]
+|===
+|Property
+|Value +
+(default value)
+|Description
+
+|`isis.services.` +
+`applicationFeatures.` +
+`init`
+| `lazy`, `eager` +
+(`lazy`)
+|Whether the application features repository (which surfaces the framework's metamodel) should be
+initialized lazily or eagerly.  +
+
+Lazy initialization can speed up bootstrapping, useful while developing and running tests.
+
+|===
+
+
+=== Related Services
+
+The default implementation of this service uses the `ApplicationFeatureFactory` service to instantiate `ApplicationFeature` instances.
 
 

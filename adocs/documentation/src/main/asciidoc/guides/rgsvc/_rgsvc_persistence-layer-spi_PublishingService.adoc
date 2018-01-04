@@ -66,6 +66,7 @@ The framework provides no default implementations of this service.
 
 
 
+
 == Usage
 
 To indicate that an action invocation should be published, annotate it with the xref:../rgant/rgant.adoc#_rgant-Action_publishing[`@Action#publishing()`] annotation.

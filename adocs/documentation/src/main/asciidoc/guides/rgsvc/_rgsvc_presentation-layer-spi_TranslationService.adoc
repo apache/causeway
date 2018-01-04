@@ -59,6 +59,28 @@ For more details on the implementation, see xref:../ugbtb/ugbtb.adoc#_ugbtb_i18n
 
 
 
+=== Configuration Properties
+
+The default implementation of this domain service recognises the following configuration properties:
+
+[cols="2a,1,3a", options="header"]
+|===
+|Property
+|Value +
+(default value)
+|Description
+
+|`isis.services.` +
+`translation.` +
+`po.mode`
+| `read`,`write`
+|Whether to force the `TranslationService` into either read or write mode. +
+
+See xref:../ugbtb/ugbtb.adoc#_ugbtb_i18n[i18n support] to learn more about the translation service.
+
+|===
+
+
 
 
 

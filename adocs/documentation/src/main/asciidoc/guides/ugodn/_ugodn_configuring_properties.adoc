@@ -9,7 +9,6 @@ These configuration properties are typically stored in `WEB-INF/persistor_datanu
 
 == Configuration Properties for Apache Isis itself
 
-
 .JDO/DataNucleus Objectstore Configuration Properties
 [cols="2a,2a,2a", options="header"]
 |===
@@ -50,13 +49,36 @@ There generally is no need to change this from its default.
 It holds the set of packages to search so that DataNucleus builds its metamodel eagerly rather than lazily.
 
 
-|`isis.persistor.datanucleus.` +
-`PublishingService.serializedForm`
+|`isis.persistor.` +
+`datanucleus.` +
+`PublishingService.` +
+`serializedForm`
 | zipped
 |(`PublishingService` is deprecated, and therefore so is this property).
 
 |===
 
+
+Also:
+
+
+[cols="2a,1,3a", options="header"]
+|===
+|Property
+|Value +
+(default value)
+|Description
+
+|`isis.persistor.` +
+`disable` +
+`ConcurrencyChecking`
+|`true`,`false` +
+(`false`)
+| Disables concurrency checking globally.  +
+
+Only intended for "emergency use" as a workaround while pending fix/patch to Apache Isis itself.  (Note that there is no "datanucleus" in the property).
+
+|===
 
 
 == Configuration Properties passed through directly to DataNucleus.
