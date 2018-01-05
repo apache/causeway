@@ -23,7 +23,7 @@ do
     git tag -d $a
 done
 
-for a in `git tag --list | grep ^simple`
+for a in `git tag --list | grep ^simple_`
 do
     git tag -d $a
 done
