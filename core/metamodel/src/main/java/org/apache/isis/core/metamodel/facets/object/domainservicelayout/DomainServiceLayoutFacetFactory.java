@@ -27,6 +27,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceMenuOrder;
 import org.apache.isis.core.metamodel.facets.object.domainservicelayout.annotation.DomainServiceLayoutFacetAnnotation;
 
 
@@ -60,7 +61,7 @@ public class DomainServiceLayoutFacetFactory extends FacetFactoryAbstract {
                 .findFirst()
                 .orElse(null);
 
-        final String menuOrder = coalesce(domainServiceLayoutMenuOrder, domainServiceMenuOrder);
+        final String menuOrder = DomainServiceMenuOrder.minimumOf(domainServiceLayoutMenuOrder, domainServiceMenuOrder);
 
         DomainServiceLayout.MenuBar menuBar =
                 domainServiceLayouts.stream()
