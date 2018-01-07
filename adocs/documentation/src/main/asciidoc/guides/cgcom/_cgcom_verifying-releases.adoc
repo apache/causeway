@@ -259,7 +259,7 @@ mvn archetype:generate  \
     -o
 
 cd myapp
-mvn clean install -o && mvn -pl jetty:run -o
+mvn clean install -o && mvn -pl webapp jetty:run -o
 ----
 +
 Adjust the version as necessary.
