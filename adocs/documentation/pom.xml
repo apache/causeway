@@ -226,6 +226,8 @@
 
                                         <echo message=""/>
                                         <echo message=""/>
+                                        <mkdir 
+                                           dir="${isis-site-content.dir}/versions/SNAPSHOT"/>
                                         <echo message="deleting everything in ${isis-site-content.dir}/versions/SNAPSHOT"/>
                                         <echo message=""/>
                                         <delete includeemptydirs="true">
