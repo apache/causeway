@@ -281,12 +281,13 @@ For more information on DOAP files, see these http://projects.apache.org/doap.ht
 This will have published to the `SNAPSHOT` directory of the `isis-site` repo.
 Now, in the `isis-site` repo itself:
 
-* double check that a copy of current exists as a named directory under `content/versions`
+* double check that a copy of `current` exists as a named directory under `content/versions`
 
 +
-If for any reason it isn't there, then create a copy.
+If for any reason it isn't there, then create a copy before it gets deleted in the step below.
+Also, take a copy of the `index.html` with one that redirects up to the home page (see a few steps below for an example).
 
-* delete the current version and rename `SNAPSHOT` as `current`:
+* delete the `current` version and then rename the just-published `SNAPSHOT` as `current`:
 
 +
 [source,bash]
@@ -295,7 +296,7 @@ rm -rf content/versions/current
 mv content/versions/SNAPSHOT content/versions/current
 ----
 
-* take a copy of the new `current` version as a named version:
+* take a copy of the new `current` version as its appropriately named version:
 
 +
 For example:
@@ -305,11 +306,30 @@ For example:
 cp -rf content/versions/current content/versions/2.0.0-M1
 ----
 
+* update the new named version's `index.html` with one that will redirect back to the home page.
+
++
+You can take a copy from one of the older named versions, or just use this text:
++
+[source,html]
+----
+<html>
+    <head>
+        <title>Redirecting to index.html</title>
+        <meta http-equiv="refresh" content="1; URL=../../index.html">
+        <meta name="keywords" content="automatic redirection">
+        </head>
+    <body>
+        Redirecting to <a href="../../index.html">index.html</a>...
+    </body>
+</html>
+----
+
 * In the root `index.html`, update the menu to reference the new version.
 
-At this point the files in the root (directly under `content`) will still be out of date; the publish process simply takes a copy of whatever is in `content/versions/current`.
+At this point the files in the root (directly under `content`) will still be out of date; the publish process simply preserves whatever is in `content/versions/current`.
 Also, the `SNAPSHOT` will be missing (above it was renamed to `current`).
-To fix this, simply publish the website one more time (from the `isis` main repo).
+To fix both of these issues, simply publish the website one more time (from the `isis` main repo).
 
 Finally, preview the changes (in the `isis-site`).
 If everything looks ok, then push the changes to make live.
