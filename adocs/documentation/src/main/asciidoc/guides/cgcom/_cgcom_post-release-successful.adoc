@@ -325,7 +325,11 @@ You can take a copy from one of the older named versions, or just use this text:
 </html>
 ----
 
-* In the root `index.html`, update the menu to reference the new version.
+* In the home page's index page (`content/index.html`):
+
+** update the menu to reference the new version
+
+** update the version in the archetype.
 
 At this point the files in the root (directly under `content`) will still be out of date; the publish process simply preserves whatever is in `content/versions/current`.
 Also, the `SNAPSHOT` will be missing (above it was renamed to `current`).
