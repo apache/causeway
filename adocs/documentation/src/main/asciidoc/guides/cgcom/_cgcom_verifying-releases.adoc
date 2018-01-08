@@ -231,7 +231,7 @@ Assuming that everything builds ok, then test the archetypes (adjust version as 
 mvn archetype:generate  \
     -D archetypeGroupId=org.apache.isis.archetype \
     -D archetypeArtifactId=helloworld-archetype \
-    -D archetypeVersion=1.16.0 \
+    -D archetypeVersion=2.0.0-M1 \
     -D groupId=com.mycompany \
     -D artifactId=myapp \
     -D version=1.0-SNAPSHOT \
@@ -251,7 +251,7 @@ Adjust the version as necessary.
 mvn archetype:generate  \
     -D archetypeGroupId=org.apache.isis.archetype \
     -D archetypeArtifactId=simpleapp-archetype \
-    -D archetypeVersion=1.16.0 \
+    -D archetypeVersion=2.0.0-M1 \
     -D groupId=com.mycompany \
     -D artifactId=myapp \
     -D version=1.0-SNAPSHOT \

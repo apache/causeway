@@ -22,7 +22,7 @@ This table summarises all releases of Apache Isis to date.
 | JIRA relnotes
 
 | xref:release-notes.adoc#_release-notes_1.16.0[1.16.0]
-| XX-XX-2018
+| 08-01-2018
 | Modules, simplified bootstrapping, menubars.layout.xml
 | 13
 | 16

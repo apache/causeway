@@ -26,7 +26,7 @@ Post the results to the `dev@isis.a.o` mailing list:
 
 [source,bash]
 ----
-[RESULT] [VOTE] Apache Isis Core release 1.16.0
+[RESULT] [VOTE] Apache Isis Core release 2.0.0-M1
 ----
 
 using the body (alter last line as appropriate):
@@ -56,9 +56,9 @@ You can do this using the `scripts/promoterctag.sh` script; for example:
 
 [source,bash]
 ----
-sh scripts/promoterctag.sh isis-1.16.0 RC1
-sh scripts/promoterctag.sh helloworld-archetype-1.16.0 RC1
-sh scripts/promoterctag.sh simpleapp-archetype-1.16.0 RC1
+sh scripts/promoterctag.sh isis-2.0.0-M1 RC1
+sh scripts/promoterctag.sh helloworld-archetype-2.0.0-M1 RC1
+sh scripts/promoterctag.sh simpleapp-archetype-2.0.0-M1 RC1
 ----
 
 This script pushes the tag under `refs/tags/rel`.  As per Apache policy (communicated on 10th Jan 2016 to Apache PMCs),
@@ -189,7 +189,7 @@ popd
 
 [source,bash]
 ----
-sh upd.sh 1.15.1 1.16.0
+sh upd.sh 1.16.0 2.0.0-M1
 ----
 
 The script downloads the artifacts from the Nexus release repository, adds the artifacts to subversion and deletes the previous version.
@@ -223,7 +223,7 @@ From the root directory, generate the release notes for the current release, in 
 
 [source,bash]
 ----
-sh scripts/jira-release-notes.sh ISIS 1.16.0 > /tmp/1
+sh scripts/jira-release-notes.sh ISIS 2.0.0-M1 > /tmp/1
 ----
 
 
@@ -254,7 +254,7 @@ Log the new release in the link:https://reporter.apache.org/addrelease.html?isis
 
 == Update website
 
-Update the Apache Isis (asciidoc) website:
+In the main `isis` repo (ie containing the asciidoc source):
 
 * Paste in the JIRA-generated release notes generated above, adding to top of `adocs/documentation/src/main/asciidoc/release-notes.adoc`.
 Also add a summary line for the release.
@@ -274,11 +274,45 @@ Validate using the http://www.w3.org/RDF/Validator/[W3C RDF Validator] service. 
 +
 For more information on DOAP files, see these http://projects.apache.org/doap.html[Apache policy docs].
 
-* Update the https://github.com/apache/isis/blob/master/STATUS[STATUS] file (in root of Apache Isis' source) should be updated with details of the new release.
+* Update the https://git-wip-us.apache.org/repos/asf/isis/repo?p=isis.git;a=blob_plain;f=STATUS;hb=HEAD[STATUS] file (in root of Apache Isis' source) should be updated with details of the new release.
 
+* commit the `.adoc` changes and publish to the `isis-site` repo.
 
-Don't forget to commit the `.adoc` changes and publish to the isis-site repo.
+This will have published to the `SNAPSHOT` directory of the `isis-site` repo.
+Now, in the `isis-site` repo itself:
 
+* double check that a copy of current exists as a named directory under `content/versions`
+
++
+If for any reason it isn't there, then create a copy.
+
+* delete the current version and rename `SNAPSHOT` as `current`:
+
++
+[source,bash]
+----
+rm -rf content/versions/current
+mv content/versions/SNAPSHOT content/versions/current
+----
+
+* take a copy of the new `current` version as a named version:
+
++
+For example:
++
+[source,bash]
+----
+cp -rf content/versions/current content/versions/2.0.0-M1
+----
+
+* In the root `index.html`, update the menu to reference the new version.
+
+At this point the files in the root (directly under `content`) will still be out of date; the publish process simply takes a copy of whatever is in `content/versions/current`.
+Also, the `SNAPSHOT` will be missing (above it was renamed to `current`).
+To fix this, simply publish the website one more time (from the `isis` main repo).
+
+Finally, preview the changes (in the `isis-site`).
+If everything looks ok, then push the changes to make live.
 
 
 
@@ -290,14 +324,14 @@ For example, for a release of Apache Isis Core, use the following subject:
 
 [source,bash]
 ----
-[ANN] Apache Isis version 1.16.0 Released
+[ANN] Apache Isis version 2.0.0-M1 Released
 ----
 
 And use the following body (summarizing the main points as required):
 
 [source]
 ----
-The Apache Isis team is pleased to announce the release of Apache Isis v1.16.0.
+The Apache Isis team is pleased to announce the release of Apache Isis v2.0.0-M1.
 
 New features in this release include:
 * ...
@@ -312,8 +346,8 @@ Enjoy!
 
 --The Apache Isis team
 
-[1] http://isis.apache.org/release-notes/release-notes.html#_release-notes_1.16.0
-[2] http://isis.apache.org/migration-notes/migration-notes.html#_migration-notes_1.15.0-to-1.16.0
+[1] http://isis.apache.org/release-notes/release-notes.html#_release-notes_2.0.0-M1
+[2] http://isis.apache.org/migration-notes/migration-notes.html#_migration-notes_1.16.0-to-2.0.0-M1
 [3] http://search.maven.org
 [4] http://isis.apache.org/downloads.html
 ----
@@ -338,9 +372,9 @@ Because we release from a branch, the changes made in the branch (changes to `po
 ----
 git checkout master                           # update master with latest
 git pull
-git merge release-1.16.0-RC1                  # merge branch onto master
-git push origin --delete release-1.16.0-RC1   # remote branch no longer needed
-git branch -d release-1.16.0-RC1              # branch no longer needed
+git merge release-2.0.0-M1-RC1                  # merge branch onto master
+git push origin --delete release-2.0.0-M1-RC1   # remote branch no longer needed
+git branch -d release-2.0.0-M1-RC1              # branch no longer needed
 ----
 
 

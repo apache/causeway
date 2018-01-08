@@ -311,7 +311,7 @@ If there are any snags at this stage, then explicitly delete the generated `rele
 [[__cgcom_cutting-a-release_releasing-core_post-prepare-sanity-check]]
 === Post-prepare sanity check
 
-You should end up with artifacts in your local repo with the new version (eg `1.16.0`).  This is a good time to do some quick sanity checks; nothing has yet been uploaded:
+You should end up with artifacts in your local repo with the new version (eg `2.0.0-M1`).  This is a good time to do some quick sanity checks; nothing has yet been uploaded:
 
 * unzip the source-release ZIP and check it builds.
 * Inspect the `DEPENDENCIES` file, and check it looks correct.
@@ -371,17 +371,17 @@ The command checks out the codebase from the tag, then builds the artifacts, the
 [INFO] Performing a LOCAL checkout from scm:git:file:///C:\APACHE\isis-git-rw\co
 re
 [INFO] Checking out the project to perform the release ...
-[INFO] Executing: cmd.exe /X /C "git clone --branch release-1.16.0 file:///C:\APACHE\isis-git-rw\core C:\APACHE\isis-git-rw\core\target\checkout"
+[INFO] Executing: cmd.exe /X /C "git clone --branch release-2.0.0-M1 file:///C:\APACHE\isis-git-rw\core C:\APACHE\isis-git-rw\core\target\checkout"
 [INFO] Working directory: C:\APACHE\isis-git-rw\core\target
 [INFO] Performing a LOCAL checkout from scm:git:file:///C:\APACHE\isis-git-rw
 [INFO] Checking out the project to perform the release ...
-[INFO] Executing: cmd.exe /X /C "git clone --branch release-1.16.0 file:///C:\APACHE\isis-git-rw C:\APACHE\isis-git-rw\core\target\checkout"
+[INFO] Executing: cmd.exe /X /C "git clone --branch release-2.0.0-M1 file:///C:\APACHE\isis-git-rw C:\APACHE\isis-git-rw\core\target\checkout"
 [INFO] Working directory: C:\APACHE\isis-git-rw\core\target
 [INFO] Executing: cmd.exe /X /C "git ls-remote file:///C:\APACHE\isis-git-rw"
 [INFO] Working directory: C:\Users\ADMINI~1\AppData\Local\Temp
 [INFO] Executing: cmd.exe /X /C "git fetch file:///C:\APACHE\isis-git-rw"
 [INFO] Working directory: C:\APACHE\isis-git-rw\core\target\checkout
-[INFO] Executing: cmd.exe /X /C "git checkout release-1.16.0"
+[INFO] Executing: cmd.exe /X /C "git checkout release-2.0.0-M1"
 [INFO] Working directory: C:\APACHE\isis-git-rw\core\target\checkout
 [INFO] Executing: cmd.exe /X /C "git ls-files"
 [INFO] Working directory: C:\APACHE\isis-git-rw\core\target\checkout
@@ -453,7 +453,7 @@ Update the parent `pom.xml` to reference the _released_ version of Apache Isis c
 [source,xml]
 ----
 <properties>
-    <isis.version>1.16.0</isis.version>
+    <isis.version>2.0.0-M1</isis.version>
     ...
 </properties>
 ----
@@ -683,7 +683,7 @@ Update the parent `pom.xml` to reference the _released_ version of Apache Isis c
 [source,xml]
 ----
 <properties>
-    <isis.version>1.16.0</isis.version>
+    <isis.version>2.0.0-M1</isis.version>
     ...
 </properties>
 ----
@@ -921,7 +921,7 @@ Use the following subject, eg:
 
 [source,bash]
 ----
-[VOTE] Apache Isis Core release 1.16.0 RC1
+[VOTE] Apache Isis Core release 2.0.0-M1 RC1
 ----
 
 And use the following body:
@@ -930,19 +930,19 @@ And use the following body:
 ----
 I've cut a release for Apache Isis Core and the two archetypes:
 
-* Core 1.16.0
-* HelloWorld Archetype 1.16.0
-* SimpleApp Archetype 1.16.0
+* Core 2.0.0-M1
+* HelloWorld Archetype 2.0.0-M1
+* SimpleApp Archetype 2.0.0-M1
 
 The source code artifacts have been uploaded to staging repositories on repository.apache.org:
 
-* http://repository.apache.org/content/repositories/orgapacheisis-10xx/org/apache/isis/core/isis/1.16.0/isis-1.16.0-source-release.zip
-* http://repository.apache.org/content/repositories/orgapacheisis-10xx/org/apache/isis/archetype/helloworld-archetype/1.16.0/helloworld-archetype-1.16.0-source-release.zip
-* http://repository.apache.org/content/repositories/orgapacheisis-10xx/org/apache/isis/archetype/simpleapp-archetype/1.16.0/simpleapp-archetype-1.16.0-source-release.zip
+* http://repository.apache.org/content/repositories/orgapacheisis-10xx/org/apache/isis/core/isis/2.0.0-M1/isis-2.0.0-M1-source-release.zip
+* http://repository.apache.org/content/repositories/orgapacheisis-10xx/org/apache/isis/archetype/helloworld-archetype/2.0.0-M1/helloworld-archetype-2.0.0-M1-source-release.zip
+* http://repository.apache.org/content/repositories/orgapacheisis-10xx/org/apache/isis/archetype/simpleapp-archetype/2.0.0-M1/simpleapp-archetype-2.0.0-M1-source-release.zip
 
 For each zip there is a corresponding signature file (append .asc to the zip's url).
 
-In the source code repo the code has been tagged as isis-1.16.0-RC1, helloworld-archetype-1.16.0-RC1 and simpleapp-archetype-1.16.0-RC1; see https://github.com/apache/isis/tags
+In the source code repo the code has been tagged as isis-2.0.0-M1-RC1, helloworld-archetype-2.0.0-M1-RC1 and simpleapp-archetype-2.0.0-M1-RC1; see https://github.com/apache/isis/tags
 
 For instructions on how to verify the release (build from binaries and/or use in Maven directly), see https://isis.apache.org/guides/cgcom/cgcom.html#_cgcom_verifying-releases
 
@@ -955,7 +955,7 @@ Please verify the release and cast your vote.  The vote will be open for a minim
 
 Remember to update:
 
-* the version number (1.16.0 or whatever)
+* the version number (`2.0.0-M1` or whatever)
 * the release candidate number (`RC1` or whatever)
 * the repository id, as provided by Nexus earlier (`orgapacheisis-10xx` or whatever)
 
