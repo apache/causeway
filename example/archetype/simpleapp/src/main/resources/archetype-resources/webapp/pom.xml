@@ -148,11 +148,6 @@
             <artifactId>isis-mavendeps-webapp</artifactId>
             <type>pom</type>
         </dependency>
-        <dependency>
-            <groupId>org.apache.isis.mavendeps</groupId>
-            <artifactId>isis-mavendeps-intellij</artifactId>
-            <type>pom</type>
-        </dependency>
 
     </dependencies>
 

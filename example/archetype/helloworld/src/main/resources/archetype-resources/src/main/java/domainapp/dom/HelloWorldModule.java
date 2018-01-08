@@ -21,6 +21,8 @@
  */
 package domainapp.dom;
 
-public final class HelloWorldModule {
-    private HelloWorldModule(){}
+import org.apache.isis.applib.ModuleAbstract;
+
+public class HelloWorldModule extends ModuleAbstract {
+
 }

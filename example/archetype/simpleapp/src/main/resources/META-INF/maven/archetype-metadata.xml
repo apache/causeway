@@ -130,10 +130,10 @@
                         <include>**/*.feature</include>
                     </includes>
                 </fileSet>
-                <fileSet encoding="UTF-8">
-                    <directory>lib</directory>
+                <fileSet filtered="true" encoding="UTF-8">
+                    <directory>src/test/resources</directory>
                     <includes>
-                        <include>**/*.gitignore</include>
+                        <include>**/*.properties</include>
                     </includes>
                 </fileSet>
                 <fileSet filtered="true" encoding="UTF-8">
@@ -145,6 +145,7 @@
                 <fileSet encoding="UTF-8">
                     <directory/>
                     <includes>
+                        <include>.gitignore</include>
                         <include>translations.pot</include>
                     </includes>
                 </fileSet>

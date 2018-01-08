@@ -19,16 +19,14 @@
  */
 package domainapp.application.bdd.specglue;
 
-import org.apache.isis.core.specsupport.specs.CukeGlueAbstract;
+import org.apache.isis.core.specsupport.specs.CukeGlueAbstract2;
 
 import cucumber.api.java.Before;
 import domainapp.application.fixture.scenarios.DomainAppDemo;
 
-public class CatalogOfFixturesGlue extends CukeGlueAbstract {
-
-    @Before(value={"@integration", "@DomainAppDemo"}, order=20000)
-    public void integrationFixtures() throws Throwable {
-        scenarioExecution().install(new DomainAppDemo());
+public class CatalogOfFixturesGlue extends CukeGlueAbstract2 {
+    @Before(value={"@DomainAppDemo"}, order=20000)
+    public void runDomainAppDemo() {
+        fixtureScripts.runFixtureScript(new DomainAppDemo(), null);
     }
-
 }

@@ -28,7 +28,7 @@ import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 
 import domainapp.modules.simple.dom.impl.SimpleObject;
-import domainapp.modules.simple.dom.impl.SimpleObjectRepository;
+import domainapp.modules.simple.dom.impl.SimpleObjects;
 
 @DomainObject(
         nature = Nature.VIEW_MODEL,
@@ -41,9 +41,9 @@ public class HomePageViewModel {
     }
 
     public List<SimpleObject> getObjects() {
-        return simpleObjectRepository.listAll();
+        return simpleObjects.listAll();
     }
 
     @javax.inject.Inject
-    SimpleObjectRepository simpleObjectRepository;
+    SimpleObjects simpleObjects;
 }

@@ -21,29 +21,24 @@
  */
 package domainapp.application.manifest;
 
-import org.apache.isis.applib.AppManifestAbstract;
+import org.apache.isis.applib.AppManifestAbstract2;
 
-import domainapp.application.fixture.DomainAppApplicationModuleFixtureSubmodule;
-import domainapp.application.services.DomainAppApplicationModuleServicesSubmodule;
-import domainapp.modules.simple.dom.SimpleModuleDomSubmodule;
+import domainapp.application.DomainAppApplicationModule;
 
 /**
  * Bootstrap the application.
  */
-public class DomainAppAppManifest extends AppManifestAbstract {
+public class DomainAppAppManifest extends AppManifestAbstract2 {
 
-    public static final Builder BUILDER = Builder.forModules(
-                    SimpleModuleDomSubmodule.class,
-                    DomainAppApplicationModuleFixtureSubmodule.class,
-                    DomainAppApplicationModuleServicesSubmodule.class
-            )
+    public static final Builder BUILDER = Builder
+            .forModule(new DomainAppApplicationModule())
             .withConfigurationPropertiesFile(DomainAppAppManifest.class,
-                    "isis.properties",
+                    "isis-non-changing.properties",
                     "authentication_shiro.properties",
                     "persistor_datanucleus.properties",
                     "viewer_restfulobjects.properties",
-                    "viewer_wicket.properties"
-            ).withAuthMechanism("shiro");
+                    "viewer_wicket.properties")
+            .withAuthMechanism("shiro");
 
     public DomainAppAppManifest() {
         super(BUILDER);

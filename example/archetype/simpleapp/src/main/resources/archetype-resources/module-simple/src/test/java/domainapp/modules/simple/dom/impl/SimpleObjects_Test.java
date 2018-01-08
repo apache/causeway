@@ -32,7 +32,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import org.apache.isis.applib.services.registry.ServiceRegistry2;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.core.unittestsupport.jmocking.JMockActions;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
@@ -40,30 +39,26 @@ import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SimpleObjectRepository_Test {
+public class SimpleObjects_Test {
 
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
     @Mock
-    ServiceRegistry2 mockServiceRegistry;
-    
-    @Mock
     RepositoryService mockRepositoryService;
 
-    SimpleObjectRepository simpleObjectRepository;
+    SimpleObjects simpleObjects;
 
     @Before
-    public void setUp() throws Exception {
-        simpleObjectRepository = new SimpleObjectRepository();
-        simpleObjectRepository.repositoryService = mockRepositoryService;
-        simpleObjectRepository.serviceRegistry = mockServiceRegistry;
+    public void setUp() {
+        simpleObjects = new SimpleObjects();
+        simpleObjects.repositoryService = mockRepositoryService;
     }
 
-    public static class Create extends SimpleObjectRepository_Test {
+    public static class Create extends SimpleObjects_Test {
 
         @Test
-        public void happyCase() throws Exception {
+        public void happyCase() {
 
             final String someName = "Foobar";
 
@@ -77,7 +72,7 @@ public class SimpleObjectRepository_Test {
             });
 
             // when
-            final SimpleObject obj = simpleObjectRepository.create(someName);
+            final SimpleObject obj = simpleObjects.create(someName);
 
             // then
             assertThat(obj).isNotNull();
@@ -91,7 +86,6 @@ public class SimpleObjectRepository_Test {
                     return name.equals(item.getName());
                 }
 
-                @Override
                 public void describeTo(final Description description) {
                     description.appendText("has name of '" + name + "'");
                 }
@@ -99,10 +93,10 @@ public class SimpleObjectRepository_Test {
         }
     }
 
-    public static class ListAll extends SimpleObjectRepository_Test {
+    public static class ListAll extends SimpleObjects_Test {
 
         @Test
-        public void happyCase() throws Exception {
+        public void happyCase() {
 
             // given
             final List<SimpleObject> all = Lists.newArrayList();
@@ -115,7 +109,7 @@ public class SimpleObjectRepository_Test {
             });
 
             // when
-            final List<SimpleObject> list = simpleObjectRepository.listAll();
+            final List<SimpleObject> list = simpleObjects.listAll();
 
             // then
             assertThat(list).isEqualTo(all);

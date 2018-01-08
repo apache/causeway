@@ -36,7 +36,7 @@
     <packaging>war</packaging>
 
     <properties>
-        <isis.version>1.16.0-SNAPSHOT</isis.version>
+        <isis.version>1.16.0</isis.version>
 
         <compiler-plugin.source>1.8</compiler-plugin.source>
         <compiler-plugin.target>1.8</compiler-plugin.target>
@@ -45,7 +45,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <maven-war-plugin.warName>${project.parent.artifactId}</maven-war-plugin.warName>
+        <maven-war-plugin.warName>${project.artifactId}</maven-war-plugin.warName>
     </properties>
 
     <build>
