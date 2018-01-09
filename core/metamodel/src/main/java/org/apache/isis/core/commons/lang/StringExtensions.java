@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.commons.lang;
 
-import java.io.File;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -134,17 +133,6 @@ public final class StringExtensions {
         return Character.isUpperCase(c) || Character.isDigit(c) && !Character.isDigit(previousChar);
     }
 
-    public static String asSimpleName(final String extendee) {
-        final int lastDot = extendee.lastIndexOf('.');
-        if (lastDot == -1) {
-            return extendee;
-        }
-        if (lastDot == extendee.length() - 1) {
-            throw new IllegalArgumentException("Name cannot end in '.'");
-        }
-        return extendee.substring(lastDot + 1);
-    }
-    
     public static String asCamel(final String extendee) {
         final StringBuffer b = new StringBuffer(extendee.length());
         final StringTokenizer t = new StringTokenizer(extendee);
@@ -181,10 +169,6 @@ public final class StringExtensions {
         return capitalize(asCamel(extendee));
     }
 
-    public static String asMemberIdFor(final String extendee) {
-        return asLowerFirst(asCamel(extendee));
-    }
-
     // ////////////////////////////////////////////////////////////
     // capitalize, lowerFirst, firstWord
     // ////////////////////////////////////////////////////////////
@@ -212,12 +196,6 @@ public final class StringExtensions {
         return extendee.substring(0, 1).toLowerCase() + extendee.substring(1);
     }
 
-    public static String asFirstWord(final String extendee) {
-        final String[] split = extendee.split(" ");
-        return split[0];
-    }
-
-
     // ////////////////////////////////////////////////////////////
     // in, combinePaths, splitOnCommas
     // ////////////////////////////////////////////////////////////
@@ -229,17 +207,6 @@ public final class StringExtensions {
             }
         }
         return false;
-    }
-
-    public static String combinePaths(final String extendee, final String... furtherPaths) {
-        final StringBuilder pathBuf = new StringBuilder(extendee);
-        for (final String furtherPath : furtherPaths) {
-            if (pathBuf.charAt(pathBuf.length() - 1) != File.separatorChar) {
-                pathBuf.append(File.separatorChar);
-            }
-            pathBuf.append(furtherPath);
-        }
-        return pathBuf.toString();
     }
 
     public static List<String> splitOnCommas(final String commaSeparatedExtendee) {
@@ -297,21 +264,6 @@ public final class StringExtensions {
     // removeTabs, removeLeadingWhiteSpace, stripLeadingSlash, stripNewLines,
     // normalize
     // ////////////////////////////////////////////////////////////
-
-    public static String removeTabs(final String extendee) {
-        // quick return - jvm java should always return here
-        if (extendee.indexOf('\t') == -1) {
-            return extendee;
-        }
-        final StringBuffer buf = new StringBuffer();
-        for (int i = 0; i < extendee.length(); i++) {
-            // a bit clunky to stay with j# api
-            if (extendee.charAt(i) != '\t') {
-                buf.append(extendee.charAt(i));
-            }
-        }
-        return buf.toString();
-    }
 
     public static String removeLeadingWhiteSpace(final String extendee) {
         if (extendee == null) {
@@ -379,108 +331,7 @@ public final class StringExtensions {
     // copied in from Apache Commons
     // //////////////////////////////////////
 
-    
-    public static final String EMPTY = "";
-    /**
-     * <p>The maximum size to which the padding constant(s) can expand.</p>
-     */
-    private static final int PAD_LIMIT = 8192;
 
-    /**
-     * <p>Repeat a String <code>repeat</code> times to form a
-     * new String.</p>
-     *
-     * <pre>
-     * StringUtils.repeat(null, 2) = null
-     * StringUtils.repeat("", 0)   = ""
-     * StringUtils.repeat("", 2)   = ""
-     * StringUtils.repeat("a", 3)  = "aaa"
-     * StringUtils.repeat("ab", 2) = "abab"
-     * StringUtils.repeat("a", -2) = ""
-     * </pre>
-     *
-     * @param extendee  the String to repeat, may be null
-     * @param repeat  number of times to repeat str, negative treated as zero
-     * @return a new String consisting of the original String repeated,
-     *  <code>null</code> if null String input
-     */
-    public static String repeat(final String extendee, int repeat) {
-        // Performance tuned for 2.0 (JDK1.4)
-
-        if (extendee == null) {
-            return null;
-        }
-        if (repeat <= 0) {
-            return EMPTY;
-        }
-        int inputLength = extendee.length();
-        if (repeat == 1 || inputLength == 0) {
-            return extendee;
-        }
-        if (inputLength == 1 && repeat <= PAD_LIMIT) {
-            return padding(repeat, extendee.charAt(0));
-        }
-
-        int outputLength = inputLength * repeat;
-        switch (inputLength) {
-            case 1 :
-                char ch = extendee.charAt(0);
-                char[] output1 = new char[outputLength];
-                for (int i = repeat - 1; i >= 0; i--) {
-                    output1[i] = ch;
-                }
-                return new String(output1);
-            case 2 :
-                char ch0 = extendee.charAt(0);
-                char ch1 = extendee.charAt(1);
-                char[] output2 = new char[outputLength];
-                for (int i = repeat * 2 - 2; i >= 0; i--, i--) {
-                    output2[i] = ch0;
-                    output2[i + 1] = ch1;
-                }
-                return new String(output2);
-            default :
-                StringBuilder buf = new StringBuilder(outputLength);
-                for (int i = 0; i < repeat; i++) {
-                    buf.append(extendee);
-                }
-                return buf.toString();
-        }
-    }
-
-    /**
-     * <p>Returns padding using the specified delimiter repeated
-     * to a given length.</p>
-     *
-     * <pre>
-     * StringUtils.padding(0, 'e')  = ""
-     * StringUtils.padding(3, 'e')  = "eee"
-     * StringUtils.padding(-2, 'e') = IndexOutOfBoundsException
-     * </pre>
-     *
-     * <p>Note: this method doesn't not support padding with
-     * <a href="http://www.unicode.org/glossary/#supplementary_character">Unicode Supplementary Characters</a>
-     * as they require a pair of <code>char</code>s to be represented.
-     * If you are needing to support full I18N of your applications
-     * consider using {@link #repeat(String, int)} instead. 
-     * </p>
-     *
-     * @param repeat  number of times to repeat delim
-     * @param padChar  character to repeat
-     * @return String with repeated character
-     * @throws IndexOutOfBoundsException if <code>repeat &lt; 0</code>
-     * @see #repeat(String, int)
-     */
-    private static String padding(int repeat, char padChar) throws IndexOutOfBoundsException {
-        if (repeat < 0) {
-            throw new IndexOutOfBoundsException("Cannot pad a negative amount: " + repeat);
-        }
-        final char[] buf = new char[repeat];
-        for (int i = 0; i < buf.length; i++) {
-            buf[i] = padChar;
-        }
-        return new String(buf);
-    }
 
     public static boolean startsWith(final String extendee, final String prefix) {
         final int length = prefix.length();

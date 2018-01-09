@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.object.mixin;
 
 import java.lang.reflect.Constructor;
+import java.util.List;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
@@ -42,27 +43,29 @@ public class MixinFacetForDomainObjectAnnotation extends MixinFacetAbstract {
     }
 
     public static MixinFacet create(
-            final DomainObject domainObject,
+            final List<DomainObject> domainObjects,
             final Class<?> candidateMixinType,
             final FacetHolder facetHolder,
             final ServicesInjector servicesInjector) {
-        if(domainObject == null) {
-            return null;
-        }
-        if(domainObject.nature() != Nature.MIXIN) {
-            return null;
-        }
-        final Constructor<?>[] constructors = candidateMixinType.getConstructors();
-        for (Constructor<?> constructor : constructors) {
-            final Class<?>[] constructorTypes = constructor.getParameterTypes();
-            if(constructorTypes.length != 1) {
-                continue;
-            }
-            final Class<?> constructorType = constructorTypes[0];
-            return new MixinFacetForDomainObjectAnnotation(candidateMixinType, domainObject.mixinMethod(), constructorType, facetHolder,
-                    servicesInjector);
-        }
-        return null;
+        return domainObjects.stream()
+                .filter(domainObject -> domainObject.nature() == Nature.MIXIN)
+                .findFirst()
+                .map(domainObject -> {
+                    final Constructor<?>[] constructors = candidateMixinType.getConstructors();
+                    for (Constructor<?> constructor : constructors) {
+                        final Class<?>[] constructorTypes = constructor.getParameterTypes();
+                        if(constructorTypes.length != 1) {
+                            continue;
+                        }
+                        final Class<?> constructorType = constructorTypes[0];
+                        return new MixinFacetForDomainObjectAnnotation(
+                                        candidateMixinType, domainObject.mixinMethod(), constructorType, facetHolder,
+                                        servicesInjector);
+                    }
+                    // else
+                    return null;
+                })
+                .orElse(null);
     }
 
 }

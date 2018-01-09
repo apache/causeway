@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets.object.recreatable;
 
-import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -34,7 +33,7 @@ public class DisabledFacetOnPropertyDerivedFromRecreatableObject extends Disable
             final Semantics semantics) {
         super(
                 DisabledFacetOnPropertyDerivedFromRecreatableObject.class, // so don't clobber any other DisabledFacet's
-                When.ALWAYS, Where.ANYWHERE, holder, semantics);
+                Where.ANYWHERE, holder, semantics);
     }
 
     @Override

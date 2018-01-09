@@ -21,10 +21,9 @@ import java.util.UUID;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.applib.services.publish.EventMetadata;
 
 /**
- * A user-friendly name of an action, as per {@link Command#getTargetAction()}, {@link EventMetadata#getTargetAction()}, {@link org.apache.isis.applib.services.audit.AuditerService#audit(UUID, int, String, Bookmark, String, String, String, String, String, Timestamp)}.
+ * A user-friendly name of an action, as per {@link Command#getTargetAction()}, {@link org.apache.isis.applib.services.audit.AuditerService#audit(UUID, int, String, Bookmark, String, String, String, String, String, Timestamp)}.
  */
 public class TargetActionType {
 

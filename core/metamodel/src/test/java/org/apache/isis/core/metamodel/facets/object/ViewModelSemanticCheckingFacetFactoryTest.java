@@ -46,6 +46,7 @@ public class ViewModelSemanticCheckingFacetFactoryTest {
     @Mock
     private IsisConfigurationDefault mockConfiguration;
 
+
     @Mock
     private ServicesInjector mockServicesInjector;
 

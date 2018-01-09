@@ -19,8 +19,10 @@
 
 package org.apache.isis.core.metamodel.facets.collections.collection.notpersisted;
 
+import java.util.List;
+
 import org.apache.isis.applib.annotation.Collection;
-import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.MementoSerialization;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacetAbstract;
@@ -32,18 +34,22 @@ public class NotPersistedFacetForCollectionAnnotation extends NotPersistedFacetA
     }
 
     public static NotPersistedFacet create(
-            final Collection collection,
+            final List<Collection> collections,
             final FacetHolder holder) {
 
-        if (collection == null) {
-            return null;
-        }
-
-        final boolean notPersisted = collection.notPersisted();
-        final boolean persisted = !notPersisted;
-        if(persisted) {
-            return null;
-        }
-        return new NotPersistedFacetForCollectionAnnotation(holder);
+        return collections.stream()
+                .map(Collection::mementoSerialization)
+                .filter(mementoSerialization -> mementoSerialization != MementoSerialization.NOT_SPECIFIED)
+                .findFirst()
+                .map(mementoSerialization -> {
+                    switch (mementoSerialization) {
+                    case INCLUDED:
+                        return null;
+                    case EXCLUDED:
+                        return new NotPersistedFacetForCollectionAnnotation(holder);
+                    }
+                    throw new IllegalStateException("mementoSerialization '" + mementoSerialization + "' not recognized");
+                })
+                .orElse(null);
     }
 }

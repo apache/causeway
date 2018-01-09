@@ -58,7 +58,7 @@ public class GivenJdoNotPersistentAnnotationFacetFactoryTest extends AbstractFac
     public void testNotPersistentAnnotationPickedUpOnProperty() throws Exception {
         final Class<?> cls = SimpleObjectWithNotPersistentColumn.class;
         final Method method = cls.getMethod("getSomeColumn");
-        facetFactory.process(new FacetFactory.ProcessMethodContext(cls, null, null, method, methodRemover, facetedMethod));
+        facetFactory.process(new FacetFactory.ProcessMethodContext(cls, null, method, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(JdoNotPersistentFacet.class);
         assertNotNull(facet);
@@ -68,7 +68,7 @@ public class GivenJdoNotPersistentAnnotationFacetFactoryTest extends AbstractFac
     public void testNotPersistedDerived() throws Exception {
         final Class<?> cls = SimpleObjectWithNotPersistentColumn.class;
         final Method method = cls.getMethod("getSomeColumn");
-        facetFactory.process(new FacetFactory.ProcessMethodContext(cls, null, null, method, methodRemover, facetedMethod));
+        facetFactory.process(new FacetFactory.ProcessMethodContext(cls, null, method, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(NotPersistedFacet.class);
         assertNotNull(facet);
@@ -94,7 +94,7 @@ public class GivenJdoNotPersistentAnnotationFacetFactoryTest extends AbstractFac
 
         final Class<?> cls = Customer.class;
         final Method method = cls.getMethod("getSomeColumn");
-        facetFactory.process(new FacetFactory.ProcessMethodContext(cls, null, null, method, methodRemover, facetedMethod));
+        facetFactory.process(new FacetFactory.ProcessMethodContext(cls, null, method, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(JdoNotPersistentFacet.class);
         assertNull(facet);
@@ -117,7 +117,7 @@ public class GivenJdoNotPersistentAnnotationFacetFactoryTest extends AbstractFac
 
         final Class<?> cls = Customer.class;
         final Method method = cls.getMethod("getSomeColumn");
-        facetFactory.process(new FacetFactory.ProcessMethodContext(cls, null, null, method, methodRemover, facetedMethod));
+        facetFactory.process(new FacetFactory.ProcessMethodContext(cls, null, method, methodRemover, facetedMethod));
 
         assertNoMethodsRemoved();
     }

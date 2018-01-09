@@ -19,7 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.param.layout;
 
-import java.lang.annotation.Annotation;
+import java.util.List;
+
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -40,27 +41,25 @@ public class ParameterLayoutFacetFactory extends FacetFactoryAbstract {
             // ignore
             return;
         }
-        
-        final Annotation[] parameterAnnotations = Annotations.getParameterAnnotations(processParameterContext.getMethod())[processParameterContext.getParamNum()];
-        for (final Annotation parameterAnnotation : parameterAnnotations) {
-            if (parameterAnnotation instanceof ParameterLayout) {
-                final ParameterLayout parameterLayout = (ParameterLayout) parameterAnnotation;
-                addFacets(processParameterContext, parameterLayout);
-                return;
-            }
-        }
+
+        final List<ParameterLayout> parameterLayouts =
+                Annotations.getAnnotations(
+                        processParameterContext.getMethod(),
+                        processParameterContext.getParamNum(),
+                        ParameterLayout.class);
+        addFacets(processParameterContext, parameterLayouts);
     }
 
-    protected void addFacets(ProcessParameterContext processParameterContext, ParameterLayout parameterLayout) {
+    protected void addFacets(ProcessParameterContext processParameterContext, List<ParameterLayout> parameterLayouts) {
         final FacetedMethodParameter facetHolder = processParameterContext.getFacetHolder();
 
-        FacetUtil.addFacet(CssClassFacetForParameterLayoutAnnotation.create(parameterLayout, facetHolder));
-        FacetUtil.addFacet(DescribedAsFacetForParameterLayoutAnnotation.create(parameterLayout, facetHolder));
-        FacetUtil.addFacet(LabelAtFacetForParameterLayoutAnnotation.create(parameterLayout, facetHolder));
-        FacetUtil.addFacet(MultiLineFacetForParameterLayoutAnnotation.create(parameterLayout, facetHolder));
-        FacetUtil.addFacet(NamedFacetForParameterLayoutAnnotation.create(parameterLayout, facetHolder));
-        FacetUtil.addFacet(RenderedAdjustedFacetForParameterLayoutAnnotation.create(parameterLayout, facetHolder));
-        FacetUtil.addFacet(TypicalLengthFacetForParameterLayoutAnnotation.create(parameterLayout, facetHolder));
+        FacetUtil.addFacet(CssClassFacetForParameterLayoutAnnotation.create(parameterLayouts, facetHolder));
+        FacetUtil.addFacet(DescribedAsFacetForParameterLayoutAnnotation.create(parameterLayouts, facetHolder));
+        FacetUtil.addFacet(LabelAtFacetForParameterLayoutAnnotation.create(parameterLayouts, facetHolder));
+        FacetUtil.addFacet(MultiLineFacetForParameterLayoutAnnotation.create(parameterLayouts, facetHolder));
+        FacetUtil.addFacet(NamedFacetForParameterLayoutAnnotation.create(parameterLayouts, facetHolder));
+        FacetUtil.addFacet(RenderedAdjustedFacetForParameterLayoutAnnotation.create(parameterLayouts, facetHolder));
+        FacetUtil.addFacet(TypicalLengthFacetForParameterLayoutAnnotation.create(parameterLayouts, facetHolder));
 
     }
 

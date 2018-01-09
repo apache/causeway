@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.actions.bulk;
 
-import org.apache.isis.applib.annotation.Bulk;
+import org.apache.isis.applib.annotation.InvokeOn;
 import org.apache.isis.core.metamodel.facets.SingleValueFacet;
 
 /**
@@ -30,7 +30,7 @@ import org.apache.isis.core.metamodel.facets.SingleValueFacet;
  * In the standard Apache Isis Programming Model, corresponds to annotating the
  * action method using <tt>@Bulk</tt>.
  */
-public interface BulkFacet extends SingleValueFacet<Bulk.AppliesTo> {
+public interface BulkFacet extends SingleValueFacet<InvokeOn> {
 
-    public Bulk.AppliesTo value();
+    public InvokeOn value();
 }

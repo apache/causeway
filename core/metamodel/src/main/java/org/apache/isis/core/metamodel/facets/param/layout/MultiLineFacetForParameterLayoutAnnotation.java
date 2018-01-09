@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.param.layout;
 
+import java.util.List;
+
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.objectvalue.multiline.MultiLineFacet;
@@ -26,12 +28,16 @@ import org.apache.isis.core.metamodel.facets.objectvalue.multiline.MultiLineFace
 
 public class MultiLineFacetForParameterLayoutAnnotation extends MultiLineFacetAbstract {
 
-    public static MultiLineFacet create(ParameterLayout parameterLayout, FacetHolder holder) {
-        if(parameterLayout == null) {
-            return null;
-        }
-        final int multiLine = parameterLayout.multiLine();
-        return multiLine != -1 ? new MultiLineFacetForParameterLayoutAnnotation(multiLine, false, holder) : null;
+    public static MultiLineFacet create(
+            final List<ParameterLayout> parameterLayouts,
+            final FacetHolder holder) {
+
+        return parameterLayouts.stream()
+                .map(ParameterLayout::multiLine)
+                .filter(multiLine -> multiLine != -1)
+                .findFirst()
+                .map(multiLine -> new MultiLineFacetForParameterLayoutAnnotation(multiLine, false, holder))
+                .orElse(null);
     }
 
     private MultiLineFacetForParameterLayoutAnnotation(int numberOfLines, boolean preventWrapping, FacetHolder holder) {

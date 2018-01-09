@@ -23,17 +23,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
+
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import org.apache.isis.applib.annotation.Command.ExecuteIn;
-import org.apache.isis.applib.annotation.Command.Persistence;
+
+import org.apache.isis.applib.annotation.CommandExecuteIn;
+import org.apache.isis.applib.annotation.CommandPersistence;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
-import org.apache.isis.applib.services.eventbus.ActionInteractionEvent;
 import org.apache.isis.applib.util.ObjectContracts;
 
-public class CommandDefault implements Command3 {
+public class CommandDefault implements Command {
 
     //region > constructor
 
@@ -185,49 +186,6 @@ public class CommandDefault implements Command3 {
 
     //endregion
 
-    //region > actionInteractionEvent (peek/pop/flush)
-
-    @Deprecated
-    @Override
-    public ActionInteractionEvent<?> peekActionInteractionEvent() {
-        final ActionDomainEvent<?> actionDomainEvent = peekActionDomainEvent();
-        if (actionDomainEvent != null && !(actionDomainEvent instanceof ActionInteractionEvent)) {
-            throw new IllegalStateException("Most recently pushed event was not an instance of ActionInteractionEvent; use either ActionDomainEvent or the (deprecated) ActionInteractionEvent consistently");
-        }
-        return (ActionInteractionEvent<?>) actionDomainEvent;
-    }
-
-    @Deprecated
-    @Override
-    public void pushActionInteractionEvent(ActionInteractionEvent<?> event) {
-        pushActionDomainEvent(event);
-    }
-
-    @Deprecated
-    @Override
-    public ActionInteractionEvent popActionInteractionEvent() {
-        final ActionDomainEvent<?> actionDomainEvent = popActionDomainEvent();
-        if (actionDomainEvent != null  && !(actionDomainEvent instanceof ActionInteractionEvent)) {
-            throw new IllegalStateException("Most recently pushed event was not an instance of ActionInteractionEvent; use either ActionDomainEvent or the (deprecated) ActionInteractionEvent consistently");
-        }
-        return (ActionInteractionEvent<?>) actionDomainEvent;
-    }
-
-    @Deprecated
-    @Programmatic
-    public List<ActionInteractionEvent<?>> flushActionInteractionEvents() {
-        final List<ActionDomainEvent<?>> actionDomainEvents = flushActionDomainEvents();
-        for (ActionDomainEvent<?> actionDomainEvent : actionDomainEvents) {
-            if (!(actionDomainEvent instanceof ActionInteractionEvent)) {
-                throw new IllegalStateException("List of events includes at least one event that is not an instance of ActionInteractionEvent; use either ActionDomainEvent or the (deprecated) ActionInteractionEvent consistently");
-            }
-        }
-        return (List)actionDomainEvents;
-    }
-
-
-    //endregion
-
     //region > actionDomainEvent (peek/pop/flush)
 
     private final LinkedList<ActionDomainEvent<?>> actionDomainEvents = Lists.newLinkedList();
@@ -281,10 +239,10 @@ public class CommandDefault implements Command3 {
 
     //region > executionType (property)
 
-    private ExecuteIn executionType;
+    private CommandExecuteIn executionType;
 
     @Override
-    public ExecuteIn getExecuteIn() {
+    public CommandExecuteIn getExecuteIn() {
         return executionType;
     }
 
@@ -292,7 +250,7 @@ public class CommandDefault implements Command3 {
      * <b>NOT API</b>: intended to be called only by the framework.
      */
     @Override
-    public void setExecuteIn(ExecuteIn executionType) {
+    public void setExecuteIn(CommandExecuteIn executionType) {
         this.executionType = executionType;
     }
 
@@ -364,15 +322,15 @@ public class CommandDefault implements Command3 {
 
     //region > persistence
 
-    private Persistence persistence;
+    private CommandPersistence persistence;
     
     @Override
-    public Persistence getPersistence() {
+    public CommandPersistence getPersistence() {
         return persistence;
     }
     
     @Override
-    public void setPersistence(Persistence persistence) {
+    public void setPersistence(CommandPersistence persistence) {
         this.persistence = persistence; 
     }
 

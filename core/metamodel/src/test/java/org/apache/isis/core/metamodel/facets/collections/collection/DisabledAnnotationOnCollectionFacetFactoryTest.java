@@ -21,7 +21,8 @@ package org.apache.isis.core.metamodel.facets.collections.collection;
 
 import java.lang.reflect.Method;
 import java.util.Collection;
-import org.apache.isis.applib.annotation.Disabled;
+
+import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
@@ -50,14 +51,14 @@ public class DisabledAnnotationOnCollectionFacetFactoryTest extends AbstractFace
 
     public void testDisabledAnnotationPickedUpOnCollection() {
         class Customer {
-            @Disabled
+            @org.apache.isis.applib.annotation.Collection(editing = Editing.DISABLED)
             public Collection<?> getOrders() {
                 return null;
             }
         }
         final Method actionMethod = findMethod(Customer.class, "getOrders");
 
-        facetFactory.processEditing(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
+        facetFactory.processEditing(new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(DisabledFacet.class);
         assertNotNull(facet);

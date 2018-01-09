@@ -18,10 +18,6 @@
  */
 package org.apache.isis.core.runtime.services.changes;
 
-import java.util.Map;
-
-import com.google.common.base.Function;
-
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
@@ -103,23 +99,10 @@ public class AdapterAndProperty {
         return bookmarkStr + " , " + getProperty().getId();
     }
 
-    public Object getPropertyValue() {
+    Object getPropertyValue() {
         ObjectAdapter referencedAdapter = property.get(objectAdapter, InteractionInitiatedBy.FRAMEWORK);
         return referencedAdapter == null ? null : referencedAdapter.getObject();
     }
 
-    static class Functions {
-        private Functions() {
-        }
-
-        static final Function<Map.Entry<AdapterAndProperty, PreAndPostValues>, ObjectAdapter> GET_ADAPTER = new Function<Map.Entry<AdapterAndProperty, PreAndPostValues>, ObjectAdapter>() {
-            @Override
-            public ObjectAdapter apply(Map.Entry<AdapterAndProperty, PreAndPostValues> input) {
-                final AdapterAndProperty aap = input.getKey();
-                return aap.getAdapter();
-            }
-        };
-
-    }
 
 }

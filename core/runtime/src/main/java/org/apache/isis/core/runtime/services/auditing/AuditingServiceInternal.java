@@ -27,7 +27,6 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.audit.AuditerService;
-import org.apache.isis.applib.services.audit.AuditingService3;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.iactn.InteractionContext;
@@ -42,7 +41,7 @@ import org.apache.isis.core.runtime.services.changes.ChangedObjectsServiceIntern
 import org.apache.isis.core.runtime.services.changes.PreAndPostValues;
 
 /**
- * Wrapper around {@link org.apache.isis.applib.services.audit.AuditingService3}.  Is a no-op if there is no injected service.
+ * Wrapper around {@link org.apache.isis.applib.services.audit.AuditerService}.
  */
 @DomainService(
         nature = NatureOfService.DOMAIN,
@@ -60,9 +59,6 @@ public class AuditingServiceInternal {
     }
 
     private boolean determineWhetherCanAudit() {
-        if (auditingServiceIfAny != null) {
-            return true;
-        }
         for (final AuditerService auditerService : auditerServices) {
             if (auditerService.isEnabled()) {
                 return true;
@@ -114,11 +110,6 @@ public class AuditingServiceInternal {
         final UUID transactionId = transaction.getTransactionId();
         final int sequence = transaction.getSequence();
 
-
-        if(auditingServiceIfAny != null) {
-            auditingServiceIfAny
-                    .audit(transactionId, targetClass, target, memberId, propertyId, preValue, postValue, user, timestamp);
-        }
         for (AuditerService auditerService : auditerServices) {
             if (auditerService.isEnabled()) {
                 auditerService
@@ -127,17 +118,11 @@ public class AuditingServiceInternal {
         }
     }
 
-    /**
-     * could be null if none has been registered.
-     */
     @javax.inject.Inject
-    private AuditingService3 auditingServiceIfAny;
+    List<AuditerService> auditerServices;
 
     @javax.inject.Inject
-    private List<AuditerService> auditerServices;
-
-    @javax.inject.Inject
-    private ChangedObjectsServiceInternal changedObjectsServiceInternal;
+    ChangedObjectsServiceInternal changedObjectsServiceInternal;
 
     @javax.inject.Inject
     UserService userService;

@@ -19,25 +19,25 @@
 
 package org.apache.isis.applib.util;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
 import org.junit.Test;
 
-import org.apache.isis.applib.annotation.When;
+import org.apache.isis.applib.annotation.Where;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class EnumsTest {
 
     @Test
     public void getFriendlyNameOf() {
-        assertThat(Enums.getFriendlyNameOf(When.ALWAYS), is("Always"));
-        assertThat(Enums.getFriendlyNameOf(When.ONCE_PERSISTED), is("Once Persisted"));
+        assertThat(Enums.getFriendlyNameOf(Where.ANYWHERE), is("Anywhere"));
+        assertThat(Enums.getFriendlyNameOf(Where.ALL_TABLES), is("All Tables"));
     }
 
     @Test
     public void getEnumNameFromFriendly() {
-        assertThat(Enums.getEnumNameFromFriendly("Always"), is("ALWAYS"));
-        assertThat(Enums.getEnumNameFromFriendly("Once Persisted"), is("ONCE_PERSISTED"));
+        assertThat(Enums.getEnumNameFromFriendly("Anywhere"), is("ANYWHERE"));
+        assertThat(Enums.getEnumNameFromFriendly("All Tables"), is("ALL_TABLES"));
     }
 
 }

@@ -8,7 +8,7 @@
 
 
 The `publishing()` attribute determines whether and how an action invocation is published via the registered
-implementation of a xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublishingService[`PublishingService`]) or
+implementation of a xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`]) or
 xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`].  This attribute is also
 supported for xref:../rgant/rgant.adoc#_rgant-DomainObject_publishing[domain objects], where it controls whether changed objects
 are published as events, and for xref:../rgant/rgant.adoc#_rgant_Property_publishing[`@Property#publishing()`], where it controls
@@ -48,23 +48,6 @@ public class Order {
 ----
 <1> because set to enabled, will be published irrespective of the configured value.
 
-
-
-
-== `publishingPayloadFactory()`
-
-The (optional) related `publishingPayloadFactory()` specifies the class to use to create the (payload of the) event to
-be published by the publishing factory.
-
-Rather than simply broadcast that the action was invoked, the payload factory allows a "fatter" payload to be
-instantiated that can eagerly push commonly-required information to all subscribers. For at least some subscribers
-this should avoid the necessity to query back for additional information.
-
-[WARNING]
-====
-Be aware that this attribute is only honoured by the (deprecated) xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublishingService[`PublishingService`], so should itself be considered as deprecated.  It
-is ignored by the replacement xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`],
-====
 
 
 

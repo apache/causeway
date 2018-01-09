@@ -23,11 +23,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
 
 import com.google.common.base.Function;
-import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Iterables;
@@ -39,11 +37,9 @@ import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.annotation.NotPersistable;
-import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.filter.Filter;
-import org.apache.isis.applib.filter.Filters;
+import com.google.common.base.Predicate;
+
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.core.commons.lang.ClassExtensions;
@@ -70,7 +66,6 @@ import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupLayoutFacet;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
-import org.apache.isis.core.metamodel.facets.object.notpersistable.NotPersistableFacet;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.facets.object.parented.ParentedCollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
@@ -87,7 +82,6 @@ import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.ObjectSpecificationException;
-import org.apache.isis.core.metamodel.spec.Persistability;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
@@ -130,10 +124,6 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     private final SpecificationLoader specificationLoader;
     private final FacetProcessor facetProcessor;
 
-    /**
-     * Only populated once {@link #introspectTypeHierarchyAndMembers()} is called.
-     */
-    protected Properties metadataProperties;
 
 
     private final List<ObjectAssociation> associations = Lists.newArrayList();
@@ -167,8 +157,6 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     private ObjectSpecId specId;
 
     private ObjectSpecification superclassSpec;
-
-    private Persistability persistability = Persistability.USER_PERSISTABLE;
 
     private TitleFacet titleFacet;
     private IconFacet iconFacet;
@@ -361,24 +349,8 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         titleFacet = getFacet(TitleFacet.class);
         iconFacet = getFacet(IconFacet.class);
         cssClassFacet = getFacet(CssClassFacet.class);
-
-        this.persistability = determinePersistability();
     }
 
-    private Persistability determinePersistability() {
-        final NotPersistableFacet notPersistableFacet = getFacet(NotPersistableFacet.class);
-        if (notPersistableFacet == null) {
-            return Persistability.USER_PERSISTABLE;
-        }
-        final NotPersistable.By initiatedBy = notPersistableFacet.value();
-        if (initiatedBy == NotPersistable.By.USER_OR_PROGRAM) {
-            return Persistability.TRANSIENT;
-        } else if (initiatedBy == NotPersistable.By.USER) {
-            return Persistability.PROGRAM_PERSISTABLE;
-        } else {
-            return Persistability.USER_PERSISTABLE;
-        }
-    }
 
     //endregion
 
@@ -502,11 +474,6 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     public String getHelp() {
         final HelpFacet helpFacet = getFacet(HelpFacet.class);
         return helpFacet == null ? null : helpFacet.value();
-    }
-
-    @Override
-    public Persistability persistability() {
-        return persistability;
     }
 
 
@@ -733,16 +700,16 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
     @Deprecated
     @Override
-    public List<ObjectAssociation> getAssociations(Filter<ObjectAssociation> filter) {
-        return getAssociations(Contributed.INCLUDED, filter);
+    public List<ObjectAssociation> getAssociations(Predicate<ObjectAssociation> predicate) {
+        return getAssociations(Contributed.INCLUDED, predicate);
     }
 
     @Override
-    public List<ObjectAssociation> getAssociations(Contributed contributed, final Filter<ObjectAssociation> filter) {
+    public List<ObjectAssociation> getAssociations(Contributed contributed, final Predicate<ObjectAssociation> predicate) {
         final List<ObjectAssociation> allAssociations = getAssociations(contributed);
         return Lists.newArrayList(
                 FluentIterable.from(allAssociations)
-                        .filter(Filters.asPredicate(filter))
+                        .filter((Predicate) predicate)
                         .toSortedList(ObjectMember.Comparators.byMemberOrderSequence())
         );
     }
@@ -750,14 +717,14 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public List<OneToOneAssociation> getProperties(Contributed contributed) {
-        final List list = getAssociations(contributed, ObjectAssociation.Filters.PROPERTIES);
+        final List list = getAssociations(contributed, ObjectAssociation.Predicates.PROPERTIES);
         return list;
     }
 
     @Override
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public List<OneToManyAssociation> getCollections(Contributed contributed) {
-        final List list = getAssociations(contributed, ObjectAssociation.Filters.COLLECTIONS);
+        final List list = getAssociations(contributed, ObjectAssociation.Predicates.COLLECTIONS);
         return list;
     }
 
@@ -768,7 +735,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     public List<ObjectAction> getObjectActions(
             final List<ActionType> types,
             final Contributed contributed, 
-            final Filter<ObjectAction> filter) {
+            final Predicate<ObjectAction> predicate) {
 
         // update our list of actions if requesting for contributed actions
         // and they have not yet been added
@@ -797,7 +764,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         final List<ObjectAction> actions = Lists.newArrayList();
         for (final ActionType type : types) {
             final Collection<ObjectAction> filterActions =
-                    Collections2.filter(objectActionsByType.get(type), Filters.asPredicate(filter));
+                    Collections2.filter(objectActionsByType.get(type), (Predicate) predicate);
             actions.addAll(filterActions);
         }
         return Lists.newArrayList(
@@ -809,15 +776,16 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     @Override
     public List<ObjectAction> getObjectActions(
             final Contributed contributed) {
-        return getObjectActions(ActionType.ALL, contributed, Filters.<ObjectAction>any());
+        return getObjectActions(ActionType.ALL, contributed,
+                com.google.common.base.Predicates.<ObjectAction>alwaysTrue());
     }
 
     @Override
     public List<ObjectAction> getObjectActions(
             final ActionType type, 
             final Contributed contributed, 
-            final Filter<ObjectAction> filter) {
-        return getObjectActions(Collections.singletonList(type), contributed, filter);
+            final Predicate<ObjectAction> predicate) {
+        return getObjectActions(Collections.singletonList(type), contributed, predicate);
     }
 
     //endregion
@@ -915,8 +883,8 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     private List<ObjectAssociation> createContributeeAssociations(final Object servicePojo) {
         final Class<?> serviceClass = servicePojo.getClass();
         final ObjectSpecification specification = specificationLoader.loadSpecification(serviceClass);
-        final List<ObjectAction> serviceActions = specification.getObjectActions(ActionType.USER, Contributed.INCLUDED, Filters
-                .<ObjectAction>any());
+        final List<ObjectAction> serviceActions = specification.getObjectActions(ActionType.USER, Contributed.INCLUDED,
+                com.google.common.base.Predicates.<ObjectAction>alwaysTrue());
 
         final List<ObjectActionDefault> contributedActions = Lists.newArrayList();
         for (final ObjectAction serviceAction : serviceActions) {
@@ -957,7 +925,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             public ObjectAssociation apply(ObjectActionDefault input) {
                 final ObjectSpecification returnType = input.getReturnType();
                 final ObjectAssociationAbstract association = createObjectAssociation(input, returnType);
-                facetProcessor.processMemberOrder(metadataProperties, association);
+                facetProcessor.processMemberOrder(association);
                 return association;
             }
 
@@ -1017,7 +985,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
         final List<ObjectAssociation> mixedInAssociations = Lists.newArrayList(
                 Iterables.transform(
-                        Iterables.filter(mixinActions, new Predicate<ObjectActionDefault>() {
+                        Iterables.filter(mixinActions, new com.google.common.base.Predicate<ObjectActionDefault>() {
                             @Override public boolean apply(final ObjectActionDefault input) {
                                 final NotContributedFacet notContributedFacet = input.getFacet(NotContributedFacet.class);
                                 if (notContributedFacet == null || !notContributedFacet.toActions()) {
@@ -1039,7 +1007,8 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     }
 
     private List objectActionsOf(final ObjectSpecification specification) {
-        return specification.getObjectActions(ActionType.ALL, Contributed.INCLUDED, Filters.<ObjectAction>any());
+        return specification.getObjectActions(ActionType.ALL, Contributed.INCLUDED,
+                com.google.common.base.Predicates.<ObjectAction>alwaysTrue());
     }
 
     private Function<ObjectActionDefault, ObjectAssociation> createMixedInAssociationFunctor(
@@ -1050,7 +1019,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             @Override
             public ObjectAssociation apply(final ObjectActionDefault mixinAction) {
                 final ObjectAssociationAbstract association = createObjectAssociation(mixinAction);
-                facetProcessor.processMemberOrder(metadataProperties, association);
+                facetProcessor.processMemberOrder(association);
                 return association;
             }
 
@@ -1099,8 +1068,8 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             return;
         }
         final List<ObjectAction> contributeeActions = Lists.newArrayList();
-        final List<ObjectAction> serviceActions = specification.getObjectActions(ActionType.ALL, Contributed.INCLUDED, Filters
-                .<ObjectAction>any());
+        final List<ObjectAction> serviceActions = specification.getObjectActions(ActionType.ALL, Contributed.INCLUDED,
+                com.google.common.base.Predicates.<ObjectAction>alwaysTrue());
         for (final ObjectAction serviceAction : serviceActions) {
             if (isAlwaysHidden(serviceAction)) {
                 continue;
@@ -1120,7 +1089,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
                 ObjectActionContributee contributeeAction =
                         new ObjectActionContributee(servicePojo, contributedAction, contributeeParam, this,
                                 servicesInjector);
-                facetProcessor.processMemberOrder(metadataProperties, contributeeAction);
+                facetProcessor.processMemberOrder(contributeeAction);
                 contributeeActions.add(contributeeAction);
             }
         }
@@ -1129,7 +1098,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
     private boolean isAlwaysHidden(final FacetHolder holder) {
         final HiddenFacet hiddenFacet = holder.getFacet(HiddenFacet.class);
-        return hiddenFacet != null && hiddenFacet.when() == When.ALWAYS && hiddenFacet.where() == Where.ANYWHERE;
+        return hiddenFacet != null && hiddenFacet.where() == Where.ANYWHERE;
     }
 
     
@@ -1191,8 +1160,8 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         }
 
         final List<ObjectAction> actions = Lists.newArrayList();
-        final List<ObjectAction> mixinActions = mixinSpec.getObjectActions(ActionType.ALL, Contributed.INCLUDED, Filters
-                .<ObjectAction>any());
+        final List<ObjectAction> mixinActions = mixinSpec.getObjectActions(ActionType.ALL, Contributed.INCLUDED,
+                com.google.common.base.Predicates.<ObjectAction>alwaysTrue());
         for (final ObjectAction mixinTypeAction : mixinActions) {
             if (isAlwaysHidden(mixinTypeAction)) {
                 continue;
@@ -1208,7 +1177,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
             ObjectActionMixedIn mixedInAction =
                     new ObjectActionMixedIn(mixinType, mixinFacet.value(), mixinAction, this, servicesInjector);
-            facetProcessor.processMemberOrder(metadataProperties, mixedInAction);
+            facetProcessor.processMemberOrder(mixedInAction);
             actions.add(mixedInAction);
         }
         mixedInActionsToAppendTo.addAll(actions);

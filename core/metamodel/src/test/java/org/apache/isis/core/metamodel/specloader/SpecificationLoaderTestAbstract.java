@@ -41,8 +41,6 @@ import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
-import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader;
-import org.apache.isis.core.metamodel.layoutmetadata.json.LayoutMetadataReaderFromJson;
 import org.apache.isis.core.metamodel.metamodelvalidator.dflt.MetaModelValidatorDefault;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
@@ -109,8 +107,7 @@ public abstract class SpecificationLoaderTestAbstract {
         final SpecificationLoader specificationLoader =
                 new SpecificationLoader(
                         new ProgrammingModelFacetsJava5(stubConfiguration),
-                        new MetaModelValidatorDefault(), Lists.<LayoutMetadataReader>newArrayList(
-                                new LayoutMetadataReaderFromJson()), stubServicesInjector);
+                        new MetaModelValidatorDefault(), stubServicesInjector);
 
         stubServicesInjector.addFallbackIfRequired(SpecificationLoader.class, specificationLoader);
 

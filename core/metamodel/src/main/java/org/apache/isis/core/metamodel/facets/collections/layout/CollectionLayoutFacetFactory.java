@@ -18,8 +18,9 @@
  */
 package org.apache.isis.core.metamodel.facets.collections.layout;
 
-
+import java.util.List;
 import java.util.Properties;
+
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -33,7 +34,6 @@ import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet;
 import org.apache.isis.core.metamodel.facets.collections.sortedby.SortedByFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
-import org.apache.isis.core.metamodel.facets.members.render.RenderFacet;
 import org.apache.isis.core.metamodel.facets.object.paged.PagedFacet;
 
 
@@ -48,75 +48,44 @@ public class CollectionLayoutFacetFactory extends FacetFactoryAbstract implement
 
         final FacetHolder holder = processMethodContext.getFacetHolder();
 
-        Properties properties = processMethodContext.metadataProperties("collectionLayout");
-        if(properties == null) {
-            // alternate key
-            properties = processMethodContext.metadataProperties("layout");
-        }
-        final CollectionLayout collectionLayout = Annotations.getAnnotation(processMethodContext.getMethod(), CollectionLayout.class);
+        Properties properties = null;
+        final List<CollectionLayout> collectionLayouts = Annotations.getAnnotations(processMethodContext.getMethod(), CollectionLayout.class);
 
 
         // cssClass
-        CssClassFacet cssClassFacet = CssClassFacetOnCollectionFromLayoutProperties.create(properties, holder);
-        if(cssClassFacet == null) {
-            cssClassFacet = CssClassFacetForCollectionLayoutAnnotation.create(collectionLayout, holder);
-        }
+        CssClassFacet cssClassFacet = CssClassFacetForCollectionLayoutAnnotation.create(collectionLayouts, holder);
         FacetUtil.addFacet(cssClassFacet);
 
 
         // describedAs
-        DescribedAsFacet describedAsFacet = DescribedAsFacetOnCollectionFromLayoutProperties.create(properties, holder);
-        if(describedAsFacet == null) {
-            describedAsFacet = DescribedAsFacetForCollectionLayoutAnnotation.create(collectionLayout, holder);
-        }
+        DescribedAsFacet describedAsFacet =
+                DescribedAsFacetForCollectionLayoutAnnotation.create(collectionLayouts, holder);
         FacetUtil.addFacet(describedAsFacet);
 
 
         // hidden
-        HiddenFacet hiddenFacet = HiddenFacetOnCollectionFromLayoutProperties.create(properties, holder);
-        if(hiddenFacet == null) {
-            hiddenFacet = HiddenFacetForCollectionLayoutAnnotation.create(collectionLayout, holder);
-        }
+        HiddenFacet hiddenFacet = HiddenFacetForCollectionLayoutAnnotation.create(collectionLayouts, holder);
         FacetUtil.addFacet(hiddenFacet);
 
 
         // defaultView
-        DefaultViewFacet defaultViewFacet = DefaultViewFacetOnCollectionFromLayoutProperties.create(properties, holder);
-        if(defaultViewFacet == null) {
-            defaultViewFacet = DefaultViewFacetForCollectionLayoutAnnotation.create(collectionLayout, getConfiguration(), holder);
-        }
+        DefaultViewFacet defaultViewFacet =
+                DefaultViewFacetForCollectionLayoutAnnotation.create(collectionLayouts, getConfiguration(), holder);
         FacetUtil.addFacet(defaultViewFacet);
         
 
         // named
-        NamedFacet namedFacet = NamedFacetOnCollectionFromLayoutProperties.create(properties, holder);
-        if(namedFacet == null) {
-            namedFacet = NamedFacetForCollectionLayoutAnnotation.create(collectionLayout, holder);
-        }
+        NamedFacet namedFacet = NamedFacetForCollectionLayoutAnnotation.create(collectionLayouts, holder);
         FacetUtil.addFacet(namedFacet);
 
 
         // paged
-        PagedFacet pagedFacet = PagedFacetOnCollectionFromLayoutProperties.create(properties, holder);
-        if(pagedFacet == null) {
-            pagedFacet = PagedFacetForCollectionLayoutAnnotation.create(collectionLayout, holder);
-        }
+        PagedFacet pagedFacet = PagedFacetForCollectionLayoutAnnotation.create(collectionLayouts, holder);
         FacetUtil.addFacet(pagedFacet);
 
 
-        // renderType
-        RenderFacet renderFacet = RenderFacetOnCollectionFromLayoutProperties.create(properties, holder);
-        if(renderFacet == null) {
-            renderFacet = RenderFacetForCollectionLayoutAnnotation.create(collectionLayout, holder);
-        }
-        FacetUtil.addFacet(renderFacet);
-
-
         // sortedBy
-        SortedByFacet sortedByFacet = SortedByFacetOnCollectionFromLayoutProperties.create(properties, holder);
-        if(sortedByFacet == null) {
-            sortedByFacet = SortedByFacetForCollectionLayoutAnnotation.create(collectionLayout, holder);
-        }
+        SortedByFacet sortedByFacet = SortedByFacetForCollectionLayoutAnnotation.create(collectionLayouts, holder);
         FacetUtil.addFacet(sortedByFacet);
 
     }
@@ -126,45 +95,36 @@ public class CollectionLayoutFacetFactory extends FacetFactoryAbstract implement
 
         final FacetHolder holder = processMemberContext.getFacetHolder();
 
-        Properties properties = processMemberContext.metadataProperties("collectionLayout");
-        if(properties == null) {
-            // alternate key
-            properties = processMemberContext.metadataProperties("layout");
-        }
+        Properties properties = null;
 
 
         // cssClass
-        CssClassFacet cssClassFacet = CssClassFacetOnCollectionFromLayoutProperties.create(properties, holder);
+        CssClassFacet cssClassFacet = null;
         FacetUtil.addFacet(cssClassFacet);
 
 
         // describedAs
-        DescribedAsFacet describedAsFacet = DescribedAsFacetOnCollectionFromLayoutProperties.create(properties, holder);
+        DescribedAsFacet describedAsFacet = null;
         FacetUtil.addFacet(describedAsFacet);
 
 
         // hidden
-        HiddenFacet hiddenFacet = HiddenFacetOnCollectionFromLayoutProperties.create(properties, holder);
+        HiddenFacet hiddenFacet = null;
         FacetUtil.addFacet(hiddenFacet);
 
 
         // named
-        NamedFacet namedFacet = NamedFacetOnCollectionFromLayoutProperties.create(properties, holder);
+        NamedFacet namedFacet = null;
         FacetUtil.addFacet(namedFacet);
 
 
         // paged
-        PagedFacet pagedFacet = PagedFacetOnCollectionFromLayoutProperties.create(properties, holder);
+        PagedFacet pagedFacet = null;
         FacetUtil.addFacet(pagedFacet);
 
 
-        // renderType
-        RenderFacet renderFacet = RenderFacetOnCollectionFromLayoutProperties.create(properties, holder);
-        FacetUtil.addFacet(renderFacet);
-
-
         // sortedBy
-        SortedByFacet sortedByFacet = SortedByFacetOnCollectionFromLayoutProperties.create(properties, holder);
+        SortedByFacet sortedByFacet = null;
         FacetUtil.addFacet(sortedByFacet);
 
 

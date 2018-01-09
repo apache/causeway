@@ -41,7 +41,7 @@ import java.lang.annotation.Target;
  * </p>
  */
 @Inherited
-@Target({ ElementType.TYPE })
+@Target({ ElementType.TYPE, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ViewModelLayout {
 
@@ -120,6 +120,6 @@ public @interface ViewModelLayout {
     /**
      * Whether (and how) this domain object can be bookmarked in the UI.
      */
-    BookmarkPolicy bookmarking() default BookmarkPolicy.NEVER;
+    BookmarkPolicy bookmarking() default BookmarkPolicy.NOT_SPECIFIED;
 
 }

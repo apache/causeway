@@ -34,7 +34,6 @@ import com.google.common.io.Resources;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
@@ -42,6 +41,7 @@ import org.apache.isis.applib.layout.grid.Grid;
 import org.apache.isis.applib.services.grid.GridLoaderService;
 import org.apache.isis.applib.services.grid.GridSystemService;
 import org.apache.isis.applib.services.jaxb.JaxbService;
+import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 
 @DomainService(
@@ -148,7 +148,7 @@ public class GridLoaderServiceDefault implements GridLoaderService {
             final String resourceName = resourceNameFor(domainClass);
             final String message = "Failed to parse " + resourceName + " file (" + ex.getMessage() + ")";
             if(supportsReloading()) {
-                container.warnUser(message);
+                messageService.warnUser(message);
             }
             LOG.warn(message);
 
@@ -190,7 +190,7 @@ public class GridLoaderServiceDefault implements GridLoaderService {
     DeploymentCategoryProvider deploymentCategoryProvider;
 
     @javax.inject.Inject
-    DomainObjectContainer container;
+    MessageService messageService;
 
     @javax.inject.Inject
     JaxbService jaxbService;

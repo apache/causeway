@@ -21,7 +21,6 @@ package org.apache.isis.core.metamodel.facets.actions.action;
 
 import java.lang.reflect.Method;
 import java.util.Collection;
-import java.util.List;
 import java.util.UUID;
 
 import org.jmock.Expectations;
@@ -31,27 +30,15 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionInteraction;
-import org.apache.isis.applib.annotation.ActionSemantics;
-import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.applib.annotation.CommandExecuteIn;
 import org.apache.isis.applib.annotation.CommandPersistence;
 import org.apache.isis.applib.annotation.CommandReification;
-import org.apache.isis.applib.annotation.Idempotent;
 import org.apache.isis.applib.annotation.InvokeOn;
-import org.apache.isis.applib.annotation.PostsActionInvokedEvent;
-import org.apache.isis.applib.annotation.PublishedAction;
-import org.apache.isis.applib.annotation.PublishingPayloadFactoryForAction;
-import org.apache.isis.applib.annotation.QueryOnly;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
-import org.apache.isis.applib.services.eventbus.ActionInteractionEvent;
-import org.apache.isis.applib.services.eventbus.ActionInvokedEvent;
-import org.apache.isis.applib.services.publish.EventPayload;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
@@ -63,35 +50,27 @@ import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredF
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromGenerics;
 import org.apache.isis.core.metamodel.facets.actions.action.command.CommandFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.command.CommandFacetForActionAnnotationAsConfigured;
-import org.apache.isis.core.metamodel.facets.actions.action.command.CommandFacetForCommandAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.command.CommandFacetFromConfiguration;
 import org.apache.isis.core.metamodel.facets.actions.action.hidden.HiddenFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacetDefault;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacetForActionAnnotation;
-import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacetForActionInteractionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEventFromActionAnnotation;
-import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEventFromActionInteractionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEventFromDefault;
-import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForPostsActionInvokedEventAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.publishing.PublishedActionFacetForActionAnnotation;
-import org.apache.isis.core.metamodel.facets.actions.action.publishing.PublishedActionFacetForPublishedActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.publishing.PublishedActionFacetFromConfiguration;
 import org.apache.isis.core.metamodel.facets.actions.action.typeof.TypeOfFacetForActionAnnotation;
-import org.apache.isis.core.metamodel.facets.actions.action.typeof.TypeOfFacetOnActionForTypeOfAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.bulk.BulkFacet;
 import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
 import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacet;
 import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFacet;
-import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionPayloadFactoryDefault;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacetAbstract;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import static org.apache.isis.core.commons.matchers.IsisMatchers.classEqualTo;
-import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -179,16 +158,9 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
 
             class Customer {
 
-                class SomeActionInvokedDomainEvent extends ActionInvokedEvent<Customer> {
-                    public SomeActionInvokedDomainEvent(
-                            final Customer source,
-                            final Identifier identifier,
-                            final Object... arguments) {
-                        super(source, identifier, arguments);
-                    }
-                }
+                class SomeActionInvokedDomainEvent extends ActionDomainEvent<Customer> { }
 
-                @PostsActionInvokedEvent(SomeActionInvokedDomainEvent.class)
+                @Action(domainEvent = SomeActionInvokedDomainEvent.class)
                 public void someAction() {
                 }
             }
@@ -208,7 +180,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
 
 
             // when
-            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, null, actionMethod, mockMethodRemover, facetedMethod);
+            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, actionMethod, mockMethodRemover, facetedMethod);
             facetFactory.processInvocation(processMethodContext);
 
             // then
@@ -220,8 +192,8 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
 
             final Facet invocationFacet = facetedMethod.getFacet(ActionInvocationFacet.class);
             Assert.assertNotNull(invocationFacet);
-            Assert.assertTrue(invocationFacet instanceof ActionInvocationFacetForPostsActionInvokedEventAnnotation);
-            final ActionInvocationFacetForPostsActionInvokedEventAnnotation invocationFacetImpl = (ActionInvocationFacetForPostsActionInvokedEventAnnotation) invocationFacet;
+            Assert.assertTrue(invocationFacet instanceof ActionInvocationFacetForDomainEventFromActionAnnotation);
+            final ActionInvocationFacetForDomainEventFromActionAnnotation invocationFacetImpl = (ActionInvocationFacetForDomainEventFromActionAnnotation) invocationFacet;
             assertThat(invocationFacetImpl.getEventType(), classEqualTo(Customer.SomeActionInvokedDomainEvent.class));
         }
 
@@ -230,16 +202,10 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
 
             class Customer {
 
-                class SomeActionInvokedDomainEvent extends ActionInteractionEvent<Customer> {
-                    public SomeActionInvokedDomainEvent(
-                            final Customer source,
-                            final Identifier identifier,
-                            final Object... arguments) {
-                        super(source, identifier, arguments);
-                    }
+                class SomeActionInvokedDomainEvent extends ActionDomainEvent<Customer> {
                 }
 
-                @ActionInteraction(SomeActionInvokedDomainEvent.class)
+                @Action(domainEvent = SomeActionInvokedDomainEvent.class)
                 public void someAction() {
                 }
             }
@@ -253,20 +219,20 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             expectRemoveMethod(actionMethod);
 
             // when
-            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, null, actionMethod, mockMethodRemover, facetedMethod);
+            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, actionMethod, mockMethodRemover, facetedMethod);
             facetFactory.processInvocation(processMethodContext);
 
             // then
             final Facet domainEventFacet = facetedMethod.getFacet(ActionDomainEventFacet.class);
             Assert.assertNotNull(domainEventFacet);
-            Assert.assertTrue(domainEventFacet instanceof ActionDomainEventFacetForActionInteractionAnnotation);
-            final ActionDomainEventFacetForActionInteractionAnnotation domainEventFacetImpl = (ActionDomainEventFacetForActionInteractionAnnotation) domainEventFacet;
+            Assert.assertTrue(domainEventFacet instanceof ActionDomainEventFacetForActionAnnotation);
+            final ActionDomainEventFacetForActionAnnotation domainEventFacetImpl = (ActionDomainEventFacetForActionAnnotation) domainEventFacet;
             assertThat(domainEventFacetImpl.getEventType(), classEqualTo(Customer.SomeActionInvokedDomainEvent.class));
 
             final Facet invocationFacet = facetedMethod.getFacet(ActionInvocationFacet.class);
             Assert.assertNotNull(invocationFacet);
-            Assert.assertTrue(invocationFacet instanceof ActionInvocationFacetForDomainEventFromActionInteractionAnnotation);
-            final ActionInvocationFacetForDomainEventFromActionInteractionAnnotation invocationFacetImpl = (ActionInvocationFacetForDomainEventFromActionInteractionAnnotation) invocationFacet;
+            Assert.assertTrue(invocationFacet instanceof ActionDomainEventFacetForActionAnnotation);
+            final ActionDomainEventFacetForActionAnnotation invocationFacetImpl = (ActionDomainEventFacetForActionAnnotation) invocationFacet;
             assertThat(invocationFacetImpl.getEventType(), classEqualTo(Customer.SomeActionInvokedDomainEvent.class));
         }
 
@@ -276,12 +242,6 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             class Customer {
 
                 class SomeActionInvokedDomainEvent extends ActionDomainEvent<Customer> {
-                    public SomeActionInvokedDomainEvent(
-                            final Customer source,
-                            final Identifier identifier,
-                            final Object... arguments) {
-                        super(source, identifier, arguments);
-                    }
                 }
 
                 @Action(domainEvent= SomeActionInvokedDomainEvent.class)
@@ -298,7 +258,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             expectRemoveMethod(actionMethod);
 
             // when
-            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, null, actionMethod, mockMethodRemover, facetedMethod);
+            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, actionMethod, mockMethodRemover, facetedMethod);
             facetFactory.processInvocation(processMethodContext);
 
             // then
@@ -338,7 +298,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
 
 
             // when
-            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, null, actionMethod, mockMethodRemover, facetedMethod);
+            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, actionMethod, mockMethodRemover, facetedMethod);
             facetFactory.processInvocation(processMethodContext);
 
             // then
@@ -372,7 +332,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             actionMethod = findMethod(cls, "someAction");
 
             // when
-            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, null, actionMethod, mockMethodRemover, facetedMethod);
+            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, actionMethod, mockMethodRemover, facetedMethod);
             facetFactory.processHidden(processMethodContext);
 
             // then
@@ -403,7 +363,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             actionMethod = findMethod(cls, "someAction");
 
             // when
-            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, null, actionMethod, mockMethodRemover, facetedMethod);
+            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, actionMethod, mockMethodRemover, facetedMethod);
             facetFactory.processRestrictTo(processMethodContext);
 
             // then
@@ -425,7 +385,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             actionMethod = findMethod(cls, "someAction");
 
             // when
-            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, null, actionMethod, mockMethodRemover, facetedMethod);
+            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, actionMethod, mockMethodRemover, facetedMethod);
             facetFactory.processRestrictTo(processMethodContext);
 
             // then
@@ -446,7 +406,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             actionMethod = findMethod(cls, "someAction");
 
             // when
-            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, null, actionMethod, mockMethodRemover, facetedMethod);
+            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, actionMethod, mockMethodRemover, facetedMethod);
             facetFactory.processRestrictTo(processMethodContext);
 
             // then
@@ -462,7 +422,6 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
         public void whenDeprecatedQueryOnly() {
 
             class Customer {
-                @QueryOnly
                 public void someAction() {
                 }
             }
@@ -472,20 +431,19 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             actionMethod = findMethod(cls, "someAction");
 
             // when
-            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, null, actionMethod, mockMethodRemover, facetedMethod);
+            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, actionMethod, mockMethodRemover, facetedMethod);
             facetFactory.processSemantics(processMethodContext);
 
             // then
             final ActionSemanticsFacet facet = facetedMethod.getFacet(ActionSemanticsFacet.class);
             Assert.assertNotNull(facet);
-            assertThat(facet.value(), is(Of.SAFE));
+            assertThat(facet.value(), is(SemanticsOf.SAFE));
         }
 
         @Test
         public void whenDeprecatedIdempotent() {
 
             class Customer {
-                @Idempotent
                 public void someAction() {
                 }
             }
@@ -495,20 +453,19 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             actionMethod = findMethod(cls, "someAction");
 
             // when
-            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, null, actionMethod, mockMethodRemover, facetedMethod);
+            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, actionMethod, mockMethodRemover, facetedMethod);
             facetFactory.processSemantics(processMethodContext);
 
             // then
             final ActionSemanticsFacet facet = facetedMethod.getFacet(ActionSemanticsFacet.class);
             Assert.assertNotNull(facet);
-            assertThat(facet.value(), is(Of.IDEMPOTENT));
+            assertThat(facet.value(), is(SemanticsOf.IDEMPOTENT));
         }
 
         @Test
         public void whenDeprecatedAnnotationSafe() {
 
             class Customer {
-                @ActionSemantics(Of.SAFE)
                 public void someAction() {
                 }
             }
@@ -518,13 +475,13 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             actionMethod = findMethod(cls, "someAction");
 
             // when
-            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, null, actionMethod, mockMethodRemover, facetedMethod);
+            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, actionMethod, mockMethodRemover, facetedMethod);
             facetFactory.processSemantics(processMethodContext);
 
             // then
             final ActionSemanticsFacet facet = facetedMethod.getFacet(ActionSemanticsFacet.class);
             Assert.assertNotNull(facet);
-            assertThat(facet.value(), is(Of.SAFE));
+            assertThat(facet.value(), is(SemanticsOf.SAFE));
         }
 
         @Test
@@ -541,13 +498,13 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             actionMethod = findMethod(cls, "someAction");
 
             // when
-            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, null, actionMethod, mockMethodRemover, facetedMethod);
+            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, actionMethod, mockMethodRemover, facetedMethod);
             facetFactory.processSemantics(processMethodContext);
 
             // then
             final ActionSemanticsFacet facet = facetedMethod.getFacet(ActionSemanticsFacet.class);
             Assert.assertNotNull(facet);
-            assertThat(facet.value(), is(Of.SAFE));
+            assertThat(facet.value(), is(SemanticsOf.SAFE));
         }
 
         @Test
@@ -564,13 +521,13 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             actionMethod = findMethod(cls, "someAction");
 
             // when
-            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, null, actionMethod, mockMethodRemover, facetedMethod);
+            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, actionMethod, mockMethodRemover, facetedMethod);
             facetFactory.processSemantics(processMethodContext);
 
             // then
             final ActionSemanticsFacet facet = facetedMethod.getFacet(ActionSemanticsFacet.class);
             Assert.assertNotNull(facet);
-            assertThat(facet.value(), is(Of.NON_IDEMPOTENT));
+            assertThat(facet.value(), is(SemanticsOf.NON_IDEMPOTENT));
         }
 
         @Test
@@ -586,13 +543,13 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             actionMethod = findMethod(cls, "someAction");
 
             // when
-            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, null, actionMethod, mockMethodRemover, facetedMethod);
+            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, actionMethod, mockMethodRemover, facetedMethod);
             facetFactory.processSemantics(processMethodContext);
 
             // then
             final ActionSemanticsFacet facet = facetedMethod.getFacet(ActionSemanticsFacet.class);
             Assert.assertNotNull(facet);
-            assertThat(facet.value(), is(Of.NON_IDEMPOTENT));
+            assertThat(facet.value(), is(SemanticsOf.NON_IDEMPOTENT));
         }
 
 
@@ -600,7 +557,6 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
         public void whenDeprecatedActionSemanticsAndAction() {
 
             class Customer {
-                @ActionSemantics(Of.SAFE)
                 @Action(semantics = SemanticsOf.IDEMPOTENT)
                 public void someAction() {
                 }
@@ -611,21 +567,19 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             actionMethod = findMethod(cls, "someAction");
 
             // when
-            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, null, actionMethod, mockMethodRemover, facetedMethod);
+            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, actionMethod, mockMethodRemover, facetedMethod);
             facetFactory.processSemantics(processMethodContext);
 
             // then
             final ActionSemanticsFacet facet = facetedMethod.getFacet(ActionSemanticsFacet.class);
             Assert.assertNotNull(facet);
-            assertThat(facet.value(), is(Of.SAFE));
+            assertThat(facet.value(), is(SemanticsOf.SAFE));
         }
 
         @Test
         public void whenDeprecatedQueryOnlyAndDeprecatedActionSemantics() {
 
             class Customer {
-                @QueryOnly
-                @ActionSemantics(Of.IDEMPOTENT)
                 public void someAction() {
                 }
             }
@@ -635,21 +589,19 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             actionMethod = findMethod(cls, "someAction");
 
             // when
-            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, null, actionMethod, mockMethodRemover, facetedMethod);
+            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, actionMethod, mockMethodRemover, facetedMethod);
             facetFactory.processSemantics(processMethodContext);
 
             // then
             final ActionSemanticsFacet facet = facetedMethod.getFacet(ActionSemanticsFacet.class);
             Assert.assertNotNull(facet);
-            assertThat(facet.value(), is(Of.SAFE));
+            assertThat(facet.value(), is(SemanticsOf.SAFE));
         }
 
         @Test
         public void whenDeprecatedIdempotentAndDeprecatedActionSemantics() {
 
             class Customer {
-                @Idempotent
-                @ActionSemantics(Of.SAFE)
                 public void someAction() {
                 }
             }
@@ -659,66 +611,19 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             actionMethod = findMethod(cls, "someAction");
 
             // when
-            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, null, actionMethod, mockMethodRemover, facetedMethod);
+            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, actionMethod, mockMethodRemover, facetedMethod);
             facetFactory.processSemantics(processMethodContext);
 
             // then
             final ActionSemanticsFacet facet = facetedMethod.getFacet(ActionSemanticsFacet.class);
             Assert.assertNotNull(facet);
-            assertThat(facet.value(), is(Of.IDEMPOTENT));
+            assertThat(facet.value(), is(SemanticsOf.IDEMPOTENT));
         }
 
 
     }
 
     public static class Bulk extends ActionAnnotationFacetFactoryTest {
-
-        @Test
-        public void whenDeprecatedBulkAnnotation() {
-
-            class Customer {
-                @org.apache.isis.applib.annotation.Bulk()
-                public void someAction() {
-                }
-            }
-
-            // given
-            final Class<?> cls = Customer.class;
-            actionMethod = findMethod(cls, "someAction");
-
-            // when
-            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, null, actionMethod, mockMethodRemover, facetedMethod);
-            facetFactory.processBulk(processMethodContext);
-
-            // then
-            final BulkFacet facet = facetedMethod.getFacet(BulkFacet.class);
-            Assert.assertNotNull(facet);
-            assertThat(facet.value(), is(org.apache.isis.applib.annotation.Bulk.AppliesTo.BULK_AND_REGULAR));
-
-        }
-
-        @Test
-        public void whenDeprecatedBulkAnnotationAppliesToBulkOnly() {
-
-            class Customer {
-                @org.apache.isis.applib.annotation.Bulk(org.apache.isis.applib.annotation.Bulk.AppliesTo.BULK_ONLY)
-                public void someAction() {
-                }
-            }
-
-            // given
-            final Class<?> cls = Customer.class;
-            actionMethod = findMethod(cls, "someAction");
-
-            // when
-            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, null, actionMethod, mockMethodRemover, facetedMethod);
-            facetFactory.processBulk(processMethodContext);
-
-            // then
-            final BulkFacet facet = facetedMethod.getFacet(BulkFacet.class);
-            Assert.assertNotNull(facet);
-            assertThat(facet.value(), is(org.apache.isis.applib.annotation.Bulk.AppliesTo.BULK_ONLY));
-        }
 
         @Test
         public void whenObjectOnly() {
@@ -734,7 +639,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             actionMethod = findMethod(cls, "someAction");
 
             // when
-            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, null, actionMethod, mockMethodRemover, facetedMethod);
+            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, actionMethod, mockMethodRemover, facetedMethod);
             facetFactory.processBulk(processMethodContext);
 
             // then
@@ -757,13 +662,13 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             actionMethod = findMethod(cls, "someAction");
 
             // when
-            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, null, actionMethod, mockMethodRemover, facetedMethod);
+            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, actionMethod, mockMethodRemover, facetedMethod);
             facetFactory.processBulk(processMethodContext);
 
             // then
             final BulkFacet facet = facetedMethod.getFacet(BulkFacet.class);
             Assert.assertNotNull(facet);
-            assertThat(facet.value(), is(org.apache.isis.applib.annotation.Bulk.AppliesTo.BULK_ONLY));
+            assertThat(facet.value(), is(InvokeOn.COLLECTION_ONLY));
 
         }
 
@@ -781,13 +686,13 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             actionMethod = findMethod(cls, "someAction");
 
             // when
-            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, null, actionMethod, mockMethodRemover, facetedMethod);
+            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, actionMethod, mockMethodRemover, facetedMethod);
             facetFactory.processBulk(processMethodContext);
 
             // then
             final BulkFacet facet = facetedMethod.getFacet(BulkFacet.class);
             Assert.assertNotNull(facet);
-            assertThat(facet.value(), is(org.apache.isis.applib.annotation.Bulk.AppliesTo.BULK_AND_REGULAR));
+            assertThat(facet.value(), is(InvokeOn.OBJECT_AND_COLLECTION));
 
         }
 
@@ -801,39 +706,12 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             final Method actionMethod = findMethod(SomeTransactionalId.class, "someAction");
 
             // when
-            facetFactory.processCommand(new ProcessMethodContext(SomeTransactionalId.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
+            facetFactory.processCommand(new ProcessMethodContext(SomeTransactionalId.class, null, actionMethod, mockMethodRemover, facetedMethod));
 
             // then
             final Facet facet = facetedMethod.getFacet(CommandFacet.class);
             assertNull(facet);
 
-        }
-
-        @Test
-        public void givenDeprecatedAnnotation() {
-            // given
-            class Customer {
-                @org.apache.isis.applib.annotation.Command(
-                        executeIn = org.apache.isis.applib.annotation.Command.ExecuteIn.BACKGROUND,
-                        persistence = org.apache.isis.applib.annotation.Command.Persistence.IF_HINTED
-                )
-                public void someAction() {
-                }
-            }
-            final Method actionMethod = findMethod(Customer.class, "someAction");
-
-            // when
-            facetFactory.processCommand(new ProcessMethodContext(Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
-
-            // then
-            final Facet facet = facetedMethod.getFacet(CommandFacet.class);
-            assertNotNull(facet);
-            assertTrue(facet instanceof CommandFacetForCommandAnnotation);
-            final CommandFacetForCommandAnnotation facetImpl = (CommandFacetForCommandAnnotation) facet;
-
-            assertThat(facetImpl.persistence(), is(org.apache.isis.applib.annotation.Command.Persistence.IF_HINTED));
-
-            expectNoMethodsRemoved();
         }
 
         @Test
@@ -843,10 +721,11 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             allowingCommandConfigurationToReturn("ignoreQueryOnly");
             final Method actionMethod = findMethod(ActionAnnotationFacetFactoryTest.Customer.class, "someAction");
 
-            facetedMethod.addFacet(new ActionSemanticsFacetAbstract(Of.SAFE, facetedMethod) {});
+            facetedMethod.addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.SAFE, facetedMethod) {});
 
             // when
-            facetFactory.processCommand(new ProcessMethodContext(ActionAnnotationFacetFactoryTest.Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
+            facetFactory.processCommand(new ProcessMethodContext(ActionAnnotationFacetFactoryTest.Customer.class, null,
+                    actionMethod, mockMethodRemover, facetedMethod));
 
             // then
             final Facet facet = facetedMethod.getFacet(CommandFacet.class);
@@ -860,18 +739,19 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             allowingCommandConfigurationToReturn("ignoreQueryOnly");
             final Method actionMethod = findMethod(ActionAnnotationFacetFactoryTest.Customer.class, "someAction");
 
-            facetedMethod.addFacet(new ActionSemanticsFacetAbstract(Of.IDEMPOTENT, facetedMethod) {});
+            facetedMethod.addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.IDEMPOTENT, facetedMethod) {});
 
             // when
-            facetFactory.processCommand(new ProcessMethodContext(ActionAnnotationFacetFactoryTest.Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
+            facetFactory.processCommand(new ProcessMethodContext(ActionAnnotationFacetFactoryTest.Customer.class, null,
+                    actionMethod, mockMethodRemover, facetedMethod));
 
             // then
             final Facet facet = facetedMethod.getFacet(CommandFacet.class);
             assertNotNull(facet);
             assert(facet instanceof  CommandFacetFromConfiguration);
             final CommandFacetFromConfiguration facetImpl = (CommandFacetFromConfiguration) facet;
-            assertThat(facetImpl.persistence(), is(org.apache.isis.applib.annotation.Command.Persistence.PERSISTED));
-            assertThat(facetImpl.executeIn(), is(org.apache.isis.applib.annotation.Command.ExecuteIn.FOREGROUND));
+            assertThat(facetImpl.persistence(), is(org.apache.isis.applib.annotation.CommandPersistence.PERSISTED));
+            assertThat(facetImpl.executeIn(), is(org.apache.isis.applib.annotation.CommandExecuteIn.FOREGROUND));
         }
 
         @Test(expected=IllegalStateException.class)
@@ -882,7 +762,8 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             final Method actionMethod = findMethod(ActionAnnotationFacetFactoryTest.Customer.class, "someAction");
 
             // when
-            facetFactory.processCommand(new ProcessMethodContext(ActionAnnotationFacetFactoryTest.Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
+            facetFactory.processCommand(new ProcessMethodContext(ActionAnnotationFacetFactoryTest.Customer.class, null,
+                    actionMethod, mockMethodRemover, facetedMethod));
         }
 
         @Test
@@ -893,7 +774,8 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             final Method actionMethod = findMethod(ActionAnnotationFacetFactoryTest.Customer.class, "someAction");
 
             // when
-            facetFactory.processCommand(new ProcessMethodContext(ActionAnnotationFacetFactoryTest.Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
+            facetFactory.processCommand(new ProcessMethodContext(ActionAnnotationFacetFactoryTest.Customer.class, null,
+                    actionMethod, mockMethodRemover, facetedMethod));
 
             // then
             final Facet facet = facetedMethod.getFacet(PublishedActionFacet.class);
@@ -909,7 +791,8 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             allowingCommandConfigurationToReturn("all");
 
             // when
-            facetFactory.processCommand(new ProcessMethodContext(ActionAnnotationFacetFactoryTest.Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
+            facetFactory.processCommand(new ProcessMethodContext(ActionAnnotationFacetFactoryTest.Customer.class, null,
+                    actionMethod, mockMethodRemover, facetedMethod));
 
             // then
             final Facet facet = facetedMethod.getFacet(CommandFacet.class);
@@ -931,9 +814,9 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             allowingCommandConfigurationToReturn("ignoreQueryOnly");
             final Method actionMethod = findMethod(Customer.class, "someAction");
 
-            facetedMethod.addFacet(new ActionSemanticsFacetAbstract(Of.SAFE, facetedMethod) {});
+            facetedMethod.addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.SAFE, facetedMethod) {});
 
-            facetFactory.processCommand(new ProcessMethodContext(Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
+            facetFactory.processCommand(new ProcessMethodContext(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
 
             final Facet facet = facetedMethod.getFacet(CommandFacet.class);
             assertNull(facet);
@@ -956,17 +839,17 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             allowingCommandConfigurationToReturn("ignoreQueryOnly");
             final Method actionMethod = findMethod(Customer.class, "someAction");
 
-            facetedMethod.addFacet(new ActionSemanticsFacetAbstract(Of.IDEMPOTENT, facetedMethod) {});
+            facetedMethod.addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.IDEMPOTENT, facetedMethod) {});
 
             // when
-            facetFactory.processCommand(new ProcessMethodContext(Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
+            facetFactory.processCommand(new ProcessMethodContext(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
 
             // then
             final Facet facet = facetedMethod.getFacet(CommandFacet.class);
             assertNotNull(facet);
             final CommandFacetForActionAnnotationAsConfigured facetImpl = (CommandFacetForActionAnnotationAsConfigured) facet;
-            assertThat(facetImpl.persistence(), is(org.apache.isis.applib.annotation.Command.Persistence.IF_HINTED));
-            assertThat(facetImpl.executeIn(), is(org.apache.isis.applib.annotation.Command.ExecuteIn.BACKGROUND));
+            assertThat(facetImpl.persistence(), is(org.apache.isis.applib.annotation.CommandPersistence.IF_HINTED));
+            assertThat(facetImpl.executeIn(), is(org.apache.isis.applib.annotation.CommandExecuteIn.BACKGROUND));
         }
 
         @Test(expected=IllegalStateException.class)
@@ -983,7 +866,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             allowingCommandConfigurationToReturn("ignoreQueryOnly");
             final Method actionMethod = findMethod(Customer.class, "someAction");
 
-            facetFactory.processCommand(new ProcessMethodContext(Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
+            facetFactory.processCommand(new ProcessMethodContext(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
         }
 
         @Test
@@ -1000,7 +883,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             allowingCommandConfigurationToReturn("none");
             final Method actionMethod = findMethod(Customer.class, "someAction");
 
-            facetFactory.processCommand(new ProcessMethodContext(Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
+            facetFactory.processCommand(new ProcessMethodContext(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
 
             final Facet facet = facetedMethod.getFacet(CommandFacet.class);
             assertNull(facet);
@@ -1024,14 +907,14 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             allowingCommandConfigurationToReturn("all");
 
             // when
-            facetFactory.processCommand(new ProcessMethodContext(Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
+            facetFactory.processCommand(new ProcessMethodContext(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
 
             // then
             final Facet facet = facetedMethod.getFacet(CommandFacet.class);
             assertNotNull(facet);
             final CommandFacetForActionAnnotationAsConfigured facetImpl = (CommandFacetForActionAnnotationAsConfigured) facet;
-            assertThat(facetImpl.persistence(), is(org.apache.isis.applib.annotation.Command.Persistence.IF_HINTED));
-            assertThat(facetImpl.executeIn(), is(org.apache.isis.applib.annotation.Command.ExecuteIn.BACKGROUND));
+            assertThat(facetImpl.persistence(), is(org.apache.isis.applib.annotation.CommandPersistence.IF_HINTED));
+            assertThat(facetImpl.executeIn(), is(org.apache.isis.applib.annotation.CommandExecuteIn.BACKGROUND));
         }
 
         @Test
@@ -1051,7 +934,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             allowingCommandConfigurationToReturn("none");
 
             // when
-            facetFactory.processCommand(new ProcessMethodContext(Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
+            facetFactory.processCommand(new ProcessMethodContext(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
 
             // then
             final Facet facet = facetedMethod.getFacet(CommandFacet.class);
@@ -1076,7 +959,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             allowingCommandConfigurationToReturn("none");
 
             // when
-            facetFactory.processCommand(new ProcessMethodContext(Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
+            facetFactory.processCommand(new ProcessMethodContext(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
 
             // then
             final Facet facet = facetedMethod.getFacet(CommandFacet.class);
@@ -1088,53 +971,15 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
 
     public static class Publishing extends ActionAnnotationFacetFactoryTest {
 
-        public static class CustomerSomeActionPayloadFactory implements PublishedAction.PayloadFactory {
-            @Override
-            public EventPayload payloadFor(final Identifier actionIdentifier, final Object target, final List<Object> arguments, final Object result) {
-                return null;
-            }
-        }
-
-        public static class CustomerSomeActionPublishingPayloadFactory implements PublishingPayloadFactoryForAction {
-            @Override
-            public EventPayload payloadFor(final Identifier actionIdentifier, final Object target, final List<Object> arguments, final Object result) {
-                return null;
-            }
-        }
-
         @Test
         public void givenHasTransactionId_thenIgnored() {
 
             final Method actionMethod = findMethod(SomeTransactionalId.class, "someAction");
 
-            facetFactory.processPublishing(new ProcessMethodContext(SomeTransactionalId.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
+            facetFactory.processPublishing(new ProcessMethodContext(SomeTransactionalId.class, null, actionMethod, mockMethodRemover, facetedMethod));
 
             final Facet facet = facetedMethod.getFacet(PublishedActionFacet.class);
             assertNull(facet);
-
-            expectNoMethodsRemoved();
-        }
-
-        @Test
-        public void givenDeprecatedAnnotation() {
-
-            // given
-            class Customer {
-                @org.apache.isis.applib.annotation.PublishedAction(CustomerSomeActionPayloadFactory.class)
-                public void someAction() {
-                }
-            }
-            final Method actionMethod = findMethod(Customer.class, "someAction");
-
-            // when
-            facetFactory.processPublishing(new ProcessMethodContext(Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
-
-            // then
-            final Facet facet = facetedMethod.getFacet(PublishedActionFacet.class);
-            assertNotNull(facet);
-            assertTrue(facet instanceof PublishedActionFacetForPublishedActionAnnotation);
-            final PublishedActionFacetForPublishedActionAnnotation facetImpl = (PublishedActionFacetForPublishedActionAnnotation) facet;
-            assertThat(facetImpl.value(), instanceOf(CustomerSomeActionPayloadFactory.class));
 
             expectNoMethodsRemoved();
         }
@@ -1146,10 +991,11 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             allowingPublishingConfigurationToReturn("ignoreQueryOnly");
             final Method actionMethod = findMethod(ActionAnnotationFacetFactoryTest.Customer.class, "someAction");
 
-            facetedMethod.addFacet(new ActionSemanticsFacetAbstract(Of.SAFE, facetedMethod) {});
+            facetedMethod.addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.SAFE, facetedMethod) {});
 
             // when
-            facetFactory.processPublishing(new ProcessMethodContext(ActionAnnotationFacetFactoryTest.Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
+            facetFactory.processPublishing(new ProcessMethodContext(ActionAnnotationFacetFactoryTest.Customer.class, null,
+                    actionMethod, mockMethodRemover, facetedMethod));
 
             // then
             final Facet facet = facetedMethod.getFacet(PublishedActionFacet.class);
@@ -1163,17 +1009,16 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             allowingPublishingConfigurationToReturn("ignoreQueryOnly");
             final Method actionMethod = findMethod(ActionAnnotationFacetFactoryTest.Customer.class, "someAction");
 
-            facetedMethod.addFacet(new ActionSemanticsFacetAbstract(Of.IDEMPOTENT, facetedMethod) {});
+            facetedMethod.addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.IDEMPOTENT, facetedMethod) {});
 
             // when
-            facetFactory.processPublishing(new ProcessMethodContext(ActionAnnotationFacetFactoryTest.Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
+            facetFactory.processPublishing(new ProcessMethodContext(ActionAnnotationFacetFactoryTest.Customer.class, null,
+                    actionMethod, mockMethodRemover, facetedMethod));
 
             // then
             final Facet facet = facetedMethod.getFacet(PublishedActionFacet.class);
             assertNotNull(facet);
             final PublishedActionFacetFromConfiguration facetImpl = (PublishedActionFacetFromConfiguration) facet;
-            final PublishedAction.PayloadFactory payloadFactory = facetImpl.value();
-            assertThat(payloadFactory, is(instanceOf(PublishedActionPayloadFactoryDefault.class)));
         }
 
         @Test(expected=IllegalStateException.class)
@@ -1184,7 +1029,8 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             final Method actionMethod = findMethod(ActionAnnotationFacetFactoryTest.Customer.class, "someAction");
 
             // when
-            facetFactory.processPublishing(new ProcessMethodContext(ActionAnnotationFacetFactoryTest.Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
+            facetFactory.processPublishing(new ProcessMethodContext(ActionAnnotationFacetFactoryTest.Customer.class, null,
+                    actionMethod, mockMethodRemover, facetedMethod));
 
         }
 
@@ -1196,7 +1042,8 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             final Method actionMethod = findMethod(ActionAnnotationFacetFactoryTest.Customer.class, "someAction");
 
             // when
-            facetFactory.processPublishing(new ProcessMethodContext(ActionAnnotationFacetFactoryTest.Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
+            facetFactory.processPublishing(new ProcessMethodContext(ActionAnnotationFacetFactoryTest.Customer.class, null,
+                    actionMethod, mockMethodRemover, facetedMethod));
 
             // then
             final Facet facet = facetedMethod.getFacet(PublishedActionFacet.class);
@@ -1215,7 +1062,8 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             allowingPublishingConfigurationToReturn("all");
 
             // when
-            facetFactory.processPublishing(new ProcessMethodContext(ActionAnnotationFacetFactoryTest.Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
+            facetFactory.processPublishing(new ProcessMethodContext(ActionAnnotationFacetFactoryTest.Customer.class, null,
+                    actionMethod, mockMethodRemover, facetedMethod));
 
             // then
             final Facet facet = facetedMethod.getFacet(PublishedActionFacet.class);
@@ -1235,9 +1083,9 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             allowingPublishingConfigurationToReturn("ignoreQueryOnly");
             final Method actionMethod = findMethod(Customer.class, "someAction");
 
-            facetedMethod.addFacet(new ActionSemanticsFacetAbstract(Of.SAFE, facetedMethod) {});
+            facetedMethod.addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.SAFE, facetedMethod) {});
 
-            facetFactory.processPublishing(new ProcessMethodContext(Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
+            facetFactory.processPublishing(new ProcessMethodContext(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
 
             final Facet facet = facetedMethod.getFacet(PublishedActionFacet.class);
             assertNull(facet);
@@ -1251,8 +1099,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             // given
             class Customer {
                 @Action(
-                        publishing = org.apache.isis.applib.annotation.Publishing.AS_CONFIGURED,
-                        publishingPayloadFactory = CustomerSomeActionPublishingPayloadFactory.class
+                        publishing = org.apache.isis.applib.annotation.Publishing.AS_CONFIGURED
                 )
                 public void someAction() {
                 }
@@ -1261,20 +1108,15 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             allowingPublishingConfigurationToReturn("ignoreQueryOnly");
             final Method actionMethod = findMethod(Customer.class, "someAction");
 
-            facetedMethod.addFacet(new ActionSemanticsFacetAbstract(Of.IDEMPOTENT, facetedMethod) {});
+            facetedMethod.addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.IDEMPOTENT, facetedMethod) {});
 
             // when
-            facetFactory.processPublishing(new ProcessMethodContext(Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
+            facetFactory.processPublishing(new ProcessMethodContext(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
 
             // then
             final Facet facet = facetedMethod.getFacet(PublishedActionFacet.class);
             assertNotNull(facet);
             final PublishedActionFacetForActionAnnotation facetImpl = (PublishedActionFacetForActionAnnotation) facet;
-            final PublishedAction.PayloadFactory payloadFactory = facetImpl.value();
-            assertThat(payloadFactory, instanceOf(PublishedActionPayloadFactoryDefault.class));
-
-            final PublishedActionPayloadFactoryDefault legacyAdapter = (PublishedActionPayloadFactoryDefault) payloadFactory;
-            assertThat(legacyAdapter.getPayloadFactory(), instanceOf(CustomerSomeActionPublishingPayloadFactory.class));
 
             expectNoMethodsRemoved();
         }
@@ -1291,7 +1133,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             allowingPublishingConfigurationToReturn("ignoreQueryOnly");
             final Method actionMethod = findMethod(Customer.class, "someAction");
 
-            facetFactory.processPublishing(new ProcessMethodContext(Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
+            facetFactory.processPublishing(new ProcessMethodContext(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
         }
 
         @Test
@@ -1306,7 +1148,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             allowingPublishingConfigurationToReturn("none");
             final Method actionMethod = findMethod(Customer.class, "someAction");
 
-            facetFactory.processPublishing(new ProcessMethodContext(Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
+            facetFactory.processPublishing(new ProcessMethodContext(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
 
             final Facet facet = facetedMethod.getFacet(PublishedActionFacet.class);
             assertNull(facet);
@@ -1321,8 +1163,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             // given
             class Customer {
                 @Action(
-                        publishing = org.apache.isis.applib.annotation.Publishing.AS_CONFIGURED,
-                        publishingPayloadFactory = CustomerSomeActionPublishingPayloadFactory.class
+                        publishing = org.apache.isis.applib.annotation.Publishing.AS_CONFIGURED
                 )
                 public void someAction() {
                 }
@@ -1332,19 +1173,12 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             allowingPublishingConfigurationToReturn("all");
 
             // when
-            facetFactory.processPublishing(new ProcessMethodContext(Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
+            facetFactory.processPublishing(new ProcessMethodContext(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
 
             // then
             final Facet facet = facetedMethod.getFacet(PublishedActionFacet.class);
             assertNotNull(facet);
             assertTrue(facet instanceof PublishedActionFacetForActionAnnotation);
-
-            final PublishedActionFacetForActionAnnotation facetImpl = (PublishedActionFacetForActionAnnotation) facet;
-            final PublishedAction.PayloadFactory payloadFactory = facetImpl.value();
-            assertThat(payloadFactory, instanceOf(PublishedActionPayloadFactoryDefault.class));
-
-            final PublishedActionPayloadFactoryDefault legacyAdapter = (PublishedActionPayloadFactoryDefault) payloadFactory;
-            assertThat(legacyAdapter.getPayloadFactory(), instanceOf(CustomerSomeActionPublishingPayloadFactory.class));
 
             expectNoMethodsRemoved();
         }
@@ -1366,7 +1200,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             allowingPublishingConfigurationToReturn("none");
 
             // when
-            facetFactory.processPublishing(new ProcessMethodContext(Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
+            facetFactory.processPublishing(new ProcessMethodContext(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
 
             // then
             final Facet facet = facetedMethod.getFacet(PublishedActionFacet.class);
@@ -1391,7 +1225,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             allowingPublishingConfigurationToReturn("none");
 
             // when
-            facetFactory.processPublishing(new ProcessMethodContext(Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
+            facetFactory.processPublishing(new ProcessMethodContext(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
 
             // then
             final Facet facet = facetedMethod.getFacet(PublishedActionFacet.class);
@@ -1402,32 +1236,6 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
 
     public static class TypeOf extends ActionAnnotationFacetFactoryTest {
 
-        @Test
-        public void whenDeprecatedTypeOfAnnotationOnActionReturningCollection() {
-
-            class Order {
-            }
-            class Customer {
-                @org.apache.isis.applib.annotation.TypeOf(Order.class)
-                public Collection someAction() {
-                    return null;
-                }
-            }
-
-            // given
-            final Class<?> cls = Customer.class;
-            actionMethod = findMethod(cls, "someAction");
-
-            // when
-            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, null, actionMethod, mockMethodRemover, facetedMethod);
-            facetFactory.processTypeOf(processMethodContext);
-
-            // then
-            final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
-            Assert.assertNotNull(facet);
-            Assert.assertTrue(facet instanceof TypeOfFacetOnActionForTypeOfAnnotation);
-            assertThat(facet.value(), classEqualTo(Order.class));
-        }
 
         @Test
         public void whenDeprecatedTypeOfAnnotationOnActionNotReturningCollection() {
@@ -1435,7 +1243,6 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             class Order {
             }
             class Customer {
-                @org.apache.isis.applib.annotation.TypeOf(Order.class)
                 public Customer someAction() {
                     return null;
                 }
@@ -1446,7 +1253,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             actionMethod = findMethod(cls, "someAction");
 
             // when
-            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, null, actionMethod, mockMethodRemover, facetedMethod);
+            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, actionMethod, mockMethodRemover, facetedMethod);
             facetFactory.processTypeOf(processMethodContext);
 
             // then
@@ -1471,7 +1278,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             actionMethod = findMethod(cls, "someAction");
 
             // when
-            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, null, actionMethod, mockMethodRemover, facetedMethod);
+            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, actionMethod, mockMethodRemover, facetedMethod);
             facetFactory.processTypeOf(processMethodContext);
 
             // then
@@ -1498,7 +1305,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             actionMethod = findMethod(cls, "someAction");
 
             // when
-            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, null, actionMethod, mockMethodRemover, facetedMethod);
+            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, actionMethod, mockMethodRemover, facetedMethod);
             facetFactory.processTypeOf(processMethodContext);
 
             // then
@@ -1522,7 +1329,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             actionMethod = findMethod(cls, "someAction");
 
             // when
-            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, null, actionMethod, mockMethodRemover, facetedMethod);
+            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, actionMethod, mockMethodRemover, facetedMethod);
             facetFactory.processTypeOf(processMethodContext);
 
             // then
@@ -1548,7 +1355,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             actionMethod = findMethod(cls, "someAction");
 
             // when
-            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, null, actionMethod, mockMethodRemover, facetedMethod);
+            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, actionMethod, mockMethodRemover, facetedMethod);
             facetFactory.processTypeOf(processMethodContext);
 
             // then

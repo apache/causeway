@@ -17,13 +17,15 @@
 package org.apache.isis.core.metamodel.facets;
 
 import java.util.Set;
+
 import org.junit.Test;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.eventbus.AbstractDomainEvent;
-import org.apache.isis.applib.services.eventbus.CollectionAddedToEvent;
 import org.apache.isis.applib.services.eventbus.CollectionDomainEvent;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThat;
 
 public class DomainEventHelperTest_newCollectionDomainEvent_forAdd {
@@ -35,13 +37,6 @@ public class DomainEventHelperTest_newCollectionDomainEvent_forAdd {
     
     public static class SomeDomainObjectCollectionDomainEvent extends CollectionDomainEvent<SomeDomainObject, SomeReferencedObject> {
         private static final long serialVersionUID = 1L;
-        public SomeDomainObjectCollectionDomainEvent(
-                SomeDomainObject source,
-                Identifier identifier,
-                Of of,
-                SomeReferencedObject value) {
-            super(source, identifier, of, value);
-        }
     }
     
     @Test
@@ -52,10 +47,10 @@ public class DomainEventHelperTest_newCollectionDomainEvent_forAdd {
 
         final CollectionDomainEvent<Object, Object> ev = new DomainEventHelper(null).newCollectionDomainEvent(
                 CollectionDomainEvent.Default.class, null, identifier, sdo, CollectionDomainEvent.Of.ADD_TO, other);
-        assertThat(ev.getSource(), is((Object)sdo));
+        assertSame(ev.getSource(), sdo);
         assertThat(ev.getIdentifier(), is(identifier));
         assertThat(ev.getOf(), is(CollectionDomainEvent.Of.ADD_TO));
-        assertThat(ev.getValue(), is((Object)other));
+        assertSame(ev.getValue(), other);
     }
 
     @Test
@@ -65,11 +60,11 @@ public class DomainEventHelperTest_newCollectionDomainEvent_forAdd {
         final Identifier identifier = Identifier.propertyOrCollectionIdentifier(SomeDomainObject.class, "references");
 
         final CollectionDomainEvent<Object, Object> ev = new DomainEventHelper(null).newCollectionDomainEvent(
-                CollectionAddedToEvent.Default.class, AbstractDomainEvent.Phase.EXECUTED, identifier, sdo, CollectionDomainEvent.Of.ADD_TO, other);
-        assertThat(ev.getSource(), is((Object)sdo));
+                CollectionDomainEvent.Default.class, AbstractDomainEvent.Phase.EXECUTED, identifier, sdo, CollectionDomainEvent.Of.ADD_TO, other);
+        assertSame(ev.getSource(), sdo);
         assertThat(ev.getIdentifier(), is(identifier));
         assertThat(ev.getOf(), is(CollectionDomainEvent.Of.ADD_TO));
-        assertThat(ev.getValue(), is((Object)other));
+        assertSame(ev.getValue(), other);
     }
 
     @Test

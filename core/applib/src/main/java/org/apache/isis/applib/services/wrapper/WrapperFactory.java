@@ -22,9 +22,8 @@ package org.apache.isis.applib.services.wrapper;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.events.InteractionEvent;
+import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
 import org.apache.isis.applib.services.wrapper.listeners.InteractionListener;
 
 /**

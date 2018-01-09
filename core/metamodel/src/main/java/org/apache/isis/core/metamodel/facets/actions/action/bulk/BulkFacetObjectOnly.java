@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.actions.action.bulk;
 
-import org.apache.isis.applib.annotation.Bulk;
+import org.apache.isis.applib.annotation.InvokeOn;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.bulk.BulkFacetAbstract;
 
@@ -27,7 +27,7 @@ public class BulkFacetObjectOnly extends BulkFacetAbstract {
 
     public BulkFacetObjectOnly(
             final FacetHolder holder) {
-        super(Bulk.AppliesTo.REGULAR_ONLY, holder);
+        super(InvokeOn.OBJECT_ONLY, holder);
     }
 
 }

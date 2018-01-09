@@ -23,7 +23,6 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
 
 import com.google.common.collect.Lists;
@@ -258,24 +257,22 @@ public class FacetProcessor implements ServicesInjectorAware {
      *            - holder to attach facets to.
      */
     public void process(
-            final Class<?> cls, 
-            final Properties metadataProperties, 
-            final MethodRemover methodRemover, 
+            final Class<?> cls,
+            final MethodRemover methodRemover,
             final FacetHolder facetHolder) {
         final List<FacetFactory> factoryList = getFactoryListByFeatureType(FeatureType.OBJECT);
         for (final FacetFactory facetFactory : factoryList) {
-            facetFactory.process(new ProcessClassContext(cls, metadataProperties, removerElseNullRemover(methodRemover), facetHolder));
+            facetFactory.process(new ProcessClassContext(cls, removerElseNullRemover(methodRemover), facetHolder));
         }
     }
 
     public void processPost(
-            final Class<?> cls, 
-            final Properties metadataProperties, 
-            final MethodRemover methodRemover, 
+            final Class<?> cls,
+            final MethodRemover methodRemover,
             final FacetHolder facetHolder) {
         final List<FacetFactory> factoryList = getFactoryListByFeatureType(FeatureType.OBJECT_POST_PROCESSING);
         for (final FacetFactory facetFactory : factoryList) {
-            facetFactory.process(new ProcessClassContext(cls, metadataProperties, removerElseNullRemover(methodRemover), facetHolder));
+            facetFactory.process(new ProcessClassContext(cls, removerElseNullRemover(methodRemover), facetHolder));
         }
     }
 
@@ -298,19 +295,16 @@ public class FacetProcessor implements ServicesInjectorAware {
      * @param featureType
      *            - what type of feature the method represents (property,
      *            action, collection etc)
-     * @param metadataProperties 
-     *            - additional properties to parse and use 
      */
     public void process(
-            final Class<?> cls, 
-            final Method method, 
-            final MethodRemover methodRemover, 
-            final FacetedMethod facetedMethod, 
-            final FeatureType featureType, 
-            final Properties metadataProperties) {
+            final Class<?> cls,
+            final Method method,
+            final MethodRemover methodRemover,
+            final FacetedMethod facetedMethod,
+            final FeatureType featureType) {
         final List<FacetFactory> factoryList = getFactoryListByFeatureType(featureType);
         final ProcessMethodContext processMethodContext =
-                new ProcessMethodContext(cls, featureType, metadataProperties, method, removerElseNullRemover(methodRemover), facetedMethod);
+                new ProcessMethodContext(cls, featureType, method, removerElseNullRemover(methodRemover), facetedMethod);
         for (final FacetFactory facetFactory : factoryList) {
             facetFactory.process(processMethodContext);
         }
@@ -318,11 +312,10 @@ public class FacetProcessor implements ServicesInjectorAware {
 
     
     public void processMemberOrder(
-            final Properties metadataProperties, 
             final ObjectMember facetHolder) {
         cacheContributeeMemberFacetFactoriesIfRequired();
         final ContributeeMemberFacetFactory.ProcessContributeeMemberContext processMemberContext =
-                new ContributeeMemberFacetFactory.ProcessContributeeMemberContext(metadataProperties, facetHolder);
+                new ContributeeMemberFacetFactory.ProcessContributeeMemberContext(facetHolder);
         for (final ContributeeMemberFacetFactory facetFactory : cachedContributeeMemberFacetFactories) {
             facetFactory.process(processMemberContext);
         }

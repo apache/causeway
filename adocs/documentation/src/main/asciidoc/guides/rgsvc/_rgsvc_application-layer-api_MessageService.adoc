@@ -8,11 +8,6 @@
 The `MessageService` allows domain objects to raise information, warning or error messages.
 These messages can either be simple strings, or can be translated.
 
-[NOTE]
-====
-The methods in this service replace similar methods (now deprecated) in xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer[`DomainObjectContainer`].
-====
-
 
 == API and Usage
 
@@ -61,4 +56,5 @@ public Order addItem(Product product, @ParameterLayout(named="Quantity") int qua
 
 The core framework provides a default implementation of this service, `o.a.i.core.runtime.services.message.MessageServiceDefault`.
 
+To use an alternative implementation, implement the `MessageService` interface and use xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:../rgsvc/rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
 

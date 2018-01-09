@@ -19,6 +19,9 @@
 
 package org.apache.isis.core.metamodel.facets.object.domainobject.choices;
 
+import java.util.List;
+
+import org.apache.isis.applib.annotation.Bounding;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
@@ -30,21 +33,22 @@ import org.apache.isis.core.metamodel.services.persistsession.PersistenceSession
 public class ChoicesFacetForDomainObjectAnnotation extends ChoicesFacetFromBoundedAbstract {
 
     public static Facet create(
-            final DomainObject domainObject,
+            final List<DomainObject> domainObjects,
             final FacetHolder facetHolder,
             final DeploymentCategory deploymentCategory,
             final AuthenticationSessionProvider authenticationSessionProvider,
             final PersistenceSessionServiceInternal persistenceSessionServiceInternal) {
 
-        if(domainObject == null) {
-            return null;
-        }
-
-        final boolean bounded = domainObject.bounded();
-        return bounded
-                ? new ChoicesFacetForDomainObjectAnnotation(
-                    facetHolder, deploymentCategory, authenticationSessionProvider, persistenceSessionServiceInternal)
-                : null;
+        return domainObjects.stream()
+                .map(DomainObject::bounding)
+                .filter(bounding -> bounding != Bounding.NOT_SPECIFIED)
+                .findFirst()
+                .map(bounding -> bounding == Bounding.BOUNDED
+                        ? new ChoicesFacetForDomainObjectAnnotation(
+                                facetHolder, deploymentCategory,
+                                authenticationSessionProvider, persistenceSessionServiceInternal)
+                        : null
+                ).orElse(null);
     }
 
     private ChoicesFacetForDomainObjectAnnotation(

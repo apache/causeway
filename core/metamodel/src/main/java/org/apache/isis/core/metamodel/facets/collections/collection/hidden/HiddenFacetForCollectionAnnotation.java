@@ -19,8 +19,9 @@
 
 package org.apache.isis.core.metamodel.facets.collections.collection.hidden;
 
+import java.util.List;
+
 import org.apache.isis.applib.annotation.Collection;
-import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -30,23 +31,19 @@ import org.apache.isis.core.metamodel.facets.members.hidden.HiddenFacetAbstract;
 public class HiddenFacetForCollectionAnnotation extends HiddenFacetAbstract {
 
     public static HiddenFacet create(
-            final Collection collection,
+            final List<Collection> collections,
             final FacetHolder holder) {
 
-        if (collection == null) {
-            return null;
-        }
-
-        final Where where = collection.hidden();
-        if (where != null && where != Where.NOT_SPECIFIED) {
-            return new HiddenFacetForCollectionAnnotation(where, holder);
-        }
-
-        return null;
+        return collections.stream()
+                .map(Collection::hidden)
+                .filter(where -> where != null && where != Where.NOT_SPECIFIED)
+                .findFirst()
+                .map(where -> new HiddenFacetForCollectionAnnotation(where, holder))
+                .orElse(null);
     }
 
     private HiddenFacetForCollectionAnnotation(final Where where, final FacetHolder holder) {
-        super(HiddenFacetForCollectionAnnotation.class, When.ALWAYS, where, holder);
+        super(HiddenFacetForCollectionAnnotation.class, where, holder);
     }
 
     @Override

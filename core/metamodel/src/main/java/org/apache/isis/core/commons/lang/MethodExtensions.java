@@ -23,17 +23,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
-import com.google.common.primitives.Primitives;
-
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 
 public class MethodExtensions {
 
     private MethodExtensions() {
-    }
-
-    public static boolean isPublic(final Method method) {
-        return Modifier.isPublic(method.getModifiers());
     }
 
     public static boolean isStatic(final Method method) {

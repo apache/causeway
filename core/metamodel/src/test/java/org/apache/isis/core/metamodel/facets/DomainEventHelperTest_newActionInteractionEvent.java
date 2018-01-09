@@ -17,13 +17,15 @@
 package org.apache.isis.core.metamodel.facets;
 
 import org.junit.Test;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
-import org.apache.isis.applib.services.eventbus.ActionInvokedEvent;
 
+import static junit.framework.Assert.assertEquals;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThat;
 
 public class DomainEventHelperTest_newActionInteractionEvent {
@@ -34,12 +36,6 @@ public class DomainEventHelperTest_newActionInteractionEvent {
     
     public static class SomeDomainObjectFooInvokedDomainEvent extends ActionDomainEvent<SomeDomainObject> {
         private static final long serialVersionUID = 1L;
-        public SomeDomainObjectFooInvokedDomainEvent(
-                final SomeDomainObject source,
-                final Identifier identifier,
-                final Object... arguments) {
-            super(source, identifier, arguments);
-        }
     }
     
     @Test
@@ -49,11 +45,11 @@ public class DomainEventHelperTest_newActionInteractionEvent {
 
         final ActionDomainEvent<Object> ev = new DomainEventHelper(null).newActionDomainEvent(
                 ActionDomainEvent.Default.class, identifier, sdo, new Object[]{1, "bar"});
-        assertThat(ev.getSource(), is((Object)sdo));
+        assertSame(ev.getSource(), sdo);
         assertThat(ev.getIdentifier(), is(identifier));
         assertThat(ev.getArguments(), is(not(nullValue())));
-        assertThat(ev.getArguments().get(0), is((Object)Integer.valueOf(1)));
-        assertThat(ev.getArguments().get(1), is((Object)"bar"));
+        assertEquals(ev.getArguments().get(0), Integer.valueOf(1));
+        assertEquals(ev.getArguments().get(1), "bar");
     }
 
     @Test
@@ -62,12 +58,12 @@ public class DomainEventHelperTest_newActionInteractionEvent {
         final Identifier identifier = Identifier.actionIdentifier(SomeDomainObject.class, "foo", new Class[]{int.class, String.class});
 
         final ActionDomainEvent<Object> ev = new DomainEventHelper(null).newActionDomainEvent(
-                ActionInvokedEvent.Default.class, identifier, sdo, new Object[]{1, "bar"});
-        assertThat(ev.getSource(), is((Object)sdo));
+                ActionDomainEvent.Default.class, identifier, sdo, new Object[]{1, "bar"});
+        assertSame(ev.getSource(), sdo);
         assertThat(ev.getIdentifier(), is(identifier));
         assertThat(ev.getArguments(), is(not(nullValue())));
-        assertThat(ev.getArguments().get(0), is((Object)Integer.valueOf(1)));
-        assertThat(ev.getArguments().get(1), is((Object)"bar"));
+        assertEquals(ev.getArguments().get(0), Integer.valueOf(1));
+        assertEquals(ev.getArguments().get(1), "bar");
     }
 
     @Test
@@ -77,11 +73,11 @@ public class DomainEventHelperTest_newActionInteractionEvent {
         
         final ActionDomainEvent<SomeDomainObject> ev = new DomainEventHelper(null).newActionDomainEvent(
                 SomeDomainObjectFooInvokedDomainEvent.class, identifier, sdo, new Object[]{1, "bar"});
-        assertThat((SomeDomainObject)ev.getSource(), is(sdo));
+        assertSame(ev.getSource(), sdo);
         assertThat(ev.getIdentifier(), is(identifier));
         assertThat(ev.getArguments(), is(not(nullValue())));
-        assertThat(ev.getArguments().get(0), is((Object)Integer.valueOf(1)));
-        assertThat(ev.getArguments().get(1), is((Object)"bar"));
+        assertEquals(ev.getArguments().get(0), Integer.valueOf(1));
+        assertEquals(ev.getArguments().get(1), "bar");
     }
     
 }

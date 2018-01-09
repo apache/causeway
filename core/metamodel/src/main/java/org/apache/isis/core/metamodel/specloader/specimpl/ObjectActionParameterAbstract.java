@@ -24,7 +24,7 @@ import java.util.List;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.filter.Filter;
+import com.google.common.base.Predicate;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.query.QueryFindAllInstances;
 import org.apache.isis.core.commons.lang.ClassExtensions;
@@ -142,10 +142,10 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
             return StringExtensions.asCamelLowerFirst(facet.value());
         }
         final String name = getSpecification().getSingularName();
-        final List<ObjectActionParameter> parameters = this.getAction().getParameters(new Filter<ObjectActionParameter>() {
+        final List<ObjectActionParameter> parameters = this.getAction().getParameters(new Predicate<ObjectActionParameter>() {
 
             @Override
-            public boolean accept(final ObjectActionParameter t) {
+            public boolean apply(final ObjectActionParameter t) {
                 return equalsShortIdentifier(t.getSpecification(), getSpecification());
             }
 
@@ -167,10 +167,10 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
             return facet.value();
         }
         final String name = getSpecification().getSingularName();
-        final List<ObjectActionParameter> parameters = getAction().getParameters(new Filter<ObjectActionParameter>() {
+        final List<ObjectActionParameter> parameters = getAction().getParameters(new Predicate<ObjectActionParameter>() {
 
             @Override
-            public boolean accept(final ObjectActionParameter t) {
+            public boolean apply(final ObjectActionParameter t) {
                 return equalsShortIdentifier(t.getSpecification(), getSpecification());
             }
 
@@ -241,9 +241,9 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
     }
 
     @Override
-    public List<Facet> getFacets(final Filter<Facet> filter) {
+    public List<Facet> getFacets(final Predicate<Facet> predicate) {
         final FacetHolder facetHolder = getFacetHolder();
-        return facetHolder != null ? facetHolder.getFacets(filter) : Lists.<Facet> newArrayList();
+        return facetHolder != null ? facetHolder.getFacets(predicate) : Lists.<Facet> newArrayList();
     }
 
     @Override

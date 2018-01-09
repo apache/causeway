@@ -27,7 +27,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.resource.CssResourceReference;
 
-import org.apache.isis.applib.filter.Filter;
+import com.google.common.base.Predicate;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -47,8 +47,8 @@ public class CollectionContentsAsSummaryFactory extends ComponentFactoryAbstract
 
     private static final String NAME = "summary";
 
-    final static Filter<ObjectAssociation> OF_TYPE_BIGDECIMAL = new Filter<ObjectAssociation>(){
-        public boolean accept(final ObjectAssociation objectAssoc) {
+    final static Predicate<ObjectAssociation> OF_TYPE_BIGDECIMAL = new Predicate<ObjectAssociation>(){
+        public boolean apply(final ObjectAssociation objectAssoc) {
             ObjectSpecification objectSpec = objectAssoc.getSpecification();
             return objectSpec.containsDoOpFacet(BigDecimalValueFacet.class);
         }};

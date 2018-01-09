@@ -74,8 +74,6 @@ public class AppUserRegistrationService extends SecurityModuleAppUserRegistratio
 This is needed so that the self-registered users are assigned automatically to your application role(s) and be able to use the application. Without any role such user will be able only to see/use the logout link of the application.
 
 
-
-
 == Related Services
 
 The most common use case is to allow users to sign-up through Apache Isis' Wicket viewer. Because the process requires email to be sent, the following services must be configured:

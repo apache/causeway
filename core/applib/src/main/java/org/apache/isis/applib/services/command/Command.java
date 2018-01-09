@@ -17,12 +17,14 @@
 package org.apache.isis.applib.services.command;
 
 import java.sql.Timestamp;
+import java.util.List;
+
+import javax.annotation.Nullable;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.Command.ExecuteIn;
-import org.apache.isis.applib.annotation.Command.Persistence;
-import org.apache.isis.applib.annotation.Optional;
+import org.apache.isis.applib.annotation.CommandExecuteIn;
+import org.apache.isis.applib.annotation.CommandPersistence;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.HasTransactionId;
@@ -32,8 +34,6 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
 import org.apache.isis.applib.services.iactn.Interaction;
-import org.apache.isis.applib.services.publish.EventMetadata;
-import org.apache.isis.applib.services.publish.EventPayload;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.schema.cmd.v1.CommandDto;
 
@@ -46,8 +46,7 @@ import org.apache.isis.schema.cmd.v1.CommandDto;
  *     The {@link Command} interface also captures details of the corresponding action invocation (or property edit),
  *     specifically when that action/edit {@link Command#getStartedAt() started} or
  *     {@link Command#getCompletedAt() completed}, and its result, either a {@link Command#getResult() return value}
- *     or an {@link Command#getException() exception}.  The {@link Command3} sub-interface also captures the stack
- *     of {@link ActionDomainEvent}s.
+ *     or an {@link Command#getException() exception}.  Also captures a stack of {@link ActionDomainEvent}s.
  * </p>
  *
  * <p>
@@ -59,7 +58,7 @@ import org.apache.isis.schema.cmd.v1.CommandDto;
  * <p>
  *     One of the responsibilities of the command is to generate unique sequence numbers for a given transactionId.
  *     This is done by {@link #next(String)}.  There are three possible sequences that might be generated:
- *     the sequence of changed domain objects being published by the {@link org.apache.isis.applib.services.publish.PublishingService#publish(EventMetadata, EventPayload)}; the
+ *     the sequence of changed domain objects being published by the {@link org.apache.isis.applib.services.publish.PublisherService#publish(Interaction.Execution)}; the
  *     sequence of wrapped action invocations (each being published), and finally one or more background commands
  *     that might be scheduled via the {@link BackgroundService}.
  * </p>
@@ -220,15 +219,43 @@ public interface Command extends HasTransactionId {
 
     /**
      * The mechanism by which this command is to be executed, either synchronously &quot;in the 
-     * {@link ExecuteIn#FOREGROUND foreground}&quot; or is to be executed asynchronously &quot;in the 
-     * {@link ExecuteIn#BACKGROUND background}&quot; through the {@link BackgroundCommandService}.
+     * {@link CommandExecuteIn#FOREGROUND foreground}&quot; or is to be executed asynchronously &quot;in the
+     * {@link CommandExecuteIn#BACKGROUND background}&quot; through the {@link BackgroundCommandService}.
      */
-    ExecuteIn getExecuteIn();
+    CommandExecuteIn getExecuteIn();
     
     /**
      * <b>NOT API</b>: intended to be called only by the framework.
      */
-    void setExecuteIn(final ExecuteIn executeIn);
+    void setExecuteIn(final CommandExecuteIn executeIn);
+
+    /**
+     * @deprecated - use {@link Interaction#getCurrentExecution()}, {@link Interaction#getPriorExecution()}  and {@link Interaction#getExecutions()} instead.
+     */
+    @Deprecated
+    @Programmatic
+    ActionDomainEvent<?> peekActionDomainEvent();
+
+    /**
+     * @deprecated - replaced by equivalent functionality in {@link Interaction}.
+     */
+    @Deprecated
+    @Programmatic
+    void pushActionDomainEvent(ActionDomainEvent<?> event);
+
+    /**
+     * @deprecated - replaced by equivalent functionality in {@link Interaction}.
+     */
+    @Deprecated
+    @Programmatic
+    ActionDomainEvent<?> popActionDomainEvent();
+
+    /**
+     * @deprecated - use {@link Interaction#getCurrentExecution()}, {@link Interaction#getPriorExecution()}  and {@link Interaction#getExecutions()} instead.
+     */
+    @Deprecated
+    @Programmatic
+    List<ActionDomainEvent<?>> flushActionDomainEvents();
 
     //endregion
 
@@ -284,7 +311,7 @@ public interface Command extends HasTransactionId {
      * For an command that has actually been executed, holds the date/time at which the {@link Interaction} that
      * executed the command started.
      *
-     * @deprecated - see {@link Interaction#getStartedAt()}.
+     * @deprecated - see {@link Interaction.Execution#getStartedAt()}.
      */
     @Deprecated
     Timestamp getStartedAt();
@@ -344,7 +371,7 @@ public interface Command extends HasTransactionId {
      * @deprecated - see {@link Interaction#getCurrentExecution()} and  {@link org.apache.isis.applib.services.iactn.Interaction.Execution#getThrew()} instead.
      */
     @Deprecated
-    @Optional
+    @Nullable
     String getException();
 
     /**
@@ -397,12 +424,12 @@ public interface Command extends HasTransactionId {
      * {@link Command}.  The hinting mechanism allows the service to suggest that the parent command be persisted so
      * that the app can then provide a mechanism to find all child background commands for that original parent command.
      */
-    Persistence getPersistence();
+    CommandPersistence getPersistence();
     
     /**
      * <b>NOT API</b>: intended to be called only by the framework.
      */
-    void setPersistence(final Persistence persistence);
+    void setPersistence(final CommandPersistence persistence);
     //endregion
 
     //region > persistHint (programmatic)

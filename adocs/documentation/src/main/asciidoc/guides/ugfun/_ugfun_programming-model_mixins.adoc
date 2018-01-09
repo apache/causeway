@@ -23,7 +23,7 @@ public class Customer_orders {                              // <2>
 
     @Action(semantics=SemanticsOf.SAFE)                     // <4>
     @ActionLayout(contributed=Contributed.AS_ASSOCIATION)   // <4>
-    @CollectionLayout(render=RenderType.EAGERLY)
+    @CollectionLayout(defaultView="table")
     public List<Order> coll() {                             // <1>
         return repositoryService.findOrdersFor(customer);
     }

@@ -31,7 +31,7 @@ import java.lang.annotation.Target;
  * @see org.apache.isis.applib.annotation.PropertyLayout
  */
 @Inherited
-@Target({ ElementType.PARAMETER })
+@Target({ ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ParameterLayout {
 
@@ -52,7 +52,7 @@ public @interface ParameterLayout {
      * If not specified, the default depends upon the parameter value's datatype.
      * </p>
      */
-    LabelPosition labelPosition() default LabelPosition.DEFAULT;
+    LabelPosition labelPosition() default LabelPosition.NOT_SPECIFIED;
 
     /**
      * Name of this action parameter.
@@ -70,7 +70,7 @@ public @interface ParameterLayout {
     int multiLine() default -1;
 
     /**
-     * For date parameters (and properties ) only, instructs the viewer that the date should be rendered as one day
+     * For date parameters (and properties) only, instructs the viewer that the date should be rendered as one day
      * prior to the actually stored date.
      *
      * <p>
@@ -84,7 +84,7 @@ public @interface ParameterLayout {
      * <pre>
      * public void updateDates(
      *     &#64;ParameterLayout(named="From") LocalDate startDate,
-     *     &#64;ParameterLayout(named="To"), renderedAsOneDayBefore=true) LocalDate startDate) { ... }
+     *     &#64;ParameterLayout(named="To"), renderDay=RenderDay.AS_DAY_BEFORE) LocalDate endDate) { ... }
      * </pre>
      *
      * <p>
@@ -93,7 +93,7 @@ public @interface ParameterLayout {
      * In the domain object, itself, however, the value stored is 1-jun-2013.
      * </p>
      */
-    boolean renderedAsDayBefore() default false;
+    RenderDay renderDay() default RenderDay.NOT_SPECIFIED;
 
     /**
      * The typical entry length of a field, use to determine the optimum width for display

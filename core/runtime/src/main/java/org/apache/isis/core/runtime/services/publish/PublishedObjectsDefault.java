@@ -32,7 +32,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Multimaps;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.annotation.PublishedObject;
+import org.apache.isis.applib.annotation.PublishingChangeKind;
 import org.apache.isis.applib.services.publish.PublishedObjects;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
@@ -54,7 +54,7 @@ public class PublishedObjectsDefault implements PublishedObjects {
     private final Timestamp completedAt;
     private final int numberLoaded;
     private final int numberObjectPropertiesModified;
-    private final Map<ObjectAdapter, PublishedObject.ChangeKind> changesByAdapter;
+    private final Map<ObjectAdapter, PublishingChangeKind> changesByAdapter;
 
     public PublishedObjectsDefault(
             final UUID transactionUuid,
@@ -63,7 +63,7 @@ public class PublishedObjectsDefault implements PublishedObjects {
             final Timestamp completedAt,
             final int numberLoaded,
             final int numberObjectPropertiesModified,
-            final Map<ObjectAdapter, PublishedObject.ChangeKind> changesByAdapter) {
+            final Map<ObjectAdapter, PublishingChangeKind> changesByAdapter) {
         this.transactionUuid = transactionUuid;
         this.sequence = sequence;
         this.userName = userName;
@@ -125,17 +125,17 @@ public class PublishedObjectsDefault implements PublishedObjects {
 
     @Override
     public int getNumberCreated() {
-        return numAdaptersOfKind(PublishedObject.ChangeKind.CREATE);
+        return numAdaptersOfKind(PublishingChangeKind.CREATE);
     }
 
     @Override
     public int getNumberUpdated() {
-        return numAdaptersOfKind(PublishedObject.ChangeKind.UPDATE);
+        return numAdaptersOfKind(PublishingChangeKind.UPDATE);
     }
 
     @Override
     public int getNumberDeleted() {
-        return numAdaptersOfKind(PublishedObject.ChangeKind.DELETE);
+        return numAdaptersOfKind(PublishingChangeKind.DELETE);
     }
 
     @Override
@@ -143,7 +143,7 @@ public class PublishedObjectsDefault implements PublishedObjects {
         return numberObjectPropertiesModified;
     }
 
-    private int numAdaptersOfKind(final PublishedObject.ChangeKind kind) {
+    private int numAdaptersOfKind(final PublishingChangeKind kind) {
         final Collection<ObjectAdapter> objectAdapters = adaptersByChange().get(kind);
         return objectAdapters != null ? objectAdapters.size() : 0;
     }
@@ -152,9 +152,9 @@ public class PublishedObjectsDefault implements PublishedObjects {
     /**
      * Lazily populated
      */
-    private Map<PublishedObject.ChangeKind, Collection<ObjectAdapter>> adaptersByChange;
+    private Map<PublishingChangeKind, Collection<ObjectAdapter>> adaptersByChange;
 
-    private Map<PublishedObject.ChangeKind, Collection<ObjectAdapter>> adaptersByChange() {
+    private Map<PublishingChangeKind, Collection<ObjectAdapter>> adaptersByChange() {
         return adaptersByChange != null? adaptersByChange : (adaptersByChange = invert(changesByAdapter));
     }
 
@@ -181,9 +181,9 @@ public class PublishedObjectsDefault implements PublishedObjects {
 
         final ObjectsDto objectsDto = new ObjectsDto();
 
-        objectsDto.setCreated(oidsDtoFor(PublishedObject.ChangeKind.CREATE));
-        objectsDto.setUpdated(oidsDtoFor(PublishedObject.ChangeKind.UPDATE));
-        objectsDto.setDeleted(oidsDtoFor(PublishedObject.ChangeKind.DELETE));
+        objectsDto.setCreated(oidsDtoFor(PublishingChangeKind.CREATE));
+        objectsDto.setUpdated(oidsDtoFor(PublishingChangeKind.UPDATE));
+        objectsDto.setDeleted(oidsDtoFor(PublishingChangeKind.DELETE));
 
         objectsDto.setLoaded(getNumberLoaded());
         objectsDto.setPropertiesModified(getNumberPropertiesModified());
@@ -191,10 +191,10 @@ public class PublishedObjectsDefault implements PublishedObjects {
         return objectsDto;
     }
 
-    private OidsDto oidsDtoFor(final PublishedObject.ChangeKind kind) {
+    private OidsDto oidsDtoFor(final PublishingChangeKind kind) {
         final OidsDto oidsDto = new OidsDto();
 
-        final Map<PublishedObject.ChangeKind, Collection<ObjectAdapter>> adaptersByChange = adaptersByChange();
+        final Map<PublishingChangeKind, Collection<ObjectAdapter>> adaptersByChange = adaptersByChange();
 
         final Collection<ObjectAdapter> adapters = adaptersByChange.get(kind);
         if(adapters != null) {

@@ -33,7 +33,7 @@ import org.apache.isis.applib.services.eventbus.CollectionDomainEvent;
  * Domain semantics for domain object collection.
  */
 @Inherited
-@Target({ ElementType.METHOD, ElementType.FIELD })
+@Target({ ElementType.METHOD, ElementType.FIELD, ElementType.ANNOTATION_TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Collection {
 
@@ -70,7 +70,7 @@ public @interface Collection {
     /**
      * Indicates when the collection is not visible to the user.
      */
-    Where hidden() default Where.NOWHERE;
+    Where hidden() default Where.NOT_SPECIFIED;
 
 
     // //////////////////////////////////////
@@ -82,7 +82,7 @@ public @interface Collection {
      *     Note that non-editable objects can nevertheless have actions invoked upon them.
      * </p>
      */
-    Editing editing() default Editing.AS_CONFIGURED;
+    Editing editing() default Editing.NOT_SPECIFIED;
 
     /**
      * If {@link #editing()} is set to {@link Editing#DISABLED},
@@ -95,13 +95,14 @@ public @interface Collection {
 
 
     /**
-     * Indicates that the collection should be excluded from snapshots.
+     * Indicates whether the collecion should be included or excluded from mementos.
      *
      * <p>
-     *     To ensure that the collection is actually not persisted in the objectstore, also annotate with {@link NotPersistent}.
+     *     To ensure that the collection is actually not persisted in the objectstore, also annotate with the JDO annotation {@link NotPersistent}.
      * </p>
      */
-    boolean notPersisted() default false;
+    MementoSerialization mementoSerialization() default MementoSerialization.NOT_SPECIFIED;
+
 
 
     // //////////////////////////////////////

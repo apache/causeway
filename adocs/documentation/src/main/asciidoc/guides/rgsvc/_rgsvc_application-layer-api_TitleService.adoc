@@ -7,11 +7,6 @@
 
 The `TitleService` provides methods to programmatically obtain the title and icon of a domain object.
 
-[NOTE]
-====
-The methods in this service replace similar methods (now deprecated) in xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer[`DomainObjectContainer`].
-====
-
 
 
 == API
@@ -20,7 +15,7 @@ The API of `TitleService` is:
 
 [source,java]
 ----
-public interface PresentationService {
+public interface TitleService {
     String titleOf(Object domainObject);                // <1>
     String iconNameOf(Object domainObject);             // <2>
 }

@@ -28,12 +28,12 @@ import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAbstr
 public class DisabledFacetOnCollectionDerivedFromImmutable extends DisabledFacetAbstract {
 
     public DisabledFacetOnCollectionDerivedFromImmutable(final ImmutableFacet immutableFacet, final FacetHolder holder) {
-        super(immutableFacet.when(), Where.ANYWHERE, holder);
+        super(Where.ANYWHERE, holder);
     }
 
     @Override
     public String disabledReason(final ObjectAdapter target) {
-        return when().appliesTo(target) ? "Immutable" : null;
+        return "Immutable";
     }
 
 }

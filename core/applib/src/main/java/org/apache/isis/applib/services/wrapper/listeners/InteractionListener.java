@@ -19,22 +19,22 @@
 
 package org.apache.isis.applib.services.wrapper.listeners;
 
-import org.apache.isis.applib.events.ActionArgumentEvent;
-import org.apache.isis.applib.events.ActionInvocationEvent;
-import org.apache.isis.applib.events.ActionUsabilityEvent;
-import org.apache.isis.applib.events.ActionVisibilityEvent;
-import org.apache.isis.applib.events.CollectionAccessEvent;
-import org.apache.isis.applib.events.CollectionAddToEvent;
-import org.apache.isis.applib.events.CollectionMethodEvent;
-import org.apache.isis.applib.events.CollectionRemoveFromEvent;
-import org.apache.isis.applib.events.CollectionUsabilityEvent;
-import org.apache.isis.applib.events.CollectionVisibilityEvent;
-import org.apache.isis.applib.events.ObjectTitleEvent;
-import org.apache.isis.applib.events.ObjectValidityEvent;
-import org.apache.isis.applib.events.PropertyAccessEvent;
-import org.apache.isis.applib.events.PropertyModifyEvent;
-import org.apache.isis.applib.events.PropertyUsabilityEvent;
-import org.apache.isis.applib.events.PropertyVisibilityEvent;
+import org.apache.isis.applib.services.wrapper.events.ActionArgumentEvent;
+import org.apache.isis.applib.services.wrapper.events.ActionInvocationEvent;
+import org.apache.isis.applib.services.wrapper.events.ActionUsabilityEvent;
+import org.apache.isis.applib.services.wrapper.events.ActionVisibilityEvent;
+import org.apache.isis.applib.services.wrapper.events.CollectionAccessEvent;
+import org.apache.isis.applib.services.wrapper.events.CollectionAddToEvent;
+import org.apache.isis.applib.services.wrapper.events.CollectionMethodEvent;
+import org.apache.isis.applib.services.wrapper.events.CollectionRemoveFromEvent;
+import org.apache.isis.applib.services.wrapper.events.CollectionUsabilityEvent;
+import org.apache.isis.applib.services.wrapper.events.CollectionVisibilityEvent;
+import org.apache.isis.applib.services.wrapper.events.ObjectTitleEvent;
+import org.apache.isis.applib.services.wrapper.events.ObjectValidityEvent;
+import org.apache.isis.applib.services.wrapper.events.PropertyAccessEvent;
+import org.apache.isis.applib.services.wrapper.events.PropertyModifyEvent;
+import org.apache.isis.applib.services.wrapper.events.PropertyUsabilityEvent;
+import org.apache.isis.applib.services.wrapper.events.PropertyVisibilityEvent;
 
 public interface InteractionListener {
 

@@ -22,8 +22,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.isis.applib.filter.Filter;
-import org.apache.isis.applib.filter.Filters;
+import com.google.common.base.Predicate;
+
 import org.apache.isis.applib.services.swagger.SwaggerService;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.spec.ActionType;
@@ -92,10 +92,10 @@ public final class Util {
                 correspondingClass == Void.class;
     }
 
-    static Filter<ObjectAssociation> associationsWith(final SwaggerService.Visibility visibility) {
-        return new Filter<ObjectAssociation>() {
+    static Predicate<ObjectAssociation> associationsWith(final SwaggerService.Visibility visibility) {
+        return new Predicate<ObjectAssociation>() {
           @Override
-          public boolean accept(final ObjectAssociation objectAssociation) {
+          public boolean apply(final ObjectAssociation objectAssociation) {
               return !visibility.isPublic() || isVisibleForPublic(objectAssociation);
           }
       };
@@ -104,26 +104,25 @@ public final class Util {
     static List<OneToOneAssociation> propertiesOf(
             final ObjectSpecification objectSpecification,
             final SwaggerService.Visibility visibility) {
-        return associationsOf(objectSpecification, ObjectAssociation.Filters.PROPERTIES, visibility);
+        return associationsOf(objectSpecification, ObjectAssociation.Predicates.PROPERTIES, visibility);
     }
 
     static List<OneToManyAssociation> collectionsOf(
             final ObjectSpecification objectSpecification,
             final SwaggerService.Visibility visibility) {
-        return associationsOf(objectSpecification, ObjectAssociation.Filters.COLLECTIONS, visibility);
+        return associationsOf(objectSpecification, ObjectAssociation.Predicates.COLLECTIONS, visibility);
     }
 
     static <T extends ObjectAssociation> List<T> associationsOf(
             final ObjectSpecification objectSpecification,
-            final Filter<ObjectAssociation> associationFilter, final SwaggerService.Visibility visibility) {
+            final Predicate<ObjectAssociation> associationPredicate, final SwaggerService.Visibility visibility) {
         @SuppressWarnings("rawtypes")
         final List<ObjectAssociation> list =
                 objectSpecification.getAssociations(
                         Contributed.INCLUDED,
-                        Filters.and(
-                                associationFilter,
-                                associationsWith(visibility)
-                        ));
+                        com.google.common.base.Predicates.and(
+                                associationPredicate,
+                                associationsWith(visibility) ));
 
         return cast(list);
     }
@@ -139,9 +138,9 @@ public final class Util {
             final ClassExcluder classExcluder) {
         final List<ActionType> actionTypes = actionTypesFor(visibility);
 
-        return objectSpec.getObjectActions(actionTypes, Contributed.INCLUDED, new Filter<ObjectAction>() {
+        return objectSpec.getObjectActions(actionTypes, Contributed.INCLUDED, new Predicate<ObjectAction>() {
             @Override
-            public boolean accept(final ObjectAction objectAction) {
+            public boolean apply(final ObjectAction objectAction) {
                 return !classExcluder.exclude(objectAction) &&
                         !visibility.isPublic() || isVisibleForPublic(objectAction);
             }

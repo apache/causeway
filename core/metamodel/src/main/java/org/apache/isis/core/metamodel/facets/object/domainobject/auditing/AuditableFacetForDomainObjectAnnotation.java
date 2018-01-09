@@ -19,6 +19,8 @@
 package org.apache.isis.core.metamodel.facets.object.domainobject.auditing;
 
 
+import java.util.List;
+
 import org.apache.isis.applib.annotation.Auditing;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -30,30 +32,26 @@ import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacetAbstract
 public class AuditableFacetForDomainObjectAnnotation extends AuditableFacetAbstract {
 
     public static AuditableFacet create(
-            final DomainObject domainObject,
+            final List<DomainObject> domainObjects,
             final IsisConfiguration configuration,
             final FacetHolder holder) {
 
-        final Auditing auditing = domainObject != null ? domainObject.auditing() : Auditing.AS_CONFIGURED;
-        switch (auditing) {
-            case AS_CONFIGURED:
-
-                final AuditObjectsConfiguration setting = AuditObjectsConfiguration.parse(configuration);
-                switch (setting) {
-                    case NONE:
-                        return null;
+        return domainObjects
+                .stream()
+                .filter(domainObject -> domainObject.auditing() != Auditing.NOT_SPECIFIED)
+                .findFirst()
+                .map(domainObject -> {
+                    switch (domainObject.auditing()) {
+                    case DISABLED:
+                        return (AuditableFacet)new AuditableFacetForDomainObjectAnnotation(Enablement.DISABLED, holder);
+                    case ENABLED:
+                        return new AuditableFacetForDomainObjectAnnotation(Enablement.ENABLED, holder);
+                    case AS_CONFIGURED:
                     default:
-                        return domainObject != null
-                                ? new AuditableFacetForDomainObjectAnnotationAsConfigured(holder)
-                                : new AuditableFacetFromConfiguration(holder);
-                }
-            case DISABLED:
-                // explicitly disable
-                return new AuditableFacetForDomainObjectAnnotation(Enablement.DISABLED, holder);
-            case ENABLED:
-                return new AuditableFacetForDomainObjectAnnotation(Enablement.ENABLED, holder);
-        }
-        return null;
+                        return new AuditableFacetForDomainObjectAnnotationAsConfigured(holder);
+                    }
+                })
+                .orElse(new AuditableFacetFromConfiguration(holder));
     }
 
     protected AuditableFacetForDomainObjectAnnotation(

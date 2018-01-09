@@ -61,7 +61,7 @@ public class ObjectAdapterUpdateHelper {
             final Intent intent) {
 
         final ObjectSpecification objectSpec = objectAdapter.getSpecification();
-        final List<ObjectAssociation> properties = objectSpec.getAssociations(Contributed.EXCLUDED, ObjectAssociation.Filters.PROPERTIES);
+        final List<ObjectAssociation> properties = objectSpec.getAssociations(Contributed.EXCLUDED, ObjectAssociation.Predicates.PROPERTIES);
 
         boolean allOk = true;
 

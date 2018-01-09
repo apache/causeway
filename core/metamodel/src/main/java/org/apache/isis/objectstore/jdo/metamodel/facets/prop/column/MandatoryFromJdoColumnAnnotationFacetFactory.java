@@ -34,7 +34,6 @@ import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacetDefault;
-import org.apache.isis.core.metamodel.facets.properties.property.mandatory.MandatoryFacetForMandatoryAnnotationOnProperty;
 import org.apache.isis.core.metamodel.facets.properties.property.mandatory.MandatoryFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
@@ -75,11 +74,6 @@ public class MandatoryFromJdoColumnAnnotationFacetFactory extends FacetFactoryAb
                 // we must keep an optional facet here for different reasons
                 return;
             }
-            if (existingFacet instanceof MandatoryFacetForMandatoryAnnotationOnProperty) {
-                // do not replace this facet; 
-                // an explicit @Mandatory annotation cannot be overridden by @Column annotation
-                return;
-            }
             if (existingFacet instanceof MandatoryFacetForPropertyAnnotation.Required) {
                 // do not replace this facet;
                 // an explicit @Property(optional=FALSE) annotation cannot be overridden by @Column annotation
@@ -88,7 +82,7 @@ public class MandatoryFromJdoColumnAnnotationFacetFactory extends FacetFactoryAb
         }
         
         boolean required = whetherRequired(processMethodContext, annotation);
-        MandatoryFacet facet = annotation != null 
+        MandatoryFacet facet = annotation != null
                 ? new MandatoryFacetDerivedFromJdoColumn(holder, required) 
                 : new MandatoryFacetInferredFromAbsenceOfJdoColumn(holder, required);
                 
@@ -139,7 +133,7 @@ public class MandatoryFromJdoColumnAnnotationFacetFactory extends FacetFactoryAb
                     return;
                 }
                 
-                final List<ObjectAssociation> associations = objectSpec.getAssociations(Contributed.EXCLUDED, ObjectAssociation.Filters.PROPERTIES);
+                final List<ObjectAssociation> associations = objectSpec.getAssociations(Contributed.EXCLUDED, ObjectAssociation.Predicates.PROPERTIES);
                 for (ObjectAssociation association : associations) {
                     
                     // skip checks if annotated with JDO @NotPersistent

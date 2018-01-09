@@ -18,7 +18,7 @@
  */
 package org.apache.isis.core.metamodel.facets.actions.layout;
 
-import java.util.Properties;
+import java.util.List;
 
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.NatureOfService;
@@ -53,78 +53,50 @@ public class ActionLayoutFacetFactory extends FacetFactoryAbstract implements Co
     public void process(final ProcessMethodContext processMethodContext) {
 
         final FacetHolder holder = processMethodContext.getFacetHolder();
-        Properties properties = processMethodContext.metadataProperties("actionLayout");
 
-        if(properties == null) {
-            // alternate key
-            properties = processMethodContext.metadataProperties("layout");
-        }
-        final ActionLayout actionLayout = Annotations.getAnnotation(processMethodContext.getMethod(), ActionLayout.class);
+        final List<ActionLayout> actionLayouts = Annotations.getAnnotations(processMethodContext.getMethod(), ActionLayout.class);
 
 
         // bookmarkable
-        BookmarkPolicyFacet bookmarkableFacet = BookmarkPolicyFacetOnActionFromLayoutProperties.create(properties, holder);
-        if(bookmarkableFacet == null) {
-            bookmarkableFacet = BookmarkPolicyFacetForActionLayoutAnnotation.create(actionLayout, holder);
-        }
+        BookmarkPolicyFacet bookmarkableFacet = BookmarkPolicyFacetForActionLayoutAnnotation
+                .create(actionLayouts, holder);
         FacetUtil.addFacet(bookmarkableFacet);
 
 
         // cssClass
-        CssClassFacet cssClassFacet = CssClassFacetOnActionFromLayoutProperties.create(properties, holder);
-        if(cssClassFacet == null) {
-            cssClassFacet = CssClassFacetForActionLayoutAnnotation.create(actionLayout, holder);
-        }
+        CssClassFacet cssClassFacet = CssClassFacetForActionLayoutAnnotation.create(actionLayouts, holder);
         FacetUtil.addFacet(cssClassFacet);
 
 
         // cssClassFa
-        CssClassFaFacet cssClassFaFacet = CssClassFaFacetOnActionFromLayoutProperties.create(properties, holder);
-        if(cssClassFaFacet == null) {
-            cssClassFaFacet = CssClassFaFacetForActionLayoutAnnotation.create(actionLayout, holder);
-        }
+        CssClassFaFacet cssClassFaFacet = CssClassFaFacetForActionLayoutAnnotation.create(actionLayouts, holder);
         FacetUtil.addFacet(cssClassFaFacet);
 
 
         // describedAs
-        DescribedAsFacet describedAsFacet = DescribedAsFacetOnActionFromLayoutProperties.create(properties, holder);
-        if(describedAsFacet == null) {
-            describedAsFacet = DescribedAsFacetForActionLayoutAnnotation.create(actionLayout, holder);
-        }
+        DescribedAsFacet describedAsFacet = DescribedAsFacetForActionLayoutAnnotation.create(actionLayouts, holder);
         FacetUtil.addFacet(describedAsFacet);
 
 
         // hidden
-        HiddenFacet hiddenFacet = HiddenFacetOnActionFromLayoutProperties.create(properties, holder);
-        if(hiddenFacet == null) {
-            hiddenFacet = HiddenFacetForActionLayoutAnnotation.create(actionLayout, holder);
-        }
+        HiddenFacet hiddenFacet = HiddenFacetForActionLayoutAnnotation.create(actionLayouts, holder);
         FacetUtil.addFacet(hiddenFacet);
 
 
         // named
-        NamedFacet namedFacet = NamedFacetOnActionFromLayoutProperties.create(properties, holder);
-        if(namedFacet == null) {
-            namedFacet = NamedFacetForActionLayoutAnnotation.create(actionLayout, holder);
-        }
+        NamedFacet namedFacet = NamedFacetForActionLayoutAnnotation.create(actionLayouts, holder);
         FacetUtil.addFacet(namedFacet);
 
         // promptStyle
-        PromptStyleFacet promptStyleFacet = PromptStyleFacetOnActionFromLayoutProperties
-                .create(properties, holder);
-        if(promptStyleFacet == null) {
-            promptStyleFacet = PromptStyleFacetForActionLayoutAnnotation
-                    .create(actionLayout, getConfiguration(), holder);
-        }
+        PromptStyleFacet promptStyleFacet = PromptStyleFacetForActionLayoutAnnotation
+                .create(actionLayouts, getConfiguration(), holder);
 
         FacetUtil.addFacet(promptStyleFacet);
 
 
         // position
-        ActionPositionFacet actionPositionFacet = ActionPositionFacetOnActionFromLayoutProperties.create(properties, holder);
-        if(actionPositionFacet == null) {
-            actionPositionFacet = ActionPositionFacetForActionLayoutAnnotation.create(actionLayout, holder);
-        }
+        ActionPositionFacet actionPositionFacet = ActionPositionFacetForActionLayoutAnnotation
+                .create(actionLayouts, holder);
         if(actionPositionFacet == null) {
             actionPositionFacet = new ActionPositionFacetFallback(holder);
         }
@@ -133,10 +105,8 @@ public class ActionLayoutFacetFactory extends FacetFactoryAbstract implements Co
 
         // contributing
         if (isContributingServiceOrMixinObject(processMethodContext)) {
-            NotContributedFacet notContributedFacet = NotContributedFacetForLayoutProperties.create(properties, holder);
-            if(notContributedFacet == null) {
-                notContributedFacet = NotContributedFacetForActionLayoutAnnotation.create(actionLayout, holder);
-            }
+            NotContributedFacet notContributedFacet = NotContributedFacetForActionLayoutAnnotation
+                    .create(actionLayouts, holder);
             FacetUtil.addFacet(notContributedFacet);
         }
     }
@@ -170,35 +140,29 @@ public class ActionLayoutFacetFactory extends FacetFactoryAbstract implements Co
     public void process(ProcessContributeeMemberContext processMemberContext) {
         final FacetHolder holder = processMemberContext.getFacetHolder();
 
-        Properties properties = processMemberContext.metadataProperties("actionLayout");
-        if (properties == null) {
-            // alternate key
-            properties = processMemberContext.metadataProperties("layout");
-        }
-
         // cssClass
-        CssClassFacet cssClassFacet = CssClassFacetOnActionFromLayoutProperties.create(properties, holder);
+        CssClassFacet cssClassFacet = null;
         FacetUtil.addFacet(cssClassFacet);
 
         // cssClassFa
-        CssClassFaFacet cssClassFaFacet = CssClassFaFacetOnActionFromLayoutProperties.create(properties, holder);
+        CssClassFaFacet cssClassFaFacet = null;
         FacetUtil.addFacet(cssClassFaFacet);
 
         // describedAs
-        DescribedAsFacet describedAsFacet = DescribedAsFacetOnActionFromLayoutProperties.create(properties, holder);
+        DescribedAsFacet describedAsFacet = null;
         FacetUtil.addFacet(describedAsFacet);
 
         // hidden
-        HiddenFacet hiddenFacet = HiddenFacetOnActionFromLayoutProperties.create(properties, holder);
+        HiddenFacet hiddenFacet = null;
         FacetUtil.addFacet(hiddenFacet);
 
         // named
-        NamedFacet namedFacet = NamedFacetOnActionFromLayoutProperties.create(properties, holder);
+        NamedFacet namedFacet = null;
         FacetUtil.addFacet(namedFacet);
 
         // position
-        ActionPositionFacet actionPositionFacet = ActionPositionFacetOnActionFromLayoutProperties.create(properties, holder);
-        if(actionPositionFacet == null && ! holder.containsDoOpFacet(ActionPositionFacet.class)) {
+        ActionPositionFacet actionPositionFacet = null;
+        if(! holder.containsDoOpFacet(ActionPositionFacet.class)) {
             actionPositionFacet = new ActionPositionFacetFallback(holder);
         }
         FacetUtil.addFacet(actionPositionFacet);

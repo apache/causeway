@@ -20,7 +20,6 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.services.background.ActionInvocationMemento;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -34,14 +33,6 @@ import org.apache.isis.schema.cmd.v1.PropertyDto;
  */
 public interface CommandDtoServiceInternal {
 
-    /**
-     * Note that this method (more precisely, {@link ActionInvocationMemento}) does <i>not</i> support mixins.
-     *
-     * @deprecated - use {@link #asCommandDto(List, ObjectAction, ObjectAdapter[])} instead.
-     */
-    @Deprecated
-    @Programmatic
-    ActionInvocationMemento asActionInvocationMemento(Method m, Object domainObject, Object[] args);
 
     /**
      * Returns a JAXB DTO (hence convertible to XML) that represents the intention to invoke an action on a

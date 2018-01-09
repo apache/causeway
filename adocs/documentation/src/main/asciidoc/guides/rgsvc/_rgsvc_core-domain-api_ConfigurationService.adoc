@@ -13,10 +13,6 @@ The `ConfigurationService` allows domain objects to read the configuration prope
 Only configuration properties with the prefix "application" are be exposed.
 ====
 
-[NOTE]
-====
-The methods in this service replace similar methods (now deprecated) in xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer[`DomainObjectContainer`].
-====
 
 
 == API and Usage

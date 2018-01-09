@@ -19,9 +19,9 @@
 
 package org.apache.isis.core.runtime.authentication.standard;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.hamcrest.TypeSafeMatcher;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
@@ -32,9 +32,11 @@ import org.junit.runner.RunWith;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.matchers.IsisMatchers;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequestPassword;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 @RunWith(JMock.class)
 public class StandardAuthenticationManager_AuthenticationTest {
@@ -61,7 +63,7 @@ public class StandardAuthenticationManager_AuthenticationTest {
 
         mockery.checking(new Expectations() {
             {
-                allowing(mockAuthenticator).canAuthenticate(with(IsisMatchers.anySubclassOf(AuthenticationRequest.class)));
+                allowing(mockAuthenticator).canAuthenticate(with(anySubclassOf(AuthenticationRequest.class)));
                 will(returnValue(true));
 
                 allowing(mockAuthenticator).authenticate(with(any(AuthenticationRequest.class)), with(any(String.class)));
@@ -89,5 +91,21 @@ public class StandardAuthenticationManager_AuthenticationTest {
 
         assertThat(authenticationManager.isSessionValid(session), is(true));
     }
+
+    private static <X> Matcher<Class<X>> anySubclassOf(final Class<X> cls) {
+        return new TypeSafeMatcher<Class<X>>() {
+
+            @Override
+            public void describeTo(final Description arg0) {
+                arg0.appendText("is subclass of ").appendText(cls.getName());
+            }
+
+            @Override
+            public boolean matchesSafely(final Class<X> item) {
+                return cls.isAssignableFrom(item);
+            }
+        };
+    }
+
 
 }

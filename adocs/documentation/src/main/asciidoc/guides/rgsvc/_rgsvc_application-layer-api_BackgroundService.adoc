@@ -11,6 +11,7 @@ xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_BackgroundCommandService[`
 The `BackgroundService2` is responsible for capturing a memento representing the command in a typesafe way, and persisting it rather than executing it directly.
 
 The default `BackgroundServiceDefault` implementation works by using a proxy wrapper around the target so that it can capture the action to invoke and its arguments.
+
 This is done using xref:../rgfis/rgfis.adoc#_rgfis_application-layer_CommandDtoServiceInternal[`CommandDtoServiceInternal`].
 
 The persistence delegates the persistence of the memento to an appropriate implementation of the companion `BackgroundCommandService2`.
@@ -39,6 +40,7 @@ public interface BackgroundService2 {
 
 The default implementation is provided by core (`o.a.i.core.runtime.services.background.BackgroundServiceDefault`).
 
+To provide an alternative implementation, subclass and use xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:../rgsvc/rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
 
 
 == Usage

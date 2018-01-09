@@ -21,8 +21,10 @@ package domainapp.dom.impl;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.VersionStrategy;
+import javax.ws.rs.HEAD;
 
 import com.google.common.collect.ComparisonChain;
+import com.google.common.collect.Ordering;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Auditing;

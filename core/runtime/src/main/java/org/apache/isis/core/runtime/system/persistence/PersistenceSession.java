@@ -44,20 +44,16 @@ import org.datanucleus.identity.DatastoreIdImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.services.bookmark.BookmarkService2;
+import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.applib.services.command.Command2;
-import org.apache.isis.applib.services.command.Command3;
 import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.command.spi.CommandService;
 import org.apache.isis.applib.services.eventbus.AbstractLifecycleEvent;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
-import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer2;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.InteractionContext;
@@ -196,7 +192,6 @@ public class PersistenceSession implements
     private final MetricsService metricsService;
     private final ClockService clockService;
     private final UserService userService;
-    private final Bulk.InteractionContext bulkInteractionContext;
 
 
     /**
@@ -254,7 +249,6 @@ public class PersistenceSession implements
         this.factoryService = lookupService(FactoryService.class);
         this.clockService = lookupService(ClockService.class);
         this.userService = lookupService(UserService.class);
-        this.bulkInteractionContext = lookupService(Bulk.InteractionContext.class);
 
         // sub-components
         final AdapterManager adapterManager = this;
@@ -345,8 +339,6 @@ public class PersistenceSession implements
         commandContext.setCommand(command);
         interactionContext.setInteraction(interaction);
 
-        Bulk.InteractionContext.current.set(bulkInteractionContext);
-
         this.state = State.OPEN;
     }
 
@@ -429,8 +421,6 @@ public class PersistenceSession implements
             // ignore
             LOG.error("close: failed to end transaction; continuing to avoid memory leakage");
         }
-
-        Bulk.InteractionContext.current.set(null);
 
         // tell the proxy of all request-scoped services to invoke @PreDestroy
         // (if any) on all underlying services stored on their thread-locals...
@@ -517,14 +507,7 @@ public class PersistenceSession implements
 
         commandService.complete(command);
 
-        if(command instanceof Command3) {
-            final Command3 command3 = (Command3) command;
-            command3.flushActionDomainEvents();
-        } else
-        if(command instanceof Command2) {
-            final Command2 command2 = (Command2) command;
-            command2.flushActionInteractionEvents();
-        }
+        command.flushActionDomainEvents();
 
         interaction.clear();
     }
@@ -965,13 +948,11 @@ public class PersistenceSession implements
             Class<ExceptionRecognizer> serviceClass = ExceptionRecognizer.class;
             final List<ExceptionRecognizer> exceptionRecognizers = lookupServices(serviceClass);
             for (ExceptionRecognizer exceptionRecognizer : exceptionRecognizers) {
-                if(exceptionRecognizer instanceof ExceptionRecognizer2) {
-                    final ExceptionRecognizer2 recognizer = (ExceptionRecognizer2) exceptionRecognizer;
-                    final ExceptionRecognizer2.Recognition recognition = recognizer.recognize2(e);
-                    if(recognition != null) {
-                        if(recognition.getCategory() == ExceptionRecognizer2.Category.NOT_FOUND) {
-                            throw new ObjectNotFoundException(rootOid, e);
-                        }
+                final ExceptionRecognizer.Recognition recognition =
+                        exceptionRecognizer.recognize2(e);
+                if(recognition != null) {
+                    if(recognition.getCategory() == ExceptionRecognizer.Category.NOT_FOUND) {
+                        throw new ObjectNotFoundException(rootOid, e);
                     }
                 }
             }
@@ -1147,9 +1128,6 @@ public class PersistenceSession implements
         if (adapter.representsPersistent()) {
             throw new NotPersistableException("Object already persistent: " + adapter);
         }
-        if (!adapter.getSpecification().persistability().isPersistable()) {
-            throw new NotPersistableException("Object is not persistable: " + adapter);
-        }
         final ObjectSpecification specification = adapter.getSpecification();
         if (specification.isService()) {
             throw new NotPersistableException("Cannot persist services: " + adapter);
@@ -1205,7 +1183,7 @@ public class PersistenceSession implements
 
 
     private static boolean objectSpecNotPersistable(final ObjectAdapter adapter) {
-        return !adapter.getSpecification().persistability().isPersistable() || adapter.isParentedCollection();
+        return adapter.isParentedCollection();
     }
 
 
@@ -2432,13 +2410,13 @@ public class PersistenceSession implements
 
     public Object lookup(
             final Bookmark bookmark,
-            final BookmarkService2.FieldResetPolicy fieldResetPolicy) {
+            final BookmarkService.FieldResetPolicy fieldResetPolicy) {
         RootOid oid = RootOid.create(bookmark);
         final ObjectAdapter adapter = adapterFor(oid);
         if(adapter == null) {
             return null;
         }
-        if(fieldResetPolicy == BookmarkService2.FieldResetPolicy.RESET && !adapter.getSpecification().isViewModel()) {
+        if(fieldResetPolicy == BookmarkService.FieldResetPolicy.RESET && !adapter.getSpecification().isViewModel()) {
             refreshRootInTransaction(adapter);
         } else {
             loadObjectInTransaction(oid);

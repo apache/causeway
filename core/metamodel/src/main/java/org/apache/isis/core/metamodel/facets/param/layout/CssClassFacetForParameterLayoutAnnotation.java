@@ -19,6 +19,9 @@
 
 package org.apache.isis.core.metamodel.facets.param.layout;
 
+import java.util.List;
+import java.util.Objects;
+
 import com.google.common.base.Strings;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -27,12 +30,17 @@ import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacetAbstr
 
 public class CssClassFacetForParameterLayoutAnnotation extends CssClassFacetAbstract {
 
-    public static CssClassFacet create(ParameterLayout parameterLayout, FacetHolder holder) {
-        if(parameterLayout == null) {
-            return null;
-        }
-        final String cssClass = Strings.emptyToNull(parameterLayout.cssClass());
-        return cssClass != null ? new CssClassFacetForParameterLayoutAnnotation(cssClass, holder) : null;
+    public static CssClassFacet create(
+            final List<ParameterLayout> parameterLayouts,
+            final FacetHolder holder) {
+
+        return parameterLayouts.stream()
+                .map(ParameterLayout::cssClass)
+                .map(Strings::emptyToNull)
+                .filter(Objects::nonNull)
+                .findFirst()
+                .map(cssClass -> new CssClassFacetForParameterLayoutAnnotation(cssClass, holder))
+                .orElse(null);
     }
 
     private CssClassFacetForParameterLayoutAnnotation(String value, FacetHolder holder) {

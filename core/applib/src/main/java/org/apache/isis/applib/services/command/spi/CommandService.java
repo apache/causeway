@@ -28,23 +28,14 @@ public interface CommandService {
 
     /**
      * Simply instantiate the appropriate instance of the {@link Command}.  Its members will be populated automatically
-     * by the framework.
+     * by the framework (the {@link Command}'s {@link Command#getTimestamp()}, {@link Command#getUser()} and {@link Command#getTransactionId()}).
      */
     @Programmatic
     Command create();
     
     /**
-     * DEPRECATED - this method is no longer called by the framework.
-     *
-     * @deprecated - the framework automatically populates the {@link Command}'s {@link Command#getTimestamp()}, {@link Command#getUser()}  and {@link Command#getTransactionId()}, so there is no need for the service implementation to initialize any of these.  In particular, the {@link Command} will already have been initialized with the provided <tt>transactionId</tt> argument.
-     */
-    @Deprecated
-    @Programmatic
-    void startTransaction(final Command command, final UUID transactionId);
-    
-    /**
      * Hint for this implementation to eagerly persist the {@link Command}s if possible; influences the behaviour 
-     * of actions annotated to execute in the {@link org.apache.isis.applib.annotation.Command.ExecuteIn#BACKGROUND}.
+     * of actions annotated to execute in the {@link org.apache.isis.applib.annotation.CommandExecuteIn#BACKGROUND}.
      */
     @Programmatic
     boolean persistIfPossible(Command command);

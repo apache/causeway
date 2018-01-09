@@ -73,7 +73,7 @@ public class NotInServiceMenuFacetDerivedFromDomainServiceFacetFactoryTest exten
         facetedMethod = FacetedMethod.createForAction(CustomerService.class, "name", mockSpecificationLoader);
 
         // when
-        facetFactory.process(new FacetFactory.ProcessMethodContext(CustomerService.class, null, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
+        facetFactory.process(new FacetFactory.ProcessMethodContext(CustomerService.class, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
 
         // then
         final Facet facet = facetedMethod.getFacet(NotInServiceMenuFacet.class);
@@ -109,7 +109,7 @@ public class NotInServiceMenuFacetDerivedFromDomainServiceFacetFactoryTest exten
         facetedMethod = FacetedMethod.createForAction(CustomerService.class, "name", mockSpecificationLoader);
 
         // when
-        facetFactory.process(new FacetFactory.ProcessMethodContext(CustomerService.class, null, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
+        facetFactory.process(new FacetFactory.ProcessMethodContext(CustomerService.class, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
 
         // then
         final Facet facet = facetedMethod.getFacet(NotInServiceMenuFacet.class);
@@ -145,7 +145,7 @@ public class NotInServiceMenuFacetDerivedFromDomainServiceFacetFactoryTest exten
         facetedMethod = FacetedMethod.createForAction(CustomerService.class, "name", mockSpecificationLoader);
 
         // when
-        facetFactory.process(new FacetFactory.ProcessMethodContext(CustomerService.class, null, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
+        facetFactory.process(new FacetFactory.ProcessMethodContext(CustomerService.class, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
 
         // then
         final Facet facet = facetedMethod.getFacet(NotInServiceMenuFacet.class);
@@ -178,7 +178,7 @@ public class NotInServiceMenuFacetDerivedFromDomainServiceFacetFactoryTest exten
         facetedMethod = FacetedMethod.createForAction(CustomerService.class, "name", mockSpecificationLoader);
 
         // when
-        facetFactory.process(new FacetFactory.ProcessMethodContext(CustomerService.class, null, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
+        facetFactory.process(new FacetFactory.ProcessMethodContext(CustomerService.class, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
 
         // then
         final Facet facet = facetedMethod.getFacet(NotInServiceMenuFacet.class);
@@ -209,7 +209,7 @@ public class NotInServiceMenuFacetDerivedFromDomainServiceFacetFactoryTest exten
         facetedMethod = FacetedMethod.createForAction(CustomerService.class, "name", mockSpecificationLoader);
 
         // when
-        facetFactory.process(new FacetFactory.ProcessMethodContext(CustomerService.class, null, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
+        facetFactory.process(new FacetFactory.ProcessMethodContext(CustomerService.class, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
 
         // then
         final Facet facet = facetedMethod.getFacet(NotInServiceMenuFacet.class);

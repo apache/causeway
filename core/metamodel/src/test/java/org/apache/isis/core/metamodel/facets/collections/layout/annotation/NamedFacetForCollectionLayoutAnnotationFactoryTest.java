@@ -56,7 +56,7 @@ public class NamedFacetForCollectionLayoutAnnotationFactoryTest extends Abstract
         }
         final Method method = findMethod(Customer.class, "getFirstNames");
 
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, method, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(Customer.class, null, method, methodRemover, facetedMethod));
 
         final NamedFacet facet = facetedMethod.getFacet(NamedFacet.class);
         assertThat(facet, is(notNullValue()));
@@ -81,7 +81,7 @@ public class NamedFacetForCollectionLayoutAnnotationFactoryTest extends Abstract
         }
         final Method method = findMethod(Customer.class, "getFirstNames");
 
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, method, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(Customer.class, null, method, methodRemover, facetedMethod));
 
         final NamedFacet facet = facetedMethod.getFacet(NamedFacet.class);
         assertThat(facet, is(notNullValue()));

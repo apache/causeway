@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.facets.actions;
 
 import java.lang.reflect.Method;
-import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -28,8 +27,6 @@ import java.util.Set;
 
 import org.jmock.Expectations;
 
-import org.apache.isis.applib.annotation.Named;
-import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.security.UserMemento;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -44,28 +41,17 @@ import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.actions.defaults.ActionDefaultsFacet;
 import org.apache.isis.core.metamodel.facets.actions.defaults.method.ActionDefaultsFacetViaMethod;
 import org.apache.isis.core.metamodel.facets.actions.defaults.method.ActionDefaultsFacetViaMethodFactory;
-import org.apache.isis.core.metamodel.facets.actions.interaction.ActionNamedExplorationFacetFactory;
-import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacet;
+import org.apache.isis.core.metamodel.facets.actions.interaction.ActionNamedFacetFactory;
 import org.apache.isis.core.metamodel.facets.actions.validate.ActionValidationFacet;
 import org.apache.isis.core.metamodel.facets.actions.validate.method.ActionValidationFacetViaMethod;
 import org.apache.isis.core.metamodel.facets.actions.validate.method.ActionValidationFacetViaMethodFactory;
-import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
-import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacetAbstract;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
-import org.apache.isis.core.metamodel.facets.members.describedas.staticmethod.DescribedAsFacetStaticMethodFactory;
-import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
-import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAbstract;
 import org.apache.isis.core.metamodel.facets.members.disabled.forsession.DisableForSessionFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.forsession.DisableForSessionFacetViaMethod;
 import org.apache.isis.core.metamodel.facets.members.disabled.forsession.DisableForSessionFacetViaMethodFactory;
-import org.apache.isis.core.metamodel.facets.members.disabled.staticmethod.DisabledFacetStaticMethodFacetFactory;
 import org.apache.isis.core.metamodel.facets.members.hidden.forsession.HideForSessionFacet;
 import org.apache.isis.core.metamodel.facets.members.hidden.forsession.HideForSessionFacetViaMethod;
 import org.apache.isis.core.metamodel.facets.members.hidden.forsession.HideForSessionFacetViaMethodFactory;
-import org.apache.isis.core.metamodel.facets.members.hidden.staticmethod.HiddenFacetOnStaticMethod;
-import org.apache.isis.core.metamodel.facets.members.hidden.staticmethod.HiddenFacetStaticMethodFactory;
-import org.apache.isis.core.metamodel.facets.members.named.staticmethod.NamedFacetStaticMethodFactory;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.method.ActionParameterAutoCompleteFacetViaMethod;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.method.ActionParameterAutoCompleteFacetViaMethodFactory;
@@ -152,7 +138,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testProvidesDefaultNameForActionButIgnoresAnyNamedAnnotation() {
-        final ActionNamedExplorationFacetFactory facetFactory = new ActionNamedExplorationFacetFactory();
+        final ActionNamedFacetFactory facetFactory = new ActionNamedFacetFactory();
 
         facetFactory.setServicesInjector(mockServicesInjector);
 
@@ -161,13 +147,12 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         class Customer {
             @SuppressWarnings("unused")
-            @Named("Renamed an action with a named annotation")
             public void anActionWithNamedAnnotation() {
             }
         }
         final Method method = findMethod(Customer.class, "anActionWithNamedAnnotation");
 
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, method, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(Customer.class, null, method, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(NamedFacet.class);
         assertNotNull(facet);
@@ -176,33 +161,6 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         assertEquals("An Action With Named Annotation", namedFacet.value());
     }
 
-
-    public void testPicksUpExplorationPrefixAndSetsNameAppropriatelyAlso() {
-        final ActionNamedExplorationFacetFactory facetFactory = new ActionNamedExplorationFacetFactory();
-
-        facetFactory.setServicesInjector(mockServicesInjector);
-
-        // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
-        allowing_specificationLoader_loadSpecification_any_willReturn(this.voidSpec);
-
-        class Customer {
-            @SuppressWarnings("unused")
-            public void explorationAnActionWithExplorationPrefix() {
-            }
-        }
-        final Method method = findMethod(Customer.class, "explorationAnActionWithExplorationPrefix");
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, method, methodRemover, facetedMethod));
-
-        Facet facet = facetedMethod.getFacet(PrototypeFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof PrototypeFacet);
-
-        facet = facetedMethod.getFacet(NamedFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof NamedFacet);
-        final NamedFacet namedFacet = (NamedFacet) facet;
-        assertEquals("An Action With Exploration Prefix", namedFacet.value());
-    }
 
     public void testInstallsValidateMethodNoArgsFacetAndRemovesMethod() {
         final ActionValidationFacetViaMethodFactory facetFactory = new ActionValidationFacetViaMethodFactory();
@@ -225,7 +183,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final Method actionMethod = findMethod(Customer.class, "someAction");
         final Method validateMethod = findMethod(Customer.class, "validateSomeAction");
 
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(ActionValidationFacet.class);
         assertNotNull(facet);
@@ -257,7 +215,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final Method actionMethod = findMethod(Customer.class, "someAction", new Class[] { int.class, int.class });
         final Method validateMethod = findMethod(Customer.class, "validateSomeAction", new Class[] { int.class, int.class });
 
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(ActionValidationFacet.class);
         assertNotNull(facet);
@@ -289,7 +247,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final Method actionMethod = findMethod(Customer.class, "someAction", new Class[] { int.class, Long.class });
         final Method defaultMethod = findMethod(Customer.class, "defaultSomeAction", new Class[] {});
 
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(ActionDefaultsFacet.class);
         assertNotNull(facet);
@@ -320,7 +278,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         }
         final Method actionMethod = findMethod(Customer.class, "someAction", new Class[] { int.class, Long.class });
 
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(ActionDefaultsFacet.class);
         assertNull(facet);
@@ -346,7 +304,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
         allowing_specificationLoader_loadSpecification_any_willReturn(this.voidSpec);
 
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(ActionChoicesFacet.class);
         assertNotNull(facet);
@@ -377,7 +335,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         }
         final Method actionMethod = findMethod(Customer.class, "someAction", new Class[] { int.class, Long.class });
 
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(ActionChoicesFacet.class);
         assertNull(facet);
@@ -423,118 +381,6 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         }
     }
 
-    public void testInstallsNamedFacetUsingNameMethodAndRemovesMethod() {
-        final NamedFacetStaticMethodFactory facetFactory = new NamedFacetStaticMethodFactory();
-
-        facetFactory.setServicesInjector(mockServicesInjector);
-
-        // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
-        allowing_specificationLoader_loadSpecification_any_willReturn(this.voidSpec);
-
-        final Method actionMethod = findMethod(CustomerStatic.class, "someAction", new Class[] { int.class, Long.class });
-        final Method nameMethod = findMethod(CustomerStatic.class, "nameSomeAction");
-
-        facetFactory.process(new ProcessMethodContext(CustomerStatic.class, null, null, actionMethod, methodRemover, facetedMethod));
-
-        final Facet facet = facetedMethod.getFacet(NamedFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof NamedFacetAbstract);
-        final NamedFacetAbstract namedFacetAbstract = (NamedFacetAbstract) facet;
-        assertEquals("Another Name", namedFacetAbstract.value());
-
-        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(nameMethod));
-    }
-
-    public void testInstallsDescribedAsFacetUsingDescriptionAndRemovesMethod() {
-        final DescribedAsFacetStaticMethodFactory facetFactory = new DescribedAsFacetStaticMethodFactory();
-
-        // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
-        allowing_specificationLoader_loadSpecification_any_willReturn(this.voidSpec);
-
-        final Method actionMethod = findMethod(CustomerStatic.class, "someAction", new Class[] { int.class, Long.class });
-        final Method descriptionMethod = findMethod(CustomerStatic.class, "descriptionSomeAction");
-
-        facetFactory.process(new ProcessMethodContext(CustomerStatic.class, null, null, actionMethod, methodRemover, facetedMethod));
-
-        final Facet facet = facetedMethod.getFacet(DescribedAsFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof DescribedAsFacetAbstract);
-        final DescribedAsFacetAbstract describedAsFacetAbstract = (DescribedAsFacetAbstract) facet;
-        assertEquals("Some old description", describedAsFacetAbstract.value());
-
-        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(descriptionMethod));
-    }
-
-    public void testInstallsHiddenFacetUsingAlwaysHideAndRemovesMethod() {
-        final HiddenFacetStaticMethodFactory facetFactory = new HiddenFacetStaticMethodFactory();
-
-        facetFactory.setServicesInjector(mockServicesInjector);
-
-        final Method actionMethod = findMethod(CustomerStatic.class, "someAction", new Class[] { int.class, Long.class });
-        final Method alwaysHideMethod = findMethod(CustomerStatic.class, "alwaysHideSomeAction", new Class[] {});
-        // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
-        allowing_specificationLoader_loadSpecification_any_willReturn(this.voidSpec);
-
-        facetFactory.process(new ProcessMethodContext(CustomerStatic.class, null, null, actionMethod, methodRemover, facetedMethod));
-
-        final HiddenFacetOnStaticMethod facet = facetedMethod.getFacet(HiddenFacetOnStaticMethod.class);
-        assertNotNull(facet);
-        assertEquals(When.ALWAYS, facet.when());
-
-        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(alwaysHideMethod));
-    }
-
-    public void testInstallsHiddenFacetUsingAlwaysHideWhenNotAndRemovesMethod() {
-        final HiddenFacetStaticMethodFactory facetFactory = new HiddenFacetStaticMethodFactory();
-
-        // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
-        allowing_specificationLoader_loadSpecification_any_willReturn(this.voidSpec);
-
-        final Method actionMethod = findMethod(CustomerStatic.class, "otherAction", new Class[] { int.class, Long.class });
-        final Method alwaysHideMethod = findMethod(CustomerStatic.class, "alwaysHideOtherAction", new Class[] {});
-
-        facetFactory.process(new ProcessMethodContext(CustomerStatic.class, null, null, actionMethod, methodRemover, facetedMethod));
-
-        assertNull(facetedMethod.getFacet(HiddenFacetOnStaticMethod.class));
-
-        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(alwaysHideMethod));
-    }
-
-    public void testInstallsDisabledFacetUsingProtectAndRemovesMethod() {
-        final DisabledFacetStaticMethodFacetFactory facetFactory = new DisabledFacetStaticMethodFacetFactory();
-
-        facetFactory.setServicesInjector(mockServicesInjector);
-
-        allowing_specificationLoader_loadSpecification_any_willReturn(this.voidSpec);
-
-        final Method actionMethod = findMethod(CustomerStatic.class, "someAction", new Class[] { int.class, Long.class });
-        final Method protectMethod = findMethod(CustomerStatic.class, "protectSomeAction", new Class[] {});
-
-        facetFactory.process(new ProcessMethodContext(CustomerStatic.class, null, null, actionMethod, methodRemover, facetedMethod));
-
-        final Facet facet = facetedMethod.getFacet(DisabledFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof DisabledFacetAbstract);
-        final DisabledFacetAbstract disabledFacetAbstract = (DisabledFacetAbstract) facet;
-        assertEquals(When.ALWAYS, disabledFacetAbstract.when());
-
-        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(protectMethod));
-    }
-
-    public void testDoesNotInstallDisabledFacetUsingProtectWhenNotAndRemovesMethod() {
-        final DisabledFacetStaticMethodFacetFactory facetFactory = new DisabledFacetStaticMethodFacetFactory();
-
-        allowing_specificationLoader_loadSpecification_any_willReturn(this.voidSpec);
-
-        final Method actionMethod = findMethod(CustomerStatic.class, "otherAction", new Class[] { int.class, Long.class });
-        final Method protectMethod = findMethod(CustomerStatic.class, "protectOtherAction", new Class[] {});
-
-        facetFactory.process(new ProcessMethodContext(CustomerStatic.class, null, null, actionMethod, methodRemover, facetedMethod));
-
-        assertNull(facetedMethod.getFacet(DisabledFacet.class));
-
-        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(protectMethod));
-    }
 
     public void testInstallsHiddenForSessionFacetAndRemovesMethod() {
 
@@ -548,7 +394,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final Method actionMethod = findMethod(CustomerStatic.class, "someAction", new Class[] { int.class, Long.class });
         final Method hideMethod = findMethod(CustomerStatic.class, "hideSomeAction", new Class[] { UserMemento.class });
 
-        facetFactory.process(new ProcessMethodContext(CustomerStatic.class, null, null, actionMethod, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(CustomerStatic.class, null, actionMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(HideForSessionFacet.class);
         assertNotNull(facet);
@@ -569,7 +415,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final Method actionMethod = findMethod(CustomerStatic.class, "someAction", new Class[] { int.class, Long.class });
         final Method disableMethod = findMethod(CustomerStatic.class, "disableSomeAction", new Class[] { UserMemento.class });
 
-        facetFactory.process(new ProcessMethodContext(CustomerStatic.class, null, null, actionMethod, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(CustomerStatic.class, null, actionMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(DisableForSessionFacet.class);
         assertNotNull(facet);
@@ -610,7 +456,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final FacetedMethod facetHolderWithParms = FacetedMethod.createForAction(Customer.class, actionMethod,
                 mockSpecificationLoader);
 
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetHolderWithParms));
+        facetFactory.process(new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetHolderWithParms));
 
         final Facet facet0 = facetHolderWithParms.getParameters().get(0).getFacet(ActionParameterDefaultsFacet.class);
         assertNotNull(facet0);
@@ -667,7 +513,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final FacetedMethod facetHolderWithParms = FacetedMethod.createForAction(Customer.class, actionMethod,
                 mockSpecificationLoader);
 
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetHolderWithParms));
+        facetFactory.process(new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetHolderWithParms));
 
         final Facet facet0 = facetHolderWithParms.getParameters().get(0).getFacet(ActionParameterChoicesFacet.class);
         assertNotNull(facet0);
@@ -721,7 +567,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final FacetedMethod facetHolderWithParms = FacetedMethod.createForAction(Customer.class, actionMethod,
                 mockSpecificationLoader);
 
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetHolderWithParms));
+        facetFactory.process(new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetHolderWithParms));
 
         final Facet facet0 = facetHolderWithParms.getParameters().get(0).getFacet(ActionParameterAutoCompleteFacet.class);
         assertNotNull(facet0);
@@ -771,7 +617,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final FacetedMethod facetHolderWithParms = FacetedMethod.createForAction(Customer.class, actionMethod,
                 mockSpecificationLoader);
 
-        final ProcessMethodContext processMethodContext = new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetHolderWithParms);
+        final ProcessMethodContext processMethodContext = new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetHolderWithParms);
         facetFactory.process(processMethodContext);
         try {
             facetFactoryForParams.process(processMethodContext);
@@ -821,7 +667,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final FacetedMethod facetHolderWithParms = FacetedMethod.createForAction(Customer.class, actionMethod,
                 mockSpecificationLoader);
 
-        final ProcessMethodContext processMethodContext = new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetHolderWithParms);
+        final ProcessMethodContext processMethodContext = new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetHolderWithParms);
         facetFactory.process(processMethodContext);
         try {
             facetFactoryForParams.process(processMethodContext);

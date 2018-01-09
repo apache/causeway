@@ -23,7 +23,7 @@ import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.filter.Filter;
+import com.google.common.base.Predicate;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -234,8 +234,8 @@ public class ObjectActionContributee extends ObjectActionDefault implements Cont
     }
 
     @Override
-    public List<Facet> getFacets(Filter<Facet> filter) {
-        return facetHolder.getFacets(filter);
+    public List<Facet> getFacets(Predicate<Facet> predicate) {
+        return facetHolder.getFacets(predicate);
     }
 
     @Override

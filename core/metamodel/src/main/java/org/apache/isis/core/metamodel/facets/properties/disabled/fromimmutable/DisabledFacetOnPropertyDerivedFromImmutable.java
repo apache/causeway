@@ -22,18 +22,17 @@ package org.apache.isis.core.metamodel.facets.properties.disabled.fromimmutable;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAbstract;
 
 public class DisabledFacetOnPropertyDerivedFromImmutable extends DisabledFacetAbstract {
 
-    public DisabledFacetOnPropertyDerivedFromImmutable(final ImmutableFacet immutableFacet, final FacetHolder holder) {
-        super(immutableFacet.when(), Where.ANYWHERE, holder);
+    public DisabledFacetOnPropertyDerivedFromImmutable(final FacetHolder holder) {
+        super(Where.ANYWHERE, holder);
     }
 
     @Override
     public String disabledReason(final ObjectAdapter target) {
-        return when().appliesTo(target) ? "Immutable" : null;
+        return "Immutable";
     }
 
 }

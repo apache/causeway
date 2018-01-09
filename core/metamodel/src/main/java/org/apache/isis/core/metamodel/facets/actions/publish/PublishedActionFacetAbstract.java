@@ -19,39 +19,20 @@
 
 package org.apache.isis.core.metamodel.facets.actions.publish;
 
-import org.apache.isis.applib.annotation.PublishedAction;
-import org.apache.isis.applib.annotation.PublishingPayloadFactoryForAction;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.SingleValueFacetAbstract;
+import org.apache.isis.core.metamodel.facets.MarkerFacetAbstract;
 
-public abstract class PublishedActionFacetAbstract extends SingleValueFacetAbstract<PublishedAction.PayloadFactory> implements PublishedActionFacet {
+public abstract class PublishedActionFacetAbstract extends MarkerFacetAbstract implements PublishedActionFacet {
 
     public static Class<? extends Facet> type() {
         return PublishedActionFacet.class;
     }
 
-    public PublishedActionFacetAbstract(final PublishingPayloadFactoryForAction payloadFactory, final FacetHolder holder) {
-        this(legacyPayloadFactoryFor(payloadFactory), holder);
-    }
-
-    public PublishedActionFacetAbstract(final PublishedAction.PayloadFactory payloadFactory, final FacetHolder holder) {
+    public PublishedActionFacetAbstract(final FacetHolder holder) {
         super(  type(),
-                payloadFactory != null
-                        ? payloadFactory
-                        : new PublishedActionPayloadFactoryDefault(),
                 holder);
     }
 
-    static PublishedAction.PayloadFactory legacyPayloadFactoryFor(final PublishingPayloadFactoryForAction publishingPayloadFactory) {
-        if(publishingPayloadFactory == null) {
-            return null;
-        }
-        if(publishingPayloadFactory instanceof PublishingPayloadFactoryForAction.Adapter) {
-            final PublishingPayloadFactoryForAction.Adapter adapter = (PublishingPayloadFactoryForAction.Adapter) publishingPayloadFactory;
-            return adapter.getPayloadFactory();
-        }
-        return new PublishedActionPayloadFactoryDefault(publishingPayloadFactory);
-    }
 
 }

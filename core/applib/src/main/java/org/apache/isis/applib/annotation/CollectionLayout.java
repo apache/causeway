@@ -30,7 +30,7 @@ import java.util.Comparator;
  * Layout hints for collections.
  */
 @Inherited
-@Target({ ElementType.METHOD, ElementType.FIELD })
+@Target({ ElementType.METHOD, ElementType.FIELD, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface CollectionLayout {
 
@@ -106,28 +106,6 @@ public @interface CollectionLayout {
     int paged() default -1;
 
 
-    // //////////////////////////////////////
-
-    /**
-     * Indicates that the rendering of a collection should be performed lazily or eagerly.
-     *
-     * <p>
-     * By default, collections are rendered lazily, meaning its contents is not shown automatically.
-     *
-     * <p>
-     * Using this attribute, an <tt>Order#lineItems</tt> collection might be rendered eagerly.  A viewer might use this
-     * hint to &quot;open&quot; the collection automatically so that the user could see a list of line items
-     * immediately when the order is rendered.
-     * </p>
-     *
-     * <p>
-     * There is some similarity between this concept and that of eager-loading as supported by some object stores.
-     * </p>
-     * 
-     * @deprecated - use {@link #defaultView()} set to &quot;table&quot; instead.
-     */
-    @Deprecated
-    RenderType render() default RenderType.LAZILY;
 
 
     // //////////////////////////////////////

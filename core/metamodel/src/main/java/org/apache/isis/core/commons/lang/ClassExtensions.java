@@ -19,24 +19,17 @@
 
 package org.apache.isis.core.commons.lang;
 
-import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.net.URL;
-import java.nio.charset.Charset;
-import java.util.Properties;
 
-import com.google.common.io.ByteSource;
 import com.google.common.io.Resources;
 
 import org.apache.isis.core.commons.exceptions.IsisException;
 
 public final class ClassExtensions {
-
-
-    // //////////////////////////////////////
 
 
     private ClassExtensions() {
@@ -65,16 +58,8 @@ public final class ClassExtensions {
                     throw new IsisException(e);
                 }
             }
-        } catch (final SecurityException ex) {
+        } catch (final SecurityException | IllegalArgumentException | IllegalAccessException | InstantiationException | InvocationTargetException ex) {
             throw new IsisException(ex);
-        } catch (final IllegalArgumentException e) {
-            throw new IsisException(e);
-        } catch (final InstantiationException e) {
-            throw new IsisException(e);
-        } catch (final IllegalAccessException e) {
-            throw new IsisException(e);
-        } catch (final InvocationTargetException e) {
-            throw new IsisException(e);
         }
     }
 
@@ -89,14 +74,6 @@ public final class ClassExtensions {
 
     public static boolean isAbstract(final Class<?> extendee) {
         return Modifier.isAbstract(extendee.getModifiers());
-    }
-
-    public static boolean isFinal(final Class<?> extendee) {
-        return Modifier.isFinal(extendee.getModifiers());
-    }
-
-    public static boolean isPublic(final Class<?> extendee) {
-        return Modifier.isPublic(extendee.getModifiers());
     }
 
     public static boolean isJavaClass(final Class<?> extendee) {
@@ -142,44 +119,12 @@ public final class ClassExtensions {
         }
     }
 
-    public static Method findMethodElseNull(final Class<?> clazz, final String[] candidateMethodNames, final Class<?>... parameterClass) {
-        for (final String candidateMethodName : candidateMethodNames) {
-            final Method method = getMethodElseNull(clazz, candidateMethodName, parameterClass);
-            if (method != null) {
-                return method;
-            }
-        }
-        return null;
-    }
-
-    public static Properties resourceProperties(final Class<?> extendee, final String suffix) {
-        try {
-            final URL url = Resources.getResource(extendee, extendee.getSimpleName()+suffix);
-            final ByteSource byteSource = Resources.asByteSource(url);
-            final Properties properties = new Properties();
-            properties.load(byteSource.openStream());
-            return properties;
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    public static String resourceContent(final Class<?> cls, final String suffix) throws IOException {
-        final String resourceName = cls.getSimpleName() + suffix;
-        return resourceContentOf(cls, resourceName);
-    }
-
-    public static String resourceContentOf(final Class<?> cls, final String resourceName) throws IOException {
-        final URL url = Resources.getResource(cls, resourceName);
-        return Resources.toString(url, Charset.defaultCharset());
-    }
-
     public static boolean exists(final Class<?> cls, final String resourceName) {
         final URL url = Resources.getResource(cls, resourceName);
         return url != null;
     }
 
-    public static Class<?> asWrapped(final Class<?> primitiveClassExtendee) {
+    static Class<?> asWrapped(final Class<?> primitiveClassExtendee) {
         return ClassUtil.wrapperClasses.get(primitiveClassExtendee);
     }
 

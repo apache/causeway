@@ -19,8 +19,8 @@
 
 package org.apache.isis.applib.services.wrapper;
 
-import org.apache.isis.applib.events.InteractionEvent;
-import org.apache.isis.applib.events.ValidityEvent;
+import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
+import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
 
 /**
  * Superclass of exceptions which indicate an attempt to interact with an object

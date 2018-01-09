@@ -19,21 +19,16 @@
 
 package org.apache.isis.progmodel.wrapper.dom.employees;
 
-import org.apache.isis.applib.AbstractDomainObject;
-import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.When;
 import org.apache.isis.progmodel.wrapper.dom.claims.Approver;
 import org.apache.isis.progmodel.wrapper.dom.claims.Claimant;
 
-public class Employee extends AbstractDomainObject implements Claimant, Approver {
+public class Employee implements Claimant, Approver {
 
-    // {{ Title
     public String title() {
         return getName();
     }
 
-    // }}
 
     // {{ Name
     private String name;
@@ -79,7 +74,6 @@ public class Employee extends AbstractDomainObject implements Claimant, Approver
     private String password;
 
     @MemberOrder(sequence = "2")
-    @Disabled(when = When.ONCE_PERSISTED)
     public String getPassword() {
         return password;
     }

@@ -7,10 +7,6 @@
 
 The `TransactionService3` (and its various supertypes) allows domain objects to influence user transactions.
 
-[NOTE]
-====
-The methods in this service replace similar methods (now deprecated) in xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer[`DomainObjectContainer`].
-====
 
 
 == API
@@ -118,6 +114,5 @@ try {
 == Implementation
 
 The core framework provides a default implementation of this service, `o.a.i.core.metamodel.services.xactn.TransactionServiceDefault`.
-
 
 

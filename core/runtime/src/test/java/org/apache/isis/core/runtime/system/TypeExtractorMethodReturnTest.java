@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.runtime.system;
 
-import static org.apache.isis.core.commons.matchers.IsisMatchers.containsElementThat;
+import static org.apache.isis.core.runtime.system.TypeExtractorMethodsParametersTest.containsElementThat;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;

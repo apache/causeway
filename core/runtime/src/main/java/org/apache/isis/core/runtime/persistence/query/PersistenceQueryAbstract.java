@@ -19,16 +19,10 @@
 
 package org.apache.isis.core.runtime.persistence.query;
 
-import java.io.IOException;
-
-import org.apache.isis.core.commons.encoding.DataInputExtended;
-import org.apache.isis.core.commons.encoding.DataOutputExtended;
-import org.apache.isis.core.commons.encoding.Encodable;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.persistence.PersistenceQuery;
 
-public abstract class PersistenceQueryAbstract implements PersistenceQuery, Encodable {
+public abstract class PersistenceQueryAbstract implements PersistenceQuery {
 
     //region > constructor, fields
 
@@ -36,39 +30,15 @@ public abstract class PersistenceQueryAbstract implements PersistenceQuery, Enco
     protected final long count;
     
     private final ObjectSpecification specification;
-    private final SpecificationLoader specificationLoader;
 
     public PersistenceQueryAbstract(
             final ObjectSpecification specification,
-            final SpecificationLoader specificationLoader,
             final long... range) {
-        this.specificationLoader = specificationLoader;
         this.start = range.length > 0 ? range[0]:0;
         this.count = range.length > 1 ? range[1]:0;
         
         this.specification = specification;
         // nothing to do
-    }
-
-    protected PersistenceQueryAbstract(
-            final DataInputExtended input,
-            final SpecificationLoader specificationLoader,
-            final long... range) throws IOException {
-
-        this.specificationLoader = specificationLoader;
-        final String specName = input.readUTF();
-        this.start = range.length > 0 ? range[0]:0;
-        this.count = range.length > 1 ? range[1]:0;
-        
-        specification = specificationLoader.loadSpecification(specName);
-        // nothing to do
-    }
-
-    //endregion
-
-    @Override
-    public void encode(final DataOutputExtended output) throws IOException {
-        output.writeUTF(specification.getFullIdentifier());
     }
 
     /**

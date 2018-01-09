@@ -29,16 +29,11 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.annotation.MementoSerialization;
 import org.apache.isis.applib.annotation.Optionality;
-import org.apache.isis.applib.annotation.PostsPropertyChangedEvent;
 import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyInteraction;
-import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.services.eventbus.PropertyChangedEvent;
 import org.apache.isis.applib.services.eventbus.PropertyDomainEvent;
-import org.apache.isis.applib.services.eventbus.PropertyInteractionEvent;
 import org.apache.isis.applib.spec.Specification;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -61,16 +56,11 @@ import org.apache.isis.core.metamodel.facets.properties.property.mandatory.Manda
 import org.apache.isis.core.metamodel.facets.properties.property.maxlength.MaxLengthFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertyClearFacetForDomainEventFromDefault;
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertyClearFacetForDomainEventFromPropertyAnnotation;
-import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertyClearFacetForDomainEventFromPropertyInteractionAnnotation;
-import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertyClearFacetForPostsPropertyChangedEventAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacet;
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacetDefault;
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacetForPropertyAnnotation;
-import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacetForPropertyInteractionAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertySetterFacetForDomainEventFromDefault;
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertySetterFacetForDomainEventFromPropertyAnnotation;
-import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertySetterFacetForDomainEventFromPropertyInteractionAnnotation;
-import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertySetterFacetForPostsPropertyChangedEventAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.mustsatisfy.MustSatisfySpecificationFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.notpersisted.NotPersistedFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.regex.RegExFacetForPropertyAnnotation;
@@ -166,12 +156,9 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
         public void withDeprecatedPostsPropertyChangedEvent_andGetterFacet_andSetterFacet() {
 
             class Customer {
-                class NamedChangedDomainEvent extends PropertyChangedEvent<Customer, String> {
-                    public NamedChangedDomainEvent(final Customer source, final String oldValue, final String newValue) {
-                        super(source, oldValue, newValue);
-                    }
+                class NamedChangedDomainEvent extends PropertyDomainEvent<Customer, String> {
                 }
-                @PostsPropertyChangedEvent(NamedChangedDomainEvent.class)
+                @Property(domainEvent = NamedChangedDomainEvent.class)
                 public String getName() {
                     return null;
                 }
@@ -196,7 +183,8 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
 
 
             // when
-            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null, null, propertyMethod, mockMethodRemover, facetedMethod);
+            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
+                    propertyMethod, mockMethodRemover, facetedMethod);
             facetFactory.processModify(processMethodContext);
 
             // then
@@ -209,15 +197,15 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             // then
             final Facet setterFacet = facetedMethod.getFacet(PropertySetterFacet.class);
             Assert.assertNotNull(setterFacet);
-            Assert.assertTrue(setterFacet instanceof PropertySetterFacetForPostsPropertyChangedEventAnnotation);
-            final PropertySetterFacetForPostsPropertyChangedEventAnnotation setterFacetImpl = (PropertySetterFacetForPostsPropertyChangedEventAnnotation) setterFacet;
+            Assert.assertTrue(setterFacet instanceof PropertySetterFacetForDomainEventFromPropertyAnnotation);
+            final PropertySetterFacetForDomainEventFromPropertyAnnotation setterFacetImpl = (PropertySetterFacetForDomainEventFromPropertyAnnotation) setterFacet;
             assertThat(setterFacetImpl.value(), classEqualTo(Customer.NamedChangedDomainEvent.class));
 
             // then
             final Facet clearFacet = facetedMethod.getFacet(PropertyClearFacet.class);
             Assert.assertNotNull(clearFacet);
-            Assert.assertTrue(clearFacet instanceof PropertyClearFacetForPostsPropertyChangedEventAnnotation);
-            final PropertyClearFacetForPostsPropertyChangedEventAnnotation clearFacetImpl = (PropertyClearFacetForPostsPropertyChangedEventAnnotation) clearFacet;
+            Assert.assertTrue(clearFacet instanceof PropertyClearFacetForDomainEventFromPropertyAnnotation);
+            final PropertyClearFacetForDomainEventFromPropertyAnnotation clearFacetImpl = (PropertyClearFacetForDomainEventFromPropertyAnnotation) clearFacet;
             assertThat(clearFacetImpl.value(), classEqualTo(Customer.NamedChangedDomainEvent.class));
         }
 
@@ -226,16 +214,9 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
         public void withPropertyInteractionEvent() {
 
             class Customer {
-                class NamedChangedDomainEvent extends PropertyInteractionEvent<Customer, String> {
-                    public NamedChangedDomainEvent(
-                            final Customer source,
-                            final Identifier identifier,
-                            final String oldValue,
-                            final String newValue) {
-                        super(source, identifier, oldValue, newValue);
-                    }
+                class NamedChangedDomainEvent extends PropertyDomainEvent<Customer, String> {
                 }
-                @PropertyInteraction(NamedChangedDomainEvent.class)
+                @Property(domainEvent = NamedChangedDomainEvent.class)
                 public String getName() {
                     return null;
                 }
@@ -255,28 +236,29 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             allowingLoadSpecificationRequestsFor(cls, propertyMethod.getReturnType());
 
             // when
-            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null, null, propertyMethod, mockMethodRemover, facetedMethod);
+            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
+                    propertyMethod, mockMethodRemover, facetedMethod);
             facetFactory.processModify(processMethodContext);
 
             // then
             final Facet domainEventFacet = facetedMethod.getFacet(PropertyDomainEventFacet.class);
             Assert.assertNotNull(domainEventFacet);
-            Assert.assertTrue(domainEventFacet instanceof PropertyDomainEventFacetForPropertyInteractionAnnotation);
-            final PropertyDomainEventFacetForPropertyInteractionAnnotation domainEventFacetImpl = (PropertyDomainEventFacetForPropertyInteractionAnnotation) domainEventFacet;
+            Assert.assertTrue(domainEventFacet instanceof PropertyDomainEventFacetForPropertyAnnotation);
+            final PropertyDomainEventFacetForPropertyAnnotation domainEventFacetImpl = (PropertyDomainEventFacetForPropertyAnnotation) domainEventFacet;
             assertThat(domainEventFacetImpl.value(), classEqualTo(Customer.NamedChangedDomainEvent.class));
 
             // then
             final Facet setterFacet = facetedMethod.getFacet(PropertySetterFacet.class);
             Assert.assertNotNull(setterFacet);
-            Assert.assertTrue(setterFacet instanceof PropertySetterFacetForDomainEventFromPropertyInteractionAnnotation);
-            final PropertySetterFacetForDomainEventFromPropertyInteractionAnnotation setterFacetImpl = (PropertySetterFacetForDomainEventFromPropertyInteractionAnnotation) setterFacet;
+            Assert.assertTrue(setterFacet instanceof PropertySetterFacetForDomainEventFromPropertyAnnotation);
+            final PropertySetterFacetForDomainEventFromPropertyAnnotation setterFacetImpl = (PropertySetterFacetForDomainEventFromPropertyAnnotation) setterFacet;
             assertThat(setterFacetImpl.value(), classEqualTo(Customer.NamedChangedDomainEvent.class));
 
             // then
             final Facet clearFacet = facetedMethod.getFacet(PropertyClearFacet.class);
             Assert.assertNotNull(clearFacet);
-            Assert.assertTrue(clearFacet instanceof PropertyClearFacetForDomainEventFromPropertyInteractionAnnotation);
-            final PropertyClearFacetForDomainEventFromPropertyInteractionAnnotation clearFacetImpl = (PropertyClearFacetForDomainEventFromPropertyInteractionAnnotation) clearFacet;
+            Assert.assertTrue(clearFacet instanceof PropertyClearFacetForDomainEventFromPropertyAnnotation);
+            final PropertyClearFacetForDomainEventFromPropertyAnnotation clearFacetImpl = (PropertyClearFacetForDomainEventFromPropertyAnnotation) clearFacet;
             assertThat(clearFacetImpl.value(), classEqualTo(Customer.NamedChangedDomainEvent.class));
         }
 
@@ -285,13 +267,6 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
 
             class Customer {
                 class NamedChangedDomainEvent extends PropertyDomainEvent<Customer, String> {
-                    public NamedChangedDomainEvent(
-                            final Customer source,
-                            final Identifier identifier,
-                            final String oldValue,
-                            final String newValue) {
-                        super(source, identifier, oldValue, newValue);
-                    }
                 }
                 @Property(domainEvent= NamedChangedDomainEvent.class)
                 public String getName() {
@@ -313,7 +288,8 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             allowingLoadSpecificationRequestsFor(cls, propertyMethod.getReturnType());
 
             // when
-            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null, null, propertyMethod, mockMethodRemover, facetedMethod);
+            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
+                    propertyMethod, mockMethodRemover, facetedMethod);
             facetFactory.processModify(processMethodContext);
 
             // then
@@ -365,7 +341,8 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             }});
 
             // when
-            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null, null, propertyMethod, mockMethodRemover, facetedMethod);
+            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
+                    propertyMethod, mockMethodRemover, facetedMethod);
             facetFactory.processModify(processMethodContext);
 
             // then
@@ -410,7 +387,8 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             propertyMethod = findMethod(Customer.class, "getName");
 
             // when
-            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null, null, propertyMethod, mockMethodRemover, facetedMethod);
+            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
+                    propertyMethod, mockMethodRemover, facetedMethod);
             facetFactory.processHidden(processMethodContext);
 
             // then
@@ -419,7 +397,6 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             Assert.assertTrue(hiddenFacet instanceof HiddenFacetForPropertyAnnotation);
             final HiddenFacetForPropertyAnnotation hiddenFacetImpl = (HiddenFacetForPropertyAnnotation) hiddenFacet;
             assertThat(hiddenFacetImpl.where(), is(Where.REFERENCES_PARENT));
-            assertThat(hiddenFacetImpl.when(), is(When.ALWAYS));
 
             final Facet hiddenFacetForProp = facetedMethod.getFacet(HiddenFacetForPropertyAnnotation.class);
             Assert.assertNotNull(hiddenFacetForProp);
@@ -450,7 +427,8 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             propertyMethod = findMethod(Customer.class, "getName");
 
             // when
-            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null, null, propertyMethod, mockMethodRemover, facetedMethod);
+            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
+                    propertyMethod, mockMethodRemover, facetedMethod);
             facetFactory.processEditing(processMethodContext);
 
             // then
@@ -459,7 +437,6 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             Assert.assertTrue(disabledFacet instanceof DisabledFacetForPropertyAnnotation);
             final DisabledFacetForPropertyAnnotation disabledFacetImpl = (DisabledFacetForPropertyAnnotation) disabledFacet;
             assertThat(disabledFacet.where(), is(Where.EVERYWHERE));
-            assertThat(disabledFacet.when(), is(When.ALWAYS));
             assertThat(disabledFacetImpl.getReason(), is("you cannot edit the name property"));
         }
     }
@@ -485,7 +462,8 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             propertyMethod = findMethod(Customer.class, "getName");
 
             // when
-            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null, null, propertyMethod, mockMethodRemover, facetedMethod);
+            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
+                    propertyMethod, mockMethodRemover, facetedMethod);
             facetFactory.processMaxLength(processMethodContext);
 
             // then
@@ -536,7 +514,8 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
 
 
             // when
-            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null, null, propertyMethod, mockMethodRemover, facetedMethod);
+            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
+                    propertyMethod, mockMethodRemover, facetedMethod);
             facetFactory.processMustSatisfy(processMethodContext);
 
             // then
@@ -559,9 +538,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
         public void withAnnotation() {
 
             class Customer {
-                @Property(
-                        notPersisted = true
-                )
+                @Property(mementoSerialization = MementoSerialization.EXCLUDED)
                 public String getName() {
                     return null;
                 }
@@ -574,7 +551,8 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             propertyMethod = findMethod(Customer.class, "getName");
 
             // when
-            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null, null, propertyMethod, mockMethodRemover, facetedMethod);
+            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
+                    propertyMethod, mockMethodRemover, facetedMethod);
             facetFactory.processNotPersisted(processMethodContext);
 
             // then
@@ -606,7 +584,8 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             propertyMethod = findMethod(Customer.class, "getName");
 
             // when
-            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null, null, propertyMethod, mockMethodRemover, facetedMethod);
+            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
+                    propertyMethod, mockMethodRemover, facetedMethod);
             facetFactory.processOptional(processMethodContext);
 
             // then
@@ -634,7 +613,8 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             propertyMethod = findMethod(Customer.class, "getName");
 
             // when
-            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null, null, propertyMethod, mockMethodRemover, facetedMethod);
+            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
+                    propertyMethod, mockMethodRemover, facetedMethod);
             facetFactory.processOptional(processMethodContext);
 
             // then
@@ -662,7 +642,8 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             propertyMethod = findMethod(Customer.class, "getName");
 
             // when
-            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null, null, propertyMethod, mockMethodRemover, facetedMethod);
+            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
+                    propertyMethod, mockMethodRemover, facetedMethod);
             facetFactory.processOptional(processMethodContext);
 
             // then
@@ -688,7 +669,8 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             propertyMethod = findMethod(Customer.class, "getName");
 
             // when
-            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null, null, propertyMethod, mockMethodRemover, facetedMethod);
+            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
+                    propertyMethod, mockMethodRemover, facetedMethod);
             facetFactory.processOptional(processMethodContext);
 
             // then
@@ -719,15 +701,16 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             propertyMethod = findMethod(Customer.class, "getName");
 
             // when
-            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null, null, propertyMethod, mockMethodRemover, facetedMethod);
+            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
+                    propertyMethod, mockMethodRemover, facetedMethod);
             facetFactory.processRegEx(processMethodContext);
 
             // then
             final RegExFacet regExFacet = facetedMethod.getFacet(RegExFacet.class);
             Assert.assertNotNull(regExFacet);
             Assert.assertTrue(regExFacet instanceof RegExFacetForPropertyAnnotation);
-            assertThat(regExFacet.caseSensitive(), is(true));
-            assertThat(regExFacet.validation(), is("[123].*"));
+            assertThat(regExFacet.patternFlags(), is(10));
+            assertThat(regExFacet.regexp(), is("[123].*"));
         }
 
         @Test
@@ -748,7 +731,8 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             propertyMethod = findMethod(Customer.class, "getName");
 
             // when
-            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null, null, propertyMethod, mockMethodRemover, facetedMethod);
+            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
+                    propertyMethod, mockMethodRemover, facetedMethod);
             facetFactory.processRegEx(processMethodContext);
 
             // then
@@ -775,7 +759,8 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             propertyMethod = findMethod(Customer.class, "getName");
 
             // when
-            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null, null, propertyMethod, mockMethodRemover, facetedMethod);
+            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
+                    propertyMethod, mockMethodRemover, facetedMethod);
             facetFactory.processRegEx(processMethodContext);
 
             // then
@@ -802,7 +787,8 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             propertyMethod = findMethod(Customer.class, "getName");
 
             // when
-            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null, null, propertyMethod, mockMethodRemover, facetedMethod);
+            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
+                    propertyMethod, mockMethodRemover, facetedMethod);
             facetFactory.processRegEx(processMethodContext);
 
             // then

@@ -43,18 +43,11 @@ import com.google.common.collect.Lists;
  * determined by the collection's {@link MemberOrder#sequence() MemberOrder.sequence} attribute
  * 
  * <p>
- * If both this annotation, {@link MemberGroupLayout}, and {@link MemberGroups} annotation
- * are present on an entity, then this one takes precedence.
- *
- * <p>
  *     The recommended alternative is to use the <code>Xxx.layout.xml</code> file, where <code>Xxx</code> is the domain object name.
  * </p>
- *
- * @deprecated
  */
-@Deprecated
 @Inherited
-@Target({ ElementType.TYPE })
+@Target({ ElementType.TYPE, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface MemberGroupLayout {
 

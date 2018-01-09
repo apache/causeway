@@ -51,7 +51,7 @@ public abstract class BuilderScriptAbstract<T,F extends BuilderScriptAbstract<T,
             ExecutionContext executionContext) {
 
         final F onFixture = (F) BuilderScriptAbstract.this;
-        parentFixtureScript.container.injectServicesInto(onFixture);
+        parentFixtureScript.serviceRegistry.injectServicesInto(onFixture);
 
         execPrereqs(executionContext);
 

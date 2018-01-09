@@ -19,7 +19,6 @@
 package org.apache.isis.applib.clock;
 
 import java.sql.Timestamp;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -86,27 +85,6 @@ public abstract class Clock {
         return getInstance().time();
     }
 
-    /**
-     * Convenience method returning the current {@link #getTime() time}
-     * according to this Clock as a mutable {@link Calendar}. Consider replacing
-     * with {@link #getTimeAsDateTime()
-
-     */
-    @Deprecated
-    public static Calendar getTimeAsCalendar() {
-        return getInstance().timeAsCalendar();
-    }
-
-    /**
-     * Convenience method returning the current {@link #getTime() time}
-     * according to this Clock as a (nominally im)mutable {@link Date}. You
-     * should now use {@link #getTimeAsDateTime()}
-     * 
-     */
-    @Deprecated
-    public static Date getTimeAsDate() {
-        return new Date(getTime());
-    }
 
     public static LocalDate getTimeAsLocalDate() {
         final DateTimeZone timeZone = DateTimeZone.forTimeZone(TimeZone.getDefault());
@@ -155,11 +133,6 @@ public abstract class Clock {
         instance = this;
     }
 
-    public final Calendar timeAsCalendar() {
-        final Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(Clock.getTime());
-        return cal;
-    }
 
     /**
      * The current time since midnight, January 1, 1970 UTC.

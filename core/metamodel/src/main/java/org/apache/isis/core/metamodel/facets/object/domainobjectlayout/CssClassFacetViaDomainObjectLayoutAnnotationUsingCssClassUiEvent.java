@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,27 +44,26 @@ public class CssClassFacetViaDomainObjectLayoutAnnotationUsingCssClassUiEvent ex
     private static final Logger LOG = LoggerFactory.getLogger(CssClassFacetViaDomainObjectLayoutAnnotationUsingCssClassUiEvent.class);
 
     public static Facet create(
-            final DomainObjectLayout domainObjectLayout,
+            final List<DomainObjectLayout> domainObjectLayouts,
             final ServicesInjector servicesInjector,
             final IsisConfiguration configuration, final FacetHolder facetHolder) {
-        if(domainObjectLayout == null) {
-            return null;
-        }
-        final Class<? extends CssClassUiEvent<?>> cssClassUiEventClass = domainObjectLayout.cssClassUiEvent();
 
-        if(!EventUtil.eventTypeIsPostable(
-                cssClassUiEventClass,
-                CssClassUiEvent.Noop.class,
-                CssClassUiEvent.Default.class,
-                "isis.reflector.facet.domainObjectLayoutAnnotation.cssClassUiEvent.postForDefault",
-                configuration)) {
-            return null;
-        }
+        return domainObjectLayouts.stream()
+                .map(DomainObjectLayout::cssClassUiEvent)
+                .filter(cssClassUiEventClass -> EventUtil.eventTypeIsPostable(
+                        cssClassUiEventClass,
+                        CssClassUiEvent.Noop.class,
+                        CssClassUiEvent.Default.class,
+                        "isis.reflector.facet.domainObjectLayoutAnnotation.cssClassUiEvent.postForDefault",
+                        configuration))
+                .findFirst()
+                .map(cssClassUiEventClass -> {
+                    final EventBusService eventBusService = servicesInjector.lookupService(EventBusService.class);
+                    return new CssClassFacetViaDomainObjectLayoutAnnotationUsingCssClassUiEvent(
+                            cssClassUiEventClass, eventBusService, facetHolder);
+                })
+                .orElse(null);
 
-        final EventBusService eventBusService = servicesInjector.lookupService(EventBusService.class);
-
-        return new CssClassFacetViaDomainObjectLayoutAnnotationUsingCssClassUiEvent(
-                cssClassUiEventClass, eventBusService, facetHolder);
     }
 
     private final Class<? extends CssClassUiEvent<?>> cssClassUiEventClass;

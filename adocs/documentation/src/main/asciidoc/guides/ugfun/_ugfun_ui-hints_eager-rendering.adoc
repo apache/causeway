@@ -26,10 +26,6 @@ public Set<ToDoItem> getDependencies() {
 }
 ----
 
-[NOTE]
-====
-The `defaultView()` attribute replaces the deprecated approach of using xref:../rgant/rgant.adoc#_rgant_CollectionLayout_render[`@CollectionLayout#render()`] eagerly.
-====
 
 Alternatively, it can be specified the `Xxx.layout.xml` file:
 

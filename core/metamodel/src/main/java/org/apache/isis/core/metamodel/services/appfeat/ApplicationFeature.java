@@ -265,13 +265,6 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
             }
         };
 
-        public static final Function<ApplicationFeature, ApplicationFeatureId> GET_ID =
-                new Function<ApplicationFeature, ApplicationFeatureId>() {
-            @Override
-            public ApplicationFeatureId apply(final ApplicationFeature input) {
-                return input.getFeatureId();
-            }
-        };
     }
 
     public static class Predicates {

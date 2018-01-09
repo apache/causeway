@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.properties.property.regex;
 
+import java.util.List;
 import java.util.regex.Pattern;
 import com.google.common.base.Strings;
 import org.apache.isis.applib.annotation.Property;
@@ -32,48 +33,32 @@ public class RegExFacetForPropertyAnnotation extends RegExFacetAbstract {
     private final Pattern pattern;
 
     public static RegExFacet create(
-            final Property annotation,
+            final List<Property> properties,
             final Class<?> returnType,
             final FacetHolder holder) {
-
-        if (annotation == null) {
-            return null;
-        }
 
         if (!Annotations.isString(returnType)) {
             return null;
         }
 
-        final String pattern = annotation.regexPattern();
-        if(Strings.isNullOrEmpty(pattern)) {
-            return null;
-        }
+        return properties.stream()
+                .filter(property -> Strings.emptyToNull(property.regexPattern()) != null)
+                .findFirst()
+                .map(property -> new RegExFacetForPropertyAnnotation(
+                        property.regexPattern(), property.regexPatternFlags(), holder,
+                        property.regexPatternReplacement()))
+                .orElse(null);
 
-        final String replacement = annotation.regexPatternReplacement();
-        final int patternFlags = annotation.regexPatternFlags();
-
-        return new RegExFacetForPropertyAnnotation(pattern, patternFlags, holder, replacement);
     }
 
     private RegExFacetForPropertyAnnotation(final String pattern, final int patternFlags, final FacetHolder holder, final String replacement) {
-        super(pattern, "", (patternFlags & Pattern.CASE_INSENSITIVE) == Pattern.CASE_INSENSITIVE, holder, replacement);
-        this.pattern = Pattern.compile(pattern, patternFlags);
-    }
-
-    /**
-     * Unused (for the TitledFacet)
-     */
-    @Override
-    public String format(String text) {
-        return text;
+        super(pattern, patternFlags, replacement, holder);
+        this.pattern = Pattern.compile(pattern, patternFlags());
     }
 
     @Override
     public boolean doesNotMatch(final String text) {
-        if (text == null) {
-            return true;
-        }
-        return !pattern.matcher(text).matches();
+        return text == null || !pattern.matcher(text).matches();
     }
 
 

@@ -23,7 +23,7 @@ import com.fasterxml.jackson.databind.node.NullNode;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import org.apache.isis.applib.annotation.ActionSemantics;
+import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -90,7 +90,7 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
         }
         final Map<String, MutatorSpec> mutators = objectMemberType.getMutators();
         
-        final ActionSemantics.Of actionSemantics = objectMember.getSemantics();
+        final SemanticsOf actionSemantics = objectMember.getSemantics();
         final String mutator = InvokeKeys.getKeyFor(actionSemantics);
         final MutatorSpec mutatorSpec = mutators.get(mutator);
 
@@ -231,7 +231,7 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
     protected void putExtensionsIsisProprietary() {
         getExtensions().mapPut("actionType", objectMember.getType().name().toLowerCase());
 
-        final ActionSemantics.Of semantics = objectMember.getSemantics();
+        final SemanticsOf semantics = objectMember.getSemantics();
         getExtensions().mapPut("actionSemantics", semantics.getCamelCaseName());
     }
 

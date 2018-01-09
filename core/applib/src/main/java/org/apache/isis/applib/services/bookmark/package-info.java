@@ -18,7 +18,7 @@
  */
 
 /**
- * The {@link org.apache.isis.applib.services.bookmark.BookmarkService2} API provides the ability to obtain a
+ * The {@link org.apache.isis.applib.services.bookmark.BookmarkService} API provides the ability to obtain a
  * serializable {@link org.apache.isis.applib.services.bookmark.Bookmark} for any (persisted) domain object, and to
  * lookup domain objects given a Bookmark. This can then in turn be converted to and from a string.
  *

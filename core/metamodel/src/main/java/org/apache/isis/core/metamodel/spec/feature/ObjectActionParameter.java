@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.spec.feature;
 
 import com.google.common.base.Function;
 
-import org.apache.isis.applib.filter.Filter;
+import com.google.common.base.Predicate;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
@@ -126,20 +126,6 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
             final InteractionInitiatedBy interactionInitiatedBy);
  
 
-    
-    public static class Filters {
-        private Filters(){}
-        
-        /**
-         * Filters only parameters that are for objects (ie 1:1 associations)
-         */
-        public static final Filter<ObjectActionParameter> PARAMETER_ASSOCIATIONS = new Filter<ObjectActionParameter>() {
-            @Override
-            public boolean accept(final ObjectActionParameter parameter) {
-                return parameter.getSpecification().isNotCollection();
-            }
-        };
-    }
     public static class Functions {
         public static final Function<ObjectActionParameter, String> GET_NAME = new Function<ObjectActionParameter, String>() {
             @Override public String apply(final ObjectActionParameter input) {

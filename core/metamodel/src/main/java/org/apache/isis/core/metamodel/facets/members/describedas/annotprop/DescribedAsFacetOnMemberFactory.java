@@ -19,26 +19,15 @@
 
 package org.apache.isis.core.metamodel.facets.members.describedas.annotprop;
 
-import java.util.Properties;
-
-import org.apache.isis.applib.annotation.DescribedAs;
-import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
-import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.ContributeeMemberFacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
 
-public class DescribedAsFacetOnMemberFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory, MetaModelValidatorRefiner {
+public class DescribedAsFacetOnMemberFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory {
 
-    private final MetaModelValidatorForDeprecatedAnnotation validator = new MetaModelValidatorForDeprecatedAnnotation(DescribedAs.class);
 
     public DescribedAsFacetOnMemberFactory() {
         super(FeatureType.MEMBERS);
@@ -47,40 +36,17 @@ public class DescribedAsFacetOnMemberFactory extends FacetFactoryAbstract implem
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
 
-        DescribedAsFacet facet = createFromMetadataPropertiesIfPossible(processMethodContext);
-        
-        if(facet == null) {
-            facet = validator.flagIfPresent(createFromAnnotationIfPossible(processMethodContext), processMethodContext);
-        }
-        if (facet == null) {
-            facet = createFromAnnotationOnReturnTypeIfPossible(processMethodContext);
-        }
-        
+        DescribedAsFacet facet = createFromAnnotationOnReturnTypeIfPossible(processMethodContext);
+
         // no-op if null
         FacetUtil.addFacet(facet);
     }
 
     @Override
     public void process(ProcessContributeeMemberContext processMemberContext) {
-        DescribedAsFacet facet = createFromMetadataPropertiesIfPossible(processMemberContext);
-        // no-op if null
-        FacetUtil.addFacet(facet);
     }
     
-    private static DescribedAsFacet createFromMetadataPropertiesIfPossible(
-            final ProcessContextWithMetadataProperties<? extends FacetHolder> pcwmp) {
-        
-        final FacetHolder holder = pcwmp.getFacetHolder();
-        
-        final Properties properties = pcwmp.metadataProperties("describedAs");
-        return properties != null ? new DescribedAsFacetOnMemberFromProperties(properties, holder) : null;
-    }
-    
-    private static DescribedAsFacet createFromAnnotationIfPossible(final ProcessMethodContext processMethodContext) {
-        // look for annotation on the property
-        final DescribedAs annotation = Annotations.getAnnotation(processMethodContext.getMethod(), DescribedAs.class);
-        return annotation == null ? null : new DescribedAsFacetOnMemberAnnotation(annotation.value(), processMethodContext.getFacetHolder());
-    }
+
 
     private DescribedAsFacet createFromAnnotationOnReturnTypeIfPossible(final ProcessMethodContext processMethodContext) {
         final Class<?> returnType = processMethodContext.getMethod().getReturnType();
@@ -93,19 +59,6 @@ public class DescribedAsFacetOnMemberFactory extends FacetFactoryAbstract implem
         return paramTypeSpec.getFacet(DescribedAsFacet.class);
     }
 
-
-    @Override
-    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
-        metaModelValidator.add(validator);
-    }
-
-
-    @Override
-    public void setServicesInjector(final ServicesInjector servicesInjector) {
-        super.setServicesInjector(servicesInjector);
-        IsisConfiguration configuration = servicesInjector.getConfigurationServiceInternal();
-        validator.setConfiguration(configuration);
-    }
 
 
 }

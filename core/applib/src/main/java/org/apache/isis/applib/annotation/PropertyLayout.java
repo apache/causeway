@@ -27,7 +27,7 @@ import java.lang.annotation.*;
  * @see org.apache.isis.applib.annotation.ParameterLayout
  */
 @Inherited
-@Target({ ElementType.METHOD, ElementType.FIELD })
+@Target({ ElementType.METHOD, ElementType.FIELD, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface PropertyLayout {
 
@@ -54,7 +54,7 @@ public @interface PropertyLayout {
      * If not specified, the default depends upon the property value's datatype.
      * </p>
      */
-    LabelPosition labelPosition() default LabelPosition.LEFT;
+    LabelPosition labelPosition() default LabelPosition.NOT_SPECIFIED;
 
     /**
      * For string properties (and parameters), render as a text area over specified number of lines.
@@ -74,7 +74,7 @@ public @interface PropertyLayout {
     /**
      * How the properties of this domain object are be edited, either {@link PromptStyle#DIALOG dialog} or {@link PromptStyle#INLINE inline}.
      */
-    PromptStyle promptStyle() default PromptStyle.AS_CONFIGURED;
+    PromptStyle promptStyle() default PromptStyle.NOT_SPECIFIED;
 
     /**
      * For date properties (and parameters) only, instructs the viewer that the date should be rendered as one day
@@ -91,7 +91,7 @@ public @interface PropertyLayout {
      * <pre>
      * public LocalDate getStartDate() { ... }
      *
-     * &#64;PropertyLayout(renderedAsDayBefore=true)
+     * &#64;PropertyLayout(renderDay=RenderDay.AS_DAY_BEFORE)
      * public LocalDate getEndDate() { ... }
      * </pre>
      *
@@ -101,8 +101,7 @@ public @interface PropertyLayout {
      * In the domain object, itself, however, the value stored is 1-jun-2013.
      * </p>
      */
-    boolean renderedAsDayBefore() default false;
-
+    RenderDay renderDay() default RenderDay.NOT_SPECIFIED;
 
     /**
      * The typical entry length of a field, use to determine the optimum width for display
@@ -114,8 +113,8 @@ public @interface PropertyLayout {
      * do change.
      *
      * <p>
-     *     Setting this attribute to <tt>true</tt> is used as a hint to the viewer to not redraw the property
-     *     after an AJAX update of some other property/ies of the object have changed.
+     *     Setting this attribute to <tt>RepaintPolicy.NO_REPAINT</tt> is used as a hint to the viewer to not repaint
+     *     the property after an AJAX update of some other property/ies of the object have changed.
      *     This is primarily for performance, eg can improve the user experience when rendering PDFs/blobs.
      * </p>
      *
@@ -131,7 +130,7 @@ public @interface PropertyLayout {
      *     within the framework than simply a hint for rendering.
      * </p>
      */
-    boolean unchanging() default false;
+    Repainting repainting() default Repainting.NOT_SPECIFIED;
 
 }
 

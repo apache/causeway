@@ -18,6 +18,13 @@
  */
 package org.apache.isis.core.commons.lang;
 
+/**
+ * 
+ * @deprecated use {@link java.util.Optional} instead
+ *
+ * @param <T>
+ */
+@Deprecated
 public class Nullable<T> {
 
     public static <T> Nullable<T> some(T t) {

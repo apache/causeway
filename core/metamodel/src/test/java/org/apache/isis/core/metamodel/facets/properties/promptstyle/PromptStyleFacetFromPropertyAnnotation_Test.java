@@ -16,7 +16,11 @@
  */
 package org.apache.isis.core.metamodel.facets.properties.promptstyle;
 
+import java.util.Collections;
+
+import org.hamcrest.Description;
 import org.hamcrest.Matcher;
+import org.hamcrest.TypeSafeMatcher;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Assert;
@@ -26,11 +30,9 @@ import org.junit.Test;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.matchers.IsisMatchers;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured;
-import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacetFallBackToInline;
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.PromptStyleFacetForPropertyLayoutAnnotation;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 
@@ -51,8 +53,7 @@ public class PromptStyleFacetFromPropertyAnnotation_Test {
     @Mock
     PropertyLayout mockPropertyLayout;
 
-
-    public static class Create_Test extends PromptStyleFacetFromPropertyAnnotation_Test {
+   public static class Create_Test extends PromptStyleFacetFromPropertyAnnotation_Test {
 
         @Test
         public void when_annotated_with_dialog() throws Exception {
@@ -65,9 +66,9 @@ public class PromptStyleFacetFromPropertyAnnotation_Test {
             }});
 
             PromptStyleFacet facet = PromptStyleFacetForPropertyLayoutAnnotation
-                    .create(mockPropertyLayout, mockConfiguration, mockFacetHolder);
+                    .create(Collections.singletonList(mockPropertyLayout), mockConfiguration, mockFacetHolder);
 
-            Assert.assertThat(facet, is((Matcher) IsisMatchers.anInstanceOf(PromptStyleFacetForPropertyLayoutAnnotation.class)));
+            Assert.assertThat(facet, is((Matcher) anInstanceOf(PromptStyleFacetForPropertyLayoutAnnotation.class)));
             Assert.assertThat(facet.value(), is(PromptStyle.DIALOG));
         }
 
@@ -83,9 +84,9 @@ public class PromptStyleFacetFromPropertyAnnotation_Test {
 
 
             PromptStyleFacet facet = PromptStyleFacetForPropertyLayoutAnnotation
-                    .create(mockPropertyLayout, mockConfiguration, mockFacetHolder);
+                    .create(Collections.singletonList(mockPropertyLayout), mockConfiguration, mockFacetHolder);
 
-            Assert.assertThat(facet, is((Matcher) IsisMatchers.anInstanceOf(PromptStyleFacetForPropertyLayoutAnnotation.class)));
+            Assert.assertThat(facet, is((Matcher) anInstanceOf(PromptStyleFacetForPropertyLayoutAnnotation.class)));
             Assert.assertThat(facet.value(), is(PromptStyle.INLINE));
         }
 
@@ -104,9 +105,9 @@ public class PromptStyleFacetFromPropertyAnnotation_Test {
             }});
 
             PromptStyleFacet facet = PromptStyleFacetForPropertyLayoutAnnotation
-                    .create(mockPropertyLayout, mockConfiguration, mockFacetHolder);
+                    .create(Collections.singletonList(mockPropertyLayout), mockConfiguration, mockFacetHolder);
 
-            Assert.assertThat(facet, is((Matcher) IsisMatchers.anInstanceOf(PromptStyleFacetAsConfigured.class)));
+            Assert.assertThat(facet, is((Matcher) anInstanceOf(PromptStyleFacetAsConfigured.class)));
             Assert.assertThat(facet.value(), is(PromptStyle.INLINE));
         }
 
@@ -117,14 +118,16 @@ public class PromptStyleFacetFromPropertyAnnotation_Test {
                 allowing(mockPropertyLayout).promptStyle();
                 will(returnValue(PromptStyle.AS_CONFIGURED));
 
-                oneOf(mockFacetHolder).containsDoOpFacet(PromptStyleFacet.class);
+                allowing(mockFacetHolder).containsDoOpFacet(PromptStyleFacet.class);
                 will(returnValue(true));
 
-                never(mockConfiguration);
+                allowing(mockConfiguration).getString("isis.viewer.wicket.promptStyle");
+                will(returnValue(null));
+
             }});
 
             PromptStyleFacet facet = PromptStyleFacetForPropertyLayoutAnnotation
-                    .create(mockPropertyLayout, mockConfiguration, mockFacetHolder);
+                    .create(Collections.singletonList(mockPropertyLayout), mockConfiguration, mockFacetHolder);
 
             Assert.assertThat(facet, is(nullValue()));
         }
@@ -134,19 +137,20 @@ public class PromptStyleFacetFromPropertyAnnotation_Test {
 
             context.checking(new Expectations() {{
                 allowing(mockPropertyLayout).promptStyle();
-                will(returnValue(null));
+                will(returnValue(PromptStyle.NOT_SPECIFIED));
 
                 allowing(mockFacetHolder).containsDoOpFacet(PromptStyleFacet.class);
                 will(returnValue(false));
 
-                never(mockConfiguration);
+                oneOf(mockConfiguration).getString("isis.viewer.wicket.promptStyle");
+                will(returnValue(null));
             }});
 
             PromptStyleFacet facet = PromptStyleFacetForPropertyLayoutAnnotation
-                    .create(mockPropertyLayout, mockConfiguration, mockFacetHolder);
+                    .create(Collections.singletonList(mockPropertyLayout), mockConfiguration, mockFacetHolder);
 
             Assert.assertThat(facet.value(), is(PromptStyle.INLINE));
-            Assert.assertThat(facet, is((Matcher) IsisMatchers.anInstanceOf(PromptStyleFacetFallBackToInline.class)));
+            Assert.assertThat(facet, is((Matcher) anInstanceOf(PromptStyleFacetAsConfigured.class)));
         }
 
         @Test
@@ -154,21 +158,38 @@ public class PromptStyleFacetFromPropertyAnnotation_Test {
 
             context.checking(new Expectations() {{
                 allowing(mockPropertyLayout).promptStyle();
-                will(returnValue(null));
+                will(returnValue(PromptStyle.NOT_SPECIFIED));
 
                 allowing(mockFacetHolder).containsDoOpFacet(PromptStyleFacet.class);
                 will(returnValue(true));
 
-                never(mockConfiguration);
+                allowing(mockConfiguration).getString("isis.viewer.wicket.promptStyle");
+                will(returnValue(null));
+
             }});
 
             PromptStyleFacet facet = PromptStyleFacetForPropertyLayoutAnnotation
-                    .create(mockPropertyLayout, mockConfiguration, mockFacetHolder);
+                    .create(Collections.singletonList(mockPropertyLayout), mockConfiguration, mockFacetHolder);
 
             Assert.assertThat(facet, is(nullValue()));
         }
 
 
     }
+
+    static <T> Matcher<T> anInstanceOf(final Class<T> expected) {
+        return new TypeSafeMatcher<T>() {
+            @Override
+            public boolean matchesSafely(final T actual) {
+                return expected.isAssignableFrom(actual.getClass());
+            }
+
+            @Override
+            public void describeTo(final Description description) {
+                description.appendText("an instance of ").appendValue(expected);
+            }
+        };
+    }
+
 
 }

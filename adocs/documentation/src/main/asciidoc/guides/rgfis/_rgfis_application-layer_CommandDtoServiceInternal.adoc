@@ -20,36 +20,31 @@ The SPI of the service is:
 [source,java]
 ----
 public interface CommandDtoServiceInternal {
-    @Deprecated
-    ActionInvocationMemento asActionInvocationMemento(      // <1>
-            Method m,
-            Object domainObject, Object[] args);
-    CommandDto asCommandDto(                                // <2>
+    CommandDto asCommandDto(                                // <1>
             List<ObjectAdapter> targetAdapters,
             ObjectAction objectAction,
             ObjectAdapter[] argAdapters);
-    CommandDto asCommandDto(                                // <3>
+    CommandDto asCommandDto(                                // <2>
             final List<ObjectAdapter> targetAdapters,
             final OneToOneAssociation association,
             final ObjectAdapter valueAdapterOrNull);
-    void addActionArgs(                                     // <4>
+    void addActionArgs(                                     // <3>
             final ObjectAction objectAction,
             final ActionDto actionDto,
             final ObjectAdapter[] argAdapters);
-    void addPropertyValue(                                  // <5>
+    void addPropertyValue(                                  // <4>
             final OneToOneAssociation property,
             final PropertyDto propertyDto,
             final ObjectAdapter valueAdapter);
 }
 ----
-<1> Note that this method (more precisely, `ActionInvocationMemento`) does __not__ support mixins.
-<2> Returns a JAXB DTO being an instance of the xref:../rgcms/rgcms.adoc#_rgcms_schema-cmd["cmd" schema] (hence convertible to
+<1> Returns a JAXB DTO being an instance of the xref:../rgcms/rgcms.adoc#_rgcms_schema-cmd["cmd" schema] (hence convertible to
 XML) that represents the __intention__ to invoke an action on a target object (or possibly many targets, for
 bulk actions).  If an action, it can also be either mixin action or a contributed action.
-<3> Returns a JAXB DTO that represents the intention to edit (set or clear) a property on a target (or possibly many
+<2> Returns a JAXB DTO that represents the intention to edit (set or clear) a property on a target (or possibly many
 targets, for symmetry with actions).
-<4> add the arguments of an action to an `ActionDto`.  This is used when the command is actually executed (per xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_InteractionContext[`InteractionContext`]) to populate the parameters of the equivalent `ActionInvocationDto`.
-<5> add the new value argument of a property to a `PropertyDto`.  This is used when the command is actually executed (per xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_InteractionContext[`InteractionContext`]) to set the the new value of the equivalent `PropertyEditDto`.
+<3> add the arguments of an action to an `ActionDto`.  This is used when the command is actually executed (per xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_InteractionContext[`InteractionContext`]) to populate the parameters of the equivalent `ActionInvocationDto`.
+<4> add the new value argument of a property to a `PropertyDto`.  This is used when the command is actually executed (per xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_InteractionContext[`InteractionContext`]) to set the the new value of the equivalent `PropertyEditDto`.
 
 
 The SPI is implemented by `o.a.i.c.r.s.command.CommandDtoServiceInternalServiceDefault`.

@@ -33,6 +33,8 @@ public static class ActionInvocationContext {
 <4> is the 0-based index to the object being acted upon.
 
 
+To provide an alternative implementation, subclass and use xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:../rgsvc/rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
+
 
 == Usage
 

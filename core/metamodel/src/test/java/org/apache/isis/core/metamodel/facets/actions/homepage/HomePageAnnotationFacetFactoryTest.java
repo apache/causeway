@@ -53,7 +53,7 @@ public class HomePageAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
 
         final Method actionMethod = findMethod(HomePageService.class, "lookup");
 
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(HomePageFacet.class);
         assertNotNull(facet);

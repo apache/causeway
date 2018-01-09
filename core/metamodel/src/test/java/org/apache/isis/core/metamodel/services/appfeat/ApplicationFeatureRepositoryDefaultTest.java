@@ -22,7 +22,6 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.hamcrest.Matchers;
 import org.jmock.Expectations;
 import org.jmock.Sequence;
@@ -34,11 +33,10 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.applib.DomainObjectContainer;
-import org.apache.isis.applib.annotation.ActionSemantics;
-import org.apache.isis.applib.annotation.When;
+import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.factory.FactoryService;
-import org.apache.isis.applib.services.registry.ServiceRegistry2;
+import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.members.hidden.HiddenFacetAbstract;
@@ -52,6 +50,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -77,13 +76,10 @@ public class ApplicationFeatureRepositoryDefaultTest {
     ObjectAction mockActThatIsHidden;
 
     @Mock
-    DomainObjectContainer mockContainer;
-
-    @Mock
     FactoryService mockFactoryService;
 
     @Mock
-    ServiceRegistry2 mockServiceRegistry;
+    ServiceRegistry mockServiceRegistry;
 
     @Mock
     SpecificationLoader mockSpecificationLoader;
@@ -93,7 +89,6 @@ public class ApplicationFeatureRepositoryDefaultTest {
     @Before
     public void setUp() throws Exception {
         applicationFeatureRepository = new ApplicationFeatureRepositoryDefault();
-        applicationFeatureRepository.container = mockContainer;
         applicationFeatureRepository.serviceRegistry = mockServiceRegistry;
         applicationFeatureRepository.specificationLoader = mockSpecificationLoader;
 
@@ -124,14 +119,14 @@ public class ApplicationFeatureRepositoryDefaultTest {
                 allowing(mockSpec).getFullIdentifier();
                 will(returnValue(Bar.class.getName()));
 
-                allowing(mockSpec).getAssociations(with(Contributed.INCLUDED), with(ObjectAssociation.Filters.PROPERTIES));
+                allowing(mockSpec).getAssociations(with(Contributed.INCLUDED), with(ObjectAssociation.Predicates.PROPERTIES));
                 will(returnValue(properties));
 
-                allowing(mockSpec).getAssociations(with(Contributed.INCLUDED), with(ObjectAssociation.Filters.COLLECTIONS));
+                allowing(mockSpec).getAssociations(with(Contributed.INCLUDED), with(ObjectAssociation.Predicates.COLLECTIONS));
                 will(returnValue(collections));
 
                 allowing(mockSpec).getFacet(HiddenFacet.class);
-                will(returnValue(new HiddenFacetAbstract(When.ALWAYS, Where.EVERYWHERE, mockSpec) {
+                will(returnValue(new HiddenFacetAbstract(Where.EVERYWHERE, mockSpec) {
                     @Override
                     protected String hiddenReason(final ObjectAdapter target, final Where whereContext) {
                         return null;
@@ -169,7 +164,7 @@ public class ApplicationFeatureRepositoryDefaultTest {
                 will(returnValue(false));
 
                 allowing(mockAct).getSemantics();
-                will(returnValue(ActionSemantics.Of.SAFE));
+                will(returnValue(SemanticsOf.SAFE));
 
                 allowing(mockActThatIsHidden).getId();
                 will(returnValue("someActionThatIsHidden"));
@@ -178,7 +173,7 @@ public class ApplicationFeatureRepositoryDefaultTest {
                 will(returnValue(true));
 
                 allowing(mockActThatIsHidden).getSemantics();
-                will(returnValue(ActionSemantics.Of.SAFE));
+                will(returnValue(SemanticsOf.SAFE));
 
                 allowing(mockServiceRegistry).getRegisteredServices();
                 will(returnValue(Lists.newArrayList()));
@@ -187,43 +182,43 @@ public class ApplicationFeatureRepositoryDefaultTest {
             // then
             final Sequence sequence = context.sequence("loadSequence");
             context.checking(new Expectations() {{
-                oneOf(mockContainer).newTransientInstance(ApplicationFeature.class);
+                oneOf(mockFactoryService).instantiate(ApplicationFeature.class);
                 inSequence(sequence);
                 will(returnValue(new ApplicationFeature(ApplicationFeatureId.newClass(Bar.class.getName()))));
 
-                oneOf(mockContainer).newTransientInstance(ApplicationFeature.class);
+                oneOf(mockFactoryService).instantiate(ApplicationFeature.class);
                 inSequence(sequence);
                 will(returnValue(new ApplicationFeature(ApplicationFeatureId.newMember(Bar.class.getName(), "someProperty"))));
 
-                oneOf(mockContainer).newTransientInstance(ApplicationFeature.class);
+                oneOf(mockFactoryService).instantiate(ApplicationFeature.class);
                 inSequence(sequence);
                 will(returnValue(new ApplicationFeature(ApplicationFeatureId.newMember(Bar.class.getName(), "someCollection"))));
 
-                oneOf(mockContainer).newTransientInstance(ApplicationFeature.class);
+                oneOf(mockFactoryService).instantiate(ApplicationFeature.class);
                 inSequence(sequence);
                 will(returnValue(new ApplicationFeature(ApplicationFeatureId.newMember(Bar.class.getName(), "someAction"))));
 
-                oneOf(mockContainer).newTransientInstance(ApplicationFeature.class);
+                oneOf(mockFactoryService).instantiate(ApplicationFeature.class);
                 inSequence(sequence);
                 will(returnValue(new ApplicationFeature(ApplicationFeatureId.newPackage("org.isisaddons.module.security.dom.feature"))));
 
-                oneOf(mockContainer).newTransientInstance(ApplicationFeature.class);
+                oneOf(mockFactoryService).instantiate(ApplicationFeature.class);
                 inSequence(sequence);
                 will(returnValue(new ApplicationFeature(ApplicationFeatureId.newPackage("org.isisaddons.module.security.dom"))));
 
-                oneOf(mockContainer).newTransientInstance(ApplicationFeature.class);
+                oneOf(mockFactoryService).instantiate(ApplicationFeature.class);
                 inSequence(sequence);
                 will(returnValue(new ApplicationFeature(ApplicationFeatureId.newPackage("org.isisaddons.module.security"))));
 
-                oneOf(mockContainer).newTransientInstance(ApplicationFeature.class);
+                oneOf(mockFactoryService).instantiate(ApplicationFeature.class);
                 inSequence(sequence);
                 will(returnValue(new ApplicationFeature(ApplicationFeatureId.newPackage("org.isisaddons.module"))));
 
-                oneOf(mockContainer).newTransientInstance(ApplicationFeature.class);
+                oneOf(mockFactoryService).instantiate(ApplicationFeature.class);
                 inSequence(sequence);
                 will(returnValue(new ApplicationFeature(ApplicationFeatureId.newPackage("org.isisaddons"))));
 
-                oneOf(mockContainer).newTransientInstance(ApplicationFeature.class);
+                oneOf(mockFactoryService).instantiate(ApplicationFeature.class);
                 inSequence(sequence);
                 will(returnValue(new ApplicationFeature(ApplicationFeatureId.newPackage("org"))));
             }});

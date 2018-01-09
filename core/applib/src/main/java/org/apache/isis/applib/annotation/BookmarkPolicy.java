@@ -36,5 +36,10 @@ public enum BookmarkPolicy {
     /**
      * An unimportant entity that should never be bookmarked.
      */
-    NEVER
+    NEVER,
+    /**
+     * Ignore the value provided by this annotation (meaning that the framework will keep searching, in meta
+     * annotations or superclasses/interfaces).
+     */
+    NOT_SPECIFIED
 }

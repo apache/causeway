@@ -70,7 +70,7 @@ where in this case `findByName` might be an existing action already defined:
 public class Customers {
     @Action(semantics=SemanticsOf.SAFE)
     public List<Customer> findByName(
-        @Parameter(minLength=3)             // <1>
+        @MinLength(3)                       // <1>
         @ParameterLayout(named="name")
         String name);
     ...
@@ -86,7 +86,7 @@ The autocomplete action can also be a regular method, annotated using xref:../rg
 public class Customers {
     @Programmatic
     public List<Customer> findByName(
-        @Parameter(minLength=3)
+        @MinLength(3)
         String name);
     ...
 }

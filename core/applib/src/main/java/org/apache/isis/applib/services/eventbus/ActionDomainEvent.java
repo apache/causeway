@@ -18,17 +18,14 @@
  */
 package org.apache.isis.applib.services.eventbus;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.annotation.ActionSemantics;
+
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.util.ObjectContracts;
 
-public abstract class ActionDomainEvent<S> extends AbstractInteractionEvent<S> {
+public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
 
     private static final long serialVersionUID = 1L;
 
@@ -39,13 +36,8 @@ public abstract class ActionDomainEvent<S> extends AbstractInteractionEvent<S> {
      * raises an event or not depends upon the "isis.reflector.facet.actionAnnotation.domainEvent.postForDefault"
      * configuration property.
      */
-    public static class Default extends ActionInteractionEvent<Object> {
+    public static class Default extends ActionDomainEvent<Object> {
         private static final long serialVersionUID = 1L;
-        public Default(){}
-        @Deprecated
-        public Default(Object source, Identifier identifier, Object... arguments) {
-            super(source, identifier, arguments);
-        }
     }
     //endregion
 
@@ -55,7 +47,7 @@ public abstract class ActionDomainEvent<S> extends AbstractInteractionEvent<S> {
      * Convenience class to use indicating that an event should <i>not</i> be posted (irrespective of the configuration
      * property setting for the {@link Default} event.
      */
-    public static class Noop extends ActionInteractionEvent<Object> {
+    public static class Noop extends ActionDomainEvent<Object> {
         private static final long serialVersionUID = 1L;
     }
     //endregion
@@ -66,13 +58,11 @@ public abstract class ActionDomainEvent<S> extends AbstractInteractionEvent<S> {
      * Convenience class meaning that an event <i>should</i> be posted (irrespective of the configuration
      * property setting for the {@link Default} event..
      */
-    public static class Doop extends ActionInteractionEvent<Object> {
+    public static class Doop extends ActionDomainEvent<Object> {
         private static final long serialVersionUID = 1L;
     }
     //endregion
 
-
-    //region > constructors
 
     /**
      * If used then the framework will set state via (non-API) setters.
@@ -83,47 +73,6 @@ public abstract class ActionDomainEvent<S> extends AbstractInteractionEvent<S> {
      */
     public ActionDomainEvent() {
     }
-
-    /**
-     * @deprecated - the {@link #ActionDomainEvent() no-arg constructor} is recommended instead, to reduce boilerplate.
-     */
-    @Deprecated
-    public ActionDomainEvent(
-            final S source,
-            final Identifier identifier) {
-        super(source, identifier);
-    }
-
-    /**
-     * @deprecated - the {@link #ActionDomainEvent() no-arg constructor} is recommended instead, to reduce boilerplate.
-     */
-    @Deprecated
-    public ActionDomainEvent(
-            final S source,
-            final Identifier identifier,
-            final Object... arguments) {
-        this(source, identifier,
-                asList(arguments));
-    }
-
-    private static List<Object> asList(final Object[] arguments) {
-        return arguments != null
-                ? Arrays.asList(arguments)
-                : Collections.emptyList();
-    }
-
-    /**
-     * @deprecated - the {@link #ActionDomainEvent() no-arg constructor} is recommended instead, to reduce boilerplate.
-     */
-    @Deprecated
-    public ActionDomainEvent(
-            final S source,
-            final Identifier identifier,
-            final List<Object> arguments) {
-        this(source, identifier);
-        this.arguments = Collections.unmodifiableList(arguments);
-    }
-    //endregion
 
     //region > command
     private Command command;
@@ -149,23 +98,23 @@ public abstract class ActionDomainEvent<S> extends AbstractInteractionEvent<S> {
 
     //region > actionSemantics
     public SemanticsOf getSemantics() {
-        return SemanticsOf.from(actionSemantics);
+        return actionSemantics;
     }
 
-    private ActionSemantics.Of actionSemantics;
+    private SemanticsOf actionSemantics;
 
     /**
      * @deprecated - use {@link #getSemantics()} instead.
      */
     @Deprecated
-    public ActionSemantics.Of getActionSemantics() {
+    public SemanticsOf getActionSemantics() {
         return actionSemantics;
     }
 
     /**
      * Not API - set by the framework.
      */
-    public void setActionSemantics(ActionSemantics.Of actionSemantics) {
+    public void setActionSemantics(SemanticsOf actionSemantics) {
         this.actionSemantics = actionSemantics;
     }
 
@@ -213,8 +162,8 @@ public abstract class ActionDomainEvent<S> extends AbstractInteractionEvent<S> {
     //region > arguments
     private List<Object> arguments;
     /**
-     * The arguments being used to invoke the action; populated at {@link org.apache.isis.applib.services.eventbus.AbstractInteractionEvent.Phase#VALIDATE} and subsequent phases
-     * (but null for {@link org.apache.isis.applib.services.eventbus.AbstractInteractionEvent.Phase#HIDE hidden} and {@link org.apache.isis.applib.services.eventbus.AbstractInteractionEvent.Phase#DISABLE disable} phases).
+     * The arguments being used to invoke the action; populated at {@link Phase#VALIDATE} and subsequent phases
+     * (but null for {@link Phase#HIDE hidden} and {@link Phase#DISABLE disable} phases).
      */
     public List<Object> getArguments() {
         return arguments;

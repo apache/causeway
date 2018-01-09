@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facetapi;
 
 import java.util.List;
 
-import org.apache.isis.applib.filter.Filter;
+import com.google.common.base.Predicate;
 
 /**
  * Anything in the metamodel (which also includes peers in the reflector) that
@@ -63,12 +63,12 @@ public interface FacetHolder {
     boolean containsDoOpNotDerivedFacet(Class<? extends Facet> facetType);
 
     /**
-     * Returns all {@link Facet}s matching the specified {@link Filter}.
+     * Returns all {@link Facet}s matching the specified {@link Predicate}.
      * 
-     * @param filter
+     * @param predicate
      * @return
      */
-    List<Facet> getFacets(Filter<Facet> filter);
+    List<Facet> getFacets(Predicate<Facet> predicate);
 
     /**
      * Adds the facet, extracting its {@link Facet#facetType() type} as the key.

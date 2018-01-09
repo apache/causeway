@@ -51,7 +51,7 @@ public class ActionSemanticsFacetFallbackToNonIdempotentFactoryTest extends Abst
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        facetFactory.processSemantics(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
+        facetFactory.processSemantics(new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(ActionSemanticsFacet.class);
         assertNotNull(facet);

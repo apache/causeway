@@ -20,7 +20,6 @@
 package org.apache.isis.core.unittestsupport.jmocking;
 
 import org.jmock.auto.Mock;
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -53,7 +52,7 @@ public class JUnitRuleMockery2Test_mockAnnotatedWithNever_sadCase {
 
     @Test
     public void invocationOnCollaboratorIsIgnored() {
-        exp.handleAssertionErrors().expect(AssertionError.class);
+        exp.expect(AssertionError.class);
         collaborating.collaborateWithCollaborator();
     }
 

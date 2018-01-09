@@ -22,6 +22,7 @@ package org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -32,13 +33,13 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.filter.Filter;
-import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.applib.layout.grid.Grid;
 import org.apache.isis.applib.services.tablecol.TableColumnOrderService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facets.WhereValueFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
@@ -180,14 +181,30 @@ public class CollectionContentsAsAjaxTablePanel
                     ? getModel().getParentObjectAdapterMemento().getObjectAdapter(ConcurrencyChecking.NO_CHECK,
                         getPersistenceSession(), getSpecificationLoader()).getSpecification()
                     : null;
-        
+
         @SuppressWarnings("unchecked")
-        final Filter<ObjectAssociation> filter = Filters.and(
-                ObjectAssociation.Filters.PROPERTIES, 
-                ObjectAssociation.Filters.staticallyVisible(whereContext),
-                associationDoesNotReferenceParent(parentSpecIfAny));
+        final Predicate<ObjectAssociation> predicate = com.google.common.base.Predicates
+                .and(ObjectAssociation.Predicates.PROPERTIES, new Predicate<ObjectAssociation>() {
+                            @Override
+                            public boolean apply(final ObjectAssociation association) {
+                                final List<Facet> facets = association.getFacets(new Predicate<Facet>() {
+                                    @Override public boolean apply(final Facet facet) {
+                                        return facet instanceof WhereValueFacet && facet instanceof HiddenFacet;
+                                    }
+                                });
+                                for (Facet facet : facets) {
+                                    final WhereValueFacet wawF = (WhereValueFacet) facet;
+                                    if (wawF.where().includes(whereContext)) {
+                                        return false;
+                                    }
+                                }
+                                return true;
+                            }
+                        },
+                        associationDoesNotReferenceParent(parentSpecIfAny));
         
-        final List<? extends ObjectAssociation> propertyList = typeOfSpec.getAssociations(Contributed.INCLUDED, filter);
+        final List<? extends ObjectAssociation> propertyList = typeOfSpec.getAssociations(Contributed.INCLUDED,
+                predicate);
         final Map<String, ObjectAssociation> propertyById = Maps.newLinkedHashMap();
         for (final ObjectAssociation property : propertyList) {
             propertyById.put(property.getId(), property);
@@ -234,13 +251,13 @@ public class CollectionContentsAsAjaxTablePanel
         }
     }
 
-    static Filter<ObjectAssociation> associationDoesNotReferenceParent(final ObjectSpecification parentSpec) {
+    static Predicate<ObjectAssociation> associationDoesNotReferenceParent(final ObjectSpecification parentSpec) {
         if(parentSpec == null) {
-            return Filters.any();
+            return com.google.common.base.Predicates.alwaysTrue();
         }
-        return new Filter<ObjectAssociation>() {
+        return new Predicate<ObjectAssociation>() {
             @Override
-            public boolean accept(ObjectAssociation association) {
+            public boolean apply(ObjectAssociation association) {
                 final HiddenFacet facet = association.getFacet(HiddenFacet.class);
                 if(facet == null) {
                     return true;

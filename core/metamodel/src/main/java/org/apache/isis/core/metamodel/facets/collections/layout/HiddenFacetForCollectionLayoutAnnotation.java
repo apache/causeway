@@ -19,8 +19,10 @@
 
 package org.apache.isis.core.metamodel.facets.collections.layout;
 
+import java.util.List;
+import java.util.Objects;
+
 import org.apache.isis.applib.annotation.CollectionLayout;
-import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -29,16 +31,18 @@ import org.apache.isis.core.metamodel.facets.members.hidden.HiddenFacetAbstract;
 
 public class HiddenFacetForCollectionLayoutAnnotation extends HiddenFacetAbstract {
 
-    public static HiddenFacet create(final CollectionLayout collectionLayout, final FacetHolder holder) {
-        if (collectionLayout == null) {
-            return null;
-        }
-        final Where where = collectionLayout.hidden();
-        return where != null && where != Where.NOT_SPECIFIED  ? new HiddenFacetForCollectionLayoutAnnotation(where, holder) : null;
+    public static HiddenFacet create(final List<CollectionLayout> collectionLayouts, final FacetHolder holder) {
+        return collectionLayouts.stream()
+                .map(CollectionLayout::hidden)
+                .filter(Objects::nonNull)
+                .filter(where -> where != Where.NOT_SPECIFIED)
+                .findFirst()
+                .map(where -> new HiddenFacetForCollectionLayoutAnnotation(where, holder))
+                .orElse(null);
     }
 
     private HiddenFacetForCollectionLayoutAnnotation(final Where where, final FacetHolder holder) {
-        super(When.ALWAYS, where, holder);
+        super(where, holder);
     }
 
     @Override

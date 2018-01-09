@@ -25,7 +25,7 @@ It also lists their corresponding implementation, either a default implementatio
 
 |xref:../rgsvc/rgsvc.adoc#_rgsvc_integration-api_BookmarkService[`o.a.i.applib.` +
 `services.bookmark` +
-`BookmarkService2`]
+`BookmarkService`]
 |Convert object reference to a serializable "bookmark", and vice versa.
 |`BookmarkServiceDefault` +
 ``o.a.i.core`` +

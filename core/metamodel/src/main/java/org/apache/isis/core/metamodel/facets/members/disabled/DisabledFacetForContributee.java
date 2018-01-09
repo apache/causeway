@@ -19,13 +19,12 @@
 
 package org.apache.isis.core.metamodel.facets.members.disabled;
 
-import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 public class DisabledFacetForContributee extends DisabledFacetAbstractImpl {
 
     public DisabledFacetForContributee(String reason, FacetHolder holder) {
-        super(When.ALWAYS, Where.ANYWHERE, reason, holder);
+        super(Where.ANYWHERE, reason, holder);
     }
 }

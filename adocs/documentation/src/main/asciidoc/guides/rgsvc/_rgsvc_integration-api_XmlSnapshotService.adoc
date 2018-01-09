@@ -14,7 +14,6 @@ Another use case is to grab raw data such that it could be merged into a report 
 
 The service offers a basic API to create a snapshot of a single object, and an more flexible API that allows the size of the graph to be customized.
 
-The core framework provides an implementation of this service (`o.a.i.core.runtime.services.xmlsnapshot.XmlSnapshotServiceDefault`).
 
 
 
@@ -189,7 +188,9 @@ public interface XmlSnapshotService {
 
 
 
+== Implementation
 
+The core framework provides an implementation of this service (`o.a.i.core.runtime.services.xmlsnapshot.XmlSnapshotServiceDefault`).
 
 
 == Related Services

@@ -21,7 +21,7 @@ package org.apache.isis.viewer.wicket.model.mementos;
 
 import java.io.Serializable;
 
-import org.apache.isis.applib.annotation.ActionSemantics;
+import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
@@ -39,7 +39,7 @@ public class ActionMemento implements Serializable {
     private final ObjectSpecId owningType;
     private final ActionType actionType;
     private final String nameParmsId;
-    private final ActionSemantics.Of actionSemantics;
+    private final SemanticsOf actionSemantics;
 
     private transient ObjectAction action;
 

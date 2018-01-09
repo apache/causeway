@@ -19,38 +19,29 @@
 
 package org.apache.isis.core.metamodel.facets.propparam.specification;
 
-import org.apache.isis.applib.AbstractDomainObject;
-import org.apache.isis.applib.annotation.MustSatisfy;
-
-public class DomainObjectWithMustSatisfyAnnotations extends AbstractDomainObject {
+public class DomainObjectWithMustSatisfyAnnotations {
 
     private String firstName;
 
-    @MustSatisfy(SpecificationAlwaysSatisfied.class)
     public String getFirstName() {
-        resolve(firstName);
         return firstName;
     }
 
     public void setFirstName(final String firstName) {
         this.firstName = firstName;
-        objectChanged();
     }
 
     private String lastName;
 
-    @MustSatisfy(SpecificationRequiresFirstLetterToBeUpperCase.class)
     public String getLastName() {
-        resolve(lastName);
         return lastName;
     }
 
     public void setLastName(final String lastName) {
         this.lastName = lastName;
-        objectChanged();
     }
 
-    public void changeLastName(@MustSatisfy(SpecificationRequiresFirstLetterToBeUpperCase.class) final String lastName) {
+    public void changeLastName(final String lastName) {
         setLastName(lastName);
     }
 

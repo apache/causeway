@@ -118,40 +118,6 @@ Key:
 
 
 
-There is also a number of deprecated domain services.
-
-.Deprecated Domain Services
-[cols="3,3a,3a,3a", options="header"]
-|===
-
-|API
-|Description
-|Implementation
-|Notes
-
-|`o.a.i.applib.` +
-`annotation`
-`Bulk.InteractionContext`
-|Request-scoped access to whether action is invoked on object and/or on collection of objects
-|`Bulk.InteractionContext` +
-``o.a.i.core`` +
-``isis-core-applib``
-|Replaced by xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_ActionInvocationContext[`ActionInvocationContext`]
-
-
-
-|===
-
-Key:
-
-Key:
-
-* `o.a.i` is an abbreviation for `org.apache.isis`
-* `o.ia.m` is an abbreviation for `org.isisaddons.module`
-* `o.a.i.c.m.s` is an abbreviation for `org.apache.isis.core.metamodel.services`
-* `o.a.i.c.r.s` is an abbreviation for `org.apache.isis.core.runtime.services`
-
-
 
 
 include::_rgsvc_core-domain-api_ClockService.adoc[leveloffset=+1]

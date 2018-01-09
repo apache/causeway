@@ -43,13 +43,10 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.memento.Memento;
 import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
 public class ObjectAdapterMemento implements Serializable {
 
@@ -572,36 +569,6 @@ public class ObjectAdapterMemento implements Serializable {
     public final static class Functions {
 
         private Functions() {
-        }
-
-        public static Function<ObjectSpecification, ObjectSpecId> fromSpec() {
-            return new Function<ObjectSpecification, ObjectSpecId>() {
-
-                @Override
-                public ObjectSpecId apply(final ObjectSpecification from) {
-                    return from.getSpecId();
-                }
-            };
-        }
-
-        public static Function<OneToOneAssociation, PropertyMemento> fromProperty(
-                final IsisSessionFactory isisSessionFactory) {
-            return new Function<OneToOneAssociation, PropertyMemento>() {
-                @Override
-                public PropertyMemento apply(final OneToOneAssociation from) {
-                    return new PropertyMemento(from, isisSessionFactory);
-                }
-            };
-        }
-
-        public static Function<OneToManyAssociation, CollectionMemento> fromCollection(
-                final IsisSessionFactory isisSessionFactory) {
-            return new Function<OneToManyAssociation, CollectionMemento>() {
-                @Override
-                public CollectionMemento apply(final OneToManyAssociation from) {
-                    return new CollectionMemento(from, isisSessionFactory);
-                }
-            };
         }
 
         public static Function<ObjectAction, ActionMemento> fromAction() {

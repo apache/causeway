@@ -21,8 +21,8 @@ package org.apache.isis.core.metamodel.adapter.mgr;
 
 import java.util.concurrent.Callable;
 
-import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
@@ -51,7 +51,7 @@ public interface AdapterManager extends AdapterManagerBase {
             return this == CHECK;
         }
 
-        public static ConcurrencyChecking concurrencyCheckingFor(ActionSemantics.Of actionSemantics) {
+        public static ConcurrencyChecking concurrencyCheckingFor(SemanticsOf actionSemantics) {
             return actionSemantics.isSafeInNature()
                     ? ConcurrencyChecking.NO_CHECK
                     : ConcurrencyChecking.CHECK;

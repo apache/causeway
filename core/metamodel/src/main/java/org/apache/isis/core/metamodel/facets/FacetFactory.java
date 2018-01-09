@@ -21,12 +21,7 @@ package org.apache.isis.core.metamodel.facets;
 
 import java.lang.reflect.Method;
 import java.util.List;
-import java.util.Properties;
 
-import com.google.common.collect.Lists;
-
-import org.apache.isis.applib.Identifier;
-import org.apache.isis.core.commons.lang.PropertiesExtensions;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -114,7 +109,6 @@ public interface FacetFactory {
     }
 
     public interface ProcessContextWithMetadataProperties<T extends FacetHolder> {
-        public Properties metadataProperties(String subKey);
         public T getFacetHolder();
     }
 
@@ -136,23 +130,13 @@ public interface FacetFactory {
 
     public static class ProcessClassContext extends AbstractProcessWithClsContext<FacetHolder> implements MethodRemover, ProcessContextWithMetadataProperties<FacetHolder> {
         private final MethodRemover methodRemover;
-        private final Properties metadataProperties;
 
         /**
          * For testing only.
          */
         public ProcessClassContext(final Class<?> cls, final MethodRemover methodRemover, final FacetHolder facetHolder) {
-            this(cls, null, methodRemover, facetHolder);
-        }
-
-        public ProcessClassContext(
-                final Class<?> cls, 
-                final Properties metadataProperties, 
-                final MethodRemover methodRemover, 
-                final FacetHolder facetHolder) {
             super(cls, facetHolder);
             this.methodRemover = methodRemover;
-            this.metadataProperties = metadataProperties;
         }
 
 
@@ -176,13 +160,6 @@ public interface FacetFactory {
             methodRemover.removeMethods(methods);
         }
 
-        public Properties metadataProperties(final String subKey) {
-            if(metadataProperties == null) {
-                return null;
-            }
-            final Properties subsetProperties = PropertiesExtensions.subset(this.metadataProperties, "class." + subKey);
-            return !subsetProperties.isEmpty() ? subsetProperties : null;
-        }
     }
 
     /**
@@ -197,58 +174,21 @@ public interface FacetFactory {
 
     public static class ProcessMethodContext extends AbstractProcessWithMethodContext<FacetedMethod> implements  ProcessContextWithMetadataProperties<FacetedMethod> {
         private final FeatureType featureType;
-        private final Properties metadataProperties;
-
 
         public ProcessMethodContext(
-                final Class<?> cls, 
-                final FeatureType featureType, 
-                final Properties metadataProperties, 
-                final Method method, 
-                final MethodRemover methodRemover, 
+                final Class<?> cls,
+                final FeatureType featureType,
+                final Method method,
+                final MethodRemover methodRemover,
                 final FacetedMethod facetedMethod) {
             super(cls, method, methodRemover, facetedMethod);
             this.featureType = featureType;
-            this.metadataProperties = metadataProperties;
         }
 
         public FeatureType getFeatureType() {
             return featureType;
         }
 
-        public Properties metadataProperties(final String subKey) {
-            
-            if(metadataProperties == null) {
-                return null;
-            }
-            final Identifier identifier = featureType.identifierFor(getCls(), getMethod());
-            final String id = identifier.getMemberName();
-            
-            // build list of keys to search for... 
-            final List<String> keys = Lists.newArrayList();
-            if(featureType == FeatureType.ACTION) {
-                // ... either "action.actionId" or "member.actionId()" 
-                keys.add("action." + id+"."+subKey);
-                keys.add("member." + id+"()"+"."+subKey);
-            } else if(featureType == FeatureType.PROPERTY) {
-                // ... either "property.propertyId" or "member.propertyId" 
-                keys.add("property." + id+"."+subKey);
-                keys.add("member." + id+"."+subKey);
-            } else if(featureType == FeatureType.COLLECTION) {
-                // ... either "collection.collectionId" or "member.collectionId" 
-                keys.add("collection." + id+"."+subKey);
-                keys.add("member." + id+"."+subKey);
-            }
-
-            for (final String key : keys) {
-                final Properties subsetProperties = PropertiesExtensions.subset(this.metadataProperties, key);
-                if (!subsetProperties.isEmpty()) {
-                    return subsetProperties;
-                } 
-            }
-            
-            return null;
-        }
     }
 
     /**

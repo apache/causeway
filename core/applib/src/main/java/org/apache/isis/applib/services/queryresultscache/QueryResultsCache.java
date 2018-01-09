@@ -32,8 +32,8 @@ import org.apache.isis.applib.AbstractSubscriber;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.events.system.FixturesInstalledEvent;
-import org.apache.isis.applib.events.system.FixturesInstallingEvent;
+import org.apache.isis.applib.fixturescripts.events.FixturesInstalledEvent;
+import org.apache.isis.applib.fixturescripts.events.FixturesInstallingEvent;
 import org.apache.isis.applib.services.WithTransactionScope;
 
 /**

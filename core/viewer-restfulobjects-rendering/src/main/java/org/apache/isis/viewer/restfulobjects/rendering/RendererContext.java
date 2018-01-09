@@ -20,7 +20,6 @@ package org.apache.isis.viewer.restfulobjects.rendering;
 
 import java.util.List;
 
-import org.apache.isis.applib.annotation.Render;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;

@@ -19,7 +19,10 @@
 
 package org.apache.isis.core.metamodel.facets.properties.property.modify;
 
+import java.sql.Timestamp;
+
 import com.google.common.base.Objects;
+
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
@@ -47,8 +50,6 @@ import org.apache.isis.core.metamodel.services.publishing.PublishingServiceInter
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.runtime.system.transaction.TransactionalClosure;
 import org.apache.isis.schema.ixn.v1.PropertyEditDto;
-
-import java.sql.Timestamp;
 
 public abstract class PropertySetterOrClearFacetForDomainEventAbstract
         extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
@@ -195,7 +196,7 @@ public abstract class PropertySetterOrClearFacetForDomainEventAbstract
         final String propertyId = owningProperty.getIdentifier().toClassAndNameIdentityString();
 
         if( command.getExecutor() == Command.Executor.USER &&
-                command.getExecuteIn() == org.apache.isis.applib.annotation.Command.ExecuteIn.BACKGROUND) {
+                command.getExecuteIn() == org.apache.isis.applib.annotation.CommandExecuteIn.BACKGROUND) {
 
             // deal with background commands
 
@@ -316,8 +317,8 @@ public abstract class PropertySetterOrClearFacetForDomainEventAbstract
     }
 
     /**
-     * Optional hook to allow the facet implementation for the deprecated {@link org.apache.isis.applib.annotation.PostsPropertyChangedEvent} annotation
-     * to discard the event if of a different type.
+     * Optional hook to allow the facet implementation for now-deleted annotations to discard an event if incompatible.
+     * Now in effect redundant.
      */
     protected PropertyDomainEvent<?, ?> verify(PropertyDomainEvent<?, ?> event) {
         return event;

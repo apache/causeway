@@ -19,9 +19,10 @@
 package org.apache.isis.core.metamodel.facets.actions.layout;
 
 
+import java.util.List;
+
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Contributed;
-import org.apache.isis.applib.annotation.NotContributed;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.notcontributed.NotContributedFacet;
 import org.apache.isis.core.metamodel.facets.actions.notcontributed.NotContributedFacetAbstract;
@@ -30,20 +31,25 @@ import org.apache.isis.core.metamodel.facets.actions.notcontributed.NotContribut
 public class NotContributedFacetForActionLayoutAnnotation extends NotContributedFacetAbstract {
 
     public static NotContributedFacet create(
-            final ActionLayout actionLayout, final FacetHolder holder) {
-        if(actionLayout == null) {
-            return null;
-        }
-        final Contributed contributed = actionLayout.contributed();
-        final NotContributed.As as = NotContributed.As.from(contributed);
-        if(as == null) {
-            return null;
-        }
-        return new NotContributedFacetForActionLayoutAnnotation(as, holder);
+            final List<ActionLayout> actionLayouts,
+            final FacetHolder holder) {
+
+        return actionLayouts.stream()
+                .map(ActionLayout::contributed)
+                .filter(contributed -> contributed != Contributed.NOT_SPECIFIED)
+                .findFirst()
+                .map(contributed -> {
+                    NotContributedAs as = NotContributedAs.notFrom(contributed);
+                    return new NotContributedFacetForActionLayoutAnnotation(as, contributed, holder);
+                })
+                .orElse(null);
     }
 
-    private NotContributedFacetForActionLayoutAnnotation(final NotContributed.As as, final FacetHolder holder) {
-        super(as, holder);
+    private NotContributedFacetForActionLayoutAnnotation(
+            final NotContributedAs as,
+            final Contributed contributed,
+            final FacetHolder holder) {
+        super(as, contributed, holder);
     }
 
 }

@@ -237,7 +237,7 @@ See also xref:../ugfun/ugfun.adoc#_ugfun_programming-model_properties-vs-paramet
 == ``BigDecimal``s (Precision)
 
 Whereas the xref:../ugfun/ugfun.adoc#__ugfun_programming-model_properties_datatypes_bigdecimals[precision of BigDecimal properties] is defined using xref:../rgant/rgant.adoc#_rgant_Column_scale[`@javax.jdo.annotations.Column#scale()`], that JDO annotation cannot be applied to parameter types.
-Instead, the xref:../rgant/rgant.adoc#_rgant_Digits_fraction[`@javax.validation.constraints.Digits#fraction()`] annotation/attribute is used.
+Instead, the xref:../rgant/rgant.adoc#_rgant-Digits[`@javax.validation.constraints.Digits#fraction()`] annotation/attribute is used.
 
 For example:
 
@@ -256,7 +256,7 @@ public Order updateDiscount(
 }
 ----
 <1> Specifies the property precision using xref:../rgant/rgant.adoc#_rgant_Column_scale[`@Column#scale()`]
-<2> Specifies the corresponding parameter precision using xref:../rgant/rgant.adoc#_rgant_Digits_fraction[`@Digits#fraction()`].
+<2> Specifies the corresponding parameter precision using xref:../rgant/rgant.adoc#_rgant-Digits[`@Digits#fraction()`].
 
 See also xref:../ugfun/ugfun.adoc#_ugfun_programming-model_properties-vs-parameters[properties vs parameters].
 

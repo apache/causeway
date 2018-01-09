@@ -27,7 +27,7 @@ public class ChangedObjectsServiceInternal {
 
     public boolean hasChangedAdapters();                                                        // <2>
 
-    public Map<ObjectAdapter, PublishedObject.ChangeKind> getChangeKindByEnlistedAdapter();     // <3>
+    public Map<ObjectAdapter, PublishingChangeKind> getChangeKindByEnlistedAdapter();     // <3>
     public int numberObjectsDirtied();
     public int numberObjectPropertiesModified();
 

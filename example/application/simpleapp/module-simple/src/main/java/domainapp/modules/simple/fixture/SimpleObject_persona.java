@@ -22,7 +22,7 @@ package domainapp.modules.simple.fixture;
 import org.apache.isis.applib.fixturescripts.PersonaWithBuilderScript;
 import org.apache.isis.applib.fixturescripts.PersonaWithFinder;
 import org.apache.isis.applib.fixturescripts.setup.PersonaEnumPersistAll;
-import org.apache.isis.applib.services.registry.ServiceRegistry2;
+import org.apache.isis.applib.services.registry.ServiceRegistry;
 
 import domainapp.modules.simple.dom.impl.SimpleObject;
 import domainapp.modules.simple.dom.impl.SimpleObjects;
@@ -45,13 +45,11 @@ public enum SimpleObject_persona implements PersonaWithBuilderScript<SimpleObjec
 
     private final String name;
 
-//    @Override
     public SimpleObjectBuilder builder() {
         return new SimpleObjectBuilder().setName(name);
     }
 
-    //@Override
-    public SimpleObject findUsing(final ServiceRegistry2 serviceRegistry) {
+    public SimpleObject findUsing(final ServiceRegistry serviceRegistry) {
         SimpleObjects simpleObjects = serviceRegistry.lookupService(SimpleObjects.class);
         return simpleObjects.findByNameExact(name);
     }

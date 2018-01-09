@@ -31,18 +31,16 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.isis.applib.services.appfeat.ApplicationMemberType;
 import org.apache.isis.applib.services.config.ConfigurationService;
-import org.apache.isis.applib.services.registry.ServiceRegistry2;
+import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleIntValueFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
@@ -135,8 +133,8 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
             return;
         }
 
-        final List<ObjectAssociation> properties = spec.getAssociations(Contributed.INCLUDED, ObjectAssociation.Filters.PROPERTIES);
-        final List<ObjectAssociation> collections = spec.getAssociations(Contributed.INCLUDED, ObjectAssociation.Filters.COLLECTIONS);
+        final List<ObjectAssociation> properties = spec.getAssociations(Contributed.INCLUDED, ObjectAssociation.Predicates.PROPERTIES);
+        final List<ObjectAssociation> collections = spec.getAssociations(Contributed.INCLUDED, ObjectAssociation.Predicates.COLLECTIONS);
         final List<ObjectAction> actions = spec.getObjectActions(Contributed.INCLUDED);
 
         if (properties.isEmpty() && collections.isEmpty() && actions.isEmpty()) {
@@ -170,7 +168,7 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
         }
         for (final ObjectAction action : actions) {
             final Class<?> returnType = correspondingClassFor(action.getReturnType());
-            final SemanticsOf actionSemantics = SemanticsOf.from(action.getSemantics());
+            final SemanticsOf actionSemantics = action.getSemantics();
             final boolean contributed = action instanceof ContributeeMember;
             addedMembers = newAction(classFeatureId, action, returnType, contributed, actionSemantics) || addedMembers;
         }
@@ -381,8 +379,7 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
         final HiddenFacet facet = spec.getFacet(HiddenFacet.class);
         return facet != null &&
                 !facet.isNoop() &&
-                (facet.where() == Where.EVERYWHERE || facet.where() == Where.ANYWHERE) &&
-                facet.when() == When.ALWAYS;
+                (facet.where() == Where.EVERYWHERE || facet.where() == Where.ANYWHERE);
     }
 
     protected boolean isBuiltIn(final ObjectSpecification spec) {
@@ -559,10 +556,7 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
     //region  > services (injected)
 
     @javax.inject.Inject
-    ServiceRegistry2 serviceRegistry;
-
-    @javax.inject.Inject
-    DomainObjectContainer container;
+    ServiceRegistry serviceRegistry;
 
     @javax.inject.Inject
     ConfigurationService configurationService;

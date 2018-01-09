@@ -26,7 +26,7 @@ import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.services.bookmark.BookmarkService2;
+import org.apache.isis.applib.services.bookmark.BookmarkService;
 
 @Mixin(method="act")
 public class Object_openRestApi {
@@ -51,7 +51,7 @@ public class Object_openRestApi {
     )
     @MemberOrder(name = "datanucleusIdLong", sequence = "750.1")
     public java.net.URL act() throws MalformedURLException {
-        Bookmark bookmark = bookmarkService2.bookmarkFor(object);
+        Bookmark bookmark = bookmarkService.bookmarkFor(object);
         return new java.net.URL(String.format(
                 "http:///restful/objects/%s/%s",
                 bookmark.getObjectType(),
@@ -59,6 +59,6 @@ public class Object_openRestApi {
     }
 
     @javax.inject.Inject
-    BookmarkService2 bookmarkService2;
+    BookmarkService bookmarkService;
 
 }

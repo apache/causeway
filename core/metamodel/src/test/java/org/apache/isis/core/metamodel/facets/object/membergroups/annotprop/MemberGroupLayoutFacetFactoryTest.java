@@ -24,7 +24,6 @@ import java.util.List;
 
 import org.apache.isis.applib.annotation.MemberGroupLayout;
 import org.apache.isis.applib.annotation.MemberGroupLayout.ColumnSpans;
-import org.apache.isis.applib.annotation.MemberGroups;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
@@ -60,17 +59,14 @@ public class MemberGroupLayoutFacetFactoryTest extends AbstractFacetFactoryTest 
             left={"General","Foo", "Bar"}, 
             middle={"Baz", "Boz"}, 
             columnSpans={2,4,0,6})
-    @MemberGroups({"General","Foo", "Bar"})
     public static class ClassWithMemberGroupLayoutAndMemberGroupsAnnotation {
         
     }
 
-    @MemberGroups({"General","Foo", "Bar"})
     public static class ClassWithMemberGroupsAnnotation {
         
     }
     
-    @MemberGroups()
     public static class ClassWithMemberGroupsAnnotationButNoGroupsNamed {
     }
     
@@ -97,31 +93,6 @@ public class MemberGroupLayoutFacetFactoryTest extends AbstractFacetFactoryTest 
         assertNoMethodsRemoved();
     }
 
-    public void testWithMemberGroups() {
-        facetFactory.process(new ProcessClassContext(ClassWithMemberGroupsAnnotation.class, methodRemover, facetHolder));
-        
-        final Facet facet = facetHolder.getFacet(MemberGroupLayoutFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof MemberGroupsFacetAnnotation);
-        final MemberGroupsFacetAnnotation memberGroupsFacet = (MemberGroupsFacetAnnotation) facet;
-        final List<String> groupNames = memberGroupsFacet.getLeft();
-        assertEquals(Arrays.asList("General", "Foo", "Bar"), groupNames);
-        
-        assertNoMethodsRemoved();
-    }
-    
-    public void testWithMemberGroupsButNoGroupsNamed() {
-        facetFactory.process(new ProcessClassContext(ClassWithMemberGroupsAnnotationButNoGroupsNamed.class, methodRemover, facetHolder));
-
-        final Facet facet = facetHolder.getFacet(MemberGroupLayoutFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof MemberGroupsFacetAnnotation);
-        final MemberGroupsFacetAnnotation memberGroupsFacet = (MemberGroupsFacetAnnotation) facet;
-        final List<String> groupNames = memberGroupsFacet.getLeft();
-        assertEquals(Arrays.asList("General"), groupNames);
-
-        assertNoMethodsRemoved();
-    }
 
     public void testWithoutMemberGroups() {
         facetFactory.process(new ProcessClassContext(ClassWithoutMemberGroupsAnnotation.class, methodRemover, facetHolder));

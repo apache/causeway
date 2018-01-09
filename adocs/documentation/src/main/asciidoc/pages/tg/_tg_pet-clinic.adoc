@@ -1,5 +1,5 @@
 [[_tg_pet-clinic]]
-= Pet Clinic
+= Pet Clinic (up to v1.13.1)
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :_basedir: ../../
 :_imagesdir: images/
@@ -7,6 +7,12 @@
 
 This is a step-by-step tutorial to build up a simple "petclinic" application, starting from the xref:../../guides/ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype].
 It was originally written by Jeroen van der Wal.
+
+[WARNING]
+====
+Due to changes in the structure of the simpleapp archetype, this tutorial does not work for any version later than v1.13.1
+====
+
 
 It consists of just three domain classes (http://yuml.me/edit/3db2078c[http://yuml.me/3db2078c]):
 
@@ -316,8 +322,12 @@ Note that `Pet` has both both Isis and JDO annotations:
         strategy=VersionStrategy.VERSION_NUMBER,
         column="version")
 @javax.jdo.annotations.Unique(name="Pet_name_UNQ", members = {"name"})         // <4>
-@ObjectType("PET")                                                             // <5>
-@Bookmarkable                                                                  // <6>
+@DomainObject(
+    objectType = "PET"                              // <5>
+)
+@DomainObjectLayout(
+    bookmarking = BookmarkPolicy.AS_ROOT            // <6>
+)
 public class Pet implements Comparable<Pet> {
     ...
 }
@@ -329,8 +339,8 @@ where:
 <2> `@DatastoreIdentity` specify a surrogate `Id` column to be used as the primary key
 <3> `@Version` provides support for optimistic locking
 <4> `@Unique` enforces a uniqueness constraint so that no two `Pet`s can have the same name (unrealistic, but can refactor later)
-<5> `@ObjectType` is used by Apache Isis for its own internal "OID" identifier; this also appears in the URL in Apache Isis' Wicket viewer and REST API
-<6> `@Bookmarkable` indicates that the object can be automatically bookmarked in Apache Isis' Wicket viewer
+<5> used by Apache Isis for its own internal "OID" identifier; this also appears in the URL in Apache Isis' Wicket viewer and REST API
+<6> indicates that the object can be automatically bookmarked in Apache Isis' Wicket viewer
 
 [NOTE]
 ====

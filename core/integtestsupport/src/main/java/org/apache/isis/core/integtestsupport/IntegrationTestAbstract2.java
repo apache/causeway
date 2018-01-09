@@ -29,7 +29,7 @@ import org.apache.isis.applib.AppManifestAbstract;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.applib.services.factory.FactoryService;
-import org.apache.isis.applib.services.registry.ServiceRegistry2;
+import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.sessmgmt.SessionManagementService;
 import org.apache.isis.applib.services.user.UserService;
@@ -106,7 +106,7 @@ public abstract class IntegrationTestAbstract2 extends IntegrationTestAbstract {
     protected FactoryService factoryService;
 
     @javax.inject.Inject
-    protected ServiceRegistry2 serviceRegistry;
+    protected ServiceRegistry serviceRegistry;
 
     @Inject
     RepositoryService repositoryService;

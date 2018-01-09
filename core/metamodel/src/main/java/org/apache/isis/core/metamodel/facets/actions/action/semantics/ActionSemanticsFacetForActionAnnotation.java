@@ -19,8 +19,9 @@
 
 package org.apache.isis.core.metamodel.facets.actions.action.semantics;
 
+import java.util.List;
+
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
@@ -29,24 +30,19 @@ import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFa
 public class ActionSemanticsFacetForActionAnnotation extends ActionSemanticsFacetAbstract {
 
     public static ActionSemanticsFacet create(
-            final Action action,
+            final List<Action> actions,
             final FacetHolder holder) {
 
-        if(action == null) {
-            return null;
-        }
-
-        final SemanticsOf semantics = action.semantics();
-        if(action.semantics() == null) {
-            // don't think this can happen, therefore will return a facet with the default, ie NON_IDEMPOTENT
-            return null;
-        }
-
-        return new ActionSemanticsFacetForActionAnnotation(
-                SemanticsOf.from(semantics), holder);
+        return actions.stream()
+                .map(Action::semantics)
+                .filter(semanticsOf -> semanticsOf != SemanticsOf.NOT_SPECIFIED)
+                .findFirst()
+                .map(semanticsOf ->
+                        (ActionSemanticsFacet)new ActionSemanticsFacetForActionAnnotation(semanticsOf, holder))
+                .orElse(new ActionSemanticsFacetFallbackToNonIdempotent(holder));
     }
 
-    private ActionSemanticsFacetForActionAnnotation(Of of, final FacetHolder holder) {
+    private ActionSemanticsFacetForActionAnnotation(SemanticsOf of, final FacetHolder holder) {
         super(of, holder);
     }
 

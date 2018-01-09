@@ -33,8 +33,11 @@ import org.apache.isis.applib.clock.Clock;
 /**
  * Value object representing a date and time value. By default, the time is
  * initialised to the current time, unless otherwise specified.
+ *
+ * @deprecated
  */
 @Value(semanticsProviderName = "org.apache.isis.core.metamodel.facets.value.datetime.DateTimeValueSemanticsProvider")
+@Deprecated
 public class DateTime extends Magnitude<DateTime> {
 
     private static final long serialVersionUID = 1L;
@@ -260,14 +263,6 @@ public class DateTime extends Magnitude<DateTime> {
 
     public boolean sameYearAs(final DateTime dateTime2) {
         return dateTime2 == null ? false : getYear() == dateTime2.getYear();
-    }
-
-    @Deprecated
-    /**
-     * See millisSinceEpoch() 
-     */
-    public long longValue() {
-        return millisSinceEpoch();
     }
 
     /**

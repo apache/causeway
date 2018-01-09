@@ -19,16 +19,14 @@
 
 package org.apache.isis.core.metamodel.facets.actions.action.publishing;
 
-import org.apache.isis.applib.annotation.PublishingPayloadFactoryForAction;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFacetAbstract;
 
 public class PublishedActionFacetFromConfiguration extends PublishedActionFacetAbstract {
 
     public PublishedActionFacetFromConfiguration(
-            final PublishingPayloadFactoryForAction publishingPayloadFactory,
             final FacetHolder holder) {
-        super(publishingPayloadFactory, holder);
+        super(holder);
     }
 
 }

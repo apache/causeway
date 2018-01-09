@@ -21,7 +21,6 @@ package org.apache.isis.core.metamodel.facets.members.disabled;
 
 import com.google.common.base.Strings;
 
-import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -30,46 +29,42 @@ public abstract class DisabledFacetAbstractImpl extends DisabledFacetAbstract {
 
     private final String reason;
 
-    public DisabledFacetAbstractImpl(final When when, final Where where, final FacetHolder holder) {
-        this(when, where, null, holder);
+    public DisabledFacetAbstractImpl(final Where where, final FacetHolder holder) {
+        this(where, null, holder);
     }
 
-    public DisabledFacetAbstractImpl(final When when, final Where where, final FacetHolder holder, final Semantics semantics) {
-        this(when, where, null, holder, semantics);
+    public DisabledFacetAbstractImpl(
+            final Where where,
+            final FacetHolder holder,
+            final Semantics semantics) {
+        this(where, null, holder, semantics);
     }
 
-    public DisabledFacetAbstractImpl(final When when, final Where where, final String reason, final FacetHolder holder) {
-        super(when, where, holder);
+    public DisabledFacetAbstractImpl(
+            final Where where,
+            final String reason,
+            final FacetHolder holder) {
+        super(where, holder);
         this.reason = reason;
     }
 
-    public DisabledFacetAbstractImpl(final When when, final Where where, final String reason, final FacetHolder holder, final Semantics semantics) {
-        super(when, where, holder, semantics);
+    public DisabledFacetAbstractImpl(
+            final Where where,
+            final String reason,
+            final FacetHolder holder,
+            final Semantics semantics) {
+        super(where, holder, semantics);
         this.reason = reason;
     }
 
     @Override
     public String disabledReason(final ObjectAdapter targetAdapter) {
-        if (when() == When.ALWAYS) {
-            return disabledReasonElse("Always disabled");
-        } else if (when() == When.NEVER) {
-            return null;
-        }
+        return disabledReasonElse("Always disabled");
 
-        // remaining tests depend upon the actual target in question
-        if (targetAdapter == null) {
-            return null;
-        }
-
-        if (when() == When.UNTIL_PERSISTED) {
-            return targetAdapter.isTransient() ? disabledReasonElse("Disabled until persisted") : null;
-        } else if (when() == When.ONCE_PERSISTED) {
-            return targetAdapter.representsPersistent() ? disabledReasonElse("Disabled once persisted") : null;
-        }
-        return null;
     }
 
-    private String disabledReasonElse(final String defaultReason) {
+    private String disabledReasonElse(
+            final String defaultReason) {
         return !Strings.isNullOrEmpty(reason) ? reason : defaultReason;
     }
 

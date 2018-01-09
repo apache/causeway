@@ -46,6 +46,9 @@ import org.apache.isis.viewer.wicket.ui.components.header.HeaderPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditFormPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.*;
+import org.apache.isis.viewer.wicket.ui.components.scalars.jdk8time.Jdk8LocalDatePanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.scalars.jdk8time.Jdk8LocalDateTimePanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.scalars.jdk8time.Jdk8OffsetDateTimePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jdkdates.JavaSqlDatePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jdkdates.JavaSqlTimePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jdkdates.JavaSqlTimestampPanelFactory;
@@ -217,6 +220,10 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
         componentFactories.add(new JodaLocalDatePanelFactory());
         componentFactories.add(new JodaLocalDateTimePanelFactory());
         componentFactories.add(new JodaDateTimePanelFactory());
+        
+        componentFactories.add(new Jdk8OffsetDateTimePanelFactory());	
+        componentFactories.add(new Jdk8LocalDatePanelFactory());
+        componentFactories.add(new Jdk8LocalDateTimePanelFactory());
 
         componentFactories.add(new ValuePanelFactory());
 

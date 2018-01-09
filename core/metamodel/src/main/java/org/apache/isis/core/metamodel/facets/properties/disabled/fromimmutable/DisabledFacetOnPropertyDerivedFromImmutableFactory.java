@@ -50,7 +50,7 @@ public class DisabledFacetOnPropertyDerivedFromImmutableFactory extends FacetFac
                 // @Property(editing=ENABLED)
                 return;
             }
-            FacetUtil.addFacet(new DisabledFacetOnPropertyDerivedFromImmutable(immutableFacet, facetHolder));
+            FacetUtil.addFacet(new DisabledFacetOnPropertyDerivedFromImmutable(facetHolder));
         }
     }
 

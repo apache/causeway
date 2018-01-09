@@ -19,14 +19,14 @@
 
 package org.apache.isis.core.metamodel.facets.actions.action.semantics;
 
-import org.apache.isis.applib.annotation.ActionSemantics;
+import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacetAbstract;
 
 public class ActionSemanticsFacetFallbackToNonIdempotent extends ActionSemanticsFacetAbstract {
 
     public ActionSemanticsFacetFallbackToNonIdempotent(final FacetHolder holder) {
-        super(ActionSemantics.Of.NON_IDEMPOTENT, holder);
+        super(SemanticsOf.NON_IDEMPOTENT, holder);
     }
 
 }

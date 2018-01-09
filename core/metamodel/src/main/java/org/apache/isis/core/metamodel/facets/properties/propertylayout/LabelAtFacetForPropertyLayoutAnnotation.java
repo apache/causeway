@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.properties.propertylayout;
 
+import java.util.List;
+
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -27,12 +29,16 @@ import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacetAbs
 
 public class LabelAtFacetForPropertyLayoutAnnotation extends LabelAtFacetAbstract {
 
-    public static LabelAtFacet create(final PropertyLayout propertyLayout, FacetHolder holder) {
-        if (propertyLayout == null) {
-            return null;
-        }
-        final LabelPosition labelPosition = propertyLayout.labelPosition();
-        return labelPosition != null ? new LabelAtFacetForPropertyLayoutAnnotation(labelPosition, holder) : null;
+    public static LabelAtFacet create(
+            final List<PropertyLayout> propertyLayouts,
+            final FacetHolder holder) {
+
+        return propertyLayouts.stream()
+                .map(PropertyLayout::labelPosition)
+                .filter(labelPosition -> labelPosition != LabelPosition.NOT_SPECIFIED)
+                .findFirst()
+                .map(labelPosition -> new LabelAtFacetForPropertyLayoutAnnotation(labelPosition, holder))
+                .orElse(null);
     }
 
     private LabelAtFacetForPropertyLayoutAnnotation(final LabelPosition value, final FacetHolder holder) {

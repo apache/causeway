@@ -111,8 +111,8 @@ public abstract class CollectionRemoveFromFacetForDomainEventFromAbstract
     }
 
     /**
-     * Optional hook to allow the facet implementation for the deprecated {@link org.apache.isis.applib.annotation.PostsCollectionRemovedFromEvent} annotation
-     * to discard the event if of a different type.
+     * Optional hook to allow the facet implementation for now removed annotations
+     * to discard the event if of a different type.  Now a no-op, I think.
      */
     protected CollectionDomainEvent<?, ?> verify(CollectionDomainEvent<?, ?> event) {
         return event;

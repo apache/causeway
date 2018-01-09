@@ -9,7 +9,6 @@
 The `MetaModelService4` service (and its various supertypes) provides access to a number of aspects of Apache Isis' internal metamodel.
 
 
-
 == API
 
 
@@ -56,7 +55,6 @@ If an `AppManifest2` was used (from a `Module`), then this is also returned (els
 == Implementation
 
 The framework provides a default implementation of this service, `o.a.i.c.m.services.metamodel.MetaModelServiceDefault`.
-
 
 
 

@@ -38,11 +38,11 @@ public class TitlingService extends AbstractSubscriber {
         if(persistentInstance instanceof ObjectWithPersistedTitle) {
             final ObjectWithPersistedTitle objectWithPersistedTitle =
                 (ObjectWithPersistedTitle) persistentInstance;
-            objectWithPersistedTitle.setTitle(container.titleOf(objectWithPersistedTitle));
+            objectWithPersistedTitle.setTitle(titleService.titleOf(objectWithPersistedTitle));
         }
     }
     @Inject
-    private DomainObjectContainer container;
+    TitleService titleService;
 }
 ----
 
@@ -63,7 +63,7 @@ public class TitlingService {
                     if(persistentInstance instanceof ObjectWithPersistedTitle) {
                         final ObjectWithPersistedTitle objectWithPersistedTitle =
                             (ObjectWithPersistedTitle) persistentInstance;
-                        objectWithPersistedTitle.setTitle(container.titleOf(objectWithPersistedTitle));
+                        objectWithPersistedTitle.setTitle(titleService.titleOf(objectWithPersistedTitle));
                     }
                 }
                 @Override
@@ -72,9 +72,9 @@ public class TitlingService {
             }, null);
     }
     @Inject
-    private IsisJdoSupport isisJdoSupport;
+    IsisJdoSupport isisJdoSupport;
     @Inject
-    private DomainObjectContainer container;
+    TitleService titleService;
 }
 ----
 

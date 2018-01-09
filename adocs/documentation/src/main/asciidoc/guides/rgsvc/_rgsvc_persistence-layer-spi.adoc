@@ -24,7 +24,7 @@ It also lists their corresponding implementation, either a default implementatio
 
 
 
-|xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditingService[`o.a.i.applib.` +
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditerService[`o.a.i.applib.` +
 `services.audit` +
 `AuditerService`]
 |Create an audit record for every changed property of every changed object within a transaction.
@@ -35,25 +35,6 @@ also +
 ``isis-module-audit``
 |
 
-
-|xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditingService[`o.a.i.applib.` +
-`services.audit` +
-`AuditingService3`]
-|(deprecated, replaced by xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditerService[`AuditerService`]); creates
-an audit record for every changed property of every changed object within a transaction.
-|
-|
-
-
-|xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_EventSerializer[`o.a.i.applib.` +
-`services.publish` +
-`EventSerializer`]
-|(deprecated, not used by replacement xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`]) Creates a representation of either an action invocation or a changed object being published through the xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublishingService[`PublishingService`].
-|`RestfulObjects-` +
-`SpecEventSerializer` +
-``o.ia.m.publishing`` +
-``isis-module-publishing``
-|
 
 
 
@@ -70,16 +51,6 @@ also +
 
 |
 
-
-|xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublishingService[`o.a.i.applib.` +
-`services.publish` +
-`PublishingService`]
-|(deprecated, replaced by xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`]) Publish any action invocations and changed objects, typically for interchange with an external system in a different bounded context.
-|`PublishingService` +
-``o.ia.m.publishing`` +
-``isis-module-publishing``
-
-|
 
 
 
@@ -111,8 +82,5 @@ Where an implementation is available (on the classpath) then it is always regist
 
 
 include::_rgsvc_persistence-layer-spi_AuditerService.adoc[leveloffset=+1]
-include::_rgsvc_persistence-layer-spi_AuditingService.adoc[leveloffset=+1]
-include::_rgsvc_persistence-layer-spi_EventSerializer.adoc[leveloffset=+1]
 include::_rgsvc_persistence-layer-spi_PublisherService.adoc[leveloffset=+1]
-include::_rgsvc_persistence-layer-spi_PublishingService.adoc[leveloffset=+1]
 include::_rgsvc_persistence-layer-spi_UserRegistrationService.adoc[leveloffset=+1]

@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.collections.collection.typeof;
 
+import java.util.List;
+
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
@@ -27,15 +29,19 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 public class TypeOfFacetOnCollectionFromCollectionAnnotation extends TypeOfFacetAbstract {
 
-    public static TypeOfFacetOnCollectionFromCollectionAnnotation create(final Collection annotation, final FacetedMethod facetHolder, final SpecificationLoader specificationLoader) {
-        if(annotation == null) {
-            return null;
-        }
-        final Class<?> typeOfClass = annotation.typeOf();
-        if(typeOfClass == Object.class) {
-            return null;
-        }
-        return new TypeOfFacetOnCollectionFromCollectionAnnotation(typeOfClass, facetHolder, specificationLoader);
+    public static TypeOfFacetOnCollectionFromCollectionAnnotation create(
+            final List<Collection> collections,
+            final FacetedMethod facetHolder,
+            final SpecificationLoader specificationLoader) {
+
+
+        return collections.stream()
+                .map(Collection::typeOf)
+                .filter(typeOf -> typeOf != Object.class)
+                .findFirst()
+                .map(typeOf ->
+                        new TypeOfFacetOnCollectionFromCollectionAnnotation(typeOf, facetHolder, specificationLoader))
+                .orElse(null);
     }
 
     private TypeOfFacetOnCollectionFromCollectionAnnotation(final Class<?> type, final FacetHolder holder, final SpecificationLoader specificationLookup) {

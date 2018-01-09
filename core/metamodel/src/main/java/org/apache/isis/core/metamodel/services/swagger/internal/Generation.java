@@ -34,8 +34,8 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
 
-import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.swagger.SwaggerService;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
@@ -463,7 +463,7 @@ class Generation {
                         .produces("application/json;profile=urn:org.restfulobjects:repr-types/action-result")
                 ;
 
-        final ActionSemantics.Of semantics = serviceAction.getSemantics();
+        final SemanticsOf semantics = serviceAction.getSemantics();
         if(semantics.isSafeInNature()) {
             path.get(invokeOperation);
 
@@ -582,7 +582,7 @@ class Generation {
                         .produces("application/json;profile=urn:org.apache.isis/v1;suppress=true")
                         .produces("application/json;profile=urn:org.restfulobjects:repr-types/action-result");
 
-        final ActionSemantics.Of semantics = objectAction.getSemantics();
+        final SemanticsOf semantics = objectAction.getSemantics();
         if(semantics.isSafeInNature()) {
             path.get(invokeOperation);
 
@@ -757,7 +757,7 @@ class Generation {
 
     // unused
     static String roSpecForResponseOf(final ObjectAction action) {
-        final ActionSemantics.Of semantics = action.getSemantics();
+        final SemanticsOf semantics = action.getSemantics();
         switch (semantics) {
         case SAFE_AND_REQUEST_CACHEABLE:
         case SAFE:

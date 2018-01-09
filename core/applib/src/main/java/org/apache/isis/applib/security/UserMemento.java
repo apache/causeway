@@ -24,13 +24,11 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.NotPersistable;
 
 /**
  * Details, obtained from the container, about the user and his roles.
  * Read-only.
  */
-@NotPersistable
 public final class UserMemento {
 
     //region > constructors

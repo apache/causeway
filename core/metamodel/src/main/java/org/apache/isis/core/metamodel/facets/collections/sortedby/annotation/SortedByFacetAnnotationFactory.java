@@ -22,24 +22,15 @@ package org.apache.isis.core.metamodel.facets.collections.sortedby.annotation;
 import java.util.Comparator;
 import java.util.List;
 
-import org.apache.isis.applib.annotation.SortedBy;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.config.IsisConfigurationDefault;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
-import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.collections.sortedby.SortedByFacet;
-import org.apache.isis.core.metamodel.progmodel.DeprecatedMarker;
-import org.apache.isis.core.metamodel.services.configinternal.ConfigurationServiceInternal;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting.Visitor;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
@@ -47,13 +38,8 @@ import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 /**
  * There is no check that the value is a {@link Comparator}; instead this is done through 
  * the {@link #refineMetaModelValidator(MetaModelValidatorComposite, IsisConfiguration)}.
- *
- * @deprecated
  */
-@Deprecated
-public class SortedByFacetAnnotationFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner, DeprecatedMarker {
-
-    private final MetaModelValidatorForDeprecatedAnnotation validator = new MetaModelValidatorForDeprecatedAnnotation(SortedBy.class);
+public class SortedByFacetAnnotationFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner {
 
     public SortedByFacetAnnotationFactory() {
         super(FeatureType.COLLECTIONS_ONLY);
@@ -61,25 +47,15 @@ public class SortedByFacetAnnotationFactory extends FacetFactoryAbstract impleme
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        final SortedBy renderAnnotation = Annotations.getAnnotation(processMethodContext.getMethod(), SortedBy.class);
-        final SortedByFacet facet = create(renderAnnotation, processMethodContext.getFacetHolder());
-        FacetUtil.addFacet(validator.flagIfPresent(facet, processMethodContext));
-    }
+        // previously this handled the (now deleted) @SortedBy annotation.
+        // nothing now to do here, but there is still validation to be contributed.
+        // TODO: move this validator to a different facet factory, eg @CollectionLayout facet factory.
 
-    private SortedByFacet create(final SortedBy annotation, final FacetHolder holder) {
-        if (annotation == null) {
-            return null;
-        } 
-        final Class<?> annotationValue = annotation.value();
-        @SuppressWarnings({ "rawtypes", "unchecked" })
-        final Class<? extends Comparator<?>> comparatorType = (Class)annotationValue;
-        return new SortedByFacetAnnotation(holder, comparatorType);
     }
 
     @Override
     public void refineMetaModelValidator(MetaModelValidatorComposite metaModelValidator, IsisConfiguration configuration) {
         metaModelValidator.add(new MetaModelValidatorVisiting(newValidatorVisitor()));
-        metaModelValidator.add(validator);
     }
 
     protected Visitor newValidatorVisitor() {
@@ -105,12 +81,6 @@ public class SortedByFacetAnnotationFactory extends FacetFactoryAbstract impleme
         };
     }
 
-
-    @Override
-    public void setServicesInjector(final ServicesInjector servicesInjector) {
-        super.setServicesInjector(servicesInjector);
-        validator.setConfiguration(servicesInjector.lookupService(ConfigurationServiceInternal.class));
-    }
 
 
 }

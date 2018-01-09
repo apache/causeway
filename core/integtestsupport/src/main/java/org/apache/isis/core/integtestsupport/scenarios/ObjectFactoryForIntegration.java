@@ -23,7 +23,7 @@ import java.util.Map;
 
 import com.google.common.collect.Maps;
 
-import org.apache.isis.applib.services.registry.ServiceRegistry2;
+import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.core.runtime.headless.IsisSystem;
 
 import cucumber.api.java.ObjectFactory;
@@ -49,7 +49,7 @@ public class ObjectFactoryForIntegration implements ObjectFactory {
             IsisSystem isisSystem = IsisSystem.getElseNull();
             if(isisSystem != null) {
                 instance = this.cacheInstance(type, instance);
-                isisSystem.getService(ServiceRegistry2.class).injectServicesInto(instance);
+                isisSystem.getService(ServiceRegistry.class).injectServicesInto(instance);
             } else {
                 // don't cache
             }

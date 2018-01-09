@@ -19,8 +19,8 @@
 
 package org.apache.isis.applib.services.wrapper;
 
-import org.apache.isis.applib.events.InteractionEvent;
-import org.apache.isis.applib.events.VisibilityEvent;
+import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
+import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
 
 /**
  * Superclass of exceptions which indicate an attempt to interact with a class

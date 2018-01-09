@@ -18,7 +18,6 @@
  */
 package org.apache.isis.objectstore.jdo.metamodel.facets.prop.primarykey;
 
-import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAbstractImpl;
@@ -30,7 +29,7 @@ import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAbstr
 public class DisabledFacetDerivedFromJdoPrimaryKeyAnnotation extends DisabledFacetAbstractImpl {
 
     public DisabledFacetDerivedFromJdoPrimaryKeyAnnotation(final FacetHolder holder) {
-        super(When.ALWAYS, Where.ANYWHERE, holder);
+        super(Where.ANYWHERE, holder);
     }
 
 }

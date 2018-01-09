@@ -18,6 +18,8 @@
  */
 package org.apache.isis.core.commons.lang;
 
+import javax.annotation.Nullable;
+
 import com.google.common.base.Function;
 
 public final class ClassFunctions {
@@ -34,5 +36,11 @@ public final class ClassFunctions {
         };
     }
 
-
+    public static Function<Class<?>, String> packageNameOf() {
+        return new Function<Class<?>, String>() {
+            @Nullable @Override public String apply(final Class<?> input) {
+                return input.getPackage().getName();
+            }
+        };
+    }
 }

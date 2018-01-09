@@ -26,7 +26,7 @@ import java.util.List;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.filter.Filter;
+import com.google.common.base.Predicate;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.exceptions.IsisException;
@@ -45,7 +45,6 @@ import org.apache.isis.core.metamodel.services.configinternal.ConfigurationServi
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.Persistability;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -63,8 +62,6 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
      * lazily derived, see {@link #getSpecId()} 
      */
     private ObjectSpecId specId;
-
-    private Persistability persistable;
 
     private ServicesInjector servicesInjector;
 
@@ -87,7 +84,6 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     public ObjectSpecificationStub(final String name) {
         this.name = name;
         title = "";
-        persistable = Persistability.USER_PERSISTABLE;
     }
 
     @Override
@@ -127,15 +123,15 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
 
     @Deprecated
     @Override
-    public List<ObjectAssociation> getAssociations(final Filter<ObjectAssociation> filter) {
-        return getAssociations(Contributed.INCLUDED, filter);
+    public List<ObjectAssociation> getAssociations(final Predicate<ObjectAssociation> predicate) {
+        return getAssociations(Contributed.INCLUDED, predicate);
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public List<OneToOneAssociation> getProperties(final Contributed contributed) {
         @SuppressWarnings("rawtypes")
-        final List list = getAssociations(Contributed.EXCLUDED, ObjectAssociation.Filters.PROPERTIES);
+        final List list = getAssociations(Contributed.EXCLUDED, ObjectAssociation.Predicates.PROPERTIES);
         return new ArrayList<OneToOneAssociation>(list);
     }
 
@@ -143,17 +139,17 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     @SuppressWarnings("unchecked")
     public List<OneToManyAssociation> getCollections(final Contributed contributed) {
         @SuppressWarnings("rawtypes")
-        final List list = getAssociations(Contributed.EXCLUDED, ObjectAssociation.Filters.COLLECTIONS);
+        final List list = getAssociations(Contributed.EXCLUDED, ObjectAssociation.Predicates.COLLECTIONS);
         return new ArrayList<>(list);
     }
 
     @Override
-    public List<ObjectAssociation> getAssociations(final Contributed contributed, final Filter<ObjectAssociation> filter) {
+    public List<ObjectAssociation> getAssociations(final Contributed contributed, final Predicate<ObjectAssociation> predicate) {
         final List<ObjectAssociation> allFields = getAssociations(Contributed.EXCLUDED);
 
         final List<ObjectAssociation> selectedFields = Lists.newArrayList();
         for (int i = 0; i < allFields.size(); i++) {
-            if (filter.accept(allFields.get(i))) {
+            if (predicate.apply(allFields.get(i))) {
                 selectedFields.add(allFields.get(i));
             }
         }
@@ -292,11 +288,6 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     }
 
     @Override
-    public Persistability persistability() {
-        return persistable;
-    }
-
-    @Override
     public List<ObjectSpecification> subclasses() {
         return subclasses;
     }
@@ -324,11 +315,6 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     @Override
     public Identifier getIdentifier() {
         return Identifier.classIdentifier(name);
-    }
-
-    // TODO: not used
-    public void setupPersistable(final Persistability persistable) {
-        this.persistable = persistable;
     }
 
     @Override
@@ -380,12 +366,12 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     }
 
     @Override
-    public List<ObjectAction> getObjectActions(final ActionType type, final Contributed contributed, final Filter<ObjectAction> filter) {
+    public List<ObjectAction> getObjectActions(final ActionType type, final Contributed contributed, final Predicate<ObjectAction> predicate) {
         return null;
     }
 
     @Override
-    public List<ObjectAction> getObjectActions(final List<ActionType> types, final Contributed contributed, final Filter<ObjectAction> filter) {
+    public List<ObjectAction> getObjectActions(final List<ActionType> types, final Contributed contributed, final Predicate<ObjectAction> predicate) {
         return null;
     }
 

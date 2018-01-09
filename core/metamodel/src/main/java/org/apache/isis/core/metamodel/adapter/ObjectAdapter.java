@@ -53,7 +53,7 @@ import org.apache.isis.core.metamodel.spec.Specification;
  * domain objects and those objects are represented within the NOF through these
  * adapter, and not directly.
  */
-public interface ObjectAdapter extends Instance, org.apache.isis.applib.annotation.When.Persistable {
+public interface ObjectAdapter extends Instance {
 
     /**
      * Refines {@link Instance#getSpecification()}.
@@ -355,6 +355,8 @@ public interface ObjectAdapter extends Instance, org.apache.isis.applib.annotati
                     Where.OBJECT_FORMS);
         }
     }
+
+    boolean isTransient();
 
     boolean representsPersistent();
     boolean isDestroyed();

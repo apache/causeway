@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.ws.rs.HEAD;
+
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -41,7 +43,6 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
-import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.configinternal.ConfigurationServiceInternal;
@@ -95,12 +96,10 @@ public class SpecificationLoader implements ApplicationScopedComponent {
 
     private final MetaModelValidator metaModelValidator;
     private final SpecificationCacheDefault cache = new SpecificationCacheDefault();
-    private final List<LayoutMetadataReader> layoutMetadataReaders;
 
     public SpecificationLoader(
             final ProgrammingModel programmingModel,
             final MetaModelValidator metaModelValidator,
-            final List<LayoutMetadataReader> layoutMetadataReaders,
             final ServicesInjector servicesInjector) {
 
         this.servicesInjector = servicesInjector;
@@ -108,7 +107,6 @@ public class SpecificationLoader implements ApplicationScopedComponent {
         this.metaModelValidator = metaModelValidator;
 
         this.facetProcessor = new FacetProcessor(programmingModel);
-        this.layoutMetadataReaders = layoutMetadataReaders;
     }
 
     @Override
@@ -138,9 +136,6 @@ public class SpecificationLoader implements ApplicationScopedComponent {
 
         // wire subcomponents into each other
         facetProcessor.setServicesInjector(servicesInjector);
-        for (final LayoutMetadataReader layoutMetadataReader : layoutMetadataReaders) {
-            servicesInjector.injectInto(layoutMetadataReader);
-        }
 
         // initialize subcomponents
         programmingModel.init();
@@ -407,7 +402,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
                     ConfigurationServiceInternal.class);
             final FacetedMethodsBuilderContext facetedMethodsBuilderContext =
                     new FacetedMethodsBuilderContext(
-                            this, facetProcessor, layoutMetadataReaders, configService);
+                            this, facetProcessor, configService);
             return new ObjectSpecificationDefault(cls, facetedMethodsBuilderContext,
                     servicesInjector, facetProcessor, natureOfServiceIfAny);
         }

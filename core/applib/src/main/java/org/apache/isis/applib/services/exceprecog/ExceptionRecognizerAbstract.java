@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import javax.inject.Inject;
+
 import com.google.common.base.Function;
 import com.google.common.base.Functions;
 import com.google.common.base.Predicate;
@@ -43,7 +43,7 @@ import org.apache.isis.applib.services.i18n.TranslationService;
  * If a messaging-parsing {@link Function} is provided through the constructor,
  * then the message can be altered.  Otherwise the exception's {@link Throwable#getMessage() message} is returned as-is.
  */
-public abstract class ExceptionRecognizerAbstract implements ExceptionRecognizer2 {
+public abstract class ExceptionRecognizerAbstract implements ExceptionRecognizer {
 
     public static final Logger LOG = LoggerFactory.getLogger(ExceptionRecognizerAbstract.class);
 

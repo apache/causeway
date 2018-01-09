@@ -24,14 +24,14 @@ import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+
 import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
-import org.apache.isis.applib.services.publish.PublisherService;
 
 /**
  * Domain semantics for domain object collection.
  */
 @Inherited
-@Target({ ElementType.METHOD })
+@Target({ ElementType.METHOD, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Action {
 
@@ -82,7 +82,7 @@ public @interface Action {
      *     {@link ActionLayout#contributed()}.
      * </p>
      */
-    Where hidden() default Where.NOWHERE;
+    Where hidden() default Where.NOT_SPECIFIED;
 
 
     // //////////////////////////////////////
@@ -93,7 +93,7 @@ public @interface Action {
      * {@link SemanticsOf#IDEMPOTENT idempotent} or
      * {@link SemanticsOf#NON_IDEMPOTENT non-idempotent}.
      */
-    SemanticsOf semantics() default SemanticsOf.NON_IDEMPOTENT;
+    SemanticsOf semantics() default SemanticsOf.NOT_SPECIFIED;
 
 
     // //////////////////////////////////////
@@ -116,7 +116,7 @@ public @interface Action {
      * Has no meaning if annotated on an action of a domain service.
      * </p>
      */
-    InvokeOn invokeOn() default InvokeOn.OBJECT_ONLY;
+    InvokeOn invokeOn() default InvokeOn.NOT_SPECIFIED;
 
     // //////////////////////////////////////
 
@@ -124,7 +124,7 @@ public @interface Action {
     /**
      * Whether the action invocation should be reified into a {@link org.apache.isis.applib.services.command.Command} object.
      */
-    CommandReification command() default CommandReification.AS_CONFIGURED;
+    CommandReification command() default CommandReification.NOT_SPECIFIED;
 
     /**
      * How the {@link org.apache.isis.applib.services.command.Command Command} object provided by the
@@ -151,17 +151,12 @@ public @interface Action {
      * Whether the action invocation should be published.
      *
      * <p>
-     * Requires that an implementation of the {@link org.apache.isis.applib.services.publish.PublishingService}
+     * Requires that an implementation of the {@link org.apache.isis.applib.services.publish.PublisherService}
      * or {@link org.apache.isis.applib.services.publish.PublisherService} is registered with the framework.
      * </p>
      */
-    Publishing publishing() default Publishing.AS_CONFIGURED;
+    Publishing publishing() default Publishing.NOT_SPECIFIED;
 
-    /**
-     * @deprecated - not supported by {@link PublisherService}.
-     */
-    @Deprecated
-    Class<? extends PublishingPayloadFactoryForAction> publishingPayloadFactory() default PublishingPayloadFactoryForAction.class;
 
 
     // //////////////////////////////////////
@@ -183,7 +178,7 @@ public @interface Action {
      *     By default there are no restrictions, with the action being available in all environments.
      * </p>
      */
-    RestrictTo restrictTo() default RestrictTo.NO_RESTRICTIONS;
+    RestrictTo restrictTo() default RestrictTo.NOT_SPECIFIED;
 
 
 }

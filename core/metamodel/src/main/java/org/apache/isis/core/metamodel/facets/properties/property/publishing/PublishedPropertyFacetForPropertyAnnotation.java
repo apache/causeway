@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.properties.property.publishing;
 
+import java.util.List;
+
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -29,29 +31,44 @@ import org.apache.isis.core.metamodel.facets.properties.publish.PublishedPropert
 public class PublishedPropertyFacetForPropertyAnnotation extends PublishedPropertyFacetAbstract {
 
     public static PublishedPropertyFacet create(
-            final Property property,
+            final List<Property> properties,
             final IsisConfiguration configuration,
             final FacetHolder holder) {
 
-        final Publishing publishing = property != null ? property.publishing() : Publishing.AS_CONFIGURED;
+        final PublishPropertiesConfiguration setting = PublishPropertiesConfiguration.parse(configuration);
 
-        switch (publishing) {
-            case AS_CONFIGURED:
-                final PublishPropertiesConfiguration setting = PublishPropertiesConfiguration.parse(configuration);
-                switch (setting) {
-                case NONE:
+        return properties.stream()
+                .map(Property::publishing)
+                .filter(publishing -> publishing != Publishing.NOT_SPECIFIED)
+                .findFirst()
+                .map(publishing -> {
+
+                    switch (publishing) {
+                    case AS_CONFIGURED:
+                        switch (setting) {
+                        case NONE:
+                            return null;
+                        default:
+                            return (PublishedPropertyFacet)
+                                    new PublishedPropertyFacetForPropertyAnnotationAsConfigured(holder);
+                        }
+                    case DISABLED:
+                        return null;
+                    case ENABLED:
+                        return new PublishedPropertyFacetForPropertyAnnotation(holder);
+                    }
                     return null;
-                default:
-                    return property != null
-                            ? new PublishedPropertyFacetForPropertyAnnotationAsConfigured(holder)
-                            : new PublishedPropertyFacetFromConfiguration(holder);
-                }
-            case DISABLED:
-                return null;
-            case ENABLED:
-                return new PublishedPropertyFacetForPropertyAnnotation(holder);
-        }
-        return null;
+
+                })
+                .orElseGet(() -> {
+                    switch (setting) {
+                    case NONE:
+                        return null;
+                    default:
+                        return new PublishedPropertyFacetFromConfiguration(holder);
+                    }
+                });
+
     }
 
     public PublishedPropertyFacetForPropertyAnnotation(final FacetHolder holder) {

@@ -31,11 +31,10 @@ import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.ApplicationException;
 import org.apache.isis.applib.RecoverableException;
-import org.apache.isis.applib.annotation.ActionSemantics;
-import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.annotation.InvokedOn;
+import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.filter.Filter;
+import com.google.common.base.Predicate;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -139,9 +138,9 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
     }
 
     @Override
-    public ActionSemantics.Of getSemantics() {
+    public SemanticsOf getSemantics() {
         final ActionSemanticsFacet facet = getFacet(ActionSemanticsFacet.class);
-        return facet != null? facet.value(): ActionSemantics.Of.NON_IDEMPOTENT;
+        return facet != null? facet.value(): SemanticsOf.NON_IDEMPOTENT;
     }
 
     //endregion
@@ -245,11 +244,11 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
     }
 
     @Override
-    public List<ObjectActionParameter> getParameters(final Filter<ObjectActionParameter> filter) {
+    public List<ObjectActionParameter> getParameters(final Predicate<ObjectActionParameter> predicate) {
         final List<ObjectActionParameter> allParameters = getParameters();
         final List<ObjectActionParameter> selectedParameters = Lists.newArrayList();
         for (int i = 0; i < allParameters.size(); i++) {
-            if (filter.accept(allParameters.get(i))) {
+            if (predicate.apply(allParameters.get(i))) {
                 selectedParameters.add(allParameters.get(i));
             }
         }
@@ -566,14 +565,6 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
                 actionInvocationContext.setInvokedOn(InvokedOn.OBJECT);
                 actionInvocationContext.setDomainObjects(Collections.singletonList(targetPojo));
             }
-
-            final Bulk.InteractionContext bulkInteractionContext = getBulkInteractionContext();
-
-            if (bulkInteractionContext != null && bulkInteractionContext.getInvokedAs() == null) {
-
-                bulkInteractionContext.setInvokedAs(Bulk.InteractionContext.InvokedAs.REGULAR);
-                bulkInteractionContext.setDomainObjects(Collections.singletonList(targetPojo));
-            }
         }
     }
 
@@ -649,10 +640,6 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
 
     //region > services (lookup)
 
-
-    protected Bulk.InteractionContext getBulkInteractionContext() {
-        return lookupService(Bulk.InteractionContext.class);
-    }
 
     protected org.apache.isis.applib.services.actinvoc.ActionInvocationContext getActionInvocationContext() {
         return lookupService(org.apache.isis.applib.services.actinvoc.ActionInvocationContext.class);

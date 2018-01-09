@@ -21,10 +21,11 @@ package org.apache.isis.core.metamodel.facets.object.domainobject;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.apache.isis.applib.annotation.ObjectType;
+
+import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
-import org.apache.isis.core.metamodel.facets.object.domainobject.objectspecid.ObjectSpecIdFacetFromObjectTypeAnnotation;
+import org.apache.isis.core.metamodel.facets.object.domainobject.objectspecid.ObjectSpecIdFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
@@ -45,18 +46,18 @@ public class ObjectTypeAnnotationFacetFactoryTest extends AbstractFacetFactoryJU
     @Test
     public void objectTypeAnnotationPickedUpOnClass() {
 
-        @ObjectType("CUS")
+        @DomainObject(objectType = "CUS")
         class Customer {
         }
         
         expectNoMethodsRemoved();
         
-        facetFactory.processObjectType(new ProcessClassContext(Customer.class, null, mockMethodRemover, facetHolder));
+        facetFactory.processObjectType(new ProcessClassContext(Customer.class, mockMethodRemover, facetHolder));
 
         final ObjectSpecIdFacet facet = facetHolder.getFacet(ObjectSpecIdFacet.class);
         
         assertThat(facet, is(not(nullValue())));
-        assertThat(facet instanceof ObjectSpecIdFacetFromObjectTypeAnnotation, is(true));
+        assertThat(facet instanceof ObjectSpecIdFacetForDomainObjectAnnotation, is(true));
         assertThat(facet.value(), is(ObjectSpecId.of("CUS")));
 
     }

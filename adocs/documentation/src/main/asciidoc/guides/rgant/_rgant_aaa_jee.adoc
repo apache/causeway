@@ -25,6 +25,13 @@ The table below lists the JEE annotations currently recognized.  Expect to see m
 |Domain
 |
 
+|xref:../rgant/rgant.adoc#_rgant-Pattern[`@javax.validation.` +
+`constraints.` +
+`Pattern`]
+|Regular expressions for strings
+|Domain
+|
+
 |xref:../rgant/rgant.adoc#_rgant-Inject[`@javax.inject.` +
 `Inject`]
 |Inject domain service into a domain object (entity or view model) or another domain service.

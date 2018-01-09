@@ -20,13 +20,16 @@
 package org.apache.isis.core.metamodel.facets.param.parameter;
 
 import java.lang.reflect.Method;
+
+import javax.validation.constraints.Pattern;
+
 import org.junit.Before;
-import org.apache.isis.applib.annotation.RegEx;
+
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessParameterContext;
 import org.apache.isis.core.metamodel.facets.objectvalue.regex.RegExFacet;
-import org.apache.isis.core.metamodel.facets.param.parameter.regex.RegExFacetFromRegExAnnotationOnParameter;
+import org.apache.isis.core.metamodel.facets.param.parameter.regex.RegExFacetForPatternAnnotationOnParameter;
 
 public class RegExAnnotationOnParameterFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -42,7 +45,7 @@ public class RegExAnnotationOnParameterFacetFactoryTest extends AbstractFacetFac
 
         class Customer {
             @SuppressWarnings("unused")
-            public void someAction(@RegEx(validation = "^A.*", caseSensitive = false) final String foo) {
+            public void someAction(@Pattern(regexp = "^A.*", flags = { Pattern.Flag.CASE_INSENSITIVE }) final String foo) {
             }
         }
         final Method method = findMethod(Customer.class, "someAction", new Class[] { String.class });
@@ -51,17 +54,17 @@ public class RegExAnnotationOnParameterFacetFactoryTest extends AbstractFacetFac
 
         final Facet facet = facetedMethodParameter.getFacet(RegExFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof RegExFacetFromRegExAnnotationOnParameter);
-        final RegExFacetFromRegExAnnotationOnParameter regExFacet = (RegExFacetFromRegExAnnotationOnParameter) facet;
-        assertEquals("^A.*", regExFacet.validation());
-        assertEquals(false, regExFacet.caseSensitive());
+        assertTrue(facet instanceof RegExFacetForPatternAnnotationOnParameter);
+        final RegExFacetForPatternAnnotationOnParameter regExFacet = (RegExFacetForPatternAnnotationOnParameter) facet;
+        assertEquals("^A.*", regExFacet.regexp());
+        assertEquals(2, regExFacet.patternFlags());
     }
 
     public void testRegExAnnotationIgnoredForPrimitiveOnActionParameter() {
 
         class Customer {
             @SuppressWarnings("unused")
-            public void someAction(@RegEx(validation = "^A.*", caseSensitive = false) final int foo) {
+            public void someAction(final int foo) {
             }
         }
         final Method method = findMethod(Customer.class, "someAction", new Class[] { int.class });

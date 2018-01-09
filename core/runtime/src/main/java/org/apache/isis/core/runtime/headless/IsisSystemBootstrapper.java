@@ -34,8 +34,8 @@ import org.apache.isis.applib.fixtures.TickingFixtureClock;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.applib.services.jdosupport.IsisJdoSupport;
-import org.apache.isis.applib.services.metamodel.MetaModelService4;
-import org.apache.isis.applib.services.registry.ServiceRegistry2;
+import org.apache.isis.applib.services.metamodel.MetaModelService;
+import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.core.runtime.headless.logging.LogConfig;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
@@ -90,7 +90,7 @@ public class IsisSystemBootstrapper {
      * Expects a transaction to have been started
      */
     public void setupModuleRefData() {
-        MetaModelService4 metaModelService4 = lookupService(MetaModelService4.class);
+        MetaModelService metaModelService4 = lookupService(MetaModelService.class);
         FixtureScript refDataSetupFixture = metaModelService4.getAppManifest2().getRefDataSetupFixture();
         runFixtureScript(refDataSetupFixture);
     }
@@ -169,7 +169,7 @@ public class IsisSystemBootstrapper {
     }
 
     public void injectServicesInto(final Object object) {
-        lookupService(ServiceRegistry2.class).injectServicesInto(object);
+        lookupService(ServiceRegistry.class).injectServicesInto(object);
     }
 
     enum SystemState {
@@ -192,7 +192,7 @@ public class IsisSystemBootstrapper {
     }
 
     public void tearDownAllModules() {
-        final MetaModelService4 metaModelService4 = lookupService(MetaModelService4.class);
+        final MetaModelService metaModelService4 = lookupService(MetaModelService.class);
 
         FixtureScript fixtureScript = metaModelService4.getAppManifest2().getTeardownFixture();
         runFixtureScript(fixtureScript);

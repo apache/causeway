@@ -33,7 +33,7 @@ import org.apache.isis.applib.services.eventbus.TitleUiEvent;
  * Layout hints for domain objects.
  */
 @Inherited
-@Target({ ElementType.TYPE })
+@Target({ ElementType.TYPE, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface DomainObjectLayout {
 
@@ -141,6 +141,6 @@ s     */
     /**
      * Whether (and how) this domain object can be bookmarked in the UI.
      */
-    BookmarkPolicy bookmarking() default BookmarkPolicy.NEVER;
+    BookmarkPolicy bookmarking() default BookmarkPolicy.NOT_SPECIFIED;
 
 }

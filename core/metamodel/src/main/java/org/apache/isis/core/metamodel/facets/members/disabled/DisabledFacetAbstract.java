@@ -19,19 +19,18 @@
 
 package org.apache.isis.core.metamodel.facets.members.disabled;
 
-import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.events.UsabilityEvent;
+import org.apache.isis.applib.services.wrapper.events.UsabilityEvent;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.WhenAndWhereValueFacetAbstract;
+import org.apache.isis.core.metamodel.facets.WhereValueFacetAbstract;
 import org.apache.isis.core.metamodel.interactions.ActionUsabilityContext;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.specloader.specimpl.OneToManyAssociationContributee;
 import org.apache.isis.core.metamodel.specloader.specimpl.OneToOneAssociationContributee;
 
-public abstract class DisabledFacetAbstract extends WhenAndWhereValueFacetAbstract implements DisabledFacet {
+public abstract class DisabledFacetAbstract extends WhereValueFacetAbstract implements DisabledFacet {
 
     public static Class<? extends Facet> type() {
         return DisabledFacet.class;
@@ -44,25 +43,23 @@ public abstract class DisabledFacetAbstract extends WhenAndWhereValueFacetAbstra
         ENABLED;
     }
 
-    public DisabledFacetAbstract(final When when, Where where, final FacetHolder holder) {
-        this(when, where, holder, Semantics.DISABLED);
+    public DisabledFacetAbstract(Where where, final FacetHolder holder) {
+        this(where, holder, Semantics.DISABLED);
     }
 
     public DisabledFacetAbstract(
-            final When when,
             final Where where,
             final FacetHolder holder,
             final Semantics semantics) {
-        this(type(), when, where, holder, semantics);
+        this(type(), where, holder, semantics);
     }
 
     protected DisabledFacetAbstract(
             final Class<? extends Facet> type,
-            final When when,
             final Where where,
             final FacetHolder holder,
             final Semantics semantics) {
-        super(type, holder, when, where);
+        super(type, holder, where);
         this.semantics = semantics;
     }
 

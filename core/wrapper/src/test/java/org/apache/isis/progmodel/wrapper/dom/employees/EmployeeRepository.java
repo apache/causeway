@@ -20,12 +20,10 @@
 package org.apache.isis.progmodel.wrapper.dom.employees;
 
 import java.util.List;
-import org.apache.isis.applib.annotation.Named;
 
-@Named("Employees")
 public interface EmployeeRepository {
 
     public List<Employee> allEmployees();
 
-    public List<Employee> findEmployees(@Named("Name") String name);
+    public List<Employee> findEmployees(String name);
 }

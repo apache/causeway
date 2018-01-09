@@ -19,8 +19,6 @@
 package org.apache.isis.core.metamodel.facets.object.audit;
 
 
-import org.apache.isis.applib.annotation.Audited;
-import org.apache.isis.applib.marker.Auditable;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 
 

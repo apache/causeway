@@ -36,7 +36,7 @@ import org.apache.isis.applib.value.Clob;
  * Domain semantics for domain object property.
  */
 @Inherited
-@Target({ ElementType.METHOD, ElementType.FIELD })
+@Target({ ElementType.METHOD, ElementType.FIELD, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Property {
 
@@ -74,7 +74,7 @@ public @interface Property {
     /**
      * Indicates where the property is not visible to the user.
      */
-    Where hidden() default Where.NOWHERE;
+    Where hidden() default Where.NOT_SPECIFIED;
 
 
 
@@ -87,7 +87,7 @@ public @interface Property {
      *     Note that non-editable objects can nevertheless have actions invoked upon them.
      * </p>
      */
-    Editing editing() default Editing.AS_CONFIGURED;
+    Editing editing() default Editing.NOT_SPECIFIED;
 
     /**
      * If {@link #editing()} is set to {@link Editing#DISABLED},
@@ -102,7 +102,7 @@ public @interface Property {
     /**
      * Whether the property edit should be reified into a {@link org.apache.isis.applib.services.command.Command} object.
      */
-    CommandReification command() default CommandReification.AS_CONFIGURED;
+    CommandReification command() default CommandReification.NOT_SPECIFIED;
 
     /**
      * How the {@link org.apache.isis.applib.services.command.Command Command} object provided by the
@@ -127,11 +127,11 @@ public @interface Property {
      * Whether the property edit should be published.
      *
      * <p>
-     * Requires that an implementation of the {@link org.apache.isis.applib.services.publish.PublishingService}
+     * Requires that an implementation of the {@link org.apache.isis.applib.services.publish.PublisherService}
      * or {@link org.apache.isis.applib.services.publish.PublisherService} is registered with the framework.
      * </p>
      */
-    Publishing publishing() default Publishing.AS_CONFIGURED;
+    Publishing publishing() default Publishing.NOT_SPECIFIED;
 
 
 
@@ -163,13 +163,13 @@ public @interface Property {
     // //////////////////////////////////////
 
     /**
-     * Indicates that the property should be excluded from snapshots.
+     * Indicates whether the property should be included or excluded from mementos.
      *
      * <p>
-     *     To ensure that the property is actually not persisted in the objectstore, also annotate with {@link NotPersistent}.
+     *     To ensure that the property is actually not persisted in the objectstore, also annotate with the JDO annotation {@link NotPersistent}.
      * </p>
      */
-    boolean notPersisted() default false;
+    MementoSerialization mementoSerialization() default MementoSerialization.NOT_SPECIFIED;
 
 
 
@@ -184,7 +184,7 @@ public @interface Property {
      *     with its {@link javax.jdo.annotations.Column#allowsNull() allowNulls()} attribute set to true.
      * </p>
      */
-    Optionality optionality() default Optionality.DEFAULT;
+    Optionality optionality() default Optionality.NOT_SPECIFIED;
 
 
 

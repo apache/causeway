@@ -53,5 +53,10 @@ public enum Optionality {
      * is unable to do so.
      * </p>
      */
-    MANDATORY
+    MANDATORY,
+    /**
+     * Ignore the value provided by this annotation (meaning that the framework will keep searching, in meta
+     * annotations or superclasses/interfaces).
+     */
+    NOT_SPECIFIED
 }

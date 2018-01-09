@@ -21,11 +21,12 @@ package org.apache.isis.core.metamodel.facets.collections.collection;
 
 import java.lang.reflect.Method;
 import java.util.Collection;
-import org.apache.isis.applib.annotation.NotPersisted;
+
+import org.apache.isis.applib.annotation.MementoSerialization;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
-import org.apache.isis.core.metamodel.facets.collections.collection.notpersisted.NotPersistedFacetForNotPersistedAnnotationOnCollection;
+import org.apache.isis.core.metamodel.facets.collections.collection.notpersisted.NotPersistedFacetForCollectionAnnotation;
 import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
 
 public class NotPersistedAnnotationOnCollectionFacetFactoryTest extends AbstractFacetFactoryTest {
@@ -43,18 +44,18 @@ public class NotPersistedAnnotationOnCollectionFacetFactoryTest extends Abstract
         }
         class Customer {
             @SuppressWarnings("unused")
-            @NotPersisted()
+            @org.apache.isis.applib.annotation.Collection(mementoSerialization = MementoSerialization.EXCLUDED)
             public Collection<Order> getOrders() {
                 return null;
             }
         }
         final Method method = findMethod(Customer.class, "getOrders");
 
-        facetFactory.processNotPersisted(new ProcessMethodContext(Customer.class, null, null, method, methodRemover, facetedMethod));
+        facetFactory.processNotPersisted(new ProcessMethodContext(Customer.class, null, method, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(NotPersistedFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof NotPersistedFacetForNotPersistedAnnotationOnCollection);
+        assertTrue(facet instanceof NotPersistedFacetForCollectionAnnotation);
 
         assertNoMethodsRemoved();
     }

@@ -49,7 +49,8 @@ If in write mode, then the implementation is saving translation keys, and will a
 
 == Implementation
 
-The Apache Isis framework provides a default implementation (`TranslationServicePo`) that uses the GNU `.pot` and `.po` files for translations.  It relies on the `LocaleProvider` service (to return the `Locale` of the current user) and also the `TranslationsResolver` service (to read existing translations).
+The Apache Isis framework provides a default implementation (`TranslationServicePo`) that uses the GNU `.pot` and `.po` files for translations.
+It relies on the `LocaleProvider` service (to return the `Locale` of the current user) and also the `TranslationsResolver` service (to read existing translations).
 
 The framework also provides a supporting `TranslationServicePoMenu` provides menu items under the "Prototyping" secondary menu for controlling this service and downloading `.pot` files for translation.
 
@@ -58,6 +59,7 @@ If the menu items are not required then these can be suppressed either using sec
 For more details on the implementation, see xref:../ugbtb/ugbtb.adoc#_ugbtb_i18n[i18n support].
 
 
+If the menu items are not required then these can be suppressed either using security or by implementing a xref:../ugbtb/ugbtb.adoc#_ugbtb_hints-and-tips_vetoing-visibility[vetoing subscriber].
 
 === Configuration Properties
 

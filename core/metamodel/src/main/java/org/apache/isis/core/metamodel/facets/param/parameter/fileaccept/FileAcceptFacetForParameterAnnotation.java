@@ -19,6 +19,11 @@
 
 package org.apache.isis.core.metamodel.facets.param.parameter.fileaccept;
 
+import java.util.List;
+import java.util.Objects;
+
+import com.google.common.base.Strings;
+
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.objectvalue.fileaccept.FileAcceptFacet;
@@ -27,17 +32,16 @@ import org.apache.isis.core.metamodel.facets.objectvalue.fileaccept.FileAcceptFa
 public class FileAcceptFacetForParameterAnnotation extends FileAcceptFacetAbstract {
 
     public static FileAcceptFacet create(
-            final Parameter parameter,
+            final List<Parameter> parameters,
             final FacetHolder holder) {
 
-        if (parameter == null) {
-            return null;
-        }
-
-        final String fileAccept = parameter.fileAccept();
-        return !"".equals(fileAccept)
-                ? new FileAcceptFacetForParameterAnnotation(fileAccept, holder)
-                : null;
+        return parameters.stream()
+                .map(Parameter::fileAccept)
+                .map(Strings::emptyToNull)
+                .filter(Objects::nonNull)
+                .findFirst()
+                .map(fileAccept -> new FileAcceptFacetForParameterAnnotation(fileAccept, holder))
+                .orElse(null);
     }
 
     private FileAcceptFacetForParameterAnnotation(final String value, final FacetHolder holder) {

@@ -22,7 +22,7 @@ package org.apache.isis.viewer.wicket.ui.components.actionlink;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
-import org.apache.isis.applib.annotation.ActionSemantics;
+import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
@@ -45,7 +45,7 @@ public class ActionLinkPanelFactory extends ComponentFactoryAbstract {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
         final ActionModel actionModel = (ActionModel) model;
-        final ActionSemantics.Of semantics = actionModel.getActionMemento().getAction(actionModel.getSpecificationLoader()).getSemantics();
+        final SemanticsOf semantics = actionModel.getActionMemento().getAction(actionModel.getSpecificationLoader()).getSemantics();
         return ApplicationAdvice.appliesIf(semantics.isSafeInNature());
     }
 

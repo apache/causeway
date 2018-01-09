@@ -25,7 +25,9 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-import org.apache.isis.applib.annotation.When;
+import com.google.common.base.Function;
+import com.google.common.collect.Maps;
+
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -34,9 +36,7 @@ import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.core.metamodel.layout.memberorderfacet.MemberOrderFacetComparator;
 
-import com.google.common.base.Function;
 import com.google.common.base.Predicate;
-import com.google.common.collect.Maps;
 
 /**
  * Provides reflective access to an action or a field on a domain object.

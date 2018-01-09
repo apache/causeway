@@ -31,13 +31,12 @@ import org.apache.isis.applib.services.eventbus.ObjectPersistingEvent;
 import org.apache.isis.applib.services.eventbus.ObjectRemovingEvent;
 import org.apache.isis.applib.services.eventbus.ObjectUpdatedEvent;
 import org.apache.isis.applib.services.eventbus.ObjectUpdatingEvent;
-import org.apache.isis.applib.services.publish.PublisherService;
 
 /**
  * Domain semantics for domain objects (entities and view models; for services see {@link org.apache.isis.applib.annotation.DomainService}).
  */
 @Inherited
-@Target({ ElementType.TYPE })
+@Target({ ElementType.TYPE, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface DomainObject {
 
@@ -45,11 +44,11 @@ public @interface DomainObject {
      * Whether the entity should be audited (note: does not apply to view models or other recreatable objects.
      *
      * <p>
-     * Requires that an implementation of the {@link org.apache.isis.applib.services.audit.AuditingService3} is
+     * Requires that an implementation of the {@link org.apache.isis.applib.services.audit.AuditerService} is
      * registered with the framework.
      * </p>
      */
-    Auditing auditing() default Auditing.AS_CONFIGURED;
+    Auditing auditing() default Auditing.NOT_SPECIFIED;
 
 
     // //////////////////////////////////////
@@ -59,23 +58,11 @@ public @interface DomainObject {
      * Whether changes to the object should be published.
      *
      * <p>
-     * Requires that an implementation of the {@link org.apache.isis.applib.services.publish.PublishingService} is
+     * Requires that an implementation of the {@link org.apache.isis.applib.services.publish.PublisherService} is
      * registered with the framework.
      * </p>
      */
-    Publishing publishing() default Publishing.AS_CONFIGURED;
-
-    /**
-     * The factory to construct the payload factory.
-     *
-     * <p>
-     *     If not specified then a default implementation will be used.
-     * </p>
-     *
-     * @deprecated - not supported by {@link PublisherService}.
-     */
-    @Deprecated
-    Class<? extends PublishingPayloadFactoryForObject> publishingPayloadFactory() default PublishingPayloadFactoryForObject.class;
+    Publishing publishing() default Publishing.NOT_SPECIFIED;
 
 
     // //////////////////////////////////////
@@ -109,8 +96,13 @@ public @interface DomainObject {
      * <p>
      *     Takes precedence over auto-complete.
      * </p>
+     *
+     * <p>
+     *     Note: this replaces bounded=true|false prior to v2.x
+     * </p>
+     *
      */
-    boolean bounded() default false;
+    Bounding bounding() default Bounding.NOT_SPECIFIED;
 
 
     // //////////////////////////////////////
@@ -123,7 +115,7 @@ public @interface DomainObject {
      *     Note that non-editable objects can nevertheless have actions invoked upon them.
      * </p>
      */
-    Editing editing() default Editing.AS_CONFIGURED;
+    Editing editing() default Editing.NOT_SPECIFIED;
 
 
     /**

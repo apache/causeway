@@ -1,12 +1,12 @@
 [[_rgsvc_application-layer-spi_BackgroundCommandService]]
-= `BackgroundCommandService`
+= `BackgroundCommandService2`
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :_basedir: ../../
 :_imagesdir: images/
 
 
 
-The `BackgroundCommandService` (SPI) service supports the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_BackgroundService[`BackgroundService`] (API) service, persisting action invocations as commands such that they can subsequently be invoked in the background.
+The `BackgroundCommandService2` (SPI) service supports the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_BackgroundService[`BackgroundService`] (API) service, persisting action invocations as commands such that they can subsequently be invoked in the background.
 
 The `BackgroundService` is responsible for capturing a memento representing the action invocation, and then hands off to the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_BackgroundCommandService[`BackgroundCommandService`] `BackgroundCommandService` to actually persist it.
 
@@ -17,40 +17,22 @@ The persisting of commands is only half the story; there needs to be a separate 
 
 == SPI
 
-The SPI of the `BackgroundCommandService` is:
+The SPI of the `BackgroundCommandService2` is:
 
 [source,java]
 ----
-public interface BackgroundCommandService {
+public interface BackgroundCommandService2 {
     void schedule(
-            ActionInvocationMemento aim,        // <1>
-            Command parentCommand,              // <2>
+            CommandDto dto,             // <1>
+            Command parentCommand,      // <2>
             String targetClassName,
             String targetActionName,
             String targetArgs);
 
 }
 ----
-<1> is a wrapper around a xref:../rgsvc/rgsvc.adoc#_rgsvc_integration-api_MementoService[`MementoService`]'s `Memento`, capturing the details of the action invocation to be retained (eg persisted to a database) so that it can be executed at a later time
+<1> an instance of a xref:../rgcms/rgcms.adoc#_rgcms_schema-cmd[`CommandDto`] capturing the details of the action invocation or property edit to be retained (eg persisted to a database) so that it can be executed at a later time
 <2> reference to the parent `Command` requesting the action be performed as a background command.  This allows information such as the initiating user to be obtained.
-
-The API of `ActionInvocationMemento` in turn is:
-
-[source,java]
-----
-public class ActionInvocationMemento {
-    public String getActionId() { ... }
-    public String getTargetClassName() { ... }
-    public String getTargetActionName() { ... }
-    public Bookmark getTarget() { ... }
-    public int getNumArgs() { ... }
-    public Class<?> getArgType(int num) throws ClassNotFoundException { ... }
-    public <T> T getArg(int num, Class<T> type) { ... }
-
-    public String asMementoString() { ... }     // <1>
-}
-----
-<1> lets the `BackgroundCommandService` implementation convert the action invocation into a simple string.
 
 
 

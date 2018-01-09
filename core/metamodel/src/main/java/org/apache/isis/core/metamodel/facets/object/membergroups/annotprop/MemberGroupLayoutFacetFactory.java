@@ -20,13 +20,10 @@
 package org.apache.isis.core.metamodel.facets.object.membergroups.annotprop;
 
 import java.util.List;
-import java.util.Properties;
 
 import org.apache.isis.applib.annotation.MemberGroupLayout;
 import org.apache.isis.applib.annotation.MemberGroupLayout.ColumnSpans;
-import org.apache.isis.applib.annotation.MemberGroups;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -60,18 +57,9 @@ public class MemberGroupLayoutFacetFactory extends FacetFactoryAbstract implemen
         
         final Class<?> cls = processClassContext.getCls();
 
-        final Properties properties = processClassContext.metadataProperties("memberGroupLayout");
-        if(properties != null) {
-            return new MemberGroupLayoutFacetProperties(properties, holder);
-        }
-        
         final MemberGroupLayout mglAnnot = Annotations.getAnnotation(cls, MemberGroupLayout.class);
         if (mglAnnot != null) {
             return new MemberGroupLayoutFacetAnnotation(mglAnnot, holder);
-        }
-        final MemberGroups mgAnnot = Annotations.getAnnotation(cls, MemberGroups.class);
-        if (mgAnnot != null) {
-            return new MemberGroupsFacetAnnotation(mgAnnot, processClassContext.getFacetHolder());
         }
         return new MemberGroupLayoutFacetFallback(holder);
     }
@@ -123,9 +111,13 @@ public class MemberGroupLayoutFacetFactory extends FacetFactoryAbstract implemen
             @SuppressWarnings("unchecked")
             private int numCollectionsOf(ObjectSpecification objectSpec) {
                 List<ObjectAssociation> objectCollections = objectSpec.getAssociations(
-                        Contributed.EXCLUDED, Filters.and(ObjectAssociation.Filters.staticallyVisible(Where.OBJECT_FORMS), ObjectAssociation.Filters.COLLECTIONS));
+                        Contributed.EXCLUDED, com.google.common.base.Predicates.and(
+                                ObjectAssociation.Predicates.staticallyVisible(Where.OBJECT_FORMS),
+                                ObjectAssociation.Predicates.COLLECTIONS )
+                );
                 return objectCollections.size();
             }
+
         };
     }
 

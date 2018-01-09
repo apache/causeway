@@ -51,7 +51,7 @@ public class DomainServiceFacetAnnotationFactoryTest extends AbstractFacetFactor
         class Customers {
         }
 
-        facetFactory.process(new ProcessClassContext(Customers.class, null, methodRemover, facetHolder));
+        facetFactory.process(new ProcessClassContext(Customers.class, methodRemover, facetHolder));
 
         final Facet facet = facetHolder.getFacet(DomainServiceFacet.class);
         assertNotNull(facet);

@@ -18,11 +18,11 @@
  */
 package org.apache.isis.applib.fixturescripts;
 
-import org.apache.isis.applib.services.registry.ServiceRegistry2;
+import org.apache.isis.applib.services.registry.ServiceRegistry;
 
 public interface PersonaWithFinder<T> {
 
-    T findUsing(final ServiceRegistry2 serviceRegistry);
+    T findUsing(final ServiceRegistry serviceRegistry);
 
 }
 

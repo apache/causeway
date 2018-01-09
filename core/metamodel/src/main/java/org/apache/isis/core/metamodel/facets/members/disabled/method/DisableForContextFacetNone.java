@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.members.disabled.method;
 
-import org.apache.isis.applib.events.UsabilityEvent;
+import org.apache.isis.applib.services.wrapper.events.UsabilityEvent;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 

@@ -45,6 +45,12 @@ public class SimpleObjects_Test {
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
     @Mock
+<<<<<<< HEAD:example/archetype/simpleapp/src/main/resources/archetype-resources/module-simple/src/test/java/domainapp/modules/simple/dom/impl/SimpleObjects_Test.java
+=======
+    ServiceRegistry mockServiceRegistry;
+    
+    @Mock
+>>>>>>> dev/2.0.0-M1:example/archetype/simpleapp/src/main/resources/archetype-resources/module-simple/src/test/java/domainapp/modules/simple/dom/impl/SimpleObjectRepository_Test.java
     RepositoryService mockRepositoryService;
 
     SimpleObjects simpleObjects;

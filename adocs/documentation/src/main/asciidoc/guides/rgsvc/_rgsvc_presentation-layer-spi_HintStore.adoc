@@ -42,6 +42,7 @@ per the xref:../rgsvc/rgsvc.adoc#_rgsvc_integration-api_BookmarkService[`Bookmar
 
 The core framework provides a default implementation of this service (`org.apache.isis.viewer.wicket.viewer.services.HintStoreUsingWicketSession`).
 
+To use an alternative implementation, implement the `HintStore` interface and use xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:../rgsvc/rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
 
 
 == View models

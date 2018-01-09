@@ -19,7 +19,7 @@
 package org.apache.isis.core.metamodel.facets.actions.notcontributed.derived;
 
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.NotContributed;
+import org.apache.isis.applib.annotation.Contributed;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.notcontributed.NotContributedFacetAbstract;
 
@@ -31,7 +31,7 @@ public class NotContributedFacetDerivedFromMixinFacet extends NotContributedFace
 
     public NotContributedFacetDerivedFromMixinFacet(
             final FacetHolder holder) {
-        super(NotContributed.As.NEITHER, holder, Derivation.DERIVED);
+        super(NotContributedAs.NEITHER, Contributed.AS_NEITHER, holder, Derivation.DERIVED);
     }
 
 }

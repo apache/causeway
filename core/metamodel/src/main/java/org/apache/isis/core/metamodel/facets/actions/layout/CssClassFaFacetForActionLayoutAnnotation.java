@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.actions.layout;
 
+import java.util.List;
+
 import com.google.common.base.Strings;
 
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -29,13 +31,23 @@ import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaPositi
 
 public class CssClassFaFacetForActionLayoutAnnotation extends CssClassFaFacetAbstract {
 
-    public static CssClassFaFacet create(final ActionLayout actionLayout, final FacetHolder holder) {
-        if(actionLayout == null) {
-            return null;
+    public static CssClassFaFacet create(final List<ActionLayout> actionLayouts, final FacetHolder holder) {
+
+        class Annot {
+            private Annot(final ActionLayout actionLayout) {
+                this.cssClassFa = Strings.emptyToNull(actionLayout.cssClassFa());
+                this.cssClassFaPosition = CssClassFaPosition.from(actionLayout.cssClassFaPosition());
+            }
+            String cssClassFa;
+            CssClassFaPosition cssClassFaPosition;
         }
-        final String cssClassFa = Strings.emptyToNull(actionLayout.cssClassFa());
-        CssClassFaPosition cssClassFaPosition = CssClassFaPosition.from(actionLayout.cssClassFaPosition());
-        return cssClassFa != null ? new CssClassFaFacetForActionLayoutAnnotation(cssClassFa, cssClassFaPosition, holder) : null;
+
+        return actionLayouts.stream()
+                .map(Annot::new)
+                .filter(a -> a.cssClassFa != null )
+                .findFirst()
+                .map(a -> new CssClassFaFacetForActionLayoutAnnotation(a.cssClassFa, a.cssClassFaPosition, holder))
+                .orElse(null);
     }
 
     private CssClassFaFacetForActionLayoutAnnotation(final String value, final CssClassFaPosition position, final FacetHolder holder) {

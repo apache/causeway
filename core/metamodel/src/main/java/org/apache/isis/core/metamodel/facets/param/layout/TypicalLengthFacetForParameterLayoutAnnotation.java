@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.param.layout;
 
+import java.util.List;
+
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
@@ -26,12 +28,16 @@ import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengt
 
 public class TypicalLengthFacetForParameterLayoutAnnotation extends TypicalLengthFacetAbstract {
 
-    public static TypicalLengthFacet create(ParameterLayout parameterLayout, FacetHolder holder) {
-        if(parameterLayout == null) {
-            return null;
-        }
-        final int typicalLength = parameterLayout.typicalLength();
-        return typicalLength != -1 ? new TypicalLengthFacetForParameterLayoutAnnotation(typicalLength, holder) : null;
+    public static TypicalLengthFacet create(
+            final List<ParameterLayout> parameterLayouts,
+            final FacetHolder holder) {
+
+        return parameterLayouts.stream()
+                .map(ParameterLayout::typicalLength)
+                .filter(typicalLength -> typicalLength != -1)
+                .findFirst()
+                .map(typicalLength -> new TypicalLengthFacetForParameterLayoutAnnotation(typicalLength, holder))
+                .orElse(null);
     }
 
     private final int typicalLength;

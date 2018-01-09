@@ -30,7 +30,7 @@ import org.slf4j.event.Level;
 
 import org.apache.isis.applib.Module;
 import org.apache.isis.applib.clock.Clock;
-import org.apache.isis.applib.services.xactn.TransactionService3;
+import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.runtime.headless.logging.LogConfig;
 import org.apache.isis.core.runtime.headless.logging.LogStream;
@@ -128,7 +128,7 @@ public abstract class HeadlessWithBootstrappingAbstract extends HeadlessAbstract
             return;
         }
 
-        transactionService.nextTransaction(TransactionService3.Policy.ALWAYS);
+        transactionService.nextTransaction(TransactionService.Policy.ALWAYS);
 
         isisSystemBootstrapper.tearDownAllModules();
 

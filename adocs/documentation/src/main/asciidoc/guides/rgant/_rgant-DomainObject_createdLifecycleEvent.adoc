@@ -6,8 +6,8 @@
 
 
 Whenever a domain object is instantiated or otherwise becomes known to the framework, a "created" lifecycle event is fired.  This is typically when the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer[`DomainObjectContainer`]'s xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer_object-creation-api[`newTransientInstance()`] is called;
-it will also happen if the object is simply instantiated with `new(...)`, and then the container's
-xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer_services-api[`injectServicesInto(...)`] method is called.
+it will also happen if the object is simply instantiated with `new(...)`, and then the ``ServiceRegistry``'s
+xref:../rgsvc/rgsvc.adoc#_rgsvc_metadata-api_ServiceRegistry[`injectServicesInto(...)`] method is called.
 
 Subscribers subscribe through the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] and can
 use the event to obtain a reference to the object just created.  The subscriber could then, for example, update the

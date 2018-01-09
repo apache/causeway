@@ -25,13 +25,13 @@ import javax.ws.rs.core.Response;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.services.conmap.ContentMappingService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndActionInvocation;
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
-import org.apache.isis.viewer.restfulobjects.rendering.service.conmap.ContentMappingService;
 
 /**
  * Handles content negotiation for accept headers requiring <code>application/json</code> or <code>application/xml</code>and specifying an x-ro-domain-type; will delegate to
@@ -126,7 +126,7 @@ public class ContentNegotiationServiceXRoDomainType extends ContentNegotiationSe
         final String xRoDomainType = mediaType.getParameters().get(X_RO_DOMAIN_TYPE);
         final Class<?> domainType = loadClass(xRoDomainType);
 
-        final Object mappedDomainObject = map(domainObject, acceptableMediaTypes, representationType);
+        final Object mappedDomainObject = map(domainObject, acceptableMediaTypes);
 
         ensureDomainObjectAssignable(xRoDomainType, domainType, mappedDomainObject);
 
@@ -138,23 +138,14 @@ public class ContentNegotiationServiceXRoDomainType extends ContentNegotiationSe
     }
 
     /**
-     * Delegates to either the applib {@link org.apache.isis.applib.conmap.ContentMappingService}, else the
-     * original non-applib {@link ContentMappingService}.
+     * Delegates to either the applib {@link ContentMappingService}.
      */
     protected Object map(
             final Object domainObject,
-            final List<MediaType> acceptableMediaTypes,
-            final RepresentationType representationType) {
+            final List<MediaType> acceptableMediaTypes) {
 
-        for (org.apache.isis.applib.conmap.ContentMappingService contentMappingService : contentMappingServices) {
+        for (ContentMappingService contentMappingService : contentMappingServices) {
             Object mappedObject = contentMappingService.map(domainObject, acceptableMediaTypes);
-            if(mappedObject != null) {
-                return mappedObject;
-            }
-        }
-
-        for (ContentMappingService contentMappingService : legacyContentMappingServices) {
-            Object mappedObject = contentMappingService.map(domainObject, acceptableMediaTypes, representationType);
             if(mappedObject != null) {
                 return mappedObject;
             }
@@ -164,8 +155,6 @@ public class ContentNegotiationServiceXRoDomainType extends ContentNegotiationSe
     }
 
     @javax.inject.Inject
-    List<org.apache.isis.applib.conmap.ContentMappingService> contentMappingServices;
+    List<ContentMappingService> contentMappingServices;
 
-    @javax.inject.Inject
-    List<ContentMappingService> legacyContentMappingServices;
 }

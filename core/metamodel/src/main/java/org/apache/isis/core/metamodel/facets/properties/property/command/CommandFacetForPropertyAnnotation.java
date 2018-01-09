@@ -18,8 +18,8 @@
  */
 package org.apache.isis.core.metamodel.facets.properties.property.command;
 
-import org.apache.isis.applib.annotation.Command.ExecuteIn;
-import org.apache.isis.applib.annotation.Command.Persistence;
+import java.util.List;
+
 import org.apache.isis.applib.annotation.CommandExecuteIn;
 import org.apache.isis.applib.annotation.CommandPersistence;
 import org.apache.isis.applib.annotation.CommandReification;
@@ -33,41 +33,50 @@ import org.apache.isis.core.metamodel.facets.actions.command.CommandFacetAbstrac
 public class CommandFacetForPropertyAnnotation extends CommandFacetAbstract {
 
     public static CommandFacet create(
-            final Property property,
+            final List<Property> properties,
             final IsisConfiguration configuration,
             final FacetHolder holder) {
 
-        final CommandReification command = property != null ? property.command() : CommandReification.AS_CONFIGURED;
-        final CommandPersistence commandPersistence = property != null ? property.commandPersistence() : CommandPersistence.PERSISTED;
-        final CommandExecuteIn commandExecuteIn = property != null? property.commandExecuteIn() :  CommandExecuteIn.FOREGROUND;
+        final CommandPropertiesConfiguration setting = CommandPropertiesConfiguration.parse(configuration);
 
-        final Persistence persistence = CommandPersistence.from(commandPersistence);
-        final ExecuteIn executeIn = CommandExecuteIn.from(commandExecuteIn);
+        return properties.stream()
+                .filter(property -> property.command() != CommandReification.NOT_SPECIFIED)
+                .findFirst()
+                .map(property -> {
+                    final CommandReification command = property.command();
+                    final CommandPersistence commandPersistence = property.commandPersistence();
+                    final CommandExecuteIn commandExecuteIn = property.commandExecuteIn();
 
-        switch (command) {
-            case AS_CONFIGURED:
-                final CommandPropertiesConfiguration setting = CommandPropertiesConfiguration.parse(configuration);
-                switch (setting) {
-                case NONE:
-                    return null;
-                default:
-                    return property != null
-                            ? new CommandFacetForPropertyAnnotationAsConfigured(persistence, executeIn, Enablement.ENABLED, holder)
-                            : CommandFacetFromConfiguration.create(holder);
-                }
-            case DISABLED:
-                return null;
-            case ENABLED:
-                return new CommandFacetForPropertyAnnotation(persistence, executeIn, Enablement.ENABLED, holder);
-        }
-
-        return null;
+                    switch (command) {
+                    case AS_CONFIGURED:
+                        switch (setting) {
+                        case NONE:
+                            return null;
+                        default:
+                            return (CommandFacet)new CommandFacetForPropertyAnnotationAsConfigured(commandPersistence,
+                                    commandExecuteIn, Enablement.ENABLED, holder);
+                        }
+                    case DISABLED:
+                        return null;
+                    case ENABLED:
+                        return new CommandFacetForPropertyAnnotation(commandPersistence, commandExecuteIn, Enablement.ENABLED, holder);
+                    }
+                    throw new IllegalStateException("command '" + command + "' not recognised");
+                })
+                .orElseGet(() -> {
+                    switch (setting) {
+                    case NONE:
+                        return null;
+                    default:
+                        return CommandFacetFromConfiguration.create(holder);
+                    }
+                });
     }
 
 
     CommandFacetForPropertyAnnotation(
-            final Persistence persistence,
-            final ExecuteIn executeIn,
+            final CommandPersistence persistence,
+            final CommandExecuteIn executeIn,
             final Enablement enablement,
             final FacetHolder holder) {
         super(persistence, executeIn, enablement, holder);

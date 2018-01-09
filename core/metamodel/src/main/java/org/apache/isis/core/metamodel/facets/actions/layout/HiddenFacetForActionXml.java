@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets.actions.layout;
 
-import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.component.ActionLayoutData;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -38,7 +37,7 @@ public class HiddenFacetForActionXml extends HiddenFacetAbstract {
     }
 
     private HiddenFacetForActionXml(final Where where, final FacetHolder holder) {
-        super(When.ALWAYS, where, holder);
+        super(where, holder);
     }
 
     @Override

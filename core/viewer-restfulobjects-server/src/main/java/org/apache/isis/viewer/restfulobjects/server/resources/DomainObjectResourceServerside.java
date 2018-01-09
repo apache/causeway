@@ -39,7 +39,7 @@ import org.apache.isis.applib.layout.component.PropertyLayoutData;
 import org.apache.isis.applib.layout.grid.Grid;
 import org.apache.isis.applib.layout.links.Link;
 import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.core.commons.url.UrlEncodingUtils;
+import org.apache.isis.core.commons.url.UrlDecoderUtil;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -569,7 +569,8 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
             final @PathParam("actionId") String actionId,
             final @QueryParam("x-isis-querystring") String xIsisUrlEncodedQueryString) {
 
-        final String urlUnencodedQueryString = UrlEncodingUtils.urlDecodeNullSafe(xIsisUrlEncodedQueryString != null? xIsisUrlEncodedQueryString: httpServletRequest.getQueryString());
+        final String urlUnencodedQueryString = UrlDecoderUtil
+                .urlDecodeNullSafe(xIsisUrlEncodedQueryString != null? xIsisUrlEncodedQueryString: httpServletRequest.getQueryString());
         init(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES, RepresentationService.Intent.NOT_APPLICABLE, urlUnencodedQueryString);
 
         setCommandExecutor(Command.Executor.USER);

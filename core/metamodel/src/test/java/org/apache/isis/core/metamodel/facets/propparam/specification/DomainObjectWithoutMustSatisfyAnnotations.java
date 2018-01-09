@@ -19,32 +19,26 @@
 
 package org.apache.isis.core.metamodel.facets.propparam.specification;
 
-import org.apache.isis.applib.AbstractDomainObject;
-
-public class DomainObjectWithoutMustSatisfyAnnotations extends AbstractDomainObject {
+public class DomainObjectWithoutMustSatisfyAnnotations {
 
     private String firstName;
 
     public String getFirstName() {
-        resolve(firstName);
         return firstName;
     }
 
     public void setFirstName(final String firstName) {
         this.firstName = firstName;
-        objectChanged();
     }
 
     private String lastName;
 
     public String getLastName() {
-        resolve(lastName);
         return lastName;
     }
 
     public void setLastName(final String lastName) {
         this.lastName = lastName;
-        objectChanged();
     }
 
     public void changeLastName(final String lastName) {

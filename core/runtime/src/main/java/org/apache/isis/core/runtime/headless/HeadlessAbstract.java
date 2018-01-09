@@ -31,13 +31,13 @@ import org.apache.isis.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.applib.fixturescripts.PersonaWithBuilderScript;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.factory.FactoryService;
-import org.apache.isis.applib.services.metamodel.MetaModelService4;
-import org.apache.isis.applib.services.registry.ServiceRegistry2;
+import org.apache.isis.applib.services.metamodel.MetaModelService;
+import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.sessmgmt.SessionManagementService;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
-import org.apache.isis.applib.services.xactn.TransactionService3;
+import org.apache.isis.applib.services.xactn.TransactionService;
 
 /**
  * Reworked base class for headless access.
@@ -120,13 +120,13 @@ public abstract class HeadlessAbstract {
     }
 
     @Inject
-    protected MetaModelService4 metaModelService4;
+    protected MetaModelService metaModelService;
     @Inject
     protected FixtureScripts fixtureScripts;
     @Inject
     protected FactoryService factoryService;
     @Inject
-    protected ServiceRegistry2 serviceRegistry;
+    protected ServiceRegistry serviceRegistry;
     @Inject
     protected RepositoryService repositoryService;
     @Inject
@@ -134,7 +134,7 @@ public abstract class HeadlessAbstract {
     @Inject
     protected WrapperFactory wrapperFactory;
     @Inject
-    protected TransactionService3 transactionService;
+    protected TransactionService transactionService;
     @Inject
     protected SessionManagementService sessionManagementService;
 

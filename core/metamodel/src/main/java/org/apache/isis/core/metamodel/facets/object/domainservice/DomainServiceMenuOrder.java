@@ -41,7 +41,7 @@ public class DomainServiceMenuOrder {
 
 	// -- HELPER
 
-    private static String minimumOf(final String dslayoutOrder, final String dsOrder) {
+    public static String minimumOf(final String dslayoutOrder, final String dsOrder) {
         if(isUndefined(dslayoutOrder))
             return dsOrder;
         if(isUndefined(dsOrder))

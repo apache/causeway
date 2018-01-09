@@ -21,7 +21,6 @@ import java.util.List;
 import com.google.common.base.Strings;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -115,7 +114,6 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
     private DisabledFacet disabledFacet() {
         final DisabledFacet originalFacet = facetHolder.getFacet(DisabledFacet.class);
         if( originalFacet != null && 
-            originalFacet.when() == When.ALWAYS && 
             originalFacet.where() == Where.ANYWHERE) {
             return originalFacet;
         }

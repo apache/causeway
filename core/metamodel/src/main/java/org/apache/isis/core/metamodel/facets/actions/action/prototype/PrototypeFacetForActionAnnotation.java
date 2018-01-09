@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.actions.action.prototype;
 
+import java.util.List;
+
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
@@ -29,13 +31,17 @@ import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacetAbs
 public class PrototypeFacetForActionAnnotation extends PrototypeFacetAbstract {
 
     public static PrototypeFacet create(
-            final Action action,
+            final List<Action> actions,
             final FacetHolder holder,
             final DeploymentCategory deploymentCategory) {
 
-        return action == null || action.restrictTo() == RestrictTo.NO_RESTRICTIONS
-                ? null
-                : new PrototypeFacetForActionAnnotation(holder, deploymentCategory);
+        return actions.stream()
+                .map(Action::restrictTo)
+                .filter(restrictTo -> restrictTo != RestrictTo.NOT_SPECIFIED)
+                .filter(restrictTo -> restrictTo == RestrictTo.PROTOTYPING)
+                .findFirst()
+                .map(restrictTo -> new PrototypeFacetForActionAnnotation(holder, deploymentCategory))
+                .orElse(null);
 
     }
 

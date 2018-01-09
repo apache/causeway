@@ -21,12 +21,11 @@ package org.apache.isis.viewer.wicket.viewer.integration.wicket;
 
 import java.lang.reflect.Constructor;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import com.google.common.base.Function;
-import com.google.common.base.Optional;
 import com.google.common.base.Throwables;
-import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Lists;
 
 import org.apache.wicket.Application;
@@ -51,7 +50,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
-import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer2;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType;
 import org.apache.isis.applib.services.i18n.TranslationService;
@@ -207,22 +205,22 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
 
 
             // handle recognised exceptions gracefully also
-            final List<ExceptionRecognizer2> exceptionRecognizers =
-                    getServicesInjector().lookupServices(ExceptionRecognizer2.class);
+            final List<ExceptionRecognizer> exceptionRecognizers =
+                    getServicesInjector().lookupServices(ExceptionRecognizer.class);
             String recognizedMessageIfAny = new ExceptionRecognizerComposite(exceptionRecognizers).recognize(ex);
             if(recognizedMessageIfAny != null) {
                 return respondGracefully(cycle);
             }
 
             final List<Throwable> causalChain = Throwables.getCausalChain(ex);
-            final Optional<Throwable> hiddenIfAny = FluentIterable.from(causalChain).filter(
-                    ObjectMember.HiddenException.isInstanceOf()).first();
+            final Optional<Throwable> hiddenIfAny = causalChain.stream()
+                    .filter(ObjectMember.HiddenException.isInstanceOf()::apply).findFirst();
             if(hiddenIfAny.isPresent()) {
                 addMessage("hidden");
                 return respondGracefully(cycle);
             }
-            final Optional<Throwable> disabledIfAny = FluentIterable.from(causalChain).filter(
-                    ObjectMember.DisabledException.isInstanceOf()).first();
+            final Optional<Throwable> disabledIfAny = causalChain.stream()
+                    .filter(ObjectMember.DisabledException.isInstanceOf()::apply).findFirst();
             if(disabledIfAny.isPresent()) {
                 addTranslatedMessage(disabledIfAny.get().getMessage());
                 return respondGracefully(cycle);

@@ -57,9 +57,8 @@ querying and for persisting objects.
 `PublishingServiceInternal`]
 |Co-ordinates between
 xref:../rgfis/rgfis.adoc#_rgfis_persistence-layer_ChangedObjectsServiceInternal[`ChangedObjectsServiceInternal`] and
-xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-api_MetricsService[`MetricsService`] and the SPI services,
-xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`] and (deprecated)
-xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublishingService[`PublishingService`].
+xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-api_MetricsService[`MetricsService`] and the SPI services, and the
+xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`].
 |`PublishingService-` +
 `InternalDefault` +
 `isis-core-runtime`

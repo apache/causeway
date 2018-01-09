@@ -21,7 +21,8 @@ package org.apache.isis.core.metamodel.facets.actions.action;
 
 import java.lang.reflect.Method;
 
-import org.apache.isis.applib.annotation.Prototype;
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
@@ -52,13 +53,13 @@ public class PrototypeFacetAnnotationFactoryTest extends AbstractFacetFactoryTes
     public void testAnnotationPickedUp() {
         class Customer {
             @SuppressWarnings("unused")
-            @Prototype
+            @Action(restrictTo = RestrictTo.PROTOTYPING)
             public void someAction() {
             }
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        facetFactory.processRestrictTo(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
+        facetFactory.processRestrictTo(new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(PrototypeFacet.class);
         assertNotNull(facet);

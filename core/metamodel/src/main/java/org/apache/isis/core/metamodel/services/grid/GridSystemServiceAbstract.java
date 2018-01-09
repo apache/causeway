@@ -359,11 +359,11 @@ public abstract class GridSystemServiceAbstract<G extends org.apache.isis.applib
 
 
     protected static List<OneToOneAssociation> getOneToOneAssociations(final ObjectSpecification objectSpec) {
-        List associations = objectSpec.getAssociations(Contributed.INCLUDED, ObjectAssociation.Filters.PROPERTIES);
+        List associations = objectSpec.getAssociations(Contributed.INCLUDED, ObjectAssociation.Predicates.PROPERTIES);
         return associations;
     }
     protected  static List<OneToManyAssociation> getOneToManyAssociations(final ObjectSpecification objectSpec) {
-        List associations = objectSpec.getAssociations(Contributed.INCLUDED, ObjectAssociation.Filters.COLLECTIONS);
+        List associations = objectSpec.getAssociations(Contributed.INCLUDED, ObjectAssociation.Predicates.COLLECTIONS);
         return associations;
     }
 

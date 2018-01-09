@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.commons.encoding.DataInputExtended;
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
-import org.apache.isis.core.commons.url.UrlEncodingUtils;
+import org.apache.isis.core.commons.url.UrlDecoderUtil;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.schema.common.v1.BookmarkObjectState;
@@ -160,7 +160,7 @@ public class RootOid implements TypedOid, Serializable {
 
     //region > deString'able, enString
     public static RootOid deStringEncoded(final String urlEncodedOidStr) {
-        final String oidStr = UrlEncodingUtils.urlDecode(urlEncodedOidStr);
+        final String oidStr = UrlDecoderUtil.urlDecode(urlEncodedOidStr);
         return deString(oidStr);
     }
 

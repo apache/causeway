@@ -43,4 +43,5 @@ Any domain objects that were created in the "previous" session are no longer usa
 The core framework provides a default implementation of this service (`o.a.i.core.runtime.services.xactn.SessionManagementServiceDefault`).
 
 
+To use an alternative implementation, implement the `SessionManagementService` interface and use xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:../rgsvc/rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
 

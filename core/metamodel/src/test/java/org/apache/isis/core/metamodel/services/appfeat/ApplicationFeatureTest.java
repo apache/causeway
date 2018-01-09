@@ -157,12 +157,6 @@ public class ApplicationFeatureTest {
             final ApplicationFeature input = new ApplicationFeature(ApplicationFeatureId.newMember("com.mycompany.Foo#bar"));
             assertThat(ApplicationFeature.Functions.GET_FQN.apply(input), is("com.mycompany.Foo#bar"));
         }
-        @Test
-        public void GET_ID() throws Exception {
-            final ApplicationFeatureId featureId = ApplicationFeatureId.newMember("com.mycompany.Foo#bar");
-            final ApplicationFeature input = new ApplicationFeature(featureId);
-            assertThat(ApplicationFeature.Functions.GET_ID.apply(input), is(featureId));
-        }
     }
 
 

@@ -19,19 +19,18 @@
 
 package org.apache.isis.core.metamodel.facets.actions.semantics;
 
-import org.apache.isis.applib.annotation.ActionSemantics;
-import org.apache.isis.applib.annotation.ActionSemantics.Of;
+import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleValueFacetAbstract;
 
-public abstract class ActionSemanticsFacetAbstract extends SingleValueFacetAbstract<ActionSemantics.Of> implements ActionSemanticsFacet {
+public abstract class ActionSemanticsFacetAbstract extends SingleValueFacetAbstract<SemanticsOf> implements ActionSemanticsFacet {
 
     public static Class<? extends Facet> type() {
         return ActionSemanticsFacet.class;
     }
 
-    public ActionSemanticsFacetAbstract(final Of of, final FacetHolder holder) {
+    public ActionSemanticsFacetAbstract(final SemanticsOf of, final FacetHolder holder) {
         super(type(), of, holder);
     }
 

@@ -23,8 +23,7 @@ The table below summarizes the annotation's attributes.
 |`AS_CONFIGURED`, `ENABLED`, `DISABLED` +
 (`AS_CONFIGURED`)
 |indicates whether each of the changed properties of an object should be submitted to the registered
-xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditingService[`AuditingService`] (deprecated) or (its replacement)
-xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditerService[`AuditerService`]
+xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditerService[`AuditerService`](s)
 
 
 |xref:../rgant/rgant.adoc#_rgant-DomainObject_autoCompleteRepository[`autoCompleteRepository()`]
@@ -87,13 +86,8 @@ The default "reserved" method name is `$$`.
 |xref:../rgant/rgant.adoc#_rgant-DomainObject_publishing[`publishing()`]
 |`AS_CONFIGURED`, `ENABLED`, `DISABLED` +
 (`AS_CONFIGURED`)
-|whether changes to the object should be published to the registered xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublishingService[`PublishingService`].
+|whether changes to the object should be published to the registered xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`].
 
-
-|`publishing-` +
-`PayloadFactory()`
-|subtype of `PublishingPayloadFactory-` `ForObject` (none)
-|specifies that a custom implementation of `PublishingPayloadFactoryForObject` be used to create the (payload of the) published event representing the change to the object
 
 |xref:../rgant/rgant.adoc#_rgant-DomainObject_removingLifecycleEvent[`removing-` +
 `LifecycleEvent()`]

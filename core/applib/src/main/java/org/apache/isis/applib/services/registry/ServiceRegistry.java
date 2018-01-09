@@ -19,6 +19,8 @@
 
 package org.apache.isis.applib.services.registry;
 
+import java.util.List;
+
 import org.apache.isis.applib.annotation.Programmatic;
 
 public interface ServiceRegistry {
@@ -32,4 +34,6 @@ public interface ServiceRegistry {
     @Programmatic
     <T> Iterable<T> lookupServices(Class<T> service);
 
+    @Programmatic
+    List<Object> getRegisteredServices();
 }

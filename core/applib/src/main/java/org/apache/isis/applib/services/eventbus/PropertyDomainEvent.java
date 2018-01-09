@@ -18,10 +18,9 @@
  */
 package org.apache.isis.applib.services.eventbus;
 
-import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.util.ObjectContracts;
 
-public abstract class PropertyDomainEvent<S,T> extends AbstractInteractionEvent<S> {
+public abstract class PropertyDomainEvent<S,T> extends AbstractDomainEvent<S> {
 
     private static final long serialVersionUID = 1L;
 
@@ -32,13 +31,8 @@ public abstract class PropertyDomainEvent<S,T> extends AbstractInteractionEvent<
      * raises an event or not depends upon the "isis.reflector.facet.propertyAnnotation.domainEvent.postForDefault"
      * configuration property.
      */
-    public static class Default extends PropertyInteractionEvent<Object, Object> {
+    public static class Default extends PropertyDomainEvent<Object, Object> {
         private static final long serialVersionUID = 1L;
-        public Default(){}
-        @Deprecated
-        public Default(Object source, Identifier identifier, Object oldValue, Object newValue) {
-            super(source, identifier, oldValue, newValue);
-        }
     }
     //endregion
 
@@ -48,7 +42,7 @@ public abstract class PropertyDomainEvent<S,T> extends AbstractInteractionEvent<
      * Convenience class to use indicating that an event should <i>not</i> be posted (irrespective of the configuration
      * property setting for the {@link Default} event.
      */
-    public static class Noop extends PropertyInteractionEvent<Object, Object> {
+    public static class Noop extends PropertyDomainEvent<Object, Object> {
         private static final long serialVersionUID = 1L;
     }
     //endregion
@@ -59,7 +53,7 @@ public abstract class PropertyDomainEvent<S,T> extends AbstractInteractionEvent<
      * Convenience class meaning that an event <i>should</i> be posted (irrespective of the configuration
      * property setting for the {@link Default} event..
      */
-    public static class Doop extends PropertyInteractionEvent<Object, Object> {
+    public static class Doop extends PropertyDomainEvent<Object, Object> {
         private static final long serialVersionUID = 1L;
     }
     //endregion
@@ -76,29 +70,6 @@ public abstract class PropertyDomainEvent<S,T> extends AbstractInteractionEvent<
     public PropertyDomainEvent() {
     }
 
-    /**
-     * @deprecated - the {@link #PropertyDomainEvent() no-arg constructor} is recommended instead, to reduce boilerplate.
-     */
-    @Deprecated
-    public PropertyDomainEvent(
-            final S source,
-            final Identifier identifier) {
-        super(source, identifier);
-    }
-
-    /**
-     * @deprecated - the {@link #PropertyDomainEvent() no-arg constructor} is recommended instead, to reduce boilerplate.
-     */
-    @Deprecated
-    public PropertyDomainEvent(
-            final S source,
-            final Identifier identifier,
-            final T oldValue, final T newValue) {
-        this(source, identifier);
-        this.oldValue = oldValue;
-        this.newValue = newValue;
-    }
-    //endregion
 
     //region > oldValue
     private T oldValue;

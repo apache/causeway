@@ -19,6 +19,9 @@
 
 package org.apache.isis.core.metamodel.facets.actions.layout;
 
+import java.util.List;
+import java.util.Objects;
+
 import com.google.common.base.Strings;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -27,12 +30,17 @@ import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
 
 public class NamedFacetForActionLayoutAnnotation extends NamedFacetAbstract {
 
-    public static NamedFacet create(final ActionLayout actionLayout, final FacetHolder holder) {
-        if(actionLayout == null) {
-            return null;
-        }
-        final String named = Strings.emptyToNull(actionLayout.named());
-        return named != null ? new NamedFacetForActionLayoutAnnotation(named, holder) : null;
+    public static NamedFacet create(
+            final List<ActionLayout> actionLayouts,
+            final FacetHolder holder) {
+
+        return actionLayouts.stream()
+                .map(ActionLayout::named)
+                .map(Strings::emptyToNull)
+                .filter(Objects::nonNull)
+                .findFirst()
+                .map(named -> new NamedFacetForActionLayoutAnnotation(named, holder))
+                .orElse(null);
     }
 
     private NamedFacetForActionLayoutAnnotation(final String value, final FacetHolder holder) {

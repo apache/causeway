@@ -19,7 +19,9 @@
 package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
 
 
-import com.google.common.base.Strings;
+import java.util.List;
+import java.util.Objects;
+
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
@@ -28,12 +30,16 @@ import org.apache.isis.core.metamodel.facets.object.plural.PluralFacetAbstract;
 
 public class PluralFacetForDomainObjectLayoutAnnotation extends PluralFacetAbstract {
 
-    public static PluralFacet create(final DomainObjectLayout domainObjectLayout, final FacetHolder holder) {
-        if(domainObjectLayout == null) {
+    public static PluralFacet create(final List<DomainObjectLayout> domainObjectLayouts, final FacetHolder holder) {
+        if(domainObjectLayouts.isEmpty()) {
             return null;
         }
-        final String plural = Strings.emptyToNull(domainObjectLayout.plural());
-        return plural != null ? new PluralFacetForDomainObjectLayoutAnnotation(plural, holder) : null;
+        return domainObjectLayouts.stream()
+                .map(DomainObjectLayout::plural)
+                .filter(Objects::nonNull)
+                .map(plural -> new PluralFacetForDomainObjectLayoutAnnotation(plural, holder))
+                .findFirst()
+                .orElse(null);
     }
 
     private PluralFacetForDomainObjectLayoutAnnotation(final String value, final FacetHolder holder) {

@@ -20,8 +20,11 @@ package org.apache.isis.applib.services.metamodel;
 
 import java.util.List;
 
+import org.apache.isis.applib.AppManifest;
+import org.apache.isis.applib.AppManifest2;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.services.bookmark.Bookmark;
 
 /**
  * This service provides a formal API into Isis' metamodel.
@@ -33,13 +36,13 @@ import org.apache.isis.applib.annotation.Programmatic;
 public interface MetaModelService {
 
     /**
-     * Provides a reverse lookup of a domain class' object type, as defined by {@link DomainObject#objectType()} or the (now-deprecated) {@link org.apache.isis.applib.annotation.ObjectType} annotation, or any other mechanism that corresponds to Isis' <code>ObjectSpecIdFacet</code>.
+     * Provides a reverse lookup of a domain class' object type, as defined by {@link DomainObject#objectType()} (or any other mechanism that corresponds to Isis' <code>ObjectSpecIdFacet</code>).
      */
     @Programmatic
     Class<?> fromObjectType(final String objectType);
 
     /**
-     * Provides a lookup of a domain class' object type, as defined by {@link DomainObject#objectType()} or the (now-deprecated) {@link org.apache.isis.applib.annotation.ObjectType} annotation, or any other mechanism that corresponds to Isis' <code>ObjectSpecIdFacet</code>.
+     * Provides a lookup of a domain class' object type, as defined by {@link DomainObject#objectType()} (or any other mechanism that corresponds to Isis' <code>ObjectSpecIdFacet</code>).
      */
     @Programmatic
     String toObjectType(final Class<?> domainType);
@@ -57,6 +60,88 @@ public interface MetaModelService {
      */
     @Programmatic
     List<DomainMember> export();
+
+    /**
+     * @deprecated - use {@link #sortOf(Class, MetaModelService.Mode)}
+     */
+    @Deprecated
+    @Programmatic
+    Sort sortOf(Class<?> domainType);
+
+    /**
+     * @deprecated - use {@link #sortOf(Bookmark, MetaModelService.Mode)}
+     */
+    @Deprecated
+    @Programmatic
+    Sort sortOf(Bookmark bookmark);
+
+    @Programmatic
+    Sort sortOf(Class<?> domainType, Mode mode);
+
+    @Programmatic
+    Sort sortOf(Bookmark bookmark, Mode mode);
+
+    enum Sort {
+        VIEW_MODEL,
+        JDO_ENTITY,
+        DOMAIN_SERVICE,
+        MIXIN,
+        VALUE,
+        COLLECTION,
+        UNKNOWN;
+
+        public boolean isDomainService() {
+            return this == DOMAIN_SERVICE;
+        }
+
+        public boolean isMixin() {
+            return this == MIXIN;
+        }
+
+        public boolean isViewModel() {
+            return this == VIEW_MODEL;
+        }
+
+        public boolean isValue() {
+            return this == VALUE;
+        }
+
+        public boolean isCollection() {
+            return this == COLLECTION;
+        }
+
+        public boolean isJdoEntity() {
+            return this == JDO_ENTITY;
+        }
+
+        public boolean isUnknown() {
+            return this == UNKNOWN;
+        }
+
+    }
+
+    enum Mode {
+        /**
+         * If the {@link #sortOf(Class, Mode) sort of} object type is unknown, then throw an exception.
+         */
+        STRICT,
+        /**
+         * If the {@link #sortOf(Class, Mode) sort of} object type is unknown, then return {@link Sort#UNKNOWN}.
+         */
+        RELAXED
+    }
+
+    /**
+     * @return as {@link #getAppManifest()}, downcasted (else null).
+     */
+    @Programmatic
+    AppManifest2 getAppManifest2();
+
+    /**
+     * @return the {@link AppManifest} used to bootstrap the application.
+     */
+    @Programmatic
+    AppManifest getAppManifest();
 
 
 }

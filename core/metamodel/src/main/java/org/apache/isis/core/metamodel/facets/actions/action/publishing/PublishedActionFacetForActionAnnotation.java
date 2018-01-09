@@ -19,9 +19,10 @@
 
 package org.apache.isis.core.metamodel.facets.actions.action.publishing;
 
+import java.util.List;
+
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Publishing;
-import org.apache.isis.applib.annotation.PublishingPayloadFactoryForAction;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFacet;
@@ -31,69 +32,65 @@ import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFa
 public class PublishedActionFacetForActionAnnotation extends PublishedActionFacetAbstract {
 
     public static PublishedActionFacet create(
-            final Action action,
+            final List<Action> actions,
             final IsisConfiguration configuration,
             final FacetHolder holder) {
 
-        final Publishing publishing = action != null ? action.publishing() : Publishing.AS_CONFIGURED;
+        final PublishActionsConfiguration setting = PublishActionsConfiguration.parse(configuration);
 
-        switch (publishing) {
-            case AS_CONFIGURED:
+        return actions.stream()
+                .map(Action::publishing)
+                .filter(publishing -> publishing != Publishing.NOT_SPECIFIED)
+                .findFirst()
+                .map(publishing -> {
+                    switch (publishing) {
+                    case AS_CONFIGURED:
 
-                final PublishActionsConfiguration setting = PublishActionsConfiguration.parse(configuration);
-                switch (setting) {
+                        switch (setting) {
+                        case NONE:
+                            return null;
+                        case IGNORE_SAFE:
+                            if (hasSafeSemantics(holder)) {
+                                return null;
+                            }
+                            // else fall through
+                        default:
+                            return (PublishedActionFacet)new PublishedActionFacetForActionAnnotationAsConfigured(holder);
+                        }
+                    case DISABLED:
+                        return null;
+                    case ENABLED:
+                        return new PublishedActionFacetForActionAnnotation(holder);
+                    }
+                    throw new IllegalStateException("publishing '" + publishing + "' not recognised");
+                })
+                .orElseGet(() -> {
+                    switch (setting) {
                     case NONE:
                         return null;
                     case IGNORE_SAFE:
-                        final ActionSemanticsFacet actionSemanticsFacet = holder.getFacet(ActionSemanticsFacet.class);
-                        if(actionSemanticsFacet == null) {
-                            throw new IllegalStateException("Require ActionSemanticsFacet in order to process");
-                        }
-
-                        if(actionSemanticsFacet.value().isSafeInNature()) {
-                            return  null;
+                        if (hasSafeSemantics(holder)) {
+                            return null;
                         }
                         // else fall through
                     default:
-                        final PublishingPayloadFactoryForAction publishingPayloadFactory = newPayloadFactory(action);
-                        return action != null
-                                ? new PublishedActionFacetForActionAnnotationAsConfigured(publishingPayloadFactory, holder)
-                                : new PublishedActionFacetFromConfiguration(publishingPayloadFactory, holder);
-                }
-            case DISABLED:
-                return null;
-            case ENABLED:
-                return new PublishedActionFacetForActionAnnotation(
-                        newPayloadFactory(action), holder);
-        }
-        return null;
+                        return new PublishedActionFacetFromConfiguration(holder);
+                    }
+                });
     }
 
-    /**
-     * @return null means that the default payload factories will be used; this is handled within IsisTransaction.
-     */
-    private static PublishingPayloadFactoryForAction newPayloadFactory(final Action action) {
-        if(action == null) {
-            return null;
-        }
-        final Class<? extends PublishingPayloadFactoryForAction> payloadFactoryClass = action.publishingPayloadFactory();
-        if(payloadFactoryClass == null) {
-            return null;
+    private static boolean hasSafeSemantics(final FacetHolder holder) {
+        final ActionSemanticsFacet actionSemanticsFacet = holder.getFacet(ActionSemanticsFacet.class);
+        if(actionSemanticsFacet == null) {
+            throw new IllegalStateException("Require ActionSemanticsFacet in order to process");
         }
 
-        try {
-            return payloadFactoryClass.newInstance();
-        } catch (final InstantiationException e) {
-            return null;
-        } catch (final IllegalAccessException e) {
-            return null;
-        }
+        return actionSemanticsFacet.value().isSafeInNature();
     }
 
-    public PublishedActionFacetForActionAnnotation(
-            final PublishingPayloadFactoryForAction publishingPayloadFactory,
+    PublishedActionFacetForActionAnnotation(
             final FacetHolder holder) {
-        super(publishingPayloadFactory, holder);
+        super(holder);
     }
 
 }

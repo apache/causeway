@@ -26,7 +26,7 @@ import java.util.Map;
 
 import com.google.common.collect.Lists;
 
-import org.apache.isis.applib.filter.Filter;
+import com.google.common.base.Predicate;
 
 public final class FacetUtil {
 
@@ -38,9 +38,9 @@ public final class FacetUtil {
             return;
         }
         final FacetHolder facetHolder = facet.getFacetHolder();
-        final List<Facet> facets = facetHolder.getFacets(new Filter<Facet>() {
+        final List<Facet> facets = facetHolder.getFacets(new Predicate<Facet>() {
             @Override
-            public boolean accept(final Facet each) {
+            public boolean apply(final Facet each) {
                 return facet.facetType() == each.facetType() && facet.getClass() == each.getClass();
             }
         });
@@ -117,12 +117,12 @@ public final class FacetUtil {
      * Bit nasty, for use only by {@link FacetHolder}s that index their
      * {@link Facet}s in a Map.
      */
-    public static List<Facet> getFacets(final Map<Class<? extends Facet>, Facet> facetsByClass, final Filter<Facet> filter) {
+    public static List<Facet> getFacets(final Map<Class<? extends Facet>, Facet> facetsByClass, final Predicate<Facet> predicate) {
         final List<Facet> filteredFacets = Lists.newArrayList();
         final List<Facet> allFacets = new ArrayList<>(facetsByClass.values());
         for (final Facet facet : allFacets) {
             // facets that implement MultiTypedFacet will be held more than once.  The 'contains' check ensures they are only returned once, however.
-            if (filter.accept(facet) && !filteredFacets.contains(facet)) {
+            if (predicate.apply(facet) && !filteredFacets.contains(facet)) {
                 filteredFacets.add(facet);
             }
         }
@@ -170,7 +170,7 @@ public final class FacetUtil {
             final Facet facet = source.getFacet(facetType);
 
         }
-        List<Facet> facets = source.getFacets(org.apache.isis.applib.filter.Filters.<Facet>any());
+        List<Facet> facets = source.getFacets(com.google.common.base.Predicates.<Facet>alwaysTrue());
         for (Facet facet : facets) {
             target.addFacet(facet);
         }

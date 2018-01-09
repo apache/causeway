@@ -5,43 +5,21 @@
 :_imagesdir: images/
 
 
-
-The object creation APIs are used to instantiate new domain objects or view models.
+The (deprecated) object creation APIs is used to instantiate a view model, specifying its memento.
 
 [source,java]
 ----
 public interface DomainObjectContainer {
 
-    <T> T newTransientInstance(final Class<T> ofType);                              // <1>
-    <T> T newViewModelInstance(final Class<T> ofType, final String memento);        // <2>
-    <T> T mixin();                                                                  // <3>
+    <T> T newViewModelInstance(final Class<T> ofType, final String memento);        // <1>
     ...
 }
 ----
-<1> create a new non-persisted domain entity.  Any services will be automatically injected into the service.
-<2> create a new view model, with the specified memento (as per xref:../rgcms/rgcms.adoc#_rgcms_classes_super_AbstractViewModel[ViewModel#viewModelMemento()].  In general it is easier to just annotate with xref:../rgant/rgant.adoc#_rgant-ViewModel[`@ViewModel`] and let Apache Isis manage the memento automatically.
-<3> programmatically instantiate a mixin, as annotated with
-xref:../rgant/rgant.adoc#_rgant-Mixin[`@Mixin`] or xref:../rgant/rgant.adoc#_rgant-DomainObject_nature[`@DomainObject#nature()`].
+<1> create a new view model, with the specified memento (as per xref:../rgcms/rgcms.adoc#_rgcms_classes_super_AbstractViewModel[ViewModel#viewModelMemento()].
 
-For example:
-
-[source,java]
-----
-Customer cust = container.newTransientInstance(Customer.class);
-cust.setFirstName("Freddie");
-cust.setLastName("Mercury");
-container.persist(cust);
-----
-
-As an alternative to using `newTransientInstance(...)` or `mixin(...)`, you could also simply `new()` up the object.
-Doing this will not inject any domain services, but they can be injected manually using xref:rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer_services-api[#injectServicesInto(...)`].
-
-[NOTE]
+[TIP]
 ====
-Calling `new(...)` also this circumvents Apache Isis' xref:../rgcms/rgcms.adoc#_rgcms_methods_reserved_created[`created()`]
-callback, and in addition any default values for properties (either explicitly set by
-xref:../rgcms/rgcms.adoc#_rgcms_methods_prefixes_default[`default...()`] or defaulted implicitly according to Apache Isis'
-own conventions) will not be called either.  If you don't intend to use these features, though, the net effect is code
-that has less coupling to Isis and is arguably easier to understand (has "less magic" happening).
+In general it is easier to just annotate with xref:../rgant/rgant.adoc#_rgant-ViewModel[`@ViewModel`], or as a JAXB view model, and let Apache Isis manage the memento automatically.
 ====
+
 

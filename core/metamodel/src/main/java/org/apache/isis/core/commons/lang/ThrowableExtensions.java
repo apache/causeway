@@ -19,9 +19,6 @@
 
 package org.apache.isis.core.commons.lang;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
 
 import org.apache.isis.applib.RecoverableException;
@@ -30,29 +27,13 @@ import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 
 public final class ThrowableExtensions {
 
-    public static String stackTraceFor(final Throwable extendee) {
-        ByteArrayOutputStream baos = null;
-        try {
-            baos = new ByteArrayOutputStream();
-            extendee.printStackTrace(new PrintStream(baos));
-            return baos.toString();
-        } finally {
-            if (baos != null) {
-                try {
-                    baos.close();
-                } catch (final IOException ignore) {
-                }
-            }
-        }
-    }
-
     public static void throwWithinIsisException(final InvocationTargetException e, final String error) {
         final Throwable targetException = e.getTargetException();
         if (targetException instanceof RecoverableException) {
             // an application exception from the domain code is re-thrown as an
             // IsisException with same semantics
             // TODO: should probably be using ApplicationException here
-            throw new IsisApplicationException(targetException);
+            throw new IsisApplicationException(error, targetException);
         }
         if (targetException instanceof RuntimeException) {
             throw (RuntimeException) targetException;

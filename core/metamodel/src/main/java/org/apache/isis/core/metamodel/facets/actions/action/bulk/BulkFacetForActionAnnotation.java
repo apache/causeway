@@ -19,8 +19,9 @@
 
 package org.apache.isis.core.metamodel.facets.actions.action.bulk;
 
+import java.util.List;
+
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.annotation.InvokeOn;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.bulk.BulkFacet;
@@ -28,22 +29,20 @@ import org.apache.isis.core.metamodel.facets.actions.bulk.BulkFacetAbstract;
 
 public class BulkFacetForActionAnnotation extends BulkFacetAbstract {
 
-    public static BulkFacet create(final Action action, final FacetHolder holder) {
+    public static BulkFacet create(
+            final List<Action> actions,
+            final FacetHolder holder) {
 
-        if(action == null) {
-            return null;
-        }
-
-        final InvokeOn invokeOn = action.invokeOn();
-        if(invokeOn == null) {
-            return null;
-        }
-
-        return new BulkFacetForActionAnnotation(InvokeOn.from(invokeOn), holder);
+        return actions.stream()
+                .map(Action::invokeOn)
+                .filter(invokeOn -> invokeOn != null && invokeOn != InvokeOn.NOT_SPECIFIED)
+                .findFirst()
+                .map(invokeOn -> new BulkFacetForActionAnnotation(invokeOn, holder))
+                .orElse(null);
     }
 
     private BulkFacetForActionAnnotation(
-            final Bulk.AppliesTo appliesTo,
+            final InvokeOn appliesTo,
             final FacetHolder holder) {
         super(appliesTo, holder);
     }

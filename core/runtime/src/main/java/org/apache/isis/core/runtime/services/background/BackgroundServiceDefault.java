@@ -29,7 +29,6 @@ import javax.annotation.PreDestroy;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.services.background.ActionInvocationMemento;
 import org.apache.isis.applib.services.background.BackgroundCommandService;
 import org.apache.isis.applib.services.background.BackgroundCommandService2;
 import org.apache.isis.applib.services.background.BackgroundService2;
@@ -224,21 +223,14 @@ public class BackgroundServiceDefault implements BackgroundService2 {
 
                 final Command command = commandContext.getCommand();
 
-                if(backgroundCommandService instanceof BackgroundCommandService2) {
-                    final BackgroundCommandService2 bcs2 = (BackgroundCommandService2) backgroundCommandService;
+                final BackgroundCommandService2 bcs2 = (BackgroundCommandService2) backgroundCommandService;
 
-                    final List<ObjectAdapter> targetList = Collections.singletonList(domainObjectAdapter);
-                    final CommandDto dto =
-                            commandDtoServiceInternal.asCommandDto(targetList, action, argAdapters);
+                final List<ObjectAdapter> targetList = Collections.singletonList(domainObjectAdapter);
+                final CommandDto dto =
+                        commandDtoServiceInternal.asCommandDto(targetList, action, argAdapters);
 
-                    bcs2.schedule(dto, command, domainObjectClassName, targetActionName, targetArgs);
-                } else {
-                    // fallback
-                    final ActionInvocationMemento aim =
-                            commandDtoServiceInternal.asActionInvocationMemento(proxyMethod, target, args);
+                bcs2.schedule(dto, command, domainObjectClassName, targetActionName, targetArgs);
 
-                    backgroundCommandService.schedule(aim, command, domainObjectClassName, targetActionName, targetArgs);
-                }
 
                 return null;
             }
@@ -266,14 +258,6 @@ public class BackgroundServiceDefault implements BackgroundService2 {
             }
 
         };
-    }
-
-    // //////////////////////////////////////
-
-    @Programmatic
-    @Override
-    public ActionInvocationMemento asActionInvocationMemento(Method method, Object domainObject, Object[] args) {
-        throw new RuntimeException("Replaced by InteractionDtoServiceInternal");
     }
 
 

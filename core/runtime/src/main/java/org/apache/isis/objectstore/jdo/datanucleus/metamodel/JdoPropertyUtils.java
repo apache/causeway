@@ -23,13 +23,13 @@ import java.util.List;
 
 import javax.jdo.annotations.PrimaryKey;
 
-import org.apache.isis.applib.filter.Filter;
+import com.google.common.base.Predicate;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
-import org.apache.isis.objectstore.jdo.metamodel.util.JdoPrimaryKeyPropertyFilter;
+import org.apache.isis.objectstore.jdo.metamodel.util.JdoPrimaryKeyPropertyPredicate;
 
 public final class JdoPropertyUtils {
 
@@ -42,23 +42,23 @@ public final class JdoPropertyUtils {
      * Returns the {@link OneToOneAssociation} if there is precisely one; else
      * <tt>null</tt>.
      * 
-     * @see JdoPrimaryKeyPropertyFilter
+     * @see JdoPrimaryKeyPropertyPredicate
      */
     public static OneToOneAssociation getPrimaryKeyPropertyFor(final ObjectSpecification objectSpec) {
-        return getPropertyFor(objectSpec, "@PrimaryKey", new JdoPrimaryKeyPropertyFilter());
+        return getPropertyFor(objectSpec, "@PrimaryKey", new JdoPrimaryKeyPropertyPredicate());
     }
 
     public static boolean hasPrimaryKeyProperty(final ObjectSpecification objectSpec) {
         return getPrimaryKeyPropertyFor(objectSpec) != null;
     }
     
-    private static OneToOneAssociation getPropertyFor(final ObjectSpecification objSpec, final String annotationName, final Filter<ObjectAssociation> filter) {
+    private static OneToOneAssociation getPropertyFor(final ObjectSpecification objSpec, final String annotationName, final Predicate<ObjectAssociation> predicate) {
         if (objSpec == null || !objSpec.containsFacet(JdoPersistenceCapableFacet.class)) {
             return null;
         }
-        final List<? extends ObjectAssociation> propertyList = objSpec.getAssociations(Contributed.EXCLUDED, filter);
+        final List<? extends ObjectAssociation> propertyList = objSpec.getAssociations(Contributed.EXCLUDED, predicate);
         if (propertyList.size() == 0) {
-            return JdoPropertyUtils.getPropertyFor(objSpec.superclass(), annotationName, filter);
+            return JdoPropertyUtils.getPropertyFor(objSpec.superclass(), annotationName, predicate);
         }
         if (propertyList.size() > 1) {
             throw new IllegalStateException(MessageFormat.format("Shouldn''t have more than one property annotated with {0} (''{1}'')", annotationName, objSpec.getFullIdentifier()));

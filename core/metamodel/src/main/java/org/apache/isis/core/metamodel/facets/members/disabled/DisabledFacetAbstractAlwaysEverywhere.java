@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets.members.disabled;
 
-import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -27,7 +26,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 public abstract class DisabledFacetAbstractAlwaysEverywhere extends DisabledFacetAbstract {
 
     public DisabledFacetAbstractAlwaysEverywhere(final FacetHolder holder) {
-        super(When.ALWAYS, Where.ANYWHERE, holder);
+        super(Where.ANYWHERE, holder);
     }
 
     /**

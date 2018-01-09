@@ -40,22 +40,4 @@ public enum CommandPersistence {
      */
     NOT_PERSISTED;
 
-    @Deprecated
-    public static CommandPersistence from(final Command.Persistence persistence) {
-        if(persistence == null) return null;
-        if(persistence == Command.Persistence.PERSISTED) return PERSISTED;
-        if(persistence == Command.Persistence.IF_HINTED) return IF_HINTED;
-        // shouldn't happen
-        throw new IllegalArgumentException("Unrecognized : persistence" + persistence);
-    }
-
-    @Deprecated
-    public static Command.Persistence from(final CommandPersistence commandPersistence) {
-        if(commandPersistence == null) return null;
-        if(commandPersistence == PERSISTED) return Command.Persistence.PERSISTED;
-        if(commandPersistence == NOT_PERSISTED) return Command.Persistence.NOT_PERSISTED;
-        if(commandPersistence == IF_HINTED) return Command.Persistence.IF_HINTED;
-        // shouldn't happen
-        throw new IllegalArgumentException("Unrecognized : persistence" + commandPersistence);
-    }
 }

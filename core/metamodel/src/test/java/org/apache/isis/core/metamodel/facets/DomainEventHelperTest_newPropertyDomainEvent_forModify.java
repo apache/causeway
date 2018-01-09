@@ -29,14 +29,6 @@ public class DomainEventHelperTest_newPropertyDomainEvent_forModify {
     public static class SomeDomainObject {}
     
     public static class SomeDatePropertyChangedDomainEvent extends PropertyDomainEvent<SomeDomainObject, LocalDate> {
-        private static final long serialVersionUID = 1L;
-        public SomeDatePropertyChangedDomainEvent(
-                SomeDomainObject source,
-                Identifier identifier,
-                LocalDate oldValue,
-                LocalDate newValue) {
-            super(source, identifier, oldValue, newValue);
-        }
     }
 
     @Test

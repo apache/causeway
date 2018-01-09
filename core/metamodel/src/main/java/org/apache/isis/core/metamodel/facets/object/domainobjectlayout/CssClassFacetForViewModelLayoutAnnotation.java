@@ -16,6 +16,9 @@
  * under the License. */
 package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
 
+import java.util.List;
+import java.util.Objects;
+
 import com.google.common.base.Strings;
 
 import org.apache.isis.applib.annotation.ViewModelLayout;
@@ -25,12 +28,15 @@ import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacetAbstr
 
 public class CssClassFacetForViewModelLayoutAnnotation extends CssClassFacetAbstract {
 
-    public static CssClassFacet create(final ViewModelLayout viewModelLayout, final FacetHolder holder) {
-        if (viewModelLayout == null) {
-            return null;
-        }
-        final String cssClass = Strings.emptyToNull(viewModelLayout.cssClass());
-        return cssClass != null ? new CssClassFacetForViewModelLayoutAnnotation(cssClass, holder) : null;
+    public static CssClassFacet create(final List<ViewModelLayout> viewModelLayouts, final FacetHolder holder) {
+
+        return viewModelLayouts.stream()
+                .map(ViewModelLayout::cssClass)
+                .map(Strings::emptyToNull)
+                .filter(Objects::nonNull)
+                .findFirst()
+                .map(cssClass -> new CssClassFacetForViewModelLayoutAnnotation(cssClass, holder))
+                .orElse(null);
     }
 
     private CssClassFacetForViewModelLayoutAnnotation(

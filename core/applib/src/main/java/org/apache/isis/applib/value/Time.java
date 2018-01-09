@@ -42,8 +42,11 @@ import org.apache.isis.applib.clock.Clock;
  * <li>withinPreviousTimePeriod(int hours, int minutes); d.hour >= this.hour >=
  * d.hour + hours & d.minutes >= this.minutes >= d.minutes + minutes</li>
  * </ul>
+ *
+ * @deprecated
  */
 @Value(semanticsProviderName = "org.apache.isis.core.metamodel.facets.value.time.TimeValueSemanticsProvider")
+@Deprecated
 public class Time extends Magnitude<Time> {
 
     private static final long serialVersionUID = 1L;

@@ -22,7 +22,7 @@ package org.apache.isis.core.metamodel.facets.members.disabled;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.WhenAndWhereValueFacet;
+import org.apache.isis.core.metamodel.facets.WhereValueFacet;
 import org.apache.isis.core.metamodel.interactions.DisablingInteractionAdvisor;
 
 /**
@@ -32,7 +32,7 @@ import org.apache.isis.core.metamodel.interactions.DisablingInteractionAdvisor;
  * In the standard Apache Isis Programming Model, corresponds to annotating the
  * member with <tt>@Disabled</tt>.
  */
-public interface DisabledFacet extends WhenAndWhereValueFacet, DisablingInteractionAdvisor {
+public interface DisabledFacet extends WhereValueFacet, DisablingInteractionAdvisor {
 
     /**
      * The reason why the (feature of the) target object is currently disabled,

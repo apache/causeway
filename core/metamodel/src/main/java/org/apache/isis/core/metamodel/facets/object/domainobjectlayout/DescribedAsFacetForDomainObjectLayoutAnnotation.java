@@ -18,8 +18,11 @@
  */
 package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
 
+import java.util.List;
+import java.util.Objects;
 
 import com.google.common.base.Strings;
+
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
@@ -28,12 +31,15 @@ import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacetAbs
 
 public class DescribedAsFacetForDomainObjectLayoutAnnotation extends DescribedAsFacetAbstract {
 
-    public static DescribedAsFacet create(final DomainObjectLayout domainObjectLayout, final FacetHolder holder) {
-        if(domainObjectLayout == null) {
-            return null;
-        }
-        final String describedAs = Strings.emptyToNull(domainObjectLayout.describedAs());
-        return describedAs != null ? new DescribedAsFacetForDomainObjectLayoutAnnotation(describedAs, holder) : null;
+    public static DescribedAsFacet create(final List<DomainObjectLayout> domainObjectLayouts, final FacetHolder holder) {
+
+        return domainObjectLayouts.stream()
+                .map(DomainObjectLayout::describedAs)
+                .map(Strings::emptyToNull)
+                .filter(Objects::nonNull)
+                .findFirst()
+                .map(describedAs -> new DescribedAsFacetForDomainObjectLayoutAnnotation(describedAs, holder))
+                .orElse(null);
     }
 
     private DescribedAsFacetForDomainObjectLayoutAnnotation(final String value, final FacetHolder holder) {

@@ -29,20 +29,19 @@
 
     <groupId>org.apache.isis.example.application</groupId>
     <artifactId>simpleapp</artifactId>
-    <version>1.16.0-SNAPSHOT</version>
+    <version>2.0.0-M1-SNAPSHOT</version>
 
     <name>SimpleApp Parent</name>
 
     <packaging>pom</packaging>
 
     <properties>
-        <isis.version>1.16.0</isis.version>
-
+        <isis.version>2.0.0-M1-SNAPSHOT</isis.version>
         <lombok.version>1.16.18</lombok.version>
 
         <compiler-plugin.source>1.8</compiler-plugin.source>
         <compiler-plugin.target>1.8</compiler-plugin.target>
-        <compiler-plugin.compilerArgument></compiler-plugin.compilerArgument>
+        <compiler-plugin.compilerArgument>-parameters</compiler-plugin.compilerArgument>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>

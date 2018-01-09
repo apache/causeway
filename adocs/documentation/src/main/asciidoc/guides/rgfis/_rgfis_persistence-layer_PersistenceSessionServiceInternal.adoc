@@ -64,7 +64,7 @@ public interface PersistenceSessionServiceInternal extends AdapterManager {
     void resolve(Object parent);
     @Deprecated
     void resolve(Object parent, Object field);
-    Object lookup(Bookmark bookmark, final BookmarkService2.FieldResetPolicy fieldResetPolicy);
+    Object lookup(Bookmark bookmark, final BookmarkService.FieldResetPolicy fieldResetPolicy);
     Bookmark bookmarkFor(Object domainObject);
     Bookmark bookmarkFor(Class<?> cls, String identifier);
 

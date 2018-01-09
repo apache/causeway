@@ -23,9 +23,8 @@ import java.util.List;
 import java.util.Objects;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.filter.Filter;
+import com.google.common.base.Predicate;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
@@ -151,8 +150,8 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
     }
 
     @Override
-    public List<Facet> getFacets(final Filter<Facet> filter) {
-        return getFacetHolder().getFacets(filter);
+    public List<Facet> getFacets(final Predicate<Facet> predicate) {
+        return getFacetHolder().getFacets(predicate);
     }
 
     @Override
@@ -234,7 +233,6 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         final HiddenFacet facet = getFacet(HiddenFacet.class);
         return facet != null &&
                 !facet.isNoop() &&
-                facet.when() == When.ALWAYS &&
                 (facet.where() == Where.EVERYWHERE || facet.where() == Where.ANYWHERE)
                 ;
 
@@ -485,8 +483,8 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
             command.setPersistence(commandFacet.persistence());
         } else {
             // if no facet, assume do want to execute right now, but only persist (eventually) if hinted.
-            command.setExecuteIn(org.apache.isis.applib.annotation.Command.ExecuteIn.FOREGROUND);
-            command.setPersistence(org.apache.isis.applib.annotation.Command.Persistence.IF_HINTED);
+            command.setExecuteIn(org.apache.isis.applib.annotation.CommandExecuteIn.FOREGROUND);
+            command.setPersistence(org.apache.isis.applib.annotation.CommandPersistence.IF_HINTED);
         }
     }
 

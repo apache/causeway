@@ -16,11 +16,8 @@
  */
 package org.apache.isis.applib.services.background;
 
-import org.apache.isis.applib.services.command.Command;
-
-
 /**
- * Persists a {@link ActionInvocationMemento memento-ized} action such that it can be executed asynchronously,
+ * Persists a {@link org.apache.isis.schema.cmd.v1.CommandDto command-reified} action such that it can be executed asynchronously,
  * for example through a Quartz scheduler.
  *
  * <p>
@@ -35,20 +32,7 @@ import org.apache.isis.applib.services.command.Command;
  * annotated with {@link org.apache.isis.applib.annotation.DomainService} so that it is automatically registered as
  * a service.
  *
- * <p>
- *     If an implementation also implements {@link BackgroundCommandService2}, then
- *     {@link BackgroundCommandService2#schedule(ActionInvocationMemento, Command, String, String, String)} will be
- *     called rather than {@link BackgroundCommandService#schedule(ActionInvocationMemento, Command, String, String, String)}.
- * </p>
  */
 public interface BackgroundCommandService {
 
-    /**
-     * @deprecated - replaced by {@link BackgroundCommandService2#schedule(ActionInvocationMemento, Command, String, String, String)}
-     */
-    @Deprecated
-    void schedule(
-            final ActionInvocationMemento aim, 
-            final Command command, 
-            final String targetClassName, final String targetActionName, final String targetArgs);
 }

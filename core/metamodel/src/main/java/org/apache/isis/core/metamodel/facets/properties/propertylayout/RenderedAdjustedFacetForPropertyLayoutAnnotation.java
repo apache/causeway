@@ -19,19 +19,34 @@
 
 package org.apache.isis.core.metamodel.facets.properties.propertylayout;
 
+import java.util.List;
+
 import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.annotation.RenderDay;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.objectvalue.renderedadjusted.RenderedAdjustedFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.renderedadjusted.RenderedAdjustedFacetAbstract;
 
 public class RenderedAdjustedFacetForPropertyLayoutAnnotation extends RenderedAdjustedFacetAbstract {
 
-    public static RenderedAdjustedFacet create(PropertyLayout propertyLayout, FacetHolder holder) {
-        if(propertyLayout == null) {
-            return null;
-        }
-        final boolean renderedAsDayBefore = propertyLayout.renderedAsDayBefore();
-        return renderedAsDayBefore ? new RenderedAdjustedFacetForPropertyLayoutAnnotation(holder) : null;
+    public static RenderedAdjustedFacet create(
+            final List<PropertyLayout> propertyLayouts,
+            final FacetHolder holder) {
+
+        return propertyLayouts.stream()
+                .map(PropertyLayout::renderDay)
+                .filter(renderDay -> renderDay != RenderDay.NOT_SPECIFIED)
+                .findFirst()
+                .map(renderDay -> {
+                    switch (renderDay) {
+                    case AS_DAY:
+                        return null;
+                    case AS_DAY_BEFORE:
+                        return new RenderedAdjustedFacetForPropertyLayoutAnnotation(holder);
+                    }
+                    throw new IllegalStateException("renderDay '" + renderDay + "' not recognised");
+                })
+                .orElse(null);
     }
 
     public static final int ADJUST_BY = -1;

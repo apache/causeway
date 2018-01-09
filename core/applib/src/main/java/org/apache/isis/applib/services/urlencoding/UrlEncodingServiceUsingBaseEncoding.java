@@ -46,13 +46,21 @@ public class UrlEncodingServiceUsingBaseEncoding implements UrlEncodingService {
     @Programmatic
     public String encode(final String str) {
         byte[] bytes = str.getBytes(charset);
+        return encodeToBase64(bytes);
+    }
+
+    String encodeToBase64(final byte[] bytes) {
         return baseEncoding.encode(bytes);
     }
 
     @Programmatic
     public String decode(String str) {
-        final byte[] bytes = baseEncoding.decode(str);
+        final byte[] bytes = decodeBase64(str);
         return new String(bytes, Charset.forName("UTF-8"));
+    }
+
+    byte[] decodeBase64(final String str) {
+        return baseEncoding.decode(str);
     }
 
 }

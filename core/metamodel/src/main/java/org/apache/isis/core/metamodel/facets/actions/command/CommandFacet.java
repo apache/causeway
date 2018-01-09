@@ -19,8 +19,9 @@
 
 package org.apache.isis.core.metamodel.facets.actions.command;
 
-import org.apache.isis.applib.annotation.Command.ExecuteIn;
-import org.apache.isis.applib.annotation.Command.Persistence;
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.CommandExecuteIn;
+import org.apache.isis.applib.annotation.CommandPersistence;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 
@@ -34,9 +35,9 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
  */
 public interface CommandFacet extends Facet {
 
-    public Persistence persistence();
+    public CommandPersistence persistence();
     
-    public ExecuteIn executeIn();
+    public CommandExecuteIn executeIn();
     
     /**
      * Indicates that the action to which this {@link Facet} is
@@ -45,7 +46,7 @@ public interface CommandFacet extends Facet {
      * <p>
      * Exists to allow implementations that configure all actions to be treated as 
      * commands, but which can then be disabled for selected actions (eg using 
-     * {@link org.apache.isis.applib.annotation.Command#disabled()}).
+     * {@link Action#command()}).
      */
     public boolean isDisabled();
 

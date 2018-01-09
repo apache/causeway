@@ -55,7 +55,11 @@ public class CommandContext {
 }
 ----
 
-This class (`o.a.i.applib.services.CommandContext`) is also the default implementation.  Under normal circumstances there shouldn't be any need to replace this implementation with another.
+This class (`o.a.i.applib.services.CommandContext`) is also the default implementation.
+
+Under normal circumstances there shouldn't be any need to replace this implementation with another.
+But if you do need to for some reason, then subclass and use xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:../rgsvc/rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
+
 
 The `Command` type referenced above is in fact an interface, defined as:
 
@@ -139,7 +143,7 @@ The xref:../rgant/rgant.adoc#_rgant-Action_command[`@Action#command()`] annotati
 [source,java]
 ----
 public class ToDoItem ... {
-    @Command(executeIn=ExecuteIn.BACKGROUND)
+    @Action(commandExecuteIn=CommandExecuteIn.BACKGROUND)
     public ToDoItem scheduleImplicitly() {
         completeSlowly(3000);
         return this;

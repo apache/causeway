@@ -23,13 +23,13 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 import javax.jdo.annotations.PersistenceCapable;
 
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
-import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
@@ -48,9 +48,8 @@ import org.apache.isis.applib.services.classdiscovery.ClassDiscoveryServiceUsing
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.factory.InstanceUtil;
-import org.apache.isis.core.commons.lang.ClassUtil;
+import org.apache.isis.core.commons.lang.ClassFunctions;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
-import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.ReflectorConstants;
@@ -151,14 +150,9 @@ public abstract class IsisComponentProvider {
 
         final Set<Class<?>> domainObjectTypes = reflections.getTypesAnnotatedWith(DomainObject.class);
         mixinTypes.addAll(
-                Lists.newArrayList(Iterables.filter(domainObjectTypes, new Predicate<Class<?>>() {
-                    @Override
-                    public boolean apply(@Nullable final Class<?> input) {
-                        if(input == null) { return false; }
-                        final DomainObject annotation = input.getAnnotation(DomainObject.class);
-                        return annotation.nature() == Nature.MIXIN;
-                    }
-                }))
+                domainObjectTypes.stream()
+                        .filter(input -> input.getAnnotation(DomainObject.class).nature() == Nature.MIXIN)
+                        .collect(Collectors.toList())
         );
 
         // add in any explicitly registered services...
@@ -242,7 +236,7 @@ public abstract class IsisComponentProvider {
                     "If an appManifest is provided then it must return a non-empty set of modules");
         }
 
-        return Iterables.transform(modules, ClassUtil.Functions.packageNameOf());
+        return Iterables.transform(modules, ClassFunctions.packageNameOf());
     }
 
     protected String classNamesFrom(final List<?> objectsOrClasses) {
@@ -324,11 +318,9 @@ public abstract class IsisComponentProvider {
 
         final MetaModelValidator mmv = createMetaModelValidator();
 
-        final List<LayoutMetadataReader> layoutMetadataReaders = createLayoutMetadataReaders();
-
         return JavaReflectorHelper.createObjectReflector(
                 configuration, programmingModel, metaModelRefiners,
-                layoutMetadataReaders, mmv,
+                mmv,
                 servicesInjector);
     }
 
@@ -348,22 +340,6 @@ public abstract class IsisComponentProvider {
         return programmingModel;
     }
 
-    protected List<LayoutMetadataReader> createLayoutMetadataReaders() {
-        final List<LayoutMetadataReader> layoutMetadataReaders = Lists.newArrayList();
-        final String[] layoutMetadataReaderClassNames =
-                configuration.getList(
-                        ReflectorConstants.LAYOUT_METADATA_READER_LIST,
-                        ReflectorConstants.LAYOUT_METADATA_READER_LIST_DEFAULT);
-
-        if (layoutMetadataReaderClassNames != null) {
-            for (final String layoutMetadataReaderClassName : layoutMetadataReaderClassNames) {
-                final LayoutMetadataReader layoutMetadataReader =
-                        InstanceUtil.createInstance(layoutMetadataReaderClassName, LayoutMetadataReader.class);
-                layoutMetadataReaders.add(layoutMetadataReader);
-            }
-        }
-        return layoutMetadataReaders;
-    }
 
 
     //endregion

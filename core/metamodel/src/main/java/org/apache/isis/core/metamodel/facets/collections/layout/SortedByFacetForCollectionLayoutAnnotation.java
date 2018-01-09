@@ -20,6 +20,8 @@
 package org.apache.isis.core.metamodel.facets.collections.layout;
 
 import java.util.Comparator;
+import java.util.List;
+
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.collections.sortedby.SortedByFacet;
@@ -27,16 +29,20 @@ import org.apache.isis.core.metamodel.facets.collections.sortedby.SortedByFacetA
 
 public class SortedByFacetForCollectionLayoutAnnotation extends SortedByFacetAbstract {
 
-    public static SortedByFacet create(CollectionLayout collectionLayout, FacetHolder holder) {
-        if(collectionLayout == null) {
-            return null;
-        }
-        final Class sortedBy = collectionLayout.sortedBy();
-        if(sortedBy == Comparator.class) {
-            return null;
-        }
+    public static SortedByFacet create(
+            final List<CollectionLayout> collectionLayouts,
+            final FacetHolder holder) {
 
-        return sortedBy != null ? new SortedByFacetForCollectionLayoutAnnotation(sortedBy, holder) : null;
+        return collectionLayouts.stream()
+                .map(CollectionLayout::sortedBy)
+                .filter(sortedBy -> sortedBy != Comparator.class)
+                .filter(Comparator.class::isAssignableFrom)
+                .findFirst()
+                .map(sortedBy -> {
+                    Class<? extends Comparator<?>> sortedByForceGenerics = sortedBy;
+                    return new SortedByFacetForCollectionLayoutAnnotation(sortedByForceGenerics, holder);
+                })
+                .orElse(null);
     }
 
     private SortedByFacetForCollectionLayoutAnnotation(Class<? extends Comparator<?>> sortedBy, FacetHolder holder) {

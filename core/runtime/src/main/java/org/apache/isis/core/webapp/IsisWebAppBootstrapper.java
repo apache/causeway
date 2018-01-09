@@ -152,13 +152,6 @@ public class IsisWebAppBootstrapper implements ServletContextListener {
 
     }
 
-    private Injector createGuiceInjector(
-            final IsisConfigurationDefault isisConfiguration,
-            final DeploymentCategory deploymentCategory) {
-        final IsisInjectModule isisModule = new IsisInjectModule(deploymentCategory, isisConfiguration);
-        return Guice.createInjector(isisModule);
-    }
-
     /**
      * Checks {@link IsisConfigurationBuilder configuration} for
      * {@value SystemConstants#DEPLOYMENT_TYPE_KEY}, (that is, from the command

@@ -65,4 +65,7 @@ public interface Transaction extends HasTransactionId {
     @Programmatic
     void clearAbortCause();
 
+    @Programmatic
+    TransactionState getTransactionState();
+
 }

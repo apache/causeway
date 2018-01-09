@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,30 +45,29 @@ public class TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent extends 
     private static final Logger LOG = LoggerFactory.getLogger(TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent.class);
 
     public static Facet create(
-            final DomainObjectLayout domainObjectLayout,
+            final List<DomainObjectLayout> domainObjectLayouts,
             final ServicesInjector servicesInjector,
             final IsisConfiguration configuration, final FacetHolder facetHolder) {
-        if(domainObjectLayout == null) {
-            return null;
-        }
-        final Class<? extends TitleUiEvent<?>> titleUiEventClass = domainObjectLayout.titleUiEvent();
 
-        if(!EventUtil.eventTypeIsPostable(
-                titleUiEventClass,
-                TitleUiEvent.Noop.class,
-                TitleUiEvent.Default.class,
-                "isis.reflector.facet.domainObjectLayoutAnnotation.titleUiEvent.postForDefault",
-                configuration)) {
-            return null;
-        }
+        return domainObjectLayouts.stream()
+                .map(DomainObjectLayout::titleUiEvent)
+                .filter(titleUiEvent -> EventUtil.eventTypeIsPostable(
+                        titleUiEvent,
+                        TitleUiEvent.Noop.class,
+                        TitleUiEvent.Default.class,
+                        "isis.reflector.facet.domainObjectLayoutAnnotation.titleUiEvent.postForDefault",
+                        configuration))
+                .findFirst()
+                .map(titleUiEventClass -> {
+                    final TranslationService translationService = servicesInjector.lookupService(TranslationService.class);
+                    final ObjectSpecification facetHolderAsSpec = (ObjectSpecification) facetHolder; // bit naughty...
+                    final String translationContext = facetHolderAsSpec.getCorrespondingClass().getCanonicalName();
+                    final EventBusService eventBusService = servicesInjector.lookupService(EventBusService.class);
 
-        final TranslationService translationService = servicesInjector.lookupService(TranslationService.class);
-        final ObjectSpecification facetHolderAsSpec = (ObjectSpecification) facetHolder; // bit naughty...
-        final String translationContext = facetHolderAsSpec.getCorrespondingClass().getCanonicalName();
-        final EventBusService eventBusService = servicesInjector.lookupService(EventBusService.class);
-
-        return new TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent(
-                titleUiEventClass, translationService, translationContext, eventBusService, facetHolder);
+                    return new TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent(
+                            titleUiEventClass, translationService, translationContext, eventBusService, facetHolder);
+                })
+                .orElse(null);
     }
 
     private final Class<? extends TitleUiEvent<?>> titleUiEventClass;

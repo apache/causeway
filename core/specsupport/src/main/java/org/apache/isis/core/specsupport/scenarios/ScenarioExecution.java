@@ -150,12 +150,7 @@ public abstract class ScenarioExecution {
      * @throws IllegalStateException if not available
      */
     public DomainObjectContainer container() {
-        final DomainObjectContainer container = dsp.getContainer();
-        if(container == null) {
-            throw new IllegalStateException(
-                    "No DomainObjectContainer available");
-        }
-        return container;
+        return service(DomainObjectContainer.class);
     }
 
     

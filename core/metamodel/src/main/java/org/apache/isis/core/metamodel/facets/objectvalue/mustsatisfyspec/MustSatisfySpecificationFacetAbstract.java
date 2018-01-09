@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facets.objectvalue.mustsatisfyspec;
 
 import java.util.List;
 
-import org.apache.isis.applib.events.ValidityEvent;
+import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.spec.Specification;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -97,9 +97,7 @@ public abstract class MustSatisfySpecificationFacetAbstract extends FacetAbstrac
         }
         try {
             return (Specification) value.newInstance();
-        } catch (final InstantiationException e) {
-            return null;
-        } catch (final IllegalAccessException e) {
+        } catch (final InstantiationException | IllegalAccessException e) {
             return null;
         }
     }

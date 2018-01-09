@@ -31,12 +31,8 @@ import com.google.common.collect.Lists;
 import org.apache.isis.applib.FatalException;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.applib.services.command.Command2;
-import org.apache.isis.applib.services.command.Command3;
 import org.apache.isis.applib.services.eventbus.AbstractDomainEvent;
-import org.apache.isis.applib.services.eventbus.AbstractInteractionEvent;
 import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
-import org.apache.isis.applib.services.eventbus.ActionInteractionEvent;
 import org.apache.isis.applib.services.eventbus.CollectionDomainEvent;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.applib.services.eventbus.PropertyDomainEvent;
@@ -98,7 +94,6 @@ public class DomainEventHelper {
             }
 
             event.setEventPhase(phase);
-            event.setPhase(AbstractInteractionEvent.Phase.from(phase));
 
             if(phase.isExecuted()) {
                 event.setReturnValue(ObjectAdapter.Util.unwrap(resultAdapter));
@@ -111,14 +106,7 @@ public class DomainEventHelper {
             // ... and associate command with event
             if(command != null) {
                 if(phase.isExecuting()) {
-                    if(command instanceof Command3) {
-                        final Command3 command3 = (Command3) command;
-                        command3.pushActionDomainEvent(event);
-                    } else if(command instanceof Command2 && event instanceof ActionInteractionEvent) {
-                        final Command2 command2 = (Command3) command;
-                        final ActionInteractionEvent<?> aie = (ActionInteractionEvent<?>) event;
-                        command2.pushActionInteractionEvent(aie);
-                    }
+                    command.pushActionDomainEvent(event);
                 }
             }
 
@@ -209,7 +197,6 @@ public class DomainEventHelper {
             }
 
             event.setEventPhase(phase);
-            event.setPhase(AbstractInteractionEvent.Phase.from(phase));
 
             // just in case the actual new value held by the object is different from that applied
             setEventNewValue(event, newValue);
@@ -298,7 +285,6 @@ public class DomainEventHelper {
             }
 
             event.setEventPhase(phase);
-            event.setPhase(AbstractInteractionEvent.Phase.from(phase));
 
             getEventBusService().post(event);
             return event;

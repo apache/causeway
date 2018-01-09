@@ -116,5 +116,5 @@ thn no event will be posted.
 
 Normally events are only raised for interactions through the UI. However, events can be raised programmatically either
 by calling the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] API directly, or as a result
-of calling the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer[`DomainObjectContainer`]'s
+of calling the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_TitleService[`TitleService`]'s
 `titleOf(...)` method.

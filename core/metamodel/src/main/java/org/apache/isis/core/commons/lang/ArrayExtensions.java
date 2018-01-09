@@ -22,15 +22,13 @@ package org.apache.isis.core.commons.lang;
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import com.google.common.collect.Lists;
-
 import org.apache.isis.core.commons.exceptions.IsisException;
+
+import com.google.common.collect.Lists;
 
 public final class ArrayExtensions {
 
@@ -73,7 +71,8 @@ public final class ArrayExtensions {
         return converted;
     }
 
-    public static <T> T[] combine(final T[]... arrays) {
+    @SafeVarargs
+	public static <T> T[] combine(final T[]... arrays) {
         final List<T> combinedList = Lists.newArrayList();
         for (final T[] array : arrays) {
             Collections.addAll(combinedList, array);
@@ -94,36 +93,8 @@ public final class ArrayExtensions {
         return argList.toArray(new String[] {});
     }
 
-    public static List<String> mergeToList(final String[] extendee, final String[] array2) {
-        final List<String> prefixes = new ArrayList<String>();
-        ArrayExtensions.addNoDuplicates(extendee, prefixes);
-        ArrayExtensions.addNoDuplicates(array2, prefixes);
-        return prefixes;
-    }
-
-    static void addNoDuplicates(final String[] array, final List<String> list) {
-        for (int i = 0; i < array.length; i++) {
-            if (!list.contains(array[i])) {
-                list.add(array[i]);
-            }
-        }
-    }
-
-    public static List<Object> asListFlattened(final Object[] objectArray) {
-        final List<Object> list = new ArrayList<Object>();
-        for (final Object element : objectArray) {
-            if (Collection.class.isAssignableFrom(element.getClass())) {
-                @SuppressWarnings("rawtypes")
-                final Collection collection = (Collection) element;
-                list.addAll(asListFlattened(collection.toArray()));
-            } else {
-                list.add(element);
-            }
-        }
-        return list;
-    }
-
-    public static <T> T coalesce(final T... objects) {
+    @SafeVarargs
+	public static <T> T coalesce(final T... objects) {
         for (final T object : objects) {
             if (object != null) {
                 return object;
@@ -131,37 +102,5 @@ public final class ArrayExtensions {
         }
         return null;
     }
-
-    public static String commaSeparatedClassNames(final List<Object> objects) {
-        final StringBuilder buf = new StringBuilder();
-        int i = 0;
-        for (final Object object : objects) {
-            if (i++ > 0) {
-                buf.append(',');
-            }
-            buf.append(object.getClass().getName());
-        }
-        return buf.toString();
-    }
-
-    public static String asSemicolonDelimitedStr(final List<String> list) {
-        final StringBuffer buf = new StringBuffer();
-        for (final String message : list) {
-            if (list.size() > 1) {
-                buf.append("; ");
-            }
-            buf.append(message);
-        }
-        return buf.toString();
-    }
-
-    public static List<Class<?>> toClasses(final List<Object> objectList) {
-        final List<Class<?>> classList = new ArrayList<Class<?>>();
-        for (final Object service : objectList) {
-            classList.add(service.getClass());
-        }
-        return classList;
-    }
-
 
 }

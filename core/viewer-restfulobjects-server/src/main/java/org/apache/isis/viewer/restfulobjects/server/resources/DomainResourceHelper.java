@@ -21,7 +21,7 @@ import java.util.List;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.apache.isis.applib.annotation.ActionSemantics;
+import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -296,7 +296,7 @@ public class DomainResourceHelper {
      * of the result of that action.
      *
      * <p>
-     *     The action must have {@link ActionSemantics.Of#isSafeInNature()} safe/request-cacheable}  semantics
+     *     The action must have {@link SemanticsOf#isSafeInNature()} safe/request-cacheable}  semantics
      *     otherwise an error response is thrown.
      * </p>
      */
@@ -306,7 +306,7 @@ public class DomainResourceHelper {
 
         final ObjectAction action = accessHelper.getObjectActionThatIsVisibleForIntent(actionId, ObjectAdapterAccessHelper.Intent.MUTATE);
 
-        final ActionSemantics.Of actionSemantics = action.getSemantics();
+        final SemanticsOf actionSemantics = action.getSemantics();
         if (! actionSemantics.isSafeInNature()) {
             throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED, "Method not allowed; action '%s' does not have safe semantics", action.getId());
         }
@@ -320,7 +320,7 @@ public class DomainResourceHelper {
      * of the result of that action.
      *
      * <p>
-     *     The action must have {@link org.apache.isis.applib.annotation.ActionSemantics.Of#IDEMPOTENT idempotent}
+     *     The action must have {@link SemanticsOf#IDEMPOTENT idempotent}
      *     semantics otherwise an error response is thrown.
      * </p>
      */
@@ -330,7 +330,7 @@ public class DomainResourceHelper {
 
         final ObjectAction action = accessHelper.getObjectActionThatIsVisibleForIntent(actionId, ObjectAdapterAccessHelper.Intent.MUTATE);
 
-        final ActionSemantics.Of actionSemantics = action.getSemantics();
+        final SemanticsOf actionSemantics = action.getSemantics();
         if (!actionSemantics.isIdempotentInNature()) {
             throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED, "Method not allowed; action '%s' is not idempotent", action.getId());
         }

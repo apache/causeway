@@ -19,8 +19,11 @@
 
 package org.apache.isis.core.metamodel.facets.properties.property.mustsatisfy;
 
+import java.util.Arrays;
 import java.util.List;
-import com.google.common.collect.Lists;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.spec.Specification;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -31,23 +34,22 @@ import org.apache.isis.core.metamodel.services.ServicesInjector;
 public class MustSatisfySpecificationFacetForPropertyAnnotation extends MustSatisfySpecificationFacetAbstract {
 
     public static Facet create(
-            final Property property,
+            final List<Property> properties,
             final FacetHolder holder,
             final ServicesInjector servicesInjector) {
 
-        if (property == null) {
-            return null;
-        }
-
-        final Class<?>[] values = property.mustSatisfy();
-        final List<Specification> specifications = Lists.newArrayList();
-        for (final Class<?> value : values) {
-            final Specification specification = newSpecificationElseNull(value);
-            if (specification != null) {
-                specifications.add(specification);
-            }
-        }
-        return specifications.size() > 0 ? new MustSatisfySpecificationFacetForPropertyAnnotation(specifications, holder, servicesInjector) : null;
+        List<Specification> specifications = properties.stream()
+                .map(Property::mustSatisfy)
+                .flatMap(classes ->
+                        Arrays.stream(classes)
+                              .map(MustSatisfySpecificationFacetAbstract::newSpecificationElseNull)
+                              .filter(Objects::nonNull)
+                )
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+        return specifications.size() > 0
+                ? new MustSatisfySpecificationFacetForPropertyAnnotation(specifications, holder, servicesInjector)
+                : null;
     }
 
 

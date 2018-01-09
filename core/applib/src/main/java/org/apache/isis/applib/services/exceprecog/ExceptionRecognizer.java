@@ -63,6 +63,13 @@ public interface ExceptionRecognizer {
     @Programmatic
     public String recognize(Throwable ex);
 
+    /**
+     * An extension to {@link #recognize(Throwable)} that allows recognized exceptions
+     * to be {@link org.apache.isis.applib.services.exceprecog.ExceptionRecognizer.Category categorize}d.
+     */
+    @Programmatic
+    Recognition recognize2(Throwable ex);
+
     @Programmatic
     @PostConstruct
     public void init(Map<String, String> properties);
@@ -71,4 +78,56 @@ public interface ExceptionRecognizer {
     @PreDestroy
     public void shutdown();
 
+    enum Category {
+        /**
+         * A violation of some declarative constraint (eg uniqueness or referential integrity) was detected.
+         */
+        CONSTRAINT_VIOLATION,
+        /**
+         * The object to be acted upon cannot be found (404)
+         */
+        NOT_FOUND,
+        /**
+         * A concurrency exception, in other words some other user has changed this object.
+         */
+        CONCURRENCY,
+        /**
+         * Recognized, but for some other reason... 40x error
+         */
+        CLIENT_ERROR,
+        /**
+         * 50x error
+         */
+        SERVER_ERROR,
+        /**
+         * Recognized, but uncategorized (typically: a recognizer of the original ExceptionRecognizer API).
+         */
+        OTHER
+    }
+
+    class Recognition {
+
+        /**
+         * Returns a recognition of the specified type (assuming a non-null reason); else null.
+         */
+        public static Recognition of(final Category category, final String reason) {
+            return reason != null? new Recognition(category, reason): null;
+        }
+
+        private final Category category;
+        private final String reason;
+
+        public Recognition(final Category category, final String reason) {
+            this.category = category;
+            this.reason = reason;
+        }
+
+        public Category getCategory() {
+            return category;
+        }
+
+        public String getReason() {
+            return reason;
+        }
+    }
 }

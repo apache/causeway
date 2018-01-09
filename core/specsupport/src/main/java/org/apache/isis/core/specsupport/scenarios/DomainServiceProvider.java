@@ -33,8 +33,6 @@ import org.apache.isis.applib.DomainObjectContainer;
 @Deprecated
 public interface DomainServiceProvider {
 
-    DomainObjectContainer getContainer();
-
     <T> T getService(Class<T> serviceClass);
 
     /**

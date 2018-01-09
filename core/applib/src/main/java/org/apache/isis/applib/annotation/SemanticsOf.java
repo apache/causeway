@@ -66,7 +66,12 @@ public enum SemanticsOf {
      * <p>
      * An example is increasing the quantity of a line item in an Order by 1.
      */
-    NON_IDEMPOTENT_ARE_YOU_SURE;
+    NON_IDEMPOTENT_ARE_YOU_SURE,
+    /**
+     * Ignore the value provided by this annotation (meaning that the framework will keep searching, in meta
+     * annotations or superclasses/interfaces).
+     */
+    NOT_SPECIFIED;
 
     public String getFriendlyName() {
         return Enums.getFriendlyNameOf(this);
@@ -106,29 +111,4 @@ public enum SemanticsOf {
         return this == IDEMPOTENT_ARE_YOU_SURE || this == NON_IDEMPOTENT_ARE_YOU_SURE;
     }
 
-    @Deprecated
-    public static ActionSemantics.Of from(final SemanticsOf semantics) {
-        if(semantics == null) return null;
-        if(semantics == SAFE_AND_REQUEST_CACHEABLE) return ActionSemantics.Of.SAFE_AND_REQUEST_CACHEABLE;
-        if(semantics == SAFE) return ActionSemantics.Of.SAFE;
-        if(semantics == IDEMPOTENT) return ActionSemantics.Of.IDEMPOTENT;
-        if(semantics == IDEMPOTENT_ARE_YOU_SURE) return ActionSemantics.Of.IDEMPOTENT_ARE_YOU_SURE;
-        if(semantics == NON_IDEMPOTENT) return ActionSemantics.Of.NON_IDEMPOTENT;
-        if(semantics == NON_IDEMPOTENT_ARE_YOU_SURE) return ActionSemantics.Of.NON_IDEMPOTENT_ARE_YOU_SURE;
-        // shouldn't happen
-        throw new IllegalArgumentException("Unrecognized of: " + semantics);
-    }
-
-    @Deprecated
-    public static SemanticsOf from(final ActionSemantics.Of semantics) {
-        if(semantics == null) return null;
-        if(semantics == ActionSemantics.Of.SAFE_AND_REQUEST_CACHEABLE) return SAFE_AND_REQUEST_CACHEABLE;
-        if(semantics == ActionSemantics.Of.SAFE) return SAFE;
-        if(semantics == ActionSemantics.Of.IDEMPOTENT) return IDEMPOTENT;
-        if(semantics == ActionSemantics.Of.IDEMPOTENT_ARE_YOU_SURE) return IDEMPOTENT_ARE_YOU_SURE;
-        if(semantics == ActionSemantics.Of.NON_IDEMPOTENT) return NON_IDEMPOTENT;
-        if(semantics == ActionSemantics.Of.NON_IDEMPOTENT_ARE_YOU_SURE) return NON_IDEMPOTENT_ARE_YOU_SURE;
-        // shouldn't happen
-        throw new IllegalArgumentException("Unrecognized semantics: " + semantics);
-    }
 }

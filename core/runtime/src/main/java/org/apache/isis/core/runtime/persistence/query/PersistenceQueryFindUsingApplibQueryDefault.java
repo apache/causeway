@@ -19,14 +19,10 @@
 
 package org.apache.isis.core.runtime.persistence.query;
 
-import java.io.IOException;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.isis.applib.query.Query;
-import org.apache.isis.core.commons.encoding.DataInputExtended;
-import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
@@ -49,42 +45,13 @@ public class PersistenceQueryFindUsingApplibQueryDefault extends PersistenceQuer
             final QueryCardinality cardinality,
             final SpecificationLoader specificationLoader,
             final long... range) {
-        super(specification, specificationLoader, range);
+        super(specification, range);
         this.queryName = queryName;
         this.cardinality = cardinality;
         this.argumentsAdaptersByParameterName = argumentsAdaptersByParameterName;
-        initialized();
     }
 
-    public PersistenceQueryFindUsingApplibQueryDefault(
-            final DataInputExtended input,
-            final SpecificationLoader specificationLoader,
-            final long... range) throws IOException {
-        super(input, specificationLoader, range);
-        this.queryName = input.readUTF();
-        this.cardinality = QueryCardinality.valueOf(input.readUTF());
-        // TODO: need to read from input
-        this.argumentsAdaptersByParameterName = new HashMap<>();
-        initialized();
-    }
 
-    @Override
-    public void encode(final DataOutputExtended output) throws IOException {
-        super.encode(output);
-        output.writeUTF(queryName);
-        output.writeUTF(cardinality.name());
-        // TODO: need to write to output
-        // ... this.argumentsAdaptersByParameterName....
-
-    }
-
-    private void initialized() {
-        // nothing to do
-    }
-
-    // ///////////////////////////////////////////////////////
-    //
-    // ///////////////////////////////////////////////////////
 
     public String getQueryName() {
         return queryName;

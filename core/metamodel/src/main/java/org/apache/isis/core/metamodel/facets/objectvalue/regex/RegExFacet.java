@@ -21,29 +21,18 @@ package org.apache.isis.core.metamodel.facets.objectvalue.regex;
 
 import org.apache.isis.core.metamodel.facets.MultipleValueFacet;
 import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
-import org.apache.isis.core.metamodel.facets.object.mask.MaskFacet;
 
 /**
  * Whether the (string) property or a parameter must correspond to a specific
  * regular expression.
- * 
- * <p>
- * In the standard Apache Isis Programming Model, corresponds to the
- * <tt>@RegEx</tt> annotation.
- * 
- * @see MaskFacet
  */
 public interface RegExFacet extends MultipleValueFacet, ValidatingInteractionAdvisor {
 
-    public String validation();
+    public String regexp();
 
-    public String format();
-
-    public boolean caseSensitive();
+    public int patternFlags();
 
     public boolean doesNotMatch(String proposed);
 
-    public String format(String text);
-
-    public String replacement();
+    public String message();
 }

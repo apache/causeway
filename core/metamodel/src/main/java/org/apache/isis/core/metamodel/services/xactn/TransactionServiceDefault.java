@@ -21,8 +21,8 @@ package org.apache.isis.core.metamodel.services.xactn;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.services.xactn.Transaction2;
-import org.apache.isis.applib.services.xactn.TransactionService3;
+import org.apache.isis.applib.services.xactn.Transaction;
+import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
@@ -31,7 +31,7 @@ import org.apache.isis.core.metamodel.services.persistsession.PersistenceSession
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
 )
-public class TransactionServiceDefault implements TransactionService3 {
+public class TransactionServiceDefault implements TransactionService {
 
 
     @Override
@@ -41,11 +41,11 @@ public class TransactionServiceDefault implements TransactionService3 {
 
     @Override
     public void nextTransaction() {
-        nextTransaction(TransactionService3.Policy.UNLESS_MARKED_FOR_ABORT);
+        nextTransaction(TransactionService.Policy.UNLESS_MARKED_FOR_ABORT);
     }
 
     @Override
-    public void nextTransaction(TransactionService3.Policy policy) {
+    public void nextTransaction(TransactionService.Policy policy) {
         final TransactionState transactionState = getTransactionState();
         switch (transactionState) {
         case NONE:
@@ -73,7 +73,7 @@ public class TransactionServiceDefault implements TransactionService3 {
     }
 
     @Override
-    public Transaction2 currentTransaction() {
+    public Transaction currentTransaction() {
         return persistenceSessionServiceInternal.currentTransaction();
     }
 

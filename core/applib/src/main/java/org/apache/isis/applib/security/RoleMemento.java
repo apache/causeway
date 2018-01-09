@@ -20,9 +20,7 @@
 package org.apache.isis.applib.security;
 
 import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.NotPersistable;
 
-@NotPersistable
 public final class RoleMemento {
 
     /**

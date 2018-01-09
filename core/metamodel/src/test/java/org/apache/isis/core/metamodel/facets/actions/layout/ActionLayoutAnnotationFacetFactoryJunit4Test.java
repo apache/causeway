@@ -28,7 +28,6 @@ import org.apache.isis.applib.annotation.Contributed;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.annotation.NotContributed;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
@@ -81,7 +80,7 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
             facetedMethod = FacetedMethod.createForAction(CustomerService.class, "name", mockSpecificationLoader);
 
             // when
-            facetFactory.process(new FacetFactory.ProcessMethodContext(CustomerService.class, null, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
+            facetFactory.process(new FacetFactory.ProcessMethodContext(CustomerService.class, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
 
             // then
             final Facet facet = facetedMethod.getFacet(NotContributedFacet.class);
@@ -115,7 +114,7 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
             facetedMethod = FacetedMethod.createForAction(CustomerService.class, "name", mockSpecificationLoader);
 
             // when
-            facetFactory.process(new FacetFactory.ProcessMethodContext(CustomerService.class, null, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
+            facetFactory.process(new FacetFactory.ProcessMethodContext(CustomerService.class, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
 
             // then
             final Facet facet = facetedMethod.getFacet(NotContributedFacet.class);
@@ -150,14 +149,15 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
             facetedMethod = FacetedMethod.createForAction(CustomerService.class, "name", mockSpecificationLoader);
 
             // when
-            facetFactory.process(new FacetFactory.ProcessMethodContext(CustomerService.class, null, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
+            facetFactory.process(new FacetFactory.ProcessMethodContext(CustomerService.class, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
 
             // then
             final Facet facet = facetedMethod.getFacet(NotContributedFacet.class);
             assertThat(facet, CoreMatchers.is(not(nullValue())));
             assertThat(facet instanceof NotContributedFacetForActionLayoutAnnotation, CoreMatchers.is(true));
             final NotContributedFacetForActionLayoutAnnotation facetImpl = (NotContributedFacetForActionLayoutAnnotation) facet;
-            assertThat(facetImpl.value(), CoreMatchers.equalTo(NotContributed.As.ACTION));
+            assertThat(facetImpl.notContributed(), CoreMatchers.equalTo(NotContributedFacet.NotContributedAs.ACTION));
+            assertThat(facetImpl.contributed(), CoreMatchers.equalTo(Contributed.AS_ASSOCIATION));
 
         }
 
@@ -188,14 +188,15 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
             facetedMethod = FacetedMethod.createForAction(CustomerService.class, "name", mockSpecificationLoader);
 
             // when
-            facetFactory.process(new FacetFactory.ProcessMethodContext(CustomerService.class, null, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
+            facetFactory.process(new FacetFactory.ProcessMethodContext(CustomerService.class, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
 
             // then
             final Facet facet = facetedMethod.getFacet(NotContributedFacet.class);
             assertThat(facet, CoreMatchers.is(not(nullValue())));
             assertThat(facet instanceof NotContributedFacetForActionLayoutAnnotation, CoreMatchers.is(true));
             final NotContributedFacetForActionLayoutAnnotation facetImpl = (NotContributedFacetForActionLayoutAnnotation) facet;
-            assertThat(facetImpl.value(), CoreMatchers.equalTo(NotContributed.As.ASSOCIATION));
+            assertThat(facetImpl.notContributed(), CoreMatchers.equalTo(NotContributedFacet.NotContributedAs.ASSOCIATION));
+            assertThat(facetImpl.contributed(), CoreMatchers.equalTo(Contributed.AS_ACTION));
         }
 
         @Test
@@ -224,14 +225,16 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
             facetedMethod = FacetedMethod.createForAction(CustomerService.class, "name", mockSpecificationLoader);
 
             // when
-            facetFactory.process(new FacetFactory.ProcessMethodContext(CustomerService.class, null, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
+            facetFactory.process(new FacetFactory.ProcessMethodContext(CustomerService.class, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
 
             // then
             final Facet facet = facetedMethod.getFacet(NotContributedFacet.class);
             assertThat(facet, CoreMatchers.is(not(nullValue())));
             assertThat(facet instanceof NotContributedFacetForActionLayoutAnnotation, CoreMatchers.is(true));
             final NotContributedFacetForActionLayoutAnnotation facetImpl = (NotContributedFacetForActionLayoutAnnotation) facet;
-            assertThat(facetImpl.value(), CoreMatchers.equalTo(NotContributed.As.EITHER));
+            assertThat(facetImpl.notContributed(), CoreMatchers.equalTo(NotContributedFacet.NotContributedAs.EITHER));
+            assertThat(facetImpl.contributed(), CoreMatchers.equalTo(Contributed.AS_NEITHER));
+
         }
 
         @Test
@@ -261,14 +264,15 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
             facetedMethod = FacetedMethod.createForAction(CustomerService.class, "name", mockSpecificationLoader);
 
             // when
-            facetFactory.process(new FacetFactory.ProcessMethodContext(CustomerService.class, null, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
+            facetFactory.process(new FacetFactory.ProcessMethodContext(CustomerService.class, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
 
             // then
             final Facet facet = facetedMethod.getFacet(NotContributedFacet.class);
             assertThat(facet, CoreMatchers.is(not(nullValue())));
             assertThat(facet instanceof NotContributedFacetForActionLayoutAnnotation, CoreMatchers.is(true));
             final NotContributedFacetForActionLayoutAnnotation facetImpl = (NotContributedFacetForActionLayoutAnnotation) facet;
-            assertThat(facetImpl.value(), CoreMatchers.equalTo(NotContributed.As.EITHER));
+            assertThat(facetImpl.notContributed(), CoreMatchers.equalTo(NotContributedFacet.NotContributedAs.EITHER));
+            assertThat(facetImpl.contributed(), CoreMatchers.equalTo(Contributed.AS_NEITHER));
 
         }
 
@@ -302,7 +306,7 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
             facetedMethod = FacetedMethod.createForAction(CustomerService.class, "name", mockSpecificationLoader);
 
             // when
-            facetFactory.process(new FacetFactory.ProcessMethodContext(CustomerService.class, null, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
+            facetFactory.process(new FacetFactory.ProcessMethodContext(CustomerService.class, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
 
             // then
             final Facet facet = facetedMethod.getFacet(NotContributedFacet.class);
@@ -340,7 +344,7 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
             facetedMethod = FacetedMethod.createForAction(CustomerService.class, "name", mockSpecificationLoader);
 
             // when
-            facetFactory.process(new FacetFactory.ProcessMethodContext(CustomerService.class, null, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
+            facetFactory.process(new FacetFactory.ProcessMethodContext(CustomerService.class, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
 
             // then
             final Facet facet = facetedMethod.getFacet(NotContributedFacet.class);
@@ -377,7 +381,7 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
             facetedMethod = FacetedMethod.createForAction(Customer.class, "name", mockSpecificationLoader);
 
             // when
-            facetFactory.process(new FacetFactory.ProcessMethodContext(Customer.class, null, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
+            facetFactory.process(new FacetFactory.ProcessMethodContext(Customer.class, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
 
             // then
             final Facet facet = facetedMethod.getFacet(NotContributedFacet.class);

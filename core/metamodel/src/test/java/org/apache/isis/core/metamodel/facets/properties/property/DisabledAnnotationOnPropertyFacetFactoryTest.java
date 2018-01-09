@@ -20,7 +20,9 @@
 package org.apache.isis.core.metamodel.facets.properties.property;
 
 import java.lang.reflect.Method;
-import org.apache.isis.applib.annotation.Disabled;
+
+import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
@@ -49,14 +51,14 @@ public class DisabledAnnotationOnPropertyFacetFactoryTest extends AbstractFacetF
 
     public void testDisabledAnnotationPickedUpOnProperty() {
         class Customer {
-            @Disabled
+            @Property(editing = Editing.DISABLED)
             public int getNumberOfOrders() {
                 return 0;
             }
         }
         final Method actionMethod = findMethod(Customer.class, "getNumberOfOrders");
 
-        facetFactory.processEditing(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
+        facetFactory.processEditing(new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(DisabledFacet.class);
         assertNotNull(facet);
@@ -64,20 +66,20 @@ public class DisabledAnnotationOnPropertyFacetFactoryTest extends AbstractFacetF
 
         final DisabledFacet disabledFacet = (DisabledFacet) facet;
         assertThat(disabledFacet.disabledReason(null), is("Always disabled"));
-        
+
         assertNoMethodsRemoved();
     }
 
     public void testDisabledAnnotationWithReason() {
         class Customer {
-            @Disabled(reason="Oh no you don't!")
+            @Property(editing = Editing.DISABLED, editingDisabledReason = "Oh no you don't!")
             public int getNumberOfOrders() {
                 return 0;
             }
         }
         final Method actionMethod = findMethod(Customer.class, "getNumberOfOrders");
 
-        facetFactory.processEditing(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
+        facetFactory.processEditing(new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(DisabledFacet.class);
         assertNotNull(facet);

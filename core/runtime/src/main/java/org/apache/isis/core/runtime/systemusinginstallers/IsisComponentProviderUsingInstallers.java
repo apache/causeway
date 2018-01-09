@@ -49,14 +49,14 @@ public class IsisComponentProviderUsingInstallers extends IsisComponentProvider 
     //region > constructors
 
     public IsisComponentProviderUsingInstallers(
-            final AppManifest appManifestIfAny,
+            final AppManifest appManifest,
             final IsisConfiguration configuration) {
-        this(appManifestFrom(appManifestIfAny, configuration),
+        this(appManifest,
                 (IsisConfigurationDefault) configuration, // REVIEW: HACKY
                 new InstallerLookup(configuration));
     }
 
-    private IsisComponentProviderUsingInstallers(
+    public IsisComponentProviderUsingInstallers(
             final AppManifest appManifest,
             final IsisConfigurationDefault configuration,
             final InstallerLookup installerLookup) {
@@ -76,23 +76,6 @@ public class IsisComponentProviderUsingInstallers extends IsisComponentProvider 
     //endregion
 
     //region > constructor helpers (factories)
-
-    /**
-     * If an {@link AppManifest} was explicitly provided (eg from the Guice <tt>IsisWicketModule</tt> when running
-     * unde the Wicket viewer) then use that; otherwise read the <tt>isis.properties</tt> config file and look
-     * for an <tt>isis.appManifest</tt> entry instead.
-     */
-    private static AppManifest appManifestFrom(
-            final AppManifest appManifestFromConstructor,
-            final IsisConfiguration configuration) {
-        if(appManifestFromConstructor != null) {
-            return appManifestFromConstructor;
-        }
-        final String appManifestFromConfiguration = configuration.getString(SystemConstants.APP_MANIFEST_KEY);
-        return appManifestFromConfiguration != null
-                ? InstanceUtil.createInstance(appManifestFromConfiguration, AppManifest.class)
-                : null;
-    }
 
     private static AuthenticationManager lookupAuthenticationManager(
             final AppManifest appManifest, final InstallerLookup installerLookup,

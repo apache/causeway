@@ -27,6 +27,7 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.ComparisonChain;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Ordering;
 
 
 public class ObjectContracts {
@@ -59,6 +60,13 @@ public class ObjectContracts {
     }
 
     private static <T> int compare(final T p, final T q, final Iterable<String> propertyNamesIter) {
+        if(p == null) { return -1;}
+        if(q == null) { return +1;}
+        if(p.getClass() != q.getClass()) {
+            // just sort on the class type
+            return Ordering.natural().onResultOf((Function<Object, String>) o -> o.getClass().getSimpleName()).compare(p, q);
+        }
+
         final Iterable<Clause> clauses = clausesFor(propertyNamesIter);
         ComparisonChain chain = ComparisonChain.start();
         for (final Clause clause : clauses) {
@@ -79,12 +87,7 @@ public class ObjectContracts {
     @Deprecated
     @SuppressWarnings("unchecked")
     public static <T> Comparator<T> compareBy(final String propertyNames){
-        return new Comparator<T>() {
-            @Override
-            public int compare(T p, T q) {
-                return ObjectContracts.compare(p, q, propertyNames);
-            }
-        };
+        return (p, q) -> compare(p, q, propertyNames);
     }
     /**
      * Returns a {@link Comparator} to evaluate objects by their property name(s).
@@ -93,12 +96,7 @@ public class ObjectContracts {
     @Deprecated
     @SuppressWarnings("unchecked")
     public static <T> Comparator<T> compareBy(final String... propertyNames){
-        return new Comparator<T>() {
-            @Override
-            public int compare(T p, T q) {
-                return ObjectContracts.compare(p, q, propertyNames);
-            }
-        };
+        return (p, q) -> compare(p, q, propertyNames);
     }
     //endregion
 
@@ -213,12 +211,7 @@ public class ObjectContracts {
 
     //region > helpers
     private static Iterable<Clause> clausesFor(final Iterable<String> iterable) {
-        return Iterables.transform(iterable, new Function<String, Clause>() {
-            @Override
-            public Clause apply(String input) {
-                return Clause.parse(input);
-            }
-        });
+        return Iterables.transform(iterable, Clause::parse);
     }
 
     private static Iterable<String> csvToIterable(final String propertyNames) {

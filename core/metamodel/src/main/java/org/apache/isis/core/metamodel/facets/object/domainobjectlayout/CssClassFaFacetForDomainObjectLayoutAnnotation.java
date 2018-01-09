@@ -17,6 +17,8 @@
 
 package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
 
+import java.util.List;
+
 import com.google.common.base.Strings;
 
 import org.apache.isis.applib.annotation.DomainObjectLayout;
@@ -27,13 +29,23 @@ import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaPositi
 
 public class CssClassFaFacetForDomainObjectLayoutAnnotation extends CssClassFaFacetAbstract {
 
-    public static CssClassFaFacet create(final DomainObjectLayout domainObjectLayout, final FacetHolder holder) {
-        if (domainObjectLayout == null) {
-            return null;
+    public static CssClassFaFacet create(final List<DomainObjectLayout> domainObjectLayouts, final FacetHolder holder) {
+
+        class Annot {
+            private Annot(final DomainObjectLayout domainObjectLayout) {
+                this.cssClassFa = Strings.emptyToNull(domainObjectLayout.cssClassFa());
+                this.cssClassFaPosition = CssClassFaPosition.from(domainObjectLayout.cssClassFaPosition());
+            }
+            String cssClassFa;
+            CssClassFaPosition cssClassFaPosition;
         }
-        final String cssClassFa = Strings.emptyToNull(domainObjectLayout.cssClassFa());
-        final CssClassFaPosition position = CssClassFaPosition.from(domainObjectLayout.cssClassFaPosition());
-        return cssClassFa != null ? new CssClassFaFacetForDomainObjectLayoutAnnotation(cssClassFa, position, holder) : null;
+
+        return domainObjectLayouts.stream()
+                .map(Annot::new)
+                .filter(a -> a.cssClassFa != null )
+                .findFirst()
+                .map(a -> new CssClassFaFacetForDomainObjectLayoutAnnotation(a.cssClassFa, a.cssClassFaPosition, holder))
+                .orElse(null);
     }
 
     public CssClassFaFacetForDomainObjectLayoutAnnotation(final String value, final CssClassFaPosition position,

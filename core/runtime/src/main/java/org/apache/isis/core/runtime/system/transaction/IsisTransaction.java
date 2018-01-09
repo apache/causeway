@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.applib.services.WithTransactionScope;
-import org.apache.isis.applib.services.xactn.Transaction2;
+import org.apache.isis.applib.services.xactn.Transaction;
 import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.MessageBroker;
@@ -58,7 +58,7 @@ import org.apache.isis.core.runtime.services.persistsession.PersistenceSessionSe
  * the {@link IsisTransactionManager} to ensure that the underlying persistence
  * mechanism (for example, the <tt>ObjectStore</tt>) is also committed.
  */
-public class IsisTransaction implements TransactionScopedComponent, Transaction2 {
+public class IsisTransaction implements TransactionScopedComponent, Transaction {
 
     public static class Placeholder {
         public static Placeholder NEW = new Placeholder("[NEW]");

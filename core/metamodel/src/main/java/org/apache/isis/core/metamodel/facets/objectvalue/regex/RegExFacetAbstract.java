@@ -19,7 +19,9 @@
 
 package org.apache.isis.core.metamodel.facets.objectvalue.regex;
 
-import org.apache.isis.applib.events.ValidityEvent;
+import javax.validation.constraints.Pattern;
+
+import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -33,37 +35,50 @@ public abstract class RegExFacetAbstract extends MultipleValueFacetAbstract impl
         return RegExFacet.class;
     }
 
-    private final String validation;
-    private final String format;
-    private final boolean caseSensitive;
-    private final String replacement;
+    private final String regexp;
+    private final int patternFlags;
+    private final String message;
 
-    public RegExFacetAbstract(final String validation, final String format, final boolean caseSensitive, final FacetHolder holder, final String replacement) {
+    public RegExFacetAbstract(
+            final String regexp,
+            final int patternFlags,
+            final String message,
+            final FacetHolder holder) {
         super(type(), holder);
-        this.validation = validation;
-        this.format = format;
-        this.caseSensitive = caseSensitive;
-        this.replacement = replacement;
+        this.regexp = regexp;
+        this.patternFlags = patternFlags;
+        this.message = message != null ? message : "Doesn't match pattern";
+    }
+
+    private static int asMask(final Pattern.Flag[] flags) {
+        int mask = 0;
+        for (Pattern.Flag flag : flags) {
+            mask |= flag.getValue();
+        }
+        return mask;
+    }
+
+    public RegExFacetAbstract(
+            final String regexp,
+            final Pattern.Flag[] flags,
+            final String message,
+            final FacetHolder holder) {
+        this(regexp, asMask(flags), message, holder);
     }
 
     @Override
-    public String validation() {
-        return validation;
+    public String regexp() {
+        return regexp;
     }
 
     @Override
-    public String format() {
-        return format;
+    public int patternFlags() {
+        return patternFlags;
     }
 
     @Override
-    public boolean caseSensitive() {
-        return caseSensitive;
-    }
-
-    @Override
-    public String replacement() {
-        return replacement;
+    public String message() {
+        return message;
     }
 
     // //////////////////////////////////////////////////////////
@@ -83,7 +98,7 @@ public abstract class RegExFacetAbstract extends MultipleValueFacetAbstract impl
             return null;
         }
 
-        return replacement();
+        return message();
     }
 
 }

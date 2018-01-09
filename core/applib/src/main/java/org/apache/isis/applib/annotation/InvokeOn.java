@@ -41,25 +41,11 @@ public enum InvokeOn {
      *     Corresponds to (the deprecated) <code>@Bulk(appliesTo=BULK_ONLY)</code> annotation.
      * </p>
      */
-    COLLECTION_ONLY;
+    COLLECTION_ONLY,
+    /**
+     * Ignore the value provided by this annotation (meaning that the framework will keep searching, in meta
+     * annotations or superclasses/interfaces).
+     */
+    NOT_SPECIFIED
 
-    @Deprecated
-    public static Bulk.AppliesTo from(final InvokeOn invokeOn) {
-        if(invokeOn == null) return null;
-        if(invokeOn == OBJECT_AND_COLLECTION) return Bulk.AppliesTo.BULK_AND_REGULAR;
-        if(invokeOn == COLLECTION_ONLY) return Bulk.AppliesTo.BULK_ONLY;
-        if(invokeOn == OBJECT_ONLY) return Bulk.AppliesTo.REGULAR_ONLY;
-        // shouldn't happen
-        throw new IllegalArgumentException("Unrecognized appliesTo: " + invokeOn);
-    }
-
-    @Deprecated
-    public static InvokeOn from(final Bulk.AppliesTo appliesTo) {
-        if(appliesTo == null) return null;
-        if(appliesTo == Bulk.AppliesTo.BULK_AND_REGULAR) return OBJECT_AND_COLLECTION;
-        if(appliesTo == Bulk.AppliesTo.BULK_ONLY) return COLLECTION_ONLY;
-        if(appliesTo == Bulk.AppliesTo.REGULAR_ONLY) return OBJECT_ONLY;
-        // shouldn't happen
-        throw new IllegalArgumentException("Unrecognized appliesTo: " + appliesTo);
-    }
 }

@@ -20,7 +20,6 @@
 
 
 
-import org.apache.isis.applib.annotation.Aggregated;
 import org.apache.isis.noa.annotations.AggregatedAnnotation;
 import org.apache.isis.noa.annotations.Annotation;
 

@@ -19,43 +19,20 @@
 
 package org.apache.isis.core.metamodel.facets.object.publishedobject;
 
-import org.apache.isis.applib.annotation.PublishedObject;
-import org.apache.isis.applib.annotation.PublishingPayloadFactoryForObject;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.SingleValueFacetAbstract;
+import org.apache.isis.core.metamodel.facets.MarkerFacetAbstract;
 
-public abstract class PublishedObjectFacetAbstract extends SingleValueFacetAbstract<PublishedObject.PayloadFactory> implements PublishedObjectFacet {
+public abstract class PublishedObjectFacetAbstract extends MarkerFacetAbstract implements PublishedObjectFacet {
 
     public static Class<? extends Facet> type() {
         return PublishedObjectFacet.class;
     }
 
     public PublishedObjectFacetAbstract(
-            final PublishedObject.PayloadFactory payloadFactory,
             final FacetHolder holder) {
         super(  type(),
-                payloadFactory != null
-                        ? payloadFactory
-                        : new PublishedObjectPayloadFactoryDefault(),
                 holder);
-    }
-
-    protected PublishedObjectFacetAbstract(
-            final PublishingPayloadFactoryForObject publishingPayloadFactory,
-            final FacetHolder holder) {
-        this(legacyPayloadFactoryFor(publishingPayloadFactory), holder);
-    }
-
-    static PublishedObject.PayloadFactory legacyPayloadFactoryFor(final PublishingPayloadFactoryForObject publishingPayloadFactory) {
-        if(publishingPayloadFactory == null) {
-            return null;
-        }
-        if(publishingPayloadFactory instanceof PublishingPayloadFactoryForObject.Adapter) {
-            final PublishingPayloadFactoryForObject.Adapter adapter = (PublishingPayloadFactoryForObject.Adapter) publishingPayloadFactory;
-            return adapter.getPayloadFactory();
-        }
-        return new PublishedObjectPayloadFactoryDefault(publishingPayloadFactory);
     }
 
 }

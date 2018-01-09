@@ -37,7 +37,7 @@ import com.google.common.collect.Lists;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.core.commons.url.UrlEncodingUtils;
+import org.apache.isis.core.commons.url.UrlDecoderUtil;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -202,7 +202,8 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
             final @PathParam("actionId") String actionId,
             final @QueryParam("x-isis-querystring") String xIsisUrlEncodedQueryString) {
 
-        final String urlUnencodedQueryString = UrlEncodingUtils.urlDecodeNullSafe(xIsisUrlEncodedQueryString != null? xIsisUrlEncodedQueryString: httpServletRequest.getQueryString());
+        final String urlUnencodedQueryString = UrlDecoderUtil
+                .urlDecodeNullSafe(xIsisUrlEncodedQueryString != null? xIsisUrlEncodedQueryString: httpServletRequest.getQueryString());
         init(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES, RepresentationService.Intent.NOT_APPLICABLE, urlUnencodedQueryString);
 
         setCommandExecutor(Command.Executor.USER);

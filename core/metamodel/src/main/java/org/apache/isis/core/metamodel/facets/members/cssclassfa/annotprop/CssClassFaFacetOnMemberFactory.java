@@ -21,7 +21,6 @@ package org.apache.isis.core.metamodel.facets.members.cssclassfa.annotprop;
 
 import java.lang.reflect.Method;
 import java.util.Map;
-import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -29,36 +28,23 @@ import java.util.regex.Pattern;
 import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 
-import org.apache.isis.applib.annotation.CssClassFa;
 import org.apache.isis.core.commons.config.ConfigurationConstants;
-import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.ContributeeMemberFacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaPosition;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
 
-public class CssClassFaFacetOnMemberFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory, MetaModelValidatorRefiner {
+public class CssClassFaFacetOnMemberFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory {
     
-    private final MetaModelValidatorForDeprecatedAnnotation validator = new MetaModelValidatorForDeprecatedAnnotation(CssClassFa.class);
-
-
     public CssClassFaFacetOnMemberFactory() {
         super(FeatureType.ACTIONS_ONLY);
     }
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        CssClassFaFacet cssClassFaFacet = createFromMetadataPropertiesIfPossible(processMethodContext);
-        if (cssClassFaFacet == null) {
-            cssClassFaFacet = createFromConfiguredRegexIfPossible(processMethodContext);
-        }
+        CssClassFaFacet cssClassFaFacet = createFromConfiguredRegexIfPossible(processMethodContext);
 
         // no-op if null
         FacetUtil.addFacet(cssClassFaFacet);
@@ -66,19 +52,8 @@ public class CssClassFaFacetOnMemberFactory extends FacetFactoryAbstract impleme
 
     @Override
     public void process(ProcessContributeeMemberContext processMemberContext) {
-        CssClassFaFacet cssClassFaFacet = createFromMetadataPropertiesIfPossible(processMemberContext);
-        // no-op if null
-        FacetUtil.addFacet(cssClassFaFacet);
     }
 
-    private static CssClassFaFacet createFromMetadataPropertiesIfPossible(
-            final ProcessContextWithMetadataProperties<? extends FacetHolder> pcwmp) {
-
-        final FacetHolder holder = pcwmp.getFacetHolder();
-
-        final Properties properties = pcwmp.metadataProperties("cssClassFa");
-        return properties != null ? new CssClassFaFacetOnMemberFromProperties(properties, holder) : null;
-    }
 
     // region > faIconFromPattern
 
@@ -163,21 +138,6 @@ public class CssClassFaFacetOnMemberFactory extends FacetFactoryAbstract impleme
     }
 
     // endregion
-
-    // //////////////////////////////////////
-
-    @Override
-    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
-        metaModelValidator.add(validator);
-    }
-
-
-    @Override
-    public void setServicesInjector(final ServicesInjector servicesInjector) {
-        super.setServicesInjector(servicesInjector);
-        final IsisConfiguration configuration = getConfiguration();
-        validator.setConfiguration(configuration);
-    }
 
 
 }

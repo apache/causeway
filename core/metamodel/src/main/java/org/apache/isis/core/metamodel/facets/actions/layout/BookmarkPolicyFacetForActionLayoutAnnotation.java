@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.actions.layout;
 
+import java.util.List;
+
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -27,12 +29,26 @@ import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolic
 
 public class BookmarkPolicyFacetForActionLayoutAnnotation extends BookmarkPolicyFacetAbstract {
 
-    public static BookmarkPolicyFacet create(final ActionLayout actionLayout, final FacetHolder holder) {
-        if (actionLayout == null) {
-            return null;
-        }
-        final BookmarkPolicy bookmarkPolicy = actionLayout.bookmarking();
-        return bookmarkPolicy != null && bookmarkPolicy != BookmarkPolicy.NEVER ? new BookmarkPolicyFacetForActionLayoutAnnotation(bookmarkPolicy, holder) : null;
+    public static BookmarkPolicyFacet create(
+            final List<ActionLayout> actionLayouts,
+            final FacetHolder holder) {
+
+        return actionLayouts.stream()
+                .map(ActionLayout::bookmarking)
+                .filter(bookmarkPolicy -> bookmarkPolicy != BookmarkPolicy.NOT_SPECIFIED)
+                .findFirst()
+                .map(bookmarkPolicy -> {
+                    switch (bookmarkPolicy){
+                    case AS_ROOT:
+                    case AS_CHILD:
+                        return new BookmarkPolicyFacetForActionLayoutAnnotation(bookmarkPolicy, holder);
+                    case NEVER:
+                        return null;
+                    }
+                    throw new IllegalStateException("bookmarkPolicy '" + bookmarkPolicy + "' not recognised");
+                }
+                )
+                .orElse(null);
     }
 
     private BookmarkPolicyFacetForActionLayoutAnnotation(final BookmarkPolicy bookmarkPolicy, final FacetHolder holder) {

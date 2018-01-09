@@ -60,7 +60,8 @@ You can use a similar approach for collections and actions.
 
 == Custom CSS styles
 
-The above technique works well if you know the class member to target, but you might instead want to apply a custom style to a set of members. For this, you can use the `@CssClass`.
+The above technique works well if you know the class member to target, but you might instead want to apply a custom style to a set of members.
+For this, you can use the `@PropertyLayout(cssClass=...)`.
 
 For example, in the `ToDoItem` class the following annotation (indicating that this is a key, important, property) :
 
