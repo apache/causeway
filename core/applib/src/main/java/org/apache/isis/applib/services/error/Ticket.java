@@ -37,6 +37,7 @@ public class Ticket implements Serializable {
     private final String userMessage;
     private final String details;
     private final StackTracePolicy stackTracePolicy;
+    private final String kittenUrl;
 
     public enum StackTracePolicy {
         SHOW,
@@ -47,11 +48,33 @@ public class Ticket implements Serializable {
         this(reference, userMessage, details, StackTracePolicy.HIDE);
     }
 
-    public Ticket(final String reference, final String userMessage, final String details, final StackTracePolicy stackTracePolicy) {
+    public Ticket(
+            final String reference,
+            final String userMessage,
+            final String details,
+            final StackTracePolicy stackTracePolicy) {
+        this(reference, userMessage, details, stackTracePolicy, null);
+    }
+
+    public Ticket(
+            final String reference,
+            final String userMessage,
+            final String details,
+            final String kittenUrl) {
+        this(reference, userMessage, details, StackTracePolicy.HIDE, kittenUrl);
+    }
+
+    public Ticket(
+            final String reference,
+            final String userMessage,
+            final String details,
+            final StackTracePolicy stackTracePolicy,
+            final String kittenUrl) {
         this.reference = reference;
         this.userMessage = userMessage;
         this.details = details;
         this.stackTracePolicy = stackTracePolicy;
+        this.kittenUrl = kittenUrl;
     }
 
     /**
@@ -99,5 +122,16 @@ public class Ticket implements Serializable {
      */
     public StackTracePolicy getStackTracePolicy() {
         return stackTracePolicy;
+    }
+
+    /**
+     * If specified, is the external URL of an image to display to the end user.
+     *
+     * <p>
+     *     Not necessarily of a kitten, but something by way of an apology.
+     * </p>
+     */
+    public String getKittenUrl() {
+        return kittenUrl;
     }
 }

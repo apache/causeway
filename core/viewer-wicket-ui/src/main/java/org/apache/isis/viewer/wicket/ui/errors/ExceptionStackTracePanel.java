@@ -19,10 +19,13 @@
 
 package org.apache.isis.viewer.wicket.ui.errors;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
+import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
+import org.apache.wicket.markup.html.WebComponent;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.basic.MultiLineLabel;
@@ -61,6 +64,22 @@ public class ExceptionStackTracePanel extends Panel {
 
     private static final JavaScriptResourceReference DIV_TOGGLE_JS = new JavaScriptResourceReference(ExceptionStackTracePanel.class, "div-toggle.js");
 
+    private static final String ID_KITTENS_IMAGE = "kittens";
+
+    public class ExternalImageUrl extends WebComponent {
+
+        public ExternalImageUrl(String id, String imageUrl) {
+            super(id);
+            add(new AttributeModifier("src", new Model<>(imageUrl)));
+            setVisible(!(imageUrl==null || imageUrl.equals("")));
+        }
+
+        protected void onComponentTag(ComponentTag tag) {
+            super.onComponentTag(tag);
+            checkComponentTag(tag, "img");
+        }
+    }
+
     public ExceptionStackTracePanel(String id, ExceptionModel exceptionModel) {
         super(id, exceptionModel);
 
@@ -84,6 +103,7 @@ public class ExceptionStackTracePanel extends Panel {
             final WebMarkupContainer panel = new WebMarkupContainer(ID_TICKET_DETAILS_DIV);
             final MultiLineLabel details = new MultiLineLabel(ID_TICKET_DETAILS, Model.of(ticketDetail));
             panel.add(details);
+            panel.add(new ExternalImageUrl(ID_KITTENS_IMAGE, ticket.getKittenUrl()));
             add(panel);
         }
 
