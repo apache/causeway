@@ -35,6 +35,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
  * startNode --@Parent--&gt; node2 --@Parent--&gt; node3 ...
  * 
  * @author ahuber@apache.org
+ * @since 2.0.0
  *
  */
 public interface ParentChain {
@@ -51,23 +52,32 @@ public interface ParentChain {
 	public Object parentOf(Object node);
 	
 	/**
-	 * Returns a Stream of nodes that are chained together by parent references. 
-	 * The startNode is excluded from the Stream.
+	 * Returns a Stream of nodes that are chained together by parent references. <br/> 
+	 * The {@code startNode} is excluded from the Stream.  <br/><br/>
+	 * The chain stops either because there is no more resolvable parent,<br/>
+	 * or we reached the {@code maxChainLength},<br/>
+	 * or we reached a node that is already part of the chain.
+	 * 
 	 * @param startNode
+	 * @param maxChainLength maximum length of the chain returned 
 	 * @return
 	 */
-	public default Stream<Object> streamParentChainOf(Object startNode){
+	public default Stream<Object> streamParentChainOf(Object startNode, int maxChainLength){
 		final Set<Object> chain = new LinkedHashSet<>();
 		
 		Object next = startNode;
 		
+		chain.add(startNode); // for infinite loop detection
+		
 		while((next = parentOf(next))!=null) {
-			final boolean doContinue = chain.add(next);
+			final boolean doContinue = chain.add(next); // stops if the we get to a node we already traversed before
 			if(!doContinue)
+				break;
+			if(chain.size()>=maxChainLength)
 				break;
 		}
 		
-		return chain.stream();
+		return chain.stream().skip(1);
 	}
 
 	

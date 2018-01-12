@@ -22,27 +22,40 @@ package org.apache.isis.viewer.wicket.model.models.whereami;
 import java.util.LinkedList;
 import java.util.stream.Stream;
 
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.util.pchain.ParentChain;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 
+/**
+ * 
+ * @author ahuber@apache.org
+ * @since 2.0.0
+ *
+ */
 class WhereAmIModelDefault implements WhereAmIModel {
 
 	private final LinkedList<Object> reversedChainOfParents = new LinkedList<>();
 	private final EntityModel startOfChain;
 	
+	private static boolean isWhereAmIEnabled = IS_WHERE_AM_I_FEATURE_ENABLED_DEFAULT;
+	private static int maxChainLength = MAX_NAVIGABLE_PARENT_CHAIN_LENGTH_DEFAULT;
+	private static int configHash = 0;
+	
 	public WhereAmIModelDefault(EntityModel startOfChain) {
 		this.startOfChain = startOfChain;
+		
+		overrideFromConfigIfNew(startOfChain.getPersistenceSession().getConfiguration());		
 		
 		final ObjectAdapter adapter = startOfChain.getObject();
 		final Object startNode = adapter.getObject();
 		
 		ParentChain.of(IsisContext.getSessionFactory().getSpecificationLoader()::loadSpecification)
-		.streamParentChainOf(startNode)
+		.streamParentChainOf(startNode, maxChainLength)
 		.forEach(reversedChainOfParents::addFirst);
 	}
-	
+
 	@Override
 	public EntityModel getStartOfChain() {
 		return startOfChain;
@@ -50,11 +63,17 @@ class WhereAmIModelDefault implements WhereAmIModel {
 	
 	@Override
 	public boolean isShowWhereAmI() {
+		if(!isWhereAmIEnabled)
+			return false; // this will prevent rendering 
+		
 		return !reversedChainOfParents.isEmpty();
 	}
 
 	@Override
 	public Stream<EntityModel> streamParentChainReversed() {
+		if(!isWhereAmIEnabled)
+			return Stream.empty(); // unexpected call, we could log a warning
+		
 		return reversedChainOfParents.stream()
 		.map(this::toEntityModel);
 	}
@@ -66,5 +85,23 @@ class WhereAmIModelDefault implements WhereAmIModel {
 				startOfChain.getPersistenceSession()
 				.adapterFor(domainObject)	);
 	}
+	
+	private void overrideFromConfigIfNew(IsisConfiguration configuration) {
+		
+		//[ahuber] without evidence that this significantly improves performance, 
+		// we use the smart update idiom here ...
+		final int newConfigHash = System.identityHashCode(configuration);
+		if(newConfigHash == configHash)
+			return;
+		
+		isWhereAmIEnabled = configuration.getBoolean(
+				CONFIG_KEY_IS_WHERE_AM_I_FEATURE_ENABLED,
+				IS_WHERE_AM_I_FEATURE_ENABLED_DEFAULT);
+		maxChainLength = configuration.getInteger(
+				CONFIG_KEY_MAX_NAVIGABLE_PARENT_CHAIN_LENGTH,
+				MAX_NAVIGABLE_PARENT_CHAIN_LENGTH_DEFAULT);
+		
+	}
+
 	
 }
