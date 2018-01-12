@@ -19,17 +19,15 @@
  
 package org.apache.isis.core.metamodel.util.pchain;
 
-import java.lang.reflect.Method;
 import java.util.LinkedHashSet;
-import java.util.LinkedList;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
-import org.apache.isis.applib.annotation.Parent;
-import org.apache.isis.core.commons.reflection.Reflect;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 /**
- * Represents a unidirectional linked ordered set of Pojos (chain), where the chain 
+ * Represents a unidirectionally linked ordered set of POJOs (chain), where the chain 
  * starts at startNode. Each subsequent node is linked via de-referencing a 
  * singular field (or no-arg method) that is annotated with {@code @Parent}.
  * <br/>
@@ -41,39 +39,25 @@ import org.apache.isis.core.commons.reflection.Reflect;
  */
 public interface ParentChain {
 	
-	static ParentChain simple() {
-		return new SimpleParentChain();
+	public static ParentChain of(Function<Class<?>, ObjectSpecification> specificationLookup){
+		return new ParentChainDefault(specificationLookup);
 	}
 	
-	static ParentChain caching() {
-		return new CachingParentChain();
-	}
-	
+	/**
+	 * Returns the parent node of this {@code node} or {@code null} if {@code node} has no parent.
+	 * @param node
+	 * @return
+	 */
 	public Object parentOf(Object node);
 	
-	static boolean providesParent(Method m) {
-		if(!Reflect.isNoArg(m))
-			return false;
-		if(!Reflect.isPublic(m))
-			return false;
-		if(Reflect.isVoid(m)) 
-			return false;
-		if(Reflect.isPrimitive(m.getReturnType())) 
-			return false;
-		
-		if(m.getName().equals("parent"))
-			return true;
-		
-		if(m.isAnnotationPresent(Parent.class))
-			return true;
-		
-		return false;
-	}
-
-	default Stream<Object> streamParentChainOf(Object startNode){
+	/**
+	 * Returns a Stream of nodes that are chained together by parent references. 
+	 * The startNode is excluded from the Stream.
+	 * @param startNode
+	 * @return
+	 */
+	public default Stream<Object> streamParentChainOf(Object startNode){
 		final Set<Object> chain = new LinkedHashSet<>();
-		
-		chain.add(startNode);
 		
 		Object next = startNode;
 		
@@ -83,17 +67,8 @@ public interface ParentChain {
 				break;
 		}
 		
-		return chain.stream().skip(1);
+		return chain.stream();
 	}
-	
-	default Stream<Object> streamReversedParentChainOf(Object startNode){
-		final LinkedList<Object> reverseChain = new LinkedList<Object>();
-		
-		streamParentChainOf(startNode)
-		.forEach(reverseChain::addFirst);
-		
-		return reverseChain.stream();
-	}
-	
+
 	
 }

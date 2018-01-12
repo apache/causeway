@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
@@ -66,6 +67,7 @@ import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupLayoutFacet;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
+import org.apache.isis.core.metamodel.facets.object.navparent.NavigableParentFacet;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.facets.object.parented.ParentedCollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
@@ -91,6 +93,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
+import org.apache.isis.core.metamodel.util.pchain.ParentChain;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 
 public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implements ObjectSpecification {
@@ -160,6 +163,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
     private TitleFacet titleFacet;
     private IconFacet iconFacet;
+    private NavigableParentFacet navigableParentFacet;
     private CssClassFacet cssClassFacet;
 
     private IntrospectionState introspected = IntrospectionState.NOT_INTROSPECTED;
@@ -346,6 +350,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
         titleFacet = getFacet(TitleFacet.class);
         iconFacet = getFacet(IconFacet.class);
+        navigableParentFacet = getFacet(NavigableParentFacet.class);
         cssClassFacet = getFacet(CssClassFacet.class);
     }
 
@@ -376,6 +381,13 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     @Override
     public String getIconName(final ObjectAdapter reference) {
         return iconFacet == null ? null : iconFacet.iconName(reference);
+    }
+    
+    @Override
+    public Object getNavigableParent(final Object object) {
+        return navigableParentFacet == null 
+        		? null 
+        		: navigableParentFacet.navigableParent(object);
     }
 
     @Deprecated

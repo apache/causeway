@@ -19,26 +19,28 @@
 
 package org.apache.isis.viewer.wicket.model.models.whereami;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedList;
 import java.util.stream.Stream;
 
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.util.pchain.ParentChain;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 
 class WhereAmIModelDefault implements WhereAmIModel {
 
-	private final List<Object> reversedChainOfParents = new ArrayList<>();
+	private final LinkedList<Object> reversedChainOfParents = new LinkedList<>();
 	private final EntityModel startOfChain;
 	
 	public WhereAmIModelDefault(EntityModel startOfChain) {
 		this.startOfChain = startOfChain;
 		
-		final Object startPojo = startOfChain.getObject().getObject();
-
-		ParentChain.caching()
-		.streamReversedParentChainOf(startPojo)
-		.forEach(reversedChainOfParents::add);
+		final ObjectAdapter adapter = startOfChain.getObject();
+		final Object startNode = adapter.getObject();
+		
+		ParentChain.of(IsisContext.getSessionFactory().getSpecificationLoader()::loadSpecification)
+		.streamParentChainOf(startNode)
+		.forEach(reversedChainOfParents::addFirst);
 	}
 	
 	@Override

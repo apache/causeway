@@ -19,48 +19,31 @@
 
 package org.apache.isis.core.metamodel.util.pchain;
 
-import java.lang.invoke.MethodHandle;
-import java.lang.invoke.MethodHandles;
-import java.lang.reflect.Method;
+import java.util.function.Function;
 
-class CachingParentChain extends SimpleParentChain {
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-	private final SoftCache<Class<?>, MethodHandle> cache = new SoftCache<>();
+class ParentChainDefault implements ParentChain {
+	
+	private final Function<Class<?>, ObjectSpecification> specificationLookup;
+	
+	ParentChainDefault(Function<Class<?>, ObjectSpecification> specificationLookup) {
+		this.specificationLookup = specificationLookup;
+	}
 
 	@Override
 	public Object parentOf(Object node) {
 		if(node==null)
 			return null;
 		
-		final MethodHandle mh = cache.computeIfAbsent(node.getClass(), 
-				key->{
-					try {
-						return methodHandleOf(node);
-					} catch (IllegalAccessException e) {
-						e.printStackTrace();
-						return null;
-					}
-				});
+		final Class<?> cls = node.getClass();
 		
-		if(mh==null)
+		final ObjectSpecification spec = specificationLookup.apply(cls);
+		
+		if(spec==null)
 			return null;
 		
-		try {
-			return mh.invoke(node);
-		} catch (Throwable e) {
-			e.printStackTrace();
-			return null;
-		}
-		
-	}
-	
-	protected static MethodHandle methodHandleOf(Object node) throws IllegalAccessException{
-		final Method getter = parentGetterOf(node);
-		return getter!=null ? handleOf(getter) : null;
-	}
-
-	public static MethodHandle handleOf(Method m) throws IllegalAccessException {
-		return MethodHandles.publicLookup().unreflect(m);
+		return spec.getNavigableParent(node);
 	}
 	
 }

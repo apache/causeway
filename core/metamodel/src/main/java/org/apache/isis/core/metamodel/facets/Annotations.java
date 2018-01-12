@@ -435,7 +435,7 @@ public final class Annotations  {
         }
     }
 
-    static class FieldEvaluator<T extends Annotation> extends Evaluator<T> {
+    public static class FieldEvaluator<T extends Annotation> extends Evaluator<T> {
         private final Field field;
 
         FieldEvaluator(final Field field, final T annotation) {
