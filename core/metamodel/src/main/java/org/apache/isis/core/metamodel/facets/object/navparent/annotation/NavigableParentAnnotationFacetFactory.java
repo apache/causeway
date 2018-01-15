@@ -26,6 +26,7 @@ import java.util.List;
 
 import org.apache.isis.applib.annotation.Parent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.lang.NullSafe;
 import org.apache.isis.core.commons.reflection.Reflect;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -33,9 +34,7 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.core.metamodel.facets.object.navparent.method.NavigableParentFacetMethod;
-import org.apache.isis.core.metamodel.methodutils.MethodScope;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -44,15 +43,14 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVis
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 
 /**
+ * For detailed behavioral specification see 
+ * <a href="https://issues.apache.org/jira/browse/ISIS-1816">ISIS-1816</a>.
  * 
  * @author ahuber@apache.org
  * @since 2.0.0
  *
  */
 public class NavigableParentAnnotationFacetFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner {
-
-    private static final String NAVIGABLE_PARENT_METHOD_NAME = "parent";
-
 
     public NavigableParentAnnotationFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
@@ -63,10 +61,18 @@ public class NavigableParentAnnotationFacetFactory extends FacetFactoryAbstract 
         final Class<?> cls = processClassContext.getCls();
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
-        final List<Annotations.Evaluator<Parent>> evaluators = Annotations.getEvaluators(cls, Parent.class);
-        if (evaluators.isEmpty()) {
-            return;
+        // Starting from the current domain-object class, we search down the object 
+        // inheritance hierarchy (super class, super super class, ...), until we find 
+        // the first class that has a @Parent annotation. That's the one we use to 
+        // resolve the current domain-object's navigable parent. 
+        
+        final List<Annotations.Evaluator<Parent>> evaluators = 
+        		Annotations.findFirstInHierarchyHaving(cls, Parent.class);
+        
+        if (NullSafe.isEmpty(evaluators)) {
+            return; // no parent resolvable
         } else if (evaluators.size()>1) {
+        	// code should not be reached, since case should be handled by meta-data validation
         	throw new RuntimeException("unable to determine navigable parent due to ambiguity");
         }
         
@@ -84,10 +90,10 @@ public class NavigableParentAnnotationFacetFactory extends FacetFactoryAbstract 
         	try {
 				method = Reflect.getGetter(cls, field.getName());
 			} catch (IntrospectionException e) {
-				return;
+				return; // no parent resolvable
 			}
         } else {
-        	return;
+        	return; // no parent resolvable
         }
         
         try {
@@ -99,59 +105,40 @@ public class NavigableParentAnnotationFacetFactory extends FacetFactoryAbstract 
 
 
     /**
-     * Violation if there is a class that has both a <tt>parent()</tt> method and also 
-     * any non-inherited method annotated with <tt>@Parent</tt>.
-     * <p>
-     * If there are only inherited methods annotated with <tt>@Parent</tt> then this is 
-     * <i>not</i> a violation; but the imperative <tt>parent()</tt> method will take precedence.
-     * </p>
+     * For detailed behavioral specification see 
+     * <a href="https://issues.apache.org/jira/browse/ISIS-1816">ISIS-1816</a>.
      */
     @Override
     public void refineMetaModelValidator(MetaModelValidatorComposite metaModelValidator, IsisConfiguration configuration) {
         metaModelValidator.add(new MetaModelValidatorVisiting(new MetaModelValidatorVisiting.Visitor() {
-
-        	//TODO [ahuber] code is a copy of the TitleAnnotationFacetFactory, not sure ...
-        	// 1) what the wanted behavior should be (what about annotations in interfaces, ambiguity, etc.)
-        	// 2) what this code fragment does
         	
             @Override
             public boolean visit(ObjectSpecification objectSpec, ValidationFailures validationFailures) {
                 final Class<?> cls = objectSpec.getCorrespondingClass();
-
-                final Method parentMethod =
-                		MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, NAVIGABLE_PARENT_METHOD_NAME, Object.class, null);
-                if (parentMethod == null) {
-                    return true; // no conflict
-                }
                 
-                // determine if cls contains a @Parent annotated method, not inherited from superclass
-                final Class<?> supClass = cls.getSuperclass();
-                if (supClass == null) {
-                    return true; // no conflict
-                }
+                final List<Annotations.Evaluator<Parent>> evaluators = 
+                		Annotations.findFirstInHierarchyHaving(cls, Parent.class);
                 
-                final List<Method> methods = methodsWithParentAnnotation(cls);
-                final List<Method> superClassMethods = methodsWithParentAnnotation(supClass);
-                if (methods.size() > superClassMethods.size()) {
-                    validationFailures.add(
+                if (NullSafe.isEmpty(evaluators)) {
+                	return true; // no conflict
+                } else if (evaluators.size()>1) {
+                	
+                	validationFailures.add(
                             "%s: conflict for determining a strategy for retrieval of (navigable) parent for class, "
-                            + "contains a method '%s' and an annotation '@%s'",
+                            + "contains multiple annotations '@%s', while at most one is allowed.",
                             objectSpec.getIdentifier().getClassName(),
-                            NAVIGABLE_PARENT_METHOD_NAME,
                             Parent.class.getName());
                 }
-
-                return true;
-            }
-
-            private List<Method> methodsWithParentAnnotation(final Class<?> cls) {
-                return MethodFinderUtils.findMethodsWithAnnotation(cls, MethodScope.OBJECT, Parent.class);
+                
+                return true; // no conflict
+                
             }
 
         }));
     }
 
-
+    // -- ADAPTER INJECTION
+    
     @Override
     public void setServicesInjector(final ServicesInjector servicesInjector) {
         super.setServicesInjector(servicesInjector);
@@ -159,5 +146,5 @@ public class NavigableParentAnnotationFacetFactory extends FacetFactoryAbstract 
     }
 
     PersistenceSessionServiceInternal adapterManager;
-
+    
 }
