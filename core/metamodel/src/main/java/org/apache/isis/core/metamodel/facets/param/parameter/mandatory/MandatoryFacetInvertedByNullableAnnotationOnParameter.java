@@ -23,6 +23,7 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import org.apache.isis.core.commons.lang.NullSafe;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
@@ -38,7 +39,7 @@ import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFace
 public class MandatoryFacetInvertedByNullableAnnotationOnParameter extends MandatoryFacetAbstract {
 
     public static MandatoryFacet create(final List<Nullable> annotation, final Class<?> parameterType, final FacetedMethodParameter holder) {
-        if(annotation == null) {
+        if(NullSafe.isEmpty(annotation)) {
             return null;
         }
         if(parameterType.isPrimitive()) {
