@@ -19,13 +19,15 @@
 
 package org.apache.isis.core.metamodel.facets;
 
+import java.beans.IntrospectionException;
 import java.lang.annotation.Annotation;
+import java.lang.invoke.MethodHandle;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -40,6 +42,7 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.core.commons.lang.ThrowableExtensions;
+import org.apache.isis.core.commons.reflection.Reflect;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
 
@@ -381,11 +384,11 @@ public final class Annotations  {
      * @param cls
      * @param annotationClass
      * @return list of {@link Evaluator} that wraps each annotated member found on the class where 
-     * the search stopped, null otherwise
+     * the search stopped, or an empty list if no such {@code annotationClass} annotation found.
      * 
      * @since 2.0.0
      */
-    public static <T extends Annotation> List<Evaluator<T>> findFirstInHierarchyHaving(
+    public static <T extends Annotation> List<Evaluator<T>> firstEvaluatorsInHierarchyHaving(
             final Class<?> cls,
             final Class<T> annotationClass) {
     	
@@ -411,8 +414,8 @@ public final class Annotations  {
     	if(!filter.test(cls))
     		return; // stop visitation
     	
-    	collectMethodEvaluators(cls, annotationClass, visitor);
-    	collectFieldEvaluators(cls, annotationClass, visitor);
+    	visitMethodEvaluators(cls, annotationClass, visitor);
+    	visitFieldEvaluators(cls, annotationClass, visitor);
         
         // search super-classes
         final Class<?> superclass = cls.getSuperclass();
@@ -423,39 +426,39 @@ public final class Annotations  {
     }
     
     @SuppressWarnings({ "rawtypes", "unchecked" })
-	private static <T extends Annotation> void collectMethodEvaluators(
+	private static <T extends Annotation> void visitMethodEvaluators(
             final Class<?> cls,
             final Class<T> annotationClass,
-            final Consumer<Evaluator<T>> action) {
+            final Consumer<Evaluator<T>> visitor) {
     	
     	for (Method method : cls.getDeclaredMethods()) {
             if(MethodScope.OBJECT.matchesScopeOf(method) &&
                     method.getParameterTypes().length == 0) {
                 final Annotation annotation = method.getAnnotation(annotationClass);
                 if(annotation != null) {
-                	action.accept(new MethodEvaluator(method, annotation));
+                	visitor.accept(new MethodEvaluator(method, annotation));
                 }
             }
         }
     }
     
     @SuppressWarnings({ "rawtypes", "unchecked" })
-	private static <T extends Annotation> void collectFieldEvaluators(
+	private static <T extends Annotation> void visitFieldEvaluators(
             final Class<?> cls,
             final Class<T> annotationClass,
-            final Consumer<Evaluator<T>> action) {
+            final Consumer<Evaluator<T>> visitor) {
     	
     	for (final Field field: cls.getDeclaredFields()) {
             final Annotation annotation = field.getAnnotation(annotationClass);
             if(annotation != null) {
-            	action.accept(new FieldEvaluator(field, annotation));
+            	visitor.accept(new FieldEvaluator(field, annotation));
             }
         }
     }
 
     public static abstract class Evaluator<T extends Annotation> {
-
         private final T annotation;
+    	private MethodHandle mh;  
 
         protected Evaluator(final T annotation) {
             this.annotation = annotation;
@@ -465,7 +468,25 @@ public final class Annotations  {
             return annotation;
         }
 
-        public abstract Object value(final Object obj) ;
+        protected abstract MethodHandle createMethodHandle() throws IllegalAccessException;
+        protected abstract String name();
+        
+        public Object value(final Object obj) {
+        	if(mh==null) {
+        		try {
+					mh = createMethodHandle();
+				} catch (IllegalAccessException e) {
+					throw new MetaModelException("illegal access of " + name(), e);
+				}
+        	}
+        	
+        	try {
+				return mh.invoke(obj);
+			} catch (Throwable e) {
+				return ThrowableExtensions.handleInvocationException(e, name());
+			}
+ 
+        }
     }
 
     public static class MethodEvaluator<T extends Annotation> extends Evaluator<T> {
@@ -475,21 +496,31 @@ public final class Annotations  {
             super(annotation);
             this.method = method;
         }
-
-        public Object value(final Object obj)  {
-            try {
-                return method.invoke(obj);
-            } catch (final InvocationTargetException e) {
-                ThrowableExtensions.throwWithinIsisException(e, "Exception executing " + method);
-                return null;
-            } catch (final IllegalAccessException e) {
-                throw new MetaModelException("illegal access of " + method, e);
-            }
+        
+        @Override
+        protected String name() {
+        	return method.getName();
         }
+
+//        public Object value(final Object obj)  {
+//            try {
+//                return method.invoke(obj);
+//            } catch (final InvocationTargetException e) {
+//                ThrowableExtensions.throwWithinIsisException(e, "Exception executing " + method);
+//                return null;
+//            } catch (final IllegalAccessException e) {
+//                throw new MetaModelException("illegal access of " + method, e);
+//            }
+//        }
 
         public Method getMethod() {
             return method;
         }
+
+		@Override
+		protected MethodHandle createMethodHandle() throws IllegalAccessException {
+			return Reflect.handleOf(method);
+		}
     }
 
     public static class FieldEvaluator<T extends Annotation> extends Evaluator<T> {
@@ -499,19 +530,40 @@ public final class Annotations  {
             super(annotation);
             this.field = field;
         }
-
-        public Object value(final Object obj)  {
-            try {
-                field.setAccessible(true);
-                return field.get(obj);
-            } catch (final IllegalAccessException e) {
-                throw new MetaModelException("illegal access of " + field, e);
-            }
+        
+        @Override
+        protected String name() {
+        	return field.getName();
         }
+
+        @Override
+		protected MethodHandle createMethodHandle() throws IllegalAccessException {
+			return Reflect.handleOf(field);
+		}
+        
+//        public Object value(final Object obj)  {
+//            try {
+//                field.setAccessible(true);
+//                return field.get(obj);
+//            } catch (final IllegalAccessException e) {
+//                throw new MetaModelException("illegal access of " + field, e);
+//            }
+//        }
 
         public Field getField() {
             return field;
         }
+        
+        public Optional<Method> getGetter(Class<?> originatingClass) {
+			try {
+        		return Optional.ofNullable(
+        				Reflect.getGetter(originatingClass, field.getName())	);
+			} catch (IntrospectionException e) {
+				e.printStackTrace();
+			}
+        	return Optional.empty();
+        }
+        
     }
 
     private static List<Class<?>> fieldAnnotationClasses = Collections.unmodifiableList(

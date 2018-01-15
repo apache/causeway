@@ -22,6 +22,8 @@ import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -46,9 +48,9 @@ public class Reflect {
 
 	public static Object[] emptyObjects = {};
 	public static Class<?>[] emptyClasses = {};
-	
+
 	// -- CLASS REFLECTION
-	
+
 	/**
 	 * Returns declared methods of this class/interface and all super classes/interfaces.
 	 * @param type
@@ -76,7 +78,7 @@ public class Reflect {
 		visitSuperclassesOf(type,c->Stream.of(c.getDeclaredFields()).forEach(fields::add));
 		return fields;
 	}
-	
+
 	public static void visitSuperclassesOf(final Class<?> clazz, final Consumer<Class<?>> visitor){
 		final Class<?> superclass = clazz.getSuperclass();
 		if(superclass!=null){
@@ -92,7 +94,7 @@ public class Reflect {
 		for(Class<?> interf : clazz.getInterfaces())
 			visitor.accept(interf);
 	}
-	
+
 	public static Method getGetter(Class<?> cls, String propertyName) throws IntrospectionException {
 		final BeanInfo beanInfo = Introspector.getBeanInfo(cls);
 		for(PropertyDescriptor pd:beanInfo.getPropertyDescriptors()){
@@ -102,14 +104,35 @@ public class Reflect {
 		}
 		return null;	
 	}
-	
+
 	public static Method getGetter(Object bean, String propertyName) throws IntrospectionException {
 		if(bean==null)
 			return null;
 		return getGetter(bean, propertyName);	
 	}
-	
-	
+
+	// -- METHOD HANDLES
+
+	public static MethodHandle handleOf(Method method) throws IllegalAccessException {
+		if(!method.isAccessible()) {
+			method.setAccessible(true);
+			MethodHandle mh = MethodHandles.publicLookup().unreflect(method);
+			method.setAccessible(false);
+			return mh;	
+		}
+		return MethodHandles.publicLookup().unreflect(method);
+	}
+
+	public static MethodHandle handleOf(Field field) throws IllegalAccessException {
+		if(!field.isAccessible()) {
+			field.setAccessible(true);
+			MethodHandle mh = MethodHandles.lookup().unreflectGetter(field);
+			field.setAccessible(false);
+			return mh;	
+		}
+		return MethodHandles.lookup().unreflectGetter(field);
+	}
+
 	// -- PRIMITIVE TYPES
 
 	private static final Set<Class<?>> primitives = new HashSet<>(Arrays.asList(
@@ -135,7 +158,7 @@ public class Reflect {
 			Short.class
 			//Void.class //separated out into its own predicate: isVoid(...)
 			));
-	
+
 	// -- TYPE PREDICATES
 
 	public static boolean isVoid(Class<?> c) {
@@ -170,5 +193,10 @@ public class Reflect {
 		Objects.requireNonNull(m);
 		return isVoid(m.getReturnType());
 	}
+
+
+
+
+
 
 }
