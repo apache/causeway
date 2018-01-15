@@ -20,9 +20,9 @@
 package org.apache.isis.core.metamodel.facets.object.navparent.method;
 
 import java.lang.invoke.MethodHandle;
-import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Method;
 
+import org.apache.isis.core.commons.reflection.Reflect;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.navparent.NavigableParentFacetAbstract;
 
@@ -38,7 +38,7 @@ public class NavigableParentFacetMethod extends NavigableParentFacetAbstract {
 	
 	public NavigableParentFacetMethod(final Method method, final FacetHolder holder) throws IllegalAccessException {
 		super(holder);
-		this.methodHandle = handleOf(method);
+		this.methodHandle = Reflect.handleOf(method);
 	}
 
 	@Override
@@ -50,19 +50,5 @@ public class NavigableParentFacetMethod extends NavigableParentFacetAbstract {
 		}
 	}
 	
-	// -- HELPER
-	
-	private static MethodHandle handleOf(Method m) throws IllegalAccessException {
-		
-		if(!m.isAccessible()) {
-			m.setAccessible(true);
-			MethodHandle mh = MethodHandles.publicLookup().unreflect(m);
-			m.setAccessible(false);
-			return mh;	
-		}
-		
-		return MethodHandles.publicLookup().unreflect(m);
-
-	}
 
 }

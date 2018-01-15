@@ -19,15 +19,12 @@
 
 package org.apache.isis.core.metamodel.facets.object.navparent.annotation;
 
-import java.beans.IntrospectionException;
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.List;
 
 import org.apache.isis.applib.annotation.Parent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.lang.NullSafe;
-import org.apache.isis.core.commons.reflection.Reflect;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -67,7 +64,7 @@ public class NavigableParentAnnotationFacetFactory extends FacetFactoryAbstract 
         // resolve the current domain-object's navigable parent. 
         
         final List<Annotations.Evaluator<Parent>> evaluators = 
-        		Annotations.findFirstInHierarchyHaving(cls, Parent.class);
+        		Annotations.firstEvaluatorsInHierarchyHaving(cls, Parent.class);
         
         if (NullSafe.isEmpty(evaluators)) {
             return; // no parent resolvable
@@ -85,13 +82,11 @@ public class NavigableParentAnnotationFacetFactory extends FacetFactoryAbstract 
         	// we have a @Parent annotated method
         	method = ((Annotations.MethodEvaluator<Parent>) parentEvaluator).getMethod();
         } else if(parentEvaluator instanceof Annotations.FieldEvaluator) {
-        	// we have a @Parent annotated field (occurs if one uses lombok's @Getter on a field)
-        	final Field field = ((Annotations.FieldEvaluator<Parent>) parentEvaluator).getField();
-        	try {
-				method = Reflect.getGetter(cls, field.getName());
-			} catch (IntrospectionException e) {
-				return; // no parent resolvable
-			}
+        	// we have a @Parent annotated field (useful if one uses lombok's @Getter on a field)
+        	method = ((Annotations.FieldEvaluator<Parent>) parentEvaluator).getGetter(cls).orElse(null);
+        	if(method==null)
+        		return; // code should not be reached, since case should be handled by meta-data validation 
+        	
         } else {
         	return; // no parent resolvable
         }
@@ -117,10 +112,10 @@ public class NavigableParentAnnotationFacetFactory extends FacetFactoryAbstract 
                 final Class<?> cls = objectSpec.getCorrespondingClass();
                 
                 final List<Annotations.Evaluator<Parent>> evaluators = 
-                		Annotations.findFirstInHierarchyHaving(cls, Parent.class);
+                		Annotations.firstEvaluatorsInHierarchyHaving(cls, Parent.class);
                 
                 if (NullSafe.isEmpty(evaluators)) {
-                	return true; // no conflict
+                	return true; // no conflict, continue validation processing
                 } else if (evaluators.size()>1) {
                 	
                 	validationFailures.add(
@@ -128,9 +123,32 @@ public class NavigableParentAnnotationFacetFactory extends FacetFactoryAbstract 
                             + "contains multiple annotations '@%s', while at most one is allowed.",
                             objectSpec.getIdentifier().getClassName(),
                             Parent.class.getName());
+                	
+                	return true; // continue validation processing
+                } 
+                
+                final Annotations.Evaluator<Parent> parentEvaluator = evaluators.get(0);
+                
+                if(parentEvaluator instanceof Annotations.FieldEvaluator) {
+                	// we have a @Parent annotated field (useful if one uses lombok's @Getter on a field)
+                	
+                	final Annotations.FieldEvaluator<Parent> fieldEvaluator = 
+                			(Annotations.FieldEvaluator<Parent>) parentEvaluator;
+                	
+                	if(!fieldEvaluator.getGetter(cls).isPresent()) {
+                		
+	            		validationFailures.add(
+	                            "%s: unable to determine a strategy for retrieval of (navigable) parent for class, "
+	                            + "field '%s' annotated with '@%s' does not provide a getter.",
+	                            objectSpec.getIdentifier().getClassName(),
+	                            fieldEvaluator.getField().getName(),
+	                            Parent.class.getName());
+                	}
+                	
                 }
                 
-                return true; // no conflict
+                
+                return true; //continue validation processing
                 
             }
 
