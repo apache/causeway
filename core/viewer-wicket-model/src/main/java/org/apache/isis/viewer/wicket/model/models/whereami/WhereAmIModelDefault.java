@@ -72,7 +72,7 @@ class WhereAmIModelDefault implements WhereAmIModel {
 	@Override
 	public Stream<EntityModel> streamParentChainReversed() {
 		if(!isWhereAmIEnabled)
-			return Stream.empty(); // unexpected call, we could log a warning
+			return Stream.empty(); //[ahuber] unexpected call, we could log a warning
 		
 		return reversedChainOfParents.stream()
 		.map(this::toEntityModel);
@@ -89,10 +89,19 @@ class WhereAmIModelDefault implements WhereAmIModel {
 	private void overrideFromConfigIfNew(IsisConfiguration configuration) {
 		
 		//[ahuber] without evidence that this significantly improves performance, 
-		// we use the smart update idiom here ...
-		final int newConfigHash = System.identityHashCode(configuration);
+		// (skipping 2 hash-table lookups) we use the smart update idiom here ...
+		//
+		// Note: Updates are expected to occur only once per application life-cycle,
+		// however this class might be loaded by a class-loader, that endures multiple
+		// application life-cycles. Chances of hash-collisions are simply neglected.
+		
+		// that's the hash of the object (we don't care about the actual config values)
+		// assuming that, we get a new (immutable) config instance each app's life-cycle:
+		final int newConfigHash = System.identityHashCode(configuration); 
 		if(newConfigHash == configHash)
 			return;
+		
+		configHash = newConfigHash;
 		
 		isWhereAmIEnabled = configuration.getBoolean(
 				CONFIG_KEY_IS_WHERE_AM_I_FEATURE_ENABLED,
