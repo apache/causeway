@@ -45,12 +45,11 @@ class MixinInterceptor {
 	static String intendedNameOf(Method method) {
 
 		final Class<?> declaringClass = method.getDeclaringClass();
-		final List<Mixin> mixins = Annotations.getAnnotations(declaringClass, Mixin.class);
-		final Optional<Mixin> mixinIfAny = mixins.stream().findFirst();
+		final Mixin mixin = Annotations.getAnnotation(declaringClass, Mixin.class);
 
-		if(mixinIfAny.isPresent()) {
+		if(mixin != null) {
 			final String methodName = method.getName();
-			final String mixinAnnotMethodName = mixinIfAny.get().method();
+			final String mixinAnnotMethodName = mixin.method();
 			if(mixinAnnotMethodName.equals(methodName)) {
     			final String mixinMethodName = ObjectMemberAbstract.deriveMemberNameFrom(method.getDeclaringClass().getName());
                 if(mixinMethodName!=null) {
