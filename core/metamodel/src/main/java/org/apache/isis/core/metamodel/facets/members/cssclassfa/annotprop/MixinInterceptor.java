@@ -20,10 +20,12 @@
 package org.apache.isis.core.metamodel.facets.members.cssclassfa.annotprop;
 
 import java.lang.reflect.Method;
+import java.util.List;
+import java.util.Optional;
 
 import org.apache.isis.applib.annotation.Mixin;
-import org.apache.isis.core.commons.lang.NullSafe;
 import org.apache.isis.core.metamodel.facets.Annotations;
+import org.apache.isis.core.metamodel.specloader.specimpl.ObjectMemberAbstract;
 
 /**
  * To solve <a href="https://issues.apache.org/jira/browse/ISIS-1743">ISIS-1743</a>.<br/>
@@ -34,42 +36,30 @@ import org.apache.isis.core.metamodel.facets.Annotations;
 class MixinInterceptor {
 
 	/**
-	 * If method originates from a mixin and is named '$$' we infer the intended name 
+	 * If method originates from a mixin then we infer the intended name
 	 * from the mixin's class name.
 	 * 
-	 * @param method
+	 * @param method within the mixin type itself.
 	 * @return the intended name of the method
 	 */
-	public static String intendedNameOf(Method method) {
-		
-		if("$$".equals(method.getName()) && isMixin(method.getDeclaringClass()) ) {
-			final String mixinMethodName = inferMixinMethodName(method.getDeclaringClass());
-			if(mixinMethodName!=null)
-				return mixinMethodName; 
+	static String intendedNameOf(Method method) {
+
+		final Class<?> declaringClass = method.getDeclaringClass();
+		final List<Mixin> mixins = Annotations.getAnnotations(declaringClass, Mixin.class);
+		final Optional<Mixin> mixinIfAny = mixins.stream().findFirst();
+
+		if(mixinIfAny.isPresent()) {
+			final String methodName = method.getName();
+			final String mixinAnnotMethodName = mixinIfAny.get().method();
+			if(mixinAnnotMethodName.equals(methodName)) {
+    			final String mixinMethodName = ObjectMemberAbstract.deriveMemberNameFrom(method.getDeclaringClass().getName());
+                if(mixinMethodName!=null) {
+                    return mixinMethodName;
+                }
+			}
 		}
 		// default behavior
 		return method.getName();
-	}
-	
-	// -- HELPER
-	
-	private static boolean isMixin(Class<?> cls) {
-		return !NullSafe.isEmpty(Annotations.getAnnotations(cls, Mixin.class));
-	}
-
-	
-	/**
-	 * Parses class name of format 'Holder_mixinMethodName' and returns 'mixinMethodName'.
-	 * @param mixin
-	 * @return null if parsing fails
-	 */
-	private static String inferMixinMethodName(Class<?> mixin) {
-		final String className = mixin.getSimpleName();
-		final int p = className.indexOf('_');
-		if(p>0 && className.length()>(p+1)) { // min length := p+2 
-			return className.substring(p+1);
-		}
-		return null;
 	}
 
 }
