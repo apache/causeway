@@ -111,4 +111,5 @@ public class HelloWorldObject implements Comparable<HelloWorldObject> {
     @javax.inject.Inject
     MessageService messageService;
 
+
 }
