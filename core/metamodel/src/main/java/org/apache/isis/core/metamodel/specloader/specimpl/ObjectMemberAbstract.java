@@ -22,9 +22,10 @@ package org.apache.isis.core.metamodel.specloader.specimpl;
 import java.util.List;
 import java.util.Objects;
 
+import com.google.common.base.Predicate;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
-import com.google.common.base.Predicate;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
@@ -346,19 +347,19 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
     }
 
     static String suffix(final ObjectAction mixinAction) {
-        return suffix(mixinAction.getOnType().getSingularName());
+        return deriveMemberNameFrom(mixinAction.getOnType().getSingularName());
     }
 
-    static String suffix(final String singularName) {
-        final String deriveFromUnderscore = derive(singularName, "_");
-        if(!Objects.equals(singularName, deriveFromUnderscore)) {
+    public static String deriveMemberNameFrom(final String mixinClassName) {
+        final String deriveFromUnderscore = derive(mixinClassName, "_");
+        if(!Objects.equals(mixinClassName, deriveFromUnderscore)) {
             return deriveFromUnderscore;
         }
-        final String deriveFromDollar = derive(singularName, "$");
-        if(!Objects.equals(singularName, deriveFromDollar)) {
+        final String deriveFromDollar = derive(mixinClassName, "$");
+        if(!Objects.equals(mixinClassName, deriveFromDollar)) {
             return deriveFromDollar;
         }
-        return singularName;
+        return mixinClassName;
     }
 
     private static String derive(final String singularName, final String separator) {
