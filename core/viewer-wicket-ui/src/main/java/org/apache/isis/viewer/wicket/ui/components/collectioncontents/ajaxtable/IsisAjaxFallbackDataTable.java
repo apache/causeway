@@ -39,6 +39,7 @@ import org.apache.wicket.util.lang.Generics;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
+import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ObjectAdapterToggleboxColumn;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
@@ -86,6 +87,13 @@ public class IsisAjaxFallbackDataTable<T, S> extends DataTable<T, S> {
         addBottomToolbar(new NoRecordsToolbar(this));
     }
 
+    private final static ThreadLocal<EntityCollectionModel> entityCollectionModel = new ThreadLocal<>();
+
+    public static Boolean isParented() {
+        EntityCollectionModel entityCollectionModel = IsisAjaxFallbackDataTable.entityCollectionModel.get();
+        return entityCollectionModel != null ? entityCollectionModel.isParented() : null;
+    }
+
     @Override
     protected void onConfigure() {
         super.onConfigure();
@@ -93,7 +101,12 @@ public class IsisAjaxFallbackDataTable<T, S> extends DataTable<T, S> {
 
     @Override
     protected void onBeforeRender() {
-        super.onBeforeRender();
+        try {
+            entityCollectionModel.set(dataProvider.getEntityCollectionModel());
+            super.onBeforeRender();
+        } finally {
+            entityCollectionModel.set(null);
+        }
     }
 
     @Override
