@@ -109,7 +109,7 @@ public class CssClassFaFacetOnMemberFactory extends FacetFactoryAbstract impleme
         }
     }
 
-	private String faIconIfAnyFor(String name) {
+    private String faIconIfAnyFor(String name) {
         final Map<Pattern, String> faIconByPattern = getFaIconByPattern();
 
         for (Map.Entry<Pattern, String> entry : faIconByPattern.entrySet()) {
