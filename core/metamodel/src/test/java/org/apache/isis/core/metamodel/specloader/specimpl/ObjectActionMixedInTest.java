@@ -32,31 +32,31 @@ public class ObjectActionMixedInTest {
 
         @Test
         public void exactly_underscore() throws Exception {
-            final String s = StringExtensions.asCapitalizedName(ObjectMemberAbstract.suffix("_"));
+            final String s = StringExtensions.asCapitalizedName(ObjectMemberAbstract.deriveMemberNameFrom("_"));
             assertThat(s, is("_"));
         }
 
         @Test
         public void ends_with_underscore() throws Exception {
-            final String s = StringExtensions.asCapitalizedName(ObjectMemberAbstract.suffix("abc_"));
+            final String s = StringExtensions.asCapitalizedName(ObjectMemberAbstract.deriveMemberNameFrom("abc_"));
             assertThat(s, is("Abc_"));
         }
 
         @Test
         public void has_no_underscore() throws Exception {
-            final String s = StringExtensions.asCapitalizedName(ObjectMemberAbstract.suffix("defghij"));
+            final String s = StringExtensions.asCapitalizedName(ObjectMemberAbstract.deriveMemberNameFrom("defghij"));
             assertThat(s, is("Defghij"));
         }
 
         @Test
         public void contains_one_underscore() throws Exception {
-            final String s = StringExtensions.asCapitalizedName(ObjectMemberAbstract.suffix("abc_def"));
+            final String s = StringExtensions.asCapitalizedName(ObjectMemberAbstract.deriveMemberNameFrom("abc_def"));
             assertThat(s, is("Def"));
         }
 
         @Test
         public void contains_more_than_one_underscore() throws Exception {
-            final String s = StringExtensions.asCapitalizedName(ObjectMemberAbstract.suffix("abc_def_ghi"));
+            final String s = StringExtensions.asCapitalizedName(ObjectMemberAbstract.deriveMemberNameFrom("abc_def_ghi"));
             assertThat(s, is("Ghi"));
         }
     }

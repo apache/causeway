@@ -94,7 +94,7 @@ public class CssClassFaFacetOnMemberFactory extends FacetFactoryAbstract impleme
     private CssClassFaFacet createFromConfiguredRegexIfPossible(final ProcessMethodContext processMethodContext) {
         final Method method = processMethodContext.getMethod();
 
-        String value = faIconIfAnyFor(method);
+        String value = faIconIfAnyFor(MixinInterceptor.intendedNameOf(method));
         CssClassFaPosition position = CssClassFaPosition.LEFT;
         if (value != null) {
             int idxOfSeparator = value.indexOf(':');
@@ -107,11 +107,6 @@ public class CssClassFaFacetOnMemberFactory extends FacetFactoryAbstract impleme
         } else {
             return null;
         }
-    }
-
-    private String faIconIfAnyFor(Method method) {
-        final String name = method.getName();
-        return faIconIfAnyFor(name);
     }
 
     private String faIconIfAnyFor(String name) {
