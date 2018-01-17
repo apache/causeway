@@ -5,11 +5,10 @@
 :_imagesdir: images/
 
 
-The `ErrorReportingService` service is an optional SPI that provides the ability to record any errors/exceptions that
- might occur in the application into an external incident recording system (such as JIRA).
-The service also allows
- a user-friendly (jargon-free) error message to be returned and rendered to the end-user, along with an optional
- incident reference (eg a JIRA issue `XXX-1234`).
+The `ErrorReportingService` service is an optional SPI that provides the ability to record any errors/exceptions that might occur in the application into an external incident recording system (such as JIRA or Slack).
+The service also allows a user-friendly (jargon-free) error message to be returned and rendered to the end-user, along with an optional incident reference (eg a JIRA issue `XXX-1234`).
+The service can also return a URL for an external image.
+For example, this could be to a comic strip or (as a bit of fun) a picture of a random kitten.
 
 
 
@@ -53,7 +52,9 @@ public class Ticket implements Serializable {
     public Ticket(
         final String reference,             // <1>
         final String userMessage,           // <2>
-        final String details) { ... }       // <3>
+        final String details,               // <3>
+        final StackTracePolicy policy,      // <4>
+        final String kittenUrl) { ... }     // <5>
 }
 ----
 <1> is a unique identifier that the end-user can use to track any follow-up from this error.
@@ -62,6 +63,9 @@ probably be the JIRA issue number <tt>XXX-1234</tt>.
 <2> a short, jargon-free message to display to the end-user.
 <3> is optional additional details to show.
 For example, these might include text on how to recover from the error, or workarounds, or just further details on contacting the help desk if the issue is severe and requires immediate attention.
+<4> is optional, specifying whether to show a button to view details of the stack trace.
+By default a stack trace button is not shown if a ticket is returned (but _is_ shown if there is no `ErrorReportingService` configured, or if it returns no ticket).
+<5> is optioal, specifying an external URL of an image to display for the end user.
 
 
 
@@ -81,13 +85,12 @@ public class KitchensinkErrorReportingService implements ErrorReportingService {
     public Ticket reportError(final ErrorDetails errorDetails) {
         return new Ticket(
                 nextTicketReference(),
-                "The Kitchen sink app is sorry to report that: " + errorDetails.getMainMessage(),
-                  "These are additional details for the end-user to read.\n"
-                + "This content should be able to span many lines.\n"
-                + "More detail.\n"
-                + "Some suggested work-arounds.\n"
-                + "Details of how to contact help desk.\n"
-                + "And so on");
+                errorDetails.getMainMessage(),
+                  "By way of an apology, \n"
+                          + "here's a picture of a \n"
+                          + "kitten for you to look at.",
+                "http://www.randomkittengenerator.com/cats/rotator.php"
+                );
     }
     String nextTicketReference() {
         return "" + ticketNumber++;

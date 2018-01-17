@@ -24,6 +24,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import com.google.common.collect.Lists;
@@ -51,7 +52,7 @@ import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 /**
  * just adds a validator
  */
-public class JaxbXmlJavaTypeAdapterFacetFactory extends FacetFactoryAbstract
+public class XmlJavaTypeAdapterFacetFactory extends FacetFactoryAbstract
             implements MetaModelValidatorRefiner {
 
     public static final String ISIS_REFLECTOR_VALIDATOR_JAXB_VIEW_MODEL_NOT_ABSTRACT =
@@ -74,7 +75,7 @@ public class JaxbXmlJavaTypeAdapterFacetFactory extends FacetFactoryAbstract
             "isis.reflector.validator.jaxbViewModelDateTimeTypeAdapter";
     public static final boolean ISIS_REFLECTOR_VALIDATOR_JAXB_VIEW_MODEL_DATE_TIME_TYPE_ADAPTER_DEFAULT = true;
 
-    public JaxbXmlJavaTypeAdapterFacetFactory() {
+    public XmlJavaTypeAdapterFacetFactory() {
         super(FeatureType.OBJECTS_AND_PROPERTIES);
     }
 
@@ -97,6 +98,12 @@ public class JaxbXmlJavaTypeAdapterFacetFactory extends FacetFactoryAbstract
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
 
+        processXmlJavaTypeAdapter(processMethodContext);
+        processXmlTransient(processMethodContext);
+
+    }
+
+    private void processXmlJavaTypeAdapter(final ProcessMethodContext processMethodContext) {
         final Method method = processMethodContext.getMethod();
 
         final XmlJavaTypeAdapter annotation = Annotations.getAnnotation(method, XmlJavaTypeAdapter.class);
@@ -109,7 +116,20 @@ public class JaxbXmlJavaTypeAdapterFacetFactory extends FacetFactoryAbstract
                 annotation.value(), getSpecificationLoader());
 
         FacetUtil.addFacet(facet);
+    }
 
+    private void processXmlTransient(final ProcessMethodContext processMethodContext) {
+        final Method method = processMethodContext.getMethod();
+
+        final XmlTransient annotation = Annotations.getAnnotation(method, XmlTransient.class);
+        if(annotation == null) {
+            return;
+        }
+
+        final FacetHolder holder = processMethodContext.getFacetHolder();
+        final XmlTransientFacet facet = new XmlTransientFacetDefault(holder);
+
+        FacetUtil.addFacet(facet);
     }
 
     @Override
@@ -261,8 +281,14 @@ public class JaxbXmlJavaTypeAdapterFacetFactory extends FacetFactoryAbstract
                 return;
             }
 
+            final XmlTransientFacet xmlTransientFacet =
+                    property.getFacet(XmlTransientFacet.class);
+            if(xmlTransientFacet != null) {
+                return;
+            }
+
             // else
-            validationFailures.add("JAXB view model '%s' property '%s' is of type '%s' but is not annotated with @XmlJavaTypeAdapter.  The field/method must be annotated with @XmlJavaTypeAdapter(org.apache.isis.schema.utils.jaxbadapters.XxxAdapter.ForJaxb.class) or equivalent.",
+            validationFailures.add("JAXB view model '%s' property '%s' is of type '%s' but is not annotated with @XmlJavaTypeAdapter.  The field/method must be annotated with @XmlJavaTypeAdapter(org.apache.isis.schema.utils.jaxbadapters.XxxAdapter.ForJaxb.class) or equivalent, or be ignored by being annotated with @XmlTransient.",
                     objectSpec.getFullIdentifier(),
                     property.getId(),
                     jodaType.getName());

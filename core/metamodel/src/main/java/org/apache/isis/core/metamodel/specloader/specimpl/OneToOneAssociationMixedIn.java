@@ -186,6 +186,11 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
     }
 
     @Override
+    public ObjectSpecification getOnType() {
+        return mixedInType;
+    }
+
+    @Override
     public ObjectSpecification getMixinType() {
         return getSpecificationLoader().loadSpecification(mixinType);
     }
