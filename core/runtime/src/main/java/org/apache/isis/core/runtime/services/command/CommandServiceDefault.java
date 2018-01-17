@@ -58,7 +58,4 @@ public class CommandServiceDefault implements CommandService {
         return false;
     }
 
-    @javax.inject.Inject
-    ClockService clockService;
-
 }
