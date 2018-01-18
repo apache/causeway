@@ -123,6 +123,17 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
                 try {
                     backgroundCommand.setExecutor(Executor.BACKGROUND);
 
+                    // responsibility for setting the Command#startedAt is in the ActionInvocationFacet or
+                    // PropertySetterFacet, but tthis is run if the domain object was found.  If the domain object is
+                    // thrown then we would have a command with only completedAt, which is inconsistent.
+                    // Therefore instead we copy down from the backgroundInteraction (similar to how we populate the
+                    // completedAt at the end)
+                    final Interaction.Execution currentExecution = backgroundInteraction.getCurrentExecution();
+                    backgroundCommand.setStartedAt(
+                            currentExecution != null
+                                    ? currentExecution.getStartedAt()
+                                    : clockService.nowAsJavaSqlTimestamp());
+
                     final boolean legacy = memento.startsWith("<memento");
                     if(legacy) {
 
@@ -223,6 +234,7 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
                     }
 
                 } catch (RuntimeException e) {
+
                     // hmmm, this doesn't really make sense if >1 action
                     //
                     // in any case, the capturing of the result of the action invocation should be the
