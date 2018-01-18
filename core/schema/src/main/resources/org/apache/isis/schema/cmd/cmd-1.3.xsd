@@ -25,6 +25,17 @@
 
     <xs:import namespace="http://isis.apache.org/schema/common" schemaLocation="../common/common-1.1.xsd"/>
 
+    <xs:element name="commandsDto">
+        <xs:annotation>
+            <xs:documentation>Collection of commandDto's</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence minOccurs="1" maxOccurs="unbounded">
+                <xs:element ref="commandDto"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
     <xs:element name="commandDto">
         <xs:annotation>
             <xs:documentation>Represents v1.3 of this schema, adding in 'logicalMemberIdentifier'
