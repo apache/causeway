@@ -38,7 +38,7 @@
 
     <xs:element name="commandDto">
         <xs:annotation>
-            <xs:documentation>Represents v1.3 of this schema, adding in 'logicalMemberIdentifier'
+            <xs:documentation>Represents v1.4 of this schema, adding in 'commandsDto' and extending 'commandDto' to allow additional implementation-specific fields to be attached in 'userData' (a map).
             </xs:documentation>
         </xs:annotation>
         <xs:complexType>
@@ -78,6 +78,7 @@
                         <xs:documentation>The action or property (identifier and parameter arguments) to be invoked on the target object(s).</xs:documentation>
                     </xs:annotation>
                 </xs:element>
+                <xs:element name="userData" type="mapDto" minOccurs="0"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -164,5 +165,17 @@
         </xs:complexContent>
     </xs:complexType>
 
+    <xs:complexType name="mapDto">
+        <xs:sequence>
+            <xs:element name="entry" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="key" type="xs:string"/>
+                        <xs:element name="value" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
 
 </xs:schema>
