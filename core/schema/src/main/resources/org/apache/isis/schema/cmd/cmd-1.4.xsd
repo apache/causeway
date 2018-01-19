@@ -38,7 +38,7 @@
 
     <xs:element name="commandDto">
         <xs:annotation>
-            <xs:documentation>Represents v1.4 of this schema, adding in 'commandsDto' and extending 'commandDto' to allow additional implementation-specific fields to be attached in 'userData' (a map).
+            <xs:documentation>Represents v1.4 of this schema (as per majorVersion.minorVersion @default attribute, below).  Adds in 'commandsDto' and extending 'commandDto' to allow additional implementation-specific fields to be attached in 'userData' (a map).
             </xs:documentation>
         </xs:annotation>
         <xs:complexType>
@@ -49,7 +49,7 @@
                         </xs:documentation>
                     </xs:annotation>
                 </xs:element>
-                <xs:element name="minorVersion" type="xs:string" minOccurs="1" maxOccurs="1" default="3">
+                <xs:element name="minorVersion" type="xs:string" minOccurs="1" maxOccurs="1" default="4">
                     <xs:annotation>
                         <xs:documentation>The minor version of the schema that an XML instance was created using.
                         </xs:documentation>
