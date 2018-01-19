@@ -78,7 +78,18 @@
                         <xs:documentation>The action or property (identifier and parameter arguments) to be invoked on the target object(s).</xs:documentation>
                     </xs:annotation>
                 </xs:element>
-                <xs:element name="userData" type="mapDto" minOccurs="0"/>
+                <xs:element name="timings" type="com:periodDto" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>The time taken to perform the command.  Used for replaying the command on a replica slave.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="userData" type="mapDto" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>Custom user data.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -163,6 +174,19 @@
                 <xs:attribute name="name" use="required" type="xs:string"/>
             </xs:extension>
         </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="timingsDto">
+        <xs:sequence>
+            <xs:element name="entry" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="key" type="xs:string"/>
+                        <xs:element name="value" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
     </xs:complexType>
 
     <xs:complexType name="mapDto">
