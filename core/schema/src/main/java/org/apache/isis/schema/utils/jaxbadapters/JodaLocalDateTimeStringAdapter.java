@@ -20,8 +20,6 @@ package org.apache.isis.schema.utils.jaxbadapters;
 
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
-import com.google.common.base.Strings;
-
 import org.joda.time.LocalDateTime;
 
 /**
