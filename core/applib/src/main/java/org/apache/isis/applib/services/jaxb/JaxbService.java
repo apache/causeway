@@ -22,22 +22,21 @@ import java.io.StringWriter;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
-import com.google.common.base.Function;
-import com.google.common.base.Joiner;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Maps;
-
 import org.apache.isis.applib.ApplicationException;
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.dto.Dto_downloadXsd;
+import org.apache.isis.applib.util.Streams;
+
+import com.google.common.collect.Maps;
 
 public interface JaxbService {
 
@@ -179,12 +178,12 @@ public interface JaxbService {
                     try {
                         final Method getErrorsMethod = exClass.getMethod("getErrors");
                         errors = (List<? extends Exception>) getErrorsMethod.invoke(ex);
-                        annotationExceptionMessages = ": " + Joiner.on("; ").join(
-                                Iterables.transform(errors, new Function<Exception, String>() {
-                                    @Override public String apply(final Exception e) {
-                                        return e.getMessage();
-                                    }
-                                }));
+                        
+                        annotationExceptionMessages = ": " + 
+                        Streams.stream(errors)
+                        .map(Exception::getMessage)
+                        .collect(Collectors.joining("; "));
+                        
                     } catch (Exception e) {
                         // fall through if we hit any snags, and instead throw the more generic error message.
                     }
