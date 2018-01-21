@@ -78,18 +78,31 @@ class XmlCalendarFactory {
 	
 	// -- HELPER
 	
+	/*
+	 * Gets an instance of DatatypeFactory and passes it to the factory argument for single use.
+	 * 
+	 * [ahuber] we don't want to store the DatatypeFactory.newInstance() into a static field for 
+	 * reuse, because then we would need to cleanup after IsisContext.destroy() as well.
+	 */
 	private static XMLGregorianCalendar withTypeFactoryDo(
 			Function<DatatypeFactory, XMLGregorianCalendar> factory) {
 		
+		final DatatypeFactory dataTypeFactory;
+		
 		try {
 			
-			final DatatypeFactory dataTypeFactory = DatatypeFactory.newInstance();
+			dataTypeFactory = DatatypeFactory.newInstance();
 			
-			return factory.apply(dataTypeFactory);
 		} catch (DatatypeConfigurationException e) {
-			System.err.println("Exception in conversion of LocalTime to XMLGregorianCalendar" + e);
-		}	 
-		return null;
+			
+			System.err.println("Within "+XmlCalendarFactory.class.getName()+": "+
+					"Exception in call to DatatypeFactory.newInstance()" + e);
+			return null;
+			
+		}
+		
+		return factory.apply(dataTypeFactory);
+		
 	}
 	
 }
