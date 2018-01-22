@@ -143,11 +143,15 @@ public interface RepositoryService {
      *
      * @param range 2 longs, specifying 0-based start and count.
      */
+    @Programmatic
+    <T> List<T> allMatches(final Class<T> ofType, final Predicate<? super T> predicate, long... range);
+    
+    /**
+     * @deprecated will be removed, use drop in replacement {@link #allMatches(Class, Predicate, long...)}
+     * utilizing java.util.function.Predicate 
+     */
     @Programmatic @Deprecated //TODO ISIS-1827 remove guava from public API
     <T> List<T> allMatches(final Class<T> ofType, final com.google.common.base.Predicate<? super T> predicate, long... range);
-
-    @Programmatic
-    <T> List<T> allMatches8(final Class<T> ofType, final Predicate<? super T> predicate, long... range);
     
     /**
      * Returns all the instances that match the given {@link Query}.
@@ -178,8 +182,8 @@ public interface RepositoryService {
      *
      * @deprecated - use {@link #uniqueMatch(Class, Predicate)} or {@link #allMatches(Class, Predicate, long...)}
      */
-    @Deprecated
-    @Programmatic
+    @Deprecated //TODO ISIS-1827 remove guava from public API 
+    @Programmatic 
     <T> T firstMatch(final Class<T> ofType, final com.google.common.base.Predicate<T> predicate);
 
     /**
@@ -212,11 +216,16 @@ public interface RepositoryService {
      * instances.  Use {@link #uniqueMatch(Query)} for production code.
      * </p>
      */
+    @Programmatic
+    <T> T uniqueMatch(final Class<T> ofType, final Predicate<T> predicate);
+    
+    /**
+     * @deprecated will be removed, use drop in replacement {@link #uniqueMatch(Class, Predicate)}
+     * utilizing java.util.function.Predicate 
+     */
     @Programmatic @Deprecated //TODO ISIS-1827 remove guava from public API 
     <T> T uniqueMatch(final Class<T> ofType, final com.google.common.base.Predicate<T> predicate);
-    
-    @Programmatic
-    <T> T uniqueMatch8(final Class<T> ofType, final Predicate<T> predicate);
+
 
     /**
      * Find the only instance that matches the provided query.
