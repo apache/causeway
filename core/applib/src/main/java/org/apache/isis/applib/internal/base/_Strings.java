@@ -108,7 +108,8 @@ public final class _Strings {
 	// -- SPLITTING
 	
 	/**
-	 * Splits the {@code input} into chunks separated by {@code separator}
+	 * Splits the {@code input} into chunks separated by {@code separator}, 
+	 * then puts all non-empty chunks on the stream.
 	 * @param input
 	 * @param separator
 	 * @return empty stream if {@code input} is null
@@ -122,7 +123,8 @@ public final class _Strings {
 		if(!input.contains(separator))
 			return Stream.of(input);
 		
-		return Stream.of(input.split(Pattern.quote(separator)));
+		return Stream.of(input.split(Pattern.quote(separator)))
+				.filter(_Strings::isNotEmpty);
 	}
     
     // -- REPLACEMENT OPERATORS
@@ -152,6 +154,7 @@ public final class _Strings {
     	private final UnaryOperator<String> operator;
     	    	
 		private StringOperator(UnaryOperator<String> operator) {
+			Objects.requireNonNull(operator);
 			this.operator = operator;
 		}
 
@@ -160,8 +163,6 @@ public final class _Strings {
 		}
 		
 		public StringOperator andThen(UnaryOperator<String> andThen) {
-			if(operator==null)
-				return new StringOperator(andThen::apply);
 			return new StringOperator(s->andThen.apply(operator.apply(s)));
 		}
     	
@@ -172,7 +173,7 @@ public final class _Strings {
      * @return
      */
     public static StringOperator operator() {
-		return new StringOperator(null);
+		return new StringOperator(UnaryOperator.identity());
     }
     
     // -- SPECIAL COMPOSITES 

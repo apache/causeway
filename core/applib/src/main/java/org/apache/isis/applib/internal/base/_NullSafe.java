@@ -100,7 +100,7 @@ public final class _NullSafe {
 	 * @return whether {@code x} is null.
 	 */
 	public static boolean isAbsent(Object x) {
-		return x!=null;
+		return x==null;
 	}
 	
 	// -- EQUALS/COMPARE
