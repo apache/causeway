@@ -17,28 +17,8 @@
  *  under the License.
  */
 
-package org.apache.isis.applib.util;
+package org.apache.isis.applib.internal.base;
 
-import java.util.Collection;
-import java.util.stream.Stream;
-
-import javax.annotation.Nullable;
-
-/**
- * 
- * Stream building utilities.
- *
- */
-public class Streams {
-
-	/**
-	 * If {@code collection} is {@code null} returns the empty stream, 
-	 * otherwise returns a stream of the collection's elements.
-	 * @param collection
-	 * @return
-	 */
-	public static <T> Stream<T> stream(@Nullable Collection<T> collection) {
-		return collection != null ? collection.stream() : Stream.empty();
-	}
+public class $Strings {
 
 }

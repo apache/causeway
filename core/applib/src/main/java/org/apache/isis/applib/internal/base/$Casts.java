@@ -17,9 +17,9 @@
  *  under the License.
  */
 
-package org.apache.isis.applib.util;
+package org.apache.isis.applib.internal.base;
 
-public class Casts {
+public class $Casts {
 
 	@SuppressWarnings("unchecked")
 	public static <T> T uncheckedCast(Object obj) {

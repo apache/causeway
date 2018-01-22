@@ -30,10 +30,9 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 import org.joda.time.LocalTime;
-
+import org.apache.isis.applib.internal.base.$Casts;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
-import org.apache.isis.applib.util.Casts;
 import org.apache.isis.schema.cmd.v1.ParamDto;
 import org.apache.isis.schema.common.v1.CollectionDto;
 import org.apache.isis.schema.common.v1.EnumDto;
@@ -278,7 +277,7 @@ public final class CommonDtoUtils {
     public static <T> T getValue(
             final ValueDto valueDto,
             final ValueType valueType) {
-    	return Casts.uncheckedCast(getValueAsObject(valueDto, valueType));
+    	return $Casts.uncheckedCast(getValueAsObject(valueDto, valueType));
     }
     
     private static Object getValueAsObject(
@@ -324,7 +323,7 @@ public final class CommonDtoUtils {
             final String enumType = enumDto.getEnumType();
             @SuppressWarnings("rawtypes") 
             final Class<? extends Enum> enumClass = loadClassElseThrow(enumType);
-            return Enum.valueOf(Casts.uncheckedCast(enumClass), enumDto.getEnumName());
+            return Enum.valueOf($Casts.uncheckedCast(enumClass), enumDto.getEnumName());
         case REFERENCE:
             return valueDto.getReference();
         case VOID:
@@ -339,7 +338,7 @@ public final class CommonDtoUtils {
 
     private static <T> Class<T> loadClassElseThrow(final String className) {
         try {
-            return Casts.uncheckedCast(loadClass(className));
+            return $Casts.uncheckedCast(loadClass(className));
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }

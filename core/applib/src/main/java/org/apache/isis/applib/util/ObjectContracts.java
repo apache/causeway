@@ -20,6 +20,8 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
+import org.apache.isis.applib.internal.base.$Casts;
+
 import com.google.common.base.Function;
 import com.google.common.base.Objects;
 import com.google.common.base.Objects.ToStringHelper;
@@ -68,8 +70,8 @@ public class ObjectContracts {
         final Iterable<Clause> clauses = clausesFor(propertyNamesIter);
         ComparisonChain chain = ComparisonChain.start();
         for (final Clause clause : clauses) {
-            final Comparable<T> propertyValueOfP = Casts.uncheckedCast(clause.getValueOf(p));
-            final Comparable<T> propertyValueOfQ = Casts.uncheckedCast(clause.getValueOf(q));
+            final Comparable<T> propertyValueOfP = $Casts.uncheckedCast(clause.getValueOf(p));
+            final Comparable<T> propertyValueOfQ = $Casts.uncheckedCast(clause.getValueOf(q));
             chain = chain.compare(propertyValueOfP, propertyValueOfQ, clause.getDirection().getOrdering());
         }
         return chain.result();

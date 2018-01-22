@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 import org.apache.isis.applib.fixturescripts.FixtureScript;
-import org.apache.isis.applib.util.Streams;
+import org.apache.isis.applib.internal.base.$Streams;
 
 import com.google.common.collect.Sets;
 
@@ -52,7 +52,7 @@ public abstract class ModuleAbstract
     @XmlElement(name = "module", required = true)
     private Set<ModuleAbstract> getModuleDependencies() {
 
-    	return Streams.stream(getDependencies())
+    	return $Streams.stream(getDependencies())
     	.filter(module->module instanceof ModuleAbstract)
     	.map(module->(ModuleAbstract) module)
     	.collect(Collectors.toSet());

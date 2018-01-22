@@ -42,6 +42,7 @@ import org.apache.isis.applib.annotation.ViewModelLayout;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.fixtures.FixtureType;
 import org.apache.isis.applib.fixtures.InstallableFixture;
+import org.apache.isis.applib.internal.base.$Casts;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.repository.RepositoryService;
@@ -49,7 +50,6 @@ import org.apache.isis.applib.services.sessmgmt.SessionManagementService;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.xactn.TransactionService;
-import org.apache.isis.applib.util.Casts;
 
 @ViewModelLayout(named="Script")
 public abstract class FixtureScript 
@@ -628,7 +628,7 @@ public abstract class FixtureScript
                     return childFixtureScript;
                 } else {
                     trace(childFixtureScript, As.SKIP);
-                    return Casts.uncheckedCast(previouslyExecutedScript);
+                    return $Casts.uncheckedCast(previouslyExecutedScript);
                 }
 
             case EXECUTE_ONCE_BY_VALUE:
@@ -676,7 +676,7 @@ public abstract class FixtureScript
                 return childFixtureScript;
             } else {
                 trace(childFixtureScript, As.SKIP);
-                return Casts.uncheckedCast(previouslyExecutedScript);
+                return $Casts.uncheckedCast(previouslyExecutedScript);
             }
         }
 
@@ -772,11 +772,11 @@ public abstract class FixtureScript
         }
         @Programmatic
         public <T> T getUserData(final Class<T> cls) {
-            return Casts.uncheckedCast(userData.get(cls));
+            return $Casts.uncheckedCast(userData.get(cls));
         }
         @Programmatic
         public <T> T clearUserData(final Class<T> cls) {
-            return Casts.uncheckedCast(userData.remove(cls));
+            return $Casts.uncheckedCast(userData.remove(cls));
         }
 
     }
@@ -791,7 +791,7 @@ public abstract class FixtureScript
     }
 
     private <T> T valueFor(final String parameterName, final ExecutionContext ec, final T defaultValue) {
-        final Class<T> cls = Casts.uncheckedCast(defaultValue.getClass());
+        final Class<T> cls = $Casts.uncheckedCast(defaultValue.getClass());
 
         final T value = readParam(parameterName, ec, cls);
         if(value != null) { return (T) value; }
@@ -819,7 +819,7 @@ public abstract class FixtureScript
         Method method;
         try {
             method = this.getClass().getMethod("get" + uppercase(parameterName));
-            value = Casts.uncheckedCast(method.invoke(this));
+            value = $Casts.uncheckedCast(method.invoke(this));
         } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException ignored) {
 
         }
@@ -828,7 +828,7 @@ public abstract class FixtureScript
         if (cls == Boolean.class || cls == boolean.class) {
             try {
                 method = this.getClass().getMethod("is" + uppercase(parameterName));
-                value = Casts.uncheckedCast(method.invoke(this));
+                value = $Casts.uncheckedCast(method.invoke(this));
             } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException ignored) {
 
             }
