@@ -50,19 +50,19 @@ public abstract class BuilderScriptAbstract<T,F extends BuilderScriptAbstract<T,
             final FixtureScript parentFixtureScript,
             ExecutionContext executionContext) {
 
-        final F onFixture = (F) BuilderScriptAbstract.this;
+        final F onFixture = self();
         parentFixtureScript.serviceRegistry.injectServicesInto(onFixture);
 
         execPrereqs(executionContext);
 
         // returns the fixture script that is run
         // (either this one, or possibly one previously executed).
-        return (F)executionContext.executeChildT(parentFixtureScript, this);
+        return executionContext.executeChildT(parentFixtureScript, this).self();
     }
 
     @Override
     public void execPrereqs(final ExecutionContext executionContext) {
-        final F onFixture = (F) BuilderScriptAbstract.this;
+        final F onFixture = self();
         for (final WithPrereqs.Block<T,F> prereq : prereqs) {
             prereq.execute(onFixture, executionContext);
         }
@@ -95,9 +95,13 @@ public abstract class BuilderScriptAbstract<T,F extends BuilderScriptAbstract<T,
     @Override
     public F setPrereq(WithPrereqs.Block<T,F> prereq) {
         prereqs.add(prereq);
-        return (F)this;
+        return self();
     }
 
-
+    @SuppressWarnings("unchecked") //[ahuber] it's safe to assume that this object is of type F
+	protected F self() {
+    	return (F)this;
+    }
+    
 }
 

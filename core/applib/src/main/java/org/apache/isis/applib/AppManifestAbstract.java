@@ -208,7 +208,7 @@ public abstract class AppManifestAbstract implements AppManifest {
 
         public B withAuthMechanism(final String authMechanism) {
             this.authMechanism = authMechanism;
-            return (B)this;
+            return self();
         }
 
         public B withFixtureScripts(final Class<? extends FixtureScript>... fixtures) {
@@ -217,10 +217,10 @@ public abstract class AppManifestAbstract implements AppManifest {
 
         public B withFixtureScripts(final List<Class<? extends FixtureScript>> fixtures) {
             if(fixtures == null) {
-                return (B)this;
+                return self();
             }
             this.fixtures.addAll(fixtures);
-            return (B)this;
+            return self();
         }
 
         List<Class<?>> getAllAdditionalModules() {

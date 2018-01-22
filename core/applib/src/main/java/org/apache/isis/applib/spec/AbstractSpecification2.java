@@ -22,6 +22,7 @@ package org.apache.isis.applib.spec;
 import java.lang.reflect.Method;
 
 import org.apache.isis.applib.services.i18n.TranslatableString;
+import org.apache.isis.applib.util.Casts;
 
 /**
  * Adapter to make it easy to write {@link Specification}s.
@@ -80,7 +81,6 @@ public abstract class AbstractSpecification2<T> implements Specification2 {
     }
 
     @Override
-    @SuppressWarnings({ "unchecked" })
     public final String satisfies(final Object obj) {
         // unused because satisfiesTranslatable will be called instead.
         return null;
@@ -101,7 +101,7 @@ public abstract class AbstractSpecification2<T> implements Specification2 {
                     ? null
                     : TranslatableString.tr("Incorrect type");
         }
-        final T objAsT = (T) obj;
+        final T objAsT = Casts.uncheckedCast(obj);
         return satisfiesTranslatableSafely(objAsT);
 
     }

@@ -22,6 +22,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import org.apache.isis.applib.util.Casts;
+
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -133,7 +136,7 @@ public class FixtureResultList {
         if (!cls.isAssignableFrom(object.getClass())) {
             throw new IllegalStateException(String.format("Fixture result exists and contains object but is of type %s, not %s", object.getClass().getName(), cls.getName()));
         }
-        return (T) object;
+        return Casts.uncheckedCast(object);
     }
 
     //endregion
