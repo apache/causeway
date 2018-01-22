@@ -188,7 +188,7 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
 
                 // it's possible that there is no priorExecution, specifically if there was an exception
                 // invoking the action.  We therefore need to guard that case.
-                final Interaction.Execution priorExecution = backgroundInteraction.getPriorExecution();
+                final Interaction.Execution<?,?> priorExecution = backgroundInteraction.getPriorExecution();
                 final Timestamp completedAt =
                         priorExecution != null
                                 ? priorExecution.getCompletedAt()

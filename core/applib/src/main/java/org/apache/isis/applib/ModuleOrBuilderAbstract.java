@@ -34,7 +34,7 @@ import com.google.common.collect.Sets;
  *
  * @param <B>
  */
-abstract class ModuleOrBuilderAbstract<B extends ModuleOrBuilderAbstract> {
+abstract class ModuleOrBuilderAbstract<B extends ModuleOrBuilderAbstract<B>> {
 
     final Set<Class<?>> additionalModules = Sets.newLinkedHashSet();
     final Set<Class<?>> additionalServices  = Sets.newLinkedHashSet();
@@ -43,17 +43,17 @@ abstract class ModuleOrBuilderAbstract<B extends ModuleOrBuilderAbstract> {
     final List<PropertyResource> propertyResources = Lists.newArrayList();
 
     ModuleOrBuilderAbstract() {}
-
+    
     public B withAdditionalModules(final Class<?>... modules) {
         return withAdditionalModules(Arrays.asList(modules));
     }
 
     public B withAdditionalModules(final List<Class<?>> modules) {
         if(modules == null) {
-            return (B)this;
+            return self();
         }
         this.additionalModules.addAll(modules);
-        return (B)this;
+        return self();
     }
 
     public B withAdditionalServices(final Class<?>... additionalServices) {
@@ -62,17 +62,17 @@ abstract class ModuleOrBuilderAbstract<B extends ModuleOrBuilderAbstract> {
 
     public B withAdditionalServices(final List<Class<?>> additionalServices) {
         if(additionalServices == null) {
-            return (B)this;
+            return self();
         }
         this.additionalServices.addAll(additionalServices);
-        return (B)this;
+        return self();
     }
 
     public B withConfigurationProperties(final Map<String,String> configurationProperties) {
         for (Map.Entry<String, String> keyValue : configurationProperties.entrySet()) {
             withConfigurationProperty(keyValue.getKey(), keyValue.getValue());
         }
-        return (B)this;
+        return self();
     }
 
     public B withConfigurationPropertiesFile(final String propertiesFile) {
@@ -83,12 +83,12 @@ abstract class ModuleOrBuilderAbstract<B extends ModuleOrBuilderAbstract> {
         for (PropertyResource propertyResource : propertyResources) {
             withConfigurationPropertyResource(propertyResource);
         }
-        return (B)this;
+        return self();
     }
 
     public B withConfigurationPropertyResource(final PropertyResource propertyResource) {
         addPropertyResource(propertyResource);
-        return (B)this;
+        return self();
     }
 
     public B withConfigurationPropertiesFile(
@@ -99,7 +99,7 @@ abstract class ModuleOrBuilderAbstract<B extends ModuleOrBuilderAbstract> {
         for (final String otherFile : furtherPropertiesFiles) {
             addPropertyResource(propertiesFileContext, otherFile);
         }
-        return (B)this;
+        return self();
     }
 
     private void addPropertyResource(final Class<?> propertiesFileContext, final String propertiesFile) {
@@ -112,7 +112,7 @@ abstract class ModuleOrBuilderAbstract<B extends ModuleOrBuilderAbstract> {
 
     public B withConfigurationProperty(final String key, final String value) {
         individualConfigProps.put(key, value);
-        return (B)this;
+        return self();
     }
 
     @XmlTransient
@@ -123,6 +123,13 @@ abstract class ModuleOrBuilderAbstract<B extends ModuleOrBuilderAbstract> {
     @XmlTransient
     public List<PropertyResource> getPropertyResources() {
         return propertyResources;
+    }
+    
+    // -- HELPER
+    
+    @SuppressWarnings("unchecked") //[ahuber] it's safe to assume this object is an instance of B
+	private B self() {
+    	return (B) this;
     }
 
 }

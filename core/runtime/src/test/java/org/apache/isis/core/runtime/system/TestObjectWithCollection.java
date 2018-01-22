@@ -23,10 +23,10 @@ import java.util.Vector;
 
 public class TestObjectWithCollection extends RuntimeTestPojo {
     
-    private final Vector arrayList;
+    private final Vector<Object> arrayList;
     private final boolean throwException;
 
-    public TestObjectWithCollection(final Vector arrayList, final boolean throwException) {
+    public TestObjectWithCollection(final Vector<Object> arrayList, final boolean throwException) {
         this.arrayList = arrayList;
         this.throwException = throwException;
     }

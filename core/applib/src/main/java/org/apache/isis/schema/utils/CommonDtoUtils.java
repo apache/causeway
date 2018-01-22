@@ -138,7 +138,7 @@ public final class CommonDtoUtils {
             final Object val,
             final BookmarkService bookmarkService) {
         if(val instanceof Collection) {
-            final Collection collection = (Collection) val;
+            final Collection<?> collection = (Collection<?>) val;
             final CollectionDto collectionDto = asCollectionDto(collection, valueType, bookmarkService);
             valueDto.setCollection(collectionDto);
             return valueDto;
@@ -225,7 +225,7 @@ public final class CommonDtoUtils {
             return valueDto;
         }
         case ENUM: {
-            final Enum argValue = (Enum) val;
+            final Enum<?> argValue = (Enum<?>) val;
             if(argValue == null) {
                 return null;
             }
@@ -258,7 +258,7 @@ public final class CommonDtoUtils {
     }
 
     private static CollectionDto asCollectionDto(
-            final Iterable iterable,
+            final Iterable<?> iterable,
             final ValueType valueType,
             final BookmarkService bookmarkService) {
         final CollectionDto collectionDto = new CollectionDto();

@@ -613,7 +613,7 @@ public abstract class FixtureScript
                 previouslyExecutedScript = fixtureScriptByClass.get(childFixtureScript.getClass());
                 if (previouslyExecutedScript == null) {
                     if (childFixtureScript instanceof WithPrereqs) {
-                        final WithPrereqs withPrereqs = (WithPrereqs) childFixtureScript;
+                        final WithPrereqs<?,?> withPrereqs = (WithPrereqs<?,?>) childFixtureScript;
                         withPrereqs.execPrereqs(this);
                     }
                 }
@@ -661,7 +661,7 @@ public abstract class FixtureScript
             FixtureScript previouslyExecutedScript = fixtureScriptByValue.get(childFixtureScript);
             if (previouslyExecutedScript == null) {
                 if (childFixtureScript instanceof WithPrereqs) {
-                    final WithPrereqs withPrereqs = (WithPrereqs) childFixtureScript;
+                    final WithPrereqs<?,?> withPrereqs = (WithPrereqs<?,?>) childFixtureScript;
                     withPrereqs.execPrereqs(this);
                 }
             }

@@ -100,16 +100,16 @@ public class Interaction implements HasTransactionId {
 
     //region > push/pop/current/get/clear Execution(s)
 
-    private final List<Execution> executionGraphs = Lists.newArrayList();
-    private Execution currentExecution;
-    private Execution priorExecution;
+    private final List<Execution<?,?>> executionGraphs = Lists.newArrayList();
+    private Execution<?,?> currentExecution;
+    private Execution<?,?> priorExecution;
 
 
     /**
      * The execution that preceded the current one.
      */
     @Programmatic
-    public Execution getPriorExecution() {
+    public Execution<?,?> getPriorExecution() {
         return priorExecution;
     }
 
@@ -120,7 +120,7 @@ public class Interaction implements HasTransactionId {
      * (Modelled after {@link Callable}), is the implementation
      * by which the framework actually performs the interaction.
      */
-    public interface MemberExecutor<T extends Execution> {
+    public interface MemberExecutor<T extends Execution<?,?>> {
         @Programmatic
         Object execute(final T currentExecution);
     }
@@ -161,7 +161,7 @@ public class Interaction implements HasTransactionId {
         return executeInternal(memberExecutor, propertyEdit);
     }
 
-    private <T extends Execution> Object executeInternal(
+    private <T extends Execution<?,?>> Object executeInternal(
             final MemberExecutor<T> memberExecutor,
             final T execution) {
 
@@ -192,7 +192,7 @@ public class Interaction implements HasTransactionId {
      * The current (most recently pushed) {@link Execution}.
      */
     @Programmatic
-    public Execution getCurrentExecution() {
+    public Execution<?,?> getCurrentExecution() {
         return currentExecution;
     }
 
@@ -205,7 +205,7 @@ public class Interaction implements HasTransactionId {
      * </p>
      */
     @Programmatic
-    private Execution push(final Execution execution) {
+    private Execution<?,?> push(final Execution<?,?> execution) {
 
         if(currentExecution == null) {
             // new top-level execution
@@ -232,18 +232,18 @@ public class Interaction implements HasTransactionId {
      * </p>
      */
     @Programmatic
-    private Execution pop(final Timestamp completedAt) {
+    private Execution<?,?> pop(final Timestamp completedAt) {
         if(currentExecution == null) {
             throw new IllegalStateException("No current execution to pop");
         }
-        final Execution popped = currentExecution;
+        final Execution<?,?> popped = currentExecution;
         popped.setCompletedAt(completedAt);
 
         moveCurrentTo(currentExecution.getParent());
         return popped;
     }
 
-    private void moveCurrentTo(final Execution newExecution) {
+    private void moveCurrentTo(final Execution<?,?> newExecution) {
         priorExecution = currentExecution;
         currentExecution = newExecution;
     }
@@ -259,7 +259,7 @@ public class Interaction implements HasTransactionId {
      * </p>
      */
     @Programmatic
-    public List<Execution> getExecutions() {
+    public List<Execution<?,?>> getExecutions() {
         return Collections.unmodifiableList(executionGraphs);
     }
 

@@ -125,7 +125,8 @@ public abstract class AppManifestAbstract2 extends AppManifestAbstract implement
             withConfigurationProperties(Module.Util.transitiveIndividualConfigPropsOf(module));
         }
 
-        private static Class[] asClasses(final List<Module> dependencies) {
+        @SuppressWarnings("unchecked") //[ahuber] it's safe to assume correct type casting here 
+		private static Class<? extends Module>[] asClasses(final List<Module> dependencies) {
             final List<Class<? extends Module>> list = new ArrayList<>();
             for (Module dependency : dependencies) {
                 Class<? extends Module> aClass = dependency.getClass();

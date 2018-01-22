@@ -18,6 +18,7 @@
  */
 package org.apache.isis.applib.services.classdiscovery;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -44,45 +45,53 @@ import org.apache.isis.applib.fixturescripts.FixtureScript;
  * </p>
  */
 @DomainService(
-        nature = NatureOfService.DOMAIN,
-        menuOrder = "" + Integer.MAX_VALUE
-)
+		nature = NatureOfService.DOMAIN,
+		menuOrder = "" + Integer.MAX_VALUE
+		)
 public class ClassDiscoveryServiceUsingReflections
-            extends AbstractService 
-            implements ClassDiscoveryService {
+extends AbstractService 
+implements ClassDiscoveryService {
 
 
-    @Programmatic
-    @Override
-    public <T> Set<Class<? extends T>> findSubTypesOfClasses(Class<T> type, String packagePrefix) {
+	@Programmatic
+	@Override
+	public <T> Set<Class<? extends T>> findSubTypesOfClasses(Class<T> type, String packagePrefix) {
 
-        if(type == FixtureScript.class) {
-            Set fixtureScriptTypes = AppManifest.Registry.instance().getFixtureScriptTypes();
-            if (fixtureScriptTypes != null) {
-                return fixtureScriptTypes;
-            }
-        }
+		if(type == FixtureScript.class) {
+			return getFixtureScriptTypes();
+		}
 
-        // no appManifest or not asking for FixtureScripts
-        Vfs.setDefaultURLTypes(getUrlTypes());
+		// no appManifest or not asking for FixtureScripts
+		Vfs.setDefaultURLTypes(getUrlTypes());
 
-        final Reflections reflections = new Reflections(
-                ClasspathHelper.forClassLoader(Thread.currentThread().getContextClassLoader()),
-                ClasspathHelper.forClass(Object.class),
-                ClasspathHelper.forPackage(packagePrefix),
-                new SubTypesScanner(false)
-        );
-        return reflections.getSubTypesOf(type);
-    }
+		final Reflections reflections = new Reflections(
+				ClasspathHelper.forClassLoader(Thread.currentThread().getContextClassLoader()),
+				ClasspathHelper.forClass(Object.class),
+				ClasspathHelper.forPackage(packagePrefix),
+				new SubTypesScanner(false)
+				);
+		return reflections.getSubTypesOf(type);
+	}
 
-    // //////////////////////////////////////
+	// //////////////////////////////////////
 
-    /**
-     * Has <tt>public</tt> visibility only so can be reused by other services (including Isis runtime itself).
-     */
-    public static List<Vfs.UrlType> getUrlTypes() {
-        return AppManifest.Registry.instance().getUrlTypes();
-    }
+	/**
+	 * Has <tt>public</tt> visibility only so can be reused by other services (including Isis runtime itself).
+	 */
+	public static List<Vfs.UrlType> getUrlTypes() {
+		return AppManifest.Registry.instance().getUrlTypes();
+	}
+
+	// -- HELPER
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	private static <T> Set<Class<? extends T>> getFixtureScriptTypes() {
+		Set fixtureScriptTypes = AppManifest.Registry.instance().getFixtureScriptTypes();
+		if (fixtureScriptTypes != null) {
+			return fixtureScriptTypes;
+		}
+		return Collections.emptySet();
+	}
 
 
 }

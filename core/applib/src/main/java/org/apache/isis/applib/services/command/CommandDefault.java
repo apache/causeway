@@ -204,7 +204,7 @@ public class CommandDefault implements Command {
     }
 
     @Override
-    public ActionDomainEvent popActionDomainEvent() {
+    public ActionDomainEvent<?> popActionDomainEvent() {
         return !actionDomainEvents.isEmpty() ? actionDomainEvents.removeLast() : null;
     }
 

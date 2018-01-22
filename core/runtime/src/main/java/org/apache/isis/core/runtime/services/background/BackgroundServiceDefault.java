@@ -142,7 +142,7 @@ public class BackgroundServiceDefault implements BackgroundService2 {
             if(mixedInIfAny == null) {
                 newInstance = proxySubclass.newInstance();
             } else {
-                Constructor constructor = findConstructor(proxySubclass, mixedInIfAny);
+                Constructor<?> constructor = findConstructor(proxySubclass, mixedInIfAny);
                 newInstance = (T) constructor.newInstance(mixedInIfAny);
             }
             final ProxyObject proxyObject = (ProxyObject) newInstance;
