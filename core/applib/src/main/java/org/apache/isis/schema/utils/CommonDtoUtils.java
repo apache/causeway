@@ -96,7 +96,7 @@ public final class CommonDtoUtils {
         if (valueType != null) {
             return valueType;
         }
-        if (type.isEnum()) {
+        if (type!=null && type.isEnum()) {
             return ValueType.ENUM;
         }
         // assume reference otherwise
@@ -238,7 +238,7 @@ public final class CommonDtoUtils {
         case REFERENCE: {
             final Bookmark bookmark = val instanceof Bookmark
                     ? (Bookmark) val
-                    : bookmarkService.bookmarkFor(val);
+                    : bookmarkService!=null ? bookmarkService.bookmarkFor(val) : null;
 
             if (bookmark != null) {
                 OidDto argValue = bookmark.toOidDto();
