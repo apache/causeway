@@ -41,8 +41,7 @@ public final class Enums {
     
     public static String getEnumNameFromFriendly(String anEnumFriendlyName) {
     	return _Strings.splitThenStream(anEnumFriendlyName, " ")
-    	    	.map(_Strings::lower)
-    	    	.map(_Strings::capitalize)
+    	    	.map(_Strings::upper)
     	    	.collect(Collectors.joining("_"));
     }
 
