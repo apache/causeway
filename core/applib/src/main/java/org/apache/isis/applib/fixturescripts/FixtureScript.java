@@ -27,13 +27,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-
-import org.joda.time.LocalDate;
-import org.joda.time.LocalDateTime;
-
 import org.apache.isis.applib.AbstractViewModel;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.PropertyLayout;
@@ -43,6 +36,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.fixtures.FixtureType;
 import org.apache.isis.applib.fixtures.InstallableFixture;
 import org.apache.isis.applib.internal.base.$Casts;
+import org.apache.isis.applib.internal.base.$Strings;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.repository.RepositoryService;
@@ -50,6 +44,12 @@ import org.apache.isis.applib.services.sessmgmt.SessionManagementService;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.xactn.TransactionService;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
+
+import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 @ViewModelLayout(named="Script")
 public abstract class FixtureScript 
@@ -115,12 +115,13 @@ public abstract class FixtureScript
 
         withTracing(printStream);
     }
+    
     protected String localNameElseDerived(final String str) {
-        return str != null ? str : StringUtil.asLowerDashed(friendlyNameElseDerived(str));
+        return str != null ? str : $Strings.asLowerDashed.apply(friendlyNameElseDerived(str));
     }
 
     protected String friendlyNameElseDerived(final String str) {
-        return str != null ? str : StringUtil.asNaturalName2(getClass().getSimpleName());
+        return str != null ? str : $Strings.asNaturalName2.apply(getClass().getSimpleName());
     }
 
     //endregion
