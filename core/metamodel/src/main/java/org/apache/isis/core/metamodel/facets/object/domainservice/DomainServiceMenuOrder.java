@@ -22,7 +22,7 @@ package org.apache.isis.core.metamodel.facets.object.domainservice;
 import org.apache.isis.applib.annotation.Constants;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
-import org.apache.isis.core.commons.compare.SequenceCompare;
+import org.apache.isis.applib.internal.compare.$Comparators;
 
 public class DomainServiceMenuOrder {
 
@@ -47,8 +47,7 @@ public class DomainServiceMenuOrder {
         if(isUndefined(dsOrder))
             return dslayoutOrder;
         
-        //XXX ISIS-1715 honor member order (use Dewey Decimal format)
-        return SequenceCompare.compareNullLast(dslayoutOrder, dsOrder) < 0
+        return $Comparators.deweyOrderCompare(dslayoutOrder, dsOrder) < 0
         		? dslayoutOrder 
         		: dsOrder;
     }

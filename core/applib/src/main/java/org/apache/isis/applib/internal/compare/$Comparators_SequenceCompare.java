@@ -16,15 +16,26 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.commons.compare;
+package org.apache.isis.applib.internal.compare;
 
 import java.util.StringTokenizer;
 
-public class SequenceCompare {
+import javax.annotation.Nullable;
 
-    private SequenceCompare(){}
+import org.apache.isis.applib.internal.base.$Strings;
 
-    public static int compareNullLast(String sequence1, String sequence2) {
+final class $Comparators_SequenceCompare {
+
+    private $Comparators_SequenceCompare(){}
+
+    public static int compareNullLast(
+    		@Nullable final String sequence1, 
+    		@Nullable final String sequence2, 
+    		final String separator) {
+    	
+    	if($Strings.isEmpty(separator))
+			throw new IllegalArgumentException("a non empty separator is required");
+    	
         if (sequence1 == null && sequence2 == null) {
             return 0;
         }
@@ -36,8 +47,8 @@ public class SequenceCompare {
             return -1; // non-null before null
         }
 
-        final String[] components1 = componentsFor(sequence1);
-        final String[] components2 = componentsFor(sequence2);
+        final String[] components1 = componentsFor(sequence1, separator);
+        final String[] components2 = componentsFor(sequence2, separator);
 
         final int length1 = components1.length;
         final int length2 = components2.length;
@@ -82,8 +93,8 @@ public class SequenceCompare {
         }
     }
 
-    private static String[] componentsFor(final String sequence) {
-        final StringTokenizer tokens = new StringTokenizer(sequence, ".", false);
+    private static String[] componentsFor(final String sequence, final String separator) {
+        final StringTokenizer tokens = new StringTokenizer(sequence, separator, false);
         final String[] components = new String[tokens.countTokens()];
         for (int i = 0; tokens.hasMoreTokens(); i++) {
             components[i] = tokens.nextToken();

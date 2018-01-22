@@ -16,22 +16,10 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
-package org.apache.isis.core.metamodel.util;
-
-import java.util.Comparator;
-
-import org.apache.isis.applib.internal.compare.$Comparators;
-
-public class DeweyOrderComparator implements Comparator<String> {
-
-    public DeweyOrderComparator() {}
-
-    @Override
-    public int compare(String o1, String o2) {
-    	return $Comparators.deweyOrderCompare(o1, o2);
-    }
-
-}
-
-
+/**
+ * Internal classes, not intended as being part of the public API.
+ * 
+ * WARNING: Do NOT use any of the classes provided by this package! <br/> 
+ * Public access will be removed once we migrate to Java 9+ modules.
+ */
+package org.apache.isis.applib.internal.compare;

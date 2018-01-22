@@ -17,21 +17,33 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.util;
+package org.apache.isis.applib.internal.compare;
 
 import java.util.Comparator;
 
-import org.apache.isis.applib.internal.compare.$Comparators;
+import javax.annotation.Nullable;
 
-public class DeweyOrderComparator implements Comparator<String> {
+/**
+ * <h1>- internal use only -</h1>
+ * <p>
+ * Provides some ordering algorithms.
+ * <p>
+ * WARNING: Do <b>NOT</b> use any of the classes provided by this package! <br/> 
+ * Public access will be removed once we migrate to Java 9+ modules.
+ * 
+ * @since 2.0.0
+ */
+public final class $Comparators {
 
-    public DeweyOrderComparator() {}
+	private $Comparators(){}
+	
+	public static int deweyOrderCompare(
+    		@Nullable final String sequence1, 
+    		@Nullable final String sequence2) {
+		return $Comparators_SequenceCompare.compareNullLast(sequence1, sequence2, ".");
+	}
+	
+	public static final Comparator<String> deweyOrderComparator = $Comparators::deweyOrderCompare;
 
-    @Override
-    public int compare(String o1, String o2) {
-    	return $Comparators.deweyOrderCompare(o1, o2);
-    }
-
+	
 }
-
-
