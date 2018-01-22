@@ -33,6 +33,7 @@ import org.joda.time.LocalTime;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
+import org.apache.isis.applib.util.Casts;
 import org.apache.isis.schema.cmd.v1.ParamDto;
 import org.apache.isis.schema.common.v1.CollectionDto;
 import org.apache.isis.schema.common.v1.EnumDto;
@@ -277,48 +278,55 @@ public final class CommonDtoUtils {
     public static <T> T getValue(
             final ValueDto valueDto,
             final ValueType valueType) {
+    	return Casts.uncheckedCast(getValueAsObject(valueDto, valueType));
+    }
+    
+    private static Object getValueAsObject(
+            final ValueDto valueDto,
+            final ValueType valueType) {
         switch(valueType) {
         case STRING:
-            return (T) valueDto.getString();
+            return valueDto.getString();
         case BYTE:
-            return (T) valueDto.getByte();
+            return valueDto.getByte();
         case SHORT:
-            return (T) valueDto.getShort();
+            return valueDto.getShort();
         case INT:
-            return (T) valueDto.getInt();
+            return valueDto.getInt();
         case LONG:
-            return (T) valueDto.getLong();
+            return valueDto.getLong();
         case FLOAT:
-            return (T) valueDto.getFloat();
+            return valueDto.getFloat();
         case DOUBLE:
-            return (T) valueDto.getDouble();
+            return valueDto.getDouble();
         case BOOLEAN:
-            return (T) valueDto.isBoolean();
+            return valueDto.isBoolean();
         case CHAR:
             final String aChar = valueDto.getChar();
             if(Strings.isNullOrEmpty(aChar)) { return null; }
-            return (T) (Object)aChar.charAt(0);
+            return (Object)aChar.charAt(0);
         case BIG_DECIMAL:
-            return (T) valueDto.getBigDecimal();
+            return valueDto.getBigDecimal();
         case BIG_INTEGER:
-            return (T) valueDto.getBigInteger();
+            return valueDto.getBigInteger();
         case JAVA_SQL_TIMESTAMP:
-            return (T) JavaSqlTimestampXmlGregorianCalendarAdapter.parse(valueDto.getDateTime());
+            return JavaSqlTimestampXmlGregorianCalendarAdapter.parse(valueDto.getDateTime());
         case JODA_DATE_TIME:
-            return (T) JodaDateTimeXMLGregorianCalendarAdapter.parse(valueDto.getDateTime());
+            return JodaDateTimeXMLGregorianCalendarAdapter.parse(valueDto.getDateTime());
         case JODA_LOCAL_DATE:
-            return (T) JodaLocalDateXMLGregorianCalendarAdapter.parse(valueDto.getLocalDate());
+            return JodaLocalDateXMLGregorianCalendarAdapter.parse(valueDto.getLocalDate());
         case JODA_LOCAL_DATE_TIME:
-            return (T) JodaLocalDateTimeXMLGregorianCalendarAdapter.parse(valueDto.getLocalDateTime());
+            return JodaLocalDateTimeXMLGregorianCalendarAdapter.parse(valueDto.getLocalDateTime());
         case JODA_LOCAL_TIME:
-            return (T) JodaLocalTimeXMLGregorianCalendarAdapter.parse(valueDto.getLocalTime());
+            return JodaLocalTimeXMLGregorianCalendarAdapter.parse(valueDto.getLocalTime());
         case ENUM:
             final EnumDto enumDto = valueDto.getEnum();
             final String enumType = enumDto.getEnumType();
+            @SuppressWarnings("rawtypes") 
             final Class<? extends Enum> enumClass = loadClassElseThrow(enumType);
-            return (T) Enum.valueOf(enumClass, enumDto.getEnumName());
+            return Enum.valueOf(Casts.uncheckedCast(enumClass), enumDto.getEnumName());
         case REFERENCE:
-            return (T) valueDto.getReference();
+            return valueDto.getReference();
         case VOID:
             return null;
         default:
@@ -329,9 +337,9 @@ public final class CommonDtoUtils {
         }
     }
 
-    private static <T> Class<T> loadClassElseThrow(final String enumType) {
+    private static <T> Class<T> loadClassElseThrow(final String className) {
         try {
-            return (Class<T>) loadClass(enumType);
+            return Casts.uncheckedCast(loadClass(className));
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }

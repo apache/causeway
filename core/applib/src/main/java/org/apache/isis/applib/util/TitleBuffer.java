@@ -32,7 +32,7 @@ import java.lang.reflect.Method;
  */
 public class TitleBuffer {
     private static final String SPACE = " ";
-    public static final Class[] NO_PARAMETER_TYPES = new Class[0];
+    public static final Class<?>[] NO_PARAMETER_TYPES = new Class[0];
     public static final Object[] NO_ARGUMENTS = new Object[0];
 
     /**

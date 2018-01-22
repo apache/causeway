@@ -28,7 +28,7 @@ import org.apache.isis.applib.services.jdosupport.IsisJdoSupport;
 
 public abstract class TeardownFixtureAbstract extends FixtureScript {
 
-    protected void deleteFrom(final Class cls) {
+    protected void deleteFrom(final Class<?> cls) {
         preDeleteFrom(cls);
         final TypeMetadata metadata = isisJdoSupport.getJdoPersistenceManager().getPersistenceManagerFactory()
                 .getMetadata(cls.getName());
@@ -58,9 +58,9 @@ public abstract class TeardownFixtureAbstract extends FixtureScript {
         isisJdoSupport.executeUpdate(String.format("DELETE FROM \"%s\"", table));
     }
 
-    protected void preDeleteFrom(final Class cls) {}
+    protected void preDeleteFrom(final Class<?> cls) {}
 
-    protected void postDeleteFrom(final Class cls) {}
+    protected void postDeleteFrom(final Class<?> cls) {}
 
     @Inject
     private IsisJdoSupport isisJdoSupport;

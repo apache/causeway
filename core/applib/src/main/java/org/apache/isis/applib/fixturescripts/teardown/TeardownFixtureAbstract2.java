@@ -34,7 +34,7 @@ public abstract class TeardownFixtureAbstract2 extends TeardownFixtureAbstract {
 
 
     @Override
-    protected void deleteFrom(Class cls) {
+    protected void deleteFrom(Class<?> cls) {
         final String column = discriminatorColumnOf(cls);
         final String value = discriminatorValueOf(cls);
         if(column == null || value == null) {
@@ -53,7 +53,7 @@ public abstract class TeardownFixtureAbstract2 extends TeardownFixtureAbstract {
         this.postDeleteFrom(cls);
     }
 
-    protected String schemaOf(final Class cls) {
+    protected String schemaOf(final Class<?> cls) {
         TypeMetadata metadata = getPersistenceManagerFactory().getMetadata(cls.getName());
         if(metadata == null) {
             return null;
@@ -65,7 +65,7 @@ public abstract class TeardownFixtureAbstract2 extends TeardownFixtureAbstract {
         return metadata.getSchema();
     }
 
-    protected String tableOf(final Class cls) {
+    protected String tableOf(final Class<?> cls) {
         final TypeMetadata metadata = getPersistenceManagerFactory().getMetadata(cls.getName());
         if(metadata == null) {
             return cls.getSimpleName();
@@ -78,7 +78,7 @@ public abstract class TeardownFixtureAbstract2 extends TeardownFixtureAbstract {
         return !Strings.isNullOrEmpty(table) ? table : cls.getSimpleName();
     }
 
-    protected String discriminatorValueOf(final Class cls) {
+    protected String discriminatorValueOf(final Class<?> cls) {
         TypeMetadata metadata = getPersistenceManagerFactory().getMetadata(cls.getName());
         if(metadata == null) {
             return null;
@@ -96,12 +96,12 @@ public abstract class TeardownFixtureAbstract2 extends TeardownFixtureAbstract {
         return discriminatorMetadata.getValue();
     }
 
-    protected String discriminatorColumnOf(final Class cls) {
+    protected String discriminatorColumnOf(final Class<?> cls) {
         final String discriminator = doDiscriminatorOf(cls);
         return discriminator != null ? discriminator : "discriminator";
     }
 
-    private String doDiscriminatorOf(final Class cls) {
+    private String doDiscriminatorOf(final Class<?> cls) {
         final TypeMetadata metadata = getPersistenceManagerFactory().getMetadata(cls.getName());
         if(metadata == null) {
             return null;
@@ -123,7 +123,7 @@ public abstract class TeardownFixtureAbstract2 extends TeardownFixtureAbstract {
         return isisJdoSupport.getJdoPersistenceManager().getPersistenceManagerFactory();
     }
 
-    private void superDeleteFrom(final Class cls) {
+    private void superDeleteFrom(final Class<?> cls) {
         super.deleteFrom(cls);
     }
 
@@ -141,10 +141,10 @@ public abstract class TeardownFixtureAbstract2 extends TeardownFixtureAbstract {
         this.isisJdoSupport.executeUpdate(sql);
     }
 
-    protected void preDeleteFrom(Class cls) {
+    protected void preDeleteFrom(Class<?> cls) {
     }
 
-    protected void postDeleteFrom(Class cls) {
+    protected void postDeleteFrom(Class<?> cls) {
     }
 
     @Inject

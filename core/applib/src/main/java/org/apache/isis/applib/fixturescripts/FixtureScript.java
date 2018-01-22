@@ -764,7 +764,7 @@ public abstract class FixtureScript
         }
 
 
-        private Map<Class, Object> userData = Maps.newHashMap();
+        private Map<Class<?>, Object> userData = Maps.newHashMap();
         @Programmatic
         public void setUserData(final Object object) {
             userData.put(object.getClass(), object);
