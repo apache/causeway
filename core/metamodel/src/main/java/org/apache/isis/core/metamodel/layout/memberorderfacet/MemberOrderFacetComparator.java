@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.layout.memberorderfacet;
 
 import java.util.Comparator;
 
-import org.apache.isis.applib.internal.compare.$Comparators;
+import org.apache.isis.applib.internal.compare._Comparators;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 
 public class MemberOrderFacetComparator implements Comparator<MemberOrderFacet> {
@@ -48,7 +48,7 @@ public class MemberOrderFacetComparator implements Comparator<MemberOrderFacet> 
             throw new IllegalArgumentException("Not in same group");
         }
         
-        return $Comparators.deweyOrderCompare(m1.sequence(), m2.sequence());
+        return _Comparators.deweyOrderCompare(m1.sequence(), m2.sequence());
 
     }
 

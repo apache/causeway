@@ -21,7 +21,7 @@ package org.apache.isis.applib.spec;
 
 import java.lang.reflect.Method;
 
-import org.apache.isis.applib.internal.base.$Casts;
+import org.apache.isis.applib.internal.base._Casts;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 
 /**
@@ -101,7 +101,7 @@ public abstract class AbstractSpecification2<T> implements Specification2 {
                     ? null
                     : TranslatableString.tr("Incorrect type");
         }
-        final T objAsT = $Casts.uncheckedCast(obj);
+        final T objAsT = _Casts.uncheckedCast(obj);
         return satisfiesTranslatableSafely(objAsT);
 
     }

@@ -24,7 +24,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import org.apache.isis.applib.internal.base.$Strings;
+import org.apache.isis.applib.internal.base._Strings;
 import org.apache.isis.applib.util.Enums;
 
 import com.google.common.base.Strings;
@@ -43,7 +43,7 @@ public final class StringExtensions {
      * "NextAvailableDate" is returned as "Next Available Date".
      */
     public static String asNaturalName2(String name) {
-    	return $Strings.asNaturalName2.apply(name);
+    	return _Strings.asNaturalName2.apply(name);
     }
 
     public static String asNaturalName(final String extendee) {
@@ -119,7 +119,7 @@ public final class StringExtensions {
     }
 
     public static String asLowerDashed(String extendee) {
-        return $Strings.asLowerDashed.apply(extendee);
+        return _Strings.asLowerDashed.apply(extendee);
     }
 
     public static String asPascal(final String extendee) {
@@ -250,7 +250,7 @@ public final class StringExtensions {
      * @return
      */
     public static String normalized(@javax.annotation.Nullable final String extendee) {
-    	return $Strings.asNormalized.apply(extendee);
+    	return _Strings.asNormalized.apply(extendee);
     }
 
     public static String removePrefix(final String extendee, final String prefix) {

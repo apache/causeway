@@ -24,7 +24,7 @@ import java.util.Properties;
 import java.util.stream.Collectors;
 
 import org.apache.isis.applib.annotation.MemberGroupLayout.ColumnSpans;
-import org.apache.isis.applib.internal.base.$Strings;
+import org.apache.isis.applib.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupLayoutFacetAbstract;
 
@@ -56,15 +56,15 @@ public class MemberGroupLayoutFacetProperties extends MemberGroupLayoutFacetAbst
     static String[] asGroupList(Properties properties, final String key) {
         final String property = properties.getProperty(key);
         if(property == null) {
-            return $Strings.emptyArray;
+            return _Strings.emptyArray;
         }
 
         return 
-        $Strings.splitThenStream(property, ",")
-        .map($Strings::trim)
-        .filter($Strings::isNotEmpty)
+        _Strings.splitThenStream(property, ",")
+        .map(_Strings::trim)
+        .filter(_Strings::isNotEmpty)
         .collect(Collectors.toCollection(ArrayList::new)) // array list for fast to-array conversion
-        .toArray($Strings.emptyArray);
+        .toArray(_Strings.emptyArray);
         
 
     }

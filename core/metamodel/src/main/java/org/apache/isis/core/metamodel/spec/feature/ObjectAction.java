@@ -28,8 +28,8 @@ import org.apache.isis.applib.annotation.InvokeOn;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.internal.base.$NullSafe;
-import org.apache.isis.applib.internal.base.$Strings;
+import org.apache.isis.applib.internal.base._NullSafe;
+import org.apache.isis.applib.internal.base._Strings;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -480,14 +480,14 @@ public interface ObjectAction extends ObjectMember {
 
             final List<ObjectAssociation> associations = adapterSpec.getAssociations(Contributed.INCLUDED);
             
-            final List<String> associationNames = $NullSafe.stream(associations)
+            final List<String> associationNames = _NullSafe.stream(associations)
             		.map(ObjectAssociation::getName)
-            		.map($Strings::lower)
+            		.map(_Strings::lower)
             		.collect(Collectors.toList());
             		
-            final List<String> associationIds = $NullSafe.stream(associations) 
+            final List<String> associationIds = _NullSafe.stream(associations) 
             		.map(ObjectAssociation::getId)
-            		.map($Strings::lower)
+            		.map(_Strings::lower)
             		.collect(Collectors.toList());
 
             return new Predicate<ObjectAction>() {

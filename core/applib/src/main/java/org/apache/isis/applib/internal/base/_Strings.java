@@ -39,9 +39,9 @@ import javax.annotation.Nullable;
  * 
  * @since 2.0.0
  */
-public final class $Strings {
+public final class _Strings {
 
-	private $Strings() {}
+	private _Strings() {}
 	
 	// -- BASICS
 	
@@ -180,14 +180,14 @@ public final class $Strings {
     // using naming convention asXxx...
     
     public final static StringOperator asLowerDashed = operator()
-        	.andThen($Strings::lower)
-        	.andThen(s->$Strings.condenseWhitespaces(s, "-"));
+        	.andThen(_Strings::lower)
+        	.andThen(s->_Strings.condenseWhitespaces(s, "-"));
 
  	public final static StringOperator asNormalized = operator()
- 			.andThen(s->$Strings.condenseWhitespaces(s, " "));
+ 			.andThen(s->_Strings.condenseWhitespaces(s, " "));
     
  	public final static StringOperator asNaturalName2 = operator()
- 			.andThen(s->$Strings_NaturalNames.naturalName2(s, true));
+ 			.andThen(s->_Strings_NaturalNames.naturalName2(s, true));
 
     
 }

@@ -39,9 +39,9 @@ import java.util.stream.StreamSupport;
  *
  */
 
-public final class $NullSafe {
+public final class _NullSafe {
 	
-	private $NullSafe(){}
+	private _NullSafe(){}
 
 	// -- STREAM CREATION
 	

@@ -30,7 +30,7 @@ import java.util.concurrent.Callable;
 
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.RecoverableException;
-import org.apache.isis.applib.internal.base.$Casts;
+import org.apache.isis.applib.internal.base._Casts;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.clock.ClockService;
@@ -311,7 +311,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
 
             // handle any exceptions
             final Interaction.Execution<ActionInvocationDto, ?> priorExecution = 
-            		$Casts.uncheckedCast(interaction.getPriorExecution());
+            		_Casts.uncheckedCast(interaction.getPriorExecution());
 
             final Exception executionExceptionIfAny = priorExecution.getThrew();
 

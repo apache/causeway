@@ -29,9 +29,9 @@ package org.apache.isis.applib.internal.base;
  * 
  * @since 2.0.0
  */
-public final class $Casts {
+public final class _Casts {
 
-	private $Casts(){}
+	private _Casts(){}
 	
 	@SuppressWarnings("unchecked")
 	public static <T> T uncheckedCast(Object obj) {

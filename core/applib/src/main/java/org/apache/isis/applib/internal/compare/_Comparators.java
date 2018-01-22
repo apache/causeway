@@ -33,19 +33,19 @@ import javax.annotation.Nullable;
  * 
  * @since 2.0.0
  */
-public final class $Comparators {
+public final class _Comparators {
 
-	private $Comparators(){}
+	private _Comparators(){}
 	
 	private static final String DEWEY_SEPERATOR = ".";
 	
 	public static int deweyOrderCompare(
     		@Nullable final String sequence1, 
     		@Nullable final String sequence2) {
-		return $Comparators_SequenceCompare.compareNullLast(sequence1, sequence2, DEWEY_SEPERATOR);
+		return _Comparators_SequenceCompare.compareNullLast(sequence1, sequence2, DEWEY_SEPERATOR);
 	}
 	
-	public static final Comparator<String> deweyOrderComparator = $Comparators::deweyOrderCompare;
+	public static final Comparator<String> deweyOrderComparator = _Comparators::deweyOrderCompare;
 
 	
 }

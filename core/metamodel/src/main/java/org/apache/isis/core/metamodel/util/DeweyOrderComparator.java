@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.util;
 
 import java.util.Comparator;
 
-import org.apache.isis.applib.internal.compare.$Comparators;
+import org.apache.isis.applib.internal.compare._Comparators;
 
 public class DeweyOrderComparator implements Comparator<String> {
 
@@ -29,7 +29,7 @@ public class DeweyOrderComparator implements Comparator<String> {
 
     @Override
     public int compare(String o1, String o2) {
-    	return $Comparators.deweyOrderCompare(o1, o2);
+    	return _Comparators.deweyOrderCompare(o1, o2);
     }
 
 }

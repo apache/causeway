@@ -22,18 +22,18 @@ import java.util.StringTokenizer;
 
 import javax.annotation.Nullable;
 
-import org.apache.isis.applib.internal.base.$Strings;
+import org.apache.isis.applib.internal.base._Strings;
 
-final class $Comparators_SequenceCompare {
+final class _Comparators_SequenceCompare {
 
-    private $Comparators_SequenceCompare(){}
+    private _Comparators_SequenceCompare(){}
 
     public static int compareNullLast(
     		@Nullable final String sequence1, 
     		@Nullable final String sequence2, 
     		final String separator) {
     	
-    	if($Strings.isEmpty(separator))
+    	if(_Strings.isEmpty(separator))
 			throw new IllegalArgumentException("a non empty separator is required");
     	
         if (sequence1 == null && sequence2 == null) {

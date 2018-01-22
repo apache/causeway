@@ -23,10 +23,10 @@ import javax.annotation.Nullable;
 
 /**
  * 
- * package private mixin for utility class {@link $Strings}
+ * package private mixin for utility class {@link _Strings}
  *
  */
-class $Strings_NaturalNames {
+class _Strings_NaturalNames {
 	
 	private static final char SPACE = ' ';
  	/**
