@@ -159,7 +159,7 @@ public final class $Strings {
 			return operator.apply(input);
 		}
 		
-		public StringOperator compose(UnaryOperator<String> andThen) {
+		public StringOperator andThen(UnaryOperator<String> andThen) {
 			if(operator==null)
 				return new StringOperator(andThen::apply);
 			return new StringOperator(s->andThen.apply(operator.apply(s)));
@@ -180,14 +180,14 @@ public final class $Strings {
     // using naming convention asXxx...
     
     public final static StringOperator asLowerDashed = operator()
-        	.compose($Strings::lower)
-        	.compose(s->$Strings.condenseWhitespaces(s, "-"));
+        	.andThen($Strings::lower)
+        	.andThen(s->$Strings.condenseWhitespaces(s, "-"));
 
  	public final static StringOperator asNormalized = operator()
- 			.compose(s->$Strings.condenseWhitespaces(s, " "));
+ 			.andThen(s->$Strings.condenseWhitespaces(s, " "));
     
  	public final static StringOperator asNaturalName2 = operator()
- 			.compose(s->$Strings_NaturalNames.naturalName2(s, true));
+ 			.andThen(s->$Strings_NaturalNames.naturalName2(s, true));
 
     
 }
