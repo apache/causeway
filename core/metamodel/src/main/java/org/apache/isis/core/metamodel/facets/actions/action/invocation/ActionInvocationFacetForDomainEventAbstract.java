@@ -51,6 +51,7 @@ import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.services.xactn.TransactionState;
+import org.apache.isis.applib.util.Casts;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -310,7 +311,8 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
             interaction.execute(callable, execution);
 
             // handle any exceptions
-            final Interaction.Execution<ActionInvocationDto, ?> priorExecution = interaction.getPriorExecution();
+            final Interaction.Execution<ActionInvocationDto, ?> priorExecution = 
+            		Casts.uncheckedCast(interaction.getPriorExecution());
 
             final Exception executionExceptionIfAny = priorExecution.getThrew();
 
