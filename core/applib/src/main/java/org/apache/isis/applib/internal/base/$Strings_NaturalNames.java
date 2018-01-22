@@ -21,7 +21,12 @@ package org.apache.isis.applib.internal.base;
 
 import javax.annotation.Nullable;
 
-class NaturalNames {
+/**
+ * 
+ * package private mixin for utility class {@link $Strings}
+ *
+ */
+class $Strings_NaturalNames {
 	
 	private static final char SPACE = ' ';
  	/**

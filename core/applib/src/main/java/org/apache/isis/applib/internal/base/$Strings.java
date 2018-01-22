@@ -187,7 +187,7 @@ public final class $Strings {
  			.compose(s->$Strings.condenseWhitespaces(s, " "));
     
  	public final static StringOperator asNaturalName2 = operator()
- 			.compose(s->NaturalNames.naturalName2(s, true));
+ 			.compose(s->$Strings_NaturalNames.naturalName2(s, true));
 
     
 }
