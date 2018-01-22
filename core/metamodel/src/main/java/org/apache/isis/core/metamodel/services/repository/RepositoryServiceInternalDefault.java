@@ -164,7 +164,7 @@ public class RepositoryServiceInternalDefault implements RepositoryService {
     
     @Programmatic
 	@Override
-	public <T> List<T> allMatches8(Class<T> ofType, final Predicate<? super T> predicate, long... range) {
+	public <T> List<T> allMatches(Class<T> ofType, final Predicate<? super T> predicate, long... range) {
 		return _NullSafe.stream(allInstances(ofType, range))
 				.filter(predicate)
 				.collect(Collectors.toCollection(ArrayList::new));
@@ -201,8 +201,8 @@ public class RepositoryServiceInternalDefault implements RepositoryService {
     
     @Programmatic
     @Override
-    public <T> T uniqueMatch8(final Class<T> type, final Predicate<T> predicate) {
-        final List<T> instances = allMatches8(type, predicate, 0, 2); // No need to fetch more than 2.
+    public <T> T uniqueMatch(final Class<T> type, final Predicate<T> predicate) {
+        final List<T> instances = allMatches(type, predicate, 0, 2); // No need to fetch more than 2.
         if (instances.size() > 1) {
             throw new RepositoryException("Found more than one instance of " + type + " matching filter " + predicate);
         }
