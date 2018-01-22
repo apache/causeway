@@ -18,10 +18,9 @@
  */
 package org.apache.isis.applib.services.exceprecog.jdo;
 
-import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType;
+import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType2;
 
-public class ExceptionRecognizerForJDOObjectNotFoundException
-        extends ExceptionRecognizerForType {
+public class ExceptionRecognizerForJDOObjectNotFoundException extends ExceptionRecognizerForType2 {
 
     public ExceptionRecognizerForJDOObjectNotFoundException() {
         super(Category.NOT_FOUND,
