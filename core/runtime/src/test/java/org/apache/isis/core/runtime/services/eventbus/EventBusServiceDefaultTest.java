@@ -16,19 +16,21 @@
  */
 package org.apache.isis.core.runtime.services.eventbus;
 
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.assertThat;
+
 import java.util.Collections;
+import java.util.List;
 
-import com.google.common.collect.ImmutableMap;
-import com.google.common.eventbus.Subscribe;
-
+import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.assertThat;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.eventbus.Subscribe;
 
 public class EventBusServiceDefaultTest {
 
@@ -37,6 +39,14 @@ public class EventBusServiceDefaultTest {
     @Before
     public void setUp() throws Exception {
         eventBusService = new EventBusServiceDefault() {
+        	{
+        		serviceRegistry = new ServiceRegistry() {
+					@Override public <T> Iterable<T> lookupServices(Class<T> service) { return null; }
+					@Override public <T> T lookupService(Class<T> service) { return null; }
+					@Override public <T> T injectServicesInto(T domainObject) {	return null; }
+					@Override public List<Object> getRegisteredServices() { return null; }
+				}; 
+        	}
         };
     }
 
