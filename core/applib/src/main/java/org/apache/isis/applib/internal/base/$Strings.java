@@ -31,6 +31,9 @@ import javax.annotation.Nullable;
  * <p>
  * Provides String related algorithms.
  * <p>
+ * Keep the public methods simple, these are basic building blocks for more complex composites.
+ * Composites are provided as static fields. 
+ * <p>
  * WARNING: Do <b>NOT</b> use any of the classes provided by this package! <br/> 
  * Public access will be removed once we migrate to Java 9+ modules.
  * 
@@ -39,6 +42,10 @@ import javax.annotation.Nullable;
 public final class $Strings {
 
 	private $Strings() {}
+	
+	// -- BASICS
+	
+	public static String[] emptyArray = new String[0];
 	
 	// -- BASIC PREDICATES
 	
@@ -75,7 +82,7 @@ public final class $Strings {
 	}
 	
     /**
-     * Converts all of the characters in this String to lower case using the rules of the default locale. 
+     * Converts all of the characters in {@code input} to lower case using the rules of the default locale. 
      * @param input
      * @return null if {@code input} is null
      */
@@ -84,6 +91,18 @@ public final class $Strings {
     		return null;
     	}
         return input.toLowerCase();
+    }
+    
+    /**
+     * Converts all of the characters in {@code input} to upper case using the rules of the default locale. 
+     * @param input
+     * @return null if {@code input} is null
+     */
+    public static String upper(@Nullable final String input) {
+    	if(input==null) {
+    		return null;
+    	}
+        return input.toUpperCase();
     }
 	
 	// -- SPLITTING

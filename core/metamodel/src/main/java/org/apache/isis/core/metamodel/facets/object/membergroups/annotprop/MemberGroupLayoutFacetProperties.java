@@ -19,14 +19,12 @@
 
 package org.apache.isis.core.metamodel.facets.object.membergroups.annotprop;
 
+import java.util.ArrayList;
 import java.util.Properties;
-
-import com.google.common.base.Splitter;
-import com.google.common.collect.Iterables;
+import java.util.stream.Collectors;
 
 import org.apache.isis.applib.annotation.MemberGroupLayout.ColumnSpans;
-import org.apache.isis.core.commons.lang.StringFunctions;
-import org.apache.isis.core.commons.lang.StringPredicates;
+import org.apache.isis.applib.internal.base.$Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupLayoutFacetAbstract;
 
@@ -58,13 +56,16 @@ public class MemberGroupLayoutFacetProperties extends MemberGroupLayoutFacetAbst
     static String[] asGroupList(Properties properties, final String key) {
         final String property = properties.getProperty(key);
         if(property == null) {
-            return new String[0];
+            return $Strings.emptyArray;
         }
-        final Iterable<String> split = Splitter.on(',').split(property);
-        return Iterables.toArray(
-                    Iterables.filter(
-                        Iterables.transform(split,StringFunctions.TRIM), 
-                        StringPredicates.NOT_EMPTY), 
-                    String.class);
+
+        return 
+        $Strings.splitThenStream(property, ",")
+        .map($Strings::trim)
+        .filter($Strings::isNotEmpty)
+        .collect(Collectors.toCollection(ArrayList::new)) // array list for fast to-array conversion
+        .toArray($Strings.emptyArray);
+        
+
     }
 }
