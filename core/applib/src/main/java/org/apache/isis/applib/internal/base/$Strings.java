@@ -19,6 +19,18 @@
 
 package org.apache.isis.applib.internal.base;
 
-public class $Strings {
+/**
+ * <h1>- internal use only -</h1>
+ * <p>
+ * Provides String related algorithms.
+ * <p>
+ * WARNING: Do <b>NOT</b> use any of the classes provided by this package! <br/> 
+ * Public access will be removed once we migrate to Java 9+ modules.
+ * 
+ * @since 2.0.0
+ */
+public final class $Strings {
 
+	private $Strings() {}
+	
 }

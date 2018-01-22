@@ -33,8 +33,8 @@ import org.apache.isis.applib.ApplicationException;
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.internal.base.$Streams;
 import org.apache.isis.applib.internal.base.$Casts;
+import org.apache.isis.applib.internal.base.$NullSafe;
 import org.apache.isis.applib.services.dto.Dto_downloadXsd;
 
 import com.google.common.collect.Maps;
@@ -181,7 +181,7 @@ public interface JaxbService {
                         errors = $Casts.uncheckedCast(getErrorsMethod.invoke(ex));
                         
                         annotationExceptionMessages = ": " + 
-                        $Streams.stream(errors)
+                        $NullSafe.stream(errors)
                         .map(Exception::getMessage)
                         .collect(Collectors.joining("; "));
                         

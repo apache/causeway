@@ -28,14 +28,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.RecoverableException;
+import org.apache.isis.applib.internal.base.$Casts;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.clock.ClockService;
@@ -51,7 +46,6 @@ import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.services.xactn.TransactionState;
-import org.apache.isis.applib.util.Casts;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -83,6 +77,11 @@ import org.apache.isis.core.metamodel.specloader.ReflectiveActionException;
 import org.apache.isis.core.metamodel.specloader.specimpl.MixedInMember2;
 import org.apache.isis.core.runtime.system.transaction.TransactionalClosure;
 import org.apache.isis.schema.ixn.v1.ActionInvocationDto;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
 
 public abstract class ActionInvocationFacetForDomainEventAbstract
         extends ActionInvocationFacetAbstract
@@ -312,7 +311,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
 
             // handle any exceptions
             final Interaction.Execution<ActionInvocationDto, ?> priorExecution = 
-            		Casts.uncheckedCast(interaction.getPriorExecution());
+            		$Casts.uncheckedCast(interaction.getPriorExecution());
 
             final Exception executionExceptionIfAny = priorExecution.getThrew();
 
