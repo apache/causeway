@@ -148,6 +148,22 @@ public class ExecutionParameters_Test {
         assertThat(roundTripped, is(value));
         assertThat(roundTrippedAsT, is(value));
     }
+    
+    @Test
+    public void roundTripString() throws Exception {
+
+        // given
+        final String value = "Hello World!";
+
+        // when
+        executionParameters.setParameter("test", value);
+        final String roundTripped = executionParameters.getParameter("test");
+        final String roundTrippedAsT = executionParameters.getParameterAsT("test", String.class);
+
+        // then
+        assertThat(roundTripped, is(value));
+        assertThat(roundTrippedAsT, is(value));
+    }
 
     @Test
     public void roundTripBoolean() throws Exception {
@@ -224,6 +240,27 @@ public class ExecutionParameters_Test {
         executionParameters.setParameter("test", value);
         final LocalDateTime roundTripped = executionParameters.getParameterAsLocalDateTime("test");
         final LocalDateTime roundTrippedAsT = executionParameters.getParameterAsT("test", LocalDateTime.class);
+
+        // then
+        assertThat(roundTripped, is(value));
+        assertThat(roundTrippedAsT, is(value));
+    }
+    
+    private static enum EnumForTest {
+		hello,
+		world
+	}
+    
+    @Test
+    public void roundTripEnum() throws Exception {
+
+        // given
+        final EnumForTest value = EnumForTest.hello;
+
+        // when
+        executionParameters.setParameter("test", value);
+        final EnumForTest roundTripped = executionParameters.getParameterAsEnum("test", EnumForTest.class);
+        final EnumForTest roundTrippedAsT = executionParameters.getParameterAsT("test", EnumForTest.class);
 
         // then
         assertThat(roundTripped, is(value));

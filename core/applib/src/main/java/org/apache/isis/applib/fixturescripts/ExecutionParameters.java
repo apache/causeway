@@ -29,6 +29,8 @@ import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 import com.google.common.io.CharSource;
+
+import org.apache.isis.applib.util.Casts;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
@@ -76,36 +78,42 @@ public class ExecutionParameters {
     }
 
     public <T> T getParameterAsT(final String parameterName, final Class<T> cls) {
-        T value = null;
+    	return Casts.uncheckedCast(getParameterAsObject(parameterName, cls));
+    }
+    
+    protected Object getParameterAsObject(final String parameterName, final Class<?> cls) {
+    	final Object value;
         if (Enum.class.isAssignableFrom(cls)) {
-            Class enumClass = cls;
-            value = (T) getParameterAsEnum(parameterName, enumClass);
+            Class<?> enumClass = cls;
+            value = getParameterAsEnum(parameterName, Casts.uncheckedCast(enumClass));
         } else if (cls == Boolean.class) {
-            value = (T) getParameterAsBoolean(parameterName);
+            value = getParameterAsBoolean(parameterName);
         } else if (cls == Byte.class) {
-            value = (T) getParameterAsByte(parameterName);
+            value = getParameterAsByte(parameterName);
         } else if (cls == Short.class) {
-            value = (T) getParameterAsShort(parameterName);
+            value = getParameterAsShort(parameterName);
         } else if (cls == Integer.class) {
-            value = (T) getParameterAsInteger(parameterName);
+            value = getParameterAsInteger(parameterName);
         } else if (cls == Long.class) {
-            value = (T) getParameterAsLong(parameterName);
+            value = getParameterAsLong(parameterName);
         } else if (cls == Float.class) {
-            value = (T) getParameterAsFloat(parameterName);
+            value = getParameterAsFloat(parameterName);
         } else if (cls == Double.class) {
-            value = (T) getParameterAsDouble(parameterName);
+            value = getParameterAsDouble(parameterName);
         } else if (cls == Character.class) {
-            value = (T) getParameterAsCharacter(parameterName);
+            value = getParameterAsCharacter(parameterName);
         } else if (cls == BigDecimal.class) {
-            value = (T) getParameterAsBigDecimal(parameterName);
+            value = getParameterAsBigDecimal(parameterName);
         } else if (cls == BigInteger.class) {
-            value = (T) getParameterAsBigInteger(parameterName);
+            value = getParameterAsBigInteger(parameterName);
         } else if (cls == LocalDate.class) {
-            value = (T) getParameterAsLocalDate(parameterName);
+            value = getParameterAsLocalDate(parameterName);
         } else if (cls == LocalDateTime.class) {
-            value = (T) getParameterAsLocalDateTime(parameterName);
+            value = getParameterAsLocalDateTime(parameterName);
         } else if (cls == String.class) {
-            value = (T) getParameter(parameterName);
+            value = getParameter(parameterName);
+        } else {
+        	value = null;
         }
         return value;
     }
