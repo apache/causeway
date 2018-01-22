@@ -20,8 +20,7 @@
 package org.apache.isis.applib.services.repository;
 
 import java.util.List;
-
-import com.google.common.base.Predicate;
+import java.util.function.Predicate;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.query.Query;
@@ -144,9 +143,12 @@ public interface RepositoryService {
      *
      * @param range 2 longs, specifying 0-based start and count.
      */
-    @Programmatic
-    <T> List<T> allMatches(final Class<T> ofType, final Predicate<? super T> predicate, long... range);
+    @Programmatic @Deprecated //TODO ISIS-1827 remove guava from public API
+    <T> List<T> allMatches(final Class<T> ofType, final com.google.common.base.Predicate<? super T> predicate, long... range);
 
+    @Programmatic
+    <T> List<T> allMatches8(final Class<T> ofType, final Predicate<? super T> predicate, long... range);
+    
     /**
      * Returns all the instances that match the given {@link Query}.
      *
@@ -178,7 +180,7 @@ public interface RepositoryService {
      */
     @Deprecated
     @Programmatic
-    <T> T firstMatch(final Class<T> ofType, final Predicate<T> predicate);
+    <T> T firstMatch(final Class<T> ofType, final com.google.common.base.Predicate<T> predicate);
 
     /**
      * Returns the first instance that matches the supplied query, or <tt>null</tt> if none.
@@ -210,8 +212,11 @@ public interface RepositoryService {
      * instances.  Use {@link #uniqueMatch(Query)} for production code.
      * </p>
      */
+    @Programmatic @Deprecated //TODO ISIS-1827 remove guava from public API 
+    <T> T uniqueMatch(final Class<T> ofType, final com.google.common.base.Predicate<T> predicate);
+    
     @Programmatic
-    <T> T uniqueMatch(final Class<T> ofType, final Predicate<T> predicate);
+    <T> T uniqueMatch8(final Class<T> ofType, final Predicate<T> predicate);
 
     /**
      * Find the only instance that matches the provided query.
