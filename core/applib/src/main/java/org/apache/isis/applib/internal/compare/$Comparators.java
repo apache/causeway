@@ -37,10 +37,12 @@ public final class $Comparators {
 
 	private $Comparators(){}
 	
+	private static final String DEWEY_SEPERATOR = ".";
+	
 	public static int deweyOrderCompare(
     		@Nullable final String sequence1, 
     		@Nullable final String sequence2) {
-		return $Comparators_SequenceCompare.compareNullLast(sequence1, sequence2, ".");
+		return $Comparators_SequenceCompare.compareNullLast(sequence1, sequence2, DEWEY_SEPERATOR);
 	}
 	
 	public static final Comparator<String> deweyOrderComparator = $Comparators::deweyOrderCompare;
