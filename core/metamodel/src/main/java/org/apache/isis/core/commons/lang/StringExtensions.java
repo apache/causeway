@@ -131,13 +131,7 @@ public final class StringExtensions {
     // ////////////////////////////////////////////////////////////
 
     public static String capitalize(final String extendee) {
-        if (extendee == null || extendee.length() == 0) {
-            return extendee;
-        }
-        if (extendee.length() == 1) {
-            return extendee.toUpperCase();
-        }
-        return Character.toUpperCase(extendee.charAt(0)) + extendee.substring(1);
+    	return _Strings.capitalize(extendee);
     }
 
     /**
