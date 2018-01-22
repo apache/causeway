@@ -39,7 +39,7 @@ public class NamedFacetTranslated extends FacetAbstract implements NamedFacet {
         this.originalText = originalText;
         this.translationService = translationService;
 
-        if(translationService.getMode().isWrite()) {
+        if(translationService!=null && translationService.getMode().isWrite()) {
             // force PoWriter to be called to capture this text that needs translating
             translateText();
         }
