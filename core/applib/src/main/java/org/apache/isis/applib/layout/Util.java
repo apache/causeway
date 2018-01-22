@@ -23,6 +23,7 @@ import javax.annotation.Nullable;
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 
+@Deprecated //[ahuber] class is package private, could not find any uses
 class Util {
 
     private Util(){}
@@ -40,7 +41,8 @@ class Util {
     }
 
     private static class CastFunction<F, T extends F> implements Function<F, T> {
-        @Override
+        @SuppressWarnings("unchecked") // class is deprecated
+		@Override
         public final T apply(final F from) {
             return (T) from;
         }
