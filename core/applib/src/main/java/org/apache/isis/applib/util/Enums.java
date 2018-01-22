@@ -19,10 +19,9 @@
 
 package org.apache.isis.applib.util;
 
-import com.google.common.base.Function;
-import com.google.common.base.Joiner;
-import com.google.common.base.Splitter;
-import com.google.common.collect.Iterables;
+import java.util.stream.Collectors;
+
+import org.apache.isis.applib.internal.base._Strings;
 
 public final class Enums {
     
@@ -33,12 +32,18 @@ public final class Enums {
     }
     
     public static String getFriendlyNameOf(String anEnumName) {
-        return Joiner.on(" ").join(Iterables.transform(Splitter.on("_").split(anEnumName), LOWER_CASE_THEN_CAPITALIZE));
+    	return _Strings.splitThenStream(anEnumName, "_")
+		    	.map(_Strings::lower)
+		    	.map(_Strings::capitalize)
+		    	.collect(Collectors.joining(" "));
     }
 
     
     public static String getEnumNameFromFriendly(String anEnumFriendlyName) {
-        return Joiner.on("_").join(Iterables.transform(Splitter.on(" ").split(anEnumFriendlyName), UPPER_CASE));
+    	return _Strings.splitThenStream(anEnumFriendlyName, " ")
+    	    	.map(_Strings::lower)
+    	    	.map(_Strings::capitalize)
+    	    	.collect(Collectors.joining("_"));
     }
 
     
@@ -79,29 +84,5 @@ public final class Enums {
         return builder.toString();
     }
 
-
-    private static Function<String, String> LOWER_CASE_THEN_CAPITALIZE = new Function<String, String>() {
-        @Override
-        public String apply(String input) {
-            return capitalize(input.toLowerCase());
-        }
-    };
-
-    private static Function<String, String> UPPER_CASE = new Function<String, String>() {
-        @Override
-        public String apply(String input) {
-            return input.toUpperCase();
-        }
-    };
-
-    private static String capitalize(final String str) {
-        if (str == null || str.length() == 0) {
-            return str;
-        }
-        if (str.length() == 1) {
-            return str.toUpperCase();
-        }
-        return Character.toUpperCase(str.charAt(0)) + str.substring(1);
-    }
 
 }

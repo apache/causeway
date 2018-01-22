@@ -74,6 +74,34 @@ public class StringsTest {
 	}
 	
 	@Test
+	public void capitalizeWithNull() throws Exception {
+		Assert.assertThat(
+				_Strings.capitalize(null), 
+				nullValue());
+	}
+	
+	@Test
+	public void capitalizeSize0() throws Exception {
+		Assert.assertThat(
+				_Strings.capitalize(""), 
+				is(""));
+	}
+	
+	@Test
+	public void capitalizeSize1() throws Exception {
+		Assert.assertThat(
+				_Strings.capitalize("a"), 
+				is("A"));
+	}
+	
+	@Test
+	public void capitalizeSize2() throws Exception {
+		Assert.assertThat(
+				_Strings.capitalize("ab"), 
+				is("Ab"));
+	}
+	
+	@Test
 	public void trimWithNull() throws Exception {
 		Assert.assertThat(
 				_Strings.trim(null), 

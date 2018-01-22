@@ -104,7 +104,25 @@ public final class _Strings {
     	}
         return input.toUpperCase();
     }
-	
+    
+    /**
+     * Converts the first character in {@code input} to upper case using the rules of the default locale. 
+     * @param input
+     * @return null if {@code input} is null
+     */
+    public static String capitalize(@Nullable final String input) {
+    	if(input==null) {
+    		return null;
+    	}
+    	if (input.length() == 0) {
+    		return input;
+    	}
+    	if (input.length() == 1) {
+    		return input.toUpperCase();
+    	}
+    	return Character.toUpperCase(input.charAt(0)) + input.substring(1);
+    }
+    
 	// -- SPLITTING
 	
 	/**
