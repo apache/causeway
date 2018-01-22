@@ -49,7 +49,7 @@ public class JaxbUtil {
         Unmarshaller un = null;
         try {
             un = getJaxbContext(dtoClass).createUnmarshaller();
-            return (T) un.unmarshal(reader);
+            return Casts.uncheckedCast(un.unmarshal(reader));
         } catch (JAXBException e) {
             throw new RuntimeException(e);
         }

@@ -35,6 +35,7 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.fixturescripts.events.FixturesInstalledEvent;
 import org.apache.isis.applib.fixturescripts.events.FixturesInstallingEvent;
 import org.apache.isis.applib.services.WithTransactionScope;
+import org.apache.isis.applib.util.Casts;
 
 /**
  * This service (API and implementation) provides a mechanism by which idempotent query results can be cached for the duration of an interaction.
@@ -154,7 +155,6 @@ public class QueryResultsCache implements WithTransactionScope {
     }
 
     @Programmatic
-    @SuppressWarnings("unchecked")
     public <T> T execute(final Callable<T> callable, final Key cacheKey) {
         if(control.isFixturesInstalling()) {
             try {
@@ -171,7 +171,7 @@ public class QueryResultsCache implements WithTransactionScope {
             final Value<?> cacheValue = cache.get(cacheKey);
             logHitOrMiss(cacheKey, cacheValue);
             if(cacheValue != null) {
-                return (T) cacheValue.getResult();
+                return Casts.uncheckedCast(cacheValue.getResult());
             }
 
             // cache miss, so get the result...

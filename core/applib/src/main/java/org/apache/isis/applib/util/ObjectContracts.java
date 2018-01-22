@@ -41,7 +41,6 @@ public class ObjectContracts {
      * @param propertyNames - the property name or names, CSV format.  If multiple properties, use the {@link #compare(Object, Object, String...) varargs} overloaded version of this method.
      */
     @Deprecated
-    @SuppressWarnings("unchecked")
     public static <T> int compare(final T p, final T q, final String propertyNames) {
         final Iterable<String> propertyNamesIter = csvToIterable(propertyNames);
         return compare(p, q, propertyNamesIter);
@@ -53,7 +52,6 @@ public class ObjectContracts {
      * @deprecated - please be aware that this utility heavily uses reflection.  We don't actually intend to deprecate this method (it's useful while prototyping), but we wanted to bring this to your attention!
      */
     @Deprecated
-    @SuppressWarnings("unchecked")
     public static <T> int compare(final T p, final T q, final String... propertyNames) {
         final Iterable<String> propertyNamesIter = varargsToIterable(propertyNames);
         return compare(p, q, propertyNamesIter);
@@ -70,8 +68,8 @@ public class ObjectContracts {
         final Iterable<Clause> clauses = clausesFor(propertyNamesIter);
         ComparisonChain chain = ComparisonChain.start();
         for (final Clause clause : clauses) {
-            final Comparable<T> propertyValueOfP = (Comparable<T>) clause.getValueOf(p);
-            final Comparable<T> propertyValueOfQ = (Comparable<T>) clause.getValueOf(q);
+            final Comparable<T> propertyValueOfP = Casts.uncheckedCast(clause.getValueOf(p));
+            final Comparable<T> propertyValueOfQ = Casts.uncheckedCast(clause.getValueOf(q));
             chain = chain.compare(propertyValueOfP, propertyValueOfQ, clause.getDirection().getOrdering());
         }
         return chain.result();
@@ -85,7 +83,6 @@ public class ObjectContracts {
      * @param propertyNames - the property name or names, CSV format.  If multiple properties, use the {@link #compareBy(String...)} varargs} overloaded version of this method.
      */
     @Deprecated
-    @SuppressWarnings("unchecked")
     public static <T> Comparator<T> compareBy(final String propertyNames){
         return (p, q) -> compare(p, q, propertyNames);
     }
@@ -94,7 +91,6 @@ public class ObjectContracts {
      * @deprecated - please be aware that this utility heavily uses reflection.  We don't actually intend to deprecate this method (it's useful while prototyping), but we wanted to bring this to your attention!
      */
     @Deprecated
-    @SuppressWarnings("unchecked")
     public static <T> Comparator<T> compareBy(final String... propertyNames){
         return (p, q) -> compare(p, q, propertyNames);
     }

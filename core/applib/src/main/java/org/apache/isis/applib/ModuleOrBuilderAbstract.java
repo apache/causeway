@@ -128,7 +128,7 @@ abstract class ModuleOrBuilderAbstract<B extends ModuleOrBuilderAbstract<B>> {
     // -- HELPER
     
     @SuppressWarnings("unchecked") //[ahuber] it's safe to assume this object is an instance of B
-	private B self() {
+	protected B self() {
     	return (B) this;
     }
 

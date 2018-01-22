@@ -34,6 +34,7 @@ import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.dto.Dto_downloadXsd;
+import org.apache.isis.applib.util.Casts;
 import org.apache.isis.applib.util.Streams;
 
 import com.google.common.collect.Maps;
@@ -132,7 +133,7 @@ public interface JaxbService {
         public <T> T fromXml(final Class<T> domainClass, final String xml, final Map<String, Object> unmarshallerProperties) {
             try {
                 final JAXBContext context = JAXBContext.newInstance(domainClass);
-                return (T) fromXml(context, xml, unmarshallerProperties);
+                return Casts.uncheckedCast(fromXml(context, xml, unmarshallerProperties));
 
             } catch (final JAXBException ex) {
                 throw new NonRecoverableException("Error unmarshalling XML to class '" + domainClass.getName() + "'", ex);
@@ -177,7 +178,7 @@ public interface JaxbService {
                     String annotationExceptionMessages = null;
                     try {
                         final Method getErrorsMethod = exClass.getMethod("getErrors");
-                        errors = (List<? extends Exception>) getErrorsMethod.invoke(ex);
+                        errors = Casts.uncheckedCast(getErrorsMethod.invoke(ex));
                         
                         annotationExceptionMessages = ": " + 
                         Streams.stream(errors)
