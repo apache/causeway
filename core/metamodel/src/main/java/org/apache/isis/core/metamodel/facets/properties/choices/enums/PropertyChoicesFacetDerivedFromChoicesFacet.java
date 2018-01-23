@@ -19,14 +19,15 @@
 
 package org.apache.isis.core.metamodel.facets.properties.choices.enums;
 
+import org.apache.isis.applib.internal._Constants;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
+import org.apache.isis.core.metamodel.facets.properties.choices.PropertyChoicesFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.metamodel.facets.properties.choices.PropertyChoicesFacetAbstract;
 
 public class PropertyChoicesFacetDerivedFromChoicesFacet extends PropertyChoicesFacetAbstract {
 
@@ -45,7 +46,7 @@ public class PropertyChoicesFacetDerivedFromChoicesFacet extends PropertyChoices
         final ObjectSpecification noSpec = getSpecification(facetedMethod.getType());
         final ChoicesFacet choicesFacet = noSpec.getFacet(ChoicesFacet.class);
         if (choicesFacet == null) {
-            return new Object[0];
+            return _Constants.emptyObjects;
         }
         return choicesFacet.getChoices(adapter, interactionInitiatedBy);
     }

@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.facets.param.choices.enums;
 
 import java.util.List;
 
+import org.apache.isis.applib.internal._Constants;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
@@ -54,7 +55,7 @@ public class ActionParameterChoicesFacetDerivedFromChoicesFacet extends ActionPa
         final ObjectSpecification noSpec = getSpecification(paramPeer.getType());
         final ChoicesFacet choicesFacet = noSpec.getFacet(ChoicesFacet.class);
         if (choicesFacet == null) {
-            return new Object[0];
+            return _Constants.emptyObjects;
         }
         return choicesFacet.getChoices(adapter, interactionInitiatedBy);
     }

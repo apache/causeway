@@ -23,6 +23,7 @@ package org.apache.isis.nof.reflect.remote.spec;
 import org.apache.isis.noa.adapter.ObjectAdapter;
 import org.apache.isis.noa.adapter.ObjectAdapterReference;
 import org.apache.isis.noa.facets.Facet;
+import org.apache.isis.applib.internal._Constants;
 import org.apache.isis.metamodel.facets.actions.debug.DebugFacet;
 import org.apache.isis.metamodel.facets.actions.executed.ExecutedFacet;
 import org.apache.isis.metamodel.facets.actions.exploration.ExplorationFacet;
@@ -78,7 +79,7 @@ public class DummyAction implements ObjectAction {
 	}
 
 	public Class[] getFacetTypes() {
-		return new Class[0];
+		return _Constants.emptyClasses;
 	}
 	
 	public Facet[] getFacets(Facet.Filter filter) {

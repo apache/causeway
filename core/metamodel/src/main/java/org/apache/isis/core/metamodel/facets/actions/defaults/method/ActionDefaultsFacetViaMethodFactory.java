@@ -22,6 +22,7 @@ package org.apache.isis.core.metamodel.facets.actions.defaults.method;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import org.apache.isis.applib.internal._Constants;
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -81,7 +82,7 @@ public class ActionDefaultsFacetViaMethodFactory extends MethodPrefixBasedFacetF
         final String name = MethodPrefixConstants.DEFAULT_PREFIX + capitalizedName;
 
         final Class<?> cls = processMethodContext.getCls();
-        return MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, name, returnType, new Class[0]);
+        return MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, name, returnType, _Constants.emptyClasses);
     }
 
 }

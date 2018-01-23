@@ -25,6 +25,7 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
+import org.apache.isis.applib.internal._Constants;
 import org.apache.isis.core.commons.lang.ClassExtensions;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -114,7 +115,7 @@ public class RemoveMethodsFacetFactory extends FacetFactoryAbstract {
         }
 
         // removeInitMethod(processClassContext);
-        processClassContext.removeMethod(MethodScope.OBJECT, "init", void.class, new Class[0]);
+        processClassContext.removeMethod(MethodScope.OBJECT, "init", void.class, _Constants.emptyClasses);
     }
 
     private void removeSuperclassMethods(Class<?> type, final ProcessClassContext processClassContext) {

@@ -23,9 +23,7 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
-
+import org.apache.isis.applib.internal._Constants;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
@@ -38,6 +36,9 @@ import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 
 public class ActionParameterChoicesFacetViaMethod extends ActionParameterChoicesFacetAbstract implements ImperativeFacet {
 
@@ -80,7 +81,7 @@ public class ActionParameterChoicesFacetViaMethod extends ActionParameterChoices
                 ObjectAdapter.InvokeUtils.invokeAutofit(
                         method, adapter, argumentsIfAvailable, getAdapterManager());
         if (choices == null) {
-            return new Object[0];
+            return _Constants.emptyObjects;
         }
         final ObjectAdapter objectAdapter = getAdapterManager().adapterFor(choices);
         final FacetedMethodParameter facetedMethodParameter = (FacetedMethodParameter) getFacetHolder();

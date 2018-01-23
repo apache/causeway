@@ -24,6 +24,8 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.isis.applib.internal._Constants;
+
 import com.google.common.collect.Lists;
 
 import com.google.common.base.Predicate;
@@ -110,7 +112,7 @@ public final class FacetUtil {
      */
     @SuppressWarnings("unchecked")
     public static Class<? extends Facet>[] getFacetTypes(final Map<Class<? extends Facet>, Facet> facetsByClass) {
-        return facetsByClass.keySet().toArray(new Class[0]);
+        return facetsByClass.keySet().toArray(_Constants.emptyClasses);
     }
 
     /**
