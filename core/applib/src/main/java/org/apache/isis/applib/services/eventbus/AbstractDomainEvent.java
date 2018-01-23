@@ -20,11 +20,14 @@ package org.apache.isis.applib.services.eventbus;
 
 import java.util.EventObject;
 import java.util.Map;
-import com.google.common.collect.Maps;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.internal.exceptions._Exceptions;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.util.ObjectContracts;
+
+import com.google.common.collect.Maps;
 
 public abstract class AbstractDomainEvent<S> extends java.util.EventObject {
 
@@ -244,11 +247,20 @@ public abstract class AbstractDomainEvent<S> extends java.util.EventObject {
     public void veto(final String reason, final Object... args) {
         switch (getEventPhase()) {
             case HIDE:
-                hide();
+                hide(); 
+                //TODO [ahuber] REVIEW missing break or intended?
             case DISABLE:
                 disable(String.format(reason, args));
+                //TODO [ahuber] REVIEW missing break or intended?
             case VALIDATE:
                 invalidate(String.format(reason, args));
+                break;
+                
+            case EXECUTED:
+            case EXECUTING:
+            	break;
+            default:
+            	throw _Exceptions.unmatchedCase(getEventPhase());
         }
     }
     /**
@@ -268,10 +280,20 @@ public abstract class AbstractDomainEvent<S> extends java.util.EventObject {
         switch (getEventPhase()) {
             case HIDE:
                 hide();
+                //TODO [ahuber] missing break or intended?
             case DISABLE:
                 disable(translatableReason);
+                //TODO [ahuber] REVIEW missing break or intended?
             case VALIDATE:
                 invalidate(translatableReason);
+                break;
+                
+            case EXECUTED:
+            case EXECUTING:
+            	break;
+            default:
+            	throw _Exceptions.unmatchedCase(getEventPhase());
+
         }
     }
     //endregion

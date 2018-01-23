@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.adapter.oid;
 
 import org.apache.isis.applib.annotation.Value;
+import org.apache.isis.applib.internal.exceptions._Exceptions;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.commons.encoding.Encodable;
 import org.apache.isis.core.metamodel.adapter.version.Version;
@@ -94,8 +95,10 @@ public interface Oid extends Encodable {
                     return VIEWMODEL;
                 case TRANSIENT:
                     return TRANSIENT;
-                default:
+                case PERSISTENT:
                     return PERSISTENT;
+                default:
+                	throw _Exceptions.unmatchedCase(objectState);
             }
         }
         public Bookmark.ObjectState asBookmarkObjectState() {
@@ -104,8 +107,10 @@ public interface Oid extends Encodable {
                     return Bookmark.ObjectState.VIEW_MODEL;
                 case TRANSIENT:
                     return Bookmark.ObjectState.TRANSIENT;
-                default:
+                case PERSISTENT:
                     return Bookmark.ObjectState.PERSISTENT;
+                default:
+                	throw _Exceptions.unmatchedCase(this);
             }
         }
     }

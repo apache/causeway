@@ -19,7 +19,10 @@
 
 package org.apache.isis.applib.internal.exceptions;
 
+import java.util.Objects;
 import java.util.stream.Stream;
+
+import javax.annotation.Nullable;
 
 import org.apache.isis.applib.internal.base._NullSafe;
 
@@ -37,19 +40,44 @@ public final class _Exceptions {
 
 	private _Exceptions(){}
 	
-	public static final RuntimeException unmatchedCase(Object _case) {
-		return new RuntimeException("internal error: unmatched case in switch statement: "+_case);
+	// -- FRAMEWORK INTERNAL ERRORS 
+	
+	/**
+	 * Most likely to be used in switch statements to handle the default case.  
+	 * @param _case the unmatched case to be reported
+	 * @return
+	 */
+	public static final IllegalArgumentException unmatchedCase(@Nullable Object _case) {
+		return new IllegalArgumentException("internal error: unmatched case in switch statement: "+_case);
+	}
+	
+	/**
+	 * Most likely to be used in switch statements to handle the default case.
+	 * @param format like in {@link java.lang.String#format(String, Object...)}
+	 * @param _case the unmatched case to be reported
+	 * @return
+	 */
+	public static final IllegalArgumentException unmatchedCase(String format, @Nullable Object _case) {
+		Objects.requireNonNull(format);
+		return new IllegalArgumentException(String.format(format, _case));
 	}
 	
 	public static final RuntimeException unexpectedCodeReach() {
 		return new RuntimeException("internal error: code was reached, that is expected unreachable");
 	}	
 	
-	public static final Stream<String> streamStacktraceLines(Throwable e, int maxLines) {
-		return _NullSafe.stream(e.getStackTrace())
+	// -- STACKTRACE UTILITITIES
+	
+	public static final Stream<String> streamStacktraceLines(@Nullable Throwable ex, int maxLines) {
+		if(ex==null) {
+			return Stream.empty();
+		}
+		return _NullSafe.stream(ex.getStackTrace())
 				.map(StackTraceElement::toString)
 				.limit(maxLines);
 	}
+
+	
 
 	
 }

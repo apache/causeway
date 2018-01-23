@@ -37,6 +37,7 @@ import org.apache.isis.applib.fixtures.FixtureType;
 import org.apache.isis.applib.fixtures.InstallableFixture;
 import org.apache.isis.applib.internal.base._Casts;
 import org.apache.isis.applib.internal.base._Strings;
+import org.apache.isis.applib.internal.exceptions._Exceptions;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.repository.RepositoryService;
@@ -642,7 +643,7 @@ public abstract class FixtureScript
                 return childFixtureScript;
 
             default:
-                throw new IllegalArgumentException("Execution strategy: '" + executionStrategy + "' not recognized");
+            	throw _Exceptions.unmatchedCase("Execution strategy: '%s' not recognized", executionStrategy);
             }
         }
 

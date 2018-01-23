@@ -42,6 +42,7 @@ import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.RestrictTo;
+import org.apache.isis.applib.internal.exceptions._Exceptions;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.classdiscovery.ClassDiscoveryService;
 import org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault;
@@ -461,6 +462,8 @@ public abstract class FixtureScripts extends AbstractService {
                     break;
                 case IGNORE:
                     return null;
+                default:
+                	throw _Exceptions.unmatchedCase(getNonPersistedObjectsStrategy());
             }
         }
         final FixtureResult fixtureResult = new FixtureResult();

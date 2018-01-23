@@ -31,6 +31,7 @@ import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 import org.joda.time.LocalTime;
 import org.apache.isis.applib.internal.base._Casts;
+import org.apache.isis.applib.internal.exceptions._Exceptions;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.schema.cmd.v1.ParamDto;
@@ -250,10 +251,7 @@ public final class CommonDtoUtils {
             return null;
         }
         default:
-            // should never happen; all cases are listed above
-            throw new IllegalArgumentException(String.format(
-                    "newValueDto(): do not recognize valueType %s (likely a framework error)",
-                    valueType));
+        	throw _Exceptions.unmatchedCase(valueType);
         }
     }
 
@@ -329,10 +327,7 @@ public final class CommonDtoUtils {
         case VOID:
             return null;
         default:
-            // should never happen; all cases are listed above
-            throw new IllegalArgumentException(String.format(
-                    "getValueDto(...): do not recognize valueType %s (likely a framework error)",
-                    valueType));
+        	throw _Exceptions.unmatchedCase(valueType);
         }
     }
 

@@ -23,6 +23,7 @@ import java.util.List;
 
 import org.apache.isis.applib.annotation.Auditing;
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.internal.exceptions._Exceptions;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacet;
@@ -47,8 +48,10 @@ public class AuditableFacetForDomainObjectAnnotation extends AuditableFacetAbstr
                     case ENABLED:
                         return new AuditableFacetForDomainObjectAnnotation(Enablement.ENABLED, holder);
                     case AS_CONFIGURED:
-                    default:
+                    case NOT_SPECIFIED:
                         return new AuditableFacetForDomainObjectAnnotationAsConfigured(holder);
+                    default:
+                    	throw _Exceptions.unmatchedCase(domainObject.auditing());
                     }
                 })
                 .orElse(new AuditableFacetFromConfiguration(holder));

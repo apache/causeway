@@ -24,6 +24,7 @@ import java.util.Iterator;
 import com.google.common.base.Splitter;
 
 import org.apache.isis.applib.annotation.Value;
+import org.apache.isis.applib.internal.exceptions._Exceptions;
 import org.apache.isis.schema.common.v1.BookmarkObjectState;
 import org.apache.isis.schema.common.v1.OidDto;
 
@@ -108,6 +109,7 @@ public class Bookmark implements Serializable {
 
         public static ObjectState from(final BookmarkObjectState objectState) {
             if(objectState == null) {
+                // persistent is assumed if not specified
                 return ObjectState.PERSISTENT;
             }
             switch (objectState) {
@@ -118,8 +120,7 @@ public class Bookmark implements Serializable {
             case PERSISTENT:
                 return ObjectState.PERSISTENT;
             default:
-                // persistent is assumed if not specified
-                return ObjectState.PERSISTENT;
+            	throw _Exceptions.unmatchedCase(objectState);
             }
         }
 
