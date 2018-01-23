@@ -19,10 +19,14 @@
 
 package org.apache.isis.applib.internal.base;
 
+import static org.apache.isis.applib.internal.base._Strings_SplitIterator.splitIterator;
+
 import java.util.Objects;
+import java.util.Spliterator;
+import java.util.Spliterators;
 import java.util.function.UnaryOperator;
-import java.util.regex.Pattern;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import javax.annotation.Nullable;
 
@@ -127,9 +131,16 @@ public final class _Strings {
 	
 	/**
 	 * Splits the {@code input} into chunks separated by {@code separator}, 
-	 * then puts all non-empty chunks on the stream.
+	 * then puts all chunks on the stream.
+	 * <p>
+	 * Corner cases: 
+	 * <ul>
+	 * <li>{@code input} starts with {@code separator}: an empty string is the first chunk put on the stream</li>
+	 * <li>{@code input} ends with {@code separator}: an empty string is the last chunk put on the stream</li>
+	 * <li>a {@code separator} is followed by another: an empty string is put on the stream</li>
+	 * </ul> 
 	 * @param input
-	 * @param separator
+	 * @param separator non-empty string
 	 * @return empty stream if {@code input} is null
 	 * @throws {@link IllegalArgumentException} if {@code separator} is empty
 	 */
@@ -141,8 +152,9 @@ public final class _Strings {
 		if(!input.contains(separator))
 			return Stream.of(input);
 		
-		return Stream.of(input.split(Pattern.quote(separator)))
-				.filter(_Strings::isNotEmpty);
+		return StreamSupport.stream(
+		          Spliterators.spliteratorUnknownSize(splitIterator(input, separator), Spliterator.ORDERED),
+		          false); // not parallel
 	}
     
     // -- REPLACEMENT OPERATORS

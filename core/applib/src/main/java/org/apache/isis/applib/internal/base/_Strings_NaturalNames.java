@@ -26,7 +26,7 @@ import javax.annotation.Nullable;
  * package private mixin for utility class {@link _Strings}
  *
  */
-class _Strings_NaturalNames {
+final class _Strings_NaturalNames {
 	
 	private static final char SPACE = ' ';
  	/**

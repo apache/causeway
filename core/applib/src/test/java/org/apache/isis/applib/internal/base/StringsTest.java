@@ -136,7 +136,7 @@ public class StringsTest {
 		Assert.assertThat(
 				_Strings.splitThenStream("$ 1$2 a$Bc ", "$")
 				.collect(Collectors.joining("|")),
-				is(" 1|2 a|Bc "));
+				is("| 1|2 a|Bc "));
 	}
 	
 	@Test
@@ -144,7 +144,15 @@ public class StringsTest {
 		Assert.assertThat(
 				_Strings.splitThenStream(" 1$2 a$Bc $", "$")
 				.collect(Collectors.joining("|")),
-				is(" 1|2 a|Bc "));
+				is(" 1|2 a|Bc |"));
+	}
+	
+	@Test
+	public void splitThenStreamMultipleWithSeparatorsInSequence() throws Exception {
+		Assert.assertThat(
+				_Strings.splitThenStream(" 1$2 a$$Bc ", "$")
+				.collect(Collectors.joining("|")),
+				is(" 1|2 a||Bc "));
 	}
 	
 	@Test
