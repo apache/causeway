@@ -46,4 +46,9 @@ public final class _Constants {
 	@SuppressWarnings("rawtypes")
 	public static final Class[] emptyClasses = new Class[0];
 	
+	/**
+	 * Convenient e.g. for toArray conversions
+	 */
+	public static final String[] emptyStringArray = new String[0];
+	
 }

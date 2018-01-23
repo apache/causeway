@@ -30,6 +30,8 @@ import java.util.stream.StreamSupport;
 
 import javax.annotation.Nullable;
 
+import org.apache.isis.applib.internal._Constants;
+
 /**
  * <h1>- internal use only -</h1>
  * <p>
@@ -49,8 +51,12 @@ public final class _Strings {
 
 	private _Strings() {}
 	
-	// -- BASICS
+	// -- CONSTANTS
 	
+	/**
+	 * Convenient e.g. for toArray conversions
+	 * (a duplicate of in {@link _Constants.emptyStringArray} )
+	 */
 	public static String[] emptyArray = new String[0];
 	
 	// -- BASIC PREDICATES
