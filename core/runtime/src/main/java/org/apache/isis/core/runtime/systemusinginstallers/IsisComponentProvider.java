@@ -28,23 +28,14 @@ import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import javax.jdo.annotations.PersistenceCapable;
 
-import com.google.common.base.Function;
-import com.google.common.base.Joiner;
-import com.google.common.collect.FluentIterable;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
-
-import org.reflections.Reflections;
-import org.reflections.vfs.Vfs;
-
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
-import org.apache.isis.applib.services.classdiscovery.ClassDiscoveryServiceUsingReflections;
+import org.apache.isis.applib.internal.reflection._Reflect;
+import org.apache.isis.applib.internal.reflection._Reflect.Discovery;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.factory.InstanceUtil;
@@ -66,6 +57,13 @@ import org.apache.isis.core.runtime.system.SystemConstants;
 import org.apache.isis.objectstore.jdo.service.RegisterEntities;
 import org.apache.isis.progmodels.dflt.JavaReflectorHelper;
 import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;
+
+import com.google.common.base.Function;
+import com.google.common.base.Joiner;
+import com.google.common.collect.FluentIterable;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 /**
  * 
@@ -137,24 +135,23 @@ public abstract class IsisComponentProvider {
         moduleAndFrameworkPackages.addAll(AppManifest.Registry.FRAMEWORK_PROVIDED_SERVICES);
         Iterables.addAll(moduleAndFrameworkPackages, modulePackages);
 
-        Vfs.setDefaultURLTypes(ClassDiscoveryServiceUsingReflections.getUrlTypes());
+        final Discovery discovery = _Reflect.discover(moduleAndFrameworkPackages);
 
-        final Reflections reflections = new Reflections(moduleAndFrameworkPackages);
-
-        final Set<Class<?>> domainServiceTypes = reflections.getTypesAnnotatedWith(DomainService.class);
-        final Set<Class<?>> persistenceCapableTypes = reflections.getTypesAnnotatedWith(PersistenceCapable.class);
-        final Set<Class<? extends FixtureScript>> fixtureScriptTypes = reflections.getSubTypesOf(FixtureScript.class);
+        final Set<Class<?>> domainServiceTypes = discovery.getTypesAnnotatedWith(DomainService.class);
+        final Set<Class<?>> persistenceCapableTypes = discovery.getTypesAnnotatedWith(PersistenceCapable.class);
+        final Set<Class<? extends FixtureScript>> fixtureScriptTypes = discovery.getSubTypesOf(FixtureScript.class);
 
         final Set<Class<?>> mixinTypes = Sets.newHashSet();
-        mixinTypes.addAll(reflections.getTypesAnnotatedWith(Mixin.class));
+        mixinTypes.addAll(discovery.getTypesAnnotatedWith(Mixin.class));
 
-        final Set<Class<?>> domainObjectTypes = reflections.getTypesAnnotatedWith(DomainObject.class);
+        final Set<Class<?>> domainObjectTypes = discovery.getTypesAnnotatedWith(DomainObject.class);
         mixinTypes.addAll(
                 domainObjectTypes.stream()
                         .filter(input -> input.getAnnotation(DomainObject.class).nature() == Nature.MIXIN)
                         .collect(Collectors.toList())
         );
-
+        
+        
         // add in any explicitly registered services...
         domainServiceTypes.addAll(appManifest.getAdditionalServices());
 
@@ -176,6 +173,7 @@ public abstract class IsisComponentProvider {
         registry.setPersistenceCapableTypes(within(packagesWithDotSuffix, persistenceCapableTypes));
         registry.setFixtureScriptTypes(within(packagesWithDotSuffix, fixtureScriptTypes));
         registry.setMixinTypes(within(packagesWithDotSuffix, mixinTypes));
+
     }
 
     static <T> Set<Class<? extends T>> within(

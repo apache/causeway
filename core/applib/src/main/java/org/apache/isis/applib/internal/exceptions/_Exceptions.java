@@ -29,7 +29,7 @@ import org.apache.isis.applib.internal.base._NullSafe;
 /**
  * <h1>- internal use only -</h1>
  * <p>
- * A collection of framework internal exceptions.
+ * A collection of framework internal exceptions and exception related idioms.
  * </p>
  * <p>
  * <b>WARNING</b>: Do <b>NOT</b> use any of the classes provided by this package! <br/> 

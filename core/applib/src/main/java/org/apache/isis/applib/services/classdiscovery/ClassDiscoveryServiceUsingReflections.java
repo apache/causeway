@@ -19,13 +19,7 @@
 package org.apache.isis.applib.services.classdiscovery;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Set;
-
-import org.reflections.Reflections;
-import org.reflections.scanners.SubTypesScanner;
-import org.reflections.util.ClasspathHelper;
-import org.reflections.vfs.Vfs;
 
 import org.apache.isis.applib.AbstractService;
 import org.apache.isis.applib.AppManifest;
@@ -33,6 +27,8 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
+import org.apache.isis.applib.internal.base._Casts;
+import org.apache.isis.applib.internal.reflection._Reflect;
 
 /**
  * This utility service supports the dynamic discovery of classes from the classpath.  One service that uses this
@@ -52,43 +48,24 @@ public class ClassDiscoveryServiceUsingReflections
 extends AbstractService 
 implements ClassDiscoveryService {
 
-
 	@Programmatic
 	@Override
-	public <T> Set<Class<? extends T>> findSubTypesOfClasses(Class<T> type, String packagePrefix) {
+	public <T> Set<Class<? extends T>> findSubTypesOfClasses(Class<T> type, String packageNamePrefix) {
 
 		if(type == FixtureScript.class) {
 			return getFixtureScriptTypes();
 		}
 
 		// no appManifest or not asking for FixtureScripts
-		Vfs.setDefaultURLTypes(getUrlTypes());
-
-		final Reflections reflections = new Reflections(
-				ClasspathHelper.forClassLoader(Thread.currentThread().getContextClassLoader()),
-				ClasspathHelper.forClass(Object.class),
-				ClasspathHelper.forPackage(packagePrefix),
-				new SubTypesScanner(false)
-				);
-		return reflections.getSubTypesOf(type);
-	}
-
-	// //////////////////////////////////////
-
-	/**
-	 * Has <tt>public</tt> visibility only so can be reused by other services (including Isis runtime itself).
-	 */
-	public static List<Vfs.UrlType> getUrlTypes() {
-		return AppManifest.Registry.instance().getUrlTypes();
+		return _Reflect.discoverFullscan(packageNamePrefix).getSubTypesOf(type);
 	}
 
 	// -- HELPER
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private static <T> Set<Class<? extends T>> getFixtureScriptTypes() {
-		Set fixtureScriptTypes = AppManifest.Registry.instance().getFixtureScriptTypes();
+		Set<?> fixtureScriptTypes = AppManifest.Registry.instance().getFixtureScriptTypes();
 		if (fixtureScriptTypes != null) {
-			return fixtureScriptTypes;
+			return _Casts.uncheckedCast(fixtureScriptTypes);
 		}
 		return Collections.emptySet();
 	}

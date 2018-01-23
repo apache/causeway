@@ -25,21 +25,20 @@ import java.util.Set;
 
 import javax.jdo.annotations.PersistenceCapable;
 
+import org.apache.isis.applib.AppManifest;
+import org.apache.isis.applib.internal.reflection._Reflect;
+import org.apache.isis.applib.internal.reflection._Reflect.Discovery;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
-import com.google.common.base.Predicate;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-
-import org.reflections.Reflections;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import org.apache.isis.applib.AppManifest;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 public class RegisterEntities {
 
@@ -96,11 +95,13 @@ public class RegisterEntities {
         final Set<Class<?>> persistenceCapableTypes = Sets.newLinkedHashSet();
         final List<String> domPackages = parseDomPackages(packagePrefixes);
         for (final String packageName : domPackages) {
-            Reflections reflections = new Reflections(packageName);
+        	
+        	final Discovery dicovery = _Reflect.discover(packageName);
+        	
             final Set<Class<?>> entityTypesInPackage =
-                    reflections.getTypesAnnotatedWith(PersistenceCapable.class);
+            		dicovery.getTypesAnnotatedWith(PersistenceCapable.class);
 
-            if(!entitiesIn(entityTypesInPackage)) {
+            if(entityTypesInPackage.isEmpty()) {
                 throw new IllegalArgumentException(String.format(
                         "Bad configuration.\n\nCould not locate any @PersistenceCapable entities in package '%s'\n" +
                                 "Check value of '%s' key in WEB-INF/*.properties\n",
@@ -143,22 +144,6 @@ public class RegisterEntities {
             @Override
             public String apply(String input) {
                 return input.trim();
-            }
-        };
-    }
-
-    private static boolean entitiesIn(Set<Class<?>> entityTypes) {
-        return Iterables.filter(entityTypes, notNullClass()).iterator().hasNext();
-    }
-
-    /**
-     * {@link Reflections} seems to return a set with 1 null element if none can be found, so we ignore these.
-     */
-    private static <T> Predicate<T> notNullClass() {
-        return new Predicate<T>() {
-            @Override
-            public boolean apply(T input) {
-                return input != null;
             }
         };
     }
