@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.isis.applib.internal._Constants;
+import org.apache.isis.applib.internal.base._Casts;
 
 import com.google.common.collect.Lists;
 
@@ -110,9 +111,9 @@ public final class FacetUtil {
      * Bit nasty, for use only by {@link FacetHolder}s that index their
      * {@link Facet}s in a Map.
      */
-    @SuppressWarnings("unchecked")
     public static Class<? extends Facet>[] getFacetTypes(final Map<Class<? extends Facet>, Facet> facetsByClass) {
-        return facetsByClass.keySet().toArray(_Constants.emptyClasses);
+        return _Casts.uncheckedCast(
+        		facetsByClass.keySet().toArray(_Constants.emptyClasses)	);
     }
 
     /**
@@ -169,7 +170,8 @@ public final class FacetUtil {
     public static void copyFacets(final FacetHolder source, final FacetHolder target) {
         final Class<? extends Facet>[] facetTypes = source.getFacetTypes();
         for (Class<? extends Facet> facetType : facetTypes) {
-            final Facet facet = source.getFacet(facetType);
+            //TODO [ahuber] unused because of expected side effects?
+			final Facet facet = source.getFacet(facetType);
 
         }
         List<Facet> facets = source.getFacets(com.google.common.base.Predicates.<Facet>alwaysTrue());

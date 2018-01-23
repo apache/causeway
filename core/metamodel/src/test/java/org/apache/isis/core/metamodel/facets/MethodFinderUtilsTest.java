@@ -16,21 +16,20 @@
  */
 package org.apache.isis.core.metamodel.facets;
 
-import java.lang.reflect.Method;
-import java.util.Map;
-
-import javax.annotation.PostConstruct;
-
-import com.google.common.collect.Maps;
-
-import org.junit.Test;
-
-import org.apache.isis.core.commons.lang.Nullable;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
+
+import java.lang.reflect.Method;
+import java.util.Map;
+import java.util.Optional;
+
+import javax.annotation.PostConstruct;
+
+import org.junit.Test;
+
+import com.google.common.collect.Maps;
 
 public class MethodFinderUtilsTest {
 
@@ -45,27 +44,27 @@ public class MethodFinderUtilsTest {
     @Test
     public void whenExists() throws Exception {
 
-        final Map<Class, Nullable<Method>> cache = Maps.newHashMap();
+        final Map<Class, Optional<Method>> cache = Maps.newHashMap();
         final Method method = MethodFinderUtils.findAnnotatedMethod(new WithPostConstruct(), PostConstruct.class, cache);
 
         assertThat(method, is(not(nullValue())));
-        final Nullable<Method> actual = cache.get(WithPostConstruct.class);
+        final Optional<Method> actual = cache.get(WithPostConstruct.class);
         assertThat(actual, is(not(nullValue())));
         assertThat(actual.isPresent(), is(true));
-        assertThat(actual.value(), is(method));
+        assertThat(actual.orElse(null), is(method));
     }
 
     @Test
     public void whenDoesNotExist() throws Exception {
 
-        final Map<Class, Nullable<Method>> cache = Maps.newHashMap();
+        final Map<Class, Optional<Method>> cache = Maps.newHashMap();
         final Method method = MethodFinderUtils.findAnnotatedMethod(new NoPostConstruct(), PostConstruct.class, cache);
 
         assertThat(method, is(nullValue()));
-        final Nullable<Method> actual = cache.get(NoPostConstruct.class);
+        final Optional<Method> actual = cache.get(NoPostConstruct.class);
         assertThat(actual, is(not(nullValue())));
         assertThat(actual.isPresent(), is(false));
-        assertThat(actual.value(), is(nullValue()));
+        assertThat(actual.orElse(null), is(nullValue()));
     }
 
 }
