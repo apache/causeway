@@ -125,7 +125,7 @@ public class RecreatableObjectFacetFactory extends FacetFactoryAbstract
 
     // //////////////////////////////////////
 
-    private final Map<Class, Optional<Method>> postConstructMethods = Maps.newHashMap();
+    private final Map<Class<?>, Optional<Method>> postConstructMethods = Maps.newHashMap();
 
     public Method postConstructMethodFor(final Object pojo) {
         return MethodFinderUtils.findAnnotatedMethod(pojo, PostConstruct.class, postConstructMethods);

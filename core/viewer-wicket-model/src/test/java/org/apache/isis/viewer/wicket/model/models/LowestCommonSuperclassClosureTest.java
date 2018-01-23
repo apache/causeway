@@ -23,12 +23,10 @@ import static org.junit.Assert.assertThat;
 
 import java.util.List;
 
-import com.google.common.collect.Lists;
-
+import org.apache.isis.core.commons.matchers.IsisMatchers;
 import org.junit.Test;
 
-import org.apache.isis.core.commons.lang.IterableExtensions;
-import org.apache.isis.core.commons.matchers.IsisMatchers;
+import com.google.common.collect.Lists;
 
 public class LowestCommonSuperclassClosureTest {
 
@@ -54,9 +52,10 @@ public class LowestCommonSuperclassClosureTest {
     }
     
     private static void assertLowestCommonOfListIs(List<Class<?>> list, Class<?> expected) {
-        EntityCollectionModel.LowestCommonSuperclassClosure closure = new EntityCollectionModel.LowestCommonSuperclassClosure();
-        IterableExtensions.fold(list, closure);
-        assertThat(closure.getLowestCommonSuperclass(), IsisMatchers.classEqualTo(expected));
+        EntityCollectionModel.LowestCommonSuperclassFinder finder = 
+        		new EntityCollectionModel.LowestCommonSuperclassFinder();
+        finder.searchThrough(list);
+        assertThat(finder.getLowestCommonSuperclass(), IsisMatchers.classEqualTo(expected));
     }
 
     private static List<Class<? extends Object>> listOf(Class<?>... classes) {

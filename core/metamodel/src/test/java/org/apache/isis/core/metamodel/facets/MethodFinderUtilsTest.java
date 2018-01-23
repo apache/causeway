@@ -44,7 +44,7 @@ public class MethodFinderUtilsTest {
     @Test
     public void whenExists() throws Exception {
 
-        final Map<Class, Optional<Method>> cache = Maps.newHashMap();
+        final Map<Class<?>, Optional<Method>> cache = Maps.newHashMap();
         final Method method = MethodFinderUtils.findAnnotatedMethod(new WithPostConstruct(), PostConstruct.class, cache);
 
         assertThat(method, is(not(nullValue())));
@@ -57,7 +57,7 @@ public class MethodFinderUtilsTest {
     @Test
     public void whenDoesNotExist() throws Exception {
 
-        final Map<Class, Optional<Method>> cache = Maps.newHashMap();
+        final Map<Class<?>, Optional<Method>> cache = Maps.newHashMap();
         final Method method = MethodFinderUtils.findAnnotatedMethod(new NoPostConstruct(), PostConstruct.class, cache);
 
         assertThat(method, is(nullValue()));

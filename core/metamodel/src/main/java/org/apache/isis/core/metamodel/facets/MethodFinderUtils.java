@@ -202,7 +202,7 @@ public final class MethodFinderUtils {
     public static Method findAnnotatedMethod(
             final Object pojo,
             final Class<? extends Annotation> annotationClass,
-            final Map<Class, Optional<Method>> methods) {
+            final Map<Class<?>, Optional<Method>> methods) {
 
         final Class<?> clz = pojo.getClass();
         Optional<Method> nullableMethod = methods.get(clz);
@@ -215,7 +215,7 @@ public final class MethodFinderUtils {
     private static Optional<Method> search(
             final Class<?> clz,
             final Class<? extends Annotation> annotationClass,
-            final Map<Class, Optional<Method>> postConstructMethods) {
+            final Map<Class<?>, Optional<Method>> postConstructMethods) {
 
         final Method[] methods = clz.getMethods();
 

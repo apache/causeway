@@ -513,6 +513,7 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
     @Override
     public void setServicesInjector(final ServicesInjector servicesInjector) {
         super.setServicesInjector(servicesInjector);
+        //TODO [ahuber] unused because of side effects ?
         IsisConfiguration configuration = getConfiguration();
 
         this.persistenceSessionServiceInternal = servicesInjector.getPersistenceSessionServiceInternal();
@@ -522,7 +523,7 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
 
     // //////////////////////////////////////
 
-    private final Map<Class, Optional<Method>> postConstructMethods = Maps.newHashMap();
+    private final Map<Class<?>, Optional<Method>> postConstructMethods = Maps.newHashMap();
 
     public Method postConstructMethodFor(final Object pojo) {
         return MethodFinderUtils.findAnnotatedMethod(pojo, PostConstruct.class, postConstructMethods);

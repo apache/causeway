@@ -49,7 +49,7 @@ public final class _NullSafe {
 	 * If {@code array} is {@code array} returns the empty stream, 
 	 * otherwise returns a stream of the array's elements.
 	 * @param array
-	 * @return
+	 * @return non-null stream object
 	 */
 	public static <T> Stream<T> stream(final T[] array) {
 		return array!=null ? Stream.of(array) : Stream.empty();
@@ -59,17 +59,27 @@ public final class _NullSafe {
 	 * If {@code collection} is {@code null} returns the empty stream, 
 	 * otherwise returns a stream of the collection's elements.
 	 * @param collection
-	 * @return
+	 * @return non-null stream object
 	 */
 	public static <T> Stream<T> stream(final Collection<T> coll){
 		return coll!=null ? coll.stream() : Stream.empty();
 	}
 	
 	/**
+	 * If {@code iterable} is {@code null} returns the empty stream, 
+	 * otherwise returns a stream of the iterable's elements.
+	 * @param iterable
+	 * @return non-null stream object
+	 */
+	public static <T> Stream<T> stream(final Iterable<T> iterable){
+		return iterable!=null ? stream(iterable.iterator()) : Stream.empty();
+	}
+	
+	/**
 	 * If {@code iterator} is {@code null} returns the empty stream, 
 	 * otherwise returns a stream of the iterator's elements.
 	 * @param collection
-	 * @return
+	 * @return non-null stream object
 	 */
 	public static <T> Stream<T> stream(final Iterator<T> iterator){
 		return iterator!=null 
@@ -77,7 +87,7 @@ public final class _NullSafe {
 				: Stream.empty();
 	}
 	
-	// [ahuber] not public, since one time use only!
+	// [ahuber] not public, since one time use of iterator only!
 	private static <T> Iterable<T> toIterable(final Iterator<T> iterator){
 		return ()->iterator;
 	}
