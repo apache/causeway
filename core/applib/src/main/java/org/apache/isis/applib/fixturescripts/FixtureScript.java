@@ -925,7 +925,8 @@ public abstract class FixtureScript
     /**
      * Returns the first non-null value; for convenience of subclass implementations
      */
-    protected static <T> T coalesce(final T... ts) {
+    @SafeVarargs
+	protected static <T> T coalesce(final T... ts) {
         for (final T t : ts) {
             if(t != null) return t;
         }

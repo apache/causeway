@@ -16,32 +16,10 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.layout.grid.bootstrap3;
-
-import javax.xml.bind.annotation.XmlAttribute;
-
 /**
- * Superclass for all layout classes, factoring out the common {@link #getCssClass()} attribute.
+ * Internal classes, not intended as being part of the public API.
+ * 
+ * WARNING: Do NOT use any of the classes provided by this package! <br/> 
+ * Public access will be removed once we migrate to Java 9+ modules.
  */
-@SuppressWarnings("serial") // serial versionId to be provided by concrete class
-public abstract class BS3ElementAbstract implements BS3Element {
-
-    private String cssClass;
-
-    /**
-     * Any additional CSS classes to render on the page element corresponding to this object,
-     * eg as per the <a href="http://getbootstrap.com/css/#grid-less">Bootstrap mixins</a> or just for
-     * custom styling.
-     */
-    @XmlAttribute(required = false)
-    public String getCssClass() {
-        return cssClass;
-    }
-
-    public void setCssClass(final String cssClass) {
-        this.cssClass = cssClass;
-    }
-
-
-
-}
+package org.apache.isis.applib.internal.exceptions;

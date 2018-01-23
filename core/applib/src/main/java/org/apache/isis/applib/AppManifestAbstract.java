@@ -211,7 +211,8 @@ public abstract class AppManifestAbstract implements AppManifest {
             return self();
         }
 
-        public B withFixtureScripts(final Class<? extends FixtureScript>... fixtures) {
+		@SuppressWarnings("unchecked") // at least type-safety applies
+		public B withFixtureScripts(final Class<? extends FixtureScript>... fixtures) {
             return withFixtureScripts(Arrays.asList(fixtures));
         }
 
