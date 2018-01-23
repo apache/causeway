@@ -64,8 +64,8 @@ public final class _Exceptions {
 		return new IllegalArgumentException(String.format(format, _case));
 	}
 	
-	public static final RuntimeException unexpectedCodeReach() {
-		return new RuntimeException("internal error: code was reached, that is expected unreachable");
+	public static final IllegalStateException unexpectedCodeReach() {
+		return new IllegalStateException("internal error: code was reached, that is expected unreachable");
 	}	
 	
 	// -- STACKTRACE UTILITITIES

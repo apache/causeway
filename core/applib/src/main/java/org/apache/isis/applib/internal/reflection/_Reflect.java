@@ -23,7 +23,7 @@ import java.lang.annotation.Annotation;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.isis.applib.internal.context._Contexts;
+import org.apache.isis.applib.internal.context._Context;
 import org.reflections.scanners.SubTypesScanner;
 import org.reflections.util.ClasspathHelper;
 
@@ -62,7 +62,7 @@ public final class _Reflect {
 	public static Discovery discoverFullscan(String packageNamePrefix) {
 		_Reflect_Manifest.prepareDiscovery();
 		return _Reflect_Discovery.of(
-				ClasspathHelper.forClassLoader(_Contexts.current().getDefaultClassLoader()),
+				ClasspathHelper.forClassLoader(_Context.getDefaultClassLoader()),
 				ClasspathHelper.forClass(Object.class),
 				ClasspathHelper.forPackage(packageNamePrefix),
 				new SubTypesScanner(false)
