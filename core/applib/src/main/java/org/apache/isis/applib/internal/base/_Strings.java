@@ -34,12 +34,14 @@ import javax.annotation.Nullable;
  * <h1>- internal use only -</h1>
  * <p>
  * Provides String related algorithms.
- * <p>
+ * </p><p>
  * Keep the public methods simple, these are basic building blocks for more complex composites.
  * Composites are provided as static fields. 
+ * </p>
  * <p>
- * WARNING: Do <b>NOT</b> use any of the classes provided by this package! <br/> 
- * Public access will be removed once we migrate to Java 9+ modules.
+ * <b>WARNING</b>: Do <b>NOT</b> use any of the classes provided by this package! <br/> 
+ * These may be changed or removed without notice!
+ * </p>
  * 
  * @since 2.0.0
  */

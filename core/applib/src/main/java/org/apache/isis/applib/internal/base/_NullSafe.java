@@ -31,9 +31,11 @@ import java.util.stream.StreamSupport;
  * <p>
  *  Provides convenient null check / null safe methods primarily 
  * to shortcut null-check idioms.
+ * </p>
  * <p>
- * WARNING: Do <b>NOT</b> use any of the classes provided by this package! <br/> 
- * Public access will be removed once we migrate to Java 9+ modules.
+ * <b>WARNING</b>: Do <b>NOT</b> use any of the classes provided by this package! <br/> 
+ * These may be changed or removed without notice!
+ * </p>
  * 
  * @since 2.0.0
  *

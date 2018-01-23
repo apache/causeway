@@ -30,9 +30,11 @@ import org.apache.isis.applib.internal.base._NullSafe;
  * <h1>- internal use only -</h1>
  * <p>
  * A collection of framework internal exceptions.
+ * </p>
  * <p>
- * WARNING: Do <b>NOT</b> use any of the classes provided by this package! <br/> 
- * Public access will be removed once we migrate to Java 9+ modules.
+ * <b>WARNING</b>: Do <b>NOT</b> use any of the classes provided by this package! <br/> 
+ * These may be changed or removed without notice!
+ * </p>
  * 
  * @since 2.0.0
  */

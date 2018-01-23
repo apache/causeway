@@ -17,9 +17,12 @@
  *  under the License.
  */
 /**
- * Internal classes, not intended as being part of the public API.
- * 
- * WARNING: Do NOT use any of the classes provided by this package! <br/> 
- * Public access will be removed once we migrate to Java 9+ modules.
+ * <h1>Internal API</h1>
+ * Internal classes, contributing to the internal proprietary API. 
+ * These may be changed or removed without notice!
+ * <p>
+ * <b>WARNING</b>: 
+ * Do NOT use any of the classes provided by this package!
+ * </p>
  */
 package org.apache.isis.applib.internal;
