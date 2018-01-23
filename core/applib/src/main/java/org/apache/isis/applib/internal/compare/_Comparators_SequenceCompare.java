@@ -24,6 +24,11 @@ import javax.annotation.Nullable;
 
 import org.apache.isis.applib.internal.base._Strings;
 
+/**
+ * 
+ * package private mixin for utility class {@link _Comparators}
+ *
+ */
 final class _Comparators_SequenceCompare {
 
     private _Comparators_SequenceCompare(){}
