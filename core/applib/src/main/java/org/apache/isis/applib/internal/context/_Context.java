@@ -47,7 +47,8 @@ public final class _Context {
 	 * Puts a singleton instance onto the current context.
 	 * @param type non-null
 	 * @param singleton non-null
-	 * @throws IllegalStateException if there is already an instance of same type on the current context.
+	 * @throws IllegalStateException if there is already an instance of same {@code type}
+	 *  on the current context.
 	 */
 	public static void putSingleton(Class<?> type, Object singleton) {
 		Objects.requireNonNull(type);
@@ -87,8 +88,7 @@ public final class _Context {
 	
 	/**
 	 * Gets a singleton instance of {@code type} if there is any, 
-	 * otherwise throws the {@code onNotFound}'s result,
-	 * which could be null.
+	 * otherwise throws the {@code onNotFound}'s result.
 	 * @param type non-null
 	 * @param onNotFound non-null
 	 * @return
