@@ -36,12 +36,12 @@ public final class _Constants {
 	/**
 	 * Convenient e.g. for reflective invocation
 	 */
-	public static Object[] emptyObjects = new Object[0];
+	public static final Object[] emptyObjects = new Object[0];
 
 	/**
 	 * Convenient e.g. for reflective invocation
 	 */
 	@SuppressWarnings("rawtypes")
-	public static Class[] emptyClasses = new Class[0];
+	public static final Class[] emptyClasses = new Class[0];
 	
 }
