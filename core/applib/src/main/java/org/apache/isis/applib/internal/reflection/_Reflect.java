@@ -44,23 +44,34 @@ public final class _Reflect {
 	
 	// -- REFLECTIVE CLASS DISCOVERY
 	
+	/**
+	 *	Provides search-methods on class hierarchies.  
+	 */
 	public static interface Discovery {
+		
+		//TODO missing java-doc
 		public Set<Class<?>> getTypesAnnotatedWith(Class<? extends Annotation> annotation);
+		
+		//TODO missing java-doc
 		public <T> Set<Class<? extends T>> getSubTypesOf(Class<T> type);
 	}
 
+	//TODO missing java-doc
 	public static Discovery discover(String packageNamePrefix) {
-		_Reflect_Manifest.prepareDiscovery();
+		_Reflect_Manifest.prepareDiscovery(); 	//TODO [ahuber] REVIEW why is this required?
 		return _Reflect_Discovery.of(packageNamePrefix);
 	}
 	
+	//TODO missing java-doc
 	public static Discovery discover(List<String> packageNamePrefixes) {
-		_Reflect_Manifest.prepareDiscovery();
+		_Reflect_Manifest.prepareDiscovery();	//TODO [ahuber] REVIEW why is this required?
 		return _Reflect_Discovery.of(packageNamePrefixes);
 	}
 	
+	//TODO missing java-doc 
+	//TODO [ahuber] REVIEW how is this different from discover(String) 
 	public static Discovery discoverFullscan(String packageNamePrefix) {
-		_Reflect_Manifest.prepareDiscovery();
+		_Reflect_Manifest.prepareDiscovery();	//TODO [ahuber] REVIEW why is this required?
 		return _Reflect_Discovery.of(
 				ClasspathHelper.forClassLoader(_Context.getDefaultClassLoader()),
 				ClasspathHelper.forClass(Object.class),
