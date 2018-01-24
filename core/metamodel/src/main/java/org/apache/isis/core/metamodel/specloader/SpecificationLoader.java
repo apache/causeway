@@ -538,7 +538,13 @@ public class SpecificationLoader implements ApplicationScopedComponent {
 
     //endregion
 
+    @Programmatic
     public IsisConfiguration getConfiguration() {
         return configuration;
+    }
+
+    @Programmatic
+    public ServicesInjector getServicesInjector() {
+        return servicesInjector;
     }
 }

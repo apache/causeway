@@ -328,10 +328,18 @@ If not, then a metamodel validation error will be triggered, meaning the app won
 See also `isis.reflector.facets.ignoreDeprecated`.
 
 |`isis.reflector.validator.` +
+`checkModuleExtent`
+|`true`,`false` +
+(`true`)
+|Whether to check that all domain objects discovered reside under the top-level module of the app manifest.
+
+Note that the application must be bootstrapped using an `AppManifest2`.
+
+|`isis.reflector.validator.` +
 `ensureUniqueObjectTypes`
 |`true`,`false` +
 (`true`)
-|Whether to ensure that all classes in the metamodel map to a different object type (typically either as explicitly specified using `@DomainObject(objectType=...)`, or their class name as a fallback).  +
+|Whether to ensure that all classes in the metamodel map to a different object type (typically either as explicitly specified using `@DomainObject(objectType=...)`, or their class name as a fallback).
 
 
 |`isis.reflector.validator.` +
