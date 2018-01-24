@@ -60,7 +60,7 @@ public final class JavaReflectorHelper  {
             programmingModel.refineMetaModelValidator(metaModelValidator, configuration);
         }
 
-        return new SpecificationLoader(programmingModel, metaModelValidator, layoutMetadataReaders, servicesInjector);
+        return new SpecificationLoader(configuration, programmingModel, metaModelValidator, layoutMetadataReaders, servicesInjector);
     }
 
 }

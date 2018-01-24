@@ -34,6 +34,7 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.ClassUtil;
@@ -91,6 +92,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
     private final ProgrammingModel programmingModel;
     private final FacetProcessor facetProcessor;
 
+    private final IsisConfiguration configuration;
     private final ServicesInjector servicesInjector;
 
     private final MetaModelValidator metaModelValidator;
@@ -98,10 +100,13 @@ public class SpecificationLoader implements ApplicationScopedComponent {
     private final List<LayoutMetadataReader> layoutMetadataReaders;
 
     public SpecificationLoader(
+            final IsisConfiguration configuration,
             final ProgrammingModel programmingModel,
             final MetaModelValidator metaModelValidator,
             final List<LayoutMetadataReader> layoutMetadataReaders,
             final ServicesInjector servicesInjector) {
+
+        this.configuration = configuration;
 
         this.servicesInjector = servicesInjector;
         this.programmingModel = programmingModel;
@@ -533,5 +538,13 @@ public class SpecificationLoader implements ApplicationScopedComponent {
 
     //endregion
 
+    @Programmatic
+    public IsisConfiguration getConfiguration() {
+        return configuration;
+    }
 
+    @Programmatic
+    public ServicesInjector getServicesInjector() {
+        return servicesInjector;
+    }
 }

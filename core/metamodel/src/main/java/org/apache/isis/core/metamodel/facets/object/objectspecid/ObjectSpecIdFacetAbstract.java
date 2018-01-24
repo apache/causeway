@@ -41,8 +41,15 @@ public abstract class ObjectSpecIdFacetAbstract extends
             final String value,
             final FacetHolder holder,
             final Derivation derivation) {
+        this(ObjectSpecId.of(value), holder, derivation);
+    }
+
+    protected ObjectSpecIdFacetAbstract(
+            final ObjectSpecId value,
+            final FacetHolder holder,
+            final Derivation derivation) {
         super(ObjectSpecIdFacetAbstract.type(), holder, derivation);
-        this.value = ObjectSpecId.of(value);
+        this.value = value;
     }
 
     public ObjectSpecId value() {
