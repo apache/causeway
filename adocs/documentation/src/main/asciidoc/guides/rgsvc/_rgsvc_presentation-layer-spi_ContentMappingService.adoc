@@ -43,37 +43,27 @@ public interface ContentMappingService {
 
 == Implementations
 
-No default implementations are provided by Apache Isis framework itself.
+The framework provides two implementations of this service, both in support of the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`] SPI.
 
-However, the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp] includes a sample implementation to convert its `ToDoItem` entity into a (JAXB annotated) `ToDoItemDto`.  The source code is:
+By way of background: implementations of the SPI `CommandService` work with custom implementations of the `Command` interface, typically being persisted to a datastore.
+The `CommandWithDto` interface is a subtype of `Command` for implementations that can be reified into xref:../rgcms/rgcms.adoc#_rgcms_schema-cmd[`CommandDto`] XML instances.
+One implementation that does this is the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s command module.
+
+For framework implementations of `ContentMappingService` allow domain service actions that return ``CommandDto``s (either singularly or in a list) to be converted into XML documents:
+
+* `o.a.i.applib.conmap.ContentMappingServiceForCommandDto` will map any single instnce of a `CommandWithDto` into a `CommandDto` XML document
+* `o.a.i.applib.conmap.ContentMappingServiceForCommandsDto` will map list of ``CommandWithDto``s into a `CommandsDto` XML document, and will wrap any single instance of a `CommandWithDto` into a singleton list and thence into a `CommandsDto` XML document.
+
+The framework also provides `ContentMappingService.Util` which includes a couple of convenience utilities for implementations:
 
 [source,java]
 ----
-@DomainService(nature = NatureOfService.DOMAIN)
-public class ContentMappingServiceForToDoItem implements ContentMappingService {
-    @Override
-    public Object map(
-            final Object object,
-            final List<MediaType> acceptableMediaTypes) {
-        if(object instanceof ToDoItem) {
-            for (MediaType acceptableMediaType : acceptableMediaTypes) {
-                final Map<String, String> parameters = acceptableMediaType.getParameters();
-                final String className = parameters.get("x-ro-domain-type");
-                if(className.eqausl(ToDoItemV1_1.class.getName())) {
-                    return newToDoItemV1_1((ToDoItem) object);
-                }
-            }
-        }
-        return null;
-    }
-    private ToDoItemV1_1 newToDoItemV1_1(final ToDoItem toDoItem) {
-        final ToDoItemV1_1 dto = new ToDoItemV1_1();
-        dto.setToDoItem(toDoItem);
-        dto.setDescription(toDoItem.getDescription());
-        ...
-        return dto;
-    }
-    ...
+public static class Util {
+    public static String determineDomainType(
+        final List<MediaType> acceptableMediaTypes) { ... }
+    public static boolean isSupported(
+            final Class<?> clazz,
+            final List<MediaType> acceptableMediaTypes) { ... }
 }
 ----
 
