@@ -29,7 +29,8 @@ import org.apache.isis.applib.internal.base._Casts;
 /**
  * <h1>- internal use only -</h1>
  * <p>
- * Provides a context for storing and retrieving singletons (usually application scoped).
+ * Provides a context for storing and retrieving singletons (usually application scoped). 
+ * Writes to the store are implemented thread-safe. 
  * </p>
  * <p>
  * <b>WARNING</b>: Do <b>NOT</b> use any of the classes provided by this package! <br/> 
@@ -41,6 +42,13 @@ public final class _Context {
 
 	private _Context(){}
 	
+	/**
+	 * Thread-safety note: We let threads synchronize on writes to the singletonMap, 
+	 * NOT on reads.<br/>
+	 * If there is a race-condition between a writing and a reading thread, by design 
+	 * the first one wins.<br/> 
+	 * If synchronization is required it should happen elsewhere, not here!<br/>
+	 */
 	private final static Map<String, Object> singletonMap = new HashMap<>(); 
 
 	/**
@@ -54,10 +62,13 @@ public final class _Context {
 		Objects.requireNonNull(type);
 		Objects.requireNonNull(singleton);
 		
-		if(singletonMap.containsKey(toKey(type)))
-			throw new IllegalStateException("there is already a singleton of type '"+type+"' on this context.");
-		
-		singletonMap.put(toKey(type), singleton);
+		// let writes to the map be atomic
+		synchronized (singletonMap) {   
+			if(singletonMap.containsKey(toKey(type)))
+				throw new IllegalStateException(
+						"there is already a singleton of type '"+type+"' on this context.");
+			singletonMap.put(toKey(type), singleton);	
+		}
 	}
 
 	/**
@@ -110,7 +121,11 @@ public final class _Context {
 	 * Removes any singleton references from the current context.
 	 */
 	public static void clear() {
-		singletonMap.clear();
+		
+		// let writes to the map be atomic
+		synchronized (singletonMap) {
+			singletonMap.clear();
+		}
 	}
 	
 	// -- DEFAULT CLASSLOADER
