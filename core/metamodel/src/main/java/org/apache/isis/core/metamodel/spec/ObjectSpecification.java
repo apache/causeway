@@ -23,8 +23,11 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import com.google.common.base.Function;
 
+import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -67,24 +70,42 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
 
     public final static List<ObjectSpecification> EMPTY_LIST = Collections.emptyList();
 
-    public final static Function<ObjectSpecification, String> FUNCTION_FULLY_QUALIFIED_CLASS_NAME = new Function<ObjectSpecification, String>() {
-        @Override
-        public String apply(final ObjectSpecification from) {
-            return from.getFullIdentifier();
-        }
-    };
-    public final static Comparator<ObjectSpecification> COMPARATOR_FULLY_QUALIFIED_CLASS_NAME = new Comparator<ObjectSpecification>() {
-        @Override
-        public int compare(final ObjectSpecification o1, final ObjectSpecification o2) {
-            return o1.getFullIdentifier().compareTo(o2.getFullIdentifier());
-        }
-    };
-    public final static Comparator<ObjectSpecification> COMPARATOR_SHORT_IDENTIFIER_IGNORE_CASE = new Comparator<ObjectSpecification>() {
-        @Override
-        public int compare(final ObjectSpecification s1, final ObjectSpecification s2) {
-            return s1.getShortIdentifier().compareToIgnoreCase(s2.getShortIdentifier());
-        }
-    };
+    @Deprecated
+    public final static Function<ObjectSpecification, String> FUNCTION_FULLY_QUALIFIED_CLASS_NAME = Functions.FULL_IDENTIFIER;
+
+    @Deprecated
+    public final static Comparator<ObjectSpecification> COMPARATOR_FULLY_QUALIFIED_CLASS_NAME = Comparators.FULLY_QUALIFIED_CLASS_NAME;
+
+    @Deprecated
+    public final static Comparator<ObjectSpecification> COMPARATOR_SHORT_IDENTIFIER_IGNORE_CASE = Comparators.SHORT_IDENTIFIER_IGNORE_CASE;
+
+    class Comparators{
+        private Comparators(){}
+        public final static Comparator<ObjectSpecification> FULLY_QUALIFIED_CLASS_NAME = new Comparator<ObjectSpecification>() {
+            @Override
+            public int compare(final ObjectSpecification o1, final ObjectSpecification o2) {
+                return o1.getFullIdentifier().compareTo(o2.getFullIdentifier());
+            }
+        };
+        public final static Comparator<ObjectSpecification> SHORT_IDENTIFIER_IGNORE_CASE = new Comparator<ObjectSpecification>() {
+            @Override
+            public int compare(final ObjectSpecification s1, final ObjectSpecification s2) {
+                return s1.getShortIdentifier().compareToIgnoreCase(s2.getShortIdentifier());
+            }
+        };
+    }
+    class Functions {
+
+        private Functions(){}
+
+        public static final Function<ObjectSpecification, String> FULL_IDENTIFIER = new Function<ObjectSpecification, String>() {
+            @Override
+            public String apply(final ObjectSpecification objectSpecification) {
+                return objectSpecification.getFullIdentifier();
+            }
+        };
+
+    }
 
     /**
      * @return
@@ -95,8 +116,8 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
      * Returns the (unique) spec Id, as per the {@link ObjectSpecIdFacet}.
      * 
      * <p>
-     * This will typically be the value of the {@link ObjectType} annotation (or equivalent);
-     * if non has been specified then will default to the fully qualified class name (with
+     * This will typically be the value of the {@link DomainObject#objectType()} annotation attribute.
+     * If none has been specified then will default to the fully qualified class name (with
      * {@link ClassSubstitutor class name substituted} if necessary to allow for runtime bytecode enhancement.
      * 
      * <p>

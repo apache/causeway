@@ -24,9 +24,11 @@ import java.util.List;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetDefaultToObject;
+import org.apache.isis.core.metamodel.facets.object.objectspecid.classname.ObjectSpecIdFacetOnStandaloneList;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.FreeStandingList;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -49,6 +51,7 @@ public class ObjectSpecificationOnStandaloneList extends ObjectSpecificationAbst
             final ServicesInjector servicesInjector,
             final FacetProcessor facetProcessor) {
         super(FreeStandingList.class, NAME, servicesInjector, facetProcessor);
+        this.specId = new ObjectSpecId(getCorrespondingClass().getName());
     }
 
     //endregion
@@ -67,6 +70,7 @@ public class ObjectSpecificationOnStandaloneList extends ObjectSpecificationAbst
         FacetUtil.addFacet(new NamedFacetOnStandaloneList(NAME, this));
         FacetUtil.addFacet(new PluralFacetOnStandaloneList(NAME, this));
         FacetUtil.addFacet(new DescribedAsFacetOnStandaloneList(DESCRIBED_AS, this));
+         FacetUtil.addFacet(new ObjectSpecIdFacetOnStandaloneList(specId, this));
         // don't install anything for NotPersistableFacet
     }
 

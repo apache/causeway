@@ -164,7 +164,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     private final Identifier identifier;
     private final boolean isAbstract;
     // derived lazily, cached since immutable
-    private ObjectSpecId specId;
+    protected ObjectSpecId specId;
 
     private ObjectSpecification superclassSpec;
 
@@ -214,9 +214,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             if(facet == null) {
                 throw new IllegalStateException("could not find an ObjectSpecIdFacet for " + this.getFullIdentifier());
             }
-            if(facet != null) {
-                specId = facet.value();
-            }
+            specId = facet.value();
         }
         return specId;
     }
@@ -517,12 +515,10 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     @Override
     public <Q extends Facet> Q getFacet(final Class<Q> facetType) {
         final Q facet = super.getFacet(facetType);
-        Q noopFacet = null;
         if (isNotANoopFacet(facet)) {
             return facet;
-        } else {
-            noopFacet = facet;
         }
+        Q noopFacet = facet; // might be null
         if (interfaces() != null) {
             final List<ObjectSpecification> interfaces = interfaces();
             for (int i = 0; i < interfaces.size(); i++) {
@@ -536,10 +532,9 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
                 final Q interfaceFacet = interfaceSpec.getFacet(facetType);
                 if (isNotANoopFacet(interfaceFacet)) {
                     return interfaceFacet;
-                } else {
-                    if (noopFacet == null) {
-                        noopFacet = interfaceFacet;
-                    }
+                }
+                if (noopFacet == null) {
+                    noopFacet = interfaceFacet; // might be null
                 }
             }
         }
@@ -550,6 +545,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             if (isNotANoopFacet(superClassFacet)) {
                 return superClassFacet;
             }
+            // TODO: should we perhaps default the noopFacet here as we do in the previous two cases?
         }
         return noopFacet;
     }
