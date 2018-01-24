@@ -48,7 +48,7 @@ public final class _NullSafe {
 	// -- STREAM CREATION
 	
 	/**
-	 * If {@code array} is {@code array} returns the empty stream, 
+	 * If {@code array} is {@code null} returns the empty stream, 
 	 * otherwise returns a stream of the array's elements.
 	 * @param array
 	 * @return non-null stream object
@@ -100,7 +100,7 @@ public final class _NullSafe {
 	/**
 	 * Allows to replace a lambda expression {@code x->x!=null} with {@code NullSafe::isPresent}
 	 * @param x
-	 * @return whether {@code x} is not null.
+	 * @return whether {@code x} is not null (present).
 	 */
 	public static boolean isPresent(Object x) {
 		return x!=null;
@@ -109,7 +109,7 @@ public final class _NullSafe {
 	/**
 	 * Allows to replace a lambda expression {@code x->x==null} with {@code NullSafe::isAbsent}
 	 * @param x
-	 * @return whether {@code x} is null.
+	 * @return whether {@code x} is null (absent).
 	 */
 	public static boolean isAbsent(Object x) {
 		return x==null;
