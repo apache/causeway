@@ -108,6 +108,8 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
             final IsisTransactionManager transactionManager,
             final Command backgroundCommand) {
 
+        final boolean replayHitException[] = new boolean[] {false};
+
         transactionManager.executeWithinTransaction(
                 backgroundCommand,
                 new TransactionalClosure() {
@@ -118,6 +120,14 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
                 final Interaction backgroundInteraction = interactionContext.getInteraction();
 
                 final String memento = backgroundCommand.getMemento();
+
+                // if this is a replayable command but we've also previously tried to execute a replayable commaand
+                // that hit an exception when executed, then just skip; we don't want to execute replayable commands
+                // after one has been blocked.
+                if(backgroundCommand.getExecuteIn().isReplayable() && replayHitException[0]) {
+                    return;
+                }
+
 
                 try {
                     backgroundCommand.setExecutor(Executor.BACKGROUND);
@@ -255,6 +265,11 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
                                 ? priorExecution.getCompletedAt()
                                 : clockService.nowAsJavaSqlTimestamp();  // close enough...
                 backgroundCommand.setCompletedAt(completedAt);
+
+                // prevent any further replayable exceptions from running
+                if(backgroundCommand.getExecuteIn().isReplayable()) {
+                    replayHitException[0] = true;
+                }
             }
 
             private ObjectAction findObjectAction(
