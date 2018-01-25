@@ -87,7 +87,19 @@ public @interface Command {
          * @deprecated - use {@link CommandExecuteIn#REPLAYABLE}
          */
         @Deprecated
-        REPLAYABLE
+        REPLAYABLE,
+        /**
+         * For framework use, not intended to be used in application code.
+         *
+         * @deprecated - use {@link CommandExecuteIn#EXCLUDED}
+         */
+        @Deprecated
+        EXCLUDED;
+
+        public boolean isForeground() { return this == FOREGROUND; }
+        public boolean isBackground() { return this == BACKGROUND; }
+        public boolean isReplayable() { return this == REPLAYABLE; }
+        public boolean isExcluded() { return this == EXCLUDED; }
 
     }
 
