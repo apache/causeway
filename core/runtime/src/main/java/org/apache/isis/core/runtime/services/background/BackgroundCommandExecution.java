@@ -31,7 +31,6 @@ import org.apache.isis.applib.services.bookmark.BookmarkService2;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.Command.Executor;
-import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.jaxb.JaxbService;
@@ -186,7 +185,7 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
 
                             for (OidDto targetOidDto : targetOidDtos) {
 
-                                final ObjectAdapter targetAdapter = targetAdapterFor(targetOidDto);
+                                final ObjectAdapter targetAdapter = adapterFor(targetOidDto);
                                 final ObjectAction objectAction = findObjectAction(targetAdapter, memberId);
 
                                 // we pass 'null' for the mixedInAdapter; if this action _is_ a mixin then
@@ -336,39 +335,11 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
             if(arg == null) {
                 return null;
             }
-            return argAdapterFor(argType, arg);
+            return adapterFor(arg);
 
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    protected ObjectAdapter targetAdapterFor(final OidDto targetOidDto) {
-
-//        // this is the original code, but it can be simplified ...
-//        // (moved out to separate method so that, if proven wrong, can override as a patch)
-
-//      final Bookmark bookmark = Bookmark.from(targetOidDto);
-//      final Object targetObject = bookmarkService.lookup(bookmark);
-//      final ObjectAdapter targetAdapter = adapterFor(targetObject);
-
-        return adapterFor(targetOidDto);
-    }
-
-    protected ObjectAdapter argAdapterFor(final Class<?> argType, final Object arg) {
-
-//        // this is the original code, but it can be simplified ...
-//        // (moved out to separate method so that, if proven wrong, can override as a patch)
-
-//        if(Bookmark.class != argType) {
-//            return adapterFor(arg);
-//        } else {
-//            final Bookmark argBookmark = (Bookmark)arg;
-//            final RootOid rootOid = RootOid.create(argBookmark);
-//            return adapterFor(rootOid);
-//        }
-
-        return adapterFor(arg);
     }
 
     private ObjectAdapter[] argAdaptersFor(final ActionDto actionDto) {
@@ -399,19 +370,16 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
     // //////////////////////////////////////
 
     @javax.inject.Inject
-    private BookmarkService2 bookmarkService;
+    BookmarkService2 bookmarkService;
 
     @javax.inject.Inject
-    private JaxbService jaxbService;
+    JaxbService jaxbService;
 
     @javax.inject.Inject
-    private CommandContext commandContext;
+    InteractionContext interactionContext;
 
     @javax.inject.Inject
-    private InteractionContext interactionContext;
-
-    @javax.inject.Inject
-    private ClockService clockService;
+    ClockService clockService;
 
 
 }

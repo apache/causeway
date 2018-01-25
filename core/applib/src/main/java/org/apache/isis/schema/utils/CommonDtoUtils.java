@@ -319,6 +319,8 @@ public final class CommonDtoUtils {
             return (T) Enum.valueOf(enumClass, enumDto.getEnumName());
         case REFERENCE:
             return (T) valueDto.getReference();
+        case COLLECTION:
+            return (T)valueDto.getCollection();
         case VOID:
             return null;
         default:
