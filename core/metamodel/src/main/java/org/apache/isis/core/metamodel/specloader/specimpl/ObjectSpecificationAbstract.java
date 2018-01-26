@@ -673,6 +673,20 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         };
     };
 
+    @Override
+    public ObjectMember getMember(final String memberId) {
+        final ObjectAction objectAction = getObjectAction(memberId);
+        if(objectAction != null) {
+            return objectAction;
+        }
+        final ObjectAssociation association = getAssociation(memberId);
+        if(association != null) {
+            return association;
+        }
+        return null;
+    }
+
+
     /**
      * The association with the given {@link ObjectAssociation#getId() id}.
      * 

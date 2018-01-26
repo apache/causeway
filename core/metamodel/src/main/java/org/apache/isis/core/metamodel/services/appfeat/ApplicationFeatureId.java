@@ -40,6 +40,7 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.applib.services.appfeat.ApplicationMemberType;
 import org.apache.isis.applib.util.TitleBuffer;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
 /**
  * Value type representing a package, class or member.
@@ -174,6 +175,21 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
             buf.append("#").append(getMemberName());
         }
         return buf.toString();
+    }
+
+    //endregion
+
+    //region > objectSpecId (property)
+
+    @Programmatic
+    public ObjectSpecId getObjectSpecId() {
+        if (getClassName() == null) {
+            return null;
+        }
+        final StringBuilder buf = new StringBuilder();
+        buf.append(getPackageName());
+        buf.append(".").append(getClassName());
+        return ObjectSpecId.of(buf.toString());
     }
 
     //endregion

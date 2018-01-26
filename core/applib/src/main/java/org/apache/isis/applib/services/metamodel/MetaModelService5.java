@@ -16,24 +16,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.actions.action.command;
+package org.apache.isis.applib.services.metamodel;
 
-import org.apache.isis.applib.annotation.Command.ExecuteIn;
-import org.apache.isis.applib.annotation.Command.Persistence;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.services.command.CommandWithDtoProcessor;
 
-public class CommandFacetForActionAnnotationAsConfigured extends CommandFacetForActionAnnotation {
+public interface MetaModelService5 extends MetaModelService4 {
 
-    CommandFacetForActionAnnotationAsConfigured(
-            final Persistence persistence,
-            final ExecuteIn executeIn,
-            final Enablement enablement,
-            final FacetHolder holder,
-            final ServicesInjector servicesInjector) {
-        super(persistence, executeIn, enablement, null,
-                holder, servicesInjector);
-    }
-
+    @Programmatic
+    CommandWithDtoProcessor<?> commandDtoProcessorFor(String memberIdentifier);
 
 }

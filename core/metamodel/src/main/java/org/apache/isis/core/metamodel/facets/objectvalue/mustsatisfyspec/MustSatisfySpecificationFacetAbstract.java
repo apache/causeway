@@ -21,6 +21,8 @@ package org.apache.isis.core.metamodel.facets.objectvalue.mustsatisfyspec;
 
 import java.util.List;
 
+import com.google.common.collect.Lists;
+
 import org.apache.isis.applib.events.ValidityEvent;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.spec.Specification;
@@ -68,8 +70,7 @@ public abstract class MustSatisfySpecificationFacetAbstract extends FacetAbstrac
 
     private static void inject(
             final List specifications, final ServicesInjector servicesInjector) {
-        final List<Object> specificationsAsObjects = specifications;
-        servicesInjector.injectServicesInto(specificationsAsObjects);
+        servicesInjector.injectServicesInto(specifications);
     }
 
     @Override
@@ -87,6 +88,21 @@ public abstract class MustSatisfySpecificationFacetAbstract extends FacetAbstrac
                 .evaluate(specifications, proposedObject)
                 .getReason();
     }
+
+    /**
+     * For benefit of subclasses.
+     */
+    protected static List<Specification> specificationsFor(final Class<?>[] values) {
+        final List<Specification> specifications = Lists.newArrayList();
+        for (final Class<?> value : values) {
+            final Specification specification = newSpecificationElseNull(value);
+            if (specification != null) {
+                specifications.add(specification);
+            }
+        }
+        return specifications;
+    }
+
 
     /**
      * For benefit of subclasses.

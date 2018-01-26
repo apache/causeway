@@ -24,27 +24,37 @@ import org.apache.isis.applib.annotation.Command.Persistence;
 import org.apache.isis.applib.annotation.CommandExecuteIn;
 import org.apache.isis.applib.annotation.CommandPersistence;
 import org.apache.isis.applib.annotation.CommandReification;
+import org.apache.isis.applib.services.command.CommandWithDtoProcessor;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
 import org.apache.isis.core.metamodel.facets.actions.command.CommandFacetAbstract;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public class CommandFacetForActionAnnotation extends CommandFacetAbstract {
 
     public static CommandFacet create(
             final Action action,
             final IsisConfiguration configuration,
+            final ServicesInjector servicesInjector,
             final FacetHolder holder) {
 
-        final CommandReification command = action != null ? action.command() : CommandReification.AS_CONFIGURED;
+        CommandReification commandReification = action != null ? action.command() : CommandReification.AS_CONFIGURED;
         final CommandPersistence commandPersistence = action != null ? action.commandPersistence() : CommandPersistence.PERSISTED;
         final CommandExecuteIn commandExecuteIn = action != null? action.commandExecuteIn() :  CommandExecuteIn.FOREGROUND;
+        final Class<? extends CommandWithDtoProcessor> processorClass =
+                action != null ? action.commandWithDtoProcessor() : null;
+        final CommandWithDtoProcessor<?> processor = (CommandWithDtoProcessor<?>) newProcessorElseNull(processorClass);
 
+        if(processor != null) {
+            commandReification = CommandReification.ENABLED;
+        }
         final Persistence persistence = CommandPersistence.from(commandPersistence);
         final ExecuteIn executeIn = CommandExecuteIn.from(commandExecuteIn);
 
-        switch (command) {
+
+        switch (commandReification) {
             case AS_CONFIGURED:
                 final CommandActionsConfiguration setting = CommandActionsConfiguration.parse(configuration);
                 switch (setting) {
@@ -61,13 +71,16 @@ public class CommandFacetForActionAnnotation extends CommandFacetAbstract {
                         // else fall through
                     default:
                         return action != null
-                                ? new CommandFacetForActionAnnotationAsConfigured(persistence, executeIn, Enablement.ENABLED, holder)
-                                : CommandFacetFromConfiguration.create(holder);
+                                ? new CommandFacetForActionAnnotationAsConfigured(persistence, executeIn, Enablement.ENABLED, holder,
+                                servicesInjector)
+                                : CommandFacetFromConfiguration.create(holder, servicesInjector);
                 }
             case DISABLED:
                 return null;
             case ENABLED:
-                return new CommandFacetForActionAnnotation(persistence, executeIn, Enablement.ENABLED, holder);
+                return new CommandFacetForActionAnnotation(
+                        persistence, executeIn, Enablement.ENABLED, processor,
+                        holder, servicesInjector);
         }
 
         return null;
@@ -78,8 +91,10 @@ public class CommandFacetForActionAnnotation extends CommandFacetAbstract {
             final Persistence persistence,
             final ExecuteIn executeIn,
             final Enablement enablement,
-            final FacetHolder holder) {
-        super(persistence, executeIn, enablement, holder);
+            final CommandWithDtoProcessor<?> processor,
+            final FacetHolder holder,
+            final ServicesInjector servicesInjector) {
+        super(persistence, executeIn, enablement, processor, holder, servicesInjector);
     }
 
 

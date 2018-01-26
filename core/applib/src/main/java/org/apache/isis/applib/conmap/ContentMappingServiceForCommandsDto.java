@@ -20,11 +20,13 @@ package org.apache.isis.applib.conmap;
 
 import java.util.List;
 
+import javax.inject.Inject;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.services.metamodel.MetaModelService5;
 import org.apache.isis.schema.cmd.v1.CommandDto;
 import org.apache.isis.schema.cmd.v1.CommandsDto;
 
@@ -45,7 +47,7 @@ public class ContentMappingServiceForCommandsDto implements ContentMappingServic
             return object;
         }
 
-        CommandDto commandDto = asDto(object);
+        CommandDto commandDto = asDto(object, metaModelService5);
         if(commandDto != null) {
             final CommandsDto commandsDto = new CommandsDto();
             commandsDto.getCommandDto().add(commandDto);
@@ -55,24 +57,27 @@ public class ContentMappingServiceForCommandsDto implements ContentMappingServic
         if (object instanceof List) {
             final List list = (List) object;
             final CommandsDto commandsDto = new CommandsDto();
-            for (final Object o : list) {
-                final CommandDto objAsCommandDto = asDto(o);
+            for (final Object obj : list) {
+                final CommandDto objAsCommandDto = asDto(obj, metaModelService5);
                 if(objAsCommandDto != null) {
                     commandsDto.getCommandDto().add(objAsCommandDto);
                 } else {
                     // ignore entire list because found something that is not convertible.
-                    return null;
+                    return new CommandsDto();
                 }
             }
             return commandsDto;
         }
 
         // else
-        return null;
+        return new CommandsDto();
     }
 
-    private static CommandDto asDto(final Object object) {
-        return ContentMappingServiceForCommandDto.asDto(object);
+    private static CommandDto asDto(final Object object, MetaModelService5 metaModelService5) {
+        return ContentMappingServiceForCommandDto.asDto(object, metaModelService5);
     }
+
+    @Inject
+    MetaModelService5 metaModelService5;
 
 }

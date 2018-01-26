@@ -20,12 +20,15 @@ package org.apache.isis.applib.conmap;
 
 import java.util.List;
 
+import javax.inject.Inject;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.command.CommandWithDto;
+import org.apache.isis.applib.services.command.CommandWithDtoProcessor;
+import org.apache.isis.applib.services.metamodel.MetaModelService5;
 import org.apache.isis.schema.cmd.v1.CommandDto;
 
 @DomainService(
@@ -41,20 +44,38 @@ public class ContentMappingServiceForCommandDto implements ContentMappingService
             return null;
         }
 
-        return asDto(object);
+        return asDto(object, metaModelService);
     }
 
+    static CommandDto asDto(
+            final Object object,
+            final MetaModelService5 metaModelService) {
 
-    static CommandDto asDto(final Object object) {
-        CommandDto commandDto = null;
         if(object instanceof CommandWithDto) {
             final CommandWithDto commandWithDto = (CommandWithDto) object;
-            commandDto = commandWithDto.asDto();
+            return process(commandWithDto, metaModelService);
         }
-        if(object instanceof CommandDto) {
-            commandDto = (CommandDto) object;
-        }
-        return commandDto;
+        return null;
     }
 
+    private static CommandDto process(
+            CommandWithDto commandWithDto,
+            final MetaModelService5 metaModelService) {
+        final CommandDto commandDto = commandWithDto.asDto();
+        final CommandWithDtoProcessor<?> commandWithDtoProcessor =
+                metaModelService.commandDtoProcessorFor(commandDto.getMember().getLogicalMemberIdentifier());
+        if (commandWithDtoProcessor == null) {
+            return commandDto;
+        }
+        return process(commandWithDtoProcessor, commandWithDto);
+    }
+
+    private static CommandDto process(
+            final CommandWithDtoProcessor commandWithDtoProcessor,
+            final CommandWithDto commandWithDto) {
+        return commandWithDtoProcessor.process(commandWithDto);
+    }
+
+    @Inject
+    MetaModelService5 metaModelService;
 }
