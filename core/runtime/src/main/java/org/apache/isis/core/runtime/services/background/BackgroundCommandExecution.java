@@ -25,6 +25,9 @@ import com.google.common.base.Throwables;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.apache.isis.applib.services.background.ActionInvocationMemento;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService2;
@@ -69,6 +72,8 @@ import org.apache.isis.schema.utils.CommonDtoUtils;
  */
 public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemplate {
 
+    private final static Logger LOG = LoggerFactory.getLogger(BackgroundCommandExecution.class);
+
     private final MementoServiceDefault mementoService;
 
     public BackgroundCommandExecution() {
@@ -90,6 +95,8 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
                 backgroundCommands.addAll(findBackgroundCommandsToExecute());
             }
         });
+
+        LOG.info("Found {} to execute", backgroundCommands.size());
 
         for (final Command backgroundCommand : backgroundCommands) {
             execute(transactionManager, backgroundCommand);
@@ -124,8 +131,14 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
                 // if this is a replayable command but we've also previously tried to execute a replayable commaand
                 // that hit an exception when executed, then just skip; we don't want to execute replayable commands
                 // after one has been blocked.
-                if(backgroundCommand.getExecuteIn().isReplayable() && replayHitException[0]) {
+                org.apache.isis.applib.annotation.Command.ExecuteIn executeIn = backgroundCommand.getExecuteIn();
+
+
+                if(executeIn.isReplayable() && replayHitException[0]) {
+                    LOG.info("Executing: {} {} - SKIPPING since replays have previously hit an exception", executeIn, backgroundCommand.getMemberIdentifier());
                     return;
+                } else {
+                    LOG.info("Executing: {} {}", executeIn, backgroundCommand.getMemberIdentifier());
                 }
 
 
@@ -244,6 +257,8 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
 
                 } catch (RuntimeException e) {
 
+                    LOG.warn("Exception for: {}, e", backgroundCommand.getMemberIdentifier(), e);
+
                     // hmmm, this doesn't really make sense if >1 action
                     //
                     // in any case, the capturing of the result of the action invocation should be the
@@ -255,6 +270,12 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
                     // would also be rolled back, and it would keep getting picked up again by a scheduler for
                     // processing); instead we clear the abort cause and ensure we can continue.
                     transactionManager.getCurrentTransaction().clearAbortCauseAndContinue();
+
+                    // prevent any further replayable exceptions from running
+                    if(executeIn.isReplayable()) {
+                        LOG.info("Command {} is REPLAYABLE, so skipping future", backgroundCommand.getMemberIdentifier());
+                        replayHitException[0] = true;
+                    }
                 }
 
                 // it's possible that there is no priorExecution, specifically if there was an exception
@@ -266,10 +287,6 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
                                 : clockService.nowAsJavaSqlTimestamp();  // close enough...
                 backgroundCommand.setCompletedAt(completedAt);
 
-                // prevent any further replayable exceptions from running
-                if(backgroundCommand.getExecuteIn().isReplayable()) {
-                    replayHitException[0] = true;
-                }
             }
 
             private ObjectAction findObjectAction(
