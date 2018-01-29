@@ -234,6 +234,10 @@ public final class ServiceActionUtil {
                     final Bookmark bookmark = new Bookmark(objectType, PersistenceSession.SERVICE_IDENTIFIER);
                     final String oid = bookmark.toString();
                     final ObjectAdapter serviceAdapter = serviceAdapterByOid.get(oid);
+                    if(serviceAdapter == null) {
+                        // service not recognised, presumably the menu layout is out of sync with actual configured modules
+                        continue;
+                    }
                     final EntityModel entityModel = new EntityModel(serviceAdapter);
                     final ObjectAction objectAction = serviceAdapter.getSpecification()
                             .getObjectAction(actionLayoutData.getId());
