@@ -40,7 +40,7 @@ public interface ContentMappingService {
 
 
 
-
+[[_rgsvc_presentation-layer-spi_ContentMappingService_implementations]]
 == Implementations
 
 The framework provides two implementations of this service, both in support of the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`] SPI.

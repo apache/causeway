@@ -71,7 +71,7 @@ public class ContentMappingServiceForCommandDto implements ContentMappingService
             final MetaModelService5 metaModelService) {
         final CommandDto commandDto = commandWithDto.asDto();
         final CommandWithDtoProcessor commandWithDtoProcessor =
-                metaModelService.commandDtoProcessorFor(commandDto.getMember().getLogicalMemberIdentifier());
+                metaModelService.commandWithDtoProcessorFor(commandDto.getMember().getLogicalMemberIdentifier());
         if (commandWithDtoProcessor == null) {
             return commandDto;
         }

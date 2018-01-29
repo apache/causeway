@@ -24,6 +24,6 @@ import org.apache.isis.applib.services.command.CommandWithDtoProcessor;
 public interface MetaModelService5 extends MetaModelService4 {
 
     @Programmatic
-    CommandWithDtoProcessor commandDtoProcessorFor(String memberIdentifier);
+    CommandWithDtoProcessor commandWithDtoProcessorFor(String memberIdentifier);
 
 }

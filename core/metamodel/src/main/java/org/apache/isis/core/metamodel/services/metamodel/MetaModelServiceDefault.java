@@ -235,7 +235,7 @@ public class MetaModelServiceDefault implements MetaModelService5 {
     }
 
     @Override
-    public CommandWithDtoProcessor commandDtoProcessorFor(final String memberIdentifier) {
+    public CommandWithDtoProcessor commandWithDtoProcessorFor(final String memberIdentifier) {
         final ApplicationFeatureId featureId = ApplicationFeatureId
                 .newFeature(ApplicationFeatureType.MEMBER, memberIdentifier);
 
