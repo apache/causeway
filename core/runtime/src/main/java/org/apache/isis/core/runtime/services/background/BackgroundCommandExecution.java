@@ -74,13 +74,30 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
 
     private final static Logger LOG = LoggerFactory.getLogger(BackgroundCommandExecution.class);
 
+    public enum OnExceptionPolicy {
+        /**
+         * For example, regular background commands.
+         */
+        CONTINUE,
+        /**
+         * For example, replayable commands.
+         */
+        QUIT
+    }
+
     private final MementoServiceDefault mementoService;
+    private final OnExceptionPolicy onExceptionPolicy;
 
     public BackgroundCommandExecution() {
-        // same as configured by BackgroundServiceDefault
-        mementoService = new MementoServiceDefault().withNoEncoding();
+        this(OnExceptionPolicy.CONTINUE);
     }
     
+    public BackgroundCommandExecution(final OnExceptionPolicy onExceptionPolicy) {
+        // same as configured by BackgroundServiceDefault
+        mementoService = new MementoServiceDefault().withNoEncoding();
+        this.onExceptionPolicy = onExceptionPolicy;
+    }
+
     // //////////////////////////////////////
 
     
@@ -115,8 +132,6 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
             final IsisTransactionManager transactionManager,
             final Command backgroundCommand) {
 
-        final boolean replayHitException[] = new boolean[] {false};
-
         transactionManager.executeWithinTransaction(
                 backgroundCommand,
                 new TransactionalClosure() {
@@ -128,20 +143,11 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
 
                 final String memento = backgroundCommand.getMemento();
 
-                // if this is a replayable command but we've also previously tried to execute a replayable commaand
-                // that hit an exception when executed, then just skip; we don't want to execute replayable commands
-                // after one has been blocked.
                 org.apache.isis.applib.annotation.Command.ExecuteIn executeIn = backgroundCommand.getExecuteIn();
 
+                LOG.info("Executing: {} {}", executeIn, backgroundCommand.getMemberIdentifier());
 
-                if(executeIn.isReplayable() && replayHitException[0]) {
-                    LOG.info("Executing: {} {} - SKIPPING since replays have previously hit an exception", executeIn, backgroundCommand.getMemberIdentifier());
-                    return;
-                } else {
-                    LOG.info("Executing: {} {}", executeIn, backgroundCommand.getMemberIdentifier());
-                }
-
-
+                RuntimeException exceptionIfAny = null;
                 try {
                     backgroundCommand.setExecutor(Executor.BACKGROUND);
 
@@ -271,11 +277,8 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
                     // processing); instead we clear the abort cause and ensure we can continue.
                     transactionManager.getCurrentTransaction().clearAbortCauseAndContinue();
 
-                    // prevent any further replayable exceptions from running
-                    if(executeIn.isReplayable()) {
-                        LOG.info("Command {} is REPLAYABLE, so skipping future", backgroundCommand.getMemberIdentifier());
-                        replayHitException[0] = true;
-                    }
+                    // checked at the end
+                    exceptionIfAny = e;
                 }
 
                 // it's possible that there is no priorExecution, specifically if there was an exception
@@ -286,6 +289,12 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
                                 ? priorExecution.getCompletedAt()
                                 : clockService.nowAsJavaSqlTimestamp();  // close enough...
                 backgroundCommand.setCompletedAt(completedAt);
+
+                // if we hit an exception processing this command, then quit if instructed
+                if(exceptionIfAny != null && onExceptionPolicy == OnExceptionPolicy.QUIT) {
+                    LOG.info("OnExceptionPolicy is to QUIT, so skipping further processing", backgroundCommand.getMemberIdentifier());
+                    return;
+                }
 
             }
 
