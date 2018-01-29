@@ -24,7 +24,7 @@ import org.apache.isis.applib.annotation.Command.Persistence;
 import org.apache.isis.applib.annotation.CommandExecuteIn;
 import org.apache.isis.applib.annotation.CommandPersistence;
 import org.apache.isis.applib.annotation.CommandReification;
-import org.apache.isis.applib.services.command.CommandWithDtoProcessor;
+import org.apache.isis.applib.services.command.CommandDtoProcessor;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
@@ -43,9 +43,9 @@ public class CommandFacetForActionAnnotation extends CommandFacetAbstract {
         CommandReification commandReification = action != null ? action.command() : CommandReification.AS_CONFIGURED;
         final CommandPersistence commandPersistence = action != null ? action.commandPersistence() : CommandPersistence.PERSISTED;
         final CommandExecuteIn commandExecuteIn = action != null? action.commandExecuteIn() :  CommandExecuteIn.FOREGROUND;
-        final Class<? extends CommandWithDtoProcessor> processorClass =
-                action != null ? action.commandWithDtoProcessor() : null;
-        final CommandWithDtoProcessor processor = (CommandWithDtoProcessor) newProcessorElseNull(processorClass);
+        final Class<? extends CommandDtoProcessor> processorClass =
+                action != null ? action.commandDtoProcessor() : null;
+        final CommandDtoProcessor processor = (CommandDtoProcessor) newProcessorElseNull(processorClass);
 
         if(processor != null) {
             commandReification = CommandReification.ENABLED;
@@ -91,7 +91,7 @@ public class CommandFacetForActionAnnotation extends CommandFacetAbstract {
             final Persistence persistence,
             final ExecuteIn executeIn,
             final Enablement enablement,
-            final CommandWithDtoProcessor processor,
+            final CommandDtoProcessor processor,
             final FacetHolder holder,
             final ServicesInjector servicesInjector) {
         super(persistence, executeIn, enablement, processor, holder, servicesInjector);

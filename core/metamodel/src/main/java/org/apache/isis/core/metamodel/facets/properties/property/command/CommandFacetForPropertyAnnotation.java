@@ -24,7 +24,7 @@ import org.apache.isis.applib.annotation.CommandExecuteIn;
 import org.apache.isis.applib.annotation.CommandPersistence;
 import org.apache.isis.applib.annotation.CommandReification;
 import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.services.command.CommandWithDtoProcessor;
+import org.apache.isis.applib.services.command.CommandDtoProcessor;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.action.command.CommandFacetFromConfiguration;
@@ -43,9 +43,9 @@ public class CommandFacetForPropertyAnnotation extends CommandFacetAbstract {
         CommandReification commandReification = property != null ? property.command() : CommandReification.AS_CONFIGURED;
         final CommandPersistence commandPersistence = property != null ? property.commandPersistence() : CommandPersistence.PERSISTED;
         final CommandExecuteIn commandExecuteIn = property != null? property.commandExecuteIn() :  CommandExecuteIn.FOREGROUND;
-        final Class<? extends CommandWithDtoProcessor> processorClass =
-                property != null ? property.commandWithDtoProcessor() : null;
-        final CommandWithDtoProcessor processor = (CommandWithDtoProcessor) newProcessorElseNull(processorClass);
+        final Class<? extends CommandDtoProcessor> processorClass =
+                property != null ? property.commandDtoProcessor() : null;
+        final CommandDtoProcessor processor = newProcessorElseNull(processorClass);
 
         if(processor != null) {
             commandReification = CommandReification.ENABLED;
@@ -82,7 +82,7 @@ public class CommandFacetForPropertyAnnotation extends CommandFacetAbstract {
             final ExecuteIn executeIn,
             final Enablement enablement,
             final FacetHolder holder,
-            final CommandWithDtoProcessor processor,
+            final CommandDtoProcessor processor,
             final ServicesInjector servicesInjector) {
         super(persistence, executeIn, enablement, processor, holder, servicesInjector);
     }

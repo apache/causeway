@@ -19,11 +19,11 @@
 package org.apache.isis.applib.services.metamodel;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.services.command.CommandWithDtoProcessor;
+import org.apache.isis.applib.services.command.CommandDtoProcessor;
 
 public interface MetaModelService5 extends MetaModelService4 {
 
     @Programmatic
-    CommandWithDtoProcessor commandWithDtoProcessorFor(String memberIdentifier);
+    CommandDtoProcessor commandDtoProcessorFor(String memberIdentifier);
 
 }

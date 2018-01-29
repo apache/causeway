@@ -92,8 +92,6 @@
             <xs:element name="mimeType" type="xs:string"/>
             <xs:element name="bytes" type="xs:hexBinary"/>
         </xs:sequence>
-        <xs:attribute name="type" use="required" type="valueType"/>
-        <xs:attribute name="null" use="optional" type="xs:boolean"/>
     </xs:complexType>
 
     <xs:complexType name="clobDto">
@@ -106,8 +104,6 @@
             <xs:element name="mimeType" type="xs:string"/>
             <xs:element name="chars" type="xs:string"/>
         </xs:sequence>
-        <xs:attribute name="type" use="required" type="valueType"/>
-        <xs:attribute name="null" use="optional" type="xs:boolean"/>
     </xs:complexType>
 
     <xs:complexType name="oidsDto">

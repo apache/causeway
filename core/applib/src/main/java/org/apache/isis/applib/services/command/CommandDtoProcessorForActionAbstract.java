@@ -18,18 +18,24 @@
  */
 package org.apache.isis.applib.services.command;
 
+import org.apache.isis.schema.cmd.v1.ActionDto;
 import org.apache.isis.schema.cmd.v1.CommandDto;
-import org.apache.isis.schema.cmd.v1.PropertyDto;
+import org.apache.isis.schema.cmd.v1.ParamDto;
+import org.apache.isis.schema.cmd.v1.ParamsDto;
 
 /**
- * Convenience adapter for command processors for property edits.
+ * Convenience adapter for command processors for action invocations.
  */
-public abstract class CommandWithDtoProcessorForPropertyAbstract
-        implements CommandWithDtoProcessor {
+public abstract class CommandDtoProcessorForActionAbstract implements CommandDtoProcessor {
     protected CommandDto asDto(final CommandWithDto commandWithDto) {
         return commandWithDto.asDto();
     }
-    protected PropertyDto getPropertyDto(final CommandDto commandDto) {
-        return (PropertyDto) commandDto.getMember();
+    protected ActionDto getActionDto(final CommandDto commandDto) {
+        return (ActionDto) commandDto.getMember();
+    }
+    protected ParamDto getParamDto(final CommandDto commandDto, final int paramNum) {
+        final ActionDto actionDto = getActionDto(commandDto);
+        final ParamsDto parameters = actionDto.getParameters();
+        return parameters.getParameter().get(paramNum);
     }
 }

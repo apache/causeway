@@ -22,7 +22,7 @@ package org.apache.isis.core.metamodel.facets.actions.command;
 import org.apache.isis.applib.annotation.Command.ExecuteIn;
 import org.apache.isis.applib.annotation.Command.Persistence;
 import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.applib.services.command.CommandWithDtoProcessor;
+import org.apache.isis.applib.services.command.CommandDtoProcessor;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 
 /**
@@ -50,5 +50,5 @@ public interface CommandFacet extends Facet {
      */
     public boolean isDisabled();
 
-    public CommandWithDtoProcessor getProcessor();
+    public CommandDtoProcessor getProcessor();
 }

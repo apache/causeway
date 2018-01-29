@@ -29,8 +29,8 @@ import javax.jdo.annotations.NotPersistent;
 
 import org.apache.isis.applib.conmap.ContentMappingServiceForCommandDto;
 import org.apache.isis.applib.conmap.ContentMappingServiceForCommandsDto;
+import org.apache.isis.applib.services.command.CommandDtoProcessor;
 import org.apache.isis.applib.services.command.CommandWithDto;
-import org.apache.isis.applib.services.command.CommandWithDtoProcessor;
 import org.apache.isis.applib.services.command.spi.CommandService;
 import org.apache.isis.applib.services.eventbus.PropertyDomainEvent;
 import org.apache.isis.applib.spec.Specification;
@@ -140,7 +140,7 @@ public @interface Property {
 
 
     /**
-     * The {@link CommandWithDtoProcessor} to process this command's DTO.
+     * The {@link CommandDtoProcessor} to process this command's DTO.
      *
      * <p>
      *     Specifying a processor requires that the implementation of {@link CommandService} provides a
@@ -153,7 +153,7 @@ public @interface Property {
      *     {@link ContentMappingServiceForCommandsDto} to dynamically transform the DTOs.
      * </p>
      */
-    Class<? extends CommandWithDtoProcessor> commandWithDtoProcessor() default CommandWithDtoProcessor.class;
+    Class<? extends CommandDtoProcessor> commandDtoProcessor() default CommandDtoProcessor.class;
 
 
 

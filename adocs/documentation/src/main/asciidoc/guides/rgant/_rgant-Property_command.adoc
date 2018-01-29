@@ -1,11 +1,11 @@
-[[_rgant-Action_command]]
+[[_rgant-Property_command]]
 = `command()`
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :_basedir: ../../
 :_imagesdir: images/
 
 
-The `@Action(command=...)` attribute (and the related `@Action(commandXxx=...)` attributes) allows an action invocation to be made into a concrete object such that it can be inspected and persisted.
+The `@Property(command=...)` attribute (and the related `@Property(commandXxx=...)` attributes) allows a property edit to be made into a concrete object such that it can be inspected and persisted.
 The primary use case for this are to support the deferring the execution of the action such that it can be invoked in the background, and to replay commands in a master/slave configuration.
 
 
@@ -18,7 +18,7 @@ The annotation works with (and is influenced by the behaviour of) a number of do
 * xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_BackgroundCommandService[`BackgroundCommandService`]
 
 
-Each action invocation is reified by the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_CommandContext[`CommandContext`] service into a `Command` object, capturing details of the target object, the action, the parameter arguments, the user, a timestamp and so on.
+Each property edit is reified by the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_CommandContext[`CommandContext`] service into a `Command` object, capturing details of the target object, the property, the proposed new value fo the property, the user, a timestamp and so on.
 
 If an appropriate `CommandService` is configured (for example using (non-ASF) link:http://platform.incode.org/modules/spi/command/spi-command.html[Incode Platform's command] module), then the `Command` itself is persisted.
 
@@ -32,38 +32,35 @@ If background ``Command``s are used, then an external scheduler, using xref:../u
 
 
 
-The `command()` attribute determines whether the action invocation should be reified into a `Command` object (by the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_CommandContext[`CommandContext`] service).
+The `command()` attribute determines whether the property edit should be reified into a `Command` object (by the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_CommandContext[`CommandContext`] service).
 
-The default is `AS_CONFIGURED`, meaning that the xref:../rgcfg/rgcfg.adoc#_rgcfg_configuring-core[configuration property] `isis.services.command.actions` is used to determine whether the action invocation is reified:
+The default is `AS_CONFIGURED`, meaning that the xref:../rgcfg/rgcfg.adoc#_rgcfg_configuring-core[configuration property] `isis.services.command.properties` is used to determine whether the property edit is reified:
 
 * `all` +
 +
-all action invocations are reified
-
-* `ignoreSafe` (or `ignoreQueryOnly`) +
-+
-invocations of actions with safe (read-only) semantics are ignored, but actions which may modify data are not ignored
+all property edits are reified
 
 * `none` +
 +
-no action invocations are reified.
+no property edits are reified.
 
-If there is no configuration property in `isis.properties` then all action invocations are reified into ``Command``s.
+If there is no configuration property in `isis.properties` then all property edits are reified into ``Command``s.
 
 [NOTE]
 ====
 Note: `Command` reification does not necessarily imply that `Command` objects will be persisted; that depends on whether there is a xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`] configured that will persist said ``Command``s.
 ====
 
-This default can be overridden on an action-by-action basis; if `command()` is set to `ENABLED` then the action is reified irrespective of the configured value; if set to `DISABLED` then the action invocation is NOT reified irrespective of the configured value.
+This default can be overridden on an property-by-property basis; if `command()` is set to `ENABLED` then the action is reified irrespective of the configured value; if set to `DISABLED` then the property edit is NOT reified irrespective of the configured value.
 
 For example:
 
 [source,java]
 ----
 public class Order {
-    @Action(command=CommandReification.ENABLED)
-    public Invoice generateInvoice(...) { ... }
+    @Property(command=CommandReification.ENABLED)
+    public Product getProduct() { ... }
+    public void setProduct(Product p) { ... }
 }
 ----
 
@@ -74,33 +71,40 @@ corresponds to the behaviour described above; the `Command` object is persisted 
 
 == `commandPersistence()`
 
-If the action invocation has been reified, then the `commandPersistence()` attribute determines whether that `Command` object should then also be persisted (the default), or not persisted, or only if hinted.
+If the property edit has been reified, then the `commandPersistence()` attribute determines whether that `Command` object should then also be persisted (the default), or not persisted, or only if hinted.
 
 To explain this last alternative:
 
 [source,java]
 ----
 public class Order {
-    @Action(
+    @Property(
         command=CommandReification.ENABLED,
         commandPersistence=CommandPersistence.IF_HINTED
     )
-    public Invoice generateInvoice(...) { ... }
+    public Product getProduct() { ... }
+    public void setProduct(Product p) { ... }
 }
 ----
 
-will suppress the persistence of the `Command` object _unless_ a child background `Command` has been created in the body of the action by way of the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_BackgroundService[`BackgroundService`].
+will suppress the persistence of the `Command` object _unless_ a child background `Command` has been created in the body of the property by way of the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_BackgroundService[`BackgroundService`].
+
+[NOTE]
+====
+Unlike actions, where this is quite feasible, it is rather unlikely to occur as a side-effect of editing a property.
+====
 
 On the other hand:
 
 [source,java]
 ----
 public class Order {
-    @Action(
+    @Property(
         command=CommandReification.ENABLED,
         commandPersistence=CommandPersistence.NOT_PERSISTED
     )
-    public Invoice generateInvoice(...) { ... }
+    public Product getProduct() { ... }
+    public void setProduct(Product p) { ... }
 }
 ----
 
@@ -120,16 +124,17 @@ For example:
 [source,java]
 ----
 public class Order {
-    @Action(
+    @Property(
         command=CommandReification.ENABLED,
         commandExecuteIn=CommandExecuteIn.BACKGROUND
     )
-    public Invoice generateInvoice(...) { ... }
+    public Product getProduct() { ... }
+    public void setProduct(Product p) { ... }
 }
 ----
 
 will result in the `Command` being persisted but its execution deferred to a background execution mechanism.
-The returned object from this action invocation is the persisted `Command` itself.
+The returned object from this property edit is the persisted `Command` itself.
 
 
 
@@ -156,7 +161,7 @@ This interface is used by the framework-provided implementations of `ContentMapp
 The primary use case for this capability is in support of master/slave replication.
 
 * on the master, ``Command``s are serialized to XML.
-This includes the identity of the target object and the argument values of all parameters.
+This includes the identity of the target object and the intended new value of the property.
 
 +
 [IMPORTANT]
@@ -181,72 +186,6 @@ If `commandDtoProcessor()` is specified, then `command()` is assumed to be ENABL
 
 
 
-=== Example implementation
-
-Consider the following method:
-
-[source,java]
-----
-@Action(
-    domainEvent = IncomingDocumentRepository.UploadDomainEvent.class,
-    commandDtoProcessor = DeriveBlobArg0FromReturnedDocument.class
-)
-public Document upload(final Blob blob) {
-    final String name = blob.getName();
-    final DocumentType type = DocumentTypeData.INCOMING.findUsing(documentTypeRepository);
-    final ApplicationUser me = meService.me();
-    String atPath = me != null ? me.getAtPath() : null;
-    if (atPath == null) {
-        atPath = "/";
-    }
-    return incomingDocumentRepository.upsertAndArchive(type, atPath, name, blob);
-}
-----
-
-The `Blob` argument will not be persisted in the memento of the `Command`, but the information is implicitly available in the `Document` that is returned by the action.
-The `DeriveBlobArg0FromReturnedDocument` processor retrieves this information and dynamically adds:
-
-[source,java]
-----
-public class DeriveBlobArg0FromReturnedDocument
-        extends CommandDtoProcessorForActionAbstract {
-
-    @Override
-    public CommandDto process(Command command, CommandDto commandDto) {
-        final Bookmark result = commandWithDto.getResult();
-        if(result == null) {
-            return commandDto;
-        }
-        try {
-            final Document document = bookmarkService.lookup(result, Document.class);
-            if (document != null) {
-                ParamDto paramDto = getParamDto(commandDto, 0);
-                CommonDtoUtils.setValueOn(paramDto, ValueType.BLOB, document.getBlob(), bookmarkService);
-            }
-        } catch(Exception ex) {
-            return commandDto;
-        }
-        return commandDto;
-    }
-    @Inject
-    BookmarkService bookmarkService;
-}
-----
+For an example application, see xref:rgant.adoc#_rgant-Action_command[`Action#command()`].
 
 
-=== Null implementation
-
-The null implementation can be used to simply indicate that no DTO should be returned for a `Command`.
-The effect is to ignore it for replay purposes:
-
-[source,xml]
-----
-pubc interface CommandDtoProcessor {
-    ...
-    class Null implements CommandDtoProcessor {
-        public CommandDto process(Command command, CommandDto commandDto) {
-            return null;
-        }
-    }
-}
-----

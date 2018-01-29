@@ -54,7 +54,10 @@ For framework implementations of `ContentMappingService` allow domain service ac
 * `o.a.i.applib.conmap.ContentMappingServiceForCommandDto` will map any single instnce of a `CommandWithDto` into a `CommandDto` XML document
 * `o.a.i.applib.conmap.ContentMappingServiceForCommandsDto` will map list of ``CommandWithDto``s into a `CommandsDto` XML document, and will wrap any single instance of a `CommandWithDto` into a singleton list and thence into a `CommandsDto` XML document.
 
-The framework also provides `ContentMappingService.Util` which includes a couple of convenience utilities for implementations:
+If the action invocation or property edit represent provides an implementation of a `CommandDtoProcessor` (by way of xref:../rgant/rgant.adoc#_rgant_Action_command[`@Action#commandDtoProcessor()`] or xref:../rgant/rgant.adoc#_rgant_Property_command[`@Property#commandDtoProcessor()`]) then this is also called to post-process the persisted `CommandDto` if required.
+A typical use case for this is to dynamically add in serialized ``Blob``s or ``Clob``s, the values of which are not captured by default in `CommandDto`.
+
+To support the writing of custom implementations of this interface, the framework also provides `ContentMappingService.Util` which includes a couple of convenience utilities:
 
 [source,java]
 ----
@@ -73,3 +76,5 @@ public static class Util {
 == Related Services
 
 This service is a companion to the default implementation of the xref:../rgfis/rgfis.adoc#_rgfis_presentation-layer_ContentNegotiationService[`ContentNegotiationService`].
+
+The framework implementations of `ContentMappingService` use the xref:rgsvc.adoc#_rgsvc_metadata-api_MetamodelService[`MetaModelService`] to lookup any custom implementations of `CommandDtoProcessor`.

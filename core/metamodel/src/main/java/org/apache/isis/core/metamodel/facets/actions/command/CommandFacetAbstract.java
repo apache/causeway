@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facets.actions.command;
 
 import org.apache.isis.applib.annotation.Command.ExecuteIn;
 import org.apache.isis.applib.annotation.Command.Persistence;
-import org.apache.isis.applib.services.command.CommandWithDtoProcessor;
+import org.apache.isis.applib.services.command.CommandDtoProcessor;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.MarkerFacetAbstract;
@@ -45,13 +45,13 @@ public abstract class CommandFacetAbstract extends MarkerFacetAbstract implement
     private final Persistence persistence;
     private final ExecuteIn executeIn;
     private final Enablement enablement;
-    private final CommandWithDtoProcessor processor;
+    private final CommandDtoProcessor processor;
 
     public CommandFacetAbstract(
             final Persistence persistence,
             final ExecuteIn executeIn,
             final Enablement enablement,
-            final CommandWithDtoProcessor processor,
+            final CommandDtoProcessor processor,
             final FacetHolder holder,
             final ServicesInjector servicesInjector) {
         super(type(), holder);
@@ -63,7 +63,7 @@ public abstract class CommandFacetAbstract extends MarkerFacetAbstract implement
     }
 
     private static void inject(
-            final CommandWithDtoProcessor processor, final ServicesInjector servicesInjector) {
+            final CommandDtoProcessor processor, final ServicesInjector servicesInjector) {
         if(processor == null || servicesInjector == null) {
             return;
         }
@@ -86,26 +86,26 @@ public abstract class CommandFacetAbstract extends MarkerFacetAbstract implement
     }
 
     @Override
-    public CommandWithDtoProcessor getProcessor() {
+    public CommandDtoProcessor getProcessor() {
         return processor;
     }
 
     /**
      * For benefit of subclasses.
      */
-    protected static CommandWithDtoProcessor newProcessorElseNull(final Class<?> cls) {
+    protected static CommandDtoProcessor newProcessorElseNull(final Class<?> cls) {
         if(cls == null) {
             return null;
         }
-        if(cls == CommandWithDtoProcessor.class) {
+        if(cls == CommandDtoProcessor.class) {
             // ie the default value, namely the interface
             return null;
         }
-        if (!(CommandWithDtoProcessor.class.isAssignableFrom(cls))) {
+        if (!(CommandDtoProcessor.class.isAssignableFrom(cls))) {
             return null;
         }
         try {
-            return (CommandWithDtoProcessor) cls.newInstance();
+            return (CommandDtoProcessor) cls.newInstance();
         } catch (final InstantiationException | IllegalAccessException e) {
             return null;
         }

@@ -26,8 +26,8 @@ import javax.ws.rs.core.MediaType;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.services.command.CommandDtoProcessor;
 import org.apache.isis.applib.services.command.CommandWithDto;
-import org.apache.isis.applib.services.command.CommandWithDtoProcessor;
 import org.apache.isis.applib.services.metamodel.MetaModelService5;
 import org.apache.isis.schema.cmd.v1.CommandDto;
 
@@ -70,12 +70,12 @@ public class ContentMappingServiceForCommandDto implements ContentMappingService
             CommandWithDto commandWithDto,
             final MetaModelService5 metaModelService) {
         final CommandDto commandDto = commandWithDto.asDto();
-        final CommandWithDtoProcessor commandWithDtoProcessor =
-                metaModelService.commandWithDtoProcessorFor(commandDto.getMember().getLogicalMemberIdentifier());
-        if (commandWithDtoProcessor == null) {
+        final CommandDtoProcessor commandDtoProcessor =
+                metaModelService.commandDtoProcessorFor(commandDto.getMember().getLogicalMemberIdentifier());
+        if (commandDtoProcessor == null) {
             return commandDto;
         }
-        return commandWithDtoProcessor.process(commandWithDto);
+        return commandDtoProcessor.process(commandWithDto, commandDto);
     }
 
     @Inject
