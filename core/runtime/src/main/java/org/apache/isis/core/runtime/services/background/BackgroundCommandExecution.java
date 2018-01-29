@@ -50,6 +50,7 @@ import org.apache.isis.core.runtime.sessiontemplate.AbstractIsisSessionTemplate;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.system.transaction.TransactionalClosure;
+import org.apache.isis.core.runtime.system.transaction.TransactionalClosureWithReturn;
 import org.apache.isis.schema.cmd.v1.ActionDto;
 import org.apache.isis.schema.cmd.v1.CommandDto;
 import org.apache.isis.schema.cmd.v1.MemberDto;
@@ -116,7 +117,12 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
         LOG.info("Found {} to execute", backgroundCommands.size());
 
         for (final Command backgroundCommand : backgroundCommands) {
-            execute(transactionManager, backgroundCommand);
+            final boolean shouldContinue = execute(transactionManager, backgroundCommand);
+            if(!shouldContinue) {
+                LOG.info("OnExceptionPolicy is to QUIT, so skipping further processing",
+                        backgroundCommand.getMemberIdentifier());
+                return;
+            }
         }
     }
 
@@ -128,15 +134,15 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
     // //////////////////////////////////////
 
     
-    private void execute(
+    private boolean execute(
             final IsisTransactionManager transactionManager,
             final Command backgroundCommand) {
 
-        transactionManager.executeWithinTransaction(
+        return transactionManager.executeWithinTransaction(
                 backgroundCommand,
-                new TransactionalClosure() {
+                new TransactionalClosureWithReturn<Boolean>() {
             @Override
-            public void execute() {
+            public Boolean execute() {
 
                 // setup for us by IsisTransactionManager; will have the transactionId of the backgroundCommand
                 final Interaction backgroundInteraction = interactionContext.getInteraction();
@@ -291,10 +297,9 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
                 backgroundCommand.setCompletedAt(completedAt);
 
                 // if we hit an exception processing this command, then quit if instructed
-                if(exceptionIfAny != null && onExceptionPolicy == OnExceptionPolicy.QUIT) {
-                    LOG.info("OnExceptionPolicy is to QUIT, so skipping further processing", backgroundCommand.getMemberIdentifier());
-                    return;
-                }
+                final boolean shouldQuit = exceptionIfAny != null && onExceptionPolicy == OnExceptionPolicy.QUIT;
+                final boolean shouldContinue = !shouldQuit;
+                return shouldContinue;
 
             }
 
