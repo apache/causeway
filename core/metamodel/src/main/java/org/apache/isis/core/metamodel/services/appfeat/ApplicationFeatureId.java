@@ -32,6 +32,7 @@ import com.google.common.base.Joiner;
 import com.google.common.base.Objects;
 import com.google.common.base.Predicate;
 import com.google.common.base.Splitter;
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 import com.google.common.io.BaseEncoding;
@@ -186,9 +187,13 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
         if (getClassName() == null) {
             return null;
         }
+
         final StringBuilder buf = new StringBuilder();
-        buf.append(getPackageName());
-        buf.append(".").append(getClassName());
+        if(!Strings.isNullOrEmpty(getPackageName())) {
+            buf.append(getPackageName()).append(".");
+        }
+        buf.append(getClassName());
+
         return ObjectSpecId.of(buf.toString());
     }
 

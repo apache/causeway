@@ -50,5 +50,5 @@ public interface CommandFacet extends Facet {
      */
     public boolean isDisabled();
 
-    public CommandWithDtoProcessor<?> getProcessor();
+    public CommandWithDtoProcessor getProcessor();
 }

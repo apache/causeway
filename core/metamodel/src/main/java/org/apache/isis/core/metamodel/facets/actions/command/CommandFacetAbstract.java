@@ -45,13 +45,13 @@ public abstract class CommandFacetAbstract extends MarkerFacetAbstract implement
     private final Persistence persistence;
     private final ExecuteIn executeIn;
     private final Enablement enablement;
-    private final CommandWithDtoProcessor<?> processor;
+    private final CommandWithDtoProcessor processor;
 
     public CommandFacetAbstract(
             final Persistence persistence,
             final ExecuteIn executeIn,
             final Enablement enablement,
-            final CommandWithDtoProcessor<?> processor,
+            final CommandWithDtoProcessor processor,
             final FacetHolder holder,
             final ServicesInjector servicesInjector) {
         super(type(), holder);
@@ -86,7 +86,7 @@ public abstract class CommandFacetAbstract extends MarkerFacetAbstract implement
     }
 
     @Override
-    public CommandWithDtoProcessor<?> getProcessor() {
+    public CommandWithDtoProcessor getProcessor() {
         return processor;
     }
 

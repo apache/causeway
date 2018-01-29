@@ -33,7 +33,6 @@ import org.apache.isis.applib.AppManifest2;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.command.CommandWithDtoProcessor;
 import org.apache.isis.applib.services.grid.GridService;
@@ -236,7 +235,7 @@ public class MetaModelServiceDefault implements MetaModelService5 {
     }
 
     @Override
-    public CommandWithDtoProcessor<?> commandDtoProcessorFor(final String memberIdentifier) {
+    public CommandWithDtoProcessor commandDtoProcessorFor(final String memberIdentifier) {
         final ApplicationFeatureId featureId = ApplicationFeatureId
                 .newFeature(ApplicationFeatureType.MEMBER, memberIdentifier);
 

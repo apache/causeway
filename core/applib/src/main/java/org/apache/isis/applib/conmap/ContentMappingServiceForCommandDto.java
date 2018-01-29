@@ -44,38 +44,41 @@ public class ContentMappingServiceForCommandDto implements ContentMappingService
             return null;
         }
 
-        return asDto(object, metaModelService);
+        return asProcessedDto(object, metaModelService);
     }
 
-    static CommandDto asDto(
+    /**
+     * Not part of the {@link ContentMappingService} API.
+     */
+    @Programmatic
+    public CommandDto map(final CommandWithDto commandWithDto) {
+        return asProcessedDto(commandWithDto, metaModelService);
+    }
+
+    static CommandDto asProcessedDto(
             final Object object,
             final MetaModelService5 metaModelService) {
 
-        if(object instanceof CommandWithDto) {
-            final CommandWithDto commandWithDto = (CommandWithDto) object;
-            return process(commandWithDto, metaModelService);
+        if (!(object instanceof CommandWithDto)) {
+            return null;
         }
-        return null;
+        final CommandWithDto commandWithDto = (CommandWithDto) object;
+        return asProcessedDto(commandWithDto, metaModelService);
     }
 
-    private static CommandDto process(
+    private static CommandDto asProcessedDto(
             CommandWithDto commandWithDto,
             final MetaModelService5 metaModelService) {
         final CommandDto commandDto = commandWithDto.asDto();
-        final CommandWithDtoProcessor<?> commandWithDtoProcessor =
+        final CommandWithDtoProcessor commandWithDtoProcessor =
                 metaModelService.commandDtoProcessorFor(commandDto.getMember().getLogicalMemberIdentifier());
         if (commandWithDtoProcessor == null) {
             return commandDto;
         }
-        return process(commandWithDtoProcessor, commandWithDto);
-    }
-
-    private static CommandDto process(
-            final CommandWithDtoProcessor commandWithDtoProcessor,
-            final CommandWithDto commandWithDto) {
         return commandWithDtoProcessor.process(commandWithDto);
     }
 
     @Inject
     MetaModelService5 metaModelService;
+
 }

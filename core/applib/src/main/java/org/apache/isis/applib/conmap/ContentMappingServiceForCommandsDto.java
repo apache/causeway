@@ -43,8 +43,16 @@ public class ContentMappingServiceForCommandsDto implements ContentMappingServic
             return null;
         }
 
+        return map(object);
+    }
+
+    /**
+     * Not part of the {@link ContentMappingService} API.
+     */
+    @Programmatic
+    public CommandsDto map(final Object object) {
         if(object instanceof CommandsDto) {
-            return object;
+            return ((CommandsDto) object);
         }
 
         CommandDto commandDto = asDto(object, metaModelService5);
@@ -62,8 +70,8 @@ public class ContentMappingServiceForCommandsDto implements ContentMappingServic
                 if(objAsCommandDto != null) {
                     commandsDto.getCommandDto().add(objAsCommandDto);
                 } else {
-                    // ignore entire list because found something that is not convertible.
-                    return new CommandsDto();
+                    // simply ignore.
+                    // this is the means by which we can avoid replicating commands.
                 }
             }
             return commandsDto;
@@ -74,7 +82,7 @@ public class ContentMappingServiceForCommandsDto implements ContentMappingServic
     }
 
     private static CommandDto asDto(final Object object, MetaModelService5 metaModelService5) {
-        return ContentMappingServiceForCommandDto.asDto(object, metaModelService5);
+        return ContentMappingServiceForCommandDto.asProcessedDto(object, metaModelService5);
     }
 
     @Inject

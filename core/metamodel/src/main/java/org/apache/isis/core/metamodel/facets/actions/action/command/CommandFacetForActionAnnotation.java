@@ -45,7 +45,7 @@ public class CommandFacetForActionAnnotation extends CommandFacetAbstract {
         final CommandExecuteIn commandExecuteIn = action != null? action.commandExecuteIn() :  CommandExecuteIn.FOREGROUND;
         final Class<? extends CommandWithDtoProcessor> processorClass =
                 action != null ? action.commandWithDtoProcessor() : null;
-        final CommandWithDtoProcessor<?> processor = (CommandWithDtoProcessor<?>) newProcessorElseNull(processorClass);
+        final CommandWithDtoProcessor processor = (CommandWithDtoProcessor) newProcessorElseNull(processorClass);
 
         if(processor != null) {
             commandReification = CommandReification.ENABLED;
@@ -91,7 +91,7 @@ public class CommandFacetForActionAnnotation extends CommandFacetAbstract {
             final Persistence persistence,
             final ExecuteIn executeIn,
             final Enablement enablement,
-            final CommandWithDtoProcessor<?> processor,
+            final CommandWithDtoProcessor processor,
             final FacetHolder holder,
             final ServicesInjector servicesInjector) {
         super(persistence, executeIn, enablement, processor, holder, servicesInjector);

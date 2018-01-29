@@ -16,14 +16,20 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.services.metamodel;
+package org.apache.isis.applib.services.command;
 
-import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.services.command.CommandWithDtoProcessor;
+import org.apache.isis.schema.cmd.v1.CommandDto;
+import org.apache.isis.schema.cmd.v1.PropertyDto;
 
-public interface MetaModelService5 extends MetaModelService4 {
-
-    @Programmatic
-    CommandWithDtoProcessor commandDtoProcessorFor(String memberIdentifier);
-
+/**
+ * Convenience adapter for command processors for property edits.
+ */
+public abstract class CommandWithDtoProcessorForPropertyAbstract
+        implements CommandWithDtoProcessor {
+    protected CommandDto asDto(final CommandWithDto commandWithDto) {
+        return commandWithDto.asDto();
+    }
+    protected PropertyDto getPropertyDto(final CommandDto commandDto) {
+        return (PropertyDto) commandDto.getMember();
+    }
 }

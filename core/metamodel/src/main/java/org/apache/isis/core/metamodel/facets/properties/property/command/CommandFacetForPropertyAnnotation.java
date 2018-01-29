@@ -45,7 +45,7 @@ public class CommandFacetForPropertyAnnotation extends CommandFacetAbstract {
         final CommandExecuteIn commandExecuteIn = property != null? property.commandExecuteIn() :  CommandExecuteIn.FOREGROUND;
         final Class<? extends CommandWithDtoProcessor> processorClass =
                 property != null ? property.commandWithDtoProcessor() : null;
-        final CommandWithDtoProcessor<?> processor = (CommandWithDtoProcessor<?>) newProcessorElseNull(processorClass);
+        final CommandWithDtoProcessor processor = (CommandWithDtoProcessor) newProcessorElseNull(processorClass);
 
         if(processor != null) {
             commandReification = CommandReification.ENABLED;
@@ -82,7 +82,7 @@ public class CommandFacetForPropertyAnnotation extends CommandFacetAbstract {
             final ExecuteIn executeIn,
             final Enablement enablement,
             final FacetHolder holder,
-            final CommandWithDtoProcessor<?> processor,
+            final CommandWithDtoProcessor processor,
             final ServicesInjector servicesInjector) {
         super(persistence, executeIn, enablement, processor, holder, servicesInjector);
     }

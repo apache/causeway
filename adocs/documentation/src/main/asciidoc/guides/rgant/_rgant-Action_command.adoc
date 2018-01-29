@@ -5,7 +5,10 @@
 :_imagesdir: images/
 
 
-The `@Action(command=...)` attribute (and the related `@Action(commandPersistence=...)` and  `@Action(commandExecuteIn=...)` attributes) allows an action invocation to be made into a concrete object such that it can be inspected and persisted.  The primary use case for this is enhanced profiling/auditing, and it also supports the deferring the execution of the action such that it can be invoked in the background.
+The `@Action(command=...)` attribute (and the related `@Action(commandPersistence=...)` and  `@Action(commandExecuteIn=...)` attributes) allows an action invocation to be made into a concrete object such that it can be inspected and persisted.
+The primary use case for this are to support the deferring the execution of the action such that it can be invoked in the background, and to replay commands in a master/slave configuration.
+
+
 
 The annotation works with (and is influenced by the behaviour of) a number of domain services:
 
@@ -19,7 +22,8 @@ Each action invocation is reified by the xref:../rgsvc/rgsvc.adoc#_rgsvc_applica
 
 If an appropriate `CommandService` is configured (for example using (non-ASF) link:http://platform.incode.org/modules/spi/command/spi-command.html[Incode Platform's command] module), then the `Command` itself is persisted.
 
-By default, actions are invoked in directly in the thread of the invocation.   If there is an implementation of `BackgroundCommandService` (as the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s command module does provide), then this means in turn that the `BackgroundService` can be used by the domain object code to programmatically create background ``Command``s.
+By default, actions are invoked in directly in the thread of the invocation.
+If there is an implementation of `BackgroundCommandService` (as the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s command module does provide), then this means in turn that the `BackgroundService` can be used by the domain object code to programmatically create background ``Command``s.
 
 [NOTE]
 ====
@@ -70,8 +74,7 @@ corresponds to the behaviour described above; the `Command` object is persisted 
 
 == `commandPersistence()`
 
-If the action has been reified, then the `commandPersistence()` attribute determines whether that `Command` object
-should then also be persisted (the default), or not persisted, or only if hinted.
+If the action has been reified, then the `commandPersistence()` attribute determines whether that `Command` object should then also be persisted (the default), or not persisted, or only if hinted.
 
 To explain this last alternative:
 
@@ -107,7 +110,6 @@ will prevent the parent `Command` object from being persisted, _even if_ a child
 
 
 
-
 == `commandExecuteIn()`
 
 For persisted commands, the `commandExecuteIn()` attribute determines whether the `Command` should be executed in the foreground (the default) or executed in the background.
@@ -126,9 +128,115 @@ public class Order {
 }
 ----
 
-will result in the `Command` being persisted but its execution deferred to a background execution mechanism. The
-returned object from this action is the persisted `Command` itself.
+will result in the `Command` being persisted but its execution deferred to a background execution mechanism.
+The returned object from this action is the persisted `Command` itself.
 
 
 
 
+== `commandWithDtoProcessor()`
+
+The `commandWithDtoProcessor()` attribute allows an implementation of `CommandWithDtoProcessor` to be specified.
+This has the following API:
+
+[source,java]
+----
+public interface CommandWithDtoProcessor {
+    CommandDto process(CommandWithDto commandWithDto);
+}
+----
+
+This interface is used by the framework-provided implementations of `ContentMappingService` for the REST API, allowing ``Command``s implementations that also implement `CommandWithDto` to be further customised as they are serialized out.
+The primary use case for this capability is in support of master/slave replication.
+
+* on the master, ``Command``s are serialized to XML.
+This includes the identity of the target object and the value of all parameters.
+However, any ``Blob``s and ``Clob``s are deliberately excluded from this XML (they are instead stored as references).
+
+* replaying ``Command``s requires this missing parameter information to be reinstated.
+The `CommandWithDtoProcessor` therefore offers a hook to dynamically re-attach the missing `Blob` or `Clob` argument.
+
+
+As a special case, returning `null` means that the command's DTO is effectively excluded when retrieving the list of commands.
+If replicating from master to slave, this effectively allows certain commands to be ignored.
+The `CommandWithDtoProcessor.Null` class provides a convenience implementation for this requirement.
+
+[NOTE]
+====
+If `commandWithDtoProcessor()` is specified, then `command()` is assumed to be ENABLED.
+====
+
+
+
+=== Example implementation
+
+Consider the following method:
+
+[source,java]
+----
+@Action(
+    domainEvent = IncomingDocumentRepository.UploadDomainEvent.class,
+    commandWithDtoProcessor = DeriveBlobArg0FromReturnedDocument.class
+)
+public Document upload(final Blob blob) {
+    final String name = blob.getName();
+    final DocumentType type = DocumentTypeData.INCOMING.findUsing(documentTypeRepository);
+    final ApplicationUser me = meService.me();
+    String atPath = me != null ? me.getAtPath() : null;
+    if (atPath == null) {
+        atPath = "/";
+    }
+    return incomingDocumentRepository.upsertAndArchive(type, atPath, name, blob);
+}
+----
+
+The `Blob` argument will not be persisted in the memento of the `Command`, but the information is implicitly available in the `Document` that is returned by the action.
+The `DeriveBlobArg0FromReturnedDocument` processor retrieves this information and dynamically adds:
+
+[source,java]
+----
+public class DeriveBlobArg0FromReturnedDocument
+        extends CommandWithDtoProcessorForActionAbstract {
+
+    @Override
+    public CommandDto process(final CommandWithDto commandWithDto) {
+        final CommandDto commandDto = commandWithDto.asDto();
+        final Bookmark result = commandWithDto.getResult();
+        if(result == null) {
+            return commandDto;
+        }
+        try {
+            final Document document = bookmarkService.lookup(result, Document.class);
+            if (document != null) {
+                ParamDto paramDto = getParamDto(commandDto, 0);
+                CommonDtoUtils.setValueOn(paramDto, ValueType.BLOB, document.getBlob(), bookmarkService);
+            }
+        } catch(Exception ex) {
+            return commandDto;
+        }
+        return commandDto;
+    }
+    @Inject
+    BookmarkService bookmarkService;
+}
+----
+
+
+=== Null implementation
+
+
+
+[source,xml]
+----
+    /**
+     * Convenience implementation to simply indicate that no DTO should be returned for a command,
+     * effectively ignoring it for replay purposes.
+     */
+    public static class Null implements CommandWithDtoProcessor {
+        @Override
+        public CommandDto process(final CommandWithDto commandWithDto) {
+            return null;
+        }
+    }
+
+----

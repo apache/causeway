@@ -435,7 +435,13 @@ public final class CommonDtoUtils {
 
         paramDto.setName(parameterName);
 
-        final ValueType valueType = CommonDtoUtils.asValueType(parameterType);
+        ValueType valueType = CommonDtoUtils.asValueType(parameterType);
+        // this hack preserves previous behaviour before we were able to serialize blobs and clobs into XML
+        // however, we also don't want this new behaviour for parameter arguments
+        // (else these large objects could end up being persisted).
+        if(valueType == ValueType.BLOB) valueType = ValueType.REFERENCE;
+        if(valueType == ValueType.CLOB) valueType = ValueType.REFERENCE;
+
         paramDto.setType(valueType);
 
         CommonDtoUtils.setValueOn(paramDto, valueType, arg, bookmarkService);

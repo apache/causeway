@@ -18,28 +18,24 @@
  */
 package org.apache.isis.applib.services.command;
 
-import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.schema.cmd.v1.ActionDto;
 import org.apache.isis.schema.cmd.v1.CommandDto;
+import org.apache.isis.schema.cmd.v1.ParamDto;
+import org.apache.isis.schema.cmd.v1.ParamsDto;
 
-public interface CommandWithDtoProcessor {
-
-    /**
-     * Returning <tt>null</tt> means that the command's DTO is effectively excluded from any list.
-     * If replicating from master to slave, this allows commands that can't be replicated to be ignored.
-     */
-    @Programmatic
-    CommandDto process(CommandWithDto commandWithDto);
-
-
-    /**
-     * Convenience implementation to simply indicate that no DTO should be returned for a command,
-     * effectively ignoring it for replay purposes.
-     */
-    public static class Null implements CommandWithDtoProcessor {
-        @Override
-        public CommandDto process(final CommandWithDto commandWithDto) {
-            return null;
-        }
+/**
+ * Convenience adapter for command processors for action invocations.
+ */
+public abstract class CommandWithDtoProcessorForActionAbstract implements CommandWithDtoProcessor {
+    protected CommandDto asDto(final CommandWithDto commandWithDto) {
+        return commandWithDto.asDto();
     }
-
+    protected ActionDto getActionDto(final CommandDto commandDto) {
+        return (ActionDto) commandDto.getMember();
+    }
+    protected ParamDto getParamDto(final CommandDto commandDto, final int paramNum) {
+        final ActionDto actionDto = getActionDto(commandDto);
+        final ParamsDto parameters = actionDto.getParameters();
+        return parameters.getParameter().get(paramNum);
+    }
 }
