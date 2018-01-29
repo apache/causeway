@@ -25,6 +25,7 @@ import org.apache.isis.applib.annotation.Command.Persistence;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
 import org.apache.isis.core.metamodel.facets.actions.command.CommandFacetAbstract;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 /**
  * @deprecated
@@ -36,18 +37,23 @@ public class CommandFacetForCommandAnnotation extends CommandFacetAbstract {
      * @deprecated
      */
     @Deprecated
-    public static CommandFacet create(final Command annotation, final FacetHolder holder) {
+    public static CommandFacet create(
+            final Command annotation,
+            final FacetHolder holder,
+            final ServicesInjector servicesInjector) {
         return annotation == null
                 ? null
-                : new CommandFacetForCommandAnnotation(annotation.persistence(), annotation.executeIn(), Enablement.isDisabled(annotation.disabled()), holder);
+                : new CommandFacetForCommandAnnotation(annotation.persistence(), annotation.executeIn(), Enablement.isDisabled(annotation.disabled()), holder,
+                servicesInjector);
     }
 
     private CommandFacetForCommandAnnotation(
             final Persistence persistence,
             final ExecuteIn executeIn,
             final Enablement enablement,
-            final FacetHolder holder) {
-        super(persistence, executeIn, enablement, holder);
+            final FacetHolder holder,
+            final ServicesInjector servicesInjector) {
+        super(persistence, executeIn, enablement, null, holder, servicesInjector);
     }
 
 

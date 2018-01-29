@@ -42,16 +42,9 @@ public class MustSatisfySpecificationFacetForMustSatisfyAnnotationOnProperty ext
             return null;
         }
         final Class<?>[] values = annotation.value();
-        final List<Specification> specifications = Lists.newArrayList();
-        for (final Class<?> value : values) {
-            final Specification specification = newSpecificationElseNull(value);
-            if (specification != null) {
-                specifications.add(specification);
-            }
-        }
+        final List<Specification> specifications = specificationsFor(values);
         return specifications.size() > 0 ? new MustSatisfySpecificationFacetForMustSatisfyAnnotationOnProperty(specifications, holder, servicesInjector) : null;
     }
-
 
     private MustSatisfySpecificationFacetForMustSatisfyAnnotationOnProperty(
             final List<Specification> specifications,

@@ -25,13 +25,15 @@ import com.google.common.base.Throwables;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.apache.isis.applib.services.background.ActionInvocationMemento;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService2;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.Command.Executor;
-import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.jaxb.JaxbService;
@@ -48,6 +50,7 @@ import org.apache.isis.core.runtime.sessiontemplate.AbstractIsisSessionTemplate;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.system.transaction.TransactionalClosure;
+import org.apache.isis.core.runtime.system.transaction.TransactionalClosureWithReturn;
 import org.apache.isis.schema.cmd.v1.ActionDto;
 import org.apache.isis.schema.cmd.v1.CommandDto;
 import org.apache.isis.schema.cmd.v1.MemberDto;
@@ -70,13 +73,32 @@ import org.apache.isis.schema.utils.CommonDtoUtils;
  */
 public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemplate {
 
+    private final static Logger LOG = LoggerFactory.getLogger(BackgroundCommandExecution.class);
+
+    public enum OnExceptionPolicy {
+        /**
+         * For example, regular background commands.
+         */
+        CONTINUE,
+        /**
+         * For example, replayable commands.
+         */
+        QUIT
+    }
+
     private final MementoServiceDefault mementoService;
+    private final OnExceptionPolicy onExceptionPolicy;
 
     public BackgroundCommandExecution() {
-        // same as configured by BackgroundServiceDefault
-        mementoService = new MementoServiceDefault().withNoEncoding();
+        this(OnExceptionPolicy.CONTINUE);
     }
     
+    public BackgroundCommandExecution(final OnExceptionPolicy onExceptionPolicy) {
+        // same as configured by BackgroundServiceDefault
+        mementoService = new MementoServiceDefault().withNoEncoding();
+        this.onExceptionPolicy = onExceptionPolicy;
+    }
+
     // //////////////////////////////////////
 
     
@@ -92,8 +114,16 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
             }
         });
 
+        LOG.debug("{}: Found {} to execute", getClass().getName(), backgroundCommands.size());
+
         for (final Command backgroundCommand : backgroundCommands) {
-            execute(transactionManager, backgroundCommand);
+
+            final boolean shouldContinue = execute(transactionManager, backgroundCommand);
+            if(!shouldContinue) {
+                LOG.info("OnExceptionPolicy is to QUIT, so skipping further processing",
+                        backgroundCommand.getMemberIdentifier());
+                return;
+            }
         }
     }
 
@@ -105,23 +135,87 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
     // //////////////////////////////////////
 
     
-    private void execute(
+    private boolean execute(
             final IsisTransactionManager transactionManager,
             final Command backgroundCommand) {
 
-        transactionManager.executeWithinTransaction(
+        try {
+            return executeWithinTran(transactionManager, backgroundCommand);
+        } catch (final RuntimeException ex) {
+
+            // attempting to commit the xactn itself could cause an issue
+            // so we need extra exception handling here, it seems.
+
+            org.apache.isis.applib.annotation.Command.ExecuteIn executeIn = backgroundCommand.getExecuteIn();
+            LOG.warn("Exception when committing for: {} {}", executeIn, backgroundCommand.getMemberIdentifier(), ex);
+
+            //
+            // the previous transaction will have been aborted as part of the recovery handling within
+            // TransactionManager's executeWithinTran
+            //
+            // we therefore start a new xactn in order to make sure that this background command is marked as a failure
+            // so it won't be attempted again.
+            //
+            transactionManager.executeWithinTransaction(new TransactionalClosure(){
+                @Override
+                public void execute() {
+
+                    final Interaction backgroundInteraction = interactionContext.getInteraction();
+                    final Interaction.Execution currentExecution = backgroundInteraction.getCurrentExecution();
+                    backgroundCommand.setStartedAt(
+                            currentExecution != null
+                                    ? currentExecution.getStartedAt()
+                                    : clockService.nowAsJavaSqlTimestamp());
+
+                    backgroundCommand.setCompletedAt(clockService.nowAsJavaSqlTimestamp());
+                    backgroundCommand.setException(Throwables.getStackTraceAsString(ex));
+                }
+            });
+
+            return determineIfContinue(ex);
+        }
+    }
+
+    private Boolean executeWithinTran(
+            final IsisTransactionManager transactionManager,
+            final Command backgroundCommand) {
+
+        return transactionManager.executeWithinTransaction(
                 backgroundCommand,
-                new TransactionalClosure() {
+                new TransactionalClosureWithReturn<Boolean>() {
             @Override
-            public void execute() {
+            public Boolean execute() {
 
                 // setup for us by IsisTransactionManager; will have the transactionId of the backgroundCommand
                 final Interaction backgroundInteraction = interactionContext.getInteraction();
 
                 final String memento = backgroundCommand.getMemento();
 
+                org.apache.isis.applib.annotation.Command.ExecuteIn executeIn = backgroundCommand.getExecuteIn();
+
+                LOG.info("Executing: {} {}", executeIn, backgroundCommand.getMemberIdentifier());
+
+                RuntimeException exceptionIfAny = null;
                 try {
                     backgroundCommand.setExecutor(Executor.BACKGROUND);
+
+                    // responsibility for setting the Command#startedAt is in the ActionInvocationFacet or
+                    // PropertySetterFacet, but tthis is run if the domain object was found.  If the domain object is
+                    // thrown then we would have a command with only completedAt, which is inconsistent.
+                    // Therefore instead we copy down from the backgroundInteraction (similar to how we populate the
+                    // completedAt at the end)
+                    final Interaction.Execution priorExecution = backgroundInteraction.getPriorExecution();
+
+                    final Timestamp startedAt = priorExecution != null
+                            ? priorExecution.getStartedAt()
+                            : clockService.nowAsJavaSqlTimestamp();
+                    final Timestamp completedAt =
+                            priorExecution != null
+                                    ? priorExecution.getCompletedAt()
+                                    : clockService.nowAsJavaSqlTimestamp();  // close enough...
+
+                    backgroundCommand.setStartedAt(startedAt);
+                    backgroundCommand.setCompletedAt(completedAt);
 
                     final boolean legacy = memento.startsWith("<memento");
                     if(legacy) {
@@ -175,7 +269,7 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
 
                             for (OidDto targetOidDto : targetOidDtos) {
 
-                                final ObjectAdapter targetAdapter = targetAdapterFor(targetOidDto);
+                                final ObjectAdapter targetAdapter = adapterFor(targetOidDto);
                                 final ObjectAction objectAction = findObjectAction(targetAdapter, memberId);
 
                                 // we pass 'null' for the mixedInAdapter; if this action _is_ a mixin then
@@ -222,18 +316,24 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
 
                     }
 
-                } catch (RuntimeException e) {
+                } catch (RuntimeException ex) {
+
+                    LOG.warn("Exception for: {} {}", executeIn, backgroundCommand.getMemberIdentifier(), ex);
+
                     // hmmm, this doesn't really make sense if >1 action
                     //
                     // in any case, the capturing of the result of the action invocation should be the
                     // responsibility of the interaction...
-                    backgroundCommand.setException(Throwables.getStackTraceAsString(e));
+                    backgroundCommand.setException(Throwables.getStackTraceAsString(ex));
 
                     // lower down the stack the IsisTransactionManager will have set the transaction to abort
                     // however, we don't want that to occur (because any changes made to the backgroundCommand itself
                     // would also be rolled back, and it would keep getting picked up again by a scheduler for
                     // processing); instead we clear the abort cause and ensure we can continue.
                     transactionManager.getCurrentTransaction().clearAbortCauseAndContinue();
+
+                    // checked at the end
+                    exceptionIfAny = ex;
                 }
 
                 // it's possible that there is no priorExecution, specifically if there was an exception
@@ -244,6 +344,10 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
                                 ? priorExecution.getCompletedAt()
                                 : clockService.nowAsJavaSqlTimestamp();  // close enough...
                 backgroundCommand.setCompletedAt(completedAt);
+
+                // if we hit an exception processing this command, then quit if instructed
+                return determineIfContinue(exceptionIfAny);
+
             }
 
             private ObjectAction findObjectAction(
@@ -273,6 +377,11 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
                 return property;
             }
         });
+    }
+
+    private boolean determineIfContinue(final RuntimeException exceptionIfAny) {
+        final boolean shouldQuit = exceptionIfAny != null && onExceptionPolicy == BackgroundCommandExecution.OnExceptionPolicy.QUIT;
+        return !shouldQuit;
     }
 
     protected ObjectAdapter newValueAdapterFor(final PropertyDto propertyDto) {
@@ -324,39 +433,11 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
             if(arg == null) {
                 return null;
             }
-            return argAdapterFor(argType, arg);
+            return adapterFor(arg);
 
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    protected ObjectAdapter targetAdapterFor(final OidDto targetOidDto) {
-
-//        // this is the original code, but it can be simplified ...
-//        // (moved out to separate method so that, if proven wrong, can override as a patch)
-
-//      final Bookmark bookmark = Bookmark.from(targetOidDto);
-//      final Object targetObject = bookmarkService.lookup(bookmark);
-//      final ObjectAdapter targetAdapter = adapterFor(targetObject);
-
-        return adapterFor(targetOidDto);
-    }
-
-    protected ObjectAdapter argAdapterFor(final Class<?> argType, final Object arg) {
-
-//        // this is the original code, but it can be simplified ...
-//        // (moved out to separate method so that, if proven wrong, can override as a patch)
-
-//        if(Bookmark.class != argType) {
-//            return adapterFor(arg);
-//        } else {
-//            final Bookmark argBookmark = (Bookmark)arg;
-//            final RootOid rootOid = RootOid.create(argBookmark);
-//            return adapterFor(rootOid);
-//        }
-
-        return adapterFor(arg);
     }
 
     private ObjectAdapter[] argAdaptersFor(final ActionDto actionDto) {
@@ -387,19 +468,16 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
     // //////////////////////////////////////
 
     @javax.inject.Inject
-    private BookmarkService2 bookmarkService;
+    BookmarkService2 bookmarkService;
 
     @javax.inject.Inject
-    private JaxbService jaxbService;
+    JaxbService jaxbService;
 
     @javax.inject.Inject
-    private CommandContext commandContext;
+    InteractionContext interactionContext;
 
     @javax.inject.Inject
-    private InteractionContext interactionContext;
-
-    @javax.inject.Inject
-    private ClockService clockService;
+    ClockService clockService;
 
 
 }

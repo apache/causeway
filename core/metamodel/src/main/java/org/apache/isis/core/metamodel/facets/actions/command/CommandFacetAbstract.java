@@ -21,10 +21,11 @@ package org.apache.isis.core.metamodel.facets.actions.command;
 
 import org.apache.isis.applib.annotation.Command.ExecuteIn;
 import org.apache.isis.applib.annotation.Command.Persistence;
+import org.apache.isis.applib.services.command.CommandDtoProcessor;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.MarkerFacetAbstract;
-import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public abstract class CommandFacetAbstract extends MarkerFacetAbstract implements CommandFacet {
 
@@ -44,16 +45,29 @@ public abstract class CommandFacetAbstract extends MarkerFacetAbstract implement
     private final Persistence persistence;
     private final ExecuteIn executeIn;
     private final Enablement enablement;
+    private final CommandDtoProcessor processor;
 
     public CommandFacetAbstract(
-            final Persistence persistence, 
-            final ExecuteIn executeIn, 
-            final Enablement enablement, 
-            final FacetHolder holder) {
+            final Persistence persistence,
+            final ExecuteIn executeIn,
+            final Enablement enablement,
+            final CommandDtoProcessor processor,
+            final FacetHolder holder,
+            final ServicesInjector servicesInjector) {
         super(type(), holder);
+        inject(processor, servicesInjector);
         this.persistence = persistence;
         this.executeIn = executeIn;
         this.enablement = enablement;
+        this.processor = processor;
+    }
+
+    private static void inject(
+            final CommandDtoProcessor processor, final ServicesInjector servicesInjector) {
+        if(processor == null || servicesInjector == null) {
+            return;
+        }
+        servicesInjector.injectServicesInto(processor);
     }
 
     @Override
@@ -69,6 +83,32 @@ public abstract class CommandFacetAbstract extends MarkerFacetAbstract implement
     @Override
     public boolean isDisabled() {
         return this.enablement == Enablement.DISABLED;
+    }
+
+    @Override
+    public CommandDtoProcessor getProcessor() {
+        return processor;
+    }
+
+    /**
+     * For benefit of subclasses.
+     */
+    protected static CommandDtoProcessor newProcessorElseNull(final Class<?> cls) {
+        if(cls == null) {
+            return null;
+        }
+        if(cls == CommandDtoProcessor.class) {
+            // ie the default value, namely the interface
+            return null;
+        }
+        if (!(CommandDtoProcessor.class.isAssignableFrom(cls))) {
+            return null;
+        }
+        try {
+            return (CommandDtoProcessor) cls.newInstance();
+        } catch (final InstantiationException | IllegalAccessException e) {
+            return null;
+        }
     }
 
 }

@@ -18,7 +18,6 @@
  */
 package org.apache.isis.applib;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 import java.util.Properties;
@@ -53,9 +52,9 @@ public class PropertyResource {
                     }
                 }
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new RuntimeException(
-                    String.format("Failed to load '%s' file ", this), e);
+                    String.format("Failed to load '%s' file relative to %s", getPropertiesFile(), getPropertiesFileContext().getName()), e);
         }
     }
 }

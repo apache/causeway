@@ -16,24 +16,20 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.actions.action.command;
+package org.apache.isis.applib.services.command;
 
-import org.apache.isis.applib.annotation.Command.ExecuteIn;
-import org.apache.isis.applib.annotation.Command.Persistence;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.schema.cmd.v1.CommandDto;
+import org.apache.isis.schema.cmd.v1.PropertyDto;
 
-public class CommandFacetForActionAnnotationAsConfigured extends CommandFacetForActionAnnotation {
-
-    CommandFacetForActionAnnotationAsConfigured(
-            final Persistence persistence,
-            final ExecuteIn executeIn,
-            final Enablement enablement,
-            final FacetHolder holder,
-            final ServicesInjector servicesInjector) {
-        super(persistence, executeIn, enablement, null,
-                holder, servicesInjector);
+/**
+ * Convenience adapter for command processors for property edits.
+ */
+public abstract class CommandDtoProcessorForPropertyAbstract
+        implements CommandDtoProcessor {
+    protected CommandDto asDto(final CommandWithDto commandWithDto) {
+        return commandWithDto.asDto();
     }
-
-
+    protected PropertyDto getPropertyDto(final CommandDto commandDto) {
+        return (PropertyDto) commandDto.getMember();
+    }
 }

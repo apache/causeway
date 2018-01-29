@@ -43,6 +43,8 @@
             <xs:element name="enum" type="enumDto"/>
             <xs:element name="reference" type="oidDto"/>
             <xs:element name="collection" type="collectionDto"/>
+            <xs:element name="blob" type="blobDto"/>
+            <xs:element name="clob" type="clobDto"/>
         </xs:choice>
     </xs:complexType>
 
@@ -78,6 +80,30 @@
         </xs:sequence>
         <xs:attribute name="type" use="required" type="valueType"/>
         <xs:attribute name="null" use="optional" type="xs:boolean"/>
+    </xs:complexType>
+
+    <xs:complexType name="blobDto">
+        <xs:annotation>
+            <xs:documentation>A collection of (argument) values
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="name" type="xs:string"/>
+            <xs:element name="mimeType" type="xs:string"/>
+            <xs:element name="bytes" type="xs:hexBinary"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="clobDto">
+        <xs:annotation>
+            <xs:documentation>A collection of (argument) values
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="name" type="xs:string"/>
+            <xs:element name="mimeType" type="xs:string"/>
+            <xs:element name="chars" type="xs:string"/>
+        </xs:sequence>
     </xs:complexType>
 
     <xs:complexType name="oidsDto">
@@ -126,6 +152,8 @@
             <xs:enumeration value="enum"/>
             <xs:enumeration value="reference"/>
             <xs:enumeration value="collection"/>
+            <xs:enumeration value="blob"/>
+            <xs:enumeration value="clob"/>
             <xs:enumeration value="void">
                 <xs:annotation>
                     <xs:documentation>Not valid to be used as the parameter type of an action; can be used as its return type.

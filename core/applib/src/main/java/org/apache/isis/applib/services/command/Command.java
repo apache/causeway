@@ -284,17 +284,30 @@ public interface Command extends HasTransactionId {
      * For an command that has actually been executed, holds the date/time at which the {@link Interaction} that
      * executed the command started.
      *
-     * @deprecated - see {@link Interaction#getStartedAt()}.
+     * <p>
+     *     Previously this field was deprecated (on the basis that the startedAt is also held in
+     *     {@link Interaction.Execution#getStartedAt()}). However, to support replay/replication feature means that
+     *     we need to query for persisted {@link Command}s and use this field to ensure the correct ordering.
+     * </p>
+     *
+     * See also {@link Interaction#getCurrentExecution()} and
+     * {@link Interaction.Execution#getStartedAt()}.
      */
-    @Deprecated
     Timestamp getStartedAt();
     
     /**
      * <b>NOT API</b>: intended to be called only by the framework.
      *
-     * @deprecated - see {@link Interaction#getCurrentExecution()} and {@link org.apache.isis.applib.services.iactn.Interaction.Execution#setStartedAt(Timestamp)}.
+     *
+     * <p>
+     *     Previously this field was deprecated (on the basis that the completedAt is also held in
+     *     {@link Interaction.Execution#getCompletedAt()}). However, to support replay/replication feature means that
+     *     we need to query for persisted {@link Command}s and use this field to ensure the correct ordering.
+     * </p>
+     *
+     * See also {@link Interaction#getCurrentExecution()} and
+     * {@link Interaction.Execution#setStartedAt(Timestamp)}.
      */
-    @Deprecated
     void setStartedAt(Timestamp startedAt);
 
     //endregion
@@ -305,17 +318,29 @@ public interface Command extends HasTransactionId {
      * For an command that has actually been executed, holds the date/time at which the {@link Interaction} that
      * executed the command completed.
      *
-     * @deprecated - see {@link Interaction#getCurrentExecution()} and  {@link org.apache.isis.applib.services.iactn.Interaction.Execution#getCompletedAt()}.
+     * <p>
+     *     Previously this field was deprecated (on the basis that the completedAt is also held in
+     *     {@link Interaction.Execution#getCompletedAt()}). However, to support replay/replication feature means that
+     *     we need to query for persisted {@link Command}s and use this field to ensure the correct ordering.
+     * </p>
+     *
+     * See also {@link Interaction#getCurrentExecution()} and
+     * {@link Interaction.Execution#getCompletedAt()}.
      */
-    @Deprecated
     Timestamp getCompletedAt();
     
     /**
      * <b>NOT API</b>: intended to be called only by the framework.
      *
-     * @deprecated - see {@link org.apache.isis.applib.services.iactn.Interaction.Execution#setCompletedAt(Timestamp)}.
+     * <p>
+     *     Previously this field was deprecated (on the basis that the completedAt is also held in
+     *     {@link Interaction.Execution#getCompletedAt()}). However, to support replay/replication feature means that
+     *     we need to query for persisted {@link Command}s and use this field to ensure the correct ordering.
+     * </p>
+     *
+     * See also {@link Interaction#getCurrentExecution()} and
+     * {@link Interaction.Execution#setCompletedAt(Timestamp)}.
      */
-    @Deprecated
     void setCompletedAt(Timestamp completedAt);
 
     //endregion

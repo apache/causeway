@@ -20,7 +20,7 @@
 package org.apache.isis.core.metamodel.facets.properties.property.mustsatisfy;
 
 import java.util.List;
-import com.google.common.collect.Lists;
+
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.spec.Specification;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -40,16 +40,9 @@ public class MustSatisfySpecificationFacetForPropertyAnnotation extends MustSati
         }
 
         final Class<?>[] values = property.mustSatisfy();
-        final List<Specification> specifications = Lists.newArrayList();
-        for (final Class<?> value : values) {
-            final Specification specification = newSpecificationElseNull(value);
-            if (specification != null) {
-                specifications.add(specification);
-            }
-        }
+        final List<Specification> specifications = specificationsFor(values);
         return specifications.size() > 0 ? new MustSatisfySpecificationFacetForPropertyAnnotation(specifications, holder, servicesInjector) : null;
     }
-
 
     private MustSatisfySpecificationFacetForPropertyAnnotation(final List<Specification> specifications, final FacetHolder holder, final ServicesInjector servicesInjector) {
         super(specifications, holder, servicesInjector);

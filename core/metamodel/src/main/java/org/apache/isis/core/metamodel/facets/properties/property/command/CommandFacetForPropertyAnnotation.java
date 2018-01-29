@@ -24,27 +24,37 @@ import org.apache.isis.applib.annotation.CommandExecuteIn;
 import org.apache.isis.applib.annotation.CommandPersistence;
 import org.apache.isis.applib.annotation.CommandReification;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.services.command.CommandDtoProcessor;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.action.command.CommandFacetFromConfiguration;
 import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
 import org.apache.isis.core.metamodel.facets.actions.command.CommandFacetAbstract;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public class CommandFacetForPropertyAnnotation extends CommandFacetAbstract {
 
     public static CommandFacet create(
             final Property property,
             final IsisConfiguration configuration,
-            final FacetHolder holder) {
+            final FacetHolder holder,
+            final ServicesInjector servicesInjector) {
 
-        final CommandReification command = property != null ? property.command() : CommandReification.AS_CONFIGURED;
+        CommandReification commandReification = property != null ? property.command() : CommandReification.AS_CONFIGURED;
         final CommandPersistence commandPersistence = property != null ? property.commandPersistence() : CommandPersistence.PERSISTED;
         final CommandExecuteIn commandExecuteIn = property != null? property.commandExecuteIn() :  CommandExecuteIn.FOREGROUND;
+        final Class<? extends CommandDtoProcessor> processorClass =
+                property != null ? property.commandDtoProcessor() : null;
+        final CommandDtoProcessor processor = newProcessorElseNull(processorClass);
 
+        if(processor != null) {
+            commandReification = CommandReification.ENABLED;
+        }
         final Persistence persistence = CommandPersistence.from(commandPersistence);
         final ExecuteIn executeIn = CommandExecuteIn.from(commandExecuteIn);
 
-        switch (command) {
+
+        switch (commandReification) {
             case AS_CONFIGURED:
                 final CommandPropertiesConfiguration setting = CommandPropertiesConfiguration.parse(configuration);
                 switch (setting) {
@@ -52,13 +62,15 @@ public class CommandFacetForPropertyAnnotation extends CommandFacetAbstract {
                     return null;
                 default:
                     return property != null
-                            ? new CommandFacetForPropertyAnnotationAsConfigured(persistence, executeIn, Enablement.ENABLED, holder)
-                            : CommandFacetFromConfiguration.create(holder);
+                            ? new CommandFacetForPropertyAnnotationAsConfigured(persistence, executeIn, Enablement.ENABLED, holder,
+                            servicesInjector)
+                            : CommandFacetFromConfiguration.create(holder, servicesInjector);
                 }
             case DISABLED:
                 return null;
             case ENABLED:
-                return new CommandFacetForPropertyAnnotation(persistence, executeIn, Enablement.ENABLED, holder);
+                return new CommandFacetForPropertyAnnotation(persistence, executeIn, Enablement.ENABLED, holder,
+                        processor, servicesInjector);
         }
 
         return null;
@@ -69,8 +81,10 @@ public class CommandFacetForPropertyAnnotation extends CommandFacetAbstract {
             final Persistence persistence,
             final ExecuteIn executeIn,
             final Enablement enablement,
-            final FacetHolder holder) {
-        super(persistence, executeIn, enablement, holder);
+            final FacetHolder holder,
+            final CommandDtoProcessor processor,
+            final ServicesInjector servicesInjector) {
+        super(persistence, executeIn, enablement, processor, holder, servicesInjector);
     }
 
 

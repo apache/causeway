@@ -37,6 +37,12 @@ The table below summarizes the annotation's attributes.
 |whether the reified `Command` (as provided by the `CommandContext` domain service) should actually be persisted (assuming an appropriate implementation of xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`] has been configured).
 
 
+|`commandDtoProcessor()`
+|Implementation of `CommandDtoProcessor` interface +
+(null)
+|If the `Command` also implements `CommandWithDto` (meaning that it can return a `CommandDto`, in other words be converted into an XML memento), then optionally specifies a processor that can refine this XML.
+
+
 |xref:../rgant/rgant.adoc#_rgant-Action_domainEvent[`domainEvent()`]
 |subtype of `ActionDomainEvent` +
 (`ActionDomainEvent.Default`)

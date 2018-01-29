@@ -20,6 +20,33 @@ It is also possible to apply the annotation to actions of domain services that a
 | Description
 
 
+|xref:../rgant/rgant.adoc#_rgant-Property_command[`command()`]
+|`AS_CONFIGURED`, `ENABLED`, `DISABLED` +
+(`AS_CONFIGURED`)
+|whether the property edit should be reified into a `o.a.i.applib.` +
+`services.command.Command` object through the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_CommandContext[`CommandContext`] service.
+
+
+|`commandExecuteIn()`
+|`FOREGROUND`,`BACKGROUND` +
+(`FOREGROUND`)
+|whether to execute the command immediately, or to persist it (assuming that an appropriate implementation of xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`] has been configured) such that a background scheduler can execute the command asynchronously
+
+
+|`commandPersistence()`
+|`PERSISTED`, `NOT_PERSISTED`, `IF_HINTED` +
+(`PERSISTED`)
+|whether the reified `Command` (as provided by the `CommandContext` domain service) should actually be persisted (assuming an appropriate implementation of xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`] has been configured).
+
+
+
+|`commandDtoProcessor()`
+|Implementation of `CommandDtoProcessor` interface +
+(null)
+|If the `Command` also implements `CommandWithDto` (meaning that it can return a `CommandDto`, in other words be converted into an XML memento), then optionally specifies a processor that can refine this XML.
+
+
+
 |xref:../rgant/rgant.adoc#_rgant-Property_domainEvent[`domainEvent()`]
 |subtype of `PropertyDomainEvent` +
 (`PropertyDomainEvent.Default`)
@@ -129,6 +156,7 @@ so that boilerplate-busting tools such as link:https://projectlombok.org/[Projec
 ====
 
 
+include::_rgant-Property_command.adoc[leveloffset=+1]
 include::_rgant-Property_domainEvent.adoc[leveloffset=+1]
 include::_rgant-Property_editing.adoc[leveloffset=+1]
 include::_rgant-Property_fileAccept.adoc[leveloffset=+1]

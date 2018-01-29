@@ -20,7 +20,7 @@
 package org.apache.isis.core.metamodel.facets.param.parameter.mustsatisfy;
 
 import java.util.List;
-import com.google.common.collect.Lists;
+
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.spec.Specification;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -40,16 +40,9 @@ public class MustSatisfySpecificationFacetForParameterAnnotation extends MustSat
         }
 
         final Class<?>[] values = parameter.mustSatisfy();
-        final List<Specification> specifications = Lists.newArrayList();
-        for (final Class<?> value : values) {
-            final Specification specification = newSpecificationElseNull(value);
-            if (specification != null) {
-                specifications.add(specification);
-            }
-        }
+        final List<Specification> specifications = specificationsFor(values);
         return specifications.size() > 0 ? new MustSatisfySpecificationFacetForParameterAnnotation(specifications, holder, servicesInjector) : null;
     }
-
 
     private MustSatisfySpecificationFacetForParameterAnnotation(
             final List<Specification> specifications,

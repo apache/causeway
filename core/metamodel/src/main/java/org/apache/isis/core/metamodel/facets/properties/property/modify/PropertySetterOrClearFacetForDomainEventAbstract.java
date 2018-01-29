@@ -19,7 +19,10 @@
 
 package org.apache.isis.core.metamodel.facets.properties.property.modify;
 
+import java.sql.Timestamp;
+
 import com.google.common.base.Objects;
+
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
@@ -47,8 +50,6 @@ import org.apache.isis.core.metamodel.services.publishing.PublishingServiceInter
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.runtime.system.transaction.TransactionalClosure;
 import org.apache.isis.schema.ixn.v1.PropertyEditDto;
-
-import java.sql.Timestamp;
 
 public abstract class PropertySetterOrClearFacetForDomainEventAbstract
         extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {

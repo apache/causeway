@@ -367,11 +367,12 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract
         // check for deprecated @Command annotation first
         final Command annotation = Annotations.getAnnotation(method, Command.class);
         commandFacet = commandValidator.flagIfPresent(
-                CommandFacetForCommandAnnotation.create(annotation, processMethodContext.getFacetHolder()), processMethodContext);
+                CommandFacetForCommandAnnotation.create(annotation, processMethodContext.getFacetHolder(),
+                        servicesInjector), processMethodContext);
 
         // else check for @Action(command=...)
         if(commandFacet == null) {
-            commandFacet = CommandFacetForActionAnnotation.create(action, getConfiguration(), holder);
+            commandFacet = CommandFacetForActionAnnotation.create(action, getConfiguration(), servicesInjector, holder);
         }
 
         FacetUtil.addFacet(commandFacet);
