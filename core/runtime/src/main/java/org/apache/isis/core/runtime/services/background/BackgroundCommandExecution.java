@@ -114,9 +114,10 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
             }
         });
 
-        LOG.info("Found {} to execute", backgroundCommands.size());
+        LOG.debug("{}: Found {} to execute", getClass().getName(), backgroundCommands.size());
 
         for (final Command backgroundCommand : backgroundCommands) {
+
             final boolean shouldContinue = execute(transactionManager, backgroundCommand);
             if(!shouldContinue) {
                 LOG.info("OnExceptionPolicy is to QUIT, so skipping further processing",
@@ -135,6 +136,47 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
 
     
     private boolean execute(
+            final IsisTransactionManager transactionManager,
+            final Command backgroundCommand) {
+
+        try {
+            return executeWithinTran(transactionManager, backgroundCommand);
+        } catch (final RuntimeException ex) {
+
+            // attempting to commit the xactn itself could cause an issue
+            // so we need extra exception handling here, it seems.
+
+            org.apache.isis.applib.annotation.Command.ExecuteIn executeIn = backgroundCommand.getExecuteIn();
+            LOG.warn("Exception when committing for: {} {}", executeIn, backgroundCommand.getMemberIdentifier(), ex);
+
+            //
+            // the previous transaction will have been aborted as part of the recovery handling within
+            // TransactionManager's executeWithinTran
+            //
+            // we therefore start a new xactn in order to make sure that this background command is marked as a failure
+            // so it won't be attempted again.
+            //
+            transactionManager.executeWithinTransaction(new TransactionalClosure(){
+                @Override
+                public void execute() {
+
+                    final Interaction backgroundInteraction = interactionContext.getInteraction();
+                    final Interaction.Execution currentExecution = backgroundInteraction.getCurrentExecution();
+                    backgroundCommand.setStartedAt(
+                            currentExecution != null
+                                    ? currentExecution.getStartedAt()
+                                    : clockService.nowAsJavaSqlTimestamp());
+
+                    backgroundCommand.setCompletedAt(clockService.nowAsJavaSqlTimestamp());
+                    backgroundCommand.setException(Throwables.getStackTraceAsString(ex));
+                }
+            });
+
+            return determineIfContinue(ex);
+        }
+    }
+
+    private Boolean executeWithinTran(
             final IsisTransactionManager transactionManager,
             final Command backgroundCommand) {
 
@@ -162,11 +204,18 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
                     // thrown then we would have a command with only completedAt, which is inconsistent.
                     // Therefore instead we copy down from the backgroundInteraction (similar to how we populate the
                     // completedAt at the end)
-                    final Interaction.Execution currentExecution = backgroundInteraction.getCurrentExecution();
-                    backgroundCommand.setStartedAt(
-                            currentExecution != null
-                                    ? currentExecution.getStartedAt()
-                                    : clockService.nowAsJavaSqlTimestamp());
+                    final Interaction.Execution priorExecution = backgroundInteraction.getPriorExecution();
+
+                    final Timestamp startedAt = priorExecution != null
+                            ? priorExecution.getStartedAt()
+                            : clockService.nowAsJavaSqlTimestamp();
+                    final Timestamp completedAt =
+                            priorExecution != null
+                                    ? priorExecution.getCompletedAt()
+                                    : clockService.nowAsJavaSqlTimestamp();  // close enough...
+
+                    backgroundCommand.setStartedAt(startedAt);
+                    backgroundCommand.setCompletedAt(completedAt);
 
                     final boolean legacy = memento.startsWith("<memento");
                     if(legacy) {
@@ -267,15 +316,15 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
 
                     }
 
-                } catch (RuntimeException e) {
+                } catch (RuntimeException ex) {
 
-                    LOG.warn("Exception for: {}, e", backgroundCommand.getMemberIdentifier(), e);
+                    LOG.warn("Exception for: {} {}", executeIn, backgroundCommand.getMemberIdentifier(), ex);
 
                     // hmmm, this doesn't really make sense if >1 action
                     //
                     // in any case, the capturing of the result of the action invocation should be the
                     // responsibility of the interaction...
-                    backgroundCommand.setException(Throwables.getStackTraceAsString(e));
+                    backgroundCommand.setException(Throwables.getStackTraceAsString(ex));
 
                     // lower down the stack the IsisTransactionManager will have set the transaction to abort
                     // however, we don't want that to occur (because any changes made to the backgroundCommand itself
@@ -284,7 +333,7 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
                     transactionManager.getCurrentTransaction().clearAbortCauseAndContinue();
 
                     // checked at the end
-                    exceptionIfAny = e;
+                    exceptionIfAny = ex;
                 }
 
                 // it's possible that there is no priorExecution, specifically if there was an exception
@@ -297,9 +346,7 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
                 backgroundCommand.setCompletedAt(completedAt);
 
                 // if we hit an exception processing this command, then quit if instructed
-                final boolean shouldQuit = exceptionIfAny != null && onExceptionPolicy == OnExceptionPolicy.QUIT;
-                final boolean shouldContinue = !shouldQuit;
-                return shouldContinue;
+                return determineIfContinue(exceptionIfAny);
 
             }
 
@@ -330,6 +377,11 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
                 return property;
             }
         });
+    }
+
+    private boolean determineIfContinue(final RuntimeException exceptionIfAny) {
+        final boolean shouldQuit = exceptionIfAny != null && onExceptionPolicy == BackgroundCommandExecution.OnExceptionPolicy.QUIT;
+        return !shouldQuit;
     }
 
     protected ObjectAdapter newValueAdapterFor(final PropertyDto propertyDto) {
