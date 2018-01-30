@@ -188,9 +188,9 @@
     </properties>
 
     <scm>
-        <connection>scm:git:http://git.apache.org/isis.git/core</connection>
-        <developerConnection>scm:git:https://git-wip-us.apache.org/repos/asf/isis.git/trunk/framework/</developerConnection>
-        <url>git://git.apache.org/isis.git/core</url>
+        <connection>scm:git:http://github.com/apache/isis.git</connection>
+        <developerConnection>scm:git:https://github.com/apache/isis.git</developerConnection>
+        <url>http://github.com/apache/isis</url>
         <tag>HEAD</tag>
     </scm>
 
