@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.apache.isis.core</groupId>
         <artifactId>isis</artifactId>
-        <version>1.16.1-SNAPSHOT</version>
+        <version>1.16.0.20180130-1145</version>
     </parent>
 
     <artifactId>isis-core-viewer-restfulobjects-rendering</artifactId>
