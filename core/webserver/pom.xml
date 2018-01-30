@@ -30,8 +30,8 @@
 	<name>Apache Isis WebServer</name>
 
 	<properties>
-		<jar-plugin.automaticModuleName.jar>org.apache.isis.core.webserver</jar-plugin.automaticModuleName.jar>
-		<gitPropertiesDir>org/apache/isis/core/webserver</gitPropertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.isis.core.webserver</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/isis/core/webserver</git-plugin.propertiesDir>
 	</properties>
 
 	<dependencies>

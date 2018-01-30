@@ -32,8 +32,8 @@
 	<name>Apache Isis Security Shiro</name>
 
 	<properties>
-		<jar-plugin.automaticModuleName.jar>org.apache.isis.security.shiro</jar-plugin.automaticModuleName.jar>
-		<gitPropertiesDir>org/apache/isis/security/shiro</gitPropertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.isis.security.shiro</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/isis/security/shiro</git-plugin.propertiesDir>
 	</properties>
 
 

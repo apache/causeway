@@ -30,8 +30,8 @@
 	<name>Apache Isis Integration Testing Support</name>
 
     <properties>
-        <jar-plugin.automaticModuleName.jar>org.apache.isis.core.integtestsupport</jar-plugin.automaticModuleName.jar>
-        <gitPropertiesDir>org/apache/isis/core/integtestsupport</gitPropertiesDir>
+        <jar-plugin.automaticModuleName>org.apache.isis.core.integtestsupport</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/isis/core/integtestsupport</git-plugin.propertiesDir>
     </properties>
 
     <dependencies>

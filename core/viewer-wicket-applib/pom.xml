@@ -31,8 +31,8 @@
 	<name>Apache Isis Wicket Viewer Applib</name>
 
 	<properties>
-		<jar-plugin.automaticModuleName.jar>org.apache.isis.viewer.wicket.applib</jar-plugin.automaticModuleName.jar>
-		<gitPropertiesDir>org/apache/isis/viewer/wicket/applib</gitPropertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.isis.viewer.wicket.applib</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/isis/viewer/wicket/applib</git-plugin.propertiesDir>
 	</properties>
 
 	<build>

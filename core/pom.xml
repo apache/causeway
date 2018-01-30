@@ -50,8 +50,8 @@
     </prerequisites>
 
     <properties>
-        <jar-plugin.automaticModuleName.jar>org.apache.isis.core</jar-plugin.automaticModuleName.jar>
-        <gitPropertiesDir>org/apache/isis/core</gitPropertiesDir>
+        <jar-plugin.automaticModuleName>org.apache.isis.core</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/isis/core</git-plugin.propertiesDir>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -806,7 +806,7 @@
                         <injectAllReactorProjects>true</injectAllReactorProjects>
 
                         <generateGitPropertiesFile>true</generateGitPropertiesFile>
-                        <generateGitPropertiesFilename>${project.build.outputDirectory}/${gitPropertiesDir}/git.properties</generateGitPropertiesFilename>
+                        <generateGitPropertiesFilename>${project.build.outputDirectory}/${git-plugin.propertiesDir}/git.properties</generateGitPropertiesFilename>
 
                         <abbrevLength>7</abbrevLength>
                     </configuration>
@@ -846,7 +846,7 @@
                                 <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
                             </manifest>
                             <manifestEntries>
-                                <Automatic-Module-Name>${jar-plugin.automaticModuleName.jar}</Automatic-Module-Name>
+                                <Automatic-Module-Name>${jar-plugin.automaticModuleName}</Automatic-Module-Name>
                                 <Implementation-Vendor-Id>org.apache.isis</Implementation-Vendor-Id>
                                 <Implementation-Vendor>Apache Isis&#8482; Project</Implementation-Vendor>
                                 <SCM-Revision>${git.commit.id.abbrev}</SCM-Revision>

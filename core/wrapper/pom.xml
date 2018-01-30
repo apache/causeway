@@ -31,8 +31,8 @@
 	<name>Apache Isis Wrapper Service</name>
 
     <properties>
-        <jar-plugin.automaticModuleName.jar>org.apache.isis.core.wrapper</jar-plugin.automaticModuleName.jar>
-        <gitPropertiesDir>org/apache/isis/core/wrapper</gitPropertiesDir>
+        <jar-plugin.automaticModuleName>org.apache.isis.core.wrapper</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/isis/core/wrapper</git-plugin.propertiesDir>
     </properties>
 
     <dependencies>

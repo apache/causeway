@@ -31,8 +31,8 @@
 	<name>Apache Isis RestfulObjects Viewer Rendering</name>
 
     <properties>
-        <jar-plugin.automaticModuleName.jar>org.apache.isis.viewer.restfulobjects.rendering</jar-plugin.automaticModuleName.jar>
-        <gitPropertiesDir>org/apache/isis/viewer/restfulobjects/rendering</gitPropertiesDir>
+        <jar-plugin.automaticModuleName>org.apache.isis.viewer.restfulobjects.rendering</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/isis/viewer/restfulobjects/rendering</git-plugin.propertiesDir>
     </properties>
 
 

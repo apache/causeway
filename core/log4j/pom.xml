@@ -22,8 +22,8 @@
     <name>Apache Isis Log4j Impls</name>
 
     <properties>
-        <jar-plugin.automaticModuleName.jar>org.apache.isis.core.log4j</jar-plugin.automaticModuleName.jar>
-        <gitPropertiesDir>org/apache/isis/core/log4j</gitPropertiesDir>
+        <jar-plugin.automaticModuleName>org.apache.isis.core.log4j</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/isis/core/log4j</git-plugin.propertiesDir>
     </properties>
 
     <dependencies>

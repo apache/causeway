@@ -30,8 +30,8 @@
 	<name>Apache Isis RestfulObjects Viewer AppLib</name>
 
     <properties>
-        <jar-plugin.automaticModuleName.jar>org.apache.isis.viewer.restfulobjects.applib</jar-plugin.automaticModuleName.jar>
-        <gitPropertiesDir>org/apache/isis/viewer/restfulobjects/applib</gitPropertiesDir>
+        <jar-plugin.automaticModuleName>org.apache.isis.viewer.restfulobjects.applib</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/isis/viewer/restfulobjects/applib</git-plugin.propertiesDir>
     </properties>
 
     <dependencies>
