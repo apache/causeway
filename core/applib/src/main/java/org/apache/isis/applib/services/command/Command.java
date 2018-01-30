@@ -22,7 +22,6 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Command.ExecuteIn;
 import org.apache.isis.applib.annotation.Command.Persistence;
-import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.HasTransactionId;
@@ -278,7 +277,7 @@ public interface Command extends HasTransactionId {
 
     //endregion
 
-    //region > startedAt (property, deprecated)
+    //region > startedAt (property)
 
     /**
      * For an command that has actually been executed, holds the date/time at which the {@link Interaction} that
@@ -286,8 +285,8 @@ public interface Command extends HasTransactionId {
      *
      * <p>
      *     Previously this field was deprecated (on the basis that the startedAt is also held in
-     *     {@link Interaction.Execution#getStartedAt()}). However, to support replay/replication feature means that
-     *     we need to query for persisted {@link Command}s and use this field to ensure the correct ordering.
+     *     {@link Interaction.Execution#getStartedAt()}). However, this property is now used in master/slave
+     *     replay scenarios which may query a persisted Command.
      * </p>
      *
      * See also {@link Interaction#getCurrentExecution()} and
@@ -301,8 +300,8 @@ public interface Command extends HasTransactionId {
      *
      * <p>
      *     Previously this field was deprecated (on the basis that the completedAt is also held in
-     *     {@link Interaction.Execution#getCompletedAt()}). However, to support replay/replication feature means that
-     *     we need to query for persisted {@link Command}s and use this field to ensure the correct ordering.
+     *     {@link Interaction.Execution#getCompletedAt()}). However, this property is now used in master/slave
+     *     replay scenarios which may query a persisted Command.
      * </p>
      *
      * See also {@link Interaction#getCurrentExecution()} and
@@ -320,8 +319,8 @@ public interface Command extends HasTransactionId {
      *
      * <p>
      *     Previously this field was deprecated (on the basis that the completedAt is also held in
-     *     {@link Interaction.Execution#getCompletedAt()}). However, to support replay/replication feature means that
-     *     we need to query for persisted {@link Command}s and use this field to ensure the correct ordering.
+     *     {@link Interaction.Execution#getCompletedAt()}). However, this property is now used in master/slave
+     *     replay scenarios which may query a persisted Command.
      * </p>
      *
      * See also {@link Interaction#getCurrentExecution()} and
@@ -334,8 +333,8 @@ public interface Command extends HasTransactionId {
      *
      * <p>
      *     Previously this field was deprecated (on the basis that the completedAt is also held in
-     *     {@link Interaction.Execution#getCompletedAt()}). However, to support replay/replication feature means that
-     *     we need to query for persisted {@link Command}s and use this field to ensure the correct ordering.
+     *     {@link Interaction.Execution#getCompletedAt()}). However, this property is now used in master/slave
+     *     replay scenarios which may query a persisted Command.
      * </p>
      *
      * See also {@link Interaction#getCurrentExecution()} and
@@ -366,10 +365,14 @@ public interface Command extends HasTransactionId {
      * For an command that has actually been executed, holds the exception stack
      * trace if the action invocation/property modification threw an exception.
      *
-     * @deprecated - see {@link Interaction#getCurrentExecution()} and  {@link org.apache.isis.applib.services.iactn.Interaction.Execution#getThrew()} instead.
+     * <p>
+     *     Previously this field was deprecated (on the basis that the exception is also held in
+     *     {@link Interaction.Execution#getThrew()}). However, this property is now used in master/slave
+     *     replay scenarios which may query a persisted Command.
+     * </p>
+     *
+     * See also {@link Interaction#getCurrentExecution()} and  {@link org.apache.isis.applib.services.iactn.Interaction.Execution#getThrew()}.
      */
-    @Deprecated
-    @Optional
     String getException();
 
     /**
@@ -384,10 +387,15 @@ public interface Command extends HasTransactionId {
 
     /**
      * For an command that has actually been executed, holds a {@link Bookmark} to the object returned by the corresponding action/property modification.
-     * 
-     * @deprecated - see {@link Interaction#getCurrentExecution()} and  {@link org.apache.isis.applib.services.iactn.Interaction.Execution#getReturned()} instead.
+     *
+     * <p>
+     *     Previously this field was deprecated (on the basis that the returned value is also held in
+     *     {@link Interaction.Execution#getReturned()}). However, this property is now used in master/slave
+     *     replay scenarios which may query a persisted Command.
+     * </p>
+     *
+     * See also  {@link Interaction#getCurrentExecution()} and  {@link org.apache.isis.applib.services.iactn.Interaction.Execution#getReturned()}.
      */
-    @Deprecated
     Bookmark getResult();
     
     /**
