@@ -30,7 +30,13 @@
 
 	<name>Apache Isis RestfulObjects Viewer Rendering</name>
 
-	<dependencies>
+    <properties>
+        <jar-plugin.automaticModuleName.jar>org.apache.isis.viewer.restfulobjects.rendering</jar-plugin.automaticModuleName.jar>
+        <gitPropertiesDir>org/apache/isis/viewer/restfulobjects/rendering</gitPropertiesDir>
+    </properties>
+
+
+    <dependencies>
 
         <dependency>
             <groupId>org.apache.isis.core</groupId>

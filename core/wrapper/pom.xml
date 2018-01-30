@@ -30,7 +30,12 @@
 
 	<name>Apache Isis Wrapper Service</name>
 
-	<dependencies>
+    <properties>
+        <jar-plugin.automaticModuleName.jar>org.apache.isis.core.wrapper</jar-plugin.automaticModuleName.jar>
+        <gitPropertiesDir>org/apache/isis/core/wrapper</gitPropertiesDir>
+    </properties>
+
+    <dependencies>
         <dependency>
 		    <groupId>org.apache.isis.core</groupId>
 		    <artifactId>isis-core-runtime</artifactId>

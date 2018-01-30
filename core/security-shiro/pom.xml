@@ -26,11 +26,16 @@
         <version>1.16.1-SNAPSHOT</version>
 	</parent>
 
-	<groupId>org.apache.isis.core</groupId>
 	<artifactId>isis-core-security-shiro</artifactId>
     <version>1.16.1-SNAPSHOT</version>
 
 	<name>Apache Isis Security Shiro</name>
+
+	<properties>
+		<jar-plugin.automaticModuleName.jar>org.apache.isis.security.shiro</jar-plugin.automaticModuleName.jar>
+		<gitPropertiesDir>org/apache/isis/security/shiro</gitPropertiesDir>
+	</properties>
+
 
 	<build>
 		<pluginManagement>

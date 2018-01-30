@@ -29,8 +29,12 @@
 
 	<name>Apache Isis Wicket Viewer Implementation</name>
 
-    <groupId>org.apache.isis.core</groupId>
 	<artifactId>isis-core-viewer-wicket-impl</artifactId>
+
+	<properties>
+		<jar-plugin.automaticModuleName.jar>org.apache.isis.viewer.wicket.impl</jar-plugin.automaticModuleName.jar>
+		<gitPropertiesDir>org/apache/isis/viewer/wicket/impl</gitPropertiesDir>
+	</properties>
 
 	<build>
 		<resources>

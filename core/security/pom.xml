@@ -27,7 +27,12 @@
 	</parent>
 
 	<artifactId>isis-core-security</artifactId>
-	<name>Apache Isis Security Bypass</name>
+	<name>Apache Isis Security + Bypass</name>
+
+	<properties>
+		<jar-plugin.automaticModuleName.jar>org.apache.isis.core.security</jar-plugin.automaticModuleName.jar>
+		<gitPropertiesDir>org/apache/isis/core/security</gitPropertiesDir>
+	</properties>
 
 	<dependencies>
 		<dependency>

@@ -34,6 +34,11 @@
         Apache Isis schemas, for conversion into canonical DTOs (for use in integration scenarios).
     </description>
 
+    <properties>
+        <jar-plugin.automaticModuleName.jar>org.apache.isis.schema</jar-plugin.automaticModuleName.jar>
+        <gitPropertiesDir>org/apache/isis/schema</gitPropertiesDir>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>joda-time</groupId>

@@ -29,7 +29,12 @@
 	<artifactId>isis-core-integtestsupport</artifactId>
 	<name>Apache Isis Integration Testing Support</name>
 
-	<dependencies>
+    <properties>
+        <jar-plugin.automaticModuleName.jar>org.apache.isis.core.integtestsupport</jar-plugin.automaticModuleName.jar>
+        <gitPropertiesDir>org/apache/isis/core/integtestsupport</gitPropertiesDir>
+    </properties>
+
+    <dependencies>
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-unittestsupport</artifactId>
