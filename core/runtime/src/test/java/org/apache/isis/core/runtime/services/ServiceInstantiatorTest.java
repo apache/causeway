@@ -24,7 +24,7 @@ import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.LongAdder;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.enterprise.context.RequestScoped;
 
@@ -139,34 +139,40 @@ public class ServiceInstantiatorTest {
 		final AccumulatingCalculator calculator = 
 				serviceInstantiator.createInstance(AccumulatingCalculator.class);
 
-		final LongAdder counter = new LongAdder();
-		
+		final AtomicInteger counter = new AtomicInteger();
+
 		final int n = 100;
 		final int nThreads = 8;
 		final ExecutorService execService = Executors.newFixedThreadPool(nThreads);
 
 		// initialize the request scoped calculator on current thread ('main')
 		((RequestScopedService)calculator).__isis_startRequest(mockServiceInjector);
-		
+
 		for(int i=1;i<=n;++i) {
 			final int j=i;
-			execService.submit(()->{
-				try {
-					
-					// access the request scoped calculator on a child thread of 'main'
-					calculator.add(j);
-					counter.add(calculator.getTotal());
-					
-				} catch (Exception e) {
-					System.err.println(e.getMessage());
-				} 
+
+			execService.submit(new Runnable() {
+
+				@Override
+				public void run() {
+					try {
+
+						// access the request scoped calculator on a child thread of 'main'
+						calculator.add(j);
+						counter.addAndGet(calculator.getTotal());
+
+					} catch (Exception e) {
+						System.err.println(e.getMessage());
+					} 
+				}
 			});
+
 		}
-		
+
 		execService.shutdown();
 
 		execService.awaitTermination(10, TimeUnit.SECONDS);
-		
+
 		((RequestScopedService)calculator).__isis_endRequest();
 
 		assertThat(counter.intValue(), is(n*(n+1)/2));
