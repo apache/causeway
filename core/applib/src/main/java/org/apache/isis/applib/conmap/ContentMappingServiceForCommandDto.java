@@ -18,6 +18,7 @@
  */
 package org.apache.isis.applib.conmap;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -30,6 +31,7 @@ import org.apache.isis.applib.services.command.CommandDtoProcessor;
 import org.apache.isis.applib.services.command.CommandWithDto;
 import org.apache.isis.applib.services.metamodel.MetaModelService5;
 import org.apache.isis.schema.cmd.v1.CommandDto;
+import org.apache.isis.schema.utils.jaxbadapters.JavaSqlTimestampXmlGregorianCalendarAdapter;
 
 @DomainService(
         nature = NatureOfService.DOMAIN,
@@ -70,6 +72,14 @@ public class ContentMappingServiceForCommandDto implements ContentMappingService
             CommandWithDto commandWithDto,
             final MetaModelService5 metaModelService) {
         final CommandDto commandDto = commandWithDto.asDto();
+        /**
+         * the timestamp field was only introduced in v1.4 of cmd.xsd, so there's no guarantee it will have been
+         * populated.  We therefore copy the value in from CommandWithDto entity.
+         */
+        if(commandDto.getTimestamp() == null) {
+            final Timestamp timestamp = commandWithDto.getTimestamp();
+            commandDto.setTimestamp(JavaSqlTimestampXmlGregorianCalendarAdapter.print(timestamp));
+        }
         final CommandDtoProcessor commandDtoProcessor =
                 metaModelService.commandDtoProcessorFor(commandDto.getMember().getLogicalMemberIdentifier());
         if (commandDtoProcessor == null) {

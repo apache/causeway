@@ -18,6 +18,7 @@
  */
 package org.apache.isis.applib.fixtures;
 
+import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.TimeZone;
 
@@ -117,6 +118,10 @@ public class TickingFixtureClock extends Clock {
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0);
         t0 = System.currentTimeMillis();
+    }
+
+    public void setTime(final Timestamp timestamp) {
+        calendar.setTimeInMillis(timestamp.getTime());
     }
 
     /**

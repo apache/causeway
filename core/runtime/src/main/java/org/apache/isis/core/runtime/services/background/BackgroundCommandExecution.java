@@ -104,21 +104,20 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
     private final SudoPolicy sudoPolicy;
 
     /**
-     * Defaults to {@link OnExceptionPolicy#CONTINUE} and {@link SudoPolicy#NO_SWITCH}, the historical defaults
-     * for running background commands.
+     * Defaults to the historical defaults * for running background commands.
      */
     public BackgroundCommandExecution() {
         this(OnExceptionPolicy.CONTINUE, SudoPolicy.NO_SWITCH);
     }
 
-
     public BackgroundCommandExecution(
             final OnExceptionPolicy onExceptionPolicy,
             final SudoPolicy sudoPolicy) {
-        // same as configured by BackgroundServiceDefault
-        mementoService = new MementoServiceDefault().withNoEncoding();
         this.onExceptionPolicy = onExceptionPolicy;
         this.sudoPolicy = sudoPolicy;
+
+        // same as configured by BackgroundServiceDefault
+        mementoService = new MementoServiceDefault().withNoEncoding();
     }
 
     // //////////////////////////////////////
@@ -128,22 +127,22 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
 
         final PersistenceSession persistenceSession = getPersistenceSession();
         final IsisTransactionManager transactionManager = getTransactionManager(persistenceSession);
-        final List<Command> backgroundCommands = Lists.newArrayList();
+        final List<Command> commands = Lists.newArrayList();
         transactionManager.executeWithinTransaction(new TransactionalClosure() {
             @Override
             public void execute() {
-                backgroundCommands.addAll(findBackgroundCommandsToExecute());
+                commands.addAll(findBackgroundCommandsToExecute());
             }
         });
 
-        LOG.debug("{}: Found {} to execute", getClass().getName(), backgroundCommands.size());
+        LOG.debug("{}: Found {} to execute", getClass().getName(), commands.size());
 
-        for (final Command backgroundCommand : backgroundCommands) {
+        for (final Command command : commands) {
 
-            final boolean shouldContinue = execute(transactionManager, backgroundCommand);
+            final boolean shouldContinue = execute(transactionManager, command);
             if(!shouldContinue) {
                 LOG.info("OnExceptionPolicy is to QUIT, so skipping further processing",
-                        backgroundCommand.getMemberIdentifier());
+                        command.getMemberIdentifier());
                 return;
             }
         }
@@ -159,21 +158,21 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
     
     private boolean execute(
             final IsisTransactionManager transactionManager,
-            final Command backgroundCommand) {
+            final Command command) {
 
         try {
-            return executeWithinTran(transactionManager, backgroundCommand);
+            return executeCommandWithinTran(transactionManager, command);
         } catch (final RuntimeException ex) {
 
             // attempting to commit the xactn itself could cause an issue
             // so we need extra exception handling here, it seems.
 
-            org.apache.isis.applib.annotation.Command.ExecuteIn executeIn = backgroundCommand.getExecuteIn();
-            LOG.warn("Exception when committing for: {} {}", executeIn, backgroundCommand.getMemberIdentifier(), ex);
+            org.apache.isis.applib.annotation.Command.ExecuteIn executeIn = command.getExecuteIn();
+            LOG.warn("Exception when committing for: {} {}", executeIn, command.getMemberIdentifier(), ex);
 
             //
             // the previous transaction will have been aborted as part of the recovery handling within
-            // TransactionManager's executeWithinTran
+            // TransactionManager's executeCommandWithinTran
             //
             // we therefore start a new xactn in order to make sure that this background command is marked as a failure
             // so it won't be attempted again.
@@ -184,13 +183,13 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
 
                     final Interaction backgroundInteraction = interactionContext.getInteraction();
                     final Interaction.Execution currentExecution = backgroundInteraction.getCurrentExecution();
-                    backgroundCommand.setStartedAt(
+                    command.setStartedAt(
                             currentExecution != null
                                     ? currentExecution.getStartedAt()
                                     : clockService.nowAsJavaSqlTimestamp());
 
-                    backgroundCommand.setCompletedAt(clockService.nowAsJavaSqlTimestamp());
-                    backgroundCommand.setException(Throwables.getStackTraceAsString(ex));
+                    command.setCompletedAt(clockService.nowAsJavaSqlTimestamp());
+                    command.setException(Throwables.getStackTraceAsString(ex));
                 }
             });
 
@@ -198,48 +197,71 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
         }
     }
 
-    private Boolean executeWithinTran(
+    private Boolean executeCommandWithinTran(
             final IsisTransactionManager transactionManager,
-            final Command backgroundCommand) {
+            final Command command) {
 
         return transactionManager.executeWithinTransaction(
-                backgroundCommand,
+                command,
                 new TransactionalClosureWithReturn<Boolean>() {
             @Override
             public Boolean execute() {
 
-                switch (sudoPolicy) {
-                case NO_SWITCH:
-                    return exec(transactionManager, backgroundCommand);
-                case SWITCH:
-                    final String user = backgroundCommand.getUser();
-                    return sudoService.sudo(user, new Callable<Boolean>() {
-                        @Override
-                        public Boolean call() {
-                            return exec(transactionManager, backgroundCommand);
-                        }
-                    });
-                default:
-                    throw new IllegalStateException("Unrecognized sudoPolicy: " + sudoPolicy);
-                }
+                return executeCommandPerSudoPolicy(transactionManager, command);
             }
         });
     }
 
-    private Boolean exec(final IsisTransactionManager transactionManager, final Command backgroundCommand) {
+    private Boolean executeCommandPerSudoPolicy(
+            final IsisTransactionManager transactionManager,
+            final Command command) {
+
+        switch (sudoPolicy) {
+        case NO_SWITCH:
+            return executeCommand(transactionManager, command);
+        case SWITCH:
+            final String user = command.getUser();
+            return sudoService.sudo(user, new Callable<Boolean>() {
+                @Override
+                public Boolean call() {
+                    return executeCommand(transactionManager, command);
+                }
+            });
+        default:
+            throw new IllegalStateException("Unrecognized sudoPolicy: " + sudoPolicy);
+        }
+    }
+
+    /**
+     * Simply delegates to {@link #doExecuteCommand(IsisTransactionManager, Command)}.
+     *
+     * Overridable, so execution policy can be adjusted if required.
+     */
+    protected Boolean executeCommand(
+            final IsisTransactionManager transactionManager,
+            final Command command) {
+        return doExecuteCommand(transactionManager, command);
+    }
+
+    /**
+     * Not overrideable, but intended to be called by {@link #executeCommand(IsisTransactionManager, Command)} (which is).
+     */
+    protected final Boolean doExecuteCommand(
+            final IsisTransactionManager transactionManager,
+            final Command command) {
 
         // setup for us by IsisTransactionManager; will have the transactionId of the backgroundCommand
         final Interaction backgroundInteraction = interactionContext.getInteraction();
 
-        final String memento = backgroundCommand.getMemento();
+        final String memento = command.getMemento();
 
-        org.apache.isis.applib.annotation.Command.ExecuteIn executeIn = backgroundCommand.getExecuteIn();
+        org.apache.isis.applib.annotation.Command.ExecuteIn executeIn = command.getExecuteIn();
 
-        LOG.info("Executing: {} {}", executeIn, backgroundCommand.getMemberIdentifier());
+        LOG.info("Executing: {} {}", executeIn, command.getMemberIdentifier());
 
         RuntimeException exceptionIfAny = null;
         try {
-            backgroundCommand.setExecutor(Executor.BACKGROUND);
+            command.setExecutor(Executor.BACKGROUND);
 
             // responsibility for setting the Command#startedAt is in the ActionInvocationFacet or
             // PropertySetterFacet, but tthis is run if the domain object was found.  If the domain object is
@@ -256,8 +278,8 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
                             ? priorExecution.getCompletedAt()
                             : clockService.nowAsJavaSqlTimestamp();  // close enough...
 
-            backgroundCommand.setStartedAt(startedAt);
-            backgroundCommand.setCompletedAt(completedAt);
+            command.setStartedAt(startedAt);
+            command.setCompletedAt(completedAt);
 
             final boolean legacy = memento.startsWith("<memento");
             if(legacy) {
@@ -290,7 +312,7 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
 
                 if(resultAdapter != null) {
                     Bookmark resultBookmark = CommandUtil.bookmarkFor(resultAdapter);
-                    backgroundCommand.setResult(resultBookmark);
+                    command.setResult(resultBookmark);
                     backgroundInteraction.getCurrentExecution().setReturned(resultAdapter.getObject());
                 }
 
@@ -333,7 +355,7 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
                         // responsibility of auditing/profiling
                         if(resultAdapter != null) {
                             Bookmark resultBookmark = CommandUtil.bookmarkFor(resultAdapter);
-                            backgroundCommand.setResult(resultBookmark);
+                            command.setResult(resultBookmark);
                         }
                     }
                 } else {
@@ -360,13 +382,13 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
 
         } catch (RuntimeException ex) {
 
-            LOG.warn("Exception for: {} {}", executeIn, backgroundCommand.getMemberIdentifier(), ex);
+            LOG.warn("Exception for: {} {}", executeIn, command.getMemberIdentifier(), ex);
 
             // hmmm, this doesn't really make sense if >1 action
             //
             // in any case, the capturing of the result of the action invocation should be the
             // responsibility of the interaction...
-            backgroundCommand.setException(Throwables.getStackTraceAsString(ex));
+            command.setException(Throwables.getStackTraceAsString(ex));
 
             // lower down the stack the IsisTransactionManager will have set the transaction to abort
             // however, we don't want that to occur (because any changes made to the backgroundCommand itself
@@ -385,7 +407,7 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
                 priorExecution != null
                         ? priorExecution.getCompletedAt()
                         : clockService.nowAsJavaSqlTimestamp();  // close enough...
-        backgroundCommand.setCompletedAt(completedAt);
+        command.setCompletedAt(completedAt);
 
         // if we hit an exception processing this command, then quit if instructed
         return determineIfContinue(exceptionIfAny);
