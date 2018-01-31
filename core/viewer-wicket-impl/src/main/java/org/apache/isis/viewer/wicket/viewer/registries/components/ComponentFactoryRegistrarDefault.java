@@ -19,17 +19,20 @@
 
 package org.apache.isis.viewer.wicket.viewer.registries.components;
 
+import java.util.ServiceLoader;
+
 import com.google.inject.Singleton;
+
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistrar;
 import org.apache.isis.viewer.wicket.ui.components.about.AboutPanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.actioninfo.ActionInfoPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.actionlink.ActionLinkPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.serviceactions.ServiceActionsPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.serviceactions.TertiaryMenuPanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.actioninfo.ActionInfoPanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.actions.ActionParametersPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.actions.ActionParametersFormPanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.actions.ActionParametersPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.bookmarkedpages.BookmarkedPagesPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsAsAjaxTablePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.multiple.CollectionContentsMultipleViewsPanelFactory;
@@ -45,7 +48,16 @@ import org.apache.isis.viewer.wicket.ui.components.footer.FooterPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.header.HeaderPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditFormPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditPanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.*;
+import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisBlobPanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisClobPanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisColorPanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisDatePanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisDateTimePanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisMoneyPanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisPasswordPanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisPercentagePanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisTimePanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisTimeStampPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jdkdates.JavaSqlDatePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jdkdates.JavaSqlTimePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jdkdates.JavaSqlTimestampPanelFactory;
@@ -56,19 +68,25 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.jodatime.JodaDateTime
 import org.apache.isis.viewer.wicket.ui.components.scalars.jodatime.JodaLocalDatePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jodatime.JodaLocalDateTimePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupPanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.scalars.primitive.*;
+import org.apache.isis.viewer.wicket.ui.components.scalars.primitive.BooleanPanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.scalars.primitive.BytePanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.scalars.primitive.CharacterPanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.scalars.primitive.DoublePanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.scalars.primitive.FloatPanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.scalars.primitive.IntegerPanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.scalars.primitive.LongPanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.scalars.primitive.ShortPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.reference.ReferencePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.string.StringPanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.scalars.uuid.UuidPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.value.ValuePanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.scalars.valuechoices.ValueChoicesSelect2PanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.standalonecollection.StandaloneCollectionPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.unknown.UnknownModelPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.value.StandaloneValuePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.voidreturn.VoidReturnPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.welcome.WelcomePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.widgets.entitysimplelink.EntityLinkSimplePanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.scalars.valuechoices.ValueChoicesSelect2PanelFactory;
-
-import java.util.ServiceLoader;
 
 /**
  * Default implementation of {@link ComponentFactoryRegistrar} that registers a
@@ -213,6 +231,7 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
         
         componentFactories.add(new JavaMathBigIntegerPanelFactory());
         componentFactories.add(new JavaMathBigDecimalPanelFactory());
+        componentFactories.add(new UuidPanelFactory());
 
         componentFactories.add(new JodaLocalDatePanelFactory());
         componentFactories.add(new JodaLocalDateTimePanelFactory());
