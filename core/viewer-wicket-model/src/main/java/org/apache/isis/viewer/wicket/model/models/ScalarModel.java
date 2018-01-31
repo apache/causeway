@@ -976,7 +976,7 @@ public class ScalarModel extends EntityModel implements LinksProvider,FormExecut
         return editable && isViewMode();
     }
 
-    boolean isEnabled() {
+    public boolean isEnabled() {
         Where where = getRenderingHint().isInTable() ? Where.PARENTED_TABLES : Where.OBJECT_FORMS;
         return whetherDisabled(where) == null;
     }

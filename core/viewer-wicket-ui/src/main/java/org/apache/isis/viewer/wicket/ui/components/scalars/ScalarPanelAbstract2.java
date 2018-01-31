@@ -589,7 +589,7 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
     protected Label createScalarName(final String id, final String labelCaption) {
         final Label scalarName = new Label(id, labelCaption);
         final ScalarModel model = getModel();
-        if(model.isRequired() && model.canEnterEditMode()) {
+        if(model.isRequired() && model.isEnabled()) {
             final String label = scalarName.getDefaultModelObjectAsString();
             if(!Strings.isNullOrEmpty(label)) {
                 scalarName.add(new CssClassAppender("mandatory"));
