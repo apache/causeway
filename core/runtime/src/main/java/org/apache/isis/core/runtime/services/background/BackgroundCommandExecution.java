@@ -19,6 +19,7 @@ package org.apache.isis.core.runtime.services.background;
 import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import com.google.common.base.Function;
 import com.google.common.base.Throwables;
@@ -37,6 +38,7 @@ import org.apache.isis.applib.services.command.Command.Executor;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.jaxb.JaxbService;
+import org.apache.isis.applib.services.sudo.SudoService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
@@ -86,17 +88,37 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
         QUIT
     }
 
+    public enum SudoPolicy {
+        /**
+         * For example, regular background commands.
+         */
+        NO_SWITCH,
+        /**
+         * For example, replayable commands.
+         */
+        SWITCH,
+    }
+
     private final MementoServiceDefault mementoService;
     private final OnExceptionPolicy onExceptionPolicy;
+    private final SudoPolicy sudoPolicy;
 
+    /**
+     * Defaults to {@link OnExceptionPolicy#CONTINUE} and {@link SudoPolicy#NO_SWITCH}, the historical defaults
+     * for running background commands.
+     */
     public BackgroundCommandExecution() {
-        this(OnExceptionPolicy.CONTINUE);
+        this(OnExceptionPolicy.CONTINUE, SudoPolicy.NO_SWITCH);
     }
-    
-    public BackgroundCommandExecution(final OnExceptionPolicy onExceptionPolicy) {
+
+
+    public BackgroundCommandExecution(
+            final OnExceptionPolicy onExceptionPolicy,
+            final SudoPolicy sudoPolicy) {
         // same as configured by BackgroundServiceDefault
         mementoService = new MementoServiceDefault().withNoEncoding();
         this.onExceptionPolicy = onExceptionPolicy;
+        this.sudoPolicy = sudoPolicy;
     }
 
     // //////////////////////////////////////
@@ -186,197 +208,213 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
             @Override
             public Boolean execute() {
 
-                // setup for us by IsisTransactionManager; will have the transactionId of the backgroundCommand
-                final Interaction backgroundInteraction = interactionContext.getInteraction();
-
-                final String memento = backgroundCommand.getMemento();
-
-                org.apache.isis.applib.annotation.Command.ExecuteIn executeIn = backgroundCommand.getExecuteIn();
-
-                LOG.info("Executing: {} {}", executeIn, backgroundCommand.getMemberIdentifier());
-
-                RuntimeException exceptionIfAny = null;
-                try {
-                    backgroundCommand.setExecutor(Executor.BACKGROUND);
-
-                    // responsibility for setting the Command#startedAt is in the ActionInvocationFacet or
-                    // PropertySetterFacet, but tthis is run if the domain object was found.  If the domain object is
-                    // thrown then we would have a command with only completedAt, which is inconsistent.
-                    // Therefore instead we copy down from the backgroundInteraction (similar to how we populate the
-                    // completedAt at the end)
-                    final Interaction.Execution priorExecution = backgroundInteraction.getPriorExecution();
-
-                    final Timestamp startedAt = priorExecution != null
-                            ? priorExecution.getStartedAt()
-                            : clockService.nowAsJavaSqlTimestamp();
-                    final Timestamp completedAt =
-                            priorExecution != null
-                                    ? priorExecution.getCompletedAt()
-                                    : clockService.nowAsJavaSqlTimestamp();  // close enough...
-
-                    backgroundCommand.setStartedAt(startedAt);
-                    backgroundCommand.setCompletedAt(completedAt);
-
-                    final boolean legacy = memento.startsWith("<memento");
-                    if(legacy) {
-
-                        final ActionInvocationMemento aim = new ActionInvocationMemento(mementoService, memento);
-
-                        final String actionId = aim.getActionId();
-
-                        final Bookmark targetBookmark = aim.getTarget();
-                        final Object targetObject = bookmarkService.lookup(
-                                                        targetBookmark, BookmarkService2.FieldResetPolicy.RESET);
-
-                        final ObjectAdapter targetAdapter = adapterFor(targetObject);
-                        final ObjectSpecification specification = targetAdapter.getSpecification();
-
-                        final ObjectAction objectAction = findActionElseNull(specification, actionId);
-                        if(objectAction == null) {
-                            throw new RuntimeException(String.format("Unknown action '%s'", actionId));
+                switch (sudoPolicy) {
+                case NO_SWITCH:
+                    return exec(transactionManager, backgroundCommand);
+                case SWITCH:
+                    final String user = backgroundCommand.getUser();
+                    return sudoService.sudo(user, new Callable<Boolean>() {
+                        @Override
+                        public Boolean call() {
+                            return exec(transactionManager, backgroundCommand);
                         }
-
-                        // TODO: background commands won't work for mixin actions...
-                        // ... we obtain the target from the bookmark service (above), which will
-                        // simply fail for a mixin.  Instead we would need to serialize out the mixedInAdapter
-                        // and also capture the mixinType within the aim memento.
-                        final ObjectAdapter mixedInAdapter = null;
-
-                        final ObjectAdapter[] argAdapters = argAdaptersFor(aim);
-                        final ObjectAdapter resultAdapter = objectAction.execute(
-                                targetAdapter, mixedInAdapter, argAdapters, InteractionInitiatedBy.FRAMEWORK);
-
-                        if(resultAdapter != null) {
-                            Bookmark resultBookmark = CommandUtil.bookmarkFor(resultAdapter);
-                            backgroundCommand.setResult(resultBookmark);
-                            backgroundInteraction.getCurrentExecution().setReturned(resultAdapter.getObject());
-                        }
-
-                    } else {
-
-                        final CommandDto dto = jaxbService.fromXml(CommandDto.class, memento);
-
-                        final MemberDto memberDto = dto.getMember();
-                        final String memberId = memberDto.getMemberIdentifier();
-
-                        final OidsDto oidsDto = CommandDtoUtils.targetsFor(dto);
-                        final List<OidDto> targetOidDtos = oidsDto.getOid();
-
-                        final InteractionType interactionType = memberDto.getInteractionType();
-                        if(interactionType == InteractionType.ACTION_INVOCATION) {
-
-                            final ActionDto actionDto = (ActionDto) memberDto;
-
-                            for (OidDto targetOidDto : targetOidDtos) {
-
-                                final ObjectAdapter targetAdapter = adapterFor(targetOidDto);
-                                final ObjectAction objectAction = findObjectAction(targetAdapter, memberId);
-
-                                // we pass 'null' for the mixedInAdapter; if this action _is_ a mixin then
-                                // it will switch the targetAdapter to be the mixedInAdapter transparently
-                                final ObjectAdapter[] argAdapters = argAdaptersFor(actionDto);
-                                final ObjectAdapter resultAdapter = objectAction.execute(
-                                        targetAdapter, null, argAdapters, InteractionInitiatedBy.FRAMEWORK);
-
-                                //
-                                // for the result adapter, we could alternatively have used...
-                                // (priorExecution populated by the push/pop within the interaction object)
-                                //
-                                // final Interaction.Execution priorExecution = backgroundInteraction.getPriorExecution();
-                                // Object unused = priorExecution.getReturned();
-                                //
-
-                                // REVIEW: this doesn't really make sense if >1 action
-                                // in any case, the capturing of the action interaction should be the
-                                // responsibility of auditing/profiling
-                                if(resultAdapter != null) {
-                                    Bookmark resultBookmark = CommandUtil.bookmarkFor(resultAdapter);
-                                    backgroundCommand.setResult(resultBookmark);
-                                }
-                            }
-                        } else {
-
-                            final PropertyDto propertyDto = (PropertyDto) memberDto;
-
-                            for (OidDto targetOidDto : targetOidDtos) {
-
-                                final Bookmark bookmark = Bookmark.from(targetOidDto);
-                                final Object targetObject = bookmarkService.lookup(bookmark);
-
-                                final ObjectAdapter targetAdapter = adapterFor(targetObject);
-
-                                final OneToOneAssociation property = findOneToOneAssociation(targetAdapter, memberId);
-
-                                final ObjectAdapter newValueAdapter = newValueAdapterFor(propertyDto);
-
-                                property.set(targetAdapter, newValueAdapter, InteractionInitiatedBy.FRAMEWORK);
-                                // there is no return value for property modifications.
-                            }
-                        }
-
-                    }
-
-                } catch (RuntimeException ex) {
-
-                    LOG.warn("Exception for: {} {}", executeIn, backgroundCommand.getMemberIdentifier(), ex);
-
-                    // hmmm, this doesn't really make sense if >1 action
-                    //
-                    // in any case, the capturing of the result of the action invocation should be the
-                    // responsibility of the interaction...
-                    backgroundCommand.setException(Throwables.getStackTraceAsString(ex));
-
-                    // lower down the stack the IsisTransactionManager will have set the transaction to abort
-                    // however, we don't want that to occur (because any changes made to the backgroundCommand itself
-                    // would also be rolled back, and it would keep getting picked up again by a scheduler for
-                    // processing); instead we clear the abort cause and ensure we can continue.
-                    transactionManager.getCurrentTransaction().clearAbortCauseAndContinue();
-
-                    // checked at the end
-                    exceptionIfAny = ex;
+                    });
+                default:
+                    throw new IllegalStateException("Unrecognized sudoPolicy: " + sudoPolicy);
                 }
-
-                // it's possible that there is no priorExecution, specifically if there was an exception
-                // invoking the action.  We therefore need to guard that case.
-                final Interaction.Execution priorExecution = backgroundInteraction.getPriorExecution();
-                final Timestamp completedAt =
-                        priorExecution != null
-                                ? priorExecution.getCompletedAt()
-                                : clockService.nowAsJavaSqlTimestamp();  // close enough...
-                backgroundCommand.setCompletedAt(completedAt);
-
-                // if we hit an exception processing this command, then quit if instructed
-                return determineIfContinue(exceptionIfAny);
-
             }
+        });
+    }
 
-            private ObjectAction findObjectAction(
-                    final ObjectAdapter targetAdapter,
-                    final String actionId) throws RuntimeException {
+    private Boolean exec(final IsisTransactionManager transactionManager, final Command backgroundCommand) {
 
+        // setup for us by IsisTransactionManager; will have the transactionId of the backgroundCommand
+        final Interaction backgroundInteraction = interactionContext.getInteraction();
+
+        final String memento = backgroundCommand.getMemento();
+
+        org.apache.isis.applib.annotation.Command.ExecuteIn executeIn = backgroundCommand.getExecuteIn();
+
+        LOG.info("Executing: {} {}", executeIn, backgroundCommand.getMemberIdentifier());
+
+        RuntimeException exceptionIfAny = null;
+        try {
+            backgroundCommand.setExecutor(Executor.BACKGROUND);
+
+            // responsibility for setting the Command#startedAt is in the ActionInvocationFacet or
+            // PropertySetterFacet, but tthis is run if the domain object was found.  If the domain object is
+            // thrown then we would have a command with only completedAt, which is inconsistent.
+            // Therefore instead we copy down from the backgroundInteraction (similar to how we populate the
+            // completedAt at the end)
+            final Interaction.Execution priorExecution = backgroundInteraction.getPriorExecution();
+
+            final Timestamp startedAt = priorExecution != null
+                    ? priorExecution.getStartedAt()
+                    : clockService.nowAsJavaSqlTimestamp();
+            final Timestamp completedAt =
+                    priorExecution != null
+                            ? priorExecution.getCompletedAt()
+                            : clockService.nowAsJavaSqlTimestamp();  // close enough...
+
+            backgroundCommand.setStartedAt(startedAt);
+            backgroundCommand.setCompletedAt(completedAt);
+
+            final boolean legacy = memento.startsWith("<memento");
+            if(legacy) {
+
+                final ActionInvocationMemento aim = new ActionInvocationMemento(mementoService, memento);
+
+                final String actionId = aim.getActionId();
+
+                final Bookmark targetBookmark = aim.getTarget();
+                final Object targetObject = bookmarkService.lookup(
+                        targetBookmark, BookmarkService2.FieldResetPolicy.RESET);
+
+                final ObjectAdapter targetAdapter = adapterFor(targetObject);
                 final ObjectSpecification specification = targetAdapter.getSpecification();
 
                 final ObjectAction objectAction = findActionElseNull(specification, actionId);
                 if(objectAction == null) {
                     throw new RuntimeException(String.format("Unknown action '%s'", actionId));
                 }
-                return objectAction;
-            }
 
-            private OneToOneAssociation findOneToOneAssociation(
-                    final ObjectAdapter targetAdapter,
-                    final String propertyId) throws RuntimeException {
+                // TODO: background commands won't work for mixin actions...
+                // ... we obtain the target from the bookmark service (above), which will
+                // simply fail for a mixin.  Instead we would need to serialize out the mixedInAdapter
+                // and also capture the mixinType within the aim memento.
+                final ObjectAdapter mixedInAdapter = null;
 
+                final ObjectAdapter[] argAdapters = argAdaptersFor(aim);
+                final ObjectAdapter resultAdapter = objectAction.execute(
+                        targetAdapter, mixedInAdapter, argAdapters, InteractionInitiatedBy.FRAMEWORK);
 
-                final ObjectSpecification specification = targetAdapter.getSpecification();
-
-                final OneToOneAssociation property = findOneToOneAssociationElseNull(specification, propertyId);
-                if(property == null) {
-                    throw new RuntimeException(String.format("Unknown property '%s'", propertyId));
+                if(resultAdapter != null) {
+                    Bookmark resultBookmark = CommandUtil.bookmarkFor(resultAdapter);
+                    backgroundCommand.setResult(resultBookmark);
+                    backgroundInteraction.getCurrentExecution().setReturned(resultAdapter.getObject());
                 }
-                return property;
+
+            } else {
+
+                final CommandDto dto = jaxbService.fromXml(CommandDto.class, memento);
+
+                final MemberDto memberDto = dto.getMember();
+                final String memberId = memberDto.getMemberIdentifier();
+
+                final OidsDto oidsDto = CommandDtoUtils.targetsFor(dto);
+                final List<OidDto> targetOidDtos = oidsDto.getOid();
+
+                final InteractionType interactionType = memberDto.getInteractionType();
+                if(interactionType == InteractionType.ACTION_INVOCATION) {
+
+                    final ActionDto actionDto = (ActionDto) memberDto;
+
+                    for (OidDto targetOidDto : targetOidDtos) {
+
+                        final ObjectAdapter targetAdapter = adapterFor(targetOidDto);
+                        final ObjectAction objectAction = findObjectAction(targetAdapter, memberId);
+
+                        // we pass 'null' for the mixedInAdapter; if this action _is_ a mixin then
+                        // it will switch the targetAdapter to be the mixedInAdapter transparently
+                        final ObjectAdapter[] argAdapters = argAdaptersFor(actionDto);
+                        final ObjectAdapter resultAdapter = objectAction.execute(
+                                targetAdapter, null, argAdapters, InteractionInitiatedBy.FRAMEWORK);
+
+                        //
+                        // for the result adapter, we could alternatively have used...
+                        // (priorExecution populated by the push/pop within the interaction object)
+                        //
+                        // final Interaction.Execution priorExecution = backgroundInteraction.getPriorExecution();
+                        // Object unused = priorExecution.getReturned();
+                        //
+
+                        // REVIEW: this doesn't really make sense if >1 action
+                        // in any case, the capturing of the action interaction should be the
+                        // responsibility of auditing/profiling
+                        if(resultAdapter != null) {
+                            Bookmark resultBookmark = CommandUtil.bookmarkFor(resultAdapter);
+                            backgroundCommand.setResult(resultBookmark);
+                        }
+                    }
+                } else {
+
+                    final PropertyDto propertyDto = (PropertyDto) memberDto;
+
+                    for (OidDto targetOidDto : targetOidDtos) {
+
+                        final Bookmark bookmark = Bookmark.from(targetOidDto);
+                        final Object targetObject = bookmarkService.lookup(bookmark);
+
+                        final ObjectAdapter targetAdapter = adapterFor(targetObject);
+
+                        final OneToOneAssociation property = findOneToOneAssociation(targetAdapter, memberId);
+
+                        final ObjectAdapter newValueAdapter = newValueAdapterFor(propertyDto);
+
+                        property.set(targetAdapter, newValueAdapter, InteractionInitiatedBy.FRAMEWORK);
+                        // there is no return value for property modifications.
+                    }
+                }
+
             }
-        });
+
+        } catch (RuntimeException ex) {
+
+            LOG.warn("Exception for: {} {}", executeIn, backgroundCommand.getMemberIdentifier(), ex);
+
+            // hmmm, this doesn't really make sense if >1 action
+            //
+            // in any case, the capturing of the result of the action invocation should be the
+            // responsibility of the interaction...
+            backgroundCommand.setException(Throwables.getStackTraceAsString(ex));
+
+            // lower down the stack the IsisTransactionManager will have set the transaction to abort
+            // however, we don't want that to occur (because any changes made to the backgroundCommand itself
+            // would also be rolled back, and it would keep getting picked up again by a scheduler for
+            // processing); instead we clear the abort cause and ensure we can continue.
+            transactionManager.getCurrentTransaction().clearAbortCauseAndContinue();
+
+            // checked at the end
+            exceptionIfAny = ex;
+        }
+
+        // it's possible that there is no priorExecution, specifically if there was an exception
+        // invoking the action.  We therefore need to guard that case.
+        final Interaction.Execution priorExecution = backgroundInteraction.getPriorExecution();
+        final Timestamp completedAt =
+                priorExecution != null
+                        ? priorExecution.getCompletedAt()
+                        : clockService.nowAsJavaSqlTimestamp();  // close enough...
+        backgroundCommand.setCompletedAt(completedAt);
+
+        // if we hit an exception processing this command, then quit if instructed
+        return determineIfContinue(exceptionIfAny);
+    }
+
+    private static ObjectAction findObjectAction(
+            final ObjectAdapter targetAdapter,
+            final String actionId) throws RuntimeException {
+
+        final ObjectSpecification specification = targetAdapter.getSpecification();
+
+        final ObjectAction objectAction = findActionElseNull(specification, actionId);
+        if(objectAction == null) {
+            throw new RuntimeException(String.format("Unknown action '%s'", actionId));
+        }
+        return objectAction;
+    }
+
+    private static OneToOneAssociation findOneToOneAssociation(
+            final ObjectAdapter targetAdapter,
+            final String propertyId) throws RuntimeException {
+
+        final ObjectSpecification specification = targetAdapter.getSpecification();
+
+        final OneToOneAssociation property = findOneToOneAssociationElseNull(specification, propertyId);
+        if(property == null) {
+            throw new RuntimeException(String.format("Unknown property '%s'", propertyId));
+        }
+        return property;
     }
 
     private boolean determineIfContinue(final RuntimeException exceptionIfAny) {
@@ -384,7 +422,7 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
         return !shouldQuit;
     }
 
-    protected ObjectAdapter newValueAdapterFor(final PropertyDto propertyDto) {
+    private ObjectAdapter newValueAdapterFor(final PropertyDto propertyDto) {
         final ValueWithTypeDto newValue = propertyDto.getNewValue();
         final Object arg = CommonDtoUtils.getValue(newValue);
         return adapterFor(arg);
@@ -475,6 +513,9 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
 
     @javax.inject.Inject
     InteractionContext interactionContext;
+
+    @javax.inject.Inject
+    SudoService sudoService;
 
     @javax.inject.Inject
     ClockService clockService;
