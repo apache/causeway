@@ -35,6 +35,7 @@ import org.apache.isis.applib.services.bookmark.BookmarkService2;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.Command.Executor;
+import org.apache.isis.applib.services.command.CommandWithDto;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.jaxb.JaxbService;
@@ -84,8 +85,12 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
         CONTINUE,
         /**
          * For example, replayable commands.
+         *
+         * To be precise, replay will quit only if there is an exception on the slave where there
+         * was none on the master.  Put another way, a replicated command that failed on the master
+         * will not cause the slave to stop executing if it caused an exception.
          */
-        QUIT
+        QUIT,
     }
 
     public enum SudoPolicy {
@@ -260,6 +265,8 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
         LOG.info("Executing: {} {}", executeIn, command.getMemberIdentifier());
 
         RuntimeException exceptionIfAny = null;
+        String origExceptionIfAny = null;
+
         try {
             command.setExecutor(Executor.BACKGROUND);
 
@@ -319,6 +326,10 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
             } else {
 
                 final CommandDto dto = jaxbService.fromXml(CommandDto.class, memento);
+
+                // if the command being executed was replayed, then in its userData it will holds
+                // details of any exception that might have occurred.
+                origExceptionIfAny = CommandDtoUtils.getUserData(dto, CommandWithDto.USERDATA_KEY_EXCEPTION);
 
                 final MemberDto memberDto = dto.getMember();
                 final String memberId = memberDto.getMemberIdentifier();
@@ -398,6 +409,7 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
 
             // checked at the end
             exceptionIfAny = ex;
+
         }
 
         // it's possible that there is no priorExecution, specifically if there was an exception
@@ -409,8 +421,8 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
                         : clockService.nowAsJavaSqlTimestamp();  // close enough...
         command.setCompletedAt(completedAt);
 
-        // if we hit an exception processing this command, then quit if instructed
-        return determineIfContinue(exceptionIfAny);
+        // if we hit an exception processing this command but the master did not, then quit if instructed
+        return determineIfContinue(origExceptionIfAny, exceptionIfAny);
     }
 
     private static ObjectAction findObjectAction(
@@ -439,9 +451,21 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
         return property;
     }
 
-    protected boolean determineIfContinue(final RuntimeException exceptionIfAny) {
+    private boolean determineIfContinue(
+            final String origExceptionIfAny,
+            final RuntimeException exceptionIfAny) {
+
+        if(origExceptionIfAny != null) {
+            return true;
+        }
+
+        // there was no exception on master, so do we continue?
+        return determineIfContinue(exceptionIfAny);
+    }
+
+    private boolean determineIfContinue(final RuntimeException exceptionIfAny) {
         final boolean shouldQuit = exceptionIfAny != null &&
-                      onExceptionPolicy == BackgroundCommandExecution.OnExceptionPolicy.QUIT;
+                      onExceptionPolicy == OnExceptionPolicy.QUIT;
         return !shouldQuit;
     }
 

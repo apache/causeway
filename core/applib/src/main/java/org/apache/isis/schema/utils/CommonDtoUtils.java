@@ -23,7 +23,11 @@ import java.math.BigInteger;
 import java.util.Collection;
 
 import com.google.common.base.Function;
+import com.google.common.base.Objects;
+import com.google.common.base.Optional;
+import com.google.common.base.Predicate;
 import com.google.common.base.Strings;
+import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableMap;
 
 import org.joda.time.DateTime;
@@ -35,6 +39,7 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
+import org.apache.isis.schema.cmd.v1.MapDto;
 import org.apache.isis.schema.cmd.v1.ParamDto;
 import org.apache.isis.schema.common.v1.BlobDto;
 import org.apache.isis.schema.common.v1.ClobDto;
@@ -462,7 +467,37 @@ public final class CommonDtoUtils {
 
     //endregion
 
+    public static String getMapValue(final MapDto mapDto, final String key) {
+        if(mapDto == null) {
+            return null;
+        }
+        final Optional<MapDto.Entry> entryIfAny = entryIfAnyFor(mapDto, key);
+        return entryIfAny.isPresent() ? entryIfAny.get().getValue() : null;
+    }
 
+    public static void putMapKeyValue(final MapDto mapDto, final String key, final String value) {
+        if(mapDto == null) {
+            return;
+        }
+        final Optional<MapDto.Entry> entryIfAny = entryIfAnyFor(mapDto, key);
+        if(entryIfAny.isPresent()) {
+            entryIfAny.get().setValue(value);
+        } else {
+            final MapDto.Entry entry = new MapDto.Entry();
+            entry.setKey(key);
+            entry.setValue(value);
+            mapDto.getEntry().add(entry);
+        }
+    }
 
+    private static Optional<MapDto.Entry> entryIfAnyFor(final MapDto mapDto, final String key) {
+        return FluentIterable.from(mapDto.getEntry())
+                    .firstMatch(new Predicate<MapDto.Entry>() {
+                        @Override
+                        public boolean apply(final MapDto.Entry entry) {
+                            return Objects.equal(entry.getKey(), key);
+                        }
+                    });
+    }
 
 }

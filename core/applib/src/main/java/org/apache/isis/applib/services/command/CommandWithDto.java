@@ -21,6 +21,12 @@ import org.apache.isis.schema.cmd.v1.CommandDto;
 
 public interface CommandWithDto extends Command {
 
+    String USERDATA_KEY_TARGET_CLASS = "targetClass";
+    String USERDATA_KEY_TARGET_ACTION = "targetAction";
+    String USERDATA_KEY_ARGUMENTS = "arguments";
+    String USERDATA_KEY_RETURN_VALUE = "returnValue";
+    String USERDATA_KEY_EXCEPTION = "exception";
+
     @Programmatic
     CommandDto asDto();
 }
