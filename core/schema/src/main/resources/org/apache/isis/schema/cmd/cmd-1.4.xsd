@@ -61,6 +61,12 @@
                         </xs:documentation>
                     </xs:annotation>
                 </xs:element>
+                <xs:element name="timestamp" type="xs:dateTime" minOccurs="0" maxOccurs="1">
+                    <xs:annotation>
+                        <xs:documentation>The timestamp when this command was created, used for sequencing when replaying.  This field is optional because it was introduced in v1.4.  The framework-provided ContentMappingServiceForCommandDto populates this field dynamically whenever querying for commands through the REST API.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
                 <xs:element name="user" type="xs:string">
                     <xs:annotation>
                         <xs:documentation>The name of the user that initiated/created this command.
