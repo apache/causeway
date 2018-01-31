@@ -439,8 +439,9 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
         return property;
     }
 
-    private boolean determineIfContinue(final RuntimeException exceptionIfAny) {
-        final boolean shouldQuit = exceptionIfAny != null && onExceptionPolicy == BackgroundCommandExecution.OnExceptionPolicy.QUIT;
+    protected boolean determineIfContinue(final RuntimeException exceptionIfAny) {
+        final boolean shouldQuit = exceptionIfAny != null &&
+                      onExceptionPolicy == BackgroundCommandExecution.OnExceptionPolicy.QUIT;
         return !shouldQuit;
     }
 
