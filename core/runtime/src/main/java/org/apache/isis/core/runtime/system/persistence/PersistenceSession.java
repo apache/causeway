@@ -233,7 +233,7 @@ public class PersistenceSession implements
             final FixturesInstalledFlag fixturesInstalledFlag) {
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug("creating " + this);
+            LOG.debug("creating {}", this);
         }
 
         this.servicesInjector = servicesInjector;
@@ -295,7 +295,7 @@ public class PersistenceSession implements
         ensureNotOpened();
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug("opening " + this);
+            LOG.debug("opening {}", this);
         }
 
         oidAdapterMap.open();
@@ -557,13 +557,13 @@ public class PersistenceSession implements
      */
     private <T> ObjectAdapter findInstancesInTransaction(final Query<T> query, final QueryCardinality cardinality) {
         if (LOG.isDebugEnabled()) {
-            LOG.debug("findInstances using (applib) Query: " + query);
+            LOG.debug("findInstances using (applib) Query: {}", query);
         }
 
         // TODO: unify PersistenceQuery and PersistenceQueryProcessor
         final PersistenceQuery persistenceQuery = createPersistenceQueryFor(query, cardinality);
         if (LOG.isDebugEnabled()) {
-            LOG.debug("maps to (core runtime) PersistenceQuery: " + persistenceQuery);
+            LOG.debug("maps to (core runtime) PersistenceQuery: {}", persistenceQuery);
         }
 
         final PersistenceQueryProcessor<? extends PersistenceQuery> processor = lookupProcessorFor(persistenceQuery);
@@ -687,7 +687,7 @@ public class PersistenceSession implements
             final Variant variant,
             final String memento) {
         if (LOG.isDebugEnabled()) {
-            LOG.debug("creating " + variant + " instance of " + spec);
+            LOG.debug("creating {} instance of {}", variant, spec);
         }
         final Object pojo;
 
@@ -936,9 +936,7 @@ public class PersistenceSession implements
                 new TransactionalClosureWithReturn<ObjectAdapter>() {
                     @Override
                     public ObjectAdapter execute() {
-                        if (LOG.isDebugEnabled()) {
-                            LOG.debug("getObject; oid=" + oid);
-                        }
+                        LOG.debug("getObject; oid={}", oid);
 
                         final Object pojo = loadPersistentPojo(oid);
                         return mapRecreatedPojo(oid, pojo);
@@ -1079,7 +1077,7 @@ public class PersistenceSession implements
             public void execute() {
 
                 if (LOG.isDebugEnabled()) {
-                    LOG.debug("resolveImmediately; oid=" + adapter.getOid().enString());
+                    LOG.debug("resolveImmediately; oid={}", adapter.getOid().enString());
                 }
 
                 if (!adapter.representsPersistent()) {
@@ -1172,9 +1170,7 @@ public class PersistenceSession implements
         if (alreadyPersistedOrNotPersistable(adapter)) {
             return;
         }
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("persist " + adapter);
-        }
+        LOG.debug("persist {}", adapter);
 
         // previously we called the PersistingCallback here.
         // this is now done in the JDO framework synchronizer.
@@ -1233,9 +1229,7 @@ public class PersistenceSession implements
         if (spec.isParented()) {
             return;
         }
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("destroyObject " + adapter);
-        }
+        LOG.debug("destroyObject {}", adapter);
         transactionManager.executeWithinTransaction(new TransactionalClosure() {
             @Override
             public void execute() {
@@ -1271,9 +1265,7 @@ public class PersistenceSession implements
     private CreateObjectCommand newCreateObjectCommand(final ObjectAdapter adapter) {
         ensureOpened();
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("create object - creating command for: " + adapter);
-        }
+        LOG.debug("create object - creating command for: {}", adapter);
         if (adapter.representsPersistent()) {
             throw new IllegalArgumentException("Adapter is persistent; adapter: " + adapter);
         }
@@ -1283,9 +1275,7 @@ public class PersistenceSession implements
     private DestroyObjectCommand newDestroyObjectCommand(final ObjectAdapter adapter) {
         ensureOpened();
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("destroy object - creating command for: " + adapter);
-        }
+        LOG.debug("destroy object - creating command for: {}", adapter);
         if (!adapter.representsPersistent()) {
             throw new IllegalArgumentException("Adapter is not persistent; adapter: " + adapter);
         }
@@ -1726,11 +1716,11 @@ public class PersistenceSession implements
                             thisVersion.different(otherVersion)) {
 
                         if(concurrencyCheckingGloballyEnabled && ConcurrencyChecking.isCurrentlyEnabled()) {
-                            LOG.info("concurrency conflict detected on " + recreatedOid + " (" + otherVersion + ")");
+                            LOG.info("concurrency conflict detected on {} ({})", recreatedOid, otherVersion);
                             final String currentUser = authenticationSession.getUserName();
                             throw new ConcurrencyException(currentUser, recreatedOid, thisVersion, otherVersion);
                         } else {
-                            LOG.info("concurrency conflict detected but suppressed, on " + recreatedOid + " (" + otherVersion + ")");
+                            LOG.info("concurrency conflict detected but suppressed, on {} ({})", recreatedOid, otherVersion);
                         }
                     }
                 }
@@ -1742,7 +1732,7 @@ public class PersistenceSession implements
                                 recreatedVersion.different(originalVersion))
                         ) {
                     if(LOG.isDebugEnabled()) {
-                        LOG.debug("updating version in oid, on " + originalOid + " (" + originalVersion + ") to (" + recreatedVersion +")");
+                        LOG.debug("updating version in oid, on {} ({}) to ({})", originalOid, originalVersion, recreatedVersion);
                     }
                     originalOid.setVersion(recreatedVersion);
                 }
@@ -1864,18 +1854,12 @@ public class PersistenceSession implements
 
         final RootAndCollectionAdapters rootAndCollectionAdapters = new RootAndCollectionAdapters(adapter, this);
 
-
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("remapAsPersistent: " + transientRootOid);
-        }
-
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("removing root adapter from oid map");
-        }
+        LOG.debug("remapAsPersistent: {}", transientRootOid);
+        LOG.debug("removing root adapter from oid map");
 
         boolean removed = oidAdapterMap.remove(transientRootOid);
         if (!removed) {
-            LOG.warn("could not remove oid: " + transientRootOid);
+            LOG.warn("could not remove oid: {}", transientRootOid);
             // should we fail here with a more serious error?
         }
 
@@ -1886,7 +1870,7 @@ public class PersistenceSession implements
             final Oid collectionOid = collectionAdapter.getOid();
             removed = oidAdapterMap.remove(collectionOid);
             if (!removed) {
-                LOG.warn("could not remove collectionOid: " + collectionOid);
+                LOG.warn("could not remove collectionOid: {}", collectionOid);
                 // should we fail here with a more serious error?
             }
         }
@@ -1916,8 +1900,7 @@ public class PersistenceSession implements
 
         // associate root adapter with the new Oid, and remap
         if (LOG.isDebugEnabled()) {
-            LOG.debug("replacing Oid for root adapter and re-adding into maps; oid is now: " + persistedRootOid.enString(
-            ) + " (was: " + transientRootOid.enString() + ")");
+            LOG.debug("replacing Oid for root adapter and re-adding into maps; oid is now: {} (was: {})", persistedRootOid.enString(), transientRootOid.enString());
         }
         adapter.replaceOid(persistedRootOid);
         oidAdapterMap.add(persistedRootOid, adapter);
@@ -1952,7 +1935,7 @@ public class PersistenceSession implements
         }
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug("made persistent " + adapter + "; was " + transientRootOid);
+            LOG.debug("made persistent {}; was {}", adapter, transientRootOid);
         }
     }
 
@@ -2018,9 +2001,7 @@ public class PersistenceSession implements
     public void removeAdapter(final ObjectAdapter adapter) {
         ensureMapsConsistent(adapter);
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("removing adapter: " + adapter);
-        }
+        LOG.debug("removing adapter: {}", adapter);
 
         unmap(adapter);
     }
@@ -2122,7 +2103,7 @@ public class PersistenceSession implements
             // and would trigger a resolve
             // don't call toString() on adapter because calls hashCode on
             // underlying object, may also trigger a resolve.
-            LOG.debug("adding identity for adapter with oid=" + adapter.getOid());
+            LOG.debug("adding identity for adapter with oid={}", adapter.getOid());
         }
 
         // value adapters are not mapped (but all others - root and aggregated adapters - are)
@@ -2202,15 +2183,14 @@ public class PersistenceSession implements
                     thisVersion.different(otherVersion)) {
 
                 if (ConcurrencyChecking.isCurrentlyEnabled()) {
-                    LOG.info("concurrency conflict detected on " + thisOid + " (" + otherVersion + ")");
+                    LOG.info("concurrency conflict detected on {} ({})", thisOid, otherVersion);
                     final String currentUser = authenticationSession.getUserName();
                     final ConcurrencyException abortCause = new ConcurrencyException(currentUser, thisOid,
                             thisVersion, otherVersion);
                     getCurrentTransaction().setAbortCause(abortCause);
 
                 } else {
-                    LOG.info("concurrency conflict detected but suppressed, on " + thisOid + " (" + otherVersion
-                            + ")");
+                    LOG.info("concurrency conflict detected but suppressed, on {} ({})", thisOid, otherVersion);
                 }
             }
         } else {

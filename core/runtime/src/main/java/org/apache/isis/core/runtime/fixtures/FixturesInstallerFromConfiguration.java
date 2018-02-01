@@ -55,7 +55,7 @@ public class FixturesInstallerFromConfiguration extends FixturesInstallerAbstrac
             boolean fixtureLoaded = false;
             for (final String element : fixtureConfig.getFixtures()) {
                 final String fixtureFullyQualifiedName = fixtureConfig.getFixturePrefix() + element;
-                LOG.info("  adding fixture " + fixtureFullyQualifiedName);
+                LOG.info("  adding fixture {}", fixtureFullyQualifiedName);
                 final Object fixture = InstanceUtil.createInstance(fixtureFullyQualifiedName);
                 fixtureLoaded = true;
                 delegate.addFixture(fixture);

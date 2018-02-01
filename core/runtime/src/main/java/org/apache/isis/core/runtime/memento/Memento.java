@@ -77,9 +77,7 @@ public class Memento implements Serializable {
 
     public Memento(final ObjectAdapter adapter) {
         data = adapter == null ? null : createData(adapter);
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("created memento for " + this);
-        }
+        LOG.debug("created memento for {}", this);
     }
 
     
@@ -118,7 +116,7 @@ public class Memento implements Serializable {
                     continue;
                 }
                 if (associations.get(i).containsFacet(PropertyOrCollectionAccessorFacet.class) && !associations.get(i).containsFacet(PropertySetterFacet.class)) {
-                    LOG.debug("ignoring not-settable field " + associations.get(i).getName());
+                    LOG.debug("ignoring not-settable field {}", associations.get(i).getName());
                     continue;
                 }
             }
@@ -227,7 +225,7 @@ public class Memento implements Serializable {
         }
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug("recreated object " + adapter.getOid());
+            LOG.debug("recreated object {}", adapter.getOid());
         }
         return adapter;
     }
@@ -285,7 +283,7 @@ public class Memento implements Serializable {
         updateFieldsAndResolveState(adapter, data);
         
         if (LOG.isDebugEnabled()) {
-            LOG.debug("object updated " + adapter.getOid());
+            LOG.debug("object updated {}", adapter.getOid());
         }
     }
 
@@ -320,7 +318,7 @@ public class Memento implements Serializable {
                     continue;
                 }
                 if (field.containsFacet(PropertyOrCollectionAccessorFacet.class) && !field.containsFacet(PropertySetterFacet.class)) {
-                    LOG.debug("ignoring not-settable field " + field.getName());
+                    LOG.debug("ignoring not-settable field {}", field.getName());
                     continue;
                 }
             }
@@ -357,7 +355,7 @@ public class Memento implements Serializable {
             final ObjectAdapter elementAdapter = recreateReference(data);
             if (!facet.contains(collection, elementAdapter)) {
                 if (LOG.isDebugEnabled()) {
-                    LOG.debug("  association " + otma + " changed, added " + elementAdapter.getOid());
+                    LOG.debug("  association {} changed, added {}", otma, elementAdapter.getOid());
                 }
                 otma.addElement(objectAdapter, elementAdapter, InteractionInitiatedBy.FRAMEWORK);
             } else {
@@ -367,7 +365,7 @@ public class Memento implements Serializable {
 
         for (final ObjectAdapter element : original) {
             if (LOG.isDebugEnabled()) {
-                LOG.debug("  association " + otma + " changed, removed " + element.getOid());
+                LOG.debug("  association {} changed, removed {}", otma, element.getOid());
             }
             otma.removeElement(objectAdapter, element, InteractionInitiatedBy.FRAMEWORK);
         }
@@ -380,7 +378,7 @@ public class Memento implements Serializable {
             final ObjectAdapter ref = recreateReference(assocData);
             if (otoa.get(objectAdapter, InteractionInitiatedBy.FRAMEWORK) != ref) {
                 if (LOG.isDebugEnabled()) {
-                    LOG.debug("  association " + otoa + " changed to " + ref.getOid());
+                    LOG.debug("  association {} changed to {}", otoa, ref.getOid());
                 }
                 otoa.initAssociation(objectAdapter, ref);
             }

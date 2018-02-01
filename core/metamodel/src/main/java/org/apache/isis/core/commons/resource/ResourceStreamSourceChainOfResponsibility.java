@@ -54,9 +54,7 @@ public class ResourceStreamSourceChainOfResponsibility extends ResourceStreamSou
                 return resourceStream;
             }
         }
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("could not load resource path '" + resourcePath + "' from " + getName());
-        }
+        LOG.debug("could not load resource path '{}' from {}", resourcePath, getName());
         return null;
     }
 

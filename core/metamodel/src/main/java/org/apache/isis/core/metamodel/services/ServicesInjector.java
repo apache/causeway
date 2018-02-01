@@ -47,7 +47,6 @@ import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.util.ToString;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 import org.apache.isis.core.metamodel.services.configinternal.ConfigurationServiceInternal;
@@ -410,7 +409,7 @@ public class ServicesInjector implements ApplicationScopedComponent {
             throw new MetaModelException(String.format("Cannot access the %s field in %s", field.getName(), target.getClass().getName()));
         }
         if (LOG.isDebugEnabled()) {
-            LOG.debug("injected " + parameter + " into " + new ToString(target));
+            LOG.debug("injected {} into {}", parameter, new ToString(target));
         }
     }
 
@@ -418,7 +417,7 @@ public class ServicesInjector implements ApplicationScopedComponent {
         final Object[] parameters = new Object[] { parameter };
         invokeMethod(method, target, parameters);
         if (LOG.isDebugEnabled()) {
-            LOG.debug("injected " + parameter + " into " + new ToString(target));
+            LOG.debug("injected {} into {}", parameter, new ToString(target));
         }
     }
 

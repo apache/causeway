@@ -53,7 +53,6 @@ import org.apache.isis.applib.services.xmlsnapshot.XmlSnapshotService.Snapshot;
 import org.apache.isis.applib.snapshot.SnapshottableWithInclusions;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
@@ -135,7 +134,7 @@ public class XmlSnapshot implements Snapshot {
     public XmlSnapshot(final ObjectAdapter rootAdapter, final XmlSchema schema) {
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug(".ctor(" + log("rootObj", rootAdapter) + andlog("schema", schema) + andlog("addOids", "" + true) + ")");
+            LOG.debug(".ctor({}{}{})", log("rootObj", rootAdapter), andlog("schema", schema), andlog("addOids", "" + true));
         }
 
         this.isisMetaModel = new IsisSchema();
@@ -198,7 +197,7 @@ public class XmlSnapshot implements Snapshot {
     private Place appendXml(final ObjectAdapter object) {
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug("appendXml(" + log("obj", object) + "')");
+            LOG.debug("appendXml({})", log("obj", object));
         }
 
         final String fullyQualifiedClassName = object.getSpecification().getFullIdentifier();
@@ -264,7 +263,7 @@ public class XmlSnapshot implements Snapshot {
     private Element appendXml(final Place parentPlace, final ObjectAdapter childObject) {
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug("appendXml(" + log("parentPlace", parentPlace) + andlog("childObj", childObject) + ")");
+            LOG.debug("appendXml({}{})", log("parentPlace", parentPlace), andlog("childObj", childObject));
         }
 
         final Element parentElement = parentPlace.getXmlElement();
@@ -275,7 +274,7 @@ public class XmlSnapshot implements Snapshot {
         }
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug("appendXml(Pl, NO): invoking objectToElement() for " + log("childObj", childObject));
+            LOG.debug("appendXml(Pl, NO): invoking objectToElement() for {}", log("childObj", childObject));
         }
         final Place childPlace = objectToElement(childObject);
         Element childElement = childPlace.getXmlElement();
@@ -297,7 +296,7 @@ public class XmlSnapshot implements Snapshot {
     private boolean appendXmlThenIncludeRemaining(final Place parentPlace, final ObjectAdapter referencedObject, final Vector fieldNames, final String annotation) {
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug("appendXmlThenIncludeRemaining(: " + log("parentPlace", parentPlace) + andlog("referencedObj", referencedObject) + andlog("fieldNames", fieldNames) + andlog("annotation", annotation) + ")");
+            LOG.debug("appendXmlThenIncludeRemaining(: {}{}{}{})", log("parentPlace", parentPlace), andlog("referencedObj", referencedObject), andlog("fieldNames", fieldNames), andlog("annotation", annotation));
             LOG.debug("appendXmlThenIncludeRemaining(..): invoking appendXml(parentPlace, referencedObject)");
         }
 
@@ -307,7 +306,7 @@ public class XmlSnapshot implements Snapshot {
         final boolean includedField = includeField(referencedPlace, fieldNames, annotation);
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug("appendXmlThenIncludeRemaining(..): invoked includeField(referencedPlace, fieldNames)" + andlog("returned", "" + includedField));
+            LOG.debug("appendXmlThenIncludeRemaining(..): invoked includeField(referencedPlace, fieldNames){}", andlog("returned", "" + includedField));
         }
 
         return includedField;
@@ -385,13 +384,13 @@ public class XmlSnapshot implements Snapshot {
             final String token = tok.nextToken();
 
             if (LOG.isDebugEnabled()) {
-                LOG.debug("include(..): " + log("token", token));
+                LOG.debug("include(..): {}", log("token", token));
             }
             fieldNames.addElement(token);
         }
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug("include(..): " + log("fieldNames", fieldNames));
+            LOG.debug("include(..): {}", log("fieldNames", fieldNames));
         }
 
         // navigate first field, from the root.
@@ -409,7 +408,7 @@ public class XmlSnapshot implements Snapshot {
     private boolean includeField(final Place place, final Vector fieldNames, final String annotation) {
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug("includeField(: " + log("place", place) + andlog("fieldNames", fieldNames) + andlog("annotation", annotation) + ")");
+            LOG.debug("includeField(: {}{}{})", log("place", place), andlog("fieldNames", fieldNames),andlog("annotation", annotation));
         }
 
         final ObjectAdapter object = place.getObject();
@@ -433,7 +432,7 @@ public class XmlSnapshot implements Snapshot {
         names.removeElementAt(0);
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug("includeField(Pl, Vec, Str):" + log("processing field", fieldName) + andlog("left", "" + names.size()));
+            LOG.debug("includeField(Pl, Vec, Str):{}{}", log("processing field", fieldName), andlog("left", "" + names.size()));
         }
 
         // locate the field in the object's class
@@ -459,7 +458,10 @@ public class XmlSnapshot implements Snapshot {
         final Vector xmlFieldElements = elementsUnder(xmlElement, field.getId());
         if (xmlFieldElements.size() != 1) {
             if (LOG.isInfoEnabled()) {
-                LOG.info("includeField(Pl, Vec, Str): could not locate " + log("field", field.getId()) + andlog("xmlFieldElements.size", "" + xmlFieldElements.size()));
+                LOG.info(
+                        "includeField(Pl, Vec, Str): could not locate {}",
+                        log("field", field.getId()) +
+                        andlog("xmlFieldElements.size", "" + xmlFieldElements.size()));
             }
             return false;
         }
@@ -494,7 +496,7 @@ public class XmlSnapshot implements Snapshot {
 
             final boolean appendedXml = appendXmlThenIncludeRemaining(fieldPlace, referencedObject, names, annotation);
             if (LOG.isDebugEnabled()) {
-                LOG.debug("includeField(Pl, Vec, Str): 1->1: invoked appendXmlThenIncludeRemaining for " + log("referencedObj", referencedObject) + andlog("returned", "" + appendedXml));
+                LOG.debug("includeField(Pl, Vec, Str): 1->1: invoked appendXmlThenIncludeRemaining for {}{}", log("referencedObj", referencedObject), andlog("returned", "" + appendedXml));
             }
 
             return appendedXml;
@@ -509,17 +511,17 @@ public class XmlSnapshot implements Snapshot {
             final CollectionFacet facet = collection.getSpecification().getFacet(CollectionFacet.class);
 
             if (LOG.isDebugEnabled()) {
-                LOG.debug("includeField(Pl, Vec, Str): 1->M: " + log("collection.size", "" + facet.size(collection)));
+                LOG.debug("includeField(Pl, Vec, Str): 1->M: {}", log("collection.size", "" + facet.size(collection)));
             }
             boolean allFieldsNavigated = true;
             for (final ObjectAdapter referencedObject : facet.iterable(collection)) {
                 final boolean appendedXml = appendXmlThenIncludeRemaining(fieldPlace, referencedObject, names, annotation);
                 if (LOG.isDebugEnabled()) {
-                    LOG.debug("includeField(Pl, Vec, Str): 1->M: + invoked appendXmlThenIncludeRemaining for " + log("referencedObj", referencedObject) + andlog("returned", "" + appendedXml));
+                    LOG.debug("includeField(Pl, Vec, Str): 1->M: + invoked appendXmlThenIncludeRemaining for {}{}",log("referencedObj", referencedObject), andlog("returned", "" + appendedXml));
                 }
                 allFieldsNavigated = allFieldsNavigated && appendedXml;
             }
-            LOG.debug("includeField(Pl, Vec, Str): " + log("returning", "" + allFieldsNavigated));
+            LOG.debug("includeField(Pl, Vec, Str): {}", log("returning", "" + allFieldsNavigated));
             return allFieldsNavigated;
         }
 
@@ -550,13 +552,13 @@ public class XmlSnapshot implements Snapshot {
     private Element mergeTree(final Element parentElement, final Element childElement) {
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug("mergeTree(" + log("parent", parentElement) + andlog("child", childElement));
+            LOG.debug("mergeTree({}{})", log("parent", parentElement), andlog("child", childElement));
         }
 
         final String childElementOid = isisMetaModel.getAttribute(childElement, "oid");
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug("mergeTree(El,El): " + log("childOid", childElementOid));
+            LOG.debug("mergeTree(El,El): {}", log("childOid", childElementOid));
         }
         if (childElementOid != null) {
 
@@ -588,7 +590,7 @@ public class XmlSnapshot implements Snapshot {
                     childElement.removeChild(grandchildElement);
 
                     if (LOG.isDebugEnabled()) {
-                        LOG.debug("mergeTree(El,El): merging " + log("grandchild", grandchildElement));
+                        LOG.debug("mergeTree(El,El): merging {}", log("grandchild", grandchildElement));
                     }
 
                     mergeTree(existingChildElement, grandchildElement);
@@ -604,7 +606,7 @@ public class XmlSnapshot implements Snapshot {
     Place objectToElement(final ObjectAdapter adapter) {
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug("objectToElement(" + log("object", adapter) + ")");
+            LOG.debug("objectToElement({})", log("object", adapter));
         }
 
         final ObjectSpecification nos = adapter.getSpecification();
@@ -637,7 +639,7 @@ public class XmlSnapshot implements Snapshot {
             final String fieldName = field.getId();
 
             if (LOG.isDebugEnabled()) {
-                LOG.debug("objectToElement(NO): " + log("field", fieldName));
+                LOG.debug("objectToElement(NO): {}", log("field", fieldName));
             }
 
             // Skip field if we have seen the name already
@@ -654,7 +656,7 @@ public class XmlSnapshot implements Snapshot {
             // same name, ultimately breaking the XSD.
             for (int j = 0; j < i; j++) {
                 if (fieldName.equals(fields.get(i).getName())) {
-                    LOG.debug("objectToElement(NO): " + log("field", fieldName) + " SKIPPED");
+                    LOG.debug("objectToElement(NO): {} SKIPPED", log("field", fieldName));
                     continue eachField;
                 }
             }
@@ -670,7 +672,7 @@ public class XmlSnapshot implements Snapshot {
 
             if (field.getSpecification().containsFacet(ValueFacet.class)) {
                 if (LOG.isDebugEnabled()) {
-                    LOG.debug("objectToElement(NO): " + log("field", fieldName) + " is value");
+                    LOG.debug("objectToElement(NO): {} is value", log("field", fieldName));
                 }
 
                 final ObjectSpecification fieldNos = field.getSpecification();
@@ -717,7 +719,7 @@ public class XmlSnapshot implements Snapshot {
                     }
 
                 } catch (final Exception ex) {
-                    LOG.warn("objectToElement(NO): " + log("field", fieldName) + ": getField() threw exception - skipping XML generation");
+                    LOG.warn("objectToElement(NO): {}: getField() threw exception - skipping XML generation", log("field", fieldName));
                 }
 
                 // XSD
@@ -726,7 +728,7 @@ public class XmlSnapshot implements Snapshot {
             } else if (field instanceof OneToOneAssociation) {
 
                 if (LOG.isDebugEnabled()) {
-                    LOG.debug("objectToElement(NO): " + log("field", fieldName) + " is OneToOneAssociation");
+                    LOG.debug("objectToElement(NO): {} is OneToOneAssociation", log("field", fieldName));
                 }
 
                 final OneToOneAssociation oneToOneAssociation = ((OneToOneAssociation) field);
@@ -752,7 +754,7 @@ public class XmlSnapshot implements Snapshot {
                     }
 
                 } catch (final Exception ex) {
-                    LOG.warn("objectToElement(NO): " + log("field", fieldName) + ": getAssociation() threw exception - skipping XML generation");
+                    LOG.warn("objectToElement(NO): {}: getAssociation() threw exception - skipping XML generation", log("field", fieldName));
                 }
 
                 // XSD
@@ -761,7 +763,7 @@ public class XmlSnapshot implements Snapshot {
             } else if (field instanceof OneToManyAssociation) {
 
                 if (LOG.isDebugEnabled()) {
-                    LOG.debug("objectToElement(NO): " + log("field", fieldName) + " is OneToManyAssociation");
+                    LOG.debug("objectToElement(NO): {} is OneToManyAssociation", log("field", fieldName));
                 }
 
                 final OneToManyAssociation oneToManyAssociation = (OneToManyAssociation) field;
@@ -780,7 +782,7 @@ public class XmlSnapshot implements Snapshot {
                     // XML
                     isisMetaModel.setIsisCollection(xmlCollectionElement, schema.getPrefix(), fullyQualifiedClassName, collection);
                 } catch (final Exception ex) {
-                    LOG.warn("objectToElement(NO): " + log("field", fieldName) + ": get(obj) threw exception - skipping XML generation");
+                    LOG.warn("objectToElement(NO): {}: get(obj) threw exception - skipping XML generation", log("field", fieldName));
                 }
 
                 // XSD
@@ -788,7 +790,7 @@ public class XmlSnapshot implements Snapshot {
 
             } else {
                 if (LOG.isInfoEnabled()) {
-                    LOG.info("objectToElement(NO): " + log("field", fieldName) + " is unknown type; ignored");
+                    LOG.info("objectToElement(NO): {} is unknown type; ignored", log("field", fieldName));
                 }
                 continue;
             }

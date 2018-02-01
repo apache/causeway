@@ -30,8 +30,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.inject.Inject;
-
 import com.google.common.collect.Maps;
 
 import org.slf4j.Logger;
@@ -124,7 +122,7 @@ public class ObjectFixtureFilePersistor {
                 }
             }
         } catch (final ObjectSpecificationException e) {
-            LOG.info("no field for '" + name + "', skipping entry: " + data);
+            LOG.info("no field for '{}', skipping entry: {}", name, data);
         }
     }
 

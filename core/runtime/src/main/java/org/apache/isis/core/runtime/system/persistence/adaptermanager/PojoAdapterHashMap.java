@@ -94,15 +94,13 @@ public class PojoAdapterHashMap implements Iterable<ObjectAdapter>, SessionScope
         adapterByPojoMap.put(key(pojo), adapter);
 
         if(LOG.isDebugEnabled()) {
-            LOG.debug("add adapter: #" + key(pojo) + " -> #" + Long.toHexString(adapter.hashCode()));
+            LOG.debug("add adapter: #{} -> #{}", key(pojo), Long.toHexString(adapter.hashCode()));
 
         }
     }
 
     public void remove(final ObjectAdapter object) {
-        if(LOG.isDebugEnabled()) {
-            LOG.debug("remove adapter: " + object);
-        }
+        LOG.debug("remove adapter: {}", object);
         adapterByPojoMap.remove(key(object.getObject()));
     }
 

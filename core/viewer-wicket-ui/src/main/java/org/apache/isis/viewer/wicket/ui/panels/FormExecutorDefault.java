@@ -415,7 +415,7 @@ public final class FormExecutorDefault<M extends BookmarkableModel<ObjectAdapter
     }
 
     private void debug(final String title, final List<Component> list) {
-        LOG.debug(">>> " + title + ":");
+        LOG.debug(">>> {}:", title);
         for (Component component : list) {
             LOG.debug(
                     String.format("%30s: %s",

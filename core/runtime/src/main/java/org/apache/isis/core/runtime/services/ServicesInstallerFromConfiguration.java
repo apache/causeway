@@ -111,7 +111,7 @@ public class ServicesInstallerFromConfiguration extends ServicesInstallerAbstrac
 
     @Override
     public List<Object> getServices() {
-        LOG.info("installing " + this.getClass().getName());
+        LOG.info("installing {}", this.getClass().getName());
 
         // rather nasty, lazily copy over the configuration to the instantiator
         serviceInstantiator.setConfiguration(getConfiguration());

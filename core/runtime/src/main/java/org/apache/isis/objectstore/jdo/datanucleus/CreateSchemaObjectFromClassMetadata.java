@@ -196,7 +196,7 @@ public class CreateSchemaObjectFromClassMetadata implements MetaDataListener, Da
                 }
                 catch (Exception e)
                 {
-                    LOG.warn("Error invoking decrypter class " + decrypterName, e);
+                    LOG.warn("Error invoking decrypter class {}", decrypterName, e);
                 }
             }
         }

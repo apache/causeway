@@ -130,9 +130,7 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
      */
     @Override
     public void onRequestHandlerExecuted(RequestCycle cycle, IRequestHandler handler) {
-        if(LOG.isDebugEnabled()) {
-            LOG.debug("onRequestHandlerExecuted: handler: " + handler);
-        }
+        LOG.debug("onRequestHandlerExecuted: handler: {}", handler);
 
         if(handler instanceof RenderPageRequestHandler) {
             AdapterManager.ConcurrencyChecking.reset(AdapterManager.ConcurrencyChecking.CHECK);

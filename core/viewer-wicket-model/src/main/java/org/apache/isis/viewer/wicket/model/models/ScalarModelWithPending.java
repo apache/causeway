@@ -54,15 +54,11 @@ public interface ScalarModelWithPending extends Serializable {
                 @Override
                 public ObjectAdapterMemento getObject() {
                     if (owner.getPending() != null) {
-                        if (LOG.isDebugEnabled()) {
-                            LOG.debug("pending not null: " + owner.getPending().toString());
-                        }
+                        LOG.debug("pending not null: {}", owner.getPending().toString());
                         return owner.getPending();
                     }
-                    if (LOG.isDebugEnabled()) {
-                        LOG.debug("pending is null");
-                    }
-                    
+                    LOG.debug("pending is null");
+
                     final ObjectAdapterMemento objectAdapterMemento = owner.getScalarModel().getObjectAdapterMemento();
                     owner.setPending(objectAdapterMemento);
 
@@ -71,9 +67,7 @@ public interface ScalarModelWithPending extends Serializable {
 
                 @Override
                 public void setObject(final ObjectAdapterMemento adapterMemento) {
-                    if (LOG.isDebugEnabled()) {
-                        LOG.debug("setting to: " + (adapterMemento!=null?adapterMemento.toString():null) );
-                    }
+                    LOG.debug("setting to: {}", (adapterMemento!=null?adapterMemento.toString():null) );
                     owner.setPending(adapterMemento);
                     final ScalarModel ownerScalarModel = owner.getScalarModel();
                     if (ownerScalarModel != null) {
@@ -82,9 +76,7 @@ public interface ScalarModelWithPending extends Serializable {
                         } else {
                             final ObjectAdapterMemento ownerPending = owner.getPending();
                             if (ownerPending != null) {
-                                if (LOG.isDebugEnabled()) {
-                                    LOG.debug("setting to pending: " + ownerPending.toString());
-                                }
+                                LOG.debug("setting to pending: {}", ownerPending.toString());
                                 ownerScalarModel.setObject(
                                         ownerPending.getObjectAdapter(
                                             ConcurrencyChecking.NO_CHECK,

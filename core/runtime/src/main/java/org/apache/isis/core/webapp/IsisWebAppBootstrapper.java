@@ -139,10 +139,10 @@ public class IsisWebAppBootstrapper implements ServletContextListener {
         // will load either from WEB-INF, from the classpath or from config directory.
         final String configLocation = servletContext.getInitParameter(WebAppConstants.CONFIG_DIR_PARAM);
         if ( configLocation != null ) {
-            LOG.info( "Config override location: " + configLocation );
+            LOG.info("Config override location: {}", configLocation );
             isisConfigurationBuilder.addResourceStreamSource(ResourceStreamSourceFileSystem.create(configLocation));
         } else {
-            LOG.info( "Config override location: No override location configured" );
+            LOG.info("Config override location: No override location configured" );
 
             isisConfigurationBuilder.addResourceStreamSource(ResourceStreamSourceContextLoaderClassPath.create());
             isisConfigurationBuilder.addResourceStreamSource(new ResourceStreamSourceCurrentClassClassPath());

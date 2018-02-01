@@ -125,18 +125,18 @@ public class PersistenceSessionFactory implements ApplicationScopedComponent, Fi
             String transactionType = props.get("javax.jdo.option.TransactionType");
             // extended logging
             if(transactionType == null) {
-                LOG.info("found config properties to use non-JTA JNDI datasource (" + connectionFactoryName + ")");
+                LOG.info("found config properties to use non-JTA JNDI datasource ({})", connectionFactoryName);
                 if(connectionFactory2Name != null) {
-                    LOG.warn("found config properties to use non-JTA JNDI datasource (" + connectionFactoryName + "); second '-nontx' JNDI datasource also configured but will not be used (" + connectionFactory2Name +")");
+                    LOG.warn("found config properties to use non-JTA JNDI datasource ({}); second '-nontx' JNDI datasource also configured but will not be used ({})", connectionFactoryName, connectionFactory2Name);
                 }
             } else {
-                LOG.info("found config properties to use JTA JNDI datasource (" + connectionFactoryName + ")");
+                LOG.info("found config properties to use JTA JNDI datasource ({})", connectionFactoryName);
             }
             if(connectionFactory2Name == null) {
                 // JDO/DN itself will (probably) throw an exception
-                LOG.error("found config properties to use JTA JNDI datasource (" + connectionFactoryName + ") but config properties for second '-nontx' JNDI datasource were *not* found");
+                LOG.error("found config properties to use JTA JNDI datasource ({}) but config properties for second '-nontx' JNDI datasource were *not* found", connectionFactoryName);
             } else {
-                LOG.info("... and config properties for second '-nontx' JNDI datasource also found; " + connectionFactory2Name);
+                LOG.info("... and config properties for second '-nontx' JNDI datasource also found; {}", connectionFactory2Name);
             }
             // nothing further to do
             return;

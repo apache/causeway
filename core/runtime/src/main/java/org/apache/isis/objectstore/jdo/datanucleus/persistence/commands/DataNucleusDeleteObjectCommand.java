@@ -38,7 +38,7 @@ public class DataNucleusDeleteObjectCommand extends AbstractDataNucleusObjectCom
     @Override
     public void execute(final PersistenceCommandContext context) {
         if (LOG.isDebugEnabled()) {
-            LOG.debug("destroy object - executing command for " + onAdapter());
+            LOG.debug("destroy object - executing command for {}", onAdapter());
         }
         getPersistenceManager().deletePersistent(onAdapter().getObject());
     }

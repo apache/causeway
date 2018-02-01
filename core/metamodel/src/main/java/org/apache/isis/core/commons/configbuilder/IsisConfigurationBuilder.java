@@ -25,11 +25,17 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
+import com.google.common.base.Objects;
+import com.google.common.collect.Sets;
+
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
@@ -41,11 +47,6 @@ import org.apache.isis.core.commons.resource.ResourceStreamSourceChainOfResponsi
 import org.apache.isis.core.commons.resource.ResourceStreamSourceFileSystem;
 import org.apache.isis.core.runtime.optionhandler.BootPrinter;
 import org.apache.isis.core.runtime.optionhandler.OptionHandler;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.google.common.base.Objects;
-import com.google.common.collect.Sets;
 
 /**
  * Holds a mutable set of properties representing the configuration.
@@ -224,7 +225,7 @@ public final class IsisConfigurationBuilder {
         try {
             final PropertiesReader propertiesReader =
                     loadConfigurationResource(resourceStreamSourceChain, configurationResource);
-            LOG.info("loading properties from " + configurationResource);
+            LOG.info("loading properties from {}", configurationResource);
             configuration.add(propertiesReader.getProperties(), containsPolicy);
             configurationResourcesFound.add(configurationResource);
             return;
@@ -238,7 +239,7 @@ public final class IsisConfigurationBuilder {
         }
         configurationResourcesNotFound.add(configurationResource);
         if(LOG.isDebugEnabled()) {
-            LOG.debug(String.format("'%s' not found, but not needed", configurationResource));
+            LOG.debug("'{}' not found, but not needed", configurationResource);
 
         }
     }

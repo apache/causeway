@@ -50,7 +50,7 @@ public class ServiceInitializer {
     public void validate() {
         
         for (final Object service : services) {
-            LOG.debug("checking for @PostConstruct and @PostDestroy methods on " + service.getClass().getName());
+            LOG.debug("checking for @PostConstruct and @PostDestroy methods on {}", service.getClass().getName());
             final Method[] methods = service.getClass().getMethods();
 
             // @PostConstruct
@@ -159,7 +159,7 @@ public class ServiceInitializer {
             final Method method = entry.getValue();
 
             if(LOG.isDebugEnabled()) {
-                LOG.debug("... calling @PreDestroy method: " + service.getClass().getName() + ": " + method.getName());
+                LOG.debug("... calling @PreDestroy method: {}: {}", service.getClass().getName(), method.getName());
             }
             
             try {

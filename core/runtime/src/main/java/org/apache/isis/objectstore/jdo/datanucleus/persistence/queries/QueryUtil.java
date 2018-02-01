@@ -45,9 +45,7 @@ public final class QueryUtil {
         appendWhere(buf, whereClause);
 
         final String queryString = buf.toString();
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("creating query: " + queryString);
-        }
+        LOG.debug("creating query: {}", queryString);
 
         final Query jdoQuery = persistenceManager.newQuery(queryString);
         

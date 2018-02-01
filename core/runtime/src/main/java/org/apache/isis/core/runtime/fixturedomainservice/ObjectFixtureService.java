@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.Set;
 
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 
 import com.google.common.collect.Sets;
 
@@ -98,7 +97,7 @@ public class ObjectFixtureService {
     public void save(final Object object) {
         final ObjectAdapter adapter = getPersistenceSession().adapterFor(object);
         if (adapter.getSpecification().persistability() != Persistability.TRANSIENT) {
-            LOG.info("Saving object for fixture: " + adapter);
+            LOG.info("Saving object for fixture: {}", adapter);
             addObjectAndAssociates(adapter);
             saveAll();
         }

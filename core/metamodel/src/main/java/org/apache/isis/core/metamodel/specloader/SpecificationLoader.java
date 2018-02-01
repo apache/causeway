@@ -119,7 +119,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
     @Override
     protected void finalize() throws Throwable {
         super.finalize();
-        LOG.info("finalizing reflector factory " + this);
+        LOG.info("finalizing reflector factory", this);
     }
 
 
@@ -203,7 +203,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
 
     @Programmatic
     public void shutdown() {
-        LOG.info("shutting down " + this);
+        LOG.info("shutting down {}", this);
 
         initialized = false;
 

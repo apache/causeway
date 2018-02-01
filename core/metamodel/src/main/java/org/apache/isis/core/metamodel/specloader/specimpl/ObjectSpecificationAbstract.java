@@ -285,7 +285,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         superclassSpec = getSpecificationLoader().loadSpecification(superclass);
         if (superclassSpec != null) {
             if (LOG.isDebugEnabled()) {
-                LOG.debug("  Superclass " + superclass.getName());
+                LOG.debug("  Superclass {}", superclass.getName());
             }
             updateAsSubclassTo(superclassSpec);
         }
@@ -711,7 +711,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             // automatically refresh if not in production
             // (better support for jrebel)
             
-            LOG.warn("Could not find association with id '" + id + "'; invalidating cache automatically");
+            LOG.warn("Could not find association with id '{}'; invalidating cache automatically", id);
             if(!invalidatingCache.get()) {
                 // make sure don't go into an infinite loop, though.
                 try {

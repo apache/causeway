@@ -123,7 +123,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         // go no further if a value
         if(this.containsFacet(ValueFacet.class)) {
             if (LOG.isDebugEnabled()) {
-                LOG.debug("skipping full introspection for value type " + getFullIdentifier());
+                LOG.debug("skipping full introspection for value type {}", getFullIdentifier());
             }
             return;
         }

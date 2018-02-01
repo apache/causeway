@@ -125,14 +125,14 @@ public class FixturesInstallerDelegate {
 
         // now, install the fixture itself
         try {
-            LOG.info("installing fixture: " + fixture);
+            LOG.info("installing fixture: {}", fixture);
             getTransactionManager().startTransaction();
             installFixture(fixture);
             saveLogonFixtureIfRequired(fixture);
             getTransactionManager().endTransaction();
             LOG.info("fixture installed");
         } catch (final RuntimeException e) {
-            LOG.error("installing fixture " + fixture.getClass().getName() + " failed; aborting ", e);
+            LOG.error("installing fixture {} failed; aborting ", fixture.getClass().getName() , e);
             try {
                 getTransactionManager().abortTransaction();
             } catch (final Exception e2) {

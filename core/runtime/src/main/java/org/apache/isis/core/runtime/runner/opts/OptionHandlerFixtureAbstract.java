@@ -45,7 +45,7 @@ public abstract class OptionHandlerFixtureAbstract extends OptionHandlerAbstract
     }
 
     static void prime(IsisConfigurationBuilder isisConfigurationBuilder, String key, String value) {
-        LOG.info("priming: " + key + "=" + value);
+        LOG.info("priming: {}={}", key, value);
         isisConfigurationBuilder.add(key, value);
     }
 
