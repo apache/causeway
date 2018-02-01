@@ -146,8 +146,7 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
 
             final boolean shouldContinue = execute(transactionManager, command);
             if(!shouldContinue) {
-                LOG.info("OnExceptionPolicy is to QUIT, so skipping further processing",
-                        command.getMemberIdentifier());
+                LOG.info("NOT continuing to process any further commands, quitting execution");
                 return;
             }
         }
@@ -160,7 +159,9 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
 
     // //////////////////////////////////////
 
-    
+    /**
+     * @return - whether to process any further commands.
+     */
     private boolean execute(
             final IsisTransactionManager transactionManager,
             final Command command) {
@@ -202,6 +203,9 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
         }
     }
 
+    /**
+     * @return - whether to process any further commands.
+     */
     private Boolean executeCommandWithinTran(
             final IsisTransactionManager transactionManager,
             final Command command) {
@@ -217,6 +221,9 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
         });
     }
 
+    /**
+     * @return - whether to process any further commands.
+     */
     private Boolean executeCommandPerSudoPolicy(
             final IsisTransactionManager transactionManager,
             final Command command) {
@@ -241,6 +248,8 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
      * Simply delegates to {@link #doExecuteCommand(IsisTransactionManager, Command)}.
      *
      * Overridable, so execution policy can be adjusted if required.
+     *
+     * @return - whether to process any further commands.
      */
     protected Boolean executeCommand(
             final IsisTransactionManager transactionManager,
@@ -250,6 +259,8 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
 
     /**
      * Not overrideable, but intended to be called by {@link #executeCommand(IsisTransactionManager, Command)} (which is).
+     *
+     * @return - whether to process any further commands.
      */
     protected final Boolean doExecuteCommand(
             final IsisTransactionManager transactionManager,
@@ -566,6 +577,5 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
 
     @javax.inject.Inject
     ClockService clockService;
-
 
 }
