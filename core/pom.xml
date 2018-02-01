@@ -68,8 +68,7 @@
         <coreBaseDir>${project.build.directory}/..</coreBaseDir>
         <checkstyle.configLocation>${coreBaseDir}/codequality/checkstyle.xml</checkstyle.configLocation>
         <pmd.ruleset>${coreBaseDir}/codequality/pmd.xml</pmd.ruleset>
-        <gitDir>${coreBaseDir}/../.git</gitDir>
-        <git.commit.id>UNKNOWN</git.commit.id>
+        <git-plugin.gitDir>${coreBaseDir}/../.git</git-plugin.gitDir>
 
         <projectUrl>${project.url}</projectUrl>
 
@@ -797,7 +796,7 @@
 
                     <configuration>
                         <verbose>false</verbose>
-                        <dotGitDirectory>${gitDir}</dotGitDirectory>
+                        <dotGitDirectory>${git-plugin.gitDir}</dotGitDirectory>
 
                         <dateFormat>yyyy-MM-dd'T'HH:mm:ssZ</dateFormat>
                         <dateFormatTimeZone>${user.timezone}</dateFormatTimeZone>
