@@ -72,7 +72,7 @@ public interface ScalarModelWithPending extends Serializable {
                 @Override
                 public void setObject(final ObjectAdapterMemento adapterMemento) {
                     if (LOG.isDebugEnabled()) {
-                        LOG.debug("setting to: " + adapterMemento!=null?adapterMemento.toString():null);
+                        LOG.debug("setting to: " + (adapterMemento!=null?adapterMemento.toString():null) );
                     }
                     owner.setPending(adapterMemento);
                     final ScalarModel ownerScalarModel = owner.getScalarModel();
