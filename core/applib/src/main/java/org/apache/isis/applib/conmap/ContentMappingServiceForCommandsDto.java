@@ -81,11 +81,14 @@ public class ContentMappingServiceForCommandsDto implements ContentMappingServic
         return new CommandsDto();
     }
 
-    private static CommandDto asDto(final Object object, MetaModelService5 metaModelService5) {
-        return ContentMappingServiceForCommandDto.asProcessedDto(object, metaModelService5);
+    private CommandDto asDto(final Object object, MetaModelService5 metaModelService5) {
+        return contentMappingServiceForCommandDto.asProcessedDto(object);
     }
 
     @Inject
     MetaModelService5 metaModelService5;
+
+    @Inject
+    ContentMappingServiceForCommandDto contentMappingServiceForCommandDto;
 
 }

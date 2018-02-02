@@ -27,7 +27,9 @@ import javax.ws.rs.core.MediaType;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.conmap.spi.CommandDtoProcessorService;
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandDtoProcessor;
 import org.apache.isis.applib.services.command.CommandWithDto;
 import org.apache.isis.applib.services.metamodel.MetaModelService5;
@@ -49,7 +51,7 @@ public class ContentMappingServiceForCommandDto implements ContentMappingService
             return null;
         }
 
-        return asProcessedDto(object, metaModelService);
+        return asProcessedDto(object);
     }
 
     /**
@@ -57,27 +59,30 @@ public class ContentMappingServiceForCommandDto implements ContentMappingService
      */
     @Programmatic
     public CommandDto map(final CommandWithDto commandWithDto) {
-        return asProcessedDto(commandWithDto, metaModelService);
+        return asProcessedDto(commandWithDto);
     }
 
-    static CommandDto asProcessedDto(
-            final Object object,
-            final MetaModelService5 metaModelService) {
-
+    CommandDto asProcessedDto(final Object object) {
         if (!(object instanceof CommandWithDto)) {
             return null;
         }
         final CommandWithDto commandWithDto = (CommandWithDto) object;
-        return asProcessedDto(commandWithDto, metaModelService);
+        return asProcessedDto(commandWithDto);
     }
 
-    private static CommandDto asProcessedDto(
-            CommandWithDto commandWithDto,
-            final MetaModelService5 metaModelService) {
-        final CommandDto commandDto = commandWithDto.asDto();
+    private CommandDto asProcessedDto(final CommandWithDto commandWithDto) {
+        CommandDto commandDto = commandWithDto.asDto();
 
-        copyOver(commandWithDto, commandDto);
+        // global processors
+        for (final CommandDtoProcessorService commandDtoProcessorService : commandDtoProcessorServices) {
+            commandDto = commandDtoProcessorService.process(commandWithDto, commandDto);
+            if(commandDto == null) {
+                // any processor could return null, effectively breaking the chain.
+                return null;
+            }
+        }
 
+        // specific processors for this specific member (action or property)
         final CommandDtoProcessor commandDtoProcessor =
                 metaModelService.commandDtoProcessorFor(commandDto.getMember().getLogicalMemberIdentifier());
         if (commandDtoProcessor == null) {
@@ -86,39 +91,58 @@ public class ContentMappingServiceForCommandDto implements ContentMappingService
         return commandDtoProcessor.process(commandWithDto, commandDto);
     }
 
-    private static void copyOver(final CommandWithDto commandWithDto, final CommandDto commandDto) {
 
-        // for some reason this isn't being persisted initially, so patch it in.  TODO: should fix this
-        commandDto.setUser(commandWithDto.getUser());
+    /**
+     * Uses the SPI infrastructure to copy over standard properties from {@link Command} to {@link CommandDto}.
+     */
+    @DomainService(
+            nature = NatureOfService.DOMAIN,
+            // specify quite a high priority since custom processors will probably want to run after this one
+            // (but can choose to run before if they wish)
+            menuOrder = "1000"
+    )
+    public static class CopyOverFromCommand implements CommandDtoProcessorService {
 
-        // the timestamp field was only introduced in v1.4 of cmd.xsd, so there's no guarantee
-        // it will have been populated.  We therefore copy the value in from CommandWithDto entity.
-        if(commandDto.getTimestamp() == null) {
-            final Timestamp timestamp = commandWithDto.getTimestamp();
-            commandDto.setTimestamp(JavaSqlTimestampXmlGregorianCalendarAdapter.print(timestamp));
+        public CommandDto process(final Command command, CommandDto commandDto) {
+
+            // for some reason this isn't being persisted initially, so patch it in.  TODO: should fix this
+            commandDto.setUser(command.getUser());
+
+            // the timestamp field was only introduced in v1.4 of cmd.xsd, so there's no guarantee
+            // it will have been populated.  We therefore copy the value in from CommandWithDto entity.
+            if(commandDto.getTimestamp() == null) {
+                final Timestamp timestamp = command.getTimestamp();
+                commandDto.setTimestamp(JavaSqlTimestampXmlGregorianCalendarAdapter.print(timestamp));
+            }
+
+            CommandDtoUtils.setUserData(commandDto,
+                    CommandWithDto.USERDATA_KEY_TARGET_CLASS, command.getTargetClass());
+            CommandDtoUtils.setUserData(commandDto,
+                    CommandWithDto.USERDATA_KEY_TARGET_ACTION, command.getTargetAction());
+            CommandDtoUtils.setUserData(commandDto,
+                    CommandWithDto.USERDATA_KEY_ARGUMENTS, command.getArguments());
+
+            final Bookmark result = command.getResult();
+            CommandDtoUtils.setUserData(commandDto,
+                    CommandWithDto.USERDATA_KEY_RETURN_VALUE, result != null ? result.toString() : null);
+            // knowing whether there was an exception is on the master is used to determine whether to
+            // continue when replayed on the slave if an exception occurs there also
+            CommandDtoUtils.setUserData(commandDto,
+                    CommandWithDto.USERDATA_KEY_EXCEPTION, command.getException());
+
+            PeriodDto timings = CommandDtoUtils.timingsFor(commandDto);
+            timings.setStartedAt(JavaSqlTimestampXmlGregorianCalendarAdapter.print(command.getStartedAt()));
+            timings.setCompletedAt(JavaSqlTimestampXmlGregorianCalendarAdapter.print(command.getCompletedAt()));
+
+            return commandDto;
         }
-
-        CommandDtoUtils.setUserData(commandDto,
-                CommandWithDto.USERDATA_KEY_TARGET_CLASS, commandWithDto.getTargetClass());
-        CommandDtoUtils.setUserData(commandDto,
-                CommandWithDto.USERDATA_KEY_TARGET_ACTION, commandWithDto.getTargetAction());
-        CommandDtoUtils.setUserData(commandDto,
-                CommandWithDto.USERDATA_KEY_ARGUMENTS, commandWithDto.getArguments());
-
-        final Bookmark result = commandWithDto.getResult();
-        CommandDtoUtils.setUserData(commandDto,
-                CommandWithDto.USERDATA_KEY_RETURN_VALUE, result != null ? result.toString() : null);
-        // knowing whether there was an exception is on the master is used to determine whether to
-        // continue when replayed on the slave if an exception occurs there also
-        CommandDtoUtils.setUserData(commandDto,
-                CommandWithDto.USERDATA_KEY_EXCEPTION, commandWithDto.getException());
-
-        PeriodDto timings = CommandDtoUtils.timingsFor(commandDto);
-        timings.setStartedAt(JavaSqlTimestampXmlGregorianCalendarAdapter.print(commandWithDto.getStartedAt()));
-        timings.setCompletedAt(JavaSqlTimestampXmlGregorianCalendarAdapter.print(commandWithDto.getCompletedAt()));
     }
+
 
     @Inject
     MetaModelService5 metaModelService;
+
+    @Inject
+    List<CommandDtoProcessorService> commandDtoProcessorServices;
 
 }

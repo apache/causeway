@@ -90,7 +90,7 @@ public abstract class AbstractIsisSessionTemplate {
 
     // //////////////////////////////////////
 
-    protected ObjectAdapter adapterFor(final Object targetObject) {
+    protected final ObjectAdapter adapterFor(final Object targetObject) {
         if(targetObject instanceof OidDto) {
             final OidDto oidDto = (OidDto) targetObject;
             return adapterFor(oidDto);
@@ -117,17 +117,17 @@ public abstract class AbstractIsisSessionTemplate {
         return getPersistenceSession().adapterFor(targetObject);
     }
 
-    protected ObjectAdapter adapterFor(final OidDto oidDto) {
+    protected final ObjectAdapter adapterFor(final OidDto oidDto) {
         final Bookmark bookmark = Bookmark.from(oidDto);
         return adapterFor(bookmark);
     }
 
-    protected ObjectAdapter adapterFor(final Bookmark bookmark) {
+    protected final ObjectAdapter adapterFor(final Bookmark bookmark) {
         final RootOid rootOid = RootOid.create(bookmark);
         return adapterFor(rootOid);
     }
 
-    protected ObjectAdapter adapterFor(final RootOid rootOid) {
+    protected final ObjectAdapter adapterFor(final RootOid rootOid) {
         return getPersistenceSession().adapterFor(rootOid);
     }
     
