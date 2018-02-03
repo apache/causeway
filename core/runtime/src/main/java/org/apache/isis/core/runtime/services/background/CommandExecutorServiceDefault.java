@@ -175,6 +175,10 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
                     final ObjectAdapter resultAdapter = objectAction.execute(
                             targetAdapter, null, argAdapters, InteractionInitiatedBy.FRAMEWORK);
 
+                    // flush any Isis PersistenceCommands pending
+                    // (else might get transient objects for the return value)
+                    transactionService.flushTransaction();
+
                     //
                     // for the result adapter, we could alternatively have used...
                     // (priorExecution populated by the push/pop within the interaction object)
