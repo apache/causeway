@@ -37,6 +37,8 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.Model;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.layout.component.ServiceActionLayoutData;
 import org.apache.isis.applib.layout.menubars.MenuBars;
@@ -63,6 +65,8 @@ import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.Confi
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationConfig;
 
 public final class ServiceActionUtil {
+
+    private final static Logger LOG = LoggerFactory.getLogger(ServiceActionUtil.class);
 
     private ServiceActionUtil(){}
 
@@ -241,6 +245,10 @@ public final class ServiceActionUtil {
                     final EntityModel entityModel = new EntityModel(serviceAdapter);
                     final ObjectAction objectAction = serviceAdapter.getSpecification()
                             .getObjectAction(actionLayoutData.getId());
+                    if(objectAction == null) {
+                        LOG.warn("No such action {}", actionLayoutData.getId());
+                        continue;
+                    }
                     final ServiceAndAction serviceAndAction =
                             new ServiceAndAction(actionLayoutData.getNamed(), entityModel, objectAction);
 
