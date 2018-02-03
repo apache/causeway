@@ -125,7 +125,11 @@ public abstract class Clock {
 
 
     public static Timestamp getTimeAsJavaSqlTimestamp() {
-        return new java.sql.Timestamp(getTimeAsDateTime().getMillis());
+        return new java.sql.Timestamp(getTimeAsMillis());
+    }
+
+    public static long getTimeAsMillis() {
+        return getTimeAsDateTime().getMillis();
     }
 
     /**

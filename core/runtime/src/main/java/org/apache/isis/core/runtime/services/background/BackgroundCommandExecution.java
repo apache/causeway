@@ -43,10 +43,10 @@ public abstract class BackgroundCommandExecution extends CommandExecutionAbstrac
      * Defaults to the historical defaults * for running background commands.
      */
     public BackgroundCommandExecution() {
-        this(SudoPolicy.NO_SWITCH);
+        this(CommandExecutorService.SudoPolicy.NO_SWITCH);
     }
 
-    public BackgroundCommandExecution(final SudoPolicy sudoPolicy) {
+    public BackgroundCommandExecution(final CommandExecutorService.SudoPolicy sudoPolicy) {
         super(sudoPolicy);
     }
 

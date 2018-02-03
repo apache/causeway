@@ -121,7 +121,11 @@ public class TickingFixtureClock extends Clock {
     }
 
     public void setTime(final Timestamp timestamp) {
-        calendar.setTimeInMillis(timestamp.getTime());
+        setTime(timestamp.getTime());
+    }
+
+    public void setTime(final long millis) {
+        calendar.setTimeInMillis(millis);
     }
 
     /**
