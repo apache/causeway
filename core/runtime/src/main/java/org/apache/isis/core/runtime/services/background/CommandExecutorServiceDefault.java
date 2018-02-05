@@ -126,7 +126,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
 
         org.apache.isis.applib.annotation.Command.ExecuteIn executeIn = command.getExecuteIn();
 
-        LOG.info("Executing: {} {}", executeIn, command.getMemberIdentifier());
+        LOG.info("Executing: {} {} {} {}", executeIn, command.getMemberIdentifier(), command.getTimestamp(), command.getTransactionId());
 
         RuntimeException exceptionIfAny = null;
 
