@@ -14,10 +14,9 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.core.runtime.services.background;
+package org.apache.isis.applib.services.command;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.services.command.Command;
 
 public interface CommandExecutorService {
 
@@ -33,12 +32,12 @@ public interface CommandExecutorService {
     }
 
     /**
-     *
+     * Executes the specified command.
      * @param sudoPolicy
-     * @param command
+     * @param commandWithDto
      * @return - any exception raised by the command.
      */
     @Programmatic
-    void executeCommand(SudoPolicy sudoPolicy, Command command);
+    void executeCommand(SudoPolicy sudoPolicy, CommandWithDto commandWithDto);
 
 }

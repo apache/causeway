@@ -19,7 +19,8 @@ package org.apache.isis.core.runtime.services.background;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.applib.services.command.CommandExecutorService;
+import org.apache.isis.applib.services.command.CommandWithDto;
 import org.apache.isis.core.runtime.sessiontemplate.AbstractIsisSessionTemplate;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 
@@ -47,12 +48,12 @@ public abstract class CommandExecutionAbstract extends AbstractIsisSessionTempla
      */
     protected final void execute(
             final IsisTransactionManager transactionManager,
-            final Command command) {
+            final CommandWithDto commandWithDto) {
 
         transactionManager.startTransaction();
 
         // the executor service will handle any exceptions thrown.
-        commandExecutorService.executeCommand(sudoPolicy, command);
+        commandExecutorService.executeCommand(sudoPolicy, commandWithDto);
 
         transactionManager.endTransaction();
 

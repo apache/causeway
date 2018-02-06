@@ -35,6 +35,8 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService2;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.applib.services.command.CommandExecutorService;
+import org.apache.isis.applib.services.command.CommandWithDto;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.jaxb.JaxbService;
@@ -80,21 +82,21 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
     @Programmatic
     public void executeCommand(
             final CommandExecutorService.SudoPolicy sudoPolicy,
-            final Command command) {
+            final CommandWithDto commandWithDto) {
 
         // make sure that the service has been called with a 'in progress' transaction already set up
         ensureTransactionInProgress();
 
         switch (sudoPolicy) {
         case NO_SWITCH:
-            executeCommand(command);
+            executeCommand(commandWithDto);
             break;
         case SWITCH:
-            final String user = command.getUser();
+            final String user = commandWithDto.getUser();
             sudoService.sudo(user, new Runnable() {
                 @Override
                 public void run() {
-                    executeCommand(command);
+                    executeCommand(commandWithDto);
                 }
             });
             break;
@@ -117,21 +119,19 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
         }
     }
 
-    protected void executeCommand(final Command command) {
+    protected void executeCommand(final CommandWithDto commandWithDto) {
 
         // setup for us by IsisTransactionManager; will have the transactionId of the backgroundCommand
         final Interaction interaction = interactionContext.getInteraction();
 
-        final String memento = command.getMemento();
+        org.apache.isis.applib.annotation.Command.ExecuteIn executeIn = commandWithDto.getExecuteIn();
 
-        org.apache.isis.applib.annotation.Command.ExecuteIn executeIn = command.getExecuteIn();
-
-        LOG.info("Executing: {} {} {} {}", executeIn, command.getMemberIdentifier(), command.getTimestamp(), command.getTransactionId());
+        LOG.info("Executing: {} {} {} {}", executeIn, commandWithDto.getMemberIdentifier(), commandWithDto.getTimestamp(), commandWithDto.getTransactionId());
 
         RuntimeException exceptionIfAny = null;
 
         try {
-            command.setExecutor(Command.Executor.BACKGROUND);
+            commandWithDto.setExecutor(Command.Executor.BACKGROUND);
 
             // responsibility for setting the Command#startedAt is in the ActionInvocationFacet or
             // PropertySetterFacet, but this is run if the domain object was found.  If the domain object is
@@ -148,10 +148,10 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
                             ? priorExecution.getCompletedAt()
                             : clockService.nowAsJavaSqlTimestamp();  // close enough...
 
-            command.setStartedAt(startedAt);
-            command.setCompletedAt(completedAt);
+            commandWithDto.setStartedAt(startedAt);
+            commandWithDto.setCompletedAt(completedAt);
 
-            final CommandDto dto = jaxbService.fromXml(CommandDto.class, memento);
+            final CommandDto dto = commandWithDto.asDto();
 
             final MemberDto memberDto = dto.getMember();
             final String memberId = memberDto.getMemberIdentifier();
@@ -190,7 +190,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
                     // REVIEW: this doesn't really make sense if >1 action
                     if(resultAdapter != null) {
                         Bookmark resultBookmark = CommandUtil.bookmarkFor(resultAdapter);
-                        command.setResult(resultBookmark);
+                        commandWithDto.setResult(resultBookmark);
                     }
                 }
             } else {
@@ -216,7 +216,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
 
         } catch (RuntimeException ex) {
 
-            LOG.warn("Exception when executing : {} {}", executeIn, command.getMemberIdentifier(), ex);
+            LOG.warn("Exception when executing : {} {}", executeIn, commandWithDto.getMemberIdentifier(), ex);
 
             exceptionIfAny = ex;
         }
@@ -226,7 +226,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
             transactionService.nextTransaction(TransactionService3.Policy.ALWAYS);
         } catch(RuntimeException ex) {
 
-            LOG.warn("Exception when committing : {} {}", executeIn, command.getMemberIdentifier(), ex);
+            LOG.warn("Exception when committing : {} {}", executeIn, commandWithDto.getMemberIdentifier(), ex);
 
             if(exceptionIfAny == null) {
                 exceptionIfAny = ex;
@@ -239,10 +239,10 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
         // it's possible that there is no priorExecution, specifically if there was an exception
         // when performing the action invocation/property edit.  We therefore need to guard that case.
         final Interaction.Execution priorExecution = interaction.getPriorExecution();
-        if (command.getStartedAt() == null) {
+        if (commandWithDto.getStartedAt() == null) {
             // if attempting to commit the xactn threw an error, we will (I think?) have lost this info, so need to
             // capture
-            command.setStartedAt(
+            commandWithDto.setStartedAt(
                     priorExecution != null
                             ? priorExecution.getStartedAt()
                             : clockService.nowAsJavaSqlTimestamp());
@@ -252,10 +252,10 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
                 priorExecution != null
                         ? priorExecution.getCompletedAt()
                         : clockService.nowAsJavaSqlTimestamp();  // close enough...
-        command.setCompletedAt(completedAt);
+        commandWithDto.setCompletedAt(completedAt);
 
         if(exceptionIfAny != null) {
-            command.setException(Throwables.getStackTraceAsString(exceptionIfAny));
+            commandWithDto.setException(Throwables.getStackTraceAsString(exceptionIfAny));
         }
     }
 

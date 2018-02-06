@@ -24,6 +24,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.applib.services.command.CommandExecutorService;
+import org.apache.isis.applib.services.command.CommandWithDto;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.system.transaction.TransactionalClosure;
@@ -68,7 +70,7 @@ public abstract class BackgroundCommandExecution extends CommandExecutionAbstrac
         LOG.debug("Found {} to execute", commands.size());
 
         for (final Command command : commands) {
-            execute(transactionManager, command);
+            execute(transactionManager, (CommandWithDto) command);
         }
     }
 
