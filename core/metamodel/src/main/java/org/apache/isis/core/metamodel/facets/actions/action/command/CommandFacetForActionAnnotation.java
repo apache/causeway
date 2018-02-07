@@ -40,15 +40,27 @@ public class CommandFacetForActionAnnotation extends CommandFacetAbstract {
             final ServicesInjector servicesInjector,
             final FacetHolder holder) {
 
-        CommandReification commandReification = action != null ? action.command() : CommandReification.AS_CONFIGURED;
-        final CommandPersistence commandPersistence = action != null ? action.commandPersistence() : CommandPersistence.PERSISTED;
-        final CommandExecuteIn commandExecuteIn = action != null? action.commandExecuteIn() :  CommandExecuteIn.FOREGROUND;
+        CommandReification commandReification =
+                action != null
+                    ? action.command()
+                    : CommandReification.AS_CONFIGURED;
+        CommandPersistence commandPersistence =
+                action != null
+                    ? action.commandPersistence()
+                    : CommandPersistence.PERSISTED;
+        final CommandExecuteIn commandExecuteIn =
+                action != null
+                    ? action.commandExecuteIn()
+                    :  CommandExecuteIn.FOREGROUND;
         final Class<? extends CommandDtoProcessor> processorClass =
-                action != null ? action.commandDtoProcessor() : null;
-        final CommandDtoProcessor processor = (CommandDtoProcessor) newProcessorElseNull(processorClass);
+                action != null
+                    ? action.commandDtoProcessor()
+                    : null;
+        final CommandDtoProcessor processor = newProcessorElseNull(processorClass);
 
         if(processor != null) {
             commandReification = CommandReification.ENABLED;
+            commandPersistence = CommandPersistence.PERSISTED;
         }
         final Persistence persistence = CommandPersistence.from(commandPersistence);
         final ExecuteIn executeIn = CommandExecuteIn.from(commandExecuteIn);

@@ -20,6 +20,7 @@ package org.apache.isis.viewer.wicket.viewer.services;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.CommandPersistence;
 import org.apache.isis.applib.annotation.CommandReification;
 import org.apache.isis.applib.annotation.Contributed;
 import org.apache.isis.applib.annotation.MemberOrder;
@@ -43,7 +44,7 @@ public class Object_clearHints {
     @Action(
             domainEvent = ActionDomainEvent.class,
             semantics = SemanticsOf.IDEMPOTENT,
-            command = CommandReification.DISABLED
+            commandPersistence = CommandPersistence.NOT_PERSISTED
     )
     @ActionLayout(
             contributed = Contributed.AS_ACTION,

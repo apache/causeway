@@ -18,7 +18,7 @@ package org.apache.isis.applib.services.layout;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.CommandReification;
+import org.apache.isis.applib.annotation.CommandPersistence;
 import org.apache.isis.applib.annotation.Contributed;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Mixin;
@@ -40,8 +40,8 @@ public class Object_rebuildMetamodel {
     @Action(
             domainEvent = ActionDomainEvent.class,
             semantics = SemanticsOf.IDEMPOTENT,
-            restrictTo = RestrictTo.PROTOTYPING,
-            command = CommandReification.DISABLED
+            commandPersistence = CommandPersistence.NOT_PERSISTED,
+            restrictTo = RestrictTo.PROTOTYPING
     )
     @ActionLayout(
             contributed = Contributed.AS_ACTION,
