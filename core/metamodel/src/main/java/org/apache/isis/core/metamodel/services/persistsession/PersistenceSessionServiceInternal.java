@@ -22,6 +22,7 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService2;
+import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.xactn.Transaction2;
 import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -92,6 +93,9 @@ public interface PersistenceSessionServiceInternal extends AdapterManager {
 
     @Programmatic
     void beginTran();
+
+    @Programmatic
+    void beginTran(final Command commandIfAny);
 
     /**
      * Provided by <tt>TransactionManager</tt> when used by framework.

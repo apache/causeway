@@ -35,11 +35,11 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService2;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.command.CommandExecutorService;
 import org.apache.isis.applib.services.command.CommandWithDto;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.InteractionContext;
-import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.sudo.SudoService;
 import org.apache.isis.applib.services.xactn.Transaction2;
 import org.apache.isis.applib.services.xactn.TransactionService3;
@@ -84,8 +84,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
             final CommandExecutorService.SudoPolicy sudoPolicy,
             final CommandWithDto commandWithDto) {
 
-        // make sure that the service has been called with a 'in progress' transaction already set up
-        ensureTransactionInProgress();
+        ensureTransactionInProgressWithContext(commandWithDto);
 
         switch (sudoPolicy) {
         case NO_SWITCH:
@@ -106,6 +105,17 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
 
         // double check that we've ended up in the same state
         ensureTransactionInProgress();
+    }
+
+    private void ensureTransactionInProgressWithContext(final Command command) {
+
+        ensureTransactionInProgress();
+
+        // check the required command is used as the context.
+        // this will ensure that any audit entries also inherit from this existing command.
+        if(commandContext.getCommand() != command) {
+            transactionService.nextTransaction(command);
+        }
     }
 
     private void ensureTransactionInProgress() {
@@ -139,17 +149,13 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
             // Therefore instead we copy down from the backgroundInteraction (similar to how we populate the
             // completedAt at the end)
             final Interaction.Execution priorExecution = interaction.getPriorExecution();
+            final Interaction.Execution currentExecution = interaction.getCurrentExecution();
 
-            final Timestamp startedAt = priorExecution != null
+            final Timestamp startedAt = currentExecution != null
                     ? priorExecution.getStartedAt()
                     : clockService.nowAsJavaSqlTimestamp();
-            final Timestamp completedAt =
-                    priorExecution != null
-                            ? priorExecution.getCompletedAt()
-                            : clockService.nowAsJavaSqlTimestamp();  // close enough...
 
             commandWithDto.setStartedAt(startedAt);
-            commandWithDto.setCompletedAt(completedAt);
 
             final CommandDto dto = commandWithDto.asDto();
 
@@ -408,9 +414,6 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
     BookmarkService2 bookmarkService;
 
     @javax.inject.Inject
-    JaxbService jaxbService;
-
-    @javax.inject.Inject
     InteractionContext interactionContext;
 
     @javax.inject.Inject
@@ -421,5 +424,8 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
 
     @javax.inject.Inject
     TransactionService3 transactionService;
+
+    @javax.inject.Inject
+    CommandContext commandContext;
 
 }

@@ -25,6 +25,7 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService2;
+import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.xactn.Transaction2;
 import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -112,6 +113,11 @@ public class PersistenceSessionServiceInternalNoop implements PersistenceSession
 
     @Override
     public void beginTran() {
+        throw new UnsupportedOperationException("Not supported by this implementation of PersistenceSessionServiceInternal");
+    }
+
+    @Override
+    public void beginTran(final Command commandIfAny) {
         throw new UnsupportedOperationException("Not supported by this implementation of PersistenceSessionServiceInternal");
     }
 

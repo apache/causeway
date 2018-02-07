@@ -50,7 +50,7 @@ public abstract class CommandExecutionAbstract extends AbstractIsisSessionTempla
             final IsisTransactionManager transactionManager,
             final CommandWithDto commandWithDto) {
 
-        transactionManager.startTransaction();
+        transactionManager.startTransaction(commandWithDto);
 
         // the executor service will handle any exceptions thrown.
         commandExecutorService.executeCommand(sudoPolicy, commandWithDto);
