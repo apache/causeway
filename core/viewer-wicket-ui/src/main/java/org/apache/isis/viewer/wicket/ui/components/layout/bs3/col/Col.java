@@ -203,12 +203,15 @@ public class Col extends PanelAbstract<EntityModel> implements HasDynamicallyVis
                     // shouldn't occur; previously have filtered these out
                     throw new IllegalStateException("Cannot render tabGroup with no tabs");
                 case 1:
-                    final BS3Tab bs3Tab = tabs.get(0);
-                    // render the rows of the one-and-only tab of this tab group.
-                    final List<BS3Row> tabRows = bs3Tab.getRows();
-                    final RepeatingViewWithDynamicallyVisibleContent rowsRv = buildRows(id, tabRows);
-                    tabGroupRv.add(rowsRv);
-                    break;
+                    if(bs3TabGroup.isCollapseIfOne() == null || bs3TabGroup.isCollapseIfOne()) {
+                        final BS3Tab bs3Tab = tabs.get(0);
+                        // render the rows of the one-and-only tab of this tab group.
+                        final List<BS3Row> tabRows = bs3Tab.getRows();
+                        final RepeatingViewWithDynamicallyVisibleContent rowsRv = buildRows(id, tabRows);
+                        tabGroupRv.add(rowsRv);
+                        break;
+                    }
+                    // else fall through...
                 default:
                     final WebMarkupContainer tabGroup = new TabGroupPanel(id, getModel(), bs3TabGroup);
 
