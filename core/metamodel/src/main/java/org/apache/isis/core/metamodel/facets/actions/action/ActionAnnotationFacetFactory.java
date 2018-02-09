@@ -20,6 +20,9 @@
 package org.apache.isis.core.metamodel.facets.actions.action;
 
 import java.lang.reflect.Method;
+import java.util.regex.Pattern;
+
+import com.google.common.base.Strings;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionInteraction;
@@ -81,6 +84,8 @@ import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFace
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
+import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
+import org.apache.isis.core.metamodel.facets.members.order.annotprop.MemberOrderFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.CollectionUtils;
@@ -127,6 +132,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract
         processPublishing(processMethodContext);
 
         processTypeOf(processMethodContext);
+        processAssociateWith(processMethodContext);
     }
 
     void processInvocation(final ProcessMethodContext processMethodContext) {
@@ -451,6 +457,53 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract
         }
 
         FacetUtil.addFacet(typeOfFacet);
+    }
+
+    void processAssociateWith(final ProcessMethodContext processMethodContext) {
+
+        final Method method = processMethodContext.getMethod();
+        final FacetedMethod holder = processMethodContext.getFacetHolder();
+
+        // check for @Action(associateWith=...)
+        MemberOrderFacet memberOrderFacet = null;
+
+        final Action action = Annotations.getAnnotation(method, Action.class);
+        if (action != null) {
+            final String associateWith = action.associateWith();
+            final NameAndSequence ns = NameAndSequence.parse(associateWith);
+            if(ns != null) {
+                memberOrderFacet = new MemberOrderFacetForActionAnnotation(ns.name, ns.sequence, holder);
+            }
+        }
+
+        FacetUtil.addFacet(memberOrderFacet);
+    }
+
+    static class NameAndSequence {
+
+        private static final Pattern pattern = Pattern.compile(":");
+        static NameAndSequence parse(final String associateWith) {
+            if(Strings.isNullOrEmpty(associateWith)) {
+                return null;
+            }
+            final String[] split = pattern.split(associateWith);
+            switch (split.length) {
+            case 1:
+                return new NameAndSequence(split[0], "1");
+            case 2:
+                return new NameAndSequence(split[0], split[1]);
+            default:
+                return null;
+            }
+        }
+
+        final String name;
+        final String sequence;
+        NameAndSequence(final String name, final String sequence) {
+            this.name = name;
+            this.sequence = sequence;
+        }
+
     }
 
     // ///////////////////////////////////////////////////////////////

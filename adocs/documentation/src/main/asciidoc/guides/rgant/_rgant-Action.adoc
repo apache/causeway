@@ -18,6 +18,11 @@ The table below summarizes the annotation's attributes.
 | Description
 
 
+|xref:../rgant/rgant.adoc#_rgant-Action_associateWith[`associateWith()`]
+|_name:sequence_ +
+("")
+|associates an action with another property or collection of the action.
+
 |xref:../rgant/rgant.adoc#_rgant-Action_command[`command()`]
 |`AS_CONFIGURED`, `ENABLED`, `DISABLED` +
 (`AS_CONFIGURED`)
@@ -125,6 +130,7 @@ public class ToDoItem {
 
 
 
+include::_rgant-Action_associateWith.adoc[leveloffset=+1]
 include::_rgant-Action_command.adoc[leveloffset=+1]
 include::_rgant-Action_domainEvent.adoc[leveloffset=+1]
 include::_rgant-Action_hidden.adoc[leveloffset=+1]

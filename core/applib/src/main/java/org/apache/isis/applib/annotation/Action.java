@@ -208,4 +208,22 @@ public @interface Action {
     RestrictTo restrictTo() default RestrictTo.NO_RESTRICTIONS;
 
 
+    // //////////////////////////////////////
+
+
+    /**
+     * Associates this action with a property or collection, specifying its id and optionally the order in the UI.
+     *
+     * <p>
+     *     This is an alternative to using {@link MemberOrder#name()}.  To specify the order (equivalent to
+     *     {@link MemberOrder#sequence()}}) add a suffix <code>:XXX</code>.
+     * </p>
+     *
+     * <p>
+     *     For example <code>@Action(associateWith="items:2.1")</code>
+     * </p>
+     */
+    String associateWith() default "";
+
+
 }
