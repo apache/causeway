@@ -487,7 +487,7 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
     }
     
     public List<ObjectAdapterMemento> getToggleMementosList() {
-        return Collections.unmodifiableList(this.toggledMementosList);
+        return Collections.unmodifiableList(Lists.newArrayList(this.toggledMementosList));
     }
 
     public void clearToggleMementosList() {
@@ -495,6 +495,7 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
     }
 
     public void addLinkAndLabels(List<LinkAndLabel> linkAndLabels) {
+        this.linkAndLabels.clear();
         this.linkAndLabels.addAll(linkAndLabels);
     }
 

@@ -16,6 +16,7 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.actionprompt;
 
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
@@ -66,4 +67,5 @@ public class ActionPromptModalWindow extends ModalDialog<Void> {
         response.render(OnDomReadyHeaderItem.forScript(
                 String.format("Wicket.Event.publish(Isis.Topic.FOCUS_FIRST_PARAMETER, '%s')", getMarkupId())));
     }
+
 }

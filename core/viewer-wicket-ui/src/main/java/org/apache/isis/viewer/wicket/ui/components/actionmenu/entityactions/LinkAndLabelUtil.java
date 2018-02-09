@@ -33,6 +33,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.model.models.ToggledMementosProvider;
 import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.ActionLinkFactory;
 
 public final class LinkAndLabelUtil {
@@ -76,6 +77,15 @@ public final class LinkAndLabelUtil {
             final List<ObjectAction> objectActions,
             final ScalarModel scalarModelForAssociationIfAny) {
 
+        return asActionLinksForAdditionalLinksPanel(parentEntityModel, objectActions, scalarModelForAssociationIfAny, null);
+    }
+
+    public static List<LinkAndLabel> asActionLinksForAdditionalLinksPanel(
+            final EntityModel parentEntityModel,
+            final List<ObjectAction> objectActions,
+            final ScalarModel scalarModelForAssociationIfAny,
+            final ToggledMementosProvider toggledMementosProviderIfAny) {
+
         final ActionLinkFactory linkFactory = new EntityActionLinkFactory(parentEntityModel, scalarModelForAssociationIfAny);
 
         return FluentIterable.from(objectActions)
@@ -83,7 +93,7 @@ public final class LinkAndLabelUtil {
 
                     @Override
                     public LinkAndLabel apply(ObjectAction objectAction) {
-                        return linkFactory.newLink(objectAction, AdditionalLinksPanel.ID_ADDITIONAL_LINK);
+                        return linkFactory.newLink(objectAction, AdditionalLinksPanel.ID_ADDITIONAL_LINK,toggledMementosProviderIfAny);
                     }
                 })
                 .filter(Predicates.<LinkAndLabel>notNull())

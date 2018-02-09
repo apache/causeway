@@ -22,7 +22,7 @@ public class Order {
     public Order addItem(Product p, int quantity) { ... }
 
     @Action(associateWith="items:2")
-    public Order removeItem(Product p, int quantity) { ... }
+    public Order removeItem(OrderItem item) { ... }
     ...
 }
 ----
@@ -36,3 +36,26 @@ In the user interface associated actions are rendered close to the member to whi
 The same effect can be accomplished using `@MemberOrder` or with the `.layout.xml` file.
 ====
 
+
+== Collection Parameters
+
+If the action that has collection parameters is associated with a collection, then the Wicket viewer will render the collection with checkboxes, and these checkboxes can be used to select the items of the action parameter.
+
+For example, suppose we have a "removeItems(...)" action:
+
+[source,java]
+----
+public class Order {
+
+    @Collection
+    SortedSet<OrderItem> getItems() { ... }
+
+    ...
+
+    @Action(associateWith="items:2")
+    public Order removeItems(SortedSet<OrderItem> items) { ... }
+    public SortedSet<OrderItem> choices0RemoveItems() { return getItems(); }
+}
+----
+
+The Wicket viewer will then render the "items" collection with checkboxes, and any selected items will be used as the pre-selected set of items if the action is invoked.

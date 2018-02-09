@@ -42,6 +42,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
+import org.apache.isis.core.metamodel.facets.param.defaults.togglebox.ActionParameterDefaultsFacetViaToggleBoxesFactory;
 import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
@@ -358,9 +359,6 @@ public class SpecificationLoader implements ApplicationScopedComponent {
             return spec;
         }
         final ObjectSpecification specification = createSpecification(type, natureOfService);
-        if (specification == null) {
-            throw new IsisException("Failed to create specification for class " + typeName);
-        }
 
         // put into the cache prior to introspecting, to prevent
         // infinite loops
@@ -439,17 +437,18 @@ public class SpecificationLoader implements ApplicationScopedComponent {
         final ObjectSpecificationAbstract.IntrospectionState introspectionState = specSpi.getIntrospectionState();
 
         // REVIEW: can't remember why this is done in multiple passes, could it be simplified?
-        if (introspectionState == ObjectSpecificationAbstract.IntrospectionState.NOT_INTROSPECTED) {
+        switch (introspectionState) {
+        case NOT_INTROSPECTED:
 
             specSpi.setIntrospectionState(ObjectSpecificationAbstract.IntrospectionState.BEING_INTROSPECTED);
             introspect(specSpi);
-
-        } else if (introspectionState == ObjectSpecificationAbstract.IntrospectionState.BEING_INTROSPECTED) {
-
+            break;
+        case BEING_INTROSPECTED:
             introspect(specSpi);
-
-        } else if (introspectionState == ObjectSpecificationAbstract.IntrospectionState.INTROSPECTED) {
+            break;
+        case INTROSPECTED:
             // nothing to do
+            break;
         }
         return spec;
     }
@@ -459,6 +458,23 @@ public class SpecificationLoader implements ApplicationScopedComponent {
         specSpi.updateFromFacetValues();
         specSpi.setIntrospectionState(ObjectSpecificationAbstract.IntrospectionState.INTROSPECTED);
 
+    }
+
+    public void postProcess() {
+
+        //
+        // HMM.  Not possible to add this as a facet factory, because of
+        // inifinite loop (can't lookup actions of spec until fully processed).
+        // so, instead, calling as a one-off special-case in SpecificationLoader
+        //
+        final ActionParameterDefaultsFacetViaToggleBoxesFactory factory =
+                new ActionParameterDefaultsFacetViaToggleBoxesFactory();
+        factory.setServicesInjector(getServicesInjector());
+
+        final Collection<ObjectSpecification> specs = allSpecifications();
+        for (final ObjectSpecification spec : specs) {
+            factory.postProcess(spec);
+        }
     }
 
     //endregion

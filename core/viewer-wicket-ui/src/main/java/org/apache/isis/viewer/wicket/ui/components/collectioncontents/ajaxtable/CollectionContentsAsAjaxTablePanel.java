@@ -90,7 +90,7 @@ public class CollectionContentsAsAjaxTablePanel
         ObjectAdapterToggleboxColumn toggleboxColumn = null;
         if(bulkActionsProvider != null) {
 
-            toggleboxColumn = bulkActionsProvider.createToggleboxColumn();
+            toggleboxColumn = bulkActionsProvider.getToggleboxColumn();
             if(toggleboxColumn != null) {
                 columns.add(toggleboxColumn);
             }

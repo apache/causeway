@@ -753,6 +753,11 @@ div.referencePanel.scalarNameAndValueComponentType {
 tr.headers th form input {
     margin-left: -8px;
 }
+/*
+tbody td.togglebox-column form {
+    margin-left: 6px;
+}
+*/
 
 #aboutLink {
     padding-right: 30px;

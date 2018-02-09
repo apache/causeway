@@ -148,11 +148,10 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
             // thrown then we would have a command with only completedAt, which is inconsistent.
             // Therefore instead we copy down from the backgroundInteraction (similar to how we populate the
             // completedAt at the end)
-            final Interaction.Execution priorExecution = interaction.getPriorExecution();
             final Interaction.Execution currentExecution = interaction.getCurrentExecution();
 
             final Timestamp startedAt = currentExecution != null
-                    ? priorExecution.getStartedAt()
+                    ? currentExecution.getStartedAt()
                     : clockService.nowAsJavaSqlTimestamp();
 
             commandWithDto.setStartedAt(startedAt);

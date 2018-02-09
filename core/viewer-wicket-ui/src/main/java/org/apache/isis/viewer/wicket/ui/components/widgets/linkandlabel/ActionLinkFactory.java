@@ -20,8 +20,10 @@
 package org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel;
 
 import java.io.Serializable;
+
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
+import org.apache.isis.viewer.wicket.model.models.ToggledMementosProvider;
 
 public interface ActionLinkFactory extends Serializable {
 
@@ -31,5 +33,6 @@ public interface ActionLinkFactory extends Serializable {
      */
     LinkAndLabel newLink(
             final ObjectAction objectAction,
-            final String linkId);
+            final String linkId,
+            final ToggledMementosProvider toggledMementosProviderIfAny);
 }

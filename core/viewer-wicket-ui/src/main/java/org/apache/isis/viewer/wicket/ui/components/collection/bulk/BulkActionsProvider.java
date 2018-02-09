@@ -18,11 +18,13 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.collection.bulk;
 
+import java.io.Serializable;
+
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ObjectAdapterToggleboxColumn;
 
-public interface BulkActionsProvider {
+public interface BulkActionsProvider extends Serializable {
 
     void configureBulkActions(ObjectAdapterToggleboxColumn toggleboxColumn);
 
-    ObjectAdapterToggleboxColumn createToggleboxColumn();
+    ObjectAdapterToggleboxColumn getToggleboxColumn();
 }

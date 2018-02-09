@@ -212,6 +212,7 @@ public class IsisSessionFactoryBuilder {
                     new Runnable() {
                         @Override
                         public void run() {
+                            specificationLoader.postProcess();
                             try {
                                 specificationLoader.validateAndAssert();
 
@@ -223,7 +224,6 @@ public class IsisSessionFactoryBuilder {
                                 }
                                 IsisContext.setMetaModelInvalidException(ex);
                             }
-
                         }
                     }
             );

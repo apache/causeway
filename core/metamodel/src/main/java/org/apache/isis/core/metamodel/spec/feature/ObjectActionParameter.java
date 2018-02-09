@@ -19,13 +19,17 @@
 
 package org.apache.isis.core.metamodel.spec.feature;
 
+import javax.annotation.Nullable;
+
 import com.google.common.base.Function;
+import com.google.common.base.Predicate;
 
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.interactions.ActionArgValidityContext;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 /**
  * Analogous to {@link ObjectAssociation}.
@@ -154,5 +158,31 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
 
         private Functions(){}
 
+    }
+
+    public static class Predicates {
+        private Predicates(){}
+
+        public static class CollectionParameter implements Predicate<ObjectActionParameter> {
+
+            private final ObjectSpecification elementSpecification;
+
+            public CollectionParameter(final ObjectSpecification elementSpecification) {
+                this.elementSpecification = elementSpecification;
+            }
+
+            @Override
+            public boolean apply(@Nullable final ObjectActionParameter objectActionParameter) {
+                if (!(objectActionParameter instanceof OneToManyActionParameter)) {
+                    return false;
+                }
+
+                final OneToManyActionParameter otmap =
+                        (OneToManyActionParameter) objectActionParameter;
+                final ObjectSpecification specification = otmap.getSpecification();
+                final ObjectSpecification typeOfSpecification = this.elementSpecification;
+                return specification == typeOfSpecification;
+            }
+        }
     }
 }

@@ -280,6 +280,13 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(new ActionDefaultsFacetViaMethodFactory());
         addFactory(new ActionParameterDefaultsFacetViaMethodFactory());
 
+        //
+        // HMM.  Not possible to add this as a facet factory, because of
+        // inifinite loop (can't lookup actions of spec until fully processed).
+        // so, instead, calling as a one-off special-case in SpecificationLoader
+        //
+        //addFactory(new ActionParameterDefaultsFacetViaToggleBoxesFactory());
+
         // members in general
         
         addFactory(new NamedFacetStaticMethodFactory());

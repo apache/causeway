@@ -17,7 +17,15 @@
 
 package org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel;
 
+import java.util.List;
 import java.util.concurrent.Callable;
+
+import javax.annotation.Nullable;
+
+import com.google.common.base.Function;
+import com.google.common.base.Predicates;
+import com.google.common.collect.FluentIterable;
+import com.google.common.collect.ImmutableList;
 
 import org.apache.wicket.Application;
 import org.apache.wicket.MarkupContainer;
@@ -29,13 +37,16 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.facets.param.defaults.togglebox.ActionParameterDefaultsFacetViaToggleBoxes;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettingsAccessor;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
+import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
@@ -43,6 +54,7 @@ import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.FormExecutor;
 import org.apache.isis.viewer.wicket.model.models.InlinePromptContext;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.model.models.ToggledMementosProvider;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
@@ -72,7 +84,8 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
 
     protected ActionLink newLink(
             final String linkId,
-            final ObjectAction action) {
+            final ObjectAction action,
+            final ToggledMementosProvider toggledMementosProviderIfAny) {
 
         final ActionModel actionModel = ActionModel.create(this.targetEntityModel, action);
 
@@ -80,9 +93,58 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
                 new ActionLink(linkId, actionModel, action) {
                     private static final long serialVersionUID = 1L;
 
-                    protected void doOnClick(AjaxRequestTarget target) {
+                    protected void doOnClick(final AjaxRequestTarget target) {
 
-                        ActionLinkFactoryAbstract.this.onClick(this, target);
+                        if(toggledMementosProviderIfAny != null) {
+
+                            final PersistenceSession persistenceSession = getIsisSessionFactory()
+                                    .getCurrentSession().getPersistenceSession();
+                            final SpecificationLoader specificationLoader =
+                                    getIsisSessionFactory().getSpecificationLoader();
+
+                            final List<ObjectAdapterMemento> selectedMementos =
+                                    toggledMementosProviderIfAny.getToggles();
+
+                            final ImmutableList<Object> selectedPojos = FluentIterable.from(selectedMementos)
+                                    .transform(new Function<ObjectAdapterMemento, Object>() {
+                                        @Nullable @Override
+                                        public Object apply(@Nullable final ObjectAdapterMemento input) {
+                                            if(input == null) {
+                                                return null;
+                                            }
+                                            final ObjectAdapter objectAdapter = input.getObjectAdapter(
+                                                    AdapterManager.ConcurrencyChecking.NO_CHECK,
+                                                    persistenceSession, specificationLoader);
+                                            return objectAdapter != null ? objectAdapter.getObject() : null;
+                                        }
+                                    })
+                                    .filter(Predicates.notNull())
+                                    .toList();
+
+                            final ActionPrompt actionPrompt = ActionParameterDefaultsFacetViaToggleBoxes.withSelected(
+                                    selectedPojos,
+                                    new ActionParameterDefaultsFacetViaToggleBoxes.SerializableRunnable<ActionPrompt>() {
+                                        public ActionPrompt call() {
+                                            return performOnClick(target);
+                                        }
+                                    }
+                            );
+                            if(actionPrompt != null) {
+                                actionPrompt.setOnClose(new ActionPrompt.CloseHandler() {
+                                    @Override
+                                    public void close(final AjaxRequestTarget target) {
+                                        toggledMementosProviderIfAny.clearToggles(target);
+                                    }
+                                });
+                            }
+
+                        } else {
+                            performOnClick(target);
+                        }
+                    }
+
+                    private ActionPrompt performOnClick(final AjaxRequestTarget target) {
+                        return ActionLinkFactoryAbstract.this.onClick(this, target);
                     }
 
                 };
@@ -91,8 +153,10 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
         return link;
     }
 
-
-    private void onClick(
+    /**
+     * @return the prompt, if not inline prompt
+     */
+    private ActionPrompt onClick(
             final ActionLink actionLink,
             final AjaxRequestTarget target) {
 
@@ -134,6 +198,8 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
                 prompt.setPanel(actionParametersPanel, target);
                 actionParametersPanel.setActionPrompt(prompt);
                 prompt.showPrompt(target);
+
+                return prompt;
 
             } else {
 
@@ -202,6 +268,8 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
 
             target.add(scalarTypeContainer);
         }
+
+        return null;
     }
 
 

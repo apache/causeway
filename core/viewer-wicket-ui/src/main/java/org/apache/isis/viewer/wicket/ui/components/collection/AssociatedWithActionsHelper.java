@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.components.collection.bulk;
+package org.apache.isis.viewer.wicket.ui.components.collection;
 
 import java.io.Serializable;
 import java.util.Collections;
@@ -26,49 +26,55 @@ import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.filter.Filters;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
+import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
-import org.apache.isis.viewer.wicket.ui.components.collection.AssociatedWithActionsHelper;
+import org.apache.isis.viewer.wicket.ui.components.collection.bulk.BulkActionsHelper;
 
 /**
- * See also {@link AssociatedWithActionsHelper}.
+ * See also {@link BulkActionsHelper}.
  */
-public class BulkActionsHelper implements Serializable {
-
+public class AssociatedWithActionsHelper implements Serializable {
     private final EntityCollectionModel collectionModel;
 
-    private static final long serialVersionUID = 1L;
-
-    public BulkActionsHelper(final EntityCollectionModel collectionModel) {
+    public AssociatedWithActionsHelper(final EntityCollectionModel collectionModel) {
         this.collectionModel = collectionModel;
     }
 
-    public List<ObjectAction> getBulkActions(final IsisSessionFactory isisSessionFactory) {
+    public List<ObjectAction> getAssociatedActions(final IsisSessionFactory isisSessionFactory) {
 
-        if(collectionModel.isParented()) {
+        if(collectionModel.isStandalone()) {
             return Collections.emptyList();
         }
-
         final ObjectSpecification objectSpec = getObjectSpecification(isisSessionFactory);
 
         final List<ActionType> actionTypes = inferActionTypes(isisSessionFactory);
         List<ObjectAction> objectActions = objectSpec.getObjectActions(actionTypes, Contributed.INCLUDED, Filters.<ObjectAction>any());
 
         return FluentIterable.from(objectActions)
-                .filter(ObjectAction.Predicates.bulk())
+                .filter(ObjectAction.Predicates.associatedWithAndWithCollectionParameterFor(
+                            collectionModel.getName(),
+                            collectionModel.getTypeOfSpecification()))
                 .toList();
     }
 
     private ObjectSpecification getObjectSpecification(final IsisSessionFactory isisSessionFactory) {
-        return collectionModel.getTypeOfSpecification();
+        final ObjectAdapterMemento parentOam = collectionModel.getParentObjectAdapterMemento();
+        final ObjectAdapter parentAdapter = parentOam.getObjectAdapter(
+                                                AdapterManager.ConcurrencyChecking.NO_CHECK,
+                                                isisSessionFactory.getCurrentSession().getPersistenceSession(),
+                                                isisSessionFactory.getSpecificationLoader());
+        return parentAdapter.getSpecification();
     }
 
-    private List<ActionType> inferActionTypes(final IsisSessionFactory isisSessionFactory) {
+    private static List<ActionType> inferActionTypes(final IsisSessionFactory isisSessionFactory) {
         final List<ActionType> actionTypes = Lists.newArrayList();
         actionTypes.add(ActionType.USER);
         final DeploymentCategory deploymentCategory = isisSessionFactory.getDeploymentCategory();
