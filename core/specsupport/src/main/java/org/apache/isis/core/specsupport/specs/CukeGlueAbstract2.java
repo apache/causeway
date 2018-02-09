@@ -22,7 +22,8 @@ import org.apache.isis.core.runtime.headless.HeadlessAbstract;
  * Base class for BDD spec glue.
  *
  * <p>
- *     Note that there also needs to be at least one spec glue that inherits from{@link CukeGlueBootstrappingAbstract}.
+ *     Note that there also needs to be at least one spec glue that performs the bootstrapping.
+ *     inherits from{@link CukeGlueBootstrappingAbstract}.
  * </p>
  */
 public abstract class CukeGlueAbstract2 extends HeadlessAbstract {
