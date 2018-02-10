@@ -154,6 +154,13 @@ body {
     border: none;
 }
 
+/*
+.collectionContentsAsAjaxTablePanel table.contents .uuidPanel,
+.collectionContentsAsAjaxTablePanel table.contents .javaSqlTimestampPanel {
+    font-family: monospace;
+}
+*/
+
 .collectionContentsAsAjaxTablePanel table.contents .javaMathBigDecimalPanel,
 .collectionContentsAsAjaxTablePanel table.contents .javaMathBigIntegerPanel,
 .collectionContentsAsAjaxTablePanel table.contents .bytePanel,
@@ -163,6 +170,7 @@ body {
 .collectionContentsAsAjaxTablePanel table.contents .floatPanel,
 .collectionContentsAsAjaxTablePanel table.contents .doublePanel {
     text-align: right;
+/*    font-family: monospace;*/
 }
 
 .collectionContentsAsAjaxTablePanel table.contents tbody td,

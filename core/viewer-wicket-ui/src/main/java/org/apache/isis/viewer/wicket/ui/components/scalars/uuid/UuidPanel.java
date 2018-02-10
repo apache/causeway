@@ -51,7 +51,7 @@ public class UuidPanel extends ScalarPanelTextFieldAbstract<UUID> {
 
     @Override
     protected String getScalarPanelType() {
-        return "javaMathBigDecimalPanel";
+        return "uuidPanel";
     }
 }
 
