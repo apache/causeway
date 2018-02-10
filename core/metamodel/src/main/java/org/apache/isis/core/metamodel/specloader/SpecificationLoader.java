@@ -42,7 +42,6 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
-import org.apache.isis.core.metamodel.facets.param.defaults.togglebox.ActionParameterDefaultsFacetViaToggleBoxesFactory;
 import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
@@ -52,6 +51,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
+import org.apache.isis.core.metamodel.specloader.postprocessor.PostProcessor;
 import org.apache.isis.core.metamodel.specloader.specimpl.FacetedMethodsBuilderContext;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
@@ -99,6 +99,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
     private final MetaModelValidator metaModelValidator;
     private final SpecificationCacheDefault cache = new SpecificationCacheDefault();
     private final List<LayoutMetadataReader> layoutMetadataReaders;
+    private final PostProcessor postProcessor;
 
     public SpecificationLoader(
             final IsisConfiguration configuration,
@@ -114,6 +115,8 @@ public class SpecificationLoader implements ApplicationScopedComponent {
         this.metaModelValidator = metaModelValidator;
 
         this.facetProcessor = new FacetProcessor(programmingModel);
+        this.postProcessor = new PostProcessor(programmingModel, servicesInjector);
+
         this.layoutMetadataReaders = layoutMetadataReaders;
     }
 
@@ -151,6 +154,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
         // initialize subcomponents
         programmingModel.init();
         facetProcessor.init();
+        postProcessor.init();
         metaModelValidator.init(this);
 
         loadSpecificationsForServices();
@@ -457,24 +461,15 @@ public class SpecificationLoader implements ApplicationScopedComponent {
         specSpi.introspectTypeHierarchyAndMembers();
         specSpi.updateFromFacetValues();
         specSpi.setIntrospectionState(ObjectSpecificationAbstract.IntrospectionState.INTROSPECTED);
-
     }
 
     public void postProcess() {
 
-        //
-        // HMM.  Not possible to add this as a facet factory, because of
-        // inifinite loop (can't lookup actions of spec until fully processed).
-        // so, instead, calling as a one-off special-case in SpecificationLoader
-        //
-        final ActionParameterDefaultsFacetViaToggleBoxesFactory factory =
-                new ActionParameterDefaultsFacetViaToggleBoxesFactory();
-        factory.setServicesInjector(getServicesInjector());
-
         final Collection<ObjectSpecification> specs = allSpecifications();
         for (final ObjectSpecification spec : specs) {
-            factory.postProcess(spec);
+            postProcessor.postProcess(spec);
         }
+
     }
 
     //endregion

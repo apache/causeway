@@ -17,6 +17,10 @@
 
 package org.apache.isis.progmodels.dflt;
 
+import java.util.List;
+
+import com.google.common.collect.Lists;
+
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facets.actions.action.ActionAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.actions.action.ActionChoicesForCollectionParameterFacetFactory;
@@ -133,6 +137,7 @@ import org.apache.isis.core.metamodel.facets.param.choices.method.ActionChoicesF
 import org.apache.isis.core.metamodel.facets.param.choices.methodnum.ActionParameterChoicesFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.param.defaults.fromtype.ActionParameterDefaultFacetDerivedFromTypeFactory;
 import org.apache.isis.core.metamodel.facets.param.defaults.methodnum.ActionParameterDefaultsFacetViaMethodFactory;
+import org.apache.isis.core.metamodel.facets.param.defaults.togglebox.ActionParameterDefaultsFacetViaToggleBoxesPostProcessor;
 import org.apache.isis.core.metamodel.facets.param.describedas.annotderived.DescribedAsFacetOnParameterAnnotationElseDerivedFromTypeFactory;
 import org.apache.isis.core.metamodel.facets.param.layout.ParameterLayoutFacetFactory;
 import org.apache.isis.core.metamodel.facets.param.mandatory.dflt.MandatoryFacetOnParametersDefaultFactory;
@@ -205,6 +210,7 @@ import org.apache.isis.core.metamodel.facets.value.timestamp.TimeStampValueFacet
 import org.apache.isis.core.metamodel.facets.value.timestampsql.JavaSqlTimeStampValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.url.URLValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.uuid.UUIDValueFacetUsingSemanticsProviderFactory;
+import org.apache.isis.core.metamodel.progmodel.ObjectSpecificationPostProcessor;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelAbstract;
 
 public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract {
@@ -279,13 +285,6 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(new ActionParameterAutoCompleteFacetViaMethodFactory());
         addFactory(new ActionDefaultsFacetViaMethodFactory());
         addFactory(new ActionParameterDefaultsFacetViaMethodFactory());
-
-        //
-        // HMM.  Not possible to add this as a facet factory, because of
-        // inifinite loop (can't lookup actions of spec until fully processed).
-        // so, instead, calling as a one-off special-case in SpecificationLoader
-        //
-        //addFactory(new ActionParameterDefaultsFacetViaToggleBoxesFactory());
 
         // members in general
         
@@ -546,5 +545,12 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(new TranslationFacetFactory());
 
         addFactory(new ViewModelSemanticCheckingFacetFactory());
+    }
+
+    @Override
+    public List<ObjectSpecificationPostProcessor> getPostProcessors() {
+        return Lists.<ObjectSpecificationPostProcessor>newArrayList(
+            new ActionParameterDefaultsFacetViaToggleBoxesPostProcessor()
+        );
     }
 }

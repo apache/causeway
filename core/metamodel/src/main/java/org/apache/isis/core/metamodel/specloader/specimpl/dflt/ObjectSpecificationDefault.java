@@ -176,10 +176,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
 
 
 
-        if(isNotIntrospected()) {
-            facetedMethodsBuilder.introspectClassPostProcessing(metadataProperties);    
-        }
-        
+
         if(isNotIntrospected()) {
             updateFromFacetValues();    
         }

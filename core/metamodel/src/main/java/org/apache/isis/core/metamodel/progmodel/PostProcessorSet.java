@@ -19,10 +19,10 @@
 
 package org.apache.isis.core.metamodel.progmodel;
 
-import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
+import java.util.List;
 
-public interface ProgrammingModel extends FacetFactorySet, PostProcessorSet, MetaModelValidatorRefiner {
+public interface PostProcessorSet {
 
-    void init();
+    List<ObjectSpecificationPostProcessor> getPostProcessors();
 
 }

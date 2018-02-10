@@ -576,18 +576,6 @@ public class FacetedMethodsBuilder {
 
 
     // ////////////////////////////////////////////////////////////////////////////
-    // introspect class post processing
-    // ////////////////////////////////////////////////////////////////////////////
-
-    public void introspectClassPostProcessing(final Properties metadataProperties) {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("introspecting {0}: class-level post-processing", getClassName());
-        }
-
-        getFacetProcessor().processPost(introspectedClass, metadataProperties, methodRemover, spec);
-    }
-
-    // ////////////////////////////////////////////////////////////////////////////
     // Helpers for finding and removing methods.
     // ////////////////////////////////////////////////////////////////////////////
 

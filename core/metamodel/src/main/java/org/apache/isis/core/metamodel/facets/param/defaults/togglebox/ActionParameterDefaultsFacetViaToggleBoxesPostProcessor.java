@@ -30,9 +30,9 @@ import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
-import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.progmodel.ObjectSpecificationPostProcessor;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.services.ServicesInjectorAware;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
@@ -43,30 +43,12 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 /**
  * Sets up all the {@link Facet}s for an action in a single shot.
  */
-public class ActionParameterDefaultsFacetViaToggleBoxesFactory extends FacetFactoryAbstract {
+public class ActionParameterDefaultsFacetViaToggleBoxesPostProcessor implements ObjectSpecificationPostProcessor,
+        ServicesInjectorAware {
 
     private DeploymentCategoryProvider deploymentCategoryProvider;
 
-    /**
-     * Note that the {@link Facet}s registered are the generic ones from
-     * noa-architecture (where they exist)
-     */
-    public ActionParameterDefaultsFacetViaToggleBoxesFactory() {
-        super(ImmutableList.of(FeatureType.OBJECT_POST_PROCESSING));
-    }
-
     @Override
-    public void process(final ProcessClassContext processClassContext) {
-        final ObjectSpecification objectSpecification = getSpecificationLoader()
-                .loadSpecification(processClassContext.getCls());
-        postProcess(objectSpecification);
-
-    }
-
-    /**
-     * NOT API.
-     * Called as special case in SpecificationLoader.
-     */
     public void postProcess(final ObjectSpecification objectSpecification) {
 
         // all the actions of this type
@@ -117,11 +99,8 @@ public class ActionParameterDefaultsFacetViaToggleBoxesFactory extends FacetFact
         return actionTypes;
     }
 
-
     @Override
     public void setServicesInjector(final ServicesInjector servicesInjector) {
-        super.setServicesInjector(servicesInjector);
         deploymentCategoryProvider = servicesInjector.getDeploymentCategoryProvider();
     }
-
 }
