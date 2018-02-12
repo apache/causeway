@@ -37,7 +37,7 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.core.metamodel.facets.param.defaults.togglebox.ActionParameterDefaultsFacetViaToggleBoxes;
+import org.apache.isis.core.metamodel.postprocessors.param.ActionParameterDefaultsFacetFromParentedCollection;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -121,9 +121,9 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
                                     .filter(Predicates.notNull())
                                     .toList();
 
-                            final ActionPrompt actionPrompt = ActionParameterDefaultsFacetViaToggleBoxes.withSelected(
+                            final ActionPrompt actionPrompt = ActionParameterDefaultsFacetFromParentedCollection.withSelected(
                                     selectedPojos,
-                                    new ActionParameterDefaultsFacetViaToggleBoxes.SerializableRunnable<ActionPrompt>() {
+                                    new ActionParameterDefaultsFacetFromParentedCollection.SerializableRunnable<ActionPrompt>() {
                                         public ActionPrompt call() {
                                             return performOnClick(target);
                                         }

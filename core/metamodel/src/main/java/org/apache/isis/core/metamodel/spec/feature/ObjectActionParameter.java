@@ -163,6 +163,23 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
     public static class Predicates {
         private Predicates(){}
 
+        /**
+         * A predicate for action parameters that checks that the parameter collection element type
+         * is the same as assignable (that is, the same or a supertype of, supporting co-variance) the
+         * {@link ObjectSpecification element type} provided in the constructor.
+         *
+         * <p>
+         *     For example, a parented collection of <tt>LeaseTerm</tt>s provides an elementSpec of <tt>LeaseTerm</tt>
+         *     into the constructor.  An action with signature <tt>removeTerms(List&lt;LeaseTerm>)</tt> would match on
+         *     its (first) parameter.
+         * </p>
+         *
+         * <p>
+         *     For example, a parented collection of <tt>LeaseTermForServiceCharge</tt>s provides an elementSpec
+         *     of <tt>LeaseTermForServiceCharge</tt> into the constructor.  An action with signature
+         *     <tt>removeTerms(List&lt;LeaseTerm>)</tt> would match on its (first) parameter.
+         * </p>
+         */
         public static class CollectionParameter implements Predicate<ObjectActionParameter> {
 
             private final ObjectSpecification elementSpecification;
@@ -179,9 +196,39 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
 
                 final OneToManyActionParameter otmap =
                         (OneToManyActionParameter) objectActionParameter;
-                final ObjectSpecification specification = otmap.getSpecification();
-                final ObjectSpecification typeOfSpecification = this.elementSpecification;
-                return specification == typeOfSpecification;
+                final ObjectSpecification paramElementSpecification = otmap.getSpecification();
+                return this.elementSpecification.isOfType(paramElementSpecification);
+            }
+        }
+
+        /**
+         * A predicate for action parameters that checks that the parameter collection element type
+         * is exactly the same as the {@link ObjectSpecification element type} (no co/contra-variance) provided in the constructor.
+         *
+         * <p>
+         *     For example, a parented collection of <tt>LeaseTerm</tt>s provides an elementSpec of <tt>LeaseTerm</tt>
+         *     into the constructor.  An action with signature <tt>addTerm(LeaseTerm)</tt> would match on
+         *     its (first) parameter.
+         * </p>
+         */
+        public static class ScalarParameter implements Predicate<ObjectActionParameter> {
+
+            private final ObjectSpecification specification;
+
+            public ScalarParameter(final ObjectSpecification specification) {
+                this.specification = specification;
+            }
+
+            @Override
+            public boolean apply(@Nullable final ObjectActionParameter objectActionParameter) {
+                if (!(objectActionParameter instanceof OneToOneActionParameter)) {
+                    return false;
+                }
+
+                final OneToOneActionParameter otoap =
+                        (OneToOneActionParameter) objectActionParameter;
+                final ObjectSpecification paramSecification = otoap.getSpecification();
+                return paramSecification == this.specification;
             }
         }
     }

@@ -19,7 +19,12 @@ The table below summarizes the annotation's attributes.
 
 
 |xref:../rgant/rgant.adoc#_rgant-Action_associateWith[`associateWith()`]
-|_name:sequence_ +
+|_memberId_ +
+("")
+|associates an action with another property or collection of the action.
+
+|xref:../rgant/rgant.adoc#_rgant-Action_associateWith[`associateWith-Sequence()`]
+|_memberId_ +
 ("")
 |associates an action with another property or collection of the action.
 
@@ -65,7 +70,9 @@ post-execute).
 |xref:../rgant/rgant.adoc#_rgant-Action_invokeOn[`invokeOn()`]
 |`OBJECT_ONLY`, `COLLECTION_ONLY`, `OBJECT_AND_COLLECTION` +
 (`OBJECT_ONLY`)
-|whether an action can be invoked on a single object and/or on many objects in a collection.
+|(deprecated - use view models and associated actions instead).
+
+whether an action can be invoked on a single object and/or on many objects in a collection.
 
 Currently this is only supported for no-arg actions.
 
@@ -78,7 +85,9 @@ Currently this is only supported for no-arg actions.
 |`publishing-` +
 `PayloadFactory()`
 |subtype of `PublishingPayloadFactory-` `ForAction` (none)
-|specifies that a custom implementation of `PublishingPayloadFactoryForAction` be used to create the (payload of the) published event representing the action invocation
+|(deprecated).
+
+specifies that a custom implementation of `PublishingPayloadFactoryForAction` be used to create the (payload of the) published event representing the action invocation
 
 |xref:../rgant/rgant.adoc#_rgant-Action_restrictTo[`restrictTo()`]
 |`NO_RESTRICTIONS`,`PROTOTYPING` +

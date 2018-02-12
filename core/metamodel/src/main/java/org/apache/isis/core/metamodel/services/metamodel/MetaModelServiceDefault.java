@@ -92,6 +92,7 @@ public class MetaModelServiceDefault implements MetaModelService5 {
         // ensure the spec is fully rebuilt
         objectSpecification.getObjectActions(Contributed.INCLUDED);
         objectSpecification.getAssociations(Contributed.INCLUDED);
+        specificationLookup.postProcess(objectSpecification);
     }
 
     // //////////////////////////////////////

@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.param.defaults.togglebox;
+package org.apache.isis.core.metamodel.postprocessors.param;
 
 import java.util.List;
 
@@ -26,27 +26,36 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.filter.Filters;
+import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
+import org.apache.isis.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet;
+import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
+import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet;
 import org.apache.isis.core.metamodel.progmodel.ObjectSpecificationPostProcessor;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.ServicesInjectorAware;
+import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 /**
  * Sets up all the {@link Facet}s for an action in a single shot.
  */
-public class ActionParameterDefaultsFacetViaToggleBoxesPostProcessor implements ObjectSpecificationPostProcessor,
+public class ActionCollectionParameterDefaultsAndChoicesPostProcessor implements ObjectSpecificationPostProcessor,
         ServicesInjectorAware {
 
     private DeploymentCategoryProvider deploymentCategoryProvider;
+    private SpecificationLoader specificationLoader;
+    private AuthenticationSessionProvider authenticationSessionProvider;
+    private PersistenceSessionServiceInternal adapterManager;
 
     @Override
     public void postProcess(final ObjectSpecification objectSpecification) {
@@ -66,41 +75,76 @@ public class ActionParameterDefaultsFacetViaToggleBoxesPostProcessor implements 
             //
             // eg Order#getItems() and Order#removeItems(List<OrderItem>)
             //
-            final String collectionId = otma.getId();
             final ObjectSpecification specification = otma.getSpecification();
-            final ImmutableList<ObjectAction> actions = FluentIterable.from(objectActions)
-                    .filter(
-                        ObjectAction.Predicates.associatedWithAndWithCollectionParameterFor(collectionId, specification))
-                    .toList();
 
-            //
-            // ... for the matching actions, install the default facet populated using toggle boxes
-            //
             final ObjectActionParameter.Predicates.CollectionParameter whetherCollectionParamOfType =
                     new ObjectActionParameter.Predicates.CollectionParameter(specification);
-            for (final ObjectAction action : actions) {
+
+            for (final ObjectAction action : objectActions) {
+
                 final List<ObjectActionParameter> parameters = action.getParameters();
+
+                // for collection parameters, install an defaults facet (if there isn't one already)
+                // this will cause the UI to render the collection with toggleboxes
+                // with a thread-local used to provide the selected objects
                 final ImmutableList<ObjectActionParameter> collectionParams = FluentIterable.from(parameters)
                         .filter(whetherCollectionParamOfType).toList();
                 for (final ObjectActionParameter collectionParam : collectionParams) {
-                    FacetUtil.addFacet(new ActionParameterDefaultsFacetViaToggleBoxes(collectionParam));
+                    final ActionParameterDefaultsFacet defaultsFacet = collectionParam
+                            .getFacet(ActionParameterDefaultsFacet.class);
+                    if (existsAndNotDerived(defaultsFacet)) {
+                        // don't overwrite existing facet
+                    } else {
+                        FacetUtil.addFacet(new ActionParameterDefaultsFacetFromParentedCollection(collectionParam));
+                    }
+                }
+
+                // for both scalar and collection parameters, install a choices facet (if there isn't one already)
+                // using the associated collection for its values.
+                for (final ObjectActionParameter scalarOrCollectionParam : parameters) {
+
+                    final ActionParameterChoicesFacet choicesFacet = scalarOrCollectionParam
+                            .getFacet(ActionParameterChoicesFacet.class);
+                    final ActionParameterAutoCompleteFacet autoCompleteFacet = scalarOrCollectionParam
+                            .getFacet(ActionParameterAutoCompleteFacet.class);
+                    if (existsAndNotDerived(choicesFacet) || existsAndNotDerived(autoCompleteFacet)) {
+                        // don't overwrite existing choices or autoComplete facet
+                    } else {
+                        FacetUtil.addFacet(
+                                new ActionParameterChoicesFacetFromParentedCollection(
+                                        scalarOrCollectionParam, otma,
+                                        getDeploymentCategory(), specificationLoader,
+                                        authenticationSessionProvider, adapterManager ));
+                    }
                 }
             }
         }
     }
 
+    private static boolean existsAndNotDerived(final Facet facet) {
+        return facet != null && !facet.isNoop() && !facet.isNoop();
+    }
+
     private List<ActionType> inferActionTypes() {
         final List<ActionType> actionTypes = Lists.newArrayList();
         actionTypes.add(ActionType.USER);
-        final DeploymentCategory deploymentCategory = deploymentCategoryProvider.getDeploymentCategory();
+        final DeploymentCategory deploymentCategory = getDeploymentCategory();
         if ( !deploymentCategory.isProduction()) {
             actionTypes.add(ActionType.PROTOTYPE);
         }
         return actionTypes;
     }
 
+    private DeploymentCategory getDeploymentCategory() {
+        return deploymentCategoryProvider.getDeploymentCategory();
+    }
+
     @Override
     public void setServicesInjector(final ServicesInjector servicesInjector) {
         deploymentCategoryProvider = servicesInjector.getDeploymentCategoryProvider();
+        specificationLoader = servicesInjector.getSpecificationLoader();
+        authenticationSessionProvider = servicesInjector.getAuthenticationSessionProvider();
+        adapterManager = servicesInjector.getPersistenceSessionServiceInternal();
     }
+
 }

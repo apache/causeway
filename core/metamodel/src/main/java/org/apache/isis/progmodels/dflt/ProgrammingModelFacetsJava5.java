@@ -137,7 +137,7 @@ import org.apache.isis.core.metamodel.facets.param.choices.method.ActionChoicesF
 import org.apache.isis.core.metamodel.facets.param.choices.methodnum.ActionParameterChoicesFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.param.defaults.fromtype.ActionParameterDefaultFacetDerivedFromTypeFactory;
 import org.apache.isis.core.metamodel.facets.param.defaults.methodnum.ActionParameterDefaultsFacetViaMethodFactory;
-import org.apache.isis.core.metamodel.facets.param.defaults.togglebox.ActionParameterDefaultsFacetViaToggleBoxesPostProcessor;
+import org.apache.isis.core.metamodel.postprocessors.param.ActionCollectionParameterDefaultsAndChoicesPostProcessor;
 import org.apache.isis.core.metamodel.facets.param.describedas.annotderived.DescribedAsFacetOnParameterAnnotationElseDerivedFromTypeFactory;
 import org.apache.isis.core.metamodel.facets.param.layout.ParameterLayoutFacetFactory;
 import org.apache.isis.core.metamodel.facets.param.mandatory.dflt.MandatoryFacetOnParametersDefaultFactory;
@@ -550,7 +550,7 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
     @Override
     public List<ObjectSpecificationPostProcessor> getPostProcessors() {
         return Lists.<ObjectSpecificationPostProcessor>newArrayList(
-            new ActionParameterDefaultsFacetViaToggleBoxesPostProcessor()
+            new ActionCollectionParameterDefaultsAndChoicesPostProcessor()
         );
     }
 }

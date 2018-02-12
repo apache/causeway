@@ -8,6 +8,7 @@
 
 
 The `associateWith` attribute allows an action to be associated with other properties or collections of the same domain object.
+The optional `associateWithSequence` attribute specifies the order of the action in the UI.
 
 For example, an `Order` could have a collection of ``OrderItem``s, and might provide actions to add and remove items:
 
@@ -18,10 +19,10 @@ public class Order {
     @Collection
     SortedSet<OrderItem> getItems() { ... }
 
-    @Action(associateWith="items:1")
+    @Action(associateWith="items", associateWithSequence="1")
     public Order addItem(Product p, int quantity) { ... }
 
-    @Action(associateWith="items:2")
+    @Action(associateWith="items", associateWithSequence="2")
     public Order removeItem(OrderItem item) { ... }
     ...
 }
@@ -37,9 +38,15 @@ The same effect can be accomplished using `@MemberOrder` or with the `.layout.xm
 ====
 
 
-== Collection Parameters
+== Inferred Defaults and Choices
 
-If the action that has collection parameters is associated with a collection, then the Wicket viewer will render the collection with checkboxes, and these checkboxes can be used to select the items of the action parameter.
+If an action is associated with a collection, then any scalar or collection parameter of the action that is the same type as that collection will automatically have a list of choices provided for it, being the items of the associated collection.
+
+This is only done provided that there isn't already an explicit `choicesNXxx()` or `autoCompleteNXxx()` supporting method.
+However, this list of choices _does_ take priority over any choices that are inferred from the parameter type itself (as per either an `@DomainObject(autoCompleteRepository=...)` or `@DomainObject(bounded=...)`).
+
+In addition, if the action has a collection parameter of the same type as the associated collection, then the Wicket viewer will render the collection with checkboxes.
+The user can use these checkboxes can be used to select the items of the action parameter.
 
 For example, suppose we have a "removeItems(...)" action:
 
@@ -52,9 +59,8 @@ public class Order {
 
     ...
 
-    @Action(associateWith="items:2")
+    @Action(associateWith="items", associateWithSequence="2")
     public Order removeItems(SortedSet<OrderItem> items) { ... }
-    public SortedSet<OrderItem> choices0RemoveItems() { return getItems(); }
 }
 ----
 

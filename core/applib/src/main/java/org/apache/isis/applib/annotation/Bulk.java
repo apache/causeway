@@ -26,7 +26,9 @@ import java.util.List;
 import javax.enterprise.context.RequestScoped;
 
 /**
- * @deprecated - use {@link Action#invokeOn()} instead.
+ * Superceded by {@link Action#invokeOn()}.
+ *
+ * @deprecated - instead of bulk actions, use view models with collection parameters and {@link Action#associateWith()}.
  */
 @Inherited
 @Target({ ElementType.METHOD })
@@ -35,29 +37,39 @@ import javax.enterprise.context.RequestScoped;
 public @interface Bulk {
 
     /**
-     * @deprecated - see {@link InvokeOn}
+     * Superceded by {@link InvokeOn}
+     *
+     * @deprecated - instead of bulk actions, use view models with collection parameters and {@link Action#associateWith()}.
      */
     @Deprecated
     public static enum AppliesTo {
         /**
-         * @deprecated - see {@link InvokeOn#OBJECT_AND_COLLECTION}
+         * Superceded by {@link InvokeOn#OBJECT_AND_COLLECTION}
+         *
+         * @deprecated - instead of bulk actions, use view models with collection parameters and {@link Action#associateWith()}.
          */
         @Deprecated
         BULK_AND_REGULAR,
         /**
-         * @deprecated - see {@link InvokeOn#COLLECTION_ONLY}
+         * Superceded by {@link InvokeOn#COLLECTION_ONLY}
+         *
+         * @deprecated - instead of bulk actions, use view models with collection parameters and {@link Action#associateWith()}.
          */
         @Deprecated
         BULK_ONLY,
         /**
-         * @deprecated - see {@link InvokeOn#OBJECT_ONLY}
+         * Superceded by {@link InvokeOn#OBJECT_ONLY}
+         *
+         * @deprecated - instead of bulk actions, use view models with collection parameters and {@link Action#associateWith()}.
          */
         @Deprecated
         REGULAR_ONLY
     }
 
     /**
-     * @deprecated - see {@link Action#invokeOn()}.
+     * Superceded by {@link Action#invokeOn()}.
+     *
+     * @deprecated - instead of bulk actions, use view models with collection parameters and {@link Action#associateWith()}.
      */
     @Deprecated
     AppliesTo value() default AppliesTo.BULK_AND_REGULAR;
@@ -66,7 +78,9 @@ public @interface Bulk {
     // //////////////////////////////////////
 
     /**
-     * @deprecated - see {@link org.apache.isis.applib.services.actinvoc.ActionInvocationContext}.
+     * Superceded by {@link org.apache.isis.applib.services.actinvoc.ActionInvocationContext}.
+     *
+     * @deprecated - instead of bulk actions, use view models with collection parameters and {@link Action#associateWith()}.
      */
     @Deprecated
     @DomainService(
@@ -90,17 +104,23 @@ public @interface Bulk {
         // //////////////////////////////////////
 
         /**
-         * @deprecated - use {@link InvokedOn} instead.
+         * Superceded by {@link InvokedOn} instead.
+         *
+         * @deprecated - instead of bulk actions, use view models with collection parameters and {@link Action#associateWith()}.
          */
         @Deprecated
         public static enum InvokedAs {
             /**
-             * @deprecated - use {@link InvokedOn#COLLECTION} instead.
+             * Superceded by {@link InvokedOn#COLLECTION} instead.
+             *
+             * @deprecated - instead of bulk actions, use view models with collection parameters and {@link Action#associateWith()}.
              */
             @Deprecated
             BULK,
             /**
-             * @deprecated - use {@link InvokedOn#OBJECT} instead.
+             * Superceded by {@link InvokedOn#OBJECT} instead.
+             *
+             * @deprecated - instead of bulk actions, use view models with collection parameters and {@link Action#associateWith()}.
              */
             @Deprecated
             REGULAR;
@@ -138,7 +158,9 @@ public @interface Bulk {
 
 
         /**
-         * @deprecated - see {@link org.apache.isis.applib.services.actinvoc.ActionInvocationContext#onObject(Object)}.
+         * Superceded by  {@link org.apache.isis.applib.services.actinvoc.ActionInvocationContext#onObject(Object)}.
+         *
+         * @deprecated - instead of bulk actions, use view models with collection parameters and {@link Action#associateWith()}.
          */
         @Deprecated
         public static InteractionContext regularAction(Object domainObject) {
@@ -146,7 +168,9 @@ public @interface Bulk {
         }
 
         /**
-         * @deprecated - see {@link org.apache.isis.applib.services.actinvoc.ActionInvocationContext#onCollection(Object...)}.
+         * Superceded by {@link org.apache.isis.applib.services.actinvoc.ActionInvocationContext#onCollection(Object...)}.
+         *
+         * @deprecated - instead of bulk actions, use view models with collection parameters and {@link Action#associateWith()}.
          */
         @Deprecated
         public static InteractionContext bulkAction(Object... domainObjects) {
@@ -154,7 +178,9 @@ public @interface Bulk {
         }
 
         /**
-         * @deprecated - see {@link org.apache.isis.applib.services.actinvoc.ActionInvocationContext#onCollection(java.util.List)}.
+         * Superceded by  {@link org.apache.isis.applib.services.actinvoc.ActionInvocationContext#onCollection(java.util.List)}.
+         *
+         * @deprecated - instead of bulk actions, use view models with collection parameters and {@link Action#associateWith()}.
          */
         @Deprecated
         public static InteractionContext bulkAction(List<Object> domainObjects) {
@@ -170,7 +196,9 @@ public @interface Bulk {
         private int index;
 
         /**
-         * @deprecated - see {@link org.apache.isis.applib.services.actinvoc.ActionInvocationContext ()}.
+         * Superceded by {@link org.apache.isis.applib.services.actinvoc.ActionInvocationContext ()}.
+         *
+         * @deprecated - instead of bulk actions, use view models with collection parameters and {@link Action#associateWith()}.
          */
         @Deprecated
         public InteractionContext() {
@@ -220,6 +248,8 @@ public @interface Bulk {
          * Whether this particular {@link org.apache.isis.applib.annotation.Bulk.InteractionContext} was applied as a {@link InvokedOn#COLLECTION bulk} action
          * (against each domain object in a list of domain objects) or as a {@link InvokedOn#OBJECT regular}
          * action (against a single domain object).
+         *
+         * @deprecated - instead of bulk actions, use view models with collection parameters and {@link Action#associateWith()}.
          */
         @Deprecated
         @Programmatic
@@ -229,7 +259,10 @@ public @interface Bulk {
 
         /**
          * The list of domain objects which are being acted upon.
+         *
+         * @deprecated - instead of bulk actions, use view models with collection parameters and {@link Action#associateWith()}.
          */
+        @Deprecated
         @Programmatic
         public List<Object> getDomainObjects() {
             return domainObjects;
@@ -237,7 +270,10 @@ public @interface Bulk {
 
         /**
          * The number of {@link #domainObjects domain objects} being acted upon.
+         *
+         * @deprecated - instead of bulk actions, use view models with collection parameters and {@link Action#associateWith()}.
          */
+        @Deprecated
         @Programmatic
         public int getSize() {
             return domainObjects.size();
@@ -248,7 +284,10 @@ public @interface Bulk {
          *
          * <p>
          * Will be a value in range [0, {@link #getSize() size}).
+         *
+         * @deprecated - instead of bulk actions, use view models with collection parameters and {@link Action#associateWith()}.
          */
+        @Deprecated
         @Programmatic
         public int getIndex() {
             return index;
@@ -256,7 +295,10 @@ public @interface Bulk {
 
         /**
          * Whether this object being acted upon is the first such.
+         *
+         * @deprecated - instead of bulk actions, use view models with collection parameters and {@link Action#associateWith()}.
          */
+        @Deprecated
         @Programmatic
         public boolean isFirst() {
             return this.index == 0;
@@ -264,7 +306,10 @@ public @interface Bulk {
 
         /**
          * Whether this object being acted upon is the last such.
+         *
+         * @deprecated - instead of bulk actions, use view models with collection parameters and {@link Action#associateWith()}.
          */
+        @Deprecated
         @Programmatic
         public boolean isLast() {
             return this.index == (getSize()-1);

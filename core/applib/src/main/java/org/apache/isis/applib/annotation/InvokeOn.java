@@ -20,11 +20,17 @@ package org.apache.isis.applib.annotation;
 
 /**
  * Whether an action can be invoked on a single object and/or on many objects in a collection.
+ *
+ * @deprecated - instead of bulk actions, use view models with collection parameters and {@link Action#associateWith()}.
  */
+@Deprecated
 public enum InvokeOn {
     /**
      * The action can only be invoked on a single object.  This is the default.
+     *
+     * @deprecated - instead of bulk actions, use view models with collection parameters and {@link Action#associateWith()}.
      */
+    @Deprecated
     OBJECT_ONLY,
     /**
      * The action can be invoked either on a single object or on a collection of objects (each in turn).
@@ -32,7 +38,10 @@ public enum InvokeOn {
      * <p>
      *     Corresponds to (the deprecated) <code>@Bulk(appliesTo=BULK_AND_REGULAR)</code> annotation.
      * </p>
+     *
+     * @deprecated - instead of bulk actions, use view models with collection parameters and {@link Action#associateWith()}.
      */
+    @Deprecated
     OBJECT_AND_COLLECTION,
     /**
      * The action is intended to be invoked only on a collection of objects (each in turn).
@@ -40,7 +49,10 @@ public enum InvokeOn {
      * <p>
      *     Corresponds to (the deprecated) <code>@Bulk(appliesTo=BULK_ONLY)</code> annotation.
      * </p>
+     *
+     * @deprecated - instead of bulk actions, use view models with collection parameters and {@link Action#associateWith()}.
      */
+    @Deprecated
     COLLECTION_ONLY;
 
     @Deprecated

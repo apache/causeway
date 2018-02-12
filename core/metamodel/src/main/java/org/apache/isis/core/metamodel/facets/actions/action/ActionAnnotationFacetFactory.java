@@ -470,9 +470,9 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract
         final Action action = Annotations.getAnnotation(method, Action.class);
         if (action != null) {
             final String associateWith = action.associateWith();
-            final NameAndSequence ns = NameAndSequence.parse(associateWith);
-            if(ns != null) {
-                memberOrderFacet = new MemberOrderFacetForActionAnnotation(ns.name, ns.sequence, holder);
+            if(!Strings.isNullOrEmpty(associateWith)) {
+                final String associateWithSequence = action.associateWithSequence();
+                memberOrderFacet = new MemberOrderFacetForActionAnnotation(associateWith, associateWithSequence, holder);
             }
         }
 

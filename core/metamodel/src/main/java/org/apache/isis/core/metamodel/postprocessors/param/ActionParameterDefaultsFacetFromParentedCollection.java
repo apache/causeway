@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.param.defaults.togglebox;
+package org.apache.isis.core.metamodel.postprocessors.param;
 
 import java.io.Serializable;
 import java.util.Collections;
@@ -29,7 +29,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacetAbstract;
 
-public class ActionParameterDefaultsFacetViaToggleBoxes extends ActionParameterDefaultsFacetAbstract {
+public class ActionParameterDefaultsFacetFromParentedCollection extends ActionParameterDefaultsFacetAbstract {
 
     private static ThreadLocal<List<Object>> selectedPojos = new ThreadLocal<List<Object>>() {
         @Override protected List<Object> initialValue() {
@@ -50,7 +50,7 @@ public class ActionParameterDefaultsFacetViaToggleBoxes extends ActionParameterD
         }
     }
 
-    public ActionParameterDefaultsFacetViaToggleBoxes(final FacetHolder holder) {
+    public ActionParameterDefaultsFacetFromParentedCollection(final FacetHolder holder) {
         super(holder);
     }
 

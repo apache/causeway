@@ -418,6 +418,10 @@ public interface ObjectAction extends ObjectMember {
             return org.apache.isis.applib.filter.Filters.asPredicate(Filters.memberOrderOf(association));
         }
 
+        public static Predicate<ObjectAction> associatedWith(final String collectionName) {
+            return new AssociatedWith(collectionName);
+        }
+
         public static Predicate<ObjectAction> associatedWithAndWithCollectionParameterFor(
                 final String collectionName,
                 final ObjectSpecification collectionTypeOfSpec) {

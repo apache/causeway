@@ -467,9 +467,13 @@ public class SpecificationLoader implements ApplicationScopedComponent {
 
         final Collection<ObjectSpecification> specs = allSpecifications();
         for (final ObjectSpecification spec : specs) {
-            postProcessor.postProcess(spec);
+            postProcess(spec);
         }
 
+    }
+
+    public void postProcess(final ObjectSpecification spec) {
+        postProcessor.postProcess(spec);
     }
 
     //endregion

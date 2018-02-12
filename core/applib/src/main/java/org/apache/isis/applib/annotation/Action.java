@@ -121,7 +121,10 @@ public @interface Action {
      * <p>
      * Has no meaning if annotated on an action of a domain service.
      * </p>
+     *
+     * @deprecated - instead of bulk actions, use view models with collection parameters and {@link Action#associateWith()}.
      */
+    @Deprecated
     InvokeOn invokeOn() default InvokeOn.OBJECT_ONLY;
 
     // //////////////////////////////////////
@@ -212,18 +215,39 @@ public @interface Action {
 
 
     /**
-     * Associates this action with a property or collection, specifying its id and optionally the order in the UI.
+     * Associates this action with a property or collection, specifying its id.
      *
      * <p>
      *     This is an alternative to using {@link MemberOrder#name()}.  To specify the order (equivalent to
-     *     {@link MemberOrder#sequence()}}) add a suffix <code>:XXX</code>.
+     *     {@link MemberOrder#sequence()}}), use {@link #associateWithSequence()}.
      * </p>
      *
      * <p>
-     *     For example <code>@Action(associateWith="items:2.1")</code>
+     *     For example <code>@Action(associateWith="items", associateWithSequence="2.1")</code>
+     * </p>
+     *
+     * <p>
+     *     If an action is associated with a collection, then any matching parameters will have
+     *     their choices automatically inferred from the collection (if not otherwise specified)
+     *     and any collection parameter defaults can be specified using checkboxes
+     *     (in the Wicket UI, at least).
      * </p>
      */
     String associateWith() default "";
+
+    /**
+     * Specifies the sequence/order in the UI for an action that's been associated with a property or collection.
+     *
+     * <p>
+     *     This is an alternative to using {@link MemberOrder#sequence()}, but is ignored if
+     *     {@link Action#associateWith()} isn't also specified.
+     * </p>
+     *
+     * <p>
+     *     For example <code>@Action(associateWith="items", associateWithSequence="2.1")</code>
+     * </p>
+     */
+    String associateWithSequence() default "1";
 
 
 }
