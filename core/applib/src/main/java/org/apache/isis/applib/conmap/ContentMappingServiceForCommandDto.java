@@ -71,6 +71,9 @@ public class ContentMappingServiceForCommandDto implements ContentMappingService
     }
 
     private CommandDto asProcessedDto(final CommandWithDto commandWithDto) {
+        if(commandWithDto == null) {
+            return null;
+        }
         CommandDto commandDto = commandWithDto.asDto();
 
         // global processors
