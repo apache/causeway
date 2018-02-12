@@ -463,6 +463,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
         specSpi.setIntrospectionState(ObjectSpecificationAbstract.IntrospectionState.INTROSPECTED);
     }
 
+    @Programmatic
     public void postProcess() {
 
         final Collection<ObjectSpecification> specs = allSpecifications();
@@ -472,6 +473,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
 
     }
 
+    @Programmatic
     public void postProcess(final ObjectSpecification spec) {
         postProcessor.postProcess(spec);
     }

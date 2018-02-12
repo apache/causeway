@@ -71,6 +71,8 @@ public class ActionCollectionParameterDefaultsAndChoicesPostProcessor implements
         // for each collection, ...
         for (final OneToManyAssociation otma : oneToManyAssociations) {
 
+            final String collectionId = otma.getId();
+
             // ... see if any of its actions has a collection parameter of the same type
             //
             // eg Order#getItems() and Order#removeItems(List<OrderItem>)
@@ -80,7 +82,11 @@ public class ActionCollectionParameterDefaultsAndChoicesPostProcessor implements
             final ObjectActionParameter.Predicates.CollectionParameter whetherCollectionParamOfType =
                     new ObjectActionParameter.Predicates.CollectionParameter(specification);
 
-            for (final ObjectAction action : objectActions) {
+            final ImmutableList<ObjectAction> actions = FluentIterable.from(objectActions)
+                    .filter(ObjectAction.Predicates.associatedWith(collectionId))
+                    .toList();
+
+            for (final ObjectAction action : actions) {
 
                 final List<ObjectActionParameter> parameters = action.getParameters();
 

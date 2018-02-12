@@ -28,6 +28,7 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
+import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacetAbstract;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
@@ -52,9 +53,22 @@ public class ActionParameterChoicesFacetFromParentedCollection extends ActionPar
             final ObjectAdapter target,
             final List<ObjectAdapter> arguments,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        final ObjectAdapter objectAdapter = otma.get(target, interactionInitiatedBy);
+        final ObjectAdapter parentAdapter = determineParentAdapter(target);
+        final ObjectAdapter objectAdapter = otma.get(parentAdapter, interactionInitiatedBy);
         final List<ObjectAdapter> objectAdapters = CollectionFacet.Utils.convertToAdapterList(objectAdapter);
         return ObjectAdapter.Util.unwrap(objectAdapters.toArray(new ObjectAdapter[0]));
+    }
+
+    /**
+     * in the case of a mixin action, the target passed to the facet is actually the mixin itself, not the mixee.
+     */
+    private ObjectAdapter determineParentAdapter(final ObjectAdapter target) {
+        final MixinFacet mixinFacet = target.getSpecification().getFacet(MixinFacet.class);
+        ObjectAdapter mixedInTarget = null;
+        if(mixinFacet != null) {
+            mixedInTarget = mixinFacet.mixedIn(target, MixinFacet.Policy.FAIL_FAST);
+        }
+        return mixedInTarget != null ? mixedInTarget : target;
     }
 
 }
