@@ -581,6 +581,10 @@ div.label-left.actions-right .scalarValueWrapper {
     /*width: 3%;*/
 }
 
+.pull-right .additionalLinkListDropDown li.additionalLinkItem a.btn {
+    text-align: inherit;
+}
+
 
 div.label-top .scalarValueWrapper,
 div.label-none .scalarValueWrapper {
