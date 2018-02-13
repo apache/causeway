@@ -30,8 +30,8 @@ import org.apache.wicket.model.IModel;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
+import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
-import org.apache.isis.viewer.wicket.model.models.EntityModel.RenderingHint;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
@@ -51,17 +51,20 @@ public final class ObjectAdapterPropertyColumn extends ColumnAbstract<ObjectAdap
 
     private static final long serialVersionUID = 1L;
 
+    private final EntityCollectionModel.Type type;
     private final String propertyExpression;
     private final boolean escaped;
     private final String parentTypeName;
 
     public ObjectAdapterPropertyColumn(
+            final EntityCollectionModel.Type type,
             final IModel<String> columnNameModel,
             final String sortProperty,
             final String propertyName,
             final boolean escaped,
             final String parentTypeName) {
         super(columnNameModel, sortProperty);
+        this.type = type;
         this.propertyExpression = propertyName;
         this.escaped = escaped;
         this.parentTypeName = parentTypeName;
@@ -94,15 +97,10 @@ public final class ObjectAdapterPropertyColumn extends ColumnAbstract<ObjectAdap
         final OneToOneAssociation property = (OneToOneAssociation) adapter.getSpecification().getAssociation(propertyExpression);
         final PropertyMemento pm = new PropertyMemento(property, entityModel.getIsisSessionFactory());
 
-        final ScalarModel scalarModel = entityModel.getPropertyModel(pm);
-
-        scalarModel.setRenderingHint(RenderingHint.PROPERTY_COLUMN);
-        scalarModel.toViewMode();
+        final ScalarModel scalarModel = entityModel.getPropertyModel(pm, EntityModel.Mode.VIEW, type.renderingHint());
 
         final ComponentFactory componentFactory = findComponentFactory(ComponentType.SCALAR_NAME_AND_VALUE, scalarModel);
-        final Component component = componentFactory.createComponent(id, scalarModel);
-        
-        return component;
+        return componentFactory.createComponent(id, scalarModel);
     }
 
 }

@@ -28,6 +28,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.actions.ActionParametersPanel;
@@ -53,7 +54,8 @@ public class PropertyEditPanel extends PanelAbstract<ScalarModel> {
     public PropertyEditPanel(
             final String id,
             final ScalarModel scalarModel) {
-        super(id, new ScalarModel(scalarModel.getParentEntityModel(), scalarModel.getPropertyMemento()));
+        super(id, new ScalarModel(scalarModel.getParentEntityModel(), scalarModel.getPropertyMemento(),
+                EntityModel.Mode.EDIT, EntityModel.RenderingHint.REGULAR));
 
         buildGui(scalarModel);
     }
@@ -83,9 +85,6 @@ public class PropertyEditPanel extends PanelAbstract<ScalarModel> {
         WebMarkupContainer header = addHeader();
 
         try {
-
-            scalarModel.toEditMode();
-
             getComponentFactoryRegistry().addOrReplaceComponent(this, ComponentType.PROPERTY_EDIT_FORM, getScalarModel());
             getComponentFactoryRegistry().addOrReplaceComponent(header, ComponentType.ENTITY_ICON_AND_TITLE, scalarModel.getParentEntityModel());
 

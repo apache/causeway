@@ -216,7 +216,8 @@ public class PropertyGroup extends PanelAbstract<EntityModel> implements HasDyna
 
         final PropertyMemento pm = new PropertyMemento(otoa, entityModel.getIsisSessionFactory());
 
-        final ScalarModel scalarModel = entityModel.getPropertyModel(pm);
+        final ScalarModel scalarModel =
+                entityModel.getPropertyModel(pm, EntityModel.Mode.VIEW, EntityModel.RenderingHint.REGULAR);
 
         final Component component = getComponentFactoryRegistry()
                 .addOrReplaceComponent(container, ID_PROPERTY, ComponentType.SCALAR_NAME_AND_VALUE, scalarModel);

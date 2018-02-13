@@ -42,7 +42,6 @@ import org.apache.wicket.model.Model;
 
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.PromptStyle;
-import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
@@ -59,7 +58,6 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelUtil;
-import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.IsisAjaxFallbackDataTable;
 import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditFormPanel;
 import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditPanel;
 import org.apache.isis.viewer.wicket.ui.components.propertyheader.PropertyEditPromptHeaderPanel;
@@ -188,11 +186,11 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
         }
 
         final ScalarModel scalarModel = getModel();
-        final String disableReasonIfAny = scalarModel.whetherDisabled(whereAreWeRendering());
 
         if (scalarModel.isViewMode()) {
             onInitializeWhenViewMode();
         } else {
+            final String disableReasonIfAny = scalarModel.whetherDisabled();
             if (disableReasonIfAny != null) {
                 onInitializeWhenDisabled(disableReasonIfAny);
             } else {
@@ -399,8 +397,8 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
     protected void onConfigure() {
 
         final ScalarModel scalarModel = getModel();
-        
-        final boolean hidden = scalarModel.whetherHidden(whereAreWeRendering());
+
+        final boolean hidden = scalarModel.whetherHidden();
         setVisibilityAllowed(!hidden);
 
         super.onConfigure();
@@ -519,45 +517,6 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
 
     protected Rendering getRendering() {
         return Rendering.renderingFor(scalarModel.getRenderingHint());
-    }
-
-    /**
-     * Returns the current rendering context of this component, one of 
-     * <ul>
-     * <li>standalone table</li>
-     * <li>parented table</li>
-     * <li>form</li>
-     * </ul>
-     * @return
-     */
-    protected Where whereAreWeRendering() {
-        switch (scalarModel.getRenderingHint()) {
-		case PARENTED_TITLE_COLUMN:
-			return Where.PARENTED_TABLES;
-		case STANDALONE_TITLE_COLUMN:
-			return Where.STANDALONE_TABLES;
-		case PROPERTY_COLUMN:
-            // this is pretty hacky, but can't (for the moment) think of another way to
-            // pass through the context other than a thread-local
-            Boolean parented = IsisAjaxFallbackDataTable.isParented();
-            if(parented == null) {
-                // this code is wrong (but kept in because it's what we had before) ...
-                // the parentEntityModel *isn't* the "parented" collection (eg Parent#child, a java.util.List),
-                // rather it is the parent of this field (the Child object itself).
-                EntityModel parentEntityModel = scalarModel.getParentEntityModel();
-                final ObjectAdapter parentAdapter =
-                     parentEntityModel.load(AdapterManager.ConcurrencyChecking.NO_CHECK);
-                parented = parentAdapter.isParentedCollection();
-            }
-            // this bit is correct, I think; earlier in the stack trace is the IsisAjaxFallbackDataTable which
-            // tells us whether it's being used to render a parented collection or a standalone collection.
-            return parented ? Where.PARENTED_TABLES : Where.STANDALONE_TABLES;
-
-        case REGULAR:
-			return Where.OBJECT_FORMS;
-		default:
-			throw new RuntimeException("unmatched case "+scalarModel.getRenderingHint());
-		}
     }
 
     // ///////////////////////////////////////////////////////////////////

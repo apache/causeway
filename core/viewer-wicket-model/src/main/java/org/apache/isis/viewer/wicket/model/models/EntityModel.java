@@ -29,6 +29,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
@@ -96,21 +97,31 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements Obj
     }
 
     public enum RenderingHint {
-        REGULAR,
-        PROPERTY_COLUMN,
-        PARENTED_TITLE_COLUMN,
-        STANDALONE_TITLE_COLUMN;
+        REGULAR(Where.OBJECT_FORMS),
+        PARENTED_PROPERTY_COLUMN(Where.PARENTED_TABLES),
+        PARENTED_TITLE_COLUMN(Where.PARENTED_TABLES),
+        STANDALONE_PROPERTY_COLUMN(Where.STANDALONE_TABLES),
+        STANDALONE_TITLE_COLUMN(Where.STANDALONE_TABLES);
+
+        private final Where where;
+
+        RenderingHint(final Where where) {
+            this.where = where;
+        }
 
         public boolean isRegular() {
             return this == REGULAR;
         }
 
-        public boolean isInTablePropertyColumn() {
-            return this == PROPERTY_COLUMN;
+        public boolean isInParentedTable() {
+            return this == PARENTED_PROPERTY_COLUMN;
+        }
+        public boolean isInStandaloneTable() {
+            return this == STANDALONE_PROPERTY_COLUMN;
         }
 
         public boolean isInTable() {
-            return isInTablePropertyColumn() || isInTableTitleColumn();
+            return isInParentedTable() || isInStandaloneTable() || isInTableTitleColumn();
         }
 
         public boolean isInTableTitleColumn() {
@@ -124,6 +135,10 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements Obj
         public boolean isInStandaloneTableTitleColumn() {
             return this == STANDALONE_TITLE_COLUMN;
         }
+
+        public Where asWhere() {
+            return this.where;
+        }
     }
 
 	public enum Mode {
@@ -134,8 +149,8 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements Obj
     private ObjectAdapterMemento adapterMemento;
     private ObjectAdapterMemento contextAdapterIfAny;
 
-    private Mode mode = Mode.VIEW;
-    private RenderingHint renderingHint = RenderingHint.REGULAR;
+    private Mode mode;
+    private RenderingHint renderingHint;
     private final PendingModel pendingModel;
 
 
@@ -150,10 +165,13 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements Obj
     // constructors
     // //////////////////////////////////////////////////////////
 
-    public EntityModel() {
-        this.adapterMemento = null;
-        this.pendingModel = new PendingModel(this);
-        this.propertyScalarModels = Maps.newHashMap();
+    /**
+     * As used by ScalarModel
+     */
+    public EntityModel(
+            final Mode mode,
+            final RenderingHint renderingHint) {
+        this(Maps.<PropertyMemento, ScalarModel>newHashMap(), null, mode, renderingHint);
     }
 
     public EntityModel(final PageParameters pageParameters) {
@@ -180,11 +198,20 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements Obj
     private EntityModel(
             final Map<PropertyMemento, ScalarModel> propertyScalarModels,
             final ObjectAdapterMemento adapterMemento) {
+        this(propertyScalarModels, adapterMemento, Mode.VIEW, RenderingHint.REGULAR);
+    }
+
+    private EntityModel(
+            final Map<PropertyMemento, ScalarModel> propertyScalarModels,
+            final ObjectAdapterMemento adapterMemento,
+            final Mode mode,
+            final RenderingHint renderingHint) {
         this.adapterMemento = adapterMemento;
         this.pendingModel = new PendingModel(this);
         this.propertyScalarModels = propertyScalarModels;
+        this.mode = mode;
+        this.renderingHint = renderingHint;
     }
-
 
     public static String oidStr(final PageParameters pageParameters) {
         return PageParameterNames.OBJECT_OID.getStringFrom(pageParameters);
@@ -351,15 +378,14 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements Obj
     /**
      * Lazily populates with the current value of each property.
      */
-    public ScalarModel getPropertyModel(final PropertyMemento pm) {
+    public ScalarModel getPropertyModel(
+            final PropertyMemento pm,
+            final Mode mode,
+            final RenderingHint renderingHint) {
         ScalarModel scalarModel = propertyScalarModels.get(pm);
         if (scalarModel == null) {
-            scalarModel = new ScalarModel(this, pm);
-            if (isViewMode()) {
-                scalarModel.toViewMode();
-            } else {
-                scalarModel.toEditMode();
-            }
+            scalarModel = new ScalarModel(this, pm, mode, renderingHint);
+
             propertyScalarModels.put(pm, scalarModel);
         }
         return scalarModel;
