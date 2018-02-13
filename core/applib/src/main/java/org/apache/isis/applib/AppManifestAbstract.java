@@ -64,8 +64,10 @@ public abstract class AppManifestAbstract implements AppManifest {
         if (overriddenAuthMechanism != null) {
             return overriddenAuthMechanism;
         } else {
-            if(builder instanceof Builder) {
-                return ((Builder) builder).authMechanism;
+            if(builder instanceof AppManifestAbstract.Builder) {
+                return ((AppManifestAbstract.Builder) builder).authMechanism;
+            } else if(builder instanceof AppManifestAbstract2.Builder) {
+                return ((AppManifestAbstract2.Builder) builder).authMechanism;
             } else {
                 return null;
             }
@@ -74,8 +76,10 @@ public abstract class AppManifestAbstract implements AppManifest {
 
     private List<Class<? extends FixtureScript>> determineFixtures(final ModuleOrBuilderAbstract<?> builder) {
         final List<Class<? extends FixtureScript>> builderFixtures;
-        if(builder instanceof Builder) {
-            builderFixtures = ((Builder) builder).fixtures;
+        if(builder instanceof AppManifestAbstract.Builder) {
+            builderFixtures = ((AppManifestAbstract.Builder) builder).fixtures;
+        } else if(builder instanceof AppManifestAbstract2.Builder) {
+            builderFixtures = ((AppManifestAbstract2.Builder) builder).fixtures;
         } else {
             builderFixtures = Lists.newArrayList();
         }
