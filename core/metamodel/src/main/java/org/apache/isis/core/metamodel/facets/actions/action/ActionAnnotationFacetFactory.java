@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.facets.actions.action;
 
 import java.lang.reflect.Method;
-import java.util.regex.Pattern;
 
 import com.google.common.base.Strings;
 
@@ -479,32 +478,6 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract
         FacetUtil.addFacet(memberOrderFacet);
     }
 
-    static class NameAndSequence {
-
-        private static final Pattern pattern = Pattern.compile(":");
-        static NameAndSequence parse(final String associateWith) {
-            if(Strings.isNullOrEmpty(associateWith)) {
-                return null;
-            }
-            final String[] split = pattern.split(associateWith);
-            switch (split.length) {
-            case 1:
-                return new NameAndSequence(split[0], "1");
-            case 2:
-                return new NameAndSequence(split[0], split[1]);
-            default:
-                return null;
-            }
-        }
-
-        final String name;
-        final String sequence;
-        NameAndSequence(final String name, final String sequence) {
-            this.name = name;
-            this.sequence = sequence;
-        }
-
-    }
 
     // ///////////////////////////////////////////////////////////////
 
