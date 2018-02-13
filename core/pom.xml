@@ -29,7 +29,7 @@
 
     <groupId>org.apache.isis.core</groupId>
     <artifactId>isis</artifactId>
-    <version>1.16.1</version>
+    <version>2.0.0-M1-SNAPSHOT</version>
     
     <packaging>pom</packaging>
 
@@ -190,7 +190,7 @@
         <connection>scm:git:http://github.com/apache/isis.git</connection>
         <developerConnection>scm:git:https://github.com/apache/isis.git</developerConnection>
         <url>http://github.com/apache/isis</url>
-        <tag>isis-1.16.1</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <url>http://isis.apache.org</url>
@@ -1146,12 +1146,12 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-unittestsupport</artifactId>
-                <version>1.16.1</version>
+                <version>2.0.0-M1-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-unittestsupport</artifactId>
-                <version>1.16.1</version>
+                <version>2.0.0-M1-SNAPSHOT</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
@@ -1160,14 +1160,14 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-applib</artifactId>
-                <version>1.16.1</version>
+                <version>2.0.0-M1-SNAPSHOT</version>
                 <type>jar</type>
                 <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-applib</artifactId>
-                <version>1.16.1</version>
+                <version>2.0.0-M1-SNAPSHOT</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
@@ -1176,14 +1176,14 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-schema</artifactId>
-                <version>1.16.1</version>
+                <version>2.0.0-M1-SNAPSHOT</version>
                 <type>jar</type>
                 <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-schema</artifactId>
-                <version>1.16.1</version>
+                <version>2.0.0-M1-SNAPSHOT</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
@@ -1192,7 +1192,7 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-log4j</artifactId>
-                <version>1.16.1</version>
+                <version>2.0.0-M1-SNAPSHOT</version>
                 <type>jar</type>
                 <scope>compile</scope>
             </dependency>
@@ -1201,14 +1201,14 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-metamodel</artifactId>
-                <version>1.16.1</version>
+                <version>2.0.0-M1-SNAPSHOT</version>
                 <type>jar</type>
                 <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-metamodel</artifactId>
-                <version>1.16.1</version>
+                <version>2.0.0-M1-SNAPSHOT</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
@@ -1217,76 +1217,76 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-runtime</artifactId>
-                <version>1.16.1</version>
+                <version>2.0.0-M1-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-runtime</artifactId>
-                <version>1.16.1</version>
+                <version>2.0.0-M1-SNAPSHOT</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-wrapper</artifactId>
-                <version>1.16.1</version>
+                <version>2.0.0-M1-SNAPSHOT</version>
             </dependency>
 
             <!-- webserver -->
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-webserver</artifactId>
-                <version>1.16.1</version>
+                <version>2.0.0-M1-SNAPSHOT</version>
             </dependency>
 
             <!-- specsupport -->
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-specsupport</artifactId>
-                <version>1.16.1</version>
+                <version>2.0.0-M1-SNAPSHOT</version>
             </dependency>
 
             <!-- integtestsupport -->
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-integtestsupport</artifactId>
-                <version>1.16.1</version>
+                <version>2.0.0-M1-SNAPSHOT</version>
             </dependency>
 
             <!-- Restful Objects viewer -->
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-viewer-restfulobjects-applib</artifactId>
-                <version>1.16.1</version>
+                <version>2.0.0-M1-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-viewer-restfulobjects-applib</artifactId>
-                <version>1.16.1</version>
+                <version>2.0.0-M1-SNAPSHOT</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-viewer-restfulobjects-rendering</artifactId>
-                <version>1.16.1</version>
+                <version>2.0.0-M1-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-viewer-restfulobjects-rendering</artifactId>
-                <version>1.16.1</version>
+                <version>2.0.0-M1-SNAPSHOT</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-viewer-restfulobjects-server</artifactId>
-                <version>1.16.1</version>
+                <version>2.0.0-M1-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-viewer-restfulobjects-server</artifactId>
-                <version>1.16.1</version>
+                <version>2.0.0-M1-SNAPSHOT</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
@@ -1295,12 +1295,12 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-security</artifactId>
-                <version>1.16.1</version>
+                <version>2.0.0-M1-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-security-shiro</artifactId>
-                <version>1.16.1</version>
+                <version>2.0.0-M1-SNAPSHOT</version>
             </dependency>
 
             
@@ -1308,41 +1308,41 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-viewer-wicket-applib</artifactId>
-                <version>1.16.1</version>
+                <version>2.0.0-M1-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-viewer-wicket-model</artifactId>
-                <version>1.16.1</version>
+                <version>2.0.0-M1-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-viewer-wicket-model</artifactId>
-                <version>1.16.1</version>
+                <version>2.0.0-M1-SNAPSHOT</version>
                 <scope>test</scope>
                 <type>test-jar</type>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-viewer-wicket-ui</artifactId>
-                <version>1.16.1</version>
+                <version>2.0.0-M1-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-viewer-wicket-ui</artifactId>
-                <version>1.16.1</version>
+                <version>2.0.0-M1-SNAPSHOT</version>
                 <scope>test</scope>
                 <type>test-jar</type>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-viewer-wicket-impl</artifactId>
-                <version>1.16.1</version>
+                <version>2.0.0-M1-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-viewer-wicket-impl</artifactId>
-                <version>1.16.1</version>
+                <version>2.0.0-M1-SNAPSHOT</version>
                 <scope>test</scope>
                 <type>test-jar</type>
             </dependency>
@@ -1351,26 +1351,26 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.apache.isis.tool</groupId>
                 <artifactId>isis-maven-plugin</artifactId>
-                <version>1.16.1</version>
+                <version>2.0.0-M1-SNAPSHOT</version>
             </dependency>
 
             <!-- Maven dependencies -->
             <dependency>
                 <groupId>org.apache.isis.mavendeps</groupId>
                 <artifactId>isis-mavendeps-intellij</artifactId>
-                <version>1.16.1</version>
+                <version>2.0.0-M1-SNAPSHOT</version>
                 <type>pom</type>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.mavendeps</groupId>
                 <artifactId>isis-mavendeps-testing</artifactId>
-                <version>1.16.1</version>
+                <version>2.0.0-M1-SNAPSHOT</version>
                 <type>pom</type>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.mavendeps</groupId>
                 <artifactId>isis-mavendeps-webapp</artifactId>
-                <version>1.16.1</version>
+                <version>2.0.0-M1-SNAPSHOT</version>
                 <type>pom</type>
             </dependency>
 
