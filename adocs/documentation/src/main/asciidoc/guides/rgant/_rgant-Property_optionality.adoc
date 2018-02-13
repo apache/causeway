@@ -129,6 +129,6 @@ public class Customer {
 
 [NOTE]
 ====
-It is also possible to specify optionality using xref:../rgant/rgant.adoc#_rgant_Nullable[`@Nullable`] annotation.
+It is also possible to specify optionality using xref:../rgant/rgant.adoc#_rgant-Nullable[`@Nullable`] annotation.
 ====
 

@@ -58,7 +58,7 @@ public interface MetaModelService4 {
 <6> whether to throw an exception or return `Sort.UNKNOWN` if the object type is not recognized.  (The overloads with no `Mode` parameter default to strict mode).
 <7> returns the `AppManifest` used to bootstrap the application.
 If an `AppManifest2` was used (from a `Module`), then this is also returned (else just `null`).
-<8> obtain an implementation of `CommandDtoProcessor` (if any) as per an xref:../rgant/rgant.adoc#_rgant_Action_command[`@Action#commandDtoProcessor()`] or xref:../rgant/rgant.adoc#_rgant_Property_command[`@Property#commandDtoProcessor()`].
+<8> obtain an implementation of `CommandDtoProcessor` (if any) as per an xref:../rgant/rgant.adoc#_rgant-Action_command[`@Action#commandDtoProcessor()`] or xref:../rgant/rgant.adoc#_rgant-Property_command[`@Property#commandDtoProcessor()`].
 +
 This is used by the xref:rgsvc.adoc#_rgsvc_presentation-layer-spi_ContentMappingService_implementations[framework-provided implementations] of `ContentMappingService`.
 

@@ -64,5 +64,5 @@ If you are using view models heavily, you may wish to restrict yourself to just 
 ====
 The `@ViewModel` does not allow the objectType to be specified, meaning that it is incompatible with the metamodel validation check ennabled by the xref:../rgcfg/rgcfg.adoc#__rgcfg_configuring-core_metamodel-validation[`explicitObjectType`] configuration property.
 
-Instead, use xref:../rgant/rgant.adoc#_rgant_DomainObject_nature[`@DomainObject#nature()`] with `Nature.VIEW_MODEL`, and specify xref:../rgant/rgant.adoc#_rgant_DomainObject_objectType[`@DomainObject#objectType()`].
+Instead, use xref:../rgant/rgant.adoc#_rgant-DomainObject_nature[`@DomainObject#nature()`] with `Nature.VIEW_MODEL`, and specify xref:../rgant/rgant.adoc#_rgant-DomainObject_objectType[`@DomainObject#objectType()`].
 ====

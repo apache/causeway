@@ -12,7 +12,7 @@ metrics counts (number of objects loaded, number of object properties modified),
 
 An instance of the DTO (corresponding to this schema) is used within the
 xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`] SPI, identifying changed objects that are to be
-published (as per xref:../rgant/rgant.adoc#_rgant_DomainObject_publishing[`@DomainObject#publishing()`] or equivalent).
+published (as per xref:../rgant/rgant.adoc#_rgant-DomainObject_publishing[`@DomainObject#publishing()`] or equivalent).
 
 
 == `changesDto`

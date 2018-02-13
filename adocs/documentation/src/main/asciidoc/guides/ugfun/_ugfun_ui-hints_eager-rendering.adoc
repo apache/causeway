@@ -11,7 +11,7 @@ For the more commonly used collections we want to show the table expanded:
 
 image::{_imagesdir}programming-model/todoapp-Dashboard.png[width="px",link="{_imagesdir}programming-model/todoapp-Dashboard.png"]
 
-For this we annotate the collection using xref:../rgant/rgant.adoc#_rgant_CollectionLayout_defaultView[`@CollectionLayout#defaultView()`]; for example
+For this we annotate the collection using xref:../rgant/rgant.adoc#_rgant-CollectionLayout_defaultView[`@CollectionLayout#defaultView()`]; for example
 
 [source,java]
 ----
@@ -28,7 +28,7 @@ public Set<ToDoItem> getDependencies() {
 
 [NOTE]
 ====
-The `defaultView()` attribute replaces the deprecated approach of using xref:../rgant/rgant.adoc#_rgant_CollectionLayout_render[`@CollectionLayout#render()`] eagerly.
+The `defaultView()` attribute replaces the deprecated approach of using xref:../rgant/rgant.adoc#_rgant-CollectionLayout_render[`@CollectionLayout#render()`] eagerly.
 ====
 
 Alternatively, it can be specified the `Xxx.layout.xml` file:

@@ -29,7 +29,7 @@ The table below summarizes the annotation's attributes.
 
 |xref:../rgant/rgant.adoc#_rgant-DomainService_objectType[`objectType()`]
 |
-|equivalent to xref:../rgant/rgant.adoc#_rgant_DomainObject_objectType[`@DomainObject#objectType()`], specifies the objectType of the service.
+|equivalent to xref:../rgant/rgant.adoc#_rgant-DomainObject_objectType[`@DomainObject#objectType()`], specifies the objectType of the service.
 
 The instanceId for services is always "1".
 
