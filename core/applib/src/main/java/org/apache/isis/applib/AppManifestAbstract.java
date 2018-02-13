@@ -64,27 +64,34 @@ public abstract class AppManifestAbstract implements AppManifest {
         if (overriddenAuthMechanism != null) {
             return overriddenAuthMechanism;
         } else {
-            if(builder instanceof AppManifestAbstract.Builder) {
-                return ((AppManifestAbstract.Builder) builder).authMechanism;
-            } else if(builder instanceof AppManifestAbstract2.Builder) {
-                return ((AppManifestAbstract2.Builder) builder).authMechanism;
-            } else {
-                return null;
-            }
+            return obtainAuthMechanismFrom(builder);
         }
     }
 
     private List<Class<? extends FixtureScript>> determineFixtures(final ModuleOrBuilderAbstract<?> builder) {
-        final List<Class<? extends FixtureScript>> builderFixtures;
-        if(builder instanceof AppManifestAbstract.Builder) {
-            builderFixtures = ((AppManifestAbstract.Builder) builder).fixtures;
-        } else if(builder instanceof AppManifestAbstract2.Builder) {
-            builderFixtures = ((AppManifestAbstract2.Builder) builder).fixtures;
-        } else {
-            builderFixtures = Lists.newArrayList();
-        }
+        final List<Class<? extends FixtureScript>> builderFixtures = obtainBuilderFixturesFrom(builder);
         overrideFixtures(builderFixtures);
         return builderFixtures;
+    }
+
+    private static String obtainAuthMechanismFrom(final ModuleOrBuilderAbstract<?> builder) {
+        if(builder instanceof Builder) {
+            return ((Builder) builder).authMechanism;
+        }
+        if(builder instanceof AppManifestAbstract2.Builder) {
+            return ((AppManifestAbstract2.Builder) builder).authMechanism;
+        }
+        return null;
+    }
+
+    private static List<Class<? extends FixtureScript>> obtainBuilderFixturesFrom(final ModuleOrBuilderAbstract<?> builder) {
+        if(builder instanceof Builder) {
+            return ((Builder) builder).fixtures;
+        }
+        if(builder instanceof AppManifestAbstract2.Builder) {
+            return ((AppManifestAbstract2.Builder) builder).fixtures;
+        }
+        return Lists.newArrayList();
     }
 
     private Map<String, String> createConfigurationProperties(
