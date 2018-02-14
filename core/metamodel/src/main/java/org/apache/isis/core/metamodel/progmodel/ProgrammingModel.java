@@ -19,70 +19,10 @@
 
 package org.apache.isis.core.metamodel.progmodel;
 
-import java.util.List;
-
-import org.apache.isis.core.commons.config.ConfigurationConstants;
-import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
-import org.apache.isis.core.metamodel.facets.FacetFactory;
-import org.apache.isis.core.metamodel.specloader.ReflectorConstants;
 
-public interface ProgrammingModel extends MetaModelValidatorRefiner {
+public interface ProgrammingModel extends FacetFactorySet, PostProcessorSet, MetaModelValidatorRefiner {
 
     void init();
 
-    List<FacetFactory> getList();
-
-    enum Position {
-        BEGINNING,END
-    }
-    void addFactory(Class<? extends FacetFactory> facetFactoryClass);
-    void addFactory(FacetFactory facetFactory);
-    void addFactory(Class<? extends FacetFactory> facetFactoryClass, Position position);
-    void addFactory(FacetFactory facetFactory, Position position);
-
-    void removeFactory(Class<? extends FacetFactory> facetFactoryClass);
-
-    /**
-     * Key used to lookup comma-separated list of {@link FacetFactory}s to
-     * include.
-     *
-     * @see #FACET_FACTORY_EXCLUDE_CLASS_NAME_LIST
-     */
-    String FACET_FACTORY_INCLUDE_CLASS_NAME_LIST = ConfigurationConstants.ROOT + "reflector.facets.include";
-
-    /**
-     * Key used to lookup comma-separated list of {@link FacetFactory}s to
-     * exclude.
-     *
-     * @see #FACET_FACTORY_INCLUDE_CLASS_NAME_LIST
-     */
-    String FACET_FACTORY_EXCLUDE_CLASS_NAME_LIST = ConfigurationConstants.ROOT + "reflector.facets.exclude";
-
-    /**
-     * This is a bit nasty, but currently the bootstrapping of the metamodel for integration tests vs the webapp differs;
-     * the intent of this class is to centralize some logic that should be applied in both cases.
-     */
-    class Util {
-        private Util(){}
-
-        public static void includeFacetFactories(final IsisConfiguration configuration, final ProgrammingModel programmingModel) {
-            final String[] facetFactoriesIncludeClassNames = configuration.getList(ReflectorConstants.FACET_FACTORY_INCLUDE_CLASS_NAME_LIST);
-            if (facetFactoriesIncludeClassNames != null) {
-                for (final String facetFactoryClassName : facetFactoriesIncludeClassNames) {
-                    final Class<? extends FacetFactory> facetFactory = InstanceUtil.loadClass(facetFactoryClassName, FacetFactory.class);
-                    programmingModel.addFactory(facetFactory);
-                }
-            }
-        }
-
-        public static void excludeFacetFactories(final IsisConfiguration configuration, final ProgrammingModel programmingModel) {
-            final String[] facetFactoriesExcludeClassNames = configuration.getList(ReflectorConstants.FACET_FACTORY_EXCLUDE_CLASS_NAME_LIST);
-            for (final String facetFactoryClassName : facetFactoriesExcludeClassNames) {
-                final Class<? extends FacetFactory> facetFactory = InstanceUtil.loadClass(facetFactoryClassName, FacetFactory.class);
-                programmingModel.removeFactory(facetFactory);
-            }
-        }
-    }
 }

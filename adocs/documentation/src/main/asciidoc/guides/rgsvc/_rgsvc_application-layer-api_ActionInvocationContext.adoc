@@ -1,5 +1,5 @@
 [[_rgsvc_application-layer-api_ActionInvocationContext]]
-= `ActionInvocationContext`
+= `ActionInvocationContext` (deprecated)
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :_basedir: ../../
 :_imagesdir: images/
@@ -9,6 +9,12 @@ The `ActionInvocationContext` domain service is a xref:../rgant/rgant.adoc#_rgan
 
 When an action is invoked in this way, this service allows each object instance to "know where it is" in the collection; it acts a little like an iterator.  In particular, an object can determine if it is the last object to be called, and so can perform special processing, eg to return a summary calculated result.
 
+[WARNING]
+====
+Bulk actions are now deprecated, which means that this service is also deprecated.
+
+Instead, the recommended technique is to define a view model to wrap around the collection, and then to use an action on the view model, associated with the collection and with a collection parameter), to act upon the selected items of the collection.
+====
 
 == API & Implementation
 

@@ -77,7 +77,7 @@ public class ExceptionDetail {
         if (ex instanceof JDOException) {
             final JDOException jdoException = (JDOException) ex;
             final Throwable[] nestedExceptions = jdoException.getNestedExceptions();
-            return nestedExceptions.length > 0? nestedExceptions[0]: null;
+            return nestedExceptions != null && nestedExceptions.length > 0? nestedExceptions[0]: null;
         }
         else {
             return ex.getCause();

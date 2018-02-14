@@ -91,7 +91,7 @@ public class CollectionContentsAsAjaxTablePanel
         ObjectAdapterToggleboxColumn toggleboxColumn = null;
         if(bulkActionsProvider != null) {
 
-            toggleboxColumn = bulkActionsProvider.createToggleboxColumn();
+            toggleboxColumn = bulkActionsProvider.getToggleboxColumn();
             if(toggleboxColumn != null) {
                 columns.add(toggleboxColumn);
             }
@@ -279,7 +279,7 @@ public class CollectionContentsAsAjaxTablePanel
         final boolean escaped = facet == null || facet.escaped();
 
         final String parentTypeName = property.getOnType().getShortIdentifier();
-        return new ObjectAdapterPropertyColumn(Model.of(property.getName()), property.getId(), property.getId(), escaped, parentTypeName);
+        return new ObjectAdapterPropertyColumn(getModel().getType(), Model.of(property.getName()), property.getId(), property.getId(), escaped, parentTypeName);
     }
 
 

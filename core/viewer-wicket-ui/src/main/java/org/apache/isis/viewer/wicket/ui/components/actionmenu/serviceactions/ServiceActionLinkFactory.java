@@ -26,6 +26,7 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChec
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.model.models.ToggledMementosProvider;
 import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.ActionLinkFactoryAbstract;
 
 class ServiceActionLinkFactory extends ActionLinkFactoryAbstract {
@@ -38,11 +39,13 @@ class ServiceActionLinkFactory extends ActionLinkFactoryAbstract {
 
     @Override
     public LinkAndLabel newLink(
-            final ObjectAction objectAction, final String linkId) {
+            final ObjectAction objectAction,
+            final String linkId,
+            final ToggledMementosProvider toggledMementosProviderIfAny) {
         
         ObjectAdapter objectAdapter = this.targetEntityModel.load(ConcurrencyChecking.NO_CHECK);
 
-        final AbstractLink link = newLink(linkId, objectAction);
+        final AbstractLink link = newLink(linkId, objectAction, toggledMementosProviderIfAny);
 
         return newLinkAndLabel(objectAdapter, objectAction, link, null);
     }

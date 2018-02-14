@@ -57,9 +57,7 @@ public class ResourceStreamSourceComposite extends ResourceStreamSourceAbstract 
         if (!compositionStreams.isEmpty()) {
             return new SequenceInputStream(compositionStreams.elements());
         }
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("could not load resource path '" + resourcePath + "' from " + getName());
-        }
+        LOG.debug("could not load resource path '{}' from {}", resourcePath, getName());
         return null;
     }
 

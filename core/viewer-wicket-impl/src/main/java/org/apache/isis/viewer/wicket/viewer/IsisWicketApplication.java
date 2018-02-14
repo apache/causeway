@@ -426,10 +426,10 @@ public class IsisWicketApplication
                 }
             }
 
-            LOG.info("storeSettings.inmemoryCacheSize        : " + getStoreSettings().getInmemoryCacheSize());
-            LOG.info("storeSettings.asynchronousQueueCapacity: " + getStoreSettings().getAsynchronousQueueCapacity());
-            LOG.info("storeSettings.maxSizePerSession        : " + getStoreSettings().getMaxSizePerSession());
-            LOG.info("storeSettings.fileStoreFolder          : " + getStoreSettings().getFileStoreFolder());
+            LOG.info("storeSettings.inmemoryCacheSize        : {}", getStoreSettings().getInmemoryCacheSize());
+            LOG.info("storeSettings.asynchronousQueueCapacity: {}", getStoreSettings().getAsynchronousQueueCapacity());
+            LOG.info("storeSettings.maxSizePerSession        : {}", getStoreSettings().getMaxSizePerSession());
+            LOG.info("storeSettings.fileStoreFolder          : {}", getStoreSettings().getFileStoreFolder());
 
         } catch(RuntimeException ex) {
             // because Wicket's handling in its WicketFilter (that calls this method) does not log the exception.

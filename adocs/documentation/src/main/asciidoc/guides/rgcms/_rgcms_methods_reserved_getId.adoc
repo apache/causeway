@@ -37,7 +37,7 @@ public class OrderMenu {
 
 The rules of precedence are:
 
-1. xref:../rgant/rgant.adoc#_rgant_DomainService_objectType[`@DomainService#objectType()`]
+1. xref:../rgant/rgant.adoc#_rgant-DomainService_objectType[`@DomainService#objectType()`]
 2. xref:../rgcms/rgcms.adoc#_rgcms_methods_reserved_getId[`getId()`]
 3. The fully qualified class name.
 

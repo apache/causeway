@@ -18,6 +18,16 @@ The table below summarizes the annotation's attributes.
 | Description
 
 
+|xref:../rgant/rgant.adoc#_rgant-Action_associateWith[`associateWith()`]
+|_memberId_ +
+("")
+|associates an action with another property or collection of the action.
+
+|xref:../rgant/rgant.adoc#_rgant-Action_associateWith[`associateWith-Sequence()`]
+|_memberId_ +
+("")
+|associates an action with another property or collection of the action.
+
 |xref:../rgant/rgant.adoc#_rgant-Action_command[`command()`]
 |`AS_CONFIGURED`, `ENABLED`, `DISABLED` +
 (`AS_CONFIGURED`)
@@ -37,6 +47,12 @@ The table below summarizes the annotation's attributes.
 |whether the reified `Command` (as provided by the `CommandContext` domain service) should actually be persisted (assuming an appropriate implementation of xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`] has been configured).
 
 
+|`commandDtoProcessor()`
+|Implementation of `CommandDtoProcessor` interface +
+(null)
+|If the `Command` also implements `CommandWithDto` (meaning that it can return a `CommandDto`, in other words be converted into an XML memento), then optionally specifies a processor that can refine this XML.
+
+
 |xref:../rgant/rgant.adoc#_rgant-Action_domainEvent[`domainEvent()`]
 |subtype of `ActionDomainEvent` +
 (`ActionDomainEvent.Default`)
@@ -54,7 +70,9 @@ post-execute).
 |xref:../rgant/rgant.adoc#_rgant-Action_invokeOn[`invokeOn()`]
 |`OBJECT_ONLY`, `COLLECTION_ONLY`, `OBJECT_AND_COLLECTION` +
 (`OBJECT_ONLY`)
-|whether an action can be invoked on a single object and/or on many objects in a collection.
+|(deprecated - use view models and associated actions instead).
+
+whether an action can be invoked on a single object and/or on many objects in a collection.
 
 Currently this is only supported for no-arg actions.
 
@@ -114,6 +132,7 @@ public class ToDoItem {
 
 
 
+include::_rgant-Action_associateWith.adoc[leveloffset=+1]
 include::_rgant-Action_command.adoc[leveloffset=+1]
 include::_rgant-Action_domainEvent.adoc[leveloffset=+1]
 include::_rgant-Action_hidden.adoc[leveloffset=+1]

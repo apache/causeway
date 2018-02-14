@@ -34,6 +34,8 @@ import de.agilecoders.wicket.extensions.markup.html.bootstrap.behavior.Draggable
  */
 public class ModalDialog<T> extends Modal<T> implements ActionPrompt {
 
+    private CloseHandler closeHandlerIfAny;
+
     public ModalDialog(String markupId) {
         this(markupId, null);
     }
@@ -82,6 +84,14 @@ public class ModalDialog<T> extends Modal<T> implements ActionPrompt {
             close(target);
         }
         setVisible(false);
+        if(closeHandlerIfAny != null) {
+            closeHandlerIfAny.close(target);
+        }
+    }
+
+    @Override
+    public void setOnClose(final CloseHandler closeHandlerIfAny) {
+        this.closeHandlerIfAny = closeHandlerIfAny;
     }
 
     @Override

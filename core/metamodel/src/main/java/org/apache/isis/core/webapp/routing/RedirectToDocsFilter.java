@@ -65,8 +65,7 @@ public class RedirectToDocsFilter implements Filter {
         if (redirectTo == null) {
             redirectTo = REDIRECT_TO_DEFAULT;
         }
-        System.out.println("redirectToDocsFilter: redirectTo=" + redirectTo);
-        LOG.info("redirectToDocsFilter: redirectTo=" + redirectTo);
+        LOG.info("redirectToDocsFilter: redirectTo={}", redirectTo);
     }
 
     @Override
@@ -80,8 +79,7 @@ public class RedirectToDocsFilter implements Filter {
 
         // do nothing if not requesting "/"
         final String servletPath = httpServletRequest.getServletPath();
-        System.out.println("redirectToDocsFilter: servletPath: " + servletPath);
-        LOG.info("redirectToDocsFilter: servletPath: " + servletPath);
+        LOG.info("redirectToDocsFilter: servletPath: {}", servletPath);
 
         if (!"/".equals(servletPath)) {
             chain.doFilter(request, response);
@@ -97,8 +95,7 @@ public class RedirectToDocsFilter implements Filter {
 
         // otherwise redirect
         final String redirect = combine(httpServletRequest.getContextPath(), redirectTo);
-        System.out.println("redirectToDocsFilter: redirecting to: " + redirect);
-        LOG.info("redirectToDocsFilter: redirecting to: " + redirect);
+        LOG.info("redirectToDocsFilter: redirecting to: {}", redirect);
 
         httpServletResponse.sendRedirect(redirect);
     }

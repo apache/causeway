@@ -30,6 +30,11 @@
 	<artifactId>isis-core-viewer-wicket-model</artifactId>
 	<name>Apache Isis Wicket Viewer Model</name>
 
+	<properties>
+		<jar-plugin.automaticModuleName>org.apache.isis.viewer.wicket.model</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/isis/viewer/wicket/model</git-plugin.propertiesDir>
+	</properties>
+
 	<dependencies>
 
 		<dependency>

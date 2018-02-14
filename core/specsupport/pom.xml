@@ -21,6 +21,11 @@
     <artifactId>isis-core-specsupport</artifactId>
     <name>Apache Isis Spec Support</name>
 
+    <properties>
+        <jar-plugin.automaticModuleName>org.apache.isis.core.specsupport</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/isis/core/specsupport</git-plugin.propertiesDir>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.apache.isis.core</groupId>

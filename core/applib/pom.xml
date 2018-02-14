@@ -34,6 +34,11 @@
         default (Java) programming model.
     </description>
 
+    <properties>
+        <jar-plugin.automaticModuleName>org.apache.isis.applib</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/isis/applib</git-plugin.propertiesDir>
+    </properties>
+
     <build>
         <resources>
             <resource>

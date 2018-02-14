@@ -96,6 +96,7 @@
                     <xs:element maxOccurs="unbounded" minOccurs="0" name="tab" type="tns:tab"/>
                     <xs:element minOccurs="0" name="metadataError" type="xs:string"/>
                 </xs:sequence>
+                <xs:attribute name="collapseIfOne" type="xs:boolean"/>
                 <xs:attribute name="unreferencedCollections" type="xs:boolean"/>
             </xs:extension>
         </xs:complexContent>

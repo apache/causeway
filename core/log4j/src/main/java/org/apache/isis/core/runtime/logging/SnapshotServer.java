@@ -28,11 +28,9 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Properties;
 
-import org.apache.log4j.spi.LoggerFactory;
-
 public class SnapshotServer {
     private static final String SNAPSHOT_PROPERTIES = "snapshot.properties";
-    private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(SnapshotServer.class);
+    private static final org.apache.log4j.Logger LOG4J = org.apache.log4j.Logger.getLogger(SnapshotServer.class);
 
     public static void main(final String[] args) {
         org.apache.log4j.BasicConfigurator.configure();
@@ -48,17 +46,17 @@ public class SnapshotServer {
             propIn = new FileInputStream(SNAPSHOT_PROPERTIES);
             prop.load(propIn);
         } catch (final FileNotFoundException e) {
-            LOG.error("failed to load properties file, " + SNAPSHOT_PROPERTIES);
+            LOG4J.error("failed to load properties file, " + SNAPSHOT_PROPERTIES);
             return;
         } catch (final IOException e) {
-            LOG.error("failed to read properties file, " + SNAPSHOT_PROPERTIES, e);
+            LOG4J.error("failed to read properties file, " + SNAPSHOT_PROPERTIES, e);
             return;
         } finally {
             if (propIn != null) {
                 try {
                     propIn.close();
                 } catch (final IOException e) {
-                    LOG.error("failed to close properties file, " + SNAPSHOT_PROPERTIES, e);
+                    LOG4J.error("failed to close properties file, " + SNAPSHOT_PROPERTIES, e);
                     return;
                 }
             }
@@ -75,7 +73,7 @@ public class SnapshotServer {
         try {
             server = new ServerSocket(port);
         } catch (final IOException e) {
-            LOG.error("failed to start server", e);
+            LOG4J.error("failed to start server", e);
             return;
         }
 
@@ -83,7 +81,7 @@ public class SnapshotServer {
             try {
                 final Socket s = server.accept();
 
-                LOG.info("receiving log from " + s.getInetAddress().getHostName());
+                LOG4J.info("receiving log from " + s.getInetAddress().getHostName());
 
                 final BufferedReader in = new BufferedReader(new InputStreamReader(s.getInputStream(), "8859_1"));
 
@@ -97,7 +95,7 @@ public class SnapshotServer {
 
                 in.close();
             } catch (final IOException e) {
-                LOG.error("failed to log", e);
+                LOG4J.error("failed to log", e);
             }
         }
     }

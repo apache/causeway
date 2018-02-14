@@ -64,7 +64,7 @@ public class BooleanPanel extends ScalarPanelAbstract2 {
 
         final FormGroup scalarIfRegularFormGroup = new FormGroup(ID_SCALAR_IF_REGULAR, checkBox);
         scalarIfRegularFormGroup.add(checkBox);
-        if(getModel().isRequired()) {
+        if(getModel().isRequired() && getModel().isEnabled()) {
             scalarIfRegularFormGroup.add(new CssClassAppender("mandatory"));
         }
 

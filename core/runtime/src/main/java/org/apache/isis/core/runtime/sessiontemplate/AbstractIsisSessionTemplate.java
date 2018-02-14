@@ -16,6 +16,10 @@
  */
 package org.apache.isis.core.runtime.sessiontemplate;
 
+import java.util.List;
+
+import com.google.common.collect.Lists;
+
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -27,7 +31,11 @@ import org.apache.isis.core.runtime.system.session.IsisSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.system.transaction.TransactionalClosure;
+import org.apache.isis.schema.common.v1.CollectionDto;
 import org.apache.isis.schema.common.v1.OidDto;
+import org.apache.isis.schema.common.v1.ValueDto;
+import org.apache.isis.schema.common.v1.ValueType;
+import org.apache.isis.schema.utils.CommonDtoUtils;
 
 public abstract class AbstractIsisSessionTemplate {
 
@@ -82,10 +90,25 @@ public abstract class AbstractIsisSessionTemplate {
 
     // //////////////////////////////////////
 
-    protected ObjectAdapter adapterFor(final Object targetObject) {
+    protected final ObjectAdapter adapterFor(final Object targetObject) {
         if(targetObject instanceof OidDto) {
             final OidDto oidDto = (OidDto) targetObject;
             return adapterFor(oidDto);
+        }
+        if(targetObject instanceof CollectionDto) {
+            final CollectionDto collectionDto = (CollectionDto) targetObject;
+            final List<ValueDto> valueDtoList = collectionDto.getValue();
+            final List<Object> pojoList = Lists.newArrayList();
+            for (final ValueDto valueDto : valueDtoList) {
+                ValueType valueType = collectionDto.getType();
+                final Object valueOrOidDto = CommonDtoUtils.getValue(valueDto, valueType);
+                // converting from adapter and back means we handle both
+                // collections of references and of values
+                final ObjectAdapter objectAdapter = adapterFor(valueOrOidDto);
+                Object pojo = objectAdapter != null ? objectAdapter.getObject() : null;
+                pojoList.add(pojo);
+            }
+            return adapterFor(pojoList);
         }
         if(targetObject instanceof Bookmark) {
             final Bookmark bookmark = (Bookmark) targetObject;
@@ -94,17 +117,17 @@ public abstract class AbstractIsisSessionTemplate {
         return getPersistenceSession().adapterFor(targetObject);
     }
 
-    protected ObjectAdapter adapterFor(final OidDto oidDto) {
+    protected final ObjectAdapter adapterFor(final OidDto oidDto) {
         final Bookmark bookmark = Bookmark.from(oidDto);
         return adapterFor(bookmark);
     }
 
-    protected ObjectAdapter adapterFor(final Bookmark bookmark) {
+    protected final ObjectAdapter adapterFor(final Bookmark bookmark) {
         final RootOid rootOid = RootOid.create(bookmark);
         return adapterFor(rootOid);
     }
 
-    protected ObjectAdapter adapterFor(final RootOid rootOid) {
+    protected final ObjectAdapter adapterFor(final RootOid rootOid) {
         return getPersistenceSession().adapterFor(rootOid);
     }
     

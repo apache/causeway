@@ -20,6 +20,8 @@
 package org.apache.isis.applib.services.xactn;
 
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.applib.services.command.CommandContext;
 
 public interface TransactionService {
 
@@ -95,9 +97,25 @@ public interface TransactionService {
     @Programmatic
     void nextTransaction(Policy policy);
 
+
+    /**
+     * If the current transaction does not use the specified {@link Command} as its
+     * {@link CommandContext#getCommand() command context}, then commit and start a new one.
+     * @param command
+     */
+    void nextTransaction(Command command);
+
+    /**
+     * As per {@link #nextTransaction(Policy)} and {@link #nextTransaction(Command)}.
+     */
+    void nextTransaction(Policy policy, Command command);
+
+
     public enum Policy {
         UNLESS_MARKED_FOR_ABORT,
         ALWAYS
     }
+
+
 
 }

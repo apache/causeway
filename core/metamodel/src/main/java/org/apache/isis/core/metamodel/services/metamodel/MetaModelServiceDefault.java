@@ -34,16 +34,21 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.command.CommandDtoProcessor;
 import org.apache.isis.applib.services.grid.GridService;
 import org.apache.isis.applib.services.metamodel.DomainMember;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
+import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
+import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureId;
+import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureType;
 import org.apache.isis.core.metamodel.services.appmanifest.AppManifestProvider;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
@@ -87,6 +92,7 @@ public class MetaModelServiceDefault implements MetaModelService {
         // ensure the spec is fully rebuilt
         objectSpecification.getObjectActions(Contributed.INCLUDED);
         objectSpecification.getAssociations(Contributed.INCLUDED);
+        specificationLookup.postProcess(objectSpecification);
     }
 
     // //////////////////////////////////////
@@ -227,6 +233,31 @@ public class MetaModelServiceDefault implements MetaModelService {
                 break;
         }
         return sortOf(domainType, mode);
+    }
+
+    @Override
+    public CommandDtoProcessor commandDtoProcessorFor(final String memberIdentifier) {
+        final ApplicationFeatureId featureId = ApplicationFeatureId
+                .newFeature(ApplicationFeatureType.MEMBER, memberIdentifier);
+
+        final ObjectSpecId objectSpecId = featureId.getObjectSpecId();
+        if(objectSpecId == null) {
+            return null;
+        }
+
+        final ObjectSpecification spec = specificationLookup.lookupBySpecId(objectSpecId);
+        if(spec == null) {
+            return null;
+        }
+        final ObjectMember objectMemberIfAny = spec.getMember(featureId.getMemberName());
+        if (objectMemberIfAny == null) {
+            return null;
+        }
+        final CommandFacet commandFacet = objectMemberIfAny.getFacet(CommandFacet.class);
+        if(commandFacet == null) {
+            return null;
+        }
+        return commandFacet.getProcessor();
     }
 
     @Override

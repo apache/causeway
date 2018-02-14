@@ -45,13 +45,11 @@ public class MustSatisfySpecificationFacetForParameterAnnotation extends MustSat
                                 .map(MustSatisfySpecificationFacetAbstract::newSpecificationElseNull)
                                 .filter(Objects::nonNull)
                 )
-                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
         return specifications.size() > 0
                 ? new MustSatisfySpecificationFacetForParameterAnnotation(specifications, holder, servicesInjector)
                 : null;
     }
-
 
     private MustSatisfySpecificationFacetForParameterAnnotation(
             final List<Specification> specifications,

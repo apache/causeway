@@ -24,18 +24,23 @@ import org.apache.isis.applib.annotation.CommandPersistence;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
 import org.apache.isis.core.metamodel.facets.actions.command.CommandFacetAbstract;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public class CommandFacetFromConfiguration extends CommandFacetAbstract {
 
-    public static CommandFacet create(final FacetHolder holder) {
-        return new CommandFacetFromConfiguration(CommandPersistence.PERSISTED, CommandExecuteIn.FOREGROUND, holder);
+    public static CommandFacet create(
+            final FacetHolder holder,
+            final ServicesInjector servicesInjector) {
+        return new CommandFacetFromConfiguration(CommandPersistence.PERSISTED, CommandExecuteIn.FOREGROUND, holder,
+                servicesInjector);
     }
 
     private CommandFacetFromConfiguration(
             final CommandPersistence persistence,
             final CommandExecuteIn executeIn,
-            final FacetHolder holder) {
-        super(persistence, executeIn, Enablement.ENABLED, holder);
+            final FacetHolder holder,
+            final ServicesInjector servicesInjector) {
+        super(persistence, executeIn, Enablement.ENABLED, null, holder, servicesInjector);
     }
 
 }

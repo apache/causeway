@@ -245,10 +245,19 @@ public abstract class AbstractDomainEvent<S> extends java.util.EventObject {
         switch (getEventPhase()) {
             case HIDE:
                 hide();
+                break;
             case DISABLE:
+                if(reason == null) {
+                    throw new IllegalArgumentException("Reason must be non-null");
+                }
                 disable(String.format(reason, args));
+                break;
             case VALIDATE:
+                if(reason == null) {
+                    throw new IllegalArgumentException("Reason must be non-null");
+                }
                 invalidate(String.format(reason, args));
+                break;
         }
     }
     /**
@@ -268,10 +277,13 @@ public abstract class AbstractDomainEvent<S> extends java.util.EventObject {
         switch (getEventPhase()) {
             case HIDE:
                 hide();
+                break;
             case DISABLE:
                 disable(translatableReason);
+                break;
             case VALIDATE:
                 invalidate(translatableReason);
+                break;
         }
     }
     //endregion

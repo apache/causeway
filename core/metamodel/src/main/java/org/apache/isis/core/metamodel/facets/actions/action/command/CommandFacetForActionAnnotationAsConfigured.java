@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.facets.actions.action.command;
 import org.apache.isis.applib.annotation.CommandExecuteIn;
 import org.apache.isis.applib.annotation.CommandPersistence;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public class CommandFacetForActionAnnotationAsConfigured extends CommandFacetForActionAnnotation {
 
@@ -28,8 +29,10 @@ public class CommandFacetForActionAnnotationAsConfigured extends CommandFacetFor
             final CommandPersistence persistence,
             final CommandExecuteIn executeIn,
             final Enablement enablement,
-            final FacetHolder holder) {
-        super(persistence, executeIn, enablement, holder);
+            final FacetHolder holder,
+            final ServicesInjector servicesInjector) {
+        super(persistence, executeIn, enablement, null,
+                holder, servicesInjector);
     }
 
 

@@ -106,7 +106,7 @@ A variation on this approach also supports localized names; see xref:../ugbtb/ug
 
 A third alternative is to move the responsibility for deriving the title into a separate subscriber object.
 
-In the target object, we define an appropriate event type and use the xref:../rgant/rgant.adoc#_rgant_DomainObjectLayout_titleUiEvent[`@DomainObjectLayout#titleUiEvent()`] attribute to specify:
+In the target object, we define an appropriate event type and use the xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_titleUiEvent[`@DomainObjectLayout#titleUiEvent()`] attribute to specify:
 
 [source,java]
 ----
@@ -203,7 +203,7 @@ Otherwise it will just use "Order.png", as normal.
 
 As for title, the determination of which image file to use for the icon can be externalized into a UI event subscriber.
 
-In the target object, we define an appropriate event type and use the xref:../rgant/rgant.adoc#_rgant_DomainObjectLayout_iconUiEvent[`@DomainObjectLayout#iconUiEvent()`] attribute to specify.
+In the target object, we define an appropriate event type and use the xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_iconUiEvent[`@DomainObjectLayout#iconUiEvent()`] attribute to specify.
 
 For example
 
@@ -287,7 +287,7 @@ If non-null value is returned then the CSS class will be rendered _in addition_ 
 
 As for title and icon, the determination of which CSS class to render can be externalized into a UI event subscriber.
 
-In the target object, we define an appropriate event type and use the xref:../rgant/rgant.adoc#_rgant_DomainObjectLayout_cssClassUiEvent[`@DomainObjectLayout#cssClassUiEvent()`] attribute to specify.
+In the target object, we define an appropriate event type and use the xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_cssClassUiEvent[`@DomainObjectLayout#cssClassUiEvent()`] attribute to specify.
 
 For example
 

@@ -30,7 +30,12 @@
 
 	<name>Apache Isis RestfulObjects Viewer Server</name>
 
-	<dependencies>
+    <properties>
+        <jar-plugin.automaticModuleName>org.apache.isis.viewer.restfulobjects.server</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/isis/viewer/restfulobjects/server</git-plugin.propertiesDir>
+    </properties>
+
+    <dependencies>
 
         <dependency>
             <groupId>org.apache.isis.core</groupId>

@@ -44,9 +44,9 @@ public class IsisLocaleInitializer {
                 locale = new Locale(language, country);
             }
             Locale.setDefault(locale);
-            LOG.info("locale set to " + locale);
+            LOG.info("locale set to {}", locale);
         }
-        LOG.debug("locale is " + Locale.getDefault());
+        LOG.debug("locale is {}", Locale.getDefault());
     }
 
 }

@@ -154,6 +154,13 @@ body {
     border: none;
 }
 
+/*
+.collectionContentsAsAjaxTablePanel table.contents .uuidPanel,
+.collectionContentsAsAjaxTablePanel table.contents .javaSqlTimestampPanel {
+    font-family: monospace;
+}
+*/
+
 .collectionContentsAsAjaxTablePanel table.contents .javaMathBigDecimalPanel,
 .collectionContentsAsAjaxTablePanel table.contents .javaMathBigIntegerPanel,
 .collectionContentsAsAjaxTablePanel table.contents .bytePanel,
@@ -163,6 +170,7 @@ body {
 .collectionContentsAsAjaxTablePanel table.contents .floatPanel,
 .collectionContentsAsAjaxTablePanel table.contents .doublePanel {
     text-align: right;
+/*    font-family: monospace;*/
 }
 
 .collectionContentsAsAjaxTablePanel table.contents tbody td,
@@ -573,6 +581,10 @@ div.label-left.actions-right .scalarValueWrapper {
     /*width: 3%;*/
 }
 
+.pull-right .additionalLinkListDropDown li.additionalLinkItem a.btn {
+    text-align: inherit;
+}
+
 
 div.label-top .scalarValueWrapper,
 div.label-none .scalarValueWrapper {
@@ -753,6 +765,11 @@ div.referencePanel.scalarNameAndValueComponentType {
 tr.headers th form input {
     margin-left: -8px;
 }
+/*
+tbody td.togglebox-column form {
+    margin-left: 6px;
+}
+*/
 
 #aboutLink {
     padding-right: 30px;

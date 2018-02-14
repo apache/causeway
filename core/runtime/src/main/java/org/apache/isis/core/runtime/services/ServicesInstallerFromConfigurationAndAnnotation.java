@@ -74,7 +74,7 @@ public class ServicesInstallerFromConfigurationAndAnnotation extends ServicesIns
 
     @Override
     public List<Object> getServices() {
-        LOG.info("installing " + this.getClass().getName());
+        LOG.info("installing {}", this.getClass().getName());
 
         if(serviceList == null) {
 

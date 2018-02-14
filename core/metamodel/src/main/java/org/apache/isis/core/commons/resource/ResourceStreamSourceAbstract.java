@@ -32,19 +32,14 @@ public abstract class ResourceStreamSourceAbstract implements ResourceStreamSour
 
     @Override
     public final InputStream readResource(final String resourcePath) {
-
         try {
             final InputStream resourceStream = doReadResource(resourcePath);
             if (resourceStream != null) {
                 return resourceStream;
             }
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("could not load resource path '" + resourcePath + "' from " + getName());
-            }
+            LOG.debug("could not load resource path '{}' from {}", resourcePath, getName());
         } catch (final IOException e) {
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("could not load resource path '" + resourcePath + "' from " + getName() + ", exception: " + e.getMessage());
-            }
+            LOG.debug("could not load resource path '{}' from {}, exception: {}", resourcePath, getName(), e.getMessage());
         }
         return null;
     }

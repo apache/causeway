@@ -106,7 +106,7 @@ public abstract class SpecificationLoaderTestAbstract {
 
         final SpecificationLoader specificationLoader =
                 new SpecificationLoader(
-                        new ProgrammingModelFacetsJava5(stubConfiguration),
+                        stubConfiguration, new ProgrammingModelFacetsJava5(stubConfiguration),
                         new MetaModelValidatorDefault(), stubServicesInjector);
 
         stubServicesInjector.addFallbackIfRequired(SpecificationLoader.class, specificationLoader);

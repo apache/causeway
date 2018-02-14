@@ -23,6 +23,7 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.services.xactn.Transaction;
 import org.apache.isis.applib.services.xactn.TransactionService;
+import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
@@ -41,11 +42,21 @@ public class TransactionServiceDefault implements TransactionService {
 
     @Override
     public void nextTransaction() {
-        nextTransaction(TransactionService.Policy.UNLESS_MARKED_FOR_ABORT);
+        nextTransaction((Command)null);
+    }
+
+    @Override
+    public void nextTransaction(final Command commandIfAny) {
+        nextTransaction(TransactionService.Policy.UNLESS_MARKED_FOR_ABORT, commandIfAny);
     }
 
     @Override
     public void nextTransaction(TransactionService.Policy policy) {
+        nextTransaction(policy, null);
+    }
+
+    @Override
+    public void nextTransaction(TransactionService.Policy policy, final Command commandIfAny) {
         final TransactionState transactionState = getTransactionState();
         switch (transactionState) {
         case NONE:
@@ -69,7 +80,7 @@ public class TransactionServiceDefault implements TransactionService {
             break;
         }
 
-        persistenceSessionServiceInternal.beginTran();
+        persistenceSessionServiceInternal.beginTran(commandIfAny);
     }
 
     @Override

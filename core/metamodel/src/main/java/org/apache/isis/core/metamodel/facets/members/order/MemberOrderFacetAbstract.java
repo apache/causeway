@@ -36,26 +36,37 @@ public abstract class MemberOrderFacetAbstract extends MultipleValueFacetAbstrac
     private final String originalName;
     private final String name;
     private final String sequence;
-    private final TranslationService translationService;
 
     public MemberOrderFacetAbstract(
             final String name,
             final String sequence,
             final TranslationService translationService,
             final FacetHolder holder) {
+        this(translatedValueElse(name, "", translationService, holder),
+             sequence,
+             holder);
+    }
+
+    public MemberOrderFacetAbstract(
+            final String name,
+            final String sequence,
+            final FacetHolder holder) {
         super(type(), holder);
-        this.translationService = translationService;
-        this.name = translatedValueElse(name, "");
+        this.name = valueElse(name, "");
         this.originalName = valueElse(name, "");
         this.sequence = valueElse(sequence, "1");
     }
 
-    private String translatedValueElse(final String name, final String defaultValue) {
+    private static String translatedValueElse(
+            final String name,
+            final String defaultValue,
+            final TranslationService translationService,
+            final FacetHolder holder) {
         final boolean nullOrEmpty = Strings.isNullOrEmpty(name);
         if (nullOrEmpty) {
             return defaultValue;
         } else {
-            final IdentifiedHolder identifiedHolder = (IdentifiedHolder) getFacetHolder();
+            final IdentifiedHolder identifiedHolder = (IdentifiedHolder) holder;
             final String context = identifiedHolder.getIdentifier().getClassName();
             return translationService.translate(context, name);
         }

@@ -21,9 +21,9 @@ package org.apache.isis.viewer.wicket.ui.components.collection.bulk;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
+import com.google.common.base.Predicates;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
@@ -33,54 +33,47 @@ import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
+import org.apache.isis.viewer.wicket.ui.components.collection.AssociatedWithActionsHelper;
 
+/**
+ * See also {@link AssociatedWithActionsHelper}.
+ */
 public class BulkActionsHelper implements Serializable {
 
-    private final EntityCollectionModel model;
+    private final EntityCollectionModel collectionModel;
 
     private static final long serialVersionUID = 1L;
 
-    public BulkActionsHelper(final EntityCollectionModel model) {
-        this.model = model;
-    }
-
-    private EntityCollectionModel getModel() {
-        return model;
+    public BulkActionsHelper(final EntityCollectionModel collectionModel) {
+        this.collectionModel = collectionModel;
     }
 
     public List<ObjectAction> getBulkActions(final IsisSessionFactory isisSessionFactory) {
-        final EntityCollectionModel model = getModel();
 
-        if(model.isParented()) {
+        if(collectionModel.isParented()) {
             return Collections.emptyList();
         }
 
-        final ObjectSpecification typeSpec = model.getTypeOfSpecification();
+        final ObjectSpecification objectSpec = getObjectSpecification(isisSessionFactory);
 
-        List<ObjectAction> objectActions = typeSpec.getObjectActions(ActionType.USER, Contributed.INCLUDED,
-                com.google.common.base.Predicates.<ObjectAction>alwaysTrue());
+        final List<ActionType> actionTypes = inferActionTypes(isisSessionFactory);
+        List<ObjectAction> objectActions = objectSpec.getObjectActions(actionTypes, Contributed.INCLUDED, Predicates.<ObjectAction>alwaysTrue());
 
-        final DeploymentCategory deploymentCategory = isisSessionFactory.getDeploymentCategory();
-        if ( !deploymentCategory.isProduction()) {
-            List<ObjectAction> prototypeActions   = typeSpec.getObjectActions(ActionType.PROTOTYPE, Contributed.INCLUDED,
-                    com.google.common.base.Predicates.<ObjectAction>alwaysTrue());
-            objectActions.addAll(prototypeActions);
-        }
-
-        List<ObjectAction> flattenedActions = objectActions;
-
-        return Lists.newArrayList(Iterables.filter(flattenedActions, BULK));
+        return objectActions.stream().filter(ObjectAction.Predicates.bulk()::apply).collect(Collectors.toList());
     }
 
+    private ObjectSpecification getObjectSpecification(final IsisSessionFactory isisSessionFactory) {
+        return collectionModel.getTypeOfSpecification();
+    }
 
-    @SuppressWarnings("deprecation")
-    private static final Predicate<ObjectAction> BULK = ObjectAction.Predicates.bulk();
-
-    /**
-     * Protected so can be overridden in testing if required.
-     */
-    protected boolean isDebugMode() {
-        return true;
+    private List<ActionType> inferActionTypes(final IsisSessionFactory isisSessionFactory) {
+        final List<ActionType> actionTypes = Lists.newArrayList();
+        actionTypes.add(ActionType.USER);
+        final DeploymentCategory deploymentCategory = isisSessionFactory.getDeploymentCategory();
+        if ( !deploymentCategory.isProduction()) {
+            actionTypes.add(ActionType.PROTOTYPE);
+        }
+        return actionTypes;
     }
 
 }

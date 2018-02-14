@@ -58,14 +58,10 @@ public interface ScalarModelWithMultiPending extends Serializable {
                 public ArrayList<ObjectAdapterMemento> getObject() {
                     final ArrayList<ObjectAdapterMemento> pending = owner.getMultiPending();
                     if (pending != null) {
-                        if (LOG.isDebugEnabled()) {
-                            LOG.debug("pending not null: " + pending.toString());
-                        }
+                        LOG.debug("pending not null: {}", pending.toString());
                         return pending;
                     }
-                    if (LOG.isDebugEnabled()) {
-                        LOG.debug("pending is null");
-                    }
+                    LOG.debug("pending is null");
 
                     final ScalarModel scalarModel = owner.getScalarModel();
                     final ObjectAdapterMemento objectAdapterMemento = scalarModel.getObjectAdapterMemento();
@@ -76,9 +72,7 @@ public interface ScalarModelWithMultiPending extends Serializable {
 
                 @Override
                 public void setObject(final ArrayList<ObjectAdapterMemento> adapterMemento) {
-                    if (LOG.isDebugEnabled()) {
-                        LOG.debug(String.format("setting to: %s", adapterMemento != null ? adapterMemento.toString() : null));
-                    }
+                    LOG.debug("setting to: {}", (adapterMemento != null ? adapterMemento.toString() : null));
                     owner.setMultiPending(adapterMemento);
 
                     final ScalarModel ownerScalarModel = owner.getScalarModel();
@@ -90,9 +84,7 @@ public interface ScalarModelWithMultiPending extends Serializable {
                     } else {
                         final ArrayList<ObjectAdapterMemento> ownerPending = owner.getMultiPending();
                         if (ownerPending != null) {
-                            if (LOG.isDebugEnabled()) {
-                                LOG.debug(String.format("setting to pending: %s", ownerPending.toString()));
-                            }
+                            LOG.debug("setting to pending: {}", ownerPending.toString());
                             final ObjectSpecId objectSpecId = ownerScalarModel.getTypeOfSpecification().getSpecId();
                             ownerScalarModel.setObjectMemento(
                                     ObjectAdapterMemento.createForList(adapterMemento, objectSpecId),

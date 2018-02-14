@@ -109,7 +109,7 @@ public final class ServiceInstantiator {
 
     private Class<?> loadClass(final String className) {
         try {
-            LOG.debug("loading class for service: " + className);
+            LOG.debug("loading class for service: {}", className);
             //return Thread.currentThread().getContextClassLoader().loadClass(className);
             return Class.forName(className);
         } catch (final ClassNotFoundException ex) {
@@ -242,7 +242,7 @@ public final class ServiceInstantiator {
         final int numParams = postConstructMethod.getParameterTypes().length;
 
         if(LOG.isDebugEnabled()) {
-            LOG.debug("... calling @PostConstruct method: " + serviceClass.getName() + ": " + postConstructMethod.getName());
+            LOG.debug("... calling @PostConstruct method: {}: {}", serviceClass.getName(), postConstructMethod.getName());
         }
         // unlike shutdown, we don't swallow exceptions; would rather fail early
         if(numParams == 0) {
@@ -261,7 +261,7 @@ public final class ServiceInstantiator {
         }
 
         if(LOG.isDebugEnabled()) {
-            LOG.debug("... calling @PreDestroy method: " + serviceClass.getName() + ": " + preDestroyMethod.getName());
+            LOG.debug("... calling @PreDestroy method: {}: {}", serviceClass.getName(), preDestroyMethod.getName());
         }
         try {
             MethodExtensions.invoke(preDestroyMethod, service);

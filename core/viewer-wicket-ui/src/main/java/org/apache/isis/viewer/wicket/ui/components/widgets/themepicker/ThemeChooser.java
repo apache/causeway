@@ -157,7 +157,7 @@ public class ThemeChooser extends Panel {
                 theme = BootswatchTheme.valueOf(themeName);
             }
         } catch (Exception x) {
-            LOG.warn("Cannot find a theme with name '"+themeName+"' in all available theme providers: " + x.getMessage());
+            LOG.warn("Cannot find a theme with name '{}' in all available theme providers: {}", themeName, x.getMessage());
             // fallback to Bootstrap default theme if the parsing by name failed somehow
             theme = new BootstrapThemeTheme();
         }

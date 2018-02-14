@@ -248,7 +248,7 @@ public class IsisTransactionManager implements SessionScopedComponent {
         transactionLevel++;
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug("startTransaction: level " + (transactionLevel - 1) + "->" + (transactionLevel) + (noneInProgress ? " (no transaction in progress or was previously completed; transaction created)" : ""));
+            LOG.debug("startTransaction: level {}->{}{}", (transactionLevel - 1), (transactionLevel), (noneInProgress ? " (no transaction in progress or was previously completed; transaction created)" : ""));
         }
     }
 

@@ -96,8 +96,7 @@ public class GridLoaderServiceDefault implements GridLoaderService {
     @Override
     @Programmatic
     public boolean existsFor(final Class<?> domainClass) {
-        final URL resource = Resources.getResource(domainClass, resourceNameFor(domainClass));
-        return resource != null;
+        return resourceNameFor(domainClass) != null;
     }
 
     @Override
@@ -158,17 +157,16 @@ public class GridLoaderServiceDefault implements GridLoaderService {
 
     private String loadXml(final Class<?> domainClass) {
         final String resourceName = resourceNameFor(domainClass);
+        if(resourceName == null) {
+            LOG.debug("Failed to locate layout file for '{}'", domainClass.getName());
+            return null;
+        }
         try {
             return resourceContentOf(domainClass, resourceName);
-        } catch (IOException | IllegalArgumentException ex) {
-
-            if(LOG.isDebugEnabled()) {
-                final String message = String .format(
-                        "Failed to locate file %s (relative to %s.class); ex: %s)",
-                        resourceName, domainClass.getName(), ex.getMessage());
-
-                LOG.debug(message);
-            }
+        } catch (IOException ex) {
+            LOG.debug(
+                    "Failed to locate file {} (relative to {}.class)",
+                    resourceName, domainClass.getName(), ex);
             return null;
         }
     }
@@ -178,10 +176,47 @@ public class GridLoaderServiceDefault implements GridLoaderService {
         return Resources.toString(url, Charset.defaultCharset());
     }
 
-    private String resourceNameFor(final Class<?> domainClass) {
-        return domainClass.getSimpleName() + ".layout.xml";
+    String resourceNameFor(final Class<?> domainClass) {
+        for (final Type type : Type.values()) {
+            final String candidateResourceName = resourceNameFor(domainClass, type);
+            try {
+                final URL resource = Resources.getResource(domainClass, candidateResourceName);
+                if (resource != null) {
+                    return candidateResourceName;
+                }
+            } catch(IllegalArgumentException ex) {
+                // continue
+            }
+        }
+        return null;
     }
 
+    enum Type {
+        DEFAULT {
+            @Override
+            protected String suffix() {
+                return ".layout.xml";
+            }
+        },
+        FALLBACK {
+            @Override
+            protected String suffix() {
+                return ".layout.fallback.xml";
+            }
+        };
+
+        private String resourceNameFor(final Class<?> domainClass) {
+            return domainClass.getSimpleName() + suffix();
+        }
+
+        protected abstract String suffix();
+    }
+
+    private String resourceNameFor(
+            final Class<?> domainClass,
+            final Type type) {
+        return type.resourceNameFor(domainClass);
+    }
 
 
     //region > injected dependencies

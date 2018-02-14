@@ -138,31 +138,35 @@ public class StandaloneCollectionPanel extends PanelAbstract<EntityCollectionMod
 
     //region > BulkActionsProvider
 
+    ObjectAdapterToggleboxColumn toggleboxColumn;
+
     @Override
-    public ObjectAdapterToggleboxColumn createToggleboxColumn() {
+    public ObjectAdapterToggleboxColumn getToggleboxColumn() {
 
-        final List<ObjectAction> bulkActions = bulkActionsHelper.getBulkActions(getIsisSessionFactory());
+        if (toggleboxColumn == null) {
+            final List<ObjectAction> bulkActions = bulkActionsHelper.getBulkActions(getIsisSessionFactory());
 
-        final EntityCollectionModel entityCollectionModel = getModel();
-        if(bulkActions.isEmpty() || entityCollectionModel.isParented()) {
-            return null;
-        }
-
-        final ObjectAdapterToggleboxColumn toggleboxColumn = new ObjectAdapterToggleboxColumn();
-        final OnSelectionHandler handler = new OnSelectionHandler() {
-
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public void onSelected(
-                    final Component context,
-                    final ObjectAdapter selectedAdapter,
-                    final AjaxRequestTarget ajaxRequestTarget) {
-                getModel().toggleSelectionOn(selectedAdapter);
+            final EntityCollectionModel entityCollectionModel = getModel();
+            if(bulkActions.isEmpty() || entityCollectionModel.isParented()) {
+                return null;
             }
 
-        };
-        toggleboxColumn.setOnSelectionHandler(handler);
+            toggleboxColumn = new ObjectAdapterToggleboxColumn();
+            final OnSelectionHandler handler = new OnSelectionHandler() {
+
+                private static final long serialVersionUID = 1L;
+
+                @Override
+                public void onSelected(
+                        final Component context,
+                        final ObjectAdapter selectedAdapter,
+                        final AjaxRequestTarget ajaxRequestTarget) {
+                    getModel().toggleSelectionOn(selectedAdapter);
+                }
+
+            };
+            toggleboxColumn.setOnSelectionHandler(handler);
+        }
 
         return toggleboxColumn;
     }
@@ -181,7 +185,7 @@ public class StandaloneCollectionPanel extends PanelAbstract<EntityCollectionMod
         List<LinkAndLabel> linkAndLabels = Lists.transform(bulkActions, new Function<ObjectAction, LinkAndLabel>(){
             @Override
             public LinkAndLabel apply(ObjectAction objectAction) {
-                return linkFactory.newLink(objectAction, ID_ADDITIONAL_LINK);
+                return linkFactory.newLink(objectAction, ID_ADDITIONAL_LINK, null);
             }
         });
 

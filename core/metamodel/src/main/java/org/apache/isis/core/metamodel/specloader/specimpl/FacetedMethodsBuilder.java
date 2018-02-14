@@ -148,7 +148,7 @@ public class FacetedMethodsBuilder {
             final ObjectSpecificationAbstract spec,
             final FacetedMethodsBuilderContext facetedMethodsBuilderContext) {
         if (LOG.isDebugEnabled()) {
-            LOG.debug("creating JavaIntrospector for " + spec.getFullIdentifier());
+            LOG.debug("creating JavaIntrospector for {}", spec.getFullIdentifier());
         }
 
         this.spec = spec;
@@ -168,7 +168,7 @@ public class FacetedMethodsBuilder {
     protected void finalize() throws Throwable {
         super.finalize();
         if (LOG.isDebugEnabled()) {
-            LOG.debug("finalizing inspector " + this);
+            LOG.debug("finalizing inspector {}", this);
         }
     }
 
@@ -187,7 +187,7 @@ public class FacetedMethodsBuilder {
 
     public void introspectClass() {
         if (LOG.isInfoEnabled()) {
-            LOG.info("introspecting " + getClassName() + ": class-level details");
+            LOG.info("introspecting {}: class-level details", getClassName());
         }
 
         // process facets at object level
@@ -240,7 +240,7 @@ public class FacetedMethodsBuilder {
 
     private List<FacetedMethod> createAssociationFacetedMethods() {
         if (LOG.isDebugEnabled()) {
-            LOG.debug("introspecting " + getClassName() + ": properties and collections");
+            LOG.debug("introspecting {}: properties and collections", getClassName());
         }
         final Set<Method> associationCandidateMethods = getFacetProcessor().findAssociationCandidateAccessors(methods, new HashSet<Method>());
 
@@ -285,7 +285,7 @@ public class FacetedMethodsBuilder {
             final List<FacetedMethod> facetMethodsToAppendto) {
         for (final Method accessorMethod : accessorMethods) {
             if (LOG.isDebugEnabled()) {
-                LOG.debug("  identified accessor method representing collection: " + accessorMethod);
+                LOG.debug("  identified accessor method representing collection: {}", accessorMethod);
             }
 
             // create property and add facets
@@ -314,7 +314,7 @@ public class FacetedMethodsBuilder {
             final List<FacetedMethod> facetedMethodsToAppendto) throws MetaModelException {
 
         for (final Method accessorMethod : accessorMethods) {
-            LOG.debug("  identified accessor method representing property: " + accessorMethod);
+            LOG.debug("  identified accessor method representing property: {}", accessorMethod);
 
             final Class<?> returnType = accessorMethod.getReturnType();
 
@@ -364,7 +364,7 @@ public class FacetedMethodsBuilder {
     private List<FacetedMethod> findActionFacetedMethods(
             final MethodScope methodScope) {
         if (LOG.isDebugEnabled()) {
-            LOG.debug("introspecting " + getClassName() + ": actions");
+            LOG.debug("introspecting {}: actions", getClassName());
         }
         final List<FacetedMethod> actionFacetedMethods1 = findActionFacetedMethods(methodScope, RecognisedHelpersStrategy.SKIP);
         final List<FacetedMethod> actionFacetedMethods2 = findActionFacetedMethods(methodScope, RecognisedHelpersStrategy.DONT_SKIP);
@@ -500,18 +500,6 @@ public class FacetedMethodsBuilder {
         return true;
     }
 
-
-    // ////////////////////////////////////////////////////////////////////////////
-    // introspect class post processing
-    // ////////////////////////////////////////////////////////////////////////////
-
-    public void introspectClassPostProcessing() {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("introspecting {0}: class-level post-processing", getClassName());
-        }
-
-        getFacetProcessor().processPost(introspectedClass, methodRemover, spec);
-    }
 
     // ////////////////////////////////////////////////////////////////////////////
     // Helpers for finding and removing methods.

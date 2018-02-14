@@ -24,17 +24,20 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.CommandExecuteIn;
 import org.apache.isis.applib.annotation.CommandPersistence;
 import org.apache.isis.applib.annotation.CommandReification;
+import org.apache.isis.applib.services.command.CommandDtoProcessor;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
 import org.apache.isis.core.metamodel.facets.actions.command.CommandFacetAbstract;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public class CommandFacetForActionAnnotation extends CommandFacetAbstract {
 
     public static CommandFacet create(
             final List<Action> actions,
             final IsisConfiguration configuration,
+            final ServicesInjector servicesInjector,
             final FacetHolder holder) {
 
         final CommandActionsConfiguration setting = CommandActionsConfiguration.parse(configuration);
@@ -44,9 +47,16 @@ public class CommandFacetForActionAnnotation extends CommandFacetAbstract {
                 .findFirst()
                 .map(action -> {
 
-                    final CommandReification command = action.command();
-                    final CommandPersistence persistence = action.commandPersistence();
+                    CommandReification command = action.command();
+                    CommandPersistence persistence = action.commandPersistence();
                     final CommandExecuteIn executeIn = action.commandExecuteIn();
+                    final Class<? extends CommandDtoProcessor> processorClass = action.commandDtoProcessor();
+                    final CommandDtoProcessor processor = newProcessorElseNull(processorClass);
+
+                    if(processor != null) {
+                        command = CommandReification.ENABLED;
+                        persistence = CommandPersistence.PERSISTED;
+                    }
 
                     switch (command) {
                     case AS_CONFIGURED:
@@ -60,12 +70,13 @@ public class CommandFacetForActionAnnotation extends CommandFacetAbstract {
                             // else fall through
                         default:
                             return (CommandFacet)new CommandFacetForActionAnnotationAsConfigured(
-                                    persistence, executeIn, Enablement.ENABLED, holder);
+                                    persistence, executeIn, Enablement.ENABLED, holder, servicesInjector);
                         }
                     case DISABLED:
                         return null;
                     case ENABLED:
-                        return new CommandFacetForActionAnnotation(persistence, executeIn, Enablement.ENABLED, holder);
+                        return new CommandFacetForActionAnnotation(
+                                persistence, executeIn, Enablement.ENABLED, processor, holder, servicesInjector);
                     }
                     throw new IllegalStateException("command '" + command + "' not recognised");
                 })
@@ -81,7 +92,6 @@ public class CommandFacetForActionAnnotation extends CommandFacetAbstract {
                     default:
                         return CommandFacetFromConfiguration.create(holder);
                     }
-
                 });
     }
 
@@ -100,8 +110,10 @@ public class CommandFacetForActionAnnotation extends CommandFacetAbstract {
             final CommandPersistence persistence,
             final CommandExecuteIn executeIn,
             final Enablement enablement,
-            final FacetHolder holder) {
-        super(persistence, executeIn, enablement, holder);
+            final CommandDtoProcessor processor,
+            final FacetHolder holder,
+            final ServicesInjector servicesInjector) {
+        super(persistence, executeIn, enablement, processor, holder, servicesInjector);
     }
 
 

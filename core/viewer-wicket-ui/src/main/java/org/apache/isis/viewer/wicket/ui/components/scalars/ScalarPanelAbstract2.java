@@ -42,7 +42,6 @@ import org.apache.wicket.model.Model;
 
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.PromptStyle;
-import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
@@ -187,11 +186,11 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
         }
 
         final ScalarModel scalarModel = getModel();
-        final String disableReasonIfAny = scalarModel.whetherDisabled(whereAreWeRendering());
 
         if (scalarModel.isViewMode()) {
             onInitializeWhenViewMode();
         } else {
+            final String disableReasonIfAny = scalarModel.whetherDisabled();
             if (disableReasonIfAny != null) {
                 onInitializeWhenDisabled(disableReasonIfAny);
             } else {
@@ -398,8 +397,8 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
     protected void onConfigure() {
 
         final ScalarModel scalarModel = getModel();
-        
-        final boolean hidden = scalarModel.whetherHidden(whereAreWeRendering());
+
+        final boolean hidden = scalarModel.whetherHidden();
         setVisibilityAllowed(!hidden);
 
         super.onConfigure();
@@ -520,34 +519,6 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
         return Rendering.renderingFor(scalarModel.getRenderingHint());
     }
 
-    /**
-     * Returns the current rendering context of this component, one of 
-     * <ul>
-     * <li>standalone table</li>
-     * <li>parented table</li>
-     * <li>form</li>
-     * </ul>
-     * @return
-     */
-    protected Where whereAreWeRendering() {
-        switch (scalarModel.getRenderingHint()) {
-		case PARENTED_TITLE_COLUMN:
-			return Where.PARENTED_TABLES;
-		case STANDALONE_TITLE_COLUMN:
-			return Where.STANDALONE_TABLES;
-		case PROPERTY_COLUMN:
-			final ObjectAdapter parentAdapter =
-			 	scalarModel.getParentEntityModel().load(AdapterManager.ConcurrencyChecking.NO_CHECK);
-			final boolean parented = parentAdapter.isParentedCollection();
-			return parented ? Where.PARENTED_TABLES : Where.STANDALONE_TABLES;
-		case REGULAR:
-			return Where.OBJECT_FORMS;
-		default:
-			throw new RuntimeException("unmatched case "+scalarModel.getRenderingHint());
-		}
-    }
-    
-
     // ///////////////////////////////////////////////////////////////////
 
     protected Component getComponentForRegular() {
@@ -577,7 +548,7 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
     protected Label createScalarName(final String id, final String labelCaption) {
         final Label scalarName = new Label(id, labelCaption);
         final ScalarModel model = getModel();
-        if(model.isRequired() && model.canEnterEditMode()) {
+        if(model.isRequired() && model.isEnabled()) {
             final String label = scalarName.getDefaultModelObjectAsString();
             if(!Strings.isNullOrEmpty(label)) {
                 scalarName.add(new CssClassAppender("mandatory"));

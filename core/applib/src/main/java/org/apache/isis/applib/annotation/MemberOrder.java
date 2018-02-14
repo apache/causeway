@@ -29,7 +29,7 @@ import java.lang.annotation.Target;
  * Indicates the position a method should be placed in.
  *
  * <p>
- *     An alternative is to use the <code>Xxx.layout.json</code> file, where <code>Xxx</code> is the domain object name.
+ *     An alternative is to use the <code>Xxx.layout.xml</code> file, where <code>Xxx</code> is the domain object name.
  * </p>
  */
 @Inherited

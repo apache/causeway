@@ -35,6 +35,6 @@ There is no lifecycle event for object creating because the framework doesn't kn
 
 
 For example, if annotated with xref:../rgant/rgant.adoc#_rgant_DomainObject_updatingLifecycleEvent[`@DomainObjectLayout#updatingLifecycleEvent()`], the appropriate (subclass of) `ObjectUpdatingEvent` will be emitted.
- Similarly for xref:../rgant/rgant.adoc#_rgant_DomainObjectLayout_iconUiEvent[`iconUiEvent()`] and xref:../rgant/rgant.adoc#_rgant_DomainObjectLayout_cssClassUiEvent[`cssClassUiEvent()`].
+ Similarly for xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_iconUiEvent[`iconUiEvent()`] and xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_cssClassUiEvent[`cssClassUiEvent()`].
 
 

@@ -247,11 +247,11 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
            thisVersion.different(otherVersion)) {
             
             if(AdapterManager.ConcurrencyChecking.isCurrentlyEnabled()) {
-                LOG.info("concurrency conflict detected on " + thisOid + " (" + otherVersion + ")");
+                LOG.info("concurrency conflict detected on {} ({})", thisOid, otherVersion);
                 final String currentUser = authenticationSession.getUserName();
                 throw new ConcurrencyException(currentUser, thisOid, thisVersion, otherVersion);
             } else {
-                LOG.info("concurrency conflict detected but suppressed, on " + thisOid + " (" + otherVersion + ")");
+                LOG.info("concurrency conflict detected but suppressed, on {} ({})", thisOid, otherVersion );
             }
         }
     }

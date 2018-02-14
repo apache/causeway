@@ -27,6 +27,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.model.models.ToggledMementosProvider;
 import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.ActionLinkFactoryAbstract;
 
 public final class EntityActionLinkFactory extends ActionLinkFactoryAbstract {
@@ -42,7 +43,8 @@ public final class EntityActionLinkFactory extends ActionLinkFactoryAbstract {
     @Override
     public LinkAndLabel newLink(
             final ObjectAction objectAction,
-            final String linkId) {
+            final String linkId,
+            final ToggledMementosProvider toggledMementosProviderIfAny) {
 
         final ObjectAdapter objectAdapter = this.targetEntityModel.load(ConcurrencyChecking.NO_CHECK);
         
@@ -65,7 +67,7 @@ public final class EntityActionLinkFactory extends ActionLinkFactoryAbstract {
         // }
 
         
-        final AbstractLink link = newLink(linkId, objectAction);
+        final AbstractLink link = newLink(linkId, objectAction, toggledMementosProviderIfAny);
 
         // similarly for whether disabled, done at point of rendering
 
@@ -82,6 +84,8 @@ public final class EntityActionLinkFactory extends ActionLinkFactoryAbstract {
         final String disabledReasonIfAny = null;
         return newLinkAndLabel(objectAdapter, objectAction, link, disabledReasonIfAny);
     }
+
+
 
 
 }

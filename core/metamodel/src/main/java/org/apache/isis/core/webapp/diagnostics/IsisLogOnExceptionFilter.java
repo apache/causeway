@@ -73,6 +73,6 @@ public class IsisLogOnExceptionFilter implements Filter {
             buf.append('?').append(queryString);
         }
         
-        LOG.error("Request caused " + e.getClass().getName() + ": " + buf.toString(), e);
+        LOG.error("Request caused {}: {}", e.getClass().getName(), buf.toString(), e);
     }
 }

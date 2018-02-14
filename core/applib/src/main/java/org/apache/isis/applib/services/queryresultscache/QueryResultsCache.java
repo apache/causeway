@@ -206,9 +206,7 @@ public class QueryResultsCache implements WithTransactionScope {
 
     @Programmatic
     public <T> void put(final Key cacheKey, final T result) {
-        if(LOG.isDebugEnabled()) {
-            LOG.debug("PUT: " + cacheKey);
-        }
+        LOG.debug("PUT: {}", cacheKey);
         cache.put(cacheKey, new Value<T>(result));
     }
 
@@ -216,8 +214,7 @@ public class QueryResultsCache implements WithTransactionScope {
         if(!LOG.isDebugEnabled()) { 
             return; 
         } 
-        String hitOrMiss = cacheValue != null ? "HIT" : "MISS";
-        LOG.debug( hitOrMiss + ": " + cacheKey.toString());
+        LOG.debug("{}: {}", (cacheValue != null ? "HIT" : "MISS"), cacheKey.toString());
     }
 
     /**

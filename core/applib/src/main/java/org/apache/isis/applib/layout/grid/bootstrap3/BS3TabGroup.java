@@ -65,6 +65,21 @@ public class BS3TabGroup extends BS3ElementAbstract implements BS3TabOwner {
 
 
 
+    private Boolean collapseIfOne;
+    /**
+     * If there is a single tab in the tabgroup, then whether to collapse and render without the outer tab.
+     */
+    @XmlAttribute(required = false)
+    public Boolean isCollapseIfOne() {
+        return collapseIfOne;
+    }
+
+    public void setCollapseIfOne(final Boolean collapseIfOne) {
+        this.collapseIfOne = collapseIfOne;
+    }
+
+
+
     private List<BS3Tab> tabs = Lists.newArrayList();
 
     // no wrapper; required=false because may be auto-generated

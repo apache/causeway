@@ -43,7 +43,7 @@ public class EntityModel_hintsTest {
 
     @Before
     public void setUp() throws Exception {
-        target = new EntityModel();
+        target = new EntityModel(EntityModel.Mode.VIEW, EntityModel.RenderingHint.REGULAR);
 
         mockParent = context.mock(MarkupContainer.class, "parent");
         mockComponent1 = context.mock(Component.class, "component1");

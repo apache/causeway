@@ -1,0 +1,24 @@
+[[_release-notes_1.16.1]]
+= 1.16.1
+:notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
+:_basedir: ../
+:_imagesdir: images/
+:toc: right
+
+
+
+
+This release is primarily a bug fix release, but does introduce a couple of notable new features and improvements:
+
+* link:https://issues.apache.org/jira/browse/ISIS-1585[ISIS-1585] supports checkboxes on parented (rather than standalone) collections.
+The selected items are used as the default values for any associated actions with collection parameters.
++
+As part of this change, the new `@Action(associateWith="...")` attribute can be used instead of `@MemberOrder(...)` as a way to associate actions with either collections or properties.
+
+* link:https://issues.apache.org/jira/browse/ISIS-1569[ISIS-1569] provides infrastructure to enable commands to be replayed from master to slave (for regression testing purposes).
+
++
+The majority of the implementation is provided in the (non-ASF) (non-ASF) link:http://platform.incode.org[Incode Platform]'s new link:http://platform.incode.org/modules/spi/command/spi-command-replay.html[command replay] library.
+
+Applications written against v1.16.0 should run against v1.16.1 with few if any changes.
+

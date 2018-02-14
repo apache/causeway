@@ -61,12 +61,12 @@ There can be more than one implementation of this new SPI, and a framework-provi
 (`PublisherServiceLogging`) will log to a file.  The (non-ASF) link:http://platform.incode.org[Incode Platform^]'s publishmq module also implements the new SPI.
 
 The new service also supports the notion of published property edits; the new
-xref:../guides/rgant/rgant.adoc#_rgant_Property_publishing[`@Property#publishing()`] annotation attribute can be used to specify.  The `
+xref:../guides/rgant/rgant.adoc#_rgant-Property_publishing[`@Property#publishing()`] annotation attribute can be used to specify.  The `
 isis.services.publish.properties` configuration property can be used to specify a fallback default for properties where
 the attribute is not set explicitly.
 
-Conversely, neither the xref:../guides/rgant/rgant.adoc#_rgant_Action_publishingPayloadFactory[`@Action#publishingPayloadFactory()`]
-nor the xref:../guides/rgant/rgant.adoc#_rgant_DomainObject_publishingPayloadFactory[`@DomainObject#publishingPayloadFactory()`] are
+Conversely, neither the xref:../guides/rgant/rgant.adoc#_rgant-Action_publishingPayloadFactory[`@Action#publishingPayloadFactory()`]
+nor the xref:../guides/rgant/rgant.adoc#_rgant-DomainObject_publishingPayloadFactory[`@DomainObject#publishingPayloadFactory()`] are
 supported by `PublisherService`; instead the consumers of the events are expected to callback for any additional
 information, eg using xref:../guides/ugvro/ugvro.adoc#[Resful Objects] viewer.
 
@@ -236,7 +236,7 @@ taking advantage of once you have upgraded.
 
 * `@Nullable` annotation +
 +
-The xref:../guides/rgant/rgant.adoc#_rgant_Nullable[`@Nullable`] annotation can now be used to specify the optionality of properties
+The xref:../guides/rgant/rgant.adoc#_rgant-Nullable[`@Nullable`] annotation can now be used to specify the optionality of properties
 and parameters.
 
 * `ActionDomainEvent` for mixins +
@@ -246,8 +246,8 @@ mixin action.  This is now possible, through the xref:../guides/rgcms/rgcms.adoc
 
 * `Blob` and `Clob` file types +
 +
-The xref:../guides/rgant/rgant.adoc#_rgant_Property_fileAccept[`@Property#fileAccept()`] and
-xref:../guides/rgant/rgant.adoc#_rgant_Parameter_fileAccept[`@Parameter#fileAccept()`] annotation attributes can be used to hint at
+The xref:../guides/rgant/rgant.adoc#_rgant-Property_fileAccept[`@Property#fileAccept()`] and
+xref:../guides/rgant/rgant.adoc#_rgant-Parameter-fileAccept[`@Parameter#fileAccept()`] annotation attributes can be used to hint at
 the file type to upload for a blob or clob.
 
 * Live reloading +

@@ -38,7 +38,29 @@ public enum CommandExecuteIn {
      * persisted {@link org.apache.isis.applib.services.command.Command command} object as a placeholder to the
      * result.
      */
-    BACKGROUND;
+    BACKGROUND,
+    /**
+     * For commands that are replicated from a master onto a slave and are to be replayed (typically using the same
+     * mechanism as "regular" background commands, eg a background job).
+     *
+     * <p>
+     *     For framework use, not intended to be used in application code.
+     * </p>
+     */
+    REPLAYABLE,
+    /**
+     * For commands that have been excluded and will not run.
+     * These are typically for a replayable command that has hit an exception (which normally would prevent any further
+     * replayable commands from being replayed) and which the administrator has decided to skip.
+     */
+    EXCLUDED
+    ;
+
+    public boolean isForeground() { return this == FOREGROUND; }
+    public boolean isBackground() { return this == BACKGROUND; }
+    public boolean isReplayable() { return this == REPLAYABLE; }
+    public boolean isExcluded() { return this == EXCLUDED; }
+
 
     public static class Type {
 

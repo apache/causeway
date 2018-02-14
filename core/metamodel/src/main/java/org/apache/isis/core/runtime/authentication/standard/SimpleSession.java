@@ -26,7 +26,7 @@ import java.util.List;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionAbstract;
 import org.apache.isis.core.commons.encoding.DataInputExtended;
 
-public final class SimpleSession extends AuthenticationSessionAbstract {
+public class SimpleSession extends AuthenticationSessionAbstract {
 
     private static final long serialVersionUID = 1L;
 

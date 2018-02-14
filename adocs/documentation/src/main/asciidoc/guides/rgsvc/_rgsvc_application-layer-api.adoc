@@ -37,7 +37,8 @@ It also lists their corresponding implementation, either a default implementatio
 `services.background` +
 `BackgroundService`]
 |Programmatic persistence of commands to be persisted (so can be executed by a background mechanism, eg scheduler)
-|`BackgroundServiceDefault` +
+|`BackgroundService-`
+`Default` +
 ``o.a.i.core`` +
 ``isis-core-runtime``
 |depends on: +
@@ -56,6 +57,17 @@ depends on: +
 xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`] for persistent `Command`, else in-memory impl. used.
 
 The xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_InteractionContext[`InteractionContext`] manages the actual execution of the command.
+
+
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_CommandExecutorService[`o.a.i.applib.` +
+`services.command` +
+`CommandExecutorService`]
+|Executes the specified `Command`.
+|`CommandExecutorService-`
+`Default` +
+``o.a.i.core`` +
+``isis-core-runtime``
+|
 
 
 |xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_DtoMappingHelper[`o.a.i.applib.` +

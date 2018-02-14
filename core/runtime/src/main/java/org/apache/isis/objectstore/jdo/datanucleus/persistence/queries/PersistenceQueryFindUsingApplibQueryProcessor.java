@@ -80,7 +80,7 @@ public class PersistenceQueryFindUsingApplibQueryProcessor extends PersistenceQu
         jdoQuery.addExtension("datanucleus.multivaluedFetch", "none");
         
         if (LOG.isDebugEnabled()) {
-            LOG.debug(cls.getName() + " # " + queryName + " ( " + filter + " )");
+            LOG.debug("{} # {} ( {} )", cls.getName(), queryName, filter);
         }
 
         try {
@@ -110,7 +110,7 @@ public class PersistenceQueryFindUsingApplibQueryProcessor extends PersistenceQu
         }
         
         if (LOG.isDebugEnabled()) {
-            LOG.debug(cls.getName() + " # " + queryName + " ( " + argumentsByParameterName + " )");
+            LOG.debug("{} # {} ( {} )", cls.getName(), queryName, argumentsByParameterName);
         }
         
         try {

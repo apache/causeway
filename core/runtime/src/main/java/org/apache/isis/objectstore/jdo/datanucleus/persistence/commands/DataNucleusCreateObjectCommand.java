@@ -40,7 +40,7 @@ public class DataNucleusCreateObjectCommand extends AbstractDataNucleusObjectCom
     @Override
     public void execute(final PersistenceCommandContext context) {
         if (LOG.isDebugEnabled()) {
-            LOG.debug("create object - executing command for: " + onAdapter());
+            LOG.debug("create object - executing command for: {}", onAdapter());
         }
         final ObjectAdapter adapter = onAdapter();
         if(!adapter.isTransient()) {

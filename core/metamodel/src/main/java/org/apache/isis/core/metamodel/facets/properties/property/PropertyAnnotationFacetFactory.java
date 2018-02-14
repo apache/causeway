@@ -215,7 +215,7 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
         }
 
         // check for @Property(command=...)
-        final CommandFacet commandFacet = CommandFacetForPropertyAnnotation.create(properties, getConfiguration(), holder);
+        final CommandFacet commandFacet = CommandFacetForPropertyAnnotation.create(properties, getConfiguration(), holder, servicesInjector);
 
         FacetUtil.addFacet(commandFacet);
     }

@@ -45,13 +45,11 @@ public class MustSatisfySpecificationFacetForPropertyAnnotation extends MustSati
                               .map(MustSatisfySpecificationFacetAbstract::newSpecificationElseNull)
                               .filter(Objects::nonNull)
                 )
-                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
         return specifications.size() > 0
                 ? new MustSatisfySpecificationFacetForPropertyAnnotation(specifications, holder, servicesInjector)
                 : null;
     }
-
 
     private MustSatisfySpecificationFacetForPropertyAnnotation(final List<Specification> specifications, final FacetHolder holder, final ServicesInjector servicesInjector) {
         super(specifications, holder, servicesInjector);

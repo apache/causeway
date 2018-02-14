@@ -32,6 +32,7 @@ import com.google.common.base.Joiner;
 import com.google.common.base.Objects;
 import com.google.common.base.Predicate;
 import com.google.common.base.Splitter;
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 import com.google.common.io.BaseEncoding;
@@ -40,6 +41,7 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.applib.services.appfeat.ApplicationMemberType;
 import org.apache.isis.applib.util.TitleBuffer;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
 /**
  * Value type representing a package, class or member.
@@ -174,6 +176,25 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
             buf.append("#").append(getMemberName());
         }
         return buf.toString();
+    }
+
+    //endregion
+
+    //region > objectSpecId (property)
+
+    @Programmatic
+    public ObjectSpecId getObjectSpecId() {
+        if (getClassName() == null) {
+            return null;
+        }
+
+        final StringBuilder buf = new StringBuilder();
+        if(!Strings.isNullOrEmpty(getPackageName())) {
+            buf.append(getPackageName()).append(".");
+        }
+        buf.append(getClassName());
+
+        return ObjectSpecId.of(buf.toString());
     }
 
     //endregion

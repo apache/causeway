@@ -25,21 +25,22 @@ import java.util.List;
 
 import com.google.common.base.Function;
 
+import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
-import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.help.HelpFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
-import org.apache.isis.core.metamodel.facets.object.parented.ParentedCollectionFacet;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
+import org.apache.isis.core.metamodel.facets.object.parented.ParentedCollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
@@ -49,6 +50,7 @@ import org.apache.isis.core.metamodel.interactions.ObjectTitleContext;
 import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationContainer;
+import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
 
@@ -66,24 +68,44 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
 
     public final static List<ObjectSpecification> EMPTY_LIST = Collections.emptyList();
 
-    public final static Function<ObjectSpecification, String> FUNCTION_FULLY_QUALIFIED_CLASS_NAME = new Function<ObjectSpecification, String>() {
-        @Override
-        public String apply(final ObjectSpecification from) {
-            return from.getFullIdentifier();
-        }
-    };
-    public final static Comparator<ObjectSpecification> COMPARATOR_FULLY_QUALIFIED_CLASS_NAME = new Comparator<ObjectSpecification>() {
-        @Override
-        public int compare(final ObjectSpecification o1, final ObjectSpecification o2) {
-            return o1.getFullIdentifier().compareTo(o2.getFullIdentifier());
-        }
-    };
-    public final static Comparator<ObjectSpecification> COMPARATOR_SHORT_IDENTIFIER_IGNORE_CASE = new Comparator<ObjectSpecification>() {
-        @Override
-        public int compare(final ObjectSpecification s1, final ObjectSpecification s2) {
-            return s1.getShortIdentifier().compareToIgnoreCase(s2.getShortIdentifier());
-        }
-    };
+    @Deprecated
+    public final static Function<ObjectSpecification, String> FUNCTION_FULLY_QUALIFIED_CLASS_NAME = Functions.FULL_IDENTIFIER;
+
+    @Deprecated
+    public final static Comparator<ObjectSpecification> COMPARATOR_FULLY_QUALIFIED_CLASS_NAME = Comparators.FULLY_QUALIFIED_CLASS_NAME;
+
+    @Deprecated
+    public final static Comparator<ObjectSpecification> COMPARATOR_SHORT_IDENTIFIER_IGNORE_CASE = Comparators.SHORT_IDENTIFIER_IGNORE_CASE;
+
+    ObjectMember getMember(String memberId);
+
+    class Comparators{
+        private Comparators(){}
+        public final static Comparator<ObjectSpecification> FULLY_QUALIFIED_CLASS_NAME = new Comparator<ObjectSpecification>() {
+            @Override
+            public int compare(final ObjectSpecification o1, final ObjectSpecification o2) {
+                return o1.getFullIdentifier().compareTo(o2.getFullIdentifier());
+            }
+        };
+        public final static Comparator<ObjectSpecification> SHORT_IDENTIFIER_IGNORE_CASE = new Comparator<ObjectSpecification>() {
+            @Override
+            public int compare(final ObjectSpecification s1, final ObjectSpecification s2) {
+                return s1.getShortIdentifier().compareToIgnoreCase(s2.getShortIdentifier());
+            }
+        };
+    }
+    class Functions {
+
+        private Functions(){}
+
+        public static final Function<ObjectSpecification, String> FULL_IDENTIFIER = new Function<ObjectSpecification, String>() {
+            @Override
+            public String apply(final ObjectSpecification objectSpecification) {
+                return objectSpecification.getFullIdentifier();
+            }
+        };
+
+    }
 
     /**
      * @return
@@ -94,8 +116,8 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
      * Returns the (unique) spec Id, as per the {@link ObjectSpecIdFacet}.
      * 
      * <p>
-     * This will typically be the value of the {@link ObjectType} annotation (or equivalent);
-     * if non has been specified then will default to the fully qualified class name (with
+     * This will typically be the value of the {@link DomainObject#objectType()} annotation attribute.
+     * If none has been specified then will default to the fully qualified class name (with
      * {@link ClassSubstitutor class name substituted} if necessary to allow for runtime bytecode enhancement.
      * 
      * <p>
@@ -162,7 +184,7 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
      * Returns the title string for the specified object.
      * 
      * <p>
-     * Corresponds to the {@link TitleFacet#value()) value} of
+     * Corresponds to the {@link TitleFacet#title(ObjectAdapter)} ) value} of
      * {@link TitleFacet}; is not necessarily immutable.
      * 
      * @deprecated use {@link #getTitle(ObjectAdapter, ObjectAdapter)}

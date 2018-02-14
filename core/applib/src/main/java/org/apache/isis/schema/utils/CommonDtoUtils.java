@@ -23,7 +23,11 @@ import java.math.BigInteger;
 import java.util.Collection;
 
 import com.google.common.base.Function;
+import com.google.common.base.Objects;
+import com.google.common.base.Optional;
+import com.google.common.base.Predicate;
 import com.google.common.base.Strings;
+import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableMap;
 
 import org.joda.time.DateTime;
@@ -34,7 +38,12 @@ import org.joda.time.LocalTime;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.util.Casts;
+import org.apache.isis.applib.value.Blob;
+import org.apache.isis.applib.value.Clob;
+import org.apache.isis.schema.cmd.v1.MapDto;
 import org.apache.isis.schema.cmd.v1.ParamDto;
+import org.apache.isis.schema.common.v1.BlobDto;
+import org.apache.isis.schema.common.v1.ClobDto;
 import org.apache.isis.schema.common.v1.CollectionDto;
 import org.apache.isis.schema.common.v1.EnumDto;
 import org.apache.isis.schema.common.v1.OidDto;
@@ -90,6 +99,8 @@ public final class CommonDtoUtils {
                     .put(LocalDate.class, ValueType.JODA_LOCAL_DATE)
                     .put(LocalTime.class, ValueType.JODA_LOCAL_TIME)
                     .put(java.sql.Timestamp.class, ValueType.JAVA_SQL_TIMESTAMP)
+                    .put(Blob.class, ValueType.BLOB)
+                    .put(Clob.class, ValueType.CLOB)
                     .build();
 
     public static ValueType asValueType(final Class<?> type) {
@@ -125,9 +136,13 @@ public final class CommonDtoUtils {
             final ValueType valueType,
             final Object val,
             final BookmarkService bookmarkService) {
+        valueWithTypeDto.setType(valueType);
+
         setValueOn((ValueDto)valueWithTypeDto, valueType, val, bookmarkService);
         valueWithTypeDto.setNull(val == null);
+
         if(val instanceof Collection) {
+            // TODO: this is probably irrelevant
             valueWithTypeDto.setType(ValueType.COLLECTION);
         }
         return valueWithTypeDto;
@@ -247,6 +262,24 @@ public final class CommonDtoUtils {
             }
             return valueDto;
         }
+        case BLOB: {
+            final Blob blob = (Blob) val;
+            final BlobDto blobDto = new BlobDto();
+            blobDto.setName(blob.getName());
+            blobDto.setBytes(blob.getBytes());
+            blobDto.setMimeType(blob.getMimeType().toString());
+            valueDto.setBlob(blobDto);
+            return valueDto;
+        }
+        case CLOB: {
+            final Clob clob = (Clob) val;
+            final ClobDto clobDto = new ClobDto();
+            clobDto.setName(clob.getName());
+            clobDto.setChars(clob.getChars().toString());
+            clobDto.setMimeType(clob.getMimeType().toString());
+            valueDto.setClob(clobDto);
+            return valueDto;
+        }
         case VOID: {
             return null;
         }
@@ -327,6 +360,14 @@ public final class CommonDtoUtils {
             return Enum.valueOf(Casts.uncheckedCast(enumClass), enumDto.getEnumName());
         case REFERENCE:
             return valueDto.getReference();
+        case COLLECTION:
+            return valueDto.getCollection();
+        case BLOB:
+            final BlobDto blobDto = valueDto.getBlob();
+            return new Blob(blobDto.getName(), blobDto.getMimeType(), blobDto.getBytes());
+        case CLOB:
+            final ClobDto clobDto = valueDto.getClob();
+            return new Clob(clobDto.getName(), clobDto.getMimeType(), clobDto.getChars());
         case VOID:
             return null;
         default:
@@ -374,8 +415,6 @@ public final class CommonDtoUtils {
         final ValueWithTypeDto valueWithTypeDto = new ValueWithTypeDto();
 
         final ValueType valueType = asValueType(type);
-        valueWithTypeDto.setType(valueType);
-
         setValueOn(valueWithTypeDto, valueType, val, bookmarkService);
 
         return valueWithTypeDto;
@@ -409,7 +448,13 @@ public final class CommonDtoUtils {
 
         paramDto.setName(parameterName);
 
-        final ValueType valueType = CommonDtoUtils.asValueType(parameterType);
+        ValueType valueType = CommonDtoUtils.asValueType(parameterType);
+        // this hack preserves previous behaviour before we were able to serialize blobs and clobs into XML
+        // however, we also don't want this new behaviour for parameter arguments
+        // (else these large objects could end up being persisted).
+        if(valueType == ValueType.BLOB) valueType = ValueType.REFERENCE;
+        if(valueType == ValueType.CLOB) valueType = ValueType.REFERENCE;
+
         paramDto.setType(valueType);
 
         CommonDtoUtils.setValueOn(paramDto, valueType, arg, bookmarkService);
@@ -430,7 +475,37 @@ public final class CommonDtoUtils {
 
     //endregion
 
+    public static String getMapValue(final MapDto mapDto, final String key) {
+        if(mapDto == null) {
+            return null;
+        }
+        final Optional<MapDto.Entry> entryIfAny = entryIfAnyFor(mapDto, key);
+        return entryIfAny.isPresent() ? entryIfAny.get().getValue() : null;
+    }
 
+    public static void putMapKeyValue(final MapDto mapDto, final String key, final String value) {
+        if(mapDto == null) {
+            return;
+        }
+        final Optional<MapDto.Entry> entryIfAny = entryIfAnyFor(mapDto, key);
+        if(entryIfAny.isPresent()) {
+            entryIfAny.get().setValue(value);
+        } else {
+            final MapDto.Entry entry = new MapDto.Entry();
+            entry.setKey(key);
+            entry.setValue(value);
+            mapDto.getEntry().add(entry);
+        }
+    }
 
+    private static Optional<MapDto.Entry> entryIfAnyFor(final MapDto mapDto, final String key) {
+        return FluentIterable.from(mapDto.getEntry())
+                    .firstMatch(new Predicate<MapDto.Entry>() {
+                        @Override
+                        public boolean apply(final MapDto.Entry entry) {
+                            return Objects.equal(entry.getKey(), key);
+                        }
+                    });
+    }
 
 }

@@ -41,6 +41,9 @@
     </prerequisites>
 
     <properties>
+        <jar-plugin.automaticModuleName>org.apache.isis.tool.mavenplugin</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/isis/tool/mavenplugin</git-plugin.propertiesDir>
+
         <maven-core.version>3.3.9</maven-core.version>
         <maven-project.version>3.0-alpha-2</maven-project.version>
         <maven-plugin-annotations.version>3.4</maven-plugin-annotations.version>

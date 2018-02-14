@@ -37,9 +37,9 @@ public class IsisTimeZoneInitializer {
             TimeZone timeZone;
             timeZone = TimeZone.getTimeZone(timeZoneSpec);
             TimeZone.setDefault(timeZone);
-            LOG.info("time zone set to " + timeZone);
+            LOG.info("time zone set to {}", timeZone);
         }
-        LOG.debug("time zone is " + TimeZone.getDefault());
+        LOG.debug("time zone is {}", TimeZone.getDefault());
     }
 
 }

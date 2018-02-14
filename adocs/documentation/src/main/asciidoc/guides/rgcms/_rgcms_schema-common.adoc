@@ -79,6 +79,28 @@ They are also used to represent references to any action arguments/properties th
 * third, as references to the target of an interaction capturing the actual execution of an action invocation or property edit, as described by the xref:../rgcms/rgcms.adoc#_rgcms_schema-ixn["ixn" (interaction)] schema.
 
 
+[[__rgcms_schema-common_collectionDto]]
+== `collectionDto` etc
+
+The `collectionDto` type defines a collection of values, also capturing the type of those values (for example ``string``s, or ``OidDto``s).
+It is used primarily to model invocations of actions with collection parameters.
+
+[source,xml]
+----
+<xs:schema targetNamespace="http://isis.apache.org/schema/common" ... >
+    ...
+    <xs:complexType name="collectionDto">
+        <xs:sequence>
+            <xs:element name="value" type="valueDto" minOccurs="1" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="type" use="required" type="valueType"/>
+        <xs:attribute name="null" use="optional" type="xs:boolean"/>
+    </xs:complexType>
+    ...
+</xs:schema>
+----
+
+
 [[__rgcms_schema-common_valueDto]]
 == `valueDto` etc
 
@@ -97,6 +119,9 @@ The common schema also defines two types representing values: the `valueDto` com
             <xs:element name="timestamp" type="xs:dateTime"/>
             <xs:element name="enum" type="enumDto"/>
             <xs:element name="reference" type="oidDto"/>
+            <xs:element name="collection" type="collectionDto"/>
+            <xs:element name="blob" type="blobDto"/>
+            <xs:element name="clob" type="clobDto"/>
         </xs:choice>
     </xs:complexType>
 
@@ -108,6 +133,9 @@ The common schema also defines two types representing values: the `valueDto` com
             ...
             <xs:enumeration value="enum"/>
             <xs:enumeration value="reference"/>
+            <xs:enumeration value="collection"/>
+            <xs:enumeration value="blob"/>
+            <xs:enumeration value="clob"/>
             <xs:enumeration value="void"/>                          <!--3-->
         </xs:restriction>
     </xs:simpleType>
@@ -134,6 +162,13 @@ These type definitions are just building blocks.
 The first, `valueDto` is The second, `valueType`, enumerates the different types of vales, eg of a formal parameter to an action.
 
 
+[IMPORTANT]
+====
+When used as a parameter, blob and clob arguments are _not_ serialized.
+Instead these are persisted only as references.
+This is primarily to save storage space if the resultant XML is persisted as a memento (eg `CommandDto`).
+====
+
 
 [[__rgcms_schema-common_ancillary]]
 == Ancillary types
@@ -151,7 +186,27 @@ The common schema also defines a number of ancillary types, used either by the c
         </xs:sequence>
     </xs:complexType>
 
-    <xs:complexType name="periodDto">                               <!--2-->
+    <xs:complexType name="blobDto">                                 <!--2-->
+        <xs:sequence>
+            <xs:element name="name" type="xs:string"/>
+            <xs:element name="mimeType" type="xs:string"/>
+            <xs:element name="bytes" type="xs:hexBinary"/>
+        </xs:sequence>
+        <xs:attribute name="type" use="required" type="valueType"/>
+        <xs:attribute name="null" use="optional" type="xs:boolean"/>
+    </xs:complexType>
+
+    <xs:complexType name="clobDto">                                 <!--3-->
+        <xs:sequence>
+            <xs:element name="name" type="xs:string"/>
+            <xs:element name="mimeType" type="xs:string"/>
+            <xs:element name="chars" type="xs:string"/>
+        </xs:sequence>
+        <xs:attribute name="type" use="required" type="valueType"/>
+        <xs:attribute name="null" use="optional" type="xs:boolean"/>
+    </xs:complexType>
+
+    <xs:complexType name="periodDto">                               <!--4-->
         <xs:sequence>
             <xs:element name="startedAt" type="xs:dateTime"/>
             <xs:element name="completedAt" type="xs:dateTime"
@@ -159,24 +214,34 @@ The common schema also defines a number of ancillary types, used either by the c
         </xs:sequence>
     </xs:complexType>
 
-    <xs:complexType name="differenceDto">                           <!--3-->
+    <xs:complexType name="differenceDto">                           <!--5-->
         <xs:sequence/>
         <xs:attribute name="before" type="xs:int"/>
         <xs:attribute name="after" type="xs:int"/>
     </xs:complexType>
 
-    <xs:simpleType name="interactionType">                          <!--4-->
+    <xs:simpleType name="interactionType">                          <!--6-->
         <xs:restriction base="xs:string">
             <xs:enumeration value="action_invocation" />
             <xs:enumeration value="property_edit" />
         </xs:restriction>
     </xs:simpleType>
+
+    <xs:complexType name="oidsDto">                                 <!--7-->
+        <xs:sequence>
+            <xs:element name="oid" type="oidDto" minOccurs="1" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
 </xs:schema>
 ----
 <1> Models an instance member of an enum (eg `Color.RED`).
-<2> Captures a period of time, eg for capturing metrics/timings.
-<3> Captures a pair of numbers representing a difference.
+<2> Models a `Blob`
+<3> Models a `Clob`
+<4> Captures a period of time, eg for capturing metrics/timings.
+<5> Captures a pair of numbers representing a difference.
 Used for example to capture metrics (number objects modified before and after).
-<4> Whether this command/interaction with a member is invoking an action, or editing a property.
+<6> Whether this command/interaction with a member is invoking an action, or editing a property.
 Used by both the xref:../rgcms/rgcms.adoc#_rgcms_schema_cmd["cmd"] and xref:../rgcms/rgcms.adoc#_rgcms_schema_ixn["ixn"] schemas.
+<7> Contains a list of OIDs, eg for use in "bulk" actions that apply to multiple targets.
 

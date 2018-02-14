@@ -21,8 +21,12 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import javax.annotation.Nullable;
+
+import com.google.common.base.Objects;
 import com.google.common.base.Predicate;
 import com.google.common.base.Strings;
+import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.Identifier;
@@ -374,6 +378,54 @@ public interface ObjectAction extends ObjectMember {
         private Predicates() {
         }
 
+        public static Predicate<ObjectAction> associatedWith(final String collectionName) {
+            return new AssociatedWith(collectionName);
+        }
+
+        public static Predicate<ObjectAction> associatedWithAndWithCollectionParameterFor(
+                final String collectionName,
+                final ObjectSpecification collectionTypeOfSpec) {
+
+            return com.google.common.base.Predicates.and(
+                    new AssociatedWith(collectionName),
+                    new HasParameterMatching(
+                        new ObjectActionParameter.Predicates.CollectionParameter(collectionTypeOfSpec)
+                    )
+            );
+        }
+
+        public static class AssociatedWith implements Predicate<ObjectAction> {
+            private final String memberNameAssociatedWith;
+            public AssociatedWith(final String memberNameAssociatedWith) {
+                this.memberNameAssociatedWith = memberNameAssociatedWith;
+            }
+
+            @Override
+            public boolean apply(final ObjectAction objectAction) {
+                final MemberOrderFacet memberOrderFacet = objectAction.getFacet(MemberOrderFacet.class);
+                if(memberOrderFacet == null) {
+                    return false;
+                }
+                final String name = memberNameAssociatedWith;
+                final String memberOrderName = memberOrderFacet.untranslatedName();
+                return name != null && memberOrderName != null &&
+                       Objects.equal(name.toLowerCase(), memberOrderName.toLowerCase());
+            }
+        }
+
+        public static class HasParameterMatching implements Predicate<ObjectAction> {
+            private final Predicate<ObjectActionParameter> parameterPredicate;
+            public HasParameterMatching(final Predicate<ObjectActionParameter> parameterPredicate) {
+                this.parameterPredicate = parameterPredicate;
+            }
+
+            @Override
+            public boolean apply(@Nullable final ObjectAction objectAction) {
+                return FluentIterable
+                        .from(objectAction.getParameters())
+                        .anyMatch(parameterPredicate);
+            }
+        }
 
         public static com.google.common.base.Predicate ofType(final ActionType type) {
             return new Predicate<ObjectAction>() {

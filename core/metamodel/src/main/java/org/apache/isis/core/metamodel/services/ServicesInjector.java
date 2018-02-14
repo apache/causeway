@@ -408,7 +408,7 @@ public class ServicesInjector implements ApplicationScopedComponent {
             throw new MetaModelException(String.format("Cannot access the %s field in %s", field.getName(), target.getClass().getName()));
         }
         if (LOG.isDebugEnabled()) {
-            LOG.debug("injected " + parameter + " into " + new ToString(target));
+            LOG.debug("injected {} into {}", parameter, new ToString(target));
         }
     }
 
@@ -416,7 +416,7 @@ public class ServicesInjector implements ApplicationScopedComponent {
         final Object[] parameters = new Object[] { parameter };
         invokeMethod(method, target, parameters);
         if (LOG.isDebugEnabled()) {
-            LOG.debug("injected " + parameter + " into " + new ToString(target));
+            LOG.debug("injected {} into {}", parameter, new ToString(target));
         }
     }
 

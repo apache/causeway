@@ -36,6 +36,7 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.ClassUtil;
@@ -51,6 +52,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
+import org.apache.isis.core.metamodel.specloader.postprocessor.PostProcessor;
 import org.apache.isis.core.metamodel.specloader.specimpl.FacetedMethodsBuilderContext;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
@@ -92,27 +94,33 @@ public class SpecificationLoader implements ApplicationScopedComponent {
     private final ProgrammingModel programmingModel;
     private final FacetProcessor facetProcessor;
 
+    private final IsisConfiguration configuration;
     private final ServicesInjector servicesInjector;
 
     private final MetaModelValidator metaModelValidator;
     private final SpecificationCacheDefault cache = new SpecificationCacheDefault();
+    private final PostProcessor postProcessor;
 
     public SpecificationLoader(
+            final IsisConfiguration configuration,
             final ProgrammingModel programmingModel,
             final MetaModelValidator metaModelValidator,
             final ServicesInjector servicesInjector) {
+
+        this.configuration = configuration;
 
         this.servicesInjector = servicesInjector;
         this.programmingModel = programmingModel;
         this.metaModelValidator = metaModelValidator;
 
         this.facetProcessor = new FacetProcessor(programmingModel);
+        this.postProcessor = new PostProcessor(programmingModel, servicesInjector);
     }
 
     @Override
     protected void finalize() throws Throwable {
         super.finalize();
-        LOG.info("finalizing reflector factory " + this);
+        LOG.info("finalizing reflector factory", this);
     }
 
 
@@ -140,6 +148,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
         // initialize subcomponents
         programmingModel.init();
         facetProcessor.init();
+        postProcessor.init();
         metaModelValidator.init(this);
 
         loadSpecificationsForServices();
@@ -193,7 +202,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
 
     @Programmatic
     public void shutdown() {
-        LOG.info("shutting down " + this);
+        LOG.info("shutting down {}", this);
 
         initialized = false;
 
@@ -348,9 +357,6 @@ public class SpecificationLoader implements ApplicationScopedComponent {
             return spec;
         }
         final ObjectSpecification specification = createSpecification(type, natureOfService);
-        if (specification == null) {
-            throw new IsisException("Failed to create specification for class " + typeName);
-        }
 
         // put into the cache prior to introspecting, to prevent
         // infinite loops
@@ -429,17 +435,18 @@ public class SpecificationLoader implements ApplicationScopedComponent {
         final ObjectSpecificationAbstract.IntrospectionState introspectionState = specSpi.getIntrospectionState();
 
         // REVIEW: can't remember why this is done in multiple passes, could it be simplified?
-        if (introspectionState == ObjectSpecificationAbstract.IntrospectionState.NOT_INTROSPECTED) {
+        switch (introspectionState) {
+        case NOT_INTROSPECTED:
 
             specSpi.setIntrospectionState(ObjectSpecificationAbstract.IntrospectionState.BEING_INTROSPECTED);
             introspect(specSpi);
-
-        } else if (introspectionState == ObjectSpecificationAbstract.IntrospectionState.BEING_INTROSPECTED) {
-
+            break;
+        case BEING_INTROSPECTED:
             introspect(specSpi);
-
-        } else if (introspectionState == ObjectSpecificationAbstract.IntrospectionState.INTROSPECTED) {
+            break;
+        case INTROSPECTED:
             // nothing to do
+            break;
         }
         return spec;
     }
@@ -448,7 +455,21 @@ public class SpecificationLoader implements ApplicationScopedComponent {
         specSpi.introspectTypeHierarchyAndMembers();
         specSpi.updateFromFacetValues();
         specSpi.setIntrospectionState(ObjectSpecificationAbstract.IntrospectionState.INTROSPECTED);
+    }
 
+    @Programmatic
+    public void postProcess() {
+
+        final Collection<ObjectSpecification> specs = allSpecifications();
+        for (final ObjectSpecification spec : specs) {
+            postProcess(spec);
+        }
+
+    }
+
+    @Programmatic
+    public void postProcess(final ObjectSpecification spec) {
+        postProcessor.postProcess(spec);
     }
 
     //endregion
@@ -528,5 +549,13 @@ public class SpecificationLoader implements ApplicationScopedComponent {
 
     //endregion
 
+    @Programmatic
+    public IsisConfiguration getConfiguration() {
+        return configuration;
+    }
 
+    @Programmatic
+    public ServicesInjector getServicesInjector() {
+        return servicesInjector;
+    }
 }

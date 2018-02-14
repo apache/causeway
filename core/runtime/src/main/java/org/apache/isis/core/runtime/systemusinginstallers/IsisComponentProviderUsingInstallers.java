@@ -151,21 +151,21 @@ public class IsisComponentProviderUsingInstallers extends IsisComponentProvider 
                 }
                 try {
                     final Installer object = (Installer) InstanceUtil.createInstance(className, isisConfiguration);
-                    LOG.debug("created component installer: " + object.getName() + " - " + className);
+                    LOG.debug("created component installer: {} - {}", object.getName(), className);
                     installerList.add(object);
                 } catch (final UnavailableClassException e) {
-                    LOG.info("component installer not found; it will not be available: " + className);
+                    LOG.info("component installer not found; it will not be available: {}", className);
                 } catch (final InstanceCreationClassException e) {
-                    LOG.info("instance creation exception: " + e.getMessage());
+                    LOG.info("instance creation exception: {}", e.getMessage());
                 } catch (final InstanceCreationException e) {
                     try {
                         final Installer object = (Installer) InstanceUtil.createInstance(className);
-                        LOG.debug("created component installer: " + object.getName() + " - " + className);
+                        LOG.debug("created component installer: {} - {}", object.getName(), className);
                         installerList.add(object);
                     } catch (final UnavailableClassException e2) {
-                        LOG.info("component installer not found; it will not be available: " + className);
+                        LOG.info("component installer not found; it will not be available: {}", className);
                     } catch (final InstanceCreationClassException e2) {
-                        LOG.info("instance creation exception: " + e2.getMessage());
+                        LOG.info("instance creation exception: {}", e2.getMessage());
                     }
                 }
             }

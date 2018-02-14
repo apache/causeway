@@ -20,5 +20,5 @@ executionContext.executeChild(this, new TickingClockFixture().setTo("2014-09-03"
 A variety of format strings are supported; the format "YYYY-MM-DD" (as shown above) will work in every locale.
 
 The fixture script requires that a `TickingFixtureClock` is initialized during bootstrapping.
-This is done automatically `IntegrationTestAbstract3` and `CukeGlueBootstrappingAbstract` (BDD specs).
+This is done automatically in `HeadlessWithBootstrappingAbstract` (the superclass of `IntegrationTestAbstract3` and for BDD bootstrapping classes).
 

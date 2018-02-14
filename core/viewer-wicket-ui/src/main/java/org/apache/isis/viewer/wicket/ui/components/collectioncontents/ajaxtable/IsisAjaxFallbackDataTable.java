@@ -92,11 +92,6 @@ public class IsisAjaxFallbackDataTable<T, S> extends DataTable<T, S> {
     }
 
     @Override
-    protected void onBeforeRender() {
-        super.onBeforeRender();
-    }
-
-    @Override
     protected Item<T> newRowItem(final String id, final int index, final IModel<T> model)
     {
         return new OddEvenItem<T>(id, index, model) {

@@ -375,16 +375,16 @@ class CssMenuItem implements Serializable {
         final String descriptionIfAny = describedAsFacet != null ? describedAsFacet.value() : null;
 
         // build the link
-        final LinkAndLabel linkAndLabel = actionLinkFactory.newLink(objectAction, PageAbstract.ID_MENU_LINK);
+        final LinkAndLabel linkAndLabel = actionLinkFactory.newLink(objectAction, PageAbstract.ID_MENU_LINK, null);
         if (linkAndLabel == null) {
             // can only get a null if invisible, so this should not happen given the visibility guard above
             return null;
         }
 
         final AbstractLink link = linkAndLabel.getLink();
-        final String actionLabel = linkAndLabel.getLabel();
+        final String actionLabel = serviceAndAction.serviceName != null ? serviceAndAction.serviceName : linkAndLabel.getLabel();
 
-        Builder builder = newSubMenuItem(actionLabel)
+        return newSubMenuItem(actionLabel)
                 .link(link)
                 .describedAs(descriptionIfAny)
                 .enabled(reasonDisabledIfAny)
@@ -398,8 +398,6 @@ class CssMenuItem implements Serializable {
                 .withCssClass(ObjectAction.Util.cssClassFor(objectAction, serviceAdapter))
                 .withCssClassFa(ObjectAction.Util.cssClassFaFor(objectAction))
                 .withCssClassFaPosition(ObjectAction.Util.cssClassFaPositionFor(objectAction));
-
-        return builder;
     }
 
     // //////////////////////////////////////////////////////////////

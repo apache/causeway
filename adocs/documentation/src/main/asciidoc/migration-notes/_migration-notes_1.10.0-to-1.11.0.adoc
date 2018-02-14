@@ -67,7 +67,7 @@ However, if you are still using the older `isis.properties` configuration file t
 
 The new xref:../guides/rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_RoutingService[`RoutingService`] SPI service provides a plugin point to the xref:../guides/ugvw/ugvw.adoc#[Wicket viewer] so that a different object than that returned from an action invocation can be rendered.
 
-The framework provides a default implementation of this service that will - instead of a void or a `null` result - render the home page (as per the xref:../guides/rgant/rgant.adoc#_rgant_HomePage[`@HomePage`] annotation) if there is one.
+The framework provides a default implementation of this service that will - instead of a void or a `null` result - render the home page (as per the xref:../guides/rgant/rgant.adoc#_rgant-HomePage[`@HomePage`] annotation) if there is one.
 This is therefore a subtle change in the UI.
 If you wish to retain the original behaviour (to return the "no results" page instead), then you should implement your own no-op implementation of this service:
 

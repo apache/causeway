@@ -140,6 +140,11 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
                 return model.mementoList.size();
             }
 
+            @Override
+            public EntityModel.RenderingHint renderingHint() {
+                return EntityModel.RenderingHint.STANDALONE_PROPERTY_COLUMN;
+            }
+
         },
         /**
          * A collection of an entity (eg Order/OrderDetail).
@@ -191,6 +196,12 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
             public int getCount(EntityCollectionModel model) {
                 return load(model).size();
             }
+
+            @Override
+            public EntityModel.RenderingHint renderingHint() {
+                return EntityModel.RenderingHint.PARENTED_PROPERTY_COLUMN;
+            }
+
         };
 
         abstract List<ObjectAdapter> load(EntityCollectionModel entityCollectionModel);
@@ -200,6 +211,8 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
         public abstract String getName(EntityCollectionModel entityCollectionModel);
 
         public abstract int getCount(EntityCollectionModel entityCollectionModel);
+
+        public abstract EntityModel.RenderingHint renderingHint();
     }
 
     static class LowestCommonSuperclassClosure implements Closure<Class<?>>{
@@ -293,6 +306,10 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
     }
 
     private final Type type;
+
+    public Type getType() {
+        return type;
+    }
 
     private final Class<?> typeOf;
     private transient ObjectSpecification typeOfSpec;
@@ -487,7 +504,7 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
     }
     
     public List<ObjectAdapterMemento> getToggleMementosList() {
-        return Collections.unmodifiableList(this.toggledMementosList);
+        return Collections.unmodifiableList(Lists.newArrayList(this.toggledMementosList));
     }
 
     public void clearToggleMementosList() {
@@ -495,6 +512,7 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
     }
 
     public void addLinkAndLabels(List<LinkAndLabel> linkAndLabels) {
+        this.linkAndLabels.clear();
         this.linkAndLabels.addAll(linkAndLabels);
     }
 

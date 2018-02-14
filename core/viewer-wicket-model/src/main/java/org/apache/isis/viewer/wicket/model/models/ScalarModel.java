@@ -67,6 +67,16 @@ import org.apache.isis.viewer.wicket.model.mementos.SpecUtils;
  * <p>
  * Is the backing model to each of the fields that appear in forms (for entities
  * or action dialogs).
+ *
+ * <p>
+ *     NOTE: although this inherits from {@link EntityModel}, this is wrong I think; what is being shared
+ *     is just some of the implementation - both objects have to wrap some arbitrary memento holding some state
+ *     (a value or entity reference in a ScalarModel's case, an entity reference in an EntityModel's), they have
+ *     a view mode, they have a rendering hint, and scalar models have a pending value (not sure if Entity Model really
+ *     requires this).
+ *     Fundamentally though a ScalarModel is NOT really an EntityModel, so this hierarchy should be broken out with a
+ *     common superclass for both EntityModel and ScalarModel.
+ * </p>
  */
 public class ScalarModel extends EntityModel implements LinksProvider,FormExecutorContext, ActionArgumentModel {
 
@@ -289,9 +299,7 @@ public class ScalarModel extends EntityModel implements LinksProvider,FormExecut
 
                 final ObjectAdapter parentAdapter = scalarModel.getParentEntityModel().load();
 
-                final ObjectAdapter associatedAdapter =
-                        property.get(parentAdapter, InteractionInitiatedBy.USER);
-                scalarModel.setObject(associatedAdapter);
+                setObjectFromPropertyIfVisible(scalarModel, property, parentAdapter);
             }
 
             @Override
@@ -625,7 +633,6 @@ public class ScalarModel extends EntityModel implements LinksProvider,FormExecut
         public abstract String toStringOf(final ScalarModel scalarModel);
     }
 
-
     private final Kind kind;
     
     private final EntityModel parentEntityModel;
@@ -656,12 +663,12 @@ public class ScalarModel extends EntityModel implements LinksProvider,FormExecut
      * value (if any) of that action parameter.
      */
     public ScalarModel(final EntityModel parentEntityModel, final ActionParameterMemento apm) {
+        super(EntityModel.Mode.EDIT, EntityModel.RenderingHint.REGULAR);
         this.kind = Kind.PARAMETER;
         this.parentEntityModel = parentEntityModel;
         this.parameterMemento = apm;
 
         init();
-        setMode(Mode.EDIT);
     }
 
     /**
@@ -669,14 +676,16 @@ public class ScalarModel extends EntityModel implements LinksProvider,FormExecut
      * {@link #getObject() value of this model} to be current value of the
      * property.
      */
-    public ScalarModel(final EntityModel parentEntityModel, final PropertyMemento pm) {
+    public ScalarModel(
+            final EntityModel parentEntityModel, final PropertyMemento pm,
+            final EntityModel.Mode mode, final EntityModel.RenderingHint renderingHint) {
+        super(mode, renderingHint);
         this.kind = Kind.PROPERTY;
         this.parentEntityModel = parentEntityModel;
         this.propertyMemento = pm;
 
         init();
         getAndStore(parentEntityModel);
-        setMode(Mode.VIEW);
     }
 
     private void init() {
@@ -701,9 +710,30 @@ public class ScalarModel extends EntityModel implements LinksProvider,FormExecut
         final OneToOneAssociation property = propertyMemento.getProperty(getSpecificationLoader());
         final ObjectAdapter parentAdapter = parentAdapterMemento.getObjectAdapter(ConcurrencyChecking.CHECK,
                 getPersistenceSession(), getSpecificationLoader());
-        final ObjectAdapter associatedAdapter = property.get(parentAdapter, InteractionInitiatedBy.USER);
-        setObject(associatedAdapter);
+
+        setObjectFromPropertyIfVisible(ScalarModel.this, property, parentAdapter);
     }
+
+    private static void setObjectFromPropertyIfVisible(
+            final ScalarModel scalarModel,
+            final OneToOneAssociation property,
+            final ObjectAdapter parentAdapter) {
+
+        final Where where = scalarModel.getRenderingHint().asWhere();
+
+        final Consent visibility =
+                property.isVisible(parentAdapter, InteractionInitiatedBy.FRAMEWORK, where);
+
+        final ObjectAdapter associatedAdapter;
+        if (visibility.isAllowed()) {
+            associatedAdapter = property.get(parentAdapter, InteractionInitiatedBy.USER);
+        } else {
+            associatedAdapter = null;
+        }
+
+        scalarModel.setObject(associatedAdapter);
+    }
+
 
     public boolean isCollection() {
         return kind.isCollection(this);
@@ -804,11 +834,13 @@ public class ScalarModel extends EntityModel implements LinksProvider,FormExecut
         setObject(adapter);
     }
 
-    public boolean whetherHidden(Where where) {
+    public boolean whetherHidden() {
+        final Where where = getRenderingHint().asWhere();
         return kind.whetherHidden(this, where);
     }
 
-    public String whetherDisabled(Where where) {
+    public String whetherDisabled() {
+        final Where where = getRenderingHint().asWhere();
         return kind.whetherDisabled(this, where);
     }
 
@@ -976,9 +1008,8 @@ public class ScalarModel extends EntityModel implements LinksProvider,FormExecut
         return editable && isViewMode();
     }
 
-    boolean isEnabled() {
-        Where where = getRenderingHint().isInTable() ? Where.PARENTED_TABLES : Where.OBJECT_FORMS;
-        return whetherDisabled(where) == null;
+    public boolean isEnabled() {
+        return whetherDisabled() == null;
     }
 
     public String getReasonInvalidIfAny() {

@@ -76,15 +76,33 @@ The bootstrapping of Apache Isis itself lives in a `BootstrappingGlue` step defi
 
 [source,java]
 ----
-public class BootstrappingGlue extends CukeGlueBootstrappingAbstract {  // <1>
+public class BootstrappingGlue
+                extends HeadlessWithBootstrappingAbstract { // <1>
+
     public BootstrappingGlue() {
-        super(new DomainAppApplicationModule());                        // <2>
+        super(new DomainAppApplicationModule());            // <2>
+    }
+
+    @Before(order=100)                                      // <3>
+    public void beforeScenario() {
+        super.bootstrapAndSetupIfRequired();
+    }
+    @After
+    public void afterScenario(cucumber.api.Scenario sc) {
+        super.tearDownAllModules();
     }
 }
 ----
-<1> superclass contains the bootstrapping logic.
-This reuses many of the same classes as the integration testing framework
+<1> superclass contains much of the bootstrapping logic (and is also used by the integration testing framework)
 <2> the `Module` to use to bootstrap the application in headless mode.
+<3> remainder of the class is just boilerplate.
+
+[NOTE]
+====
+For BDD specs, the `CukeGlueBootstrappingAbstract` was previously provided (as a BDD counterpart to `IntegrationTestAbstract3`) to perform the relevant bootstrapping.
+_However_, it turns out that Cucumber does not allow subclassing of BDD specs.
+Therefore the bootstrapping boilerplate (that ideally would have been factored out into an abstract superclass) must be included within the BDD spec.
+====
 
 The fixture to run also lives in its own step definition, `CatalogOfFixturesGlue`:
 
@@ -129,7 +147,7 @@ public class SimpleObjectMenuGlue extends CukeGlueAbstract2 {
 
 [TIP]
 ====
-The xref:rgsvc.adoc#_rgsvc_api_Scratchpad[`Scratchpad`] domain service is one way in which glue classes can pass state between each other.
+The xref:../rgsvc/rgsvc.adoc#_rgsvc_api_Scratchpad[`Scratchpad`] domain service is one way in which glue classes can pass state between each other.
 Or, for more type safety, you could develop your own custom domain services for each scenario, and inject these in as regular services.
 See link:http://www.thinkcode.se/blog/2017/04/01/sharing-state-between-steps-in-cucumberjvm-using-picocontainer[this blog] post for more details.
 ====

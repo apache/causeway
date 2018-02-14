@@ -69,7 +69,7 @@ public class OidAdapterHashMap implements Iterable<Oid>, SessionScopedComponent 
             // the pojo,
             // which for Hibernate PersistentCollections would trigger a
             // resolve.
-            LOG.debug("add oid: " + oid + " ; oid.hashCode: + #" + Long.toHexString(oid.hashCode()) + " ; adapter.hashCode(): #" + Long.toHexString(adapter.hashCode()));
+            LOG.debug("add oid: {} ; oid.hashCode: + #{} ; adapter.hashCode(): #{}", oid, Long.toHexString(oid.hashCode()), Long.toHexString(adapter.hashCode()));
         }
     }
 
@@ -79,9 +79,7 @@ public class OidAdapterHashMap implements Iterable<Oid>, SessionScopedComponent 
      * @return <tt>true</tt> if an adapter was removed.
      */
     public boolean remove(final Oid oid) {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("remove oid: " + oid);
-        }
+        LOG.debug("remove oid: {}", oid);
         return adapterByOidMap.remove(oid) != null;
     }
 

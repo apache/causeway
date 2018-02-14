@@ -48,6 +48,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
@@ -70,6 +71,19 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
         IsisConfigurationDefault stubConfiguration = new IsisConfigurationDefault(null);
         this.servicesInjector = new ServicesInjector(Collections.emptyList(), stubConfiguration);
         servicesInjector.addFallbackIfRequired(ConfigurationServiceInternal.class, stubConfiguration);
+    }
+
+    @Override
+    public ObjectMember getMember(final String memberId) {
+        final ObjectAction objectAction = getObjectAction(memberId);
+        if(objectAction != null) {
+            return objectAction;
+        }
+        final ObjectAssociation association = getAssociation(memberId);
+        if(association != null) {
+            return association;
+        }
+        return null;
     }
 
     @Override

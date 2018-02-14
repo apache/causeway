@@ -49,7 +49,7 @@ public class PersistenceQueryFindAllInstancesProcessor extends PersistenceQueryP
         jdoQuery.addExtension("datanucleus.multivaluedFetch", "none");
         
         if (LOG.isDebugEnabled()) {
-            LOG.debug("allInstances(): class=" + specification.getFullIdentifier());
+            LOG.debug("allInstances(): class={}", specification.getFullIdentifier());
         }
 
         try {

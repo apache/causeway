@@ -34,16 +34,16 @@ public Customer updateName(@javax.annotation.Nullable final String name) {
 ----
 
 Apache Isis does provide several other ways to specify optionality: using the
-xref:../rgant/rgant.adoc#_rgant_Property_optionality[`@Property#optionality()`] /
-xref:../rgant/rgant.adoc#_rgant_Parameter_optionality[`@Parameter#optionality()`] annotation.  For properties, the optionality
-can also be inferred from the xref:../rgant/rgant.adoc#_rgant_Column_allowsNull[`@Column#allowsNull()`] attribute.
+xref:../rgant/rgant.adoc#_rgant-Property_optionality[`@Property#optionality()`] /
+xref:../rgant/rgant.adoc#_rgant-Parameter_optionality[`@Parameter#optionality()`] annotation.  For properties, the optionality
+can also be inferred from the xref:../rgant/rgant.adoc#_rgant-Column_allowsNull[`@Column#allowsNull()`] attribute.
 
 [TIP]
 ====
 See the
-xref:../rgant/rgant.adoc#_rgant_Property_optionality[`@Property#optionality()`] documentation for a much fuller discussion on
+xref:../rgant/rgant.adoc#_rgant-Property_optionality[`@Property#optionality()`] documentation for a much fuller discussion on
 the relationship between using the Apache Isis annotations vs
-xref:../rgant/rgant.adoc#_rgant_Column_allowsNull[`@Column#allowsNull()`].
+xref:../rgant/rgant.adoc#_rgant-Column_allowsNull[`@Column#allowsNull()`].
 ====
 
 If more than one method is specified then the framework will validate that there are no incompatibilities (and fail to

@@ -168,14 +168,14 @@ public abstract class GridSystemServiceAbstract<G extends org.apache.isis.applib
         if (valid) {
             overwriteFacets(grid, domainClass);
             if(LOG.isDebugEnabled()) {
-                LOG.debug("Grid:\n\n" + jaxbService.toXml(grid) + "\n\n");
+                LOG.debug("Grid:\n\n{}\n\n", jaxbService.toXml(grid));
             }
         } else {
 
             if(!deploymentCategoryProvider.getDeploymentCategory().isProduction()) {
                 messageService.warnUser("Grid metadata errors for " + grid.getDomainClass().getName() + "; check the error log");
             }
-            LOG.error("Grid metadata errors:\n\n" + jaxbService.toXml(grid) + "\n\n");
+            LOG.error("Grid metadata errors:\n\n{}\n\n", jaxbService.toXml(grid));
         }
     }
 

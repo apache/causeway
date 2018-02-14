@@ -221,7 +221,7 @@ The BDD specs (run using Cucumber) reside under `domain.application.bdd`:
 >>>>> SimpleObjectSpec_listAllAndCreate.feature
 ----
 
-Here the `BootstrappingGlue` glue class inherits from the framework's `CukeGlueBootstrappingAbstract` class, and bootstraps using the `DomainAppApplicationModule` mentioned above.
+Here the `BootstrappingGlue` glue class inherits from the framework's `HeadlessWithBootstrappingAbstract` class, and bootstraps using the `DomainAppApplicationModule` mentioned above.
 
 There is just one feature file: `SimpleObjectSpec_listAllAndCreate.feature`, which is pretty simple:
 

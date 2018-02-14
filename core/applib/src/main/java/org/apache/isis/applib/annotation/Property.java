@@ -27,6 +27,11 @@ import java.lang.annotation.Target;
 
 import javax.jdo.annotations.NotPersistent;
 
+import org.apache.isis.applib.conmap.ContentMappingServiceForCommandDto;
+import org.apache.isis.applib.conmap.ContentMappingServiceForCommandsDto;
+import org.apache.isis.applib.services.command.CommandDtoProcessor;
+import org.apache.isis.applib.services.command.CommandWithDto;
+import org.apache.isis.applib.services.command.spi.CommandService;
 import org.apache.isis.applib.services.eventbus.PropertyDomainEvent;
 import org.apache.isis.applib.spec.Specification;
 import org.apache.isis.applib.value.Blob;
@@ -133,6 +138,22 @@ public @interface Property {
      */
     Publishing publishing() default Publishing.NOT_SPECIFIED;
 
+
+    /**
+     * The {@link CommandDtoProcessor} to process this command's DTO.
+     *
+     * <p>
+     *     Specifying a processor requires that the implementation of {@link CommandService} provides a
+     *     custom implementation of {@link org.apache.isis.applib.services.command.Command} that additional extends
+     *     from {@link CommandWithDto}.
+     * </p>
+     *
+     * <p>
+     *     Tprocessor itself is used by {@link ContentMappingServiceForCommandDto} and
+     *     {@link ContentMappingServiceForCommandsDto} to dynamically transform the DTOs.
+     * </p>
+     */
+    Class<? extends CommandDtoProcessor> commandDtoProcessor() default CommandDtoProcessor.class;
 
 
 

@@ -29,7 +29,12 @@
 	<artifactId>isis-core-viewer-restfulobjects-applib</artifactId>
 	<name>Apache Isis RestfulObjects Viewer AppLib</name>
 
-	<dependencies>
+    <properties>
+        <jar-plugin.automaticModuleName>org.apache.isis.viewer.restfulobjects.applib</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/isis/viewer/restfulobjects/applib</git-plugin.propertiesDir>
+    </properties>
+
+    <dependencies>
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>

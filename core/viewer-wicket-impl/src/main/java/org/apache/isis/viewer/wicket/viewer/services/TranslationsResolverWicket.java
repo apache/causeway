@@ -63,7 +63,7 @@ public class TranslationsResolverWicket implements TranslationsResolver {
         final String configLocation = servletContext.getInitParameter(WebAppConstants.CONFIG_DIR_PARAM);
         try {
             if(configLocation != null) {
-                LOG.info( "Reading translations relative to config override location: " + configLocation );
+                LOG.info( "Reading translations relative to config override location: {}", configLocation );
                 return Files.readLines(newFile(configLocation, file), Charsets.UTF_8);
             } else {
                 final URL url = servletContext.getResource("/WEB-INF/" + file);

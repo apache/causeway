@@ -177,7 +177,7 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
         }
 
         final ScalarModel scalarModel = getModel();
-        final String disableReasonIfAny = scalarModel.whetherDisabled(getRendering().getWhere());
+        final String disableReasonIfAny = scalarModel.whetherDisabled();
 
         if (scalarModel.isViewMode()) {
             onBeforeRenderWhenViewMode();

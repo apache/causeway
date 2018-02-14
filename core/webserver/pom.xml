@@ -29,6 +29,11 @@
 	<artifactId>isis-core-webserver</artifactId>
 	<name>Apache Isis WebServer</name>
 
+	<properties>
+		<jar-plugin.automaticModuleName>org.apache.isis.core.webserver</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/isis/core/webserver</git-plugin.propertiesDir>
+	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>

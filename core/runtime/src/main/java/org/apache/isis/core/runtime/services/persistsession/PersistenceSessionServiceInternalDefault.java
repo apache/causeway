@@ -27,6 +27,7 @@ import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.xactn.Transaction;
+import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
@@ -148,7 +149,12 @@ public class PersistenceSessionServiceInternalDefault implements PersistenceSess
 
     @Override
     public void beginTran() {
-        getTransactionManager().startTransaction();
+        beginTran(null);
+    }
+
+    @Override
+    public void beginTran(final Command commandIfAny) {
+        getTransactionManager().startTransaction(commandIfAny);
     }
 
     @Override

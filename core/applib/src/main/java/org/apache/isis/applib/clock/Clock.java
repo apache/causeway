@@ -28,7 +28,6 @@ import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 
 import org.apache.isis.applib.Defaults;
-import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.fixtures.FixtureClock;
 
 /**
@@ -49,7 +48,6 @@ import org.apache.isis.applib.fixtures.FixtureClock;
  */
 public abstract class Clock {
     protected static Clock instance;
-    private static boolean isReplaceable = true;
 
     /**
      * Returns the (singleton) instance of {@link Clock}.
@@ -64,7 +62,6 @@ public abstract class Clock {
     public final static Clock getInstance() {
         if (!isInitialized()) {
             instance = new SystemClock();
-            isReplaceable = false;
         }
         return instance;
     }
@@ -104,14 +101,13 @@ public abstract class Clock {
         return new DateTime(getTime(), Defaults.getTimeZone());
     }
 
-    private static void ensureReplaceable() {
-        if (!isReplaceable && instance != null) {
-            throw new RecoverableException("Clock already set up");
-        }
-    }
 
     public static Timestamp getTimeAsJavaSqlTimestamp() {
-        return new java.sql.Timestamp(getTimeAsDateTime().getMillis());
+        return new java.sql.Timestamp(getTimeAsMillis());
+    }
+
+    public static long getTimeAsMillis() {
+        return getTimeAsDateTime().getMillis();
     }
 
     /**
@@ -120,7 +116,6 @@ public abstract class Clock {
      * @return whether a clock was removed.
      */
     protected static boolean remove() {
-        ensureReplaceable();
         if (instance == null) {
             return false;
         }
@@ -129,7 +124,6 @@ public abstract class Clock {
     }
 
     protected Clock() {
-        ensureReplaceable();
         instance = this;
     }
 
@@ -147,6 +141,8 @@ public abstract class Clock {
 }
 
 final class SystemClock extends Clock {
+
+    SystemClock() {}
     @Override
     protected long time() {
         return System.currentTimeMillis();

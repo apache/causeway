@@ -43,6 +43,7 @@ import org.apache.isis.core.metamodel.facets.MethodFilteringFacetFactory;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactory;
 import org.apache.isis.core.metamodel.facets.MethodRemoverConstants;
 import org.apache.isis.core.metamodel.facets.PropertyOrCollectionIdentifyingFacetFactory;
+import org.apache.isis.core.metamodel.progmodel.ObjectSpecificationPostProcessor;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.ServicesInjectorAware;
@@ -266,15 +267,6 @@ public class FacetProcessor implements ServicesInjectorAware {
         }
     }
 
-    public void processPost(
-            final Class<?> cls,
-            final MethodRemover methodRemover,
-            final FacetHolder facetHolder) {
-        final List<FacetFactory> factoryList = getFactoryListByFeatureType(FeatureType.OBJECT_POST_PROCESSING);
-        for (final FacetFactory facetFactory : factoryList) {
-            facetFactory.process(new ProcessClassContext(cls, removerElseNullRemover(methodRemover), facetHolder));
-        }
-    }
 
     /**
      * Attaches all facets applicable to the provided {@link FeatureType type of

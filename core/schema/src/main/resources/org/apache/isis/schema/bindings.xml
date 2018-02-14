@@ -38,7 +38,7 @@
         </jaxb:bindings>
     </jaxb:bindings>
 
-    <jaxb:bindings schemaLocation="ixn/ixn-1.2.xsd">
+    <jaxb:bindings schemaLocation="ixn/ixn-1.3.xsd">
         <jaxb:schemaBindings>
             <!--
             we don't include the minor version, because the
@@ -50,7 +50,7 @@
             <namespace:prefix name="ixn" />
         </jaxb:bindings>
     </jaxb:bindings>
-    <!-- since ixn-1.2.xsd does an xs:import of common-1.1.xsd, we need to specify common's package bindings -->
+    <!-- since ixn-1.3.xsd does an xs:import of common-1.1.xsd, we need to specify common's package bindings -->
     <jaxb:bindings schemaLocation="common/common-1.1.xsd">
         <jaxb:schemaBindings>
             <!--
@@ -63,8 +63,8 @@
             <namespace:prefix name="com" />
         </jaxb:bindings>
     </jaxb:bindings>
-    <!-- since ixn-1.2.xsd does an xs:import of cmd-1.3.xsd, we need to specify common's package bindings -->
-    <jaxb:bindings schemaLocation="cmd/cmd-1.3.xsd">
+    <!-- since ixn-1.3.xsd does an xs:import of cmd-1.4.xsd, we need to specify common's package bindings -->
+    <jaxb:bindings schemaLocation="cmd/cmd-1.4.xsd">
         <jaxb:schemaBindings>
             <!--
             we don't include the minor version, because the

@@ -53,16 +53,12 @@ public class ResourceServlet extends HttpServlet {
 
     private void processRequest(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
         final String servletPath = StringExtensions.stripLeadingSlash(request.getServletPath());
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("request: " + servletPath);
-        }
+        LOG.debug("request: {}", servletPath);
 
         // try to load from filesystem
         final InputStream is2 = getRealPath(request);
         if (is2 != null) {
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("request: " + servletPath + " loaded from filesystem");
-            }
+            LOG.debug("request: {} loaded from filesystem", servletPath);
             writeContentType(request, response);
             InputStreamExtensions.copyTo(is2, response.getOutputStream());
             is2.close();
@@ -72,16 +68,14 @@ public class ResourceServlet extends HttpServlet {
         // otherwise, try to load from classpath
         final InputStream is = ResourceUtil.getResourceAsStream(servletPath);
         if (is != null) {
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("request: " + servletPath + " loaded from classpath");
-            }
+            LOG.debug("request: {} loaded from classpath", servletPath );
             writeContentType(request, response);
             InputStreamExtensions.copyTo(is, response.getOutputStream());
             is.close();
             return;
         }
 
-        LOG.warn("failed to load resource from classpath or file system: " + servletPath);
+        LOG.warn("failed to load resource from classpath or file system: {}", servletPath);
     }
 
     private static void writeContentType(final HttpServletRequest request, final HttpServletResponse response) {

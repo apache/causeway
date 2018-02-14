@@ -52,7 +52,7 @@ public class PersistenceQueryFactory {
      */
     final PersistenceQuery createPersistenceQueryFor(final Query<?> query, final QueryCardinality cardinality) {
         if (LOG.isDebugEnabled()) {
-            LOG.debug("createPersistenceQueryFor: " + query.getDescription());
+            LOG.debug("createPersistenceQueryFor: {}", query.getDescription());
         }
         final ObjectSpecification noSpec = specFor(query);
         if (query instanceof QueryFindAllInstances) {

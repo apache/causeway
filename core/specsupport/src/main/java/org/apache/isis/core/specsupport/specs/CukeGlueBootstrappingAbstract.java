@@ -25,7 +25,17 @@ import cucumber.api.java.Before;
 /**
  * For BDD spec using headless access, there needs to be (at least) one BDD spec glue that inherits from this adapter
  * class, specifying the {@link Module} to use to bootstrap the system.
+ *
+ * <p>
+ *     <b>This class is deprecated</b>.  It's not possible to subclass from this class, it'll result in an exception:
+ *     <code>cucumber.runtime.CucumberException: You're not allowed to extend classes that define Step Definitions or
+ *     hooks</code>.
+ *     Instead, just inline the contents of this class.
+ * </p>
+ *
+ * @deprecated - it's not possible to subclass from this class. Instead, just inline the contents of this class.
  */
+@Deprecated
 public abstract class CukeGlueBootstrappingAbstract extends HeadlessWithBootstrappingAbstract {
 
     protected CukeGlueBootstrappingAbstract(final Module module) {

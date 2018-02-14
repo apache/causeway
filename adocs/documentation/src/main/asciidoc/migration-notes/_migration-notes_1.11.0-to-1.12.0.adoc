@@ -62,7 +62,7 @@ xref:../guides/rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_MessageService[`Mes
 
 The `DomainObjectContainer` service will continue to be supported until Apache Isis v2.0.0, but in the meantime, consider changing existing application code to use these new domain services.
 
-Please note that when migrating from _rgsvc_core-domain-api_DomainObjectContainer_object-persistence-api.adoc#_rgsvc_core-domain-api_DomainObjectContainer_object-persistence-api[`DomainObjectContainer#persist()`] to xref:../../guides/rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-api_RepositoryService[`RepositoryService#persist()`], no exception will be thrown if the Domain Object is already persisted, so the behavior of xref:../guides/rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-api_RepositoryService[`RepositoryService#persist()`] will be the same as that of xref:rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer_object-persistence-api[`DomainObjectContainer#persistIfNotAlready()`].
+Please note that when migrating from _rgsvc_core-domain-api_DomainObjectContainer_object-persistence-api.adoc#_rgsvc_core-domain-api_DomainObjectContainer_object-persistence-api[`DomainObjectContainer#persist()`] to xref:../../guides/rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-api_RepositoryService[`RepositoryService#persist()`], no exception will be thrown if the Domain Object is already persisted, so the behavior of xref:../guides/rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-api_RepositoryService[`RepositoryService#persist()`] will be the same as that of xref:../guides/rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer_object-persistence-api[`DomainObjectContainer#persistIfNotAlready()`].
 
 
 

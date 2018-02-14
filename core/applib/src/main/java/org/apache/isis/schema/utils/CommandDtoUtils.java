@@ -35,8 +35,10 @@ import com.google.common.io.Resources;
 
 import org.apache.isis.schema.cmd.v1.ActionDto;
 import org.apache.isis.schema.cmd.v1.CommandDto;
+import org.apache.isis.schema.cmd.v1.MapDto;
 import org.apache.isis.schema.cmd.v1.ParamsDto;
 import org.apache.isis.schema.common.v1.OidsDto;
+import org.apache.isis.schema.common.v1.PeriodDto;
 
 public final class CommandDtoUtils {
 
@@ -113,6 +115,40 @@ public final class CommandDtoUtils {
             actionDto.setParameters(parameters);
         }
         return parameters;
+    }
+
+    public static PeriodDto timingsFor(final CommandDto commandDto) {
+        PeriodDto timings = commandDto.getTimings();
+        if(timings == null) {
+            timings = new PeriodDto();
+            commandDto.setTimings(timings);
+        }
+        return timings;
+    }
+
+    public static String getUserData(final CommandDto dto, final String key) {
+        if(dto == null || key == null) {
+            return null;
+        }
+        return CommonDtoUtils.getMapValue(dto.getUserData(), key);
+    }
+
+    public static void setUserData(
+            final CommandDto dto, final String key, final String value) {
+        if(dto == null || key == null) {
+            return;
+        }
+        final MapDto userData = userDataFor(dto);
+        CommonDtoUtils.putMapKeyValue(userData, key, value);
+    }
+
+    private static MapDto userDataFor(final CommandDto commandDto) {
+        MapDto userData = commandDto.getUserData();
+        if(userData == null) {
+            userData = new MapDto();
+            commandDto.setUserData(userData);
+        }
+        return userData;
     }
 
 }

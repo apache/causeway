@@ -733,26 +733,21 @@ For example:
 image:_images/vscode.png[]
 ....
 
-will render as:
-
-image:_images/vscode.png[]
-
-
-to make the image clickable, add in the `link` attribute:
+To make the image clickable, add in the `link` attribute:
 
 ....
 image:_images/vscode.png[link="_images/vscode.png"]
 ....
 
-will render as:
-
-image:_images/vscode.png[link="_images/vscode.png"]
-
-
-to make the image clickable, add in the `link` attribute:
 
 
 It's also possible to specify the width using `scaledwidth` (for PDF/HTML) or `width` and `height` (for HTML only).
+
+For example:
+
+....
+image:_images/vscode.png[link="_images/vscode.png",width="800px"]
+....
 
 
 
@@ -762,13 +757,14 @@ It's also possible to specify the width using `scaledwidth` (for PDF/HTML) or `w
 
 Use the `include:` macro to break up a document into multiple sections.
 
-For example, the xref:../../setting-up/concepts/concepts.adoc#[concepts] document is broken into several files:
+For example, this xref:dg.adoc#[developers' guide] document is broken into several files:
 
 ....
-concepts.adoc
-_concepts_why-a-new-platform.adoc
-_concepts_ci-as-a-service.adoc
-_concepts_git-intro.adoc
+dg.adoc
+_dg_ide.adoc
+_dg_hints-and-tips.adoc
+_dg_building-isis.adoc
+...
 ....
 
 and so on.
@@ -777,9 +773,10 @@ These are included using:
 
 [source,asciidoc]
 ----
-\include::_concepts_why-a-new-platform.adoc[leveloffset=+1]
-\include::_concepts_ci-as-a-service.adoc[leveloffset=+1]
-\include::_concepts_git-intro.adoc[leveloffset=+1]
+\include::_dg_ide.adoc[leveloffset=+1]
+\include::_dg_hints-and-tips.adoc[leveloffset=+1]
+\include::_dg_building-isis.adoc[leveloffset=+1]
+...
 ----
 
 The `leveloffset=+1` means that each included file's heading levels are automatically adjusted.
@@ -794,21 +791,21 @@ To make this work, it relies upon the following naming conventions:
 * every document should have an id anchor for its level heading corresponding to its file name
 * every child document's name should be an '_ followed by the name of its parent.
 
-For example, `concepts.adoc` is:
+For example, `dg.adoc` is:
 
 [source,asciidoc]
 ----
-[[concepts]]
-= Concepts
+[[dg]]
+= Developers' Guide
 ...
 ----
 
-while its child document `_concepts_why-a-new-platform.adoc` starts with:
+while its child document `_dg_ide.adoc` starts with:
 
 [source,asciidoc]
 ----
-[[_concepts_why-a-new-platform]]
-= Why a new platform?
+[[_dg_ide]]
+= Using an IDE
 ...
 ----
 

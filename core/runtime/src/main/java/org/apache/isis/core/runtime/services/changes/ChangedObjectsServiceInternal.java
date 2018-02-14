@@ -21,6 +21,7 @@ package org.apache.isis.core.runtime.services.changes;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.Callable;
 
 import javax.enterprise.context.RequestScoped;
 
@@ -34,6 +35,7 @@ import org.apache.isis.applib.annotation.PublishingChangeKind;
 import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.applib.services.WithTransactionScope;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -226,31 +228,35 @@ public class ChangedObjectsServiceInternal implements WithTransactionScope {
     }
 
     private Set<Map.Entry<AdapterAndProperty, PreAndPostValues>> capturePostValuesAndDrain(final Map<AdapterAndProperty, PreAndPostValues> changedObjectProperties) {
-        final Map<AdapterAndProperty, PreAndPostValues> processedObjectProperties = Maps.newLinkedHashMap();
+        return AdapterManager.ConcurrencyChecking.executeWithConcurrencyCheckingDisabled(new Callable<Set<Map.Entry<AdapterAndProperty, PreAndPostValues>>>() {
+            @Override
+            public Set<Map.Entry<AdapterAndProperty, PreAndPostValues>> call() {
+                final Map<AdapterAndProperty, PreAndPostValues> processedObjectProperties = Maps.newLinkedHashMap();
 
-        while(!changedObjectProperties.isEmpty()) {
+                while(!changedObjectProperties.isEmpty()) {
 
-            final Set<AdapterAndProperty> keys = Sets.newLinkedHashSet(changedObjectProperties.keySet());
-            for (final AdapterAndProperty aap : keys) {
+                    final Set<AdapterAndProperty> keys = Sets.newLinkedHashSet(changedObjectProperties.keySet());
+                    for (final AdapterAndProperty aap : keys) {
 
-                final PreAndPostValues papv = changedObjectProperties.remove(aap);
+                        final PreAndPostValues papv = changedObjectProperties.remove(aap);
 
-                final ObjectAdapter adapter = aap.getAdapter();
-                if(adapter.isDestroyed()) {
-                    // don't touch the object!!!
-                    // JDO, for example, will complain otherwise...
-                    papv.setPost(IsisTransaction.Placeholder.DELETED);
-                } else {
-                    papv.setPost(aap.getPropertyValue());
+                        final ObjectAdapter adapter = aap.getAdapter();
+                        if(adapter.isDestroyed()) {
+                            // don't touch the object!!!
+                            // JDO, for example, will complain otherwise...
+                            papv.setPost(IsisTransaction.Placeholder.DELETED);
+                        } else {
+                            papv.setPost(aap.getPropertyValue());
+                        }
+
+                        // if we encounter the same objectProperty again, this will simply overwrite it
+                        processedObjectProperties.put(aap, papv);
+                    }
                 }
 
-                // if we encounter the same objectProperty again, this will simply overwrite it
-                processedObjectProperties.put(aap, papv);
-            }
-        }
-
-        return Collections.unmodifiableSet(
-                Sets.filter(processedObjectProperties.entrySet(), PreAndPostValues.Predicates.SHOULD_AUDIT));
+                return Collections.unmodifiableSet(
+                        Sets.filter(processedObjectProperties.entrySet(), PreAndPostValues.Predicates.SHOULD_AUDIT));            }
+        });
     }
 
     protected boolean shouldIgnore(final ObjectAdapter adapter) {

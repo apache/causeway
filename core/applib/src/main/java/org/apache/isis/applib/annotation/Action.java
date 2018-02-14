@@ -25,6 +25,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.apache.isis.applib.conmap.ContentMappingServiceForCommandDto;
+import org.apache.isis.applib.conmap.ContentMappingServiceForCommandsDto;
+import org.apache.isis.applib.services.command.CommandDtoProcessor;
+import org.apache.isis.applib.services.command.CommandWithDto;
+import org.apache.isis.applib.services.command.spi.CommandService;
 import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
 
 /**
@@ -115,7 +120,10 @@ public @interface Action {
      * <p>
      * Has no meaning if annotated on an action of a domain service.
      * </p>
+     *
+     * @deprecated - instead of bulk actions, use view models with collection parameters and {@link Action#associateWith()}.
      */
+    @Deprecated
     InvokeOn invokeOn() default InvokeOn.NOT_SPECIFIED;
 
     // //////////////////////////////////////
@@ -142,6 +150,22 @@ public @interface Action {
      * </p>
      */
     CommandExecuteIn commandExecuteIn() default CommandExecuteIn.FOREGROUND;
+
+    /**
+     * The {@link CommandDtoProcessor} to process this command's DTO.
+     *
+     * <p>
+     *     Specifying a processor requires that the implementation of {@link CommandService} provides a
+     *     custom implementation of {@link org.apache.isis.applib.services.command.Command} that additional extends
+     *     from {@link CommandWithDto}.
+     * </p>
+     *
+     * <p>
+     *     Tprocessor itself is used by {@link ContentMappingServiceForCommandDto} and
+     *     {@link ContentMappingServiceForCommandsDto} to dynamically transform the DTOs.
+     * </p>
+     */
+    Class<? extends CommandDtoProcessor> commandDtoProcessor() default CommandDtoProcessor.class;
 
 
     // //////////////////////////////////////
@@ -179,6 +203,45 @@ public @interface Action {
      * </p>
      */
     RestrictTo restrictTo() default RestrictTo.NOT_SPECIFIED;
+
+
+    // //////////////////////////////////////
+
+
+    /**
+     * Associates this action with a property or collection, specifying its id.
+     *
+     * <p>
+     *     This is an alternative to using {@link MemberOrder#name()}.  To specify the order (equivalent to
+     *     {@link MemberOrder#sequence()}}), use {@link #associateWithSequence()}.
+     * </p>
+     *
+     * <p>
+     *     For example <code>@Action(associateWith="items", associateWithSequence="2.1")</code>
+     * </p>
+     *
+     * <p>
+     *     If an action is associated with a collection, then any matching parameters will have
+     *     their choices automatically inferred from the collection (if not otherwise specified)
+     *     and any collection parameter defaults can be specified using checkboxes
+     *     (in the Wicket UI, at least).
+     * </p>
+     */
+    String associateWith() default "";
+
+    /**
+     * Specifies the sequence/order in the UI for an action that's been associated with a property or collection.
+     *
+     * <p>
+     *     This is an alternative to using {@link MemberOrder#sequence()}, but is ignored if
+     *     {@link Action#associateWith()} isn't also specified.
+     * </p>
+     *
+     * <p>
+     *     For example <code>@Action(associateWith="items", associateWithSequence="2.1")</code>
+     * </p>
+     */
+    String associateWithSequence() default "1";
 
 
 }

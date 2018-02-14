@@ -22,6 +22,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import javax.enterprise.context.RequestScoped;
+
+import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.InvokedOn;
 import org.apache.isis.applib.annotation.NatureOfService;
@@ -35,7 +37,10 @@ import org.apache.isis.applib.annotation.Programmatic;
  * with {@link org.apache.isis.applib.annotation.DomainService}.  This means that it is automatically registered
  * and available for use; no further configuration is required.
  * </p>
+ *
+ * @deprecated - instead of bulk actions, use view models with collection parameters and {@link Action#associateWith()}.
  */
+@Deprecated
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
@@ -45,7 +50,10 @@ public class ActionInvocationContext {
 
     /**
      * Intended only to support unit testing.
+     *
+     * @deprecated - instead of bulk actions, use view models with collection parameters and {@link Action#associateWith()}.
      */
+    @Deprecated
     public static ActionInvocationContext onObject(final Object domainObject) {
         ActionInvocationContext aic = new ActionInvocationContext();
         aic.setInvokedOn(InvokedOn.OBJECT);
@@ -55,14 +63,20 @@ public class ActionInvocationContext {
 
     /**
      * Intended only to support unit testing.
+     *
+     * @deprecated - instead of bulk actions, use view models with collection parameters and {@link Action#associateWith()}.
      */
+    @Deprecated
     public static ActionInvocationContext onCollection(final Object... domainObjects) {
         return onCollection(Arrays.asList(domainObjects));
     }
 
     /**
      * Intended only to support unit testing.
+     *
+     * @deprecated - instead of bulk actions, use view models with collection parameters and {@link Action#associateWith()}.
      */
+    @Deprecated
     public static ActionInvocationContext onCollection(final List<Object> domainObjects) {
         ActionInvocationContext aic = new ActionInvocationContext();
         aic.setInvokedOn(InvokedOn.COLLECTION);
@@ -77,7 +91,6 @@ public class ActionInvocationContext {
     private List<Object> domainObjects;
 
     private int index;
-
 
 
     // //////////////////////////////////////
@@ -113,7 +126,10 @@ public class ActionInvocationContext {
      * Whether this particular {@link ActionInvocationContext} was applied as a {@link InvokedOn#COLLECTION bulk} action
      * (against each domain object in a list of domain objects) or as a {@link InvokedOn#OBJECT regular}
      * action (against a single domain object).
+     *
+     * @deprecated - instead of bulk actions, use view models with collection parameters and {@link Action#associateWith()}.
      */
+    @Deprecated
     @Programmatic
     public InvokedOn getInvokedOn() {
         return invokedOn;
@@ -122,7 +138,10 @@ public class ActionInvocationContext {
 
     /**
      * The list of domain objects which are being acted upon.
+     *
+     * @deprecated - instead of bulk actions, use view models with collection parameters and {@link Action#associateWith()}.
      */
+    @Deprecated
     @Programmatic
     public List<Object> getDomainObjects() {
         return domainObjects;
@@ -130,7 +149,10 @@ public class ActionInvocationContext {
 
     /**
      * The number of {@link #domainObjects domain objects} being acted upon.
+     *
+     * @deprecated - instead of bulk actions, use view models with collection parameters and {@link Action#associateWith()}.
      */
+    @Deprecated
     @Programmatic
     public int getSize() {
         return domainObjects.size();
@@ -141,7 +163,10 @@ public class ActionInvocationContext {
      *
      * <p>
      * Will be a value in range [0, {@link #getSize() size}).
+     *
+     * @deprecated - instead of bulk actions, use view models with collection parameters and {@link Action#associateWith()}.
      */
+    @Deprecated
     @Programmatic
     public int getIndex() {
         return index;
@@ -149,7 +174,10 @@ public class ActionInvocationContext {
 
     /**
      * Whether this object being acted upon is the first such.
+     *
+     * @deprecated - instead of bulk actions, use view models with collection parameters and {@link Action#associateWith()}.
      */
+    @Deprecated
     @Programmatic
     public boolean isFirst() {
         return this.index == 0;
@@ -157,7 +185,10 @@ public class ActionInvocationContext {
 
     /**
      * Whether this object being acted upon is the last such.
+     *
+     * @deprecated - instead of bulk actions, use view models with collection parameters and {@link Action#associateWith()}.
      */
+    @Deprecated
     @Programmatic
     public boolean isLast() {
         return this.index == (getSize()-1);

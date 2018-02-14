@@ -105,10 +105,10 @@ public class IsisSessionFactoryBuilder {
 
 
         LOG.info("initialising Isis System");
-        LOG.info("working directory: " + new File(".").getAbsolutePath());
+        LOG.info("working directory: {}", new File(".").getAbsolutePath());
 
         final IsisConfigurationDefault configuration = componentProvider.getConfiguration();
-        LOG.info("resource stream source: " + configuration.getResourceStreamSource());
+        LOG.info("resource stream source: {}", configuration.getResourceStreamSource());
 
         localeInitializer.initLocale(configuration);
         timeZoneInitializer.initTimeZone(configuration);
@@ -212,6 +212,7 @@ public class IsisSessionFactoryBuilder {
                     new Runnable() {
                         @Override
                         public void run() {
+                            specificationLoader.postProcess();
                             try {
                                 specificationLoader.validateAndAssert();
 
@@ -223,7 +224,6 @@ public class IsisSessionFactoryBuilder {
                                 }
                                 IsisContext.setMetaModelInvalidException(ex);
                             }
-
                         }
                     }
             );

@@ -29,7 +29,12 @@
 	<artifactId>isis-core-unittestsupport</artifactId>
 	<name>Apache Isis Unit Test Support</name>
 
-	<description>
+    <properties>
+        <jar-plugin.automaticModuleName>org.apache.isis.core.unittestsupport</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/isis/core/unittestsupport</git-plugin.propertiesDir>
+    </properties>
+
+    <description>
 		Support for writing unit tests; should be added as a dependency
 		with scope=test only
 	</description>

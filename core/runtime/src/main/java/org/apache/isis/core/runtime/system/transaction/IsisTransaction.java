@@ -197,9 +197,7 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
 
         this.state = State.IN_PROGRESS;
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("new transaction " + this);
-        }
+        LOG.debug("new transaction {}", this);
     }
 
     //endregion
@@ -274,23 +272,19 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
         if (command instanceof DestroyObjectCommand) {
             if (alreadyHasCreate(onObject)) {
                 removeCreate(onObject);
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug("ignored both create and destroy command " + command);
-                }
+                LOG.debug("ignored both create and destroy command {}", command);
                 return;
             }
 
             if (alreadyHasDestroy(onObject)) {
                 if (LOG.isDebugEnabled()) {
-                    LOG.debug("ignored command " + command + " as command already recorded");
+                    LOG.debug("ignored command {} as command already recorded", command );
                 }
                 return;
             }
         }
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("add command " + command);
-        }
+        LOG.debug("add command {}", command);
         persistenceCommands.add(command);
     }
 
@@ -339,9 +333,7 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
         //
         // ensureThatState(getState().canFlush(), is(true), "state is: " + getState());
         //
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("flush transaction " + this);
-        }
+        LOG.debug("flush transaction {}", this);
 
         try {
             doFlush();
@@ -416,14 +408,10 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
         assert getState().canCommit();
         assert abortCause == null;
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("preCommit transaction " + this);
-        }
+        LOG.debug("preCommit transaction {}", this);
 
         if (getState() == State.COMMITTED) {
-            if (LOG.isInfoEnabled()) {
-                LOG.info("already committed; ignoring");
-            }
+            LOG.info("already committed; ignoring");
             return;
         }
 
@@ -448,14 +436,10 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
         assert getState().canCommit();
         assert abortCause == null;
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("postCommit transaction " + this);
-        }
+        LOG.debug("postCommit transaction {}", this);
 
         if (getState() == State.COMMITTED) {
-            if (LOG.isInfoEnabled()) {
-                LOG.info("already committed; ignoring");
-            }
+            LOG.info("already committed; ignoring");
             return;
         }
 
@@ -473,10 +457,7 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
     final void markAsAborted() {
         assert getState().canAbort();
 
-        if (LOG.isInfoEnabled()) {
-            LOG.info("abort transaction " + this);
-        }
-
+        LOG.info("abort transaction {}", this);
         setState(State.ABORTED);
     }
 

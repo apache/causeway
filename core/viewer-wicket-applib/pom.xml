@@ -27,9 +27,13 @@
 		<version>2.0.0-M1-SNAPSHOT</version>
     </parent>
 
-    <groupId>org.apache.isis.core</groupId>
 	<artifactId>isis-core-viewer-wicket-applib</artifactId>
 	<name>Apache Isis Wicket Viewer Applib</name>
+
+	<properties>
+		<jar-plugin.automaticModuleName>org.apache.isis.viewer.wicket.applib</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/isis/viewer/wicket/applib</git-plugin.propertiesDir>
+	</properties>
 
 	<build>
 		<resources>

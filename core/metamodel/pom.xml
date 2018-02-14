@@ -29,6 +29,30 @@
     <artifactId>isis-core-metamodel</artifactId>
     <name>Apache Isis MetaModel</name>
 
+    <properties>
+        <jar-plugin.automaticModuleName>org.apache.isis.core.metamodel</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/isis/core/metamodel</git-plugin.propertiesDir>
+    </properties>
+
+    <build>
+        <testResources>
+            <testResource>
+                <filtering>false</filtering>
+                <directory>src/test/resources</directory>
+            </testResource>
+            <testResource>
+                <filtering>false</filtering>
+                <directory>src/test/java</directory>
+                <includes>
+                    <include>**</include>
+                </includes>
+                <excludes>
+                    <exclude>**/*.java</exclude>
+                </excludes>
+            </testResource>
+        </testResources>
+    </build>
+
     <dependencies>
         <dependency>
             <groupId>org.apache.isis.core</groupId>

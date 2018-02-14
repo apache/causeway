@@ -50,6 +50,9 @@
     </prerequisites>
 
     <properties>
+        <jar-plugin.automaticModuleName>org.apache.isis.core</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/isis/core</git-plugin.propertiesDir>
+
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
@@ -63,8 +66,9 @@
 
         <dependency.locations.enabled>false</dependency.locations.enabled>
         <coreBaseDir>${project.build.directory}/..</coreBaseDir>
-        <checkstyle.configLocation>${coreBaseDir}/src/site/resources/codequality/checkstyle.xml</checkstyle.configLocation>
-        <pmd.ruleset>${coreBaseDir}/src/site/resources/codequality/pmd.xml</pmd.ruleset>
+        <checkstyle.configLocation>${coreBaseDir}/codequality/checkstyle.xml</checkstyle.configLocation>
+        <pmd.ruleset>${coreBaseDir}/codequality/pmd.xml</pmd.ruleset>
+        <git-plugin.gitDir>${coreBaseDir}/../.git</git-plugin.gitDir>
 
         <projectUrl>${project.url}</projectUrl>
 
@@ -183,11 +187,11 @@
     </properties>
 
     <scm>
-        <connection>scm:git:http://git.apache.org/isis.git/core</connection>
-        <developerConnection>scm:git:https://git-wip-us.apache.org/repos/asf/isis.git/trunk/framework/</developerConnection>
-        <url>git://git.apache.org/isis.git/core</url>
-      <tag>HEAD</tag>
-  </scm>
+        <connection>scm:git:http://github.com/apache/isis.git</connection>
+        <developerConnection>scm:git:https://github.com/apache/isis.git</developerConnection>
+        <url>http://github.com/apache/isis</url>
+        <tag>HEAD</tag>
+    </scm>
 
     <url>http://isis.apache.org</url>
 
@@ -776,6 +780,39 @@
                 </plugin>
 
 
+                <plugin>
+                    <groupId>pl.project13.maven</groupId>
+                    <artifactId>git-commit-id-plugin</artifactId>
+                    <version>2.2.3</version>
+                    <executions>
+                        <execution>
+                            <id>get-the-git-infos</id>
+                            <goals>
+                                <goal>revision</goal>
+                            </goals>
+                            <phase>validate</phase>
+                        </execution>
+                    </executions>
+
+                    <configuration>
+                        <verbose>false</verbose>
+                        <dotGitDirectory>${git-plugin.gitDir}</dotGitDirectory>
+
+                        <dateFormat>yyyy-MM-dd'T'HH:mm:ssZ</dateFormat>
+                        <dateFormatTimeZone>${user.timezone}</dateFormatTimeZone>
+
+                        <failOnNoGitDirectory>true</failOnNoGitDirectory>
+                        <injectAllReactorProjects>true</injectAllReactorProjects>
+
+                        <generateGitPropertiesFile>true</generateGitPropertiesFile>
+                        <generateGitPropertiesFilename>${project.build.outputDirectory}/${git-plugin.propertiesDir}/git.properties</generateGitPropertiesFilename>
+
+                        <abbrevLength>7</abbrevLength>
+                    </configuration>
+
+                </plugin>
+
+
                 <!-- Packaging: jar -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -791,8 +828,30 @@
                             <goals>
                                 <goal>test-jar</goal>
                             </goals>
+                            <configuration>
+                                <archive>
+                                    <manifest>
+                                        <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+                                        <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                                    </manifest>
+                                </archive>
+                            </configuration>
                         </execution>
                     </executions>
+                    <configuration>
+                        <archive>
+                            <manifest>
+                                <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+                                <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                            </manifest>
+                            <manifestEntries>
+                                <Automatic-Module-Name>${jar-plugin.automaticModuleName}</Automatic-Module-Name>
+                                <Implementation-Vendor-Id>org.apache.isis</Implementation-Vendor-Id>
+                                <Implementation-Vendor>Apache Isis&#8482; Project</Implementation-Vendor>
+                                <SCM-Revision>${git.commit.id.abbrev}</SCM-Revision>
+                            </manifestEntries>
+                        </archive>
+                    </configuration>
                 </plugin>
 
 
@@ -984,7 +1043,6 @@
         </pluginManagement>
 
 
-
         <!-- build plugins; apply to all inheriting modules. Note that some 
             plugins also come from the "super-POM" for the default bindings. For example, 
             in the 'default' lifecycle, the resources, compiler, surefire, jar, install 
@@ -999,6 +1057,11 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>pl.project13.maven</groupId>
+                <artifactId>git-commit-id-plugin</artifactId>
             </plugin>
 
             <plugin>

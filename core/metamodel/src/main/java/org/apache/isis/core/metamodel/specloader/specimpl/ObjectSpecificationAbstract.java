@@ -154,7 +154,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     private final Identifier identifier;
     private final boolean isAbstract;
     // derived lazily, cached since immutable
-    private ObjectSpecId specId;
+    protected ObjectSpecId specId;
 
     private ObjectSpecification superclassSpec;
 
@@ -202,9 +202,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             if(facet == null) {
                 throw new IllegalStateException("could not find an ObjectSpecIdFacet for " + this.getFullIdentifier());
             }
-            if(facet != null) {
-                specId = facet.value();
-            }
+            specId = facet.value();
         }
         return specId;
     }
@@ -275,7 +273,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         superclassSpec = getSpecificationLoader().loadSpecification(superclass);
         if (superclassSpec != null) {
             if (LOG.isDebugEnabled()) {
-                LOG.debug("  Superclass " + superclass.getName());
+                LOG.debug("  Superclass {}", superclass.getName());
             }
             updateAsSubclassTo(superclassSpec);
         }
@@ -484,12 +482,10 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     @Override
     public <Q extends Facet> Q getFacet(final Class<Q> facetType) {
         final Q facet = super.getFacet(facetType);
-        Q noopFacet = null;
         if (isNotANoopFacet(facet)) {
             return facet;
-        } else {
-            noopFacet = facet;
         }
+        Q noopFacet = facet; // might be null
         if (interfaces() != null) {
             final List<ObjectSpecification> interfaces = interfaces();
             for (int i = 0; i < interfaces.size(); i++) {
@@ -503,10 +499,9 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
                 final Q interfaceFacet = interfaceSpec.getFacet(facetType);
                 if (isNotANoopFacet(interfaceFacet)) {
                     return interfaceFacet;
-                } else {
-                    if (noopFacet == null) {
-                        noopFacet = interfaceFacet;
-                    }
+                }
+                if (noopFacet == null) {
+                    noopFacet = interfaceFacet; // might be null
                 }
             }
         }
@@ -517,6 +512,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             if (isNotANoopFacet(superClassFacet)) {
                 return superClassFacet;
             }
+            // TODO: should we perhaps default the noopFacet here as we do in the previous two cases?
         }
         return noopFacet;
     }
@@ -644,6 +640,20 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         };
     };
 
+    @Override
+    public ObjectMember getMember(final String memberId) {
+        final ObjectAction objectAction = getObjectAction(memberId);
+        if(objectAction != null) {
+            return objectAction;
+        }
+        final ObjectAssociation association = getAssociation(memberId);
+        if(association != null) {
+            return association;
+        }
+        return null;
+    }
+
+
     /**
      * The association with the given {@link ObjectAssociation#getId() id}.
      * 
@@ -668,7 +678,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             // automatically refresh if not in production
             // (better support for jrebel)
             
-            LOG.warn("Could not find association with id '" + id + "'; invalidating cache automatically");
+            LOG.warn("Could not find association with id '{}'; invalidating cache automatically", id);
             if(!invalidatingCache.get()) {
                 // make sure don't go into an infinite loop, though.
                 try {

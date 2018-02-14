@@ -40,7 +40,7 @@ To install, download each XML file, then go to `Windows > Preferences > Java > E
 [[__dg_ide_eclipse_configure-lombok]]
 == Install Project Lombok
 
-The xref:ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype] uses link:http://projectlombok.org[Project Lombok] annotations (`@Getter` and `@Setter` and so on) to reduce the boilerplate.
+The xref:../ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype] uses link:http://projectlombok.org[Project Lombok] annotations (`@Getter` and `@Setter` and so on) to reduce the boilerplate.
 For Eclipse IDE this requires an link:https://projectlombok.org/setup/eclipse[installation step]:
 
 * Locate the `lombok.jar` jar file:

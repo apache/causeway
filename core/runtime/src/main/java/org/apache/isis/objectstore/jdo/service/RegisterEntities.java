@@ -128,7 +128,8 @@ public class RegisterEntities {
 
     private static boolean ignore(final Class<?> entityType) {
         try {
-            if(entityType.isAnonymousClass() || entityType.isLocalClass() || entityType.isMemberClass()) {
+            if(entityType.isAnonymousClass() || entityType.isLocalClass() || entityType.isMemberClass() ||
+               entityType.isInterface()) {
                 return true;
             }
             final PersistenceCapable persistenceCapable = entityType.getAnnotation(PersistenceCapable.class);

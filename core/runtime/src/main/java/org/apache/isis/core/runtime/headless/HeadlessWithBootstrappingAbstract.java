@@ -78,12 +78,12 @@ public abstract class HeadlessWithBootstrappingAbstract extends HeadlessAbstract
         }
 
         final String integTestModuleFqcn = System.getProperty("isis.integTest.module");
-        LOG.info("isis.integTest.module = " + integTestModuleFqcn);
+        LOG.info("isis.integTest.module = {}", integTestModuleFqcn);
         String moduleFqcn = integTestModuleFqcn;
 
         if(moduleFqcn == null) {
             final String headlessModuleFqcn = System.getProperty("isis.headless.module");
-            LOG.info("isis.headless.module = " + headlessModuleFqcn);
+            LOG.info("isis.headless.module = {}", headlessModuleFqcn);
             moduleFqcn = headlessModuleFqcn;
         }
 

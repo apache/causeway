@@ -173,7 +173,7 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
         if(!deploymentCategoryProvider.getDeploymentCategory().isProduction()) {
             messageService.warnUser("Menubars metadata errors; check the error log");
         }
-        LOG.error("Menubar layout metadata errors:\n\n" + jaxbService.toXml(menuBars) + "\n\n");
+        LOG.error("Menubar layout metadata errors:\n\n{}\n\n", jaxbService.toXml(menuBars));
 
         return null;
     }
@@ -184,9 +184,35 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
         final List<ObjectAdapter> serviceAdapters =
                 isisSessionFactory.getCurrentSession().getPersistenceSession().getServices();
 
-        append(serviceAdapters, menuBars.getPrimary(), DomainServiceLayout.MenuBar.PRIMARY);
-        append(serviceAdapters, menuBars.getSecondary(), DomainServiceLayout.MenuBar.SECONDARY);
-        append(serviceAdapters, menuBars.getTertiary(), DomainServiceLayout.MenuBar.TERTIARY);
+        final List<ObjectAdapter> visibleServiceAdapters =
+                FluentIterable.from(
+                        serviceAdapters)
+                .filter(new Predicate<ObjectAdapter>() {
+                    @Override public boolean apply(final ObjectAdapter objectAdapter) {
+                        if (objectAdapter == null) {
+                            return false;
+                        }
+                        if (objectAdapter.getSpecification() == null) {
+                            return false;
+                        }
+                        final ObjectSpecification spec = objectAdapter.getSpecification();
+                        if (spec.isHidden()) {
+                            // however, this isn't the same as HiddenObjectFacet, so doesn't filter out
+                            // services that have an imperative hidden() method.
+                            return false;
+                        }
+                        final DomainServiceFacet facet = spec.getFacet(DomainServiceFacet.class);
+                        if (facet == null) {
+                            return true;
+                        }
+                        final NatureOfService natureOfService = facet.getNatureOfService();
+                        return natureOfService == null || natureOfService != NatureOfService.DOMAIN;
+                    }
+                }).toList();
+
+        append(visibleServiceAdapters, menuBars.getPrimary(), DomainServiceLayout.MenuBar.PRIMARY);
+        append(visibleServiceAdapters, menuBars.getSecondary(), DomainServiceLayout.MenuBar.SECONDARY);
+        append(visibleServiceAdapters, menuBars.getTertiary(), DomainServiceLayout.MenuBar.TERTIARY);
 
         menuBars.setTnsAndSchemaLocation(tnsAndSchemaLocation());
 

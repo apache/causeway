@@ -32,6 +32,17 @@ These are JAXB-annotated classes with corresponding XSD schemas; the upshot of t
 
 
 
+== Search Algorithm (Library Support)
+
+For a given domain object `Xxx` the framework initially searches for a file (on the classpath) called `Xxx.layout.xml`.
+
+If this can't be found, then the framework will search for a file named `Xxx.layout.fallback.xml`.
+If present, this will be used instead.
+
+This therefore allows libraries that provide a domain entities/view models (for example, the (non-ASF) link:http://platform.incode.org[Incode Platform] modules) to define the UI of these objects using a layout file, while still allowing the consuming application to override that layout if it so requires.
+
+
+
 
 == Grids vs Components
 
@@ -44,6 +55,7 @@ The rows and columns are closely modelled on link:http://getbootstrap.com[Bootst
 * those that defines common components, of: fieldsets (previously called member groups or property groups), properties, collections, actions and also the title/icon of the domain object itself.
 
 More information about these classes can be found in xref:../rgcms/rgcms.adoc#_rgcms_classes_layout[the reference guide].  More information on Bootstrap 3's grid system can be found link:http://getbootstrap.com/css/#grid[here].
+
 
 
 == Screencast
@@ -439,3 +451,6 @@ Ensure the following is defined in the dom project's `pom.xml`:
 ----
 
 If using an Apache Isis xref:../ugfun/ugfun.adoc#_ugfun_getting-started_helloworld-archetype[HelloWorld] xref:../ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp] archetypes, then the POM is already correctly configured.
+
+
+

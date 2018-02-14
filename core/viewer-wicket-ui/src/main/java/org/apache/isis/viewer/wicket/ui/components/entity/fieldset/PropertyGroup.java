@@ -71,7 +71,8 @@ public class PropertyGroup extends PanelAbstract<EntityModel> implements HasDyna
 
     private final FieldSet fieldSet;
     private final boolean visible;
-    private final List<ScalarPanelAbstract2> childComponents;
+    private final List<ScalarPanelAbstract2> childScalarPanelAbstract2s;
+    private final List<Component> childComponents;
 
     public PropertyGroup(final String id, final EntityModel model, final FieldSet fieldSet) {
         super(id, model);
@@ -79,6 +80,7 @@ public class PropertyGroup extends PanelAbstract<EntityModel> implements HasDyna
 
         // the UI is only ever built once.
         childComponents = buildGui();
+        childScalarPanelAbstract2s = FluentIterable.from(childComponents).filter(ScalarPanelAbstract2.class).toList();
 
         final ImmutableList<ObjectAssociation> associations = getObjectAssociations();
         this.visible = !associations.isEmpty();
@@ -90,9 +92,9 @@ public class PropertyGroup extends PanelAbstract<EntityModel> implements HasDyna
 
 
 
-    private List<ScalarPanelAbstract2> buildGui() {
+    private List<Component> buildGui() {
 
-        final List<ScalarPanelAbstract2> childComponents = Lists.newArrayList();
+        final List<Component> childComponents = Lists.newArrayList();
 
         setOutputMarkupPlaceholderTag(true);
         setOutputMarkupId(true);
@@ -112,9 +114,7 @@ public class PropertyGroup extends PanelAbstract<EntityModel> implements HasDyna
             propertyRv.addOrReplace(propertyRvContainer);
             final Component component = addPropertyToForm(getModel(), (OneToOneAssociation) association,
                     propertyRvContainer, memberGroupActions);
-            if(component instanceof ScalarPanelAbstract2) {
-                childComponents.add((ScalarPanelAbstract2) component);
-            }
+            childComponents.add(component);
         }
 
         WebMarkupContainer panelHeading = new WebMarkupContainer("panelHeading");
@@ -216,7 +216,8 @@ public class PropertyGroup extends PanelAbstract<EntityModel> implements HasDyna
 
         final PropertyMemento pm = new PropertyMemento(otoa, entityModel.getIsisSessionFactory());
 
-        final ScalarModel scalarModel = entityModel.getPropertyModel(pm);
+        final ScalarModel scalarModel =
+                entityModel.getPropertyModel(pm, EntityModel.Mode.VIEW, EntityModel.RenderingHint.REGULAR);
 
         final Component component = getComponentFactoryRegistry()
                 .addOrReplaceComponent(container, ID_PROPERTY, ComponentType.SCALAR_NAME_AND_VALUE, scalarModel);
@@ -233,7 +234,7 @@ public class PropertyGroup extends PanelAbstract<EntityModel> implements HasDyna
 
     @Override
     public void onConfigure() {
-        for (final ScalarPanelAbstract2 childComponent : childComponents) {
+        for (final ScalarPanelAbstract2 childComponent : childScalarPanelAbstract2s) {
             childComponent.configure();
         }
         super.onConfigure();
@@ -241,7 +242,19 @@ public class PropertyGroup extends PanelAbstract<EntityModel> implements HasDyna
 
     @Override
     public boolean isVisible() {
-        for (final ScalarPanelAbstract2 childComponent : childComponents) {
+
+        // HACK: there are some components that are not ScalarPanelAbstract2's, eg the pdfjsviewer.
+        // In this case, don't ever hide.
+
+        // TODO: should remove this hack.  We need some sort of SPI for ScalarPanelAbstract2's and any other component,
+        // (eg PdfJsViewer) that can implement.  It's "probably" just a matter of having PdfJsViewer do its work in the
+        // correct Wicket callback (probably onConfigure).
+        if(childComponents.size() > childScalarPanelAbstract2s.size()) {
+            return true;
+        }
+        // HACK:END
+
+        for (final ScalarPanelAbstract2 childComponent : childScalarPanelAbstract2s) {
             if(childComponent.isVisibilityAllowed()) {
                 return true;
             }

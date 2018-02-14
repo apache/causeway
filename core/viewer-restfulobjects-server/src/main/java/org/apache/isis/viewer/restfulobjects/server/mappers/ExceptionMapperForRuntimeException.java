@@ -26,6 +26,7 @@ import javax.ws.rs.ext.Provider;
 import com.google.common.base.Throwables;
 
 import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.session.IsisSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 
@@ -35,15 +36,17 @@ public class ExceptionMapperForRuntimeException extends ExceptionMapperAbstract<
     @Override
     public Response toResponse(final RuntimeException ex) {
 
-        // since already rendered...
-        final IsisTransaction currentTransaction = getIsisSessionFactory().getCurrentSession()
-                .getPersistenceSession().getTransactionManager().getCurrentTransaction();
-
         final Throwable rootCause = Throwables.getRootCause(ex);
         final List<Throwable> causalChain = Throwables.getCausalChain(ex);
         for (Throwable throwable : causalChain) {
             if(throwable == rootCause) {
-                currentTransaction.clearAbortCause();
+                // since already rendered...
+                final IsisSession currentSession = getIsisSessionFactory().getCurrentSession();
+                if(currentSession != null) {
+                    final IsisTransaction currentTransaction = currentSession
+                            .getPersistenceSession().getTransactionManager().getCurrentTransaction();
+                    currentTransaction.clearAbortCause();
+                }
             }
         }
 

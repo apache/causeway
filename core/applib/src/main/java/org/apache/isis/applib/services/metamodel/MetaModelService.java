@@ -25,6 +25,7 @@ import org.apache.isis.applib.AppManifest2;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.command.CommandDtoProcessor;
 
 /**
  * This service provides a formal API into Isis' metamodel.
@@ -143,5 +144,7 @@ public interface MetaModelService {
     @Programmatic
     AppManifest getAppManifest();
 
+    @Programmatic
+    CommandDtoProcessor commandDtoProcessorFor(String memberIdentifier);
 
 }
