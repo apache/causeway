@@ -32,5 +32,6 @@ include::_ugodn_hints-and-tips_java8.adoc[leveloffset=+1,lines=3..-1]
 
 include::_ugodn_hints-and-tips_diagnosing-n-plus-1.adoc[leveloffset=+1,lines=3..-1]
 include::_ugodn_hints-and-tips_typesafe-queries-and-fetchgroups.adoc[leveloffset=+1,lines=3..-1]
+include::_ugodn_hints-and-tips_jdoql-and-timestamps.adoc[leveloffset=+1,lines=3..-1]
 
 // end::inclusions[]
