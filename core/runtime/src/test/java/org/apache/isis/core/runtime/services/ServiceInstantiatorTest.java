@@ -18,6 +18,7 @@ package org.apache.isis.core.runtime.services;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.ExecutorService;
@@ -38,6 +39,7 @@ import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 
 public class ServiceInstantiatorTest {
@@ -140,28 +142,29 @@ public class ServiceInstantiatorTest {
 	@Test
 	public void requestScoped_childThreads() throws InterruptedException  {
 
-		final AccumulatingCalculator calculator = 
-				serviceInstantiator.createInstance(AccumulatingCalculator.class);
+		final Consumer consumer = serviceInstantiator.createInstance(Consumer.class);
 
-
-		final List<Integer> interimTotals = Collections.synchronizedList(Lists.newArrayList());
+		final List<Integer> allTheNumbers = Collections.synchronizedList(Lists.newArrayList());
 
 		final int n = 100;
+		for (int i = 0; i < n; i++) {
+			allTheNumbers.add(i);
+		}
+
 		final int nThreads = 8;
 		final ExecutorService execService = Executors.newFixedThreadPool(nThreads);
 
 		// initialize the request scoped calculator on current thread ('main')
-		((RequestScopedService)calculator).__isis_startRequest(mockServiceInjector);
+		((RequestScopedService)consumer).__isis_startRequest(mockServiceInjector);
 
-		for(int i=1;i<=n;++i) {
+		for (int i = 0; i < n; i++) {
 			final int j=i;
 
 			execService.submit(() -> {
                 try {
 
                     // access the request scoped calculator on a child thread of 'main'
-                    calculator.add(j);
-                    interimTotals.add(calculator.getTotal());
+                    consumer.consume(allTheNumbers, j);
 
                 } catch (Exception e) {
                     System.err.println(e.getMessage());
@@ -174,11 +177,9 @@ public class ServiceInstantiatorTest {
 
 		execService.awaitTermination(10, TimeUnit.SECONDS);
 
-		((RequestScopedService)calculator).__isis_endRequest();
+		((RequestScopedService)consumer).__isis_endRequest();
 
-		assertThat(interimTotals.size(), is(n));
-		final Integer maxTotal = Collections.max(interimTotals);
-		assertThat(maxTotal, is(n*(n+1)/2));
+		assertFalse(allTheNumbers.stream().anyMatch(Objects::nonNull));
 	}
 
 	public static class SingletonCalculator {
@@ -196,6 +197,18 @@ public class ServiceInstantiatorTest {
 		}
 		public int getTotal() {
 			return total;
+		}
+	}
+
+	@RequestScoped
+	public static class Consumer {
+		public void consume(final List<Integer> queue, final int slot) {
+			synchronized (queue) {
+				final Integer integer = queue.get(slot);
+				if(integer != null) {
+					queue.set(slot, null);
+				}
+			}
 		}
 	}
 }
