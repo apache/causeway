@@ -189,6 +189,11 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
         return null;
     }
 
+	@Override
+	public Object getNavigableParent(Object object) {
+		return null;
+	}
+    
     @Override
     public String getCssClass() {
         return null;

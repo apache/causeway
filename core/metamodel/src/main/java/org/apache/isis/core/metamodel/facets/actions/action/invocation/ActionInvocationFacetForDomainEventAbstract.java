@@ -27,6 +27,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Callable;
+import java.util.function.Consumer;
 
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.RecoverableException;
@@ -273,36 +274,29 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
 
                         return ObjectAdapter.Util.unwrap(resultAdapterPossiblyCloned);
 
-                    } catch (IllegalAccessException ex) {
-                        throw new ReflectiveActionException("Illegal access of " + method, ex);
-                    } catch (InvocationTargetException ex) {
-
-                        final Throwable targetException = ex.getTargetException();
-                        if (targetException instanceof IllegalStateException) {
-                            throw new ReflectiveActionException( String.format(
-                                    "IllegalStateException thrown while executing %s %s",
-                                    method, targetException.getMessage()), targetException);
-                        }
-
-                        if(targetException instanceof RecoverableException) {
-                            if (!getTransactionState().canCommit()) {
-                                // something severe has happened to the underlying transaction;
-                                // so escalate this exception to be non-recoverable
-                                final Throwable targetExceptionCause = targetException.getCause();
-                                Throwable nonRecoverableCause = targetExceptionCause != null
-                                        ? targetExceptionCause
-                                        : targetException;
-
-                                // trim to first 300 chars
-                                final String message = trim(nonRecoverableCause.getMessage(), 300);
-
-                                throw new NonRecoverableException(message, nonRecoverableCause);
-                            }
-                        }
-
-                        ThrowableExtensions.throwWithinIsisException(ex, "Exception executing " + method);
-                        return null; // never executed, previous line throws
-                    }
+                    } catch (Exception e) {
+                    	
+                    	final Consumer<RecoverableException> recovery = recoverableException->{
+                    		
+                    		if (!getTransactionState().canCommit()) {
+		                        // something severe has happened to the underlying transaction;
+		                        // so escalate this exception to be non-recoverable
+		                        final Throwable recoverableExceptionCause = recoverableException.getCause();
+		                        Throwable nonRecoverableCause = recoverableExceptionCause != null
+		                                ? recoverableExceptionCause
+		                                : recoverableException;
+		
+		                        // trim to first 300 chars
+		                        final String message = trim(nonRecoverableCause.getMessage(), 300);
+		
+		                        throw new NonRecoverableException(message, nonRecoverableCause);
+                    		}
+                        };
+                    	
+                    	return ThrowableExtensions.handleInvocationException(e, method.getName(), recovery);
+					}
+                    
+                    
                 }
             };
 

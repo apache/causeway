@@ -83,6 +83,8 @@ import org.apache.isis.core.metamodel.facets.object.ignore.jdo.RemoveJdoPrefixed
 import org.apache.isis.core.metamodel.facets.object.immutable.immutableannot.CopyImmutableFacetOntoMembersFactory;
 import org.apache.isis.core.metamodel.facets.object.membergroups.annotprop.MemberGroupLayoutFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacetForMixinAnnotationFactory;
+import org.apache.isis.core.metamodel.facets.object.navparent.annotation.NavigableParentAnnotationFacetFactory;
+import org.apache.isis.core.metamodel.facets.object.navparent.method.NavigableParentFacetMethodFactory;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.classname.ObjectSpecIdFacetDerivedFromClassNameFactory;
 import org.apache.isis.core.metamodel.facets.object.objectvalidprops.impl.ObjectValidPropertiesFacetImplFactory;
 import org.apache.isis.core.metamodel.facets.object.parseable.annotcfg.ParseableFacetAnnotationElseConfigurationFactory;
@@ -325,6 +327,8 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(new TitleAnnotationFacetFactory());
         addFactory(new TitleFacetViaMethodsFactory());
         addFactory(new IconFacetMethodFactory());
+        addFactory(new NavigableParentAnnotationFacetFactory());
+        //addFactory(new NavigableParentFacetMethodFactory()); //TODO [ahuber] remove once we agreed on deprecation
         addFactory(new CssClassFacetMethodFactory());
 
 

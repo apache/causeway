@@ -19,26 +19,64 @@
 
 package org.apache.isis.core.commons.lang;
 
+import java.lang.invoke.WrongMethodTypeException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.function.Consumer;
 
 import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.core.commons.exceptions.IsisApplicationException;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
+import org.apache.isis.core.metamodel.specloader.ReflectiveActionException;
 
 public final class ThrowableExtensions {
 
-    public static void throwWithinIsisException(final InvocationTargetException e, final String error) {
-        final Throwable targetException = e.getTargetException();
-        if (targetException instanceof RecoverableException) {
-            // an application exception from the domain code is re-thrown as an
-            // IsisException with same semantics
-            // TODO: should probably be using ApplicationException here
-            throw new IsisApplicationException(error, targetException);
+	public static Object handleInvocationException(
+    		final Throwable e, 
+    		final String memberName) {
+		return handleInvocationException(e, memberName, null);
+	}
+	
+    public static Object handleInvocationException(
+    		final Throwable e, 
+    		final String memberName, 
+    		final Consumer<RecoverableException> recovery) {
+    	
+    	if(e instanceof InvocationTargetException) {
+			return handleInvocationException(((InvocationTargetException) e).getTargetException(), memberName, recovery);
+		}
+    	if(e instanceof WrongMethodTypeException) {
+			throw new MetaModelException("Wrong method type access of " + memberName, e);
+		}
+    	if(e instanceof IllegalAccessException) {
+			throw new ReflectiveActionException("Illegal access of " + memberName, e);
+	    }
+    	if(e instanceof IllegalStateException) {
+            throw new ReflectiveActionException( String.format(
+                    "IllegalStateException thrown while invoking %s %s",
+                    memberName, e.getMessage()), e);
         }
-        if (targetException instanceof RuntimeException) {
-            throw (RuntimeException) targetException;
-        } else {
-            throw new MetaModelException(targetException);
+		if(e instanceof RecoverableException) {
+			return handleRecoverableException((RecoverableException)e, memberName, recovery);
+	    }
+		if (e instanceof RuntimeException) {
+            throw (RuntimeException) e;
         }
-    }
+        throw new MetaModelException("Exception invoking " + memberName, e);
+	}
+
+
+	private static Object handleRecoverableException(
+			final RecoverableException e, 
+    		final String memberName, 
+    		final Consumer<RecoverableException> recovery) {
+		
+		if(recovery!=null)
+			recovery.accept(e); 
+		
+		// an application exception from the domain code is re-thrown as an
+        // IsisException with same semantics
+        // TODO: should probably be using ApplicationException here
+        throw new IsisApplicationException("Exception invoking " + memberName, e);
+	}
+    
 }

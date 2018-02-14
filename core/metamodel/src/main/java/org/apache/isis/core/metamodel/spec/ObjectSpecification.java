@@ -54,6 +54,8 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
 
+import com.google.common.base.Function;
+
 /**
  * Represents an entity or value (cf {@link java.lang.Class}) within the
  * metamodel.
@@ -209,6 +211,14 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
      * returned by the {@link IconFacet}; is not necessarily immutable.
      */
     String getIconName(ObjectAdapter object);
+    
+    /**
+     * Returns this object's navigable parent, if any. 
+     * @param object
+     * @return
+     * @since 2.0.0
+     */
+    Object getNavigableParent(Object object);
 
     /**
      *
@@ -373,4 +383,6 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
 
     boolean isPersistenceCapable();
     boolean isPersistenceCapableOrViewModel();
+
+	
 }

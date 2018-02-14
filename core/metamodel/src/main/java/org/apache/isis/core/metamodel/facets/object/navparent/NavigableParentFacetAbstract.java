@@ -16,32 +16,21 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
- 
- /* === whereAmI feature === */
 
-.whereAmI {
-    color: #555;
-}
-.whereAmI img {
-    width: 16px !important;
-    height: 16px !important;
-}
-ul.whereAmI {
-    padding: 8px 12px;
-    list-style: none;
-    background-color: #eee;
-}
+package org.apache.isis.core.metamodel.facets.object.navparent;
 
-/* Display list items side by side */
-ul.whereAmI li {
-    display: inline;
-}
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-/* Add a slash symbol (/) before/behind each list item */
-ul.whereAmI li+li:before {
-    padding: 4px;
-    color: black;
-    content: "/\00a0";
-}
+public abstract class NavigableParentFacetAbstract extends FacetAbstract implements NavigableParentFacet {
 
-/* -------------------------- */
+    public static Class<? extends Facet> type() {
+        return NavigableParentFacet.class;
+    }
+
+    public NavigableParentFacetAbstract(final FacetHolder holder) {
+        super(type(), holder, Derivation.NOT_DERIVED);
+    }
+
+}

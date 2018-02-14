@@ -22,12 +22,16 @@ package org.apache.isis.viewer.wicket.ui.pages.entity;
 import org.apache.wicket.Application;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.util.string.Strings;
 
-import org.apache.isis.applib.layout.grid.Grid;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -39,7 +43,9 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.model.models.whereami.WhereAmIModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
+import org.apache.isis.viewer.wicket.ui.components.entity.icontitle.EntityIconAndTitlePanel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModelProvider;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
@@ -51,8 +57,10 @@ import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 @AuthorizeInstantiation("org.apache.isis.viewer.wicket.roles.USER")
 public class EntityPage extends PageAbstract {
 
-    private static final long serialVersionUID = 1L;
-    
+	private static final long serialVersionUID = 144368606134796079L;
+	private static final CssResourceReference WHERE_AM_I_CSS = 
+			new CssResourceReference(EntityPage.class, "EntityPage.css");
+
     private final EntityModel model;
     private final String titleString;
 
@@ -62,6 +70,12 @@ public class EntityPage extends PageAbstract {
      */
     public EntityPage(final PageParameters pageParameters) {
         this(pageParameters, createEntityModel(pageParameters));
+    }
+    
+    @Override
+    public void renderHead(IHeaderResponse response) {
+    	super.renderHead(response);
+    	response.render(CssHeaderItem.forReference(WHERE_AM_I_CSS));
     }
 
     /**
@@ -159,7 +173,7 @@ public class EntityPage extends PageAbstract {
             // the facet should always exist, in fact
             // just enough to ask for the metadata.
             // This will cause the current ObjectSpec to be updated as a side effect.
-            final Grid unused = gridFacet.getGrid();
+            gridFacet.getGrid();
         }
 
         if(titleString == null) {
@@ -179,6 +193,8 @@ public class EntityPage extends PageAbstract {
 
         themeDiv.addOrReplace(entityPageContainer);
 
+        addWhereAmIIfShown(entityPageContainer, WhereAmIModel.of(model));
+        
         addChildComponents(entityPageContainer, model);
 
         // bookmarks and breadcrumbs
@@ -186,10 +202,37 @@ public class EntityPage extends PageAbstract {
         addBreadcrumbIfShown(model);
 
         addBookmarkedPages(entityPageContainer);
+        
+        
     }
 
     protected DeploymentCategory getDeploymentCategory() {
         return getIsisSessionFactory().getDeploymentCategory();
     }
-
+    
+    protected void addWhereAmIIfShown(
+    		WebMarkupContainer entityPageContainer, 
+    		WhereAmIModel whereAmIModel) 
+    {
+    	
+    	final WebMarkupContainer whereAmIContainer = 
+    			new WebMarkupContainer("whereAmI-container");
+    	entityPageContainer.addOrReplace(whereAmIContainer);
+    	
+    	if(!whereAmIModel.isShowWhereAmI()) {
+    		whereAmIContainer.setVisible(false);
+    		return;
+    	}
+    	
+    	final RepeatingView listItems = new RepeatingView("whereAmI-items");
+    	
+    	whereAmIModel.streamParentChainReversed().forEach(entityModel->
+    		listItems.add(new EntityIconAndTitlePanel(listItems.newChildId(), entityModel))	
+		);
+    	
+    	listItems.add(new Label(listItems.newChildId(), whereAmIModel.getStartOfChain().getTitle()));
+    	
+    	whereAmIContainer.addOrReplace(listItems);
+    	
+	}
 }

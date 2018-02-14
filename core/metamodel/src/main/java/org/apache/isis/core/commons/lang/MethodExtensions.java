@@ -19,11 +19,8 @@
 
 package org.apache.isis.core.commons.lang;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-
-import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 
 public class MethodExtensions {
 
@@ -45,14 +42,9 @@ public class MethodExtensions {
         try {
             Object[] defaultAnyPrimitive = defaultAnyPrimitive(method.getParameterTypes(), arguments);
             return method.invoke(object, defaultAnyPrimitive);
-        } catch (final IllegalArgumentException e) {
-            throw e;
-        } catch (final InvocationTargetException e) {
-            ThrowableExtensions.throwWithinIsisException(e, "Exception executing " + method);
-            return null;
-        } catch (final IllegalAccessException e) {
-            throw new MetaModelException("illegal access of " + method, e);
-        }
+        } catch (Exception e) {
+        	return ThrowableExtensions.handleInvocationException(e, method.getName());
+		} 
     }
 
     private static Object[] defaultAnyPrimitive(Class<?>[] parameterTypes, Object[] arguments) {

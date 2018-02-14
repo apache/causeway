@@ -16,32 +16,29 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
- 
- /* === whereAmI feature === */
 
-.whereAmI {
-    color: #555;
-}
-.whereAmI img {
-    width: 16px !important;
-    height: 16px !important;
-}
-ul.whereAmI {
-    padding: 8px 12px;
-    list-style: none;
-    background-color: #eee;
-}
+package org.apache.isis.core.metamodel.facets.object.navparent;
 
-/* Display list items side by side */
-ul.whereAmI li {
-    display: inline;
-}
+import org.apache.isis.core.metamodel.facetapi.Facet;
 
-/* Add a slash symbol (/) before/behind each list item */
-ul.whereAmI li+li:before {
-    padding: 4px;
-    color: black;
-    content: "/\00a0";
-}
+/**
+ * 
+ * Mechanism for obtaining the navigable parent (a domain-object or a domain-view-model) 
+ * of an instance of a class, used to build a navigable parent chain as required by the 
+ * 'where-am-I' feature.
+ * 
+ * @author ahuber@apache.org
+ * @since 2.0.0
+ *
+ */
+public interface NavigableParentFacet extends Facet {
 
-/* -------------------------- */
+	/**
+	 * Returns the navigable parent (a domain-object or a domain-view-model) for the target object
+	 * or null if there is no parent.
+	 * @param object
+	 * @return 
+	 */
+    Object navigableParent(final Object object);
+	
+}
