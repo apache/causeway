@@ -26,19 +26,10 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
-import com.google.common.base.Function;
-import com.google.common.base.Predicates;
-import com.google.common.collect.FluentIterable;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
-
-import org.apache.wicket.Component;
-
+import org.apache.isis.applib.internal.base._NullSafe;
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.commons.lang.ClassUtil;
-import org.apache.isis.core.commons.lang.Closure;
-import org.apache.isis.core.commons.lang.IterableExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
@@ -57,6 +48,12 @@ import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.links.LinksProvider;
 import org.apache.isis.viewer.wicket.model.mementos.CollectionMemento;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
+import org.apache.wicket.Component;
+
+import com.google.common.base.Predicates;
+import com.google.common.collect.FluentIterable;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 
 /**
  * Model representing a collection of entities, either {@link Type#STANDALONE
@@ -215,10 +212,10 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
         public abstract EntityModel.RenderingHint renderingHint();
     }
 
-    static class LowestCommonSuperclassClosure implements Closure<Class<?>>{
+    static class LowestCommonSuperclassFinder {
         private Class<?> common;
-        @Override
-        public Class<?> execute(final Class<?> value) {
+        
+        public void collect(final Class<?> value) {
             if(common == null) {
                 common = value;
             } else {
@@ -228,11 +225,15 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
                 }
                 common = current;
             }
-            return common;
         }
         Class<?> getLowestCommonSuperclass() { 
             return common; 
         }
+		void searchThrough(Iterable<?> list) {
+			_NullSafe.stream(list)
+            .map(Object::getClass)
+            .forEach(this::collect);
+		}
     }
 
     /**
@@ -252,15 +253,12 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
             // dynamically determine the spec of the elements
             // (ie so a List<Object> can be rendered according to the runtime type of its elements, 
             // rather than the compile-time type
-            final LowestCommonSuperclassClosure closure = new LowestCommonSuperclassClosure();
-            Function<Object, Class<?>> function = new Function<Object, Class<?>>(){
-                @Override
-                public Class<?> apply(Object obj) {
-                    return obj.getClass();
-                }
-            };
-            IterableExtensions.fold(Iterables.transform(pojos,  function), closure);
-            elementSpec = sessionFactory.getSpecificationLoader().loadSpecification(closure.getLowestCommonSuperclass());
+            final LowestCommonSuperclassFinder finder = new LowestCommonSuperclassFinder();
+            
+            finder.searchThrough(pojos);
+            
+            elementSpec = sessionFactory.getSpecificationLoader()
+            		.loadSpecification(finder.getLowestCommonSuperclass());
         } else {
             elementSpec = collectionAsAdapter.getElementSpecification();
         }

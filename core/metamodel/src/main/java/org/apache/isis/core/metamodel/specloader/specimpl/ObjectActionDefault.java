@@ -34,6 +34,8 @@ import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.annotation.InvokedOn;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.internal._Constants;
+
 import com.google.common.base.Predicate;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
@@ -518,7 +520,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
                     parameterChoicesPojos[i] = paramFacet.getChoices(target, null,
                             interactionInitiatedBy);
                 } else {
-                    parameterChoicesPojos[i] = new Object[0];
+                    parameterChoicesPojos[i] = _Constants.emptyObjects;
                 }
             }
         }

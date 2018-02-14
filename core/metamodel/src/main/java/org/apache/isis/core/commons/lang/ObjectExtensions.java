@@ -23,6 +23,8 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import org.apache.isis.applib.internal._Constants;
+
 /**
  * Helpers to co-erce non-generic values into type-safe generics without
  * having to suppress compiler warnings all over the place.
@@ -59,7 +61,7 @@ public final class ObjectExtensions {
     }
 
     public static Method getMethod(final Object object, final String methodName) throws NoSuchMethodException {
-        return ClassExtensions.getMethod(object.getClass(), methodName, new Class[0]);
+        return ClassExtensions.getMethod(object.getClass(), methodName, _Constants.emptyClasses);
     }
 
     public static String classBaseName(final Object forObject) {

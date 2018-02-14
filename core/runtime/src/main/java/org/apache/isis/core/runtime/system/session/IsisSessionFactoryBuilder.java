@@ -30,6 +30,7 @@ import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.fixtures.FixtureClock;
 import org.apache.isis.applib.fixturescripts.FixtureScripts;
+import org.apache.isis.applib.internal.context._Context;
 import org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.lang.ListExtensions;
@@ -173,12 +174,9 @@ public class IsisSessionFactoryBuilder {
             // finally, wire up components and components into services...
             servicesInjector.autowire();
 
-
             // ... and make IsisSessionFactory available via the IsisContext static for those places where we cannot
             // yet inject.
-            IsisContext.setSessionFactory(isisSessionFactory);
-
-
+            _Context.putSingleton(IsisSessionFactory.class, isisSessionFactory);
 
             // time to initialize...
             specificationLoader.init();
@@ -222,7 +220,7 @@ public class IsisSessionFactoryBuilder {
                                 if(LOG.isDebugEnabled()) {
                                     LOG.debug("Meta model invalid", ex);
                                 }
-                                IsisContext.setMetaModelInvalidException(ex);
+                                _Context.putSingleton(MetaModelInvalidException.class, ex);
                             }
                         }
                     }

@@ -19,14 +19,17 @@
 package org.apache.isis.applib.services.exceprecog.jdo;
 
 import javax.jdo.JDODataStoreException;
-import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType;
+import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType2;
 
-public class ExceptionRecognizerForJDODataStoreExceptionIntegrityConstraintViolationForeignKeyNoActionException extends ExceptionRecognizerForType {
+public class ExceptionRecognizerForJDODataStoreExceptionIntegrityConstraintViolationForeignKeyNoActionException 
+extends ExceptionRecognizerForType2 {
 
-    public ExceptionRecognizerForJDODataStoreExceptionIntegrityConstraintViolationForeignKeyNoActionException() {
-        super(Category.CONSTRAINT_VIOLATION,
-              ofTypeIncluding(JDODataStoreException.class, "integrity constraint violation: foreign key no action"),
-                prefix("Related data exists"));
-    }
+	public ExceptionRecognizerForJDODataStoreExceptionIntegrityConstraintViolationForeignKeyNoActionException() {
+		super(Category.CONSTRAINT_VIOLATION,
+				ofTypeIncluding(
+						JDODataStoreException.class, 
+						"integrity constraint violation: foreign key no action"),
+				prefix("Related data exists"));
+	}
 
 }

@@ -266,8 +266,7 @@ public class CollectionLayoutData
         this.link = link;
     }
 
-
-
+    @Deprecated //[ahuber] not used, or otherwise replace with java 8+ function variant
     public static class Functions {
         private Functions(){}
 

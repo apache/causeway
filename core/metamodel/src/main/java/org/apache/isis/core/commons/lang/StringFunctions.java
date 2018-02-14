@@ -21,7 +21,12 @@ package org.apache.isis.core.commons.lang;
 
 import com.google.common.base.Function;
 
-public final class StringFunctions {
+/**
+ * 
+ * @deprecated [ahuber] use $String::upper and $String::lower instead
+ */
+@Deprecated
+final class StringFunctions {
     
     public static final Function<String,String> TRIM = new Function<String,String>(){
         @Override

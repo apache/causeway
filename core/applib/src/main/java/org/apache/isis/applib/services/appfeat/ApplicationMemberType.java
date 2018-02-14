@@ -18,6 +18,8 @@
  */
 package org.apache.isis.applib.services.appfeat;
 
+import org.apache.isis.applib.internal.base._Strings;
+
 public enum ApplicationMemberType {
     PROPERTY,
     COLLECTION,
@@ -25,18 +27,7 @@ public enum ApplicationMemberType {
 
     @Override
     public String toString() {
-        return capitalize(name());
+        return _Strings.capitalize(name());
     }
-
-    private static String capitalize(final String extendee) {
-        if (extendee == null || extendee.length() == 0) {
-            return extendee;
-        }
-        if (extendee.length() == 1) {
-            return extendee.toUpperCase();
-        }
-        return Character.toUpperCase(extendee.charAt(0)) + extendee.substring(1);
-    }
-
 
 }

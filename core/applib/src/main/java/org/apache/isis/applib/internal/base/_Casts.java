@@ -17,28 +17,27 @@
  *  under the License.
  */
 
-package org.apache.isis.applib.util;
-
-import java.util.Collection;
-import java.util.stream.Stream;
-
-import javax.annotation.Nullable;
+package org.apache.isis.applib.internal.base;
 
 /**
+ * <h1>- internal use only -</h1>
+ * <p>
+ * Casting Utilities
+ * </p>
+ * <p>
+ * <b>WARNING</b>: Do <b>NOT</b> use any of the classes provided by this package! <br/> 
+ * These may be changed or removed without notice!
+ * </p>
  * 
- * Stream building utilities.
- *
+ * @since 2.0.0
  */
-public class Streams {
+public final class _Casts {
 
-	/**
-	 * If {@code collection} is {@code null} returns the empty stream, 
-	 * otherwise returns a stream of the collection's elements.
-	 * @param collection
-	 * @return
-	 */
-	public static <T> Stream<T> stream(@Nullable Collection<T> collection) {
-		return collection != null ? collection.stream() : Stream.empty();
+	private _Casts(){}
+	
+	@SuppressWarnings("unchecked")
+	public static <T> T uncheckedCast(Object obj) {
+		return (T) obj;
 	}
-
+	
 }

@@ -19,80 +19,64 @@
 
 package org.apache.isis.core.runtime.system.context;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import org.apache.isis.core.commons.exceptions.IsisException;
+import org.apache.isis.applib.internal.context._Context;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
-import org.apache.isis.core.runtime.system.session.IsisSessionFactoryBuilder;
-import org.apache.isis.core.runtime.system.session.IsisSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
 /**
- * Simply a static field holding the {@link IsisSessionFactory} singleton, and conveneince methods to obtain the
- * current {@link IsisSession}, along with application-scoped components and also any transaction-scoped components.
+ * Provides static access to current context's singletons 
+ * {@link MetaModelInvalidException} and {@link IsisSessionFactory}.  
  */
-public final class IsisContext {
+public interface IsisContext {
 
-    private static final Logger LOG = LoggerFactory.getLogger(IsisContext.class);
+	/**
+	 * Populated only if the meta-model was found to be invalid.
+	 * @return null, if there is none
+	 */
+	public static MetaModelInvalidException getMetaModelInvalidExceptionIfAny() {
+		return _Context.getIfAny(MetaModelInvalidException.class);
+	}
 
-    private IsisContext(){
-        throw new IllegalStateException("Never instantiated");
-    }
-
-    //region > metaModelInvalidExceptionIfAny (static)
+	/**
+	 * 
+	 * @return Isis's session factory
+	 */
+	// Implementation Note: Populated only by {@link IsisSessionFactoryBuilder}.
+	public static IsisSessionFactory getSessionFactory() {
+		return _Context.getOrThrow(
+				IsisSessionFactory.class, 
+				()->new IllegalStateException(
+						"internal error: should have been populated by IsisSessionFactoryBuilder") );
+	}
+	
+	/**
+	 * 
+	 * @return Isis's default class loader
+	 */
+	public static ClassLoader getClassLoader() {
+		return _Context.getDefaultClassLoader();
+	}
+	
+	// -- LIFE-CYCLING
+    
     /**
-     * Populated only if the metamodel was found to be invalid
+     * Destroys this context and clears any state associated with it. 
+     * It marks the end of IsisContext's life-cycle. Subsequent calls have no effect. 
      */
-    private static MetaModelInvalidException metamodelInvalidException;
-
-    public static MetaModelInvalidException getMetaModelInvalidExceptionIfAny() {
-        return IsisContext.metamodelInvalidException;
+    public static void clear() {
+    	_Context.clear();
     }
-    public static void setMetaModelInvalidException(final MetaModelInvalidException metaModelInvalid) {
-        IsisContext.metamodelInvalidException = metaModelInvalid;
-    }
-    //endregion
-
-    //region > sessionFactory (static)
-
-    private static IsisSessionFactory sessionFactory;
-
-    public static IsisSessionFactory getSessionFactory() {
-        return sessionFactory;
-    }
-
-
-    /**
-     * Intended to be called only by {@link IsisSessionFactoryBuilder}.
-     */
-    public static void setSessionFactory(final IsisSessionFactory sessionFactory) {
-        if (IsisContext.sessionFactory != null) {
-            throw new IsisException("SessionFactory already set up");
-        }
-        IsisContext.sessionFactory = sessionFactory;
-    }
+    
+    // -- DEPRECATIONS
     
     /**
      * Resets
-     * @deprecated replaced by {@link #destroy()}
+     * @deprecated replaced by {@link #clear()}
      * 
      */
     @Deprecated
     public static void testReset() {
-    	destroy();
+    	clear();
     }
-    
-    /**
-     * Destroys this context and clears any state associated with it. 
-     * It marks the end of IsisContext's lifecycle. Subsequent calls have no effect. 
-     */
-    public static void destroy() {
-        sessionFactory = null;
-        metamodelInvalidException = null;
-    }
-
-    //endregion
-
 
 }

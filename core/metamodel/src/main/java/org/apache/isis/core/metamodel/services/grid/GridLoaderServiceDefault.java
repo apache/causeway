@@ -37,6 +37,7 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.internal._Constants;
 import org.apache.isis.applib.layout.grid.Grid;
 import org.apache.isis.applib.services.grid.GridLoaderService;
 import org.apache.isis.applib.services.grid.GridSystemService;
@@ -127,7 +128,7 @@ public class GridLoaderServiceDefault implements GridLoaderService {
 
         try {
             // all known implementations of Page
-            final JAXBContext context = JAXBContext.newInstance(pageImplementations.toArray(new Class[0]));
+            final JAXBContext context = JAXBContext.newInstance(pageImplementations.toArray(_Constants.emptyClasses));
 
             final Grid grid = (Grid) jaxbService.fromXml(context, xml);
             grid.setDomainClass(domainClass);

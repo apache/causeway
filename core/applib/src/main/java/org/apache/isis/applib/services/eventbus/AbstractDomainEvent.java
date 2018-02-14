@@ -20,9 +20,14 @@ package org.apache.isis.applib.services.eventbus;
 
 import java.util.EventObject;
 import java.util.Map;
+
+import javax.ws.rs.HEAD;
+
 import com.google.common.collect.Maps;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.internal.exceptions._Exceptions;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.util.ObjectContracts;
 
@@ -258,6 +263,11 @@ public abstract class AbstractDomainEvent<S> extends java.util.EventObject {
                 }
                 invalidate(String.format(reason, args));
                 break;
+            case EXECUTED:
+            case EXECUTING:
+            	break;
+            default:
+            	throw _Exceptions.unmatchedCase(getEventPhase());
         }
     }
     /**
@@ -284,6 +294,11 @@ public abstract class AbstractDomainEvent<S> extends java.util.EventObject {
             case VALIDATE:
                 invalidate(translatableReason);
                 break;
+            case EXECUTED:
+            case EXECUTING:
+            	break;
+            default:
+            	throw _Exceptions.unmatchedCase(getEventPhase());
         }
     }
     //endregion

@@ -20,18 +20,20 @@ package org.apache.isis.applib.services.exceprecog;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.function.Function;
+import java.util.function.Predicate;
+
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
-import com.google.common.base.Function;
-import com.google.common.base.Functions;
-import com.google.common.base.Predicate;
-import com.google.common.base.Throwables;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.common.base.Throwables;
 
 /**
  * Abstract implementation of {@link ExceptionRecognizer} that looks 
@@ -93,11 +95,14 @@ public abstract class ExceptionRecognizerAbstract implements ExceptionRecognizer
     private boolean logRecognizedExceptions;
 
     // //////////////////////////////////////
-
+    
+    // -- JAVA 8+
+    
     public ExceptionRecognizerAbstract(final Category category, Predicate<Throwable> predicate, final Function<String,String> messageParser) {
-        this.category = category;
+    	Objects.requireNonNull(predicate);
+    	this.category = category;
         this.predicate = predicate;
-        this.messageParser = messageParser != null? messageParser: Functions.<String>identity();
+        this.messageParser = messageParser != null ? messageParser : Function.identity();
     }
 
     public ExceptionRecognizerAbstract(Predicate<Throwable> predicate, final Function<String,String> messageParser) {
@@ -112,6 +117,38 @@ public abstract class ExceptionRecognizerAbstract implements ExceptionRecognizer
         this(Category.OTHER, predicate);
     }
 
+    // -- GUAVA LEGACY
+    
+    @Deprecated //TODO ISIS-1827 remove guava from public API
+    public ExceptionRecognizerAbstract(final Category category, 
+    		com.google.common.base.Predicate<Throwable> predicate, 
+    		final com.google.common.base.Function<String,String> messageParser) {
+    	Objects.requireNonNull(predicate);
+        this.category = category;
+        this.predicate = predicate::apply;
+        this.messageParser = messageParser != null ? messageParser::apply : Function.identity();
+    }
+
+    @Deprecated //TODO ISIS-1827 remove guava from public API
+    public ExceptionRecognizerAbstract(
+    		com.google.common.base.Predicate<Throwable> predicate, 
+    		final com.google.common.base.Function<String,String> messageParser) {
+        this(Category.OTHER, predicate, messageParser);
+    }
+
+    @Deprecated //TODO ISIS-1827 remove guava from public API
+    public ExceptionRecognizerAbstract(Category category, com.google.common.base.Predicate<Throwable> predicate) {
+        this(category, predicate, null);
+    }
+
+    @Deprecated //TODO ISIS-1827 remove guava from public API
+    public ExceptionRecognizerAbstract(com.google.common.base.Predicate<Throwable> predicate) {
+        this(Category.OTHER, predicate);
+    }
+
+    // --
+    
+    
 
     @PostConstruct
     public void init(Map<String, String> properties) {
@@ -129,7 +166,7 @@ public abstract class ExceptionRecognizerAbstract implements ExceptionRecognizer
     public String recognize(Throwable ex) {
         List<Throwable> causalChain = Throwables.getCausalChain(ex);
         for (Throwable throwable : causalChain) {
-            if(predicate.apply(throwable)) {
+            if(predicate.test(throwable)) {
                 if(logRecognizedExceptions) {
                     LOG.info("Recognized exception, stacktrace : ", throwable);
                 }

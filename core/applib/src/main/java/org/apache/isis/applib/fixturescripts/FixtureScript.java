@@ -27,13 +27,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-
-import org.joda.time.LocalDate;
-import org.joda.time.LocalDateTime;
-
 import org.apache.isis.applib.AbstractViewModel;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.PropertyLayout;
@@ -42,6 +35,9 @@ import org.apache.isis.applib.annotation.ViewModelLayout;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.fixtures.FixtureType;
 import org.apache.isis.applib.fixtures.InstallableFixture;
+import org.apache.isis.applib.internal.base._Casts;
+import org.apache.isis.applib.internal.base._Strings;
+import org.apache.isis.applib.internal.exceptions._Exceptions;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.repository.RepositoryService;
@@ -49,7 +45,12 @@ import org.apache.isis.applib.services.sessmgmt.SessionManagementService;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.xactn.TransactionService;
-import org.apache.isis.applib.util.Casts;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
+
+import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 @ViewModelLayout(named="Script")
 public abstract class FixtureScript 
@@ -115,12 +116,13 @@ public abstract class FixtureScript
 
         withTracing(printStream);
     }
+    
     protected String localNameElseDerived(final String str) {
-        return str != null ? str : StringUtil.asLowerDashed(friendlyNameElseDerived(str));
+        return str != null ? str : _Strings.asLowerDashed.apply(friendlyNameElseDerived(str));
     }
 
     protected String friendlyNameElseDerived(final String str) {
-        return str != null ? str : StringUtil.asNaturalName2(getClass().getSimpleName());
+        return str != null ? str : _Strings.asNaturalName2.apply(getClass().getSimpleName());
     }
 
     //endregion
@@ -628,7 +630,7 @@ public abstract class FixtureScript
                     return childFixtureScript;
                 } else {
                     trace(childFixtureScript, As.SKIP);
-                    return Casts.uncheckedCast(previouslyExecutedScript);
+                    return _Casts.uncheckedCast(previouslyExecutedScript);
                 }
 
             case EXECUTE_ONCE_BY_VALUE:
@@ -641,7 +643,7 @@ public abstract class FixtureScript
                 return childFixtureScript;
 
             default:
-                throw new IllegalArgumentException("Execution strategy: '" + executionStrategy + "' not recognized");
+            	throw _Exceptions.unmatchedCase("Execution strategy: '%s' not recognized", executionStrategy);
             }
         }
 
@@ -676,7 +678,7 @@ public abstract class FixtureScript
                 return childFixtureScript;
             } else {
                 trace(childFixtureScript, As.SKIP);
-                return Casts.uncheckedCast(previouslyExecutedScript);
+                return _Casts.uncheckedCast(previouslyExecutedScript);
             }
         }
 
@@ -772,11 +774,11 @@ public abstract class FixtureScript
         }
         @Programmatic
         public <T> T getUserData(final Class<T> cls) {
-            return Casts.uncheckedCast(userData.get(cls));
+            return _Casts.uncheckedCast(userData.get(cls));
         }
         @Programmatic
         public <T> T clearUserData(final Class<T> cls) {
-            return Casts.uncheckedCast(userData.remove(cls));
+            return _Casts.uncheckedCast(userData.remove(cls));
         }
 
     }
@@ -791,7 +793,7 @@ public abstract class FixtureScript
     }
 
     private <T> T valueFor(final String parameterName, final ExecutionContext ec, final T defaultValue) {
-        final Class<T> cls = Casts.uncheckedCast(defaultValue.getClass());
+        final Class<T> cls = _Casts.uncheckedCast(defaultValue.getClass());
 
         final T value = readParam(parameterName, ec, cls);
         if(value != null) { return (T) value; }
@@ -819,7 +821,7 @@ public abstract class FixtureScript
         Method method;
         try {
             method = this.getClass().getMethod("get" + uppercase(parameterName));
-            value = Casts.uncheckedCast(method.invoke(this));
+            value = _Casts.uncheckedCast(method.invoke(this));
         } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException ignored) {
 
         }
@@ -828,7 +830,7 @@ public abstract class FixtureScript
         if (cls == Boolean.class || cls == boolean.class) {
             try {
                 method = this.getClass().getMethod("is" + uppercase(parameterName));
-                value = Casts.uncheckedCast(method.invoke(this));
+                value = _Casts.uncheckedCast(method.invoke(this));
             } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException ignored) {
 
             }
@@ -924,7 +926,8 @@ public abstract class FixtureScript
     /**
      * Returns the first non-null value; for convenience of subclass implementations
      */
-    protected static <T> T coalesce(final T... ts) {
+    @SafeVarargs
+	protected static <T> T coalesce(final T... ts) {
         for (final T t : ts) {
             if(t != null) return t;
         }

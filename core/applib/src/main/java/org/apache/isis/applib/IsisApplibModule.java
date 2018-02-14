@@ -22,14 +22,17 @@ public final class IsisApplibModule {
 
     private IsisApplibModule(){}
 
-    public abstract static class ActionDomainEvent<S> extends org.apache.isis.applib.services.eventbus.ActionDomainEvent<S> {
+    @SuppressWarnings("serial") // serial versionId to be provided by concrete class
+	public abstract static class ActionDomainEvent<S> extends org.apache.isis.applib.services.eventbus.ActionDomainEvent<S> {
         public ActionDomainEvent() {}
     }
 
+    @SuppressWarnings("serial") // serial versionId to be provided by concrete class
     public abstract static class CollectionDomainEvent<S,T> extends org.apache.isis.applib.services.eventbus.CollectionDomainEvent<S,T> {
         public CollectionDomainEvent() { }
     }
 
+    @SuppressWarnings("serial") // serial versionId to be provided by concrete class
     public abstract static class PropertyDomainEvent<S,T> extends org.apache.isis.applib.services.eventbus.PropertyDomainEvent<S,T> {
         public PropertyDomainEvent() { }
     }

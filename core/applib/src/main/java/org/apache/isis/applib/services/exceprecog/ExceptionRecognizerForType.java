@@ -35,6 +35,7 @@ import com.google.common.base.Throwables;
  * If a messaging-parsing {@link Function} is provided through the constructor,
  * then the message can be altered.  Otherwise the exception's {@link Throwable#getMessage() message} is returned as-is.
  */
+@Deprecated //TODO ISIS-1827 remove guava from public API
 public class ExceptionRecognizerForType extends ExceptionRecognizerAbstract {
 
     protected final static Predicate<Throwable> ofTypeExcluding(final Class<? extends Throwable> exceptionType, final String... messages) {

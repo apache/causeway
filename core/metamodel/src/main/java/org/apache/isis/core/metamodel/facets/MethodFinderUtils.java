@@ -22,8 +22,8 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
-import org.apache.isis.core.commons.lang.Nullable;
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
 
@@ -202,28 +202,28 @@ public final class MethodFinderUtils {
     public static Method findAnnotatedMethod(
             final Object pojo,
             final Class<? extends Annotation> annotationClass,
-            final Map<Class, Nullable<Method>> methods) {
+            final Map<Class<?>, Optional<Method>> methods) {
 
         final Class<?> clz = pojo.getClass();
-        Nullable<Method> nullableMethod = methods.get(clz);
+        Optional<Method> nullableMethod = methods.get(clz);
         if(nullableMethod == null) {
             nullableMethod = search(clz, annotationClass, methods);
         }
-        return nullableMethod.value();
+        return nullableMethod.orElse(null);
     }
 
-    private static Nullable<Method> search(
+    private static Optional<Method> search(
             final Class<?> clz,
             final Class<? extends Annotation> annotationClass,
-            final Map<Class, Nullable<Method>> postConstructMethods) {
+            final Map<Class<?>, Optional<Method>> postConstructMethods) {
 
         final Method[] methods = clz.getMethods();
 
-        Nullable<Method> nullableMethod = Nullable.none();
+        Optional<Method> nullableMethod = Optional.empty();
         for (final Method method : methods) {
             final Annotation annotation = method.getAnnotation(annotationClass);
             if(annotation != null) {
-                nullableMethod = Nullable.some(method);
+                nullableMethod = Optional.of(method);
                 break;
             }
         }

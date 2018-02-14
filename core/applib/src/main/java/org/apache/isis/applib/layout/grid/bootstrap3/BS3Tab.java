@@ -20,13 +20,13 @@ package org.apache.isis.applib.layout.grid.bootstrap3;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Predicate;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
-import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.annotation.Programmatic;
@@ -104,7 +104,7 @@ public class BS3Tab extends BS3ElementAbstract implements BS3RowOwner {
 
             return new Predicate<BS3Tab>() {
                 @Override
-                public boolean apply(final BS3Tab thisBs3Tab) {
+                public boolean test(final BS3Tab thisBs3Tab) {
                     final BS3Grid owningGrid = thisBs3Tab.getGrid();
                     owningGrid.visit(new BS3Grid.VisitorAdapter() {
 

@@ -28,6 +28,7 @@ import org.jmock.States;
 import org.jmock.internal.ExpectationBuilder;
 
 import org.apache.isis.applib.DomainObjectContainer;
+import org.apache.isis.applib.internal.base._Strings;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.core.specsupport.scenarios.ScenarioExecution;
 import org.apache.isis.core.specsupport.scenarios.ScenarioExecutionForUnit;
@@ -220,7 +221,7 @@ public abstract class CukeGlueAbstract {
         }
         final Class<? extends Object> cls = obj.getClass();
         try {
-            final String methodName = "get" + capitalize(propertyName);
+            final String methodName = "get" + _Strings.capitalize(propertyName);
             final Method method = cls.getMethod(methodName, new Class[]{});
             if(method != null) {
                 return method.invoke(obj);
@@ -230,7 +231,7 @@ public abstract class CukeGlueAbstract {
         }
         
         try {
-            final String methodName = "is" + capitalize(propertyName);
+            final String methodName = "is" + _Strings.capitalize(propertyName);
             final Method method = cls.getMethod(methodName, new Class[]{});
             if(method != null) {
                 return method.invoke(obj);
@@ -253,17 +254,6 @@ public abstract class CukeGlueAbstract {
         
         return null;
     }
-
-    private static String capitalize(final String str) {
-        if (str == null || str.length() == 0) {
-            return str;
-        }
-        if (str.length() == 1) {
-            return str.toUpperCase();
-        }
-        return Character.toUpperCase(str.charAt(0)) + str.substring(1);
-    }
-
 
     // //////////////////////////////////////
 

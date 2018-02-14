@@ -24,16 +24,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import com.google.common.base.Strings;
-
+import org.apache.isis.applib.internal.base._Strings;
 import org.apache.isis.applib.util.Enums;
+
+import com.google.common.base.Strings;
 
 public final class StringExtensions {
     
-    static final char SPACE = ' ';
-
-    private StringExtensions() {
-    }
+    private StringExtensions() {}
 
     // ////////////////////////////////////////////////////////////
     // naturalName, naturalize, simpleName, camel, memberIdFor
@@ -45,48 +43,7 @@ public final class StringExtensions {
      * "NextAvailableDate" is returned as "Next Available Date".
      */
     public static String asNaturalName2(String name) {
-
-        // handle any nested class names, eg 'Foo$Bar'
-        final int idx = name.lastIndexOf("$");
-        if(idx != -1) {
-            name = name.substring(idx+1);
-        }
-
-        final int length = name.length();
-    
-        if (length <= 1) {
-            return name.toUpperCase();// ensure first character is upper case
-        }
-    
-        final StringBuilder naturalName = new StringBuilder(length);
-    
-        char previousCharacter;
-        char character = Character.toUpperCase(name.charAt(0));// ensure first
-                                                               // character is
-                                                               // upper case
-        naturalName.append(character);
-        char nextCharacter = name.charAt(1);
-    
-        for (int pos = 2; pos < length; pos++) {
-            previousCharacter = character;
-            character = nextCharacter;
-            nextCharacter = name.charAt(pos);
-    
-            if (previousCharacter != StringExtensions.SPACE) {
-                if (Character.isUpperCase(character) && !Character.isUpperCase(previousCharacter)) {
-                    naturalName.append(StringExtensions.SPACE);
-                }
-                if (Character.isUpperCase(character) && Character.isLowerCase(nextCharacter) && Character.isUpperCase(previousCharacter)) {
-                    naturalName.append(StringExtensions.SPACE);
-                }
-                if (Character.isDigit(character) && !Character.isDigit(previousCharacter)) {
-                    naturalName.append(StringExtensions.SPACE);
-                }
-            }
-            naturalName.append(character);
-        }
-        naturalName.append(nextCharacter);
-        return naturalName.toString();
+    	return _Strings.asNaturalName2.apply(name);
     }
 
     public static String asNaturalName(final String extendee) {
@@ -162,7 +119,7 @@ public final class StringExtensions {
     }
 
     public static String asLowerDashed(String extendee) {
-        return extendee.toLowerCase().replaceAll("\\s+", "-");
+        return _Strings.asLowerDashed.apply(extendee);
     }
 
     public static String asPascal(final String extendee) {
@@ -174,13 +131,7 @@ public final class StringExtensions {
     // ////////////////////////////////////////////////////////////
 
     public static String capitalize(final String extendee) {
-        if (extendee == null || extendee.length() == 0) {
-            return extendee;
-        }
-        if (extendee.length() == 1) {
-            return extendee.toUpperCase();
-        }
-        return Character.toUpperCase(extendee.charAt(0)) + extendee.substring(1);
+    	return _Strings.capitalize(extendee);
     }
 
     /**
@@ -292,11 +243,8 @@ public final class StringExtensions {
      * @param extendee
      * @return
      */
-    public static String normalized(final String extendee) {
-        if (extendee == null) {
-            return null;
-        }
-        return extendee.replaceAll("\\s+", " ");
+    public static String normalized(@javax.annotation.Nullable final String extendee) {
+    	return _Strings.asNormalized.apply(extendee);
     }
 
     public static String removePrefix(final String extendee, final String prefix) {

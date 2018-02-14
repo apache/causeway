@@ -26,7 +26,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.isis.core.commons.reflection.Reflect;
+import org.apache.isis.applib.internal._Constants;
 
 /**
  * <p>Provides utilities for manipulating and examining 
@@ -69,7 +69,7 @@ public class ExceptionUtils {
     static {
         Method causeMethod;
         try {
-            causeMethod = Throwable.class.getMethod("getCause", Reflect.emptyClasses);
+            causeMethod = Throwable.class.getMethod("getCause", _Constants.emptyClasses);
         } catch (Exception e) {
             causeMethod = null;
         }
@@ -248,7 +248,7 @@ public class ExceptionUtils {
         Class<?> cls = throwable.getClass();
         for (final String causeMethodName : CAUSE_METHOD_NAMES) {
             try {
-                Method method = cls.getMethod(causeMethodName, Reflect.emptyClasses);
+                Method method = cls.getMethod(causeMethodName, _Constants.emptyClasses);
                 if (method != null && Throwable.class.isAssignableFrom(method.getReturnType())) {
                     return true;
                 }

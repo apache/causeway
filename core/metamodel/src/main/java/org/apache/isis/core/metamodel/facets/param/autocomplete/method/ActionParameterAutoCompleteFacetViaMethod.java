@@ -26,6 +26,7 @@ import java.util.List;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
+import org.apache.isis.applib.internal._Constants;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
@@ -87,7 +88,7 @@ public class ActionParameterAutoCompleteFacetViaMethod extends ActionParameterAu
 
         final Object collectionOrArray = ObjectAdapter.InvokeUtils.invoke(method, owningAdapter, searchArg);
         if (collectionOrArray == null) {
-            return new Object[0];
+            return _Constants.emptyObjects;
         }
         final ObjectAdapter collectionAdapter = getAdapterManager().adapterFor(collectionOrArray);
 

@@ -16,14 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
-package org.apache.isis.applib.util;
-
-public class Casts {
-
-	@SuppressWarnings("unchecked")
-	public static <T> T uncheckedCast(Object obj) {
-		return (T) obj;
-	}
-	
-}
+/**
+ * <h1>Internal API</h1>
+ * Internal classes, contributing to the internal proprietary API. 
+ * These may be changed or removed without notice!
+ * <p>
+ * <b>WARNING</b>: 
+ * Do NOT use any of the classes provided by this package!
+ * </p>
+ */
+package org.apache.isis.applib.internal.compare;

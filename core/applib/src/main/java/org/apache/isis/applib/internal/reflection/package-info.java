@@ -16,24 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
-package org.apache.isis.core.commons.lang;
-
-
 /**
- * @see http://cyrille.martraire.com/2011/03/thinking-functional-programming-with-map-and-fold-in-your-everyday-java/
+ * <h1>Internal API</h1>
+ * Internal classes, contributing to the internal proprietary API. 
+ * These may be changed or removed without notice!
+ * <p>
+ * <b>WARNING</b>: 
+ * Do NOT use any of the classes provided by this package!
+ * </p>
  */
-public final class IterableExtensions {
-
-    private IterableExtensions() {
-    }
-
-    public final static <T> T fold(Iterable<T> list, Closure<T> closure) {
-        T result = null;
-        for (T t : list) {
-        result = closure.execute(t);
-        }
-        return result;
-    }
-
-}
+package org.apache.isis.applib.internal.reflection;

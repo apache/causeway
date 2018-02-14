@@ -20,6 +20,7 @@ package org.apache.isis.core.metamodel.spec.feature;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
@@ -35,9 +36,10 @@ import org.apache.isis.applib.annotation.InvokeOn;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.internal.base._NullSafe;
+import org.apache.isis.applib.internal.base._Strings;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
-import org.apache.isis.core.commons.lang.StringFunctions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -529,10 +531,16 @@ public interface ObjectAction extends ObjectMember {
         public static Predicate<ObjectAction> memberOrderNotAssociationOf(final ObjectSpecification adapterSpec) {
 
             final List<ObjectAssociation> associations = adapterSpec.getAssociations(Contributed.INCLUDED);
-            final List<String> associationNames = Lists.transform(associations,
-                    com.google.common.base.Functions.compose(StringFunctions.toLowerCase(), ObjectAssociation.Functions.toName()));
-            final List<String> associationIds = Lists.transform(associations,
-                    com.google.common.base.Functions.compose(StringFunctions.toLowerCase(), ObjectAssociation.Functions.toId()));
+            
+            final List<String> associationNames = _NullSafe.stream(associations)
+            		.map(ObjectAssociation::getName)
+            		.map(_Strings::lower)
+            		.collect(Collectors.toList());
+            		
+            final List<String> associationIds = _NullSafe.stream(associations) 
+            		.map(ObjectAssociation::getId)
+            		.map(_Strings::lower)
+            		.collect(Collectors.toList());
 
             return new Predicate<ObjectAction>() {
 

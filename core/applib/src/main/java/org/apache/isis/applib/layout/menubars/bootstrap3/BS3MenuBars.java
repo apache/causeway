@@ -25,6 +25,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.DomainServiceLayout;
+import org.apache.isis.applib.internal.exceptions._Exceptions;
 import org.apache.isis.applib.layout.component.ServiceActionLayoutData;
 import org.apache.isis.applib.layout.menubars.MenuBars;
 
@@ -88,6 +89,10 @@ public class BS3MenuBars extends org.apache.isis.applib.layout.menubars.MenuBars
             return getSecondary();
         case TERTIARY:
             return getTertiary();
+		case NOT_SPECIFIED:
+			break;
+		default:
+			throw _Exceptions.unmatchedCase(menuBar);
         }
         return null;
     }

@@ -16,53 +16,91 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.isis.core.commons.lang;
+package org.apache.isis.applib.internal.base;
 
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 /**
- * 
- * Provides convenient null check / null safe methods primarily 
+ * <h1>- internal use only -</h1>
+ * <p>
+ *  Provides convenient null check / null safe methods primarily 
  * to shortcut null-check idioms.
+ * </p>
+ * <p>
+ * <b>WARNING</b>: Do <b>NOT</b> use any of the classes provided by this package! <br/> 
+ * These may be changed or removed without notice!
+ * </p>
  * 
- * @author ahuber@apache.org
  * @since 2.0.0
  *
  */
-public class NullSafe {
+
+public final class _NullSafe {
+	
+	private _NullSafe(){}
 
 	// -- STREAM CREATION
-
+	
 	/**
-	 * Shortcut for {@code Optional.ofNullable(array).map(Stream::of)}
+	 * If {@code array} is {@code null} returns the empty stream, 
+	 * otherwise returns a stream of the array's elements.
 	 * @param array
-	 * @return a sequential ordered stream whose elements are the elements of 
-	 * the specified {@code array}, or the empty stream if array is {@code null}.
+	 * @return non-null stream object
 	 */
-	public static <T> Stream<T> stream(T[] array) {
+	public static <T> Stream<T> stream(final T[] array) {
 		return array!=null ? Stream.of(array) : Stream.empty();
 	}
 
 	/**
-	 * Shortcut for {@code Optional.ofNullable(coll).map(Stream::of)}
-	 * @param coll
-	 * @return a sequential ordered stream whose elements are the elements of 
-	 * the specified {@code coll}, or the empty stream if coll is {@code null}.
+	 * If {@code collection} is {@code null} returns the empty stream, 
+	 * otherwise returns a stream of the collection's elements.
+	 * @param collection
+	 * @return non-null stream object
 	 */
-	public static <T> Stream<T> stream(Collection<T> coll){
+	public static <T> Stream<T> stream(final Collection<T> coll){
 		return coll!=null ? coll.stream() : Stream.empty();
 	}
+	
+	/**
+	 * If {@code iterable} is {@code null} returns the empty stream, 
+	 * otherwise returns a stream of the iterable's elements.
+	 * @param iterable
+	 * @return non-null stream object
+	 */
+	public static <T> Stream<T> stream(final Iterable<T> iterable){
+		return iterable!=null ? stream(iterable.iterator()) : Stream.empty();
+	}
+	
+	/**
+	 * If {@code iterator} is {@code null} returns the empty stream, 
+	 * otherwise returns a stream of the iterator's elements.
+	 * @param collection
+	 * @return non-null stream object
+	 */
+	public static <T> Stream<T> stream(final Iterator<T> iterator){
+		return iterator!=null 
+				? StreamSupport.stream(toIterable(iterator).spliterator(), false) //not parallel 
+				: Stream.empty();
+	}
+	
+	// [ahuber] not public, since one time use of iterator only!
+	private static <T> Iterable<T> toIterable(final Iterator<T> iterator){
+		return ()->iterator;
+	}
+
 	
 	// -- ABSENCE/PRESENCE PREDICATES
 	
 	/**
 	 * Allows to replace a lambda expression {@code x->x!=null} with {@code NullSafe::isPresent}
 	 * @param x
-	 * @return whether {@code x} is not null.
+	 * @return whether {@code x} is not null (present).
 	 */
 	public static boolean isPresent(Object x) {
 		return x!=null;
@@ -71,10 +109,10 @@ public class NullSafe {
 	/**
 	 * Allows to replace a lambda expression {@code x->x==null} with {@code NullSafe::isAbsent}
 	 * @param x
-	 * @return whether {@code x} is null.
+	 * @return whether {@code x} is null (absent).
 	 */
 	public static boolean isAbsent(Object x) {
-		return x!=null;
+		return x==null;
 	}
 	
 	// -- EQUALS/COMPARE

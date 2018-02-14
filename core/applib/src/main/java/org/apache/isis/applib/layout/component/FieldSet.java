@@ -201,7 +201,7 @@ public class FieldSet
     }
 
 
-
+    @Deprecated //[ahuber] not used, or otherwise replace with java 8+ function variant
     public static class Util {
         private Util(){}
         public static Function<? super FieldSet, String> nameOf() {

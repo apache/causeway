@@ -22,6 +22,8 @@ package org.apache.isis.applib.util;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import org.apache.isis.applib.internal._Constants;
+
 /**
  * Title buffer is a utility class to help produce titles for objects without
  * having to add lots of guard code. It provides two basic method: one to
@@ -32,8 +34,6 @@ import java.lang.reflect.Method;
  */
 public class TitleBuffer {
     private static final String SPACE = " ";
-    public static final Class<?>[] NO_PARAMETER_TYPES = new Class[0];
-    public static final Object[] NO_ARGUMENTS = new Object[0];
 
     /**
      * Determines if the specified object's title is empty (or null).
@@ -64,8 +64,8 @@ public class TitleBuffer {
         }
 
         try {
-            Method method = object.getClass().getMethod("title", NO_PARAMETER_TYPES);
-            return (String) method.invoke(object, NO_ARGUMENTS);
+            Method method = object.getClass().getMethod("title", _Constants.emptyClasses);
+            return (String) method.invoke(object, _Constants.emptyObjects);
         } catch (final SecurityException | IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
             throw new TitleBufferException(e);
         } catch (final NoSuchMethodException e) {

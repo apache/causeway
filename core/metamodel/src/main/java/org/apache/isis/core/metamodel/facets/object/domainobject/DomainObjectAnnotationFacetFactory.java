@@ -21,11 +21,10 @@ package org.apache.isis.core.metamodel.facets.object.domainobject;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
-
-import com.google.common.collect.Maps;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
@@ -38,7 +37,6 @@ import org.apache.isis.applib.services.eventbus.ObjectRemovingEvent;
 import org.apache.isis.applib.services.eventbus.ObjectUpdatedEvent;
 import org.apache.isis.applib.services.eventbus.ObjectUpdatingEvent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.lang.Nullable;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -81,6 +79,8 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVis
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 import org.apache.isis.core.metamodel.util.EventUtil;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
+
+import com.google.common.collect.Maps;
 
 
 public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
@@ -513,6 +513,7 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
     @Override
     public void setServicesInjector(final ServicesInjector servicesInjector) {
         super.setServicesInjector(servicesInjector);
+        //TODO [ahuber] unused because of side effects ?
         IsisConfiguration configuration = getConfiguration();
 
         this.persistenceSessionServiceInternal = servicesInjector.getPersistenceSessionServiceInternal();
@@ -522,7 +523,7 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
 
     // //////////////////////////////////////
 
-    private final Map<Class, Nullable<Method>> postConstructMethods = Maps.newHashMap();
+    private final Map<Class<?>, Optional<Method>> postConstructMethods = Maps.newHashMap();
 
     public Method postConstructMethodFor(final Object pojo) {
         return MethodFinderUtils.findAnnotatedMethod(pojo, PostConstruct.class, postConstructMethods);

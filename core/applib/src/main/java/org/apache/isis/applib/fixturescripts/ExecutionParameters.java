@@ -30,7 +30,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 import com.google.common.io.CharSource;
 
-import org.apache.isis.applib.util.Casts;
+import org.apache.isis.applib.internal.base._Casts;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
@@ -78,14 +78,14 @@ public class ExecutionParameters {
     }
 
     public <T> T getParameterAsT(final String parameterName, final Class<T> cls) {
-    	return Casts.uncheckedCast(getParameterAsObject(parameterName, cls));
+    	return _Casts.uncheckedCast(getParameterAsObject(parameterName, cls));
     }
     
     protected Object getParameterAsObject(final String parameterName, final Class<?> cls) {
     	final Object value;
         if (Enum.class.isAssignableFrom(cls)) {
             Class<?> enumClass = cls;
-            value = getParameterAsEnum(parameterName, Casts.uncheckedCast(enumClass));
+            value = getParameterAsEnum(parameterName, _Casts.uncheckedCast(enumClass));
         } else if (cls == Boolean.class) {
             value = getParameterAsBoolean(parameterName);
         } else if (cls == Byte.class) {

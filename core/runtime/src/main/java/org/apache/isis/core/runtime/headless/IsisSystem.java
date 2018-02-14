@@ -245,7 +245,7 @@ public class IsisSystem {
 
                 // for subsequent tests; the attempt to bootstrap the framework will leave
                 // the IsisContext singleton as set.
-                IsisContext.testReset();
+                IsisContext.clear();
 
                 final Set<String> validationErrors = ex.getValidationErrors();
                 final StringBuilder buf = new StringBuilder();

@@ -25,13 +25,15 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
-import com.google.common.base.Predicate;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import org.apache.isis.applib.PersistFailedException;
 import org.apache.isis.applib.RepositoryException;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.internal.base._NullSafe;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.query.QueryFindAllInstances;
 import org.apache.isis.applib.services.factory.FactoryService;
@@ -46,8 +48,6 @@ import org.apache.isis.core.metamodel.services.persistsession.PersistenceSession
         menuOrder = "" + Integer.MAX_VALUE
 )
 public class RepositoryServiceInternalDefault implements RepositoryService {
-
-
 
     private boolean autoFlush;
 
@@ -151,7 +151,7 @@ public class RepositoryServiceInternalDefault implements RepositoryService {
 
     @Programmatic
     @Override
-    public <T> List<T> allMatches(final Class<T> cls, final Predicate<? super T> predicate, long... range) {
+    public <T> List<T> allMatches(final Class<T> cls, final com.google.common.base.Predicate<? super T> predicate, long... range) {
         final List<T> allInstances = allInstances(cls, range);
         final List<T> filtered = new ArrayList<T>();
         for (final T instance : allInstances) {
@@ -161,6 +161,14 @@ public class RepositoryServiceInternalDefault implements RepositoryService {
         }
         return filtered;
     }
+    
+    @Programmatic
+	@Override
+	public <T> List<T> allMatches(Class<T> ofType, final Predicate<? super T> predicate, long... range) {
+		return _NullSafe.stream(allInstances(ofType, range))
+				.filter(predicate)
+				.collect(Collectors.toCollection(ArrayList::new));
+	}
 
 
     @Programmatic
@@ -176,11 +184,21 @@ public class RepositoryServiceInternalDefault implements RepositoryService {
         final List<ObjectAdapter> allMatching = persistenceSessionServiceInternal.allMatchingQuery(query);
         return ObjectAdapter.Util.unwrapT(allMatching);
     }
-
+    
 
     // //////////////////////////////////////
 
 
+    @Programmatic
+    @Override
+    public <T> T uniqueMatch(final Class<T> type, final com.google.common.base.Predicate<T> predicate) {
+        final List<T> instances = allMatches(type, predicate, 0, 2); // No need to fetch more than 2.
+        if (instances.size() > 1) {
+            throw new RepositoryException("Found more than one instance of " + type + " matching filter " + predicate);
+        }
+        return firstInstanceElseNull(instances);
+    }
+    
     @Programmatic
     @Override
     public <T> T uniqueMatch(final Class<T> type, final Predicate<T> predicate) {
@@ -208,7 +226,7 @@ public class RepositoryServiceInternalDefault implements RepositoryService {
 
     @Programmatic
     @Override
-    public <T> T firstMatch(final Class<T> cls, final Predicate<T> predicate) {
+    public <T> T firstMatch(final Class<T> cls, final com.google.common.base.Predicate<T> predicate) {
         final List<T> allInstances = allInstances(cls); // Have to fetch all, as matching is done in next loop
         for (final T instance : allInstances) {
             if (predicate.apply(instance)) {
@@ -217,7 +235,6 @@ public class RepositoryServiceInternalDefault implements RepositoryService {
         }
         return null;
     }
-
 
     @Programmatic
     @Override
@@ -255,5 +272,7 @@ public class RepositoryServiceInternalDefault implements RepositoryService {
 
     @javax.inject.Inject
     PersistenceSessionServiceInternal persistenceSessionServiceInternal;
+
+
 
 }

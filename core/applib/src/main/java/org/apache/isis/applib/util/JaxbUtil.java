@@ -29,6 +29,8 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
+import org.apache.isis.applib.internal.base._Casts;
+
 import com.google.common.io.Resources;
 
 /**
@@ -49,7 +51,7 @@ public class JaxbUtil {
         Unmarshaller un = null;
         try {
             un = getJaxbContext(dtoClass).createUnmarshaller();
-            return Casts.uncheckedCast(un.unmarshal(reader));
+            return _Casts.uncheckedCast(un.unmarshal(reader));
         } catch (JAXBException e) {
             throw new RuntimeException(e);
         }

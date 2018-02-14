@@ -34,10 +34,10 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 import org.joda.time.LocalTime;
-
+import org.apache.isis.applib.internal.base._Casts;
+import org.apache.isis.applib.internal.exceptions._Exceptions;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
-import org.apache.isis.applib.util.Casts;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.schema.cmd.v1.MapDto;
@@ -284,10 +284,7 @@ public final class CommonDtoUtils {
             return null;
         }
         default:
-            // should never happen; all cases are listed above
-            throw new IllegalArgumentException(String.format(
-                    "newValueDto(): do not recognize valueType %s (likely a framework error)",
-                    valueType));
+        	throw _Exceptions.unmatchedCase(valueType);
         }
     }
 
@@ -311,7 +308,7 @@ public final class CommonDtoUtils {
     public static <T> T getValue(
             final ValueDto valueDto,
             final ValueType valueType) {
-    	return Casts.uncheckedCast(getValueAsObject(valueDto, valueType));
+    	return _Casts.uncheckedCast(getValueAsObject(valueDto, valueType));
     }
     
     private static Object getValueAsObject(
@@ -357,7 +354,7 @@ public final class CommonDtoUtils {
             final String enumType = enumDto.getEnumType();
             @SuppressWarnings("rawtypes") 
             final Class<? extends Enum> enumClass = loadClassElseThrow(enumType);
-            return Enum.valueOf(Casts.uncheckedCast(enumClass), enumDto.getEnumName());
+            return Enum.valueOf(_Casts.uncheckedCast(enumClass), enumDto.getEnumName());
         case REFERENCE:
             return valueDto.getReference();
         case COLLECTION:
@@ -371,16 +368,13 @@ public final class CommonDtoUtils {
         case VOID:
             return null;
         default:
-            // should never happen; all cases are listed above
-            throw new IllegalArgumentException(String.format(
-                    "getValueDto(...): do not recognize valueType %s (likely a framework error)",
-                    valueType));
+        	throw _Exceptions.unmatchedCase(valueType);
         }
     }
 
     private static <T> Class<T> loadClassElseThrow(final String className) {
         try {
-            return Casts.uncheckedCast(loadClass(className));
+            return _Casts.uncheckedCast(loadClass(className));
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }

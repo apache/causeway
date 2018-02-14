@@ -21,6 +21,7 @@ import javax.inject.Inject;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.internal.exceptions._Exceptions;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.schema.common.v1.BookmarkObjectState;
@@ -56,9 +57,10 @@ public class DtoMappingHelper {
             return BookmarkObjectState.TRANSIENT;
         case VIEW_MODEL:
             return BookmarkObjectState.VIEW_MODEL;
+        default:
+        	throw _Exceptions.unmatchedCase("objectState '%s' not recognized", bookmark.getObjectState());	
         }
-        throw new IllegalArgumentException(
-                String.format("objectState '%s' not recognized", bookmark.getObjectState()));
+        
     }
 
     @Inject

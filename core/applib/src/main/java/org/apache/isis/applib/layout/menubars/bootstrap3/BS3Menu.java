@@ -87,11 +87,6 @@ public class BS3Menu implements Menu, Serializable {
         return sections;
     }
 
-    public void setSections(List<BS3MenuSection> menuSections) {
-        this.sections = sections;
-    }
-
-
     private Boolean unreferencedActions;
 
     /**

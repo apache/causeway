@@ -108,7 +108,7 @@ public class BS3Grid extends GridAbstract implements BS3Element, Dto, BS3RowOwne
 
 
 
-
+    //TODO [ahuber] unused
     private BS3RowOwner owner;
 
 

@@ -151,14 +151,32 @@
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-unittestsupport</artifactId>
             <scope>test</scope>
+            <exclusions>
+            	<exclusion>
+            	    <!-- whatever unittestsupport is dependent on, it should not be transitive  -->
+            		<groupId>org.reflections</groupId>
+            		<artifactId>reflections</artifactId>
+            	</exclusion>
+            </exclusions>
         </dependency>
 
-        <!-- as used by ClassDiscoveryServiceUsingReflections -->
+        <!-- as used by internal API, 
+        	also provides com.google.code.findbugs/annotations @Nullable, 
+        	but not transitive -->
         <dependency>
             <groupId>org.reflections</groupId>
             <artifactId>reflections</artifactId>
+            <!-- we enforce usage of internal reflective API, 
+       			only applib is allowed to access reflections directly -->
+            <optional>true</optional> 
         </dependency>
 
+		<!-- provides @Nullable -->
+        <dependency>
+        	<groupId>com.google.code.findbugs</groupId>
+        	<artifactId>annotations</artifactId>
+        </dependency>
+        
     </dependencies>
 
 </project>

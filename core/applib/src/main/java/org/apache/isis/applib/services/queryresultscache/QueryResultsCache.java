@@ -34,8 +34,8 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.fixturescripts.events.FixturesInstalledEvent;
 import org.apache.isis.applib.fixturescripts.events.FixturesInstallingEvent;
+import org.apache.isis.applib.internal.base._Casts;
 import org.apache.isis.applib.services.WithTransactionScope;
-import org.apache.isis.applib.util.Casts;
 
 /**
  * This service (API and implementation) provides a mechanism by which idempotent query results can be cached for the duration of an interaction.
@@ -171,7 +171,7 @@ public class QueryResultsCache implements WithTransactionScope {
             final Value<?> cacheValue = cache.get(cacheKey);
             logHitOrMiss(cacheKey, cacheValue);
             if(cacheValue != null) {
-                return Casts.uncheckedCast(cacheValue.getResult());
+                return _Casts.uncheckedCast(cacheValue.getResult());
             }
 
             // cache miss, so get the result...

@@ -16,34 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.commons.lang;
-
 /**
- * 
- * @deprecated use {@link java.util.Optional} instead
- *
- * @param <T>
+ * <h1>Internal API</h1>
+ * Internal classes, contributing to the internal proprietary API. 
+ * These may be changed or removed without notice!
+ * <p>
+ * <b>WARNING</b>: 
+ * Do NOT use any of the classes provided by this package!
+ * </p>
  */
-@Deprecated
-public class Nullable<T> {
-
-    public static <T> Nullable<T> some(T t) {
-        return new Nullable<>(t);
-    }
-
-    public static <T> Nullable<T> none() {
-        return new Nullable<T>(null);
-    }
-
-    private final T t;
-
-    private Nullable(final T t) {
-        this.t = t;
-    }
-
-    public boolean isPresent() { return t != null; }
-    public T value() {
-        return t;
-    }
-
-}
+package org.apache.isis.applib.internal.context;

@@ -20,8 +20,7 @@
 package org.apache.isis.applib.services.repository;
 
 import java.util.List;
-
-import com.google.common.base.Predicate;
+import java.util.function.Predicate;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.query.Query;
@@ -146,7 +145,14 @@ public interface RepositoryService {
      */
     @Programmatic
     <T> List<T> allMatches(final Class<T> ofType, final Predicate<? super T> predicate, long... range);
-
+    
+    /**
+     * @deprecated will be removed, use drop in replacement {@link #allMatches(Class, Predicate, long...)}
+     * utilizing java.util.function.Predicate 
+     */
+    @Programmatic @Deprecated //TODO ISIS-1827 remove guava from public API
+    <T> List<T> allMatches(final Class<T> ofType, final com.google.common.base.Predicate<? super T> predicate, long... range);
+    
     /**
      * Returns all the instances that match the given {@link Query}.
      *
@@ -176,9 +182,9 @@ public interface RepositoryService {
      *
      * @deprecated - use {@link #uniqueMatch(Class, Predicate)} or {@link #allMatches(Class, Predicate, long...)}
      */
-    @Deprecated
-    @Programmatic
-    <T> T firstMatch(final Class<T> ofType, final Predicate<T> predicate);
+    @Deprecated //TODO ISIS-1827 remove guava from public API 
+    @Programmatic 
+    <T> T firstMatch(final Class<T> ofType, final com.google.common.base.Predicate<T> predicate);
 
     /**
      * Returns the first instance that matches the supplied query, or <tt>null</tt> if none.
@@ -212,6 +218,14 @@ public interface RepositoryService {
      */
     @Programmatic
     <T> T uniqueMatch(final Class<T> ofType, final Predicate<T> predicate);
+    
+    /**
+     * @deprecated will be removed, use drop in replacement {@link #uniqueMatch(Class, Predicate)}
+     * utilizing java.util.function.Predicate 
+     */
+    @Programmatic @Deprecated //TODO ISIS-1827 remove guava from public API 
+    <T> T uniqueMatch(final Class<T> ofType, final com.google.common.base.Predicate<T> predicate);
+
 
     /**
      * Find the only instance that matches the provided query.
