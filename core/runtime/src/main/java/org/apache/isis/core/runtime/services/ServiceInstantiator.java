@@ -164,8 +164,6 @@ public final class ServiceInstantiator {
                 @Override
                 public Object invoke(final Object proxied, final Method proxyMethod, final Method proxiedMethod, final Object[] args) throws Throwable {
 
-                	System.out.println("invoke: "+proxyMethod.getName()+" "+this);
-                	
                     cacheMethodsIfNecessary(cls);
 
                     if(proxyMethod.getName().equals("__isis_startRequest")) {
