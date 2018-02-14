@@ -160,7 +160,7 @@ public final class ServiceInstantiator {
             	// Allow serviceByThread to be propagated from the thread that starts the request 
             	// to any child-threads, hence InheritableThreadLocal.
             	private InheritableThreadLocal<T> serviceByThread = new InheritableThreadLocal<>();
-                
+
                 @Override
                 public Object invoke(final Object proxied, final Method proxyMethod, final Method proxiedMethod, final Object[] args) throws Throwable {
 

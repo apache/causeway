@@ -16,25 +16,29 @@
  */
 package org.apache.isis.core.runtime.services;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.enterprise.context.RequestScoped;
 
-import org.apache.isis.core.commons.config.IsisConfigurationDefault;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
+import com.google.common.collect.Lists;
+
 import org.jmock.auto.Mock;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class ServiceInstantiatorTest {
 
@@ -139,7 +143,8 @@ public class ServiceInstantiatorTest {
 		final AccumulatingCalculator calculator = 
 				serviceInstantiator.createInstance(AccumulatingCalculator.class);
 
-		final AtomicInteger counter = new AtomicInteger();
+
+		final List<Integer> interimTotals = Collections.synchronizedList(Lists.newArrayList());
 
 		final int n = 100;
 		final int nThreads = 8;
@@ -151,21 +156,17 @@ public class ServiceInstantiatorTest {
 		for(int i=1;i<=n;++i) {
 			final int j=i;
 
-			execService.submit(new Runnable() {
+			execService.submit(() -> {
+                try {
 
-				@Override
-				public void run() {
-					try {
+                    // access the request scoped calculator on a child thread of 'main'
+                    calculator.add(j);
+                    interimTotals.add(calculator.getTotal());
 
-						// access the request scoped calculator on a child thread of 'main'
-						calculator.add(j);
-						counter.addAndGet(calculator.getTotal());
-
-					} catch (Exception e) {
-						System.err.println(e.getMessage());
-					} 
-				}
-			});
+                } catch (Exception e) {
+                    System.err.println(e.getMessage());
+                }
+            });
 
 		}
 
@@ -175,7 +176,9 @@ public class ServiceInstantiatorTest {
 
 		((RequestScopedService)calculator).__isis_endRequest();
 
-		assertThat(counter.intValue(), is(n*(n+1)/2));
+		assertThat(interimTotals.size(), is(n));
+		final Integer maxTotal = Collections.max(interimTotals);
+		assertThat(maxTotal, is(n*(n+1)/2));
 	}
 
 	public static class SingletonCalculator {
