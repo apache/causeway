@@ -90,7 +90,7 @@ public class CommandFacetForActionAnnotation extends CommandFacetAbstract {
                         }
                         // else fall through
                     default:
-                        return CommandFacetFromConfiguration.create(holder);
+                        return CommandFacetFromConfiguration.create(holder, servicesInjector);
                     }
                 });
     }

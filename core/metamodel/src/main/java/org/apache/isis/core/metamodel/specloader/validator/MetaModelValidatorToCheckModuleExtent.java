@@ -32,7 +32,7 @@ import com.google.common.collect.Maps;
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.AppManifest2;
 import org.apache.isis.applib.Module;
-import org.apache.isis.applib.services.metamodel.MetaModelService4;
+import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public class MetaModelValidatorToCheckModuleExtent extends MetaModelValidatorComposite {
@@ -54,7 +54,7 @@ public class MetaModelValidatorToCheckModuleExtent extends MetaModelValidatorCom
         }
 
         AppManifest2 appManifest = specificationLoader.getServicesInjector()
-                .lookupService(MetaModelService4.class).getAppManifest2();
+                .lookupService(MetaModelService.class).getAppManifest2();
         if(appManifest == null) {
             return;
         }
@@ -101,7 +101,7 @@ public class MetaModelValidatorToCheckModuleExtent extends MetaModelValidatorCom
             public void summarize(final ValidationFailures validationFailures) {
 
                 AppManifest2 appManifest = specificationLoader.getServicesInjector()
-                        .lookupService(MetaModelService4.class).getAppManifest2();
+                        .lookupService(MetaModelService.class).getAppManifest2();
                 if(appManifest == null) {
                     return;
                 }

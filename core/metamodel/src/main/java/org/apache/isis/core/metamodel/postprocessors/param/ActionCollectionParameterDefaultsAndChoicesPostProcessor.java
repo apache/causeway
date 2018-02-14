@@ -21,11 +21,11 @@ package org.apache.isis.core.metamodel.postprocessors.param;
 
 import java.util.List;
 
+import com.google.common.base.Predicates;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
-import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
@@ -62,7 +62,8 @@ public class ActionCollectionParameterDefaultsAndChoicesPostProcessor implements
 
         // all the actions of this type
         final List<ActionType> actionTypes = inferActionTypes();
-        List<ObjectAction> objectActions = objectSpecification.getObjectActions(actionTypes, Contributed.INCLUDED, Filters.<ObjectAction>any());
+        List<ObjectAction> objectActions = objectSpecification.getObjectActions(actionTypes, Contributed.INCLUDED,
+                Predicates.alwaysTrue());
 
         // and all the collections of this type
         final List<OneToManyAssociation> oneToManyAssociations =

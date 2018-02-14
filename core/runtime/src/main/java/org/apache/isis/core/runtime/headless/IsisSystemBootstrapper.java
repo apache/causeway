@@ -90,8 +90,8 @@ public class IsisSystemBootstrapper {
      * Expects a transaction to have been started
      */
     public void setupModuleRefData() {
-        MetaModelService metaModelService4 = lookupService(MetaModelService.class);
-        FixtureScript refDataSetupFixture = metaModelService4.getAppManifest2().getRefDataSetupFixture();
+        MetaModelService metaModelService = lookupService(MetaModelService.class);
+        FixtureScript refDataSetupFixture = metaModelService.getAppManifest2().getRefDataSetupFixture();
         runFixtureScript(refDataSetupFixture);
     }
 

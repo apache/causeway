@@ -19,10 +19,9 @@ package org.apache.isis.core.runtime.services.background;
 import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import com.google.common.base.Function;
 import com.google.common.base.Throwables;
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
 import org.slf4j.Logger;
@@ -32,7 +31,7 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.services.bookmark.BookmarkService2;
+import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
@@ -41,7 +40,8 @@ import org.apache.isis.applib.services.command.CommandWithDto;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.sudo.SudoService;
-import org.apache.isis.applib.services.xactn.Transaction2;
+import org.apache.isis.applib.services.xactn.Transaction;
+import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
@@ -118,7 +118,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
     }
 
     private void ensureTransactionInProgress() {
-        final Transaction2 currentTransaction = transactionService.currentTransaction();
+        final Transaction currentTransaction = transactionService.currentTransaction();
         if(currentTransaction == null) {
             throw new IllegalStateException("No current transaction");
         }
@@ -133,7 +133,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
         // setup for us by IsisTransactionManager; will have the transactionId of the backgroundCommand
         final Interaction interaction = interactionContext.getInteraction();
 
-        org.apache.isis.applib.annotation.Command.ExecuteIn executeIn = commandWithDto.getExecuteIn();
+        org.apache.isis.applib.annotation.CommandExecuteIn executeIn = commandWithDto.getExecuteIn();
 
         LOG.info("Executing: {} {} {} {}", executeIn, commandWithDto.getMemberIdentifier(), commandWithDto.getTimestamp(), commandWithDto.getTransactionId());
 
@@ -227,7 +227,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
 
         // committing the xactn might also trigger an exception
         try {
-            transactionService.nextTransaction(TransactionService3.Policy.ALWAYS);
+            transactionService.nextTransaction(TransactionService.Policy.ALWAYS);
         } catch(RuntimeException ex) {
 
             LOG.warn("Exception when committing : {} {}", executeIn, commandWithDto.getMemberIdentifier(), ex);
@@ -325,13 +325,12 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
     private ObjectAdapter[] argAdaptersFor(final ActionDto actionDto) {
         final List<ParamDto> params = paramDtosFrom(actionDto);
         final List<ObjectAdapter> args = Lists.newArrayList(
-                Iterables.transform(params, new Function<ParamDto, ObjectAdapter>() {
-                    @Override
-                    public ObjectAdapter apply(final ParamDto paramDto) {
-                        final Object arg = CommonDtoUtils.getValue(paramDto);
-                        return adapterFor(arg);
-                    }
-                })
+                params.stream()
+                        .map(paramDto -> {
+                            final Object arg = CommonDtoUtils.getValue(paramDto);
+                            return adapterFor(arg);
+                        })
+                        .collect(Collectors.toList())
         );
         return args.toArray(new ObjectAdapter[]{});
     }
@@ -409,7 +408,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
     // //////////////////////////////////////
 
     @javax.inject.Inject
-    BookmarkService2 bookmarkService;
+    BookmarkService bookmarkService;
 
     @javax.inject.Inject
     InteractionContext interactionContext;
@@ -421,7 +420,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
     ClockService clockService;
 
     @javax.inject.Inject
-    TransactionService3 transactionService;
+    TransactionService transactionService;
 
     @javax.inject.Inject
     CommandContext commandContext;

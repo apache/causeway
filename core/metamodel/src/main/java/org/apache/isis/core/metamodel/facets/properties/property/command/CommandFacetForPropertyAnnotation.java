@@ -78,7 +78,7 @@ public class CommandFacetForPropertyAnnotation extends CommandFacetAbstract {
                     case NONE:
                         return null;
                     default:
-                        return CommandFacetFromConfiguration.create(holder);
+                        return CommandFacetFromConfiguration.create(holder, servicesInjector);
                     }
                 });
     }

@@ -22,10 +22,10 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 
+import com.google.common.base.Predicates;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Lists;
 
-import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
@@ -56,7 +56,7 @@ public class AssociatedWithActionsHelper implements Serializable {
         final ObjectSpecification objectSpec = getObjectSpecification(isisSessionFactory);
 
         final List<ActionType> actionTypes = inferActionTypes(isisSessionFactory);
-        List<ObjectAction> objectActions = objectSpec.getObjectActions(actionTypes, Contributed.INCLUDED, Filters.<ObjectAction>any());
+        List<ObjectAction> objectActions = objectSpec.getObjectActions(actionTypes, Contributed.INCLUDED, Predicates.alwaysTrue());
 
         return FluentIterable.from(objectActions)
                 .filter(ObjectAction.Predicates.associatedWithAndWithCollectionParameterFor(

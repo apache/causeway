@@ -63,14 +63,4 @@ public enum InvokeOn {
     @Deprecated
     NOT_SPECIFIED;
 
-    @Deprecated
-    public static Bulk.AppliesTo from(final InvokeOn invokeOn) {
-        if(invokeOn == null) return null;
-        if(invokeOn == OBJECT_AND_COLLECTION) return Bulk.AppliesTo.BULK_AND_REGULAR;
-        if(invokeOn == COLLECTION_ONLY) return Bulk.AppliesTo.BULK_ONLY;
-        if(invokeOn == OBJECT_ONLY) return Bulk.AppliesTo.REGULAR_ONLY;
-        // shouldn't happen
-        throw new IllegalArgumentException("Unrecognized appliesTo: " + invokeOn);
-    }
-
 }
