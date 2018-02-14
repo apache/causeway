@@ -23,8 +23,8 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 import org.apache.isis.applib.annotation.Parent;
+import org.apache.isis.applib.internal.base._NullSafe;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.lang.NullSafe;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -66,7 +66,7 @@ public class NavigableParentAnnotationFacetFactory extends FacetFactoryAbstract 
         final List<Annotations.Evaluator<Parent>> evaluators = 
         		Annotations.firstEvaluatorsInHierarchyHaving(cls, Parent.class);
         
-        if (NullSafe.isEmpty(evaluators)) {
+        if (_NullSafe.isEmpty(evaluators)) {
             return; // no parent resolvable
         } else if (evaluators.size()>1) {
         	// code should not be reached, since case should be handled by meta-data validation
@@ -114,7 +114,7 @@ public class NavigableParentAnnotationFacetFactory extends FacetFactoryAbstract 
                 final List<Annotations.Evaluator<Parent>> evaluators = 
                 		Annotations.firstEvaluatorsInHierarchyHaving(cls, Parent.class);
                 
-                if (NullSafe.isEmpty(evaluators)) {
+                if (_NullSafe.isEmpty(evaluators)) {
                 	return true; // no conflict, continue validation processing
                 } else if (evaluators.size()>1) {
                 	
