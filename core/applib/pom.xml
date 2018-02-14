@@ -122,7 +122,6 @@
         <dependency>
             <groupId>org.axonframework</groupId>
             <artifactId>axon-core</artifactId>
-            <optional>true</optional>
         </dependency>
 
         <dependency>
@@ -166,9 +165,11 @@
         <dependency>
             <groupId>org.reflections</groupId>
             <artifactId>reflections</artifactId>
-            <!-- we enforce usage of internal reflective API, 
-       			only applib is allowed to access reflections directly -->
-            <optional>true</optional> 
+            <!--
+            ideally we would like to make this optional (to enforce usage of internal
+             reflective API, with only applib is allowed to access reflections directly.
+              HOWEVER, there is also a runtime dependency on org.reflections.vfs.Vfs.UrlType. -->
+            <optional>false</optional>
         </dependency>
 
 		<!-- provides @Nullable -->
