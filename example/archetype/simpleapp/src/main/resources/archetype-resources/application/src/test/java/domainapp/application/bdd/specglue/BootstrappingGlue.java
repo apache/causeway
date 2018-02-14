@@ -19,11 +19,23 @@ O *  Licensed to the Apache Software Foundation (ASF) under one or more
  */
 package domainapp.application.bdd.specglue;
 
-import org.apache.isis.core.specsupport.specs.CukeGlueBootstrappingAbstract;
+import org.apache.isis.core.runtime.headless.HeadlessWithBootstrappingAbstract;
 
+import cucumber.api.java.After;
+import cucumber.api.java.Before;
 import domainapp.application.DomainAppApplicationModule;
 
-public class BootstrappingGlue extends CukeGlueBootstrappingAbstract {
+public class BootstrappingGlue extends HeadlessWithBootstrappingAbstract {
+
+    @Before(order=100)
+    public void beforeScenario() {
+        super.bootstrapAndSetupIfRequired();
+    }
+
+    @After
+    public void afterScenario(cucumber.api.Scenario sc) {
+        super.tearDownAllModules();
+    }
 
     public BootstrappingGlue() {
         super(new DomainAppApplicationModule());
