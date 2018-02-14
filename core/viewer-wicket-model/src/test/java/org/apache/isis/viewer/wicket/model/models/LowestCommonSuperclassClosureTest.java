@@ -19,14 +19,14 @@
 
 package org.apache.isis.viewer.wicket.model.models;
 
-import static org.junit.Assert.assertThat;
-
+import java.util.Arrays;
 import java.util.List;
 
-import org.apache.isis.core.commons.matchers.IsisMatchers;
 import org.junit.Test;
 
-import com.google.common.collect.Lists;
+import org.apache.isis.core.commons.matchers.IsisMatchers;
+
+import static org.junit.Assert.assertThat;
 
 public class LowestCommonSuperclassClosureTest {
 
@@ -37,29 +37,25 @@ public class LowestCommonSuperclassClosureTest {
     static class Lion extends Mammal {}
     
     @Test
-    public void nothingInCommon() throws Exception {
-        assertLowestCommonOfListIs(listOf(Animal.class, Mineral.class, Vegetable.class), Object.class);
+    public void nothingInCommon() {
+        assertLowestCommonOfListIs(Arrays.asList(new Animal(), new Mineral(), new Vegetable()), Object.class);
     }
 
     @Test
-    public void superclassInCommon() throws Exception {
-        assertLowestCommonOfListIs(listOf(Animal.class, Mammal.class), Animal.class);
+    public void superclassInCommon() {
+        assertLowestCommonOfListIs(Arrays.asList(new Animal(), new Mammal()), Animal.class);
     }
     
     @Test
-    public void subclassInCommon() throws Exception {
-        assertLowestCommonOfListIs(listOf(Lion.class, Lion.class), Lion.class);
+    public void subclassInCommon() {
+        assertLowestCommonOfListIs(Arrays.asList(new Lion(), new Lion()), Lion.class);
     }
     
-    private static void assertLowestCommonOfListIs(List<Class<?>> list, Class<?> expected) {
+    private static void assertLowestCommonOfListIs(List<Object> list, Class<?> expected) {
         EntityCollectionModel.LowestCommonSuperclassFinder finder = 
         		new EntityCollectionModel.LowestCommonSuperclassFinder();
         finder.searchThrough(list);
         assertThat(finder.getLowestCommonSuperclass(), IsisMatchers.classEqualTo(expected));
-    }
-
-    private static List<Class<? extends Object>> listOf(Class<?>... classes) {
-        return Lists.newArrayList(classes);
     }
 
 
