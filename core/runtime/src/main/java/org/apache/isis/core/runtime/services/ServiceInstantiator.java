@@ -157,11 +157,15 @@ public final class ServiceInstantiator {
             final T newInstance = proxySubclass.newInstance();
             final ProxyObject proxyObject = (ProxyObject) newInstance;
             proxyObject.setHandler(new MethodHandler() {
-                private ThreadLocal<T> serviceByThread = new ThreadLocal<>();
-                
+            	// Allow serviceByThread to be propagated from the thread that starts the request 
+            	// to any child-threads, hence InheritableThreadLocal.
+            	private InheritableThreadLocal<T> serviceByThread = new InheritableThreadLocal<>();
+
                 @Override
                 public Object invoke(final Object proxied, final Method proxyMethod, final Method proxiedMethod, final Object[] args) throws Throwable {
 
+                	System.out.println("invoke: "+proxyMethod.getName()+" "+this);
+                	
                     cacheMethodsIfNecessary(cls);
 
                     if(proxyMethod.getName().equals("__isis_startRequest")) {
