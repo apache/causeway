@@ -70,7 +70,7 @@ Extend/adapt these according to your own standards.
 +
 [source,bash]
 ----
-mvn -f pom-jdo-enhance-all.xml datanucleus:enhance
+mvn -pl module-simple datanucleus:enhance -o
 ----
 
 * To also generate the link:https://github.com/eirbjo/jetty-console[Jetty console], allowing the application to run as a standalone JAR: +
