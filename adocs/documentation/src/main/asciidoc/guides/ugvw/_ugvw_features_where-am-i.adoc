@@ -34,16 +34,16 @@ public class Company { ... }
 public class Employee {
 
     @Parent @Getter // annotated field with e.g. lombok provided getter
-	Company myCompany;
+    Company myCompany;
 }
 
 @DomainObject
 public class PhoneNumber {
 
     @Parent  // annotated no-arg supplier
-	Employee employee(){
+    Employee employee(){
         return ...
-	}
+    }
 
 }
 
@@ -55,12 +55,12 @@ Company > Employee > PhoneNumber
 
 === How to use @Parent annotation
 
-. @Parent annotation on members declared with Java interfaces are ignored. These do not contribute to the domain meta model.
+. `@Parent` annotations used within Java interfaces are ignored. These do not contribute to the domain meta model.
 . Any class (abstract or concrete) may at most have one @Parent annotation (on either a method or a field); otherwise meta-model validation will fail.
 . The annotated member (method or field), when ...
-.. ... a method: then must be a no-arg method returning a non-primitive type
+.. ... a method: then must be a no-arg method returning a non-primitive type (e.g. a getter)
 .. ... a field: then the field must be of non-primitive type and must also have a getter (as specified by the Java Beans Standard, particularly to allow @Parent annotations on fields that use the lombok @Getter annotation)
-. Starting from the current concrete domain-object class, we search down the object inheritance hierarchy (super class, super super class, ...), until we find the first class that has a @Parent annotation. That's the one we use to resolve the current domain-object's navigable parent.
+. Starting from the current domain-object class, we search the object's class inheritance hierarchy (super class, super super class, ...), until we find the first class that has a `@Parent` annotation. That's the one we use to resolve the current domain-object's navigable parent.
 
 
 == User Experience
@@ -72,7 +72,7 @@ When viewing a domain object that is part of a hierarchical structure, one can e
 == Related functionality
 
 
-The 'Where am I' functionality is declared at compile-time (predefined by the programmer). Related features (xref:../ugvw/ugvw.adoc#_ugvw_features_recent-pages[Recent Pages] and xref:../ugvw/ugvw.adoc#_ugvw_features_bookmarked-pages[bookmarked pages]) are populated at runtime.
+The 'Where am I' functionality is declared at compile-time (predefined by the programmer). Related features (xref:../ugvw/ugvw.adoc#_ugvw_features_recent-pages[Recent Pages] and xref:../ugvw/ugvw.adoc#_ugvw_features_bookmarked-pages[Bookmarked Pages]) are populated at runtime.
 
 
 == Configuration
@@ -84,7 +84,7 @@ By default, the 'Where am I' feature will show a maximum of 64 links. This can b
 isis.viewer.whereAmI.maxParentChainLength=20
 ----
 
-To disable the 'Where am I' feature, overridden the default (=enabled) using a property (in `isis.properties`):
+To disable the 'Where am I' feature, override the default (=enabled) by using a property (in `isis.properties`):
 
 [source,ini]
 ----
