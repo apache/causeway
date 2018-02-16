@@ -60,7 +60,7 @@ Company > Employee > PhoneNumber
 . The annotated member (method or field), when ...
 .. ... a method: then must be a no-arg method returning a non-primitive type (e.g. a getter)
 .. ... a field: then the field must be of non-primitive type and must also have a getter (as specified by the Java Beans Standard, particularly to allow @Parent annotations on fields that use the lombok @Getter annotation)
-. Starting from the current domain-object class, we search the object's class inheritance hierarchy (super class, super super class, ...), until we find the first class that has a `@Parent` annotation. That's the one we use to resolve the current domain-object's navigable parent.
+. Starting from the current domain-object, we search the object's class inheritance hierarchy (super class, super super class, ...), until we find the first class that has a `@Parent` annotation. That's the one we use to resolve the current domain-object's navigable parent.
 
 
 == User Experience
@@ -72,7 +72,7 @@ When viewing a domain object that is part of a hierarchical structure, one can e
 == Related functionality
 
 
-The 'Where am I' functionality is declared at compile-time (predefined by the programmer). Related features (xref:../ugvw/ugvw.adoc#_ugvw_features_recent-pages[Recent Pages] and xref:../ugvw/ugvw.adoc#_ugvw_features_bookmarked-pages[Bookmarked Pages]) are populated at runtime.
+The navigable tree-structure, as provided by the 'Where am I' feature, is declared at compile-time (predefined by the programmer), whereas related features (xref:../ugvw/ugvw.adoc#_ugvw_features_recent-pages[Recent Pages] and xref:../ugvw/ugvw.adoc#_ugvw_features_bookmarked-pages[Bookmarked Pages]) are populated at runtime only after user interaction.
 
 
 == Configuration
