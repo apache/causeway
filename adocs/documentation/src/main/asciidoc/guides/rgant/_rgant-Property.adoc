@@ -19,24 +19,6 @@ It is also possible to apply the annotation to actions of domain services that a
 | Values (default)
 | Description
 
-|xref:../rgant/rgant.adoc#_rgant-Property_command[`command()`]
-|`AS_CONFIGURED`, `ENABLED`, `DISABLED` +
-(`AS_CONFIGURED`)
-|whether the action invocation should be reified into a `o.a.i.applib.` +
-`services.command.Command` object through the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_CommandContext[`CommandContext`] service.
-
-
-|`commandExecuteIn()`
-|`FOREGROUND`,`BACKGROUND` +
-(`FOREGROUND`)
-|whether to execute the command immediately, or to persist it (assuming that an appropriate implementation of xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`] has been configured) such that a background scheduler can execute the command asynchronously
-
-
-|`commandPersistence()`
-|`PERSISTED`, `NOT_PERSISTED`, `IF_HINTED` +
-(`PERSISTED`)
-|whether the reified `Command` (as provided by the `CommandContext` domain service) should actually be persisted (assuming an appropriate implementation of xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`] has been configured).
-
 
 |xref:../rgant/rgant.adoc#_rgant-Property_command[`command()`]
 |`AS_CONFIGURED`, `ENABLED`, `DISABLED` +
