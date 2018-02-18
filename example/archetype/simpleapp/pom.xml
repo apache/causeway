@@ -21,7 +21,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.apache.isis.archetype</groupId>
     <artifactId>simpleapp-archetype</artifactId>
-    <version>1.16.1-SNAPSHOT</version>
+    <version>1.16.0.20180218-1042</version>
     <packaging>maven-archetype</packaging>
     <name>simpleapp-archetype</name>
     <build>
@@ -70,7 +70,7 @@
     <parent>
         <groupId>org.apache.isis.core</groupId>
         <artifactId>isis</artifactId>
-        <version>1.16.1-SNAPSHOT</version>
+        <version>1.16.0.20180218-1042</version>
         <relativePath>../../../core/pom.xml</relativePath>
     </parent>
     <properties>
