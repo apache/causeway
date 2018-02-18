@@ -1060,11 +1060,6 @@
             </plugin>
 
             <plugin>
-                <groupId>pl.project13.maven</groupId>
-                <artifactId>git-commit-id-plugin</artifactId>
-            </plugin>
-
-            <plugin>
                 <artifactId>maven-remote-resources-plugin</artifactId>
                 <executions>
                     <execution>
@@ -2262,6 +2257,22 @@ ${license.additional-notes}
                                 </goals>
                             </execution>
                         </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>git</id>
+            <activation>
+                <property>
+                    <name>!skip.git</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>pl.project13.maven</groupId>
+                        <artifactId>git-commit-id-plugin</artifactId>
                     </plugin>
                 </plugins>
             </build>
