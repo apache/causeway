@@ -21,7 +21,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.apache.isis.archetype</groupId>
     <artifactId>simpleapp-archetype</artifactId>
-    <version>2.0.0-M1-SNAPSHOT</version>
+    <version>1.16.1-SNAPSHOT</version>
     <packaging>maven-archetype</packaging>
     <name>simpleapp-archetype</name>
     <build>
