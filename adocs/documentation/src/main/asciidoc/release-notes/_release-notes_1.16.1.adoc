@@ -81,10 +81,21 @@ Applications written against v1.16.0 should run against v1.16.1 with few if any 
 
 * link:https://issues.apache.org/jira/browse/ISIS-1813[ISIS-1813] - Release tasks for 1.16.1
 
-=== Duplicates or Not Implemented
+=== Duplicates / Won't Fix / Not Implemented
 
-* link:https://issues.apache.org/jira/browse/ISIS-1500[ISIS-1500] - [DUPLICATE] ReplayService, to directly execute a previously persisted command
 * link:https://issues.apache.org/jira/browse/ISIS-1850[ISIS-1850] - [NOT IMPLEMENTED] Rename 'default' in JSON Response
+* link:https://issues.apache.org/jira/browse/ISIS-1500[ISIS-1500] - [DUPLICATE] ReplayService, to directly execute a previously persisted command
+* link:https://issues.apache.org/jira/browse/ISIS-1395[ISIS-1395] - [WON'T FIX] Bulk actions button is shown for a collection, even if not in table view (eg showing collection as a map)
+* link:https://issues.apache.org/jira/browse/ISIS-1200[ISIS-1200] - [DUPLICATE] Improve support for BDD tests, factoring out domain service to act as context.
+* link:https://issues.apache.org/jira/browse/ISIS-1035[ISIS-1035] - [DUPLICATE] Allow parented collections to have bulk actions associated with them...
+* link:https://issues.apache.org/jira/browse/ISIS-926[ISIS-926] - [WON'T FIX] Allow integration tests to run in parallel, each with a different user. Part of this to include a ProgrammableClockService as a replacement for ClockService, partiitioned by user (to allow concurrent integration tests to run etc).
+* link:https://issues.apache.org/jira/browse/ISIS-834[ISIS-834] - [WON'T FIX] Ensure that only a single implementation of a DomainService is registered.
+* link:https://issues.apache.org/jira/browse/ISIS-804[ISIS-804] - [INVALID] Make (entity) properties read-only by default.
+* link:https://issues.apache.org/jira/browse/ISIS-689[ISIS-689] - [WON'T FIX] Bulk action take arguments
+* link:https://issues.apache.org/jira/browse/ISIS-516[ISIS-516] - [DUPLICATE] Wicket: be able to invoke @Bulk on items within a parent collection (already supported for standalone collections)
+* link:https://issues.apache.org/jira/browse/ISIS-514[ISIS-514] - [WON'T FIX] [DUPLICATE] Feature: Allow @Bulk actions to accept parameters
+* link:https://issues.apache.org/jira/browse/ISIS-505[ISIS-505] - [INVALID] Wicket error handling returns only a 500 if encounter an unenhanced object
+
 
 === Question
 
