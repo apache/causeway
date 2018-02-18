@@ -130,6 +130,11 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
             }
 
             @Override
+            public String getId(final EntityCollectionModel entityCollectionModel) {
+                return null;
+            }
+
+            @Override
             public String getName(final EntityCollectionModel model) {
                 PluralFacet facet = model.getTypeOfSpecification().getFacet(PluralFacet.class);
                 return facet.value();
@@ -187,9 +192,13 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
                 throw new UnsupportedOperationException();
             }
 
+            @Override public String getId(final EntityCollectionModel model) {
+                return model.getCollectionMemento().getCollectionId();
+            }
+
             @Override
             public String getName(EntityCollectionModel model) {
-                return model.getCollectionMemento().getName(model.getSpecificationLoader());
+                return model.getCollectionMemento().getCollectionName();
             }
 
             @Override
@@ -208,6 +217,7 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
 
         abstract void setObject(EntityCollectionModel entityCollectionModel, List<ObjectAdapter> list);
 
+        public abstract String getId(EntityCollectionModel entityCollectionModel);
         public abstract String getName(EntityCollectionModel entityCollectionModel);
 
         public abstract int getCount(EntityCollectionModel entityCollectionModel);
