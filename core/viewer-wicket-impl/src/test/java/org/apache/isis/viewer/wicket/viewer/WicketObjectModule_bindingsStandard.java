@@ -83,7 +83,7 @@ public class WicketObjectModule_bindingsStandard {
 
 	// -- CONFIGURATION BINDING
 
-	public static class ConfigModule extends AbstractModule {
+	private static class ConfigModule extends AbstractModule {
 		@Override 
 		protected void configure() {
 			bind(IsisConfiguration.class).to(IsisConfigurationDefault.class);
