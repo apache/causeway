@@ -55,7 +55,7 @@ public class AuthenticatedWebSessionForIsis_Instantiation {
         new AuthenticatedWebSessionForIsis(stubRequest);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = Exception.class)
     public void requestMustBeProvided() {
         new AuthenticatedWebSessionForIsis(null);
     }

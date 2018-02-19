@@ -22,6 +22,8 @@ package org.apache.isis.viewer.wicket.viewer.integration.wicket;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.validation.constraints.NotNull;
+
 import org.apache.wicket.Session;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.authroles.authorization.strategies.role.Roles;
@@ -29,6 +31,7 @@ import org.apache.wicket.request.Request;
 import org.apache.wicket.request.cycle.RequestCycle;
 
 import org.apache.isis.applib.clock.Clock;
+import org.apache.isis.applib.internal.context._Context;
 import org.apache.isis.applib.services.session.SessionLoggingService;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
@@ -169,21 +172,35 @@ public class AuthenticatedWebSessionForIsis extends AuthenticatedWebSession impl
             final SessionLoggingService.Type type,
             final String username,
             final SessionLoggingService.CausedBy causedBy) {
+    	
+    	
+    	final IsisSessionFactory isisSessionFactory = getIsisSessionFactoryIfAny();
         final SessionLoggingService sessionLoggingService = getSessionLoggingService();
-        if (sessionLoggingService != null) {
-            getIsisSessionFactory().doInSession(new Runnable() {
-                    @Override
-                    public void run() {
-                        // use hashcode as session identifier, to avoid re-binding http sessions if using Session#getId()
-                        int sessionHashCode = System.identityHashCode(AuthenticatedWebSessionForIsis.this);
-                        sessionLoggingService.log(type, username, Clock.getTimeAsDateTime().toDate(), causedBy, Integer.toString(sessionHashCode));
-                    }
-                });
-        }
+        	
+    	final Runnable loggingTask = ()->{
+            // use hashcode as session identifier, to avoid re-binding http sessions if using Session#getId()
+            int sessionHashCode = System.identityHashCode(AuthenticatedWebSessionForIsis.this);
+            sessionLoggingService.log(type, username, Clock.getTimeAsDateTime().toDate(), causedBy, Integer.toString(sessionHashCode));        		
+    	};
+    	
+    	if(isisSessionFactory!=null) {
+    		isisSessionFactory.doInSession(loggingTask);
+    	} else {
+    		loggingTask.run();
+    	}
+        
     }
 
-    protected SessionLoggingService getSessionLoggingService() {
-        return getIsisSessionFactory().getServicesInjector().lookupService(SessionLoggingService.class);
+    protected @NotNull SessionLoggingService getSessionLoggingService() {
+    	try {
+    		final SessionLoggingService service = getIsisSessionFactory().getServicesInjector()
+    				.lookupService(SessionLoggingService.class);
+    		return (service!=null) ? service : new SessionLoggingService.Stderr();
+    	} catch (Exception e) {
+    		// fallback to System.err
+    		return new SessionLoggingService.Stderr(); 
+		}
+    	
     }
 
     @Override
@@ -191,10 +208,19 @@ public class AuthenticatedWebSessionForIsis extends AuthenticatedWebSession impl
         // do nothing here because this will lead to problems with Shiro
         // see https://issues.apache.org/jira/browse/ISIS-1018
     }
+    
+    // -- HELPER
 
-
-    IsisSessionFactory getIsisSessionFactory() {
+    private IsisSessionFactory getIsisSessionFactory() {
         return IsisContext.getSessionFactory();
+    }
+    
+    private IsisSessionFactory getIsisSessionFactoryIfAny() {
+    	try { 
+    		return getIsisSessionFactory();
+    	} catch (Exception e) {
+    		return null;
+		}
     }
 
 

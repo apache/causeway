@@ -62,7 +62,7 @@ public class PageClassListDefault_RegistrationAndCaching {
         registryImpl.registerPage(PageType.ACTION_PROMPT, TestingActionPage.class);
 
         final Class<? extends Page> pageClass = registryImpl.getPageClass(PageType.ACTION_PROMPT);
-        assertThat(pageClass, is(instanceOf(TestingActionPage.class)));
+        assertThat(pageClass, is(org.hamcrest.Matchers.equalTo(TestingActionPage.class)));
     }
 
 }
