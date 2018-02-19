@@ -33,7 +33,7 @@ import com.google.common.collect.Sets;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import org.apache.isis.applib.internal.context._Context;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.factory.InstanceCreationClassException;
@@ -110,8 +110,7 @@ public final class ServiceInstantiator {
     private Class<?> loadClass(final String className) {
         try {
             LOG.debug("loading class for service: {}", className);
-            //return Thread.currentThread().getContextClassLoader().loadClass(className);
-            return Class.forName(className);
+            return _Context.loadClassAndInitialize(className);
         } catch (final ClassNotFoundException ex) {
             throw new InitialisationException(String.format("Cannot find class '%s' for service", className));
         }

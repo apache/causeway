@@ -19,6 +19,8 @@
 
 package org.apache.isis.applib.query;
 
+import org.apache.isis.applib.internal.context._Context;
+
 /**
  * Convenience adapter class for {@link Query}.
  * 
@@ -67,7 +69,7 @@ public abstract class QueryAbstract<T> implements Query<T> {
     public Class<T> getResultType() {
         if (resultType == null) {
             try {
-                resultType = (Class<T>) Thread.currentThread().getContextClassLoader().loadClass(resultTypeName);
+                resultType = (Class<T>) _Context.loadClass(resultTypeName);
             } catch (final ClassNotFoundException e) {
                 throw new IllegalStateException(e);
             }

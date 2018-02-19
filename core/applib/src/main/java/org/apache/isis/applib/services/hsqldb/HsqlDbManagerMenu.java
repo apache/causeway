@@ -34,6 +34,7 @@ import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.internal.context._Context;
 
 @DomainService(
         nature = NatureOfService.VIEW_MENU_ONLY,
@@ -73,7 +74,7 @@ public class HsqlDbManagerMenu {
     public boolean hideHsqlDbManager() {
         try {
             // hsqldb is configured as optional in the applib's pom.xml
-            Thread.currentThread().getContextClassLoader().loadClass(DatabaseManagerSwing.class.getCanonicalName());
+        	_Context.loadClass(DatabaseManagerSwing.class.getCanonicalName());
         } catch (ClassNotFoundException e) {
             return true;
         }

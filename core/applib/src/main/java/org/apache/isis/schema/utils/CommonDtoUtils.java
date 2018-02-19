@@ -22,19 +22,8 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Collection;
 
-import com.google.common.base.Function;
-import com.google.common.base.Objects;
-import com.google.common.base.Optional;
-import com.google.common.base.Predicate;
-import com.google.common.base.Strings;
-import com.google.common.collect.FluentIterable;
-import com.google.common.collect.ImmutableMap;
-
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalDateTime;
-import org.joda.time.LocalTime;
 import org.apache.isis.applib.internal.base._Casts;
+import org.apache.isis.applib.internal.context._Context;
 import org.apache.isis.applib.internal.exceptions._Exceptions;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
@@ -55,6 +44,18 @@ import org.apache.isis.schema.utils.jaxbadapters.JodaDateTimeXMLGregorianCalenda
 import org.apache.isis.schema.utils.jaxbadapters.JodaLocalDateTimeXMLGregorianCalendarAdapter;
 import org.apache.isis.schema.utils.jaxbadapters.JodaLocalDateXMLGregorianCalendarAdapter;
 import org.apache.isis.schema.utils.jaxbadapters.JodaLocalTimeXMLGregorianCalendarAdapter;
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
+import org.joda.time.LocalTime;
+
+import com.google.common.base.Function;
+import com.google.common.base.Objects;
+import com.google.common.base.Optional;
+import com.google.common.base.Predicate;
+import com.google.common.base.Strings;
+import com.google.common.collect.FluentIterable;
+import com.google.common.collect.ImmutableMap;
 
 public final class CommonDtoUtils {
 
@@ -374,28 +375,18 @@ public final class CommonDtoUtils {
 
     private static <T> Class<T> loadClassElseThrow(final String className) {
         try {
-            return _Casts.uncheckedCast(loadClass(className));
+            return _Casts.uncheckedCast(_Context.loadClassAndInitialize(className));
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
+        	
+        	// [ahuber] fallback to pre 2.0.0 behavior, not sure if needed  
+        	try {
+				return _Casts.uncheckedCast(Class.forName(className));
+			} catch (ClassNotFoundException e1) {
+				throw new RuntimeException(e);
+			}
         }
     }
 
-    private static Class<?> loadClass(String className) throws ClassNotFoundException {
-        ClassLoader ccl = Thread.currentThread().getContextClassLoader();
-        if(ccl == null) {
-            return loadClass(className, (ClassLoader)null);
-        } else {
-            try {
-                return loadClass(className, ccl);
-            } catch (ClassNotFoundException var3) {
-                return loadClass(className, (ClassLoader)null);
-            }
-        }
-    }
-
-    private static Class<?> loadClass(String className, ClassLoader classLoader) throws ClassNotFoundException {
-        return classLoader == null?Class.forName(className):Class.forName(className, true, classLoader);
-    }
     //endregion
 
     //region > newValueWithTypeDto

@@ -24,6 +24,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.isis.applib.internal.context._Context;
+
 import com.google.common.collect.Maps;
 
 public final class ClassUtil {
@@ -149,7 +151,7 @@ public final class ClassUtil {
             return primitiveCls;
         }
         try {
-            return Thread.currentThread().getContextClassLoader().loadClass(fullName);
+            return _Context.loadClass(fullName);
         } catch (final ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -160,7 +162,7 @@ public final class ClassUtil {
             return null;
         }
         try {
-            return Thread.currentThread().getContextClassLoader().loadClass(fullName);
+            return _Context.loadClass(fullName);
         } catch (final ClassNotFoundException e) {
             return null;
         }

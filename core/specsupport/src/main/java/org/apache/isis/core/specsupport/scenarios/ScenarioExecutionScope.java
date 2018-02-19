@@ -16,6 +16,7 @@
  */
 package org.apache.isis.core.specsupport.scenarios;
 
+import org.apache.isis.applib.internal.context._Context;
 
 /**
  * The scope at which the specification will run; acts as a factory to create
@@ -39,7 +40,7 @@ public class ScenarioExecutionScope {
     public ScenarioExecutionScope(String scenarioExecutionClassName) {
         try {
             this.scenarioExecutionClass = (Class<? extends ScenarioExecution>) 
-                    Thread.currentThread().getContextClassLoader().loadClass(scenarioExecutionClassName);
+                    _Context.loadClass(scenarioExecutionClassName);
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }

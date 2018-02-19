@@ -22,6 +22,7 @@ package org.apache.isis.core.commons.factory;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
+import org.apache.isis.applib.internal.context._Context;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.lang.ObjectExtensions;
 
@@ -54,7 +55,7 @@ public final class InstanceUtil {
         Class<? extends T> defaultType = null;
         if (defaultTypeName != null) {
             try {
-                defaultType = ObjectExtensions.asT(Thread.currentThread().getContextClassLoader().loadClass(defaultTypeName));
+                defaultType = ObjectExtensions.asT(_Context.loadClass(defaultTypeName));
                 if (defaultType == null) {
                     throw new InstanceCreationClassException(String.format("Failed to load default type '%s'", defaultTypeName));
                 }
@@ -76,7 +77,7 @@ public final class InstanceUtil {
         if (defaultTypeName != null) {
             defaultType = loadClass(defaultTypeName, requiredType);
             try {
-                defaultType = ObjectExtensions.asT(Thread.currentThread().getContextClassLoader().loadClass(defaultTypeName));
+                defaultType = ObjectExtensions.asT(_Context.loadClass(defaultTypeName));
                 if (defaultType == null) {
                     throw new InstanceCreationClassException(String.format("Failed to load default type '%s'", defaultTypeName));
                 }
@@ -96,7 +97,7 @@ public final class InstanceUtil {
             Object... args) {
         Assert.assertNotNull("Class to instantiate must be specified", className);
         try {
-            final Class<?> cls = Thread.currentThread().getContextClassLoader().loadClass(className);
+            final Class<?> cls = _Context.loadClass(className);
             if (cls == null) {
                 throw new InstanceCreationClassException(String.format("Failed to load class '%s'", className));
             }
@@ -149,7 +150,7 @@ public final class InstanceUtil {
     public static Class<?> loadClass(final String className) {
         Assert.assertNotNull("Class to instantiate must be specified", className);
         try {
-            return Thread.currentThread().getContextClassLoader().loadClass(className);
+            return _Context.loadClass(className);
         } catch (final ClassNotFoundException e) {
             throw new UnavailableClassException(String.format("The type '%s' cannot be found", className));
         } catch (final NoClassDefFoundError e) {

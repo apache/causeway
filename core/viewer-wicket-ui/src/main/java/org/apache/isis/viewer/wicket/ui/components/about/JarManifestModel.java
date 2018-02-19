@@ -35,6 +35,7 @@ import com.google.common.base.CharMatcher;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 
+import org.apache.isis.applib.internal.context._Context;
 import org.apache.isis.core.commons.lang.CloseableExtensions;
 import org.apache.isis.viewer.wicket.model.models.ModelAbstract;
 
@@ -75,7 +76,7 @@ public class JarManifestModel extends ModelAbstract<JarManifestModel> {
         
         Enumeration<?> resEnum;
         try {
-            resEnum = Thread.currentThread().getContextClassLoader().getResources(JarFile.MANIFEST_NAME);
+            resEnum = _Context.getDefaultClassLoader().getResources(JarFile.MANIFEST_NAME);
         } catch (IOException e) {
             return;
         }

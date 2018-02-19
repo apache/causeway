@@ -25,13 +25,15 @@ import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.identity.ByteIdentity;
 import javax.jdo.identity.IntIdentity;
 import javax.jdo.identity.LongIdentity;
 import javax.jdo.identity.ObjectIdentity;
 import javax.jdo.identity.StringIdentity;
-import org.datanucleus.identity.DatastoreId;
+
+import org.apache.isis.applib.internal.context._Context;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -39,6 +41,7 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
+import org.datanucleus.identity.DatastoreId;
 
 public final class JdoObjectIdSerializer {
     
@@ -187,7 +190,7 @@ public final class JdoObjectIdSerializer {
 
             final String clsName = distinguisher;
             try {
-                final Class<?> cls = Thread.currentThread().getContextClassLoader().loadClass(clsName);
+                final Class<?> cls = _Context.loadClass(clsName);
                 final Constructor<?> cons = cls.getConstructor(String.class);
                 final Object dnOid = cons.newInstance(keyStr);
                 return dnOid.toString();

@@ -24,6 +24,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.Supplier;
 
+import javax.validation.constraints.NotNull;
+
 import org.apache.isis.applib.internal.base._Casts;
 
 /**
@@ -137,10 +139,35 @@ public final class _Context {
 	 * Will be set by the framework's bootstrapping mechanism if required.
 	 * @return the default class loader
 	 */
-	public static ClassLoader getDefaultClassLoader() {
+	public static @NotNull ClassLoader getDefaultClassLoader() {
 		return getOrElse(ClassLoader.class, FALLBACK_CLASSLOADER);
 	}
+	
+	// -- CLASS LOADING SHORTCUTS
+	
+	/**
+	 * Uses the frameworks default-ClassLoader to load a class by name.
+	 * @param className
+	 * @return class by name
+	 * @throws ClassNotFoundException
+	 */
+	public static Class<?> loadClass(String className) throws ClassNotFoundException{
+		return getDefaultClassLoader().loadClass(className);
+	}
 
+	/**
+	 * Uses the frameworks default-ClassLoader to load and initialize a class by name.<br/>
+	 * <b>Initialize</b> the class, that is, all static initializers will be run. <br/>
+	 * (For details on initialize see Section 12.4 of The Java Language Specification)
+	 * @param className
+	 * @return
+	 * @throws ClassNotFoundException
+	 */
+	public static Class<?> loadClassAndInitialize(String className) throws ClassNotFoundException{
+		return Class.forName(className, true, getDefaultClassLoader());
+	}
+	
+	
 	// -- HELPER
 	
 	private static String toKey(Class<?> type) {

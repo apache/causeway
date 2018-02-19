@@ -21,6 +21,8 @@ package org.apache.isis.core.commons.lang;
 
 import java.io.InputStream;
 
+import org.apache.isis.applib.internal.context._Context;
+
 /**
  * Adapted from Ibatis Common, now with some additional guava stuff.
  */
@@ -29,10 +31,17 @@ public class ResourceUtil {
     private ResourceUtil(){}
 
     public static InputStream getResourceAsStream(final String resource) {
+    	
+        // try Isis's classloader
+        ClassLoader classLoader = _Context.getDefaultClassLoader();
+        InputStream is = classLoader.getResourceAsStream(resource);
+        if (is != null) {
+            return is;
+        }
 
         // try thread's classloader
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        InputStream is = classLoader.getResourceAsStream(resource);
+        classLoader = Thread.currentThread().getContextClassLoader();
+        is = classLoader.getResourceAsStream(resource);
         if (is != null) {
             return is;
         }

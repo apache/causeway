@@ -31,6 +31,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.isis.applib.internal.context._Context;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -969,7 +970,7 @@ public abstract class FieldType<T> {
                 Class<?> cls;
                 try {
                     // ...obtain constructor
-                    cls = Thread.currentThread().getContextClassLoader().loadClass(className);
+                    cls = _Context.loadClass(className);
 
                     final Constructor<?> constructor = cls.getConstructor(new Class[] { DataInputExtended.class });
 
