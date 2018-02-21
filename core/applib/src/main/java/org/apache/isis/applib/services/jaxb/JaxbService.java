@@ -131,22 +131,21 @@ public interface JaxbService {
         }
         @Override
         public <T> T fromXml(final Class<T> domainClass, final String xml, final Map<String, Object> unmarshallerProperties) {
-            try {
-                final JAXBContext context = jaxbContextFor(domainClass);
-                return _Casts.uncheckedCast(fromXml(context, xml, unmarshallerProperties));
-
-            } catch (final JAXBException ex) {
-                throw new NonRecoverableException("Error unmarshalling XML to class '" + domainClass.getName() + "'", ex);
-            }
+            final JAXBContext context = jaxbContextFor(domainClass);
+            return _Casts.uncheckedCast(fromXml(context, xml, unmarshallerProperties));
         }
 
         private Map<Class<?>, JAXBContext> jaxbContextByClass = new MapMaker().concurrencyLevel(10).makeMap();
 
-        private <T> JAXBContext jaxbContextFor(final Class<T> dtoClass) throws JAXBException {
-            JAXBContext jaxbContext = jaxbContextByClass.get(dtoClass);
+        private <T> JAXBContext jaxbContextFor(final Class<T> clazz)  {
+            JAXBContext jaxbContext = jaxbContextByClass.get(clazz);
             if(jaxbContext == null) {
-                jaxbContext = JAXBContext.newInstance(dtoClass);
-                jaxbContextByClass.put(dtoClass, jaxbContext);
+                try {
+                    jaxbContext = JAXBContext.newInstance(clazz);
+                } catch (JAXBException e) {
+                    throw new NonRecoverableException("Error obtaining JAXBContext for class '" + clazz + "'", e);
+                }
+                jaxbContextByClass.put(clazz, jaxbContext);
             }
             return jaxbContext;
         }
@@ -236,7 +235,7 @@ public interface JaxbService {
                 context.generateSchema(outputResolver);
 
                 return outputResolver.asMap();
-            } catch (final JAXBException | IOException ex) {
+            } catch (final IOException ex) {
                 throw new ApplicationException(ex);
             }
         }
