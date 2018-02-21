@@ -25,6 +25,7 @@ import java.util.Objects;
 
 import javax.annotation.PostConstruct;
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
 
 import com.google.common.base.Function;
 import com.google.common.collect.FluentIterable;
@@ -60,20 +61,22 @@ public class GridLoaderServiceDefault implements GridLoaderService {
     // cache (used only in prototyping mode)
     private final Map<String, Grid> gridByXml = Maps.newHashMap();
 
-    private List<Class<? extends Grid>> pageImplementations;
-
-
+    private JAXBContext jaxbContext;
 
     @PostConstruct
     public void init(){
-        pageImplementations = FluentIterable.from(gridSystemServices)
-                .transform(new Function<GridSystemService, Class<? extends Grid>>() {
-                    @Override
-                    public Class<? extends Grid> apply(final GridSystemService gridSystemService) {
-                        return gridSystemService.gridImplementation();
-                    }
-                })
-                .toList();
+        final List<Class<? extends Grid>> pageImplementations =
+                FluentIterable.from(gridSystemServices)
+                    .transform(
+                            (Function<GridSystemService, Class<? extends Grid>>) gss -> gss.gridImplementation())
+                    .toList();
+
+        final Class[] clazz = pageImplementations.toArray(_Constants.emptyClasses);
+        try {
+            jaxbContext = JAXBContext.newInstance(clazz);
+        } catch (JAXBException e) {
+            // leave as null
+        }
     }
 
     @Override
@@ -126,11 +129,14 @@ public class GridLoaderServiceDefault implements GridLoaderService {
             }
         }
 
-        try {
-            // all known implementations of Page
-            final JAXBContext context = JAXBContext.newInstance(pageImplementations.toArray(_Constants.emptyClasses));
 
-            final Grid grid = (Grid) jaxbService.fromXml(context, xml);
+        try {
+            if(jaxbContext == null) {
+                // shouldn't occur, indicates that initialization failed to locate any GridSystemService implementations.
+                return null;
+            }
+            
+            final Grid grid = (Grid) jaxbService.fromXml(jaxbContext, xml);
             grid.setDomainClass(domainClass);
             if(supportsReloading()) {
                 gridByXml.put(xml, grid);

@@ -41,6 +41,7 @@ import com.google.common.io.Resources;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.iactn.Interaction;
+import org.apache.isis.applib.util.JaxbUtil;
 import org.apache.isis.schema.cmd.v1.ParamDto;
 import org.apache.isis.schema.cmd.v1.ParamsDto;
 import org.apache.isis.schema.common.v1.InteractionType;
@@ -65,11 +66,7 @@ public final class InteractionDtoUtils {
     static JAXBContext jaxbContext;
     static JAXBContext getJaxbContext() {
         if(jaxbContext == null) {
-            try {
-                jaxbContext = JAXBContext.newInstance(InteractionDto.class);
-            } catch (JAXBException e) {
-                throw new RuntimeException(e);
-            }
+            jaxbContext = JaxbUtil.jaxbContextFor(InteractionDto.class);
         }
         return jaxbContext;
     }
