@@ -89,7 +89,7 @@ public class JaxbUtil {
 
     private static Map<Class<?>, JAXBContext> jaxbContextByClass = new MapMaker().concurrencyLevel(10).makeMap();
 
-    private static <T> JAXBContext jaxbContextFor(final Class<T> dtoClass)  {
+    public static <T> JAXBContext jaxbContextFor(final Class<T> dtoClass)  {
         JAXBContext jaxbContext = jaxbContextByClass.get(dtoClass);
         if(jaxbContext == null) {
             try {
