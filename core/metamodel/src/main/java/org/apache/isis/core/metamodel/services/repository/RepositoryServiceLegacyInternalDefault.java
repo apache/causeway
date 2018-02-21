@@ -22,11 +22,10 @@ package org.apache.isis.core.metamodel.services.repository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import javax.annotation.PostConstruct;
-
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
+import javax.annotation.PostConstruct;
 
 import org.apache.isis.applib.PersistFailedException;
 import org.apache.isis.applib.RepositoryException;
@@ -37,17 +36,22 @@ import org.apache.isis.applib.internal.base._NullSafe;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.query.QueryFindAllInstances;
 import org.apache.isis.applib.services.factory.FactoryService;
-import org.apache.isis.applib.services.repository.RepositoryService;
+import org.apache.isis.applib.services.repository.RepositoryServiceLegacy;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 
+/**
+ * 
+ * Legacy Service default implementation to ease transition from Isis 1.x to 2.x.
+ *
+ */
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
 )
-public class RepositoryServiceInternalDefault implements RepositoryService {
+public class RepositoryServiceLegacyInternalDefault implements RepositoryServiceLegacy {
 
     private boolean autoFlush;
 
@@ -150,13 +154,18 @@ public class RepositoryServiceInternalDefault implements RepositoryService {
     // //////////////////////////////////////
 
     @Programmatic
-	@Override
-	public <T> List<T> allMatches(Class<T> ofType, final Predicate<? super T> predicate, long... range) {
-		return _NullSafe.stream(allInstances(ofType, range))
-				.filter(predicate)
-				.collect(Collectors.toCollection(ArrayList::new));
-	}
-
+    @Override
+    public <T> List<T> allMatches(final Class<T> cls, final com.google.common.base.Predicate<? super T> predicate, long... range) {
+        final List<T> allInstances = allInstances(cls, range);
+        final List<T> filtered = new ArrayList<T>();
+        for (final T instance : allInstances) {
+            if (predicate.apply(instance)) {
+                filtered.add(instance);
+            }
+        }
+        return filtered;
+    }
+    
     @Programmatic
     @Override
     public <T> List<T> allMatches(final Query<T> query) {
@@ -174,16 +183,16 @@ public class RepositoryServiceInternalDefault implements RepositoryService {
 
     // //////////////////////////////////////
 
+
     @Programmatic
     @Override
-    public <T> T uniqueMatch(final Class<T> type, final Predicate<T> predicate) {
+    public <T> T uniqueMatch(final Class<T> type, final com.google.common.base.Predicate<T> predicate) {
         final List<T> instances = allMatches(type, predicate, 0, 2); // No need to fetch more than 2.
         if (instances.size() > 1) {
             throw new RepositoryException("Found more than one instance of " + type + " matching filter " + predicate);
         }
         return firstInstanceElseNull(instances);
     }
-
 
     @Programmatic
     @Override
@@ -195,7 +204,36 @@ public class RepositoryServiceInternalDefault implements RepositoryService {
         return firstInstanceElseNull(instances);
     }
 
+
     // //////////////////////////////////////
+
+
+    @Programmatic
+    @Override
+    public <T> T firstMatch(final Class<T> cls, final com.google.common.base.Predicate<T> predicate) {
+        final List<T> allInstances = allInstances(cls); // Have to fetch all, as matching is done in next loop
+        for (final T instance : allInstances) {
+            if (predicate.apply(instance)) {
+                return instance;
+            }
+        }
+        return null;
+    }
+
+    @Programmatic
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T> T firstMatch(final Query<T> query) {
+        if(autoFlush) {
+            transactionService.flushTransaction();
+        }
+        final ObjectAdapter firstMatching = persistenceSessionServiceInternal.firstMatchingQuery(query);
+        return (T) ObjectAdapter.Util.unwrap(firstMatching);
+    }
+
+
+    // //////////////////////////////////////
+
 
     private static <T> T firstInstanceElseNull(final List<T> instances) {
         return instances.size() == 0 ? null : instances.get(0);

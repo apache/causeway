@@ -20,12 +20,19 @@
 package org.apache.isis.applib.services.repository;
 
 import java.util.List;
-import java.util.function.Predicate;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.query.Query;
 
-public interface RepositoryService {
+/**
+ * Legacy interface to ease transition from Isis 1.x to 2.x.
+ * 
+ * @deprecated use {@link RepositoryService} instead. 
+ * (Requires you to refactor Guava Predicates to Java Predicates in your domain code.)
+ * 
+ */
+@Deprecated
+public interface RepositoryServiceLegacy {
 
     /**
      * Normally any queries are automatically preceded by flushing pending executions.
@@ -142,9 +149,11 @@ public interface RepositoryService {
      * @see #allMatches(Class, Predicate, long...)
      *
      * @param range 2 longs, specifying 0-based start and count.
+     * @deprecated will be removed, use drop in replacement {@link #allMatches(Class, Predicate, long...)}
+     * utilizing java.util.function.Predicate 
      */
-    @Programmatic
-    <T> List<T> allMatches(final Class<T> ofType, final Predicate<? super T> predicate, long... range);
+    @Programmatic @Deprecated //TODO ISIS-1827 remove guava from public API
+    <T> List<T> allMatches(final Class<T> ofType, final com.google.common.base.Predicate<? super T> predicate, long... range);
     
     /**
      * Returns all the instances that match the given {@link Query}.
@@ -164,22 +173,45 @@ public interface RepositoryService {
     <T> List<T> allMatches(Query<T> query);
 
     /**
-     * Find the only instance of the specified type (including subtypes) that
-     * has the specified title.
-     *
-     * <p>
-     * If no instance is found then <tt>null</tt> will be return, while if there
-     * is more that one instances a run-time exception will be thrown.
+     * Returns the first instance of the specified type (including subtypes)
+     * that matches the supplied {@link Predicate}, or <tt>null</tt> if none.
      *
      * <p>
      * This method is useful during exploration/prototyping, but - because the filtering is performed client-side -
      * this method is only really suitable for initial development/prototyping, or for classes with very few
-     * instances.  Use {@link #uniqueMatch(Query)} for production code.
+     * instances.  Use {@link #firstMatch(Query)} for production code.
      * </p>
+     *
+     * @deprecated - use {@link #uniqueMatch(Class, Predicate)} or {@link #allMatches(Class, Predicate, long...)}
      */
+    @Deprecated //TODO ISIS-1827 remove guava from public API 
+    @Programmatic 
+    <T> T firstMatch(final Class<T> ofType, final com.google.common.base.Predicate<T> predicate);
+
+    /**
+     * Returns the first instance that matches the supplied query, or <tt>null</tt> if none.
+     *
+     * <p>
+     *     This method is the recommended way of querying for an instance when one or more may match.  See also
+     *     {@link #uniqueMatch(Query)}.
+     * </p>
+     *
+     * @see #uniqueMatch(Query)
+     *
+     * @deprecated - use {@link #uniqueMatch(Query)} or {@link #allMatches(Query)}.
+     */
+    @Deprecated
     @Programmatic
-    <T> T uniqueMatch(final Class<T> ofType, final Predicate<T> predicate);
+    <T> T firstMatch(Query<T> query);
     
+    /**
+     * @deprecated will be removed, use drop in replacement {@link #uniqueMatch(Class, Predicate)}
+     * utilizing java.util.function.Predicate 
+     */
+    @Programmatic @Deprecated //TODO ISIS-1827 remove guava from public API 
+    <T> T uniqueMatch(final Class<T> ofType, final com.google.common.base.Predicate<T> predicate);
+
+
     /**
      * Find the only instance that matches the provided query.
      *
