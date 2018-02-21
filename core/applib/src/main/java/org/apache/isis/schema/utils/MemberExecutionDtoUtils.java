@@ -20,6 +20,7 @@ package org.apache.isis.schema.utils;
 
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.util.Map;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
@@ -28,6 +29,8 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.namespace.QName;
 import javax.xml.transform.stream.StreamSource;
+
+import com.google.common.collect.MapMaker;
 
 import org.apache.isis.applib.internal.base._Casts;
 import org.apache.isis.schema.common.v1.DifferenceDto;
@@ -45,7 +48,7 @@ public final class MemberExecutionDtoUtils {
 
     private static <T> T clone(final T dto, final Class<T> dtoClass) {
         try {
-            JAXBContext jaxbContext = JAXBContext.newInstance(dtoClass);
+            JAXBContext jaxbContext = jaxbContextFor(dtoClass);
 
             final Marshaller marshaller = jaxbContext.createMarshaller();
 
@@ -66,6 +69,17 @@ public final class MemberExecutionDtoUtils {
         } catch (JAXBException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private static Map<Class<?>, JAXBContext> jaxbContextByClass = new MapMaker().concurrencyLevel(10).makeMap();
+
+    private static <T> JAXBContext jaxbContextFor(final Class<T> dtoClass) throws JAXBException {
+        JAXBContext jaxbContext = jaxbContextByClass.get(dtoClass);
+        if(jaxbContext == null) {
+            jaxbContext = JAXBContext.newInstance(dtoClass);
+            jaxbContextByClass.put(dtoClass, jaxbContext);
+        }
+        return jaxbContext;
     }
 
     public static MetricsDto metricsFor(final MemberExecutionDto executionDto) {
