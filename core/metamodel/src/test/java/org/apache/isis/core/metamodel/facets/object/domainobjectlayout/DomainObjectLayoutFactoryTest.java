@@ -52,6 +52,8 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
 
     DomainObjectLayoutFacetFactory facetFactory;
 
+    // -- TEST LIFE CYCLING
+    
     @Before
     public void setUp() throws Exception {
         facetFactory = new DomainObjectLayoutFacetFactory();
@@ -64,6 +66,8 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
         super.tearDown();
     }
 
+    // -- DOMAIN OBJECTS FOR TESTING
+    
     @DomainObjectLayout(
             bookmarking = BookmarkPolicy.AS_ROOT,
             cssClass = "foobar",
@@ -74,12 +78,10 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
             paged = 20,
             plural = "Customers Plural Form"
     )
-    class Customer {
-    }
-    @DomainObjectLayout(
-    )
-    class CustomerWithDefaults {
-    }
+    class Customer { }
+    
+    @DomainObjectLayout 
+    class CustomerWithDefaults { }
 
     @ViewModelLayout(
             bookmarking = BookmarkPolicy.AS_ROOT,
@@ -91,12 +93,12 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
             paged = 20,
             plural = "Customers Plural Form"
     )
-    class CustomerViewModel {
-    }
-    @ViewModelLayout(
-    )
-    class CustomerViewModelWithDefaults {
-    }
+    class CustomerViewModel { }
+    
+    @ViewModelLayout
+    class CustomerViewModelWithDefaults { }
+    
+    // -- LAYOUT TESTS
 
     public static class Bookmarking extends DomainObjectLayoutFactoryTest {
 
@@ -118,7 +120,9 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
                 assertNotNull(facet);
                 assertTrue(facet instanceof BookmarkPolicyFacetForDomainObjectLayoutAnnotation);
 
-                final BookmarkPolicyFacetForDomainObjectLayoutAnnotation facetImpl = (BookmarkPolicyFacetForDomainObjectLayoutAnnotation) facet;
+                final BookmarkPolicyFacetForDomainObjectLayoutAnnotation facetImpl = 
+                		(BookmarkPolicyFacetForDomainObjectLayoutAnnotation) facet;
+                
                 Assert.assertThat(facetImpl.value(), is(BookmarkPolicy.AS_ROOT));
 
                 expectNoMethodsRemoved();
@@ -131,8 +135,8 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
 
                 facetFactory.process(new FacetFactory.ProcessClassContext(cls, mockMethodRemover, facetHolder));
 
-                final Facet facet = facetHolder.getFacet(BookmarkPolicyFacet.class);
-                assertNull(facet);
+                final BookmarkPolicyFacet facet = facetHolder.getFacet(BookmarkPolicyFacet.class);
+                Assert.assertThat(facet.value(), is(BookmarkPolicy.NOT_SPECIFIED));
 
                 expectNoMethodsRemoved();
             }
@@ -165,14 +169,16 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
 
                 facetFactory.process(new FacetFactory.ProcessClassContext(cls, mockMethodRemover, facetHolder));
 
-                final Facet facet = facetHolder.getFacet(BookmarkPolicyFacet.class);
-                assertNull(facet);
+                final BookmarkPolicyFacet facet = facetHolder.getFacet(BookmarkPolicyFacet.class);
+                Assert.assertThat(facet.value(), is(BookmarkPolicy.NOT_SPECIFIED));
 
                 expectNoMethodsRemoved();
             }
         }
 
     }
+    
+    // --
 
     public static class CssClass extends DomainObjectLayoutFactoryTest {
 
@@ -608,8 +614,9 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
 
                 facetFactory.process(new FacetFactory.ProcessClassContext(cls, mockMethodRemover, facetHolder));
 
-                final Facet facet = facetHolder.getFacet(PluralFacet.class);
-                assertNull(facet);
+                final PluralFacet facet = facetHolder.getFacet(PluralFacet.class);
+                assertNotNull(facet);
+                Assert.assertThat(facet.value(), is(""));
 
                 expectNoMethodsRemoved();
             }
