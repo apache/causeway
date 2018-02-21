@@ -46,8 +46,9 @@ public class PublishedObjectFacetForDomainObjectAnnotation extends PublishedObje
                     switch (publishing) {
                     case AS_CONFIGURED:
                         return setting == PublishObjectsConfiguration.NONE
-                                ? (PublishedObjectFacet)new PublishedObjectFacetForDomainObjectAnnotationAsConfigured(holder)
-                                : null;
+                                ? null
+                                : (PublishedObjectFacet)new PublishedObjectFacetForDomainObjectAnnotationAsConfigured(holder)
+                                ;
                     case DISABLED:
                         return null;
                     case ENABLED:
