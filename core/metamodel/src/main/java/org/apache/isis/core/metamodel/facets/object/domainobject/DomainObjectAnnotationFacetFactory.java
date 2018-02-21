@@ -192,7 +192,7 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
                 .filter(a -> a.autoCompleteRepository != Object.class)
                 .filter(a -> isServiceType(cls, "@DomainObject", a.autoCompleteRepository))
                 .peek(a -> a.repositoryMethod = findRepositoryMethod(cls, "@DomainObject", a.autoCompleteRepository, a.autoCompleteAction))
-                .filter(a -> a.repositoryMethod == null)
+                .filter(a -> a.repositoryMethod != null)
                 .findFirst()
                 .map(a -> new AutoCompleteFacetForDomainObjectAnnotation(
                         facetHolder, a.autoCompleteRepository, a.repositoryMethod, servicesInjector))
