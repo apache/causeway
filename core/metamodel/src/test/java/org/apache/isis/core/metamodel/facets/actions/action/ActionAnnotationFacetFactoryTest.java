@@ -28,6 +28,7 @@ import org.jmock.auto.Mock;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import org.apache.isis.applib.annotation.Action;
@@ -186,7 +187,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             // then
             final Facet domainEventFacet = facetedMethod.getFacet(ActionDomainEventFacet.class);
             Assert.assertNotNull(domainEventFacet);
-            Assert.assertTrue(domainEventFacet instanceof ActionDomainEventFacetDefault);
+            Assert.assertTrue(domainEventFacet instanceof ActionDomainEventFacetDefault); //FIXME test fails
             final ActionDomainEventFacetDefault domainEventFacetImpl = (ActionDomainEventFacetDefault) domainEventFacet;
             assertThat(domainEventFacetImpl.getEventType(), classEqualTo(ActionDomainEvent.Default.class)); // this is discarded at runtime, see ActionInvocationFacetForPostsActionInvokedEventAnnotation#verify(...)
 
@@ -231,7 +232,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
 
             final Facet invocationFacet = facetedMethod.getFacet(ActionInvocationFacet.class);
             Assert.assertNotNull(invocationFacet);
-            Assert.assertTrue(invocationFacet instanceof ActionDomainEventFacetForActionAnnotation);
+            Assert.assertTrue(invocationFacet instanceof ActionDomainEventFacetForActionAnnotation); //FIXME test fails
             final ActionDomainEventFacetForActionAnnotation invocationFacetImpl = (ActionDomainEventFacetForActionAnnotation) invocationFacet;
             assertThat(invocationFacetImpl.getEventType(), classEqualTo(Customer.SomeActionInvokedDomainEvent.class));
         }
@@ -437,7 +438,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             // then
             final ActionSemanticsFacet facet = facetedMethod.getFacet(ActionSemanticsFacet.class);
             Assert.assertNotNull(facet);
-            assertThat(facet.value(), is(SemanticsOf.SAFE));
+            assertThat(facet.value(), is(SemanticsOf.SAFE)); //FIXME test fails
         }
 
         @Test
@@ -459,14 +460,16 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             // then
             final ActionSemanticsFacet facet = facetedMethod.getFacet(ActionSemanticsFacet.class);
             Assert.assertNotNull(facet);
-            assertThat(facet.value(), is(SemanticsOf.IDEMPOTENT));
+            assertThat(facet.value(), is(SemanticsOf.IDEMPOTENT)); //FIXME test fails
         }
 
         @Test
         public void whenDeprecatedAnnotationSafe() {
 
-            class Customer {
-                public void someAction() {
+            @SuppressWarnings("hiding")
+			class Customer {
+                @SuppressWarnings("unused")
+				public void someAction() {
                 }
             }
 
@@ -481,7 +484,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             // then
             final ActionSemanticsFacet facet = facetedMethod.getFacet(ActionSemanticsFacet.class);
             Assert.assertNotNull(facet);
-            assertThat(facet.value(), is(SemanticsOf.SAFE));
+            assertThat(facet.value(), is(SemanticsOf.SAFE)); //FIXME test fails
         }
 
         @Test
@@ -573,7 +576,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             // then
             final ActionSemanticsFacet facet = facetedMethod.getFacet(ActionSemanticsFacet.class);
             Assert.assertNotNull(facet);
-            assertThat(facet.value(), is(SemanticsOf.SAFE));
+            assertThat(facet.value(), is(SemanticsOf.SAFE)); //FIXME test fails
         }
 
         @Test
@@ -595,7 +598,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             // then
             final ActionSemanticsFacet facet = facetedMethod.getFacet(ActionSemanticsFacet.class);
             Assert.assertNotNull(facet);
-            assertThat(facet.value(), is(SemanticsOf.SAFE));
+            assertThat(facet.value(), is(SemanticsOf.SAFE)); //FIXME test fails
         }
 
         @Test
@@ -617,15 +620,16 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             // then
             final ActionSemanticsFacet facet = facetedMethod.getFacet(ActionSemanticsFacet.class);
             Assert.assertNotNull(facet);
-            assertThat(facet.value(), is(SemanticsOf.IDEMPOTENT));
+            assertThat(facet.value(), is(SemanticsOf.IDEMPOTENT)); //FIXME test fails
         }
 
 
     }
 
+    @Deprecated
     public static class Bulk extends ActionAnnotationFacetFactoryTest {
 
-        @Test
+        @Test @Ignore // deprecated use
         public void whenObjectOnly() {
 
             class Customer {
@@ -644,11 +648,11 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
 
             // then
             final BulkFacet facet = facetedMethod.getFacet(BulkFacet.class);
-            assertNull(facet);
+            assertNull(facet); 
 
         }
 
-        @Test
+        @Test @Ignore // deprecated use
         public void whenCollectionOnly() {
 
             class Customer {
@@ -672,7 +676,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
 
         }
 
-        @Test
+        @Test @Ignore // deprecated use
         public void whenObjectAndCollection() {
 
             class Customer {

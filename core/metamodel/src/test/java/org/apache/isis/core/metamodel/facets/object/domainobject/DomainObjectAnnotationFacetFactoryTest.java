@@ -437,15 +437,24 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
         @Before
         public void setUp() throws Exception {
             super.setUp();
-            ignoringConfiguration();
+            
+            context.checking(new Expectations() {
+                {
+                    allowing(mockServicesInjector).isRegisteredService(CustomerRepository.class);
+                    will(returnValue(true));
+
+                    // anything else
+                    ignoring(mockConfiguration);
+                }
+            });
+            
         }
 
-        //FIXME test fails with
-        // java.lang.AssertionError: unexpected invocation: mockServicesInjector.isRegisteredService(<class org.apache.isis.core.metamodel.facets.object.domainobject.DomainObjectAnnotationFacetFactoryTest$AutoComplete$CustomerRepository>)
         @Test
         public void whenDomainObjectAndAutoCompleteRepositoryAndAction() {
 
-            facetFactory.process(new ProcessClassContext(CustomerWithDomainObjectAndAutoCompleteRepositoryAndAction.class, mockMethodRemover, facetHolder)); //FIXME
+            facetFactory.process(new ProcessClassContext(
+            		CustomerWithDomainObjectAndAutoCompleteRepositoryAndAction.class, mockMethodRemover, facetHolder));
 
             final Facet facet = facetHolder.getFacet(AutoCompleteFacet.class);
             Assert.assertNotNull(facet);
@@ -460,15 +469,14 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
             expectNoMethodsRemoved();
         }
 
-        //FIXME test fails with
-        // java.lang.AssertionError: unexpected invocation: mockServicesInjector.isRegisteredService(<class org.apache.isis.core.metamodel.facets.object.domainobject.DomainObjectAnnotationFacetFactoryTest$AutoComplete$CustomerRepository>)
         @Test
         public void whenDomainObjectAndAutoCompleteRepository() {
 
-            facetFactory.process(new ProcessClassContext(CustomerWithDomainObjectAndAutoCompleteRepository.class, mockMethodRemover, facetHolder)); //FIXME
+            facetFactory.process(new ProcessClassContext(
+            		CustomerWithDomainObjectAndAutoCompleteRepository.class, mockMethodRemover, facetHolder)); 
 
             final Facet facet = facetHolder.getFacet(AutoCompleteFacet.class);
-            Assert.assertNotNull(facet);
+            Assert.assertNotNull(facet); //FIXME test fails
 
             Assert.assertTrue(facet instanceof AutoCompleteFacetForDomainObjectAnnotation);
 
@@ -483,7 +491,8 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
         @Test
         public void whenDomainObjectAnnotationButNoAutoComplete() {
 
-            facetFactory.process(new ProcessClassContext(CustomerWithDomainObjectButNoAutoCompleteRepository.class, mockMethodRemover, facetHolder));
+            facetFactory.process(new ProcessClassContext(
+            		CustomerWithDomainObjectButNoAutoCompleteRepository.class, mockMethodRemover, facetHolder));
 
             final Facet facet = facetHolder.getFacet(AutoCompleteFacet.class);
             Assert.assertNull(facet);
@@ -494,7 +503,8 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
         @Test
         public void whenNoDomainObjectAnnotation() {
 
-            facetFactory.process(new ProcessClassContext(DomainObjectAnnotationFacetFactoryTest.Customer.class, mockMethodRemover, facetHolder));
+            facetFactory.process(new ProcessClassContext(
+            		DomainObjectAnnotationFacetFactoryTest.Customer.class, mockMethodRemover, facetHolder));
 
             final Facet facet = facetHolder.getFacet(AutoCompleteFacet.class);
             Assert.assertNull(facet);

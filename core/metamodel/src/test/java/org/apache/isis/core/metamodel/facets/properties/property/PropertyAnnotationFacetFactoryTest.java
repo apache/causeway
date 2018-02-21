@@ -190,7 +190,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             // then
             final Facet domainEventFacet = facetedMethod.getFacet(PropertyDomainEventFacet.class);
             Assert.assertNotNull(domainEventFacet);
-            Assert.assertTrue(domainEventFacet instanceof PropertyDomainEventFacetDefault);
+            Assert.assertTrue(domainEventFacet instanceof PropertyDomainEventFacetDefault); //FIXME test fails
             final PropertyDomainEventFacetDefault domainEventFacetDefault = (PropertyDomainEventFacetDefault) domainEventFacet;
             assertThat(domainEventFacetDefault.getEventType(), classEqualTo(PropertyDomainEvent.Default.class)); // this is discarded at runtime, see PropertySetterFacetForPostsPropertyChangedEventAnnotation#verify(...)
 

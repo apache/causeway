@@ -133,7 +133,6 @@ public class ActionLayoutXmlLayoutAnnotationFacetFactoryTest extends AbstractFac
         public void testDefaultPosition() {
 
             class Customer {
-                @SuppressWarnings("unused")
                 @ActionLayout(cssClassFa = "font-awesome")
                 public String foz() {
                     return null;
@@ -143,6 +142,9 @@ public class ActionLayoutXmlLayoutAnnotationFacetFactoryTest extends AbstractFac
 
             context.checking(new Expectations() {
                 {
+                	allowing(mockConfiguration).getString("isis.viewer.wicket.promptStyle");
+                	will(returnValue(null));
+                	
                     allowing(mockSpecificationLoader).loadSpecification(Customer.class);
                     will(returnValue(mockObjSpec));
 
@@ -155,7 +157,7 @@ public class ActionLayoutXmlLayoutAnnotationFacetFactoryTest extends AbstractFac
             });
 
             facetFactory.process(new ProcessMethodContext(Customer.class, null, method, mockMethodRemover,
-                    facetedMethod));
+                    facetedMethod)); 
 
             Facet facet = facetedMethod.getFacet(CssClassFaFacet.class);
             assertThat(facet, is(notNullValue()));
@@ -169,7 +171,6 @@ public class ActionLayoutXmlLayoutAnnotationFacetFactoryTest extends AbstractFac
         public void testRightPosition() {
 
             class Customer {
-                @SuppressWarnings("unused")
                 @ActionLayout(cssClassFa = "font-awesome", cssClassFaPosition = ActionLayout.CssClassFaPosition.RIGHT)
                 public String foz() {
                     return null;
@@ -179,6 +180,9 @@ public class ActionLayoutXmlLayoutAnnotationFacetFactoryTest extends AbstractFac
 
             context.checking(new Expectations() {
                 {
+                	allowing(mockConfiguration).getString("isis.viewer.wicket.promptStyle");
+                	will(returnValue(null));                	
+                	
                     allowing(mockSpecificationLoader).loadSpecification(Customer.class);
                     will(returnValue(mockObjSpec));
 
