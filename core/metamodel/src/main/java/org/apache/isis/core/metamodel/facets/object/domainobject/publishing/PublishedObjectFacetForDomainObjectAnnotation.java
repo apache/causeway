@@ -23,6 +23,7 @@ import java.util.List;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Publishing;
+import org.apache.isis.applib.internal.exceptions._Exceptions;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.publishedobject.PublishedObjectFacet;
@@ -51,6 +52,8 @@ public class PublishedObjectFacetForDomainObjectAnnotation extends PublishedObje
                         return null;
                     case ENABLED:
                         return new PublishedObjectFacetForDomainObjectAnnotation(holder);
+                    case NOT_SPECIFIED:
+                    	throw _Exceptions.unexpectedCodeReach(); // case filtered out above 
                     }
                     throw new IllegalStateException("domainObject.publishing() not recognised, is " + publishing);
 
