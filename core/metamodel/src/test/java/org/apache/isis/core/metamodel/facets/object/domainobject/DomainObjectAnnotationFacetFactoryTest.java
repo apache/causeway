@@ -161,8 +161,9 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
                 facetFactory.process(new ProcessClassContext(DomainObjectAnnotationFacetFactoryTest.Customer.class, mockMethodRemover, facetHolder));
 
-                final Facet facet = facetHolder.getFacet(AuditableFacet.class);
-                Assert.assertNull(facet);
+                final AuditableFacet facet = facetHolder.getFacet(AuditableFacet.class);
+                Assert.assertNotNull(facet); 
+                Assert.assertThat(facet.isDisabled(), is(false));
 
                 expectNoMethodsRemoved();
             }
@@ -173,8 +174,9 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
                 facetFactory.process(new ProcessClassContext(DomainObjectAnnotationFacetFactoryTest.Customer.class, mockMethodRemover, facetHolder));
 
-                final Facet facet = facetHolder.getFacet(AuditableFacet.class);
-                Assert.assertNull(facet);
+                final AuditableFacet facet = facetHolder.getFacet(AuditableFacet.class);
+                Assert.assertNotNull(facet); 
+                Assert.assertThat(facet.isDisabled(), is(false));
 
                 expectNoMethodsRemoved();
             }
@@ -201,8 +203,9 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
                 facetFactory.process(new ProcessClassContext(CustomerWithDomainObjectAndAuditingSetToAsConfigured.class, mockMethodRemover, facetHolder));
 
-                final Facet facet = facetHolder.getFacet(AuditableFacet.class);
-                Assert.assertNull(facet);
+                final AuditableFacet facet = facetHolder.getFacet(AuditableFacet.class);
+                Assert.assertNotNull(facet);
+                Assert.assertThat(facet.isDisabled(), is(false));
 
                 expectNoMethodsRemoved();
             }
@@ -213,8 +216,9 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
                 facetFactory.process(new ProcessClassContext(CustomerWithDomainObjectAndAuditingSetToAsConfigured.class, mockMethodRemover, facetHolder));
 
-                final Facet facet = facetHolder.getFacet(AuditableFacet.class);
-                Assert.assertNull(facet);
+                final AuditableFacet facet = facetHolder.getFacet(AuditableFacet.class);
+                Assert.assertNotNull(facet);
+                Assert.assertThat(facet.isDisabled(), is(false));
 
                 expectNoMethodsRemoved();
             }
@@ -245,8 +249,13 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
                 facetFactory.process(new ProcessClassContext(CustomerWithDomainObjectAndAuditingSetToDisabled.class, mockMethodRemover, facetHolder));
 
-                final Facet facet = facetHolder.getFacet(AuditableFacet.class);
-                Assert.assertNull(facet);
+                final AuditableFacet facet = facetHolder.getFacet(AuditableFacet.class);
+                Assert.assertNotNull(facet);
+                
+                Assert.assertThat(facet.isDisabled(), is(true));
+                Assert.assertThat(facet.alwaysReplace(), is(true));
+                Assert.assertThat(facet.isNoop(), is(false));
+                Assert.assertThat(facet.isDerived(), is(false));
 
                 expectNoMethodsRemoved();
             }
@@ -333,7 +342,12 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
                 final Facet facet = facetHolder.getFacet(PublishedObjectFacet.class);
                 Assert.assertNotNull(facet);
-                Assert.assertTrue(facet instanceof PublishedObjectFacetForDomainObjectAnnotationAsConfigured);
+                
+                System.out.println("debug: "+facet.getClass().getName()); //FIXME remove debug
+                
+                //FIXME test fails because type is 
+                //org.apache.isis.core.metamodel.facets.object.domainobject.publishing.PublishedObjectFacetFromConfiguration
+                Assert.assertTrue(facet instanceof PublishedObjectFacetForDomainObjectAnnotationAsConfigured); //FIXME
 
                 expectNoMethodsRemoved();
             }
@@ -345,7 +359,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
                 facetFactory.process(new ProcessClassContext(CustomerWithDomainObjectAndPublishingSetToAsConfigured.class, mockMethodRemover, facetHolder));
 
                 final Facet facet = facetHolder.getFacet(PublishedObjectFacet.class);
-                Assert.assertNull(facet);
+                Assert.assertNull(facet); //FIXME test fails
 
                 expectNoMethodsRemoved();
             }
@@ -357,7 +371,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
                 facetFactory.process(new ProcessClassContext(CustomerWithDomainObjectAndPublishingSetToAsConfigured.class, mockMethodRemover, facetHolder));
 
                 final Facet facet = facetHolder.getFacet(PublishedObjectFacet.class);
-                Assert.assertNull(facet);
+                Assert.assertNull(facet); //FIXME test fails
 
                 expectNoMethodsRemoved();
             }
@@ -389,8 +403,13 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
                 facetFactory.process(new ProcessClassContext(CustomerWithDomainObjectAndPublishingSetToDisabled.class, mockMethodRemover, facetHolder));
 
-                final Facet facet = facetHolder.getFacet(AuditableFacet.class);
-                Assert.assertNull(facet);
+                final AuditableFacet facet = facetHolder.getFacet(AuditableFacet.class);
+                Assert.assertNotNull(facet);
+                
+                Assert.assertThat(facet.isDisabled(), is(false));
+                Assert.assertThat(facet.alwaysReplace(), is(true));
+                Assert.assertThat(facet.isNoop(), is(false));
+                Assert.assertThat(facet.isDerived(), is(false));
 
                 expectNoMethodsRemoved();
             }
@@ -421,10 +440,12 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
             ignoringConfiguration();
         }
 
+        //FIXME test fails with
+        // java.lang.AssertionError: unexpected invocation: mockServicesInjector.isRegisteredService(<class org.apache.isis.core.metamodel.facets.object.domainobject.DomainObjectAnnotationFacetFactoryTest$AutoComplete$CustomerRepository>)
         @Test
         public void whenDomainObjectAndAutoCompleteRepositoryAndAction() {
 
-            facetFactory.process(new ProcessClassContext(CustomerWithDomainObjectAndAutoCompleteRepositoryAndAction.class, mockMethodRemover, facetHolder));
+            facetFactory.process(new ProcessClassContext(CustomerWithDomainObjectAndAutoCompleteRepositoryAndAction.class, mockMethodRemover, facetHolder)); //FIXME
 
             final Facet facet = facetHolder.getFacet(AutoCompleteFacet.class);
             Assert.assertNotNull(facet);
@@ -439,10 +460,12 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
             expectNoMethodsRemoved();
         }
 
+        //FIXME test fails with
+        // java.lang.AssertionError: unexpected invocation: mockServicesInjector.isRegisteredService(<class org.apache.isis.core.metamodel.facets.object.domainobject.DomainObjectAnnotationFacetFactoryTest$AutoComplete$CustomerRepository>)
         @Test
         public void whenDomainObjectAndAutoCompleteRepository() {
 
-            facetFactory.process(new ProcessClassContext(CustomerWithDomainObjectAndAutoCompleteRepository.class, mockMethodRemover, facetHolder));
+            facetFactory.process(new ProcessClassContext(CustomerWithDomainObjectAndAutoCompleteRepository.class, mockMethodRemover, facetHolder)); //FIXME
 
             final Facet facet = facetHolder.getFacet(AutoCompleteFacet.class);
             Assert.assertNotNull(facet);
@@ -645,8 +668,8 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
                 facetFactory.process(new ProcessClassContext(CustomerWithDomainObjectAndEditingSetToEnabled.class, mockMethodRemover, facetHolder));
 
-                final Facet facet = facetHolder.getFacet(ImmutableFacet.class);
-                Assert.assertNull(facet);
+                final ImmutableFacet facet = facetHolder.getFacet(ImmutableFacet.class);
+                Assert.assertNull(facet); //FIXME test fails
 
                 expectNoMethodsRemoved();
             }
