@@ -38,6 +38,7 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.internal.base._Casts;
 import org.apache.isis.applib.internal.base._NullSafe;
 import org.apache.isis.applib.services.dto.Dto_downloadXsd;
+import org.apache.isis.applib.util.JaxbUtil;
 
 public interface JaxbService {
 
@@ -135,21 +136,13 @@ public interface JaxbService {
             return _Casts.uncheckedCast(fromXml(context, xml, unmarshallerProperties));
         }
 
-        private Map<Class<?>, JAXBContext> jaxbContextByClass = new MapMaker().concurrencyLevel(10).makeMap();
-
         private <T> JAXBContext jaxbContextFor(final Class<T> clazz)  {
-            JAXBContext jaxbContext = jaxbContextByClass.get(clazz);
-            if(jaxbContext == null) {
-                try {
-                    jaxbContext = JAXBContext.newInstance(clazz);
-                } catch (JAXBException e) {
-                    throw new NonRecoverableException("Error obtaining JAXBContext for class '" + clazz + "'", e);
-                }
-                jaxbContextByClass.put(clazz, jaxbContext);
+            try {
+                return JaxbUtil.jaxbContextFor(clazz);
+            } catch (RuntimeException e) {
+                throw new NonRecoverableException("Error obtaining JAXBContext for class '" + clazz + "'", e.getCause());
             }
-            return jaxbContext;
         }
-
 
         @Override
         public String toXml(final Object domainObject) {
