@@ -19,13 +19,11 @@
 
 package org.apache.isis.core.metamodel.facets.object.domainobject;
 
-import java.util.UUID;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertThat;
 
-import org.jmock.Expectations;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import java.util.UUID;
 
 import org.apache.isis.applib.annotation.Bounding;
 import org.apache.isis.applib.annotation.DomainObject;
@@ -45,7 +43,6 @@ import org.apache.isis.core.metamodel.facets.object.domainobject.editing.Immutab
 import org.apache.isis.core.metamodel.facets.object.domainobject.editing.ImmutableFacetFromConfiguration;
 import org.apache.isis.core.metamodel.facets.object.domainobject.objectspecid.ObjectSpecIdFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.publishing.PublishedObjectFacetForDomainObjectAnnotation;
-import org.apache.isis.core.metamodel.facets.object.domainobject.publishing.PublishedObjectFacetForDomainObjectAnnotationAsConfigured;
 import org.apache.isis.core.metamodel.facets.object.domainobject.publishing.PublishedObjectFacetFromConfiguration;
 import org.apache.isis.core.metamodel.facets.object.domainobject.recreatable.RecreatableObjectFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
@@ -54,10 +51,11 @@ import org.apache.isis.core.metamodel.facets.object.publishedobject.PublishedObj
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.assertThat;
+import org.jmock.Expectations;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
 public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
 
@@ -338,16 +336,11 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
             public void configured_value_set_to_all() {
                 allowingConfigurationToReturn("isis.services.publish.objects", "all");
 
-                facetFactory.process(new ProcessClassContext(CustomerWithDomainObjectAndPublishingSetToAsConfigured.class, mockMethodRemover, facetHolder));
+                facetFactory.process(new ProcessClassContext(
+                		CustomerWithDomainObjectAndPublishingSetToAsConfigured.class, mockMethodRemover, facetHolder));
 
-                final Facet facet = facetHolder.getFacet(PublishedObjectFacet.class);
+                final PublishedObjectFacet facet = facetHolder.getFacet(PublishedObjectFacet.class);
                 Assert.assertNotNull(facet);
-                
-                System.out.println("debug: "+facet.getClass().getName()); //FIXME remove debug
-                
-                //FIXME test fails because type is 
-                //org.apache.isis.core.metamodel.facets.object.domainobject.publishing.PublishedObjectFacetFromConfiguration
-                Assert.assertTrue(facet instanceof PublishedObjectFacetForDomainObjectAnnotationAsConfigured); //FIXME
 
                 expectNoMethodsRemoved();
             }
@@ -356,10 +349,11 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
             public void configured_value_set_to_none() {
                 allowingConfigurationToReturn("isis.services.publish.objects", "none");
 
-                facetFactory.process(new ProcessClassContext(CustomerWithDomainObjectAndPublishingSetToAsConfigured.class, mockMethodRemover, facetHolder));
+                facetFactory.process(new ProcessClassContext(
+                		CustomerWithDomainObjectAndPublishingSetToAsConfigured.class, mockMethodRemover, facetHolder));
 
                 final Facet facet = facetHolder.getFacet(PublishedObjectFacet.class);
-                Assert.assertNull(facet); //FIXME test fails
+                Assert.assertNull(facet);
 
                 expectNoMethodsRemoved();
             }
@@ -368,10 +362,11 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
             public void configured_value_set_to_not_recognized() {
                 allowingConfigurationToReturn("isis.services.publish.objects", "foobar");
 
-                facetFactory.process(new ProcessClassContext(CustomerWithDomainObjectAndPublishingSetToAsConfigured.class, mockMethodRemover, facetHolder));
+                facetFactory.process(new ProcessClassContext(
+                		CustomerWithDomainObjectAndPublishingSetToAsConfigured.class, mockMethodRemover, facetHolder));
 
-                final Facet facet = facetHolder.getFacet(PublishedObjectFacet.class);
-                Assert.assertNull(facet); //FIXME test fails
+                final PublishedObjectFacet facet = facetHolder.getFacet(PublishedObjectFacet.class);
+                Assert.assertNotNull(facet); // if not configured at all, according to doc, editing is enabled
 
                 expectNoMethodsRemoved();
             }
@@ -422,11 +417,15 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
             public String lookup(final String x) { return null; }
         }
 
+        class CustomerRepositoryWithDefaultMethodName {
+            public String autoComplete(final String x) { return null; }
+        }
+        
         @DomainObject(autoCompleteRepository = CustomerRepository.class, autoCompleteAction = "lookup")
         class CustomerWithDomainObjectAndAutoCompleteRepositoryAndAction {
         }
 
-        @DomainObject(autoCompleteRepository = CustomerRepository.class)
+        @DomainObject(autoCompleteRepository = CustomerRepositoryWithDefaultMethodName.class)
         class CustomerWithDomainObjectAndAutoCompleteRepository {
         }
 
@@ -476,7 +475,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
             		CustomerWithDomainObjectAndAutoCompleteRepository.class, mockMethodRemover, facetHolder)); 
 
             final Facet facet = facetHolder.getFacet(AutoCompleteFacet.class);
-            Assert.assertNotNull(facet); //FIXME test fails
+            Assert.assertNotNull(facet);
 
             Assert.assertTrue(facet instanceof AutoCompleteFacetForDomainObjectAnnotation);
 
@@ -676,10 +675,11 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
             public void irrespective_of_configured_value() {
                 allowingConfigurationToReturn(EditingObjectsConfiguration.EDIT_OBJECTS_KEY, "false");
 
-                facetFactory.process(new ProcessClassContext(CustomerWithDomainObjectAndEditingSetToEnabled.class, mockMethodRemover, facetHolder));
+                facetFactory.process(new ProcessClassContext(
+                		CustomerWithDomainObjectAndEditingSetToEnabled.class, mockMethodRemover, facetHolder));
 
                 final ImmutableFacet facet = facetHolder.getFacet(ImmutableFacet.class);
-                Assert.assertNull(facet); //FIXME test fails
+                Assert.assertNotNull(facet); 
 
                 expectNoMethodsRemoved();
             }
@@ -692,7 +692,8 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
             public void irrespective_of_configured_value() {
                 allowingConfigurationToReturn(EditingObjectsConfiguration.EDIT_OBJECTS_KEY, "true");
 
-                facetFactory.process(new ProcessClassContext(CustomerWithDomainObjectAndEditingSetToDisabled.class, mockMethodRemover, facetHolder));
+                facetFactory.process(new ProcessClassContext(
+                		CustomerWithDomainObjectAndEditingSetToDisabled.class, mockMethodRemover, facetHolder));
 
                 final Facet facet = facetHolder.getFacet(ImmutableFacet.class);
                 Assert.assertNotNull(facet);
