@@ -34,6 +34,7 @@ import javax.xml.bind.Unmarshaller;
 
 import com.google.common.io.Resources;
 
+import org.apache.isis.applib.util.JaxbUtil;
 import org.apache.isis.schema.chg.v1.ChangesDto;
 
 public final class ChangesDtoUtils {
@@ -46,11 +47,7 @@ public final class ChangesDtoUtils {
     static JAXBContext jaxbContext;
     static JAXBContext getJaxbContext() {
         if(jaxbContext == null) {
-            try {
-                jaxbContext = JAXBContext.newInstance(ChangesDto.class);
-            } catch (JAXBException e) {
-                throw new RuntimeException(e);
-            }
+            jaxbContext = JaxbUtil.jaxbContextFor(ChangesDto.class);
         }
         return jaxbContext;
     }
