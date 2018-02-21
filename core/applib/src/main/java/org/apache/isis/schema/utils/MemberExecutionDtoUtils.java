@@ -73,10 +73,14 @@ public final class MemberExecutionDtoUtils {
 
     private static Map<Class<?>, JAXBContext> jaxbContextByClass = new MapMaker().concurrencyLevel(10).makeMap();
 
-    private static <T> JAXBContext jaxbContextFor(final Class<T> dtoClass) throws JAXBException {
+    private static <T> JAXBContext jaxbContextFor(final Class<T> dtoClass)  {
         JAXBContext jaxbContext = jaxbContextByClass.get(dtoClass);
         if(jaxbContext == null) {
-            jaxbContext = JAXBContext.newInstance(dtoClass);
+            try {
+                jaxbContext = JAXBContext.newInstance(dtoClass);
+            } catch (JAXBException e) {
+                throw new RuntimeException(e);
+            }
             jaxbContextByClass.put(dtoClass, jaxbContext);
         }
         return jaxbContext;
