@@ -23,6 +23,7 @@ import org.apache.shiro.config.IniSecurityManagerFactory;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.util.Factory;
+import org.apache.shiro.util.ThreadContext;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.After;
@@ -65,7 +66,7 @@ public class ShiroAuthenticatorOrAuthorizorTest_isVisibleInAnyRole {
 
     @After
     public void tearDown() throws Exception {
-        Subject subject = SecurityUtils.getSubject();
+        Subject subject = ThreadContext.getSubject();
         if(subject != null) {
             subject.logout();
         }
