@@ -366,7 +366,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
                 		CustomerWithDomainObjectAndPublishingSetToAsConfigured.class, mockMethodRemover, facetHolder));
 
                 final PublishedObjectFacet facet = facetHolder.getFacet(PublishedObjectFacet.class);
-                Assert.assertNotNull(facet); // if not configured at all, according to doc, editing is enabled
+                Assert.assertNull(facet); 
 
                 expectNoMethodsRemoved();
             }
