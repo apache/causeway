@@ -19,7 +19,6 @@
 package org.apache.isis.viewer.restfulobjects.applib;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThat;
 
@@ -32,16 +31,18 @@ public class RepresentationTypeTest_lookup {
 
     @Test
     public void roundtrip() {
-        // overloaded
-        for (final RepresentationType repType : RepresentationType.values()) {
-            final MediaType mediaType = repType.getMediaType();
-            final RepresentationType lookup = RepresentationType.lookup(mediaType);
-            assertSame(repType, lookup);
-        }
-
         for (final RepresentationType repType : RepresentationType.values()) {
             final String name = repType.getName();
             final RepresentationType lookup = RepresentationType.lookup(name);
+            assertSame(repType, lookup);
+        }
+    }
+    
+    @Test
+    public void roundtrip_overloaded() {
+        for (final RepresentationType repType : RepresentationType.values()) {
+            final MediaType mediaType = repType.getJsonMediaType();
+            final RepresentationType lookup = RepresentationType.lookup(mediaType);
             assertSame(repType, lookup);
         }
     }
@@ -61,8 +62,10 @@ public class RepresentationTypeTest_lookup {
 
     @Test
     public void whenDomainObjectWithXRoParameter() {
-        MediaType toLookup = RepresentationType.DOMAIN_OBJECT.getMediaType("x-ro-domain-type", "http://mycompany.com:39393/domain-types/JdkValuedEntities");
-        // ignores the parameter.
+        MediaType toLookup = RepresentationType.DOMAIN_OBJECT
+        		.getMediaType("x-ro-domain-type", "http://mycompany.com:39393/domain-types/JdkValuedEntities");
+        
+        // ignores the parameter ...
         assertThat(
             RepresentationType.lookup(toLookup), is(RepresentationType.DOMAIN_OBJECT));
     }

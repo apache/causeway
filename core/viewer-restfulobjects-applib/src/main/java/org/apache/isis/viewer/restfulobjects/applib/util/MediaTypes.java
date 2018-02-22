@@ -19,6 +19,9 @@
 
 package org.apache.isis.viewer.restfulobjects.applib.util;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import javax.ws.rs.core.MediaType;
 
 import org.apache.isis.applib.internal.base._Strings;
@@ -29,7 +32,8 @@ public class MediaTypes {
 	 * Same as {@code MediaType.valueOf(type)}, but with fallback in case {@code MediaType.valueOf(type)}
 	 * throws an IllegalArgumentException.
 	 * <br/><br/>
-	 * The fallback is to retry with String {@code type} cut off at first occurrence of a semicolon (;).
+	 * 
+	 * The fallback is to retry with some special characters replaces in String {@code type}.
 	 * 
 	 * @param type
 	 * @return
@@ -45,10 +49,21 @@ public class MediaTypes {
 			
 		} catch (IllegalArgumentException e) {
 
-			return _Strings.splitThenStream(type, ";")
-			.findFirst()
-			.map(MediaType::valueOf)
-			.orElseThrow(()->e); // could can't be reached, but re-throw the original exception just in case
+			
+			List<String> chunks = _Strings.splitThenStream(type, ";")
+			.collect(Collectors.toList());
+			
+			final StringBuilder sb = new StringBuilder(); 
+			sb.append(chunks.get(0));
+			
+			if(chunks.size()>1) {
+				chunks.stream()
+				.skip(1)
+				.map(chunk->chunk.replace(":", "..").replace("/", "."))
+				.forEach(chunk->sb.append(';').append(chunk));
+			}
+
+			return MediaType.valueOf(sb.toString());
 			
 		}
 		
