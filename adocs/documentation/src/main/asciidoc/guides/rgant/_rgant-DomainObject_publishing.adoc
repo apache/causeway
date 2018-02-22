@@ -26,7 +26,7 @@ all changed objects are published
 +
 no changed objects are published
 
-If there is no configuration property in `isis.properties` then publishing is automatically enabled for domain objects.
+If there is no configuration property in `isis.properties` then publishing is automatically disabled for domain objects.
 
 This default can be overridden on an object-by-object basis; if `publishing()` is set to `ENABLED` then changed instances of the domain class are published irrespective of the configured value; if set to `DISABLED` then the changed instances are _not_ published, again irrespective of the configured value.
 
