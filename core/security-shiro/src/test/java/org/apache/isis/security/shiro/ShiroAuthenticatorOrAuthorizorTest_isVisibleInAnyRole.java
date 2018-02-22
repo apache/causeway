@@ -23,6 +23,7 @@ import org.apache.shiro.config.IniSecurityManagerFactory;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.util.Factory;
+import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.After;
 import org.junit.Before;
@@ -52,6 +53,12 @@ public class ShiroAuthenticatorOrAuthorizorTest_isVisibleInAnyRole {
 
     @Before
     public void setUp() throws Exception {
+    	
+    	context.checking(new Expectations() {{
+            allowing(mockConfiguration).getBoolean("isis.authentication.shiro.autoLogoutIfAlreadyAuthenticated", false);
+            will(returnValue(false));
+        }});
+    	
         authOrAuth = new ShiroAuthenticatorOrAuthorizor(mockConfiguration);
         authOrAuth.init(DeploymentCategory.PRODUCTION);
     }

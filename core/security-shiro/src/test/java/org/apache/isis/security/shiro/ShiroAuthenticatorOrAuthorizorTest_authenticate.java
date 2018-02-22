@@ -18,16 +18,10 @@
  */
 package org.apache.isis.security.shiro;
 
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.config.IniSecurityManagerFactory;
-import org.apache.shiro.mgt.SecurityManager;
-import org.apache.shiro.subject.Subject;
-import org.apache.shiro.util.Factory;
-import org.jmock.auto.Mock;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.junit.Assert.assertThat;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -37,11 +31,17 @@ import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequestPassword;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.assertThat;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.config.IniSecurityManagerFactory;
+import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.subject.Subject;
+import org.apache.shiro.util.Factory;
+import org.jmock.Expectations;
+import org.jmock.auto.Mock;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
 
 public class ShiroAuthenticatorOrAuthorizorTest_authenticate {
 
@@ -55,8 +55,14 @@ public class ShiroAuthenticatorOrAuthorizorTest_authenticate {
 
     @Before
     public void setUp() throws Exception {
-        authOrAuth = new ShiroAuthenticatorOrAuthorizor(mockConfiguration);
-        authOrAuth.init(DeploymentCategory.PRODUCTION);
+        
+    	context.checking(new Expectations() {{
+            allowing(mockConfiguration).getBoolean("isis.authentication.shiro.autoLogoutIfAlreadyAuthenticated", false);
+            will(returnValue(false));
+        }});
+    	
+   		authOrAuth = new ShiroAuthenticatorOrAuthorizor(mockConfiguration);
+    	authOrAuth.init(DeploymentCategory.PRODUCTION);
     }
 
     @After
