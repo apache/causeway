@@ -21,6 +21,7 @@ package org.apache.isis.core.wrapper;
 
 import java.lang.reflect.Method;
 import java.util.Collections;
+import java.util.List;
 
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
@@ -35,6 +36,7 @@ import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.wrapper.DisabledException;
 import org.apache.isis.applib.services.wrapper.HiddenException;
 import org.apache.isis.applib.services.wrapper.InvalidException;
+import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -58,6 +60,7 @@ import org.apache.isis.core.metamodel.services.persistsession.PersistenceSession
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.OneToOneAssociationDefault;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
@@ -69,6 +72,7 @@ import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.progmodel.wrapper.dom.employees.Employee;
 import org.apache.isis.progmodel.wrapper.dom.employees.EmployeeRepository;
 import org.apache.isis.progmodel.wrapper.dom.employees.EmployeeRepositoryImpl;
+import org.apache.isis.schema.cmd.v1.CommandDto;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -146,6 +150,21 @@ public class WrapperFactoryDefaultTest_wrappedObject {
 
         context.checking(new Expectations() {
             {
+                allowing(mockIsisSessionFactory).getServicesInjector();
+                will(returnValue(mockServicesInjector));
+
+                allowing(mockIsisSessionFactory).getSpecificationLoader();
+                will(returnValue(mockSpecificationLoader));
+
+                allowing(mockServicesInjector).getPersistenceSessionServiceInternal();
+                will(returnValue(mockPersistenceSessionServiceInternal));
+
+                allowing(mockPersistenceSessionServiceInternal).adapterFor(employeeDO);
+                will(returnValue(mockEmployeeAdapter));
+
+                allowing(mockServicesInjector).getAuthenticationSessionProvider();
+                will(returnValue(mockAuthenticationSessionProvider));
+
                 allowing(mockEmployeeAdapter).getOid();
                 will(returnValue(RootOid.create(ObjectSpecId.of("EMP"), "1")));
 
@@ -157,6 +176,12 @@ public class WrapperFactoryDefaultTest_wrappedObject {
 
                 allowing(mockServicesInjector).lookupService(CommandContext.class);
                 will(returnValue(mockCommandContext));
+
+                allowing(mockServicesInjector).lookupService(CommandDtoServiceInternal.class);
+                will(returnValue(mockCommandDtoServiceInternal));
+
+                allowing(mockCommandDtoServiceInternal).asCommandDto(with(any(List.class)), with(any(OneToOneAssociation.class)), with(any(ObjectAdapter.class)));
+                will(returnValue(new CommandDto()));
 
                 allowing(mockCommandContext).getCommand();
                 will(returnValue(mockCommand));
@@ -199,6 +224,16 @@ public class WrapperFactoryDefaultTest_wrappedObject {
 
                 allowing(mockEmployeeSpec).getMember(methodOf(Employee.class, "getEmployeeRepository"));
                 will(returnValue(null));
+
+                allowing(mockAdapterForStringJones).isDestroyed();
+                will(returnValue(false));
+
+                allowing(mockAdapterForStringJones).getSpecification();
+                will(returnValue(mockStringSpec));
+
+                allowing(mockPersistenceSessionServiceInternal).adapterFor("Jones");
+                will(returnValue(mockAdapterForStringJones));
+
             }
         });
 
@@ -222,6 +257,9 @@ public class WrapperFactoryDefaultTest_wrappedObject {
 
         context.checking(new Expectations() {
             {
+                allowing(mockServicesInjector).lookupService(WrapperFactory.class);
+                will(returnValue(wrapperFactory));
+
                 allowing(mockEmployeeSpec).getMember(employeeGetNameMethod);
                 will(returnValue(employeeNameMember));
 
@@ -323,15 +361,6 @@ public class WrapperFactoryDefaultTest_wrappedObject {
 
                 oneOf(mockConfiguration).getBoolean("isis.reflector.facet.filterVisibility", true);
                 will(returnValue(true));
-
-                allowing(mockAdapterForStringJones).isDestroyed();
-                will(returnValue(false));
-
-                allowing(mockAdapterForStringJones).getSpecification();
-                will(returnValue(mockStringSpec));
-
-                allowing(mockPersistenceSessionServiceInternal).adapterFor("Jones");
-                will(returnValue(mockAdapterForStringJones));
 
                 ignoring(mockStringSpec);
             }

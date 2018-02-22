@@ -24,6 +24,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import com.google.common.base.Predicate;
+
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Before;
@@ -33,11 +35,11 @@ import org.junit.Test;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.services.wrapper.DisabledException;
+import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.events.PropertyModifyEvent;
 import org.apache.isis.applib.services.wrapper.events.PropertyUsabilityEvent;
 import org.apache.isis.applib.services.wrapper.events.PropertyVisibilityEvent;
-import com.google.common.base.Predicate;
-import org.apache.isis.applib.services.wrapper.DisabledException;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -54,10 +56,10 @@ import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAbstractAlwaysEverywhere;
 import org.apache.isis.core.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacetViaSetterMethod;
-import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
 import org.apache.isis.core.runtime.authentication.standard.SimpleSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
@@ -136,6 +138,21 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
 
         context.checking(new Expectations() {
             {
+                allowing(mockIsisSessionFactory).getServicesInjector();
+                will(returnValue(mockServicesInjector));
+
+                allowing(mockIsisSessionFactory).getSpecificationLoader();
+                will(returnValue(mockSpecificationLoader));
+
+                allowing(mockServicesInjector).getPersistenceSessionServiceInternal();
+                will(returnValue(mockPersistenceSessionServiceInternal));
+
+                allowing(mockPersistenceSessionServiceInternal).adapterFor(employeeDO);
+                will(returnValue(mockEmployeeAdapter));
+
+                allowing(mockServicesInjector).getAuthenticationSessionProvider();
+                will(returnValue(mockAuthenticationSessionProvider));
+
                 allowing(mockServicesInjector).getSpecificationLoader();
                 will(returnValue(mockSpecificationLoader));
 
@@ -183,6 +200,9 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
 
                 allowing(mockPasswordMember).isOneToManyAssociation();
                 will(returnValue(false));
+
+                allowing(mockServicesInjector).lookupService(WrapperFactory.class);
+                will(returnValue(wrapperFactory));
             }
         });
 
