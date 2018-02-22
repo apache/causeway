@@ -418,16 +418,17 @@ public interface ObjectAction extends ObjectMember {
             return org.apache.isis.applib.filter.Filters.asPredicate(Filters.memberOrderOf(association));
         }
 
-        public static Predicate<ObjectAction> associatedWith(final String collectionName) {
-            return new AssociatedWith(collectionName);
+        public static Predicate<ObjectAction> associatedWith(final ObjectAssociation objectAssociation) {
+            return new AssociatedWith(objectAssociation);
         }
 
         public static Predicate<ObjectAction> associatedWithAndWithCollectionParameterFor(
-                final String collectionName,
-                final ObjectSpecification collectionTypeOfSpec) {
+                final OneToManyAssociation collection) {
+
+            final ObjectSpecification collectionTypeOfSpec = collection.getSpecification();
 
             return com.google.common.base.Predicates.and(
-                    new AssociatedWith(collectionName),
+                    new AssociatedWith(collection),
                     new HasParameterMatching(
                         new ObjectActionParameter.Predicates.CollectionParameter(collectionTypeOfSpec)
                     )
@@ -435,9 +436,12 @@ public interface ObjectAction extends ObjectMember {
         }
 
         public static class AssociatedWith implements Predicate<ObjectAction> {
-            private final String memberNameAssociatedWith;
-            public AssociatedWith(final String memberNameAssociatedWith) {
-                this.memberNameAssociatedWith = memberNameAssociatedWith;
+            private final String memberId;
+            private final String memberName;
+
+            public AssociatedWith(final ObjectAssociation objectAssociation) {
+                this.memberId = objectAssociation.getId();
+                this.memberName = objectAssociation.getName();
             }
 
             @Override
@@ -446,10 +450,13 @@ public interface ObjectAction extends ObjectMember {
                 if(memberOrderFacet == null) {
                     return false;
                 }
-                final String name = memberNameAssociatedWith;
                 final String memberOrderName = memberOrderFacet.untranslatedName();
-                return name != null && memberOrderName != null &&
-                       Objects.equal(name.toLowerCase(), memberOrderName.toLowerCase());
+                if (memberOrderName == null) {
+                    return false;
+                }
+                final String memberOrderNameLowerCase = memberOrderName.toLowerCase();
+                return memberName != null && Objects.equal(memberName.toLowerCase(), memberOrderNameLowerCase) ||
+                       memberId   != null && Objects.equal(memberId.toLowerCase(), memberOrderNameLowerCase);
             }
         }
 

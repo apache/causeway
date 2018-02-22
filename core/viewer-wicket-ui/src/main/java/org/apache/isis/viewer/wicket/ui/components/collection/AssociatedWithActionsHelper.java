@@ -33,6 +33,7 @@ import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
@@ -53,6 +54,9 @@ public class AssociatedWithActionsHelper implements Serializable {
         if(collectionModel.isStandalone()) {
             return Collections.emptyList();
         }
+        final OneToManyAssociation collection = collectionModel.getCollectionMemento()
+                .getCollection(isisSessionFactory.getSpecificationLoader());
+
         final ObjectSpecification objectSpec = getObjectSpecification(isisSessionFactory);
 
         final List<ActionType> actionTypes = inferActionTypes(isisSessionFactory);
@@ -60,8 +64,8 @@ public class AssociatedWithActionsHelper implements Serializable {
 
         return FluentIterable.from(objectActions)
                 .filter(ObjectAction.Predicates.associatedWithAndWithCollectionParameterFor(
-                            collectionModel.getName(),
-                            collectionModel.getTypeOfSpecification()))
+                            collection
+                ))
                 .toList();
     }
 

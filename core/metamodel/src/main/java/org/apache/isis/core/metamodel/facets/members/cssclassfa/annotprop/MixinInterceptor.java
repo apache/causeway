@@ -20,8 +20,6 @@
 package org.apache.isis.core.metamodel.facets.members.cssclassfa.annotprop;
 
 import java.lang.reflect.Method;
-import java.util.List;
-import java.util.Optional;
 
 import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.core.metamodel.facets.Annotations;
@@ -30,7 +28,7 @@ import org.apache.isis.core.metamodel.specloader.specimpl.ObjectMemberAbstract;
 /**
  * To solve <a href="https://issues.apache.org/jira/browse/ISIS-1743">ISIS-1743</a>.<br/>
  * Could be better integrated into Isis' meta-model.
- * 
+ *
  * @author ahuber@apache.org
  */
 class MixinInterceptor {

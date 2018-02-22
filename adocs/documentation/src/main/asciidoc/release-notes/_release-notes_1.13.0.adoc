@@ -125,7 +125,7 @@ now removed/unsupported.  We therefore do recommend that you read and keep in mi
 * link:https://issues.apache.org/jira/browse/ISIS-1458[ISIS-1458] - Possible incomplete auditing for "non-trivial" updates
 * link:https://issues.apache.org/jira/browse/ISIS-1454[ISIS-1454] - Hints for drop-downs in Wicket viewer not honoured.
 * link:https://issues.apache.org/jira/browse/ISIS-1453[ISIS-1453] - SessionManagementService#nextSession broken
-* link:https://issues.apache.org/jira/browse/ISIS-1452[ISIS-1452] - Throwing an exception (for -SNAPSHOT) does not abort the transaction.
+* link:https://issues.apache.org/jira/browse/ISIS-1452[ISIS-1452] - Throwing an exception (for snapshots) does not abort the transaction.
 * link:https://issues.apache.org/jira/browse/ISIS-1444[ISIS-1444] - Mark applib FixtureScript.Execution methods as @Programmatic to avoid being added to the metamodel
 * link:https://issues.apache.org/jira/browse/ISIS-1436[ISIS-1436] - When executing a bulk action on a paginated collection items, chosen items can be ignored unintentionally
 * link:https://issues.apache.org/jira/browse/ISIS-1435[ISIS-1435] - Infitinite recursion in updating() callback if it modifies the object
