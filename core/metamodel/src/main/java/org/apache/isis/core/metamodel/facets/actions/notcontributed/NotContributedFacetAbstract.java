@@ -26,7 +26,6 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 public abstract class NotContributedFacetAbstract extends FacetAbstract implements NotContributedFacet {
 
-    private final NotContributedAs as;
     private final Contributed contributed;
 
     public static Class<? extends Facet> type() {
@@ -34,25 +33,17 @@ public abstract class NotContributedFacetAbstract extends FacetAbstract implemen
     }
 
     public NotContributedFacetAbstract(
-            final NotContributedAs as,
             final Contributed contributed,
             final FacetHolder holder) {
-        this(as, contributed, holder, Derivation.NOT_DERIVED);
+        this(contributed, holder, Derivation.NOT_DERIVED);
     }
 
     public NotContributedFacetAbstract(
-            final NotContributedAs as,
             final Contributed contributed,
             final FacetHolder holder,
             final Derivation derivation) {
         super(type(), holder, derivation);
-        this.as = as;
         this.contributed = contributed;
-    }
-
-    @Override
-    public NotContributedAs notContributed() {
-        return as;
     }
 
     @Override

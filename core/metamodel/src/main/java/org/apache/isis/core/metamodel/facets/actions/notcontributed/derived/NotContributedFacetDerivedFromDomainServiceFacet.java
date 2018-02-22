@@ -30,7 +30,7 @@ public class NotContributedFacetDerivedFromDomainServiceFacet extends NotContrib
     private final NatureOfService natureOfService;
 
     public NotContributedFacetDerivedFromDomainServiceFacet(final NatureOfService natureOfService, final FacetHolder holder) {
-        super(NotContributedAs.EITHER, Contributed.AS_NEITHER , holder, Derivation.DERIVED);
+        super(Contributed.AS_NEITHER , holder, Derivation.DERIVED);
         this.natureOfService = natureOfService;
     }
 

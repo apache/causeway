@@ -39,17 +39,15 @@ public class NotContributedFacetForActionLayoutAnnotation extends NotContributed
                 .filter(contributed -> contributed != Contributed.NOT_SPECIFIED)
                 .findFirst()
                 .map(contributed -> {
-                    NotContributedAs as = NotContributedAs.notFrom(contributed);
-                    return new NotContributedFacetForActionLayoutAnnotation(as, contributed, holder);
+                    return new NotContributedFacetForActionLayoutAnnotation(contributed, holder);
                 })
                 .orElse(null);
     }
 
     private NotContributedFacetForActionLayoutAnnotation(
-            final NotContributedAs as,
             final Contributed contributed,
             final FacetHolder holder) {
-        super(as, contributed, holder);
+        super(contributed, holder);
     }
 
 }

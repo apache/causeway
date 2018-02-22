@@ -31,7 +31,7 @@ public class NotContributedFacetDerivedFromMixinFacet extends NotContributedFace
 
     public NotContributedFacetDerivedFromMixinFacet(
             final FacetHolder holder) {
-        super(NotContributedAs.NEITHER, Contributed.AS_BOTH, holder, Derivation.DERIVED);
+        super(Contributed.AS_BOTH, holder, Derivation.DERIVED);
     }
 
 }
