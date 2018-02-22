@@ -44,6 +44,7 @@ import org.apache.isis.viewer.restfulobjects.applib.domaintypes.TypeListRepresen
 import org.apache.isis.viewer.restfulobjects.applib.errors.ErrorRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.homepage.HomePageRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.user.UserRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.util.MediaTypes;
 import org.apache.isis.viewer.restfulobjects.applib.util.Parser;
 import org.apache.isis.viewer.restfulobjects.applib.version.VersionRepresentation;
 
@@ -139,11 +140,22 @@ public enum RepresentationType {
     private MediaType xmlMediaType;
     private final Class<? extends JsonRepresentation> representationClass;
 
-    private RepresentationType(final String jsonMediaTypeStr, final String xmlMediaTypeStr, final Class<? extends JsonRepresentation> representationClass) {
-        this(jsonMediaTypeStr != null ? MediaType.valueOf(jsonMediaTypeStr) : null, xmlMediaTypeStr != null? MediaType.valueOf(xmlMediaTypeStr): null, representationClass);
+    private RepresentationType(
+    		final String jsonMediaTypeStr, 
+    		final String xmlMediaTypeStr, 
+    		final Class<? extends JsonRepresentation> representationClass) {
+    	
+        this(	jsonMediaTypeStr != null ? MediaTypes.parse(jsonMediaTypeStr) : null, 
+        		xmlMediaTypeStr != null ? MediaTypes.parse(xmlMediaTypeStr) : null, 
+        		representationClass
+        		);
     }
 
-    private RepresentationType(final MediaType jsonMediaType, final MediaType xmlMediaType, final Class<? extends JsonRepresentation> representationClass) {
+    private RepresentationType(
+    		final MediaType jsonMediaType, 
+    		final MediaType xmlMediaType, 
+    		final Class<? extends JsonRepresentation> representationClass) {
+    	
         this.xmlMediaType = xmlMediaType;
         this.representationClass = representationClass;
         this.name = Enums.enumToCamelCase(this);
@@ -177,14 +189,14 @@ public enum RepresentationType {
      * parameter value.
      */
     public MediaType getMediaType(String parameter, String paramValue) {
-        return getMediaType(Collections.singletonMap(parameter, paramValue));
+        return getJsonMediaType(Collections.singletonMap(parameter, paramValue));
     }
 
     /**
      * Clones the (immutable) {@link #getMediaType() media type}, adding all provided
      * parameters.
      *
-     * @deprecated - use {@link #getMediaType(Map)} instead.
+     * @deprecated - use {@link #getJsonMediaType(Map)} instead.
      */
     @Deprecated
     public MediaType getMediaType(Map<String, String> mediaTypeParams) {
