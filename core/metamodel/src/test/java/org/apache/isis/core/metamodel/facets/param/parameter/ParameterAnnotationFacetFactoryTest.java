@@ -380,7 +380,7 @@ public class ParameterAnnotationFacetFactoryTest extends AbstractFacetFactoryJUn
 
             // then
             final RegExFacet regExFacet = facetedMethodParameter.getFacet(RegExFacet.class);
-            Assert.assertNotNull(regExFacet); //FIXME test fails, seems correct though
+            Assert.assertNotNull(regExFacet);
             
         }
 

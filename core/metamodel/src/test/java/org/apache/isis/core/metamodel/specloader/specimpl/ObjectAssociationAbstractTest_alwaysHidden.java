@@ -184,7 +184,7 @@ public class ObjectAssociationAbstractTest_alwaysHidden {
         addHiddenFacet(Where.EVERYWHERE, facetedMethod, false);
 
         // when, then
-        assertThat(objectAssociation.isAlwaysHidden(), is(true)); //FIXME test fails, seems correct though
+        assertThat(objectAssociation.isAlwaysHidden(), is(true));
     }
 
     @Test

@@ -442,6 +442,9 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
                     allowing(mockServicesInjector).isRegisteredService(CustomerRepository.class);
                     will(returnValue(true));
 
+                    allowing(mockServicesInjector).isRegisteredService(CustomerRepositoryWithDefaultMethodName.class);
+                    will(returnValue(true));
+                    
                     // anything else
                     ignoring(mockConfiguration);
                 }
@@ -481,7 +484,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
             final AutoCompleteFacetForDomainObjectAnnotation autoCompleteFacet = (AutoCompleteFacetForDomainObjectAnnotation) facet;
 
-            assertThat(CustomerRepository.class.isAssignableFrom(autoCompleteFacet.getRepositoryClass()), is(true));
+            assertThat(CustomerRepositoryWithDefaultMethodName.class.isAssignableFrom(autoCompleteFacet.getRepositoryClass()), is(true));
             assertThat(autoCompleteFacet.getActionName(), is("autoComplete"));
 
             expectNoMethodsRemoved();
