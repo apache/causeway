@@ -34,6 +34,7 @@ public enum PublishObjectsConfiguration {
 
     private static PublishObjectsConfiguration parse(final String value) {
         // must be explicitly enabled
+    	// behavior must conform to the doc https://isis.apache.org/guides/rgant/rgant.html#_rgant-DomainObject_publishing
         return Util.parseYes(value)? ALL: NONE;
     }
 
