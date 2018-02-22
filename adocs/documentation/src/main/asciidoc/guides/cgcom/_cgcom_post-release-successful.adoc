@@ -259,8 +259,6 @@ In the main `isis` repo (ie containing the asciidoc source):
 * Paste in the JIRA-generated release notes generated above, adding to top of `adocs/documentation/src/main/asciidoc/release-notes.adoc`.
 Also add a summary line for the release.
 
-* Search for any `-SNAPSHOT` suffices, and remove
-
 * Search these release procedures, and update any hard-coded reference to the release to the next release (so when they are followed next time the text will be correct).
 
 * Update the xref:../../downloads.adoc#[downloads page] with a link to the source release zip file (under https://dist.apache.org/repos/dist/release/isis[https://dist.apache.org/repos/dist/release/isis])
@@ -402,7 +400,7 @@ git branch -d release-2.0.0-M1-RC1              # branch no longer needed
 ----
 
 
-Finally, update helloworld's `pom.xml` and simpleapp's root `pom.xml` to reference the next SNAPSHOT release (`1.17.0-SNAPSHOT`)
+Finally, update helloworld's `pom.xml` and simpleapp's root `pom.xml` to reference the next SNAPSHOT release (`2.0.0-M1-SNAPSHOT`)
 
 
 
