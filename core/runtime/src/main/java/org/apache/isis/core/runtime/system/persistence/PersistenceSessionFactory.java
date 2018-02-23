@@ -53,17 +53,11 @@ public class PersistenceSessionFactory implements ApplicationScopedComponent, Fi
 
     private static final Logger LOG = LoggerFactory.getLogger(PersistenceSessionFactory.class);
 
-    //region > constructor
-
     private final IsisConfigurationDefault configuration;
 
     public PersistenceSessionFactory(final IsisConfigurationDefault isisConfiguration) {
         this.configuration = isisConfiguration;
     }
-
-    //endregion
-
-    //region > init, createDataNucleusApplicationComponents
 
     public static final String JDO_OBJECTSTORE_CONFIG_PREFIX = "isis.persistor.datanucleus";  // specific to the JDO objectstore
     public static final String DATANUCLEUS_CONFIG_PREFIX = "isis.persistor.datanucleus.impl"; // reserved for datanucleus' own config props
@@ -93,7 +87,7 @@ public class PersistenceSessionFactory implements ApplicationScopedComponent, Fi
             final Map<String, String> datanucleusProps = dataNucleusConfig.asMap();
             addDataNucleusPropertiesIfRequired(datanucleusProps);
 
-            final RegisterEntities registerEntities = new RegisterEntities(configuration.asMap(), specificationLoader);
+            final RegisterEntities registerEntities = new RegisterEntities(specificationLoader);
             final Set<String> classesToBePersisted = registerEntities.getEntityTypes();
 
             applicationComponents = new DataNucleusApplicationComponents(jdoObjectstoreConfig, specificationLoader,
@@ -159,18 +153,17 @@ public class PersistenceSessionFactory implements ApplicationScopedComponent, Fi
             props.put(key, value);
         }
     }
-    //endregion
 
-    //region > shutdown
     @Programmatic
     public final void shutdown() {
-        // no-op
+        if(!isInitialized()) {
+            return;
+        }
+    	if(applicationComponents != null) {
+    		applicationComponents.shutdown();
+            applicationComponents = null;
+    	}
     }
-
-    //endregion
-
-
-    //region > createPersistenceSession
 
     /**
      * Called by {@link org.apache.isis.core.runtime.system.session.IsisSessionFactory#openSession(AuthenticationSession)}.
@@ -190,12 +183,6 @@ public class PersistenceSessionFactory implements ApplicationScopedComponent, Fi
                 fixturesInstalledFlag);
     }
 
-
-
-    //endregion
-
-    //region > FixturesInstalledFlag impl
-
     private Boolean fixturesInstalled;
 
     @Programmatic
@@ -209,8 +196,6 @@ public class PersistenceSessionFactory implements ApplicationScopedComponent, Fi
     public void setFixturesInstalled(final Boolean fixturesInstalled) {
         this.fixturesInstalled = fixturesInstalled;
     }
-
-    //endregion
 
 
 }

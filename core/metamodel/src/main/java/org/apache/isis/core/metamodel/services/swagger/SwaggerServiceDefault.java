@@ -22,15 +22,15 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.swagger.SwaggerService;
 import org.apache.isis.core.metamodel.services.swagger.internal.SwaggerSpecGenerator;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.webapp.WebAppContextSupport;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @DomainService(
         nature = NatureOfService.DOMAIN,
@@ -48,7 +48,14 @@ public class SwaggerServiceDefault implements SwaggerService {
 
     @PostConstruct
     public void init(final Map<String,String> properties) {
-        this.basePath = getPropertyElse(properties, KEY_RESTFUL_BASE_PATH, KEY_RESTFUL_BASE_PATH_DEFAULT);
+    	
+    	final String webappContextPath = 
+    			getPropertyElse(properties, WebAppContextSupport.WEB_APP_CONTEXT_PATH, "/");
+    	
+    	final String basePath = 
+    			getPropertyElse(properties, KEY_RESTFUL_BASE_PATH, KEY_RESTFUL_BASE_PATH_DEFAULT);
+    	
+    	this.basePath = WebAppContextSupport.prependContextPathIfPresent(webappContextPath, basePath);
     }
 
     static String getPropertyElse(final Map<String, String> properties, final String key, final String dflt) {

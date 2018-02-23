@@ -41,7 +41,9 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.objectstore.jdo.datanucleus.CreateSchemaObjectFromClassMetadata;
+import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusLifeCycleHelper;
 import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusPropertiesAware;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.query.JdoNamedQuery;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.query.JdoQueryFacet;
@@ -109,6 +111,20 @@ public class DataNucleusApplicationComponents implements ApplicationScopedCompon
 
         namedQueryByName = catalogNamedQueries(persistableClassNameSet);
     }
+    
+    /** 
+     * Marks the end of DataNucleus' life-cycle. Purges any state associated with DN. 
+     * Subsequent calls have no effect.  
+     * 
+     * @since 2.0.0
+     */
+    public void shutdown() {
+    	instance = null;
+    	if(persistenceManagerFactory != null) {
+    		DataNucleusLifeCycleHelper.cleanUp(persistenceManagerFactory);
+    		persistenceManagerFactory = null;
+    	}
+    }
 
     private static boolean isSchemaAwareStoreManager(Map<String,String> datanucleusProps) {
 
@@ -148,8 +164,9 @@ public class DataNucleusApplicationComponents implements ApplicationScopedCompon
                 datanucleusProps.put(PropertyNames.PROPERTY_SCHEMA_AUTOCREATE_TABLES, "true"); // but have DN do everything else...
                 datanucleusProps.put(PropertyNames.PROPERTY_SCHEMA_AUTOCREATE_COLUMNS, "true");
                 datanucleusProps.put(PropertyNames.PROPERTY_SCHEMA_AUTOCREATE_CONSTRAINTS, "true");
-
-                persistenceManagerFactory = JDOHelper.getPersistenceManagerFactory(datanucleusProps);
+                
+                persistenceManagerFactory = JDOHelper
+                		.getPersistenceManagerFactory(datanucleusProps,	IsisContext.getClassLoader() );
                 createSchema(persistenceManagerFactory, persistableClassNameSet, datanucleusProps);
 
             } else {

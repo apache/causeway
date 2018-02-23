@@ -30,15 +30,51 @@ import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 
-import com.google.common.base.Function;
-import com.google.common.base.Joiner;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
-import com.google.common.io.Resources;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.google.inject.Module;
-
+import org.apache.isis.applib.internal.context._Context;
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
+import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
+import org.apache.isis.core.runtime.logging.IsisLoggingConfigurer;
+import org.apache.isis.core.runtime.runner.IsisInjectModule;
+import org.apache.isis.core.runtime.system.DeploymentType;
+import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
+import org.apache.isis.core.runtime.threadpool.ThreadPoolSupport;
+import org.apache.isis.core.webapp.IsisWebAppBootstrapper;
+import org.apache.isis.core.webapp.WebAppConstants;
+import org.apache.isis.core.webapp.WebAppContextSupport;
+import org.apache.isis.schema.utils.ChangesDtoUtils;
+import org.apache.isis.schema.utils.CommandDtoUtils;
+import org.apache.isis.schema.utils.InteractionDtoUtils;
+import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
+import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettingsAccessor;
+import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
+import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
+import org.apache.isis.viewer.wicket.model.models.PageType;
+import org.apache.isis.viewer.wicket.ui.ComponentFactory;
+import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
+import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
+import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
+import org.apache.isis.viewer.wicket.ui.components.scalars.string.MultiLineStringPanel;
+import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2BootstrapCssReference;
+import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2JsReference;
+import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
+import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
+import org.apache.isis.viewer.wicket.ui.pages.accmngt.AccountConfirmationMap;
+import org.apache.isis.viewer.wicket.ui.pages.login.WicketLogoutPage;
+import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
+import org.apache.isis.viewer.wicket.viewer.integration.isis.DeploymentTypeWicketAbstract;
+import org.apache.isis.viewer.wicket.viewer.integration.isis.WicketServer;
+import org.apache.isis.viewer.wicket.viewer.integration.isis.WicketServerPrototype;
+import org.apache.isis.viewer.wicket.viewer.integration.wicket.AuthenticatedWebSessionForIsis;
+import org.apache.isis.viewer.wicket.viewer.integration.wicket.ConverterForObjectAdapter;
+import org.apache.isis.viewer.wicket.viewer.integration.wicket.ConverterForObjectAdapterMemento;
+import org.apache.isis.viewer.wicket.viewer.integration.wicket.WebRequestCycleForIsis;
+import org.apache.isis.viewer.wicket.viewer.settings.IsisResourceSettings;
 import org.apache.wicket.Application;
 import org.apache.wicket.Component;
 import org.apache.wicket.ConverterLocator;
@@ -76,49 +112,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.wicketstuff.select2.ApplicationSettings;
 
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.config.IsisConfigurationDefault;
-import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
-import org.apache.isis.core.runtime.logging.IsisLoggingConfigurer;
-import org.apache.isis.core.runtime.runner.IsisInjectModule;
-import org.apache.isis.core.runtime.system.DeploymentType;
-import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
-import org.apache.isis.core.runtime.threadpool.ThreadPoolSupport;
-import org.apache.isis.core.webapp.IsisWebAppBootstrapper;
-import org.apache.isis.core.webapp.WebAppConstants;
-import org.apache.isis.schema.utils.ChangesDtoUtils;
-import org.apache.isis.schema.utils.CommandDtoUtils;
-import org.apache.isis.schema.utils.InteractionDtoUtils;
-import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
-import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettingsAccessor;
-import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
-import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
-import org.apache.isis.viewer.wicket.model.models.PageType;
-import org.apache.isis.viewer.wicket.ui.ComponentFactory;
-import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
-import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
-import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.string.MultiLineStringPanel;
-import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2BootstrapCssReference;
-import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2JsReference;
-import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
-import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
-import org.apache.isis.viewer.wicket.ui.pages.accmngt.AccountConfirmationMap;
-import org.apache.isis.viewer.wicket.ui.pages.login.WicketLogoutPage;
-import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
-import org.apache.isis.viewer.wicket.viewer.integration.isis.DeploymentTypeWicketAbstract;
-import org.apache.isis.viewer.wicket.viewer.integration.isis.WicketServer;
-import org.apache.isis.viewer.wicket.viewer.integration.isis.WicketServerPrototype;
-import org.apache.isis.viewer.wicket.viewer.integration.wicket.AuthenticatedWebSessionForIsis;
-import org.apache.isis.viewer.wicket.viewer.integration.wicket.ConverterForObjectAdapter;
-import org.apache.isis.viewer.wicket.viewer.integration.wicket.ConverterForObjectAdapterMemento;
-import org.apache.isis.viewer.wicket.viewer.integration.wicket.WebRequestCycleForIsis;
-import org.apache.isis.viewer.wicket.viewer.settings.IsisResourceSettings;
+import com.google.common.base.Function;
+import com.google.common.base.Joiner;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+import com.google.common.io.Resources;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.google.inject.Module;
 
 import de.agilecoders.wicket.core.Bootstrap;
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.BootstrapBaseBehavior;
@@ -333,6 +334,8 @@ public class IsisWicketApplication
         List<Future<Object>> futures = null;
         try {
             super.init();
+            
+            _Context.putSingleton(ClassLoader.class, this.getClass().getClassLoader());
 
             futures = startBackgroundInitializationThreads();
 
@@ -346,6 +349,9 @@ public class IsisWicketApplication
 
             final IsisConfigurationBuilder isisConfigurationBuilder = obtainConfigBuilder();
             isisConfigurationBuilder.addDefaultConfigurationResourcesAndPrimers();
+            
+            final String webappContextPath = getServletContext().getContextPath();
+            isisConfigurationBuilder.add(WebAppContextSupport.WEB_APP_CONTEXT_PATH, webappContextPath);
 
             final IsisConfigurationDefault configuration = isisConfigurationBuilder.getConfiguration();
 
@@ -859,6 +865,7 @@ public class IsisWicketApplication
             }
             getServletContext().setAttribute(WebAppConstants.ISIS_SESSION_FACTORY, null);
             super.onDestroy();
+            IsisContext.clear();
         } catch(final RuntimeException ex) {
             // symmetry with #init()
             LOG.error("Failed to destroy", ex);
