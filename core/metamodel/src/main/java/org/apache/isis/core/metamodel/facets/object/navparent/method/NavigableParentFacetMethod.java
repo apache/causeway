@@ -28,7 +28,6 @@ import org.apache.isis.core.metamodel.facets.object.navparent.NavigableParentFac
 
 /**
  * 
- * @author ahuber@apache.org
  * @since 2.0.0
  *
  */

@@ -27,7 +27,6 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
  * of an instance of a class, used to build a navigable parent chain as required by the 
  * 'where-am-I' feature.
  * 
- * @author ahuber@apache.org
  * @since 2.0.0
  *
  */

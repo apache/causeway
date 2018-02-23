@@ -31,7 +31,6 @@ import org.apache.isis.core.metamodel.specloader.specimpl.ObjectMemberAbstract;
  * To solve <a href="https://issues.apache.org/jira/browse/ISIS-1743">ISIS-1743</a>.<br/>
  * Could be better integrated into Isis' meta-model.
  *
- * @author ahuber@apache.org
  */
 class MixinInterceptor {
 

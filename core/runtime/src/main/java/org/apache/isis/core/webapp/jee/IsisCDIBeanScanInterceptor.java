@@ -49,7 +49,6 @@ import org.slf4j.LoggerFactory;
  * by Isis itself. All other Beans are allowed to be managed by CDI.
  * </p>
  * 
- * @author ahuber@apache.org
  *
  */
 public final class IsisCDIBeanScanInterceptor implements Extension {

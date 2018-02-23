@@ -43,7 +43,6 @@ import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
  * For detailed behavioral specification see 
  * <a href="https://issues.apache.org/jira/browse/ISIS-1816">ISIS-1816</a>.
  * 
- * @author ahuber@apache.org
  * @since 2.0.0
  *
  */

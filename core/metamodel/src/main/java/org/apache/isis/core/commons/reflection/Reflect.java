@@ -40,7 +40,6 @@ import java.util.stream.Stream;
  * 
  * Provides shortcuts for common java.lang.reflect idioms.
  * 
- * @author ahuber@apache.org
  * @since 2.0.0
  *
  */

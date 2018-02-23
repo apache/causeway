@@ -30,7 +30,6 @@ import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstra
 
 /**
  * 
- * @author ahuber@apache.org
  * @since 2.0.0
  *
  * @deprecated according to proposed spec, <a href="https://issues.apache.org/jira/browse/ISIS-1816">ISIS-1816</a>

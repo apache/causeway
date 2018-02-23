@@ -30,7 +30,6 @@ import org.apache.isis.viewer.wicket.model.models.EntityModel;
 
 /**
  * 
- * @author ahuber@apache.org
  * @since 2.0.0
  *
  */

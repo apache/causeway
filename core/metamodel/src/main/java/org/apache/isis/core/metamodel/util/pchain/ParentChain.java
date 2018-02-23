@@ -34,7 +34,6 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
  * 
  * startNode --@Parent--&gt; node2 --@Parent--&gt; node3 ...
  * 
- * @author ahuber@apache.org
  * @since 2.0.0
  *
  */
