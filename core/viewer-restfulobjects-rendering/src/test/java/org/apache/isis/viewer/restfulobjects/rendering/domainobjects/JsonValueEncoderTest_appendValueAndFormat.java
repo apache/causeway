@@ -22,56 +22,56 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.Timestamp;
 import java.util.Date;
+
 import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JMock;
-import org.jmock.integration.junit4.JUnit4Mockery;
+import org.jmock.auto.Mock;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 
-@RunWith(JMock.class)
 public class JsonValueEncoderTest_appendValueAndFormat {
 
-    private final Mockery context = new JUnit4Mockery();
+    @Rule
+    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
 
+    @Mock
     private JsonRepresentation representation;
+    @Mock
     private ObjectSpecification mockObjectSpec;
+    @Mock
     private EncodableFacet mockEncodableFacet;
+    @Mock
     private ObjectAdapter mockObjectAdapter;
 
     private AdapterManager mockAdapterManager;
 
     @Before
-    public void setUp() throws Exception {
-        mockObjectSpec = context.mock(ObjectSpecification.class);
-        mockEncodableFacet = context.mock(EncodableFacet.class);
-        mockObjectAdapter = context.mock(ObjectAdapter.class);
-        mockAdapterManager = context.mock(AdapterManager.class);
-
+    public void setUp() {
         JsonValueEncoder.testSetAdapterManager(mockAdapterManager);
 
         representation = JsonRepresentation.newMap();
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         JsonValueEncoder.testSetAdapterManager(null);
     }
 
     @Test
-    public void whenString() throws Exception {
+    public void whenString() {
         allowingObjectSpecToReturnSpecIdFor(String.class);
         allowingObjectAdapterToReturn("aString");
 
@@ -84,7 +84,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
     }
 
     @Test
-    public void whenBooleanWrapper() throws Exception {
+    public void whenBooleanWrapper() {
         allowingObjectSpecToReturnSpecIdFor(Boolean.class);
         allowingObjectAdapterToReturn(Boolean.TRUE);
 
@@ -96,7 +96,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
     }
 
     @Test
-    public void whenBooleanPrimitive() throws Exception {
+    public void whenBooleanPrimitive() {
         allowingObjectSpecToReturnSpecIdFor(boolean.class);
         allowingObjectAdapterToReturn(true);
 
@@ -108,7 +108,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
     }
 
     @Test
-    public void whenByteWrapper() throws Exception {
+    public void whenByteWrapper() {
         allowingObjectSpecToReturnSpecIdFor(Byte.class);
         allowingObjectAdapterToReturn(Byte.valueOf((byte)123));
 
@@ -121,7 +121,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
     }
 
     @Test
-    public void whenBytePrimitive() throws Exception {
+    public void whenBytePrimitive() {
         allowingObjectSpecToReturnSpecIdFor(byte.class);
         allowingObjectAdapterToReturn((byte)123);
 
@@ -134,7 +134,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
     }
 
     @Test
-    public void whenShortWrapper() throws Exception {
+    public void whenShortWrapper() {
         allowingObjectSpecToReturnSpecIdFor(Short.class);
         allowingObjectAdapterToReturn(Short.valueOf((short)12345));
 
@@ -147,7 +147,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
     }
 
     @Test
-    public void whenShortPrimitive() throws Exception {
+    public void whenShortPrimitive() {
         allowingObjectSpecToReturnSpecIdFor(short.class);
         allowingObjectAdapterToReturn((short)12345);
 
@@ -160,7 +160,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
     }
 
     @Test
-    public void whenIntWrapper() throws Exception {
+    public void whenIntWrapper() {
         allowingObjectSpecToReturnSpecIdFor(Integer.class);
         allowingObjectAdapterToReturn(Integer.valueOf(12345678));
 
@@ -173,7 +173,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
     }
 
     @Test
-    public void whenIntPrimitive() throws Exception {
+    public void whenIntPrimitive() {
         allowingObjectSpecToReturnSpecIdFor(int.class);
         allowingObjectAdapterToReturn(12345678);
 
@@ -186,7 +186,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
     }
 
     @Test
-    public void whenLongWrapper() throws Exception {
+    public void whenLongWrapper() {
         allowingObjectSpecToReturnSpecIdFor(Long.class);
         allowingObjectAdapterToReturn(Long.valueOf(12345678901234L));
 
@@ -199,7 +199,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
     }
 
     @Test
-    public void whenLongPrimitive() throws Exception {
+    public void whenLongPrimitive() {
         allowingObjectSpecToReturnSpecIdFor(long.class);
         allowingObjectAdapterToReturn(12345678901234L);
 
@@ -212,7 +212,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
     }
 
     @Test
-    public void whenFloatWrapper() throws Exception {
+    public void whenFloatWrapper() {
         allowingObjectSpecToReturnSpecIdFor(Float.class);
         allowingObjectAdapterToReturn(Float.valueOf((float)123.45));
 
@@ -225,7 +225,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
     }
 
     @Test
-    public void whenFloatPrimitive() throws Exception {
+    public void whenFloatPrimitive() {
         allowingObjectSpecToReturnSpecIdFor(Float.class);
         allowingObjectAdapterToReturn((float)123.45);
 
@@ -238,7 +238,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
     }
 
     @Test
-    public void whenDoubleWrapper() throws Exception {
+    public void whenDoubleWrapper() {
         allowingObjectSpecToReturnSpecIdFor(Double.class);
         allowingObjectAdapterToReturn(Double.valueOf(12345.6789));
 
@@ -251,7 +251,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
     }
 
     @Test
-    public void whenDoublePrimitive() throws Exception {
+    public void whenDoublePrimitive() {
         allowingObjectSpecToReturnSpecIdFor(double.class);
         allowingObjectAdapterToReturn(12345.6789);
 
@@ -264,7 +264,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
     }
 
     @Test
-    public void whenCharWrapper() throws Exception {
+    public void whenCharWrapper() {
         allowingObjectSpecToReturnSpecIdFor(Character.class);
         allowingObjectAdapterToReturn(Character.valueOf('a'));
 
@@ -277,7 +277,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
     }
 
     @Test
-    public void whenCharPrimitive() throws Exception {
+    public void whenCharPrimitive() {
         allowingObjectSpecToReturnSpecIdFor(char.class);
         allowingObjectAdapterToReturn('a');
 
@@ -290,7 +290,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
     }
 
     @Test
-    public void whenJavaUtilDate() throws Exception {
+    public void whenJavaUtilDate() {
         allowingObjectSpecToReturnSpecIdFor(java.util.Date.class);
         allowingObjectAdapterToReturn(asDateTime("2014-04-25T12:34:45Z"));
 
@@ -303,7 +303,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
     }
 
     @Test
-    public void whenJavaSqlDate() throws Exception {
+    public void whenJavaSqlDate() {
         allowingObjectSpecToReturnSpecIdFor(java.sql.Date.class);
         allowingObjectAdapterToReturn(asSqlDate("2014-04-25"));
 
@@ -316,7 +316,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
     }
 
     @Test
-    public void whenJodaDateTime() throws Exception {
+    public void whenJodaDateTime() {
         allowingObjectSpecToReturnSpecIdFor(org.joda.time.DateTime.class);
         allowingObjectAdapterToReturn(new org.joda.time.DateTime(asDateTime("2014-04-25T12:34:45Z")));
 
@@ -329,7 +329,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
     }
 
     @Test
-    public void whenJodaLocalDateTime() throws Exception {
+    public void whenJodaLocalDateTime() {
         allowingObjectSpecToReturnSpecIdFor(org.joda.time.LocalDateTime.class);
         allowingObjectAdapterToReturn(new org.joda.time.LocalDateTime(asDateTime("2014-04-25T12:34:45Z")));
 
@@ -342,7 +342,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
     }
 
     @Test
-    public void whenJodaLocalDate() throws Exception {
+    public void whenJodaLocalDate() {
         allowingObjectSpecToReturnSpecIdFor(org.joda.time.LocalDate.class);
         allowingObjectAdapterToReturn(new org.joda.time.LocalDate(2014,4,25));
 
@@ -355,7 +355,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
     }
 
     @Test
-    public void whenJavaSqlTimestamp() throws Exception {
+    public void whenJavaSqlTimestamp() {
         allowingObjectSpecToReturnSpecIdFor(java.sql.Timestamp.class);
         final long time = asDateTime("2014-04-25T12:34:45Z").getTime();
         allowingObjectAdapterToReturn(new Timestamp(time));
@@ -369,7 +369,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
     }
 
     @Test
-    public void whenBigInteger() throws Exception {
+    public void whenBigInteger() {
         allowingObjectSpecToReturnSpecIdFor(BigInteger.class);
         allowingObjectAdapterToReturn(new BigInteger("12345678901234567890"));
 
@@ -383,7 +383,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
     }
 
     @Test
-    public void whenBigDecimal() throws Exception {
+    public void whenBigDecimal() {
         allowingObjectSpecToReturnSpecIdFor(BigDecimal.class);
         allowingObjectAdapterToReturn(new BigDecimal("12345678901234567890.1234"));
 

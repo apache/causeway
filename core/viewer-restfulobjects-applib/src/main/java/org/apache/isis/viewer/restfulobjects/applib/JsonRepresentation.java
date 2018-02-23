@@ -686,7 +686,7 @@ public class JsonRepresentation {
     }
 
     private boolean isDecimal(final JsonNode node) {
-        return !representsNull(node) && node.isValueNode() && node.isDouble();
+        return !representsNull(node) && node.isValueNode() && (node.isDouble() || node.isFloat());
     }
 
     /**
