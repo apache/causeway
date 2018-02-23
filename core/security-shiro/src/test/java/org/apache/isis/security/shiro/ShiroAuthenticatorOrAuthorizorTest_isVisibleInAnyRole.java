@@ -87,9 +87,6 @@ public class ShiroAuthenticatorOrAuthorizorTest_isVisibleInAnyRole {
         Identifier changeAddressIdentifier = Identifier.actionIdentifier("com.mycompany.myapp.Customer", "changeAddress", String.class, String.class);
         assertThat(authOrAuth.isVisibleInAnyRole(changeAddressIdentifier), is(true));
 
-        // when, then
-        Identifier removeCustomerIdentifier = Identifier.actionIdentifier("com.mycompany.myapp.Customer", "remove");
-        assertThat(authOrAuth.isVisibleInAnyRole(removeCustomerIdentifier), is(false));
     }
 
     
