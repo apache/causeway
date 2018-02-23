@@ -33,6 +33,7 @@ import javax.xml.bind.Unmarshaller;
 
 import com.google.common.io.Resources;
 
+import org.apache.isis.applib.util.JaxbUtil;
 import org.apache.isis.schema.cmd.v1.ActionDto;
 import org.apache.isis.schema.cmd.v1.CommandDto;
 import org.apache.isis.schema.cmd.v1.MapDto;
@@ -50,11 +51,7 @@ public final class CommandDtoUtils {
     static JAXBContext jaxbContext;
     static JAXBContext getJaxbContext() {
         if(jaxbContext == null) {
-            try {
-                jaxbContext = JAXBContext.newInstance(CommandDto.class);
-            } catch (JAXBException e) {
-                throw new RuntimeException(e);
-            }
+            jaxbContext = JaxbUtil.jaxbContextFor(CommandDto.class);
         }
         return jaxbContext;
     }

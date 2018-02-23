@@ -23,13 +23,16 @@ import java.io.StringReader;
 import java.io.Writer;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.Map;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
+import com.google.common.collect.MapMaker;
 import com.google.common.io.Resources;
+
 
 /**
  * Helper methods for converting {@link javax.xml.bind.annotation.XmlRootElement}-annotated class to-and-from XML.  Intended primarily for
@@ -48,7 +51,7 @@ public class JaxbUtil {
             final Class<T> dtoClass) {
         Unmarshaller un = null;
         try {
-            un = getJaxbContext(dtoClass).createUnmarshaller();
+            un = jaxbContextFor(dtoClass).createUnmarshaller();
             return (T) un.unmarshal(reader);
         } catch (JAXBException e) {
             throw new RuntimeException(e);
@@ -75,7 +78,7 @@ public class JaxbUtil {
         Marshaller m = null;
         try {
             final Class<?> aClass = dto.getClass();
-            m = getJaxbContext(aClass).createMarshaller();
+            m = jaxbContextFor(aClass).createMarshaller();
             m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
             m.marshal(dto, writer);
         } catch (JAXBException e) {
@@ -83,11 +86,18 @@ public class JaxbUtil {
         }
     }
 
-    private static JAXBContext getJaxbContext(Class<?> dtoClass) {
-        try {
-            return JAXBContext.newInstance(dtoClass);
-        } catch (JAXBException e) {
-            throw new RuntimeException(e);
+    private static Map<Class<?>, JAXBContext> jaxbContextByClass = new MapMaker().concurrencyLevel(10).makeMap();
+
+    public static <T> JAXBContext jaxbContextFor(final Class<T> dtoClass)  {
+        JAXBContext jaxbContext = jaxbContextByClass.get(dtoClass);
+        if(jaxbContext == null) {
+            try {
+                jaxbContext = JAXBContext.newInstance(dtoClass);
+            } catch (JAXBException e) {
+                throw new RuntimeException(e);
+            }
+            jaxbContextByClass.put(dtoClass, jaxbContext);
         }
+        return jaxbContext;
     }
 }

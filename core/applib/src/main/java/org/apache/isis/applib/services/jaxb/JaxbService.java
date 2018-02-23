@@ -31,13 +31,14 @@ import javax.xml.bind.Unmarshaller;
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Iterables;
+import com.google.common.collect.MapMaker;
 import com.google.common.collect.Maps;
 
 import org.apache.isis.applib.ApplicationException;
-import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.dto.Dto_downloadXsd;
+import org.apache.isis.applib.util.JaxbUtil;
 
 public interface JaxbService {
 
@@ -103,7 +104,7 @@ public interface JaxbService {
 
         @Override
         public Object fromXml(final JAXBContext jaxbContext, final String xml) {
-            return fromXml(jaxbContext, xml, Maps.<String,Object>newHashMap());
+            return fromXml(jaxbContext, xml, Maps.newHashMap());
         }
         @Override
         public Object fromXml(final JAXBContext jaxbContext, final String xml, final Map<String, Object> unmarshallerProperties) {
@@ -127,22 +128,25 @@ public interface JaxbService {
 
         @Override
         public <T> T fromXml(final Class<T> domainClass, final String xml) {
-            return fromXml(domainClass, xml, Maps.<String,Object>newHashMap());
+            return fromXml(domainClass, xml, Maps.newHashMap());
         }
         @Override
         public <T> T fromXml(final Class<T> domainClass, final String xml, final Map<String, Object> unmarshallerProperties) {
-            try {
-                final JAXBContext context = JAXBContext.newInstance(domainClass);
-                return (T) fromXml(context, xml, unmarshallerProperties);
+            final JAXBContext context = jaxbContextFor(domainClass);
+            return (T) fromXml(context, xml, unmarshallerProperties);
+        }
 
-            } catch (final JAXBException ex) {
-                throw new NonRecoverableException("Error unmarshalling XML to class '" + domainClass.getName() + "'", ex);
+        private <T> JAXBContext jaxbContextFor(final Class<T> clazz)  {
+            try {
+                return JaxbUtil.jaxbContextFor(clazz);
+            } catch (RuntimeException e) {
+                throw new NonRecoverableException("Error obtaining JAXBContext for class '" + clazz + "'", e.getCause());
             }
         }
 
         @Override
         public String toXml(final Object domainObject) {
-            return toXml(domainObject, Maps.<String,Object>newHashMap());
+            return toXml(domainObject, Maps.newHashMap());
         }
 
         @Override
@@ -150,7 +154,7 @@ public interface JaxbService {
 
             final Class<?> domainClass = domainObject.getClass();
             try {
-                final JAXBContext context = JAXBContext.newInstance(domainClass);
+                final JAXBContext context = jaxbContextFor(domainClass);
 
                 final Marshaller marshaller = context.createMarshaller();
 
@@ -218,20 +222,16 @@ public interface JaxbService {
 
             try {
                 final Class<?> domainClass = domainObject.getClass();
-                final JAXBContext context = JAXBContext.newInstance(domainClass);
+                final JAXBContext context = jaxbContextFor(domainClass);
 
                 final CatalogingSchemaOutputResolver outputResolver = new CatalogingSchemaOutputResolver(isisSchemas);
                 context.generateSchema(outputResolver);
 
                 return outputResolver.asMap();
-            } catch (final JAXBException | IOException ex) {
+            } catch (final IOException ex) {
                 throw new ApplicationException(ex);
             }
         }
-
-
-        @javax.inject.Inject
-        DomainObjectContainer container;
     }
 
 
