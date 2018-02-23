@@ -25,6 +25,7 @@ import java.util.Set;
 
 import javax.jdo.annotations.PersistenceCapable;
 
+import org.apache.isis.applib.internal.base._Casts;
 import org.apache.isis.applib.internal.reflection._Reflect.Discovery;
 
 /**
@@ -34,7 +35,6 @@ import org.apache.isis.applib.internal.reflection._Reflect.Discovery;
  */
 class PersistenceCapableTypeFinder {
 
-	@SuppressWarnings("unchecked")
 	static Set<Class<?>> find(Discovery discovery) {
 
 		final Set<Class<?>> types = new LinkedHashSet<>();
@@ -43,12 +43,14 @@ class PersistenceCapableTypeFinder {
 		.forEach(type->{
 
 			if(type.isAnnotation()) {
-
-				// We have an annotation, that is annotated with @PersistenceCapable,
-				// this requires special treatment: 
-				// Search for any classes annotated with this (meta-)annotation.
 				
-				discovery.getTypesAnnotatedWith((Class<? extends Annotation>) type).stream()
+				final Class<? extends Annotation> annotatedAnnotation = _Casts.uncheckedCast(type);
+				
+				// We have an annotation (annotatedAnnotation), that is annotated with @PersistenceCapable,
+				// this requires special treatment: 
+				// Search for any classes annotated with annotatedAnnotation.
+				
+				discovery.getTypesAnnotatedWith(annotatedAnnotation).stream()
 				.filter(x->!x.isAnnotation())
 				.forEach(types::add);
 
