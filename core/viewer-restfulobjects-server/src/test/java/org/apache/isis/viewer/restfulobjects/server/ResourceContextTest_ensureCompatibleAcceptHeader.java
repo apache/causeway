@@ -21,15 +21,29 @@ package org.apache.isis.viewer.restfulobjects.server;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
+
 import com.google.common.collect.Maps;
+
 import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JUnit4Mockery;
+import org.jmock.auto.Mock;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.session.IsisSession;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
+import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
@@ -39,19 +53,47 @@ import static org.junit.Assert.assertThat;
 
 public class ResourceContextTest_ensureCompatibleAcceptHeader {
 
-    private HttpHeaders httpHeaders;
-    private HttpServletRequest httpServletRequest;
+    @Rule
+    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
 
-    private final Mockery context = new JUnit4Mockery();
+    @Mock HttpHeaders mockHttpHeaders;
+    @Mock HttpServletRequest mockHttpServletRequest;
+    @Mock ServletContext mockServletContext;
+    @Mock IsisSessionFactory mockIsisSessionFactory;
+    @Mock ServicesInjector mockServicesInjector;
+    @Mock IsisConfiguration mockConfiguration;
+    @Mock IsisSession mockIsisSession;
+    @Mock AuthenticationSession mockAuthenticationSession;
+    @Mock PersistenceSession mockPersistenceSession;
+    @Mock SpecificationLoader mockSpecificationLoader;
 
+    DeploymentCategory deploymentCategory;
     @Before
     public void setUp() throws Exception {
-        httpHeaders = context.mock(HttpHeaders.class);
-        httpServletRequest = context.mock(HttpServletRequest.class);
+        deploymentCategory = DeploymentCategory.PRODUCTION;
+
         context.checking(new Expectations() {
             {
-                allowing(httpServletRequest).getQueryString();
+                allowing(mockHttpServletRequest).getQueryString();
                 will(returnValue(""));
+                allowing(mockHttpServletRequest).getServletContext();
+                will(returnValue(mockServletContext));
+                allowing(mockServletContext).getAttribute("org.apache.isis.core.webapp.isisSessionFactory");
+                will(returnValue(mockIsisSessionFactory));
+                allowing(mockIsisSessionFactory).getServicesInjector();
+                will(returnValue(mockServicesInjector));
+                allowing(mockIsisSessionFactory).getConfiguration();
+                will(returnValue(mockConfiguration));
+                allowing(mockIsisSessionFactory).getCurrentSession();
+                will(returnValue(mockIsisSession));
+                allowing(mockIsisSession).getAuthenticationSession();
+                will(returnValue(mockAuthenticationSession));
+                allowing(mockIsisSessionFactory).getSpecificationLoader();
+                will(returnValue(mockSpecificationLoader));
+                allowing(mockIsisSessionFactory).getDeploymentCategory();
+                will(returnValue(deploymentCategory));
+                allowing(mockIsisSession).getPersistenceSession();
+                will(returnValue(mockPersistenceSession));
             }
         });
     }
@@ -143,7 +185,7 @@ public class ResourceContextTest_ensureCompatibleAcceptHeader {
     private void givenHttpHeadersGetAcceptableMediaTypesReturns(final List<MediaType> mediaTypes) {
         context.checking(new Expectations() {
             {
-                oneOf(httpHeaders).getAcceptableMediaTypes();
+                allowing(mockHttpHeaders).getAcceptableMediaTypes();
                 will(returnValue(mediaTypes));
             }
         });
@@ -153,7 +195,7 @@ public class ResourceContextTest_ensureCompatibleAcceptHeader {
         final HashMap<Object, Object> parameterMap = Maps.newHashMap();
         context.checking(new Expectations() {
             {
-                oneOf(httpServletRequest).getParameterMap();
+                oneOf(mockHttpServletRequest).getParameterMap();
                 will(returnValue(parameterMap));
             }
         });
@@ -161,7 +203,8 @@ public class ResourceContextTest_ensureCompatibleAcceptHeader {
 
     private ResourceContext instantiateResourceContext(
             final RepresentationType representationType) {
-        return new ResourceContext(representationType, httpHeaders, null, null, null, null, null, null, httpServletRequest, null, null,
+        return new ResourceContext(representationType, mockHttpHeaders, null, null, null, null, null, null,
+                mockHttpServletRequest, null, null,
                 null);
     }
 
