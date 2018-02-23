@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import javax.annotation.Nullable;
 import javax.annotation.PostConstruct;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -67,10 +68,17 @@ public class GridLoaderServiceDefault implements GridLoaderService {
         final List<Class<? extends Grid>> pageImplementations =
                 FluentIterable.from(gridSystemServices)
                     .transform(
-                            (Function<GridSystemService, Class<? extends Grid>>) gss -> gss.gridImplementation())
+                            //(Function<GridSystemService, Class<? extends Grid>>)  gss -> gss.gridImplementation()
+                            new Function<GridSystemService, Class<? extends Grid>>() {
+                                @Override
+                                public Class<? extends Grid> apply(final GridSystemService input) {
+                                    return input.gridImplementation();
+                                }
+                            }
+                    )
                     .toList();
 
-        final Class[] clazz = pageImplementations.toArray(_Constants.emptyClasses);
+        final Class[] clazz = pageImplementations.toArray(new Class[0]);
         try {
             jaxbContext = JAXBContext.newInstance(clazz);
         } catch (JAXBException e) {

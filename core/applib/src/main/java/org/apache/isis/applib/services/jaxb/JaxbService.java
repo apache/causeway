@@ -31,7 +31,6 @@ import javax.xml.bind.Unmarshaller;
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Iterables;
-import com.google.common.collect.MapMaker;
 import com.google.common.collect.Maps;
 
 import org.apache.isis.applib.ApplicationException;
@@ -104,7 +103,7 @@ public interface JaxbService {
 
         @Override
         public Object fromXml(final JAXBContext jaxbContext, final String xml) {
-            return fromXml(jaxbContext, xml, Maps.newHashMap());
+            return fromXml(jaxbContext, xml, Maps.<String,Object>newHashMap());
         }
         @Override
         public Object fromXml(final JAXBContext jaxbContext, final String xml, final Map<String, Object> unmarshallerProperties) {
@@ -128,7 +127,7 @@ public interface JaxbService {
 
         @Override
         public <T> T fromXml(final Class<T> domainClass, final String xml) {
-            return fromXml(domainClass, xml, Maps.newHashMap());
+            return fromXml(domainClass, xml, Maps.<String,Object>newHashMap());
         }
         @Override
         public <T> T fromXml(final Class<T> domainClass, final String xml, final Map<String, Object> unmarshallerProperties) {
@@ -146,7 +145,7 @@ public interface JaxbService {
 
         @Override
         public String toXml(final Object domainObject) {
-            return toXml(domainObject, Maps.newHashMap());
+            return toXml(domainObject, Maps.<String,Object>newHashMap());
         }
 
         @Override
