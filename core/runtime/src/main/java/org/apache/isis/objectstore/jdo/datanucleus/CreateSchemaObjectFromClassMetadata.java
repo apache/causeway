@@ -67,6 +67,11 @@ public class CreateSchemaObjectFromClassMetadata implements MetaDataListener, Da
         final String url = properties.get("javax.jdo.option.ConnectionURL");
         final String userName = properties.get("javax.jdo.option.ConnectionUserName");
         final String password = getConnectionPassword();
+        
+        if(Strings.isNullOrEmpty(driverName) || Strings.isNullOrEmpty(url)) {
+        	LOG.warn("Unable to create schema due to missing configuration javax.jdo.option.Connection*");
+        	return;
+        }
 
         try {
 
