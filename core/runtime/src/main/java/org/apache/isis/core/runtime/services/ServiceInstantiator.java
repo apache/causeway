@@ -28,11 +28,6 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.enterprise.context.RequestScoped;
 
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.internal.context._Context;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.exceptions.IsisException;
@@ -42,6 +37,11 @@ import org.apache.isis.core.commons.lang.ArrayExtensions;
 import org.apache.isis.core.commons.lang.MethodExtensions;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.JavassistEnhanced;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 
 import javassist.util.proxy.MethodFilter;
 import javassist.util.proxy.MethodHandler;

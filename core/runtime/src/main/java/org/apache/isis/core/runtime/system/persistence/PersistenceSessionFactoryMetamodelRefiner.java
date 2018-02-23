@@ -57,7 +57,6 @@ public class PersistenceSessionFactoryMetamodelRefiner implements MetaModelRefin
         // and also MandatoryFacetOnPropertyMandatoryAnnotationFactory
         // and also PropertyAnnotationFactory
         programmingModel.addFactory(new MandatoryFromJdoColumnAnnotationFacetFactory());
-
     }
 
     @Override

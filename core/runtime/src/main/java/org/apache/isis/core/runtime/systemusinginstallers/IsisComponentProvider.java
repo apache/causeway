@@ -23,10 +23,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
-import javax.jdo.annotations.PersistenceCapable;
 
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.annotation.DomainObject;
@@ -138,19 +136,19 @@ public abstract class IsisComponentProvider {
         final Discovery discovery = _Reflect.discover(moduleAndFrameworkPackages);
 
         final Set<Class<?>> domainServiceTypes = discovery.getTypesAnnotatedWith(DomainService.class);
-        final Set<Class<?>> persistenceCapableTypes = discovery.getTypesAnnotatedWith(PersistenceCapable.class);
+        final Set<Class<?>> persistenceCapableTypes = PersistenceCapableTypeFinder.find(discovery);
         final Set<Class<? extends FixtureScript>> fixtureScriptTypes = discovery.getSubTypesOf(FixtureScript.class);
 
         final Set<Class<?>> mixinTypes = Sets.newHashSet();
         mixinTypes.addAll(discovery.getTypesAnnotatedWith(Mixin.class));
 
         final Set<Class<?>> domainObjectTypes = discovery.getTypesAnnotatedWith(DomainObject.class);
-        mixinTypes.addAll(
-                domainObjectTypes.stream()
-                        .filter(input -> input.getAnnotation(DomainObject.class).nature() == Nature.MIXIN)
-                        .collect(Collectors.toList())
-        );
-        
+        domainObjectTypes.stream()
+        .filter(input -> {
+            final DomainObject annotation = input.getAnnotation(DomainObject.class);
+            return annotation.nature() == Nature.MIXIN;
+        })
+        .forEach(mixinTypes::add);
         
         // add in any explicitly registered services...
         domainServiceTypes.addAll(appManifest.getAdditionalServices());
@@ -190,7 +188,7 @@ public abstract class IsisComponentProvider {
     }
     static private boolean containedWithin(final List<String> packagesWithDotSuffix, final String className) {
         for (String packageWithDotSuffix : packagesWithDotSuffix) {
-            if(className.startsWith(packageWithDotSuffix)) {
+            if (className.startsWith(packageWithDotSuffix)) {
                 return true;
             }
         }
