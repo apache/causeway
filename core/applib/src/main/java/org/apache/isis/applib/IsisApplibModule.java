@@ -20,9 +20,10 @@ package org.apache.isis.applib;
 
 import java.util.List;
 
-public final class IsisApplibModule {
+import javax.xml.bind.annotation.XmlRootElement;
 
-    private IsisApplibModule(){}
+@XmlRootElement(name = "module")
+public class IsisApplibModule extends ModuleAbstract {
 
     public abstract static class ActionDomainEvent<S> extends org.apache.isis.applib.services.eventbus.ActionDomainEvent<S> {
         public ActionDomainEvent() {}
