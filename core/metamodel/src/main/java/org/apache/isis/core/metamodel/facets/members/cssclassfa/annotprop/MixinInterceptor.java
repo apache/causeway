@@ -20,6 +20,8 @@
 package org.apache.isis.core.metamodel.facets.members.cssclassfa.annotprop;
 
 import java.lang.reflect.Method;
+import java.util.List;
+import java.util.Optional;
 
 import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.core.metamodel.facets.Annotations;
