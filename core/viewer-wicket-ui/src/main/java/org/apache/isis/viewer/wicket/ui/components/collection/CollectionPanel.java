@@ -193,9 +193,10 @@ public class CollectionPanel extends PanelAbstract<EntityCollectionModel> implem
             collectionModel.clearToggleMementosList();
 
             final ObjectAdapterToggleboxColumn toggleboxColumn = bulkActionsProvider.getToggleboxColumn();
-            toggleboxColumn.clearToggles();
-
-            target.add(collectionPanel);
+            if(toggleboxColumn != null) {
+                toggleboxColumn.clearToggles();
+                target.add(collectionPanel);
+            }
         }
     }
 

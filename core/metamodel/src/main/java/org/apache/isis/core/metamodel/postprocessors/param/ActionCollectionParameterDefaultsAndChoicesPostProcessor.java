@@ -82,6 +82,9 @@ public class ActionCollectionParameterDefaultsAndChoicesPostProcessor implements
             final ObjectActionParameter.Predicates.CollectionParameter whetherCollectionParamOfType =
                     new ObjectActionParameter.Predicates.CollectionParameter(specification);
 
+            final ObjectActionParameter.Predicates.ScalarParameter whetherScalarParamOfType =
+                    new ObjectActionParameter.Predicates.ScalarParameter(specification);
+
             final ImmutableList<ObjectAction> actions = FluentIterable.from(objectActions)
                     .filter(ObjectAction.Predicates.associatedWith(otma))
                     .toList();
@@ -90,12 +93,16 @@ public class ActionCollectionParameterDefaultsAndChoicesPostProcessor implements
 
                 final List<ObjectActionParameter> parameters = action.getParameters();
 
+                final ImmutableList<ObjectActionParameter> compatibleCollectionParams = FluentIterable.from(parameters)
+                        .filter(whetherCollectionParamOfType).toList();
+
+                final ImmutableList<ObjectActionParameter> compatibleScalarParams = FluentIterable.from(parameters)
+                        .filter(whetherScalarParamOfType).toList();
+
                 // for collection parameters, install an defaults facet (if there isn't one already)
                 // this will cause the UI to render the collection with toggleboxes
                 // with a thread-local used to provide the selected objects
-                final ImmutableList<ObjectActionParameter> collectionParams = FluentIterable.from(parameters)
-                        .filter(whetherCollectionParamOfType).toList();
-                for (final ObjectActionParameter collectionParam : collectionParams) {
+                for (final ObjectActionParameter collectionParam : compatibleCollectionParams) {
                     final ActionParameterDefaultsFacet defaultsFacet = collectionParam
                             .getFacet(ActionParameterDefaultsFacet.class);
                     if (existsAndNotDerived(defaultsFacet)) {
@@ -105,25 +112,36 @@ public class ActionCollectionParameterDefaultsAndChoicesPostProcessor implements
                     }
                 }
 
-                // for both scalar and collection parameters, install a choices facet (if there isn't one already)
-                // using the associated collection for its values.
-                for (final ObjectActionParameter scalarOrCollectionParam : parameters) {
+                // for compatible collection parameters, install a choices facet (if there isn't one already)
+                // using the associated collection for its values
+                for (final ObjectActionParameter collectionParam : compatibleCollectionParams) {
+                    addChoicesFacetIfNoneAlready(otma, collectionParam);
+                }
 
-                    final ActionParameterChoicesFacet choicesFacet = scalarOrCollectionParam
-                            .getFacet(ActionParameterChoicesFacet.class);
-                    final ActionParameterAutoCompleteFacet autoCompleteFacet = scalarOrCollectionParam
-                            .getFacet(ActionParameterAutoCompleteFacet.class);
-                    if (existsAndNotDerived(choicesFacet) || existsAndNotDerived(autoCompleteFacet)) {
-                        // don't overwrite existing choices or autoComplete facet
-                    } else {
-                        FacetUtil.addFacet(
-                                new ActionParameterChoicesFacetFromParentedCollection(
-                                        scalarOrCollectionParam, otma,
-                                        getDeploymentCategory(), specificationLoader,
-                                        authenticationSessionProvider, adapterManager ));
-                    }
+                // similarly for compatible scalar parameters, install a choices facet (if there isn't one already)
+                // using the associated collection for its values.
+                for (final ObjectActionParameter scalarParam : compatibleScalarParams) {
+                    addChoicesFacetIfNoneAlready(otma, scalarParam);
                 }
             }
+        }
+    }
+
+    private void addChoicesFacetIfNoneAlready(
+            final OneToManyAssociation otma,
+            final ObjectActionParameter scalarOrCollectionParam) {
+        final ActionParameterChoicesFacet choicesFacet = scalarOrCollectionParam
+                .getFacet(ActionParameterChoicesFacet.class);
+        final ActionParameterAutoCompleteFacet autoCompleteFacet = scalarOrCollectionParam
+                .getFacet(ActionParameterAutoCompleteFacet.class);
+        if (existsAndNotDerived(choicesFacet) || existsAndNotDerived(autoCompleteFacet)) {
+            // don't overwrite existing choices or autoComplete facet
+        } else {
+            FacetUtil.addFacet(
+                    new ActionParameterChoicesFacetFromParentedCollection(
+                            scalarOrCollectionParam, otma,
+                            getDeploymentCategory(), specificationLoader,
+                            authenticationSessionProvider, adapterManager ));
         }
     }
 
