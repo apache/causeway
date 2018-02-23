@@ -18,7 +18,6 @@ package org.apache.isis.core.runtime.services;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.ExecutorService;
@@ -27,6 +26,8 @@ import java.util.concurrent.TimeUnit;
 
 import javax.enterprise.context.RequestScoped;
 
+import com.google.common.base.Predicates;
+import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Lists;
 
 import org.jmock.auto.Mock;
@@ -39,7 +40,7 @@ import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
 public class ServiceInstantiatorTest {
@@ -144,7 +145,7 @@ public class ServiceInstantiatorTest {
 
 		final Consumer consumer = serviceInstantiator.createInstance(Consumer.class);
 
-		final List<Integer> allTheNumbers = Collections.synchronizedList(Lists.newArrayList());
+		final List<Integer> allTheNumbers = Collections.synchronizedList(Lists.<Integer>newArrayList());
 
 		final int n = 100;
 		for (int i = 0; i < n; i++) {
@@ -160,16 +161,18 @@ public class ServiceInstantiatorTest {
 		for (int i = 0; i < n; i++) {
 			final int j=i;
 
-			execService.submit(() -> {
-                try {
+			execService.submit(new Runnable() {
+				@Override public void run() {
+					try {
 
-                    // access the request scoped calculator on a child thread of 'main'
-                    consumer.consume(allTheNumbers, j);
+						// access the request scoped calculator on a child thread of 'main'
+						consumer.consume(allTheNumbers, j);
 
-                } catch (Exception e) {
-                    System.err.println(e.getMessage());
-                }
-            });
+					} catch (Exception e) {
+						System.err.println(e.getMessage());
+					}
+				}
+			});
 
 		}
 
@@ -179,7 +182,7 @@ public class ServiceInstantiatorTest {
 
 		((RequestScopedService)consumer).__isis_endRequest();
 
-		assertFalse(allTheNumbers.stream().anyMatch(Objects::nonNull));
+		assertEquals(0, FluentIterable.from(allTheNumbers).filter(Predicates.<Integer>notNull()).size());
 	}
 
 	public static class SingletonCalculator {

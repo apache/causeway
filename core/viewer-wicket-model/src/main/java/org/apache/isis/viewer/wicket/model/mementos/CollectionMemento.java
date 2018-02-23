@@ -44,14 +44,10 @@ public class CollectionMemento implements Serializable {
 
     private final ObjectSpecId owningType;
     private final String id;
+    private final String collectionId;
+    private final String collectionName;
 
     private transient OneToManyAssociation collection;
-
-    public CollectionMemento(
-            final ObjectSpecId owningType,
-            final String id, final SpecificationLoader specificationLoader) {
-        this(owningType, id, collectionFor(owningType, id, specificationLoader));
-    }
 
     public CollectionMemento(final OneToManyAssociation collection, final IsisSessionFactory isisSessionFactory) {
         this(owningSpecFor(collection, isisSessionFactory).getSpecId(), collection.getIdentifier().toNameIdentityString(), collection);
@@ -61,6 +57,8 @@ public class CollectionMemento implements Serializable {
         this.owningType = owningType;
         this.id = id;
         this.collection = collection;
+        this.collectionId = collection.getId();
+        this.collectionName = collection.getName();
     }
 
     public ObjectSpecId getOwningType() {
@@ -78,8 +76,19 @@ public class CollectionMemento implements Serializable {
         return id;
     }
 
-    public String getName(final SpecificationLoader specificationLoader) {
-        return getCollection(specificationLoader).getName();
+    /**
+     * {@link OneToManyAssociation#getId() id} of the {@link OneToManyAssociation collection} passed into the constructor.
+     *
+     * <p>
+     *     Is (I think) the same value as {@link #getId()}, though derived more directly.
+     * </p>
+     */
+    public String getCollectionId() {
+        return collectionId;
+    }
+
+    public String getCollectionName() {
+        return collectionName;
     }
 
     public OneToManyAssociation getCollection(final SpecificationLoader specificationLoader) {

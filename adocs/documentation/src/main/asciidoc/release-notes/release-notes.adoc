@@ -22,12 +22,12 @@ This table summarises all releases of Apache Isis to date.
 | JIRA relnotes
 
 | xref:release-notes.adoc#_release-notes_1.16.1[1.16.1]
-| xx-02-2018
+| 22-02-2018
 | Parented collections with checkboxes, replay module
-| .
-| .
-| .
-| ...
+| 4
+| 10
+| 17
+| https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12342424[Release notes for v1.16.1]
 
 | xref:release-notes.adoc#_release-notes_1.16.0[1.16.0]
 | 08-01-2018

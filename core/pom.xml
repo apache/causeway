@@ -843,7 +843,7 @@
                             <manifestEntries>
                                 <Automatic-Module-Name>${jar-plugin.automaticModuleName}</Automatic-Module-Name>
                                 <Implementation-Vendor-Id>org.apache.isis</Implementation-Vendor-Id>
-                                <Implementation-Vendor>Apache Isis&#8482; Project</Implementation-Vendor>
+                                <Implementation-Vendor>Apache Isis™ Project</Implementation-Vendor>
                                 <SCM-Revision>${git.commit.id.abbrev}</SCM-Revision>
                             </manifestEntries>
                         </archive>
@@ -1053,11 +1053,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
-            </plugin>
-
-            <plugin>
-                <groupId>pl.project13.maven</groupId>
-                <artifactId>git-commit-id-plugin</artifactId>
             </plugin>
 
             <plugin>
@@ -2264,6 +2259,22 @@ ${license.additional-notes}
                                 </goals>
                             </execution>
                         </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>git</id>
+            <activation>
+                <property>
+                    <name>!skip.git</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>pl.project13.maven</groupId>
+                        <artifactId>git-commit-id-plugin</artifactId>
                     </plugin>
                 </plugins>
             </build>

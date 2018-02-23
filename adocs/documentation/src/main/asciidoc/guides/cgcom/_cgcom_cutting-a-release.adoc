@@ -478,7 +478,7 @@ mvn clean install
 * can be run from an IDE
 ** mainClass=`org.apache.isis.WebServer`
 ** args=`-m domainapp.application.manifest.DomainAppAppManifestWithFixtures`
-** run before: `mvn -f pom-jdo-enhance-all.xml datanucleus:enhance -o` in the root module
+** run before: `mvn -pl module-simple datanucleus:enhance -o` in the root module
 
 * can be run using the mvn jetty plugin:
 +

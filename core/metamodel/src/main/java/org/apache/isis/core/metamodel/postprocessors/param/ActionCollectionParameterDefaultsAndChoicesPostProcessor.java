@@ -84,7 +84,7 @@ public class ActionCollectionParameterDefaultsAndChoicesPostProcessor implements
                     new ObjectActionParameter.Predicates.CollectionParameter(specification);
 
             final ImmutableList<ObjectAction> actions = FluentIterable.from(objectActions)
-                    .filter(ObjectAction.Predicates.associatedWith(collectionId))
+                    .filter(ObjectAction.Predicates.associatedWith(otma))
                     .toList();
 
             for (final ObjectAction action : actions) {
