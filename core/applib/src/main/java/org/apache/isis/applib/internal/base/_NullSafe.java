@@ -162,6 +162,20 @@ public final class _NullSafe {
 	public static boolean isEmpty(short[] array){ return array==null || array.length == 0;}
 	public static <T> boolean isEmpty(T[] array){ return array==null || array.length == 0;}
 
+	// -- MAP
 	
+	/**
+	 * Null-safe variant of {@link java.util.Map#getOrDefault(Object, Object)}
+	 * @param map
+	 * @param key
+	 * @param defaultValue
+	 * @return
+	 */
+	public final static <K,V> V getOrDefault(final Map<K, V> map, final K key, final V defaultValue) {
+		if(map==null || key==null) {
+			return defaultValue;
+		}
+		return map.getOrDefault(key, defaultValue);
+	}
 	
 }
