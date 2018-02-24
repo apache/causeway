@@ -18,6 +18,7 @@
  */
 package org.apache.isis.applib;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -43,6 +44,39 @@ abstract class ModuleOrBuilderAbstract<B extends ModuleOrBuilderAbstract> {
     final List<PropertyResource> propertyResources = Lists.newArrayList();
 
     ModuleOrBuilderAbstract() {}
+
+    public B withAdditionalDependency(final Module dependency) {
+        withTransitiveFrom(dependency);
+        return (B) this;
+    }
+
+    public B withAdditionalDependencies(final Set<Module> dependencies) {
+        for (final Module dependency : dependencies) {
+            withAdditionalDependency(dependency);
+        }
+        return (B) this;
+    }
+
+    public B withAdditionalDependencies(final Module... dependencies) {
+        return withAdditionalDependencies(Sets.newHashSet(dependencies));
+    }
+
+    void withTransitiveFrom(final Module module) {
+        withAdditionalModules(asClasses(Module.Util.transitiveDependenciesOf(module)));
+        withAdditionalModules(Module.Util.transitiveAdditionalModulesOf(module));
+        withAdditionalServices(Module.Util.transitiveAdditionalServicesOf(module));
+        withConfigurationPropertyResources(Module.Util.transitivePropertyResourcesOf(module));
+        withConfigurationProperties(Module.Util.transitiveIndividualConfigPropsOf(module));
+    }
+
+    private static Class[] asClasses(final List<Module> dependencies) {
+        final List<Class<? extends Module>> list = new ArrayList<>();
+        for (Module dependency : dependencies) {
+            Class<? extends Module> aClass = dependency.getClass();
+            list.add(aClass);
+        }
+        return list.toArray(new Class[] {});
+    }
 
     public B withAdditionalModules(final Class<?>... modules) {
         return withAdditionalModules(Arrays.asList(modules));
