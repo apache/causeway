@@ -72,6 +72,30 @@ public final class _Context {
 			singletonMap.put(toKey(type), singleton);	
 		}
 	}
+	
+	/**
+	 * Puts a singleton instance onto the current context, that 
+	 * either overrides any already present or ignores the call depending on {@code override}.
+	 * @param type non-null
+	 * @param singleton non-null
+	 * @param override whether to overrides any already present singleton or not
+	 * @return whether the {@code singleton} was put on the context or ignored because there is already one present 
+	 */
+	public static boolean put(Class<?> type, Object singleton, boolean override) {
+		Objects.requireNonNull(type);
+		Objects.requireNonNull(singleton);
+		
+		// let writes to the map be atomic
+		synchronized (singletonMap) {   
+			if(singletonMap.containsKey(toKey(type))) {
+				if(!override)
+					return false;
+			}
+			singletonMap.put(toKey(type), singleton);
+			return true;
+		}
+	}
+	
 
 	/**
 	 * Gets a singleton instance of {@code type} if there is any, null otherwise.
