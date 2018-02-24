@@ -30,7 +30,10 @@ import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 
+import javax.servlet.ServletContext;
+
 import org.apache.isis.applib.internal.context._Context;
+import org.apache.isis.applib.internal.resources._Resource;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
@@ -46,7 +49,6 @@ import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.threadpool.ThreadPoolSupport;
 import org.apache.isis.core.webapp.IsisWebAppBootstrapper;
 import org.apache.isis.core.webapp.WebAppConstants;
-import org.apache.isis.core.webapp.WebAppContextSupport;
 import org.apache.isis.schema.utils.ChangesDtoUtils;
 import org.apache.isis.schema.utils.CommandDtoUtils;
 import org.apache.isis.schema.utils.InteractionDtoUtils;
@@ -349,9 +351,8 @@ public class IsisWicketApplication
 
             final IsisConfigurationBuilder isisConfigurationBuilder = obtainConfigBuilder();
             isisConfigurationBuilder.addDefaultConfigurationResourcesAndPrimers();
-            
-            final String webappContextPath = getServletContext().getContextPath();
-            isisConfigurationBuilder.add(WebAppContextSupport.WEB_APP_CONTEXT_PATH, webappContextPath);
+
+            _Resource.putContextPath(getServletContext().getContextPath());
 
             final IsisConfigurationDefault configuration = isisConfigurationBuilder.getConfiguration();
 
