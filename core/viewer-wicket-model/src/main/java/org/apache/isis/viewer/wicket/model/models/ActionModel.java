@@ -48,6 +48,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.routing.RoutingService;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
+import org.apache.isis.applib.value.LocalResourcePath;
 import org.apache.isis.applib.value.NamedWithMimeType;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
@@ -577,6 +578,10 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
         if(value instanceof java.net.URL) {
             final java.net.URL url = (java.net.URL) value;
             return new RedirectRequestHandler(url.toString());
+        }
+        if(value instanceof LocalResourcePath) {
+            final LocalResourcePath localResourcePath = (LocalResourcePath) value;
+            return new RedirectRequestHandler(localResourcePath.getPath());
         }
         return null;
     }

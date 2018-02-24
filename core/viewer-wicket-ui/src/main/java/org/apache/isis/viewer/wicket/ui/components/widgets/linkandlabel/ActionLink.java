@@ -32,6 +32,7 @@ import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
 import org.apache.wicket.util.time.Duration;
 
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.value.LocalResourcePath;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -255,7 +256,11 @@ public abstract class ActionLink extends AjaxLink<ObjectAdapter> implements IAja
     private static boolean isNoArgReturnTypeRedirect(final ObjectAction action) {
         return action.getParameterCount() == 0 &&
                 action.getReturnType() != null &&
-                action.getReturnType().getCorrespondingClass() == java.net.URL.class;
+                (
+                		action.getReturnType().getCorrespondingClass() == java.net.URL.class ||
+                		action.getReturnType().getCorrespondingClass() == LocalResourcePath.class
+                )
+                ;
     }
 
     // TODO: should unify with ActionResultResponseType (as used in ActionParametersPanel)
