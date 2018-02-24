@@ -16,9 +16,6 @@
  */
 package org.apache.isis.applib.services.swagger;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-
 import org.apache.isis.applib.IsisApplibModule;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -29,7 +26,9 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.internal.resources._Resource;
 import org.apache.isis.applib.value.Clob;
+import org.apache.isis.applib.value.LocalResourcePath;
 
 
 @DomainService(
@@ -58,11 +57,9 @@ public class SwaggerServiceMenu {
             cssClassFa = "fa-external-link"
     )
     @MemberOrder(sequence="500.600.1")
-    public URL openSwaggerUi() throws MalformedURLException {
-        return new java.net.URL("http:///swagger-ui/index.html");
+    public LocalResourcePath openSwaggerUi() {
+        return new LocalResourcePath("/swagger-ui/index.html");
     }
-
-
 
     public static class OpenRestApiDomainEvent extends ActionDomainEvent {}
 
@@ -75,11 +72,9 @@ public class SwaggerServiceMenu {
             cssClassFa = "fa-external-link"
     )
     @MemberOrder(sequence="500.600.2")
-    public URL openRestApi() throws MalformedURLException {
-        return new java.net.URL("http:///restful/");
+    public LocalResourcePath openRestApi() {
+    	return new LocalResourcePath("/"+_Resource.getRestfulPathIfAny()+"/");
     }
-
-
 
     public static class DownloadSwaggerSpecDomainEvent extends ActionDomainEvent {}
 
@@ -111,8 +106,6 @@ public class SwaggerServiceMenu {
     public SwaggerService.Format default2DownloadSwaggerSchemaDefinition() {
         return SwaggerService.Format.YAML;
     }
-
-
 
     @javax.inject.Inject
     SwaggerService swaggerService;

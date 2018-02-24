@@ -25,10 +25,11 @@ import javax.annotation.PostConstruct;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.internal.base._NullSafe;
+import org.apache.isis.applib.internal.resources._Resource;
 import org.apache.isis.applib.services.swagger.SwaggerService;
 import org.apache.isis.core.metamodel.services.swagger.internal.SwaggerSpecGenerator;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.webapp.WebAppContextSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,21 +50,15 @@ public class SwaggerServiceDefault implements SwaggerService {
     @PostConstruct
     public void init(final Map<String,String> properties) {
     	
-    	final String webappContextPath = 
-    			getPropertyElse(properties, WebAppContextSupport.WEB_APP_CONTEXT_PATH, "/");
+    	// ----------------------------------------------------------------------------------------------------------
+    	// TODO [ahuber] this initialization must be done once before accessing _Resource.prependContextPathIfPresent
+    	// could be done anywhere during bootstrapping
+    	final String restfulPath = 
+    			_NullSafe.getOrDefault(properties, KEY_RESTFUL_BASE_PATH, KEY_RESTFUL_BASE_PATH_DEFAULT);
+    	_Resource.putRestfulPath(restfulPath); 
+    	// ----------------------------------------------------------------------------------------------------------
     	
-    	final String basePath = 
-    			getPropertyElse(properties, KEY_RESTFUL_BASE_PATH, KEY_RESTFUL_BASE_PATH_DEFAULT);
-    	
-    	this.basePath = WebAppContextSupport.prependContextPathIfPresent(webappContextPath, basePath);
-    }
-
-    static String getPropertyElse(final Map<String, String> properties, final String key, final String dflt) {
-        String basePath = properties.get(key);
-        if(basePath == null) {
-            basePath = dflt;
-        }
-        return basePath;
+    	this.basePath = _Resource.prependContextPathIfPresent(restfulPath);
     }
 
     @Programmatic
@@ -76,7 +71,6 @@ public class SwaggerServiceDefault implements SwaggerService {
         final String swaggerSpec = swaggerSpecGenerator.generate(basePath, visibility, format);
         return swaggerSpec;
     }
-
 
     @javax.inject.Inject
     SpecificationLoader specificationLoader;

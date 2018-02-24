@@ -16,8 +16,6 @@
  */
 package org.apache.isis.applib.services.layout;
 
-import java.net.MalformedURLException;
-
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Contributed;
@@ -25,8 +23,11 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.internal.resources._Resource;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
+import org.apache.isis.applib.services.swagger.SwaggerService;
+import org.apache.isis.applib.value.LocalResourcePath;
 
 @Mixin(method="act")
 public class Object_openRestApi {
@@ -50,15 +51,20 @@ public class Object_openRestApi {
             position = ActionLayout.Position.PANEL_DROPDOWN
     )
     @MemberOrder(name = "datanucleusIdLong", sequence = "750.1")
-    public java.net.URL act() throws MalformedURLException {
+    public LocalResourcePath act() {
         Bookmark bookmark = bookmarkService.bookmarkFor(object);
-        return new java.net.URL(String.format(
-                "http:///restful/objects/%s/%s",
+        
+        return new LocalResourcePath(String.format(
+                "/%s/objects/%s/%s",
+            	_Resource.getRestfulPathIfAny(),
                 bookmark.getObjectType(),
                 bookmark.getIdentifier()));
     }
 
     @javax.inject.Inject
     BookmarkService bookmarkService;
+    
+    @javax.inject.Inject
+    SwaggerService swaggerService;
 
 }
