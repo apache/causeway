@@ -20,7 +20,7 @@
 package org.apache.isis.applib.value;
 
 import java.io.Serializable;
-import java.nio.file.InvalidPathException;
+import java.net.URISyntaxException;
 
 import javax.annotation.Nonnull;
 
@@ -34,14 +34,14 @@ public final class LocalResourcePath implements Serializable {
     private static final long serialVersionUID = 1L;
     private final String path;
 
-    public LocalResourcePath(final String path) throws InvalidPathException {
+    public LocalResourcePath(final String path) throws IllegalArgumentException {
     	
-    	//TODO throw InvalidPathException if path is not sane
+    	validate(path); // may throw IllegalArgumentException
     	
-        this.path = path != null ? path : "";
+        this.path = (path != null) ? path : "";
     }
 
-    @Nonnull
+	@Nonnull
     public Object getValue() {
         return path;
     }
@@ -71,6 +71,19 @@ public final class LocalResourcePath implements Serializable {
     	return this.getPath().equals(other.getPath());
     }
     
+    // -- HELPER
+    
+    private void validate(String path) throws IllegalArgumentException {
+    	if(path==null)
+    		return;
 
+		try {
+			// used for syntax testing
+			new java.net.URI("http://localhost/"+path);
+		} catch (URISyntaxException e) {
+			throw new IllegalArgumentException("the given local path has an invalid syntax: '"+path+"'", e);
+		}
+    	
+	}
 
 }
