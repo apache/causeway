@@ -19,8 +19,6 @@ package org.apache.isis.progmodels.dflt;
 
 import java.util.List;
 
-import com.google.common.collect.Lists;
-
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facets.actions.action.ActionAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.actions.action.ActionChoicesForCollectionParameterFacetFactory;
@@ -84,7 +82,6 @@ import org.apache.isis.core.metamodel.facets.object.immutable.immutableannot.Cop
 import org.apache.isis.core.metamodel.facets.object.membergroups.annotprop.MemberGroupLayoutFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacetForMixinAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.navparent.annotation.NavigableParentAnnotationFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.navparent.method.NavigableParentFacetMethodFactory;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.classname.ObjectSpecIdFacetDerivedFromClassNameFactory;
 import org.apache.isis.core.metamodel.facets.object.objectvalidprops.impl.ObjectValidPropertiesFacetImplFactory;
 import org.apache.isis.core.metamodel.facets.object.parseable.annotcfg.ParseableFacetAnnotationElseConfigurationFactory;
@@ -102,7 +99,6 @@ import org.apache.isis.core.metamodel.facets.param.choices.method.ActionChoicesF
 import org.apache.isis.core.metamodel.facets.param.choices.methodnum.ActionParameterChoicesFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.param.defaults.fromtype.ActionParameterDefaultFacetDerivedFromTypeFactory;
 import org.apache.isis.core.metamodel.facets.param.defaults.methodnum.ActionParameterDefaultsFacetViaMethodFactory;
-import org.apache.isis.core.metamodel.postprocessors.param.ActionCollectionParameterDefaultsAndChoicesPostProcessor;
 import org.apache.isis.core.metamodel.facets.param.describedas.annotderived.DescribedAsFacetOnParameterAnnotationElseDerivedFromTypeFactory;
 import org.apache.isis.core.metamodel.facets.param.layout.ParameterLayoutFacetFactory;
 import org.apache.isis.core.metamodel.facets.param.mandatory.dflt.MandatoryFacetOnParametersDefaultFactory;
@@ -154,6 +150,7 @@ import org.apache.isis.core.metamodel.facets.value.image.ImageValueFacetUsingSem
 import org.apache.isis.core.metamodel.facets.value.imageawt.JavaAwtImageValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.integer.IntPrimitiveValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.integer.IntWrapperValueFacetUsingSemanticsProviderFactory;
+import org.apache.isis.core.metamodel.facets.value.localrespath.LocalResourcePathValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.longs.LongPrimitiveValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.longs.LongWrapperValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.money.MoneyValueFacetUsingSemanticsProviderFactory;
@@ -168,8 +165,11 @@ import org.apache.isis.core.metamodel.facets.value.timestamp.TimeStampValueFacet
 import org.apache.isis.core.metamodel.facets.value.timestampsql.JavaSqlTimeStampValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.url.URLValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.uuid.UUIDValueFacetUsingSemanticsProviderFactory;
+import org.apache.isis.core.metamodel.postprocessors.param.ActionCollectionParameterDefaultsAndChoicesPostProcessor;
 import org.apache.isis.core.metamodel.progmodel.ObjectSpecificationPostProcessor;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelAbstract;
+
+import com.google.common.collect.Lists;
 
 public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract {
 
@@ -376,6 +376,7 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(new JavaSqlTimeStampValueFacetUsingSemanticsProviderFactory());
         addFactory(new StringValueFacetUsingSemanticsProviderFactory());
         addFactory(new URLValueFacetUsingSemanticsProviderFactory());
+        addFactory(new LocalResourcePathValueFacetUsingSemanticsProviderFactory());
         addFactory(new UUIDValueFacetUsingSemanticsProviderFactory());
 
         addFactory(new JavaAwtImageValueFacetUsingSemanticsProviderFactory());
