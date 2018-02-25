@@ -21,6 +21,7 @@ package org.apache.isis.applib.internal.base;
 
 import static org.apache.isis.applib.internal.base._Strings_SplitIterator.splitIterator;
 
+import java.nio.charset.Charset;
 import java.util.Objects;
 import java.util.Spliterator;
 import java.util.Spliterators;
@@ -31,6 +32,7 @@ import java.util.stream.StreamSupport;
 import javax.annotation.Nullable;
 
 import org.apache.isis.applib.internal._Constants;
+import org.apache.isis.applib.internal.base._Bytes.BytesOperator;
 
 /**
  * <h1>- internal use only -</h1>
@@ -50,17 +52,17 @@ import org.apache.isis.applib.internal._Constants;
 public final class _Strings {
 
 	private _Strings() {}
-	
+
 	// -- CONSTANTS
-	
+
 	/**
 	 * Convenient e.g. for toArray conversions
 	 * (a duplicate of in {@link _Constants.emptyStringArray} )
 	 */
 	public static String[] emptyArray = new String[0];
-	
+
 	// -- BASIC PREDICATES
-	
+
 	/**
 	 * 
 	 * @param x
@@ -78,9 +80,9 @@ public final class _Strings {
 	public static boolean isNotEmpty(final CharSequence x){
 		return x!=null && x.length()!=0;
 	}
-	
+
 	// -- BASIC UNARY OPERATORS
-	
+
 	/**
 	 * Trims the input.
 	 * @param input
@@ -92,51 +94,51 @@ public final class _Strings {
 		}
 		return input.trim();
 	}
-	
-    /**
-     * Converts all of the characters in {@code input} to lower case using the rules of the default locale. 
-     * @param input
-     * @return null if {@code input} is null
-     */
-    public static String lower(@Nullable final String input) {
-    	if(input==null) {
-    		return null;
-    	}
-        return input.toLowerCase();
-    }
-    
-    /**
-     * Converts all of the characters in {@code input} to upper case using the rules of the default locale. 
-     * @param input
-     * @return null if {@code input} is null
-     */
-    public static String upper(@Nullable final String input) {
-    	if(input==null) {
-    		return null;
-    	}
-        return input.toUpperCase();
-    }
-    
-    /**
-     * Converts the first character in {@code input} to upper case using the rules of the default locale. 
-     * @param input
-     * @return null if {@code input} is null
-     */
-    public static String capitalize(@Nullable final String input) {
-    	if(input==null) {
-    		return null;
-    	}
-    	if (input.length() == 0) {
-    		return input;
-    	}
-    	if (input.length() == 1) {
-    		return input.toUpperCase();
-    	}
-    	return Character.toUpperCase(input.charAt(0)) + input.substring(1);
-    }
-    
+
+	/**
+	 * Converts all of the characters in {@code input} to lower case using the rules of the default locale. 
+	 * @param input
+	 * @return null if {@code input} is null
+	 */
+	public static String lower(@Nullable final String input) {
+		if(input==null) {
+			return null;
+		}
+		return input.toLowerCase();
+	}
+
+	/**
+	 * Converts all of the characters in {@code input} to upper case using the rules of the default locale. 
+	 * @param input
+	 * @return null if {@code input} is null
+	 */
+	public static String upper(@Nullable final String input) {
+		if(input==null) {
+			return null;
+		}
+		return input.toUpperCase();
+	}
+
+	/**
+	 * Converts the first character in {@code input} to upper case using the rules of the default locale. 
+	 * @param input
+	 * @return null if {@code input} is null
+	 */
+	public static String capitalize(@Nullable final String input) {
+		if(input==null) {
+			return null;
+		}
+		if (input.length() == 0) {
+			return input;
+		}
+		if (input.length() == 1) {
+			return input.toUpperCase();
+		}
+		return Character.toUpperCase(input.charAt(0)) + input.substring(1);
+	}
+
 	// -- SPLITTING
-	
+
 	/**
 	 * Splits the {@code input} into chunks separated by {@code separator}, 
 	 * then puts all chunks on the stream.
@@ -159,38 +161,86 @@ public final class _Strings {
 			return Stream.of();
 		if(!input.contains(separator))
 			return Stream.of(input);
-		
+
 		return StreamSupport.stream(
-		          Spliterators.spliteratorUnknownSize(splitIterator(input, separator), Spliterator.ORDERED),
-		          false); // not parallel
+				Spliterators.spliteratorUnknownSize(splitIterator(input, separator), Spliterator.ORDERED),
+				false); // not parallel
 	}
-    
-    // -- REPLACEMENT OPERATORS
-    
-    /**
-     * Condenses any whitespace to the given {@code replacement}
-     * 
-     * @param input
-     * @param replacement
-     * @return null if {@code input} is null
-     */
-    public static String condenseWhitespaces(@Nullable final String input, final String replacement) {
-    	if(input==null) {
-    		return null;
-    	}
-    	Objects.requireNonNull(replacement);
-        return input.replaceAll("\\s+", replacement);
-    }
-    
-    // -- UNARY OPERATOR COMPOSITION
-    
-    /**
-     * Monadic StringOperator that allows composition of unary string operators.
-     */
-    public final static class StringOperator {
-    	
-    	private final UnaryOperator<String> operator;
-    	    	
+
+	// -- REPLACEMENT OPERATORS
+
+	/**
+	 * Condenses any whitespace to the given {@code replacement}
+	 * 
+	 * @param input
+	 * @param replacement
+	 * @return null if {@code input} is null
+	 */
+	public static String condenseWhitespaces(@Nullable final String input, final String replacement) {
+		if(input==null) {
+			return null;
+		}
+		Objects.requireNonNull(replacement);
+		return input.replaceAll("\\s+", replacement);
+	}
+	
+	// -- BYTE ARRAY CONVERSION
+	
+	/**
+	 * Encodes {@code str} into a sequence of bytes using the given {@code charset}.
+	 * @param str
+	 * @param charset
+	 * @return null if {@code str} is null
+	 */
+	public final static byte[] toBytes(@Nullable final String str, Charset charset) {
+		if(str==null) {
+			return null;
+		}
+		Objects.requireNonNull(charset);
+		return str.getBytes(charset);
+	}
+	
+	/**
+	 * Constructs a new String by decoding the specified array of bytes using the specified {@code charset}.
+	 * @param bytes
+	 * @param charset
+	 * @return null if {@code bytes} is null
+	 */
+	public final static String ofBytes(@Nullable final byte[] bytes, Charset charset) {
+		if(bytes==null) {
+			return null;
+		}
+		Objects.requireNonNull(charset);
+		return new String(bytes, charset);
+	}
+	
+	/**
+	 * Converts the {@code input} to a byte array using the specified {@code charset}, 
+	 * then applies the byte manipulation operator {@code converter},
+	 * then converts the (manipulated) byte array back to a string, again using the specified {@code charset}.
+	 * @param input
+	 * @param converter
+	 * @param charset
+	 * @return null if {@code input} is null
+	 */
+	public final static String convert(@Nullable final String input, final BytesOperator converter, final Charset charset) {
+		if(input==null) {
+			return null;
+		}
+		Objects.requireNonNull(converter);
+		Objects.requireNonNull(charset);
+		return ofBytes(converter.apply(toBytes(input, charset)), charset);
+	}
+
+	// -- UNARY OPERATOR COMPOSITION
+
+	/**
+	 * Monadic StringOperator that allows composition of unary string operators.
+	 */
+	public final static class StringOperator {
+
+		private final UnaryOperator<String> operator;
+
 		private StringOperator(UnaryOperator<String> operator) {
 			Objects.requireNonNull(operator);
 			this.operator = operator;
@@ -199,34 +249,40 @@ public final class _Strings {
 		public String apply(String input) {
 			return operator.apply(input);
 		}
-		
+
 		public StringOperator andThen(UnaryOperator<String> andThen) {
 			return new StringOperator(s->andThen.apply(operator.apply(s)));
 		}
-    	
-    }
-    
-    /**
-     * Returns a monadic StringOperator that allows composition of unary string operators
-     * @return
-     */
-    public static StringOperator operator() {
+
+	}
+
+	/**
+	 * Returns a monadic StringOperator that allows composition of unary string operators
+	 * @return
+	 */
+	public static StringOperator operator() {
 		return new StringOperator(UnaryOperator.identity());
-    }
-    
-    // -- SPECIAL COMPOSITES 
-    
-    // using naming convention asXxx...
-    
-    public final static StringOperator asLowerDashed = operator()
-        	.andThen(_Strings::lower)
-        	.andThen(s->_Strings.condenseWhitespaces(s, "-"));
+	}
 
- 	public final static StringOperator asNormalized = operator()
- 			.andThen(s->_Strings.condenseWhitespaces(s, " "));
-    
- 	public final static StringOperator asNaturalName2 = operator()
- 			.andThen(s->_Strings_NaturalNames.naturalName2(s, true));
+	// -- SPECIAL COMPOSITES 
 
-    
+	// using naming convention asXxx...
+
+	public final static StringOperator asLowerDashed = operator()
+			.andThen(_Strings::lower)
+			.andThen(s->_Strings.condenseWhitespaces(s, "-"));
+
+	public final static StringOperator asNormalized = operator()
+			.andThen(s->_Strings.condenseWhitespaces(s, " "));
+
+	public final static StringOperator asNaturalName2 = operator()
+			.andThen(s->_Strings_NaturalNames.naturalName2(s, true));
+
+
+
+
+
+
+
+
 }

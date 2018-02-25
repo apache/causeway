@@ -51,4 +51,9 @@ public final class _Constants {
 	 */
 	public static final String[] emptyStringArray = new String[0];
 	
+	/**
+	 * empty array of byte
+	 */
+	public static final byte[] emptyBytes = new byte[0];
+	
 }
