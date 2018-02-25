@@ -22,8 +22,10 @@ package org.apache.isis.applib.internal.base;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 
+import java.nio.charset.StandardCharsets;
 import java.util.stream.Collectors;
 
+import org.apache.isis.applib.internal._Constants;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -167,6 +169,66 @@ public class StringsTest {
 		Assert.assertThat(
 				_Strings.condenseWhitespaces("  12 aBc","|"), 
 				is("|12|aBc"));
+	}
+	
+	// -- TO BYTE CONVERSION
+	
+	@Test
+	public void toByteConvertWithNull() throws Exception {
+		Assert.assertThat(
+				_Strings.toBytes(null, StandardCharsets.UTF_8), 
+				nullValue());
+	}
+	
+	@Test
+	public void toByteConvertWithEmpty() throws Exception {
+		Assert.assertArrayEquals(
+				_Constants.emptyBytes,
+				_Strings.toBytes("", StandardCharsets.UTF_8));
+	}
+	
+	@Test
+	public void toByteConvert() throws Exception {
+		Assert.assertArrayEquals(
+				new byte[] {48,49,50,51},
+				_Strings.toBytes("0123", StandardCharsets.UTF_8));
+	}
+	
+	// -- FROM BYTE CONVERSION
+	
+	@Test
+	public void fromByteConvertWithNull() throws Exception {
+		Assert.assertThat(
+				_Strings.ofBytes(null, StandardCharsets.UTF_8), 
+				nullValue());
+	}
+	
+	@Test
+	public void fromByteConvertWithEmpty() throws Exception {
+		Assert.assertThat(
+				_Strings.ofBytes(_Constants.emptyBytes, StandardCharsets.UTF_8), 
+				is(""));
+	}
+	
+	@Test
+	public void fromByteConvert() throws Exception {
+		Assert.assertThat(
+				_Strings.ofBytes(new byte[] {48,49,50,51}, StandardCharsets.UTF_8), 
+				is("0123"));
+	}
+	
+	// -- BYTE MANIPULATION
+	
+	@Test
+	public void convertIdentity() throws Exception {
+		
+		Assert.assertThat(
+				_Strings.convert(null, _Bytes.operator(), StandardCharsets.UTF_8), 
+				nullValue());
+		
+		Assert.assertThat(
+				_Strings.convert("0123", _Bytes.operator(), StandardCharsets.UTF_8), 
+				is("0123"));
 	}
 	
 	// -- OPERATOR COMPOSITION
