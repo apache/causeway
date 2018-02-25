@@ -23,13 +23,13 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
-import com.google.common.base.Function;
+import java.util.function.Function;
 
 import org.junit.Test;
 
 public class ExceptionRecognizerForTypeTest {
 
-    private ExceptionRecognizerForType ersForType;
+    private ExceptionRecognizer ersForType;
 
     static class FooException extends Exception {
         private static final long serialVersionUID = 1L;
@@ -51,7 +51,7 @@ public class ExceptionRecognizerForTypeTest {
             return "pre: " + input;
         }
     };
-
+    
     @Test
     public void whenRecognized() {
         ersForType = new ExceptionRecognizerForType(FooException.class);
@@ -69,5 +69,35 @@ public class ExceptionRecognizerForTypeTest {
         ersForType = new ExceptionRecognizerForType(FooException.class, prepend);
         assertThat(ersForType.recognize(new FooException()), is("pre: foo"));
     }
+    
+    // -- LEGACY TESTS 
 
+    private com.google.common.base.Function<String,String> prependLegacy = 
+    		new com.google.common.base.Function<String, String>() {
+        @Override
+        public String apply(String input) {
+            return "pre: " + input;
+        }
+    };
+    
+    @Test
+    public void legacyWhenRecognized() {
+        ersForType = new ExceptionRecognizerForTypeLegacy(FooException.class);
+        assertThat(ersForType.recognize(new FooException()), is("foo"));
+    }
+
+    @Test
+    public void legacyWhenDoesNotRecognize() {
+        ersForType = new ExceptionRecognizerForTypeLegacy(FooException.class);
+        assertThat(ersForType.recognize(new BarException()), is(nullValue()));
+    }
+
+    @Test
+    public void legacyWhenRecognizedWithMessageParser() {
+        ersForType = new ExceptionRecognizerForTypeLegacy(FooException.class, prependLegacy);
+        assertThat(ersForType.recognize(new FooException()), is("pre: foo"));
+    }
+
+
+    
 }

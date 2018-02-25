@@ -18,9 +18,9 @@
  */
 package org.apache.isis.applib.services.exceprecog.jdo;
 
-import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType2;
+import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType;
 
-public class ExceptionRecognizerForJDODataStoreException extends ExceptionRecognizerForType2 {
+public class ExceptionRecognizerForJDODataStoreException extends ExceptionRecognizerForType {
 
     public ExceptionRecognizerForJDODataStoreException() {
         super(Category.SERVER_ERROR,

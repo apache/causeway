@@ -19,10 +19,10 @@
 package org.apache.isis.applib.services.exceprecog.jdo;
 
 import javax.jdo.JDODataStoreException;
-import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType2;
+import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType;
 
 public class ExceptionRecognizerForJDODataStoreExceptionIntegrityConstraintViolationForeignKeyNoActionException 
-extends ExceptionRecognizerForType2 {
+extends ExceptionRecognizerForType {
 
 	public ExceptionRecognizerForJDODataStoreExceptionIntegrityConstraintViolationForeignKeyNoActionException() {
 		super(Category.CONSTRAINT_VIOLATION,

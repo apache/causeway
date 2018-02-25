@@ -27,11 +27,11 @@ import org.apache.isis.applib.query.Query;
 /**
  * Legacy interface to ease transition from Isis 1.x to 2.x.
  * 
- * @deprecated use {@link RepositoryService} instead. 
+ * @deprecated use {@link RepositoryService} instead. (Will not be removed before Version 2.1.)
  * (Requires you to refactor Guava Predicates to Java Predicates in your domain code.)
  * 
  */
-@Deprecated
+@Deprecated // (Will not be removed before Version 2.1.)
 public interface RepositoryServiceLegacy {
 
     /**

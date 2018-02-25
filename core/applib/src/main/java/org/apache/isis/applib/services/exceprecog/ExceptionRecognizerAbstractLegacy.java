@@ -44,10 +44,15 @@ import com.google.common.base.Throwables;
  * <p>
  * If a messaging-parsing {@link Function} is provided through the constructor,
  * then the message can be altered.  Otherwise the exception's {@link Throwable#getMessage() message} is returned as-is.
+ * 
+ * @deprecated use {@link ExceptionRecognizerAbstract} instead. (Will not be removed before Version 2.1.)   
+ * (Requires you to refactor Guava Predicates, Functions, ... to Java Predicates, Functions, ... in your domain code.)
+ * 
  */
-public abstract class ExceptionRecognizerAbstract implements ExceptionRecognizer {
+@Deprecated // (Will not be removed before Version 2.1.)
+public abstract class ExceptionRecognizerAbstractLegacy implements ExceptionRecognizer {
 
-    public static final Logger LOG = LoggerFactory.getLogger(ExceptionRecognizerAbstract.class);
+    public static final Logger LOG = LoggerFactory.getLogger(ExceptionRecognizerAbstractLegacy.class);
 
     /**
      * Normally recognized exceptions are not logged (because they are expected and handled).  
@@ -95,28 +100,35 @@ public abstract class ExceptionRecognizerAbstract implements ExceptionRecognizer
     private boolean logRecognizedExceptions;
 
     // //////////////////////////////////////
+
+
+    // -- GUAVA LEGACY
     
-    // -- JAVA 8+
-    
-    public ExceptionRecognizerAbstract(final Category category, Predicate<Throwable> predicate, final Function<String,String> messageParser) {
+    public ExceptionRecognizerAbstractLegacy(final Category category, 
+    		com.google.common.base.Predicate<Throwable> predicate, 
+    		final com.google.common.base.Function<String,String> messageParser) {
     	Objects.requireNonNull(predicate);
-    	this.category = category;
-        this.predicate = predicate;
-        this.messageParser = messageParser != null ? messageParser : Function.identity();
+        this.category = category;
+        this.predicate = predicate::apply;
+        this.messageParser = messageParser != null ? messageParser::apply : Function.identity();
     }
 
-    public ExceptionRecognizerAbstract(Predicate<Throwable> predicate, final Function<String,String> messageParser) {
+    public ExceptionRecognizerAbstractLegacy(
+    		com.google.common.base.Predicate<Throwable> predicate, 
+    		final com.google.common.base.Function<String,String> messageParser) {
         this(Category.OTHER, predicate, messageParser);
     }
 
-    public ExceptionRecognizerAbstract(Category category, Predicate<Throwable> predicate) {
+    public ExceptionRecognizerAbstractLegacy(Category category, com.google.common.base.Predicate<Throwable> predicate) {
         this(category, predicate, null);
     }
 
-    public ExceptionRecognizerAbstract(Predicate<Throwable> predicate) {
+    public ExceptionRecognizerAbstractLegacy(com.google.common.base.Predicate<Throwable> predicate) {
         this(Category.OTHER, predicate);
     }
 
+    // --
+    
     @PostConstruct
     public void init(Map<String, String> properties) {
         final String prop = properties.get(KEY_LOG_RECOGNIZED_EXCEPTIONS);

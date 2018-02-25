@@ -29,7 +29,7 @@ import org.junit.Test;
 
 public class ExceptionRecognizerGeneralTest {
 
-    private ExceptionRecognizerAbstract ersGeneral;
+    private ExceptionRecognizer ersGeneral;
 
     static class FooException extends Exception {
         private static final long serialVersionUID = 1L;
@@ -48,19 +48,19 @@ public class ExceptionRecognizerGeneralTest {
     
     @Test
     public void whenRecognized_guava() {
-        ersGeneral = new ExceptionRecognizerAbstract(com.google.common.base.Predicates.<Throwable>alwaysTrue()){};
+        ersGeneral = new ExceptionRecognizerAbstractLegacy(com.google.common.base.Predicates.<Throwable>alwaysTrue()){};
         assertThat(ersGeneral.recognize(new FooException()), is("foo"));
     }
 
     @Test
     public void whenDoesNotRecognize_guava() {
-        ersGeneral = new ExceptionRecognizerAbstract(com.google.common.base.Predicates.<Throwable>alwaysFalse()){};
+        ersGeneral = new ExceptionRecognizerAbstractLegacy(com.google.common.base.Predicates.<Throwable>alwaysFalse()){};
         assertThat(ersGeneral.recognize(new FooException()), is(nullValue()));
     }
 
     @Test
     public void whenRecognizedWithMessageParser_guava() {
-        ersGeneral = new ExceptionRecognizerAbstract(com.google.common.base.Predicates.<Throwable>alwaysTrue(), prepend){};
+        ersGeneral = new ExceptionRecognizerAbstractLegacy(com.google.common.base.Predicates.<Throwable>alwaysTrue(), prepend){};
         assertThat(ersGeneral.recognize(new FooException()), is("pre: foo"));
     }
     

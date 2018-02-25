@@ -89,7 +89,8 @@ public class ExceptionRecognizerComposite implements ExceptionRecognizer {
 
 
     /**
-     * Returns the non-<tt>null</tt> recognition of the first {@link #add(ExceptionRecognizer) add}ed {@link org.apache.isis.applib.services.exceprecog.ExceptionRecognizer}.
+     * Returns the non-<tt>null</tt> recognition of the first {@link #add(ExceptionRecognizer) add}ed 
+     * {@link org.apache.isis.applib.services.exceprecog.ExceptionRecognizer}.
      *
      * <p>
      *     If none recognize the exception, then falls back to using {@link #recognize(Throwable)}, returning a

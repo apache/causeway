@@ -18,10 +18,10 @@
  */
 package org.apache.isis.applib.services.exceprecog.jdo;
 
-import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType2;
+import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType;
 
 public class ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException 
-extends ExceptionRecognizerForType2 {
+extends ExceptionRecognizerForType {
 
 	public ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException() {
 		super(Category.CONSTRAINT_VIOLATION,
