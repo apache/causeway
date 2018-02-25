@@ -15,7 +15,7 @@ public class UrlEncodingServiceWithCompression_Abstract_Test {
     @Before
     public void setUp() throws Exception {
         service = new UrlEncodingServiceWithCompressionAbstract(){};
-        service.base64Encoder = new UrlEncodingServiceUsingBaseEncoding();
+//        service.base64Encoder = new UrlEncodingServiceUsingBaseEncoding();
     }
 
     @Test
