@@ -16,13 +16,13 @@
  */
 package org.apache.isis.applib.services.urlencoding;
 
-import java.nio.charset.Charset;
-
-import com.google.common.io.BaseEncoding;
+import java.nio.charset.StandardCharsets;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.internal.base._Bytes;
+import org.apache.isis.applib.internal.base._Strings;
 
 @DomainService(
         nature = NatureOfService.DOMAIN,
@@ -30,37 +30,14 @@ import org.apache.isis.applib.annotation.Programmatic;
 )
 public class UrlEncodingServiceUsingBaseEncoding implements UrlEncodingService {
 
-    private final BaseEncoding baseEncoding;
-    private final Charset charset;
-
-    public UrlEncodingServiceUsingBaseEncoding(final BaseEncoding baseEncoding, final Charset charset) {
-        this.baseEncoding = baseEncoding;
-        this.charset = charset;
-    }
-
-    public UrlEncodingServiceUsingBaseEncoding() {
-        this(BaseEncoding.base64Url(), Charset.forName("UTF-8"));
-    }
-
-
-    @Programmatic
+	@Override @Programmatic
     public String encode(final String str) {
-        byte[] bytes = str.getBytes(charset);
-        return encodeToBase64(bytes);
+    	return _Strings.convert(str, _Bytes.asUrlBase64, StandardCharsets.UTF_8);
     }
 
-    String encodeToBase64(final byte[] bytes) {
-        return baseEncoding.encode(bytes);
-    }
-
-    @Programmatic
-    public String decode(String str) {
-        final byte[] bytes = decodeBase64(str);
-        return new String(bytes, Charset.forName("UTF-8"));
-    }
-
-    byte[] decodeBase64(final String str) {
-        return baseEncoding.decode(str);
+    @Override @Programmatic
+    public String decode(final String str) {
+    	return _Strings.convert(str, _Bytes.ofUrlBase64, StandardCharsets.UTF_8);
     }
 
 }
