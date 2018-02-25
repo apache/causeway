@@ -24,11 +24,11 @@ import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.util.ArrayList;
 import java.util.List;
-import com.google.common.base.Function;
-import com.google.common.base.Splitter;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
+import java.util.stream.Collectors;
+
+import org.apache.isis.applib.internal.base._Strings;
 
 /**
  * Specifies the positioning of an entity's (groups of) properties and of its collections, on a page, column by column.
@@ -62,21 +62,17 @@ public @interface MemberGroupLayout {
         private final int collections;
         
         public static ColumnSpans valueOf(String str) {
-            final Iterable<String> split = Splitter.on(",").split(str);
             try {
-                final List<Integer> list = Lists.newArrayList(Iterables.transform(split, new Function<String,Integer>() {
-                    @Override
-                    public Integer apply(String input) {
-                        return Integer.parseInt(input);
-                    }
-                }));
+                final List<Integer> list = _Strings.splitThenStream(str, ",")
+                    	.map(Integer::parseInt)
+                    	.collect(Collectors.toList());
                 return asSpans(list);
             } catch(RuntimeException ex) {
                 return null;
             }
         }
         public static ColumnSpans asSpans(int... columnSpans) {
-            List<Integer> list = Lists.<Integer>newArrayList();
+            final List<Integer> list = new ArrayList<>();
             for (int i : columnSpans) {
                 list.add(i);
             }
