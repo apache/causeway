@@ -148,13 +148,19 @@ public final class _Bytes {
 	
 	// -- SPECIAL COMPOSITES 
 
-	// using naming convention asXxx...
+	// using naming convention asX../ofX..
 
+	public final static BytesOperator asUrlBase64 = operator()
+			.andThen(bytes->encodeToBase64(Base64.getUrlEncoder(), bytes));
+	
+	public final static BytesOperator ofUrlBase64 = operator()
+			.andThen(bytes->decodeBase64(Base64.getUrlDecoder(), bytes));
+	
 	public final static BytesOperator asCompressedUrlBase64 = operator()
 			.andThen(_Bytes::compress)
 			.andThen(bytes->encodeToBase64(Base64.getUrlEncoder(), bytes));
 	
-	public final static BytesOperator asDecompressedUrlBase64 = operator()
+	public final static BytesOperator ofCompressedUrlBase64 = operator()
 			.andThen(bytes->decodeBase64(Base64.getUrlDecoder(), bytes))
 			.andThen(_Bytes::decompress);
 	

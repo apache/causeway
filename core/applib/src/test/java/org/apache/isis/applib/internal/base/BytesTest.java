@@ -105,20 +105,22 @@ public class BytesTest {
 	@Test
 	public void composedOperatorWithNull() throws Exception {
 		Assert.assertNull(_Bytes.asCompressedUrlBase64.apply(null));
-		Assert.assertNull(_Bytes.asDecompressedUrlBase64.apply(null));
+		Assert.assertNull(_Bytes.ofCompressedUrlBase64.apply(null));
+		Assert.assertNull(_Bytes.asUrlBase64.apply(null));
+		Assert.assertNull(_Bytes.ofUrlBase64.apply(null));
 	}
 	
 	@Test
 	public void composedIdentityWithByteRange() throws Exception {
 		Assert.assertArrayEquals(allBytes,
-				_Bytes.asDecompressedUrlBase64.apply(
+				_Bytes.ofCompressedUrlBase64.apply(
 						_Bytes.asCompressedUrlBase64.apply(allBytes)));
 	}
 	
 	@Test
 	public void composedIdentityWithTestimonial() throws Exception {
 		Assert.assertArrayEquals(testimonal,
-				_Bytes.asDecompressedUrlBase64.apply(
+				_Bytes.ofCompressedUrlBase64.apply(
 						_Bytes.asCompressedUrlBase64.apply(testimonal)));
 	}
 	

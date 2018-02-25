@@ -20,7 +20,7 @@ public abstract class UrlEncodingServiceWithCompressionAbstract implements UrlEn
 
     @Override
     public String decode(final String str) {
-    	return _Strings.convert(str, _Bytes.asDecompressedUrlBase64, StandardCharsets.UTF_8);
+    	return _Strings.convert(str, _Bytes.ofCompressedUrlBase64, StandardCharsets.UTF_8);
     }
 
 }
