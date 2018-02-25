@@ -33,7 +33,7 @@ public class BytesTest {
 	final int n = 256;
 	private final byte[] allBytes = new byte[n];
 	
-	private final byte[] testimonal = 
+	private final byte[] testimonial = 
 			_Strings.toBytes(
 					"https://docs.oracle.com/javase/8/docs/api/java/util/Base64.html#basic?"+
 					"0-theme-entityPageContainer-entity-rows-2-rowContents-1-col-tabGroups-1-panel-"
@@ -64,14 +64,14 @@ public class BytesTest {
 	
 	@Test
 	public void compressIdentityWithTestimonial() throws Exception {
-		Assert.assertArrayEquals(testimonal,
-				_Bytes.decompress(_Bytes.compress(testimonal)));
+		Assert.assertArrayEquals(testimonial,
+				_Bytes.decompress(_Bytes.compress(testimonial)));
 	}
 	
 	@Test
 	public void compressionRatio() throws Exception {
 		// lower is better
-		final double compressionRatio = (double)_Bytes.compress(testimonal).length / testimonal.length;
+		final double compressionRatio = (double)_Bytes.compress(testimonial).length / testimonial.length;
 		Assert.assertThat(compressionRatio, lessThan(0.7));
 	}
 	
@@ -94,10 +94,10 @@ public class BytesTest {
 	
 	@Test
 	public void base64IdentityWithTestimonial() throws Exception {
-		Assert.assertArrayEquals(testimonal,
+		Assert.assertArrayEquals(testimonial,
 				_Bytes.decodeBase64(
 						Base64.getUrlDecoder(), 
-						_Bytes.encodeToBase64(Base64.getUrlEncoder(), testimonal)));
+						_Bytes.encodeToBase64(Base64.getUrlEncoder(), testimonial)));
 	}
 	
 	// -- OPERATOR COMPOSITION
@@ -119,9 +119,9 @@ public class BytesTest {
 	
 	@Test
 	public void composedIdentityWithTestimonial() throws Exception {
-		Assert.assertArrayEquals(testimonal,
+		Assert.assertArrayEquals(testimonial,
 				_Bytes.ofCompressedUrlBase64.apply(
-						_Bytes.asCompressedUrlBase64.apply(testimonal)));
+						_Bytes.asCompressedUrlBase64.apply(testimonial)));
 	}
 	
 }

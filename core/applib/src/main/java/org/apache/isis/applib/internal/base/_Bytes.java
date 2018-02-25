@@ -43,10 +43,11 @@ public final class _Bytes {
 	// -- BASE-64 ENCODING
 
 	/**
-	 * 
+	 * Encodes all bytes from the specified byte array into a newly-allocated byte array using 
+	 * the specified {@code encoder}.
 	 * @param encoder
 	 * @param input
-	 * @return null if {@code str} is null
+	 * @return null if {@code input} is null
 	 */
 	public final static byte[] encodeToBase64(Base64.Encoder encoder, final byte[] input) {
 		if(input==null) {
@@ -57,10 +58,11 @@ public final class _Bytes {
 	}
 
 	/**
-	 * 
+	 * Decodes all bytes from the input byte array using the specified {@code decoder}, writing the 
+	 * results into a newly-allocated output byte array.
 	 * @param decoder
 	 * @param base64
-	 * @return null if {@code str} is null
+	 * @return null if {@code base64} is null
 	 */
 	public final static byte[] decodeBase64(Base64.Decoder decoder, final byte[] base64) {
 		if(base64==null) {
@@ -77,7 +79,7 @@ public final class _Bytes {
 	 * However, following symmetry holds: <br/>
 	 * {@code x == decompress(compress(x))}
 	 * @param input
-	 * @return null if {@code str} is null
+	 * @return null if {@code input} is null
 	 */
 	public static final byte[] compress(byte[] input) {
 		if(input==null) {
@@ -98,7 +100,7 @@ public final class _Bytes {
 	 * However, following symmetry holds: <br/>
 	 * {@code x == decompress(compress(x))}
 	 * @param compressed
-	 * @return null if {@code str} is null
+	 * @return null if {@code compressed} is null
 	 */
 	public static final byte[] decompress(byte[] compressed) {
 		if(compressed==null) {
