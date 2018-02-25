@@ -24,6 +24,9 @@ import java.io.Serializable;
 import org.apache.isis.applib.annotation.PromptStyle;
 
 public interface WicketViewerSettings extends Serializable {
+	
+	public static final String  KEY_WICKET_VIEWER_SHOW_FOOTER = "isis.viewer.wicket.showFooter";
+	public static final boolean WICKET_VIEWER_SHOW_FOOTER_DEFAULT = true;
 
     /**
      * The maximum length that a title of an object will be shown when rendered in a standalone table;

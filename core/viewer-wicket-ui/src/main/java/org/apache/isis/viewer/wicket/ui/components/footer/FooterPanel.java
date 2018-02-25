@@ -29,6 +29,7 @@ import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
+import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbPanel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.themepicker.ThemeChooser;
 import org.apache.isis.viewer.wicket.ui.pages.about.AboutPage;
@@ -39,7 +40,9 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
  */
 public class FooterPanel extends PanelAbstract<Model<String>> {
 
-    private static final String ID_BREADCRUMBS = "breadcrumbs";
+	private static final long serialVersionUID = 1L;
+	
+	private static final String ID_BREADCRUMBS = "breadcrumbs";
     private static final String ID_ABOUT_LINK = "aboutLink";
     private static final String ID_ABOUT_MESSAGE = "aboutMessage";
     private static final String ID_THEME_PICKER = "themePicker";
@@ -77,6 +80,15 @@ public class FooterPanel extends PanelAbstract<Model<String>> {
     protected void onConfigure() {
         super.onConfigure();
 
+        final boolean showFooter = getConfiguration().getBoolean(
+        		WicketViewerSettings.KEY_WICKET_VIEWER_SHOW_FOOTER, 
+        		WicketViewerSettings.WICKET_VIEWER_SHOW_FOOTER_DEFAULT);
+        
+        if(!showFooter) {
+        	setVisible(false);
+        	return;
+        }
+        
         PageParameters parameters = getPage().getPageParameters();
         setVisible(parameters.get(PageParametersUtils.ISIS_NO_FOOTER_PARAMETER_NAME).isNull());
     }
