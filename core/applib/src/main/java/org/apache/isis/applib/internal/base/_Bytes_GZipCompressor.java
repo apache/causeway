@@ -32,9 +32,11 @@ import java.util.zip.GZIPOutputStream;
  */
 final class _Bytes_GZipCompressor {
 	
-    static byte[] compress(final byte[] input) throws IOException {
+	static byte[] compress(final byte[] input) throws IOException {
     	
-        final ByteArrayOutputStream os = new ByteArrayOutputStream(input.length);
+    	final int BUFFER_SIZE = Math.max(256, input.length); // at least 256
+    	
+        final ByteArrayOutputStream os = new ByteArrayOutputStream(BUFFER_SIZE);
         final GZIPOutputStream gos = new GZIPOutputStream(os);
         gos.write(input);
         gos.close();
@@ -57,5 +59,7 @@ final class _Bytes_GZipCompressor {
         gis.close();
         return baos.toByteArray();
     }
+    
+
 	
 }

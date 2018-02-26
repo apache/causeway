@@ -24,6 +24,8 @@ import java.util.Base64;
 import java.util.Objects;
 import java.util.function.UnaryOperator;
 
+import javax.annotation.Nullable;
+
 /**
  * <h1>- internal use only -</h1>
  * <p>
@@ -40,6 +42,52 @@ public final class _Bytes {
 
 	private _Bytes(){}
 	
+	// -- PREPEND/APPEND
+	
+	/**
+	 * Copies all bytes from {@code bytes} followed by all bytes from {@code target} into a newly-allocated byte array. 
+	 * @param target
+	 * @param bytes to be prepended to {@code target}
+	 * @return bytes + target, or null if both {@code target} and {@code bytes} are null
+	 */
+	public final static byte[] prepend(@Nullable final byte[] target, @Nullable final byte ... bytes) {
+		if(target==null) {
+			if(bytes==null) {
+				return null;
+			}
+			return bytes.clone();
+		}
+		if(bytes==null) {
+			return target.clone();	
+		}
+		final byte[] result = new byte[target.length + bytes.length];
+		System.arraycopy(bytes, 0, result, 0, bytes.length);
+		System.arraycopy(target, 0, result, bytes.length, target.length);
+		return result;
+	}
+	
+	/**
+	 * Copies all bytes from {@code target} followed by all bytes from {@code bytes} into a newly-allocated byte array. 
+	 * @param target
+	 * @param bytes to be appended to {@code target}
+	 * @return target + bytes, or null if both {@code target} and {@code bytes} are null
+	 */
+	public final static byte[] append(@Nullable final byte[] target, @Nullable final byte ... bytes) {
+		if(target==null) {
+			if(bytes==null) {
+				return null;
+			}
+			return bytes.clone();
+		}
+		if(bytes==null) {
+			return target.clone();	
+		}
+		final byte[] result = new byte[target.length + bytes.length];
+		System.arraycopy(target, 0, result, 0, target.length);
+		System.arraycopy(bytes, 0, result, target.length, bytes.length);
+		return result;
+	}
+	
 	// -- BASE-64 ENCODING
 
 	/**
@@ -49,7 +97,7 @@ public final class _Bytes {
 	 * @param input
 	 * @return null if {@code input} is null
 	 */
-	public final static byte[] encodeToBase64(Base64.Encoder encoder, final byte[] input) {
+	public final static byte[] encodeToBase64(Base64.Encoder encoder, @Nullable final byte[] input) {
 		if(input==null) {
 			return null;
 		}
@@ -64,7 +112,7 @@ public final class _Bytes {
 	 * @param base64
 	 * @return null if {@code base64} is null
 	 */
-	public final static byte[] decodeBase64(Base64.Decoder decoder, final byte[] base64) {
+	public final static byte[] decodeBase64(Base64.Decoder decoder, @Nullable final byte[] base64) {
 		if(base64==null) {
 			return null;
 		}
@@ -81,7 +129,7 @@ public final class _Bytes {
 	 * @param input
 	 * @return null if {@code input} is null
 	 */
-	public static final byte[] compress(byte[] input) {
+	public static final byte[] compress(@Nullable byte[] input) {
 		if(input==null) {
 			return null;
 		}
@@ -89,7 +137,7 @@ public final class _Bytes {
 			return input;
 		}
 		try {
-			return _Bytes_GZipCompressor.compress(input);
+			return _Bytes_GZipCompressorSmart.compress(input);
 		} catch (IOException e) {
 			throw new IllegalArgumentException(e);
 		}
@@ -102,7 +150,7 @@ public final class _Bytes {
 	 * @param compressed
 	 * @return null if {@code compressed} is null
 	 */
-	public static final byte[] decompress(byte[] compressed) {
+	public static final byte[] decompress(@Nullable byte[] compressed) {
 		if(compressed==null) {
 			return null;
 		}
@@ -110,7 +158,7 @@ public final class _Bytes {
 			return compressed;
 		}
 		try {
-			return _Bytes_GZipCompressor.decompress(compressed);
+			return _Bytes_GZipCompressorSmart.decompress(compressed);
 		} catch (IOException e) {
 			throw new IllegalArgumentException(e);
 		}
