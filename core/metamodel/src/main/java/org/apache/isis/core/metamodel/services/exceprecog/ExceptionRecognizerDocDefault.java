@@ -30,7 +30,7 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
-import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType2;
+import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 
@@ -62,13 +62,13 @@ public class ExceptionRecognizerDocDefault
     //endregion
 
     static class ExceptionRecognizerForConcurrencyException
-            extends ExceptionRecognizerForType2 {
+            extends ExceptionRecognizerForType {
         public ExceptionRecognizerForConcurrencyException() {
             super(Category.CONCURRENCY, ConcurrencyException.class, prefix("Another user has just changed this data"));
         }
     }
     static class ExceptionRecognizerForRecoverableException 
-    	extends ExceptionRecognizerForType2 {
+    	extends ExceptionRecognizerForType {
         public ExceptionRecognizerForRecoverableException() {
             super(Category.CLIENT_ERROR, RecoverableException.class);
         }
