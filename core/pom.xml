@@ -1181,6 +1181,15 @@ ${license.additional-notes}
 	        	<artifactId>annotations</artifactId>
 	        	<version>${findbugs-annotations.version}</version>
 	        </dependency>
+	        
+	        <!-- applib-legacy -->
+	        <dependency>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis-core-applib-legacy</artifactId>
+                <version>${core-version}</version>
+                <type>jar</type>
+                <scope>compile</scope>
+            </dependency>
             
             <!--  reflections/applib -->
             <dependency>
@@ -2093,7 +2102,6 @@ ${license.additional-notes}
           <groupId>org.slf4j</groupId>
           <artifactId>slf4j-api</artifactId>
         </dependency>
-
 
         <!-- test dependencies -->
         <dependency>
