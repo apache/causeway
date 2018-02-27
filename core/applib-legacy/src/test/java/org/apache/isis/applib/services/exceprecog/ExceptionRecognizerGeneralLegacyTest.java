@@ -23,52 +23,45 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
-import java.util.function.Function;
+import java.util.function.Predicate;
 
 import org.junit.Test;
 
-public class ExceptionRecognizerForTypeTest {
+public class ExceptionRecognizerGeneralLegacyTest {
 
-    private ExceptionRecognizer ersForType;
+    private ExceptionRecognizer ersGeneral;
 
     static class FooException extends Exception {
         private static final long serialVersionUID = 1L;
         public FooException() {
             super("foo");
         }
-        
-    }
-    static class BarException extends Exception {
-        private static final long serialVersionUID = 1L;
-        public BarException() {
-            super("bar");
-        }
     }
     
-    private Function<String,String> prepend = new Function<String, String>() {
+    private com.google.common.base.Function<String,String> prepend = new com.google.common.base.Function<String, String>() {
         @Override
         public String apply(String input) {
             return "pre: " + input;
         }
     };
     
-    @Test
-    public void whenRecognized() {
-        ersForType = new ExceptionRecognizerForType(FooException.class);
-        assertThat(ersForType.recognize(new FooException()), is("foo"));
-    }
-
-    @Test
-    public void whenDoesNotRecognize() {
-        ersForType = new ExceptionRecognizerForType(FooException.class);
-        assertThat(ersForType.recognize(new BarException()), is(nullValue()));
-    }
-
-    @Test
-    public void whenRecognizedWithMessageParser() {
-        ersForType = new ExceptionRecognizerForType(FooException.class, prepend);
-        assertThat(ersForType.recognize(new FooException()), is("pre: foo"));
-    }
-
     
+    @Test
+    public void whenRecognized_guava() {
+        ersGeneral = new ExceptionRecognizerAbstractLegacy(com.google.common.base.Predicates.<Throwable>alwaysTrue()){};
+        assertThat(ersGeneral.recognize(new FooException()), is("foo"));
+    }
+
+    @Test
+    public void whenDoesNotRecognize_guava() {
+        ersGeneral = new ExceptionRecognizerAbstractLegacy(com.google.common.base.Predicates.<Throwable>alwaysFalse()){};
+        assertThat(ersGeneral.recognize(new FooException()), is(nullValue()));
+    }
+
+    @Test
+    public void whenRecognizedWithMessageParser_guava() {
+        ersGeneral = new ExceptionRecognizerAbstractLegacy(com.google.common.base.Predicates.<Throwable>alwaysTrue(), prepend){};
+        assertThat(ersGeneral.recognize(new FooException()), is("pre: foo"));
+    }
+ 
 }

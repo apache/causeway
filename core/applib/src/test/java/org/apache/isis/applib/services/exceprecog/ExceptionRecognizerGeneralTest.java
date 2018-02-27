@@ -38,32 +38,6 @@ public class ExceptionRecognizerGeneralTest {
         }
     }
     
-    private com.google.common.base.Function<String,String> prepend = new com.google.common.base.Function<String, String>() {
-        @Override
-        public String apply(String input) {
-            return "pre: " + input;
-        }
-    };
-    
-    
-    @Test
-    public void whenRecognized_guava() {
-        ersGeneral = new ExceptionRecognizerAbstractLegacy(com.google.common.base.Predicates.<Throwable>alwaysTrue()){};
-        assertThat(ersGeneral.recognize(new FooException()), is("foo"));
-    }
-
-    @Test
-    public void whenDoesNotRecognize_guava() {
-        ersGeneral = new ExceptionRecognizerAbstractLegacy(com.google.common.base.Predicates.<Throwable>alwaysFalse()){};
-        assertThat(ersGeneral.recognize(new FooException()), is(nullValue()));
-    }
-
-    @Test
-    public void whenRecognizedWithMessageParser_guava() {
-        ersGeneral = new ExceptionRecognizerAbstractLegacy(com.google.common.base.Predicates.<Throwable>alwaysTrue(), prepend){};
-        assertThat(ersGeneral.recognize(new FooException()), is("pre: foo"));
-    }
-    
     private final static Predicate<Throwable> ALWAYS_TRUE = __->true;
     private final static Predicate<Throwable> ALWAYS_FALSE = __->false;
     

@@ -23,6 +23,12 @@ import javax.annotation.PostConstruct;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.eventbus.EventBusService;
+import org.apache.isis.applib.services.factory.FactoryService;
+import org.apache.isis.applib.services.message.MessageService;
+import org.apache.isis.applib.services.repository.RepositoryService;
+import org.apache.isis.applib.services.title.TitleService;
+import org.apache.isis.applib.services.user.UserService;
+import org.apache.isis.applib.services.xactn.TransactionService;
 
 /**
  * Convenience class for services that act as subscribers.
@@ -42,9 +48,23 @@ public abstract class AbstractSubscriber {
         eventBusService.unregister(this);
     }
 
-
     @javax.inject.Inject
-    protected DomainObjectContainer container;
+    protected MessageService messageService;
+    
+    @javax.inject.Inject
+    protected TitleService titleService;
+    
+    @javax.inject.Inject
+    protected RepositoryService repositoryService;
+    
+    @javax.inject.Inject
+    protected FactoryService factoryService;
+    
+    @javax.inject.Inject
+    protected UserService userService;
+    
+    @javax.inject.Inject
+    protected TransactionService transactionService;
 
     @javax.inject.Inject
     protected EventBusService eventBusService;

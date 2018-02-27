@@ -27,7 +27,7 @@ import java.util.function.Function;
 
 import org.junit.Test;
 
-public class ExceptionRecognizerForTypeTest {
+public class ExceptionRecognizerForTypeLegacyTest {
 
     private ExceptionRecognizer ersForType;
 
@@ -45,7 +45,10 @@ public class ExceptionRecognizerForTypeTest {
         }
     }
     
-    private Function<String,String> prepend = new Function<String, String>() {
+    // -- LEGACY TESTS 
+
+    private com.google.common.base.Function<String,String> prependLegacy = 
+    		new com.google.common.base.Function<String, String>() {
         @Override
         public String apply(String input) {
             return "pre: " + input;
@@ -53,22 +56,23 @@ public class ExceptionRecognizerForTypeTest {
     };
     
     @Test
-    public void whenRecognized() {
-        ersForType = new ExceptionRecognizerForType(FooException.class);
+    public void legacyWhenRecognized() {
+        ersForType = new ExceptionRecognizerForTypeLegacy(FooException.class);
         assertThat(ersForType.recognize(new FooException()), is("foo"));
     }
 
     @Test
-    public void whenDoesNotRecognize() {
-        ersForType = new ExceptionRecognizerForType(FooException.class);
+    public void legacyWhenDoesNotRecognize() {
+        ersForType = new ExceptionRecognizerForTypeLegacy(FooException.class);
         assertThat(ersForType.recognize(new BarException()), is(nullValue()));
     }
 
     @Test
-    public void whenRecognizedWithMessageParser() {
-        ersForType = new ExceptionRecognizerForType(FooException.class, prepend);
+    public void legacyWhenRecognizedWithMessageParser() {
+        ersForType = new ExceptionRecognizerForTypeLegacy(FooException.class, prependLegacy);
         assertThat(ersForType.recognize(new FooException()), is("pre: foo"));
     }
+
 
     
 }

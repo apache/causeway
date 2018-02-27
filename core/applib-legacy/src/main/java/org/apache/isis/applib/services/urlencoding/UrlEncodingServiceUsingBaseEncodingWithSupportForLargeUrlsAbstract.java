@@ -12,6 +12,7 @@ import com.google.common.collect.Maps;
  * &#064;DomainService(nature=DOMAIN, menuOrder="100")
  * </pre>
  */
+@Deprecated // [ahuber] why not use variant with compression ?
 public abstract class UrlEncodingServiceUsingBaseEncodingWithSupportForLargeUrlsAbstract extends UrlEncodingServiceUsingBaseEncoding {
 
     /**
