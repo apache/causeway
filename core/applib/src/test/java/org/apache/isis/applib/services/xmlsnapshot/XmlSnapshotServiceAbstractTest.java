@@ -21,14 +21,11 @@ import static org.junit.Assert.assertThat;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.Locale;
 
-import com.google.common.io.Resources;
-
+import org.apache.isis.applib.internal.resources._Resource;
 import org.joda.time.LocalDate;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.w3c.dom.Document;
@@ -41,9 +38,10 @@ public class XmlSnapshotServiceAbstractTest {
     
     @Before
     public void setUp() throws Exception {
-        URL resource = Resources.getResource(XmlSnapshotServiceAbstractTest.class, "XmlSnapshotServiceAbstractTest.xml");
-        xmlStr = Resources.toString(resource, Charset.forName("UTF-8"));
-        
+        xmlStr = _Resource.loadAsString(
+        		XmlSnapshotServiceAbstractTest.class, 
+        		"XmlSnapshotServiceAbstractTest.xml", 
+        		Charset.forName("UTF-8"));
         xmlSnapshotService = new XmlSnapshotServiceForUnitTesting();
         
     }

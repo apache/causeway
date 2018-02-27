@@ -19,18 +19,18 @@ package org.apache.isis.applib.util;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.isis.applib.internal.base._Casts;
+import org.apache.isis.applib.internal.base._NullSafe;
+import org.apache.isis.applib.internal.base._Strings;
+import org.apache.isis.applib.internal.collections._Lists;
 
 import com.google.common.base.Function;
 import com.google.common.base.Objects;
 import com.google.common.base.Objects.ToStringHelper;
-import com.google.common.base.Splitter;
 import com.google.common.collect.ComparisonChain;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
-
 
 public class ObjectContracts {
 
@@ -142,7 +142,7 @@ public class ObjectContracts {
     }
 
     private static int hashCode(final Object obj, final Iterable<String> propertyNamesIter) {
-        final List<Object> propertyValues = Lists.newArrayList();
+        final List<Object> propertyValues = _Lists.newArrayList();
         for (final Clause clause : clausesFor(propertyNamesIter)) {
             final Object propertyValue = clause.getValueOf(obj);
             if(propertyValue != null) {
@@ -209,11 +209,14 @@ public class ObjectContracts {
 
     //region > helpers
     private static Iterable<Clause> clausesFor(final Iterable<String> iterable) {
-        return Iterables.transform(iterable, Clause::parse);
+        return _NullSafe.stream(iterable)
+        		.map(Clause::parse)
+        		.collect(Collectors.toList());
     }
 
     private static Iterable<String> csvToIterable(final String propertyNames) {
-        return Splitter.on(',').split(propertyNames);
+        return _Strings.splitThenStream(propertyNames, ",")
+        		.collect(Collectors.toList());
     }
 
     private static List<String> varargsToIterable(final String[] iterable) {
@@ -228,7 +231,7 @@ public class ObjectContracts {
         String evaluate(Object o);
     }
     
-    private final List<ToStringEvaluator> evaluators = Lists.newArrayList();
+    private final List<ToStringEvaluator> evaluators = _Lists.newArrayList();
 
     public ObjectContracts with(ToStringEvaluator evaluator) {
         evaluators.add(evaluator);

@@ -19,7 +19,7 @@
 
 package org.apache.isis.applib;
 
-import com.google.common.base.Strings;
+import org.apache.isis.applib.internal.base._Strings;
 import org.apache.isis.applib.services.exceprecog.TranslatableException;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 
@@ -83,7 +83,7 @@ public class NonRecoverableException extends RuntimeException implements Transla
         this.translationContext =
                 translationContextClass != null
                         ? (translationContextClass.getName() +
-                            (!Strings.isNullOrEmpty(translationContextMethod)
+                            (!_Strings.isNullOrEmpty(translationContextMethod)
                                 ? "#" + translationContextMethod
                                 : "")
                         )

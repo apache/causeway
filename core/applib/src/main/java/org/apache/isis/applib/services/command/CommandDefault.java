@@ -24,12 +24,11 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-
 import org.apache.isis.applib.annotation.CommandExecuteIn;
 import org.apache.isis.applib.annotation.CommandPersistence;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.internal.collections._Lists;
+import org.apache.isis.applib.internal.collections._Maps;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
 import org.apache.isis.applib.util.ObjectContracts;
@@ -188,7 +187,7 @@ public class CommandDefault implements Command {
 
     //region > actionDomainEvent (peek/pop/flush)
 
-    private final LinkedList<ActionDomainEvent<?>> actionDomainEvents = Lists.newLinkedList();
+    private final LinkedList<ActionDomainEvent<?>> actionDomainEvents = _Lists.newLinkedList();
 
     @Override
     public ActionDomainEvent<?> peekActionDomainEvent() {
@@ -211,7 +210,7 @@ public class CommandDefault implements Command {
     @Programmatic
     public List<ActionDomainEvent<?>> flushActionDomainEvents() {
         final List<ActionDomainEvent<?>> events =
-                Collections.unmodifiableList(Lists.newArrayList(actionDomainEvents));
+                Collections.unmodifiableList(_Lists.newArrayList(actionDomainEvents));
         actionDomainEvents.clear();
         return events;
     }
@@ -353,7 +352,7 @@ public class CommandDefault implements Command {
 
     //region > next
 
-    private final Map<String, AtomicInteger> sequenceByName = Maps.newHashMap();
+    private final Map<String, AtomicInteger> sequenceByName = _Maps.newHashMap();
 
     @Deprecated
     @Override

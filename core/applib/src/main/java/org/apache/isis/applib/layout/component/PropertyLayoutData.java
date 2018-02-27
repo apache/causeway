@@ -27,13 +27,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
-import com.google.common.collect.Lists;
-
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.RenderDay;
 import org.apache.isis.applib.annotation.Repainting;
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.internal.collections._Lists;
 import org.apache.isis.applib.layout.links.Link;
 
 /**
@@ -253,7 +252,7 @@ public class PropertyLayoutData
         this.repainting = repainting;
     }
 
-    private List<ActionLayoutData> actions = Lists.newArrayList();
+    private List<ActionLayoutData> actions = _Lists.newArrayList();
 
     // no wrapper
     @XmlElement(name = "action", required = false)

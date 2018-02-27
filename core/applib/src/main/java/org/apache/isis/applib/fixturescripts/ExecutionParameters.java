@@ -18,19 +18,16 @@
  */
 package org.apache.isis.applib.fixturescripts;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Collections;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import com.google.common.base.Strings;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Maps;
-import com.google.common.io.CharSource;
 
 import org.apache.isis.applib.internal.base._Casts;
+import org.apache.isis.applib.internal.base._Strings;
+import org.apache.isis.applib.internal.collections._Maps;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
@@ -49,20 +46,17 @@ public class ExecutionParameters {
     }
 
     static Map<String, String> asKeyValueMap(final String parameters) {
-        final Map<String, String> keyValues = Maps.newLinkedHashMap();
+        final Map<String, String> keyValues = _Maps.newLinkedHashMap();
         if (parameters != null) {
             try {
-                final ImmutableList<String> lines = CharSource.wrap(parameters).readLines();
-                for (final String line : lines) {
-                    if (line == null) {
-                        continue;
-                    }
+            	_Strings.splitThenStream(parameters, "\n")
+            	.forEach(line->{
                     final Matcher matcher = keyEqualsValuePattern.matcher(line);
                     if (matcher.matches()) {
                         keyValues.put(matcher.group(1).trim(), matcher.group(2).trim());
                     }
-                }
-            } catch (final IOException e) {
+            	});
+            } catch (final Exception e) {
                 // ignore, shouldn't happen
             }
         }
@@ -120,7 +114,7 @@ public class ExecutionParameters {
 
     public Boolean getParameterAsBoolean(final String parameterName) {
         final String value = getParameter(parameterName);
-        if (Strings.isNullOrEmpty(value)) {
+        if (_Strings.isNullOrEmpty(value)) {
             return null;
         }
         return Boolean.valueOf(value);
@@ -128,7 +122,7 @@ public class ExecutionParameters {
 
     public Byte getParameterAsByte(final String parameterName) {
         final String value = getParameter(parameterName);
-        if (Strings.isNullOrEmpty(value)) {
+        if (_Strings.isNullOrEmpty(value)) {
             return null;
         }
         return Byte.valueOf(value);
@@ -136,7 +130,7 @@ public class ExecutionParameters {
 
     public Short getParameterAsShort(final String parameterName) {
         final String value = getParameter(parameterName);
-        if (Strings.isNullOrEmpty(value)) {
+        if (_Strings.isNullOrEmpty(value)) {
             return null;
         }
         return Short.valueOf(value);
@@ -144,7 +138,7 @@ public class ExecutionParameters {
 
     public Integer getParameterAsInteger(final String parameterName) {
         final String value = getParameter(parameterName);
-        if (Strings.isNullOrEmpty(value)) {
+        if (_Strings.isNullOrEmpty(value)) {
             return null;
         }
         return Integer.valueOf(value);
@@ -152,7 +146,7 @@ public class ExecutionParameters {
 
     public Long getParameterAsLong(final String parameterName) {
         final String value = getParameter(parameterName);
-        if (Strings.isNullOrEmpty(value)) {
+        if (_Strings.isNullOrEmpty(value)) {
             return null;
         }
         return Long.valueOf(value);
@@ -160,7 +154,7 @@ public class ExecutionParameters {
 
     public Float getParameterAsFloat(final String parameterName) {
         final String value = getParameter(parameterName);
-        if (Strings.isNullOrEmpty(value)) {
+        if (_Strings.isNullOrEmpty(value)) {
             return null;
         }
         return Float.valueOf(value);
@@ -168,7 +162,7 @@ public class ExecutionParameters {
 
     public Double getParameterAsDouble(final String parameterName) {
         final String value = getParameter(parameterName);
-        if (Strings.isNullOrEmpty(value)) {
+        if (_Strings.isNullOrEmpty(value)) {
             return null;
         }
         return Double.valueOf(value);
@@ -176,7 +170,7 @@ public class ExecutionParameters {
 
     public Character getParameterAsCharacter(final String parameterName) {
         final String value = getParameter(parameterName);
-        if (Strings.isNullOrEmpty(value)) {
+        if (_Strings.isNullOrEmpty(value)) {
             return null;
         }
         return Character.valueOf(value.charAt(0));
@@ -184,7 +178,7 @@ public class ExecutionParameters {
 
     public BigInteger getParameterAsBigInteger(final String parameterName) {
         final String value = getParameter(parameterName);
-        if (Strings.isNullOrEmpty(value)) {
+        if (_Strings.isNullOrEmpty(value)) {
             return null;
         }
         return new BigInteger(value);
@@ -192,7 +186,7 @@ public class ExecutionParameters {
 
     public BigDecimal getParameterAsBigDecimal(final String parameterName) {
         final String value = getParameter(parameterName);
-        if (Strings.isNullOrEmpty(value)) {
+        if (_Strings.isNullOrEmpty(value)) {
             return null;
         }
         return new BigDecimal(value);

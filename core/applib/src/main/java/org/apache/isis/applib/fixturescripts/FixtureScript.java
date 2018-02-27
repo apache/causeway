@@ -37,6 +37,8 @@ import org.apache.isis.applib.fixtures.FixtureType;
 import org.apache.isis.applib.fixtures.InstallableFixture;
 import org.apache.isis.applib.internal.base._Casts;
 import org.apache.isis.applib.internal.base._Strings;
+import org.apache.isis.applib.internal.collections._Lists;
+import org.apache.isis.applib.internal.collections._Maps;
 import org.apache.isis.applib.internal.exceptions._Exceptions;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
@@ -47,10 +49,6 @@ import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
-
-import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 
 @ViewModelLayout(named="Script")
 public abstract class FixtureScript 
@@ -689,7 +687,7 @@ public abstract class FixtureScript
          * but used only by {@link FixtureScripts.MultipleExecutionStrategy#EXECUTE_ONCE_BY_VALUE} to determine whether
          * should execute or not.
          */
-        private final List<FixtureScript> previouslyExecuted = Lists.newArrayList();
+        private final List<FixtureScript> previouslyExecuted = _Lists.newArrayList();
 
         /**
          * Returns a list of the {@link FixtureScript} instances that have already been executed.
@@ -711,13 +709,13 @@ public abstract class FixtureScript
          * used and populated only if the {@link FixtureScripts.MultipleExecutionStrategy#EXECUTE_ONCE_BY_CLASS}
          * strategy is in use.
          */
-        private final Map<Class<? extends FixtureScript>, FixtureScript> fixtureScriptByClass = Maps.newLinkedHashMap();
+        private final Map<Class<? extends FixtureScript>, FixtureScript> fixtureScriptByClass = _Maps.newLinkedHashMap();
 
         /**
          * used and populated only if the {@link FixtureScripts.MultipleExecutionStrategy#EXECUTE_ONCE_BY_VALUE}
          * strategy is in use.
          */
-        private final Map<FixtureScript, FixtureScript> fixtureScriptByValue = Maps.newLinkedHashMap();
+        private final Map<FixtureScript, FixtureScript> fixtureScriptByValue = _Maps.newLinkedHashMap();
 
         //endregion
 
@@ -759,7 +757,7 @@ public abstract class FixtureScript
         //endregion
 
         private static String pad(final String str, final int padTo) {
-            return Strings.padEnd(str, padTo, ' ');
+            return _Strings.padEnd(str, padTo, ' ');
         }
 
         static int roundup(final int n, final int roundTo) {
@@ -767,7 +765,7 @@ public abstract class FixtureScript
         }
 
 
-        private Map<Class<?>, Object> userData = Maps.newHashMap();
+        private Map<Class<?>, Object> userData = _Maps.newHashMap();
         @Programmatic
         public void setUserData(final Object object) {
             userData.put(object.getClass(), object);

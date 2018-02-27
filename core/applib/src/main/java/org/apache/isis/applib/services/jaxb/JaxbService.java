@@ -29,14 +29,12 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
-import com.google.common.collect.MapMaker;
-import com.google.common.collect.Maps;
-
 import org.apache.isis.applib.ApplicationException;
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.internal.base._Casts;
 import org.apache.isis.applib.internal.base._NullSafe;
+import org.apache.isis.applib.internal.collections._Maps;
 import org.apache.isis.applib.services.dto.Dto_downloadXsd;
 import org.apache.isis.applib.util.JaxbUtil;
 
@@ -104,7 +102,7 @@ public interface JaxbService {
 
         @Override
         public Object fromXml(final JAXBContext jaxbContext, final String xml) {
-            return fromXml(jaxbContext, xml, Maps.newHashMap());
+            return fromXml(jaxbContext, xml, _Maps.newHashMap());
         }
         @Override
         public Object fromXml(final JAXBContext jaxbContext, final String xml, final Map<String, Object> unmarshallerProperties) {
@@ -128,7 +126,7 @@ public interface JaxbService {
 
         @Override
         public <T> T fromXml(final Class<T> domainClass, final String xml) {
-            return fromXml(domainClass, xml, Maps.newHashMap());
+            return fromXml(domainClass, xml, _Maps.newHashMap());
         }
         @Override
         public <T> T fromXml(final Class<T> domainClass, final String xml, final Map<String, Object> unmarshallerProperties) {
@@ -146,7 +144,7 @@ public interface JaxbService {
 
         @Override
         public String toXml(final Object domainObject) {
-            return toXml(domainObject, Maps.newHashMap());
+            return toXml(domainObject, _Maps.newHashMap());
         }
 
         @Override

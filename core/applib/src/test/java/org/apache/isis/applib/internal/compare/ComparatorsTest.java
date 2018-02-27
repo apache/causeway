@@ -27,13 +27,11 @@ import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import org.apache.isis.applib.internal.collections._Lists;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-
-import com.google.common.collect.Iterators;
-import com.google.common.collect.Lists;
 
 public class ComparatorsTest {
 	
@@ -146,13 +144,13 @@ public class ComparatorsTest {
 	}
 
 	private static List<String> ofL(String... str) {
-		return Lists.newArrayList(ofS(str));
+		return _Lists.newArrayList(ofS(str));
 	}
 
 	private static void assertThatSorting(Collection<String> input, List<String> expected) {
 		final SortedSet<String> treeSet = new TreeSet<String>(_Comparators.deweyOrderComparator);
 		treeSet.addAll(input);
-		final List<String> strings = Arrays.asList(Iterators.toArray(treeSet.iterator(), String.class));
+		final List<String> strings = _Lists.newArrayList(treeSet); 
 		Assert.assertThat(strings, is(expected));
 	}
 }

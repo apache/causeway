@@ -20,12 +20,12 @@ package org.apache.isis.applib.services.conmap;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.ws.rs.core.MediaType;
 
-import com.google.common.base.Joiner;
-
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.internal.base._NullSafe;
 
 public interface ContentMappingService {
 
@@ -49,7 +49,11 @@ public interface ContentMappingService {
                 }
             }
             throw new IllegalArgumentException(
-                    "Could not locate x-ro-domain-type parameter in any of the provided media types; got: " + Joiner.on(", ").join(acceptableMediaTypes));
+                    "Could not locate x-ro-domain-type parameter in any of the provided media types; got: " +
+                    		_NullSafe.stream(acceptableMediaTypes)
+                    		.filter(_NullSafe::isPresent)
+                    		.map(Object::toString)
+                    		.collect(Collectors.joining(", ")) );
         }
 
         public static boolean isSupported(

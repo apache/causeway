@@ -18,11 +18,9 @@ package org.apache.isis.applib.util;
 
 import java.util.List;
 
-import com.google.common.collect.Lists;
-
-import org.junit.Before;
-
+import org.apache.isis.applib.internal.collections._Lists;
 import org.apache.isis.core.unittestsupport.value.ValueTypeContractTestAbstract;
+import org.junit.Before;
 
 public class ObjectContractsTest_equals_and_hashCode extends ValueTypeContractTestAbstract<InvoiceItem3> {
 
@@ -39,7 +37,7 @@ public class ObjectContractsTest_equals_and_hashCode extends ValueTypeContractTe
 
     @Override
     protected List<InvoiceItem3> getObjectsWithSameValue() {
-        return Lists.newArrayList(
+        return _Lists.unmodifiable(
                     InvoiceItem3.newInvoiceItem(inv123, "A", new Integer(1)),
                     InvoiceItem3.newInvoiceItem(inv123, "A", new Integer(1))
                 );
@@ -47,7 +45,7 @@ public class ObjectContractsTest_equals_and_hashCode extends ValueTypeContractTe
 
     @Override
     protected List<InvoiceItem3> getObjectsWithDifferentValue() {
-        return Lists.newArrayList(
+        return _Lists.unmodifiable(
                     InvoiceItem3.newInvoiceItem(null, "A", new Integer(2)),
                     InvoiceItem3.newInvoiceItem(inv456, "A", new Integer(2)),
                     InvoiceItem3.newInvoiceItem(inv123, null, new Integer(1)),

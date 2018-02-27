@@ -21,17 +21,14 @@ package org.apache.isis.applib.layout.component;
 import java.io.Serializable;
 import java.util.List;
 
-import javax.annotation.Nullable;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Lists;
-
 import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.internal.collections._Lists;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Col;
 
 /**
@@ -138,7 +135,7 @@ public class FieldSet
 
 
 
-    private List<ActionLayoutData> actions = Lists.newArrayList();
+    private List<ActionLayoutData> actions = _Lists.newArrayList();
 
     // no wrapper
     @XmlElement(name = "action", required = false)
@@ -152,7 +149,7 @@ public class FieldSet
 
 
 
-    private List<PropertyLayoutData> properties = Lists.newArrayList();
+    private List<PropertyLayoutData> properties = _Lists.newArrayList();
 
     // no wrapper; required=false because may be auto-generated
     @XmlElement(name = "property", required = false)
@@ -183,9 +180,6 @@ public class FieldSet
     }
 
 
-
-
-
     private String metadataError;
 
     /**
@@ -198,20 +192,6 @@ public class FieldSet
 
     public void setMetadataError(final String metadataError) {
         this.metadataError = metadataError;
-    }
-
-
-    @Deprecated //[ahuber] not used, or otherwise replace with java 8+ function variant
-    public static class Util {
-        private Util(){}
-        public static Function<? super FieldSet, String> nameOf() {
-            return new Function<FieldSet, String>() {
-                @Nullable @Override
-                public String apply(@Nullable final FieldSet fieldSet) {
-                    return fieldSet.getName();
-                }
-            };
-        }
     }
 
     @Override public String toString() {

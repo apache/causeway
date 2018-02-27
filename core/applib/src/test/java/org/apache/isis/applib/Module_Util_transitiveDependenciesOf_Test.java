@@ -18,19 +18,18 @@
  */
 package org.apache.isis.applib;
 
+import static org.junit.Assert.assertTrue;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
-
+import org.apache.isis.applib.internal.collections._Lists;
+import org.apache.isis.applib.internal.collections._Sets;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-
-import static org.junit.Assert.assertTrue;
 
 public class Module_Util_transitiveDependenciesOf_Test {
 
@@ -63,22 +62,22 @@ public class Module_Util_transitiveDependenciesOf_Test {
         }
         @Override
         public Set<Class<?>> getAdditionalModules() {
-            return Sets.<Class<?>>newHashSet(ModuleP.class);
+            return _Sets.<Class<?>>unmodifiable(ModuleP.class);
         }
     };
     final Module moduleD = new ModuleImpl("D") {
         @Override public Set<Module> getDependencies() {
-            return Sets.newHashSet(moduleE);
+            return _Sets.unmodifiable(moduleE);
         }
     };
 
     final Module moduleC = new ModuleImpl("C") {
         @Override public Set<Module> getDependencies() {
-            return Sets.newHashSet(moduleE, moduleD);
+            return _Sets.unmodifiable(moduleE, moduleD);
         }
         @Override
         public Set<Class<?>> getAdditionalModules() {
-            return Sets.newHashSet(ModuleQ.class, ModuleR.class);
+            return _Sets.unmodifiable(ModuleQ.class, ModuleR.class);
         }
         {
             withAdditionalServices(ServiceY.class, ServiceZ.class);
@@ -86,29 +85,29 @@ public class Module_Util_transitiveDependenciesOf_Test {
     };
     final Module moduleB = new ModuleImpl("B") {
         @Override public Set<Module> getDependencies() {
-            return Sets.newHashSet(moduleF, moduleC);
+            return _Sets.unmodifiable(moduleF, moduleC);
         }
     };
     final Module moduleA = new ModuleImpl("A") {
         @Override public Set<Module> getDependencies() {
-            return Sets.newHashSet(moduleE, moduleC);
+            return _Sets.unmodifiable(moduleE, moduleC);
         }
     };
 
     final Module moduleG = new ModuleImpl("G") {
         @Override public Set<Module> getDependencies() {
-            return Sets.newHashSet(moduleH);
+            return _Sets.unmodifiable(moduleH);
         }
     };
     final Module moduleH = new ModuleImpl("H") {
         @Override public Set<Module> getDependencies() {
-            return Sets.newHashSet(moduleI);
+            return _Sets.unmodifiable(moduleI);
         }
     };
 
     final Module moduleI = new ModuleImpl("I") {
         @Override public Set<Module> getDependencies() {
-            return Sets.newHashSet(moduleG);
+            return _Sets.unmodifiable(moduleG);
         }
     };
 
@@ -133,16 +132,16 @@ public class Module_Util_transitiveDependenciesOf_Test {
         assertTransitiveDependencies(
                 moduleE, Arrays.asList(moduleE));
         assertTransitiveDependenciesAsClass(
-                moduleE, Lists.<Class<?>>newArrayList(ModuleP.class));
+                moduleE, _Lists.<Class<?>>unmodifiable(ModuleP.class));
         assertTransitiveServices(
-                moduleE, Lists.<Class<?>>newArrayList(ServiceX.class));
+                moduleE, _Lists.<Class<?>>unmodifiable(ServiceX.class));
 
         assertTransitiveDependencies(
                 moduleD, Arrays.asList(moduleE, moduleD));
         assertTransitiveDependenciesAsClass(
-                moduleD, Lists.<Class<?>>newArrayList(ModuleP.class));
+                moduleD, _Lists.<Class<?>>unmodifiable(ModuleP.class));
         assertTransitiveServices(
-                moduleD, Lists.<Class<?>>newArrayList(ServiceX.class));
+                moduleD, _Lists.<Class<?>>unmodifiable(ServiceX.class));
 
         assertTransitiveDependencies(
                 moduleC, Arrays.asList(moduleE, moduleD, moduleC));

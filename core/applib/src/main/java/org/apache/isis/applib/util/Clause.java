@@ -23,8 +23,7 @@ import java.util.Comparator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.google.common.base.Strings;
-import com.google.common.collect.Ordering;
+import org.apache.isis.applib.internal.base._Strings;
 
 class Clause {
     private static Pattern pattern = Pattern.compile("\\W*(\\w+)\\W*(asc|asc nullsFirst|asc nullsLast|desc|desc nullsFirst|desc nullsLast)?\\W*");
@@ -32,25 +31,29 @@ class Clause {
         ASC {
             @Override
             public Comparator<Comparable<?>> getOrdering() {
-                return Ordering.natural().nullsFirst();
+            	// legacy of Ordering.natural().nullsFirst();
+            	return Comparator.nullsFirst(Comparator.<Comparable>naturalOrder());
             }
         },
         ASC_NULLS_LAST {
             @Override
             public Comparator<Comparable<?>> getOrdering() {
-                return Ordering.natural().nullsLast();
+                // legacy of Ordering.natural().nullsLast();
+            	return Comparator.nullsLast(Comparator.<Comparable>naturalOrder());
             }
         },
         DESC {
             @Override
             public Comparator<Comparable<?>> getOrdering() {
-                return Ordering.natural().nullsLast().reverse();
+                // legacy of Ordering.natural().nullsLast().reverse();
+            	return ASC_NULLS_LAST.getOrdering().reversed();
             }
         },
         DESC_NULLS_LAST {
             @Override
             public Comparator<Comparable<?>> getOrdering() {
-                return Ordering.natural().nullsFirst().reverse();
+                // legacy of Ordering.natural().nullsFirst().reverse();
+            	return ASC.getOrdering().reversed();
             }
         };
 
@@ -111,7 +114,7 @@ class Clause {
         }
     }
     private static String upperFirst(final String str) {
-        if (Strings.isNullOrEmpty(str)) {
+        if (_Strings.isNullOrEmpty(str)) {
             return str;
         }
         if (str.length() == 1) {

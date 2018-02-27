@@ -24,8 +24,7 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
-import com.google.common.collect.Lists;
-
+import org.apache.isis.applib.internal.collections._Lists;
 import org.apache.isis.applib.layout.component.ServiceActionLayoutData;
 import org.apache.isis.applib.layout.component.ServiceActionLayoutDataOwner;
 import org.apache.isis.applib.layout.menubars.MenuSection;
@@ -47,7 +46,7 @@ public class BS3MenuSection implements MenuSection, Serializable, ServiceActionL
     }
 
 
-    private List<ServiceActionLayoutData> serviceActions = Lists.newArrayList();
+    private List<ServiceActionLayoutData> serviceActions = _Lists.newArrayList();
 
     // no wrapper
     @Override

@@ -21,12 +21,9 @@ package org.apache.isis.applib.services.eventbus;
 import java.util.EventObject;
 import java.util.Map;
 
-import javax.ws.rs.HEAD;
-
-import com.google.common.collect.Maps;
-
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.internal.collections._Maps;
 import org.apache.isis.applib.internal.exceptions._Exceptions;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.util.ObjectContracts;
@@ -307,7 +304,7 @@ public abstract class AbstractDomainEvent<S> extends java.util.EventObject {
     /**
      * Provides a mechanism to pass data to the next {@link #getEventPhase() phase}.
      */
-    private final Map<Object, Object> userData = Maps.newHashMap();
+    private final Map<Object, Object> userData = _Maps.newHashMap();
 
     /**
      * Obtain user-data, as set by a previous {@link #getEventPhase() phase}.

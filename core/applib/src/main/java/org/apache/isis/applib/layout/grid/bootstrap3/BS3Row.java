@@ -27,9 +27,8 @@ import javax.xml.bind.annotation.XmlElementRefs;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
-import com.google.common.collect.Lists;
-
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.internal.collections._Lists;
 
 /**
  * Contains a row of content, either on the top-level {@link BS3Grid page} or at any other lower-level element that can
@@ -67,7 +66,7 @@ public class BS3Row extends BS3ElementAbstract implements HasCssId, BS3RowConten
 
 
 
-    private List<BS3RowContent> cols = Lists.newArrayList();
+    private List<BS3RowContent> cols = _Lists.newArrayList();
 
     // no wrapper
     @XmlElementRefs({

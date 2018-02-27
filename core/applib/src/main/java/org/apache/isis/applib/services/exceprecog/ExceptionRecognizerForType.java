@@ -24,7 +24,8 @@ import java.util.function.Predicate;
 
 import javax.jdo.JDODataStoreException;
 
-import com.google.common.base.Throwables;
+import org.apache.isis.applib.internal.exceptions._Exceptions;
+import org.junit.internal.Throwables;
 
 /**
  * An specific implementation of {@link ExceptionRecognizer} that looks for an
@@ -60,7 +61,7 @@ public class ExceptionRecognizerForType extends ExceptionRecognizerAbstract {
      */
     protected final static Predicate<Throwable> excluding(final String... messages) {
         return input->{
-                final List<Throwable> causalChain = Throwables.getCausalChain(input);
+                final List<Throwable> causalChain = _Exceptions.getCausalChain(input);
                 for (String message : messages) {
                     for (Throwable throwable : causalChain) {
                         final String throwableMessage = throwable.getMessage();
@@ -94,7 +95,7 @@ public class ExceptionRecognizerForType extends ExceptionRecognizerAbstract {
      */
     protected final static Predicate<Throwable> including(final String... messages) {
         return input->{
-                final List<Throwable> causalChain = Throwables.getCausalChain(input);
+                final List<Throwable> causalChain = _Exceptions.getCausalChain(input);
                 for (String message : messages) {
                     for (Throwable throwable : causalChain) {
                         final String throwableMessage = throwable.getMessage();

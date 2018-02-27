@@ -19,13 +19,8 @@
 
 package org.apache.isis.applib;
 
-import java.util.Iterator;
-import java.util.List;
-
-import com.google.common.base.Strings;
-import com.google.common.base.Throwables;
-import com.google.common.collect.Iterables;
-
+import org.apache.isis.applib.internal.base._Strings;
+import org.apache.isis.applib.internal.exceptions._Exceptions;
 import org.apache.isis.applib.services.exceprecog.TranslatableException;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 
@@ -98,7 +93,7 @@ public class RecoverableException extends RuntimeException implements Translatab
         this.translationContext =
                 translationContextClass != null
                         ? (translationContextClass.getName() +
-                          (!Strings.isNullOrEmpty(translationContextMethod)
+                          (!_Strings.isNullOrEmpty(translationContextMethod)
                                 ? "#" + translationContextMethod
                                 : "")
                 )
@@ -127,11 +122,14 @@ public class RecoverableException extends RuntimeException implements Translatab
         private Util() {}
 
         public static RecoverableException getRecoverableExceptionIfAny(final Exception ex) {
-            final List<Throwable> causalChain = Throwables.getCausalChain(ex);
-            final Iterable<RecoverableException> appEx =
-                    Iterables.filter(causalChain, RecoverableException.class);
-            final Iterator<RecoverableException> iterator = appEx.iterator();
-            return iterator.hasNext() ? iterator.next() : null;
+        	
+        	return _Exceptions.streamCausalChain(ex)
+        			.filter(t->t instanceof RecoverableException)
+        			.map(t->(RecoverableException)t)
+		        	.findFirst()
+		        	.orElse(null)
+		        	;
+
         }
     }
 

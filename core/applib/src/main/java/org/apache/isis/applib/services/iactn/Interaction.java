@@ -27,11 +27,10 @@ import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Value;
+import org.apache.isis.applib.internal.collections._Lists;
+import org.apache.isis.applib.internal.collections._Maps;
 import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.command.Command;
@@ -100,7 +99,7 @@ public class Interaction implements HasTransactionId {
 
     //region > push/pop/current/get/clear Execution(s)
 
-    private final List<Execution<?,?>> executionGraphs = Lists.newArrayList();
+    private final List<Execution<?,?>> executionGraphs = _Lists.newArrayList();
     private Execution<?,?> currentExecution;
     private Execution<?,?> priorExecution;
 
@@ -307,7 +306,7 @@ public class Interaction implements HasTransactionId {
     }
 
 
-    private final Map<String, AtomicInteger> maxBySequence = Maps.newHashMap();
+    private final Map<String, AtomicInteger> maxBySequence = _Maps.newHashMap();
 
     /**
      * Generates numbers in a named sequence.  The name of the sequence can be arbitrary, though note that the
@@ -405,7 +404,7 @@ public class Interaction implements HasTransactionId {
 
         //region > parent, children
 
-        private final List<Execution<?,?>> children = Lists.newArrayList();
+        private final List<Execution<?,?>> children = _Lists.newArrayList();
         private Execution<?,?> parent;
 
         /**

@@ -23,9 +23,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import com.google.common.collect.Lists;
+
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Value;
+import org.apache.isis.applib.internal.collections._Lists;
 
 @Value
 public final class TranslatableString {
@@ -214,7 +215,7 @@ public final class TranslatableString {
     static String format(String format, Map<String, Object> values)
     {
         StringBuilder formatter = new StringBuilder(format);
-        List<Object> valueList = Lists.newArrayList();
+        List<Object> valueList = _Lists.newArrayList();
 
         Matcher matcher = Pattern.compile("\\{(\\w+)}").matcher(format);
 

@@ -23,11 +23,6 @@ import java.util.concurrent.Callable;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
-import com.google.common.collect.Maps;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.isis.applib.AbstractSubscriber;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
@@ -35,7 +30,10 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.fixturescripts.events.FixturesInstalledEvent;
 import org.apache.isis.applib.fixturescripts.events.FixturesInstallingEvent;
 import org.apache.isis.applib.internal.base._Casts;
+import org.apache.isis.applib.internal.collections._Maps;
 import org.apache.isis.applib.services.WithTransactionScope;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This service (API and implementation) provides a mechanism by which idempotent query results can be cached for the duration of an interaction.
@@ -139,7 +137,7 @@ public class QueryResultsCache implements WithTransactionScope {
     // //////////////////////////////////////
 
     
-    private final Map<Key, Value<?>> cache = Maps.newHashMap();
+    private final Map<Key, Value<?>> cache = _Maps.newHashMap();
 
     @Programmatic
     public <T> T execute(final Callable<T> callable, final Class<?> callingClass, final String methodName, final Object... keys) {

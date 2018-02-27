@@ -21,8 +21,7 @@ package org.apache.isis.applib.services.eventbus;
 import java.util.EventObject;
 import java.util.Map;
 
-import com.google.common.collect.Maps;
-
+import org.apache.isis.applib.internal.collections._Maps;
 import org.apache.isis.applib.util.ObjectContracts;
 
 public abstract class AbstractUiEvent<S> extends EventObject {
@@ -71,7 +70,7 @@ public abstract class AbstractUiEvent<S> extends EventObject {
     /**
      * Provides a mechanism to pass data around.
      */
-    private final Map<Object, Object> userData = Maps.newHashMap();
+    private final Map<Object, Object> userData = _Maps.newHashMap();
 
     /**
      * Obtain user-data, as set by any other subscribers.

@@ -21,9 +21,8 @@ package org.apache.isis.applib.fixturescripts.teardown;
 import javax.inject.Inject;
 import javax.jdo.metadata.TypeMetadata;
 
-import com.google.common.base.Strings;
-
 import org.apache.isis.applib.fixturescripts.FixtureScript;
+import org.apache.isis.applib.internal.base._Strings;
 import org.apache.isis.applib.services.jdosupport.IsisJdoSupport;
 
 public abstract class TeardownFixtureAbstract extends FixtureScript {
@@ -38,10 +37,10 @@ public abstract class TeardownFixtureAbstract extends FixtureScript {
         } else {
             final String schema = metadata.getSchema();
             String table = metadata.getTable();
-            if(Strings.isNullOrEmpty(table)) {
+            if(_Strings.isNullOrEmpty(table)) {
                 table = cls.getSimpleName();
             }
-            if(Strings.isNullOrEmpty(schema)) {
+            if(_Strings.isNullOrEmpty(schema)) {
                 deleteFrom(table);
             } else {
                 deleteFrom(schema, table);

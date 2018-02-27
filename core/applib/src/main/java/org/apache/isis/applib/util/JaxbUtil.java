@@ -21,7 +21,6 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.Writer;
-import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.Map;
 
@@ -30,17 +29,17 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
-import com.google.common.collect.MapMaker;
-import com.google.common.io.Resources;
-
 import org.apache.isis.applib.internal.base._Casts;
+import org.apache.isis.applib.internal.collections._Maps;
+import org.apache.isis.applib.internal.resources._Resource;
 
 /**
- * Helper methods for converting {@link javax.xml.bind.annotation.XmlRootElement}-annotated class to-and-from XML.  Intended primarily for
- * test use only (the {@link JAXBContext} is not cached).
+ * Helper methods for converting {@link javax.xml.bind.annotation.XmlRootElement}-annotated class to-and-from XML.  
+ * Intended primarily for test use only (the {@link JAXBContext} is not cached).
  *
  * <p>
- * For example usage, see <a href="https://github.com/isisaddons/isis-module-publishmq">Isis addons' publishmq module</a> (non-ASF)
+ * For example usage, see <a href="https://github.com/isisaddons/isis-module-publishmq">Isis addons' publishmq module</a> 
+ * (non-ASF)
  * </p>
  */
 public class JaxbUtil {
@@ -64,8 +63,8 @@ public class JaxbUtil {
             final String resourceName,
             final Charset charset,
             final Class<T> dtoClass) throws IOException {
-        final URL url = Resources.getResource(contextClass, resourceName);
-        final String s = Resources.toString(url, charset);
+    	
+    	final String s = _Resource.loadAsString(contextClass, resourceName, charset);
         return fromXml(new StringReader(s), dtoClass);
     }
 
@@ -87,18 +86,18 @@ public class JaxbUtil {
         }
     }
 
-    private static Map<Class<?>, JAXBContext> jaxbContextByClass = new MapMaker().concurrencyLevel(10).makeMap();
+    private static Map<Class<?>, JAXBContext> jaxbContextByClass = _Maps.newConcurrentHashMap(); 
 
     public static <T> JAXBContext jaxbContextFor(final Class<T> dtoClass)  {
-        JAXBContext jaxbContext = jaxbContextByClass.get(dtoClass);
-        if(jaxbContext == null) {
-            try {
-                jaxbContext = JAXBContext.newInstance(dtoClass);
-            } catch (JAXBException e) {
-                throw new RuntimeException(e);
-            }
-            jaxbContextByClass.put(dtoClass, jaxbContext);
-        }
-        return jaxbContext;
+    	return jaxbContextByClass.computeIfAbsent(dtoClass, JaxbUtil::contextOf );
     }
+    
+    private static <T> JAXBContext contextOf(final Class<T> dtoClass) {
+    	try {
+            return JAXBContext.newInstance(dtoClass);
+        } catch (JAXBException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
 }

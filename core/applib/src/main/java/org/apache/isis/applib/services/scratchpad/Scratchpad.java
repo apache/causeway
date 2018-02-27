@@ -19,11 +19,13 @@
 package org.apache.isis.applib.services.scratchpad;
 
 import java.util.Map;
+
 import javax.enterprise.context.RequestScoped;
-import com.google.common.collect.Maps;
+
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.internal.collections._Maps;
 
 /**
  * This service (API and implementation) provides a mechanism to interchange information between multiple objects invoked in the same
@@ -46,7 +48,7 @@ public class Scratchpad {
      * Provides a mechanism for each object being acted upon to pass
      * data to the next object.
      */
-    private final Map<Object, Object> userData = Maps.newHashMap();
+    private final Map<Object, Object> userData = _Maps.newHashMap();
     
     /**
      * Obtain user-data, as set by a previous object being acted upon.

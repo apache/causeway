@@ -16,10 +16,8 @@
  */
 package org.apache.isis.applib.query;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-
-import com.google.common.collect.ImmutableMap;
 
 import org.junit.Before;
 import org.junit.Rule;

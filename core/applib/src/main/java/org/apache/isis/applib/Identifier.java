@@ -23,9 +23,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.StringTokenizer;
+import java.util.stream.Collectors;
 
-import com.google.common.base.Joiner;
-import com.google.common.collect.Lists;
+import org.apache.isis.applib.internal.base._NullSafe;
+import org.apache.isis.applib.internal.collections._Lists;
 
 public class Identifier implements Comparable<Identifier> {
 
@@ -117,7 +118,7 @@ public class Identifier implements Comparable<Identifier> {
         if (parameterClasses == null) {
             return EMPTY_LIST_OF_STRINGS;
         }
-        final List<String> parameterClassNames = Lists.newArrayList();
+        final List<String> parameterClassNames = _Lists.newArrayList();
         for (final Class<?> parameterClass : parameterClasses) {
             parameterClassNames.add(parameterClass.getName());
         }
@@ -238,7 +239,9 @@ public class Identifier implements Comparable<Identifier> {
 
     private void appendParameterNamesTo(final StringBuilder buf) {
         buf.append('(');
-        Joiner.on(',').appendTo(buf, parameterNames);
+        buf.append(
+        		_NullSafe.stream(parameterNames)
+        		.collect(Collectors.joining(","))	);
         buf.append(')');
     }
 
@@ -431,7 +434,7 @@ class NameUtils {
     }
 
     public static List<String> naturalNames(final List<String> names) {
-        final List<String> naturalNames = Lists.newArrayList();
+        final List<String> naturalNames = _Lists.newArrayList();
         for (final String name : names) {
             naturalNames.add(NameUtils.naturalName(name));
         }

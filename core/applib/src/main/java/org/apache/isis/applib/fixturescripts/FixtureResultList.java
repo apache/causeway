@@ -24,9 +24,8 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.isis.applib.internal.base._Casts;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
+import org.apache.isis.applib.internal.collections._Lists;
+import org.apache.isis.applib.internal.collections._Maps;
 
 /**
  * Collecting parameter.
@@ -50,7 +49,7 @@ public class FixtureResultList {
 
     //region > list of FixtureResults
 
-    private final List<FixtureResult> list = Lists.newArrayList();
+    private final List<FixtureResult> list = _Lists.newArrayList();
 
     /**
      * Irrespective of the setting for {@link FixtureScripts#getMultipleExecutionStrategy()}, this list ensures
@@ -69,9 +68,9 @@ public class FixtureResultList {
      * </p>
      * {@link org.apache.isis.applib.fixturescripts.FixtureScript}s used to generate this result list.
      */
-    private final List<FixtureScript> fixtureScriptList = Lists.newArrayList();
+    private final List<FixtureScript> fixtureScriptList = _Lists.newArrayList();
 
-    private final Map<String, FixtureResult> fixtureResultByKey = Maps.newHashMap();
+    private final Map<String, FixtureResult> fixtureResultByKey = _Maps.newHashMap();
 
     public <T> T add(final FixtureScript script, final T object) {
         return add(script, nextItemFor(script), object);
@@ -108,7 +107,7 @@ public class FixtureResultList {
 
     //region > nextItemFor
 
-    private final Map<FixtureScript, AtomicInteger> itemNumberByScript = Maps.newHashMap();
+    private final Map<FixtureScript, AtomicInteger> itemNumberByScript = _Maps.newHashMap();
 
     String nextItemFor(final FixtureScript script) {
         AtomicInteger atomicInteger = itemNumberByScript.get(script);

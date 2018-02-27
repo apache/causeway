@@ -25,9 +25,8 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
-import com.google.common.collect.Lists;
-
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.internal.collections._Lists;
 
 /**
  * Represents a tab group containing one or more {@link BS3Tab tab}s.
@@ -80,7 +79,7 @@ public class BS3TabGroup extends BS3ElementAbstract implements BS3TabOwner {
 
 
 
-    private List<BS3Tab> tabs = Lists.newArrayList();
+    private List<BS3Tab> tabs = _Lists.newArrayList();
 
     // no wrapper; required=false because may be auto-generated
     @XmlElement(name = "tab", required = false)

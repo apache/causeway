@@ -20,13 +20,12 @@ package org.apache.isis.applib.fixturescripts.setup;
 
 import java.util.List;
 
-import com.google.common.collect.Lists;
-
 import org.apache.isis.applib.fixturescripts.BuilderScriptAbstract;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.applib.fixturescripts.FixtureScriptWithExecutionStrategy;
 import org.apache.isis.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.applib.fixturescripts.PersonaWithBuilderScript;
+import org.apache.isis.applib.internal.collections._Lists;
 
 public class PersonaEnumPersistAll<E extends Enum<E> & PersonaWithBuilderScript<T,F>, T, F extends BuilderScriptAbstract<T,F>>
         extends FixtureScript
@@ -53,7 +52,7 @@ public class PersonaEnumPersistAll<E extends Enum<E> & PersonaWithBuilderScript<
     /**
      * The objects created by this fixture (output).
      */
-    private final List<T> objects = Lists.newArrayList();
+    private final List<T> objects = _Lists.newArrayList();
     public List<T> getObjects() {
         return objects;
     }

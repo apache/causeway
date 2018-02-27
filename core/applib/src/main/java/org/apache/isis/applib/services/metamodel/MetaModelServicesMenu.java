@@ -19,12 +19,11 @@
 package org.apache.isis.applib.services.metamodel;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
-
-import com.google.common.base.Joiner;
-import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.IsisApplibModule;
 import org.apache.isis.applib.annotation.Action;
@@ -36,6 +35,7 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.internal.collections._Lists;
 import org.apache.isis.applib.value.Clob;
 
 @DomainService(
@@ -105,7 +105,7 @@ public class MetaModelServicesMenu {
     }
 
     private static List<String> asList(final List<DomainMember> rows) {
-        final List<String> list = Lists.newArrayList();
+        final List<String> list = _Lists.newArrayList();
         list.add(header());
         for (final DomainMember row : rows) {
             list.add(asTextCsv(row));
@@ -120,7 +120,7 @@ public class MetaModelServicesMenu {
     }
 
     private static String asTextCsv(final DomainMember row) {
-        return Joiner.on(",").join(
+        return Stream.of(
                 row.getClassType(),
                 row.getPackageName(),
                 row.getClassName(),
@@ -136,7 +136,8 @@ public class MetaModelServicesMenu {
                 row.getChoices(),
                 row.getAutoComplete(),
                 row.getDefault(),
-                row.getValidate());
+                row.getValidate())
+        	.collect(Collectors.joining(","));
     }
 
 

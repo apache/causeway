@@ -18,17 +18,14 @@
  */
 package org.apache.isis.applib.services.exceprecog.jdo;
 
-import java.util.Collections;
-
-import com.google.common.collect.ImmutableBiMap;
-
-import org.junit.Before;
-import org.junit.Test;
-
-import org.apache.isis.applib.services.exceprecog.jdo.ExceptionRecognizerCompositeForJdoObjectStore;
-
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
+
+import java.util.Collections;
+
+import org.apache.isis.applib.internal.collections._Maps;
+import org.junit.Before;
+import org.junit.Test;
 
 public class ExceptionRecognizerCompositeForJdoObjectStoreTest {
 
@@ -57,7 +54,7 @@ public class ExceptionRecognizerCompositeForJdoObjectStoreTest {
     @Test
     public void whenDisabledFlagSetToTrue() throws Exception {
         // when
-        recog.init(ImmutableBiMap.of(ExceptionRecognizerCompositeForJdoObjectStore.KEY_DISABLE, "true"));
+        recog.init(_Maps.unmodifiable(ExceptionRecognizerCompositeForJdoObjectStore.KEY_DISABLE, "true"));
 
         // then
         assertThat(called[0], is(false));
@@ -66,7 +63,7 @@ public class ExceptionRecognizerCompositeForJdoObjectStoreTest {
     @Test
     public void whenDisabledFlagSetToFalse() throws Exception {
         // when
-        recog.init(ImmutableBiMap.of(ExceptionRecognizerCompositeForJdoObjectStore.KEY_DISABLE, "false"));
+    	recog.init(_Maps.unmodifiable(ExceptionRecognizerCompositeForJdoObjectStore.KEY_DISABLE, "false"));
 
         // then
         assertThat(called[0], is(true));

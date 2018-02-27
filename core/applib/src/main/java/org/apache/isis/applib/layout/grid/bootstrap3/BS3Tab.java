@@ -27,9 +27,8 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
-import com.google.common.collect.Lists;
-
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.internal.collections._Lists;
 import org.apache.isis.applib.layout.component.ActionLayoutData;
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
 import org.apache.isis.applib.layout.component.DomainObjectLayoutData;
@@ -64,7 +63,7 @@ public class BS3Tab extends BS3ElementAbstract implements BS3RowOwner {
     }
 
 
-    private List<BS3Row> rows = Lists.newArrayList();
+    private List<BS3Row> rows = _Lists.newArrayList();
 
     // no wrapper
     @XmlElement(name = "row", required = true)

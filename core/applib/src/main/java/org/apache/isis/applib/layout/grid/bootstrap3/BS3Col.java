@@ -26,8 +26,7 @@ import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-import com.google.common.collect.Lists;
-
+import org.apache.isis.applib.internal.collections._Lists;
 import org.apache.isis.applib.layout.component.ActionLayoutData;
 import org.apache.isis.applib.layout.component.ActionLayoutDataOwner;
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
@@ -156,7 +155,7 @@ public class BS3Col extends BS3RowContent
     }
 
 
-    private List<SizeSpan> sizeSpans = Lists.newArrayList();
+    private List<SizeSpan> sizeSpans = _Lists.newArrayList();
 
     // no wrapper
     @XmlElement(name = "sizeSpan", required = false)
@@ -170,7 +169,7 @@ public class BS3Col extends BS3RowContent
 
 
 
-    private List<ActionLayoutData> actions = Lists.newArrayList();
+    private List<ActionLayoutData> actions = _Lists.newArrayList();
 
     // no wrapper
     @XmlElementRef(type = ActionLayoutData.class, name = "action", required = false)
@@ -184,7 +183,7 @@ public class BS3Col extends BS3RowContent
 
 
 
-    private List<BS3Row> rows = Lists.newArrayList();
+    private List<BS3Row> rows = _Lists.newArrayList();
 
     // no wrapper
     @XmlElement(name = "row", required = false)
@@ -198,7 +197,7 @@ public class BS3Col extends BS3RowContent
 
 
 
-    private List<BS3TabGroup> tabGroups = Lists.newArrayList();
+    private List<BS3TabGroup> tabGroups = _Lists.newArrayList();
 
     // no wrapper
     @XmlElement(name = "tabGroup", required = false)
@@ -212,7 +211,7 @@ public class BS3Col extends BS3RowContent
 
 
 
-    private List<FieldSet> fieldSets = Lists.newArrayList();
+    private List<FieldSet> fieldSets = _Lists.newArrayList();
 
     // no wrapper
     @XmlElementRef(type=FieldSet.class, name = "fieldSet", required = false)
@@ -226,7 +225,7 @@ public class BS3Col extends BS3RowContent
 
 
 
-    private List<CollectionLayoutData> collections = Lists.newArrayList();
+    private List<CollectionLayoutData> collections = _Lists.newArrayList();
 
     // no wrapper
     @XmlElementRef(type=CollectionLayoutData.class, name = "collection", required = false)

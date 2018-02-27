@@ -33,7 +33,8 @@ import org.apache.isis.applib.services.xactn.TransactionService;
  * domain objects, and which provides functionality to those domain objects
  * in order that they might interact or have knowledge of with the "outside world".
  *
- * @deprecated - use {@link MessageService}, {@link TitleService}, {@link RepositoryService}, {@link FactoryService}, {@link UserService}, {@link TransactionService}.
+ * @deprecated - use {@link MessageService}, {@link TitleService}, {@link RepositoryService}, 
+ * {@link FactoryService}, {@link UserService}, {@link TransactionService}.
  */
 @Deprecated
 public interface DomainObjectContainer {

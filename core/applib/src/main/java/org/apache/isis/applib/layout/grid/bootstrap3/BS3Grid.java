@@ -27,10 +27,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.internal.collections._Lists;
+import org.apache.isis.applib.internal.collections._Maps;
 import org.apache.isis.applib.layout.component.ActionLayoutData;
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
 import org.apache.isis.applib.layout.component.DomainObjectLayoutData;
@@ -78,7 +77,7 @@ public class BS3Grid extends GridAbstract implements BS3Element, Dto, BS3RowOwne
 
 
 
-    private List<BS3Row> rows = Lists.newArrayList();
+    private List<BS3Row> rows = _Lists.newArrayList();
 
     // no wrapper
     @XmlElement(name = "row", required = true)
@@ -92,7 +91,7 @@ public class BS3Grid extends GridAbstract implements BS3Element, Dto, BS3RowOwne
 
 
 
-    private List<String> metadataErrors = Lists.newArrayList();
+    private List<String> metadataErrors = _Lists.newArrayList();
 
     /**
      * For diagnostics; populated by the framework if and only if a metadata error.
@@ -108,8 +107,8 @@ public class BS3Grid extends GridAbstract implements BS3Element, Dto, BS3RowOwne
 
 
 
-    //TODO [ahuber] unused
-    private BS3RowOwner owner;
+    @SuppressWarnings("unused")
+	private BS3RowOwner owner;
 
 
 
@@ -167,7 +166,7 @@ public class BS3Grid extends GridAbstract implements BS3Element, Dto, BS3RowOwne
     protected void traverseRows(final BS3RowOwner rowOwner, final Grid.Visitor visitor) {
         final BS3Grid.Visitor bs3Visitor = asBs3Visitor(visitor);
         final List<BS3Row> rows = rowOwner.getRows();
-        for (BS3Row bs3Row : Lists.newArrayList(rows)) {
+        for (BS3Row bs3Row : _Lists.newArrayList(rows)) {
             bs3Row.setOwner(this);
             bs3Visitor.preVisit(bs3Row);
             bs3Visitor.visit(bs3Row);
@@ -179,7 +178,7 @@ public class BS3Grid extends GridAbstract implements BS3Element, Dto, BS3RowOwne
     private void traverseCols(final Grid.Visitor visitor, final BS3Row bs3Row) {
         final BS3Grid.Visitor bs3Visitor = asBs3Visitor(visitor);
         final List<BS3RowContent> cols = bs3Row.getCols();
-        for (BS3RowContent rowContent : Lists.newArrayList(cols)) {
+        for (BS3RowContent rowContent : _Lists.newArrayList(cols)) {
             rowContent.setOwner(bs3Row);
             if(rowContent instanceof BS3Col) {
                 final BS3Col bs3Col = (BS3Col) rowContent;
@@ -216,7 +215,7 @@ public class BS3Grid extends GridAbstract implements BS3Element, Dto, BS3RowOwne
             final Grid.Visitor visitor) {
         final BS3Grid.Visitor bs3Visitor = asBs3Visitor(visitor);
         final List<BS3TabGroup> tabGroups = bs3TabGroupOwner.getTabGroups();
-        for (BS3TabGroup bs3TabGroup : Lists.newArrayList(tabGroups)) {
+        for (BS3TabGroup bs3TabGroup : _Lists.newArrayList(tabGroups)) {
             bs3TabGroup.setOwner(bs3TabGroupOwner);
             bs3Visitor.preVisit(bs3TabGroup);
             bs3Visitor.visit(bs3TabGroup);
@@ -230,7 +229,7 @@ public class BS3Grid extends GridAbstract implements BS3Element, Dto, BS3RowOwne
             final Grid.Visitor visitor) {
         final BS3Grid.Visitor bs3Visitor = asBs3Visitor(visitor);
         final List<BS3Tab> tabs = bs3TabOwner.getTabs();
-        for (BS3Tab tab : Lists.newArrayList(tabs)) {
+        for (BS3Tab tab : _Lists.newArrayList(tabs)) {
             tab.setOwner(bs3TabOwner);
             bs3Visitor.preVisit(tab);
             bs3Visitor.visit(tab);
@@ -267,7 +266,7 @@ public class BS3Grid extends GridAbstract implements BS3Element, Dto, BS3RowOwne
     @Programmatic
     @XmlTransient
     public LinkedHashMap<String, BS3Tab> getAllTabsByName() {
-        final LinkedHashMap<String, BS3Tab> tabsByName = Maps.newLinkedHashMap();
+        final LinkedHashMap<String, BS3Tab> tabsByName = _Maps.newLinkedHashMap();
 
         visit(new BS3Grid.VisitorAdapter() {
             @Override
@@ -282,7 +281,7 @@ public class BS3Grid extends GridAbstract implements BS3Element, Dto, BS3RowOwne
     @Programmatic
     @XmlTransient
     public LinkedHashMap<String, HasCssId> getAllCssId() {
-        final LinkedHashMap<String, HasCssId> divsByCssId = Maps.newLinkedHashMap();
+        final LinkedHashMap<String, HasCssId> divsByCssId = _Maps.newLinkedHashMap();
 
         visit(new BS3Grid.VisitorAdapter() {
             @Override

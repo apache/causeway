@@ -25,9 +25,8 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
-import com.google.common.collect.Lists;
-
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.internal.collections._Lists;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 
@@ -46,7 +45,7 @@ import org.apache.isis.applib.services.registry.ServiceRegistry;
  */
 public class ExceptionRecognizerComposite implements ExceptionRecognizer {
 
-    private final List<ExceptionRecognizer> exceptionRecognizers = Lists.newArrayList();
+    private final List<ExceptionRecognizer> exceptionRecognizers = _Lists.newArrayList();
 
     public ExceptionRecognizerComposite(final ExceptionRecognizer... exceptionRecognizers) {
         this(Arrays.asList(exceptionRecognizers));

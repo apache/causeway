@@ -22,11 +22,10 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
-import com.google.common.base.Strings;
-
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.internal.base._Strings;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
 
@@ -64,7 +63,7 @@ public class ExceptionRecognizerCompositeForJdoObjectStore extends ExceptionReco
 
     private static boolean getElseFalse(final Map<String, String> properties, final String key) {
         final String value = properties.get(key);
-        return !Strings.isNullOrEmpty(value) && Boolean.parseBoolean(value);
+        return !_Strings.isNullOrEmpty(value) && Boolean.parseBoolean(value);
     }
 
     protected void addChildren() {

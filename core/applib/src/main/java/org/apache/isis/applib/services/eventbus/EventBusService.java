@@ -23,9 +23,8 @@ import java.util.Set;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
-import com.google.common.collect.Sets;
-
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.internal.collections._Sets;
 
 /**
  * A service implementing an Event Bus, allowing arbitrary events to be posted and
@@ -184,14 +183,14 @@ public abstract class EventBusService {
 
     //region > subscribers
 
-    private final Set<Object> subscribers = Sets.newConcurrentHashSet();
+    private final Set<Object> subscribers = _Sets.newConcurrentHashSet();
 
     /**
      * Returns an immutable snapshot of the current subscribers.
      */
     @Programmatic
     public Set<Object> getSubscribers() {
-        return Collections.unmodifiableSet(Sets.newLinkedHashSet(subscribers));
+        return Collections.unmodifiableSet(_Sets.newLinkedHashSet(subscribers));
     }
     //endregion
 

@@ -25,9 +25,9 @@ import java.util.Set;
 
 import javax.xml.bind.annotation.XmlTransient;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
+import org.apache.isis.applib.internal.collections._Lists;
+import org.apache.isis.applib.internal.collections._Maps;
+import org.apache.isis.applib.internal.collections._Sets;
 
 /**
  * Factors out the commonality between {@link AppManifestAbstract.Builder} and {@link ModuleAbstract}.
@@ -36,11 +36,11 @@ import com.google.common.collect.Sets;
  */
 abstract class ModuleOrBuilderAbstract<B extends ModuleOrBuilderAbstract<B>> {
 
-    final Set<Class<?>> additionalModules = Sets.newLinkedHashSet();
-    final Set<Class<?>> additionalServices  = Sets.newLinkedHashSet();
+    final Set<Class<?>> additionalModules = _Sets.newLinkedHashSet();
+    final Set<Class<?>> additionalServices  = _Sets.newLinkedHashSet();
 
-    final Map<String,String> individualConfigProps = Maps.newLinkedHashMap();
-    final List<PropertyResource> propertyResources = Lists.newArrayList();
+    final Map<String,String> individualConfigProps = _Maps.newLinkedHashMap();
+    final List<PropertyResource> propertyResources = _Lists.newArrayList();
 
     ModuleOrBuilderAbstract() {}
     

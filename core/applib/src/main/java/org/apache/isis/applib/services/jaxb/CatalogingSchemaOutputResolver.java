@@ -32,9 +32,8 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-
+import org.apache.isis.applib.internal.collections._Lists;
+import org.apache.isis.applib.internal.collections._Maps;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -52,7 +51,7 @@ class CatalogingSchemaOutputResolver extends SchemaOutputResolver {
     private static final String SCHEMA_LOCATION_CORRECT = "http://isis.apache.org/schema/common/common.xsd";
 
     private final JaxbService.IsisSchemas isisSchemas;
-    private final List<String> namespaceUris = Lists.newArrayList();
+    private final List<String> namespaceUris = _Lists.newArrayList();
 
     public CatalogingSchemaOutputResolver(final JaxbService.IsisSchemas isisSchemas) {
         this.isisSchemas = isisSchemas;
@@ -62,7 +61,7 @@ class CatalogingSchemaOutputResolver extends SchemaOutputResolver {
         return namespaceUris;
     }
 
-    private Map<String, StreamResultWithWriter> schemaResultByNamespaceUri = Maps.newLinkedHashMap();
+    private Map<String, StreamResultWithWriter> schemaResultByNamespaceUri = _Maps.newLinkedHashMap();
 
     public String getSchemaTextFor(final String namespaceUri) {
         final StreamResultWithWriter streamResult = schemaResultByNamespaceUri.get(namespaceUri);
@@ -140,7 +139,7 @@ class CatalogingSchemaOutputResolver extends SchemaOutputResolver {
     }
 
     public Map<String, String> asMap() {
-        final Map<String,String> map = Maps.newLinkedHashMap();
+        final Map<String,String> map = _Maps.newLinkedHashMap();
         final List<String> namespaceUris = getNamespaceUris();
 
         for (String namespaceUri : namespaceUris) {

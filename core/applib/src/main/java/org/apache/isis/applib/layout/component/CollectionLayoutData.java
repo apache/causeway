@@ -27,10 +27,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Lists;
-
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.internal.collections._Lists;
 import org.apache.isis.applib.layout.links.Link;
 
 /**
@@ -200,7 +198,7 @@ public class CollectionLayoutData
 
 
 
-    private List<ActionLayoutData> actions = Lists.newArrayList();
+    private List<ActionLayoutData> actions = _Lists.newArrayList();
 
     // no wrapper
     @XmlElement(name = "action", required = false)
@@ -264,20 +262,6 @@ public class CollectionLayoutData
 
     public void setLink(final Link link) {
         this.link = link;
-    }
-
-    @Deprecated //[ahuber] not used, or otherwise replace with java 8+ function variant
-    public static class Functions {
-        private Functions(){}
-
-        public static Function<CollectionLayoutData, String> id() {
-            return new Function<CollectionLayoutData, String>() {
-                @Override
-                public String apply(final CollectionLayoutData metadata) {
-                    return metadata.getId();
-                }
-            };
-        }
     }
 
     @Override public String toString() {

@@ -24,9 +24,8 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
-import com.google.common.collect.Lists;
-
 import org.apache.isis.applib.annotation.DomainServiceLayout;
+import org.apache.isis.applib.internal.collections._Lists;
 import org.apache.isis.applib.layout.menubars.MenuBar;
 
 /**
@@ -46,7 +45,7 @@ public class BS3MenuBar implements MenuBar, Serializable {
     }
 
 
-    private List<BS3Menu> menus = Lists.newArrayList();
+    private List<BS3Menu> menus = _Lists.newArrayList();
 
     // no wrapper
     @XmlElement(name = "menu", required = true)

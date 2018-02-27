@@ -20,9 +20,8 @@ package org.apache.isis.applib.fixturescripts;
 
 import java.util.List;
 
-import com.google.common.collect.Lists;
-
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.internal.collections._Lists;
 
 public abstract class BuilderScriptAbstract<T,F extends BuilderScriptAbstract<T,F>>
         extends FixtureScript implements WithPrereqs<T,F>, FixtureScriptWithExecutionStrategy {
@@ -90,7 +89,7 @@ public abstract class BuilderScriptAbstract<T,F extends BuilderScriptAbstract<T,
         return persona.findUsing(serviceRegistry);
     }
 
-    private final List<WithPrereqs.Block<T,F>> prereqs = Lists.newArrayList();
+    private final List<WithPrereqs.Block<T,F>> prereqs = _Lists.newArrayList();
 
     @Override
     public F setPrereq(WithPrereqs.Block<T,F> prereq) {

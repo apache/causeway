@@ -22,10 +22,6 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
-import com.google.common.base.Strings;
-
-import org.hsqldb.util.DatabaseManagerSwing;
-
 import org.apache.isis.applib.IsisApplibModule;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -34,7 +30,9 @@ import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.internal.base._Strings;
 import org.apache.isis.applib.internal.context._Context;
+import org.hsqldb.util.DatabaseManagerSwing;
 
 @DomainService(
         nature = NatureOfService.VIEW_MENU_ONLY,
@@ -78,7 +76,7 @@ public class HsqlDbManagerMenu {
         } catch (ClassNotFoundException e) {
             return true;
         }
-        return Strings.isNullOrEmpty(url) || !url.contains("hsqldb:mem");
+        return _Strings.isNullOrEmpty(url) || !url.contains("hsqldb:mem");
     }
 
 

@@ -23,12 +23,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
-
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
+import org.apache.isis.applib.internal.collections._Lists;
+import org.apache.isis.applib.internal.collections._Maps;
+import org.apache.isis.applib.internal.collections._Sets;
 
 /**
  * Represents a collection of entities and domain services that provide a set of coherent functionality under a
@@ -58,7 +57,7 @@ import org.apache.isis.applib.fixturescripts.FixtureScript;
  *     <b>IMPORTANT</b>: implementations are expected to have value-semantics. This allows each {@link Module} to define
  *     its respective {@link #getDependencies() dependencies} simply by instantiating the {@link Module}s on which
  *     it depends.  The framework relies on value semantics to remove any duplicates from the computed graph of
- *     all depenencies for the entire running application.  The easiest way to simply inherit from
+ *     all dependencies for the entire running application.  The easiest way to simply inherit from
  *     {@link ModuleAbstract}.
  * </p>
  */
@@ -124,11 +123,11 @@ public interface Module {
          * </p>
          */
         static List<Module> transitiveDependenciesOf(Module module) {
-            final List<Module> ordered = Lists.newArrayList();
-            final List<Module> visited = Lists.newArrayList();
+            final List<Module> ordered = _Lists.newArrayList();
+            final List<Module> visited = _Lists.newArrayList();
             appendDependenciesTo(ordered, module, visited);
-            final LinkedHashSet<Module> sequencedSet = Sets.newLinkedHashSet(ordered);
-            return Lists.newArrayList(sequencedSet);
+            final LinkedHashSet<Module> sequencedSet = _Sets.newLinkedHashSet(ordered);
+            return _Lists.newArrayList(sequencedSet);
         }
 
         /**
@@ -140,7 +139,7 @@ public interface Module {
          * </p>
          */
         static List<Class<?>> transitiveAdditionalModulesOf(Module module) {
-            final Set<Class<?>> modules = Sets.newHashSet();
+            final Set<Class<?>> modules = _Sets.newHashSet();
             final List<Module> transitiveDependencies = transitiveDependenciesOf(module);
             for (Module transitiveDependency : transitiveDependencies) {
                 final Set<Class<?>> additionalModules = transitiveDependency.getAdditionalModules();
@@ -153,7 +152,7 @@ public interface Module {
                     modules.addAll(additionalModules);
                 }
             }
-            return Lists.newArrayList(modules);
+            return _Lists.newArrayList(modules);
         }
 
         /**
@@ -165,7 +164,7 @@ public interface Module {
          * </p>
          */
         static List<Class<?>> transitiveAdditionalServicesOf(Module module) {
-            final Set<Class<?>> services = Sets.newHashSet();
+            final Set<Class<?>> services = _Sets.newHashSet();
             final List<Module> transitiveDependencies = Util.transitiveDependenciesOf(module);
             for (Module transitiveDependency : transitiveDependencies) {
                 final Set<Class<?>> additionalServices = transitiveDependency.getAdditionalServices();
@@ -173,7 +172,7 @@ public interface Module {
                     services.addAll(additionalServices);
                 }
             }
-            return Lists.newArrayList(services);
+            return _Lists.newArrayList(services);
         }
 
         private static void appendDependenciesTo(
@@ -203,7 +202,7 @@ public interface Module {
         }
 
         static Map<String, String> transitiveIndividualConfigPropsOf(final Module module) {
-            final Map<String,String> transitiveIndividualConfigProps = Maps.newLinkedHashMap();
+            final Map<String,String> transitiveIndividualConfigProps = _Maps.newLinkedHashMap();
 
             final List<Module> transitiveDependencies = transitiveDependenciesOf(module);
             for (Module transitiveDependency : transitiveDependencies) {
@@ -213,7 +212,7 @@ public interface Module {
         }
 
         static List<PropertyResource> transitivePropertyResourcesOf(final Module module) {
-            final List<PropertyResource> transitivePropertyResources = Lists.newArrayList();
+            final List<PropertyResource> transitivePropertyResources = _Lists.newArrayList();
 
             final List<Module> transitiveDependencies = transitiveDependenciesOf(module);
             for (Module transitiveDependency : transitiveDependencies) {

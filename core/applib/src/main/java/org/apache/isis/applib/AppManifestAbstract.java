@@ -23,10 +23,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-
 import org.apache.isis.applib.fixturescripts.FixtureScript;
+import org.apache.isis.applib.internal.collections._Lists;
+import org.apache.isis.applib.internal.collections._Maps;
 
 /**
  * Convenience adapter, configured using an {@link Builder}.
@@ -45,7 +44,7 @@ public abstract class AppManifestAbstract implements AppManifest {
         overrideModules(builderModules);
         this.modules = builderModules;
 
-        final List<Class<?>> builderAdditionalServices = Lists.newArrayList(builder.getAllAdditionalServices());
+        final List<Class<?>> builderAdditionalServices = _Lists.newArrayList(builder.getAllAdditionalServices());
         overrideAdditionalServices(builderAdditionalServices);
 
         this.additionalServices = builderAdditionalServices;
@@ -91,14 +90,14 @@ public abstract class AppManifestAbstract implements AppManifest {
         if(builder instanceof AppManifestAbstract2.Builder) {
             return ((AppManifestAbstract2.Builder) builder).fixtures;
         }
-        return Lists.newArrayList();
+        return _Lists.newArrayList();
     }
 
     private Map<String, String> createConfigurationProperties(
             final List<PropertyResource> propertyResources,
             final Map<String,String> individualConfigProps,
             final List<Class<? extends FixtureScript>> fixtures) {
-        final Map<String, String> props = Maps.newHashMap();
+        final Map<String, String> props = _Maps.newHashMap();
         for (PropertyResource propertyResource : propertyResources) {
             propertyResource.loadPropsInto(props);
         }
@@ -215,7 +214,7 @@ public abstract class AppManifestAbstract implements AppManifest {
     public static abstract class BuilderAbstract<B extends BuilderAbstract<B>> extends ModuleOrBuilderAbstract<B> {
 
         String authMechanism = "shiro";
-        List<Class<? extends FixtureScript>> fixtures = Lists.newArrayList();
+        List<Class<? extends FixtureScript>> fixtures = _Lists.newArrayList();
 
         public B withAuthMechanism(final String authMechanism) {
             this.authMechanism = authMechanism;
@@ -236,7 +235,7 @@ public abstract class AppManifestAbstract implements AppManifest {
         }
 
         List<Class<?>> getAllAdditionalModules() {
-            return Lists.newArrayList(additionalModules);
+            return _Lists.newArrayList(additionalModules);
         }
 
         Set<Class<?>> getAllAdditionalServices() {
