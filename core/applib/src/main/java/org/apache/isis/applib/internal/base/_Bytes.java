@@ -19,7 +19,9 @@
 
 package org.apache.isis.applib.internal.base;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Base64;
 import java.util.Objects;
 import java.util.function.UnaryOperator;
@@ -41,9 +43,37 @@ import javax.annotation.Nullable;
 public final class _Bytes {
 
 	private _Bytes(){}
-	
+
+	// -- CONSTRUCTION
+
+	private final static int BUFFER_SIZE = 16 * 1024; // 16k
+
+	/**
+	 * Reads the input stream into an array of byte.
+	 * @param input
+	 * @return null if {@code input} is null
+	 * @throws IOException
+	 */
+	public static byte[] of(@Nullable final InputStream input) throws IOException {
+		if(input==null) {
+			return null;
+		}
+
+		final ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		final byte[] buffer = new byte[BUFFER_SIZE];
+
+		int nRead;
+		while ((nRead = input.read(buffer, 0, buffer.length)) != -1) {
+			bos.write(buffer, 0, nRead);
+		}
+		bos.flush();
+		
+		input.close();
+		return bos.toByteArray();
+	}
+
 	// -- PREPEND/APPEND
-	
+
 	/**
 	 * Copies all bytes from {@code bytes} followed by all bytes from {@code target} into a newly-allocated byte array. 
 	 * @param target
@@ -65,7 +95,7 @@ public final class _Bytes {
 		System.arraycopy(target, 0, result, bytes.length, target.length);
 		return result;
 	}
-	
+
 	/**
 	 * Copies all bytes from {@code target} followed by all bytes from {@code bytes} into a newly-allocated byte array. 
 	 * @param target
@@ -87,7 +117,7 @@ public final class _Bytes {
 		System.arraycopy(bytes, 0, result, target.length, bytes.length);
 		return result;
 	}
-	
+
 	// -- BASE-64 ENCODING
 
 	/**
@@ -121,7 +151,7 @@ public final class _Bytes {
 	}
 
 	// -- COMPRESSION
-	
+
 	/**
 	 * Compresses the given byte array, without being specific about the used algorithm.<br/>
 	 * However, following symmetry holds: <br/>
@@ -142,7 +172,7 @@ public final class _Bytes {
 			throw new IllegalArgumentException(e);
 		}
 	}
-	
+
 	/**
 	 * Decompresses the given byte array, without being specific about the used algorithm.<br/>
 	 * However, following symmetry holds: <br/>
@@ -163,7 +193,7 @@ public final class _Bytes {
 			throw new IllegalArgumentException(e);
 		}
 	}
-	
+
 	// -- UNARY OPERATOR COMPOSITION
 
 	/**
@@ -187,7 +217,7 @@ public final class _Bytes {
 		}
 
 	}
-	
+
 	/**
 	 * Returns a monadic BytesOperator that allows composition of unary byte[] operators
 	 * @return
@@ -195,26 +225,26 @@ public final class _Bytes {
 	public static BytesOperator operator() {
 		return new BytesOperator(UnaryOperator.identity());
 	}
-	
+
 	// -- SPECIAL COMPOSITES 
 
 	// using naming convention asX../ofX..
 
 	public final static BytesOperator asUrlBase64 = operator()
 			.andThen(bytes->encodeToBase64(Base64.getUrlEncoder(), bytes));
-	
+
 	public final static BytesOperator ofUrlBase64 = operator()
 			.andThen(bytes->decodeBase64(Base64.getUrlDecoder(), bytes));
-	
+
 	public final static BytesOperator asCompressedUrlBase64 = operator()
 			.andThen(_Bytes::compress)
 			.andThen(bytes->encodeToBase64(Base64.getUrlEncoder(), bytes));
-	
+
 	public final static BytesOperator ofCompressedUrlBase64 = operator()
 			.andThen(bytes->decodeBase64(Base64.getUrlDecoder(), bytes))
 			.andThen(_Bytes::decompress);
-	
+
 	// --
-	
-	
+
+
 }

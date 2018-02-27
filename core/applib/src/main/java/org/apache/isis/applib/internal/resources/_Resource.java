@@ -19,6 +19,13 @@
 
 package org.apache.isis.applib.internal.resources;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.Charset;
+import java.util.Objects;
+
+import org.apache.isis.applib.internal.base._Bytes;
+import org.apache.isis.applib.internal.base._Strings;
 import org.apache.isis.applib.internal.context._Context;
 
 /**
@@ -33,6 +40,28 @@ import org.apache.isis.applib.internal.context._Context;
  * @since 2.0.0
  */
 public final class _Resource {
+	
+	// -- CLASS PATH RESOURCE LOADING
+	
+	public static InputStream load(Class<?> contextClass, String resourceName) {
+		
+		Objects.requireNonNull(contextClass);
+		Objects.requireNonNull(resourceName);
+		
+		final String absoluteResourceName = resolveName(resourceName, contextClass);
+		
+		return _Context.getDefaultClassLoader()
+				.getResourceAsStream(absoluteResourceName);
+	}
+	
+	public static String loadAsString(Class<?> contextClass, String resourceName, Charset charset) throws IOException {
+		final InputStream is = load(contextClass, resourceName);
+		return _Strings.ofBytes(_Bytes.of(is), charset);
+		
+		// legacy of guava
+//		final URL url = Resources.getResource(contextClass, resourceName);
+//      return Resources.toString(url, charset);
+	}
 	
 	// -- CONTEXT PATH RESOURCE
 	
@@ -75,6 +104,31 @@ public final class _Resource {
 		_Context.put(_Resource_RestfulPath.class, new _Resource_RestfulPath(restfulPath), false);
 	}
 	
-	// -- 
+	// -- HELPER
+	
+    /*
+     * 
+     * Adapted copy of JDK 8 Class::resolveName
+     */
+    private static String resolveName(String name, Class<?> contextClass) {
+        if (name == null) {
+            return name;
+        }
+        if (!name.startsWith("/")) {
+            Class<?> c = contextClass;
+            while (c.isArray()) {
+                c = c.getComponentType();
+            }
+            String baseName = c.getName();
+            int index = baseName.lastIndexOf('.');
+            if (index != -1) {
+                name = baseName.substring(0, index).replace('.', '/')
+                    +"/"+name;
+            }
+        } else {
+            name = name.substring(1);
+        }
+        return name;
+    }
 
 }

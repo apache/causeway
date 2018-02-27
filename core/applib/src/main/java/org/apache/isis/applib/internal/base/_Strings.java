@@ -59,25 +59,34 @@ public final class _Strings {
 	 * Convenient e.g. for toArray conversions
 	 * (a duplicate of in {@link _Constants.emptyStringArray} )
 	 */
-	public static String[] emptyArray = new String[0];
+	public final static String[] emptyArray = new String[0];
 
 	// -- BASIC PREDICATES
 
 	/**
-	 * 
+	 * Same as {@link #isNullOrEmpty(CharSequence)}
 	 * @param x
 	 * @return true only if string is of zero length or null. 
 	 */
-	public static boolean isEmpty(final CharSequence x){
+	public static boolean isEmpty(@Nullable final CharSequence x){
 		return x==null || x.length()==0;
 	}
+	/**
+	 * Same as {@link #isEmpty(CharSequence)}
+	 * @param x
+	 * @return true only if string is of zero length or null. 
+	 */
+	public static boolean isNullOrEmpty(@Nullable final CharSequence x){
+		return x==null || x.length()==0;
+	}
+	
 
 	/**
 	 * 
 	 * @param x
 	 * @return inverse of isEmpty(CharSequence). 
 	 */
-	public static boolean isNotEmpty(final CharSequence x){
+	public static boolean isNotEmpty(@Nullable final CharSequence x){
 		return x!=null && x.length()!=0;
 	}
 
@@ -88,7 +97,7 @@ public final class _Strings {
 	 * @param input
 	 * @return null if the {@code input} is null
 	 */
-	public static String trim(String input) {
+	public static String trim(@Nullable String input) {
 		if(input==null) {
 			return null;
 		}
@@ -135,6 +144,72 @@ public final class _Strings {
 			return input.toUpperCase();
 		}
 		return Character.toUpperCase(input.charAt(0)) + input.substring(1);
+	}
+
+	// -- PADDING
+	
+	/**
+	 * Returns a string, of length at least minLength, consisting of string prepended with as many copies 
+	 * of padChar as are necessary to reach that length.
+	 * @param str
+	 * @param minLength
+	 * @param c
+	 * @return
+	 */
+	public static String padStart(@Nullable String str, int minLength, char c) {
+		if(minLength==0) {
+			return "";
+		}
+		if(minLength<0) {
+			throw new IllegalArgumentException("minLength can't be negative, got: " + minLength);
+		}
+		
+		final int len = str!=null ? str.length() : 0;
+		if(len>=minLength) {
+			return str;
+		}
+		
+		final int fillCount = minLength - len;
+		final StringBuilder sb = new StringBuilder();
+		for(int i=0; i<fillCount; ++i) {
+			sb.append(c);
+		}
+		if(len>0) {
+			sb.append(str);
+		}
+		return sb.toString();
+	}
+	
+	/**
+	 * Returns a string, of length at least minLength, consisting of string appended with as many copies 
+	 * of padChar as are necessary to reach that length.
+	 * @param str
+	 * @param padTo
+	 * @param c
+	 * @return
+	 */
+	public static String padEnd(@Nullable String str, int minLength, char c) {
+		if(minLength==0) {
+			return "";
+		}
+		if(minLength<0) {
+			throw new IllegalArgumentException("minLength can't be negative, got: " + minLength);
+		}
+		
+		final int len = str!=null ? str.length() : 0;
+		if(len>=minLength) {
+			return str;
+		}
+		
+		final int fillCount = minLength - len;
+		final StringBuilder sb = new StringBuilder();
+		if(len>0) {
+			sb.append(str);
+		}
+		for(int i=0; i<fillCount; ++i) {
+			sb.append(c);
+		}
+		return sb.toString();
 	}
 
 	// -- SPLITTING
@@ -277,6 +352,8 @@ public final class _Strings {
 
 	public final static StringOperator asNaturalName2 = operator()
 			.andThen(s->_Strings_NaturalNames.naturalName2(s, true));
+
+	
 
 
 

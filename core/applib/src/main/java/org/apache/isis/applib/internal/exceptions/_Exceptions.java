@@ -19,12 +19,15 @@
 
 package org.apache.isis.applib.internal.exceptions;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
 
 import org.apache.isis.applib.internal.base._NullSafe;
+import org.apache.isis.applib.internal.collections._Lists;
 
 /**
  * <h1>- internal use only -</h1>
@@ -78,8 +81,34 @@ public final class _Exceptions {
 				.map(StackTraceElement::toString)
 				.limit(maxLines);
 	}
-
 	
+	// -- CAUSAL CHAIN
+
+	public static List<Throwable> getCausalChain(@Nullable Throwable ex) {
+		if(ex==null) {
+			return Collections.emptyList();
+		}
+		final List<Throwable> chain = _Lists.newArrayList();
+		Throwable t = ex;
+		while(t!=null) {
+			chain.add(t);			
+			t = t.getCause();
+		}
+		return chain;		
+	}
+	
+	public static Stream<Throwable> streamCausalChain(@Nullable Throwable ex) {
+		if(ex==null) {
+			return Stream.empty();
+		}
+		return getCausalChain(ex).stream();		
+	}
+
+	public static Throwable getRootCause(@Nullable Throwable ex) {
+		return _Lists.lastElementIfAny(getCausalChain(ex));
+	}
+
+	// --
 
 	
 }
