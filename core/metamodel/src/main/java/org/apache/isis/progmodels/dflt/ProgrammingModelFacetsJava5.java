@@ -18,7 +18,9 @@
 package org.apache.isis.progmodels.dflt;
 
 import java.util.List;
+import java.util.Set;
 
+import org.apache.isis.applib.internal.context._Plugin;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facets.actions.action.ActionAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.actions.action.ActionChoicesForCollectionParameterFacetFactory;
@@ -132,11 +134,9 @@ import org.apache.isis.core.metamodel.facets.value.chars.CharPrimitiveValueFacet
 import org.apache.isis.core.metamodel.facets.value.chars.CharWrapperValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.clobs.ClobValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.color.ColorValueFacetUsingSemanticsProviderFactory;
-import org.apache.isis.core.metamodel.facets.value.date.DateValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.datejdk8local.Jdk8LocalDateValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.datejodalocal.JodaLocalDateValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.datesql.JavaSqlDateValueFacetUsingSemanticsProviderFactory;
-import org.apache.isis.core.metamodel.facets.value.datetime.DateTimeValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.datetimejdk8local.Jdk8LocalDateTimeValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.datetimejdk8offset.Jdk8OffsetDateTimeValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.datetimejoda.JodaDateTimeValueFacetUsingSemanticsProviderFactory;
@@ -159,15 +159,15 @@ import org.apache.isis.core.metamodel.facets.value.percentage.PercentageValueFac
 import org.apache.isis.core.metamodel.facets.value.shortint.ShortPrimitiveValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.shortint.ShortWrapperValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.string.StringValueFacetUsingSemanticsProviderFactory;
-import org.apache.isis.core.metamodel.facets.value.time.TimeValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.timesql.JavaSqlTimeValueFacetUsingSemanticsProviderFactory;
-import org.apache.isis.core.metamodel.facets.value.timestamp.TimeStampValueFacetUsingSemanticsProviderFactory;
-import org.apache.isis.core.metamodel.facets.value.timestampsql.JavaSqlTimeStampValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.url.URLValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.uuid.UUIDValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.postprocessors.param.ActionCollectionParameterDefaultsAndChoicesPostProcessor;
 import org.apache.isis.core.metamodel.progmodel.ObjectSpecificationPostProcessor;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelAbstract;
+import org.apache.isis.core.metamodel.progmodel.ProgrammingModelPlugin;
+import org.apache.isis.core.metamodel.progmodel.ProgrammingModelPlugin.FacetFactoryCategory;
+import org.apache.isis.core.metamodel.progmodel.ProgrammingModelPlugin.FactoryCollector;
 
 import com.google.common.collect.Lists;
 
@@ -179,7 +179,9 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
 
     public ProgrammingModelFacetsJava5(final DeprecatedPolicy deprecatedPolicy) {
         super(deprecatedPolicy);
-
+        
+        final FactoryCollector factoriesFromPlugins = discoverFactories();
+        
         // must be first, so any Facets created can be replaced by other
         // FacetFactorys later.
         addFactory(new FallbackFacetFactory());
@@ -348,8 +350,6 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(new TypicalLengthFacetOnPropertyDerivedFromTypeFacetFactory());
         addFactory(new TypicalLengthFacetOnParameterDerivedFromTypeFacetFactory());
 
-        
-
 
         // built-in value types for Java language
         addFactory(new BooleanPrimitiveValueFacetUsingSemanticsProviderFactory());
@@ -373,7 +373,6 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(new JavaSqlDateValueFacetUsingSemanticsProviderFactory());
         addFactory(new JavaSqlTimeValueFacetUsingSemanticsProviderFactory());
         addFactory(new JavaUtilDateValueFacetUsingSemanticsProviderFactory());
-        addFactory(new JavaSqlTimeStampValueFacetUsingSemanticsProviderFactory());
         addFactory(new StringValueFacetUsingSemanticsProviderFactory());
         addFactory(new URLValueFacetUsingSemanticsProviderFactory());
         addFactory(new LocalResourcePathValueFacetUsingSemanticsProviderFactory());
@@ -384,16 +383,12 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         // applib values
         addFactory(new BlobValueFacetUsingSemanticsProviderFactory());
         addFactory(new ClobValueFacetUsingSemanticsProviderFactory());
-        addFactory(new DateValueFacetUsingSemanticsProviderFactory());
-        addFactory(new DateTimeValueFacetUsingSemanticsProviderFactory());
         addFactory(new ColorValueFacetUsingSemanticsProviderFactory());
         addFactory(new MoneyValueFacetUsingSemanticsProviderFactory());
         addFactory(new PasswordValueFacetUsingSemanticsProviderFactory());
         addFactory(new PercentageValueFacetUsingSemanticsProviderFactory());
-        addFactory(new TimeStampValueFacetUsingSemanticsProviderFactory());
-        addFactory(new TimeValueFacetUsingSemanticsProviderFactory());
         addFactory(new ImageValueFacetUsingSemanticsProviderFactory());
-
+        
         // jodatime values
         addFactory(new JodaLocalDateValueFacetUsingSemanticsProviderFactory());
         addFactory(new JodaLocalDateTimeValueFacetUsingSemanticsProviderFactory());
@@ -403,6 +398,9 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(new Jdk8LocalDateValueFacetUsingSemanticsProviderFactory());
         addFactory(new Jdk8OffsetDateTimeValueFacetUsingSemanticsProviderFactory());
         addFactory(new Jdk8LocalDateTimeValueFacetUsingSemanticsProviderFactory());
+        
+        // plugin value factories 
+        factoriesFromPlugins.getFactories(FacetFactoryCategory.VALUE).forEach(this::addFactory);
         
         // written to not trample over TypeOf if already installed
         addFactory(new CollectionFacetFactory());
@@ -435,4 +433,16 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
             new ActionCollectionParameterDefaultsAndChoicesPostProcessor()
         );
     }
+    
+    // -- HELPER
+    
+    private static FactoryCollector discoverFactories() {
+	    final Set<ProgrammingModelPlugin> plugins = _Plugin.load(ProgrammingModelPlugin.class);
+	    final FactoryCollector collector = ProgrammingModelPlugin.collector();
+	    plugins.forEach(plugin->{
+	    	plugin.plugin(collector);
+	    });
+	    return collector;
+    }
+    
 }

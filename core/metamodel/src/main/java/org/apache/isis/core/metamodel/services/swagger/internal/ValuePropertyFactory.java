@@ -23,18 +23,22 @@ import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
+import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
+
+import org.apache.isis.applib.internal.context._Plugin;
+import org.apache.isis.core.metamodel.services.swagger.internal.ValuePropertyPlugin.ValuePropertyCollector;
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalDateTime;
 
 import io.swagger.models.properties.BooleanProperty;
 import io.swagger.models.properties.ByteArrayProperty;
@@ -51,120 +55,55 @@ import io.swagger.models.properties.UUIDProperty;
 
 public class ValuePropertyFactory {
 
-    private final Map<Class, Factory> propertyFactoryByClass = Maps.newHashMap();
+    private final Map<Class<?>, Factory> propertyFactoryByClass = Maps.newHashMap();
 
-    static interface Factory {
-        Property newProperty();
-    }
+    public static interface Factory extends Supplier<Property> {};
+    
     public ValuePropertyFactory() {
 
-        final Factory booleanFactory = new Factory() {
-            @Override
-            public Property newProperty() {
-                return new BooleanProperty();
-            }
-        };
-        propertyFactoryByClass.put(boolean.class, booleanFactory);
-        propertyFactoryByClass.put(Boolean.class, booleanFactory);
+        propertyFactoryByClass.put(boolean.class, BooleanProperty::new);
+        propertyFactoryByClass.put(Boolean.class, BooleanProperty::new);
 
-        final Factory integerFactory = new Factory() {
-            @Override
-            public Property newProperty() {
-                return new IntegerProperty();
-            }
-        };
-        propertyFactoryByClass.put(byte.class, integerFactory);
-        propertyFactoryByClass.put(Byte.class, integerFactory);
-        propertyFactoryByClass.put(short.class, integerFactory);
-        propertyFactoryByClass.put(Short.class, integerFactory);
-        propertyFactoryByClass.put(int.class, integerFactory);
-        propertyFactoryByClass.put(Integer.class, integerFactory);
-        propertyFactoryByClass.put(BigInteger.class, integerFactory);
+        propertyFactoryByClass.put(byte.class, IntegerProperty::new);
+        propertyFactoryByClass.put(Byte.class, IntegerProperty::new);
+        propertyFactoryByClass.put(short.class, IntegerProperty::new);
+        propertyFactoryByClass.put(Short.class, IntegerProperty::new);
+        propertyFactoryByClass.put(int.class, IntegerProperty::new);
+        propertyFactoryByClass.put(Integer.class, IntegerProperty::new);
+        propertyFactoryByClass.put(BigInteger.class, IntegerProperty::new);
 
-        final Factory longFactory = new Factory() {
-            @Override
-            public Property newProperty() {
-                return new LongProperty();
-            }
-        };
-        propertyFactoryByClass.put(long.class, longFactory);
-        propertyFactoryByClass.put(Long.class, longFactory);
-        propertyFactoryByClass.put(java.sql.Timestamp.class, longFactory);
+        propertyFactoryByClass.put(long.class, LongProperty::new);
+        propertyFactoryByClass.put(Long.class, LongProperty::new);
+        propertyFactoryByClass.put(java.sql.Timestamp.class, LongProperty::new);
 
-        final Factory decimalFactory = new Factory() {
-            @Override
-            public Property newProperty() {
-                return new DecimalProperty();
-            }
-        };
-        propertyFactoryByClass.put(BigDecimal.class, decimalFactory);
+        propertyFactoryByClass.put(BigDecimal.class, DecimalProperty::new);
 
-        final Factory floatFactory = new Factory() {
-            @Override
-            public Property newProperty() {
-                return new FloatProperty();
-            }
-        };
-        propertyFactoryByClass.put(float.class, floatFactory);
-        propertyFactoryByClass.put(Float.class, floatFactory);
+        propertyFactoryByClass.put(float.class, FloatProperty::new);
+        propertyFactoryByClass.put(Float.class, FloatProperty::new);
 
-        final Factory doubleFactory = new Factory() {
-            @Override
-            public Property newProperty() {
-                return new DoubleProperty();
-            }
-        };
-        propertyFactoryByClass.put(double.class, doubleFactory);
-        propertyFactoryByClass.put(Double.class, doubleFactory);
+        propertyFactoryByClass.put(double.class, DoubleProperty::new);
+        propertyFactoryByClass.put(Double.class, DoubleProperty::new);
 
-        final Factory stringFactory = new Factory() {
-            @Override
-            public Property newProperty() {
-                return new StringProperty();
-            }
-        };
-        propertyFactoryByClass.put(char.class, stringFactory);
-        propertyFactoryByClass.put(Character.class, stringFactory);
-        propertyFactoryByClass.put(char[].class, stringFactory);
-        propertyFactoryByClass.put(String.class, stringFactory);
+        propertyFactoryByClass.put(char.class, StringProperty::new);
+        propertyFactoryByClass.put(Character.class, StringProperty::new);
+        propertyFactoryByClass.put(char[].class, StringProperty::new);
+        propertyFactoryByClass.put(String.class, StringProperty::new);
 
-        final Factory uuidFactory = new Factory() {
-            @Override
-            public Property newProperty() {
-                return new UUIDProperty();
-            }
-        };
-        propertyFactoryByClass.put(UUID.class, uuidFactory);
+        propertyFactoryByClass.put(UUID.class, UUIDProperty::new);
 
-        final Factory dateTimeFactory = new Factory() {
-            @Override
-            public Property newProperty() {
-                return new DateTimeProperty();
-            }
-        };
-        propertyFactoryByClass.put(java.util.Date.class, dateTimeFactory);
-        propertyFactoryByClass.put(DateTime.class, dateTimeFactory);
-        propertyFactoryByClass.put(LocalDateTime.class, dateTimeFactory);
-        propertyFactoryByClass.put(org.apache.isis.applib.value.DateTime.class, dateTimeFactory);
+        propertyFactoryByClass.put(java.util.Date.class, DateTimeProperty::new);
+        propertyFactoryByClass.put(DateTime.class, DateTimeProperty::new);
+        propertyFactoryByClass.put(LocalDateTime.class, DateTimeProperty::new);
 
-        final Factory dateFactory = new Factory() {
-            @Override
-            public Property newProperty() {
-                return new DateProperty();
-            }
-        };
-        propertyFactoryByClass.put(java.sql.Date.class, dateFactory);
-        propertyFactoryByClass.put(LocalDate.class, dateFactory);
-        propertyFactoryByClass.put(org.apache.isis.applib.value.Date.class, dateFactory);
+        propertyFactoryByClass.put(java.sql.Date.class, DateProperty::new);
+        propertyFactoryByClass.put(LocalDate.class, DateProperty::new);
 
-        final Factory byteArrayFactory = new Factory() {
-            @Override
-            public Property newProperty() {
-                return new ByteArrayProperty();
-            }
-        };
-        propertyFactoryByClass.put(byte[].class, byteArrayFactory);
-        propertyFactoryByClass.put(org.apache.isis.applib.value.Blob.class, byteArrayFactory);
+        propertyFactoryByClass.put(byte[].class, ByteArrayProperty::new);
+        propertyFactoryByClass.put(org.apache.isis.applib.value.Blob.class, ByteArrayProperty::new);
+        
+        // add propertyFactories from plugins
+        discoverValueProperties().visitEntries(propertyFactoryByClass::put);        
+        
     }
 
     public Property newProperty(Class<?> cls) {
@@ -174,7 +113,7 @@ public class ValuePropertyFactory {
 
         final Factory factory = propertyFactoryByClass.get(cls);
         if(factory != null) {
-            return factory.newProperty();
+            return factory.get();
         }
 
         // special case, want to treat as a value
@@ -193,6 +132,17 @@ public class ValuePropertyFactory {
         }
 
         return null;
+    }
+    
+    // -- HELPER
+    
+    private static ValuePropertyCollector discoverValueProperties() {
+	    final Set<ValuePropertyPlugin> plugins = _Plugin.load(ValuePropertyPlugin.class);
+	    final ValuePropertyCollector collector = ValuePropertyPlugin.collector();
+	    plugins.forEach(plugin->{
+	    	plugin.plugin(collector);
+	    });
+	    return collector;
     }
 
 }
