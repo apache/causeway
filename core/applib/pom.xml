@@ -151,25 +151,16 @@
             <artifactId>isis-core-unittestsupport</artifactId>
             <scope>test</scope>
             <exclusions>
+            	<!-- whatever unittestsupport is dependent on, it should not be transitive  -->
             	<exclusion>
-            	    <!-- whatever unittestsupport is dependent on, it should not be transitive  -->
             		<groupId>org.reflections</groupId>
             		<artifactId>reflections</artifactId>
             	</exclusion>
+            	<exclusion>
+	            	<groupId>com.google.guava</groupId>
+					<artifactId>guava</artifactId>
+            	</exclusion>
             </exclusions>
-        </dependency>
-
-        <!-- as used by internal API, 
-        	also provides com.google.code.findbugs/annotations @Nullable, 
-        	but not transitive -->
-        <dependency>
-            <groupId>org.reflections</groupId>
-            <artifactId>reflections</artifactId>
-            <!--
-            ideally we would like to make this optional (to enforce usage of internal
-             reflective API, with only applib is allowed to access reflections directly.
-              HOWEVER, there is also a runtime dependency on org.reflections.vfs.Vfs.UrlType. -->
-            <optional>false</optional>
         </dependency>
 
 		<!-- provides @Nullable -->
