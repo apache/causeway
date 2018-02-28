@@ -22,6 +22,7 @@ package org.apache.isis.applib.internal.context;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 import javax.validation.constraints.NotNull;
@@ -60,7 +61,7 @@ public final class _Context {
 	 * @throws IllegalStateException if there is already an instance of same {@code type}
 	 *  on the current context.
 	 */
-	public static void putSingleton(Class<?> type, Object singleton) {
+	public static <T> void putSingleton(Class<? super T> type, T singleton) {
 		Objects.requireNonNull(type);
 		Objects.requireNonNull(singleton);
 		
@@ -81,7 +82,7 @@ public final class _Context {
 	 * @param override whether to overrides any already present singleton or not
 	 * @return whether the {@code singleton} was put on the context or ignored because there is already one present 
 	 */
-	public static boolean put(Class<?> type, Object singleton, boolean override) {
+	public static <T> boolean put(Class<? super T> type, T singleton, boolean override) {
 		Objects.requireNonNull(type);
 		Objects.requireNonNull(singleton);
 		
@@ -104,6 +105,23 @@ public final class _Context {
 	 */
 	public static <T> T getIfAny(Class<? super T> type) {
 		return _Casts.uncheckedCast(singletonMap.get(toKey(type)));
+	}
+	
+	/**
+	 * If the specified key is not already associated with a value (or is mapped to null), 
+	 * attempts to compute its value using the given factory function and enters it into this map unless null. 
+	 * @param type
+	 * @param factory
+	 * @return null, if there is no such instance
+	 */
+	public static <T> T computeIfAbsent(Class<? super T> type, Function<Class<? super T>, T> factory) {
+		Objects.requireNonNull(type);
+		Objects.requireNonNull(factory);
+		
+		// let writes to the map be atomic
+		synchronized (singletonMap) { 
+			return _Casts.uncheckedCast(singletonMap.computeIfAbsent(toKey(type), __->factory.apply(type)));
+		}
 	}
 	
 	/**
