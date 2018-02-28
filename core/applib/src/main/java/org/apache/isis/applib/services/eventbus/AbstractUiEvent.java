@@ -23,6 +23,7 @@ import java.util.Map;
 
 import org.apache.isis.applib.internal.collections._Maps;
 import org.apache.isis.applib.util.ObjectContracts;
+import org.apache.isis.applib.util.ToString;
 
 public abstract class AbstractUiEvent<S> extends EventObject {
 
@@ -86,11 +87,12 @@ public abstract class AbstractUiEvent<S> extends EventObject {
     }
     //endregion
 
-    //region > toString
+    private final static ToString<AbstractUiEvent<?>> toString = ObjectContracts
+    		.toString("source", AbstractUiEvent::getSource);
+    
     @Override
     public String toString() {
-        return ObjectContracts.toString(this, "source");
+    	return toString.toString(this);
     }
-    //endregion
 
 }

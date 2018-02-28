@@ -19,15 +19,11 @@
 package org.apache.isis.core.metamodel.services.metamodel;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.SortedSet;
 
-import com.google.common.base.Joiner;
-import com.google.common.base.Strings;
-import com.google.common.collect.Sets;
-
 import org.apache.isis.applib.services.metamodel.DomainMember;
-import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
@@ -57,6 +53,10 @@ import org.apache.isis.core.metamodel.specloader.specimpl.ContributeeMember;
 import org.apache.isis.core.metamodel.specloader.specimpl.ContributeeMember2;
 import org.apache.isis.core.metamodel.specloader.specimpl.MixedInMember;
 import org.apache.isis.core.metamodel.specloader.specimpl.MixedInMember2;
+
+import com.google.common.base.Joiner;
+import com.google.common.base.Strings;
+import com.google.common.collect.Sets;
 
 public class DomainMemberDefault implements DomainMember {
 
@@ -243,6 +243,11 @@ public class DomainMemberDefault implements DomainMember {
 
     @Override
     public int compareTo(DomainMember o) {
-        return ObjectContracts.compare(this, o, "classType,className,type desc,memberName");
+    	// legacy of ObjectContracts.compare(this, o, "classType,className,type desc,memberName");
+        return Comparator.comparing(DomainMember::getClassType)
+        		.thenComparing(DomainMember::getClassName)
+        		.thenComparing(DomainMember::getType, Comparator.reverseOrder()) // desc
+        		.thenComparing(DomainMember::getMemberName)
+        		.compare(this, o);
     }
 }

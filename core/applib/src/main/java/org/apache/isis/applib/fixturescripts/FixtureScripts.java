@@ -53,7 +53,6 @@ import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.applib.services.xactn.TransactionService;
-import org.apache.isis.applib.util.ObjectContracts;
 
 
 /**
@@ -241,7 +240,10 @@ public abstract class FixtureScripts extends AbstractService {
         Collections.sort(fixtureScripts, new Comparator<FixtureScript>() {
             @Override
             public int compare(final FixtureScript o1, final FixtureScript o2) {
-                return ObjectContracts.compare(o1, o2, "friendlyName","qualifiedName");
+            	return Comparator
+            				.comparing(FixtureScript::getFriendlyName)
+            				.thenComparing(FixtureScript::getQualifiedName)
+            				.compare(o1, o2);
             }
         });
         return fixtureScripts;

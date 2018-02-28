@@ -24,6 +24,7 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.util.ObjectContracts;
+import org.apache.isis.applib.util.ToString;
 
 public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
 
@@ -203,11 +204,17 @@ public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
     }
     //endregion
 
-    //region > toString
+    
+    private final static ToString<ActionDomainEvent<?>> toString = ObjectContracts.<ActionDomainEvent<?>>
+    		toString("source", ActionDomainEvent::getSource)
+    		.thenToString("identifier", ActionDomainEvent::getIdentifier)
+    		.thenToString("eventPhase", ActionDomainEvent::getEventPhase)
+    		;
+    
     @Override
     public String toString() {
-        return ObjectContracts.toString(this, "source,identifier,phase");
+    	return toString.toString(this);
     }
-    //endregion
+
 
 }

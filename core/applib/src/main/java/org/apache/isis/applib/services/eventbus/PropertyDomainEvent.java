@@ -19,6 +19,7 @@
 package org.apache.isis.applib.services.eventbus;
 
 import org.apache.isis.applib.util.ObjectContracts;
+import org.apache.isis.applib.util.ToString;
 
 public abstract class PropertyDomainEvent<S,T> extends AbstractDomainEvent<S> {
 
@@ -106,10 +107,18 @@ public abstract class PropertyDomainEvent<S,T> extends AbstractDomainEvent<S> {
     }
     //endregion
 
-    //region > toString
+    private final static ToString<PropertyDomainEvent<?,?>> toString = 
+    		ObjectContracts.<PropertyDomainEvent<?,?>>
+		    toString("source", PropertyDomainEvent::getSource)
+		    .thenToString("identifier", PropertyDomainEvent::getIdentifier)
+		    .thenToString("eventPhase", PropertyDomainEvent::getEventPhase)
+		    .thenToString("oldValue", PropertyDomainEvent::getOldValue) 
+		    .thenToString("newValue", PropertyDomainEvent::getNewValue)
+		    ;
+
     @Override
     public String toString() {
-        return ObjectContracts.toString(this, "source,identifier,phase,oldValue,newValue");
+    	return toString.toString(this);
     }
-    //endregion
+    
 }

@@ -27,6 +27,7 @@ import org.apache.isis.applib.internal.collections._Maps;
 import org.apache.isis.applib.internal.exceptions._Exceptions;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.util.ObjectContracts;
+import org.apache.isis.applib.util.ToString;
 
 public abstract class AbstractDomainEvent<S> extends java.util.EventObject {
 
@@ -320,13 +321,16 @@ public abstract class AbstractDomainEvent<S> extends java.util.EventObject {
     }
     //endregion
 
-    //region > toString
+    private final static ToString<AbstractDomainEvent<?>> toString = ObjectContracts
+    		//.toString("source", AbstractDomainEvent::getSource)
+    		.toString("identifier", AbstractDomainEvent::getIdentifier)
+//			.thenToString("eventPhase", AbstractDomainEvent::getEventPhase)
+    		;
+    
     @Override
     public String toString() {
-        return ObjectContracts.toString(this, "source","identifier","eventPhase");
+    	return toString.toString(this);
     }
-    //endregion
-
 
 
 }

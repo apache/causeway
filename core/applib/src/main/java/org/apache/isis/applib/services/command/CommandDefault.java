@@ -32,6 +32,7 @@ import org.apache.isis.applib.internal.collections._Maps;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
 import org.apache.isis.applib.util.ObjectContracts;
+import org.apache.isis.applib.util.ToString;
 
 public class CommandDefault implements Command {
 
@@ -371,9 +372,17 @@ public class CommandDefault implements Command {
 
     //region > toString
 
+    private final static ToString<CommandDefault> toString = ObjectContracts
+    		.toString("startedAt", CommandDefault::getStartedAt)
+    		.thenToString("user", CommandDefault::getUser)
+			.thenToString("memberIdentifier", CommandDefault::getMemberIdentifier) 
+			.thenToString("target", CommandDefault::getTarget) 
+			.thenToString("transactionId", CommandDefault::getTransactionId);
+    		
+    
     @Override
     public String toString() {
-        return ObjectContracts.toString(this, "startedAt","user","memberIdentifier","target","transactionId");
+    	return toString.toString(this);
     }
 
     //endregion

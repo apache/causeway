@@ -21,6 +21,7 @@ package org.apache.isis.applib.services.eventbus;
 import java.util.EventObject;
 
 import org.apache.isis.applib.util.ObjectContracts;
+import org.apache.isis.applib.util.ToString;
 
 public abstract class AbstractLifecycleEvent<S> extends EventObject {
 
@@ -53,9 +54,11 @@ public abstract class AbstractLifecycleEvent<S> extends EventObject {
     }
     //endregion
 
-
+    private final static ToString<AbstractLifecycleEvent<?>> toString = ObjectContracts
+    		.toString("source", AbstractLifecycleEvent::getSource);
+    
     @Override
     public String toString() {
-        return ObjectContracts.toString(this, "source");
+    	return toString.toString(this);
     }
 }

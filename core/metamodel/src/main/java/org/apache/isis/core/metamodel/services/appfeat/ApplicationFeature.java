@@ -18,19 +18,23 @@
  */
 package org.apache.isis.core.metamodel.services.appfeat;
 
+import java.util.Comparator;
 import java.util.SortedSet;
-
-import com.google.common.base.Function;
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Sets;
 
 import org.apache.isis.applib.IsisApplibModule;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.isis.applib.services.appfeat.ApplicationMemberType;
+import org.apache.isis.applib.util.Equality;
+import org.apache.isis.applib.util.Hashing;
 import org.apache.isis.applib.util.ObjectContracts;
+import org.apache.isis.applib.util.ToString;
+
+import com.google.common.base.Function;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Sets;
 
 /**
  * Canonical application feature, identified by {@link ApplicationFeatureId},
@@ -289,26 +293,36 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
 
     //region > equals, hashCode, compareTo, toString
 
-    private final static String propertyNames = "featureId";
-
+    private final static Comparator<ApplicationFeature> comparator = 
+    		Comparator.comparing(ApplicationFeature::getFeatureId);
+    
+    private final static Equality<ApplicationFeature> equality = 
+    		ObjectContracts.checkEquals(ApplicationFeature::getFeatureId);
+    
+    private final static Hashing<ApplicationFeature> hashing = 
+    		ObjectContracts.hashing(ApplicationFeature::getFeatureId);
+    
+    private final static ToString<ApplicationFeature> toString = 
+    		ObjectContracts.toString("featureId", ApplicationFeature::getFeatureId);
+    
     @Override
     public int compareTo(final ApplicationFeature other) {
-        return ObjectContracts.compare(this, other, propertyNames);
+    	return comparator.compare(this, other);
     }
 
     @Override
     public boolean equals(final Object obj) {
-        return ObjectContracts.equals(this, obj, propertyNames);
+    	return equality.equals(this, obj);
     }
 
     @Override
     public int hashCode() {
-        return ObjectContracts.hashCode(this, propertyNames);
+        return hashing.hashCode(this);
     }
 
     @Override
     public String toString() {
-        return ObjectContracts.toString(this, propertyNames);
+        return toString.toString(this);
     }
 
     //endregion
