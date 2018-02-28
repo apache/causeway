@@ -26,8 +26,6 @@ import java.util.Set;
 
 import javax.xml.bind.annotation.XmlTransient;
 
-import com.google.common.collect.Sets;
-
 import org.apache.isis.applib.internal.collections._Lists;
 import org.apache.isis.applib.internal.collections._Maps;
 import org.apache.isis.applib.internal.collections._Sets;
@@ -60,7 +58,7 @@ abstract class ModuleOrBuilderAbstract<B extends ModuleOrBuilderAbstract<B>> {
     }
 
     public B withAdditionalDependencies(final Module... dependencies) {
-        return withAdditionalDependencies(Sets.newHashSet(dependencies));
+        return withAdditionalDependencies(_Sets.unmodifiable(dependencies));
     }
 
     void withTransitiveFrom(final Module module) {

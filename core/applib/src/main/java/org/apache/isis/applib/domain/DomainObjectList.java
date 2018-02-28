@@ -24,8 +24,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import com.google.common.collect.Lists;
-
 import org.apache.isis.applib.IsisApplibModule;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
@@ -34,6 +32,7 @@ import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.internal.collections._Lists;
 import org.apache.isis.schema.utils.jaxbadapters.PersistentEntitiesAdapter;
 
 @XmlRootElement(name = "list")
@@ -158,7 +157,7 @@ public class DomainObjectList {
     public static class ObjectsDomainEvent extends CollectionDomainEvent<Object> { }
 
     @XmlJavaTypeAdapter(PersistentEntitiesAdapter.class)
-    private List<Object> objects = Lists.newArrayList();
+    private List<Object> objects = _Lists.newArrayList();
 
     @Collection(
             domainEvent = ObjectsDomainEvent.class,

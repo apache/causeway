@@ -21,10 +21,8 @@ package org.apache.isis.applib.fixtures;
 
 import java.util.List;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
-
 import org.apache.isis.applib.fixturescripts.FixtureScript;
+import org.apache.isis.applib.internal.collections._Lists;
 
 /**
  * Indicates that the demo or test should be run as the specified user, with the
@@ -54,7 +52,7 @@ public class LogonFixture implements InstallableFixture {
      */
     @Deprecated
     public LogonFixture(final String username, final String... roles) {
-        this(username, Lists.newArrayList(roles));
+        this(username, _Lists.unmodifiable(roles));
     }
 
     /**
@@ -63,7 +61,7 @@ public class LogonFixture implements InstallableFixture {
     @Deprecated
     public LogonFixture(final String username, final List<String> roles) {
         this.username = username;
-        this.roles = ImmutableList.copyOf(roles);
+        this.roles = _Lists.unmodifiable(roles);
     }
 
     /**

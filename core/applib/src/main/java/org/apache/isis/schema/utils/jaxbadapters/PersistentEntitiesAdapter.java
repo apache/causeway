@@ -21,8 +21,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
-import com.google.common.collect.Lists;
-
+import org.apache.isis.applib.internal.collections._Lists;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.schema.common.v1.OidDto;
@@ -33,7 +32,7 @@ public class PersistentEntitiesAdapter extends XmlAdapter<OidsDto, List<Object>>
     @Override
     public List<Object> unmarshal(final OidsDto oidsDto) {
 
-        List<Object> domainObjects = Lists.newArrayList();
+        List<Object> domainObjects = _Lists.newArrayList();
         for (final OidDto oidDto : oidsDto.getOid()) {
             final Bookmark bookmark = Bookmark.from(oidDto);
             Object domainObject = bookmarkService.lookup(bookmark, BookmarkService.FieldResetPolicy.DONT_RESET);
