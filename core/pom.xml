@@ -1276,6 +1276,22 @@ ${license.additional-notes}
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
+            
+            <!-- runtime -->
+            <dependency>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis-core-runtime-legacy</artifactId>
+                <version>${core-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis-core-runtime-legacy</artifactId>
+                <version>${core-version}</version>
+                <type>test-jar</type>
+                <scope>test</scope>
+            </dependency>
+            
+            <!-- wrapper -->
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-wrapper</artifactId>
