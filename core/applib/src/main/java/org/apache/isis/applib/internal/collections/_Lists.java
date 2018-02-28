@@ -59,6 +59,11 @@ public final class _Lists {
 	
 	// -- UNMODIFIABLE LIST
 	
+	/**
+	 * Copies all elements into a new unmodifiable List.
+	 * @param elements
+	 * @return non null
+	 */
 	@SafeVarargs
 	public static <T> List<T> unmodifiable(T ... elements) {
 		Objects.requireNonNull(elements); // don't accept null elements
@@ -68,6 +73,11 @@ public final class _Lists {
 		return Collections.unmodifiableList(Arrays.asList(elements));
 	}
 	
+	/**
+	 * Copies all elements from iterable into a new unmodifiable List.
+	 * @param iterable
+	 * @return non null
+	 */
 	public static <T> List<T> unmodifiable(Iterable<T> iterable) {
 		if(iterable==null) {
 			return Collections.emptyList();
