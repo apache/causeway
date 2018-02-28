@@ -30,7 +30,7 @@ import javax.ws.rs.core.Response.ResponseBuilder;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.services.jaxb.DomainObjectList;
+import org.apache.isis.applib.domain.DomainObjectList;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
@@ -231,7 +231,7 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
 
         final String title = titleFrom(collectionAdapters, elementSpec);
 
-        final DomainObjectList list = new DomainObjectList(title, elementSpec.getCorrespondingClass());
+        final DomainObjectList list = new DomainObjectList(title, elementSpec.getSpecId().asString());
         for (final ObjectAdapter adapter : collectionAdapters) {
             list.getObjects().add(adapter.getObject());
         }

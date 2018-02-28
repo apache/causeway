@@ -105,28 +105,19 @@ public interface JaxbService {
         public Object fromXml(final JAXBContext jaxbContext, final String xml) {
             return fromXml(jaxbContext, xml, Maps.<String,Object>newHashMap());
         }
+
         @Override
         public Object fromXml(final JAXBContext jaxbContext, final String xml, final Map<String, Object> unmarshallerProperties) {
             try {
 
-                Object unmarshal = internalFromXml(jaxbContext, xml, unmarshallerProperties);
-
-                if(unmarshal instanceof DomainObjectList) {
-
-                    // go around the loop again, so can properly deserialize the contents
-                    DomainObjectList domainObjectList = (DomainObjectList) unmarshal;
-                    JAXBContext jaxbContext1 = jaxbContextFor(domainObjectList);
-                    unmarshal = internalFromXml(jaxbContext1, xml, unmarshallerProperties);
-                }
-
-                return unmarshal;
+                return internalFromXml(jaxbContext, xml, unmarshallerProperties);
 
             } catch (final JAXBException ex) {
                 throw new NonRecoverableException("Error unmarshalling XML", ex);
             }
         }
 
-        private Object internalFromXml(
+        protected Object internalFromXml(
                 final JAXBContext jaxbContext,
                 final String xml,
                 final Map<String, Object> unmarshallerProperties) throws JAXBException {
@@ -222,21 +213,13 @@ public interface JaxbService {
             }
         }
 
-        private static JAXBContext jaxbContextFor(final Object domainObject) {
+        /**
+         * Optional hook
+         */
+        protected JAXBContext jaxbContextFor(final Object domainObject) {
             final Class<?> domainClass = domainObject.getClass();
             final JAXBContext context;
-            if(domainObject instanceof DomainObjectList) {
-                DomainObjectList list = (DomainObjectList) domainObject;
-                final Class<?> elementType;
-                try {
-                    elementType = Thread.currentThread().getContextClassLoader().loadClass(list.getElementType());
-                    context = JAXBContext.newInstance(domainClass, elementType);
-                } catch (JAXBException | ClassNotFoundException e) {
-                    throw new RuntimeException(e);
-                }
-            } else {
                 context = jaxbContextFor(domainClass);
-            }
             return context;
         }
 

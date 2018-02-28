@@ -16,12 +16,19 @@
  */
 package org.apache.isis.schema.services.jaxb;
 
+import java.util.Map;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
+import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.domain.DomainObjectList;
 import org.apache.isis.applib.services.jaxb.JaxbService;
+import org.apache.isis.applib.services.metamodel.MetaModelService5;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.schema.utils.jaxbadapters.PersistentEntitiesAdapter;
 import org.apache.isis.schema.utils.jaxbadapters.PersistentEntityAdapter;
@@ -32,6 +39,45 @@ import org.apache.isis.schema.utils.jaxbadapters.PersistentEntityAdapter;
 )
 public class JaxbServiceDefault extends JaxbService.Simple {
 
+    @Override
+    public Object fromXml(final JAXBContext jaxbContext, final String xml, final Map<String, Object> unmarshallerProperties) {
+        try {
+            Object pojo = internalFromXml(jaxbContext, xml, unmarshallerProperties);
+
+            if(pojo instanceof DomainObjectList) {
+
+                // go around the loop again, so can properly deserialize the contents
+                DomainObjectList list = (DomainObjectList) pojo;
+                JAXBContext jaxbContextForList = jaxbContextFor(list);
+                
+                return internalFromXml(jaxbContextForList, xml, unmarshallerProperties);
+            }
+
+            return pojo;
+
+        } catch (final JAXBException ex) {
+            throw new NonRecoverableException("Error unmarshalling XML", ex);
+        }
+    }
+
+    @Override
+    protected JAXBContext jaxbContextFor(final Object domainObject) {
+        final Class<?> domainClass = domainObject.getClass();
+        if(domainObject instanceof DomainObjectList) {
+            DomainObjectList list = (DomainObjectList) domainObject;
+            try {
+                final String elementObjectType = list.getElementObjectType();
+                final Class<?> elementType = metaModelService5.fromObjectType(elementObjectType);
+                return JAXBContext.newInstance(domainClass, elementType);
+            } catch (JAXBException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return super.jaxbContextFor(domainObject);
+    }
+
+
+    @Override
     protected void configure(final Unmarshaller unmarshaller) {
         unmarshaller.setAdapter(PersistentEntityAdapter.class,
                 serviceRegistry.injectServicesInto(new PersistentEntityAdapter()));
@@ -39,6 +85,7 @@ public class JaxbServiceDefault extends JaxbService.Simple {
                 serviceRegistry.injectServicesInto(new PersistentEntitiesAdapter()));
     }
 
+    @Override
     protected void configure(final Marshaller marshaller) {
         marshaller.setAdapter(PersistentEntityAdapter.class,
                 serviceRegistry.injectServicesInto(new PersistentEntityAdapter()));
@@ -46,7 +93,11 @@ public class JaxbServiceDefault extends JaxbService.Simple {
                 serviceRegistry.injectServicesInto(new PersistentEntitiesAdapter()));
     }
 
+
     @javax.inject.Inject
     ServiceRegistry serviceRegistry;
+
+    @javax.inject.Inject
+    MetaModelService5 metaModelService5;
 }
 
