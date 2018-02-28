@@ -21,7 +21,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.apache.isis.archetype</groupId>
     <artifactId>simpleapp-archetype</artifactId>
-    <version>1.16.2</version>
+    <version>2.0.0-M1-SNAPSHOT</version>
     <packaging>maven-archetype</packaging>
     <name>simpleapp-archetype</name>
     <build>
@@ -65,7 +65,7 @@
         <connection>scm:git:git@github.com:incodehq/incode-build.git/simpleapp</connection>
         <developerConnection>scm:git:git@github.com:incodehq/incode-build.git/simpleapp</developerConnection>
         <url>git@github.com:incodehq/incode-build.git/simpleapp</url>
-      <tag>simpleapp-archetype-1.16.2</tag>
+      <tag>HEAD</tag>
   </scm>
     <parent>
         <groupId>org.apache.isis.core</groupId>
