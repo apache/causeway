@@ -121,7 +121,15 @@ The other two implementations of `ContentNegotiationService` are:
 
 * `ContentNegotiationServiceForRestfulObjectsV1_0` +
 +
-which returns representations according to the link:http://restfulobjects.org[Restful Objects] spec
+which returns representations according to the link:http://restfulobjects.org[Restful Objects] spec.
++
+One extension (specific to Apache Isis, not part of the RO spec) is that actions can also be invoked with an HTTP `Accept` header of the form:
++
+`application/json;profile=urn:org.restfulobjects:repr-types/object`
++
+If the action result returns a collection then this will automatically converted to a `DomainObjectList` view model.
+This can be useful for generic viewers.
+
 
 * `ContentNegotiationServiceOrgApacheIsisV1` +
 +
