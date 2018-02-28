@@ -41,7 +41,7 @@ import java.util.function.Supplier;
  * 
  * @since 2.0.0
  */
-public class _Multimap {
+public class _Multimaps {
 	
 	/**
 	 * Represents a Map of Lists.
@@ -99,7 +99,7 @@ public class _Multimap {
 		public V getElement(K1 key, K2 subkey);
 	}
 	
-	public static <K, V> ListMultimap<K, V> newListMultiMap(
+	public static <K, V> ListMultimap<K, V> newListMultimap(
 			final Supplier<Map<K, List<V>>> mapFactory,
 			final Supplier<List<V>> elementCollectionFactory){
 		Objects.requireNonNull(mapFactory);
@@ -131,7 +131,7 @@ public class _Multimap {
 		};
 	}
 	
-	public static <K, V> SetMultimap<K, V> newSetMultiMap(
+	public static <K, V> SetMultimap<K, V> newSetMultimap(
 			final Supplier<Map<K, Set<V>>> mapFactory,
 			final Supplier<Set<V>> elementCollectionFactory){
 		Objects.requireNonNull(mapFactory);
@@ -206,21 +206,21 @@ public class _Multimap {
 	/**
 	 * @return HashMap of ArrayLists
 	 */
-	public static <K, V> ListMultimap<K, V> newListMultiMap(){ 
-		return newListMultiMap(HashMap::new, ArrayList::new); 
+	public static <K, V> ListMultimap<K, V> newListMultimap(){ 
+		return newListMultimap(HashMap::new, ArrayList::new); 
 	}
 	
 	/**
 	 * @return HashMap of HashSets
 	 */
-	public static <K, V> SetMultimap<K, V> newSetMultiMap(){ 
-		return newSetMultiMap(HashMap::new, HashSet::new); 
+	public static <K, V> SetMultimap<K, V> newSetMultimap(){ 
+		return newSetMultimap(HashMap::new, HashSet::new); 
 	}
 
 	/**
 	 * @return HashMap of HashMaps
 	 */
-	public static <K1, K2, V> MapMultimap<K1, K2, V> newMapMultiMap(){ 
+	public static <K1, K2, V> MapMultimap<K1, K2, V> newMapMultimap(){ 
 		return newMapMultimap(HashMap::new, HashMap::new); 
 	}
 
