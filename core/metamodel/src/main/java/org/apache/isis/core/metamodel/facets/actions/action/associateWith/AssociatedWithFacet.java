@@ -16,25 +16,15 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package domainapp.application;
 
-import java.util.Set;
+package org.apache.isis.core.metamodel.facets.actions.action.associateWith;
 
-import javax.xml.bind.annotation.XmlRootElement;
+import org.apache.isis.core.metamodel.facets.SingleStringValueFacet;
 
-import com.google.common.collect.Sets;
-
-import org.apache.isis.applib.Module;
-import org.apache.isis.applib.ModuleAbstract;
-
-import domainapp.modules.simple.SimpleModule;
-
-@XmlRootElement(name = "module")
-public class DomainAppApplicationModule extends ModuleAbstract {
-
-    @Override
-    public Set<Module> getDependencies() {
-        return Sets.<Module>newHashSet(new SimpleModule());
-    }
+/**
+ * Associates an action with a collection, for the purpose of defaulting
+ * choices and defaults of parameters of the same type.
+ */
+public interface AssociatedWithFacet extends SingleStringValueFacet {
 
 }

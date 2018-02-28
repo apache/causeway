@@ -29,7 +29,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacetAbstract;
 
-public class ActionParameterDefaultsFacetFromParentedCollection extends ActionParameterDefaultsFacetAbstract {
+public class ActionParameterDefaultsFacetFromAssociatedCollection extends ActionParameterDefaultsFacetAbstract {
 
     private static ThreadLocal<List<Object>> selectedPojos = new ThreadLocal<List<Object>>() {
         @Override protected List<Object> initialValue() {
@@ -50,7 +50,7 @@ public class ActionParameterDefaultsFacetFromParentedCollection extends ActionPa
         }
     }
 
-    public ActionParameterDefaultsFacetFromParentedCollection(final FacetHolder holder) {
+    public ActionParameterDefaultsFacetFromAssociatedCollection(final FacetHolder holder) {
         super(holder);
     }
 

@@ -18,10 +18,8 @@
  */
 package org.apache.isis.applib;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
@@ -103,36 +101,6 @@ public abstract class AppManifestAbstract2 extends AppManifestAbstract implement
 
         public Module getModule() {
             return module;
-        }
-
-        public Builder withAdditionalDependency(final Module dependency) {
-            withTransitiveFrom(dependency);
-            return this;
-        }
-
-        public Builder withAdditionalDependencies(final Set<Module> dependencies) {
-            for (final Module dependency : dependencies) {
-                withAdditionalDependency(dependency);
-            }
-            return this;
-        }
-
-        private void withTransitiveFrom(final Module module) {
-            withAdditionalModules(asClasses(Module.Util.transitiveDependenciesOf(module)));
-            withAdditionalModules(Module.Util.transitiveAdditionalModulesOf(module));
-            withAdditionalServices(Module.Util.transitiveAdditionalServicesOf(module));
-            withConfigurationPropertyResources(Module.Util.transitivePropertyResourcesOf(module));
-            withConfigurationProperties(Module.Util.transitiveIndividualConfigPropsOf(module));
-        }
-
-        @SuppressWarnings("unchecked") //[ahuber] it's safe to assume correct type casting here 
-		private static Class<? extends Module>[] asClasses(final List<Module> dependencies) {
-            final List<Class<? extends Module>> list = new ArrayList<>();
-            for (Module dependency : dependencies) {
-                Class<? extends Module> aClass = dependency.getClass();
-                list.add(aClass);
-            }
-            return list.toArray(new Class[] {});
         }
 
         @Override

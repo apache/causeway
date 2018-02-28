@@ -28,6 +28,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
+import org.apache.isis.viewer.restfulobjects.applib.RestfulHttpMethod;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ActionResultRepresentation.ResultType;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkBuilder;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
@@ -193,6 +194,12 @@ public class ActionResultReprRenderer extends ReprRendererAbstract<ActionResultR
 
         links.arrayAdd(selfLink);
         selfLink.mapPut("args", bodyArgs);
+
+        final LinkBuilder upLinkBuilder = adapterLinkTo.memberBuilder(Rel.UP, MemberType.ACTION, action, RepresentationType.OBJECT_ACTION);
+        upLinkBuilder.withHttpMethod(RestfulHttpMethod.GET);
+
+        links.arrayAdd(upLinkBuilder.build());
+
     }
 
 }

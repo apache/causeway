@@ -16,25 +16,30 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package domainapp.application;
 
-import java.util.Set;
+package org.apache.isis.core.metamodel.facets.actions.action.associateWith;
 
-import javax.xml.bind.annotation.XmlRootElement;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.SingleStringValueFacetAbstract;
 
-import com.google.common.collect.Sets;
+/**
+ * Associates an action with a collection, for the purpose of defaulting
+ * choices and defaults of parameters of the same type.
+ */
+public abstract class AssociatedWithFacetAbstract
+        extends SingleStringValueFacetAbstract
+        implements AssociatedWithFacet {
 
-import org.apache.isis.applib.Module;
-import org.apache.isis.applib.ModuleAbstract;
+    public static Class<? extends Facet> type() {
+        return AssociatedWithFacet.class;
+    }
 
-import domainapp.modules.simple.SimpleModule;
 
-@XmlRootElement(name = "module")
-public class DomainAppApplicationModule extends ModuleAbstract {
-
-    @Override
-    public Set<Module> getDependencies() {
-        return Sets.<Module>newHashSet(new SimpleModule());
+    public AssociatedWithFacetAbstract(
+            final String value,
+            final FacetHolder holder) {
+        super(type(), holder, value);
     }
 
 }
