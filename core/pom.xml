@@ -1175,12 +1175,6 @@ ${license.additional-notes}
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
-            <!-- provides @Nullable -->
-	        <dependency>
-	        	<groupId>com.google.code.findbugs</groupId>
-	        	<artifactId>annotations</artifactId>
-	        	<version>${findbugs-annotations.version}</version>
-	        </dependency>
 	        
 	        <!-- applib-legacy -->
 	        <dependency>
@@ -1190,6 +1184,20 @@ ${license.additional-notes}
                 <type>jar</type>
                 <scope>compile</scope>
             </dependency>
+            <dependency>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis-core-applib-legacy</artifactId>
+                <version>${core-version}</version>
+                <type>test-jar</type>
+                <scope>test</scope>
+            </dependency>
+            
+            <!-- provides @Nullable -->
+	        <dependency>
+	        	<groupId>com.google.code.findbugs</groupId>
+	        	<artifactId>annotations</artifactId>
+	        	<version>${findbugs-annotations.version}</version>
+	        </dependency>
             
             <!--  reflections/applib -->
             <dependency>
@@ -1234,6 +1242,22 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-metamodel</artifactId>
+                <version>${core-version}</version>
+                <type>test-jar</type>
+                <scope>test</scope>
+            </dependency>
+            
+            <!-- metamodel legacy -->
+            <dependency>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis-core-metamodel-legacy</artifactId>
+                <version>${core-version}</version>
+                <type>jar</type>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis-core-metamodel-legacy</artifactId>
                 <version>${core-version}</version>
                 <type>test-jar</type>
                 <scope>test</scope>

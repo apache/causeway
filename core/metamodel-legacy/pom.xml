@@ -26,8 +26,8 @@
         <version>2.0.0-M1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>isis-core-metamodel</artifactId>
-    <name>Apache Isis MetaModel</name>
+    <artifactId>isis-core-metamodel-legacy</artifactId>
+    <name>Apache Isis MetaModel Legacy</name>
 
     <properties>
         <jar-plugin.automaticModuleName>org.apache.isis.core.metamodel</jar-plugin.automaticModuleName>
@@ -62,13 +62,18 @@
 
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-applib</artifactId>
+            <artifactId>isis-core-applib-legacy</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-applib</artifactId>
+            <artifactId>isis-core-applib-legacy</artifactId>
             <type>test-jar</type>
             <scope>test</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-metamodel</artifactId>
         </dependency>
 
         <dependency>
