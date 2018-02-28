@@ -25,4 +25,4 @@
  * Do NOT use any of the classes provided by this package!
  * </p>
  */
-package org.apache.isis.applib.internal.reflection;
+package org.apache.isis.applib.internal.discover;

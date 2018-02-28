@@ -1,4 +1,4 @@
-package org.apache.isis.applib.internal.reflection;
+package org.apache.isis.applib.plugins.classdiscovery.reflections;
 
 import java.lang.annotation.Annotation;
 import java.util.HashSet;
@@ -11,35 +11,35 @@ import java.util.stream.Stream;
 import javax.validation.constraints.NotNull;
 
 import org.apache.isis.applib.internal.base._NullSafe;
-import org.apache.isis.applib.internal.reflection._Reflect.Discovery;
+import org.apache.isis.applib.plugins.classdiscovery.ClassDiscovery;
 import org.reflections.Reflections;
 
 /**
  * 
- * package private mixin for utility class {@link _Reflect}
+ * package private utility class
  *
  */
-class _Reflect_Discovery implements _Reflect.Discovery {
+class ReflectDiscovery implements ClassDiscovery {
 	
 	private final Reflections reflections;
 	
 	// -- CONSTRUCTORS
 	
-	public static Discovery of(List<String> packagePrefixes) {
-		return new _Reflect_Discovery(packagePrefixes);
+	public static ReflectDiscovery of(List<String> packagePrefixes) {
+		return new ReflectDiscovery(packagePrefixes);
 	}
 
-	public static Discovery of(String packageNamePrefix) {
-		return new _Reflect_Discovery(packageNamePrefix);
+	public static ReflectDiscovery of(String packageNamePrefix) {
+		return new ReflectDiscovery(packageNamePrefix);
 	}
 	
-	public static Discovery of(final Object... params) {
-		return new _Reflect_Discovery(params);
+	public static ReflectDiscovery of(final Object... params) {
+		return new ReflectDiscovery(params);
 	}
 	
 	// -- HIDDEN CONSTRUCTOR
 	
-	private _Reflect_Discovery(final Object... params) {
+	private ReflectDiscovery(final Object... params) {
 		this.reflections = new Reflections(params);
 	}
 	

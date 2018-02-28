@@ -1,4 +1,4 @@
-package org.apache.isis.applib.internal.reflection;
+package org.apache.isis.applib.plugins.classdiscovery.reflections;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
@@ -16,10 +16,10 @@ import com.google.common.collect.Lists;
 
 /**
  * 
- * package private mixin for utility class {@link _Reflect}
+ * package private utility class
  *
  */
-class _Reflect_Manifest {
+class ReflectManifest {
 
 	/*
 	 * If this static reference survives ApplicationScope life-cycles, thats ok.

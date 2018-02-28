@@ -33,8 +33,8 @@ import javax.annotation.PreDestroy;
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
-import org.apache.isis.applib.internal.reflection._Reflect;
-import org.apache.isis.applib.internal.reflection._Reflect.Discovery;
+import org.apache.isis.applib.internal.discover._Discover;
+import org.apache.isis.applib.plugins.classdiscovery.ClassDiscovery;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceMenuOrder;
 import org.apache.isis.core.metamodel.util.DeweyOrderComparator;
@@ -211,7 +211,7 @@ public class ServicesInstallerFromAnnotation extends ServicesInstallerAbstract {
         Set<Class<?>> domainServiceTypes = AppManifest.Registry.instance().getDomainServiceTypes();
         if(domainServiceTypes == null) {
             // if no appManifest
-        	final Discovery discovery = _Reflect.discover(packagePrefixList);
+        	final ClassDiscovery discovery = _Discover.discover(packagePrefixList);
         	
         	domainServiceTypes = discovery.getTypesAnnotatedWith(DomainService.class);
         }

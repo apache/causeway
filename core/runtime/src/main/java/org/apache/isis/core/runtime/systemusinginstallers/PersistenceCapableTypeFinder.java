@@ -26,7 +26,7 @@ import java.util.Set;
 import javax.jdo.annotations.PersistenceCapable;
 
 import org.apache.isis.applib.internal.base._Casts;
-import org.apache.isis.applib.internal.reflection._Reflect.Discovery;
+import org.apache.isis.applib.plugins.classdiscovery.ClassDiscovery;
 
 /**
  * 
@@ -35,7 +35,7 @@ import org.apache.isis.applib.internal.reflection._Reflect.Discovery;
  */
 class PersistenceCapableTypeFinder {
 
-	static Set<Class<?>> find(Discovery discovery) {
+	static Set<Class<?>> find(ClassDiscovery discovery) {
 
 		final Set<Class<?>> types = new LinkedHashSet<>();
 

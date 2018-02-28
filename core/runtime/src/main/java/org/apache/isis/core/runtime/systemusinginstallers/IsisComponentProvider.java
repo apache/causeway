@@ -32,8 +32,8 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
-import org.apache.isis.applib.internal.reflection._Reflect;
-import org.apache.isis.applib.internal.reflection._Reflect.Discovery;
+import org.apache.isis.applib.internal.discover._Discover;
+import org.apache.isis.applib.plugins.classdiscovery.ClassDiscovery;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.factory.InstanceUtil;
@@ -133,7 +133,7 @@ public abstract class IsisComponentProvider {
         moduleAndFrameworkPackages.addAll(AppManifest.Registry.FRAMEWORK_PROVIDED_SERVICES);
         Iterables.addAll(moduleAndFrameworkPackages, modulePackages);
 
-        final Discovery discovery = _Reflect.discover(moduleAndFrameworkPackages);
+        final ClassDiscovery discovery = _Discover.discover(moduleAndFrameworkPackages);
 
         final Set<Class<?>> domainServiceTypes = discovery.getTypesAnnotatedWith(DomainService.class);
         final Set<Class<?>> persistenceCapableTypes = PersistenceCapableTypeFinder.find(discovery);
