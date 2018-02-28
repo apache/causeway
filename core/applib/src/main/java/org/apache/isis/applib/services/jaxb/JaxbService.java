@@ -105,37 +105,45 @@ public interface JaxbService {
         public Object fromXml(final JAXBContext jaxbContext, final String xml) {
             return fromXml(jaxbContext, xml, Maps.<String,Object>newHashMap());
         }
+
         @Override
         public Object fromXml(final JAXBContext jaxbContext, final String xml, final Map<String, Object> unmarshallerProperties) {
             try {
 
-                final Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-
-                for (Map.Entry<String, Object> entry : unmarshallerProperties.entrySet()) {
-                    unmarshaller.setProperty(entry.getKey(), entry.getValue());
-                }
-
-                configure(unmarshaller);
-
-                final Object unmarshal = unmarshaller.unmarshal(new StringReader(xml));
-                return unmarshal;
+                return internalFromXml(jaxbContext, xml, unmarshallerProperties);
 
             } catch (final JAXBException ex) {
                 throw new NonRecoverableException("Error unmarshalling XML", ex);
             }
         }
 
+        protected Object internalFromXml(
+                final JAXBContext jaxbContext,
+                final String xml,
+                final Map<String, Object> unmarshallerProperties) throws JAXBException {
+            final Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+
+            for (Map.Entry<String, Object> entry : unmarshallerProperties.entrySet()) {
+                unmarshaller.setProperty(entry.getKey(), entry.getValue());
+            }
+
+            configure(unmarshaller);
+
+            return unmarshaller.unmarshal(new StringReader(xml));
+        }
+
         @Override
         public <T> T fromXml(final Class<T> domainClass, final String xml) {
             return fromXml(domainClass, xml, Maps.<String,Object>newHashMap());
         }
+
         @Override
         public <T> T fromXml(final Class<T> domainClass, final String xml, final Map<String, Object> unmarshallerProperties) {
             final JAXBContext context = jaxbContextFor(domainClass);
             return (T) fromXml(context, xml, unmarshallerProperties);
         }
 
-        private <T> JAXBContext jaxbContextFor(final Class<T> clazz)  {
+        private static <T> JAXBContext jaxbContextFor(final Class<T> clazz)  {
             try {
                 return JaxbUtil.jaxbContextFor(clazz);
             } catch (RuntimeException e) {
@@ -152,9 +160,9 @@ public interface JaxbService {
         public String toXml(final Object domainObject, final Map<String, Object> marshallerProperties)  {
 
             final Class<?> domainClass = domainObject.getClass();
-            try {
-                final JAXBContext context = jaxbContextFor(domainClass);
+            final JAXBContext context = jaxbContextFor(domainObject);
 
+            try {
                 final Marshaller marshaller = context.createMarshaller();
 
                 marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
@@ -208,6 +216,16 @@ public interface JaxbService {
         /**
          * Optional hook
          */
+        protected JAXBContext jaxbContextFor(final Object domainObject) {
+            final Class<?> domainClass = domainObject.getClass();
+            final JAXBContext context;
+                context = jaxbContextFor(domainClass);
+            return context;
+        }
+
+        /**
+         * Optional hook
+         */
         protected void configure(final Unmarshaller unmarshaller) {
         }
 
@@ -232,6 +250,5 @@ public interface JaxbService {
             }
         }
     }
-
 
 }

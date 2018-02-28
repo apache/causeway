@@ -372,7 +372,7 @@ public class DomainResourceHelper {
                 InteractionInitiatedBy.USER);
 
         final ObjectAndActionInvocation objectAndActionInvocation =
-                new ObjectAndActionInvocation(objectAdapter, action, arguments, returnedAdapter, selfLink);
+                new ObjectAndActionInvocation(objectAdapter, action, arguments, argAdapters, returnedAdapter, selfLink);
 
         // response
         transactionService.flushTransaction();
