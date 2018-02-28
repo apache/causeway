@@ -27,9 +27,12 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentHashMap.KeySetView;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
+
+import org.apache.isis.applib.internal.base._NullSafe;
 
 /**
  * <h1>- internal use only -</h1>
@@ -62,6 +65,15 @@ public final class _Sets {
 		.forEach(setPreservingOrder::add);
 		
 		return Collections.unmodifiableSet(setPreservingOrder);
+	}
+	
+	public static <T> Set<T> unmodifiable(Iterable<T> iterable) {
+		if(iterable==null) {
+			return Collections.emptySet();
+		}
+		return Collections.unmodifiableSet(
+				_NullSafe.stream(iterable)
+				.collect(Collectors.toSet()));
 	}
 	
 	// -- HASH SET
