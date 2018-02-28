@@ -60,7 +60,7 @@ public final class _Strings {
 	 * (a duplicate of in {@link _Constants.emptyStringArray} )
 	 */
 	public final static String[] emptyArray = new String[0];
-
+	
 	// -- BASIC PREDICATES
 
 	/**
@@ -211,7 +211,7 @@ public final class _Strings {
 		}
 		return sb.toString();
 	}
-
+	
 	// -- SPLITTING
 
 	/**
