@@ -25,26 +25,25 @@ import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
-import org.apache.isis.applib.services.bookmark.BookmarkService2;
 import org.apache.isis.schema.common.v1.OidDto;
 import org.apache.isis.schema.common.v1.OidsDto;
 
 public class PersistentEntitiesAdapter extends XmlAdapter<OidsDto, List<Object>> {
 
     @Override
-    public List<Object> unmarshal(final OidsDto oidsDto) throws Exception {
+    public List<Object> unmarshal(final OidsDto oidsDto) {
 
         List<Object> domainObjects = Lists.newArrayList();
         for (final OidDto oidDto : oidsDto.getOid()) {
             final Bookmark bookmark = Bookmark.from(oidDto);
-            Object domainObject = bookmarkService.lookup(bookmark, BookmarkService2.FieldResetPolicy.DONT_RESET);
+            Object domainObject = bookmarkService.lookup(bookmark, BookmarkService.FieldResetPolicy.DONT_RESET);
             domainObjects.add(domainObject);
         }
         return domainObjects;
     }
 
     @Override
-    public OidsDto marshal(final List<Object> domainObjects) throws Exception {
+    public OidsDto marshal(final List<Object> domainObjects) {
         if(domainObjects == null) {
             return null;
         }
@@ -56,9 +55,6 @@ public class PersistentEntitiesAdapter extends XmlAdapter<OidsDto, List<Object>>
         return oidsDto;
     }
 
-    private static String coalesce(final String first, final String second) {
-        return first != null? first: second;
-    }
 
 
     protected BookmarkService getBookmarkService() {
@@ -66,5 +62,5 @@ public class PersistentEntitiesAdapter extends XmlAdapter<OidsDto, List<Object>>
     }
 
     @Inject
-    BookmarkService2 bookmarkService;
+    BookmarkService bookmarkService;
 }
