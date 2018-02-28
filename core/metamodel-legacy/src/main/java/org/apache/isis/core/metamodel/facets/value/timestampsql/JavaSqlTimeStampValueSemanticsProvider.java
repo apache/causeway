@@ -35,7 +35,8 @@ import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefault
 import org.apache.isis.core.metamodel.facets.value.timestamp.TimeStampValueSemanticsProviderAbstract;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 
-public class JavaSqlTimeStampValueSemanticsProvider extends TimeStampValueSemanticsProviderAbstract<java.sql.Timestamp> {
+public class JavaSqlTimeStampValueSemanticsProvider 
+extends TimeStampValueSemanticsProviderAbstract<java.sql.Timestamp> {
 
     public static final boolean isAPropertyDefaultFacet() {
         return PropertyDefaultFacet.class.isAssignableFrom(JavaSqlTimeStampValueSemanticsProvider.class);

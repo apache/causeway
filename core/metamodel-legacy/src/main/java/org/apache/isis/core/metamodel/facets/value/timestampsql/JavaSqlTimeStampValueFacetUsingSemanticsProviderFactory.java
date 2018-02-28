@@ -23,7 +23,8 @@ import java.sql.Timestamp;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProviderFactory;
 
-public class JavaSqlTimeStampValueFacetUsingSemanticsProviderFactory extends ValueFacetUsingSemanticsProviderFactory<Timestamp> {
+public class JavaSqlTimeStampValueFacetUsingSemanticsProviderFactory 
+extends ValueFacetUsingSemanticsProviderFactory<Timestamp> {
 
     public JavaSqlTimeStampValueFacetUsingSemanticsProviderFactory() {
         super(); // as per inherited
