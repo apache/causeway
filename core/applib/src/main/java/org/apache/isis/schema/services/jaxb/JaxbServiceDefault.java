@@ -19,10 +19,11 @@ package org.apache.isis.schema.services.jaxb;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
-import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.services.jaxb.JaxbService;
+import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.schema.utils.jaxbadapters.PersistentEntitiesAdapter;
 import org.apache.isis.schema.utils.jaxbadapters.PersistentEntityAdapter;
 
 @DomainService(
@@ -32,18 +33,20 @@ import org.apache.isis.schema.utils.jaxbadapters.PersistentEntityAdapter;
 public class JaxbServiceDefault extends JaxbService.Simple {
 
     protected void configure(final Unmarshaller unmarshaller) {
-        final PersistentEntityAdapter adapter = new PersistentEntityAdapter();
-        container.injectServicesInto(adapter);
-        unmarshaller.setAdapter(PersistentEntityAdapter.class, adapter);
+        unmarshaller.setAdapter(PersistentEntityAdapter.class,
+                serviceRegistry.injectServicesInto(new PersistentEntityAdapter()));
+        unmarshaller.setAdapter(PersistentEntitiesAdapter.class,
+                serviceRegistry.injectServicesInto(new PersistentEntitiesAdapter()));
     }
 
     protected void configure(final Marshaller marshaller) {
-        final PersistentEntityAdapter adapter = new PersistentEntityAdapter();
-        container.injectServicesInto(adapter);
-        marshaller.setAdapter(PersistentEntityAdapter.class, adapter);
+        marshaller.setAdapter(PersistentEntityAdapter.class,
+                serviceRegistry.injectServicesInto(new PersistentEntityAdapter()));
+        marshaller.setAdapter(PersistentEntitiesAdapter.class,
+                serviceRegistry.injectServicesInto(new PersistentEntitiesAdapter()));
     }
 
     @javax.inject.Inject
-    DomainObjectContainer container;
+    ServiceRegistry serviceRegistry;
 }
 

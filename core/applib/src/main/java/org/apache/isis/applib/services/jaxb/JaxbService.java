@@ -109,15 +109,16 @@ public interface JaxbService {
         public Object fromXml(final JAXBContext jaxbContext, final String xml, final Map<String, Object> unmarshallerProperties) {
             try {
 
-                final Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+                Object unmarshal = internalFromXml(jaxbContext, xml, unmarshallerProperties);
 
-                for (Map.Entry<String, Object> entry : unmarshallerProperties.entrySet()) {
-                    unmarshaller.setProperty(entry.getKey(), entry.getValue());
+                if(unmarshal instanceof DomainObjectList) {
+
+                    // go around the loop again, so can properly deserialize the contents
+                    DomainObjectList domainObjectList = (DomainObjectList) unmarshal;
+                    JAXBContext jaxbContext1 = jaxbContextFor(domainObjectList);
+                    unmarshal = internalFromXml(jaxbContext1, xml, unmarshallerProperties);
                 }
 
-                configure(unmarshaller);
-
-                final Object unmarshal = unmarshaller.unmarshal(new StringReader(xml));
                 return unmarshal;
 
             } catch (final JAXBException ex) {
@@ -125,17 +126,33 @@ public interface JaxbService {
             }
         }
 
+        private Object internalFromXml(
+                final JAXBContext jaxbContext,
+                final String xml,
+                final Map<String, Object> unmarshallerProperties) throws JAXBException {
+            final Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+
+            for (Map.Entry<String, Object> entry : unmarshallerProperties.entrySet()) {
+                unmarshaller.setProperty(entry.getKey(), entry.getValue());
+            }
+
+            configure(unmarshaller);
+
+            return unmarshaller.unmarshal(new StringReader(xml));
+        }
+
         @Override
         public <T> T fromXml(final Class<T> domainClass, final String xml) {
             return fromXml(domainClass, xml, Maps.<String,Object>newHashMap());
         }
+
         @Override
         public <T> T fromXml(final Class<T> domainClass, final String xml, final Map<String, Object> unmarshallerProperties) {
             final JAXBContext context = jaxbContextFor(domainClass);
             return (T) fromXml(context, xml, unmarshallerProperties);
         }
 
-        private <T> JAXBContext jaxbContextFor(final Class<T> clazz)  {
+        private static <T> JAXBContext jaxbContextFor(final Class<T> clazz)  {
             try {
                 return JaxbUtil.jaxbContextFor(clazz);
             } catch (RuntimeException e) {
@@ -152,9 +169,9 @@ public interface JaxbService {
         public String toXml(final Object domainObject, final Map<String, Object> marshallerProperties)  {
 
             final Class<?> domainClass = domainObject.getClass();
-            try {
-                final JAXBContext context = jaxbContextFor(domainClass);
+            final JAXBContext context = jaxbContextFor(domainObject);
 
+            try {
                 final Marshaller marshaller = context.createMarshaller();
 
                 marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
@@ -205,6 +222,24 @@ public interface JaxbService {
             }
         }
 
+        private static JAXBContext jaxbContextFor(final Object domainObject) {
+            final Class<?> domainClass = domainObject.getClass();
+            final JAXBContext context;
+            if(domainObject instanceof DomainObjectList) {
+                DomainObjectList list = (DomainObjectList) domainObject;
+                final Class<?> elementType;
+                try {
+                    elementType = Thread.currentThread().getContextClassLoader().loadClass(list.getElementType());
+                    context = JAXBContext.newInstance(domainClass, elementType);
+                } catch (JAXBException | ClassNotFoundException e) {
+                    throw new RuntimeException(e);
+                }
+            } else {
+                context = jaxbContextFor(domainClass);
+            }
+            return context;
+        }
+
         /**
          * Optional hook
          */
@@ -232,6 +267,5 @@ public interface JaxbService {
             }
         }
     }
-
 
 }
