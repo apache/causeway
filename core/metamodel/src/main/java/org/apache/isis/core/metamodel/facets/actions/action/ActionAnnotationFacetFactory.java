@@ -48,6 +48,7 @@ import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
+import org.apache.isis.core.metamodel.facets.actions.action.associateWith.AssociatedWithFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.bulk.BulkFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.bulk.BulkFacetForBulkAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.bulk.BulkFacetObjectOnly;
@@ -83,7 +84,6 @@ import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFace
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
-import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.core.metamodel.facets.members.order.annotprop.MemberOrderFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -464,18 +464,19 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract
         final FacetedMethod holder = processMethodContext.getFacetHolder();
 
         // check for @Action(associateWith=...)
-        MemberOrderFacet memberOrderFacet = null;
 
         final Action action = Annotations.getAnnotation(method, Action.class);
         if (action != null) {
             final String associateWith = action.associateWith();
             if(!Strings.isNullOrEmpty(associateWith)) {
                 final String associateWithSequence = action.associateWithSequence();
-                memberOrderFacet = new MemberOrderFacetForActionAnnotation(associateWith, associateWithSequence, holder);
+                FacetUtil.addFacet(
+                        new MemberOrderFacetForActionAnnotation(associateWith, associateWithSequence, holder));
+                FacetUtil.addFacet(
+                        new AssociatedWithFacetForActionAnnotation(associateWith, holder));
             }
         }
 
-        FacetUtil.addFacet(memberOrderFacet);
     }
 
 

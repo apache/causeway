@@ -65,19 +65,16 @@ public class ActionCollectionParameterDefaultsAndChoicesPostProcessor implements
         List<ObjectAction> objectActions = objectSpecification.getObjectActions(actionTypes, Contributed.INCLUDED, Filters.<ObjectAction>any());
 
         // and all the collections of this type
-        final List<OneToManyAssociation> oneToManyAssociations =
-                objectSpecification.getCollections(Contributed.INCLUDED);
+        final List<OneToManyAssociation> collections = objectSpecification.getCollections(Contributed.INCLUDED);
 
         // for each collection, ...
-        for (final OneToManyAssociation otma : oneToManyAssociations) {
-
-            final String collectionId = otma.getId();
+        for (final OneToManyAssociation collection : collections) {
 
             // ... see if any of its actions has a collection parameter of the same type
             //
             // eg Order#getItems() and Order#removeItems(List<OrderItem>)
             //
-            final ObjectSpecification specification = otma.getSpecification();
+            final ObjectSpecification specification = collection.getSpecification();
 
             final ObjectActionParameter.Predicates.CollectionParameter whetherCollectionParamOfType =
                     new ObjectActionParameter.Predicates.CollectionParameter(specification);
@@ -85,11 +82,11 @@ public class ActionCollectionParameterDefaultsAndChoicesPostProcessor implements
             final ObjectActionParameter.Predicates.ScalarParameter whetherScalarParamOfType =
                     new ObjectActionParameter.Predicates.ScalarParameter(specification);
 
-            final ImmutableList<ObjectAction> actions = FluentIterable.from(objectActions)
-                    .filter(ObjectAction.Predicates.associatedWith(otma))
+            final ImmutableList<ObjectAction> actionsAssociatedWithCollection = FluentIterable.from(objectActions)
+                    .filter(ObjectAction.Predicates.associatedWith(collection))
                     .toList();
 
-            for (final ObjectAction action : actions) {
+            for (final ObjectAction action : actionsAssociatedWithCollection) {
 
                 final List<ObjectActionParameter> parameters = action.getParameters();
 
@@ -103,37 +100,43 @@ public class ActionCollectionParameterDefaultsAndChoicesPostProcessor implements
                 // this will cause the UI to render the collection with toggleboxes
                 // with a thread-local used to provide the selected objects
                 for (final ObjectActionParameter collectionParam : compatibleCollectionParams) {
-                    final ActionParameterDefaultsFacet defaultsFacet = collectionParam
-                            .getFacet(ActionParameterDefaultsFacet.class);
-                    if (existsAndNotDerived(defaultsFacet)) {
-                        // don't overwrite existing facet
-                    } else {
-                        FacetUtil.addFacet(new ActionParameterDefaultsFacetFromParentedCollection(collectionParam));
-                    }
+                    addDefaultsFacetIfNoneAlready(collectionParam);
                 }
 
                 // for compatible collection parameters, install a choices facet (if there isn't one already)
                 // using the associated collection for its values
                 for (final ObjectActionParameter collectionParam : compatibleCollectionParams) {
-                    addChoicesFacetIfNoneAlready(otma, collectionParam);
+                    addChoicesFacetIfNoneAlready(collection, collectionParam);
                 }
 
                 // similarly for compatible scalar parameters, install a choices facet (if there isn't one already)
                 // using the associated collection for its values.
                 for (final ObjectActionParameter scalarParam : compatibleScalarParams) {
-                    addChoicesFacetIfNoneAlready(otma, scalarParam);
+                    addChoicesFacetIfNoneAlready(collection, scalarParam);
                 }
             }
+        }
+    }
+
+    private void addDefaultsFacetIfNoneAlready(final ObjectActionParameter collectionParam) {
+        final ActionParameterDefaultsFacet defaultsFacet =
+                collectionParam.getFacet(ActionParameterDefaultsFacet.class);
+        if (existsAndNotDerived(defaultsFacet)) {
+            // don't overwrite existing facet
+        } else {
+            FacetUtil.addFacet(new ActionParameterDefaultsFacetFromAssociatedCollection(collectionParam));
         }
     }
 
     private void addChoicesFacetIfNoneAlready(
             final OneToManyAssociation otma,
             final ObjectActionParameter scalarOrCollectionParam) {
+
         final ActionParameterChoicesFacet choicesFacet = scalarOrCollectionParam
                 .getFacet(ActionParameterChoicesFacet.class);
         final ActionParameterAutoCompleteFacet autoCompleteFacet = scalarOrCollectionParam
                 .getFacet(ActionParameterAutoCompleteFacet.class);
+
         if (existsAndNotDerived(choicesFacet) || existsAndNotDerived(autoCompleteFacet)) {
             // don't overwrite existing choices or autoComplete facet
         } else {

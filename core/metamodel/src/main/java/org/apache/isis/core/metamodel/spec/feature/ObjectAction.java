@@ -46,6 +46,7 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetFilters;
+import org.apache.isis.core.metamodel.facets.actions.action.associateWith.AssociatedWithFacet;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
 import org.apache.isis.core.metamodel.facets.actions.bulk.BulkFacet;
 import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacet;
@@ -446,15 +447,15 @@ public interface ObjectAction extends ObjectMember {
 
             @Override
             public boolean apply(final ObjectAction objectAction) {
-                final MemberOrderFacet memberOrderFacet = objectAction.getFacet(MemberOrderFacet.class);
-                if(memberOrderFacet == null) {
+                final AssociatedWithFacet associatedWithFacet = objectAction.getFacet(AssociatedWithFacet.class);
+                if(associatedWithFacet == null) {
                     return false;
                 }
-                final String memberOrderName = memberOrderFacet.untranslatedName();
-                if (memberOrderName == null) {
+                final String associatedMemberName = associatedWithFacet.value();
+                if (associatedMemberName == null) {
                     return false;
                 }
-                final String memberOrderNameLowerCase = memberOrderName.toLowerCase();
+                final String memberOrderNameLowerCase = associatedMemberName.toLowerCase();
                 return memberName != null && Objects.equal(memberName.toLowerCase(), memberOrderNameLowerCase) ||
                        memberId   != null && Objects.equal(memberId.toLowerCase(), memberOrderNameLowerCase);
             }
