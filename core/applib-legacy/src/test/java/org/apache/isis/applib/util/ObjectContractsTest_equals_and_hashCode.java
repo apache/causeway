@@ -68,11 +68,11 @@ class Invoice3 {
     }
     @Override
     public int hashCode() {
-        return ObjectContracts.hashCode(this, KEY_PROPERTIES);
+        return ObjectContractsLegacy.hashCode(this, KEY_PROPERTIES);
     }
     @Override
     public boolean equals(Object obj) {
-        return ObjectContracts.equals(this, obj, KEY_PROPERTIES);
+        return ObjectContractsLegacy.equals(this, obj, KEY_PROPERTIES);
     }
     
 }
@@ -115,10 +115,10 @@ class InvoiceItem3 {
     private static final String KEY_PROPERTIES = "invoice desc, productCode, quantity";
     @Override
     public int hashCode() {
-        return ObjectContracts.hashCode(this, KEY_PROPERTIES);
+        return ObjectContractsLegacy.hashCode(this, KEY_PROPERTIES);
     }
     @Override
     public boolean equals(Object obj) {
-        return ObjectContracts.equals(this, obj, KEY_PROPERTIES);
+        return ObjectContractsLegacy.equals(this, obj, KEY_PROPERTIES);
     }
 }

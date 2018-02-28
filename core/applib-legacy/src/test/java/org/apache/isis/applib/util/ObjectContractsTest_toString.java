@@ -68,11 +68,11 @@ class Invoice2 implements Comparable<Invoice2>, Numbered {
     }
     @Override
     public String toString() {
-        return ObjectContracts.toString(this, KEY_PROPERTIES);
+        return ObjectContractsLegacy.toString(this, KEY_PROPERTIES);
     }
     @Override
     public int compareTo(Invoice2 o) {
-        return ObjectContracts.compare(this, o, KEY_PROPERTIES);
+        return ObjectContractsLegacy.compare(this, o, KEY_PROPERTIES);
     }
 }
 class InvoiceItem2 implements Comparable<InvoiceItem2> {
@@ -123,10 +123,10 @@ class InvoiceItem2 implements Comparable<InvoiceItem2> {
     
     @Override
     public String toString() {
-        return new ObjectContracts().with(new NumberedEvaluator()).toStringOf(this, KEY_PROPERTIES);
+        return new ObjectContractsLegacy().with(new NumberedEvaluator()).toStringOf(this, KEY_PROPERTIES);
     }
     @Override
     public int compareTo(InvoiceItem2 o) {
-        return ObjectContracts.compare(this, o, KEY_PROPERTIES);
+        return ObjectContractsLegacy.compare(this, o, KEY_PROPERTIES);
     }
 }

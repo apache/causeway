@@ -36,11 +36,11 @@ public class ObjectContractsTest_equals {
         }
         @Override
         public int hashCode() {
-            return ObjectContracts.hashCode(this, KEY_PROPERTIES);
+            return ObjectContractsLegacy.hashCode(this, KEY_PROPERTIES);
         }
         @Override
         public boolean equals(Object obj) {
-            return ObjectContracts.equals(this, obj, KEY_PROPERTIES);
+            return ObjectContractsLegacy.equals(this, obj, KEY_PROPERTIES);
         }
 
     }
@@ -64,27 +64,27 @@ public class ObjectContractsTest_equals {
 
     @Test
     public void happyCase() throws Exception {
-        assertTrue(ObjectContracts.equals(p, q, "number"));
+        assertTrue(ObjectContractsLegacy.equals(p, q, "number"));
     }
 
     @Test
     public void nullsAreEqual() throws Exception {
-        assertTrue(ObjectContracts.equals(null, null, "number"));
+        assertTrue(ObjectContractsLegacy.equals(null, null, "number"));
     }
 
     @Test
     public void notEqualDifferentValues() throws Exception {
-        assertFalse(ObjectContracts.equals(p, r, "number"));
+        assertFalse(ObjectContractsLegacy.equals(p, r, "number"));
     }
 
     @Test
     public void notEqualDifferentTypes() throws Exception {
-        assertFalse(ObjectContracts.equals(p, x, "number"));
+        assertFalse(ObjectContractsLegacy.equals(p, x, "number"));
     }
 
     @Test
     public void notEqualNull() throws Exception {
-        assertFalse(ObjectContracts.equals(p, null, "number"));
+        assertFalse(ObjectContractsLegacy.equals(p, null, "number"));
     }
 
 

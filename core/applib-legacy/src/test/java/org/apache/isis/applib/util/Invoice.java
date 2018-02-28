@@ -16,17 +16,23 @@
  */
 package org.apache.isis.applib.util;
 
-import org.apache.isis.applib.util.ObjectContracts.ToStringEvaluator;
 
-public class NumberedEvaluator implements ToStringEvaluator {
-
-    public boolean canEvaluate(Object o) {
-        return o instanceof Numbered;
+class Invoice implements Comparable<Invoice>{
+    private static final String KEY_PROPERTIES = "number";
+    
+    private String number;
+    public String getNumber() {
+        return number;
     }
-
+    public void setNumber(String number) {
+        this.number = number;
+    }
     @Override
-    public String evaluate(Object o) {
-        return ((Numbered)o).getNumber();
+    public String toString() {
+        return ObjectContractsLegacy.toString(this, KEY_PROPERTIES);
     }
-
+    @Override
+    public int compareTo(Invoice o) {
+        return ObjectContractsLegacy.compare(this, o, KEY_PROPERTIES);
+    }
 }

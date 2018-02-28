@@ -64,10 +64,10 @@ class InvoiceItem implements Comparable<InvoiceItem> {
     
     @Override
     public String toString() {
-        return ObjectContracts.toString(this, KEY_PROPERTIES);
+        return ObjectContractsLegacy.toString(this, KEY_PROPERTIES);
     }
     @Override
     public int compareTo(InvoiceItem o) {
-        return ObjectContracts.compare(this, o, KEY_PROPERTIES);
+        return ObjectContractsLegacy.compare(this, o, KEY_PROPERTIES);
     }
 }
