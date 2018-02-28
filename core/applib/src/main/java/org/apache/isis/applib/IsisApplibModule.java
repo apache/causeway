@@ -18,22 +18,39 @@
  */
 package org.apache.isis.applib;
 
-public final class IsisApplibModule {
+import java.util.List;
+import javax.xml.bind.annotation.XmlRootElement;
 
-    private IsisApplibModule(){}
+@XmlRootElement(name = "module")
+public class IsisApplibModule extends ModuleAbstract {
+
+    //region > ui event classes
+    @SuppressWarnings("serial") // serial versionId to be provided by concrete class
+    public abstract static class TitleUiEvent<S>
+            extends org.apache.isis.applib.services.eventbus.TitleUiEvent<S> { }
+    @SuppressWarnings("serial") // serial versionId to be provided by concrete class
+    public abstract static class IconUiEvent<S>
+            extends org.apache.isis.applib.services.eventbus.IconUiEvent<S> { }
+    @SuppressWarnings("serial") // serial versionId to be provided by concrete class
+    public abstract static class CssClassUiEvent<S>
+            extends org.apache.isis.applib.services.eventbus.CssClassUiEvent<S> { }
+    //endregion
+
+
+    //region > domain event classes
 
     @SuppressWarnings("serial") // serial versionId to be provided by concrete class
 	public abstract static class ActionDomainEvent<S> extends org.apache.isis.applib.services.eventbus.ActionDomainEvent<S> {
-        public ActionDomainEvent() {}
     }
 
     @SuppressWarnings("serial") // serial versionId to be provided by concrete class
     public abstract static class CollectionDomainEvent<S,T> extends org.apache.isis.applib.services.eventbus.CollectionDomainEvent<S,T> {
-        public CollectionDomainEvent() { }
     }
 
     @SuppressWarnings("serial") // serial versionId to be provided by concrete class
     public abstract static class PropertyDomainEvent<S,T> extends org.apache.isis.applib.services.eventbus.PropertyDomainEvent<S,T> {
-        public PropertyDomainEvent() { }
     }
+
+    //endregion
+
 }

@@ -18,6 +18,8 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 
+import java.util.List;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
@@ -31,6 +33,7 @@ public class ObjectAndActionInvocation {
     private final ObjectAdapter objectAdapter;
     private final ObjectAction action;
     private final JsonRepresentation arguments;
+    private final List<ObjectAdapter> argAdapters;
     private final ObjectAdapter returnedAdapter;
     private final ActionResultReprRenderer.SelfLink selfLink;
 
@@ -38,11 +41,13 @@ public class ObjectAndActionInvocation {
             final ObjectAdapter objectAdapter,
             final ObjectAction action,
             final JsonRepresentation arguments,
+            final List<ObjectAdapter> argAdapters,
             final ObjectAdapter returnedAdapter,
             final ActionResultReprRenderer.SelfLink selfLink) {
         this.objectAdapter = objectAdapter;
         this.action = action;
         this.arguments = arguments;
+        this.argAdapters = argAdapters;
         this.returnedAdapter = returnedAdapter;
         this.selfLink = selfLink;
     }
@@ -57,6 +62,10 @@ public class ObjectAndActionInvocation {
 
     public JsonRepresentation getArguments() {
         return arguments;
+    }
+
+    public List<ObjectAdapter> getArgAdapters() {
+        return argAdapters;
     }
 
     public ObjectAdapter getReturnedAdapter() {

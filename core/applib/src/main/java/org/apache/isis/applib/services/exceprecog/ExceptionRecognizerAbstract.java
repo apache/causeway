@@ -26,18 +26,18 @@ import java.util.function.Predicate;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.internal.exceptions._Exceptions;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationService;
-import org.junit.internal.Throwables;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Abstract implementation of {@link ExceptionRecognizer} that looks 
  * exceptions meeting the {@link Predicate} supplied in the constructor
- * and, if found anywhere in the {@link Throwables#getCausalChain(Throwable) causal chain},
+ * and, if found anywhere in the causal chain,
  * then returns a non-null message indicating that the exception has been recognized.
  * 
  * <p>

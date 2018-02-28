@@ -27,7 +27,6 @@ import com.google.common.base.Strings;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -35,6 +34,7 @@ import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
+import org.apache.isis.core.metamodel.facets.actions.action.associateWith.AssociatedWithFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.bulk.BulkFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.bulk.BulkFacetObjectOnly;
 import org.apache.isis.core.metamodel.facets.actions.action.command.CommandFacetForActionAnnotation;
@@ -55,12 +55,9 @@ import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacet;
 import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFacet;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
-import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.core.metamodel.facets.members.order.annotprop.MemberOrderFacetForActionAnnotation;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.CollectionUtils;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.metamodel.util.EventUtil;
 
 public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
@@ -293,18 +290,19 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
         final FacetedMethod holder = processMethodContext.getFacetHolder();
 
         // check for @Action(associateWith=...)
-        MemberOrderFacet memberOrderFacet = null;
 
         final Action action = Annotations.getAnnotation(method, Action.class);
         if (action != null) {
             final String associateWith = action.associateWith();
             if(!Strings.isNullOrEmpty(associateWith)) {
                 final String associateWithSequence = action.associateWithSequence();
-                memberOrderFacet = new MemberOrderFacetForActionAnnotation(associateWith, associateWithSequence, holder);
+                FacetUtil.addFacet(
+                        new MemberOrderFacetForActionAnnotation(associateWith, associateWithSequence, holder));
+                FacetUtil.addFacet(
+                        new AssociatedWithFacetForActionAnnotation(associateWith, holder));
             }
         }
 
-        FacetUtil.addFacet(memberOrderFacet);
     }
 
 

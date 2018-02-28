@@ -25,12 +25,11 @@ import java.util.function.Predicate;
 import javax.jdo.JDODataStoreException;
 
 import org.apache.isis.applib.internal.exceptions._Exceptions;
-import org.junit.internal.Throwables;
 
 /**
  * An specific implementation of {@link ExceptionRecognizer} that looks for an
  * exception of the type provided in the constructor
- * and, if found anywhere in the {@link Throwables#getCausalChain(Throwable) causal chain},
+ * and, if found anywhere in the causal chain,
  * then returns a non-null message indicating that the exception has been recognized.
  * 
  * <p>

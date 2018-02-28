@@ -33,6 +33,7 @@ import org.apache.isis.applib.internal.base._Casts;
 import org.apache.isis.applib.internal.collections._Maps;
 import org.apache.isis.applib.internal.resources._Resource;
 
+
 /**
  * Helper methods for converting {@link javax.xml.bind.annotation.XmlRootElement}-annotated class to-and-from XML.  
  * Intended primarily for test use only (the {@link JAXBContext} is not cached).
@@ -75,10 +76,9 @@ public class JaxbUtil {
     }
 
     public static <T> void toXml(final T dto, final Writer writer) {
-        Marshaller m = null;
         try {
             final Class<?> aClass = dto.getClass();
-            m = jaxbContextFor(aClass).createMarshaller();
+            final Marshaller m = jaxbContextFor(aClass).createMarshaller();
             m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
             m.marshal(dto, writer);
         } catch (JAXBException e) {
@@ -86,12 +86,12 @@ public class JaxbUtil {
         }
     }
 
-    private static Map<Class<?>, JAXBContext> jaxbContextByClass = _Maps.newConcurrentHashMap(); 
+    private static Map<Class<?>, JAXBContext> jaxbContextByClass = _Maps.newConcurrentHashMap();
 
     public static <T> JAXBContext jaxbContextFor(final Class<T> dtoClass)  {
     	return jaxbContextByClass.computeIfAbsent(dtoClass, JaxbUtil::contextOf );
     }
-    
+
     private static <T> JAXBContext contextOf(final Class<T> dtoClass) {
     	try {
             return JAXBContext.newInstance(dtoClass);

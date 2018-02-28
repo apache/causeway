@@ -18,6 +18,7 @@ package org.apache.isis.viewer.restfulobjects.rendering.service.conneg;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -29,8 +30,13 @@ import javax.ws.rs.core.Response.ResponseBuilder;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.domain.DomainObjectList;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.Version;
+import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
@@ -199,13 +205,123 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
             final RepresentationService.Context2 rendererContext,
             final ObjectAndActionInvocation objectAndActionInvocation) {
 
-        final List<MediaType> list = rendererContext.getAcceptableMediaTypes();
-        ensureCompatibleAcceptHeader(RepresentationType.ACTION_RESULT, list);
+        final ResponseBuilder responseBuilder;
 
-        final ResponseBuilder responseBuilder =
-                buildResponseTo(rendererContext, objectAndActionInvocation, JsonRepresentation.newMap(), null);
+        final List<MediaType> acceptableMediaTypes = rendererContext.getAcceptableMediaTypes();
+        if(isAccepted(RepresentationType.DOMAIN_OBJECT, acceptableMediaTypes, true)) {
+
+            final ObjectAdapter adapter;
+            final Collection<ObjectAdapter> collectionAdapters = objectAdaptersFrom(objectAndActionInvocation);
+
+            if(collectionAdapters != null) {
+                final ObjectSpecification elementSpec = elementSpecFrom(objectAndActionInvocation);
+                final String actionOwningType = actionOwningTypeFrom(objectAndActionInvocation);
+                final String actionId = actionIdFrom(objectAndActionInvocation);
+                final String actionArguments = actionArgumentsFrom(objectAndActionInvocation);
+                final DomainObjectList list = domainObjectListFrom(collectionAdapters, elementSpec, actionOwningType, actionId, actionArguments);
+
+                adapter = rendererContext.getPersistenceSession().adapterFor(list);
+
+            } else {
+                adapter = objectAndActionInvocation.getReturnedAdapter();
+            }
+            responseBuilder = buildResponse(rendererContext, adapter);
+
+        } else if(isAccepted(RepresentationType.ACTION_RESULT, acceptableMediaTypes)) {
+            responseBuilder = buildResponseTo(rendererContext, objectAndActionInvocation, JsonRepresentation.newMap(), null);
+        } else {
+            throw RestfulObjectsApplicationException.create(RestfulResponse.HttpStatusCode.NOT_ACCEPTABLE);
+        }
 
         return responseBuilder(responseBuilder);
+    }
+
+    private static String actionOwningTypeFrom(final ObjectAndActionInvocation objectAndActionInvocation) {
+        return objectAndActionInvocation.getAction().getOnType().getSpecId().asString();
+    }
+
+    private static String actionIdFrom(final ObjectAndActionInvocation objectAndActionInvocation) {
+        return objectAndActionInvocation.getAction().getId();
+    }
+
+    private static String actionArgumentsFrom(final ObjectAndActionInvocation objectAndActionInvocation) {
+        final StringBuilder buf = new StringBuilder();
+        final List<ObjectActionParameter> parameters = objectAndActionInvocation.getAction().getParameters();
+        final List<ObjectAdapter> argAdapters = objectAndActionInvocation.getArgAdapters();
+        if(parameters.size() == argAdapters.size()) {
+            for (int i = 0; i < parameters.size(); i++) {
+                final ObjectActionParameter param = parameters.get(i);
+                final ObjectAdapter argAdapter = argAdapters.get(i);
+
+                if(buf.length() > 0) {
+                    buf.append(",");
+                }
+                buf.append(param.getName()).append("=");
+                buf.append(abbreviated(titleOf(argAdapter), 8));
+            }
+        }
+
+        return buf.toString();
+    }
+
+    private static String titleOf(final ObjectAdapter argumentAdapter) {
+        return argumentAdapter!=null?argumentAdapter.titleString(null):"";
+    }
+
+    private static String abbreviated(final String str, final int maxLength) {
+        return str.length() < maxLength ? str : str.substring(0, maxLength - 3) + "...";
+    }
+
+    private static DomainObjectList domainObjectListFrom(
+            final Collection<ObjectAdapter> collectionAdapters,
+            final ObjectSpecification elementSpec,
+            final String actionOwningType,
+            final String actionId,
+            final String actionArguments) {
+
+        final String title = titleFrom(collectionAdapters, elementSpec);
+
+        final DomainObjectList list = new DomainObjectList(title, elementSpec.getSpecId().asString(), actionOwningType, actionId, actionArguments);
+        for (final ObjectAdapter adapter : collectionAdapters) {
+            list.getObjects().add(adapter.getObject());
+        }
+        return list;
+    }
+
+    private static String titleFrom(
+            final Collection<ObjectAdapter> collectionAdapters,
+            final ObjectSpecification elementSpec) {
+        final String singularName = elementSpec.getSingularName();
+        final String pluralName = elementSpec.getPluralName();
+        int size = collectionAdapters.size();
+        final String title;
+        switch (size) {
+        case 0:
+            title = "0 " + pluralName;
+            break;
+        case 1:
+            title = "1 " + singularName;
+            break;
+        default:
+            title = size + " " + pluralName;
+            break;
+        }
+        return title;
+    }
+
+    private ObjectSpecification elementSpecFrom(final ObjectAndActionInvocation objectAndActionInvocation) {
+        final TypeOfFacet typeOfFacet = objectAndActionInvocation.getAction().getFacet(TypeOfFacet.class);
+        return typeOfFacet.valueSpec();
+    }
+
+    private Collection<ObjectAdapter> objectAdaptersFrom(final ObjectAndActionInvocation objectAndActionInvocation) {
+        final ObjectAdapter returnedAdapter = objectAndActionInvocation.getReturnedAdapter();
+        final ObjectSpecification returnType = objectAndActionInvocation.getAction().getReturnType();
+
+        final CollectionFacet collectionFacet = returnType.getFacet(CollectionFacet.class);
+        return collectionFacet != null
+                ? collectionFacet.collection(returnedAdapter)
+                : null;
     }
 
     /**
@@ -248,18 +364,50 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
         // RestEasy will check the basic media types...
         // ... so we just need to check the profile paramter
         final String producedProfile = representationType.getMediaTypeProfile();
-        if(producedProfile != null) {
-            for (MediaType mediaType : acceptableMediaTypes ) {
-                String acceptedProfileValue = mediaType.getParameters().get("profile");
-                if(acceptedProfileValue == null) {
-                    continue;
-                }
-                if(!producedProfile.equals(acceptedProfileValue)) {
-                    throw RestfulObjectsApplicationException.create(RestfulResponse.HttpStatusCode.NOT_ACCEPTABLE);
-                }
-            }
+        if (producedProfile == null) {
+            return;
+        }
+        boolean accepted = isAccepted(producedProfile, acceptableMediaTypes);
+        if(!accepted) {
+            throw RestfulObjectsApplicationException.create(RestfulResponse.HttpStatusCode.NOT_ACCEPTABLE);
         }
     }
+
+    private boolean isAccepted(
+            final RepresentationType representationType,
+            final List<MediaType> acceptableMediaTypes) {
+        return isAccepted(representationType, acceptableMediaTypes, strictAcceptChecking);
+    }
+
+    private boolean isAccepted(
+            final RepresentationType representationType,
+            final List<MediaType> acceptableMediaTypes,
+            final boolean strictAcceptChecking) {
+        if(!strictAcceptChecking) {
+            return true;
+        }
+        final String producedProfile = representationType.getMediaTypeProfile();
+        if (producedProfile == null) {
+            throw new IllegalArgumentException("RepresentationType " + representationType + " does not specify a 'profile' parameter");
+        }
+        return isAccepted(producedProfile, acceptableMediaTypes);
+    }
+
+    private static boolean isAccepted(
+            final String producedProfile,
+            final List<MediaType> acceptableMediaTypes) {
+        for (MediaType mediaType : acceptableMediaTypes ) {
+            String acceptedProfileValue = mediaType.getParameters().get("profile");
+            if(acceptedProfileValue == null) {
+                continue;
+            }
+            if(!producedProfile.equals(acceptedProfileValue)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 
 
 }
