@@ -69,6 +69,23 @@
 			<type>test-jar</type>
 			<scope>test</scope>
 		</dependency>
+		
+		<dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-unittestsupport</artifactId>
+            <scope>test</scope>
+            <exclusions>
+            	<!-- whatever unittestsupport is dependent on, it should not be transitive  -->
+            	<exclusion>
+            		<groupId>org.reflections</groupId>
+            		<artifactId>reflections</artifactId>
+            	</exclusion>
+            	<exclusion>
+	            	<groupId>com.google.guava</groupId>
+					<artifactId>guava</artifactId>
+            	</exclusion>
+            </exclusions>
+        </dependency>
 
 	</dependencies>
 
