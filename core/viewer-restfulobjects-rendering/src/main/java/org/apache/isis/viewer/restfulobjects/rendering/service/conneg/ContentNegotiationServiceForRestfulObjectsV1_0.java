@@ -36,6 +36,7 @@ import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
@@ -214,7 +215,10 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
 
             if(collectionAdapters != null) {
                 final ObjectSpecification elementSpec = elementSpecFrom(objectAndActionInvocation);
-                final DomainObjectList list = domainObjectListFrom(collectionAdapters, elementSpec);
+                final String actionOwningType = actionOwningTypeFrom(objectAndActionInvocation);
+                final String actionId = actionIdFrom(objectAndActionInvocation);
+                final String actionArguments = actionArgumentsFrom(objectAndActionInvocation);
+                final DomainObjectList list = domainObjectListFrom(collectionAdapters, elementSpec, actionOwningType, actionId, actionArguments);
 
                 adapter = rendererContext.getPersistenceSession().adapterFor(list);
 
@@ -232,13 +236,52 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
         return responseBuilder(responseBuilder);
     }
 
+    private static String actionOwningTypeFrom(final ObjectAndActionInvocation objectAndActionInvocation) {
+        return objectAndActionInvocation.getAction().getOnType().getSpecId().asString();
+    }
+
+    private static String actionIdFrom(final ObjectAndActionInvocation objectAndActionInvocation) {
+        return objectAndActionInvocation.getAction().getId();
+    }
+
+    private static String actionArgumentsFrom(final ObjectAndActionInvocation objectAndActionInvocation) {
+        final StringBuilder buf = new StringBuilder();
+        final List<ObjectActionParameter> parameters = objectAndActionInvocation.getAction().getParameters();
+        final List<ObjectAdapter> argAdapters = objectAndActionInvocation.getArgAdapters();
+        if(parameters.size() == argAdapters.size()) {
+            for (int i = 0; i < parameters.size(); i++) {
+                final ObjectActionParameter param = parameters.get(i);
+                final ObjectAdapter argAdapter = argAdapters.get(i);
+
+                if(buf.length() > 0) {
+                    buf.append(",");
+                }
+                buf.append(param.getName()).append("=");
+                buf.append(abbreviated(titleOf(argAdapter), 8));
+            }
+        }
+
+        return buf.toString();
+    }
+
+    private static String titleOf(final ObjectAdapter argumentAdapter) {
+        return argumentAdapter!=null?argumentAdapter.titleString(null):"";
+    }
+
+    private static String abbreviated(final String str, final int maxLength) {
+        return str.length() < maxLength ? str : str.substring(0, maxLength - 3) + "...";
+    }
+
     private static DomainObjectList domainObjectListFrom(
             final Collection<ObjectAdapter> collectionAdapters,
-            final ObjectSpecification elementSpec) {
+            final ObjectSpecification elementSpec,
+            final String actionOwningType,
+            final String actionId,
+            final String actionArguments) {
 
         final String title = titleFrom(collectionAdapters, elementSpec);
 
-        final DomainObjectList list = new DomainObjectList(title, elementSpec.getSpecId().asString());
+        final DomainObjectList list = new DomainObjectList(title, elementSpec.getSpecId().asString(), actionOwningType, actionId, actionArguments);
         for (final ObjectAdapter adapter : collectionAdapters) {
             list.getObjects().add(adapter.getObject());
         }

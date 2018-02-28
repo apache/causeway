@@ -32,6 +32,7 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.schema.utils.jaxbadapters.PersistentEntitiesAdapter;
 
@@ -39,6 +40,9 @@ import org.apache.isis.schema.utils.jaxbadapters.PersistentEntitiesAdapter;
 @XmlType(
         propOrder = {
                 "title",
+                "actionOwningType",
+                "actionId",
+                "actionArguments",
                 "elementObjectType",
                 "objects"
         }
@@ -71,9 +75,17 @@ public class DomainObjectList {
     //region > constructors
     public DomainObjectList() {
     }
-    public DomainObjectList(final String title, final String elementObjectType) {
+    public DomainObjectList(
+            final String title,
+            final String elementObjectType,
+            final String actionOwningType,
+            final String actionId,
+            final String actionArguments) {
         this.title = title;
         this.elementObjectType = elementObjectType;
+        this.actionOwningType = actionOwningType;
+        this.actionId = actionId;
+        this.actionArguments = actionArguments;
     }
     //endregion
 
@@ -94,6 +106,51 @@ public class DomainObjectList {
     )
     public String getElementObjectType() {
         return elementObjectType;
+    }
+    //endregion
+
+    //region > property: actionOwningType
+    public static class ActionOwningTypeDomainEvent extends PropertyDomainEvent<String> { }
+
+    private String actionOwningType;
+
+    @Property(
+            domainEvent = ActionOwningTypeDomainEvent.class,
+            optionality = Optionality.OPTIONAL,
+            editing = Editing.DISABLED
+    )
+    public String getActionOwningType() {
+        return actionOwningType;
+    }
+    //endregion
+
+    //region > property: actionId
+    public static class ActionIdDomainEvent extends PropertyDomainEvent<String> { }
+
+    private String actionId;
+
+    @Property(
+            domainEvent = ActionIdDomainEvent.class,
+            optionality = Optionality.OPTIONAL,
+            editing = Editing.DISABLED
+    )
+    public String getActionId() {
+        return actionId;
+    }
+    //endregion
+
+    //region > property: actionArguments
+    public static class ActionArgumentsDomainEvent extends PropertyDomainEvent<String> { }
+
+    private String actionArguments;
+
+    @Property(
+            domainEvent = ActionArgumentsDomainEvent.class,
+            optionality = Optionality.OPTIONAL,
+            editing = Editing.DISABLED
+    )
+    public String getActionArguments() {
+        return actionArguments;
     }
     //endregion
 
