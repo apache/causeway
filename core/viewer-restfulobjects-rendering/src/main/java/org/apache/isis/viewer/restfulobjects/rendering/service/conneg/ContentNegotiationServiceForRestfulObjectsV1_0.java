@@ -209,11 +209,18 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
         final List<MediaType> acceptableMediaTypes = rendererContext.getAcceptableMediaTypes();
         if(isAccepted(RepresentationType.DOMAIN_OBJECT, acceptableMediaTypes, true)) {
 
+            final ObjectAdapter adapter;
             final Collection<ObjectAdapter> collectionAdapters = objectAdaptersFrom(objectAndActionInvocation);
-            final ObjectSpecification elementSpec = elementSpecFrom(objectAndActionInvocation);
-            final DomainObjectList list = domainObjectListFrom(collectionAdapters, elementSpec);
 
-            final ObjectAdapter adapter = rendererContext.getPersistenceSession().adapterFor(list);
+            if(collectionAdapters != null) {
+                final ObjectSpecification elementSpec = elementSpecFrom(objectAndActionInvocation);
+                final DomainObjectList list = domainObjectListFrom(collectionAdapters, elementSpec);
+
+                adapter = rendererContext.getPersistenceSession().adapterFor(list);
+
+            } else {
+                adapter = objectAndActionInvocation.getReturnedAdapter();
+            }
             responseBuilder = buildResponse(rendererContext, adapter);
 
         } else if(isAccepted(RepresentationType.ACTION_RESULT, acceptableMediaTypes)) {
@@ -269,7 +276,9 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
         final ObjectSpecification returnType = objectAndActionInvocation.getAction().getReturnType();
 
         final CollectionFacet collectionFacet = returnType.getFacet(CollectionFacet.class);
-        return collectionFacet.collection(returnedAdapter);
+        return collectionFacet != null
+                ? collectionFacet.collection(returnedAdapter)
+                : null;
     }
 
     /**
