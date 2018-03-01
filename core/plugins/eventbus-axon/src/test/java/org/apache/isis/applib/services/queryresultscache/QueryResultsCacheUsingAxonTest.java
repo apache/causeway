@@ -27,16 +27,16 @@ import org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-public class QueryResultsCacheTest {
+public class QueryResultsCacheUsingAxonTest {
 
-    private QueryResultsCacheUsingGuava queryResultsCache;
+    private QueryResultsCacheInternal queryResultsCache;
 
-    QueryResultsCacheUsingGuava.Control control;
+    QueryResultsCacheControlUsingAxon control;
 
     @Before
     public void setUp() throws Exception {
-        queryResultsCache = new QueryResultsCacheUsingGuava();
-        control = new QueryResultsCacheUsingGuava.Control();
+        queryResultsCache = new QueryResultsCacheInternal();
+        control = new QueryResultsCacheControlUsingAxon();
         queryResultsCache.control = control;
     }
 
@@ -50,7 +50,7 @@ public class QueryResultsCacheTest {
                 return "foo";
             }
             
-        }, QueryResultsCacheTest.class, "execute");
+        }, QueryResultsCacheUsingAxonTest.class, "execute");
         
         assertThat(value, is("foo"));
     }
@@ -70,21 +70,21 @@ public class QueryResultsCacheTest {
             
         };
         assertThat(i[0], is(0));
-        assertThat(queryResultsCache.execute(callable, QueryResultsCacheTest.class, "caching", "a","b",1,2), is("foo"));
+        assertThat(queryResultsCache.execute(callable, QueryResultsCacheUsingAxonTest.class, "caching", "a","b",1,2), is("foo"));
         assertThat(i[0], is(1));
         
         // should be a cache hit
-        assertThat(queryResultsCache.execute(callable, QueryResultsCacheTest.class, "caching", "a","b",1,2), is("foo"));
+        assertThat(queryResultsCache.execute(callable, QueryResultsCacheUsingAxonTest.class, "caching", "a","b",1,2), is("foo"));
         assertThat(i[0], is(1));
         
         // changing any of the keys results in a cache miss
-        assertThat(queryResultsCache.execute(callable, QueryResultsCacheTest.class, "XXXcaching", "a","b",1,2), is("foo"));
+        assertThat(queryResultsCache.execute(callable, QueryResultsCacheUsingAxonTest.class, "XXXcaching", "a","b",1,2), is("foo"));
         assertThat(i[0], is(2));
         assertThat(queryResultsCache.execute(callable, QueryResultsCache.class, "caching", "a","b",1,2), is("foo"));
         assertThat(i[0], is(3));
-        assertThat(queryResultsCache.execute(callable, QueryResultsCacheTest.class, "caching", "XXX","b",1,2), is("foo"));
+        assertThat(queryResultsCache.execute(callable, QueryResultsCacheUsingAxonTest.class, "caching", "XXX","b",1,2), is("foo"));
         assertThat(i[0], is(4));
-        assertThat(queryResultsCache.execute(callable, QueryResultsCacheTest.class, "caching", "a","b",1,2, "x"), is("foo"));
+        assertThat(queryResultsCache.execute(callable, QueryResultsCacheUsingAxonTest.class, "caching", "a","b",1,2, "x"), is("foo"));
         assertThat(i[0], is(5));
     }
     
@@ -108,11 +108,11 @@ public class QueryResultsCacheTest {
 
         // when, then (a cache miss)
         assertThat(i[0], is(0));
-        assertThat(queryResultsCache.execute(callable, QueryResultsCacheTest.class, "caching", "a","b",1,2), is("foo"));
+        assertThat(queryResultsCache.execute(callable, QueryResultsCacheUsingAxonTest.class, "caching", "a","b",1,2), is("foo"));
         assertThat(i[0], is(1));
 
         // when, then should also be a cache miss - would've been a hit previously
-        assertThat(queryResultsCache.execute(callable, QueryResultsCacheTest.class, "caching", "a","b",1,2), is("foo"));
+        assertThat(queryResultsCache.execute(callable, QueryResultsCacheUsingAxonTest.class, "caching", "a","b",1,2), is("foo"));
         assertThat(i[0], is(2));
 
     }

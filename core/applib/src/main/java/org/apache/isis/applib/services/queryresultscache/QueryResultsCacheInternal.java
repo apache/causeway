@@ -1,33 +1,13 @@
-/*
- *  Licensed to the Apache Software Foundation (ASF) under one or more
- *  contributor license agreements.  See the NOTICE file distributed with
- *  this work for additional information regarding copyright ownership.
- *  The ASF licenses this file to You under the Apache License, Version 2.0
- *  (the "License"); you may not use this file except in compliance with
- *  the License.  You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- */
 package org.apache.isis.applib.services.queryresultscache;
-
 import java.util.Map;
 import java.util.concurrent.Callable;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
-import org.apache.isis.applib.AbstractSubscriber;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.fixturescripts.events.FixturesInstalledEvent;
-import org.apache.isis.applib.fixturescripts.events.FixturesInstallingEvent;
 import org.apache.isis.applib.internal.base._Casts;
 import org.apache.isis.applib.internal.collections._Maps;
 import org.apache.isis.applib.services.WithTransactionScope;
@@ -49,9 +29,9 @@ import org.slf4j.LoggerFactory;
         menuOrder = "" + Integer.MAX_VALUE
 )
 @RequestScoped
-public class QueryResultsCacheUsingGuava implements QueryResultsCache, WithTransactionScope {
+public class QueryResultsCacheInternal implements QueryResultsCache, WithTransactionScope {
 
-    private static final Logger LOG = LoggerFactory.getLogger(QueryResultsCacheUsingGuava.class);
+    private static final Logger LOG = LoggerFactory.getLogger(QueryResultsCacheInternal.class);
     
     private final Map<Key, Value<?>> cache = _Maps.newHashMap();
 
@@ -150,39 +130,8 @@ public class QueryResultsCacheUsingGuava implements QueryResultsCache, WithTrans
         cache.clear();
     }
 
-    /**
-     * In separate class because {@link QueryResultsCache} itself is request-scoped
-     */
-    @DomainService(
-            nature = NatureOfService.DOMAIN,
-            menuOrder = "" + Integer.MAX_VALUE
-    )
-    public static class Control extends AbstractSubscriber {
-
-        @Programmatic
-        @com.google.common.eventbus.Subscribe
-        //@org.axonframework.eventhandling.annotation.EventHandler
-        public void on(FixturesInstallingEvent ev) {
-            fixturesInstalling = true;
-        }
-
-        @Programmatic
-        @com.google.common.eventbus.Subscribe
-        //@org.axonframework.eventhandling.annotation.EventHandler
-        public void on(FixturesInstalledEvent ev) {
-            fixturesInstalling = false;
-        }
-
-        private boolean fixturesInstalling;
-        @Programmatic
-        public boolean isFixturesInstalling() {
-            return fixturesInstalling;
-        }
-    }
-
 
     @Inject
-    protected Control control;
-
+    protected QueryResultCacheControl control;
 
 }
