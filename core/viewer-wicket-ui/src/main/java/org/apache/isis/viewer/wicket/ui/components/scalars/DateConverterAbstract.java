@@ -21,7 +21,6 @@ package org.apache.isis.viewer.wicket.ui.components.scalars;
 import java.util.Locale;
 
 import org.apache.wicket.util.convert.ConversionException;
-import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 

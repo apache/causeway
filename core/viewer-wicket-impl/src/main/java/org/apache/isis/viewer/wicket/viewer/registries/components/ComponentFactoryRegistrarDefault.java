@@ -21,8 +21,7 @@ package org.apache.isis.viewer.wicket.viewer.registries.components;
 
 import java.util.ServiceLoader;
 
-import com.google.inject.Singleton;
-
+import org.apache.isis.applib.internal.context._Plugin;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistrar;
@@ -51,13 +50,9 @@ import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditPanelFac
 import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisBlobPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisClobPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisColorPanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisDatePanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisDateTimePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisMoneyPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisPasswordPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisPercentagePanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisTimePanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisTimeStampPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jdk8time.Jdk8LocalDatePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jdk8time.Jdk8LocalDateTimePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jdk8time.Jdk8OffsetDateTimePanelFactory;
@@ -90,6 +85,8 @@ import org.apache.isis.viewer.wicket.ui.components.value.StandaloneValuePanelFac
 import org.apache.isis.viewer.wicket.ui.components.voidreturn.VoidReturnPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.welcome.WelcomePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.widgets.entitysimplelink.EntityLinkSimplePanelFactory;
+
+import com.google.inject.Singleton;
 
 /**
  * Default implementation of {@link ComponentFactoryRegistrar} that registers a
@@ -151,6 +148,9 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
         addComponentFactoriesForBreadcrumbs(componentFactories);
         addComponentFactoriesForPageHeader(componentFactories);
         addComponentFactoriesForPageFooter(componentFactories);
+        
+        // load component factories from plugins
+        _Plugin.loadAll(ComponentFactory.class).forEach(componentFactories::add);
         
         addComponentFactoriesForUnknown(componentFactories);
     }
@@ -221,10 +221,6 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
         componentFactories.add(new JavaSqlTimePanelFactory());
 
         componentFactories.add(new IsisMoneyPanelFactory());
-        componentFactories.add(new IsisDatePanelFactory());
-        componentFactories.add(new IsisDateTimePanelFactory());
-        componentFactories.add(new IsisTimePanelFactory());
-        componentFactories.add(new IsisTimeStampPanelFactory());
         componentFactories.add(new IsisColorPanelFactory());
         componentFactories.add(new IsisPercentagePanelFactory());
         componentFactories.add(new IsisPasswordPanelFactory());

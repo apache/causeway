@@ -27,12 +27,12 @@
 		<version>2.0.0-M1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>isis-core-viewer-wicket-ui</artifactId>
-	<name>Apache Isis Wicket Viewer UI Components</name>
+	<artifactId>isis-core-viewer-wicket-ui-legacy</artifactId>
+	<name>Apache Isis Wicket Viewer UI Components (Legacy)</name>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.viewer.wicket.ui</jar-plugin.automaticModuleName>
-	  	<git-plugin.propertiesDir>org/apache/isis/viewer/wicket/ui</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.isis.viewer.wicket.ui-legacy</jar-plugin.automaticModuleName>
+	  	<git-plugin.propertiesDir>org/apache/isis/viewer/wicket/ui-legacy</git-plugin.propertiesDir>
 	</properties>
 
 	<build>
@@ -64,12 +64,17 @@
 
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-core-metamodel-legacy</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
 			<artifactId>isis-core-viewer-wicket-model</artifactId>
 		</dependency>
 
 		<dependency>
 		    <groupId>org.apache.isis.core</groupId>
-		    <artifactId>isis-core-metamodel</artifactId>
+		    <artifactId>isis-core-viewer-wicket-ui</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>

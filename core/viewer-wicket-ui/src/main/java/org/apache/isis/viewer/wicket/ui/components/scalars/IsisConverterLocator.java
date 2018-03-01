@@ -18,17 +18,14 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars;
 
-import org.apache.wicket.Application;
-import org.apache.wicket.IConverterLocator;
-import org.apache.wicket.util.convert.IConverter;
-import org.apache.wicket.util.convert.converter.BigIntegerConverter;
+import org.apache.isis.applib.internal.base._Casts;
+import org.apache.isis.applib.internal.base._NullSafe;
+import org.apache.isis.applib.internal.context._Plugin;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.objectvalue.renderedadjusted.RenderedAdjustedFacet;
 import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
-import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.DateConverterForApplibDate;
-import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.DateConverterForApplibDateTime;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jdkdates.DateConverterForJavaSqlDate;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jdkdates.DateConverterForJavaSqlTimestamp;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jdkdates.DateConverterForJavaUtilDate;
@@ -36,6 +33,10 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.jdkmath.BigDecimalCon
 import org.apache.isis.viewer.wicket.ui.components.scalars.jodatime.DateConverterForJodaDateTime;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jodatime.DateConverterForJodaLocalDate;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jodatime.DateConverterForJodaLocalDateTime;
+import org.apache.wicket.Application;
+import org.apache.wicket.IConverterLocator;
+import org.apache.wicket.util.convert.IConverter;
+import org.apache.wicket.util.convert.converter.BigIntegerConverter;
 
 /**
  * A locator for IConverters for ObjectAdapters
@@ -49,7 +50,9 @@ public class IsisConverterLocator {
      * @param wicketViewerSettings The date related settings
      * @return The best converter for the object adapter's type
      */
-    public static IConverter<Object> findConverter(final ObjectAdapter objectAdapter, final WicketViewerSettings wicketViewerSettings) {
+    public static IConverter<Object> findConverter(
+    		final ObjectAdapter objectAdapter, 
+    		final WicketViewerSettings wicketViewerSettings) {
 
         final ObjectSpecification objectSpecification = objectAdapter.getSpecification();
 
@@ -67,38 +70,56 @@ public class IsisConverterLocator {
 
         final RenderedAdjustedFacet renderedAdjustedFacet = objectSpecification.getFacet(RenderedAdjustedFacet.class);
         final int adjustBy = renderedAdjustedFacet != null ? renderedAdjustedFacet.value() : 0;
-
-        IConverter converter = null;
+        
         if (java.util.Date.class == correspondingClass) {
-            converter = new DateConverterForJavaUtilDate(wicketViewerSettings, adjustBy);
-        } else if (java.sql.Date.class == correspondingClass) {
-            converter = new DateConverterForJavaSqlDate(wicketViewerSettings, adjustBy);
-        } else if (org.apache.isis.applib.value.Date.class == correspondingClass) {
-            converter = new DateConverterForApplibDate(wicketViewerSettings, adjustBy);
-        } else if (org.apache.isis.applib.value.DateTime.class == correspondingClass) {
-            converter = new DateConverterForApplibDateTime(wicketViewerSettings, adjustBy);
-        } else if (org.joda.time.LocalDate.class == correspondingClass) {
-            converter = new DateConverterForJodaLocalDate(wicketViewerSettings, adjustBy);
-        } else if (org.joda.time.LocalDateTime.class == correspondingClass) {
-            converter = new DateConverterForJodaLocalDateTime(wicketViewerSettings, adjustBy);
-        } else if (org.joda.time.DateTime.class == correspondingClass) {
-            converter = new DateConverterForJodaDateTime(wicketViewerSettings, adjustBy);
-        } else if (java.sql.Timestamp.class == correspondingClass) {
-            converter = new DateConverterForJavaSqlTimestamp(wicketViewerSettings, adjustBy);
-        } else if (java.math.BigInteger.class == correspondingClass) {
-            converter = new BigIntegerConverter();
-        } else if (java.math.BigDecimal.class == correspondingClass) {
+            return _Casts.uncheckedCast(new DateConverterForJavaUtilDate(wicketViewerSettings, adjustBy));
+        } 
+        if (java.sql.Date.class == correspondingClass) {
+        	return _Casts.uncheckedCast(new DateConverterForJavaSqlDate(wicketViewerSettings, adjustBy));
+        } 
+        if (org.joda.time.LocalDate.class == correspondingClass) {
+        	return _Casts.uncheckedCast(new DateConverterForJodaLocalDate(wicketViewerSettings, adjustBy));
+        }
+        if (org.joda.time.LocalDateTime.class == correspondingClass) {
+        	return _Casts.uncheckedCast(new DateConverterForJodaLocalDateTime(wicketViewerSettings, adjustBy));
+        }
+        if (org.joda.time.DateTime.class == correspondingClass) {
+        	return _Casts.uncheckedCast(new DateConverterForJodaDateTime(wicketViewerSettings, adjustBy));
+        } 
+        if (java.sql.Timestamp.class == correspondingClass) {
+        	return _Casts.uncheckedCast(new DateConverterForJavaSqlTimestamp(wicketViewerSettings, adjustBy));
+        } 
+        {
+        	// data converter plugins (if any)
+        	
+	        DateConverter<?> converter = _Plugin.loadAll(DateConverterPlugin.class).stream()
+			.map(plugin->plugin.converterForClassIfAny(correspondingClass, wicketViewerSettings, adjustBy))
+			.filter(_NullSafe::isPresent)
+			.findAny()
+			.orElse(null);
+	        
+	        if(converter!=null) {
+	        	return _Casts.uncheckedCast(converter);
+	        }
+        
+        }
+        if (java.math.BigInteger.class == correspondingClass) {
+        	return _Casts.uncheckedCast(new BigIntegerConverter());
+        } 
+        if (java.math.BigDecimal.class == correspondingClass) {
             final BigDecimalValueFacet facet = objectSpecification.getFacet(BigDecimalValueFacet.class);
             Integer scale = null;
             if (facet != null) {
                 scale = facet.getScale();
             }
-            converter = new BigDecimalConverterWithScale(scale).forViewMode();
-        } else if (Application.exists()) {
+            return _Casts.uncheckedCast(new BigDecimalConverterWithScale(scale).forViewMode());
+        } 
+        
+        if(Application.exists()) {
             final IConverterLocator converterLocator = Application.get().getConverterLocator();
-            converter = converterLocator.getConverter(correspondingClass);
+            return _Casts.uncheckedCast(converterLocator.getConverter(correspondingClass));
         }
 
-        return converter;
+        return null;
     }
 }
