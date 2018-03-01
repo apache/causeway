@@ -71,11 +71,12 @@
 			<artifactId>isis-core-runtime</artifactId>
 		</dependency>
 
-		<dependency>
-			<groupId>org.apache.geronimo.specs</groupId>
-			<artifactId>geronimo-servlet_3.0_spec</artifactId>
-			<scope>provided</scope>
-		</dependency>
+<!-- replaced by javaee-api -->
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.apache.geronimo.specs</groupId> -->
+<!-- 			<artifactId>geronimo-servlet_3.0_spec</artifactId> -->
+<!-- 			<scope>provided</scope> -->
+<!-- 		</dependency> -->
 
 		<dependency>
 			<groupId>org.apache.wicket</groupId>

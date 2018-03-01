@@ -30,8 +30,8 @@
 	<name>Apache Isis Legacy Runtime</name>
 
     <properties>
-        <jar-plugin.automaticModuleName>org.apache.isis.core.runtime</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/apache/isis/core/runtime</git-plugin.propertiesDir>
+        <jar-plugin.automaticModuleName>org.apache.isis.core.runtime-legacy</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/isis/core/runtime-legacy</git-plugin.propertiesDir>
     </properties>
 
     <build>
@@ -70,24 +70,9 @@
 	</build>
 
 	<dependencies>
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-applib-legacy</artifactId>
-			<type>test-jar</type>
-			<scope>test</scope>
-		</dependency>
 
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-unittestsupport</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-log4j</artifactId>
-        </dependency>
-        
+		<!-- LEGACY DEPENDENCY -->
+		
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-metamodel-legacy</artifactId>
@@ -98,8 +83,10 @@
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
-        
-       	<dependency>
+	
+		<!-- INHERIT FROM NON LEGACY SIBLING -->
+	
+       <dependency>
 			<groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-runtime</artifactId>
 		</dependency>
@@ -108,40 +95,7 @@
             <artifactId>isis-core-runtime</artifactId>
             <type>test-jar</type>
             <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-schema</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>dom4j</groupId>
-            <artifactId>dom4j</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-        </dependency>
-
-        <dependency>
-            <!-- because DataNucleus uses log4j as its preferred logger -->
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-        </dependency>
-
-        <!-- for our home-grown proxies for @RequestScoped -->
-        <dependency>
-            <groupId>org.javassist</groupId>
-            <artifactId>javassist</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.geronimo.specs</groupId>
-            <artifactId>geronimo-servlet_3.0_spec</artifactId>
-            <scope>provided</scope>
-        </dependency>
+        </dependency>	
 
     </dependencies>
 
@@ -194,7 +148,6 @@
                 <dependency>
                     <groupId>org.axonframework</groupId>
                     <artifactId>axon-core</artifactId>
-                    <version>${axon-core.version}</version>
                 </dependency>
             </dependencies>
         </profile>

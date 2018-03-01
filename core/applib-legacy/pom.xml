@@ -53,11 +53,15 @@
 	</build>
 
 	<dependencies>
-		<!-- compile dependencies (applib-legacy only) -->
+		
+		<!-- LEGACY DEPENDENCY -->
+		
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
 		</dependency>
+
+		<!-- INHERIT FROM NON LEGACY SIBLING -->
 
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
@@ -70,6 +74,8 @@
 			<type>test-jar</type>
 			<scope>test</scope>
 		</dependency>
+		
+		<!-- TEST DEPENDENCY -->
 		
 		<dependency>
             <groupId>org.apache.isis.core</groupId>

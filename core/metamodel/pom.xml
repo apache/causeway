@@ -86,16 +86,17 @@
             <artifactId>guice</artifactId>
         </dependency>
 
-          <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-          </dependency>
-
         <dependency>
-            <groupId>org.apache.geronimo.specs</groupId>
-            <artifactId>geronimo-servlet_3.0_spec</artifactId>
-            <scope>provided</scope>
+	       <groupId>com.google.code.gson</groupId>
+	       <artifactId>gson</artifactId>
         </dependency>
+
+		<!-- replaced by javaee-api -->
+		<!--         <dependency> -->
+		<!--             <groupId>org.apache.geronimo.specs</groupId> -->
+		<!--             <artifactId>geronimo-servlet_3.0_spec</artifactId> -->
+		<!--             <scope>provided</scope> -->
+		<!--         </dependency> -->
 
         <dependency>
             <groupId>org.datanucleus</groupId>

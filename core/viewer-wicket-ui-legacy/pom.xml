@@ -61,100 +61,27 @@
 	</build>
 
 	<dependencies>
+	
+		<!-- LEGACY DEPENDENCY -->
 
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>isis-core-metamodel-legacy</artifactId>
 		</dependency>
 
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-viewer-wicket-model</artifactId>
-		</dependency>
+		<!-- INHERIT FROM NON LEGACY SIBLING -->
 
 		<dependency>
 		    <groupId>org.apache.isis.core</groupId>
 		    <artifactId>isis-core-viewer-wicket-ui</artifactId>
 		</dependency>
+		
+		<!-- TEST DEPENDENCY -->
+		
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>isis-core-unittestsupport</artifactId>
 			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.wicket</groupId>
-			<artifactId>wicket-core</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.wicket</groupId>
-			<artifactId>wicket-devutils</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.wicket</groupId>
-			<artifactId>wicket-extensions</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.wicket</groupId>
-			<artifactId>wicket-auth-roles</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.wicket</groupId>
-			<artifactId>wicket-guice</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.wicketstuff</groupId>
-			<artifactId>wicketstuff-select2</artifactId>
-		</dependency>
-
-		<dependency>
-            <groupId>org.webjars</groupId>
-            <artifactId>select2</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.webjars</groupId>
-            <artifactId>jquery-ui</artifactId>
-        </dependency>
-
-        <!-- WEBJARS -->
-        <dependency>
-            <groupId>de.agilecoders.wicket.webjars</groupId>
-            <artifactId>wicket-webjars</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>de.agilecoders.wicket</groupId>
-            <artifactId>wicket-bootstrap-core</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>de.agilecoders.wicket</groupId>
-            <artifactId>wicket-bootstrap-extensions</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>de.agilecoders.wicket</groupId>
-            <artifactId>wicket-bootstrap-themes</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.geronimo.specs</groupId>
-            <artifactId>geronimo-servlet_3.0_spec</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
-        <!-- LOGGING DEPENDENCIES - LOG4J -->
-
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
 		</dependency>
 
 	</dependencies>

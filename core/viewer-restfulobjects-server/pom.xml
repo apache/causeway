@@ -48,23 +48,24 @@
             <artifactId>isis-core-viewer-restfulobjects-rendering</artifactId>
         </dependency>
 
+<!-- replaced by javaee-api -->
 
         <!-- the javax:* equivalents of these are excluded in 
              dependencyManagement of resteasy-jaxrs, so  
-             are required here -->           
-        <dependency>
-            <groupId>org.apache.geronimo.specs</groupId>
-            <artifactId>geronimo-servlet_3.0_spec</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.geronimo.specs</groupId>
-            <artifactId>geronimo-annotation_1.0_spec</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.geronimo.specs</groupId>
-            <artifactId>geronimo-activation_1.1_spec</artifactId>
-        </dependency>
+             are required here -->  
+<!--         <dependency> -->
+<!--             <groupId>org.apache.geronimo.specs</groupId> -->
+<!--             <artifactId>geronimo-servlet_3.0_spec</artifactId> -->
+<!--             <scope>provided</scope> -->
+<!--         </dependency> -->
+<!--         <dependency> -->
+<!--             <groupId>org.apache.geronimo.specs</groupId> -->
+<!--             <artifactId>geronimo-annotation_1.0_spec</artifactId> -->
+<!--         </dependency> -->
+<!--         <dependency> -->
+<!--             <groupId>org.apache.geronimo.specs</groupId> -->
+<!--             <artifactId>geronimo-activation_1.1_spec</artifactId> -->
+<!--         </dependency> -->
 
         <dependency>
             <groupId>org.webjars</groupId>

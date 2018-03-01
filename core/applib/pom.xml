@@ -99,26 +99,34 @@
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-schema</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.apache.geronimo.specs</groupId>
-            <artifactId>geronimo-atinject_1.0_spec</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>javax.validation</groupId>
-            <artifactId>validation-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.geronimo.specs</groupId>
-            <artifactId>geronimo-jta_1.1_spec</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.geronimo.specs</groupId>
-            <artifactId>geronimo-jcdi_1.0_spec</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.spec.javax.ws.rs</groupId>
-            <artifactId>jboss-jaxrs-api_2.0_spec</artifactId>
-        </dependency>
+
+<!-- replaced by javaee-api -->        
+<!--         <dependency> -->
+<!--             <groupId>org.apache.geronimo.specs</groupId> -->
+<!--             <artifactId>geronimo-atinject_1.0_spec</artifactId> -->
+<!--         </dependency> -->
+<!--         <dependency> -->
+<!--             <groupId>javax.validation</groupId> -->
+<!--             <artifactId>validation-api</artifactId> -->
+<!--         </dependency> -->
+<!--         <dependency> -->
+<!--             <groupId>org.apache.geronimo.specs</groupId> -->
+<!--             <artifactId>geronimo-jta_1.1_spec</artifactId> -->
+<!--         </dependency> -->
+<!--         <dependency> -->
+<!--             <groupId>org.apache.geronimo.specs</groupId> -->
+<!--             <artifactId>geronimo-jcdi_1.0_spec</artifactId> -->
+<!--         </dependency> -->
+<!--         <dependency> -->
+<!--             <groupId>org.jboss.spec.javax.ws.rs</groupId> -->
+<!--             <artifactId>jboss-jaxrs-api_2.0_spec</artifactId> -->
+<!--         </dependency> -->
+
+		<!-- JEE API -->
+		<dependency>
+		    <groupId>javax</groupId>
+		    <artifactId>javaee-api</artifactId>
+		</dependency>
 
         <dependency>
             <groupId>org.hsqldb</groupId>

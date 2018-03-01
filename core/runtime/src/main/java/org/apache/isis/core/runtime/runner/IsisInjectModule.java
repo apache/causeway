@@ -22,8 +22,6 @@ package org.apache.isis.core.runtime.runner;
 import java.util.List;
 import java.util.Map;
 
-import javax.ws.rs.HEAD;
-
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;

@@ -171,15 +171,15 @@
         <easymock.version>2.5.2</easymock.version>
         <cucumber.version>1.2.4</cucumber.version>
 
-        <geronimo-jsp_2.1_spec.version>1.0.1</geronimo-jsp_2.1_spec.version>
-        <geronimo-jta_1.1_spec.version>1.1.1</geronimo-jta_1.1_spec.version>
-        <geronimo-jta_1.0.1B_spec.version>1.1.1</geronimo-jta_1.0.1B_spec.version>
-        <geronimo-servlet_3.0_spec.version>1.0</geronimo-servlet_3.0_spec.version>
-        <geronimo-annotation_1.0_spec.version>1.1.1</geronimo-annotation_1.0_spec.version>
-        <geronimo-activation_1.1_spec.version>1.1</geronimo-activation_1.1_spec.version>
-        <geronimo-javamail_1.4_spec.version>1.7.1</geronimo-javamail_1.4_spec.version>
-        <geronimo-atinject_1.0_spec.version>1.0</geronimo-atinject_1.0_spec.version>
-        <geronimo-jcdi_1.0_spec.version>1.0</geronimo-jcdi_1.0_spec.version>
+<!--         <geronimo-jsp_2.1_spec.version>1.0.1</geronimo-jsp_2.1_spec.version> -->
+<!--         <geronimo-jta_1.1_spec.version>1.1.1</geronimo-jta_1.1_spec.version> -->
+<!--         <geronimo-jta_1.0.1B_spec.version>1.1.1</geronimo-jta_1.0.1B_spec.version> -->
+<!--         <geronimo-servlet_3.0_spec.version>1.0</geronimo-servlet_3.0_spec.version> -->
+<!--         <geronimo-annotation_1.0_spec.version>1.1.1</geronimo-annotation_1.0_spec.version> -->
+<!--         <geronimo-activation_1.1_spec.version>1.1</geronimo-activation_1.1_spec.version> -->
+<!--         <geronimo-javamail_1.4_spec.version>1.7.1</geronimo-javamail_1.4_spec.version> -->
+<!--         <geronimo-atinject_1.0_spec.version>1.0</geronimo-atinject_1.0_spec.version> -->
+<!--         <geronimo-jcdi_1.0_spec.version>1.0</geronimo-jcdi_1.0_spec.version> -->
 
         <validation-api.version>1.1.0.Final</validation-api.version>
         <transaction-api.version>1.2</transaction-api.version>
@@ -2013,52 +2013,61 @@ ${license.additional-notes}
                 <scope>test</scope>
             </dependency>
 
-            <!-- Specs -->
-            <dependency>
-                <groupId>org.apache.geronimo.specs</groupId>
-                <artifactId>geronimo-jsp_2.1_spec</artifactId>
-                <version>${geronimo-jsp_2.1_spec.version}</version>
-            </dependency>
-              <dependency>
-                <groupId>org.apache.geronimo.specs</groupId>
-                <artifactId>geronimo-jta_1.1_spec</artifactId>
-                <version>${geronimo-jta_1.1_spec.version}</version>
-              </dependency>
-            <dependency>
-                <groupId>org.apache.geronimo.specs</groupId>
-                <artifactId>geronimo-jta_1.0.1B_spec</artifactId>
-                <version>${geronimo-jta_1.0.1B_spec.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.geronimo.specs</groupId>
-                <artifactId>geronimo-servlet_3.0_spec</artifactId>
-                <version>${geronimo-servlet_3.0_spec.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.geronimo.specs</groupId>
-                <artifactId>geronimo-annotation_1.0_spec</artifactId>
-                <version>${geronimo-annotation_1.0_spec.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.geronimo.specs</groupId>
-                <artifactId>geronimo-activation_1.1_spec</artifactId>
-                <version>${geronimo-activation_1.1_spec.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.geronimo.specs</groupId>
-                <artifactId>geronimo-javamail_1.4_spec</artifactId>
-                <version>${geronimo-javamail_1.4_spec.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.geronimo.specs</groupId>
-                <artifactId>geronimo-atinject_1.0_spec</artifactId>
-                <version>${geronimo-atinject_1.0_spec.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.geronimo.specs</groupId>
-                <artifactId>geronimo-jcdi_1.0_spec</artifactId>
-                <version>${geronimo-jcdi_1.0_spec.version}</version>
-            </dependency>
+            <!-- JEE API -->
+            
+            	<dependency>
+				    <groupId>javax</groupId>
+				    <artifactId>javaee-api</artifactId>
+				    <version>${javaee.version}</version>
+				</dependency>
+            
+<!--             <dependency> -->
+<!--                 <groupId>org.apache.geronimo.specs</groupId> -->
+<!--                 <artifactId>geronimo-jsp_2.1_spec</artifactId> -->
+<!--                 <version>${geronimo-jsp_2.1_spec.version}</version> -->
+<!--             </dependency> -->
+<!--               <dependency> -->
+<!--                 <groupId>org.apache.geronimo.specs</groupId> -->
+<!--                 <artifactId>geronimo-jta_1.1_spec</artifactId> -->
+<!--                 <version>${geronimo-jta_1.1_spec.version}</version> -->
+<!--               </dependency> -->
+<!--             <dependency> -->
+<!--                 <groupId>org.apache.geronimo.specs</groupId> -->
+<!--                 <artifactId>geronimo-jta_1.0.1B_spec</artifactId> -->
+<!--                 <version>${geronimo-jta_1.0.1B_spec.version}</version> -->
+<!--             </dependency> -->
+<!--             <dependency> -->
+<!--                 <groupId>org.apache.geronimo.specs</groupId> -->
+<!--                 <artifactId>geronimo-servlet_3.0_spec</artifactId> -->
+<!--                 <version>${geronimo-servlet_3.0_spec.version}</version> -->
+<!--             </dependency> -->
+<!--             <dependency> -->
+<!--                 <groupId>org.apache.geronimo.specs</groupId> -->
+<!--                 <artifactId>geronimo-annotation_1.0_spec</artifactId> -->
+<!--                 <version>${geronimo-annotation_1.0_spec.version}</version> -->
+<!--             </dependency> -->
+<!--             <dependency> -->
+<!--                 <groupId>org.apache.geronimo.specs</groupId> -->
+<!--                 <artifactId>geronimo-activation_1.1_spec</artifactId> -->
+<!--                 <version>${geronimo-activation_1.1_spec.version}</version> -->
+<!--             </dependency> -->
+<!--             <dependency> -->
+<!--                 <groupId>org.apache.geronimo.specs</groupId> -->
+<!--                 <artifactId>geronimo-javamail_1.4_spec</artifactId> -->
+<!--                 <version>${geronimo-javamail_1.4_spec.version}</version> -->
+<!--             </dependency> -->
+<!--             <dependency> -->
+<!--                 <groupId>org.apache.geronimo.specs</groupId> -->
+<!--                 <artifactId>geronimo-atinject_1.0_spec</artifactId> -->
+<!--                 <version>${geronimo-atinject_1.0_spec.version}</version> -->
+<!--             </dependency> -->
+<!--             <dependency> -->
+<!--                 <groupId>org.apache.geronimo.specs</groupId> -->
+<!--                 <artifactId>geronimo-jcdi_1.0_spec</artifactId> -->
+<!--                 <version>${geronimo-jcdi_1.0_spec.version}</version> -->
+<!--             </dependency> -->
+
+			<!-- JAX-RS API -->
 
             <dependency>
                 <groupId>org.jboss.spec.javax.ws.rs</groupId>
@@ -2068,6 +2077,7 @@ ${license.additional-notes}
 
 
             <!-- javax APIs -->
+            
             <dependency>
                 <groupId>javax.validation</groupId>
                 <artifactId>validation-api</artifactId>
@@ -2158,34 +2168,6 @@ ${license.additional-notes}
     </dependencies>
 
     <profiles>
-
-        <profile>
-            <id>jdk7</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-toolchains-plugin</artifactId>
-                        <version>1.1</version>
-                        <executions>
-                            <execution>
-                                <goals>
-                                    <goal>toolchain</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                        <configuration>
-                            <toolchains>
-                                <jdk>
-                                    <version>1.7</version>
-                                    <vendor>oracle</vendor>
-                                </jdk>
-                            </toolchains>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
         <profile>
             <id>apache-release</id>
             <build>
