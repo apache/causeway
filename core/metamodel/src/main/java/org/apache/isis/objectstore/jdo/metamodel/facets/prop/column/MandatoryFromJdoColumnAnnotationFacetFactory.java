@@ -26,6 +26,7 @@ import javax.jdo.annotations.IdentityType;
 import com.google.common.base.Strings;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.util.MetaInfo;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
@@ -58,7 +59,7 @@ public class MandatoryFromJdoColumnAnnotationFacetFactory extends FacetFactoryAb
 
         // only applies to JDO entities; ignore any view models
         final Class<?> cls = processMethodContext.getCls();
-        if(!org.datanucleus.enhancement.Persistable.class.isAssignableFrom(cls)) {
+        if(!MetaInfo.isPersistenceEnhanced(cls)) {
             return;
         }
 

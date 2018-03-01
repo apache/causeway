@@ -24,6 +24,7 @@ import javax.jdo.annotations.PersistenceCapable;
 
 import com.google.common.base.Strings;
 
+import org.apache.isis.core.commons.util.MetaInfo;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.Annotations;
@@ -41,7 +42,7 @@ public class JdoPersistenceCapableAnnotationFacetFactory extends FacetFactoryAbs
         final Class<?> cls = processClassContext.getCls();
 
         // only applies to JDO entities; ignore any view models
-        if(!org.datanucleus.enhancement.Persistable.class.isAssignableFrom(cls)) {
+        if(!MetaInfo.isPersistenceEnhanced(cls)) {
             return;
         }
 

@@ -25,6 +25,7 @@ import javax.jdo.annotations.Queries;
 import javax.jdo.annotations.Query;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.util.MetaInfo;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -53,7 +54,7 @@ public class JdoQueryAnnotationFacetFactory extends FacetFactoryAbstract impleme
         final Class<?> cls = processClassContext.getCls();
 
         // only applies to JDO entities; ignore any view models
-        if(!org.datanucleus.enhancement.Persistable.class.isAssignableFrom(cls)) {
+        if(!MetaInfo.isPersistenceEnhanced(cls)) {
             return;
         }
 

@@ -21,6 +21,8 @@ package org.apache.isis.objectstore.jdo.metamodel.facets.object.discriminator;
 
 import javax.jdo.annotations.Discriminator;
 import com.google.common.base.Strings;
+
+import org.apache.isis.core.commons.util.MetaInfo;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -42,7 +44,7 @@ public class JdoDiscriminatorAnnotationFacetFactory extends FacetFactoryAbstract
 
         // only applies to JDO entities; ignore any view models
         final Class<?> cls = processClassContext.getCls();
-        if(!org.datanucleus.enhancement.Persistable.class.isAssignableFrom(cls)) {
+        if(!MetaInfo.isPersistenceEnhanced(cls)) {
             return;
         }
 

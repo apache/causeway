@@ -27,11 +27,8 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import com.google.common.collect.Lists;
-
-import org.datanucleus.enhancement.Persistable;
-
 import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.util.MetaInfo;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -48,6 +45,8 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
+
+import com.google.common.collect.Lists;
 
 /**
  * just adds a validator
@@ -239,7 +238,7 @@ public class XmlJavaTypeAdapterFacetFactory extends FacetFactoryAbstract
 
             final ObjectSpecification propertyTypeSpec = property.getSpecification();
             final Class<?> propertyType = propertyTypeSpec.getCorrespondingClass();
-            if (!Persistable.class.isAssignableFrom(propertyType)) {
+            if (!MetaInfo.isPersistenceEnhanced(propertyType)) {
                 return;
             }
 

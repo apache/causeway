@@ -22,12 +22,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import com.google.common.collect.Lists;
-
-import org.datanucleus.enhancement.Persistable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.AppManifest2;
 import org.apache.isis.applib.annotation.DomainService;
@@ -38,6 +32,7 @@ import org.apache.isis.applib.services.command.CommandDtoProcessor;
 import org.apache.isis.applib.services.grid.GridService;
 import org.apache.isis.applib.services.metamodel.DomainMember;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
+import org.apache.isis.core.commons.util.MetaInfo;
 import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureId;
@@ -52,6 +47,10 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.common.collect.Lists;
 
 @DomainService(
         nature = NatureOfService.DOMAIN,
@@ -195,7 +194,7 @@ public class MetaModelServiceDefault implements MetaModelService {
             return Sort.COLLECTION;
         }
         final Class<?> correspondingClass = objectSpec.getCorrespondingClass();
-        if(Persistable.class.isAssignableFrom(correspondingClass)) {
+        if(MetaInfo.isPersistenceEnhanced(correspondingClass)) {
             return Sort.JDO_ENTITY;
         }
         if(mode == Mode.RELAXED) {

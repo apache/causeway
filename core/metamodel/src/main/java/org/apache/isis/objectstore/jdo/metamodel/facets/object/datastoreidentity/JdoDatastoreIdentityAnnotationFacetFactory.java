@@ -22,6 +22,7 @@ package org.apache.isis.objectstore.jdo.metamodel.facets.object.datastoreidentit
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
 
+import org.apache.isis.core.commons.util.MetaInfo;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.Annotations;
@@ -39,7 +40,7 @@ public class JdoDatastoreIdentityAnnotationFacetFactory extends FacetFactoryAbst
         final Class<?> cls = processClassContext.getCls();
 
         // only applies to JDO entities; ignore any view models
-        if(!org.datanucleus.enhancement.Persistable.class.isAssignableFrom(cls)) {
+        if(!MetaInfo.isPersistenceEnhanced(cls)) {
             return;
         }
 
