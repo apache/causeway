@@ -95,16 +95,6 @@
 
     <dependencies>
     
-    	<!--
-    		removal in progress 
-    		last remaining compile dependency is for guava's event bus
-    	-->
-		<dependency>
-			<groupId>com.google.guava</groupId>
-			<artifactId>guava</artifactId>
-			<optional>true</optional>
-		</dependency>
-    
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-schema</artifactId>
@@ -128,11 +118,6 @@
         <dependency>
             <groupId>org.jboss.spec.javax.ws.rs</groupId>
             <artifactId>jboss-jaxrs-api_2.0_spec</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.axonframework</groupId>
-            <artifactId>axon-core</artifactId>
         </dependency>
 
         <dependency>

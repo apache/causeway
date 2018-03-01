@@ -19,16 +19,16 @@
 		<version>2.0.0-M1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>isis-core-plugins-discovery-reflections</artifactId>
+	<artifactId>isis-core-plugins-eventbus-axon</artifactId>
 
-	<name>Apache Isis Discovery Plugin (Reflections)</name>
+	<name>Apache Isis Eventbus Plugin (Axon)</name>
 	<description>
-        Class discovery plugin using reflections.org.
+        Eventbus plugin using the axon framework.
     </description>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.plugins.discovery-reflections</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/plugins/discovery-reflections</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.isis.plugins.eventbus-axon</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/isis/plugins/eventbus-axon</git-plugin.propertiesDir>
 	</properties>
 
 	<build>
@@ -52,6 +52,10 @@
 
 	<dependencies>
 		<!-- compile dependencies -->
+		<dependency>
+            <groupId>org.axonframework</groupId>
+            <artifactId>axon-core</artifactId>
+        </dependency>
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>

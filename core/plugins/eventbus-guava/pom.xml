@@ -19,16 +19,16 @@
 		<version>2.0.0-M1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>isis-core-plugins-discovery-reflections</artifactId>
+	<artifactId>isis-core-plugins-eventbus-guava</artifactId>
 
-	<name>Apache Isis Discovery Plugin (Reflections)</name>
+	<name>Apache Isis Eventbus Plugin (Guava)</name>
 	<description>
-        Class discovery plugin using reflections.org.
+        Eventbus plugin using google guava.
     </description>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.plugins.discovery-reflections</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/plugins/discovery-reflections</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.isis.plugins.eventbus-guava</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/isis/plugins/eventbus-guava</git-plugin.propertiesDir>
 	</properties>
 
 	<build>

@@ -21,9 +21,10 @@
 
 	<artifactId>isis-core-applib-legacy</artifactId>
 
-	<name>Apache Applib Legacy 1.x</name>
-	<description>
-        Isis legacy module, to easy transition from v 1.x to 2.x.
+ <name>Apache Isis AppLib (Legacy)</name>
+    <description>
+        Isis application library, defining annotations and utilities for the
+        default (Java) programming model. (Legacy of Apache 1.x)
     </description>
 
 	<properties>
@@ -52,7 +53,7 @@
 	</build>
 
 	<dependencies>
-		<!-- compile dependencies -->
+		<!-- compile dependencies (applib-legacy only) -->
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
