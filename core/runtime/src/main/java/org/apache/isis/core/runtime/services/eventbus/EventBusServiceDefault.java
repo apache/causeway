@@ -21,8 +21,6 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 
-import com.google.common.base.Strings;
-
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.eventbus.EventBusImplementation;
@@ -31,8 +29,8 @@ import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.core.commons.lang.ClassUtil;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.runtime.services.RequestScopedService;
-import org.apache.isis.core.runtime.services.eventbus.adapter.EventBusImplementationForAxonSimple;
-import org.apache.isis.core.runtime.services.eventbus.adapter.EventBusImplementationForGuava;
+
+import com.google.common.base.Strings;
 
 /**
  * Holds common runtime logic for EventBusService implementations.
@@ -126,14 +124,16 @@ public abstract class EventBusServiceDefault extends EventBusService {
     }
 
     private EventBusImplementation instantiateEventBus() {
+    	String fqImplementationName = implementation;
         if("guava".equals(implementation)) {
-            return new EventBusImplementationForGuava();
-        }
-        if("axon".equals(implementation)) {
-            return new EventBusImplementationForAxonSimple();
+            // legacy of return new EventBusImplementationForGuava();
+        	fqImplementationName = "org.apache.isis.core.runtime.services.eventbus.EventBusImplementationForGuava";
+        } else if("axon".equals(implementation)) {
+        	// legacy of return new EventBusImplementationForAxonSimple();
+        	fqImplementationName = "org.apache.isis.core.runtime.services.eventbus.EventBusImplementationForAxonSimple";
         }
 
-        final Class<?> aClass = ClassUtil.forName(implementation);
+        final Class<?> aClass = ClassUtil.forName(fqImplementationName);
         if(EventBusImplementation.class.isAssignableFrom(aClass)) {
             try {
                 return (EventBusImplementation) aClass.newInstance();

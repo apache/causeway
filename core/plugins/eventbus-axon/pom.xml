@@ -52,42 +52,18 @@
 
 	<dependencies>
 		<!-- compile dependencies -->
+
 		<dependency>
-            <groupId>org.axonframework</groupId>
-            <artifactId>axon-core</artifactId>
-        </dependency>
-		<dependency>
-			<groupId>com.google.guava</groupId>
-			<artifactId>guava</artifactId>
+			<groupId>org.axonframework</groupId>
+			<artifactId>axon-core</artifactId>
 		</dependency>
 
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-applib</artifactId>
+			<artifactId>isis-core-runtime</artifactId>
 			<scope>compile</scope>
 		</dependency>
-		
-	    <!-- as used by internal API, 
-       	also provides com.google.code.findbugs/annotations @Nullable, 
-       	but not transitive -->
-        <dependency>
-            <groupId>org.reflections</groupId>
-            <artifactId>reflections</artifactId>
-            <!--
-            ideally we would like to make this optional (to enforce usage of internal
-             reflective API, with only applib is allowed to access reflections directly.
-              HOWEVER, there is also a runtime dependency on org.reflections.vfs.Vfs.UrlType. -->
-            <optional>false</optional>
-            <exclusions>
-            	<exclusion>
-            	    <!-- whatever reflections is dependent on, it should not be transitive  -->
-            		<groupId>com.google.guava</groupId>
-            		<artifactId>guava</artifactId>
-            	</exclusion>
-            </exclusions>
-        </dependency>
 
 	</dependencies>
-
 
 </project>

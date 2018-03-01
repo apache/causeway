@@ -17,16 +17,14 @@
 package org.apache.isis.core.runtime.services.eventbus.adapter;
 
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
-import com.google.common.collect.Maps;
-
+import org.apache.isis.applib.services.eventbus.AbstractDomainEvent;
+import org.apache.isis.core.runtime.services.eventbus.EventBusImplementationAbstract;
 import org.axonframework.domain.EventMessage;
 import org.axonframework.domain.GenericEventMessage;
 import org.axonframework.eventhandling.SimpleEventBus;
 import org.axonframework.eventhandling.annotation.AnnotationEventListenerAdapter;
-
-import org.apache.isis.applib.services.eventbus.AbstractDomainEvent;
-import org.apache.isis.core.runtime.services.eventbus.EventBusImplementationAbstract;
 
 /**
  * A wrapper for an Axon {@link org.axonframework.eventhandling.SimpleEventBus},
@@ -36,7 +34,7 @@ public class EventBusImplementationForAxonSimple extends EventBusImplementationA
 
     private SimpleEventBus simpleEventBus = new SimpleEventBus();
 
-    private Map<Object, AxonEventListenerAdapter> listenerAdapterByDomainService = Maps.newConcurrentMap();
+    private Map<Object, AxonEventListenerAdapter> listenerAdapterByDomainService = new ConcurrentHashMap<>();
 
     private AxonEventListenerAdapter adapterFor(final Object domainService) {
         AxonEventListenerAdapter annotationEventListenerAdapter = listenerAdapterByDomainService.get(domainService);

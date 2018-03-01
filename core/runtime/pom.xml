@@ -132,7 +132,7 @@
             <scope>provided</scope>
         </dependency>
 
-    </dependencies>
+	</dependencies>
 
     <profiles>
         <profile>
@@ -169,21 +169,6 @@
                     <groupId>javax.activation</groupId>
                     <artifactId>activation</artifactId>
                     <version>1.1.1</version>
-                </dependency>
-            </dependencies>
-        </profile>
-        <profile>
-            <id>axon-event-bus</id>
-            <activation>
-                <property>
-                    <name>!skip.axon-event-bus</name>
-                </property>
-            </activation>
-            <dependencies>
-                <dependency>
-                    <groupId>org.axonframework</groupId>
-                    <artifactId>axon-core</artifactId>
-                    <version>${axon-core.version}</version>
                 </dependency>
             </dependencies>
         </profile>
