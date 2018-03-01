@@ -69,7 +69,7 @@ public class FixturesInstallerFromConfiguration extends FixturesInstallerAbstrac
 
     private static class FixtureConfig {
 
-        //region > fixtures
+        // -- fixtures
 
         private String[] fixtures;
 
@@ -96,7 +96,7 @@ public class FixturesInstallerFromConfiguration extends FixturesInstallerAbstrac
         }
         //endregion
 
-        //region > fixturePrefix
+        // -- fixturePrefix
 
         private String fixturePrefix;
         String getFixturePrefix() {

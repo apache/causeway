@@ -45,7 +45,7 @@ import org.apache.isis.core.runtime.authentication.standard.SimpleSession;
  */
 public class ExplorationAuthenticator extends AuthenticatorAbstract {
 
-    //region > Constructor, fields
+    // -- Constructor, fields
     private final Set<SimpleSession> registeredSessions = new LinkedHashSet<SimpleSession>();;
     private final String users;
 

@@ -41,7 +41,7 @@ public abstract class AuthenticationSessionAbstract implements AuthenticationSes
 
     private static final long serialVersionUID = 1L;
 
-    //region > Constructor, fields
+    // -- Constructor, fields
 
     private final String name;
     private final List<String> roles = new ArrayList<String>();
@@ -75,7 +75,7 @@ public abstract class AuthenticationSessionAbstract implements AuthenticationSes
 
     //endregion
 
-    //region > encode
+    // -- encode
 
     @Override
     public void encode(final DataOutputExtended output) throws IOException {
@@ -86,7 +86,7 @@ public abstract class AuthenticationSessionAbstract implements AuthenticationSes
 
     //endregion
 
-    //region > User Name
+    // -- User Name
 
     @Override
     public String getUserName() {
@@ -100,7 +100,7 @@ public abstract class AuthenticationSessionAbstract implements AuthenticationSes
 
     //endregion
 
-    //region > Roles
+    // -- Roles
 
     /**
      * Can be overridden.
@@ -112,7 +112,7 @@ public abstract class AuthenticationSessionAbstract implements AuthenticationSes
 
     //endregion
 
-    //region > Validation Code
+    // -- Validation Code
 
     @Override
     public String getValidationCode() {
@@ -121,7 +121,7 @@ public abstract class AuthenticationSessionAbstract implements AuthenticationSes
 
     //endregion
 
-    //region > Attributes
+    // -- Attributes
 
     @Override
     public Object getAttribute(final String attributeName) {
@@ -135,7 +135,7 @@ public abstract class AuthenticationSessionAbstract implements AuthenticationSes
 
     //endregion
 
-    //region > MessageBroker
+    // -- MessageBroker
 
     @Override
     public MessageBroker getMessageBroker() {
@@ -144,7 +144,7 @@ public abstract class AuthenticationSessionAbstract implements AuthenticationSes
 
     //endregion
 
-    //region > createUserMemento
+    // -- createUserMemento
 
     @Override
     public UserMemento createUserMemento() {
@@ -157,7 +157,7 @@ public abstract class AuthenticationSessionAbstract implements AuthenticationSes
 
     //endregion
 
-    //region > toString
+    // -- toString
 
     @Override
     public String toString() {

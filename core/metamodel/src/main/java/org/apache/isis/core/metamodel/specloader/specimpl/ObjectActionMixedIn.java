@@ -232,7 +232,7 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
                 interactionInitiatedBy);
     }
 
-    //region > facetHolder
+    // -- facetHolder
     @Override
     protected FacetHolder getFacetHolder() {
         return facetHolder;

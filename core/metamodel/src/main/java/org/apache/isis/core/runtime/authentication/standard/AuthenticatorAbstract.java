@@ -26,7 +26,7 @@ import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 
 public abstract class AuthenticatorAbstract implements Authenticator {
 
-    //region > constructor, fields
+    // -- constructor, fields
     private final IsisConfiguration configuration;
     private DeploymentCategory deploymentCategory;
 
@@ -36,7 +36,7 @@ public abstract class AuthenticatorAbstract implements Authenticator {
 
     //endregion
 
-    //region > init, shutdown
+    // -- init, shutdown
 
     @Override
     public void init(final DeploymentCategory deploymentCategory) {
@@ -56,7 +56,7 @@ public abstract class AuthenticatorAbstract implements Authenticator {
 
     //endregion
 
-    //region > API
+    // -- API
 
     /**
      * Default implementation returns a {@link SimpleSession}; can be overridden
@@ -93,7 +93,7 @@ public abstract class AuthenticatorAbstract implements Authenticator {
 
     //endregion
 
-    //region > Injected (via constructor)
+    // -- Injected (via constructor)
 
     public IsisConfiguration getConfiguration() {
         return configuration;

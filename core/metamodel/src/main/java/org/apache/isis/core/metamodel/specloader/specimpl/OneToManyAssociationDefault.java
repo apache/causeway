@@ -70,7 +70,7 @@ public class OneToManyAssociationDefault extends ObjectAssociationAbstract imple
     }
 
 
-    //region > visible, usable
+    // -- visible, usable
 
     @Override
     public VisibilityContext<?> createVisibleInteractionContext(
@@ -89,7 +89,7 @@ public class OneToManyAssociationDefault extends ObjectAssociationAbstract imple
 
     //endregion
 
-    //region > Validate Add
+    // -- Validate Add
     // Not API
     private ValidityContext<?> createValidateAddInteractionContext(
             final InteractionInitiatedBy interactionInitiatedBy,
@@ -118,7 +118,7 @@ public class OneToManyAssociationDefault extends ObjectAssociationAbstract imple
 
     //endregion
 
-    //region > Validate Remove
+    // -- Validate Remove
     private ValidityContext<?> createValidateRemoveInteractionContext(
             final ObjectAdapter ownerAdapter,
             final ObjectAdapter proposedToRemoveAdapter,
@@ -152,7 +152,7 @@ public class OneToManyAssociationDefault extends ObjectAssociationAbstract imple
 
     //endregion
 
-    //region > get, isEmpty, add, clear
+    // -- get, isEmpty, add, clear
 
     @Override
     public ObjectAdapter get(
@@ -179,7 +179,7 @@ public class OneToManyAssociationDefault extends ObjectAssociationAbstract imple
 
     //endregion
 
-    //region > add, clear
+    // -- add, clear
 
     @Override
     public void addElement(
@@ -227,7 +227,7 @@ public class OneToManyAssociationDefault extends ObjectAssociationAbstract imple
 
     //endregion
 
-    //region > defaults
+    // -- defaults
     @Override
     public ObjectAdapter getDefault(final ObjectAdapter ownerAdapter) {
         return null;
@@ -239,7 +239,7 @@ public class OneToManyAssociationDefault extends ObjectAssociationAbstract imple
 
     //endregion
 
-    //region > choices & autoComplete
+    // -- choices & autoComplete
 
     @Override
     public ObjectAdapter[] getChoices(
@@ -274,7 +274,7 @@ public class OneToManyAssociationDefault extends ObjectAssociationAbstract imple
 
     //endregion
 
-    //region > toString
+    // -- toString
 
     @Override
     public String toString() {

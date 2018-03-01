@@ -68,7 +68,7 @@ import com.google.common.collect.Sets;
  */
 public abstract class IsisComponentProvider {
 
-    //region > constructor, fields
+    // -- constructor, fields
 
     private final AppManifest appManifest;
     private final IsisConfigurationDefault configuration;
@@ -114,7 +114,7 @@ public abstract class IsisComponentProvider {
 
     //endregion
 
-    //region > helpers (appManifest)
+    // -- helpers (appManifest)
 
     private void putAppManifestKey(final AppManifest appManifest) {
         // required to prevent RegisterEntities validation from complaining
@@ -284,7 +284,7 @@ public abstract class IsisComponentProvider {
 
     //endregion
 
-    //region > provideAuth*
+    // -- provideAuth*
 
     public AuthenticationManager provideAuthenticationManager() {
         return authenticationManager;
@@ -296,7 +296,7 @@ public abstract class IsisComponentProvider {
 
     //endregion
 
-    //region > provideServiceInjector
+    // -- provideServiceInjector
 
     public ServicesInjector provideServiceInjector(final IsisConfiguration configuration) {
         return new ServicesInjector(services, configuration);
@@ -304,7 +304,7 @@ public abstract class IsisComponentProvider {
 
     //endregion
 
-    //region > provideSpecificationLoader
+    // -- provideSpecificationLoader
 
     public SpecificationLoader provideSpecificationLoader(
             final ServicesInjector servicesInjector,

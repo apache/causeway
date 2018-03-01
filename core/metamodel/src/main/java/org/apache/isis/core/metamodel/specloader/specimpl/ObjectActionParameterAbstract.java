@@ -202,7 +202,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
         return Allow.DEFAULT;
     }
 
-    //region > FacetHolder
+    // -- FacetHolder
 
     protected FacetHolder getFacetHolder() {
         return peer;
@@ -280,7 +280,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
 
     //endregion
 
-    //region > AutoComplete
+    // -- AutoComplete
 
     @Override
     public boolean hasAutoComplete() {
@@ -322,7 +322,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
 
     //endregion
 
-    //region > Choices
+    // -- Choices
 
     @Override
     public boolean hasChoices() {
@@ -370,7 +370,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
 
     //endregion
 
-    //region > Defaults
+    // -- Defaults
 
     @Override
     public ObjectAdapter getDefault(final ObjectAdapter adapter) {
@@ -460,7 +460,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
 
     //endregion
 
-    //region > Validation
+    // -- Validation
 
     @Override
     public ActionArgValidityContext createProposedArgumentInteractionContext(
@@ -520,7 +520,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
 
     //endregion
 
-    //region > Dependencies (from parent)
+    // -- Dependencies (from parent)
 
     protected SpecificationLoader getSpecificationLoader() {
         return parentAction.getSpecificationLoader();

@@ -91,7 +91,7 @@ public class CssClassFacetOnActionFromConfiguredRegexFactory extends FacetFactor
         FacetUtil.addFacet(cssClassFacet);
     }
 
-    //region > cssClassFromPattern
+    // -- cssClassFromPattern
 
     private final static Pattern CSS_CLASS_REGEX_PATTERN = Pattern.compile("([^:]+):(.+)");
 

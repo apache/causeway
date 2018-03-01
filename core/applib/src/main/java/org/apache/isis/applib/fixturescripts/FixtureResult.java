@@ -28,7 +28,7 @@ import org.apache.isis.applib.annotation.*;
 public class FixtureResult {
 
 
-    //region > fixtureScriptClassName (property)
+    // -- fixtureScriptClassName (property)
 
     private String fixtureScriptClassName;
 
@@ -42,9 +42,9 @@ public class FixtureResult {
         this.fixtureScriptClassName = fixtureScriptClassName;
     }
 
-    //endregion
+    
 
-    //region > fixtureScriptQualifiedName (programmatic)
+    // -- fixtureScriptQualifiedName (programmatic)
 
     private String fixtureScriptQualifiedName;
 
@@ -57,9 +57,9 @@ public class FixtureResult {
         this.fixtureScriptQualifiedName = fixtureScriptQualifiedName;
     }
 
-    //endregion
+    
 
-    //region > key (property)
+    // -- key (property)
 
     private String key;
 
@@ -73,9 +73,9 @@ public class FixtureResult {
         this.key = key;
     }
 
-    //endregion
+    
 
-    //region > object (property)
+    // -- object (property)
 
     private Object object;
 
@@ -89,9 +89,9 @@ public class FixtureResult {
         this.object = object;
     }
 
-    //endregion
+    
 
-    //region > className (derived property)
+    // -- className (derived property)
 
 
     @PropertyLayout(named="Result class")
@@ -100,13 +100,13 @@ public class FixtureResult {
         return object != null? object.getClass().getName(): null;
     }
 
-    //endregion
+    
 
-    //region > injected services
+    // -- injected services
 
     @javax.inject.Inject
     FixtureScripts fixtureScripts;
 
-    //endregion
+    
 
 }

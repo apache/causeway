@@ -55,7 +55,7 @@ public abstract class AbstractDomainEvent<S> extends java.util.EventObject {
         return source != null ? source : new Object();
     }
 
-    //region > Phase
+    // -- Phase
 
     public enum Phase {
         HIDE,
@@ -105,9 +105,9 @@ public abstract class AbstractDomainEvent<S> extends java.util.EventObject {
     public void setEventPhase(Phase phase) {
         this.phase = phase;
     }
-    //endregion
+    
 
-    //region > source (downcast to S)
+    // -- source (downcast to S)
     @Override
     @SuppressWarnings("unchecked")
     public S getSource() {
@@ -120,9 +120,9 @@ public abstract class AbstractDomainEvent<S> extends java.util.EventObject {
     public void setSource(S source) {
         this.source = source;
     }
-    //endregion
+    
 
-    //region > identifier
+    // -- identifier
     /**
      * If the no-arg constructor is used, then the framework will populate this field reflectively.
      */
@@ -137,9 +137,9 @@ public abstract class AbstractDomainEvent<S> extends java.util.EventObject {
     public void setIdentifier(final Identifier identifier) {
         this.identifier = identifier;
     }
-    //endregion
+    
 
-    //region > hide, isHidden
+    // -- hide, isHidden
     private boolean hidden;
     public boolean isHidden() {
         return hidden;
@@ -151,9 +151,9 @@ public abstract class AbstractDomainEvent<S> extends java.util.EventObject {
     public void hide() {
         this.hidden = true;
     }
-    //endregion
+    
 
-    //region > disable, isDisabled, getDisabledReason, getDisabledReasonTranslatable
+    // -- disable, isDisabled, getDisabledReason, getDisabledReasonTranslatable
     private String disabledReason;
 
     public boolean isDisabled() {
@@ -189,9 +189,9 @@ public abstract class AbstractDomainEvent<S> extends java.util.EventObject {
     public void disable(final TranslatableString reason) {
         this.disabledReasonTranslatable = reason;
     }
-    //endregion
+    
 
-    //region > invalidate, isInvalid, getInvalidityReason, getInvalidityReasonTranslatable
+    // -- invalidate, isInvalid, getInvalidityReason, getInvalidityReasonTranslatable
     private String invalidatedReason;
     public boolean isInvalid() {
         return invalidatedReason != null || invalidatedReasonTranslatable != null;
@@ -227,9 +227,9 @@ public abstract class AbstractDomainEvent<S> extends java.util.EventObject {
         this.invalidatedReasonTranslatable = reason;
     }
 
-    //endregion
+    
 
-    //region > veto
+    // -- veto
     /**
      * Use instead of {@link #hide()}, {@link #disable(String)} and {@link #invalidate(String)}; just delegates to
      * appropriate vetoing method based upon the {@link #getEventPhase() phase}.
@@ -299,9 +299,9 @@ public abstract class AbstractDomainEvent<S> extends java.util.EventObject {
             	throw _Exceptions.unmatchedCase(getEventPhase());
         }
     }
-    //endregion
+    
 
-    //region > userData
+    // -- userData
     /**
      * Provides a mechanism to pass data to the next {@link #getEventPhase() phase}.
      */
@@ -319,7 +319,7 @@ public abstract class AbstractDomainEvent<S> extends java.util.EventObject {
     public void put(Object key, Object value) {
         userData.put(key, value);
     }
-    //endregion
+    
 
     private final static ToString<AbstractDomainEvent<?>> toString = ObjectContracts
     		//.toString("source", AbstractDomainEvent::getSource)

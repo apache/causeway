@@ -24,7 +24,7 @@ import org.apache.isis.core.runtime.system.persistence.PersistenceQuery;
 
 public abstract class PersistenceQueryAbstract implements PersistenceQuery {
 
-    //region > constructor, fields
+    // -- constructor, fields
 
     protected final long start;
     protected final long count;
@@ -63,7 +63,7 @@ public abstract class PersistenceQueryAbstract implements PersistenceQuery {
         return specification;
     }
 
-    //region > equals, hashCode
+    // -- equals, hashCode
     @Override
     public boolean equals(final Object obj) {
         if (this == obj) {

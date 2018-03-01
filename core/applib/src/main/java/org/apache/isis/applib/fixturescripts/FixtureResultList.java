@@ -36,7 +36,7 @@ import org.apache.isis.applib.internal.collections._Maps;
 public class FixtureResultList {
 
 
-    //region > constructor
+    // -- constructor
 
     FixtureResultList(
             final FixtureScripts fixtureScripts,
@@ -44,10 +44,10 @@ public class FixtureResultList {
         this.fixtureScripts = fixtureScripts;
         this.executionContext = executionContext;
     }
-    //endregion
+    
 
 
-    //region > list of FixtureResults
+    // -- list of FixtureResults
 
     private final List<FixtureResult> list = _Lists.newArrayList();
 
@@ -103,9 +103,9 @@ public class FixtureResultList {
         return Collections.unmodifiableList(list);
     }
 
-    //endregion
+    
 
-    //region > nextItemFor
+    // -- nextItemFor
 
     private final Map<FixtureScript, AtomicInteger> itemNumberByScript = _Maps.newHashMap();
 
@@ -118,10 +118,10 @@ public class FixtureResultList {
         return "item-"+atomicInteger.incrementAndGet();
     }
 
-    //endregion
+    
 
 
-    //region > lookup
+    // -- lookup
 
     <T> T lookup(final String key, Class<T> cls) {
         final FixtureResult fixtureResult = fixtureResultByKey.get(key);
@@ -138,9 +138,9 @@ public class FixtureResultList {
         return _Casts.uncheckedCast(object);
     }
 
-    //endregion
+    
 
-    //region > injected services 
+    // -- injected services 
 
     /**
      * Injected in {@link #FixtureResultList(FixtureScripts, org.apache.isis.applib.fixturescripts.FixtureScript.ExecutionContext) constructor}.
@@ -150,5 +150,5 @@ public class FixtureResultList {
      * Injected in {@link #FixtureResultList(FixtureScripts, org.apache.isis.applib.fixturescripts.FixtureScript.ExecutionContext) constructor}.
      */
     private final FixtureScript.ExecutionContext executionContext;
-    //endregion
+    
 }

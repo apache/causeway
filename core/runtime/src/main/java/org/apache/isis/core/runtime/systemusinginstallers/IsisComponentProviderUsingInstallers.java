@@ -46,7 +46,7 @@ import org.apache.isis.core.runtime.system.SystemConstants;
 
 public class IsisComponentProviderUsingInstallers extends IsisComponentProvider {
 
-    //region > constructors
+    // -- constructors
 
     public IsisComponentProviderUsingInstallers(
             final AppManifest appManifest,
@@ -75,7 +75,7 @@ public class IsisComponentProviderUsingInstallers extends IsisComponentProvider 
 
     //endregion
 
-    //region > constructor helpers (factories)
+    // -- constructor helpers (factories)
 
     private static AuthenticationManager lookupAuthenticationManager(
             final AppManifest appManifest, final InstallerLookup installerLookup,
@@ -130,7 +130,7 @@ public class IsisComponentProviderUsingInstallers extends IsisComponentProvider 
 
         private static final Logger LOG = LoggerFactory.getLogger(InstallerLookup.class);
 
-        //region > constructor, fields
+        // -- constructor, fields
 
         private final IsisConfiguration isisConfiguration;
         private final List<Installer> installerList = Lists.newArrayList();
@@ -173,7 +173,7 @@ public class IsisComponentProviderUsingInstallers extends IsisComponentProvider 
 
         //endregion
 
-        //region > framework
+        // -- framework
 
         public AuthenticationManagerInstaller authenticationManagerInstaller(final String requested) {
 
@@ -193,7 +193,7 @@ public class IsisComponentProviderUsingInstallers extends IsisComponentProvider 
 
         //endregion
 
-        //region > helpers
+        // -- helpers
         @SuppressWarnings("unchecked")
         private <T extends Installer> T getInstaller(final Class<T> cls, final String implName) {
             Assert.assertNotNull("No name specified", implName);

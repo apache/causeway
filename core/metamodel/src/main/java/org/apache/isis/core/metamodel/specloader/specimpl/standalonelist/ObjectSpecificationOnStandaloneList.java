@@ -45,7 +45,7 @@ public class ObjectSpecificationOnStandaloneList extends ObjectSpecificationAbst
     private static final String DESCRIBED_AS = "Typed instances";
     private static final String ICON_NAME = "instances";
 
-    //region > constructor
+    // -- constructor
 
     public ObjectSpecificationOnStandaloneList(
             final ServicesInjector servicesInjector,
@@ -56,7 +56,7 @@ public class ObjectSpecificationOnStandaloneList extends ObjectSpecificationAbst
 
     //endregion
 
-    //region > Introspection
+    // -- Introspection
 
     @Override
     public void introspectTypeHierarchyAndMembers() {
@@ -76,7 +76,7 @@ public class ObjectSpecificationOnStandaloneList extends ObjectSpecificationAbst
 
     //endregion
 
-    //region > isXxx
+    // -- isXxx
 
     @Override
     public boolean isService() {
@@ -104,7 +104,7 @@ public class ObjectSpecificationOnStandaloneList extends ObjectSpecificationAbst
 
     //endregion
 
-    //region > Associations
+    // -- Associations
     /**
      * Review: is this ever called for an instance of this class? If not, then
      * no need to override.
@@ -116,7 +116,7 @@ public class ObjectSpecificationOnStandaloneList extends ObjectSpecificationAbst
 
     //endregion
 
-    //region > Title and Icon
+    // -- Title and Icon
 
     @Override
     public String getTitle(final ObjectAdapter object) {
@@ -130,7 +130,7 @@ public class ObjectSpecificationOnStandaloneList extends ObjectSpecificationAbst
 
     //endregion
 
-    //region > Object Actions
+    // -- Object Actions
     /**
      * Review: is it necessary to override for this subclass?
      */

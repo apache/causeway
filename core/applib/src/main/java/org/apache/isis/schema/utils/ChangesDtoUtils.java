@@ -42,7 +42,7 @@ public final class ChangesDtoUtils {
         getJaxbContext();
     }
 
-    //region > marshalling
+    // -- marshalling
     static JAXBContext jaxbContext;
     static JAXBContext getJaxbContext() {
         if(jaxbContext == null) {
@@ -88,15 +88,15 @@ public final class ChangesDtoUtils {
             throw new RuntimeException(e);
         }
     }
-    //endregion
+    
 
 
 
-    //region > debugging (dump)
+    // -- debugging (dump)
     public static void dump(final ChangesDto changesDto, final PrintStream out) throws JAXBException {
         out.println(toXml(changesDto));
     }
 
-    //endregion
+    
 
 }

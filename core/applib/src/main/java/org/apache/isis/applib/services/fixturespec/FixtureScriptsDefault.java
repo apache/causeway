@@ -72,7 +72,7 @@ import org.apache.isis.applib.services.eventbus.EventBusService;
 )
 public class FixtureScriptsDefault extends FixtureScripts {
 
-    //region > constructor, init
+    // -- constructor, init
     /**
      * The package prefix to search for fixture scripts.  This default value will result in
      * no fixture scripts being found.  However, normally it will be overridden.
@@ -92,10 +92,10 @@ public class FixtureScriptsDefault extends FixtureScripts {
         }
         setSpecification(fixtureScriptsSpecificationProvider.getSpecification());
     }
-    //endregion
+    
 
 
-    //region > runFixtureScript (using choices as the drop-down policy)
+    // -- runFixtureScript (using choices as the drop-down policy)
     @Action(
             restrictTo = RestrictTo.PROTOTYPING
     )
@@ -152,9 +152,9 @@ public class FixtureScriptsDefault extends FixtureScripts {
         return super.validateRunFixtureScript(fixtureScript, parameters);
     }
 
-    //endregion
+    
 
-    //region > runFixtureScript (using autoComplete as drop-down policy)
+    // -- runFixtureScript (using autoComplete as drop-down policy)
     @Action(
             restrictTo = RestrictTo.PROTOTYPING
     )
@@ -193,9 +193,9 @@ public class FixtureScriptsDefault extends FixtureScripts {
     public String validateRunFixtureScriptWithAutoComplete(final FixtureScript fixtureScript, final String parameters) {
         return super.validateRunFixtureScript(fixtureScript, parameters);
     }
-    //endregion
+    
 
-    //region > recreateObjectsAndReturnFirst
+    // -- recreateObjectsAndReturnFirst
 
     @Action(
             restrictTo = RestrictTo.PROTOTYPING
@@ -221,19 +221,19 @@ public class FixtureScriptsDefault extends FixtureScripts {
         return getSpecification().getRecreateScriptClass() == null;
     }
 
-    //endregion
+    
 
-    //region > helpers
+    // -- helpers
     private boolean hideIfPolicyNot(final FixtureScriptsSpecification.DropDownPolicy requiredPolicy) {
         return fixtureScriptsSpecificationProvider == null || getSpecification().getRunScriptDropDownPolicy() != requiredPolicy;
     }
-    //endregion
+    
 
-    //region > injected services
+    // -- injected services
     @javax.inject.Inject
     FixtureScriptsSpecificationProvider fixtureScriptsSpecificationProvider;
     @javax.inject.Inject
     EventBusService eventBusService;
-    //endregion
+    
 
 }

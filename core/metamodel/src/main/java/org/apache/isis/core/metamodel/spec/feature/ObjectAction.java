@@ -59,7 +59,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public interface ObjectAction extends ObjectMember {
 
-    //region > getSemantics, getOnType
+    // -- getSemantics, getOnType
     /**
      * The semantics of this action.
      */
@@ -72,7 +72,7 @@ public interface ObjectAction extends ObjectMember {
     ObjectSpecification getOnType();
     //endregion
 
-    //region > getType, isPrototype
+    // -- getType, isPrototype
 
     ActionType getType();
 
@@ -80,7 +80,7 @@ public interface ObjectAction extends ObjectMember {
 
     //endregion
 
-    //region > ReturnType
+    // -- ReturnType
     /**
      * Returns the specifications for the return type.
      */
@@ -94,7 +94,7 @@ public interface ObjectAction extends ObjectMember {
 
     //endregion
 
-    //region > execute, executeWithRuleChecking
+    // -- execute, executeWithRuleChecking
 
     /**
      * Invokes the action's method on the target object given the specified set
@@ -123,7 +123,7 @@ public interface ObjectAction extends ObjectMember {
 
     //endregion
 
-    //region > isProposedArgumentSetValid
+    // -- isProposedArgumentSetValid
 
     /**
      * Whether the provided argument set is valid, represented as a {@link Consent}.
@@ -135,7 +135,7 @@ public interface ObjectAction extends ObjectMember {
 
     //endregion
 
-    //region > Parameters (declarative)
+    // -- Parameters (declarative)
 
     /**
      * Returns the number of parameters used by this method.
@@ -177,7 +177,7 @@ public interface ObjectAction extends ObjectMember {
 
     //endregion
 
-    //region > Parameters (per instance)
+    // -- Parameters (per instance)
 
     /**
      * Returns the defaults references/values to be used for the action.
@@ -194,7 +194,7 @@ public interface ObjectAction extends ObjectMember {
 
     //endregion
 
-    //region > setupBulkActionInvocationContext
+    // -- setupBulkActionInvocationContext
     /**
      * internal API, called by {@link ActionInvocationFacet} if the action is actually executed (ie in the foreground).
      */
@@ -204,7 +204,7 @@ public interface ObjectAction extends ObjectMember {
 
     //endregion
 
-    //region > Util
+    // -- Util
     public static final class Util {
 
         final static MemberOrderFacetComparator memberOrderFacetComparator = new MemberOrderFacetComparator(false);
@@ -372,7 +372,7 @@ public interface ObjectAction extends ObjectMember {
 
     //endregion
 
-    //region > Predicates
+    // -- Predicates
 
     public static final class Predicates {
 

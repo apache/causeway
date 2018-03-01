@@ -55,7 +55,7 @@ public abstract class AuthenticationSessionStrategyAbstract implements Authentic
     }
 
 
-    //region > Dependencies (from request)
+    // -- Dependencies (from request)
     protected AuthenticationManager authenticationManagerFrom(final HttpServletRequest httpServletRequest) {
         return isisSessionFactoryFrom(httpServletRequest).getAuthenticationManager();
     }

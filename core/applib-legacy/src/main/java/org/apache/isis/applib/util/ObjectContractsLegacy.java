@@ -34,7 +34,7 @@ import com.google.common.collect.Ordering;
 
 public class ObjectContractsLegacy {
 
-    //region > compare
+    // -- compare
 
     /**
      * Evaluates which of p and q is first.
@@ -78,7 +78,7 @@ public class ObjectContractsLegacy {
     }
     //endregion
 
-    //region > compareBy
+    // -- compareBy
     /**
      * Returns a {@link Comparator} to evaluate objects by their property name(s).
      * @deprecated - please be aware that this utility heavily uses reflection.  We don't actually intend to deprecate this method (it's useful while prototyping), but we wanted to bring this to your attention!
@@ -98,7 +98,7 @@ public class ObjectContractsLegacy {
     }
     //endregion
 
-    //region > toString
+    // -- toString
 
     /**
      * Returns a string representation of the object consisting of the specified property name(s).
@@ -119,7 +119,7 @@ public class ObjectContractsLegacy {
     }
     //endregion
 
-    //region > hashCode
+    // -- hashCode
     /**
      * Returns the hashCode for the object using the specified property name(s).
      * @deprecated - please be aware that this utility heavily uses reflection.  We don't actually intend to deprecate this method (it's useful while prototyping), but we wanted to bring this to your attention!
@@ -153,7 +153,7 @@ public class ObjectContractsLegacy {
     }
     //endregion
 
-    //region > equals
+    // -- equals
 
     /**
      * Returns whether two objects are equal, considering just the specified property name(s).
@@ -207,7 +207,7 @@ public class ObjectContractsLegacy {
     }
     //endregion
 
-    //region > helpers
+    // -- helpers
     private static Iterable<Clause> clausesFor(final Iterable<String> iterable) {
         return _NullSafe.stream(iterable)
         		.map(Clause::parse)
@@ -224,7 +224,7 @@ public class ObjectContractsLegacy {
     }
     //endregion
 
-    //region > toStringOf
+    // -- toStringOf
 
     public interface ToStringEvaluator {
         boolean canEvaluate(Object o);

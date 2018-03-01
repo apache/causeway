@@ -107,9 +107,9 @@ public final class CommonDtoUtils {
         // assume reference otherwise
         return ValueType.REFERENCE;
     }
-    //endregion
+    
 
-    //region > newValueDto, setValueOn
+    // -- newValueDto, setValueOn
 
     public static ValueDto newValueDto(
             final ValueType valueType,
@@ -294,9 +294,9 @@ public final class CommonDtoUtils {
         }
         return collectionDto;
     }
-    //endregion
+    
 
-    //region > getValue (from valueDto)
+    // -- getValue (from valueDto)
 
     public static <T> T getValue(
             final ValueDto valueDto,
@@ -379,9 +379,9 @@ public final class CommonDtoUtils {
         }
     }
 
-    //endregion
+    
 
-    //region > newValueWithTypeDto
+    // -- newValueWithTypeDto
 
 
     public static ValueWithTypeDto newValueWithTypeDto(
@@ -397,9 +397,9 @@ public final class CommonDtoUtils {
         return valueWithTypeDto;
     }
 
-    //endregion
+    
 
-    //region > getValue (from ValueWithTypeDto)
+    // -- getValue (from ValueWithTypeDto)
 
     public static <T> T getValue(final ValueWithTypeDto valueWithTypeDto) {
         if(valueWithTypeDto.isNull()) {
@@ -410,10 +410,10 @@ public final class CommonDtoUtils {
     }
 
 
-    //endregion
+    
 
 
-    //region > newParamDto
+    // -- newParamDto
 
     public static ParamDto newParamDto(
             final String parameterName,
@@ -438,9 +438,9 @@ public final class CommonDtoUtils {
 
         return paramDto;
     }
-    //endregion
+    
 
-    //region > getValue (from ParamDto)
+    // -- getValue (from ParamDto)
 
     public static <T> T getValue(final ParamDto paramDto) {
         if(paramDto.isNull()) {
@@ -450,7 +450,7 @@ public final class CommonDtoUtils {
         return CommonDtoUtils.getValue(paramDto, parameterType);
     }
 
-    //endregion
+    
 
     public static String getMapValue(final MapDto mapDto, final String key) {
         if(mapDto == null) {

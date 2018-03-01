@@ -42,7 +42,7 @@ public abstract class EventBusServiceDefault extends EventBusService {
     public static final String KEY_ALLOW_LATE_REGISTRATION = "isis.services.eventbus.allowLateRegistration";
     public static final String KEY_EVENT_BUS_IMPLEMENTATION = "isis.services.eventbus.implementation";
 
-    //region > register
+    // -- register
     /**
      * {@inheritDoc}
      *
@@ -75,7 +75,7 @@ public abstract class EventBusServiceDefault extends EventBusService {
 
     //endregion
 
-    //region > init, shutdown
+    // -- init, shutdown
     @Programmatic
     @PostConstruct
     public void init(final Map<String, String> properties) {

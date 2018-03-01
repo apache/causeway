@@ -197,7 +197,7 @@ public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault imp
         return InteractionUtils.isUsableResult(this, ic).createConsent();
     }
 
-    //region > FacetHolder
+    // -- FacetHolder
 
     @Override
     protected FacetHolder getFacetHolder() {

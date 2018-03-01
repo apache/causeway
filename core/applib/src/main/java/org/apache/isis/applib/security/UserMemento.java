@@ -31,7 +31,7 @@ import org.apache.isis.applib.annotation.MemberOrder;
  */
 public final class UserMemento {
 
-    //region > constructors
+    // -- constructors
     /**
      * Creates a new user with the specified name and no roles.
      */
@@ -56,16 +56,16 @@ public final class UserMemento {
         this.name = name;
         this.roles.addAll(roles);
     }
-    //endregion
+    
 
-    //region > title
+    // -- title
     public String title() {
         return name;
     }
 
-    //endregion
+    
 
-    //region > name, NameType
+    // -- name, NameType
 
     // {{ (User) Name, isCurrentUser
     private final String name;
@@ -92,9 +92,9 @@ public final class UserMemento {
 
     }
 
-    //endregion
+    
 
-    //region > isCurrentUser
+    // -- isCurrentUser
     /**
      * Determine if the specified name is this user.
      * 
@@ -109,9 +109,9 @@ public final class UserMemento {
         return name.equals(userName);
     }
 
-    //endregion
+    
 
-    //region > roles
+    // -- roles
     private final List<RoleMemento> roles = new ArrayList<RoleMemento>();
 
     /**
@@ -144,9 +144,9 @@ public final class UserMemento {
         return false;
     }
 
-    //endregion
+    
 
-    //region > toString
+    // -- toString
     @Override
     public String toString() {
         final StringBuilder buf = new StringBuilder();
@@ -156,6 +156,6 @@ public final class UserMemento {
         return "User [name=" + getName() + ",roles=" + buf.toString() + "]";
     }
 
-    //endregion
+    
 
 }

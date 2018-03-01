@@ -35,7 +35,7 @@ public class TickingClockFixture
         extends FixtureScript
         implements FixtureScriptWithExecutionStrategy {
 
-    //region > date property
+    // -- date property
     private String date;
     public String getDate() {
         return date;
@@ -44,7 +44,7 @@ public class TickingClockFixture
         this.date = date;
         return this;
     }
-    //endregion
+    
 
     @Override
     protected void execute(ExecutionContext ec) {

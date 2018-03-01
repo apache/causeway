@@ -30,7 +30,7 @@ public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
 
     private static final long serialVersionUID = 1L;
 
-    //region > Default class
+    // -- Default class
     /**
      * This class is the default for the
      * {@link org.apache.isis.applib.annotation.Action#domainEvent()} annotation attribute.  Whether this
@@ -40,9 +40,9 @@ public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
     public static class Default extends ActionDomainEvent<Object> {
         private static final long serialVersionUID = 1L;
     }
-    //endregion
+    
 
-    //region > Noop class
+    // -- Noop class
 
     /**
      * Convenience class to use indicating that an event should <i>not</i> be posted (irrespective of the configuration
@@ -51,9 +51,9 @@ public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
     public static class Noop extends ActionDomainEvent<Object> {
         private static final long serialVersionUID = 1L;
     }
-    //endregion
+    
 
-    //region > Doop class
+    // -- Doop class
 
     /**
      * Convenience class meaning that an event <i>should</i> be posted (irrespective of the configuration
@@ -62,7 +62,7 @@ public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
     public static class Doop extends ActionDomainEvent<Object> {
         private static final long serialVersionUID = 1L;
     }
-    //endregion
+    
 
 
     /**
@@ -75,7 +75,7 @@ public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
     public ActionDomainEvent() {
     }
 
-    //region > command
+    // -- command
     private Command command;
 
     /**
@@ -95,9 +95,9 @@ public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
     public void setCommand(Command command) {
         this.command = command;
     }
-    //endregion
+    
 
-    //region > actionSemantics
+    // -- actionSemantics
     public SemanticsOf getSemantics() {
         return actionSemantics;
     }
@@ -119,9 +119,9 @@ public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
         this.actionSemantics = actionSemantics;
     }
 
-    //endregion
+    
 
-    //region > parameterNames
+    // -- parameterNames
     private List<String> parameterNames;
     public List<String> getParameterNames() {
         return parameterNames;
@@ -129,9 +129,9 @@ public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
     public void setParameterNames(final List<String> parameterNames) {
         this.parameterNames = parameterNames;
     }
-    //endregion
+    
 
-    //region > parameterTypes
+    // -- parameterTypes
     private List<Class<?>> parameterTypes;
     public List<Class<?>> getParameterTypes() {
         return parameterTypes;
@@ -140,7 +140,7 @@ public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
     public void setParameterTypes(final List<Class<?>> parameterTypes) {
         this.parameterTypes = parameterTypes;
     }
-    //endregion
+    
 
 
     // region > mixedIn
@@ -160,7 +160,7 @@ public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
     }
     // endregion
 
-    //region > arguments
+    // -- arguments
     private List<Object> arguments;
     /**
      * The arguments being used to invoke the action; populated at {@link Phase#VALIDATE} and subsequent phases
@@ -176,9 +176,9 @@ public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
     public void setArguments(List<Object> arguments) {
         this.arguments = arguments;
     }
-    //endregion
+    
 
-    //region > returnValue
+    // -- returnValue
     /**
      *
      */
@@ -202,7 +202,7 @@ public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
     public void setReturnValue(final Object returnValue) {
         this.returnValue = returnValue;
     }
-    //endregion
+    
 
     
     private final static ToString<ActionDomainEvent<?>> toString = ObjectContracts.<ActionDomainEvent<?>>

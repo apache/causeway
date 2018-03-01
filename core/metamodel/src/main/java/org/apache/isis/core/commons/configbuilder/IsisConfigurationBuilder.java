@@ -69,7 +69,7 @@ public final class IsisConfigurationBuilder {
 
     private static final Logger LOG = LoggerFactory.getLogger(IsisConfigurationBuilder.class);
 
-    //region > constructor, fields
+    // -- constructor, fields
 
     private final ResourceStreamSourceChainOfResponsibility resourceStreamSourceChain;
 
@@ -162,7 +162,7 @@ public final class IsisConfigurationBuilder {
 
     //endregion
 
-    //region > addResourceStreamSource, addResourceStreamSources
+    // -- addResourceStreamSource, addResourceStreamSources
 
     public void addResourceStreamSource(final ResourceStreamSource resourceStreamSource) {
         addResourceStreamSources(resourceStreamSource);
@@ -181,7 +181,7 @@ public final class IsisConfigurationBuilder {
 
     //endregion
 
-    //region > addConfigurationResource
+    // -- addConfigurationResource
 
     /**
      * Registers the configuration resource (usually, a file) with the specified
@@ -251,7 +251,7 @@ public final class IsisConfigurationBuilder {
 
     //endregion
 
-    //region > add, put
+    // -- add, put
 
     /**
      * Adds additional property; if already present then will _not_ be replaced.
@@ -272,7 +272,7 @@ public final class IsisConfigurationBuilder {
 
     //endregion
 
-    //region > parseAndPrimeWith, primeWith
+    // -- parseAndPrimeWith, primeWith
 
     public boolean parseAndPrimeWith(final List<OptionHandler> optionHandlers, final String[] args) {
 
@@ -325,7 +325,7 @@ public final class IsisConfigurationBuilder {
 
     //endregion
 
-    //region > getConfiguration, peekConfiguration, isLocked
+    // -- getConfiguration, peekConfiguration, isLocked
 
     /**
      * Returns the {@link IsisConfiguration}; this will cause the configuration to be locked
@@ -369,7 +369,7 @@ public final class IsisConfigurationBuilder {
 
     //endregion
 
-    //region > dumpResourcesToLog, toString
+    // -- dumpResourcesToLog, toString
 
     /**
      * Log a summary of resources found or not found.

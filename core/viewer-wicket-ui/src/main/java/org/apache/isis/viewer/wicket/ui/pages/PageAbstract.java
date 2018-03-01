@@ -494,7 +494,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     
 
 
-    //region > getComponentFactoryRegistry (Convenience)
+    // -- getComponentFactoryRegistry (Convenience)
     protected ComponentFactoryRegistry getComponentFactoryRegistry() {
         final ComponentFactoryRegistryAccessor cfra = (ComponentFactoryRegistryAccessor) getApplication();
         return cfra.getComponentFactoryRegistry();
@@ -502,7 +502,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     //endregion
 
 
-    //region > injected (application-scope) 
+    // -- injected (application-scope) 
 
     // REVIEW: can't inject because not serializable.
     protected IsisSessionFactory getIsisSessionFactory() {
@@ -519,7 +519,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
 
     //endregion
 
-    //region > derived from injected components (session-scope)
+    // -- derived from injected components (session-scope)
 
     protected PersistenceSession getPersistenceSession() {
         return getIsisSessionFactory().getCurrentSession().getPersistenceSession();

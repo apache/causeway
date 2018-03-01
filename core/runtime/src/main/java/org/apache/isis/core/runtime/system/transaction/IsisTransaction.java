@@ -159,7 +159,7 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
 
     private static final Logger LOG = LoggerFactory.getLogger(IsisTransaction.class);
 
-    //region > constructor, fields
+    // -- constructor, fields
 
     private final UUID interactionId;
     private final int sequence;
@@ -202,7 +202,7 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
 
     //endregion
 
-    //region > transactionId
+    // -- transactionId
 
     @Programmatic
     public final UUID getTransactionId() {
@@ -224,7 +224,7 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
 
     //endregion
 
-    //region > state
+    // -- state
 
     private State state;
 
@@ -254,7 +254,7 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
 
     //endregion
 
-    //region > commands
+    // -- commands
 
 
     /**
@@ -322,7 +322,7 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
 
     //endregion
 
-    //region > flush
+    // -- flush
 
     public final void flush() {
 
@@ -402,7 +402,7 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
 
     //endregion
 
-    //region > preCommit, commit
+    // -- preCommit, commit
 
     void preCommit() {
         assert getState().canCommit();
@@ -449,7 +449,7 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
 
     //endregion
 
-    //region > abortCause, markAsAborted
+    // -- abortCause, markAsAborted
 
     /**
      * internal API called by IsisTransactionManager only
@@ -499,7 +499,7 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
 
     //endregion
 
-    //region > toString
+    // -- toString
 
     @Override
     public String toString() {
@@ -514,7 +514,7 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
 
     //endregion
 
-    //region > getMessageBroker
+    // -- getMessageBroker
 
     /**
      * The {@link org.apache.isis.core.commons.authentication.MessageBroker} for this transaction.

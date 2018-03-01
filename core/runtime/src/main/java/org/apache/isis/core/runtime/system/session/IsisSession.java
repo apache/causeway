@@ -42,7 +42,7 @@ public class IsisSession implements SessionScopedComponent {
 
     private static final Logger LOG = LoggerFactory.getLogger(IsisSession.class);
 
-    //region > constructor, fields
+    // -- constructor, fields
 
     private final AuthenticationSession authenticationSession;
     private PersistenceSession persistenceSession; // only non-final so can be replaced in tests.
@@ -56,7 +56,7 @@ public class IsisSession implements SessionScopedComponent {
     }
     //endregion
 
-    //region > open, close
+    // -- open, close
     void open() {
         persistenceSession.open();
     }
@@ -73,7 +73,7 @@ public class IsisSession implements SessionScopedComponent {
     //endregion
 
 
-    //region > AuthenticationSession
+    // -- AuthenticationSession
     /**
      * Returns the {@link AuthenticationSession} representing this user for this
      * {@link IsisSession}.
@@ -83,7 +83,7 @@ public class IsisSession implements SessionScopedComponent {
     }
     //endregion
 
-    //region > Persistence Session
+    // -- Persistence Session
     /**
      * The {@link PersistenceSession} within this {@link IsisSession}.
      */
@@ -93,7 +93,7 @@ public class IsisSession implements SessionScopedComponent {
 
     //endregion
 
-    //region > transaction
+    // -- transaction
 
     /**
      * Convenience method that returns the {@link IsisTransaction} of the
@@ -105,7 +105,7 @@ public class IsisSession implements SessionScopedComponent {
 
     //endregion
 
-    //region > toString
+    // -- toString
     @Override
     public String toString() {
         final ToString asString = new ToString(this);
@@ -116,7 +116,7 @@ public class IsisSession implements SessionScopedComponent {
     }
     //endregion
 
-    //region > Dependencies (from constructor)
+    // -- Dependencies (from constructor)
 
     private IsisTransactionManager getTransactionManager() {
         return getPersistenceSession().getTransactionManager();

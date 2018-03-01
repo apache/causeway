@@ -105,7 +105,7 @@ public class CollectionSelectorHelper implements Serializable {
         return initialFactory;
     }
 
-    //region > helpers
+    // -- helpers
 
     /**
      * return the index of {@link CollectionContentsHiddenPanelFactory unresolved panel} if present and not eager loading;

@@ -51,7 +51,7 @@ public class DomainEventHelper {
         this.servicesInjector = servicesInjector;
     }
 
-    //region > postEventForAction, newActionDomainEvent
+    // -- postEventForAction, newActionDomainEvent
     @SuppressWarnings({ "rawtypes" })
     public ActionDomainEvent<?> postEventForAction(
             final AbstractDomainEvent.Phase phase,
@@ -173,7 +173,7 @@ public class DomainEventHelper {
     }
     //endregion
 
-    //region > postEventForProperty, newPropertyInteraction
+    // -- postEventForProperty, newPropertyInteraction
     public PropertyDomainEvent<?, ?> postEventForProperty(
             final AbstractDomainEvent.Phase phase,
             final Class eventType,
@@ -262,7 +262,7 @@ public class DomainEventHelper {
     }
     //endregion
 
-    //region > postEventForCollection, newCollectionDomainEvent
+    // -- postEventForCollection, newCollectionDomainEvent
 
     public CollectionDomainEvent<?, ?> postEventForCollection(
             AbstractDomainEvent.Phase phase,
@@ -393,7 +393,7 @@ public class DomainEventHelper {
     //endregion
 
 
-    //region > eventBusService
+    // -- eventBusService
 
     private EventBusService getEventBusService() {
         // previously this method used to cache, however it prevents integration tests

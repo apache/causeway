@@ -57,7 +57,7 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
 
     // //////////////////////////////////////
 
-    //region > factory methods
+    // -- factory methods
     public static ApplicationFeatureId newFeature(final ApplicationFeatureType featureType, final String fullyQualifiedName) {
         switch (featureType) {
             case PACKAGE:
@@ -125,7 +125,7 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
 
     // //////////////////////////////////////
 
-    //region > constructor
+    // -- constructor
 
     private ApplicationFeatureId(final String asString) {
         final Iterator<String> iterator = Splitter.on(":").split(asString).iterator();
@@ -149,7 +149,7 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
 
     // //////////////////////////////////////
 
-    //region > identification
+    // -- identification
     /**
      * having a title() method (rather than using @Title annotation) is necessary as a workaround to be able to use
      * wrapperFactory#unwrap(...) method, which is otherwise broken in Isis 1.6.0
@@ -163,7 +163,7 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
 
     // //////////////////////////////////////
 
-    //region > fullyQualifiedName (property)
+    // -- fullyQualifiedName (property)
 
     @Programmatic
     public String getFullyQualifiedName() {
@@ -180,7 +180,7 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
 
     //endregion
 
-    //region > objectSpecId (property)
+    // -- objectSpecId (property)
 
     @Programmatic
     public ObjectSpecId getObjectSpecId() {
@@ -201,7 +201,7 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
 
     // //////////////////////////////////////
 
-    //region > type (property)
+    // -- type (property)
     ApplicationFeatureType type;
 
     public ApplicationFeatureType getType() {
@@ -211,7 +211,7 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
 
     // //////////////////////////////////////
 
-    //region > packageName (property)
+    // -- packageName (property)
     private String packageName;
 
     @Programmatic
@@ -226,7 +226,7 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
 
     // //////////////////////////////////////
 
-    //region > className (property, optional)
+    // -- className (property, optional)
 
     private String className;
 
@@ -242,7 +242,7 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
 
     // //////////////////////////////////////
 
-    //region > memberName (property, optional)
+    // -- memberName (property, optional)
     private String memberName;
 
     @Programmatic
@@ -257,7 +257,7 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
 
     // //////////////////////////////////////
 
-    //region > Package or Class: getParentPackageId
+    // -- Package or Class: getParentPackageId
 
     /**
      * The {@link ApplicationFeatureId id} of the parent package of this
@@ -290,7 +290,7 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
 
     // //////////////////////////////////////
 
-    //region > Member: getParentClassId
+    // -- Member: getParentClassId
 
     /**
      * The {@link ApplicationFeatureId id} of the member's class.
@@ -304,7 +304,7 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
 
     // //////////////////////////////////////
 
-    //region > asString, asEncodedString
+    // -- asString, asEncodedString
 
     @Programmatic
     public String asString() {
@@ -332,7 +332,7 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
 
     // //////////////////////////////////////
 
-    //region > Functions
+    // -- Functions
 
     public static class Functions {
 
@@ -357,7 +357,7 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
 
     // //////////////////////////////////////
 
-    //region > Predicates
+    // -- Predicates
 
     public static class Predicates {
         private Predicates(){}
@@ -392,7 +392,7 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
 
     // //////////////////////////////////////
 
-    //region > Comparators
+    // -- Comparators
     public static final class Comparators {
         private Comparators(){}
         public static Comparator<ApplicationFeatureId> natural() {
@@ -411,7 +411,7 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
 
     // //////////////////////////////////////
 
-    //region > pathIds, parentIds
+    // -- pathIds, parentIds
 
     @Programmatic
     public List<ApplicationFeatureId> getPathIds() {
@@ -443,7 +443,7 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
 
     // //////////////////////////////////////
 
-    //region > equals, hashCode, compareTo, toString
+    // -- equals, hashCode, compareTo, toString
 
     private final static Ordering<ApplicationFeatureId> byType = Ordering.natural()
             .nullsFirst().onResultOf(new Function<ApplicationFeatureId, ApplicationFeatureType>() {

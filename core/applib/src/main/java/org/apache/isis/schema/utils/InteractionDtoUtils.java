@@ -61,7 +61,7 @@ public final class InteractionDtoUtils {
 	}
 
 
-	//region > marshalling
+	// -- marshalling
 	static JAXBContext jaxbContext;
 	static JAXBContext getJaxbContext() {
 		if(jaxbContext == null) {
@@ -107,9 +107,9 @@ public final class InteractionDtoUtils {
 			throw new RuntimeException(e);
 		}
 	}
-	//endregion
+	
 
-	//region > newInteractionDto
+	// -- newInteractionDto
 
 	/**
 	 * Encapsulates the mechanism for obtaining a {@link MemberExecutionDto} DTO (XML memento) of the provided
@@ -149,7 +149,7 @@ public final class InteractionDtoUtils {
 				return MemberExecutionDtoUtils.clone(memberExecutionDto);
 			}
 
-			//endregion
+			
 
 		};
 
@@ -217,9 +217,9 @@ public final class InteractionDtoUtils {
 
 
 
-	//endregion
+	
 
-	//region > newActionInvocation, newPropertyModification
+	// -- newActionInvocation, newPropertyModification
 
 	public static ActionInvocationDto newActionInvocation(
 			final int sequence,
@@ -297,9 +297,9 @@ public final class InteractionDtoUtils {
 		return objectType + "#" + localMemberId;
 	}
 
-	//endregion
+	
 
-	//region > invocationFor, actionFor, timingsFor
+	// -- invocationFor, actionFor, timingsFor
 
 	private static ActionInvocationDto actionInvocationFor(final InteractionDto interactionDto) {
 		ActionInvocationDto invocation = (ActionInvocationDto) interactionDto.getExecution();
@@ -339,9 +339,9 @@ public final class InteractionDtoUtils {
 		return parametersFor(invocationDto).getParameter();
 	}
 
-	//endregion
+	
 
-	//region > addParamArg
+	// -- addParamArg
 
 	public static void addParamArg(
 			final InteractionDto interactionDto,
@@ -354,9 +354,9 @@ public final class InteractionDtoUtils {
 		ParamDto paramDto = CommonDtoUtils.newParamDto(parameterName, parameterType, arg, bookmarkService);
 		params.add(paramDto);
 	}
-	//endregion
+	
 
-	//region > addReturn
+	// -- addReturn
 
 	/**
 	 *
@@ -372,9 +372,9 @@ public final class InteractionDtoUtils {
 				.newValueWithTypeDto(returnType, result, bookmarkService);
 		invocationDto.setReturned(returned);
 	}
-	//endregion
+	
 
-	//region > getParameters, getParameterNames, getParameterTypes
+	// -- getParameters, getParameterNames, getParameterTypes
 	public static List<ParamDto> getParameters(final ActionInvocationDto ai) {
 		final List<ParamDto> params = parameterListFor(ai);
 		final int parameterNumber = getNumberOfParameters(ai);
@@ -406,9 +406,9 @@ public final class InteractionDtoUtils {
 				);
 	}
 
-	//endregion
+	
 
-	//region > getParameter, getParameterName, getParameterType, getParameterArgument
+	// -- getParameter, getParameterName, getParameterType, getParameterArgument
 	public static ParamDto getParameter(final ActionInvocationDto ai, final int paramNum) {
 		final int parameterNumber = getNumberOfParameters(ai);
 		if(paramNum > parameterNumber) {
@@ -435,9 +435,9 @@ public final class InteractionDtoUtils {
 		final ParamDto paramDto = getParameter(ai, paramNum);
 		return paramDto.isNull();
 	}
-	//endregion
+	
 
-	//region > getParameterArgValue
+	// -- getParameterArgValue
 	public static <T> T getParameterArgValue(final ActionInvocationDto ai, int paramNum, Class<T> inferClass) {
 		final ParamDto paramDto = getParameter(ai, paramNum);
 		return CommonDtoUtils.getValue(paramDto);
@@ -446,14 +446,14 @@ public final class InteractionDtoUtils {
 		final ParamDto paramDto = getParameter(ai, paramNum);
 		return CommonDtoUtils.getValue(paramDto);
 	}
-	//endregion
+	
 
 
-	//region > debugging (dump)
+	// -- debugging (dump)
 	public static void dump(final InteractionDto ixnDto, final PrintStream out) throws JAXBException {
 		out.println(toXml(ixnDto));
 	}
 
-	//endregion
+	
 
 }

@@ -59,7 +59,7 @@ public class IsisSessionFactoryBuilder {
 
     private boolean initialized = false;
 
-    //region > constructors, accessors
+    // -- constructors, accessors
 
     private final IsisComponentProvider componentProvider;
     private final DeploymentCategory deploymentCategory;
@@ -95,7 +95,7 @@ public class IsisSessionFactoryBuilder {
 
     //endregion
 
-    //region > buildSessionFactory
+    // -- buildSessionFactory
 
     public IsisSessionFactory buildSessionFactory() {
 

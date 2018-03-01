@@ -75,7 +75,7 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
         super(facetedMethod, FeatureType.PROPERTY, objectSpec, servicesInjector);
     }
 
-    //region > visible, usable
+    // -- visible, usable
 
     @Override
     public VisibilityContext<?> createVisibleInteractionContext(
@@ -94,7 +94,7 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
 
     //endregion
 
-    //region > Validity
+    // -- Validity
     private ValidityContext<?> createValidateInteractionContext(
             final ObjectAdapter ownerAdapter,
             final ObjectAdapter proposedToReferenceAdapter,
@@ -124,7 +124,7 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
 
     //endregion
 
-    //region > init
+    // -- init
     @Override
     public void initAssociation(final ObjectAdapter ownerAdapter, final ObjectAdapter referencedAdapter) {
         final PropertyInitializationFacet initializerFacet = getFacet(PropertyInitializationFacet.class);
@@ -135,7 +135,7 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
 
     //endregion
 
-    //region > Access (get, isEmpty)
+    // -- Access (get, isEmpty)
 
     @Override
     public ObjectAdapter get(
@@ -169,7 +169,7 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
 
     //endregion
 
-    //region > Set
+    // -- Set
     @Override
     public void set(
             final ObjectAdapter ownerAdapter,
@@ -234,7 +234,7 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
 
     //endregion
 
-    //region > defaults
+    // -- defaults
     @Override
     public ObjectAdapter getDefault(final ObjectAdapter ownerAdapter) {
         PropertyDefaultFacet propertyDefaultFacet = getFacet(PropertyDefaultFacet.class);
@@ -266,7 +266,7 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
 
     //endregion
 
-    //region > choices and autoComplete
+    // -- choices and autoComplete
     @Override
     public boolean hasChoices() {
         return getFacet(PropertyChoicesFacet.class) != null;
@@ -355,7 +355,7 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
     }
 
 
-    //region > toString
+    // -- toString
 
     @Override
     public String toString() {

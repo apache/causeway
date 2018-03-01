@@ -85,7 +85,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
         return type;
     }
 
-    //region > fields
+    // -- fields
 
     /**
      * Lazily initialized by {@link #getParameters()} (so don't use directly!)
@@ -94,7 +94,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
 
     //endregion
 
-    //region > constructors
+    // -- constructors
 
     public ObjectActionDefault(
             final FacetedMethod facetedMethod,
@@ -104,7 +104,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
 
     //endregion
 
-    //region > ReturnType, OnType, Actions (set)
+    // -- ReturnType, OnType, Actions (set)
     /**
      * Always returns <tt>null</tt>.
      */
@@ -147,7 +147,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
 
     //endregion
 
-    //region > Type
+    // -- Type
     @Override
     public ActionType getType() {
         return getType(this);
@@ -162,7 +162,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
     }
     //endregion
 
-    //region > Parameters
+    // -- Parameters
 
     @Override
     public int getParameterCount() {
@@ -267,7 +267,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
 
     //endregion
 
-    //region > visable, usable
+    // -- visable, usable
 
     @Override
     public VisibilityContext<?> createVisibleInteractionContext(
@@ -284,7 +284,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
     }
     //endregion
 
-    //region > validate
+    // -- validate
 
     @Override
     public Consent isProposedArgumentSetValid(
@@ -340,7 +340,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
 
     //endregion
 
-    //region > executeWithRuleChecking, execute
+    // -- executeWithRuleChecking, execute
 
     @Override
     public ObjectAdapter executeWithRuleChecking(
@@ -408,7 +408,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
 
     //endregion
 
-    //region > defaults
+    // -- defaults
 
     @Override
     public ObjectAdapter[] getDefaults(final ObjectAdapter target) {
@@ -483,7 +483,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
 
     //endregion
 
-    //region > choices
+    // -- choices
 
     @Override
     public ObjectAdapter[][] getChoices(
@@ -616,7 +616,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
 
     //endregion
 
-    //region > toString
+    // -- toString
 
     @Override
     public String toString() {
@@ -640,7 +640,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
 
     //endregion
 
-    //region > services (lookup)
+    // -- services (lookup)
 
 
     protected org.apache.isis.applib.services.actinvoc.ActionInvocationContext getActionInvocationContext() {

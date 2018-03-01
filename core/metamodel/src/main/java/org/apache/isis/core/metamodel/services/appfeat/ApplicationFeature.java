@@ -53,7 +53,7 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
 
     public static abstract class ActionDomainEvent extends IsisApplibModule.ActionDomainEvent<ApplicationFeature> {}
 
-    //region > constants
+    // -- constants
 
     // using same value for all to neaten up rendering
     public static final int TYPICAL_LENGTH_PKG_FQN = 50;
@@ -61,7 +61,7 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
     public static final int TYPICAL_LENGTH_MEMBER_NAME = 50;
     //endregion
 
-    //region > constructors
+    // -- constructors
     public ApplicationFeature() {
         this(null);
     }
@@ -70,7 +70,7 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
     }
     //endregion
 
-    //region > featureId
+    // -- featureId
     private ApplicationFeatureId featureId;
 
     @Programmatic
@@ -83,7 +83,7 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
     }
     //endregion
 
-    //region > memberType
+    // -- memberType
     private ApplicationMemberType memberType;
 
     /**
@@ -99,7 +99,7 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
     }
     //endregion
 
-    //region > returnTypeName (for: properties, collections, actions)
+    // -- returnTypeName (for: properties, collections, actions)
     private String returnTypeName;
 
     /**
@@ -115,7 +115,7 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
     }
     //endregion
 
-    //region > contributed (for: properties, collections, actions)
+    // -- contributed (for: properties, collections, actions)
     private boolean contributed;
 
     @Programmatic
@@ -128,7 +128,7 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
     }
     //endregion
 
-    //region > derived (properties and collections)
+    // -- derived (properties and collections)
     private Boolean derived;
 
     /**
@@ -144,7 +144,7 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
     }
     //endregion
 
-    //region > propertyMaxLength (properties only)
+    // -- propertyMaxLength (properties only)
     private Integer propertyMaxLength;
 
     /**
@@ -160,7 +160,7 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
     }
     //endregion
 
-    //region > propertyTypicalLength (properties only)
+    // -- propertyTypicalLength (properties only)
     private Integer propertyTypicalLength;
 
     /**
@@ -176,7 +176,7 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
     }
     //endregion
 
-    //region > actionSemantics (actions only)
+    // -- actionSemantics (actions only)
     private SemanticsOf actionSemantics;
 
     /**
@@ -192,7 +192,7 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
     }
     //endregion
 
-    //region > packages: Contents
+    // -- packages: Contents
     private final SortedSet<ApplicationFeatureId> contents = Sets.newTreeSet();
 
     @Programmatic
@@ -209,7 +209,7 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
     }
     //endregion
 
-    //region > classes: Properties, Collections, Actions
+    // -- classes: Properties, Collections, Actions
     private final SortedSet<ApplicationFeatureId> properties = Sets.newTreeSet();
 
     @Programmatic
@@ -257,7 +257,7 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
     }
     //endregion
 
-    //region > Functions
+    // -- Functions
 
     public static class Functions {
         private Functions(){}
@@ -291,7 +291,7 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
 
     //endregion
 
-    //region > equals, hashCode, compareTo, toString
+    // -- equals, hashCode, compareTo, toString
 
     private final static Comparator<ApplicationFeature> comparator = 
     		Comparator.comparing(ApplicationFeature::getFeatureId);

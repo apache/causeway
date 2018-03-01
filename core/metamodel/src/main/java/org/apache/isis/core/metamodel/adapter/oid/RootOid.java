@@ -38,7 +38,7 @@ import org.apache.isis.schema.common.v1.OidDto;
 
 public class RootOid implements TypedOid, Serializable {
 
-    //region > fields
+    // -- fields
     private final static Logger LOG = LoggerFactory.getLogger(RootOid.class);
 
     private static final long serialVersionUID = 1L;
@@ -56,7 +56,7 @@ public class RootOid implements TypedOid, Serializable {
     private int cachedHashCode;
     //endregion
 
-    //region > Constructor, factory methods
+    // -- Constructor, factory methods
     public static RootOid createTransient(final ObjectSpecId objectSpecId, final String identifier) {
         return new RootOid(objectSpecId, identifier, State.TRANSIENT);
     }
@@ -139,7 +139,7 @@ public class RootOid implements TypedOid, Serializable {
 
     //endregion
 
-    //region > Encodeable
+    // -- Encodeable
     public RootOid(final DataInputExtended input) throws IOException {
         final String oidStr = input.readUTF();
         final RootOid oid = OID_MARSHALLER.unmarshal(oidStr, RootOid.class);
@@ -158,7 +158,7 @@ public class RootOid implements TypedOid, Serializable {
 
     //endregion
 
-    //region > deString'able, enString
+    // -- deString'able, enString
     public static RootOid deStringEncoded(final String urlEncodedOidStr) {
         final String oidStr = UrlDecoderUtil.urlDecode(urlEncodedOidStr);
         return deString(oidStr);
@@ -179,7 +179,7 @@ public class RootOid implements TypedOid, Serializable {
     }
     //endregion
 
-    //region > Properties
+    // -- Properties
     public ObjectSpecId getObjectSpecId() {
         return objectSpecId;
     }
@@ -205,7 +205,7 @@ public class RootOid implements TypedOid, Serializable {
 
     //endregion
 
-    //region > Version
+    // -- Version
 
     public Version getVersion() {
         return version;
@@ -217,7 +217,7 @@ public class RootOid implements TypedOid, Serializable {
     }
     //endregion
 
-    //region > asBookmark, asOidDto
+    // -- asBookmark, asOidDto
     public Bookmark asBookmark() {
         final String objectType = state.asBookmarkObjectState().getCode() + getObjectSpecId().asString();
         final String identifier = getIdentifier();
@@ -242,7 +242,7 @@ public class RootOid implements TypedOid, Serializable {
 
     //endregion
 
-    //region > equals, hashCode
+    // -- equals, hashCode
 
     private void cacheState() {
         cachedHashCode = 17;
@@ -276,7 +276,7 @@ public class RootOid implements TypedOid, Serializable {
 
     //endregion
 
-    //region > toString
+    // -- toString
     @Override
     public String toString() {
         return enString();

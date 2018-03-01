@@ -88,7 +88,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
 
     private final static Logger LOG = LoggerFactory.getLogger(SpecificationLoader.class);
 
-    //region > constructor, fields
+    // -- constructor, fields
     private final ClassSubstitutor classSubstitutor = new ClassSubstitutor();
 
     private final ProgrammingModel programmingModel;
@@ -127,7 +127,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
     //endregion
 
 
-    //region > init
+    // -- init
 
     private boolean initialized = false;
 
@@ -198,7 +198,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
 
     //endregion
 
-    //region > shutdown
+    // -- shutdown
 
     @Programmatic
     public void shutdown() {
@@ -211,7 +211,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
 
     //endregion
 
-    //region > invalidateCache
+    // -- invalidateCache
 
     @Programmatic
     public void invalidateCache(final Class<?> cls) {
@@ -247,7 +247,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
 
     //endregion
 
-    //region > validation
+    // -- validation
 
     private ValidationFailures validationFailures;
 
@@ -271,7 +271,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
     //endregion
 
 
-    //region > loadSpecification, loadSpecifications
+    // -- loadSpecification, loadSpecifications
 
     /**
      * Return the specification for the specified class of object.
@@ -474,7 +474,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
 
     //endregion
 
-    //region > allSpecifications
+    // -- allSpecifications
     /**
      * Returns (a new list holding a copy of) all the loaded specifications.
      *
@@ -495,7 +495,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
 
     //endregion
 
-    //region > getServiceClasses, isServiceClass
+    // -- getServiceClasses, isServiceClass
 
     @Programmatic
     public List<Class<?>> allServiceClasses() {
@@ -516,7 +516,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
 
     //endregion
 
-    //region > loaded
+    // -- loaded
     /**
      * Whether this class has been loaded.
      */
@@ -535,7 +535,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
 
     //endregion
 
-    //region > lookupBySpecId
+    // -- lookupBySpecId
     @Programmatic
     public ObjectSpecification lookupBySpecId(ObjectSpecId objectSpecId) {
         final ObjectSpecification objectSpecification = cache.getByObjectType(objectSpecId);

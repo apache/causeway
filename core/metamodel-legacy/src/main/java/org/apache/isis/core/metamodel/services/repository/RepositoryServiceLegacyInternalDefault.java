@@ -143,7 +143,7 @@ public class RepositoryServiceLegacyInternalDefault implements RepositoryService
     // //////////////////////////////////////
 
 
-    //region > allInstances, allMatches, uniqueMatch, firstMatch
+    // -- allInstances, allMatches, uniqueMatch, firstMatch
 
     @Programmatic
     @Override

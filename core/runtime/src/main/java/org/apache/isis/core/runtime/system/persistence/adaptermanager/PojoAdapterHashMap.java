@@ -55,7 +55,7 @@ public class PojoAdapterHashMap implements Iterable<ObjectAdapter>, SessionScope
 
     protected final Map<Object, ObjectAdapter> adapterByPojoMap;
 
-    //region > Constructors, finalize
+    // -- Constructors, finalize
     public PojoAdapterHashMap() {
         this(DEFAULT_POJO_ADAPTER_MAP_SIZE);
     }
@@ -73,7 +73,7 @@ public class PojoAdapterHashMap implements Iterable<ObjectAdapter>, SessionScope
     }
     //endregion
 
-    //region > open, close
+    // -- open, close
 
     public void open() {
         // nothing to do
@@ -88,7 +88,7 @@ public class PojoAdapterHashMap implements Iterable<ObjectAdapter>, SessionScope
 
     //endregion
 
-    //region > add, remove
+    // -- add, remove
 
     public void add(final Object pojo, final ObjectAdapter adapter) {
         adapterByPojoMap.put(key(pojo), adapter);
@@ -106,7 +106,7 @@ public class PojoAdapterHashMap implements Iterable<ObjectAdapter>, SessionScope
 
     //endregion
 
-    //region > getAdapter, containsPojo
+    // -- getAdapter, containsPojo
 
     public boolean containsPojo(final Object pojo) {
         return adapterByPojoMap.containsKey(key(pojo));
@@ -118,7 +118,7 @@ public class PojoAdapterHashMap implements Iterable<ObjectAdapter>, SessionScope
 
     //endregion
 
-    //region > iterator, key
+    // -- iterator, key
     @Override
     public Iterator<ObjectAdapter> iterator() {
         return adapterByPojoMap.values().iterator();

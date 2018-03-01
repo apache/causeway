@@ -46,7 +46,7 @@ public class FixturesInstallerDelegate {
 
     private static final Logger LOG = LoggerFactory.getLogger(FixturesInstallerDelegate.class);
 
-    //region > Constructor, fields
+    // -- Constructor, fields
 
     private final IsisSessionFactory isisSessionFactory;
 
@@ -80,7 +80,7 @@ public class FixturesInstallerDelegate {
 
     //endregion
 
-    //region > installFixtures
+    // -- installFixtures
 
     /**
      * Installs all {{@link #addFixture(Object) added fixtures} fixtures (ie as
@@ -182,7 +182,7 @@ public class FixturesInstallerDelegate {
 
     //endregion
 
-    //region > logonFixture
+    // -- logonFixture
 
     /**
      * The requested {@link LogonFixture}, if any.
@@ -216,7 +216,7 @@ public class FixturesInstallerDelegate {
 
     //endregion
 
-    //region > dependencies (derived)
+    // -- dependencies (derived)
 
     private ServicesInjector getServicesInjector() {
         return isisSessionFactory.getServicesInjector();

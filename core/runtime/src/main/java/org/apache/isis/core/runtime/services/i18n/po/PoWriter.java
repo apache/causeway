@@ -48,7 +48,7 @@ class PoWriter extends PoAbstract {
         super(translationServicePo, TranslationService.Mode.WRITE);
     }
 
-    //region > shutdown
+    // -- shutdown
 
     @Override
     void shutdown() {

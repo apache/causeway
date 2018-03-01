@@ -149,7 +149,7 @@ public class OneToOneAssociationContributee extends OneToOneAssociationDefault i
         return getPersistenceSessionService().adapterFor(servicePojo);
     }
 
-    //region > Contributee2 impl - getServiceContributedBy()
+    // -- Contributee2 impl - getServiceContributedBy()
     @Override
     public ObjectSpecification getServiceContributedBy() {
         return getServiceAdapter().getSpecification();

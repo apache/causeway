@@ -18,13 +18,12 @@
  */
 package org.apache.isis.applib;
 
-import java.util.List;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "module")
 public class IsisApplibModule extends ModuleAbstract {
 
-    //region > ui event classes
+    // -- ui event classes
     @SuppressWarnings("serial") // serial versionId to be provided by concrete class
     public abstract static class TitleUiEvent<S>
             extends org.apache.isis.applib.services.eventbus.TitleUiEvent<S> { }
@@ -34,10 +33,8 @@ public class IsisApplibModule extends ModuleAbstract {
     @SuppressWarnings("serial") // serial versionId to be provided by concrete class
     public abstract static class CssClassUiEvent<S>
             extends org.apache.isis.applib.services.eventbus.CssClassUiEvent<S> { }
-    //endregion
 
-
-    //region > domain event classes
+    // -- domain event classes
 
     @SuppressWarnings("serial") // serial versionId to be provided by concrete class
 	public abstract static class ActionDomainEvent<S> extends org.apache.isis.applib.services.eventbus.ActionDomainEvent<S> {
@@ -51,6 +48,6 @@ public class IsisApplibModule extends ModuleAbstract {
     public abstract static class PropertyDomainEvent<S,T> extends org.apache.isis.applib.services.eventbus.PropertyDomainEvent<S,T> {
     }
 
-    //endregion
+    
 
 }

@@ -39,7 +39,7 @@ public abstract class AbstractLifecycleEvent<S> extends EventObject {
         return source != null ? source : new Object();
     }
 
-    //region > source (downcast to S)
+    // -- source (downcast to S)
     @Override
     @SuppressWarnings("unchecked")
     public S getSource() {
@@ -52,7 +52,7 @@ public abstract class AbstractLifecycleEvent<S> extends EventObject {
     public void setSource(S source) {
         this.source = source;
     }
-    //endregion
+    
 
     private final static ToString<AbstractLifecycleEvent<?>> toString = ObjectContracts
     		.toString("source", AbstractLifecycleEvent::getSource);

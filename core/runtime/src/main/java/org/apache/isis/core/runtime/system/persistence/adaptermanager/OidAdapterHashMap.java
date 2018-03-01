@@ -41,7 +41,7 @@ public class OidAdapterHashMap implements Iterable<Oid>, SessionScopedComponent 
 
     private final Map<Oid, ObjectAdapter> adapterByOidMap = Maps.newHashMapWithExpectedSize(DEFAULT_OID_ADAPTER_MAP_SIZE);
 
-    //region > open, close
+    // -- open, close
 
     public void open() {
         // nothing to do
@@ -56,7 +56,7 @@ public class OidAdapterHashMap implements Iterable<Oid>, SessionScopedComponent 
 
     //endregion
 
-    //region > add, remove
+    // -- add, remove
     /**
      * Add an adapter for a given oid
      */
@@ -85,7 +85,7 @@ public class OidAdapterHashMap implements Iterable<Oid>, SessionScopedComponent 
 
     //endregion
 
-    //region > getAdapter, iterator
+    // -- getAdapter, iterator
     /**
      * Get the adapter identified by the specified OID.
      */

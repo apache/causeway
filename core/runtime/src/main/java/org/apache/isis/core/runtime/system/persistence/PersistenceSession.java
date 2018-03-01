@@ -151,7 +151,7 @@ public class PersistenceSession implements
         AdapterManager,
         IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
 
-    //region > constants
+    // -- constants
     private static final Logger LOG = LoggerFactory.getLogger(PersistenceSession.class);
 
     /**
@@ -171,7 +171,7 @@ public class PersistenceSession implements
 
     //endregion
 
-    //region > constructor, fields, finalize()
+    // -- constructor, fields, finalize()
 
     private final FixturesInstalledFlag fixturesInstalledFlag;
 
@@ -272,7 +272,7 @@ public class PersistenceSession implements
     //endregion
 
 
-    //region > open
+    // -- open
 
     /**
      * Only populated once {@link #open()}'d
@@ -385,7 +385,7 @@ public class PersistenceSession implements
 
     //endregion
 
-    //region > close
+    // -- close
 
     /**
      * Closes the subcomponents.
@@ -515,7 +515,7 @@ public class PersistenceSession implements
 
     //endregion
 
-    //region > QuerySubmitter impl, findInstancesInTransaction
+    // -- QuerySubmitter impl, findInstancesInTransaction
 
     public <T> List<ObjectAdapter> allMatchingQuery(final Query<T> query) {
         final ObjectAdapter instances = findInstancesInTransaction(query, QueryCardinality.MULTIPLE);
@@ -604,7 +604,7 @@ public class PersistenceSession implements
 
     //endregion
 
-    //region > State
+    // -- State
 
     private enum State {
         NOT_INITIALIZED, OPEN, CLOSED
@@ -632,7 +632,7 @@ public class PersistenceSession implements
 
     //endregion
 
-    //region > createTransientInstance, createViewModelInstance
+    // -- createTransientInstance, createViewModelInstance
 
     /**
      * Create a root or standalone {@link ObjectAdapter adapter}.
@@ -767,7 +767,7 @@ public class PersistenceSession implements
 
     //endregion
 
-    //region > getServices, getService
+    // -- getServices, getService
 
     public List<ObjectAdapter> getServices() {
         final List<Object> services = servicesInjector.getRegisteredServices();
@@ -784,7 +784,7 @@ public class PersistenceSession implements
 
     //endregion
 
-    //region > helper: postEvent
+    // -- helper: postEvent
 
     void postLifecycleEventIfRequired(
             final ObjectAdapter adapter,
@@ -806,7 +806,7 @@ public class PersistenceSession implements
 
 
 
-    //region > fixture installation
+    // -- fixture installation
 
     /**
      * Determine if the object store has been initialized with its set of start
@@ -859,7 +859,7 @@ public class PersistenceSession implements
 
     //endregion
 
-    //region > loadObject
+    // -- loadObject
 
     /**
      * Loads the object identified by the specified {@link RootOid}.
@@ -930,7 +930,7 @@ public class PersistenceSession implements
 
     //endregion
 
-    //region > loadPersistentPojo
+    // -- loadPersistentPojo
 
     private Object loadPersistentPojo(final RootOid rootOid) {
 
@@ -1028,7 +1028,7 @@ public class PersistenceSession implements
 
     //endregion
 
-    //region > lazilyLoaded
+    // -- lazilyLoaded
 
 
     public ObjectAdapter mapPersistent(final Persistable pojo) {
@@ -1043,7 +1043,7 @@ public class PersistenceSession implements
 
     //endregion
 
-    //region > refreshRootInTransaction, refreshRoot, resolve
+    // -- refreshRootInTransaction, refreshRoot, resolve
 
     /**
      * Re-initialises the fields of an object. If the object is unresolved then
@@ -1104,7 +1104,7 @@ public class PersistenceSession implements
 
     //endregion
 
-    //region > makePersistent
+    // -- makePersistent
 
     /**
      * Makes an {@link ObjectAdapter} persistent. The specified object should be
@@ -1185,7 +1185,7 @@ public class PersistenceSession implements
 
     //endregion
 
-    //region > ObjectPersistor impl
+    // -- ObjectPersistor impl
     public void makePersistent(final ObjectAdapter adapter) {
         makePersistentInTransaction(adapter);
     }
@@ -1196,7 +1196,7 @@ public class PersistenceSession implements
     //endregion
 
 
-    //region > destroyObjectInTransaction
+    // -- destroyObjectInTransaction
 
     /**
      * Removes the specified object from the system. The specified object's data
@@ -1219,7 +1219,7 @@ public class PersistenceSession implements
 
     //endregion
 
-    //region > newXxxCommand
+    // -- newXxxCommand
     /**
      * Makes an {@link ObjectAdapter} persistent. The specified object should be
      * stored away via this object store's persistence mechanism, and have an
@@ -1261,7 +1261,7 @@ public class PersistenceSession implements
     }
     //endregion
 
-    //region > execute
+    // -- execute
     public void execute(final List<PersistenceCommand> commands) {
 
         // previously we used to check that there were some commands, and skip processing otherwise.
@@ -1280,7 +1280,7 @@ public class PersistenceSession implements
     }
     //endregion
 
-    //region > getAggregateRoot, remappedFrom
+    // -- getAggregateRoot, remappedFrom
 
     private Map<Oid, Oid> persistentByTransient = Maps.newHashMap();
 
@@ -1305,7 +1305,7 @@ public class PersistenceSession implements
 
     //endregion
 
-    //region > transactions
+    // -- transactions
     public void startTransaction() {
         final javax.jdo.Transaction transaction = persistenceManager.currentTransaction();
         if (transaction.isActive()) {
@@ -1331,7 +1331,7 @@ public class PersistenceSession implements
     //endregion
 
 
-    //region > dependencies (from constructor)
+    // -- dependencies (from constructor)
 
     protected SpecificationLoader getSpecificationLoader() {
         return specificationLoader;
@@ -1350,7 +1350,7 @@ public class PersistenceSession implements
 
     //endregion
 
-    //region > transactionManager
+    // -- transactionManager
 
 
     /**
@@ -1369,7 +1369,7 @@ public class PersistenceSession implements
     //endregion
 
 
-    //region > jdoPersistenceManager delegate methods
+    // -- jdoPersistenceManager delegate methods
     public javax.jdo.Query newJdoQuery(Class<?> cls) {
         return persistenceManager.newQuery(cls);
     }
@@ -1383,7 +1383,7 @@ public class PersistenceSession implements
     }
     // endregion
 
-    //region > AdapterManager implementation
+    // -- AdapterManager implementation
 
     private final PojoAdapterHashMap pojoAdapterMap = new PojoAdapterHashMap();
     private final OidAdapterHashMap oidAdapterMap = new OidAdapterHashMap();
@@ -2112,13 +2112,13 @@ public class PersistenceSession implements
     //endregion
 
 
-    //region > TransactionManager delegate methods
+    // -- TransactionManager delegate methods
     protected IsisTransaction getCurrentTransaction() {
         return transactionManager.getCurrentTransaction();
     }
     //endregion
 
-    //region > FrameworkSynchronizer delegate methods
+    // -- FrameworkSynchronizer delegate methods
 
     public void enlistDeletingAndInvokeIsisRemovingCallbackFacet(final Persistable pojo) {
         ObjectAdapter adapter = adapterFor(pojo);
@@ -2190,7 +2190,7 @@ public class PersistenceSession implements
         adapter.setVersion(datastoreVersion);
     }
 
-    //region > create...Oid (main API)
+    // -- create...Oid (main API)
     /**
      * Create a new {@link Oid#isTransient() transient} {@link Oid} for the
      * supplied pojo, uniquely distinguishable from any other {@link Oid}.
@@ -2385,7 +2385,7 @@ public class PersistenceSession implements
 
     //endregion
 
-    //region > DomainObjectServices impl
+    // -- DomainObjectServices impl
 
 
     public Object lookup(
@@ -2411,7 +2411,7 @@ public class PersistenceSession implements
 
     //endregion
 
-    //region > helpers: lookupService, lookupServices
+    // -- helpers: lookupService, lookupServices
 
     private <T> T lookupService(Class<T> serviceType) {
         T service = lookupServiceIfAny(serviceType);
@@ -2430,7 +2430,7 @@ public class PersistenceSession implements
     }
     //endregion
 
-    //region > toString
+    // -- toString
 
     @Override
     public String toString() {

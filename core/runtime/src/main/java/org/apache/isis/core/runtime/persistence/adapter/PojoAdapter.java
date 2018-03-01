@@ -51,7 +51,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
 
     private final static Logger LOG = LoggerFactory.getLogger(PojoAdapter.class);
 
-    //region > Constructor, fields, finalizer
+    // -- Constructor, fields, finalizer
 
     private final AuthenticationSession authenticationSession;
     private final SpecificationLoader specificationLoader;
@@ -90,7 +90,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
     }
     //endregion
 
-    //region > getSpecification
+    // -- getSpecification
 
     /**
      * Downcasts {@link #getSpecification()}.
@@ -109,7 +109,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
 
     //endregion
 
-    //region > getObject, replacePojo
+    // -- getObject, replacePojo
     @Override
     public Object getObject() {
         return pojo;
@@ -126,7 +126,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
     }
     //endregion
 
-    //region > getOid, replaceOid
+    // -- getOid, replaceOid
     @Override
     public Oid getOid() {
         return oid;
@@ -139,7 +139,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
     }
     //endregion
 
-    //region > isParentedCollection, isValue
+    // -- isParentedCollection, isValue
 
     @Override
     public boolean isParentedCollection() {
@@ -153,7 +153,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
 
     //endregion
 
-    //region > isTransient, representsPersistent, isDestroyed
+    // -- isTransient, representsPersistent, isDestroyed
 
     @Override
     public boolean isTransient() {
@@ -207,7 +207,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
     }
     //endregion
 
-    //region > getAggregateRoot
+    // -- getAggregateRoot
     @Override
     public ObjectAdapter getAggregateRoot() {
         if(!isParentedCollection()) {
@@ -219,7 +219,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
 
     //endregion
 
-    //region > getVersion, setVersion, checkLock
+    // -- getVersion, setVersion, checkLock
 
     @Override
     public Version getVersion() {
@@ -275,7 +275,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
 
     //endregion
 
-    //region > titleString
+    // -- titleString
     /**
      * Returns the title from the underlying business object.
      * 
@@ -394,7 +394,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
     }
     //endregion
 
-    //region > iconName
+    // -- iconName
 
     /**
      * Returns the name of the icon to use to represent this object.
@@ -406,7 +406,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
 
     //endregion
 
-    //region > elementSpecification
+    // -- elementSpecification
 
     @Override
     public ObjectSpecification getElementSpecification() {
@@ -430,7 +430,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
     }
     //endregion
 
-    //region > getInstance (unsupported for this impl)
+    // -- getInstance (unsupported for this impl)
 
     /**
      * Not supported by this implementation.

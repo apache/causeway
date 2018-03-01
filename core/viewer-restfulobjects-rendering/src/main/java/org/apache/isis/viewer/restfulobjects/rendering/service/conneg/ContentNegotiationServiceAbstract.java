@@ -86,7 +86,7 @@ public abstract class ContentNegotiationServiceAbstract implements ContentNegoti
         return null;
     }
 
-    //region > convenience methods for subclasses (possibly hooks)
+    // -- convenience methods for subclasses (possibly hooks)
 
     /**
      * Potential hook to allow a domain object to be mapped.

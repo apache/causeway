@@ -94,7 +94,7 @@ public class SimpleObject implements Comparable<SimpleObject> {
 
 
 
-    //region > toString, compareTo
+    // -- toString, compareTo
     @Override
     public String toString() {
         return getName();
@@ -108,7 +108,7 @@ public class SimpleObject implements Comparable<SimpleObject> {
     //endregion
 
 
-    //region > injected services
+    // -- injected services
     @javax.inject.Inject
     @javax.jdo.annotations.NotPersistent
     @lombok.Getter(AccessLevel.NONE) @lombok.Setter(AccessLevel.NONE)

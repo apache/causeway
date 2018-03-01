@@ -55,7 +55,7 @@ public class TranslationServicePo implements TranslationService {
         po = new PoWriter(this);
     }
 
-    //region > init, shutdown
+    // -- init, shutdown
 
     @Programmatic
     @PostConstruct

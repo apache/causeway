@@ -29,7 +29,7 @@ public abstract class TitleUiEvent<S> extends AbstractUiEvent<S> {
 
     private static final long serialVersionUID = 1L;
 
-    //region > Default class
+    // -- Default class
     /**
      * This class is the default for the
      * {@link org.apache.isis.applib.annotation.DomainObjectLayout#titleUiEvent()} annotation attribute.  Whether this
@@ -39,9 +39,9 @@ public abstract class TitleUiEvent<S> extends AbstractUiEvent<S> {
     public static class Default extends TitleUiEvent<Object> {
         private static final long serialVersionUID = 1L;
     }
-    //endregion
+    
 
-    //region > Noop class
+    // -- Noop class
 
     /**
      * Convenience class to use indicating that an event should <i>not</i> be posted (irrespective of the configuration
@@ -50,9 +50,9 @@ public abstract class TitleUiEvent<S> extends AbstractUiEvent<S> {
     public static class Noop extends TitleUiEvent<Object> {
         private static final long serialVersionUID = 1L;
     }
-    //endregion
+    
 
-    //region > Doop class
+    // -- Doop class
 
     /**
      * Convenience class meaning that an event <i>should</i> be posted (irrespective of the configuration
@@ -61,9 +61,9 @@ public abstract class TitleUiEvent<S> extends AbstractUiEvent<S> {
     public static class Doop extends TitleUiEvent<Object> {
         private static final long serialVersionUID = 1L;
     }
-    //endregion
+    
 
-    //region > constructors
+    // -- constructors
     /**
      * If used then the framework will set state via (non-API) setters.
      *
@@ -79,9 +79,9 @@ public abstract class TitleUiEvent<S> extends AbstractUiEvent<S> {
         super(source);
     }
 
-    //endregion
+    
 
-    //region > title
+    // -- title
     private String title;
 
     /**
@@ -101,9 +101,9 @@ public abstract class TitleUiEvent<S> extends AbstractUiEvent<S> {
     public void setTitle(final String title) {
         this.title = title;
     }
-    //endregion
+    
 
-    //region > translatableTitle
+    // -- translatableTitle
     private TranslatableString translatableTitle;
 
     /**
@@ -124,6 +124,6 @@ public abstract class TitleUiEvent<S> extends AbstractUiEvent<S> {
     public void setTranslatableTitle(final TranslatableString translatableTitle) {
         this.translatableTitle = translatableTitle;
     }
-    //endregion
+    
 
 }

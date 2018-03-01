@@ -69,7 +69,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         return type == null ? null : specificationLookup.loadSpecification(type);
     }
 
-    //region > fields
+    // -- fields
     private final String id;
     private final FacetedMethod facetedMethod;
     private final FeatureType featureType;
@@ -96,7 +96,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         this.persistenceSessionServiceInternal = servicesInjector.getPersistenceSessionServiceInternal();
     }
 
-    //region > Identifiers
+    // -- Identifiers
 
     @Override
     public String getId() {
@@ -115,7 +115,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
 
     //endregion
 
-    //region > Facets
+    // -- Facets
 
     public FacetedMethod getFacetedMethod() {
         return facetedMethod;
@@ -177,7 +177,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
 
     //endregion
 
-    //region > Name, Description, Help (convenience for facets)
+    // -- Name, Description, Help (convenience for facets)
     /**
      * Return the default label for this member. This is based on the name of
      * this member.
@@ -211,7 +211,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
 
     //endregion
 
-    //region > Hidden (or visible)
+    // -- Hidden (or visible)
     /**
      * Create an {@link InteractionContext} to represent an attempt to view this
      * member (that is, to check if it is visible or not).
@@ -260,7 +260,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
     }
     //endregion
 
-    //region > Disabled (or enabled)
+    // -- Disabled (or enabled)
     /**
      * Create an {@link InteractionContext} to represent an attempt to
      * use this member (that is, to check if it is usable or not).
@@ -298,7 +298,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
 
     //endregion
 
-    //region > isAssociation, isAction
+    // -- isAssociation, isAction
     @Override
     public boolean isAction() {
         return featureType.isAction();
@@ -320,7 +320,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
     }
     //endregion
 
-    //region > mixinAdapterFor
+    // -- mixinAdapterFor
     /**
      * For mixins
      */
@@ -375,7 +375,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
 
     //endregion
 
-    //region > toString
+    // -- toString
 
     @Override
     public String toString() {
@@ -384,7 +384,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
 
     //endregion
 
-    //region > Dependencies
+    // -- Dependencies
 
     public SpecificationLoader getSpecificationLoader() {
         return specificationLoader;
@@ -416,7 +416,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
 
     //endregion
 
-    //region > command (setup)
+    // -- command (setup)
 
 
     protected void setupCommandTarget(final ObjectAdapter targetAdapter, final String arguments) {

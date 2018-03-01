@@ -47,7 +47,7 @@ public class RegisterEntities {
     // //////////////////////////////////////
 
 
-    //region > entityTypes
+    // -- entityTypes
     private final Set<String> entityTypes = Sets.newLinkedHashSet();
     private final SpecificationLoader specificationLoader;
 

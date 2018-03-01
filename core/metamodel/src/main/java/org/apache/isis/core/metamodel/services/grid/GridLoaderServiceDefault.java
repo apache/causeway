@@ -226,7 +226,7 @@ public class GridLoaderServiceDefault implements GridLoaderService {
     }
 
 
-    //region > injected dependencies
+    // -- injected dependencies
 
     @javax.inject.Inject
     DeploymentCategoryProvider deploymentCategoryProvider;

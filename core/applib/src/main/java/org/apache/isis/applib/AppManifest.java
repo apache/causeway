@@ -173,7 +173,7 @@ public interface AppManifest {
             return instance;
         }
 
-        //region > persistenceCapableTypes
+        // -- persistenceCapableTypes
         private Set<Class<?>> persistenceCapableTypes;
         /**
          * @return <tt>null</tt> if no appManifest is defined
@@ -184,9 +184,9 @@ public interface AppManifest {
         public void setPersistenceCapableTypes(final Set<Class<?>> persistenceCapableTypes) {
             this.persistenceCapableTypes = persistenceCapableTypes;
         }
-        //endregion
+        
 
-        //region > mixinTypes
+        // -- mixinTypes
         private Set<Class<?>> mixinTypes;
 
         /**
@@ -198,9 +198,9 @@ public interface AppManifest {
         public void setMixinTypes(final Set<Class<?>> mixinTypes) {
             this.mixinTypes = mixinTypes;
         }
-        //endregion
+        
 
-        //region > fixtureScriptTypes
+        // -- fixtureScriptTypes
         private Set<Class<? extends FixtureScript>> fixtureScriptTypes;
 
         /**
@@ -212,10 +212,10 @@ public interface AppManifest {
         public void setFixtureScriptTypes(final Set<Class<? extends FixtureScript>> fixtureScriptTypes) {
             this.fixtureScriptTypes = fixtureScriptTypes;
         }
-        //endregion
+        
 
 
-        //region > domainServiceTypes
+        // -- domainServiceTypes
         private Set<Class<?>> domainServiceTypes;
         /**
          * @return <tt>null</tt> if no appManifest is defined
@@ -226,7 +226,7 @@ public interface AppManifest {
         public void setDomainServiceTypes(final Set<Class<?>> domainServiceTypes) {
             this.domainServiceTypes = domainServiceTypes;
         }
-        //endregion
+        
 
     }
 

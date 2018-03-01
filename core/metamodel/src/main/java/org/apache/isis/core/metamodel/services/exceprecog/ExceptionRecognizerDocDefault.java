@@ -42,7 +42,7 @@ public class ExceptionRecognizerDocDefault
         implements ExceptionRecognizer {
 
 
-    //region > init, shutdown
+    // -- init, shutdown
 
     @Programmatic
     @PostConstruct

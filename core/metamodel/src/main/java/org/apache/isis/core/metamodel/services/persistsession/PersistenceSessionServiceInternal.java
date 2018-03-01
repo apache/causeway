@@ -32,7 +32,7 @@ import org.apache.isis.core.runtime.system.transaction.TransactionalClosure;
 
 public interface PersistenceSessionServiceInternal extends AdapterManager {
 
-    //region > instantiate
+    // -- instantiate
 
     /**
      * Provided by the <tt>PersistenceSession</tt> when used by framework.
@@ -48,7 +48,7 @@ public interface PersistenceSessionServiceInternal extends AdapterManager {
 
     //endregion
 
-    //region > retrieve
+    // -- retrieve
 
     /**
      * Provided by <tt>PersistenceSession</tt> when used by framework.
@@ -89,7 +89,7 @@ public interface PersistenceSessionServiceInternal extends AdapterManager {
 
     //endregion
 
-    //region > beginTran, flush, commit, currentTransaction
+    // -- beginTran, flush, commit, currentTransaction
 
     @Programmatic
     void beginTran();
@@ -127,7 +127,7 @@ public interface PersistenceSessionServiceInternal extends AdapterManager {
 
     //endregion
 
-    //region > makePersistent, remove
+    // -- makePersistent, remove
 
     /**
      * Provided by the <tt>PersistenceSession</tt> when used by framework.
@@ -151,7 +151,7 @@ public interface PersistenceSessionServiceInternal extends AdapterManager {
 
     //endregion
 
-    //region > allMatchingQuery, firstMatchingQuery
+    // -- allMatchingQuery, firstMatchingQuery
     /**
      * Provided by <tt>PersistenceSession</tt> when used by framework.
      *

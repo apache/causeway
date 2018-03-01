@@ -22,7 +22,7 @@ public abstract class ObjectPersistedEvent<S> extends AbstractLifecycleEvent<S> 
 
     private static final long serialVersionUID = 1L;
 
-    //region > Default class
+    // -- Default class
     /**
      * This class is the default for the
      * {@link org.apache.isis.applib.annotation.DomainObject#persistedLifecycleEvent()} annotation attribute.  Whether this
@@ -38,9 +38,9 @@ public abstract class ObjectPersistedEvent<S> extends AbstractLifecycleEvent<S> 
             return "ObjectPersistedEvent$Default{source=" + getSource() + "}";
         }
     }
-    //endregion
+    
 
-    //region > Noop class
+    // -- Noop class
 
     /**
      * Convenience class to use indicating that an event should <i>not</i> be posted (irrespective of the configuration
@@ -49,9 +49,9 @@ public abstract class ObjectPersistedEvent<S> extends AbstractLifecycleEvent<S> 
     public static class Noop extends ObjectPersistedEvent<Object> {
         private static final long serialVersionUID = 1L;
     }
-    //endregion
+    
 
-    //region > Doop class
+    // -- Doop class
 
     /**
      * Convenience class meaning that an event <i>should</i> be posted (irrespective of the configuration
@@ -60,7 +60,7 @@ public abstract class ObjectPersistedEvent<S> extends AbstractLifecycleEvent<S> 
     public static class Doop extends ObjectPersistedEvent<Object> {
         private static final long serialVersionUID = 1L;
     }
-    //endregion
+    
 
     public ObjectPersistedEvent() {
     }

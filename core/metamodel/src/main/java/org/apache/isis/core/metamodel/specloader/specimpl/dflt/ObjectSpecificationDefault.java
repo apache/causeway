@@ -77,7 +77,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         return name.substring(name.lastIndexOf('.') + 1);
     }
 
-    //region > constructor, fields
+    // -- constructor, fields
 
     /**
      * Lazily built by {@link #getMember(Method)}.
@@ -105,7 +105,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
 
     //endregion
 
-    //region > introspectTypeHierarchyAndMembers
+    // -- introspectTypeHierarchyAndMembers
     @Override
     public void introspectTypeHierarchyAndMembers() {
 
@@ -199,7 +199,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
 
     //endregion
 
-    //region > create associations and actions
+    // -- create associations and actions
     private List<ObjectAssociation> createAssociations() {
         final List<FacetedMethod> associationFacetedMethods = facetedMethodsBuilder.getAssociationFacetedMethods();
         final List<ObjectAssociation> associations = Lists.newArrayList();
@@ -246,7 +246,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
 
     //endregion
 
-    //region > isXxx
+    // -- isXxx
 
     @Override
     public boolean isViewModel() {
@@ -280,7 +280,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
 
     //endregion
 
-    //region > getObjectAction
+    // -- getObjectAction
 
     @Override
     public ObjectAction getObjectAction(final ActionType type, final String id, final List<ObjectSpecification> parameters) {
@@ -349,7 +349,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
 
     //endregion
 
-    //region > getMember, catalog... (not API)
+    // -- getMember, catalog... (not API)
 
     public ObjectMember getMember(final Method method) {
         if (membersByMethod == null) {
@@ -396,7 +396,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
 
     //endregion
 
-    //region > toString
+    // -- toString
     @Override
     public String toString() {
         final ToString str = new ToString(this);

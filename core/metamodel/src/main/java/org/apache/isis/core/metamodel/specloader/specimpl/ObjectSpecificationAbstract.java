@@ -119,7 +119,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         }
     }
 
-    //region > fields
+    // -- fields
 
     protected final ServicesInjector servicesInjector;
 
@@ -169,7 +169,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     private IntrospectionState introspected = IntrospectionState.NOT_INTROSPECTED;
     //endregion
 
-    //region > Constructor
+    // -- Constructor
     public ObjectSpecificationAbstract(
             final Class<?> introspectedClass,
             final String shortName,
@@ -193,7 +193,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     
     //endregion
 
-    //region > Stuff immediately derivable from class
+    // -- Stuff immediately derivable from class
     @Override
     public FeatureType getFeatureType() {
         return FeatureType.OBJECT;
@@ -262,7 +262,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
     //endregion
 
-    //region > Introspection (part 1)
+    // -- Introspection (part 1)
 
     public abstract void introspectTypeHierarchyAndMembers();
 
@@ -344,7 +344,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
     //endregion
 
-    //region > Introspection (part 2)
+    // -- Introspection (part 2)
 
     public void updateFromFacetValues() {
 
@@ -357,7 +357,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
     //endregion
 
-    //region > Title, Icon
+    // -- Title, Icon
 
     @Override
     public String getTitle(final ObjectAdapter targetAdapter) {
@@ -403,7 +403,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
     //endregion
 
-    //region > Hierarchical
+    // -- Hierarchical
     /**
      * Determines if this class represents the same class, or a subclass, of the
      * specified class.
@@ -444,7 +444,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
     //endregion
 
-    //region > Name, Description, Persistability
+    // -- Name, Description, Persistability
     /**
      * The name according to any available {@link org.apache.isis.core.metamodel.facets.all.named.NamedFacet},
      * but falling back to {@link #getFullIdentifier()} otherwise.
@@ -489,7 +489,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
     //endregion
 
-    //region > Facet Handling
+    // -- Facet Handling
 
     @Override
     public <Q extends Facet> Q getFacet(final Class<Q> facetType) {
@@ -535,7 +535,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
     //endregion
 
-    //region > DefaultValue - unused
+    // -- DefaultValue - unused
     /**
      * @deprecated  - never called.
      * @return - always returns <tt>null</tt>
@@ -547,7 +547,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     }
     //endregion
 
-    //region > Identifier
+    // -- Identifier
     @Override
     public Identifier getIdentifier() {
         return identifier;
@@ -555,7 +555,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
     //endregion
 
-    //region > createTitleInteractionContext
+    // -- createTitleInteractionContext
     @Override
     public ObjectTitleContext createTitleInteractionContext(final AuthenticationSession session, final InteractionInitiatedBy interactionMethod, final ObjectAdapter targetObjectAdapter) {
         return new ObjectTitleContext(targetObjectAdapter, getIdentifier(), targetObjectAdapter.titleString(null),
@@ -564,7 +564,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
     //endregion
 
-    //region > Superclass, Interfaces, Subclasses, isAbstract
+    // -- Superclass, Interfaces, Subclasses, isAbstract
     @Override
     public ObjectSpecification superclass() {
         return superclassSpec;
@@ -626,7 +626,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
     //endregion
 
-    //region > Associations
+    // -- Associations
     @Override
     public List<ObjectAssociation> getAssociations(final Contributed contributed) {
         // the "contributed.isIncluded()" guard is required because we cannot do this too early;
@@ -752,7 +752,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
     //endregion
 
-    //region > getObjectActions
+    // -- getObjectActions
     @Override
     public List<ObjectAction> getObjectActions(
             final List<ActionType> types,
@@ -812,7 +812,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
     //endregion
 
-    //region > sorting
+    // -- sorting
 
     protected List<ObjectAssociation> sortAssociations(final List<ObjectAssociation> associations) {
         final DeweyOrderSet orderSet = DeweyOrderSet.createOrderSet(associations);
@@ -877,7 +877,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
     //endregion
 
-    //region > contributee associations (properties and collections)
+    // -- contributee associations (properties and collections)
 
     private List<ObjectAssociation> createContributeeAssociations() {
         if (isService() || isValue()) {
@@ -967,7 +967,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
     //endregion
 
-    //region > mixin associations (properties and collections)
+    // -- mixin associations (properties and collections)
 
     private List<ObjectAssociation> createMixedInAssociations() {
         if (isService() || isValue()) {
@@ -1061,7 +1061,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
     //endregion
 
-    //region > contributee actions
+    // -- contributee actions
     /**
      * All contributee actions (each wrapping a service's contributed action) for this spec.
      * 
@@ -1139,7 +1139,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     }
     //endregion
 
-    //region > mixin actions
+    // -- mixin actions
     /**
      * All contributee actions (each wrapping a service's contributed action) for this spec.
      *
@@ -1207,7 +1207,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
     //endregion
 
-    //region > validity
+    // -- validity
     @Override
     public Consent isValid(final ObjectAdapter targetAdapter, final InteractionInitiatedBy interactionInitiatedBy) {
         return isValidResult(targetAdapter, interactionInitiatedBy).createConsent();
@@ -1234,7 +1234,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     }
     //endregion
 
-    //region > convenience isXxx (looked up from facets)
+    // -- convenience isXxx (looked up from facets)
     @Override
     public boolean isImmutable() {
         return containsFacet(ImmutableFacet.class);
@@ -1293,7 +1293,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
     //endregion
 
-    //region > toString
+    // -- toString
 
     @Override
     public String toString() {
@@ -1304,7 +1304,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
     //endregion
 
-    //region > Dependencies (injected in constructor)
+    // -- Dependencies (injected in constructor)
     private ServicesInjector getServicesInjector() {
         return servicesInjector;
     }

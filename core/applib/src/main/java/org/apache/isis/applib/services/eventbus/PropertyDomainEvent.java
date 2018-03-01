@@ -25,7 +25,7 @@ public abstract class PropertyDomainEvent<S,T> extends AbstractDomainEvent<S> {
 
     private static final long serialVersionUID = 1L;
 
-    //region > Default class
+    // -- Default class
     /**
      * This class is the default for the
      * {@link org.apache.isis.applib.annotation.Property#domainEvent()} annotation attribute.  Whether this
@@ -35,9 +35,9 @@ public abstract class PropertyDomainEvent<S,T> extends AbstractDomainEvent<S> {
     public static class Default extends PropertyDomainEvent<Object, Object> {
         private static final long serialVersionUID = 1L;
     }
-    //endregion
+    
 
-    //region > Noop class
+    // -- Noop class
 
     /**
      * Convenience class to use indicating that an event should <i>not</i> be posted (irrespective of the configuration
@@ -46,9 +46,9 @@ public abstract class PropertyDomainEvent<S,T> extends AbstractDomainEvent<S> {
     public static class Noop extends PropertyDomainEvent<Object, Object> {
         private static final long serialVersionUID = 1L;
     }
-    //endregion
+    
 
-    //region > Doop class
+    // -- Doop class
 
     /**
      * Convenience class meaning that an event <i>should</i> be posted (irrespective of the configuration
@@ -57,9 +57,9 @@ public abstract class PropertyDomainEvent<S,T> extends AbstractDomainEvent<S> {
     public static class Doop extends PropertyDomainEvent<Object, Object> {
         private static final long serialVersionUID = 1L;
     }
-    //endregion
+    
 
-    //region > constructors
+    // -- constructors
 
     /**
      * If used then the framework will set state via (non-API) setters.
@@ -72,7 +72,7 @@ public abstract class PropertyDomainEvent<S,T> extends AbstractDomainEvent<S> {
     }
 
 
-    //region > oldValue
+    // -- oldValue
     private T oldValue;
 
     /**
@@ -88,9 +88,9 @@ public abstract class PropertyDomainEvent<S,T> extends AbstractDomainEvent<S> {
     public void setOldValue(T oldValue) {
         this.oldValue = oldValue;
     }
-    //endregion
+    
 
-    //region > newValue
+    // -- newValue
     private T newValue;
     /**
      * The proposed (post-modification) value of the property; populated at {@link org.apache.isis.applib.services.eventbus.AbstractDomainEvent.Phase#VALIDATE} and subsequent phases
@@ -105,7 +105,7 @@ public abstract class PropertyDomainEvent<S,T> extends AbstractDomainEvent<S> {
     public void setNewValue(T newValue) {
         this.newValue = newValue;
     }
-    //endregion
+    
 
     private final static ToString<PropertyDomainEvent<?,?>> toString = 
     		ObjectContracts.<PropertyDomainEvent<?,?>>

@@ -450,7 +450,7 @@ public class FacetProcessor implements ServicesInjectorAware {
     }
 
 
-    //region > dependencies
+    // -- dependencies
 
     private ServicesInjector servicesInjector;
 

@@ -57,7 +57,7 @@ public abstract class FacetFactoryAbstract implements FacetFactory, ServicesInje
     public void processParams(final ProcessParameterContext processParameterContext) {
     }
 
-    //region > dependencies (injected)
+    // -- dependencies (injected)
 
     protected ServicesInjector servicesInjector;
 
@@ -67,7 +67,7 @@ public abstract class FacetFactoryAbstract implements FacetFactory, ServicesInje
     }
     //endregion
 
-    //region > dependencies (looked up from services injector)
+    // -- dependencies (looked up from services injector)
 
     protected SpecificationLoader getSpecificationLoader() {
         return servicesInjector.getSpecificationLoader();

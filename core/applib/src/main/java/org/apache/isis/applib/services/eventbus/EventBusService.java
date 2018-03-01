@@ -65,7 +65,7 @@ public abstract class EventBusService {
 
     public static final EventBusService NOOP = new Noop();
 
-    //region > init, shutdown
+    // -- init, shutdown
 
     /**
      * Cannot do the setup of the event bus here (so this is asymmetric with <code>@PreDestroy</code>) because there is
@@ -92,9 +92,9 @@ public abstract class EventBusService {
         teardownEventBus();
     }
 
-    //endregion
+    
 
-    //region > register, unregister
+    // -- register, unregister
 
     /**
      * Both singleton and request-scoped domain services can register on the event bus; this should be done in their
@@ -179,9 +179,9 @@ public abstract class EventBusService {
         // intentionally no-op
     }
 
-    //endregion
+    
 
-    //region > subscribers
+    // -- subscribers
 
     private final Set<Object> subscribers = _Sets.newConcurrentHashSet();
 
@@ -192,9 +192,9 @@ public abstract class EventBusService {
     public Set<Object> getSubscribers() {
         return Collections.unmodifiableSet(_Sets.newLinkedHashSet(subscribers));
     }
-    //endregion
+    
 
-    //region > post
+    // -- post
 
     /**
      * Post an event.
@@ -212,10 +212,10 @@ public abstract class EventBusService {
         return this.eventBusImplementation != null;
     }
 
-    //endregion
+    
 
 
-    //region > getEventBus
+    // -- getEventBus
 
     /**
      * Lazily populated in {@link #getEventBusImplementation()} as result of the first {@link #post(Object)}.
@@ -279,9 +279,9 @@ public abstract class EventBusService {
         this.eventBusImplementation = null;
     }
 
-    //endregion
+    
 
-    //region > hook methods (newEventBus, skip)
+    // -- hook methods (newEventBus, skip)
 
     /**
      * Mandatory hook method for subclass to instantiate an appropriately configured Guava event bus.
@@ -300,7 +300,7 @@ public abstract class EventBusService {
         return false;
     }
 
-    //endregion
+    
 
 
 }

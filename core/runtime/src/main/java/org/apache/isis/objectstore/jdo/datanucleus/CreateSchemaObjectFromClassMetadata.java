@@ -42,7 +42,7 @@ public class CreateSchemaObjectFromClassMetadata implements MetaDataListener, Da
 
     private static final Logger LOG = LoggerFactory.getLogger(CreateSchemaObjectFromClassMetadata.class);
 
-    //region > persistenceManagerFactory, properties
+    // -- persistenceManagerFactory, properties
 
     private Map<String, String> properties;
     protected Map<String, String> getProperties() {
@@ -50,7 +50,7 @@ public class CreateSchemaObjectFromClassMetadata implements MetaDataListener, Da
     }
     //endregion
 
-    //region > loaded (API)
+    // -- loaded (API)
 
     @Override
     public void loaded(final AbstractClassMetaData cmd) {
@@ -94,7 +94,7 @@ public class CreateSchemaObjectFromClassMetadata implements MetaDataListener, Da
     }
     //endregion
 
-    //region > skip, exec, schemaNameFor
+    // -- skip, exec, schemaNameFor
 
     /**
      * Whether to skip creating this schema.
@@ -166,7 +166,7 @@ public class CreateSchemaObjectFromClassMetadata implements MetaDataListener, Da
     }
     //endregion
 
-    //region > helpers: closeSafely, getConnectionPassword
+    // -- helpers: closeSafely, getConnectionPassword
     protected void closeSafely(final AutoCloseable connection) {
         if(connection != null) {
             try {
@@ -209,7 +209,7 @@ public class CreateSchemaObjectFromClassMetadata implements MetaDataListener, Da
 	}    
     //endregion
 
-    //region > injected dependencies
+    // -- injected dependencies
     @Override
     public void setDataNucleusProperties(final Map<String, String> properties) {
         this.properties = properties;

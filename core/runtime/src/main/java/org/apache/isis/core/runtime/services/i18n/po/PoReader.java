@@ -74,7 +74,7 @@ class PoReader extends PoAbstract {
         localeProvider = translationServicePo.getLocaleProvider();
     }
 
-    //region > init, shutdown
+    // -- init, shutdown
 
     /**
      * Not API

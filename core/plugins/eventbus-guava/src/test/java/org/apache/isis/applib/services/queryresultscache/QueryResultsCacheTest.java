@@ -29,14 +29,14 @@ import static org.junit.Assert.assertThat;
 
 public class QueryResultsCacheTest {
 
-    private QueryResultsCache queryResultsCache;
+    private QueryResultsCacheUsingGuava queryResultsCache;
 
-    QueryResultsCache.Control control;
+    QueryResultsCacheUsingGuava.Control control;
 
     @Before
     public void setUp() throws Exception {
-        queryResultsCache = new QueryResultsCache();
-        control = new QueryResultsCache.Control();
+        queryResultsCache = new QueryResultsCacheUsingGuava();
+        control = new QueryResultsCacheUsingGuava.Control();
         queryResultsCache.control = control;
     }
 

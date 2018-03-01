@@ -30,7 +30,7 @@ public class MessageBroker implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    //region > constructor, fields
+    // -- constructor, fields
 
     private final List<String> messages = Lists.newArrayList();
     private final List<String> warnings = Lists.newArrayList();
@@ -40,7 +40,7 @@ public class MessageBroker implements Serializable {
     }
     //endregion
 
-    //region > reset
+    // -- reset
 
     public void reset() {
         warnings.clear();
@@ -50,7 +50,7 @@ public class MessageBroker implements Serializable {
 
     //endregion
 
-    //region > messages
+    // -- messages
 
     public List<String> getMessages() {
         return copyAndClear(messages);
@@ -62,7 +62,7 @@ public class MessageBroker implements Serializable {
 
     //endregion
 
-    //region > warnings
+    // -- warnings
 
     public List<String> getWarnings() {
         return copyAndClear(warnings);
@@ -78,7 +78,7 @@ public class MessageBroker implements Serializable {
 
     //endregion
 
-    //region > applicationError
+    // -- applicationError
     public String getApplicationError() {
         final String error = applicationError;
         setApplicationError(null);
@@ -91,7 +91,7 @@ public class MessageBroker implements Serializable {
 
     //endregion
 
-    //region > helpers
+    // -- helpers
 
     private List<String> copyAndClear(final List<String> messages) {
         final List<String> copy = Collections.unmodifiableList(new ArrayList<>(messages));

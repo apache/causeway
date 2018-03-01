@@ -350,7 +350,7 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
         this.pageClassRegistry = pageClassRegistry;
     }
 
-    //region > Dependencies (from isis' context)
+    // -- Dependencies (from isis' context)
     protected ServicesInjector getServicesInjector() {
         return getIsisSessionFactory().getServicesInjector();
     }
@@ -383,7 +383,7 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
 
     //endregion
 
-    //region > Dependencies (from wicket)
+    // -- Dependencies (from wicket)
 
     protected AuthenticatedWebSession getWicketAuthenticationSession() {
         return AuthenticatedWebSession.get();

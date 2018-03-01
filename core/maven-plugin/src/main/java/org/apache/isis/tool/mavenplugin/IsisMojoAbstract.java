@@ -103,7 +103,7 @@ public abstract class IsisMojoAbstract extends AbstractMojo {
             final IsisSessionFactory isisSessionFactory)
             throws MojoFailureException, IOException;
 
-    //region > Context
+    // -- Context
     static class ContextForMojo implements MetaModelProcessor.Context {
 
         private final MavenProject mavenProject;

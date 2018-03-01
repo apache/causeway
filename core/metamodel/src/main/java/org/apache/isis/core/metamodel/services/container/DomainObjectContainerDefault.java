@@ -54,7 +54,7 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 public class DomainObjectContainerDefault implements DomainObjectContainer {
 
 
-    //region > newViewModelInstance
+    // -- newViewModelInstance
 
     @Programmatic
     @SuppressWarnings("unchecked")
@@ -74,7 +74,7 @@ public class DomainObjectContainerDefault implements DomainObjectContainer {
 
     //endregion
 
-    //region >  remove
+    // --  remove
 
     @Programmatic
     @Override
@@ -93,7 +93,7 @@ public class DomainObjectContainerDefault implements DomainObjectContainer {
     //endregion
 
 
-    //region > resolve, objectChanged (DEPRECATED)
+    // -- resolve, objectChanged (DEPRECATED)
 
     /**
      * Re-initialises the fields of an object, using the
@@ -142,7 +142,7 @@ public class DomainObjectContainerDefault implements DomainObjectContainer {
 
     //endregion
 
-    //region > commit (deprecated)
+    // -- commit (deprecated)
 
     /**
      * @deprecated
@@ -156,7 +156,7 @@ public class DomainObjectContainerDefault implements DomainObjectContainer {
 
     //endregion
 
-    //region > isValid, validate
+    // -- isValid, validate
 
     @Programmatic
     @Override
@@ -176,7 +176,7 @@ public class DomainObjectContainerDefault implements DomainObjectContainer {
     //endregion
 
 
-    //region > isViewModel
+    // -- isViewModel
 
     @Programmatic
     @Override
@@ -186,7 +186,7 @@ public class DomainObjectContainerDefault implements DomainObjectContainer {
     }
     //endregion
 
-    //region > persistence
+    // -- persistence
 
 
     /**
@@ -221,7 +221,7 @@ public class DomainObjectContainerDefault implements DomainObjectContainer {
 
 
 
-    //region > helpers
+    // -- helpers
 
     private Object unwrapped(Object domainObject) {
         return wrapperFactory != null ? wrapperFactory.unwrap(domainObject) : domainObject;
@@ -229,7 +229,7 @@ public class DomainObjectContainerDefault implements DomainObjectContainer {
     //endregion
 
 
-    //region > service dependencies
+    // -- service dependencies
 
     @javax.inject.Inject
     SpecificationLoader specificationLoader;

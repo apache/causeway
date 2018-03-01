@@ -59,19 +59,19 @@ import org.apache.isis.schema.utils.jaxbadapters.PersistentEntitiesAdapter;
 )
 public class DomainObjectList {
 
-    //region > ui event classes
+    // -- ui event classes
     public static class TitleUiEvent extends IsisApplibModule.TitleUiEvent<DomainObjectList>{}
     public static class IconUiEvent extends IsisApplibModule.IconUiEvent<DomainObjectList>{}
     public static class CssClassUiEvent extends IsisApplibModule.CssClassUiEvent<DomainObjectList>{}
-    //endregion
+    
 
-    //region > domain event classes
+    // -- domain event classes
     public static abstract class PropertyDomainEvent<T> extends IsisApplibModule.PropertyDomainEvent<DomainObjectList, T> { }
     public static abstract class CollectionDomainEvent<T> extends IsisApplibModule.CollectionDomainEvent<DomainObjectList, T> { }
     public static abstract class ActionDomainEvent extends IsisApplibModule.ActionDomainEvent<DomainObjectList> { }
-    //endregion
+    
 
-    //region > constructors
+    // -- constructors
     public DomainObjectList() {
     }
     public DomainObjectList(
@@ -86,16 +86,16 @@ public class DomainObjectList {
         this.actionId = actionId;
         this.actionArguments = actionArguments;
     }
-    //endregion
+    
 
-    //region > title
+    // -- title
     private String title;
     public String title() {
         return title;
     }
-    //endregion
+    
 
-    //region > property: elementObjectType
+    // -- property: elementObjectType
     public static class ElementObjectTypeDomainEvent extends PropertyDomainEvent<String> { }
 
     private String elementObjectType;
@@ -106,9 +106,9 @@ public class DomainObjectList {
     public String getElementObjectType() {
         return elementObjectType;
     }
-    //endregion
+    
 
-    //region > property: actionOwningType
+    // -- property: actionOwningType
     public static class ActionOwningTypeDomainEvent extends PropertyDomainEvent<String> { }
 
     private String actionOwningType;
@@ -121,9 +121,9 @@ public class DomainObjectList {
     public String getActionOwningType() {
         return actionOwningType;
     }
-    //endregion
+    
 
-    //region > property: actionId
+    // -- property: actionId
     public static class ActionIdDomainEvent extends PropertyDomainEvent<String> { }
 
     private String actionId;
@@ -136,9 +136,9 @@ public class DomainObjectList {
     public String getActionId() {
         return actionId;
     }
-    //endregion
+    
 
-    //region > property: actionArguments
+    // -- property: actionArguments
     public static class ActionArgumentsDomainEvent extends PropertyDomainEvent<String> { }
 
     private String actionArguments;
@@ -151,9 +151,9 @@ public class DomainObjectList {
     public String getActionArguments() {
         return actionArguments;
     }
-    //endregion
+    
 
-    //region > collection: objects
+    // -- collection: objects
     public static class ObjectsDomainEvent extends CollectionDomainEvent<Object> { }
 
     @XmlJavaTypeAdapter(PersistentEntitiesAdapter.class)
@@ -170,6 +170,6 @@ public class DomainObjectList {
     public void setObjects(final List<Object> objects) {
         this.objects = objects;
     }
-    //endregion
+    
 
 }

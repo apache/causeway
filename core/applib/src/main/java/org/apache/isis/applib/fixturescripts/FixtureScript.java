@@ -57,7 +57,7 @@ public abstract class FixtureScript
 
     protected static final String PATH_SEPARATOR = "/";
 
-    //region > constructors
+    // -- constructors
 
     /**
      * Initializes a {@link Discoverability#NON_DISCOVERABLE} fixture, with
@@ -123,9 +123,9 @@ public abstract class FixtureScript
         return str != null ? str : _Strings.asNaturalName2.apply(getClass().getSimpleName());
     }
 
-    //endregion
+    
 
-    //region > tracing
+    // -- tracing
 
     private PrintStream tracePrintStream;
 
@@ -146,9 +146,9 @@ public abstract class FixtureScript
         return withTracing(System.out);
     }
 
-    //endregion
+    
 
-    //region > viewModel impl
+    // -- viewModel impl
 
     @Programmatic
     @Override
@@ -162,18 +162,18 @@ public abstract class FixtureScript
         fixtureScripts.initOf(mementoStr, this);
     }
 
-    //endregion
+    
 
-    //region > qualifiedName
+    // -- qualifiedName
 
     @Programmatic
     public String getQualifiedName() {
         return getParentPath() + getLocalName();
     }
 
-    //endregion
+    
 
-    //region > friendlyName (property)
+    // -- friendlyName (property)
 
     private String friendlyName;
     
@@ -186,9 +186,9 @@ public abstract class FixtureScript
         this.friendlyName = friendlyName;
     }
 
-    //endregion
+    
 
-    //region > localName
+    // -- localName
 
     private String localName;
     /**
@@ -203,9 +203,9 @@ public abstract class FixtureScript
         this.localName = localName;
     }
 
-    //endregion
+    
 
-    //region > parentPath
+    // -- parentPath
 
     private String parentPath;
     
@@ -221,9 +221,9 @@ public abstract class FixtureScript
         this.parentPath = parentPath;
     }
 
-    //endregion
+    
 
-    //region > discoverability
+    // -- discoverability
 
 
     /**
@@ -265,9 +265,9 @@ public abstract class FixtureScript
         return this;
     }
 
-    //endregion
+    
 
-    //region > ExecutionContext
+    // -- ExecutionContext
 
     public static class ExecutionContext {
 
@@ -680,7 +680,7 @@ public abstract class FixtureScript
             }
         }
 
-        //region > previouslyExecuted
+        // -- previouslyExecuted
 
         /**
          * Always populated, irrespective of {@link FixtureScripts#getMultipleExecutionStrategy() execution strategy},
@@ -703,7 +703,7 @@ public abstract class FixtureScript
             return Collections.unmodifiableList(previouslyExecuted);
         }
 
-        //endregion
+        
 
         /**
          * used and populated only if the {@link FixtureScripts.MultipleExecutionStrategy#EXECUTE_ONCE_BY_CLASS}
@@ -717,9 +717,9 @@ public abstract class FixtureScript
          */
         private final Map<FixtureScript, FixtureScript> fixtureScriptByValue = _Maps.newLinkedHashMap();
 
-        //endregion
+        
 
-        //region > tracing
+        // -- tracing
 
         private int traceHighwatermark = 40;
         private PrintStream tracePrintStream;
@@ -754,7 +754,7 @@ public abstract class FixtureScript
             traceHighwatermark = Math.max(key.length(), traceHighwatermark);
             return pad(key, roundup(traceHighwatermark, 20));
         }
-        //endregion
+        
 
         private static String pad(final String str, final int padTo) {
             return _Strings.padEnd(str, padTo, ' ');
@@ -781,9 +781,9 @@ public abstract class FixtureScript
 
     }
 
-    //endregion
+    
 
-    //region > defaultParam, checkParam
+    // -- defaultParam, checkParam
     protected <T> T defaultParam(final String parameterName, final ExecutionContext ec, final T defaultValue) {
         final T value = valueFor(parameterName, ec, defaultValue);
         setParam(parameterName, value);
@@ -855,9 +855,9 @@ public abstract class FixtureScript
     private String uppercase(final String parameterName) {
         return parameterName.substring(0, 1).toUpperCase() + parameterName.substring(1);
     }
-    //endregion
+    
 
-    //region > run (entry point for FixtureScripts service to call)
+    // -- run (entry point for FixtureScripts service to call)
 
     /**
      * It's a bit nasty to hold onto this as a field, but required in order to support
@@ -887,10 +887,10 @@ public abstract class FixtureScript
         return null;
     }
 
-    //endregion
+    
 
 
-    //region > execute (API for subclasses to implement)
+    // -- execute (API for subclasses to implement)
 
     /**
      * Subclasses should <b>implement this</b> but SHOULD <i>NOT</i> CALL DIRECTLY.
@@ -902,9 +902,9 @@ public abstract class FixtureScript
     @Programmatic
     protected abstract void execute(final ExecutionContext executionContext);
 
-    //endregion
+    
 
-    //region > (legacy) InstallableFixture impl
+    // -- (legacy) InstallableFixture impl
 
     @Override
     @Programmatic
@@ -917,9 +917,9 @@ public abstract class FixtureScript
         run(null);
     }
 
-    //endregion
+    
 
-    //region > helpers (for subclasses)
+    // -- helpers (for subclasses)
 
     /**
      * Returns the first non-null value; for convenience of subclass implementations
@@ -964,18 +964,18 @@ public abstract class FixtureScript
         transactionService.nextTransaction();
     }
 
-    //endregion
+    
 
 
-    //region > helpers (local)
+    // -- helpers (local)
 
     @Programmatic
     String pathWith(final String subkey) {
         return (getQualifiedName() != null? getQualifiedName() + PATH_SEPARATOR: "") +  subkey;
     }
-    //endregion
+    
 
-    //region > injected services
+    // -- injected services
 
     @javax.inject.Inject
     protected FixtureScripts fixtureScripts;
@@ -1002,5 +1002,5 @@ public abstract class FixtureScript
     protected SessionManagementService sessionManagementService;
 
 
-    //endregion
+    
 }

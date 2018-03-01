@@ -52,7 +52,7 @@ import com.google.common.collect.Maps;
 
 public class ServicesInstallerFromAnnotation extends ServicesInstallerAbstract {
 
-    //region > constants
+    // -- constants
 
     private static final Logger LOG = LoggerFactory.getLogger(ServicesInstallerFromAnnotation.class);
 
@@ -74,7 +74,7 @@ public class ServicesInstallerFromAnnotation extends ServicesInstallerAbstract {
     public final static String PACKAGE_PREFIX_STANDARD = Joiner.on(",").join(AppManifest.Registry.FRAMEWORK_PROVIDED_SERVICES);
     //endregion
 
-    //region > constructor, fields
+    // -- constructor, fields
 
     private final ServiceInstantiator serviceInstantiator;
 
@@ -90,7 +90,7 @@ public class ServicesInstallerFromAnnotation extends ServicesInstallerAbstract {
     }
     //endregion
 
-    //region > packagePrefixes
+    // -- packagePrefixes
     private String packagePrefixes;
 
     /**
@@ -105,7 +105,7 @@ public class ServicesInstallerFromAnnotation extends ServicesInstallerAbstract {
     }
     //endregion
 
-    //region > init, shutdown
+    // -- init, shutdown
 
     public void init() {
         initIfRequired();
@@ -145,7 +145,7 @@ public class ServicesInstallerFromAnnotation extends ServicesInstallerAbstract {
 
     //endregion
 
-    //region > helpers
+    // -- helpers
 
     private Predicate<Class<?>> instantiatable() {
         return and(not(nullClass()), not(abstractClass()));
@@ -182,7 +182,7 @@ public class ServicesInstallerFromAnnotation extends ServicesInstallerAbstract {
 
     //endregion
 
-    //region > getServices (API)
+    // -- getServices (API)
 
     private List<Object> services;
 
@@ -201,7 +201,7 @@ public class ServicesInstallerFromAnnotation extends ServicesInstallerAbstract {
     }
     //endregion
 
-    //region > appendServices
+    // -- appendServices
 
     public void appendServices(final SortedMap<String, SortedSet<String>> positionedServices) {
         initIfRequired();
@@ -231,7 +231,7 @@ public class ServicesInstallerFromAnnotation extends ServicesInstallerAbstract {
 
     //endregion
 
-    //region > helpers: nameOf, asList
+    // -- helpers: nameOf, asList
 
     private static String nameOf(final Class<?> cls) {
         final DomainServiceLayout domainServiceLayout = cls.getAnnotation(DomainServiceLayout.class);
@@ -247,7 +247,7 @@ public class ServicesInstallerFromAnnotation extends ServicesInstallerAbstract {
     }
     //endregion
 
-    //region > domain events
+    // -- domain events
     public static abstract class PropertyDomainEvent<T>
             extends org.apache.isis.applib.services.eventbus.PropertyDomainEvent<ServicesInstallerFromAnnotation, T> {
     }
@@ -261,7 +261,7 @@ public class ServicesInstallerFromAnnotation extends ServicesInstallerAbstract {
     }
     //endregion
 
-    //region > getTypes (API)
+    // -- getTypes (API)
 
     @Override
     public List<Class<?>> getTypes() {

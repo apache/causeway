@@ -128,7 +128,7 @@ public class StandaloneCollectionPanel extends PanelAbstract<EntityCollectionMod
         bulkActionsHelper = new BulkActionsHelper(entityCollectionModel);
     }
 
-    //region > ActionPromptModalWindowProvider
+    // -- ActionPromptModalWindowProvider
 
     public ActionPromptModalWindow getActionPrompt() {
         return actionPromptModalWindow;
@@ -136,7 +136,7 @@ public class StandaloneCollectionPanel extends PanelAbstract<EntityCollectionMod
 
     //endregion
 
-    //region > BulkActionsProvider
+    // -- BulkActionsProvider
 
     ObjectAdapterToggleboxColumn toggleboxColumn;
 
@@ -200,7 +200,7 @@ public class StandaloneCollectionPanel extends PanelAbstract<EntityCollectionMod
 
 
 
-    //region > CollectionSelectorProvider
+    // -- CollectionSelectorProvider
 
     @Override
     public CollectionSelectorPanel getSelectorDropdownPanel() {
@@ -209,7 +209,7 @@ public class StandaloneCollectionPanel extends PanelAbstract<EntityCollectionMod
 
     //endregion
 
-    //region > CollectionCountProvider
+    // -- CollectionCountProvider
 
     @Override
     public Integer getCount() {

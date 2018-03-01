@@ -45,7 +45,7 @@ public class ServiceInitializer {
         this.services = services;
     }
 
-    //region > validate
+    // -- validate
 
     public void validate() {
         
@@ -105,7 +105,7 @@ public class ServiceInitializer {
     }
     //endregion
 
-    //region > postConstruct
+    // -- postConstruct
 
     public void postConstruct() {
         if(LOG.isInfoEnabled()) {
@@ -148,7 +148,7 @@ public class ServiceInitializer {
 
     //endregion
 
-    //region > preDestroy
+    // -- preDestroy
 
     public void preDestroy() {
         if(LOG.isInfoEnabled()) {

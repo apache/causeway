@@ -27,7 +27,7 @@ public abstract class IconUiEvent<S> extends AbstractUiEvent<S> {
 
     private static final long serialVersionUID = 1L;
 
-    //region > constructors
+    // -- constructors
     /**
      * If used then the framework will set state via (non-API) setters.
      *
@@ -43,9 +43,9 @@ public abstract class IconUiEvent<S> extends AbstractUiEvent<S> {
         super(source);
     }
 
-    //endregion
+    
 
-    //region > Default class
+    // -- Default class
     /**
      * This class is the default for the
      * {@link org.apache.isis.applib.annotation.DomainObjectLayout#iconUiEvent()} annotation attribute.  Whether this
@@ -55,9 +55,9 @@ public abstract class IconUiEvent<S> extends AbstractUiEvent<S> {
     public static class Default extends IconUiEvent<Object> {
         private static final long serialVersionUID = 1L;
     }
-    //endregion
+    
 
-    //region > Noop class
+    // -- Noop class
 
     /**
      * Convenience class to use indicating that an event should <i>not</i> be posted (irrespective of the configuration
@@ -66,9 +66,9 @@ public abstract class IconUiEvent<S> extends AbstractUiEvent<S> {
     public static class Noop extends IconUiEvent<Object> {
         private static final long serialVersionUID = 1L;
     }
-    //endregion
+    
 
-    //region > Doop class
+    // -- Doop class
 
     /**
      * Convenience class meaning that an event <i>should</i> be posted (irrespective of the configuration
@@ -77,10 +77,10 @@ public abstract class IconUiEvent<S> extends AbstractUiEvent<S> {
     public static class Doop extends IconUiEvent<Object> {
         private static final long serialVersionUID = 1L;
     }
-    //endregion
+    
 
 
-    //region > iconName
+    // -- iconName
     private String iconName;
 
     /**
@@ -96,6 +96,6 @@ public abstract class IconUiEvent<S> extends AbstractUiEvent<S> {
     public void setIconName(final String iconName) {
         this.iconName = iconName;
     }
-    //endregion
+    
 
 }

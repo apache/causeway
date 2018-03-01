@@ -1,4 +1,4 @@
-/**
+/*
  *  Licensed to the Apache Software Foundation (ASF) under one or more
  *  contributor license agreements.  See the NOTICE file distributed with
  *  this work for additional information regarding copyright ownership.
@@ -16,7 +16,6 @@
  */
 package org.apache.isis.applib.services.queryresultscache;
 
-import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
@@ -50,97 +49,19 @@ import org.slf4j.LoggerFactory;
         menuOrder = "" + Integer.MAX_VALUE
 )
 @RequestScoped
-public class QueryResultsCache implements WithTransactionScope {
+public class QueryResultsCacheUsingGuava implements QueryResultsCache, WithTransactionScope {
 
-    private static final Logger LOG = LoggerFactory.getLogger(QueryResultsCache.class);
-
-
-    public static class Key {
-        private final Class<?> callingClass;
-        private final String methodName;
-        private final Object[] keys;
-        
-        public Key(Class<?> callingClass, String methodName, Object... keys) {
-            this.callingClass = callingClass;
-            this.methodName = methodName;
-            this.keys = keys;
-        }
-        
-        public Class<?> getCallingClass() {
-            return callingClass;
-        }
-        public String getMethodName() {
-            return methodName;
-        }
-        public Object[] getKeys() {
-            return keys;
-        }
-        
-        @Override
-        public boolean equals(Object obj) {
-            if (this == obj)
-                return true;
-            if (obj == null)
-                return false;
-            if (getClass() != obj.getClass())
-                return false;
-            Key other = (Key) obj;
-
-            // compare callingClass
-            if (callingClass == null) {
-                if (other.callingClass != null)
-                    return false;
-            } else if (!callingClass.equals(other.callingClass))
-                return false;
-
-            // compare methodName
-            if (methodName == null) {
-                if (other.methodName != null)
-                    return false;
-            } else if (!methodName.equals(other.methodName))
-                return false;
-
-            // compare keys
-            if (!Arrays.equals(keys, other.keys))
-                return false;
-
-            // ok, matches
-            return true;
-        }
-        
-        @Override
-        public int hashCode() {
-            final int prime = 31;
-            int result = 1;
-            result = prime * result + ((callingClass == null) ? 0 : callingClass.hashCode());
-            result = prime * result + Arrays.hashCode(keys);
-            result = prime * result + ((methodName == null) ? 0 : methodName.hashCode());
-            return result;
-        }
-
-        @Override
-        public String toString() {
-            return callingClass.getName() + "#" + methodName  + Arrays.toString(keys);
-        }
-    }
-    
-    public static class Value<T> {
-        private T result;
-        public Value(T result) {
-            this.result = result;
-        }
-        public T getResult() {
-            return result;
-        }
-    }
-    
-    // //////////////////////////////////////
-
+    private static final Logger LOG = LoggerFactory.getLogger(QueryResultsCacheUsingGuava.class);
     
     private final Map<Key, Value<?>> cache = _Maps.newHashMap();
 
     @Programmatic
-    public <T> T execute(final Callable<T> callable, final Class<?> callingClass, final String methodName, final Object... keys) {
+    @Override
+    public <T> T execute(
+    		final Callable<T> callable, 
+    		final Class<?> callingClass, 
+    		final String methodName, 
+    		final Object... keys) {
         if(control.isFixturesInstalling()) {
             try {
                 return callable.call();
@@ -153,7 +74,7 @@ public class QueryResultsCache implements WithTransactionScope {
     }
 
     @Programmatic
-    public <T> T execute(final Callable<T> callable, final Key cacheKey) {
+    private <T> T execute(final Callable<T> callable, final Key cacheKey) {
         if(control.isFixturesInstalling()) {
             try {
                 return callable.call();
@@ -164,7 +85,7 @@ public class QueryResultsCache implements WithTransactionScope {
         return executeWithCaching(callable, cacheKey);
     }
 
-    protected <T> T executeWithCaching(final Callable<T> callable, final Key cacheKey) {
+    private <T> T executeWithCaching(final Callable<T> callable, final Key cacheKey) {
         try {
             final Value<?> cacheValue = cache.get(cacheKey);
             logHitOrMiss(cacheKey, cacheValue);
@@ -190,20 +111,20 @@ public class QueryResultsCache implements WithTransactionScope {
     }
 
     @Programmatic
-    public <T> Value<T> get(final Class<?> callingClass, final String methodName, final Object... keys) {
+    private <T> Value<T> get(final Class<?> callingClass, final String methodName, final Object... keys) {
         return get(new Key(callingClass, methodName, keys));
     }
     
     @Programmatic
     @SuppressWarnings("unchecked")
-    public <T> Value<T> get(final Key cacheKey) {
+    private <T> Value<T> get(final Key cacheKey) {
         Value<T> value = (Value<T>) cache.get(cacheKey);
         logHitOrMiss(cacheKey, value);
         return value;
     }
 
     @Programmatic
-    public <T> void put(final Key cacheKey, final T result) {
+    private <T> void put(final Key cacheKey, final T result) {
         LOG.debug("PUT: {}", cacheKey);
         cache.put(cacheKey, new Value<T>(result));
     }
@@ -240,14 +161,14 @@ public class QueryResultsCache implements WithTransactionScope {
 
         @Programmatic
         @com.google.common.eventbus.Subscribe
-        @org.axonframework.eventhandling.annotation.EventHandler
+        //@org.axonframework.eventhandling.annotation.EventHandler
         public void on(FixturesInstallingEvent ev) {
             fixturesInstalling = true;
         }
 
         @Programmatic
         @com.google.common.eventbus.Subscribe
-        @org.axonframework.eventhandling.annotation.EventHandler
+        //@org.axonframework.eventhandling.annotation.EventHandler
         public void on(FixturesInstalledEvent ev) {
             fixturesInstalling = false;
         }

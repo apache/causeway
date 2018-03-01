@@ -45,7 +45,7 @@ public final class CommandDtoUtils {
         getJaxbContext();
     }
 
-    //region > marshalling
+    // -- marshalling
     static JAXBContext jaxbContext;
     static JAXBContext getJaxbContext() {
         if(jaxbContext == null) {
@@ -92,7 +92,7 @@ public final class CommandDtoUtils {
         }
     }
 
-    //endregion
+    
 
     public static OidsDto targetsFor(final CommandDto dto) {
         OidsDto targets = dto.getTargets();

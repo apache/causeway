@@ -291,7 +291,7 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
     }
 
 
-    //region > dependencies
+    // -- dependencies
 
     protected ComponentFactoryRegistry getComponentFactoryRegistry() {
         return ((ComponentFactoryRegistryAccessor) Application.get()).getComponentFactoryRegistry();

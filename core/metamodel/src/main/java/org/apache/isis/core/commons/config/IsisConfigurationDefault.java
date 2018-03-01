@@ -469,7 +469,7 @@ public class IsisConfigurationDefault implements ConfigurationServiceInternal {
     }
 
 
-    //region > ConfigurationService impl
+    // -- ConfigurationService impl
     @Override
     public String getProperty(final String name) {
         initAppPropertiesIfRequired();

@@ -35,7 +35,7 @@ final class ImageResourceCacheKey implements Serializable {
         this.toString = calcToString();
     }
 
-    //region > getResourceClass, getResourceName
+    // -- getResourceClass, getResourceName
 
     private final Class<?> resourceClass;
     private final String resourceName;
@@ -49,7 +49,7 @@ final class ImageResourceCacheKey implements Serializable {
     }
     //endregion
 
-    //region > superKey
+    // -- superKey
 
     ImageResourceCacheKey superKey() {
         if(resourceClass == null) {
@@ -64,7 +64,7 @@ final class ImageResourceCacheKey implements Serializable {
 
     //endregion
 
-    //region > resourcePaths
+    // -- resourcePaths
 
     List<ImageResourceCacheKey> resourcePaths(final String... suffices) {
         return resourcePaths(Arrays.asList(suffices));
@@ -149,7 +149,7 @@ final class ImageResourceCacheKey implements Serializable {
 
     //endregion
 
-    //region > equals, hashCode
+    // -- equals, hashCode
 
     @Override
     public boolean equals(Object o) {
@@ -167,7 +167,7 @@ final class ImageResourceCacheKey implements Serializable {
 
     //endregion
 
-    //region > toString
+    // -- toString
 
     private final String toString;
 
