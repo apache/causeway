@@ -20,7 +20,6 @@
 package org.apache.isis.applib.internal.discover;
 
 import java.util.List;
-import java.util.Set;
 
 import org.apache.isis.applib.internal.context._Context;
 import org.apache.isis.applib.internal.context._Plugin;
@@ -68,18 +67,18 @@ public final class _Discover {
 	}
 
 	private static ClassDiscoveryPlugin loadPluginsPickAny() {
-		final Set<ClassDiscoveryPlugin> plugins = _Plugin.load(ClassDiscoveryPlugin.class);
 		
-		if(plugins.isEmpty()) {
-			return ClassDiscoveryPlugin.nop();
-		}
-		
-		if(plugins.size()>1) {
-			final Logger LOG = LoggerFactory.getLogger(ClassDiscoveryPlugin.class);
-			LOG.warn("you have more than one ClassDiscoveryPlugin on your class path, just picking one");
-		}
-		
-		return plugins.iterator().next();
+		return _Plugin.getOrElse(ClassDiscoveryPlugin.class, 
+				ambiguosPlugins->{
+					final Logger LOG = LoggerFactory.getLogger(ClassDiscoveryPlugin.class);
+					LOG.warn("You have more than one ClassDiscoveryPlugin on your class path, just picking one!");
+					return ambiguosPlugins.iterator().next();
+				}, 
+				()->{
+					final Logger LOG = LoggerFactory.getLogger(ClassDiscoveryPlugin.class);
+					LOG.error("You have no ClassDiscoveryPlugin on your class path!");
+					return ClassDiscoveryPlugin.nop();
+				});
 	}
 	
 }

@@ -23,6 +23,7 @@ import javax.enterprise.context.RequestScoped;
 
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.internal.context._Plugin;
 import org.apache.isis.applib.services.eventbus.EventBusImplementation;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
@@ -124,13 +125,26 @@ public abstract class EventBusServiceDefault extends EventBusService {
     }
 
     private EventBusImplementation instantiateEventBus() {
+    	
     	String fqImplementationName = implementation;
-        if("guava".equals(implementation)) {
+    	
+    	if( "plugin".equalsIgnoreCase(implementation) || "auto".equalsIgnoreCase(implementation) ) {
+    		
+    		return _Plugin.getOrElse(EventBusImplementation.class, 
+        			ambiguousPlugins->{
+        				throw new NonRecoverableException(
+        		                "Ambiguity: Could not instantiate event bus implementation '" + implementation + "'");
+        			}, ()->{
+        				throw new NonRecoverableException(
+        		                "Missing Plugin: Could not instantiate event bus implementation '" + implementation + "'");
+        			});
+    		
+    	} else if("guava".equalsIgnoreCase(implementation)) {
             // legacy of return new EventBusImplementationForGuava();
-        	fqImplementationName = "org.apache.isis.core.runtime.services.eventbus.EventBusImplementationForGuava";
-        } else if("axon".equals(implementation)) {
+        	fqImplementationName = "org.apache.isis.core.runtime.services.eventbus.adapter.EventBusImplementationForGuava";
+        } else if("axon".equalsIgnoreCase(implementation)) {
         	// legacy of return new EventBusImplementationForAxonSimple();
-        	fqImplementationName = "org.apache.isis.core.runtime.services.eventbus.EventBusImplementationForAxonSimple";
+        	fqImplementationName = "org.apache.isis.core.runtime.services.eventbus.adapter.EventBusImplementationForAxonSimple";
         }
 
         final Class<?> aClass = ClassUtil.forName(fqImplementationName);

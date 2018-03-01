@@ -137,7 +137,7 @@ public class ValuePropertyFactory {
     // -- HELPER
     
     private static ValuePropertyCollector discoverValueProperties() {
-	    final Set<ValuePropertyPlugin> plugins = _Plugin.load(ValuePropertyPlugin.class);
+	    final Set<ValuePropertyPlugin> plugins = _Plugin.loadAll(ValuePropertyPlugin.class);
 	    final ValuePropertyCollector collector = ValuePropertyPlugin.collector();
 	    plugins.forEach(plugin->{
 	    	plugin.plugin(collector);

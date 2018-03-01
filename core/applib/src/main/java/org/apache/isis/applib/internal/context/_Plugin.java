@@ -22,6 +22,8 @@ package org.apache.isis.applib.internal.context;
 import java.util.Objects;
 import java.util.ServiceLoader;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 import org.apache.isis.applib.internal.collections._Sets;
 
@@ -56,12 +58,27 @@ public final class _Plugin {
 	 * @param service
 	 * @return non null
 	 */
-	public static <S> Set<S> load(Class<S> service){
+	public static <S> Set<S> loadAll(Class<S> service){
 		Objects.requireNonNull(service);
 
 		ServiceLoader<S> loader = ServiceLoader.load(service, _Context.getDefaultClassLoader());
 		
 		return _Sets.unmodifiable(loader);   
+	}
+	
+	public static <S> S getOrElse(Class<S> service, Function<Set<S>, S> onAmbiguity, Supplier<S> onNotFound){
+	
+		final Set<S> plugins = loadAll(service);
+		
+		if(plugins.isEmpty()) {
+			return onNotFound.get();
+		}
+		
+		if(plugins.size()>1) {
+			return onAmbiguity.apply(plugins);
+		}
+		
+		return plugins.iterator().next();
 	}
 	
 }

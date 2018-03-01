@@ -437,7 +437,7 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
     // -- HELPER
     
     private static FactoryCollector discoverFactories() {
-	    final Set<ProgrammingModelPlugin> plugins = _Plugin.load(ProgrammingModelPlugin.class);
+	    final Set<ProgrammingModelPlugin> plugins = _Plugin.loadAll(ProgrammingModelPlugin.class);
 	    final FactoryCollector collector = ProgrammingModelPlugin.collector();
 	    plugins.forEach(plugin->{
 	    	plugin.plugin(collector);
