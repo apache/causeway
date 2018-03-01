@@ -320,11 +320,11 @@ public abstract class AbstractDomainEvent<S> extends java.util.EventObject {
         userData.put(key, value);
     }
     
-
-    private final static ToString<AbstractDomainEvent<?>> toString = ObjectContracts
-    		//.toString("source", AbstractDomainEvent::getSource)
-    		.toString("identifier", AbstractDomainEvent::getIdentifier)
-//			.thenToString("eventPhase", AbstractDomainEvent::getEventPhase)
+    private final static ToString<AbstractDomainEvent<?>> toString = 
+    		ObjectContracts.<AbstractDomainEvent<?>>
+    		toString("source", AbstractDomainEvent::getSource)
+    		.thenToString("identifier", AbstractDomainEvent::getIdentifier)
+			.thenToString("eventPhase", AbstractDomainEvent::getEventPhase)
     		;
     
     @Override
