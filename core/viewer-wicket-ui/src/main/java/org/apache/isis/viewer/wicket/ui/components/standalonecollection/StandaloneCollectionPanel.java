@@ -134,7 +134,7 @@ public class StandaloneCollectionPanel extends PanelAbstract<EntityCollectionMod
         return actionPromptModalWindow;
     }
 
-    //endregion
+    
 
     // -- BulkActionsProvider
 
@@ -195,7 +195,7 @@ public class StandaloneCollectionPanel extends PanelAbstract<EntityCollectionMod
 
     }
 
-    //endregion
+    
 
 
 
@@ -207,7 +207,7 @@ public class StandaloneCollectionPanel extends PanelAbstract<EntityCollectionMod
         return selectorDropdownPanel;
     }
 
-    //endregion
+    
 
     // -- CollectionCountProvider
 
@@ -217,6 +217,6 @@ public class StandaloneCollectionPanel extends PanelAbstract<EntityCollectionMod
         return model.getCount();
     }
 
-    //endregion
+    
 
 }

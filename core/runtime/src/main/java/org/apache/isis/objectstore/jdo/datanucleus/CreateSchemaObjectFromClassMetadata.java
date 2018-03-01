@@ -48,7 +48,7 @@ public class CreateSchemaObjectFromClassMetadata implements MetaDataListener, Da
     protected Map<String, String> getProperties() {
         return properties;
     }
-    //endregion
+    
 
     // -- loaded (API)
 
@@ -92,7 +92,7 @@ public class CreateSchemaObjectFromClassMetadata implements MetaDataListener, Da
         }
 
     }
-    //endregion
+    
 
     // -- skip, exec, schemaNameFor
 
@@ -164,7 +164,7 @@ public class CreateSchemaObjectFromClassMetadata implements MetaDataListener, Da
         }
         return schemaName;
     }
-    //endregion
+    
 
     // -- helpers: closeSafely, getConnectionPassword
     protected void closeSafely(final AutoCloseable connection) {
@@ -207,14 +207,14 @@ public class CreateSchemaObjectFromClassMetadata implements MetaDataListener, Da
         }
         return password;
 	}    
-    //endregion
+    
 
     // -- injected dependencies
     @Override
     public void setDataNucleusProperties(final Map<String, String> properties) {
         this.properties = properties;
     }
-    //endregion
+    
 
 
 }

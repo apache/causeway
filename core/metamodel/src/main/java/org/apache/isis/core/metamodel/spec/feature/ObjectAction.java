@@ -70,7 +70,7 @@ public interface ObjectAction extends ObjectMember {
      * invoked upon.
      */
     ObjectSpecification getOnType();
-    //endregion
+    
 
     // -- getType, isPrototype
 
@@ -78,7 +78,7 @@ public interface ObjectAction extends ObjectMember {
 
     boolean isPrototype();
 
-    //endregion
+    
 
     // -- ReturnType
     /**
@@ -92,7 +92,7 @@ public interface ObjectAction extends ObjectMember {
      */
     boolean hasReturn();
 
-    //endregion
+    
 
     // -- execute, executeWithRuleChecking
 
@@ -121,7 +121,7 @@ public interface ObjectAction extends ObjectMember {
             ObjectAdapter[] parameters,
             final InteractionInitiatedBy interactionInitiatedBy);
 
-    //endregion
+    
 
     // -- isProposedArgumentSetValid
 
@@ -133,7 +133,7 @@ public interface ObjectAction extends ObjectMember {
             ObjectAdapter[] proposedArguments,
             final InteractionInitiatedBy interactionInitiatedBy);
 
-    //endregion
+    
 
     // -- Parameters (declarative)
 
@@ -175,7 +175,7 @@ public interface ObjectAction extends ObjectMember {
      */
     ObjectActionParameter getParameterByName(String paramName);
 
-    //endregion
+    
 
     // -- Parameters (per instance)
 
@@ -192,7 +192,7 @@ public interface ObjectAction extends ObjectMember {
             final ObjectAdapter target,
             final InteractionInitiatedBy interactionInitiatedBy);
 
-    //endregion
+    
 
     // -- setupBulkActionInvocationContext
     /**
@@ -202,7 +202,7 @@ public interface ObjectAction extends ObjectMember {
             final ObjectAdapter targetAdapter);
 
 
-    //endregion
+    
 
     // -- Util
     public static final class Util {
@@ -370,7 +370,7 @@ public interface ObjectAction extends ObjectMember {
         }
     }
 
-    //endregion
+    
 
     // -- Predicates
 
@@ -566,6 +566,6 @@ public interface ObjectAction extends ObjectMember {
         }
     }
 
-    //endregion
+    
 
 }

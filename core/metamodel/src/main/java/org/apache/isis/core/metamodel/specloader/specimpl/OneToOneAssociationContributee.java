@@ -155,6 +155,6 @@ public class OneToOneAssociationContributee extends OneToOneAssociationDefault i
         return getServiceAdapter().getSpecification();
     }
 
-    //endregion
+    
 
 }

@@ -54,7 +54,7 @@ public class RegisterEntities {
     public Set<String> getEntityTypes() {
         return entityTypes;
     }
-    //endregion
+    
 
     public RegisterEntities(final SpecificationLoader specificationLoader) {
         this.specificationLoader = specificationLoader;

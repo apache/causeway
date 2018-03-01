@@ -73,7 +73,7 @@ public class IsisComponentProviderUsingInstallers extends IsisComponentProvider 
         super(appManifest, configuration, authenticationManager, authorizationManager);
     }
 
-    //endregion
+    
 
     // -- constructor helpers (factories)
 
@@ -108,7 +108,7 @@ public class IsisComponentProviderUsingInstallers extends IsisComponentProvider 
     }
 
 
-    //endregion
+    
 
     /**
      * Looks up authorization and authentication implementations.
@@ -171,7 +171,7 @@ public class IsisComponentProviderUsingInstallers extends IsisComponentProvider 
             }
         }
 
-        //endregion
+        
 
         // -- framework
 
@@ -191,7 +191,7 @@ public class IsisComponentProviderUsingInstallers extends IsisComponentProvider 
                     SystemConstants.AUTHORIZATION_DEFAULT);
         }
 
-        //endregion
+        
 
         // -- helpers
         @SuppressWarnings("unchecked")
@@ -233,7 +233,7 @@ public class IsisComponentProviderUsingInstallers extends IsisComponentProvider 
             return installer;
         }
 
-        //endregion
+        
 
     }
 }

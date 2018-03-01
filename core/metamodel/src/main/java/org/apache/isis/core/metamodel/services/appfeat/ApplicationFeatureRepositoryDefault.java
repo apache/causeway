@@ -71,7 +71,7 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
     private final SortedMap<ApplicationFeatureId, ApplicationFeature> propertyFeatures = Maps.newTreeMap();
     private final SortedMap<ApplicationFeatureId, ApplicationFeature> collectionFeatures = Maps.newTreeMap();
     private final SortedMap<ApplicationFeatureId, ApplicationFeature> actionFeatures = Maps.newTreeMap();
-    //endregion
+    
 
 
     // -- init
@@ -92,7 +92,7 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
                 "eagerly".equalsIgnoreCase(configuredValue);
     }
 
-    //endregion
+    
 
 
     // -- initializeIfRequired
@@ -386,7 +386,7 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
         final String className = spec.getFullIdentifier();
         return className.startsWith("java") || className.startsWith("org.joda");
     }
-    //endregion
+    
 
     // -- packageFeatures, classFeatures, memberFeatures
     @Programmatic
@@ -421,7 +421,7 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
         return memberFeatures.get(featureId);
     }
 
-    //endregion
+    
 
     // -- allFeatures, allPackages, allClasses, allMembers
     @Programmatic
@@ -476,7 +476,7 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
         initializeIfRequired();
         return actionFeatures.values();
     }
-    //endregion
+    
 
     // -- packageNames, packageNamesContainingClasses, classNamesContainedIn, memberNamesOf
     @Override @Programmatic
@@ -551,7 +551,7 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
         );
     }
 
-    //endregion
+    
 
     //region  > services (injected)
 
@@ -567,7 +567,7 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
     @javax.inject.Inject
     ApplicationFeatureFactory applicationFeatureFactory;
 
-    //endregion
+    
 
 
 }

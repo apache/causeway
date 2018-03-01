@@ -73,7 +73,7 @@ public abstract class AuthenticationSessionAbstract implements AuthenticationSes
         // nothing to do
     }
 
-    //endregion
+    
 
     // -- encode
 
@@ -84,7 +84,7 @@ public abstract class AuthenticationSessionAbstract implements AuthenticationSes
         output.writeUTF(validationCode);
     }
 
-    //endregion
+    
 
     // -- User Name
 
@@ -98,7 +98,7 @@ public abstract class AuthenticationSessionAbstract implements AuthenticationSes
         return Objects.equal(userName, getUserName());
     }
 
-    //endregion
+    
 
     // -- Roles
 
@@ -110,7 +110,7 @@ public abstract class AuthenticationSessionAbstract implements AuthenticationSes
         return Collections.unmodifiableList(roles);
     }
 
-    //endregion
+    
 
     // -- Validation Code
 
@@ -119,7 +119,7 @@ public abstract class AuthenticationSessionAbstract implements AuthenticationSes
         return validationCode;
     }
 
-    //endregion
+    
 
     // -- Attributes
 
@@ -133,7 +133,7 @@ public abstract class AuthenticationSessionAbstract implements AuthenticationSes
         attributeByName.put(attributeName, attribute);
     }
 
-    //endregion
+    
 
     // -- MessageBroker
 
@@ -142,7 +142,7 @@ public abstract class AuthenticationSessionAbstract implements AuthenticationSes
         return messageBroker;
     }
 
-    //endregion
+    
 
     // -- createUserMemento
 
@@ -155,7 +155,7 @@ public abstract class AuthenticationSessionAbstract implements AuthenticationSes
         return new UserMemento(getUserName(), roles);
     }
 
-    //endregion
+    
 
     // -- toString
 
@@ -164,6 +164,6 @@ public abstract class AuthenticationSessionAbstract implements AuthenticationSes
         return new ToString(this).append("name", getUserName()).append("code", getValidationCode()).toString();
     }
 
-    //endregion
+    
 
 }

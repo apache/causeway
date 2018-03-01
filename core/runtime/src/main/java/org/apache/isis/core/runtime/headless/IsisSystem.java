@@ -79,7 +79,7 @@ public class IsisSystem {
     public static void set(IsisSystem isft) {
         ISFT.set(isft);
     }
-    //endregion
+    
 
     // -- Builder
 
@@ -156,7 +156,7 @@ public class IsisSystem {
         return new Builder();
     }
 
-    //endregion
+    
 
     // -- constructor, fields
 
@@ -177,7 +177,7 @@ public class IsisSystem {
         this.authenticationRequestIfAny = authenticationRequestIfAny;
     }
 
-    //endregion
+    
 
     // -- level
     private org.apache.log4j.Level level = org.apache.log4j.Level.INFO;
@@ -193,7 +193,7 @@ public class IsisSystem {
         this.level = level;
     }
 
-    //endregion
+    
 
     // -- setup (also componentProvider)
 
@@ -266,7 +266,7 @@ public class IsisSystem {
         return getService(DomainObjectContainer.class);
     }
 
-    //endregion
+    
 
     // -- isisSystem (populated during setup)
     protected IsisSessionFactory isisSessionFactory;
@@ -285,7 +285,7 @@ public class IsisSystem {
         return authenticationSession;
     }
 
-    //endregion
+    
 
     // -- openSession, closeSession, nextSession
 
@@ -309,7 +309,7 @@ public class IsisSystem {
         }
     }
 
-    //endregion
+    
 
     // -- beginTran, endTran, commitTran, abortTran
 
@@ -435,7 +435,7 @@ public class IsisSystem {
         }
     }
 
-    //endregion
+    
 
     // -- getService
 
@@ -445,7 +445,7 @@ public class IsisSystem {
         return servicesInjector.lookupServiceElseFail(serviceClass);
     }
 
-    //endregion
+    
 
     // -- Fixture management (for each test, rather than at bootstrap)
 
@@ -475,7 +475,7 @@ public class IsisSystem {
         }
     }
 
-    //endregion
+    
 
     // -- Dependencies
 
@@ -487,6 +487,6 @@ public class IsisSystem {
         return isisSessionFactory.getCurrentSession().getPersistenceSession();
     }
 
-    //endregion
+    
 
 }

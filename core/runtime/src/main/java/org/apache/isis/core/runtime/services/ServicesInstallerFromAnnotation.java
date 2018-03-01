@@ -72,7 +72,7 @@ public class ServicesInstallerFromAnnotation extends ServicesInstallerAbstract {
      * </p>
      */
     public final static String PACKAGE_PREFIX_STANDARD = Joiner.on(",").join(AppManifest.Registry.FRAMEWORK_PROVIDED_SERVICES);
-    //endregion
+    
 
     // -- constructor, fields
 
@@ -88,7 +88,7 @@ public class ServicesInstallerFromAnnotation extends ServicesInstallerAbstract {
         super(NAME, isisConfiguration);
         this.serviceInstantiator = serviceInstantiator;
     }
-    //endregion
+    
 
     // -- packagePrefixes
     private String packagePrefixes;
@@ -103,7 +103,7 @@ public class ServicesInstallerFromAnnotation extends ServicesInstallerAbstract {
     public void withPackagePrefixes(final String... packagePrefixes) {
         this.packagePrefixes = Joiner.on(",").join(packagePrefixes);
     }
-    //endregion
+    
 
     // -- init, shutdown
 
@@ -143,7 +143,7 @@ public class ServicesInstallerFromAnnotation extends ServicesInstallerAbstract {
     public void shutdown() {
     }
 
-    //endregion
+    
 
     // -- helpers
 
@@ -180,7 +180,7 @@ public class ServicesInstallerFromAnnotation extends ServicesInstallerAbstract {
         };
     }
 
-    //endregion
+    
 
     // -- getServices (API)
 
@@ -199,7 +199,7 @@ public class ServicesInstallerFromAnnotation extends ServicesInstallerAbstract {
         }
         return services;
     }
-    //endregion
+    
 
     // -- appendServices
 
@@ -229,7 +229,7 @@ public class ServicesInstallerFromAnnotation extends ServicesInstallerAbstract {
         }
     }
 
-    //endregion
+    
 
     // -- helpers: nameOf, asList
 
@@ -245,7 +245,7 @@ public class ServicesInstallerFromAnnotation extends ServicesInstallerAbstract {
     private static List<String> asList(final String csv) {
         return Lists.newArrayList(Iterables.transform(Splitter.on(",").split(csv), trim()));
     }
-    //endregion
+    
 
     // -- domain events
     public static abstract class PropertyDomainEvent<T>
@@ -259,7 +259,7 @@ public class ServicesInstallerFromAnnotation extends ServicesInstallerAbstract {
     public static abstract class ActionDomainEvent
             extends org.apache.isis.applib.services.eventbus.ActionDomainEvent<ServicesInstallerFromAnnotation> {
     }
-    //endregion
+    
 
     // -- getTypes (API)
 
@@ -268,6 +268,6 @@ public class ServicesInstallerFromAnnotation extends ServicesInstallerAbstract {
         return listOf(List.class); // ie List<Object.class>, of services
     }
 
-    //endregion
+    
 
 }

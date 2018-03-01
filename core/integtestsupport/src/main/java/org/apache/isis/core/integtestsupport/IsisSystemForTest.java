@@ -120,7 +120,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         }
     }
 
-    //endregion
+    
 
     // -- getElseNull, get, set
 
@@ -142,7 +142,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
     public static void set(IsisSystemForTest isft) {
         ISFT.set(isft);
     }
-    //endregion
+    
 
     // -- Builder
 
@@ -229,7 +229,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         return new Builder();
     }
 
-    //endregion
+    
 
     // -- constructor, fields
 
@@ -252,7 +252,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         this.listeners = listeners;
     }
 
-    //endregion
+    
 
     // -- level
     private org.apache.log4j.Level level = org.apache.log4j.Level.INFO;
@@ -268,7 +268,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         this.level = level;
     }
 
-    //endregion
+    
 
     // -- setup (also componentProvider)
 
@@ -349,7 +349,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         }
     }
 
-    //endregion
+    
 
     // -- isisSystem (populated during setup)
     private IsisSessionFactory isisSessionFactory;
@@ -368,7 +368,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         return authenticationSession;
     }
 
-    //endregion
+    
 
     // -- teardown
 
@@ -391,7 +391,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         firePostNextSession();
     }
 
-    //endregion
+    
 
     // -- openSession, closeSession
     public void openSession() throws Exception {
@@ -407,7 +407,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         closeSession(FireListeners.FIRE);
     }
 
-    //endregion
+    
 
     // -- listeners
 
@@ -462,7 +462,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
             listener.postNextSession();
         }
     }
-    //endregion
+    
 
     // -- JUnit @Rule integration
 
@@ -487,7 +487,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         };
     }
 
-    //endregion
+    
 
     // -- beginTran, endTran, commitTran, abortTran
 
@@ -621,7 +621,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         }
     }
 
-    //endregion
+    
 
     // -- getService, replaceService
 
@@ -641,7 +641,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         servicesInjector.replaceService(originalService, replacementService);
     }
 
-    //endregion
+    
 
     // -- Fixture management (for each test, rather than at bootstrap)
 
@@ -671,7 +671,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         }
     }
 
-    //endregion
+    
 
     // -- Dependencies
 
@@ -683,6 +683,6 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         return isisSessionFactory.getCurrentSession().getPersistenceSession();
     }
 
-    //endregion
+    
 
 }

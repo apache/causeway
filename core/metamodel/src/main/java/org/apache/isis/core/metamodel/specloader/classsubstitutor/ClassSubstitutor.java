@@ -45,7 +45,7 @@ public class ClassSubstitutor {
         ignore("javassist.util.proxy.MethodHandler");
 
     }
-    //endregion
+    
 
     // -- getClass(Class)
 
@@ -81,7 +81,7 @@ public class ClassSubstitutor {
         return cls;
     }
 
-    //endregion
+    
 
     // -- helpers
 
@@ -117,7 +117,7 @@ public class ClassSubstitutor {
         return classesToIgnore.contains(cls) || classNamesToIgnore.contains(cls.getCanonicalName());
     }
 
-    //endregion
+    
 
 
 }

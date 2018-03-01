@@ -112,7 +112,7 @@ public abstract class IsisComponentProvider {
         return configuration;
     }
 
-    //endregion
+    
 
     // -- helpers (appManifest)
 
@@ -282,7 +282,7 @@ public abstract class IsisComponentProvider {
         this.configuration.add(key, value);
     }
 
-    //endregion
+    
 
     // -- provideAuth*
 
@@ -294,7 +294,7 @@ public abstract class IsisComponentProvider {
         return authorizationManager;
     }
 
-    //endregion
+    
 
     // -- provideServiceInjector
 
@@ -302,7 +302,7 @@ public abstract class IsisComponentProvider {
         return new ServicesInjector(services, configuration);
     }
 
-    //endregion
+    
 
     // -- provideSpecificationLoader
 
@@ -338,6 +338,6 @@ public abstract class IsisComponentProvider {
 
 
 
-    //endregion
+    
 
 }

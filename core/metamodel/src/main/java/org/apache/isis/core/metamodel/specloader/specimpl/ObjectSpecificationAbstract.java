@@ -167,7 +167,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     private CssClassFacet cssClassFacet;
 
     private IntrospectionState introspected = IntrospectionState.NOT_INTROSPECTED;
-    //endregion
+    
 
     // -- Constructor
     public ObjectSpecificationAbstract(
@@ -191,7 +191,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     }
 
     
-    //endregion
+    
 
     // -- Stuff immediately derivable from class
     @Override
@@ -260,7 +260,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         return !(getIntrospectionState() == IntrospectionState.INTROSPECTED);
     }
 
-    //endregion
+    
 
     // -- Introspection (part 1)
 
@@ -342,7 +342,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         }
     }
 
-    //endregion
+    
 
     // -- Introspection (part 2)
 
@@ -355,7 +355,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     }
 
 
-    //endregion
+    
 
     // -- Title, Icon
 
@@ -401,7 +401,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         return cssClassFacet == null ? null : cssClassFacet.cssClass(reference);
     }
 
-    //endregion
+    
 
     // -- Hierarchical
     /**
@@ -442,7 +442,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         return superclassSpec != null && superclassSpec.isOfType(specification);
     }
 
-    //endregion
+    
 
     // -- Name, Description, Persistability
     /**
@@ -487,7 +487,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     }
 
 
-    //endregion
+    
 
     // -- Facet Handling
 
@@ -533,7 +533,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         return facet != null && !facet.isNoop();
     }
 
-    //endregion
+    
 
     // -- DefaultValue - unused
     /**
@@ -545,7 +545,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     public Object getDefaultValue() {
         return null;
     }
-    //endregion
+    
 
     // -- Identifier
     @Override
@@ -553,7 +553,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         return identifier;
     }
 
-    //endregion
+    
 
     // -- createTitleInteractionContext
     @Override
@@ -562,7 +562,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
                 interactionMethod);
     }
 
-    //endregion
+    
 
     // -- Superclass, Interfaces, Subclasses, isAbstract
     @Override
@@ -624,7 +624,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         return isAbstract;
     }
 
-    //endregion
+    
 
     // -- Associations
     @Override
@@ -750,7 +750,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         return list;
     }
 
-    //endregion
+    
 
     // -- getObjectActions
     @Override
@@ -810,7 +810,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         return getObjectActions(Collections.singletonList(type), contributed, predicate);
     }
 
-    //endregion
+    
 
     // -- sorting
 
@@ -875,7 +875,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         return getServicesInjector().getRegisteredServices();
     }
 
-    //endregion
+    
 
     // -- contributee associations (properties and collections)
 
@@ -965,7 +965,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         };
     }
 
-    //endregion
+    
 
     // -- mixin associations (properties and collections)
 
@@ -1059,7 +1059,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         };
     }
 
-    //endregion
+    
 
     // -- contributee actions
     /**
@@ -1137,7 +1137,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         }
         return -1;
     }
-    //endregion
+    
 
     // -- mixin actions
     /**
@@ -1205,7 +1205,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         mixedInActionsToAppendTo.addAll(actions);
     }
 
-    //endregion
+    
 
     // -- validity
     @Override
@@ -1232,7 +1232,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             final ObjectAdapter targetAdapter, final InteractionInitiatedBy interactionInitiatedBy) {
         return new ObjectValidityContext(targetAdapter, getIdentifier(), interactionInitiatedBy);
     }
-    //endregion
+    
 
     // -- convenience isXxx (looked up from facets)
     @Override
@@ -1291,7 +1291,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     }
 
 
-    //endregion
+    
 
     // -- toString
 
@@ -1302,7 +1302,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         return str.toString();
     }
 
-    //endregion
+    
 
     // -- Dependencies (injected in constructor)
     private ServicesInjector getServicesInjector() {
@@ -1313,6 +1313,6 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         return specificationLoader;
     }
 
-    //endregion
+    
 
 }

@@ -90,7 +90,7 @@ public final class OidMarshaller {
     // -- public constants
     public static final String VIEWMODEL_INDICATOR =
             Bookmark.ObjectState.VIEW_MODEL.getCode(); // "*"
-    //endregion
+    
 
     // -- private constants
     private static final String TRANSIENT_INDICATOR =
@@ -126,7 +126,7 @@ public final class OidMarshaller {
     		 		     SEPARATOR + DIGITS_GROUP + "?" +  // optional version UTC time
     		 		 ")?" + 
             		 "$");
-    //endregion
+    
 
     // -- join, split
     @Programmatic
@@ -140,7 +140,7 @@ public final class OidMarshaller {
         return indexOfSeperator > 0? oidStr.substring(indexOfSeperator+1): null;
     }
 
-    //endregion
+    
 
     // -- unmarshal
 
@@ -240,7 +240,7 @@ public final class OidMarshaller {
     }
 
 
-    //endregion
+    
 
     // -- marshal
     @Programmatic
@@ -277,6 +277,6 @@ public final class OidMarshaller {
     private static String nullToEmpty(Object obj) {
         return obj == null? "": "" + obj;
     }
-    //endregion
+    
 
 }

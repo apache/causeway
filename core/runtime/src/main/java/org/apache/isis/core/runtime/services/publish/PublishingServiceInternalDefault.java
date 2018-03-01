@@ -194,6 +194,6 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
     @javax.inject.Inject
     MetricsService metricsService;
 
-    //endregion
+    
 
 }

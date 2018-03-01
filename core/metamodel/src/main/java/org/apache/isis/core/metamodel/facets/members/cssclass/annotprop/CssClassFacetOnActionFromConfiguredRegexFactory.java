@@ -149,7 +149,7 @@ public class CssClassFacetOnActionFromConfiguredRegexFactory extends FacetFactor
         }
         return cssClassByPattern;
     }
-    //endregion
+    
 
 
 

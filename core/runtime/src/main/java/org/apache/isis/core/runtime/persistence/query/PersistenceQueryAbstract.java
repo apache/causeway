@@ -95,6 +95,6 @@ public abstract class PersistenceQueryAbstract implements PersistenceQuery {
         return result;
     }
 
-    //endregion
+    
 
 }

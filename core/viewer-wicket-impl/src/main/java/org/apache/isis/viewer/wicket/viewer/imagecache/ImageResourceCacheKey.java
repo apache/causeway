@@ -47,7 +47,7 @@ final class ImageResourceCacheKey implements Serializable {
     public final String getResourceName() {
         return resourceName;
     }
-    //endregion
+    
 
     // -- superKey
 
@@ -62,7 +62,7 @@ final class ImageResourceCacheKey implements Serializable {
         return new ImageResourceCacheKey(superclass, resourceName);
     }
 
-    //endregion
+    
 
     // -- resourcePaths
 
@@ -147,7 +147,7 @@ final class ImageResourceCacheKey implements Serializable {
         return Collections.unmodifiableList(resourcePaths);
     }
 
-    //endregion
+    
 
     // -- equals, hashCode
 
@@ -165,7 +165,7 @@ final class ImageResourceCacheKey implements Serializable {
         return toString != null ? toString.hashCode() : 0;
     }
 
-    //endregion
+    
 
     // -- toString
 
@@ -189,5 +189,5 @@ final class ImageResourceCacheKey implements Serializable {
         }
         return buf.toString();
     }
-    //endregion
+    
 }

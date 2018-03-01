@@ -59,7 +59,7 @@ public class ExceptionRecognizerDocDefault
         recognizer.shutdown();
     }
 
-    //endregion
+    
 
     static class ExceptionRecognizerForConcurrencyException
             extends ExceptionRecognizerForType {

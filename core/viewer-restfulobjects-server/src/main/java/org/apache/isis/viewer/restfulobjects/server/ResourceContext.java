@@ -148,7 +148,7 @@ public class ResourceContext implements RendererContext6 {
         }
     }
 
-    //endregion
+    
 
     
 
@@ -325,7 +325,7 @@ public class ResourceContext implements RendererContext6 {
         final Oid oid = objectAdapter.getOid();
         return rendered.add(oid);
     }
-    //endregion
+    
 
     // -- configuration settings
 
@@ -379,7 +379,7 @@ public class ResourceContext implements RendererContext6 {
     public boolean suppressMemberDisabledReason() {
         return getConfiguration().getBoolean("isis.viewer.restfulobjects.suppressMemberDisabledReason", SUPPRESS_MEMBER_DISABLED_REASON_DEFAULT);
     }
-    //endregion
+    
 
 
     @Override

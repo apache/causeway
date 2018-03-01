@@ -78,7 +78,7 @@ public class FixturesInstallerDelegate {
         return Collections.unmodifiableList(fixtures);
     }
 
-    //endregion
+    
 
     // -- installFixtures
 
@@ -180,7 +180,7 @@ public class FixturesInstallerDelegate {
         return true;
     }
 
-    //endregion
+    
 
     // -- logonFixture
 
@@ -214,7 +214,7 @@ public class FixturesInstallerDelegate {
         }
     }
 
-    //endregion
+    
 
     // -- dependencies (derived)
 
@@ -234,6 +234,6 @@ public class FixturesInstallerDelegate {
         return getPersistenceSession().getTransactionManager();
     }
 
-    //endregion
+    
 
 }

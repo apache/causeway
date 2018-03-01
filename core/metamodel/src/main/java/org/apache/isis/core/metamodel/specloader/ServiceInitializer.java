@@ -103,7 +103,7 @@ public class ServiceInitializer {
         }
 
     }
-    //endregion
+    
 
     // -- postConstruct
 
@@ -146,7 +146,7 @@ public class ServiceInitializer {
         }
     }
 
-    //endregion
+    
 
     // -- preDestroy
 
@@ -173,6 +173,6 @@ public class ServiceInitializer {
         }
     }
 
-    //endregion
+    
 
 }

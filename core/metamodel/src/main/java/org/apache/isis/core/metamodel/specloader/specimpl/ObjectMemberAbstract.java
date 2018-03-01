@@ -76,7 +76,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
     private final SpecificationLoader specificationLoader;
     private final ServicesInjector servicesInjector;
     private final PersistenceSessionServiceInternal persistenceSessionServiceInternal;
-    //endregion
+    
 
     protected ObjectMemberAbstract(
             final FacetedMethod facetedMethod,
@@ -113,7 +113,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         return featureType;
     }
 
-    //endregion
+    
 
     // -- Facets
 
@@ -175,7 +175,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         getFacetHolder().removeFacet(facetType);
     }
 
-    //endregion
+    
 
     // -- Name, Description, Help (convenience for facets)
     /**
@@ -209,7 +209,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         return facet.value();
     }
 
-    //endregion
+    
 
     // -- Hidden (or visible)
     /**
@@ -258,7 +258,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         final VisibilityContext<?> ic = createVisibleInteractionContext(target, interactionInitiatedBy, where);
         return InteractionUtils.isVisibleResult(this, ic);
     }
-    //endregion
+    
 
     // -- Disabled (or enabled)
     /**
@@ -296,7 +296,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         return InteractionUtils.isUsableResult(this, ic);
     }
 
-    //endregion
+    
 
     // -- isAssociation, isAction
     @Override
@@ -318,7 +318,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
     public boolean isOneToOneAssociation() {
         return featureType.isProperty();
     }
-    //endregion
+    
 
     // -- mixinAdapterFor
     /**
@@ -373,7 +373,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         return indexOfUnderscore != -1 && indexOfUnderscore != singularName.length() - 1;
     }
 
-    //endregion
+    
 
     // -- toString
 
@@ -382,7 +382,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         return String.format("id=%s,name='%s'", getId(), getName());
     }
 
-    //endregion
+    
 
     // -- Dependencies
 
@@ -414,7 +414,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         return lookupService(CommandDtoServiceInternal.class);
     }
 
-    //endregion
+    
 
     // -- command (setup)
 
@@ -489,6 +489,6 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         }
     }
 
-    //endregion
+    
 
 }

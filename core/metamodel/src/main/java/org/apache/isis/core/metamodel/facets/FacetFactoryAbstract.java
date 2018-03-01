@@ -65,7 +65,7 @@ public abstract class FacetFactoryAbstract implements FacetFactory, ServicesInje
     public void setServicesInjector(final ServicesInjector servicesInjector) {
         this.servicesInjector = servicesInjector;
     }
-    //endregion
+    
 
     // -- dependencies (looked up from services injector)
 
@@ -87,7 +87,7 @@ public abstract class FacetFactoryAbstract implements FacetFactory, ServicesInje
         return configurationServiceInternal;
     }
 
-    //endregion
+    
 
 
 }

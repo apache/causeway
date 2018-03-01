@@ -128,7 +128,7 @@ public class ServicesInjector implements ApplicationScopedComponent {
         this.autowireInject = configuration.getBoolean(KEY_INJECT_PREFIX, false);
     }
 
-    //endregion
+    
 
     // -- replaceServices
 
@@ -230,7 +230,7 @@ public class ServicesInjector implements ApplicationScopedComponent {
         return Collections.unmodifiableList(services);
     }
 
-    //endregion
+    
 
     // -- injectServicesInto
 
@@ -255,7 +255,7 @@ public class ServicesInjector implements ApplicationScopedComponent {
         }
     }
 
-    //endregion
+    
 
     // -- injectInto
 
@@ -269,7 +269,7 @@ public class ServicesInjector implements ApplicationScopedComponent {
         }
     }
 
-    //endregion
+    
 
     // -- helpers
 
@@ -423,7 +423,7 @@ public class ServicesInjector implements ApplicationScopedComponent {
 
 
 
-    //endregion
+    
 
 
 
@@ -434,7 +434,7 @@ public class ServicesInjector implements ApplicationScopedComponent {
         injectServicesInto(this.services);
     }
 
-    //endregion
+    
 
 
     // -- lookupService, lookupServices
@@ -508,7 +508,7 @@ public class ServicesInjector implements ApplicationScopedComponent {
     }
 
 
-    //endregion
+    
 
     // -- convenience lookups (singletons only, cached)
 
@@ -572,6 +572,6 @@ public class ServicesInjector implements ApplicationScopedComponent {
     }
 
 
-    //endregion
+    
 
 }

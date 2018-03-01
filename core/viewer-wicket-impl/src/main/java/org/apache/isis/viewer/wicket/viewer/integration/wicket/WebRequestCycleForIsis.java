@@ -381,7 +381,7 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
     }
 
 
-    //endregion
+    
 
     // -- Dependencies (from wicket)
 
@@ -389,6 +389,6 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
         return AuthenticatedWebSession.get();
     }
 
-    //endregion
+    
 
 }

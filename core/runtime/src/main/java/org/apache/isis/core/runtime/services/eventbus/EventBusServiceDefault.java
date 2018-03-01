@@ -73,7 +73,7 @@ public abstract class EventBusServiceDefault extends EventBusService {
         super.register(domainService);
     }
 
-    //endregion
+    
 
     // -- init, shutdown
     @Programmatic
@@ -102,7 +102,7 @@ public abstract class EventBusServiceDefault extends EventBusService {
         final String value = properties.get(key);
         return !Strings.isNullOrEmpty(value) && Boolean.parseBoolean(value);
     }
-    //endregion
+    
 
     private boolean allowLateRegistration;
     boolean isAllowLateRegistration() {
@@ -144,7 +144,7 @@ public abstract class EventBusServiceDefault extends EventBusService {
         throw new NonRecoverableException(
                 "Could not instantiate event bus implementation '" + implementation + "'");
     }
-    //endregion
+    
 
     @javax.inject.Inject
     ServiceRegistry serviceRegistry;

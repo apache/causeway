@@ -92,7 +92,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
      */
     List<ObjectActionParameter> parameters;
 
-    //endregion
+    
 
     // -- constructors
 
@@ -102,7 +102,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
         super(facetedMethod, FeatureType.ACTION, servicesInjector);
     }
 
-    //endregion
+    
 
     // -- ReturnType, OnType, Actions (set)
     /**
@@ -145,7 +145,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
         return facet != null? facet.value(): SemanticsOf.NON_IDEMPOTENT;
     }
 
-    //endregion
+    
 
     // -- Type
     @Override
@@ -160,7 +160,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
         }
         return ActionType.USER;
     }
-    //endregion
+    
 
     // -- Parameters
 
@@ -265,7 +265,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
         return parameters.get(position);
     }
 
-    //endregion
+    
 
     // -- visable, usable
 
@@ -282,7 +282,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
             Where where) {
         return new ActionUsabilityContext(targetObjectAdapter, this, getIdentifier(), interactionInitiatedBy, where);
     }
-    //endregion
+    
 
     // -- validate
 
@@ -338,7 +338,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
                 interactionInitiatedBy);
     }
 
-    //endregion
+    
 
     // -- executeWithRuleChecking, execute
 
@@ -406,7 +406,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
     }
 
 
-    //endregion
+    
 
     // -- defaults
 
@@ -481,7 +481,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
     }
 
 
-    //endregion
+    
 
     // -- choices
 
@@ -614,7 +614,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
     }
 
 
-    //endregion
+    
 
     // -- toString
 
@@ -638,7 +638,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
         return sb.toString();
     }
 
-    //endregion
+    
 
     // -- services (lookup)
 
@@ -647,7 +647,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
         return lookupService(org.apache.isis.applib.services.actinvoc.ActionInvocationContext.class);
     }
 
-    //endregion
+    
 
 
 }

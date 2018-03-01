@@ -54,7 +54,7 @@ public class ObjectSpecificationOnStandaloneList extends ObjectSpecificationAbst
         this.specId = new ObjectSpecId(getCorrespondingClass().getName());
     }
 
-    //endregion
+    
 
     // -- Introspection
 
@@ -74,7 +74,7 @@ public class ObjectSpecificationOnStandaloneList extends ObjectSpecificationAbst
         // don't install anything for NotPersistableFacet
     }
 
-    //endregion
+    
 
     // -- isXxx
 
@@ -102,7 +102,7 @@ public class ObjectSpecificationOnStandaloneList extends ObjectSpecificationAbst
         return false;
     }
 
-    //endregion
+    
 
     // -- Associations
     /**
@@ -114,7 +114,7 @@ public class ObjectSpecificationOnStandaloneList extends ObjectSpecificationAbst
         return null;
     }
 
-    //endregion
+    
 
     // -- Title and Icon
 
@@ -128,7 +128,7 @@ public class ObjectSpecificationOnStandaloneList extends ObjectSpecificationAbst
         return ICON_NAME;
     }
 
-    //endregion
+    
 
     // -- Object Actions
     /**
@@ -156,7 +156,7 @@ public class ObjectSpecificationOnStandaloneList extends ObjectSpecificationAbst
     }
 
 
-    //endregion
+    
 
 
 }

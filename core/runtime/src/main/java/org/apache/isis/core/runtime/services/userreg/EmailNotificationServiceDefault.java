@@ -64,7 +64,7 @@ public class EmailNotificationServiceDefault implements EmailNotificationService
 
     private String passwordResetTemplate;
     private String emailVerificationTemplate;
-    //endregion
+    
 
     // -- init
 
@@ -96,7 +96,7 @@ public class EmailNotificationServiceDefault implements EmailNotificationService
         }
     }
 
-    //endregion
+    
 
     // -- isConfigured
 
@@ -106,7 +106,7 @@ public class EmailNotificationServiceDefault implements EmailNotificationService
         return emailService != null && emailService.isConfigured();
     }
 
-    //endregion
+    
 
     // -- send
 
@@ -127,7 +127,7 @@ public class EmailNotificationServiceDefault implements EmailNotificationService
         return sendEmail(passwordResetEvent, body);
     }
 
-    //endregion
+    
 
     // -- helper methods for send(...)
 
@@ -171,12 +171,12 @@ public class EmailNotificationServiceDefault implements EmailNotificationService
         return message;
     }
 
-    //endregion
+    
 
     // -- dependencies
 
     @javax.inject.Inject
     private EmailService emailService;
-    //endregion
+    
 
 }

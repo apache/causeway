@@ -72,7 +72,7 @@ public class PublishedObjectsDefault implements PublishedObjects {
         this.numberObjectPropertiesModified = numberObjectPropertiesModified;
         this.changesByAdapter = changesByAdapter;
     }
-    //endregion
+    
 
 
     // -- transactionId, completedAt, user
@@ -102,7 +102,7 @@ public class PublishedObjectsDefault implements PublishedObjects {
     public String getUsername() {
         return userName;
     }
-    //endregion
+    
 
     // -- dto
     /**
@@ -114,7 +114,7 @@ public class PublishedObjectsDefault implements PublishedObjects {
     public ChangesDto getDto() {
         return dto != null ? dto : (dto = newDto());
     }
-    //endregion
+    
 
     // -- numberLoaded, numberCreated, numberUpdated, numberDeleted, numberObjectPropertiesModified
 
@@ -167,7 +167,7 @@ public class PublishedObjectsDefault implements PublishedObjects {
         );
     }
 
-    //endregion
+    
 
 
     // -- newDto, newObjectsDto, newChangesDto
@@ -229,7 +229,7 @@ public class PublishedObjectsDefault implements PublishedObjects {
     }
 
 
-    //endregion
+    
 
 
 }

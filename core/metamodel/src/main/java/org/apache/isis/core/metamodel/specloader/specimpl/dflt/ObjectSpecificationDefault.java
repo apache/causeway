@@ -103,7 +103,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
 
 
 
-    //endregion
+    
 
     // -- introspectTypeHierarchyAndMembers
     @Override
@@ -197,7 +197,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         }
     }
 
-    //endregion
+    
 
     // -- create associations and actions
     private List<ObjectAssociation> createAssociations() {
@@ -244,7 +244,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         }
     }
 
-    //endregion
+    
 
     // -- isXxx
 
@@ -278,7 +278,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         return isService;
     }
 
-    //endregion
+    
 
     // -- getObjectAction
 
@@ -347,7 +347,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         return null;
     }
 
-    //endregion
+    
 
     // -- getMember, catalog... (not API)
 
@@ -394,7 +394,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         }
     }
 
-    //endregion
+    
 
     // -- toString
     @Override
@@ -406,6 +406,6 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         return str.toString();
     }
 
-    //endregion
+    
 
 }

@@ -309,6 +309,6 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
         return IsisContext.getSessionFactory();
     }
 
-    //endregion
+    
 
 }

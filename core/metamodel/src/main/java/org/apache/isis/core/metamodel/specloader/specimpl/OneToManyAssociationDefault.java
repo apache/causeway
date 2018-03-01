@@ -87,7 +87,7 @@ public class OneToManyAssociationDefault extends ObjectAssociationAbstract imple
         return new CollectionUsabilityContext(ownerAdapter, getIdentifier(), interactionInitiatedBy, where);
     }
 
-    //endregion
+    
 
     // -- Validate Add
     // Not API
@@ -116,7 +116,7 @@ public class OneToManyAssociationDefault extends ObjectAssociationAbstract imple
         return InteractionUtils.isValidResult(this, validityContext);
     }
 
-    //endregion
+    
 
     // -- Validate Remove
     private ValidityContext<?> createValidateRemoveInteractionContext(
@@ -150,7 +150,7 @@ public class OneToManyAssociationDefault extends ObjectAssociationAbstract imple
         return !isNotPersisted();
     }
 
-    //endregion
+    
 
     // -- get, isEmpty, add, clear
 
@@ -177,7 +177,7 @@ public class OneToManyAssociationDefault extends ObjectAssociationAbstract imple
         return facet.size(collection) == 0;
     }
 
-    //endregion
+    
 
     // -- add, clear
 
@@ -225,7 +225,7 @@ public class OneToManyAssociationDefault extends ObjectAssociationAbstract imple
         }
     }
 
-    //endregion
+    
 
     // -- defaults
     @Override
@@ -237,7 +237,7 @@ public class OneToManyAssociationDefault extends ObjectAssociationAbstract imple
     public void toDefault(final ObjectAdapter ownerAdapter) {
     }
 
-    //endregion
+    
 
     // -- choices & autoComplete
 
@@ -272,7 +272,7 @@ public class OneToManyAssociationDefault extends ObjectAssociationAbstract imple
         return 0; // n/a
     }
 
-    //endregion
+    
 
     // -- toString
 
@@ -286,7 +286,7 @@ public class OneToManyAssociationDefault extends ObjectAssociationAbstract imple
         return str.toString();
     }
 
-    //endregion
+    
 
 
 }

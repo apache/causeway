@@ -169,7 +169,7 @@ public class PersistenceSession implements
 
     public static final String SERVICE_IDENTIFIER = "1";
 
-    //endregion
+    
 
     // -- constructor, fields, finalize()
 
@@ -269,7 +269,7 @@ public class PersistenceSession implements
         LOG.debug("finalizing persistence session");
     }
 
-    //endregion
+    
 
 
     // -- open
@@ -383,7 +383,7 @@ public class PersistenceSession implements
         return command;
     }
 
-    //endregion
+    
 
     // -- close
 
@@ -513,7 +513,7 @@ public class PersistenceSession implements
     }
 
 
-    //endregion
+    
 
     // -- QuerySubmitter impl, findInstancesInTransaction
 
@@ -602,7 +602,7 @@ public class PersistenceSession implements
     }
 
 
-    //endregion
+    
 
     // -- State
 
@@ -630,7 +630,7 @@ public class PersistenceSession implements
     }
 
 
-    //endregion
+    
 
     // -- createTransientInstance, createViewModelInstance
 
@@ -765,7 +765,7 @@ public class PersistenceSession implements
     }
 
 
-    //endregion
+    
 
     // -- getServices, getService
 
@@ -782,7 +782,7 @@ public class PersistenceSession implements
         return serviceAdapters;
     }
 
-    //endregion
+    
 
     // -- helper: postEvent
 
@@ -802,7 +802,7 @@ public class PersistenceSession implements
         event.setSource(pojo);
         eventBusService.post(event);
     }
-    //endregion
+    
 
 
 
@@ -857,7 +857,7 @@ public class PersistenceSession implements
         return !installFixtures;
     }
 
-    //endregion
+    
 
     // -- loadObject
 
@@ -928,7 +928,7 @@ public class PersistenceSession implements
     }
 
 
-    //endregion
+    
 
     // -- loadPersistentPojo
 
@@ -1026,7 +1026,7 @@ public class PersistenceSession implements
         return objectSpec.getCorrespondingClass();
     }
 
-    //endregion
+    
 
     // -- lazilyLoaded
 
@@ -1041,7 +1041,7 @@ public class PersistenceSession implements
     }
 
 
-    //endregion
+    
 
     // -- refreshRootInTransaction, refreshRoot, resolve
 
@@ -1102,7 +1102,7 @@ public class PersistenceSession implements
         refreshRootInTransaction(adapter);
     }
 
-    //endregion
+    
 
     // -- makePersistent
 
@@ -1183,7 +1183,7 @@ public class PersistenceSession implements
     }
 
 
-    //endregion
+    
 
     // -- ObjectPersistor impl
     public void makePersistent(final ObjectAdapter adapter) {
@@ -1193,7 +1193,7 @@ public class PersistenceSession implements
     public void remove(final ObjectAdapter adapter) {
         destroyObjectInTransaction(adapter);
     }
-    //endregion
+    
 
 
     // -- destroyObjectInTransaction
@@ -1217,7 +1217,7 @@ public class PersistenceSession implements
         });
     }
 
-    //endregion
+    
 
     // -- newXxxCommand
     /**
@@ -1259,7 +1259,7 @@ public class PersistenceSession implements
         }
         return new DataNucleusDeleteObjectCommand(adapter, persistenceManager);
     }
-    //endregion
+    
 
     // -- execute
     public void execute(final List<PersistenceCommand> commands) {
@@ -1278,7 +1278,7 @@ public class PersistenceSession implements
         }
         persistenceManager.flush();
     }
-    //endregion
+    
 
     // -- getAggregateRoot, remappedFrom
 
@@ -1303,7 +1303,7 @@ public class PersistenceSession implements
     }
 
 
-    //endregion
+    
 
     // -- transactions
     public void startTransaction() {
@@ -1328,7 +1328,7 @@ public class PersistenceSession implements
         }
     }
 
-    //endregion
+    
 
 
     // -- dependencies (from constructor)
@@ -1348,7 +1348,7 @@ public class PersistenceSession implements
     }
 
 
-    //endregion
+    
 
     // -- transactionManager
 
@@ -1366,7 +1366,7 @@ public class PersistenceSession implements
 //    }
 
 
-    //endregion
+    
 
 
     // -- jdoPersistenceManager delegate methods
@@ -2109,14 +2109,14 @@ public class PersistenceSession implements
     }
 
 
-    //endregion
+    
 
 
     // -- TransactionManager delegate methods
     protected IsisTransaction getCurrentTransaction() {
         return transactionManager.getCurrentTransaction();
     }
-    //endregion
+    
 
     // -- FrameworkSynchronizer delegate methods
 
@@ -2255,7 +2255,7 @@ public class PersistenceSession implements
         final Class<?> pojoClass = pojo.getClass();
         return getSpecificationLoader().loadSpecification(pojoClass);
     }
-    //endregion
+    
 
 
     /**
@@ -2383,7 +2383,7 @@ public class PersistenceSession implements
     }
 
 
-    //endregion
+    
 
     // -- DomainObjectServices impl
 
@@ -2409,7 +2409,7 @@ public class PersistenceSession implements
     }
 
 
-    //endregion
+    
 
     // -- helpers: lookupService, lookupServices
 
@@ -2428,7 +2428,7 @@ public class PersistenceSession implements
     private <T> List<T> lookupServices(final Class<T> serviceClass) {
         return servicesInjector.lookupServices(serviceClass);
     }
-    //endregion
+    
 
     // -- toString
 
@@ -2438,7 +2438,7 @@ public class PersistenceSession implements
     }
 
 
-    //endregion
+    
 
 
 

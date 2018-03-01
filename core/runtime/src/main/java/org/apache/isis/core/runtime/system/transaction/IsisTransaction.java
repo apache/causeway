@@ -200,7 +200,7 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
         LOG.debug("new transaction {}", this);
     }
 
-    //endregion
+    
 
     // -- transactionId
 
@@ -222,7 +222,7 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
         return sequence;
     }
 
-    //endregion
+    
 
     // -- state
 
@@ -252,7 +252,7 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
     }
 
 
-    //endregion
+    
 
     // -- commands
 
@@ -320,7 +320,7 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
         removeCommand(CreateObjectCommand.class, onObject);
     }
 
-    //endregion
+    
 
     // -- flush
 
@@ -400,7 +400,7 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
         
     }
 
-    //endregion
+    
 
     // -- preCommit, commit
 
@@ -447,7 +447,7 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
     }
 
 
-    //endregion
+    
 
     // -- abortCause, markAsAborted
 
@@ -497,7 +497,7 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
 
 
 
-    //endregion
+    
 
     // -- toString
 
@@ -512,7 +512,7 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
         return str;
     }
 
-    //endregion
+    
 
     // -- getMessageBroker
 
@@ -528,7 +528,7 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
         return messageBroker;
     }
 
-    //endregion
+    
 
 }
 

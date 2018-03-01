@@ -499,7 +499,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
         final ComponentFactoryRegistryAccessor cfra = (ComponentFactoryRegistryAccessor) getApplication();
         return cfra.getComponentFactoryRegistry();
     }
-    //endregion
+    
 
 
     // -- injected (application-scope) 
@@ -517,7 +517,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
         return getIsisSessionFactory().getServicesInjector();
     }
 
-    //endregion
+    
 
     // -- derived from injected components (session-scope)
 
@@ -529,7 +529,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
         return getIsisSessionFactory().getCurrentSession().getAuthenticationSession();
     }
 
-    //endregion
+    
 
 
 }

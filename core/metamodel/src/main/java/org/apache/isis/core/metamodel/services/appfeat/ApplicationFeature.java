@@ -59,7 +59,7 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
     public static final int TYPICAL_LENGTH_PKG_FQN = 50;
     public static final int TYPICAL_LENGTH_CLS_NAME = 50;
     public static final int TYPICAL_LENGTH_MEMBER_NAME = 50;
-    //endregion
+    
 
     // -- constructors
     public ApplicationFeature() {
@@ -68,7 +68,7 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
     public ApplicationFeature(final ApplicationFeatureId featureId) {
         setFeatureId(featureId);
     }
-    //endregion
+    
 
     // -- featureId
     private ApplicationFeatureId featureId;
@@ -81,7 +81,7 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
     public void setFeatureId(final ApplicationFeatureId applicationFeatureId) {
         this.featureId = applicationFeatureId;
     }
-    //endregion
+    
 
     // -- memberType
     private ApplicationMemberType memberType;
@@ -97,7 +97,7 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
     public void setMemberType(final ApplicationMemberType memberType) {
         this.memberType = memberType;
     }
-    //endregion
+    
 
     // -- returnTypeName (for: properties, collections, actions)
     private String returnTypeName;
@@ -113,7 +113,7 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
     public void setReturnTypeName(final String returnTypeName) {
         this.returnTypeName = returnTypeName;
     }
-    //endregion
+    
 
     // -- contributed (for: properties, collections, actions)
     private boolean contributed;
@@ -126,7 +126,7 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
     public void setContributed(final boolean contributed) {
         this.contributed = contributed;
     }
-    //endregion
+    
 
     // -- derived (properties and collections)
     private Boolean derived;
@@ -142,7 +142,7 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
     public void setDerived(final Boolean derived) {
         this.derived = derived;
     }
-    //endregion
+    
 
     // -- propertyMaxLength (properties only)
     private Integer propertyMaxLength;
@@ -158,7 +158,7 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
     public void setPropertyMaxLength(final Integer propertyMaxLength) {
         this.propertyMaxLength = propertyMaxLength;
     }
-    //endregion
+    
 
     // -- propertyTypicalLength (properties only)
     private Integer propertyTypicalLength;
@@ -174,7 +174,7 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
     public void setPropertyTypicalLength(final Integer propertyTypicalLength) {
         this.propertyTypicalLength = propertyTypicalLength;
     }
-    //endregion
+    
 
     // -- actionSemantics (actions only)
     private SemanticsOf actionSemantics;
@@ -190,7 +190,7 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
     public void setActionSemantics(final SemanticsOf actionSemantics) {
         this.actionSemantics = actionSemantics;
     }
-    //endregion
+    
 
     // -- packages: Contents
     private final SortedSet<ApplicationFeatureId> contents = Sets.newTreeSet();
@@ -207,7 +207,7 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
         ApplicationFeatureType.ensurePackageOrClass(contentId);
         this.contents.add(contentId);
     }
-    //endregion
+    
 
     // -- classes: Properties, Collections, Actions
     private final SortedSet<ApplicationFeatureId> properties = Sets.newTreeSet();
@@ -255,7 +255,7 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
                 return actions;
         }
     }
-    //endregion
+    
 
     // -- Functions
 
@@ -289,7 +289,7 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
         }
     }
 
-    //endregion
+    
 
     // -- equals, hashCode, compareTo, toString
 
@@ -325,6 +325,6 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
         return toString.toString(this);
     }
 
-    //endregion
+    
 
 }

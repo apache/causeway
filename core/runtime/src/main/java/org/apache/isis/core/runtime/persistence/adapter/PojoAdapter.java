@@ -88,7 +88,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         this.pojo = pojo;
         this.oid = oid;
     }
-    //endregion
+    
 
     // -- getSpecification
 
@@ -107,7 +107,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         return specification;
     }
 
-    //endregion
+    
 
     // -- getObject, replacePojo
     @Override
@@ -124,7 +124,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
     public void replacePojo(final Object pojo) {
         this.pojo = pojo;
     }
-    //endregion
+    
 
     // -- getOid, replaceOid
     @Override
@@ -137,7 +137,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         Ensure.ensureThatArg(oid, is(notNullValue())); // values have no oid, so cannot be replaced 
         this.oid = persistedOid;
     }
-    //endregion
+    
 
     // -- isParentedCollection, isValue
 
@@ -151,7 +151,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         return oid == null;
     }
 
-    //endregion
+    
 
     // -- isTransient, representsPersistent, isDestroyed
 
@@ -205,7 +205,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         }
         return false;
     }
-    //endregion
+    
 
     // -- getAggregateRoot
     @Override
@@ -217,7 +217,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         return persistenceSession.getAggregateRoot(collectionOid);
     }
 
-    //endregion
+    
 
     // -- getVersion, setVersion, checkLock
 
@@ -273,7 +273,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         return version == null || otherVersion == null || otherVersion.different(version);
     }
 
-    //endregion
+    
 
     // -- titleString
     /**
@@ -392,7 +392,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         }
         return "S"; // standalone adapter (value)
     }
-    //endregion
+    
 
     // -- iconName
 
@@ -404,7 +404,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         return getSpecification().getIconName(this);
     }
 
-    //endregion
+    
 
     // -- elementSpecification
 
@@ -428,7 +428,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
     public void setElementSpecificationProvider(final ElementSpecificationProvider elementSpecificationProvider) {
         this.elementSpecificationProvider = elementSpecificationProvider;
     }
-    //endregion
+    
 
     // -- getInstance (unsupported for this impl)
 
@@ -440,6 +440,6 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         throw new UnsupportedOperationException();
     }
 
-    //endregion
+    
 
 }

@@ -38,7 +38,7 @@ public class MessageBroker implements Serializable {
 
     public MessageBroker() {
     }
-    //endregion
+    
 
     // -- reset
 
@@ -48,7 +48,7 @@ public class MessageBroker implements Serializable {
         applicationError = null;
     }
 
-    //endregion
+    
 
     // -- messages
 
@@ -60,7 +60,7 @@ public class MessageBroker implements Serializable {
         messages.add(message);
     }
 
-    //endregion
+    
 
     // -- warnings
 
@@ -76,7 +76,7 @@ public class MessageBroker implements Serializable {
         warnings.add(message);
     }
 
-    //endregion
+    
 
     // -- applicationError
     public String getApplicationError() {
@@ -89,7 +89,7 @@ public class MessageBroker implements Serializable {
         this.applicationError = applicationError;
     }
 
-    //endregion
+    
 
     // -- helpers
 
@@ -99,7 +99,7 @@ public class MessageBroker implements Serializable {
         return copy;
     }
 
-    //endregion
+    
 
 
 }

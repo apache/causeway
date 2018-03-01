@@ -155,7 +155,7 @@ public abstract class ContentNegotiationServiceAbstract implements ContentNegoti
         return mediaParam;
     }
 
-    //endregion
+    
 
     @javax.inject.Inject
     protected DomainObjectContainer container;

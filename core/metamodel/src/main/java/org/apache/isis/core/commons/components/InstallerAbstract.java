@@ -59,7 +59,7 @@ public abstract class InstallerAbstract implements Installer {
     public IsisConfiguration getConfiguration() {
         return isisConfiguration;
     }
-    //endregion
+    
 
     // -- init, shutdown
 
@@ -77,7 +77,7 @@ public abstract class InstallerAbstract implements Installer {
         // no-op implementation, subclasses may override!
     }
 
-    //endregion
+    
 
     // -- helpers (for subclasses)
 
@@ -97,6 +97,6 @@ public abstract class InstallerAbstract implements Installer {
         return Collections.unmodifiableList(arrayList);
     }
 
-    //endregion
+    
 
 }

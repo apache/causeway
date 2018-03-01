@@ -234,7 +234,7 @@ public class CommandDtoServiceInternalDefault implements CommandDtoServiceIntern
         return isisSessionFactory.getCurrentSession().getPersistenceSession();
     }
 
-    //endregion
+    
 
 
 }

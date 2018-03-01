@@ -92,7 +92,7 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
         return new PropertyUsabilityContext(ownerAdapter, getIdentifier(), interactionInitiatedBy, where);
     }
 
-    //endregion
+    
 
     // -- Validity
     private ValidityContext<?> createValidateInteractionContext(
@@ -122,7 +122,7 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
         return InteractionUtils.isValidResult(this, validityContext);
     }
 
-    //endregion
+    
 
     // -- init
     @Override
@@ -133,7 +133,7 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
         }
     }
 
-    //endregion
+    
 
     // -- Access (get, isEmpty)
 
@@ -167,7 +167,7 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
         return get(ownerAdapter, interactionInitiatedBy) == null;
     }
 
-    //endregion
+    
 
     // -- Set
     @Override
@@ -232,7 +232,7 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
         facet.clearProperty(this, ownerAdapter, interactionInitiatedBy);
     }
 
-    //endregion
+    
 
     // -- defaults
     @Override
@@ -264,7 +264,7 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
         }
     }
 
-    //endregion
+    
 
     // -- choices and autoComplete
     @Override
@@ -320,7 +320,7 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
         return propertyAutoCompleteFacet != null? propertyAutoCompleteFacet.getMinLength(): MinLengthUtil.MIN_LENGTH_DEFAULT;
     }
 
-    //endregion
+    
 
     /**
      * Internal API
@@ -366,7 +366,7 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
         str.append("type", getSpecification().getShortIdentifier());
         return str.toString();
     }
-    //endregion
+    
 
 
 }

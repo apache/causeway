@@ -106,7 +106,7 @@ public class IsisSessionFactory
         return appManifest;
     }
 
-    //endregion
+    
 
     // -- constructServices, destroyServicesAndShutdown
 
@@ -230,7 +230,7 @@ public class IsisSessionFactory
         specificationLoader.shutdown();
     }
 
-    //endregion
+    
 
     // -- logonFixture
 
@@ -250,7 +250,7 @@ public class IsisSessionFactory
         return logonFixture;
     }
 
-    //endregion
+    
 
     // -- openSession, closeSession, currentSession, inSession
     private final ThreadLocal<IsisSession> currentSession = new ThreadLocal<>();
@@ -373,7 +373,7 @@ public class IsisSessionFactory
         }
     }
 
-    //endregion
+    
 
     // -- component accessors
     /**
@@ -454,6 +454,6 @@ public class IsisSessionFactory
     }
 
 
-    //endregion
+    
 
 }

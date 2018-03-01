@@ -34,7 +34,7 @@ public abstract class AuthenticatorAbstract implements Authenticator {
         this.configuration = configuration;
     }
 
-    //endregion
+    
 
     // -- init, shutdown
 
@@ -54,7 +54,7 @@ public abstract class AuthenticatorAbstract implements Authenticator {
         return deploymentCategory;
     }
 
-    //endregion
+    
 
     // -- API
 
@@ -91,7 +91,7 @@ public abstract class AuthenticatorAbstract implements Authenticator {
     }
 
 
-    //endregion
+    
 
     // -- Injected (via constructor)
 
@@ -99,6 +99,6 @@ public abstract class AuthenticatorAbstract implements Authenticator {
         return configuration;
     }
 
-    //endregion
+    
 
 }

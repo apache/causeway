@@ -76,7 +76,7 @@ public class ObjectContractsLegacy {
         }
         return chain.result();
     }
-    //endregion
+    
 
     // -- compareBy
     /**
@@ -96,7 +96,7 @@ public class ObjectContractsLegacy {
     public static <T> Comparator<T> compareBy(final String... propertyNames){
         return (p, q) -> compare(p, q, propertyNames);
     }
-    //endregion
+    
 
     // -- toString
 
@@ -117,7 +117,7 @@ public class ObjectContractsLegacy {
     public static String toString(Object p, String... propertyNames) {
         return new ObjectContractsLegacy().toStringOf(p, propertyNames);
     }
-    //endregion
+    
 
     // -- hashCode
     /**
@@ -151,7 +151,7 @@ public class ObjectContractsLegacy {
         }
         return Objects.hashCode(propertyValues.toArray());
     }
-    //endregion
+    
 
     // -- equals
 
@@ -205,7 +205,7 @@ public class ObjectContractsLegacy {
         }
         return true;
     }
-    //endregion
+    
 
     // -- helpers
     private static Iterable<Clause> clausesFor(final Iterable<String> iterable) {
@@ -222,7 +222,7 @@ public class ObjectContractsLegacy {
     private static List<String> varargsToIterable(final String[] iterable) {
         return Arrays.asList(iterable);
     }
-    //endregion
+    
 
     // -- toStringOf
 
@@ -280,7 +280,7 @@ public class ObjectContractsLegacy {
         return value.toString();
     }
 
-    //endregion
+    
 
 
 }

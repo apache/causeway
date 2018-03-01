@@ -58,7 +58,7 @@ public class IsisComponentProviderDefault2 extends IsisComponentProvider  {
         super(appManifest, configuration, authenticationManager, authorizationManager);
     }
 
-    //endregion
+    
 
     // -- constructor helpers (factories)
     /**
@@ -79,7 +79,7 @@ public class IsisComponentProviderDefault2 extends IsisComponentProvider  {
         authenticationManager.addAuthenticator(new AuthenticatorBypass(configuration));
         return authenticationManager;
     }
-    //endregion
+    
 
 
 }

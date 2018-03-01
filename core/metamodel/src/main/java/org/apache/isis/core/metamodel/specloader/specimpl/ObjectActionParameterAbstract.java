@@ -278,7 +278,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
         }
     }
 
-    //endregion
+    
 
     // -- AutoComplete
 
@@ -320,7 +320,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
         return facet != null? facet.getMinLength(): MinLengthUtil.MIN_LENGTH_DEFAULT;
     }
 
-    //endregion
+    
 
     // -- Choices
 
@@ -368,7 +368,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
         return adapters.toArray(new ObjectAdapter[adapters.size()]);
     }
 
-    //endregion
+    
 
     // -- Defaults
 
@@ -458,7 +458,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
         }
     }
 
-    //endregion
+    
 
     // -- Validation
 
@@ -518,7 +518,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
         return arguments;
     }
 
-    //endregion
+    
 
     // -- Dependencies (from parent)
 
@@ -534,6 +534,6 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
         return parentAction.getPersistenceSessionService();
     }
 
-    //endregion
+    
 
 }

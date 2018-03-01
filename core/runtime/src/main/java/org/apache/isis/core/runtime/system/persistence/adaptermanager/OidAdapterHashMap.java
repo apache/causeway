@@ -54,7 +54,7 @@ public class OidAdapterHashMap implements Iterable<Oid>, SessionScopedComponent 
         adapterByOidMap.clear();
     }
 
-    //endregion
+    
 
     // -- add, remove
     /**
@@ -83,7 +83,7 @@ public class OidAdapterHashMap implements Iterable<Oid>, SessionScopedComponent 
         return adapterByOidMap.remove(oid) != null;
     }
 
-    //endregion
+    
 
     // -- getAdapter, iterator
     /**
@@ -98,7 +98,7 @@ public class OidAdapterHashMap implements Iterable<Oid>, SessionScopedComponent 
         return adapterByOidMap.keySet().iterator();
     }
 
-    //endregion
+    
 
 
 }

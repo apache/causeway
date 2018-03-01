@@ -91,7 +91,7 @@ public class ShiroAuthenticatorOrAuthorizor implements Authenticator, Authorizor
         return configuration;
     }
 
-    //endregion
+    
 
     // -- init, shutdown
 
@@ -110,7 +110,7 @@ public class ShiroAuthenticatorOrAuthorizor implements Authenticator, Authorizor
         return deploymentCategory;
     }
 
-    //endregion
+    
 
     // -- Authenticator API
 
@@ -233,7 +233,7 @@ public class ShiroAuthenticatorOrAuthorizor implements Authenticator, Authorizor
         
         return new UsernamePasswordToken(username, password);
     }
-    //endregion
+    
 
     // -- Authorizor API
 
@@ -299,7 +299,7 @@ public class ShiroAuthenticatorOrAuthorizor implements Authenticator, Authorizor
         return false;
     }
 
-    //endregion
+    
 
     // -- Injected (via Shiro service locator)
 
@@ -320,6 +320,6 @@ public class ShiroAuthenticatorOrAuthorizor implements Authenticator, Authorizor
         return (RealmSecurityManager) securityManager;
     }
 
-    //endregion
+    
 
 }

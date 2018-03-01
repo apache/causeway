@@ -121,7 +121,7 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
     public static ApplicationFeatureId parseEncoded(final String encodedString) {
         return new ApplicationFeatureId(base64UrlDecode(encodedString));
     }
-    //endregion
+    
 
     // //////////////////////////////////////
 
@@ -145,7 +145,7 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
         type.init(this, fullyQualifiedName);
     }
 
-    //endregion
+    
 
     // //////////////////////////////////////
 
@@ -159,7 +159,7 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
         buf.append(getFullyQualifiedName());
         return buf.toString();
     }
-    //endregion
+    
 
     // //////////////////////////////////////
 
@@ -178,7 +178,7 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
         return buf.toString();
     }
 
-    //endregion
+    
 
     // -- objectSpecId (property)
 
@@ -197,7 +197,7 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
         return ObjectSpecId.of(buf.toString());
     }
 
-    //endregion
+    
 
     // //////////////////////////////////////
 
@@ -207,7 +207,7 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
     public ApplicationFeatureType getType() {
         return type;
     }
-    //endregion
+    
 
     // //////////////////////////////////////
 
@@ -222,7 +222,7 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
     void setPackageName(final String packageName) {
         this.packageName = packageName;
     }
-    //endregion
+    
 
     // //////////////////////////////////////
 
@@ -238,7 +238,7 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
     void setClassName(final String className) {
         this.className = className;
     }
-    //endregion
+    
 
     // //////////////////////////////////////
 
@@ -253,7 +253,7 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
     void setMemberName(final String memberName) {
         this.memberName = memberName;
     }
-    //endregion
+    
 
     // //////////////////////////////////////
 
@@ -286,7 +286,7 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
         }
     }
 
-    //endregion
+    
 
     // //////////////////////////////////////
 
@@ -300,7 +300,7 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
         final String classFqn = this.getPackageName() + "." + getClassName();
         return newClass(classFqn);
     }
-    //endregion
+    
 
     // //////////////////////////////////////
 
@@ -328,7 +328,7 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
 
 
 
-    //endregion
+    
 
     // //////////////////////////////////////
 
@@ -353,7 +353,7 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
         };
 
     }
-    //endregion
+    
 
     // //////////////////////////////////////
 
@@ -388,7 +388,7 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
             };
         }
     }
-    //endregion
+    
 
     // //////////////////////////////////////
 
@@ -407,7 +407,7 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
             }
         }
     }
-    //endregion
+    
 
     // //////////////////////////////////////
 
@@ -439,7 +439,7 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
         }
         return parentIds;
     }
-    //endregion
+    
 
     // //////////////////////////////////////
 
@@ -542,6 +542,6 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
         throw new IllegalStateException("Unknown feature type " + type);
     }
 
-    //endregion
+    
 
 }

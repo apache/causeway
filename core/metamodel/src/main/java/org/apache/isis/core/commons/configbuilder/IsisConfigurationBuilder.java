@@ -160,7 +160,7 @@ public final class IsisConfigurationBuilder {
         primeWith(new PrimerForEnvironmentVariableISIS_OPTS());
     }
 
-    //endregion
+    
 
     // -- addResourceStreamSource, addResourceStreamSources
 
@@ -179,7 +179,7 @@ public final class IsisConfigurationBuilder {
         }
     }
 
-    //endregion
+    
 
     // -- addConfigurationResource
 
@@ -249,7 +249,7 @@ public final class IsisConfigurationBuilder {
     }
 
 
-    //endregion
+    
 
     // -- add, put
 
@@ -270,7 +270,7 @@ public final class IsisConfigurationBuilder {
     }
 
 
-    //endregion
+    
 
     // -- parseAndPrimeWith, primeWith
 
@@ -323,7 +323,7 @@ public final class IsisConfigurationBuilder {
         primer.prime(this);
     }
 
-    //endregion
+    
 
     // -- getConfiguration, peekConfiguration, isLocked
 
@@ -367,7 +367,7 @@ public final class IsisConfigurationBuilder {
         }
     }
 
-    //endregion
+    
 
     // -- dumpResourcesToLog, toString
 
@@ -395,6 +395,6 @@ public final class IsisConfigurationBuilder {
                 .toString();
     }
 
-    //endregion
+    
 
 }

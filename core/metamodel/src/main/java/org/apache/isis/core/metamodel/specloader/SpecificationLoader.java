@@ -124,7 +124,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
     }
 
 
-    //endregion
+    
 
 
     // -- init
@@ -196,7 +196,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
     }
 
 
-    //endregion
+    
 
     // -- shutdown
 
@@ -209,7 +209,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
         cache.clear();
     }
 
-    //endregion
+    
 
     // -- invalidateCache
 
@@ -245,7 +245,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
         cache.recache(newSpec);
     }
 
-    //endregion
+    
 
     // -- validation
 
@@ -268,7 +268,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
         return validationFailures;
     }
 
-    //endregion
+    
 
 
     // -- loadSpecification, loadSpecifications
@@ -472,7 +472,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
         postProcessor.postProcess(spec);
     }
 
-    //endregion
+    
 
     // -- allSpecifications
     /**
@@ -493,7 +493,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
         return cache.allSpecifications();
     }
 
-    //endregion
+    
 
     // -- getServiceClasses, isServiceClass
 
@@ -514,7 +514,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
         return this.servicesInjector.isRegisteredService(cls);
     }
 
-    //endregion
+    
 
     // -- loaded
     /**
@@ -533,7 +533,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
         return cache.get(fullyQualifiedClassName) != null;
     }
 
-    //endregion
+    
 
     // -- lookupBySpecId
     @Programmatic
@@ -547,7 +547,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
     }
 
 
-    //endregion
+    
 
     @Programmatic
     public IsisConfiguration getConfiguration() {

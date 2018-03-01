@@ -75,7 +75,7 @@ public class IsisTransactionManager implements SessionScopedComponent {
         return persistenceSession;
     }
 
-    //endregion
+    
 
 
     // -- open, close
@@ -94,7 +94,7 @@ public class IsisTransactionManager implements SessionScopedComponent {
         }
         session = null;
     }
-    //endregion
+    
 
     // -- current transaction (if any)
     /**
@@ -108,7 +108,7 @@ public class IsisTransactionManager implements SessionScopedComponent {
         return transactionLevel;
     }
 
-    //endregion
+    
 
 
     // -- Transactional Execution
@@ -205,7 +205,7 @@ public class IsisTransactionManager implements SessionScopedComponent {
         return getCurrentTransaction() != null && !getCurrentTransaction().getState().isComplete();
     }
 
-    //endregion
+    
 
     // -- startTransaction
 
@@ -252,7 +252,7 @@ public class IsisTransactionManager implements SessionScopedComponent {
         }
     }
 
-    //endregion
+    
 
     // -- flushTransaction
     public boolean flushTransaction() {
@@ -267,7 +267,7 @@ public class IsisTransactionManager implements SessionScopedComponent {
         return false;
     }
 
-    //endregion
+    
 
     // -- endTransaction, abortTransaction
     /**
@@ -467,12 +467,12 @@ public class IsisTransactionManager implements SessionScopedComponent {
         }
     }
 
-    //endregion
+    
 
     // -- addCommand
     public void addCommand(final PersistenceCommand command) {
         getCurrentTransaction().addCommand(command);
     }
-    //endregion
+    
 
 }

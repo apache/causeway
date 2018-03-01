@@ -171,7 +171,7 @@ public class DomainEventHelper {
                 ? Arrays.asList(arguments)
                 : Collections.emptyList();
     }
-    //endregion
+    
 
     // -- postEventForProperty, newPropertyInteraction
     public PropertyDomainEvent<?, ?> postEventForProperty(
@@ -260,7 +260,7 @@ public class DomainEventHelper {
 
         throw new NoSuchMethodException(type.getName()+".<init>(? super " + source.getClass().getName() + ", " + Identifier.class.getName() + ", java.lang.Object, java.lang.Object)");
     }
-    //endregion
+    
 
     // -- postEventForCollection, newCollectionDomainEvent
 
@@ -390,7 +390,7 @@ public class DomainEventHelper {
         throw new NoSuchMethodException(type.getName()+".<init>(? super " + source.getClass().getName() + ", " + Identifier.class.getName() + ", java.lang.Object)");
     }
 
-    //endregion
+    
 
 
     // -- eventBusService
@@ -401,6 +401,6 @@ public class DomainEventHelper {
         return this.servicesInjector.lookupService(EventBusService.class);
     }
 
-    //endregion
+    
 
 }

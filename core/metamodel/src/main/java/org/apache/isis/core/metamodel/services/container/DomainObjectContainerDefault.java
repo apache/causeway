@@ -72,7 +72,7 @@ public class DomainObjectContainerDefault implements DomainObjectContainer {
         }
     }
 
-    //endregion
+    
 
     // --  remove
 
@@ -90,7 +90,7 @@ public class DomainObjectContainerDefault implements DomainObjectContainer {
         persistenceSessionServiceInternal.remove(adapter);
     }
 
-    //endregion
+    
 
 
     // -- resolve, objectChanged (DEPRECATED)
@@ -140,7 +140,7 @@ public class DomainObjectContainerDefault implements DomainObjectContainer {
     public void objectChanged(final Object object) {
     }
 
-    //endregion
+    
 
     // -- commit (deprecated)
 
@@ -154,7 +154,7 @@ public class DomainObjectContainerDefault implements DomainObjectContainer {
         persistenceSessionServiceInternal.commit();
     }
 
-    //endregion
+    
 
     // -- isValid, validate
 
@@ -173,7 +173,7 @@ public class DomainObjectContainerDefault implements DomainObjectContainer {
         return validityResult.getReason();
     }
 
-    //endregion
+    
 
 
     // -- isViewModel
@@ -184,7 +184,7 @@ public class DomainObjectContainerDefault implements DomainObjectContainer {
         final ObjectAdapter adapter = persistenceSessionServiceInternal.adapterFor(unwrapped(domainObject));
         return adapter.getSpecification().isViewModel();
     }
-    //endregion
+    
 
     // -- persistence
 
@@ -211,7 +211,7 @@ public class DomainObjectContainerDefault implements DomainObjectContainer {
     }
 
 
-    //endregion
+    
 
 
 
@@ -226,7 +226,7 @@ public class DomainObjectContainerDefault implements DomainObjectContainer {
     private Object unwrapped(Object domainObject) {
         return wrapperFactory != null ? wrapperFactory.unwrap(domainObject) : domainObject;
     }
-    //endregion
+    
 
 
     // -- service dependencies
@@ -243,6 +243,6 @@ public class DomainObjectContainerDefault implements DomainObjectContainer {
     @javax.inject.Inject
     PersistenceSessionServiceInternal persistenceSessionServiceInternal;
 
-    //endregion
+    
 
 }

@@ -65,6 +65,6 @@ public abstract class AuthenticationSessionStrategyAbstract implements Authentic
         return IsisContext.getSessionFactory();
     }
 
-    //endregion
+    
 
 }

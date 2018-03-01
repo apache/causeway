@@ -75,7 +75,7 @@ public class Version implements Serializable, Encodable {
         return new Version(sequence, user, utcTimestamp);
     }
 
-    //endregion
+    
 
     // -- constructor, fields
     private final Long sequence;
@@ -88,7 +88,7 @@ public class Version implements Serializable, Encodable {
         this.utcTimestamp = utcTimestamp;
     }
 
-    //endregion
+    
 
     // -- encodable
 
@@ -104,7 +104,7 @@ public class Version implements Serializable, Encodable {
         output.writeLong(utcTimestamp);
     }
 
-    //endregion
+    
 
     // -- getters
     /**
@@ -151,7 +151,7 @@ public class Version implements Serializable, Encodable {
         return utcTimestamp != null? new Date(this.utcTimestamp): null;
     }
 
-    //endregion
+    
 
     // -- enString
 
@@ -159,7 +159,7 @@ public class Version implements Serializable, Encodable {
         return OID_MARSHALLER.marshal(this);
     }
 
-    //endregion
+    
 
     // -- equals, hashCode
 
@@ -200,7 +200,7 @@ public class Version implements Serializable, Encodable {
         return !equals(version);
     }
 
-    //endregion
+    
 
     // -- sequence
 
@@ -216,6 +216,6 @@ public class Version implements Serializable, Encodable {
         return Long.toString(sequence, 16);
     }
 
-    //endregion
+    
 
 }

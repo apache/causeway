@@ -54,7 +54,7 @@ public class IsisSession implements SessionScopedComponent {
         this.authenticationSession = authenticationSession;
         this.persistenceSession = persistenceSession;
     }
-    //endregion
+    
 
     // -- open, close
     void open() {
@@ -70,7 +70,7 @@ public class IsisSession implements SessionScopedComponent {
         }
     }
 
-    //endregion
+    
 
 
     // -- AuthenticationSession
@@ -81,7 +81,7 @@ public class IsisSession implements SessionScopedComponent {
     public AuthenticationSession getAuthenticationSession() {
         return authenticationSession;
     }
-    //endregion
+    
 
     // -- Persistence Session
     /**
@@ -91,7 +91,7 @@ public class IsisSession implements SessionScopedComponent {
         return persistenceSession;
     }
 
-    //endregion
+    
 
     // -- transaction
 
@@ -103,7 +103,7 @@ public class IsisSession implements SessionScopedComponent {
         return getTransactionManager().getCurrentTransaction();
     }
 
-    //endregion
+    
 
     // -- toString
     @Override
@@ -114,13 +114,13 @@ public class IsisSession implements SessionScopedComponent {
         asString.append("transaction", getCurrentTransaction());
         return asString.toString();
     }
-    //endregion
+    
 
     // -- Dependencies (from constructor)
 
     private IsisTransactionManager getTransactionManager() {
         return getPersistenceSession().getTransactionManager();
     }
-    //endregion
+    
 
 }

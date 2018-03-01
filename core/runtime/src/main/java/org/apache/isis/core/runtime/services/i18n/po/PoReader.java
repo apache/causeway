@@ -90,7 +90,7 @@ class PoReader extends PoAbstract {
     @Override
     void shutdown() {
     }
-    //endregion
+    
 
     public String translate(final String context, final String msgId) {
         if(translationsResolver == null) {

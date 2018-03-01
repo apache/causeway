@@ -58,7 +58,7 @@ public class ExplorationAuthenticator extends AuthenticatorAbstract {
         }
     }
 
-    //endregion
+    
 
     private List<SimpleSession> parseUsers(final String users) {
         final List<SimpleSession> registeredUsers = new ArrayList<SimpleSession>();

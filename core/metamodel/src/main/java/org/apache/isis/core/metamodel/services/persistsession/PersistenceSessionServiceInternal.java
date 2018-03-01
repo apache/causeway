@@ -46,7 +46,7 @@ public interface PersistenceSessionServiceInternal extends AdapterManager {
     @Programmatic
     ObjectAdapter createViewModelInstance(ObjectSpecification spec, String memento);
 
-    //endregion
+    
 
     // -- retrieve
 
@@ -87,7 +87,7 @@ public interface PersistenceSessionServiceInternal extends AdapterManager {
     @Programmatic
     Bookmark bookmarkFor(Class<?> cls, String identifier);
 
-    //endregion
+    
 
     // -- beginTran, flush, commit, currentTransaction
 
@@ -125,7 +125,7 @@ public interface PersistenceSessionServiceInternal extends AdapterManager {
     @Programmatic
     TransactionState getTransactionState();
 
-    //endregion
+    
 
     // -- makePersistent, remove
 
@@ -149,7 +149,7 @@ public interface PersistenceSessionServiceInternal extends AdapterManager {
     @Programmatic
     void remove(ObjectAdapter adapter);
 
-    //endregion
+    
 
     // -- allMatchingQuery, firstMatchingQuery
     /**
@@ -174,6 +174,6 @@ public interface PersistenceSessionServiceInternal extends AdapterManager {
     void executeWithinTransaction(TransactionalClosure transactionalClosure);
 
 
-    //endregion
+    
 
 }

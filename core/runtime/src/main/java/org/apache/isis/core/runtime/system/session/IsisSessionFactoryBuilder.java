@@ -93,7 +93,7 @@ public class IsisSessionFactoryBuilder {
         return appManifest;
     }
 
-    //endregion
+    
 
     // -- buildSessionFactory
 
@@ -236,13 +236,13 @@ public class IsisSessionFactoryBuilder {
         return ListExtensions.filtered(Arrays.asList(possibleRefiners), MetaModelRefiner.class);
     }
 
-    //endregion
+    
 
     // region > metaModel validity
     public boolean isMetaModelValid() {
         return IsisContext.getMetaModelInvalidExceptionIfAny() == null;
     }
-    //endregion
+    
 
 
 }

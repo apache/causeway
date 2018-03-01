@@ -127,7 +127,7 @@ public class CollectionPanel extends PanelAbstract<EntityCollectionModel> implem
         this.selectorDropdownPanel = selectorDropdownPanel;
     }
 
-    //endregion
+    
 
     // -- BulkActionsProvider
     ObjectAdapterToggleboxColumn toggleboxColumn;
@@ -200,7 +200,7 @@ public class CollectionPanel extends PanelAbstract<EntityCollectionModel> implem
         }
     }
 
-    //endregion
+    
 
 
 }

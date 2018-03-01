@@ -459,6 +459,6 @@ public class FacetProcessor implements ServicesInjectorAware {
         this.servicesInjector = servicesInjector;
     }
 
-    //endregion
+    
 
 }
