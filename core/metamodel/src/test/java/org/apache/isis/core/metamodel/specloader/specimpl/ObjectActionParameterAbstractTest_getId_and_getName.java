@@ -123,7 +123,7 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
 
         context.checking(new Expectations() {
             {
-                one(actionParamPeer).getFacet(NamedFacet.class);
+                oneOf(actionParamPeer).getFacet(NamedFacet.class);
                 will(returnValue(namedFacet));
 
                 atLeast(1).of(namedFacet).value();
@@ -141,7 +141,7 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
 
         context.checking(new Expectations() {
             {
-                one(actionParamPeer).getFacet(NamedFacet.class);
+            	oneOf(actionParamPeer).getFacet(NamedFacet.class);
                 will(returnValue(namedFacet));
 
                 atLeast(1).of(namedFacet).value();
@@ -152,7 +152,6 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
         assertThat(objectActionParameter.getName(), is("Some parameter name"));
     }
 
-    @SuppressWarnings("unchecked")
     @Test
     public void whenNamedFaceNotPresentAndOnlyOneParamOfType() throws Exception {
 
@@ -161,10 +160,10 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
 
         context.checking(new Expectations() {
             {
-                one(actionParamPeer).getFacet(NamedFacet.class);
+            	oneOf(actionParamPeer).getFacet(NamedFacet.class);
                 will(returnValue(null));
 
-                one(parentAction).getParameters((Predicate<ObjectActionParameter>) with(Expectations.<Predicate>anything()));
+                oneOf(parentAction).getParameters(with(Expectations.<Predicate<ObjectActionParameter>>anything()));
                 will(returnValue(Lists.newArrayList(objectActionParameter)));
             }
         });
@@ -180,10 +179,10 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
 
         context.checking(new Expectations() {
             {
-                one(actionParamPeer).getFacet(NamedFacet.class);
+            	oneOf(actionParamPeer).getFacet(NamedFacet.class);
                 will(returnValue(null));
 
-                one(parentAction).getParameters(with(Expectations.<Predicate>anything()));
+                oneOf(parentAction).getParameters(with(Expectations.<Predicate<ObjectActionParameter>>anything()));
                 will(returnValue(Lists.newArrayList(stubObjectActionParameterString, objectActionParameter, stubObjectActionParameterString2)));
             }
         });
@@ -199,10 +198,10 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
 
         context.checking(new Expectations() {
             {
-                one(actionParamPeer).getFacet(NamedFacet.class);
+            	oneOf(actionParamPeer).getFacet(NamedFacet.class);
                 will(returnValue(null));
 
-                one(parentAction).getParameters(with(Expectations.<Predicate>anything()));
+                oneOf(parentAction).getParameters(with(Expectations.<Predicate<ObjectActionParameter>>anything()));
                 will(returnValue(Lists.newArrayList(stubObjectActionParameterString, objectActionParameter, stubObjectActionParameterString2)));
             }
         });
