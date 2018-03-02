@@ -84,6 +84,7 @@ public final class ServiceActionUtil {
             Label menuItemLabel = new Label("menuLinkLabel", menuItem.getName());
             subMenuItemLink.addOrReplace(menuItemLabel);
 
+            listItem.add(new CssClassAppender("isis-" + CssClassAppender.asCssStyle(menuItem.getActionIdentifier())));
             if (!menuItem.isEnabled()) {
                 listItem.add(new CssClassAppender("disabled"));
                 subMenuItemLink.setEnabled(false);

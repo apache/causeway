@@ -260,7 +260,7 @@ public interface ObjectAction extends ObjectMember {
             @SuppressWarnings("unused")
             final Identifier identifier = action.getIdentifier();
 
-            final String className = action.getOnType().getShortIdentifier();
+            final String className = action.getOnType().getSpecId().asString().replace(".","-");
             final String actionId = action.getId();
             return className + "-" + actionId;
         }
