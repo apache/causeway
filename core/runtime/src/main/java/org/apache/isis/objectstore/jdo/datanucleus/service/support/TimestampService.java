@@ -25,10 +25,11 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.clock.ClockService;
-import org.apache.isis.applib.services.jdosupport.IsisJdoSupport;
+import org.apache.isis.applib.services.jdosupport.IsisJdoSupport0;
 import org.apache.isis.applib.services.timestamp.HoldsUpdatedAt;
 import org.apache.isis.applib.services.timestamp.HoldsUpdatedBy;
 import org.apache.isis.applib.services.user.UserService;
+import org.apache.isis.core.metamodel.JdoMetamodelUtil;
 
 @RequestScoped
 @DomainService(
@@ -40,7 +41,7 @@ public class TimestampService implements
 
     @PostConstruct
     public void open() {
-        isisJdoSupport.getJdoPersistenceManager().addInstanceLifecycleListener(this, null);
+        isisJdoSupport.getJdoPersistenceManager().addInstanceLifecycleListener(this, new Class[] {null});
     }
 
     @PreDestroy
@@ -53,7 +54,7 @@ public class TimestampService implements
 
         final Object pi = event.getPersistentInstance();
 
-        if(pi instanceof org.datanucleus.enhancement.Persistable) {
+        if(pi!=null && JdoMetamodelUtil.isPersistenceEnhanced(pi.getClass())) {
 
             if(pi instanceof HoldsUpdatedBy) {
                 ((HoldsUpdatedBy)pi).setUpdatedBy(userService.getUser().getName());
@@ -76,5 +77,5 @@ public class TimestampService implements
     ClockService clockService;
 
     @javax.inject.Inject
-    IsisJdoSupport isisJdoSupport;
+    IsisJdoSupport0 isisJdoSupport;
 }

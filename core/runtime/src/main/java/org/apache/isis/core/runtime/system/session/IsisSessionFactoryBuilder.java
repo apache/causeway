@@ -155,7 +155,7 @@ public class IsisSessionFactoryBuilder {
             servicesInjector.addFallbackIfRequired(SpecificationLoader.class, specificationLoader);
 
             // persistenceSessionFactory
-            final PersistenceSessionFactory persistenceSessionFactory = new PersistenceSessionFactory(configuration);
+            final PersistenceSessionFactory persistenceSessionFactory = PersistenceSessionFactory.of(configuration);
             servicesInjector.addFallbackIfRequired(PersistenceSessionFactory.class, persistenceSessionFactory);
 
 

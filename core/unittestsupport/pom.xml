@@ -60,11 +60,12 @@
                <artifactId>jmock-junit4</artifactId>
            </dependency>
 
-            <dependency>
-                <groupId>javax.jdo</groupId>
-                <artifactId>jdo-api</artifactId>
-                <optional>true</optional>
-            </dependency>
+			<!-- JDO API -->
+			<dependency>
+	            <groupId>javax.jdo</groupId>
+	            <artifactId>jdo-api</artifactId>
+	            <scope>test</scope>
+        	</dependency>
 
             <dependency>
                 <groupId>org.javassist</groupId>

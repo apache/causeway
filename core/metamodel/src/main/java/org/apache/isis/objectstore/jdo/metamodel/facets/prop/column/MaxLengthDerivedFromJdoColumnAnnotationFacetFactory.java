@@ -24,7 +24,7 @@ import javax.jdo.annotations.Column;
 import javax.jdo.annotations.IdentityType;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.util.MetaInfo;
+import org.apache.isis.core.metamodel.JdoMetamodelUtil;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
@@ -56,7 +56,7 @@ public class MaxLengthDerivedFromJdoColumnAnnotationFacetFactory extends FacetFa
 
         // only applies to JDO entities; ignore any view models
         final Class<?> cls = processMethodContext.getCls();
-        if(!MetaInfo.isPersistenceEnhanced(cls)) {
+        if(!JdoMetamodelUtil.isPersistenceEnhanced(cls)) {
             return;
         }
 

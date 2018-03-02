@@ -91,33 +91,6 @@
 	       <artifactId>gson</artifactId>
         </dependency>
 
-		<!-- replaced by javaee-api -->
-		<!--         <dependency> -->
-		<!--             <groupId>org.apache.geronimo.specs</groupId> -->
-		<!--             <artifactId>geronimo-servlet_3.0_spec</artifactId> -->
-		<!--             <scope>provided</scope> -->
-		<!--         </dependency> -->
-
-        <dependency>
-            <groupId>org.datanucleus</groupId>
-            <artifactId>datanucleus-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.datanucleus</groupId>
-            <artifactId>datanucleus-api-jdo</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.datanucleus</groupId>
-            <artifactId>datanucleus-jdo-query</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.datanucleus</groupId>
-            <artifactId>datanucleus-rdbms</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.datanucleus</groupId>
-            <artifactId>datanucleus-jodatime</artifactId>
-        </dependency>
         <dependency>
             <groupId>io.swagger</groupId>
             <artifactId>swagger-core</artifactId>

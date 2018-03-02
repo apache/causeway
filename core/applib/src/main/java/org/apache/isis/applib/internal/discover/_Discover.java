@@ -63,11 +63,6 @@ public final class _Discover {
 	// -- HELPER
 	
 	private static ClassDiscoveryPlugin getPlugin() {
-		return _Context.computeIfAbsent(ClassDiscoveryPlugin.class, __->loadPluginsPickAny());
-	}
-
-	private static ClassDiscoveryPlugin loadPluginsPickAny() {
-		
 		return _Plugin.getOrElse(ClassDiscoveryPlugin.class, 
 				ambiguosPlugins->{
 					final Logger LOG = LoggerFactory.getLogger(ClassDiscoveryPlugin.class);

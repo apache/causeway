@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.util.MetaInfo;
+import org.apache.isis.core.metamodel.JdoMetamodelUtil;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -238,7 +238,7 @@ public class XmlJavaTypeAdapterFacetFactory extends FacetFactoryAbstract
 
             final ObjectSpecification propertyTypeSpec = property.getSpecification();
             final Class<?> propertyType = propertyTypeSpec.getCorrespondingClass();
-            if (!MetaInfo.isPersistenceEnhanced(propertyType)) {
+            if (!JdoMetamodelUtil.isPersistenceEnhanced(propertyType)) {
                 return;
             }
 

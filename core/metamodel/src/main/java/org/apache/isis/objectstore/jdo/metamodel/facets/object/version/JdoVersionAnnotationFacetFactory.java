@@ -22,7 +22,7 @@ package org.apache.isis.objectstore.jdo.metamodel.facets.object.version;
 import javax.jdo.annotations.Version;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.util.MetaInfo;
+import org.apache.isis.core.metamodel.JdoMetamodelUtil;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
@@ -46,7 +46,7 @@ public class JdoVersionAnnotationFacetFactory extends FacetFactoryAbstract imple
         final Class<?> cls = processClassContext.getCls();
 
         // only applies to JDO entities; ignore any view models
-        if(!MetaInfo.isPersistenceEnhanced(cls)) {
+        if(!JdoMetamodelUtil.isPersistenceEnhanced(cls)) {
             return;
         }
 

@@ -22,11 +22,7 @@ package org.apache.isis.core.runtime.memento;
 import java.io.Serializable;
 import java.util.List;
 
-import com.google.common.collect.Lists;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import org.apache.isis.applib.internal.collections._Lists;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
@@ -41,14 +37,16 @@ import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Holds the state for the specified object in serializable form.
@@ -65,7 +63,7 @@ public class Memento implements Serializable {
 
     private final static OidMarshaller OID_MARSHALLER = OidMarshaller.INSTANCE;
 
-    private final List<Oid> transientObjects = Lists.newArrayList();
+    private final List<Oid> transientObjects = _Lists.newArrayList();
 
 
     private Data data;
@@ -345,7 +343,7 @@ public class Memento implements Serializable {
     private void updateOneToManyAssociation(final ObjectAdapter objectAdapter, final OneToManyAssociation otma, final CollectionData collectionData) {
         final ObjectAdapter collection = otma.get(objectAdapter, InteractionInitiatedBy.FRAMEWORK);
         final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(collection);
-        final List<ObjectAdapter> original = Lists.newArrayList();
+        final List<ObjectAdapter> original = _Lists.newArrayList();
         for (final ObjectAdapter adapter : facet.iterable(collection)) {
             original.add(adapter);
         }

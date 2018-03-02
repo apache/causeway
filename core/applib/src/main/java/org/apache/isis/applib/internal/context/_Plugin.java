@@ -66,19 +66,36 @@ public final class _Plugin {
 		return _Sets.unmodifiable(loader);   
 	}
 	
-	public static <S> S getOrElse(Class<S> service, Function<Set<S>, S> onAmbiguity, Supplier<S> onNotFound){
+	/**
+	 * Uses application scoped caching. The first successful retrieval of a plugin for given 
+	 * {@code pluginClass} is cached until application's life-cycle ends. 
+	 * 
+	 * @param pluginClass
+	 * @param onAmbiguity what to do if more than one matching plugin is found
+	 * @param onNotFound what to do if no matching plugin is found
+	 * @return
+	 */
+	public static <S> S getOrElse(Class<S> pluginClass, Function<Set<S>, S> onAmbiguity, Supplier<S> onNotFound){
 	
-		final Set<S> plugins = loadAll(service);
+		// lookup cache first 
+		return _Context.computeIfAbsent(pluginClass, __->{
+			
+			final Set<S> plugins = loadAll(pluginClass);
+			
+			if(plugins.isEmpty()) {
+				return onNotFound.get();
+			}
+			
+			if(plugins.size()>1) {
+				return onAmbiguity.apply(plugins);
+			}
+			
+			return plugins.iterator().next();	
+			
+		});
 		
-		if(plugins.isEmpty()) {
-			return onNotFound.get();
-		}
 		
-		if(plugins.size()>1) {
-			return onAmbiguity.apply(plugins);
-		}
 		
-		return plugins.iterator().next();
 	}
 	
 }

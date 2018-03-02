@@ -31,6 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.AppManifest;
+import org.apache.isis.core.metamodel.JdoMetamodelUtil;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 public class RegisterEntities {
@@ -70,7 +71,7 @@ public class RegisterEntities {
             if(ignore(persistenceCapableType)) {
                 continue;
             }
-            if(!org.datanucleus.enhancement.Persistable.class.isAssignableFrom(persistenceCapableType)) {
+            if(!JdoMetamodelUtil.isPersistenceEnhanced(persistenceCapableType)) {
                 classNamesNotEnhanced.add(persistenceCapableType.getCanonicalName());
             }
             this.entityTypes.add(persistenceCapableType.getCanonicalName());

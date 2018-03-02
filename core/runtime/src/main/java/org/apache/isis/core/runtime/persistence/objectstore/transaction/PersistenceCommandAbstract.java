@@ -19,9 +19,7 @@
 
 package org.apache.isis.core.runtime.persistence.objectstore.transaction;
 
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 
 public abstract class PersistenceCommandAbstract implements PersistenceCommand {
 

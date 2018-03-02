@@ -18,9 +18,7 @@ package org.apache.isis.core.integtestsupport;
 
 import java.util.List;
 
-import com.google.common.base.Throwables;
-import com.google.common.collect.FluentIterable;
-
+import org.apache.isis.applib.internal.exceptions._Exceptions;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 
@@ -32,8 +30,11 @@ public class ThrowableMatchers {
         return new TypeSafeMatcher<Throwable>() {
             @Override
             protected boolean matchesSafely(final Throwable throwable) {
-                final List<Throwable> causalChain = Throwables.getCausalChain(throwable);
-                return !FluentIterable.from(causalChain).filter(type).isEmpty();
+            	final List<Throwable> causalChain = _Exceptions.getCausalChain(throwable); // non null result
+            	
+            	// legacy of return !FluentIterable.from(causalChain).filter(type).isEmpty();
+            	
+                return causalChain.stream().filter(t->t.getClass().equals(type)).findAny().isPresent();
             }
 
             @Override public void describeTo(final Description description) {

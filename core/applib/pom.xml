@@ -100,56 +100,26 @@
             <artifactId>isis-core-schema</artifactId>
         </dependency>
 
-<!-- replaced by javaee-api -->        
-<!--         <dependency> -->
-<!--             <groupId>org.apache.geronimo.specs</groupId> -->
-<!--             <artifactId>geronimo-atinject_1.0_spec</artifactId> -->
-<!--         </dependency> -->
-<!--         <dependency> -->
-<!--             <groupId>javax.validation</groupId> -->
-<!--             <artifactId>validation-api</artifactId> -->
-<!--         </dependency> -->
-<!--         <dependency> -->
-<!--             <groupId>org.apache.geronimo.specs</groupId> -->
-<!--             <artifactId>geronimo-jta_1.1_spec</artifactId> -->
-<!--         </dependency> -->
-<!--         <dependency> -->
-<!--             <groupId>org.apache.geronimo.specs</groupId> -->
-<!--             <artifactId>geronimo-jcdi_1.0_spec</artifactId> -->
-<!--         </dependency> -->
-<!--         <dependency> -->
-<!--             <groupId>org.jboss.spec.javax.ws.rs</groupId> -->
-<!--             <artifactId>jboss-jaxrs-api_2.0_spec</artifactId> -->
-<!--         </dependency> -->
-
 		<!-- JEE API -->
 		<dependency>
 		    <groupId>javax</groupId>
 		    <artifactId>javaee-api</artifactId>
 		</dependency>
+		
+		<!-- JDO API -->
+        <dependency>
+            <groupId>javax.jdo</groupId>
+            <artifactId>jdo-api</artifactId>
+        </dependency>
 
+		<!-- HSQL-DB -->
         <dependency>
             <groupId>org.hsqldb</groupId>
             <artifactId>hsqldb</artifactId>
             <optional>true</optional>
         </dependency>
 
-        <!-- DataNucleus' standard JDO support -->
-        <dependency>
-            <groupId>javax.jdo</groupId>
-            <artifactId>jdo-api</artifactId>
-        </dependency>
-
-        <!-- DataNucleus' (proprietary) type-safe query support-->
-        <dependency>
-            <groupId>org.datanucleus</groupId>
-            <artifactId>datanucleus-api-jdo</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.datanucleus</groupId>
-            <artifactId>datanucleus-jdo-query</artifactId>
-        </dependency>
-
+		<!-- TESTS -->
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-unittestsupport</artifactId>

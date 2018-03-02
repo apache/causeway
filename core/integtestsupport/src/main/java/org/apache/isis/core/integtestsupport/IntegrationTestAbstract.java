@@ -20,19 +20,12 @@ package org.apache.isis.core.integtestsupport;
 
 import java.util.List;
 
-import com.google.common.base.Throwables;
-
-import org.junit.Rule;
-import org.junit.rules.ExpectedException;
-import org.junit.rules.MethodRule;
-import org.junit.runners.model.FrameworkMethod;
-import org.junit.runners.model.Statement;
-
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.fixtures.FixtureClock;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
+import org.apache.isis.applib.internal.exceptions._Exceptions;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
@@ -45,6 +38,11 @@ import org.apache.isis.core.specsupport.scenarios.ScenarioExecution;
 import org.apache.isis.core.specsupport.specs.CukeGlueAbstract;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
+import org.junit.Rule;
+import org.junit.rules.ExpectedException;
+import org.junit.rules.MethodRule;
+import org.junit.runners.model.FrameworkMethod;
+import org.junit.runners.model.Statement;
 
 /**
  * Base class for integration tests.
@@ -224,7 +222,7 @@ public abstract class IntegrationTestAbstract {
                         endTransactionTilDone();
 
                         isft.nextSession();
-                        final List<Throwable> causalChain = Throwables.getCausalChain(e);
+                        final List<Throwable> causalChain = _Exceptions.getCausalChain(e);
                         // if underlying cause is an applib-defined exception, throw that rather than Isis' wrapper exception
                         for (final Throwable cause : causalChain) {
                             if(cause instanceof RecoverableException ||

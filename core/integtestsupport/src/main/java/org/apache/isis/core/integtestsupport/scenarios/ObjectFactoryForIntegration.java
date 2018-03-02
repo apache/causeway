@@ -21,8 +21,7 @@ package org.apache.isis.core.integtestsupport.scenarios;
 import java.lang.reflect.Constructor;
 import java.util.Map;
 
-import com.google.common.collect.Maps;
-
+import org.apache.isis.applib.internal.collections._Maps;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.core.runtime.headless.IsisSystem;
 
@@ -30,7 +29,7 @@ import cucumber.api.java.ObjectFactory;
 import cucumber.runtime.CucumberException;
 
 public class ObjectFactoryForIntegration implements ObjectFactory {
-    private final Map<Class<?>, Object> instances = Maps.newHashMap();
+    private final Map<Class<?>, Object> instances = _Maps.newHashMap();
 
     public void start() { }
 

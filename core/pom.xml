@@ -87,24 +87,31 @@
 [5] https://github.com/Eonasdan/bootstrap-datetimepicker/blob/master/LICENSE
 [6] https://github.com/moment/moment/blob/develop/LICENSE</license.additional-notes>
 
-        <!-- Datanucleus Objectstore -->
+        <!-- JDO API -->
+        
         <jdo-api.version>3.1</jdo-api.version>
+        
+        <!-- Datanucleus JDO Plugin dn5 -->
 
-        <datanucleus-core.version>4.1.7</datanucleus-core.version>
-        <datanucleus-api-jdo.version>4.1.1</datanucleus-api-jdo.version>
-        <datanucleus-jdo-query.version>4.0.5</datanucleus-jdo-query.version>
-        <datanucleus-rdbms.version>4.1.9</datanucleus-rdbms.version>
+		<dn5-jdo-api.version>3.2.0-m7</dn5-jdo-api.version>
+        <dn5-core.version>5.1.6</dn5-core.version>
+        <dn5-api-jdo.version>5.1.4</dn5-api-jdo.version>
+        <dn5-jdo-query.version>5.0.4</dn5-jdo-query.version>
+        <dn5-rdbms.version>5.1.6</dn5-rdbms.version>
+        <dn5-jodatime.version>5.1.0-release</dn5-jodatime.version>
+        <dn5-maven-plugin.version>5.0.2</dn5-maven-plugin.version>
 
-        <datanucleus-jodatime.version>4.1.0-release</datanucleus-jodatime.version>
-	<!--
-	    ISIS-1288: seen integration tests to fail;
-	    domain object date holding 1-Aug-2015 after xactn retrieved as 31-Jul-2015
+		<!-- Datanucleus JDO Plugin dn4 -->
 
-        https://github.com/datanucleus/datanucleus-jodatime/commit/b85795a1bf5f92909a95d2c8f8822bba2ba38b5f
-
-        <datanucleus-jodatime.version>4.1.1</datanucleus-jodatime.version>
-	-->
-        <datanucleus-maven-plugin.version>4.0.2</datanucleus-maven-plugin.version>
+		<dn4-jdo-api.version>3.1</dn4-jdo-api.version>
+        <dn4-core.version>4.1.7</dn4-core.version>
+        <dn4-api-jdo.version>4.1.1</dn4-api-jdo.version>
+        <dn4-jdo-query.version>4.0.5</dn4-jdo-query.version>
+        <dn4-rdbms.version>4.1.9</dn4-rdbms.version>
+        <dn4-jodatime.version>4.1.0-release</dn4-jodatime.version>
+        <dn4-maven-plugin.version>4.0.2</dn4-maven-plugin.version>
+        
+        <!-- ... -->
 
         <shiro.version>1.2.6</shiro.version>
 
@@ -2014,61 +2021,21 @@ ${license.additional-notes}
             </dependency>
 
             <!-- JEE API -->
-            
-            	<dependency>
-				    <groupId>javax</groupId>
-				    <artifactId>javaee-api</artifactId>
-				    <version>${javaee.version}</version>
-				</dependency>
-            
-<!--             <dependency> -->
-<!--                 <groupId>org.apache.geronimo.specs</groupId> -->
-<!--                 <artifactId>geronimo-jsp_2.1_spec</artifactId> -->
-<!--                 <version>${geronimo-jsp_2.1_spec.version}</version> -->
-<!--             </dependency> -->
-<!--               <dependency> -->
-<!--                 <groupId>org.apache.geronimo.specs</groupId> -->
-<!--                 <artifactId>geronimo-jta_1.1_spec</artifactId> -->
-<!--                 <version>${geronimo-jta_1.1_spec.version}</version> -->
-<!--               </dependency> -->
-<!--             <dependency> -->
-<!--                 <groupId>org.apache.geronimo.specs</groupId> -->
-<!--                 <artifactId>geronimo-jta_1.0.1B_spec</artifactId> -->
-<!--                 <version>${geronimo-jta_1.0.1B_spec.version}</version> -->
-<!--             </dependency> -->
-<!--             <dependency> -->
-<!--                 <groupId>org.apache.geronimo.specs</groupId> -->
-<!--                 <artifactId>geronimo-servlet_3.0_spec</artifactId> -->
-<!--                 <version>${geronimo-servlet_3.0_spec.version}</version> -->
-<!--             </dependency> -->
-<!--             <dependency> -->
-<!--                 <groupId>org.apache.geronimo.specs</groupId> -->
-<!--                 <artifactId>geronimo-annotation_1.0_spec</artifactId> -->
-<!--                 <version>${geronimo-annotation_1.0_spec.version}</version> -->
-<!--             </dependency> -->
-<!--             <dependency> -->
-<!--                 <groupId>org.apache.geronimo.specs</groupId> -->
-<!--                 <artifactId>geronimo-activation_1.1_spec</artifactId> -->
-<!--                 <version>${geronimo-activation_1.1_spec.version}</version> -->
-<!--             </dependency> -->
-<!--             <dependency> -->
-<!--                 <groupId>org.apache.geronimo.specs</groupId> -->
-<!--                 <artifactId>geronimo-javamail_1.4_spec</artifactId> -->
-<!--                 <version>${geronimo-javamail_1.4_spec.version}</version> -->
-<!--             </dependency> -->
-<!--             <dependency> -->
-<!--                 <groupId>org.apache.geronimo.specs</groupId> -->
-<!--                 <artifactId>geronimo-atinject_1.0_spec</artifactId> -->
-<!--                 <version>${geronimo-atinject_1.0_spec.version}</version> -->
-<!--             </dependency> -->
-<!--             <dependency> -->
-<!--                 <groupId>org.apache.geronimo.specs</groupId> -->
-<!--                 <artifactId>geronimo-jcdi_1.0_spec</artifactId> -->
-<!--                 <version>${geronimo-jcdi_1.0_spec.version}</version> -->
-<!--             </dependency> -->
+           	<dependency>
+			    <groupId>javax</groupId>
+			    <artifactId>javaee-api</artifactId>
+			    <version>${javaee.version}</version>
+			</dependency>
+			
+			<!-- JDO API -->
+			<dependency>
+	            <groupId>javax.jdo</groupId>
+	            <artifactId>jdo-api</artifactId>
+	            <version>${jdo-api.version}</version>
+	            <scope></scope> <!-- TODO provided by plugin -->
+        	</dependency>
 
 			<!-- JAX-RS API -->
-
             <dependency>
                 <groupId>org.jboss.spec.javax.ws.rs</groupId>
                 <artifactId>jboss-jaxrs-api_2.0_spec</artifactId>
@@ -2076,45 +2043,11 @@ ${license.additional-notes}
             </dependency>
 
 
-            <!-- javax APIs -->
-            
+            <!-- VALIDATION API -->
             <dependency>
                 <groupId>javax.validation</groupId>
                 <artifactId>validation-api</artifactId>
                 <version>${validation-api.version}</version>
-            </dependency>
-
-
-            <!-- DataNucleus -->
-            <dependency>
-                <groupId>javax.jdo</groupId>
-                <artifactId>jdo-api</artifactId>
-                <version>${jdo-api.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.datanucleus</groupId>
-                <artifactId>datanucleus-core</artifactId>
-                <version>${datanucleus-core.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.datanucleus</groupId>
-                <artifactId>datanucleus-api-jdo</artifactId>
-                <version>${datanucleus-api-jdo.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.datanucleus</groupId>
-                <artifactId>datanucleus-jdo-query</artifactId>
-                <version>${datanucleus-jdo-query.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.datanucleus</groupId>
-                <artifactId>datanucleus-rdbms</artifactId>
-                <version>${datanucleus-rdbms.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.datanucleus</groupId>
-                <artifactId>datanucleus-jodatime</artifactId>
-                <version>${datanucleus-jodatime.version}</version>
             </dependency>
 
             <dependency>

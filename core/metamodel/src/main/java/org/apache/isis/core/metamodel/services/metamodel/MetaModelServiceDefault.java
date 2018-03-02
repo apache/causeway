@@ -32,7 +32,7 @@ import org.apache.isis.applib.services.command.CommandDtoProcessor;
 import org.apache.isis.applib.services.grid.GridService;
 import org.apache.isis.applib.services.metamodel.DomainMember;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
-import org.apache.isis.core.commons.util.MetaInfo;
+import org.apache.isis.core.metamodel.JdoMetamodelUtil;
 import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureId;
@@ -194,7 +194,7 @@ public class MetaModelServiceDefault implements MetaModelService {
             return Sort.COLLECTION;
         }
         final Class<?> correspondingClass = objectSpec.getCorrespondingClass();
-        if(MetaInfo.isPersistenceEnhanced(correspondingClass)) {
+        if(JdoMetamodelUtil.isPersistenceEnhanced(correspondingClass)) {
             return Sort.JDO_ENTITY;
         }
         if(mode == Mode.RELAXED) {

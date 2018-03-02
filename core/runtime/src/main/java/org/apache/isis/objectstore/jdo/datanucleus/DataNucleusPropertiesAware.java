@@ -19,7 +19,6 @@
 package org.apache.isis.objectstore.jdo.datanucleus;
 
 import java.util.Map;
-import java.util.Properties;
 
 public interface DataNucleusPropertiesAware {
 

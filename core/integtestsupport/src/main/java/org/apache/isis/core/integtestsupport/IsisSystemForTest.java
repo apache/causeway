@@ -19,20 +19,17 @@
 
 package org.apache.isis.core.integtestsupport;
 
+import static org.junit.Assert.fail;
+
 import java.util.List;
 import java.util.Set;
-
-import com.google.common.base.Joiner;
-import com.google.common.collect.Lists;
-
-import org.junit.Before;
-import org.junit.runner.Description;
-import org.junit.runners.model.Statement;
+import java.util.stream.Collectors;
 
 import org.apache.isis.applib.AppManifest;
-import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.fixtures.FixtureClock;
 import org.apache.isis.applib.fixtures.InstallableFixture;
+import org.apache.isis.applib.internal.base._NullSafe;
+import org.apache.isis.applib.internal.collections._Lists;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -57,8 +54,9 @@ import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.systemusinginstallers.IsisComponentProvider;
 import org.apache.isis.core.security.authentication.AuthenticationRequestNameOnly;
 import org.apache.isis.core.specsupport.scenarios.DomainServiceProvider;
-
-import static org.junit.Assert.fail;
+import org.junit.Before;
+import org.junit.runner.Description;
+import org.junit.runners.model.Statement;
 
 /**
  * Wraps a plain {@link IsisSessionFactoryBuilder}, and provides a number of features to assist with testing.
@@ -155,10 +153,10 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
 
         private AppManifest appManifestIfAny;
 
-        private final List<Object> services = Lists.newArrayList();
-        private final List<InstallableFixture> fixtures = Lists.newArrayList();
+        private final List<Object> services = _Lists.newArrayList();
+        private final List<InstallableFixture> fixtures = _Lists.newArrayList();
 
-        private final List <Listener> listeners = Lists.newArrayList();
+        private final List <Listener> listeners = _Lists.newArrayList();
 
         private org.apache.log4j.Level level;
 
@@ -293,7 +291,8 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         final MetaModelInvalidException mmie = IsisContext.getMetaModelInvalidExceptionIfAny();
         if(mmie != null) {
             final Set<String> validationErrors = mmie.getValidationErrors();
-            final String validationMsg = Joiner.on("\n").join(validationErrors);
+            final String validationMsg = _NullSafe.stream(validationErrors)
+            		.collect(Collectors.joining("\n"));
             fail(validationMsg);
             return;
         }

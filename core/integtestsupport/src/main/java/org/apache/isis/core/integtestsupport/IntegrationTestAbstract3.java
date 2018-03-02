@@ -20,8 +20,16 @@ package org.apache.isis.core.integtestsupport;
 
 import java.util.List;
 
-import com.google.common.base.Throwables;
-
+import org.apache.isis.applib.AppManifest;
+import org.apache.isis.applib.Module;
+import org.apache.isis.applib.NonRecoverableException;
+import org.apache.isis.applib.RecoverableException;
+import org.apache.isis.applib.internal.exceptions._Exceptions;
+import org.apache.isis.applib.services.jdosupport.IsisJdoSupport0;
+import org.apache.isis.applib.services.xactn.TransactionService;
+import org.apache.isis.core.runtime.headless.HeadlessWithBootstrappingAbstract;
+import org.apache.isis.core.runtime.headless.IsisSystem;
+import org.apache.isis.core.runtime.headless.logging.LogConfig;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -32,16 +40,6 @@ import org.junit.runners.model.Statement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.event.Level;
-
-import org.apache.isis.applib.AppManifest;
-import org.apache.isis.applib.Module;
-import org.apache.isis.applib.NonRecoverableException;
-import org.apache.isis.applib.RecoverableException;
-import org.apache.isis.applib.services.jdosupport.IsisJdoSupport;
-import org.apache.isis.applib.services.xactn.TransactionService;
-import org.apache.isis.core.runtime.headless.logging.LogConfig;
-import org.apache.isis.core.runtime.headless.HeadlessWithBootstrappingAbstract;
-import org.apache.isis.core.runtime.headless.IsisSystem;
 
 /**
  * Reworked base class for integration tests, uses a {@link Module} to bootstrap, rather than an {@link AppManifest}.
@@ -86,7 +84,7 @@ public abstract class IntegrationTestAbstract3 extends HeadlessWithBootstrapping
                             try {
                                 final IsisSystem isft = IsisSystem.get();
                                 isft.getService(TransactionService.class).flushTransaction(); // don't care if npe
-                                isft.getService(IsisJdoSupport.class).getJdoPersistenceManager().flush();
+                                isft.getService(IsisJdoSupport0.class).getJdoPersistenceManager().flush();
                             } catch (Exception ignore) {
                                 // ignore
                             }
@@ -125,7 +123,7 @@ public abstract class IntegrationTestAbstract3 extends HeadlessWithBootstrapping
 
                 NonRecoverableException determineIfNonRecoverableException(final Throwable e) {
                     NonRecoverableException nonRecoverableException = null;
-                    final List<Throwable> causalChain2 = Throwables.getCausalChain(e);
+                    final List<Throwable> causalChain2 = _Exceptions.getCausalChain(e);
                     for (final Throwable cause : causalChain2) {
                         if(cause instanceof NonRecoverableException) {
                             nonRecoverableException = (NonRecoverableException) cause;
@@ -137,7 +135,7 @@ public abstract class IntegrationTestAbstract3 extends HeadlessWithBootstrapping
 
                 RecoverableException determineIfRecoverableException(final Throwable e) {
                     RecoverableException recoverableException = null;
-                    final List<Throwable> causalChain = Throwables.getCausalChain(e);
+                    final List<Throwable> causalChain = _Exceptions.getCausalChain(e);
                     for (final Throwable cause : causalChain) {
                         if(cause instanceof RecoverableException) {
                             recoverableException = (RecoverableException) cause;
