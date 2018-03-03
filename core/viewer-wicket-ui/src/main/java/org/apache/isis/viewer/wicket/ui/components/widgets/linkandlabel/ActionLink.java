@@ -237,11 +237,11 @@ public abstract class ActionLink extends AjaxLink<ObjectAdapter> implements IAja
                 @Override
                 protected IRequestHandler getRequestHandler() {
                     final ObjectAdapter resultAdapter = actionModel.execute();
-                    final Object value = resultAdapter.getObject();
+                    final Object value = resultAdapter!=null ? resultAdapter.getObject() : null;
                     
                     final IRequestHandler handler = ActionModel.downloadHandler(value);
                     
-                    //XXX ISIS-1619, prevent clients from caching the response content
+                    //ISIS-1619, prevent clients from caching the response content
                     return isNonIdempotent(actionModel) 
                     		? enforceNoCacheOnClientSide(handler)
                     		: handler                    		
