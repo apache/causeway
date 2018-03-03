@@ -30,6 +30,7 @@ import org.jboss.resteasy.spi.interception.PreProcessInterceptor;
 
 @Provider
 @ServerInterceptor
+@Deprecated // see PreProcessInterceptor  
 public class PreProcessInterceptorForIsisSession implements PreProcessInterceptor {
 
     @Override
