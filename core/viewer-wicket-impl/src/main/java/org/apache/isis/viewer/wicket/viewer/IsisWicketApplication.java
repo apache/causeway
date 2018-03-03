@@ -28,8 +28,10 @@ import java.util.ServiceLoader;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.Callable;
+import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import org.apache.isis.applib.internal.collections._Lists;
 import org.apache.isis.applib.internal.context._Context;
 import org.apache.isis.applib.internal.resources._Resource;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -446,46 +448,14 @@ public class IsisWicketApplication
     }
 
     protected List<Future<Object>> startBackgroundInitializationThreads() {
-        return ThreadPoolSupport.invokeAll(Lists.newArrayList(
-                new Callable<Object>() {
-                    @Override
-                    public Object call() throws Exception {
-                        configureWebJars();
-                        return null;
-                    }
-                },
-                new Callable<Object>() {
-                    @Override
-                    public Object call() throws Exception {
-                        configureWicketBootstrap();
-                        return null;
-                    }
-                },
-                new Callable<Object>() {
-                    @Override
-                    public Object call() throws Exception {
-                        configureWicketSelect2();
-                        return null;
-                    }
-                },
-                new Callable<Object>() {
-                    @Override public Object call() throws Exception {
-                        ChangesDtoUtils.init();
-                        return null;
-                    }
-                },
-                new Callable<Object>() {
-                    @Override public Object call() throws Exception {
-                        InteractionDtoUtils.init();
-                        return null;
-                    }
-                },
-                new Callable<Object>() {
-                    @Override public Object call() throws Exception {
-                        CommandDtoUtils.init();
-                        return null;
-                    }
-                }
+        return ThreadPoolSupport.getInstance().invokeAll(_Lists.<Callable<Object>>unmodifiable(
+        		
+        		Executors.callable(this::configureWebJars),
+        		Executors.callable(this::configureWicketBootstrap),
+        		Executors.callable(this::configureWicketSelect2),
+        		Executors.callable(ChangesDtoUtils::init),
+        		Executors.callable(InteractionDtoUtils::init),
+        		Executors.callable(CommandDtoUtils::init)
         ));
     }
 

@@ -29,20 +29,28 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import com.google.common.collect.Lists;
-
+import org.apache.isis.applib.internal.collections._Lists;
+import org.apache.isis.applib.internal.context._Context;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public final class ThreadPoolSupport {
+/**
+ * ThreadPoolSupport is application-scoped, meaning ThreadPoolSupport is closed on
+ * application's end of life-cycle. 
+ * <br/><br/>
+ * Implementation Note: ThreadPoolSupport::close is triggered by _Context.clear() 
+ * when application shuts down.
+ *
+ */
+public final class ThreadPoolSupport implements AutoCloseable {
 
     private static final Logger LOG = LoggerFactory.getLogger(ThreadPoolSupport.class);
 
-    public static ThreadGroup group;
+    private final ThreadGroup group;
+    private final ThreadPoolExecutor executor;
 
-    public static ThreadPoolExecutor executor   ;
-
-    static {
+    private ThreadPoolSupport() {
+    	
         group = new ThreadGroup(ThreadPoolSupport.class.getName());
 
         final int corePoolSize = Runtime.getRuntime().availableProcessors();
@@ -72,7 +80,7 @@ public final class ThreadPoolSupport {
 
         final long t0 = System.currentTimeMillis();
         try{
-            final List<Object> returnValues = Lists.newArrayList();
+            final List<Object> returnValues = _Lists.newArrayList();
             for (Future<Object> future : futures) {
                 returnValues.add(join(future));
             }
@@ -92,11 +100,21 @@ public final class ThreadPoolSupport {
         return null;
     }
 
-    public static List<Future<Object>> invokeAll(final List<Callable<Object>> callables) {
+    public List<Future<Object>> invokeAll(final List<Callable<Object>> callables) {
         try {
             return executor.invokeAll(callables);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
     }
+    
+    public static ThreadPoolSupport getInstance() {
+    	return _Context.computeIfAbsent(ThreadPoolSupport.class, __-> new ThreadPoolSupport());
+    }
+
+	@Override
+	public void close() throws Exception {
+		executor.shutdown();
+	}
+    
 }

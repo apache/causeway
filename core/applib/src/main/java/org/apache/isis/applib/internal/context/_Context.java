@@ -20,6 +20,7 @@
 package org.apache.isis.applib.internal.context;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
@@ -28,6 +29,8 @@ import java.util.function.Supplier;
 import javax.validation.constraints.NotNull;
 
 import org.apache.isis.applib.internal.base._Casts;
+import org.apache.isis.applib.internal.base._NullSafe;
+import org.apache.isis.applib.internal.collections._Lists;
 
 /**
  * <h1>- internal use only -</h1>
@@ -162,14 +165,31 @@ public final class _Context {
 	}
 	
 	/**
-	 * Removes any singleton references from the current context.
+	 * Removes any singleton references from the current context. <br/> 
+	 * Any singletons that implement the AutoClosable interface are being closed.
 	 */
 	public static void clear() {
 		
 		// let writes to the map be atomic
 		synchronized (singletonMap) {
+			
+			closeAnyClosables(_Lists.newArrayList(singletonMap.values()));
+			
 			singletonMap.clear();
 		}
+	}
+	
+	private static void closeAnyClosables(List<Object> objects) {
+		_NullSafe.stream(objects)
+		.filter(singleton->singleton instanceof AutoCloseable)
+		.map(singleton->(AutoCloseable)singleton)
+		.forEach(autoCloseable->{
+			try {
+				autoCloseable.close();	
+			} catch (Exception e) {
+				// [ahuber] nothing we can do here, so ignore
+			}
+		});
 	}
 	
 	// -- DEFAULT CLASSLOADER
