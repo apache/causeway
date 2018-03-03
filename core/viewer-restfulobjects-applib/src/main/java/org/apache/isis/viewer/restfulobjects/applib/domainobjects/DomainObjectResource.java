@@ -32,8 +32,6 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.jboss.resteasy.annotations.ClientResponseType;
-
 import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
 
 @Path("/objects")
@@ -46,7 +44,7 @@ public interface DomainObjectResource {
             MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR,
             MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT, RestfulMediaType.APPLICATION_XML_ERROR
     })
-    @ClientResponseType(entityType = String.class)
+    //TODO deprecated @ClientResponseType(entityType = String.class)
     public Response persist(@PathParam("domainType") String domainType, final InputStream object);
 
     // //////////////////////////////////////////////////////////
@@ -60,7 +58,7 @@ public interface DomainObjectResource {
             MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR,
             MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT, RestfulMediaType.APPLICATION_XML_ERROR
     })
-    @ClientResponseType(entityType = String.class)
+    //TODO deprecated @ClientResponseType(entityType = String.class)
     public Response object(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId);
 
     @PUT
@@ -70,7 +68,7 @@ public interface DomainObjectResource {
             MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR,
             MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT, RestfulMediaType.APPLICATION_XML_ERROR
     })
-    @ClientResponseType(entityType = String.class)
+    //TODO deprecated @ClientResponseType(entityType = String.class)
     public Response object(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, final InputStream arguments);
 
     @DELETE
@@ -111,7 +109,7 @@ public interface DomainObjectResource {
             MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_JSON_ERROR,
             MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_XML_ERROR
     })
-    @ClientResponseType(entityType = String.class)
+    //TODO deprecated @ClientResponseType(entityType = String.class)
     public Response propertyDetails(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("propertyId") final String propertyId);
 
     @PUT
@@ -121,7 +119,7 @@ public interface DomainObjectResource {
             MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_JSON_ERROR,
             MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_XML_ERROR
     })
-    @ClientResponseType(entityType = String.class)
+    //TODO deprecated @ClientResponseType(entityType = String.class)
     public Response modifyProperty(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("propertyId") final String propertyId, final InputStream arguments);
 
     @DELETE
@@ -131,7 +129,7 @@ public interface DomainObjectResource {
             MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_JSON_ERROR,
             MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_XML_ERROR
     })
-    @ClientResponseType(entityType = String.class)
+    //TODO deprecated @ClientResponseType(entityType = String.class)
     public Response clearProperty(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("propertyId") final String propertyId);
 
     @POST
@@ -150,7 +148,7 @@ public interface DomainObjectResource {
             MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_JSON_ERROR,
             MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_XML_ERROR
     })
-    @ClientResponseType(entityType = String.class)
+    //TODO deprecated @ClientResponseType(entityType = String.class)
     public Response accessCollection(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("collectionId") final String collectionId);
 
     @PUT
@@ -160,7 +158,7 @@ public interface DomainObjectResource {
             MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_JSON_ERROR,
             MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_XML_ERROR
     })
-    @ClientResponseType(entityType = String.class)
+    //TODO deprecated @ClientResponseType(entityType = String.class)
     public Response addToSet(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("collectionId") final String collectionId, final InputStream arguments);
 
     @POST
@@ -170,7 +168,7 @@ public interface DomainObjectResource {
             MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_JSON_ERROR,
             MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_XML_ERROR
     })
-    @ClientResponseType(entityType = String.class)
+    //TODO deprecated @ClientResponseType(entityType = String.class)
     public Response addToList(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("collectionId") final String collectionId, final InputStream arguments);
 
     @DELETE
@@ -180,7 +178,7 @@ public interface DomainObjectResource {
             MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_JSON_ERROR,
             MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_XML_ERROR
     })
-    @ClientResponseType(entityType = String.class)
+    //TODO deprecated @ClientResponseType(entityType = String.class)
     public Response removeFromCollection(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("collectionId") final String collectionId);
 
     // //////////////////////////////////////////////////////////
@@ -194,7 +192,7 @@ public interface DomainObjectResource {
             MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_ACTION, RestfulMediaType.APPLICATION_JSON_ERROR,
             MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_ACTION, RestfulMediaType.APPLICATION_XML_ERROR
     })
-    @ClientResponseType(entityType = String.class)
+    //TODO deprecated @ClientResponseType(entityType = String.class)
     public Response actionPrompt(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("actionId") final String actionId);
 
     @DELETE
@@ -220,7 +218,7 @@ public interface DomainObjectResource {
             MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR,
             MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
     })
-    @ClientResponseType(entityType = String.class)
+    //TODO deprecated @ClientResponseType(entityType = String.class)
     public Response invokeActionQueryOnly(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("actionId") final String actionId, @QueryParam("x-isis-querystring") final String xIsisQueryString);
 
     @PUT
@@ -230,7 +228,7 @@ public interface DomainObjectResource {
             MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR,
             MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
     })
-    @ClientResponseType(entityType = String.class)
+    //TODO deprecated @ClientResponseType(entityType = String.class)
     public Response invokeActionIdempotent(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("actionId") final String actionId, final InputStream arguments);
 
     @POST
@@ -240,7 +238,7 @@ public interface DomainObjectResource {
             MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR,
             MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
     })
-    @ClientResponseType(entityType = String.class)
+    //TODO deprecated @ClientResponseType(entityType = String.class)
     public Response invokeAction(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("actionId") final String actionId, final InputStream arguments);
 
     @DELETE

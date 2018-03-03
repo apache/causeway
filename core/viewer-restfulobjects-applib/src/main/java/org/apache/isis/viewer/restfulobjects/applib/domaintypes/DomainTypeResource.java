@@ -26,8 +26,6 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.jboss.resteasy.annotations.ClientResponseType;
-
 import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
 
 @Path("/domain-types")
@@ -40,7 +38,7 @@ public interface DomainTypeResource {
     @GET
     @Path("/")
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_TYPE_LIST })
-    @ClientResponseType(entityType = String.class)
+    //TODO deprecated @ClientResponseType(entityType = String.class)
     public abstract Response domainTypes();
 
     // /////////////////////////////////////////////////////
@@ -50,7 +48,7 @@ public interface DomainTypeResource {
     @GET
     @Path("/{domainType}")
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_DOMAIN_TYPE })
-    @ClientResponseType(entityType = String.class)
+    //TODO deprecated @ClientResponseType(entityType = String.class)
     public abstract Response domainType(@PathParam("domainType") final String domainType);
 
     @GET
@@ -59,30 +57,31 @@ public interface DomainTypeResource {
             MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_LAYOUT_BS3,
             MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_LAYOUT_BS3
     })
+    //TODO deprecated @ClientResponseType(entityType = String.class)
     public abstract Response layout(@PathParam("domainType") final String domainType);
 
     @GET
     @Path("/{domainType}/properties/{propertyId}")
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_PROPERTY_DESCRIPTION })
-    @ClientResponseType(entityType = String.class)
+    //TODO deprecated @ClientResponseType(entityType = String.class)
     public abstract Response typeProperty(@PathParam("domainType") final String domainType, @PathParam("propertyId") final String propertyId);
 
     @GET
     @Path("/{domainType}/collections/{collectionId}")
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_COLLECTION_DESCRIPTION })
-    @ClientResponseType(entityType = String.class)
+    //TODO deprecated @ClientResponseType(entityType = String.class)
     public abstract Response typeCollection(@PathParam("domainType") final String domainType, @PathParam("collectionId") final String collectionId);
 
     @GET
     @Path("/{domainType}/actions/{actionId}")
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_DESCRIPTION })
-    @ClientResponseType(entityType = String.class)
+    //TODO deprecated @ClientResponseType(entityType = String.class)
     public abstract Response typeAction(@PathParam("domainType") final String domainType, @PathParam("actionId") final String actionId);
 
     @GET
     @Path("/{domainType}/actions/{actionId}/params/{paramNum}")
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_PARAMETER_DESCRIPTION })
-    @ClientResponseType(entityType = String.class)
+    //TODO deprecated @ClientResponseType(entityType = String.class)
     public abstract Response typeActionParam(@PathParam("domainType") final String domainType, @PathParam("actionId") final String actionId, @PathParam("paramNum") final String paramName);
 
     // //////////////////////////////////////////////////////////
@@ -92,7 +91,7 @@ public interface DomainTypeResource {
     @GET
     @Path("/{domainType}/isSubtypeOf/invoke")
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_TYPE_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR })
-    @ClientResponseType(entityType = String.class)
+    //TODO deprecated @ClientResponseType(entityType = String.class)
     public abstract Response domainTypeIsSubtypeOf(
             @PathParam("domainType") final String domainType, 
             @QueryParam("supertype") String superType, // simple style
@@ -102,7 +101,7 @@ public interface DomainTypeResource {
     @GET
     @Path("/{domainType}/isSupertypeOf/invoke")
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_TYPE_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR })
-    @ClientResponseType(entityType = String.class)
+    //TODO deprecated @ClientResponseType(entityType = String.class)
     public abstract Response domainTypeIsSupertypeOf(
             @PathParam("domainType") final String domainType, 
             @QueryParam("supertype") String superType, // simple style

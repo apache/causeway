@@ -38,7 +38,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import org.jboss.resteasy.client.ClientResponse;
+
+import org.apache.isis.viewer.legacy.RestEasyLegacy;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 
 public final class JsonMapper {
@@ -115,8 +116,7 @@ public final class JsonMapper {
     }
 
     public <T> T read(final Response response, final Class<T> requiredType) throws JsonParseException, JsonMappingException, IOException {
-        final ClientResponse<?> clientResponse = (ClientResponse<?>) response; // a shame, but needed if calling resources directly.
-        final String entity = clientResponse.getEntity(String.class);
+    	final String entity = RestEasyLegacy.getEntityAsStringFrom(response);
         if (entity == null) {
             return null;
         }

@@ -32,8 +32,6 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.jboss.resteasy.annotations.ClientResponseType;
-
 import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
 
 @Path("/services")
@@ -42,7 +40,7 @@ public interface DomainServiceResource {
     @GET
     @Path("/")
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_LIST, RestfulMediaType.APPLICATION_JSON_ERROR })
-    @ClientResponseType(entityType = String.class)
+    //TODO deprecated @ClientResponseType(entityType = String.class)
     public Response services();
 
     @DELETE
@@ -67,7 +65,7 @@ public interface DomainServiceResource {
             MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR,
             MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT, RestfulMediaType.APPLICATION_XML_ERROR
     })
-    @ClientResponseType(entityType = String.class)
+    //TODO deprecated @ClientResponseType(entityType = String.class)
     public Response service(@PathParam("serviceId") final String serviceId);
 
     @DELETE
@@ -94,7 +92,7 @@ public interface DomainServiceResource {
             MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_ACTION, RestfulMediaType.APPLICATION_JSON_ERROR,
             MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_ACTION, RestfulMediaType.APPLICATION_XML_ERROR
     })
-    @ClientResponseType(entityType = String.class)
+    //TODO deprecated @ClientResponseType(entityType = String.class)
     public Response actionPrompt(@PathParam("serviceId") final String serviceId, @PathParam("actionId") final String actionId);
 
     @DELETE
@@ -127,7 +125,7 @@ public interface DomainServiceResource {
             MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR,
             MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
     })
-    @ClientResponseType(entityType = String.class)
+    //TODO deprecated @ClientResponseType(entityType = String.class)
     public Response invokeActionQueryOnly(@PathParam("serviceId") final String serviceId, @PathParam("actionId") final String actionId, @QueryParam("x-isis-querystring") final String xIsisQueryString);
 
     @PUT
@@ -137,7 +135,7 @@ public interface DomainServiceResource {
             MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR,
             MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
     })
-    @ClientResponseType(entityType = String.class)
+    //TODO deprecated @ClientResponseType(entityType = String.class)
     public Response invokeActionIdempotent(@PathParam("serviceId") final String serviceId, @PathParam("actionId") final String actionId, final InputStream arguments);
 
     @POST
@@ -147,7 +145,7 @@ public interface DomainServiceResource {
             MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR,
             MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
     })
-    @ClientResponseType(entityType = String.class)
+    //TODO deprecated @ClientResponseType(entityType = String.class)
     public Response invokeAction(@PathParam("serviceId") final String serviceId, @PathParam("actionId") final String actionId, final InputStream arguments);
 
     @DELETE

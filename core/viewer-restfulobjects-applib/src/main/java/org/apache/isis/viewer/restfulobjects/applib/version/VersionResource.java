@@ -23,14 +23,13 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
-import org.jboss.resteasy.annotations.ClientResponseType;
 
 @Path("/version")
 public interface VersionResource {
 
     @GET
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_VERSION })
-    @ClientResponseType(entityType = String.class)
+    //TODO deprecated @ClientResponseType(entityType = String.class)
     public Response version();
 
     @DELETE

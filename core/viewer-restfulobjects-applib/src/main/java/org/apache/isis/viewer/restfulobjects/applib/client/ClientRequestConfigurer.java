@@ -21,17 +21,15 @@ package org.apache.isis.viewer.restfulobjects.applib.client;
 import java.util.Map;
 
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.UriBuilder;
 
+import org.apache.isis.viewer.legacy.ClientExecutor;
+import org.apache.isis.viewer.legacy.ClientRequest;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulHttpMethod;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulRequest.RequestParameter;
 import org.apache.isis.viewer.restfulobjects.applib.util.UrlEncodingUtils;
-import org.jboss.resteasy.client.ClientExecutor;
-import org.jboss.resteasy.client.ClientRequest;
-import org.jboss.resteasy.specimpl.ResteasyUriBuilder;
 
 /**
  * Configures the body, query string etc of a {@link ClientRequest}.
@@ -45,8 +43,11 @@ import org.jboss.resteasy.specimpl.ResteasyUriBuilder;
  */
 public class ClientRequestConfigurer {
 
-    public static ClientRequestConfigurer create(final ClientExecutor executor, final String uriTemplate) {
-        final UriBuilder uriBuilder = new ResteasyUriBuilder().uriTemplate(uriTemplate);
+    public static ClientRequestConfigurer create(
+    		final ClientExecutor executor, 
+    		final String uriTemplate) 
+    {
+        final UriBuilder uriBuilder = UriBuilderPlugin.get().uriTemplate(uriTemplate);
         final ClientRequest clientRequest = executor.createRequest(uriBuilder);
         return new ClientRequestConfigurer(clientRequest, uriBuilder);
     }
@@ -127,7 +128,7 @@ public class ClientRequestConfigurer {
      * {@link RestfulHttpMethod#setUpArgs(ClientRequestConfigurer, JsonRepresentation)}
      */
     public ClientRequestConfigurer body(final JsonRepresentation requestArgs) {
-        clientRequest.body(MediaType.APPLICATION_JSON_TYPE, requestArgs.toString());
+        clientRequest.jsonPayload(requestArgs.toString());
         return this;
     }
 
@@ -149,12 +150,11 @@ public class ClientRequestConfigurer {
      * {@link RestfulHttpMethod#setUpArgs(ClientRequestConfigurer, JsonRepresentation)}
      */
     public ClientRequestConfigurer queryArgs(final JsonRepresentation requestArgs) {
-        final MultivaluedMap<String, String> queryParameters = clientRequest.getQueryParameters();
         for (final Map.Entry<String, JsonRepresentation> entry : requestArgs.mapIterable()) {
             final String param = entry.getKey();
             final JsonRepresentation argRepr = entry.getValue();
             final String arg = UrlEncodingUtils.urlEncode(argRepr.asArg());
-            queryParameters.add(param, arg);
+            clientRequest.addQueryParameter(param, arg);
         }
         return this;
     }

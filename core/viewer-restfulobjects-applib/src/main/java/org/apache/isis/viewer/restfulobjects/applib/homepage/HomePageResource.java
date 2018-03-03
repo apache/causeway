@@ -18,19 +18,23 @@
  */
 package org.apache.isis.viewer.restfulobjects.applib.homepage;
 
-import javax.ws.rs.*;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
-import org.jboss.resteasy.annotations.ClientResponseType;
 
 @Path("/")
 public interface HomePageResource {
 
     @GET
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_HOME_PAGE })
-    @ClientResponseType(entityType = String.class)
+    //TODO deprecated @ClientResponseType(entityType = String.class)
     public Response homePage();
 
     @DELETE
@@ -49,7 +53,7 @@ public interface HomePageResource {
     @GET
     @Path("/notAuthenticated")
     @Produces({ MediaType.APPLICATION_JSON })
-    @ClientResponseType(entityType = String.class)
+    //TODO deprecated @ClientResponseType(entityType = String.class)
     public Response notAuthenticated();
 
 }

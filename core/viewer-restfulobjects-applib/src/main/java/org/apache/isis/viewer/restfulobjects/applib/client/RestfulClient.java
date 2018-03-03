@@ -20,17 +20,13 @@ package org.apache.isis.viewer.restfulobjects.applib.client;
 
 import java.net.URI;
 
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.apache.http.client.HttpClient;
-import org.apache.http.conn.ClientConnectionManager;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
-import org.jboss.resteasy.client.ClientExecutor;
-import org.jboss.resteasy.client.ClientRequestFactory;
-import org.jboss.resteasy.client.core.executors.ApacheHttpClient4Executor;
-
+import org.apache.isis.viewer.legacy.ClientExecutor;
+import org.apache.isis.viewer.legacy.ClientRequestFactory;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulHttpMethod;
@@ -55,25 +51,17 @@ public class RestfulClient {
 
     
     /**
-     * Using {@link ApacheHttpClient4Executor} and {@link DefaultHttpClient}.
+     * Using {@link javax.ws.rs.client.Client}.
      */
     public RestfulClient(final URI baseUri) {
-        this(baseUri, new ThreadSafeClientConnManager());
+        this(baseUri, ClientBuilder.newClient());
     }
 
     /**
-     * Using {@link ApacheHttpClient4Executor} and {@link DefaultHttpClient}.
+     * Using {@link javax.ws.rs.client.Client}.
      */
-    public RestfulClient(final URI baseUri, ClientConnectionManager clientConnectionManager) {
-        this(baseUri, new DefaultHttpClient(clientConnectionManager));
-    }
-
-
-    /**
-     * Using {@link ApacheHttpClient4Executor} and specified {@link HttpClient}.
-     */
-    public RestfulClient(final URI baseUri, HttpClient client) {
-        this(baseUri, new ApacheHttpClient4Executor(client));
+    public RestfulClient(final URI baseUri, Client client) {
+        this(baseUri, ClientExecutor.of(client));
     }
 
     /**
@@ -81,7 +69,7 @@ public class RestfulClient {
      */
     public RestfulClient(final URI baseUri, final ClientExecutor clientExecutor) {
         this.executor = clientExecutor;
-        this.clientRequestFactory = new ClientRequestFactory(clientExecutor, baseUri);
+        this.clientRequestFactory = ClientRequestFactory.of(clientExecutor, baseUri);
 
         this.homePageResource = clientRequestFactory.createProxy(HomePageResource.class);
         this.userResource = clientRequestFactory.createProxy(UserResource.class);

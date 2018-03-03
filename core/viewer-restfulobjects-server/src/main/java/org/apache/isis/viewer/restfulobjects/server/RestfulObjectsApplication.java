@@ -19,7 +19,6 @@
 package org.apache.isis.viewer.restfulobjects.server;
 
 import org.apache.isis.viewer.restfulobjects.rendering.service.acceptheader.AcceptHeaderServiceForRest;
-import org.apache.isis.viewer.restfulobjects.server.conneg.RestfulObjectsJaxbWriterForXml;
 import org.apache.isis.viewer.restfulobjects.server.mappers.ExceptionMapperForObjectNotFound;
 import org.apache.isis.viewer.restfulobjects.server.mappers.ExceptionMapperForRestfulObjectsApplication;
 import org.apache.isis.viewer.restfulobjects.server.mappers.ExceptionMapperForRuntimeException;
@@ -46,9 +45,9 @@ public class RestfulObjectsApplication extends AbstractJaxRsApplication {
         addClass(VersionResourceServerside.class);
 
         addClass(SwaggerSpecResource.class);
-
-        final RestfulObjectsJaxbWriterForXml roWriter = new RestfulObjectsJaxbWriterForXml();
-        addSingleton(roWriter);
+        
+        addSingleton(IsisJaxrsServerPlugin.get().newRestfulObjectsJaxbWriterForXml());
+        
 
         addSingleton(new ExceptionMapperForRestfulObjectsApplication());
         addSingleton(new ExceptionMapperForRuntimeException());

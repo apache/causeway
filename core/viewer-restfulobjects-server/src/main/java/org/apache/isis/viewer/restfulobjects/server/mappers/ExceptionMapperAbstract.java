@@ -27,19 +27,18 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.ext.ExceptionMapper;
 
-import com.google.common.base.Optional;
-import com.google.common.base.Throwables;
-import com.google.common.collect.FluentIterable;
-
-import org.jboss.resteasy.spi.Failure;
-
 import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.rendering.HasHttpStatusCode;
+import org.apache.isis.viewer.restfulobjects.server.IsisJaxrsServerPlugin;
 import org.apache.isis.viewer.restfulobjects.server.mappers.entity.ExceptionDetail;
 import org.apache.isis.viewer.restfulobjects.server.mappers.entity.ExceptionPojo;
 import org.apache.isis.viewer.restfulobjects.server.resources.serialization.SerializationStrategy;
+
+import com.google.common.base.Optional;
+import com.google.common.base.Throwables;
+import com.google.common.collect.FluentIterable;
 
 public abstract class ExceptionMapperAbstract<T extends Throwable> implements ExceptionMapper<T> {
 
@@ -63,10 +62,13 @@ public abstract class ExceptionMapperAbstract<T extends Throwable> implements Ex
         final List<Throwable> chain = Throwables.getCausalChain(ex);
 
         RestfulResponse.HttpStatusCode statusCode;
-        if(ex instanceof Failure) {
-            Failure failure = (Failure) ex;
-            statusCode = RestfulResponse.HttpStatusCode.statusFor(failure.getErrorCode());
-        } else if(!FluentIterable.from(chain).filter(RecoverableException.class).isEmpty()) {
+        
+        statusCode = IsisJaxrsServerPlugin.get().getFailureStatusCodeIfAny(ex);
+        if(statusCode!=null) {
+        	return statusCode;
+        }
+        
+        if(!FluentIterable.from(chain).filter(RecoverableException.class).isEmpty()) {
             statusCode = RestfulResponse.HttpStatusCode.OK;
         } else if(ex instanceof HasHttpStatusCode) {
             HasHttpStatusCode hasHttpStatusCode = (HasHttpStatusCode) ex;
