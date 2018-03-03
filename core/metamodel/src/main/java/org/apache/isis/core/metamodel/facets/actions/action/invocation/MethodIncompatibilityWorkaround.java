@@ -73,17 +73,22 @@ class MethodIncompatibilityWorkaround {
 			return null;
 		}
 		
+		// allow no side effects on Collection arguments
+		if(Collection.class.equals(parameterType)) {
+			return adaptAsCollection((List<?>)obj);
+		}
+		
 		// allow no side effects on List arguments
 		if(List.class.equals(parameterType)) {
 			return adaptAsList((List<?>)obj);
 		}
 
-		// adapt set
+		// adapt as Set (unmodifiable)
 		if(Set.class.equals(parameterType)) {
 			return adaptAsSet((List<?>)obj);
 		}
 		
-		// adapt sorted
+		// adapt as SortedSet (unmodifiable)
 		if(SortedSet.class.equals(parameterType)) {
 			return adaptAsSortedSet((List<?>)obj);
 		}
@@ -91,8 +96,17 @@ class MethodIncompatibilityWorkaround {
 		return obj;
 	}
 	
-	// -- COLLECTION ADAPTER
+	// -- COLLECTION ADAPTERS
 
+	/**
+	 * Adapts the list as unmodifiable collection.
+	 * @param list
+	 * @return
+	 */
+	private static <T> Collection<T> adaptAsCollection(final List<T> list) {
+		return Collections.unmodifiableCollection(list);
+	}
+	
 	/**
 	 * Adapts the list as unmodifiable list.
 	 * @param list
