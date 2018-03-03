@@ -389,15 +389,12 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
         if(cacheable) {
             final QueryResultsCache queryResultsCache = getQueryResultsCache();
             final Object[] targetPojoPlusExecutionParameters = ArrayExtensions.appendT(executionParameters, targetPojo);
-            return queryResultsCache.execute(new Callable<Object>() {
-                @Override
-                public Object call() throws Exception {
-                    return method.invoke(targetPojo, executionParameters);
-                }
-            }, targetPojo.getClass(), method.getName(), targetPojoPlusExecutionParameters);
+            return queryResultsCache.execute(
+            		()->MethodIncompatibilityWorkaround.invoke(method, targetPojo, executionParameters),
+            		targetPojo.getClass(), method.getName(), targetPojoPlusExecutionParameters);
 
         } else {
-            return method.invoke(targetPojo, executionParameters);
+            return MethodIncompatibilityWorkaround.invoke(method, targetPojo, executionParameters);
         }
     }
 
