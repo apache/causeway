@@ -1,51 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-  Licensed to the Apache Software Foundation (ASF) under one
-  or more contributor license agreements.  See the NOTICE file
-  distributed with this work for additional information
-  regarding copyright ownership.  The ASF licenses this file
-  to you under the Apache License, Version 2.0 (the
-  "License"); you may not use this file except in compliance
-  with the License.  You may obtain a copy of the License at
-  
-         http://www.apache.org/licenses/LICENSE-2.0
-         
-  Unless required by applicable law or agreed to in writing,
-  software distributed under the License is distributed on an
-  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-  KIND, either express or implied.  See the License for the
-  specific language governing permissions and limitations
-  under the License.
--->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+<!-- Licensed to the Apache Software Foundation (ASF) under one or more contributor 
+	license agreements. See the NOTICE file distributed with this work for additional 
+	information regarding copyright ownership. The ASF licenses this file to 
+	you under the Apache License, Version 2.0 (the "License"); you may not use 
+	this file except in compliance with the License. You may obtain a copy of 
+	the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required 
+	by applicable law or agreed to in writing, software distributed under the 
+	License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS 
+	OF ANY KIND, either express or implied. See the License for the specific 
+	language governing permissions and limitations under the License. -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
 
-    <parent>
+	<parent>
 		<groupId>org.apache.isis.core</groupId>
 		<artifactId>isis</artifactId>
-        <version>2.0.0-M1-SNAPSHOT</version>
+		<version>2.0.0-M1-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>isis-core-runtime</artifactId>
 	<name>Apache Isis Runtime</name>
 
-    <properties>
-        <jar-plugin.automaticModuleName>org.apache.isis.core.runtime</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/apache/isis/core/runtime</git-plugin.propertiesDir>
-    </properties>
+	<properties>
+		<jar-plugin.automaticModuleName>org.apache.isis.core.runtime</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/isis/core/runtime</git-plugin.propertiesDir>
+	</properties>
 
-    <build>
+	<build>
 		<resources>
-            <resource>
-                <directory>src/main/java</directory>
-                <filtering>false</filtering>
-                <includes>
-                    <include>**</include>
-                </includes>
-                <excludes>
-                    <exclude>**/*.java</exclude>
-                </excludes>
-            </resource>
+			<resource>
+				<directory>src/main/java</directory>
+				<filtering>false</filtering>
+				<includes>
+					<include>**</include>
+				</includes>
+				<excludes>
+					<exclude>**/*.java</exclude>
+				</excludes>
+			</resource>
 			<resource>
 				<directory>src/main/resources</directory>
 				<includes>
@@ -58,15 +51,15 @@
 				<filtering>false</filtering>
 			</resource>
 		</resources>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <skipTests>false</skipTests>
-                </configuration>
-            </plugin>
-        </plugins>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<skipTests>false</skipTests>
+				</configuration>
+			</plugin>
+		</plugins>
 	</build>
 
 	<dependencies>
@@ -77,95 +70,102 @@
 			<scope>test</scope>
 		</dependency>
 
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-unittestsupport</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-log4j</artifactId>
-        </dependency>
-        
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-metamodel</artifactId>
+			<artifactId>isis-core-unittestsupport</artifactId>
+			<scope>test</scope>
 		</dependency>
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-metamodel</artifactId>
-            <type>test-jar</type>
-            <scope>test</scope>
-        </dependency>
 
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-schema</artifactId>
-        </dependency>
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-core-log4j</artifactId>
+		</dependency>
 
-        <dependency>
-            <groupId>dom4j</groupId>
-            <artifactId>dom4j</artifactId>
-        </dependency>
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-core-metamodel</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-core-metamodel</artifactId>
+			<type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
 
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-        </dependency>
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-core-schema</artifactId>
+		</dependency>
 
-        <dependency>
-            <!-- because DataNucleus uses log4j as its preferred logger -->
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-        </dependency>
+		<dependency>
+			<groupId>dom4j</groupId>
+			<artifactId>dom4j</artifactId>
+		</dependency>
 
-        <!-- for our home-grown proxies for @RequestScoped -->
-        <dependency>
-            <groupId>org.javassist</groupId>
-            <artifactId>javassist</artifactId>
-        </dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+		</dependency>
+
+		<dependency>
+			<!-- because DataNucleus uses log4j as its preferred logger -->
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+		</dependency>
+
+		<dependency>
+			<!-- required because resteasy-jaxrs declares as a test dependency whereas 
+				httpclient4 needs it as a compile dependency -->
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+		</dependency>
+
+		<!-- for our home-grown proxies for @RequestScoped -->
+		<dependency>
+			<groupId>org.javassist</groupId>
+			<artifactId>javassist</artifactId>
+		</dependency>
 
 	</dependencies>
 
-    <profiles>
-        <profile>
-            <id>email-notification-service</id>
-            <activation>
-                <property>
-                    <name>!skip.email-notification-service</name>
-                </property>
-            </activation>
-            <dependencies>
-                <dependency>
-                    <groupId>org.apache.commons</groupId>
-                    <artifactId>commons-email</artifactId>
-                    <version>${commons-email.version}</version>
-                    <exclusions>
-                        <exclusion>
-                            <groupId>com.sun.mail</groupId>
-                            <artifactId>javax.mail</artifactId>
-                        </exclusion>
-                    </exclusions>
-                </dependency>
-                <dependency>
-                    <groupId>com.sun.mail</groupId>
-                    <artifactId>javax.mail</artifactId>
-                    <version>${com-sun-mail.version}</version>
-                    <exclusions>
-                        <exclusion>
-                            <groupId>javax.activation</groupId>
-                            <artifactId>activation</artifactId>
-                        </exclusion>
-                    </exclusions>
-                </dependency>
-                <dependency>
-                    <groupId>javax.activation</groupId>
-                    <artifactId>activation</artifactId>
-                    <version>1.1.1</version>
-                </dependency>
-            </dependencies>
-        </profile>
+	<profiles>
+		<profile>
+			<id>email-notification-service</id>
+			<activation>
+				<property>
+					<name>!skip.email-notification-service</name>
+				</property>
+			</activation>
+			<dependencies>
+				<dependency>
+					<groupId>org.apache.commons</groupId>
+					<artifactId>commons-email</artifactId>
+					<version>${commons-email.version}</version>
+					<exclusions>
+						<exclusion>
+							<groupId>com.sun.mail</groupId>
+							<artifactId>javax.mail</artifactId>
+						</exclusion>
+					</exclusions>
+				</dependency>
+				<dependency>
+					<groupId>com.sun.mail</groupId>
+					<artifactId>javax.mail</artifactId>
+					<version>${com-sun-mail.version}</version>
+					<exclusions>
+						<exclusion>
+							<groupId>javax.activation</groupId>
+							<artifactId>activation</artifactId>
+						</exclusion>
+					</exclusions>
+				</dependency>
+				<dependency>
+					<groupId>javax.activation</groupId>
+					<artifactId>activation</artifactId>
+					<version>1.1.1</version>
+				</dependency>
+			</dependencies>
+		</profile>
 
-    </profiles>
+	</profiles>
 </project>

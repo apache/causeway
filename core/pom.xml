@@ -111,6 +111,14 @@
         <dn4-jodatime.version>4.1.0-release</dn4-jodatime.version>
         <dn4-maven-plugin.version>4.0.2</dn4-maven-plugin.version>
         
+        <!-- Resteasy Plugin 3 (for JEE 7 JAX-RS API 2.0) -->
+        
+		<resteasy3-jaxrs.version>3.0.17.Final</resteasy3-jaxrs.version> 
+		
+		<!-- Resteasy Plugin 4 (for JEE 8 JAX-RS API 2.1) -->
+		
+        <resteasy4-jaxrs.version>4.0.0.Beta2</resteasy4-jaxrs.version>
+        
         <!-- ... -->
 
         <shiro.version>1.2.6</shiro.version>
@@ -147,7 +155,6 @@
         <!-- using 2.3.3 throws SQL exception in simpleapp integtests -->
         <hsqldb.version>2.3.4</hsqldb.version>
         <log4jdbc-remix.version>0.2.7</log4jdbc-remix.version>
-        <resteasy-jaxrs.version>3.0.24.Final</resteasy-jaxrs.version>
 
         <jetty.version>9.4.3.v20170317</jetty.version>
 
@@ -1131,7 +1138,7 @@ ${license.additional-notes}
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>
                 <configuration>
-                    <!-- overriddes the default ('clean verify') -->
+                    <!-- overrides the default ('clean verify') -->
                     <preparationGoals>clean install</preparationGoals>
                     <autoVersionSubmodules>true</autoVersionSubmodules>
                 </configuration>
@@ -1152,6 +1159,20 @@ ${license.additional-notes}
     <dependencyManagement>
         <!-- is also for benefit of application developers, using scope=import -->
         <dependencies>
+        
+            <!-- JEE API -->
+           	<dependency>
+			    <groupId>javax</groupId>
+			    <artifactId>javaee-api</artifactId>
+			    <version>${javaee.version}</version>
+			</dependency>
+			
+			<!-- JDO API -->
+			<dependency>
+	            <groupId>javax.jdo</groupId>
+	            <artifactId>jdo-api</artifactId>
+	            <version>${jdo-api.version}</version>
+        	</dependency>
         
             <!-- unittestsupport -->
             <dependency>
@@ -1284,7 +1305,7 @@ ${license.additional-notes}
                 <scope>test</scope>
             </dependency>
             
-            <!-- runtime -->
+            <!-- runtime legacy -->
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-runtime-legacy</artifactId>
@@ -1460,6 +1481,8 @@ ${license.additional-notes}
                 <artifactId>guava</artifactId>
                 <version>${guava.version}</version>
             </dependency>
+            
+            <!-- Axon -->
             <dependency>
                 <groupId>org.axonframework</groupId>
                 <artifactId>axon-core</artifactId>
@@ -1625,41 +1648,6 @@ ${license.additional-notes}
                 <groupId>org.apache.shiro</groupId>
                 <artifactId>shiro-web</artifactId>
                 <version>${shiro.version}</version>
-            </dependency>
-
-
-            <!-- RestEasy -->
-            <dependency>
-                <groupId>org.jboss.resteasy</groupId>
-                <artifactId>resteasy-jaxrs</artifactId>
-                <version>${resteasy-jaxrs.version}</version>
-                <exclusions>
-                    <!-- instead use geronimo-servlet_3.0_spec -->
-                    <exclusion>
-                        <groupId>org.jboss.spec.javax.servlet</groupId>
-                        <artifactId>jboss-servlet-api_3.1_spec</artifactId>
-                    </exclusion>
-                    <!-- instead use org.apache.geronimo.specs:geronimo-annotation_1.0_spec -->
-                    <exclusion>
-                        <groupId>javax.annotation</groupId>
-                        <artifactId>jsr250-api</artifactId>
-                    </exclusion>
-                    <!-- org.apache.geronimo.specs:geronimo-activation_1.1_spec -->
-                    <exclusion>
-                        <groupId>javax.activation</groupId>
-                        <artifactId>activation</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.jboss.resteasy</groupId>
-                <artifactId>resteasy-jaxb-provider</artifactId>
-                <version>${resteasy-jaxrs.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.jboss.resteasy</groupId>
-                <artifactId>resteasy-jackson-provider</artifactId>
-                <version>${resteasy-jaxrs.version}</version>
             </dependency>
 
             <dependency>
@@ -2020,20 +2008,7 @@ ${license.additional-notes}
                 <scope>test</scope>
             </dependency>
 
-            <!-- JEE API -->
-           	<dependency>
-			    <groupId>javax</groupId>
-			    <artifactId>javaee-api</artifactId>
-			    <version>${javaee.version}</version>
-			</dependency>
-			
-			<!-- JDO API -->
-			<dependency>
-	            <groupId>javax.jdo</groupId>
-	            <artifactId>jdo-api</artifactId>
-	            <version>${jdo-api.version}</version>
-	            <scope></scope> <!-- TODO provided by plugin -->
-        	</dependency>
+
 
 			<!-- JAX-RS API -->
             <dependency>
