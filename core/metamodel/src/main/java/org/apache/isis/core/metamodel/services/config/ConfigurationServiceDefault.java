@@ -21,7 +21,9 @@ package org.apache.isis.core.metamodel.services.config;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeSet;
 
 import javax.annotation.PostConstruct;
@@ -29,10 +31,14 @@ import javax.annotation.PostConstruct;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.internal.collections._Maps;
+import org.apache.isis.applib.internal.collections._Sets;
 import org.apache.isis.applib.services.config.ConfigurationProperty;
 import org.apache.isis.applib.services.config.ConfigurationService;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.services.configinternal.ConfigurationServiceInternal;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This is the implementation of the applib's {@link ConfigurationService}, different from the internal
@@ -45,29 +51,67 @@ import org.apache.isis.core.metamodel.services.configinternal.ConfigurationServi
         menuOrder = "" + Integer.MAX_VALUE
 )
 public class ConfigurationServiceDefault implements ConfigurationService {
+	
+	private final Logger LOG = LoggerFactory.getLogger(ConfigurationServiceDefault.class);
 
-    private Map<String, String> properties;
+    private final Map<String, String> properties = _Maps.newHashMap();
 
     @Programmatic
     @PostConstruct
     public void init(final Map<String,String> properties) {
-        this.properties = properties;
+    	Objects.requireNonNull(properties);
+    	Objects.requireNonNull(configurationServiceInternal);
+    	
+    	// [ahuber] not sure which of the two to has precedence ...
+    	final Map<String, String> a = properties;
+    	final Map<String, String> b = configurationServiceInternal.asMap();
+        
+        // ... so we report if there is a clash in configured values
+        {
+        	Set<String> potentialClashKeys = _Sets.intersect(a.keySet(), b.keySet());
+        	
+        	long clashCount = potentialClashKeys.stream()
+        	.filter(key->{
+        		if(!Objects.equals(a.get(key), b.get(key))){
+        			
+        			LOG.warn(String.format("config value clash, having two versions for key '%s': '%s' <--> '%s'", 
+        					key, ""+a.get(key), ""+b.get(key)	));
+        		
+        			return true;
+        		}
+        		return false;
+        	})
+        	.count();
+        	
+        	if(clashCount>0) {
+        		LOG.error("===================================================================");
+        		LOG.error(" config clashes detected, likely a framework bug");
+        		LOG.error("===================================================================");
+        	}
+        	
+        }
+        
+        this.properties.putAll(a);
+        this.properties.putAll(b);
+        
+                
     }
 
     @Programmatic
-    public Set<ConfigurationProperty> allProperties() {
-        final Set<ConfigurationProperty> kv = new TreeSet<>();
-        for (Map.Entry<String, String> propertyPair : properties.entrySet()) {
-            kv.add(new ConfigurationProperty(propertyPair.getKey(),propertyPair.getValue()));
-
-        }
+    public SortedSet<ConfigurationProperty> allProperties() {
+        final SortedSet<ConfigurationProperty> kv = new TreeSet<>();
+        
+        properties.entrySet().stream()
+        .map(this::toConfigurationProperty)
+        .forEach(kv::add);
+        
         return kv;
     }
 
     @Programmatic
     @Override
     public String getProperty(final String name) {
-        return configurationServiceInternal.getProperty(name);
+        return properties.get(name);
     }
 
     @Programmatic
@@ -83,9 +127,13 @@ public class ConfigurationServiceDefault implements ConfigurationService {
         return configurationServiceInternal.getPropertyNames();
     }
 
-
-
     @javax.inject.Inject
     ConfigurationServiceInternal configurationServiceInternal;
+    
+    // -- HELPER
+    
+    private ConfigurationProperty toConfigurationProperty(Map.Entry<String, String> entry) {
+    	return new ConfigurationProperty(entry.getKey(), entry.getValue());
+    }
 
 }

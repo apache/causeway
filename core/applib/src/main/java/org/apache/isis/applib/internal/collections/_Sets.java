@@ -116,6 +116,27 @@ public final class _Sets {
 		return keySetView;
 	}
 	
+	// -- SET OPERATIONS
+
+	/**
+	 * Returns the intersection (set theory) of two given sets, not retaining any order.
+	 * @param a
+	 * @param b
+	 * @return non null, unmodifiable
+	 */
+	public static <T> Set<T> intersect(@Nullable Set<T> a, @Nullable Set<T> b) {
+		if(a==null && b==null) {
+			return Collections.emptySet();
+		}
+		if(a==null || b==null) {
+			return Collections.emptySet();
+		}
+		return Collections.unmodifiableSet(
+				a.stream()
+				.filter(b::contains)
+				.collect(Collectors.toSet()) );
+	}
+	
 	// -- 
 
 	
