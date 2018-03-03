@@ -25,9 +25,7 @@ public enum Placement {
     SIGNIN;
 
     String urlFor(final String logoHeaderUrl, final String logoSigninUrl) {
-        return this == Placement.HEADER
-        		? _Resource.prependContextPathIfPresent(logoHeaderUrl) 
-                : _Resource.prependContextPathIfPresent(logoSigninUrl)
-                ;
+        return _Resource.prependContextPathIfPresent(
+        			this == Placement.HEADER ? logoHeaderUrl : logoSigninUrl );
     }
 }
