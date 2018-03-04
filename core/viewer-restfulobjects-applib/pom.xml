@@ -61,6 +61,8 @@
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
         </dependency>
+	
+		<!-- TEST DEPENDENCIES -->
 
         <dependency>
             <groupId>org.apache.isis.core</groupId>

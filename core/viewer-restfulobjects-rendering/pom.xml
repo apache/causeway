@@ -38,12 +38,6 @@
 
     <dependencies>
 
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-unittestsupport</artifactId>
-            <scope>test</scope>
-        </dependency>
-
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>isis-core-metamodel</artifactId>
@@ -55,6 +49,14 @@
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-viewer-restfulobjects-applib</artifactId>
+        </dependency>
+        
+        <!-- TEST DEPENDENCIES -->
+		
+		<dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-unittestsupport</artifactId>
+            <scope>test</scope>
         </dependency>
 
 	</dependencies>
