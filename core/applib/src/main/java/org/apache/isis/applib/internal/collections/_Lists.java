@@ -26,6 +26,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
@@ -113,6 +114,16 @@ public final class _Lists {
 		return new LinkedList<T>(collection);
 	}
 	
-	// --
+	// -- TRANSFORMATION
+	
+	public static <T, R> List<R> transform(@Nullable List<T> input, Function<T, R> mapper) {
+		if(input==null) {
+			return Collections.emptyList();
+		}
+		Objects.requireNonNull(mapper);
+		return input.stream()
+				.map(mapper)
+				.collect(Collectors.toList());
+	}
 	
 }
