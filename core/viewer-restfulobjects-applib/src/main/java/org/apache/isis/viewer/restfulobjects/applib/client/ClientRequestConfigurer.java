@@ -150,12 +150,15 @@ public class ClientRequestConfigurer {
      * {@link RestfulHttpMethod#setUpArgs(ClientRequestConfigurer, JsonRepresentation)}
      */
     public ClientRequestConfigurer queryArgs(final JsonRepresentation requestArgs) {
-        for (final Map.Entry<String, JsonRepresentation> entry : requestArgs.mapIterable()) {
-            final String param = entry.getKey();
+    	
+    	requestArgs.streamMapEntries()
+    	.forEach(entry->{
+    		final String param = entry.getKey();
             final JsonRepresentation argRepr = entry.getValue();
             final String arg = UrlEncodingUtils.urlEncode(argRepr.asArg());
             clientRequest.addQueryParameter(param, arg);
-        }
+    	});
+    	
         return this;
     }
 

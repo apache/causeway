@@ -21,13 +21,17 @@ package org.apache.isis.viewer.restfulobjects.applib.util;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import com.google.common.base.Objects;
-import com.google.common.base.Splitter;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
+import java.util.stream.Collectors;
+
+import org.apache.isis.applib.internal.base._Strings;
+import org.apache.isis.applib.internal.collections._Lists;
+import org.apache.isis.applib.internal.collections._Maps;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
+
+import com.google.common.base.Splitter;
 
 public class PathNode {
     private static final Pattern NODE = Pattern.compile("^([^\\[]*)(\\[(.+)\\])?$");
@@ -37,9 +41,13 @@ public class PathNode {
     public static final PathNode NULL = new PathNode("", Collections.<String, String> emptyMap());
 
     public static List<String> split(String path) {
-        List<String> parts = Lists.newArrayList();
+        List<String> parts = _Lists.newArrayList();
         String curr = null;
-        for (String part : Splitter.on(".").split(path)) {
+        
+        final List<String> chunks = _Strings.splitThenStream(path, ".")
+        		.collect(Collectors.toList());
+        
+        for (String part : chunks) {
             if(curr != null) {
                 if(part.contains("]")) {
                     curr = curr + "." + part;
@@ -73,9 +81,10 @@ public class PathNode {
             return null;
         }
         final String key = nodeMatcher.group(1);
-        final Map<String, String> criteria = Maps.newHashMap();
+        final Map<String, String> criteria = _Maps.newHashMap();
         final String criteriaStr = nodeMatcher.group(3);
         if (criteriaStr != null) {
+        	
             for (final String criterium : Splitter.on(WHITESPACE).split(criteriaStr)) {
                 final Matcher keyValueMatcher = LIST_CRITERIA_SYNTAX.matcher(criterium);
                 if (keyValueMatcher.matches()) {
@@ -133,7 +142,7 @@ public class PathNode {
                 if(actualValueSemiIndex == -1 && requiredValueSemiIndex != -1) {
                     requiredValue = requiredValue.substring(0, requiredValueSemiIndex);
                 }
-                if (!Objects.equal(requiredValue, actualValue)) {
+                if (!Objects.equals(requiredValue, actualValue)) {
                     return false;
                 }
             } else {

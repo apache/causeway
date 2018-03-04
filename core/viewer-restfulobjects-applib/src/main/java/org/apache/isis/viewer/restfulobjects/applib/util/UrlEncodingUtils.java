@@ -21,12 +21,15 @@ package org.apache.isis.viewer.restfulobjects.applib.util;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
+
 import com.fasterxml.jackson.databind.JsonNode;
-import com.google.common.base.Charsets;
-import com.google.common.base.Function;
-import com.google.common.collect.Lists;
+
+import org.apache.isis.applib.internal.base._NullSafe;
+import org.apache.isis.applib.internal.collections._Lists;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 
 public final class UrlEncodingUtils {
@@ -51,7 +54,7 @@ public final class UrlEncodingUtils {
     }
 
     public static List<String> urlDecode(final List<String> values) {
-        return Lists.transform(values, FUNCTION);
+        return _Lists.transform(values, FUNCTION);
     }
 
     public static String[] urlDecode(final String[] values) {
@@ -69,7 +72,7 @@ public final class UrlEncodingUtils {
 
     public static String urlEncode(final String str) {
         try {
-            return URLEncoder.encode(str, Charsets.UTF_8.name());
+            return URLEncoder.encode(str, StandardCharsets.UTF_8.name());
         } catch (final UnsupportedEncodingException e) {
             // shouldn't happen
             throw new RuntimeException(e);

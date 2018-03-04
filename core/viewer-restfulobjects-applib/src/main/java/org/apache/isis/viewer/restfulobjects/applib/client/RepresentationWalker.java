@@ -19,6 +19,7 @@
 package org.apache.isis.viewer.restfulobjects.applib.client;
 
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.ws.rs.core.Response;
@@ -29,7 +30,6 @@ import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.google.common.collect.Lists;
 
 public class RepresentationWalker {
 
@@ -58,7 +58,7 @@ public class RepresentationWalker {
     }
 
     private final RestfulClient restfulClient;
-    private final List<Step> steps = Lists.newLinkedList();
+    private final List<Step> steps = new LinkedList<>();
 
     public RepresentationWalker(final RestfulClient restfulClient, final Response response) {
         this.restfulClient = restfulClient;

@@ -20,11 +20,12 @@ package org.apache.isis.viewer.restfulobjects.applib.client;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import com.google.common.collect.Maps;
 
 import org.apache.isis.viewer.legacy.ClientRequest;
 import org.apache.isis.viewer.legacy.RestEasyLegacy;
@@ -139,7 +140,7 @@ public final class RestfulRequest {
     }
 
     private final ClientRequestConfigurer clientRequestConfigurer;
-    private final Map<RequestParameter<?>, Object> args = Maps.newLinkedHashMap();
+    private final Map<RequestParameter<?>, Object> args = new LinkedHashMap<>();
 
     public RestfulRequest(final ClientRequestConfigurer clientRequestConfigurer) {
         this.clientRequestConfigurer = clientRequestConfigurer;

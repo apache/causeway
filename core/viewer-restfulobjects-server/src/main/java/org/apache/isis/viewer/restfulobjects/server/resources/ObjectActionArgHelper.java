@@ -96,17 +96,29 @@ public class ObjectActionArgHelper {
         final List<JsonRepresentation> argList = Lists.newArrayList();
 
         // ensure that we have no arguments that are not parameters
-        for (final Map.Entry<String, JsonRepresentation> arg : arguments.mapIterable()) {
-            final String argName = arg.getKey();
-            if(argName.startsWith("x-ro")) {
-                continue;
-            }
-            if (action.getParameterById(argName) == null) {
+        arguments.streamMapEntries()
+        .map(Map.Entry::getKey)
+        .filter(argName->!argName.startsWith("x-ro"))
+        .forEach(argName->{
+        	if (action.getParameterById(argName) == null) {
                 String reason = String.format("Argument '%s' found but no such parameter", argName);
                 arguments.mapPut("x-ro-invalidReason", reason);
                 throw RestfulObjectsApplicationException.createWithBody(RestfulResponse.HttpStatusCode.BAD_REQUEST, arguments, reason);
             }
-        }
+        });
+        
+// legacy of ...        
+//        for (final Map.Entry<String, JsonRepresentation> arg : arguments.streamMap()) {
+//            final String argName = arg.getKey();
+//            if(argName.startsWith("x-ro")) {
+//                continue;
+//            }
+//            if (action.getParameterById(argName) == null) {
+//                String reason = String.format("Argument '%s' found but no such parameter", argName);
+//                arguments.mapPut("x-ro-invalidReason", reason);
+//                throw RestfulObjectsApplicationException.createWithBody(RestfulResponse.HttpStatusCode.BAD_REQUEST, arguments, reason);
+//            }
+//        }
 
         // ensure that an argument value has been provided for all non-optional
         // parameters

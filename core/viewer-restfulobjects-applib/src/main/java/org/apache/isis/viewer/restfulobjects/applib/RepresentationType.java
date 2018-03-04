@@ -20,12 +20,11 @@ package org.apache.isis.viewer.restfulobjects.applib;
 
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.ws.rs.core.MediaType;
-
-import com.google.common.collect.Maps;
 
 import org.apache.isis.applib.util.Enums;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ActionResultRepresentation;
@@ -203,7 +202,7 @@ public enum RepresentationType {
         return getJsonMediaType(mediaTypeParams);
     }
     public MediaType getJsonMediaType(Map<String, String> mediaTypeParams) {
-        Map<String, String> parameters = Maps.newHashMap(jsonMediaType.getParameters());
+        Map<String, String> parameters = new HashMap<>(jsonMediaType.getParameters());
         parameters.putAll(mediaTypeParams);
         return new MediaType(jsonMediaType.getType(), jsonMediaType.getSubtype(), parameters);
     }
@@ -211,7 +210,7 @@ public enum RepresentationType {
         if(xmlMediaType == null) {
             return null;
         }
-        Map<String, String> parameters = Maps.newHashMap(xmlMediaType.getParameters());
+        Map<String, String> parameters = new HashMap<>(xmlMediaType.getParameters());
         parameters.putAll(mediaTypeParams);
         return new MediaType(xmlMediaType.getType(), xmlMediaType.getSubtype(), parameters);
     }

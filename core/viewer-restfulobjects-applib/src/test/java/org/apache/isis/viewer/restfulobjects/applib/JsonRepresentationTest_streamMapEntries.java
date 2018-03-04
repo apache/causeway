@@ -29,15 +29,16 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
-public class JsonRepresentationTest_mapIterable {
+public class JsonRepresentationTest_streamMapEntries {
 
     private JsonRepresentation jsonRepresentation;
 
     @Test
     public void forJsonRepresentation() throws IOException {
         jsonRepresentation = new JsonRepresentation(readJson("map.json"));
-        final Iterable<Entry<String, JsonRepresentation>> mapIterable = jsonRepresentation.mapIterable();
-        final Iterator<Entry<String, JsonRepresentation>> mapIterator = mapIterable.iterator();
+        final Iterator<Entry<String, JsonRepresentation>> mapIterator = 
+        		jsonRepresentation.streamMapEntries()
+        		.iterator();
 
         for (int i = 0; i < jsonRepresentation.asJsonNode().size(); i++) {
             assertThat(mapIterator.hasNext(), is(true));

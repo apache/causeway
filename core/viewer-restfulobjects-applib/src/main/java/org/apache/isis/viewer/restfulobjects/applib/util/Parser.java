@@ -24,19 +24,24 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.isis.applib.internal._Constants;
+import org.apache.isis.applib.internal.base._NullSafe;
+import org.apache.isis.applib.internal.base._Strings;
+import org.apache.isis.applib.internal.collections._Lists;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
 public abstract class Parser<T> {
+	
     public T valueOf(final List<String> str) {
         if (str == null) {
             return null;
@@ -149,6 +154,7 @@ public abstract class Parser<T> {
         };
     }
 
+    @Deprecated // [ahuber] MediaType is in standard API! proposing removal
     public static Parser<com.google.common.net.MediaType> forGuavaMediaType() {
         return new Parser<com.google.common.net.MediaType>() {
             @Override
@@ -234,12 +240,14 @@ public abstract class Parser<T> {
                 if (str == null) {
                     return Collections.emptyList();
                 }
-                return Lists.newArrayList(Splitter.on(",").split(str));
+                return _Strings.splitThenStream(str, ",")
+                		.collect(Collectors.toList());
             }
 
             @Override
             public String asString(final List<String> strings) {
-                return Joiner.on(",").join(strings);
+                return _NullSafe.stream(strings)
+                		.collect(Collectors.joining(","));
             }
         };
     }
@@ -255,7 +263,7 @@ public abstract class Parser<T> {
                 if (str.size() == 0) {
                     return null;
                 }
-                final List<List<String>> listOfLists = Lists.newArrayList();
+                final List<List<String>> listOfLists = _Lists.newArrayList();
                 for (final String s : str) {
                     listOfLists.add(PathNode.split(s));
                 }
@@ -278,25 +286,18 @@ public abstract class Parser<T> {
                 if (str == null || str.isEmpty()) {
                     return Collections.emptyList();
                 }
-                final Iterable<String> listOfStrings = Splitter.on(',').split(str);
-                return Lists.transform(Lists.newArrayList(listOfStrings), new Function<String, List<String>>() {
-
-                    @Override
-                    public List<String> apply(final String input) {
-                        return PathNode.split(input);
-                    }
-                });
+                
+                return _Strings.splitThenStream(str, ",")
+	                .map(PathNode::split)
+	        		.collect(Collectors.toList());
             }
 
             @Override
             public String asString(final List<List<String>> listOfLists) {
-                final List<String> listOfStrings = Lists.transform(listOfLists, new Function<List<String>, String>() {
-                    @Override
-                    public String apply(final List<String> listOfStrings) {
-                        return Joiner.on('.').join(listOfStrings);
-                    }
-                });
-                return Joiner.on(',').join(listOfStrings);
+            	
+            	return _NullSafe.stream(listOfLists)
+	            	.map(listOfStrings->_NullSafe.stream(listOfStrings).collect(Collectors.joining(".")))
+	            	.collect(Collectors.joining(","));
             }
         };
     }
@@ -307,7 +308,7 @@ public abstract class Parser<T> {
             @Override
             public String[] valueOf(final List<String> strings) {
                 if (strings == null) {
-                    return new String[] {};
+                	return _Constants.emptyStringArray;
                 }
                 if (strings.size() == 1) {
                     // special case processing to handle comma-separated values
@@ -319,7 +320,7 @@ public abstract class Parser<T> {
             @Override
             public String[] valueOf(final String[] strings) {
                 if (strings == null) {
-                    return new String[] {};
+                	return _Constants.emptyStringArray;
                 }
                 if (strings.length == 1) {
                     // special case processing to handle comma-separated values
@@ -331,15 +332,18 @@ public abstract class Parser<T> {
             @Override
             public String[] valueOf(final String str) {
                 if (str == null) {
-                    return new String[] {};
+                    return _Constants.emptyStringArray;
                 }
-                final Iterable<String> split = Splitter.on(",").split(str);
-                return Iterables.toArray(split, String.class);
+                
+                return _Strings.splitThenStream(str, ",")
+                .collect(Collectors.toList())
+                .toArray(_Constants.emptyStringArray);
             }
 
             @Override
             public String asString(final String[] strings) {
-                return Joiner.on(",").join(strings);
+                return _NullSafe.stream(strings)
+                		.collect(Collectors.joining(","));
             }
         };
     }
@@ -352,29 +356,23 @@ public abstract class Parser<T> {
                 if (str == null) {
                     return Collections.emptyList();
                 }
-                final List<String> strings = Lists.newArrayList(Splitter.on(",").split(str));
-                return Lists.transform(strings, new Function<String, MediaType>() {
-
-                    @Override
-                    public MediaType apply(final String input) {
-                        return MediaType.valueOf(input);
-                    }
-                });
+                
+                return _Strings.splitThenStream(str, ",")
+                		.map(MediaType::valueOf)
+                        .collect(Collectors.toList());
             }
 
             @Override
             public String asString(final List<MediaType> listOfMediaTypes) {
-                final List<String> strings = Lists.transform(listOfMediaTypes, new Function<MediaType, String>() {
-                    @Override
-                    public String apply(final MediaType input) {
-                        return input.toString();
-                    }
-                });
-                return Joiner.on(",").join(strings);
+            	
+            	return _NullSafe.stream(listOfMediaTypes)
+            			.map(MediaType::toString)
+                		.collect(Collectors.joining(","));
             }
         };
     }
-
+    
+    @Deprecated // [ahuber] MediaType is in standard API! proposing removal
     public static Parser<List<com.google.common.net.MediaType>> forListOfGuavaMediaTypes() {
         return new Parser<List<com.google.common.net.MediaType>>() {
 
@@ -406,6 +404,7 @@ public abstract class Parser<T> {
         };
     }
 
+    @Deprecated // [ahuber] what is this? since it does nothing marking it deprecated
     public static Parser<String> forETag() {
         return new Parser<String>(){
 
@@ -425,5 +424,9 @@ public abstract class Parser<T> {
                 return null;
             }};
     }
+    
+    // -- HELPER
+    
+    
 
 }

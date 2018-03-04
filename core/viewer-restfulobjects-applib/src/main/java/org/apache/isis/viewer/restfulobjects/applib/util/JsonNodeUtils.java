@@ -20,6 +20,7 @@ package org.apache.isis.viewer.restfulobjects.applib.util;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
@@ -27,7 +28,6 @@ import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.google.common.base.Charsets;
 
 public class JsonNodeUtils {
 
@@ -36,13 +36,13 @@ public class JsonNodeUtils {
 
     public static InputStream asInputStream(final JsonNode jsonNode) {
         final String jsonStr = jsonNode.toString();
-        final byte[] bytes = jsonStr.getBytes(Charsets.UTF_8);
+        final byte[] bytes = jsonStr.getBytes(StandardCharsets.UTF_8);
         return new ByteArrayInputStream(bytes);
     }
 
     public static InputStream asInputStream(final JsonRepresentation jsonRepresentation) {
         final String jsonStr = jsonRepresentation.toString();
-        final byte[] bytes = jsonStr.getBytes(Charsets.UTF_8);
+        final byte[] bytes = jsonStr.getBytes(StandardCharsets.UTF_8);
         return new ByteArrayInputStream(bytes);
     }
 

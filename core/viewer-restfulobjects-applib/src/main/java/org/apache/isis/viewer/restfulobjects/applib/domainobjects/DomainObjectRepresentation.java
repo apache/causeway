@@ -19,12 +19,14 @@
 package org.apache.isis.viewer.restfulobjects.applib.domainobjects;
 
 import java.util.Map;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
+
+import com.fasterxml.jackson.databind.JsonNode;
 
 public class DomainObjectRepresentation extends DomainRepresentation  {
 
@@ -115,13 +117,15 @@ public class DomainObjectRepresentation extends DomainRepresentation  {
     private JsonRepresentation getMembersOfType(String memberTypeOf) {
         final JsonRepresentation members = getRepresentation("members");
         return JsonRepresentation.newMap().mapPut(
-                Iterables.filter(members.mapIterable(), havingMemberTypeOf(memberTypeOf)));
+        		members.streamMapEntries()
+        		.filter(havingMemberTypeOf(memberTypeOf))
+        		.collect(Collectors.toList()) );
     }
 
     private static Predicate<Map.Entry<String, JsonRepresentation>> havingMemberTypeOf(final String memberTypeOf) {
         return new Predicate<Map.Entry<String, JsonRepresentation>>() {
             @Override
-            public boolean apply(Map.Entry<String, JsonRepresentation> input) {
+            public boolean test(Map.Entry<String, JsonRepresentation> input) {
                 final JsonRepresentation value = input.getValue();
                 final String memberType = value.getRepresentation("memberType").asString();
                 return memberTypeOf.equals(memberType);

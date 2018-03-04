@@ -26,14 +26,16 @@ import static org.apache.isis.viewer.restfulobjects.applib.JsonFixture.readJson;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-public class JsonRepresentationTest_arrayIterator {
+public class JsonRepresentationTest_streamArrayElements {
 
     private JsonRepresentation jsonRepresentation;
 
     @Test
     public void forJsonRepresentation() throws IOException {
         jsonRepresentation = new JsonRepresentation(readJson("list.json"));
-        final Iterator<JsonRepresentation> arrayIterator = jsonRepresentation.arrayIterator(JsonRepresentation.class);
+        final Iterator<JsonRepresentation> arrayIterator = 
+        		jsonRepresentation.streamArrayElements(JsonRepresentation.class)
+        		.iterator();
         assertThat(arrayIterator.hasNext(), is(true));
         assertThat(arrayIterator.next().getString("a"), is("a1"));
         assertThat(arrayIterator.hasNext(), is(true));
@@ -44,7 +46,9 @@ public class JsonRepresentationTest_arrayIterator {
     @Test
     public void forString() throws IOException {
         jsonRepresentation = new JsonRepresentation(readJson("listOfStrings.json"));
-        final Iterator<String> arrayIterator = jsonRepresentation.arrayIterator(String.class);
+        final Iterator<String> arrayIterator = 
+        		jsonRepresentation.streamArrayElements(String.class)
+        		.iterator();
         assertThat(arrayIterator.hasNext(), is(true));
         assertThat(arrayIterator.next(), is("a"));
         assertThat(arrayIterator.hasNext(), is(true));

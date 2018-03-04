@@ -32,22 +32,22 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.Response.Status.Family;
 import javax.ws.rs.core.Response.StatusType;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.google.common.collect.Maps;
-
+import org.apache.isis.applib.internal.collections._Maps;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.util.JsonMapper;
 import org.apache.isis.viewer.restfulobjects.applib.util.Parser;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
+
 public class RestfulResponse<T> {
 
     public final static class HttpStatusCode {
 
-        private final static Map<Status, HttpStatusCode> statii = Maps.newHashMap();
-        private final static Map<Integer, HttpStatusCode> statusCodes = Maps.newHashMap();
+        private final static Map<Status, HttpStatusCode> statii = _Maps.newHashMap();
+        private final static Map<Integer, HttpStatusCode> statusCodes = _Maps.newHashMap();
 
         private static class StatusTypeImpl implements StatusType {
 
