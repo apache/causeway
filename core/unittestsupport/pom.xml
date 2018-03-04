@@ -64,7 +64,6 @@
 			<dependency>
 	            <groupId>javax.jdo</groupId>
 	            <artifactId>jdo-api</artifactId>
-	            <scope>test</scope>
         	</dependency>
 
             <dependency>

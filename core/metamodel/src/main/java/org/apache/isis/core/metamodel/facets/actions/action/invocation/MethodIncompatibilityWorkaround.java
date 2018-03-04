@@ -123,6 +123,7 @@ class MethodIncompatibilityWorkaround {
 	 */
 	private static <T> Set<T> adaptAsSet(final List<T> list) {
 		return Collections.unmodifiableSet(
+				(Set<T>)
 				list.stream()
 				.collect(Collectors.toCollection(LinkedHashSet::new)));
 	}
