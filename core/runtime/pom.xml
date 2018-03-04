@@ -142,27 +142,20 @@
 					<artifactId>commons-email</artifactId>
 					<version>${commons-email.version}</version>
 					<exclusions>
+						<!--
+						excluded because provided by javax:javaee-api
+						note: moved javax.mail from 1.5.2 to 1.5.0
+						note: moved activation from 1.1.1 to 1.1    ... don't know if this is significant.
+						-->
 						<exclusion>
 							<groupId>com.sun.mail</groupId>
 							<artifactId>javax.mail</artifactId>
 						</exclusion>
-					</exclusions>
-				</dependency>
-				<dependency>
-					<groupId>com.sun.mail</groupId>
-					<artifactId>javax.mail</artifactId>
-					<version>${com-sun-mail.version}</version>
-					<exclusions>
 						<exclusion>
 							<groupId>javax.activation</groupId>
 							<artifactId>activation</artifactId>
 						</exclusion>
 					</exclusions>
-				</dependency>
-				<dependency>
-					<groupId>javax.activation</groupId>
-					<artifactId>activation</artifactId>
-					<version>1.1.1</version>
 				</dependency>
 			</dependencies>
 		</profile>
