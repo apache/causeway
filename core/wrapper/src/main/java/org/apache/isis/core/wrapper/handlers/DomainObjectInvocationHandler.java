@@ -21,20 +21,19 @@ package org.apache.isis.core.wrapper.handlers;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
-
-import org.datanucleus.enhancement.Persistable;
-
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.internal.base._NullSafe;
+import org.apache.isis.applib.services.wrapper.DisabledException;
+import org.apache.isis.applib.services.wrapper.HiddenException;
+import org.apache.isis.applib.services.wrapper.InteractionException;
+import org.apache.isis.applib.services.wrapper.InvalidException;
+import org.apache.isis.applib.services.wrapper.WrapperFactory.ExecutionMode;
+import org.apache.isis.applib.services.wrapper.WrappingObject;
 import org.apache.isis.applib.services.wrapper.events.CollectionAccessEvent;
 import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
 import org.apache.isis.applib.services.wrapper.events.ObjectTitleEvent;
@@ -42,14 +41,9 @@ import org.apache.isis.applib.services.wrapper.events.PropertyAccessEvent;
 import org.apache.isis.applib.services.wrapper.events.UsabilityEvent;
 import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
 import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
-import org.apache.isis.applib.services.wrapper.DisabledException;
-import org.apache.isis.applib.services.wrapper.HiddenException;
-import org.apache.isis.applib.services.wrapper.InteractionException;
-import org.apache.isis.applib.services.wrapper.InvalidException;
-import org.apache.isis.applib.services.wrapper.WrapperFactory.ExecutionMode;
-import org.apache.isis.applib.services.wrapper.WrappingObject;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
+import org.apache.isis.core.metamodel.IsisJdoMetamodelPlugin;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -73,6 +67,9 @@ import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionContribute
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandlerDefault<T> {
 
@@ -104,7 +101,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
      */
     protected Method __isis_executionMode;
 
-    protected final Set<String> dnPersistableMethods = Sets.newHashSet();
+    protected final Set<String> jdoMethodsProvidedByEnhancement = Sets.newHashSet();
 
     public DomainObjectInvocationHandler(
             final T delegate,
@@ -134,16 +131,21 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             __isis_wrappedMethod = WrappingObject.class.getMethod("__isis_wrapped", new Class[]{});
             __isis_executionMode = WrappingObject.class.getMethod("__isis_executionMode", new Class[]{});
 
-            dnPersistableMethods.addAll(
-                    Lists.newArrayList(
-                            Iterables.transform(
-                                    Arrays.asList(Persistable.class.getDeclaredMethods()),
-                                    new Function<Method, String>() {
-                                        @Override
-                                        public String apply(final Method input) {
-                                            return input.getName();
-                                        }
-                                    })));
+    		_NullSafe.stream(IsisJdoMetamodelPlugin.get().getMethodsProvidedByEnhancement())
+	    		.map(Method::getName)
+	    		.forEach(jdoMethodsProvidedByEnhancement::add);
+    		
+// legacy of ...            
+//            dnPersistableMethods.addAll(
+//                    Lists.newArrayList(
+//                            Iterables.transform(
+//                                    Arrays.asList(Persistable.class.getDeclaredMethods()),
+//                                    new Function<Method, String>() {
+//                                        @Override
+//                                        public String apply(final Method input) {
+//                                            return input.getName();
+//                                        }
+//                                    })));
 
         } catch (final NoSuchMethodException nsme) {
             throw new IllegalStateException(
@@ -344,7 +346,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     }
 
     private boolean isJdoMethod(final Method method) {
-        return methodStartsWith(method, "jdo") || dnPersistableMethods.contains(method.getName());
+        return methodStartsWith(method, "jdo") || jdoMethodsProvidedByEnhancement.contains(method.getName());
     }
 
     private static boolean isInjectMethod(final Method method) {

@@ -16,6 +16,8 @@
  */
 package org.apacha.isis.plugins.jdo.dn4;
 
+import java.lang.reflect.Method;
+
 import javax.annotation.Nullable;
 
 import org.apache.isis.core.metamodel.IsisJdoMetamodelPlugin;
@@ -32,6 +34,11 @@ public class IsisJdoSupportPlugin4 implements IsisJdoMetamodelPlugin, IsisJdoRun
 			return false;
 		}
 		return org.datanucleus.enhancement.Persistable.class.isAssignableFrom(cls);
+	}
+	
+	@Override
+	public Method[] getMethodsProvidedByEnhancement() {
+		return org.datanucleus.enhancement.Persistable.class.getDeclaredMethods();
 	}
 
 	@Override

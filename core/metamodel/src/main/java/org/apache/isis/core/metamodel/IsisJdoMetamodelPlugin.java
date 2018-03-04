@@ -1,5 +1,7 @@
 package org.apache.isis.core.metamodel;
 
+import java.lang.reflect.Method;
+
 import javax.annotation.Nullable;
 
 import org.apache.isis.applib.NonRecoverableException;
@@ -16,6 +18,12 @@ public interface IsisJdoMetamodelPlugin {
 	 */
 	public boolean isPersistenceEnhanced(@Nullable Class<?> cls);
 	
+	/**
+	 * Equivalent to org.datanucleus.enhancement.Persistable.class.getDeclaredMethods().
+	 * @return
+	 */
+	public Method[] getMethodsProvidedByEnhancement();
+	
 	// -- LOOKUP
 
 	public static IsisJdoMetamodelPlugin get() {
@@ -27,7 +35,5 @@ public interface IsisJdoMetamodelPlugin {
 					throw new NonRecoverableException("No plugin implementing IsisJdoMetamodelPlugin found on class path.");
 				}); 
 	}
-
-	
 	
 }
