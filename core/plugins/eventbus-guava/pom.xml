@@ -22,7 +22,7 @@
 
 	<artifactId>isis-core-plugins-eventbus-guava</artifactId>
 
-	<name>Apache Isis Eventbus Plugin (Guava)</name>
+	<name>Apache Isis Plugin for Eventbus (Guava)</name>
 	<description>
         Eventbus plugin using google guava.
     </description>

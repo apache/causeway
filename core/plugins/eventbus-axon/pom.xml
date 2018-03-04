@@ -22,7 +22,7 @@
 
 	<artifactId>isis-core-plugins-eventbus-axon</artifactId>
 
-	<name>Apache Isis Eventbus Plugin (Axon)</name>
+	<name>Apache Isis Plugin for Eventbus (Axon)</name>
 	<description>
         Eventbus plugin using the axon framework.
     </description>

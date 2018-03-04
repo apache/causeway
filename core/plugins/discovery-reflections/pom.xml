@@ -22,7 +22,7 @@
 
 	<artifactId>isis-core-plugins-discovery-reflections</artifactId>
 
-	<name>Apache Isis Discovery Plugin (Reflections)</name>
+	<name>Apache Isis Plugin for Class Discovery (Reflections)</name>
 	<description>
         Class discovery plugin using reflections.org.
     </description>

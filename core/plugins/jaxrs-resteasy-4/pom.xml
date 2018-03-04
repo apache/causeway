@@ -22,7 +22,7 @@
 
 	<artifactId>isis-core-plugins-jaxrs-resteasy-4</artifactId>
 
-	<name>Apache Isis JAX-RS Plugin (Resteasy v4)</name>
+	<name>Apache Isis Plugin for JAX-RS (Resteasy v4)</name>
 	<description>
         JAX-RS plugin using jboss resteasy.
     </description>

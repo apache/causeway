@@ -22,7 +22,7 @@
 
 	<artifactId>isis-core-plugins-jdo-datanucleus-4</artifactId>
 
-	<name>Apache Isis JDO Plugin (Datanucleus 4)</name>
+	<name>Apache Isis Plugin for JDO (Datanucleus 4)</name>
 	<description>
         JDO plugin using datanucleus.
     </description>
