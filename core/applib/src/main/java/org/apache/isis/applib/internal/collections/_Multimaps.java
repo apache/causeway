@@ -207,21 +207,21 @@ public class _Multimaps {
 	 * @return HashMap of ArrayLists
 	 */
 	public static <K, V> ListMultimap<K, V> newListMultimap(){ 
-		return newListMultimap(() -> new HashMap<K, List<V>>(), () -> new ArrayList<V>());
+		return newListMultimap(HashMap<K, List<V>>::new, ArrayList::new);
 	}
 	
 	/**
 	 * @return HashMap of HashSets
 	 */
 	public static <K, V> SetMultimap<K, V> newSetMultimap(){ 
-		return newSetMultimap(() -> new HashMap<K, Set<V>>(), () -> new HashSet<V>());
+		return newSetMultimap(HashMap<K, Set<V>>::new, HashSet::new);
 	}
 
 	/**
 	 * @return HashMap of HashMaps
 	 */
 	public static <K1, K2, V> MapMultimap<K1, K2, V> newMapMultimap(){ 
-		return newMapMultimap(() -> new HashMap<K1, Map<K2, V>>(), () -> new HashMap<K2, V>());
+		return newMapMultimap(HashMap<K1, Map<K2, V>>::new, HashMap::new);
 	}
 
 	
