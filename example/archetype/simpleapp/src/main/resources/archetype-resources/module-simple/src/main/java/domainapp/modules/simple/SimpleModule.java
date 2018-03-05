@@ -21,12 +21,15 @@
  */
 package domainapp.modules.simple;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+import org.apache.isis.applib.ModuleAbstract;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.applib.fixturescripts.teardown.TeardownFixtureAbstract2;
-import org.apache.isis.applib.ModuleAbstract;
 
 import domainapp.modules.simple.dom.impl.SimpleObject;
 
+@XmlRootElement(name = "module")
 public class SimpleModule extends ModuleAbstract {
 
     @Override

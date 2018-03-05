@@ -36,6 +36,30 @@
     <category rdf:resource="http://projects.apache.org/category/web-framework" />
 
     
+    <!-- 2018-03-05 releases -->
+    <release>
+      <Version>
+        <name>isis</name>
+        <created>2018-03-05</created>
+        <revision>1.16.2</revision>
+      </Version>
+    </release>
+    <release>
+      <Version>
+        <name>helloworld-archetype</name>
+        <created>2018-03-05</created>
+        <revision>1.16.2</revision>
+      </Version>
+    </release>
+    <release>
+      <Version>
+        <name>simpleapp-archetype</name>
+        <created>2018-03-05</created>
+        <revision>1.16.2</revision>
+      </Version>
+    </release>
+
+
     <!-- 2018-02-22 releases -->
     <release>
       <Version>
