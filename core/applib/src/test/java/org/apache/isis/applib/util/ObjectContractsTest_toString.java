@@ -57,6 +57,7 @@ public class ObjectContractsTest_toString {
 
 }
 
+@SuppressWarnings("deprecation")
 class Invoice2 implements Comparable<Invoice2>, Numbered {
     private static final String KEY_PROPERTIES = "number";
     
@@ -76,6 +77,8 @@ class Invoice2 implements Comparable<Invoice2>, Numbered {
         return ObjectContracts.compare(this, o, KEY_PROPERTIES);
     }
 }
+
+@SuppressWarnings("deprecation")
 class InvoiceItem2 implements Comparable<InvoiceItem2> {
 
     static InvoiceItem2 newInvoiceItem(Invoice2 invoice, String productCode, Integer quantity, Boolean rush) {

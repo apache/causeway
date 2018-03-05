@@ -75,6 +75,28 @@ public final class _Exceptions {
 		return new IllegalStateException("internal error: code was reached, that is not implemented yet");
 	}
 	
+	/**
+	 * Used, to hide from the compiler the fact, that this call always throws.
+	 * 
+	 * <pre>{
+	 *    throw notImplemented();
+	 *    return 0; // won't compile: unreachable code
+	 *}</pre>
+	 *
+	 * hence ...
+	 * 
+	 * <pre>{
+	 *    throwNotImplemented();
+	 *    return 0;    
+	 *}</pre>
+	 * 
+	 * @return
+	 */
+	public static IllegalStateException throwNotImplemented() {
+		throw notImplemented();
+	}
+	
+	
 	// -- STACKTRACE UTILITITIES
 	
 	public static final Stream<String> streamStacktraceLines(@Nullable Throwable ex, int maxLines) {

@@ -16,7 +16,7 @@
  */
 package org.apache.isis.applib.util;
 
-
+@SuppressWarnings("deprecation")
 class InvoiceItem implements Comparable<InvoiceItem> {
 
     static InvoiceItem newInvoiceItem(Invoice invoice, String productCode, Integer quantity, Boolean rush) {

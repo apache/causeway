@@ -56,6 +56,7 @@ public class ObjectContractsTest_equals_and_hashCode extends ValueTypeContractTe
     }
 }
 
+@SuppressWarnings("deprecation")
 class Invoice3 {
     private static final String KEY_PROPERTIES = "number";
     
@@ -77,6 +78,7 @@ class Invoice3 {
     
 }
 
+@SuppressWarnings("deprecation")
 class InvoiceItem3 {
 
     static InvoiceItem3 newInvoiceItem(Invoice3 invoice, String productCode, Integer quantity) {

@@ -16,7 +16,7 @@
  */
 package org.apache.isis.applib.util;
 
-
+@SuppressWarnings("deprecation")
 class Invoice implements Comparable<Invoice>{
     private static final String KEY_PROPERTIES = "number";
     
@@ -27,7 +27,7 @@ class Invoice implements Comparable<Invoice>{
     public void setNumber(String number) {
         this.number = number;
     }
-    @Override
+	@Override
     public String toString() {
         return ObjectContracts.toString(this, KEY_PROPERTIES);
     }
