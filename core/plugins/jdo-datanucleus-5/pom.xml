@@ -74,6 +74,7 @@
 			<groupId>org.datanucleus</groupId>
 			<artifactId>javax.jdo</artifactId>
 			<version>${dn5-jdo-api.version}</version>
+			<scope>compile</scope>
 		</dependency>
 
 		<!-- DataNucleus -->
