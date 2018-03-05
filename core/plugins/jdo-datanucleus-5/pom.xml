@@ -69,12 +69,15 @@
 
 	<dependencies>
 
-		<!-- DataNucleus -->
+		<!-- JDO API (providing compile dependency) -->
 		<dependency>
 			<groupId>org.datanucleus</groupId>
 			<artifactId>javax.jdo</artifactId>
 			<version>${dn5-jdo-api.version}</version>
 		</dependency>
+
+		<!-- DataNucleus -->
+
 		<dependency>
 			<groupId>org.datanucleus</groupId>
 			<artifactId>datanucleus-core</artifactId>

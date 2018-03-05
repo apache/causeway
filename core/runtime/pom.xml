@@ -52,8 +52,15 @@
 			</resource>
 		</resources>
 	</build>
-
+	
 	<dependencies>
+	
+		<!-- JDO API (non transient, provided by plugin) -->
+	    <dependency>
+	        <groupId>javax.jdo</groupId>
+	        <artifactId>jdo-api</artifactId>
+	    </dependency>
+	
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>isis-core-applib</artifactId>

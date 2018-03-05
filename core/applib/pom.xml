@@ -106,7 +106,7 @@
 		    <artifactId>javaee-api</artifactId>
 		</dependency>
 		
-		<!-- JDO API -->
+		<!-- JDO API (non transient, provided by plugin) -->
         <dependency>
             <groupId>javax.jdo</groupId>
             <artifactId>jdo-api</artifactId>

@@ -69,15 +69,14 @@
 
 	<dependencies>
 
+		<!-- JDO API (providing compile dependency) -->
+		<dependency>
+			<groupId>javax.jdo</groupId>
+	        <artifactId>jdo-api</artifactId>
+			<version>${dn4-jdo-api.version}</version>
+		</dependency>
+
 		<!-- DataNucleus -->
-
-<!-- inherit from standard API -->		
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.datanucleus</groupId> -->
-<!-- 			<artifactId>javax.jdo</artifactId> -->
-<!-- 			<version>${dn4-jdo-api.version}</version> -->
-<!-- 		</dependency> -->
-
 		<dependency>
 			<groupId>org.datanucleus</groupId>
 			<artifactId>datanucleus-core</artifactId>
