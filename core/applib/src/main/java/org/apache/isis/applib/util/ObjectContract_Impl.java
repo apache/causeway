@@ -19,9 +19,10 @@
 
 package org.apache.isis.applib.util;
 
-import org.apache.isis.applib.internal.exceptions._Exceptions;
+import java.util.Comparator;
+import java.util.function.Function;
+
 import org.apache.isis.applib.util.ObjectContracts.ObjectContract;
-import org.apache.isis.applib.util.ObjectContracts.ToStringEvaluator;
 
 /**
  * Package private default implementation for ObjectContract.
@@ -29,40 +30,77 @@ import org.apache.isis.applib.util.ObjectContracts.ToStringEvaluator;
  * @since 2.0.0
  */
 class ObjectContract_Impl<T> implements ObjectContract<T> {
+	
+	private final Equality<T> equality;
+	private final Hashing<T> hashing;
+	private final ToString<T> toString;
+	private final Comparator<T> comparator;
+	
+	private Function<Object, String> valueToStringFunction;
+	
+	// -- CONSTRUCTION
+	
+	ObjectContract_Impl(
+			Equality<T> equality, 
+			Hashing<T> hashing, 
+			ToString<T> toString,
+			Comparator<T> comparator) {
+		this.equality = equality;
+		this.hashing = hashing;
+		this.toString = toString;
+		this.comparator = comparator; 
+	}
+	
+	// -- INTERFACE
 
 	@Override
-	public int compare(Object obj, Object other) {
-		// TODO Auto-generated method stub
-		_Exceptions.throwNotImplemented();
-		return 0;
+	public int compare(T obj, T other) {
+		return comparator.compare(obj, other);
 	}
 
 	@Override
-	public boolean equals(Object obj, Object other) {
-		// TODO Auto-generated method stub
-		_Exceptions.throwNotImplemented();
-		return false;
+	public boolean equals(T obj, Object other) {
+		return equality.equals(obj, other);
 	}
 
 	@Override
-	public int hashCode(Object obj) {
-		// TODO Auto-generated method stub
-		_Exceptions.throwNotImplemented();
-		return 0;
+	public int hashCode(T obj) {
+		return hashing.hashCode(obj);
 	}
 
 	@Override
-	public String toString(Object obj) {
-		// TODO Auto-generated method stub
-		_Exceptions.throwNotImplemented();
-		return null;
+	public String toString(T obj) {
+		return toString.toString(obj, valueToStringFunction);
 	}
 
+	// -- WITHER FOR VALUE TO STRING FUNCTION
+	
 	@Override
-	public ObjectContract<T> withToStringEvaluators(ToStringEvaluator... evaluators) {
-		// TODO Auto-generated method stub
-		_Exceptions.throwNotImplemented();
-		return null;
+	public ObjectContract<T> withValueToStringFunction(Function<Object, String> valueToStringFunction) {
+		this.valueToStringFunction = valueToStringFunction;
+		return this;
 	}
+
+	// -- COMPOSITION
+	
+	@Override
+	public ObjectContract<T> thenUse(
+			String propertyLabel, 
+			Function<T, ?> getter,
+			Comparator<T> comparator) {
+		
+		final ObjectContract_Impl<T> contract =  new ObjectContract_Impl<>(
+				this.equality.thenCheckEquals(getter), 
+				this.hashing.thenHashing(getter), 
+				this.toString.thenToString(propertyLabel, getter), 
+				this.comparator.thenComparing(comparator)
+				);
+		
+		contract.valueToStringFunction = this.valueToStringFunction;
+		
+		return contract;
+	}
+
+
 
 }

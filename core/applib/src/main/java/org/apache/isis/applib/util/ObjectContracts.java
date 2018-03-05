@@ -18,10 +18,14 @@
  */
 package org.apache.isis.applib.util;
 
+import java.util.Comparator;
 import java.util.Objects;
 import java.util.function.Function;
 
 import org.apache.isis.applib.internal.base._Casts;
+import org.apache.isis.applib.internal.base._NullSafe;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Provides fluent composition for Objects' equals, hashCode and toString.
@@ -68,6 +72,8 @@ import org.apache.isis.applib.internal.base._Casts;
  */
 public final class ObjectContracts {
 	
+	private static final Logger LOG = LoggerFactory.getLogger(ObjectContracts.class);
+	
 	private ObjectContracts() {}
 	
 	public static <T> ToString<T> toString(String name, Function<T, ?> getter) {
@@ -81,11 +87,6 @@ public final class ObjectContracts {
 	public static <T> Hashing<T> hashing(Function<T, ?> getter) {
 		return Hashing.hashing(getter);
 	}
-	
-    public interface ToStringEvaluator {
-        boolean canEvaluate(Object o);
-        String evaluate(Object o);
-    }
 	
     /**
      * WARNING Possible misuse because of forgetting respectively the last method 
@@ -108,19 +109,70 @@ public final class ObjectContracts {
 
 		/**
 		 * True 'wither' (each call returns a new instance of ObjectContract)!
-		 * @param evaluators
-		 * @return contract with ToStringEvaluator(s) to apply to properties when 
+		 * @param valueToStringFunction
+		 * @return ObjectContract with valueToStringFunction to apply to property values when 
 		 * processing the toString algorithm.
 		 */
-		public ObjectContract<T> withToStringEvaluators(ToStringEvaluator ... evaluators);
+		public ObjectContract<T> withValueToStringFunction(Function<Object, String> valueToStringFunction);
+		
+		// -- COMPOSITION
+		
+		/**
+		 * Contract composition. Any valueToStringFunction is 'copied over'.
+		 * @param propertyLabel a label to use for property to string output 
+		 * (often, but not necessarily the property name)
+		 * @param getter function giving the property value for an object
+		 * @param comparator
+		 * @return
+		 */
+		public ObjectContract<T> thenUse(String propertyLabel, Function<T, ?> getter, Comparator<T> comparator);
+
+		public static <T> ObjectContract<T> empty() {
+			return new ObjectContract_Empty<>();
+		}
 		
 	}
+	
+	public static <T, C extends Comparable<C>> ObjectContract<T> use(
+			Class<T> target, String propertyLabel, Function<T, ?> getter, Comparator<T> comparator) {
+		
+		return new ObjectContract_Impl<T>(
+				Equality.checkEquals(getter), 
+				Hashing.hashing(getter), 
+				ToString.toString(propertyLabel, getter), 
+				comparator);
+	}
+			
 	
 	public static <T> ObjectContract<T> parse(Class<T> target, String propertyNames) {
 		return ObjectContract_Parser.parse(target, propertyNames);
 	}
 
-	// -- BACKWARDS COMPATIBILITY
+	// -- BACKWARDS COMPATIBILITY TO-STRING EVALUATOR
+	
+    public interface ToStringEvaluator {
+    	
+        public boolean canEvaluate(Object o);
+        public String evaluate(Object o);
+        
+        public static Function<Object, String> combineToFunction(ToStringEvaluator ... evaluators){
+        	return value -> {
+    	        if(value == null) {
+    	            return null;
+    	        }
+    	        if(!_NullSafe.isEmpty(evaluators)) {
+    		        for (ToStringEvaluator evaluator : evaluators) {
+    		            if(evaluator.canEvaluate(value)) {
+    		                return evaluator.evaluate(value);
+    		            }
+    		        }
+    	        }
+    	        return value.toString();
+    		};
+        }
+    }
+    
+    // -- BACKWARDS COMPATIBILITY
 	
 	@Deprecated // uses reflection on each call
 	public static <T> String toString(T obj, String propertyNames) {
@@ -132,6 +184,15 @@ public final class ObjectContracts {
 	
 	@Deprecated // uses reflection on each call
 	public static <T> boolean equals(T obj, Object other, String propertyNames) {
+		
+		if(obj==null && other==null) {
+			if(LOG.isWarnEnabled()) {
+				LOG.warn("potential misuse of <T> ObjectContracts::equals(T obj, Object other, "
+						+ "String propertyNames). First argument is not expected to be null!");
+			}
+			return true;
+		}
+		
 		Objects.requireNonNull(obj, "obj required, otherwise undecidable"); 
 		
 		return parse(_Casts.uncheckedCast(obj.getClass()), propertyNames)

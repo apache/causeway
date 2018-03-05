@@ -40,9 +40,20 @@ public class ToString<T> {
 	}
 
 	public String toString(T target){
+		return toString(target, value->""+value);
+	}
+	
+	public String toString(T target, Function<Object, String> valueToStringFunction){
+		
+		if(valueToStringFunction==null) {
+			return toString(target);
+		}
+		
 		if(target==null) {
 			return "null";
 		}
+		
+		Objects.requireNonNull(valueToStringFunction);
 		
 		final Iterator<String> nameIterator = names.iterator();
 		
@@ -52,12 +63,11 @@ public class ToString<T> {
 				
 				getters.stream()
 				.map(getter->getter.apply(target))
-				.map(value->nameIterator.next()+"="+value)
+				.map(valueToStringFunction)
+				.map(valueLiteral->nameIterator.next()+"="+valueLiteral)
 				.collect(Collectors.joining(", "))	
 				
 				);
-	}
-
-	
+	}	
 	
 }

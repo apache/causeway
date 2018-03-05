@@ -18,9 +18,8 @@
  */
 package org.apache.isis.core.unittestsupport.comparable;
 
+import java.util.Arrays;
 import java.util.List;
-
-import com.google.common.collect.Lists;
 
 import org.junit.Test;
 
@@ -44,7 +43,7 @@ public abstract class ComparableContractTest_compareTo<T extends Comparable<T>> 
      * Syntax sugar to remove boilerplate from subclasses.
      */
     protected <E> List<E> listOf(E... elements) {
-        return Lists.newArrayList(elements);
+        return Arrays.asList(elements);
     }
 
 }

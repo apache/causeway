@@ -20,6 +20,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 import org.apache.isis.applib.util.ObjectContracts.ObjectContract;
+import org.apache.isis.applib.util.ObjectContracts.ToStringEvaluator;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -122,12 +123,11 @@ class InvoiceItem2 implements Comparable<InvoiceItem2> {
         this.rush = rush;
     }
     
-    
     private static final String KEY_PROPERTIES = "invoice desc, productCode, quantity, rush desc";
     
     private static final ObjectContract<InvoiceItem2> contract = 
     		ObjectContracts.parse(InvoiceItem2.class, KEY_PROPERTIES)
-    		.withToStringEvaluators(new NumberedEvaluator());
+    		.withValueToStringFunction(ToStringEvaluator.combineToFunction(new NumberedEvaluator()));
     
     @Override
     public String toString() {

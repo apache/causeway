@@ -20,15 +20,15 @@ public class Equality<T> {
 		return new Equality<>(getter);
 	}
 	
-	private final List<Function<T, ?>> chain = _Lists.newArrayList();
+	private final List<Function<T, ?>> getters = _Lists.newArrayList();
 
 	private Equality(Function<T, ?> getter) {
-		chain.add(getter);
+		getters.add(getter);
 	}
 	
 	public Equality<T> thenCheckEquals(Function<T, ?> getter){
 		Objects.requireNonNull(getter);
-		chain.add(getter);
+		getters.add(getter);
 		return this;
 	}
 
@@ -44,7 +44,7 @@ public class Equality<T> {
         }
 		final T o = _Casts.uncheckedCast(other);
 		
-		for(Function<T, ?> getter : chain) {
+		for(Function<T, ?> getter : getters) {
 			if(!Objects.equals(getter.apply(target), getter.apply(o)))
 				return false;
 		}

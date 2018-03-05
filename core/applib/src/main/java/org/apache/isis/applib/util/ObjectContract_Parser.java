@@ -19,7 +19,20 @@
 
 package org.apache.isis.applib.util;
 
-import org.apache.isis.applib.internal.exceptions._Exceptions;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Objects;
+import java.util.function.Function;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
+import javax.annotation.Nullable;
+
+import org.apache.isis.applib.internal._Constants;
+import org.apache.isis.applib.internal.base._Strings;
 import org.apache.isis.applib.util.ObjectContracts.ObjectContract;
 
 /**
@@ -32,13 +45,152 @@ import org.apache.isis.applib.util.ObjectContracts.ObjectContract;
  */
 class ObjectContract_Parser<T> {
 
-	public static <T> ObjectContract<T> parse(Class<T> target, String propertyNames) {
-		final ObjectContract_Impl<T> contract = new ObjectContract_Impl<>();
+	/**
+	 * Parsing stringified property name lists like <pre>"invoice desc, productCode, quantity"</pre>.
+	 * @param cls
+	 * @param propertyNames
+	 * @return
+	 */
+	public static <T> ObjectContract<T> parse(Class<T> cls, @Nullable final String propertyNames) {
 		
-		//TODO
-		_Exceptions.throwNotImplemented();
+		Objects.requireNonNull(cls);
+		
+		final List<Clause<T>> clauses = _Strings.splitThenStream(propertyNames, ",")
+		.map(String::trim)
+		.filter(p->!p.isEmpty())
+		.map(p->Clause.parse(cls, p))
+		.collect(Collectors.toList());
+		
+		if(clauses.isEmpty()) {
+			return ObjectContract.empty();
+		}
+		
+		ObjectContract<T> contract = null;
+		
+		for(Clause<T> clause : clauses) {
+			
+			if(contract==null) {
+				
+				contract = ObjectContracts.use(
+						cls,
+						clause.propertyName, 
+						clause,
+						Comparator.comparing(
+								x->(Comparable)clause.apply((T) x),
+								clause.direction.getOrdering()
+								)
+						);
+				
+			} else {
+				
+				contract = contract.thenUse(
+						clause.propertyName, 
+						clause,
+						Comparator.comparing(
+								x->(Comparable)clause.apply((T) x),
+								clause.direction.getOrdering()
+								)
+						);
+			}
+			
+		}
 		
 		return contract;
 	}
+	
+	private static class Clause<T> implements Function<T, Object> {
+		
+	    private static Pattern pattern =
+	    		Pattern.compile("\\W*(\\w+)\\W*(asc|asc nullsFirst|asc nullsLast|desc|desc nullsFirst|desc nullsLast)?\\W*");
+	    enum Direction {
+	        ASC {
+	            @Override
+	            public Comparator<Comparable<?>> getOrdering() {
+	            	// legacy of Ordering.natural().nullsFirst();
+	            	return Comparator.nullsFirst(Comparator.<Comparable>naturalOrder());
+	            }
+	        },
+	        ASC_NULLS_LAST {
+	            @Override
+	            public Comparator<Comparable<?>> getOrdering() {
+	                // legacy of Ordering.natural().nullsLast();
+	            	return Comparator.nullsLast(Comparator.<Comparable>naturalOrder());
+	            }
+	        },
+	        DESC {
+	            @Override
+	            public Comparator<Comparable<?>> getOrdering() {
+	                // legacy of Ordering.natural().nullsLast().reverse();
+	            	return ASC_NULLS_LAST.getOrdering().reversed();
+	            }
+	        },
+	        DESC_NULLS_LAST {
+	            @Override
+	            public Comparator<Comparable<?>> getOrdering() {
+	                // legacy of Ordering.natural().nullsFirst().reverse();
+	            	return ASC.getOrdering().reversed();
+	            }
+	        };
+
+	        public abstract Comparator<Comparable<?>> getOrdering();
+
+	        public static Direction valueOfElseAsc(String str) {
+	            if("asc".equals(str)) return ASC;
+	            if("asc nullsFirst".equals(str)) return ASC;
+	            if("asc nullsLast".equals(str)) return ASC_NULLS_LAST;
+	            if("desc".equals(str)) return DESC;
+	            if("desc nullsFirst".equals(str)) return DESC;
+	            if("desc nullsLast".equals(str)) return DESC_NULLS_LAST;
+	            return ASC;
+	        }
+	    }
+	    
+	    private final Class<T> objectClass;
+	    private final String propertyName;
+	    private final Direction direction;
+	    private final Method getterMethod;
+	    
+	    private static <X> Clause<X> parse(Class<X> cls, String input) {
+	        final Matcher matcher = pattern.matcher(input);
+	        if(!matcher.matches()) {
+	            return null;
+	        }
+	        return new Clause<>(cls, matcher.group(1), Direction.valueOfElseAsc(matcher.group(2)));
+	    }
+	    
+		private Clause(Class<T> cls, String propertyName, Direction direction) {
+			this.objectClass = cls;
+	        this.propertyName = propertyName;
+	        this.direction = direction;
+	        this.getterMethod = findGetter();
+	    }
+		
+	    public Method findGetter() {
+	        final String methodNameSuffix = _Strings.capitalize(propertyName);
+	        final String getMethodName = "get" + methodNameSuffix;
+	        try {
+	            return objectClass.getMethod(getMethodName);
+	        } catch (NoSuchMethodException e) {
+	            final String isMethodName = "is" + methodNameSuffix;
+	            try {
+	                return objectClass.getMethod(isMethodName);
+	            } catch (NoSuchMethodException ex) {
+	                throw new IllegalArgumentException("No such method ' " + 
+	                		getMethodName + "' or '" + isMethodName + "'", e);
+	            } 
+	        } 
+	    }
+	    
+		@Override
+		public Object apply(T obj) {
+			try {
+				return getterMethod.invoke(obj, _Constants.emptyObjects);
+			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+				throw new RuntimeException(e);
+			}
+		}
+	    
+	}
+
 
 }
