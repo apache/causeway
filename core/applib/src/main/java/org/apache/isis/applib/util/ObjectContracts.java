@@ -20,6 +20,8 @@ package org.apache.isis.applib.util;
 
 import java.util.function.Function;
 
+import org.apache.isis.applib.internal.exceptions._Exceptions;
+
 /**
  * Provides fluent composition for Objects' equals, hashCode and toString.
  * 
@@ -75,6 +77,50 @@ public class ObjectContracts {
 	
 	public static <T> Hashing<T> hashing(Function<T, ?> getter) {
 		return Hashing.hashing(getter);
+	}
+	
+	public static interface ObjectContract<T> {
+
+		public int compare(T obj, T other);
+
+		public boolean equals(T obj, Object other);
+
+		public int hashCode(T obj);
+
+		public String toString(T obj);
+		
+	}
+	
+	public static <T> ObjectContract<T> parse(Class<T> target, String propertyNames) {
+		// TODO Auto-generated method stub
+		throw _Exceptions.notImplemented();
+	}
+
+	// -- BACKWARDS COMPATIBILITY
+	
+	@Deprecated
+	public static String toString(Object obj, String propertyNames) {
+		
+		// TODO Auto-generated method stub
+		throw _Exceptions.notImplemented();
+	}
+	
+	@Deprecated
+	public static boolean equals(Object obj, Object other, String propertyNames) {
+		// TODO Auto-generated method stub
+		throw _Exceptions.notImplemented();
+	}
+	
+	@Deprecated
+	public static int hashCode(Object obj, String propertyNames) {
+		// TODO Auto-generated method stub
+		throw _Exceptions.notImplemented();
+	}
+
+	@Deprecated
+	public static <T> int compare(T obj, T other, String propertyNames) {
+		// TODO Auto-generated method stub
+		throw _Exceptions.notImplemented();
 	}
 
 	

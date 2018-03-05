@@ -71,6 +71,10 @@ public final class _Exceptions {
 		return new IllegalStateException("internal error: code was reached, that is expected unreachable");
 	}	
 	
+	public static IllegalStateException notImplemented() {
+		return new IllegalStateException("internal error: code was reached, that is not implemented yet");
+	}
+	
 	// -- STACKTRACE UTILITITIES
 	
 	public static final Stream<String> streamStacktraceLines(@Nullable Throwable ex, int maxLines) {
