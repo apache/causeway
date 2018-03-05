@@ -19,6 +19,7 @@ package org.apache.isis.applib.util;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
+import org.apache.isis.applib.util.ObjectContracts.ObjectContract;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -68,11 +69,11 @@ class Invoice2 implements Comparable<Invoice2>, Numbered {
     }
     @Override
     public String toString() {
-        return ObjectContractsLegacy.toString(this, KEY_PROPERTIES);
+        return ObjectContracts.toString(this, KEY_PROPERTIES);
     }
     @Override
     public int compareTo(Invoice2 o) {
-        return ObjectContractsLegacy.compare(this, o, KEY_PROPERTIES);
+        return ObjectContracts.compare(this, o, KEY_PROPERTIES);
     }
 }
 class InvoiceItem2 implements Comparable<InvoiceItem2> {
@@ -121,12 +122,18 @@ class InvoiceItem2 implements Comparable<InvoiceItem2> {
     
     private static final String KEY_PROPERTIES = "invoice desc, productCode, quantity, rush desc";
     
+    private static final ObjectContract<InvoiceItem2> contract = 
+    		ObjectContracts.parse(InvoiceItem2.class, KEY_PROPERTIES)
+    		.withToStringEvaluators(new NumberedEvaluator());
+    
     @Override
     public String toString() {
-        return new ObjectContractsLegacy().with(new NumberedEvaluator()).toStringOf(this, KEY_PROPERTIES);
+    	return contract.toString(this);
+    	//legacy of ...
+        //return new ObjectContracts().with(new NumberedEvaluator()).toStringOf(this, KEY_PROPERTIES);
     }
     @Override
     public int compareTo(InvoiceItem2 o) {
-        return ObjectContractsLegacy.compare(this, o, KEY_PROPERTIES);
+        return ObjectContracts.compare(this, o, KEY_PROPERTIES);
     }
 }

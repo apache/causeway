@@ -22,7 +22,7 @@ import org.apache.isis.applib.internal.collections._Lists;
 import org.apache.isis.core.unittestsupport.value.ValueTypeContractTestAbstract;
 import org.junit.Before;
 
-public class ObjectContractsTest_equals_and_hashCode extends ValueTypeContractTestAbstract<InvoiceItem3> {
+public class ObjectContractsLegacyTest_equals_and_hashCode extends ValueTypeContractTestAbstract<InvoiceItem3> {
 
     private Invoice3 inv123;
     private Invoice3 inv456;
