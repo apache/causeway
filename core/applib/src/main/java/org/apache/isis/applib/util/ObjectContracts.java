@@ -18,9 +18,10 @@
  */
 package org.apache.isis.applib.util;
 
+import java.util.Objects;
 import java.util.function.Function;
 
-import org.apache.isis.applib.internal.exceptions._Exceptions;
+import org.apache.isis.applib.internal.base._Casts;
 
 /**
  * Provides fluent composition for Objects' equals, hashCode and toString.
@@ -86,6 +87,13 @@ public final class ObjectContracts {
         String evaluate(Object o);
     }
 	
+    /**
+     * WARNING Possible misuse because of forgetting respectively the last method 
+     * argument with {@code equals}, [@code hashCode} and {@code toString}!
+     *  
+     * @since 2.0.0
+     * @param <T>
+     */
 	public static interface ObjectContract<T> {
 
 		public int compare(T obj, T other);
@@ -98,40 +106,52 @@ public final class ObjectContracts {
 		
 	    // -- TO STRING EVALUATION
 
+		/**
+		 * True 'wither' (each call returns a new instance of ObjectContract)!
+		 * @param evaluators
+		 * @return contract with ToStringEvaluator(s) to apply to properties when 
+		 * processing the toString algorithm.
+		 */
 		public ObjectContract<T> withToStringEvaluators(ToStringEvaluator ... evaluators);
 		
 	}
 	
 	public static <T> ObjectContract<T> parse(Class<T> target, String propertyNames) {
-		// TODO Auto-generated method stub
-		throw _Exceptions.notImplemented();
+		return ObjectContract_Parser.parse(target, propertyNames);
 	}
 
 	// -- BACKWARDS COMPATIBILITY
 	
-	@Deprecated
-	public static String toString(Object obj, String propertyNames) {
+	@Deprecated // uses reflection on each call
+	public static <T> String toString(T obj, String propertyNames) {
+		Objects.requireNonNull(obj, "obj required, otherwise undecidable");
 		
-		// TODO Auto-generated method stub
-		throw _Exceptions.notImplemented();
+		return parse(_Casts.uncheckedCast(obj.getClass()), propertyNames)
+				.toString(obj);
 	}
 	
-	@Deprecated
-	public static boolean equals(Object obj, Object other, String propertyNames) {
-		// TODO Auto-generated method stub
-		throw _Exceptions.notImplemented();
+	@Deprecated // uses reflection on each call
+	public static <T> boolean equals(T obj, Object other, String propertyNames) {
+		Objects.requireNonNull(obj, "obj required, otherwise undecidable"); 
+		
+		return parse(_Casts.uncheckedCast(obj.getClass()), propertyNames)
+				.equals(obj, other);
 	}
 	
-	@Deprecated
+	@Deprecated // uses reflection on each call
 	public static int hashCode(Object obj, String propertyNames) {
-		// TODO Auto-generated method stub
-		throw _Exceptions.notImplemented();
+		Objects.requireNonNull(obj, "obj required, otherwise undecidable");
+
+		return parse(_Casts.uncheckedCast(obj.getClass()), propertyNames)
+				.hashCode(obj);
 	}
 
-	@Deprecated
+	@Deprecated // uses reflection on each call
 	public static <T> int compare(T obj, T other, String propertyNames) {
-		// TODO Auto-generated method stub
-		throw _Exceptions.notImplemented();
+		Objects.requireNonNull(obj, "obj required, otherwise undecidable");
+
+		return parse(_Casts.uncheckedCast(obj.getClass()), propertyNames)
+				.compare(obj, other);
 	}
 
 	
