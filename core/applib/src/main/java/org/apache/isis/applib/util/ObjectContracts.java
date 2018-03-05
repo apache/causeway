@@ -65,7 +65,9 @@ import org.apache.isis.applib.internal.exceptions._Exceptions;
  * @since 2.0.0 (re-invented)
  *
  */
-public class ObjectContracts {
+public final class ObjectContracts {
+	
+	private ObjectContracts() {}
 	
 	public static <T> ToString<T> toString(String name, Function<T, ?> getter) {
 		return ToString.toString(name, getter);
@@ -79,6 +81,11 @@ public class ObjectContracts {
 		return Hashing.hashing(getter);
 	}
 	
+    public interface ToStringEvaluator {
+        boolean canEvaluate(Object o);
+        String evaluate(Object o);
+    }
+	
 	public static interface ObjectContract<T> {
 
 		public int compare(T obj, T other);
@@ -88,6 +95,10 @@ public class ObjectContracts {
 		public int hashCode(T obj);
 
 		public String toString(T obj);
+		
+	    // -- TO STRING EVALUATION
+
+		public ObjectContract<T> withToStringEvaluators(ToStringEvaluator ... evaluators);
 		
 	}
 	
