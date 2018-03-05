@@ -34,6 +34,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.viewer.wicket.model.hints.IsisActionCompletedEvent;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
@@ -92,8 +93,18 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
 
         if(component instanceof MarkupContainer) {
             final MarkupContainer markupContainer = (MarkupContainer) component;
-            final String paramId = model.getParameterMemento().getActionParameter(getSpecificationLoader()).getId();
-            CssClassAppender.appendCssClassTo(markupContainer, CssClassAppender.asCssStyle("isis-" + paramId));
+
+            // TODO: copy-n-paste of ScalarModel.Kind#getCssClass(ScalarModel), so could perhaps unify
+            final ObjectActionParameter actionParameter = model.getParameterMemento()
+                    .getActionParameter(getSpecificationLoader());
+
+            final ObjectAction action = actionParameter.getAction();
+            final String objectSpecId = action.getOnType().getSpecId().asString().replace(".", "-");
+            final String parmId = actionParameter.getId();
+
+            final String css = "isis-" + objectSpecId + "-" + action.getId() + "-" + parmId;
+
+            CssClassAppender.appendCssClassTo(markupContainer, CssClassAppender.asCssStyle(css));
         }
         final ScalarPanelAbstract2 paramPanel =
                 component instanceof ScalarPanelAbstract2

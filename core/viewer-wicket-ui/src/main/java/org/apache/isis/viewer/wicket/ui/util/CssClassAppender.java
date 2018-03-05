@@ -70,6 +70,6 @@ public class CssClassAppender extends AttributeAppender {
      * Utility method to sanitize string into a single CSS class.
      */
     public static String asCssStyle(final String str) {
-        return str.toLowerCase().replaceAll("[^A-Za-z0-9- ]", "").replaceAll("\\s+", "-");
+        return str.replaceAll("[^A-Za-z0-9- ]", "").replaceAll("\\s+", "-");
     }
 }

@@ -259,7 +259,7 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
     protected abstract void addFormComponentBehavior(Behavior behavior);
 
     private void addCssForMetaModel() {
-        final String cssForMetaModel = getModel().getLongName();
+        final String cssForMetaModel = getModel().getCssClass();
         if (cssForMetaModel != null) {
             add(new AttributeAppender("class", Model.of(cssForMetaModel), " "));
         }
