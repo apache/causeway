@@ -15,17 +15,17 @@ import org.apache.isis.applib.internal.collections._Lists;
  */
 public class Hashing<T> {
 
-	public static <T> Hashing<T> hashing(Function<T, ?> getter){
+	public static <T> Hashing<T> hashing(Function<? super T, ?> getter){
 		return new Hashing<>(getter);
 	}
 	
-	private final List<Function<T, ?>> getters = _Lists.newArrayList();
+	private final List<Function<? super T, ?>> getters = _Lists.newArrayList();
 
-	private Hashing(Function<T, ?> getter) {
+	private Hashing(Function<? super T, ?> getter) {
 		getters.add(getter);
 	}
 	
-	public Hashing<T> thenHashing(Function<T, ?> getter){
+	public Hashing<T> thenHashing(Function<? super T, ?> getter){
 		Objects.requireNonNull(getter);
 		getters.add(getter);
 		return this;
@@ -36,7 +36,7 @@ public class Hashing<T> {
 			return 0;
 		}
 		int result = 1;
-		for(Function<T, ?> getter : getters) {
+		for(Function<? super T, ?> getter : getters) {
 			final Object element = getter.apply(object); 
 			result = 31 * result + (element == null ? 0 : element.hashCode());
 		}

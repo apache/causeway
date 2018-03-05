@@ -36,7 +36,7 @@ class ObjectContract_Impl<T> implements ObjectContract<T> {
 	private final ToString<T> toString;
 	private final Comparator<T> comparator;
 	
-	private Function<Object, String> valueToStringFunction;
+	Function<Object, String> valueToStringFunction;
 	
 	// -- CONSTRUCTION
 	
@@ -84,16 +84,14 @@ class ObjectContract_Impl<T> implements ObjectContract<T> {
 	// -- COMPOSITION
 	
 	@Override
-	public ObjectContract<T> thenUse(
-			String propertyLabel, 
-			Function<T, ?> getter,
-			Comparator<T> comparator) {
+	public <U> ObjectContract<T> thenUse(String propertyLabel, Function<? super T, ? extends U> getter,
+			Comparator<? super U> valueComparator) {
 		
 		final ObjectContract_Impl<T> contract =  new ObjectContract_Impl<>(
 				this.equality.thenCheckEquals(getter), 
 				this.hashing.thenHashing(getter), 
 				this.toString.thenToString(propertyLabel, getter), 
-				this.comparator.thenComparing(comparator)
+				this.comparator.thenComparing(Comparator.comparing(getter, valueComparator))
 				);
 		
 		contract.valueToStringFunction = this.valueToStringFunction;

@@ -118,31 +118,43 @@ public final class ObjectContracts {
 		// -- COMPOSITION
 		
 		/**
-		 * Contract composition. Any valueToStringFunction is 'copied over'.
-		 * @param propertyLabel a label to use for property to string output 
-		 * (often, but not necessarily the property name)
-		 * @param getter function giving the property value for an object
-		 * @param comparator
+		 * Contract composition. (Any valueToStringFunction is 'copied over'.)
+		 * 
+		 * @param propertyLabel a label to use for property to string output
+		 * @param getter function extracting the property value of an object
+		 * @param valueComparator
 		 * @return
 		 */
-		public ObjectContract<T> thenUse(String propertyLabel, Function<T, ?> getter, Comparator<T> comparator);
+		public <U> ObjectContract<T> thenUse(
+				String propertyLabel, 
+				Function<? super T, ? extends U> getter, 
+				Comparator<? super U> valueComparator);
 
-		public static <T> ObjectContract<T> empty() {
-			return new ObjectContract_Empty<>();
+		/**
+		 * Contract composition using the naturalOrder comparator. 
+		 * (Any valueToStringFunction is 'copied over'.)
+		 * 
+		 * @param propertyLabel a label to use for property to string output
+		 * @param getter function extracting the property value of an object
+		 * @return
+		 */
+		public default <U extends Comparable<? super U>> ObjectContract<T> thenUse(
+				String propertyLabel, 
+				Function<? super T, ? extends U> getter){
+			return thenUse(propertyLabel, getter, Comparator.<U>naturalOrder());
+		}
+		
+		public static <T> ObjectContract<T> empty(Class<T> objectClass) {
+			return new ObjectContract_Empty<>(objectClass);
 		}
 		
 	}
 	
-	public static <T, C extends Comparable<C>> ObjectContract<T> use(
-			Class<T> target, String propertyLabel, Function<T, ?> getter, Comparator<T> comparator) {
-		
-		return new ObjectContract_Impl<T>(
-				Equality.checkEquals(getter), 
-				Hashing.hashing(getter), 
-				ToString.toString(propertyLabel, getter), 
-				comparator);
+	// -- COMPOSITION ENTRY POINTS
+	
+	public static <T, U> ObjectContract<T> contract(Class<T> objectClass) {
+		return ObjectContract.empty(objectClass);
 	}
-			
 	
 	public static <T> ObjectContract<T> parse(Class<T> target, String propertyNames) {
 		return ObjectContract_Parser.parse(target, propertyNames);

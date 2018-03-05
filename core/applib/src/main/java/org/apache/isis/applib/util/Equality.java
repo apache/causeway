@@ -15,18 +15,18 @@ import org.apache.isis.applib.internal.collections._Lists;
  */
 public class Equality<T> {
 
-	public static <T> Equality<T> checkEquals(Function<T, ?> getter) {
+	public static <T> Equality<T> checkEquals(Function<? super T, ?> getter) {
 		Objects.requireNonNull(getter);
 		return new Equality<>(getter);
 	}
 	
-	private final List<Function<T, ?>> getters = _Lists.newArrayList();
+	private final List<Function<? super T, ?>> getters = _Lists.newArrayList();
 
-	private Equality(Function<T, ?> getter) {
+	private Equality(Function<? super T, ?> getter) {
 		getters.add(getter);
 	}
 	
-	public Equality<T> thenCheckEquals(Function<T, ?> getter){
+	public Equality<T> thenCheckEquals(Function<? super T, ?> getter){
 		Objects.requireNonNull(getter);
 		getters.add(getter);
 		return this;
@@ -44,7 +44,7 @@ public class Equality<T> {
         }
 		final T o = _Casts.uncheckedCast(other);
 		
-		for(Function<T, ?> getter : getters) {
+		for(Function<? super T, ?> getter : getters) {
 			if(!Objects.equals(getter.apply(target), getter.apply(o)))
 				return false;
 		}

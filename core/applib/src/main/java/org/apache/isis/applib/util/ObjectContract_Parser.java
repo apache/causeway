@@ -61,48 +61,30 @@ class ObjectContract_Parser<T> {
 		.map(p->Clause.parse(cls, p))
 		.collect(Collectors.toList());
 		
+		ObjectContract<T> contract = ObjectContract.empty(cls);
+		
 		if(clauses.isEmpty()) {
-			return ObjectContract.empty();
+			return contract;
 		}
 		
-		ObjectContract<T> contract = null;
-		
 		for(Clause<T> clause : clauses) {
+			final Function valueExtractor = x->clause.extractValue((T)x);
 			
-			if(contract==null) {
-				
-				contract = ObjectContracts.use(
-						cls,
-						clause.propertyName, 
-						clause,
-						Comparator.comparing(
-								x->(Comparable)clause.apply((T) x),
-								clause.direction.getOrdering()
-								)
-						);
-				
-			} else {
-				
-				contract = contract.thenUse(
-						clause.propertyName, 
-						clause,
-						Comparator.comparing(
-								x->(Comparable)clause.apply((T) x),
-								clause.direction.getOrdering()
-								)
-						);
-			}
-			
+			contract = contract.thenUse(
+					clause.propertyName, 
+					valueExtractor,
+					clause.direction.getOrdering() );
 		}
 		
 		return contract;
 	}
 	
-	private static class Clause<T> implements Function<T, Object> {
+	private static class Clause<T> {
 		
 	    private static Pattern pattern =
 	    		Pattern.compile("\\W*(\\w+)\\W*(asc|asc nullsFirst|asc nullsLast|desc|desc nullsFirst|desc nullsLast)?\\W*");
-	    enum Direction {
+	    
+	    private enum Direction {
 	        ASC {
 	            @Override
 	            public Comparator<Comparable<?>> getOrdering() {
@@ -181,8 +163,7 @@ class ObjectContract_Parser<T> {
 	        } 
 	    }
 	    
-		@Override
-		public Object apply(T obj) {
+		public Object extractValue(T obj) {
 			try {
 				return getterMethod.invoke(obj, _Constants.emptyObjects);
 			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {

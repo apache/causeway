@@ -31,8 +31,13 @@ import org.apache.isis.applib.util.ObjectContracts.ObjectContract;
  */
 class ObjectContract_Empty<T> implements ObjectContract<T> {
 	
+	private final static String UNDEFINED_CONTRACT = "object's contract is not defined (empty)";
 	
-	private final static String UNDEFINED_CONTRACT = "object's contract is not defined";
+	private Function<Object, String> valueToStringFunction;
+
+	public ObjectContract_Empty(Class<T> objectClass) {
+
+	}
 
 	@Override
 	public int compare(T obj, T other) {
@@ -54,24 +59,35 @@ class ObjectContract_Empty<T> implements ObjectContract<T> {
 		return UNDEFINED_CONTRACT;
 	}
 
+	// -- WITHER FOR VALUE TO STRING FUNCTION
+	
 	@Override
 	public ObjectContract<T> withValueToStringFunction(Function<Object, String> valueToStringFunction) {
-		throw notSupported();
+		this.valueToStringFunction = valueToStringFunction;
+		return this;
 	}
 
+	// -- COMPOSITION
+	
 	@Override
-	public ObjectContract<T> thenUse(String propertyLabel, Function<T, ?> getter, Comparator<T> comparator) {
-		throw notSupported();
+	public <U> ObjectContract<T> thenUse(String propertyLabel, Function<? super T, ? extends U> getter,
+			Comparator<? super U> valueComparator) {
+		
+		final ObjectContract_Impl<T> contract = new ObjectContract_Impl<T>(
+				Equality.checkEquals(getter), 
+				Hashing.hashing(getter), 
+				ToString.toString(propertyLabel, getter), 
+				Comparator.comparing(getter, valueComparator));
+		
+		contract.valueToStringFunction = this.valueToStringFunction;
+		
+		return contract;
 	}
 	
 	// -- HELPER
 	
 	private final static IllegalArgumentException undefined() {
 		return new IllegalArgumentException(UNDEFINED_CONTRACT);
-	}
-	
-	private final static IllegalArgumentException notSupported() {
-		return new IllegalArgumentException("operation not supported on an object contract that is not defined");
 	}
 
 	

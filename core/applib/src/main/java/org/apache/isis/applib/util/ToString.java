@@ -17,21 +17,21 @@ import org.apache.isis.applib.internal.collections._Lists;
  */
 public class ToString<T> {
 
-	public static <T> ToString<T> toString(String name, Function<T, ?> getter) {
+	public static <T> ToString<T> toString(String name, Function<? super T, ?> getter) {
 		Objects.requireNonNull(name);
 		Objects.requireNonNull(getter);		
 		return new ToString<>(name, getter);
 	}
 	
 	private final List<String> names = _Lists.newArrayList();
-	private final List<Function<T, ?>> getters = _Lists.newArrayList();
+	private final List<Function<? super T, ?>> getters = _Lists.newArrayList();
 
-	private ToString(String name, Function<T, ?> getter) {
+	private ToString(String name, Function<? super T, ?> getter) {
 		names.add(name);
 		getters.add(getter);
 	}
 	
-	public ToString<T> thenToString(String name, Function<T, ?> getter){
+	public ToString<T> thenToString(String name, Function<? super T, ?> getter){
 		Objects.requireNonNull(name);
 		Objects.requireNonNull(getter);
 		names.add(name);
