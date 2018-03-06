@@ -24,7 +24,10 @@ import java.util.ServiceLoader;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
+import org.apache.isis.applib.NonRecoverableException;
+import org.apache.isis.applib.internal.base._NullSafe;
 import org.apache.isis.applib.internal.collections._Sets;
 
 /**
@@ -94,8 +97,31 @@ public final class _Plugin {
 			
 		});
 		
+	}
+	
+	// -- CONVENIENT EXCEPTION FACTORIES
+
+	public static <T> NonRecoverableException ambiguityNonRecoverable(
+			Class<T> pluginInterfaceClass, 
+			Set<? extends T> ambigousPlugins) {
 		
+		return new NonRecoverableException(
+				String.format("Ambigous plugins implementing %s found on class path.\n{%s}", 
+						pluginInterfaceClass.getName(),
+						
+						_NullSafe.stream(ambigousPlugins)
+						.map(Object::getClass)
+						.map(Class::getName)
+						.collect(Collectors.joining(", "))
+						
+						));
+	}
+
+	public static NonRecoverableException absenceNonRecoverable(Class<?> pluginInterfaceClass) {
 		
+		return new NonRecoverableException(
+				String.format("No plugin implementing %s found on class path.", 
+						pluginInterfaceClass.getName() ));
 	}
 	
 }

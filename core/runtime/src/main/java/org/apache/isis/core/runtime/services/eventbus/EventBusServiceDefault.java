@@ -23,7 +23,6 @@ import javax.enterprise.context.RequestScoped;
 
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.internal.context._Plugin;
 import org.apache.isis.applib.services.eventbus.EventBusImplementation;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
@@ -135,14 +134,7 @@ public abstract class EventBusServiceDefault extends EventBusService {
     	
     	if( "plugin".equals(implementation) || "auto".equals(implementation) ) {
     		
-    		return _Plugin.getOrElse(EventBusImplementation.class, 
-        			ambiguousPlugins->{
-        				throw new NonRecoverableException(
-        		                "Ambiguity: Could not instantiate event bus implementation '" + implementation + "'");
-        			}, ()->{
-        				throw new NonRecoverableException(
-        		                "Missing Plugin: Could not instantiate event bus implementation '" + implementation + "'");
-        			});
+    		return EventBusImplementation.get();
     		
     	} else if("guava".equals(implementation)) {
             // legacy of return new EventBusImplementationForGuava();

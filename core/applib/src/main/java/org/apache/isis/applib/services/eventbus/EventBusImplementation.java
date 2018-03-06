@@ -16,6 +16,7 @@
  */
 package org.apache.isis.applib.services.eventbus;
 
+import org.apache.isis.applib.internal.context._Plugin;
 
 /**
  * Common interface for all Event Bus implementations.
@@ -31,22 +32,34 @@ package org.apache.isis.applib.services.eventbus;
  */
 public interface EventBusImplementation {
 
-    /**
-     * For {@link org.apache.isis.applib.services.eventbus.EventBusService} to call on
-     * {@link org.apache.isis.applib.services.eventbus.EventBusService#register(Object)}.
-     */
-    void register(Object domainService);
+	/**
+	 * For {@link org.apache.isis.applib.services.eventbus.EventBusService} to call on
+	 * {@link org.apache.isis.applib.services.eventbus.EventBusService#register(Object)}.
+	 */
+	void register(Object domainService);
 
-    /**
-     * For {@link org.apache.isis.applib.services.eventbus.EventBusService} to call on
-     * {@link org.apache.isis.applib.services.eventbus.EventBusService#unregister(Object)}.
-     */
-    void unregister(Object domainService);
+	/**
+	 * For {@link org.apache.isis.applib.services.eventbus.EventBusService} to call on
+	 * {@link org.apache.isis.applib.services.eventbus.EventBusService#unregister(Object)}.
+	 */
+	void unregister(Object domainService);
 
-    /**
-     * For {@link org.apache.isis.applib.services.eventbus.EventBusService} to call on
-     * {@link org.apache.isis.applib.services.eventbus.EventBusService#post(Object)}.
-     */
-    void post(Object event);
+	/**
+	 * For {@link org.apache.isis.applib.services.eventbus.EventBusService} to call on
+	 * {@link org.apache.isis.applib.services.eventbus.EventBusService#post(Object)}.
+	 */
+	void post(Object event);
+
+	// -- LOOKUP
+
+	public static EventBusImplementation get() {
+		return _Plugin.getOrElse(EventBusImplementation.class, 
+				ambigousPlugins->{
+					throw _Plugin.ambiguityNonRecoverable(EventBusImplementation.class, ambigousPlugins); 
+				}, 
+				()->{
+					throw _Plugin.absenceNonRecoverable(EventBusImplementation.class);
+				});
+	}
 
 }
