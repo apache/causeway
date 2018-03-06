@@ -146,11 +146,15 @@ class CssMenuItem implements Serializable {
          */
         public CssMenuItem build() {
             if (cssMenuItem.parent != null) {
-                cssMenuItem.parent.subMenuItems.add(cssMenuItem);
+                cssMenuItem.parent.addSubMenuItem(cssMenuItem);
             }
             return cssMenuItem;
         }
 
+    }
+
+    private void addSubMenuItem(final CssMenuItem cssMenuItem) {
+        subMenuItems.add(cssMenuItem);
     }
 
     private final String name;
@@ -181,6 +185,10 @@ class CssMenuItem implements Serializable {
      */
     public static Builder newMenuItem(final String name) {
         return new Builder(name);
+    }
+
+    public String getActionIdentifier() {
+        return actionIdentifier;
     }
 
     public void setActionIdentifier(String actionIdentifier) {

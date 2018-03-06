@@ -278,7 +278,7 @@ public class CollectionContentsAsAjaxTablePanel
         final NamedFacet facet = property.getFacet(NamedFacet.class);
         final boolean escaped = facet == null || facet.escaped();
 
-        final String parentTypeName = property.getOnType().getShortIdentifier();
+        final String parentTypeName = property.getOnType().getSpecId().asString();
         return new ObjectAdapterPropertyColumn(getModel().getType(), Model.of(property.getName()), property.getId(), property.getId(), escaped, parentTypeName);
     }
 

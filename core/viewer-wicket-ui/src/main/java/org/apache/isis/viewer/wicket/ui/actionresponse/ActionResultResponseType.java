@@ -31,8 +31,11 @@ import org.apache.isis.applib.value.Clob;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
+import org.apache.isis.core.metamodel.facets.actcoll.typeof.ElementSpecificationProviderFromTypeOfFacet;
+import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
@@ -60,6 +63,14 @@ public enum ActionResultResponseType {
     COLLECTION {
         @Override
         public ActionResultResponse interpretResult(final ActionModel actionModel, final AjaxRequestTarget target, final ObjectAdapter resultAdapter) {
+            if(resultAdapter.getElementSpecification() == null) {
+                final TypeOfFacet typeOfFacet = actionModel.getActionMemento().getAction(IsisContext.getSessionFactory().getSpecificationLoader()).getFacet(
+                        TypeOfFacet.class);
+                if (typeOfFacet != null) {
+                    resultAdapter.setElementSpecificationProvider(new ElementSpecificationProviderFromTypeOfFacet(typeOfFacet.valueSpec()));
+                }
+            }
+
             final EntityCollectionModel collectionModel = EntityCollectionModel.createStandalone(resultAdapter, actionModel.getIsisSessionFactory());
             // take a copy of the actionModel, because the original can get mutated (specifically: its arguments cleared)
             final ActionModel actionModelCopy = actionModel.copy();

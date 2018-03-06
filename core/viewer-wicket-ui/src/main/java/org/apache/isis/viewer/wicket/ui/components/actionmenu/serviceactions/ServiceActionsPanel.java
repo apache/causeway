@@ -20,6 +20,13 @@ package org.apache.isis.viewer.wicket.ui.components.actionmenu.serviceactions;
 
 import java.util.List;
 
+import javax.annotation.Nullable;
+
+import com.google.common.base.Function;
+import com.google.common.base.Joiner;
+import com.google.common.base.Predicate;
+import com.google.common.collect.FluentIterable;
+
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -83,6 +90,36 @@ public class ServiceActionsPanel extends Panel {
                         }
                     }
                 };
+                final List<CssMenuItem> childItems = menuItem.getSubMenuItems();
+                final String cssForServices = Joiner.on(" ").join(
+                        FluentIterable.from(childItems)
+                                .transform(new Function<CssMenuItem, String>() {
+                                    @Nullable @Override public String apply(final CssMenuItem input) {
+                                        final String actionIdentifier = input.getActionIdentifier();
+                                        if (actionIdentifier != null) {
+                                            // busrules-busrulesobjects-findbyname
+                                            final String actionId = CssClassAppender.asCssStyle(actionIdentifier);
+                                            final int i = actionId.lastIndexOf("-");
+                                            // busrules-busrulesobjects
+                                            return i == -1 ? actionId : actionId.substring(0, i);
+                                        } else {
+                                            return null;
+                                        }
+                                    }
+                                })
+                                .filter(new Predicate<String>() {
+                                    @Override public boolean apply(@Nullable final String input) {
+                                        return input != null;
+                                    }
+                                })
+                                .transform(new Function<String, String>() {
+                                    @Override public String apply(final String input) {
+                                        return "isis-" + input;
+                                    }
+                                })
+                                .toSet());
+                listItem.add(new CssClassAppender(cssForServices));
+
                 topMenu.add(subMenuItemsView);
             }
         };
