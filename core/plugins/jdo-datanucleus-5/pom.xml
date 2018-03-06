@@ -112,6 +112,13 @@
 			<scope>compile</scope>
 		</dependency>
 		
+		<!-- Core Wrapper -->
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-core-wrapper</artifactId>
+			<scope>compile</scope>
+		</dependency>
+		
 		<!-- TESTING -->
 		
         <dependency>
