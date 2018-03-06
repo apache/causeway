@@ -73,6 +73,8 @@
 		<dependency>
 			<groupId>javax.jdo</groupId>
 	        <artifactId>jdo-api</artifactId>
+	        <!-- intentionally overriding standard compliance version from parent pom 
+	        	since this plugin is responsible for providing the 'jar' -->
 			<version>${dn4-jdo-api.version}</version>
 			<scope>compile</scope>
 		</dependency>

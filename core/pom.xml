@@ -1168,13 +1168,15 @@ ${license.additional-notes}
 			</dependency>
 			
 			<!-- JDO API -->
-			<dependency>
-	            <groupId>javax.jdo</groupId>
-	            <artifactId>jdo-api</artifactId>
-	            <version>${jdo-api.version}</version>
-	            <!-- provided by plugins -->
-	            <scope>provided</scope>
-        	</dependency>
+<!-- not managed, because scope=provided can not be overwritten by plugins that are 
+	responsible for providing jdo-api -->			
+<!-- 			<dependency> -->
+<!-- 	            <groupId>javax.jdo</groupId> -->
+<!-- 	            <artifactId>jdo-api</artifactId> -->
+<!-- 	            <version>${jdo-api.version}</version> -->
+<!-- 	            provided by plugins -->
+<!-- 	            <scope>provided</scope> -->
+<!--         	</dependency> -->
         
             <!-- unittestsupport -->
             <dependency>
