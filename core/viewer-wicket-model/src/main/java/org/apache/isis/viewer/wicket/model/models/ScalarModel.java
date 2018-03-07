@@ -51,6 +51,7 @@ import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFac
 import org.apache.isis.core.metamodel.facets.value.string.StringValueSemanticsProvider;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
@@ -101,13 +102,11 @@ public class ScalarModel extends EntityModel implements LinksProvider,FormExecut
             }
 
             @Override
-            public String getLongName(final ScalarModel scalarModel) {
-
-                ObjectSpecId objectSpecId =
-                        scalarModel.getParentEntityModel().getTypeOfSpecification().getSpecId();
-
-                final String specShortName = SpecUtils.getSpecificationFor(objectSpecId, scalarModel.getSpecificationLoader()).getShortIdentifier();
-                return specShortName + "-" + scalarModel.getPropertyMemento().getProperty(scalarModel.getSpecificationLoader()).getId();
+            public String getCssClass(final ScalarModel scalarModel) {
+                final String objectSpecId =
+                        scalarModel.getParentEntityModel().getTypeOfSpecification().getSpecId().asString().replace(".", "-");
+                final String propertyId = getIdentifier(scalarModel);
+                return "isis-" + objectSpecId + "-" + propertyId;
             }
 
             @Override
@@ -334,16 +333,19 @@ public class ScalarModel extends EntityModel implements LinksProvider,FormExecut
             }
 
             @Override
-            public String getLongName(final ScalarModel scalarModel) {
+            public String getCssClass(final ScalarModel scalarModel) {
                 final ObjectAdapterMemento adapterMemento = scalarModel.getObjectAdapterMemento();
                 if (adapterMemento == null) {
                     // shouldn't happen
                     return null;
                 }
-                ObjectSpecId objectSpecId = adapterMemento.getObjectSpecId();
-                final String specShortName = SpecUtils.getSpecificationFor(objectSpecId, scalarModel.getSpecificationLoader()).getShortIdentifier();
-                final String parmId = scalarModel.getParameterMemento().getActionParameter(scalarModel.getSpecificationLoader()).getIdentifier().toNameIdentityString();
-                return specShortName + "-" + parmId + "-" + scalarModel.getParameterMemento().getNumber();
+                final ObjectActionParameter actionParameter = scalarModel.getParameterMemento()
+                        .getActionParameter(scalarModel.getSpecificationLoader());
+                final ObjectAction action = actionParameter.getAction();
+                final String objectSpecId = action.getOnType().getSpecId().asString().replace(".", "-");
+                final String parmId = actionParameter.getId();
+
+                return "isis-" + objectSpecId + "-" + action.getId() + "-" + parmId;
             }
 
             @Override
@@ -585,7 +587,7 @@ public class ScalarModel extends EntityModel implements LinksProvider,FormExecut
 
         public abstract String validate(ScalarModel scalarModel, ObjectAdapter proposedAdapter);
 
-        public abstract String getLongName(ScalarModel scalarModel);
+        public abstract String getCssClass(ScalarModel scalarModel);
 
         public abstract boolean isRequired(ScalarModel scalarModel);
 
@@ -860,8 +862,8 @@ public class ScalarModel extends EntityModel implements LinksProvider,FormExecut
         return kind.isRequired(this);
     }
 
-    public String getLongName() {
-        return kind.getLongName(this);
+    public String getCssClass() {
+        return kind.getCssClass(this);
     }
 
     public <T extends Facet> T getFacet(final Class<T> facetType) {

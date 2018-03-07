@@ -91,8 +91,10 @@ public class StandaloneCollectionPanel extends PanelAbstract<EntityCollectionMod
         ObjectAction action = actionModel.getActionMemento().getAction(entityCollectionModel.getSpecificationLoader());
         outerDiv.addOrReplace(new Label(StandaloneCollectionPanel.ID_ACTION_NAME, Model.of(action.getName())));
 
-        CssClassAppender.appendCssClassTo(outerDiv, action.getOnType().getFullIdentifier().replace('.', '-') + "_" + action.getId());
-        CssClassAppender.appendCssClassTo(outerDiv, entityCollectionModel.getTypeOfSpecification().getFullIdentifier().replace('.','-'));
+        CssClassAppender.appendCssClassTo(outerDiv,
+                CssClassAppender.asCssStyle("isis-" + action.getOnType().getSpecId().asString().replace('.', '-') + "-" + action.getId()));
+        CssClassAppender.appendCssClassTo(outerDiv,
+                CssClassAppender.asCssStyle("isis-" + entityCollectionModel.getTypeOfSpecification().getSpecId().asString().replace('.','-')));
 
         // action prompt
         this.actionPromptModalWindow = ActionPromptModalWindow.newModalWindow(ID_ACTION_PROMPT_MODAL_WINDOW);

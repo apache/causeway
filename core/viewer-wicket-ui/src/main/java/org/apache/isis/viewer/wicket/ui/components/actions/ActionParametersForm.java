@@ -21,12 +21,12 @@ package org.apache.isis.viewer.wicket.ui.components.actions;
 import java.util.List;
 
 import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.repeater.RepeatingView;
-import org.apache.wicket.model.IModel;
 
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.message.MessageService;
@@ -34,6 +34,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.viewer.wicket.model.hints.IsisActionCompletedEvent;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
@@ -46,6 +47,7 @@ import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.panels.FormExecutorStrategy;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 import org.apache.isis.viewer.wicket.ui.panels.PromptFormAbstract;
+import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationBehavior;
 
@@ -85,9 +87,25 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
         }
     }
 
-    private ScalarPanelAbstract2 newParamPanel(final WebMarkupContainer container, final IModel<?> model) {
+    private ScalarPanelAbstract2 newParamPanel(final WebMarkupContainer container, final ActionArgumentModel model) {
         final Component component = getComponentFactoryRegistry()
                 .addOrReplaceComponent(container, ComponentType.SCALAR_NAME_AND_VALUE, model);
+
+        if(component instanceof MarkupContainer) {
+            final MarkupContainer markupContainer = (MarkupContainer) component;
+
+            // TODO: copy-n-paste of ScalarModel.Kind#getCssClass(ScalarModel), so could perhaps unify
+            final ObjectActionParameter actionParameter = model.getParameterMemento()
+                    .getActionParameter(getSpecificationLoader());
+
+            final ObjectAction action = actionParameter.getAction();
+            final String objectSpecId = action.getOnType().getSpecId().asString().replace(".", "-");
+            final String parmId = actionParameter.getId();
+
+            final String css = "isis-" + objectSpecId + "-" + action.getId() + "-" + parmId;
+
+            CssClassAppender.appendCssClassTo(markupContainer, CssClassAppender.asCssStyle(css));
+        }
         final ScalarPanelAbstract2 paramPanel =
                 component instanceof ScalarPanelAbstract2
                         ? (ScalarPanelAbstract2) component

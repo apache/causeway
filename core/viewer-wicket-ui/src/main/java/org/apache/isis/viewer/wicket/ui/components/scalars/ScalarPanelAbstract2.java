@@ -363,9 +363,9 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
 
 
     private void addCssFromMetaModel() {
-        final String cssForMetaModel = getModel().getLongName();
-        if (cssForMetaModel != null) {
-            add(new AttributeAppender("class", Model.of(cssForMetaModel), " "));
+        final String cssForMetaModel = getModel().getCssClass();
+        if (!Strings.isNullOrEmpty(cssForMetaModel)) {
+            CssClassAppender.appendCssClassTo(this, CssClassAppender.asCssStyle(cssForMetaModel));
         }
 
         ScalarModel model = getModel();

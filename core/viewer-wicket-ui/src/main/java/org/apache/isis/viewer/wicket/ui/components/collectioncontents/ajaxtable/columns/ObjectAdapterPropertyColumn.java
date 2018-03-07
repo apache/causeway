@@ -37,6 +37,7 @@ import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsAsAjaxTablePanel;
+import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 /**
  * A {@link ColumnAbstract column} within a
@@ -81,7 +82,7 @@ public final class ObjectAdapterPropertyColumn extends ColumnAbstract<ObjectAdap
     public String getCssClass() {
         final String cssClass = super.getCssClass();
         return (!Strings.isNullOrEmpty(cssClass) ? (cssClass + " ") : "") +
-               parentTypeName + "-" + propertyExpression;
+                CssClassAppender.asCssStyle("isis-" + parentTypeName.replace(".","-") + "-" + propertyExpression);
     }
 
     @Override

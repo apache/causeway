@@ -34,7 +34,7 @@
     <packaging>pom</packaging>
 
     <properties>
-        <isis.version>1.16.1</isis.version>
+        <isis.version>1.16.2</isis.version>
 
         <lombok.version>1.16.18</lombok.version>
 

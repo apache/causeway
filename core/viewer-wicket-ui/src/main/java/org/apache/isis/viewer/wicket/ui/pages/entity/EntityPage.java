@@ -182,8 +182,8 @@ public class EntityPage extends PageAbstract {
         }
 
         WebMarkupContainer entityPageContainer = new WebMarkupContainer("entityPageContainer");
-        CssClassAppender.appendCssClassTo(entityPageContainer, objectSpec.getFullIdentifier().replace('.','-'));
-        CssClassAppender.appendCssClassTo(entityPageContainer, objectSpec.getCorrespondingClass().getSimpleName());
+        CssClassAppender.appendCssClassTo(entityPageContainer,
+                CssClassAppender.asCssStyle("isis-" + objectSpec.getSpecId().asString().replace(".","-")));
 
         CssClassFacet cssClassFacet = objectSpec.getFacet(CssClassFacet.class);
         if(cssClassFacet != null) {

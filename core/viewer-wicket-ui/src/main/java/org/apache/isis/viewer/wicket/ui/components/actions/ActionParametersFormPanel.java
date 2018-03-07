@@ -53,7 +53,7 @@ public class ActionParametersFormPanel extends PromptFormPanelAbstract<ActionMod
                 new ActionParametersForm("inputForm", this, this.getSettings(), model);
 
         final ObjectAction action = model.getActionMemento().getAction(getSpecificationLoader());
-        CssClassAppender.appendCssClassTo(inputForm, action.getOnType().getShortIdentifier() + "_" + action.getId());
+        CssClassAppender.appendCssClassTo(inputForm, "isis-" + CssClassAppender.asCssStyle(action.getOnType().getSpecId().asString().replace(".","-") + "-" + action.getId()));
         add(inputForm);
     }
 
