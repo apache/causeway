@@ -44,25 +44,15 @@ import org.apache.isis.applib.internal.collections._Maps;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
-import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.applib.services.command.CommandContext;
-import org.apache.isis.applib.services.command.spi.CommandService;
 import org.apache.isis.applib.services.eventbus.AbstractLifecycleEvent;
-import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
-import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.iactn.Interaction;
-import org.apache.isis.applib.services.iactn.InteractionContext;
-import org.apache.isis.applib.services.metrics.MetricsService;
-import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.ensure.IsisAssertException;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.factory.InstanceUtil;
-import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
@@ -101,7 +91,6 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.persistence.FixturesInstalledFlag;
 import org.apache.isis.core.runtime.persistence.NotPersistableException;
 import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
@@ -114,9 +103,7 @@ import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyO
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindAllInstances;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
-import org.apache.isis.core.runtime.runner.opts.OptionHandlerFixtureAbstract;
 import org.apache.isis.core.runtime.services.RequestScopedService;
-import org.apache.isis.core.runtime.services.changes.ChangedObjectsServiceInternal;
 import org.apache.isis.core.runtime.system.persistence.adaptermanager.OidAdapterHashMap;
 import org.apache.isis.core.runtime.system.persistence.adaptermanager.PojoAdapterHashMap;
 import org.apache.isis.core.runtime.system.persistence.adaptermanager.RootAndCollectionAdapters;
@@ -144,75 +131,10 @@ import com.google.common.collect.Maps;
  * and maintains an identity map of {@link ObjectAdapter adapter}s and {@link Oid
  * identities} for each and every POJO that is being used by the framework.
  */
-public class PersistenceSession5 implements PersistenceSession,
-        IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
+public class PersistenceSession5 extends PersistenceSessionBase
+implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
 
-    // -- constants
     private static final Logger LOG = LoggerFactory.getLogger(PersistenceSession5.class);
-
-    /**
-     * @see #isFixturesInstalled()
-     */
-    public static final String INSTALL_FIXTURES_KEY = OptionHandlerFixtureAbstract.DATANUCLEUS_INSTALL_FIXTURES_KEY;
-    public static final boolean INSTALL_FIXTURES_DEFAULT = false;
-
-    private static final String ROOT_KEY = OptionHandlerFixtureAbstract.DATANUCLEUS_ROOT_KEY;
-
-    /**
-     * Append regular <a href="http://www.datanucleus.org/products/accessplatform/persistence_properties.html">datanucleus properties</a> to this key
-     */
-    public static final String DATANUCLEUS_PROPERTIES_ROOT = ROOT_KEY + "impl.";
-
-    //defined on PersistenceSession interface 
-    //public static final String SERVICE_IDENTIFIER = "1";
-
-    
-
-    // -- constructor, fields, finalize()
-
-    private final FixturesInstalledFlag fixturesInstalledFlag;
-
-    private final PersistenceQueryFactory persistenceQueryFactory;
-    private final IsisConfiguration configuration;
-    private final SpecificationLoader specificationLoader;
-    private final AuthenticationSession authenticationSession;
-
-    private final ServicesInjector servicesInjector;
-
-    private final CommandContext commandContext;
-    private final CommandService commandService;
-
-    private final InteractionContext interactionContext;
-    private final EventBusService eventBusService ;
-    private final ChangedObjectsServiceInternal changedObjectsServiceInternal;
-    private final FactoryService factoryService;
-    private final MetricsService metricsService;
-    private final ClockService clockService;
-    private final UserService userService;
-
-
-    /**
-     * Used to create the {@link #persistenceManager} when {@link #open()}ed.
-     */
-    private final PersistenceManagerFactory jdoPersistenceManagerFactory;
-
-    // not final only for testing purposes
-    private IsisTransactionManager transactionManager;
-
-
-    /**
-     * populated only when {@link #open()}ed.
-     */
-    private PersistenceManager persistenceManager;
-
-    /**
-     * populated only when {@link #open()}ed.
-     */
-    private final Map<Class<?>, PersistenceQueryProcessor<?>> persistenceQueryProcessorByClass = _Maps.newHashMap();
-
-
-    private final boolean concurrencyCheckingGloballyEnabled;
-
 
     /**
      * Initialize the object store so that calls to this object store access
@@ -223,65 +145,17 @@ public class PersistenceSession5 implements PersistenceSession,
             final AuthenticationSession authenticationSession,
             final PersistenceManagerFactory jdoPersistenceManagerFactory,
             final FixturesInstalledFlag fixturesInstalledFlag) {
-
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("creating {}", this);
-        }
-
-        this.servicesInjector = servicesInjector;
-        this.jdoPersistenceManagerFactory = jdoPersistenceManagerFactory;
-        this.fixturesInstalledFlag = fixturesInstalledFlag;
-
-        // injected
-        this.configuration = servicesInjector.getConfigurationServiceInternal();
-        this.specificationLoader = servicesInjector.getSpecificationLoader();
-        this.authenticationSession = authenticationSession;
-
-        this.commandContext = lookupService(CommandContext.class);
-        this.commandService = lookupService(CommandService.class);
-        this.interactionContext = lookupService(InteractionContext.class);
-        this.eventBusService = lookupService(EventBusService.class);
-        this.changedObjectsServiceInternal = lookupService(ChangedObjectsServiceInternal.class);
-        this.metricsService = lookupService(MetricsService.class);
-        this.factoryService = lookupService(FactoryService.class);
-        this.clockService = lookupService(ClockService.class);
-        this.userService = lookupService(UserService.class);
-
-        // sub-components
-        final AdapterManager adapterManager = this;
-        this.persistenceQueryFactory = new PersistenceQueryFactory(adapterManager, this.specificationLoader);
-        this.transactionManager = new IsisTransactionManager(this, authenticationSession, servicesInjector);
-
-        this.state = State.NOT_INITIALIZED;
-
-        final boolean concurrencyCheckingGloballyDisabled =
-                this.configuration.getBoolean("isis.persistor.disableConcurrencyChecking", false);
-        this.concurrencyCheckingGloballyEnabled = !concurrencyCheckingGloballyDisabled;
-
+    	
+    	super(servicesInjector, authenticationSession, jdoPersistenceManagerFactory, fixturesInstalledFlag);
     }
-
-    @Override
-    protected void finalize() throws Throwable {
-        super.finalize();
-        LOG.debug("finalizing persistence session");
-    }
-
-    
-
 
     // -- open
-
-    /**
-     * Only populated once {@link #open()}'d
-     */
-    public PersistenceManager getPersistenceManager() {
-        return persistenceManager;
-    }
 
     /**
      * Injects components, calls open on subcomponents, and then creates service
      * adapters.
      */
+    @Override
     public void open() {
         ensureNotOpened();
 
@@ -395,6 +269,7 @@ public class PersistenceSession5 implements PersistenceSession,
      * <p>
      * The corresponding DataNucleus entity is then closed.
      */
+    @Override
     public void close() {
 
         if (state == State.CLOSED) {
@@ -513,12 +388,12 @@ public class PersistenceSession5 implements PersistenceSession,
     
 
     // -- QuerySubmitter impl, findInstancesInTransaction
-
+    @Override
     public <T> List<ObjectAdapter> allMatchingQuery(final Query<T> query) {
         final ObjectAdapter instances = findInstancesInTransaction(query, QueryCardinality.MULTIPLE);
         return CollectionFacetUtils.convertToAdapterList(instances);
     }
-
+    @Override
     public <T> ObjectAdapter firstMatchingQuery(final Query<T> query) {
         final ObjectAdapter instances = findInstancesInTransaction(query, QueryCardinality.SINGLE);
         final List<ObjectAdapter> list = CollectionFacetUtils.convertToAdapterList(instances);
@@ -594,41 +469,6 @@ public class PersistenceSession5 implements PersistenceSession,
         return persistenceQueryProcessor.process((Q) persistenceQuery);
     }
 
-    public IsisConfiguration getConfiguration() {
-        return configuration;
-    }
-
-
-    
-
-    // -- State
-
-    private enum State {
-        NOT_INITIALIZED, OPEN, CLOSED
-    }
-
-    private State state;
-
-    protected void ensureNotOpened() {
-        if (state != State.NOT_INITIALIZED) {
-            throw new IllegalStateException("Persistence session has already been initialized");
-        }
-    }
-
-    public void ensureOpened() {
-        ensureStateIs(State.OPEN);
-    }
-
-    private void ensureStateIs(final State stateRequired) {
-        if (state == stateRequired) {
-            return;
-        }
-        throw new IllegalStateException("State is: " + state + "; should be: " + stateRequired);
-    }
-
-
-    
-
     // -- createTransientInstance, createViewModelInstance
 
     /**
@@ -649,17 +489,14 @@ public class PersistenceSession5 implements PersistenceSession,
      * This method is ultimately delegated to by the
      * {@link org.apache.isis.applib.DomainObjectContainer}.
      */
+    @Override
     public ObjectAdapter createTransientInstance(final ObjectSpecification objectSpec) {
         return createInstance(objectSpec, Variant.TRANSIENT, null);
     }
 
+    @Override
     public ObjectAdapter createViewModelInstance(final ObjectSpecification objectSpec, final String memento) {
         return createInstance(objectSpec, Variant.VIEW_MODEL, memento);
-    }
-
-    private enum Variant {
-        TRANSIENT,
-        VIEW_MODEL
     }
 
     private ObjectAdapter createInstance(
@@ -698,6 +535,7 @@ public class PersistenceSession5 implements PersistenceSession,
         return viewModelPojo;
     }
 
+    @Override
     public Object instantiateAndInjectServices(final ObjectSpecification objectSpec) {
 
         final Class<?> correspondingClass = objectSpec.getCorrespondingClass();
@@ -762,25 +600,6 @@ public class PersistenceSession5 implements PersistenceSession,
     }
 
 
-    
-
-    // -- getServices, getService
-
-    public List<ObjectAdapter> getServices() {
-        final List<Object> services = servicesInjector.getRegisteredServices();
-        final List<ObjectAdapter> serviceAdapters = _Lists.newArrayList();
-        for (final Object servicePojo : services) {
-            ObjectAdapter serviceAdapter = getAdapterFor(servicePojo);
-            if(serviceAdapter == null) {
-                throw new IllegalStateException("ObjectAdapter for service " + servicePojo + " does not exist?!?");
-            }
-            serviceAdapters.add(serviceAdapter);
-        }
-        return serviceAdapters;
-    }
-
-    
-
     // -- helper: postEvent
 
     void postLifecycleEventIfRequired(
@@ -825,6 +644,7 @@ public class PersistenceSession5 implements PersistenceSession,
      * 
      * @see FixturesInstalledFlag
      */
+    @Override
     public boolean isFixturesInstalled() {
         if (fixturesInstalledFlag.isFixturesInstalled() == null) {
             fixturesInstalledFlag.setFixturesInstalled(objectStoreIsFixturesInstalled());
@@ -848,13 +668,11 @@ public class PersistenceSession5 implements PersistenceSession,
      * By default this is not expected to be there, but utilities can add in on
      * the fly during bootstrapping if required.
      */
-    public boolean objectStoreIsFixturesInstalled() {
+    private boolean objectStoreIsFixturesInstalled() {
         final boolean installFixtures = configuration.getBoolean(INSTALL_FIXTURES_KEY, INSTALL_FIXTURES_DEFAULT);
         LOG.info("isFixturesInstalled: {} = {}", INSTALL_FIXTURES_KEY, installFixtures);
         return !installFixtures;
     }
-
-    
 
     // -- loadObject
 
@@ -901,7 +719,7 @@ public class PersistenceSession5 implements PersistenceSession,
      * @throws org.apache.isis.core.runtime.persistence.ObjectNotFoundException
      *             when no object corresponding to the oid can be found
      */
-    public ObjectAdapter loadObjectInTransaction(final RootOid oid) {
+    private ObjectAdapter loadObjectInTransaction(final RootOid oid) {
 
         // can be either a view model or a persistent entity.
 
@@ -1027,8 +845,7 @@ public class PersistenceSession5 implements PersistenceSession,
 
     // -- lazilyLoaded
 
-
-    public ObjectAdapter mapPersistent(final Persistable pojo) {
+    private ObjectAdapter mapPersistent(final Persistable pojo) {
         if (persistenceManager.getObjectId(pojo) == null) {
             return null;
         }
@@ -1047,7 +864,7 @@ public class PersistenceSession5 implements PersistenceSession,
      * the object's missing data should be retrieved from the persistence
      * mechanism and be used to set up the value objects and associations.
      */
-    public void refreshRootInTransaction(final ObjectAdapter adapter) {
+    private void refreshRootInTransaction(final ObjectAdapter adapter) {
         Assert.assertTrue("only resolve object that is persistent", adapter, adapter.representsPersistent());
         getTransactionManager().executeWithinTransaction(new TransactionalClosure() {
 
@@ -1074,6 +891,7 @@ public class PersistenceSession5 implements PersistenceSession,
     /**
      * Forces a reload (refresh in JDO terminology) of the domain object wrapped in the {@link ObjectAdapter}.
      */
+    @Override
     public void refreshRoot(final ObjectAdapter adapter) {
 
         final Object domainObject = adapter.getObject();
@@ -1094,6 +912,7 @@ public class PersistenceSession5 implements PersistenceSession,
         initializeMapAndCheckConcurrency((Persistable) domainObject);
     }
 
+    @Override
     public void resolve(final Object parent) {
         final ObjectAdapter adapter = adapterFor(parent);
         refreshRootInTransaction(adapter);
@@ -1119,6 +938,7 @@ public class PersistenceSession5 implements PersistenceSession,
      * collection, that is not already persistent, should be made persistent by
      * recursively calling this method.
      */
+    @Override
     public void makePersistentInTransaction(final ObjectAdapter adapter) {
         if (adapter.representsPersistent()) {
             throw new NotPersistableException("Object already persistent: " + adapter);
@@ -1180,18 +1000,16 @@ public class PersistenceSession5 implements PersistenceSession,
     }
 
 
-    
-
     // -- ObjectPersistor impl
-    public void makePersistent(final ObjectAdapter adapter) {
+    
+    private void makePersistent(final ObjectAdapter adapter) {
         makePersistentInTransaction(adapter);
     }
 
-    public void remove(final ObjectAdapter adapter) {
+    
+    private void remove(final ObjectAdapter adapter) {
         destroyObjectInTransaction(adapter);
     }
-    
-
 
     // -- destroyObjectInTransaction
 
@@ -1199,6 +1017,7 @@ public class PersistenceSession5 implements PersistenceSession,
      * Removes the specified object from the system. The specified object's data
      * should be removed from the persistence mechanism.
      */
+    @Override
     public void destroyObjectInTransaction(final ObjectAdapter adapter) {
         final ObjectSpecification spec = adapter.getSpecification();
         if (spec.isParented()) {
@@ -1259,6 +1078,7 @@ public class PersistenceSession5 implements PersistenceSession,
     
 
     // -- execute
+    @Override
     public void execute(final List<PersistenceCommand> commands) {
 
         // previously we used to check that there were some commands, and skip processing otherwise.
@@ -1281,6 +1101,7 @@ public class PersistenceSession5 implements PersistenceSession,
 
     private Map<Oid, Oid> persistentByTransient = _Maps.newHashMap();
 
+    @Override
     public ObjectAdapter getAggregateRoot(final ParentedCollectionOid collectionOid) {
         final Oid rootOid = collectionOid.getRootOid();
         ObjectAdapter rootadapter = getAdapterFor(rootOid);
@@ -1298,87 +1119,6 @@ public class PersistenceSession5 implements PersistenceSession,
     private Oid remappedFrom(final Oid transientOid) {
         return persistentByTransient.get(transientOid);
     }
-
-
-    
-
-    // -- transactions
-    public void startTransaction() {
-        final javax.jdo.Transaction transaction = persistenceManager.currentTransaction();
-        if (transaction.isActive()) {
-            throw new IllegalStateException("Transaction already active");
-        }
-        transaction.begin();
-    }
-
-    public void endTransaction() {
-        final javax.jdo.Transaction transaction = persistenceManager.currentTransaction();
-        if (transaction.isActive()) {
-            transaction.commit();
-        }
-    }
-
-    public void abortTransaction() {
-        final javax.jdo.Transaction transaction = persistenceManager.currentTransaction();
-        if (transaction.isActive()) {
-            transaction.rollback();
-        }
-    }
-
-    
-
-
-    // -- dependencies (from constructor)
-
-    protected SpecificationLoader getSpecificationLoader() {
-        return specificationLoader;
-    }
-    protected AuthenticationSession getAuthenticationSession() {
-        return authenticationSession;
-    }
-
-    /**
-     * The configured {@link ServicesInjector}.
-     */
-    public ServicesInjector getServicesInjector() {
-        return servicesInjector;
-    }
-
-
-    
-
-    // -- transactionManager
-
-
-    /**
-     * The configured {@link IsisTransactionManager}.
-     */
-    public IsisTransactionManager getTransactionManager() {
-        return transactionManager;
-    }
-
-//    // for testing only
-//    void setTransactionManager(final IsisTransactionManager transactionManager) {
-//        this.transactionManager = transactionManager;
-//    }
-
-
-    
-
-
-    // -- jdoPersistenceManager delegate methods
-    public javax.jdo.Query newJdoQuery(Class<?> cls) {
-        return persistenceManager.newQuery(cls);
-    }
-
-    public javax.jdo.Query newJdoNamedQuery (Class<?> cls, String queryName) {
-        return persistenceManager.newNamedQuery(cls, queryName);
-    }
-
-    public javax.jdo.Query newJdoQuery (Class<?> cls, String filter) {
-        return persistenceManager.newQuery(cls, filter);
-    }
-    // endregion
 
     // -- AdapterManager implementation
 
@@ -1509,6 +1249,7 @@ public class PersistenceSession5 implements PersistenceSession,
                         + "but map's adapter's OID was: " + adapterAccordingToMap.getOid());
     }
 
+    @Override
     public ObjectAdapter adapterForAny(RootOid rootOid) {
 
         final ObjectSpecId specId = rootOid.getObjectSpecId();
@@ -1543,12 +1284,13 @@ public class PersistenceSession5 implements PersistenceSession,
             }
         }
     }
-
+    
+    @Override
     public Map<RootOid, ObjectAdapter> adaptersFor(final List<RootOid> rootOids) {
         return adaptersFor(rootOids, ConcurrencyChecking.NO_CHECK);
     }
 
-    public Map<RootOid,ObjectAdapter> adaptersFor(
+    private Map<RootOid,ObjectAdapter> adaptersFor(
             final List<RootOid> rootOids,
             final ConcurrencyChecking concurrencyChecking) {
 
@@ -1608,6 +1350,7 @@ public class PersistenceSession5 implements PersistenceSession,
      * know that the oid does indeed represent an object you know exists.
      * </p>
      */
+    @Override 
     public ObjectAdapter adapterFor(final RootOid rootOid) {
         return adapterFor(rootOid, ConcurrencyChecking.NO_CHECK);
     }
@@ -1640,6 +1383,7 @@ public class PersistenceSession5 implements PersistenceSession,
      *
      * @throws {@link org.apache.isis.core.runtime.persistence.ObjectNotFoundException} if the object does not exist.
      */
+    @Override
     public ObjectAdapter adapterFor(
             final RootOid rootOid,
             final ConcurrencyChecking concurrencyChecking) {
@@ -1817,7 +1561,7 @@ public class PersistenceSession5 implements PersistenceSession,
      *
      * @param hintRootOid - allow a different persistent root oid to be provided.
      */
-    public void remapAsPersistent(final ObjectAdapter adapter, RootOid hintRootOid) {
+    private void remapAsPersistent(final ObjectAdapter adapter, RootOid hintRootOid) {
 
         final ObjectAdapter rootAdapter = adapter.getAggregateRoot();  // TODO: REVIEW: think this is redundant; would seem this method is only ever called for roots anyway.
         final RootOid transientRootOid = (RootOid) rootAdapter.getOid();
@@ -1991,8 +1735,7 @@ public class PersistenceSession5 implements PersistenceSession,
         pojoAdapterMap.remove(adapter);
     }
 
-
-    public void remapRecreatedPojo(ObjectAdapter adapter, final Object pojo) {
+    private void remapRecreatedPojo(ObjectAdapter adapter, final Object pojo) {
         removeAdapter(adapter);
         adapter.replacePojo(pojo);
         mapAndInjectServices(adapter);
@@ -2117,6 +1860,7 @@ public class PersistenceSession5 implements PersistenceSession,
 
     // -- FrameworkSynchronizer delegate methods
 
+    @Override
     public void enlistDeletingAndInvokeIsisRemovingCallbackFacet(final Persistable pojo) {
         ObjectAdapter adapter = adapterFor(pojo);
 
@@ -2126,7 +1870,7 @@ public class PersistenceSession5 implements PersistenceSession,
         postLifecycleEventIfRequired(adapter, RemovingLifecycleEventFacet.class);
     }
 
-
+    @Override
     public void initializeMapAndCheckConcurrency(final Persistable pojo) {
         final Persistable pc = pojo;
 
@@ -2192,7 +1936,7 @@ public class PersistenceSession5 implements PersistenceSession,
      * Create a new {@link Oid#isTransient() transient} {@link Oid} for the
      * supplied pojo, uniquely distinguishable from any other {@link Oid}.
      */
-    public final RootOid createTransientOrViewModelOid(final Object pojo) {
+    private final RootOid createTransientOrViewModelOid(final Object pojo) {
         return newIdentifier(pojo, Type.TRANSIENT);
     }
 
@@ -2207,13 +1951,9 @@ public class PersistenceSession5 implements PersistenceSession,
      *
      * @param pojo - being persisted
      */
+    @Override
     public final RootOid createPersistentOrViewModelOid(Object pojo) {
         return newIdentifier(pojo, Type.PERSISTENT);
-    }
-
-    enum Type {
-        TRANSIENT,
-        PERSISTENT
     }
 
     private RootOid newIdentifier(final Object pojo, final Type type) {
@@ -2263,6 +2003,7 @@ public class PersistenceSession5 implements PersistenceSession,
      * The implementation therefore uses Isis' {@link org.apache.isis.core.metamodel.adapter.oid.Oid#isTransient() oid}
      * to determine which callback to fire.
      */
+    @Override
     public void invokeIsisPersistingCallback(final Persistable pojo) {
         final ObjectAdapter adapter = getAdapterFor(pojo);
         if (adapter == null) {
@@ -2294,6 +2035,7 @@ public class PersistenceSession5 implements PersistenceSession,
      * The implementation therefore uses Isis' {@link org.apache.isis.core.metamodel.adapter.oid.Oid#isTransient() oid}
      * to determine which callback to fire.
      */
+    @Override
     public void enlistCreatedAndRemapIfRequiredThenInvokeIsisInvokePersistingOrUpdatedCallback(final Persistable pojo) {
         final ObjectAdapter adapter = adapterFor(pojo);
 
@@ -2322,6 +2064,7 @@ public class PersistenceSession5 implements PersistenceSession,
         adapter.setVersion(versionIfAny);
     }
 
+    @Override
     public void enlistUpdatingAndInvokeIsisUpdatingCallback(final Persistable pojo) {
         ObjectAdapter adapter = getAdapterFor(pojo);
         if (adapter == null) {
@@ -2368,6 +2111,7 @@ public class PersistenceSession5 implements PersistenceSession,
      * makes sure the entity is known to Isis and is a root
      * @param pojo
      */
+    @Override
     public void ensureRootObject(final Persistable pojo) {
         final Oid oid = adapterFor(pojo).getOid();
         if (!(oid instanceof RootOid)) {
@@ -2384,7 +2128,7 @@ public class PersistenceSession5 implements PersistenceSession,
 
     // -- DomainObjectServices impl
 
-
+    @Override
     public Object lookup(
             final Bookmark bookmark,
             final BookmarkService.FieldResetPolicy fieldResetPolicy) {
@@ -2401,42 +2145,10 @@ public class PersistenceSession5 implements PersistenceSession,
         return adapter.getObject();
     }
 
+    @Override
     public boolean flush() {
         return getTransactionManager().flushTransaction();
     }
-
-
-    
-
-    // -- helpers: lookupService, lookupServices
-
-    private <T> T lookupService(Class<T> serviceType) {
-        T service = lookupServiceIfAny(serviceType);
-        if(service == null) {
-            throw new IllegalStateException("Could not locate service of type '" + serviceType + "'");
-        }
-        return service;
-    }
-
-    private <T> T lookupServiceIfAny(final Class<T> serviceType) {
-        return servicesInjector.lookupService(serviceType);
-    }
-
-    private <T> List<T> lookupServices(final Class<T> serviceClass) {
-        return servicesInjector.lookupServices(serviceClass);
-    }
-    
-
-    // -- toString
-
-    @Override
-    public String toString() {
-        return new ToString(this).toString();
-    }
-
-
-    
-
 
 
 }
