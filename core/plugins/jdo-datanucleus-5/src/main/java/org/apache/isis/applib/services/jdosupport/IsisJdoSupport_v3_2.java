@@ -29,7 +29,8 @@ import org.apache.isis.applib.annotation.Programmatic;
 /**
  * Service that provide a number of workarounds when using JDO/DataNucleus. 
  */
-public interface IsisJdoSupport5 extends org.apache.isis.applib.services.jdosupport.IsisJdoSupport0 {
+public interface IsisJdoSupport_v3_2 extends org.apache.isis.applib.services.jdosupport.IsisJdoSupport0 
+{
 
     /**
      * To perform the most common use-case of executing a (type-safe) query against the specified class,

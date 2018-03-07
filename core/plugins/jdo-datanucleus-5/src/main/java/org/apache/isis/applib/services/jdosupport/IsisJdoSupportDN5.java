@@ -29,8 +29,10 @@ import java.util.Map;
 import java.util.concurrent.Callable;
 
 import javax.jdo.Extent;
+import javax.jdo.JDOQLTypedQuery;
 import javax.jdo.PersistenceManager;
 import javax.jdo.datastore.JDOConnection;
+import javax.jdo.query.BooleanExpression;
 
 import org.apache.isis.applib.FatalException;
 import org.apache.isis.applib.annotation.DomainService;
@@ -42,16 +44,13 @@ import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.runtime.persistence.ObjectPersistenceException;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
-import org.datanucleus.api.jdo.JDOPersistenceManager;
-import org.datanucleus.query.typesafe.BooleanExpression;
-import org.datanucleus.query.typesafe.TypesafeQuery;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 
 /**
- * This service provdes a number of utility methods to supplement/support the capabilities of the JDO Objectstore.
+ * This service provides a number of utility methods to supplement/support the capabilities of the JDO Objectstore.
  *
  * <p>
  * This implementation has no UI and there are no other implementations of the service API, and so it is annotated
@@ -62,7 +61,7 @@ import com.google.common.collect.Maps;
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
 )
-public class IsisJdoSupportImpl4 implements IsisJdoSupport4 {
+public class IsisJdoSupportDN5 implements IsisJdoSupport_v3_2 {
     
     @Programmatic
     @Override
@@ -171,31 +170,31 @@ public class IsisJdoSupportImpl4 implements IsisJdoSupport4 {
     @Programmatic
     @Override
     public <T> List<T> executeQuery(final Class<T> cls, final BooleanExpression expression) {
-        final TypesafeQuery<T> query = newTypesafeQuery(cls).filter(expression);
+        final JDOQLTypedQuery<T> query = newTypesafeQuery(cls).filter(expression);
         return executeListAndClose(query);
     }
 
     @Programmatic
     @Override
     public <T> T executeQueryUnique(final Class<T> cls, final BooleanExpression expression) {
-        final TypesafeQuery<T> query = newTypesafeQuery(cls).filter(expression);
+        final JDOQLTypedQuery<T> query = newTypesafeQuery(cls).filter(expression);
         return executeUniqueAndClose(query);
     }
 
     @Programmatic
     @Override
-    public <T> TypesafeQuery<T> newTypesafeQuery(Class<T> cls) {
-        return ((JDOPersistenceManager)getJdoPersistenceManager()).newTypesafeQuery(cls);
+    public <T> JDOQLTypedQuery<T> newTypesafeQuery(Class<T> cls) {
+        return getJdoPersistenceManager().newJDOQLTypedQuery(cls);
     }
 
-    private static <T> List<T> executeListAndClose(final TypesafeQuery<T> query) {
+    private static <T> List<T> executeListAndClose(final JDOQLTypedQuery<T> query) {
         final List<T> elements = query.executeList();
         final List<T> list = Lists.newArrayList(elements);
         query.closeAll();
         return list;
     }
 
-    private static <T> T executeUniqueAndClose(final TypesafeQuery<T> query) {
+    private static <T> T executeUniqueAndClose(final JDOQLTypedQuery<T> query) {
         final T result = query.executeUnique();
         query.closeAll();
         return result;
