@@ -66,11 +66,13 @@ PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstalledFlag {
     private DataNucleusApplicationComponents4 applicationComponents;
 
     @Programmatic
+    @Override
     public void init(final SpecificationLoader specificationLoader) {
         this.applicationComponents = createDataNucleusApplicationComponents(configuration, specificationLoader);
     }
 
     @Programmatic
+    @Override
     public boolean isInitialized() {
         return this.applicationComponents != null;
     }
@@ -155,6 +157,7 @@ PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstalledFlag {
     }
 
     @Programmatic
+    @Override
     public final void shutdown() {
         if(!isInitialized()) {
             return;

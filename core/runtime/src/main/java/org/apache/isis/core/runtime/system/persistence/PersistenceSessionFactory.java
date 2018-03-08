@@ -14,6 +14,8 @@ public interface PersistenceSessionFactory {
 			AuthenticationSession authenticationSession);
 
 	void init(SpecificationLoader specificationLoader);
+
+	boolean isInitialized();
 	
 	void shutdown();
 	
@@ -22,5 +24,6 @@ public interface PersistenceSessionFactory {
 	static PersistenceSessionFactory of(ConfigurationServiceInternal configuration) {
 		return IsisJdoRuntimePlugin.get().getPersistenceSessionFactory(configuration);
 	}
+
 
 }

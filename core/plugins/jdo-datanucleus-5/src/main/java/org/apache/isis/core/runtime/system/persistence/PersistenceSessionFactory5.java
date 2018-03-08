@@ -66,11 +66,13 @@ implements PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstal
     private DataNucleusApplicationComponents5 applicationComponents;
 
     @Programmatic
+    @Override
     public void init(final SpecificationLoader specificationLoader) {
         this.applicationComponents = createDataNucleusApplicationComponents(configuration, specificationLoader);
     }
 
     @Programmatic
+    @Override
     public boolean isInitialized() {
         return this.applicationComponents != null;
     }
@@ -155,6 +157,7 @@ implements PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstal
     }
 
     @Programmatic
+    @Override
     public final void shutdown() {
         if(!isInitialized()) {
             return;
@@ -169,6 +172,7 @@ implements PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstal
      * Called by {@link org.apache.isis.core.runtime.system.session.IsisSessionFactory#openSession(AuthenticationSession)}.
      */
     @Programmatic
+    @Override
     public PersistenceSession5 createPersistenceSession(
             final ServicesInjector servicesInjector,
             final AuthenticationSession authenticationSession) {
