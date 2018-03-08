@@ -71,13 +71,6 @@
 			<artifactId>isis-core-runtime</artifactId>
 		</dependency>
 
-<!-- replaced by javaee-api -->
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.apache.geronimo.specs</groupId> -->
-<!-- 			<artifactId>geronimo-servlet_3.0_spec</artifactId> -->
-<!-- 			<scope>provided</scope> -->
-<!-- 		</dependency> -->
-
 		<dependency>
 			<groupId>org.apache.wicket</groupId>
 			<artifactId>wicket-auth-roles</artifactId>
@@ -87,6 +80,12 @@
             <groupId>net.ftlines.wicket-source</groupId>
             <artifactId>wicket-source</artifactId>
         </dependency>
+
+		<!-- as required by wicket -->
+		<dependency>
+		    <groupId>commons-io</groupId>
+		    <artifactId>commons-io</artifactId>
+		</dependency>
 
 		<dependency>
 			<groupId>com.google.inject</groupId>

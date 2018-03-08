@@ -138,14 +138,34 @@
     </build>
 
     <dependencies>
+    
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-plugins-discovery-reflections</artifactId>
+            <version>${isis.version}</version>
+        </dependency>
+    
+      	<dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-plugins-jdo-datanucleus-5</artifactId>
+            <version>${isis.version}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-plugins-eventbus-guava</artifactId>
+            <version>${isis.version}</version>
+        </dependency>
+    
+    	<dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-plugins-jaxrs-resteasy-3</artifactId>
+            <version>${isis.version}</version>
+        </dependency>
+    
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-applib</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.axonframework</groupId>
-            <artifactId>axon-core</artifactId>
         </dependency>
 
         <!-- test -->
@@ -156,11 +176,11 @@
             <scope>test</scope>
         </dependency>
 
-        <dependency>
-            <groupId>org.datanucleus</groupId>
-            <artifactId>datanucleus-core</artifactId>
-            <scope>test</scope>
-        </dependency>
+<!--         <dependency> -->
+<!--             <groupId>org.datanucleus</groupId> -->
+<!--             <artifactId>datanucleus-core</artifactId> -->
+<!--             <scope>test</scope> -->
+<!--         </dependency> -->
 
         <dependency>
             <groupId>org.hsqldb</groupId>

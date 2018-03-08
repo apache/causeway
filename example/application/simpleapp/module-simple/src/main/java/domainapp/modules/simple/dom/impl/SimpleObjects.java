@@ -20,7 +20,7 @@ package domainapp.modules.simple.dom.impl;
 
 import java.util.List;
 
-import org.datanucleus.query.typesafe.TypesafeQuery;
+import javax.jdo.JDOQLTypedQuery;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -33,9 +33,8 @@ import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
-import org.apache.isis.applib.services.jdosupport.IsisJdoSupport;
+import org.apache.isis.applib.services.jdosupport.IsisJdoSupport_v3_2;
 import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.applib.services.xactn.TransactionService;
 
 @DomainService(
         nature = NatureOfService.VIEW_MENU_ONLY,
@@ -63,7 +62,7 @@ public class SimpleObjects {
             @ParameterLayout(named="Name")
             final String name
     ) {
-        TypesafeQuery<SimpleObject> q = isisJdoSupport.newTypesafeQuery(SimpleObject.class);
+    	JDOQLTypedQuery<SimpleObject> q = isisJdoSupport.newTypesafeQuery(SimpleObject.class);
         final QSimpleObject cand = QSimpleObject.candidate();
         q = q.filter(
                 cand.name.indexOf(q.stringParameter("name")).ne(-1)
@@ -74,7 +73,7 @@ public class SimpleObjects {
 
     @Programmatic
     public SimpleObject findByNameExact(final String name) {
-        TypesafeQuery<SimpleObject> q = isisJdoSupport.newTypesafeQuery(SimpleObject.class);
+    	JDOQLTypedQuery<SimpleObject> q = isisJdoSupport.newTypesafeQuery(SimpleObject.class);
         final QSimpleObject cand = QSimpleObject.candidate();
         q = q.filter(
                 cand.name.eq(q.stringParameter("name"))
@@ -97,6 +96,6 @@ public class SimpleObjects {
     RepositoryService repositoryService;
 
     @javax.inject.Inject
-    IsisJdoSupport isisJdoSupport;
+    IsisJdoSupport_v3_2 isisJdoSupport;
 
 }

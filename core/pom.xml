@@ -142,6 +142,7 @@
         <commons-httpclient.version>3.1</commons-httpclient.version>
         <commons-codec.version>1.10</commons-codec.version>
         <commons-email.version>1.4</commons-email.version>
+        <commons-io.version>2.6</commons-io.version>
         <com-sun-mail.version>1.5.2</com-sun-mail.version>
 
         <axon-core.version>2.4.4</axon-core.version>
@@ -1549,6 +1550,11 @@ ${license.additional-notes}
                 <artifactId>commons-codec</artifactId>
                 <version>${commons-codec.version}</version>
             </dependency>
+            <dependency>
+			    <groupId>commons-io</groupId>
+			    <artifactId>commons-io</artifactId>
+			    <version>${commons-io.version}</version>
+			</dependency>
 
             <!-- Dependency injection -->
             <dependency>
