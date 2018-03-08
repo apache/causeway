@@ -20,7 +20,7 @@ package domainapp.dom.impl;
 
 import java.util.List;
 
-import org.datanucleus.query.typesafe.TypesafeQuery;
+import javax.jdo.JDOQLTypedQuery;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainService;
@@ -30,8 +30,7 @@ import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.services.jdosupport.IsisJdoSupport;
-import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.applib.services.jdosupport.IsisJdoSupport_v3_2;
 import org.apache.isis.applib.services.repository.RepositoryService;
 
 @DomainService(
@@ -52,7 +51,7 @@ public class HelloWorldObjects {
     @Action(semantics = SemanticsOf.SAFE)
     @MemberOrder(sequence = "2")
     public List<HelloWorldObject> findByName(final String name) {
-        TypesafeQuery<HelloWorldObject> q = isisJdoSupport.newTypesafeQuery(HelloWorldObject.class);
+    	JDOQLTypedQuery<HelloWorldObject> q = isisJdoSupport.newTypesafeQuery(HelloWorldObject.class);
         final QHelloWorldObject cand = QHelloWorldObject.candidate();
         q = q.filter(
                 cand.name.indexOf(q.stringParameter("name")).ne(-1)
@@ -71,6 +70,6 @@ public class HelloWorldObjects {
     RepositoryService repositoryService;
 
     @javax.inject.Inject
-    IsisJdoSupport isisJdoSupport;
+    IsisJdoSupport_v3_2 isisJdoSupport;
 
 }

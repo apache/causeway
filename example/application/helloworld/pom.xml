@@ -155,10 +155,41 @@
     </dependencyManagement>
 
     <dependencies>
+
+    	<!-- ISIS API -->
+    	
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-applib</artifactId>
         </dependency>
+        
+        <!-- ISIS CORE PLUGINS -->
+        
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-plugins-discovery-reflections</artifactId>
+            <version>${isis.version}</version>
+        </dependency>
+    
+      	<dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-plugins-jdo-datanucleus-5</artifactId>
+            <version>${isis.version}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-plugins-eventbus-guava</artifactId>
+            <version>${isis.version}</version>
+        </dependency>
+    
+    	<dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-plugins-jaxrs-resteasy-3</artifactId>
+            <version>${isis.version}</version>
+        </dependency>
+        
+        <!-- TESTS -->
 
         <dependency>
             <groupId>org.apache.isis.mavendeps</groupId>
