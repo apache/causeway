@@ -189,7 +189,7 @@ popd
 
 [source,bash]
 ----
-sh upd.sh 1.16.0 2.0.0-M1
+sh upd.sh 1.16.2 1.16.3
 ----
 
 The script downloads the artifacts from the Nexus release repository, adds the artifacts to subversion and deletes the previous version.
