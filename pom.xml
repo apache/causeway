@@ -37,10 +37,6 @@
         <url>https://git-wip-us.apache.org/repos/asf?p=isis.git</url>
       <tag>HEAD</tag>
     </scm>
-  
-    <prerequisites>
-        <maven>3.0.4</maven>
-    </prerequisites>
 
     
     <profiles>
