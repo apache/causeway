@@ -24,7 +24,7 @@
     <parent>
         <groupId>org.incode</groupId>
         <artifactId>incode-build</artifactId>
-        <version>2</version>
+        <version>4</version>
     </parent>
 
     <groupId>org.apache.isis.example.application</groupId>
@@ -41,6 +41,9 @@
         <compiler-plugin.source>1.8</compiler-plugin.source>
         <compiler-plugin.target>1.8</compiler-plugin.target>
         <compiler-plugin.compilerArgument>-parameters</compiler-plugin.compilerArgument>
+
+        <!-- override incode-build -->
+        <datanucleus-core.version>5.1.6</datanucleus-core.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
