@@ -59,7 +59,14 @@
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>isis-core-viewer-restfulobjects-rendering</artifactId>
 		</dependency>
-		
+
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-core-viewer-restfulobjects-applib</artifactId>
+			<type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
+
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>isis-core-viewer-restfulobjects-server</artifactId>

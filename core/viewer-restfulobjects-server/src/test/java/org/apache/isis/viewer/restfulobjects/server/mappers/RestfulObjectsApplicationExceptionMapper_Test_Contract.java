@@ -37,7 +37,10 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
-public class RestfulObjectsApplicationExceptionMapperTest {
+/**
+ * contract test.
+ */
+public abstract class RestfulObjectsApplicationExceptionMapper_Test_Contract {
 
     private ExceptionMapperForRestfulObjectsApplication exceptionMapper;
 

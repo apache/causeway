@@ -32,13 +32,11 @@ import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 import org.junit.Test;
 
-import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
-
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-public class ParserTest {
+public class Parser_Test {
 
     @Test
     public void forBoolean() {
@@ -158,47 +156,6 @@ public class ParserTest {
             final Integer valueOf = parser.valueOf(asString);
             assertThat(v, is(equalTo(valueOf)));
         }
-    }
-
-    @Test
-    public void forJaxRsMediaType() {
-        final Parser<javax.ws.rs.core.MediaType> parser = Parser.forJaxRsMediaType();
-
-        for (final javax.ws.rs.core.MediaType v : new javax.ws.rs.core.MediaType[] { 
-        		javax.ws.rs.core.MediaType.APPLICATION_ATOM_XML_TYPE, 
-        		javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE, 
-        		javax.ws.rs.core.MediaType.APPLICATION_XHTML_XML_TYPE, 
-        		MediaTypes.parse(RestfulMediaType.APPLICATION_JSON_OBJECT) 
-        		}) {
-            final String asString = parser.asString(v);
-            final javax.ws.rs.core.MediaType valueOf = parser.valueOf(asString);
-            assertThat(v, is(equalTo(valueOf)));
-        }
-    }
-
-    @Test
-    public void forCacheControl() {
-        final Parser<CacheControl> parser = Parser.forCacheControl();
-
-        final CacheControl cc1 = createCacheControl();
-        cc1.setMaxAge(2000);
-        final CacheControl cc2 = createCacheControl();
-        cc2.setNoCache(true);
-        for (final CacheControl v : new CacheControl[] { cc1, cc2 }) {
-            final String asString = parser.asString(v);
-            final CacheControl valueOf = parser.valueOf(asString);
-            assertThat(v.getMaxAge(), is(equalTo(valueOf.getMaxAge())));
-            assertThat(v.isNoCache(), is(equalTo(valueOf.isNoCache())));
-        }
-    }
-
-    private static CacheControl createCacheControl() {
-        final CacheControl cacheControl = new CacheControl();
-        cacheControl.getCacheExtension(); // workaround for bug in
-                                          // CacheControl's equals() method
-        cacheControl.getNoCacheFields(); // workaround for bug in CacheControl's
-                                         // equals() method
-        return cacheControl;
     }
 
     private static <T> Matcher<List<T>> sameContentsAs(final List<T> expected) {

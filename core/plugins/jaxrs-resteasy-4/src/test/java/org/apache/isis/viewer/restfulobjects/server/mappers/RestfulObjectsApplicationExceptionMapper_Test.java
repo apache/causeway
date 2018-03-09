@@ -16,26 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.restfulobjects.applib;
+package org.apache.isis.viewer.restfulobjects.server.mappers;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.assertThat;
-
-import org.junit.Test;
-
-
-public class RepresentationTypeTest_getMediaType {
-
-    @Test
-    public void whenHasProfile() {
-        assertThat(RepresentationType.GENERIC.getMediaTypeProfile(), is(nullValue()));
-    }
-
-    @Test
-    public void whenHasNoProfile() {
-        assertThat(RepresentationType.GENERIC.getMediaTypeProfile(), is(nullValue()));
-    }
-
+public class RestfulObjectsApplicationExceptionMapper_Test extends
+        RestfulObjectsApplicationExceptionMapper_Test_Contract {
 
 }

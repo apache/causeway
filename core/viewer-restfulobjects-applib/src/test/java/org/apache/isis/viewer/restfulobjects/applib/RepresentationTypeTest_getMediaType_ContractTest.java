@@ -18,20 +18,26 @@
  */
 package org.apache.isis.viewer.restfulobjects.applib;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
 import org.junit.Test;
 
-public class RepresentationTypeTest_getName {
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.junit.Assert.assertThat;
+
+/**
+ * contract test.
+ */
+public abstract class RepresentationTypeTest_getMediaType_ContractTest {
 
     @Test
-    public void selectedValues() {
-        assertThat(RepresentationType.VERSION.getName(), is("version"));
-        assertThat(RepresentationType.HOME_PAGE.getName(), is("homePage"));
-        assertThat(RepresentationType.ACTION_PARAMETER_DESCRIPTION.getName(), is("actionParameterDescription"));
+    public void whenHasProfile() {
+        assertThat(RepresentationType.GENERIC.getMediaTypeProfile(), is(nullValue()));
     }
 
+    @Test
+    public void whenHasNoProfile() {
+        assertThat(RepresentationType.GENERIC.getMediaTypeProfile(), is(nullValue()));
+    }
 
 
 }

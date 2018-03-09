@@ -18,16 +18,19 @@
  */
 package org.apache.isis.viewer.restfulobjects.applib;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertThat;
-
 import javax.ws.rs.core.MediaType;
 
 import org.junit.Test;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertThat;
 
-public class RepresentationTypeTest_lookup {
+
+/**
+ * contract test.
+ */
+public abstract class RepresentationTypeTest_lookup_ContractTest {
 
     @Test
     public void roundtrip() {
