@@ -51,7 +51,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplication
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-public class ResourceContextTest_ensureCompatibleAcceptHeader {
+public abstract class ResourceContext_ensureCompatibleAcceptHeader_ContractTest {
 
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
