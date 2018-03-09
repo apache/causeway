@@ -29,14 +29,14 @@
 
     <groupId>org.apache.isis.example.application</groupId>
     <artifactId>helloworld</artifactId>
-    <version>2.0.0-M1-SNAPSHOT</version>
+    <version>${revision}</version>
 
     <name>HelloWorld</name>
 
     <packaging>war</packaging>
 
     <properties>
-        <isis.version>2.0.0-M1-SNAPSHOT</isis.version>
+        <revision>2.0.0-M1-SNAPSHOT</revision>
 
         <compiler-plugin.source>1.8</compiler-plugin.source>
         <compiler-plugin.target>1.8</compiler-plugin.target>
@@ -150,7 +150,7 @@
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis</artifactId>
-                <version>${isis.version}</version>
+                <version>${revision}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -171,25 +171,25 @@
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-plugins-discovery-reflections</artifactId>
-            <version>${isis.version}</version>
+            <version>${revision}</version>
         </dependency>
     
       	<dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-plugins-jdo-datanucleus-5</artifactId>
-            <version>${isis.version}</version>
+            <version>${revision}</version>
         </dependency>
         
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-plugins-eventbus-guava</artifactId>
-            <version>${isis.version}</version>
+            <version>${revision}</version>
         </dependency>
     
     	<dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-plugins-jaxrs-resteasy-3</artifactId>
-            <version>${isis.version}</version>
+            <version>${revision}</version>
         </dependency>
         
         <!-- TESTS -->

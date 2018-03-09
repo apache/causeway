@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.apache.isis.example.application</groupId>
         <artifactId>simpleapp</artifactId>
-        <version>2.0.0-M1-SNAPSHOT</version>
+        <version>${revision}</version>
     </parent>
 
     <artifactId>simpleapp-module-simple</artifactId>
@@ -109,7 +109,7 @@
             <plugin>
                 <groupId>org.apache.isis.tool</groupId>
                 <artifactId>isis-maven-plugin</artifactId>
-                <version>${isis.version}</version>
+                <version>${revision}</version>
                 <executions>
                     <execution>
                         <phase>test</phase>
@@ -151,25 +151,25 @@
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-plugins-discovery-reflections</artifactId>
-            <version>${isis.version}</version>
+            <version>${revision}</version>
         </dependency>
     
       	<dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-plugins-jdo-datanucleus-5</artifactId>
-            <version>${isis.version}</version>
+            <version>${revision}</version>
         </dependency>
         
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-plugins-eventbus-guava</artifactId>
-            <version>${isis.version}</version>
+            <version>${revision}</version>
         </dependency>
     
     	<dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-plugins-jaxrs-resteasy-3</artifactId>
-            <version>${isis.version}</version>
+            <version>${revision}</version>
         </dependency>
 
         <!-- TESTS -->

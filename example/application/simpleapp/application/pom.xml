@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.apache.isis.example.application</groupId>
         <artifactId>simpleapp</artifactId>
-        <version>2.0.0-M1-SNAPSHOT</version>
+        <version>${revision}</version>
     </parent>
 
     <artifactId>simpleapp-application</artifactId>
@@ -33,6 +33,9 @@
 
     <packaging>jar</packaging>
 
+    <properties>
+        <revision>2.0.0-M1-SNAPSHOT</revision>
+    </properties>
     <build>
         <resources>
             <resource>

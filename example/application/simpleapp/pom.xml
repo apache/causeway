@@ -29,14 +29,15 @@
 
     <groupId>org.apache.isis.example.application</groupId>
     <artifactId>simpleapp</artifactId>
-    <version>2.0.0-M1-SNAPSHOT</version>
+    <version>${revision}</version>
 
     <name>SimpleApp Parent</name>
 
     <packaging>pom</packaging>
 
     <properties>
-        <isis.version>2.0.0-M1-SNAPSHOT</isis.version>
+        <revision>2.0.0-M1-SNAPSHOT</revision>
+
         <lombok.version>1.16.20</lombok.version>
 
         <compiler-plugin.source>1.8</compiler-plugin.source>
@@ -132,7 +133,7 @@
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis</artifactId>
-                <version>${isis.version}</version>
+                <version>${revision}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

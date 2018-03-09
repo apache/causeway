@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.apache.isis.example.application</groupId>
         <artifactId>simpleapp</artifactId>
-        <version>2.0.0-M1-SNAPSHOT</version>
+        <version>${revision}</version>
     </parent>
 
     <artifactId>simpleapp-webapp</artifactId>
@@ -105,7 +105,7 @@
             <plugin>
                 <groupId>org.apache.isis.tool</groupId>
                 <artifactId>isis-maven-plugin</artifactId>
-                <version>${isis.version}</version>
+                <version>${revision}</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
