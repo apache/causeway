@@ -22,7 +22,7 @@ import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class HelloWorldObjectTest_updateName {
+public class HelloWorldObject_updateName_Test {
 
     @Test
     public void happy_case() throws Exception {
