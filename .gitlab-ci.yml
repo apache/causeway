@@ -4,7 +4,8 @@ stages:
 maven-build:
   image: maven:3-jdk-8
   stage: build
-  script: "mvn clean install -B -Dskip.arch -D revision=2.0.0-M1.$(date +%Y%m%d)-$(git rev-parse --short HEAD) && \
-          cd example/application/simpleapp && \
-          mvn install -B Dmavenmixin-docker -D revision=2.0.0-M1.$(date +%Y%m%d)-$(git rev-parse --short HEAD) "
+  script:
+    - mvn -Drevision=2.0.0-M1.$(date +%Y%m%d)-$(git rev-parse --short HEAD) -Dskip.arch -Dskip.app -B clean install
+    - cd example/application/simpleapp
+    - mvn -Drevision=2.0.0-M1.$(date +%Y%m%d)-$(git rev-parse --short HEAD) -Dmavenmixin-docker    -B install
 
