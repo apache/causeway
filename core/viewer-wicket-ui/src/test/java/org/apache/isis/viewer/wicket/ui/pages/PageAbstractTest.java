@@ -31,12 +31,12 @@ public abstract class PageAbstractTest {
 
         @Test
         public void withSpacesAndCapitals() throws Exception {
-            assertThat(CssClassAppender.asCssStyle("Simple App"), is("simple-app"));
+            assertThat(CssClassAppender.asCssStyle("Simple App"), is("Simple-App"));
         }
 
         @Test
         public void withOtherCharacters() throws Exception {
-            assertThat(CssClassAppender.asCssStyle("Kitchen Sink (Demo) App"), is("kitchen-sink-demo-app"));
+            assertThat(CssClassAppender.asCssStyle("Kitchen Sink (Demo) App"), is("Kitchen-Sink-Demo-App"));
         }
 
     }
