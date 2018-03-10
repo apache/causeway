@@ -131,6 +131,14 @@
     <dependencyManagement>
         <dependencies>
 
+            <dependency>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis</artifactId>
+                <version>${revision}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
             <!-- this project's own modules -->
             <dependency>
                 <groupId>org.apache.isis.example.application</groupId>
@@ -175,22 +183,18 @@
 
     <profiles>
         <profile>
-            <id>isis</id>
+            <!--
+            specifying -Drevision means that scope=pom dependencies are not resolved.
+            This is a workaround for that issue
+            -->
+            <id>revision</id>
             <activation>
                 <property>
-                    <name>!skip.isis</name>
+                    <name>revision</name>
                 </property>
             </activation>
             <dependencyManagement>
                 <dependencies>
-
-                    <dependency>
-                        <groupId>org.apache.isis.core</groupId>
-                        <artifactId>isis</artifactId>
-                        <version>${revision}</version>
-                        <type>pom</type>
-                        <scope>import</scope>
-                    </dependency>
 
                     <dependency>
                         <groupId>org.apache.isis.core</groupId>

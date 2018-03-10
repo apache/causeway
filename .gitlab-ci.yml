@@ -7,5 +7,5 @@ maven-build:
   script:
     - mvn -Drevision=2.0.0-M1.$(date +%Y%m%d)-$(git rev-parse --short HEAD) -Dskip.arch -Dskip.app -B clean install
     - cd example/application/simpleapp
-    - mvn -Drevision=2.0.0-M1.$(date +%Y%m%d)-$(git rev-parse --short HEAD) -Dmavenmixin-docker    -B install
+    - mvn -Drevision=2.0.0-M1.$(date +%Y%m%d)-$(git rev-parse --short HEAD) -Dmavenmixin-docker -Ddocker-plugin.imageName=isis/simpleapp -B install
 
