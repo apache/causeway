@@ -18,6 +18,9 @@
  */
 package org.apache.isis.applib.services.i18n;
 
+import java.util.Objects;
+import java.util.function.Predicate;
+
 import org.apache.isis.applib.annotation.Programmatic;
 
 public interface TranslationService {
@@ -55,14 +58,35 @@ public interface TranslationService {
 
 
     public enum Mode {
-        READ,
-        WRITE;
+    	DISABLED(configValue->configValue != null &&
+                ("disable".equalsIgnoreCase(configValue) ||
+                        "disabled".equalsIgnoreCase(configValue))),
+        READ(configValue->configValue != null &&
+                ("read".equalsIgnoreCase(configValue) ||
+                		"reader".equalsIgnoreCase(configValue))),
+        // default
+        WRITE(configValue->!READ.matches(configValue) && !DISABLED.matches(configValue));
 
-        public boolean isRead() {
+    	// -- handle values from configuration
+    	
+    	private final Predicate<String> matchesConfigValue;
+        private Mode(Predicate<String> matchesConfigValue) {
+			this.matchesConfigValue = Objects.requireNonNull(matchesConfigValue);
+		}
+        public boolean matches(String configValue) {
+        	return matchesConfigValue.test(configValue);
+        }
+        
+        // -- for convenience
+        
+		public boolean isRead() {
             return this == READ;
         }
         public boolean isWrite() {
             return this == WRITE;
+        }
+        public boolean isDisabled() {
+            return this == DISABLED;
         }
     }
 

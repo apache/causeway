@@ -61,18 +61,23 @@ public class TranslationServicePo implements TranslationService {
     @PostConstruct
     public void init(final Map<String,String> config) {
 
+    	final String translationMode = config.get(KEY_PO_MODE);
+    	
+        final boolean translationDisabled = TranslationService.Mode.DISABLED.matches(translationMode);
+        if(translationDisabled) {
+            // switch to disabled mode
+        	po = new PoDisabled(this);
+        	return;
+        }
+    	
         if(getLocaleProvider() == null || getTranslationsResolver() == null) {
             // remain in write mode
             return;
         }
 
         final boolean prototypeOrTest = isPrototypeOrTest();
-
-        final String translationMode = config.get(KEY_PO_MODE);
-        final boolean forceRead =
-                translationMode != null &&
-                        ("read".equalsIgnoreCase(translationMode) ||
-                         "reader".equalsIgnoreCase(translationMode));
+        
+        final boolean forceRead = TranslationService.Mode.READ.matches(translationMode);
 
         if(prototypeOrTest && !forceRead) {
             // remain in write mode
