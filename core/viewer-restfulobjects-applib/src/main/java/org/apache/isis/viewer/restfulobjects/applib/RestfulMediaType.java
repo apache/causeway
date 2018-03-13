@@ -86,4 +86,6 @@ public final class RestfulMediaType {
     public final static String APPLICATION_XML_ERROR = XML_BASE + "error";
 //    public final static String APPLICATION_XML_TYPE_ACTION_RESULT = XML_BASE + "type-action-result";
 
+    public final static String IMAGE_PNG = "image/png";
+
 }

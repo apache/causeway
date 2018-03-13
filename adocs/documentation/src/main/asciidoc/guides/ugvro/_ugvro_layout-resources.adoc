@@ -110,6 +110,30 @@ This can also be obtained in JSON format in the usual way (by specifying an HTTP
 
 
 
+[[_ugvro_layout-resources_domain-object-icon]]
+== Domain Object Icon
+
+The representation returned by the domain object resource (section 14.4 of the RO spec v1.0) has been extended to provide a link to the icon image (`.png`) to use:
+
+[source,javascript]
+----
+{
+  "links": [
+    ...
+    {
+      "rel": "urn:org.apache.isis.restfulobjects:rels/object-layout",
+      "href": "http://localhost:8080/restful/objects/helloworld.HelloWorldObject/0/object-icon",
+      "method": "GET",
+      "type": "image/png",
+    },
+  ],
+  ...
+}
+----
+
+Note that because of dynamic icons (the xref:../../guides/rgcms/rgcms.adoc#_rgcms_methods_reserved_iconName[`iconName()`] supporting method) the image returned can vary on an instance-by-instance basis.
+
+
 [[_ugvro_layout-resources_domain-object-layout]]
 == Domain Object Layout
 
@@ -129,8 +153,7 @@ The representation returned by the domain object resource (section 14.4 of the R
       "rel": "urn:org.apache.isis.restfulobjects:rels/object-layout",
       "href": "http://localhost:8080/restful/objects/helloworld.HelloWorldObject/0/object-layout",
       "method": "GET",
-      "type": "application/json;profile='urn:org.restfulobjects:repr-types/object'",
-      "title": "Object: a"
+      "type": "application/json;profile='urn:org.restfulobjects:repr-types/object-layout-bs3'",
     },
   ],
   ...

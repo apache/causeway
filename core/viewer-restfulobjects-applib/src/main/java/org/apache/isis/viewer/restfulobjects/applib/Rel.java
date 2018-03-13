@@ -60,6 +60,7 @@ public enum Rel {
     // implementation specific
     CONTRIBUTED_BY(RelDefinition.IMPL, "contributed-by"),
     OBJECT_LAYOUT(RelDefinition.IMPL, "object-layout"),
+    OBJECT_ICON(RelDefinition.IMPL, "object-icon"),
     LAYOUT(RelDefinition.IMPL, "layout"),
     MENUBARS(RelDefinition.IMPL, "menuBars"),
     LOGOUT(RelDefinition.IMPL, "logout");

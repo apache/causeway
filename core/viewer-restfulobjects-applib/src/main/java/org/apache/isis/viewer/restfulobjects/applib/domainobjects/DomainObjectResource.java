@@ -83,6 +83,23 @@ public interface DomainObjectResource {
 
 
     // //////////////////////////////////////////////////////////
+    // domain object image
+    // //////////////////////////////////////////////////////////
+
+    @GET
+    @Path("/{domainType}/{instanceId}/image")
+    @Consumes({ MediaType.WILDCARD })
+    @Produces({
+            "image/png"
+    })
+    public Response image(
+            @PathParam("domainType")
+            final String domainType,
+            @PathParam("instanceId")
+            final String instanceId);
+
+
+    // //////////////////////////////////////////////////////////
     // domain object layout
     // //////////////////////////////////////////////////////////
 
