@@ -29,14 +29,14 @@
 
     <groupId>org.apache.isis.example.application</groupId>
     <artifactId>helloworld</artifactId>
-    <version>1.16.2-SNAPSHOT</version>
+    <version>1.16.3-SNAPSHOT</version>
 
     <name>HelloWorld</name>
 
     <packaging>war</packaging>
 
     <properties>
-        <isis.version>1.16.2</isis.version>
+        <isis.version>1.16.3-SNAPSHOT</isis.version>
 
         <compiler-plugin.source>1.8</compiler-plugin.source>
         <compiler-plugin.target>1.8</compiler-plugin.target>
