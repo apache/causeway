@@ -849,6 +849,15 @@
                                 <Implementation-Vendor-Id>org.apache.isis</Implementation-Vendor-Id>
                                 <Implementation-Vendor>Apache Isis™ Project</Implementation-Vendor>
                                 <SCM-Revision>${git.commit.id.abbrev}</SCM-Revision>
+								<!-- required for DN plugin.xml loading -->
+                                <Bundle-SymbolicName>${jar-plugin.automaticModuleName}</Bundle-SymbolicName>
+								<!--
+								no requirement as of yet.
+                                <Bundle-ManifestVersion>2</Bundle-ManifestVersion>
+                                <Bundle-Name>${jar-plugin.automaticModuleName}</Bundle-Name>
+                                <Bundle-Version>${revision}</Bundle-Version>
+                                <Bundle-Vendor>Apache Isis™ Project</Bundle-Vendor>
+								-->
                             </manifestEntries>
                         </archive>
                     </configuration>
