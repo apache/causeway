@@ -18,6 +18,7 @@
  */
 package org.apache.isis.core.runtime.system.persistence;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -124,13 +125,18 @@ public class DataNucleusApplicationComponents5 implements ApplicationScopedCompo
     		persistenceManagerFactory = null;
     	}
     }
-
+    
+    private static PersistenceManagerFactory newPersistenceManagerFactory(Map<String, String> datanucleusProps) {
+    	return JDOHelper.getPersistenceManagerFactory(datanucleusProps, IsisContext.getClassLoader());
+    }
+    
     private static boolean isSchemaAwareStoreManager(Map<String,String> datanucleusProps) {
 
         // we create a throw-away instance of PMF so that we can probe whether DN has
         // been configured with a schema-aware store manager or not.
-        final JDOPersistenceManagerFactory probePmf =
-                (JDOPersistenceManagerFactory)JDOHelper.getPersistenceManagerFactory(datanucleusProps);
+        final JDOPersistenceManagerFactory probePmf = 
+        		(JDOPersistenceManagerFactory) newPersistenceManagerFactory(datanucleusProps);
+                
         try {
             final PersistenceNucleusContext nucleusContext = probePmf.getNucleusContext();
             final StoreManager storeManager = nucleusContext.getStoreManager();
@@ -164,12 +170,11 @@ public class DataNucleusApplicationComponents5 implements ApplicationScopedCompo
                 datanucleusProps.put(PropertyNames.PROPERTY_SCHEMA_AUTOCREATE_COLUMNS, "true");
                 datanucleusProps.put(PropertyNames.PROPERTY_SCHEMA_AUTOCREATE_CONSTRAINTS, "true");
                 
-                persistenceManagerFactory = JDOHelper
-                		.getPersistenceManagerFactory(datanucleusProps,	IsisContext.getClassLoader() );
+                persistenceManagerFactory = newPersistenceManagerFactory(datanucleusProps);
                 createSchema(persistenceManagerFactory, persistableClassNameSet, datanucleusProps);
 
             } else {
-                persistenceManagerFactory = JDOHelper.getPersistenceManagerFactory(datanucleusProps);
+                persistenceManagerFactory = newPersistenceManagerFactory(datanucleusProps);
             }
 
         } else {
@@ -178,7 +183,7 @@ public class DataNucleusApplicationComponents5 implements ApplicationScopedCompo
             // otherwise NPEs occur later.
 
             configureAutoStart(persistableClassNameSet, datanucleusProps);
-            persistenceManagerFactory = JDOHelper.getPersistenceManagerFactory(this.datanucleusProps);
+            persistenceManagerFactory = newPersistenceManagerFactory(this.datanucleusProps);
         }
 
         return persistenceManagerFactory;
