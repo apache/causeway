@@ -867,6 +867,7 @@
                                 <Automatic-Module-Name>${jar-plugin.automaticModuleName}</Automatic-Module-Name>
                                 <Implementation-Vendor-Id>org.apache.isis</Implementation-Vendor-Id>
                                 <Implementation-Vendor>Apache Isis™ Project</Implementation-Vendor>
+                                <Bundle-SymbolicName>${jar-plugin.automaticModuleName}</Bundle-SymbolicName>
                                 <SCM-Revision>${git.commit.id.abbrev}</SCM-Revision>
                             </manifestEntries>
                         </archive>
