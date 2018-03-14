@@ -31,9 +31,14 @@ import org.apache.isis.applib.annotation.Programmatic;
 
 
 /**
- * Service that provide a number of workarounds when using JDO/DataNucleus. 
+ * Service that provides a number of workarounds when using JDO/DataNucleus.<br/><br/> 
+ * 
+ * 1.x to 2.x Migration Notes: JDO API version specific query methods have been removed.<br/>
+ * Instead you may want to use IsisJdoSupport_v3_1 or IsisJdoSupport_v3_2 as provided by Isis' 
+ * core plugins for JDO.  
+ * 
  */
-public interface IsisJdoSupport0 {
+public interface IsisJdoSupport {
 
     /**
      * Force a reload (corresponding to the JDO <tt>PersistenceManager</tt>'s <tt>refresh()</tt> method)
@@ -83,53 +88,5 @@ public interface IsisJdoSupport0 {
     @Programmatic
     void deleteAll(Class<?>... pcClasses);
 
-    /**
-     * To perform the most common use-case of executing a (type-safe) query against the specified class,
-     * filtering using the provided {@link BooleanExpression}, then automatically cloning the returned list
-     * and closing the query.
-     *
-     * <p>
-     *     Typical usage:
-     *     <pre>
-     *          final QToDoItem q = QToDoItem.candidate();
-     *          return executeQuery(ToDoItem.class,
-     *                              q.atPath.eq(atPath).and(
-     *                              q.description.indexOf(description).gt(0))
-     *                              );
-     *     </pre>
-     * </p>
-     */
-//    @Programmatic
-//    <T> List<T> executeQuery(final Class<T> cls, final BooleanExpression booleanExpression);
 
-    /**
-     * To perform a common use-case of executing a (type-safe) query against the specified class,
-     * filtering a unique match using the provided {@link BooleanExpression}, then returning
-     * the result and closing the query.
-     *
-     * <p>
-     *     Typical usage:
-     *     <pre>
-     *          final QToDoItem q = QToDoItem.candidate();
-     *          return executeQueryUnique(ToDoItem.class,
-     *                              q.atPath.eq(atPath).and(
-     *                              q.description.eq(description))
-     *                              );
-     *     </pre>
-     * </p>
-     */
-//    @Programmatic
-//    <T> T executeQueryUnique(final Class<T> cls, final BooleanExpression booleanExpression);
-
-    /**
-     * To support the execution of type-safe queries using DataNucleus' lower-level APIs
-     * (eg for group by and so on).
-     *
-     * <p>
-     *     Responsibility for cloning any result sets and closing the query is the responsibility
-     *     of the caller.
-     * </p>
-     */
-//    @Programmatic
-//    <T> JDOQLTypedQuery<T> newTypesafeQuery(Class<T> cls);
 }

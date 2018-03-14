@@ -27,7 +27,7 @@ import javax.jdo.metadata.InheritanceMetadata;
 import javax.jdo.metadata.TypeMetadata;
 
 import org.apache.isis.applib.internal.base._Strings;
-import org.apache.isis.applib.services.jdosupport.IsisJdoSupport0;
+import org.apache.isis.applib.services.jdosupport.IsisJdoSupport;
 
 public abstract class TeardownFixtureAbstract2 extends TeardownFixtureAbstract {
 
@@ -147,5 +147,5 @@ public abstract class TeardownFixtureAbstract2 extends TeardownFixtureAbstract {
     }
 
     @Inject
-    protected IsisJdoSupport0 isisJdoSupport;
+    protected IsisJdoSupport isisJdoSupport;
 }

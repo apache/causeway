@@ -29,7 +29,7 @@ import org.apache.isis.applib.annotation.Programmatic;
 /**
  * Service that provide a number of workarounds when using JDO/DataNucleus. 
  */
-public interface IsisJdoSupport_v3_2 extends org.apache.isis.applib.services.jdosupport.IsisJdoSupport0 
+public interface IsisJdoSupport_v3_2 extends org.apache.isis.applib.services.jdosupport.IsisJdoSupport 
 {
 
     /**

@@ -23,7 +23,7 @@ import javax.jdo.metadata.TypeMetadata;
 
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.applib.internal.base._Strings;
-import org.apache.isis.applib.services.jdosupport.IsisJdoSupport0;
+import org.apache.isis.applib.services.jdosupport.IsisJdoSupport;
 
 public abstract class TeardownFixtureAbstract extends FixtureScript {
 
@@ -62,6 +62,6 @@ public abstract class TeardownFixtureAbstract extends FixtureScript {
     protected void postDeleteFrom(final Class<?> cls) {}
 
     @Inject
-    private IsisJdoSupport0 isisJdoSupport;
+    private IsisJdoSupport isisJdoSupport;
 
 }

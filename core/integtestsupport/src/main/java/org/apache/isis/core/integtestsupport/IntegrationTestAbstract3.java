@@ -25,7 +25,7 @@ import org.apache.isis.applib.Module;
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.internal.exceptions._Exceptions;
-import org.apache.isis.applib.services.jdosupport.IsisJdoSupport0;
+import org.apache.isis.applib.services.jdosupport.IsisJdoSupport;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.runtime.headless.HeadlessWithBootstrappingAbstract;
 import org.apache.isis.core.runtime.headless.IsisSystem;
@@ -84,7 +84,7 @@ public abstract class IntegrationTestAbstract3 extends HeadlessWithBootstrapping
                             try {
                                 final IsisSystem isft = IsisSystem.get();
                                 isft.getService(TransactionService.class).flushTransaction(); // don't care if npe
-                                isft.getService(IsisJdoSupport0.class).getJdoPersistenceManager().flush();
+                                isft.getService(IsisJdoSupport.class).getJdoPersistenceManager().flush();
                             } catch (Exception ignore) {
                                 // ignore
                             }

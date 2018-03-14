@@ -30,7 +30,7 @@ import org.apache.isis.applib.Module;
 import org.apache.isis.applib.fixtures.TickingFixtureClock;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.applib.fixturescripts.FixtureScripts;
-import org.apache.isis.applib.services.jdosupport.IsisJdoSupport0;
+import org.apache.isis.applib.services.jdosupport.IsisJdoSupport;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.core.runtime.headless.logging.LogConfig;
@@ -181,8 +181,7 @@ public class IsisSystemBootstrapper {
     private static void teardownSystem() {
         final IsisSessionFactory isisSessionFactory = lookupService(IsisSessionFactory.class);
 
-        // TODO: this ought to be part of isisSessionFactory's responsibilities
-        final IsisJdoSupport0 isisJdoSupport = lookupService(IsisJdoSupport0.class);
+        final IsisJdoSupport isisJdoSupport = lookupService(IsisJdoSupport.class);
         final PersistenceManagerFactory pmf =
                 isisJdoSupport.getJdoPersistenceManager().getPersistenceManagerFactory();
         isisSessionFactory.destroyServicesAndShutdown();

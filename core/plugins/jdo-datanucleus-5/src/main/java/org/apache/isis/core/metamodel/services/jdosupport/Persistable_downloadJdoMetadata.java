@@ -32,7 +32,7 @@ import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.services.jdosupport.IsisJdoSupport0;
+import org.apache.isis.applib.services.jdosupport.IsisJdoSupport;
 import org.apache.isis.applib.value.Clob;
 import org.datanucleus.enhancement.Persistable;
 
@@ -80,6 +80,6 @@ public class Persistable_downloadJdoMetadata {
     }
 
     @javax.inject.Inject
-    IsisJdoSupport0 jdoSupport;
+    IsisJdoSupport jdoSupport;
 
 }

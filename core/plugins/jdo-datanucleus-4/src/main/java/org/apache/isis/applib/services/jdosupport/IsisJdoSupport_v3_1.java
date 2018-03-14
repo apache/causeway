@@ -29,7 +29,7 @@ import org.datanucleus.query.typesafe.TypesafeQuery;
 /**
  * Service that provide a number of workarounds when using JDO/DataNucleus. 
  */
-public interface IsisJdoSupport_v3_1 extends org.apache.isis.applib.services.jdosupport.IsisJdoSupport0 {
+public interface IsisJdoSupport_v3_1 extends org.apache.isis.applib.services.jdosupport.IsisJdoSupport {
 
 	/**
 	 * To perform the most common use-case of executing a (type-safe) query against the specified class,
