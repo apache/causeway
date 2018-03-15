@@ -24,25 +24,22 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.Map;
 
-import com.google.common.collect.Maps;
-
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
+import org.apache.isis.applib.internal.collections._Maps;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.parseable.InvalidEntryException;
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
-
-import org.apache.isis.core.metamodel.facets.value.timestamp.TimeStampValueSemanticsProviderAbstract;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public class JavaSqlTimeStampValueSemanticsProvider 
-extends TimeStampValueSemanticsProviderAbstract<java.sql.Timestamp> {
+extends EpochMillisValueSemanticsProviderAbstract<java.sql.Timestamp> {
 
     public static final boolean isAPropertyDefaultFacet() {
         return PropertyDefaultFacet.class.isAssignableFrom(JavaSqlTimeStampValueSemanticsProvider.class);
     }
 
-    private static Map<String, DateFormat> formats = Maps.newHashMap();
+    private static Map<String, DateFormat> formats = _Maps.newHashMap();
 
     static {
         initFormats(formats);
@@ -66,7 +63,7 @@ extends TimeStampValueSemanticsProviderAbstract<java.sql.Timestamp> {
 
     @Override
     protected Date dateValue(final Object value) {
-        return new Date(((Timestamp) value).getTime());
+        return ((EpochMillis) value).toJavaUtilDate();
     }
 
     @Override

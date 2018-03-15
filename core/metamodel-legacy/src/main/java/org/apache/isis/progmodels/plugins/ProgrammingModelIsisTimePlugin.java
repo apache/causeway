@@ -4,7 +4,6 @@ import org.apache.isis.core.metamodel.facets.value.date.DateValueFacetUsingSeman
 import org.apache.isis.core.metamodel.facets.value.datetime.DateTimeValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.time.TimeValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.timestamp.TimeStampValueFacetUsingSemanticsProviderFactory;
-import org.apache.isis.core.metamodel.facets.value.timestampsql.JavaSqlTimeStampValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelPlugin;
 
 public class ProgrammingModelIsisTimePlugin implements ProgrammingModelPlugin {
@@ -17,8 +16,6 @@ public class ProgrammingModelIsisTimePlugin implements ProgrammingModelPlugin {
         
 		collector.addFactory(new TimeStampValueFacetUsingSemanticsProviderFactory(), FacetFactoryCategory.VALUE);
 		collector.addFactory(new TimeValueFacetUsingSemanticsProviderFactory(), FacetFactoryCategory.VALUE);
-		
-		collector.addFactory(new JavaSqlTimeStampValueFacetUsingSemanticsProviderFactory(), FacetFactoryCategory.VALUE);
 
 	}
 

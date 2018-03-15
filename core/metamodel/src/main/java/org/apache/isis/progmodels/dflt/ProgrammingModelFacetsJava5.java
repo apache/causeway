@@ -160,6 +160,7 @@ import org.apache.isis.core.metamodel.facets.value.shortint.ShortPrimitiveValueF
 import org.apache.isis.core.metamodel.facets.value.shortint.ShortWrapperValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.string.StringValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.timesql.JavaSqlTimeValueFacetUsingSemanticsProviderFactory;
+import org.apache.isis.core.metamodel.facets.value.timestampsql.JavaSqlTimeStampValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.url.URLValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.uuid.UUIDValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.postprocessors.param.ActionCollectionParameterDefaultsAndChoicesPostProcessor;
@@ -372,6 +373,7 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(new BigDecimalValueFacetUsingSemanticsProviderFactory());
         addFactory(new JavaSqlDateValueFacetUsingSemanticsProviderFactory());
         addFactory(new JavaSqlTimeValueFacetUsingSemanticsProviderFactory());
+        addFactory(new JavaSqlTimeStampValueFacetUsingSemanticsProviderFactory());
         addFactory(new JavaUtilDateValueFacetUsingSemanticsProviderFactory());
         addFactory(new StringValueFacetUsingSemanticsProviderFactory());
         addFactory(new URLValueFacetUsingSemanticsProviderFactory());
