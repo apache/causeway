@@ -23,6 +23,7 @@ build-package:
     - >
       mvn $MAVEN_CLI_OPTS \
           clean install \
+          $CORE_ADDITIONAL_OPTS \
           -Drevision=$REVISION
     - cd ..
     - cd example/application/simpleapp
