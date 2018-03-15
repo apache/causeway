@@ -19,20 +19,20 @@ build-package:
   stage: build-package
   script:
     - echo "REVISION=$REVISION"
+    - cd core
     - >
-      cd core && \
       mvn $MAVEN_CLI_OPTS \
           clean install \
-          -Drevision=$REVISION && \
-      cd ..
+          -Drevision=$REVISION
+    - cd ..
+    - cd example/application/simpleapp
     - >
-      cd example/application/simpleapp && \
       mvn $MAVEN_CLI_OPTS \
           install \
           -Drevision=$REVISION \
           -Disis.version=$REVISION \
           -Dmavenmixin-docker \
-          -Ddocker-plugin.imageName=isis/simpleapp && \
-      cd ../../..
+          -Ddocker-plugin.imageName=isis/simpleapp
+    - cd ../../..
 
 
