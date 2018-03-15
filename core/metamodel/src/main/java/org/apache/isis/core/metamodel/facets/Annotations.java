@@ -383,6 +383,7 @@ public final class Annotations  {
      * In this hierarchy traversal, implemented interfaces are not processed.      
      * @param cls
      * @param annotationClass
+     * @param filter
      * @return list of {@link Evaluator} that wraps each annotated member found on the class where 
      * the search stopped, or an empty list if no such {@code annotationClass} annotation found.
      * 
@@ -390,10 +391,15 @@ public final class Annotations  {
      */
     public static <T extends Annotation> List<Evaluator<T>> firstEvaluatorsInHierarchyHaving(
             final Class<?> cls,
-            final Class<T> annotationClass) {
+            final Class<T> annotationClass,
+            final Predicate<Evaluator<T>> filter) {
     	
     	 final List<Evaluator<T>> evaluators = Lists.newArrayList();
-    	 visitEvaluatorsWhile(cls, annotationClass, __->evaluators.isEmpty(), evaluators::add);
+    	 visitEvaluatorsWhile(cls, annotationClass, __->evaluators.isEmpty(), evaluator->{
+    		 if(filter.test(evaluator)) {
+    			 evaluators.add(evaluator);
+    		 }
+    	 });
          
          return evaluators;
     }

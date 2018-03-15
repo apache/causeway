@@ -22,7 +22,7 @@ package org.apache.isis.core.metamodel.facets.object.navparent.annotation;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import org.apache.isis.applib.annotation.Parent;
+import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.internal.base._NullSafe;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -59,11 +59,13 @@ public class NavigableParentAnnotationFacetFactory extends FacetFactoryAbstract 
 
         // Starting from the current domain-object class, we search down the object 
         // inheritance hierarchy (super class, super super class, ...), until we find 
-        // the first class that has a @Parent annotation. That's the one we use to 
+        // the first class that has a @PropertyLayout(navigable=Navigable.PARENT) annotation. 
+        // That's the one we use to 
         // resolve the current domain-object's navigable parent. 
         
-        final List<Annotations.Evaluator<Parent>> evaluators = 
-        		Annotations.firstEvaluatorsInHierarchyHaving(cls, Parent.class);
+        final List<Annotations.Evaluator<PropertyLayout>> evaluators = 
+        		Annotations.firstEvaluatorsInHierarchyHaving(cls, PropertyLayout.class, 
+        				NavigableParentAnnotationFacetFactory::isNavigaleParentFlagSet);
         
         if (_NullSafe.isEmpty(evaluators)) {
             return; // no parent resolvable
@@ -72,17 +74,17 @@ public class NavigableParentAnnotationFacetFactory extends FacetFactoryAbstract 
         	throw new RuntimeException("unable to determine navigable parent due to ambiguity");
         }
         
-        final Annotations.Evaluator<Parent> parentEvaluator = evaluators.get(0);
+        final Annotations.Evaluator<PropertyLayout> parentEvaluator = evaluators.get(0);
         
         final Method method;
 
         // find method that provides the parent ...
         if(parentEvaluator instanceof Annotations.MethodEvaluator) {
         	// we have a @Parent annotated method
-        	method = ((Annotations.MethodEvaluator<Parent>) parentEvaluator).getMethod();
+        	method = ((Annotations.MethodEvaluator<PropertyLayout>) parentEvaluator).getMethod();
         } else if(parentEvaluator instanceof Annotations.FieldEvaluator) {
         	// we have a @Parent annotated field (useful if one uses lombok's @Getter on a field)
-        	method = ((Annotations.FieldEvaluator<Parent>) parentEvaluator).getGetter(cls).orElse(null);
+        	method = ((Annotations.FieldEvaluator<PropertyLayout>) parentEvaluator).getGetter(cls).orElse(null);
         	if(method==null)
         		return; // code should not be reached, since case should be handled by meta-data validation 
         	
@@ -95,6 +97,10 @@ public class NavigableParentAnnotationFacetFactory extends FacetFactoryAbstract 
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		}
+    }
+    
+    private static boolean isNavigaleParentFlagSet(Annotations.Evaluator<PropertyLayout> evaluator){
+    	return evaluator.getAnnotation().navigable().isParent();
     }
 
 
@@ -110,8 +116,9 @@ public class NavigableParentAnnotationFacetFactory extends FacetFactoryAbstract 
             public boolean visit(ObjectSpecification objectSpec, ValidationFailures validationFailures) {
                 final Class<?> cls = objectSpec.getCorrespondingClass();
                 
-                final List<Annotations.Evaluator<Parent>> evaluators = 
-                		Annotations.firstEvaluatorsInHierarchyHaving(cls, Parent.class);
+                final List<Annotations.Evaluator<PropertyLayout>> evaluators = 
+                		Annotations.firstEvaluatorsInHierarchyHaving(cls, PropertyLayout.class, 
+                				NavigableParentAnnotationFacetFactory::isNavigaleParentFlagSet);
                 
                 if (_NullSafe.isEmpty(evaluators)) {
                 	return true; // no conflict, continue validation processing
@@ -119,29 +126,29 @@ public class NavigableParentAnnotationFacetFactory extends FacetFactoryAbstract 
                 	
                 	validationFailures.add(
                             "%s: conflict for determining a strategy for retrieval of (navigable) parent for class, "
-                            + "contains multiple annotations '@%s', while at most one is allowed.",
+                            + "contains multiple annotations '@%s' having navigable=PARENT, while at most one is allowed.",
                             objectSpec.getIdentifier().getClassName(),
-                            Parent.class.getName());
+                            PropertyLayout.class.getName());
                 	
                 	return true; // continue validation processing
                 } 
                 
-                final Annotations.Evaluator<Parent> parentEvaluator = evaluators.get(0);
+                final Annotations.Evaluator<PropertyLayout> parentEvaluator = evaluators.get(0);
                 
                 if(parentEvaluator instanceof Annotations.FieldEvaluator) {
                 	// we have a @Parent annotated field (useful if one uses lombok's @Getter on a field)
                 	
-                	final Annotations.FieldEvaluator<Parent> fieldEvaluator = 
-                			(Annotations.FieldEvaluator<Parent>) parentEvaluator;
+                	final Annotations.FieldEvaluator<PropertyLayout> fieldEvaluator = 
+                			(Annotations.FieldEvaluator<PropertyLayout>) parentEvaluator;
                 	
                 	if(!fieldEvaluator.getGetter(cls).isPresent()) {
                 		
 	            		validationFailures.add(
 	                            "%s: unable to determine a strategy for retrieval of (navigable) parent for class, "
-	                            + "field '%s' annotated with '@%s' does not provide a getter.",
+	                            + "field '%s' annotated with '@%s' having navigable=PARENT does not provide a getter.",
 	                            objectSpec.getIdentifier().getClassName(),
 	                            fieldEvaluator.getField().getName(),
-	                            Parent.class.getName());
+	                            PropertyLayout.class.getName());
                 	}
                 	
                 }

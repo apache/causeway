@@ -1,6 +1,7 @@
 package org.apache.isis.core.metamodel.facets.object.navparent.annotation;
 
-import org.apache.isis.applib.annotation.Parent;
+import org.apache.isis.applib.annotation.Navigable;
+import org.apache.isis.applib.annotation.PropertyLayout;
 
 class NavigableParentTestSamples {
 
@@ -24,7 +25,7 @@ class NavigableParentTestSamples {
 			return "A";
 		}
 
-		@Parent
+		@PropertyLayout(navigable=Navigable.PARENT)
 		public Object root() {
 			return myParent;
 		}
