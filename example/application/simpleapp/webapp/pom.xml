@@ -198,7 +198,7 @@
                             <dependency>
                                 <groupId>org.hsqldb</groupId>
                                 <artifactId>hsqldb</artifactId>
-                                <version>2.3.1</version>
+                                <version>${hsqldb.version}</version>
                             </dependency>
                             <!-- workaround to avoid conflict with plexus-default -->
                         </dependencies>
@@ -217,6 +217,7 @@
                 <dependency>
                     <groupId>org.hsqldb</groupId>
                     <artifactId>hsqldb</artifactId>
+                    <version>${hsqldb.version}</version>
                 </dependency>
             </dependencies>
         </profile>
