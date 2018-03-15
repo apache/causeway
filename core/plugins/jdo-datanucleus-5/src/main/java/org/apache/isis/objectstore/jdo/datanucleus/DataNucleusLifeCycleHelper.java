@@ -48,6 +48,9 @@ public class DataNucleusLifeCycleHelper {
 			// https://github.com/datanucleus/datanucleus-core/issues/272
 			EnhancementHelper.getInstance().unregisterClasses(cl);
 			
+			// cleanup thread locals
+			JDOStateManagerForIsis.hint.remove();
+			
 		} catch (Exception e) {
 			// ignore, since it only affects re-deploy-ability, which is nice to have but not critical
 		}

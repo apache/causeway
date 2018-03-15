@@ -123,11 +123,15 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
     }
 
     protected void addComponentFactoriesUsingServiceLoader(final ComponentFactoryList componentFactories) {
-        final ServiceLoader<ComponentFactory> serviceLoader = ServiceLoader.load(ComponentFactory.class);
 
-        for (final ComponentFactory componentFactory : serviceLoader) {
-            componentFactories.add(componentFactory);
-        }
+        _Plugin.loadAll(ComponentFactory.class).forEach(componentFactories::add);
+        
+// same as ...
+//        final ServiceLoader<ComponentFactory> serviceLoader = ServiceLoader.load(ComponentFactory.class);
+//
+//        for (final ComponentFactory componentFactory : serviceLoader) {
+//            componentFactories.add(componentFactory);
+//        }
     }
 
     private void addBuiltInComponentFactories(final ComponentFactoryList componentFactories) {
@@ -148,9 +152,6 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
         addComponentFactoriesForBreadcrumbs(componentFactories);
         addComponentFactoriesForPageHeader(componentFactories);
         addComponentFactoriesForPageFooter(componentFactories);
-        
-        // load component factories from plugins
-        _Plugin.loadAll(ComponentFactory.class).forEach(componentFactories::add);
         
         addComponentFactoriesForUnknown(componentFactories);
     }
