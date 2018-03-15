@@ -39,3 +39,5 @@ pom.xml.versionsBackup
 
 rebel.xml
 translations.pot
+
+.flattened-pom.xml

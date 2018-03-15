@@ -57,7 +57,15 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         String domainType = OidUtils.getDomainType(objectAdapter);
         String instanceId = OidUtils.getInstanceId(objectAdapter);
         final String url = "objects/" + domainType + "/" + instanceId + "/object-layout";
-        return LinkBuilder.newBuilder(rendererContext, rel.getName(), RepresentationType.DOMAIN_OBJECT, url).withTitle(objectAdapter.titleString(null));
+        return LinkBuilder.newBuilder(rendererContext, rel.getName(), RepresentationType.OBJECT_LAYOUT, url);
+    }
+
+    public static LinkBuilder newLinkToObjectIconBuilder(final RendererContext rendererContext, final ObjectAdapter objectAdapter) {
+        final Rel rel = Rel.OBJECT_ICON;
+        String domainType = OidUtils.getDomainType(objectAdapter);
+        String instanceId = OidUtils.getInstanceId(objectAdapter);
+        final String url = "objects/" + domainType + "/" + instanceId + "/image";
+        return LinkBuilder.newBuilder(rendererContext, rel.getName(), RepresentationType.OBJECT_IMAGE, url);
     }
 
     private static enum Mode {
@@ -174,6 +182,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         if (mode.includeDescribedBy() && !rendererContext.suppressDescribedByLinks()) {
             addLinkToDescribedBy();
             addLinkToObjectLayout();
+            addLinkToObjectIcon();
         }
         if(isService && mode.includeUp()) {
             addLinkToUp();
@@ -232,6 +241,13 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
     private void addLinkToObjectLayout() {
         final LinkBuilder linkBuilder = DomainObjectReprRenderer
                 .newLinkToObjectLayoutBuilder(getRendererContext(), objectAdapter);
+        final JsonRepresentation link = linkBuilder.build();
+        getLinks().arrayAdd(link);
+    }
+
+    private void addLinkToObjectIcon() {
+        final LinkBuilder linkBuilder = DomainObjectReprRenderer
+                .newLinkToObjectIconBuilder(getRendererContext(), objectAdapter);
         final JsonRepresentation link = linkBuilder.build();
         getLinks().arrayAdd(link);
     }

@@ -16,7 +16,9 @@
  */
 package org.apache.isis.viewer.restfulobjects.server.resources;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -30,6 +32,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import com.google.common.base.Strings;
+import com.google.common.io.Resources;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.component.ActionLayoutData;
@@ -188,6 +193,83 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
     // domain object layout
     // //////////////////////////////////////////////////////////
 
+    static class IconKey {
+        private final Class<?> domainClass;
+        private final String modifier;
+
+        IconKey(final Class<?> domainClass, final String modifier) {
+            this.domainClass = domainClass;
+            this.modifier = modifier;
+        }
+
+        String getImageName() {
+            final StringBuilder buf = new StringBuilder(domainClass.getSimpleName());
+            if(!Strings.isNullOrEmpty(modifier)) {
+                buf.append("-").append(modifier);
+            }
+            buf.append(".png");
+            return buf.toString();
+        }
+
+        @Override
+        public boolean equals(final Object o) {
+            if (this == o)
+                return true;
+            if (o == null || getClass() != o.getClass())
+                return false;
+
+            final IconKey iconKey = (IconKey) o;
+
+            if (domainClass != null ? !domainClass.equals(iconKey.domainClass) : iconKey.domainClass != null) {
+                return false;
+            }
+            return modifier != null ? modifier.equals(iconKey.modifier) : iconKey.modifier == null;
+        }
+
+        @Override
+        public int hashCode() {
+            int result = domainClass != null ? domainClass.hashCode() : 0;
+            result = 31 * result + (modifier != null ? modifier.hashCode() : 0);
+            return result;
+        }
+
+        byte[] toBytes() {
+            String imageName =  getImageName();
+            URL resource = Resources.getResource(domainClass, imageName);
+            try {
+                return Resources.toByteArray(resource);
+            } catch (IOException e) {
+                return null;
+            }
+        }
+    }
+
+    @Override
+    @GET
+    @Path("/{domainType}/{instanceId}/image")
+    @Consumes({ MediaType.WILDCARD })
+    @Produces({
+            "image/png"
+    })
+    @PrettyPrinting
+    public Response image(
+            @PathParam("domainType")
+            final String domainType,
+            @PathParam("instanceId")
+            final String instanceId) {
+
+        init(RepresentationType.OBJECT_LAYOUT, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
+
+        final ObjectAdapter objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
+        final ObjectSpecification objectSpec = objectAdapter.getSpecification();
+        final String iconName = objectSpec.getIconName(objectAdapter);
+        final Class<?> correspondingClass = objectSpec.getCorrespondingClass();
+        final IconKey iconKey = new IconKey(correspondingClass, iconName);
+        final byte[] bytes = iconKey.toBytes();
+        return bytes != null
+                ? Response.ok(bytes).build()
+                : Response.status(Response.Status.NOT_FOUND).build();
+    }
 
     @Override
     @GET

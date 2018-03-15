@@ -3,7 +3,7 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :_basedir: ../../
 :_imagesdir: images/
-
+:toc:
 
 The quickest way to get started building an application "for real" is to run the `simpleapp` archetype.
 Like the xref:ugfun.adoc#_ugfun_getting-started_helloworld-archetype[helloworld archetype], this too will generate a very simple one-class domain model (an entity called `SimpleObject` with a couple of properties).
@@ -638,12 +638,75 @@ image::{_imagesdir}getting-started/using-simple-app/070-home-page.png[width="600
 
 
 
+== Using GitLab CI and DockerHub
+
+The archetype provides configuration files to allow you to build and package the application using link:https://gitlab.com/[GitLab] (for continuous integration pipelines) and link:https://hub.docker.com/[Docker Hub] (as a registry of Docker images).
+
+To use, you'll need an account on both GitLab and DockerHub.
+
+=== DockerHub
+
+Simply create Docker repository "myapp" in DockerHub.
+
+
+=== Source code
+
+In the `.gitlab-ci.yml` file, update the name of the Docker repository on DockerHub:
+
+[source,yml]
+----
+variables:
+  ...
+  DOCKER_REGISTRY_REPOSITORY: "myapp"
+----
+
+=== GitLab
+
+Create a git repository "myapp" in GitLab.
+
+Using Settings > CI/CD, specify the following _Secret Variables_:
+
+* `DOCKER_REGISTRY_USERNAME` - corresponds to user account name on DockerHub
+* `DOCKER_REGISTRY_PASSWORD` - corresponding password
+* `DOCKER_REGISTRY_EMAIL` - associated email for the user account
+
+Finally, push a copy of the generated application to this repository using the instructions provided by GitLab.
+
+This will kick off a pipeline that will build the image and push to DockerHub.
+
+image::{_imagesdir}getting-started/dockerhub-tags.png[width="600px",link="{_imagesdir}getting-started/dockerhub-tags.png"]
+
+The tag name is based on a combination of the date, the branch and the git shaId.
+
+
+=== Running the Image
+
+You can run the image in a new container using:
+
+[source,bash]
+----
+docker run -p 8080:8080 -d XXX/YYY:ZZZ
+----
+
+where
+
+* `XXX` is your DockerHub account name (`DOCKER_REGISTRY_USERNAME` secret variable in GitLab CI)
+* `YYY` is the name of the DockerHub registry (`DOCKER_REGISTRY_REPOSITORY` in the `.gitlab-ci.yml` file)
+* `ZZZ` is the tag of the image to run
+
+
+For example, using the screenshot above, that image could be run using:
+
+[source,bash]
+----
+docker run -p 8080:8080 -d danhaywood/simpleapp:20180315.0935.master.4521215
+----
+
+
 == Modifying the App
 
 Once you are familiar with the generated app, you'll want to start modifying it.
 There is plenty of guidance on this site; start with this guide (fundamentals) and then look at the other guides available the main xref:../../documentation.adoc#[documentation] page.
 
 If you use IntelliJ IDEA or Eclipse, do also install the xref:../dg/dg.adoc#__dg_ide_intellij_live-templates[live templates (for IntelliJ)] / xref:../dg/dg.adoc#__dg_ide_eclipse_editor-templates[editor templates (for Eclipse)]; these will help you follow the Apache Isis naming conventions.
-
-
 

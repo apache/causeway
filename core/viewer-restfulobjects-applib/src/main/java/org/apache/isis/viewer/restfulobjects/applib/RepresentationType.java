@@ -101,6 +101,10 @@ public enum RepresentationType {
             RestfulMediaType.APPLICATION_JSON_OBJECT_LAYOUT_BS3,
             RestfulMediaType.APPLICATION_XML_OBJECT_LAYOUT_BS3,
             null),
+    OBJECT_IMAGE(
+            "image/png",
+            "image/png",
+            null),
     MENUBARS(
             RestfulMediaType.APPLICATION_JSON_LAYOUT_MENUBARS,
             RestfulMediaType.APPLICATION_XML_LAYOUT_MENUBARS,

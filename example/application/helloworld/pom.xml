@@ -37,6 +37,7 @@
 
     <properties>
         <revision>2.0.0-M1-SNAPSHOT</revision>
+        <isis.version>2.0.0-M1-SNAPSHOT</isis.version>
 
         <compiler-plugin.source>1.8</compiler-plugin.source>
         <compiler-plugin.target>1.8</compiler-plugin.target>
