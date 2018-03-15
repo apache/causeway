@@ -1,3 +1,12 @@
+#
+# requires the following gitlab secret variables
+#
+# - DOCKER_REGISTRY_USERNAME
+# - DOCKER_REGISTRY_PASSWORD
+# - DOCKER_REGISTRY_EMAIL
+#
+#
+
 image: maven:3.5.3-jdk-8
 
 before_script:
@@ -11,6 +20,9 @@ variables:
   DOCKER_HOST: tcp://docker:2375
   DOCKER_DRIVER: overlay2
   MAVEN_CLI_OPTS: "--batch-mode"
+  DOCKER_REGISTRY_ID: "docker-hub"
+  DOCKER_REGISTRY_URL: "https://index.docker.io/v1/"
+  DOCKER_REGISTRY_REPOSITORY: "simpleapp"
 
 stages:
   - build-package
@@ -33,7 +45,20 @@ build-package:
           -Drevision=$REVISION \
           -Disis.version=$REVISION \
           -Dmavenmixin-docker \
-          -Ddocker-plugin.imageName=isis/simpleapp
+          -Ddocker-plugin.imageName=$DOCKER_REGISTRY_USERNAME/$DOCKER_REGISTRY_REPOSITORY
+    - >
+      mvn $MAVEN_CLI_OPTS \
+          -s .m2/settings.xml \
+          docker:push@push-image-tagged \
+          -pl webapp \
+          -Drevision=$REVISION \
+          -Disis.version=$REVISION \
+          -DskipTests \
+          -Dskip.isis-swagger \
+          -Dmavenmixin-docker \
+          -Ddocker-plugin.imageName=$DOCKER_REGISTRY_USERNAME/$DOCKER_REGISTRY_REPOSITORY \
+          -Ddocker-plugin.serverId=$DOCKER_REGISTRY_ID \
+          -Ddocker.registryUrl=$DOCKER_REGISTRY_URL
     - cd ../../..
 
 
