@@ -65,11 +65,16 @@ A typical use case is if the desired name is a reserved Java keyword, such as `d
 |whether to HTML escape the name of this property.
 
 
+|xref:../rgant/rgant.adoc#_rgant-PropertyLayout_navigable[`navigable()`]
+|`PARENT`, `IGNORE`, `NOT_CONFIGURED` +
+(`NOT_CONFIGURED`)
+|whether a property should be used as the navigable parent (parent breadcrumb) of this object
+
+
 |xref:../rgant/rgant.adoc#_rgant-PropertyLayout_promptStyle[`promptStyle()`]
 |`DIALOG`, `INLINE`, `AS_CONFIGURED` +
 (`AS_CONFIGURED`)
 |how a property prompt should be displayed within the UI
-
 
 
 |xref:../rgant/rgant.adoc#_rgant-PropertyLayout_renderedAsDayBefore[`renderedAsDayBefore()`]
@@ -137,6 +142,7 @@ include::_rgant-PropertyLayout_describedAs.adoc[leveloffset=+1]
 include::_rgant-PropertyLayout_labelPosition.adoc[leveloffset=+1]
 include::_rgant-PropertyLayout_multiLine.adoc[leveloffset=+1]
 include::_rgant-PropertyLayout_named.adoc[leveloffset=+1]
+include::_rgant-PropertyLayout_navigable.adoc[leveloffset=+1]
 include::_rgant-PropertyLayout_promptStyle.adoc[leveloffset=+1]
 include::_rgant-PropertyLayout_renderedAsDayBefore.adoc[leveloffset=+1]
 include::_rgant-PropertyLayout_typicalLength.adoc[leveloffset=+1]
