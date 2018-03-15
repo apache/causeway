@@ -1,11 +1,38 @@
-stages:
-  - build
+image: maven:3.5.3-jdk-8
 
-maven-build:
-  image: maven:3-jdk-8
-  stage: build
+before_script:
+  - export BASELINE=2.0.0-M1
+  - export REVISION=$BASELINE.$(date +%Y%m%d)-$(git rev-parse --short HEAD)
+
+services:
+  - docker:dind
+
+variables:
+  DOCKER_HOST: tcp://docker:2375
+  DOCKER_DRIVER: overlay2
+  MAVEN_CLI_OPTS: "--batch-mode"
+
+stages:
+  - build-package
+
+build-package:
+  stage: build-package
   script:
-    - mvn -Drevision=2.0.0-M1.$(date +%Y%m%d)-$(git rev-parse --short HEAD) -Dskip.arch -Dskip.app -B clean install
-    - cd example/application/simpleapp
-    - mvn -Drevision=2.0.0-M1.$(date +%Y%m%d)-$(git rev-parse --short HEAD) -Dmavenmixin-docker -Ddocker-plugin.imageName=isis/simpleapp -B install
+    - echo "REVISION=$REVISION"
+    - >
+      cd core && \
+      mvn $MAVEN_CLI_OPTS \
+          clean install \
+          -Drevision=$REVISION && \
+      cd ..
+    - >
+      cd example/application/simpleapp && \
+      mvn $MAVEN_CLI_OPTS \
+          install \
+          -Drevision=$REVISION \
+          -Disis.version=$REVISION \
+          -Dmavenmixin-docker \
+          -Ddocker-plugin.imageName=isis/simpleapp && \
+      cd ../../..
+
 
