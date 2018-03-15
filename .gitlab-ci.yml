@@ -58,9 +58,7 @@ build-package:
           -Dmavenmixin-docker \
           -Ddocker-plugin.imageName=$DOCKER_REGISTRY_USERNAME/$DOCKER_REGISTRY_REPOSITORY \
           -Ddocker-plugin.serverId=$DOCKER_REGISTRY_ID \
-          -Ddocker.registryUrl=$DOCKER_REGISTRY_URL \
-          -Dskip.sonatype-snapshots \
-          -Dskip.apache-snapshots
+          -Ddocker.registryUrl=$DOCKER_REGISTRY_URL
     - cd ../../..
 
 
