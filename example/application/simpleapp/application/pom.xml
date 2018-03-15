@@ -33,9 +33,6 @@
 
     <packaging>jar</packaging>
 
-    <properties>
-        <revision>2.0.0-M1-SNAPSHOT</revision>
-    </properties>
     <build>
         <resources>
             <resource>
@@ -104,7 +101,7 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>simpleapp-module-simple</artifactId>
-            <version>${isis.version}</version>
+            <version>${revision}</version>
         </dependency>
 
         <dependency>
