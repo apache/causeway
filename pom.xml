@@ -69,7 +69,7 @@
             <id>arch</id>
             <activation>
 	        <property>
-		    <name>!skip.arch</name>
+		    <name>arch</name>
 		</property>
             </activation>
             <modules>
