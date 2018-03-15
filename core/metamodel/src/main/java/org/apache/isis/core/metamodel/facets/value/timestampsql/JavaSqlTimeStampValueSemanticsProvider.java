@@ -33,7 +33,7 @@ import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefault
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public class JavaSqlTimeStampValueSemanticsProvider 
-extends EpochMillisValueSemanticsProviderAbstract<java.sql.Timestamp> {
+extends TimeStampValueSemanticsProviderAbstract<java.sql.Timestamp> {
 
     public static final boolean isAPropertyDefaultFacet() {
         return PropertyDefaultFacet.class.isAssignableFrom(JavaSqlTimeStampValueSemanticsProvider.class);
@@ -63,7 +63,7 @@ extends EpochMillisValueSemanticsProviderAbstract<java.sql.Timestamp> {
 
     @Override
     protected Date dateValue(final Object value) {
-        return ((EpochMillis) value).toJavaUtilDate();
+        return new Date(((java.sql.Timestamp) value).getTime());
     }
 
     @Override

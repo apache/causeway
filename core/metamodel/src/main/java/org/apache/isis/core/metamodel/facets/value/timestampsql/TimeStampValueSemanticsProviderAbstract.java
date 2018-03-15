@@ -31,7 +31,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.value.ValueSemanticsProviderAbstractTemporal;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 
-abstract class EpochMillisValueSemanticsProviderAbstract<T> extends ValueSemanticsProviderAbstractTemporal<T> {
+abstract class TimeStampValueSemanticsProviderAbstract<T> extends ValueSemanticsProviderAbstractTemporal<T> {
 
     private static final Object DEFAULT_VALUE = null; // no default
     private static final int TYPICAL_LENGTH = 25;
@@ -42,7 +42,7 @@ abstract class EpochMillisValueSemanticsProviderAbstract<T> extends ValueSemanti
     }
 
     @SuppressWarnings("unchecked")
-    public EpochMillisValueSemanticsProviderAbstract(final FacetHolder holder, final Class<T> adaptedClass, final ServicesInjector context) {
+    public TimeStampValueSemanticsProviderAbstract(final FacetHolder holder, final Class<T> adaptedClass, final ServicesInjector context) {
         super("timestamp", holder, adaptedClass, TYPICAL_LENGTH, Immutability.NOT_IMMUTABLE, EqualByContent.NOT_HONOURED, (T) DEFAULT_VALUE, context);
         final String formatRequired = getConfiguration().getString(ConfigurationConstants.ROOT + "value.format.timestamp");
         if (formatRequired == null) {
