@@ -251,7 +251,6 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
     @Produces({
             "image/png"
     })
-    @PrettyPrinting
     public Response image(
             @PathParam("domainType")
             final String domainType,

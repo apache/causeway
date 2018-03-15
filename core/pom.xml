@@ -1442,7 +1442,33 @@ ${license.additional-notes}
                 <version>${revision}</version>
             </dependency>
 
-            
+
+            <!-- plugins -->
+            <dependency>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis-core-plugins-discovery-reflections</artifactId>
+                <version>${revision}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis-core-plugins-jdo-datanucleus-5</artifactId>
+                <version>${revision}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis-core-plugins-eventbus-guava</artifactId>
+                <version>${revision}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis-core-plugins-jaxrs-resteasy-3</artifactId>
+                <version>${revision}</version>
+            </dependency>
+
+
             <!-- also for benefit of application developers, using scope=import -->
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
