@@ -17,11 +17,11 @@
   specific language governing permissions and limitations
   under the License.
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.apache.isis.archetype</groupId>
     <artifactId>simpleapp-archetype</artifactId>
-    <version>2.0.0-M1-SNAPSHOT</version>
+    <version>1.16.3-SNAPSHOT</version>
     <packaging>maven-archetype</packaging>
     <name>simpleapp-archetype</name>
     <build>
@@ -29,14 +29,14 @@
             <extension>
                 <groupId>org.apache.maven.archetype</groupId>
                 <artifactId>archetype-packaging</artifactId>
-                <version>2.2</version>
+                <version>3.0.1</version>
             </extension>
         </extensions>
         <pluginManagement>
             <plugins>
                 <plugin>
                     <artifactId>maven-archetype-plugin</artifactId>
-                    <version>2.2</version>
+                    <version>3.0.1</version>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -65,8 +65,7 @@
         <connection>scm:git:git@github.com:incodehq/incode-build.git/simpleapp</connection>
         <developerConnection>scm:git:git@github.com:incodehq/incode-build.git/simpleapp</developerConnection>
         <url>git@github.com:incodehq/incode-build.git/simpleapp</url>
-      <tag>HEAD</tag>
-  </scm>
+    </scm>
     <parent>
         <groupId>org.apache.isis.core</groupId>
         <artifactId>isis</artifactId>

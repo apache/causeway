@@ -36,7 +36,7 @@
     <packaging>pom</packaging>
 
     <properties>
-        <revision>1.0.0-SNAPSHOT</revision>
+        <revision>1.16.3-SNAPSHOT</revision>
 	
         <isis.version>1.16.2</isis.version>
 
@@ -146,12 +146,6 @@
         </dependency>
     </dependencies>
 
-    <modules>
-        <module>module-simple</module>
-        <module>application</module>
-        <module>webapp</module>
-    </modules>
-
     <profiles>
         <profile>
             <id>m2e</id>
@@ -176,5 +170,11 @@
             </build>
         </profile>
     </profiles>
+
+    <modules>
+        <module>module-simple</module>
+        <module>application</module>
+        <module>webapp</module>
+    </modules>
 
 </project>
