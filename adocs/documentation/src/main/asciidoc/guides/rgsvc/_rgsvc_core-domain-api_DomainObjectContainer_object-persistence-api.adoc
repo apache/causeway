@@ -34,7 +34,7 @@ Note that this includes any domain objects annotated with xref:../rgant/rgant.ad
 <2> persist a transient object.
 Note though that this will throw an exception if the object is already persistent; this can happen if JDO/DataNucleus's link:http://www.datanucleus.org/products/accessplatform_4_0/jdo/orm/cascading.html[persistence-by-reachability] is in effect.
 For this reason it is generally better to use xref:rgsvc.adoc#_rgsvc_persistence-layer-api_RepositoryService[`RepositoryService#persist()`], which is a no-op if the object is persistent.
-<5> remove (ie DELETE) a persistent object.
+<3> remove (ie DELETE) a persistent object.
 However, the object must be persistent already, otherwise an exception will be thrown.
 It is generally therefore better to use use xref:rgsvc.adoc#_rgsvc_persistence-layer-api_RepositoryService[`RepositoryService#remove()`], which is a no-op if the object is not persistent.
 
