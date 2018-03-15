@@ -48,6 +48,8 @@
         <!-- override incode-build -->
         <datanucleus-core.version>5.1.6</datanucleus-core.version>
 
+        <hsqldb.version>2.3.4</hsqldb.version>
+
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
@@ -212,7 +214,6 @@
                 </dependencies>
             </dependencyManagement>
             <properties>
-                <hsqldb.version>2.3.4</hsqldb.version>
                 <log4jdbc-remix.version>0.2.7</log4jdbc-remix.version>
             </properties>
         </profile>

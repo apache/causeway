@@ -64,11 +64,6 @@
                     <groupId>org.apache.isis.core</groupId>
                     <artifactId>isis-core-security</artifactId>
                 </dependency>
-
-<!--                 <dependency> -->
-<!--                     <groupId>org.apache.geronimo.specs</groupId> -->
-<!--                     <artifactId>geronimo-servlet_3.0_spec</artifactId> -->
-<!--                 </dependency> -->
             </dependencies>
         </profile>
         <profile>
