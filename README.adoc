@@ -1,5 +1,7 @@
 = Apache Isis
 
+image:https://builds.apache.org/buildStatus/icon?job=Isis master jdk8[]
+
 _http://isis.apache.org[Apache Isis] software is a framework for rapidly developing domain-driven apps in Java. Write your business logic in entities, domain services and repositories, and the framework dynamically generates a representation of that domain model as a webapp or a RESTful API._
 
 Start learning about Apache Isis using our https://isis.apache.org/guides/ugfun.html#_ugfun_getting-started_helloworld-archetype["Hello World"] Maven archetype.
