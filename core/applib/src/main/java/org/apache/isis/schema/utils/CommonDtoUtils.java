@@ -258,36 +258,24 @@ public final class CommonDtoUtils {
         case BLOB: {
         	
             final Blob blob = (Blob) val;
-            final BlobDto blobDto = new BlobDto();
-            
-            if(blob==null) {
-                blobDto.setName("#empty");
-                blobDto.setBytes(new byte[0]);
-                blobDto.setMimeType("");	
-        	} else {
+            if(blob != null) {
+                final BlobDto blobDto = new BlobDto();
                 blobDto.setName(blob.getName());
                 blobDto.setBytes(blob.getBytes());
-                blobDto.setMimeType(blob.getMimeType().toString());	
-        	}
-            
-            valueDto.setBlob(blobDto);
+                blobDto.setMimeType(blob.getMimeType().toString());
+                valueDto.setBlob(blobDto);
+            }
             return valueDto;
         }
         case CLOB: {
             final Clob clob = (Clob) val;
-            final ClobDto clobDto = new ClobDto();
-            
-            if(clob==null) {
-                clobDto.setName("#empty");
-                clobDto.setChars("");
-                clobDto.setMimeType("");
-        	} else {
+            if(clob != null) {
+                final ClobDto clobDto = new ClobDto();
                 clobDto.setName(clob.getName());
                 clobDto.setChars(clob.getChars().toString());
                 clobDto.setMimeType(clob.getMimeType().toString());
-        	}
-            
-            valueDto.setClob(clobDto);
+                valueDto.setClob(clobDto);
+            }
             return valueDto;
         }
         case VOID: {
