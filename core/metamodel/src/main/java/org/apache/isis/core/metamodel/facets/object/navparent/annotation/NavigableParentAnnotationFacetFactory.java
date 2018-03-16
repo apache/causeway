@@ -65,7 +65,7 @@ public class NavigableParentAnnotationFacetFactory extends FacetFactoryAbstract 
         
         final List<Annotations.Evaluator<PropertyLayout>> evaluators = 
         		Annotations.firstEvaluatorsInHierarchyHaving(cls, PropertyLayout.class, 
-        				NavigableParentAnnotationFacetFactory::isNavigaleParentFlagSet);
+        				NavigableParentAnnotationFacetFactory::isNavigableParentFlagSet);
         
         if (_NullSafe.isEmpty(evaluators)) {
             return; // no parent resolvable
@@ -99,7 +99,7 @@ public class NavigableParentAnnotationFacetFactory extends FacetFactoryAbstract 
 		}
     }
     
-    private static boolean isNavigaleParentFlagSet(Annotations.Evaluator<PropertyLayout> evaluator){
+    private static boolean isNavigableParentFlagSet(Annotations.Evaluator<PropertyLayout> evaluator){
     	return evaluator.getAnnotation().navigable().isParent();
     }
 
@@ -118,7 +118,7 @@ public class NavigableParentAnnotationFacetFactory extends FacetFactoryAbstract 
                 
                 final List<Annotations.Evaluator<PropertyLayout>> evaluators = 
                 		Annotations.firstEvaluatorsInHierarchyHaving(cls, PropertyLayout.class, 
-                				NavigableParentAnnotationFacetFactory::isNavigaleParentFlagSet);
+                				NavigableParentAnnotationFacetFactory::isNavigableParentFlagSet);
                 
                 if (_NullSafe.isEmpty(evaluators)) {
                 	return true; // no conflict, continue validation processing
