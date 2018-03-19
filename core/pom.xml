@@ -2234,6 +2234,52 @@ ${license.additional-notes}
             </build>
         </profile>
         <profile>
+            <!--
+            this profile allows builds to be deployed to an inhouse nexus repo.
+
+            export NEXUS_USERNAME=...
+            export NEXUS_PASSWORD=...
+            export NEXUS_REPO_URL=...
+
+            export REVISION=...
+
+            mvn clean deploy \
+                 -Drevision=$REVISION \
+                 -Dnexus-deploy \
+                 -s .m2/settings.xml \
+                 -Dnexus-deploy.repositoryUrl=$NEXUS_REPO_URL
+            -->
+            <id>nexus-deploy</id>
+            <activation>
+                <property>
+                    <name>nexus-deploy</name>
+                </property>
+            </activation>
+            <properties>
+                <nexus-deploy.repositoryUrl>http://localhost:8081/repository/builds</nexus-deploy.repositoryUrl>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                        <version>1.6.8</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <serverId>nexus-deploy.serverId</serverId>
+                            <skipStaging>true</skipStaging>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+            <distributionManagement>
+                <repository>
+                    <id>nexus-deploy.serverId</id>
+                    <url>${nexus-deploy.repositoryUrl}</url>
+                </repository>
+            </distributionManagement>
+        </profile>
+        <profile>
             <id>owasp</id>
             <activation>
                 <property>

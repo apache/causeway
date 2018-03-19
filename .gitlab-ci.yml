@@ -1,6 +1,9 @@
 #
 # requires the following gitlab secret variables
 #
+# - NEXUS_USERNAME
+# - NEXUS_PASSWORD
+# - NEXUS_REPO_URL
 # - DOCKER_REGISTRY_USERNAME
 # - DOCKER_REGISTRY_PASSWORD
 # - DOCKER_REGISTRY_EMAIL
@@ -34,9 +37,12 @@ build-package:
     - cd core
     - >
       mvn $MAVEN_CLI_OPTS \
-          clean install \
-          $CORE_ADDITIONAL_OPTS \
-          -Drevision=$REVISION
+          -s .m2/settings.xml \
+          clean deploy \
+          -Drevision=$REVISION \
+          -Dnexus-deploy \
+          -Dnexus-deploy.repositoryUrl=$NEXUS_REPO_URL \
+          $CORE_ADDITIONAL_OPTS
     - cd ..
     - cd example/application/simpleapp
     - >
