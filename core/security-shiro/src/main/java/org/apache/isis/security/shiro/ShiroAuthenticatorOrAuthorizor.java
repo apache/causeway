@@ -156,7 +156,8 @@ public class ShiroAuthenticatorOrAuthorizor implements Authenticator, Authorizor
             LOG.info("Incorrect credentials for user: {}", request.getName());
             return null;
         } catch ( CredentialsException ice ) {
-            LOG.error("Unable to authenticate", ice);
+            // it seems that this is the exception that is actually thrown for invalid user/password.
+            LOG.info("Unable to authenticate", ice);
             return null;
         } catch ( LockedAccountException lae ) {
             LOG.info("Locked account for user: {}", request.getName());
