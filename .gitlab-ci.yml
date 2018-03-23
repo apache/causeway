@@ -62,7 +62,7 @@ build-package-push:
           -DskipTests \
           -Dskip.isis-swagger \
           -Dmavenmixin-docker \
-          -Ddocker-plugin.imageName=$DOCKER_REGISTRY_USERNAME/$DOCKER_REGISTRY_REPOSITORY \
+          -Ddocker-plugin.imageName=$DOCKER_REGISTRY_NAME/$DOCKER_REGISTRY_USERNAME/$APP_NAME \
           -Ddocker-plugin.serverId=docker-registry \
           -Ddocker.registryUrl=$DOCKER_REGISTRY_URL
     - cd ../../..
