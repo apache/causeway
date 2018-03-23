@@ -25,7 +25,6 @@ services:
 variables:
   DOCKER_HOST: tcp://docker:2375
   DOCKER_DRIVER: overlay2
-  MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository -Dskip.cloudbees-estatio-repositories -Dskip.sonatype-snapshots -Dskip.apache-snapshots"
   APP_NAME: "simpleapp"
 
 stages:
