@@ -66,7 +66,7 @@ class CollectionHelper {
 	 * @throws IllegalArgumentException if the given typeOfCollection is not supported 
 	 */
 	static <T> Collection<T> collectIntoUnmodifiableCompatibleWithCollectionType (
-			Class<? extends Collection<T>> typeOfCollection, Stream<T> elementStream) {
+			Class<?> typeOfCollection, Stream<T> elementStream) {
 
 		if(SortedSet.class.isAssignableFrom(typeOfCollection)) {
 			return Collections.unmodifiableSortedSet(
