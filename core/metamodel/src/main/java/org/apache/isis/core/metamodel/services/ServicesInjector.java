@@ -43,6 +43,7 @@ import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 import org.apache.isis.core.metamodel.services.configinternal.ConfigurationServiceInternal;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.spec.InjectorMethodEvaluator;
+import org.apache.isis.core.metamodel.specloader.CollectionUtils;
 import org.apache.isis.core.metamodel.specloader.InjectorMethodEvaluatorDefault;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
@@ -196,7 +197,7 @@ public class ServicesInjector implements ApplicationScopedComponent {
 
     static boolean contains(final List<Object> services, final Class<?> serviceClass) {
     	return _NullSafe.stream(services)
-    			.anyMatch(service->serviceClass.isAssignableFrom(service.getClass()));
+    			.anyMatch(isOfType(serviceClass));
     }
 
     /**
@@ -283,14 +284,14 @@ public class ServicesInjector implements ApplicationScopedComponent {
         }
 
         // inject matching services into a field of type Collection<T> if a generic type T is present
-        CollectionHelper.ifIsCollectionWithGenericTypeThen(field, (elementType)->{
+        CollectionUtils.ifIsCollectionWithGenericTypeThen(field, (elementType)->{
         	
         	@SuppressWarnings("unchecked")
 			final Class<? extends Collection<Object>> collectionTypeToBeInjected =
         			(Class<? extends Collection<Object>>) typeToBeInjected;
         	
         	 final Collection<Object> collectionOfServices =
-        			 CollectionHelper.collectIntoUnmodifiableCompatibleWithCollectionType(
+        			 CollectionUtils.collectIntoUnmodifiableCompatibleWithCollectionType(
         					 
         					 collectionTypeToBeInjected,
         					 
@@ -385,7 +386,7 @@ public class ServicesInjector implements ApplicationScopedComponent {
         injectServicesInto(this.services);
     }
 
-    // -- lookupService, lookupServices
+    // -- LOOKUP SERVICE(S)
 
     /**
      * Returns the first registered domain service implementing the requested type.
@@ -450,7 +451,7 @@ public class ServicesInjector implements ApplicationScopedComponent {
     // -- REFLECTIVE PREDICATES
     
     private static final Predicate<Object> isOfType(final Class<?> cls) {
-        return input->cls.isAssignableFrom(input.getClass());
+        return obj->cls.isAssignableFrom(obj.getClass());
     }
     
     private static final Predicate<Method> nameStartsWith(final String prefix) {

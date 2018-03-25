@@ -106,7 +106,7 @@ public interface TypeOfFacet extends SingleClassValueFacet {
                 final FacetHolder holder,
                 final Class<?> type,
                 final SpecificationLoader specificationLoader) {
-            final Class<?> componentType = CollectionUtils.inferFromArrayType(type);
+            final Class<?> componentType = CollectionUtils.inferElementTypeFromArrayType(type);
             return componentType != null
                     ? new TypeOfFacetInferredFromArray(componentType, holder, specificationLoader)
                     : null;
@@ -118,7 +118,12 @@ public interface TypeOfFacet extends SingleClassValueFacet {
                 final Class<?> parameterType,
                 final Type genericParameterType,
                 final SpecificationLoader specificationLoader) {
-            final Class<?> actualType = CollectionUtils.inferFromGenericParamType(parameterType, genericParameterType);
+        	
+        	if(!CollectionUtils.isCollectionType(parameterType)) {
+                return null;
+            }
+        	
+            final Class<?> actualType = CollectionUtils.inferElementTypeFromGenericType(genericParameterType);
             return actualType != null
                     ? new TypeOfFacetInferredFromGenerics(actualType, holder, specificationLoader)
                     : null;

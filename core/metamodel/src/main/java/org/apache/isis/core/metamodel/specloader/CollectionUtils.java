@@ -19,12 +19,22 @@
 
 package org.apache.isis.core.metamodel.specloader;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
+import javax.annotation.Nullable;
 
 /**
  * Defines the types which are considered to be collections.
@@ -39,36 +49,64 @@ public final class CollectionUtils {
 
     private CollectionUtils() {}
 
-    public static boolean isCollectionType(final Class<?> cls) {
-        return java.util.Collection.class.isAssignableFrom(cls);
+    // -- PREDICATES
+    
+    public static boolean isCollectionType(@Nullable final Class<?> cls) {
+        return cls!=null ? java.util.Collection.class.isAssignableFrom(cls) : false;
     }
 
-    public static boolean isArrayType(final Class<?> cls) {
-        return cls.isArray();
+    public static boolean isArrayType(@Nullable final Class<?> cls) {
+        return cls!=null ? cls.isArray() : false;
+    }
+    
+    /**
+     * 
+     * @param parameterType
+     * @param genericParameterType
+     * @return whether the parameter is a (collection or array) and has an infer-able element type
+     */
+    public static boolean isParamCollection(
+    		@Nullable final Class<?> parameterType,
+    		@Nullable final Type genericParameterType) {
+    	if(inferElementTypeFromArrayType(parameterType) != null) {
+    		return true;
+    	}
+    	if(isCollectionType(parameterType) && inferElementTypeFromGenericType(genericParameterType)!=null) {
+    		return true;
+    	}
+    	return false;
     }
 
-    public static Class<?> inferFromArrayType(final Class<?> type) {
+    // -- ELEMENT TYPE INFERENCE (ARRAY)
+    
+    /**
+     * Returns the inferred element type of the specified array type 
+     * @param type of the array for which to infer the element type 
+     * @return inferred type or null if inference fails
+     */
+    public static @Nullable Class<?> inferElementTypeFromArrayType(@Nullable final Class<?> type) {
         if(!isArrayType(type)) {
             return null;
         }
-        if (type.isArray()) {
-            final Class<?> componentType = type.getComponentType();
-            return componentType;
-        }
-        return null;
+        return type.getComponentType();
     }
 
-    @Programmatic
-    public static Class<?> inferFromGenericParamType(
-            final Class<?> parameterType,
-            final Type genericParameterType) {
+    // -- ELEMENT TYPE INFERENCE (FROM GENERIC TYPE)
+    
+    /**
+     * Returns the inferred element type of the specified array type
+     * @param collectionType
+     * @param genericParameterType
+     * @return inferred type or null if inference fails
+     */
+    public static @Nullable Class<?> inferElementTypeFromGenericType(@Nullable final Type genericType) {
 
-        if(!isCollectionType(parameterType)) {
-            return null;
-        }
+    	if(genericType==null) {
+    		return null;
+    	}
 
-        if(genericParameterType instanceof ParameterizedType) {
-            final ParameterizedType parameterizedType = (ParameterizedType) genericParameterType;
+        if(genericType instanceof ParameterizedType) {
+            final ParameterizedType parameterizedType = (ParameterizedType) genericType;
             final Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
             if(actualTypeArguments.length == 1) {
                 final Type actualTypeArgument = actualTypeArguments[0];
@@ -78,15 +116,73 @@ public final class CollectionUtils {
                 }
             }
         }
+        
         return null;
     }
 
+    // -- ELEMENT TYPE INFERENCE (FROM FIELD)
+    
     /**
-     * @return true means that either {@link CollectionUtils#inferFromGenericParamType(Class, Type)} or {@link TypeOfFacet.Util#inferFromArrayType(FacetHolder, Class, SpecificationLoader)} will return a non-null value.
-     */
-    public static boolean isParamCollection(
-            final Class<?> parameterType,
-            final Type genericParameterType) {
-        return inferFromGenericParamType(parameterType, genericParameterType) != null || inferFromArrayType(parameterType) != null;
-    }
+	 * If field is of type (or a sub-type of) Collection&lt;T&gt; with generic type T present, 
+	 * then call action with the element type.
+	 * @param field
+	 * @param action
+	 */
+    public static void ifIsCollectionWithGenericTypeThen(Field field, Consumer<Class<?>> action) {
+		
+		final Class<?> fieldType = field.getType();
+		
+		if(isCollectionType(fieldType)) {
+			
+			final Class<?> elementType = inferElementTypeFromGenericType(field.getGenericType());
+			
+			if(elementType!=null) {
+				action.accept(elementType);
+			}
+        }
+		
+	}
+    
+    // -- COLLECT ELEMENTS FROM STREAM
+
+	/**
+	 * Collects elements from stream into a collection that is compatible with the given typeOfCollection.
+	 * @param typeOfCollection
+	 * @param elementStream
+	 * @return
+	 * 
+	 * @throws IllegalArgumentException if the given typeOfCollection is not supported 
+	 */
+	public static <T> Collection<T> collectIntoUnmodifiableCompatibleWithCollectionType (
+			Class<?> typeOfCollection, Stream<? extends T> elementStream) {
+
+		if(SortedSet.class.equals(typeOfCollection)) {
+			return Collections.unmodifiableSortedSet(
+					elementStream.collect(Collectors.<T, SortedSet<T>>toCollection(TreeSet::new))
+			);
+		}
+		
+		if(Set.class.equals(typeOfCollection)) {
+			return Collections.unmodifiableSet(
+					elementStream.collect(Collectors.<T, Set<T>>toCollection(HashSet::new))
+			);
+		}
+		
+		if(List.class.equals(typeOfCollection)) {
+			return Collections.unmodifiableList(
+					elementStream.collect(Collectors.<T, List<T>>toCollection(ArrayList::new))
+			);
+		}
+		
+		if(Collection.class.equals(typeOfCollection)) {
+			return Collections.unmodifiableCollection(
+					elementStream.collect(Collectors.toCollection(ArrayList::new))
+			);
+		}
+		
+		throw new IllegalArgumentException(
+				String.format("Can not collect into %s. Only List, Set, SortedSet and Collection are supported.",
+						typeOfCollection.getClass().getName()));
+	}
+
 }
