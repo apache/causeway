@@ -19,27 +19,19 @@ package org.apache.isis.core.metamodel.services;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-
-import javax.inject.Inject;
-
-import com.google.common.base.Predicate;
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.ListMultimap;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.internal.base._NullSafe;
+import org.apache.isis.applib.internal.collections._Lists;
+import org.apache.isis.applib.internal.collections._Maps;
+import org.apache.isis.applib.internal.collections._Multimaps;
+import org.apache.isis.applib.internal.collections._Multimaps.ListMultimap;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
@@ -55,6 +47,8 @@ import org.apache.isis.core.metamodel.specloader.InjectorMethodEvaluatorDefault;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The repository of services, also able to inject into any object.
@@ -72,19 +66,20 @@ public class ServicesInjector implements ApplicationScopedComponent {
     public static final String KEY_SET_PREFIX = "isis.services.injector.setPrefix";
     public static final String KEY_INJECT_PREFIX = "isis.services.injector.injectPrefix";
 
-    // -- constructor, fields
+    // -- CONSTRUCTOR, FIELDS
     /**
      * This is mutable internally, but only ever exposed (in {@link #getRegisteredServices()}) as immutable.
      */
-    private final List<Object> services = Lists.newArrayList();
+    private final List<Object> services = _Lists.newArrayList();
 
     /**
      * If no key, not yet searched for type; otherwise the corresponding value is a {@link List} of all
      * services that are assignable to the type.  It's possible that this is an empty list.
      */
-    private final Map<Class<?>, List<Object>> servicesAssignableToType = Maps.newHashMap();
-
-    private final Map<Class<?>, Object> serviceByConcreteType = Maps.newHashMap();
+    private final Map<Class<?>, List<Object>> servicesAssignableToType = _Maps.newHashMap();
+    private final Map<Class<?>, Object> serviceByConcreteType = _Maps.newHashMap();
+    private final Map<Class<?>, Method[]> methodsByClassCache = _Maps.newHashMap();
+    private final Map<Class<?>, Field[]> fieldsByClassCache = _Maps.newHashMap();
 
     private final InjectorMethodEvaluator injectorMethodEvaluator;
     private final boolean autowireSetters;
@@ -94,25 +89,19 @@ public class ServicesInjector implements ApplicationScopedComponent {
         this(services, null, configuration);
     }
 
-    /**
-     * For testing.
-     */
-    public ServicesInjector(
-            final List<Object> services,
+    public static ServicesInjector forTesting(
+    		final List<Object> services,
             final IsisConfigurationDefault configuration,
             final InjectorMethodEvaluator injectorMethodEvaluator) {
-        this(services, injectorMethodEvaluator, defaultAutowiring(configuration));
+        return new ServicesInjector(services, injectorMethodEvaluator, defaultAutowiring(configuration));
     }
-
+    
     private static IsisConfiguration defaultAutowiring(final IsisConfigurationDefault configuration) {
         configuration.put(KEY_SET_PREFIX, ""+true);
         configuration.put(KEY_INJECT_PREFIX, ""+false);
         return configuration;
     }
 
-    /**
-     * For testing.
-     */
     private ServicesInjector(
             final List<Object> services,
             final InjectorMethodEvaluator injectorMethodEvaluator,
@@ -128,9 +117,7 @@ public class ServicesInjector implements ApplicationScopedComponent {
         this.autowireInject = configuration.getBoolean(KEY_INJECT_PREFIX, false);
     }
 
-    
-
-    // -- replaceServices
+    // -- REPLACE SERVICES
 
     /**
      * Update an individual service.
@@ -185,43 +172,32 @@ public class ServicesInjector implements ApplicationScopedComponent {
     }
 
     private static void validate(List<Object> serviceList) {
-        ListMultimap<String, Object> servicesById = ArrayListMultimap.create();
+        final ListMultimap<String, Object> servicesById = _Multimaps.newListMultimap();
         for (Object service : serviceList) {
             String id = ServiceUtil.id(service);
-            servicesById.put(id, service);
+            servicesById.putElement(id, service);
         }
-        for (Map.Entry<String, Collection<Object>> servicesForId : servicesById.asMap().entrySet()) {
-            String serviceId = servicesForId.getKey();
-            Collection<Object> services = servicesForId.getValue();
-            if(services.size() > 1) {
+        
+        servicesById.forEach((serviceId, services)->{
+        	if(services.size() > 1) {
                 throw new IllegalStateException(
                         String.format("Service ids must be unique; serviceId '%s' is declared by domain services %s",
                                 serviceId, classNamesFor(services)));
             }
-        }
+        });
     }
 
     private static String classNamesFor(Collection<Object> services) {
-        StringBuilder buf = new StringBuilder();
-        for (Object service : services) {
-            if(buf.length() > 0) {
-                buf.append(", ");
-            }
-            buf.append(service.getClass().getName());
-        }
-        return buf.toString();
+    	return _NullSafe.stream(services)
+    			.map(Object::getClass)
+    			.map(Class::getName)
+    			.collect(Collectors.joining(", "));
     }
-
 
     static boolean contains(final List<Object> services, final Class<?> serviceClass) {
-        for (Object service : services) {
-            if(serviceClass.isAssignableFrom(service.getClass())) {
-                return true;
-            }
-        }
-        return false;
+    	return _NullSafe.stream(services)
+    			.anyMatch(service->serviceClass.isAssignableFrom(service.getClass()));
     }
-
 
     /**
      * All registered services, as an immutable {@link List}.
@@ -230,9 +206,7 @@ public class ServicesInjector implements ApplicationScopedComponent {
         return Collections.unmodifiableList(services);
     }
 
-    
-
-    // -- injectServicesInto
+    // -- INJECT SERVICES INTO
 
     /**
      * Provided by the <tt>ServicesInjector</tt> when used by framework.
@@ -255,9 +229,7 @@ public class ServicesInjector implements ApplicationScopedComponent {
         }
     }
 
-    
-
-    // -- injectInto
+    // -- INJECT INTO
 
     /**
      * That is, injecting this injector...
@@ -269,9 +241,7 @@ public class ServicesInjector implements ApplicationScopedComponent {
         }
     }
 
-    
-
-    // -- helpers
+    // -- HELPERS
 
     private void injectServices(final Object object, final List<Object> services) {
 
@@ -288,18 +258,10 @@ public class ServicesInjector implements ApplicationScopedComponent {
     }
 
     private void autowireViaFields(final Object object, final List<Object> services, final Class<?> cls) {
-        final List<Field> fields = Arrays.asList(cls.getDeclaredFields());
-        final Iterable<Field> injectFields = Iterables.filter(fields, new Predicate<Field>() {
-            @Override
-            public boolean apply(final Field input) {
-                final Inject annotation = input.getAnnotation(javax.inject.Inject.class);
-                return annotation != null;
-            }
-        });
-
-        for (final Field field : injectFields) {
-            autowire(object, field, services);
-        }
+    	
+    	_NullSafe.stream(fieldsByClassCache.computeIfAbsent(cls, __->cls.getDeclaredFields()))
+    	.filter(isAnnotatedForInjection())
+    	.forEach(field->autowire(object, field, services));
 
         // recurse up the object's class hierarchy
         final Class<?> superclass = cls.getSuperclass();
@@ -313,35 +275,37 @@ public class ServicesInjector implements ApplicationScopedComponent {
             final Field field,
             final List<Object> services) {
 
-        final Class<?> type = field.getType();
+        final Class<?> typeToBeInjected = field.getType();
         // don't think that type can ever be null,
         // but Javadoc for java.lang.reflect.Field doesn't say
-        if(type == null) {
+        if(typeToBeInjected == null) {
             return;
         }
 
-        // inject into Collection<T> or List<T>
-        if(Collection.class.isAssignableFrom(type) || List.class.isAssignableFrom(type)) {
-            final Type genericType = field.getGenericType();
-            if(genericType instanceof ParameterizedType) {
-                final ParameterizedType listParameterizedType = (ParameterizedType) genericType;
-                final Class<?> listType = (Class<?>) listParameterizedType.getActualTypeArguments()[0];
-                final List<Object> listOfServices =
-                        Collections.unmodifiableList(
-                                Lists.newArrayList(
-                                        Iterables.filter(services, new Predicate<Object>() {
-                                            @Override
-                                            public boolean apply(final Object input) {
-                                                return input != null && listType.isAssignableFrom(input.getClass());
-                                            }
-                                        })));
-                invokeInjectorField(field, object, listOfServices);
-            }
-        }
-
+        // inject matching services into a field of type Collection<T> if a generic type T is present
+        CollectionHelper.ifIsCollectionWithGenericTypeThen(field, (elementType)->{
+        	
+        	@SuppressWarnings("unchecked")
+			final Class<? extends Collection<Object>> collectionTypeToBeInjected =
+        			(Class<? extends Collection<Object>>) typeToBeInjected;
+        	
+        	 final Collection<Object> collectionOfServices =
+        			 CollectionHelper.collectIntoUnmodifiableCompatibleWithCollectionType(
+        					 
+        					 collectionTypeToBeInjected,
+        					 
+                     		 _NullSafe.stream(services)
+                              .filter(_NullSafe::isPresent)
+                              .filter(isOfType(elementType))
+                              
+                     		);
+             
+             invokeInjectorField(field, object, collectionOfServices);
+        });
+        
         for (final Object service : services) {
             final Class<?> serviceClass = service.getClass();
-            if(type.isAssignableFrom(serviceClass)) {
+            if(typeToBeInjected.isAssignableFrom(serviceClass)) {
                 invokeInjectorField(field, object, service);
                 return;
             }
@@ -353,23 +317,17 @@ public class ServicesInjector implements ApplicationScopedComponent {
             final List<Object> services,
             final Class<?> cls,
             final String prefix) {
-        final List<Method> methods = Arrays.asList(cls.getMethods());
-        final Iterable<Method> prefixedMethods = Iterables.filter(methods, new Predicate<Method>(){
-            public boolean apply(final Method method) {
-                final String methodName = method.getName();
-                return methodName.startsWith(prefix);
-            }
-        });
-
-        for (final Method prefixedMethod : prefixedMethods) {
-            autowire(object, prefixedMethod, services);
-        }
+    	
+    	_NullSafe.stream(methodsByClassCache.computeIfAbsent(cls, __->cls.getMethods()))
+    	.filter(nameStartsWith(prefix))
+    	.forEach(prefixedMethod->autowire(object, prefixedMethod, services));
     }
 
     private void autowire(
             final Object object,
             final Method prefixedMethod,
             final List<Object> services) {
+    	
         for (final Object service : services) {
             final Class<?> serviceClass = service.getClass();
             final boolean isInjectorMethod = injectorMethodEvaluator.isInjectorMethodFor(prefixedMethod, serviceClass);
@@ -420,22 +378,12 @@ public class ServicesInjector implements ApplicationScopedComponent {
         }
     }
 
-
-
-
-    
-
-
-
-    // -- autoWire
+    // -- AUTOWIRE
 
     @Programmatic
     public void autowire() {
         injectServicesInto(this.services);
     }
-
-    
-
 
     // -- lookupService, lookupServices
 
@@ -487,30 +435,33 @@ public class ServicesInjector implements ApplicationScopedComponent {
             return;
         }
 
-        final List<Object> matchingServices = Lists.newArrayList();
+        final List<Object> matchingServices = _Lists.newArrayList();
         addAssignableTo(serviceClass, services, matchingServices);
 
         servicesAssignableToType.put(serviceClass, matchingServices);
     }
 
     private static void addAssignableTo(final Class<?> type, final List<Object> candidates, final List<Object> filteredServicesAndContainer) {
-        final Iterable<Object> filteredServices = Iterables.filter(candidates, ofType(type));
-        filteredServicesAndContainer.addAll(Lists.newArrayList(filteredServices));
+    	_NullSafe.stream(candidates)
+    	.filter(isOfType(type))
+    	.forEach(filteredServicesAndContainer::add);
     }
 
-    private static final Predicate<Object> ofType(final Class<?> cls) {
-        return new Predicate<Object>() {
-            @Override
-            public boolean apply(final Object input) {
-                return cls.isAssignableFrom(input.getClass());
-            }
-        };
-    }
-
-
+    // -- REFLECTIVE PREDICATES
     
-
-    // -- convenience lookups (singletons only, cached)
+    private static final Predicate<Object> isOfType(final Class<?> cls) {
+        return input->cls.isAssignableFrom(input.getClass());
+    }
+    
+    private static final Predicate<Method> nameStartsWith(final String prefix) {
+        return method->method.getName().startsWith(prefix);
+    }
+    
+    private static final Predicate<Field> isAnnotatedForInjection() {
+        return field->field.getAnnotation(javax.inject.Inject.class) != null;
+    }
+    
+    // -- CONVENIENCE LOOKUPS (singletons only, cached)
 
     private AuthenticationManager authenticationManager;
 

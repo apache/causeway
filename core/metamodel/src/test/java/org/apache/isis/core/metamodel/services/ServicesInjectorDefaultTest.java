@@ -72,7 +72,8 @@ public class ServicesInjectorDefaultTest {
         final Object[] services = { mockContainer, mockService1, mockService2 };
 
         IsisConfigurationDefault stubConfiguration = new IsisConfigurationDefault();
-        injector = new ServicesInjector(Arrays.asList(services), stubConfiguration, new InjectorMethodEvaluatorDefault());
+        injector = ServicesInjector.forTesting(
+        		Arrays.asList(services), stubConfiguration, new InjectorMethodEvaluatorDefault());
     }
 
     @After

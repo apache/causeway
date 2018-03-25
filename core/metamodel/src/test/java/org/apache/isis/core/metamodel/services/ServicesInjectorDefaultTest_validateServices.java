@@ -62,7 +62,7 @@ public class ServicesInjectorDefaultTest_validateServices {
             serviceList.add(new DomainServiceWithSomeId());
             serviceList.add(new DomainServiceWithDuplicateId());
 
-            servicesInjector = new ServicesInjector(serviceList, stubConfiguration, null);
+            servicesInjector = ServicesInjector.forTesting(serviceList, stubConfiguration, null);
 
             // when
             servicesInjector.validateServices();
@@ -74,7 +74,7 @@ public class ServicesInjectorDefaultTest_validateServices {
             serviceList.add(new DomainServiceWithSomeId());
             serviceList.add(new DomainServiceWithDifferentId());
 
-            servicesInjector = new ServicesInjector(serviceList, stubConfiguration, null);
+            servicesInjector = ServicesInjector.forTesting(serviceList, stubConfiguration, null);
 
             // when
             servicesInjector.validateServices();
