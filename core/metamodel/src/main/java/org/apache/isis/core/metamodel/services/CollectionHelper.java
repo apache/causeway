@@ -68,25 +68,25 @@ class CollectionHelper {
 	static <T> Collection<T> collectIntoUnmodifiableCompatibleWithCollectionType (
 			Class<?> typeOfCollection, Stream<? extends T> elementStream) {
 
-		if(SortedSet.class.isAssignableFrom(typeOfCollection)) {
+		if(SortedSet.class.equals(typeOfCollection)) {
 			return Collections.unmodifiableSortedSet(
 					elementStream.collect(Collectors.<T, SortedSet<T>>toCollection(TreeSet::new))
 			);
 		}
 		
-		if(Set.class.isAssignableFrom(typeOfCollection)) {
+		if(Set.class.equals(typeOfCollection)) {
 			return Collections.unmodifiableSet(
 					elementStream.collect(Collectors.<T, Set<T>>toCollection(HashSet::new))
 			);
 		}
 		
-		if(List.class.isAssignableFrom(typeOfCollection)) {
+		if(List.class.equals(typeOfCollection)) {
 			return Collections.unmodifiableList(
 					elementStream.collect(Collectors.<T, List<T>>toCollection(ArrayList::new))
 			);
 		}
 		
-		if(Collection.class.isAssignableFrom(typeOfCollection)) {
+		if(Collection.class.equals(typeOfCollection)) {
 			return Collections.unmodifiableCollection(
 					elementStream.collect(Collectors.toCollection(ArrayList::new))
 			);
