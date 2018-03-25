@@ -66,23 +66,23 @@ class CollectionHelper {
 	 * @throws IllegalArgumentException if the given typeOfCollection is not supported 
 	 */
 	static <T> Collection<T> collectIntoUnmodifiableCompatibleWithCollectionType (
-			Class<?> typeOfCollection, Stream<T> elementStream) {
+			Class<?> typeOfCollection, Stream<? extends T> elementStream) {
 
 		if(SortedSet.class.isAssignableFrom(typeOfCollection)) {
 			return Collections.unmodifiableSortedSet(
-					elementStream.collect(Collectors.toCollection(TreeSet::new))
+					elementStream.collect(Collectors.<T, SortedSet<T>>toCollection(TreeSet::new))
 			);
 		}
 		
 		if(Set.class.isAssignableFrom(typeOfCollection)) {
 			return Collections.unmodifiableSet(
-					elementStream.collect(Collectors.toCollection(HashSet::new))
+					elementStream.collect(Collectors.<T, Set<T>>toCollection(HashSet::new))
 			);
 		}
 		
 		if(List.class.isAssignableFrom(typeOfCollection)) {
 			return Collections.unmodifiableList(
-					elementStream.collect(Collectors.toCollection(ArrayList::new))
+					elementStream.collect(Collectors.<T, List<T>>toCollection(ArrayList::new))
 			);
 		}
 		
