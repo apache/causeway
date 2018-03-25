@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.commons.ensure;
 
+import java.util.function.Supplier;
+
 import org.hamcrest.Matcher;
 import org.hamcrest.StringDescription;
 
@@ -77,6 +79,13 @@ public final class Ensure {
         return arg;
     }
 
+    public static <T> T ensureThatArg(final T arg, final Matcher<T> matcher, final Supplier<String> message) {
+        if (!matcher.matches(arg)) {
+            throw new IllegalArgumentException(message.get());
+        }
+        return arg;
+    }
+    
     /**
      * To ensure that the current state of this object (instance fields) is
      * correct.

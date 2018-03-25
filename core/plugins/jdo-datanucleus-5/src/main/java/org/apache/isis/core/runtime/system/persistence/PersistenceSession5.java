@@ -20,7 +20,6 @@ package org.apache.isis.core.runtime.system.persistence;
 
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Modifier;
@@ -30,6 +29,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 import javax.jdo.FetchGroup;
@@ -41,6 +41,7 @@ import javax.jdo.listener.InstanceLifecycleListener;
 
 import org.apache.isis.applib.internal.collections._Lists;
 import org.apache.isis.applib.internal.collections._Maps;
+import org.apache.isis.applib.internal.exceptions._Exceptions;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
@@ -723,7 +724,7 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
 
         // can be either a view model or a persistent entity.
 
-        ensureThatArg(oid, is(notNullValue()));
+        Objects.requireNonNull(oid);
 
         final ObjectAdapter adapter = getAdapterFor(oid);
         if (adapter != null) {
@@ -1127,14 +1128,14 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
 
     @Override
     public ObjectAdapter getAdapterFor(final Object pojo) {
-        ensureThatArg(pojo, is(notNullValue()));
+        Objects.requireNonNull(pojo);
 
         return pojoAdapterMap.getAdapter(pojo);
     }
 
     @Override
     public ObjectAdapter getAdapterFor(final Oid oid) {
-        ensureThatArg(oid, is(notNullValue()));
+        Objects.requireNonNull(oid);
         ensureMapsConsistent(oid);
 
         return oidAdapterMap.getAdapter(oid);
@@ -1195,7 +1196,7 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
      * Fail early if any problems.
      */
     private void ensureMapsConsistent(final Oid oid) {
-        ensureThatArg(oid, is(notNullValue()));
+    	Objects.requireNonNull(oid);
 
         final ObjectAdapter adapter = oidAdapterMap.getAdapter(oid);
         if (adapter == null) {
@@ -1241,15 +1242,17 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
                     + mapName
                     + ": provided adapter's OID: " + adapterOid + "; but no adapter found in map");
         }
+        
         ensureThatArg(
                 adapter, is(adapterAccordingToMap),
-                "mismatch in "
+                ()->"mismatch in "
                         + mapName
                         + ": provided adapter's OID: " + adapterOid + ", \n"
                         + "but map's adapter's OID was: " + adapterAccordingToMap.getOid());
     }
+  
 
-    @Override
+	@Override
     public ObjectAdapter adapterForAny(RootOid rootOid) {
 
         final ObjectSpecId specId = rootOid.getObjectSpecId();

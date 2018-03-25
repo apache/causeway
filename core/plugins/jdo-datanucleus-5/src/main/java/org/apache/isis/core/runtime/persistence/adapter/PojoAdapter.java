@@ -23,6 +23,8 @@ import org.datanucleus.enhancement.Persistable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Objects;
+
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.commons.exceptions.IsisException;
@@ -43,9 +45,6 @@ import org.apache.isis.core.metamodel.spec.Specification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession5;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
 
 public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
 
@@ -134,7 +133,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
 
     @Override
     public void replaceOid(Oid persistedOid) {
-        Ensure.ensureThatArg(oid, is(notNullValue())); // values have no oid, so cannot be replaced 
+        Objects.requireNonNull(oid); // values have no oid, so cannot be replaced 
         this.oid = persistedOid;
     }
     

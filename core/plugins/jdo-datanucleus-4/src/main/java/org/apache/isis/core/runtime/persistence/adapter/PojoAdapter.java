@@ -19,8 +19,7 @@
 
 package org.apache.isis.core.runtime.persistence.adapter;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
+import java.util.Objects;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.ensure.Ensure;
@@ -133,7 +132,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
 
     @Override
     public void replaceOid(Oid persistedOid) {
-        Ensure.ensureThatArg(oid, is(notNullValue())); // values have no oid, so cannot be replaced 
+    	Objects.requireNonNull(oid); // values have no oid, so cannot be replaced 
         this.oid = persistedOid;
     }
     
