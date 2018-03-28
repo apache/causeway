@@ -1,0 +1,3 @@
+buildCmd: mvn compile
+testCmd: mvn test
+ignoreExistingCoverage: true
