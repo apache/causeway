@@ -67,7 +67,6 @@ import org.apache.isis.core.metamodel.facets.object.domainobject.DomainObjectAnn
 import org.apache.isis.core.metamodel.facets.object.domainobjectlayout.DomainObjectLayoutFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.domainservice.annotation.DomainServiceFacetAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.domainservicelayout.DomainServiceLayoutFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.encodeable.annotcfg.EncodableFacetAnnotationElseConfigurationFactory;
 import org.apache.isis.core.metamodel.facets.object.facets.annotation.FacetsFacetAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.grid.GridFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.hidden.method.HiddenObjectFacetViaMethodFactory;
@@ -86,7 +85,6 @@ import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacetForMixinAnno
 import org.apache.isis.core.metamodel.facets.object.navparent.annotation.NavigableParentAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.classname.ObjectSpecIdFacetDerivedFromClassNameFactory;
 import org.apache.isis.core.metamodel.facets.object.objectvalidprops.impl.ObjectValidPropertiesFacetImplFactory;
-import org.apache.isis.core.metamodel.facets.object.parseable.annotcfg.ParseableFacetAnnotationElseConfigurationFactory;
 import org.apache.isis.core.metamodel.facets.object.recreatable.DisabledFacetOnCollectionDerivedFromViewModelFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.recreatable.DisabledFacetOnPropertyDerivedFromRecreatableObjectFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.recreatable.RecreatableObjectFacetFactory;
@@ -283,8 +281,6 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(new BigDecimalFacetOnParameterFromJavaxValidationAnnotationFactory());
         addFactory(new BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotationFactory());
 
-        addFactory(new EncodableFacetAnnotationElseConfigurationFactory());
-        
         addFactory(new NotContributedFacetDerivedFromDomainServiceFacetFactory());
         addFactory(new NotInServiceMenuFacetDerivedFromDomainServiceFacetFactory());
 
@@ -331,23 +327,19 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(new TitleFacetViaMethodsFactory());
         addFactory(new IconFacetMethodFactory());
         addFactory(new NavigableParentAnnotationFacetFactory());
-        //addFactory(new NavigableParentFacetMethodFactory()); //TODO [ahuber] remove once we agreed on deprecation
         addFactory(new CssClassFacetMethodFactory());
-
 
         addFactory(new DomainServiceLayoutFacetFactory());
         addFactory(new DomainObjectLayoutFacetFactory());
+        
         // must come after MultiLine
         addFactory(new PropertyLayoutFacetFactory());
         addFactory(new ParameterLayoutFacetFactory());
         addFactory(new ActionLayoutFacetFactory());
         addFactory(new CollectionLayoutFacetFactory());
-
-        addFactory(new ParseableFacetAnnotationElseConfigurationFactory());
         
 
         // must come after any facets that install titles
-        
         addFactory(new TypicalLengthFacetOnPropertyDerivedFromTypeFacetFactory());
         addFactory(new TypicalLengthFacetOnParameterDerivedFromTypeFacetFactory());
 

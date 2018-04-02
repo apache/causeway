@@ -17,26 +17,27 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.object.parseable.annotcfg;
+package org.apache.isis.core.metamodel.facets.object.encodeable.annotcfg;
 
-import com.google.common.base.Strings;
-
-import org.apache.isis.applib.annotation.Parseable;
+import org.apache.isis.applib.annotation.Encodable;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacetAbstract;
-import org.apache.isis.core.metamodel.facets.object.parseable.ParserUtil;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
+import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
+import org.apache.isis.core.metamodel.facets.object.encodeable.EncoderDecoderUtil;
+import org.apache.isis.core.metamodel.progmodel.DeprecatedMarker;
 
-public class ParseableFacetAnnotationElseConfigurationFactory extends FacetFactoryAbstract {
+import com.google.common.base.Strings;
 
+/**
+ * @deprecated because {@link Encodable} was deprecated
+ */
+@Deprecated
+public class EncodableFacetAnnotationElseConfigurationFactory extends FacetFactoryAbstract implements DeprecatedMarker {
 
-
-    public ParseableFacetAnnotationElseConfigurationFactory() {
+    public EncodableFacetAnnotationElseConfigurationFactory() {
         super(FeatureType.OBJECTS_ONLY);
     }
 
@@ -45,38 +46,34 @@ public class ParseableFacetAnnotationElseConfigurationFactory extends FacetFacto
         FacetUtil.addFacet(create(processClassContaxt.getCls(), processClassContaxt.getFacetHolder()));
     }
 
-    private ParseableFacetAbstract create(final Class<?> cls, final FacetHolder holder) {
-        final Parseable annotation = Annotations.getAnnotation(cls, Parseable.class);
+    /**
+     * Returns a {@link org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet} implementation.
+     */
+    private EncodableFacet create(final Class<?> cls, final FacetHolder holder) {
 
         // create from annotation, if present
+        final Encodable annotation = Annotations.getAnnotation(cls, Encodable.class);
         if (annotation != null) {
-            final ParseableFacetAnnotation facet = new ParseableFacetAnnotation(cls, getConfiguration(), holder,
-                    adapterManager, servicesInjector);
+            final EncodableFacetAnnotation facet = new EncodableFacetAnnotation(cls, holder, servicesInjector);
             if (facet.isValid()) {
                 return facet;
             }
         }
 
         // otherwise, try to create from configuration, if present
-        final String parserName = ParserUtil.parserNameFromConfiguration(cls, getConfiguration());
-        if (!Strings.isNullOrEmpty(parserName)) {
-            final ParseableFacetFromConfiguration facet = new ParseableFacetFromConfiguration(parserName, holder,
-                    servicesInjector, adapterManager);
+        final String encoderDecoderName = EncoderDecoderUtil.encoderDecoderNameFromConfiguration(cls, getConfiguration());
+        if (!Strings.isNullOrEmpty(encoderDecoderName)) {
+            final EncodableFacetFromConfiguration facet = new EncodableFacetFromConfiguration(encoderDecoderName, holder, servicesInjector);
             if (facet.isValid()) {
                 return facet;
             }
         }
 
+        // otherwise, no value semantic
         return null;
     }
 
 
-    @Override
-    public void setServicesInjector(final ServicesInjector servicesInjector) {
-        super.setServicesInjector(servicesInjector);
-        adapterManager = servicesInjector.getPersistenceSessionServiceInternal();
-    }
 
-    PersistenceSessionServiceInternal adapterManager;
 
 }

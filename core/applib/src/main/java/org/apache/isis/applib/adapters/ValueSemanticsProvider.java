@@ -22,9 +22,7 @@ package org.apache.isis.applib.adapters;
 import java.math.BigDecimal;
 
 import org.apache.isis.applib.annotation.Defaulted;
-import org.apache.isis.applib.annotation.Encodable;
 import org.apache.isis.applib.annotation.EqualByContent;
-import org.apache.isis.applib.annotation.Parseable;
 import org.apache.isis.applib.annotation.Value;
 
 /**
@@ -33,7 +31,7 @@ import org.apache.isis.applib.annotation.Value;
  * <p>
  * As explained in the Javadoc of the {@link Value} annotation, value semantics
  * only actually implies that the type is {@link Aggregated aggregated}.
- * However, values are very often also {@link Parseable}, {@link Encodable},
+ * However, values are very often
  * {@link Immutable} and implement {@link EqualByContent} semantics. In
  * addition, there may be a {@link Defaulted default value}.
  * 
@@ -58,17 +56,11 @@ public interface ValueSemanticsProvider<T> {
 
     /**
      * The {@link Parser}, if any.
-     * 
-     * <p>
-     * If not <tt>null</tt>, implies that the value is {@link Parseable}.
      */
     Parser<T> getParser();
 
     /**
      * The {@link EncoderDecoder}, if any.
-     * 
-     * <p>
-     * If not <tt>null</tt>, implies that the value is {@link Encodable}.
      */
     EncoderDecoder<T> getEncoderDecoder();
 
