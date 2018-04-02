@@ -26,7 +26,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.apache.isis.applib.DomainObjectContainer;
+import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.specloader.InjectorMethodEvaluatorDefault;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
@@ -38,7 +38,7 @@ public class ServicesInjectorDefaultTest {
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
     @Mock
-    private DomainObjectContainerExtended mockContainer;
+    private RepositoryServiceExtended mockRepository;
     @Mock
     private Service1 mockService1;
     @Mock
@@ -57,11 +57,11 @@ public class ServicesInjectorDefaultTest {
     public static interface Mixin {
     }
 
-    public static interface DomainObjectContainerExtended extends DomainObjectContainer, Mixin {
+    public static interface RepositoryServiceExtended extends RepositoryService, Mixin {
     }
 
     public static interface SomeDomainObject {
-        public void setContainer(DomainObjectContainer container);
+        public void setContainer(RepositoryService container);
         public void setMixin(Mixin mixin);
         public void setService1(Service1 service);
         public void setService2(Service2 service);
@@ -69,7 +69,7 @@ public class ServicesInjectorDefaultTest {
 
     @Before
     public void setUp() throws Exception {
-        final Object[] services = { mockContainer, mockService1, mockService2 };
+        final Object[] services = { mockRepository, mockService1, mockService2 };
 
         IsisConfigurationDefault stubConfiguration = new IsisConfigurationDefault();
         injector = ServicesInjector.forTesting(
@@ -85,10 +85,10 @@ public class ServicesInjectorDefaultTest {
 
         context.checking(new Expectations() {
             {
-                one(mockDomainObject).setContainer(mockContainer);
-                one(mockDomainObject).setMixin(mockContainer);
-                one(mockDomainObject).setService1(mockService1);
-                one(mockDomainObject).setService2(mockService2);
+                oneOf(mockDomainObject).setContainer(mockRepository);
+                oneOf(mockDomainObject).setMixin(mockRepository);
+                oneOf(mockDomainObject).setService1(mockService1);
+                oneOf(mockDomainObject).setService2(mockService2);
             }
         });
 
