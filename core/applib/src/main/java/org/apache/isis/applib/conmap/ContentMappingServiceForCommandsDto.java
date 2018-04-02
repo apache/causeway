@@ -63,7 +63,7 @@ public class ContentMappingServiceForCommandsDto implements ContentMappingServic
         }
 
         if (object instanceof List) {
-            final List list = (List) object;
+            final List<?> list = (List<?>) object;
             final CommandsDto commandsDto = new CommandsDto();
             for (final Object obj : list) {
                 final CommandDto objAsCommandDto = asDto(obj);

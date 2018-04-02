@@ -18,14 +18,10 @@
  */
 package org.apache.isis.applib.services.metrics;
 
-import java.sql.Timestamp;
-import java.util.UUID;
-
 import javax.enterprise.context.RequestScoped;
 import javax.jdo.listener.InstanceLifecycleEvent;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.schema.ixn.v1.MemberExecutionDto;
 

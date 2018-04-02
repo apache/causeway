@@ -20,10 +20,10 @@
 package org.apache.isis.applib.query;
 
 import java.io.Serializable;
-
 import java.util.function.Predicate;
 
-import org.apache.isis.applib.DomainObjectContainer;
+import org.apache.isis.applib.services.repository.RepositoryService;
+
 
 /**
  * For use by repository implementations, representing the values of a query.
@@ -40,9 +40,10 @@ import org.apache.isis.applib.DomainObjectContainer;
  * <b>Note:</b> that not every object store will necessarily support this
  * interface. In particular, the in-memory object store does not. For this, you
  * can use the {@link Predicate} interface to similar effect, for example in
- * {@link DomainObjectContainer#allMatches(Class, Predicate, long...)}). Note that the
- * predicate is applied within the {@link DomainObjectContainer} (ie client-side)
- * rather than being pushed back to the object store.
+ * {@link RepositoryService#allMatches(Class, Predicate, long...)}). 
+ * 
+ * Note that the predicate is applied within the {@link RepositoryService} 
+ * (ie client-side) rather than being pushed back to the object store.
  */
 public interface Query<T> extends Serializable {
 
