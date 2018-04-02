@@ -49,9 +49,9 @@ public class FilesTest_deleteFiles {
         final File cus2File = new File("xml/objects/CUS/2.xml");
         context.checking(new Expectations() {
             {
-                one(deleter).deleteFile(with(equalsFile(cusIdxFile)));
-                one(deleter).deleteFile(with(equalsFile(cus1File)));
-                one(deleter).deleteFile(with(equalsFile(cus2File)));
+            	oneOf(deleter).deleteFile(with(equalsFile(cusIdxFile)));
+            	oneOf(deleter).deleteFile(with(equalsFile(cus1File)));
+            	oneOf(deleter).deleteFile(with(equalsFile(cus2File)));
             }
         });
         

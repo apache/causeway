@@ -87,10 +87,10 @@ public class MustSatisfySpecificationValidatingInteractionTest {
 
         context.checking(new Expectations() {
             {
-                one(mockContext).getProposed();
+            	oneOf(mockContext).getProposed();
                 will(returnValue(mockProposedObjectAdapter));
 
-                one(mockProposedObjectAdapter).getObject();
+                oneOf(mockProposedObjectAdapter).getObject();
                 will(returnValue(mockProposedObject));
             }
         });

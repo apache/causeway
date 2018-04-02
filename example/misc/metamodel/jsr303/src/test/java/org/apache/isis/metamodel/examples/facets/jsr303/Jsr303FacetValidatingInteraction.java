@@ -74,13 +74,13 @@ public class Jsr303FacetValidatingInteraction {
 
         mockery.checking(new Expectations() {
             {
-                one(mockHolder).getIdentifier();
+            	oneOf(mockHolder).getIdentifier();
                 will(returnValue(Identifier.propertyOrCollectionIdentifier(DomainObjectWithBuiltInValidation.class, "serialNumber")));
 
-                one(mockContext).getTarget();
+                oneOf(mockContext).getTarget();
                 will(returnValue(mockTargetObjectAdapter));
 
-                one(mockContext).getProposed();
+                oneOf(mockContext).getProposed();
                 will(returnValue(mockProposedObjectAdapter));
             }
         });
@@ -97,10 +97,10 @@ public class Jsr303FacetValidatingInteraction {
     public void invalidatesWhenBuiltInConstraintVetoes() {
         mockery.checking(new Expectations() {
             {
-                one(mockTargetObjectAdapter).getObject();
+            	oneOf(mockTargetObjectAdapter).getObject();
                 will(returnValue(domainObjectWithBuiltInValidation));
 
-                one(mockProposedObjectAdapter).getObject();
+                oneOf(mockProposedObjectAdapter).getObject();
                 will(returnValue("NONSENSE"));
             }
         });
@@ -114,10 +114,10 @@ public class Jsr303FacetValidatingInteraction {
     public void validatesWhenBuiltInConstraintIsMet() {
         mockery.checking(new Expectations() {
             {
-                one(mockTargetObjectAdapter).getObject();
+            	oneOf(mockTargetObjectAdapter).getObject();
                 will(returnValue(domainObjectWithBuiltInValidation));
 
-                one(mockProposedObjectAdapter).getObject();
+                oneOf(mockProposedObjectAdapter).getObject();
                 will(returnValue("1234-5678-9012"));
             }
         });
@@ -130,10 +130,10 @@ public class Jsr303FacetValidatingInteraction {
     public void invalidatesWhenFailsCustomConstraint() {
         mockery.checking(new Expectations() {
             {
-                one(mockTargetObjectAdapter).getObject();
+            	oneOf(mockTargetObjectAdapter).getObject();
                 will(returnValue(domainObjectWithCustomValidation));
 
-                one(mockProposedObjectAdapter).getObject();
+                oneOf(mockProposedObjectAdapter).getObject();
                 will(returnValue("NONSENSE"));
             }
         });
@@ -147,10 +147,10 @@ public class Jsr303FacetValidatingInteraction {
     public void validatesWhenFailsCustomConstraint() {
         mockery.checking(new Expectations() {
             {
-                one(mockTargetObjectAdapter).getObject();
+            	oneOf(mockTargetObjectAdapter).getObject();
                 will(returnValue(domainObjectWithCustomValidation));
 
-                one(mockProposedObjectAdapter).getObject();
+                oneOf(mockProposedObjectAdapter).getObject();
                 will(returnValue("1234-5678-9012"));
             }
         });

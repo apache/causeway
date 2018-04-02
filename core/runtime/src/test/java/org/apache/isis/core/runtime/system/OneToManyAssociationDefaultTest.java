@@ -133,19 +133,19 @@ public class OneToManyAssociationDefaultTest {
     public void canAddPersistable() {
         context.checking(new Expectations() {
             {
-                one(mockPeer).containsFacet(NotPersistedFacet.class);
+            	oneOf(mockPeer).containsFacet(NotPersistedFacet.class);
                 will(returnValue(false));
 
-                one(mockOwnerAdapter).representsPersistent();
+                oneOf(mockOwnerAdapter).representsPersistent();
                 will(returnValue(true));
 
-                one(mockAssociatedAdapter).isTransient();
+                oneOf(mockAssociatedAdapter).isTransient();
                 will(returnValue(false));
 
-                one(mockPeer).getFacet(CollectionAddToFacet.class);
+                oneOf(mockPeer).getFacet(CollectionAddToFacet.class);
                 will(returnValue(mockCollectionAddToFacet));
 
-                one(mockCollectionAddToFacet).add(mockOwnerAdapter, mockAssociatedAdapter, InteractionInitiatedBy.USER);
+                oneOf(mockCollectionAddToFacet).add(mockOwnerAdapter, mockAssociatedAdapter, InteractionInitiatedBy.USER);
             }
         });
         association.addElement(mockOwnerAdapter, mockAssociatedAdapter, InteractionInitiatedBy.USER);
@@ -173,7 +173,7 @@ public class OneToManyAssociationDefaultTest {
     private void allowingPeerToReturnIdentifier() {
         context.checking(new Expectations() {
             {
-                one(mockPeer).getIdentifier();
+            	oneOf(mockPeer).getIdentifier();
                 will(returnValue(Identifier.propertyOrCollectionIdentifier(Customer.class, COLLECTION_ID)));
             }
         });
@@ -182,10 +182,10 @@ public class OneToManyAssociationDefaultTest {
     private void expectPeerToReturnNamedFacet() {
         context.checking(new Expectations() {
             {
-                one(mockPeer).getFacet(NamedFacet.class);
+            	oneOf(mockPeer).getFacet(NamedFacet.class);
                 will(returnValue(mockNamedFacet));
 
-                one(mockNamedFacet).value();
+                oneOf(mockNamedFacet).value();
                 will(returnValue("My name"));
             }
         });

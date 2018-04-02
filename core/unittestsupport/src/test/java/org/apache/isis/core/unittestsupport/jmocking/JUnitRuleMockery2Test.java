@@ -38,7 +38,7 @@ public class JUnitRuleMockery2Test {
     public void poke() {
         context.checking(new Expectations() {
             {
-                one(collaborator).doOtherStuff();
+            	oneOf(collaborator).doOtherStuff();
             }
         });
         new CollaboratingUsingConstructorInjection(collaborator).collaborateWithCollaborator();

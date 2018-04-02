@@ -72,8 +72,8 @@ public class RestfulHttpMethodTest_setUp {
     private void setsUpQueryString(final RestfulHttpMethod httpMethod) throws UnsupportedEncodingException {
         context.checking(new Expectations() {
             {
-                one(requestConfigurer).setHttpMethod(httpMethod);
-                one(requestConfigurer).queryString(repr);
+            	oneOf(requestConfigurer).setHttpMethod(httpMethod);
+            	oneOf(requestConfigurer).queryString(repr);
             }
         });
 
@@ -83,8 +83,8 @@ public class RestfulHttpMethodTest_setUp {
     private void setsUpBody(final RestfulHttpMethod httpMethod) throws UnsupportedEncodingException {
         context.checking(new Expectations() {
             {
-                one(requestConfigurer).setHttpMethod(httpMethod);
-                one(requestConfigurer).body(repr);
+            	oneOf(requestConfigurer).setHttpMethod(httpMethod);
+            	oneOf(requestConfigurer).body(repr);
             }
         });
 

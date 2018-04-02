@@ -262,13 +262,23 @@ public class JUnitRuleMockery2 extends JUnit4Mockery implements MethodRule {
      * Require one interaction
      * @return 
      */
-	public Object one(final Object mock) {
+	public Object oneOf(final Object mock) {
         checking(new Expectations() {
             {
                 oneOf(mock);
             }
         });
         return mock;
+	}
+	
+    /**
+     * Require one interaction
+     * @return
+     * @deprecated use {@link #oneOf(Object)} instead 
+     */
+	@Deprecated
+	public Object one(final Object mock) {
+        return oneOf(mock);
 	}
 
     public static class ExpectationsOn<T> extends Expectations {

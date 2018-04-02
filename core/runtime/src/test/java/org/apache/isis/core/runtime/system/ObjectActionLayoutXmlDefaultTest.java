@@ -102,7 +102,7 @@ public class ObjectActionLayoutXmlDefaultTest {
         };
         context.checking(new Expectations() {
             {
-                one(mockFacetedMethod).getFacet(NamedFacet.class);
+            	oneOf(mockFacetedMethod).getFacet(NamedFacet.class);
                 will(returnValue(facet));
             }
         });

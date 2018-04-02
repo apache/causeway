@@ -145,7 +145,7 @@ public class JsonValueEncoderTest_asAdapter {
 
         context.checking(new Expectations() {
             {
-                one(mockEncodableFacet).fromEncodedString("aString");
+            	oneOf(mockEncodableFacet).fromEncodedString("aString");
                 will(throwException(new TextEntryParseException("'aString' cannot be parsed as a boolean value")));
             }
         });
@@ -234,7 +234,7 @@ public class JsonValueEncoderTest_asAdapter {
 
         context.checking(new Expectations() {
             {
-                one(mockEncodableFacet).fromEncodedString("aString");
+            	oneOf(mockEncodableFacet).fromEncodedString("aString");
                 will(throwException(new TextEntryParseException("'aString' cannot be parsed as a long value")));
             }
         });

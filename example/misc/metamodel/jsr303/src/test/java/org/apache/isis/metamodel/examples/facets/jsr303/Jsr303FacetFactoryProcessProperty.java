@@ -73,7 +73,7 @@ public class Jsr303FacetFactoryProcessProperty {
     @Test
     public void alwaysAddsAJsr303FacetToHolder() {
         mockery.checking(new Expectations() {{
-            one(mockFacetHolder).addFacet(with(anInstanceOf(Jsr303PropertyValidationFacet.class)));
+            oneOf(mockFacetHolder).addFacet(with(anInstanceOf(Jsr303PropertyValidationFacet.class)));
         }});
 
         facetFactory.process(firstNameMethod, mockMethodRemover, mockFacetHolder);

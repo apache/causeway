@@ -126,13 +126,13 @@ public class ParseableFacetUsingParserTest {
          * mockery.mock(AuthenticationSession.class);
          * 
          * mockery.checking(new Expectations(){{
-         * one(mockAdapterManager).adapterFor("XXX");
+         * oneOf(mockAdapterManager).adapterFor("XXX");
          * will(returnValue(mockAdapter));
          * 
-         * one(mockAdapter).getSpecification();
+         * oneOf(mockAdapter).getSpecification();
          * will(returnValue(mockSpecification));
          * 
-         * one(mockAuthenticationSessionProvider).getAuthenticationSession();
+         * oneOf(mockAuthenticationSessionProvider).getAuthenticationSession();
          * will(returnValue(session));
          * 
          * allowing(mockSpecification).createValidityInteractionContext(session,

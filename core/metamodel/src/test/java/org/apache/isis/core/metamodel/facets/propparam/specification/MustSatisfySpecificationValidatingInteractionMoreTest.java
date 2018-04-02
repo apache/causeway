@@ -103,10 +103,10 @@ public class MustSatisfySpecificationValidatingInteractionMoreTest {
     public void validatesUsingSpecificationIfProposedOkay() {
         context.checking(new Expectations() {
             {
-                one(mockContext).getProposed();
+            	oneOf(mockContext).getProposed();
                 will(returnValue(mockProposedObjectAdapter));
 
-                one(mockProposedObjectAdapter).getObject();
+                oneOf(mockProposedObjectAdapter).getObject();
                 will(returnValue("This starts with an upper case letter and so is okay"));
             }
         });
@@ -119,10 +119,10 @@ public class MustSatisfySpecificationValidatingInteractionMoreTest {
     public void invalidatesUsingSpecificationIfProposedNotOkay() {
         context.checking(new Expectations() {
             {
-                one(mockContext).getProposed();
+            	oneOf(mockContext).getProposed();
                 will(returnValue(mockProposedObjectAdapter));
 
-                one(mockProposedObjectAdapter).getObject();
+                oneOf(mockProposedObjectAdapter).getObject();
                 will(returnValue("this starts with an lower case letter and so is not okay"));
             }
         });

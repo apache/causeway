@@ -142,7 +142,7 @@ public class ResourceContextTest_getArg {
     private void givenServletRequestQueryString(final String queryString) {
         context.checking(new Expectations() {
             {
-                one(mockHttpServletRequest).getQueryString();
+            	oneOf(mockHttpServletRequest).getQueryString();
                 will(returnValue(queryString));
             }
         });

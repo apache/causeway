@@ -74,13 +74,13 @@ public class JavaCollectionFacetTest {
     public void firstElementForEmptyCollectionIsNull() {
         context.checking(new Expectations() {
             {
-                one(mockCollection).getObject();
+                oneOf(mockCollection).getObject();
                 will(returnValue(mockWrappedCollection));
 
-                one(mockWrappedCollection).iterator();
+                oneOf(mockWrappedCollection).iterator();
                 will(returnValue(mockIterator));
 
-                one(mockIterator).hasNext();
+                oneOf(mockIterator).hasNext();
                 will(returnValue(false));
             }
         });

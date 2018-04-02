@@ -61,7 +61,7 @@ public class IsisWicketApplication_Pages {
         };
         context.checking(new Expectations() {
             {
-                one(mockPageClassRegistry).getPageClass(pageType);
+            	oneOf(mockPageClassRegistry).getPageClass(pageType);
                 will(returnValue(expectedPageClass));
             }
         });
@@ -86,7 +86,7 @@ public class IsisWicketApplication_Pages {
         };
         context.checking(new Expectations() {
             {
-                one(mockPageClassRegistry).getPageClass(pageType);
+            	oneOf(mockPageClassRegistry).getPageClass(pageType);
                 will(returnValue(expectedPageClass));
             }
         });
