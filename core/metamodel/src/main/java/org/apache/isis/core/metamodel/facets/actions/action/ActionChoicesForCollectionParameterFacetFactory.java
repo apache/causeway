@@ -25,6 +25,7 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacet;
 import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
@@ -106,6 +107,25 @@ public class ActionChoicesForCollectionParameterFacetFactory extends FacetFactor
                             final ObjectActionParameter parameter,
                             final int paramNum,
                             final ValidationFailures validationFailures) {
+                    	
+                    	
+                    	final CollectionSemanticsFacet collectionSemantics = 
+                    			parameter.getFacet(CollectionSemanticsFacet.class);
+                    	if (collectionSemantics != null) {
+                            // Violation if there are action parameter types that are assignable 
+                        	// from java.util.Collection but are not of  
+                            // exact type List, Set, SortedSet or Collection.
+                    		if(!collectionSemantics.value().isSupportedInterfaceForActionParameters()) {
+                    			validationFailures.add(
+                                        "Collection action parameter found that is not exaclty one "
+                                        + "of the following supported types: "
+                                        + "List, Set, SortedSet or Collection.  "
+                                        + "Class: %s action: %s parameter %d",
+                                        objectSpec.getFullIdentifier(), objectAction.getName(), paramNum);
+                        		return;	
+                    		}
+                        }
+                    	
                         final ActionParameterChoicesFacet choicesFacet =
                                 parameter.getFacet(ActionParameterChoicesFacet.class);
                         final ActionParameterAutoCompleteFacet autoCompleteFacet =
@@ -128,6 +148,5 @@ public class ActionChoicesForCollectionParameterFacetFactory extends FacetFactor
                 });
         metaModelValidator.add(validator);
     }
-
 
 }

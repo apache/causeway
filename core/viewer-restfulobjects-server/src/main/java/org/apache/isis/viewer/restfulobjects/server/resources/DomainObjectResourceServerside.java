@@ -506,7 +506,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         final OneToManyAssociation collection = accessHelper.getCollectionThatIsVisibleForIntent(
                 collectionId, ObjectAdapterAccessHelper.Intent.MUTATE);
 
-        if (!collection.getCollectionSemantics().isSet()) {
+        if (!collection.getCollectionSemantics().isAnySet()) {
             throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.BAD_REQUEST, "Collection '%s' does not have set semantics", collectionId);
         }
 

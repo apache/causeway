@@ -40,7 +40,7 @@ public enum CollectionSemantics {
     }
 
     public static CollectionSemantics determine(final OneToManyAssociation collection) {
-        return collection.getCollectionSemantics().isSet() ? CollectionSemantics.SET : CollectionSemantics.LIST;
+        return collection.getCollectionSemantics().isAnySet() ? CollectionSemantics.SET : CollectionSemantics.LIST;
     }
 
 }

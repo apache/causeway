@@ -18,56 +18,55 @@
  */
 package org.apache.isis.core.metamodel.facets.collparam.semantics;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Queue;
 import java.util.Set;
 import java.util.SortedSet;
-import java.util.TreeSet;
 
 public enum CollectionSemantics {
-    LIST {
-        @Override
-        public Object emptyCollectionOf(final Class<?> elementClass) {
-            return new ArrayList<>();
-        }
-    }, ARRAY {
-        @Override
-        public Object emptyCollectionOf(final Class<?> elementClass) {
-            return Array.newInstance(elementClass, 0);
-        }
-    }, SORTED_SET {
-        @Override
-        public Object emptyCollectionOf(final Class<?> elementClass) {
-            return new TreeSet<>();
-        }
-    }, SET {
-        @Override
-        public Object emptyCollectionOf(final Class<?> elementClass) {
-            return new HashSet<>();
-        }
-    }, OTHER {
-        @Override
-        public Object emptyCollectionOf(final Class<?> elementClass) {
-            return new ArrayList<>();
-        }
-    };
+	
+	ARRAY,
+	
+	COLLECTION_INTERFACE(true),
+	
+	LIST_IMPLEMENTATION, 
+	LIST_INTERFACE(true),
+	
+    SORTED_SET_IMPLEMENTATION, 
+    SORTED_SET_INTERFACE(true),
+    
+    SET_IMPLEMENTATION,
+    SET_INTERFACE(true),
+    
+    OTHER
+    ;
+	
+	final boolean isSupportedInterfaceForActionParameters;
+	
+	private CollectionSemantics() {
+		this(false);
+	}
+	
+    private CollectionSemantics(boolean isSupportedInterfaceForActionParameters) {
+		this.isSupportedInterfaceForActionParameters = isSupportedInterfaceForActionParameters;
+	}
 
-    public static CollectionSemantics of(final Class<?> accessorReturnType) {
+	public static CollectionSemantics of(final Class<?> accessorReturnType) {
         if (!Collection.class.isAssignableFrom(accessorReturnType)) {
             return ARRAY;
         }
+        if (Collection.class.equals(accessorReturnType)) {
+        	return COLLECTION_INTERFACE;
+        }
         if (List.class.isAssignableFrom(accessorReturnType)) {
-            return LIST;
+            return List.class.equals(accessorReturnType) ? LIST_INTERFACE : LIST_IMPLEMENTATION;
         }
         if (SortedSet.class.isAssignableFrom(accessorReturnType)) {
-            return SORTED_SET;
+        	return SortedSet.class.equals(accessorReturnType) ? SORTED_SET_INTERFACE : SORTED_SET_IMPLEMENTATION;
         }
         if (Set.class.isAssignableFrom(accessorReturnType)) {
-            return SET;
+        	return Set.class.equals(accessorReturnType) ? SET_INTERFACE : SET_IMPLEMENTATION;
         }
         return OTHER;
     }
@@ -79,14 +78,34 @@ public enum CollectionSemantics {
         return this == ARRAY;
     }
 
+    /**
+     * The corresponding class is assignable from {@link List}.
+     */
     public boolean isList() {
-        return this == LIST;
+        return this == LIST_IMPLEMENTATION || this == LIST_INTERFACE;
     }
 
-    public boolean isSet() {
-        return this == SET || this == SORTED_SET;
+    /**
+     * The corresponding class is assignable from {@link SortedSet}.
+     */
+    public boolean isSortedSet() {
+        return this == SORTED_SET_IMPLEMENTATION || this == SORTED_SET_INTERFACE;
+    }
+    
+    /**
+     * The corresponding class is assignable from {@link Set} but not from {@link SortedSet}.
+     */
+    public boolean isUnorderedSet() {
+        return this == SET_IMPLEMENTATION || this == SET_INTERFACE;
     }
 
+    /**
+     * The corresponding class is assignable from {@link Set}.
+     */
+    public boolean isAnySet() {
+        return isSortedSet() || isUnorderedSet();
+    }
+    
     /**
      * For example, {@link Queue}, or some other 3rd party implementation of
      * {@link Collection}.
@@ -99,6 +118,8 @@ public enum CollectionSemantics {
         return isList() || isArray();
     }
 
-    public abstract Object emptyCollectionOf(final Class<?> elementClass);
+    public boolean isSupportedInterfaceForActionParameters() {
+    	return isSupportedInterfaceForActionParameters;
+    }
 
 }
