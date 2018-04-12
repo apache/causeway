@@ -24,7 +24,6 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.fixturescripts.events.FixturesInstalledEvent;
 import org.apache.isis.applib.fixturescripts.events.FixturesInstallingEvent;
-import org.apache.isis.applib.services.eventbus.EventBusImplementation;
 
 
 /**
