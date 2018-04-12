@@ -239,7 +239,7 @@ public abstract class EventBusService {
      * Lazily populates the event bus for the current {@link #getSubscribers() subscribers}.
      */
     @Programmatic
-    public EventBusImplementation getEventBusImplementation() {
+    protected EventBusImplementation getEventBusImplementation() {
         setupEventBus();
         return eventBusImplementation;
     }

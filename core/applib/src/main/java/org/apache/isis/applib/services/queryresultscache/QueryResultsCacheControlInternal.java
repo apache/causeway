@@ -42,11 +42,6 @@ public class QueryResultsCacheControlInternal extends AbstractSubscriber impleme
 
 		super.postConstruct();
 
-		final EventBusImplementation eventBus = eventBusService.getEventBusImplementation(); //TODO don't expose this
-		if(eventBus==null) {
-			return;
-		}
-
 		eventBusService.addEventListener(FixturesInstallingEvent.class, ev->{
 			fixturesInstalling = true;
 		});
