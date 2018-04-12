@@ -22,4 +22,4 @@
  *
  * @see <a href="">Reference guide</a>
  */
-package org.apache.isis.applib.services.timestamp;
+package org.apache.isis.applib.mixins.timestamp;

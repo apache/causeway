@@ -14,10 +14,10 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.applib.services.timestamp;
+package org.apache.isis.applib.mixins.timestamp;
 
-public interface HoldsUpdatedAt {
+public interface HoldsUpdatedBy {
 
-    void setUpdatedAt(java.sql.Timestamp updatedAt);
+    void setUpdatedBy(String updatedBy);
 
 }    
