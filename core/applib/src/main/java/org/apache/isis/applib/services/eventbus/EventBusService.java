@@ -209,8 +209,8 @@ public abstract class EventBusService {
         if(skip(event)) {
             return;
         }
-        getEventBusImplementation().post(event);
         hasPosted = true;
+        getEventBusImplementation().post(event);
     }
 
 

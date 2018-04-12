@@ -45,6 +45,9 @@ public abstract class EventBusImplementationAbstract implements EventBusImplemen
         }
 
         final AbstractDomainEvent.Phase phase = domainEvent.getEventPhase();
+        if(phase==null) {
+        	throw new RuntimeException(exception);
+        }
         switch (phase) {
             case HIDE:
             case DISABLE:

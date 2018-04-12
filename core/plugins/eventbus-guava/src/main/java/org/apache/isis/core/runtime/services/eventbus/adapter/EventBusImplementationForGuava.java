@@ -71,8 +71,8 @@ public class EventBusImplementationForGuava extends EventBusImplementationAbstra
     }
 
     @Override
-    public <T> EventListener<T> addEventListener(Class<T> targetType, Consumer<T> onEvent) {
-    	final EventListener<T> eventListener = new GuavaEventListener<>(onEvent);
+    public <T> EventListener<T> addEventListener(final Class<T> targetType, final Consumer<T> onEvent) {
+    	final EventListener<T> eventListener = new GuavaEventListener<>(targetType, onEvent);
     	eventBus.register(eventListener);
     	return eventListener;
     }
@@ -85,14 +85,21 @@ public class EventBusImplementationForGuava extends EventBusImplementationAbstra
 	// -- HELPER
 	
     private static class GuavaEventListener<T> implements EventBusImplementation.EventListener<T> {
+    	private final Class<T> targetType;
     	private final Consumer<T> eventConsumer;
-    	private GuavaEventListener(Consumer<T> eventConsumer) {
+    	private GuavaEventListener(final Class<T> targetType, final Consumer<T> eventConsumer) {
+    		this.targetType = Objects.requireNonNull(targetType);
 			this.eventConsumer = Objects.requireNonNull(eventConsumer);
 		}
 		@com.google.common.eventbus.Subscribe
 		@Override
-    	public void on(T event) {
-    		eventConsumer.accept(event);
+    	public void on(T payload) {
+			if(payload==null) {
+				return;
+			}
+			if(targetType.isAssignableFrom(payload.getClass())){
+				eventConsumer.accept(payload);
+			}
     	}
     }
 

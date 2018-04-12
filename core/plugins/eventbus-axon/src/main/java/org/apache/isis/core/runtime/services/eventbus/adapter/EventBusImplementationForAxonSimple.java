@@ -105,7 +105,7 @@ public class EventBusImplementationForAxonSimple extends EventBusImplementationA
     static class AxonEventListener<T> implements EventBusImplementation.EventListener<T> {
     	private final Consumer<T> eventConsumer;
 		private final EventListenerProxy proxy;
-    	private AxonEventListener(Class<T> targetType, Consumer<T> eventConsumer) {
+    	private AxonEventListener(final Class<T> targetType, final Consumer<T> eventConsumer) {
 			this.eventConsumer = Objects.requireNonNull(eventConsumer);
 			this.proxy = new EventListenerProxy() {
 				@SuppressWarnings("unchecked")
