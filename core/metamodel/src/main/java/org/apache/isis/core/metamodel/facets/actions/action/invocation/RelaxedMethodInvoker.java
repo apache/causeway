@@ -31,8 +31,9 @@ import org.apache.isis.applib.internal.collections._Collections;
 
 /**
  * Package private utility for method invocation pre-processing. 
+ * Adapts supported collection parameter types List, Set, SortedSet and Collection.
  */
-class MethodIncompatibilityWorkaround {
+class RelaxedMethodInvoker {
 
 	static Object invoke(Method method, Object targetPojo, Object[] executionParameters) 
 			throws IllegalAccessException, InvocationTargetException {

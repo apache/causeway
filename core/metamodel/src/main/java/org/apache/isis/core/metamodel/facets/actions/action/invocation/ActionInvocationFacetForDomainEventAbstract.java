@@ -332,8 +332,9 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
             final PublishedActionFacet publishedActionFacet = getIdentified().getFacet(PublishedActionFacet.class);
             if (publishedActionFacet != null) {
 
-                final IdentifiedHolder identifiedHolder = getIdentified();
-                final List<ObjectAdapter> parameterAdapters = Arrays.asList(argumentAdapters);
+            	//TODO not used
+//                final IdentifiedHolder identifiedHolder = getIdentified();
+//                final List<ObjectAdapter> parameterAdapters = Arrays.asList(argumentAdapters);
 
                 getPublishingServiceInternal().publishAction(
                         priorExecution
@@ -390,11 +391,11 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
             final QueryResultsCache queryResultsCache = getQueryResultsCache();
             final Object[] targetPojoPlusExecutionParameters = ArrayExtensions.appendT(executionParameters, targetPojo);
             return queryResultsCache.execute(
-            		()->MethodIncompatibilityWorkaround.invoke(method, targetPojo, executionParameters),
+            		()->RelaxedMethodInvoker.invoke(method, targetPojo, executionParameters),
             		targetPojo.getClass(), method.getName(), targetPojoPlusExecutionParameters);
 
         } else {
-            return MethodIncompatibilityWorkaround.invoke(method, targetPojo, executionParameters);
+            return RelaxedMethodInvoker.invoke(method, targetPojo, executionParameters);
         }
     }
 
