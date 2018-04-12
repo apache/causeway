@@ -22,17 +22,7 @@ package org.apache.isis.core.metamodel.specloader;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
 
@@ -141,48 +131,6 @@ public final class CollectionUtils {
 			}
         }
 		
-	}
-    
-    // -- COLLECT ELEMENTS FROM STREAM
-
-	/**
-	 * Collects elements from stream into a collection that is compatible with the given typeOfCollection.
-	 * @param typeOfCollection
-	 * @param elementStream
-	 * @return
-	 * 
-	 * @throws IllegalArgumentException if the given typeOfCollection is not supported 
-	 */
-	public static <T> Collection<T> collectIntoUnmodifiableCompatibleWithCollectionType (
-			Class<?> typeOfCollection, Stream<? extends T> elementStream) {
-
-		if(SortedSet.class.equals(typeOfCollection)) {
-			return Collections.unmodifiableSortedSet(
-					elementStream.collect(Collectors.<T, SortedSet<T>>toCollection(TreeSet::new))
-			);
-		}
-		
-		if(Set.class.equals(typeOfCollection)) {
-			return Collections.unmodifiableSet(
-					elementStream.collect(Collectors.<T, Set<T>>toCollection(HashSet::new))
-			);
-		}
-		
-		if(List.class.equals(typeOfCollection)) {
-			return Collections.unmodifiableList(
-					elementStream.collect(Collectors.<T, List<T>>toCollection(ArrayList::new))
-			);
-		}
-		
-		if(Collection.class.equals(typeOfCollection)) {
-			return Collections.unmodifiableCollection(
-					elementStream.collect(Collectors.toCollection(ArrayList::new))
-			);
-		}
-		
-		throw new IllegalArgumentException(
-				String.format("Can not collect into %s. Only List, Set, SortedSet and Collection are supported.",
-						typeOfCollection.getClass().getName()));
 	}
 
 }

@@ -28,6 +28,7 @@ import java.util.stream.Collectors;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.internal.base._NullSafe;
+import org.apache.isis.applib.internal.collections._Collections;
 import org.apache.isis.applib.internal.collections._Lists;
 import org.apache.isis.applib.internal.collections._Maps;
 import org.apache.isis.applib.internal.collections._Multimaps;
@@ -290,16 +291,10 @@ public class ServicesInjector implements ApplicationScopedComponent {
 			final Class<? extends Collection<Object>> collectionTypeToBeInjected =
         			(Class<? extends Collection<Object>>) typeToBeInjected;
         	
-        	 final Collection<Object> collectionOfServices =
-        			 CollectionUtils.collectIntoUnmodifiableCompatibleWithCollectionType(
-        					 
-        					 collectionTypeToBeInjected,
-        					 
-                     		 _NullSafe.stream(services)
-                              .filter(_NullSafe::isPresent)
-                              .filter(isOfType(elementType))
-                              
-                     		);
+        	 final Collection<Object> collectionOfServices = _NullSafe.stream(services)
+                      .filter(_NullSafe::isPresent)
+                      .filter(isOfType(elementType))
+                      .collect(_Collections.toUnmodifiableOfType(collectionTypeToBeInjected));
              
              invokeInjectorField(field, object, collectionOfServices);
         });

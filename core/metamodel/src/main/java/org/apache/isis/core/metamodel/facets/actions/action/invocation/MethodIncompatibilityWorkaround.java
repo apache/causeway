@@ -22,17 +22,12 @@ package org.apache.isis.core.metamodel.facets.actions.action.invocation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.SortedSet;
-import java.util.stream.Collectors;
 
 import org.apache.isis.applib.internal.base._NullSafe;
+import org.apache.isis.applib.internal.collections._Collections;
 
 /**
  * Package private utility for method invocation pre-processing. 
@@ -75,171 +70,26 @@ class MethodIncompatibilityWorkaround {
 		
 		// allow no side effects on Collection arguments
 		if(Collection.class.equals(parameterType)) {
-			return adaptAsCollection((List<?>)obj);
+			return _Collections.asUnmodifiableCollection((List<?>)obj);
 		}
 		
 		// allow no side effects on List arguments
 		if(List.class.equals(parameterType)) {
-			return adaptAsList((List<?>)obj);
+			return _Collections.asUnmodifiableList((List<?>)obj);
 		}
 
 		// adapt as Set (unmodifiable)
 		if(Set.class.equals(parameterType)) {
-			return adaptAsSet((List<?>)obj);
+			return _Collections.asUnmodifiableSet((List<?>)obj);
 		}
 		
 		// adapt as SortedSet (unmodifiable)
 		if(SortedSet.class.equals(parameterType)) {
-			return adaptAsSortedSet((List<?>)obj);
+			return _Collections.asUnmodifiableSortedSet((List<?>)obj);
 		}
 		
 		return obj;
 	}
 	
-	// -- COLLECTION ADAPTERS
-
-	/**
-	 * Adapts the list as unmodifiable collection.
-	 * @param list
-	 * @return
-	 */
-	private static <T> Collection<T> adaptAsCollection(final List<T> list) {
-		return Collections.unmodifiableCollection(list);
-	}
-	
-	/**
-	 * Adapts the list as unmodifiable list.
-	 * @param list
-	 * @return
-	 */
-	private static <T> List<T> adaptAsList(final List<T> list) {
-		return Collections.unmodifiableList(list);
-	}
-
-	/**
-	 * Preserves order, adapts the Set interface.
-	 * @param list
-	 * @return
-	 */
-	private static <T> Set<T> adaptAsSet(final List<T> list) {
-		return Collections.unmodifiableSet(
-				(Set<T>)
-				list.stream()
-				.collect(Collectors.toCollection(LinkedHashSet::new)));
-	}
-
-	private final static String JUST_AN_ADAPTER = 
-			"this set is just an adapter, it has no information about the intended comparator";
-	
-	/**
-	 * Preserves order, adapts the SortedSet interface.
-	 * @param list
-	 * @return
-	 */
-	private static <T> SortedSet<T> adaptAsSortedSet(final List<T> list) {
-		return new SortedSet<T>() {
-			
-			@Override
-			public int size() {
-				return list.size();
-			}
-
-			@Override
-			public boolean isEmpty() {
-				return list.isEmpty();
-			}
-
-			@Override
-			public boolean contains(Object o) {
-				throw new UnsupportedOperationException(JUST_AN_ADAPTER);
-			}
-
-			@Override
-			public Iterator<T> iterator() {
-				return list.iterator();
-			}
-
-			@Override
-			public Object[] toArray() {
-				return list.toArray();
-			}
-
-			@Override
-			public <X> X[] toArray(X[] a) {
-				return list.toArray(a);
-			}
-
-			@Override
-			public boolean add(T e) {
-				throw new UnsupportedOperationException("unmodifiable");
-			}
-
-			@Override
-			public boolean remove(Object o) {
-				throw new UnsupportedOperationException("unmodifiable");
-			}
-
-			@Override
-			public boolean containsAll(Collection<?> c) {
-				throw new UnsupportedOperationException(JUST_AN_ADAPTER);
-			}
-
-			@Override
-			public boolean addAll(Collection<? extends T> c) {
-				throw new UnsupportedOperationException("unmodifiable");
-			}
-
-			@Override
-			public boolean retainAll(Collection<?> c) {
-				throw new UnsupportedOperationException("unmodifiable");
-			}
-
-			@Override
-			public boolean removeAll(Collection<?> c) {
-				throw new UnsupportedOperationException("unmodifiable");
-			}
-
-			@Override
-			public void clear() {
-				throw new UnsupportedOperationException("unmodifiable");
-			}
-
-			@Override
-			public Comparator<? super T> comparator() {
-				throw new UnsupportedOperationException(JUST_AN_ADAPTER);
-			}
-
-			@Override
-			public SortedSet<T> subSet(T fromElement, T toElement) {
-				throw new UnsupportedOperationException(JUST_AN_ADAPTER);
-			}
-
-			@Override
-			public SortedSet<T> headSet(T toElement) {
-				throw new UnsupportedOperationException(JUST_AN_ADAPTER);
-			}
-
-			@Override
-			public SortedSet<T> tailSet(T fromElement) {
-				throw new UnsupportedOperationException(JUST_AN_ADAPTER);
-			}
-
-			@Override
-			public T first() {
-				if(size()==0) {
-					throw new NoSuchElementException("set is empty");
-				}
-				return list.get(0);
-			}
-
-			@Override
-			public T last() {
-				if(size()==0) {
-					throw new NoSuchElementException("set is empty");
-				}
-				return list.get(size()-1);
-			}
-		};
-	}
 
 }
