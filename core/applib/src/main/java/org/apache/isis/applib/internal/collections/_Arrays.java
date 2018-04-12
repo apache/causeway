@@ -55,14 +55,14 @@ public class _Arrays {
         return _Collections.isCollectionType(cls) || _Arrays.isArrayType(cls);
     }
 	
-    // -- ELEMENT TYPE INFERENCE
+    // -- COMPONENT TYPE INFERENCE
     
     /**
      * Returns the inferred element type of the specified array type 
      * @param type of the array for which to infer the element type 
      * @return inferred type or null if inference fails
      */
-    public static @Nullable Class<?> inferElementTypeIfAny(@Nullable final Class<?> arrayType) {
+    public static @Nullable Class<?> inferComponentTypeIfAny(@Nullable final Class<?> arrayType) {
         if(!isArrayType(arrayType)) {
             return null;
         }

@@ -19,6 +19,9 @@
 
 package org.apache.isis.applib.internal.collections;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -209,6 +212,51 @@ public class _Collections {
 	
 	// -- ELEMENT TYPE INFERENCE
 	
+    /**
+     * If the {@code collectionType} represents a collection then returns returns the inferred element type of the 
+     * specified {@code genericType}     
+     * @param collectionType
+     * @param genericType as associated with {@code collectionType} (as available for fields or method parameters)
+     * @return inferred type or null if inference fails
+     */
+    public static @Nullable Class<?> inferElementTypeIfAny(
+    		@Nullable final Class<?> collectionType, 
+    		@Nullable final Type genericType) {
+    	
+    	if(collectionType == null || genericType==null) {
+    		return null;
+    	}
+    	
+    	if(!isCollectionType(collectionType)) {
+    		return null;
+    	}
+
+        if(genericType instanceof ParameterizedType) {
+            final ParameterizedType parameterizedType = (ParameterizedType) genericType;
+            final Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
+            if(actualTypeArguments.length == 1) {
+                final Type actualTypeArgument = actualTypeArguments[0];
+                if(actualTypeArgument instanceof Class) {
+                    final Class<?> actualType = (Class<?>) actualTypeArgument;
+                    return actualType;
+                }
+            }
+        }
+        
+        return null;
+    }
+	
+    /**
+     * If the {@code field} represents a collection then returns the inferred element type for this collection (if any).
+     *   
+     * @param field
+     * @return inferred type or null if inference fails
+     */
+    public static @Nullable Class<?> inferElementTypeIfAny(@Nullable final Field field) {
+    	        
+        return inferElementTypeIfAny(field.getType(), field.getGenericType());
+    }
+    
 	// --
 	
 }

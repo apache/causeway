@@ -30,7 +30,6 @@ import org.apache.isis.applib.internal.collections._Arrays;
 import org.apache.isis.applib.internal.collections._Collections;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleClassValueFacet;
-import org.apache.isis.core.metamodel.specloader.CollectionUtils;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 /**
@@ -108,7 +107,7 @@ public interface TypeOfFacet extends SingleClassValueFacet {
                 final FacetHolder holder,
                 final Class<?> type,
                 final SpecificationLoader specificationLoader) {
-            final Class<?> elementType = _Arrays.inferElementTypeIfAny(type);
+            final Class<?> elementType = _Arrays.inferComponentTypeIfAny(type);
             return elementType != null
                     ? new TypeOfFacetInferredFromArray(elementType, holder, specificationLoader)
                     : null;
@@ -121,13 +120,9 @@ public interface TypeOfFacet extends SingleClassValueFacet {
                 final Type genericParameterType,
                 final SpecificationLoader specificationLoader) {
         	
-        	if(!_Collections.isCollectionType(parameterType)) {
-                return null;
-            }
-        	
-            final Class<?> actualType = CollectionUtils.inferElementTypeFromGenericType(genericParameterType);
-            return actualType != null
-                    ? new TypeOfFacetInferredFromGenerics(actualType, holder, specificationLoader)
+            final Class<?> elementType = _Collections.inferElementTypeIfAny(parameterType, genericParameterType);
+            return elementType != null
+                    ? new TypeOfFacetInferredFromGenerics(elementType, holder, specificationLoader)
                     : null;
         }
     }

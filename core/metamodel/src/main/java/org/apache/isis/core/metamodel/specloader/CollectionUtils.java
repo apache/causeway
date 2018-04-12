@@ -19,10 +19,7 @@
 
 package org.apache.isis.core.metamodel.specloader;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.function.Consumer;
 
 import javax.annotation.Nullable;
 
@@ -51,67 +48,14 @@ public final class CollectionUtils {
     public static boolean isParamCollection(
     		@Nullable final Class<?> parameterType,
     		@Nullable final Type genericParameterType) {
-    	if(_Arrays.inferElementTypeIfAny(parameterType) != null) {
+    	if(_Arrays.inferComponentTypeIfAny(parameterType) != null) {
     		return true;
     	}
-    	if(_Collections.isCollectionType(parameterType) && inferElementTypeFromGenericType(genericParameterType)!=null) {
+    	if(_Collections.inferElementTypeIfAny(parameterType, genericParameterType)!=null) {
     		return true;
     	}
     	return false;
     }
 
-
-
-    // -- ELEMENT TYPE INFERENCE (FROM GENERIC TYPE)
-    
-    /**
-     * Returns the inferred element type of the specified array type
-     * @param collectionType
-     * @param genericParameterType
-     * @return inferred type or null if inference fails
-     */
-    public static @Nullable Class<?> inferElementTypeFromGenericType(@Nullable final Type genericType) {
-
-    	if(genericType==null) {
-    		return null;
-    	}
-
-        if(genericType instanceof ParameterizedType) {
-            final ParameterizedType parameterizedType = (ParameterizedType) genericType;
-            final Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
-            if(actualTypeArguments.length == 1) {
-                final Type actualTypeArgument = actualTypeArguments[0];
-                if(actualTypeArgument instanceof Class) {
-                    final Class<?> actualType = (Class<?>) actualTypeArgument;
-                    return actualType;
-                }
-            }
-        }
-        
-        return null;
-    }
-
-    // -- ELEMENT TYPE INFERENCE (FROM FIELD)
-    
-    /**
-	 * If field is of type (or a sub-type of) Collection&lt;T&gt; with generic type T present, 
-	 * then call action with the element type.
-	 * @param field
-	 * @param action
-	 */
-    public static void ifIsCollectionWithGenericTypeThen(Field field, Consumer<Class<?>> action) {
-		
-		final Class<?> fieldType = field.getType();
-		
-		if(_Collections.isCollectionType(fieldType)) {
-			
-			final Class<?> elementType = inferElementTypeFromGenericType(field.getGenericType());
-			
-			if(elementType!=null) {
-				action.accept(elementType);
-			}
-        }
-		
-	}
 
 }

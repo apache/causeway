@@ -44,7 +44,6 @@ import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 import org.apache.isis.core.metamodel.services.configinternal.ConfigurationServiceInternal;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.spec.InjectorMethodEvaluator;
-import org.apache.isis.core.metamodel.specloader.CollectionUtils;
 import org.apache.isis.core.metamodel.specloader.InjectorMethodEvaluatorDefault;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
@@ -285,9 +284,9 @@ public class ServicesInjector implements ApplicationScopedComponent {
         }
 
         // inject matching services into a field of type Collection<T> if a generic type T is present
-        CollectionUtils.ifIsCollectionWithGenericTypeThen(field, (elementType)->{
-        	
-        	@SuppressWarnings("unchecked")
+        final Class<?> elementType = _Collections.inferElementTypeIfAny(field);
+		if(elementType!=null) {
+			@SuppressWarnings("unchecked")
 			final Class<? extends Collection<Object>> collectionTypeToBeInjected =
         			(Class<? extends Collection<Object>>) typeToBeInjected;
         	
@@ -297,7 +296,7 @@ public class ServicesInjector implements ApplicationScopedComponent {
                       .collect(_Collections.toUnmodifiableOfType(collectionTypeToBeInjected));
              
              invokeInjectorField(field, object, collectionOfServices);
-        });
+		}
         
         for (final Object service : services) {
             final Class<?> serviceClass = service.getClass();
