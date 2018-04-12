@@ -117,7 +117,7 @@ public class ActionChoicesForCollectionParameterFacetFactory extends FacetFactor
                             // exact type List, Set, SortedSet or Collection.
                     		if(!collectionSemantics.value().isSupportedInterfaceForActionParameters()) {
                     			validationFailures.add(
-                                        "Collection action parameter found that is not exaclty one "
+                                        "Collection action parameter found that is not exactly one "
                                         + "of the following supported types: "
                                         + "List, Set, SortedSet or Collection.  "
                                         + "Class: %s action: %s parameter %d",
