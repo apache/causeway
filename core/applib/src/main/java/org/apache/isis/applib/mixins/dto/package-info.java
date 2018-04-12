@@ -18,11 +18,11 @@
  */
 
 /**
- * The {@link org.apache.isis.applib.services.dto.Dto} role interface is intended to be implemented by JAXB-annotated
+ * The {@link org.apache.isis.applib.mixins.dto.Dto} role interface is intended to be implemented by JAXB-annotated
  * view models, that is, annotated using <code>@XmlRootElement</code>. It enables the ability to download the XML and
- * XSD schema of those objects using two mixins, {@link org.apache.isis.applib.services.dto.Dto_downloadXml} and
- * {@link org.apache.isis.applib.services.dto.Dto_downloadXsd}.
+ * XSD schema of those objects using two mixins, {@link org.apache.isis.applib.mixins.dto.Dto_downloadXml} and
+ * {@link org.apache.isis.applib.mixins.dto.Dto_downloadXsd}.
  *
  * @see <a href="http://isis.apache.org/guides/rgcms/rgcms.html#_rgcms_classes_mixins_Dto">Classes, Methods &amp; Schema guide</a>
  */
-package org.apache.isis.applib.services.dto;
+package org.apache.isis.applib.mixins.dto;

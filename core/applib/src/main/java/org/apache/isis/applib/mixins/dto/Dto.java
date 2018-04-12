@@ -14,20 +14,8 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.applib.services.dto;
+package org.apache.isis.applib.mixins.dto;
 
-class Util {
-
-    private Util(){}
-
-    static String withSuffix(String fileName, String suffix) {
-        if(!suffix.startsWith(".")) {
-            suffix = "." + suffix;
-        }
-        if(!fileName.endsWith(suffix)) {
-            fileName += suffix;
-        }
-        return fileName;
-    }
+public interface Dto {
 
 }

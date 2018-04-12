@@ -35,7 +35,7 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.internal.base._Casts;
 import org.apache.isis.applib.internal.base._NullSafe;
 import org.apache.isis.applib.internal.collections._Maps;
-import org.apache.isis.applib.services.dto.Dto_downloadXsd;
+import org.apache.isis.applib.mixins.dto.Dto_downloadXsd;
 import org.apache.isis.applib.util.JaxbUtil;
 
 public interface JaxbService {

@@ -37,7 +37,7 @@ import org.apache.isis.applib.layout.component.FieldSet;
 import org.apache.isis.applib.layout.component.PropertyLayoutData;
 import org.apache.isis.applib.layout.grid.Grid;
 import org.apache.isis.applib.layout.grid.GridAbstract;
-import org.apache.isis.applib.services.dto.Dto;
+import org.apache.isis.applib.mixins.dto.Dto;
 
 /**
  * This is the top-level for rendering the domain object's properties, collections and actions.  It simply consists
