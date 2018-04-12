@@ -119,7 +119,7 @@ public class ActionChoicesForCollectionParameterFacetFactory extends FacetFactor
                     			validationFailures.add(
                                         "Collection action parameter found that is not exactly one "
                                         + "of the following supported types: "
-                                        + "List, Set, SortedSet or Collection.  "
+                                        + "List, Set, SortedSet, Collection or Array.  "
                                         + "Class: %s action: %s parameter %d",
                                         objectSpec.getFullIdentifier(), objectAction.getName(), paramNum);
                         		return;	

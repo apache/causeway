@@ -26,12 +26,14 @@ import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
 
+import org.apache.isis.applib.internal.base._Casts;
 import org.apache.isis.applib.internal.base._NullSafe;
+import org.apache.isis.applib.internal.collections._Arrays;
 import org.apache.isis.applib.internal.collections._Collections;
 
 /**
  * Package private utility for method invocation pre-processing. 
- * Adapts supported collection parameter types List, Set, SortedSet and Collection.
+ * Adapts supported collection parameter types List, Set, SortedSet, Collection and Arrays.
  */
 class RelaxedMethodInvoker {
 
@@ -63,10 +65,20 @@ class RelaxedMethodInvoker {
 	 * @param parameterType
 	 * @return
 	 */
+	
 	private static Object adapt(Object obj, Class<?> parameterType) {
 
 		if(obj==null) {
 			return null;
+		}
+		
+		if(_Arrays.isArrayType(parameterType)) {
+			final Class<?> componentType = _Arrays.inferComponentTypeIfAny(parameterType);
+			if(componentType==null) {
+				return obj;
+			}
+			@SuppressWarnings("rawtypes") final List list = (List)obj;
+			return _Arrays.toArray(_Casts.uncheckedCast(list), componentType);
 		}
 		
 		// allow no side effects on Collection arguments

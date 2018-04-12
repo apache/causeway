@@ -26,7 +26,7 @@ import java.util.SortedSet;
 
 public enum CollectionSemantics {
 	
-	ARRAY,
+	ARRAY(true),
 	
 	COLLECTION_INTERFACE(true),
 	
