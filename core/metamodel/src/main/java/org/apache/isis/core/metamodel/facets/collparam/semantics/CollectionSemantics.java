@@ -39,7 +39,7 @@ public enum CollectionSemantics {
     SET_IMPLEMENTATION,
     SET_INTERFACE(true),
     
-    OTHER
+    OTHER_IMPLEMENTATION
     ;
 	
 	final boolean isSupportedInterfaceForActionParameters;
@@ -68,39 +68,39 @@ public enum CollectionSemantics {
         if (Set.class.isAssignableFrom(accessorReturnType)) {
         	return Set.class.equals(accessorReturnType) ? SET_INTERFACE : SET_IMPLEMENTATION;
         }
-        return OTHER;
+        return OTHER_IMPLEMENTATION;
     }
 
     /**
-     * The corresponding class is not a subclass of {@link Collection}.
+     * {@link Collection} is not assignable from the corresponding class.
      */
     public boolean isArray() {
         return this == ARRAY;
     }
 
     /**
-     * The corresponding class is assignable from {@link List}.
+     * {@link List} is assignable from the corresponding class.
      */
     public boolean isList() {
         return this == LIST_IMPLEMENTATION || this == LIST_INTERFACE;
     }
 
     /**
-     * The corresponding class is assignable from {@link SortedSet}.
+     * {@link SortedSet} is assignable from the corresponding class.
      */
     public boolean isSortedSet() {
         return this == SORTED_SET_IMPLEMENTATION || this == SORTED_SET_INTERFACE;
     }
     
     /**
-     * The corresponding class is assignable from {@link Set} but not from {@link SortedSet}.
+     * {@link Set} (but not {@link SortedSet}) is assignable from the corresponding class.
      */
     public boolean isUnorderedSet() {
         return this == SET_IMPLEMENTATION || this == SET_INTERFACE;
     }
 
     /**
-     * The corresponding class is assignable from {@link Set}.
+     * {@link Set} is assignable from the corresponding class.
      */
     public boolean isAnySet() {
         return isSortedSet() || isUnorderedSet();
@@ -111,7 +111,7 @@ public enum CollectionSemantics {
      * {@link Collection}.
      */
     public boolean isOther() {
-        return this == OTHER;
+        return this == OTHER_IMPLEMENTATION;
     }
 
     public boolean isListOrArray() {
