@@ -16,12 +16,15 @@
  */
 package org.apache.isis.applib.services.queryresultscache;
 
+import javax.annotation.PostConstruct;
+
 import org.apache.isis.applib.AbstractSubscriber;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.fixturescripts.events.FixturesInstalledEvent;
 import org.apache.isis.applib.fixturescripts.events.FixturesInstallingEvent;
+import org.apache.isis.applib.services.eventbus.EventBusImplementation;
 
 
 /**
@@ -31,23 +34,31 @@ import org.apache.isis.applib.fixturescripts.events.FixturesInstallingEvent;
 		nature = NatureOfService.DOMAIN,
 		menuOrder = "" + Integer.MAX_VALUE
 		)
-public class QueryResultsCacheControlUsingAxon extends AbstractSubscriber implements QueryResultCacheControl {
+public class QueryResultsCacheControlInternal extends AbstractSubscriber implements QueryResultCacheControl {
 
-	@Programmatic
-	//@com.google.common.eventbus.Subscribe
-	@org.axonframework.eventhandling.annotation.EventHandler
-	public void on(FixturesInstallingEvent ev) {
-		fixturesInstalling = true;
-	}
+	@PostConstruct
+	@Override
+	public void postConstruct() {
 
-	@Programmatic
-	//@com.google.common.eventbus.Subscribe
-	@org.axonframework.eventhandling.annotation.EventHandler
-	public void on(FixturesInstalledEvent ev) {
-		fixturesInstalling = false;
+		super.postConstruct();
+
+		final EventBusImplementation eventBus = eventBusService.getEventBusImplementation(); //TODO don't expose this
+		if(eventBus==null) {
+			return;
+		}
+
+		eventBusService.addEventListener(FixturesInstallingEvent.class, ev->{
+			fixturesInstalling = true;
+		});
+
+		eventBusService.addEventListener(FixturesInstalledEvent.class, ev->{
+			fixturesInstalling = false;
+		});
+
 	}
 
 	private boolean fixturesInstalling;
+
 	@Programmatic
 	@Override
 	public boolean isFixturesInstalling() {

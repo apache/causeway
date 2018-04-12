@@ -17,12 +17,16 @@
 package org.apache.isis.core.runtime.services.eventbus.adapter;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Consumer;
 
 import org.apache.isis.applib.events.domain.AbstractDomainEvent;
+import org.apache.isis.applib.services.eventbus.EventBusImplementation;
 import org.apache.isis.core.runtime.services.eventbus.EventBusImplementationAbstract;
 import org.axonframework.domain.EventMessage;
 import org.axonframework.domain.GenericEventMessage;
+import org.axonframework.eventhandling.EventListenerProxy;
 import org.axonframework.eventhandling.SimpleEventBus;
 import org.axonframework.eventhandling.annotation.AnnotationEventListenerAdapter;
 
@@ -36,15 +40,6 @@ public class EventBusImplementationForAxonSimple extends EventBusImplementationA
 
     private Map<Object, AxonEventListenerAdapter> listenerAdapterByDomainService = new ConcurrentHashMap<>();
 
-    private AxonEventListenerAdapter adapterFor(final Object domainService) {
-        AxonEventListenerAdapter annotationEventListenerAdapter = listenerAdapterByDomainService.get(domainService);
-        if (annotationEventListenerAdapter == null) {
-            annotationEventListenerAdapter = new AxonEventListenerAdapter(domainService);
-            listenerAdapterByDomainService.put(domainService, annotationEventListenerAdapter);
-        }
-        return annotationEventListenerAdapter;
-    }
-
     @Override
     public void register(final Object domainService) {
         simpleEventBus.subscribe(adapterFor(domainService));
@@ -54,7 +49,6 @@ public class EventBusImplementationForAxonSimple extends EventBusImplementationA
     public void unregister(final Object domainService) {
         // Seems it's needed to be a no-op (See EventBusService).
         // AxonSimpleEventBusAdapter.simpleEventBus.unsubscribe(AxonSimpleEventBusAdapter.adapterFor(domainService));
-
     }
 
     /*
@@ -69,13 +63,30 @@ public class EventBusImplementationForAxonSimple extends EventBusImplementationA
         simpleEventBus.publish(GenericEventMessage.asEventMessage(event));
     }
 
+	@Override
+	public <T> EventBusImplementation.EventListener<T> addEventListener(
+			final Class<T> targetType, 
+			final Consumer<T> onEvent) {
+		
+		final AxonEventListener<T> eventListener = new AxonEventListener<T>(targetType, onEvent);
+		simpleEventBus.subscribe(eventListener.proxy());
+		return eventListener;
+	}
+
+	@Override
+	public <T> void removeEventListener(EventBusImplementation.EventListener<T> eventListener) {
+		if(eventListener instanceof AxonEventListener) {
+			simpleEventBus.unsubscribe(((AxonEventListener<T>)eventListener).proxy());	
+		}
+	}
 
     @Override
     protected AbstractDomainEvent<?> asDomainEvent(final Object event) {
         if(event instanceof GenericEventMessage) {
             // this seems to be the case on error
 
-            final GenericEventMessage genericEventMessage = (GenericEventMessage) event;
+            @SuppressWarnings("rawtypes")
+			final GenericEventMessage genericEventMessage = (GenericEventMessage) event;
             final Object payload = genericEventMessage.getPayload();
             return asDomainEventIfPossible(payload);
         }
@@ -84,6 +95,55 @@ public class EventBusImplementationForAxonSimple extends EventBusImplementationA
         return asDomainEventIfPossible(event);
     }
 
+    // -- HELPER
+    
+    /**
+     * Wraps a Consumer as EventBusImplementation.EventListener with the given targetType.
+     * @param <T>
+     * @since 2.0.0
+     */
+    static class AxonEventListener<T> implements EventBusImplementation.EventListener<T> {
+    	private final Consumer<T> eventConsumer;
+		private final EventListenerProxy proxy;
+    	private AxonEventListener(Class<T> targetType, Consumer<T> eventConsumer) {
+			this.eventConsumer = Objects.requireNonNull(eventConsumer);
+			this.proxy = new EventListenerProxy() {
+				@SuppressWarnings("unchecked")
+				@Override
+				public void handle(@SuppressWarnings("rawtypes") EventMessage event) {
+					final Object payload = event.getPayload();
+					if(payload==null) {
+						return;
+					}
+					if(targetType.isAssignableFrom(event.getPayloadType())){
+						on((T)event.getPayload());	
+					}
+				}
+				@Override
+				public Class<?> getTargetType() {
+					return targetType;
+				}
+			};
+		}
+		@Override
+    	public void on(T event) {
+    		eventConsumer.accept(event);
+    	}
+    	public EventListenerProxy proxy() {
+    		return proxy;
+    	}
+    	
+    }
+    
+    private AxonEventListenerAdapter adapterFor(final Object domainService) {
+        AxonEventListenerAdapter annotationEventListenerAdapter = listenerAdapterByDomainService.get(domainService);
+        if (annotationEventListenerAdapter == null) {
+            annotationEventListenerAdapter = new AxonEventListenerAdapter(domainService);
+            listenerAdapterByDomainService.put(domainService, annotationEventListenerAdapter);
+        }
+        return annotationEventListenerAdapter;
+    }
+    
     private AbstractDomainEvent<?> asDomainEventIfPossible(final Object event) {
         if (event instanceof AbstractDomainEvent)
             return (AbstractDomainEvent<?>) event;
@@ -109,5 +169,7 @@ public class EventBusImplementationForAxonSimple extends EventBusImplementationA
             }
         }
     }
+
+
 
 }

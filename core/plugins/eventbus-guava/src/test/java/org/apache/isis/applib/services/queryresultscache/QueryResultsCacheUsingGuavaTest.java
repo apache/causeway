@@ -16,27 +16,39 @@
  */
 package org.apache.isis.applib.services.queryresultscache;
 
-import java.util.concurrent.Callable;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
-import org.junit.Before;
-import org.junit.Test;
+import java.util.concurrent.Callable;
 
 import org.apache.isis.applib.fixturescripts.events.FixturesInstallingEvent;
 import org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import org.apache.isis.core.runtime.services.eventbus.EventBusServiceDefault;
+import org.apache.isis.core.runtime.services.eventbus.adapter.EventBusImplementationForGuava;
+import org.junit.Before;
+import org.junit.Test;
 
 public class QueryResultsCacheUsingGuavaTest {
 
     private QueryResultsCacheInternal queryResultsCache;
-
-    QueryResultsCacheControlUsingGuava control;
+    private QueryResultsCacheControlInternal control;
+    private EventBusImplementationForGuava eventBusImplementationGuava;
 
     @Before
     public void setUp() throws Exception {
         queryResultsCache = new QueryResultsCacheInternal();
-        control = new QueryResultsCacheControlUsingGuava();
+        control = new QueryResultsCacheControlInternal() {
+        	{
+        		eventBusService = new EventBusServiceDefault() {
+        			{
+        				allowLateRegistration = true;
+        				eventBusImplementation = eventBusImplementationGuava 
+        						= new EventBusImplementationForGuava();
+        			}
+				};
+        	}
+        };
+        control.postConstruct();
         queryResultsCache.control = control;
     }
 
@@ -92,7 +104,7 @@ public class QueryResultsCacheUsingGuavaTest {
     public void cachingDisabled() {
 
         // given fixtures installing, hence caching disabled
-        control.on(new FixturesInstallingEvent(new FixtureScriptsDefault()));
+    	eventBusImplementationGuava.post(new FixturesInstallingEvent(new FixtureScriptsDefault()));
 
         final int[] i = new int[]{0};
 

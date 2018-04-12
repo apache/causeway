@@ -107,7 +107,7 @@ public abstract class EventBusServiceDefault extends EventBusService {
     }
     
 
-    private boolean allowLateRegistration;
+    protected boolean allowLateRegistration;
     boolean isAllowLateRegistration() {
         return allowLateRegistration;
     }

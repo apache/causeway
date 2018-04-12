@@ -16,27 +16,39 @@
  */
 package org.apache.isis.applib.services.queryresultscache;
 
-import java.util.concurrent.Callable;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
-import org.junit.Before;
-import org.junit.Test;
+import java.util.concurrent.Callable;
 
 import org.apache.isis.applib.fixturescripts.events.FixturesInstallingEvent;
 import org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import org.apache.isis.core.runtime.services.eventbus.EventBusServiceDefault;
+import org.apache.isis.core.runtime.services.eventbus.adapter.EventBusImplementationForAxonSimple;
+import org.junit.Before;
+import org.junit.Test;
 
 public class QueryResultsCacheUsingAxonTest {
 
     private QueryResultsCacheInternal queryResultsCache;
-
-    QueryResultsCacheControlUsingAxon control;
+    private QueryResultsCacheControlInternal control;
+    private EventBusImplementationForAxonSimple eventBusImplementationAxon;
 
     @Before
     public void setUp() throws Exception {
         queryResultsCache = new QueryResultsCacheInternal();
-        control = new QueryResultsCacheControlUsingAxon();
+        control = new QueryResultsCacheControlInternal() {
+        	{
+        		eventBusService = new EventBusServiceDefault() {
+        			{
+        				allowLateRegistration = true;
+        				eventBusImplementation = eventBusImplementationAxon 
+        						= new EventBusImplementationForAxonSimple();
+        			}
+				};
+        	}
+        };
+        control.postConstruct();
         queryResultsCache.control = control;
     }
 
@@ -91,8 +103,8 @@ public class QueryResultsCacheUsingAxonTest {
     @Test
     public void cachingDisabled() {
 
-        // given fixtures installing, hence caching disabled
-        control.on(new FixturesInstallingEvent(new FixtureScriptsDefault()));
+    	// given fixtures installing, hence caching disabled
+    	eventBusImplementationAxon.post(new FixturesInstallingEvent(new FixtureScriptsDefault()));
 
         final int[] i = new int[]{0};
 

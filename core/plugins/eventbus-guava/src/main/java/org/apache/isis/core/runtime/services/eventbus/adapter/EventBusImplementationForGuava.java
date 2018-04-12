@@ -16,11 +16,15 @@
  */
 package org.apache.isis.core.runtime.services.eventbus.adapter;
 
-import com.google.common.eventbus.SubscriberExceptionContext;
-import com.google.common.eventbus.SubscriberExceptionHandler;
+import java.util.Objects;
+import java.util.function.Consumer;
 
 import org.apache.isis.applib.events.domain.AbstractDomainEvent;
+import org.apache.isis.applib.services.eventbus.EventBusImplementation;
 import org.apache.isis.core.runtime.services.eventbus.EventBusImplementationAbstract;
+
+import com.google.common.eventbus.SubscriberExceptionContext;
+import com.google.common.eventbus.SubscriberExceptionHandler;
 
 /**
  * A wrapper for a Guava {@link com.google.common.eventbus.EventBus},
@@ -28,7 +32,8 @@ import org.apache.isis.core.runtime.services.eventbus.EventBusImplementationAbst
  */
 public class EventBusImplementationForGuava extends EventBusImplementationAbstract {
 
-    private final com.google.common.eventbus.EventBus eventBus = new com.google.common.eventbus.EventBus(newEventBusSubscriberExceptionHandler());
+    private final com.google.common.eventbus.EventBus eventBus = 
+    		new com.google.common.eventbus.EventBus(newEventBusSubscriberExceptionHandler());
 
     protected SubscriberExceptionHandler newEventBusSubscriberExceptionHandler() {
         return new SubscriberExceptionHandler() {
@@ -49,7 +54,7 @@ public class EventBusImplementationForGuava extends EventBusImplementationAbstra
 
     @Override
     public void unregister(final Object domainService) {
-        // Intentionally no-op.
+        // Intentionally no-op. //TODO [ahuber] why?
         // this.eventBus.unregister(domainService);
     }
 
@@ -64,6 +69,33 @@ public class EventBusImplementationForGuava extends EventBusImplementationAbstra
                 ? (AbstractDomainEvent<?>) event
                 : null;
     }
+
+    @Override
+    public <T> EventListener<T> addEventListener(Class<T> targetType, Consumer<T> onEvent) {
+    	final EventListener<T> eventListener = new GuavaEventListener<>(onEvent);
+    	register(eventListener);
+    	return eventListener;
+    }
+
+    @Override
+    public <T> void removeEventListener(EventListener<T> eventListener) {
+    	this.eventBus.unregister(eventListener);
+    }
+
+	// -- HELPER
+	
+    private static class GuavaEventListener<T> implements EventBusImplementation.EventListener<T> {
+    	private final Consumer<T> eventConsumer;
+    	private GuavaEventListener(Consumer<T> eventConsumer) {
+			this.eventConsumer = Objects.requireNonNull(eventConsumer);
+		}
+		@com.google.common.eventbus.Subscribe
+		@Override
+    	public void on(T event) {
+    		eventConsumer.accept(event);
+    	}
+    }
+
 
 
 }

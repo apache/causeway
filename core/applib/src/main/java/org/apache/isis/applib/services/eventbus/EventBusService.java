@@ -18,13 +18,16 @@ package org.apache.isis.applib.services.eventbus;
 
 import java.util.Collections;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
+import java.util.function.Consumer;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.internal.collections._Sets;
+import org.apache.isis.applib.services.eventbus.EventBusImplementation.EventListener;
 
 /**
  * A service implementing an Event Bus, allowing arbitrary events to be posted and
@@ -56,7 +59,7 @@ public abstract class EventBusService {
         @Override
         public void post(Object event) {}
         @Override
-        protected EventBusImplementation getEventBusImplementation() {
+        public EventBusImplementation getEventBusImplementation() {
             return null;
         }
         @Override
@@ -212,21 +215,31 @@ public abstract class EventBusService {
         return this.eventBusImplementation != null;
     }
 
-    
-
-
     // -- getEventBus
 
     /**
      * Lazily populated in {@link #getEventBusImplementation()} as result of the first {@link #post(Object)}.
      */
     protected EventBusImplementation eventBusImplementation;
+    
+    public <T> EventListener<T> addEventListener(final Class<T> targetType, Consumer<T> onEvent) {
+    	return Optional.ofNullable(getEventBusImplementation())
+    			.map(impl->impl.addEventListener(targetType, onEvent))
+    			.orElse(null);
+	}
 
+    public <T> void removeEventListener(EventListener<T> eventListener) {
+    	// do not trigger setupEventBus() 
+    	if(eventBusImplementation!=null) {
+    		eventBusImplementation.removeEventListener(eventListener);
+    	}
+	}
+    
     /**
      * Lazily populates the event bus for the current {@link #getSubscribers() subscribers}.
      */
     @Programmatic
-    protected EventBusImplementation getEventBusImplementation() {
+    public EventBusImplementation getEventBusImplementation() {
         setupEventBus();
         return eventBusImplementation;
     }
@@ -299,6 +312,8 @@ public abstract class EventBusService {
     protected boolean skip(Object event) {
         return false;
     }
+
+
 
     
 

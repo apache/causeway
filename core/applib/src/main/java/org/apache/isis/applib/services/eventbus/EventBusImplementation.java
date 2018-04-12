@@ -16,20 +16,19 @@
  */
 package org.apache.isis.applib.services.eventbus;
 
+import java.util.function.Consumer;
+
 import org.apache.isis.applib.internal.context._Plugin;
 
 /**
  * Common interface for all Event Bus implementations.
  *
  * <p>
- *     Defines an (non-pluggable, hard-coded) SPI to the 
+ *     Defines a plug-able SPI to the 
  *     {@link org.apache.isis.applib.services.eventbus.EventBusService},
  *     to allow alternative implementations of in-memory event bus to be used.
  * </p>
  *
- * <p>
- *     Currently, there are implementations based on Guava and on the Axon framework.
- * </p>
  */
 public interface EventBusImplementation {
 
@@ -50,8 +49,30 @@ public interface EventBusImplementation {
 	 * {@link org.apache.isis.applib.services.eventbus.EventBusService#post(Object)}.
 	 */
 	void post(Object event);
+	
+	/**
+	 * Programmatically adds an event listener (wrapping the specified Consumer {@code onEvent})
+	 * to the event-bus.
+	 * @param onEvent
+	 * @return an EventListener instance 
+	 * @since 2.0.0
+	 */
+	<T> EventListener<T> addEventListener(final Class<T> targetType, Consumer<T> onEvent);
+	
+	/**
+	 * Removes the {@code eventListener} from the event-bus.
+	 * @param eventListener
+	 * @since 2.0.0
+	 */
+	<T> void removeEventListener(EventListener<T> eventListener);
+	
+	// -- EVENT LISTENER
+	
+	public static interface EventListener<T> {
+    	public void on(T event);
+    }
 
-	// -- LOOKUP
+	// -- PLUGIN LOOKUP
 
 	public static EventBusImplementation get() {
 		return _Plugin.getOrElse(EventBusImplementation.class, 
