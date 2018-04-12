@@ -29,15 +29,15 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Value;
+import org.apache.isis.applib.events.domain.AbstractDomainEvent;
+import org.apache.isis.applib.events.domain.ActionDomainEvent;
+import org.apache.isis.applib.events.domain.PropertyDomainEvent;
 import org.apache.isis.applib.internal.collections._Lists;
 import org.apache.isis.applib.internal.collections._Maps;
 import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.applib.services.eventbus.AbstractDomainEvent;
-import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
 import org.apache.isis.applib.services.eventbus.EventBusService;
-import org.apache.isis.applib.services.eventbus.PropertyDomainEvent;
 import org.apache.isis.applib.services.metrics.MetricsService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.xactn.Transaction;
@@ -199,7 +199,7 @@ public class Interaction implements HasTransactionId {
      * <b>NOT API</b>: intended to be called only by the framework.
      *
      * <p>
-     * Push a new {@link org.apache.isis.applib.services.eventbus.AbstractDomainEvent}
+     * Push a new {@link org.apache.isis.applib.events.domain.AbstractDomainEvent}
      * onto the stack of events held by the command.
      * </p>
      */
@@ -226,7 +226,7 @@ public class Interaction implements HasTransactionId {
      * <b>NOT API</b>: intended to be called only by the framework.
      *
      * <p>
-     * Pops the top-most  {@link org.apache.isis.applib.services.eventbus.ActionDomainEvent}
+     * Pops the top-most  {@link org.apache.isis.applib.events.domain.ActionDomainEvent}
      * from the stack of events held by the command.
      * </p>
      */

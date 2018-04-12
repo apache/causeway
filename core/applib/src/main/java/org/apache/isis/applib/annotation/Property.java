@@ -29,10 +29,10 @@ import javax.jdo.annotations.NotPersistent;
 
 import org.apache.isis.applib.conmap.ContentMappingServiceForCommandDto;
 import org.apache.isis.applib.conmap.ContentMappingServiceForCommandsDto;
+import org.apache.isis.applib.events.domain.PropertyDomainEvent;
 import org.apache.isis.applib.services.command.CommandDtoProcessor;
 import org.apache.isis.applib.services.command.CommandWithDto;
 import org.apache.isis.applib.services.command.spi.CommandService;
-import org.apache.isis.applib.services.eventbus.PropertyDomainEvent;
 import org.apache.isis.applib.spec.Specification;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
@@ -48,7 +48,7 @@ public @interface Property {
     /**
      * Indicates that changes to the property that should be posted to the
      * {@link org.apache.isis.applib.services.eventbus.EventBusService event bus} using a custom (subclass of)
-     * {@link org.apache.isis.applib.services.eventbus.PropertyDomainEvent}.
+     * {@link org.apache.isis.applib.events.domain.PropertyDomainEvent}.
      *
      * <p>For example:
      * </p>

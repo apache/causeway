@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.properties.property.modify;
 
-import org.apache.isis.applib.services.eventbus.PropertyDomainEvent;
+import org.apache.isis.applib.events.domain.PropertyDomainEvent;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacet;

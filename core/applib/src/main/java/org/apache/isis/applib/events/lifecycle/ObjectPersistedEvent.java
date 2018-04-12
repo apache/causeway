@@ -16,46 +16,27 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.services.eventbus;
+package org.apache.isis.applib.events.lifecycle;
 
-import java.util.EventObject;
-
-import org.apache.isis.applib.annotation.DomainObjectLayout;
-
-/**
- * Emitted for subscribers to obtain a cssClass hint (equivalent to the <tt>cssClass()</tt> supporting method or the {@link DomainObjectLayout#cssClass()} attribute).
- */
-public abstract class CssClassUiEvent<S> extends AbstractUiEvent<S> {
+public abstract class ObjectPersistedEvent<S> extends AbstractLifecycleEvent<S> {
 
     private static final long serialVersionUID = 1L;
-
-    // -- constructors
-    /**
-     * If used then the framework will set state via (non-API) setters.
-     *
-     * <p>
-     *     Because the {@link EventObject} superclass prohibits a null source, a dummy value is temporarily used.
-     * </p>
-     */
-    public CssClassUiEvent() {
-        this(null);
-    }
-
-    public CssClassUiEvent(final S source) {
-        super(source);
-    }
-
-    
 
     // -- Default class
     /**
      * This class is the default for the
-     * {@link org.apache.isis.applib.annotation.DomainObjectLayout#cssClassUiEvent()} annotation attribute.  Whether this
-     * raises an event or not depends upon the "isis.reflector.facet.domainObjectLayoutAnnotation.cssClassUiEvent.postForDefault"
+     * {@link org.apache.isis.applib.annotation.DomainObject#persistedLifecycleEvent()} annotation attribute.  Whether this
+     * raises an event or not depends upon the "isis.reflector.facet.domainObjectAnnotation.persistedLifecycleEvent.postForDefault"
      * configuration property.
      */
-    public static class Default extends CssClassUiEvent<Object> {
+    public static class Default extends ObjectPersistedEvent<Object> {
         private static final long serialVersionUID = 1L;
+        public Default() {}
+
+        @Override
+        public String toString() {
+            return "ObjectPersistedEvent$Default{source=" + getSource() + "}";
+        }
     }
     
 
@@ -65,7 +46,7 @@ public abstract class CssClassUiEvent<S> extends AbstractUiEvent<S> {
      * Convenience class to use indicating that an event should <i>not</i> be posted (irrespective of the configuration
      * property setting for the {@link Default} event.
      */
-    public static class Noop extends CssClassUiEvent<Object> {
+    public static class Noop extends ObjectPersistedEvent<Object> {
         private static final long serialVersionUID = 1L;
     }
     
@@ -76,27 +57,15 @@ public abstract class CssClassUiEvent<S> extends AbstractUiEvent<S> {
      * Convenience class meaning that an event <i>should</i> be posted (irrespective of the configuration
      * property setting for the {@link Default} event..
      */
-    public static class Doop extends CssClassUiEvent<Object> {
+    public static class Doop extends ObjectPersistedEvent<Object> {
         private static final long serialVersionUID = 1L;
     }
     
 
-    // -- cssClass
-    private String cssClass;
-
-    /**
-     * The CSS class as provided by a subscriber using {@link #setCssClass(String)}.
-     */
-    public String getCssClass() {
-        return cssClass;
+    public ObjectPersistedEvent() {
     }
-
-    /**
-     * For subscribers to call to provide a CSS class for this object.
-     */
-    public void setCssClass(final String cssClass) {
-        this.cssClass = cssClass;
+    public ObjectPersistedEvent(final S source) {
+        super(source);
     }
-    
 
 }

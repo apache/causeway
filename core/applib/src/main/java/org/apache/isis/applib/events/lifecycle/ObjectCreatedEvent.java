@@ -16,26 +16,26 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.services.eventbus;
+package org.apache.isis.applib.events.lifecycle;
 
-public abstract class ObjectPersistedEvent<S> extends AbstractLifecycleEvent<S> {
+public abstract class ObjectCreatedEvent<S> extends AbstractLifecycleEvent<S> {
 
     private static final long serialVersionUID = 1L;
 
     // -- Default class
     /**
      * This class is the default for the
-     * {@link org.apache.isis.applib.annotation.DomainObject#persistedLifecycleEvent()} annotation attribute.  Whether this
-     * raises an event or not depends upon the "isis.reflector.facet.domainObjectAnnotation.persistedLifecycleEvent.postForDefault"
+     * {@link org.apache.isis.applib.annotation.DomainObject#createdLifecycleEvent()} annotation attribute.  Whether this
+     * raises an event or not depends upon the "isis.reflector.facet.domainObjectAnnotation.createdLifecycleEvent.postForDefault"
      * configuration property.
      */
-    public static class Default extends ObjectPersistedEvent<Object> {
+    public static class Default extends ObjectCreatedEvent<Object> {
         private static final long serialVersionUID = 1L;
         public Default() {}
 
         @Override
         public String toString() {
-            return "ObjectPersistedEvent$Default{source=" + getSource() + "}";
+            return "ObjectCreatedEvent$Default{source=" + getSource() + "}";
         }
     }
     
@@ -46,7 +46,7 @@ public abstract class ObjectPersistedEvent<S> extends AbstractLifecycleEvent<S> 
      * Convenience class to use indicating that an event should <i>not</i> be posted (irrespective of the configuration
      * property setting for the {@link Default} event.
      */
-    public static class Noop extends ObjectPersistedEvent<Object> {
+    public static class Noop extends ObjectCreatedEvent<Object> {
         private static final long serialVersionUID = 1L;
     }
     
@@ -57,14 +57,14 @@ public abstract class ObjectPersistedEvent<S> extends AbstractLifecycleEvent<S> 
      * Convenience class meaning that an event <i>should</i> be posted (irrespective of the configuration
      * property setting for the {@link Default} event..
      */
-    public static class Doop extends ObjectPersistedEvent<Object> {
+    public static class Doop extends ObjectCreatedEvent<Object> {
         private static final long serialVersionUID = 1L;
     }
     
 
-    public ObjectPersistedEvent() {
+    public ObjectCreatedEvent() {
     }
-    public ObjectPersistedEvent(final S source) {
+    public ObjectCreatedEvent(final S source) {
         super(source);
     }
 

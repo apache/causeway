@@ -19,7 +19,7 @@ package org.apache.isis.core.metamodel.facets;
 import org.junit.Test;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
+import org.apache.isis.applib.events.domain.ActionDomainEvent;
 
 import static junit.framework.Assert.assertEquals;
 import static org.hamcrest.CoreMatchers.is;

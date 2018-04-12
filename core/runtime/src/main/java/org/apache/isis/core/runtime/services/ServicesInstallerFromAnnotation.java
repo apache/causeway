@@ -249,15 +249,15 @@ public class ServicesInstallerFromAnnotation extends ServicesInstallerAbstract {
 
     // -- domain events
     public static abstract class PropertyDomainEvent<T>
-            extends org.apache.isis.applib.services.eventbus.PropertyDomainEvent<ServicesInstallerFromAnnotation, T> {
+            extends org.apache.isis.applib.events.domain.PropertyDomainEvent<ServicesInstallerFromAnnotation, T> {
     }
 
     public static abstract class CollectionDomainEvent<T>
-            extends org.apache.isis.applib.services.eventbus.CollectionDomainEvent<ServicesInstallerFromAnnotation, T> {
+            extends org.apache.isis.applib.events.domain.CollectionDomainEvent<ServicesInstallerFromAnnotation, T> {
     }
 
     public static abstract class ActionDomainEvent
-            extends org.apache.isis.applib.services.eventbus.ActionDomainEvent<ServicesInstallerFromAnnotation> {
+            extends org.apache.isis.applib.events.domain.ActionDomainEvent<ServicesInstallerFromAnnotation> {
     }
     
 

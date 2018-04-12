@@ -19,7 +19,7 @@ package org.apache.isis.core.runtime.services.eventbus.adapter;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.apache.isis.applib.services.eventbus.AbstractDomainEvent;
+import org.apache.isis.applib.events.domain.AbstractDomainEvent;
 import org.apache.isis.core.runtime.services.eventbus.EventBusImplementationAbstract;
 import org.axonframework.domain.EventMessage;
 import org.axonframework.domain.GenericEventMessage;

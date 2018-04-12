@@ -30,12 +30,12 @@ import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.FatalException;
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.events.domain.AbstractDomainEvent;
+import org.apache.isis.applib.events.domain.ActionDomainEvent;
+import org.apache.isis.applib.events.domain.CollectionDomainEvent;
+import org.apache.isis.applib.events.domain.PropertyDomainEvent;
 import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.applib.services.eventbus.AbstractDomainEvent;
-import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
-import org.apache.isis.applib.services.eventbus.CollectionDomainEvent;
 import org.apache.isis.applib.services.eventbus.EventBusService;
-import org.apache.isis.applib.services.eventbus.PropertyDomainEvent;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.services.ServicesInjector;

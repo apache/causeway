@@ -20,8 +20,9 @@
 package org.apache.isis.core.metamodel.facets.collections.collection.modify;
 
 import java.util.Set;
-import org.apache.isis.applib.services.eventbus.AbstractDomainEvent;
-import org.apache.isis.applib.services.eventbus.CollectionDomainEvent;
+
+import org.apache.isis.applib.events.domain.AbstractDomainEvent;
+import org.apache.isis.applib.events.domain.CollectionDomainEvent;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;

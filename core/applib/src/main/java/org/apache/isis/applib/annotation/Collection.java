@@ -27,7 +27,7 @@ import java.lang.annotation.Target;
 
 import javax.jdo.annotations.NotPersistent;
 
-import org.apache.isis.applib.services.eventbus.CollectionDomainEvent;
+import org.apache.isis.applib.events.domain.CollectionDomainEvent;
 
 /**
  * Domain semantics for domain object collection.
@@ -40,7 +40,7 @@ public @interface Collection {
     /**
      * Indicates that changes to the collection that should be posted to the
      * {@link org.apache.isis.applib.services.eventbus.EventBusService event bus} using a custom (subclass of)
-     * {@link org.apache.isis.applib.services.eventbus.CollectionDomainEvent}.
+     * {@link org.apache.isis.applib.events.domain.CollectionDomainEvent}.
      *
      * <p>For example:
      * </p>

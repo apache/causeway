@@ -20,10 +20,9 @@ package org.apache.isis.applib.services.command;
 
 import java.util.List;
 
+import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.junit.Before;
 import org.junit.Test;
-
-import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;

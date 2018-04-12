@@ -22,8 +22,9 @@ import org.apache.isis.applib.internal.context._Plugin;
  * Common interface for all Event Bus implementations.
  *
  * <p>
- *     Defines an (non-pluggable, hard-coded) SPI to the {@link org.apache.isis.applib.services.eventbus.EventBusService},
- *     to allow alternativeimplementations of in-memory event bus to be used.
+ *     Defines an (non-pluggable, hard-coded) SPI to the 
+ *     {@link org.apache.isis.applib.services.eventbus.EventBusService},
+ *     to allow alternative implementations of in-memory event bus to be used.
  * </p>
  *
  * <p>

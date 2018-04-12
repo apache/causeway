@@ -16,26 +16,26 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.services.eventbus;
+package org.apache.isis.applib.events.lifecycle;
 
-public abstract class ObjectPersistingEvent<S> extends AbstractLifecycleEvent<S> {
+public abstract class ObjectRemovingEvent<S> extends AbstractLifecycleEvent<S> {
 
     private static final long serialVersionUID = 1L;
 
     // -- Default class
     /**
      * This class is the default for the
-     * {@link org.apache.isis.applib.annotation.DomainObject#persistingLifecycleEvent()} annotation attribute.  Whether this
-     * raises an event or not depends upon the "isis.reflector.facet.domainObjectAnnotation.persistingLifecycleEvent.postForDefault"
+     * {@link org.apache.isis.applib.annotation.DomainObject#removingLifecycleEvent()} annotation attribute.  Whether this
+     * raises an event or not depends upon the "isis.reflector.facet.domainObjectAnnotation.removingLifecycleEvent.postForDefault"
      * configuration property.
      */
-    public static class Default extends ObjectPersistingEvent<Object> {
+    public static class Default extends ObjectRemovingEvent<Object> {
         private static final long serialVersionUID = 1L;
         public Default() {}
 
         @Override
         public String toString() {
-            return "ObjectPersistingEvent$Default{source=" + getSource() + "}";
+            return "ObjectRemovingEvent$Default{source=" + getSource() + "}";
         }
     }
     
@@ -46,7 +46,7 @@ public abstract class ObjectPersistingEvent<S> extends AbstractLifecycleEvent<S>
      * Convenience class to use indicating that an event should <i>not</i> be posted (irrespective of the configuration
      * property setting for the {@link Default} event.
      */
-    public static class Noop extends ObjectPersistingEvent<Object> {
+    public static class Noop extends ObjectRemovingEvent<Object> {
         private static final long serialVersionUID = 1L;
     }
     
@@ -57,14 +57,14 @@ public abstract class ObjectPersistingEvent<S> extends AbstractLifecycleEvent<S>
      * Convenience class meaning that an event <i>should</i> be posted (irrespective of the configuration
      * property setting for the {@link Default} event..
      */
-    public static class Doop extends ObjectPersistingEvent<Object> {
+    public static class Doop extends ObjectRemovingEvent<Object> {
         private static final long serialVersionUID = 1L;
     }
     
 
-    public ObjectPersistingEvent() {
+    public ObjectRemovingEvent() {
     }
-    public ObjectPersistingEvent(final S source) {
+    public ObjectRemovingEvent(final S source) {
         super(source);
     }
 

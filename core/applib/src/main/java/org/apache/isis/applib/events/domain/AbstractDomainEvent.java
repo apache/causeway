@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.services.eventbus;
+package org.apache.isis.applib.events.domain;
 
 import java.util.EventObject;
 import java.util.Map;
@@ -73,8 +73,8 @@ public abstract class AbstractDomainEvent<S> extends java.util.EventObject {
         }
 
         /**
-         * When the {@link org.apache.isis.applib.services.command.Command} is made available on the {@link org.apache.isis.applib.services.eventbus.ActionDomainEvent}
-         * via {@link org.apache.isis.applib.services.eventbus.ActionDomainEvent#getCommand()}.
+         * When the {@link org.apache.isis.applib.services.command.Command} is made available on the {@link org.apache.isis.applib.events.domain.ActionDomainEvent}
+         * via {@link org.apache.isis.applib.events.domain.ActionDomainEvent#getCommand()}.
          */
         public boolean isExecutingOrLater() {
             return isExecuting() || isExecuted();
@@ -238,7 +238,7 @@ public abstract class AbstractDomainEvent<S> extends java.util.EventObject {
      *     If hiding, just pass <tt>null</tt> for the parameter.
      * </p>
      *
-     * @param reason - reason why the interaction is being invalidated (ignored if in {@link org.apache.isis.applib.services.eventbus.AbstractDomainEvent.Phase#HIDE hide} phase).
+     * @param reason - reason why the interaction is being invalidated (ignored if in {@link org.apache.isis.applib.events.domain.AbstractDomainEvent.Phase#HIDE hide} phase).
      * @param args
      *
      * @see #veto(org.apache.isis.applib.services.i18n.TranslatableString)
@@ -276,7 +276,7 @@ public abstract class AbstractDomainEvent<S> extends java.util.EventObject {
      *     If hiding, just pass <tt>null</tt> for the parameter.
      * </p>
      *
-     * @param translatableReason - reason why the interaction is being invalidated (ignored if in {@link org.apache.isis.applib.services.eventbus.AbstractDomainEvent.Phase#HIDE hide} phase).
+     * @param translatableReason - reason why the interaction is being invalidated (ignored if in {@link org.apache.isis.applib.events.domain.AbstractDomainEvent.Phase#HIDE hide} phase).
      *
      * @see #veto(String, Object...)
      */

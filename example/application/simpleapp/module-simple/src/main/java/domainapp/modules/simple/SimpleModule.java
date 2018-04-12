@@ -40,9 +40,9 @@ public class SimpleModule extends ModuleAbstract {
     }
 
     public static class PropertyDomainEvent<S,T>
-            extends org.apache.isis.applib.services.eventbus.PropertyDomainEvent<S,T> {}
+            extends org.apache.isis.applib.events.domain.PropertyDomainEvent<S,T> {}
     public static class CollectionDomainEvent<S,T>
-            extends org.apache.isis.applib.services.eventbus.CollectionDomainEvent<S,T> {}
+            extends org.apache.isis.applib.events.domain.CollectionDomainEvent<S,T> {}
     public static class ActionDomainEvent<S> extends
-            org.apache.isis.applib.services.eventbus.ActionDomainEvent<S> {}
+            org.apache.isis.applib.events.domain.ActionDomainEvent<S> {}
 }

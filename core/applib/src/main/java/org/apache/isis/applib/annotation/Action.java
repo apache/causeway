@@ -27,10 +27,10 @@ import java.lang.annotation.Target;
 
 import org.apache.isis.applib.conmap.ContentMappingServiceForCommandDto;
 import org.apache.isis.applib.conmap.ContentMappingServiceForCommandsDto;
+import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.applib.services.command.CommandDtoProcessor;
 import org.apache.isis.applib.services.command.CommandWithDto;
 import org.apache.isis.applib.services.command.spi.CommandService;
-import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
 
 /**
  * Domain semantics for domain object collection.
@@ -44,7 +44,7 @@ public @interface Action {
     /**
      * Indicates that an invocation of the action should be posted to the
      * {@link org.apache.isis.applib.services.eventbus.EventBusService event bus} using a custom (subclass of)
-     * {@link org.apache.isis.applib.services.eventbus.ActionDomainEvent}.
+     * {@link org.apache.isis.applib.events.domain.ActionDomainEvent}.
      *
      * <p>For example:
      * </p>

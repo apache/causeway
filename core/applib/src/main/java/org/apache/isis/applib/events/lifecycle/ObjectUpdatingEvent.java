@@ -16,44 +16,27 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.services.eventbus;
+package org.apache.isis.applib.events.lifecycle;
 
-import java.util.EventObject;
-
-/**
- * Emitted for subscribers to obtain a cssClass hint (equivalent to the <tt>iconName()</tt> supporting method).
- */
-public abstract class IconUiEvent<S> extends AbstractUiEvent<S> {
+public abstract class ObjectUpdatingEvent<S> extends AbstractLifecycleEvent<S> {
 
     private static final long serialVersionUID = 1L;
-
-    // -- constructors
-    /**
-     * If used then the framework will set state via (non-API) setters.
-     *
-     * <p>
-     *     Because the {@link EventObject} superclass prohibits a null source, a dummy value is temporarily used.
-     * </p>
-     */
-    public IconUiEvent() {
-        this(null);
-    }
-
-    public IconUiEvent(final S source) {
-        super(source);
-    }
-
-    
 
     // -- Default class
     /**
      * This class is the default for the
-     * {@link org.apache.isis.applib.annotation.DomainObjectLayout#iconUiEvent()} annotation attribute.  Whether this
-     * raises an event or not depends upon the "isis.reflector.facet.domainObjectLayoutAnnotation.iconUiEvent.postForDefault"
+     * {@link org.apache.isis.applib.annotation.DomainObject#updatingLifecycleEvent()} annotation attribute.  Whether this
+     * raises an event or not depends upon the "isis.reflector.facet.domainObjectAnnotation.updatingLifecycleEvent.postForDefault"
      * configuration property.
      */
-    public static class Default extends IconUiEvent<Object> {
+    public static class Default extends ObjectUpdatingEvent<Object> {
         private static final long serialVersionUID = 1L;
+        public Default() {}
+
+        @Override
+        public String toString() {
+            return "ObjectUpdatingEvent$Default{source=" + getSource() + "}";
+        }
     }
     
 
@@ -63,7 +46,7 @@ public abstract class IconUiEvent<S> extends AbstractUiEvent<S> {
      * Convenience class to use indicating that an event should <i>not</i> be posted (irrespective of the configuration
      * property setting for the {@link Default} event.
      */
-    public static class Noop extends IconUiEvent<Object> {
+    public static class Noop extends ObjectUpdatingEvent<Object> {
         private static final long serialVersionUID = 1L;
     }
     
@@ -74,28 +57,15 @@ public abstract class IconUiEvent<S> extends AbstractUiEvent<S> {
      * Convenience class meaning that an event <i>should</i> be posted (irrespective of the configuration
      * property setting for the {@link Default} event..
      */
-    public static class Doop extends IconUiEvent<Object> {
+    public static class Doop extends ObjectUpdatingEvent<Object> {
         private static final long serialVersionUID = 1L;
     }
     
 
-
-    // -- iconName
-    private String iconName;
-
-    /**
-     * The icon name as provided by a subscriber using {@link #setIconName(String)}.
-     */
-    public String getIconName() {
-        return iconName;
+    public ObjectUpdatingEvent() {
     }
-
-    /**
-     * For subscribers to call to provide an icon name for this object.
-     */
-    public void setIconName(final String iconName) {
-        this.iconName = iconName;
+    public ObjectUpdatingEvent(final S source) {
+        super(source);
     }
-    
 
 }

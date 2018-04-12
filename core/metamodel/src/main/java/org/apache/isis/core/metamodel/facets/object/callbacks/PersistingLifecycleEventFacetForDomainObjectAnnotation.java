@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.object.callbacks;
 
-import org.apache.isis.applib.services.eventbus.ObjectPersistingEvent;
+import org.apache.isis.applib.events.lifecycle.ObjectPersistingEvent;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleClassValueFacetAbstract;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;

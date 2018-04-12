@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.services.eventbus;
+package org.apache.isis.applib.events.domain;
 
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ToString;
@@ -78,8 +78,8 @@ public abstract class CollectionDomainEvent<S,T> extends AbstractDomainEvent<S> 
     private T value;
 
     /**
-     * The proposed reference to either add or remove (per {@link #getOf()}), populated at {@link org.apache.isis.applib.services.eventbus.AbstractDomainEvent.Phase#VALIDATE}
-     * and subsequent phases (is null for {@link org.apache.isis.applib.services.eventbus.AbstractDomainEvent.Phase#HIDE hidden} and {@link org.apache.isis.applib.services.eventbus.AbstractDomainEvent.Phase#DISABLE disable} phases).
+     * The proposed reference to either add or remove (per {@link #getOf()}), populated at {@link org.apache.isis.applib.events.domain.AbstractDomainEvent.Phase#VALIDATE}
+     * and subsequent phases (is null for {@link org.apache.isis.applib.events.domain.AbstractDomainEvent.Phase#HIDE hidden} and {@link org.apache.isis.applib.events.domain.AbstractDomainEvent.Phase#DISABLE disable} phases).
      */
     public T getValue() {
         return value;
@@ -122,7 +122,7 @@ public abstract class CollectionDomainEvent<S,T> extends AbstractDomainEvent<S> 
 
     /**
      * Not API; updates from {@link Of#ACCESS} to either {@link Of#ADD_TO} or {@link Of#REMOVE_FROM} when hits the
-     * {@link org.apache.isis.applib.services.eventbus.AbstractDomainEvent.Phase#VALIDATE validation phase}.
+     * {@link org.apache.isis.applib.events.domain.AbstractDomainEvent.Phase#VALIDATE validation phase}.
      */
     public void setOf(Of of) {
         this.of = of;

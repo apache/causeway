@@ -39,7 +39,7 @@ public class Object_clearHints {
         this.object = object;
     }
 
-    public static class ActionDomainEvent extends org.apache.isis.applib.services.eventbus.ActionDomainEvent<Object> { }
+    public static class ActionDomainEvent extends org.apache.isis.applib.events.domain.ActionDomainEvent<Object> { }
 
     @Action(
             domainEvent = ActionDomainEvent.class,

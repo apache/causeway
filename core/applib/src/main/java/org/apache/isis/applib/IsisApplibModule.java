@@ -26,26 +26,26 @@ public class IsisApplibModule extends ModuleAbstract {
     // -- ui event classes
     @SuppressWarnings("serial") // serial versionId to be provided by concrete class
     public abstract static class TitleUiEvent<S>
-            extends org.apache.isis.applib.services.eventbus.TitleUiEvent<S> { }
+            extends org.apache.isis.applib.events.ui.TitleUiEvent<S> { }
     @SuppressWarnings("serial") // serial versionId to be provided by concrete class
     public abstract static class IconUiEvent<S>
-            extends org.apache.isis.applib.services.eventbus.IconUiEvent<S> { }
+            extends org.apache.isis.applib.events.ui.IconUiEvent<S> { }
     @SuppressWarnings("serial") // serial versionId to be provided by concrete class
     public abstract static class CssClassUiEvent<S>
-            extends org.apache.isis.applib.services.eventbus.CssClassUiEvent<S> { }
+            extends org.apache.isis.applib.events.ui.CssClassUiEvent<S> { }
 
     // -- domain event classes
 
     @SuppressWarnings("serial") // serial versionId to be provided by concrete class
-	public abstract static class ActionDomainEvent<S> extends org.apache.isis.applib.services.eventbus.ActionDomainEvent<S> {
+	public abstract static class ActionDomainEvent<S> extends org.apache.isis.applib.events.domain.ActionDomainEvent<S> {
     }
 
     @SuppressWarnings("serial") // serial versionId to be provided by concrete class
-    public abstract static class CollectionDomainEvent<S,T> extends org.apache.isis.applib.services.eventbus.CollectionDomainEvent<S,T> {
+    public abstract static class CollectionDomainEvent<S,T> extends org.apache.isis.applib.events.domain.CollectionDomainEvent<S,T> {
     }
 
     @SuppressWarnings("serial") // serial versionId to be provided by concrete class
-    public abstract static class PropertyDomainEvent<S,T> extends org.apache.isis.applib.services.eventbus.PropertyDomainEvent<S,T> {
+    public abstract static class PropertyDomainEvent<S,T> extends org.apache.isis.applib.events.domain.PropertyDomainEvent<S,T> {
     }
 
     

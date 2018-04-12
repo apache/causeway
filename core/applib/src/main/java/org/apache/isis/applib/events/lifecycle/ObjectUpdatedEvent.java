@@ -16,26 +16,26 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.services.eventbus;
+package org.apache.isis.applib.events.lifecycle;
 
-public abstract class ObjectLoadedEvent<S> extends AbstractLifecycleEvent<S> {
+public abstract class ObjectUpdatedEvent<S> extends AbstractLifecycleEvent<S> {
 
     private static final long serialVersionUID = 1L;
 
     // -- Default class
     /**
      * This class is the default for the
-     * {@link org.apache.isis.applib.annotation.DomainObject#loadedLifecycleEvent()} annotation attribute.  Whether this
-     * raises an event or not depends upon the "isis.reflector.facet.domainObjectAnnotation.loadedLifecycleEvent.postForDefault"
+     * {@link org.apache.isis.applib.annotation.DomainObject#updatedLifecycleEvent()} annotation attribute.  Whether this
+     * raises an event or not depends upon the "isis.reflector.facet.domainObjectAnnotation.updatedLifecycleEvent.postForDefault"
      * configuration property.
      */
-    public static class Default extends ObjectLoadedEvent<Object> {
+    public static class Default extends ObjectUpdatedEvent<Object> {
         private static final long serialVersionUID = 1L;
         public Default() {}
 
         @Override
         public String toString() {
-            return "ObjectLoadedEvent$Default{source=" + getSource() + "}";
+            return "ObjectUpdatedEvent$Default{source=" + getSource() + "}";
         }
     }
     
@@ -46,7 +46,7 @@ public abstract class ObjectLoadedEvent<S> extends AbstractLifecycleEvent<S> {
      * Convenience class to use indicating that an event should <i>not</i> be posted (irrespective of the configuration
      * property setting for the {@link Default} event.
      */
-    public static class Noop extends ObjectLoadedEvent<Object> {
+    public static class Noop extends ObjectUpdatedEvent<Object> {
         private static final long serialVersionUID = 1L;
     }
     
@@ -57,16 +57,14 @@ public abstract class ObjectLoadedEvent<S> extends AbstractLifecycleEvent<S> {
      * Convenience class meaning that an event <i>should</i> be posted (irrespective of the configuration
      * property setting for the {@link Default} event..
      */
-    public static class Doop extends ObjectLoadedEvent<Object> {
+    public static class Doop extends ObjectUpdatedEvent<Object> {
         private static final long serialVersionUID = 1L;
     }
     
 
-
-
-    public ObjectLoadedEvent() {
+    public ObjectUpdatedEvent() {
     }
-    public ObjectLoadedEvent(final S source) {
+    public ObjectUpdatedEvent(final S source) {
         super(source);
     }
 

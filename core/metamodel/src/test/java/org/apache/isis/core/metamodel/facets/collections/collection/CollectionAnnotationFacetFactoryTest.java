@@ -28,7 +28,7 @@ import org.junit.Test;
 
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.services.eventbus.CollectionDomainEvent;
+import org.apache.isis.applib.events.domain.CollectionDomainEvent;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;

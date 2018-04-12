@@ -23,9 +23,9 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.applib.internal.collections._Collections;
 import org.apache.isis.applib.services.HasTransactionId;
-import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;

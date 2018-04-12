@@ -21,8 +21,8 @@ import java.util.Set;
 import org.junit.Test;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.services.eventbus.AbstractDomainEvent;
-import org.apache.isis.applib.services.eventbus.CollectionDomainEvent;
+import org.apache.isis.applib.events.domain.AbstractDomainEvent;
+import org.apache.isis.applib.events.domain.CollectionDomainEvent;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertSame;

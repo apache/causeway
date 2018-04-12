@@ -20,7 +20,7 @@ import org.joda.time.LocalDate;
 import org.junit.Test;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.services.eventbus.PropertyDomainEvent;
+import org.apache.isis.applib.events.domain.PropertyDomainEvent;
 
 import static junit.framework.Assert.assertEquals;
 import static org.hamcrest.CoreMatchers.is;

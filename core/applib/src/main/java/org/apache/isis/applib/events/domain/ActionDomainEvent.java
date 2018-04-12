@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.services.eventbus;
+package org.apache.isis.applib.events.domain;
 
 import java.util.List;
 
@@ -188,7 +188,7 @@ public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
      * The value returned by the action.
      *
      * <p>
-     *     Only available for the {@link org.apache.isis.applib.services.eventbus.AbstractDomainEvent.Phase#EXECUTED}
+     *     Only available for the {@link org.apache.isis.applib.events.domain.AbstractDomainEvent.Phase#EXECUTED}
      *     {@link #getEventPhase() phase}.
      * </p>
      */
