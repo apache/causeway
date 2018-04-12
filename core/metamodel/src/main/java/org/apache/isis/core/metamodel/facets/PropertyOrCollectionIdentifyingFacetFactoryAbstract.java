@@ -21,8 +21,8 @@ package org.apache.isis.core.metamodel.facets;
 
 import java.util.List;
 
+import org.apache.isis.applib.internal.collections._Collections;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.specloader.CollectionUtils;
 
 public abstract class PropertyOrCollectionIdentifyingFacetFactoryAbstract
         extends MethodPrefixBasedFacetFactoryAbstract
@@ -33,14 +33,8 @@ public abstract class PropertyOrCollectionIdentifyingFacetFactoryAbstract
         super(featureTypes, OrphanValidation.DONT_VALIDATE, prefixes);
     }
 
-
-    // //////////////////////////////////////
-
     protected boolean isCollectionOrArray(final Class<?> cls) {
-        return CollectionUtils.isCollectionType(cls) || CollectionUtils.isArrayType(cls);
+        return _Collections.isCollectionOrArrayType(cls);
     }
-
-
-
 
 }

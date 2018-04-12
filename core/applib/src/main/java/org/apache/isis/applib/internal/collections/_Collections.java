@@ -48,6 +48,26 @@ import javax.annotation.Nullable;
  * @since 2.0.0
  */
 public class _Collections {
+	
+    // -- PREDICATES
+
+	/**
+	 * @param cls
+	 * @return whether {@code cls} implements the java.util.Collection interface
+	 */
+    public static boolean isCollectionType(@Nullable final Class<?> cls) {
+        return cls!=null ? java.util.Collection.class.isAssignableFrom(cls) : false;
+    }
+    
+    /**
+     * For convenience also provided in {@link _Arrays}.
+     * @param cls
+     * @return whether {@code cls} implements the java.util.Collection interface 
+     * or represents an array
+     */
+    public static boolean isCollectionOrArrayType(final Class<?> cls) {
+        return _Collections.isCollectionType(cls) || _Arrays.isArrayType(cls);
+    }
 
 	// -- COLLECTION UNMODIFIABLE ADAPTERS (FOR LIST)
 
@@ -186,6 +206,8 @@ public class _Collections {
 				String.format("Can not collect into %s. Only List, Set, SortedSet and Collection are supported.",
 						typeOfCollection.getClass().getName()));
 	}
+	
+	// -- ELEMENT TYPE INFERENCE
 	
 	// --
 	

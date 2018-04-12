@@ -26,6 +26,7 @@ import java.lang.reflect.TypeVariable;
 import java.util.List;
 
 import org.apache.isis.applib.annotation.Collection;
+import org.apache.isis.applib.internal.collections._Collections;
 import org.apache.isis.applib.services.eventbus.CollectionDomainEvent;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -55,7 +56,6 @@ import org.apache.isis.core.metamodel.facets.collections.modify.CollectionRemove
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
-import org.apache.isis.core.metamodel.specloader.CollectionUtils;
 import org.apache.isis.core.metamodel.util.EventUtil;
 
 public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract {
@@ -196,7 +196,7 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract {
         final Method method = processMethodContext.getMethod();
 
         final Class<?> methodReturnType = method.getReturnType();
-        if (!CollectionUtils.isCollectionType(methodReturnType) && !CollectionUtils.isArrayType(methodReturnType)) {
+        if (!_Collections.isCollectionOrArrayType(methodReturnType)) {
             return;
         }
 

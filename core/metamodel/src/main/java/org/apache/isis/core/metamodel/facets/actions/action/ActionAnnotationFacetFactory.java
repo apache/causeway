@@ -22,9 +22,8 @@ package org.apache.isis.core.metamodel.facets.actions.action;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import com.google.common.base.Strings;
-
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.internal.collections._Collections;
 import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -57,8 +56,9 @@ import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFa
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.members.order.annotprop.MemberOrderFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.CollectionUtils;
 import org.apache.isis.core.metamodel.util.EventUtil;
+
+import com.google.common.base.Strings;
 
 public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
 
@@ -255,7 +255,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
         final FacetedMethod holder = processMethodContext.getFacetHolder();
 
         final Class<?> methodReturnType = method.getReturnType();
-        if (!CollectionUtils.isCollectionType(methodReturnType) && !CollectionUtils.isArrayType(methodReturnType)) {
+        if (!_Collections.isCollectionOrArrayType(methodReturnType)) {
             return;
         }
 

@@ -26,6 +26,9 @@ import java.util.function.Consumer;
 
 import javax.annotation.Nullable;
 
+import org.apache.isis.applib.internal.collections._Arrays;
+import org.apache.isis.applib.internal.collections._Collections;
+
 /**
  * Defines the types which are considered to be collections.
  * 
@@ -38,16 +41,6 @@ import javax.annotation.Nullable;
 public final class CollectionUtils {
 
     private CollectionUtils() {}
-
-    // -- PREDICATES
-    
-    public static boolean isCollectionType(@Nullable final Class<?> cls) {
-        return cls!=null ? java.util.Collection.class.isAssignableFrom(cls) : false;
-    }
-
-    public static boolean isArrayType(@Nullable final Class<?> cls) {
-        return cls!=null ? cls.isArray() : false;
-    }
     
     /**
      * 
@@ -58,28 +51,16 @@ public final class CollectionUtils {
     public static boolean isParamCollection(
     		@Nullable final Class<?> parameterType,
     		@Nullable final Type genericParameterType) {
-    	if(inferElementTypeFromArrayType(parameterType) != null) {
+    	if(_Arrays.inferElementTypeIfAny(parameterType) != null) {
     		return true;
     	}
-    	if(isCollectionType(parameterType) && inferElementTypeFromGenericType(genericParameterType)!=null) {
+    	if(_Collections.isCollectionType(parameterType) && inferElementTypeFromGenericType(genericParameterType)!=null) {
     		return true;
     	}
     	return false;
     }
 
-    // -- ELEMENT TYPE INFERENCE (ARRAY)
-    
-    /**
-     * Returns the inferred element type of the specified array type 
-     * @param type of the array for which to infer the element type 
-     * @return inferred type or null if inference fails
-     */
-    public static @Nullable Class<?> inferElementTypeFromArrayType(@Nullable final Class<?> type) {
-        if(!isArrayType(type)) {
-            return null;
-        }
-        return type.getComponentType();
-    }
+
 
     // -- ELEMENT TYPE INFERENCE (FROM GENERIC TYPE)
     
@@ -122,7 +103,7 @@ public final class CollectionUtils {
 		
 		final Class<?> fieldType = field.getType();
 		
-		if(isCollectionType(fieldType)) {
+		if(_Collections.isCollectionType(fieldType)) {
 			
 			final Class<?> elementType = inferElementTypeFromGenericType(field.getGenericType());
 			

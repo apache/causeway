@@ -24,9 +24,8 @@ import java.lang.reflect.Type;
 import java.util.Collections;
 import java.util.List;
 
-import com.google.common.collect.Lists;
-
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.internal.collections._Arrays;
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -34,7 +33,9 @@ import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacet;
 import org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacetDefault;
-import org.apache.isis.core.metamodel.specloader.*;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+
+import com.google.common.collect.Lists;
 
 /**
  * non-final only so it can be mocked if need be.
@@ -137,7 +138,7 @@ public class FacetedMethod extends TypedHolderDefault implements IdentifiedHolde
                         specificationLoader);
 
                 if(typeOfFacet == null ) {
-                    if (org.apache.isis.core.metamodel.specloader.CollectionUtils.isArrayType(parameterType)) {
+                    if (_Arrays.isArrayType(parameterType)) {
                         typeOfFacet = TypeOfFacet.Util.inferFromArrayType(fmp, parameterType, specificationLoader);
                     }
                 }

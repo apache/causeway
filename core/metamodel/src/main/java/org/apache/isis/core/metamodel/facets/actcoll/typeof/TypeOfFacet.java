@@ -26,6 +26,8 @@ import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.internal.collections._Arrays;
+import org.apache.isis.applib.internal.collections._Collections;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleClassValueFacet;
 import org.apache.isis.core.metamodel.specloader.CollectionUtils;
@@ -52,7 +54,7 @@ public interface TypeOfFacet extends SingleClassValueFacet {
                 final SpecificationLoader specificationLoader) {
 
             final Class<?> methodReturnType = method.getReturnType();
-            if (!CollectionUtils.isCollectionType(methodReturnType)) {
+            if (!_Collections.isCollectionType(methodReturnType)) {
                 return null;
             }
 
@@ -106,9 +108,9 @@ public interface TypeOfFacet extends SingleClassValueFacet {
                 final FacetHolder holder,
                 final Class<?> type,
                 final SpecificationLoader specificationLoader) {
-            final Class<?> componentType = CollectionUtils.inferElementTypeFromArrayType(type);
-            return componentType != null
-                    ? new TypeOfFacetInferredFromArray(componentType, holder, specificationLoader)
+            final Class<?> elementType = _Arrays.inferElementTypeIfAny(type);
+            return elementType != null
+                    ? new TypeOfFacetInferredFromArray(elementType, holder, specificationLoader)
                     : null;
         }
 
@@ -119,7 +121,7 @@ public interface TypeOfFacet extends SingleClassValueFacet {
                 final Type genericParameterType,
                 final SpecificationLoader specificationLoader) {
         	
-        	if(!CollectionUtils.isCollectionType(parameterType)) {
+        	if(!_Collections.isCollectionType(parameterType)) {
                 return null;
             }
         	
