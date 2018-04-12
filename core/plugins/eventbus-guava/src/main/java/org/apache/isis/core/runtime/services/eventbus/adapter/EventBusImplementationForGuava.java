@@ -73,13 +73,13 @@ public class EventBusImplementationForGuava extends EventBusImplementationAbstra
     @Override
     public <T> EventListener<T> addEventListener(Class<T> targetType, Consumer<T> onEvent) {
     	final EventListener<T> eventListener = new GuavaEventListener<>(onEvent);
-    	register(eventListener);
+    	eventBus.register(eventListener);
     	return eventListener;
     }
 
     @Override
     public <T> void removeEventListener(EventListener<T> eventListener) {
-    	this.eventBus.unregister(eventListener);
+    	eventBus.unregister(eventListener);
     }
 
 	// -- HELPER
