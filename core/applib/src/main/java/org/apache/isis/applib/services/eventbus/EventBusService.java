@@ -86,7 +86,7 @@ public abstract class EventBusService {
     @Programmatic
     @PostConstruct
     public void init(final Map<String, String> properties) {
-        // no-op
+    	hasPosted = false; // reset state
     }
 
     @Programmatic
@@ -187,6 +187,7 @@ public abstract class EventBusService {
     // -- subscribers
 
     private final Set<Object> subscribers = _Sets.newConcurrentHashSet();
+	
 
     /**
      * Returns an immutable snapshot of the current subscribers.
@@ -195,9 +196,10 @@ public abstract class EventBusService {
     public Set<Object> getSubscribers() {
         return Collections.unmodifiableSet(_Sets.newLinkedHashSet(subscribers));
     }
-    
 
     // -- post
+    
+    private boolean hasPosted;
 
     /**
      * Post an event.
@@ -208,11 +210,12 @@ public abstract class EventBusService {
             return;
         }
         getEventBusImplementation().post(event);
+        hasPosted = true;
     }
 
 
     protected boolean hasPosted() {
-        return this.eventBusImplementation != null;
+        return hasPosted;
     }
 
     // -- getEventBus
