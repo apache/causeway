@@ -101,6 +101,11 @@ public final class _Lists {
 		return new ArrayList<T>(collection);
 	}
 	
+	public static <T> ArrayList<T> newArrayList(@Nullable Iterable<T> iterable) {
+		return _Collections.collectFromIterable(iterable, _Lists::newArrayList, 
+				()->Collectors.<T, ArrayList<T>>toCollection(ArrayList::new) );
+	}
+	
 	// -- LINKED LIST
 	
 	public static <T> LinkedList<T> newLinkedList() {
@@ -114,6 +119,11 @@ public final class _Lists {
 		return new LinkedList<T>(collection);
 	}
 	
+	public static <T> LinkedList<T> newLinkedList(@Nullable Iterable<T> iterable) {
+		return _Collections.collectFromIterable(iterable, _Lists::newLinkedList, 
+				()->Collectors.<T, LinkedList<T>>toCollection(LinkedList::new) );
+	}
+	
 	// -- TRANSFORMATION
 	
 	public static <T, R> List<R> transform(@Nullable List<T> input, Function<T, R> mapper) {
@@ -125,5 +135,6 @@ public final class _Lists {
 				.map(mapper)
 				.collect(Collectors.toList());
 	}
+	
 	
 }

@@ -21,10 +21,12 @@ package org.apache.isis.applib.internal.collections;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentHashMap.KeySetView;
 import java.util.stream.Collectors;
@@ -76,6 +78,27 @@ public final class _Sets {
 				.collect(Collectors.toSet()));
 	}
 	
+	// -- TREE SET
+	
+	public static <T> TreeSet<T> newTreeSet() {
+		return new TreeSet<T>();
+	}
+	
+	public static <T> TreeSet<T> newTreeSet(@Nullable Comparator<T> comparator) {
+		return comparator!=null ? new TreeSet<T>(comparator) : new TreeSet<T>();
+	}
+	
+	public static <T> TreeSet<T> newTreeSet(@Nullable Iterable<T> iterable) {
+		return _NullSafe.stream(iterable)
+				.collect(Collectors.<T, TreeSet<T>>toCollection(TreeSet::new));
+	}
+	
+	public static <T> TreeSet<T> newTreeSet(@Nullable Iterable<T> iterable, @Nullable Comparator<T> comparator) {
+		return _NullSafe.stream(iterable)
+				.collect(Collectors.<T, TreeSet<T>>toCollection(()->new TreeSet<T>(comparator)));
+	}
+	
+	
 	// -- HASH SET
 	
 	public static <T> HashSet<T> newHashSet() {
@@ -87,6 +110,11 @@ public final class _Sets {
 			return newHashSet();
 		}
 		return new HashSet<T>(collection);
+	}
+	
+	public static <T> HashSet<T> newHashSet(@Nullable Iterable<T> iterable) {
+		return _Collections.collectFromIterable(iterable, _Sets::newHashSet, 
+				()->Collectors.<T, HashSet<T>>toCollection(HashSet::new) );
 	}
 	
 	// -- LINKED HASH SET
@@ -102,6 +130,11 @@ public final class _Sets {
 		return new LinkedHashSet<T>(collection);
 	}
 	
+	public static <T> LinkedHashSet<T> newLinkedHashSet(@Nullable Iterable<T> iterable) {
+		return _Collections.collectFromIterable(iterable, _Sets::newLinkedHashSet, 
+				()->Collectors.<T, LinkedHashSet<T>>toCollection(LinkedHashSet::new) );
+	}
+	
 	// -- CONCURRENT HASH SET
 	
 	public static <T> KeySetView<T, Boolean> newConcurrentHashSet() {
@@ -115,6 +148,12 @@ public final class _Sets {
 		}
 		return keySetView;
 	}
+	
+	public static <T> KeySetView<T, Boolean> newConcurrentHashSet(@Nullable Iterable<T> iterable) {
+		return _Collections.collectFromIterable(iterable, _Sets::newConcurrentHashSet, 
+				()->Collectors.<T, KeySetView<T, Boolean>>toCollection(ConcurrentHashMap::newKeySet) );
+	}
+	
 	
 	// -- SET OPERATIONS
 

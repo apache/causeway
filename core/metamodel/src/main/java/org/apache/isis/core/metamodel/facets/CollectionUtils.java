@@ -23,110 +23,98 @@ import java.util.AbstractList;
 import java.util.AbstractSet;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.function.Function;
 
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
-
+import org.apache.isis.applib.internal.base._Casts;
+import org.apache.isis.applib.internal.base._NullSafe;
+import org.apache.isis.applib.internal.collections._Arrays;
+import org.apache.isis.applib.internal.collections._Lists;
+import org.apache.isis.applib.internal.collections._Sets;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+
 public final class CollectionUtils {
-    private CollectionUtils() {
-    }
 
-    public static Object[] getCollectionAsObjectArray(final Object option, final ObjectSpecification spec, final AdapterManager adapterMap) {
-        final ObjectAdapter collection = adapterMap.adapterFor(option);
-        final CollectionFacet facet = CollectionFacet.Utils.getCollectionFacetFromSpec(collection);
-        final Object[] optionArray = new Object[facet.size(collection)];
-        int j = 0;
-        for (final ObjectAdapter nextElement : facet.iterable(collection)) {
-            optionArray[j++] = nextElement != null? nextElement.getObject(): null;
-        }
-        return optionArray;
-    }
+	private CollectionUtils() {
+	}
 
-    /**
-     * Copies the iterable into the specified type.
-     */
-    public static Object copyOf(final Iterable<Object> iterable, final Class<?> requiredType) {
+	public static Object[] getCollectionAsObjectArray(final Object option, final ObjectSpecification spec, final AdapterManager adapterMap) {
+		final ObjectAdapter collection = adapterMap.adapterFor(option);
+		final CollectionFacet facet = CollectionFacet.Utils.getCollectionFacetFromSpec(collection);
+		final Object[] optionArray = new Object[facet.size(collection)];
+		int j = 0;
+		for (final ObjectAdapter nextElement : facet.iterable(collection)) {
+			optionArray[j++] = nextElement != null? nextElement.getObject(): null;
+		}
+		return optionArray;
+	}
 
-        if(iterable == null) {
-            throw new IllegalArgumentException("Iterable must be provided");
-        }
-        if(requiredType == null) {
-            throw new IllegalArgumentException("RequiredType must be provided");
-        }
+	private final static Map<Class<?>, Function<Iterable<Object>, Object>> factoriesByType = _NullSafe.peek(
+			new HashMap<>(), map-> {
+				// specific list implementations
+				map.put(CopyOnWriteArrayList.class, Lists::newCopyOnWriteArrayList);
+				map.put(LinkedList.class, _Lists::newLinkedList);
+				map.put(ArrayList.class, _Lists::newArrayList);
+				map.put(AbstractList.class, _Lists::newArrayList);
 
-        // specific list implementations
-        if (CopyOnWriteArrayList.class == requiredType) {
-            return Lists.newCopyOnWriteArrayList(iterable);
-        }
-        if (LinkedList.class == requiredType) {
-            return Lists.newLinkedList(iterable);
-        }
-        if (ArrayList.class == requiredType) {
-            return Lists.newArrayList(iterable);
-        }
+				// specific set implementations
+				map.put(CopyOnWriteArraySet.class, Sets::newCopyOnWriteArraySet);
+				map.put(LinkedHashSet.class, _Sets::newLinkedHashSet);
+				map.put(HashSet.class, _Sets::newHashSet);
+				map.put(TreeSet.class, _Sets::newTreeSet);
+				map.put(AbstractSet.class, _Sets::newLinkedHashSet);
 
-        if (AbstractList.class == requiredType) {
-            return Lists.newArrayList(iterable);
-        }
+				// interfaces
+				map.put(List.class, _Lists::newArrayList);
+				map.put(SortedSet.class, _Sets::newTreeSet);
+				map.put(Set.class, _Sets::newLinkedHashSet);
+				map.put(Collection.class, _Lists::newArrayList);
+			});
 
-        // specific set implementations
-        if (CopyOnWriteArraySet.class == requiredType) {
-            return Sets.newCopyOnWriteArraySet(iterable);
-        }
-        if (LinkedHashSet.class == requiredType) {
-            return Sets.newLinkedHashSet(iterable);
-        }
-        if (HashSet.class == requiredType) {
-            return Sets.newHashSet(iterable);
-        }
-        if (TreeSet.class == requiredType) {
-            Iterable rawIterable = iterable;
-            return Sets.newTreeSet(rawIterable);
-        }
+	/**
+	 * Copies the iterable into the specified type.
+	 */
+	public static Object copyOf(final Iterable<Object> iterable, final Class<?> requiredType) {
 
-        if (AbstractSet.class == requiredType) {
-            return Sets.newLinkedHashSet(iterable);
-        }
+		if(iterable == null) {
+			throw new IllegalArgumentException("Iterable must be provided");
+		}
+		if(requiredType == null) {
+			throw new IllegalArgumentException("RequiredType must be provided");
+		}
 
+		final Function<Iterable<Object>, Object> factory = factoriesByType.get(requiredType);
+		if(factory!=null) {
+			return factory.apply(iterable);
+		}
 
-        // interfaces
-        if (List.class == requiredType) {
-            return Lists.newArrayList(iterable);
-        }
-        if (SortedSet.class == requiredType) {
-            Iterable rawIterable = iterable;
-            return Sets.newTreeSet(rawIterable);
-        }
-        if (Set.class == requiredType) {
-            return Sets.newLinkedHashSet(iterable);
-        }
-        if (Collection.class == requiredType) {
-            return Lists.newArrayList(iterable);
-        }
+		// array
+		if (requiredType.isArray()) {
+			Class<?> componentType = requiredType.getComponentType();
+			
+			@SuppressWarnings("rawtypes") Iterable rawIterable = iterable;
+			return _Arrays.toArray(_Casts.uncheckedCast(rawIterable), componentType);
+		}
 
-        // array
-        if (requiredType.isArray()) {
-            Class<?> componentType = requiredType.getComponentType();
-            Iterable rawIterable = iterable;
-            return Iterables.toArray(rawIterable, componentType);
-        }
+		// not recognized
+		return null;
 
-        // not recognized
-        return null;
-    }
+	}
+
 }

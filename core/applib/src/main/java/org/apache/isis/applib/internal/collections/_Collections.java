@@ -33,10 +33,14 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
+
+import org.apache.isis.applib.internal.base._NullSafe;
 
 /**
  * <h1>- internal use only -</h1>
@@ -50,7 +54,9 @@ import javax.annotation.Nullable;
  * 
  * @since 2.0.0
  */
-public class _Collections {
+public final class _Collections {
+	
+	private _Collections(){}
 	
     // -- PREDICATES
 
@@ -208,6 +214,32 @@ public class _Collections {
 		throw new IllegalArgumentException(
 				String.format("Can not collect into %s. Only List, Set, SortedSet and Collection are supported.",
 						typeOfCollection.getClass().getName()));
+	}
+	
+	// -- COLLECT FROM ITERABLE
+	
+	/*
+	 * package private utility for a slightly heap pollution reduced collection, 
+	 * if the iterable is a collection and we know the size of the result in advance
+	 * 
+	 * @param iterable
+	 * @param factory
+	 * @param elementCollector
+	 * @return
+	 */
+	static <T, R> R collectFromIterable(
+			@Nullable Iterable<T> iterable, 
+			Function<Collection<T>, R> factory, 
+			Supplier<Collector<T, ?, R>> elementCollector) {
+		
+		if(iterable==null) {
+			return factory.apply(null);
+		}
+		if(iterable instanceof Collection) {
+			return factory.apply((Collection<T>) iterable);
+		}
+		return _NullSafe.stream(iterable)
+				.collect(elementCollector.get());
 	}
 	
 	// -- ELEMENT TYPE INFERENCE

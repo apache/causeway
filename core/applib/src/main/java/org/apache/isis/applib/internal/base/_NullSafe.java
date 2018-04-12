@@ -23,6 +23,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -113,6 +114,21 @@ public final class _NullSafe {
 	 */
 	public static boolean isAbsent(Object x) {
 		return x==null;
+	}
+	
+	// -- PEEK OPERATOR
+	
+	/**
+	 * Unary identity operator that passes {@code obj} to {@code ifPresent} if {@code obj} is present.   
+	 * @param obj
+	 * @param ifPresent
+	 * @return {@code obj}
+	 */
+	public final static <T> T peek(T obj, Consumer<T> ifPresent) {
+		if(obj!=null) {
+			ifPresent.accept(obj);
+		}
+		return obj;
 	}
 	
 	// -- EQUALS/COMPARE

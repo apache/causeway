@@ -19,7 +19,13 @@
 
 package org.apache.isis.applib.internal.collections;
 
+import java.util.Collection;
+import java.util.Objects;
+import java.util.stream.Collector;
+
 import javax.annotation.Nullable;
+
+import org.apache.isis.applib.internal.base._NullSafe;
 
 /**
  * <h1>- internal use only -</h1>
@@ -33,7 +39,9 @@ import javax.annotation.Nullable;
  * 
  * @since 2.0.0
  */
-public class _Arrays {
+public final class _Arrays {
+	
+	private _Arrays(){}
 	
     // -- PREDICATES
 
@@ -54,7 +62,63 @@ public class _Arrays {
     public static boolean isCollectionOrArrayType(final Class<?> cls) {
         return _Collections.isCollectionType(cls) || _Arrays.isArrayType(cls);
     }
-	
+    
+    // -- TO-ARRAY COLLECTORS
+    
+    /**
+     * Known-size Collector.
+     * @param componentType
+     * @param length
+     * @return
+     */
+    public static <T> Collector<T,?,T[]> toArray(final Class<T> componentType, final int length){
+    	Objects.requireNonNull(componentType);
+		return new _Array_Collector<T>(componentType, length);
+	}
+    
+    /**
+     * Unknown-size Collector.
+     * @param componentType
+     * @return
+     */
+    public static <T> Collector<T,?,T[]> toArray(final Class<T> componentType){
+    	Objects.requireNonNull(componentType);
+		return new _Array_CollectorUnknownSize<T>(componentType);
+	}
+
+    // -- CONSTRUCTION
+    
+    /**
+     * Copies a collection's elements into an array.
+     *
+     * @param iterable the iterable to copy
+     * @param type the type of the elements
+     * @return a newly-allocated array into which all the elements of the iterable
+     *     have been copied (non-null)
+     */
+	public static <T> T[] toArray(@Nullable final Collection<? extends T> collection, final Class<T> componentType) {
+		Objects.requireNonNull(componentType);
+		return _NullSafe.stream(collection)
+				.collect(toArray(componentType, collection!=null ? collection.size() : 0));
+	}
+    
+    /**
+     * Copies an iterable's elements into an array.
+     *
+     * @param iterable the iterable to copy
+     * @param type the type of the elements
+     * @return a newly-allocated array into which all the elements of the iterable
+     *     have been copied (non-null)
+     */
+	public static <T> T[] toArray(@Nullable final Iterable<? extends T> iterable, final Class<T> componentType) {
+		Objects.requireNonNull(componentType);
+		if(iterable!=null && (iterable instanceof Collection)) {
+			return toArray((Collection<? extends T>) iterable, componentType);
+		}
+		return _NullSafe.stream(iterable)
+				.collect(toArray(componentType));
+	}
+    
     // -- COMPONENT TYPE INFERENCE
     
     /**
