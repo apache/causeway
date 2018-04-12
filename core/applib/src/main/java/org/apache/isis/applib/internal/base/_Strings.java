@@ -393,7 +393,7 @@ public final class _Strings {
 	public final static String asFileNameWithExtension(final String fileName, String fileExtension) {
 		Objects.requireNonNull(fileName);
 		Objects.requireNonNull(fileExtension);
-		return suffix(fileName, prefix(".", fileExtension));
+		return suffix(fileName, prefix(fileExtension, "."));
 	}
 
 
