@@ -14,28 +14,32 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.applib.services.layout;
+package org.apache.isis.applib.mixins.layout;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Contributed;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Mixin;
-import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.value.Clob;
+import org.apache.isis.applib.internal.resources._Resource;
+import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.bookmark.BookmarkService;
+import org.apache.isis.applib.services.swagger.SwaggerService;
+import org.apache.isis.applib.value.LocalResourcePath;
 
 @Mixin(method="act")
-public class Object_downloadLayoutXml {
+@SuppressWarnings("serial")
+public class Object_openRestApi {
 
     private final Object object;
 
-    public Object_downloadLayoutXml(final Object object) {
+    public Object_openRestApi(final Object object) {
         this.object = object;
     }
 
-    public static class ActionDomainEvent extends org.apache.isis.applib.IsisApplibModule.ActionDomainEvent<Object_downloadLayoutXml> {}
+    public static class ActionDomainEvent extends org.apache.isis.applib.IsisApplibModule.ActionDomainEvent<Object_openRestApi> {}
 
     @Action(
             domainEvent = ActionDomainEvent.class,
@@ -44,27 +48,24 @@ public class Object_downloadLayoutXml {
     )
     @ActionLayout(
             contributed = Contributed.AS_ACTION,
-            cssClassFa = "fa-download",
+            cssClassFa = "fa-external-link",
             position = ActionLayout.Position.PANEL_DROPDOWN
     )
-    @MemberOrder(name = "datanucleusIdLong", sequence = "700.1")
-    public Object act(
-            @ParameterLayout(named = "File name")
-            final String fileName,
-            final LayoutService.Style style) {
-        final String xml = layoutService.toXml(object.getClass(), style);
-
-        return new Clob(Util.withSuffix(fileName, style.name().toLowerCase() + ".xml"), "text/xml", xml);
-    }
-
-    public String default0Act() {
-        return Util.withSuffix(object.getClass().getSimpleName(), "layout");
-    }
-    public LayoutService.Style default1Act() {
-        return LayoutService.Style.NORMALIZED;
+    @MemberOrder(name = "datanucleusIdLong", sequence = "750.1")
+    public LocalResourcePath act() {
+        Bookmark bookmark = bookmarkService.bookmarkFor(object);
+        
+        return new LocalResourcePath(String.format(
+                "/%s/objects/%s/%s",
+            	_Resource.getRestfulPathIfAny(),
+                bookmark.getObjectType(),
+                bookmark.getIdentifier()));
     }
 
     @javax.inject.Inject
-    LayoutService layoutService;
+    BookmarkService bookmarkService;
+    
+    @javax.inject.Inject
+    SwaggerService swaggerService;
 
 }

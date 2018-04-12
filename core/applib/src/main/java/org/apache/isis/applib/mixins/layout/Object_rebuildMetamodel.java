@@ -14,57 +14,48 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.applib.services.layout;
+package org.apache.isis.applib.mixins.layout;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.CommandPersistence;
 import org.apache.isis.applib.annotation.Contributed;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.internal.resources._Resource;
-import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.services.bookmark.BookmarkService;
-import org.apache.isis.applib.services.swagger.SwaggerService;
-import org.apache.isis.applib.value.LocalResourcePath;
+import org.apache.isis.applib.services.metamodel.MetaModelService;
 
 @Mixin(method="act")
-public class Object_openRestApi {
+@SuppressWarnings("serial")
+public class Object_rebuildMetamodel {
 
     private final Object object;
 
-    public Object_openRestApi(final Object object) {
+    public Object_rebuildMetamodel(final Object object) {
         this.object = object;
     }
 
-    public static class ActionDomainEvent extends org.apache.isis.applib.IsisApplibModule.ActionDomainEvent<Object_openRestApi> {}
+    public static class ActionDomainEvent extends org.apache.isis.applib.IsisApplibModule.ActionDomainEvent<Object_rebuildMetamodel> {}
 
     @Action(
             domainEvent = ActionDomainEvent.class,
-            semantics = SemanticsOf.SAFE,
+            semantics = SemanticsOf.IDEMPOTENT,
+            commandPersistence = CommandPersistence.NOT_PERSISTED,
             restrictTo = RestrictTo.PROTOTYPING
     )
     @ActionLayout(
             contributed = Contributed.AS_ACTION,
-            cssClassFa = "fa-external-link",
+            cssClassFa = "fa-refresh",
             position = ActionLayout.Position.PANEL_DROPDOWN
     )
-    @MemberOrder(name = "datanucleusIdLong", sequence = "750.1")
-    public LocalResourcePath act() {
-        Bookmark bookmark = bookmarkService.bookmarkFor(object);
-        
-        return new LocalResourcePath(String.format(
-                "/%s/objects/%s/%s",
-            	_Resource.getRestfulPathIfAny(),
-                bookmark.getObjectType(),
-                bookmark.getIdentifier()));
+    @MemberOrder(name = "datanucleusIdLong", sequence = "800.1")
+    public void act() {
+        metaModelService.rebuild(object.getClass());
     }
 
     @javax.inject.Inject
-    BookmarkService bookmarkService;
-    
-    @javax.inject.Inject
-    SwaggerService swaggerService;
+    MetaModelService metaModelService;
+
 
 }

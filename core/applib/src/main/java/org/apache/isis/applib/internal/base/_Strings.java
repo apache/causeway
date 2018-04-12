@@ -145,6 +145,42 @@ public final class _Strings {
 		}
 		return Character.toUpperCase(input.charAt(0)) + input.substring(1);
 	}
+	
+	// -- PREFIX/SUFFIX
+	
+	/**
+	 * If {@code input} does not start with {@code prefix} prepends {@code prefix} to the input. 
+	 * @param input
+	 * @param prefix 
+	 * @return null if {@code input} is null  
+	 */
+	public static String prefix(@Nullable final String input, final String prefix) {
+		if(input==null) {
+			return null;
+		}
+		Objects.requireNonNull(prefix);
+		if(input.startsWith(prefix)) {
+            return input;
+        }
+		return prefix + input;
+	}
+	
+	/**
+	 * If {@code input} does not end with {@code suffix} appends {@code suffix} to the input. 
+	 * @param input
+	 * @param suffix 
+	 * @return null if {@code input} is null  
+	 */
+	public static String suffix(@Nullable final String input, final String suffix) {
+		if(input==null) {
+			return null;
+		}
+		Objects.requireNonNull(suffix);
+		if(input.endsWith(suffix)) {
+            return input;
+        }
+		return input + suffix;
+	}
 
 	// -- PADDING
 	
@@ -354,7 +390,11 @@ public final class _Strings {
 			.andThen(s->_Strings_NaturalNames.naturalName2(s, true));
 
 	
-
+	public final static String asFileNameWithExtension(final String fileName, String fileExtension) {
+		Objects.requireNonNull(fileName);
+		Objects.requireNonNull(fileExtension);
+		return suffix(fileName, prefix(".", fileExtension));
+	}
 
 
 

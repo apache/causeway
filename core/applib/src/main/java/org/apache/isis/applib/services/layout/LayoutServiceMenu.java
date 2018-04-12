@@ -29,6 +29,7 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.internal.base._Strings;
 import org.apache.isis.applib.services.menu.MenuBarsService;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
@@ -42,9 +43,10 @@ import org.apache.isis.applib.value.Clob;
         menuBar = DomainServiceLayout.MenuBar.SECONDARY,
         menuOrder = "500.400"
 )
+@SuppressWarnings("serial")
 public class LayoutServiceMenu {
-
-    public static abstract class ActionDomainEvent extends IsisApplibModule.ActionDomainEvent<LayoutServiceMenu> {
+    
+	public static abstract class ActionDomainEvent extends IsisApplibModule.ActionDomainEvent<LayoutServiceMenu> {
     }
 
     private final MimeType mimeTypeApplicationZip;
@@ -101,7 +103,7 @@ public class LayoutServiceMenu {
 
         final String xml = layoutService.toMenuBarsXml(type);
 
-        return new Clob(Util.withSuffix(fileName,  ".xml"), "text/xml", xml);
+        return new Clob(_Strings.asFileNameWithExtension(fileName,  ".xml"), "text/xml", xml);
     }
 
     public String default0DownloadMenuBarsLayout() {

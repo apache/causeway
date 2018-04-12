@@ -14,47 +14,64 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.applib.services.layout;
+package org.apache.isis.applib.mixins.layout;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.CommandPersistence;
 import org.apache.isis.applib.annotation.Contributed;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Mixin;
+import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.services.metamodel.MetaModelService;
+import org.apache.isis.applib.internal.base._Strings;
+import org.apache.isis.applib.services.layout.LayoutService;
+import org.apache.isis.applib.value.Clob;
 
 @Mixin(method="act")
-public class Object_rebuildMetamodel {
+@SuppressWarnings("serial")
+public class Object_downloadLayoutXml {
 
     private final Object object;
 
-    public Object_rebuildMetamodel(final Object object) {
+    public Object_downloadLayoutXml(final Object object) {
         this.object = object;
     }
 
-    public static class ActionDomainEvent extends org.apache.isis.applib.IsisApplibModule.ActionDomainEvent<Object_rebuildMetamodel> {}
+    public static class ActionDomainEvent extends org.apache.isis.applib.IsisApplibModule.ActionDomainEvent<Object_downloadLayoutXml> {}
 
     @Action(
             domainEvent = ActionDomainEvent.class,
-            semantics = SemanticsOf.IDEMPOTENT,
-            commandPersistence = CommandPersistence.NOT_PERSISTED,
+            semantics = SemanticsOf.SAFE,
             restrictTo = RestrictTo.PROTOTYPING
     )
     @ActionLayout(
             contributed = Contributed.AS_ACTION,
-            cssClassFa = "fa-refresh",
+            cssClassFa = "fa-download",
             position = ActionLayout.Position.PANEL_DROPDOWN
     )
-    @MemberOrder(name = "datanucleusIdLong", sequence = "800.1")
-    public void act() {
-        metaModelService.rebuild(object.getClass());
+    @MemberOrder(name = "datanucleusIdLong", sequence = "700.1")
+    public Object act(
+            @ParameterLayout(named = "File name")
+            final String fileName,
+            final LayoutService.Style style) {
+    	
+        final String xml = layoutService.toXml(object.getClass(), style);
+        
+        return new Clob(
+        		_Strings.asFileNameWithExtension(fileName, style.name().toLowerCase() + ".xml"), 
+        		"text/xml", 
+        		xml);
+    }
+
+    public String default0Act() {
+        return _Strings.asFileNameWithExtension(object.getClass().getSimpleName(), "layout");
+    }
+    public LayoutService.Style default1Act() {
+        return LayoutService.Style.NORMALIZED;
     }
 
     @javax.inject.Inject
-    MetaModelService metaModelService;
-
+    LayoutService layoutService;
 
 }
