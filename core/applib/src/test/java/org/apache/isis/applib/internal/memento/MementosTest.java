@@ -30,8 +30,8 @@ import java.util.Date;
 import org.apache.isis.applib.internal.memento._Mementos.Memento;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
-import org.apache.isis.applib.services.urlencoding.UrlEncodingServiceUsingBaseEncoding;
-import org.apache.isis.applib.services.urlencoding.UrlEncodingServiceWithCompressionAbstract;
+import org.apache.isis.applib.services.urlencoding.UrlEncodingServiceUsingBaseEncodingAbstract;
+import org.apache.isis.applib.services.urlencoding.UrlEncodingServiceWithCompression;
 import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
@@ -42,13 +42,13 @@ public class MementosTest {
 		Mon,Tue,Wed,Thu,Fri
 	}
 
-    UrlEncodingServiceWithCompressionAbstract serviceWithCompression;
-    UrlEncodingServiceUsingBaseEncoding serviceBaseEncoding;
+    UrlEncodingServiceWithCompression serviceWithCompression;
+    UrlEncodingServiceUsingBaseEncodingAbstract serviceBaseEncoding;
 
     @Before
     public void setUp() throws Exception {
-    	serviceWithCompression = new UrlEncodingServiceWithCompressionAbstract(){};
-    	serviceBaseEncoding = new UrlEncodingServiceUsingBaseEncoding(){};
+    	serviceWithCompression = new UrlEncodingServiceWithCompression();
+    	serviceBaseEncoding = new UrlEncodingServiceUsingBaseEncodingAbstract(){};
     }
 	
 	@Test

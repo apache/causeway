@@ -13,7 +13,8 @@ import com.google.common.collect.Maps;
  * </pre>
  */
 @Deprecated // [ahuber] why not use variant with compression ?
-public abstract class UrlEncodingServiceUsingBaseEncodingWithSupportForLargeUrlsAbstract extends UrlEncodingServiceUsingBaseEncoding {
+public abstract class UrlEncodingServiceUsingBaseEncodingWithSupportForLargeUrlsAbstract 
+extends UrlEncodingServiceUsingBaseEncodingAbstract {
 
     /**
      * Strings under this length are not cached, just returned as is.

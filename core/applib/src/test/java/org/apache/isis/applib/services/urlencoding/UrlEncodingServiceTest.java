@@ -10,13 +10,13 @@ import org.junit.Test;
 
 public class UrlEncodingServiceTest {
 
-    UrlEncodingServiceWithCompressionAbstract serviceWithCompression;
-    UrlEncodingServiceUsingBaseEncoding serviceBaseEncoding;
+    UrlEncodingServiceWithCompression serviceWithCompression;
+    UrlEncodingServiceUsingBaseEncodingAbstract serviceBaseEncoding;
 
     @Before
     public void setUp() throws Exception {
-    	serviceWithCompression = new UrlEncodingServiceWithCompressionAbstract(){};
-    	serviceBaseEncoding = new UrlEncodingServiceUsingBaseEncoding(){};
+    	serviceWithCompression = new UrlEncodingServiceWithCompression();
+    	serviceBaseEncoding = new UrlEncodingServiceUsingBaseEncodingAbstract(){};
     }
 
     @Test
