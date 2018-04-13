@@ -65,7 +65,7 @@ public interface BookmarkService {
     Object lookup(Bookmark bookmark, FieldResetPolicy fieldResetPolicy);
 
     /**
-     * As {@link #lookup(Bookmark, FieldResetPolicy)}, but downcasting to the specified type.
+     * As {@link #lookup(Bookmark, FieldResetPolicy)}, but down-casting to the specified type.
      */
     @Programmatic <T> T lookup(Bookmark bookmark, FieldResetPolicy fieldResetPolicy, Class<T> cls);
 

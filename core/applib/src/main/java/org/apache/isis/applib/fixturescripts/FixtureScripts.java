@@ -56,7 +56,7 @@ import org.apache.isis.applib.services.xactn.TransactionService;
 
 
 /**
- * Rather than subclassing, instead implement
+ * Rather than sub-classing, instead implement
  * {@link org.apache.isis.applib.services.fixturespec.FixtureScriptsSpecificationProvider}.  The framework will
  * automatically provide a default implementation configured using that provider service.
  */
@@ -265,7 +265,14 @@ public abstract class FixtureScripts extends AbstractService {
                 return null;
             }
             
-            return factoryService.viewModel(fixtureScriptCls, mementoFor(template));
+            final FixtureScript instance = factoryService.instantiate(fixtureScriptCls);
+            instance.setParentPath(template.getParentPath());
+            
+            return instance;
+            
+            //Legacy of ...
+            //return container.newViewModelInstance(fixtureScriptCls, mementoFor(template));
+            
         } catch(final Exception ex) {
             // ignore if does not have a no-arg constructor or cannot be instantiated
             return null;
@@ -426,6 +433,7 @@ public abstract class FixtureScripts extends AbstractService {
     	memento.setPath(fs.getParentPath());
     	return jaxbService.toXml(memento);
     }
+    
     void initOf(final String xml, final FixtureScript fs) {
     	final FixtureScriptMemento memento = jaxbService.fromXml(FixtureScriptMemento.class, xml);
         fs.setParentPath(memento.getPath());

@@ -115,7 +115,6 @@ public class BookmarkServiceInternalDefault implements BookmarkService {
         return (T) lookup(bookmark, fieldResetPolicy);
     }
 
-    @SuppressWarnings("unchecked")
     @Programmatic
     @Override
     public <T> T lookup(final Bookmark bookmark, Class<T> cls) {
