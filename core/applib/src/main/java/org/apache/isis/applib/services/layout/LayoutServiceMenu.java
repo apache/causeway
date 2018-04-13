@@ -43,10 +43,11 @@ import org.apache.isis.applib.value.Clob;
         menuBar = DomainServiceLayout.MenuBar.SECONDARY,
         menuOrder = "500.400"
 )
-@SuppressWarnings("serial")
 public class LayoutServiceMenu {
     
-	public static abstract class ActionDomainEvent extends IsisApplibModule.ActionDomainEvent<LayoutServiceMenu> {
+	public static abstract class ActionDomainEvent 
+	extends IsisApplibModule.ActionDomainEvent<LayoutServiceMenu> {
+		private static final long serialVersionUID = 1L;
     }
 
     private final MimeType mimeTypeApplicationZip;
@@ -60,6 +61,7 @@ public class LayoutServiceMenu {
     }
 
     public static class DownloadLayoutsDomainEvent extends ActionDomainEvent {
+    	private static final long serialVersionUID = 1L;
     }
 
     @Action(
@@ -85,6 +87,7 @@ public class LayoutServiceMenu {
     }
 
     public static class DownloadMenuBarsLayoutDomainEvent extends ActionDomainEvent {
+    	private static final long serialVersionUID = 1L;
     }
 
     @Action(

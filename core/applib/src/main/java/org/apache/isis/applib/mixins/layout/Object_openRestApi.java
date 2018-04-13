@@ -30,7 +30,6 @@ import org.apache.isis.applib.services.swagger.SwaggerService;
 import org.apache.isis.applib.value.LocalResourcePath;
 
 @Mixin(method="act")
-@SuppressWarnings("serial")
 public class Object_openRestApi {
 
     private final Object object;
@@ -39,7 +38,10 @@ public class Object_openRestApi {
         this.object = object;
     }
 
-    public static class ActionDomainEvent extends org.apache.isis.applib.IsisApplibModule.ActionDomainEvent<Object_openRestApi> {}
+    public static class ActionDomainEvent 
+    extends org.apache.isis.applib.IsisApplibModule.ActionDomainEvent<Object_openRestApi> {
+    	private static final long serialVersionUID = 1L;
+    }
 
     @Action(
             domainEvent = ActionDomainEvent.class,

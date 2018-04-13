@@ -18,8 +18,9 @@
  */
 package org.apache.isis.applib.layout.grid.bootstrap3;
 
-@SuppressWarnings("serial") // serial versionId to be provided by concrete class
 public abstract class BS3ClearFix extends BS3RowContent {
-
+	
+	private static final long serialVersionUID = 1L;
+	
     public abstract String toCssClass();
 }

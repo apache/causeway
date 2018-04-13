@@ -27,10 +27,11 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.internal.collections._Maps;
 import org.apache.isis.applib.layout.component.ServiceActionLayoutData;
 
-@SuppressWarnings("serial") // serial versionId to be provided by concrete class
 @XmlTransient // ignore this class
 public abstract class MenuBarsAbstract implements MenuBars, Serializable {
 
+	private static final long serialVersionUID = 1L;
+	
     private String tnsAndSchemaLocation;
 
     @Programmatic

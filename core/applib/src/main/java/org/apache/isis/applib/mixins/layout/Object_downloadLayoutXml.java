@@ -29,16 +29,18 @@ import org.apache.isis.applib.services.layout.LayoutService;
 import org.apache.isis.applib.value.Clob;
 
 @Mixin(method="act")
-@SuppressWarnings("serial")
 public class Object_downloadLayoutXml {
-
+	
     private final Object object;
 
     public Object_downloadLayoutXml(final Object object) {
         this.object = object;
     }
 
-    public static class ActionDomainEvent extends org.apache.isis.applib.IsisApplibModule.ActionDomainEvent<Object_downloadLayoutXml> {}
+    public static class ActionDomainEvent 
+    extends org.apache.isis.applib.IsisApplibModule.ActionDomainEvent<Object_downloadLayoutXml> {
+    	private static final long serialVersionUID = 1L;
+    }
 
     @Action(
             domainEvent = ActionDomainEvent.class,

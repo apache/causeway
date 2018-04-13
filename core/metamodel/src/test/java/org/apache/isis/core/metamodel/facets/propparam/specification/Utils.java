@@ -29,7 +29,7 @@ public final class Utils {
     private Utils() {
     }
 
-    @SuppressWarnings("serial")
+    
     public static List<Specification> listOf(final Specification specification) {
         return new ArrayList<Specification>() {
             {

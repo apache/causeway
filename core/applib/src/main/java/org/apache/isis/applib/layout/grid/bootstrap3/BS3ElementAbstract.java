@@ -23,10 +23,11 @@ import javax.xml.bind.annotation.XmlAttribute;
 /**
  * Superclass for all layout classes, factoring out the common {@link #getCssClass()} attribute.
  */
-@SuppressWarnings("serial") // serial versionId to be provided by concrete class
 public abstract class BS3ElementAbstract implements BS3Element {
+	
+	private static final long serialVersionUID = 1L;
 
-    private String cssClass;
+	private String cssClass;
 
     /**
      * Any additional CSS classes to render on the page element corresponding to this object,

@@ -27,7 +27,6 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 
 @Mixin(method="act")
-@SuppressWarnings("serial")
 public class Object_rebuildMetamodel {
 
     private final Object object;
@@ -36,7 +35,10 @@ public class Object_rebuildMetamodel {
         this.object = object;
     }
 
-    public static class ActionDomainEvent extends org.apache.isis.applib.IsisApplibModule.ActionDomainEvent<Object_rebuildMetamodel> {}
+    public static class ActionDomainEvent 
+    extends org.apache.isis.applib.IsisApplibModule.ActionDomainEvent<Object_rebuildMetamodel> {
+    	private static final long serialVersionUID = 1L;
+    }
 
     @Action(
             domainEvent = ActionDomainEvent.class,
