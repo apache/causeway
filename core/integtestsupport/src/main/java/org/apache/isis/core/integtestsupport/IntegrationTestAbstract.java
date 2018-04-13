@@ -20,7 +20,6 @@ package org.apache.isis.core.integtestsupport;
 
 import java.util.List;
 
-import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.fixtures.FixtureClock;
@@ -154,13 +153,13 @@ public abstract class IntegrationTestAbstract {
         return scenarioExecution().service(cls);
     }
     
-    /**
-     * @deprecated - instead just inject {@link org.apache.isis.applib.DomainObjectContainer} into test.
-     */
-    @Deprecated
-    protected DomainObjectContainer container() {
-        return scenarioExecution().container();
-    }
+//    /**
+//     * @deprecated - instead just inject {@link org.apache.isis.applib.DomainObjectContainer} into test.
+//     */
+//    @Deprecated
+//    protected DomainObjectContainer container() {
+//        return scenarioExecution().container();
+//    }
     
     /**
      * @deprecated - instead just inject {@link org.apache.isis.applib.services.wrapper.WrapperFactory} into test.

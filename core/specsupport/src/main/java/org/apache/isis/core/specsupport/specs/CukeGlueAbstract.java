@@ -16,28 +16,27 @@
  */
 package org.apache.isis.core.specsupport.specs;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import com.google.common.base.Objects;
-import com.google.common.collect.Lists;
-
-import org.jmock.Sequence;
-import org.jmock.States;
-import org.jmock.internal.ExpectationBuilder;
-
-import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.internal.base._Strings;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.core.specsupport.scenarios.ScenarioExecution;
 import org.apache.isis.core.specsupport.scenarios.ScenarioExecutionForUnit;
 import org.apache.isis.core.specsupport.scenarios.ScenarioExecutionScope;
+import org.jmock.Sequence;
+import org.jmock.States;
+import org.jmock.internal.ExpectationBuilder;
+
+import com.google.common.base.Objects;
+import com.google.common.collect.Lists;
 
 import cucumber.api.java.Before;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
 /**
  * Base class for Cucumber-JVM step definitions.
@@ -121,12 +120,12 @@ public abstract class CukeGlueAbstract {
         return scenarioExecution().service(cls);
     }
     
-    /**
-     * Convenience method
-     */
-    protected DomainObjectContainer container() {
-        return scenarioExecution().container();
-    }
+//    /**
+//     * Convenience method
+//     */
+//    protected DomainObjectContainer container() {
+//        return scenarioExecution().container();
+//    }
     
     /**
      * Convenience method

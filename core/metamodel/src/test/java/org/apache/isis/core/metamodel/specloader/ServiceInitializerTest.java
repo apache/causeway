@@ -18,15 +18,19 @@
  */
 package org.apache.isis.core.metamodel.specloader;
 
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.After;
@@ -35,14 +39,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import org.apache.isis.applib.DomainObjectContainer;
-import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
-import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
-
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 public class ServiceInitializerTest {
 
@@ -50,8 +48,7 @@ public class ServiceInitializerTest {
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_ONLY);
     
     private Map<String,String> props;
-    @Mock
-    private DomainObjectContainer container;
+    
     @Mock
     private IsisConfiguration configuration;
     private ServiceInitializer serviceInitializer;

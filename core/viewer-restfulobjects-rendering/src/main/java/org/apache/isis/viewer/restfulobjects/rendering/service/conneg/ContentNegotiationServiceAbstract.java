@@ -24,12 +24,10 @@ import java.util.Objects;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import javax.inject.Inject;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -155,8 +153,4 @@ public abstract class ContentNegotiationServiceAbstract implements ContentNegoti
         return mediaParam;
     }
 
-    
-
-    @javax.inject.Inject
-    protected DomainObjectContainer container;
 }

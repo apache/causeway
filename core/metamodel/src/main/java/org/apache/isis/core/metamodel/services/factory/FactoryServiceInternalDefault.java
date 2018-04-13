@@ -26,10 +26,13 @@ import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.internal.base._Casts;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
+import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
@@ -58,7 +61,6 @@ public class FactoryServiceInternalDefault implements FactoryService {
     }
 
 
-
     @Programmatic
     @Override
     public <T> T mixin(final Class<T> mixinClass, final Object mixedIn) {
@@ -77,7 +79,7 @@ public class FactoryServiceInternalDefault implements FactoryService {
                 final Object mixin;
                 try {
                     mixin = constructor.newInstance(mixedIn);
-                    return (T) serviceRegistry.injectServicesInto(mixin);
+                    return _Casts.uncheckedCast(serviceRegistry.injectServicesInto(mixin));
                 } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
                     throw new NonRecoverableException(e);
                 }
@@ -87,6 +89,22 @@ public class FactoryServiceInternalDefault implements FactoryService {
         throw new NonRecoverableException( String.format(
                 "Failed to locate constructor in %s to instantiate using %s", mixinClass.getName(), mixedIn));
     }
+    
+    @Programmatic
+	@Override
+	public <T> T viewModel(Class<T> viewModelClass, String memento) {
+    	final ObjectSpecification spec = specificationLoader.loadSpecification(viewModelClass);
+        if (!spec.containsFacet(ViewModelFacet.class)) {
+            throw new IsisException("Type must be a ViewModel: " + viewModelClass);
+        }
+        final ObjectAdapter adapter = persistenceSessionServiceInternal.createViewModelInstance(spec, memento);
+        if(adapter.getOid().isViewModel()) {
+            return _Casts.uncheckedCast(adapter.getObject());
+        } else {
+            throw new IsisException("Object instantiated but was not given a ViewModel Oid; "
+            		+ "please report as a possible defect in Isis: " + viewModelClass);
+        }
+	}
 
     @javax.inject.Inject
     SpecificationLoader specificationLoader;
@@ -96,6 +114,8 @@ public class FactoryServiceInternalDefault implements FactoryService {
 
     @javax.inject.Inject
     PersistenceSessionServiceInternal persistenceSessionServiceInternal;
+
+
 
 
 }

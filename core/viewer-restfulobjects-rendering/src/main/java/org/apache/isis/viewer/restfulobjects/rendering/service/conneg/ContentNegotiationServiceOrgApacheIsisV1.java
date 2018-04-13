@@ -24,7 +24,6 @@ import java.util.List;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
@@ -394,7 +393,4 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
         }
     }
 
-
-    @javax.inject.Inject
-    protected DomainObjectContainer container;
 }

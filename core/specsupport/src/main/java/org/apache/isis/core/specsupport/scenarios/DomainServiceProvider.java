@@ -16,11 +16,8 @@
  */
 package org.apache.isis.core.specsupport.scenarios;
 
-import org.apache.isis.applib.DomainObjectContainer;
-
-
 /**
- * Provides access to the {@link DomainObjectContainer} and any other domain services 
+ * Provides access to the any domain services 
  * that may have been configured.
  * 
  * <p>

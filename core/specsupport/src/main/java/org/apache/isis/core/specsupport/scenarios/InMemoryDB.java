@@ -19,16 +19,15 @@ package org.apache.isis.core.specsupport.scenarios;
 import java.util.List;
 import java.util.Map;
 
-import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-
+import org.apache.isis.schema.utils.InteractionDtoUtils.Strategy;
 import org.hamcrest.Description;
 import org.jmock.api.Action;
 import org.jmock.api.Invocation;
 
-import org.apache.isis.applib.DomainObjectContainer;
+import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 /**
  * Utility class to support the writing of unit-scope specs.
@@ -40,8 +39,7 @@ import org.apache.isis.applib.DomainObjectContainer;
  * 
  * <p>
  * If objects are created, then (mock) services are automatically injected.  This is performed by
- * searching for <tt>injectXxx()</tt> methods.  The (mock) {@link DomainObjectContainer container}
- * is also automatically injected, through the <tt>setXxx</tt> method.
+ * searching for <tt>injectXxx()</tt> methods.
  * 
  * <p>
  * Finally, note that the {@link #init(Object, String) init} hook method allows subclasses to

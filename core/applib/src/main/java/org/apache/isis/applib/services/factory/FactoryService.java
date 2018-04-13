@@ -19,6 +19,7 @@
 
 package org.apache.isis.applib.services.factory;
 
+import org.apache.isis.applib.ViewModel;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.repository.RepositoryService;
 
@@ -53,10 +54,19 @@ public interface FactoryService {
      * </p>
      */
     @Programmatic
-    <T> T instantiate(final Class<T> domainClass);
+    <T> T instantiate(Class<T> domainClass);
 
 
     @Programmatic
-    <T> T mixin( Class<T> mixinClass, Object mixedIn);
+    <T> T mixin(Class<T> mixinClass, Object mixedIn);
+    
+    /**
+     * Create a new {@link ViewModel} instance of the specified type, initializing with the specified memento.
+     * @deprecated [ahuber] just here to yet ease internal transition
+     *
+     */
+    @Programmatic @Deprecated 
+    <T> T viewModel(Class<T> viewModelClass, String memento);
+
 
 }

@@ -22,13 +22,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.LabelPosition;
@@ -112,6 +105,11 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
 
 public abstract class GridSystemServiceAbstract<G extends org.apache.isis.applib.layout.grid.Grid> implements GridSystemService<G> {
 
@@ -362,7 +360,7 @@ public abstract class GridSystemServiceAbstract<G extends org.apache.isis.applib
         List associations = objectSpec.getAssociations(Contributed.INCLUDED, ObjectAssociation.Predicates.PROPERTIES);
         return associations;
     }
-    protected  static List<OneToManyAssociation> getOneToManyAssociations(final ObjectSpecification objectSpec) {
+    protected static List<OneToManyAssociation> getOneToManyAssociations(final ObjectSpecification objectSpec) {
         List associations = objectSpec.getAssociations(Contributed.INCLUDED, ObjectAssociation.Predicates.COLLECTIONS);
         return associations;
     }
@@ -692,9 +690,6 @@ public abstract class GridSystemServiceAbstract<G extends org.apache.isis.applib
 
     @javax.inject.Inject
     protected JaxbService jaxbService;
-
-    @javax.inject.Inject
-    protected DomainObjectContainer container;
 
     @javax.inject.Inject
     protected MessageService messageService;

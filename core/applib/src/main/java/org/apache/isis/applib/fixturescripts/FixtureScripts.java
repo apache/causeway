@@ -31,7 +31,6 @@ import javax.annotation.PostConstruct;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.isis.applib.AbstractService;
-import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.ViewModel;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.MemberOrder;
@@ -46,6 +45,7 @@ import org.apache.isis.applib.internal.collections._Lists;
 import org.apache.isis.applib.internal.exceptions._Exceptions;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.classdiscovery.ClassDiscoveryService;
+import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault;
 import org.apache.isis.applib.services.fixturespec.FixtureScriptsSpecification;
 import org.apache.isis.applib.services.jaxb.JaxbService;
@@ -264,7 +264,8 @@ public abstract class FixtureScripts extends AbstractService {
             if(!template.isDiscoverable()) {
                 return null;
             }
-            return container.newViewModelInstance(fixtureScriptCls, mementoFor(template));
+            
+            return factoryService.viewModel(fixtureScriptCls, mementoFor(template));
         } catch(final Exception ex) {
             // ignore if does not have a no-arg constructor or cannot be instantiated
             return null;
@@ -467,7 +468,7 @@ public abstract class FixtureScripts extends AbstractService {
     // -- injected services
 
     @javax.inject.Inject
-    DomainObjectContainer container;
+    FactoryService factoryService; 
     
     @javax.inject.Inject
     TitleService titleService;

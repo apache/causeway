@@ -16,26 +16,28 @@
  */
 package org.apache.isis.core.specsupport.scenarios;
 
+import static org.junit.Assert.fail;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+
 import javax.inject.Inject;
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Maps;
-import org.jmock.Mockery;
-import org.jmock.Sequence;
-import org.jmock.States;
-import org.jmock.internal.ExpectationBuilder;
-import org.apache.isis.applib.DomainObjectContainer;
+
 import org.apache.isis.applib.fixtures.InstallableFixture;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
+import org.jmock.Mockery;
+import org.jmock.Sequence;
+import org.jmock.States;
+import org.jmock.internal.ExpectationBuilder;
 
-import static org.junit.Assert.fail;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Maps;
 
 /**
  * Represents the currently executing scenario, allowing information to be shared 
@@ -143,15 +145,15 @@ public abstract class ScenarioExecution {
         dsp.replaceService(original, replacement);
     }
 
-    /**
-     * Convenience method, returning the {@link DomainObjectContainer},
-     * first ensuring that it is available.
-     * 
-     * @throws IllegalStateException if not available
-     */
-    public DomainObjectContainer container() {
-        return service(DomainObjectContainer.class);
-    }
+//    /**
+//     * Convenience method, returning the {@link DomainObjectContainer},
+//     * first ensuring that it is available.
+//     * 
+//     * @throws IllegalStateException if not available
+//     */
+//    public DomainObjectContainer container() {
+//        return service(DomainObjectContainer.class);
+//    }
 
     
     /**
@@ -475,10 +477,10 @@ public abstract class ScenarioExecution {
                     final Object service = service(serviceClass);
                     method.invoke(obj, service);
                 }
-                if(method.getName().startsWith("set") && serviceClass == DomainObjectContainer.class) {
-                    final Object container = container();
-                    method.invoke(obj, container);
-                }
+//                if(method.getName().startsWith("set") && serviceClass == DomainObjectContainer.class) {
+//                    final Object container = container();
+//                    method.invoke(obj, container);
+//                }
             }
             autowireViaFields(obj, obj.getClass());
 

@@ -21,10 +21,7 @@ package org.apache.isis.core.runtime.headless;
 
 import java.util.Set;
 
-import com.google.common.base.Joiner;
-
 import org.apache.isis.applib.AppManifest;
-import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.fixtures.FixtureClock;
 import org.apache.isis.applib.fixtures.InstallableFixture;
 import org.apache.isis.applib.services.command.Command;
@@ -48,6 +45,8 @@ import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction.State;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.systemusinginstallers.IsisComponentProvider;
+
+import com.google.common.base.Joiner;
 
 
 /**
@@ -262,11 +261,9 @@ public class IsisSystem {
         openSession();
     }
 
-    public DomainObjectContainer getContainer() {
-        return getService(DomainObjectContainer.class);
-    }
-
-    
+//    public DomainObjectContainer getContainer() {
+//        return getService(DomainObjectContainer.class);
+//    }
 
     // -- isisSystem (populated during setup)
     protected IsisSessionFactory isisSessionFactory;

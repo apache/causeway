@@ -19,29 +19,26 @@
 
 package org.apache.isis.core.metamodel.services;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
 import java.util.Arrays;
 
-import javax.inject.Inject;
-
+import org.apache.isis.applib.services.repository.RepositoryService;
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
+import org.apache.isis.core.metamodel.services.repository.RepositoryServiceInternalDefault;
+import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-
-import org.apache.isis.applib.DomainObjectContainer;
-import org.apache.isis.core.commons.config.IsisConfigurationDefault;
-import org.apache.isis.core.metamodel.services.container.DomainObjectContainerDefault;
-import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
-import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
 
 public class ServicesInjectorDefaultTest_usingFields {
 
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
-    private DomainObjectContainer container;
+    private RepositoryService container;
     
     private SomeDomainService1 service1;
     private SomeDomainService2 service2;
@@ -54,8 +51,8 @@ public class ServicesInjectorDefaultTest_usingFields {
 
     static class SomeDomainService1 {
         @javax.inject.Inject
-        private DomainObjectContainer container;
-        DomainObjectContainer getContainer() {
+        private RepositoryService container;
+        RepositoryService getContainer() {
             return container;
         }
         @javax.inject.Inject
@@ -81,7 +78,7 @@ public class ServicesInjectorDefaultTest_usingFields {
 
     @Before
     public void setUp() throws Exception {
-        container = new DomainObjectContainerDefault();
+        container = new RepositoryServiceInternalDefault();
         service1 = new SomeDomainService1();
         service3 = new SomeDomainService3();
         service2 = new SomeDomainService2();
