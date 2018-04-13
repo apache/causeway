@@ -18,15 +18,14 @@
  */
 package org.apache.isis.applib.services.i18n;
 
-import java.util.Locale;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
+import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Rule;
 import org.junit.Test;
-import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
 
 public class TranslatableStringTest {
 
@@ -89,7 +88,6 @@ public class TranslatableStringTest {
             // given
             final String simpleText = "text to translate";
             final String someContext = "someContext";
-            final Locale someLocale = Locale.CANADA; // any
             final String translation = "the translation";
 
             final TranslatableString ts = TranslatableString.tr(simpleText);
@@ -111,7 +109,6 @@ public class TranslatableStringTest {
             final String singularText = "singular text to translate";
             final String pluralText = "plural text to translate";
             final String someContext = "someContext";
-            final Locale someLocale = Locale.CANADA; // any
             final String translation = "the translation";
 
             final TranslatableString ts = TranslatableString.trn(singularText, pluralText, 1);
@@ -133,7 +130,6 @@ public class TranslatableStringTest {
             final String singularText = "singular text to translate";
             final String pluralText = "plural text to translate";
             final String someContext = "someContext";
-            final Locale someLocale = Locale.CANADA; // any
             final String translation = "the translation";
             final int number = 2; // != 1
 

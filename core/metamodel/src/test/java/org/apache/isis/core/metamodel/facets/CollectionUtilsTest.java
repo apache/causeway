@@ -81,7 +81,8 @@ public class CollectionUtilsTest {
             assertThat(o, is(not(nullValue())));
             assertThat(collectionType.isAssignableFrom(o.getClass()), is(true));
 
-            Collection copy = (Collection)o;
+            @SuppressWarnings("rawtypes")
+			Collection copy = (Collection)o;
             assertThat(copy.size(), is(3));
         }
 

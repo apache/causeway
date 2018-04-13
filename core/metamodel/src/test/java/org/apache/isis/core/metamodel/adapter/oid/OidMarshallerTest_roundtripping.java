@@ -28,7 +28,8 @@ import static org.junit.Assert.assertThat;
 
 public class OidMarshallerTest_roundtripping {
 
-    private OidMarshaller oidMarshaller = OidMarshaller.INSTANCE;
+    @SuppressWarnings("unused")
+	private OidMarshaller oidMarshaller = OidMarshaller.INSTANCE;
     
     @Test
     public void rootOid_withNoVersion() {

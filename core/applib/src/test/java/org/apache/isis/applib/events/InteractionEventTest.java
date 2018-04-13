@@ -24,21 +24,17 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JMock;
-import org.jmock.integration.junit4.JUnit4Mockery;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
+import org.jmock.integration.junit4.JUnitRuleMockery;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
 
-@RunWith(JMock.class)
 public class InteractionEventTest {
 
-    @SuppressWarnings("unused")
-    private final Mockery mockery = new JUnit4Mockery();
+    @Rule
+    public final JUnitRuleMockery context = new JUnitRuleMockery();
 
     private InteractionEvent interactionEvent;
 

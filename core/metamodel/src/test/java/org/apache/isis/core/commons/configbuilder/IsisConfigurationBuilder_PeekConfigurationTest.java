@@ -19,8 +19,6 @@
 
 package org.apache.isis.core.commons.configbuilder;
 
-import java.util.Properties;
-
 import org.apache.isis.core.commons.config.IsisConfiguration;
 
 import junit.framework.TestCase;

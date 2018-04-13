@@ -17,19 +17,14 @@
 package org.apache.isis.core.commons.lang;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-
-import com.google.common.collect.Lists;
 
 import org.junit.Test;
 
-import org.apache.isis.core.commons.lang.ListExtensions;
+import com.google.common.collect.Lists;
 
 public class ListUtilsTest_adjust {
     

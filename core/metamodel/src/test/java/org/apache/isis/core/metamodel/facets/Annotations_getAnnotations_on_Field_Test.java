@@ -16,6 +16,7 @@ import org.apache.isis.applib.annotation.Publishing;
 
 import static org.hamcrest.CoreMatchers.is;
 
+@SuppressWarnings("unused")
 public class Annotations_getAnnotations_on_Field_Test {
 
 

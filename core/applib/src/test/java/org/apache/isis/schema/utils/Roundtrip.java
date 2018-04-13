@@ -83,7 +83,8 @@ public class Roundtrip {
         // given
 
         final Timestamp startedAt = new Timestamp(new Date().getTime());
-        final Timestamp completedAt = new Timestamp(startedAt.getTime() + 1000);
+        @SuppressWarnings("unused")
+		final Timestamp completedAt = new Timestamp(startedAt.getTime() + 1000);
 
         final ValueWithTypeDto returnDto = new ValueWithTypeDto();
         returnDto.setType(ValueType.BOOLEAN);

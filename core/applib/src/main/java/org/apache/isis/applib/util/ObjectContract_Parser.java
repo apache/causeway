@@ -51,6 +51,7 @@ class ObjectContract_Parser<T> {
 	 * @param propertyNames
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public static <T> ObjectContract<T> parse(Class<T> cls, @Nullable final String propertyNames) {
 		
 		Objects.requireNonNull(cls);
@@ -68,6 +69,7 @@ class ObjectContract_Parser<T> {
 		}
 		
 		for(Clause<T> clause : clauses) {
+			@SuppressWarnings("rawtypes")
 			final Function valueExtractor = x->clause.extractValue((T)x);
 			
 			contract = contract.thenUse(
@@ -86,14 +88,14 @@ class ObjectContract_Parser<T> {
 	    
 	    private enum Direction {
 	        ASC {
-	            @Override
+				@Override @SuppressWarnings({ "unchecked", "rawtypes" })
 	            public Comparator<Comparable<?>> getOrdering() {
 	            	// legacy of Ordering.natural().nullsFirst();
 	            	return Comparator.nullsFirst(Comparator.<Comparable>naturalOrder());
 	            }
 	        },
 	        ASC_NULLS_LAST {
-	            @Override
+	            @Override @SuppressWarnings({ "unchecked", "rawtypes" })
 	            public Comparator<Comparable<?>> getOrdering() {
 	                // legacy of Ordering.natural().nullsLast();
 	            	return Comparator.nullsLast(Comparator.<Comparable>naturalOrder());

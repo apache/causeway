@@ -13,6 +13,7 @@ import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 
+@SuppressWarnings("unused")
 public class Annotations_getAnnotations_on_Parameter_Test {
 
 
