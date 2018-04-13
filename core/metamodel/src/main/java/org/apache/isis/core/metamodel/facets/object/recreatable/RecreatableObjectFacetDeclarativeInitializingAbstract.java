@@ -24,6 +24,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.apache.isis.applib.internal.memento._Mementos;
+import org.apache.isis.applib.internal.memento._Mementos.SerializingAdapter;
 import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
@@ -63,8 +64,9 @@ public abstract class RecreatableObjectFacetDeclarativeInitializingAbstract exte
             final String mementoStr) {
 
     	final UrlEncodingService codec = servicesInjector.lookupService(UrlEncodingService.class);
+    	final SerializingAdapter serializer = servicesInjector.lookupService(SerializingAdapter.class);
     	
-    	final _Mementos.Memento memento = _Mementos.parse(codec, mementoStr);
+    	final _Mementos.Memento memento = _Mementos.parse(codec, serializer, mementoStr);
     	
 //TODO Legacy of ...
 //        final MementoService mementoService = servicesInjector.lookupService(MementoService.class);
@@ -113,8 +115,9 @@ public abstract class RecreatableObjectFacetDeclarativeInitializingAbstract exte
     public String memento(Object viewModelPojo) {
     	
     	final UrlEncodingService codec = servicesInjector.lookupService(UrlEncodingService.class);
+    	final SerializingAdapter serializer = servicesInjector.lookupService(SerializingAdapter.class);
     	
-    	final _Mementos.Memento memento = _Mementos.create(codec);
+		final _Mementos.Memento memento = _Mementos.create(codec, serializer);
 
 //TODO Legacy of ...
 //        final MementoService mementoService = servicesInjector.lookupService(MementoService.class);

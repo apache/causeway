@@ -23,6 +23,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -34,6 +35,7 @@ import org.apache.isis.applib.internal.base._NullSafe;
 import org.apache.isis.applib.internal.collections._Maps;
 import org.apache.isis.applib.internal.collections._Sets;
 import org.apache.isis.applib.internal.memento._Mementos.Memento;
+import org.apache.isis.applib.internal.memento._Mementos.SerializingAdapter;
 import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
 
 /**
@@ -46,28 +48,41 @@ import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
 class _Mementos_MementoDefault implements _Mementos.Memento {
 	
 	private final UrlEncodingService codec;
-	private final Map<String, Object> valuesByKey;
+	private final SerializingAdapter serializer;
 	
-	_Mementos_MementoDefault(UrlEncodingService codec) {
-		this(codec, _Maps.newHashMap());
+	private final Map<String, Serializable> valuesByKey;
+	
+	_Mementos_MementoDefault(UrlEncodingService codec, SerializingAdapter serializer) {
+		this(codec, serializer, _Maps.newHashMap());
 	}
 	
-	private _Mementos_MementoDefault(UrlEncodingService codec, Map<String, Object> valuesByKey) {
-		Objects.requireNonNull(codec);
-		this.codec = codec;
-		this.valuesByKey = valuesByKey;
+	private _Mementos_MementoDefault(
+			UrlEncodingService codec,
+			SerializingAdapter serializer,
+			Map<String, Serializable> valuesByKey) {
+		
+		this.codec = Objects.requireNonNull(codec);
+		this.serializer = Objects.requireNonNull(serializer);
+		this.valuesByKey = Objects.requireNonNull(valuesByKey);
 	}
 
 	@Override
 	public Memento set(String name, Object value) {
-		valuesByKey.put(name, value);
+		if(value==null) {
+			return this; //no-op
+		}
+		Objects.requireNonNull(name);
+		valuesByKey.put(name, serializer.write(value));
 		return this;
 	}
 
 	@Override
 	public <T> T get(String name, Class<T> cls) {
-		final Object value = valuesByKey.get(name);
-		return _Casts.castToOrElse(value, cls, ()->null);		
+		final Serializable value = valuesByKey.get(name);
+		if(value==null) {
+			return null;
+		}
+		return serializer.read(cls, value);
 	}
 
 	@Override
@@ -77,28 +92,25 @@ class _Mementos_MementoDefault implements _Mementos.Memento {
 	
 	@Override
 	public String asString() {
-		
 		final ByteArrayOutputStream os = new ByteArrayOutputStream(16*1024); // 16k initial size
-		
 		try(ObjectOutputStream oos = new ObjectOutputStream(os)){
 			oos.writeObject(valuesByKey);
 		} catch (Exception e) {
 			throw new IllegalArgumentException("failed to serialize memento", e);
 		}
-
 		return codec.encode(os.toByteArray());
 	}
 
 	// -- PARSER
 	
-	static Memento parse(UrlEncodingService codec, @Nullable String str) {
+	static Memento parse(UrlEncodingService codec, SerializingAdapter serializer, @Nullable String str) {
 		Objects.requireNonNull(codec);
 		if(_NullSafe.isEmpty(str)) {
 			return null;
 		}
 		try(ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(codec.decode(str)))) {
-			final Map<String, Object> valuesByKey = _Casts.uncheckedCast(ois.readObject());
-			return new _Mementos_MementoDefault(codec, valuesByKey);
+			final Map<String, Serializable> valuesByKey = _Casts.uncheckedCast(ois.readObject());
+			return new _Mementos_MementoDefault(codec, serializer, valuesByKey);
 		} catch (Exception e) {
 			throw new IllegalArgumentException("failed to parse memento from serialized string", e);
 		} 

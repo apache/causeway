@@ -23,11 +23,14 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Date;
 
+import org.apache.isis.applib.internal.base._Casts;
 import org.apache.isis.applib.internal.memento._Mementos.Memento;
+import org.apache.isis.applib.internal.memento._Mementos.SerializingAdapter;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
 import org.apache.isis.applib.services.urlencoding.UrlEncodingServiceUsingBaseEncodingAbstract;
@@ -44,11 +47,26 @@ public class MementosTest {
 
     UrlEncodingServiceWithCompression serviceWithCompression;
     UrlEncodingServiceUsingBaseEncodingAbstract serviceBaseEncoding;
+    SerializingAdapter serializingAdapter;
 
     @Before
     public void setUp() throws Exception {
     	serviceWithCompression = new UrlEncodingServiceWithCompression();
     	serviceBaseEncoding = new UrlEncodingServiceUsingBaseEncodingAbstract(){};
+    	
+    	serializingAdapter = new SerializingAdapter() {
+
+			@Override
+			public Serializable write(Object value) {
+				return (Serializable) value;
+			}
+
+			@Override
+			public <T> T read(Class<T> cls, Serializable value) {
+				return _Casts.castToOrElse(value, cls, ()->null);
+			}
+    	};
+    	
     }
 	
 	@Test
@@ -62,7 +80,7 @@ public class MementosTest {
 	}
 	
 	private void roundtrip(UrlEncodingService codec) {
-		final Memento memento = _Mementos.create(codec);
+		final Memento memento = _Mementos.create(codec, serializingAdapter);
 
 		memento.set("someString", "a string");
 		memento.set("someStringWithDoubleSpaces", "a  string");
@@ -86,7 +104,7 @@ public class MementosTest {
 
 		final String str = memento.asString();
 
-		final Memento memento2 = _Mementos.parse(codec, str);
+		final Memento memento2 = _Mementos.parse(codec, serializingAdapter, str);
 
 		assertThat(memento2.get("someString", String.class), is("a string"));
 		assertThat(memento2.get("someStringWithDoubleSpaces", String.class), is("a  string"));

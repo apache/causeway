@@ -19,6 +19,9 @@
 
 package org.apache.isis.applib.internal.memento;
 
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
+import java.io.Serializable;
 import java.util.Set;
 
 import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
@@ -55,6 +58,28 @@ public final class _Mementos {
         public Set<String> keySet();
     }
     
+	// -- SERIALIZER INTERFACE
+	
+    public static interface SerializingAdapter {
+        
+    	/**
+    	 * Converts the value into a Serializable that is write-able to an {@link ObjectOutput}.<br/>
+    	 * Note: write and read are complementary operators.
+    	 * @param value
+    	 * @return
+    	 */
+		public Serializable write(Object value);
+		
+		/**
+		 * Converts the value Serializable as read from an {@link ObjectInput} into its original (a Pojo).<br/>
+		 * Note: write and read are complementary operators.
+		 * @param cls
+		 * @param value
+		 * @return
+		 */
+		public <T> T read(Class<T> cls, Serializable value);
+    }    
+    
     // -- CONSTRUCTION
     
     /**
@@ -65,8 +90,8 @@ public final class _Mementos {
      * add to the {@link Memento}, then {@link Memento#asString()} to convert to a string format.
      *
      */
-    public static Memento create(UrlEncodingService codec) {
-    	return new _Mementos_MementoDefault(codec);
+    public static Memento create(UrlEncodingService codec, SerializingAdapter serializer) {
+    	return new _Mementos_MementoDefault(codec, serializer);
     }
 
     /**
@@ -77,8 +102,8 @@ public final class _Mementos {
      * in the {@link Memento}. 
      *
      */
-    public static Memento parse(UrlEncodingService codec, final String str) {
-		return _Mementos_MementoDefault.parse(codec, str);
+    public static Memento parse(UrlEncodingService codec, SerializingAdapter serializer, final String str) {
+		return _Mementos_MementoDefault.parse(codec, serializer, str);
     	
     }
 	

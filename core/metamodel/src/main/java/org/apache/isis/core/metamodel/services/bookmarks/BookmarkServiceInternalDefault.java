@@ -18,16 +18,22 @@
  */
 package org.apache.isis.core.metamodel.services.bookmarks;
 
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.inject.Inject;
-
-import com.google.common.collect.Maps;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.internal.base._Casts;
+import org.apache.isis.applib.internal.collections._Lists;
+import org.apache.isis.applib.internal.collections._Sets;
+import org.apache.isis.applib.internal.memento._Mementos.SerializingAdapter;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkHolder;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
@@ -35,6 +41,8 @@ import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
+
+import com.google.common.collect.Maps;
 
 /**
  * This service enables a serializable &quot;bookmark&quot; to be created for an entity.
@@ -48,7 +56,7 @@ import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
 )
-public class BookmarkServiceInternalDefault implements BookmarkService {
+public class BookmarkServiceInternalDefault implements BookmarkService, SerializingAdapter {
 
 
     @Programmatic
@@ -164,7 +172,74 @@ public class BookmarkServiceInternalDefault implements BookmarkService {
         }
     }
 
+    // -- SERIALIZING ADAPTER IMPLEMENTATION
+    
+    @Override
+	public <T> T read(Class<T> cls, Serializable value) {
+    	
+    	if(Bookmark.class.equals(cls)) {
+    		return _Casts.uncheckedCast(value);
+    	}
+		
+		if(Bookmark.class.isAssignableFrom(value.getClass())) {
+			final Bookmark valueBookmark = (Bookmark) value;
+			return _Casts.uncheckedCast(lookup(valueBookmark));
+		}
+		
+		return _Casts.uncheckedCast(value);
+	}
+	
+	@Override
+	public Serializable write(Object value) {
+        if(isPredefinedSerializable(value.getClass())) {
+            return (Serializable) value;
+        } else {
+            final Bookmark valueBookmark = bookmarkFor(value);
+            return valueBookmark;	
+        }
+	}
 
+	// -- HELPER
+	
+    private final static Set<Class<? extends Serializable>> serializableFinalTypes = _Sets.unmodifiable(
+    		String.class,
+    		Boolean.class, boolean.class,
+    		Byte.class, byte.class,
+    		Short.class, short.class,
+    		Integer.class, int.class,
+    		Long.class, long.class,
+    		Float.class, float.class,
+    		Double.class, double.class
+    );
+    
+    private final static List<Class<? extends Serializable>> serializableTypes = _Lists.unmodifiable(
+    		BigDecimal.class,
+    		BigInteger.class,
+    		java.util.Date.class,
+    		java.sql.Date.class,
+    		Enum.class,
+    		Bookmark.class
+    );
+    
+    private static boolean isPredefinedSerializable(final Class<?> cls) {
+    	if(!Serializable.class.isAssignableFrom(cls)) {
+    		return false;
+    	}
+    	//[ahuber] any non-scalar values could be problematic, so we are careful with wild-cards here
+    	if(cls.getName().startsWith("java.time.")) {
+    		return true;
+    	}
+    	if(cls.getName().startsWith("org.joda.time.")) {
+    		return true;
+    	}
+    	if(serializableFinalTypes.contains(cls)) {
+    		return true;
+    	}
+    	return serializableTypes.stream().anyMatch(t->t.isAssignableFrom(cls));
+    }
+	
+	// -- INJECTION
+	
     @javax.inject.Inject
     PersistenceSessionServiceInternal persistenceSessionServiceInternal;
 
@@ -173,5 +248,5 @@ public class BookmarkServiceInternalDefault implements BookmarkService {
 
     @Inject
     ServiceRegistry serviceRegistry;
-
+    
 }
