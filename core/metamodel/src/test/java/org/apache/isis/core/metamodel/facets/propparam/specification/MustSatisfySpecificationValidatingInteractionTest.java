@@ -41,6 +41,8 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
+import java.util.Collections;
+
 public class MustSatisfySpecificationValidatingInteractionTest {
 
     @Rule
@@ -79,8 +81,17 @@ public class MustSatisfySpecificationValidatingInteractionTest {
         specificationAlwaysSatisfied = new SpecificationAlwaysSatisfied();
         specificationNeverSatisfied = new SpecificationNeverSatisfied();
 
-        facetForSpecificationAlwaysSatisfied = new MustSatisfySpecificationFromMustSatisfyAnnotationOnTypeFacet(Utils.listOf(specificationAlwaysSatisfied), identifiedHolder, mockServicesInjector);
-        facetForSpecificationNeverSatisfied = new MustSatisfySpecificationFromMustSatisfyAnnotationOnTypeFacet(Utils.listOf(specificationNeverSatisfied), identifiedHolder, mockServicesInjector);
+        facetForSpecificationAlwaysSatisfied = 
+        		new MustSatisfySpecificationFromMustSatisfyAnnotationOnTypeFacet(
+        				Collections.singletonList(specificationAlwaysSatisfied), 
+        				identifiedHolder, 
+        				mockServicesInjector);
+        
+        facetForSpecificationNeverSatisfied = 
+        		new MustSatisfySpecificationFromMustSatisfyAnnotationOnTypeFacet(
+        				Collections.singletonList(specificationNeverSatisfied), 
+        				identifiedHolder, 
+        				mockServicesInjector);
 
         mockProposedObjectAdapter = context.mock(ObjectAdapter.class, "proposed");
         mockProposedObject = context.mock(Object.class, "proposedObject");

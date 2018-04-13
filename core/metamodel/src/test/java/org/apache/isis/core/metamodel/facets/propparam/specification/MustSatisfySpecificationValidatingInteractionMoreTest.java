@@ -41,6 +41,8 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
+import java.util.Collections;
+
 public class MustSatisfySpecificationValidatingInteractionMoreTest {
 
     @Rule
@@ -65,6 +67,7 @@ public class MustSatisfySpecificationValidatingInteractionMoreTest {
     private SpecificationRequiresFirstLetterToBeUpperCase requiresFirstLetterToBeUpperCase;
 
     public static class Customer {}
+    
     @Before
     public void setUp() throws Exception {
 
@@ -77,7 +80,11 @@ public class MustSatisfySpecificationValidatingInteractionMoreTest {
 
         requiresFirstLetterToBeUpperCase = new SpecificationRequiresFirstLetterToBeUpperCase();
 
-        facetForSpecificationFirstLetterUpperCase = new MustSatisfySpecificationFromMustSatisfyAnnotationOnTypeFacet(Utils.listOf(requiresFirstLetterToBeUpperCase), identifiedHolder, mockServicesInjector);
+        facetForSpecificationFirstLetterUpperCase = 
+        		new MustSatisfySpecificationFromMustSatisfyAnnotationOnTypeFacet(
+        				Collections.singletonList(requiresFirstLetterToBeUpperCase), 
+        				identifiedHolder, 
+        				mockServicesInjector);
 
         mockProposedObjectAdapter = context.mock(ObjectAdapter.class, "proposed");
     }
