@@ -60,15 +60,15 @@ import org.apache.isis.schema.utils.jaxbadapters.PersistentEntitiesAdapter;
 public class DomainObjectList {
 
     // -- ui event classes
-    public static class TitleUiEvent extends IsisApplibModule.TitleUiEvent<DomainObjectList>{}
-    public static class IconUiEvent extends IsisApplibModule.IconUiEvent<DomainObjectList>{}
-    public static class CssClassUiEvent extends IsisApplibModule.CssClassUiEvent<DomainObjectList>{}
+    public static class TitleUiEvent extends IsisApplibModule.TitleUiEvent<DomainObjectList>{ private static final long serialVersionUID = 1L; }
+    public static class IconUiEvent extends IsisApplibModule.IconUiEvent<DomainObjectList>{ private static final long serialVersionUID = 1L; }
+    public static class CssClassUiEvent extends IsisApplibModule.CssClassUiEvent<DomainObjectList>{ private static final long serialVersionUID = 1L; }
     
 
     // -- domain event classes
-    public static abstract class PropertyDomainEvent<T> extends IsisApplibModule.PropertyDomainEvent<DomainObjectList, T> { }
-    public static abstract class CollectionDomainEvent<T> extends IsisApplibModule.CollectionDomainEvent<DomainObjectList, T> { }
-    public static abstract class ActionDomainEvent extends IsisApplibModule.ActionDomainEvent<DomainObjectList> { }
+    public static abstract class PropertyDomainEvent<T> extends IsisApplibModule.PropertyDomainEvent<DomainObjectList, T> { private static final long serialVersionUID = 1L; }
+    public static abstract class CollectionDomainEvent<T> extends IsisApplibModule.CollectionDomainEvent<DomainObjectList, T> { private static final long serialVersionUID = 1L; }
+    public static abstract class ActionDomainEvent extends IsisApplibModule.ActionDomainEvent<DomainObjectList> { private static final long serialVersionUID = 1L; }
     
 
     // -- constructors
@@ -96,7 +96,7 @@ public class DomainObjectList {
     
 
     // -- property: elementObjectType
-    public static class ElementObjectTypeDomainEvent extends PropertyDomainEvent<String> { }
+    public static class ElementObjectTypeDomainEvent extends PropertyDomainEvent<String> { private static final long serialVersionUID = 1L; }
 
     private String elementObjectType;
     @Property(
@@ -109,7 +109,7 @@ public class DomainObjectList {
     
 
     // -- property: actionOwningType
-    public static class ActionOwningTypeDomainEvent extends PropertyDomainEvent<String> { }
+    public static class ActionOwningTypeDomainEvent extends PropertyDomainEvent<String> { private static final long serialVersionUID = 1L; }
 
     private String actionOwningType;
 
@@ -124,7 +124,7 @@ public class DomainObjectList {
     
 
     // -- property: actionId
-    public static class ActionIdDomainEvent extends PropertyDomainEvent<String> { }
+    public static class ActionIdDomainEvent extends PropertyDomainEvent<String> { private static final long serialVersionUID = 1L; }
 
     private String actionId;
 
@@ -139,7 +139,7 @@ public class DomainObjectList {
     
 
     // -- property: actionArguments
-    public static class ActionArgumentsDomainEvent extends PropertyDomainEvent<String> { }
+    public static class ActionArgumentsDomainEvent extends PropertyDomainEvent<String> { private static final long serialVersionUID = 1L; }
 
     private String actionArguments;
 
@@ -154,7 +154,7 @@ public class DomainObjectList {
     
 
     // -- collection: objects
-    public static class ObjectsDomainEvent extends CollectionDomainEvent<Object> { }
+    public static class ObjectsDomainEvent extends CollectionDomainEvent<Object> { private static final long serialVersionUID = 1L; }
 
     @XmlJavaTypeAdapter(PersistentEntitiesAdapter.class)
     private List<Object> objects = _Lists.newArrayList();

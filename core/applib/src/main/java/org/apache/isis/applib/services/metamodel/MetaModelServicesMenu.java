@@ -49,8 +49,7 @@ import org.apache.isis.applib.value.Clob;
 )
 public class MetaModelServicesMenu {
 
-    public static abstract class ActionDomainEvent extends IsisApplibModule.ActionDomainEvent<MetaModelServicesMenu> {
-    }
+    public static abstract class ActionDomainEvent extends IsisApplibModule.ActionDomainEvent<MetaModelServicesMenu> { private static final long serialVersionUID = 1L; }
 
     private final MimeType mimeTypeTextCsv;
 
@@ -64,8 +63,7 @@ public class MetaModelServicesMenu {
 
     // //////////////////////////////////////
 
-    public static class DownloadMetaModelEvent extends ActionDomainEvent {
-    }
+    public static class DownloadMetaModelEvent extends ActionDomainEvent { private static final long serialVersionUID = 1L; }
 
     @Action(
             domainEvent = DownloadMetaModelEvent.class,

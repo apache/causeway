@@ -20,18 +20,15 @@ package org.apache.isis.applib.services.publish;
 
 import javax.annotation.PostConstruct;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.iactn.Interaction;
-import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.schema.chg.v1.ChangesDto;
 import org.apache.isis.schema.ixn.v1.InteractionDto;
 import org.apache.isis.schema.utils.ChangesDtoUtils;
 import org.apache.isis.schema.utils.InteractionDtoUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @DomainService(
         nature = NatureOfService.DOMAIN,
@@ -72,12 +69,12 @@ public class PublisherServiceLogging implements PublisherService {
         LOG.debug(ChangesDtoUtils.toXml(changesDto));
     }
 
-
-    @javax.inject.Inject
-    private CommandContext commandContext;
-
-    @javax.inject.Inject
-    private UserService userService;
+//TODO [ahuber] not used, remove?
+//    @javax.inject.Inject
+//    private CommandContext commandContext;
+//
+//    @javax.inject.Inject
+//    private UserService userService;
 
 }
 

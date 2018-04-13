@@ -40,12 +40,15 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 )
 public class ConfigurationServiceMenu {
 
-    public static abstract class ActionDomainEvent
-            extends IsisApplibModule.ActionDomainEvent<ConfigurationServiceMenu> { }
-
-    // //////////////////////////////////////
-
-    public static class AllConfigurationPropertiesDomainEvent extends ActionDomainEvent { }
+    public static abstract class ActionDomainEvent 
+    extends IsisApplibModule.ActionDomainEvent<ConfigurationServiceMenu> { 
+    	private static final long serialVersionUID = 1L; 
+    }
+    
+    public static class AllConfigurationPropertiesDomainEvent 
+    extends ActionDomainEvent { 
+    	private static final long serialVersionUID = 1L; 
+    }
 
     @Action(
             domainEvent = AllConfigurationPropertiesDomainEvent.class,

@@ -31,7 +31,6 @@ package org.apache.isis.applib;
  *     As an alternative, consider simply annotating the view model class with {@link org.apache.isis.applib.annotation.ViewModel}.
  * </p>
  *
- * @see org.apache.isis.applib.DomainObjectContainer
  */
 public abstract class AbstractViewModel implements ViewModel {
 

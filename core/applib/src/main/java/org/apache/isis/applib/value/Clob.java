@@ -28,7 +28,9 @@ import javax.activation.MimeTypeParseException;
 
 public final class Clob implements NamedWithMimeType, Serializable {
 
-    private final String name;
+	private static final long serialVersionUID = 8694189924062378527L;
+	
+	private final String name;
     private final MimeType mimeType;
     private final CharSequence chars;
     

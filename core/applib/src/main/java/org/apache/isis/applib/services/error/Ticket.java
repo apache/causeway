@@ -33,7 +33,9 @@ import java.io.Serializable;
  */
 public class Ticket implements Serializable {
 
-    private final String reference;
+	private static final long serialVersionUID = 4900947111894407314L;
+	
+	private final String reference;
     private final String userMessage;
     private final String details;
     private final StackTracePolicy stackTracePolicy;
