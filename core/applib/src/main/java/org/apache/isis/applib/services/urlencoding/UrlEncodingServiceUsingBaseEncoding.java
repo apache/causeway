@@ -20,7 +20,6 @@ import java.nio.charset.StandardCharsets;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.internal.base._Bytes;
 import org.apache.isis.applib.internal.base._Strings;
 
@@ -30,14 +29,14 @@ import org.apache.isis.applib.internal.base._Strings;
 )
 public class UrlEncodingServiceUsingBaseEncoding implements UrlEncodingService {
 
-	@Override @Programmatic
-    public String encode(final String str) {
-    	return _Strings.convert(str, _Bytes.asUrlBase64, StandardCharsets.UTF_8);
+    @Override
+    public String encode(final byte[] bytes) {
+    	return _Strings.ofBytes(_Bytes.asUrlBase64.apply(bytes), StandardCharsets.UTF_8);
     }
 
-    @Override @Programmatic
-    public String decode(final String str) {
-    	return _Strings.convert(str, _Bytes.ofUrlBase64, StandardCharsets.UTF_8);
+    @Override
+    public byte[] decode(final String str) {
+    	return _Bytes.ofUrlBase64.apply(_Strings.toBytes(str, StandardCharsets.UTF_8));
     }
 
 }

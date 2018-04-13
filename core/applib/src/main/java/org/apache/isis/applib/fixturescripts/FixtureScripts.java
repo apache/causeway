@@ -28,6 +28,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.isis.applib.AbstractService;
 import org.apache.isis.applib.DomainObjectContainer;
@@ -47,8 +48,7 @@ import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.classdiscovery.ClassDiscoveryService;
 import org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault;
 import org.apache.isis.applib.services.fixturespec.FixtureScriptsSpecification;
-import org.apache.isis.applib.services.memento.MementoService;
-import org.apache.isis.applib.services.memento.MementoService.Memento;
+import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
@@ -413,15 +413,21 @@ public abstract class FixtureScripts extends AbstractService {
 
     // -- memento support for FixtureScript
 
+    @XmlRootElement(name = "fixtureScript")
+    public static class FixtureScriptMemento {
+    	private String path;
+		public String getPath() { return path; }
+		public void setPath(String path) { this.path = path; }
+    }
 
     String mementoFor(final FixtureScript fs) {
-        return mementoService.create()
-                .set("path", fs.getParentPath())
-                .asString();
+    	final FixtureScriptMemento memento = new FixtureScriptMemento();
+    	memento.setPath(fs.getParentPath());
+    	return jaxbService.toXml(memento);
     }
-    void initOf(final String mementoStr, final FixtureScript fs) {
-        final Memento memento = mementoService.parse(mementoStr);
-        fs.setParentPath(memento.get("path", String.class));
+    void initOf(final String xml, final FixtureScript fs) {
+    	final FixtureScriptMemento memento = jaxbService.fromXml(FixtureScriptMemento.class, xml);
+        fs.setParentPath(memento.getPath());
     }
 
     // -- helpers (package level)
@@ -467,7 +473,7 @@ public abstract class FixtureScripts extends AbstractService {
     TitleService titleService;
 
     @javax.inject.Inject
-    MementoService mementoService;
+    JaxbService jaxbService;
 
     @javax.inject.Inject
     BookmarkService bookmarkService;

@@ -19,19 +19,18 @@ package org.apache.isis.core.runtime.services.memento;
 import java.util.List;
 import java.util.Set;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Sets;
-
-import org.dom4j.Document;
-import org.dom4j.DocumentHelper;
-import org.dom4j.Element;
-
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.memento.MementoService;
 import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
+import org.dom4j.Document;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
+
+import com.google.common.base.Function;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Sets;
 
 /**
  * This service provides a mechanism by which a serializable memento of arbitrary state can be created.  Most
@@ -41,11 +40,14 @@ import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
  * This implementation has no UI and there are no other implementations of the service API, and so it annotated
  * with {@link org.apache.isis.applib.annotation.DomainService}.  Because this class is implemented in core, this means
  * that it is automatically registered and available for use; no further configuration is required.
+ * 
+ * @deprecated - because {@link MementoService} is deprecated.
  */
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
 )
+@Deprecated
 public class MementoServiceDefault implements MementoService {
 
     static class MementoDefault implements Memento {
@@ -89,7 +91,7 @@ public class MementoServiceDefault implements MementoService {
         }
 
         protected String encode(final String xmlStr) {
-            return noEncoding ? xmlStr : urlEncodingService.encode(xmlStr);
+            return noEncoding ? xmlStr : urlEncodingService.encodeString(xmlStr);
         }
 
         private static final Function<Element, String> ELEMENT_NAME = new Function<Element, String>(){
@@ -149,7 +151,7 @@ public class MementoServiceDefault implements MementoService {
         if (noEncoding) {
             xmlStr = str;
         } else {
-            xmlStr = urlEncodingService.decode(str);
+            xmlStr = urlEncodingService.decodeToString(str);
         }
         final Document doc = Dom4jUtil.parse(xmlStr);
         return new MementoDefault(doc, noEncoding, urlEncodingService);

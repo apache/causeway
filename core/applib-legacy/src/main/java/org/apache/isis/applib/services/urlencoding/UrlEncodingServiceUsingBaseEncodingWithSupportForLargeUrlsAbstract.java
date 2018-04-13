@@ -31,9 +31,9 @@ public abstract class UrlEncodingServiceUsingBaseEncodingWithSupportForLargeUrls
             Maps.synchronizedBiMap(HashBiMap.<String, String>create(EXPECTED_SIZE));
 
     @Override
-    public String encode(final String value) {
+    public String encodeString(final String value) {
         if(!canCache(value)) {
-            return super.encode(value);
+            return super.encodeString(value);
         }
 
         synchronized (cachedValueByKey) {
@@ -47,9 +47,9 @@ public abstract class UrlEncodingServiceUsingBaseEncodingWithSupportForLargeUrls
     }
 
     @Override
-    public String decode(final String key) {
+    public String decodeToString(final String key) {
         if(key == null || !key.startsWith(KEY_PREFIX)) {
-            return super.decode(key);
+            return super.decodeToString(key);
         }
         String keySuffix = key.substring(KEY_PREFIX.length());
         return cachedValueByKey.get(keySuffix);

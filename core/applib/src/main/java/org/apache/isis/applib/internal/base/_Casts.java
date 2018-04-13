@@ -19,6 +19,11 @@
 
 package org.apache.isis.applib.internal.base;
 
+import java.util.Objects;
+import java.util.function.Supplier;
+
+import javax.annotation.Nullable;
+
 /**
  * <h1>- internal use only -</h1>
  * <p>
@@ -36,8 +41,27 @@ public final class _Casts {
 	private _Casts(){}
 	
 	@SuppressWarnings("unchecked")
-	public static <T> T uncheckedCast(Object obj) {
+	public static <T> T uncheckedCast(@Nullable Object obj) {
 		return (T) obj;
+	}
+
+	/**
+	 * Returns the casts of {@code value} to {@code cls}, or if this fails returns the result of {@code orElse}
+	 * @param value
+	 * @param cls
+	 * @param orElse
+	 * @return
+	 */
+	public static <T> T castToOrElse(@Nullable Object value, Class<T> cls, Supplier<T> orElse) {
+		Objects.requireNonNull(cls);
+		Objects.requireNonNull(orElse);
+
+		try {
+			return cls.cast(value);
+		} catch (Exception e) {
+			return orElse.get();	
+		}
+		
 	}
 	
 }

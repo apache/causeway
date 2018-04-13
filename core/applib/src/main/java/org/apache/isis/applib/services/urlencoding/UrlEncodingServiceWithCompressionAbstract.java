@@ -14,13 +14,28 @@ import org.apache.isis.applib.internal.base._Strings;
 public abstract class UrlEncodingServiceWithCompressionAbstract implements UrlEncodingService {
 
     @Override
-    public String encode(final String str) {
-    	return _Strings.convert(str, _Bytes.asCompressedUrlBase64, StandardCharsets.UTF_8);
+    public String encode(final byte[] bytes) {
+    	return _Strings.ofBytes(_Bytes.asCompressedUrlBase64.apply(bytes), StandardCharsets.UTF_8);
     }
 
     @Override
-    public String decode(final String str) {
-    	return _Strings.convert(str, _Bytes.ofCompressedUrlBase64, StandardCharsets.UTF_8);
+    public byte[] decode(final String str) {
+    	return _Bytes.ofCompressedUrlBase64.apply(_Strings.toBytes(str, StandardCharsets.UTF_8));
     }
 
+    // -- OVERRIDING DEFAULTS FOR STRING UNARY OPERATORS 
+    
+//    @Override
+//    public String encodeString(final String str) {
+//    	return _Strings.convert(str, _Bytes.asCompressedUrlBase64, StandardCharsets.UTF_8);
+//    }
+//
+//    @Override
+//    public String decodeToString(final String str) {
+//    	return _Strings.convert(str, _Bytes.ofCompressedUrlBase64, StandardCharsets.UTF_8);
+//    }
+    
+    // -- 
+
+    
 }

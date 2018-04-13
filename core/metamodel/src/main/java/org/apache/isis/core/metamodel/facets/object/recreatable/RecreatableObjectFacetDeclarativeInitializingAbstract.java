@@ -23,9 +23,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.services.bookmark.BookmarkService;
-import org.apache.isis.applib.services.memento.MementoService;
+import org.apache.isis.applib.internal.memento._Mementos;
+import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
@@ -37,9 +36,9 @@ import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySe
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 public abstract class RecreatableObjectFacetDeclarativeInitializingAbstract extends RecreatableObjectFacetAbstract {
 
@@ -63,10 +62,15 @@ public abstract class RecreatableObjectFacetDeclarativeInitializingAbstract exte
             final Object viewModelPojo,
             final String mementoStr) {
 
-        final MementoService mementoService = servicesInjector.lookupService(MementoService.class);
-        final BookmarkService bookmarkService = servicesInjector.lookupService(BookmarkService.class);
-
-        final MementoService.Memento memento = mementoService.parse(mementoStr);
+    	final UrlEncodingService codec = servicesInjector.lookupService(UrlEncodingService.class);
+    	
+    	final _Mementos.Memento memento = _Mementos.parse(codec, mementoStr);
+    	
+//TODO Legacy of ...
+//        final MementoService mementoService = servicesInjector.lookupService(MementoService.class);
+//        final BookmarkService bookmarkService = servicesInjector.lookupService(BookmarkService.class);
+//
+//        final MementoService.Memento memento = mementoService.parse(mementoStr);
 
         final Set<String> mementoKeys = memento.keySet();
 
@@ -84,14 +88,20 @@ public abstract class RecreatableObjectFacetDeclarativeInitializingAbstract exte
             final String propertyId = property.getId();
 
             Object propertyValue = null;
-
+            
             if(mementoKeys.contains(propertyId)) {
-                final Class<?> propertyType = property.getSpecification().getCorrespondingClass();
-                propertyValue = memento.get(propertyId, propertyType);
-            } else if(mementoKeys.contains(propertyId + ".bookmark")) {
-                final Bookmark propertyValueBookmark = memento.get(propertyId + ".bookmark", Bookmark.class);
-                propertyValue = bookmarkService.lookup(propertyValueBookmark);
+            	final Class<?> propertyType = property.getSpecification().getCorrespondingClass();
+            	propertyValue = memento.get(propertyId, propertyType);
             }
+
+//TODO Legacy of ...            
+//            if(mementoKeys.contains(propertyId)) {
+//                final Class<?> propertyType = property.getSpecification().getCorrespondingClass();
+//                propertyValue = memento.get(propertyId, propertyType);
+//            } else if(mementoKeys.contains(propertyId + ".bookmark")) {
+//                final Bookmark propertyValueBookmark = memento.get(propertyId + ".bookmark", Bookmark.class);
+//                propertyValue = bookmarkService.lookup(propertyValueBookmark);
+//            }
 
             if(propertyValue != null) {
                 property.set(viewModelAdapter, adapterManager.adapterFor(propertyValue), InteractionInitiatedBy.FRAMEWORK);
@@ -101,11 +111,16 @@ public abstract class RecreatableObjectFacetDeclarativeInitializingAbstract exte
     
     @Override
     public String memento(Object viewModelPojo) {
+    	
+    	final UrlEncodingService codec = servicesInjector.lookupService(UrlEncodingService.class);
+    	
+    	final _Mementos.Memento memento = _Mementos.create(codec);
 
-        final MementoService mementoService = servicesInjector.lookupService(MementoService.class);
-        final BookmarkService bookmarkService = servicesInjector.lookupService(BookmarkService.class);
-
-        final MementoService.Memento memento = mementoService.create();
+//TODO Legacy of ...
+//        final MementoService mementoService = servicesInjector.lookupService(MementoService.class);
+//        final BookmarkService bookmarkService = servicesInjector.lookupService(BookmarkService.class);
+//
+//        final MementoService.Memento memento = mementoService.create();
 
         // this is horrible, but there's a catch-22 here...
         // we need an adapter in order to query the state of the object via the metamodel, on the other hand
@@ -115,9 +130,15 @@ public abstract class RecreatableObjectFacetDeclarativeInitializingAbstract exte
         boolean createdTemporaryAdapter = false;
         ObjectAdapter viewModelAdapter = adapterManager.getAdapterFor(viewModelPojo);
         if(viewModelAdapter == null) {
-            final ObjectSpecification objectSpecification = specificationLoader.loadSpecification(viewModelPojo.getClass());
+        	
+            final ObjectSpecification objectSpecification = 
+            		specificationLoader.loadSpecification(viewModelPojo.getClass());
+            
             final ObjectSpecId objectSpecId = objectSpecification.getSpecId();
-            viewModelAdapter = adapterManager.mapRecreatedPojo(RootOid.create(objectSpecId, UUID.randomUUID().toString()), viewModelPojo);
+            viewModelAdapter = 
+            		adapterManager.mapRecreatedPojo(
+            				RootOid.create(objectSpecId, UUID.randomUUID().toString()), 
+            				viewModelPojo);
 
             createdTemporaryAdapter = true;
         }
@@ -144,12 +165,16 @@ public abstract class RecreatableObjectFacetDeclarativeInitializingAbstract exte
                         InteractionInitiatedBy.FRAMEWORK);
                 if(propertyValueAdapter != null) {
                     final Object propertyValue = propertyValueAdapter.getObject();
-                    if(mementoService.canSet(propertyValue)) {
-                        memento.set(property.getId(), propertyValue);
-                    } else {
-                        final Bookmark propertyValueBookmark = bookmarkService.bookmarkFor(propertyValue);
-                        memento.set(property.getId() + ".bookmark", propertyValueBookmark);
-                    }
+                    
+                    memento.set(property.getId(), propertyValue);
+
+//TODO Legacy of ...                    
+//                    if(mementoService.canSet(propertyValue)) {
+//                        memento.set(property.getId(), propertyValue);
+//                    } else {
+//                        final Bookmark propertyValueBookmark = bookmarkService.bookmarkFor(propertyValue);
+//                        memento.set(property.getId() + ".bookmark", propertyValueBookmark);
+//                    }
                 }
             }
             return memento.asString();

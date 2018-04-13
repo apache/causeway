@@ -16,7 +16,6 @@
  */
 package org.apache.isis.core.metamodel.services.command;
 
-import java.lang.reflect.Method;
 import java.util.List;
 
 import org.apache.isis.applib.annotation.Programmatic;

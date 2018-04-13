@@ -33,7 +33,8 @@ import org.apache.isis.applib.services.jaxb.JaxbService;
  * registered and available for use; no configuration is required.
  * </p>
  *
- * @deprecated - for view models, use JAXB annotations and the {@link JaxbService}; for action invocations and such like, use {@link InteractionContext} and {@link CommandContext}.
+ * @deprecated - for view models, use JAXB annotations and the {@link JaxbService}; 
+ * for action invocations and such like, use {@link InteractionContext} and {@link CommandContext}.
  */
 @Deprecated
 public interface MementoService {

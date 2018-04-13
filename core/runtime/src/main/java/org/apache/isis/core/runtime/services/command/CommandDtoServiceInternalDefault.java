@@ -16,14 +16,11 @@
  */
 package org.apache.isis.core.runtime.services.command;
 
-import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 import javax.annotation.PostConstruct;
-
-import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
@@ -40,11 +37,8 @@ import org.apache.isis.core.metamodel.services.command.CommandDtoServiceInternal
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
-import org.apache.isis.core.runtime.services.memento.MementoServiceDefault;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.schema.cmd.v1.ActionDto;
 import org.apache.isis.schema.cmd.v1.CommandDto;
@@ -63,15 +57,15 @@ import org.apache.isis.schema.utils.CommonDtoUtils;
 )
 public class CommandDtoServiceInternalDefault implements CommandDtoServiceInternal {
 
-    private final MementoServiceDefault mementoService;
-
-    public CommandDtoServiceInternalDefault() {
-        this(new MementoServiceDefault());
-    }
-
-    CommandDtoServiceInternalDefault(MementoServiceDefault mementoService) {
-        this.mementoService = mementoService.withNoEncoding();
-    }
+//    private final MementoServiceDefault mementoService;
+//
+//    public CommandDtoServiceInternalDefault() {
+//        this(new MementoServiceDefault());
+//    }
+//
+//    CommandDtoServiceInternalDefault(MementoServiceDefault mementoService) {
+//        this.mementoService = mementoService.withNoEncoding();
+//    }
     
     // //////////////////////////////////////
 
@@ -84,23 +78,23 @@ public class CommandDtoServiceInternalDefault implements CommandDtoServiceIntern
     // //////////////////////////////////////
 
 
-    private ObjectSpecificationDefault getJavaSpecificationOfOwningClass(final Method method) {
-        return getJavaSpecification(method.getDeclaringClass());
-    }
+//    private ObjectSpecificationDefault getJavaSpecificationOfOwningClass(final Method method) {
+//        return getJavaSpecification(method.getDeclaringClass());
+//    }
 
-    private ObjectSpecificationDefault getJavaSpecification(final Class<?> cls) {
-        final ObjectSpecification objectSpec = getSpecification(cls);
-        if (!(objectSpec instanceof ObjectSpecificationDefault)) {
-            throw new UnsupportedOperationException(
-                "Only Java is supported "
-                + "(specification is '" + objectSpec.getClass().getCanonicalName() + "')");
-        }
-        return (ObjectSpecificationDefault) objectSpec;
-    }
+//    private ObjectSpecificationDefault getJavaSpecification(final Class<?> cls) {
+//        final ObjectSpecification objectSpec = getSpecification(cls);
+//        if (!(objectSpec instanceof ObjectSpecificationDefault)) {
+//            throw new UnsupportedOperationException(
+//                "Only Java is supported "
+//                + "(specification is '" + objectSpec.getClass().getCanonicalName() + "')");
+//        }
+//        return (ObjectSpecificationDefault) objectSpec;
+//    }
 
-    private ObjectSpecification getSpecification(final Class<?> type) {
-        return specificationLoader.loadSpecification(type);
-    }
+//    private ObjectSpecification getSpecification(final Class<?> type) {
+//        return specificationLoader.loadSpecification(type);
+//    }
 
 
     // //////////////////////////////////////

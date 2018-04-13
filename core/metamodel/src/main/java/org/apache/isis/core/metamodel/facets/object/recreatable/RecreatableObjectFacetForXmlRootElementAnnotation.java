@@ -39,7 +39,7 @@ public class RecreatableObjectFacetForXmlRootElementAnnotation extends Recreatab
     @Override
     protected Object doInstantiate(final Class<?> viewModelClass, final String mementoStr) {
 
-        final String xmlStr = getUrlEncodingService().decode(mementoStr);
+        final String xmlStr = getUrlEncodingService().decodeToString(mementoStr);
         final Object viewModelPojo = getJaxbService().fromXml(viewModelClass, xmlStr);
 
         return viewModelPojo;
@@ -49,7 +49,7 @@ public class RecreatableObjectFacetForXmlRootElementAnnotation extends Recreatab
     public String memento(final Object pojo) {
 
         final String xml = getJaxbService().toXml(pojo);
-        final String encoded = getUrlEncodingService().encode(xml);
+        final String encoded = getUrlEncodingService().encodeString(xml);
 
         return encoded;
     }
