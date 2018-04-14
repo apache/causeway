@@ -20,7 +20,9 @@
 package org.apache.isis.applib.internal.collections;
 
 import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.BinaryOperator;
@@ -37,57 +39,38 @@ import org.apache.isis.applib.internal.base._Casts;
  * Collector for Arrays.
  *
  */
-class _Array_Collector<T> implements Collector<T, _Array_Collector.FastList<T>, T[]> {
+class _Arrays_CollectorUnknownSize<T> implements Collector<T, List<T>, T[]> {
 	
 	private final Class<T> componentType;
-	private final int size;
 	
-	_Array_Collector(Class<T> componentType, int size) {
+	_Arrays_CollectorUnknownSize(Class<T> componentType) {
 		this.componentType = componentType;
-		this.size = size;
 	}
 
 	@Override
-	public Supplier<FastList<T>> supplier() {
-		return ()->new FastList<>(componentType, size);
+	public Supplier<List<T>> supplier() {
+		return ArrayList::new;
 	}
 
 	@Override
-	public BiConsumer<FastList<T>, T> accumulator() {
-		return FastList::add;
+	public BiConsumer<List<T>, T> accumulator() {
+		return List::add;
 	}
 
 	@Override
-	public BinaryOperator<FastList<T>> combiner() {
-		return (a,b)->a.addAll(b);
+	public BinaryOperator<List<T>> combiner() {
+		return (left, right) -> { left.addAll(right); return left; };
 	}
 
 	@Override
-	public Function<FastList<T>, T[]> finisher() {
-		return list->list.buffer;
+	public Function<List<T>, T[]> finisher() {
+		final T[] arg = _Casts.uncheckedCast(Array.newInstance(componentType, 0));
+		return list->list.toArray(arg);
 	}
 
 	@Override
 	public Set<Characteristics> characteristics() {
 		return Collections.emptySet();
-	}
-
-	// -- HELPER
-	
-	static final class FastList<T> {
-		private final T[] buffer;
-		private int offset=0;
-		
-		public FastList(Class<T> componentType, int size) {
-			this.buffer = _Casts.uncheckedCast(Array.newInstance(componentType, size));
-		}
-		public void add(T x){
-			buffer[offset++]=x;
-		}
-		public FastList<T> addAll(FastList<T> x){
-			System.arraycopy(x.buffer, 0, buffer, offset, x.offset);
-			return this;
-		}
 	}
 	
 	

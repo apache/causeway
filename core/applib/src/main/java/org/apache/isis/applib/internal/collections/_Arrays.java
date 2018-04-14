@@ -73,7 +73,7 @@ public final class _Arrays {
      */
     public static <T> Collector<T,?,T[]> toArray(final Class<T> componentType, final int length){
     	Objects.requireNonNull(componentType);
-		return new _Array_Collector<T>(componentType, length);
+		return new _Arrays_Collector<T>(componentType, length);
 	}
     
     /**
@@ -83,7 +83,7 @@ public final class _Arrays {
      */
     public static <T> Collector<T,?,T[]> toArray(final Class<T> componentType){
     	Objects.requireNonNull(componentType);
-		return new _Array_CollectorUnknownSize<T>(componentType);
+		return new _Arrays_CollectorUnknownSize<T>(componentType);
 	}
 
     // -- CONSTRUCTION
