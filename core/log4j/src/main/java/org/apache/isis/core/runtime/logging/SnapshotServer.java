@@ -69,34 +69,35 @@ public class SnapshotServer {
         fileName = prop.getProperty(prefix + "filename", "log-snapshot-");
         extension = prop.getProperty(prefix + "extension", "txt");
 
-        ServerSocket server;
-        try {
-            server = new ServerSocket(port);
+        try( final ServerSocket server = new ServerSocket(port) ) {
+        
+        	while (true) {
+                try {
+                    final Socket s = server.accept();
+
+                    LOG4J.info("receiving log from " + s.getInetAddress().getHostName());
+
+                    final BufferedReader in = new BufferedReader(new InputStreamReader(s.getInputStream(), "8859_1"));
+
+                    final String message = in.readLine();
+                    final SnapshotWriter w = new SnapshotWriter(directoryPath, fileName, extension, message);
+                    String line;
+                    while ((line = in.readLine()) != null) {
+                        w.appendLog(line);
+                    }
+                    s.close();
+
+                    in.close();
+                } catch (final IOException e) {
+                    LOG4J.error("failed to log", e);
+                }
+            }
+        	
         } catch (final IOException e) {
             LOG4J.error("failed to start server", e);
             return;
         }
 
-        while (true) {
-            try {
-                final Socket s = server.accept();
-
-                LOG4J.info("receiving log from " + s.getInetAddress().getHostName());
-
-                final BufferedReader in = new BufferedReader(new InputStreamReader(s.getInputStream(), "8859_1"));
-
-                final String message = in.readLine();
-                final SnapshotWriter w = new SnapshotWriter(directoryPath, fileName, extension, message);
-                String line;
-                while ((line = in.readLine()) != null) {
-                    w.appendLog(line);
-                }
-                s.close();
-
-                in.close();
-            } catch (final IOException e) {
-                LOG4J.error("failed to log", e);
-            }
-        }
+        
     }
 }

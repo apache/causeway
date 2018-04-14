@@ -25,17 +25,13 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
-import com.google.common.base.Objects;
-import com.google.common.collect.Sets;
-
-import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import org.apache.isis.applib.util.ObjectContracts;
+import org.apache.isis.applib.util.ObjectContracts.ObjectContract;
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
@@ -47,6 +43,10 @@ import org.apache.isis.core.commons.resource.ResourceStreamSourceChainOfResponsi
 import org.apache.isis.core.commons.resource.ResourceStreamSourceFileSystem;
 import org.apache.isis.core.runtime.optionhandler.BootPrinter;
 import org.apache.isis.core.runtime.optionhandler.OptionHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.common.collect.Sets;
 
 /**
  * Holds a mutable set of properties representing the configuration.
@@ -296,7 +296,7 @@ public final class IsisConfigurationBuilder {
 
     private boolean parseAndPrimeWith(final Options options, final List<OptionHandler> optionHandlers, final String[] args) {
         final BootPrinter printer = new BootPrinter(getClass());
-        final CommandLineParser parser = new BasicParser();
+        final CommandLineParser parser = new DefaultParser();
         try {
             final CommandLine commandLine = parser.parse(options, args);
             for (final OptionHandler optionHandler : optionHandlers) {
@@ -387,12 +387,15 @@ public final class IsisConfigurationBuilder {
         }
     }
 
+    private final static ObjectContract<IsisConfigurationBuilder> contract = 
+    		ObjectContracts.contract(IsisConfigurationBuilder.class)
+    		.thenUse("resourceStream", x->x.resourceStreamSourceChain)
+    		.thenUse("configResources", x->x.configurationResourcesFound)
+    		;
+    
     @Override
     public String toString() {
-        return Objects.toStringHelper(this)
-                .add("resourceStream", resourceStreamSourceChain)
-                .add("configResources", configurationResourcesFound)
-                .toString();
+    	return contract.toString(this);
     }
 
     

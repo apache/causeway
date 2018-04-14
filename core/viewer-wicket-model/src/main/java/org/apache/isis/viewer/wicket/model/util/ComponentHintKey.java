@@ -123,7 +123,9 @@ public class ComponentHintKey implements Serializable {
 
     public static ComponentHintKey noop() {
         return new ComponentHintKey(null, null, null, null) {
-            @Override
+			private static final long serialVersionUID = 1L;
+
+			@Override
             public String getKey() {
                 return null;
             }

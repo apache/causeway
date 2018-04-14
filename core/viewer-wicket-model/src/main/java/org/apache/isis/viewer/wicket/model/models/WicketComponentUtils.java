@@ -16,6 +16,7 @@
  */
 package org.apache.isis.viewer.wicket.model.models;
 
+import org.apache.isis.applib.internal.base._Casts;
 import org.apache.wicket.Component;
 import org.apache.wicket.Page;
 import org.apache.wicket.markup.renderStrategy.DeepChildFirstVisitor;
@@ -51,7 +52,7 @@ public class WicketComponentUtils {
             }
         });
 
-        return (T) pComponent[0];
+        return _Casts.uncheckedCast(pComponent[0]);
     }
 
 }

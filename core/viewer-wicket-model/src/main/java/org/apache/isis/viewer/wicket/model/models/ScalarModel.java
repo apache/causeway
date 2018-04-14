@@ -259,7 +259,7 @@ public class ScalarModel extends EntityModel implements LinksProvider,FormExecut
                 final PropertyMemento propertyMemento = scalarModel.getPropertyMemento();
                 final OneToOneAssociation property = propertyMemento.getProperty(scalarModel.getSpecificationLoader());
                 final BigDecimalValueFacet facet = property.getFacet(BigDecimalValueFacet.class);
-                return facet != null? facet.getLength(): null;
+                return facet != null? facet.getPrecision(): null;
             }
             
             @Override
@@ -479,7 +479,7 @@ public class ScalarModel extends EntityModel implements LinksProvider,FormExecut
                 final ActionParameterMemento parameterMemento = scalarModel.getParameterMemento();
                 final ObjectActionParameter actionParameter = parameterMemento.getActionParameter(scalarModel.getSpecificationLoader());
                 final BigDecimalValueFacet facet = actionParameter.getFacet(BigDecimalValueFacet.class);
-                return facet != null? facet.getLength(): null;
+                return facet != null? facet.getPrecision(): null;
             }
             
             @Override
@@ -810,7 +810,7 @@ public class ScalarModel extends EntityModel implements LinksProvider,FormExecut
         }
 
         if(isCollection()) {
-            final Iterable iterable = (Iterable) pojo;
+            final Iterable<?> iterable = (Iterable<?>) pojo;
             final ArrayList<ObjectAdapterMemento> listOfMementos =
                     Lists.newArrayList(FluentIterable.from(iterable)
                           .transform(ObjectAdapterMemento.Functions.fromPojo(getPersistenceSession()))

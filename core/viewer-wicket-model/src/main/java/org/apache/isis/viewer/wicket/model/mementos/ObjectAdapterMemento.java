@@ -351,7 +351,8 @@ public class ObjectAdapterMemento implements Serializable {
     /**
      * Populated only if {@link #getSort() sort} is {@link Sort#SCALAR scalar}
      */
-    private String titleHint;
+    @SuppressWarnings("unused")
+	private String titleHint;
 
     /**
      * The current value, if {@link Type#ENCODEABLE}; will be <tt>null</tt> otherwise.
@@ -391,7 +392,7 @@ public class ObjectAdapterMemento implements Serializable {
     private Memento transientMemento;
 
     /**
-     * opulated only if {@link #getSort() sort} is {@link Sort#VECTOR vector}
+     * populated only if {@link #getSort() sort} is {@link Sort#VECTOR vector}
      */
     private ArrayList<ObjectAdapterMemento> list;
 

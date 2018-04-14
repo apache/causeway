@@ -60,7 +60,8 @@ public class ExceptionRecognizerTranslate implements MethodRule {
     private void recognize(final Throwable ex) {
         final List<ExceptionRecognizer> exceptionRecognizers = getIsisSessionFactory().getServicesInjector().lookupServices(ExceptionRecognizer.class);
         for (final ExceptionRecognizer exceptionRecognizer : exceptionRecognizers) {
-            final String unused = exceptionRecognizer.recognize(ex);
+            @SuppressWarnings("unused")
+			final String unused = exceptionRecognizer.recognize(ex);
         }
     }
 
