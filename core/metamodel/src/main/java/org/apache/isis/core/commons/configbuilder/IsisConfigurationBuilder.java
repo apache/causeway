@@ -30,8 +30,7 @@ import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.apache.isis.applib.util.ObjectContracts;
-import org.apache.isis.applib.util.ObjectContracts.ObjectContract;
+import org.apache.isis.applib.util.ToString;
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
@@ -387,15 +386,15 @@ public final class IsisConfigurationBuilder {
         }
     }
 
-    private final static ObjectContract<IsisConfigurationBuilder> contract = 
-    		ObjectContracts.contract(IsisConfigurationBuilder.class)
-    		.thenUse("resourceStream", x->x.resourceStreamSourceChain)
-    		.thenUse("configResources", x->x.configurationResourcesFound)
+    private final static ToString<IsisConfigurationBuilder> toString = 
+    		ToString.<IsisConfigurationBuilder>
+    		toString("resourceStream", x->x.resourceStreamSourceChain)
+    		.thenToString("configResources", x->x.configurationResourcesFound)
     		;
     
     @Override
     public String toString() {
-    	return contract.toString(this);
+    	return toString.toString(this);
     }
 
     

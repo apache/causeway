@@ -152,7 +152,7 @@ public final class ObjectContracts {
 	
 	// -- COMPOSITION ENTRY POINTS
 	
-	public static <T, U> ObjectContract<T> contract(Class<T> objectClass) {
+	public static <T> ObjectContract<T> contract(Class<T> objectClass) {
 		return ObjectContract.empty(objectClass);
 	}
 	
