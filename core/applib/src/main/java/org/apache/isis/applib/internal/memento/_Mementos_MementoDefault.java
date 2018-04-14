@@ -67,9 +67,9 @@ class _Mementos_MementoDefault implements _Mementos.Memento {
 	}
 
 	@Override
-	public Memento set(String name, Object value) {
+	public Memento put(String name, Object value) {
 		if(value==null) {
-			return this; //no-op
+			return this; //no-op, there is no point in storing null values
 		}
 		Objects.requireNonNull(name);
 		valuesByKey.put(name, serializer.write(value));
@@ -94,11 +94,11 @@ class _Mementos_MementoDefault implements _Mementos.Memento {
 	public String asString() {
 		final ByteArrayOutputStream os = new ByteArrayOutputStream(16*1024); // 16k initial size
 		try(ObjectOutputStream oos = new ObjectOutputStream(os)){
-			oos.writeObject(valuesByKey);
+			oos.writeObject(valuesByKey); // write the entire map to the byte-buffer
 		} catch (Exception e) {
 			throw new IllegalArgumentException("failed to serialize memento", e);
 		}
-		return codec.encode(os.toByteArray());
+		return codec.encode(os.toByteArray()); // convert bytes from byte-buffer to encoded string
 	}
 
 	// -- PARSER
@@ -109,6 +109,7 @@ class _Mementos_MementoDefault implements _Mementos.Memento {
 			return null;
 		}
 		try(ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(codec.decode(str)))) {
+			// read in the entire map
 			final Map<String, Serializable> valuesByKey = _Casts.uncheckedCast(ois.readObject());
 			return new _Mementos_MementoDefault(codec, serializer, valuesByKey);
 		} catch (Exception e) {

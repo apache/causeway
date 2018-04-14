@@ -169,7 +169,7 @@ public abstract class RecreatableObjectFacetDeclarativeInitializingAbstract exte
                 if(propertyValueAdapter != null) {
                     final Object propertyValue = propertyValueAdapter.getObject();
                     
-                    memento.set(property.getId(), propertyValue);
+                    memento.put(property.getId(), propertyValue);
 
 //TODO Legacy of ...                    
 //                    if(mementoService.canSet(propertyValue)) {

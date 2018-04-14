@@ -82,25 +82,25 @@ public class MementosTest {
 	private void roundtrip(UrlEncodingService codec) {
 		final Memento memento = _Mementos.create(codec, serializingAdapter);
 
-		memento.set("someString", "a string");
-		memento.set("someStringWithDoubleSpaces", "a  string");
-		memento.set("someByte", (byte)123);
-		memento.set("someShort", (short)12345);
-		memento.set("someInt", 123456789);
-		memento.set("someLong", 1234567890123456789L);
-		memento.set("someFloat", 123.45F);
-		memento.set("someDouble", 1234567890.123456);
-		memento.set("someBooleanTrue", Boolean.TRUE);
-		memento.set("someBooleanFalse", Boolean.FALSE);
-		memento.set("someBigInteger", new BigInteger("123456789012345678901234567890"));
-		memento.set("someBigDecimal", new BigDecimal("123456789012345678901234567890.123456789"));
-		memento.set("someLocalDate", new LocalDate(2013,9,3));
-		memento.set("someJavaUtilDate", new Date(300_000_000));
+		memento.put("someString", "a string");
+		memento.put("someStringWithDoubleSpaces", "a  string");
+		memento.put("someByte", (byte)123);
+		memento.put("someShort", (short)12345);
+		memento.put("someInt", 123456789);
+		memento.put("someLong", 1234567890123456789L);
+		memento.put("someFloat", 123.45F);
+		memento.put("someDouble", 1234567890.123456);
+		memento.put("someBooleanTrue", Boolean.TRUE);
+		memento.put("someBooleanFalse", Boolean.FALSE);
+		memento.put("someBigInteger", new BigInteger("123456789012345678901234567890"));
+		memento.put("someBigDecimal", new BigDecimal("123456789012345678901234567890.123456789"));
+		memento.put("someLocalDate", new LocalDate(2013,9,3));
+		memento.put("someJavaUtilDate", new Date(300_000_000));
 
-		memento.set("someBookmark", new Bookmark("CUS", "12345"));
-		memento.set("someNullValue", null);
+		memento.put("someBookmark", new Bookmark("CUS", "12345"));
+		memento.put("someNullValue", null);
 
-		memento.set("someEnum", DOW.Wed);
+		memento.put("someEnum", DOW.Wed);
 
 		final String str = memento.asString();
 
