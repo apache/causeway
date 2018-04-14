@@ -172,9 +172,11 @@
         
         <javaee.version>7.0</javaee.version>
 
+		<!-- XML libraries ... no longer needed 			
         <dom4j.version>1.6.1</dom4j.version>
         <jdom.version>2.0.2</jdom.version>
-        <xstream.version>1.4.9</xstream.version>
+        <xstream.version>1.4.9</xstream.version>  -->
+        
         <htmlparser.version>2.1</htmlparser.version>
 
         <junit.version>4.12</junit.version>
@@ -182,16 +184,6 @@
         <jmock.version>2.6.0</jmock.version>
         <easymock.version>2.5.2</easymock.version>
         <cucumber.version>1.2.4</cucumber.version>
-
-<!--         <geronimo-jsp_2.1_spec.version>1.0.1</geronimo-jsp_2.1_spec.version> -->
-<!--         <geronimo-jta_1.1_spec.version>1.1.1</geronimo-jta_1.1_spec.version> -->
-<!--         <geronimo-jta_1.0.1B_spec.version>1.1.1</geronimo-jta_1.0.1B_spec.version> -->
-<!--         <geronimo-servlet_3.0_spec.version>1.0</geronimo-servlet_3.0_spec.version> -->
-<!--         <geronimo-annotation_1.0_spec.version>1.1.1</geronimo-annotation_1.0_spec.version> -->
-<!--         <geronimo-activation_1.1_spec.version>1.1</geronimo-activation_1.1_spec.version> -->
-<!--         <geronimo-javamail_1.4_spec.version>1.7.1</geronimo-javamail_1.4_spec.version> -->
-<!--         <geronimo-atinject_1.0_spec.version>1.0</geronimo-atinject_1.0_spec.version> -->
-<!--         <geronimo-jcdi_1.0_spec.version>1.0</geronimo-jcdi_1.0_spec.version> -->
 
         <validation-api.version>1.1.0.Final</validation-api.version>
         <transaction-api.version>1.2</transaction-api.version>
@@ -1641,23 +1633,22 @@ ${license.additional-notes}
                 <version>${javassist.version}</version>
             </dependency>
 
-
-            <!-- XML libraries -->
-            <dependency>
-                <groupId>dom4j</groupId>
-                <artifactId>dom4j</artifactId>
-                <version>${dom4j.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.jdom</groupId>
-                <artifactId>jdom</artifactId>
-                <version>${jdom.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.thoughtworks.xstream</groupId>
-                <artifactId>xstream</artifactId>
-                <version>${xstream.version}</version>
-            </dependency>
+            <!-- XML libraries ... no longer needed -->
+<!--             <dependency> -->
+<!--                 <groupId>dom4j</groupId> -->
+<!--                 <artifactId>dom4j</artifactId> -->
+<!--                 <version>${dom4j.version}</version> -->
+<!--             </dependency> -->
+<!--             <dependency> -->
+<!--                 <groupId>org.jdom</groupId> -->
+<!--                 <artifactId>jdom</artifactId> -->
+<!--                 <version>${jdom.version}</version> -->
+<!--             </dependency> -->
+<!--             <dependency> -->
+<!--                 <groupId>com.thoughtworks.xstream</groupId> -->
+<!--                 <artifactId>xstream</artifactId> -->
+<!--                 <version>${xstream.version}</version> -->
+<!--             </dependency> -->
 
 
             <!-- JSON libraries -->

@@ -98,10 +98,10 @@
 			<artifactId>isis-core-schema</artifactId>
 		</dependency>
 
-		<dependency>
-			<groupId>dom4j</groupId>
-			<artifactId>dom4j</artifactId>
-		</dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>dom4j</groupId> -->
+<!-- 			<artifactId>dom4j</artifactId> -->
+<!-- 		</dependency> -->
 
 		<dependency>
 			<groupId>org.slf4j</groupId>
