@@ -130,11 +130,10 @@ public abstract class ChoicesFacetFromBoundedAbstract
         final List<ObjectAdapter> allInstancesAdapter = getPersistenceSessionService().allMatchingQuery(query);
 
         final List<ObjectAdapter> adapters =
-                ObjectAdapter.Util.visibleAdapters(
-                    allInstancesAdapter, interactionInitiatedBy);
+                ObjectAdapter.Util.visibleAdapters(allInstancesAdapter, interactionInitiatedBy);
         
         return _NullSafe.stream(adapters)
-	        .map(ObjectAdapter.Functions.getObject())
+	        .map(ObjectAdapter.Functions.getObject()) // pojos
 	        .collect(_Arrays.toArray(Object.class, _NullSafe.size(adapters)));
     }
 

@@ -27,6 +27,7 @@ import java.util.function.Function;
 
 import javax.annotation.Nullable;
 
+import org.apache.isis.applib.internal.collections._Lists;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.hint.HintStore;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -45,7 +46,6 @@ import org.apache.isis.core.runtime.memento.Memento;
 import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 
-import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Lists;
 
 public class ObjectAdapterMemento implements Serializable {
@@ -134,11 +134,8 @@ public class ObjectAdapterMemento implements Serializable {
                     final ConcurrencyChecking concurrencyChecking, final PersistenceSession persistenceSession,
                     final SpecificationLoader specificationLoader) {
                 final List<Object> listOfPojos =
-                        Lists.newArrayList(
-                            FluentIterable.from(oam.list)
-                                           .transform(Functions.to_Pojo(persistenceSession, specificationLoader))
-                                           .toList()
-                        );
+                        _Lists.transform(oam.list, Functions.toPojo(persistenceSession, specificationLoader));
+                        
                 return ObjectAdapter.Functions.adapterForUsing(persistenceSession).apply(listOfPojos);
             }
 
@@ -678,7 +675,7 @@ public class ObjectAdapterMemento implements Serializable {
             };
         }
         
-        public static Function<? super ObjectAdapterMemento, Object> toPojo(
+        public static Function<ObjectAdapterMemento, Object> toPojo(
                 final PersistenceSession persistenceSession,
                 final SpecificationLoader specificationLoader) {
         	return input->{

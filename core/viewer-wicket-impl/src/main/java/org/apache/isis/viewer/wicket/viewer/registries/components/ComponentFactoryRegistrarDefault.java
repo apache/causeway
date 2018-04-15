@@ -80,6 +80,7 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.uuid.UuidPanelFactory
 import org.apache.isis.viewer.wicket.ui.components.scalars.value.ValuePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.valuechoices.ValueChoicesSelect2PanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.standalonecollection.StandaloneCollectionPanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.tree.TreePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.unknown.UnknownModelPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.value.StandaloneValuePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.voidreturn.VoidReturnPanelFactory;
@@ -195,6 +196,7 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
     protected void addComponentFactoriesForValue(final ComponentFactoryList componentFactories) {
     	componentFactories.add(new MarkupPanelFactory(ComponentType.VALUE));
         componentFactories.add(new StandaloneValuePanelFactory());
+        componentFactories.add(new TreePanelFactory(ComponentType.VALUE));
     }
 
     protected void addComponentFactoriesForScalar(final ComponentFactoryList componentFactories) {
@@ -245,6 +247,8 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
 
         // or for choices
         componentFactories.add(new ValueChoicesSelect2PanelFactory());
+        
+        componentFactories.add(new TreePanelFactory(ComponentType.SCALAR_NAME_AND_VALUE));
     }
 
     protected void addComponentFactoriesForEntityLink(final ComponentFactoryList componentFactories) {

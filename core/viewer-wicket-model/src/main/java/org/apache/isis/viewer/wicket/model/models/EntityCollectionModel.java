@@ -97,9 +97,8 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
 
                 final PersistenceSession persistenceSession = model.getPersistenceSession();
                 
-                final List<RootOid> rootOids = _NullSafe.stream(model.mementoList)
-                		.map(ObjectAdapterMemento.Functions.toOid())
-                		.collect(Collectors.toList());
+                final List<RootOid> rootOids =
+                		_Lists.transform(model.mementoList, ObjectAdapterMemento.Functions.toOid());
 
                 final Map<RootOid, ObjectAdapter> adaptersByOid = persistenceSession.adaptersFor(rootOids);
                 final Collection<ObjectAdapter> adapterList = adaptersByOid.values();
@@ -175,9 +174,9 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
                     Collections.sort(objectList, comparator);
                 }
 
-                final List<ObjectAdapter> adapterList = _NullSafe.stream(objectList)
-	                .map(ObjectAdapter.Functions.adapterForUsing( entityCollectionModel.getPersistenceSession() )) 
-	                .collect(Collectors.toList());
+                final List<ObjectAdapter> adapterList = 
+                		_Lists.transform(objectList, 
+                				ObjectAdapter.Functions.adapterForUsing( entityCollectionModel.getPersistenceSession() )); 
 
                 return adapterList;
             }
