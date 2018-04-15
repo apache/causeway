@@ -1,7 +1,6 @@
 package org.apache.isis.applib.tree;
 
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Stream;
 
 class TreeNode_Lazy<T> implements TreeNode<T> {
@@ -26,9 +25,10 @@ class TreeNode_Lazy<T> implements TreeNode<T> {
 	}
 
 	@Override
-	public Optional<TreeNode<T>> getParent() {
+	public TreeNode<T> getParentIfAny() {
 		return treeAdapter.parentOf(getValue())
 				.map(this::toTreeNode)
+				.orElse(null)
 				;
 	}
 

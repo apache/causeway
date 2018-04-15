@@ -29,7 +29,7 @@ class TreeNode_iteratorHierarchyUp<T> implements Iterator<TreeNode<T>> {
 	// -- HELPER
 
 	private TreeNode<T> fetchNext(TreeNode<T> current) {
-		return current.getParent().orElse(null);
+		return current.getParentIfAny();
 	}
 
 }

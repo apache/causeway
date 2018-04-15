@@ -1,12 +1,14 @@
 package org.apache.isis.applib.tree;
 
 import java.util.Iterator;
-import java.util.Optional;
 import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
+import org.apache.isis.applib.annotation.ViewModel;
+
+@ViewModel
 public interface TreeNode<T> {
 	
 	// -- VALUE
@@ -15,7 +17,7 @@ public interface TreeNode<T> {
 	
 	// -- PARENT
 	
-	public Optional<TreeNode<T>> getParent();
+	public TreeNode<T> getParentIfAny();
 	
 	// -- CHILDREN
 	
@@ -26,7 +28,7 @@ public interface TreeNode<T> {
 	// -- BASIC PREDICATES
 	
 	public default boolean isRoot() {
-		return !getParent().isPresent();
+		return getParentIfAny() == null;
 	}
 	
 	public default boolean isLeaf() {
@@ -36,7 +38,7 @@ public interface TreeNode<T> {
 	// -- CONSTRUCTION
 	
 	public static <T> TreeNode<T> of(T node, TreeAdapter<T> treeAdapter) {
-		return TreeNode_Lazy.of(node, treeAdapter);
+		return TreeNodeBean.of(node, treeAdapter);
 	}
 	
 	// -- PARENT NODE ITERATION
