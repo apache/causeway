@@ -38,7 +38,7 @@ public interface TreeNode<T> {
 	// -- CONSTRUCTION
 	
 	public static <T> TreeNode<T> of(T node, TreeAdapter<T> treeAdapter) {
-		return TreeNodeBean.of(node, treeAdapter);
+		return TreeNode_Lazy.of(node, treeAdapter);
 	}
 	
 	// -- PARENT NODE ITERATION
