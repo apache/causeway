@@ -448,7 +448,7 @@ public class IsisWicketApplication
     }
 
     protected List<Future<Object>> startBackgroundInitializationThreads() {
-        return ThreadPoolSupport.getInstance().invokeAll(_Lists.<Callable<Object>>unmodifiable(
+        return ThreadPoolSupport.getInstance().invokeAll(_Lists.<Callable<Object>>of(
         		
         		Executors.callable(this::configureWebJars),
         		Executors.callable(this::configureWicketBootstrap),

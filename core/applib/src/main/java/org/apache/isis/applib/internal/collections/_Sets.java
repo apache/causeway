@@ -54,13 +54,37 @@ public final class _Sets {
 	
 	// -- UNMODIFIABLE SET
 	
+	/**
+	 * Returns an unmodifiable set containing only the specified element.
+	 * @param element (required)
+	 * @return non null
+	 */
+	public static <T> Set<T> singleton(T element) {
+		Objects.requireNonNull(element); // don't accept null element
+		return Collections.singleton(element);
+	}
+	
+	/**
+	 * Returns an unmodifiable set containing only the specified element or 
+	 * the empty list if the element is null. 
+	 * @param element
+	 * @return non null
+	 */
+	public static <T> Set<T> singletonOrElseEmpty(@Nullable T element) {
+		return element != null ? Collections.singleton(element) : Collections.emptySet();
+	}
+
+	/**
+	 * Copies all elements into a new unmodifiable List.
+	 * @param elements
+	 * @return non null
+	 */
 	@SafeVarargs
-	public static <T> Set<T> unmodifiable(T ... elements) {
-		Objects.requireNonNull(elements); // don't accept null elements
+	public static <T> Set<T> of(T ... elements) {
+		Objects.requireNonNull(elements); // don't accept null as argument
 		if(elements.length==0) {
 			return Collections.emptySet();
 		}
-		
 		final Set<T> setPreservingOrder = newLinkedHashSet();
 		
 		Stream.of(elements)
@@ -69,6 +93,11 @@ public final class _Sets {
 		return Collections.unmodifiableSet(setPreservingOrder);
 	}
 	
+	/**
+	 * Copies all elements from iterable into a new unmodifiable Set preserving iteration order.
+	 * @param iterable
+	 * @return non null
+	 */
 	public static <T> Set<T> unmodifiable(Iterable<T> iterable) {
 		if(iterable==null) {
 			return Collections.emptySet();

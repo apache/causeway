@@ -62,22 +62,22 @@ public class Module_Util_transitiveDependenciesOf_Test {
         }
         @Override
         public Set<Class<?>> getAdditionalModules() {
-            return _Sets.<Class<?>>unmodifiable(ModuleP.class);
+            return _Sets.<Class<?>>of(ModuleP.class);
         }
     };
     final Module moduleD = new ModuleImpl("D") {
         @Override public Set<Module> getDependencies() {
-            return _Sets.unmodifiable(moduleE);
+            return _Sets.of(moduleE);
         }
     };
 
     final Module moduleC = new ModuleImpl("C") {
         @Override public Set<Module> getDependencies() {
-            return _Sets.unmodifiable(moduleE, moduleD);
+            return _Sets.of(moduleE, moduleD);
         }
         @Override
         public Set<Class<?>> getAdditionalModules() {
-            return _Sets.unmodifiable(ModuleQ.class, ModuleR.class);
+            return _Sets.of(ModuleQ.class, ModuleR.class);
         }
         {
             withAdditionalServices(ServiceY.class, ServiceZ.class);
@@ -85,29 +85,29 @@ public class Module_Util_transitiveDependenciesOf_Test {
     };
     final Module moduleB = new ModuleImpl("B") {
         @Override public Set<Module> getDependencies() {
-            return _Sets.unmodifiable(moduleF, moduleC);
+            return _Sets.of(moduleF, moduleC);
         }
     };
     final Module moduleA = new ModuleImpl("A") {
         @Override public Set<Module> getDependencies() {
-            return _Sets.unmodifiable(moduleE, moduleC);
+            return _Sets.of(moduleE, moduleC);
         }
     };
 
     final Module moduleG = new ModuleImpl("G") {
         @Override public Set<Module> getDependencies() {
-            return _Sets.unmodifiable(moduleH);
+            return _Sets.of(moduleH);
         }
     };
     final Module moduleH = new ModuleImpl("H") {
         @Override public Set<Module> getDependencies() {
-            return _Sets.unmodifiable(moduleI);
+            return _Sets.of(moduleI);
         }
     };
 
     final Module moduleI = new ModuleImpl("I") {
         @Override public Set<Module> getDependencies() {
-            return _Sets.unmodifiable(moduleG);
+            return _Sets.of(moduleG);
         }
     };
 
@@ -132,16 +132,16 @@ public class Module_Util_transitiveDependenciesOf_Test {
         assertTransitiveDependencies(
                 moduleE, Arrays.asList(moduleE));
         assertTransitiveDependenciesAsClass(
-                moduleE, _Lists.<Class<?>>unmodifiable(ModuleP.class));
+                moduleE, _Lists.<Class<?>>of(ModuleP.class));
         assertTransitiveServices(
-                moduleE, _Lists.<Class<?>>unmodifiable(ServiceX.class));
+                moduleE, _Lists.<Class<?>>of(ServiceX.class));
 
         assertTransitiveDependencies(
                 moduleD, Arrays.asList(moduleE, moduleD));
         assertTransitiveDependenciesAsClass(
-                moduleD, _Lists.<Class<?>>unmodifiable(ModuleP.class));
+                moduleD, _Lists.<Class<?>>of(ModuleP.class));
         assertTransitiveServices(
-                moduleD, _Lists.<Class<?>>unmodifiable(ServiceX.class));
+                moduleD, _Lists.<Class<?>>of(ServiceX.class));
 
         assertTransitiveDependencies(
                 moduleC, Arrays.asList(moduleE, moduleD, moduleC));

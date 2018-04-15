@@ -88,7 +88,7 @@ public class ConfigurationProperty implements Comparable<ConfigurationProperty> 
     public static class Util {
 
         private static final List<String> PROTECTED_KEYS =
-        		_Lists.unmodifiable("password", "apiKey", "authToken");
+        		_Lists.of("password", "apiKey", "authToken");
                 
 
         private Util(){}

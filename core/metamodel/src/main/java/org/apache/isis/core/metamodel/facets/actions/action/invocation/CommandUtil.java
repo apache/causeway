@@ -19,12 +19,10 @@
 
 package org.apache.isis.core.metamodel.facets.actions.action.invocation;
 
-import java.util.Arrays;
 import java.util.List;
 
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
-
+import org.apache.isis.applib.internal.base._NullSafe;
+import org.apache.isis.applib.internal.collections._Arrays;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -103,13 +101,10 @@ public class CommandUtil {
         buf.append(name).append(": ").append(titleOf).append("\n");
     }
 
-
     public static ObjectAdapter[] adaptersFor(final Object[] args, final AdapterManager adapterManager) {
-        List<Object> argList = Arrays.asList(args);
-        Iterable<ObjectAdapter> adapterList = 
-                Iterables.transform(
-                        argList, ObjectAdapter.Functions.adapterForUsing(adapterManager));
-        return Lists.newArrayList(adapterList).toArray(new ObjectAdapter[]{});
+    	return _NullSafe.stream(args)
+	    	.map(ObjectAdapter.Functions.adapterForUsing(adapterManager))
+	    	.collect(_Arrays.toArray(ObjectAdapter.class, _NullSafe.size(args)));
     }
 
 }

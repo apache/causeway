@@ -39,15 +39,16 @@ package org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers;
 import java.util.Collection;
 import java.util.List;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Collections2;
-import com.google.common.collect.Lists;
-
+import org.apache.isis.applib.internal.collections._Lists;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+
+import com.google.common.base.Function;
+import com.google.common.collect.Collections2;
+import com.google.common.collect.Lists;
 
 public class ObjectAdapterMementoProviderForReferenceParamOrPropertyAutoComplete
         extends ObjectAdapterMementoProviderAbstract {
@@ -67,9 +68,7 @@ public class ObjectAdapterMementoProviderForReferenceParamOrPropertyAutoComplete
                     getScalarModel().getAutoComplete(term, getAuthenticationSession(), getDeploymentCategory());
             autoCompleteChoices.addAll(autoCompleteAdapters);
         }
-        // take a copy otherwise so is eagerly evaluated and memento objects correctly built
-        return Lists.newArrayList(
-                Lists.transform(autoCompleteChoices, ObjectAdapterMemento.Functions.fromAdapter()));
+        return _Lists.transform(autoCompleteChoices, ObjectAdapterMemento.Functions.fromAdapter());
     }
 
     @Override

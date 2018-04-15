@@ -178,6 +178,22 @@ public final class _NullSafe {
 	public static boolean isEmpty(short[] array){ return array==null || array.length == 0;}
 	public static <T> boolean isEmpty(T[] array){ return array==null || array.length == 0;}
 
+	// -- SIZE/LENGTH CHECKS
+	
+	public static int size(String x){ return x!=null ? x.length() : 0; }
+	public static int size(Collection<?> x){ return x!=null ? x.size() : 0; }
+	public static int size(Map<?,?> x){ return x!=null ? x.size() : 0; }
+	public static int size(boolean[] array){ return array!=null ? array.length : 0; }
+	public static int size(byte[] array){ return array!=null ? array.length : 0; }
+	public static int size(char[] array){ return array!=null ? array.length : 0; }
+	public static int size(double[] array){ return array!=null ? array.length : 0; }
+	public static int size(float[] array){ return array!=null ? array.length : 0; }
+	public static int size(int[] array){ return array!=null ? array.length : 0; }
+	public static int size(long[] array){ return array!=null ? array.length : 0; }
+	public static int size(short[] array){ return array!=null ? array.length : 0; }
+	public static <T> int size(T[] array){ return array!=null ? array.length : 0; }
+
+	
 	// -- MAP
 	
 	/**

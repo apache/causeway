@@ -21,12 +21,12 @@ package org.apache.isis.core.metamodel.facets.object.choices;
 
 import java.util.List;
 
-import com.google.common.collect.Lists;
-
-import org.apache.isis.applib.services.wrapper.events.UsabilityEvent;
-import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
+import org.apache.isis.applib.internal.base._NullSafe;
+import org.apache.isis.applib.internal.collections._Arrays;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.query.QueryFindAllInstances;
+import org.apache.isis.applib.services.wrapper.events.UsabilityEvent;
+import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -35,6 +35,7 @@ import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.object.domainobject.DomainObjectAnnotationFacetFactoryTest.Bounded;
 import org.apache.isis.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
 import org.apache.isis.core.metamodel.interactions.DisablingInteractionAdvisor;
 import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
@@ -131,9 +132,10 @@ public abstract class ChoicesFacetFromBoundedAbstract
         final List<ObjectAdapter> adapters =
                 ObjectAdapter.Util.visibleAdapters(
                     allInstancesAdapter, interactionInitiatedBy);
-
-        final List<Object> pojos = Lists.transform(adapters, ObjectAdapter.Functions.getObject());
-        return Lists.newArrayList(pojos).toArray();
+        
+        return _NullSafe.stream(adapters)
+	        .map(ObjectAdapter.Functions.getObject())
+	        .collect(_Arrays.toArray(Object.class, _NullSafe.size(adapters)));
     }
 
     protected DeploymentCategory getDeploymentCategory() {

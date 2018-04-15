@@ -61,13 +61,33 @@ public final class _Lists {
 	// -- UNMODIFIABLE LIST
 	
 	/**
+	 * Returns an unmodifiable list containing only the specified element.
+	 * @param element (required)
+	 * @return non null
+	 */
+	public static <T> List<T> singleton(T element) {
+		Objects.requireNonNull(element); // don't accept null element
+		return Collections.singletonList(element);
+	}
+	
+	/**
+	 * Returns an unmodifiable list containing only the specified element or 
+	 * the empty list if the element is null. 
+	 * @param element
+	 * @return non null
+	 */
+	public static <T> List<T> singletonOrElseEmpty(@Nullable T element) {
+		return element != null ? Collections.singletonList(element) : Collections.emptyList();
+	}
+
+	/**
 	 * Copies all elements into a new unmodifiable List.
 	 * @param elements
 	 * @return non null
 	 */
 	@SafeVarargs
-	public static <T> List<T> unmodifiable(T ... elements) {
-		Objects.requireNonNull(elements); // don't accept null elements
+	public static <T> List<T> of(T ... elements) {
+		Objects.requireNonNull(elements); // don't accept null as argument
 		if(elements.length==0) {
 			return Collections.emptyList();
 		}
@@ -79,7 +99,7 @@ public final class _Lists {
 	 * @param iterable
 	 * @return non null
 	 */
-	public static <T> List<T> unmodifiable(Iterable<T> iterable) {
+	public static <T> List<T> unmodifiable(@Nullable Iterable<T> iterable) {
 		if(iterable==null) {
 			return Collections.emptyList();
 		}

@@ -26,7 +26,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.Callable;
 import java.util.function.Consumer;
 
 import org.apache.isis.applib.NonRecoverableException;
@@ -57,7 +56,6 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facets.CollectionUtils;
 import org.apache.isis.core.metamodel.facets.DomainEventHelper;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
@@ -74,7 +72,6 @@ import org.apache.isis.core.metamodel.services.publishing.PublishingServiceInter
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.specloader.ReflectiveActionException;
 import org.apache.isis.core.metamodel.specloader.specimpl.MixedInMember2;
 import org.apache.isis.core.runtime.system.transaction.TransactionalClosure;
 import org.apache.isis.schema.ixn.v1.ActionInvocationDto;
@@ -88,7 +85,8 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
         extends ActionInvocationFacetAbstract
         implements ImperativeFacet {
 
-    private final static Logger LOG = LoggerFactory.getLogger(ActionInvocationFacetForDomainEventAbstract.class);
+    @SuppressWarnings("unused")
+	private final static Logger LOG = LoggerFactory.getLogger(ActionInvocationFacetForDomainEventAbstract.class);
 
     private final Method method;
     private final ObjectSpecification onType;
@@ -504,7 +502,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
                             interactionInitiatedBy);
             final Object visibleObjects =
                     CollectionUtils.copyOf(
-                            Lists.transform(visibleAdapters, ObjectAdapter.Functions.getObject()),
+                            Lists.transform(visibleAdapters, ObjectAdapter.Functions.get_Object()),
                             method.getReturnType());
             if (visibleObjects != null) {
                 return getPersistenceSessionServiceInternal().adapterFor(visibleObjects);

@@ -52,7 +52,7 @@ public class LogonFixture implements InstallableFixture {
      */
     @Deprecated
     public LogonFixture(final String username, final String... roles) {
-        this(username, _Lists.unmodifiable(roles));
+        this(username, _Lists.of(roles));
     }
 
     /**

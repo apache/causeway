@@ -23,8 +23,7 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 
-import com.google.common.collect.Lists;
-
+import org.apache.isis.applib.internal.collections._Lists;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -87,7 +86,7 @@ public class CollectionAccessorFacetViaAccessor
                             interactionInitiatedBy);
             final Object visibleObjects =
                     CollectionUtils.copyOf(
-                            Lists.transform(visibleAdapters, ObjectAdapter.Functions.getObject()),
+                            _Lists.transform(visibleAdapters, ObjectAdapter.Functions.getObject()),
                             method.getReturnType());
             if (visibleObjects != null) {
                 return visibleObjects;

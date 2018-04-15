@@ -201,7 +201,10 @@ public class MetaModelServiceDefault implements MetaModelService {
             return Sort.UNKNOWN;
         }
         throw new IllegalArgumentException(String.format(
-                "Unable to determine what sort of domain object is '%s'", objectSpec.getFullIdentifier()));
+                "Unable to determine what sort of domain object this is: '%s'. Originating domainType: '%s'", 
+                objectSpec.getFullIdentifier(),
+                domainType.getName()
+        		));
     }
 
     @Override

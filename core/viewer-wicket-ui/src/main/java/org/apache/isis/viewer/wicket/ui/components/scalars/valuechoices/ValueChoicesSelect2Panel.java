@@ -18,17 +18,7 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.valuechoices;
 
 import java.util.List;
 
-import com.google.common.collect.Lists;
-
-import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.Component;
-import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.FormComponent;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
-import org.wicketstuff.select2.ChoiceProvider;
-
+import org.apache.isis.applib.internal.collections._Lists;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
@@ -37,6 +27,14 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.PanelWithChoices;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelSelect2Abstract;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ObjectAdapterMementoProviderForValueChoices;
+import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.FormComponent;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
+import org.wicketstuff.select2.ChoiceProvider;
 
 public class ValueChoicesSelect2Panel extends ScalarPanelSelect2Abstract implements PanelWithChoices {
 
@@ -75,8 +73,7 @@ public class ValueChoicesSelect2Panel extends ScalarPanelSelect2Abstract impleme
         final List<ObjectAdapter> choices =
                 scalarModel.getChoices(argumentsIfAvailable, getAuthenticationSession(), getDeploymentCategory());
         
-        // take a copy otherwise is only lazily evaluated
-        return Lists.newArrayList(Lists.transform(choices, ObjectAdapterMemento.Functions.fromAdapter()));
+        return _Lists.transform(choices, ObjectAdapterMemento.Functions.fromAdapter());
     }
 
     // ///////////////////////////////////////////////////////////////////

@@ -39,10 +39,7 @@ package org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers;
 import java.util.Collection;
 import java.util.List;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Collections2;
-import com.google.common.collect.Lists;
-
+import org.apache.isis.applib.internal.collections._Lists;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -51,6 +48,10 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+
+import com.google.common.base.Function;
+import com.google.common.collect.Collections2;
+import com.google.common.collect.Lists;
 
 public class ObjectAdapterMementoProviderForReferenceObjectAutoComplete
         extends ObjectAdapterMementoProviderAbstract {
@@ -70,9 +71,7 @@ public class ObjectAdapterMementoProviderForReferenceObjectAutoComplete
         final List<ObjectAdapter> autoCompleteAdapters =
                 autoCompleteFacet.execute(term,
                         InteractionInitiatedBy.USER);
-        // take a copy otherwise so is eagerly evaluated and memento objects correctly built
-        return Lists.newArrayList(
-                Lists.transform(autoCompleteAdapters, ObjectAdapterMemento.Functions.fromAdapter()));
+        return _Lists.transform(autoCompleteAdapters, ObjectAdapterMemento.Functions.fromAdapter());
     }
 
     @Override

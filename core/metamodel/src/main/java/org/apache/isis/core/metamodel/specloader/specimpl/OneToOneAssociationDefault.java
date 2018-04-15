@@ -21,10 +21,10 @@ package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import java.util.Collections;
 import java.util.List;
-
-import com.google.common.collect.Lists;
+import java.util.stream.Collectors;
 
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.internal.base._NullSafe;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.util.ToString;
@@ -45,7 +45,6 @@ import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyCle
 import org.apache.isis.core.metamodel.facets.properties.update.init.PropertyInitializationFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
-import org.apache.isis.core.metamodel.interactions.PropertyAccessContext;
 import org.apache.isis.core.metamodel.interactions.PropertyModifyContext;
 import org.apache.isis.core.metamodel.interactions.PropertyUsabilityContext;
 import org.apache.isis.core.metamodel.interactions.PropertyVisibilityContext;
@@ -153,14 +152,15 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
     }
 
     // REVIEW: UNUSED
-    private PropertyAccessContext createAccessInteractionContext(
-            final ObjectAdapter ownerAdapter,
-            final InteractionInitiatedBy interactionInitiatedBy) {
-        final ObjectAdapter referencedAdapter = get(ownerAdapter, interactionInitiatedBy);
-        return new PropertyAccessContext(
-                ownerAdapter, getIdentifier(), referencedAdapter, interactionInitiatedBy
-        );
-    }
+//TODO [ahuber] remove?    
+//    private PropertyAccessContext createAccessInteractionContext(
+//            final ObjectAdapter ownerAdapter,
+//            final InteractionInitiatedBy interactionInitiatedBy) {
+//        final ObjectAdapter referencedAdapter = get(ownerAdapter, interactionInitiatedBy);
+//        return new PropertyAccessContext(
+//                ownerAdapter, getIdentifier(), referencedAdapter, interactionInitiatedBy
+//        );
+//    }
 
     @Override
     public boolean isEmpty(final ObjectAdapter ownerAdapter, final InteractionInitiatedBy interactionInitiatedBy) {
@@ -284,8 +284,9 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
                 ownerAdapter,
                 getSpecificationLoader(),
                 interactionInitiatedBy);
-        List<ObjectAdapter> adapters = Lists.transform(
-                Lists.newArrayList(pojoOptions), ObjectAdapter.Functions.adapterForUsing(getPersistenceSessionService()));
+        List<ObjectAdapter> adapters = _NullSafe.stream(pojoOptions)
+        		.map( ObjectAdapter.Functions.adapterForUsing(getPersistenceSessionService()) )
+        		.collect(Collectors.toList());
         return adapters.toArray(new ObjectAdapter[]{});
     }
 

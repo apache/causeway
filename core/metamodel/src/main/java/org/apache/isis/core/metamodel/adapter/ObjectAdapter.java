@@ -22,11 +22,10 @@ package org.apache.isis.core.metamodel.adapter;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
-
-import com.google.common.base.Function;
-import com.google.common.collect.Lists;
+import java.util.function.Function;
 
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.internal.collections._Lists;
 import org.apache.isis.core.commons.lang.ClassExtensions;
 import org.apache.isis.core.commons.lang.ListExtensions;
 import org.apache.isis.core.commons.lang.MethodExtensions;
@@ -221,7 +220,7 @@ public interface ObjectAdapter extends Instance {
         }
 
         public static List<Object> unwrap(final List<ObjectAdapter> adapters) {
-            List<Object> objects = Lists.newArrayList();
+            List<Object> objects = _Lists.newArrayList();
             for (ObjectAdapter adapter : adapters) {
                 objects.add(unwrap(adapter));
             }
@@ -310,7 +309,7 @@ public interface ObjectAdapter extends Instance {
         public static List<ObjectAdapter> visibleAdapters(
                 final Iterable<ObjectAdapter> objectAdapters,
                 final InteractionInitiatedBy interactionInitiatedBy) {
-            final List<ObjectAdapter> adapters = Lists.newArrayList();
+            final List<ObjectAdapter> adapters = _Lists.newArrayList();
             for (final ObjectAdapter adapter : objectAdapters) {
                 final boolean visible = isVisible(adapter,
                         interactionInitiatedBy);
@@ -413,7 +412,7 @@ public interface ObjectAdapter extends Instance {
          * </ul>
          */
         public static Object invokeAutofit(final Method method, final ObjectAdapter target, List<ObjectAdapter> argumentsIfAvailable, final AdapterManager adapterManager) {
-            final List<ObjectAdapter> args = Lists.newArrayList();
+            final List<ObjectAdapter> args = _Lists.newArrayList();
             if(argumentsIfAvailable != null) {
                 args.addAll(argumentsIfAvailable);
             }
@@ -475,7 +474,12 @@ public interface ObjectAdapter extends Instance {
         private Functions(){}
 
         public static Function<ObjectAdapter, Object> getObject() {
-            return new Function<ObjectAdapter, Object>() {
+        	return Util::unwrap;
+        }
+        
+        @Deprecated
+        public static com.google.common.base.Function<ObjectAdapter, Object> get_Object() {
+            return new com.google.common.base.Function<ObjectAdapter, Object>() {
                 @Override
                 public Object apply(ObjectAdapter input) {
                     return Util.unwrap(input);
@@ -484,7 +488,12 @@ public interface ObjectAdapter extends Instance {
         }
         
         public static Function<Object, ObjectAdapter> adapterForUsing(final AdapterManager adapterManager) {
-            return new Function<Object, ObjectAdapter>() {
+        	return adapterManager::adapterFor;
+        }
+        
+        @Deprecated
+        public static com.google.common.base.Function<Object, ObjectAdapter> adapter_ForUsing(final AdapterManager adapterManager) {
+            return new com.google.common.base.Function<Object, ObjectAdapter>() {
                 @Override
                 public ObjectAdapter apply(final Object pojo) {
                     return adapterManager.adapterFor(pojo);

@@ -21,20 +21,7 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.reference;
 
 import java.util.List;
 
-import com.google.common.collect.Lists;
-
-import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.Component;
-import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.FormComponent;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
-import org.wicketstuff.select2.ChoiceProvider;
-import org.wicketstuff.select2.Settings;
-
+import org.apache.isis.applib.internal.collections._Lists;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
@@ -57,6 +44,19 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.Obj
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ObjectAdapterMementoProviderForReferenceParamOrPropertyAutoComplete;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
+import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.FormComponent;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
+import org.wicketstuff.select2.ChoiceProvider;
+import org.wicketstuff.select2.Settings;
+
+import com.google.common.collect.Lists;
 
 /**
  * Panel for rendering scalars which of are of reference type (as opposed to
@@ -73,7 +73,8 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract implements PanelW
     /**
      * Determines the behaviour of dependent choices for the dependent; either to autoselect the first available choice, or to select none.
      */
-    private static final String KEY_DISABLE_DEPENDENT_CHOICE_AUTO_SELECTION = "isis.viewer.wicket.disableDependentChoiceAutoSelection";
+    //TODO [ahuber] not used, remove?
+    //private static final String KEY_DISABLE_DEPENDENT_CHOICE_AUTO_SELECTION = "isis.viewer.wicket.disableDependentChoiceAutoSelection";
 
     private EntityLinkSelect2Panel entityLink;
 
@@ -171,7 +172,9 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract implements PanelW
     protected IModel<String> obtainInlinePromptModel() {
         final IModel<ObjectAdapterMemento> model = select2.getModel();
         return new IModel<String>() {
-            @Override
+			private static final long serialVersionUID = 1L;
+
+			@Override
             public String getObject() {
                 final ObjectAdapterMemento oam = model.getObject();
                 if(oam == null) {
@@ -350,8 +353,7 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract implements PanelW
         if(getModel().hasChoices()) {
             choices.addAll(getModel().getChoices(argsIfAvailable, getAuthenticationSession(), getDeploymentCategory()));
         }
-        // take a copy (otherwise is only lazily evaluated)
-        return Lists.newArrayList(Lists.transform(choices, ObjectAdapterMemento.Functions.fromAdapter()));
+        return _Lists.transform(choices, ObjectAdapterMemento.Functions.fromAdapter());
     }
 
     // called by setProviderAndCurrAndPending
@@ -368,12 +370,13 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract implements PanelW
 
         }
     }
-
-    private boolean autoSelect() {
-        final boolean disableAutoSelect = getConfiguration().getBoolean(KEY_DISABLE_DEPENDENT_CHOICE_AUTO_SELECTION, false);
-        final boolean autoSelect = !disableAutoSelect;
-        return autoSelect;
-    }
+    
+//TODO [ahuber ]not used, remove? 
+//    private boolean autoSelect() {
+//        final boolean disableAutoSelect = getConfiguration().getBoolean(KEY_DISABLE_DEPENDENT_CHOICE_AUTO_SELECTION, false);
+//        final boolean autoSelect = !disableAutoSelect;
+//        return autoSelect;
+//    }
 
     // //////////////////////////////////////
     // getInput, convertInput

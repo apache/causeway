@@ -37,7 +37,7 @@ public class ObjectContractsLegacyTest_equals_and_hashCode extends ValueTypeCont
 
     @Override
     protected List<InvoiceItem3> getObjectsWithSameValue() {
-        return _Lists.unmodifiable(
+        return _Lists.of(
                     InvoiceItem3.newInvoiceItem(inv123, "A", new Integer(1)),
                     InvoiceItem3.newInvoiceItem(inv123, "A", new Integer(1))
                 );
@@ -45,7 +45,7 @@ public class ObjectContractsLegacyTest_equals_and_hashCode extends ValueTypeCont
 
     @Override
     protected List<InvoiceItem3> getObjectsWithDifferentValue() {
-        return _Lists.unmodifiable(
+        return _Lists.of(
                     InvoiceItem3.newInvoiceItem(null, "A", new Integer(2)),
                     InvoiceItem3.newInvoiceItem(inv456, "A", new Integer(2)),
                     InvoiceItem3.newInvoiceItem(inv123, null, new Integer(1)),

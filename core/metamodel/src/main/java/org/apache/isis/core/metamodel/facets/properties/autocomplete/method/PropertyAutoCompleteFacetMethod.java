@@ -26,6 +26,7 @@ import java.util.List;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
+import org.apache.isis.applib.internal.collections._Lists;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -98,7 +99,6 @@ public class PropertyAutoCompleteFacetMethod extends PropertyAutoCompleteFacetAb
         final AuthenticationSession authenticationSession = getAuthenticationSession();
         final DeploymentCategory deploymentCategory = getDeploymentCategory();
 
-
         final Object collectionOrArray = ObjectAdapter.InvokeUtils.invoke(method, owningAdapter, searchArg);
         if (collectionOrArray == null) {
             return null;
@@ -113,8 +113,8 @@ public class PropertyAutoCompleteFacetMethod extends PropertyAutoCompleteFacetAb
                 ObjectAdapter.Util.visibleAdapters(
                         collectionAdapter,
                         interactionInitiatedBy);
-        final List<Object> filteredObjects = Lists.newArrayList(
-                Iterables.transform(visibleAdapters, ObjectAdapter.Functions.getObject()));
+        final List<Object> filteredObjects = 
+        		_Lists.transform(visibleAdapters, ObjectAdapter.Functions.getObject());
 
         final ObjectSpecification propertySpec = getSpecification(propertyType);
         return CollectionUtils.getCollectionAsObjectArray(filteredObjects, propertySpec, getAdapterManager());

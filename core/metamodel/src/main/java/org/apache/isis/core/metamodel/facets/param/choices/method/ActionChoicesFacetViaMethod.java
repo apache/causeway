@@ -23,9 +23,7 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
-
+import org.apache.isis.applib.internal.collections._Lists;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -33,12 +31,12 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.CollectionUtils;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionChoicesFacetAbstract;
 import org.apache.isis.core.metamodel.spec.DomainModelException;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.metamodel.facets.CollectionUtils;
 
 public class ActionChoicesFacetViaMethod extends ActionChoicesFacetAbstract implements ImperativeFacet {
 
@@ -118,8 +116,8 @@ public class ActionChoicesFacetViaMethod extends ActionChoicesFacetAbstract impl
                 ObjectAdapter.Util.visibleAdapters(
                         collectionAdapter,
                         interactionInitiatedBy);
-        final List<Object> filteredObjects = Lists.newArrayList(
-                Iterables.transform(visibleAdapters, ObjectAdapter.Functions.getObject()));
+        final List<Object> filteredObjects = 
+        		_Lists.transform(visibleAdapters, ObjectAdapter.Functions.getObject());
 
         final ObjectSpecification parameterSpec = getSpecification(parameterType);
         return CollectionUtils.getCollectionAsObjectArray(filteredObjects, parameterSpec, getAdapterManager());

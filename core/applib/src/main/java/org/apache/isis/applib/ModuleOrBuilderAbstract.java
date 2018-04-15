@@ -58,7 +58,7 @@ abstract class ModuleOrBuilderAbstract<B extends ModuleOrBuilderAbstract<B>> {
     }
 
     public B withAdditionalDependencies(final Module... dependencies) {
-        return withAdditionalDependencies(_Sets.unmodifiable(dependencies));
+        return withAdditionalDependencies(_Sets.of(dependencies));
     }
 
     void withTransitiveFrom(final Module module) {

@@ -23,12 +23,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Function;
 
 import javax.annotation.Nullable;
-
-import com.google.common.base.Function;
-import com.google.common.collect.FluentIterable;
-import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.hint.HintStore;
@@ -47,6 +44,9 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.memento.Memento;
 import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+
+import com.google.common.collect.FluentIterable;
+import com.google.common.collect.Lists;
 
 public class ObjectAdapterMemento implements Serializable {
 
@@ -136,7 +136,7 @@ public class ObjectAdapterMemento implements Serializable {
                 final List<Object> listOfPojos =
                         Lists.newArrayList(
                             FluentIterable.from(oam.list)
-                                           .transform(Functions.toPojo(persistenceSession, specificationLoader))
+                                           .transform(Functions.to_Pojo(persistenceSession, specificationLoader))
                                            .toList()
                         );
                 return ObjectAdapter.Functions.adapterForUsing(persistenceSession).apply(listOfPojos);
@@ -573,25 +573,40 @@ public class ObjectAdapterMemento implements Serializable {
         }
 
         public static Function<ObjectAction, ActionMemento> fromAction() {
-            return new Function<ObjectAction, ActionMemento>() {
+        	return ActionMemento::new;
+        }
+        
+        @Deprecated
+        public static com.google.common.base.Function<ObjectAction, ActionMemento> from_Action() {
+            return new com.google.common.base.Function<ObjectAction, ActionMemento>() {
                 @Override
                 public ActionMemento apply(final ObjectAction from) {
                     return new ActionMemento(from);
                 }
             };
         }
-
+        
         public static Function<ObjectActionParameter, ActionParameterMemento> fromActionParameter() {
-            return new Function<ObjectActionParameter, ActionParameterMemento>() {
+        	return ActionParameterMemento::new;
+        }
+
+        @Deprecated
+        public static com.google.common.base.Function<ObjectActionParameter, ActionParameterMemento> from_ActionParameter() {
+            return new com.google.common.base.Function<ObjectActionParameter, ActionParameterMemento>() {
                 @Override
                 public ActionParameterMemento apply(final ObjectActionParameter from) {
                     return new ActionParameterMemento(from);
                 }
             };
         }
-
+        
         public static Function<Object, ObjectAdapterMemento> fromPojo(final AdapterManager adapterManager) {
-            return new Function<Object, ObjectAdapterMemento>() {
+        	return pojo->ObjectAdapterMemento.createOrNull( adapterManager.adapterFor(pojo) );
+        }
+        
+        @Deprecated
+        public static com.google.common.base.Function<Object, ObjectAdapterMemento> from_Pojo(final AdapterManager adapterManager) {
+            return new com.google.common.base.Function<Object, ObjectAdapterMemento>() {
                 @Override
                 public ObjectAdapterMemento apply(final Object pojo) {
                     final ObjectAdapter adapter = adapterManager.adapterFor(pojo);
@@ -599,22 +614,42 @@ public class ObjectAdapterMemento implements Serializable {
                 }
             };
         }
-
+        
         public static Function<ObjectAdapter, ObjectAdapterMemento> fromAdapter() {
-            return new Function<ObjectAdapter, ObjectAdapterMemento>() {
+        	return ObjectAdapterMemento::createOrNull;
+        }
+
+        @Deprecated
+        public static com.google.common.base.Function<ObjectAdapter, ObjectAdapterMemento> from_Adapter() {
+            return new com.google.common.base.Function<ObjectAdapter, ObjectAdapterMemento>() {
                 @Override
                 public ObjectAdapterMemento apply(final ObjectAdapter adapter) {
                     return ObjectAdapterMemento.createOrNull(adapter);
                 }
             };
         }
-
-
+        
         public static Function<ObjectAdapterMemento, ObjectAdapter> fromMemento(
                 final ConcurrencyChecking concurrencyChecking,
                 final PersistenceSession persistenceSession,
                 final SpecificationLoader specificationLoader) {
-            return new Function<ObjectAdapterMemento, ObjectAdapter>() {
+        	
+        	return memento->{
+        		 try {
+                     return memento.getObjectAdapter(concurrencyChecking, persistenceSession, specificationLoader);
+                 } catch (ObjectNotFoundException e) {
+                     // this can happen if for example the object is not visible (due to the security tenanted facet)
+                     return null;
+                 }
+        	};
+    	}
+
+        @Deprecated        
+        public static com.google.common.base.Function<ObjectAdapterMemento, ObjectAdapter> from_Memento(
+                final ConcurrencyChecking concurrencyChecking,
+                final PersistenceSession persistenceSession,
+                final SpecificationLoader specificationLoader) {
+            return new com.google.common.base.Function<ObjectAdapterMemento, ObjectAdapter>() {
                 @Override
                 public ObjectAdapter apply(final ObjectAdapterMemento memento) {
                     try {
@@ -626,9 +661,14 @@ public class ObjectAdapterMemento implements Serializable {
                 }
             };
         }
-
+        
         public static Function<ObjectAdapter, ObjectAdapterMemento> toMemento() {
-            return new Function<ObjectAdapter, ObjectAdapterMemento>() {
+           return ObjectAdapterMemento::createOrNull;
+        }
+
+        @Deprecated
+        public static com.google.common.base.Function<ObjectAdapter, ObjectAdapterMemento> to_Memento() {
+            return new com.google.common.base.Function<ObjectAdapter, ObjectAdapterMemento>() {
 
                 @Override
                 public ObjectAdapterMemento apply(ObjectAdapter from) {
@@ -637,11 +677,28 @@ public class ObjectAdapterMemento implements Serializable {
                 
             };
         }
-
+        
         public static Function<? super ObjectAdapterMemento, Object> toPojo(
                 final PersistenceSession persistenceSession,
                 final SpecificationLoader specificationLoader) {
-            return new Function<ObjectAdapterMemento, Object>() {
+        	return input->{
+        		 if(input == null) {
+                     return null;
+                 }
+                 final ObjectAdapter objectAdapter = input
+                         .getObjectAdapter(ConcurrencyChecking.NO_CHECK, persistenceSession, specificationLoader);
+                 if(objectAdapter == null) {
+                     return null;
+                 }
+                 return objectAdapter.getObject();
+        	}; 
+        }
+
+        @Deprecated
+        public static com.google.common.base.Function<? super ObjectAdapterMemento, Object> to_Pojo(
+                final PersistenceSession persistenceSession,
+                final SpecificationLoader specificationLoader) {
+            return new com.google.common.base.Function<ObjectAdapterMemento, Object>() {
                 @Nullable @Override public Object apply(@Nullable final ObjectAdapterMemento input) {
                     if(input == null) {
                         return null;
@@ -657,7 +714,12 @@ public class ObjectAdapterMemento implements Serializable {
         }
 
         public static Function<ObjectAdapterMemento, RootOid> toOid() {
-            return new Function<ObjectAdapterMemento, RootOid>() {
+        	return objectAdapterMemento->RootOid.create(objectAdapterMemento.asBookmark());
+        }
+        
+        @Deprecated
+        public static com.google.common.base.Function<ObjectAdapterMemento, RootOid> to_Oid() {
+            return new com.google.common.base.Function<ObjectAdapterMemento, RootOid>() {
                                 @Override
                                 public RootOid apply(final ObjectAdapterMemento objectAdapterMemento) {
                                     return RootOid.create(objectAdapterMemento.asBookmark());

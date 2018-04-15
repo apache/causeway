@@ -19,17 +19,12 @@
 package org.apache.isis.viewer.wicket.ui.components.collection.bulk;
 
 import java.util.List;
-
-import com.google.common.base.Predicate;
-import com.google.common.collect.FluentIterable;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
-
-import org.apache.wicket.markup.html.link.AbstractLink;
-import org.apache.wicket.markup.html.link.Link;
+import java.util.stream.Collectors;
 
 import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.annotation.InvokedOn;
+import org.apache.isis.applib.internal.base._NullSafe;
+import org.apache.isis.applib.internal.collections._Lists;
 import org.apache.isis.applib.services.actinvoc.ActionInvocationContext;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.Command.Executor;
@@ -57,6 +52,12 @@ import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponseType;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ObjectAdapterToggleboxColumn;
 import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.ActionLinkFactory;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
+import org.apache.wicket.markup.html.link.AbstractLink;
+import org.apache.wicket.markup.html.link.Link;
+
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 
 public final class BulkActionsLinkFactory implements ActionLinkFactory {
 
@@ -94,25 +95,19 @@ public final class BulkActionsLinkFactory implements ActionLinkFactory {
                         ConcurrencyChecking.concurrencyCheckingFor(objectAction.getSemantics());
 
                 try {
-                    final List<ObjectAdapterMemento> toggleMementosList = model.getToggleMementosList();
+                    final List<ObjectAdapter> toggledAdapters = _NullSafe.stream(model.getToggleMementosList())
+	                    .map(ObjectAdapterMemento.Functions.fromMemento(
+	                            concurrencyChecking, getPersistenceSession(), getSpecificationLoader()))
+	                    .collect(Collectors.toList());
 
-                    final List<ObjectAdapter> toggledAdapters =
-                            FluentIterable.from(toggleMementosList)
-                            .transform(
-                                    ObjectAdapterMemento.Functions.fromMemento(
-                                            concurrencyChecking, getPersistenceSession(), getSpecificationLoader()))
-                                    .toList();
-
-                    final List<Object> domainObjects = Lists.newArrayList(Iterables.transform(toggledAdapters, ObjectAdapter.Functions.getObject()));
-
+                    final List<Object> domainObjects = 
+                    		_Lists.transform(toggledAdapters, ObjectAdapter.Functions.getObject());
 
                     final ActionInvocationContext actionInvocationContext = getServicesInjector().lookupService(ActionInvocationContext.class);
                     if (actionInvocationContext != null) {
                         actionInvocationContext.setInvokedOn(InvokedOn.COLLECTION);
                         actionInvocationContext.setDomainObjects(domainObjects);
                     }
-
-
 
                     ObjectAdapter lastReturnedAdapter = null;
                     int i=0;

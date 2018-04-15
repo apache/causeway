@@ -39,10 +39,12 @@ public class JavaCollectionFacet extends CollectionFacetAbstract {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public Collection<ObjectAdapter> collection(final ObjectAdapter wrappedCollection) {
         final Collection<?> collectionOfUnderlying = collectionOfUnderlying(wrappedCollection);
-        return Collections2.transform(collectionOfUnderlying, ObjectAdapter.Functions.adapterForUsing(getAdapterManager()));
+        
+        //TODO [ahuber] java doc states, this is a live view, don't know if this is needed, or if a copy is sufficient
+        return Collections2.transform(collectionOfUnderlying, 
+        		ObjectAdapter.Functions.adapter_ForUsing(getAdapterManager()));
     }
 
     @Override

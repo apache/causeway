@@ -24,12 +24,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
-import com.google.common.collect.FluentIterable;
-import com.google.common.collect.Lists;
+import java.util.stream.Collectors;
 
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.internal.base._NullSafe;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -60,6 +59,8 @@ import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
 import org.apache.isis.viewer.wicket.model.mementos.SpecUtils;
+
+import com.google.common.collect.Lists;
 
 /**
  * Represents a scalar of an entity, either a {@link Kind#PROPERTY property} or
@@ -780,12 +781,15 @@ public class ScalarModel extends EntityModel implements LinksProvider,FormExecut
 
     public boolean isScalarTypeAnyOf(final Class<?>... requiredClass) {
         final String fullName = getTypeOfSpecification().getFullIdentifier();
-        for (final Class<?> requiredCls : requiredClass) {
-            if (fullName.equals(requiredCls.getName())) {
-                return true;
-            }
-        }
-        return false;
+        return _NullSafe.stream(requiredClass)
+        		.map(Class::getName)
+        		.anyMatch(fullName::equals);
+    }
+    
+    public boolean isScalarTypeSubtypingAnyOf(final Class<?>... requiredClass) {
+        final Class<?> scalarType = getTypeOfSpecification().getCorrespondingClass();
+        return _NullSafe.stream(requiredClass)
+        		.anyMatch(scalarType::isAssignableFrom);
     }
 
     public String getObjectAsString() {
@@ -810,11 +814,9 @@ public class ScalarModel extends EntityModel implements LinksProvider,FormExecut
         }
 
         if(isCollection()) {
-            final Iterable<?> iterable = (Iterable<?>) pojo;
-            final ArrayList<ObjectAdapterMemento> listOfMementos =
-                    Lists.newArrayList(FluentIterable.from(iterable)
-                          .transform(ObjectAdapterMemento.Functions.fromPojo(getPersistenceSession()))
-                    .toList());
+            final List<ObjectAdapterMemento> listOfMementos = _NullSafe.stream((Iterable<?>) pojo)
+            		.map(ObjectAdapterMemento.Functions.fromPojo(getPersistenceSession()))
+            		.collect(Collectors.toList());
             final ObjectAdapterMemento memento =
                     ObjectAdapterMemento.createForList(listOfMementos, getTypeOfSpecification().getSpecId());
             super.setObjectMemento(memento, getPersistenceSession(), getSpecificationLoader()); // associated value

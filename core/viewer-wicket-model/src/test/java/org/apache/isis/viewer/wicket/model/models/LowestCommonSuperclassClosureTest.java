@@ -19,14 +19,13 @@
 
 package org.apache.isis.viewer.wicket.model.models;
 
+import static org.junit.Assert.assertThat;
+
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.Test;
-
 import org.apache.isis.core.commons.matchers.IsisMatchers;
-
-import static org.junit.Assert.assertThat;
+import org.junit.Test;
 
 public class LowestCommonSuperclassClosureTest {
 
@@ -52,10 +51,10 @@ public class LowestCommonSuperclassClosureTest {
     }
     
     private static void assertLowestCommonOfListIs(List<Object> list, Class<?> expected) {
-        EntityCollectionModel.LowestCommonSuperclassFinder finder = 
-        		new EntityCollectionModel.LowestCommonSuperclassFinder();
-        finder.searchThrough(list);
-        assertThat(finder.getLowestCommonSuperclass(), IsisMatchers.classEqualTo(expected));
+        Util.LowestCommonSuperclassFinder finder = 
+        		new Util.LowestCommonSuperclassFinder();
+        list.forEach(finder::collect);
+        assertThat(finder.getLowestCommonSuperclass().get(), IsisMatchers.classEqualTo(expected));
     }
 
 
