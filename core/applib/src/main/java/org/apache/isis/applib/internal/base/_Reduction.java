@@ -11,7 +11,10 @@ import javax.annotation.Nullable;
 /**
  * <h1>- internal use only -</h1>
  * <p>
- *  Provides a generic reduction class. Most intuitive example of a reduction is finding the 
+ *  Provides a generic (left-fold) reduction class. 
+ *  </p>
+ *  <p>
+ *  Most intuitive example of a reduction is finding the 
  *  minimum value from a list of values. See {@link ReductionTest} for examples.
  * </p>
  * <p>
