@@ -23,7 +23,6 @@ import java.util.ServiceLoader;
 
 import org.apache.isis.applib.internal.context._Plugin;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
-import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistrar;
 import org.apache.isis.viewer.wicket.ui.components.about.AboutPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.actioninfo.ActionInfoPanelFactory;
@@ -65,7 +64,7 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.jdkmath.JavaMathBigIn
 import org.apache.isis.viewer.wicket.ui.components.scalars.jodatime.JodaDateTimePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jodatime.JodaLocalDatePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jodatime.JodaLocalDateTimePanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupPanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupPanelFactories;
 import org.apache.isis.viewer.wicket.ui.components.scalars.primitive.BooleanPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.primitive.BytePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.primitive.CharacterPanelFactory;
@@ -193,15 +192,14 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
     }
 
     protected void addComponentFactoriesForValue(final ComponentFactoryList componentFactories) {
-    	componentFactories.add(new MarkupPanelFactory(ComponentType.VALUE));
+    	componentFactories.add(MarkupPanelFactories.standalone());
         componentFactories.add(new StandaloneValuePanelFactory());
     }
 
     protected void addComponentFactoriesForScalar(final ComponentFactoryList componentFactories) {
 
         componentFactories.add(new ReferencePanelFactory());
-
-        componentFactories.add(new MarkupPanelFactory(ComponentType.SCALAR_NAME_AND_VALUE));
+        componentFactories.add(MarkupPanelFactories.parented());
         
         componentFactories.add(new BooleanPanelFactory());
         componentFactories.add(new BytePanelFactory());
