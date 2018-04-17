@@ -19,14 +19,9 @@
 
 package org.apache.isis.core.runtime.persistence.adapter;
 
-import org.datanucleus.enhancement.Persistable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.Objects;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -45,6 +40,9 @@ import org.apache.isis.core.metamodel.spec.Specification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession5;
+import org.datanucleus.enhancement.Persistable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
 

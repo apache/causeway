@@ -33,6 +33,7 @@ import java.util.TimeZone;
 import com.google.common.collect.Maps;
 
 import org.apache.isis.applib.adapters.EncodingException;
+import org.apache.isis.applib.internal.base._Casts;
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -200,7 +201,7 @@ public abstract class ValueSemanticsProviderAbstractTemporal<T> extends ValueSem
         }
 
         try {
-            T date = (T) object;
+            T date = _Casts.uncheckedCast(object);
             final StringTokenizer st = new StringTokenizer(str.substring(1), " ");
             while (st.hasMoreTokens()) {
                 final String token = st.nextToken();

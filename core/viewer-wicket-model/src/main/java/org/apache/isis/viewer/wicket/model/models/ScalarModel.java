@@ -80,7 +80,7 @@ import com.google.common.collect.Lists;
  *     common superclass for both EntityModel and ScalarModel.
  * </p>
  */
-public class ScalarModel extends EntityModel implements LinksProvider,FormExecutorContext, ActionArgumentModel {
+public class ScalarModel extends EntityModel implements LinksProvider, FormExecutorContext, ActionArgumentModel {
 
     private static final long serialVersionUID = 1L;
 

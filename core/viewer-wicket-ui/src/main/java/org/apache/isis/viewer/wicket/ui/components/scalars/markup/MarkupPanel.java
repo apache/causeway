@@ -30,8 +30,7 @@ import org.apache.wicket.model.Model;
 /**
  * Panel for rendering scalars of type {@link org.apache.isis.applib.value.Markup}.
  */
-public class MarkupPanel extends ScalarPanelTextFieldParseableAbstract 
-{
+public class MarkupPanel extends ScalarPanelTextFieldParseableAbstract {
 
 	private static final long serialVersionUID = 1L;
 
