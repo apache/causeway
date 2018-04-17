@@ -17,20 +17,11 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.components.tree;
+package org.apache.isis.core.metamodel.facets.value.treenode;
 
-import org.apache.isis.viewer.wicket.model.models.ValueModel;
-import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+import org.apache.isis.core.metamodel.facetapi.Facet;
 
-public class StandaloneTreePanel extends PanelAbstract<ValueModel> {
-
-	private static final long serialVersionUID = 1L;
-	private static final String ID_TREE = "tree";
-
-	public StandaloneTreePanel(final String id, final ValueModel valueModel) {
-		super(id, valueModel);
-		add(IsisToWicketTreeAdapter.adapt(ID_TREE, valueModel));
-	}
-
+public interface TreeNodeValueFacet extends Facet {
+	
 
 }

@@ -21,15 +21,17 @@ package org.apache.isis.applib.tree;
 import java.util.Objects;
 import java.util.stream.Stream;
 
+import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.applib.internal.base._Lazy;
 
+@Value(semanticsProviderName="org.apache.isis.core.metamodel.facets.value.treenode.TreeNodeValueSemanticsProvider")
 public class LazyTreeNode<T> implements TreeNode<T> {
 	
 	private final T value;
 	private final Class<? extends TreeAdapter<T>> treeAdapterClass;
 	private final _Lazy<TreeAdapter<T>> treeAdapter = _Lazy.of(this::newTreeAdapter);
 	
-	static <T> TreeNode<T> of(T value, Class<? extends TreeAdapter<T>> treeAdapterClass) {
+	public static <T> TreeNode<T> of(T value, Class<? extends TreeAdapter<T>> treeAdapterClass) {
 		return new LazyTreeNode<T>(value, treeAdapterClass);
 	}
 	
@@ -66,6 +68,7 @@ public class LazyTreeNode<T> implements TreeNode<T> {
 				;
 	}
 
+	@Override
 	public Class<? extends TreeAdapter<T>> getTreeAdapterClass() {
 		return treeAdapterClass;
 	}
@@ -77,7 +80,7 @@ public class LazyTreeNode<T> implements TreeNode<T> {
 			return treeAdapterClass.newInstance();
 		} catch (InstantiationException | IllegalAccessException e) {
 			throw new IllegalArgumentException(
-					String.format("failed to instanciate treeAdapter '%s'", treeAdapterClass.getName()), e);
+					String.format("failed to instantiate TreeAdapter '%s'", treeAdapterClass.getName()), e);
 		}
 	}
 

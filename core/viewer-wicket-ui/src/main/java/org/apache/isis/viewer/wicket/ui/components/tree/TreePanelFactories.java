@@ -45,19 +45,22 @@ public class TreePanelFactories {
 		
 		@Override
 		public ApplicationAdvice appliesTo(final IModel<?> model) {
-			if (!(model instanceof ScalarModel))
+			if (!(model instanceof ScalarModel)) {
 				return ApplicationAdvice.DOES_NOT_APPLY;
+			}
 
 			final ScalarModel scalarModel = (ScalarModel) model;
 
-			if(!scalarModel.isScalarTypeAnyOf(org.apache.isis.applib.tree.TreeNode.class)) 
+			if(!scalarModel.isScalarTypeSubtypingAnyOf(org.apache.isis.applib.tree.TreeNode.class)) {
 				return ApplicationAdvice.DOES_NOT_APPLY;
+			}
 
 			return appliesIf( !scalarModel.hasChoices() );
 		}
 		
 		@Override
 		public final Component createComponent(final String id, final IModel<?> model) {
+			
 			return new TreePanel(id, (ScalarModel) model);
 		}
 	}
@@ -73,12 +76,15 @@ public class TreePanelFactories {
 		
 		@Override
 		public ApplicationAdvice appliesTo(final IModel<?> model) {
-			if (!(model instanceof ValueModel))
+			if (!(model instanceof ValueModel)) {
 				return ApplicationAdvice.DOES_NOT_APPLY;
+			}
+			
 			final ValueModel valueModel = (ValueModel) model;
 			final ObjectAdapter adapter = valueModel.getObject();
-			if(adapter==null || adapter.getObject()==null)
+			if(adapter==null || adapter.getObject()==null) {
 				return ApplicationAdvice.DOES_NOT_APPLY;
+			}
 
 			return appliesIf( adapter.getObject() instanceof org.apache.isis.applib.tree.TreeNode );
 		}

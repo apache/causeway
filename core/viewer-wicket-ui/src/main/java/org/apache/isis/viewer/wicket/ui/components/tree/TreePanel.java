@@ -20,17 +20,23 @@
 package org.apache.isis.viewer.wicket.ui.components.tree;
 
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldParseableAbstract;
+import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.model.Model;
 
-public class TreePanel extends ScalarPanelAbstract2 {
-
-    public TreePanel(String id, ScalarModel scalarModel) {
-		super(id, scalarModel);
-	}
+/**
+ * Immutable tree, reuses the ScalarPanelTextField functionality without the need of its text field.
+ */
+public class TreePanel extends ScalarPanelTextFieldParseableAbstract {
 
 	private static final long serialVersionUID = 1L;
+
+	public TreePanel(final String id, final ScalarModel scalarModel) {
+		super(id, scalarModel);
+	}
 
 	@Override
 	protected String getScalarPanelType() {
@@ -38,28 +44,36 @@ public class TreePanel extends ScalarPanelAbstract2 {
 	}
 
 	@Override
-	protected InlinePromptConfig getInlinePromptConfig() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	protected MarkupContainer createScalarIfRegularFormGroup() {
 
-	@Override
-	protected MarkupContainer createComponentForRegular() {
-		// TODO Auto-generated method stub
-		return null;
+		if(getModel().isEditMode()) {
+			// fallback to text editor
+			return super.createScalarIfRegularFormGroup();
+		}
+
+		final Component treeComponent = createTreeComponent("scalarValueContainer");
+
+		getTextField().setLabel(Model.of(getModel().getName()));
+
+		final FormGroup formGroup = new FormGroup(ID_SCALAR_IF_REGULAR, getTextField());
+		formGroup.add(treeComponent);
+
+		final String labelCaption = getRendering().getLabelCaption(getTextField());
+		final Label scalarName = createScalarName(ID_SCALAR_NAME, labelCaption);
+		formGroup.add(scalarName);
+
+		return formGroup;
 	}
 
 	@Override
 	protected Component createComponentForCompact() {
-		// TODO Auto-generated method stub
-		return null;
+		return createTreeComponent(ID_SCALAR_IF_COMPACT);
 	}
 
-	@Override
-	protected Component getScalarValueComponent() {
-		// TODO Auto-generated method stub
-		return null;
+	// -- HELPER
+
+	private Component createTreeComponent(String id) {
+		return IsisToWicketTreeAdapter.adapt(id, getModel());
 	}
-    
 
 }

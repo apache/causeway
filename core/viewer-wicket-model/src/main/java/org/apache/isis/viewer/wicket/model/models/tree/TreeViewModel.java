@@ -3,6 +3,7 @@ package org.apache.isis.viewer.wicket.model.models.tree;
 import org.apache.isis.applib.tree.TreeNode;
 import org.apache.isis.viewer.wicket.model.models.ModelAbstract;
 
+@Deprecated //[ahuber] temporary
 public class TreeViewModel extends ModelAbstract<TreeNode<Object>> {
 
 	private static final long serialVersionUID = 1L;

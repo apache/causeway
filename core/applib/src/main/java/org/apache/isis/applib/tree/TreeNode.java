@@ -27,33 +27,33 @@ import java.util.stream.StreamSupport;
 import javax.annotation.Nullable;
 
 public interface TreeNode<T> {
-	
+
 	// -- VALUE
-	
+
 	public T getValue();
-	
+
 	// -- PARENT
-	
+
 	public @Nullable TreeNode<T> getParentIfAny();
-	
+
 	// -- CHILDREN
-	
+
 	public int getChildCount();
 
 	public Stream<TreeNode<T>> streamChildren();
-	
+
 	// -- BASIC PREDICATES
-	
+
 	public default boolean isRoot() {
 		return getParentIfAny() == null;
 	}
-	
+
 	public default boolean isLeaf() {
 		return getChildCount() == 0;
 	}
 
 	// -- CONSTRUCTION
-	
+
 	/**
 	 * Convenient shortcut.
 	 * @param node
@@ -63,43 +63,52 @@ public interface TreeNode<T> {
 	public static <T> TreeNode<T> lazy(T node, Class<? extends TreeAdapter<T>> treeAdapterClass) {
 		return LazyTreeNode.of(node, treeAdapterClass);
 	}
-	
+
 	// -- PARENT NODE ITERATION
-	
+
 	public default Iterator<TreeNode<T>> iteratorHierarchyUp(){
 		return new TreeNode_iteratorHierarchyUp<>(this);
 	}
-	
+
 	// -- PARENT NODE STREAMING
-	
+
 	public default Stream<TreeNode<T>> streamHierarchyUp(){
 		return StreamSupport.stream(
 				Spliterators.spliteratorUnknownSize(iteratorHierarchyUp(), Spliterator.ORDERED), 
 				false); // not parallel
 	}
-	
+
 	// -- CHILD NODE ITERATION
-	
+
 	public default Iterator<TreeNode<T>> iteratorDepthFirst(){
 		return new TreeNode_iteratorDepthFirst<>(this);
 	}
-	
+
 	public default Iterator<TreeNode<T>> iteratorBreadthFirst(){
 		return new TreeNode_iteratorBreadthFirst<>(this);
 	}
-	
+
 	// -- CHILD NODE STREAMING
-	
+
 	public default Stream<TreeNode<T>> streamDepthFirst(){
 		return StreamSupport.stream(
 				Spliterators.spliteratorUnknownSize(iteratorDepthFirst(), Spliterator.ORDERED), 
 				false); // not parallel
 	}
-	
+
 	public default Stream<TreeNode<T>> streamBreadthFirst(){
 		return StreamSupport.stream(
 				Spliterators.spliteratorUnknownSize(iteratorBreadthFirst(), Spliterator.ORDERED), 
 				false); // not parallel
 	}
-	
+
+	// -- LAZY NODE ADAPTING
+
+	/**
+	 * @return
+	 */
+	// [ahuber] Implementation Note: a class rather than an instance, because otherwise 
+	// the adapter would need to be serializable for Wicket's trees to work correctly.
+	public Class<? extends TreeAdapter<T>> getTreeAdapterClass();
+
 }

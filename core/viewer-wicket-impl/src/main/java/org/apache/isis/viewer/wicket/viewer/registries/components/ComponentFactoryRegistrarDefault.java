@@ -200,9 +200,10 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
 
     protected void addComponentFactoriesForScalar(final ComponentFactoryList componentFactories) {
 
+    	componentFactories.add(TreePanelFactories.parented());
+    	
         componentFactories.add(new ReferencePanelFactory());
         componentFactories.add(MarkupPanelFactories.parented());
-        componentFactories.add(TreePanelFactories.parented());
         
         componentFactories.add(new BooleanPanelFactory());
         componentFactories.add(new BytePanelFactory());
