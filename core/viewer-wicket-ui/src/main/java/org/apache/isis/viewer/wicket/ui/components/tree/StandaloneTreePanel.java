@@ -17,31 +17,20 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.model.models;
+package org.apache.isis.viewer.wicket.ui.components.tree;
 
-import java.util.Optional;
+import org.apache.isis.viewer.wicket.model.models.ValueModel;
+import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
-import org.apache.isis.applib.internal.base._Reduction;
+public class StandaloneTreePanel extends PanelAbstract<ValueModel> {
 
-class Util {
+	private static final long serialVersionUID = 1L;
+	private static final String ID_TREE = "tree";
 
-	final static class LowestCommonSuperclassFinder {
-
-		private final _Reduction<Class<?>> reduction = _Reduction.of((common, next) -> {
-			Class<?> refine = common;
-			while(!refine.isAssignableFrom(next)) {
-				refine = refine.getSuperclass();
-			}
-			return refine;
-		});
-
-		public void collect(Object pojo) {
-			reduction.accept(pojo.getClass());
-		}
-
-		public Optional<Class<?>> getLowestCommonSuperclass() {
-			return reduction.getResult();
-		}
+	public StandaloneTreePanel(final String id, final ValueModel valueModel) {
+		super(id, valueModel);
+		add(IsisToWicketTreeAdapter.adapt(ID_TREE, valueModel));
 	}
+
 
 }

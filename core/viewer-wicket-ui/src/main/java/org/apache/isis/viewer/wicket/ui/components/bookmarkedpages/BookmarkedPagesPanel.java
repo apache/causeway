@@ -205,14 +205,18 @@ public class BookmarkedPagesPanel extends PanelAbstract<BookmarkedPagesModel> {
     protected Component addHelpText(final BookmarkedPagesModel bookmarkedPagesModel) {
 
         IModel<String> helpTextModel = new AbstractReadOnlyModel<String>() {
-            @Override
+			private static final long serialVersionUID = -2445813533787596379L;
+
+			@Override
             public String getObject() {
                 return bookmarkedPagesModel.isEmpty() ? "You have no bookmarks!" : "";
             }
         };
 
         Label helpText = new Label(ID_BOOKMARKS_HELP_TEXT, helpTextModel) {
-            @Override
+			private static final long serialVersionUID = -8364098044839077580L;
+
+			@Override
             protected void onConfigure() {
                 super.onConfigure();
 

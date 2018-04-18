@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.components.scalars.markup;
+package org.apache.isis.viewer.wicket.ui.components.tree;
 
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldParseableAbstract;
@@ -28,55 +28,52 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
 
 /**
- * Panel for rendering scalars of type {@link org.apache.isis.applib.value.Markup}.
+ * Immutable tree, reuses the ScalarPanelTextField functionality without the need of its text field.
  */
-public class MarkupPanel extends ScalarPanelTextFieldParseableAbstract {
+public class TreePanel extends ScalarPanelTextFieldParseableAbstract {
 
 	private static final long serialVersionUID = 1L;
 
-	public MarkupPanel(final String id, final ScalarModel scalarModel) {
+	public TreePanel(final String id, final ScalarModel scalarModel) {
 		super(id, scalarModel);
 	}
 
 	@Override
 	protected String getScalarPanelType() {
-		return "markupPanel";
+		return "treePanel";
 	}
 
 	@Override
 	protected MarkupContainer createScalarIfRegularFormGroup() {
-		
+
 		if(getModel().isEditMode()) {
 			// fallback to text editor
 			return super.createScalarIfRegularFormGroup();
 		}
-		
-		final MarkupComponent markupComponent = createMarkupComponent("scalarValueContainer");
-				
+
+		final Component treeComponent = createTreeComponent("scalarValueContainer");
+
 		getTextField().setLabel(Model.of(getModel().getName()));
 
 		final FormGroup formGroup = new FormGroup(ID_SCALAR_IF_REGULAR, getTextField());
-		formGroup.add(markupComponent);
+		formGroup.add(treeComponent);
 
 		final String labelCaption = getRendering().getLabelCaption(getTextField());
 		final Label scalarName = createScalarName(ID_SCALAR_NAME, labelCaption);
-
 		formGroup.add(scalarName);
 
 		return formGroup;
 	}
-	
-    @Override
-    protected Component createComponentForCompact() {
-    	return createMarkupComponent(ID_SCALAR_IF_COMPACT);
-    }
-    
-    // -- HELPER
-    
-    private MarkupComponent createMarkupComponent(String id) {
-    	MarkupComponent markupComponent = new MarkupComponent(id, getModel());
-		markupComponent.setEnabled(false);
-		return markupComponent;
-    }
+
+	@Override
+	protected Component createComponentForCompact() {
+		return createTreeComponent(ID_SCALAR_IF_COMPACT);
+	}
+
+	// -- HELPER
+
+	private Component createTreeComponent(String id) {
+		return IsisToWicketTreeAdapter.adapt(id, getModel());
+	}
 
 }

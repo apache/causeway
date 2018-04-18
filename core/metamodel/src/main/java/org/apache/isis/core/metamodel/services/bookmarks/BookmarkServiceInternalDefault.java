@@ -202,14 +202,15 @@ public class BookmarkServiceInternalDefault implements BookmarkService, Serializ
 	// -- HELPER
 	
     private final static Set<Class<? extends Serializable>> serializableFinalTypes = _Sets.of(
-    		String.class,
-    		Boolean.class, boolean.class,
-    		Byte.class, byte.class,
-    		Short.class, short.class,
-    		Integer.class, int.class,
-    		Long.class, long.class,
-    		Float.class, float.class,
-    		Double.class, double.class
+    		String.class, String[].class,
+    		Class.class, Class[].class,
+    		Boolean.class, boolean.class, Boolean[].class, boolean[].class, 
+    		Byte.class, byte.class, Byte[].class, byte[].class,
+    		Short.class, short.class, Short[].class, short[].class,
+    		Integer.class, int.class, Integer[].class, int[].class,
+    		Long.class, long.class, Long[].class, long[].class,
+    		Float.class, float.class, Float[].class, float[].class,
+    		Double.class, double.class, Double[].class, double[].class
     );
     
     private final static List<Class<? extends Serializable>> serializableTypes = _Lists.of(

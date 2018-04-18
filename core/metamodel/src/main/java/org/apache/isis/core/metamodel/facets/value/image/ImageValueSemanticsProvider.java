@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.facets.value.image;
 
 import org.apache.isis.applib.value.Image;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;

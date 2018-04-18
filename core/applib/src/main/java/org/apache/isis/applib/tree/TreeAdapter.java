@@ -16,32 +16,17 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
-package org.apache.isis.viewer.wicket.model.models;
+package org.apache.isis.applib.tree;
 
 import java.util.Optional;
+import java.util.stream.Stream;
 
-import org.apache.isis.applib.internal.base._Reduction;
+public interface TreeAdapter<T> {
 
-class Util {
-
-	final static class LowestCommonSuperclassFinder {
-
-		private final _Reduction<Class<?>> reduction = _Reduction.of((common, next) -> {
-			Class<?> refine = common;
-			while(!refine.isAssignableFrom(next)) {
-				refine = refine.getSuperclass();
-			}
-			return refine;
-		});
-
-		public void collect(Object pojo) {
-			reduction.accept(pojo.getClass());
-		}
-
-		public Optional<Class<?>> getLowestCommonSuperclass() {
-			return reduction.getResult();
-		}
-	}
-
+	public Optional<T> parentOf(T value);
+	
+	public int childCountOf(T value);
+	
+	public Stream<T> childrenOf(T value);
+	
 }

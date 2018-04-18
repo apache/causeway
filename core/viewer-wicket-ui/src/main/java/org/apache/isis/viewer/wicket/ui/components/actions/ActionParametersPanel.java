@@ -83,7 +83,9 @@ public class ActionParametersPanel extends PanelAbstract<ActionModel> {
 
 
         WebMarkupContainer header = new WebMarkupContainer(ID_HEADER) {
-            @Override
+			private static final long serialVersionUID = 5410724436024228792L;
+
+			@Override
             protected void onConfigure() {
                 super.onConfigure();
                 setVisible(showHeader);

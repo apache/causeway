@@ -16,32 +16,38 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.applib.tree;
 
-package org.apache.isis.viewer.wicket.model.models;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
-import java.util.Optional;
+class TreeNode_iteratorHierarchyUp<T> implements Iterator<TreeNode<T>> {
 
-import org.apache.isis.applib.internal.base._Reduction;
+	private TreeNode<T> next;
 
-class Util {
+	TreeNode_iteratorHierarchyUp(TreeNode<T> treeNode) {
+		next = treeNode;
+	}
 
-	final static class LowestCommonSuperclassFinder {
+	@Override
+	public boolean hasNext() {
+		return next!=null;
+	}
 
-		private final _Reduction<Class<?>> reduction = _Reduction.of((common, next) -> {
-			Class<?> refine = common;
-			while(!refine.isAssignableFrom(next)) {
-				refine = refine.getSuperclass();
-			}
-			return refine;
-		});
-
-		public void collect(Object pojo) {
-			reduction.accept(pojo.getClass());
+	@Override
+	public TreeNode<T> next() {
+		if(next==null) {
+			throw new NoSuchElementException("Iterator has run out of elements.");
 		}
+		final TreeNode<T> result = next; 
+		next = fetchNext(next);		
+		return result;
+	}
+	
+	// -- HELPER
 
-		public Optional<Class<?>> getLowestCommonSuperclass() {
-			return reduction.getResult();
-		}
+	private TreeNode<T> fetchNext(TreeNode<T> current) {
+		return current.getParentIfAny();
 	}
 
 }

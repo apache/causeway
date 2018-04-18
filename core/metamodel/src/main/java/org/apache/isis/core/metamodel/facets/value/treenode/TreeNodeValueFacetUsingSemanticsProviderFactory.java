@@ -17,31 +17,24 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.model.models;
+package org.apache.isis.core.metamodel.facets.value.treenode;
 
-import java.util.Optional;
+import org.apache.isis.applib.tree.TreeNode;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProviderFactory;
 
-import org.apache.isis.applib.internal.base._Reduction;
+@SuppressWarnings("rawtypes")
+public class TreeNodeValueFacetUsingSemanticsProviderFactory 
+extends ValueFacetUsingSemanticsProviderFactory<TreeNode> {
+	
+	@Override
+	public void process(final ProcessClassContext processClassContext) {
+		final Class<?> type = processClassContext.getCls();
+		final FacetHolder holder = processClassContext.getFacetHolder();
 
-class Util {
-
-	final static class LowestCommonSuperclassFinder {
-
-		private final _Reduction<Class<?>> reduction = _Reduction.of((common, next) -> {
-			Class<?> refine = common;
-			while(!refine.isAssignableFrom(next)) {
-				refine = refine.getSuperclass();
-			}
-			return refine;
-		});
-
-		public void collect(Object pojo) {
-			reduction.accept(pojo.getClass());
+		if (!TreeNode.class.isAssignableFrom(type)) {
+			return;
 		}
-
-		public Optional<Class<?>> getLowestCommonSuperclass() {
-			return reduction.getResult();
-		}
+		addFacets(new TreeNodeValueSemanticsProvider(holder, getContext()));
 	}
-
 }
