@@ -21,8 +21,10 @@ package org.apache.isis.applib.internal.memento;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.ObjectStreamClass;
 import java.io.Serializable;
 import java.util.Map;
 import java.util.Objects;
@@ -34,6 +36,7 @@ import org.apache.isis.applib.internal.base._Casts;
 import org.apache.isis.applib.internal.base._NullSafe;
 import org.apache.isis.applib.internal.collections._Maps;
 import org.apache.isis.applib.internal.collections._Sets;
+import org.apache.isis.applib.internal.context._Context;
 import org.apache.isis.applib.internal.memento._Mementos.Memento;
 import org.apache.isis.applib.internal.memento._Mementos.SerializingAdapter;
 import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
@@ -108,7 +111,15 @@ class _Mementos_MementoDefault implements _Mementos.Memento {
 		if(_NullSafe.isEmpty(str)) {
 			return null;
 		}
-		try(ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(codec.decode(str)))) {
+		try(ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(codec.decode(str))) {
+			//override ObjectInputStream's classloading
+			protected Class<?> resolveClass(ObjectStreamClass desc)
+			        throws IOException, ClassNotFoundException
+		    {
+		        String name = desc.getName();
+		        return Class.forName(name, false, _Context.getDefaultClassLoader());
+		    }
+		}) {
 			// read in the entire map
 			final Map<String, Serializable> valuesByKey = _Casts.uncheckedCast(ois.readObject());
 			return new _Mementos_MementoDefault(codec, serializer, valuesByKey);
