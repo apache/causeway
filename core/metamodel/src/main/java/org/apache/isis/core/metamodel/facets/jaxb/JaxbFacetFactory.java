@@ -23,7 +23,10 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.List;
+import java.util.Optional;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
@@ -51,7 +54,7 @@ import com.google.common.collect.Lists;
 /**
  * just adds a validator
  */
-public class XmlJavaTypeAdapterFacetFactory extends FacetFactoryAbstract
+public class JaxbFacetFactory extends FacetFactoryAbstract
             implements MetaModelValidatorRefiner {
 
     public static final String ISIS_REFLECTOR_VALIDATOR_JAXB_VIEW_MODEL_NOT_ABSTRACT =
@@ -74,42 +77,74 @@ public class XmlJavaTypeAdapterFacetFactory extends FacetFactoryAbstract
             "isis.reflector.validator.jaxbViewModelDateTimeTypeAdapter";
     public static final boolean ISIS_REFLECTOR_VALIDATOR_JAXB_VIEW_MODEL_DATE_TIME_TYPE_ADAPTER_DEFAULT = true;
 
-    public XmlJavaTypeAdapterFacetFactory() {
+    public JaxbFacetFactory() {
         super(FeatureType.OBJECTS_AND_PROPERTIES);
     }
+    
+    // -- CLASS CONTEXT
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
+    	processXmlJavaTypeAdapter(processClassContext);
+    	processXmlAccessorTypeFacet(processClassContext);
+    }
+    
+    private void processXmlJavaTypeAdapter(final ProcessClassContext processClassContext) {
         final Class<?> cls = processClassContext.getCls();
 
         final XmlJavaTypeAdapter annotation = Annotations.getAnnotation(cls, XmlJavaTypeAdapter.class);
         if(annotation == null) {
             return;
         }
-
+        
         final FacetHolder holder = processClassContext.getFacetHolder();
         final XmlJavaTypeAdapterFacetDefault facet = new XmlJavaTypeAdapterFacetDefault(holder,
                 annotation.value(), getSpecificationLoader());
 
         FacetUtil.addFacet(facet);
     }
+    
+    private void processXmlAccessorTypeFacet(final ProcessClassContext processClassContext) {
+        final Class<?> cls = processClassContext.getCls();
+
+        final XmlAccessorType annotation = Annotations.getAnnotation(cls, XmlAccessorType.class);
+        if(annotation == null) {
+            return;
+        }
+        
+        final FacetHolder holder = processClassContext.getFacetHolder();
+        final XmlAccessorTypeFacetDefault facet = 
+        		new XmlAccessorTypeFacetDefault(holder, annotation.value());
+
+        FacetUtil.addFacet(facet);
+    }
+    
+    // -- METHOD CONTEXT
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
+    	
+    	//[ahuber] accessType not yet used, but could be in future extensions
+    	final Optional<XmlAccessorTypeFacet> accessorTypeFacet = 
+    			Optional.ofNullable(processMethodContext.getFacetHolder().getFacet(XmlAccessorTypeFacet.class));
+    	final XmlAccessType accessType = accessorTypeFacet
+    			.map(facet->facet.value())
+    			.orElse(XmlAccessType.PUBLIC_MEMBER); // the annotation's default value
+    	// ---
 
-        processXmlJavaTypeAdapter(processMethodContext);
-        processXmlTransient(processMethodContext);
+        processXmlJavaTypeAdapter(processMethodContext, accessType);
+        processXmlTransient(processMethodContext, accessType);
 
     }
 
-    private void processXmlJavaTypeAdapter(final ProcessMethodContext processMethodContext) {
+    private void processXmlJavaTypeAdapter(final ProcessMethodContext processMethodContext, XmlAccessType accessType) {
         final Method method = processMethodContext.getMethod();
 
         final XmlJavaTypeAdapter annotation = Annotations.getAnnotation(method, XmlJavaTypeAdapter.class);
         if(annotation == null) {
             return;
         }
-
+        
         final FacetHolder holder = processMethodContext.getFacetHolder();
         final XmlJavaTypeAdapterFacetDefault facet = new XmlJavaTypeAdapterFacetDefault(holder,
                 annotation.value(), getSpecificationLoader());
@@ -117,7 +152,7 @@ public class XmlJavaTypeAdapterFacetFactory extends FacetFactoryAbstract
         FacetUtil.addFacet(facet);
     }
 
-    private void processXmlTransient(final ProcessMethodContext processMethodContext) {
+    private void processXmlTransient(final ProcessMethodContext processMethodContext, XmlAccessType accessType) {
         final Method method = processMethodContext.getMethod();
 
         final XmlTransient annotation = Annotations.getAnnotation(method, XmlTransient.class);
@@ -130,6 +165,8 @@ public class XmlJavaTypeAdapterFacetFactory extends FacetFactoryAbstract
 
         FacetUtil.addFacet(facet);
     }
+    
+    // -- 
 
     @Override
     public void refineMetaModelValidator(

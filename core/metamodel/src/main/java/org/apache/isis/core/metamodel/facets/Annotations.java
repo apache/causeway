@@ -33,6 +33,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import javax.validation.constraints.Pattern;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.isis.applib.annotation.Collection;
@@ -583,6 +584,7 @@ public final class Annotations  {
                     javax.annotation.Nullable.class,
                     Title.class,
                     XmlJavaTypeAdapter.class,
+                    XmlTransient.class,
                     javax.jdo.annotations.Column.class
             )
     );

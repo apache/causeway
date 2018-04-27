@@ -42,7 +42,7 @@ import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToR
 import org.apache.isis.core.metamodel.facets.collections.parented.ParentedFacetSinceCollectionFactory;
 import org.apache.isis.core.metamodel.facets.collections.sortedby.annotation.SortedByFacetAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.fallback.FallbackFacetFactory;
-import org.apache.isis.core.metamodel.facets.jaxb.XmlJavaTypeAdapterFacetFactory;
+import org.apache.isis.core.metamodel.facets.jaxb.JaxbFacetFactory;
 import org.apache.isis.core.metamodel.facets.members.cssclass.annotprop.CssClassFacetOnActionFromConfiguredRegexFactory;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.annotprop.CssClassFaFacetOnMemberFactory;
 import org.apache.isis.core.metamodel.facets.members.describedas.annotprop.DescribedAsFacetOnMemberFactory;
@@ -297,7 +297,7 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(new CopyImmutableFacetOntoMembersFactory());
 
         addFactory(new RecreatableObjectFacetFactory());
-        addFactory(new XmlJavaTypeAdapterFacetFactory());
+        addFactory(new JaxbFacetFactory());
         addFactory(new MixinFacetForMixinAnnotationFactory());
 
 
