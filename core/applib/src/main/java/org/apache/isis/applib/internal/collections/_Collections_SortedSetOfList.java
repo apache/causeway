@@ -113,7 +113,10 @@ class _Collections_SortedSetOfList<T> implements SortedSet<T> {
 
 	@Override
 	public Comparator<? super T> comparator() {
-		throw new UnsupportedOperationException(JUST_AN_ADAPTER);
+		return null; 
+		// this set was created from a list, we have no 
+		// info about the intended comparator, 
+		// but a least let stream traverse the elements
 	}
 
 	@Override
