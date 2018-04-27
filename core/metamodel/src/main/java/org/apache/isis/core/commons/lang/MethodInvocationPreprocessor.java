@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.actions.action.invocation;
+package org.apache.isis.core.commons.lang;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -32,12 +32,18 @@ import org.apache.isis.applib.internal.collections._Arrays;
 import org.apache.isis.applib.internal.collections._Collections;
 
 /**
- * Package private utility for method invocation pre-processing. 
- * Adapts supported collection parameter types List, Set, SortedSet, Collection and Arrays.
+ * Utility for method invocation pre-processing.
+ * <p>
+ * For a given array of parameters, we intercept and adapt those, 
+ * that are not compatible with the expected target parameter type.
+ * </p>
+ * <p>
+ * By now we do this for collection parameter types List, Set, SortedSet, Collection and Arrays.
+ * </p>
  */
-class RelaxedMethodInvoker {
+public class MethodInvocationPreprocessor {
 
-	static Object invoke(Method method, Object targetPojo, Object[] executionParameters) 
+	public static Object invoke(Method method, Object targetPojo, Object[] executionParameters) 
 			throws IllegalAccessException, InvocationTargetException {
 
 		if (_NullSafe.isEmpty(executionParameters)) {

@@ -35,6 +35,7 @@ import org.apache.isis.applib.annotation.InvokedOn;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.internal._Constants;
+import org.apache.isis.applib.internal.collections._Lists;
 
 import com.google.common.base.Predicate;
 import org.apache.isis.applib.services.command.Command;

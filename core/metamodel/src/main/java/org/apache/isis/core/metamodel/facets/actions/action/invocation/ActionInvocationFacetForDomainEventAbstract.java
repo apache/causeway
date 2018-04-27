@@ -51,6 +51,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.ArrayExtensions;
+import org.apache.isis.core.commons.lang.MethodInvocationPreprocessor;
 import org.apache.isis.core.commons.lang.ThrowableExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -389,11 +390,11 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
             final QueryResultsCache queryResultsCache = getQueryResultsCache();
             final Object[] targetPojoPlusExecutionParameters = ArrayExtensions.appendT(executionParameters, targetPojo);
             return queryResultsCache.execute(
-            		()->RelaxedMethodInvoker.invoke(method, targetPojo, executionParameters),
+            		()->MethodInvocationPreprocessor.invoke(method, targetPojo, executionParameters),
             		targetPojo.getClass(), method.getName(), targetPojoPlusExecutionParameters);
 
         } else {
-            return RelaxedMethodInvoker.invoke(method, targetPojo, executionParameters);
+            return MethodInvocationPreprocessor.invoke(method, targetPojo, executionParameters);
         }
     }
 

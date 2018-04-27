@@ -41,7 +41,7 @@ public class MethodExtensions {
     public static Object invoke(final Method method, final Object object, final Object[] arguments) {
         try {
             Object[] defaultAnyPrimitive = defaultAnyPrimitive(method.getParameterTypes(), arguments);
-            return method.invoke(object, defaultAnyPrimitive);
+            return MethodInvocationPreprocessor.invoke(method, object, defaultAnyPrimitive);
         } catch (Exception e) {
         	return ThrowableExtensions.handleInvocationException(e, method.getName());
 		} 
