@@ -20,6 +20,8 @@ package org.apache.isis.applib.tree;
 
 import java.io.Serializable;
 
+import javax.annotation.Nullable;
+
 /**
  * Provides an unambiguous way to address nodes by position within a tree-structure. Examples:
  * <ul>
@@ -36,6 +38,14 @@ public interface TreePath extends Serializable {
 	 * @return a new TreePath instance composed of this with one canonical path entry added
 	 */
 	public TreePath append(int indexWithinSiblings);
+	
+	/**
+	 * 
+	 * @return a new TreePath instance that represents the parent path of this
+	 */
+	public @Nullable TreePath getParentIfAny();
+	
+	public boolean isRoot();
 	
 	// -- CONSTRUCTION
 	

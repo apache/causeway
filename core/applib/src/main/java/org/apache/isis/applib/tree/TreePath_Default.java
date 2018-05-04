@@ -18,6 +18,7 @@
  */
 package org.apache.isis.applib.tree;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 /**
@@ -38,10 +39,39 @@ class TreePath_Default implements TreePath {
 
 	@Override
 	public TreePath append(int indexWithinSiblings) {
-		int[] newCanonicalPath = new int[canonicalPath.length+1];
+		final int[] newCanonicalPath = new int[canonicalPath.length+1];
 		System.arraycopy(canonicalPath, 0, newCanonicalPath, 0, canonicalPath.length);
 		newCanonicalPath[canonicalPath.length] = indexWithinSiblings;
 		return new TreePath_Default(newCanonicalPath);
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof TreePath_Default) {
+			final TreePath_Default other = (TreePath_Default) obj;
+			return Arrays.equals(canonicalPath, other.canonicalPath);
+		}
+		return false;
+	}
+	
+	@Override
+	public int hashCode() {
+		return canonicalPath.hashCode();
+	}
+
+	@Override
+	public TreePath getParentIfAny() {
+		if(isRoot()) {
+			return null;
+		}
+		final int[] newCanonicalPath = new int[canonicalPath.length-1];
+		System.arraycopy(canonicalPath, 0, newCanonicalPath, 0, canonicalPath.length-1);
+		return new TreePath_Default(newCanonicalPath);
+	}
+
+	@Override
+	public boolean isRoot() {
+		return canonicalPath.length==1;
 	}
 	
 }

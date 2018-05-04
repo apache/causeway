@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.atomic.LongAdder;
 import java.util.stream.Stream;
 
 import javax.resource.spi.IllegalStateException;
@@ -12,6 +13,7 @@ import javax.resource.spi.IllegalStateException;
 import org.apache.isis.applib.internal.collections._Lists;
 import org.apache.isis.applib.tree.TreeAdapter;
 import org.apache.isis.applib.tree.TreeNode;
+import org.apache.isis.applib.tree.TreePath;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -47,11 +49,11 @@ class IsisToWicketTreeAdapter {
 	/**
 	 * Wicket's Tree Component implemented for Isis
 	 */
-	private static class EntityTree extends NestedTree<EntityModel> {
+	private static class EntityTree extends NestedTree<TreeModel> {
 
 		private static final long serialVersionUID = 1L;
 
-		public EntityTree(String id, ITreeProvider<EntityModel> provider) {
+		public EntityTree(String id, ITreeProvider<TreeModel> provider) {
 			super(id, provider);
 			add(new WindowsTheme()); // TODO not required if Isis provides it's own css styles for tree-nodes
 		}
@@ -60,9 +62,9 @@ class IsisToWicketTreeAdapter {
 		 * To use a custom component for the representation of a node's content we override this method.
 		 */
 		@Override
-		protected Component newContentComponent(String id, IModel<EntityModel> node) {
-			final EntityModel entityModel = node.getObject();
-			final Component entityIconAndTitle = new EntityIconAndTitlePanel(id, entityModel);
+		protected Component newContentComponent(String id, IModel<TreeModel> node) {
+			final TreeModel treeModel = node.getObject();
+			final Component entityIconAndTitle = new EntityIconAndTitlePanel(id, treeModel);
 			return entityIconAndTitle;
 		}
 		
@@ -70,20 +72,20 @@ class IsisToWicketTreeAdapter {
 		 * To hardcode Node's <pre>AjaxFallbackLink.isEnabledInHierarchy()->true</pre> we override this method.
 		 */
 		@Override
-		public Component newNodeComponent(String id, IModel<EntityModel> model) {
+		public Component newNodeComponent(String id, IModel<TreeModel> model) {
 			
-			final Node<EntityModel> node =  new Node<EntityModel>(id, this, model) {
+			final Node<TreeModel> node =  new Node<TreeModel>(id, this, model) {
 				private static final long serialVersionUID = 1L;
 				
 				@Override
-				protected Component createContent(String id, IModel<EntityModel> model) {
+				protected Component createContent(String id, IModel<TreeModel> model) {
 					return EntityTree.this.newContentComponent(id, model);
 				}
 				
 				@Override
 				protected MarkupContainer createJunctionComponent(String id) {
 					
-					final Node<EntityModel> node = this;
+					final Node<TreeModel> node = this;
 					final Runnable toggleExpandCollapse = (Runnable & Serializable) this::toggle;
 					
 					return new AjaxFallbackLink<Void>(id) {
@@ -118,15 +120,34 @@ class IsisToWicketTreeAdapter {
 	}
 	
 	// -- HELPER
+	
+	/**
+	 * Extending the EntityModel to also provide a TreePath.
+	 */
+	public static class TreeModel extends EntityModel {
+		private static final long serialVersionUID = 8916044984628849300L;
+		
+		private final TreePath treePath;
+
+		public TreeModel(ObjectAdapter adapter, TreePath treePath) {
+			super(adapter);
+			this.treePath = treePath;
+		}
+		
+		public TreePath getTreePath() {
+			return treePath;
+		}
+	}
+	
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
-	private static class EntityModelTreeAdapter implements TreeAdapter<EntityModel>, Serializable {
+	private static class TreeModelTreeAdapter implements TreeAdapter<TreeModel>, Serializable {
 		private static final long serialVersionUID = 1L;
 		
 		private final Class<? extends TreeAdapter> treeAdapterClass;
 		private transient TreeAdapter wrappedTreeAdapter;
 		
-		private EntityModelTreeAdapter(Class<? extends TreeAdapter> treeAdapterClass) {
+		private TreeModelTreeAdapter(Class<? extends TreeAdapter> treeAdapterClass) {
 			this.treeAdapterClass = treeAdapterClass;
 		}
 		
@@ -142,37 +163,39 @@ class IsisToWicketTreeAdapter {
 		}
 
 		@Override
-		public Optional<EntityModel> parentOf(EntityModel entityModel) {
-			if(entityModel==null) {
+		public Optional<TreeModel> parentOf(TreeModel treeModel) {
+			if(treeModel==null) {
 				return Optional.empty();
 			}
-			return wrappedTreeAdapter().parentOf(unwrap(entityModel))
-					.map(this::wrap);
+			return wrappedTreeAdapter().parentOf(unwrap(treeModel))
+					.map(pojo->wrap(pojo, treeModel.getTreePath().getParentIfAny())); 
 		}
 
 		@Override
-		public int childCountOf(EntityModel entityModel) {
-			if(entityModel==null) {
+		public int childCountOf(TreeModel treeModel) {
+			if(treeModel==null) {
 				return 0;
 			}
-			return wrappedTreeAdapter().childCountOf(unwrap(entityModel));
+			return wrappedTreeAdapter().childCountOf(unwrap(treeModel));
 		}
 
 		@Override
-		public Stream<EntityModel> childrenOf(EntityModel entityModel) {
-			if(entityModel==null) {
+		public Stream<TreeModel> childrenOf(TreeModel treeModel) {
+			if(treeModel==null) {
 				return Stream.empty();
 			}
-			return wrappedTreeAdapter().childrenOf(unwrap(entityModel))
-					.map(this::wrap);
+			final LongAdder indexWithinSiblings = new LongAdder(); 
+			return wrappedTreeAdapter().childrenOf(unwrap(treeModel))
+					.map(pojo->wrap(pojo, treeModel.getTreePath().append(indexWithinSiblings.intValue()) ))
+					.peek(__->indexWithinSiblings.increment());
 		}
 		
-		private EntityModel wrap(Object pojo) {
+		private TreeModel wrap(Object pojo, TreePath treePath) {
 			Objects.requireNonNull(pojo);
-			return new EntityModel(persistenceSession().getAdapterFor(pojo));
+			return new TreeModel(persistenceSession().getAdapterFor(pojo), treePath);
 		}
 		
-		private Object unwrap(EntityModel model) {
+		private Object unwrap(TreeModel model) {
 			Objects.requireNonNull(model);
 			return model.getObject().getObject();
 		}
@@ -186,14 +209,17 @@ class IsisToWicketTreeAdapter {
 	/**
 	 * Wicket's ITreeProvider implemented for Isis
 	 */
-	private static class EntityModelTreeProvider implements ITreeProvider<EntityModel> {
+	private static class TreeModelTreeProvider implements ITreeProvider<TreeModel> {
 
 		private static final long serialVersionUID = 1L;
 		
-		private final EntityModel primaryValue;
-		private final EntityModelTreeAdapter treeAdapter;
+		/**
+		 * tree's root
+		 */
+		private final TreeModel primaryValue;
+		private final TreeModelTreeAdapter treeAdapter;
 
-		private EntityModelTreeProvider(EntityModel primaryValue, EntityModelTreeAdapter treeAdapter) {
+		private TreeModelTreeProvider(TreeModel primaryValue, TreeModelTreeAdapter treeAdapter) {
 			this.primaryValue = primaryValue;
 			this.treeAdapter = treeAdapter;
 		}
@@ -203,23 +229,23 @@ class IsisToWicketTreeAdapter {
 		}
 
 		@Override
-		public Iterator<? extends EntityModel> getRoots() {
+		public Iterator<? extends TreeModel> getRoots() {
 			return _Lists.singleton(primaryValue).iterator();
 		}
 
 		@Override
-		public boolean hasChildren(EntityModel node) {
+		public boolean hasChildren(TreeModel node) {
 			return treeAdapter.childCountOf(node)>0;
 		}
 
 		@Override
-		public Iterator<? extends EntityModel> getChildren(EntityModel node) {
+		public Iterator<? extends TreeModel> getChildren(TreeModel node) {
 			return treeAdapter.childrenOf(node).iterator();
 		}
 
 		@Override
-		public IModel<EntityModel> model(final EntityModel entityModel) {
-			return new LoadableDetachableEntityModel(entityModel);
+		public IModel<TreeModel> model(final TreeModel treeModel) {
+			return new LoadableDetachableEntityModel(treeModel);
 		}
 		
 	}
@@ -229,29 +255,34 @@ class IsisToWicketTreeAdapter {
 	 * @return Wicket's ITreeProvider
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private static ITreeProvider<EntityModel> toITreeProvider(ModelAbstract<ObjectAdapter> model) {
+	private static ITreeProvider<TreeModel> toITreeProvider(ModelAbstract<ObjectAdapter> model) {
 		
-		final TreeNode tree = (TreeNode) model.getObject().getObject();
-		final EntityModelTreeAdapter wrappingTreeAdapter = new EntityModelTreeAdapter(tree.getTreeAdapterClass());
-		
-		return new EntityModelTreeProvider(wrappingTreeAdapter.wrap(tree.getValue()), wrappingTreeAdapter);		
+		final TreeNode treeNode = (TreeNode) model.getObject().getObject();
+		final TreeModelTreeAdapter wrappingTreeAdapter = new TreeModelTreeAdapter(treeNode.getTreeAdapterClass());
+		return new TreeModelTreeProvider(
+				wrappingTreeAdapter.wrap(treeNode.getValue(), treeNode.getPositionAsPath()), 
+				wrappingTreeAdapter);		
 	}
 	
-	private static class LoadableDetachableEntityModel extends LoadableDetachableModel<EntityModel> {
+	private static class LoadableDetachableEntityModel extends LoadableDetachableModel<TreeModel> {
 		private static final long serialVersionUID = 1L;
 
 		private final RootOid id;
+		private final TreePath treePath;
+		private final int hashCode;
 
-		public LoadableDetachableEntityModel(EntityModel eModel) {
-			super(eModel);
-			id = (RootOid) eModel.getObject().getOid();
+		public LoadableDetachableEntityModel(TreeModel tModel) {
+			super(tModel);
+			this.id = (RootOid) tModel.getObject().getOid();
+			this.treePath = tModel.getTreePath();
+			this.hashCode = Objects.hash(id.hashCode(), treePath.hashCode());
 		}
 
 		/*
 		 * loads EntityModel using Oid (id)
 		 */
 		@Override
-		protected EntityModel load() {
+		protected TreeModel load() {
 			
 			final PersistenceSession persistenceSession = IsisContext.getPersistenceSession()
 					.orElseThrow(()->new RuntimeException(new IllegalStateException(
@@ -271,7 +302,7 @@ class IsisToWicketTreeAdapter {
 						String.format("Tree creation: could not recreate Pojo from Oid: '%s'", id)); 
 			}
 			
-			return new EntityModel(objAdapter);
+			return new TreeModel(objAdapter, treePath);
 		}
 
 		/*
@@ -282,7 +313,7 @@ class IsisToWicketTreeAdapter {
 		public boolean equals(Object obj) {
 			if (obj instanceof LoadableDetachableEntityModel) {
 				final LoadableDetachableEntityModel other = (LoadableDetachableEntityModel) obj;
-				return id.equals(other.id);
+				return treePath.equals(other.treePath) && id.equals(other.id);
 			}
 			return false;
 		}
@@ -292,7 +323,7 @@ class IsisToWicketTreeAdapter {
 		 */
 		@Override
 		public int hashCode() {
-			return id.hashCode();
+			return hashCode;
 		}
 	}
 
