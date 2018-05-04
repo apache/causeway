@@ -7,6 +7,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.internal.collections._Lists;
+import org.apache.isis.applib.internal.exceptions._Exceptions;
 import org.apache.isis.applib.tree.TreeAdapter;
 import org.apache.isis.applib.tree.TreeNode;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -19,8 +20,12 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.models.ValueModel;
 import org.apache.isis.viewer.wicket.ui.components.entity.icontitle.EntityIconAndTitlePanel;
 import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.extensions.markup.html.repeater.tree.ITreeProvider;
 import org.apache.wicket.extensions.markup.html.repeater.tree.NestedTree;
+import org.apache.wicket.extensions.markup.html.repeater.tree.Node;
 import org.apache.wicket.extensions.markup.html.repeater.tree.theme.WindowsTheme;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
@@ -37,6 +42,9 @@ class IsisToWicketTreeAdapter {
 	
 	// -- RENDERING
 	
+	/**
+	 * Wicket's Tree Component implemented for Isis
+	 */
 	private static class EntityTree extends NestedTree<EntityModel> {
 
 		private static final long serialVersionUID = 1L;
@@ -44,6 +52,9 @@ class IsisToWicketTreeAdapter {
 		public EntityTree(String id, ITreeProvider<EntityModel> provider) {
 			super(id, provider);
 			add(new WindowsTheme()); // TODO not required if Isis provides it's own css styles for tree-nodes
+			
+			super.setEnabled(true);
+			super.setVisible(true);
 		}
 		
 		/**
@@ -52,7 +63,50 @@ class IsisToWicketTreeAdapter {
 		@Override
 		protected Component newContentComponent(String id, IModel<EntityModel> node) {
 			final EntityModel entityModel = node.getObject();
-			return new EntityIconAndTitlePanel(id, entityModel);
+			final Component entityIconAndTitle = new EntityIconAndTitlePanel(id, entityModel);
+			return entityIconAndTitle;
+		}
+		
+		/**
+		 * To hardcode Node's <pre>AjaxFallbackLink.isEnabledInHierarchy()->true</pre> we override this method.
+		 */
+		@Override
+		public Component newNodeComponent(String id, IModel<EntityModel> model) {
+			return new Node<EntityModel>(id, this, model)
+			{
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				protected Component createContent(String id, IModel<EntityModel> model) {
+					return EntityTree.this.newContentComponent(id, model);
+				}
+				
+				@Override
+				protected MarkupContainer createJunctionComponent(String id) {
+					
+					final Node<EntityModel> self = this;
+					
+					return new AjaxFallbackLink<Void>(id) {
+						private static final long serialVersionUID = 1L;
+						
+						@Override
+						public void onClick(AjaxRequestTarget target) {
+							toggle();
+						}
+
+						@Override
+						public boolean isEnabled() {
+							return EntityTree.this.getProvider().hasChildren(self.getModelObject());
+						}
+						
+						@Override
+						public boolean isEnabledInHierarchy() {
+							return true;
+						}
+						
+					};
+				}
+			};
 		}
 
 		
@@ -123,7 +177,9 @@ class IsisToWicketTreeAdapter {
 		
 	}
 
-	
+	/**
+	 * Wicket's ITreeProvider implemented for Isis
+	 */
 	private static class EntityModelTreeProvider implements ITreeProvider<EntityModel> {
 
 		private static final long serialVersionUID = 1L;
@@ -162,6 +218,10 @@ class IsisToWicketTreeAdapter {
 		
 	}
 	
+	/**
+	 * @param model
+	 * @return Wicket's ITreeProvider
+	 */
 	private static ITreeProvider<EntityModel> toITreeProvider(ModelAbstract<ObjectAdapter> model) {
 		
 		final TreeNode tree = (TreeNode) model.getObject().getObject();
@@ -183,7 +243,8 @@ class IsisToWicketTreeAdapter {
 
 		@Override
 		protected EntityModel load() {
-			return null; //TODO [ahuber] load model by id, possibly not required
+			//FIXME load EntityModel by id
+			throw _Exceptions.notImplemented();
 		}
 
 		/**
@@ -192,7 +253,8 @@ class IsisToWicketTreeAdapter {
 		@Override
 		public boolean equals(Object obj) {
 			if (obj instanceof EntityModel) {
-				return ((EntityModel) obj).getObject().getOid().equals(id);
+				final EntityModel other = (EntityModel) obj;
+				return other.getObject().getOid().equals(id);
 			}
 			return false;
 		}
