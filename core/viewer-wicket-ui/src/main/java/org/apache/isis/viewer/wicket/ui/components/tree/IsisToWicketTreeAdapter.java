@@ -91,9 +91,7 @@ class IsisToWicketTreeAdapter {
 						
 						@Override
 						public void onClick(AjaxRequestTarget target) {
-							System.out.println("!!! before toggle");
 							toggleExpandCollapse.run();
-							System.out.println("!!! after toggle");
 						}
 
 						@Override
@@ -120,7 +118,8 @@ class IsisToWicketTreeAdapter {
 	}
 	
 	// -- HELPER
-	
+
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	private static class EntityModelTreeAdapter implements TreeAdapter<EntityModel>, Serializable {
 		private static final long serialVersionUID = 1L;
 		
@@ -229,6 +228,7 @@ class IsisToWicketTreeAdapter {
 	 * @param model
 	 * @return Wicket's ITreeProvider
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private static ITreeProvider<EntityModel> toITreeProvider(ModelAbstract<ObjectAdapter> model) {
 		
 		final TreeNode tree = (TreeNode) model.getObject().getObject();
