@@ -51,6 +51,10 @@ public interface TreeNode<T> {
 	public default boolean isLeaf() {
 		return getChildCount() == 0;
 	}
+	
+	// -- PATH INFO
+	
+	public TreePath getPositionAsPath();
 
 	// -- CONSTRUCTION
 

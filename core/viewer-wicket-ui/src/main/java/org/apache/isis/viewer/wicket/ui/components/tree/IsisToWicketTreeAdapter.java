@@ -275,7 +275,8 @@ class IsisToWicketTreeAdapter {
 		}
 
 		/*
-		 * Important! Models must be identifiable by their contained object.
+		 * Important! Models must be identifiable by their contained object. Also IDs must be
+		 * unique within a tree structure.
 		 */
 		@Override
 		public boolean equals(Object obj) {
