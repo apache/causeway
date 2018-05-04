@@ -2,16 +2,18 @@ package org.apache.isis.viewer.wicket.ui.components.tree;
 
 import java.io.Serializable;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import javax.resource.spi.IllegalStateException;
+
 import org.apache.isis.applib.internal.collections._Lists;
-import org.apache.isis.applib.internal.exceptions._Exceptions;
 import org.apache.isis.applib.tree.TreeAdapter;
 import org.apache.isis.applib.tree.TreeNode;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -52,9 +54,6 @@ class IsisToWicketTreeAdapter {
 		public EntityTree(String id, ITreeProvider<EntityModel> provider) {
 			super(id, provider);
 			add(new WindowsTheme()); // TODO not required if Isis provides it's own css styles for tree-nodes
-			
-			super.setEnabled(true);
-			super.setVisible(true);
 		}
 		
 		/**
@@ -72,10 +71,10 @@ class IsisToWicketTreeAdapter {
 		 */
 		@Override
 		public Component newNodeComponent(String id, IModel<EntityModel> model) {
-			return new Node<EntityModel>(id, this, model)
-			{
+			
+			final Node<EntityModel> node =  new Node<EntityModel>(id, this, model) {
 				private static final long serialVersionUID = 1L;
-
+				
 				@Override
 				protected Component createContent(String id, IModel<EntityModel> model) {
 					return EntityTree.this.newContentComponent(id, model);
@@ -84,43 +83,51 @@ class IsisToWicketTreeAdapter {
 				@Override
 				protected MarkupContainer createJunctionComponent(String id) {
 					
-					final Node<EntityModel> self = this;
+					final Node<EntityModel> node = this;
+					final Runnable toggleExpandCollapse = (Runnable & Serializable) this::toggle;
 					
 					return new AjaxFallbackLink<Void>(id) {
 						private static final long serialVersionUID = 1L;
 						
 						@Override
 						public void onClick(AjaxRequestTarget target) {
-							toggle();
+							System.out.println("!!! before toggle");
+							toggleExpandCollapse.run();
+							System.out.println("!!! after toggle");
 						}
 
 						@Override
 						public boolean isEnabled() {
-							return EntityTree.this.getProvider().hasChildren(self.getModelObject());
+							return EntityTree.this.getProvider().hasChildren(node.getModelObject());
 						}
 						
 						@Override
 						public boolean isEnabledInHierarchy() {
-							return true;
+							return true; // hardcoded -> true
 						}
 						
 					};
 				}
+				
 			};
+			
+			node.setOutputMarkupId(true);
+			
+			return node;
+			
 		}
-
 		
 	}
 	
 	// -- HELPER
 	
-	private static class EntitiyModelTreeAdapter implements TreeAdapter<EntityModel>, Serializable {
+	private static class EntityModelTreeAdapter implements TreeAdapter<EntityModel>, Serializable {
 		private static final long serialVersionUID = 1L;
 		
 		private final Class<? extends TreeAdapter> treeAdapterClass;
 		private transient TreeAdapter wrappedTreeAdapter;
 		
-		private EntitiyModelTreeAdapter(Class<? extends TreeAdapter> treeAdapterClass) {
+		private EntityModelTreeAdapter(Class<? extends TreeAdapter> treeAdapterClass) {
 			this.treeAdapterClass = treeAdapterClass;
 		}
 		
@@ -172,7 +179,7 @@ class IsisToWicketTreeAdapter {
 		}
 		
 		private PersistenceSession persistenceSession() {
-			return IsisContext.getSessionFactory().getCurrentSession().getPersistenceSession();
+			return IsisContext.getPersistenceSession().orElse(null);
 		}
 		
 	}
@@ -185,9 +192,9 @@ class IsisToWicketTreeAdapter {
 		private static final long serialVersionUID = 1L;
 		
 		private final EntityModel primaryValue;
-		private final EntitiyModelTreeAdapter treeAdapter;
+		private final EntityModelTreeAdapter treeAdapter;
 
-		private EntityModelTreeProvider(EntityModel primaryValue, EntitiyModelTreeAdapter treeAdapter) {
+		private EntityModelTreeProvider(EntityModel primaryValue, EntityModelTreeAdapter treeAdapter) {
 			this.primaryValue = primaryValue;
 			this.treeAdapter = treeAdapter;
 		}
@@ -225,7 +232,7 @@ class IsisToWicketTreeAdapter {
 	private static ITreeProvider<EntityModel> toITreeProvider(ModelAbstract<ObjectAdapter> model) {
 		
 		final TreeNode tree = (TreeNode) model.getObject().getObject();
-		final EntitiyModelTreeAdapter wrappingTreeAdapter = new EntitiyModelTreeAdapter(tree.getTreeAdapterClass());
+		final EntityModelTreeAdapter wrappingTreeAdapter = new EntityModelTreeAdapter(tree.getTreeAdapterClass());
 		
 		return new EntityModelTreeProvider(wrappingTreeAdapter.wrap(tree.getValue()), wrappingTreeAdapter);		
 	}
@@ -233,33 +240,53 @@ class IsisToWicketTreeAdapter {
 	private static class LoadableDetachableEntityModel extends LoadableDetachableModel<EntityModel> {
 		private static final long serialVersionUID = 1L;
 
-		private final Oid id;
+		private final RootOid id;
 
 		public LoadableDetachableEntityModel(EntityModel eModel) {
 			super(eModel);
-
-			id = eModel.getObject().getOid();
+			id = (RootOid) eModel.getObject().getOid();
 		}
 
+		/*
+		 * loads EntityModel using Oid (id)
+		 */
 		@Override
 		protected EntityModel load() {
-			//FIXME load EntityModel by id
-			throw _Exceptions.notImplemented();
+			
+			final PersistenceSession persistenceSession = IsisContext.getPersistenceSession()
+					.orElseThrow(()->new RuntimeException(new IllegalStateException(
+							String.format("Tree creation: missing a PersistenceSession to recreate EntityModel "
+									+ "from Oid: '%s'", id)))
+					);
+			
+			final ObjectAdapter objAdapter = persistenceSession.adapterFor(id);
+			if(objAdapter==null) {
+				throw new NoSuchElementException(
+						String.format("Tree creation: could not recreate EntityModel from Oid: '%s'", id)); 
+			}
+			
+			final Object pojo = objAdapter.getObject();
+			if(pojo==null) {
+				throw new NoSuchElementException(
+						String.format("Tree creation: could not recreate Pojo from Oid: '%s'", id)); 
+			}
+			
+			return new EntityModel(objAdapter);
 		}
 
-		/**
+		/*
 		 * Important! Models must be identifiable by their contained object.
 		 */
 		@Override
 		public boolean equals(Object obj) {
-			if (obj instanceof EntityModel) {
-				final EntityModel other = (EntityModel) obj;
-				return other.getObject().getOid().equals(id);
+			if (obj instanceof LoadableDetachableEntityModel) {
+				final LoadableDetachableEntityModel other = (LoadableDetachableEntityModel) obj;
+				return id.equals(other.id);
 			}
 			return false;
 		}
 
-		/**
+		/*
 		 * Important! Models must be identifiable by their contained object.
 		 */
 		@Override
