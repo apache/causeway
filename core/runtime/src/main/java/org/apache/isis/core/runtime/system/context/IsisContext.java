@@ -19,8 +19,15 @@
 
 package org.apache.isis.core.runtime.system.context;
 
+import java.util.Optional;
+
 import org.apache.isis.applib.internal.context._Context;
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.session.IsisSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
 /**
@@ -40,6 +47,7 @@ public interface IsisContext {
 	/**
 	 * 
 	 * @return Isis's session factory
+	 * @throws IllegalStateException if IsisSessionFactory not initialized
 	 */
 	// Implementation Note: Populated only by {@link IsisSessionFactoryBuilder}.
 	public static IsisSessionFactory getSessionFactory() {
@@ -68,16 +76,39 @@ public interface IsisContext {
     	resetLogging();
     }
     
-    // -- DEPRECATIONS
+    // -- CONVENIENT SHORTCUTS
     
     /**
-     * Resets
-     * @deprecated replaced by {@link #clear()}
-     * 
+     * @return framework's current PersistenceSession (if any)
+     * @throws IllegalStateException if IsisSessionFactory not initialized
      */
-    @Deprecated
-    public static void testReset() {
-    	clear();
+    public static Optional<PersistenceSession> getPersistenceSession() {
+        return Optional.ofNullable(getSessionFactory().getCurrentSession())
+        		.map(IsisSession::getPersistenceSession);
+    }
+    
+    /**
+     * @return framework's IsisConfiguration
+     * @throws IllegalStateException if IsisSessionFactory not initialized
+     */
+    public static IsisConfiguration getConfiguration() {
+        return getSessionFactory().getConfiguration();
+    }
+
+    /**
+     * @return framework's SpecificationLoader
+     * @throws IllegalStateException if IsisSessionFactory not initialized
+     */
+    public static SpecificationLoader getSpecificationLoader() {
+        return getSessionFactory().getSpecificationLoader();
+    }
+
+    /**
+     * @return framework's ServicesInjector
+     * @throws IllegalStateException if IsisSessionFactory not initialized
+     */
+    public static ServicesInjector getServicesInjector() {
+        return getSessionFactory().getServicesInjector();
     }
 
 	// -- HELPER

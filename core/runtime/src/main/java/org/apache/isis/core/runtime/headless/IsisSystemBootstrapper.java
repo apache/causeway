@@ -187,7 +187,7 @@ public class IsisSystemBootstrapper {
         isisSessionFactory.destroyServicesAndShutdown();
         pmf.close();
 
-        IsisContext.testReset();
+        IsisContext.clear();
     }
 
     public void tearDownAllModules() {
