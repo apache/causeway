@@ -5,12 +5,13 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.concurrent.atomic.LongAdder;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 import javax.resource.spi.IllegalStateException;
 
 import org.apache.isis.applib.internal.collections._Lists;
+import org.apache.isis.applib.internal.functions._Functions;
 import org.apache.isis.applib.tree.TreeAdapter;
 import org.apache.isis.applib.tree.TreeNode;
 import org.apache.isis.applib.tree.TreePath;
@@ -124,7 +125,7 @@ class IsisToWicketTreeAdapter {
 	/**
 	 * Extending the EntityModel to also provide a TreePath.
 	 */
-	public static class TreeModel extends EntityModel {
+	private static class TreeModel extends EntityModel {
 		private static final long serialVersionUID = 8916044984628849300L;
 		
 		private final TreePath treePath;
@@ -139,7 +140,6 @@ class IsisToWicketTreeAdapter {
 		}
 	}
 	
-
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	private static class TreeModelTreeAdapter implements TreeAdapter<TreeModel>, Serializable {
 		private static final long serialVersionUID = 1L;
@@ -184,10 +184,8 @@ class IsisToWicketTreeAdapter {
 			if(treeModel==null) {
 				return Stream.empty();
 			}
-			final LongAdder indexWithinSiblings = new LongAdder(); 
 			return wrappedTreeAdapter().childrenOf(unwrap(treeModel))
-					.map(pojo->wrap(pojo, treeModel.getTreePath().append(indexWithinSiblings.intValue()) ))
-					.peek(__->indexWithinSiblings.increment());
+					.map(newPojoToTreeModelMapper(treeModel));
 		}
 		
 		private TreeModel wrap(Object pojo, TreePath treePath) {
@@ -202,6 +200,11 @@ class IsisToWicketTreeAdapter {
 		
 		private PersistenceSession persistenceSession() {
 			return IsisContext.getPersistenceSession().orElse(null);
+		}
+		
+		private Function<Object, TreeModel> newPojoToTreeModelMapper(TreeModel parent) {
+			return _Functions.indexAwareFunctionToFunction((indexWithinSiblings, pojo)->
+				wrap(pojo, parent.getTreePath().append(indexWithinSiblings)));
 		}
 		
 	}
