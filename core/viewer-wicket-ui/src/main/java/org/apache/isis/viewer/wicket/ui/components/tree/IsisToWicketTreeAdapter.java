@@ -137,7 +137,7 @@ class IsisToWicketTreeAdapter {
 		
 	}
 	
-	// -- HELPER
+	// -- ISIS' TREE-MODEL
 	
 	/**
 	 * Extending the EntityModel to also provide a TreePath.
@@ -157,6 +157,11 @@ class IsisToWicketTreeAdapter {
 		}
 	}
 	
+	// -- ISIS' TREE ADAPTER (FOR TREES OF TREE-MODEL NODES) 
+	
+	/**
+	 *  TreeAdapter for TreeModel nodes. 
+	 */
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	private static class TreeModelTreeAdapter implements TreeAdapter<TreeModel>, Serializable {
 		private static final long serialVersionUID = 1L;
@@ -225,6 +230,8 @@ class IsisToWicketTreeAdapter {
 		}
 		
 	}
+	
+	// -- WICKET'S TREE PROVIDER (FOR TREES OF TREE-MODEL NODES)
 
 	/**
 	 * Wicket's ITreeProvider implemented for Isis
@@ -265,7 +272,7 @@ class IsisToWicketTreeAdapter {
 
 		@Override
 		public IModel<TreeModel> model(final TreeModel treeModel) {
-			return new LoadableDetachableEntityModel(treeModel);
+			return new LoadableDetachableTreeModel(treeModel);
 		}
 		
 	}
@@ -285,6 +292,76 @@ class IsisToWicketTreeAdapter {
 				wrappingTreeAdapter.wrap(treeNode.getValue(), treeNode.getPositionAsPath()), 
 				wrappingTreeAdapter);		
 	}
+	
+	// -- WICKET'S LOADABLE/DETACHABLE MODEL FOR TREE-MODEL NODES 
+	
+	/**
+	 * Wicket's loadable/detachable model for TreeModel nodes. 
+	 */
+	private static class LoadableDetachableTreeModel extends LoadableDetachableModel<TreeModel> {
+		private static final long serialVersionUID = 1L;
+
+		private final RootOid id;
+		private final TreePath treePath;
+		private final int hashCode;
+
+		public LoadableDetachableTreeModel(TreeModel tModel) {
+			super(tModel);
+			this.id = (RootOid) tModel.getObject().getOid();
+			this.treePath = tModel.getTreePath();
+			this.hashCode = Objects.hash(id.hashCode(), treePath.hashCode());
+		}
+
+		/*
+		 * loads EntityModel using Oid (id)
+		 */
+		@Override
+		protected TreeModel load() {
+			
+			final PersistenceSession persistenceSession = IsisContext.getPersistenceSession()
+					.orElseThrow(()->new RuntimeException(new IllegalStateException(
+							String.format("Tree creation: missing a PersistenceSession to recreate EntityModel "
+									+ "from Oid: '%s'", id)))
+					);
+			
+			final ObjectAdapter objAdapter = persistenceSession.adapterFor(id);
+			if(objAdapter==null) {
+				throw new NoSuchElementException(
+						String.format("Tree creation: could not recreate EntityModel from Oid: '%s'", id)); 
+			}
+			
+			final Object pojo = objAdapter.getObject();
+			if(pojo==null) {
+				throw new NoSuchElementException(
+						String.format("Tree creation: could not recreate Pojo from Oid: '%s'", id)); 
+			}
+			
+			return new TreeModel(objAdapter, treePath);
+		}
+
+		/*
+		 * Important! Models must be identifiable by their contained object. Also IDs must be
+		 * unique within a tree structure.
+		 */
+		@Override
+		public boolean equals(Object obj) {
+			if (obj instanceof LoadableDetachableTreeModel) {
+				final LoadableDetachableTreeModel other = (LoadableDetachableTreeModel) obj;
+				return treePath.equals(other.treePath) && id.equals(other.id);
+			}
+			return false;
+		}
+
+		/*
+		 * Important! Models must be identifiable by their contained object.
+		 */
+		@Override
+		public int hashCode() {
+			return hashCode;
+		}
+	}
+
+	// -- COLLAPSE/EXPAND
 	
 	/**
 	 * 
@@ -330,76 +407,11 @@ class IsisToWicketTreeAdapter {
 		
 		@Override
 		public String toString() {
-			return "{" + expandedNodes.stream()
-					.map(TreeModel::getTreePath)
+			return "{" + expandedTreePaths.stream()
 					.map(TreePath::toString)
 					.collect(Collectors.joining(", ")) + "}";
 		}
 
-
 	}
 	
-	private static class LoadableDetachableEntityModel extends LoadableDetachableModel<TreeModel> {
-		private static final long serialVersionUID = 1L;
-
-		private final RootOid id;
-		private final TreePath treePath;
-		private final int hashCode;
-
-		public LoadableDetachableEntityModel(TreeModel tModel) {
-			super(tModel);
-			this.id = (RootOid) tModel.getObject().getOid();
-			this.treePath = tModel.getTreePath();
-			this.hashCode = Objects.hash(id.hashCode(), treePath.hashCode());
-		}
-
-		/*
-		 * loads EntityModel using Oid (id)
-		 */
-		@Override
-		protected TreeModel load() {
-			
-			final PersistenceSession persistenceSession = IsisContext.getPersistenceSession()
-					.orElseThrow(()->new RuntimeException(new IllegalStateException(
-							String.format("Tree creation: missing a PersistenceSession to recreate EntityModel "
-									+ "from Oid: '%s'", id)))
-					);
-			
-			final ObjectAdapter objAdapter = persistenceSession.adapterFor(id);
-			if(objAdapter==null) {
-				throw new NoSuchElementException(
-						String.format("Tree creation: could not recreate EntityModel from Oid: '%s'", id)); 
-			}
-			
-			final Object pojo = objAdapter.getObject();
-			if(pojo==null) {
-				throw new NoSuchElementException(
-						String.format("Tree creation: could not recreate Pojo from Oid: '%s'", id)); 
-			}
-			
-			return new TreeModel(objAdapter, treePath);
-		}
-
-		/*
-		 * Important! Models must be identifiable by their contained object. Also IDs must be
-		 * unique within a tree structure.
-		 */
-		@Override
-		public boolean equals(Object obj) {
-			if (obj instanceof LoadableDetachableEntityModel) {
-				final LoadableDetachableEntityModel other = (LoadableDetachableEntityModel) obj;
-				return treePath.equals(other.treePath) && id.equals(other.id);
-			}
-			return false;
-		}
-
-		/*
-		 * Important! Models must be identifiable by their contained object.
-		 */
-		@Override
-		public int hashCode() {
-			return hashCode;
-		}
-	}
-
 }
