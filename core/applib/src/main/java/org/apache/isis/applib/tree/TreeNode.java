@@ -19,12 +19,16 @@
 package org.apache.isis.applib.tree;
 
 import java.util.Iterator;
+import java.util.Set;
 import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 import javax.annotation.Nullable;
+
+import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.internal.base._NullSafe;
 
 public interface TreeNode<T> {
 
@@ -58,11 +62,35 @@ public interface TreeNode<T> {
 
 	// -- COLLAPSE/EXPAND
 	
+	/**
+	 * @return this tree's shared state object, holding e.g. the collapse/expand state
+	 */
 	public TreeState getTreeState();
 	
-//	public boolean isExpanded();
-//	
-//	public void setExpanded(boolean expanded);
+	public default boolean isExpanded(TreePath treePath) {
+		final Set<TreePath> expandedPaths = getTreeState().getExpandedNodePaths();
+		return expandedPaths.contains(treePath);
+	}
+	
+	/**
+	 * Adds {@code treePaths} to the set of expanded nodes, as held by this tree's shared state object. 
+	 * @param treePaths
+	 */
+	@Programmatic
+	public default void expand(TreePath ... treePaths) {
+		final Set<TreePath> expandedPaths = getTreeState().getExpandedNodePaths();
+		_NullSafe.stream(treePaths).forEach(expandedPaths::add);
+	}
+	
+	/**
+	 * Removes {@code treePaths} from the set of expanded nodes, as held by this tree's shared state object.
+	 * @param treePaths
+	 */
+	@Programmatic
+	public default void collapse(TreePath ... treePaths) {
+		final Set<TreePath> expandedPaths = getTreeState().getExpandedNodePaths();
+		_NullSafe.stream(treePaths).forEach(expandedPaths::remove);
+	}
 	
 	// -- CONSTRUCTION
 
