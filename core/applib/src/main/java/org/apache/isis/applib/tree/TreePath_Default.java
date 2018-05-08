@@ -20,6 +20,8 @@ package org.apache.isis.applib.tree;
 
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * Package private mixin for TreePath.
@@ -28,6 +30,7 @@ class TreePath_Default implements TreePath {
 
 	private static final long serialVersionUID = 530511373409525896L;
 	private final int[] canonicalPath;
+	private final int hashCode;
 
 	TreePath_Default(int[] canonicalPath) {
 		Objects.requireNonNull(canonicalPath, "canonicalPath is required");
@@ -35,6 +38,7 @@ class TreePath_Default implements TreePath {
 			throw new IllegalArgumentException("canonicalPath must not be empty");
 		}
 		this.canonicalPath = canonicalPath;
+		this.hashCode = Arrays.hashCode(canonicalPath);
 	}
 
 	@Override
@@ -44,6 +48,23 @@ class TreePath_Default implements TreePath {
 		newCanonicalPath[canonicalPath.length] = indexWithinSiblings;
 		return new TreePath_Default(newCanonicalPath);
 	}
+	
+	@Override
+	public TreePath getParentIfAny() {
+		if(isRoot()) {
+			return null;
+		}
+		final int[] newCanonicalPath = new int[canonicalPath.length-1];
+		System.arraycopy(canonicalPath, 0, newCanonicalPath, 0, canonicalPath.length-1);
+		return new TreePath_Default(newCanonicalPath);
+	}
+	
+	@Override
+	public boolean isRoot() {
+		return canonicalPath.length==1;
+	}
+
+	// -- OBJECT CONTRACTS
 	
 	@Override
 	public boolean equals(Object obj) {
@@ -56,22 +77,14 @@ class TreePath_Default implements TreePath {
 	
 	@Override
 	public int hashCode() {
-		return canonicalPath.hashCode();
+		return hashCode;
 	}
-
+	
 	@Override
-	public TreePath getParentIfAny() {
-		if(isRoot()) {
-			return null;
-		}
-		final int[] newCanonicalPath = new int[canonicalPath.length-1];
-		System.arraycopy(canonicalPath, 0, newCanonicalPath, 0, canonicalPath.length-1);
-		return new TreePath_Default(newCanonicalPath);
-	}
-
-	@Override
-	public boolean isRoot() {
-		return canonicalPath.length==1;
+	public String toString() {
+		return "/" + IntStream.of(canonicalPath)
+				.mapToObj(i->""+i)
+				.collect(Collectors.joining("/"));
 	}
 	
 }

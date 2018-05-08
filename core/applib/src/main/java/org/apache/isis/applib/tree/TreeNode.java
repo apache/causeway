@@ -56,6 +56,14 @@ public interface TreeNode<T> {
 	
 	public TreePath getPositionAsPath();
 
+	// -- COLLAPSE/EXPAND
+	
+	public TreeState getTreeState();
+	
+//	public boolean isExpanded();
+//	
+//	public void setExpanded(boolean expanded);
+	
 	// -- CONSTRUCTION
 
 	/**
@@ -65,7 +73,7 @@ public interface TreeNode<T> {
 	 * @return new LazyTreeNode
 	 */
 	public static <T> TreeNode<T> lazy(T node, Class<? extends TreeAdapter<T>> treeAdapterClass) {
-		return LazyTreeNode.of(node, treeAdapterClass);
+		return LazyTreeNode.of(node, treeAdapterClass, TreeState.rootCollapsed());
 	}
 
 	// -- PARENT NODE ITERATION
@@ -114,5 +122,6 @@ public interface TreeNode<T> {
 	// [ahuber] Implementation Note: a class rather than an instance, because otherwise 
 	// the adapter would need to be serializable for Wicket's trees to work correctly.
 	public Class<? extends TreeAdapter<T>> getTreeAdapterClass();
+	
 
 }

@@ -29,18 +29,20 @@ import org.apache.isis.applib.internal.exceptions._Exceptions;
 @Value(semanticsProviderName="org.apache.isis.core.metamodel.facets.value.treenode.TreeNodeValueSemanticsProvider")
 public class LazyTreeNode<T> implements TreeNode<T> {
 	
+	private final TreeState sharedState;
 	private final T value;
 	private final Class<? extends TreeAdapter<T>> treeAdapterClass;
 	private final _Lazy<TreeAdapter<T>> treeAdapter = _Lazy.of(this::newTreeAdapter);
 	private final _Lazy<TreePath> treePath = _Lazy.of(this::resolveTreePath);
 	
-	public static <T> TreeNode<T> of(T value, Class<? extends TreeAdapter<T>> treeAdapterClass) {
-		return new LazyTreeNode<T>(value, treeAdapterClass);
+	public static <T> TreeNode<T> of(T value, Class<? extends TreeAdapter<T>> treeAdapterClass, TreeState sharedState) {
+		return new LazyTreeNode<T>(value, treeAdapterClass, sharedState);
 	}
 	
-	protected LazyTreeNode(T value, Class<? extends TreeAdapter<T>> treeAdapterClass) {
+	protected LazyTreeNode(T value, Class<? extends TreeAdapter<T>> treeAdapterClass, TreeState sharedState) {
 		this.value = Objects.requireNonNull(value);
 		this.treeAdapterClass = Objects.requireNonNull(treeAdapterClass);
+		this.sharedState = sharedState;
 	}
 
 	@Override
@@ -52,8 +54,7 @@ public class LazyTreeNode<T> implements TreeNode<T> {
 	public TreeNode<T> getParentIfAny() {
 		return treeAdapter().parentOf(getValue())
 				.map(this::toTreeNode)
-				.orElse(null)
-				;
+				.orElse(null);
 	}
 
 	@Override
@@ -67,8 +68,7 @@ public class LazyTreeNode<T> implements TreeNode<T> {
 			return Stream.empty();
 		}
 		return treeAdapter().childrenOf(value)
-				.map(this::toTreeNode)
-				;
+				.map(this::toTreeNode);
 	}
 
 	@Override
@@ -80,6 +80,23 @@ public class LazyTreeNode<T> implements TreeNode<T> {
 	public TreePath getPositionAsPath() {
 		return treePath.get();
 	}
+	
+	@Override
+	public TreeState getTreeState() {
+		return sharedState;
+	}
+
+//	@Override
+//	public boolean isExpanded() {
+//		// TODO Auto-generated method stub
+//		return false;
+//	}
+//	
+//	@Override
+//	public void setExpanded(boolean expanded) {
+//		// TODO Auto-generated method stub
+//		
+//	}
 	
 	// -- HELPER
 	
@@ -97,7 +114,7 @@ public class LazyTreeNode<T> implements TreeNode<T> {
 	}
 	
 	private TreeNode<T> toTreeNode(T value){
-		return of(value, getTreeAdapterClass());
+		return of(value, getTreeAdapterClass(), sharedState);
 	}
 
 	private TreePath resolveTreePath() {
@@ -116,8 +133,7 @@ public class LazyTreeNode<T> implements TreeNode<T> {
 		
 		boolean found = parent.streamChildren()
 		.peek(__->indexOneBased.increment())
-		.anyMatch(sibling->this.equals(sibling))
-		;
+		.anyMatch(sibling->this.equals(sibling));
 		
 		if(!found) {
 			throw _Exceptions.unexpectedCodeReach();

@@ -5,7 +5,9 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.resource.spi.IllegalStateException;
@@ -15,6 +17,7 @@ import org.apache.isis.applib.internal.functions._Functions;
 import org.apache.isis.applib.tree.TreeAdapter;
 import org.apache.isis.applib.tree.TreeNode;
 import org.apache.isis.applib.tree.TreePath;
+import org.apache.isis.applib.tree.TreeState;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -32,17 +35,18 @@ import org.apache.wicket.extensions.markup.html.repeater.tree.ITreeProvider;
 import org.apache.wicket.extensions.markup.html.repeater.tree.NestedTree;
 import org.apache.wicket.extensions.markup.html.repeater.tree.Node;
 import org.apache.wicket.extensions.markup.html.repeater.tree.theme.WindowsTheme;
+import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 
 class IsisToWicketTreeAdapter {
 
 	public static EntityTree adapt(String id, ValueModel valueModel) {
-		return new EntityTree(id, toITreeProvider( valueModel ));
+		return new EntityTree(id, toITreeProvider(valueModel), toIModelRepresentingCollapseExpandState(valueModel));
 	}
-	
+
 	public static EntityTree adapt(String id, ScalarModel scalarModel) {
-		return new EntityTree(id, toITreeProvider( scalarModel ));
+		return new EntityTree(id, toITreeProvider(scalarModel), toIModelRepresentingCollapseExpandState(scalarModel));
 	}
 	
 	// -- RENDERING
@@ -54,8 +58,11 @@ class IsisToWicketTreeAdapter {
 
 		private static final long serialVersionUID = 1L;
 
-		public EntityTree(String id, ITreeProvider<TreeModel> provider) {
-			super(id, provider);
+		public EntityTree(
+				String id, 
+				ITreeProvider<TreeModel> provider, 
+				TreeExpansionModel collapseExpandState) {
+			super(id, provider, collapseExpandState);
 			add(new WindowsTheme()); // TODO not required if Isis provides it's own css styles for tree-nodes
 		}
 		
@@ -116,6 +123,16 @@ class IsisToWicketTreeAdapter {
 			
 			return node;
 			
+		}
+		
+		/**
+		 * To utilize the custom TreeExpansionModel for deciding a node's collapse/expand state we 
+		 * override this method.
+		 */
+		@Override
+		public State getState(TreeModel t) {
+			final TreeExpansionModel treeExpansionModel = (TreeExpansionModel) getModel();  
+			return treeExpansionModel.contains(t.getTreePath()) ? State.EXPANDED : State.COLLAPSED;
 		}
 		
 	}
@@ -261,10 +278,65 @@ class IsisToWicketTreeAdapter {
 	private static ITreeProvider<TreeModel> toITreeProvider(ModelAbstract<ObjectAdapter> model) {
 		
 		final TreeNode treeNode = (TreeNode) model.getObject().getObject();
-		final TreeModelTreeAdapter wrappingTreeAdapter = new TreeModelTreeAdapter(treeNode.getTreeAdapterClass());
+		final Class<? extends TreeAdapter> treeAdapterClass = treeNode.getTreeAdapterClass();
+		final TreeModelTreeAdapter wrappingTreeAdapter = new TreeModelTreeAdapter(treeAdapterClass);
+		
 		return new TreeModelTreeProvider(
 				wrappingTreeAdapter.wrap(treeNode.getValue(), treeNode.getPositionAsPath()), 
 				wrappingTreeAdapter);		
+	}
+	
+	/**
+	 * 
+	 * @param model
+	 * @return Wicket's model for collapse/expand state
+	 */
+	@SuppressWarnings({ "rawtypes" })
+	private static TreeExpansionModel toIModelRepresentingCollapseExpandState(ModelAbstract<ObjectAdapter> model) {
+		
+		final TreeNode treeNode = (TreeNode) model.getObject().getObject();
+		final TreeState treeState = treeNode.getTreeState();
+		return TreeExpansionModel.of(treeState.getExpandedNodePaths());
+	}
+	
+	/**
+	 * Wicket's model for collapse/expand state
+	 */
+	private static class TreeExpansionModel extends AbstractReadOnlyModel<Set<TreeModel>> {
+		private static final long serialVersionUID = 648152234030889164L;
+
+		public static TreeExpansionModel of(Set<TreePath> expandedTreePaths) {
+			return new TreeExpansionModel(expandedTreePaths);
+		}
+
+		public boolean contains(TreePath treePath) {
+			return expandedTreePaths.contains(treePath);
+		}
+
+		private final Set<TreePath> expandedTreePaths;
+		private final Set<TreeModel> expandedNodes; //TODO [ahuber] possibly not used within this readonly model 
+		
+		private TreeExpansionModel(Set<TreePath> expandedTreePaths) {
+			this.expandedTreePaths = expandedTreePaths;
+			this.expandedNodes = expandedTreePaths.stream()
+			.map(tPath->new TreeModel(null, tPath))
+			.collect(Collectors.toSet());
+		}
+
+		@Override
+		public Set<TreeModel> getObject() {
+			return expandedNodes;
+		}
+		
+		@Override
+		public String toString() {
+			return "{" + expandedNodes.stream()
+					.map(TreeModel::getTreePath)
+					.map(TreePath::toString)
+					.collect(Collectors.joining(", ")) + "}";
+		}
+
+
 	}
 	
 	private static class LoadableDetachableEntityModel extends LoadableDetachableModel<TreeModel> {
