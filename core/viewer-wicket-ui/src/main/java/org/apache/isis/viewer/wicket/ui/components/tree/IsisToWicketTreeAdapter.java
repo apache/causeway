@@ -126,13 +126,35 @@ class IsisToWicketTreeAdapter {
 		}
 		
 		/**
-		 * To utilize the custom TreeExpansionModel for deciding a node's collapse/expand state we 
-		 * override this method.
+		 * To utilize the custom TreeExpansionModel for deciding a node's collapse/expand state,
+		 * we override this method.
 		 */
 		@Override
 		public State getState(TreeModel t) {
 			final TreeExpansionModel treeExpansionModel = (TreeExpansionModel) getModel();  
 			return treeExpansionModel.contains(t.getTreePath()) ? State.EXPANDED : State.COLLAPSED;
+		}
+		
+		/**
+		 * To utilize the custom TreeExpansionModel for hooking into a node's expand event,
+		 * we override this method.
+		 */
+		@Override
+		public void expand(TreeModel t) {
+			final TreeExpansionModel treeExpansionModel = (TreeExpansionModel) getModel();
+			treeExpansionModel.onExpand(t);
+			super.expand(t);
+		}
+		
+		/**
+		 * To utilize the custom TreeExpansionModel for hooking into a node's collapse event,
+		 * we override this method.
+		 */
+		@Override
+		public void collapse(TreeModel t) {
+			final TreeExpansionModel treeExpansionModel = (TreeExpansionModel) getModel();
+			treeExpansionModel.onCollapse(t);
+			super.collapse(t);
 		}
 		
 	}
@@ -386,12 +408,28 @@ class IsisToWicketTreeAdapter {
 			return new TreeExpansionModel(expandedTreePaths);
 		}
 
+		/**
+		 * Happens on user interaction via UI.
+		 * @param t
+		 */
+		public void onExpand(TreeModel t) {
+			expandedTreePaths.add(t.getTreePath());
+		}
+		
+		/**
+		 * Happens on user interaction via UI.
+		 * @param t
+		 */
+		public void onCollapse(TreeModel t) {
+			expandedTreePaths.remove(t.getTreePath());
+		}
+
 		public boolean contains(TreePath treePath) {
 			return expandedTreePaths.contains(treePath);
 		}
 
 		private final Set<TreePath> expandedTreePaths;
-		private final Set<TreeModel> expandedNodes; //TODO [ahuber] possibly not used within this readonly model 
+		private final Set<TreeModel> expandedNodes; 
 		
 		private TreeExpansionModel(Set<TreePath> expandedTreePaths) {
 			this.expandedTreePaths = expandedTreePaths;
