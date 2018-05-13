@@ -34,8 +34,8 @@
             domainapp.modules.simple.SimpleModuleManifest
         </isis-maven-plugin.validate.appManifest>
 
-        <maven-checkstyle-plugin.configLocation>${project.parent.basedir}/_checks/checkstyle.xml</maven-checkstyle-plugin.configLocation>
-        <maven-pmd-plugin.ruleset>${project.parent.basedir}/_checks/pmd.xml</maven-pmd-plugin.ruleset>
+        <maven-checkstyle-plugin.configLocation>../_checks/checkstyle.xml</maven-checkstyle-plugin.configLocation>
+        <maven-pmd-plugin.ruleset>../_checks/pmd.xml</maven-pmd-plugin.ruleset>
     </properties>
 
     <build>
@@ -183,7 +183,6 @@
             <scope>test</scope>
         </dependency>
 
-
         <dependency>
             <groupId>org.hsqldb</groupId>
             <artifactId>hsqldb</artifactId>
@@ -191,70 +190,5 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
-    <profiles>
-        <profile>
-            <!--
-            The flattened pom plugin seems to interfere with isis-mavendeps-testing type=pom dependency
-            This is a workaround for that issue
-            -->
-            <id>flattened-pom</id>
-            <activation>
-                <property>
-                    <name>!skip.flattened-pom</name>
-                </property>
-            </activation>
-            <properties>
-                <hamcrest.version>1.3</hamcrest.version>
-                <assertj.version>3.6.2</assertj.version>
-                <objenesis.version>2.4</objenesis.version>
-            </properties>
-            <dependencies>
-                <dependency>
-                    <groupId>org.apache.isis.core</groupId>
-                    <artifactId>isis-core-unittestsupport</artifactId>
-                    <version>${isis.version}</version>
-                    <scope>test</scope>
-                </dependency>
-                <dependency>
-                    <groupId>org.apache.isis.core</groupId>
-                    <artifactId>isis-core-integtestsupport</artifactId>
-                    <version>${isis.version}</version>
-                    <scope>test</scope>
-                </dependency>
-                <dependency>
-                    <groupId>org.apache.isis.core</groupId>
-                    <artifactId>isis-core-specsupport</artifactId>
-                    <version>${isis.version}</version>
-                    <scope>test</scope>
-                </dependency>
-
-                <dependency>
-                    <groupId>org.objenesis</groupId>
-                    <artifactId>objenesis</artifactId>
-                    <version>${objenesis.version}</version>
-                    <scope>test</scope>
-                </dependency>
-                <dependency>
-                    <groupId>org.hamcrest</groupId>
-                    <artifactId>hamcrest-library</artifactId>
-                    <version>${hamcrest.version}</version>
-                    <scope>test</scope>
-                </dependency>
-                <dependency>
-                    <groupId>org.assertj</groupId>
-                    <artifactId>assertj-core</artifactId>
-                    <version>${assertj.version}</version>
-                    <scope>test</scope>
-                </dependency>
-                <dependency>
-                    <groupId>org.hsqldb</groupId>
-                    <artifactId>hsqldb</artifactId>
-                    <version>${hsqldb.version}</version>
-                    <scope>test</scope>
-                </dependency>
-            </dependencies>
-        </profile>
-    </profiles>
 
 </project>
