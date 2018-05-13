@@ -34,15 +34,21 @@ abstract class _Resource_Path {
 	protected abstract String resourceName();
 
 	public _Resource_Path(String contextPath) {
-		
-		if(_Strings.isEmpty(contextPath))
-			throw new IllegalArgumentException(resourceName()+" can not be empty");
-		
-		contextPath = contextPath.trim();
-		
-		if(_Strings.isEmpty(contextPath))
-			throw new IllegalArgumentException(resourceName()+" can not be empty");
-		
+
+// as it stands, this code fails when running under org.apache.isis.WebServer, because the contextPath passed in is just ""
+// But it's not obvious to me why an empty contextPath is not allowed; a value of "/" would be trimmed down to "" anyway.
+// Therefore relaxing the logic.
+//
+//		if(_Strings.isEmpty(contextPath))
+//			throw new IllegalArgumentException(resourceName()+" can not be empty");
+//
+//		contextPath = contextPath.trim();
+//
+//		if(_Strings.isEmpty(contextPath))
+//			throw new IllegalArgumentException(resourceName()+" can not be empty");
+
+		contextPath = defaultIfEmpty(contextPath);
+
 		while(contextPath.startsWith("/")) {
 			contextPath = contextPath.substring(1);
 		}
@@ -58,5 +64,16 @@ abstract class _Resource_Path {
 		
 		this.path = contextPath;
 	}
-	
+
+	private static String defaultIfEmpty(final String contextPath) {
+		if(contextPath == null) {
+			return "/";
+		}
+		final String trimmedContextPath = contextPath.trim();
+		if(_Strings.isEmpty(trimmedContextPath)) {
+			return "/";
+		}
+		return trimmedContextPath;
+	}
+
 }
