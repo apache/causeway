@@ -1161,6 +1161,10 @@ ${license.additional-notes}
                 <version>1.0.0</version>
                 <configuration>
                     <updatePomFile>true</updatePomFile>
+                    <pomElements>
+                        <dependencyManagement>resolve</dependencyManagement>
+                        <dependencies>resolve</dependencies>
+                    </pomElements>
                 </configuration>
                 <executions>
                     <execution>
