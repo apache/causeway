@@ -352,7 +352,7 @@ public class IsisWicketApplication
             final IsisConfigurationBuilder isisConfigurationBuilder = obtainConfigBuilder();
             isisConfigurationBuilder.addDefaultConfigurationResourcesAndPrimers();
 
-            _Resource.putContextPath(getServletContext().getContextPath());
+            _Resource.putContextPathIfPresent(getServletContext().getContextPath());
 
             final IsisConfigurationDefault configuration = isisConfigurationBuilder.getConfiguration();
 
