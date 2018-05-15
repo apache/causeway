@@ -26,7 +26,9 @@ import org.apache.isis.applib.internal.memento._Mementos;
 import org.apache.isis.applib.internal.memento._Mementos.Memento;
 import org.apache.isis.applib.internal.memento._Mementos.SerializingAdapter;
 import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
+import org.apache.isis.applib.tree.LazyTreeNode;
 import org.apache.isis.applib.tree.TreeNode;
+import org.apache.isis.applib.tree.TreeState;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
@@ -97,6 +99,7 @@ implements TreeNodeValueFacet {
 		final Memento memento = newMemento();
 		memento.put("primaryValue", treeNode.getValue());
 		memento.put("adapterClass", treeNode.getTreeAdapterClass());
+		memento.put("treeState", treeNode.getTreeState());
 		return memento.asString(); 
 	}
 
@@ -104,9 +107,10 @@ implements TreeNodeValueFacet {
 	@Override
 	protected TreeNode<?> doRestore(final String input) {
 		final Memento memento = parseMemento(input);
-		return TreeNode.lazy(
+		return LazyTreeNode.of(
 				memento.get("primaryValue", Object.class), 
-				memento.get("adapterClass", Class.class));
+				memento.get("adapterClass", Class.class),
+				memento.get("treeState", TreeState.class));
 	}
 
 	// /////// toString ///////

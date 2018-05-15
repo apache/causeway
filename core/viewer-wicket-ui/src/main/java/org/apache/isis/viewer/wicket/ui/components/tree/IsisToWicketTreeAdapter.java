@@ -14,6 +14,7 @@ import javax.resource.spi.IllegalStateException;
 
 import org.apache.isis.applib.internal.collections._Lists;
 import org.apache.isis.applib.internal.functions._Functions;
+import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.tree.TreeAdapter;
 import org.apache.isis.applib.tree.TreeNode;
 import org.apache.isis.applib.tree.TreePath;
@@ -38,6 +39,7 @@ import org.apache.wicket.extensions.markup.html.repeater.tree.theme.WindowsTheme
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.model.Model;
 
 class IsisToWicketTreeAdapter {
 
@@ -169,14 +171,24 @@ class IsisToWicketTreeAdapter {
 		
 		private final TreePath treePath;
 
+		public TreeModel(TreePath treePath) {
+			super((ObjectAdapter)null);
+			this.treePath = treePath;
+		}
+		
 		public TreeModel(ObjectAdapter adapter, TreePath treePath) {
-			super(adapter);
+			super(Objects.requireNonNull(adapter));
 			this.treePath = treePath;
 		}
 		
 		public TreePath getTreePath() {
 			return treePath;
 		}
+		
+		public boolean isTreePathModelOnly() {
+			return getObject()==null;
+		}
+		
 	}
 	
 	// -- ISIS' TREE ADAPTER (FOR TREES OF TREE-MODEL NODES) 
@@ -200,8 +212,10 @@ class IsisToWicketTreeAdapter {
 				return wrappedTreeAdapter;
 			}
 			try {
-				return wrappedTreeAdapter = treeAdapterClass.newInstance();
-			} catch (InstantiationException | IllegalAccessException e) {
+				final FactoryService factoryService = IsisContext.getServicesInjector()
+						.lookupService(FactoryService.class);
+				return wrappedTreeAdapter = factoryService.instantiate(treeAdapterClass);
+			} catch (Exception e) {
 				throw new RuntimeException("failed to instantiate tree adapter", e);
 			}
 		}
@@ -234,7 +248,7 @@ class IsisToWicketTreeAdapter {
 		
 		private TreeModel wrap(Object pojo, TreePath treePath) {
 			Objects.requireNonNull(pojo);
-			return new TreeModel(persistenceSession().getAdapterFor(pojo), treePath);
+			return new TreeModel(persistenceSession().adapterFor(pojo), treePath);
 		}
 		
 		private Object unwrap(TreeModel model) {
@@ -294,7 +308,9 @@ class IsisToWicketTreeAdapter {
 
 		@Override
 		public IModel<TreeModel> model(final TreeModel treeModel) {
-			return new LoadableDetachableTreeModel(treeModel);
+			return treeModel.isTreePathModelOnly() 
+					? Model.of(treeModel)
+					: new LoadableDetachableTreeModel(treeModel);
 		}
 		
 	}
@@ -329,8 +345,8 @@ class IsisToWicketTreeAdapter {
 
 		public LoadableDetachableTreeModel(TreeModel tModel) {
 			super(tModel);
-			this.id = (RootOid) tModel.getObject().getOid();
 			this.treePath = tModel.getTreePath();
+			this.id = (RootOid) tModel.getObject().getOid();
 			this.hashCode = Objects.hash(id.hashCode(), treePath.hashCode());
 		}
 
@@ -342,14 +358,14 @@ class IsisToWicketTreeAdapter {
 			
 			final PersistenceSession persistenceSession = IsisContext.getPersistenceSession()
 					.orElseThrow(()->new RuntimeException(new IllegalStateException(
-							String.format("Tree creation: missing a PersistenceSession to recreate EntityModel "
+							String.format("Tree creation: missing a PersistenceSession to recreate TreeModel "
 									+ "from Oid: '%s'", id)))
 					);
 			
 			final ObjectAdapter objAdapter = persistenceSession.adapterFor(id);
 			if(objAdapter==null) {
 				throw new NoSuchElementException(
-						String.format("Tree creation: could not recreate EntityModel from Oid: '%s'", id)); 
+						String.format("Tree creation: could not recreate TreeModel from Oid: '%s'", id)); 
 			}
 			
 			final Object pojo = objAdapter.getObject();
@@ -392,7 +408,6 @@ class IsisToWicketTreeAdapter {
 	 */
 	@SuppressWarnings({ "rawtypes" })
 	private static TreeExpansionModel toIModelRepresentingCollapseExpandState(ModelAbstract<ObjectAdapter> model) {
-		
 		final TreeNode treeNode = (TreeNode) model.getObject().getObject();
 		final TreeState treeState = treeNode.getTreeState();
 		return TreeExpansionModel.of(treeState.getExpandedNodePaths());
@@ -434,7 +449,7 @@ class IsisToWicketTreeAdapter {
 		private TreeExpansionModel(Set<TreePath> expandedTreePaths) {
 			this.expandedTreePaths = expandedTreePaths;
 			this.expandedNodes = expandedTreePaths.stream()
-			.map(tPath->new TreeModel(null, tPath))
+			.map(tPath->new TreeModel(tPath))
 			.collect(Collectors.toSet());
 		}
 

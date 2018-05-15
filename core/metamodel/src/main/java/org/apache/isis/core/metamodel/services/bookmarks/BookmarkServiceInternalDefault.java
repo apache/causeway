@@ -39,6 +39,7 @@ import org.apache.isis.applib.services.bookmark.BookmarkHolder;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
+import org.apache.isis.applib.tree.TreeState;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
 
@@ -219,7 +220,8 @@ public class BookmarkServiceInternalDefault implements BookmarkService, Serializ
     		java.util.Date.class,
     		java.sql.Date.class,
     		Enum.class,
-    		Bookmark.class
+    		Bookmark.class,
+    		TreeState.class
     );
     
     private static boolean isPredefinedSerializable(final Class<?> cls) {

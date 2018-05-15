@@ -85,18 +85,6 @@ public class LazyTreeNode<T> implements TreeNode<T> {
 	public TreeState getTreeState() {
 		return sharedState;
 	}
-
-//	@Override
-//	public boolean isExpanded() {
-//		// TODO Auto-generated method stub
-//		return false;
-//	}
-//	
-//	@Override
-//	public void setExpanded(boolean expanded) {
-//		// TODO Auto-generated method stub
-//		
-//	}
 	
 	// -- HELPER
 	
