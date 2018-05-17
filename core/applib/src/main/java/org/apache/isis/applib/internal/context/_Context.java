@@ -198,11 +198,20 @@ public final class _Context {
 			Thread.currentThread()::getContextClassLoader;
 	
 	/**
-	 * Will be set by the framework's bootstrapping mechanism if required.
+	 * As set by the framework's bootstrapping mechanism.
 	 * @return the default class loader
 	 */
 	public static @NotNull ClassLoader getDefaultClassLoader() {
 		return getOrElse(ClassLoader.class, FALLBACK_CLASSLOADER);
+	}
+	
+	/**
+	 * Set by the framework's bootstrapping mechanism.
+	 */
+	public static void setDefaultClassLoaderIfAbsent(ClassLoader classLoader) {
+		if(_Context.getIfAny(ClassLoader.class)==null) {
+        	_Context.putSingleton(ClassLoader.class, Objects.requireNonNull(classLoader, "classLoader required"));	
+        }
 	}
 	
 	// -- CLASS LOADING SHORTCUTS

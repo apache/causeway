@@ -18,6 +18,7 @@
  */
 package org.apache.isis.viewer.restfulobjects.server;
 
+import org.apache.isis.applib.internal.context._Context;
 import org.apache.isis.viewer.restfulobjects.rendering.service.acceptheader.AcceptHeaderServiceForRest;
 import org.apache.isis.viewer.restfulobjects.server.mappers.ExceptionMapperForObjectNotFound;
 import org.apache.isis.viewer.restfulobjects.server.mappers.ExceptionMapperForRestfulObjectsApplication;
@@ -48,6 +49,7 @@ public class RestfulObjectsApplication extends AbstractJaxRsApplication {
 
         addClass(SwaggerSpecResource.class);
         
+        _Context.setDefaultClassLoaderIfAbsent(this.getClass().getClassLoader());
         addSingleton(IsisJaxrsServerPlugin.get().newRestfulObjectsJaxbWriterForXml());
         
 

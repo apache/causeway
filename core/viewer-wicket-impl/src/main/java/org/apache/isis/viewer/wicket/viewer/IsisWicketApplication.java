@@ -337,7 +337,7 @@ public class IsisWicketApplication
         try {
             super.init();
             
-            _Context.putSingleton(ClassLoader.class, this.getClass().getClassLoader());
+            _Context.setDefaultClassLoaderIfAbsent(this.getClass().getClassLoader());
 
             futures = startBackgroundInitializationThreads();
 
