@@ -207,11 +207,17 @@ public final class _Context {
 	
 	/**
 	 * Set by the framework's bootstrapping mechanism.
+	 * @param classLoader the framework's default class loader
+	 * @param override whether to override if already registered
 	 */
-	public static void setDefaultClassLoaderIfAbsent(ClassLoader classLoader) {
-		if(_Context.getIfAny(ClassLoader.class)==null) {
-        	_Context.putSingleton(ClassLoader.class, Objects.requireNonNull(classLoader, "classLoader required"));	
-        }
+	public static void setDefaultClassLoader(ClassLoader classLoader, boolean override) {
+		final boolean alreadyRegistered = _Context.getIfAny(ClassLoader.class)!=null; 
+		if(!alreadyRegistered || override) {
+			// let writes to the map be atomic
+			synchronized (singletonMap) {   
+				singletonMap.put(toKey(ClassLoader.class), Objects.requireNonNull(classLoader, "classLoader required"));	
+			}
+		}
 	}
 	
 	// -- CLASS LOADING SHORTCUTS

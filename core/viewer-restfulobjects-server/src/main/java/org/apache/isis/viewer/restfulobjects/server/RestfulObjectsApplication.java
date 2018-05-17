@@ -49,7 +49,8 @@ public class RestfulObjectsApplication extends AbstractJaxRsApplication {
 
         addClass(SwaggerSpecResource.class);
         
-        _Context.setDefaultClassLoaderIfAbsent(this.getClass().getClassLoader());
+        //override=false, allows for IsisWicketApplication to take precedence
+        _Context.setDefaultClassLoader(this.getClass().getClassLoader(), /*override*/false);
         addSingleton(IsisJaxrsServerPlugin.get().newRestfulObjectsJaxbWriterForXml());
         
 
