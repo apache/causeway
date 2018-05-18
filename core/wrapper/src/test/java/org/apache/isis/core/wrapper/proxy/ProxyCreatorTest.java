@@ -22,7 +22,6 @@ import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.isis.core.metamodel.specloader.classsubstitutor.ProxyEnhanced;
 import org.apache.isis.core.wrapper.handlers.DelegatingInvocationHandler;
 import org.apache.isis.progmodel.wrapper.dom.employees.Employee;
 import org.junit.Assert;
@@ -74,7 +73,8 @@ public class ProxyCreatorTest {
 		final Employee proxyOfEmployee = proxyCreator.instantiateProxy(handler);
 		
 		Assert.assertNotNull(proxyOfEmployee);
-		Assert.assertTrue(proxyOfEmployee instanceof ProxyEnhanced);
+		
+		Assert.assertNotEquals(Employee.class.getName(), proxyOfEmployee.getClass().getName());
 		
 		Assert.assertFalse(handler.wasInvoked("getName"));
 		
