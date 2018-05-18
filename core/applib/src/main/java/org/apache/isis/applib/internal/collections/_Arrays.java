@@ -19,12 +19,15 @@
 
 package org.apache.isis.applib.internal.collections;
 
+import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.stream.Collector;
 
 import javax.annotation.Nullable;
 
+import org.apache.isis.applib.internal._Constants;
+import org.apache.isis.applib.internal.base._Casts;
 import org.apache.isis.applib.internal.base._NullSafe;
 
 /**
@@ -85,6 +88,46 @@ public final class _Arrays {
     	Objects.requireNonNull(componentType);
 		return new _Arrays_CollectorUnknownSize<T>(componentType);
 	}
+    
+    // -- CONCATENATION
+    
+    /**
+     * Returns a new array containing all components {first, *rest} 
+     * @param first (non-null)
+     * @param rest (nullable)
+     * @return (non-null)
+     */
+    @SafeVarargs
+	public static <T> T[] combine(T first, @Nullable  T... rest) {
+    	Objects.requireNonNull(first);
+    	final int restLength = _NullSafe.size(rest);
+    	final T[] all = _Casts.uncheckedCast(Array.newInstance(first.getClass(), restLength+1));
+        all[0] = first;
+        if(restLength>0) {
+        	System.arraycopy(rest, 0, all, 1, restLength);
+        }
+        return all;
+    }
+    
+    /**
+     * Returns a new array containing all components {*first, *rest} 
+     * @param first (nullable)
+     * @param rest (nullable)
+     * @return (non-null)
+     */
+    @SafeVarargs
+	public static <T> T[] combine(T[] first, T... rest) {
+    	final int firstLength = _NullSafe.size(first);
+    	final int restLength = _NullSafe.size(rest);
+    	if(firstLength + restLength == 0) {
+    		return _Casts.uncheckedCast(_Constants.emptyObjects);
+    	}
+    	final Class<?> componentType = firstLength>0 ? first[0].getClass() : rest[0].getClass();
+    	final T[] all = _Casts.uncheckedCast(Array.newInstance(componentType, firstLength + restLength));
+    	System.arraycopy(first, 0, all, 0, firstLength);
+        System.arraycopy(rest, 0, all, firstLength, restLength);
+        return all;
+    }
 
     // -- CONSTRUCTION
     
