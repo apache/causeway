@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.runtime.services;
 
+import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Map;
@@ -29,24 +30,25 @@ import javax.annotation.PreDestroy;
 import javax.enterprise.context.RequestScoped;
 
 import org.apache.isis.applib.internal.context._Context;
+import org.apache.isis.applib.internal.proxy._Proxies;
+import org.apache.isis.applib.internal.proxy._Proxies.ProxyFactory;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.factory.InstanceCreationClassException;
 import org.apache.isis.core.commons.factory.InstanceCreationException;
 import org.apache.isis.core.commons.lang.ArrayExtensions;
 import org.apache.isis.core.commons.lang.MethodExtensions;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.specloader.classsubstitutor.JavassistEnhanced;
+import org.apache.isis.core.metamodel.specloader.classsubstitutor.ProxyEnhanced;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
-import javassist.util.proxy.MethodFilter;
-import javassist.util.proxy.MethodHandler;
-import javassist.util.proxy.ProxyFactory;
-import javassist.util.proxy.ProxyObject;
+//import javassist.util.proxy.MethodFilter;
+//import javassist.util.proxy.MethodHandler;
+//import javassist.util.proxy.ProxyFactory;
+//import javassist.util.proxy.ProxyObject;
 
 /**
  * Instantiates the service, taking into account whether the service is annotated with
@@ -138,95 +140,85 @@ public final class ServiceInstantiator {
     
      
     private <T> T instantiateRequestScopedProxy(final Class<T> cls) {
-        final ProxyFactory proxyFactory = new ProxyFactory();
-        proxyFactory.setSuperclass(cls);
-        proxyFactory.setInterfaces(ArrayExtensions.combine(cls.getInterfaces(), new Class<?>[] { RequestScopedService.class, JavassistEnhanced.class }));
+    	
+    	final Class<?>[] interfaces = ArrayExtensions.combine(
+				cls.getInterfaces(), 
+				new Class<?>[] { RequestScopedService.class, ProxyEnhanced.class });
+    	
+        final ProxyFactory<T> proxyFactory = _Proxies.factory(cls, interfaces); 
 
-        // ignore finalize()
-        proxyFactory.setFilter(new MethodFilter() {
-            @Override
-            public boolean isHandled(final Method m) {
-                return !m.getName().equals("finalize");
-            }
-        });
+        final InvocationHandler handler = new InvocationHandler() {
 
-        @SuppressWarnings("unchecked")
-        final Class<T> proxySubclass = proxyFactory.createClass();
-        try {
-            final T newInstance = proxySubclass.newInstance();
-            final ProxyObject proxyObject = (ProxyObject) newInstance;
-            proxyObject.setHandler(new MethodHandler() {
-            	// Allow serviceByThread to be propagated from the thread that starts the request 
-            	// to any child-threads, hence InheritableThreadLocal.
-            	private InheritableThreadLocal<T> serviceByThread = new InheritableThreadLocal<>();
+        	// Allow serviceByThread to be propagated from the thread that starts the request 
+        	// to any child-threads, hence InheritableThreadLocal.
+        	private InheritableThreadLocal<T> serviceByThread = new InheritableThreadLocal<>();
 
-                @Override
-                public Object invoke(final Object proxied, final Method proxyMethod, final Method proxiedMethod, final Object[] args) throws Throwable {
+        	@Override
+        	public Object invoke(final Object proxied, final Method proxyMethod, final Object[] args) 
+        			throws Throwable {
 
-                    cacheMethodsIfNecessary(cls);
+        		cacheMethodsIfNecessary(cls);
 
-                    if(proxyMethod.getName().equals("__isis_startRequest")) {
+        		if(proxyMethod.getName().equals("__isis_startRequest")) {
 
-                        T service = instantiate(cls);
-                        serviceByThread.set(service);
+        			T service = instantiate(cls);
+        			serviceByThread.set(service);
 
-                        ServicesInjector servicesInjector = (ServicesInjector) args[0];
-                        servicesInjector.injectServicesInto(service);
+        			ServicesInjector servicesInjector = (ServicesInjector) args[0];
+        			servicesInjector.injectServicesInto(service);
 
-                        return null;
+        			return null;
 
-                    } else if(proxyMethod.getName().equals("__isis_postConstruct")) {
+        		} else if(proxyMethod.getName().equals("__isis_postConstruct")) {
 
-                        final T service = serviceByThread.get();
+        			final T service = serviceByThread.get();
 
-                        callPostConstructIfPresent(service);
+        			callPostConstructIfPresent(service);
 
-                        return null;
+        			return null;
 
-                    } else if(proxyMethod.getName().equals("__isis_preDestroy")) {
+        		} else if(proxyMethod.getName().equals("__isis_preDestroy")) {
 
-                        final T service = serviceByThread.get();
+        			final T service = serviceByThread.get();
 
-                        callPreDestroyIfPresent(service);
+        			callPreDestroyIfPresent(service);
 
-                        return null;
+        			return null;
 
-                    } else if(proxyMethod.getName().equals("__isis_endRequest")) {
+        		} else if(proxyMethod.getName().equals("__isis_endRequest")) {
 
-                        serviceByThread.set(null);
-                        return null;
+        			serviceByThread.set(null);
+        			return null;
 
-                    } else if(proxyMethod.getName().equals("hashCode") && proxyMethod.getParameterTypes().length == 0) {
+        		} else if(proxyMethod.getName().equals("hashCode") && proxyMethod.getParameterTypes().length == 0) {
 
-                        final T service = serviceByThread.get();
-                        return service != null? service.hashCode(): this.hashCode();
+        			final T service = serviceByThread.get();
+        			return service != null? service.hashCode(): this.hashCode();
 
-                    } else if(proxyMethod.getName().equals("equals") && proxyMethod.getParameterTypes().length == 1 && proxyMethod.getParameterTypes()[0] == Object.class) {
+        		} else if(proxyMethod.getName().equals("equals") && proxyMethod.getParameterTypes().length == 1 && proxyMethod.getParameterTypes()[0] == Object.class) {
 
-                        final T service = serviceByThread.get();
-                        return service != null? service.equals(args[0]): this.equals(args[0]);
+        			final T service = serviceByThread.get();
+        			return service != null? service.equals(args[0]): this.equals(args[0]);
 
-                    } else if(proxyMethod.getName().equals("toString") && proxyMethod.getParameterTypes().length == 0) {
+        		} else if(proxyMethod.getName().equals("toString") && proxyMethod.getParameterTypes().length == 0) {
 
-                        final T service = serviceByThread.get();
-                        return service != null? service.toString(): this.toString();
+        			final T service = serviceByThread.get();
+        			return service != null? service.toString(): this.toString();
 
-                    } else {
-                        T service = serviceByThread.get();
-                        if(service == null) {
-                            // shouldn't happen...
-                            throw new IllegalStateException("No service of type " + cls + " is available on this ");
-                        }
-                        final Object proxiedReturn = proxyMethod.invoke(service, args);
-                        return proxiedReturn;
-                    }
-                }
-            });
+        		} else {
+        			T service = serviceByThread.get();
+        			if(service == null) {
+        				// shouldn't happen...
+        				throw new IllegalStateException("No service of type " + cls + " is available on this ");
+        			}
+        			final Object proxiedReturn = proxyMethod.invoke(service, args);
+        			return proxiedReturn;
+        		}
+        	}
 
-            return newInstance;
-        } catch (final InstantiationException | IllegalAccessException e) {
-            throw new IsisException(e);
-        }
+        };
+
+        return proxyFactory.createInstance(handler);
     }
 
     private Set<Class<?>> cached = Sets.newHashSet();

@@ -76,7 +76,7 @@ public class ClassSubstitutor {
         if(superclass != null && superclass.isEnum()) {
             return superclass;
         }
-        if (ClassUtil.directlyImplements(cls, JavassistEnhanced.class)) {
+        if (ClassUtil.directlyImplements(cls, ProxyEnhanced.class)) {
             return getClass(cls.getSuperclass());
         }
         return cls;
