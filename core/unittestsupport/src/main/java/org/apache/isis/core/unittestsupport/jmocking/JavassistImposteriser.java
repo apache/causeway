@@ -101,8 +101,8 @@ public class JavassistImposteriser implements Imposteriser {
         proxyFactory.setFilter(new MethodFilter() {
             @Override
             public boolean isHandled(final Method m) {
-                // ignore finalize() and als bridge methods
-                return !m.getName().equals("finalize") || m.isBridge();
+                // ignore finalize() and also bridge methods
+                return !m.getName().equals("finalize") || m.isBridge(); //[ahuber] this code does not ignore bridges!
             }
         });
 
