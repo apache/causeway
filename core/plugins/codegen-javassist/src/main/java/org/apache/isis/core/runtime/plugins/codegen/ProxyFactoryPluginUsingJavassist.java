@@ -5,6 +5,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.function.Predicate;
 
+import javax.annotation.Nullable;
+
+import org.apache.isis.applib.internal._Constants;
 import org.apache.isis.applib.internal.base._Casts;
 import org.apache.isis.applib.internal.base._NullSafe;
 import org.apache.isis.core.commons.exceptions.IsisException;
@@ -33,26 +36,42 @@ public class ProxyFactoryPluginUsingJavassist implements ProxyFactoryPlugin {
         }
         
 		return new ProxyFactory<T>() {
-
+			
 			@Override
-			public T createInstance(InvocationHandler handler, Object[] constructorArgs) {
-				
-				ensureSameSize(constructorArgTypes, constructorArgs);
+			public T createInstance(InvocationHandler handler, boolean initialize) {
 
 				try {
 					
-					if(_NullSafe.isEmpty(constructorArgTypes)) {
-						return _Casts.uncheckedCast( createNotUsingConstructor(handler) );	
+					if(initialize) {
+						ensureSameSize(constructorArgTypes, null);
+						return _Casts.uncheckedCast( createUsingConstructor(handler, null) );
 					} else {
-						return _Casts.uncheckedCast( createUsingConstructor(handler, constructorArgs) );
+						return _Casts.uncheckedCast( createNotUsingConstructor(handler) );
 					}
 					
 				} catch (NoSuchMethodException | IllegalArgumentException | InstantiationException | 
 						IllegalAccessException | InvocationTargetException e) {
 					throw new IsisException(e);
 				}
+				
 			}
 
+			@Override
+			public T createInstance(InvocationHandler handler, Object[] constructorArgs) {
+				
+				ensureSameSize(constructorArgTypes, constructorArgs);
+				ensureNonEmtpy(constructorArgs);
+
+				try {
+					return _Casts.uncheckedCast( createUsingConstructor(handler, constructorArgs) );
+				} catch (NoSuchMethodException | IllegalArgumentException | InstantiationException | 
+						IllegalAccessException | InvocationTargetException e) {
+					throw new IsisException(e);
+				}
+			}
+
+			// -- HELPER (create w/o initialize)
+			
 			private Object createNotUsingConstructor(InvocationHandler handler) {
 				final Class<?> proxyClass = pfDelegate.createClass();
 				
@@ -65,13 +84,15 @@ public class ProxyFactoryPluginUsingJavassist implements ProxyFactoryPlugin {
 				return object;
 			}
 			
-			private Object createUsingConstructor(InvocationHandler handler, Object[] constructorArgs)
+			// -- HELPER (create with initialize)
+			
+			private Object createUsingConstructor(InvocationHandler handler, @Nullable Object[] constructorArgs)
 				throws NoSuchMethodException, IllegalArgumentException, InstantiationException, 
 					IllegalAccessException, InvocationTargetException {
 				
 				return pfDelegate.create(
-						constructorArgTypes, 
-						constructorArgs, 
+						constructorArgTypes==null ? _Constants.emptyClasses : constructorArgTypes, 
+						constructorArgs==null ? _Constants.emptyObjects : constructorArgs,
 						(Object self, Method thisMethod, Method proceed, Object[] args)->{
 							return handler.invoke(self, thisMethod, args);
 						});
@@ -84,8 +105,15 @@ public class ProxyFactoryPluginUsingJavassist implements ProxyFactoryPlugin {
 	
 	private static void ensureSameSize(Class<?>[] a, Object[] b) {
 		if(_NullSafe.size(a) != _NullSafe.size(b)) {
-			throw new IllegalArgumentException(String.format("Contructor args expected %d, got %d.", 
+			throw new IllegalArgumentException(String.format("Constructor arg count expected %d, got %d.", 
 					_NullSafe.size(a), _NullSafe.size(b) ));
+		}
+	}
+	
+	private static void ensureNonEmtpy(Object[] a) {
+		if(_NullSafe.isEmpty(a)) {
+			throw new IllegalArgumentException(String.format("Contructor args count expected > 0, got %d.", 
+					_NullSafe.size(a) ));
 		}
 	}
 

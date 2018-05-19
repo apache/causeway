@@ -59,7 +59,7 @@ public class ProxyCreator {
             return createInstanceForInterface(base, handler, WrappingObject.class);
         } else {
             final ProxyFactory<T> proxyFactory = proxyFactoryFor(base);
-            return proxyFactory.createInstance(handler);
+            return proxyFactory.createInstance(handler, false);
         }
     }
     

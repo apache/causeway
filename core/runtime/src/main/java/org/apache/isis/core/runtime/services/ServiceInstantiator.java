@@ -218,7 +218,7 @@ public final class ServiceInstantiator {
 
         };
 
-        return proxyFactory.createInstance(handler);
+        return proxyFactory.createInstance(handler, false);
     }
 
     private Set<Class<?>> cached = Sets.newHashSet();

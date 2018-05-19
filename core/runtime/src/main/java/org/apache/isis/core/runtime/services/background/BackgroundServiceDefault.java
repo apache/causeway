@@ -123,15 +123,21 @@ public class BackgroundServiceDefault implements BackgroundService2 {
     			cls.getInterfaces(), 
     			new Class<?>[] { ProxyEnhanced.class }); 
     	
-        final Class<?>[] constructorArgTypes = mixedInIfAny!=null ? new Class<?>[] {mixedInIfAny.getClass()} : _Constants.emptyClasses;
-        final Object[] constructorArgs = mixedInIfAny!=null ? new Object[] {mixedInIfAny} : _Constants.emptyObjects;
+    	final boolean initialize = mixedInIfAny!=null;
+    	
+    	
+        final Class<?>[] constructorArgTypes = initialize ? new Class<?>[] {mixedInIfAny.getClass()} : _Constants.emptyClasses;
+        final Object[] constructorArgs = initialize ? new Object[] {mixedInIfAny} : _Constants.emptyObjects;
         
         final ProxyFactory<T> proxyFactory = ProxyFactory.builder(cls)
         		.interfaces(interfaces)
         		.constructorArgTypes(constructorArgTypes)
         		.build();
         
-        return proxyFactory.createInstance(methodHandler, constructorArgs);
+        return initialize 
+        		? proxyFactory.createInstance(methodHandler, constructorArgs)  
+        		: proxyFactory.createInstance(methodHandler, false)
+        		;
     }
 
     /**

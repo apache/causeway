@@ -22,17 +22,36 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.util.function.Predicate;
 
-import javax.annotation.Nullable;
-
+/**
+ * Generates dynamic classes and corresponding instances by rebasing a given 'base' class.
+ *   
+ * @since 2.0.0
+ * @param <T> type of proxy objects this factory creates
+ */
 public interface ProxyFactory<T> {
 
 	// -- INTERFACE
 	
-	public default T createInstance(InvocationHandler handler) {
-		return createInstance(handler, null);
-	}
+	/**
+	 * 
+	 * @param handler
+	 * @param initialize whether to call a constructor on object instantiation 
+	 * @return
+	 * @throws IllegalArgumentException when using initialize=true and the number of 
+	 * constructorArgTypes specified while building this factory is greater than 0.
+	 */
+	public T createInstance(InvocationHandler handler, boolean initialize);
 	
-	public T createInstance(InvocationHandler handler, @Nullable Object[] constructorArgs);
+	/**
+	 * 
+	 * @param handler
+	 * @param constructorArgs passed to the constructor with matching signature on object instantiation
+	 * @param initialize whether to call a constructor on object instantiation
+	 * @return
+	 * @throws IllegalArgumentException if constructorArgs is null or empty or does not 
+	 * conform to the number of constructorArgTypes specified while building this factory.
+	 */
+	public T createInstance(InvocationHandler handler, Object[] constructorArgs);
 	
 	// -- BUILDER (uses plugin)
 	
