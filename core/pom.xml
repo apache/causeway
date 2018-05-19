@@ -1209,6 +1209,13 @@ ${license.additional-notes}
 <!-- 	            provided by plugins -->
 <!-- 	            <scope>provided</scope> -->
 <!--         	</dependency> -->
+
+            <!-- isis commons -->
+			<dependency>
+				<groupId>org.apache.isis.core</groupId>
+				<artifactId>isis-core-commons</artifactId>
+				<version>${revision}</version>
+			</dependency>
         
             <!-- unittestsupport -->
             <dependency>

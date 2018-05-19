@@ -99,6 +99,11 @@
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-schema</artifactId>
         </dependency>
+        
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-commons</artifactId>
+        </dependency>
 
 		<!-- JEE API -->
 		<dependency>
