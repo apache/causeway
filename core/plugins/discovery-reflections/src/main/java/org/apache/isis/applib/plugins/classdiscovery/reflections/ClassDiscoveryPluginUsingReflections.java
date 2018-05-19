@@ -8,7 +8,7 @@ import org.apache.isis.applib.plugins.classdiscovery.ClassDiscoveryPlugin;
 import org.reflections.scanners.SubTypesScanner;
 import org.reflections.util.ClasspathHelper;
 
-public class ClassDiscoveryUsingReflectionsPlugin implements ClassDiscoveryPlugin {
+public class ClassDiscoveryPluginUsingReflections implements ClassDiscoveryPlugin {
 
 	@Override
 	public ClassDiscovery discover(String packageNamePrefix) {

@@ -1,1 +1,1 @@
-org.apache.isis.applib.plugins.classdiscovery.reflections.ClassDiscoveryUsingReflectionsPlugin
+org.apache.isis.applib.plugins.classdiscovery.reflections.ClassDiscoveryPluginUsingReflections
