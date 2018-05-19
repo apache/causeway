@@ -26,8 +26,6 @@ import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import javax.validation.constraints.NotNull;
-
 import org.apache.isis.applib.internal.base._Casts;
 import org.apache.isis.applib.internal.base._NullSafe;
 import org.apache.isis.applib.internal.collections._Lists;
@@ -199,9 +197,9 @@ public final class _Context {
 	
 	/**
 	 * As set by the framework's bootstrapping mechanism.
-	 * @return the default class loader
+	 * @return the default class loader (non-null)
 	 */
-	public static @NotNull ClassLoader getDefaultClassLoader() {
+	public static ClassLoader getDefaultClassLoader() {
 		return getOrElse(ClassLoader.class, FALLBACK_CLASSLOADER);
 	}
 	

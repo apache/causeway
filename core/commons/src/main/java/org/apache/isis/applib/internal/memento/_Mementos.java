@@ -22,11 +22,11 @@ package org.apache.isis.applib.internal.memento;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.Nullable;
-
-import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
 
 /**
  * <h1>- internal use only -</h1>
@@ -43,6 +43,13 @@ import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
 public final class _Mementos {
 
 	private _Mementos(){}
+	
+	// -- ENCODE-DECODER INTERFACE
+	
+	public static interface EncoderDecoder {
+		public String encode(final byte[] bytes);
+	    public byte[] decode(String str);
+	}
 	
 	// -- MEMENTO INTERFACE
 	
@@ -120,7 +127,7 @@ public final class _Mementos {
      * @param serializer (required)
      * @return non-null
      */
-    public static Memento create(UrlEncodingService codec, SerializingAdapter serializer) {
+    public static Memento create(EncoderDecoder codec, SerializingAdapter serializer) {
     	return new _Mementos_MementoDefault(codec, serializer);
     }
 
@@ -141,7 +148,7 @@ public final class _Mementos {
      * 
      */
     public static @Nullable Memento parse(
-    		final UrlEncodingService codec, 
+    		final EncoderDecoder codec, 
     		final SerializingAdapter serializer, 
     		final String input) {
 

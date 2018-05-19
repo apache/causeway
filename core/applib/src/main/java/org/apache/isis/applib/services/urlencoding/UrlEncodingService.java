@@ -20,14 +20,9 @@ import java.nio.charset.StandardCharsets;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.internal.base._Strings;
+import org.apache.isis.applib.internal.memento._Mementos.EncoderDecoder;
 
-public interface UrlEncodingService {
-
-    @Programmatic
-    public String encode(final byte[] bytes);
-
-    @Programmatic
-    public byte[] decode(String str);
+public interface UrlEncodingService extends EncoderDecoder {
 
     @Programmatic
     public default String encodeString(final String str) {

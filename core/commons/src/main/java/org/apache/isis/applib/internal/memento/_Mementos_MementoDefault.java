@@ -37,9 +37,9 @@ import org.apache.isis.applib.internal.base._NullSafe;
 import org.apache.isis.applib.internal.collections._Maps;
 import org.apache.isis.applib.internal.collections._Sets;
 import org.apache.isis.applib.internal.context._Context;
+import org.apache.isis.applib.internal.memento._Mementos.EncoderDecoder;
 import org.apache.isis.applib.internal.memento._Mementos.Memento;
 import org.apache.isis.applib.internal.memento._Mementos.SerializingAdapter;
-import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
 
 /**
  * 
@@ -50,17 +50,17 @@ import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
  */
 class _Mementos_MementoDefault implements _Mementos.Memento {
 	
-	private final UrlEncodingService codec;
+	private final EncoderDecoder codec;
 	private final SerializingAdapter serializer;
 	
 	private final Map<String, Serializable> valuesByKey;
 	
-	_Mementos_MementoDefault(UrlEncodingService codec, SerializingAdapter serializer) {
+	_Mementos_MementoDefault(EncoderDecoder codec, SerializingAdapter serializer) {
 		this(codec, serializer, _Maps.newHashMap());
 	}
 	
 	private _Mementos_MementoDefault(
-			UrlEncodingService codec,
+			EncoderDecoder codec,
 			SerializingAdapter serializer,
 			Map<String, Serializable> valuesByKey) {
 		
@@ -106,7 +106,7 @@ class _Mementos_MementoDefault implements _Mementos.Memento {
 
 	// -- PARSER
 	
-	static Memento parse(UrlEncodingService codec, SerializingAdapter serializer, @Nullable String str) {
+	static Memento parse(EncoderDecoder codec, SerializingAdapter serializer, @Nullable String str) {
 		Objects.requireNonNull(codec);
 		if(_NullSafe.isEmpty(str)) {
 			return null;
