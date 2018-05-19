@@ -38,7 +38,7 @@ public interface ProxyFactory<T> {
 	
 	public static class ProxyFactoryBuilder<T> {
 		private static final Predicate<Method> DEFAULT_METHOD_FILTER = 
-				m->!m.getName().equals("finalize") || m.isBridge();
+				m->!"finalize".equals(m.getName());
 		private final Class<T> base;
 		private Class<?>[] interfaces;
 		private Predicate<Method> methodFilter = DEFAULT_METHOD_FILTER;
