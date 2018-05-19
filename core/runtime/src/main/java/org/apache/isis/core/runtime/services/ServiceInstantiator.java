@@ -36,7 +36,7 @@ import org.apache.isis.core.commons.lang.ArrayExtensions;
 import org.apache.isis.core.commons.lang.MethodExtensions;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ProxyEnhanced;
-import org.apache.isis.core.runtime.plugins.codegen.ProxyFactory;
+import org.apache.isis.core.plugins.codegen.ProxyFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.runtime.plugins.codegen;
+package org.apache.isis.core.plugins.codegen;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;

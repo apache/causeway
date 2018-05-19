@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.applib.plugins.classdiscovery;
+package org.apache.isis.core.plugins.classdiscovery;
 
 import java.util.List;
 

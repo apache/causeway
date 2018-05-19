@@ -1,4 +1,4 @@
-package org.apache.isis.core.runtime.plugins.codegen;
+package org.apache.isis.core.plugins.codegen;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
@@ -11,6 +11,8 @@ import org.apache.isis.applib.internal._Constants;
 import org.apache.isis.applib.internal.base._Casts;
 import org.apache.isis.applib.internal.base._NullSafe;
 import org.apache.isis.core.commons.exceptions.IsisException;
+import org.apache.isis.core.plugins.codegen.ProxyFactory;
+import org.apache.isis.core.plugins.codegen.ProxyFactoryPlugin;
 import org.objenesis.Objenesis;
 import org.objenesis.ObjenesisStd;
 

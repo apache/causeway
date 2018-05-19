@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 
 import org.apache.isis.applib.internal.base._NullSafe;
 import org.apache.isis.applib.internal.collections._Sets;
-import org.apache.isis.commons.plugins.PluginResolveException;
+import org.apache.isis.core.plugins.PluginResolveException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

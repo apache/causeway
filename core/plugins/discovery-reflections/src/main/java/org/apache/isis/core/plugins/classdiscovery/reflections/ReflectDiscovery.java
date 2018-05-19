@@ -1,4 +1,4 @@
-package org.apache.isis.applib.plugins.classdiscovery.reflections;
+package org.apache.isis.core.plugins.classdiscovery.reflections;
 
 import java.lang.annotation.Annotation;
 import java.util.HashSet;
@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 import javax.validation.constraints.NotNull;
 
 import org.apache.isis.applib.internal.base._NullSafe;
-import org.apache.isis.applib.plugins.classdiscovery.ClassDiscovery;
+import org.apache.isis.core.plugins.classdiscovery.ClassDiscovery;
 import org.reflections.Reflections;
 
 /**

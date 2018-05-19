@@ -1,10 +1,10 @@
-package org.apache.isis.applib.plugins.classdiscovery.reflections;
+package org.apache.isis.core.plugins.classdiscovery.reflections;
 
 import java.util.List;
 
 import org.apache.isis.applib.internal.context._Context;
-import org.apache.isis.applib.plugins.classdiscovery.ClassDiscovery;
-import org.apache.isis.applib.plugins.classdiscovery.ClassDiscoveryPlugin;
+import org.apache.isis.core.plugins.classdiscovery.ClassDiscovery;
+import org.apache.isis.core.plugins.classdiscovery.ClassDiscoveryPlugin;
 import org.reflections.scanners.SubTypesScanner;
 import org.reflections.util.ClasspathHelper;
 

@@ -34,10 +34,10 @@ import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.internal.discover._Discover;
-import org.apache.isis.applib.plugins.classdiscovery.ClassDiscovery;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceMenuOrder;
 import org.apache.isis.core.metamodel.util.DeweyOrderComparator;
+import org.apache.isis.core.plugins.classdiscovery.ClassDiscovery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

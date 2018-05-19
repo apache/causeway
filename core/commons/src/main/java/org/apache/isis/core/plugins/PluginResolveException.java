@@ -1,4 +1,4 @@
-package org.apache.isis.commons.plugins;
+package org.apache.isis.core.plugins;
 
 public class PluginResolveException extends RuntimeException {
     

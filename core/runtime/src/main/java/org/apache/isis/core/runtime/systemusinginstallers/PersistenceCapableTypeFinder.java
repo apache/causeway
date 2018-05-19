@@ -26,7 +26,7 @@ import java.util.Set;
 import javax.jdo.annotations.PersistenceCapable;
 
 import org.apache.isis.applib.internal.base._Casts;
-import org.apache.isis.applib.plugins.classdiscovery.ClassDiscovery;
+import org.apache.isis.core.plugins.classdiscovery.ClassDiscovery;
 
 /**
  * 

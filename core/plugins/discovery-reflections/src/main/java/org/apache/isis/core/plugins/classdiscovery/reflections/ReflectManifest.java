@@ -1,4 +1,4 @@
-package org.apache.isis.applib.plugins.classdiscovery.reflections;
+package org.apache.isis.core.plugins.classdiscovery.reflections;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;

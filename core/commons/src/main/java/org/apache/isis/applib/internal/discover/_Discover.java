@@ -22,8 +22,8 @@ package org.apache.isis.applib.internal.discover;
 import java.util.List;
 
 import org.apache.isis.applib.internal.context._Plugin;
-import org.apache.isis.applib.plugins.classdiscovery.ClassDiscovery;
-import org.apache.isis.applib.plugins.classdiscovery.ClassDiscoveryPlugin;
+import org.apache.isis.core.plugins.classdiscovery.ClassDiscovery;
+import org.apache.isis.core.plugins.classdiscovery.ClassDiscoveryPlugin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

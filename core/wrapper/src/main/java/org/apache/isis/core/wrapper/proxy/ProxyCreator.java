@@ -28,7 +28,7 @@ import org.apache.isis.applib.internal.collections._Arrays;
 import org.apache.isis.applib.services.wrapper.WrappingObject;
 import org.apache.isis.core.commons.lang.ArrayExtensions;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ProxyEnhanced;
-import org.apache.isis.core.runtime.plugins.codegen.ProxyFactory;
+import org.apache.isis.core.plugins.codegen.ProxyFactory;
 import org.apache.isis.core.wrapper.handlers.DelegatingInvocationHandler;
 
 import com.google.common.collect.MapMaker;
