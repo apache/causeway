@@ -54,6 +54,12 @@
 			<artifactId>jmock-junit4</artifactId>
 		</dependency>
 
+        <dependency>
+            <groupId>org.objenesis</groupId>
+            <artifactId>objenesis</artifactId>
+            <optional>true</optional>
+        </dependency>
+
 		<!-- JDO API (non transient, provided by plugin) -->
 		<dependency>
 			<groupId>javax.jdo</groupId>
