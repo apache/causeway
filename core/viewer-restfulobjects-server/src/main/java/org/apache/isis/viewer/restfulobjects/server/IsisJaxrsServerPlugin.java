@@ -15,8 +15,8 @@ public interface IsisJaxrsServerPlugin {
 
 	public static IsisJaxrsServerPlugin get() {
 		return _Plugin.getOrElse(IsisJaxrsServerPlugin.class, 
-				ambigousPlugins->{
-					throw _Plugin.ambiguityNonRecoverable(IsisJaxrsServerPlugin.class, ambigousPlugins); 
+				ambiguousPlugins->{
+					throw _Plugin.ambiguityNonRecoverable(IsisJaxrsServerPlugin.class, ambiguousPlugins); 
 				}, 
 				()->{
 					throw _Plugin.absenceNonRecoverable(IsisJaxrsServerPlugin.class);

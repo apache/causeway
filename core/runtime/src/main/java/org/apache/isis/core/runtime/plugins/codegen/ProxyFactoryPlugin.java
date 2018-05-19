@@ -16,13 +16,35 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-/**
- * <h1>Internal API</h1>
- * Internal classes, contributing to the internal proprietary API. 
- * These may be changed or removed without notice!
- * <p>
- * <b>WARNING</b>: 
- * Do NOT use any of the classes provided by this package!
- * </p>
- */
-package org.apache.isis.applib.internal.proxy;
+package org.apache.isis.core.runtime.plugins.codegen;
+
+import java.lang.reflect.Method;
+import java.util.function.Predicate;
+
+import javax.annotation.Nullable;
+
+import org.apache.isis.applib.internal.context._Plugin;
+
+public interface ProxyFactoryPlugin {
+
+	// -- INTERFACE
+	
+	public <T> ProxyFactory<T> factory(
+			Class<T> base, 
+			@Nullable Class<?>[] interfaces, 
+			@Nullable Predicate<Method> methodFilter,
+			@Nullable Class<?>[] constructorArgTypes);
+	
+	
+	// -- LOOKUP
+	
+	public static ProxyFactoryPlugin get() {
+		return _Plugin.getOrElse(ProxyFactoryPlugin.class, 
+				ambiguousPlugins->{
+					return _Plugin.pickAnyAndWarn(ProxyFactoryPlugin.class, ambiguousPlugins);
+				}, 
+				()->{
+					throw _Plugin.absenceNonRecoverable(ProxyFactoryPlugin.class);
+				}); 
+	}
+}

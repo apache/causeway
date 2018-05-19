@@ -62,11 +62,9 @@ public final class _Discover {
 	// -- HELPER
 	
 	private static ClassDiscoveryPlugin getPlugin() {
-		return _Plugin.getOrElse(ClassDiscoveryPlugin.class, 
-				ambiguosPlugins->{
-					final Logger LOG = LoggerFactory.getLogger(ClassDiscoveryPlugin.class);
-					LOG.warn("You have more than one ClassDiscoveryPlugin on your class path, just picking one!");
-					return ambiguosPlugins.iterator().next();
+		return _Plugin.getOrElse(ClassDiscoveryPlugin.class,
+				ambiguousPlugins->{
+					return _Plugin.pickAnyAndWarn(ClassDiscoveryPlugin.class, ambiguousPlugins);
 				}, 
 				()->{
 					final Logger LOG = LoggerFactory.getLogger(ClassDiscoveryPlugin.class);

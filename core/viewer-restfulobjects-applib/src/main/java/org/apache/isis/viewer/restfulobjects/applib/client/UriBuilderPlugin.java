@@ -14,8 +14,8 @@ public interface UriBuilderPlugin {
 	
 	public static UriBuilderPlugin get() {
 		return _Plugin.getOrElse(UriBuilderPlugin.class, 
-				ambigousPlugins->{
-					throw _Plugin.ambiguityNonRecoverable(UriBuilderPlugin.class, ambigousPlugins); 
+				ambiguousPlugins->{
+					throw _Plugin.ambiguityNonRecoverable(UriBuilderPlugin.class, ambiguousPlugins); 
 				}, 
 				()->{
 					throw _Plugin.absenceNonRecoverable(UriBuilderPlugin.class);

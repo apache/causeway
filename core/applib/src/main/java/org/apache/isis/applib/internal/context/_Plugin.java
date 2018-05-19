@@ -29,6 +29,8 @@ import java.util.stream.Collectors;
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.internal.base._NullSafe;
 import org.apache.isis.applib.internal.collections._Sets;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <h1>- internal use only -</h1>
@@ -99,17 +101,33 @@ public final class _Plugin {
 		
 	}
 	
+	// -- CONVENIENT PICK ANY
+	
+	public static <T> T pickAnyAndWarn(Class<T> pluginInterfaceClass, Set<T> ambiguousPlugins) {
+		final Logger log = LoggerFactory.getLogger(pluginInterfaceClass);
+		final T any = ambiguousPlugins.iterator().next();
+		
+		log.warn(String.format("You have more than one plugin implementing '%s' on your class-path [%s], "
+				+ "just picking one: '%s'", 
+				pluginInterfaceClass.getName(),
+				ambiguousPlugins.stream().map(p->p.getClass().getName()).collect(Collectors.joining(", ")),
+				any.getClass().getName()
+				));
+		
+		return any;
+	}
+	
 	// -- CONVENIENT EXCEPTION FACTORIES
 
 	public static <T> NonRecoverableException ambiguityNonRecoverable(
 			Class<T> pluginInterfaceClass, 
-			Set<? extends T> ambigousPlugins) {
+			Set<? extends T> ambiguousPlugins) {
 		
 		return new NonRecoverableException(
-				String.format("Ambigous plugins implementing %s found on class path.\n{%s}", 
+				String.format("Ambiguous plugins implementing %s found on class path.\n{%s}", 
 						pluginInterfaceClass.getName(),
 						
-						_NullSafe.stream(ambigousPlugins)
+						_NullSafe.stream(ambiguousPlugins)
 						.map(Object::getClass)
 						.map(Class::getName)
 						.collect(Collectors.joining(", "))
@@ -123,5 +141,7 @@ public final class _Plugin {
 				String.format("No plugin implementing %s found on class path.", 
 						pluginInterfaceClass.getName() ));
 	}
+
+	
 	
 }

@@ -76,8 +76,8 @@ public interface EventBusImplementation {
 
 	public static EventBusImplementation get() {
 		return _Plugin.getOrElse(EventBusImplementation.class, 
-				ambigousPlugins->{
-					throw _Plugin.ambiguityNonRecoverable(EventBusImplementation.class, ambigousPlugins); 
+				ambiguousPlugins->{
+					throw _Plugin.ambiguityNonRecoverable(EventBusImplementation.class, ambiguousPlugins); 
 				}, 
 				()->{
 					throw _Plugin.absenceNonRecoverable(EventBusImplementation.class);

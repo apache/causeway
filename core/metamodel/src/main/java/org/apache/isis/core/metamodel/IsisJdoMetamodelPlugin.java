@@ -27,8 +27,8 @@ public interface IsisJdoMetamodelPlugin {
 
 	public static IsisJdoMetamodelPlugin get() {
 		return _Plugin.getOrElse(IsisJdoMetamodelPlugin.class, 
-				ambigousPlugins->{
-					throw _Plugin.ambiguityNonRecoverable(IsisJdoMetamodelPlugin.class, ambigousPlugins); 
+				ambiguousPlugins->{
+					throw _Plugin.ambiguityNonRecoverable(IsisJdoMetamodelPlugin.class, ambiguousPlugins); 
 				}, 
 				()->{
 					throw _Plugin.absenceNonRecoverable(IsisJdoMetamodelPlugin.class);

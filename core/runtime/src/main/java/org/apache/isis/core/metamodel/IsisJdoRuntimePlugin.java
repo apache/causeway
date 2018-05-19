@@ -14,8 +14,8 @@ public interface IsisJdoRuntimePlugin {
 
 	public static IsisJdoRuntimePlugin get() {
 		return _Plugin.getOrElse(IsisJdoRuntimePlugin.class, 
-				ambigousPlugins->{
-					throw _Plugin.ambiguityNonRecoverable(IsisJdoRuntimePlugin.class, ambigousPlugins); 
+				ambiguousPlugins->{
+					throw _Plugin.ambiguityNonRecoverable(IsisJdoRuntimePlugin.class, ambiguousPlugins); 
 				}, 
 				()->{
 					throw _Plugin.absenceNonRecoverable(IsisJdoRuntimePlugin.class);

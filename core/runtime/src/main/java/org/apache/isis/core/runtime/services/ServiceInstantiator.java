@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.runtime.services;
 
 import java.lang.reflect.InvocationHandler;
@@ -30,8 +29,6 @@ import javax.annotation.PreDestroy;
 import javax.enterprise.context.RequestScoped;
 
 import org.apache.isis.applib.internal.context._Context;
-import org.apache.isis.applib.internal.proxy._Proxies;
-import org.apache.isis.applib.internal.proxy._Proxies.ProxyFactory;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.factory.InstanceCreationClassException;
 import org.apache.isis.core.commons.factory.InstanceCreationException;
@@ -39,6 +36,7 @@ import org.apache.isis.core.commons.lang.ArrayExtensions;
 import org.apache.isis.core.commons.lang.MethodExtensions;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ProxyEnhanced;
+import org.apache.isis.core.runtime.plugins.codegen.ProxyFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -145,7 +143,9 @@ public final class ServiceInstantiator {
 				cls.getInterfaces(), 
 				new Class<?>[] { RequestScopedService.class, ProxyEnhanced.class });
     	
-        final ProxyFactory<T> proxyFactory = _Proxies.factory(cls, interfaces); 
+        final ProxyFactory<T> proxyFactory = ProxyFactory.builder(cls)
+        		.interfaces(interfaces)
+        		.build(); 
 
         final InvocationHandler handler = new InvocationHandler() {
 

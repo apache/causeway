@@ -22,11 +22,10 @@ package org.apache.isis.core.wrapper.proxy;
 import java.util.Map;
 
 import org.apache.isis.applib.internal.base._Casts;
-import org.apache.isis.applib.internal.proxy._Proxies;
-import org.apache.isis.applib.internal.proxy._Proxies.ProxyFactory;
 import org.apache.isis.applib.services.wrapper.WrappingObject;
 import org.apache.isis.core.commons.lang.ArrayExtensions;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ProxyEnhanced;
+import org.apache.isis.core.runtime.plugins.codegen.ProxyFactory;
 import org.apache.isis.core.wrapper.handlers.DelegatingInvocationHandler;
 import org.apache.isis.core.wrapper.internal.util.Util;
 
@@ -55,6 +54,7 @@ public class ProxyCreator {
         final Class<T> clazz = (Class<T>) toProxy.getClass();
 
         if (clazz.isInterface()) {
+        	//TODO [ahuber] move this logic to ProxyFactory
             return Util.createInstance(clazz, handler, WrappingObject.class);
         } else {
             final ProxyFactory<T> proxyFactory = proxyFactoryFor(clazz);
@@ -77,7 +77,9 @@ public class ProxyCreator {
                 toProxyClass.getInterfaces(),
                 new Class<?>[] { ProxyEnhanced.class, WrappingObject.class }); 
     	
-        final ProxyFactory<T> proxyFactory = _Proxies.factory(toProxyClass, interfaces);
+        final ProxyFactory<T> proxyFactory = ProxyFactory.builder(toProxyClass)
+        		.interfaces(interfaces)
+        		.build();
 
         return proxyFactory;
     }

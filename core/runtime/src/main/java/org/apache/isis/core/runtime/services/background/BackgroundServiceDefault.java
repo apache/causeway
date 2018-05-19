@@ -28,9 +28,8 @@ import javax.annotation.PreDestroy;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.internal._Constants;
 import org.apache.isis.applib.internal.base._Casts;
-import org.apache.isis.applib.internal.proxy._Proxies;
-import org.apache.isis.applib.internal.proxy._Proxies.ProxyFactory;
 import org.apache.isis.applib.services.background.BackgroundCommandService;
 import org.apache.isis.applib.services.background.BackgroundCommandService2;
 import org.apache.isis.applib.services.background.BackgroundService2;
@@ -50,6 +49,7 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ProxyEnhanced;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
+import org.apache.isis.core.runtime.plugins.codegen.ProxyFactory;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.schema.cmd.v1.CommandDto;
 
@@ -123,9 +123,15 @@ public class BackgroundServiceDefault implements BackgroundService2 {
     			cls.getInterfaces(), 
     			new Class<?>[] { ProxyEnhanced.class }); 
     	
-        final ProxyFactory<T> proxyFactory = _Proxies.factory(cls, interfaces);
+        final Class<?>[] constructorArgTypes = mixedInIfAny!=null ? new Class<?>[] {mixedInIfAny.getClass()} : _Constants.emptyClasses;
+        final Object[] constructorArgs = mixedInIfAny!=null ? new Object[] {mixedInIfAny} : _Constants.emptyObjects;
         
-        return proxyFactory.createInstance(methodHandler);
+        final ProxyFactory<T> proxyFactory = ProxyFactory.builder(cls)
+        		.interfaces(interfaces)
+        		.constructorArgTypes(constructorArgTypes)
+        		.build();
+        
+        return proxyFactory.createInstance(methodHandler, constructorArgs);
     }
 
     /**
