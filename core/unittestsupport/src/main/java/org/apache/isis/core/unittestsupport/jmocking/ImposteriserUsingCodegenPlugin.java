@@ -16,34 +16,22 @@
  */
 package org.apache.isis.core.unittestsupport.jmocking;
 
-import javassist.util.proxy.MethodFilter;
-import javassist.util.proxy.MethodHandler;
-import javassist.util.proxy.ProxyFactory;
-import javassist.util.proxy.ProxyObject;
-
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+
+import org.apache.isis.core.plugins.codegen.ProxyFactory;
 import org.jmock.api.Imposteriser;
 import org.jmock.api.Invocation;
 import org.jmock.api.Invokable;
 import org.jmock.lib.JavaReflectionImposteriser;
-import org.objenesis.Objenesis;
-import org.objenesis.ObjenesisStd;
 
-/**
-  * @deprecated with 2.0.0, use {@link ImposteriserUsingCodegenPlugin} instead
-  * 
-  */
-@Deprecated
-public class JavassistImposteriser implements Imposteriser {
+public class ImposteriserUsingCodegenPlugin implements Imposteriser {
 
-    public static final Imposteriser INSTANCE = new JavassistImposteriser();
+    public static final Imposteriser INSTANCE = new ImposteriserUsingCodegenPlugin();
 
     private final Imposteriser reflectionImposteriser = new JavaReflectionImposteriser();
-    private final Objenesis objenesis = new ObjenesisStd();
 
-    private JavassistImposteriser() {
+    private ImposteriserUsingCodegenPlugin() {
     }
 
 
@@ -67,15 +55,16 @@ public class JavassistImposteriser implements Imposteriser {
             return reflectionImposteriser.imposterise(mockObject, mockedType, ancilliaryTypes);
         }
 
-        try {
-            setConstructorsAccessible(mockedType, true);
+            
+        final ProxyFactory<T> factory = ProxyFactory.builder(mockedType)
+    	.interfaces(ancilliaryTypes)
+    	.build();
 
-            final Class<?> proxyClass = proxyClass(mockedType, ancilliaryTypes);
-            final Object proxy = proxy(proxyClass, mockObject);
-            return mockedType.cast(proxy);
-        } finally {
-            setConstructorsAccessible(mockedType, false);
-        }
+        final boolean initialize = false;
+        
+        return factory.createInstance(
+        		(obj, method, args)->mockObject.invoke(new Invocation(obj, method, args)), 
+        		initialize);
     }
 
     // //////////////////////////////////////
@@ -93,44 +82,5 @@ public class JavassistImposteriser implements Imposteriser {
             throw new Error("no public toString method found", e);
         }
     }
-
-    private static void setConstructorsAccessible(Class<?> mockedType, boolean accessible) {
-        for (Constructor<?> constructor : mockedType.getDeclaredConstructors()) {
-            constructor.setAccessible(accessible);
-        }
-    }
-
-    private Class<?> proxyClass(Class<?> mockedType, Class<?>... ancilliaryTypes) {
-
-        final ProxyFactory proxyFactory = new ProxyFactory();
-        proxyFactory.setFilter(new MethodFilter() {
-            @Override
-            public boolean isHandled(final Method m) {
-                // ignore finalize() and also bridge methods
-                return !m.getName().equals("finalize") || m.isBridge(); //[ahuber] this code does not ignore bridges!
-            }
-        });
-
-        proxyFactory.setSuperclass(mockedType);
-        proxyFactory.setInterfaces(ancilliaryTypes);
-
-        return proxyFactory.createClass();
-    }
-
-
-    private Object proxy(Class<?> proxyClass, final Invokable mockObject) {
-
-        final ProxyObject proxyObject = (ProxyObject) objenesis.newInstance(proxyClass);
-        proxyObject.setHandler(new MethodHandler() {
-            @Override
-            public Object invoke(Object self, Method thisMethod, Method proceed, Object[] args) throws Throwable {
-                return mockObject.invoke(new Invocation(self, thisMethod, args));
-            }
-        });
-
-        return proxyObject;
-    }
-
-    
     
 }
