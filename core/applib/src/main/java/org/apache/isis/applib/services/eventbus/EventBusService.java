@@ -26,8 +26,9 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.services.eventbus.EventBusImplementation.EventListener;
 import org.apache.isis.commons.internal.collections._Sets;
+import org.apache.isis.core.plugins.eventbus.EventBusPlugin;
+import org.apache.isis.core.plugins.eventbus.EventBusPlugin.EventListener;
 
 /**
  * A service implementing an Event Bus, allowing arbitrary events to be posted and
@@ -59,11 +60,11 @@ public abstract class EventBusService {
         @Override
         public void post(Object event) {}
         @Override
-        public EventBusImplementation getEventBusImplementation() {
+        public EventBusPlugin getEventBusImplementation() {
             return null;
         }
         @Override
-        protected EventBusImplementation newEventBus() { return null; }
+        protected EventBusPlugin newEventBus() { return null; }
     }
 
     public static final EventBusService NOOP = new Noop();
@@ -223,7 +224,7 @@ public abstract class EventBusService {
     /**
      * Lazily populated in {@link #getEventBusImplementation()} as result of the first {@link #post(Object)}.
      */
-    protected EventBusImplementation eventBusImplementation;
+    protected EventBusPlugin eventBusImplementation;
     
     public <T> EventListener<T> addEventListener(final Class<T> targetType, Consumer<T> onEvent) {
     	return Optional.ofNullable(getEventBusImplementation())
@@ -242,7 +243,7 @@ public abstract class EventBusService {
      * Lazily populates the event bus for the current {@link #getSubscribers() subscribers}.
      */
     @Programmatic
-    protected EventBusImplementation getEventBusImplementation() {
+    protected EventBusPlugin getEventBusImplementation() {
         setupEventBus();
         return eventBusImplementation;
     }
@@ -302,7 +303,7 @@ public abstract class EventBusService {
     /**
      * Mandatory hook method for subclass to instantiate an appropriately configured Guava event bus.
      */
-    protected abstract EventBusImplementation newEventBus();
+    protected abstract EventBusPlugin newEventBus();
 
 
     /**

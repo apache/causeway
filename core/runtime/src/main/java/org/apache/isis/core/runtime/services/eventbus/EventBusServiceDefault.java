@@ -23,11 +23,11 @@ import javax.enterprise.context.RequestScoped;
 
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.services.eventbus.EventBusImplementation;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.core.commons.lang.ClassUtil;
 import org.apache.isis.core.metamodel.facets.Annotations;
+import org.apache.isis.core.plugins.eventbus.EventBusPlugin;
 import org.apache.isis.core.runtime.services.RequestScopedService;
 
 import com.google.common.base.Strings;
@@ -114,7 +114,7 @@ public abstract class EventBusServiceDefault extends EventBusService {
 
     /**
      * Either &lt;guava&gt; or &lt;axon&gt;, or else the fully qualified class name of an
-     * implementation of {@link org.apache.isis.applib.services.eventbus.EventBusImplementation}.
+     * implementation of {@link org.apache.isis.core.plugins.eventbus.EventBusPlugin}.
      */
     private String implementation;
     String getImplementation() {
@@ -122,19 +122,19 @@ public abstract class EventBusServiceDefault extends EventBusService {
     }
 
     @Override
-    protected org.apache.isis.applib.services.eventbus.EventBusImplementation newEventBus() {
-        final EventBusImplementation implementation = instantiateEventBus();
+    protected org.apache.isis.core.plugins.eventbus.EventBusPlugin newEventBus() {
+        final EventBusPlugin implementation = instantiateEventBus();
         serviceRegistry.injectServicesInto(implementation);
         return implementation;
     }
 
-    private EventBusImplementation instantiateEventBus() {
+    private EventBusPlugin instantiateEventBus() {
     	
     	String fqImplementationName = implementation;
     	
     	if( "plugin".equals(implementation) || "auto".equals(implementation) ) {
     		
-    		return EventBusImplementation.get();
+    		return EventBusPlugin.get();
     		
     	} else if("guava".equals(implementation)) {
             // legacy of return new EventBusImplementationForGuava();
@@ -145,9 +145,9 @@ public abstract class EventBusServiceDefault extends EventBusService {
         }
 
         final Class<?> aClass = ClassUtil.forName(fqImplementationName);
-        if(EventBusImplementation.class.isAssignableFrom(aClass)) {
+        if(EventBusPlugin.class.isAssignableFrom(aClass)) {
             try {
-                return (EventBusImplementation) aClass.newInstance();
+                return (EventBusPlugin) aClass.newInstance();
             } catch (InstantiationException | IllegalAccessException e) {
                 throw new NonRecoverableException(e);
             }

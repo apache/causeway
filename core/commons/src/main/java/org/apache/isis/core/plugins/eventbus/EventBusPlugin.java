@@ -14,7 +14,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.applib.services.eventbus;
+package org.apache.isis.core.plugins.eventbus;
 
 import java.util.function.Consumer;
 
@@ -30,7 +30,7 @@ import org.apache.isis.commons.internal.context._Plugin;
  * </p>
  *
  */
-public interface EventBusImplementation {
+public interface EventBusPlugin {
 
 	/**
 	 * For {@link org.apache.isis.applib.services.eventbus.EventBusService} to call on
@@ -74,13 +74,13 @@ public interface EventBusImplementation {
 
 	// -- PLUGIN LOOKUP
 
-	public static EventBusImplementation get() {
-		return _Plugin.getOrElse(EventBusImplementation.class, 
+	public static EventBusPlugin get() {
+		return _Plugin.getOrElse(EventBusPlugin.class, 
 				ambiguousPlugins->{
-					throw _Plugin.ambiguityNonRecoverable(EventBusImplementation.class, ambiguousPlugins); 
+					throw _Plugin.ambiguityNonRecoverable(EventBusPlugin.class, ambiguousPlugins); 
 				}, 
 				()->{
-					throw _Plugin.absenceNonRecoverable(EventBusImplementation.class);
+					throw _Plugin.absenceNonRecoverable(EventBusPlugin.class);
 				});
 	}
 

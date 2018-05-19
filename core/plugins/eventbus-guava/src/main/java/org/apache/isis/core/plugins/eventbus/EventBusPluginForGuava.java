@@ -14,13 +14,13 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.core.runtime.services.eventbus.adapter;
+package org.apache.isis.core.plugins.eventbus;
 
 import java.util.Objects;
 import java.util.function.Consumer;
 
 import org.apache.isis.applib.events.domain.AbstractDomainEvent;
-import org.apache.isis.applib.services.eventbus.EventBusImplementation;
+import org.apache.isis.core.plugins.eventbus.EventBusPlugin;
 import org.apache.isis.core.runtime.services.eventbus.EventBusImplementationAbstract;
 
 import com.google.common.eventbus.SubscriberExceptionContext;
@@ -30,7 +30,7 @@ import com.google.common.eventbus.SubscriberExceptionHandler;
  * A wrapper for a Guava {@link com.google.common.eventbus.EventBus},
  * allowing arbitrary events to be posted and subscribed to.
  */
-public class EventBusImplementationForGuava extends EventBusImplementationAbstract {
+public class EventBusPluginForGuava extends EventBusImplementationAbstract {
 
     private final com.google.common.eventbus.EventBus eventBus = 
     		new com.google.common.eventbus.EventBus(newEventBusSubscriberExceptionHandler());
@@ -84,7 +84,7 @@ public class EventBusImplementationForGuava extends EventBusImplementationAbstra
 
 	// -- HELPER
 	
-    private static class GuavaEventListener<T> implements EventBusImplementation.EventListener<T> {
+    private static class GuavaEventListener<T> implements EventBusPlugin.EventListener<T> {
     	private final Class<T> targetType;
     	private final Consumer<T> eventConsumer;
     	private GuavaEventListener(final Class<T> targetType, final Consumer<T> eventConsumer) {

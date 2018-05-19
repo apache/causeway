@@ -19,12 +19,12 @@ package org.apache.isis.core.runtime.services.eventbus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.events.domain.AbstractDomainEvent;
-import org.apache.isis.applib.services.eventbus.EventBusImplementation;
 import org.apache.isis.core.commons.exceptions.IsisApplicationException;
+import org.apache.isis.core.plugins.eventbus.EventBusPlugin;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 
-public abstract class EventBusImplementationAbstract implements EventBusImplementation {
+public abstract class EventBusImplementationAbstract implements EventBusPlugin {
 
     private static final Logger LOG = LoggerFactory.getLogger(EventBusImplementationAbstract.class);
 

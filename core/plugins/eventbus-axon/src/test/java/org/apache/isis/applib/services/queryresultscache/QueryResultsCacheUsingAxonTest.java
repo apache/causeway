@@ -23,8 +23,8 @@ import java.util.concurrent.Callable;
 
 import org.apache.isis.applib.fixturescripts.events.FixturesInstallingEvent;
 import org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault;
+import org.apache.isis.core.plugins.eventbus.EventBusPluginForAxon;
 import org.apache.isis.core.runtime.services.eventbus.EventBusServiceDefault;
-import org.apache.isis.core.runtime.services.eventbus.adapter.EventBusImplementationForAxonSimple;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -32,7 +32,7 @@ public class QueryResultsCacheUsingAxonTest {
 
     private QueryResultsCacheInternal queryResultsCache;
     private QueryResultsCacheControlInternal control;
-    private EventBusImplementationForAxonSimple eventBusImplementationAxon;
+    private EventBusPluginForAxon eventBusImplementationAxon;
 
     @Before
     public void setUp() throws Exception {
@@ -43,7 +43,7 @@ public class QueryResultsCacheUsingAxonTest {
         			{
         				allowLateRegistration = true;
         				eventBusImplementation = eventBusImplementationAxon 
-        						= new EventBusImplementationForAxonSimple();
+        						= new EventBusPluginForAxon();
         			}
 				};
         	}

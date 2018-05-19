@@ -14,7 +14,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.core.runtime.services.eventbus.adapter;
+package org.apache.isis.core.plugins.eventbus;
 
 import java.util.Map;
 import java.util.Objects;
@@ -22,7 +22,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
 import org.apache.isis.applib.events.domain.AbstractDomainEvent;
-import org.apache.isis.applib.services.eventbus.EventBusImplementation;
+import org.apache.isis.core.plugins.eventbus.EventBusPlugin;
 import org.apache.isis.core.runtime.services.eventbus.EventBusImplementationAbstract;
 import org.axonframework.domain.EventMessage;
 import org.axonframework.domain.GenericEventMessage;
@@ -34,7 +34,7 @@ import org.axonframework.eventhandling.annotation.AnnotationEventListenerAdapter
  * A wrapper for an Axon {@link org.axonframework.eventhandling.SimpleEventBus},
  * allowing arbitrary events to be posted and subscribed to.
  */
-public class EventBusImplementationForAxonSimple extends EventBusImplementationAbstract {
+public class EventBusPluginForAxon extends EventBusImplementationAbstract {
 
     private SimpleEventBus simpleEventBus = new SimpleEventBus();
 
@@ -64,7 +64,7 @@ public class EventBusImplementationForAxonSimple extends EventBusImplementationA
     }
 
 	@Override
-	public <T> EventBusImplementation.EventListener<T> addEventListener(
+	public <T> EventBusPlugin.EventListener<T> addEventListener(
 			final Class<T> targetType, 
 			final Consumer<T> onEvent) {
 		
@@ -74,7 +74,7 @@ public class EventBusImplementationForAxonSimple extends EventBusImplementationA
 	}
 
 	@Override
-	public <T> void removeEventListener(EventBusImplementation.EventListener<T> eventListener) {
+	public <T> void removeEventListener(EventBusPlugin.EventListener<T> eventListener) {
 		if(eventListener instanceof AxonEventListener) {
 			simpleEventBus.unsubscribe(((AxonEventListener<T>)eventListener).proxy());	
 		}
@@ -102,7 +102,7 @@ public class EventBusImplementationForAxonSimple extends EventBusImplementationA
      * @param <T>
      * @since 2.0.0
      */
-    static class AxonEventListener<T> implements EventBusImplementation.EventListener<T> {
+    static class AxonEventListener<T> implements EventBusPlugin.EventListener<T> {
     	private final Consumer<T> eventConsumer;
 		private final EventListenerProxy proxy;
     	private AxonEventListener(final Class<T> targetType, final Consumer<T> eventConsumer) {

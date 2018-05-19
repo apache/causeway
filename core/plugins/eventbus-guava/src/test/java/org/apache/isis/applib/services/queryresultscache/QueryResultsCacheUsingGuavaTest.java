@@ -23,8 +23,8 @@ import java.util.concurrent.Callable;
 
 import org.apache.isis.applib.fixturescripts.events.FixturesInstallingEvent;
 import org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault;
+import org.apache.isis.core.plugins.eventbus.EventBusPluginForGuava;
 import org.apache.isis.core.runtime.services.eventbus.EventBusServiceDefault;
-import org.apache.isis.core.runtime.services.eventbus.adapter.EventBusImplementationForGuava;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -32,7 +32,7 @@ public class QueryResultsCacheUsingGuavaTest {
 
     private QueryResultsCacheInternal queryResultsCache;
     private QueryResultsCacheControlInternal control;
-    private EventBusImplementationForGuava eventBusImplementationGuava;
+    private EventBusPluginForGuava eventBusImplementationGuava;
 
     @Before
     public void setUp() throws Exception {
@@ -43,7 +43,7 @@ public class QueryResultsCacheUsingGuavaTest {
         			{
         				allowLateRegistration = true;
         				eventBusImplementation = eventBusImplementationGuava 
-        						= new EventBusImplementationForGuava();
+        						= new EventBusPluginForGuava();
         			}
 				};
         	}
