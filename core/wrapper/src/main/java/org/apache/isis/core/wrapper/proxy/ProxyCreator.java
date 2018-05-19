@@ -19,15 +19,17 @@
 
 package org.apache.isis.core.wrapper.proxy;
 
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Proxy;
 import java.util.Map;
 
 import org.apache.isis.applib.internal.base._Casts;
+import org.apache.isis.applib.internal.collections._Arrays;
 import org.apache.isis.applib.services.wrapper.WrappingObject;
 import org.apache.isis.core.commons.lang.ArrayExtensions;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ProxyEnhanced;
 import org.apache.isis.core.runtime.plugins.codegen.ProxyFactory;
 import org.apache.isis.core.wrapper.handlers.DelegatingInvocationHandler;
-import org.apache.isis.core.wrapper.internal.util.Util;
 
 import com.google.common.collect.MapMaker;
 
@@ -51,16 +53,17 @@ public class ProxyCreator {
 
         final T toProxy = handler.getDelegate();
 
-        final Class<T> clazz = (Class<T>) toProxy.getClass();
+        final Class<T> base = (Class<T>) toProxy.getClass();
 
-        if (clazz.isInterface()) {
-        	//TODO [ahuber] move this logic to ProxyFactory
-            return Util.createInstance(clazz, handler, WrappingObject.class);
+        if (base.isInterface()) {
+            return createInstanceForInterface(base, handler, WrappingObject.class);
         } else {
-            final ProxyFactory<T> proxyFactory = proxyFactoryFor(clazz);
+            final ProxyFactory<T> proxyFactory = proxyFactoryFor(base);
             return proxyFactory.createInstance(handler);
         }
     }
+    
+    // -- HELPER
 
     private <T> ProxyFactory<T> proxyFactoryFor(final Class<T> toProxyClass) {
         ProxyFactory<T> proxyFactory = _Casts.uncheckedCast(proxyFactoryByClass.get(toProxyClass));
@@ -84,4 +87,10 @@ public class ProxyCreator {
         return proxyFactory;
     }
 
+    @SuppressWarnings("unchecked")
+    private static <T> T createInstanceForInterface(
+    		final Class<T> base, final InvocationHandler handler, final Class<?>... auxiliaryTypes) {
+        return (T) Proxy.newProxyInstance(base.getClassLoader(), _Arrays.combine(base, auxiliaryTypes) , handler);
+    }
+    
 }

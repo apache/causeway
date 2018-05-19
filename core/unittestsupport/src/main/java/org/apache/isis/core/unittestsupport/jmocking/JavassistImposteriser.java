@@ -126,10 +126,6 @@ public class JavassistImposteriser implements Imposteriser {
         return proxyObject;
     }
 
-    private static Class<?>[] combine(Class<?> first, Class<?>... rest) {
-        Class<?>[] all = new Class<?>[rest.length+1];
-        all[0] = first;
-        System.arraycopy(rest, 0, all, 1, rest.length);
-        return all;
-    }
+    
+    
 }
