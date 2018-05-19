@@ -59,8 +59,8 @@ public class ProxyFactoryPluginUsingJavassist implements ProxyFactoryPlugin {
 			@Override
 			public T createInstance(InvocationHandler handler, Object[] constructorArgs) {
 				
-				ensureSameSize(constructorArgTypes, constructorArgs);
 				ensureNonEmtpy(constructorArgs);
+				ensureSameSize(constructorArgTypes, constructorArgs);
 
 				try {
 					return _Casts.uncheckedCast( createUsingConstructor(handler, constructorArgs) );

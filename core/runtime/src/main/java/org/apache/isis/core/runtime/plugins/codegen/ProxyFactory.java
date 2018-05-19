@@ -33,21 +33,18 @@ public interface ProxyFactory<T> {
 	// -- INTERFACE
 	
 	/**
-	 * 
 	 * @param handler
 	 * @param initialize whether to call a constructor on object instantiation 
-	 * @return
+	 * @return new proxy instance of type T
 	 * @throws IllegalArgumentException when using initialize=true and the number of 
 	 * constructorArgTypes specified while building this factory is greater than 0.
 	 */
 	public T createInstance(InvocationHandler handler, boolean initialize);
 	
 	/**
-	 * 
 	 * @param handler
 	 * @param constructorArgs passed to the constructor with matching signature on object instantiation
-	 * @param initialize whether to call a constructor on object instantiation
-	 * @return
+	 * @return new proxy instance of type T (always uses a constructor)
 	 * @throws IllegalArgumentException if constructorArgs is null or empty or does not 
 	 * conform to the number of constructorArgTypes specified while building this factory.
 	 */
