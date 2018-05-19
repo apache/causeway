@@ -37,8 +37,7 @@ public class ProxyCreatorTestUsingJavassist {
     	proxyCreator = new ProxyCreator();
     }
 
-    @SuppressWarnings("unused")
-    private static class Employee {
+    public static class Employee {
         private String name;
         public String getName() {
             return name;

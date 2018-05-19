@@ -22,12 +22,17 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.util.function.Predicate;
 
+import javax.annotation.Nullable;
+
 public interface ProxyFactory<T> {
 
 	// -- INTERFACE
 	
-	public T createInstance(InvocationHandler handler);
-	public T createInstance(InvocationHandler handler, Object[] constructorArgs);
+	public default T createInstance(InvocationHandler handler) {
+		return createInstance(handler, null);
+	}
+	
+	public T createInstance(InvocationHandler handler, @Nullable Object[] constructorArgs);
 	
 	// -- BUILDER (uses plugin)
 	
