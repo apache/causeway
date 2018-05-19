@@ -23,12 +23,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.isis.core.wrapper.handlers.DelegatingInvocationHandler;
-import org.apache.isis.progmodel.wrapper.dom.employees.Employee;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-public class ProxyCreatorTest {
+public class ProxyCreatorTestUsingJavassist {
 	
 	private ProxyCreator proxyCreator;
 
@@ -37,6 +37,17 @@ public class ProxyCreatorTest {
     	proxyCreator = new ProxyCreator();
     }
 
+    @SuppressWarnings("unused")
+    private static class Employee {
+        private String name;
+        public String getName() {
+            return name;
+        }
+		public void setName(final String name) {
+            this.name = name;
+        }
+    }
+    
     private static class DelegatingInvocationHandlerForTest implements DelegatingInvocationHandler<Employee> {
 		private final Employee delegate = new Employee();
 		private final Set<String> invoked = new HashSet<>();
@@ -67,7 +78,7 @@ public class ProxyCreatorTest {
     }
     
 	@Test
-	public void proxyShouldDlegateCalls() {
+	public void proxyShouldDelegateCalls() {
 		
 		final DelegatingInvocationHandlerForTest handler = new DelegatingInvocationHandlerForTest();		
 		final Employee proxyOfEmployee = proxyCreator.instantiateProxy(handler);

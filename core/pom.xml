@@ -1440,8 +1440,20 @@ ${license.additional-notes}
                 <version>${revision}</version>
             </dependency>
 
-
-            <!-- plugins -->
+            <!-- core plugins -->
+            
+            <dependency>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis-core-plugins-codegen-bytebuddy</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            
+            <dependency>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis-core-plugins-codegen-javassist</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-plugins-discovery-reflections</artifactId>
@@ -2396,6 +2408,8 @@ ${license.additional-notes}
         <module>mavendeps/webapp</module>
         <module>mavendeps/testing</module>
         
+        <module>plugins/codegen-bytebuddy</module>
+        <module>plugins/codegen-javassist</module>
         <module>plugins/discovery-reflections</module>
         <module>plugins/eventbus-axon</module>
         <module>plugins/eventbus-guava</module>
