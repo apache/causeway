@@ -1,3 +1,4 @@
+package org.apache.isis.core.runtime.services;
 /**
  *  Licensed to the Apache Software Foundation (ASF) under one or more
  *  contributor license agreements.  See the NOTICE file distributed with
@@ -14,7 +15,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.core.runtime.services;
+
 
 import java.util.Collections;
 import java.util.List;
@@ -32,7 +33,6 @@ import com.google.common.collect.Lists;
 
 import org.jmock.auto.Mock;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -44,7 +44,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
-public class ServiceInstantiatorTest {
+public class ServiceInstantiatorTestUsingJavassist {
 
 	@Rule
 	public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
@@ -68,13 +68,13 @@ public class ServiceInstantiatorTest {
 		assertThat(calculator.add(3,4), is(7));
 	}
 
-	@Test @Ignore("test is in core plugins codegen-*")
+	@Test
 	public void requestScoped_instantiate() {
 		AccumulatingCalculator calculator = serviceInstantiator.createInstance(AccumulatingCalculator.class);
 		assertThat(calculator instanceof RequestScopedService, is(true));
 	}
 
-	@Test @Ignore("test is in core plugins codegen-*")
+	@Test
 	public void requestScoped_justOneThread() {
 		AccumulatingCalculator calculator = serviceInstantiator.createInstance(AccumulatingCalculator.class);
 		try {
@@ -87,7 +87,7 @@ public class ServiceInstantiatorTest {
 		}
 	}
 
-	@Test @Ignore("test is in core plugins codegen-*")
+	@Test
 	public void requestScoped_multipleThreads() throws InterruptedException, BrokenBarrierException {
 
 		final AccumulatingCalculator calculator = serviceInstantiator.createInstance(AccumulatingCalculator.class);
@@ -141,7 +141,7 @@ public class ServiceInstantiatorTest {
 		assertThat(totals[2], is(30));
 	}
 
-	@Test @Ignore("test is in core plugins codegen-*")
+	@Test
 	public void requestScoped_childThreads() throws InterruptedException  {
 
 		final Consumer consumer = serviceInstantiator.createInstance(Consumer.class);
