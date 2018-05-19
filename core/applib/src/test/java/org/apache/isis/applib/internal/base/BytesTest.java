@@ -24,7 +24,9 @@ import static org.hamcrest.Matchers.lessThan;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
-import org.apache.isis.applib.internal._Constants;
+import org.apache.isis.commons.internal._Constants;
+import org.apache.isis.commons.internal.base._Bytes;
+import org.apache.isis.commons.internal.base._Strings;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

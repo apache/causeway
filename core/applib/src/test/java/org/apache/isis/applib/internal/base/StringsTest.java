@@ -25,7 +25,9 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import java.nio.charset.StandardCharsets;
 import java.util.stream.Collectors;
 
-import org.apache.isis.applib.internal._Constants;
+import org.apache.isis.commons.internal._Constants;
+import org.apache.isis.commons.internal.base._Bytes;
+import org.apache.isis.commons.internal.base._Strings;
 import org.junit.Assert;
 import org.junit.Test;
 

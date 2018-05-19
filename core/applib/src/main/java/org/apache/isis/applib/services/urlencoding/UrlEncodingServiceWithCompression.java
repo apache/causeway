@@ -4,8 +4,8 @@ import java.nio.charset.StandardCharsets;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.internal.base._Bytes;
-import org.apache.isis.applib.internal.base._Strings;
+import org.apache.isis.commons.internal.base._Bytes;
+import org.apache.isis.commons.internal.base._Strings;
 
 @DomainService(
         nature = NatureOfService.DOMAIN,

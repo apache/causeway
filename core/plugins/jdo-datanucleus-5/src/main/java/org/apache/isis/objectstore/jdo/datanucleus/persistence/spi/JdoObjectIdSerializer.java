@@ -33,7 +33,7 @@ import javax.jdo.identity.LongIdentity;
 import javax.jdo.identity.ObjectIdentity;
 import javax.jdo.identity.StringIdentity;
 
-import org.apache.isis.applib.internal.context._Context;
+import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;

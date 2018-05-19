@@ -26,9 +26,9 @@ import java.util.Set;
 
 import javax.xml.bind.annotation.XmlTransient;
 
-import org.apache.isis.applib.internal.collections._Lists;
-import org.apache.isis.applib.internal.collections._Maps;
-import org.apache.isis.applib.internal.collections._Sets;
+import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.commons.internal.collections._Sets;
 
 /**
  * Factors out the commonality between {@link AppManifestAbstract.Builder} and {@link ModuleAbstract}.

@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.internal.base._NullSafe;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;

@@ -31,9 +31,9 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import org.apache.isis.applib.internal.collections._Lists;
-import org.apache.isis.applib.internal.context._Context;
-import org.apache.isis.applib.internal.resources._Resource;
+import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.commons.internal.resources._Resource;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;

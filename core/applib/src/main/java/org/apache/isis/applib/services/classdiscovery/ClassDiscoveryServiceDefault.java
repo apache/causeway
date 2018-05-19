@@ -27,8 +27,8 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
-import org.apache.isis.applib.internal.base._Casts;
-import org.apache.isis.applib.internal.discover._Discover;
+import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.discover._Discover;
 
 /**
  * This utility service supports the dynamic discovery of classes from the classpath.  One service that uses this

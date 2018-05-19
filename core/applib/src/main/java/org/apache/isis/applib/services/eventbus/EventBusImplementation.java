@@ -18,7 +18,7 @@ package org.apache.isis.applib.services.eventbus;
 
 import java.util.function.Consumer;
 
-import org.apache.isis.applib.internal.context._Plugin;
+import org.apache.isis.commons.internal.context._Plugin;
 
 /**
  * Common interface for all Event Bus implementations.

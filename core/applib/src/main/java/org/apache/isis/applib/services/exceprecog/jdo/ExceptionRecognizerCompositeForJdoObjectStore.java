@@ -25,9 +25,9 @@ import javax.annotation.PostConstruct;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.internal.base._Strings;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
+import org.apache.isis.commons.internal.base._Strings;
 
 /**
  * Convenience implementation of the {@link ExceptionRecognizer} domain service that

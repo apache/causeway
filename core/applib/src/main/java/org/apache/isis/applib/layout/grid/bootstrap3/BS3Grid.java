@@ -28,8 +28,6 @@ import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.internal.collections._Lists;
-import org.apache.isis.applib.internal.collections._Maps;
 import org.apache.isis.applib.layout.component.ActionLayoutData;
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
 import org.apache.isis.applib.layout.component.DomainObjectLayoutData;
@@ -38,6 +36,8 @@ import org.apache.isis.applib.layout.component.PropertyLayoutData;
 import org.apache.isis.applib.layout.grid.Grid;
 import org.apache.isis.applib.layout.grid.GridAbstract;
 import org.apache.isis.applib.mixins.dto.Dto;
+import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Maps;
 
 /**
  * This is the top-level for rendering the domain object's properties, collections and actions.  It simply consists

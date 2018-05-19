@@ -24,7 +24,7 @@ import java.math.BigInteger;
 import java.nio.charset.Charset;
 import java.util.Locale;
 
-import org.apache.isis.applib.internal.resources._Resource;
+import org.apache.isis.commons.internal.resources._Resource;
 import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;

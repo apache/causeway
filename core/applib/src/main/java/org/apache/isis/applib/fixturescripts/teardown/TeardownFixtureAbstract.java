@@ -22,8 +22,8 @@ import javax.inject.Inject;
 import javax.jdo.metadata.TypeMetadata;
 
 import org.apache.isis.applib.fixturescripts.FixtureScript;
-import org.apache.isis.applib.internal.base._Strings;
 import org.apache.isis.applib.services.jdosupport.IsisJdoSupport;
+import org.apache.isis.commons.internal.base._Strings;
 
 public abstract class TeardownFixtureAbstract extends FixtureScript {
 

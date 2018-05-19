@@ -12,13 +12,13 @@ import java.util.stream.Stream;
 
 import javax.resource.spi.IllegalStateException;
 
-import org.apache.isis.applib.internal.collections._Lists;
-import org.apache.isis.applib.internal.functions._Functions;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.tree.TreeAdapter;
 import org.apache.isis.applib.tree.TreeNode;
 import org.apache.isis.applib.tree.TreePath;
 import org.apache.isis.applib.tree.TreeState;
+import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.functions._Functions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.runtime.system.context.IsisContext;

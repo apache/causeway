@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facets.param.choices.enums;
 
 import java.util.List;
 
-import org.apache.isis.applib.internal._Constants;
+import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;

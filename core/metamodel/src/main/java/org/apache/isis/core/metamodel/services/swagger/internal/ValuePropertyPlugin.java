@@ -4,7 +4,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.BiConsumer;
 
-import org.apache.isis.applib.internal.collections._Maps;
+import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.services.swagger.internal.ValuePropertyFactory.Factory;
 
 public interface ValuePropertyPlugin {

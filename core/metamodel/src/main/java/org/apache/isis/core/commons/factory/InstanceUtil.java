@@ -22,7 +22,7 @@ package org.apache.isis.core.commons.factory;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-import org.apache.isis.applib.internal.context._Context;
+import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.lang.ObjectExtensions;
 

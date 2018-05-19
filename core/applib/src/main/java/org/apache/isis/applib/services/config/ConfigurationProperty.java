@@ -29,9 +29,9 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Title;
-import org.apache.isis.applib.internal.base._NullSafe;
-import org.apache.isis.applib.internal.base._Strings;
-import org.apache.isis.applib.internal.collections._Lists;
+import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.collections._Lists;
 
 @XmlRootElement(name = "configurationProperty")
 @XmlType(

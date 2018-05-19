@@ -26,8 +26,8 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.internal.collections._Sets;
 import org.apache.isis.applib.services.eventbus.EventBusImplementation.EventListener;
+import org.apache.isis.commons.internal.collections._Sets;
 
 /**
  * A service implementing an Event Bus, allowing arbitrary events to be posted and

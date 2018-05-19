@@ -28,8 +28,8 @@ import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.internal.collections._Lists;
 import org.apache.isis.applib.layout.links.Link;
+import org.apache.isis.commons.internal.collections._Lists;
 
 /**
  * Describes the layout of a single collection, broadly corresponds to the {@link org.apache.isis.applib.annotation.CollectionLayout} annotation.

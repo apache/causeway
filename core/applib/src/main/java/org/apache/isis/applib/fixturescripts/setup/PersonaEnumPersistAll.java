@@ -25,7 +25,7 @@ import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.applib.fixturescripts.FixtureScriptWithExecutionStrategy;
 import org.apache.isis.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.applib.fixturescripts.PersonaWithBuilderScript;
-import org.apache.isis.applib.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 
 public class PersonaEnumPersistAll<E extends Enum<E> & PersonaWithBuilderScript<T,F>, T, F extends BuilderScriptAbstract<T,F>>
         extends FixtureScript

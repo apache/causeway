@@ -35,8 +35,8 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.internal.collections._Lists;
 import org.apache.isis.applib.value.Clob;
+import org.apache.isis.commons.internal.collections._Lists;
 
 @DomainService(
         nature = NatureOfService.VIEW_MENU_ONLY,

@@ -25,7 +25,7 @@ import javax.enterprise.context.RequestScoped;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.internal.collections._Maps;
+import org.apache.isis.commons.internal.collections._Maps;
 
 /**
  * This service (API and implementation) provides a mechanism to interchange information between multiple objects invoked in the same

@@ -21,7 +21,7 @@ package org.apache.isis.viewer.wicket.viewer.registries.components;
 
 import java.util.ServiceLoader;
 
-import org.apache.isis.applib.internal.context._Plugin;
+import org.apache.isis.commons.internal.context._Plugin;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistrar;
 import org.apache.isis.viewer.wicket.ui.components.about.AboutPanelFactory;

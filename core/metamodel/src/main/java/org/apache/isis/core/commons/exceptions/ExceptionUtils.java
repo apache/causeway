@@ -26,7 +26,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.isis.applib.internal._Constants;
+import org.apache.isis.commons.internal._Constants;
 
 /**
  * <p>Provides utilities for manipulating and examining 

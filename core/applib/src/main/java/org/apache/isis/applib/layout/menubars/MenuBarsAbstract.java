@@ -24,8 +24,8 @@ import java.util.LinkedHashMap;
 import javax.xml.bind.annotation.XmlTransient;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.internal.collections._Maps;
 import org.apache.isis.applib.layout.component.ServiceActionLayoutData;
+import org.apache.isis.commons.internal.collections._Maps;
 
 @XmlTransient // ignore this class
 public abstract class MenuBarsAbstract implements MenuBars, Serializable {

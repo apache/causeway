@@ -25,7 +25,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.lang.ClassExtensions;
 import org.apache.isis.core.commons.lang.ListExtensions;
 import org.apache.isis.core.commons.lang.MethodExtensions;

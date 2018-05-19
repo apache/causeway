@@ -22,7 +22,7 @@ package org.apache.isis.core.runtime.memento;
 import java.io.Serializable;
 import java.util.List;
 
-import org.apache.isis.applib.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;

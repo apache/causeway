@@ -24,8 +24,6 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlTransient;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.internal.collections._Lists;
-import org.apache.isis.applib.internal.collections._Maps;
 import org.apache.isis.applib.layout.component.ActionLayoutData;
 import org.apache.isis.applib.layout.component.ActionLayoutDataOwner;
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
@@ -35,6 +33,8 @@ import org.apache.isis.applib.layout.component.FieldSetOwner;
 import org.apache.isis.applib.layout.component.PropertyLayoutData;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Grid;
 import org.apache.isis.applib.services.layout.LayoutService;
+import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Maps;
 
 /**
  * All top-level page layout classes should implement this interface.

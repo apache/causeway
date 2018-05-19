@@ -30,8 +30,8 @@ import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.internal.base._Strings;
-import org.apache.isis.applib.internal.context._Context;
+import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.context._Context;
 import org.hsqldb.util.DatabaseManagerSwing;
 
 @DomainService(

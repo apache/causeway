@@ -36,11 +36,11 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Function;
 
-import org.apache.isis.applib.internal.base._Casts;
-import org.apache.isis.applib.internal.base._NullSafe;
-import org.apache.isis.applib.internal.collections._Arrays;
-import org.apache.isis.applib.internal.collections._Lists;
-import org.apache.isis.applib.internal.collections._Sets;
+import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.collections._Arrays;
+import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;

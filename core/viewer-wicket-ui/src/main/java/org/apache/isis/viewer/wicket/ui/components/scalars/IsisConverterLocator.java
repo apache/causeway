@@ -18,9 +18,9 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars;
 
-import org.apache.isis.applib.internal.base._Casts;
-import org.apache.isis.applib.internal.base._NullSafe;
-import org.apache.isis.applib.internal.context._Plugin;
+import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.context._Plugin;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.objectvalue.renderedadjusted.RenderedAdjustedFacet;
 import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacet;

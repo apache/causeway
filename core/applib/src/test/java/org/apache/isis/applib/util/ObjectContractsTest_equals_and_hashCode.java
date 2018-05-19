@@ -18,7 +18,7 @@ package org.apache.isis.applib.util;
 
 import java.util.List;
 
-import org.apache.isis.applib.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.unittestsupport.value.ValueTypeContractTestAbstract;
 import org.junit.Before;
 

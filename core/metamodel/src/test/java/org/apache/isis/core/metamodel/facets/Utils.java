@@ -22,7 +22,7 @@ package org.apache.isis.core.metamodel.facets;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import org.apache.isis.applib.internal._Constants;
+import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 
 class Utils {

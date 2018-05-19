@@ -19,10 +19,10 @@
 
 package org.apache.isis.applib;
 
-import org.apache.isis.applib.internal.base._Strings;
-import org.apache.isis.applib.internal.exceptions._Exceptions;
 import org.apache.isis.applib.services.exceprecog.TranslatableException;
 import org.apache.isis.applib.services.i18n.TranslatableString;
+import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 /**
  * Indicates that an exceptional condition/problem has occurred within the application's domain logic.

@@ -35,7 +35,7 @@ import com.google.common.base.CharMatcher;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 
-import org.apache.isis.applib.internal.context._Context;
+import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.core.commons.lang.CloseableExtensions;
 import org.apache.isis.viewer.wicket.model.models.ModelAbstract;
 

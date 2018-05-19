@@ -29,8 +29,8 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.isis.applib.internal.collections._Lists;
-import org.apache.isis.applib.internal.context._Context;
+import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.context._Context;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

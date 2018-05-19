@@ -26,10 +26,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
 
-import org.apache.isis.applib.internal.base._Casts;
-import org.apache.isis.applib.internal.base._NullSafe;
-import org.apache.isis.applib.internal.collections._Arrays;
-import org.apache.isis.applib.internal.collections._Collections;
+import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.collections._Arrays;
+import org.apache.isis.commons.internal.collections._Collections;
 
 /**
  * Utility for method invocation pre-processing.

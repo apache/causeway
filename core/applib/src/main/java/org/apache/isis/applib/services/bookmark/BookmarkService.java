@@ -19,7 +19,7 @@
 package org.apache.isis.applib.services.bookmark;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.internal.memento._Mementos.SerializingAdapter;
+import org.apache.isis.commons.internal.memento._Mementos.SerializingAdapter;
 
 /**
  * This service enables a serializable &quot;bookmark&quot; to be created for an entity.

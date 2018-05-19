@@ -23,7 +23,8 @@ import static org.hamcrest.CoreMatchers.is;
 
 import java.util.List;
 
-import org.apache.isis.applib.internal.collections._Lists;
+import org.apache.isis.commons.internal.base._Reduction;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.junit.Assert;
 import org.junit.Test;
 

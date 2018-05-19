@@ -18,7 +18,7 @@
  */
 package org.apache.isis.schema.utils;
 
-import static org.apache.isis.applib.internal.collections._Maps.entry;
+import static org.apache.isis.commons.internal.collections._Maps.entry;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -28,15 +28,15 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 
-import org.apache.isis.applib.internal.base._Casts;
-import org.apache.isis.applib.internal.base._Strings;
-import org.apache.isis.applib.internal.collections._Maps;
-import org.apache.isis.applib.internal.context._Context;
-import org.apache.isis.applib.internal.exceptions._Exceptions;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
+import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.schema.cmd.v1.MapDto;
 import org.apache.isis.schema.cmd.v1.ParamDto;
 import org.apache.isis.schema.common.v1.BlobDto;

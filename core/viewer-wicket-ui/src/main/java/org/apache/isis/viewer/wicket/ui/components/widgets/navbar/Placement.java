@@ -18,7 +18,7 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.widgets.navbar;
 
-import org.apache.isis.applib.internal.resources._Resource;
+import org.apache.isis.commons.internal.resources._Resource;
 
 public enum Placement {
     HEADER,

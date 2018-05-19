@@ -21,7 +21,7 @@ package org.apache.isis.core.runtime.system.context;
 
 import java.util.Optional;
 
-import org.apache.isis.applib.internal.context._Context;
+import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;

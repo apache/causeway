@@ -21,7 +21,7 @@ package org.apache.isis.core.commons.resource;
 
 import java.io.InputStream;
 
-import org.apache.isis.applib.internal.context._Context;
+import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.core.commons.lang.StringExtensions;
 
 /**

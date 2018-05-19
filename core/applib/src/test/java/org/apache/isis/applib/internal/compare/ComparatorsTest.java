@@ -27,7 +27,8 @@ import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import org.apache.isis.applib.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.compare._Comparators;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;

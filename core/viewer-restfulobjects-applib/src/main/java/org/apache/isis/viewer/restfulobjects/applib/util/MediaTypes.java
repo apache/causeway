@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 
 import javax.ws.rs.core.MediaType;
 
-import org.apache.isis.applib.internal.base._Strings;
+import org.apache.isis.commons.internal.base._Strings;
 
 public class MediaTypes {
 

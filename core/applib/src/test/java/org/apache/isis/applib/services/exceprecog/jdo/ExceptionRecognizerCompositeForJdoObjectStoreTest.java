@@ -23,7 +23,7 @@ import static org.junit.Assert.assertThat;
 
 import java.util.Collections;
 
-import org.apache.isis.applib.internal.collections._Maps;
+import org.apache.isis.commons.internal.collections._Maps;
 import org.junit.Before;
 import org.junit.Test;
 

@@ -29,10 +29,10 @@ import java.util.stream.Collectors;
 import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.MediaType;
 
-import org.apache.isis.applib.internal._Constants;
-import org.apache.isis.applib.internal.base._NullSafe;
-import org.apache.isis.applib.internal.base._Strings;
-import org.apache.isis.applib.internal.collections._Lists;
+import org.apache.isis.commons.internal._Constants;
+import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 
 import com.google.common.base.Function;

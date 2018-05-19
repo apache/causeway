@@ -22,7 +22,7 @@ package org.apache.isis.core.metamodel.facets.param.choices.method;
 import java.lang.reflect.Method;
 import java.util.Collection;
 
-import org.apache.isis.applib.internal._Constants;
+import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;

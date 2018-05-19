@@ -32,11 +32,11 @@ import javax.xml.bind.Unmarshaller;
 import org.apache.isis.applib.ApplicationException;
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.internal.base._Casts;
-import org.apache.isis.applib.internal.base._NullSafe;
-import org.apache.isis.applib.internal.collections._Maps;
 import org.apache.isis.applib.mixins.dto.Dto_downloadXsd;
 import org.apache.isis.applib.util.JaxbUtil;
+import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.collections._Maps;
 
 public interface JaxbService {
 

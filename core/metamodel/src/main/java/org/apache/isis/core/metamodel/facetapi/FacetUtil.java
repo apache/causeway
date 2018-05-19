@@ -24,8 +24,8 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.isis.applib.internal._Constants;
-import org.apache.isis.applib.internal.base._Casts;
+import org.apache.isis.commons.internal._Constants;
+import org.apache.isis.commons.internal.base._Casts;
 
 import com.google.common.collect.Lists;
 

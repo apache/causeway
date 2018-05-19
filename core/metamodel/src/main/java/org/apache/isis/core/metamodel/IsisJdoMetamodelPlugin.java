@@ -4,7 +4,7 @@ import java.lang.reflect.Method;
 
 import javax.annotation.Nullable;
 
-import org.apache.isis.applib.internal.context._Plugin;
+import org.apache.isis.commons.internal.context._Plugin;
 
 public interface IsisJdoMetamodelPlugin {
 

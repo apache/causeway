@@ -23,9 +23,9 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
 import java.util.Map;
 
-import org.apache.isis.applib.internal.base._Casts;
-import org.apache.isis.applib.internal.collections._Arrays;
 import org.apache.isis.applib.services.wrapper.WrappingObject;
+import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.core.commons.lang.ArrayExtensions;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ProxyEnhanced;
 import org.apache.isis.core.plugins.codegen.ProxyFactory;

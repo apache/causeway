@@ -23,11 +23,11 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.internal.resources._Resource;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.swagger.SwaggerService;
 import org.apache.isis.applib.value.LocalResourcePath;
+import org.apache.isis.commons.internal.resources._Resource;
 
 @Mixin(method="act")
 public class Object_openRestApi {

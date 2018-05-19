@@ -24,7 +24,7 @@ import java.util.function.Predicate;
 
 import javax.jdo.JDODataStoreException;
 
-import org.apache.isis.applib.internal.exceptions._Exceptions;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 /**
  * An specific implementation of {@link ExceptionRecognizer} that looks for an

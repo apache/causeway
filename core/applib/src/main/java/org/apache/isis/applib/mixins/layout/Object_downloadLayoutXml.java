@@ -24,9 +24,9 @@ import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.internal.base._Strings;
 import org.apache.isis.applib.services.layout.LayoutService;
 import org.apache.isis.applib.value.Clob;
+import org.apache.isis.commons.internal.base._Strings;
 
 @Mixin(method="act")
 public class Object_downloadLayoutXml {

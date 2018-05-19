@@ -16,7 +16,7 @@
  */
 package org.apache.isis.viewer.wicket.model.models;
 
-import org.apache.isis.applib.internal.base._Casts;
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.wicket.Component;
 import org.apache.wicket.Page;
 import org.apache.wicket.markup.renderStrategy.DeepChildFirstVisitor;

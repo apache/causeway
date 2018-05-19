@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.apache.isis.applib.internal.base._Strings;
+import org.apache.isis.commons.internal.base._Strings;
 
 /**
  * Specifies the positioning of an entity's (groups of) properties and of its collections, on a page, column by column.

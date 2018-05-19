@@ -22,7 +22,7 @@ package org.apache.isis.applib.fixtures;
 import java.util.List;
 
 import org.apache.isis.applib.fixturescripts.FixtureScript;
-import org.apache.isis.applib.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 
 /**
  * Indicates that the demo or test should be run as the specified user, with the

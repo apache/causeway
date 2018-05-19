@@ -10,7 +10,7 @@ import java.util.stream.Stream;
 
 import javax.validation.constraints.NotNull;
 
-import org.apache.isis.applib.internal.base._NullSafe;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.plugins.classdiscovery.ClassDiscovery;
 import org.reflections.Reflections;
 

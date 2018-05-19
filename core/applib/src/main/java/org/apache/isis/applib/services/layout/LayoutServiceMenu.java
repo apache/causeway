@@ -29,10 +29,10 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.internal.base._Strings;
 import org.apache.isis.applib.services.menu.MenuBarsService;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
+import org.apache.isis.commons.internal.base._Strings;
 
 @DomainService(
         nature = NatureOfService.VIEW_MENU_ONLY,

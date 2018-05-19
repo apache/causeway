@@ -21,10 +21,10 @@ package org.apache.isis.viewer.wicket.ui.components.layout.bs3.tabs;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.apache.isis.applib.internal.base._NullSafe;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Tab;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3TabGroup;
 import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.util.ComponentHintKey;

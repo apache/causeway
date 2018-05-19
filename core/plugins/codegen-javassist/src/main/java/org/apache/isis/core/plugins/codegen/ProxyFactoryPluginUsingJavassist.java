@@ -7,9 +7,9 @@ import java.util.function.Predicate;
 
 import javax.annotation.Nullable;
 
-import org.apache.isis.applib.internal._Constants;
-import org.apache.isis.applib.internal.base._Casts;
-import org.apache.isis.applib.internal.base._NullSafe;
+import org.apache.isis.commons.internal._Constants;
+import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.plugins.codegen.ProxyFactory;
 import org.apache.isis.core.plugins.codegen.ProxyFactoryPlugin;

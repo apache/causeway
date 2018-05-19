@@ -8,9 +8,9 @@ import javax.inject.Inject;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.internal.base._Casts;
-import org.apache.isis.applib.internal.collections._Maps;
 import org.apache.isis.applib.services.WithTransactionScope;
+import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.collections._Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

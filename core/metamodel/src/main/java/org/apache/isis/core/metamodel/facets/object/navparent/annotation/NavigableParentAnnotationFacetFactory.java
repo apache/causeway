@@ -23,7 +23,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.internal.base._NullSafe;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;

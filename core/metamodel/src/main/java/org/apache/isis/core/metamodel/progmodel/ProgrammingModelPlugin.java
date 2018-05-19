@@ -22,8 +22,8 @@ import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
 
-import org.apache.isis.applib.internal.collections._Multimaps;
-import org.apache.isis.applib.internal.collections._Multimaps.SetMultimap;
+import org.apache.isis.commons.internal.collections._Multimaps;
+import org.apache.isis.commons.internal.collections._Multimaps.SetMultimap;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 
 public interface ProgrammingModelPlugin {

@@ -21,9 +21,9 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
-import org.apache.isis.applib.internal.collections._Lists;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.schema.common.v1.OidDto;
 import org.apache.isis.schema.common.v1.OidsDto;
 

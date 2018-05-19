@@ -22,7 +22,7 @@ package org.apache.isis.core.metamodel.facets.object.domainservice;
 import org.apache.isis.applib.annotation.Constants;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
-import org.apache.isis.applib.internal.compare._Comparators;
+import org.apache.isis.commons.internal.compare._Comparators;
 
 public class DomainServiceMenuOrder {
 

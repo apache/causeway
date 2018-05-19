@@ -25,9 +25,9 @@ import java.util.Set;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
-import org.apache.isis.applib.internal.collections._Lists;
-import org.apache.isis.applib.internal.collections._Maps;
-import org.apache.isis.applib.internal.collections._Sets;
+import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.commons.internal.collections._Sets;
 
 /**
  * Represents a collection of entities and domain services that provide a set of coherent functionality under a

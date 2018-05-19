@@ -24,8 +24,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import org.apache.isis.applib.internal.base._Strings;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.specsupport.scenarios.ScenarioExecution;
 import org.apache.isis.core.specsupport.scenarios.ScenarioExecutionForUnit;
 import org.apache.isis.core.specsupport.scenarios.ScenarioExecutionScope;

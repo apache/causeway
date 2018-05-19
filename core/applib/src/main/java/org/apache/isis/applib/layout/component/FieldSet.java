@@ -28,8 +28,8 @@ import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.internal.collections._Lists;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Col;
+import org.apache.isis.commons.internal.collections._Lists;
 
 /**
  * A {@link MemberRegion region} of the page containing a set of

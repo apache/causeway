@@ -30,8 +30,8 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
-import org.apache.isis.applib.internal.resources._Resource;
 import org.apache.isis.applib.util.JaxbUtil;
+import org.apache.isis.commons.internal.resources._Resource;
 import org.apache.isis.schema.cmd.v1.ActionDto;
 import org.apache.isis.schema.cmd.v1.CommandDto;
 import org.apache.isis.schema.cmd.v1.MapDto;

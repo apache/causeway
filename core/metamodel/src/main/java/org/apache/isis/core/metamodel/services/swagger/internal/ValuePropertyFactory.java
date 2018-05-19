@@ -29,7 +29,7 @@ import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
 
-import org.apache.isis.applib.internal.context._Plugin;
+import org.apache.isis.commons.internal.context._Plugin;
 import org.apache.isis.core.metamodel.services.swagger.internal.ValuePropertyPlugin.ValuePropertyCollector;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;

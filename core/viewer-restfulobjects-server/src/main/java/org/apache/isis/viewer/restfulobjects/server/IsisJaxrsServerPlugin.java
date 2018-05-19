@@ -1,6 +1,6 @@
 package org.apache.isis.viewer.restfulobjects.server;
 
-import org.apache.isis.applib.internal.context._Plugin;
+import org.apache.isis.commons.internal.context._Plugin;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
 
 public interface IsisJaxrsServerPlugin {

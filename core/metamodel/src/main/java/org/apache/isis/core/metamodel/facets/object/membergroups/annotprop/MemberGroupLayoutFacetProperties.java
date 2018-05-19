@@ -24,7 +24,7 @@ import java.util.Properties;
 import java.util.stream.Collectors;
 
 import org.apache.isis.applib.annotation.MemberGroupLayout.ColumnSpans;
-import org.apache.isis.applib.internal.base._Strings;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupLayoutFacetAbstract;
 
