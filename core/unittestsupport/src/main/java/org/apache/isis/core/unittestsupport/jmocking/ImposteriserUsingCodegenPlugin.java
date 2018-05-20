@@ -25,7 +25,7 @@ import org.jmock.api.Invocation;
 import org.jmock.api.Invokable;
 import org.jmock.lib.JavaReflectionImposteriser;
 
-public class ImposteriserUsingCodegenPlugin implements Imposteriser {
+class ImposteriserUsingCodegenPlugin implements Imposteriser {
 
     public static final Imposteriser INSTANCE = new ImposteriserUsingCodegenPlugin();
 
