@@ -20,12 +20,12 @@
 		<version>${revision}</version>
 	</parent>
 
-	<artifactId>isis-core-unittestsupport</artifactId>
-	<name>Apache Isis Unit Test Support</name>
+	<artifactId>isis-core-unittestsupport-legacy</artifactId>
+	<name>Apache Isis Unit Test Support (Legacy)</name>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.core.unittestsupport</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/core/unittestsupport</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.isis.core.unittestsupport-legacy</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/isis/core/unittestsupport-legacy</git-plugin.propertiesDir>
 	</properties>
 
 	<description>
@@ -35,11 +35,22 @@
 
 	<dependencies>
 	
-		<!-- core plugin loading -->
+		<!-- INHERIT FROM NON LEGACY SIBLING -->
+
 		<dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-commons</artifactId>
-        </dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-core-unittestsupport</artifactId>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-core-unittestsupport</artifactId>
+			<type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
+	
+	
+		<!-- LEGACY DEPENDENCY -->
 	
 		<dependency>
 			<groupId>junit</groupId>
