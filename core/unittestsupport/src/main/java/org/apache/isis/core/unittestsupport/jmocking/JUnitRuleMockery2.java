@@ -67,7 +67,7 @@ public class JUnitRuleMockery2 extends JUnit4Mockery implements MethodRule {
     public static JUnitRuleMockery2 createFor(final Mode mode) {
         final JUnitRuleMockery2 jUnitRuleMockery2 = new JUnitRuleMockery2();
         if (mode == Mode.INTERFACES_AND_CLASSES) {
-            jUnitRuleMockery2.setImposteriser(JavassistImposteriser.INSTANCE);
+            jUnitRuleMockery2.setImposteriser(Imposterisers.getDefault());
         }
         jUnitRuleMockery2.setThreadingPolicy(new Synchroniser());
         return jUnitRuleMockery2;

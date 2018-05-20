@@ -19,13 +19,18 @@
 
 package org.apache.isis.commons.internal.context;
 
+import java.io.File;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.Objects;
 import java.util.ServiceLoader;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.plugins.PluginResolveException;
@@ -142,6 +147,51 @@ public final class _Plugin {
 						pluginInterfaceClass.getName() ));
 	}
 
+	// -- JUNIT TEST SUPPORT 
 	
+	/**
+	 * TODO will break with java 9+
+	 * @return file-system path, where the frameworks core classes reside (after a build).
+	 */
+	public static URL getCoreCommonsTargetFolder() {
+		return Stream.of(((URLClassLoader )_Plugin.class.getClassLoader()).getURLs())
+		.filter(url->url.toString().contains("/core/commons/"))
+		.findFirst()
+		.orElseThrow(()->new RuntimeException("Failed to find file-system path, where the frameworks core classes reside."))
+		;
+	}
+	
+	/**
+	 * Loads a plugin by name and class-path. (Most likely used by JUnit Tests.)
+	 * @param pluginClass
+	 * @param classPath
+	 * @param pluginFullyQualifiedClassName
+	 * @return
+	 */
+	public static <S> S load(Class<S> pluginInterfaceClass, File classPath, String pluginFullyQualifiedClassName) {
+
+		try {
+		
+			ClassLoader parentCL = pluginInterfaceClass.getClassLoader();
+			URL[] urls = {classPath.toURI().toURL()};
+			ClassLoader cl = URLClassLoader.newInstance(urls, parentCL);
+			Class<S> pluginClass = _Casts.uncheckedCast(
+					cl.loadClass(pluginFullyQualifiedClassName));
+			S plugin = pluginClass.newInstance(); 
+			
+			_Context.putSingleton(pluginInterfaceClass, plugin);
+		
+			return plugin;
+			
+		} catch (Exception e) {
+			throw new PluginResolveException(
+					String.format("Failed to load plugin '%s' implementing '%s' from path '%s'.", 
+							pluginFullyQualifiedClassName,
+							pluginInterfaceClass.getName(),
+							classPath.getAbsolutePath()
+							), e);
+		}
+		
+	}
 	
 }

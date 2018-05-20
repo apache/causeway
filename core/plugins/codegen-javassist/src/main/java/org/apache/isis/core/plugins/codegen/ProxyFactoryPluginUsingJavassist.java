@@ -10,7 +10,6 @@ import javax.annotation.Nullable;
 import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.plugins.codegen.ProxyFactory;
 import org.apache.isis.core.plugins.codegen.ProxyFactoryPlugin;
 import org.objenesis.Objenesis;
@@ -53,7 +52,7 @@ public class ProxyFactoryPluginUsingJavassist implements ProxyFactoryPlugin {
 					
 				} catch (NoSuchMethodException | IllegalArgumentException | InstantiationException | 
 						IllegalAccessException | InvocationTargetException e) {
-					throw new IsisException(e);
+					throw new RuntimeException(e);
 				}
 				
 			}
@@ -68,7 +67,7 @@ public class ProxyFactoryPluginUsingJavassist implements ProxyFactoryPlugin {
 					return _Casts.uncheckedCast( createUsingConstructor(handler, constructorArgs) );
 				} catch (NoSuchMethodException | IllegalArgumentException | InstantiationException | 
 						IllegalAccessException | InvocationTargetException e) {
-					throw new IsisException(e);
+					throw new RuntimeException(e);
 				}
 			}
 

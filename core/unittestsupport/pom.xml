@@ -40,6 +40,14 @@
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-commons</artifactId>
         </dependency>
+        
+        <!-- specifically to test the codegen-javassist plugin -->
+        <dependency>
+			<groupId>org.javassist</groupId>
+			<artifactId>javassist</artifactId>
+			<scope>test</scope>
+			<optional>true</optional>
+		</dependency>
 	
 		<dependency>
 			<groupId>junit</groupId>
@@ -60,13 +68,7 @@
 			<groupId>org.jmock</groupId>
 			<artifactId>jmock-junit4</artifactId>
 		</dependency>
-
-        <dependency>
-            <groupId>org.objenesis</groupId>
-            <artifactId>objenesis</artifactId>
-            <optional>true</optional>
-        </dependency>
-
+		
 		<!-- JDO API (non transient, provided by plugin) -->
 		<dependency>
 			<groupId>javax.jdo</groupId>
@@ -85,6 +87,11 @@
 						setUserData(), as needed by xmlsnapshot functionality in isis-core-runtime. -->
 					<groupId>xml-apis</groupId>
 					<artifactId>xml-apis</artifactId>
+				</exclusion>
+				<exclusion>
+					<!-- provided by plugins if required  -->
+					<groupId>org.javassist</groupId>
+					<artifactId>javassist</artifactId>
 				</exclusion>
 			</exclusions>
 			<optional>true</optional>
