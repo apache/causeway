@@ -1,1 +1,1 @@
-org.apache.isis.core.runtime.plugins.codegen.ProxyFactoryPluginUsingJavassist
+org.apache.isis.core.plugins.codegen.ProxyFactoryPluginUsingJavassist

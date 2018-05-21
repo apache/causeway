@@ -138,10 +138,10 @@ public abstract class EventBusServiceDefault extends EventBusService {
     		
     	} else if("guava".equals(implementation)) {
             // legacy of return new EventBusImplementationForGuava();
-        	fqImplementationName = "org.apache.isis.core.runtime.services.eventbus.adapter.EventBusImplementationForGuava";
+        	fqImplementationName = "org.apache.isis.core.plugins.eventbus.EventBusPluginForGuava";
         } else if("axon".equals(implementation)) {
         	// legacy of return new EventBusImplementationForAxonSimple();
-        	fqImplementationName = "org.apache.isis.core.runtime.services.eventbus.adapter.EventBusImplementationForAxonSimple";
+        	fqImplementationName = "org.apache.isis.core.plugins.eventbus.EventBusPluginForAxon";
         }
 
         final Class<?> aClass = ClassUtil.forName(fqImplementationName);
