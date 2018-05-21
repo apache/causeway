@@ -24,6 +24,12 @@ import org.apache.isis.commons.internal.memento._Mementos.EncoderDecoder;
 
 public interface UrlEncodingService extends EncoderDecoder {
 
+	// -- INHERITED from EncoderDecoder (make explicitly programmatic, in order to avoid meta-model validation)
+	@Programmatic public String encode(final byte[] bytes);
+	@Programmatic public byte[] decode(String str);
+	
+    // -- EXTENSIONS
+    
     @Programmatic
     public default String encodeString(final String str) {
     	return encode(_Strings.toBytes(str, StandardCharsets.UTF_8));
