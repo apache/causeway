@@ -124,33 +124,36 @@ public final class _With<T> {
 	// -- MAPPING IDIOMS
 	
 	/**
+	 * Equivalent to {@code Optional.ofNullable(obj).map(mapper).orElse(orElse);}
 	 * @param obj (nullable)
 	 * @param mapper
 	 * @param orElse (nullable)
 	 * @return {@code obj!=null ? mapper.apply(obj) : orElse}
 	 */
-	public static <X, R> R mapIfPresent(@Nullable X obj, Function<X, R> mapper, @Nullable R orElse) {
+	public static <X, R> R mapIfPresentElse(@Nullable X obj, Function<X, R> mapper, @Nullable R orElse) {
 		return obj!=null ? requires(mapper, "mapper").apply(obj) : orElse;	
 	}
 	
 	/**
+	 * Equivalent to {@code Optional.ofNullable(obj).map(mapper).orElseGet(elseGet);} 
 	 * @param obj (nullable)
 	 * @param mapper
 	 * @param elseGet
 	 * @return {@code obj!=null ? mapper.apply(obj) : elseGet.get()}
 	 */
-	public static <X, R> R mapIfPresent(@Nullable X obj, Function<X, R> mapper, Supplier<R> elseGet) {
+	public static <X, R> R mapIfPresentElseGet(@Nullable X obj, Function<X, R> mapper, Supplier<R> elseGet) {
 		return obj!=null ? requires(mapper, "mapper").apply(obj) : requires(elseGet, "elseGet").get();
 	}
 	
 	/**
+	 * Equivalent to {@code Optional.ofNullable(obj).map(mapper).orElseThrow(elseThrow);}
 	 * @param obj (nullable)
 	 * @param mapper
 	 * @param elseThrow
 	 * @return {@code obj!=null ? mapper.apply(obj) : throw( elseThrow.get() )}
 	 * @throws E
 	 */
-	public static <X, R, E extends Exception> R applyIfPresentElseThrow(
+	public static <X, R, E extends Exception> R mapIfPresentElseThrow(
 			@Nullable X obj, 
 			Function<X, R> mapper, 
 			Supplier<E> elseThrow) 
