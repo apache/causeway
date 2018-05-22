@@ -19,6 +19,10 @@
 
 package org.apache.isis.commons.internal.context;
 
+import static org.apache.isis.commons.internal.base._With.ifPresentElseGet;
+import static org.apache.isis.commons.internal.base._With.ifPresentElseThrow;
+import static org.apache.isis.commons.internal.base._With.requires;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,8 +67,8 @@ public final class _Context {
 	 *  on the current context.
 	 */
 	public static <T> void putSingleton(Class<? super T> type, T singleton) {
-		Objects.requireNonNull(type);
-		Objects.requireNonNull(singleton);
+		requires(type, "type");
+		requires(singleton, "singleton");
 		
 		// let writes to the map be atomic
 		synchronized (singletonMap) {   
@@ -84,8 +88,8 @@ public final class _Context {
 	 * @return whether the {@code singleton} was put on the context or ignored because there is already one present 
 	 */
 	public static <T> boolean put(Class<? super T> type, T singleton, boolean override) {
-		Objects.requireNonNull(type);
-		Objects.requireNonNull(singleton);
+		requires(type, "type");
+		requires(singleton, "singleton");
 		
 		// let writes to the map be atomic
 		synchronized (singletonMap) {   
@@ -116,8 +120,8 @@ public final class _Context {
 	 * @return null, if there is no such instance
 	 */
 	public static <T> T computeIfAbsent(Class<? super T> type, Function<Class<? super T>, T> factory) {
-		Objects.requireNonNull(type);
-		Objects.requireNonNull(factory);
+		requires(type, "type");
+		requires(factory, "factory");
 		
 		// let writes to the map be atomic
 		synchronized (singletonMap) { 
@@ -134,12 +138,8 @@ public final class _Context {
 	 * @return
 	 */
 	public static <T> T getOrElse(Class<? super T> type, Supplier<T> fallback) {
-		Objects.requireNonNull(fallback);
-		final T singleton = getIfAny(type);
-		if(singleton!=null) {
-			return singleton;
-		}
-		return fallback.get(); 
+		requires(fallback, "fallback");
+		return ifPresentElseGet(getIfAny(type), fallback);
 	}
 	
 	/**
@@ -154,12 +154,8 @@ public final class _Context {
 			Class<? super T> type, 
 			Supplier<E> onNotFound) 
 			throws E {
-		Objects.requireNonNull(onNotFound);
-		final T singleton = getIfAny(type);
-		if(singleton!=null) {
-			return singleton;
-		}
-		throw onNotFound.get();
+		requires(onNotFound, "onNotFound");
+		return ifPresentElseThrow(getIfAny(type), onNotFound);
 	}
 	
 	/**

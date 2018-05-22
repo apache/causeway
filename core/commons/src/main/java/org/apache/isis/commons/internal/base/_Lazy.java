@@ -19,7 +19,8 @@
 
 package org.apache.isis.commons.internal.base;
 
-import java.util.Objects;
+import static org.apache.isis.commons.internal.base._With.requires;
+
 import java.util.function.Supplier;
 
 /**
@@ -45,8 +46,7 @@ public final class _Lazy<T> implements Supplier<T> {
 	}
 	
 	private _Lazy(Supplier<? extends T> supplier) {
-		Objects.requireNonNull(supplier, "supplier required");
-		this.supplier = supplier;
+		this.supplier = requires(supplier, "supplier");
 	}
 
 	public boolean isMemoized() {

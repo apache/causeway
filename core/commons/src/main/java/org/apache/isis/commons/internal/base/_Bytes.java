@@ -19,11 +19,13 @@
 
 package org.apache.isis.commons.internal.base;
 
+import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
+import static org.apache.isis.commons.internal.base._With.requires;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Base64;
-import java.util.Objects;
 import java.util.function.UnaryOperator;
 
 import javax.annotation.Nullable;
@@ -128,11 +130,8 @@ public final class _Bytes {
 	 * @return null if {@code input} is null
 	 */
 	public final static byte[] encodeToBase64(Base64.Encoder encoder, @Nullable final byte[] input) {
-		if(input==null) {
-			return null;
-		}
-		Objects.requireNonNull(encoder);
-		return encoder.encode(input);
+		requires(encoder, "encoder");
+		return mapIfPresentElse(input, encoder::encode, null);
 	}
 
 	/**
@@ -143,11 +142,8 @@ public final class _Bytes {
 	 * @return null if {@code base64} is null
 	 */
 	public final static byte[] decodeBase64(Base64.Decoder decoder, @Nullable final byte[] base64) {
-		if(base64==null) {
-			return null;
-		}
-		Objects.requireNonNull(decoder);
-		return decoder.decode(base64);
+		requires(decoder, "decoder");
+		return mapIfPresentElse(base64, decoder::decode, null);
 	}
 
 	// -- COMPRESSION
@@ -204,8 +200,7 @@ public final class _Bytes {
 		private final UnaryOperator<byte[]> operator;
 
 		private BytesOperator(UnaryOperator<byte[]> operator) {
-			Objects.requireNonNull(operator);
-			this.operator = operator;
+			this.operator = requires(operator, "operator");
 		}
 
 		public byte[] apply(byte[] input) {

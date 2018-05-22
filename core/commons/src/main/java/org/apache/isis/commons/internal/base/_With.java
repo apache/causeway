@@ -33,7 +33,7 @@ import javax.annotation.Nullable;
 /**
  * <h1>- internal use only -</h1>
  * <p>
- * Provides fluent replacements for common accept/apply/supply idioms.
+ * Provides shortcuts for common 'Optional' idioms.
  * </p>
  * <p>
  * <b>WARNING</b>: Do <b>NOT</b> use any of the classes provided by this package! <br/> 
@@ -45,6 +45,45 @@ import javax.annotation.Nullable;
 public final class _With<T> {
 
 	private _With() { }
+	
+	// -- OPTION IDIOMS
+	
+	/**
+	 * Equivalent to {@code Optional.ofNullable(obj).orElse(orElse);}
+	 * @param obj (nullable)
+	 * @param orElse (nullable)
+	 * @return {@code obj!=null ? obj : orElse}
+	 */
+	public static <X> X ifPresentElse(@Nullable X obj, @Nullable X orElse) {
+		return obj!=null ? obj : orElse;	
+	}
+	
+	/**
+	 * Equivalent to {@code Optional.ofNullable(obj).orElseGet(elseGet);} 
+	 * @param obj (nullable)
+	 * @param elseGet
+	 * @return {@code obj!=null ? obj : elseGet.get()}
+	 */
+	public static <X> X ifPresentElseGet(@Nullable X obj, Supplier<X> elseGet) {
+		return obj!=null ? obj : requires(elseGet, "elseGet").get();
+	}
+	
+	/**
+	 * Equivalent to {@code Optional.ofNullable(obj).orElseThrow(elseThrow);}
+	 * @param obj (nullable)
+	 * @param elseThrow
+	 * @return {@code obj!=null ? obj : throw( elseThrow.get() )}
+	 * @throws E
+	 */
+	public static <X, E extends Exception> X ifPresentElseThrow(
+			@Nullable X obj, 
+			Supplier<E> elseThrow) 
+			throws E {
+		if(obj!=null) {
+			return obj;	
+		}
+		throw requires(elseThrow, "elseThrow").get();
+	}
 	
 	// -- CONSUMER IDIOMS
 	
@@ -166,7 +205,7 @@ public final class _With<T> {
 	
 	// -- PARAMETER NON-NULL CHECK
 	
-	public static <T> T requires(T obj, String paramName) {
+	public static <T> T requires(@Nullable T obj, String paramName) {
         if (obj == null) {
             throw new NullPointerException(String.format("Parameter '%s' is required to be non-null.", paramName));
         }

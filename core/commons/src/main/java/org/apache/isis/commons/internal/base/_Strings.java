@@ -20,9 +20,10 @@
 package org.apache.isis.commons.internal.base;
 
 import static org.apache.isis.commons.internal.base._Strings_SplitIterator.splitIterator;
+import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
+import static org.apache.isis.commons.internal.base._With.requires;
 
 import java.nio.charset.Charset;
-import java.util.Objects;
 import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.function.UnaryOperator;
@@ -98,10 +99,7 @@ public final class _Strings {
 	 * @return null if the {@code input} is null
 	 */
 	public static String trim(@Nullable String input) {
-		if(input==null) {
-			return null;
-		}
-		return input.trim();
+		return mapIfPresentElse(input, String::trim, null);
 	}
 
 	/**
@@ -110,10 +108,7 @@ public final class _Strings {
 	 * @return null if {@code input} is null
 	 */
 	public static String lower(@Nullable final String input) {
-		if(input==null) {
-			return null;
-		}
-		return input.toLowerCase();
+		return mapIfPresentElse(input, String::toLowerCase, null);
 	}
 
 	/**
@@ -122,10 +117,7 @@ public final class _Strings {
 	 * @return null if {@code input} is null
 	 */
 	public static String upper(@Nullable final String input) {
-		if(input==null) {
-			return null;
-		}
-		return input.toUpperCase();
+		return mapIfPresentElse(input, String::toUpperCase, null);
 	}
 
 	/**
@@ -158,7 +150,7 @@ public final class _Strings {
 		if(input==null) {
 			return null;
 		}
-		Objects.requireNonNull(prefix);
+		requires(prefix, "prefix");
 		if(input.startsWith(prefix)) {
             return input;
         }
@@ -175,7 +167,7 @@ public final class _Strings {
 		if(input==null) {
 			return null;
 		}
-		Objects.requireNonNull(suffix);
+		requires(suffix, "suffix");
 		if(input.endsWith(suffix)) {
             return input;
         }
@@ -206,14 +198,18 @@ public final class _Strings {
 		}
 		
 		final int fillCount = minLength - len;
-		final StringBuilder sb = new StringBuilder();
-		for(int i=0; i<fillCount; ++i) {
-			sb.append(c);
-		}
-		if(len>0) {
-			sb.append(str);
-		}
-		return sb.toString();
+		
+		return _With.stringBuilder(sb->{
+			
+			for(int i=0; i<fillCount; ++i) {
+				sb.append(c);
+			}
+			
+			if(len>0) {
+				sb.append(str);
+			}
+			
+		}).toString();
 	}
 	
 	/**
@@ -238,14 +234,18 @@ public final class _Strings {
 		}
 		
 		final int fillCount = minLength - len;
-		final StringBuilder sb = new StringBuilder();
-		if(len>0) {
-			sb.append(str);
-		}
-		for(int i=0; i<fillCount; ++i) {
-			sb.append(c);
-		}
-		return sb.toString();
+		
+		return _With.stringBuilder(sb->{
+			
+			if(len>0) {
+				sb.append(str);
+			}
+			
+			for(int i=0; i<fillCount; ++i) {
+				sb.append(c);
+			}	
+			
+		}).toString();
 	}
 	
 	// -- SPLITTING
@@ -288,11 +288,8 @@ public final class _Strings {
 	 * @return null if {@code input} is null
 	 */
 	public static String condenseWhitespaces(@Nullable final String input, final String replacement) {
-		if(input==null) {
-			return null;
-		}
-		Objects.requireNonNull(replacement);
-		return input.replaceAll("\\s+", replacement);
+		requires(replacement, "replacement");
+		return mapIfPresentElse(input, __->input.replaceAll("\\s+", replacement), null);
 	}
 	
 	// -- BYTE ARRAY CONVERSION
@@ -304,11 +301,8 @@ public final class _Strings {
 	 * @return null if {@code str} is null
 	 */
 	public final static byte[] toBytes(@Nullable final String str, Charset charset) {
-		if(str==null) {
-			return null;
-		}
-		Objects.requireNonNull(charset);
-		return str.getBytes(charset);
+		requires(charset, "charset");
+		return mapIfPresentElse(str, __->str.getBytes(charset), null);
 	}
 	
 	/**
@@ -318,11 +312,8 @@ public final class _Strings {
 	 * @return null if {@code bytes} is null
 	 */
 	public final static String ofBytes(@Nullable final byte[] bytes, Charset charset) {
-		if(bytes==null) {
-			return null;
-		}
-		Objects.requireNonNull(charset);
-		return new String(bytes, charset);
+		requires(charset, "charset");
+		return mapIfPresentElse(bytes, __->new String(bytes, charset), null);
 	}
 	
 	/**
@@ -335,12 +326,9 @@ public final class _Strings {
 	 * @return null if {@code input} is null
 	 */
 	public final static String convert(@Nullable final String input, final BytesOperator converter, final Charset charset) {
-		if(input==null) {
-			return null;
-		}
-		Objects.requireNonNull(converter);
-		Objects.requireNonNull(charset);
-		return ofBytes(converter.apply(toBytes(input, charset)), charset);
+		requires(converter, "converter");
+		requires(charset, "charset");
+		return mapIfPresentElse(input, __->ofBytes(converter.apply(toBytes(input, charset)), charset), null);
 	}
 
 	// -- UNARY OPERATOR COMPOSITION
@@ -353,8 +341,7 @@ public final class _Strings {
 		private final UnaryOperator<String> operator;
 
 		private StringOperator(UnaryOperator<String> operator) {
-			Objects.requireNonNull(operator);
-			this.operator = operator;
+			this.operator = requires(operator, "operator");
 		}
 
 		public String apply(String input) {
@@ -391,8 +378,8 @@ public final class _Strings {
 
 	
 	public final static String asFileNameWithExtension(final String fileName, String fileExtension) {
-		Objects.requireNonNull(fileName);
-		Objects.requireNonNull(fileExtension);
+		requires(fileName, "fileName");
+		requires(fileExtension, "fileExtension");
 		return suffix(fileName, prefix(fileExtension, "."));
 	}
 

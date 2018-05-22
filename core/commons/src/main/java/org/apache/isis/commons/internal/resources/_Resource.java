@@ -19,10 +19,11 @@
 
 package org.apache.isis.commons.internal.resources;
 
+import static org.apache.isis.commons.internal.base._With.requires;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
-import java.util.Objects;
 
 import org.apache.isis.commons.internal.base._Bytes;
 import org.apache.isis.commons.internal.base._Strings;
@@ -45,8 +46,8 @@ public final class _Resource {
 	
 	public static InputStream load(Class<?> contextClass, String resourceName) {
 		
-		Objects.requireNonNull(contextClass);
-		Objects.requireNonNull(resourceName);
+		requires(contextClass, "contextClass");
+		requires(resourceName, "resourceName");
 		
 		final String absoluteResourceName = resolveName(resourceName, contextClass);
 		

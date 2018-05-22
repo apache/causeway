@@ -19,7 +19,8 @@
 
 package org.apache.isis.commons.internal.base;
 
-import java.util.Objects;
+import static org.apache.isis.commons.internal.base._With.requires;
+
 import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
@@ -52,14 +53,12 @@ public final class _Casts {
 	 * @param orElse
 	 * @return
 	 */
-	public static <T> T castToOrElse(@Nullable Object value, Class<T> cls, Supplier<T> orElse) {
-		Objects.requireNonNull(cls);
-		Objects.requireNonNull(orElse);
+	public static <T> T castToOrElseGet(@Nullable Object value, Class<T> cls, Supplier<T> orElse) {
 
 		try {
-			return cls.cast(value);
+			return requires(cls, "cls").cast(value);
 		} catch (Exception e) {
-			return orElse.get();	
+			return requires(orElse, "orElse").get();	
 		}
 		
 	}
