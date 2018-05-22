@@ -172,11 +172,6 @@
         
         <javaee.version>7.0</javaee.version>
 
-		<!-- XML libraries ... no longer needed 			
-        <dom4j.version>1.6.1</dom4j.version>
-        <jdom.version>2.0.2</jdom.version>
-        <xstream.version>1.4.9</xstream.version>  -->
-        
         <htmlparser.version>2.1</htmlparser.version>
 
         <junit.version>4.12</junit.version>
@@ -602,7 +597,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.1</version>
+                    <version>3.7.0</version>
                     <configuration>
                         <showDeprecation>false</showDeprecation>
                         <showWarnings>false</showWarnings>
@@ -1673,24 +1668,6 @@ ${license.additional-notes}
                 <artifactId>javassist</artifactId>
                 <version>${javassist.version}</version>
             </dependency>
-
-            <!-- XML libraries ... no longer needed -->
-<!--             <dependency> -->
-<!--                 <groupId>dom4j</groupId> -->
-<!--                 <artifactId>dom4j</artifactId> -->
-<!--                 <version>${dom4j.version}</version> -->
-<!--             </dependency> -->
-<!--             <dependency> -->
-<!--                 <groupId>org.jdom</groupId> -->
-<!--                 <artifactId>jdom</artifactId> -->
-<!--                 <version>${jdom.version}</version> -->
-<!--             </dependency> -->
-<!--             <dependency> -->
-<!--                 <groupId>com.thoughtworks.xstream</groupId> -->
-<!--                 <artifactId>xstream</artifactId> -->
-<!--                 <version>${xstream.version}</version> -->
-<!--             </dependency> -->
-
 
             <!-- JSON libraries -->
             <dependency>

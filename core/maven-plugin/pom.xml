@@ -37,17 +37,19 @@
     </description>
 
     <prerequisites>
-        <maven>3.0.4</maven>
+        <maven>3.5.3</maven>
     </prerequisites>
 
     <properties>
         <jar-plugin.automaticModuleName>org.apache.isis.tool.mavenplugin</jar-plugin.automaticModuleName>
         <git-plugin.propertiesDir>org/apache/isis/tool/mavenplugin</git-plugin.propertiesDir>
 
-        <maven-core.version>3.3.9</maven-core.version>
+        <maven-core.version>3.5.3</maven-core.version>
         <maven-project.version>3.0-alpha-2</maven-project.version>
-        <maven-plugin-annotations.version>3.4</maven-plugin-annotations.version>
-        <plexus-container-default.version>1.7</plexus-container-default.version>
+        <maven-plugin-annotations.version>3.5.1</maven-plugin-annotations.version>
+        <plexus-container-default.version>1.7.1</plexus-container-default.version>
+        <plexus-utils.version>3.1.0</plexus-utils.version>
+        
     </properties>
 
     <build>
@@ -120,6 +122,12 @@
         
         It's all a bit of a pig's ear...
         -->
+        
+        <dependency>
+        	<groupId>org.codehaus.plexus</groupId>
+            <artifactId>plexus-utils</artifactId>
+            <version>${plexus-utils.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>org.apache.maven</groupId>
@@ -129,6 +137,10 @@
                 <exclusion>
                     <groupId>org.codehaus.plexus</groupId>
                     <artifactId>plexus-component-annotations</artifactId>
+                </exclusion>
+                <exclusion>
+                	<groupId>org.codehaus.plexus</groupId>
+                	<artifactId>plexus-utils</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
