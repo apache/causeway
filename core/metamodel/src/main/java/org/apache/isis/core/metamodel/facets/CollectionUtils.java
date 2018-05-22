@@ -23,7 +23,6 @@ import java.util.AbstractList;
 import java.util.AbstractSet;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
@@ -37,7 +36,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Function;
 
 import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.base._With;
 import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
@@ -65,8 +64,8 @@ public final class CollectionUtils {
 		return optionArray;
 	}
 
-	private final static Map<Class<?>, Function<Iterable<Object>, Object>> factoriesByType = _NullSafe.peek(
-			new HashMap<>(), map-> {
+	private final static Map<Class<?>, Function<Iterable<Object>, Object>> factoriesByType = _With.hashMap(
+			map-> {
 				// specific list implementations
 				map.put(CopyOnWriteArrayList.class, Lists::newCopyOnWriteArrayList);
 				map.put(LinkedList.class, _Lists::newLinkedList);

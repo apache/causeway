@@ -23,7 +23,6 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
-import java.util.function.Consumer;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -99,7 +98,8 @@ public final class _NullSafe {
 	// -- ABSENCE/PRESENCE PREDICATES
 	
 	/**
-	 * Allows to replace a lambda expression {@code x->x!=null} with {@code NullSafe::isPresent}
+	 * Allows to replace a lambda expression {@code x->x!=null} with {@code NullSafe::isPresent}.
+	 * Equivalent to {@link java.util.Objects#nonNull(Object)}.
 	 * @param x
 	 * @return whether {@code x} is not null (present).
 	 */
@@ -108,27 +108,13 @@ public final class _NullSafe {
 	}
 
 	/**
-	 * Allows to replace a lambda expression {@code x->x==null} with {@code NullSafe::isAbsent}
+	 * Allows to replace a lambda expression {@code x->x==null} with {@code NullSafe::isAbsent}.<br/>
+	 * Equivalent to {@link java.util.Objects#isNull(Object)}.
 	 * @param x
 	 * @return whether {@code x} is null (absent).
 	 */
 	public static boolean isAbsent(Object x) {
 		return x==null;
-	}
-	
-	// -- PEEK OPERATOR
-	
-	/**
-	 * Unary identity operator that passes {@code obj} to {@code ifPresent} if {@code obj} is present.   
-	 * @param obj
-	 * @param ifPresent
-	 * @return {@code obj}
-	 */
-	public final static <T> T peek(T obj, Consumer<T> ifPresent) {
-		if(obj!=null) {
-			ifPresent.accept(obj);
-		}
-		return obj;
 	}
 	
 	// -- EQUALS/COMPARE
@@ -161,7 +147,6 @@ public final class _NullSafe {
 		return Objects.compare(x, y, Comparator.nullsLast(Comparator.naturalOrder()));
 				
 	}
-	
 	
 	// -- EMTPY CHECKS
 	
