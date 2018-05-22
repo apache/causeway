@@ -56,60 +56,55 @@
                 </excludes>
             </resource>
         </resources>
-        <pluginManagement>
-            <plugins>
-                <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
-                <plugin>
-                    <groupId>org.eclipse.m2e</groupId>
-                    <artifactId>lifecycle-mapping</artifactId>
-                    <version>1.0.0</version>
-                    <configuration>
-                        <lifecycleMappingMetadata>
-                            <pluginExecutions>
-                                <pluginExecution>
-                                    <pluginExecutionFilter>
-                                        <groupId>
-                                            org.datanucleus
-                                        </groupId>
-                                        <artifactId>
-                                            datanucleus-maven-plugin
-                                        </artifactId>
-                                        <versionRange>
-                                            [4.0.0-release,)
-                                        </versionRange>
-                                        <goals>
-                                            <goal>enhance</goal>
-                                        </goals>
-                                    </pluginExecutionFilter>
-                                    <action>
-                                        <ignore />
-                                    </action>
-                                </pluginExecution>
-                            </pluginExecutions>
-                        </lifecycleMappingMetadata>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
+<!--  [ahuber] possibly no longer required -->
+<!--         <pluginManagement> -->
+<!--             <plugins> -->
+<!--                 This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself. -->
+<!--                 <plugin> -->
+<!--                     <groupId>org.eclipse.m2e</groupId> -->
+<!--                     <artifactId>lifecycle-mapping</artifactId> -->
+<!--                     <version>1.0.0</version> -->
+<!--                     <configuration> -->
+<!--                         <lifecycleMappingMetadata> -->
+<!--                             <pluginExecutions> -->
+<!--                                 <pluginExecution> -->
+<!--                                     <pluginExecutionFilter> -->
+<!--                                         <groupId> -->
+<!--                                             org.datanucleus -->
+<!--                                         </groupId> -->
+<!--                                         <artifactId> -->
+<!--                                             datanucleus-maven-plugin -->
+<!--                                         </artifactId> -->
+<!--                                         <versionRange> -->
+<!--                                             [4.0.0-release,) -->
+<!--                                         </versionRange> -->
+<!--                                         <goals> -->
+<!--                                             <goal>enhance</goal> -->
+<!--                                         </goals> -->
+<!--                                     </pluginExecutionFilter> -->
+<!--                                     <action> -->
+<!--                                         <ignore /> -->
+<!--                                     </action> -->
+<!--                                 </pluginExecution> -->
+<!--                             </pluginExecutions> -->
+<!--                         </lifecycleMappingMetadata> -->
+<!--                     </configuration> -->
+<!--                 </plugin> -->
+<!--             </plugins> -->
+<!--         </pluginManagement> -->
     </build>
 
     <dependencies>
+    
+    	<dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-commons</artifactId>
+        </dependency>
     
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-schema</artifactId>
         </dependency>
-        
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-commons</artifactId>
-        </dependency>
-
-		<!-- JEE API -->
-		<dependency>
-		    <groupId>javax</groupId>
-		    <artifactId>javaee-api</artifactId>
-		</dependency>
 		
 		<!-- JDO API (non transient, provided by plugin) -->
         <dependency>
@@ -143,12 +138,6 @@
 					<artifactId>guava</artifactId>
             	</exclusion>
             </exclusions>
-        </dependency>
-
-		<!-- provides @Nullable -->
-        <dependency>
-        	<groupId>com.google.code.findbugs</groupId>
-        	<artifactId>annotations</artifactId>
         </dependency>
         
     </dependencies>

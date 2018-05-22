@@ -58,6 +58,12 @@
     </build>
 
     <dependencies>
+    
+    	<!-- JEE API -->
+        <dependency>
+		    <groupId>javax</groupId>
+		    <artifactId>javaee-api</artifactId>
+		</dependency>
 
 		<!-- provides @Nullable -->
         <dependency>
