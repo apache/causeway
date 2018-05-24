@@ -22,12 +22,15 @@ package org.apache.isis.commons.internal.exceptions;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
 
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.functions._Functions;
 
 /**
  * <h1>- internal use only -</h1>
@@ -76,7 +79,7 @@ public final class _Exceptions {
 	}
 	
 	/**
-	 * Used, to hide from the compiler the fact, that this call always throws.
+	 * Used to hide from the compiler the fact, that this call always throws.
 	 * 
 	 * <pre>{
 	 *    throw notImplemented();
@@ -135,6 +138,47 @@ public final class _Exceptions {
 	}
 
 	// --
+	
+	/**
+	 * [ahuber] Experimental, remove if it adds no value. 
+	 */
+	public static class TryContext {
+		
+		private final Function<Exception, ? extends RuntimeException> toUnchecked;
+		
+		public TryContext(Function<Exception, ? extends RuntimeException> toUnchecked) {
+			this.toUnchecked = toUnchecked;
+		}
 
+	    // -- SHORTCUTS (RUNNABLE)
+	    
+		public Runnable uncheckedRunnable(_Functions.CheckedRunnable checkedRunnable) {
+			return checkedRunnable.toUnchecked(toUnchecked);
+		}
+		
+		public void tryRun(_Functions.CheckedRunnable checkedRunnable) {
+			uncheckedRunnable(checkedRunnable).run();
+		}
+		
+	    // -- SHORTCUTS (FUNCTION)
+		
+		public <T, R> Function<T, R> uncheckedFunction(_Functions.CheckedFunction<T, R> checkedFunction) {
+			return checkedFunction.toUnchecked(toUnchecked);
+		}
+		
+		public <T, R> R tryApply(T obj, _Functions.CheckedFunction<T, R> checkedFunction) {
+			return uncheckedFunction(checkedFunction).apply(obj);
+		}
+		
+	    // -- SHORTCUTS (CONSUMER)
+
+		public <T> Consumer<T> uncheckedConsumer(_Functions.CheckedConsumer<T> checkedConsumer) {
+			return checkedConsumer.toUnchecked(toUnchecked);
+		}
+		
+		public <T> void tryAccept(T obj, _Functions.CheckedConsumer<T> checkedConsumer) {
+			uncheckedConsumer(checkedConsumer).accept(obj);
+		}
+	}
 	
 }

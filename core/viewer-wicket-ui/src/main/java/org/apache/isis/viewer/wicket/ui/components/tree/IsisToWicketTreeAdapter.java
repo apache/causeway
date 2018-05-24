@@ -261,7 +261,7 @@ class IsisToWicketTreeAdapter {
 		}
 		
 		private Function<Object, TreeModel> newPojoToTreeModelMapper(TreeModel parent) {
-			return _Functions.indexAwareFunctionToFunction((indexWithinSiblings, pojo)->
+			return _Functions.indexAwareToFunction((indexWithinSiblings, pojo)->
 				wrap(pojo, parent.getTreePath().append(indexWithinSiblings)));
 		}
 		

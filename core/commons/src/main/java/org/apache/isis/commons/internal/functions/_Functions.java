@@ -18,7 +18,9 @@
  */
 package org.apache.isis.commons.internal.functions;
 
+import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * <h1>- internal use only -</h1>
@@ -34,6 +36,8 @@ import java.util.function.Function;
  */
 public class _Functions {
 
+	// -- INDEX AWARE 
+	
 	@FunctionalInterface
 	public interface IndexAwareFunction<T, R> {
 		public R apply(int index, T t);
@@ -45,9 +49,136 @@ public class _Functions {
 	 * @param indexAwareFunction
 	 * @return 
 	 */
-	public static <T, R> Function<T, R> indexAwareFunctionToFunction(IndexAwareFunction<T, R> indexAwareFunction){
+	public static <T, R> Function<T, R> indexAwareToFunction(IndexAwareFunction<T, R> indexAwareFunction){
 		return new _Functions_IndexAwareFunctionAdapter<T, R>(indexAwareFunction);
 	}
+	
+	// -- CHECKED EXCEPTION ADAPTERS (FUNCTION) 
+	
+	/**
+	 * 
+	 * Similar to {@link Function}, but allows checked exceptions to be thrown.
+	 *
+	 * @param <T>
+	 * @param <R>
+	 */
+	@FunctionalInterface
+	public interface CheckedFunction<T, R> {
+
+		R apply(T t) throws Exception;
+
+		default <U extends RuntimeException> Function<T, R> toUnchecked(Function<Exception, U> toUncheckedException) {
+			return uncheckedFunction(this, toUncheckedException);
+		}
+
+	}
+	
+	public static <T, R, U extends RuntimeException> Function<T, R> uncheckedFunction(
+			CheckedFunction<T, R> checkedFunction, 
+			Function<Exception, U> toUncheckedException) {
+		return t->{
+			try {
+				return checkedFunction.apply(t);
+			} catch (Exception e) {
+				throw toUncheckedException.apply(e);
+			}
+		};
+	}
+	
+	// -- CHECKED EXCEPTION ADAPTERS (RUNNABLE) 
+
+	/**
+	 * 
+	 * Similar to {@link Runnable}, but allows checked exceptions to be thrown.
+	 *
+	 */
+	@FunctionalInterface
+	public interface CheckedRunnable {
+
+		void run() throws Exception;
+
+		default <U extends RuntimeException> Runnable toUnchecked(Function<Exception, U> toUncheckedException) {
+			return uncheckedRunnable(this, toUncheckedException);
+		}
+
+	}
+	
+	public static <U extends RuntimeException> Runnable uncheckedRunnable(
+			CheckedRunnable checkedRunnable, 
+			Function<Exception, U> toUncheckedException) {
+		return ()->{
+			try {
+				checkedRunnable.run();
+			} catch (Exception e) {
+				throw toUncheckedException.apply(e);
+			}
+		};
+	}
+	
+	// -- CHECKED EXCEPTION ADAPTERS (CONSUMER) 
+	
+	/**
+	 * 
+	 * Similar to {@link Consumer}, but allows checked exceptions to be thrown.
+	 *
+	 * @param <T>
+	 */
+	@FunctionalInterface
+	public interface CheckedConsumer<T> {
+
+		void accept(T t) throws Exception;
+
+		default <U extends RuntimeException> Consumer<T> toUnchecked(Function<Exception, U> toUncheckedException) {
+			return uncheckedConsumer(this, toUncheckedException);
+		}
+
+	}
+	
+	public static <T, U extends RuntimeException> Consumer<T> uncheckedConsumer(
+			CheckedConsumer<T> checkedConsumer, 
+			Function<Exception, U> toUncheckedException) {
+		return t->{
+			try {
+				checkedConsumer.accept(t);
+			} catch (Exception e) {
+				throw toUncheckedException.apply(e);
+			}
+		};
+	}
+	
+	// -- CHECKED EXCEPTION ADAPTERS (SUPPLIER)
+	
+	/**
+	 * 
+	 * Similar to {@link Function}, but allows checked exceptions to be thrown.
+	 *
+	 * @param <T>
+	 * @param <R>
+	 */
+	@FunctionalInterface
+	public interface CheckedSupplier<T> {
+
+		T get() throws Exception;
+
+		default <U extends RuntimeException> Supplier<T> toUnchecked(Function<Exception, U> toUncheckedException) {
+			return uncheckedSupplier(this, toUncheckedException);
+		}
+
+	}
+	
+	public static <T, U extends RuntimeException> Supplier<T> uncheckedSupplier(
+			CheckedSupplier<T> checkedSupplier, 
+			Function<Exception, U> toUncheckedException) {
+		return ()->{
+			try {
+				return checkedSupplier.get();
+			} catch (Exception e) {
+				throw toUncheckedException.apply(e);
+			}
+		};
+	}
+	
+	// --
 	
 	
 }

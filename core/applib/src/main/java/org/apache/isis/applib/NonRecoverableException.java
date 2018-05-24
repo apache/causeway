@@ -22,6 +22,7 @@ package org.apache.isis.applib;
 import org.apache.isis.applib.services.exceprecog.TranslatableException;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.functions._Functions;
 
 /**
  * Indicates that an unexpected, non-recoverable (fatal) exception has occurred within
@@ -106,4 +107,36 @@ public class NonRecoverableException extends RuntimeException implements Transla
     public String getTranslationContext() {
         return translationContext;
     }
+
+    // -- SHORTCUTS
+    
+	/**
+	 * <p><pre>
+	 * Path path = ...
+	 *
+	 * ## OLD
+	 *
+	 * try {
+	 *     Files.createDirectories(path);
+	 * } catch (IOException e) {
+	 *     throw new NonRecoverableException(e);
+	 * }
+	 * 
+	 * ## NEW
+	 *  
+	 * NonRecoverableException.tryRun(()->Files.createDirectories(path));
+	 * 
+	 * </pre></p>
+	 *  
+	 * @param checkedRunnable
+	 */
+	public static void tryRun(_Functions.CheckedRunnable checkedRunnable) {
+		try {
+			checkedRunnable.run();
+		} catch (Exception cause) {
+			throw new NonRecoverableException(cause);
+		}
+	}
+    
+    
 }
