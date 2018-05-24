@@ -153,7 +153,6 @@ public class _Functions {
 	 * Similar to {@link Supplier}, but allows checked exceptions to be thrown.
 	 *
 	 * @param <T>
-	 * @param <R>
 	 */
 	@FunctionalInterface
 	public interface CheckedSupplier<T> {
