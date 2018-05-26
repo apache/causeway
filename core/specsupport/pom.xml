@@ -41,10 +41,23 @@
             <artifactId>isis-core-wrapper</artifactId>
         </dependency>
 
-        <dependency>
-           <groupId>junit</groupId>
-           <artifactId>junit</artifactId>
-        </dependency>
+		<!-- JUPITER -->
+		<dependency>
+			<!-- JUnit API for writing tests and extensions -->
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
+		</dependency>
+		<dependency>
+			<!-- implementation of the JUnit Jupiter test engine -->
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
+		</dependency>
+		<dependency>
+			<!-- support for unit tests that use JUnit 4 or JUnit 3 -->
+			<groupId>org.junit.vintage</groupId>
+			<artifactId>junit-vintage-engine</artifactId>
+		</dependency>
+        
         <dependency>
            <groupId>org.jmock</groupId>
            <artifactId>jmock</artifactId>

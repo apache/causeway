@@ -48,10 +48,22 @@
 			<scope>test</scope>
 			<optional>true</optional>
 		</dependency>
-	
+
+		<!-- JUPITER -->
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
+			<!-- JUnit API for writing tests and extensions -->
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
+		</dependency>
+		<dependency>
+			<!-- implementation of the JUnit Jupiter test engine -->
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
+		</dependency>
+		<dependency>
+			<!-- support for unit tests that use JUnit 4 or JUnit 3 -->
+			<groupId>org.junit.vintage</groupId>
+			<artifactId>junit-vintage-engine</artifactId>
 		</dependency>
 
 		<dependency>
