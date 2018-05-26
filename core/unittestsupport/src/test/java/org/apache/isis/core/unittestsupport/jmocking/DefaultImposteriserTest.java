@@ -18,6 +18,7 @@
  */
 package org.apache.isis.core.unittestsupport.jmocking;
 
+import static org.apache.isis.commons.internal.functions._Functions.uncheckedFunction;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -30,9 +31,13 @@ import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Date;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Stream;
 
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.context._Plugin;
 import org.apache.isis.core.plugins.codegen.ProxyFactoryPlugin;
@@ -52,7 +57,7 @@ public class DefaultImposteriserTest {
     private Invokable invokable;
     @SuppressWarnings("unused")
 	private Invocation invocation;
-
+    
     @Before
     public void setUp() throws Exception {
         invokable = new Invokable() {
@@ -66,16 +71,10 @@ public class DefaultImposteriserTest {
         // -- loading codegen plugin by name (because not configured as a maven dependency) 
         {
         	String pluginFullyQualifiedClassName = "org.apache.isis.core.plugins.codegen.ProxyFactoryPluginUsingJavassist";
-        	// we are guessing where to find the pluginTarget based on the 'commons' target location
-        	String commonsTarget = 
-        			Paths.get(_Plugin.getCoreCommonsTargetFolder().toURI())
-        			.toFile()
-        			.getCanonicalPath()
-        			.replace('\\', '/');
-        			; 		
-        	String pluginTarget = commonsTarget.replace("/core/commons/", "/core/plugins/codegen-javassist/");
+        	// we are guessing where to find the pluginTarget
+        	File pluginTarget = getCoreTargetFolder("/core/plugins/codegen-javassist/");
         	
-    		_Plugin.load(ProxyFactoryPlugin.class, new File(pluginTarget), pluginFullyQualifiedClassName);
+    		_Plugin.load(ProxyFactoryPlugin.class, pluginTarget, pluginFullyQualifiedClassName);
         }
         
 
@@ -344,5 +343,42 @@ public class DefaultImposteriserTest {
         Object imposter = imposteriser.imposterise(failIfInvokedAction, Object.class);
         invokeMethod(imposter, Object.class.getDeclaredMethod("finalize"));
     }
+    
+    // -- HELPER
+    
+	/**
+	 * TODO will break with java 9+
+	 * @param relativeLocation 
+	 * @return file-system path, where the frameworks core classes reside (after a build).
+	 */
+	private static File getCoreTargetFolder(String relativeLocation) {
+		
+		//if run with surefire, URL look like ...
+		//file:/home/hobrom/isis/isis-master/core/unittestsupport/target/surefire/surefirebooter7883344605325794375.jar
+		
+		final AtomicReference<String> binaries = new AtomicReference<>("target");
+		
+		return Stream.of(((URLClassLoader )_Plugin.class.getClassLoader()).getURLs())
+//		.peek(u->System.out.println("searching unittestsupport: "+u.toString()))
+		.filter(url->url.toString().contains("/core/unittestsupport/"))
+		.map(uncheckedFunction(URL::toURI, RuntimeException::new))
+		.map(Paths::get)
+		.map(Path::toFile)
+		.map(uncheckedFunction(File::getCanonicalPath, RuntimeException::new))
+		.map(s->s.replace('\\', '/'))
+		.peek(s->{
+			_Strings.splitThenStream(s.substring(s.indexOf("/core/unittestsupport/")), "/")
+			.skip(3)
+			.findFirst()
+			.ifPresent(t->binaries.set(t));	
+//			System.out.println("binaries ("+s+"): "+binaries.get());
+		})
+		.map(s->s.substring(0, s.indexOf("/core/unittestsupport/")))
+		.map(s->new File(s, relativeLocation + "/" + binaries.get() + "/classes"))
+		.findFirst()
+		.orElseThrow(()->new RuntimeException("Failed to find file-system path, where the frameworks core classes reside."))
+		;
+	}
+    
 
 }

@@ -28,7 +28,6 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
@@ -148,18 +147,6 @@ public final class _Plugin {
 	}
 
 	// -- JUNIT TEST SUPPORT 
-	
-	/**
-	 * TODO will break with java 9+
-	 * @return file-system path, where the frameworks core classes reside (after a build).
-	 */
-	public static URL getCoreCommonsTargetFolder() {
-		return Stream.of(((URLClassLoader )_Plugin.class.getClassLoader()).getURLs())
-		.filter(url->url.toString().contains("/core/commons/"))
-		.findFirst()
-		.orElseThrow(()->new RuntimeException("Failed to find file-system path, where the frameworks core classes reside."))
-		;
-	}
 	
 	/**
 	 * Loads a plugin by name and class-path. (Most likely used by JUnit Tests.)
