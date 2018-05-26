@@ -20,16 +20,16 @@
 		<relativePath>../../pom.xml</relativePath>
 	</parent>
 
-	<artifactId>isis-core-plugins-codegen-javassist</artifactId>
+	<artifactId>isis-core-plugins-codegen-javassist-test</artifactId>
 
-	<name>Apache Isis Plugin for Code Generation (Javassist)</name>
+	<name>Tests for Apache Isis Plugin for Code Generation (Javassist)</name>
 	<description>
-        Code generation plugin using Javassist.
+        To break cyclic dependencies some tests needed to be moved to their own module (this).
     </description>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.plugins.codegen-javassist</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/plugins/codegen-javassist</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.isis.plugins.codegen-javassist-test</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/isis/plugins/codegen-javassist-test</git-plugin.propertiesDir>
 	</properties>
 
 	<build>
@@ -53,22 +53,25 @@
 
 	<dependencies>
 	
-		<!-- compile dependencies -->
+		
+		<!-- TEST -->
 		
 		<dependency>
-			<groupId>org.javassist</groupId>
-			<artifactId>javassist</artifactId>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-core-plugins-codegen-javassist</artifactId>
+			<scope>test</scope>
 		</dependency>
 		
 		<dependency>
-			<groupId>org.objenesis</groupId>
-			<artifactId>objenesis</artifactId>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-core-wrapper</artifactId>
+			<scope>test</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-commons</artifactId>
-			<scope>compile</scope>
+			<artifactId>isis-core-unittestsupport</artifactId>
+			<scope>test</scope>
 		</dependency>
 
 	</dependencies>

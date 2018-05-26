@@ -2430,6 +2430,10 @@ ${license.additional-notes}
         <module>plugins/jaxrs-resteasy-4</module>
         <module>plugins/jdo-datanucleus-4</module>
         <module>plugins/jdo-datanucleus-5</module>
+
+		<!-- to break cyclic dependencies some tests needed to be moved to their own modules -->
+        <module>plugins-test/codegen-javassist-test</module>
+        
     </modules>
 
 </project>

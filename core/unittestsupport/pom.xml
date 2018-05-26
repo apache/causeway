@@ -48,6 +48,11 @@
 			<scope>test</scope>
 			<optional>true</optional>
 		</dependency>
+		<dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-plugins-codegen-javassist</artifactId>
+            <scope>runtime</scope>
+        </dependency>
 
 		<!-- JUPITER -->
 		<dependency>
