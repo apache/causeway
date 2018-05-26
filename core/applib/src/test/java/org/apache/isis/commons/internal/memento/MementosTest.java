@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.applib.internal.memento;
+package org.apache.isis.commons.internal.memento;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;

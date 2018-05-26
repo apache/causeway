@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.applib.internal.compare;
+package org.apache.isis.commons.internal.compare;
 
 import static org.hamcrest.CoreMatchers.is;
 

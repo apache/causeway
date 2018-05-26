@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.applib.internal.base;
+package org.apache.isis.commons.internal.base;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
