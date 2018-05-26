@@ -65,6 +65,14 @@
 			<groupId>org.junit.vintage</groupId>
 			<artifactId>junit-vintage-engine</artifactId>
 		</dependency>
+		<dependency>
+			<!-- JUnit 4 compile dependency in unittestsupport's src/main/java folder, non-transitive -->
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
+			<scope>compile</scope>
+			<optional>true</optional>
+		</dependency>
 
 		<dependency>
 			<groupId>org.picocontainer</groupId>
