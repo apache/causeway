@@ -108,7 +108,6 @@ public class MemberGroupLayoutFacetFactory extends FacetFactoryAbstract implemen
                 return true;
             }
 
-            @SuppressWarnings("unchecked")
             private int numCollectionsOf(ObjectSpecification objectSpec) {
                 List<ObjectAssociation> objectCollections = objectSpec.getAssociations(
                         Contributed.EXCLUDED, com.google.common.base.Predicates.and(

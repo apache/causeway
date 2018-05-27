@@ -173,7 +173,6 @@ public class ResourceContext implements RendererContext6 {
     }
 
     protected JsonRepresentation requestArgsAsMap() {
-        @SuppressWarnings("unchecked")
         final Map<String,String[]> params = httpServletRequest.getParameterMap();
 
         if(simpleQueryArgs(params)) {

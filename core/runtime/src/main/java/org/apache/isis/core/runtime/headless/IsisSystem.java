@@ -436,7 +436,6 @@ public class IsisSystem {
 
     // -- getService
 
-    @SuppressWarnings("unchecked")
     public <C> C getService(Class<C> serviceClass) {
         final ServicesInjector servicesInjector = isisSessionFactory.getServicesInjector();
         return servicesInjector.lookupServiceElseFail(serviceClass);

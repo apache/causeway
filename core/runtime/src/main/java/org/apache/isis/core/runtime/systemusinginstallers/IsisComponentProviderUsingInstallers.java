@@ -205,7 +205,6 @@ public class IsisComponentProviderUsingInstallers extends IsisComponentProvider 
             return (T) getInstaller(implName);
         }
 
-        @SuppressWarnings("unchecked")
         public Installer getInstaller(final String implClassName) {
             try {
                 return ObjectExtensions.asT(InstanceUtil.createInstance(implClassName));

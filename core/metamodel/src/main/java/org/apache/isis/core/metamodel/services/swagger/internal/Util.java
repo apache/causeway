@@ -22,9 +22,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import com.google.common.base.Predicate;
-
 import org.apache.isis.applib.services.swagger.SwaggerService;
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -33,6 +32,8 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+
+import com.google.common.base.Predicate;
 
 import io.swagger.models.Response;
 
@@ -116,7 +117,6 @@ public final class Util {
     static <T extends ObjectAssociation> List<T> associationsOf(
             final ObjectSpecification objectSpecification,
             final Predicate<ObjectAssociation> associationPredicate, final SwaggerService.Visibility visibility) {
-        @SuppressWarnings("rawtypes")
         final List<ObjectAssociation> list =
                 objectSpecification.getAssociations(
                         Contributed.INCLUDED,
@@ -124,12 +124,7 @@ public final class Util {
                                 associationPredicate,
                                 associationsWith(visibility) ));
 
-        return cast(list);
-    }
-
-    @SuppressWarnings("unchecked")
-    static <T> List<T> cast(final List list) {
-        return list;
+        return _Casts.uncheckedCast(list);
     }
 
     static List<ObjectAction> actionsOf(

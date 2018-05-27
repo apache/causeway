@@ -163,7 +163,7 @@ public interface ObjectAction extends ObjectMember {
      * @return
      */
     List<ObjectActionParameter> getParameters(
-            @SuppressWarnings("deprecation") Predicate<ObjectActionParameter> predicate);
+            Predicate<ObjectActionParameter> predicate);
 
     /**
      * Returns the parameter with provided id.
@@ -304,7 +304,7 @@ public interface ObjectAction extends ObjectMember {
 
             final ObjectSpecification adapterSpec = adapter.getSpecification();
 
-            @SuppressWarnings({ "unchecked", "deprecation" })
+            @SuppressWarnings({ "unchecked" })
             Predicate<ObjectAction> predicate = com.google.common.base.Predicates
                     .and(ObjectAction.Predicates.memberOrderNotAssociationOf(adapterSpec),
                             ObjectAction.Predicates.dynamicallyVisible(adapter, InteractionInitiatedBy.USER, Where.ANYWHERE),
@@ -344,7 +344,7 @@ public interface ObjectAction extends ObjectMember {
                 final ObjectAssociation association, final List<ObjectAction> associatedActions) {
             final ObjectSpecification objectSpecification = adapter.getSpecification();
 
-            @SuppressWarnings({ "unchecked", "deprecation" })
+            @SuppressWarnings({ "unchecked" })
             Predicate<ObjectAction> predicate = com.google.common.base.Predicates
                     .and(ObjectAction.Predicates.memberOrderOf(association), ObjectAction.Predicates.notBulkOnly(),
                             ObjectAction.Predicates.excludeWizardActions(objectSpecification));

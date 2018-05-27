@@ -28,6 +28,7 @@ import javax.annotation.PreDestroy;
 import com.google.common.eventbus.Subscribe;
 
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.commons.lang.ClassUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
@@ -43,8 +44,8 @@ public class RemoveAnnotatedMethodsFacetFactory extends FacetFactoryAbstract {
 
         try {
             // doing this reflectively so that don't bring in a dependency on axon.
-            Class cls = (Class) ClassUtil.forName("org.axonframework.eventhandling.annotation.EventHandler");
-            eventHandlerClass = cls;
+            eventHandlerClass = _Casts.uncheckedCast(
+            		ClassUtil.forName("org.axonframework.eventhandling.annotation.EventHandler"));
 
         } catch(Exception ignore) {
             // ignore
@@ -57,7 +58,6 @@ public class RemoveAnnotatedMethodsFacetFactory extends FacetFactoryAbstract {
         removeIgnoredMethods(processClassContext.getCls(), processClassContext);
     }
 
-    @SuppressWarnings("deprecation")
     private void removeIgnoredMethods(final Class<?> cls, final MethodRemover methodRemover) {
         if (cls == null) {
             return;

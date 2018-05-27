@@ -153,8 +153,9 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
 
         private AppManifest appManifestIfAny;
 
-        private final List<Object> services = _Lists.newArrayList();
-        private final List<InstallableFixture> fixtures = _Lists.newArrayList();
+//[ahuber] not used        
+//        private final List<Object> services = _Lists.newArrayList();
+//        private final List<InstallableFixture> fixtures = _Lists.newArrayList();
 
         private final List <Listener> listeners = _Lists.newArrayList();
 
@@ -628,7 +629,6 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
      * @see org.apache.isis.core.integtestsupport.ServiceProvider#getService(java.lang.Class)
      */
     @Override
-    @SuppressWarnings("unchecked")
     public <T> T getService(Class<T> serviceClass) {
         final ServicesInjector servicesInjector = isisSessionFactory.getServicesInjector();
         return servicesInjector.lookupServiceElseFail(serviceClass);

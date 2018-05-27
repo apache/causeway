@@ -29,7 +29,6 @@ public final class MavenProjects {
 
     public static Plugin lookupPlugin(MavenProject mavenProject, String key) {
     
-        @SuppressWarnings("unchecked")
         List<Plugin> plugins = mavenProject.getBuildPlugins();
     
         for (Plugin plugin : plugins) {
