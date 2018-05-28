@@ -31,52 +31,11 @@ import java.io.Serializable;
  *     </ul>
  * </p>
  */
-public class Ticket implements Serializable {
-
-	private static final long serialVersionUID = 4900947111894407314L;
-	
-	private final String reference;
-    private final String userMessage;
-    private final String details;
-    private final StackTracePolicy stackTracePolicy;
-    private final String kittenUrl;
+public interface Ticket extends Serializable {
 
     public enum StackTracePolicy {
         SHOW,
         HIDE
-    }
-
-    public Ticket(final String reference, final String userMessage, final String details) {
-        this(reference, userMessage, details, StackTracePolicy.HIDE);
-    }
-
-    public Ticket(
-            final String reference,
-            final String userMessage,
-            final String details,
-            final StackTracePolicy stackTracePolicy) {
-        this(reference, userMessage, details, stackTracePolicy, null);
-    }
-
-    public Ticket(
-            final String reference,
-            final String userMessage,
-            final String details,
-            final String kittenUrl) {
-        this(reference, userMessage, details, StackTracePolicy.HIDE, kittenUrl);
-    }
-
-    public Ticket(
-            final String reference,
-            final String userMessage,
-            final String details,
-            final StackTracePolicy stackTracePolicy,
-            final String kittenUrl) {
-        this.reference = reference;
-        this.userMessage = userMessage;
-        this.details = details;
-        this.stackTracePolicy = stackTracePolicy;
-        this.kittenUrl = kittenUrl;
     }
 
     /**
@@ -87,9 +46,7 @@ public class Ticket implements Serializable {
      *     which case the {@link #getReference() reference} would be the JIRA issue number <tt>XXX-1234</tt>.
      * </p>
      */
-    public String getReference() {
-        return reference;
-    }
+    public String getReference();
 
     /**
      * Message to display to the user.
@@ -98,9 +55,7 @@ public class Ticket implements Serializable {
      *     Typically this message should be short, one line long.
      * </p>
      */
-    public String getUserMessage() {
-        return userMessage;
-    }
+    public String getUserMessage();
 
     /**
      * Optional additional details to show to the end-user.
@@ -110,9 +65,7 @@ public class Ticket implements Serializable {
      *     details on contacting the help desk if the issue is severe and requires immediate attention.
      * </p>
      */
-    public String getDetails() {
-        return details;
-    }
+    public String getDetails();
 
     /**
      * Whether the stack trace for the exception should be displayed or be hidden.
@@ -122,18 +75,11 @@ public class Ticket implements Serializable {
      *     the support team, meaning there's no need to expose this info to the end-user.
      * </p>
      */
-    public StackTracePolicy getStackTracePolicy() {
-        return stackTracePolicy;
-    }
+    public StackTracePolicy getStackTracePolicy();
+
 
     /**
-     * If specified, is the external URL of an image to display to the end user.
-     *
-     * <p>
-     *     Not necessarily of a kitten, but something by way of an apology.
-     * </p>
+     * Returns a Html representation of this ticket.
      */
-    public String getKittenUrl() {
-        return kittenUrl;
-    }
+	public String getMarkup();
 }

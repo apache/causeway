@@ -19,6 +19,16 @@
 
 package org.apache.isis.viewer.wicket.ui.errors;
 
+import org.apache.isis.applib.services.error.Ticket;
+import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.model.models.PageType;
+import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupComponent;
+import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModel;
+import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModelProvider;
+import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
+import org.apache.isis.viewer.wicket.ui.pages.home.HomePage;
+import org.apache.isis.viewer.wicket.ui.util.Components;
+import org.apache.isis.viewer.wicket.ui.util.Links;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
@@ -28,22 +38,11 @@ import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
 import org.apache.wicket.markup.html.WebComponent;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.basic.MultiLineLabel;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
-
-import org.apache.isis.applib.services.error.Ticket;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
-import org.apache.isis.viewer.wicket.model.models.PageType;
-import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModel;
-import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModelProvider;
-import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
-import org.apache.isis.viewer.wicket.ui.pages.home.HomePage;
-import org.apache.isis.viewer.wicket.ui.util.Components;
-import org.apache.isis.viewer.wicket.ui.util.Links;
 
 public class ExceptionStackTracePanel extends Panel {
 
@@ -51,24 +50,21 @@ public class ExceptionStackTracePanel extends Panel {
 
     private static final String ID_MAIN_MESSAGE = "mainMessage";
 
-    private static final String ID_TICKET_DETAILS_DIV = "ticketDetailsDiv";
-    private static final String ID_TICKET_DETAILS = "ticketDetails";
-
-    private static final String ID_TICKET_REFERENCE_DIV = "ticketReferenceDiv";
-    private static final String ID_TICKET_REFERENCE = "ticketReference";
-
     private static final String ID_EXCEPTION_DETAIL_DIV = "exceptionDetailDiv";
+    
+    private static final String ID_TICKET_MARKUP = "ticketMarkup";
 
     private static final String ID_STACK_TRACE_ELEMENT = "stackTraceElement";
     private static final String ID_LINE = "stackTraceElementLine";
 
     private static final JavaScriptResourceReference DIV_TOGGLE_JS = new JavaScriptResourceReference(ExceptionStackTracePanel.class, "div-toggle.js");
 
-    private static final String ID_KITTENS_IMAGE = "kittens";
 
     public class ExternalImageUrl extends WebComponent {
 
-        public ExternalImageUrl(String id, String imageUrl) {
+		private static final long serialVersionUID = -3556235292216447710L;
+
+		public ExternalImageUrl(String id, String imageUrl) {
             super(id);
             add(new AttributeModifier("src", new Model<>(imageUrl)));
             setVisible(!(imageUrl==null || imageUrl.equals("")));
@@ -96,25 +92,12 @@ public class ExceptionStackTracePanel extends Panel {
         // label.setEscapeModelStrings(false);
         add(label);
 
-        final String ticketDetail = ticket != null ? ticket.getDetails(): null;
-        if(ticketDetail == null) {
-            Components.permanentlyHide(this, ID_TICKET_DETAILS_DIV);
+        
+        final String ticketMarkup = ticket != null ? ticket.getMarkup(): null;
+        if(ticketMarkup == null) {
+        	Components.permanentlyHide(this, ID_TICKET_MARKUP);
         } else {
-            final WebMarkupContainer panel = new WebMarkupContainer(ID_TICKET_DETAILS_DIV);
-            final MultiLineLabel details = new MultiLineLabel(ID_TICKET_DETAILS, Model.of(ticketDetail));
-            panel.add(details);
-            panel.add(new ExternalImageUrl(ID_KITTENS_IMAGE, ticket.getKittenUrl()));
-            add(panel);
-        }
-
-        final String ticketReference = ticket != null ? ticket.getReference(): null;
-        if(ticketReference == null) {
-            Components.permanentlyHide(this, ID_TICKET_REFERENCE_DIV);
-        } else {
-            final WebMarkupContainer panel = new WebMarkupContainer(ID_TICKET_REFERENCE_DIV);
-            final Label reference = new Label(ID_TICKET_REFERENCE, Model.of(ticketReference));
-            panel.add(reference);
-            add(panel);
+        	add(new MarkupComponent(ID_TICKET_MARKUP, Model.of(ticket.getMarkup())));
         }
 
         final boolean suppressExceptionDetail =

@@ -28,6 +28,7 @@ import com.google.common.collect.Lists;
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.services.error.ErrorReportingService;
 import org.apache.isis.applib.services.error.Ticket;
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.viewer.wicket.model.models.ModelAbstract;
 
@@ -90,7 +91,7 @@ public class ExceptionModel extends ModelAbstract<List<StackTraceDetail>> {
         final List<Throwable> causalChain = Throwables.getCausalChain(ex);
         for (Throwable cause : causalChain) {
             if(exType.isAssignableFrom(cause.getClass())) {
-                return (T)cause;
+                return _Casts.uncheckedCast(cause);
             }
         }
         return null;
@@ -162,7 +163,6 @@ public class ExceptionModel extends ModelAbstract<List<StackTraceDetail>> {
         List<List<StackTraceDetail>> stackTraces = Lists.newArrayList();
 
         List<Throwable> causalChain = Throwables.getCausalChain(ex);
-        boolean firstTime = true;
         for(Throwable cause: causalChain) {
             List<StackTraceDetail> stackTrace = Lists.newArrayList();
             append(cause, stackTrace);

@@ -37,8 +37,7 @@ public class MarkupComponent extends WebComponent {
 
 	@Override
 	public void onComponentTagBody(final MarkupStream markupStream, final ComponentTag openTag){
-		final ObjectAdapter objAdapter = (ObjectAdapter) getDefaultModelObject();
-		replaceComponentTagBody(markupStream, openTag, extractHtmlOrElse(objAdapter, ""));
+		replaceComponentTagBody(markupStream, openTag, extractHtmlOrElse(getDefaultModelObject(), ""));
 	}
 
 	@Override
@@ -49,17 +48,28 @@ public class MarkupComponent extends WebComponent {
 	
 	// -- HELPER
 	
-	private CharSequence extractHtmlOrElse(ObjectAdapter objAdapter, final String fallback) {
+	private CharSequence extractHtmlOrElse(Object modelObject, final String fallback) {
 		
-		if(objAdapter==null || objAdapter.getObject()==null)
+		if(modelObject==null) {
 			return fallback;
+		}
 		
-		final Object value = objAdapter.getObject();
+		if(modelObject instanceof ObjectAdapter) {
+			
+			final ObjectAdapter objAdapter = (ObjectAdapter) modelObject;
+			
+			if(objAdapter.getObject()==null)
+				return fallback;
+			
+			final Object value = objAdapter.getObject();
+			
+			if(!(value instanceof Markup))
+				return fallback;
+			
+			return ((Markup)value).asString();	
+		}
 		
-		if(!(value instanceof Markup))
-			return fallback;
-		
-		return ((Markup)value).asString();
+		return modelObject.toString();
 		
 	}
 }
