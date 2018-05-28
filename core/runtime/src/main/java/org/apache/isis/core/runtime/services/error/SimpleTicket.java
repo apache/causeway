@@ -16,11 +16,15 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.services.error;
+package org.apache.isis.core.runtime.services.error;
+
+import static org.apache.isis.commons.internal.base._NullSafe.isEmpty;
 
 import java.io.Serializable;
+import java.util.function.UnaryOperator;
 
-import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.applib.services.error.ErrorReportingService;
+import org.apache.isis.applib.services.error.Ticket;
 
 /**
  * Response from the {@link ErrorReportingService}, containing information to show to the end-user.
@@ -109,19 +113,22 @@ public class SimpleTicket implements Ticket {
 
     @Override
 	public String getMarkup() {
- 
     	return
     	"<p>" + 
-    	"    <h3>" + getDetails() + "</h3>" +
-    	(_NullSafe.isEmpty(getKittenUrl()) ? "" : "<img src=\"" + getKittenUrl() + "\"></img>") +
+    	ifPresentMap(getDetails(), s->"<h3>" + htmlEscape(s) + "</h3>") +
+    	ifPresentMap(getKittenUrl(), s->"<img src=\"" + s + "\"></img>") +
     	"</p>" + 
-		(_NullSafe.isEmpty(getReference()) ? "" : 
-			"<p><h4>Please quote reference: <span>" + getReference() + "</span></h4></p>")
+    	ifPresentMap(getReference(), s-> 
+			"<p><h4>Please quote reference: <span>" + htmlEscape(s) + "</span></h4></p>")
     	;
-		
 	}
     
+    protected static String ifPresentMap(String x, UnaryOperator<String> operator) {
+    	return isEmpty(x) ? "" : operator.apply(x);
+    }
     
-    
+    protected static String htmlEscape(String source) {
+    	return com.google.common.html.HtmlEscapers.htmlEscaper().escape(source);
+    }
     
 }
