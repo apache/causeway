@@ -61,6 +61,11 @@
 			<artifactId>byte-buddy</artifactId>
 			<version>${bytebuddy.version}</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.objenesis</groupId>
+			<artifactId>objenesis</artifactId>
+		</dependency>
 
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
