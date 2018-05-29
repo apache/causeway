@@ -150,6 +150,31 @@
         </dependency>
     </dependencies>
 
+    <profiles>
+        <profile>
+            <id>m2e</id>
+            <activation>
+                <property>
+                    <name>m2e.version</name>
+                </property>
+            </activation>
+            <build>
+                <directory>target-ide</directory>
+                <plugins>
+                    <!-- eclipse doesn't seem to support maven mixins config, so repeat here -->
+                    <plugin>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <configuration>
+                            <source>${compiler-plugin.source}</source>
+                            <target>${compiler-plugin.target}</target>
+                            <compilerArgument>${compiler-plugin.compilerArgument}</compilerArgument>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
     <modules>
         <module>module-simple</module>
         <module>application</module>
