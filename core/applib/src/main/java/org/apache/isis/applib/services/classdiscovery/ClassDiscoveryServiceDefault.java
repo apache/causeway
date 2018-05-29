@@ -28,7 +28,7 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.commons.internal.discover._Discover;
+import org.apache.isis.core.plugins.classdiscovery.ClassDiscoveryPlugin;
 
 /**
  * This utility service supports the dynamic discovery of classes from the classpath.  One service that uses this
@@ -57,7 +57,7 @@ implements ClassDiscoveryService {
 		}
 
 		// no appManifest or not asking for FixtureScripts
-		return _Discover.discoverFullscan(packageNamePrefix).getSubTypesOf(type);
+		return ClassDiscoveryPlugin.get().discoverFullscan(packageNamePrefix).getSubTypesOf(type);
 	}
 
 	// -- HELPER

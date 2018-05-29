@@ -24,13 +24,13 @@ import java.util.Set;
 
 import javax.jdo.annotations.PersistenceCapable;
 
+import org.apache.isis.core.plugins.classdiscovery.ClassDiscovery;
+import org.apache.isis.core.plugins.classdiscovery.ClassDiscoveryPlugin;
+import org.apache.isis.core.unittestsupport.utils.IndentPrinter;
+import org.junit.Test;
+
 import com.google.common.collect.Sets;
 import com.google.common.io.ByteStreams;
-
-import org.junit.Test;
-import org.reflections.Reflections;
-
-import org.apache.isis.core.unittestsupport.utils.IndentPrinter;
 
 /**
  * Provides some basic infrastructure to iterate over all entity types and
@@ -38,12 +38,12 @@ import org.apache.isis.core.unittestsupport.utils.IndentPrinter;
  */
 public abstract class AbstractApplyToAllContractTest {
 
-    protected final Reflections reflections;
+    protected final ClassDiscovery discovery;
     protected IndentPrinter out;
     
     protected AbstractApplyToAllContractTest(
             final String packagePrefix) {
-        reflections = new Reflections(packagePrefix);
+        discovery = ClassDiscoveryPlugin.get().discover(packagePrefix);
         out = new IndentPrinter(new PrintWriter(ByteStreams.nullOutputStream()));
     }
 
@@ -88,7 +88,7 @@ public abstract class AbstractApplyToAllContractTest {
      * Can be overridden if need be.
      */
     protected Set<Class<?>> findTypes() {
-        return reflections.getTypesAnnotatedWith(PersistenceCapable.class);
+        return discovery.getTypesAnnotatedWith(PersistenceCapable.class);
     }
 
     protected abstract void applyContractTest(Class<?> entityType);

@@ -11,6 +11,7 @@ import javax.annotation.Nullable;
 import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.context._Context;
 import org.objenesis.Objenesis;
 import org.objenesis.ObjenesisStd;
 
@@ -40,7 +41,7 @@ public class ProxyFactoryPluginUsingByteBuddy implements ProxyFactoryPlugin {
 		final Function<InvocationHandler, Class<? extends T>> proxyClassFactory = handler->
 				proxyDef.intercept(InvocationHandlerAdapter.of(handler))
 				.make()
-				.load(base.getClassLoader())
+				.load(_Context.getDefaultClassLoader())
 				.getLoaded();
 
 		return new ProxyFactory<T>() {

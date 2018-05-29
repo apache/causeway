@@ -69,12 +69,19 @@ public class DefaultImposteriserTest {
         };
 
         // -- loading codegen plugin by name (because not configured as a maven dependency) 
+//        {
+//        	String pluginFullyQualifiedClassName = "org.apache.isis.core.plugins.codegen.ProxyFactoryPluginUsingJavassist";
+//        	// we are guessing where to find the pluginTarget
+//        	File pluginTarget = getCoreTargetFolder("/core/plugins/codegen-javassist/");
+//        	
+//    		_Plugin.load(ProxyFactoryPlugin.class, pluginTarget, pluginFullyQualifiedClassName);
+//        }
+        
         {
-        	String pluginFullyQualifiedClassName = "org.apache.isis.core.plugins.codegen.ProxyFactoryPluginUsingJavassist";
         	// we are guessing where to find the pluginTarget
-        	File pluginTarget = getCoreTargetFolder("/core/plugins/codegen-javassist/");
-        	
-    		_Plugin.load(ProxyFactoryPlugin.class, pluginTarget, pluginFullyQualifiedClassName);
+    		_Plugin.load(ProxyFactoryPlugin.class,
+    				getCoreTargetFolder("/core/plugins/codegen-bytebuddy/"), 
+    				"org.apache.isis.core.plugins.codegen.ProxyFactoryPluginUsingByteBuddy");
         }
         
 

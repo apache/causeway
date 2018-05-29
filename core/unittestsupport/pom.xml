@@ -41,18 +41,24 @@
             <artifactId>isis-core-commons</artifactId>
         </dependency>
         
-        <!-- specifically to test the codegen-javassist plugin -->
+        <!-- core plugins required to run this module's own tests -->
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-plugins-discovery-reflections</artifactId>
+            <scope>runtime</scope>
+        </dependency>
         <dependency>
 			<groupId>org.javassist</groupId>
 			<artifactId>javassist</artifactId>
 			<scope>test</scope>
 			<optional>true</optional>
 		</dependency>
-		<dependency>
+        <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-plugins-codegen-javassist</artifactId>
+            <artifactId>isis-core-plugins-codegen-bytebuddy</artifactId>
             <scope>runtime</scope>
         </dependency>
+        
 
 		<!-- JUPITER -->
 		<dependency>
@@ -103,24 +109,24 @@
 			<scope>provided</scope>
 		</dependency>
 
-		<dependency>
-			<groupId>org.reflections</groupId>
-			<artifactId>reflections</artifactId>
-			<exclusions>
-				<exclusion>
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.reflections</groupId> -->
+<!-- 			<artifactId>reflections</artifactId> -->
+<!-- 			<exclusions> -->
+<!-- 				<exclusion> -->
 					<!-- part of JDK 6+ the version here does not provide getUserData(), 
 						setUserData(), as needed by xmlsnapshot functionality in isis-core-runtime. -->
-					<groupId>xml-apis</groupId>
-					<artifactId>xml-apis</artifactId>
-				</exclusion>
-				<exclusion>
+<!-- 					<groupId>xml-apis</groupId> -->
+<!-- 					<artifactId>xml-apis</artifactId> -->
+<!-- 				</exclusion> -->
+<!-- 				<exclusion> -->
 					<!-- provided by plugins if required  -->
-					<groupId>org.javassist</groupId>
-					<artifactId>javassist</artifactId>
-				</exclusion>
-			</exclusions>
-			<optional>true</optional>
-		</dependency>
+<!-- 					<groupId>org.javassist</groupId> -->
+<!-- 					<artifactId>javassist</artifactId> -->
+<!-- 				</exclusion> -->
+<!-- 			</exclusions> -->
+<!-- 			<optional>true</optional> -->
+<!-- 		</dependency> -->
 
 	</dependencies>
 
