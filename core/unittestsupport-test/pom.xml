@@ -47,6 +47,12 @@
             <scope>test</scope>
         </dependency>
         
+        <dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-core-wrapper</artifactId>
+			<scope>test</scope>
+		</dependency>
+        
         <!-- core plugins required to run this module's own tests -->
         <dependency>
             <groupId>org.apache.isis.core</groupId>

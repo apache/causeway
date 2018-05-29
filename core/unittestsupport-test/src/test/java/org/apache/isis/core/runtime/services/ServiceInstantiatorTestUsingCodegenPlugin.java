@@ -44,7 +44,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
-public class ServiceInstantiatorTestUsingJavassist {
+public class ServiceInstantiatorTestUsingCodegenPlugin {
 
 	@Rule
 	public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);

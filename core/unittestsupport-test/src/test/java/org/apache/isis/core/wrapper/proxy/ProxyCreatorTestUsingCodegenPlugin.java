@@ -28,7 +28,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-public class ProxyCreatorTestUsingJavassist {
+public class ProxyCreatorTestUsingCodegenPlugin {
 	
 	private ProxyCreator proxyCreator;
 

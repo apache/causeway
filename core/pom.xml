@@ -2433,7 +2433,6 @@ ${license.additional-notes}
 
 		<!-- to break cyclic dependencies some tests needed to be moved to their own modules -->
 		<module>unittestsupport-test</module>
-        <module>plugins-test/codegen-javassist-test</module>
         
     </modules>
 
