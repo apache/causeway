@@ -2,9 +2,7 @@ package org.apache.isis.core.plugins.codegen;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.function.Function;
-import java.util.function.Predicate;
 
 import javax.annotation.Nullable;
 
@@ -27,7 +25,6 @@ public class ProxyFactoryPluginUsingByteBuddy implements ProxyFactoryPlugin {
 	public <T> ProxyFactory<T> factory(
 			Class<T> base, 
 			Class<?>[] interfaces, 
-			Predicate<Method> methodFilter,
 			Class<?>[] constructorArgTypes) {
 		
 		final Objenesis objenesis = new ObjenesisStd();

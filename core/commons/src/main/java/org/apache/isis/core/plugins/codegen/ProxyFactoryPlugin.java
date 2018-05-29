@@ -18,9 +18,6 @@
  */
 package org.apache.isis.core.plugins.codegen;
 
-import java.lang.reflect.Method;
-import java.util.function.Predicate;
-
 import javax.annotation.Nullable;
 
 import org.apache.isis.commons.internal.context._Plugin;
@@ -32,7 +29,6 @@ public interface ProxyFactoryPlugin {
 	public <T> ProxyFactory<T> factory(
 			Class<T> base, 
 			@Nullable Class<?>[] interfaces, 
-			@Nullable Predicate<Method> methodFilter,
 			@Nullable Class<?>[] constructorArgTypes);
 	
 	

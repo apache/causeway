@@ -19,11 +19,13 @@ import javassist.util.proxy.ProxyObject;
 
 public class ProxyFactoryPluginUsingJavassist implements ProxyFactoryPlugin {
 	
+	private static final Predicate<Method> DEFAULT_METHOD_FILTER = 
+			m->!"finalize".equals(m.getName());
+	
 	@Override
 	public <T> ProxyFactory<T> factory(
 			final Class<T> base, 
 			final Class<?>[] interfaces, 
-			final Predicate<Method> methodFilter,
 			final Class<?>[] constructorArgTypes) {
 		
         final javassist.util.proxy.ProxyFactory pfDelegate = new javassist.util.proxy.ProxyFactory();
@@ -31,10 +33,7 @@ public class ProxyFactoryPluginUsingJavassist implements ProxyFactoryPlugin {
 
         pfDelegate.setSuperclass(base);
         pfDelegate.setInterfaces(interfaces);
-
-        if(methodFilter!=null) {
-        	pfDelegate.setFilter(methodFilter::test);	
-        }
+        pfDelegate.setFilter(DEFAULT_METHOD_FILTER::test);	
         
 		return new ProxyFactory<T>() {
 			

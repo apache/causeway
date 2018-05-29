@@ -19,8 +19,6 @@
 package org.apache.isis.core.plugins.codegen;
 
 import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
-import java.util.function.Predicate;
 
 /**
  * Generates dynamic classes and corresponding instances by rebasing a given 'base' class.
@@ -53,11 +51,8 @@ public interface ProxyFactory<T> {
 	// -- BUILDER (uses plugin)
 	
 	public static class ProxyFactoryBuilder<T> {
-		private static final Predicate<Method> DEFAULT_METHOD_FILTER = 
-				m->!"finalize".equals(m.getName());
 		private final Class<T> base;
 		private Class<?>[] interfaces;
-		private Predicate<Method> methodFilter = DEFAULT_METHOD_FILTER;
 		private Class<?>[] constructorArgTypes;
 		private ProxyFactoryBuilder(Class<T> base) {
 			this.base = base;
@@ -66,16 +61,12 @@ public interface ProxyFactory<T> {
 			this.interfaces = interfaces;
 			return this;
 		}		
-		public ProxyFactoryBuilder<T> methodFilter(Predicate<Method> methodFilter) {
-			this.methodFilter = methodFilter;
-			return this;
-		}
 		public ProxyFactoryBuilder<T> constructorArgTypes(Class<?>[] constructorArgTypes) {
 			this.constructorArgTypes = constructorArgTypes;
 			return this;
 		}
 		public ProxyFactory<T> build() {
-			return ProxyFactoryPlugin.get().factory(base, interfaces, methodFilter, constructorArgTypes);
+			return ProxyFactoryPlugin.get().factory(base, interfaces, constructorArgTypes);
 		}
 	}
 	
