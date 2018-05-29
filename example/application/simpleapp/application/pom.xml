@@ -107,7 +107,6 @@
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-wrapper</artifactId>
-            <version>${isis.version}</version>
         </dependency>
 
         <!-- test -->
@@ -121,7 +120,6 @@
         <dependency>
             <groupId>org.apache.isis.mavendeps</groupId>
             <artifactId>isis-mavendeps-testing</artifactId>
-            <version>${isis.version}</version>
             <type>pom</type>
             <scope>test</scope>
         </dependency>
