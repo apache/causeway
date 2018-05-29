@@ -20,17 +20,17 @@
 		<version>${revision}</version>
 	</parent>
 
-	<artifactId>isis-core-unittestsupport</artifactId>
-	<name>Apache Isis Unit Test Support</name>
+	<artifactId>isis-core-unittestsupport-test</artifactId>
+	<name>Apache Isis Unit Test Support (Tests)</name>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.core.unittestsupport</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/core/unittestsupport</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.isis.core.unittestsupport-test</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/isis/core/unittestsupport-test</git-plugin.propertiesDir>
 	</properties>
 
 	<description>
-		Support for writing unit tests; should be added as a dependency
-		with scope=test only
+		This module is for testing the Unittestsupport module.
+		To break cyclic dependencies some tests needed to be moved to their own module (this).
 	</description>
 
 	<dependencies>
@@ -40,6 +40,31 @@
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-commons</artifactId>
         </dependency>
+        
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-unittestsupport</artifactId>
+            <scope>test</scope>
+        </dependency>
+        
+        <!-- core plugins required to run this module's own tests -->
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-plugins-discovery-reflections</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+			<groupId>org.javassist</groupId>
+			<artifactId>javassist</artifactId>
+			<scope>test</scope>
+			<optional>true</optional>
+		</dependency>
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-plugins-codegen-bytebuddy</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        
 
 		<!-- JUPITER -->
 		<dependency>
@@ -90,25 +115,24 @@
 			<scope>provided</scope>
 		</dependency>
 
-		<!-- TODO [ahuber] work in progress to remove these dependencies -->
-		<dependency>
-			<groupId>org.reflections</groupId>
-			<artifactId>reflections</artifactId>
-			<exclusions>
-				<exclusion>
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.reflections</groupId> -->
+<!-- 			<artifactId>reflections</artifactId> -->
+<!-- 			<exclusions> -->
+<!-- 				<exclusion> -->
 					<!-- part of JDK 6+ the version here does not provide getUserData(), 
 						setUserData(), as needed by xmlsnapshot functionality in isis-core-runtime. -->
-					<groupId>xml-apis</groupId>
-					<artifactId>xml-apis</artifactId>
-				</exclusion>
-				<exclusion>
+<!-- 					<groupId>xml-apis</groupId> -->
+<!-- 					<artifactId>xml-apis</artifactId> -->
+<!-- 				</exclusion> -->
+<!-- 				<exclusion> -->
 					<!-- provided by plugins if required  -->
-					<groupId>org.javassist</groupId>
-					<artifactId>javassist</artifactId>
-				</exclusion>
-			</exclusions>
-			<optional>true</optional>
-		</dependency>
+<!-- 					<groupId>org.javassist</groupId> -->
+<!-- 					<artifactId>javassist</artifactId> -->
+<!-- 				</exclusion> -->
+<!-- 			</exclusions> -->
+<!-- 			<optional>true</optional> -->
+<!-- 		</dependency> -->
 
 	</dependencies>
 
