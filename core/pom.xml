@@ -602,14 +602,10 @@
                         <showWarnings>false</showWarnings>
                         <source>${compileSource}</source>
                         <target>${compileTarget}</target>
-                        <compilerArgs>
-                        	<arg>--add-opens</arg><arg>javax.xml/javax.xml.bind=ALL-UNNAMED</arg>
-                        </compilerArgs>
                     </configuration>
                     <!-- goal:compile binds to phase:compile -->
                     <!-- goal:testCompile binds to phase:test-compile -->
                 </plugin>
-
                 
                 <!-- Tests (ignore integration tests)-->
                 <plugin>
@@ -2202,6 +2198,37 @@ ${license.additional-notes}
                 </plugins>
             </build>
         </profile>
+
+	<profile>
+		<id>jdk9plus</id>
+		<activation>
+			<jdk>[9,)</jdk>
+		</activation>
+		<build>
+			<plugins>
+
+				<!-- Compile -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<configuration>
+						<showDeprecation>true</showDeprecation>
+						<showWarnings>true</showWarnings>
+						<source>${compileSource}</source>
+						<target>${compileTarget}</target>
+						<compilerArgs>
+							<arg>--add-opens</arg>
+							<arg>javax.xml/javax.xml.bind=ALL-UNNAMED</arg>
+						</compilerArgs>
+					</configuration>
+					<!-- goal:compile binds to phase:compile -->
+					<!-- goal:testCompile binds to phase:test-compile -->
+				</plugin>
+
+			</plugins>
+		</build>
+	</profile>
+        
         <profile>
             <id>m2e</id>
             <activation>
