@@ -602,6 +602,9 @@
                         <showWarnings>false</showWarnings>
                         <source>${compileSource}</source>
                         <target>${compileTarget}</target>
+                        <compilerArgs>
+                        	<arg>--add-opens</arg><arg>javax.xml/javax.xml.bind=ALL-UNNAMED</arg>
+                        </compilerArgs>
                     </configuration>
                     <!-- goal:compile binds to phase:compile -->
                     <!-- goal:testCompile binds to phase:test-compile -->

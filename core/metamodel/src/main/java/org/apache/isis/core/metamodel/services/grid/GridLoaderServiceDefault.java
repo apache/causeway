@@ -27,14 +27,6 @@ import javax.annotation.PostConstruct;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 
-import com.google.common.base.Function;
-import com.google.common.collect.FluentIterable;
-import com.google.common.collect.Maps;
-import com.google.common.io.Resources;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
@@ -43,8 +35,14 @@ import org.apache.isis.applib.services.grid.GridLoaderService;
 import org.apache.isis.applib.services.grid.GridSystemService;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.message.MessageService;
-import org.apache.isis.commons.internal._Constants;
+import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.common.collect.Maps;
+import com.google.common.io.Resources;
 
 @DomainService(
         nature = NatureOfService.DOMAIN,
@@ -65,15 +63,12 @@ public class GridLoaderServiceDefault implements GridLoaderService {
 
     @PostConstruct
     public void init(){
-        final List<Class<? extends Grid>> pageImplementations =
-                FluentIterable.from(gridSystemServices)
-                    .transform(
-                            (Function<GridSystemService, Class<? extends Grid>>) gss -> gss.gridImplementation())
-                    .toList();
-
-        final Class[] clazz = pageImplementations.toArray(_Constants.emptyClasses);
+        final Class<?>[] pageImplementations =
+        		_NullSafe.stream(gridSystemServices)
+        		.map(GridSystemService::gridImplementation)
+        		.collect(_Arrays.toArray(Class.class));
         try {
-            jaxbContext = JAXBContext.newInstance(clazz);
+            jaxbContext = JAXBContext.newInstance(pageImplementations);
         } catch (JAXBException e) {
             // leave as null
         }
@@ -238,8 +233,6 @@ public class GridLoaderServiceDefault implements GridLoaderService {
     JaxbService jaxbService;
 
     @javax.inject.Inject
-    List<GridSystemService> gridSystemServices;
-    
-
+    List<GridSystemService<?>> gridSystemServices;
 
 }
