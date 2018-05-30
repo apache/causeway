@@ -82,6 +82,8 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-plugin-plugin</artifactId>
+                <!-- override to allow build on jdk9+ -->
+                <version>3.5.2</version>
                 <configuration>
                     <goalPrefix>configurator</goalPrefix>
                 </configuration>

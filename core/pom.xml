@@ -2216,6 +2216,7 @@ ${license.additional-notes}
 							<showWarnings>true</showWarnings>
 							<source>10</source>
 							<target>10</target>
+							<!-- TODO on build WARNING: __add-opens has no effect at compile time -->
 							<compilerArgs>
 								<arg>--add-opens</arg>
 								<arg>javax.xml/javax.xml.bind=ALL-UNNAMED</arg>
