@@ -22,13 +22,13 @@ import org.apache.isis.applib.layout.grid.Grid;
 /**
  * Provides an implementation of {@link Grid}.
  */
-public interface GridSystemService<G extends org.apache.isis.applib.layout.grid.Grid> {
+public interface GridSystemService<G extends Grid> {
 
     /**
      * Which grid (implementation) is defined by this service.
      */
     @Programmatic
-    Class<? extends Grid> gridImplementation();
+    Class<G> gridImplementation();
 
     @Programmatic
     String tns();
@@ -37,7 +37,7 @@ public interface GridSystemService<G extends org.apache.isis.applib.layout.grid.
     String schemaLocation();
 
     @Programmatic
-    Grid defaultGrid(Class<?> domainClass);
+    G defaultGrid(Class<?> domainClass);
 
     /**
      * Validate the grid, derive any missing object members, and overwrite any facets in the metamodel based on the

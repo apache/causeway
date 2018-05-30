@@ -83,7 +83,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
 
     @Programmatic
     @Override
-    public Grid defaultGrid(final Class<?> domainClass) {
+    public BS3Grid defaultGrid(final Class<?> domainClass) {
         final BS3Grid bs3Grid = new BS3Grid();
 
         final ObjectSpecification objectSpec = specificationLoader.loadSpecification(domainClass);

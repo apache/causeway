@@ -277,10 +277,19 @@ public final class _Collections {
             final ParameterizedType parameterizedType = (ParameterizedType) genericType;
             final Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
             if(actualTypeArguments.length == 1) {
+            	// handle e.g. List<Sometype>
                 final Type actualTypeArgument = actualTypeArguments[0];
                 if(actualTypeArgument instanceof Class) {
                     final Class<?> actualType = (Class<?>) actualTypeArgument;
                     return actualType;
+                }
+                // also handle e.g. List<Sometype<T>>
+                if(actualTypeArgument instanceof ParameterizedType) {
+                	final Type innerParameterizedType = ((ParameterizedType) actualTypeArgument).getRawType();
+                	if(innerParameterizedType instanceof Class) {
+                        final Class<?> actualType = (Class<?>) innerParameterizedType;
+                        return actualType;
+                    }
                 }
             }
         }
@@ -295,8 +304,7 @@ public final class _Collections {
      * @return inferred type or null if inference fails
      */
     public static @Nullable Class<?> inferElementTypeIfAny(@Nullable final Field field) {
-    	        
-        return inferElementTypeIfAny(field.getType(), field.getGenericType());
+    	return inferElementTypeIfAny(field.getType(), field.getGenericType());
     }
     
 	// --

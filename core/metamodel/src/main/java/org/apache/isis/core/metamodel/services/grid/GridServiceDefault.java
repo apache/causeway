@@ -20,14 +20,6 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-import com.google.common.base.Joiner;
-import com.google.common.base.Predicate;
-import com.google.common.collect.FluentIterable;
-import com.google.common.collect.Lists;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
@@ -35,6 +27,12 @@ import org.apache.isis.applib.layout.grid.Grid;
 import org.apache.isis.applib.services.grid.GridLoaderService;
 import org.apache.isis.applib.services.grid.GridService;
 import org.apache.isis.applib.services.grid.GridSystemService;
+import org.apache.isis.commons.internal.base._Casts;
+
+import com.google.common.base.Joiner;
+import com.google.common.base.Predicate;
+import com.google.common.collect.FluentIterable;
+import com.google.common.collect.Lists;
 
 @DomainService(
         nature = NatureOfService.DOMAIN,
@@ -42,7 +40,7 @@ import org.apache.isis.applib.services.grid.GridSystemService;
 )
 public class GridServiceDefault implements GridService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(GridServiceDefault.class);
+    //private static final Logger LOG = LoggerFactory.getLogger(GridServiceDefault.class);
 
     public static final String COMPONENT_TNS = "http://isis.apache.org/applib/layout/component";
     public static final String COMPONENT_SCHEMA_LOCATION = "http://isis.apache.org/applib/layout/component/component.xsd";
@@ -80,7 +78,7 @@ public class GridServiceDefault implements GridService {
     @Programmatic
     public Grid defaultGridFor(Class<?> domainClass) {
 
-        for (GridSystemService gridSystemService : gridSystemServices()) {
+        for (GridSystemService<?> gridSystemService : gridSystemServices()) {
             Grid grid = gridSystemService.defaultGrid(domainClass);
             if(grid != null) {
                 return grid;
@@ -98,8 +96,8 @@ public class GridServiceDefault implements GridService {
 
         final Class<?> domainClass = grid.getDomainClass();
 
-        for (GridSystemService gridSystemService : gridSystemServices()) {
-            gridSystemService.normalize(grid, domainClass);
+        for (GridSystemService<?> gridSystemService : gridSystemServices()) {
+            gridSystemService.normalize(_Casts.uncheckedCast(grid), domainClass);
         }
 
         final String tnsAndSchemaLocation = tnsAndSchemaLocation(grid);
@@ -115,8 +113,8 @@ public class GridServiceDefault implements GridService {
     public Grid complete(final Grid grid) {
 
         final Class<?> domainClass = grid.getDomainClass();
-        for (GridSystemService gridSystemService : gridSystemServices()) {
-            gridSystemService.complete(grid, domainClass);
+        for (GridSystemService<?> gridSystemService : gridSystemServices()) {
+            gridSystemService.complete(_Casts.uncheckedCast(grid), domainClass);
         }
 
         return grid;
@@ -127,8 +125,8 @@ public class GridServiceDefault implements GridService {
     public Grid minimal(final Grid grid) {
 
         final Class<?> domainClass = grid.getDomainClass();
-        for (GridSystemService gridSystemService : gridSystemServices()) {
-            gridSystemService.minimal(grid, domainClass);
+        for (GridSystemService<?> gridSystemService : gridSystemServices()) {
+            gridSystemService.minimal(_Casts.uncheckedCast(grid), domainClass);
         }
 
         return grid;
@@ -148,7 +146,7 @@ public class GridServiceDefault implements GridService {
         parts.add(LINKS_TNS);
         parts.add(LINKS_SCHEMA_LOCATION);
 
-        for (GridSystemService gridSystemService : gridSystemServices) {
+        for (GridSystemService<?> gridSystemService : gridSystemServices) {
             final Class<? extends Grid> gridImpl = gridSystemService.gridImplementation();
             if(gridImpl.isAssignableFrom(grid.getClass())) {
                 parts.add(gridSystemService.tns());
@@ -177,8 +175,8 @@ public class GridServiceDefault implements GridService {
         if (filteredGridSystemServices == null) {
             List<GridSystemService<?>> services = Lists.newArrayList();
 
-            for (GridSystemService gridSystemService : this.gridSystemServices) {
-                final Class gridImplementation = gridSystemService.gridImplementation();
+            for (GridSystemService<?> gridSystemService : this.gridSystemServices) {
+                final Class<?> gridImplementation = gridSystemService.gridImplementation();
                 final boolean notSeenBefore = FluentIterable.from(services).filter(new Predicate<GridSystemService<?>>() {
                     @Override public boolean apply(@Nullable final GridSystemService<?> systemService) {
                         return systemService.gridImplementation() == gridImplementation;
@@ -203,6 +201,6 @@ public class GridServiceDefault implements GridService {
     GridLoaderService gridLoaderService;
 
     @javax.inject.Inject
-    List<GridSystemService> gridSystemServices;
+    List<GridSystemService<?>> gridSystemServices;
 
 }

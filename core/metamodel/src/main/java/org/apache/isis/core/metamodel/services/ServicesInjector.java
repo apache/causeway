@@ -445,7 +445,7 @@ public class ServicesInjector implements ApplicationScopedComponent {
     // -- REFLECTIVE PREDICATES
     
     private static final Predicate<Object> isOfType(final Class<?> cls) {
-        return obj->cls.isAssignableFrom(obj.getClass());
+    	return obj->cls.isAssignableFrom(obj.getClass());
     }
     
     private static final Predicate<Method> nameStartsWith(final String prefix) {

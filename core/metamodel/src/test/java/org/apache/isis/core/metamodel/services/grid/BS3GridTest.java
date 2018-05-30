@@ -59,7 +59,7 @@ public class BS3GridTest {
         jaxbService = new JaxbService.Simple();
         gridServiceDefault = new GridServiceDefault();
         gridSystemServiceBS3 = new GridSystemServiceBS3();
-        gridServiceDefault.gridSystemServices = Arrays.<GridSystemService>asList(
+        gridServiceDefault.gridSystemServices = Arrays.<GridSystemService<?>>asList(
                 gridSystemServiceBS3);
     }
 
