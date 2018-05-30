@@ -19,6 +19,9 @@
 
 package org.apache.isis.commons.internal;
 
+import java.io.IOException;
+import java.io.Writer;
+
 /**
  * <h1>- internal use only -</h1>
  * <p>
@@ -55,5 +58,14 @@ public final class _Constants {
 	 * empty array of byte
 	 */
 	public static final byte[] emptyBytes = new byte[0];
+
+	/**
+	 * writer that does nothing
+	 */
+	public static final Writer nopWriter = new Writer() {
+			@Override public void write(char[] cbuf, int off, int len) throws IOException { }
+			@Override public void flush() throws IOException { }
+			@Override public void close() throws IOException { }
+	};
 	
 }

@@ -16,6 +16,15 @@
  */
 package org.apache.isis.core.unittestsupport.bidir;
 
+import static org.apache.isis.commons.internal.collections._Collections.toHashSet;
+import static org.apache.isis.commons.internal.reflection._Reflect.streamAllFields;
+import static org.apache.isis.commons.internal.reflection._Reflect.streamAllMethods;
+import static org.apache.isis.commons.internal.reflection._Reflect.withName;
+import static org.apache.isis.commons.internal.reflection._Reflect.withMethodParametersCount;
+import static org.apache.isis.core.unittestsupport.utils.ReflectUtils.withEntityParameter;
+import static org.apache.isis.core.unittestsupport.utils.ReflectUtils.withParametersAssignableFrom;
+import static org.apache.isis.core.unittestsupport.utils.ReflectUtils.withReturnTypeAssignableFrom;
+import static org.apache.isis.core.unittestsupport.utils.ReflectUtils.withTypeAssignableFrom;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.Matchers.greaterThan;
@@ -25,22 +34,17 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Collection;
+import java.util.Map;
 import java.util.Set;
+import java.util.function.Predicate;
 
 import javax.jdo.annotations.Persistent;
-
-import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
-import com.google.common.collect.ImmutableMap;
-
-import org.hamcrest.Matchers;
-import org.reflections.ReflectionUtils;
-import org.reflections.Reflections;
 
 import org.apache.isis.core.unittestsupport.AbstractApplyToAllContractTest;
 import org.apache.isis.core.unittestsupport.utils.CollectUtils;
 import org.apache.isis.core.unittestsupport.utils.ReflectUtils;
 import org.apache.isis.core.unittestsupport.utils.StringUtils;
+import org.hamcrest.Matchers;
 
 public abstract class BidirectionalRelationshipContractTestAbstract extends AbstractApplyToAllContractTest implements Instantiators {
 
@@ -48,14 +52,17 @@ public abstract class BidirectionalRelationshipContractTestAbstract extends Abst
     
     protected BidirectionalRelationshipContractTestAbstract(
             final String packagePrefix, 
-            ImmutableMap<Class<?>,Instantiator> instantiatorsByClass) {
+            Map<Class<?>, Instantiator> instantiatorsByClass) {
         super(packagePrefix);
         instantiatorMap = new InstantiatorMap(instantiatorsByClass);
     }
 
     @Override
     protected void applyContractTest(Class<?> entityType) {
-        final Set<Field> mappedByFields = ReflectionUtils.getAllFields(entityType, ReflectUtils.persistentMappedBy);
+        final Set<Field> mappedByFields = streamAllFields(entityType)
+        		.filter(ReflectUtils.persistentMappedBy)
+        		.collect(toHashSet());
+        		
         for (Field mappedByField : mappedByFields) {
             final Parent p = new Parent();
             p.entityType = entityType;
@@ -78,7 +85,10 @@ public abstract class BidirectionalRelationshipContractTestAbstract extends Abst
 
         // getMethod
         final String getMethod = StringUtils.methodNamed("get", p.childField);
-        final Set<Method> getMethods = ReflectionUtils.getAllMethods(p.entityType, withConcreteMethodNamed(getMethod));
+        final Set<Method> getMethods = streamAllMethods(p.entityType)
+        		.filter(withConcreteMethodNamed(getMethod))
+        		.collect(toHashSet());
+        		
         assertThat(p.desc() + ": no unique getXxx() method:" + getMethods , getMethods.size(), is(greaterThan(0)));
         p.getMethod = CollectUtils.firstIn(getMethods);
         
@@ -88,8 +98,12 @@ public abstract class BidirectionalRelationshipContractTestAbstract extends Abst
         if(Collection.class.isAssignableFrom(returnType)) {
             // addToMethod
             final String addToMethod = StringUtils.methodNamed("addTo", p.childField);
-            final Set<Method> addToMethods = ReflectionUtils.getAllMethods(p.entityType,
-                    Predicates.and(withConcreteMethodNamed(addToMethod), ReflectionUtils.withParametersCount(1), ReflectUtils.withEntityParameter()));
+            final Set<Method> addToMethods = streamAllMethods(p.entityType)
+            		.filter(withConcreteMethodNamed(addToMethod))
+            		.filter(withMethodParametersCount(1))
+            		.filter(withEntityParameter())
+            		.collect(toHashSet());
+                    
             if(addToMethods.size() != 1) {
                 // just skip
                 out.println("no addToXxx() method in parent");
@@ -99,8 +113,12 @@ public abstract class BidirectionalRelationshipContractTestAbstract extends Abst
 
             // removeFromMethod
             final String removeFromMethod = StringUtils.methodNamed("removeFrom", p.childField);
-            final Set<Method> removeFromMethods = ReflectionUtils.getAllMethods(p.entityType,
-                    Predicates.and(withConcreteMethodNamed(removeFromMethod), ReflectionUtils.withParametersCount(1), ReflectUtils.withEntityParameter()));
+            final Set<Method> removeFromMethods = streamAllMethods(p.entityType)
+            		.filter(withConcreteMethodNamed(removeFromMethod))
+            		.filter(withMethodParametersCount(1))
+            		.filter(withEntityParameter())
+            		.collect(toHashSet());
+
             if(removeFromMethods.size() != 1) {
                 // just skip
                 out.println("no removeFromXxx() method in parent");
@@ -120,8 +138,12 @@ public abstract class BidirectionalRelationshipContractTestAbstract extends Abst
             
             // modify
             String modifyMethod = StringUtils.methodNamed("modify", p.childField);
-            final Set<Method> modifyMethods = ReflectionUtils.getAllMethods(p.entityType,
-                    Predicates.and(withConcreteMethodNamed(modifyMethod), ReflectionUtils.withParametersCount(1), ReflectUtils.withEntityParameter()));
+            final Set<Method> modifyMethods = streamAllMethods(p.entityType)
+            		.filter(withConcreteMethodNamed(modifyMethod))
+            		.filter(withMethodParametersCount(1))
+            		.filter(withEntityParameter())
+            		.collect(toHashSet());
+            
             if(modifyMethods.size() != 1) {
                 // just skip
                 out.println("no modifyXxx() method in parent");
@@ -131,8 +153,11 @@ public abstract class BidirectionalRelationshipContractTestAbstract extends Abst
             
             // clear
             String clearMethod = StringUtils.methodNamed("clear", p.childField);
-            final Set<Method> clearMethods = ReflectionUtils.getAllMethods(p.entityType,
-                    Predicates.and(withConcreteMethodNamed(clearMethod), ReflectionUtils.withParametersCount(0)));
+            final Set<Method> clearMethods = streamAllMethods(p.entityType)
+            		.filter(withConcreteMethodNamed(clearMethod))
+            		.filter(withMethodParametersCount(0))
+            		.collect(toHashSet());
+            
             if(clearMethods.size() != 1) {
                 // just skip
                 out.println("no clearXxx() method in parent");
@@ -160,12 +185,13 @@ public abstract class BidirectionalRelationshipContractTestAbstract extends Abst
         process(p, c);
     }
 
-    private static Predicate<Method> withConcreteMethodNamed(final String getMethod) {
-        return Predicates.and(ReflectionUtils.withName(getMethod), new Predicate<Method>(){
-            public boolean apply(Method m) {
-                return !m.isSynthetic() && !Modifier.isAbstract(m.getModifiers());
-            }
-        });
+    private static Predicate<Method> withConcreteMethodNamed(final String methodName) {
+    	return (Method m) -> {
+    		if(m==null || !methodName.equals(m.getName())){
+    			return false;
+    		}
+    		return !m.isSynthetic() && !Modifier.isAbstract(m.getModifiers());
+    	};
     }
 
     
@@ -193,22 +219,33 @@ public abstract class BidirectionalRelationshipContractTestAbstract extends Abst
     private void process(Parent p, Child c) {
         
         // mappedBy field
-        final Set<Field> parentFields = ReflectionUtils.getAllFields(c.entityType, Predicates.and(ReflectionUtils.withName(p.mappedBy), ReflectUtils.withTypeAssignableFrom(p.entityType)));
+        final Set<Field> parentFields = streamAllFields(c.entityType)
+        		.filter(withName(p.mappedBy))
+        		.filter(withTypeAssignableFrom(p.entityType))
+        		.collect(toHashSet());
 
         assertThat(c.entityType.getName()+  ": could not locate '" + p.mappedBy + "' field, returning supertype of " + p.entityType.getSimpleName() +", (as per @Persistent(mappedBy=...) in parent "+ p.entityType.getSimpleName()+")", parentFields.size(), is(1));
         c.parentField = CollectUtils.firstIn(parentFields);
 
         // getter
         String getterMethod = StringUtils.methodNamed("get", c.parentField);
-        final Set<Method> getterMethods = ReflectionUtils.getAllMethods(c.entityType,
-                Predicates.and(withConcreteMethodNamed(getterMethod), ReflectionUtils.withParametersCount(0), ReflectUtils.withReturnTypeAssignableFrom(p.entityType)));
+        final Set<Method> getterMethods = streamAllMethods(c.entityType)
+        		.filter(withConcreteMethodNamed(getterMethod))
+        		.filter(withMethodParametersCount(0))
+        		.filter(withReturnTypeAssignableFrom(p.entityType))
+        		.collect(toHashSet());
+        		
         assertThat(p.descRel(c) +": could not locate getter " + getterMethod + "() returning supertype of " + p.entityType.getSimpleName(), getterMethods.size(), is(1));
         c.getMethod = CollectUtils.firstIn(getterMethods);
 
         // modify
         String modifyMethod = StringUtils.methodNamed("modify", c.parentField);
-        final Set<Method> modifyMethods = ReflectionUtils.getAllMethods(c.entityType,
-                Predicates.and(withConcreteMethodNamed(modifyMethod), ReflectionUtils.withParametersCount(1), ReflectUtils.withParametersAssignableFrom(p.entityType)));
+        final Set<Method> modifyMethods = streamAllMethods(c.entityType)
+        		.filter(withConcreteMethodNamed(modifyMethod))
+        		.filter(withMethodParametersCount(1))
+        		.filter(withParametersAssignableFrom(p.entityType))
+        		.collect(toHashSet());
+        		
         if(modifyMethods.size() != 1) {
             // just skip
             out.println("no modifyXxx() method in child");
@@ -218,8 +255,11 @@ public abstract class BidirectionalRelationshipContractTestAbstract extends Abst
         
         // clear
         String clearMethod = StringUtils.methodNamed("clear", c.parentField);
-        final Set<Method> clearMethods = ReflectionUtils.getAllMethods(c.entityType,
-                Predicates.and(withConcreteMethodNamed(clearMethod), ReflectionUtils.withParametersCount(0)));
+        final Set<Method> clearMethods = streamAllMethods(c.entityType)
+        		.filter(withConcreteMethodNamed(clearMethod))
+        		.filter(withMethodParametersCount(0))
+        		.collect(toHashSet());
+        		
         if(clearMethods.size() != 1) {
             // just skip
             out.println("no clearXxx() method in child");

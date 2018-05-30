@@ -18,64 +18,50 @@ package org.apache.isis.core.unittestsupport.utils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.function.Predicate;
 
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 
-import com.google.common.base.Predicate;
-import com.google.common.base.Strings;
+import org.apache.isis.commons.internal.base._Strings;
 
 public class ReflectUtils {
 
     public static <T> Predicate<Field> withTypeAssignableFrom(final Class<T> type) {
-        return new Predicate<Field>() {
-            public boolean apply(Field input) {
-                return input != null && input.getType().isAssignableFrom(type);
-            }
-        };
+        return (Field input)-> input != null && input.getType().isAssignableFrom(type);
     }
 
     public static <T> Predicate<Method> withReturnTypeAssignableFrom(final Class<T> type) {
-        return new Predicate<Method>() {
-            public boolean apply(Method input) {
-                return input != null && input.getReturnType().isAssignableFrom(type);
-            }
-        };
+        return (Method input) -> input != null && input.getReturnType().isAssignableFrom(type);
     }
 
     public static Predicate<Method> withParametersAssignableFrom(final Class<?>... types) {
-        return new Predicate<Method>() {
-            public boolean apply(Method input) {
-                if (input != null) {
-                    Class<?>[] parameterTypes = input.getParameterTypes();
-                    if (parameterTypes.length == types.length) {
-                        for (int i = 0; i < parameterTypes.length; i++) {
-                            if (!parameterTypes[i].isAssignableFrom(types[i])) {
-                                return false;
-                            }
+        return (Method input) -> {
+            if (input != null) {
+                Class<?>[] parameterTypes = input.getParameterTypes();
+                if (parameterTypes.length == types.length) {
+                    for (int i = 0; i < parameterTypes.length; i++) {
+                        if (!parameterTypes[i].isAssignableFrom(types[i])) {
+                            return false;
                         }
-                        return true;
                     }
+                    return true;
                 }
-                return false;
             }
+            return false;
         };
     }
 
-    public static final Predicate<? super Field> persistentMappedBy = new Predicate<Field>() {
-        public boolean apply(Field f) {
+    public static final Predicate<? super Field> persistentMappedBy = 
+    	(Field f) -> {
             final Persistent annotation = f.getAnnotation(Persistent.class);
-            return annotation!=null && !Strings.isNullOrEmpty(annotation.mappedBy());
-        }
-    };
+            return annotation!=null && !_Strings.isNullOrEmpty(annotation.mappedBy());
+        };
 
     public static Predicate<? super Method> withEntityParameter() {
-        return new Predicate<Method>() {
-            public boolean apply(Method m) {
+        return (Method m) -> {
                 final Class<?> parameterType = m.getParameterTypes()[0];
-                return parameterType.isAnnotationPresent(PersistenceCapable.class);
-            }
-        };
+                return parameterType.isAnnotationPresent(PersistenceCapable.class); };
     }
 
 }

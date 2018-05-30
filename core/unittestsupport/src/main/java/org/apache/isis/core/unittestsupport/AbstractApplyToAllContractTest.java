@@ -21,16 +21,15 @@ import java.io.PrintWriter;
 import java.io.Writer;
 import java.util.Comparator;
 import java.util.Set;
+import java.util.TreeSet;
 
 import javax.jdo.annotations.PersistenceCapable;
 
+import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.core.plugins.classdiscovery.ClassDiscovery;
 import org.apache.isis.core.plugins.classdiscovery.ClassDiscoveryPlugin;
 import org.apache.isis.core.unittestsupport.utils.IndentPrinter;
 import org.junit.Test;
-
-import com.google.common.collect.Sets;
-import com.google.common.io.ByteStreams;
 
 /**
  * Provides some basic infrastructure to iterate over all entity types and
@@ -44,7 +43,7 @@ public abstract class AbstractApplyToAllContractTest {
     protected AbstractApplyToAllContractTest(
             final String packagePrefix) {
         discovery = ClassDiscoveryPlugin.get().discover(packagePrefix);
-        out = new IndentPrinter(new PrintWriter(ByteStreams.nullOutputStream()));
+        out = new IndentPrinter(_Constants.nopWriter);
     }
 
     public AbstractApplyToAllContractTest withLoggingTo(Writer out) {
@@ -61,7 +60,7 @@ public abstract class AbstractApplyToAllContractTest {
     public void searchAndTest() throws Exception {
         
         Set<Class<?>> entityTypes =
-                Sets.newTreeSet(new Comparator<Class<?>>() {
+                new TreeSet<>(new Comparator<Class<?>>() {
                     @Override
                     public int compare(Class<?> o1, Class<?> o2) {
                         return o1.getName().compareTo(o2.getName());

@@ -25,6 +25,8 @@ import java.lang.annotation.Target;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.List;
+
+import org.apache.isis.commons.internal.base._Casts;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.jmock.integration.junit4.JUnit4Mockery;
@@ -206,7 +208,7 @@ public class JUnitRuleMockery2 extends JUnit4Mockery implements MethodRule {
     	if(cutType == null) {
     		throw new IllegalStateException("No field annotated @ClassUnderTest was found");
     	}
-    	return (T) container.getComponent(cutType);
+    	return _Casts.uncheckedCast( container.getComponent(cutType) );
     }
 
     
@@ -283,7 +285,7 @@ public class JUnitRuleMockery2 extends JUnit4Mockery implements MethodRule {
 
     public static class ExpectationsOn<T> extends Expectations {
     	public ExpectationsOn(Object mock) {
-    		this.mockObj = (T) mock;
+    		this.mockObj = _Casts.uncheckedCast( mock );
     	}
     	private T mockObj;
     	public T mock() {

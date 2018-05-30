@@ -16,35 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.unittestsupport.comparable;
-
-import java.util.Arrays;
-import java.util.List;
-
-import org.junit.Test;
-
-public abstract class ComparableContractTest_compareTo<T extends Comparable<T>> {
-
-    /**
-     * Return an array of tuples; each tuple should consist of 4 elements, whereby
-     * item0  < item1 = item2 < item3
-     * 
-     * Typically item0 should be null valued (if supported by the impl).
-     */
-    protected abstract List<List<T>> orderedTuples();
-
-    @Test
-    public void compareAllOrderedTuples() {
-
-        new ComparableContractTester<T>(orderedTuples()).test();
-    }
-
-    /**
-     * Syntax sugar to remove boilerplate from subclasses.
-     */
-    @SafeVarargs
-    protected static <E> List<E> listOf(E... elements) {
-        return Arrays.asList(elements);
-    }
-
-}
+/**
+ * <h1>Internal API</h1>
+ * Internal classes, contributing to the internal proprietary API. 
+ * These may be changed or removed without notice!
+ * <p>
+ * <b>WARNING</b>: 
+ * Do NOT use any of the classes provided by this package!
+ * </p>
+ */
+package org.apache.isis.commons.internal.reflection;

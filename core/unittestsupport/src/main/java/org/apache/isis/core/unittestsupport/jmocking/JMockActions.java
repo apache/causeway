@@ -31,7 +31,8 @@ public final class JMockActions {
     private JMockActions() {
     }
     
-    public static <T> Action returnEach(final T... values) {
+    @SafeVarargs
+	public static <T> Action returnEach(final T... values) {
         return new ReturnEachAction<T>(values);
     }
 
@@ -49,7 +50,8 @@ public final class JMockActions {
             this.iterator = collection.iterator();
         }
         
-        private ReturnEachAction(T... array) {
+        @SafeVarargs
+		private ReturnEachAction(T... array) {
             this(Arrays.asList(array));
         }
         

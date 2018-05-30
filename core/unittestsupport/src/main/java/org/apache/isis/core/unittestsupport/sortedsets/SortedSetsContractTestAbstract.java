@@ -16,6 +16,8 @@
  */
 package org.apache.isis.core.unittestsupport.sortedsets;
 
+import static org.apache.isis.commons.internal.collections._Collections.toHashSet;
+import static org.apache.isis.commons.internal.reflection._Reflect.withTypeAssignableTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -24,9 +26,7 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.SortedSet;
 
-import org.reflections.ReflectionUtils;
-import org.reflections.Reflections;
-
+import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.core.unittestsupport.AbstractApplyToAllContractTest;
 
 public abstract class SortedSetsContractTestAbstract extends AbstractApplyToAllContractTest {
@@ -38,7 +38,10 @@ public abstract class SortedSetsContractTestAbstract extends AbstractApplyToAllC
 
     @Override
     protected void applyContractTest(Class<?> entityType) {
-        final Set<Field> collectionFields = ReflectionUtils.getAllFields(entityType, ReflectionUtils.withTypeAssignableTo(Collection.class));
+        final Set<Field> collectionFields = _Reflect.streamAllFields(entityType)
+        		.filter(withTypeAssignableTo(Collection.class))
+        		.collect(toHashSet());
+        		
         for (Field collectionField : collectionFields) {
             try {
                 final String desc = desc(entityType, collectionField);
@@ -54,7 +57,7 @@ public abstract class SortedSetsContractTestAbstract extends AbstractApplyToAllC
     private void process(Class<?> entityType, Field collectionField) {
         assertThat(
                 desc(entityType, collectionField) + " must be a SortedSet", 
-                ReflectionUtils.withTypeAssignableTo(SortedSet.class).apply(collectionField), is(true));
+                _Reflect.withTypeAssignableTo(SortedSet.class).test(collectionField), is(true));
     }
     
     private String desc(Class<?> entityType, Field collectionField) {

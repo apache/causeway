@@ -18,6 +18,8 @@
  */
 package org.apache.isis.core.unittestsupport.inject;
 
+import static org.apache.isis.commons.internal.collections._Collections.toHashSet;
+import static org.apache.isis.commons.internal.reflection._Reflect.withPrefix;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -25,9 +27,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Set;
 
-import org.reflections.ReflectionUtils;
-import org.reflections.Reflections;
-
+import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.core.unittestsupport.AbstractApplyToAllContractTest;
 
 /**
@@ -47,7 +47,10 @@ public abstract class InjectServiceMethodMustBeFinalContractTestAbstract extends
 
     @Override
     protected void applyContractTest(Class<?> entityType) {
-        final Set<Method> injectMethods = ReflectionUtils.getAllMethods(entityType, ReflectionUtils.withPrefix("inject"));
+        final Set<Method> injectMethods = _Reflect.streamAllMethods(entityType)
+        		.filter(withPrefix("inject"))
+        		.collect(toHashSet());
+        
         for (Method injectMethod : injectMethods) {
             try {
                 final String desc = desc(entityType, injectMethod);

@@ -16,20 +16,12 @@
  */
 package org.apache.isis.core.unittestsupport.soap;
 
-import javax.annotation.Nullable;
-
-import com.google.common.base.Function;
-import com.google.common.base.Supplier;
+import java.util.function.Supplier;
 
 public class SoapEndpointSpec {
 
-    static Function<Class<?>, SoapEndpointSpec> asSoapEndpointSpec() {
-        return new Function<Class<?>, SoapEndpointSpec>() {
-            @Nullable @Override
-            public SoapEndpointSpec apply(final Class<?> input) {
-                return new SoapEndpointSpec(input);
-            }
-        };
+    static SoapEndpointSpec asSoapEndpointSpec(final Class<?> input) {
+        return new SoapEndpointSpec(input);
     }
 
     public SoapEndpointSpec(final Class<?> endpointClass) {

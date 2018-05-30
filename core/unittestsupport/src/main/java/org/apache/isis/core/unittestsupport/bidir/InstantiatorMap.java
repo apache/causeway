@@ -16,17 +16,15 @@
  */
 package org.apache.isis.core.unittestsupport.bidir;
 
+import java.util.HashMap;
 import java.util.Map;
-
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
 
 class InstantiatorMap  {
 
     private Map<Class<?>, Instantiator> instantiatorMap;
 
-    public InstantiatorMap(ImmutableMap<Class<?>, Instantiator> instantiatorMap) {
-        this.instantiatorMap = Maps.newHashMap(instantiatorMap);
+    public InstantiatorMap(Map<Class<?>, Instantiator> instantiatorMap) {
+        this.instantiatorMap = new HashMap<>(instantiatorMap);
     }
 
     Instantiator get(Class<?> cls) {

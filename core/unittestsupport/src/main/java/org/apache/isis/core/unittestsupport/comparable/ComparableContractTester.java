@@ -23,8 +23,7 @@ import static org.junit.Assert.assertThat;
 
 import java.util.List;
 
-import com.google.common.collect.Lists;
-
+import org.apache.isis.commons.internal.collections._Lists;
 import org.hamcrest.Matchers;
 
 public class ComparableContractTester<T extends Comparable<T>> {
@@ -73,8 +72,9 @@ public class ComparableContractTester<T extends Comparable<T>> {
     /**
      * Syntax sugar to remove boilerplate from subclasses.
      */
-    public static <E> List<E> listOf(E... elements) {
-        return Lists.newArrayList(elements);
+    @SafeVarargs
+	public static <E> List<E> listOf(E... elements) {
+        return _Lists.of(elements);
     }
 
 

@@ -19,7 +19,8 @@ package org.apache.isis.core.unittestsupport.soap;
 import java.util.List;
 import java.util.Map;
 
-import com.google.common.collect.Maps;
+import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.collections._Maps;
 
 /**
  * Collection of SOAP endpoints that have been published; will automatically assign a unique address to any
@@ -28,7 +29,7 @@ import com.google.common.collect.Maps;
 class PublishedEndpoints {
 
     private int port = SoapEndpointPublishingRule.INITIAL_PORT;
-    private Map<Class<?>, SoapEndpoint> soapEndpointByType = Maps.newLinkedHashMap();
+    private Map<Class<?>, SoapEndpoint> soapEndpointByType = _Maps.newLinkedHashMap();
 
     void publishEndpointIfRequired(final List<SoapEndpointSpec> soapEndpointSpecs) {
         // merge in any new endpoints to static cache
@@ -49,6 +50,6 @@ class PublishedEndpoints {
     }
 
     <T> T getEndpointImplementor(Class<T> endpointClass) {
-        return (T) soapEndpointByType.get(endpointClass).getImplementor();
+        return _Casts.uncheckedCast( soapEndpointByType.get(endpointClass).getImplementor() );
     }
 }

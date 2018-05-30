@@ -21,19 +21,18 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.Writer;
-import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.Map;
+import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
-import com.google.common.base.Objects;
-import com.google.common.collect.MapMaker;
-import com.google.common.io.Resources;
-
+import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.resources._Resource;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
@@ -54,7 +53,7 @@ public class JaxbMatchers {
             protected boolean matchesSafely(final T item) {
                 final String expectedXml = JaxbUtil2.toXml(expected);
                 final String itemXml = JaxbUtil2.toXml(item);
-                return Objects.equal(expectedXml, itemXml);
+                return Objects.equals(expectedXml, itemXml);
             }
 
             @Override
@@ -76,7 +75,7 @@ class JaxbUtil2 {
         Unmarshaller un = null;
         try {
             un = jaxbContextFor(dtoClass).createUnmarshaller();
-            return (T)un.unmarshal(reader);
+            return _Casts.uncheckedCast( un.unmarshal(reader) );
         } catch (JAXBException e) {
             throw new RuntimeException(e);
         }
@@ -87,8 +86,7 @@ class JaxbUtil2 {
             final String resourceName,
             final Charset charset,
             final Class<T> dtoClass) throws IOException {
-        final URL url = Resources.getResource(contextClass, resourceName);
-        final String s = Resources.toString(url, charset);
+        final String s = _Resource.loadAsString(contextClass, resourceName, charset); 
         return fromXml(new StringReader(s), dtoClass);
     }
 
@@ -110,7 +108,7 @@ class JaxbUtil2 {
         }
     }
 
-    private static Map<Class<?>, JAXBContext> jaxbContextByClass = new MapMaker().concurrencyLevel(10).makeMap();
+    private static Map<Class<?>, JAXBContext> jaxbContextByClass = new ConcurrentHashMap<>();
 
     public static <T> JAXBContext jaxbContextFor(final Class<T> dtoClass)  {
         JAXBContext jaxbContext = jaxbContextByClass.get(dtoClass);

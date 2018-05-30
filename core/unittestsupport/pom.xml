@@ -96,26 +96,6 @@
 			<scope>provided</scope>
 		</dependency>
 
-		<!-- TODO [ahuber] work in progress to remove these dependencies -->
-		<dependency>
-			<groupId>org.reflections</groupId>
-			<artifactId>reflections</artifactId>
-			<exclusions>
-				<exclusion>
-					<!-- part of JDK 6+ the version here does not provide getUserData(), 
-						setUserData(), as needed by xmlsnapshot functionality in isis-core-runtime. -->
-					<groupId>xml-apis</groupId>
-					<artifactId>xml-apis</artifactId>
-				</exclusion>
-				<exclusion>
-					<!-- provided by plugins if required  -->
-					<groupId>org.javassist</groupId>
-					<artifactId>javassist</artifactId>
-				</exclusion>
-			</exclusions>
-			<optional>true</optional>
-		</dependency>
-
 	</dependencies>
 
 </project>

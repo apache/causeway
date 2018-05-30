@@ -31,7 +31,8 @@ public final class IsisActions {
         return InjectIntoJMockAction.injectInto();
     }
 
-    public static <T> Action returnEach(final T... values) {
+    @SafeVarargs
+	public static <T> Action returnEach(final T... values) {
         return JMockActions.returnEach(values);
     }
 

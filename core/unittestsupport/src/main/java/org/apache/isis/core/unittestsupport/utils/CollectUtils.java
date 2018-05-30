@@ -16,7 +16,6 @@
  */
 package org.apache.isis.core.unittestsupport.utils;
 
-import java.lang.reflect.Field;
 import java.util.Set;
 
 public class CollectUtils {
@@ -24,6 +23,5 @@ public class CollectUtils {
     public static <T> T firstIn(final Set<T> set) {
         return set.iterator().next();
     }
-
 
 }

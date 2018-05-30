@@ -143,6 +143,16 @@ public final class _Collections {
 		return _Collections_SortedSetOfList.of(list);
 	}
 
+	// -- STREAM TO COMMON COLLECTIONS
+	
+	public static <T> Collector<T, ?, HashSet<T>> toHashSet() {
+		return Collectors.toCollection(HashSet::new);
+	}
+	
+	public static <T> Collector<T, ?, ArrayList<T>> toArrayList() {
+		return Collectors.toCollection(ArrayList::new);
+	}
+	
 	// -- STREAM TO UMODIFIABLE COLLECTION COLLECTORS
 	
 	/**

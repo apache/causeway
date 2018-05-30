@@ -16,11 +16,11 @@
  */
 package org.apache.isis.core.unittestsupport.soap;
 
-import java.util.Arrays;
-import java.util.List;
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.junit.rules.TestRule;
 import org.junit.runner.Description;
@@ -39,26 +39,32 @@ public class SoapEndpointPublishingRule implements TestRule {
 
     private static PublishedEndpoints publishedEndpoints = new PublishedEndpoints();
 
-    private final List<SoapEndpointSpec> soapEndpointSpecs = Lists.newArrayList();
+    private final List<SoapEndpointSpec> soapEndpointSpecs;
 
     public SoapEndpointPublishingRule(final Class<?> endpointClass, final String endpointAddress) {
         this(new SoapEndpointSpec(endpointClass, endpointAddress));
     }
 
     public SoapEndpointPublishingRule(Class<?>... endpointClasses) {
-        this(Arrays.asList(endpointClasses));
+    	this.soapEndpointSpecs = stream(endpointClasses)
+    			.map(SoapEndpointSpec::asSoapEndpointSpec)
+    			.collect(Collectors.toCollection(ArrayList::new));
     }
 
     public SoapEndpointPublishingRule(final List<Class<?>> endpointClasses) {
-        this(Iterables.transform(endpointClasses, SoapEndpointSpec.asSoapEndpointSpec()));
+    	this.soapEndpointSpecs = stream(endpointClasses)
+    			.map(SoapEndpointSpec::asSoapEndpointSpec)
+    			.collect(Collectors.toCollection(ArrayList::new));
     }
 
     public SoapEndpointPublishingRule(SoapEndpointSpec... soapEndpointSpecs) {
-        this(Arrays.asList(soapEndpointSpecs));
+    	this.soapEndpointSpecs = stream(soapEndpointSpecs)
+    			.collect(Collectors.toCollection(ArrayList::new));
     }
 
     public SoapEndpointPublishingRule(final Iterable<SoapEndpointSpec> soapEndpointSpecs) {
-        Iterables.addAll(this.soapEndpointSpecs, soapEndpointSpecs);
+    	this.soapEndpointSpecs = stream(soapEndpointSpecs)
+    			.collect(Collectors.toCollection(ArrayList::new));
     }
 
     @Override
