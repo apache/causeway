@@ -21,6 +21,7 @@ package org.apache.isis.commons.internal.reflection;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
 import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
+import static org.apache.isis.commons.internal.base._With.requires;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Member;
@@ -57,6 +58,7 @@ public final class _Reflect {
 	 * @return
 	 */
 	public static <T extends Member> Predicate<T> withName(final String memberName) {
+		requires(memberName, "memberName");
 		return m -> m != null && memberName.equals(m.getName());
 	}
 
@@ -66,6 +68,7 @@ public final class _Reflect {
 	 * @return
 	 */
 	public static <T extends Member> Predicate<T> withPrefix(final String prefix) {
+		requires(prefix, "prefix");
 		return m -> m != null && m.getName().startsWith(prefix);
 	}
 
@@ -84,6 +87,7 @@ public final class _Reflect {
 	 * @return
 	 */
 	public static <T> Predicate<Field> withTypeAssignableTo(final Class<T> type) {
+		requires(type, "type");
 		return (Field f) -> f != null && type.isAssignableFrom(f.getType());
 	}
 
@@ -136,7 +140,7 @@ public final class _Reflect {
 
 	/**
 	 * Stream all types of given {@code type}, up the super class hierarchy starting with self
-	 * @param type
+	 * @param type (nullable)
 	 * @return
 	 */
 	public static Stream<Class<?>> streamTypeHierarchy(@Nullable Class<?> type) {
