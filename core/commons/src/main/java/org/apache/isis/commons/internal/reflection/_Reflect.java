@@ -132,12 +132,11 @@ public final class _Reflect {
 				.flatMap(_Reflect::streamMethods);
 	}
 
-	// SUPER CLASSES
+	// -- SUPER CLASSES
 
 	/**
 	 * Stream all types of given {@code type}, up the super class hierarchy starting with self
 	 * @param type
-	 * @param includeObject whether to include {@code Object}
 	 * @return
 	 */
 	public static Stream<Class<?>> streamTypeHierarchy(@Nullable Class<?> type) {
