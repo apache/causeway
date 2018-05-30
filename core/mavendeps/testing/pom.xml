@@ -62,10 +62,6 @@
                 </dependency>
 
                 <dependency>
-                    <groupId>org.objenesis</groupId>
-                    <artifactId>objenesis</artifactId>
-                </dependency>
-                <dependency>
                     <groupId>org.hamcrest</groupId>
                     <artifactId>hamcrest-library</artifactId>
                 </dependency>
