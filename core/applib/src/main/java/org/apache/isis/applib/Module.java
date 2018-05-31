@@ -18,14 +18,13 @@
  */
 package org.apache.isis.applib;
 
-import static org.apache.isis.commons.internal.base._With.accept;
-import static org.apache.isis.commons.internal.collections._Lists.newArrayList;
 import static org.apache.isis.commons.internal.collections._Maps.newLinkedHashMap;
 
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
@@ -211,27 +210,30 @@ public interface Module {
         }
 
         static Map<String, String> transitiveIndividualConfigPropsOf(final Module module) {
-        	return accept(newLinkedHashMap(), props->{
-        		transitiveDependenciesOf(module).stream()
-            	.map(Module::getIndividualConfigProps)
-            	.forEach(props::putAll);
-        	});
+        	final Map<String, String> props = newLinkedHashMap();
+        			
+    		transitiveDependenciesOf(module).stream()
+        	.map(Module::getIndividualConfigProps)
+        	.forEach(props::putAll);
+        	
+        	return props;
         }
         
         static Map<String, String> transitiveFallbackConfigPropsOf(final Module module) {
-        	return accept(newLinkedHashMap(), props->{
-        		transitiveDependenciesOf(module).stream()
-            	.map(Module::getFallbackConfigProps)
-            	.forEach(props::putAll);
-        	});
+        	final Map<String, String> props = newLinkedHashMap();
+			
+    		transitiveDependenciesOf(module).stream()
+        	.map(Module::getFallbackConfigProps)
+        	.forEach(props::putAll);
+        	
+        	return props;
         }
 
         static List<PropertyResource> transitivePropertyResourcesOf(final Module module) {
-        	return accept(newArrayList(), resources->{
-        		transitiveDependenciesOf(module).stream()
-            	.map(Module::getPropertyResources)
-            	.forEach(resources::addAll);
-        	});
+        	return transitiveDependenciesOf(module).stream()
+        		.map(Module::getPropertyResources)
+            	.flatMap(List::stream)
+            	.collect(Collectors.toList());
         }
     }
 
