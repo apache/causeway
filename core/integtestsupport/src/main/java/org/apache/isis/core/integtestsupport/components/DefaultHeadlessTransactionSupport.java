@@ -17,25 +17,26 @@
  *  under the License.
  */
 
-package org.apache.isis.core.runtime.headless;
+package org.apache.isis.core.integtestsupport.components;
 
+import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.runtime.headless.HeadlessTransactionSupport;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
-import org.apache.isis.core.runtime.system.transaction.IsisTransaction.State;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
+import org.apache.isis.core.runtime.system.transaction.IsisTransaction.State;
 
-class IsisSystem_Transactions implements TransactionSupportInternal {
+@DomainService(nature=NatureOfService.DOMAIN)
+public class DefaultHeadlessTransactionSupport implements HeadlessTransactionSupport {
 
-	/**
-     * @deprecated - ought to be using regular domain services rather than reaching into the framework
-     */
-    @Deprecated @Override
-    public void beginTran() {
+    @Override
+    public void beginTransaction() {
         final IsisTransactionManager transactionManager = getTransactionManager();
         final IsisTransaction transaction = transactionManager.getCurrentTransaction();
 
@@ -73,10 +74,9 @@ class IsisSystem_Transactions implements TransactionSupportInternal {
     /**
      * Either commits or aborts the transaction, depending on the Transaction's {@link IsisTransaction#getState()}
      *
-     * @deprecated - ought to be using regular domain services rather than reaching into the framework
      */
-    @Deprecated @Override
-    public void endTran() {
+    @Override
+    public void endTransaction() {
         final IsisTransactionManager transactionManager = getTransactionManager();
         final IsisTransaction transaction = transactionManager.getCurrentTransaction();
         if(transaction == null) {

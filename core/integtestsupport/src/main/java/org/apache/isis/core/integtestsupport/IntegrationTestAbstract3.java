@@ -27,6 +27,8 @@ import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.services.jdosupport.IsisJdoSupport;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.integtestsupport.components.DefaultHeadlessTransactionSupport;
+import org.apache.isis.core.runtime.headless.HeadlessTransactionSupport;
 import org.apache.isis.core.runtime.headless.HeadlessWithBootstrappingAbstract;
 import org.apache.isis.core.runtime.headless.IsisSystem;
 import org.apache.isis.core.runtime.headless.logging.LogConfig;
@@ -69,7 +71,8 @@ public abstract class IntegrationTestAbstract3 extends HeadlessWithBootstrapping
                     // Instead we expect it to be bootstrapped via @Before
                     try {
                         base.evaluate();
-                        IsisSystem.get().getTransactionSupportInternal().endTran();
+                        final IsisSystem isft = IsisSystem.get();
+                        isft.getService(HeadlessTransactionSupport.class).endTransaction();
                     } catch(final Throwable e) {
                         // determine if underlying cause is an applib-defined exception,
                         final RecoverableException recoverableException =
@@ -153,10 +156,17 @@ public abstract class IntegrationTestAbstract3 extends HeadlessWithBootstrapping
     protected IntegrationTestAbstract3(
             final LogConfig logConfig,
             final Module module) {
-        super(logConfig, module);
+        super(logConfig, addHeadlessTransactionSupport(module));
     }
 
-    @Override
+    //[ahuber] hooks into the bootstrapping, such that the 
+    // DefaultHeadlessTransactionSupport is registered as an additional service
+    private static Module addHeadlessTransactionSupport(Module module) {
+    	module.getAdditionalServices().add(DefaultHeadlessTransactionSupport.class);
+		return module;
+	}
+
+	@Override
     @Before
     public void bootstrapAndSetupIfRequired() {
 

@@ -20,20 +20,19 @@ package org.apache.isis.core.runtime.headless;
 
 import java.io.PrintStream;
 
-import com.google.common.base.Strings;
-
-import org.apache.log4j.PropertyConfigurator;
-import org.joda.time.LocalDate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.slf4j.event.Level;
-
 import org.apache.isis.applib.Module;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.runtime.headless.logging.LogConfig;
 import org.apache.isis.core.runtime.headless.logging.LogStream;
+import org.apache.log4j.PropertyConfigurator;
+import org.joda.time.LocalDate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.event.Level;
+
+import com.google.common.base.Strings;
 
 /**
  * Provides headless access to the system, first bootstrapping the system if required.
@@ -116,7 +115,7 @@ public abstract class HeadlessWithBootstrappingAbstract extends HeadlessAbstract
     }
 
     private void beginTransaction() {
-        IsisSystem.get().getTransactionSupportInternal().beginTran();
+        IsisSystem.get().getService(HeadlessTransactionSupport.class).beginTransaction();
     }
 
     protected void tearDownAllModules() {

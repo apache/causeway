@@ -20,11 +20,10 @@
 package org.apache.isis.core.runtime.headless;
 
 /**
- * [ahuber] temporal interface to ease refactoring and finally removal
- * @deprecated ought to be using regular domain services rather than reaching into the framework
+ * Extends transaction management as required by integration tests.
+ * 
  */
-@Deprecated
-public interface TransactionSupportInternal {
-	void beginTran();
-	void endTran();
+public interface HeadlessTransactionSupport {
+	void beginTransaction();
+	void endTransaction();
 }

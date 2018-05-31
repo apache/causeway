@@ -72,10 +72,8 @@ public class IsisSystem {
     public static void set(IsisSystem isft) {
         ISFT.set(isft);
     }
-    
 
     // -- Builder
-
 
     public static class Builder<T extends Builder<T, S>, S extends IsisSystem> {
 
@@ -298,14 +296,5 @@ public class IsisSystem {
         final ServicesInjector servicesInjector = isisSessionFactory.getServicesInjector();
         return servicesInjector.lookupServiceElseFail(serviceClass);
     }
-
-    // -- Mixin for deprecated TransactionSupportInternal ([ahuber] refactored out of this class to ease removal)
-    
-    private final TransactionSupportInternal transactionSupportInternal = new IsisSystem_Transactions(); 
-    
-	public TransactionSupportInternal getTransactionSupportInternal() {
-		return transactionSupportInternal;
-	}
-    
 
 }
