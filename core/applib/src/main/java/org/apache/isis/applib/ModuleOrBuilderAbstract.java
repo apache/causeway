@@ -26,6 +26,7 @@ import java.util.Set;
 
 import javax.xml.bind.annotation.XmlTransient;
 
+import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
@@ -42,6 +43,7 @@ abstract class ModuleOrBuilderAbstract<B extends ModuleOrBuilderAbstract<B>> {
     final Set<Class<?>> additionalServices  = _Sets.newLinkedHashSet();
 
     final Map<String,String> individualConfigProps = _Maps.newLinkedHashMap();
+    final Map<String,String> fallbackConfigProps = _Maps.newLinkedHashMap();
     final List<PropertyResource> propertyResources = _Lists.newArrayList();
 
     ModuleOrBuilderAbstract() {}
@@ -68,16 +70,16 @@ abstract class ModuleOrBuilderAbstract<B extends ModuleOrBuilderAbstract<B>> {
         withAdditionalServices(Module.Util.transitiveAdditionalServicesOf(module));
         withConfigurationPropertyResources(Module.Util.transitivePropertyResourcesOf(module));
         withConfigurationProperties(Module.Util.transitiveIndividualConfigPropsOf(module));
+        withFallbackConfigurationProperties(Module.Util.transitiveFallbackConfigPropsOf(module));
     }
 
-    @SuppressWarnings("unchecked") //[ahuber] it's safe to assume correct type casting here
     private static Class<? extends Module>[] asClasses(final List<Module> dependencies) {
         final List<Class<? extends Module>> list = new ArrayList<>();
         for (Module dependency : dependencies) {
             Class<? extends Module> aClass = dependency.getClass();
             list.add(aClass);
         }
-        return list.toArray(new Class[] {});
+        return _Casts.uncheckedCast( list.toArray(_Constants.emptyClasses) );
     }
 
     public B withAdditionalModules(final Class<?>... modules) {
@@ -105,9 +107,12 @@ abstract class ModuleOrBuilderAbstract<B extends ModuleOrBuilderAbstract<B>> {
     }
 
     public B withConfigurationProperties(final Map<String,String> configurationProperties) {
-        for (Map.Entry<String, String> keyValue : configurationProperties.entrySet()) {
-            withConfigurationProperty(keyValue.getKey(), keyValue.getValue());
-        }
+    	configurationProperties.forEach(this::withConfigurationProperty);
+        return self();
+    }
+    
+    public B withFallbackConfigurationProperties(final Map<String,String> fallbackConfigurationProperties) {
+    	fallbackConfigurationProperties.forEach(this::withFallbackConfigurationProperty);
         return self();
     }
 
@@ -151,9 +156,19 @@ abstract class ModuleOrBuilderAbstract<B extends ModuleOrBuilderAbstract<B>> {
         return self();
     }
 
-    @XmlTransient
+    @XmlTransient 
     public Map<String,String> getIndividualConfigProps() {
         return individualConfigProps;
+    }
+    
+    public B withFallbackConfigurationProperty(final String key, final String value) {
+    	fallbackConfigProps.put(key, value);
+        return self();
+    }
+    
+    @XmlTransient
+    public Map<String,String> getFallbackConfigProps() {
+        return fallbackConfigProps;
     }
 
     @XmlTransient

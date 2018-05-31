@@ -18,6 +18,10 @@
  */
 package org.apache.isis.applib;
 
+import static org.apache.isis.commons.internal.base._With.accept;
+import static org.apache.isis.commons.internal.collections._Lists.newArrayList;
+import static org.apache.isis.commons.internal.collections._Maps.newLinkedHashMap;
+
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +30,6 @@ import java.util.Set;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Sets;
 
 /**
@@ -105,6 +108,12 @@ public interface Module {
      * Optionally each module can define additional configuration properties.
      */
     Map<String,String> getIndividualConfigProps();
+    
+    /**
+     * Optionally each module can define fallback configuration properties, 
+     * such that if not configured elsewhere provides values to fallback to.
+     */
+    Map<String, String> getFallbackConfigProps();
 
     /**
      * Optionally each module can define additional configuration properties, specified in terms of
@@ -202,24 +211,27 @@ public interface Module {
         }
 
         static Map<String, String> transitiveIndividualConfigPropsOf(final Module module) {
-            final Map<String,String> transitiveIndividualConfigProps = _Maps.newLinkedHashMap();
-
-            final List<Module> transitiveDependencies = transitiveDependenciesOf(module);
-            for (Module transitiveDependency : transitiveDependencies) {
-                transitiveIndividualConfigProps.putAll(transitiveDependency.getIndividualConfigProps());
-            }
-            return transitiveIndividualConfigProps;
+        	return accept(newLinkedHashMap(), props->{
+        		transitiveDependenciesOf(module).stream()
+            	.map(Module::getIndividualConfigProps)
+            	.forEach(props::putAll);
+        	});
+        }
+        
+        static Map<String, String> transitiveFallbackConfigPropsOf(final Module module) {
+        	return accept(newLinkedHashMap(), props->{
+        		transitiveDependenciesOf(module).stream()
+            	.map(Module::getFallbackConfigProps)
+            	.forEach(props::putAll);
+        	});
         }
 
         static List<PropertyResource> transitivePropertyResourcesOf(final Module module) {
-            final List<PropertyResource> transitivePropertyResources = _Lists.newArrayList();
-
-            final List<Module> transitiveDependencies = transitiveDependenciesOf(module);
-            for (Module transitiveDependency : transitiveDependencies) {
-                transitivePropertyResources.addAll(transitiveDependency.getPropertyResources());
-            }
-
-            return transitivePropertyResources;
+        	return accept(newArrayList(), resources->{
+        		transitiveDependenciesOf(module).stream()
+            	.map(Module::getPropertyResources)
+            	.forEach(resources::addAll);
+        	});
         }
     }
 

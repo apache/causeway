@@ -54,7 +54,9 @@ public abstract class AppManifestAbstract implements AppManifest {
 
         // note uses this.fixtures, so must come afterwards...
         this.configurationProperties = createConfigurationProperties(
-                builder.getAllPropertyResources(), builder.getAllIndividualConfigProps(),
+                builder.getAllPropertyResources(), 
+                builder.getAllIndividualConfigProps(),
+                builder.getAllFallbackConfigProps(),
                 this.fixtureClasses);
     }
 
@@ -96,17 +98,21 @@ public abstract class AppManifestAbstract implements AppManifest {
     private Map<String, String> createConfigurationProperties(
             final List<PropertyResource> propertyResources,
             final Map<String,String> individualConfigProps,
+            final Map<String,String> fallbackConfigProps,
             final List<Class<? extends FixtureScript>> fixtures) {
         final Map<String, String> props = _Maps.newHashMap();
         for (PropertyResource propertyResource : propertyResources) {
             propertyResource.loadPropsInto(props);
         }
-        for (final Map.Entry<String,String> individualConfigProp : individualConfigProps.entrySet()) {
-            props.put(individualConfigProp.getKey(), individualConfigProp.getValue());
-        }
+        
+        individualConfigProps.forEach(props::put);
+        
         if(!fixtures.isEmpty()) {
-            props.put("isis.persistor.datanucleus.install-fixtures","true");
+            props.put("isis.persistor.datanucleus.install-fixtures", "true");
         }
+        
+        fallbackConfigProps.forEach((k, v)->props.computeIfAbsent(k, __->v));
+        
         overrideConfigurationProperties(props);
         return props;
     }
@@ -248,6 +254,10 @@ public abstract class AppManifestAbstract implements AppManifest {
 
         Map<String,String> getAllIndividualConfigProps() {
             return getIndividualConfigProps();
+        }
+        
+        Map<String,String> getAllFallbackConfigProps() {
+            return getFallbackConfigProps();
         }
 
         public abstract AppManifest build();

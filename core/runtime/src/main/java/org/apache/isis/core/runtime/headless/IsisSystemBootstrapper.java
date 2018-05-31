@@ -158,7 +158,7 @@ public class IsisSystemBootstrapper {
         // used to bootstrap the system onto thread-local
         IsisSystem.set(isft);
         isftAppManifest.set(appManifest2);
-
+        
         return isft;
     }
 

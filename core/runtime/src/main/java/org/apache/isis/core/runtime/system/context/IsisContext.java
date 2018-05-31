@@ -115,7 +115,15 @@ public interface IsisContext {
     
     public static void dumpConfig() {
 
-		final Map<String, String> map = new TreeMap<>(getConfiguration().asMap());
+    	final IsisConfiguration configuration;
+    	try {
+    		configuration = getConfiguration();	
+    	} catch (Exception e) {
+    		// ignore
+    		return;
+    	}
+    	
+		final Map<String, String> map = new TreeMap<>(configuration.asMap());
 
 		System.out.println("=============================================");
 		System.out.println("=                ISIS 2.0.0                 =");

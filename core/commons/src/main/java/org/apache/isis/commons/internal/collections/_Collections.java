@@ -143,7 +143,7 @@ public final class _Collections {
 		return _Collections_SortedSetOfList.of(list);
 	}
 
-	// -- STREAM TO COMMON COLLECTIONS
+	// -- COMMON COLLECTORS
 	
 	public static <T> Collector<T, ?, HashSet<T>> toHashSet() {
 		return Collectors.toCollection(HashSet::new);

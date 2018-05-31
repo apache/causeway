@@ -285,7 +285,7 @@ public class IsisSystem {
     }
 
     public void closeSession() throws Exception {
-        if(isisSessionFactory.inSession()) {
+        if(isisSessionFactory!=null && isisSessionFactory.inSession()) {
             isisSessionFactory.closeSession();
         }
     }

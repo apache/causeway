@@ -53,16 +53,17 @@ class Util {
 			return this;
 		}
 		/**
-		 * Adds default config values for integration tests, without overriding any existing keys.
+		 * Adds default fallback configuration values for integration tests, 
+		 * without overriding any existing key value pairs.
 		 */
-		public ModuleBuilder withIntegrationTestConfigIfAbsent() {
+		public ModuleBuilder withIntegrationTestConfigFallback() {
 			final Map<String, String> integrationTestDefaultConfig = new HashMap<>();
 			AppManifest.Util.withJavaxJdoRunInMemoryProperties(integrationTestDefaultConfig);
 			AppManifest.Util.withDataNucleusProperties(integrationTestDefaultConfig);
 			AppManifest.Util.withIsisIntegTestProperties(integrationTestDefaultConfig);
 			
 			integrationTestDefaultConfig.forEach((k, v)->{
-				module.getIndividualConfigProps().computeIfAbsent(k, __->v);
+				module.getFallbackConfigProps().computeIfAbsent(k, __->v);
 			});
 			return this;
 		}

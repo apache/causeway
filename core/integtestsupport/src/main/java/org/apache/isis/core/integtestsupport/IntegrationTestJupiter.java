@@ -79,7 +79,7 @@ public abstract class IntegrationTestJupiter extends HeadlessWithBootstrappingAb
 		super(logConfig, 
 				Util.moduleBuilder(module)
 				.withHeadlessTransactionSupport()
-				.withIntegrationTestConfigIfAbsent()
+				.withIntegrationTestConfigFallback()
 				.build() );
 	}
 
