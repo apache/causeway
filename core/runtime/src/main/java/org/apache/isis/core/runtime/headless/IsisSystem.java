@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.runtime.headless;
 
+import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
+
 import java.util.Set;
 
 import org.apache.isis.applib.AppManifest;
@@ -95,22 +97,22 @@ public class IsisSystem {
 
         public T with(IsisConfiguration configuration) {
             this.configuration = (IsisConfigurationDefault) configuration;
-            return (T)this;
+            return uncheckedCast(this);
         }
 
         public T with(AuthenticationRequest authenticationRequest) {
             this.authenticationRequest = authenticationRequest;
-            return (T)this;
+            return uncheckedCast(this);
         }
 
         public T with(AppManifest appManifest) {
             this.appManifestIfAny = appManifest;
-            return (T)this;
+            return uncheckedCast(this);
         }
 
         public T withLoggingAt(org.apache.log4j.Level level) {
             this.level = level;
-            return (T)this;
+            return uncheckedCast(this);
         }
 
         public S build() {
@@ -119,10 +121,10 @@ public class IsisSystem {
                             appManifestIfAny,
                             configuration,
                             authenticationRequest);
-            return (S)configure(isisSystem);
+            return configure(uncheckedCast(isisSystem));
         }
 
-        protected <T extends IsisSystem> T configure(final T isisSystem) {
+        protected S configure(final S isisSystem) {
             if(level != null) {
                 isisSystem.setLevel(level);
             }
@@ -151,11 +153,9 @@ public class IsisSystem {
 
     }
 
-    public static Builder builder() {
-        return new Builder();
+    public static <T extends Builder<T, S>, S extends IsisSystem> Builder<T, S> builder() {
+        return new Builder<>();
     }
-
-    
 
     // -- constructor, fields
 
