@@ -18,16 +18,8 @@
  */
 package org.apache.isis.core.integtestsupport;
 
-import java.util.List;
-
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.Module;
-import org.apache.isis.applib.NonRecoverableException;
-import org.apache.isis.applib.RecoverableException;
-import org.apache.isis.applib.services.jdosupport.IsisJdoSupport;
-import org.apache.isis.applib.services.xactn.TransactionService;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.integtestsupport.components.DefaultHeadlessTransactionSupport;
 import org.apache.isis.core.runtime.headless.HeadlessTransactionSupport;
 import org.apache.isis.core.runtime.headless.HeadlessWithBootstrappingAbstract;
 import org.apache.isis.core.runtime.headless.IsisSystem;
@@ -73,81 +65,14 @@ public abstract class IntegrationTestAbstract3 extends HeadlessWithBootstrapping
                         base.evaluate();
                         final IsisSystem isft = IsisSystem.get();
                         isft.getService(HeadlessTransactionSupport.class).endTransaction();
-                    } catch(final Throwable e) {
-                        // determine if underlying cause is an applib-defined exception,
-                        final RecoverableException recoverableException =
-                                determineIfRecoverableException(e);
-                        final NonRecoverableException nonRecoverableException =
-                                determineIfNonRecoverableException(e);
-
-                        if(recoverableException != null) {
-                            try {
-                                final IsisSystem isft = IsisSystem.get();
-                                isft.getService(TransactionService.class).flushTransaction(); // don't care if npe
-                                isft.getService(IsisJdoSupport.class).getJdoPersistenceManager().flush();
-                            } catch (Exception ignore) {
-                                // ignore
-                            }
-                        }
-                        // attempt to close this
-                        try {
-                            final IsisSystem isft = IsisSystem.getElseNull();
-                            isft.closeSession(); // don't care if npe
-                        } catch(Exception ignore) {
-                            // ignore
-                        }
-
-                        // attempt to start another
-                        try {
-                            final IsisSystem isft = IsisSystem.getElseNull();
-                            isft.openSession(); // don't care if npe
-                        } catch(Exception ignore) {
-                            // ignore
-                        }
-
-
-                        // if underlying cause is an applib-defined, then
-                        // throw that rather than Isis' wrapper exception
-                        if(recoverableException != null) {
-                            throw recoverableException;
-                        }
-                        if(nonRecoverableException != null) {
-                            throw nonRecoverableException;
-                        }
-
-                        // report on the error that caused
-                        // a problem for *this* test
-                        throw e;
+                    } catch(final Exception e) {
+                    	Util.handleTransactionContextException(e);
                     }
                 }
 
-                NonRecoverableException determineIfNonRecoverableException(final Throwable e) {
-                    NonRecoverableException nonRecoverableException = null;
-                    final List<Throwable> causalChain2 = _Exceptions.getCausalChain(e);
-                    for (final Throwable cause : causalChain2) {
-                        if(cause instanceof NonRecoverableException) {
-                            nonRecoverableException = (NonRecoverableException) cause;
-                            break;
-                        }
-                    }
-                    return nonRecoverableException;
-                }
-
-                RecoverableException determineIfRecoverableException(final Throwable e) {
-                    RecoverableException recoverableException = null;
-                    final List<Throwable> causalChain = _Exceptions.getCausalChain(e);
-                    for (final Throwable cause : causalChain) {
-                        if(cause instanceof RecoverableException) {
-                            recoverableException = (RecoverableException) cause;
-                            break;
-                        }
-                    }
-                    return recoverableException;
-                }
             };
         }
     }
-
 
     protected IntegrationTestAbstract3(final Module module) {
         this(new LogConfig(Level.INFO), module);
@@ -156,15 +81,8 @@ public abstract class IntegrationTestAbstract3 extends HeadlessWithBootstrapping
     protected IntegrationTestAbstract3(
             final LogConfig logConfig,
             final Module module) {
-        super(logConfig, addHeadlessTransactionSupport(module));
+        super(logConfig, Util.addHeadlessTransactionSupport(module));
     }
-
-    //[ahuber] hooks into the bootstrapping, such that the 
-    // DefaultHeadlessTransactionSupport is registered as an additional service
-    private static Module addHeadlessTransactionSupport(Module module) {
-    	module.getAdditionalServices().add(DefaultHeadlessTransactionSupport.class);
-		return module;
-	}
 
 	@Override
     @Before
