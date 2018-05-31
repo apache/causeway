@@ -116,8 +116,7 @@ public abstract class HeadlessWithBootstrappingAbstract extends HeadlessAbstract
     }
 
     private void beginTransaction() {
-        final IsisSystem isft = IsisSystem.get();
-        isft.beginTran();
+        IsisSystem.get().getTransactionSupportInternal().beginTran();
     }
 
     protected void tearDownAllModules() {

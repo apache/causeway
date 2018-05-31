@@ -45,12 +45,12 @@
 			<artifactId>isis-core-integtestsupport</artifactId>
 			<scope>compile</scope>
 		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-integtestsupport</artifactId>
-			<type>test-jar</type>
-			<scope>test</scope>
-		</dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.apache.isis.core</groupId> -->
+<!-- 			<artifactId>isis-core-integtestsupport</artifactId> -->
+<!-- 			<type>test-jar</type> -->
+<!-- 			<scope>test</scope> -->
+<!-- 		</dependency> -->
     
 		<!-- JDO API (non transient, provided by plugin) -->
         <dependency>

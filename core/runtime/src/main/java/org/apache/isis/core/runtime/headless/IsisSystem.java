@@ -25,9 +25,6 @@ import java.util.Set;
 
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.fixtures.FixtureClock;
-import org.apache.isis.applib.fixtures.InstallableFixture;
-import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
@@ -36,16 +33,11 @@ import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
-import org.apache.isis.core.runtime.fixtures.FixturesInstallerDelegate;
 import org.apache.isis.core.runtime.headless.auth.AuthenticationRequestNameOnly;
 import org.apache.isis.core.runtime.logging.IsisLoggingConfigurer;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactoryBuilder;
-import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
-import org.apache.isis.core.runtime.system.transaction.IsisTransaction.State;
-import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.systemusinginstallers.IsisComponentProvider;
 
 import com.google.common.base.Joiner;
@@ -261,10 +253,6 @@ public class IsisSystem {
         openSession();
     }
 
-//    public DomainObjectContainer getContainer() {
-//        return getService(DomainObjectContainer.class);
-//    }
-
     // -- isisSystem (populated during setup)
     protected IsisSessionFactory isisSessionFactory;
 
@@ -281,8 +269,6 @@ public class IsisSystem {
     public AuthenticationSession getAuthenticationSession() {
         return authenticationSession;
     }
-
-    
 
     // -- openSession, closeSession, nextSession
 
@@ -306,134 +292,6 @@ public class IsisSystem {
         }
     }
 
-    
-
-    // -- beginTran, endTran, commitTran, abortTran
-
-    /**
-     * @deprecated - ought to be using regular domain services rather than reaching into the framework
-     */
-    @Deprecated
-    public void beginTran() {
-        final IsisTransactionManager transactionManager = getTransactionManager();
-        final IsisTransaction transaction = transactionManager.getCurrentTransaction();
-
-        if(transaction == null) {
-            startTransactionForUser(transactionManager);
-            return;
-        }
-
-        final State state = transaction.getState();
-        switch(state) {
-            case COMMITTED:
-            case ABORTED:
-                startTransactionForUser(transactionManager);
-                break;
-            case IN_PROGRESS:
-                // nothing to do
-                break;
-            case MUST_ABORT:
-                throw new AssertionError("Transaction is in state of '" + state + "'");
-            default:
-                throw new AssertionError("Unknown transaction state '" + state + "'");
-        }
-
-    }
-
-    private void startTransactionForUser(IsisTransactionManager transactionManager) {
-        transactionManager.startTransaction();
-
-        // specify that this command (if any) is being executed by a 'USER'
-        final CommandContext commandContext = getService(CommandContext.class);
-        Command command = commandContext.getCommand();
-        command.setExecutor(Command.Executor.USER);
-    }
-
-    /**
-     * Either commits or aborts the transaction, depending on the Transaction's {@link IsisTransaction#getState()}
-     *
-     * @deprecated - ought to be using regular domain services rather than reaching into the framework
-     */
-    @Deprecated
-    public void endTran() {
-        final IsisTransactionManager transactionManager = getTransactionManager();
-        final IsisTransaction transaction = transactionManager.getCurrentTransaction();
-        if(transaction == null) {
-            throw new AssertionError("No transaction exists");
-        }
-
-        transactionManager.endTransaction();
-
-        final State state = transaction.getState();
-        switch(state) {
-            case COMMITTED:
-                break;
-            case ABORTED:
-                break;
-            case IN_PROGRESS:
-                throw new AssertionError("Transaction is still in state of '" + state + "'");
-            case MUST_ABORT:
-                throw new AssertionError("Transaction is still in state of '" + state + "'");
-            default:
-                throw new AssertionError("Unknown transaction state '" + state + "'");
-        }
-    }
-
-    /**
-     * Commits the transaction.
-     *
-     * @deprecated - ought to be using regular domain services rather than reaching into the framework
-     */
-    @Deprecated
-    public void commitTran() {
-        final IsisTransactionManager transactionManager = getTransactionManager();
-        final IsisTransaction transaction = transactionManager.getCurrentTransaction();
-        if(transaction == null) {
-            throw new AssertionError("No transaction exists");
-        }
-        final State state = transaction.getState();
-        switch(state) {
-            case COMMITTED:
-            case ABORTED:
-            case MUST_ABORT:
-                throw new AssertionError("Transaction is in state of '" + state + "'");
-            case IN_PROGRESS:
-                transactionManager.endTransaction();
-                break;
-            default:
-                throw new AssertionError("Unknown transaction state '" + state + "'");
-        }
-    }
-
-    /**
-     * Aborts the transaction.
-     *
-     * @deprecated - ought to be using regular domain services rather than reaching into the framework
-     */
-    @Deprecated
-    public void abortTran() {
-        final IsisTransactionManager transactionManager = getTransactionManager();
-        final IsisTransaction transaction = transactionManager.getCurrentTransaction();
-        if(transaction == null) {
-            throw new AssertionError("No transaction exists");
-        }
-        final State state = transaction.getState();
-        switch(state) {
-            case ABORTED:
-                break;
-            case COMMITTED:
-                throw new AssertionError("Transaction is in state of '" + state + "'");
-            case MUST_ABORT:
-            case IN_PROGRESS:
-                transactionManager.abortTransaction();
-                break;
-            default:
-                throw new AssertionError("Unknown transaction state '" + state + "'");
-        }
-    }
-
-    
-
     // -- getService
 
     public <C> C getService(Class<C> serviceClass) {
@@ -441,48 +299,13 @@ public class IsisSystem {
         return servicesInjector.lookupServiceElseFail(serviceClass);
     }
 
+    // -- Mixin for deprecated TransactionSupportInternal ([ahuber] refactored out of this class to ease removal)
     
-
-    // -- Fixture management (for each test, rather than at bootstrap)
-
-    /**
-     * @deprecated - use {@link org.apache.isis.applib.fixturescripts.FixtureScripts} domain service instead.
-     */
-    @Deprecated
-    public void installFixtures(final InstallableFixture... fixtures) {
-        final FixturesInstallerDelegate fid = new FixturesInstallerDelegate(isisSessionFactory);
-        for (final InstallableFixture fixture : fixtures) {
-            fid.addFixture(fixture);
-        }
-        fid.installFixtures();
-
-        // ensure that tests are performed in separate xactn to any fixture setup.
-        final IsisTransactionManager transactionManager = getTransactionManager();
-        final IsisTransaction transaction = transactionManager.getCurrentTransaction();
-        final State transactionState = transaction.getState();
-        if(transactionState.canCommit()) {
-            commitTran();
-            try {
-                nextSession();
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-            beginTran();
-        }
-    }
-
+    private final TransactionSupportInternal transactionSupportInternal = new IsisSystem_Transactions(); 
     
-
-    // -- Dependencies
-
-    private IsisTransactionManager getTransactionManager() {
-        return getPersistenceSession().getTransactionManager();
-    }
-    
-    private PersistenceSession getPersistenceSession() {
-        return isisSessionFactory.getCurrentSession().getPersistenceSession();
-    }
-
+	public TransactionSupportInternal getTransactionSupportInternal() {
+		return transactionSupportInternal;
+	}
     
 
 }

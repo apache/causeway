@@ -37,8 +37,6 @@ import org.junit.rules.ExpectedException;
 import org.junit.rules.MethodRule;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.slf4j.event.Level;
 
 /**
@@ -46,7 +44,7 @@ import org.slf4j.event.Level;
  */
 public abstract class IntegrationTestAbstract3 extends HeadlessWithBootstrappingAbstract {
 
-    private static final Logger LOG = LoggerFactory.getLogger(IntegrationTestAbstract3.class);
+    //private static final Logger LOG = LoggerFactory.getLogger(IntegrationTestAbstract3.class);
 
     @Rule
     public ExpectedException expectedExceptions = ExpectedException.none();
@@ -71,8 +69,7 @@ public abstract class IntegrationTestAbstract3 extends HeadlessWithBootstrapping
                     // Instead we expect it to be bootstrapped via @Before
                     try {
                         base.evaluate();
-                        final IsisSystem isft = IsisSystem.get();
-                        isft.endTran();
+                        IsisSystem.get().getTransactionSupportInternal().endTran();
                     } catch(final Throwable e) {
                         // determine if underlying cause is an applib-defined exception,
                         final RecoverableException recoverableException =
