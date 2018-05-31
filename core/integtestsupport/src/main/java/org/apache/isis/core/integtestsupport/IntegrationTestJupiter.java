@@ -39,7 +39,7 @@ import org.slf4j.event.Level;
 @ExtendWith(IntegrationTestJupiter.HeadlessTransactionRule.class)
 public abstract class IntegrationTestJupiter extends HeadlessWithBootstrappingAbstract {
 
-	private static class HeadlessTransactionRule implements AfterEachCallback, BeforeEachCallback {
+	public static class HeadlessTransactionRule implements AfterEachCallback, BeforeEachCallback {
 
 		@Override
 		public void beforeEach(ExtensionContext context) throws Exception {
