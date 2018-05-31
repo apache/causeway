@@ -26,6 +26,7 @@ import java.util.Set;
 
 import javax.xml.bind.annotation.XmlTransient;
 
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Sets;
@@ -162,9 +163,8 @@ abstract class ModuleOrBuilderAbstract<B extends ModuleOrBuilderAbstract<B>> {
     
     // -- HELPER
     
-    @SuppressWarnings("unchecked") //[ahuber] it's safe to assume this object is an instance of B
 	protected B self() {
-    	return (B) this;
+    	return _Casts.uncheckedCast(this);
     }
 
 }

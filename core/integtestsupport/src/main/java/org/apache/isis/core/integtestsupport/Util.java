@@ -19,8 +19,11 @@
 
 package org.apache.isis.core.integtestsupport;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.Module;
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.RecoverableException;
@@ -31,86 +34,120 @@ import org.apache.isis.core.integtestsupport.components.DefaultHeadlessTransacti
 import org.apache.isis.core.runtime.headless.IsisSystem;
 
 class Util {
+
+	// -- MODULE BUILDER
 	
-	//[ahuber] hooks into the bootstrapping, such that the 
-    // DefaultHeadlessTransactionSupport is registered as an additional service
-	public static Module addHeadlessTransactionSupport(Module module) {
-    	module.getAdditionalServices().add(DefaultHeadlessTransactionSupport.class);
-		return module;
+	public static class ModuleBuilder {
+		final Module module;
+		private ModuleBuilder(Module module) {
+			this.module = module;
+		}
+		public Module build() {
+			return module;
+		}
+		/**
+		 * Registers DefaultHeadlessTransactionSupport as an additional service.
+		 */
+		public ModuleBuilder withHeadlessTransactionSupport() {
+			module.getAdditionalServices().add(DefaultHeadlessTransactionSupport.class);
+			return this;
+		}
+		/**
+		 * Adds default config values for integration tests, without overriding any existing keys.
+		 */
+		public ModuleBuilder withIntegrationTestConfigIfAbsent() {
+			final Map<String, String> integrationTestDefaultConfig = new HashMap<>();
+			AppManifest.Util.withJavaxJdoRunInMemoryProperties(integrationTestDefaultConfig);
+			AppManifest.Util.withDataNucleusProperties(integrationTestDefaultConfig);
+			AppManifest.Util.withIsisIntegTestProperties(integrationTestDefaultConfig);
+			
+			integrationTestDefaultConfig.forEach((k, v)->{
+				module.getIndividualConfigProps().computeIfAbsent(k, __->v);
+			});
+			return this;
+		}
 	}
+	
+	public static ModuleBuilder moduleBuilder(Module module) {
+		return new ModuleBuilder(module);
+	}
+	
+	// -- HANDLING EXCEPTIONS
 
 	public static void handleTransactionContextException(Exception e) throws Exception {
 		// determine if underlying cause is an applib-defined exception,
-        final RecoverableException recoverableException =
-                determineIfRecoverableException(e);
-        final NonRecoverableException nonRecoverableException =
-                determineIfNonRecoverableException(e);
+		final RecoverableException recoverableException =
+				determineIfRecoverableException(e);
+		final NonRecoverableException nonRecoverableException =
+				determineIfNonRecoverableException(e);
 
-        if(recoverableException != null) {
-            try {
-                final IsisSystem isft = IsisSystem.get();
-                isft.getService(TransactionService.class).flushTransaction(); // don't care if npe
-                isft.getService(IsisJdoSupport.class).getJdoPersistenceManager().flush();
-            } catch (Exception ignore) {
-                // ignore
-            }
-        }
-        // attempt to close this
-        try {
-            final IsisSystem isft = IsisSystem.getElseNull();
-            isft.closeSession(); // don't care if npe
-        } catch(Exception ignore) {
-            // ignore
-        }
+		if(recoverableException != null) {
+			try {
+				final IsisSystem isft = IsisSystem.get();
+				isft.getService(TransactionService.class).flushTransaction(); // don't care if npe
+				isft.getService(IsisJdoSupport.class).getJdoPersistenceManager().flush();
+			} catch (Exception ignore) {
+				// ignore
+			}
+		}
+		// attempt to close this
+		try {
+			final IsisSystem isft = IsisSystem.getElseNull();
+			isft.closeSession(); // don't care if npe
+		} catch(Exception ignore) {
+			// ignore
+		}
 
-        // attempt to start another
-        try {
-            final IsisSystem isft = IsisSystem.getElseNull();
-            isft.openSession(); // don't care if npe
-        } catch(Exception ignore) {
-            // ignore
-        }
+		// attempt to start another
+		try {
+			final IsisSystem isft = IsisSystem.getElseNull();
+			isft.openSession(); // don't care if npe
+		} catch(Exception ignore) {
+			// ignore
+		}
 
 
-        // if underlying cause is an applib-defined, then
-        // throw that rather than Isis' wrapper exception
-        if(recoverableException != null) {
-            throw recoverableException;
-        }
-        if(nonRecoverableException != null) {
-            throw nonRecoverableException;
-        }
+		// if underlying cause is an applib-defined, then
+		// throw that rather than Isis' wrapper exception
+		if(recoverableException != null) {
+			throw recoverableException;
+		}
+		if(nonRecoverableException != null) {
+			throw nonRecoverableException;
+		}
 
-        // report on the error that caused
-        // a problem for *this* test
-        throw e;
+		// report on the error that caused
+		// a problem for *this* test
+		throw e;
 	}
 
-	 private static NonRecoverableException determineIfNonRecoverableException(final Exception e) {
-         NonRecoverableException nonRecoverableException = null;
-         final List<Throwable> causalChain2 = _Exceptions.getCausalChain(e);
-         for (final Throwable cause : causalChain2) {
-             if(cause instanceof NonRecoverableException) {
-                 nonRecoverableException = (NonRecoverableException) cause;
-                 break;
-             }
-         }
-         return nonRecoverableException;
-     }
-
-     private static RecoverableException determineIfRecoverableException(final Exception e) {
-         RecoverableException recoverableException = null;
-         final List<Throwable> causalChain = _Exceptions.getCausalChain(e);
-         for (final Throwable cause : causalChain) {
-             if(cause instanceof RecoverableException) {
-                 recoverableException = (RecoverableException) cause;
-                 break;
-             }
-         }
-         return recoverableException;
-     }
-
-
+	// -- HELPER
 	
-	
+	private static NonRecoverableException determineIfNonRecoverableException(final Exception e) {
+		NonRecoverableException nonRecoverableException = null;
+		final List<Throwable> causalChain2 = _Exceptions.getCausalChain(e);
+		for (final Throwable cause : causalChain2) {
+			if(cause instanceof NonRecoverableException) {
+				nonRecoverableException = (NonRecoverableException) cause;
+				break;
+			}
+		}
+		return nonRecoverableException;
+	}
+
+	private static RecoverableException determineIfRecoverableException(final Exception e) {
+		RecoverableException recoverableException = null;
+		final List<Throwable> causalChain = _Exceptions.getCausalChain(e);
+		for (final Throwable cause : causalChain) {
+			if(cause instanceof RecoverableException) {
+				recoverableException = (RecoverableException) cause;
+				break;
+			}
+		}
+		return recoverableException;
+	}
+
+
+
+
 }

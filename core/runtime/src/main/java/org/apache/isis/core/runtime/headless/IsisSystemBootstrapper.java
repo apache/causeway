@@ -19,7 +19,6 @@
 package org.apache.isis.core.runtime.headless;
 
 import java.util.List;
-import java.util.UUID;
 
 import javax.jdo.PersistenceManagerFactory;
 
@@ -36,7 +35,6 @@ import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.core.runtime.headless.logging.LogConfig;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
-import org.apache.isis.objectstore.jdo.datanucleus.IsisConfigurationForJdoIntegTests;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -148,20 +146,16 @@ public class IsisSystemBootstrapper {
 
     private static IsisSystem setupSystem(final AppManifest2 appManifest2) {
 
-        final IsisConfigurationForJdoIntegTests configuration = new IsisConfigurationForJdoIntegTests();
-        configuration.putDataNucleusProperty("javax.jdo.option.ConnectionURL","jdbc:hsqldb:mem:test-" + UUID.randomUUID()
-        .toString());
-        final IsisSystem.Builder isftBuilder =
-                new IsisSystem.Builder()
+        final IsisSystem isft = 
+                IsisSystem.builder()
                         .withLoggingAt(org.apache.log4j.Level.INFO)
                         .with(appManifest2)
-                        .with(configuration);
-
-        IsisSystem isft = isftBuilder.build();
+        				.build();
+        
         isft.setUpSystem();
 
         // save both the system and the manifest
-        // used to bootstrap the system onto thread-loca
+        // used to bootstrap the system onto thread-local
         IsisSystem.set(isft);
         isftAppManifest.set(appManifest2);
 

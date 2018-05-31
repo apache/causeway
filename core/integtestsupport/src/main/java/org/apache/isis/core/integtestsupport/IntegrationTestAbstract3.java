@@ -81,7 +81,11 @@ public abstract class IntegrationTestAbstract3 extends HeadlessWithBootstrapping
     protected IntegrationTestAbstract3(
             final LogConfig logConfig,
             final Module module) {
-        super(logConfig, Util.addHeadlessTransactionSupport(module));
+    	super(logConfig, 
+				Util.moduleBuilder(module)
+				.withHeadlessTransactionSupport()
+				.withIntegrationTestConfigIfAbsent()
+				.build() );
     }
 
 	@Override

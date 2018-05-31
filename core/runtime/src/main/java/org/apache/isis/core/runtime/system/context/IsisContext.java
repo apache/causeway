@@ -19,7 +19,9 @@
 
 package org.apache.isis.core.runtime.system.context;
 
+import java.util.Map;
 import java.util.Optional;
+import java.util.TreeMap;
 
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -110,6 +112,19 @@ public interface IsisContext {
     public static ServicesInjector getServicesInjector() {
         return getSessionFactory().getServicesInjector();
     }
+    
+    public static void dumpConfig() {
+
+		final Map<String, String> map = new TreeMap<>(getConfiguration().asMap());
+
+		System.out.println("=============================================");
+		System.out.println("=                ISIS 2.0.0                 =");
+		System.out.println("=============================================");
+		map.forEach((k,v)->{
+			System.out.println(k+" -> "+v);
+		});
+		System.out.println("=============================================");
+	}
 
 	// -- HELPER
 
@@ -125,5 +140,7 @@ public interface IsisContext {
 			// at least we tried
 		}
 	}
+	
+	
 
 }
