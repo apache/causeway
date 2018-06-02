@@ -45,9 +45,11 @@ public class IsisAjaxNavigationToolbar extends AjaxNavigationToolbar {
     private void addShowAllButton(final DataTable<?, ?> table) {
         table.setOutputMarkupId(true);
 
-        ((MarkupContainer)get("span")).add(new AjaxLink(ID_SHOW_ALL) {
+        ((MarkupContainer)get("span")).add(new AjaxLink<Void>(ID_SHOW_ALL) {
 
-            @Override
+			private static final long serialVersionUID = 1L;
+
+			@Override
             public void onClick(AjaxRequestTarget target) {
                 showAllItemsOn(table);
 

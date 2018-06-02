@@ -18,16 +18,15 @@ package org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers;
 
 import java.util.Collection;
 
-import org.apache.wicket.ajax.json.JSONException;
-import org.apache.wicket.ajax.json.JSONStringer;
 import org.wicketstuff.select2.ChoiceProvider;
 import org.wicketstuff.select2.Response;
 
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 
 public class EmptyChoiceProvider extends ChoiceProvider<ObjectAdapterMemento> {
-
-    public static final EmptyChoiceProvider INSTANCE = new EmptyChoiceProvider();
+	private static final long serialVersionUID = 1L;
+	
+	public static final EmptyChoiceProvider INSTANCE = new EmptyChoiceProvider();
 
     @Override
     public String getDisplayValue(ObjectAdapterMemento object) {
@@ -41,10 +40,6 @@ public class EmptyChoiceProvider extends ChoiceProvider<ObjectAdapterMemento> {
 
     @Override
     public void query(String term, int page, Response<ObjectAdapterMemento> response) {
-    }
-
-    @Override
-    public void toJson(ObjectAdapterMemento choice, JSONStringer writer) throws JSONException {
     }
 
     @Override

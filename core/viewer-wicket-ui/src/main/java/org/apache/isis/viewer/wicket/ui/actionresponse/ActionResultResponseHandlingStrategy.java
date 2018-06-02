@@ -64,7 +64,7 @@ public enum ActionResultResponseHandlingStrategy {
                 final ActionResultResponse resultResponse,
                 final IsisSessionFactory isisSessionFactory) {
             final RequestCycle requestCycle = RequestCycle.get();
-            AjaxRequestTarget target = requestCycle.find(AjaxRequestTarget.class);
+            AjaxRequestTarget target = requestCycle.find(AjaxRequestTarget.class).orElse(null);
 
             if (target == null) {
                 // non-Ajax request => just stream the Lob to the browser
@@ -134,8 +134,9 @@ public enum ActionResultResponseHandlingStrategy {
      * an Ajax request.
      */
     private static class StreamAfterAjaxResponseBehavior extends AbstractAjaxBehavior {
-
-        private final String fileName;
+		private static final long serialVersionUID = 1L;
+		
+		private final String fileName;
         private final IResourceStream resourceStream;
         private final Duration cacheDuration;
 

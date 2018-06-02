@@ -20,8 +20,8 @@ package org.apache.isis.viewer.wicket.ui.components.actionmenu.serviceactions;
 
 import java.util.List;
 
-import com.google.common.collect.Lists;
-
+import org.apache.isis.viewer.wicket.model.models.PageType;
+import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
 import org.apache.wicket.markup.head.CssHeaderItem;
@@ -33,8 +33,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.request.resource.CssResourceReference;
 
-import org.apache.isis.viewer.wicket.model.models.PageType;
-import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
+import com.google.common.collect.Lists;
 
 /**
  * A panel responsible to render the application actions as menu in a navigation bar.
@@ -46,12 +45,16 @@ import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
  */
 public class TertiaryActionsPanel extends Panel {
 
-    public TertiaryActionsPanel(String id, List<CssMenuItem> menuItems) {
+	private static final long serialVersionUID = 1L;
+
+	public TertiaryActionsPanel(String id, List<CssMenuItem> menuItems) {
         super(id);
         addLogoutLink(this);
         final List<CssMenuItem> subMenuItems = flatten(menuItems);
         final ListView<CssMenuItem> subMenuItemsView = new ListView<CssMenuItem>("subMenuItems", subMenuItems) {
-            @Override
+			private static final long serialVersionUID = 1L;
+
+			@Override
             protected void populateItem(ListItem<CssMenuItem> listItem) {
                 CssMenuItem subMenuItem = listItem.getModelObject();
                 if (subMenuItem.hasSubMenuItems()) {
@@ -63,7 +66,9 @@ public class TertiaryActionsPanel extends Panel {
         };
 
         WebComponent divider = new WebComponent("divider") {
-            @Override
+			private static final long serialVersionUID = 1L;
+
+			@Override
             protected void onConfigure() {
                 super.onConfigure();
 
@@ -84,13 +89,16 @@ public class TertiaryActionsPanel extends Panel {
     }
 
     private void addLogoutLink(MarkupContainer themeDiv) {
-        Link logoutLink = new Link("logoutLink") {
+        Link<Void> logoutLink = new Link<Void>("logoutLink") {
 
-            @Override
+			private static final long serialVersionUID = 1L;
+
+			@Override
             public void onClick() {
                 getSession().invalidate();
                 setResponsePage(getSignInPage());
             }
+
         };
         themeDiv.add(logoutLink);
     }

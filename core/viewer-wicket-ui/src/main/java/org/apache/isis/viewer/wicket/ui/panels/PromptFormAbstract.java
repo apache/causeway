@@ -63,7 +63,9 @@ public abstract class PromptFormAbstract<T extends BookmarkableModel<ObjectAdapt
         extends FormAbstract<ObjectAdapter>
         implements ScalarModelSubscriber2 {
 
-    private static final String ID_OK_BUTTON = "okButton";
+	private static final long serialVersionUID = 1L;
+	
+	private static final String ID_OK_BUTTON = "okButton";
     public static final String ID_CANCEL_BUTTON = "cancelButton";
 
     private static final String ID_FEEDBACK = "feedback";
@@ -117,8 +119,8 @@ public abstract class PromptFormAbstract<T extends BookmarkableModel<ObjectAdapt
             private static final long serialVersionUID = 1L;
 
             @Override
-            public void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                onOkSubmittedOf(target, form, this);
+            public void onSubmit(AjaxRequestTarget target) {
+                onOkSubmittedOf(target, getForm(), this);
             }
 
             @Override
@@ -129,16 +131,16 @@ public abstract class PromptFormAbstract<T extends BookmarkableModel<ObjectAdapt
             }
 
             @Override
-            protected void onError(AjaxRequestTarget target, Form<?> form) {
-                target.add(form);
+            protected void onError(AjaxRequestTarget target) {
+                target.add(getForm());
             }
         }
         : new AjaxButton(ID_OK_BUTTON, new ResourceModel("okLabel")) {
             private static final long serialVersionUID = 1L;
 
             @Override
-            public void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                onOkSubmittedOf(target, form, this);
+            public void onSubmit(AjaxRequestTarget target) {
+                onOkSubmittedOf(target, getForm(), this);
             }
 
             @Override
@@ -149,8 +151,8 @@ public abstract class PromptFormAbstract<T extends BookmarkableModel<ObjectAdapt
             }
 
             @Override
-            protected void onError(AjaxRequestTarget target, Form<?> form) {
-                target.add(form);
+            protected void onError(AjaxRequestTarget target) {
+                target.add(getForm());
             }
         };
         okButton.add(new JGrowlBehaviour());
@@ -164,7 +166,7 @@ public abstract class PromptFormAbstract<T extends BookmarkableModel<ObjectAdapt
             private static final long serialVersionUID = 1L;
 
             @Override
-            public void onSubmit(final AjaxRequestTarget target, Form<?> form) {
+            public void onSubmit(final AjaxRequestTarget target) {
                 closePromptIfAny(target);
 
                 onCancelSubmitted(target);
@@ -175,7 +177,9 @@ public abstract class PromptFormAbstract<T extends BookmarkableModel<ObjectAdapt
 
         if (formExecutorContext.getPromptStyle().isInlineOrInlineAsIfEdit()) {
             cancelButton.add(new FireOnEscapeKey() {
-                @Override
+				private static final long serialVersionUID = 1L;
+
+				@Override
                 protected void respond(final AjaxRequestTarget target) {
                     onCancelSubmitted(target);
                 }
@@ -335,8 +339,9 @@ public abstract class PromptFormAbstract<T extends BookmarkableModel<ObjectAdapt
     }
 
     static abstract class FireOnEscapeKey extends AbstractDefaultAjaxBehavior {
-
-        private static final String PRE_JS =
+		private static final long serialVersionUID = 1L;
+		
+		private static final String PRE_JS =
                 "" + "$(document).ready( function() { \n"
                         + "  $(document).bind('keyup', function(evt) { \n"
                         + "    if (evt.keyCode == 27) { \n";

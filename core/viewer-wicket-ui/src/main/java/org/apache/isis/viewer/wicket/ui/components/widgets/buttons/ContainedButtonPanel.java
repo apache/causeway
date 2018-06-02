@@ -55,7 +55,7 @@ public class ContainedButtonPanel extends PanelAbstract<Model<String>> {
             private static final long serialVersionUID = 1L;
 
             @Override
-            protected void onSubmit(final AjaxRequestTarget target, final Form<?> form) {
+            protected void onSubmit(final AjaxRequestTarget target) {
                 setDefaultFormProcessing(false);
                 ContainedButtonPanel.this.onSubmit();
                 if (target != null) {

@@ -16,14 +16,13 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable;
 
-import org.apache.wicket.ajax.attributes.IAjaxCallListener;
+import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
+import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackHeadersToolbar;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.ISortStateLocator;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-
-import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
 
 /**
  * Adapted from Wicket's own {@link AjaxFallbackHeadersToolbar}.
@@ -38,7 +37,7 @@ public class IsisAjaxFallbackHeadersToolbar<S> extends IsisAjaxHeadersToolbar<S>
             final IsisAjaxFallbackDataTable<?, S> table,
             final CollectionContentsSortableDataProvider stateLocator)
     {
-        super(table, (ISortStateLocator<S>)stateLocator);
+        super(table, _Casts.uncheckedCast(stateLocator));
         this.table = table;
         table.setOutputMarkupId(true);
         this.stateLocator = stateLocator;
@@ -55,18 +54,18 @@ public class IsisAjaxFallbackHeadersToolbar<S> extends IsisAjaxHeadersToolbar<S>
     protected WebMarkupContainer newSortableHeader(final String borderId, final S property,
         final ISortStateLocator<S> locator)
     {
-        return new IsisAjaxFallbackOrderByBorder<S>(borderId, table, property, locator, getAjaxCallListener());
+        return new IsisAjaxFallbackOrderByBorder<S>(borderId, table, property, locator/*, getAjaxCallListener()*/);
     }
 
-    /**
-     * Returns a decorator that will be used to decorate ajax links used in sortable headers
-     * 
-     * @return decorator or null for none
-     */
-    protected IAjaxCallListener getAjaxCallListener()
-    {
-        return null;
-    }
+//    /**
+//     * Returns a decorator that will be used to decorate ajax links used in sortable headers
+//     * 
+//     * @return decorator or null for none
+//     */
+//    protected IAjaxCallListener getAjaxCallListener()
+//    {
+//        return null;
+//    }
     
     // //////////////////////////////////////
 

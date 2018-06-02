@@ -36,7 +36,6 @@ import org.apache.wicket.extensions.markup.html.repeater.tree.ITreeProvider;
 import org.apache.wicket.extensions.markup.html.repeater.tree.NestedTree;
 import org.apache.wicket.extensions.markup.html.repeater.tree.Node;
 import org.apache.wicket.extensions.markup.html.repeater.tree.theme.WindowsTheme;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
@@ -102,7 +101,7 @@ class IsisToWicketTreeAdapter {
 						private static final long serialVersionUID = 1L;
 						
 						@Override
-						public void onClick(AjaxRequestTarget target) {
+						public void onClick(Optional<AjaxRequestTarget> target) {
 							toggleExpandCollapse.run();
 						}
 
@@ -416,7 +415,7 @@ class IsisToWicketTreeAdapter {
 	/**
 	 * Wicket's model for collapse/expand state
 	 */
-	private static class TreeExpansionModel extends AbstractReadOnlyModel<Set<TreeModel>> {
+	private static class TreeExpansionModel implements IModel<Set<TreeModel>> {
 		private static final long serialVersionUID = 648152234030889164L;
 
 		public static TreeExpansionModel of(Set<TreePath> expandedTreePaths) {

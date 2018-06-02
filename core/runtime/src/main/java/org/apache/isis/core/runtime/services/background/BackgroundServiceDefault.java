@@ -21,6 +21,7 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -193,6 +194,9 @@ public class BackgroundServiceDefault implements BackgroundService2 {
                 final Command command = commandContext.getCommand();
 
                 final BackgroundCommandService2 bcs2 = (BackgroundCommandService2) backgroundCommandService;
+                Objects.requireNonNull(bcs2, 
+                		()->String.format("You need to provide a domain-service implementing '%s'!", 
+                				BackgroundCommandService2.class.getName()));
 
                 final List<ObjectAdapter> targetList = Collections.singletonList(domainObjectAdapter);
                 final CommandDto dto =
