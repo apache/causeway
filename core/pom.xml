@@ -156,19 +156,17 @@
 
         <wicket.version>8.0.0</wicket.version>
         <wicketstuff.version>8.0.0</wicketstuff.version>
+        <wicket-bootstrap.version>2.0.1</wicket-bootstrap.version>
         <wicket-source.version>7.0.0</wicket-source.version>
 
 <!-- [ahuber] update to newer versions just does not work as a drop in replacement
         <wicket-webjars.version>2.0.7</wicket-webjars.version>
-        <wicket-bootstrap.version>2.0.1</wicket-bootstrap.version>
 -->     
         <wicket-webjars.version>0.5.4</wicket-webjars.version>
-        <wicket-bootstrap.version>0.10.16</wicket-bootstrap.version>
         
+        <select2.version>4.0.5</select2.version>
 
-        <select2.version>4.0.3</select2.version>
-
-        <jquery-ui.version>1.11.4</jquery-ui.version>
+        <jquery-ui.version>1.12.1</jquery-ui.version>
 
         <guice.version>4.1.0</guice.version>
         <picocontainer.version>2.15</picocontainer.version>
@@ -1989,8 +1987,10 @@ ${license.additional-notes}
 
 
             <dependency>
+<!-- version 7.0.0 -->            
             	<groupId>net.ftlines.wicket-source</groupId>
-<!-- [ahuber] for version 8.0.0 we might consider<groupId>com.github.jennybrown8.wicket-source</groupId> -->
+<!-- version 8.0.0 -->
+<!-- 				<groupId>com.github.jennybrown8.wicket-source</groupId> -->
                 <artifactId>wicket-source</artifactId>
                 <version>${wicket-source.version}</version>
                 <exclusions>

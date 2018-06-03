@@ -31,7 +31,8 @@ import org.apache.isis.viewer.wicket.ui.panels.HasDynamicallyVisibleContent;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 
-public class TabPanel extends PanelAbstract implements HasUiHintDisambiguator, HasDynamicallyVisibleContent {
+public class TabPanel extends PanelAbstract<EntityModel> 
+implements HasUiHintDisambiguator, HasDynamicallyVisibleContent {
 
     private static final long serialVersionUID = 1L;
 

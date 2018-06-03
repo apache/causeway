@@ -18,6 +18,7 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.layout.bs3.tabs;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,23 +36,20 @@ import org.apache.wicket.extensions.markup.html.tabs.TabbedPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.FluentIterable;
-import com.google.common.collect.Lists;
-
 import de.agilecoders.wicket.core.markup.html.bootstrap.tabs.AjaxBootstrapTabbedPanel;
 
 // hmmm... not sure how to make this implement HasDynamicallyVisibleContent
-public class TabGroupPanel extends AjaxBootstrapTabbedPanel  {
+public class TabGroupPanel extends AjaxBootstrapTabbedPanel<ITab>  {
+	private static final long serialVersionUID = 1L;
 
-    public static final String SESSION_ATTR_SELECTED_TAB = "selectedTab";
+	public static final String SESSION_ATTR_SELECTED_TAB = "selectedTab";
 
     // the view metadata
     private final ComponentHintKey selectedTabHintKey;
     private final EntityModel entityModel;
 
     private static List<ITab> tabsFor(final EntityModel entityModel, final BS3TabGroup bs3TabGroup) {
-        final List<ITab> tabs = Lists.newArrayList();
+        final List<ITab> tabs = new ArrayList<>();
 
         final List<BS3Tab> tablist = _NullSafe.stream(bs3TabGroup.getTabs())
         		.filter(BS3Tab.Predicates.notEmpty())
@@ -98,13 +96,13 @@ public class TabGroupPanel extends AjaxBootstrapTabbedPanel  {
     }
 
     @Override
-    public TabbedPanel setSelectedTab(final int index) {
+    public TabbedPanel<ITab> setSelectedTab(final int index) {
         selectedTabHintKey.set(entityModel.getObjectAdapterMemento().asHintingBookmark(), ""+index);
         return super.setSelectedTab(index);
     }
 
     private void setSelectedTabFromSessionIfAny(
-            final AjaxBootstrapTabbedPanel ajaxBootstrapTabbedPanel) {
+            final AjaxBootstrapTabbedPanel<ITab> ajaxBootstrapTabbedPanel) {
         final String selectedTabStr = selectedTabHintKey.get(entityModel.getObjectAdapterMemento().asHintingBookmark());
         final Integer tabIndex = parse(selectedTabStr);
         if (tabIndex != null) {
@@ -126,15 +124,9 @@ public class TabGroupPanel extends AjaxBootstrapTabbedPanel  {
 
     @Override
     public boolean isVisible() {
-        return FluentIterable.<AbstractTab>from(getTabs()).anyMatch(new Predicate<AbstractTab>() {
-            @Override
-            public boolean apply(final AbstractTab tab) {
-                return tab.isVisible();
-            }
-        });
+    	return _NullSafe.stream(getTabs())
+    	.anyMatch(ITab::isVisible);
     }
-
-
 
 
 }
