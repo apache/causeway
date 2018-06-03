@@ -23,10 +23,6 @@ import java.util.List;
 import java.util.concurrent.Callable;
 
 import javax.inject.Inject;
-import com.google.common.collect.Lists;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.annotation.Programmatic;
@@ -53,6 +49,10 @@ import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManagerException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.common.collect.Lists;
 
 /**
  * Is the factory of {@link IsisSession}s, also holding a reference to the current session using
@@ -160,7 +160,8 @@ public class IsisSessionFactory
             final List<Object> copyOfServices = Lists.newArrayList(services);
             final TitleService titleService = servicesInjector.lookupServiceElseFail(TitleService.class);
             for (Object service : copyOfServices) {
-                final String unused = titleService.titleOf(service);
+                @SuppressWarnings("unused")
+				final String unused = titleService.titleOf(service);
             }
 
             // (previously we took a protective copy to avoid a concurrent modification exception,
@@ -170,7 +171,8 @@ public class IsisSessionFactory
                 if(correspondingClass.isEnum()) {
                     final Object[] enumConstants = correspondingClass.getEnumConstants();
                     for (Object enumConstant : enumConstants) {
-                        final String unused = titleService.titleOf(enumConstant);
+                        @SuppressWarnings("unused")
+						final String unused = titleService.titleOf(enumConstant);
                     }
                 }
             }
@@ -283,7 +285,7 @@ public class IsisSessionFactory
 
     @Programmatic
     public IsisSession getCurrentSession() {
-        return currentSession.get();
+    	return currentSession.get();
     }
 
     private IsisTransactionManager getCurrentSessionTransactionManager() {

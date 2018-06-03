@@ -18,16 +18,20 @@
  */
 package org.apache.isis.core.runtime.services.persistsession;
 
+import static java.util.Objects.requireNonNull;
+import static java.util.Optional.ofNullable;
+
 import java.util.List;
 
+import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
-import org.apache.isis.applib.services.xactn.Transaction;
 import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.applib.services.xactn.Transaction;
 import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
@@ -37,6 +41,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.session.IsisSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
@@ -203,11 +208,13 @@ public class PersistenceSessionServiceInternalDefault implements PersistenceSess
     }
 
     protected PersistenceSession getPersistenceSession() {
-        return getIsisSessionFactory().getCurrentSession().getPersistenceSession();
+    	return ofNullable(getIsisSessionFactory().getCurrentSession())
+    			.map(IsisSession::getPersistenceSession)
+    			.orElseThrow(()->new NonRecoverableException("No IsisSession on current thread."));
     }
 
     private IsisSessionFactory getIsisSessionFactory() {
-        return isisSessionFactory;
+        return requireNonNull(isisSessionFactory, "IsisSessionFactory was not injected.");
     }
 
     @Programmatic
