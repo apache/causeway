@@ -226,7 +226,19 @@ public class ResourceCachingFilter implements Filter {
             httpResponse.addHeader(EXPIRES_HEADER, httpDateFormat.format(new Date(now + (this.cacheTime.longValue() * MILLISECONDS_IN_SECOND))));
         }
         httpRequest.setAttribute(REQUEST_ATTRIBUTE, true);
-        chain.doFilter(servletRequest, servletResponse);
+        
+        // try to suppress java.io.IOException of kind 'client connection abort'
+        // 1) the TCP protocol (by design) does not provide a means to check, whether a 
+        //    connection has been closed by the client
+        // 2) the exception thrown and the exception message text are specific to the 
+        //    servlet-engine implementation, so we can only guess here
+        try {
+        	chain.doFilter(servletRequest, servletResponse);
+        } catch (IOException e) {
+        	if(!isConnectionAbortException(e)) {
+        		throw e;
+        	}
+		}
     }
 
     /**
@@ -236,6 +248,21 @@ public class ResourceCachingFilter implements Filter {
      */
     @Override
     public void destroy() {
+    }
+    
+    // -- HELPER
+    
+    private boolean isConnectionAbortException(IOException e) {
+    	// tomcat 9
+    	if(e.getMessage().contains("An established connection was aborted by the software in your host machine")) {
+    		return true;
+    	}
+    	// payara 4
+    	if(e.getMessage().contains("Connection is closed")) {
+    		return true;
+    	}
+    	
+    	return false;
     }
 
 }
