@@ -62,7 +62,20 @@ class ForkingInvocationHandler<T> implements InvocationHandler {
         }
         
         backgroundExecutorService.submit(()->{
-    		IsisContext.getSessionFactory().doInSession(()->proxyMethod.invoke(domainObject, args));
+        	
+        	try {
+        		
+        		IsisContext.getSessionFactory().doInSession(
+        			()->proxyMethod.invoke(domainObject, args));
+        		
+        	} catch (Exception e) {
+        		// log in caller's context        		
+        		BackgroundServiceDefault.LOG.error(
+        				String.format("Background execution of action '%s' on object '%s' failed.", 
+        						proxyMethod.getName(),
+        						domainObject.getClass().getName()),
+        				e);
+			}
     	}); 
 
         return null;
