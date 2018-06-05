@@ -21,6 +21,16 @@ import net.bytebuddy.matcher.ElementMatchers;
 
 public class ProxyFactoryPluginUsingByteBuddy implements ProxyFactoryPlugin {
 
+	private static <T> ImplementationDefinition<T> nextProxyDef(
+			Class<T> base, 
+			Class<?>[] interfaces) {
+		return new ByteBuddy()
+			.with(new NamingStrategy.SuffixingRandom("bb"))
+			.subclass(base)
+			.implement(interfaces)
+			.method(ElementMatchers.any());
+	}
+	
 	@Override
 	public <T> ProxyFactory<T> factory(
 			Class<T> base, 
@@ -29,14 +39,9 @@ public class ProxyFactoryPluginUsingByteBuddy implements ProxyFactoryPlugin {
 		
 		final Objenesis objenesis = new ObjenesisStd();
 
-		final ImplementationDefinition<T> proxyDef = new ByteBuddy()
-				.with(new NamingStrategy.SuffixingRandom("bb"))
-				.subclass(base)
-				.implement(interfaces)
-				.method(ElementMatchers.any());
-				
 		final Function<InvocationHandler, Class<? extends T>> proxyClassFactory = handler->
-				proxyDef.intercept(InvocationHandlerAdapter.of(handler))
+				nextProxyDef(base, interfaces)
+				.intercept(InvocationHandlerAdapter.of(handler))
 				.make()
 				.load(_Context.getDefaultClassLoader())
 				.getLoaded();
