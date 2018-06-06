@@ -18,23 +18,26 @@
  */
 package domainapp.modules.simple.integtests.tests;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 
 import javax.inject.Inject;
 
-import com.google.common.base.Throwables;
-
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
+import org.hamcrest.MatcherAssert;
 import org.hamcrest.TypeSafeMatcher;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
+import com.google.common.base.Throwables;
 
 import domainapp.modules.simple.dom.impl.SimpleObject;
 import domainapp.modules.simple.dom.impl.SimpleObjects;
 import domainapp.modules.simple.fixture.SimpleObject_persona;
 import domainapp.modules.simple.integtests.SimpleModuleIntegTestAbstract;
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class SimpleObjectMenu_IntegTest extends SimpleModuleIntegTestAbstract {
 
@@ -84,15 +87,22 @@ public class SimpleObjectMenu_IntegTest extends SimpleModuleIntegTestAbstract {
             fixtureScripts.runBuilderScript(SimpleObject_persona.FIZZ.builder());
             transactionService.nextTransaction();
 
-            // then
-            expectedExceptions.expectCause(causalChainContains(SQLIntegrityConstraintViolationException.class));
+            // expect
+        	Throwable cause = assertThrows(Throwable.class, ()->{
+            
+                // when
+                wrap(menu).create("Fizz");
+                transactionService.nextTransaction();
+            	
+            });
+        	
+        	// also expect
+        	MatcherAssert.assertThat(cause, 
+        			causalChainContains(SQLIntegrityConstraintViolationException.class));
 
-            // when
-            wrap(menu).create("Fizz");
-            transactionService.nextTransaction();
         }
 
-        private static Matcher<? extends Throwable> causalChainContains(final Class<?> cls) {
+        private static Matcher<Throwable> causalChainContains(final Class<?> cls) {
             return new TypeSafeMatcher<Throwable>() {
                 @Override
                 protected boolean matchesSafely(Throwable item) {

@@ -16,16 +16,17 @@
  */
 package domainapp.modules.simple.dom.impl;
 
-import org.junit.Before;
-import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class SimpleObject_Test {
 
     SimpleObject simpleObject;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         simpleObject = new SimpleObject("Foobar");
     }

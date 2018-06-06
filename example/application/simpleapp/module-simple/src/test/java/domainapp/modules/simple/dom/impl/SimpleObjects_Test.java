@@ -28,7 +28,6 @@ import org.jmock.auto.Mock;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.core.unittestsupport.jmocking.JMockActions;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
@@ -36,6 +35,8 @@ import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+//TODO [ahuber] this test is still on JUnit 4 because it uses org.junit.Rule, 
+//which no longer exists with JUnit 5
 public class SimpleObjects_Test {
 
     @Rule
