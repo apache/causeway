@@ -62,12 +62,6 @@
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>isis-core-commons</artifactId>
 			<scope>compile</scope>
-			<exclusions>
-				<exclusion>
-					<groupId>com.google.code.findbugs</groupId>
-					<artifactId>annotations</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		
 	    <!-- as used by internal API, 
@@ -86,14 +80,6 @@
             	<exclusion>
             		<groupId>com.google.guava</groupId>
             		<artifactId>guava</artifactId>
-            	</exclusion>
-            	<exclusion>
-            		<groupId>com.google.code.findbugs</groupId>
-            		<artifactId>annotations</artifactId>
-            	</exclusion>
-            	<exclusion>
-            		<groupId>org.javassist</groupId>
-            		<artifactId>javassist</artifactId>
             	</exclusion>
             </exclusions>
         </dependency>
