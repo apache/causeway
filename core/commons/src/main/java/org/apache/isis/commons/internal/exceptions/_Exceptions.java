@@ -19,11 +19,15 @@
 
 package org.apache.isis.commons.internal.exceptions;
 
+import static org.apache.isis.commons.internal.base._With.requires;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
@@ -47,9 +51,9 @@ import org.apache.isis.commons.internal.functions._Functions;
 public final class _Exceptions {
 
 	private _Exceptions(){}
-	
+
 	// -- FRAMEWORK INTERNAL ERRORS 
-	
+
 	/**
 	 * Most likely to be used in switch statements to handle the default case.  
 	 * @param _case the unmatched case to be reported
@@ -58,7 +62,7 @@ public final class _Exceptions {
 	public static final IllegalArgumentException unmatchedCase(@Nullable Object _case) {
 		return new IllegalArgumentException("internal error: unmatched case in switch statement: "+_case);
 	}
-	
+
 	/**
 	 * Most likely to be used in switch statements to handle the default case.
 	 * @param format like in {@link java.lang.String#format(String, Object...)}
@@ -69,15 +73,15 @@ public final class _Exceptions {
 		Objects.requireNonNull(format);
 		return new IllegalArgumentException(String.format(format, _case));
 	}
-	
+
 	public static final IllegalStateException unexpectedCodeReach() {
 		return new IllegalStateException("internal error: code was reached, that is expected unreachable");
 	}	
-	
+
 	public static IllegalStateException notImplemented() {
 		return new IllegalStateException("internal error: code was reached, that is not implemented yet");
 	}
-	
+
 	/**
 	 * Used to hide from the compiler the fact, that this call always throws.
 	 * 
@@ -98,10 +102,41 @@ public final class _Exceptions {
 	public static IllegalStateException throwNotImplemented() {
 		throw notImplemented();
 	}
+
+	// -- SELECTIVE ERROR SUPPRESSION
+
+//	/**
+//	 * Allows to selectively ignore unchecked exceptions. Most likely used framework internally
+//	 * for workarounds, not properly dealing with the root cause. This way at least we know, where
+//	 * we placed such workarounds. 
+//	 * 
+//	 * @param runnable that might throw an unchecked exception
+//	 * @param suppress predicate that decides whether to suppress an exception
+//	 */
+//	public static void catchSilently(
+//			Runnable runnable, 
+//			Predicate<RuntimeException> suppress) {
+//		
+//		try {
+//			runnable.run();
+//		} catch (RuntimeException cause) {
+//			if(suppress.test(cause)) {
+//				return;
+//			}	
+//			throw cause;
+//		}
+//	}
 	
+	// -- SELECTIVE THROW
 	
+	public static <E extends Exception> void throwWhenTrue(E cause, Predicate<E> test) throws E {
+		if(test.test(cause)) {
+			throw cause;
+		}
+	}
+
 	// -- STACKTRACE UTILITITIES
-	
+
 	public static final Stream<String> streamStacktraceLines(@Nullable Throwable ex, int maxLines) {
 		if(ex==null) {
 			return Stream.empty();
@@ -110,7 +145,7 @@ public final class _Exceptions {
 				.map(StackTraceElement::toString)
 				.limit(maxLines);
 	}
-	
+
 	// -- CAUSAL CHAIN
 
 	public static List<Throwable> getCausalChain(@Nullable Throwable ex) {
@@ -125,7 +160,7 @@ public final class _Exceptions {
 		}
 		return chain;		
 	}
-	
+
 	public static Stream<Throwable> streamCausalChain(@Nullable Throwable ex) {
 		if(ex==null) {
 			return Stream.empty();
@@ -137,48 +172,116 @@ public final class _Exceptions {
 		return _Lists.lastElementIfAny(getCausalChain(ex));
 	}
 
-	// --
+	// -- FLUENT EXCEPTION
 	
+	/**
+	 * [ahuber] Experimental, remove if it adds no value. Otherwise expand.
+	 */
+	public static class FluentException<E extends Exception> {
+		
+		public static <E extends Exception> FluentException<E> of(E cause) {
+			return new FluentException<>(cause);
+		}
+		
+		private final E cause;
+
+		private FluentException(E cause) {
+			requires(cause, "cause");
+			this.cause = cause;
+		}
+		
+		public E getCause() {
+			return cause;
+		}
+
+		public Optional<String> getMessage() {
+			return Optional.ofNullable(cause.getMessage());
+		}
+		
+		// -- RE-THROW IDIOMS 
+		
+		public void rethrow() throws E {
+			throw cause;
+		}
+		
+		public void rethrowIf(Predicate<E> condition) throws E {
+			requires(condition, "condition");
+			if(condition.test(cause)) {
+				throw cause;
+			}
+		}
+		
+		public void suppressIf(Predicate<E> condition) throws E {
+			requires(condition, "condition");
+			if(!condition.test(cause)) {
+				throw cause;
+			}
+		}
+
+		public void rethrowIfMessageContains(String string) throws E {
+			requires(string, "string");
+			final boolean containsMessage = getMessage().map(msg->msg.contains(string)).orElse(false);
+			if(containsMessage) {
+				throw cause;
+			}
+		}
+		
+		public void suppressIfMessageContains(String string) throws E {
+			requires(string, "string");
+			final boolean containsMessage = getMessage().map(msg->msg.contains(string)).orElse(false);
+			if(!containsMessage) {
+				throw cause;
+			}
+		}
+		
+	}
+	
+	// --
+
 	/**
 	 * [ahuber] Experimental, remove if it adds no value. 
 	 */
 	public static class TryContext {
-		
+
 		private final Function<Exception, ? extends RuntimeException> toUnchecked;
-		
+
 		public TryContext(Function<Exception, ? extends RuntimeException> toUnchecked) {
 			this.toUnchecked = toUnchecked;
 		}
 
-	    // -- SHORTCUTS (RUNNABLE)
-	    
+		// -- SHORTCUTS (RUNNABLE)
+
 		public Runnable uncheckedRunnable(_Functions.CheckedRunnable checkedRunnable) {
 			return checkedRunnable.toUnchecked(toUnchecked);
 		}
-		
+
 		public void tryRun(_Functions.CheckedRunnable checkedRunnable) {
 			uncheckedRunnable(checkedRunnable).run();
 		}
-		
-	    // -- SHORTCUTS (FUNCTION)
-		
+
+		// -- SHORTCUTS (FUNCTION)
+
 		public <T, R> Function<T, R> uncheckedFunction(_Functions.CheckedFunction<T, R> checkedFunction) {
 			return checkedFunction.toUnchecked(toUnchecked);
 		}
-		
+
 		public <T, R> R tryApply(T obj, _Functions.CheckedFunction<T, R> checkedFunction) {
 			return uncheckedFunction(checkedFunction).apply(obj);
 		}
-		
-	    // -- SHORTCUTS (CONSUMER)
+
+		// -- SHORTCUTS (CONSUMER)
 
 		public <T> Consumer<T> uncheckedConsumer(_Functions.CheckedConsumer<T> checkedConsumer) {
 			return checkedConsumer.toUnchecked(toUnchecked);
 		}
-		
+
 		public <T> void tryAccept(T obj, _Functions.CheckedConsumer<T> checkedConsumer) {
 			uncheckedConsumer(checkedConsumer).accept(obj);
 		}
 	}
-	
+
+
+
+
+
 }

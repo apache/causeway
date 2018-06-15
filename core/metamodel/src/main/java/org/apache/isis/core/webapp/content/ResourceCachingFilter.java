@@ -36,6 +36,8 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.isis.commons.internal.exceptions._Exceptions.FluentException;
+
 /**
  * Adapted from {@link http
  * ://www.digitalsanctuary.com/tech-blog/java/jboss/setting
@@ -235,9 +237,8 @@ public class ResourceCachingFilter implements Filter {
         try {
         	chain.doFilter(servletRequest, servletResponse);
         } catch (IOException e) {
-        	if(!isConnectionAbortException(e)) {
-        		throw e;
-        	}
+        	FluentException.of(e)
+        	.suppressIf(this::isConnectionAbortException);
 		}
     }
 

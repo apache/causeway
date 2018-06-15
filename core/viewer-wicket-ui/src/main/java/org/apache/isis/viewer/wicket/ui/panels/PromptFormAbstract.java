@@ -20,8 +20,22 @@ package org.apache.isis.viewer.wicket.ui.panels;
 
 import java.util.List;
 
-import com.google.common.collect.Lists;
-
+import org.apache.isis.commons.internal.exceptions._Exceptions.FluentException;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
+import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
+import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
+import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
+import org.apache.isis.viewer.wicket.model.models.BookmarkableModel;
+import org.apache.isis.viewer.wicket.model.models.FormExecutor;
+import org.apache.isis.viewer.wicket.model.models.FormExecutorContext;
+import org.apache.isis.viewer.wicket.model.models.ParentEntityModelProvider;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarModelSubscriber2;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
+import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.FormFeedbackPanel;
+import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
+import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
+import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
@@ -40,21 +54,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.util.string.AppendingStringBuffer;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
-import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
-import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
-import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
-import org.apache.isis.viewer.wicket.model.models.BookmarkableModel;
-import org.apache.isis.viewer.wicket.model.models.FormExecutor;
-import org.apache.isis.viewer.wicket.model.models.FormExecutorContext;
-import org.apache.isis.viewer.wicket.model.models.ParentEntityModelProvider;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarModelSubscriber2;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
-import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.FormFeedbackPanel;
-import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
-import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
-import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
+import com.google.common.collect.Lists;
 
 public abstract class PromptFormAbstract<T extends BookmarkableModel<ObjectAdapter>
                                                     & ParentEntityModelProvider
@@ -236,7 +236,16 @@ public abstract class PromptFormAbstract<T extends BookmarkableModel<ObjectAdapt
             completePrompt(target);
 
             okButton.send(target.getPage(), Broadcast.EXACT, newCompletedEvent(target, form));
-            target.add(form);
+            //TODO as of Wicket-8 we (for lack of a better solution) silently ignore java.lang.IllegalArgumentException: 
+            // 'Cannot update component because its page is not the same as the one this handler has been created for.'
+            
+            try {
+            	target.add(form);
+            } catch (IllegalArgumentException cause) {
+            	FluentException.of(cause)
+            	.suppressIfMessageContains("Cannot update component because its page is not the same");
+			} 
+                        
         }
 
     }
