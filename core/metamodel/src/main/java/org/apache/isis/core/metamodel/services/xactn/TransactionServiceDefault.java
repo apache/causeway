@@ -19,11 +19,13 @@
 
 package org.apache.isis.core.metamodel.services.xactn;
 
+import java.util.concurrent.CountDownLatch;
+
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.xactn.Transaction;
 import org.apache.isis.applib.services.xactn.TransactionService;
-import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
@@ -87,6 +89,11 @@ public class TransactionServiceDefault implements TransactionService {
     public Transaction currentTransaction() {
         return persistenceSessionServiceInternal.currentTransaction();
     }
+    
+	@Override
+	public CountDownLatch currentTransactionLatch() {
+    	return persistenceSessionServiceInternal.currentTransactionLatch(); 
+	}
 
     @Override
     public TransactionState getTransactionState() {

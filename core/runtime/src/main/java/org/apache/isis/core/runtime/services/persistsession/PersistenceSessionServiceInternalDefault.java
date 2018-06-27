@@ -22,6 +22,7 @@ import static java.util.Objects.requireNonNull;
 import static java.util.Optional.ofNullable;
 
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.annotation.DomainService;
@@ -181,6 +182,12 @@ public class PersistenceSessionServiceInternalDefault implements PersistenceSess
     public Transaction currentTransaction() {
         return getTransactionManager().getCurrentTransaction();
     }
+    
+	@Override
+	public CountDownLatch currentTransactionLatch() {
+    	IsisTransaction transaction = getTransactionManager().getCurrentTransaction();
+    	return transaction==null ? new CountDownLatch(0) : transaction.countDownLatch(); 
+	}
 
     @Override
     public <T> List<ObjectAdapter> allMatchingQuery(final Query<T> query) {

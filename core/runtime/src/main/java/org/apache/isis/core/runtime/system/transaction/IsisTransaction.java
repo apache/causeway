@@ -21,19 +21,14 @@ package org.apache.isis.core.runtime.system.transaction;
 
 import java.util.List;
 import java.util.UUID;
-
-import com.google.common.collect.Lists;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.concurrent.CountDownLatch;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.applib.services.WithTransactionScope;
 import org.apache.isis.applib.services.xactn.Transaction;
 import org.apache.isis.applib.services.xactn.TransactionState;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.authentication.MessageBroker;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.components.TransactionScopedComponent;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.util.ToString;
@@ -45,6 +40,10 @@ import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyO
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
 import org.apache.isis.core.runtime.services.auditing.AuditingServiceInternal;
 import org.apache.isis.core.runtime.services.persistsession.PersistenceSessionServiceInternalDefault;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.common.collect.Lists;
 
 /**
  * Used by the {@link IsisTransactionManager} to captures a set of changes to be
@@ -163,11 +162,11 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
 
     private final UUID interactionId;
     private final int sequence;
-    private final AuthenticationSession authenticationSession;
+//    private final AuthenticationSession authenticationSession;
 
-    private final List<PersistenceCommand> persistenceCommands = Lists.newArrayList();
+    private final List<PersistenceCommand> persistenceCommands = _Lists.newArrayList();
     private final IsisTransactionManager transactionManager;
-    private final MessageBroker messageBroker;
+//    private final MessageBroker messageBroker;
     private final PublishingServiceInternal publishingServiceInternal;
     private final AuditingServiceInternal auditingServiceInternal;
 
@@ -178,18 +177,18 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
     public IsisTransaction(
             final UUID interactionId,
             final int sequence,
-            final AuthenticationSession authenticationSession,
+            /*final AuthenticationSession authenticationSession,*/
             final ServicesInjector servicesInjector) {
 
         this.interactionId = interactionId;
         this.sequence = sequence;
-        this.authenticationSession = authenticationSession;
+//        this.authenticationSession = authenticationSession;
 
         final PersistenceSessionServiceInternalDefault persistenceSessionService = servicesInjector
                 .lookupServiceElseFail(PersistenceSessionServiceInternalDefault.class);
         this.transactionManager = persistenceSessionService.getTransactionManager();
 
-        this.messageBroker = authenticationSession.getMessageBroker();
+//        this.messageBroker = authenticationSession.getMessageBroker();
         this.publishingServiceInternal = servicesInjector.lookupServiceElseFail(PublishingServiceInternal.class);
         this.auditingServiceInternal = servicesInjector.lookupServiceElseFail(AuditingServiceInternal.class);
 
@@ -199,8 +198,6 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
 
         LOG.debug("new transaction {}", this);
     }
-
-    
 
     // -- transactionId
 
@@ -223,6 +220,7 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
     }
 
     
+    private final CountDownLatch countDownLatch = new CountDownLatch(1);
 
     // -- state
 
@@ -234,6 +232,9 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
 
     private void setState(final State state) {
         this.state = state;
+        if(state.isComplete()) {
+        	countDownLatch.countDown();
+        }
     }
 
     @Override
@@ -251,11 +252,7 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
         return transactionState;
     }
 
-
-    
-
     // -- commands
-
 
     /**
      * Add the non-null command to the list of commands to execute at the end of
@@ -319,8 +316,6 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
     private void removeCreate(final ObjectAdapter onObject) {
         removeCommand(CreateObjectCommand.class, onObject);
     }
-
-    
 
     // -- flush
 
@@ -446,9 +441,6 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
         setState(State.COMMITTED);
     }
 
-
-    
-
     // -- abortCause, markAsAborted
 
     /**
@@ -494,11 +486,6 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
         clearAbortCause();
     }
 
-
-
-
-    
-
     // -- toString
 
     @Override
@@ -512,21 +499,29 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
         return str;
     }
 
-    
-
     // -- getMessageBroker
 
+//    /**
+//     * The {@link org.apache.isis.core.commons.authentication.MessageBroker} for this transaction.
+//     * 
+//     * <p>
+//     * Injected in constructor
+//     *
+//     * @deprecated - obtain the {@link org.apache.isis.core.commons.authentication.MessageBroker} instead from the {@link AuthenticationSession}.
+//     */
+//    public MessageBroker getMessageBroker() {
+//        return messageBroker;
+//    }
+    
+    // -- countDownLatch
+
     /**
-     * The {@link org.apache.isis.core.commons.authentication.MessageBroker} for this transaction.
+     * Returns a latch that allows threads to wait on. The latch count drops to zero once this transaction completes.
      * 
-     * <p>
-     * Injected in constructor
-     *
-     * @deprecated - obtain the {@link org.apache.isis.core.commons.authentication.MessageBroker} instead from the {@link AuthenticationSession}.
      */
-    public MessageBroker getMessageBroker() {
-        return messageBroker;
-    }
+	public CountDownLatch countDownLatch() {
+		return countDownLatch;
+	}
 
     
 

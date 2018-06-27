@@ -119,7 +119,7 @@ abstract class PersistenceSessionBase implements PersistenceSession {
         // sub-components
         final AdapterManager adapterManager = this;
         this.persistenceQueryFactory = new PersistenceQueryFactory(adapterManager, this.specificationLoader);
-        this.transactionManager = new IsisTransactionManager(this, authenticationSession, servicesInjector);
+        this.transactionManager = new IsisTransactionManager(this, /*authenticationSession,*/ servicesInjector);
 
         this.state = State.NOT_INITIALIZED;
 

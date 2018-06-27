@@ -19,6 +19,7 @@
 package org.apache.isis.core.metamodel.services.persistsession;
 
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
@@ -145,6 +146,11 @@ public class PersistenceSessionServiceInternalNoop implements PersistenceSession
     public Transaction currentTransaction() {
         throw new UnsupportedOperationException("Not supported by this implementation of PersistenceSessionServiceInternal");
     }
+    
+	@Override
+	public CountDownLatch currentTransactionLatch() {
+		throw new UnsupportedOperationException("Not supported by this implementation of PersistenceSessionServiceInternal");
+	}
 
     @Override
     public void remove(final ObjectAdapter adapter) {
@@ -170,4 +176,6 @@ public class PersistenceSessionServiceInternalNoop implements PersistenceSession
     public TransactionState getTransactionState() {
         throw new UnsupportedOperationException("Not supported by this implementation of PersistenceSessionServiceInternal");
     }
+
+
 }

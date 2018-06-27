@@ -19,6 +19,8 @@
 
 package org.apache.isis.applib.services.xactn;
 
+import java.util.concurrent.CountDownLatch;
+
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
@@ -59,7 +61,13 @@ public interface TransactionService {
     @Programmatic
     TransactionState getTransactionState();
 
-
+    /**
+     * Return a latch, that allows threads to wait on the current transaction to complete.
+     */
+    @Programmatic
+    CountDownLatch currentTransactionLatch(); 
+    
+    
     /**
      * Intended only for use by fixture scripts and integration tests.
      *

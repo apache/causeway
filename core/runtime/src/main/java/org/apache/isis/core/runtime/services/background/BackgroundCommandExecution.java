@@ -18,33 +18,15 @@ package org.apache.isis.core.runtime.services.background;
 
 import java.util.List;
 
-import com.google.common.collect.Lists;
-
-import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.services.bookmark.BookmarkService;
-import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.applib.services.command.Command.Executor;
-import org.apache.isis.applib.services.iactn.Interaction;
-import org.apache.isis.applib.services.iactn.InteractionContext;
-import org.apache.isis.applib.services.jaxb.JaxbService;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.core.runtime.sessiontemplate.AbstractIsisSessionTemplate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.isis.applib.services.command.CommandExecutorService;
 import org.apache.isis.applib.services.command.CommandWithDto;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
-import org.apache.isis.core.runtime.system.transaction.TransactionalClosure;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.common.collect.Lists;
 
 /**
  * Intended to be used as a base class for executing queued up {@link Command background action}s.

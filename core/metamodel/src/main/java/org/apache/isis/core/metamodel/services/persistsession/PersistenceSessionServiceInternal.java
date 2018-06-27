@@ -17,13 +17,14 @@
 package org.apache.isis.core.metamodel.services.persistsession;
 
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
-import org.apache.isis.applib.services.xactn.Transaction;
 import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.applib.services.xactn.Transaction;
 import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
@@ -120,12 +121,12 @@ public interface PersistenceSessionServiceInternal extends AdapterManager {
 
     @Programmatic
     Transaction currentTransaction();
-
+    
+    @Programmatic
+	CountDownLatch currentTransactionLatch();
 
     @Programmatic
     TransactionState getTransactionState();
-
-    
 
     // -- makePersistent, remove
 
@@ -173,7 +174,5 @@ public interface PersistenceSessionServiceInternal extends AdapterManager {
 
     void executeWithinTransaction(TransactionalClosure transactionalClosure);
 
-
-    
 
 }

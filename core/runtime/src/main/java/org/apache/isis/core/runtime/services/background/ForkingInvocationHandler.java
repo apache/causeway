@@ -20,9 +20,14 @@ import static org.apache.isis.commons.internal.base._With.requires;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.util.Optional;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 
 import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.session.IsisSession;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
+import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 
 /**
  * Package private invocation handler that executes actions in the background using a ExecutorService
@@ -61,9 +66,16 @@ class ForkingInvocationHandler<T> implements InvocationHandler {
             domainObject = mixedInIfAny;
         }
         
+        final CountDownLatch countDownLatch = Optional.ofNullable(IsisContext.getSessionFactory())
+        		.map(IsisSessionFactory::getCurrentSession)
+        		.map(IsisSession::getCurrentTransaction)
+        		.map(IsisTransaction::countDownLatch)
+        		.orElse(new CountDownLatch(0));
+        
         backgroundExecutorService.submit(()->{
         	
         	try {
+        		countDownLatch.await(); // wait for current transaction of the calling thread to complete
         		
         		IsisContext.getSessionFactory().doInSession(
         			()->proxyMethod.invoke(domainObject, args));

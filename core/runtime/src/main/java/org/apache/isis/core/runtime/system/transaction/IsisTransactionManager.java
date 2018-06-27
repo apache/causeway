@@ -21,20 +21,18 @@ package org.apache.isis.core.runtime.system.transaction;
 
 import java.util.UUID;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.InteractionContext;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class IsisTransactionManager implements SessionScopedComponent {
 
@@ -52,7 +50,7 @@ public class IsisTransactionManager implements SessionScopedComponent {
     // -- constructor, fields
 
     private final PersistenceSession persistenceSession;
-    private final AuthenticationSession authenticationSession;
+    //private final AuthenticationSession authenticationSession;
     private final ServicesInjector servicesInjector;
 
     private final CommandContext commandContext;
@@ -60,11 +58,11 @@ public class IsisTransactionManager implements SessionScopedComponent {
 
     public IsisTransactionManager(
             final PersistenceSession persistenceSession,
-            final AuthenticationSession authenticationSession,
+            /*final AuthenticationSession authenticationSession,*/
             final ServicesInjector servicesInjector) {
 
         this.persistenceSession = persistenceSession;
-        this.authenticationSession = authenticationSession;
+        //this.authenticationSession = authenticationSession;
         this.servicesInjector = servicesInjector;
 
         this.commandContext = this.servicesInjector.lookupServiceElseFail(CommandContext.class);
@@ -239,7 +237,7 @@ public class IsisTransactionManager implements SessionScopedComponent {
             final UUID transactionId = command.getTransactionId();
 
             this.currentTransaction = new IsisTransaction(transactionId,
-                    interaction.next(Interaction.Sequence.TRANSACTION.id()), authenticationSession, servicesInjector);
+                    interaction.next(Interaction.Sequence.TRANSACTION.id()), /*authenticationSession,*/ servicesInjector);
             transactionLevel = 0;
 
             persistenceSession.startTransaction();
