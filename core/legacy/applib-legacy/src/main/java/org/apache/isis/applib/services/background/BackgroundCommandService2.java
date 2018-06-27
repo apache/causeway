@@ -16,18 +16,13 @@
  */
 package org.apache.isis.applib.services.background;
 
-import org.apache.isis.applib.annotation.Programmatic;
-
 /**
- * Submit actions to be invoked in the background.
+ * Persists a {@link org.apache.isis.schema.cmd.v1.CommandDto memento-ized} command such that it can be
+ * executed asynchronously, for example through a Quartz scheduler.
+ * @deprecated use BackgroundCommandService instead
  */
-public interface BackgroundService2 extends BackgroundService {
+@Deprecated
+public interface BackgroundCommandService2 extends BackgroundCommandService {
 
-    /**
-     * Returns a proxy around the mixin object which is then used to obtain the
-     * signature of the action to be invoked in the background.
-     */
-    @Programmatic
-    <T> T executeMixin(Class<T> mixinClass, Object mixedIn);
-
+    
 }

@@ -47,5 +47,11 @@ public interface BackgroundService {
     @Programmatic
     <T> T execute(final T object);
 
+    /**
+     * Returns a proxy around the mixin object which is then used to obtain the
+     * signature of the action to be invoked in the background.
+     */
+    @Programmatic
+    <T> T executeMixin(Class<T> mixinClass, Object mixedIn);
 
 }

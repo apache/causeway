@@ -16,20 +16,13 @@
  */
 package org.apache.isis.applib.services.background;
 
-import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.schema.cmd.v1.CommandDto;
-
 /**
- * Persists a {@link org.apache.isis.schema.cmd.v1.CommandDto memento-ized} command such that it can be
- * executed asynchronously, for example through a Quartz scheduler.
- *
+ * Submit actions to be invoked in the background.
+ * @deprecated use BackgroundService instead
+ * 
  */
-public interface BackgroundCommandService2 extends BackgroundCommandService {
+@Deprecated
+public interface BackgroundService2 extends BackgroundService {
+   
 
-    void schedule(
-            final CommandDto dto,
-            final Command parentCommand,
-            final String targetClassName,
-            final String targetActionName,
-            final String targetArgs);
 }

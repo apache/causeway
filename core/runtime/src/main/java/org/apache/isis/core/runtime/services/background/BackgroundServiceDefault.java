@@ -30,8 +30,7 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.background.BackgroundCommandService;
-import org.apache.isis.applib.services.background.BackgroundCommandService2;
-import org.apache.isis.applib.services.background.BackgroundService2;
+import org.apache.isis.applib.services.background.BackgroundService;
 import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.commons.internal._Constants;
@@ -55,43 +54,55 @@ import org.slf4j.LoggerFactory;
 		nature = NatureOfService.DOMAIN,
 		menuOrder = "" + Integer.MAX_VALUE
 		)
-public class BackgroundServiceDefault implements BackgroundService2 {
+public class BackgroundServiceDefault implements BackgroundService {
 	
 	static final Logger LOG = LoggerFactory.getLogger(BackgroundServiceDefault.class);
 
-	/*
-	 * For the fixed thread-pool let there be 1-4 concurrent threads,
-	 * limited by the number of available (logical) processor cores.
-	 * 
-	 * Note: Future improvements might make these values configurable, 
-	 * but for now lets try to be reasonably nice here.
-	 * 
-	 */
-	private final int minThreadCount = 1; // only used if there is no BackgroundCommandService
-	private final int maxThreadCount = 4; // only used if there is no BackgroundCommandService
-
-	private final int threadCount = // only used if there is no BackgroundCommandService
-			Math.max(minThreadCount, 
-					Math.min(maxThreadCount,
-							Runtime.getRuntime().availableProcessors()));
-
 	// only used if there is no BackgroundCommandService
-	private ExecutorService backgroundExecutorService; 
+	private static class BuiltinExecutor {
+		/*
+		 * For the fixed thread-pool let there be 1-4 concurrent threads,
+		 * limited by the number of available (logical) processor cores.
+		 * 
+		 * Note: Future improvements might make these values configurable, 
+		 * but for now lets try to be reasonably nice here.
+		 * 
+		 */
+		private final int minThreadCount = 1; 
+		private final int maxThreadCount = 4;
+
+		private final int threadCount =
+				Math.max(minThreadCount, 
+						Math.min(maxThreadCount,
+								Runtime.getRuntime().availableProcessors()));
+
+		public final ExecutorService backgroundExecutorService = 
+				Executors.newFixedThreadPool(threadCount);
+
+		public void shutdown() {
+			backgroundExecutorService.shutdownNow();
+		}	
+	}
+	
+	private BuiltinExecutor builtinExecutor; // only used if there is no BackgroundCommandService
+	
+	private boolean usesBuiltinExecutor() {
+		return backgroundCommandService==null;
+	}
 
 	@Programmatic
 	@PostConstruct
 	public void init(Map<String,String> props) {
-		if(backgroundCommandService==null) {
-			backgroundExecutorService = Executors.newFixedThreadPool(threadCount);	
+		if(usesBuiltinExecutor()) {
+			builtinExecutor = new BuiltinExecutor();
 		}
 	}
 
 	@Programmatic
 	@PreDestroy
 	public void shutdown() {
-		if(backgroundExecutorService!=null) {
-			backgroundExecutorService.shutdownNow();
-			backgroundExecutorService = null;
+		if(builtinExecutor!=null) {
+			builtinExecutor.shutdown();
 		}
 	}
 
@@ -149,12 +160,12 @@ public class BackgroundServiceDefault implements BackgroundService2 {
 	 */
 	private <T> InvocationHandler newMethodHandler(final T target, final Object mixedInIfAny) {
 
-		if(backgroundCommandService==null) {
-			return new ForkingInvocationHandler<T>(target, mixedInIfAny, backgroundExecutorService);
+		if(usesBuiltinExecutor()) {
+			return new ForkingInvocationHandler<T>(target, mixedInIfAny, builtinExecutor.backgroundExecutorService);
 		}
 
 		return new CommandInvocationHandler<T>(
-				(BackgroundCommandService2) backgroundCommandService, 
+				backgroundCommandService, 
 				target, 
 				mixedInIfAny, 
 				specificationLoader,
