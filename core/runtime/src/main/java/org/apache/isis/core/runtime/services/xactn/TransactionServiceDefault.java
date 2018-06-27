@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.services.xactn;
+package org.apache.isis.core.runtime.services.xactn;
 
 import java.util.concurrent.CountDownLatch;
 
@@ -29,6 +29,7 @@ import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
+import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 
 @DomainService(
         nature = NatureOfService.DOMAIN,
@@ -72,7 +73,10 @@ public class TransactionServiceDefault implements TransactionService {
                 throw new IsisException("Transaction is marked to abort");
             case ALWAYS:
                 persistenceSessionServiceInternal.abortTransaction();
-                currentTransaction().clearAbortCause();
+                final Transaction currentTransaction = currentTransaction();
+                if(currentTransaction instanceof IsisTransaction) {
+                	((IsisTransaction)currentTransaction).clearAbortCause();
+                }
                 break;
             }
             break;
