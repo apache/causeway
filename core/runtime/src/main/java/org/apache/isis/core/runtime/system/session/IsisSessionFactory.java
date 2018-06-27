@@ -252,8 +252,6 @@ public class IsisSessionFactory
         return logonFixture;
     }
 
-    
-
     // -- openSession, closeSession, currentSession, inSession
     private final ThreadLocal<IsisSession> currentSession = new ThreadLocal<>();
 

@@ -24,7 +24,9 @@ import java.util.Optional;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.internal.InitialisationSession;
 import org.apache.isis.core.runtime.system.session.IsisSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
@@ -66,11 +68,17 @@ class ForkingInvocationHandler<T> implements InvocationHandler {
             domainObject = mixedInIfAny;
         }
         
-        final CountDownLatch countDownLatch = Optional.ofNullable(IsisContext.getSessionFactory())
-        		.map(IsisSessionFactory::getCurrentSession)
-        		.map(IsisSession::getCurrentTransaction)
-        		.map(IsisTransaction::countDownLatch)
-        		.orElse(new CountDownLatch(0));
+        final Optional<IsisSession> currentSession = Optional.ofNullable(IsisContext.getSessionFactory())
+    		.map(IsisSessionFactory::getCurrentSession);
+        
+        final AuthenticationSession authSession = currentSession
+			.map(IsisSession::getAuthenticationSession)
+			.orElse(new InitialisationSession());
+        
+        final CountDownLatch countDownLatch = currentSession
+    		.map(IsisSession::getCurrentTransaction)
+    		.map(IsisTransaction::countDownLatch)
+    		.orElse(new CountDownLatch(0));
         
         backgroundExecutorService.submit(()->{
         	
@@ -78,7 +86,8 @@ class ForkingInvocationHandler<T> implements InvocationHandler {
         		countDownLatch.await(); // wait for current transaction of the calling thread to complete
         		
         		IsisContext.getSessionFactory().doInSession(
-        			()->proxyMethod.invoke(domainObject, args));
+        			()->proxyMethod.invoke(domainObject, args), 
+        			authSession	);
         		
         	} catch (Exception e) {
         		// log in caller's context        		
