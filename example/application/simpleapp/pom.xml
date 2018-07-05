@@ -37,7 +37,7 @@
 
     <properties>
         <revision>2.0.0-M1-SNAPSHOT</revision>
-        <isis.version>2.0.0-M1-SNAPSHOT</isis.version>
+        <isis.version>${revision}</isis.version>
 
         <lombok.version>[1.16,)</lombok.version>
 
@@ -76,6 +76,10 @@
                 <version>1.0.0</version>
                 <configuration>
                     <updatePomFile>true</updatePomFile>
+                    <pomElements>
+                        <dependencyManagement>resolve</dependencyManagement>
+                        <dependencies>resolve</dependencies>
+                    </pomElements>
                 </configuration>
                 <executions>
                     <execution>

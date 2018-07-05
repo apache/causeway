@@ -19,55 +19,53 @@
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-	<modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>org.apache.isis.core</groupId>
-		<artifactId>isis</artifactId>
-		<version>${revision}</version>
-	</parent>
+    <parent>
+        <groupId>org.apache.isis.core</groupId>
+        <artifactId>isis</artifactId>
+        <version>${revision}</version>
+    </parent>
 
-	<artifactId>isis-core-viewer-wicket-model</artifactId>
-	<name>Apache Isis Wicket Viewer Model</name>
+    <artifactId>isis-core-viewer-wicket-model</artifactId>
+    <name>Apache Isis Wicket Viewer Model</name>
 
-	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.viewer.wicket.model</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/viewer/wicket/model</git-plugin.propertiesDir>
-	</properties>
+    <properties>
+        <jar-plugin.automaticModuleName>org.apache.isis.viewer.wicket.model</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/isis/viewer/wicket/model</git-plugin.propertiesDir>
+    </properties>
 
-	<dependencies>
+    <dependencies>
 
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-viewer-wicket-applib</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-viewer-wicket-applib</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.wicket</groupId>
+            <artifactId>wicket-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.wicket</groupId>
+            <artifactId>wicket-extensions</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-runtime</artifactId>
+        </dependency>
+	
+	<!-- TEST DEPENDENCIES -->
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-unittestsupport</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-metamodel</artifactId>
+            <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
 
-		<dependency>
-			<groupId>org.apache.wicket</groupId>
-			<artifactId>wicket-core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.wicket</groupId>
-			<artifactId>wicket-extensions</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-metamodel</artifactId>
-			<type>test-jar</type>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-runtime</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-unittestsupport</artifactId>
-			<scope>test</scope>
-		</dependency>
-
-	</dependencies>
-
+    </dependencies>
 </project>

@@ -17,103 +17,90 @@
   specific language governing permissions and limitations
   under the License.
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-	<modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>org.apache.isis.core</groupId>
-		<artifactId>isis</artifactId>
-		<version>${revision}</version>
-	</parent>
+    <parent>
+        <groupId>org.apache.isis.core</groupId>
+        <artifactId>isis</artifactId>
+        <version>${revision}</version>
+    </parent>
 
-	<artifactId>isis-core-viewer-wicket-ui</artifactId>
-	<name>Apache Isis Wicket Viewer UI Components</name>
+    <artifactId>isis-core-viewer-wicket-ui</artifactId>
+    <name>Apache Isis Wicket Viewer UI Components</name>
 
-	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.viewer.wicket.ui</jar-plugin.automaticModuleName>
-	  	<git-plugin.propertiesDir>org/apache/isis/viewer/wicket/ui</git-plugin.propertiesDir>
-	</properties>
+    <properties>
+        <jar-plugin.automaticModuleName>org.apache.isis.viewer.wicket.ui</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/isis/viewer/wicket/ui</git-plugin.propertiesDir>
+    </properties>
 
-	<build>
-		<resources>
-			<resource>
-				<filtering>false</filtering>
-				<directory>src/main/resources</directory>
-			</resource>
-			<resource>
-				<filtering>false</filtering>
-				<directory>src/main/java</directory>
-				<includes>
-					<include>**</include>
-				</includes>
-				<excludes>
-					<exclude>**/*.java</exclude>
-				</excludes>
-			</resource>
-		</resources>
-		<plugins>
-			<plugin>
-				<groupId>net.alchim31.maven</groupId>
-				<artifactId>yuicompressor-maven-plugin</artifactId>
-			</plugin>
-		</plugins>
-	</build>
+    <build>
+        <resources>
+            <resource>
+                <filtering>false</filtering>
+                <directory>src/main/resources</directory>
+            </resource>
+            <resource>
+                <filtering>false</filtering>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**</include>
+                </includes>
+                <excludes>
+                    <exclude>**/*.java</exclude>
+                </excludes>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <groupId>net.alchim31.maven</groupId>
+                <artifactId>yuicompressor-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 
-	<dependencies>
-	
-		<!-- JDO API (non transient, provided by plugin) -->
+    <dependencies>
+
         <dependency>
-            <groupId>javax.jdo</groupId>
-            <artifactId>jdo-api</artifactId>
-            <version>${jdo-api.version}</version>
-            <!-- provided by plugins -->
-            <scope>provided</scope>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-viewer-wicket-model</artifactId>
         </dependency>
 
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-viewer-wicket-model</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-metamodel</artifactId>
+        </dependency>
 
-		<dependency>
-		    <groupId>org.apache.isis.core</groupId>
-		    <artifactId>isis-core-metamodel</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-unittestsupport</artifactId>
-			<scope>test</scope>
-		</dependency>
+        <dependency>
+            <groupId>org.apache.wicket</groupId>
+            <artifactId>wicket-core</artifactId>
+        </dependency>
 
-		<dependency>
-			<groupId>org.apache.wicket</groupId>
-			<artifactId>wicket-core</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>org.apache.wicket</groupId>
+            <artifactId>wicket-devutils</artifactId>
+        </dependency>
 
-		<dependency>
-			<groupId>org.apache.wicket</groupId>
-			<artifactId>wicket-devutils</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>org.apache.wicket</groupId>
+            <artifactId>wicket-extensions</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.wicket</groupId>
+            <artifactId>wicket-auth-roles</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.wicket</groupId>
+            <artifactId>wicket-guice</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wicketstuff</groupId>
+            <artifactId>wicketstuff-select2</artifactId>
+        </dependency>
 
-		<dependency>
-			<groupId>org.apache.wicket</groupId>
-			<artifactId>wicket-extensions</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.wicket</groupId>
-			<artifactId>wicket-auth-roles</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.wicket</groupId>
-			<artifactId>wicket-guice</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.wicketstuff</groupId>
-			<artifactId>wicketstuff-select2</artifactId>
-		</dependency>
-
-		<dependency>
+        <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>select2</artifactId>
         </dependency>
@@ -144,23 +131,40 @@
             <artifactId>wicket-bootstrap-themes</artifactId>
         </dependency>
 
-		<!-- replaced by javaee-api -->
-		<!--         <dependency> -->
-		<!--             <groupId>org.apache.geronimo.specs</groupId> -->
-		<!--             <artifactId>geronimo-servlet_3.0_spec</artifactId> -->
-		<!--             <scope>provided</scope> -->
-		<!--         </dependency> -->
+<!-- replaced by javaee-api -->
+<!--    <dependency> -->
+<!--        <groupId>org.apache.geronimo.specs</groupId> -->
+<!--        <artifactId>geronimo-servlet_3.0_spec</artifactId> -->
+<!--        <scope>provided</scope> -->
+<!--    </dependency> -->
 
         <!-- LOGGING DEPENDENCIES - LOG4J -->
 
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+        </dependency>
 
-	</dependencies>
+	
+        <!-- JDO API (non transient, provided by plugin) -->
+        <dependency>
+            <groupId>javax.jdo</groupId>
+            <artifactId>jdo-api</artifactId>
+            <version>${jdo-api.version}</version>
+            <!-- provided by plugins -->
+            <scope>provided</scope>
+        </dependency>
+
+	<!-- TEST DEPENDENCIES -->
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-unittestsupport</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
 </project>

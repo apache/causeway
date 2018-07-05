@@ -18,16 +18,16 @@
   under the License.
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>org.apache.isis.core</groupId>
-		<artifactId>isis</artifactId>
+    <parent>
+        <groupId>org.apache.isis.core</groupId>
+        <artifactId>isis</artifactId>
         <version>${revision}</version>
-	</parent>
+    </parent>
 
-	<artifactId>isis-core-integtestsupport</artifactId>
-	<name>Apache Isis Integration Testing Support</name>
+    <artifactId>isis-core-integtestsupport</artifactId>
+    <name>Apache Isis Integration Testing Support</name>
 
     <properties>
         <jar-plugin.automaticModuleName>org.apache.isis.core.integtestsupport</jar-plugin.automaticModuleName>
@@ -36,7 +36,7 @@
 
     <dependencies>
     
-		<!-- JDO API (non transient, provided by plugin) -->
+        <!-- JDO API (non transient, provided by plugin) -->
         <dependency>
             <groupId>javax.jdo</groupId>
             <artifactId>jdo-api</artifactId>
@@ -54,22 +54,22 @@
             <artifactId>isis-core-specsupport</artifactId>
         </dependency>
 
-		<!-- JUPITER -->
-		<dependency>
-			<!-- JUnit API for writing tests and extensions -->
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-api</artifactId>
-		</dependency>
-		<dependency>
-			<!-- implementation of the JUnit Jupiter test engine -->
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-engine</artifactId>
-		</dependency>
-		<dependency>
-			<!-- support for unit tests that use JUnit 4 or JUnit 3 -->
-			<groupId>org.junit.vintage</groupId>
-			<artifactId>junit-vintage-engine</artifactId>
-		</dependency>
+        <!-- JUPITER -->
+        <dependency>
+            <!-- JUnit API for writing tests and extensions -->
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+        </dependency>
+        <dependency>
+            <!-- implementation of the JUnit Jupiter test engine -->
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+        </dependency>
+        <dependency>
+            <!-- support for unit tests that use JUnit 4 or JUnit 3 -->
+            <groupId>org.junit.vintage</groupId>
+            <artifactId>junit-vintage-engine</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>org.jmock</groupId>
@@ -101,5 +101,5 @@
             <artifactId>log4j</artifactId>
         </dependency>
 
-	</dependencies>
+    </dependencies>
 </project>

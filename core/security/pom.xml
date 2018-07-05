@@ -20,30 +20,30 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>org.apache.isis.core</groupId>
-		<artifactId>isis</artifactId>
+    <parent>
+        <groupId>org.apache.isis.core</groupId>
+        <artifactId>isis</artifactId>
         <version>${revision}</version>
-	</parent>
+    </parent>
 
-	<artifactId>isis-core-security</artifactId>
-	<name>Apache Isis Security + Bypass</name>
+    <artifactId>isis-core-security</artifactId>
+    <name>Apache Isis Security + Bypass</name>
 
-	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.core.security</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/core/security</git-plugin.propertiesDir>
-	</properties>
+    <properties>
+        <jar-plugin.automaticModuleName>org.apache.isis.core.security</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/isis/core/security</git-plugin.propertiesDir>
+    </properties>
 
-	<dependencies>
-		<dependency>
-		    <groupId>org.apache.isis.core</groupId>
-		    <artifactId>isis-core-runtime</artifactId>
-		</dependency>
-		<dependency>
-		    <groupId>org.apache.isis.core</groupId>
-		    <artifactId>isis-core-runtime</artifactId>
-		    <type>test-jar</type>
-		    <scope>test</scope>
-		</dependency>
-	</dependencies>
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-runtime</artifactId>
+        </dependency>
+    	<dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-runtime</artifactId>
+            <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>    
+    </dependencies>
 </project>

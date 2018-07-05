@@ -17,42 +17,45 @@
   specific language governing permissions and limitations
   under the License.
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
     <parent>
-		<groupId>org.apache.isis.core</groupId>
-		<artifactId>isis</artifactId>
+        <groupId>org.apache.isis.core</groupId>
+        <artifactId>isis</artifactId>
         <version>${revision}</version>
     </parent>
 
-	<artifactId>isis-core-webserver</artifactId>
-	<name>Apache Isis WebServer</name>
+    <artifactId>isis-core-webserver</artifactId>
+    <name>Apache Isis WebServer</name>
 
-	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.core.webserver</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/core/webserver</git-plugin.propertiesDir>
-	</properties>
+    <properties>
+        <jar-plugin.automaticModuleName>org.apache.isis.core.webserver</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/isis/core/webserver</git-plugin.propertiesDir>
+    </properties>
 
-	<dependencies>
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-runtime</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.jetty</groupId>
-           	<artifactId>jetty-servlet</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.jetty</groupId>
-    		<artifactId>jetty-webapp</artifactId>
-		</dependency>
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-runtime</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-servlet</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-webapp</artifactId>
+        </dependency>
+	
 <!-- provided by JEE standard API -->		
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.apache.geronimo.specs</groupId> -->
-<!-- 			<artifactId>geronimo-servlet_3.0_spec</artifactId> -->
-<!--             <scope>provided</scope> -->
-<!-- 		</dependency> -->
-	</dependencies>
+<!--    <dependency> -->
+<!-- 	    <groupId>org.apache.geronimo.specs</groupId> -->
+<!-- 	    <artifactId>geronimo-servlet_3.0_spec</artifactId> -->
+<!--        <scope>provided</scope> -->
+<!-- 	</dependency> -->
+
+    </dependencies>
 
 </project>

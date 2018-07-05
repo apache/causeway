@@ -92,7 +92,7 @@
         
         <!-- Isis Datanucleus JDO Plugin dn5 -->
 
-		<dn5-jdo-api.version>3.2.0-m7</dn5-jdo-api.version>
+	<dn5-jdo-api.version>3.2.0-m7</dn5-jdo-api.version>
         <dn5-core.version>5.1.6</dn5-core.version>
         <dn5-api-jdo.version>5.1.4</dn5-api-jdo.version>
         <dn5-jdo-query.version>5.0.4</dn5-jdo-query.version>
@@ -100,9 +100,9 @@
         <dn5-jodatime.version>5.1.0-release</dn5-jodatime.version>
         <dn5-maven-plugin.version>5.0.2</dn5-maven-plugin.version>
 
-		<!-- Isis Datanucleus JDO Plugin dn4 -->
+        <!-- Isis Datanucleus JDO Plugin dn4 -->
 
-		<dn4-jdo-api.version>3.1</dn4-jdo-api.version>
+        <dn4-jdo-api.version>3.1</dn4-jdo-api.version>
         <dn4-core.version>4.1.7</dn4-core.version>
         <dn4-api-jdo.version>4.1.1</dn4-api-jdo.version>
         <dn4-jdo-query.version>4.0.5</dn4-jdo-query.version>
@@ -112,9 +112,9 @@
         
         <!-- Isis Resteasy Plugin 3 (for JEE 7 JAX-RS API 2.0) -->
         
-		<resteasy3-jaxrs.version>3.0.17.Final</resteasy3-jaxrs.version> 
+        <resteasy3-jaxrs.version>3.0.17.Final</resteasy3-jaxrs.version> 
 		
-		<!-- Isis Resteasy Plugin 4 (for JEE 8 JAX-RS API 2.1) -->
+        <!-- Isis Resteasy Plugin 4 (for JEE 8 JAX-RS API 2.1) -->
 		
         <resteasy4-jaxrs.version>4.0.0.Beta2</resteasy4-jaxrs.version>
         
@@ -1189,29 +1189,29 @@ ${license.additional-notes}
         <dependencies>
         
             <!-- JEE API -->
-           	<dependency>
-			    <groupId>javax</groupId>
-			    <artifactId>javaee-api</artifactId>
-			    <version>${javaee.version}</version>
-			</dependency>
+            <dependency>
+                <groupId>javax</groupId>
+                <artifactId>javaee-api</artifactId>
+                <version>${javaee.version}</version>
+            </dependency>
 			
-			<!-- JDO API -->
+            <!-- JDO API -->
 <!-- not managed, because scope=provided can not be overwritten by plugins that are 
-	responsible for providing jdo-api -->			
-<!-- 			<dependency> -->
-<!-- 	            <groupId>javax.jdo</groupId> -->
-<!-- 	            <artifactId>jdo-api</artifactId> -->
-<!-- 	            <version>${jdo-api.version}</version> -->
-<!-- 	            provided by plugins -->
-<!-- 	            <scope>provided</scope> -->
-<!--         	</dependency> -->
+     responsible for providing jdo-api -->			
+<!--        <dependency> -->
+<!--            <groupId>javax.jdo</groupId> -->
+<!--            <artifactId>jdo-api</artifactId> -->
+<!--            <version>${jdo-api.version}</version> -->
+                <!-- provided by plugins -->
+<!--            <scope>provided</scope> -->
+<!--         </dependency> -->
 
             <!-- isis commons -->
-			<dependency>
-				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis-core-commons</artifactId>
-				<version>${revision}</version>
-			</dependency>
+            <dependency>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis-core-commons</artifactId>
+                <version>${revision}</version>
+            </dependency>
         
             <!-- unittestsupport -->
             <dependency>
@@ -1260,11 +1260,11 @@ ${license.additional-notes}
             </dependency>
             
             <!-- provides @Nullable -->
-	        <dependency>
-	        	<groupId>com.google.code.findbugs</groupId>
-	        	<artifactId>annotations</artifactId>
-	        	<version>${findbugs-annotations.version}</version>
-	        </dependency>
+            <dependency>
+                <groupId>com.google.code.findbugs</groupId>
+                <artifactId>annotations</artifactId>
+                <version>${findbugs-annotations.version}</version>
+            </dependency>
             
             <!--  reflections/applib -->
             <dependency>
@@ -1641,10 +1641,10 @@ ${license.additional-notes}
                 <version>${commons-codec.version}</version>
             </dependency>
             <dependency>
-			    <groupId>commons-io</groupId>
-			    <artifactId>commons-io</artifactId>
-			    <version>${commons-io.version}</version>
-			</dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${commons-io.version}</version>
+            </dependency>
 
             <!-- Dependency injection -->
             <dependency>
@@ -1988,9 +1988,9 @@ ${license.additional-notes}
 
             <dependency>
 <!-- version 7.0.0 -->            
-            	<groupId>net.ftlines.wicket-source</groupId>
+                <groupId>net.ftlines.wicket-source</groupId>
 <!-- version 8.0.0 -->
-<!-- 				<groupId>com.github.jennybrown8.wicket-source</groupId> -->
+<!--            <groupId>com.github.jennybrown8.wicket-source</groupId> -->
                 <artifactId>wicket-source</artifactId>
                 <version>${wicket-source.version}</version>
                 <exclusions>
@@ -2017,8 +2017,8 @@ ${license.additional-notes}
 
             <!-- Web development -->
             <dependency>
-				<groupId>org.eclipse.jetty</groupId>
-	           	<artifactId>jetty-servlet</artifactId>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-servlet</artifactId>
                 <version>${jetty.version}</version>
                 <exclusions>
                     <exclusion>
@@ -2028,32 +2028,32 @@ ${license.additional-notes}
                 </exclusions>
             </dependency>
             <dependency>
-    			<groupId>org.eclipse.jetty</groupId>
-    			<artifactId>jetty-webapp</artifactId>
-    			<version>${jetty.version}</version>
-			</dependency>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-webapp</artifactId>
+                <version>${jetty.version}</version>
+            </dependency>
             
 
             <!-- TESTING LIBRARIES (not scope=test because used by isis-core-integtest) -->
             
-			<dependency>
-				<!-- JUnit API for writing tests and extensions -->
-				<groupId>org.junit.jupiter</groupId>
-				<artifactId>junit-jupiter-api</artifactId>
-				<version>${junit.version}</version>
-			</dependency>
-			<dependency>
-				<!-- implementation of the JUnit Jupiter test engine -->
-				<groupId>org.junit.jupiter</groupId>
-				<artifactId>junit-jupiter-engine</artifactId>
-				<version>${junit.version}</version>
-			</dependency>
-			<dependency>
-				<!-- support for unit tests that use JUnit 4 or JUnit 3 -->
-				<groupId>org.junit.vintage</groupId>
-				<artifactId>junit-vintage-engine</artifactId>
-				<version>${junit.version}</version>
-			</dependency>
+            <dependency>
+                <!-- JUnit API for writing tests and extensions -->
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-api</artifactId>
+                <version>${junit.version}</version>
+            </dependency>
+            <dependency>
+                <!-- implementation of the JUnit Jupiter test engine -->
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-engine</artifactId>
+                <version>${junit.version}</version>
+            </dependency>
+            <dependency>
+                <!-- support for unit tests that use JUnit 4 or JUnit 3 -->
+                <groupId>org.junit.vintage</groupId>
+                <artifactId>junit-vintage-engine</artifactId>
+                <version>${junit.version}</version>
+            </dependency>
 
             <dependency>
                 <groupId>org.jmock</groupId>
@@ -2103,7 +2103,7 @@ ${license.additional-notes}
 
 
 
-			<!-- JAX-RS API -->
+            <!-- JAX-RS API -->
             <dependency>
                 <groupId>org.jboss.spec.javax.ws.rs</groupId>
                 <artifactId>jboss-jaxrs-api_2.0_spec</artifactId>
@@ -2151,24 +2151,24 @@ ${license.additional-notes}
         </dependency>
 
         <!-- TEST DEPENDENCIES -->
-		<dependency>
-			<!-- JUnit API for writing tests and extensions -->
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-api</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<!-- implementation of the JUnit Jupiter test engine -->
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-engine</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<!-- support for unit tests that use JUnit 4 or JUnit 3 -->
-			<groupId>org.junit.vintage</groupId>
-			<artifactId>junit-vintage-engine</artifactId>
-			<scope>test</scope>
-		</dependency>
+        <dependency>
+            <!-- JUnit API for writing tests and extensions -->
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <!-- implementation of the JUnit Jupiter test engine -->
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <!-- support for unit tests that use JUnit 4 or JUnit 3 -->
+            <groupId>org.junit.vintage</groupId>
+            <artifactId>junit-vintage-engine</artifactId>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>org.jmock</groupId>
             <artifactId>jmock-junit4</artifactId>
@@ -2177,234 +2177,241 @@ ${license.additional-notes}
     </dependencies>
 
 	<profiles>
-		<profile>
-			<id>apache-release</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-toolchains-plugin</artifactId>
-						<version>1.1</version>
-						<executions>
-							<execution>
-								<goals>
-									<goal>toolchain</goal>
-								</goals>
-							</execution>
-						</executions>
-						<configuration>
-							<toolchains>
-								<jdk>
-									<version>1.8</version>
-									<vendor>oracle</vendor>
-								</jdk>
-							</toolchains>
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
+        <profile>
+            <id>apache-release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-toolchains-plugin</artifactId>
+                        <version>1.1</version>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>toolchain</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <toolchains>
+                                <jdk>
+                                    <version>1.8</version>
+                                    <vendor>oracle</vendor>
+                                </jdk>
+                            </toolchains>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
 
-		<profile>
-			<id>jdk10plus</id>
-			<activation>
-				<jdk>[10,)</jdk>
-			</activation>
-			<build>
-				<plugins>
+        <profile>
+            <id>jdk10plus</id>
+            <activation>
+                <jdk>[10,)</jdk>
+            </activation>
+            <build>
+                <plugins>
+                    <!-- Compile -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <configuration>
+                            <showDeprecation>true</showDeprecation>
+                            <showWarnings>true</showWarnings>
+                            <source>10</source>
+                            <target>10</target>
+                            <!-- TODO on build WARNING: __add-opens has no effect at compile time -->
+                            <compilerArgs>
+                                <arg>--add-opens</arg>
+                                <arg>javax.xml/javax.xml.bind=ALL-UNNAMED</arg>
+                            </compilerArgs>
+                        </configuration>
+                        <!-- goal:compile binds to phase:compile -->
+                        <!-- goal:testCompile binds to phase:test-compile -->
+                    </plugin>
+    
+                    <!-- pre-release, requires java 9+ -->
+                    <plugin>
+                        <groupId>org.jvnet.jaxb2.maven2</groupId>
+                        <artifactId>maven-jaxb2-plugin</artifactId>
+                        <version>0.14.0-SNAPSHOT</version>
+                        <configuration>
+                            <removeOldOutput>true</removeOldOutput>
+                            <episode>true</episode>
+                            </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
 
-					<!-- Compile -->
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-compiler-plugin</artifactId>
-						<configuration>
-							<showDeprecation>true</showDeprecation>
-							<showWarnings>true</showWarnings>
-							<source>10</source>
-							<target>10</target>
-							<!-- TODO on build WARNING: __add-opens has no effect at compile time -->
-							<compilerArgs>
-								<arg>--add-opens</arg>
-								<arg>javax.xml/javax.xml.bind=ALL-UNNAMED</arg>
-							</compilerArgs>
-						</configuration>
-						<!-- goal:compile binds to phase:compile -->
-						<!-- goal:testCompile binds to phase:test-compile -->
-					</plugin>
-
-					<!-- pre-release, requires java 9+ -->
-					<plugin>
-						<groupId>org.jvnet.jaxb2.maven2</groupId>
-						<artifactId>maven-jaxb2-plugin</artifactId>
-						<version>0.14.0-SNAPSHOT</version>
-						<configuration>
-							<removeOldOutput>true</removeOldOutput>
-							<episode>true</episode>
-						</configuration>
-					</plugin>
-
-				</plugins>
-			</build>
-		</profile>
-
-		<profile>
-			<id>m2e</id>
-			<activation>
-				<property>
-					<name>m2e.version</name>
-				</property>
-			</activation>
-			<build>
-				<directory>target-ide</directory>
-			</build>
-		</profile>
+        <profile>
+            <id>m2e</id>
+            <activation>
+                <property>
+                    <name>m2e.version</name>
+                </property>
+            </activation>
+            <build>
+                <directory>target-ide</directory>
+            </build>
+        </profile>
 
 
-		<profile>
-			<id>deploy-local</id>
-			<activation>
-				<property>
-					<name>deploy</name>
-					<value>local</value>
-				</property>
-			</activation>
-			<!-- to deploy locally -->
-			<properties>
-				<distMgmtSiteUrl>file:///tmp/m2-sites/isis</distMgmtSiteUrl>
-			</properties>
-		</profile>
+        <profile>
+            <id>deploy-local</id>
+            <activation>
+                <property>
+                    <name>deploy</name>
+                    <value>local</value>
+                </property>
+            </activation>
+            <!-- to deploy locally -->
+            <properties>
+                <distMgmtSiteUrl>file:///tmp/m2-sites/isis</distMgmtSiteUrl>
+            </properties>
+        </profile>
 
-		<!-- overrides inherited configuration to allow regular deploy plugin to 
-			work to snapshot repo. Use: -D deploy=snapshot -D modules=standard -D distMgmtSnapshotsUrl=... 
-			where the last property is the repo URL to deploy to -->
-		<profile>
-			<id>deploy-snapshot</id>
-			<activation>
-				<property>
-					<name>deploy</name>
-					<value>snapshot</value>
-				</property>
-			</activation>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-deploy-plugin</artifactId>
-						<inherited>true</inherited>
-						<configuration>
-							<skip>false</skip>
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-		<profile>
-			<!-- this profile allows builds to be deployed to an inhouse nexus repo. 
-				export NEXUS_USERNAME=... export NEXUS_PASSWORD=... export NEXUS_REPO_URL=... 
-				export REVISION=... mvn clean deploy \ -Drevision=$REVISION \ -Dnexus-deploy 
-				\ -s .m2/settings.xml \ -Dnexus-deploy.repositoryUrl=$NEXUS_REPO_URL -->
-			<id>nexus-deploy</id>
-			<activation>
-				<property>
-					<name>nexus-deploy</name>
-				</property>
-			</activation>
-			<properties>
-				<nexus-deploy.repositoryUrl>http://localhost:8081/repository/builds</nexus-deploy.repositoryUrl>
-			</properties>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.sonatype.plugins</groupId>
-						<artifactId>nexus-staging-maven-plugin</artifactId>
-						<version>1.6.8</version>
-						<extensions>true</extensions>
-						<configuration>
-							<serverId>nexus-deploy.serverId</serverId>
-							<skipStaging>true</skipStaging>
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
-			<distributionManagement>
-				<repository>
-					<id>nexus-deploy.serverId</id>
-					<url>${nexus-deploy.repositoryUrl}</url>
-				</repository>
-			</distributionManagement>
-		</profile>
-		<profile>
-			<id>owasp</id>
-			<activation>
-				<property>
-					<name>owasp</name>
-				</property>
-			</activation>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.owasp</groupId>
-						<artifactId>dependency-check-maven</artifactId>
-						<version>1.3.1</version>
-						<executions>
-							<execution>
-								<id>owasp-aggregate</id>
-								<goals>
-									<goal>aggregate</goal>
-								</goals>
-								<configuration>
-									<skipProvidedScope>true</skipProvidedScope>
-									<skipRuntimeScope>true</skipRuntimeScope>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-		<profile>
-			<id>jdeps</id>
-			<activation>
-				<property>
-					<name>jdeps</name>
-				</property>
-			</activation>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-jdeps-plugin</artifactId>
-						<version>3.0.0</version>
-						<executions>
-							<execution>
-								<id>jdeps-jdkinternals</id>
-								<goals>
-									<goal>jdkinternals</goal>
-									<goal>test-jdkinternals</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-		<profile>
-			<id>git</id>
-			<activation>
-				<property>
-					<name>!skip.git</name>
-				</property>
-			</activation>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>pl.project13.maven</groupId>
-						<artifactId>git-commit-id-plugin</artifactId>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
+        <!-- overrides inherited configuration to allow regular deploy plugin 
+            to work to snapshot repo. Use: -D deploy=snapshot -D modules=standard -D 
+            distMgmtSnapshotsUrl=... where the last property is the repo URL to deploy 
+            to -->
+        <profile>
+            <id>deploy-snapshot</id>
+            <activation>
+                <property>
+                    <name>deploy</name>
+                    <value>snapshot</value>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-deploy-plugin</artifactId>
+                        <inherited>true</inherited>
+                        <configuration>
+                            <skip>false</skip>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <!-- 
+	    this profile allows builds to be deployed to an inhouse nexus repo. 
+            export NEXUS_USERNAME=... 
+	    export NEXUS_PASSWORD=... 
+	    export NEXUS_REPO_URL=... 
+            export REVISION=... 
+	    mvn clean deploy \ 
+	       -Drevision=$REVISION \
+	       -Dnexus-deploy \ 
+	       -s .m2/settings.xml \ 
+	       -Dnexus-deploy.repositoryUrl=$NEXUS_REPO_URL
+            -->
+            <id>nexus-deploy</id>
+                <activation>
+                <property>
+                    <name>nexus-deploy</name>
+                </property>
+            </activation>
+            <properties>
+                <nexus-deploy.repositoryUrl>http://localhost:8081/repository/builds</nexus-deploy.repositoryUrl>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                        <version>1.6.8</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <serverId>nexus-deploy.serverId</serverId>
+                            <skipStaging>true</skipStaging>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+            <distributionManagement>
+                <repository>
+                    <id>nexus-deploy.serverId</id>
+                    <url>${nexus-deploy.repositoryUrl}</url>
+                </repository>
+            </distributionManagement>
+        </profile>
+        <profile>
+            <id>owasp</id>
+            <activation>
+                <property>
+                    <name>owasp</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.owasp</groupId>
+                        <artifactId>dependency-check-maven</artifactId>
+                        <version>1.3.1</version>
+                        <executions>
+                            <execution>
+                                <id>owasp-aggregate</id>
+                                <goals>
+                                    <goal>aggregate</goal>
+                                </goals>
+                                <configuration>
+                                    <skipProvidedScope>true</skipProvidedScope>
+                                    <skipRuntimeScope>true</skipRuntimeScope>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>jdeps</id>
+            <activation>
+                <property>
+                    <name>jdeps</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-jdeps-plugin</artifactId>
+                        <version>3.0.0</version>
+                        <executions>
+                            <execution>
+                                <id>jdeps-jdkinternals</id>
+                                <goals>
+                                    <goal>jdkinternals</goal>
+                                    <goal>test-jdkinternals</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>git</id>
+            <activation>
+                <property>
+                    <name>!skip.git</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>pl.project13.maven</groupId>
+                        <artifactId>git-commit-id-plugin</artifactId>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
     <modules>
         <module>schema</module>
@@ -2448,8 +2455,8 @@ ${license.additional-notes}
         <module>plugins/jdo-datanucleus-4</module>
         <module>plugins/jdo-datanucleus-5</module>
 
-		<!-- to break cyclic dependencies some tests needed to be moved to their own modules -->
-		<module>unittestsupport-test</module>
+        <!-- to break cyclic dependencies some tests needed to be moved to their own modules -->
+        <module>unittestsupport-test</module>
         
     </modules>
 

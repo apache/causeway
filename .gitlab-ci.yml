@@ -22,6 +22,10 @@ before_script:
 services:
   - docker:dind
 
+only:
+  - master
+  - maint-1.16.2
+
 variables:
   DOCKER_HOST: tcp://docker:2375
   DOCKER_DRIVER: overlay2

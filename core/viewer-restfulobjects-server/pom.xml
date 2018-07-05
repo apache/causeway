@@ -37,7 +37,17 @@
 
     <dependencies>
 
-		<!-- JDO API (non transient, provided by plugin) -->
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-viewer-restfulobjects-rendering</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>webjars-servlet-2.x</artifactId>
+        </dependency>
+
+        <!-- JDO API (non transient, provided by plugin) -->
         <dependency>
             <groupId>javax.jdo</groupId>
             <artifactId>jdo-api</artifactId>
@@ -47,25 +57,17 @@
         </dependency>
 
         <dependency>
+            <groupId>com.fasterxml.jackson.module</groupId>
+            <artifactId>jackson-module-jaxb-annotations</artifactId>
+        </dependency>
+
+
+        <!-- TEST DEPENDENCIES -->
+        <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-unittestsupport</artifactId>
             <scope>test</scope>
         </dependency>
 
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-viewer-restfulobjects-rendering</artifactId>
-        </dependency>
-
-		<dependency>
-			<groupId>com.fasterxml.jackson.module</groupId>
-			<artifactId>jackson-module-jaxb-annotations</artifactId>
-		</dependency>
-
-        <dependency>
-            <groupId>org.webjars</groupId>
-            <artifactId>webjars-servlet-2.x</artifactId>
-        </dependency>
-        
-	</dependencies>
+    </dependencies>
 </project>

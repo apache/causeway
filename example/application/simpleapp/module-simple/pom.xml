@@ -34,8 +34,8 @@
             domainapp.modules.simple.SimpleModuleManifest
         </isis-maven-plugin.validate.appManifest>
 
-        <maven-checkstyle-plugin.configLocation>../_checks/checkstyle.xml</maven-checkstyle-plugin.configLocation>
-        <maven-pmd-plugin.ruleset>../_checks/pmd.xml</maven-pmd-plugin.ruleset>
+        <maven-checkstyle-plugin.configLocation>${project.parent.basedir}/_checks/checkstyle.xml</maven-checkstyle-plugin.configLocation>
+        <maven-pmd-plugin.ruleset>${project.parent.basedir}/_checks/pmd.xml</maven-pmd-plugin.ruleset>
     </properties>
 
     <build>
@@ -149,9 +149,9 @@
         <!-- ISIS CORE PLUGINS -->
         
         <dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-plugins-codegen-bytebuddy</artifactId>
-		</dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-plugins-codegen-bytebuddy</artifactId>
+        </dependency>
         
         <dependency>
             <groupId>org.apache.isis.core</groupId>

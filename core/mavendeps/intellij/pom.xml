@@ -38,7 +38,4 @@
         Deprecated - profile moved to isis-mavendeps-webapp
     </description>
     
-    <profiles>
-    </profiles>
-
 </project>
