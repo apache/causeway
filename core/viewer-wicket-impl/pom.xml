@@ -19,85 +19,86 @@
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-	<modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>org.apache.isis.core</groupId>
-		<artifactId>isis</artifactId>
-		<version>1.16.3-SNAPSHOT</version>
-	</parent>
+    <parent>
+        <groupId>org.apache.isis.core</groupId>
+        <artifactId>isis</artifactId>
+        <version>${revision}</version>
+    </parent>
 
-	<name>Apache Isis Wicket Viewer Implementation</name>
+    <name>Apache Isis Wicket Viewer Implementation</name>
 
-	<artifactId>isis-core-viewer-wicket-impl</artifactId>
+    <artifactId>isis-core-viewer-wicket-impl</artifactId>
 
-	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.viewer.wicket.impl</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/viewer/wicket/impl</git-plugin.propertiesDir>
-	</properties>
+    <properties>
+        <jar-plugin.automaticModuleName>org.apache.isis.viewer.wicket.impl</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/isis/viewer/wicket/impl</git-plugin.propertiesDir>
+    </properties>
 
-	<build>
-		<resources>
-			<resource>
-				<filtering>false</filtering>
-				<directory>src/main/resources</directory>
-			</resource>
-			<resource>
-				<filtering>false</filtering>
-				<directory>src/main/java</directory>
-				<includes>
-					<include>**</include>
-				</includes>
-				<excludes>
-					<exclude>**/*.java</exclude>
-				</excludes>
-			</resource>
-		</resources>
-	</build>
+    <build>
+        <resources>
+            <resource>
+                <filtering>false</filtering>
+                <directory>src/main/resources</directory>
+            </resource>
+            <resource>
+                <filtering>false</filtering>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**</include>
+                </includes>
+                <excludes>
+                    <exclude>**/*.java</exclude>
+                </excludes>
+            </resource>
+        </resources>
+    </build>
 
-	<dependencies>
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-viewer-wicket-ui</artifactId>
-		</dependency>
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-viewer-wicket-ui</artifactId>
+        </dependency>
 
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-unittestsupport</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-runtime</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-runtime</artifactId>
+        </dependency>
 
-		<dependency>
-			<groupId>org.apache.geronimo.specs</groupId>
-			<artifactId>geronimo-servlet_3.0_spec</artifactId>
-			<scope>provided</scope>
-		</dependency>
+        <dependency>
+            <groupId>org.apache.wicket</groupId>
+            <artifactId>wicket-auth-roles</artifactId>
+        </dependency>
 
-		<dependency>
-			<groupId>org.apache.wicket</groupId>
-			<artifactId>wicket-auth-roles</artifactId>
-		</dependency>
-
+        <dependency>
+            <groupId>de.agilecoders.wicket</groupId>
+            <artifactId>wicket-bootstrap-core</artifactId>
+        </dependency>
+	
         <dependency>
             <groupId>net.ftlines.wicket-source</groupId>
             <artifactId>wicket-source</artifactId>
         </dependency>
 
-		<dependency>
-			<groupId>com.google.inject</groupId>
-			<artifactId>guice-parent</artifactId>
-			<version>${guice.version}</version>
-			<type>pom</type>
-		</dependency>
+        <dependency>
+            <groupId>com.google.inject</groupId>
+            <artifactId>guice-parent</artifactId>
+            <version>${guice.version}</version>
+            <type>pom</type>
+        </dependency>
 
-		<dependency>
-			<groupId>de.agilecoders.wicket</groupId>
-			<artifactId>wicket-bootstrap-core</artifactId>
-		</dependency>
-	</dependencies>
+        <dependency>
+            <groupId>org.apache.geronimo.specs</groupId>
+            <artifactId>geronimo-servlet_3.0_spec</artifactId>
+            <scope>provided</scope>
+        </dependency>
 
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-unittestsupport</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
 </project>

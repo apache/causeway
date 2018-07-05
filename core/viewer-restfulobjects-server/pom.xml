@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.apache.isis.core</groupId>
         <artifactId>isis</artifactId>
-        <version>1.16.3-SNAPSHOT</version>
+        <version>${revision}</version>
     </parent>
 
     <artifactId>isis-core-viewer-restfulobjects-server</artifactId>
@@ -37,17 +37,16 @@
 
     <dependencies>
 
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-unittestsupport</artifactId>
-            <scope>test</scope>
-        </dependency>
 
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-viewer-restfulobjects-rendering</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>webjars-servlet-2.x</artifactId>
+        </dependency>
 
         <!-- the javax:* equivalents of these are excluded in 
              dependencyManagement of resteasy-jaxrs, so  
@@ -66,9 +65,12 @@
             <artifactId>geronimo-activation_1.1_spec</artifactId>
         </dependency>
 
+
+        <!-- TEST DEPENDENCIES -->
         <dependency>
-            <groupId>org.webjars</groupId>
-            <artifactId>webjars-servlet-2.x</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-unittestsupport</artifactId>
+            <scope>test</scope>
         </dependency>
-	</dependencies>
+    </dependencies>
 </project>

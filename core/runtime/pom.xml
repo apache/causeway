@@ -21,13 +21,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-		<groupId>org.apache.isis.core</groupId>
-		<artifactId>isis</artifactId>
-        <version>1.16.3-SNAPSHOT</version>
-	</parent>
+        <groupId>org.apache.isis.core</groupId>
+        <artifactId>isis</artifactId>
+        <version>${revision}</version>
+    </parent>
 
-	<artifactId>isis-core-runtime</artifactId>
-	<name>Apache Isis Runtime</name>
+    <artifactId>isis-core-runtime</artifactId>
+    <name>Apache Isis Runtime</name>
 
     <properties>
         <jar-plugin.automaticModuleName>org.apache.isis.core.runtime</jar-plugin.automaticModuleName>
@@ -35,7 +35,7 @@
     </properties>
 
     <build>
-		<resources>
+        <resources>
             <resource>
                 <directory>src/main/java</directory>
                 <filtering>false</filtering>
@@ -46,18 +46,18 @@
                     <exclude>**/*.java</exclude>
                 </excludes>
             </resource>
-			<resource>
-				<directory>src/main/resources</directory>
-				<includes>
-					<include>isis-version.properties</include>
-				</includes>
-				<filtering>true</filtering>
-			</resource>
-			<resource>
-				<directory>src/main/resources</directory>
-				<filtering>false</filtering>
-			</resource>
-		</resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>isis-version.properties</include>
+                </includes>
+                <filtering>true</filtering>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>false</filtering>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -67,15 +67,15 @@
                 </configuration>
             </plugin>
         </plugins>
-	</build>
+    </build>
 
-	<dependencies>
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-applib</artifactId>
-			<type>test-jar</type>
-			<scope>test</scope>
-		</dependency>
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-applib</artifactId>
+            <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
 
         <dependency>
             <groupId>org.apache.isis.core</groupId>
@@ -88,10 +88,10 @@
             <artifactId>isis-core-log4j</artifactId>
         </dependency>
         
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-metamodel</artifactId>
-		</dependency>
+        </dependency>
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-metamodel</artifactId>

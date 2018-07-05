@@ -38,7 +38,7 @@
     <properties>
         <revision>1.16.3-SNAPSHOT</revision>
 	
-        <isis.version>1.16.2</isis.version>
+        <isis.version>${revision}</isis.version>
 
         <lombok.version>1.16.20</lombok.version>
 
@@ -72,6 +72,10 @@
                 <version>1.0.0</version>
                 <configuration>
                     <updatePomFile>true</updatePomFile>
+                    <pomElements>
+                        <dependencyManagement>resolve</dependencyManagement>
+                        <dependencies>resolve</dependencies>
+                    </pomElements>
                 </configuration>
                 <executions>
                     <execution>
@@ -106,23 +110,23 @@
 
             <!-- this project's own modules -->
             <dependency>
-                <groupId>${project.groupId}</groupId>
+                <groupId>org.apache.isis.example.application</groupId>
                 <artifactId>simpleapp-module-simple</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
-                <groupId>${project.groupId}</groupId>
+                <groupId>org.apache.isis.example.application</groupId>
                 <artifactId>simpleapp-module-simple</artifactId>
                 <version>${revision}</version>
                 <type>test-jar</type>
             </dependency>
             <dependency>
-                <groupId>${project.groupId}</groupId>
+                <groupId>org.apache.isis.example.application</groupId>
                 <artifactId>simpleapp-application</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
-                <groupId>${project.groupId}</groupId>
+                <groupId>org.apache.isis.example.application</groupId>
                 <artifactId>simpleapp-webapp</artifactId>
                 <version>${revision}</version>
             </dependency>

@@ -138,17 +138,22 @@
     </build>
 
     <dependencies>
+
+    
+    	<!-- ISIS API -->
+    	
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-applib</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.axonframework</groupId>
             <artifactId>axon-core</artifactId>
         </dependency>
 
-        <!-- test -->
+
+        <!-- TESTS -->
+
         <dependency>
             <groupId>org.apache.isis.mavendeps</groupId>
             <artifactId>isis-mavendeps-testing</artifactId>

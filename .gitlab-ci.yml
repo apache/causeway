@@ -1,0 +1,74 @@
+#
+# requires the following gitlab secret variables
+#
+# - NEXUS_USERNAME
+# - NEXUS_PASSWORD
+# - NEXUS_REPO_URL
+# - DOCKER_REGISTRY_USERNAME
+# - DOCKER_REGISTRY_PASSWORD
+# - DOCKER_REGISTRY_EMAIL
+# - DOCKER_REGISTRY_NAME        # eg "registry-1.docker.io" (for docker hub)
+                                # or "docker-dev.incode.cloud" (eg a cloud-based nexus)
+# - DOCKER_REGISTRY_URL         # eg "https://index.docker.io/v1/" (for docker hub)
+                                # or "https://repo.incode.cloud/repository/docker-dev/" (eg a cloud-based nexus)
+#
+
+image: maven:3.5.3-jdk-8
+
+before_script:
+  - export BASELINE=1.16.2
+  - export REVISION=$BASELINE.$(date +%Y%m%d)-$(date +%H%M)-$(echo $CI_COMMIT_SHA | cut -c1-8)
+
+services:
+  - docker:dind
+
+only:
+  - master
+  - maint-1.16.2
+
+variables:
+  DOCKER_HOST: tcp://docker:2375
+  DOCKER_DRIVER: overlay2
+  APP_NAME: "simpleapp"
+
+stages:
+  - build-package-push
+
+build-package-push:
+  stage: build-package-push
+  script:
+    - echo "REVISION=$REVISION"
+    - cd core
+    - >
+      mvn -s .m2/settings.xml \
+          --batch-mode \
+          clean deploy \
+          -Drevision=$REVISION \
+          -Dnexus-deploy \
+          -Dnexus-deploy.repositoryUrl=$NEXUS_REPO_URL \
+          $CORE_ADDITIONAL_OPTS
+    - cd ..
+    - cd example/application/$APP_NAME
+    - >
+      mvn --batch-mode \
+          install \
+          -Drevision=$REVISION \
+          -Disis.version=$REVISION \
+          -Dmavenmixin-docker \
+          -Ddocker-plugin.imageName=$DOCKER_REGISTRY_NAME/$DOCKER_REGISTRY_USERNAME/$APP_NAME
+    - >
+      mvn -s .m2/settings.xml \
+          --batch-mode \
+          docker:push@push-image-tagged \
+          -pl webapp \
+          -Drevision=$REVISION \
+          -Disis.version=$REVISION \
+          -DskipTests \
+          -Dskip.isis-swagger \
+          -Dmavenmixin-docker \
+          -Ddocker-plugin.imageName=$DOCKER_REGISTRY_NAME/$DOCKER_REGISTRY_USERNAME/$APP_NAME \
+          -Ddocker-plugin.serverId=docker-registry \
+          -Ddocker.registryUrl=$DOCKER_REGISTRY_URL
+    - cd ../../..
+
+

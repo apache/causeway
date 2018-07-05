@@ -18,28 +18,27 @@
   under the License.
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>org.apache.isis.core</groupId>
-		<artifactId>isis</artifactId>
-        <version>1.16.3-SNAPSHOT</version>
-	</parent>
+    <parent>
+        <groupId>org.apache.isis.core</groupId>
+        <artifactId>isis</artifactId>
+    <version>${revision}</version>
+    </parent>
 
-	<artifactId>isis-core-security-shiro</artifactId>
-    <version>1.16.3-SNAPSHOT</version>
+    <artifactId>isis-core-security-shiro</artifactId>
 
-	<name>Apache Isis Security Shiro</name>
+    <name>Apache Isis Security Shiro</name>
 
-	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.security.shiro</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/security/shiro</git-plugin.propertiesDir>
-	</properties>
+    <properties>
+        <jar-plugin.automaticModuleName>org.apache.isis.security.shiro</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/isis/security/shiro</git-plugin.propertiesDir>
+    </properties>
 
 
-	<build>
-		<pluginManagement>
-			<plugins>
+    <build>
+        <pluginManagement>
+            <plugins>
                 <!-- Apache Release Audit Tool -->
                 <plugin>
                     <groupId>org.apache.rat</groupId>
@@ -59,44 +58,45 @@
 	                        <exclude>**/.settings/**</exclude>
 	                    </excludes>
                     </configuration>
-	            </plugin>
-			</plugins>
-		</pluginManagement>
-	</build>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
 
     <dependencyManagement>
     	<!-- for benefit of application developers, using scope=import -->
     	<dependencies>
-			<dependency>
-			    <groupId>org.apache.isis.core</groupId>
-			    <artifactId>isis-core-security-shiro</artifactId>
-				<version>1.16.3-SNAPSHOT</version>
-			</dependency>
+            <dependency>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis-core-security-shiro</artifactId>
+                <version>${revision}</version>
+            </dependency>
     	</dependencies>
     </dependencyManagement>
 
-	<dependencies>
-		<dependency>
-		    <groupId>org.apache.isis.core</groupId>
-		    <artifactId>isis-core-runtime</artifactId>
-		</dependency>
-		<dependency>
-		    <groupId>org.apache.isis.core</groupId>
-		    <artifactId>isis-core-unittestsupport</artifactId>
-		    <scope>test</scope>
-		</dependency>
-		<dependency>
-		    <groupId>org.apache.isis.core</groupId>
-		    <artifactId>isis-core-runtime</artifactId>
-		    <type>test-jar</type>
-		    <scope>test</scope>
-		</dependency>
-		
-		<dependency>
-		  <groupId>org.slf4j</groupId>
-		  <artifactId>jcl-over-slf4j</artifactId>
-          <scope>test</scope>
-		</dependency>
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-runtime</artifactId>
+        </dependency>
+	
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-runtime</artifactId>
+            <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-unittestsupport</artifactId>
+            <scope>test</scope>
+        </dependency>
+	
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jcl-over-slf4j</artifactId>
+            <scope>test</scope>
+        </dependency>
 
         <dependency>
             <groupId>org.apache.shiro</groupId>
@@ -113,5 +113,5 @@
             <scope>provided</scope>
         </dependency>
 
-	</dependencies>
+    </dependencies>
 </project>

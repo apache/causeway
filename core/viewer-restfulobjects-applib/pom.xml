@@ -18,12 +18,12 @@
   under the License.
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
 
     <parent>
         <groupId>org.apache.isis.core</groupId>
         <artifactId>isis</artifactId>
-        <version>1.16.3-SNAPSHOT</version>
+        <version>${revision}</version>
     </parent>
 
 	<artifactId>isis-core-viewer-restfulobjects-applib</artifactId>
@@ -35,32 +35,21 @@
     </properties>
 
     <dependencies>
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-		</dependency>
-		
         <dependency>
-            <groupId>org.jdom</groupId>
-            <artifactId>jdom</artifactId>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
         </dependency>
-	    
+		
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-applib</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-metamodel</artifactId>
-            <scope>test</scope>
+            <groupId>org.jdom</groupId>
+            <artifactId>jdom</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-unittestsupport</artifactId>
-            <scope>test</scope>
-        </dependency>
 
         <dependency>
             <groupId>org.jboss.resteasy</groupId>
@@ -87,19 +76,32 @@
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
+            <artifactId>jackson-annotations</artifactId>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-annotations</artifactId>
+            <artifactId>jackson-databind</artifactId>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.module</groupId>
             <artifactId>jackson-module-jaxb-annotations</artifactId>
         </dependency>
 
-	</dependencies>
+        <!-- TEST DEPENDENCIES -->
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-metamodel</artifactId>
+            <scope>test</scope>
+        </dependency>
 
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-unittestsupport</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+
+    </dependencies>
 
     <repositories>
         <!-- The artifact in the maven repository has been moved and causes a build failure. Using this setting gets the artifact allowing the build to work.  This fix should hopefully be temporary -->

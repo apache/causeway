@@ -29,7 +29,7 @@
 
     <groupId>org.apache.isis.core</groupId>
     <artifactId>isis</artifactId>
-    <version>1.16.3-SNAPSHOT</version>
+    <version>${revision}</version>
     
     <packaging>pom</packaging>
 
@@ -45,11 +45,9 @@
 
     <inceptionYear>2010</inceptionYear>
 
-    <prerequisites>
-        <maven>3.0.4</maven>
-    </prerequisites>
-
     <properties>
+        <revision>1.16.3-SNAPSHOT</revision>
+
         <jar-plugin.automaticModuleName>org.apache.isis.core</jar-plugin.automaticModuleName>
         <git-plugin.propertiesDir>org/apache/isis/core</git-plugin.propertiesDir>
 
@@ -63,6 +61,8 @@
         <compileSource>1.7</compileSource>
         <compileTarget>1.7</compileTarget>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <surefire-plugin.argLine>-Xms1024m -Xmx1024m</surefire-plugin.argLine>
 
         <dependency.locations.enabled>false</dependency.locations.enabled>
         <coreBaseDir>${project.build.directory}/..</coreBaseDir>
@@ -135,8 +135,6 @@
         <swagger-core.version>1.5.9</swagger-core.version>
         <webjars-servlet-2.x.version>1.5</webjars-servlet-2.x.version>
 
-        <!-- using 2.3.2 throws strange error about not finding org.hsqldb.jdbcDriver -->
-        <!-- using 2.3.3 throws SQL exception in simpleapp integtests -->
         <hsqldb.version>2.3.4</hsqldb.version>
         <log4jdbc-remix.version>0.2.7</log4jdbc-remix.version>
         <resteasy-jaxrs.version>3.0.24.Final</resteasy-jaxrs.version>
@@ -987,17 +985,20 @@
                     <configuration>
                         <rules>
                             <requireMavenVersion>
-                                <version>[3.0.4,)</version>
+                                <version>[3.5.0,)</version>
                             </requireMavenVersion>
                             <requireJavaVersion>
                                 <version>[1.8.0,)</version>
                             </requireJavaVersion>
+                            <!--
+                            seemingly not compatible with use of ${revision} placeholders
                             <requirePluginVersions>
                                 <message>All plugin versions must be
                                     defined!</message>
                                 <banLatest>true</banLatest>
                                 <banRelease>true</banRelease>
                             </requirePluginVersions>
+                            -->
                             <DependencyConvergence />
                         </rules>
                     </configuration>
@@ -1124,7 +1125,7 @@ ${license.additional-notes}
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>
                 <configuration>
-                    <!-- overriddes the default ('clean verify') -->
+                    <!-- overrides the default ('clean verify') -->
                     <preparationGoals>clean install</preparationGoals>
                     <autoVersionSubmodules>true</autoVersionSubmodules>
                 </configuration>
@@ -1136,6 +1137,35 @@ ${license.additional-notes}
                 <configuration>
                     <skip>false</skip>
                 </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>flatten-maven-plugin</artifactId>
+                <version>1.0.0</version>
+                <configuration>
+                    <updatePomFile>true</updatePomFile>
+                    <pomElements>
+                        <dependencyManagement>resolve</dependencyManagement>
+                        <dependencies>resolve</dependencies>
+                    </pomElements>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>flatten</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>flatten</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>flatten.clean</id>
+                        <phase>clean</phase>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
 
         </plugins>
@@ -1150,12 +1180,12 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-unittestsupport</artifactId>
-                <version>1.16.3-SNAPSHOT</version>
+                <version>${revision}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-unittestsupport</artifactId>
-                <version>1.16.3-SNAPSHOT</version>
+                <version>${revision}</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
@@ -1164,14 +1194,14 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-applib</artifactId>
-                <version>1.16.3-SNAPSHOT</version>
+                <version>${revision}</version>
                 <type>jar</type>
                 <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-applib</artifactId>
-                <version>1.16.3-SNAPSHOT</version>
+                <version>${revision}</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
@@ -1180,14 +1210,14 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-schema</artifactId>
-                <version>1.16.3-SNAPSHOT</version>
+                <version>${revision}</version>
                 <type>jar</type>
                 <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-schema</artifactId>
-                <version>1.16.3-SNAPSHOT</version>
+                <version>${revision}</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
@@ -1196,7 +1226,7 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-log4j</artifactId>
-                <version>1.16.3-SNAPSHOT</version>
+                <version>${revision}</version>
                 <type>jar</type>
                 <scope>compile</scope>
             </dependency>
@@ -1205,14 +1235,14 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-metamodel</artifactId>
-                <version>1.16.3-SNAPSHOT</version>
+                <version>${revision}</version>
                 <type>jar</type>
                 <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-metamodel</artifactId>
-                <version>1.16.3-SNAPSHOT</version>
+                <version>${revision}</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
@@ -1221,76 +1251,76 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-runtime</artifactId>
-                <version>1.16.3-SNAPSHOT</version>
+                <version>${revision}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-runtime</artifactId>
-                <version>1.16.3-SNAPSHOT</version>
+                <version>${revision}</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-wrapper</artifactId>
-                <version>1.16.3-SNAPSHOT</version>
+                <version>${revision}</version>
             </dependency>
 
             <!-- webserver -->
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-webserver</artifactId>
-                <version>1.16.3-SNAPSHOT</version>
+                <version>${revision}</version>
             </dependency>
 
             <!-- specsupport -->
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-specsupport</artifactId>
-                <version>1.16.3-SNAPSHOT</version>
+                <version>${revision}</version>
             </dependency>
 
             <!-- integtestsupport -->
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-integtestsupport</artifactId>
-                <version>1.16.3-SNAPSHOT</version>
+                <version>${revision}</version>
             </dependency>
 
             <!-- Restful Objects viewer -->
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-viewer-restfulobjects-applib</artifactId>
-                <version>1.16.3-SNAPSHOT</version>
+                <version>${revision}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-viewer-restfulobjects-applib</artifactId>
-                <version>1.16.3-SNAPSHOT</version>
+                <version>${revision}</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-viewer-restfulobjects-rendering</artifactId>
-                <version>1.16.3-SNAPSHOT</version>
+                <version>${revision}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-viewer-restfulobjects-rendering</artifactId>
-                <version>1.16.3-SNAPSHOT</version>
+                <version>${revision}</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-viewer-restfulobjects-server</artifactId>
-                <version>1.16.3-SNAPSHOT</version>
+                <version>${revision}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-viewer-restfulobjects-server</artifactId>
-                <version>1.16.3-SNAPSHOT</version>
+                <version>${revision}</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
@@ -1299,12 +1329,12 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-security</artifactId>
-                <version>1.16.3-SNAPSHOT</version>
+                <version>${revision}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-security-shiro</artifactId>
-                <version>1.16.3-SNAPSHOT</version>
+                <version>${revision}</version>
             </dependency>
 
             
@@ -1312,41 +1342,41 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-viewer-wicket-applib</artifactId>
-                <version>1.16.3-SNAPSHOT</version>
+                <version>${revision}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-viewer-wicket-model</artifactId>
-                <version>1.16.3-SNAPSHOT</version>
+                <version>${revision}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-viewer-wicket-model</artifactId>
-                <version>1.16.3-SNAPSHOT</version>
+                <version>${revision}</version>
                 <scope>test</scope>
                 <type>test-jar</type>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-viewer-wicket-ui</artifactId>
-                <version>1.16.3-SNAPSHOT</version>
+                <version>${revision}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-viewer-wicket-ui</artifactId>
-                <version>1.16.3-SNAPSHOT</version>
+                <version>${revision}</version>
                 <scope>test</scope>
                 <type>test-jar</type>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-viewer-wicket-impl</artifactId>
-                <version>1.16.3-SNAPSHOT</version>
+                <version>${revision}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-viewer-wicket-impl</artifactId>
-                <version>1.16.3-SNAPSHOT</version>
+                <version>${revision}</version>
                 <scope>test</scope>
                 <type>test-jar</type>
             </dependency>
@@ -1355,26 +1385,26 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.apache.isis.tool</groupId>
                 <artifactId>isis-maven-plugin</artifactId>
-                <version>1.16.3-SNAPSHOT</version>
+                <version>${revision}</version>
             </dependency>
 
             <!-- Maven dependencies -->
             <dependency>
                 <groupId>org.apache.isis.mavendeps</groupId>
                 <artifactId>isis-mavendeps-intellij</artifactId>
-                <version>1.16.3-SNAPSHOT</version>
+                <version>${revision}</version>
                 <type>pom</type>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.mavendeps</groupId>
                 <artifactId>isis-mavendeps-testing</artifactId>
-                <version>1.16.3-SNAPSHOT</version>
+                <version>${revision}</version>
                 <type>pom</type>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.mavendeps</groupId>
                 <artifactId>isis-mavendeps-webapp</artifactId>
-                <version>1.16.3-SNAPSHOT</version>
+                <version>${revision}</version>
                 <type>pom</type>
             </dependency>
 
@@ -1391,6 +1421,8 @@ ${license.additional-notes}
                 <artifactId>guava</artifactId>
                 <version>${guava.version}</version>
             </dependency>
+            
+            <!-- Axon -->
             <dependency>
                 <groupId>org.axonframework</groupId>
                 <artifactId>axon-core</artifactId>
@@ -1888,8 +1920,8 @@ ${license.additional-notes}
 
             <!-- Web development -->
             <dependency>
-				<groupId>org.eclipse.jetty</groupId>
-	           	<artifactId>jetty-servlet</artifactId>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-servlet</artifactId>
                 <version>${jetty.version}</version>
                 <exclusions>
                     <exclusion>
@@ -1899,10 +1931,10 @@ ${license.additional-notes}
                 </exclusions>
             </dependency>
             <dependency>
-    			<groupId>org.eclipse.jetty</groupId>
-    			<artifactId>jetty-webapp</artifactId>
-    			<version>${jetty.version}</version>
-			</dependency>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-webapp</artifactId>
+                <version>${jetty.version}</version>
+            </dependency>
             
 
             <!-- Testing libraries (not scope=test because used by isis-core-integtest) -->
@@ -2005,6 +2037,7 @@ ${license.additional-notes}
                 <version>${geronimo-jcdi_1.0_spec.version}</version>
             </dependency>
 
+            <!-- JAX-RS API -->
             <dependency>
                 <groupId>org.jboss.spec.javax.ws.rs</groupId>
                 <artifactId>jboss-jaxrs-api_2.0_spec</artifactId>
@@ -2012,7 +2045,7 @@ ${license.additional-notes}
             </dependency>
 
 
-            <!-- javax APIs -->
+            <!-- VALIDATION API -->
             <dependency>
                 <groupId>javax.validation</groupId>
                 <artifactId>validation-api</artifactId>
@@ -2074,7 +2107,7 @@ ${license.additional-notes}
     </dependencyManagement>
 
     <dependencies>
-        <!-- compile dependencies -->
+        <!-- COMPILE DEPENDENCIES -->
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
@@ -2088,8 +2121,7 @@ ${license.additional-notes}
           <artifactId>slf4j-api</artifactId>
         </dependency>
 
-
-        <!-- test dependencies -->
+        <!-- TEST DEPENDENCIES -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -2163,6 +2195,7 @@ ${license.additional-notes}
                 </plugins>
             </build>
         </profile>
+
         <profile>
             <id>m2e</id>
             <activation>
@@ -2174,7 +2207,6 @@ ${license.additional-notes}
                 <directory>target-ide</directory>
             </build>
         </profile>
-
 
         <profile>
             <id>deploy-local</id>
@@ -2214,6 +2246,49 @@ ${license.additional-notes}
                     </plugin>
                 </plugins>
             </build>
+        </profile>
+        <profile>
+            <!-- 
+	    this profile allows builds to be deployed to an inhouse nexus repo. 
+            export NEXUS_USERNAME=... 
+	    export NEXUS_PASSWORD=... 
+	    export NEXUS_REPO_URL=... 
+            export REVISION=... 
+	    mvn clean deploy \ 
+	       -Drevision=$REVISION \
+	       -Dnexus-deploy \ 
+	       -s .m2/settings.xml \ 
+	       -Dnexus-deploy.repositoryUrl=$NEXUS_REPO_URL
+            -->
+            <id>nexus-deploy</id>
+                <activation>
+                <property>
+                    <name>nexus-deploy</name>
+                </property>
+            </activation>
+            <properties>
+                <nexus-deploy.repositoryUrl>http://localhost:8081/repository/builds</nexus-deploy.repositoryUrl>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                        <version>1.6.8</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <serverId>nexus-deploy.serverId</serverId>
+                            <skipStaging>true</skipStaging>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+            <distributionManagement>
+                <repository>
+                    <id>nexus-deploy.serverId</id>
+                    <url>${nexus-deploy.repositoryUrl}</url>
+                </repository>
+            </distributionManagement>
         </profile>
         <profile>
             <id>owasp</id>
@@ -2289,8 +2364,8 @@ ${license.additional-notes}
     </profiles>
 
     <modules>
-        <module>applib</module>
         <module>schema</module>
+        <module>applib</module>
         <module>log4j</module>
         <module>metamodel</module>
         <module>runtime</module>
