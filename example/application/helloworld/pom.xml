@@ -31,7 +31,7 @@
     <artifactId>helloworld</artifactId>
     <version>${revision}</version>
 
-    <name>HelloWorld</name>
+    <name>Apache Isis App -HelloWorld</name>
 
     <packaging>war</packaging>
 

@@ -31,7 +31,7 @@
     <artifactId>simpleapp</artifactId>
     <version>${revision}</version>
 
-    <name>SimpleApp Parent</name>
+    <name>Apache Isis App - SimpleApp Parent</name>
 
     <packaging>pom</packaging>
 
