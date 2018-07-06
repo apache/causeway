@@ -30,7 +30,7 @@ import com.google.common.collect.Lists;
 
 /**
  * Intended to be used as a base class for executing queued up {@link Command background action}s.
- * 
+ *
  * <p>
  * This implementation uses the {@link #findBackgroundCommandsToExecute() hook method} so that it is
  * independent of the location where the actions have actually been persisted to.
@@ -52,6 +52,7 @@ public abstract class BackgroundCommandExecution extends CommandExecutionAbstrac
 
     // //////////////////////////////////////
 
+    @Override
     protected void doExecute(Object context) {
 
         final PersistenceSession persistenceSession = getPersistenceSession();

@@ -44,7 +44,7 @@ public class JarManifestModel extends ModelAbstract<JarManifestModel> {
     private static final long serialVersionUID = 1L;
 
     private static final List<String> VERSION_KEY_CANDIDATES = Arrays.asList("Implementation-Version", "Build-Time");
-    
+
     private String aboutMessage;
 
     private final List<JarManifestAttributes> manifests = Lists.newArrayList();
@@ -56,31 +56,31 @@ public class JarManifestModel extends ModelAbstract<JarManifestModel> {
     public JarManifestModel(String aboutMessage, InputStream metaInfManifestIs) {
 
         this.aboutMessage = aboutMessage;
-        
+
         Manifest manifest;
         try {
             manifest = new Manifest(metaInfManifestIs);
             manifests.add(JarManifestAttributes.jarName("Web archive (war file)"));
             manifests.add(JarManifestAttributes.jarUrl(null));
             addAttributes(manifest, manifests);
-            
+
             // append the version if able to guess
-            String versionIfAny = guessVersion(manifest); 
+            String versionIfAny = guessVersion(manifest);
             this.aboutMessage = this.aboutMessage + (versionIfAny != null? "\n\n" + versionIfAny: "");
-            
+
         } catch (Exception ex) {
             // ignore
         } finally {
             CloseableExtensions.closeSafely(metaInfManifestIs);
         }
-        
+
         Enumeration<?> resEnum;
         try {
             resEnum = _Context.getDefaultClassLoader().getResources(JarFile.MANIFEST_NAME);
         } catch (IOException e) {
             return;
         }
-        final List<JarManifest> jarManifests = Lists.newArrayList(); 
+        final List<JarManifest> jarManifests = Lists.newArrayList();
         while (resEnum.hasMoreElements()) {
             URL url = (URL)resEnum.nextElement();
             JarManifest jarManifest = new JarManifest(url);
@@ -99,9 +99,9 @@ public class JarManifestModel extends ModelAbstract<JarManifestModel> {
                 CloseableExtensions.closeSafely(is);
             }
         }
-        
+
         Collections.sort(jarManifests);
-        
+
         for (JarManifest jarManifest : jarManifests) {
             jarManifest.addAttributesTo(manifests);
         }
@@ -113,7 +113,7 @@ public class JarManifestModel extends ModelAbstract<JarManifestModel> {
         private final URL url;
 
         private JarName jarName;
-        
+
         public JarManifest(URL url) {
             this.url = url;
             jarName = asJarName(url);
@@ -134,7 +134,7 @@ public class JarManifestModel extends ModelAbstract<JarManifestModel> {
             return jarName.compareTo(o.jarName);
         }
     }
-    
+
     static class JarName implements Comparable<JarName>{
         enum Type {
             CLASSES, JAR, OTHER
@@ -152,32 +152,32 @@ public class JarManifestModel extends ModelAbstract<JarManifestModel> {
             return name.compareTo(o.name);
         }
     }
-    
+
     private static JarName asJarName(URL url) {
         final String path = url.getPath();
         // strip off the meta-inf
         String strippedPath = stripSuffix(path, "/META-INF/MANIFEST.MF");
         strippedPath = stripSuffix(strippedPath, "!");
-        
+
         // split the path into parts, and reverse
         List<String> parts = Lists.newArrayList(Splitter.on(CharMatcher.anyOf("/\\")).split(strippedPath));
         Collections.reverse(parts);
-        
+
         // searching from the end, return the jar name if possible
         for (String part : parts) {
             if(part.endsWith(".jar")) {
                 return new JarName(JarName.Type.JAR, part);
             }
         }
-        
-        // see if running in an IDE, under target*/classes; return the part prior to that. 
+
+        // see if running in an IDE, under target*/classes; return the part prior to that.
         if(parts.size()>=3) {
             if(parts.get(0).equals("classes") && parts.get(1).startsWith("target")) {
                 return new JarName(JarName.Type.CLASSES, parts.get(2));
             }
         }
-        
-        // otherwise, return the stripped path 
+
+        // otherwise, return the stripped path
         return new JarName(JarName.Type.OTHER, strippedPath);
     }
 

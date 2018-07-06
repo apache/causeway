@@ -30,7 +30,7 @@ import org.apache.isis.core.wrapper.proxy.ProxyCreator;
 public class ProxyContextHandler {
 
     private final ProxyCreator proxyCreator;
-    
+
     public ProxyContextHandler(final ProxyCreator proxyCreator) {
         this.proxyCreator = proxyCreator;
     }

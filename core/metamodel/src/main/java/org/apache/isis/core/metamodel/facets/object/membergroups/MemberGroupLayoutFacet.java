@@ -28,7 +28,7 @@ import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 /**
  * Indicates the (column) layout of property groups (as defined by {@link MemberOrderFacet})
  * and collections.
- * 
+ *
  * <p>
  * Corresponds to the {@link MemberGroupsFacet} annotation in the applib.
  */

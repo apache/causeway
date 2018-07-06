@@ -29,16 +29,16 @@ import org.apache.isis.commons.internal.functions._Functions.IndexAwareFunction;
 class _Functions_IndexAwareFunctionAdapter<T, R> implements Function<T, R> {
 
 
-	private int index=0;
-	private final IndexAwareFunction<T, R> indexAwareFunction;
+    private int index=0;
+    private final IndexAwareFunction<T, R> indexAwareFunction;
 
-	_Functions_IndexAwareFunctionAdapter(IndexAwareFunction<T, R> indexAwareFunction) {
-		this.indexAwareFunction = indexAwareFunction;
-	}
+    _Functions_IndexAwareFunctionAdapter(IndexAwareFunction<T, R> indexAwareFunction) {
+        this.indexAwareFunction = indexAwareFunction;
+    }
 
-	@Override
-	public R apply(T t) {
-		return indexAwareFunction.apply(index++, t);
-	}
+    @Override
+    public R apply(T t) {
+        return indexAwareFunction.apply(index++, t);
+    }
 
 }

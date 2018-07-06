@@ -25,7 +25,7 @@ import javax.ws.rs.HEAD;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 public final class InvokeKeys {
-    
+
     private final static EnumMap<SemanticsOf, String> map = new EnumMap<>(SemanticsOf.class);
     static {
         map.put(SemanticsOf.SAFE_AND_REQUEST_CACHEABLE, "invokeQueryOnly");
@@ -35,10 +35,10 @@ public final class InvokeKeys {
         map.put(SemanticsOf.NON_IDEMPOTENT, "invoke");
         map.put(SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE, "invoke");
     }
-    
+
     private InvokeKeys() {
     }
-    
+
     public static String getKeyFor(SemanticsOf actionSemantics) {
         return map.get(actionSemantics);
     }

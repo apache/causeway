@@ -36,7 +36,7 @@ public class HideForContextFacetNone extends HideForContextFacetAbstract {
     public String hides(final VisibilityContext<? extends VisibilityEvent> ic) {
         return null;
     }
-    
+
     @Override
     public boolean isNoop() {
         return true;

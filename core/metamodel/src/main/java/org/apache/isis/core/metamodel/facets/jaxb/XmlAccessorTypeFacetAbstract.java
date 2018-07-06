@@ -25,7 +25,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleValueFacetAbstract;
 
 public abstract class XmlAccessorTypeFacetAbstract
-        extends SingleValueFacetAbstract<XmlAccessType> implements XmlAccessorTypeFacet {
+extends SingleValueFacetAbstract<XmlAccessType> implements XmlAccessorTypeFacet {
 
     public static Class<XmlAccessorTypeFacet> type() {
         return XmlAccessorTypeFacet.class;

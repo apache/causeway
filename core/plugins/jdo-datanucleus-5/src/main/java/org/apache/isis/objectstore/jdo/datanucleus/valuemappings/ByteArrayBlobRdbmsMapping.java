@@ -35,6 +35,7 @@ public class ByteArrayBlobRdbmsMapping extends BlobRDBMSMapping {
         return javaTypeMapping;
     }
 
+    @Override
     protected Object getObjectForBytes(byte[] bytes, int param) {
         if(param == 3) {
             // JDBC is 1-based.

@@ -62,8 +62,8 @@ public interface DomainServiceResource {
     @GET
     @Path("/{serviceId}")
     @Produces({
-            MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR,
-            MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT, RestfulMediaType.APPLICATION_XML_ERROR
+        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR,
+        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT, RestfulMediaType.APPLICATION_XML_ERROR
     })
     //TODO deprecated @ClientResponseType(entityType = String.class)
     public Response service(@PathParam("serviceId") final String serviceId);
@@ -89,8 +89,8 @@ public interface DomainServiceResource {
     @Path("/{serviceId}/actions/{actionId}")
     @Consumes({ MediaType.WILDCARD })
     @Produces({
-            MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_ACTION, RestfulMediaType.APPLICATION_JSON_ERROR,
-            MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_ACTION, RestfulMediaType.APPLICATION_XML_ERROR
+        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_ACTION, RestfulMediaType.APPLICATION_JSON_ERROR,
+        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_ACTION, RestfulMediaType.APPLICATION_XML_ERROR
     })
     //TODO deprecated @ClientResponseType(entityType = String.class)
     public Response actionPrompt(@PathParam("serviceId") final String serviceId, @PathParam("actionId") final String actionId);
@@ -112,9 +112,9 @@ public interface DomainServiceResource {
     // //////////////////////////////////////////////////////////
 
     /**
-     * Because it isn't possible with the RestEasy client-side framework to specify a query string nor to pass arbitrary query params; instead 
+     * Because it isn't possible with the RestEasy client-side framework to specify a query string nor to pass arbitrary query params; instead
      * we provide an additional syntax of passing an Isis-defined query param <tt>x-isis-querystring</tt>.
-     * 
+     *
      * <p>
      * The content of this is taken to be the URL encoded map of arguments.
      */
@@ -122,8 +122,8 @@ public interface DomainServiceResource {
     @Path("/{serviceId}/actions/{actionId}/invoke")
     @Consumes({ MediaType.WILDCARD })
     @Produces({
-            MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR,
-            MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
+        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR,
+        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
     })
     //TODO deprecated @ClientResponseType(entityType = String.class)
     public Response invokeActionQueryOnly(@PathParam("serviceId") final String serviceId, @PathParam("actionId") final String actionId, @QueryParam("x-isis-querystring") final String xIsisQueryString);
@@ -132,8 +132,8 @@ public interface DomainServiceResource {
     @Path("/{serviceId}/actions/{actionId}/invoke")
     @Consumes({ MediaType.WILDCARD })
     @Produces({
-            MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR,
-            MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
+        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR,
+        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
     })
     //TODO deprecated @ClientResponseType(entityType = String.class)
     public Response invokeActionIdempotent(@PathParam("serviceId") final String serviceId, @PathParam("actionId") final String actionId, final InputStream arguments);
@@ -142,8 +142,8 @@ public interface DomainServiceResource {
     @Path("/{serviceId}/actions/{actionId}/invoke")
     @Consumes({ MediaType.WILDCARD })
     @Produces({
-            MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR,
-            MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
+        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR,
+        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
     })
     //TODO deprecated @ClientResponseType(entityType = String.class)
     public Response invokeAction(@PathParam("serviceId") final String serviceId, @PathParam("actionId") final String actionId, final InputStream arguments);

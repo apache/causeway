@@ -83,7 +83,7 @@ import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;
  * must be annotated using {@link Programmatic}.
  * </p>
  *
-*/
+ */
 public class SpecificationLoader implements ApplicationScopedComponent {
 
     private final static Logger LOG = LoggerFactory.getLogger(SpecificationLoader.class);
@@ -124,7 +124,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
     }
 
 
-    
+
 
 
     // -- init
@@ -196,7 +196,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
     }
 
 
-    
+
 
     // -- shutdown
 
@@ -209,7 +209,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
         cache.clear();
     }
 
-    
+
 
     // -- invalidateCache
 
@@ -245,7 +245,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
         cache.recache(newSpec);
     }
 
-    
+
 
     // -- validation
 
@@ -268,7 +268,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
         return validationFailures;
     }
 
-    
+
 
 
     // -- loadSpecification, loadSpecifications
@@ -472,7 +472,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
         postProcessor.postProcess(spec);
     }
 
-    
+
 
     // -- allSpecifications
     /**
@@ -493,7 +493,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
         return cache.allSpecifications();
     }
 
-    
+
 
     // -- getServiceClasses, isServiceClass
 
@@ -501,6 +501,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
     public List<Class<?>> allServiceClasses() {
         List<Class<?>> serviceClasses = Lists
                 .transform(this.servicesInjector.getRegisteredServices(), new Function<Object, Class<?>>(){
+                    @Override
                     public Class<?> apply(Object o) {
                         return o.getClass();
                     }
@@ -514,7 +515,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
         return this.servicesInjector.isRegisteredService(cls);
     }
 
-    
+
 
     // -- loaded
     /**
@@ -533,7 +534,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
         return cache.get(fullyQualifiedClassName) != null;
     }
 
-    
+
 
     // -- lookupBySpecId
     @Programmatic
@@ -547,7 +548,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
     }
 
 
-    
+
 
     @Programmatic
     public IsisConfiguration getConfiguration() {

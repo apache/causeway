@@ -54,8 +54,8 @@ public interface DomainTypeResource {
     @GET
     @Path("/{domainType}/layout")
     @Produces({
-            MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_LAYOUT_BS3,
-            MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_LAYOUT_BS3
+        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_LAYOUT_BS3,
+        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_LAYOUT_BS3
     })
     //TODO deprecated @ClientResponseType(entityType = String.class)
     public abstract Response layout(@PathParam("domainType") final String domainType);
@@ -93,7 +93,7 @@ public interface DomainTypeResource {
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_TYPE_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR })
     //TODO deprecated @ClientResponseType(entityType = String.class)
     public abstract Response domainTypeIsSubtypeOf(
-            @PathParam("domainType") final String domainType, 
+            @PathParam("domainType") final String domainType,
             @QueryParam("supertype") String superType, // simple style
             @QueryParam("args") final String argumentsQueryString // formal style
             );
@@ -103,7 +103,7 @@ public interface DomainTypeResource {
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_TYPE_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR })
     //TODO deprecated @ClientResponseType(entityType = String.class)
     public abstract Response domainTypeIsSupertypeOf(
-            @PathParam("domainType") final String domainType, 
+            @PathParam("domainType") final String domainType,
             @QueryParam("supertype") String superType, // simple style
             @QueryParam("args") final String argumentsQueryString // formal style
             );

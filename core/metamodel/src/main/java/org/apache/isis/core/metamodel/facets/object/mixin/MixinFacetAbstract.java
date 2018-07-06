@@ -113,7 +113,7 @@ public abstract class MixinFacetAbstract extends SingleValueFacetAbstract<String
         if(policy == Policy.FAIL_FAST) {
             throw new RuntimeException(
                     "Could not find the \"mixed-in\" domain object within " + getTitleService().titleOf(mixin)
-                            + " (tried to guess by looking at all private fields and matching one against the constructor parameter)");
+                    + " (tried to guess by looking at all private fields and matching one against the constructor parameter)");
         }
         // else just...
         return null;

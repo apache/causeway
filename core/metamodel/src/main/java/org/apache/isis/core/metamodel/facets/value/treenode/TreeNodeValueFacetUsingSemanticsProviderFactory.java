@@ -24,17 +24,17 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProviderFactory;
 
 @SuppressWarnings("rawtypes")
-public class TreeNodeValueFacetUsingSemanticsProviderFactory 
+public class TreeNodeValueFacetUsingSemanticsProviderFactory
 extends ValueFacetUsingSemanticsProviderFactory<TreeNode> {
-	
-	@Override
-	public void process(final ProcessClassContext processClassContext) {
-		final Class<?> type = processClassContext.getCls();
-		final FacetHolder holder = processClassContext.getFacetHolder();
 
-		if (!TreeNode.class.isAssignableFrom(type)) {
-			return;
-		}
-		addFacets(new TreeNodeValueSemanticsProvider(holder, getContext()));
-	}
+    @Override
+    public void process(final ProcessClassContext processClassContext) {
+        final Class<?> type = processClassContext.getCls();
+        final FacetHolder holder = processClassContext.getFacetHolder();
+
+        if (!TreeNode.class.isAssignableFrom(type)) {
+            return;
+        }
+        addFacets(new TreeNodeValueSemanticsProvider(holder, getContext()));
+    }
 }

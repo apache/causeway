@@ -27,20 +27,20 @@ import org.apache.isis.commons.internal.functions._Functions;
 /**
  * Indicates that an unexpected, non-recoverable (fatal) exception has occurred within
  * the application logic.
- * 
+ *
  * <p>
  * Throwing this exception will (dependent on the viewer) result in some sort of an error page being displayed to the user.
- * 
+ *
  * <p>
  * Note that this exception has identical semantics to {@link FatalException} (of which it is the immediate
  * superclass) and can be considered a synonym.
- * 
+ *
  * @see RecoverableException
  * @see ApplicationException
  * @see FatalException
  */
 public class NonRecoverableException extends RuntimeException implements TranslatableException {
-    
+
     private static final long serialVersionUID = 1L;
 
     private final TranslatableString translatableMessage;
@@ -83,10 +83,10 @@ public class NonRecoverableException extends RuntimeException implements Transla
         this.translatableMessage = translatableMessage;
         this.translationContext =
                 translationContextClass != null
-                        ? (translationContextClass.getName() +
-                            (!_Strings.isNullOrEmpty(translationContextMethod)
+                ? (translationContextClass.getName() +
+                        (!_Strings.isNullOrEmpty(translationContextMethod)
                                 ? "#" + translationContextMethod
-                                : "")
+                                        : "")
                         )
                         : null;
     }
@@ -95,7 +95,7 @@ public class NonRecoverableException extends RuntimeException implements Transla
     public String getMessage() {
         return getTranslatableMessage() != null
                 ? getTranslatableMessage().getPattern()
-                : super.getMessage();
+                        : super.getMessage();
     }
 
     @Override
@@ -109,34 +109,34 @@ public class NonRecoverableException extends RuntimeException implements Transla
     }
 
     // -- SHORTCUTS
-    
-	/**
-	 * <p><pre>
-	 * Path path = ...
-	 *
-	 * ## OLD
-	 *
-	 * try {
-	 *     Files.createDirectories(path);
-	 * } catch (IOException e) {
-	 *     throw new NonRecoverableException(e);
-	 * }
-	 * 
-	 * ## NEW
-	 *  
-	 * NonRecoverableException.tryRun(()->Files.createDirectories(path));
-	 * 
-	 * </pre></p>
-	 *  
-	 * @param checkedRunnable
-	 */
-	public static void tryRun(_Functions.CheckedRunnable checkedRunnable) {
-		try {
-			checkedRunnable.run();
-		} catch (Exception cause) {
-			throw new NonRecoverableException(cause);
-		}
-	}
-    
-    
+
+    /**
+     * <p><pre>
+     * Path path = ...
+     *
+     * ## OLD
+     *
+     * try {
+     *     Files.createDirectories(path);
+     * } catch (IOException e) {
+     *     throw new NonRecoverableException(e);
+     * }
+     *
+     * ## NEW
+     *
+     * NonRecoverableException.tryRun(()->Files.createDirectories(path));
+     *
+     * </pre></p>
+     *
+     * @param checkedRunnable
+     */
+    public static void tryRun(_Functions.CheckedRunnable checkedRunnable) {
+        try {
+            checkedRunnable.run();
+        } catch (Exception cause) {
+            throw new NonRecoverableException(cause);
+        }
+    }
+
+
 }

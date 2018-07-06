@@ -34,42 +34,42 @@ import javax.annotation.Nullable;
  * Provides framework internal memento support.
  * </p>
  * <p>
- * <b>WARNING</b>: Do <b>NOT</b> use any of the classes provided by this package! <br/> 
+ * <b>WARNING</b>: Do <b>NOT</b> use any of the classes provided by this package! <br/>
  * These may be changed or removed without notice!
  * </p>
- * 
+ *
  * @since 2.0.0
  */
 public final class _Mementos {
 
-	private _Mementos(){}
-	
-	// -- ENCODE-DECODER INTERFACE
-	
-	public static interface EncoderDecoder {
-		public String encode(final byte[] bytes);
-	    public byte[] decode(String str);
-	}
-	
-	// -- MEMENTO INTERFACE
-	
-	/**
-	 * Similar to a {@link Map}&lt;String, Object&gt; for key/value pairs, 
-	 * but in addition allows to-String <em>serialization</em> and
-	 * from-String <em>de-serialization</em> of the entire map.
-	 */
+    private _Mementos(){}
+
+    // -- ENCODE-DECODER INTERFACE
+
+    public static interface EncoderDecoder {
+        public String encode(final byte[] bytes);
+        public byte[] decode(String str);
+    }
+
+    // -- MEMENTO INTERFACE
+
+    /**
+     * Similar to a {@link Map}&lt;String, Object&gt; for key/value pairs,
+     * but in addition allows to-String <em>serialization</em> and
+     * from-String <em>de-serialization</em> of the entire map.
+     */
     public static interface Memento {
 
-    	/**
-    	 * Returns the Object associated with {@code name}
-    	 * @param name
-    	 * @param cls the expected type which to cast the retrieved value to (required)
-    	 * @return 
-    	 */
-        public <T> T get(String name, Class<T> cls);
-    	
         /**
-         * Behaves like a {@link HashMap}, but returns the Memento itself. 
+         * Returns the Object associated with {@code name}
+         * @param name
+         * @param cls the expected type which to cast the retrieved value to (required)
+         * @return
+         */
+        public <T> T get(String name, Class<T> cls);
+
+        /**
+         * Behaves like a {@link HashMap}, but returns the Memento itself.
          * @param name
          * @param value
          * @return self
@@ -77,82 +77,82 @@ public final class _Mementos {
         public Memento put(String name, Object value);
 
         /**
-         * @return an unmodifiable key-set of this map 
+         * @return an unmodifiable key-set of this map
          */
         public Set<String> keySet();
-        
+
         /**
-         * @return to-String <em>serialization</em> of this map 
+         * @return to-String <em>serialization</em> of this map
          */
         public String asString();
     }
-    
-	// -- SERIALIZER INTERFACE
-	
+
+    // -- SERIALIZER INTERFACE
+
     /**
-     * Coder/Decoder from {@link Object} to {@link Serializable} 
+     * Coder/Decoder from {@link Object} to {@link Serializable}
      */
     public static interface SerializingAdapter {
-        
-    	/**
-    	 * Converts the value into a {@link Serializable} that is write-able to an {@link ObjectOutput}.<br/>
-    	 * Note: write and read are complementary operators.
-    	 * @param value
-    	 * @return
-    	 */
-		public Serializable write(Object value);
-		
-		/**
-		 * Converts the {@link Serializable} {@code value} as read from an {@link ObjectInput} back into its 
-		 * original (typically a Pojo).<br/>
-		 * Note: write and read are complementary operators.
-		 * @param cls the expected type which to cast the {@code value} to (required)
-		 * @param value
-		 * @return
-		 */
-		public <T> T read(Class<T> cls, Serializable value);
-    }    
-    
+
+        /**
+         * Converts the value into a {@link Serializable} that is write-able to an {@link ObjectOutput}.<br/>
+         * Note: write and read are complementary operators.
+         * @param value
+         * @return
+         */
+        public Serializable write(Object value);
+
+        /**
+         * Converts the {@link Serializable} {@code value} as read from an {@link ObjectInput} back into its
+         * original (typically a Pojo).<br/>
+         * Note: write and read are complementary operators.
+         * @param cls the expected type which to cast the {@code value} to (required)
+         * @param value
+         * @return
+         */
+        public <T> T read(Class<T> cls, Serializable value);
+    }
+
     // -- MEMENTO CONSTRUCTION
-    
+
     /**
      * Creates an empty {@link Memento}.
-     * 
+     *
      * <p>
      * Typically followed by {@link Memento#put(String, Object)} for each of the data values to
      * add to the {@link Memento}, then {@link Memento#asString()} to convert to a string format.
      * </p>
-     * 
-     * @param codec (required) 
+     *
+     * @param codec (required)
      * @param serializer (required)
      * @return non-null
      */
     public static Memento create(EncoderDecoder codec, SerializingAdapter serializer) {
-    	return new _Mementos_MementoDefault(codec, serializer);
+        return new _Mementos_MementoDefault(codec, serializer);
     }
 
     /**
      * Parse string returned from {@link Memento#asString()}
-     * 
+     *
      * <p>
      * Typically followed by {@link Memento#get(String, Class)} for each of the data values held
      * in the {@link Memento}.
-     * </p> 
-     * 
+     * </p>
+     *
      * @param codec (required)
      * @param serializer (required)
      * @param input
-     * @return null if {@code input} is empty  
-     * 
+     * @return null if {@code input} is empty
+     *
      * @throws IllegalArgumentException if parsing fails
-     * 
+     *
      */
     public static @Nullable Memento parse(
-    		final EncoderDecoder codec, 
-    		final SerializingAdapter serializer, 
-    		final String input) {
+            final EncoderDecoder codec,
+            final SerializingAdapter serializer,
+            final String input) {
 
-    	return _Mementos_MementoDefault.parse(codec, serializer, input);
+        return _Mementos_MementoDefault.parse(codec, serializer, input);
     }
-	
+
 }

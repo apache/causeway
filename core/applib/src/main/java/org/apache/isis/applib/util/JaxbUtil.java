@@ -35,11 +35,11 @@ import org.apache.isis.commons.internal.resources._Resource;
 
 
 /**
- * Helper methods for converting {@link javax.xml.bind.annotation.XmlRootElement}-annotated class to-and-from XML.  
+ * Helper methods for converting {@link javax.xml.bind.annotation.XmlRootElement}-annotated class to-and-from XML.
  * Intended primarily for test use only (the {@link JAXBContext} is not cached).
  *
  * <p>
- * For example usage, see <a href="https://github.com/isisaddons/isis-module-publishmq">Isis addons' publishmq module</a> 
+ * For example usage, see <a href="https://github.com/isisaddons/isis-module-publishmq">Isis addons' publishmq module</a>
  * (non-ASF)
  * </p>
  */
@@ -64,8 +64,8 @@ public class JaxbUtil {
             final String resourceName,
             final Charset charset,
             final Class<T> dtoClass) throws IOException {
-    	
-    	final String s = _Resource.loadAsString(contextClass, resourceName, charset);
+
+        final String s = _Resource.loadAsString(contextClass, resourceName, charset);
         return fromXml(new StringReader(s), dtoClass);
     }
 
@@ -89,15 +89,15 @@ public class JaxbUtil {
     private static Map<Class<?>, JAXBContext> jaxbContextByClass = _Maps.newConcurrentHashMap();
 
     public static <T> JAXBContext jaxbContextFor(final Class<T> dtoClass)  {
-    	return jaxbContextByClass.computeIfAbsent(dtoClass, JaxbUtil::contextOf );
+        return jaxbContextByClass.computeIfAbsent(dtoClass, JaxbUtil::contextOf );
     }
 
     private static <T> JAXBContext contextOf(final Class<T> dtoClass) {
-    	try {
+        try {
             return JAXBContext.newInstance(dtoClass);
         } catch (JAXBException e) {
             throw new RuntimeException(e);
         }
     }
-    
+
 }

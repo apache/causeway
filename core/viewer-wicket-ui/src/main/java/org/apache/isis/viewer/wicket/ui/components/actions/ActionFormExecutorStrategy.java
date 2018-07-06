@@ -42,22 +42,25 @@ public class ActionFormExecutorStrategy implements FormExecutorStrategy<ActionMo
         return model;
     }
 
+    @Override
     public ObjectAdapter obtainTargetAdapter() {
         return model.getTargetAdapter();
     }
 
+    @Override
     public String getReasonInvalidIfAny() {
         return model.getReasonInvalidIfAny();
     }
 
+    @Override
     public void onExecuteAndProcessResults(final AjaxRequestTarget target) {
 
         if (model.isBookmarkable()) {
-/*
+            /*
             BookmarkedPagesModelProvider application = (BookmarkedPagesModelProvider) Session.get();
             BookmarkedPagesModel bookmarkedPagesModel = application.getBookmarkedPagesModel();
             bookmarkedPagesModel.bookmarkPage(model);
-*/
+             */
         }
 
         if (actionPrompt != null) {
@@ -67,10 +70,12 @@ public class ActionFormExecutorStrategy implements FormExecutorStrategy<ActionMo
         }
     }
 
+    @Override
     public ObjectAdapter obtainResultAdapter() {
         return model.execute();
     }
 
+    @Override
     public void redirectTo(
             final ObjectAdapter resultAdapter,
             final AjaxRequestTarget targetIfany) {

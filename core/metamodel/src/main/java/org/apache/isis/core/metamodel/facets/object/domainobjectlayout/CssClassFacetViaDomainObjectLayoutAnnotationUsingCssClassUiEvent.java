@@ -39,7 +39,7 @@ import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.util.EventUtil;
 
 public class CssClassFacetViaDomainObjectLayoutAnnotationUsingCssClassUiEvent extends FacetAbstract implements
-        CssClassFacet {
+CssClassFacet {
 
     private static final Logger LOG = LoggerFactory.getLogger(CssClassFacetViaDomainObjectLayoutAnnotationUsingCssClassUiEvent.class);
 
@@ -71,8 +71,8 @@ public class CssClassFacetViaDomainObjectLayoutAnnotationUsingCssClassUiEvent ex
 
     public CssClassFacetViaDomainObjectLayoutAnnotationUsingCssClassUiEvent(
             final Class<? extends CssClassUiEvent<?>> cssClassUiEventClass,
-            final EventBusService eventBusService,
-            final FacetHolder holder) {
+                    final EventBusService eventBusService,
+                    final FacetHolder holder) {
         super(CssClassFacetAbstract.type(), holder, Derivation.NOT_DERIVED);
         this.cssClassUiEventClass = cssClassUiEventClass;
         this.eventBusService = eventBusService;

@@ -23,7 +23,7 @@ import org.apache.isis.applib.Identifier;
 
 /**
  * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents an access (reading) of a collection.
- * 
+ *
  * <p>
  * Analogous to {@link CollectionAddToEvent} or
  * {@link CollectionRemoveFromEvent}, however the {@link #getReason()} will

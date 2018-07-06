@@ -20,13 +20,13 @@
 /**
  * Defines {@link org.apache.isis.core.metamodel.adapter.ObjectAdapter} interface,
  * a wrapper around each domain object pojo.
- * 
+ *
  * <p>
  * {@link org.apache.isis.core.metamodel.adapter.ObjectAdapter} is analogous
  * to {@link java.lang.Object java.lang.Object}; from it the {@link org.apache.isis.core.metamodel.spec.ObjectSpecification}
  * can be obtained (analogous to {@link java.lang.Class java.lang.Class}.
- * 
+ *
  * <p>
- * The other significant type defined by  
+ * The other significant type defined by
  */
 package org.apache.isis.core.metamodel.adapter;

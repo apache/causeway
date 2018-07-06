@@ -24,7 +24,7 @@ import org.apache.isis.applib.Identifier;
 /**
  * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents a check as to whether a particular value for a property is valid
  * or not.
- * 
+ *
  * <p>
  * If {@link #getReason()} is not <tt>null</tt> then provides the reason why the
  * value is invalid; otherwise the value is valid.
@@ -43,7 +43,7 @@ public class PropertyModifyEvent extends ValidityEvent {
 
     /**
      * If <tt>null</tt>, then the property was cleared.
-     * 
+     *
      * @return
      */
     @Override

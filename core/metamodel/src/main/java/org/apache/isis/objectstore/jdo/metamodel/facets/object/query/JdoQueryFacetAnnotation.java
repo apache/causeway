@@ -24,7 +24,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 
 public class JdoQueryFacetAnnotation extends JdoQueryFacetAbstract
-        implements JdoQueryFacet {
+implements JdoQueryFacet {
 
     public JdoQueryFacetAnnotation(final Query jdoNamedQuery,
             final FacetHolder holder) {

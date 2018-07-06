@@ -29,7 +29,7 @@ import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
 /**
  * Builds an {@link XmlSnapshot} using a fluent use through a builder:
- * 
+ *
  * <pre>
  * XmlSnapshot snapshot = XmlSnapshotBuilder.create(customer).includePath(&quot;placeOfBirth&quot;).includePath(&quot;orders/product&quot;).build();
  * Element customerAsXml = snapshot.toXml();

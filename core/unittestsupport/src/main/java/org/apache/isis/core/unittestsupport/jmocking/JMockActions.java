@@ -27,12 +27,12 @@ import org.jmock.api.Action;
 import org.jmock.api.Invocation;
 
 public final class JMockActions {
-    
+
     private JMockActions() {
     }
-    
+
     @SafeVarargs
-	public static <T> Action returnEach(final T... values) {
+    public static <T> Action returnEach(final T... values) {
         return new ReturnEachAction<T>(values);
     }
 
@@ -41,24 +41,26 @@ public final class JMockActions {
     }
 
     private static class ReturnEachAction<T> implements Action {
-        
+
         private final Collection<T> collection;
         private final Iterator<T> iterator;
-        
+
         ReturnEachAction(Collection<T> collection) {
             this.collection = collection;
             this.iterator = collection.iterator();
         }
-        
+
         @SafeVarargs
-		private ReturnEachAction(T... array) {
+        private ReturnEachAction(T... array) {
             this(Arrays.asList(array));
         }
-        
+
+        @Override
         public T invoke(Invocation invocation) throws Throwable {
             return iterator.next();
         }
-        
+
+        @Override
         public void describeTo(Description description) {
             description.appendValueList("return iterator.next() over ", ", ", "", collection);
         }
@@ -71,10 +73,12 @@ public final class JMockActions {
             this.i = i;
         }
 
+        @Override
         public void describeTo(final Description description) {
             description.appendText("parameter #" + i + " ");
         }
 
+        @Override
         public Object invoke(final Invocation invocation) throws Throwable {
             return invocation.getParameter(i);
         }

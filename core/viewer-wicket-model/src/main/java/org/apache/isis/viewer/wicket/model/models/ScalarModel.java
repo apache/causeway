@@ -65,7 +65,7 @@ import com.google.common.collect.Lists;
 /**
  * Represents a scalar of an entity, either a {@link Kind#PROPERTY property} or
  * a {@link Kind#PARAMETER parameter}.
- * 
+ *
  * <p>
  * Is the backing model to each of the fields that appear in forms (for entities
  * or action dialogs).
@@ -232,7 +232,7 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
 
             @Override
             public int getAutoCompleteOrChoicesMinLength(ScalarModel scalarModel) {
-                
+
                 if (scalarModel.hasAutoComplete()) {
                     final PropertyMemento propertyMemento = scalarModel.getPropertyMemento();
                     final OneToOneAssociation property = propertyMemento.getProperty(scalarModel.getSpecificationLoader());
@@ -242,7 +242,7 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
                 }
             }
 
-            
+
             @Override
             public void resetVersion(ScalarModel scalarModel) {
                 scalarModel.getParentEntityModel().resetVersion();
@@ -262,7 +262,7 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
                 final BigDecimalValueFacet facet = property.getFacet(BigDecimalValueFacet.class);
                 return facet != null? facet.getPrecision(): null;
             }
-            
+
             @Override
             public Integer getScale(ScalarModel scalarModel) {
                 final PropertyMemento propertyMemento = scalarModel.getPropertyMemento();
@@ -270,7 +270,7 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
                 final BigDecimalValueFacet facet = property.getFacet(BigDecimalValueFacet.class);
                 return facet != null? facet.getScale(): null;
             }
-            
+
             @Override
             public int getTypicalLength(ScalarModel scalarModel) {
                 final PropertyMemento propertyMemento = scalarModel.getPropertyMemento();
@@ -369,7 +369,7 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
                     final ObjectAdapter parentAdapter = scalarModel.getParentEntityModel().load();
                     final String invalidReasonIfAny = parameter.isValid(parentAdapter, proposedPojoAsStr,
                             InteractionInitiatedBy.USER
-                    );
+                            );
                     return invalidReasonIfAny;
                 } catch (final Exception ex) {
                     return ex.getLocalizedMessage();
@@ -384,7 +384,7 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
                     final ObjectAdapter parentAdapter = scalarModel.getParentEntityModel().load();
                     final String invalidReasonIfAny = parameter.isValid(parentAdapter, proposedAdapter.getObject(),
                             InteractionInitiatedBy.USER
-                    );
+                            );
                     return invalidReasonIfAny;
                 } catch (final Exception ex) {
                     return ex.getLocalizedMessage();
@@ -482,7 +482,7 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
                 final BigDecimalValueFacet facet = actionParameter.getFacet(BigDecimalValueFacet.class);
                 return facet != null? facet.getPrecision(): null;
             }
-            
+
             @Override
             public Integer getScale(ScalarModel scalarModel) {
                 final ActionParameterMemento parameterMemento = scalarModel.getParameterMemento();
@@ -490,7 +490,7 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
                 final BigDecimalValueFacet facet = actionParameter.getFacet(BigDecimalValueFacet.class);
                 return facet != null? facet.getScale(): null;
             }
-            
+
             @Override
             public int getTypicalLength(ScalarModel scalarModel) {
                 final ActionParameterMemento parameterMemento = scalarModel.getParameterMemento();
@@ -540,14 +540,14 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
 
                 // hmmm... I think we should simply return null, as an indicator that there is no "pending" (see ScalarModelWithMultiPending)
 
-//                // return an empty collection
-//                // TODO: this should probably move down into OneToManyActionParameter impl
-//                final OneToManyActionParameter otmap = (OneToManyActionParameter) actionParameter;
-//                final CollectionSemantics collectionSemantics = otmap.getCollectionSemantics();
-//                final TypeOfFacet typeOfFacet = actionParameter.getFacet(TypeOfFacet.class);
-//                final Class<?> elementType = typeOfFacet.value();
-//                final Object emptyCollection = collectionSemantics.emptyCollectionOf(elementType);
-//                return scalarModel.getCurrentSession().getPersistenceSession().adapterFor(emptyCollection);
+                //                // return an empty collection
+                //                // TODO: this should probably move down into OneToManyActionParameter impl
+                //                final OneToManyActionParameter otmap = (OneToManyActionParameter) actionParameter;
+                //                final CollectionSemantics collectionSemantics = otmap.getCollectionSemantics();
+                //                final TypeOfFacet typeOfFacet = actionParameter.getFacet(TypeOfFacet.class);
+                //                final Class<?> elementType = typeOfFacet.value();
+                //                final Object emptyCollection = collectionSemantics.emptyCollectionOf(elementType);
+                //                return scalarModel.getCurrentSession().getPersistenceSession().adapterFor(emptyCollection);
 
                 return objectAdapter;
 
@@ -614,7 +614,7 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
                 final AuthenticationSession authenticationSession, final DeploymentCategory deploymentCategory);
 
         public abstract int getAutoCompleteOrChoicesMinLength(ScalarModel scalarModel);
-        
+
         public abstract void resetVersion(ScalarModel scalarModel);
 
         public abstract String getDescribedAs(ScalarModel scalarModel);
@@ -637,7 +637,7 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
     }
 
     private final Kind kind;
-    
+
     private final EntityModel parentEntityModel;
 
     @Override
@@ -694,7 +694,8 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
     private void init() {
         kind.init(this);
     }
-    
+
+    @Override
     public void reset() {
         kind.reset(this);
     }
@@ -704,6 +705,7 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
         return FormExecutorContext.Util.isWithinPrompt(this);
     }
 
+    @Override
     public EntityModel getParentEntityModel() {
         return parentEntityModel;
     }
@@ -764,6 +766,7 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
     /**
      * Populated only if {@link #getKind()} is {@link Kind#PARAMETER}
      */
+    @Override
     public ActionParameterMemento getParameterMemento() {
         return parameterMemento;
     }
@@ -782,14 +785,14 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
     public boolean isScalarTypeAnyOf(final Class<?>... requiredClass) {
         final String fullName = getTypeOfSpecification().getFullIdentifier();
         return _NullSafe.stream(requiredClass)
-        		.map(Class::getName)
-        		.anyMatch(fullName::equals);
+                .map(Class::getName)
+                .anyMatch(fullName::equals);
     }
-    
+
     public boolean isScalarTypeSubtypingAnyOf(final Class<?>... requiredClass) {
         final Class<?> scalarType = getTypeOfSpecification().getCorrespondingClass();
         return _NullSafe.stream(requiredClass)
-        		.anyMatch(scalarType::isAssignableFrom);
+                .anyMatch(scalarType::isAssignableFrom);
     }
 
     public String getObjectAsString() {
@@ -815,8 +818,8 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
 
         if(isCollection()) {
             final List<ObjectAdapterMemento> listOfMementos = _NullSafe.stream((Iterable<?>) pojo)
-            		.map(ObjectAdapterMemento.Functions.fromPojo(getPersistenceSession()))
-            		.collect(Collectors.toList());
+                    .map(ObjectAdapterMemento.Functions.fromPojo(getPersistenceSession()))
+                    .collect(Collectors.toList());
             final ObjectAdapterMemento memento =
                     ObjectAdapterMemento.createForList(listOfMementos, getTypeOfSpecification().getSpecId());
             super.setObjectMemento(memento, getPersistenceSession(), getSpecificationLoader()); // associated value
@@ -833,7 +836,7 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
         }
         final ObjectAdapter adapter = parseableFacet.parseTextEntry(getObject(), enteredText,
                 InteractionInitiatedBy.USER
-        );
+                );
 
         setObject(adapter);
     }
@@ -856,6 +859,7 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
      * Default implementation looks up from singleton, but can be overridden for
      * testing.
      */
+    @Override
     protected AuthenticationSession getAuthenticationSession() {
         return getPersistenceSession().getServicesInjector().lookupService(AuthenticationSessionProvider.class).getAuthenticationSession();
     }
@@ -904,7 +908,7 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
 
     /**
      * for {@link BigDecimal}s only.
-     * 
+     *
      * @see #getScale()
      */
     public int getLength() {
@@ -913,7 +917,7 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
 
     /**
      * for {@link BigDecimal}s only.
-     * 
+     *
      * @see #getLength()
      */
     public Integer getScale() {
@@ -991,6 +995,7 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
 
 
 
+    @Override
     public PromptStyle getPromptStyle() {
         final PromptStyleFacet facet = getFacet(PromptStyleFacet.class);
         if(facet == null) {
@@ -1100,6 +1105,7 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
     /**
      * Further hint, to support inline prompts...
      */
+    @Override
     public InlinePromptContext getInlinePromptContext() {
         return inlinePromptContext;
     }
@@ -1135,6 +1141,7 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
      */
     private transient ObjectAdapter[] actionArgsHint;
 
+    @Override
     public void setActionArgsHint(ObjectAdapter[] actionArgsHint) {
         this.actionArgsHint = actionArgsHint;
     }

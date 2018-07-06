@@ -49,9 +49,9 @@ public class PropertyMemento implements Serializable {
                 owningSpecFor(property, isisSessionFactory).getSpecId(),
                 property.getIdentifier().toNameIdentityString(),
                 property.getSpecification().getSpecId()
-        );
+                );
     }
-    
+
     private PropertyMemento(
             final ObjectSpecId owningSpecId,
             final String name,

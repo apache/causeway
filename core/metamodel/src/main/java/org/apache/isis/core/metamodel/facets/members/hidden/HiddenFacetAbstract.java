@@ -31,7 +31,7 @@ import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 
 /**
  * This implements {@link org.apache.isis.core.metamodel.facetapi.MultiTypedFacet} so that each concrete implementation
- * is added to the eventual {@link org.apache.isis.core.metamodel.facetapi.FacetHolder} twice: once under 
+ * is added to the eventual {@link org.apache.isis.core.metamodel.facetapi.FacetHolder} twice: once under
  * <tt>HiddeFacet.class</tt> and once under its own concrete type class (eg <tt>HiddenFacetForActionAnnotation</tt>).
  * This satisfies a couple of (independent) requirements:
  * <ul>

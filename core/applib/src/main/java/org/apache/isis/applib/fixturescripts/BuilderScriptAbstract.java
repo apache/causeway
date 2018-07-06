@@ -24,7 +24,7 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.commons.internal.collections._Lists;
 
 public abstract class BuilderScriptAbstract<T,F extends BuilderScriptAbstract<T,F>>
-        extends FixtureScript implements WithPrereqs<T,F>, FixtureScriptWithExecutionStrategy {
+extends FixtureScript implements WithPrereqs<T,F>, FixtureScriptWithExecutionStrategy {
 
     private final FixtureScripts.MultipleExecutionStrategy executionStrategy;
 
@@ -98,9 +98,9 @@ public abstract class BuilderScriptAbstract<T,F extends BuilderScriptAbstract<T,
     }
 
     @SuppressWarnings("unchecked") //[ahuber] it's safe to assume that this object is of type F
-	protected F self() {
-    	return (F)this;
+    protected F self() {
+        return (F)this;
     }
-    
+
 }
 

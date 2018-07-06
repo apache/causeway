@@ -25,7 +25,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 /**
  * Implemented by some of the {@link InteractionContext} subclasses, making it
  * easier for facets to process multiple at the same time.
- * 
+ *
  * <p>
  * Where this is used most often is for {@link PropertyModifyContext} and
  * {@link ActionArgValidityContext}, where a {@link Facet} (such as

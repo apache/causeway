@@ -83,7 +83,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
      * Lazily built by {@link #getMember(Method)}.
      */
     private Map<Method, ObjectMember> membersByMethod = null;
-    
+
     private final FacetedMethodsBuilder facetedMethodsBuilder;
     private final boolean isService;
 
@@ -103,7 +103,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
 
 
 
-    
+
 
     // -- introspectTypeHierarchyAndMembers
     @Override
@@ -112,7 +112,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         if(isNotIntrospected()) {
             facetedMethodsBuilder.introspectClass();
         }
-        
+
         // name
         if(isNotIntrospected()) {
             addNamedFacetAndPluralFacetIfRequired();
@@ -174,7 +174,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
 
 
         if(isNotIntrospected()) {
-            updateFromFacetValues();    
+            updateFromFacetValues();
         }
     }
 
@@ -197,7 +197,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         }
     }
 
-    
+
 
     // -- create associations and actions
     private List<ObjectAssociation> createAssociations() {
@@ -211,7 +211,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         }
         return associations;
     }
-    
+
 
     private ObjectAssociation createAssociation(final FacetedMethod facetMethod) {
         if (facetMethod.getFeatureType().isCollection()) {
@@ -244,7 +244,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         }
     }
 
-    
+
 
     // -- isXxx
 
@@ -278,7 +278,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         return isService;
     }
 
-    
+
 
     // -- getObjectAction
 
@@ -307,8 +307,8 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     }
 
     private static ObjectAction firstAction(
-            final List<ObjectAction> candidateActions, 
-            final String actionName, 
+            final List<ObjectAction> candidateActions,
+            final String actionName,
             final List<ObjectSpecification> parameters) {
         outer: for (int i = 0; i < candidateActions.size(); i++) {
             final ObjectAction action = candidateActions.get(i);
@@ -325,11 +325,11 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
             }
             return action;
         }
-        return null;
+    return null;
     }
 
     private static ObjectAction firstAction(
-            final List<ObjectAction> candidateActions, 
+            final List<ObjectAction> candidateActions,
             final String id) {
         if (id == null) {
             return null;
@@ -347,7 +347,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         return null;
     }
 
-    
+
 
     // -- getMember, catalog... (not API)
 
@@ -364,7 +364,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         catalogueActions(membersByMethod);
         return membersByMethod;
     }
-    
+
     private void cataloguePropertiesAndCollections(final Map<Method, ObjectMember> membersByMethod) {
         final Predicate<ObjectAssociation> noop = com.google.common.base.Predicates.alwaysTrue();
         final List<ObjectAssociation> fields = getAssociations(Contributed.EXCLUDED, noop);
@@ -394,7 +394,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         }
     }
 
-    
+
 
     // -- toString
     @Override
@@ -406,6 +406,6 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         return str.toString();
     }
 
-    
+
 
 }

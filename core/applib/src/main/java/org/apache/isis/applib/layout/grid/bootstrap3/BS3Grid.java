@@ -49,14 +49,14 @@ import org.apache.isis.commons.internal.collections._Maps;
  */
 @XmlRootElement(
         name = "grid"
-)
+        )
 @XmlType(
         name = "grid"
         , propOrder = {
-            "rows",
-            "metadataErrors"
+                "rows",
+                "metadataErrors"
         }
-)
+        )
 public class BS3Grid extends GridAbstract implements BS3Element, Dto, BS3RowOwner {
 
     private static final long serialVersionUID = 1L;
@@ -64,11 +64,13 @@ public class BS3Grid extends GridAbstract implements BS3Element, Dto, BS3RowOwne
 
     private String cssClass;
 
+    @Override
     @XmlAttribute(required = false)
     public String getCssClass() {
         return cssClass;
     }
 
+    @Override
     public void setCssClass(final String cssClass) {
         this.cssClass = cssClass;
     }
@@ -80,6 +82,7 @@ public class BS3Grid extends GridAbstract implements BS3Element, Dto, BS3RowOwne
     private List<BS3Row> rows = _Lists.newArrayList();
 
     // no wrapper
+    @Override
     @XmlElement(name = "row", required = true)
     public List<BS3Row> getRows() {
         return rows;
@@ -108,7 +111,7 @@ public class BS3Grid extends GridAbstract implements BS3Element, Dto, BS3RowOwne
 
 
     @SuppressWarnings("unused")
-	private BS3RowOwner owner;
+    private BS3RowOwner owner;
 
 
 
@@ -155,6 +158,7 @@ public class BS3Grid extends GridAbstract implements BS3Element, Dto, BS3RowOwne
         @Override public void postVisit(final BS3Tab bs3Tab) { }
     }
 
+    @Override
     public void visit(final Grid.Visitor visitor) {
         final BS3Grid.Visitor bs3Visitor = asBs3Visitor(visitor);
         bs3Visitor.preVisit(this);

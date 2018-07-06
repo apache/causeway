@@ -25,7 +25,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
 public abstract class ObjectSpecIdFacetAbstract extends
-        FacetAbstract implements ObjectSpecIdFacet {
+FacetAbstract implements ObjectSpecIdFacet {
 
     public static Class<? extends Facet> type() {
         return ObjectSpecIdFacet.class;
@@ -36,7 +36,7 @@ public abstract class ObjectSpecIdFacetAbstract extends
     public ObjectSpecIdFacetAbstract(final String value, final FacetHolder holder) {
         this(value, holder, Derivation.NOT_DERIVED);
     }
-    
+
     public ObjectSpecIdFacetAbstract(
             final String value,
             final FacetHolder holder,
@@ -52,6 +52,7 @@ public abstract class ObjectSpecIdFacetAbstract extends
         this.value = value;
     }
 
+    @Override
     public ObjectSpecId value() {
         return value;
     }

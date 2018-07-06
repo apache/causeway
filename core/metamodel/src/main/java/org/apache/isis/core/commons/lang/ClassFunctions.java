@@ -23,7 +23,7 @@ import javax.annotation.Nullable;
 import com.google.common.base.Function;
 
 public final class ClassFunctions {
-    
+
     private ClassFunctions(){}
 
     public static <T> Function<Object, T> castTo(final Class<T> type) {

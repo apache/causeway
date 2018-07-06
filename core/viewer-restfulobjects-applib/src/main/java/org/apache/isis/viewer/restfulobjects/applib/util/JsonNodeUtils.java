@@ -49,17 +49,17 @@ public class JsonNodeUtils {
     /**
      * Walks the path, ensuring keys exist and are maps, or creating required
      * maps as it goes.
-     * 
+     *
      * <p>
      * For example, if given a list ("a", "b", "c") and starting with an empty
      * map, then will create:
-     * 
+     *
      * <pre>
      * {
      *   "a": {
      *     "b: {
      *       "c": {
-     *       }       
+     *       }
      *     }
      *   }
      * }

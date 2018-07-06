@@ -25,10 +25,10 @@ import java.lang.reflect.Type;
 /**
  * Helper that finds all parameter types (including generic types) for the
  * provided {@link Method}.
- * 
+ *
  * <p>
  * For example,
- * 
+ *
  * <pre>
  * public class CustomerRepository {
  *     public void filterCustomers(List&lt;Customer&gt; customerList) { ... }

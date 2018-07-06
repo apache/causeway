@@ -71,7 +71,7 @@ public class ActionLinkPanel extends PanelAbstract<ActionModel> {
         final PageParameters pageParameters = actionModel.getPageParameters();
         final Class<? extends Page> pageClass = getPageClassRegistry().getPageClass(PageType.ACTION_PROMPT);
         final AbstractLink link = newLink(ID_ACTION_LINK, pageClass, pageParameters);
-        
+
         label = new Label(ID_ACTION_TITLE, determineTitle());
         link.add(label);
 
@@ -88,7 +88,7 @@ public class ActionLinkPanel extends PanelAbstract<ActionModel> {
         return Links.newBookmarkablePageLink(linkId, pageParameters, pageClass);
     }
 
-    
+
     // ///////////////////////////////////////////////////////////////////
     // Convenience
     // ///////////////////////////////////////////////////////////////////

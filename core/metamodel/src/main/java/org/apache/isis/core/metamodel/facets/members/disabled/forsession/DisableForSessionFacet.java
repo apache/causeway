@@ -25,7 +25,7 @@ import org.apache.isis.core.metamodel.interactions.DisablingInteractionAdvisor;
 
 /**
  * Disable a property, collection or action based on the current session.
- * 
+ *
  * <p>
  * In the standard Apache Isis Programming Model, corresponds to invoking the
  * <tt>disableXxx(UserMemento)</tt> support method for the member.

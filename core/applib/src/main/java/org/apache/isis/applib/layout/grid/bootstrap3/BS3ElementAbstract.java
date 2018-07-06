@@ -24,21 +24,23 @@ import javax.xml.bind.annotation.XmlAttribute;
  * Superclass for all layout classes, factoring out the common {@link #getCssClass()} attribute.
  */
 public abstract class BS3ElementAbstract implements BS3Element {
-	
-	private static final long serialVersionUID = 1L;
 
-	private String cssClass;
+    private static final long serialVersionUID = 1L;
+
+    private String cssClass;
 
     /**
      * Any additional CSS classes to render on the page element corresponding to this object,
      * eg as per the <a href="http://getbootstrap.com/css/#grid-less">Bootstrap mixins</a> or just for
      * custom styling.
      */
+    @Override
     @XmlAttribute(required = false)
     public String getCssClass() {
         return cssClass;
     }
 
+    @Override
     public void setCssClass(final String cssClass) {
         this.cssClass = cssClass;
     }

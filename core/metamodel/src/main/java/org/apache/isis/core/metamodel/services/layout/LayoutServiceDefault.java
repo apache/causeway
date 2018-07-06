@@ -52,7 +52,7 @@ import org.apache.isis.objectstore.jdo.metamodel.facets.object.persistencecapabl
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
-)
+        )
 public class LayoutServiceDefault implements LayoutService2 {
 
     private static final Logger LOG = LoggerFactory.getLogger(LayoutServiceDefault.class);
@@ -64,7 +64,7 @@ public class LayoutServiceDefault implements LayoutService2 {
                 ImmutableMap.<String,Object>of(
                         Marshaller.JAXB_SCHEMA_LOCATION,
                         grid.getTnsAndSchemaLocation()
-                ));
+                        ));
     }
 
     protected Grid toGrid(final Class<?> domainClass, final Style style) {
@@ -94,6 +94,7 @@ public class LayoutServiceDefault implements LayoutService2 {
     }
 
 
+    @Override
     @Programmatic
     public byte[] toZip(final Style style) {
         final Collection<ObjectSpecification> allSpecs = specificationLoader.allSpecifications();
@@ -119,7 +120,7 @@ public class LayoutServiceDefault implements LayoutService2 {
                             ImmutableMap.<String,Object>of(
                                     Marshaller.JAXB_SCHEMA_LOCATION,
                                     grid.getTnsAndSchemaLocation()
-                            ));
+                                    ));
                     writer.write(xml);
                     writer.flush();
                     zos.closeEntry();
@@ -148,7 +149,7 @@ public class LayoutServiceDefault implements LayoutService2 {
                 ImmutableMap.<String,Object>of(
                         Marshaller.JAXB_SCHEMA_LOCATION,
                         menuBars.getTnsAndSchemaLocation()
-                ));
+                        ));
     }
 
 

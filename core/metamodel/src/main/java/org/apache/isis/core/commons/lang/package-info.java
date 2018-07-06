@@ -19,7 +19,7 @@
 
 /**
  * This package holds a small number of classes to extend the JDK.
- * 
+ *
  * <p>
  * These classes should be thought of as being in the same spirit as
  * the google <i>guava</i> library helper classes (and some may be replaced by guava in the future).

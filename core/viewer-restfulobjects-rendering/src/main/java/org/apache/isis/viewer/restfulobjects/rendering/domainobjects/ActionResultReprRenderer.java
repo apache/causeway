@@ -130,41 +130,41 @@ public class ActionResultReprRenderer extends ReprRendererAbstract<ActionResultR
         final ObjectSpecification returnType = this.action.getReturnType();
 
         switch (resultType) {
-            case VOID:
-                return null;
+        case VOID:
+            return null;
 
-            case LIST:
+        case LIST:
 
-                final CollectionFacet collectionFacet = returnType.getFacet(CollectionFacet.class);
-                final Collection<ObjectAdapter> collectionAdapters = collectionFacet.collection(returnedAdapter);
+            final CollectionFacet collectionFacet = returnType.getFacet(CollectionFacet.class);
+            final Collection<ObjectAdapter> collectionAdapters = collectionFacet.collection(returnedAdapter);
 
-                final ListReprRenderer listReprRenderer =
-                        new ListReprRenderer(rendererContext, null, representation).withElementRel(Rel.ELEMENT);
-                listReprRenderer.with(collectionAdapters)
-                        .withReturnType(action.getReturnType())
-                        .withElementType(returnedAdapter.getElementSpecification());
+            final ListReprRenderer listReprRenderer =
+                    new ListReprRenderer(rendererContext, null, representation).withElementRel(Rel.ELEMENT);
+            listReprRenderer.with(collectionAdapters)
+            .withReturnType(action.getReturnType())
+            .withElementType(returnedAdapter.getElementSpecification());
 
-                return listReprRenderer;
+            return listReprRenderer;
 
-            case SCALAR_VALUE:
+        case SCALAR_VALUE:
 
-                final ScalarValueReprRenderer scalarValueReprRenderer =
-                        new ScalarValueReprRenderer(rendererContext, null, representation);
-                scalarValueReprRenderer.with(returnedAdapter)
-                        .withReturnType(action.getReturnType());
+            final ScalarValueReprRenderer scalarValueReprRenderer =
+            new ScalarValueReprRenderer(rendererContext, null, representation);
+            scalarValueReprRenderer.with(returnedAdapter)
+            .withReturnType(action.getReturnType());
 
-                return scalarValueReprRenderer;
+            return scalarValueReprRenderer;
 
-            case DOMAIN_OBJECT:
+        case DOMAIN_OBJECT:
 
-                final DomainObjectReprRenderer objectReprRenderer =
-                        new DomainObjectReprRenderer(rendererContext, null, representation);
+            final DomainObjectReprRenderer objectReprRenderer =
+            new DomainObjectReprRenderer(rendererContext, null, representation);
 
-                objectReprRenderer.with(returnedAdapter).includesSelf();
+            objectReprRenderer.with(returnedAdapter).includesSelf();
 
-                return objectReprRenderer;
-            default:
-                throw new IllegalStateException("All possible states of ResultType enumerated; resultType = " + resultType);
+            return objectReprRenderer;
+        default:
+            throw new IllegalStateException("All possible states of ResultType enumerated; resultType = " + resultType);
         }
     }
 
@@ -179,7 +179,7 @@ public class ActionResultReprRenderer extends ReprRendererAbstract<ActionResultR
         if(selfLink == SelfLink.EXCLUDED) {
             return;
         }
-        
+
         final LinkBuilder selfLinkBuilder = adapterLinkTo.memberBuilder(Rel.SELF, MemberType.ACTION, action, RepresentationType.ACTION_RESULT, "invoke");
 
         // TODO: remove duplication with AbstractObjectMember#addLinkTo

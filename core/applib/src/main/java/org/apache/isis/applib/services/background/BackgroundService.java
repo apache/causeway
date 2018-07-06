@@ -20,7 +20,7 @@ import org.apache.isis.applib.annotation.Programmatic;
 
 /**
  * Submit actions to be invoked in the background.
- * 
+ *
  * <p>
  * Example usage:
  * <pre>
@@ -29,7 +29,7 @@ import org.apache.isis.applib.annotation.Programmatic;
  *         backgroundService.execute(customer).submitInvoice();
  *     }
  * }
- * 
+ *
  * &#64;javax.inject.Inject
  * private BackgroundService backgroundService;
  * </pre>

@@ -17,14 +17,14 @@
 package org.apache.isis.core.specsupport.scenarios;
 
 /**
- * Provides access to the any domain services 
+ * Provides access to the any domain services
  * that may have been configured.
- * 
+ *
  * <p>
  * For {@link ScenarioExecution scenario}s with integration-scope, these will be
  * configured services for an end-to-end running system.  For scenarios with
  * unit-scope, these will typically be mocks.
- * 
+ *
  * @deprecated - with no replacement
  */
 @Deprecated

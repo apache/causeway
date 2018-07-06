@@ -29,7 +29,7 @@ import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 public class IsisAjaxPagingNavigationIncrementLink extends AjaxPagingNavigationIncrementLink {
 
     private static final long serialVersionUID = 1L;
-    
+
     private final IsisAjaxFallbackDataTable<?, ?> dataTable;
     private final Component component;
 

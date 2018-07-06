@@ -62,13 +62,13 @@ final class IsisSchema {
     public static final String FEATURE_VALUE = "value";
     /**
      * Namespace prefix for {@link NS_URI}.
-     * 
+     *
      * The NamespaceManager will not allow any namespace to use this prefix.
      */
     public static final String NS_PREFIX = "isis";
     /**
      * URI representing the namespace of ObjectAdapter framework's metamodel.
-     * 
+     *
      * The NamespaceManager will not allow any namespaces with this URI to be
      * added.
      */
@@ -168,7 +168,7 @@ final class IsisSchema {
      * Adds <code>isis:feature=&quot;collection&quot;</code> attribute, the
      * <code>isis:type=&quote;...&quot;</code> and the
      * <code>isis:size=&quote;...&quot;</code> for the supplied element.
-     * 
+     *
      * Additionally, if the <code>addOids</code> parameter is set, also adds
      * <code>&lt;oids&gt;</code> child elements.
      */

@@ -40,17 +40,17 @@ public class JUnitRuleMockery2Test_autoWiring_constructorInjection_happyCase {
     private Collaborator collaborator;
 
     @ClassUnderTest
-	private CollaboratingUsingConstructorInjection collaborating;
+    private CollaboratingUsingConstructorInjection collaborating;
 
     // no longer necessary :-)
-//    @Before
-//	public void setUp() throws Exception {
-//    	collaborating = (CollaboratingUsingConstructorInjection) context.getClassUnderTest();
-//	}
-    
+    //    @Before
+    //	public void setUp() throws Exception {
+    //    	collaborating = (CollaboratingUsingConstructorInjection) context.getClassUnderTest();
+    //	}
+
     @Test
     public void wiring() {
-    	assertThat(collaborating.collaborator, is(not(nullValue())));
+        assertThat(collaborating.collaborator, is(not(nullValue())));
     }
 
 

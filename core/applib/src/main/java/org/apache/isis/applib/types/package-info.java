@@ -18,6 +18,6 @@
  */
 
 /**
- * 
+ *
  */
 package org.apache.isis.applib.types;

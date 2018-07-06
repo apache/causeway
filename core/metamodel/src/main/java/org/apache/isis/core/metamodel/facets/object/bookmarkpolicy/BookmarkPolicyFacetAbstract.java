@@ -26,7 +26,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 
 public abstract class BookmarkPolicyFacetAbstract extends FacetAbstract implements
-        BookmarkPolicyFacet {
+BookmarkPolicyFacet {
 
 
     public static Class<? extends Facet> type() {

@@ -45,7 +45,7 @@ public class RemoveAnnotatedMethodsFacetFactory extends FacetFactoryAbstract {
         try {
             // doing this reflectively so that don't bring in a dependency on axon.
             eventHandlerClass = _Casts.uncheckedCast(
-            		ClassUtil.forName("org.axonframework.eventhandling.annotation.EventHandler"));
+                    ClassUtil.forName("org.axonframework.eventhandling.annotation.EventHandler"));
 
         } catch(Exception ignore) {
             // ignore
@@ -67,7 +67,7 @@ public class RemoveAnnotatedMethodsFacetFactory extends FacetFactoryAbstract {
         for (final Method method : methods) {
             removeAnnotatedMethods(methodRemover, method, PreDestroy.class);
             removeAnnotatedMethods(methodRemover, method, PostConstruct.class);
-                removeAnnotatedMethods(methodRemover, method, Programmatic.class);
+            removeAnnotatedMethods(methodRemover, method, Programmatic.class);
             removeAnnotatedMethods(methodRemover, method, Subscribe.class);
             if(eventHandlerClass != null) {
                 removeAnnotatedMethods(methodRemover, method, eventHandlerClass);

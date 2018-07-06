@@ -42,15 +42,15 @@ import org.apache.isis.core.metamodel.layout.memberorderfacet.MemberOrderCompara
 
 /**
  * Represents a nested hierarchy of ordered members.
- * 
+ *
  * <p>
  * At each level the elements are either {@link FacetedMethod}s or they are
  * instances of {@link OrderSet} represent a group of {@link FacetedMethod}s
  * that have a {@link MemberOrderFacet} of the same name.
- * 
+ *
  * <p>
  * With no name, (ie <tt>name=""</tt> is the default), at the top level
- * 
+ *
  * <pre>
  * MemberOrder(sequence=&quot;1&quot;)
  * MemberOrder(sequence=&quot;1.1&quot;)
@@ -58,10 +58,10 @@ import org.apache.isis.core.metamodel.layout.memberorderfacet.MemberOrderCompara
  * MemberOrder(sequence=&quot;1.2.1&quot;)
  * MemberOrder(sequence=&quot;1.3&quot;)
  * </pre>
- * 
+ *
  * <p>
  * With names, creates a hierarchy.
- * 
+ *
  * <pre>
  * MemberOrder(sequence=&quot;1.1&quot;)                   // no parent
  * MemberOrder(sequence=&quot;1.2.1&quot;)
@@ -71,10 +71,10 @@ import org.apache.isis.core.metamodel.layout.memberorderfacet.MemberOrderCompara
  * MemberOrder(name=&quot;abc,def&quot;, sequence=&quot;1&quot;)     // group is def, parent is abc
  * MemberOrder(name=&quot;abc,def&quot;, sequence=&quot;1.2&quot;)
  * </pre>
- * 
+ *
  */
 public class DeweyOrderSet implements Comparable<DeweyOrderSet>, Iterable<Object>  {
-    
+
     public static DeweyOrderSet createOrderSet(final List<? extends IdentifiedHolder> identifiedHolders) {
 
         final SortedMap<String, SortedSet<IdentifiedHolder>> sortedMembersByGroup = Maps.newTreeMap();
@@ -128,7 +128,7 @@ public class DeweyOrderSet implements Comparable<DeweyOrderSet>, Iterable<Object
      * Recursively creates parents all the way up to root (<tt>""</tt>), along
      * the way associating each child with its parent and adding the child as an
      * element of its parent.
-     * 
+     *
      * @param orderSetsByGroup
      * @param deweyOrderSet
      */
@@ -152,10 +152,10 @@ public class DeweyOrderSet implements Comparable<DeweyOrderSet>, Iterable<Object
     /**
      * Gets the SortedSet with the specified group from the supplied Map of
      * SortedSets.
-     * 
+     *
      * <p>
      * If there is no such SortedSet, creates.
-     * 
+     *
      * @param sortedMembersByGroup
      * @param groupName
      * @return
@@ -170,7 +170,7 @@ public class DeweyOrderSet implements Comparable<DeweyOrderSet>, Iterable<Object
     }
 
     // /////////////////////////////////////////////////////////////////////////
-    
+
     private final List<Object> elements = Lists.newArrayList();
     private final String groupFullName;
     private final String groupName;
@@ -199,7 +199,7 @@ public class DeweyOrderSet implements Comparable<DeweyOrderSet>, Iterable<Object
      * Last component of the comma-separated group name supplied in the
      * constructor (analogous to the file name extracted from a fully qualified
      * file name).
-     * 
+     *
      * <p>
      * For example, if supplied <tt>abc,def,ghi</tt> in the constructor, then
      * this will return <tt>ghi</tt>.
@@ -211,7 +211,7 @@ public class DeweyOrderSet implements Comparable<DeweyOrderSet>, Iterable<Object
     /**
      * The group name exactly as it was supplied in the constructor (analogous
      * to a fully qualified file name).
-     * 
+     *
      * <p>
      * For example, if supplied <tt>abc,def,ghi</tt> in the constructor, then
      * this will return the same string <tt>abc,def,ghi</tt>.
@@ -224,7 +224,7 @@ public class DeweyOrderSet implements Comparable<DeweyOrderSet>, Iterable<Object
      * Represents the parent groups, derived from the group name supplied in the
      * constructor (analogous to the directory portion of a fully qualified file
      * name).
-     * 
+     *
      * <p>
      * For example, if supplied <tt>abc,def,ghi</tt> in the constructor, then
      * this will return <tt>abc,def</tt>.
@@ -313,12 +313,12 @@ public class DeweyOrderSet implements Comparable<DeweyOrderSet>, Iterable<Object
             this.addElement(deweyOrderSet);
         }
     }
-    
+
     // ///////////////////////// reorderChildren //////////////////////
-    
+
     public void reorderChildren(List<String> requiredOrder) {
         final LinkedHashMap<String,DeweyOrderSet> orderSets = Maps.newLinkedHashMap();
-        
+
         // remove all OrderSets from elements
         // though remembering the order they were encountered
         for (Object child : elementList()) {
@@ -328,8 +328,8 @@ public class DeweyOrderSet implements Comparable<DeweyOrderSet>, Iterable<Object
                 orderSets.put(orderSet.getGroupName(), orderSet);
             }
         }
-        
-        // spin through the requiredOrder and add back in (if found)  
+
+        // spin through the requiredOrder and add back in (if found)
         for (String group : requiredOrder) {
             DeweyOrderSet orderSet = orderSets.get(group);
             if(orderSet == null) {
@@ -338,7 +338,7 @@ public class DeweyOrderSet implements Comparable<DeweyOrderSet>, Iterable<Object
             orderSets.remove(group);
             elements.add(orderSet);
         }
-        
+
         // anything left, add back in the original order
         for (String orderSetGroupName : orderSets.keySet()) {
             final DeweyOrderSet orderSet = orderSets.get(orderSetGroupName);
@@ -396,7 +396,7 @@ public class DeweyOrderSet implements Comparable<DeweyOrderSet>, Iterable<Object
      * Format is: <tt>abc,def:XXel/YYm/ZZch</tt>
      * <p>
      * where <tt>abc,def</tt> is group name, <tt>XX</tt> is number of elements,
-     * <tt>YY is number of members, and 
+     * <tt>YY is number of members, and
      * <tt>ZZ</tt> is number of child order sets.
      */
     @Override

@@ -34,9 +34,9 @@ import org.apache.isis.commons.internal.collections._Lists;
 @XmlType(
         name = "menuBar"
         , propOrder = {
-            "menus"
+                "menus"
         }
-)
+        )
 public class BS3MenuBar implements MenuBar, Serializable {
 
     private static final long serialVersionUID = 1L;

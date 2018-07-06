@@ -22,18 +22,18 @@
  * interface (and various implementations), used by the
  * {@link org.apache.isis.applib.annotation.MustSatisfy} annotation to
  * declare valid values for properties or parameters.
- * 
+ *
  * <p>
  * This is an implementation of the DDD &quot;Specification&quot;, allowing
  * validatation that might otherwise be repeated for both properties and
  * parameters (in the <tt>validateXxx()</tt> methods to be factored out.
- * 
+ *
  * <p>
  * That said, there is still some repetition in that the {@link org.apache.isis.applib.annotation.MustSatisfy}
  * annotation must be applied in all appropriate cases.  If it is the case that
- * the validation rules would apply <i>every</i> case, then it is generally 
+ * the validation rules would apply <i>every</i> case, then it is generally
  * preferable to implement a {@link org.apache.isis.applib.annotation.Value} type
  * through the {@link org.apache.isis.applib.adapters.ValueSemanticsProvider}
- * interface. 
+ * interface.
  */
 package org.apache.isis.applib.spec;

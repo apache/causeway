@@ -46,7 +46,7 @@ public class NotInServiceMenuFacetDerivedFromDomainServiceFacetFactory extends F
         if(domainServiceFacet == null || domainServiceFacet.isNoop()) {
             return;
         }
-        
+
         final NatureOfService natureOfService = domainServiceFacet.getNatureOfService();
         if(natureOfService == NatureOfService.VIEW_MENU_ONLY || natureOfService == NatureOfService.VIEW) {
             return;

@@ -28,22 +28,22 @@ import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory
 
 public class IsisJdoSupportPlugin4 implements IsisJdoMetamodelPlugin, IsisJdoRuntimePlugin {
 
-	@Override
-	public boolean isPersistenceEnhanced(@Nullable Class<?> cls) {
-		if(cls==null) {
-			return false;
-		}
-		return org.datanucleus.enhancement.Persistable.class.isAssignableFrom(cls);
-	}
-	
-	@Override
-	public Method[] getMethodsProvidedByEnhancement() {
-		return org.datanucleus.enhancement.Persistable.class.getDeclaredMethods();
-	}
+    @Override
+    public boolean isPersistenceEnhanced(@Nullable Class<?> cls) {
+        if(cls==null) {
+            return false;
+        }
+        return org.datanucleus.enhancement.Persistable.class.isAssignableFrom(cls);
+    }
 
-	@Override
-	public PersistenceSessionFactory getPersistenceSessionFactory(ConfigurationServiceInternal isisConfiguration) {
-		return new PersistenceSessionFactory4(isisConfiguration);
-	}
+    @Override
+    public Method[] getMethodsProvidedByEnhancement() {
+        return org.datanucleus.enhancement.Persistable.class.getDeclaredMethods();
+    }
+
+    @Override
+    public PersistenceSessionFactory getPersistenceSessionFactory(ConfigurationServiceInternal isisConfiguration) {
+        return new PersistenceSessionFactory4(isisConfiguration);
+    }
 
 }

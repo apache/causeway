@@ -89,7 +89,7 @@ public abstract class TeardownFixtureAbstract2 extends TeardownFixtureAbstract {
         }
         final DiscriminatorMetadata discriminatorMetadata = inheritanceMetadata.getDiscriminatorMetadata();
         if(discriminatorMetadata == null ||
-           discriminatorMetadata.getStrategy() != DiscriminatorStrategy.VALUE_MAP) {
+                discriminatorMetadata.getStrategy() != DiscriminatorStrategy.VALUE_MAP) {
             return null;
         }
         return discriminatorMetadata.getValue();
@@ -112,7 +112,7 @@ public abstract class TeardownFixtureAbstract2 extends TeardownFixtureAbstract {
         }
         final DiscriminatorMetadata discriminatorMetadata = inheritanceMetadata.getDiscriminatorMetadata();
         if(discriminatorMetadata == null ||
-           discriminatorMetadata.getStrategy() != DiscriminatorStrategy.VALUE_MAP) {
+                discriminatorMetadata.getStrategy() != DiscriminatorStrategy.VALUE_MAP) {
             return null;
         }
         return discriminatorMetadata.getColumn();
@@ -140,9 +140,11 @@ public abstract class TeardownFixtureAbstract2 extends TeardownFixtureAbstract {
         this.isisJdoSupport.executeUpdate(sql);
     }
 
+    @Override
     protected void preDeleteFrom(Class<?> cls) {
     }
 
+    @Override
     protected void postDeleteFrom(Class<?> cls) {
     }
 

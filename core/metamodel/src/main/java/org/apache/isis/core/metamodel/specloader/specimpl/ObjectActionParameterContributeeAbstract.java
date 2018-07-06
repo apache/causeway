@@ -25,8 +25,8 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 
 public abstract class ObjectActionParameterContributeeAbstract
-        extends ObjectActionParameterAbstract
-        implements ObjectActionParameterContributee {
+extends ObjectActionParameterAbstract
+implements ObjectActionParameterContributee {
 
     private final ObjectAdapter serviceAdapter;
     private final ObjectActionParameter serviceActionParameter;
@@ -52,20 +52,22 @@ public abstract class ObjectActionParameterContributeeAbstract
                 interactionInitiatedBy);
     }
 
+    @Override
     protected ObjectAdapter targetForDefaultOrChoices(final ObjectAdapter adapter) {
         return serviceAdapter;
     }
 
+    @Override
     protected List<ObjectAdapter> argsForDefaultOrChoices(
             final ObjectAdapter contributee,
             final List<ObjectAdapter> argumentsIfAvailable) {
 
         final List<ObjectAdapter> suppliedArgs = ListExtensions.mutableCopy(argumentsIfAvailable);
-        
+
         final int contributeeParam = contributeeAction.getContributeeParam();
         ListExtensions.insert(suppliedArgs, contributeeParam, contributee);
-        
+
         return suppliedArgs;
     }
-    
+
 }

@@ -32,7 +32,7 @@ public class JUnitRuleMockery2Test_mockAnnotatedWithNever_sadCase {
 
     @Rule
     public ExpectedException exp = ExpectedException.none();
-    
+
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
@@ -42,13 +42,13 @@ public class JUnitRuleMockery2Test_mockAnnotatedWithNever_sadCase {
     private Collaborator collaborator;
 
     @ClassUnderTest
-	private CollaboratingUsingConstructorInjection collaborating;
+    private CollaboratingUsingConstructorInjection collaborating;
 
     // no longer necessary :-)
-//    @Before
-//	public void setUp() throws Exception {
-//    	collaborating = context.getClassUnderTest();
-//	}
+    //    @Before
+    //	public void setUp() throws Exception {
+    //    	collaborating = context.getClassUnderTest();
+    //	}
 
     @Test
     public void invocationOnCollaboratorIsIgnored() {

@@ -49,13 +49,13 @@ public abstract class MandatoryFacetForParameterAnnotation extends MandatoryFace
                 .findFirst()
                 .map(optionality -> {
                     switch (optionality) {
-                        case DEFAULT:
-                            // do nothing here
-                            return null;
-                        case MANDATORY:
-                            return new MandatoryFacetForParameterAnnotation.Required(holder);
-                        case OPTIONAL:
-                            return new MandatoryFacetForParameterAnnotation.Optional(holder);
+                    case DEFAULT:
+                        // do nothing here
+                        return null;
+                    case MANDATORY:
+                        return new MandatoryFacetForParameterAnnotation.Required(holder);
+                    case OPTIONAL:
+                        return new MandatoryFacetForParameterAnnotation.Optional(holder);
                     }
                     throw new IllegalStateException("optionality '" + optionality + "' not recognised");
                 })

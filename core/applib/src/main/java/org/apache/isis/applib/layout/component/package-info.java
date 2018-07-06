@@ -35,5 +35,5 @@
                         namespaceURI = "http://isis.apache.org/applib/layout/component", prefix = "cpt")
         }        // specifying the location seems to cause JaxbService#toXsd() to not generate the schema; not sure why...
         //, location = ..."http://isis.apache.org/schema/metamodel/layout/common/common.xsd"
-)
+        )
 package org.apache.isis.applib.layout.component;

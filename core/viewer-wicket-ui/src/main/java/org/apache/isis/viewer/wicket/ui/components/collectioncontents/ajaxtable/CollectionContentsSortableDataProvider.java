@@ -155,7 +155,7 @@ public class CollectionContentsSortableDataProvider extends SortableDataProvider
 
     private static Ordering<ObjectAdapter> orderingBy(final ObjectAssociation sortProperty, final boolean ascending) {
         final Ordering<ObjectAdapter> ordering = new Ordering<ObjectAdapter>(){
-    
+
             @Override
             public int compare(final ObjectAdapter p, final ObjectAdapter q) {
                 final ObjectAdapter pSort = sortProperty.get(p, InteractionInitiatedBy.FRAMEWORK);
@@ -179,7 +179,7 @@ public class CollectionContentsSortableDataProvider extends SortableDataProvider
             final Object qPojo = q.getObject();
             if(!(pPojo instanceof Comparable) || !(qPojo instanceof Comparable)) {
                 return 0;
-            } 
+            }
             return naturalOrdering(pPojo, qPojo);
         }
         @SuppressWarnings("rawtypes")

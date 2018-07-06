@@ -26,17 +26,17 @@ import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySe
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public class PropertySetterFacetForDomainEventFromPropertyAnnotation
-        extends PropertySetterOrClearFacetForDomainEventAbstract
-        implements PropertySetterFacet {
+extends PropertySetterOrClearFacetForDomainEventAbstract
+implements PropertySetterFacet {
 
 
     public PropertySetterFacetForDomainEventFromPropertyAnnotation(
             final Class<? extends PropertyDomainEvent<?, ?>> eventType,
-            final PropertyOrCollectionAccessorFacet getterFacet,
-            final PropertySetterFacet setterFacet,
-            final PropertyDomainEventFacetAbstract propertyInteractionFacet,
-            final FacetHolder holder,
-            final ServicesInjector servicesInjector) {
+                    final PropertyOrCollectionAccessorFacet getterFacet,
+                    final PropertySetterFacet setterFacet,
+                    final PropertyDomainEventFacetAbstract propertyInteractionFacet,
+                    final FacetHolder holder,
+                    final ServicesInjector servicesInjector) {
         super(PropertySetterFacet.class, eventType, getterFacet, setterFacet, null, propertyInteractionFacet, servicesInjector, holder);
     }
 }

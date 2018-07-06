@@ -30,7 +30,7 @@ import org.apache.isis.applib.services.wrapper.listeners.InteractionListener;
  * Provides the ability to &quot;wrap&quot; of a domain object such that it can
  * be interacted with while enforcing the hide/disable/validate rules implies by
  * the Isis programming model.
- * 
+ *
  * <p>
  * The &quot;wrap&quot; is a CGLib proxy that wraps the underlying domain
  * object. The wrapper can then be interacted with as follows:
@@ -40,7 +40,7 @@ import org.apache.isis.applib.services.wrapper.listeners.InteractionListener;
  * <li>an <tt>addTo</tt> or <tt>removeFrom</tt> method for collections</li>
  * <li>any action</li>
  * </ul>
- * 
+ *
  * <p>
  * Calling any of the above methods may result in a (subclass of)
  * {@link InteractionException} if the object disallows it. For example, if a
@@ -48,14 +48,14 @@ import org.apache.isis.applib.services.wrapper.listeners.InteractionListener;
  * be thrown. Similarly if an action has a <tt>validate</tt> method and the
  * supplied arguments are invalid then a {@link InvalidException} will be
  * thrown.
- * 
+ *
  * <p>
  * In addition, the following methods may also be called:
  * <ul>
  * <li>the <tt>title</tt> method</li>
  * <li>any <tt>defaultXxx</tt> or <tt>choicesXxx</tt> method</li>
  * </ul>
- * 
+ *
  * <p>
  * An exception will be thrown if any other methods are thrown.
  *
@@ -69,23 +69,23 @@ public interface WrapperFactory {
     /**
      * Whether interactions with the wrapper are actually passed onto the
      * underlying domain object.
-     * 
+     *
      * @see WrapperFactory#wrap(Object, ExecutionMode)
      */
     public static enum ExecutionMode {
         /**
          * Validate all business rules and then execute.
          */
-        EXECUTE(true,true), 
+        EXECUTE(true,true),
         /**
          * Skip all business rules and then execute.
          */
-        SKIP_RULES(false, true), 
+        SKIP_RULES(false, true),
         /**
          * Validate all business rules but do not execute.
          */
         NO_EXECUTE(true, false);
-        
+
         private final boolean enforceRules;
         private final boolean execute;
 
@@ -113,12 +113,12 @@ public interface WrapperFactory {
         public <T> T wrapNoExecute(T domainObject) {
             return domainObject;
         }
-        
+
         @Override
         public <T> T wrapSkipRules(T domainObject) {
             return domainObject;
         }
-        
+
         @Override
         public <T> T wrap(T domainObject, ExecutionMode mode) {
             return domainObject;
@@ -156,7 +156,7 @@ public interface WrapperFactory {
 
     /**
      * Provides the &quot;wrapper&quot; of the underlying domain object.
-     * 
+     *
      * <p>
      * If the object has (see {@link #isWrapper(Object)} already been wrapped),
      * then should just return the object back unchanged.
@@ -170,18 +170,18 @@ public interface WrapperFactory {
      */
     @Programmatic
     <T> T wrapNoExecute(T domainObject);
-    
+
     /**
      * Convenience method for {@link #wrap(Object, ExecutionMode)} with {@link ExecutionMode#SKIP_RULES},
      * to make this feature more discoverable.
      */
     @Programmatic
     <T> T wrapSkipRules(T domainObject);
-    
+
     /**
      * Same as {@link #wrap(Object)}, except the actual execution occurs only if
      * the <tt>execute</tt> parameter indicates.
-     * 
+     *
      * <p>
      * Otherwise, will do all the validations (raise exceptions as required
      * etc.), but doesn't modify the model.
@@ -192,7 +192,7 @@ public interface WrapperFactory {
 
     /**
      * Obtains the underlying domain object, if wrapped.
-     * 
+     *
      * <p>
      * If the object {@link #isWrapper(Object) is not wrapped}, then
      * should just return the object back unchanged.
@@ -200,10 +200,10 @@ public interface WrapperFactory {
     @Programmatic
     <T> T unwrap(T possibleWrappedDomainObject);
 
-    
+
     /**
      * Whether the supplied object has been wrapped.
-     * 
+     *
      * @param <T>
      * @param possibleWrappedDomainObject
      *            - object that might or might not be a wrapper.
@@ -225,13 +225,13 @@ public interface WrapperFactory {
     /**
      * Registers an {@link InteractionListener}, to be notified of interactions
      * on all wrappers.
-     * 
+     *
      * <p>
      * This is retrospective: the listener will be notified of interactions even
      * on wrappers created before the listener was installed. (From an
      * implementation perspective this is because the wrappers delegate back to
      * the container to fire the events).
-     * 
+     *
      * @param listener
      * @return
      */
@@ -241,13 +241,13 @@ public interface WrapperFactory {
     /**
      * Remove an {@link InteractionListener}, to no longer be notified of
      * interactions on wrappers.
-     * 
+     *
      * <p>
      * This is retrospective: the listener will no longer be notified of any
      * interactions created on any wrappers, not just on those wrappers created
      * subsequently. (From an implementation perspective this is because the
      * wrappers delegate back to the container to fire the events).
-     * 
+     *
      * @param listener
      * @return
      */

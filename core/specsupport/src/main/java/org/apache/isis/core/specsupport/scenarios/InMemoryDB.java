@@ -31,16 +31,16 @@ import com.google.common.collect.Maps;
 
 /**
  * Utility class to support the writing of unit-scope specs.
- * 
+ *
  * <p>
  * The {@link #finds(Class, Strategy)} provides an implementation of a JMock
- * {@link Action} that can simulate searching for an object from a database, and 
+ * {@link Action} that can simulate searching for an object from a database, and
  * optionally automatically creating a new one if {@link Strategy specified}.
- * 
+ *
  * <p>
  * If objects are created, then (mock) services are automatically injected.  This is performed by
  * searching for <tt>injectXxx()</tt> methods.
- * 
+ *
  * <p>
  * Finally, note that the {@link #init(Object, String) init} hook method allows subclasses to
  * customize the state of any objects created.
@@ -49,13 +49,13 @@ import com.google.common.collect.Maps;
  */
 @Deprecated
 public class InMemoryDB {
-    
+
     private final ScenarioExecution scenarioExecution;
 
     public InMemoryDB(ScenarioExecution scenarioExecution) {
         this.scenarioExecution = scenarioExecution;
     }
-    
+
     public static class EntityId {
         private final Class<?> type;
         private final String id;
@@ -100,9 +100,9 @@ public class InMemoryDB {
             return "EntityId [type=" + type + ", id=" + id + "]";
         }
     }
-    
+
     private Map<InMemoryDB.EntityId, Object> objectsById = Maps.newHashMap();
-    
+
     /**
      * Returns the object if exists, but will NOT instantiate a new one if not present.
      */
@@ -123,7 +123,7 @@ public class InMemoryDB {
 
     /**
      * Returns the object if exists, else will instantiate and save a new one if not present.
-     * 
+     *
      * <p>
      * The new object will have services injected into it (through the {@link ScenarioExecution#injectServices(Object)})
      * and will be initialized through the {@link #init(Object, String) init hook} method.
@@ -131,12 +131,12 @@ public class InMemoryDB {
     @SuppressWarnings({ "unchecked" })
     public <T> T getElseCreate(final Class<T> cls, final String id) {
         final Object object = getNoCreate(cls, id);
-        if(object != null) { 
+        if(object != null) {
             return (T) object;
         }
         Object obj = instantiateAndInject(cls);
         init(obj, id);
-        
+
         return put(cls, id, obj);
     }
 
@@ -165,19 +165,19 @@ public class InMemoryDB {
 
     /**
      * Returns a JMock {@link Action} to return an instance of the provided class.
-     * 
+     *
      * <p>
      * If the object is not yet held in memory, it will be automatically created,
      * as per {@link #getElseCreate(Class, String)}.
-     * 
+     *
      * <p>
      * This {@link Action} can only be set for expectations to invoke a method
      * accepting a single string argument.  This string argument is taken to be an
-     * identifier for the object (and is used in the caching of that object in memory).  
+     * identifier for the object (and is used in the caching of that object in memory).
      */
     public Action finds(final Class<?> cls) {
         return new Action() {
-            
+
             @Override
             public Object invoke(Invocation invocation) throws Throwable {
                 if(invocation.getParameterCount() != 1) {
@@ -186,11 +186,11 @@ public class InMemoryDB {
                 final Object argObj = invocation.getParameter(0);
                 if(!(argObj instanceof String)) {
                     throw new IllegalArgumentException("Argument must be a string");
-                } 
+                }
                 String arg = (String) argObj;
                 return getElseCreate(cls, arg);
             }
-            
+
             @Override
             public void describeTo(Description description) {
                 description.appendText("finds an instance of " + cls.getName());
@@ -204,7 +204,7 @@ public class InMemoryDB {
 
     @SuppressWarnings("unchecked")
     public <T> List<T> find(Class<T> cls, Predicate<T> predicate) {
-        final List<T> list = Lists.newArrayList(); 
+        final List<T> list = Lists.newArrayList();
         for (EntityId entityId : objectsById.keySet()) {
             if(cls.isAssignableFrom(entityId.getType())) {
                 final T object = (T) objectsById.get(entityId);
@@ -218,7 +218,7 @@ public class InMemoryDB {
 
     /**
      * Hook to initialize if possible.
-     * 
+     *
      * <p>
      * The provided string is usually taken to be some sort of unique identifier for the object
      * (unique in the context of any given scenario, that is).

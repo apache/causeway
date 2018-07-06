@@ -28,7 +28,7 @@ import org.apache.isis.commons.internal.collections._Collections;
 
 /**
  * Defines the types which are considered to be collections.
- * 
+ *
  * <p>
  * In this way there are similarities with the way in which value types are
  * specified using <tt>@Value</tt>. However, we need to maintain a repository of
@@ -38,23 +38,23 @@ import org.apache.isis.commons.internal.collections._Collections;
 public final class CollectionUtils {
 
     private CollectionUtils() {}
-    
+
     /**
-     * 
+     *
      * @param parameterType
      * @param genericParameterType
      * @return whether the parameter is a (collection or array) and has an infer-able element type
      */
     public static boolean isParamCollection(
-    		@Nullable final Class<?> parameterType,
-    		@Nullable final Type genericParameterType) {
-    	if(_Arrays.inferComponentTypeIfAny(parameterType) != null) {
-    		return true;
-    	}
-    	if(_Collections.inferElementTypeIfAny(parameterType, genericParameterType)!=null) {
-    		return true;
-    	}
-    	return false;
+            @Nullable final Class<?> parameterType,
+            @Nullable final Type genericParameterType) {
+        if(_Arrays.inferComponentTypeIfAny(parameterType) != null) {
+            return true;
+        }
+        if(_Collections.inferElementTypeIfAny(parameterType, genericParameterType)!=null) {
+            return true;
+        }
+        return false;
     }
 
 

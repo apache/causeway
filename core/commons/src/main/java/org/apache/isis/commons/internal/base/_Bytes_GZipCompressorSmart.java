@@ -25,50 +25,50 @@ import java.util.Arrays;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 /**
- * 
+ *
  * package private mixin for utility class {@link _Bytes}
  *
  */
 final class _Bytes_GZipCompressorSmart {
-	
+
     private static final int INPUT_LENGTH_THRESHOLD_FOR_SMART_COMPRESSION = 256;
     private static final int GZIP_MIN_OVERHEAD = 18;
     private static final byte COMPRESSION_NONE = 0;
     private static final byte COMPRESSION_GZIP = 1;
 
-	static byte[] compress(byte[] input) throws IOException {
-		if(input.length<GZIP_MIN_OVERHEAD) {
-			return input;
-		}
-		if(input.length<INPUT_LENGTH_THRESHOLD_FOR_SMART_COMPRESSION) {
-			return _Bytes.prepend(input, COMPRESSION_NONE); // prefix the input
-		} else {
-			return _Bytes.prepend(_Bytes_GZipCompressor.compress(input), COMPRESSION_GZIP); // prefix the input
-		}
-	}
-	
-	static byte[] decompress(byte[] input) throws IOException {
-		if(input==null || input.length<GZIP_MIN_OVERHEAD)
-			return input;
-		
-		final byte[] inputWithoutPrefix = Arrays.copyOfRange(input, 1, input.length);
-		
-		return isCompressed(input) ? _Bytes_GZipCompressor.decompress(inputWithoutPrefix) : inputWithoutPrefix;
-		
-	}
-	
-	// -- HELPER
-	
-	private static boolean isCompressed(byte[] input) {
-		switch (input[0]) {
-		case COMPRESSION_NONE:
-			return false;
-		case COMPRESSION_GZIP:
-			return true;
-		default:
-			throw _Exceptions.unmatchedCase(input[0]);
-		}
-		
-	}
-	
+    static byte[] compress(byte[] input) throws IOException {
+        if(input.length<GZIP_MIN_OVERHEAD) {
+            return input;
+        }
+        if(input.length<INPUT_LENGTH_THRESHOLD_FOR_SMART_COMPRESSION) {
+            return _Bytes.prepend(input, COMPRESSION_NONE); // prefix the input
+        } else {
+            return _Bytes.prepend(_Bytes_GZipCompressor.compress(input), COMPRESSION_GZIP); // prefix the input
+        }
+    }
+
+    static byte[] decompress(byte[] input) throws IOException {
+        if(input==null || input.length<GZIP_MIN_OVERHEAD)
+            return input;
+
+        final byte[] inputWithoutPrefix = Arrays.copyOfRange(input, 1, input.length);
+
+        return isCompressed(input) ? _Bytes_GZipCompressor.decompress(inputWithoutPrefix) : inputWithoutPrefix;
+
+    }
+
+    // -- HELPER
+
+    private static boolean isCompressed(byte[] input) {
+        switch (input[0]) {
+        case COMPRESSION_NONE:
+            return false;
+        case COMPRESSION_GZIP:
+            return true;
+        default:
+            throw _Exceptions.unmatchedCase(input[0]);
+        }
+
+    }
+
 }

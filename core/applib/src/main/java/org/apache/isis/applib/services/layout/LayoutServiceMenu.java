@@ -37,17 +37,17 @@ import org.apache.isis.commons.internal.base._Strings;
 @DomainService(
         nature = NatureOfService.VIEW_MENU_ONLY,
         objectType = "isisApplib.LayoutServiceMenu"
-)
+        )
 @DomainServiceLayout(
         named = "Prototyping",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY,
         menuOrder = "500.400"
-)
+        )
 public class LayoutServiceMenu {
-    
-	public static abstract class ActionDomainEvent 
-	extends IsisApplibModule.ActionDomainEvent<LayoutServiceMenu> {
-		private static final long serialVersionUID = 1L;
+
+    public static abstract class ActionDomainEvent
+    extends IsisApplibModule.ActionDomainEvent<LayoutServiceMenu> {
+        private static final long serialVersionUID = 1L;
     }
 
     private final MimeType mimeTypeApplicationZip;
@@ -61,18 +61,18 @@ public class LayoutServiceMenu {
     }
 
     public static class DownloadLayoutsDomainEvent extends ActionDomainEvent {
-    	private static final long serialVersionUID = 1L;
+        private static final long serialVersionUID = 1L;
     }
 
     @Action(
             domainEvent = DownloadLayoutsDomainEvent.class,
             semantics = SemanticsOf.SAFE,
             restrictTo = RestrictTo.PROTOTYPING
-    )
+            )
     @ActionLayout(
             cssClassFa = "fa-download",
             named = "Download Object Layouts (ZIP)"
-    )
+            )
     @MemberOrder(sequence="500.400.1")
     public Blob downloadLayouts(final LayoutService.Style style) {
 
@@ -87,18 +87,18 @@ public class LayoutServiceMenu {
     }
 
     public static class DownloadMenuBarsLayoutDomainEvent extends ActionDomainEvent {
-    	private static final long serialVersionUID = 1L;
+        private static final long serialVersionUID = 1L;
     }
 
     @Action(
             domainEvent = DownloadMenuBarsLayoutDomainEvent.class,
             semantics = SemanticsOf.SAFE,
             restrictTo = RestrictTo.PROTOTYPING
-    )
+            )
     @ActionLayout(
             cssClassFa = "fa-download",
             named = "Download Menu Bars Layout (XML)"
-    )
+            )
     @MemberOrder(sequence="500.400.2")
     public Clob downloadMenuBarsLayout(
             @ParameterLayout(named = "File name") final String fileName,

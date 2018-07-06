@@ -40,16 +40,16 @@ import org.apache.isis.commons.internal.collections._Maps;
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
-)
+        )
 @RequestScoped
 public class Scratchpad {
-    
+
     /**
      * Provides a mechanism for each object being acted upon to pass
      * data to the next object.
      */
     private final Map<Object, Object> userData = _Maps.newHashMap();
-    
+
     /**
      * Obtain user-data, as set by a previous object being acted upon.
      */
@@ -64,7 +64,7 @@ public class Scratchpad {
     public void put(Object key, Object value) {
         userData.put(key, value);
     }
-    
+
     /**
      * Clear any user data.
      */

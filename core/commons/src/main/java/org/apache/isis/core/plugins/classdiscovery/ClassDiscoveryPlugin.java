@@ -24,57 +24,57 @@ import java.util.List;
 import org.apache.isis.commons.internal.context._Plugin;
 
 public interface ClassDiscoveryPlugin {
-	
-	//TODO missing java-doc
-	public ClassDiscovery discover(String packageNamePrefix);
-	
-	//TODO missing java-doc
-	public ClassDiscovery discover(List<String> packageNamePrefixes);
-	
-	//TODO missing java-doc 
-	//TODO [ahuber] REVIEW how is this different from discover(String) 
-	public ClassDiscovery discoverFullscan(String packageNamePrefix);
-	
-	// -- LOOKUP
-	
-	public static ClassDiscoveryPlugin get() {
-		return _Plugin.getOrElse(ClassDiscoveryPlugin.class, 
-				ambiguousPlugins->{
-					return _Plugin.pickAnyAndWarn(ClassDiscoveryPlugin.class, ambiguousPlugins);
-				}, 
-				()->{
-					throw _Plugin.absenceNonRecoverable(ClassDiscoveryPlugin.class);
-				}); 
-	}
-	
-//	// -- NOP IMPLEMENTATION
-//	
-//	public static ClassDiscoveryPlugin nop() {
-//		return new ClassDiscoveryPlugin() {
-//			
-//			private final Logger LOG = LoggerFactory.getLogger(ClassDiscoveryPlugin.class);
-//			
-//			@Override
-//			public ClassDiscovery discoverFullscan(String packageNamePrefix) {
-//				return warn();
-//			}
-//			
-//			@Override
-//			public ClassDiscovery discover(List<String> packageNamePrefixes) {
-//				return warn();
-//			}
-//			
-//			@Override
-//			public ClassDiscovery discover(String packageNamePrefix) {
-//				return warn();
-//			}
-//			
-//			private ClassDiscovery warn() {
-//				LOG.error("you need a ClassDiscoveryPlugin on your class path, class discovery will not work");
-//				return ClassDiscovery.empty();
-//			}
-//			
-//		};
-//	}
-	
+
+    //TODO missing java-doc
+    public ClassDiscovery discover(String packageNamePrefix);
+
+    //TODO missing java-doc
+    public ClassDiscovery discover(List<String> packageNamePrefixes);
+
+    //TODO missing java-doc
+    //TODO [ahuber] REVIEW how is this different from discover(String)
+    public ClassDiscovery discoverFullscan(String packageNamePrefix);
+
+    // -- LOOKUP
+
+    public static ClassDiscoveryPlugin get() {
+        return _Plugin.getOrElse(ClassDiscoveryPlugin.class,
+                ambiguousPlugins->{
+                    return _Plugin.pickAnyAndWarn(ClassDiscoveryPlugin.class, ambiguousPlugins);
+                },
+                ()->{
+                    throw _Plugin.absenceNonRecoverable(ClassDiscoveryPlugin.class);
+                });
+    }
+
+    //	// -- NOP IMPLEMENTATION
+    //
+    //	public static ClassDiscoveryPlugin nop() {
+    //		return new ClassDiscoveryPlugin() {
+    //
+    //			private final Logger LOG = LoggerFactory.getLogger(ClassDiscoveryPlugin.class);
+    //
+    //			@Override
+    //			public ClassDiscovery discoverFullscan(String packageNamePrefix) {
+    //				return warn();
+    //			}
+    //
+    //			@Override
+    //			public ClassDiscovery discover(List<String> packageNamePrefixes) {
+    //				return warn();
+    //			}
+    //
+    //			@Override
+    //			public ClassDiscovery discover(String packageNamePrefix) {
+    //				return warn();
+    //			}
+    //
+    //			private ClassDiscovery warn() {
+    //				LOG.error("you need a ClassDiscoveryPlugin on your class path, class discovery will not work");
+    //				return ClassDiscovery.empty();
+    //			}
+    //
+    //		};
+    //	}
+
 }

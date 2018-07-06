@@ -119,7 +119,7 @@ public class IsisInjectModule extends AbstractModule {
     @com.google.inject.Inject
     @Singleton
     protected IsisSessionFactory provideIsisSessionFactory(
-                    final AppManifest appManifestIfExplicitlyBound) {
+            final AppManifest appManifestIfExplicitlyBound) {
 
         final AppManifest appManifestToUse = determineAppManifest(appManifestIfExplicitlyBound);
 
@@ -145,7 +145,7 @@ public class IsisInjectModule extends AbstractModule {
     private AppManifest determineAppManifest(final AppManifest appManifestIfExplicitlyBound) {
         final AppManifest appManifest =
                 appManifestIfExplicitlyBound != APP_MANIFEST_NOOP
-                        ? appManifestIfExplicitlyBound
+                ? appManifestIfExplicitlyBound
                         : null;
 
         return appManifestFrom(appManifest, isisConfiguration);
@@ -166,7 +166,7 @@ public class IsisInjectModule extends AbstractModule {
         final String appManifestFromConfiguration = configuration.getString(SystemConstants.APP_MANIFEST_KEY);
         return appManifestFromConfiguration != null
                 ? InstanceUtil.createInstance(appManifestFromConfiguration, AppManifest.class)
-                : null;
+                        : null;
     }
 
 

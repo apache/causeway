@@ -27,7 +27,7 @@ import com.google.common.collect.Sets;
 public final class ValidationFailures implements Iterable<String> {
 
     private final Set<String> messages = Sets.newLinkedHashSet();
-    
+
     public void add(final String pattern, final Object... arguments) {
         final String message = String.format(pattern, arguments);
         messages.add(message);

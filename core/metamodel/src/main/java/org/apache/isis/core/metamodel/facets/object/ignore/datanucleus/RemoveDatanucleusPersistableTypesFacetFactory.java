@@ -50,7 +50,7 @@ public class RemoveDatanucleusPersistableTypesFacetFactory extends FacetFactoryA
         final Method[] methods = typeToIgnore.getMethods();
         for (final Method method : methods) {
             datanucleusPersistableMethodsToIgnore
-                    .add(new RemoveMethodsFacetFactory.MethodAndParameterTypes(method.getName(), method.getParameterTypes()));
+            .add(new RemoveMethodsFacetFactory.MethodAndParameterTypes(method.getName(), method.getParameterTypes()));
         }
     }
 

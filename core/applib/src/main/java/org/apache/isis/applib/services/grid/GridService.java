@@ -89,8 +89,8 @@ public interface GridService {
     Grid complete(Grid grid);
 
     /**
-     * Modifies the provided {@link Grid}, removing all metadata except the basic grid structure. 
-     * 
+     * Modifies the provided {@link Grid}, removing all metadata except the basic grid structure.
+     *
      * <p>
      *     If a &quot;minimal&quot; grid is persisted as the <code>layout.xml</code>, then the expectation is that
      *     most of the layout annotations ({@link DomainObjectLayout}, {@link ActionLayout}, {@link PropertyLayout},

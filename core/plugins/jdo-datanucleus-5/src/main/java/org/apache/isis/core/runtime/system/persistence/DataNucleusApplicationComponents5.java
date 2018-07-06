@@ -57,14 +57,14 @@ public class DataNucleusApplicationComponents5 implements ApplicationScopedCompo
     ///////////////////////////////////////////////////////////////////////////
 
     private static DataNucleusApplicationComponents5 instance;
-    
+
     /**
      * For JRebel plugin
      */
     public static MetaDataManager getMetaDataManager() {
         return instance != null
-                ? ((JDOPersistenceManagerFactory)instance.persistenceManagerFactory).getNucleusContext().getMetaDataManager() 
-                : null;
+                ? ((JDOPersistenceManagerFactory)instance.persistenceManagerFactory).getNucleusContext().getMetaDataManager()
+                        : null;
     }
 
     public static void markAsStale() {
@@ -84,7 +84,7 @@ public class DataNucleusApplicationComponents5 implements ApplicationScopedCompo
     private final IsisConfiguration jdoObjectstoreConfig;
     private final SpecificationLoader specificationLoader;
     private final Map<String, String> datanucleusProps;
-    
+
     private Map<String, JdoNamedQuery> namedQueryByName;
     private PersistenceManagerFactory persistenceManagerFactory;
 
@@ -100,7 +100,7 @@ public class DataNucleusApplicationComponents5 implements ApplicationScopedCompo
         this.jdoObjectstoreConfig = configuration;
 
         initialize();
-        
+
         // for JRebel plugin
         instance = this;
     }
@@ -110,32 +110,32 @@ public class DataNucleusApplicationComponents5 implements ApplicationScopedCompo
 
         namedQueryByName = catalogNamedQueries(persistableClassNameSet);
     }
-    
-    /** 
-     * Marks the end of DataNucleus' life-cycle. Purges any state associated with DN. 
-     * Subsequent calls have no effect.  
-     * 
+
+    /**
+     * Marks the end of DataNucleus' life-cycle. Purges any state associated with DN.
+     * Subsequent calls have no effect.
+     *
      * @since 2.0.0
      */
     public void shutdown() {
-    	instance = null;
-    	if(persistenceManagerFactory != null) {
-    		DataNucleusLifeCycleHelper.cleanUp(persistenceManagerFactory);
-    		persistenceManagerFactory = null;
-    	}
+        instance = null;
+        if(persistenceManagerFactory != null) {
+            DataNucleusLifeCycleHelper.cleanUp(persistenceManagerFactory);
+            persistenceManagerFactory = null;
+        }
     }
-    
+
     private static PersistenceManagerFactory newPersistenceManagerFactory(Map<String, String> datanucleusProps) {
-    	return JDOHelper.getPersistenceManagerFactory(datanucleusProps, IsisContext.getClassLoader());
+        return JDOHelper.getPersistenceManagerFactory(datanucleusProps, IsisContext.getClassLoader());
     }
-    
+
     private static boolean isSchemaAwareStoreManager(Map<String,String> datanucleusProps) {
 
         // we create a throw-away instance of PMF so that we can probe whether DN has
         // been configured with a schema-aware store manager or not.
-        final JDOPersistenceManagerFactory probePmf = 
-        		(JDOPersistenceManagerFactory) newPersistenceManagerFactory(datanucleusProps);
-                
+        final JDOPersistenceManagerFactory probePmf =
+                (JDOPersistenceManagerFactory) newPersistenceManagerFactory(datanucleusProps);
+
         try {
             final PersistenceNucleusContext nucleusContext = probePmf.getNucleusContext();
             final StoreManager storeManager = nucleusContext.getStoreManager();
@@ -168,7 +168,7 @@ public class DataNucleusApplicationComponents5 implements ApplicationScopedCompo
                 datanucleusProps.put(PropertyNames.PROPERTY_SCHEMA_AUTOCREATE_TABLES, "true"); // but have DN do everything else...
                 datanucleusProps.put(PropertyNames.PROPERTY_SCHEMA_AUTOCREATE_COLUMNS, "true");
                 datanucleusProps.put(PropertyNames.PROPERTY_SCHEMA_AUTOCREATE_CONSTRAINTS, "true");
-                
+
                 persistenceManagerFactory = newPersistenceManagerFactory(datanucleusProps);
                 createSchema(persistenceManagerFactory, persistableClassNameSet, datanucleusProps);
 
@@ -242,7 +242,7 @@ public class DataNucleusApplicationComponents5 implements ApplicationScopedCompo
                 CLASS_METADATA_LOADED_LISTENER_DEFAULT);
         return classMetadataListenerClassName != null
                 ? InstanceUtil.createInstance(classMetadataListenerClassName, MetaDataListener.class)
-                : null;
+                        : null;
     }
 
 
@@ -271,6 +271,6 @@ public class DataNucleusApplicationComponents5 implements ApplicationScopedCompo
         return persistenceManagerFactory;
     }
 
-    
+
 
 }

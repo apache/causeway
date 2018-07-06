@@ -30,7 +30,7 @@ import org.apache.isis.applib.ViewModel;
 /**
  * Indicates that the (no-arg) action (on a domain service) to be invoked automatically
  * and the contents used for the home page.
- * 
+ *
  * <p>
  * Typically this action would return a {@link ViewModel} representing a dashboard
  * (from which the user can navigate to commonly used objects and invoked actions);

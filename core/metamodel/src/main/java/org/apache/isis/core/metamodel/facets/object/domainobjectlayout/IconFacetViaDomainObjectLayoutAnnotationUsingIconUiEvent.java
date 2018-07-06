@@ -71,8 +71,8 @@ public class IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent extends Ic
 
     public IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent(
             final Class<? extends IconUiEvent<?>> iconUiEventClass,
-            final EventBusService eventBusService,
-            final FacetHolder holder) {
+                    final EventBusService eventBusService,
+                    final FacetHolder holder) {
         super(holder);
         this.iconUiEventClass = iconUiEventClass;
         this.eventBusService = eventBusService;

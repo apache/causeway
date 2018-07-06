@@ -38,7 +38,7 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
-)
+        )
 public class FactoryServiceInternalDefault implements FactoryService {
 
 

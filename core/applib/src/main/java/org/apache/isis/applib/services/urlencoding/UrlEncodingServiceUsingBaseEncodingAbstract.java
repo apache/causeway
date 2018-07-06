@@ -31,12 +31,12 @@ public abstract class UrlEncodingServiceUsingBaseEncodingAbstract implements Url
 
     @Override
     public String encode(final byte[] bytes) {
-    	return _Strings.ofBytes(_Bytes.asUrlBase64.apply(bytes), StandardCharsets.UTF_8);
+        return _Strings.ofBytes(_Bytes.asUrlBase64.apply(bytes), StandardCharsets.UTF_8);
     }
 
     @Override
     public byte[] decode(final String str) {
-    	return _Bytes.ofUrlBase64.apply(_Strings.toBytes(str, StandardCharsets.UTF_8));
+        return _Bytes.ofUrlBase64.apply(_Strings.toBytes(str, StandardCharsets.UTF_8));
     }
 
 }

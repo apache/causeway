@@ -87,6 +87,6 @@ public class ContainedButtonPanel extends PanelAbstract<Model<String>> {
      */
     public void onSubmit() {
     }
-    
+
 
 }

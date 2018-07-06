@@ -72,7 +72,7 @@ public class CssClassFacetOnActionFromConfiguredRegexFactory extends FacetFactor
         FacetUtil.addFacet(cssClassFacet);
     }
 
-    
+
     @Override
     public void process(final ProcessContributeeMemberContext processMemberContext) {
 
@@ -99,7 +99,7 @@ public class CssClassFacetOnActionFromConfiguredRegexFactory extends FacetFactor
         String value = cssIfAnyFor(name);
         return value != null
                 ? new CssClassFacetOnActionFromConfiguredRegex(value, facetHolder)
-                : null;
+                        : null;
     }
 
     private String cssIfAnyFor(String name) {
@@ -149,7 +149,7 @@ public class CssClassFacetOnActionFromConfiguredRegexFactory extends FacetFactor
         }
         return cssClassByPattern;
     }
-    
+
 
 
 

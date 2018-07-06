@@ -23,15 +23,15 @@ import org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSeman
 
 /**
  * Base interface for {@link OneToManyAssociation} only.
- * 
+ *
  * <p>
  * Introduced for symmetry with {@link OneToOneFeature}; if we ever support
  * collections as parameters then would also be the base interface for a
  * <tt>OneToManyActionParameter</tt>.
- * 
+ *
  * <p>
  * Is also the route up to the {@link ObjectFeature} superinterface.
- * 
+ *
  */
 public interface OneToManyFeature extends ObjectFeature {
 

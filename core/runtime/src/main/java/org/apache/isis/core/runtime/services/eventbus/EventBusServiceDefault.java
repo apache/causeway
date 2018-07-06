@@ -39,7 +39,7 @@ public abstract class EventBusServiceDefault extends EventBusService {
 
     public static final String KEY_ALLOW_LATE_REGISTRATION = "isis.services.eventbus.allowLateRegistration";
     public static final String KEY_EVENT_BUS_IMPLEMENTATION = "isis.services.eventbus.implementation";
-    
+
     private static final String EVENT_BUS_IMPLEMENTATION_DEFAULT = "plugin";
     private static final String[] KEYWORDS = {"auto", "plugin", "guava", "axon"};
 
@@ -74,9 +74,10 @@ public abstract class EventBusServiceDefault extends EventBusService {
         super.register(domainService);
     }
 
-    
+
 
     // -- init, shutdown
+    @Override
     @Programmatic
     @PostConstruct
     public void init(final Map<String, String> properties) {
@@ -89,15 +90,15 @@ public abstract class EventBusServiceDefault extends EventBusService {
             return EVENT_BUS_IMPLEMENTATION_DEFAULT;
         } else {
             final String implementationTrimmed = implementation.trim();
-            
+
             for(String keyword : KEYWORDS) {
-            	if(keyword.equalsIgnoreCase(implementationTrimmed)) {
-            		return keyword;
-            	}
+                if(keyword.equalsIgnoreCase(implementationTrimmed)) {
+                    return keyword;
+                }
             }
-            
+
             return implementationTrimmed;
-            
+
         }
     }
 
@@ -105,7 +106,7 @@ public abstract class EventBusServiceDefault extends EventBusService {
         final String value = properties.get(key);
         return !Strings.isNullOrEmpty(value) && Boolean.parseBoolean(value);
     }
-    
+
 
     protected boolean allowLateRegistration;
     boolean isAllowLateRegistration() {
@@ -129,19 +130,19 @@ public abstract class EventBusServiceDefault extends EventBusService {
     }
 
     private EventBusPlugin instantiateEventBus() {
-    	
-    	String fqImplementationName = implementation;
-    	
-    	if( "plugin".equals(implementation) || "auto".equals(implementation) ) {
-    		
-    		return EventBusPlugin.get();
-    		
-    	} else if("guava".equals(implementation)) {
+
+        String fqImplementationName = implementation;
+
+        if( "plugin".equals(implementation) || "auto".equals(implementation) ) {
+
+            return EventBusPlugin.get();
+
+        } else if("guava".equals(implementation)) {
             // legacy of return new EventBusImplementationForGuava();
-        	fqImplementationName = "org.apache.isis.core.plugins.eventbus.EventBusPluginForGuava";
+            fqImplementationName = "org.apache.isis.core.plugins.eventbus.EventBusPluginForGuava";
         } else if("axon".equals(implementation)) {
-        	// legacy of return new EventBusImplementationForAxonSimple();
-        	fqImplementationName = "org.apache.isis.core.plugins.eventbus.EventBusPluginForAxon";
+            // legacy of return new EventBusImplementationForAxonSimple();
+            fqImplementationName = "org.apache.isis.core.plugins.eventbus.EventBusPluginForAxon";
         }
 
         final Class<?> aClass = ClassUtil.forName(fqImplementationName);
@@ -155,7 +156,7 @@ public abstract class EventBusServiceDefault extends EventBusService {
         throw new NonRecoverableException(
                 "Could not instantiate event bus implementation '" + implementation + "'");
     }
-    
+
 
     @javax.inject.Inject
     ServiceRegistry serviceRegistry;

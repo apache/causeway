@@ -50,7 +50,7 @@ public interface ObjectMember extends ObjectFeature {
     /**
      * Return the help text for this member - the field or action - to
      * complement the description.
-     * 
+     *
      * @see #getDescription()
      */
     String getHelp();
@@ -61,9 +61,9 @@ public interface ObjectMember extends ObjectFeature {
 
     /**
      * When the member is always hidden.
-     * 
+     *
      * <p>
-     * Determined as per the {@link HiddenFacet} being present and 
+     * Determined as per the {@link HiddenFacet} being present and
      * {@link HiddenFacet#when()} returning {@link When#ALWAYS}, and
      * {@link HiddenFacet#where()} returning {@link When#ANYWHERE}.
      */
@@ -105,7 +105,7 @@ public interface ObjectMember extends ObjectFeature {
 
     /**
      * Whether this member represents a {@link ObjectAssociation}.
-     * 
+     *
      * <p>
      * If so, can be safely downcast to {@link ObjectAssociation}.
      */
@@ -113,7 +113,7 @@ public interface ObjectMember extends ObjectFeature {
 
     /**
      * Whether this member represents a {@link OneToManyAssociation}.
-     * 
+     *
      * <p>
      * If so, can be safely downcast to {@link OneToManyAssociation}.
      */
@@ -121,7 +121,7 @@ public interface ObjectMember extends ObjectFeature {
 
     /**
      * Whether this member represents a {@link OneToOneAssociation}.
-     * 
+     *
      * <p>
      * If so, can be safely downcast to {@link OneToOneAssociation}.
      */
@@ -129,7 +129,7 @@ public interface ObjectMember extends ObjectFeature {
 
     /**
      * Whether this member represents a {@link ObjectAction}.
-     * 
+     *
      * <p>
      * If so, can be safely downcast to {@link ObjectAction}.
      */
@@ -239,14 +239,14 @@ public interface ObjectMember extends ObjectFeature {
     public static class Comparators {
         public static Comparator<ObjectMember> byMemberOrderSequence() {
             return new Comparator<ObjectMember>() {
-            	 private final MemberOrderFacetComparator memberOrderFacetComparator = 
-                 		new MemberOrderFacetComparator(false);
-                 @Override
-                 public int compare(final ObjectMember o1, final ObjectMember o2) {
-                 	return memberOrderFacetComparator.compare(
-                 			o1.getFacet(MemberOrderFacet.class),
-                 			o2.getFacet(MemberOrderFacet.class));
-                 }
+                private final MemberOrderFacetComparator memberOrderFacetComparator =
+                        new MemberOrderFacetComparator(false);
+                @Override
+                public int compare(final ObjectMember o1, final ObjectMember o2) {
+                    return memberOrderFacetComparator.compare(
+                            o1.getFacet(MemberOrderFacet.class),
+                            o2.getFacet(MemberOrderFacet.class));
+                }
             };
         }
 

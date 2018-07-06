@@ -34,7 +34,7 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 /**
  * The type of the collection or the action.
- * 
+ *
  * <p>
  * In the standard Apache Isis Programming Model, corresponds to annotating the
  * collection's accessor or the action's invoker method with the
@@ -110,7 +110,7 @@ public interface TypeOfFacet extends SingleClassValueFacet {
             final Class<?> elementType = _Arrays.inferComponentTypeIfAny(type);
             return elementType != null
                     ? new TypeOfFacetInferredFromArray(elementType, holder, specificationLoader)
-                    : null;
+                            : null;
         }
 
         @Programmatic
@@ -119,11 +119,11 @@ public interface TypeOfFacet extends SingleClassValueFacet {
                 final Class<?> parameterType,
                 final Type genericParameterType,
                 final SpecificationLoader specificationLoader) {
-        	
+
             final Class<?> elementType = _Collections.inferElementTypeIfAny(parameterType, genericParameterType);
             return elementType != null
                     ? new TypeOfFacetInferredFromGenerics(elementType, holder, specificationLoader)
-                    : null;
+                            : null;
         }
     }
 }

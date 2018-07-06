@@ -26,7 +26,7 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 /**
  * Mix-in interface for {@link ObjectFeature}s that reference or otherwise
  * contain a 'current' value.
- * 
+ *
  * <p>
  * Examples include {@link OneToOneAssociation properties},
  * {@link OneToManyAssociation collection}s and {@link OneToOneActionParameter
@@ -37,7 +37,7 @@ public interface CurrentHolder {
     /**
      * Returns the referenced {@link ObjectAdapter} for the owning
      * {@link ObjectAdapter}.
-     * 
+     *
      * <p>
      * For example, if this is an {@link OneToOneAssociation}, then returns the
      * referenced object.

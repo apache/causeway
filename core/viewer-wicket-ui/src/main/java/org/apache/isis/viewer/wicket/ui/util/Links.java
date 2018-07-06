@@ -47,14 +47,14 @@ public final class Links {
     @Deprecated
     public static <T extends Page> AbstractLink newAbstractLink(final String linkId, final PageParameters pageParameters, final Class<T> pageClass) {
 
-      return new Link<T>(linkId) {
-          private static final long serialVersionUID = 1L;
-          @Override
-          public void onClick() {
-              this.setResponsePage(pageClass, pageParameters);
-          }
-          
-      };
+        return new Link<T>(linkId) {
+            private static final long serialVersionUID = 1L;
+            @Override
+            public void onClick() {
+                this.setResponsePage(pageClass, pageParameters);
+            }
+
+        };
     }
 
     public static <T extends Page> AbstractLink newBookmarkablePageLink(

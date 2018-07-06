@@ -24,7 +24,7 @@ import org.apache.isis.core.metamodel.facets.MarkerFacetAbstract;
 
 
 public abstract class JdoPrimaryKeyFacetAbstract extends MarkerFacetAbstract implements
-        JdoPrimaryKeyFacet {
+JdoPrimaryKeyFacet {
 
     public static Class<? extends Facet> type() {
         return JdoPrimaryKeyFacet.class;

@@ -46,173 +46,175 @@ import static org.junit.Assert.assertThat;
 
 public class ServiceInstantiatorTestUsingCodegenPlugin {
 
-	@Rule
-	public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
+    @Rule
+    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
 
-	private ServiceInstantiator serviceInstantiator;
+    private ServiceInstantiator serviceInstantiator;
 
-	@JUnitRuleMockery2.Ignoring
-	@Mock
-	private ServicesInjector mockServiceInjector;
+    @JUnitRuleMockery2.Ignoring
+    @Mock
+    private ServicesInjector mockServiceInjector;
 
-	@Before
-	public void setUp() throws Exception {
+    @Before
+    public void setUp() throws Exception {
 
-		serviceInstantiator = new ServiceInstantiator();
-		serviceInstantiator.setConfiguration(new IsisConfigurationDefault());
-	}
+        serviceInstantiator = new ServiceInstantiator();
+        serviceInstantiator.setConfiguration(new IsisConfigurationDefault());
+    }
 
-	@Test
-	public void singleton() {
-		SingletonCalculator calculator = serviceInstantiator.createInstance(SingletonCalculator.class);
-		assertThat(calculator.add(3,4), is(7));
-	}
+    @Test
+    public void singleton() {
+        SingletonCalculator calculator = serviceInstantiator.createInstance(SingletonCalculator.class);
+        assertThat(calculator.add(3,4), is(7));
+    }
 
-	@Test
-	public void requestScoped_instantiate() {
-		AccumulatingCalculator calculator = serviceInstantiator.createInstance(AccumulatingCalculator.class);
-		assertThat(calculator instanceof RequestScopedService, is(true));
-	}
+    @Test
+    public void requestScoped_instantiate() {
+        AccumulatingCalculator calculator = serviceInstantiator.createInstance(AccumulatingCalculator.class);
+        assertThat(calculator instanceof RequestScopedService, is(true));
+    }
 
-	@Test
-	public void requestScoped_justOneThread() {
-		AccumulatingCalculator calculator = serviceInstantiator.createInstance(AccumulatingCalculator.class);
-		try {
-			((RequestScopedService)calculator).__isis_startRequest(mockServiceInjector);
-			assertThat(calculator.add(3), is(3));
-			assertThat(calculator.add(4), is(7));
-			assertThat(calculator.getTotal(), is(7));
-		} finally {
-			((RequestScopedService)calculator).__isis_endRequest();
-		}
-	}
+    @Test
+    public void requestScoped_justOneThread() {
+        AccumulatingCalculator calculator = serviceInstantiator.createInstance(AccumulatingCalculator.class);
+        try {
+            ((RequestScopedService)calculator).__isis_startRequest(mockServiceInjector);
+            assertThat(calculator.add(3), is(3));
+            assertThat(calculator.add(4), is(7));
+            assertThat(calculator.getTotal(), is(7));
+        } finally {
+            ((RequestScopedService)calculator).__isis_endRequest();
+        }
+    }
 
-	@Test
-	public void requestScoped_multipleThreads() throws InterruptedException, BrokenBarrierException {
+    @Test
+    public void requestScoped_multipleThreads() throws InterruptedException, BrokenBarrierException {
 
-		final AccumulatingCalculator calculator = serviceInstantiator.createInstance(AccumulatingCalculator.class);
+        final AccumulatingCalculator calculator = serviceInstantiator.createInstance(AccumulatingCalculator.class);
 
-		// will ask each thread's calculator to increment 10 times
-		final int[] steps = new int[]{10};
+        // will ask each thread's calculator to increment 10 times
+        final int[] steps = new int[]{10};
 
-		// each thread will post its totals here
-		final int[] totals = new int[]{0,0,0};
+        // each thread will post its totals here
+        final int[] totals = new int[]{0,0,0};
 
-		// after each step, all threads wait.  The +1 is for this thread (the co-ordinator)
-		final CyclicBarrier barrier =
-				new CyclicBarrier(totals.length+1, new Runnable() {
-					public void run() {
-						// all threads waiting; decrement number of steps
-						steps[0]--;
-					}
-				});
+        // after each step, all threads wait.  The +1 is for this thread (the co-ordinator)
+        final CyclicBarrier barrier =
+                new CyclicBarrier(totals.length+1, new Runnable() {
+                    @Override
+                    public void run() {
+                        // all threads waiting; decrement number of steps
+                        steps[0]--;
+                    }
+                });
 
-		// start off all threads
-		for(int i=0; i<totals.length; i++) {
-			final int j=i;
-			new Thread() {
-				public void run() {
-					try {
-						((RequestScopedService)calculator).__isis_startRequest(mockServiceInjector);
-						// keep incrementing, till no more steps
-						while(steps[0]>0) {
-							try {
-								calculator.add((j+1));
-								totals[j] = calculator.getTotal();
-								barrier.await();
-							} catch (InterruptedException | BrokenBarrierException e) {
-								throw new RuntimeException(e);
-							}
-						}
-					} finally {
-						((RequestScopedService)calculator).__isis_endRequest();
-					}
-				};
-			}.start();
-		}
+        // start off all threads
+        for(int i=0; i<totals.length; i++) {
+            final int j=i;
+            new Thread() {
+                @Override
+                public void run() {
+                    try {
+                        ((RequestScopedService)calculator).__isis_startRequest(mockServiceInjector);
+                        // keep incrementing, till no more steps
+                        while(steps[0]>0) {
+                            try {
+                                calculator.add((j+1));
+                                totals[j] = calculator.getTotal();
+                                barrier.await();
+                            } catch (InterruptedException | BrokenBarrierException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                    } finally {
+                        ((RequestScopedService)calculator).__isis_endRequest();
+                    }
+                };
+            }.start();
+        }
 
-		// this thread is the co-ordinator; move onto next step when all are waiting
-		while(steps[0]>0) {
-			barrier.await();
-		}
+        // this thread is the co-ordinator; move onto next step when all are waiting
+        while(steps[0]>0) {
+            barrier.await();
+        }
 
-		assertThat(totals[0], is(10));
-		assertThat(totals[1], is(20));
-		assertThat(totals[2], is(30));
-	}
+        assertThat(totals[0], is(10));
+        assertThat(totals[1], is(20));
+        assertThat(totals[2], is(30));
+    }
 
-	@Test
-	public void requestScoped_childThreads() throws InterruptedException  {
+    @Test
+    public void requestScoped_childThreads() throws InterruptedException  {
 
-		final Consumer consumer = serviceInstantiator.createInstance(Consumer.class);
+        final Consumer consumer = serviceInstantiator.createInstance(Consumer.class);
 
-		final List<Integer> allTheNumbers = Collections.synchronizedList(Lists.<Integer>newArrayList());
+        final List<Integer> allTheNumbers = Collections.synchronizedList(Lists.<Integer>newArrayList());
 
-		final int n = 100;
-		for (int i = 0; i < n; i++) {
-			allTheNumbers.add(i);
-		}
+        final int n = 100;
+        for (int i = 0; i < n; i++) {
+            allTheNumbers.add(i);
+        }
 
-		final int nThreads = 8;
-		final ExecutorService execService = Executors.newFixedThreadPool(nThreads);
+        final int nThreads = 8;
+        final ExecutorService execService = Executors.newFixedThreadPool(nThreads);
 
-		// initialize the request scoped calculator on current thread ('main')
-		((RequestScopedService)consumer).__isis_startRequest(mockServiceInjector);
+        // initialize the request scoped calculator on current thread ('main')
+        ((RequestScopedService)consumer).__isis_startRequest(mockServiceInjector);
 
-		for (int i = 0; i < n; i++) {
-			final int j=i;
+        for (int i = 0; i < n; i++) {
+            final int j=i;
 
-			execService.submit(new Runnable() {
-				@Override public void run() {
-					try {
+            execService.submit(new Runnable() {
+                @Override public void run() {
+                    try {
 
-						// access the request scoped calculator on a child thread of 'main'
-						consumer.consume(allTheNumbers, j);
+                        // access the request scoped calculator on a child thread of 'main'
+                        consumer.consume(allTheNumbers, j);
 
-					} catch (Exception e) {
-						System.err.println(e.getMessage());
-					}
-				}
-			});
+                    } catch (Exception e) {
+                        System.err.println(e.getMessage());
+                    }
+                }
+            });
 
-		}
+        }
 
-		execService.shutdown();
+        execService.shutdown();
 
-		execService.awaitTermination(10, TimeUnit.SECONDS);
+        execService.awaitTermination(10, TimeUnit.SECONDS);
 
-		((RequestScopedService)consumer).__isis_endRequest();
+        ((RequestScopedService)consumer).__isis_endRequest();
 
-		assertEquals(0, FluentIterable.from(allTheNumbers).filter(Predicates.<Integer>notNull()).size());
-	}
+        assertEquals(0, FluentIterable.from(allTheNumbers).filter(Predicates.<Integer>notNull()).size());
+    }
 
-	public static class SingletonCalculator {
-		public int add(int x, int y) {
-			return x+y;
-		}
-	}
+    public static class SingletonCalculator {
+        public int add(int x, int y) {
+            return x+y;
+        }
+    }
 
-	@RequestScoped
-	public static class AccumulatingCalculator {
-		private int total;
-		public int add(int x) {
-			total += x;
-			return getTotal();
-		}
-		public int getTotal() {
-			return total;
-		}
-	}
+    @RequestScoped
+    public static class AccumulatingCalculator {
+        private int total;
+        public int add(int x) {
+            total += x;
+            return getTotal();
+        }
+        public int getTotal() {
+            return total;
+        }
+    }
 
-	@RequestScoped
-	public static class Consumer {
-		public void consume(final List<Integer> queue, final int slot) {
-			synchronized (queue) {
-				final Integer integer = queue.get(slot);
-				if(integer != null) {
-					queue.set(slot, null);
-				}
-			}
-		}
-	}
+    @RequestScoped
+    public static class Consumer {
+        public void consume(final List<Integer> queue, final int slot) {
+            synchronized (queue) {
+                final Integer integer = queue.get(slot);
+                if(integer != null) {
+                    queue.set(slot, null);
+                }
+            }
+        }
+    }
 }

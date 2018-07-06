@@ -27,11 +27,11 @@ import org.apache.isis.commons.internal.context._Context;
  * Adapted from Ibatis Common, now with some additional guava stuff.
  */
 public class ResourceUtil {
-    
+
     private ResourceUtil(){}
 
     public static InputStream getResourceAsStream(final String resource) {
-    	
+
         // try Isis's classloader
         ClassLoader classLoader = _Context.getDefaultClassLoader();
         InputStream is = classLoader.getResourceAsStream(resource);

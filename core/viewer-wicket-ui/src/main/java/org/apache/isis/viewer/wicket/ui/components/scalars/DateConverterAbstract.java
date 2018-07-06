@@ -26,15 +26,15 @@ import org.joda.time.format.DateTimeFormatter;
 
 
 public abstract class DateConverterAbstract<T> implements DateConverter<T> {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     private final Class<T> cls;
     protected final String datePattern;
     protected final String dateTimePattern;
 
     protected final int adjustBy;
-    
+
 
     protected DateConverterAbstract(Class<T> cls, String datePattern, String dateTimePattern, int adjustBy) {
         this.cls = cls;
@@ -47,7 +47,7 @@ public abstract class DateConverterAbstract<T> implements DateConverter<T> {
     public Class<T> getConvertableClass() {
         return cls;
     }
-    
+
     @Override
     public String getDatePattern(Locale locale) {
         return datePattern;

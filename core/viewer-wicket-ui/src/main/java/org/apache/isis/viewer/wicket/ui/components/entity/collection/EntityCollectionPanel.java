@@ -86,6 +86,7 @@ public class EntityCollectionPanel extends PanelAbstract<EntityModel> implements
     /**
      * Attach UI only after added to parent.
      */
+    @Override
     public void onInitialize() {
         super.onInitialize();
 

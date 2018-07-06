@@ -185,7 +185,7 @@ public interface AppManifest {
         public void setPersistenceCapableTypes(final Set<Class<?>> persistenceCapableTypes) {
             this.persistenceCapableTypes = persistenceCapableTypes;
         }
-        
+
 
         // -- mixinTypes
         private Set<Class<?>> mixinTypes;
@@ -199,7 +199,7 @@ public interface AppManifest {
         public void setMixinTypes(final Set<Class<?>> mixinTypes) {
             this.mixinTypes = mixinTypes;
         }
-        
+
 
         // -- fixtureScriptTypes
         private Set<Class<? extends FixtureScript>> fixtureScriptTypes;
@@ -213,7 +213,7 @@ public interface AppManifest {
         public void setFixtureScriptTypes(final Set<Class<? extends FixtureScript>> fixtureScriptTypes) {
             this.fixtureScriptTypes = fixtureScriptTypes;
         }
-        
+
 
 
         // -- domainServiceTypes
@@ -227,7 +227,7 @@ public interface AppManifest {
         public void setDomainServiceTypes(final Set<Class<?>> domainServiceTypes) {
             this.domainServiceTypes = domainServiceTypes;
         }
-        
+
 
     }
 
@@ -272,7 +272,7 @@ public interface AppManifest {
 
             return map;
         }
-        
+
     }
 
 }

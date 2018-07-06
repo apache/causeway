@@ -46,7 +46,7 @@ import org.apache.isis.core.runtime.services.changes.PreAndPostValues;
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
-)
+        )
 public class AuditingServiceInternal {
 
     Boolean whetherCanAudit;
@@ -113,7 +113,7 @@ public class AuditingServiceInternal {
         for (AuditerService auditerService : auditerServices) {
             if (auditerService.isEnabled()) {
                 auditerService
-                        .audit(transactionId, sequence, targetClass, target, memberId, propertyId, preValue, postValue, user, timestamp);
+                .audit(transactionId, sequence, targetClass, target, memberId, propertyId, preValue, postValue, user, timestamp);
             }
         }
     }

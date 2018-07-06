@@ -89,7 +89,7 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
             return;
         }
         final Map<String, MutatorSpec> mutators = objectMemberType.getMutators();
-        
+
         final SemanticsOf actionSemantics = objectMember.getSemantics();
         final String mutator = InvokeKeys.getKeyFor(actionSemantics);
         final MutatorSpec mutatorSpec = mutators.get(mutator);

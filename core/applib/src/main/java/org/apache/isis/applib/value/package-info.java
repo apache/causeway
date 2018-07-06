@@ -18,14 +18,14 @@
  */
 
 /**
- * This package defines an additional set of 
+ * This package defines an additional set of
  * {@link org.apache.isis.applib.annotation.Value} types, supported in addition
  * to the usual JDK ones (of {@link java.lang.String}, {@link java.lang.Integer}, {@link java.math.BigDecimal}, {@link java.util.Date}
  * etc and the primitives).
- * 
+ *
  * <p>
- * Each of these value types has a corresponding implementation of 
+ * Each of these value types has a corresponding implementation of
  * {@link org.apache.isis.applib.adapters.ValueSemanticsProvider} (implemented
- * within the <tt>core.progmodel</tt> module).   
+ * within the <tt>core.progmodel</tt> module).
  */
 package org.apache.isis.applib.value;

@@ -25,8 +25,8 @@ public class ExceptionRecognizerForJDODataStoreException extends ExceptionRecogn
     public ExceptionRecognizerForJDODataStoreException() {
         super(Category.SERVER_ERROR,
                 ofTypeExcluding(javax.jdo.JDODataStoreException.class, "NOT NULL check constraint"),
-            prefix("Unable to save changes.  " +
-            	   "Does similar data already exist, or has referenced data been deleted?"));
+                prefix("Unable to save changes.  " +
+                        "Does similar data already exist, or has referenced data been deleted?"));
     }
 
 }

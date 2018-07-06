@@ -24,6 +24,6 @@ package org.apache.isis.core.runtime.headless;
  * @since 2.0.0
  */
 public interface HeadlessTransactionSupport {
-	void beginTransaction();
-	void endTransaction();
+    void beginTransaction();
+    void endTransaction();
 }

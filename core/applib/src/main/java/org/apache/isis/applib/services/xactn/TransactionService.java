@@ -65,9 +65,9 @@ public interface TransactionService {
      * Return a latch, that allows threads to wait on the current transaction to complete.
      */
     @Programmatic
-    CountDownLatch currentTransactionLatch(); 
-    
-    
+    CountDownLatch currentTransactionLatch();
+
+
     /**
      * Intended only for use by fixture scripts and integration tests.
      *

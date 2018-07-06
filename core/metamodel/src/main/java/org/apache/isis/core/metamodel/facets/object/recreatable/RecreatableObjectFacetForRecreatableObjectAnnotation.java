@@ -26,7 +26,7 @@ import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 public class RecreatableObjectFacetForRecreatableObjectAnnotation extends
-        RecreatableObjectFacetDeclarativeInitializingAbstract {
+RecreatableObjectFacetDeclarativeInitializingAbstract {
 
     public RecreatableObjectFacetForRecreatableObjectAnnotation(
             final FacetHolder holder,

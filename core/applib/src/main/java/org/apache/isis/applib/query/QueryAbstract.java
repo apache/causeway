@@ -23,7 +23,7 @@ import org.apache.isis.commons.internal.context._Context;
 
 /**
  * Convenience adapter class for {@link Query}.
- * 
+ *
  * <p>
  * Handles implementation of {@link #getResultType()}
  */
@@ -42,8 +42,8 @@ public abstract class QueryAbstract<T> implements Query<T> {
 
 
     /**
-     * Base query based on Class type. 
-     * 
+     * Base query based on Class type.
+     *
      * @param type
      * @param range optional start and count of the range of dataset. 0
      */
@@ -85,6 +85,7 @@ public abstract class QueryAbstract<T> implements Query<T> {
      * The start index into the set table
      * @return
      */
+    @Override
     public long getStart() {
         return start;
     }
@@ -94,6 +95,7 @@ public abstract class QueryAbstract<T> implements Query<T> {
      * The number of items to return, starting at {@link QueryFindAllPaged#getStart()}
      * @return
      */
+    @Override
     public long getCount() {
         return count;
     }

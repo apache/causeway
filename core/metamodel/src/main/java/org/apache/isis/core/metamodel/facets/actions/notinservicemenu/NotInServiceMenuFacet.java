@@ -26,7 +26,7 @@ import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 /**
  * Indicates that the (repository) action should not be contributed to any
  * objects.
- * 
+ *
  * <p>
  * In the standard Apache Isis Programming Model, corresponds to annotating the
  * action method using <tt>@NotContributed</tt>.

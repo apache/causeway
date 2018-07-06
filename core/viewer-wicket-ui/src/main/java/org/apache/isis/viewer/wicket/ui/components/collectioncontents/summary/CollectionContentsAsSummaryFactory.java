@@ -48,48 +48,49 @@ public class CollectionContentsAsSummaryFactory extends ComponentFactoryAbstract
     private static final String NAME = "summary";
 
     final static Predicate<ObjectAssociation> OF_TYPE_BIGDECIMAL = new Predicate<ObjectAssociation>(){
+        @Override
         public boolean apply(final ObjectAssociation objectAssoc) {
             ObjectSpecification objectSpec = objectAssoc.getSpecification();
             return objectSpec.containsDoOpFacet(BigDecimalValueFacet.class);
         }};
 
-    // //////////////////////////////////////
+        // //////////////////////////////////////
 
-    public CollectionContentsAsSummaryFactory() {
-        super(ComponentType.COLLECTION_CONTENTS, NAME, CollectionContentsAsSummary.class);
-    }
-
-    @Override
-    public ApplicationAdvice appliesTo(final IModel<?> model) {
-        if(!(model instanceof EntityCollectionModel)) {
-            return ApplicationAdvice.DOES_NOT_APPLY;
+        public CollectionContentsAsSummaryFactory() {
+            super(ComponentType.COLLECTION_CONTENTS, NAME, CollectionContentsAsSummary.class);
         }
-        final EntityCollectionModel entityCollectionModel = (EntityCollectionModel) model;
-        final ObjectSpecification elementSpec = entityCollectionModel.getTypeOfSpecification();
-        List<ObjectAssociation> associations = elementSpec.getAssociations(Contributed.EXCLUDED, OF_TYPE_BIGDECIMAL);
-        return appliesIf(!associations.isEmpty());
-    }
 
-    @Override
-    public Component createComponent(final String id, final IModel<?> model) {
-        final EntityCollectionModel collectionModel = (EntityCollectionModel) model;
-        return new CollectionContentsAsSummary(id, collectionModel);
-    }
-    
-    @Override
-    public CssResourceReference getCssResourceReference() {
-        // do not bundle, because of relative CSS images...
-        return null;
-    }
+        @Override
+        public ApplicationAdvice appliesTo(final IModel<?> model) {
+            if(!(model instanceof EntityCollectionModel)) {
+                return ApplicationAdvice.DOES_NOT_APPLY;
+            }
+            final EntityCollectionModel entityCollectionModel = (EntityCollectionModel) model;
+            final ObjectSpecification elementSpec = entityCollectionModel.getTypeOfSpecification();
+            List<ObjectAssociation> associations = elementSpec.getAssociations(Contributed.EXCLUDED, OF_TYPE_BIGDECIMAL);
+            return appliesIf(!associations.isEmpty());
+        }
 
-    @Override
-    public IModel<String> getTitleLabel() {
-        return new ResourceModel("CollectionContentsAsSummaryFactory.Summary", "Summary");
-    }
+        @Override
+        public Component createComponent(final String id, final IModel<?> model) {
+            final EntityCollectionModel collectionModel = (EntityCollectionModel) model;
+            return new CollectionContentsAsSummary(id, collectionModel);
+        }
 
-    @Override
-    public IModel<String> getCssClass() {
-        return Model.of("fa fa-fw fa-usd");
-    }
+        @Override
+        public CssResourceReference getCssResourceReference() {
+            // do not bundle, because of relative CSS images...
+            return null;
+        }
+
+        @Override
+        public IModel<String> getTitleLabel() {
+            return new ResourceModel("CollectionContentsAsSummaryFactory.Summary", "Summary");
+        }
+
+        @Override
+        public IModel<String> getCssClass() {
+            return Model.of("fa fa-fw fa-usd");
+        }
 
 }

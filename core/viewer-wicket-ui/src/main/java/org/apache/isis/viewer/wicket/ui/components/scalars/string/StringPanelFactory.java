@@ -31,8 +31,8 @@ public class StringPanelFactory extends ComponentFactoryScalarAbstract {
 
     public StringPanelFactory() {
         super(
-            StringPanel.class, 
-            String.class);
+                StringPanel.class,
+                String.class);
     }
 
     @Override

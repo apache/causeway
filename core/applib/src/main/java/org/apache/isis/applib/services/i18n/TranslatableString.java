@@ -105,7 +105,7 @@ public final class TranslatableString {
         this.argumentsByParameterName = argumentsByParameterName;
     }
 
-    
+
 
     // -- singularText, pluralText, pluralForm
 
@@ -159,7 +159,7 @@ public final class TranslatableString {
     boolean isPluralForm() {
         return type == Type.TRN;
     }
-    
+
 
     // -- argumentsByParameterName
     private final Map<String, Object> argumentsByParameterName;
@@ -170,7 +170,7 @@ public final class TranslatableString {
     Map<String, Object> getArgumentsByParameterName() {
         return argumentsByParameterName;
     }
-    
+
 
     // -- translate
 
@@ -185,9 +185,9 @@ public final class TranslatableString {
     public String translate(final TranslationService translationService, final String context) {
         final String translatedText =
                 !isPluralForm()
-                        ? translationService.translate(context, getSingularText())
+                ? translationService.translate(context, getSingularText())
                         : translationService.translate(context, getSingularText(), getPluralText(), number);
-        return translated(translatedText);
+                return translated(translatedText);
     }
 
     /**
@@ -236,7 +236,7 @@ public final class TranslatableString {
         return String.format(formatter.toString(), valueList.toArray());
     }
 
-    
+
 
     // -- equals, hashCode, toString
 
@@ -269,6 +269,6 @@ public final class TranslatableString {
         return type.toString(this);
     }
 
-    
+
 
 }

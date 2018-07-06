@@ -66,7 +66,7 @@ public abstract class IntegrationTestAbstract3 extends HeadlessWithBootstrapping
                         final IsisSystem isft = IsisSystem.get();
                         isft.getService(HeadlessTransactionSupport.class).endTransaction();
                     } catch(final Exception e) {
-                    	Util.handleTransactionContextException(e);
+                        Util.handleTransactionContextException(e);
                     }
                 }
 
@@ -81,14 +81,14 @@ public abstract class IntegrationTestAbstract3 extends HeadlessWithBootstrapping
     protected IntegrationTestAbstract3(
             final LogConfig logConfig,
             final Module module) {
-    	super(logConfig, 
-				Util.moduleBuilder(module)
-				.withHeadlessTransactionSupport()
-				.withIntegrationTestConfigFallback()
-				.build() );
+        super(logConfig,
+                Util.moduleBuilder(module)
+                .withHeadlessTransactionSupport()
+                .withIntegrationTestConfigFallback()
+                .build() );
     }
 
-	@Override
+    @Override
     @Before
     public void bootstrapAndSetupIfRequired() {
 

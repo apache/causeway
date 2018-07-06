@@ -35,7 +35,7 @@ import de.agilecoders.wicket.jquery.util.Strings2;
 public class ZeroClipboardPanel extends PanelAbstract<ObjectAdapterModel> {
 
     private static final long serialVersionUID = 1L;
-    
+
     private static final String ID_SUBSCRIBING_LINK = "subscribingLink";
     private static final String ID_COPY_LINK = "copyLink";
     private static final String ID_SIMPLE_CLIPBOARD_MODAL_WINDOW = "simpleClipboardModalWindow";
@@ -46,7 +46,7 @@ public class ZeroClipboardPanel extends PanelAbstract<ObjectAdapterModel> {
     public ZeroClipboardPanel(String id, ObjectAdapterModel entityModel) {
         super(id, entityModel);
     }
-    
+
     @Override
     protected void onInitialize() {
         super.onInitialize();
@@ -74,10 +74,10 @@ public class ZeroClipboardPanel extends PanelAbstract<ObjectAdapterModel> {
     private AjaxLink<ObjectAdapter> newSimpleClipboardLink(String linkId) {
         return new AjaxLink<ObjectAdapter>(linkId) {
             private static final long serialVersionUID = 1L;
-            
+
             @Override
             public void onClick(AjaxRequestTarget target) {
-                
+
                 String contentId = simpleClipboardModalWindow.getContentId();
                 SimpleClipboardModalWindowPanel panel = new SimpleClipboardModalWindowPanel(contentId);
                 SimpleClipboardModalWindowForm form = new SimpleClipboardModalWindowForm("form");
@@ -100,7 +100,7 @@ public class ZeroClipboardPanel extends PanelAbstract<ObjectAdapterModel> {
                 });
                 panel.add(form);
                 form.add(textField);
-                
+
                 textField.setOutputMarkupId(true);
 
                 CharSequence modalId = Strings2.escapeMarkupId(simpleClipboardModalWindow.getMarkupId());
@@ -109,13 +109,13 @@ public class ZeroClipboardPanel extends PanelAbstract<ObjectAdapterModel> {
 
                 simpleClipboardModalWindow.setPanel(panel, target);
                 simpleClipboardModalWindow.showPrompt(target);
-                
+
                 target.focusComponent(textField);
             }
         };
     }
 
-    
+
 
     private void addSimpleClipboardModalWindow() {
         simpleClipboardModalWindow = SimpleClipboardModalWindow.newModalWindow(ID_SIMPLE_CLIPBOARD_MODAL_WINDOW);

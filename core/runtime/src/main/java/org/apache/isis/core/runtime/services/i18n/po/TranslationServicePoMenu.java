@@ -33,12 +33,12 @@ import org.apache.isis.applib.value.Clob;
 @DomainService(
         nature = NatureOfService.VIEW_MENU_ONLY,
         objectType = "isisApplib.TranslationServicePoMenu"
-)
+        )
 @DomainServiceLayout(
         named = "Prototyping",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY,
         menuOrder = "500.700"
-)
+        )
 public class TranslationServicePoMenu {
 
     public static abstract class ActionDomainEvent extends IsisApplibModule.ActionDomainEvent<TranslationServicePoMenu> {
@@ -53,10 +53,10 @@ public class TranslationServicePoMenu {
             domainEvent = DownloadPotFileDomainEvent.class,
             semantics = SemanticsOf.SAFE,
             restrictTo = RestrictTo.PROTOTYPING
-    )
+            )
     @ActionLayout(
             cssClassFa = "fa-download"
-    )
+            )
     @MemberOrder(sequence="500.700.1")
     public Clob downloadTranslations(
             @ParameterLayout(named = ".pot file name")
@@ -77,11 +77,11 @@ public class TranslationServicePoMenu {
             domainEvent = ResetTranslationCacheDomainEvent.class,
             semantics = SemanticsOf.SAFE,
             restrictTo = RestrictTo.PROTOTYPING
-    )
+            )
     @ActionLayout(
             named="Clear translation cache",
             cssClassFa = "fa-trash"
-    )
+            )
     @MemberOrder(sequence="500.700.2")
     public void resetTranslationCache() {
         translationService.clearCache();
@@ -98,10 +98,10 @@ public class TranslationServicePoMenu {
             domainEvent = SwitchToReadingTranslationsDomainEvent.class,
             semantics = SemanticsOf.IDEMPOTENT,
             restrictTo = RestrictTo.PROTOTYPING
-    )
+            )
     @ActionLayout(
             cssClassFa = "fa-book"
-    )
+            )
     @MemberOrder(sequence="500.700.2")
     public void switchToReadingTranslations() {
         translationService.toggleMode();
@@ -119,10 +119,10 @@ public class TranslationServicePoMenu {
             domainEvent = SwitchToWritingTranslationsDomainEvent.class,
             semantics = SemanticsOf.IDEMPOTENT,
             restrictTo = RestrictTo.PROTOTYPING
-    )
+            )
     @ActionLayout(
             cssClassFa = "fa-pencil"
-    )
+            )
     @MemberOrder(sequence="500.700.3")
     public void switchToWritingTranslations() {
         translationService.toggleMode();

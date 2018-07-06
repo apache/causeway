@@ -40,9 +40,9 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.tabs.AjaxBootstrapTabbed
 
 // hmmm... not sure how to make this implement HasDynamicallyVisibleContent
 public class TabGroupPanel extends AjaxBootstrapTabbedPanel<ITab>  {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public static final String SESSION_ATTR_SELECTED_TAB = "selectedTab";
+    public static final String SESSION_ATTR_SELECTED_TAB = "selectedTab";
 
     // the view metadata
     private final ComponentHintKey selectedTabHintKey;
@@ -52,9 +52,9 @@ public class TabGroupPanel extends AjaxBootstrapTabbedPanel<ITab>  {
         final List<ITab> tabs = new ArrayList<>();
 
         final List<BS3Tab> tablist = _NullSafe.stream(bs3TabGroup.getTabs())
-        		.filter(BS3Tab.Predicates.notEmpty())
-        		.collect(Collectors.toList());
-        		
+                .filter(BS3Tab.Predicates.notEmpty())
+                .collect(Collectors.toList());
+
 
         for (final BS3Tab bs3Tab : tablist) {
             final RepeatingViewWithDynamicallyVisibleContent rv = TabPanel.newRows(entityModel, bs3Tab);
@@ -124,8 +124,8 @@ public class TabGroupPanel extends AjaxBootstrapTabbedPanel<ITab>  {
 
     @Override
     public boolean isVisible() {
-    	return _NullSafe.stream(getTabs())
-    	.anyMatch(ITab::isVisible);
+        return _NullSafe.stream(getTabs())
+                .anyMatch(ITab::isVisible);
     }
 
 

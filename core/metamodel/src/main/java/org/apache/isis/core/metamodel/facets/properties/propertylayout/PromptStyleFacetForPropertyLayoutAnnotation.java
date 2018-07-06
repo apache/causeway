@@ -72,13 +72,13 @@ public class PromptStyleFacetForPropertyLayoutAnnotation extends PromptStyleFace
                 })
                 .orElseGet(() -> {
 
-                        // do not replace
-                        if (holder.containsDoOpFacet(PromptStyleFacet.class)) {
-                            return null;
-                        }
+                    // do not replace
+                    if (holder.containsDoOpFacet(PromptStyleFacet.class)) {
+                        return null;
+                    }
 
-                        PromptStyle promptStyle = PromptStyleConfiguration.parse(configuration);
-                        return new PromptStyleFacetAsConfigured(promptStyle, holder);
+                    PromptStyle promptStyle = PromptStyleConfiguration.parse(configuration);
+                    return new PromptStyleFacetAsConfigured(promptStyle, holder);
                 });
     }
 

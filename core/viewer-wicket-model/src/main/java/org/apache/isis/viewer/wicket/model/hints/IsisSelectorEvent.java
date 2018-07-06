@@ -20,7 +20,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 
 public class IsisSelectorEvent extends IsisEventLetterAbstract {
-    
+
     private final Component component;
     private final String hintKey;
     private final String hintValue;

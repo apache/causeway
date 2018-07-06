@@ -39,7 +39,7 @@ public class Profiler {
 
     /**
      * Primarily for testing.
-     * 
+     *
      * @param profilerSystem
      */
     public static void setProfilerSystem(final ProfilerSystem profilerSystem) {

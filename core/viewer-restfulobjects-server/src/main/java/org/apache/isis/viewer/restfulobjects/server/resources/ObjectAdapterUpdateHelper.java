@@ -78,7 +78,7 @@ public class ObjectAdapterUpdateHelper {
                     objectAdapter,
                     resourceContext.getInteractionInitiatedBy(),
                     resourceContext.getWhere()
-            );
+                    );
 
             final boolean invisible = visibility.isVetoed();
             final boolean disabled = usability.isVetoed();

@@ -26,14 +26,14 @@ import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
 /**
  * The mechanism by which a single parameter of the action can be validated
  * before the action itself is invoked.
- * 
+ *
  * <p>
  * In the standard Apache Isis Programming Model, corresponds to invoking the
  * <tt>validateNXxx</tt> support method for an action.
- * 
+ *
  * <p>
  * Note that the parameter may be validated independently first (eg a range check on a numeric parameter).
- * 
+ *
  * @see org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet
  */
 public interface ActionParameterValidationFacet extends Facet, ValidatingInteractionAdvisor {

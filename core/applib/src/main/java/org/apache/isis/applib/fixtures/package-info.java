@@ -26,21 +26,21 @@
  *     approach to handling fixtures, and should generally be used in preference to
  *     {@link org.apache.isis.applib.fixtures.InstallableFixture}.
  * </p>
- * 
+ *
  * <p>
  * Fixtures are used to initialize the system, typically for either testing
  * or for demo/prototyping purposes.  Initializing the system means:
  * <ul>
  * <li><p>setting up objects within the persistent object store (typically only relevant
  * if using the in-memory object store; other object stores will generally
- * ignore these fixtures)</p></li>  
+ * ignore these fixtures)</p></li>
  * <li><p>setting the current {@link org.apache.isis.applib.fixtures.DateFixture date}</p></li>
- * <li><p>{@link org.apache.isis.applib.fixtures.SwitchUserFixture switching} 
+ * <li><p>{@link org.apache.isis.applib.fixtures.SwitchUserFixture switching}
  * the current user while fixtures are being installed (eg so that a workflow
- * can be picked up midway through)</p></li>  
+ * can be picked up midway through)</p></li>
  * <li><p>specifying the {@link org.apache.isis.applib.fixtures.LogonFixture currently logged on} user once the fixtures have been installed</p></li>
  * </ul>
- * 
+ *
  * <p>
  * Fixtures are typically combined into a {@link org.apache.isis.applib.fixtures.CompositeFixture composite}
  * pattern; the {@link org.apache.isis.applib.fixtures.AbstractFixture} adapter

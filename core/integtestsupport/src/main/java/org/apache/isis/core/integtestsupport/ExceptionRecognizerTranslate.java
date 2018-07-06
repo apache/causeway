@@ -44,6 +44,7 @@ public class ExceptionRecognizerTranslate implements MethodRule {
             this.next = base;
         }
 
+        @Override
         public void evaluate() throws Throwable {
             try {
                 this.next.evaluate();
@@ -61,7 +62,7 @@ public class ExceptionRecognizerTranslate implements MethodRule {
         final List<ExceptionRecognizer> exceptionRecognizers = getIsisSessionFactory().getServicesInjector().lookupServices(ExceptionRecognizer.class);
         for (final ExceptionRecognizer exceptionRecognizer : exceptionRecognizers) {
             @SuppressWarnings("unused")
-			final String unused = exceptionRecognizer.recognize(ex);
+            final String unused = exceptionRecognizer.recognize(ex);
         }
     }
 

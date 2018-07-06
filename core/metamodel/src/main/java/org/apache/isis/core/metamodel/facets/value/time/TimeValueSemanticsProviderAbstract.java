@@ -37,8 +37,8 @@ public abstract class TimeValueSemanticsProviderAbstract<T> extends ValueSemanti
     private static final int TYPICAL_LENGTH = 8;
 
     protected static void initFormats(final Map<String, DateFormat> formats) {
-        formats.put(ISO_ENCODING_FORMAT, createDateEncodingFormat("HHmmssSSS")); 
-        formats.put("short", DateFormat.getTimeInstance(DateFormat.SHORT)); 
+        formats.put(ISO_ENCODING_FORMAT, createDateEncodingFormat("HHmmssSSS"));
+        formats.put("short", DateFormat.getTimeInstance(DateFormat.SHORT));
     }
 
     @SuppressWarnings("unchecked")
@@ -77,33 +77,34 @@ public abstract class TimeValueSemanticsProviderAbstract<T> extends ValueSemanti
     public String toString() {
         return "TimeValueSemanticsProvider: " + format;
     }
-    
-@Override 
-     protected DateFormat format() {
+
+    @Override
+    protected DateFormat format() {
 
         final Locale locale = Locale.getDefault();
         final DateFormat dateFormat = DateFormat.getTimeInstance(DateFormat.SHORT, locale);
-         dateFormat.setTimeZone(UTC_TIME_ZONE); 
-         return dateFormat; 
-     } 
-  
-     protected List<DateFormat> formatsToTry() {
-         List<DateFormat> formats = new ArrayList<DateFormat>();
+        dateFormat.setTimeZone(UTC_TIME_ZONE);
+        return dateFormat;
+    }
 
-         final Locale locale = Locale.getDefault();
+    @Override
+    protected List<DateFormat> formatsToTry() {
+        List<DateFormat> formats = new ArrayList<DateFormat>();
 
-         formats.add(DateFormat.getTimeInstance(DateFormat.LONG, locale));
-         formats.add(DateFormat.getTimeInstance(DateFormat.MEDIUM, locale)); 
-         formats.add(DateFormat.getTimeInstance(DateFormat.SHORT, locale)); 
-         formats.add(createDateFormat("HH:mm:ss.SSS")); 
-         formats.add(createDateFormat("HHmmssSSS")); 
-         formats.add(createDateFormat("HH:mm:ss")); 
-         formats.add(createDateFormat("HHmmss")); 
-  
-         for (DateFormat format : formats) { 
-             format.setTimeZone(UTC_TIME_ZONE); 
-         } 
-          
-         return formats; 
-     } 
+        final Locale locale = Locale.getDefault();
+
+        formats.add(DateFormat.getTimeInstance(DateFormat.LONG, locale));
+        formats.add(DateFormat.getTimeInstance(DateFormat.MEDIUM, locale));
+        formats.add(DateFormat.getTimeInstance(DateFormat.SHORT, locale));
+        formats.add(createDateFormat("HH:mm:ss.SSS"));
+        formats.add(createDateFormat("HHmmssSSS"));
+        formats.add(createDateFormat("HH:mm:ss"));
+        formats.add(createDateFormat("HHmmss"));
+
+        for (DateFormat format : formats) {
+            format.setTimeZone(UTC_TIME_ZONE);
+        }
+
+        return formats;
+    }
 }

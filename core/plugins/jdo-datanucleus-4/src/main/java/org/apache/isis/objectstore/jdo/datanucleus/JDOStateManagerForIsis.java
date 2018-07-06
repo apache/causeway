@@ -47,6 +47,7 @@ public class JDOStateManagerForIsis extends ReferentialStateManagerImpl {
      * Tunnel down the thread stack as a hint to the {@link org.apache.isis.objectstore.jdo.datanucleus.service.eventbus.EventBusServiceJdo}.
      */
     public final static ThreadLocal<Hint> hint = new ThreadLocal<JDOStateManagerForIsis.Hint>() {
+        @Override
         protected Hint initialValue() {
             return Hint.NONE;
         };
@@ -178,7 +179,7 @@ public class JDOStateManagerForIsis extends ReferentialStateManagerImpl {
             hint.set(previous);
         }
     }
-    
+
     @Override
     public void replaceFields(int[] fieldNumbers, FieldManager fm, boolean replaceWhenDirty) {
         final Hint previous = hint.get();
@@ -201,6 +202,7 @@ public class JDOStateManagerForIsis extends ReferentialStateManagerImpl {
         }
     }
 
+    @Override
     public void postCommit(org.datanucleus.Transaction tx) {
         final Hint previous = hint.get();
         try {

@@ -61,6 +61,7 @@ public class AuthenticationManagerStandard implements AuthenticationManager {
      * {@link #addAuthenticator(Authenticator) added}.
      * @param deploymentCategory
      */
+    @Override
     @Programmatic
     public final void init(final DeploymentCategory deploymentCategory) {
         defaultRandomCodeGeneratorIfNecessary();
@@ -85,6 +86,7 @@ public class AuthenticationManagerStandard implements AuthenticationManager {
     protected void addDefaultAuthenticators() {
     }
 
+    @Override
     @Programmatic
     public void shutdown() {
         for (final Authenticator authenticator : authenticators) {

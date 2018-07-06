@@ -55,7 +55,7 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel
  * of) {@link ScalarPanelAbstract2}.
  */
 public class CollectionPanel extends PanelAbstract<EntityCollectionModel> implements CollectionSelectorProvider,
-        BulkActionsProvider {
+BulkActionsProvider {
 
     private static final long serialVersionUID = 1L;
 
@@ -88,8 +88,8 @@ public class CollectionPanel extends PanelAbstract<EntityCollectionModel> implem
 
         entityActionLinks.addAll(
                 LinkAndLabelUtil
-                        .asActionLinksForAdditionalLinksPanel(
-                                entityModel, associatedActions, null, toggledMementosProvider));
+                .asActionLinksForAdditionalLinksPanel(
+                        entityModel, associatedActions, null, toggledMementosProvider));
 
         collectionModel.addLinkAndLabels(entityActionLinks);
 
@@ -127,7 +127,7 @@ public class CollectionPanel extends PanelAbstract<EntityCollectionModel> implem
         this.selectorDropdownPanel = selectorDropdownPanel;
     }
 
-    
+
 
     // -- BulkActionsProvider
     ObjectAdapterToggleboxColumn toggleboxColumn;
@@ -200,7 +200,7 @@ public class CollectionPanel extends PanelAbstract<EntityCollectionModel> implem
         }
     }
 
-    
+
 
 
 }

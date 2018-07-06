@@ -32,8 +32,8 @@ import org.apache.isis.applib.fixturescripts.FixtureScripts;
 
 
 public class TickingClockFixture
-        extends FixtureScript
-        implements FixtureScriptWithExecutionStrategy {
+extends FixtureScript
+implements FixtureScriptWithExecutionStrategy {
 
     // -- date property
     private String date;
@@ -44,7 +44,7 @@ public class TickingClockFixture
         this.date = date;
         return this;
     }
-    
+
 
     @Override
     protected void execute(ExecutionContext ec) {

@@ -56,7 +56,7 @@ import org.apache.isis.core.webapp.config.ResourceStreamSourceForWebInf;
 public class IsisWebAppBootstrapper implements ServletContextListener {
 
     private static final Logger LOG = LoggerFactory.getLogger(IsisWebAppBootstrapper.class);
-    
+
     private final IsisLoggingConfigurer loggingConfigurer = new IsisLoggingConfigurer();
 
     @com.google.inject.Inject

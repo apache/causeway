@@ -100,7 +100,7 @@ public final class LinkFollowSpecs {
 
     /**
      * Ensure that every key present in the provided map matches the criterium.
-     * 
+     *
      * <p>
      * Any keys in the criterium are ignored (these were matched on during the
      * {@link #follow(String, Object...)} call).

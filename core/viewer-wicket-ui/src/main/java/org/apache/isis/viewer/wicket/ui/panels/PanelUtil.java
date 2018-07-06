@@ -57,7 +57,7 @@ public final class PanelUtil {
     public static CssResourceReference cssResourceReferenceFor(final Class<?> cls) {
         return cssResourceReferenceFor(cls, null);
     }
-    
+
     public static CssResourceReference cssResourceReferenceFor(final Class<?> cls, final String suffix) {
         final String url = cssFor(cls, suffix);
         if(url == null) {
@@ -98,10 +98,10 @@ public final class PanelUtil {
         if (!semanticsOf.isAreYouSure()) {
             return;
         }
-        
+
         final TranslationService translationService =
                 servicesInjector.lookupService(TranslationService.class);
-        
+
         ConfirmationConfig confirmationConfig = new ConfirmationConfig();
 
         final String context = IsisSessionFactoryBuilder.class.getName();
@@ -110,12 +110,12 @@ public final class PanelUtil {
         final String cancel = translationService.translate(context, IsisSystem.MSG_CANCEL);
 
         confirmationConfig
-                .withTitle(areYouSure)
-                .withBtnOkLabel(confirm)
-                .withBtnCancelLabel(cancel)
-                .withPlacement(TooltipConfig.Placement.right)
-                .withBtnOkClass("btn btn-danger")
-                .withBtnCancelClass("btn btn-default");
+        .withTitle(areYouSure)
+        .withBtnOkLabel(confirm)
+        .withBtnCancelLabel(cancel)
+        .withPlacement(TooltipConfig.Placement.right)
+        .withBtnOkClass("btn btn-danger")
+        .withBtnCancelClass("btn btn-default");
 
         component.add(new ConfirmationBehavior(confirmationConfig));
     }

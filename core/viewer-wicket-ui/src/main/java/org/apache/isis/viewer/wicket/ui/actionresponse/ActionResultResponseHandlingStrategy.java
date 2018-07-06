@@ -49,10 +49,10 @@ public enum ActionResultResponseHandlingStrategy {
                 final ActionResultResponse resultResponse,
                 final IsisSessionFactory isisSessionFactory) {
             // force any changes in state etc to happen now prior to the redirect;
-            // in the case of an object being returned, this should cause our page mementos 
+            // in the case of an object being returned, this should cause our page mementos
             // (eg EntityModel) to hold the correct state.  I hope.
             isisSessionFactory.getCurrentSession().getPersistenceSession().getTransactionManager().flushTransaction();
-            
+
             // "redirect-after-post"
             final RequestCycle requestCycle = RequestCycle.get();
             requestCycle.setResponsePage(resultResponse.getToPage());
@@ -134,9 +134,9 @@ public enum ActionResultResponseHandlingStrategy {
      * an Ajax request.
      */
     private static class StreamAfterAjaxResponseBehavior extends AbstractAjaxBehavior {
-		private static final long serialVersionUID = 1L;
-		
-		private final String fileName;
+        private static final long serialVersionUID = 1L;
+
+        private final String fileName;
         private final IResourceStream resourceStream;
         private final Duration cacheDuration;
 

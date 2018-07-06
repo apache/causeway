@@ -46,7 +46,7 @@ import org.apache.isis.viewer.wicket.viewer.settings.WicketViewerSettingsDefault
 
 /**
  * To override
- * 
+ *
  * <pre>
  * final Module isisDefaults = new IsisWicketModule();
  *
@@ -55,7 +55,7 @@ import org.apache.isis.viewer.wicket.viewer.settings.WicketViewerSettingsDefault
  *     protected void configure() {
  *         bind(ComponentFactoryRegistrar.class).to(ComponentFactoryRegistrarForMyApp.class);
  *         bind(PageClassList.class).to(PageClassListForMyApp.class);
- *         ...  
+ *         ...
  *         bind(String.class).annotatedWith(Names.named("applicationName")).toInstance("My App");
  *         bind(String.class).annotatedWith(Names.named("brandLogoHeader")).toInstance("/images/myapp-logo-header.png");
  *         bind(String.class).annotatedWith(Names.named("brandLogoSignin")).toInstance("/images/myapp-logo-signin.png");
@@ -85,9 +85,9 @@ public class IsisWicketModule extends AbstractModule {
         // these services need to be bound because they injected directly into
         // Wicket panels outside of the Isis runtime.
         bind(EmailService.class)
-                .to(EmailServiceDefault.class);
+        .to(EmailServiceDefault.class);
         bind(EmailNotificationService.class)
-                .to(EmailNotificationServiceDefault.class);
+        .to(EmailNotificationServiceDefault.class);
 
         bind(String.class).annotatedWith(Names.named("applicationName")).toInstance("Apache Isis Wicket Viewer");
         bind(String.class).annotatedWith(Names.named("applicationCss")).toProvider(Providers.of((String) null));

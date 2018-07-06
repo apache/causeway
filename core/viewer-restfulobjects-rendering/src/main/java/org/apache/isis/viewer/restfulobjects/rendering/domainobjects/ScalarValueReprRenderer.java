@@ -40,15 +40,15 @@ public class ScalarValueReprRenderer extends ReprRendererAbstract<ScalarValueRep
 
     /**
      * Fail early...
-     * 
+     *
      * <p>
-     * In case I forget in the future that scalar values don't have a representation.  
+     * In case I forget in the future that scalar values don't have a representation.
      */
     @Override
     public MediaType getMediaType() {
         throw new UnsupportedOperationException("no mediaType defined for scalar values");
     }
-    
+
     @Override
     public ScalarValueReprRenderer with(final ObjectAdapter objectAdapter) {
         final EncodableFacet facet = objectAdapter.getSpecification().getFacet(EncodableFacet.class);
@@ -61,7 +61,7 @@ public class ScalarValueReprRenderer extends ReprRendererAbstract<ScalarValueRep
         representation.mapPut("value", value);
         return this;
     }
-    
+
     @Override
     public JsonRepresentation render() {
 

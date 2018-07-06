@@ -26,30 +26,30 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 /**
  * Indicates that an exceptional condition/problem has occurred within the application's domain logic.
- * 
+ *
  * <p>
  * Throwing this exception is equivalent to calling {@link DomainObjectContainer#raiseError(String)}.
  * The framework will trap the error and display the exception message as a warning.
- * 
+ *
  * <p>
  * This exception should only be thrown for &quot;recoverable&quot; exceptions, that is, those which
  * could be anticipated by the application.  It should not be thrown for fatal, unanticipated exceptions.
- * 
+ *
  * <p>
  * The framework attempts to apply some heuristics; if the underlying Isis transaction has been aborted
  * (for example as the result of a problem persisting some data) but then the application attempts to
  * throw this exception, the exception will be promoted to a fatal exception.
- * 
+ *
  * <p>
  * Note that this exception has identical semantics to {@link ApplicationException} (of which it is the immediate
  * superclass), and can be considered a synonym.
- * 
+ *
  * @see ApplicationException
  * @see NonRecoverableException
  * @see FatalException
  */
 public class RecoverableException extends RuntimeException implements TranslatableException {
-    
+
     private static final long serialVersionUID = 1L;
 
     private final TranslatableString translatableMessage;
@@ -92,11 +92,11 @@ public class RecoverableException extends RuntimeException implements Translatab
         this.translatableMessage = translatableMessage;
         this.translationContext =
                 translationContextClass != null
-                        ? (translationContextClass.getName() +
-                          (!_Strings.isNullOrEmpty(translationContextMethod)
+                ? (translationContextClass.getName() +
+                        (!_Strings.isNullOrEmpty(translationContextMethod)
                                 ? "#" + translationContextMethod
-                                : "")
-                )
+                                        : "")
+                        )
                         : null;
     }
 
@@ -104,7 +104,7 @@ public class RecoverableException extends RuntimeException implements Translatab
     public String getMessage() {
         return getTranslatableMessage() != null
                 ? getTranslatableMessage().getPattern()
-                : super.getMessage();
+                        : super.getMessage();
     }
 
     @Override
@@ -122,13 +122,13 @@ public class RecoverableException extends RuntimeException implements Translatab
         private Util() {}
 
         public static RecoverableException getRecoverableExceptionIfAny(final Exception ex) {
-        	
-        	return _Exceptions.streamCausalChain(ex)
-        			.filter(t->t instanceof RecoverableException)
-        			.map(t->(RecoverableException)t)
-		        	.findFirst()
-		        	.orElse(null)
-		        	;
+
+            return _Exceptions.streamCausalChain(ex)
+                    .filter(t->t instanceof RecoverableException)
+                    .map(t->(RecoverableException)t)
+                    .findFirst()
+                    .orElse(null)
+                    ;
 
         }
     }

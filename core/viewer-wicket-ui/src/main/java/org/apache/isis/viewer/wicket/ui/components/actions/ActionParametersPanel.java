@@ -37,7 +37,7 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 /**
  * {@link PanelAbstract Panel} representing an action invocation, backed by an
  * {@link ActionModel}.
- * 
+ *
  * <p>
  * Based on the {@link ActionModel.Mode mode}, will render either parameter
  * dialog or the results.
@@ -83,9 +83,9 @@ public class ActionParametersPanel extends PanelAbstract<ActionModel> {
 
 
         WebMarkupContainer header = new WebMarkupContainer(ID_HEADER) {
-			private static final long serialVersionUID = 5410724436024228792L;
+            private static final long serialVersionUID = 5410724436024228792L;
 
-			@Override
+            @Override
             protected void onConfigure() {
                 super.onConfigure();
                 setVisible(showHeader);

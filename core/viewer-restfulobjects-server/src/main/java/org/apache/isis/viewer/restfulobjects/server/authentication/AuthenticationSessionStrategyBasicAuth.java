@@ -74,7 +74,7 @@ public class AuthenticationSessionStrategyBasicAuth extends AuthenticationSessio
         return authStr != null &&
                 authStr.startsWith(BASIC_AUTH_PREFIX)
                 ? authStr.substring(BASIC_AUTH_PREFIX.length())
-                : null;
+                        : null;
     }
 
 

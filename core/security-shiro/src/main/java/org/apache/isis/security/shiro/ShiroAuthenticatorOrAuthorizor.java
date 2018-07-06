@@ -62,7 +62,7 @@ import org.apache.isis.security.shiro.authorization.IsisPermission;
  * If Shiro is configured for both {@link AuthenticationManagerInstaller authentication} and
  * {@link AuthorizationManagerInstaller authorization} (as recommended), then this class is
  * instantiated twice, once in the role of {@link Authenticator} and once in the role of the {@link Authorizor}.
- * 
+ *
  * <p>
  * However, although there are two objects, they are set up to share the same {@link SecurityManager Shiro SecurityManager}
  * (bound to a thread-local).
@@ -91,7 +91,7 @@ public class ShiroAuthenticatorOrAuthorizor implements Authenticator, Authorizor
         return configuration;
     }
 
-    
+
 
     // -- init, shutdown
 
@@ -110,7 +110,7 @@ public class ShiroAuthenticatorOrAuthorizor implements Authenticator, Authorizor
         return deploymentCategory;
     }
 
-    
+
 
     // -- Authenticator API
 
@@ -129,7 +129,7 @@ public class ShiroAuthenticatorOrAuthorizor implements Authenticator, Authorizor
             return null;
         }
         final AuthenticationToken token = asAuthenticationToken(request);
-        
+
         final Subject currentSubject = SecurityUtils.getSubject();
         if(currentSubject.isAuthenticated()) {
 
@@ -149,7 +149,7 @@ public class ShiroAuthenticatorOrAuthorizor implements Authenticator, Authorizor
         }
         try {
             currentSubject.login(token);
-        } catch ( UnknownAccountException uae ) { 
+        } catch ( UnknownAccountException uae ) {
             LOG.info("Unknown account: {}", request.getName());
             return null;
         } catch ( IncorrectCredentialsException ice ) {
@@ -162,7 +162,7 @@ public class ShiroAuthenticatorOrAuthorizor implements Authenticator, Authorizor
         } catch ( LockedAccountException lae ) {
             LOG.info("Locked account for user: {}", request.getName());
             return null;
-        } catch ( ExcessiveAttemptsException eae ) { 
+        } catch ( ExcessiveAttemptsException eae ) {
             LOG.info("Excessive attempts for user: {}", request.getName());
             return null;
         } catch ( AuthenticationException ae ) {
@@ -202,7 +202,7 @@ public class ShiroAuthenticatorOrAuthorizor implements Authenticator, Authorizor
         if(securityManager == null) {
             return roles;
         }
-        
+
         final Set<String> realmNames = realmNamesOf(subject);
         final Collection<Realm> realms = securityManager.getRealms();
         for (final Realm realm : realms) {
@@ -231,10 +231,10 @@ public class ShiroAuthenticatorOrAuthorizor implements Authenticator, Authorizor
         final AuthenticationRequestPassword passwordRequest = (AuthenticationRequestPassword) request;
         final String username = passwordRequest.getName();
         final String password = passwordRequest.getPassword();
-        
+
         return new UsernamePasswordToken(username, password);
     }
-    
+
 
     // -- Authorizor API
 
@@ -251,15 +251,15 @@ public class ShiroAuthenticatorOrAuthorizor implements Authenticator, Authorizor
     private boolean isPermitted(Identifier identifier, String qualifier) {
         RealmSecurityManager securityManager = getSecurityManager();
         if(securityManager == null) {
-              // since a security manager will always be present for regular web requests, presumably the user
-              // is running in fixtures during bootstrapping.  We therefore permit the interaction.
+            // since a security manager will always be present for regular web requests, presumably the user
+            // is running in fixtures during bootstrapping.  We therefore permit the interaction.
             return true;
         }
 
         String permission = asPermissionsString(identifier) + ":" + qualifier;
 
         Subject subject = SecurityUtils.getSubject();
-        
+
         try {
             return subject.isPermitted(permission);
         } finally {
@@ -300,7 +300,7 @@ public class ShiroAuthenticatorOrAuthorizor implements Authenticator, Authorizor
         return false;
     }
 
-    
+
 
     // -- Injected (via Shiro service locator)
 
@@ -321,6 +321,6 @@ public class ShiroAuthenticatorOrAuthorizor implements Authenticator, Authorizor
         return (RealmSecurityManager) securityManager;
     }
 
-    
+
 
 }

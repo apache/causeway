@@ -31,7 +31,7 @@ public class Jdk8LocalDatePanel extends ScalarPanelTextFieldDatePickerAbstract<L
     private static final long serialVersionUID = 1L;
 
     public Jdk8LocalDatePanel(final String id, final ScalarModel scalarModel) {
-        super(id, scalarModel, LocalDate.class); 
+        super(id, scalarModel, LocalDate.class);
         init(new DateConverterForJdk8LocalDate(getSettings(), getAdjustBy()));
     }
 

@@ -20,8 +20,8 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneActionParameter;
 
 public class OneToOneActionParameterMixedIn
-        extends ObjectActionParameterMixedInAbstract
-        implements OneToOneActionParameter {
+extends ObjectActionParameterMixedInAbstract
+implements OneToOneActionParameter {
 
     public OneToOneActionParameterMixedIn(
             final ObjectActionParameterAbstract mixinParameter,

@@ -21,8 +21,8 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneActionParameter;
 
 public class OneToOneActionParameterContributee
-        extends ObjectActionParameterContributeeAbstract
-        implements OneToOneActionParameter {
+extends ObjectActionParameterContributeeAbstract
+implements OneToOneActionParameter {
 
     public OneToOneActionParameterContributee(
             final ObjectAdapter serviceAdapter,

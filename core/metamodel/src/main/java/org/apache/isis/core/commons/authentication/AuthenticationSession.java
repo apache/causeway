@@ -44,7 +44,7 @@ public interface AuthenticationSession extends Encodable, Serializable {
 
     /**
      * A unique code given to this session during authentication.
-     * 
+     *
      * <p>
      * This can be used to confirm that this session has been properly created
      * and the user has been authenticated. It should return an empty string (

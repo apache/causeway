@@ -96,12 +96,12 @@ public final class BulkActionsLinkFactory implements ActionLinkFactory {
 
                 try {
                     final List<ObjectAdapter> toggledAdapters = _NullSafe.stream(model.getToggleMementosList())
-	                    .map(ObjectAdapterMemento.Functions.fromMemento(
-	                            concurrencyChecking, getPersistenceSession(), getSpecificationLoader()))
-	                    .collect(Collectors.toList());
+                            .map(ObjectAdapterMemento.Functions.fromMemento(
+                                    concurrencyChecking, getPersistenceSession(), getSpecificationLoader()))
+                            .collect(Collectors.toList());
 
-                    final List<Object> domainObjects = 
-                    		_Lists.transform(toggledAdapters, ObjectAdapter.Functions.getObject());
+                    final List<Object> domainObjects =
+                            _Lists.transform(toggledAdapters, ObjectAdapter.Functions.getObject());
 
                     final ActionInvocationContext actionInvocationContext = getServicesInjector().lookupService(ActionInvocationContext.class);
                     if (actionInvocationContext != null) {
@@ -131,7 +131,7 @@ public final class BulkActionsLinkFactory implements ActionLinkFactory {
                         lastReturnedAdapter = objectAction.executeWithRuleChecking(
                                 adapter, mixedInAdapter, arguments,
                                 InteractionInitiatedBy.USER, ActionModel.WHERE_FOR_ACTION_INVOCATION
-                        );
+                                );
                         TransactionService transactionService =
                                 getServicesInjector().lookupService(TransactionService.class);
                         transactionService.nextTransaction();

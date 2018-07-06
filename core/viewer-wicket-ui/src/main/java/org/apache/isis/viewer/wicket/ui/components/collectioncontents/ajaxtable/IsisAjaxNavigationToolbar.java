@@ -47,9 +47,9 @@ public class IsisAjaxNavigationToolbar extends AjaxNavigationToolbar {
 
         ((MarkupContainer)get("span")).add(new AjaxLink<Void>(ID_SHOW_ALL) {
 
-			private static final long serialVersionUID = 1L;
+            private static final long serialVersionUID = 1L;
 
-			@Override
+            @Override
             public void onClick(AjaxRequestTarget target) {
                 showAllItemsOn(table);
 

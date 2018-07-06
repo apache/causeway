@@ -23,7 +23,7 @@ import org.apache.isis.applib.Identifier;
 
 /**
  * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents a check as to whether a property is visible or has been hidden.
- * 
+ *
  * <p>
  * If {@link #getReason()} is not <tt>null</tt> then provides the reason why the
  * property is invisible; otherwise property is visible.

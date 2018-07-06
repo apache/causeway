@@ -40,7 +40,7 @@ public class AboutPanel extends PanelAbstract<AboutModel> {
     @com.google.inject.Inject
     @Named("aboutMessage")
     private String aboutMessage;
-    
+
     /**
      * We take care to read this only once.
      *
@@ -51,16 +51,16 @@ public class AboutPanel extends PanelAbstract<AboutModel> {
     @com.google.inject.Inject
     @Named("metaInfManifest")
     private transient InputStream metaInfManifestIs;
-    
+
     private JarManifestModel jarManifestModel;
-    
+
     public AboutPanel(final String id) {
         super(id);
-        
+
         if(jarManifestModel == null) {
             jarManifestModel = new JarManifestModel(aboutMessage, metaInfManifestIs);
         }
-        
+
         add(new JarManifestPanel(ID_MANIFEST_ATTRIBUTES, jarManifestModel));
     }
 

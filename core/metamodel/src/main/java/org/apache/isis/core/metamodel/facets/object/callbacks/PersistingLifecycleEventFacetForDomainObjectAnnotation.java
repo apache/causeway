@@ -33,10 +33,11 @@ public class PersistingLifecycleEventFacetForDomainObjectAnnotation extends Sing
     public PersistingLifecycleEventFacetForDomainObjectAnnotation(
             final FacetHolder holder,
             final Class<? extends ObjectPersistingEvent<?>> value,
-            final SpecificationLoader specificationLoader) {
+                    final SpecificationLoader specificationLoader) {
         super(type(), holder, value, specificationLoader);
     }
 
+    @Override
     public Class<? extends ObjectPersistingEvent<?>> getEventType() {
         //noinspection unchecked
         return eventType();

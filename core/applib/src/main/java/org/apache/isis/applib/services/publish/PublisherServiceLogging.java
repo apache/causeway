@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory;
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
-)
+        )
 public class PublisherServiceLogging implements PublisherService {
 
     private static final Logger LOG = LoggerFactory.getLogger(PublisherServiceLogging.class);
@@ -69,12 +69,12 @@ public class PublisherServiceLogging implements PublisherService {
         LOG.debug(ChangesDtoUtils.toXml(changesDto));
     }
 
-//TODO [ahuber] not used, remove?
-//    @javax.inject.Inject
-//    private CommandContext commandContext;
-//
-//    @javax.inject.Inject
-//    private UserService userService;
+    //TODO [ahuber] not used, remove?
+    //    @javax.inject.Inject
+    //    private CommandContext commandContext;
+    //
+    //    @javax.inject.Inject
+    //    private UserService userService;
 
 }
 

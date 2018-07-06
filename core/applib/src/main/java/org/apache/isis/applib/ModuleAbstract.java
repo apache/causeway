@@ -38,8 +38,8 @@ import org.apache.isis.commons.internal.collections._Sets;
  * </p>
  */
 public abstract class ModuleAbstract
-        extends ModuleOrBuilderAbstract<ModuleAbstract>
-        implements Module {
+extends ModuleOrBuilderAbstract<ModuleAbstract>
+implements Module {
 
 
     @Override
@@ -51,10 +51,10 @@ public abstract class ModuleAbstract
     @XmlElement(name = "module", required = true)
     private Set<ModuleAbstract> getModuleDependencies() {
 
-    	return _NullSafe.stream(getDependencies())
-    	.filter(module->module instanceof ModuleAbstract)
-    	.map(module->(ModuleAbstract) module)
-    	.collect(Collectors.toSet());
+        return _NullSafe.stream(getDependencies())
+                .filter(module->module instanceof ModuleAbstract)
+                .map(module->(ModuleAbstract) module)
+                .collect(Collectors.toSet());
     }
 
     /**
@@ -101,6 +101,7 @@ public abstract class ModuleAbstract
         return getFullName();
     }
 
+    @Override
     public boolean equals(final Object o) {
         if (o == this) {
             return true;
@@ -112,6 +113,7 @@ public abstract class ModuleAbstract
         return Objects.equals(getFullName(), other.getFullName());
     }
 
+    @Override
     public int hashCode() {
         return getFullName().hashCode();
     }

@@ -39,13 +39,14 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 public class IsisClobPanel extends IsisBlobOrClobPanelAbstract<Clob> {
 
     private static final long serialVersionUID = 1L;
-    
+
     private static final Charset CHARSET = Charsets.UTF_8;
 
     public IsisClobPanel(final String id, final ScalarModel model) {
         super(id, model);
     }
 
+    @Override
     protected Clob getBlobOrClobFrom(final List<FileUpload> fileUploads) {
         final FileUpload fileUpload = fileUploads.get(0);
         final String contentType = fileUpload.getContentType();
@@ -55,6 +56,7 @@ public class IsisClobPanel extends IsisBlobOrClobPanelAbstract<Clob> {
         return blob;
     }
 
+    @Override
     protected IResource newResource(final Clob clob) {
         return new CharSequenceResource(clob.getMimeType().getBaseType(), clob.getChars(), clob.getName());
     }

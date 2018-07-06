@@ -26,8 +26,9 @@ public class IsisPermissionResolver implements PermissionResolver {
     public IsisPermissionResolver(){
     }
 
+    @Override
     public Permission resolvePermission(String permissionString) {
         return new IsisPermission(permissionString);
     }
-    
+
 }

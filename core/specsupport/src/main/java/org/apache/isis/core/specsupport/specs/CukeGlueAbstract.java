@@ -40,11 +40,11 @@ import cucumber.api.java.Before;
 
 /**
  * Base class for Cucumber-JVM step definitions.
- * 
+ *
  * <p>
  * Simply declares that an instance of {@link ScenarioExecution} (or a subclass)
  * must be instantiated by the Cucumber-JVM runtime and injected into the step definitions.
- * 
+ *
  * @deprecated  - use {@link CukeGlueAbstract2} instead.
  */
 @Deprecated
@@ -52,7 +52,7 @@ public abstract class CukeGlueAbstract {
 
     /**
      * Access the {@link ScenarioExecution} as setup through a previous call to {@link #before(ScenarioExecutionScope)}.
-     * 
+     *
      * <p>
      * This corresponds, broadly, to the (Ruby) Cucumber's &quot;World&quot; object.
      */
@@ -69,7 +69,7 @@ public abstract class CukeGlueAbstract {
     /**
      * Intended to be called at the beginning of any 'when' (after all the 'given's)
      * or at the beginning of any 'then' (after all the 'when's)
-     * 
+     *
      * <p>
      * Simply {@link ScenarioExecution#endTran(boolean) ends any existing transaction} and
      * then {@link ScenarioExecution#beginTran() starts a new one}.
@@ -81,7 +81,7 @@ public abstract class CukeGlueAbstract {
             scenarioExecution.beginTran();
         }
     }
-    
+
 
     // //////////////////////////////////////
 
@@ -91,14 +91,14 @@ public abstract class CukeGlueAbstract {
     public Object getVar(String type, String id) {
         return scenarioExecution().getVar(type, id);
     }
-    
+
     /**
      * Convenience method
      */
     public <X> X getVar(String type, String id, Class<X> cls) {
         return scenarioExecution().getVar(type, id ,cls);
     }
-    
+
     /**
      * Convenience method
      */
@@ -119,64 +119,64 @@ public abstract class CukeGlueAbstract {
     protected <T> T service(Class<T> cls) {
         return scenarioExecution().service(cls);
     }
-    
-//    /**
-//     * Convenience method
-//     */
-//    protected DomainObjectContainer container() {
-//        return scenarioExecution().container();
-//    }
-    
+
+    //    /**
+    //     * Convenience method
+    //     */
+    //    protected DomainObjectContainer container() {
+    //        return scenarioExecution().container();
+    //    }
+
     /**
      * Convenience method
      */
     protected WrapperFactory wrapperFactory() {
         return scenarioExecution().wrapperFactory();
     }
-    
+
     /**
      * Convenience method
      */
     protected <T> T wrap(T obj) {
         return wrapperFactory().wrap(obj);
     }
-    
+
     /**
      * Convenience method
      */
     protected <T> T unwrap(T obj) {
         return wrapperFactory().unwrap(obj);
     }
-    
+
     /**
      * Convenience method
-     * @return 
+     * @return
      */
     public boolean supportsMocks() {
         return scenarioExecution().supportsMocks();
     }
-    
+
     /**
      * Convenience method
      */
     public void checking(ExpectationBuilder expectations) {
         scenarioExecution().checking(expectations);
     }
-    
+
     /**
      * Convenience method
      */
     public void assertMocksSatisfied() {
         scenarioExecution().assertIsSatisfied();
     }
-    
+
     /**
      * Convenience method
      */
     public Sequence sequence(String name) {
         return scenarioExecution().sequence(name);
     }
-    
+
     /**
      * Convenience method
      */
@@ -193,10 +193,10 @@ public abstract class CukeGlueAbstract {
 
         final StringBuilder buf = new StringBuilder();
         for (int i=0; i<listOfActuals.size(); i++) {
-            
+
             final Object actual = listOfActuals.get(i);
             final Object expected = listOfExpecteds.get(i);
-            
+
             final Field[] expectedFields = expected.getClass().getDeclaredFields();
             for (Field field : expectedFields) {
                 final String propertyName = field.getName();
@@ -213,7 +213,7 @@ public abstract class CukeGlueAbstract {
         }
     }
 
-    
+
     private static Object getProperty(Object obj, String propertyName) {
         if(obj == null) {
             return null;
@@ -228,7 +228,7 @@ public abstract class CukeGlueAbstract {
         } catch (Exception e) {
             // continue
         }
-        
+
         try {
             final String methodName = "is" + _Strings.capitalize(propertyName);
             final Method method = cls.getMethod(methodName, new Class[]{});
@@ -238,7 +238,7 @@ public abstract class CukeGlueAbstract {
         } catch (Exception e) {
             // continue
         }
-        
+
         try {
             final Field field = cls.getDeclaredField(propertyName);
             if(field != null) {
@@ -250,27 +250,27 @@ public abstract class CukeGlueAbstract {
         } catch (Exception e) {
             // continue
         }
-        
+
         return null;
     }
 
     // //////////////////////////////////////
 
     /**
-     * Indicate that a scenario is starting, and specify the {@link ScenarioExecutionScope scope} 
+     * Indicate that a scenario is starting, and specify the {@link ScenarioExecutionScope scope}
      * at which to run the scenario.
-     * 
+     *
      * <p>
      * This method should be called from a &quot;before&quot; hook (a method annotated with
      * Cucumber's {@link Before} annotation, in a step definition subclass.  The tag
-     * should be appropriate for the scope specified.  Typically this method should be delegated to 
+     * should be appropriate for the scope specified.  Typically this method should be delegated to
      * twice, in two mutually exclusive before hooks.
-     * 
+     *
      * <p>
      * Calling this method makes the {@link ScenarioExecution} available (via {@link #scenarioExecution()}).
-     * It also delegates to the scenario to {@link ScenarioExecution#beginTran() begin the transaction}.  
-     * (Whether this actually does anything depends in implementation of the {@link ScenarioExecution}). 
-     * 
+     * It also delegates to the scenario to {@link ScenarioExecution#beginTran() begin the transaction}.
+     * (Whether this actually does anything depends in implementation of the {@link ScenarioExecution}).
+     *
      * <p>
      * The boilerplate (to copy-n-paste as required) is:
      * <pre>
@@ -283,18 +283,18 @@ public abstract class CukeGlueAbstract {
      *     before(ScenarioExecutionScope.INTEGRATION);
      *  }
      * </pre>
-     * The built-in {@link ScenarioExecutionScope#UNIT unit}-level scope will instantiate a 
+     * The built-in {@link ScenarioExecutionScope#UNIT unit}-level scope will instantiate a
      * {@link ScenarioExecutionForUnit}, while the built-in
-     * {@link ScenarioExecutionScope#INTEGRATION integration}-level scope instantiates 
-     * <tt>ScenarioExecutionForIntegration</tt> (from the <tt>isis-core-integtestsupport</tt> module).  
-     * The former provides access to domain services as mocks, whereas the latter wraps a running 
+     * {@link ScenarioExecutionScope#INTEGRATION integration}-level scope instantiates
+     * <tt>ScenarioExecutionForIntegration</tt> (from the <tt>isis-core-integtestsupport</tt> module).
+     * The former provides access to domain services as mocks, whereas the latter wraps a running
      * <tt>IsisSystemForTest</tt>.
-     * 
+     *
      * <p>
-     * If need be, it is also possible to define custom scopes, with a different implementation of 
+     * If need be, it is also possible to define custom scopes, with a different implementation of
      * {@link ScenarioExecution}.  This might be done when unit testing where a large number of specs
      * have similar expectations needing to be set on the mock domain services.
-     * 
+     *
      * <p>
      * Not every class holding step definitions should have these hooks, only those that correspond to the logical
      * beginning and end of scenario.  As such, this method may only be called once per scenario execution
@@ -308,12 +308,12 @@ public abstract class CukeGlueAbstract {
     /**
      * Indicate that a scenario is ending; the {@link ScenarioExecution} is discarded and no
      * longer {@link #scenarioExecution() available}.
-     * 
+     *
      * <p>
      * Before being discarded, the {@link ScenarioExecution} is delegated to
      * in order to {@link ScenarioExecution#endTran(boolean) end the transaction}.
      * (Whether this actually does anything depends in implementation of the {@link ScenarioExecution}).
-     *  
+     *
      * <p>
      * The boilerplate (to copy-n-paste as required) is:
      * <pre>
@@ -322,7 +322,7 @@ public abstract class CukeGlueAbstract {
      *     after(sc);
      *  }
      * </pre>
-     * 
+     *
      * <p>
      * Not every class holding step definitions should have this hook, only those that correspond to the logical
      * beginning and end of scenario.  As such, this method may only be called once per scenario execution

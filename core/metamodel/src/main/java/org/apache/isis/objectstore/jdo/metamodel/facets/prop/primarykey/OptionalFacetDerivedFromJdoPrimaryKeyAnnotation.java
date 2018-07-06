@@ -27,7 +27,7 @@ import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefault
 
 /**
  * Derived by presence of {@link PrimaryKey}.
- * 
+ *
  * <p>
  * By default mandatory properties are initialized using the
  * {@link PropertyDefaultFacet} facet. We don't want this, so this facet marks

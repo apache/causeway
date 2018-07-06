@@ -34,5 +34,5 @@ public abstract class SortedByFacetAbstract extends SingleValueFacetAbstract<Cla
     public SortedByFacetAbstract(Class<? extends Comparator<?>> value, final FacetHolder holder) {
         super(type(), value, holder);
     }
-    
+
 }

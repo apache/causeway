@@ -33,7 +33,7 @@ import org.apache.isis.commons.internal.collections._Lists;
 /**
  * Convenience implementation of {@link ExceptionRecognizer} that loops through a list of
  * {@link #add(ExceptionRecognizer) registered} services.
- * 
+ *
  * <p>
  * Note that the framework <i>does</i> allow multiple {@link ExceptionRecognizer service}s
  * to be registered in <tt>isis.properties</tt>, and each will be consulted in turn.  Therefore
@@ -50,7 +50,7 @@ public class ExceptionRecognizerComposite implements ExceptionRecognizer {
     public ExceptionRecognizerComposite(final ExceptionRecognizer... exceptionRecognizers) {
         this(Arrays.asList(exceptionRecognizers));
     }
-    
+
     public ExceptionRecognizerComposite(final List<? extends ExceptionRecognizer> exceptionRecognizers) {
         for (final ExceptionRecognizer er : exceptionRecognizers) {
             add(er);
@@ -60,7 +60,7 @@ public class ExceptionRecognizerComposite implements ExceptionRecognizer {
     /**
      * Register an {@link ExceptionRecognizer} to be consulted when
      * {@link #recognize(Throwable)} is called.
-     * 
+     *
      * <p>
      * The most specific {@link ExceptionRecognizer recognizer}s should be registered
      * before the more general ones.  See the <i>JDO object store</i> applib for
@@ -70,11 +70,12 @@ public class ExceptionRecognizerComposite implements ExceptionRecognizer {
     public final void add(final ExceptionRecognizer ers) {
         exceptionRecognizers.add(ers);
     }
-    
+
     /**
-     * Returns the non-<tt>null</tt> message of the first {@link #add(ExceptionRecognizer) add}ed 
-     * {@link ExceptionRecognizer service} that recognizes the exception. 
+     * Returns the non-<tt>null</tt> message of the first {@link #add(ExceptionRecognizer) add}ed
+     * {@link ExceptionRecognizer service} that recognizes the exception.
      */
+    @Override
     @Programmatic
     public final String recognize(final Throwable ex) {
         for (final ExceptionRecognizer ers : exceptionRecognizers) {
@@ -88,7 +89,7 @@ public class ExceptionRecognizerComposite implements ExceptionRecognizer {
 
 
     /**
-     * Returns the non-<tt>null</tt> recognition of the first {@link #add(ExceptionRecognizer) add}ed 
+     * Returns the non-<tt>null</tt> recognition of the first {@link #add(ExceptionRecognizer) add}ed
      * {@link org.apache.isis.applib.services.exceprecog.ExceptionRecognizer}.
      *
      * <p>
@@ -97,6 +98,7 @@ public class ExceptionRecognizerComposite implements ExceptionRecognizer {
      *     category of {@link org.apache.isis.applib.services.exceprecog.ExceptionRecognizer.Category#CLIENT_ERROR}.
      * </p>
      */
+    @Override
     @Programmatic
     public final Recognition recognize2(final Throwable ex) {
         for (final ExceptionRecognizer ers : exceptionRecognizers) {

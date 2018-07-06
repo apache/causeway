@@ -34,7 +34,7 @@ import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 /**
  * An adapter that handles {@link java.sql.Date} with only date component.
- * 
+ *
  * @see JavaUtilDateValueSemanticsProvider
  * @see JavaSqlTimeValueSemanticsProvider
  */

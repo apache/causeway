@@ -37,7 +37,7 @@ import com.google.common.collect.Lists;
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
-)
+        )
 public class GridServiceDefault implements GridService {
 
     //private static final Logger LOG = LoggerFactory.getLogger(GridServiceDefault.class);

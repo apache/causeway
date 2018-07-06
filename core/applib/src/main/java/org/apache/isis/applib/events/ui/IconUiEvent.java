@@ -43,7 +43,7 @@ public abstract class IconUiEvent<S> extends AbstractUiEvent<S> {
         super(source);
     }
 
-    
+
 
     // -- Default class
     /**
@@ -55,7 +55,7 @@ public abstract class IconUiEvent<S> extends AbstractUiEvent<S> {
     public static class Default extends IconUiEvent<Object> {
         private static final long serialVersionUID = 1L;
     }
-    
+
 
     // -- Noop class
 
@@ -66,7 +66,7 @@ public abstract class IconUiEvent<S> extends AbstractUiEvent<S> {
     public static class Noop extends IconUiEvent<Object> {
         private static final long serialVersionUID = 1L;
     }
-    
+
 
     // -- Doop class
 
@@ -77,7 +77,7 @@ public abstract class IconUiEvent<S> extends AbstractUiEvent<S> {
     public static class Doop extends IconUiEvent<Object> {
         private static final long serialVersionUID = 1L;
     }
-    
+
 
 
     // -- iconName
@@ -96,6 +96,6 @@ public abstract class IconUiEvent<S> extends AbstractUiEvent<S> {
     public void setIconName(final String iconName) {
         this.iconName = iconName;
     }
-    
+
 
 }

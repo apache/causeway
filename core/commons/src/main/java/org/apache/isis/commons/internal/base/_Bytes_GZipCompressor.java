@@ -26,28 +26,28 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 /**
- * 
+ *
  * package private mixin for utility class {@link _Bytes}
  *
  */
 final class _Bytes_GZipCompressor {
-	
-	static byte[] compress(final byte[] input) throws IOException {
-    	
-    	final int BUFFER_SIZE = Math.max(256, input.length); // at least 256
-    	
+
+    static byte[] compress(final byte[] input) throws IOException {
+
+        final int BUFFER_SIZE = Math.max(256, input.length); // at least 256
+
         final ByteArrayOutputStream os = new ByteArrayOutputStream(BUFFER_SIZE);
         final GZIPOutputStream gos = new GZIPOutputStream(os);
         gos.write(input);
         gos.close();
-        
+
         return os.toByteArray();
     }
 
     static byte[] decompress(byte[] compressed) throws IOException {
-    	
-    	final int BUFFER_SIZE = 32; 
-    	
+
+        final int BUFFER_SIZE = 32;
+
         final ByteArrayInputStream is = new ByteArrayInputStream(compressed);
         final GZIPInputStream gis = new GZIPInputStream(is, BUFFER_SIZE);
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -59,7 +59,7 @@ final class _Bytes_GZipCompressor {
         gis.close();
         return baos.toByteArray();
     }
-    
 
-	
+
+
 }

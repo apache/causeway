@@ -34,13 +34,13 @@ import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
  * An instance of this class is held by each {@link ObjectAdapter} and is used
  * to represent a particular version (at a point in time) of domain object
  * wrapped by that adapter.
- * 
+ *
  * <p>
  * This is normally done using some form of incrementing number or timestamp,
  * which would be held within the implementing class. The numbers, timestamps,
  * etc should change for each changed object, and the different() method should
  * indicate that the two Version objects are different.
- * 
+ *
  * <p>
  * The user's name and a timestamp should alos be kept so that when an message
  * is passed to the user it can be of the form "user has change object at time"
@@ -58,7 +58,7 @@ public class Version implements Serializable, Encodable {
     }
 
     public static Version create(String sequence, String user, String utcTimestamp) {
-        if(sequence == null) { 
+        if(sequence == null) {
             return null;
         }
         return create(Long.parseLong(sequence), user, utcTimestamp != null?Long.parseLong(utcTimestamp):null);
@@ -69,13 +69,13 @@ public class Version implements Serializable, Encodable {
     }
 
     public static Version create(Long sequence, String user, Long utcTimestamp) {
-        if(sequence == null) { 
+        if(sequence == null) {
             return null;
         }
         return new Version(sequence, user, utcTimestamp);
     }
 
-    
+
 
     // -- constructor, fields
     private final Long sequence;
@@ -88,7 +88,7 @@ public class Version implements Serializable, Encodable {
         this.utcTimestamp = utcTimestamp;
     }
 
-    
+
 
     // -- encodable
 
@@ -104,35 +104,35 @@ public class Version implements Serializable, Encodable {
         output.writeLong(utcTimestamp);
     }
 
-    
+
 
     // -- getters
     /**
      * The internal, strictly monotonically increasing, version number.
-     * 
+     *
      * <p>
      * This might be the timestamp of the change, or it might be simply a number incrementing 1,2,3...
      */
     public long getSequence() {
         return sequence;
     }
-    
+
     /**
      * Returns the user who made the last change (used for display/reporting only)
-     * 
+     *
      * <p>
      * May be null.
      */
     public String getUser() {
         return user;
     }
-    
+
     /**
      * The time of the last change, as UTC milliseconds.
-     * 
+     *
      * <p>
      * May be null.
-     * 
+     *
      * @see #getTime()
      */
     public Long getUtcTimestamp() {
@@ -141,17 +141,17 @@ public class Version implements Serializable, Encodable {
 
     /**
      * Returns the time of the last change (used for display/reporting only, not comparison)
-     * 
+     *
      * <p>
      * May be null.
-     * 
+     *
      * @see #getUtcTimestamp()
      */
     public Date getTime() {
         return utcTimestamp != null? new Date(this.utcTimestamp): null;
     }
 
-    
+
 
     // -- enString
 
@@ -159,7 +159,7 @@ public class Version implements Serializable, Encodable {
         return OID_MARSHALLER.marshal(this);
     }
 
-    
+
 
     // -- equals, hashCode
 
@@ -191,7 +191,7 @@ public class Version implements Serializable, Encodable {
     /**
      * Compares this version against the specified version and returns true if
      * they are different versions (by checking {@link #getSequence()}).
-     * 
+     *
      * <p>
      * This is use for optimistic checking, where the existence of a different
      * version will normally cause a concurrency exception.
@@ -200,7 +200,7 @@ public class Version implements Serializable, Encodable {
         return !equals(version);
     }
 
-    
+
 
     // -- sequence
 
@@ -208,7 +208,7 @@ public class Version implements Serializable, Encodable {
     public String toString() {
         return "#" + sequence + " " + getUser() + " " + DateExtensions.asTimestamp(getTime());
     }
-    
+
     /**
      * Returns the sequence for printing/display
      */
@@ -216,6 +216,6 @@ public class Version implements Serializable, Encodable {
         return Long.toString(sequence, 16);
     }
 
-    
+
 
 }

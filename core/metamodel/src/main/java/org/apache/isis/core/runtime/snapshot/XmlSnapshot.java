@@ -69,13 +69,13 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 /**
  * Traverses object graph from specified root, so that an XML representation of
  * the graph can be returned.
- * 
+ *
  * <p>
  * Initially designed to allow snapshots to be easily created.
- * 
+ *
  * <p>
  * Typical use:
- * 
+ *
  * <pre>
  * XmlSnapshot snapshot = new XmlSnapshot(customer); // where customer is a
  * // reference to an
@@ -187,7 +187,7 @@ public class XmlSnapshot implements Snapshot {
     /**
      * Creates an Element representing this object, and appends it as the root
      * element of the Document.
-     * 
+     *
      * The Document must not yet have a root element Additionally, the supplied
      * schemaManager must be populated with any application-level namespaces
      * referenced in the document that the parentElement resides within.
@@ -248,11 +248,11 @@ public class XmlSnapshot implements Snapshot {
      * Creates an Element representing this object, and appends it to the
      * supplied parentElement, provided that an element for the object is not
      * already appended.
-     * 
+     *
      * The method uses the OID to determine if an object's element is already
      * present. If the object is not yet persistent, then the hashCode is used
      * instead.
-     * 
+     *
      * The parentElement must have an owner document, and should define the &quot;isis&quot;
      * namespace. Additionally, the supplied schemaManager must be populated
      * with any application-level namespaces referenced in the document that the
@@ -338,16 +338,17 @@ public class XmlSnapshot implements Snapshot {
 
     /**
      * The name of the <code>xsi:schemaLocation</code> in the XML document.
-     * 
+     *
      * Taken from the <code>fullyQualifiedClassName</code> (which also is used
      * as the basis for the <code>targetNamespace</code>.
-     * 
+     *
      * Populated in {@link #appendXml(ObjectAdapter)}.
      */
     public String getSchemaLocationFileName() {
         return schemaLocationFileName;
     }
 
+    @Override
     public Document getXmlDocument() {
         return xmlDocument;
     }
@@ -360,6 +361,7 @@ public class XmlSnapshot implements Snapshot {
         return xmlElement;
     }
 
+    @Override
     public Document getXsdDocument() {
         return xsdDocument;
     }
@@ -540,11 +542,11 @@ public class XmlSnapshot implements Snapshot {
     /**
      * Merges the tree of Elements whose root is <code>childElement</code>
      * underneath the <code>parentElement</code>.
-     * 
+     *
      * If the <code>parentElement</code> already has an element that matches the
      * <code>childElement</code>, then recursively attaches the grandchildren
      * instead.
-     * 
+     *
      * The element returned will be either the supplied
      * <code>childElement</code>, or an existing child element if one already
      * existed under <code>parentElement</code>.
@@ -662,8 +664,8 @@ public class XmlSnapshot implements Snapshot {
             }
 
             Element xmlFieldElement = getXmlDocument().createElementNS(schema.getUri(), // scoped
-                                                                                        // by
-                                                                                        // namespace
+                    // by
+                    // namespace
                     // of class of
                     // containing object
                     schema.getPrefix() + ":" + fieldName);
@@ -686,9 +688,9 @@ public class XmlSnapshot implements Snapshot {
 
                 final OneToOneAssociation valueAssociation = ((OneToOneAssociation) field);
                 final Element xmlValueElement = xmlFieldElement; // more
-                                                                 // meaningful
-                                                                 // locally
-                                                                 // scoped name
+                // meaningful
+                // locally
+                // scoped name
 
                 ObjectAdapter value;
                 try {
@@ -734,10 +736,10 @@ public class XmlSnapshot implements Snapshot {
                 final OneToOneAssociation oneToOneAssociation = ((OneToOneAssociation) field);
                 final String fullyQualifiedClassName = nos.getFullIdentifier();
                 final Element xmlReferenceElement = xmlFieldElement; // more
-                                                                     // meaningful
-                                                                     // locally
-                                                                     // scoped
-                                                                     // name
+                // meaningful
+                // locally
+                // scoped
+                // name
 
                 ObjectAdapter referencedObjectAdapter;
 
@@ -768,10 +770,10 @@ public class XmlSnapshot implements Snapshot {
 
                 final OneToManyAssociation oneToManyAssociation = (OneToManyAssociation) field;
                 final Element xmlCollectionElement = xmlFieldElement; // more
-                                                                      // meaningful
-                                                                      // locally
-                                                                      // scoped
-                                                                      // name
+                // meaningful
+                // locally
+                // scoped
+                // name
 
                 ObjectAdapter collection;
                 try {
@@ -817,13 +819,13 @@ public class XmlSnapshot implements Snapshot {
         return place;
     }
 
-    
+
     private final Map<ObjectAdapter, String> viewModelFakeOids = Maps.newHashMap();
-    
+
     private String oidAsString(final ObjectAdapter adapter) {
         if(adapter.getObject() instanceof ViewModel) {
-            // return a fake oid for view models; 
-            // a snapshot may be being used to create the memento/OID 
+            // return a fake oid for view models;
+            // a snapshot may be being used to create the memento/OID
             String fakeOid = viewModelFakeOids.get(adapter);
             if(fakeOid == null) {
                 fakeOid = "viewmodel-fakeoid-" + UUID.randomUUID().toString();
@@ -862,7 +864,7 @@ public class XmlSnapshot implements Snapshot {
         final Document doc = getXsdDocument();
         return asString(doc);
     }
-    
+
     private static String asString(final Document doc) {
         try {
             final DOMSource domSource = new DOMSource(doc);
@@ -876,7 +878,7 @@ public class XmlSnapshot implements Snapshot {
             transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
             transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
             transformer.transform(domSource, result);
-            
+
             return writer.toString();
         } catch (TransformerConfigurationException e) {
             throw new IsisException(e);
@@ -884,6 +886,6 @@ public class XmlSnapshot implements Snapshot {
             throw new IsisException(e);
         }
     }
-    
+
 
 }

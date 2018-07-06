@@ -30,7 +30,7 @@ import org.apache.shiro.realm.ldap.JndiLdapContextFactory;
  * An extension of {@link JndiLdapContextFactory} that allows a different authentication mechanism
  * for system-level authentications (as used by authorization lookups, for example)
  * compared to regular authentication.
- * 
+ *
  * <p>
  * See {@link IsisLdapRealm} for typical configuration within <tt>shiro.ini</tt>.
  */
@@ -56,6 +56,6 @@ public class IsisLdapContextFactory extends JndiLdapContextFactory {
     public void setSystemAuthenticationMechanism(String systemAuthenticationMechanism) {
         this.systemAuthenticationMechanism = systemAuthenticationMechanism;
     }
-    
-    
+
+
 }

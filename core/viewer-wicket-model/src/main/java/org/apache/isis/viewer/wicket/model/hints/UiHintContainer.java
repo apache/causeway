@@ -24,7 +24,7 @@ import org.apache.wicket.util.string.Strings;
 public interface UiHintContainer {
 
     String getHint(Component component, String attributeName);
-    
+
     void setHint(Component component, String attributeName, String attributeValue);
 
     void clearHint(Component component, String attributeName);

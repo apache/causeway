@@ -51,7 +51,7 @@ import org.apache.isis.core.runtime.system.transaction.TransactionalClosure;
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + (Integer.MAX_VALUE - 1)  // ie before the Noop impl in metamodel
-)
+        )
 public class PersistenceSessionServiceInternalDefault implements PersistenceSessionServiceInternal {
 
     @Override
@@ -182,12 +182,12 @@ public class PersistenceSessionServiceInternalDefault implements PersistenceSess
     public Transaction currentTransaction() {
         return getTransactionManager().getCurrentTransaction();
     }
-    
-	@Override
-	public CountDownLatch currentTransactionLatch() {
-    	IsisTransaction transaction = getTransactionManager().getCurrentTransaction();
-    	return transaction==null ? new CountDownLatch(0) : transaction.countDownLatch(); 
-	}
+
+    @Override
+    public CountDownLatch currentTransactionLatch() {
+        IsisTransaction transaction = getTransactionManager().getCurrentTransaction();
+        return transaction==null ? new CountDownLatch(0) : transaction.countDownLatch();
+    }
 
     @Override
     public <T> List<ObjectAdapter> allMatchingQuery(final Query<T> query) {
@@ -215,9 +215,9 @@ public class PersistenceSessionServiceInternalDefault implements PersistenceSess
     }
 
     protected PersistenceSession getPersistenceSession() {
-    	return ofNullable(getIsisSessionFactory().getCurrentSession())
-    			.map(IsisSession::getPersistenceSession)
-    			.orElseThrow(()->new NonRecoverableException("No IsisSession on current thread."));
+        return ofNullable(getIsisSessionFactory().getCurrentSession())
+                .map(IsisSession::getPersistenceSession)
+                .orElseThrow(()->new NonRecoverableException("No IsisSession on current thread."));
     }
 
     private IsisSessionFactory getIsisSessionFactory() {

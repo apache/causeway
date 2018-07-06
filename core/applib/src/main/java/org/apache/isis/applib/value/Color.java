@@ -24,7 +24,7 @@ import org.apache.isis.applib.annotation.Value;
 /**
  * Color is simple numerical representation of a color using the brightness of
  * red, green and blue (RGB) components.
- * 
+ *
  * <p>
  * Where there is no basic colors (RGB all equal 0) then you get black; where
  * each color is at maximum (RGB all equal 255) you get white.

@@ -35,9 +35,9 @@ public class Object_rebuildMetamodel {
         this.object = object;
     }
 
-    public static class ActionDomainEvent 
+    public static class ActionDomainEvent
     extends org.apache.isis.applib.IsisApplibModule.ActionDomainEvent<Object_rebuildMetamodel> {
-    	private static final long serialVersionUID = 1L;
+        private static final long serialVersionUID = 1L;
     }
 
     @Action(
@@ -45,12 +45,12 @@ public class Object_rebuildMetamodel {
             semantics = SemanticsOf.IDEMPOTENT,
             commandPersistence = CommandPersistence.NOT_PERSISTED,
             restrictTo = RestrictTo.PROTOTYPING
-    )
+            )
     @ActionLayout(
             contributed = Contributed.AS_ACTION,
             cssClassFa = "fa-refresh",
             position = ActionLayout.Position.PANEL_DROPDOWN
-    )
+            )
     @MemberOrder(name = "datanucleusIdLong", sequence = "800.1")
     public void act() {
         metaModelService.rebuild(object.getClass());

@@ -159,7 +159,7 @@ public class FixtureScriptsSpecification {
                     packagePrefix,
                     nonPersistedObjectsStrategy, multipleExecutionStrategy,
                     defaultScriptClass, dropDownPolicy, recreateScriptClass
-            );
+                    );
         }
     }
 

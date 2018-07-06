@@ -21,23 +21,23 @@
 package org.apache.isis.commons.internal.resources;
 
 /**
- * 
+ *
  * package private helper class to store application scoped context-path (if any)
  *
  */
 class _Resource_ContextPath extends _Resource_Path {
 
-	public _Resource_ContextPath(String contextPath) {
-		super(contextPath);
-	}
-	
-	public String getContextPath() {
-		return path;
-	}
+    public _Resource_ContextPath(String contextPath) {
+        super(contextPath);
+    }
 
-	@Override
-	protected String resourceName() {
-		return "context-path";
-	}
-	
+    public String getContextPath() {
+        return path;
+    }
+
+    @Override
+    protected String resourceName() {
+        return "context-path";
+    }
+
 }

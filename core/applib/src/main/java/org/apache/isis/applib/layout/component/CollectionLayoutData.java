@@ -41,7 +41,7 @@ import org.apache.isis.commons.internal.collections._Lists;
  */
 @XmlRootElement(
         name = "collection"
-)
+        )
 @XmlType(
         name = "collection"
         , propOrder = {
@@ -52,12 +52,12 @@ import org.apache.isis.commons.internal.collections._Lists;
                 , "metadataError"
                 , "link"
         }
-)
+        )
 public class CollectionLayoutData
-        implements MemberRegion<CollectionLayoutDataOwner>,
-                   ActionLayoutDataOwner,
-                   Serializable,
-                   HasCssClass, HasDescribedAs, HasHidden, HasNamed {
+implements MemberRegion<CollectionLayoutDataOwner>,
+ActionLayoutDataOwner,
+Serializable,
+HasCssClass, HasDescribedAs, HasHidden, HasNamed {
 
     private static final long serialVersionUID = 1L;
 
@@ -201,11 +201,13 @@ public class CollectionLayoutData
     private List<ActionLayoutData> actions = _Lists.newArrayList();
 
     // no wrapper
+    @Override
     @XmlElement(name = "action", required = false)
     public List<ActionLayoutData> getActions() {
         return actions;
     }
 
+    @Override
     public void setActions(List<ActionLayoutData> actionLayoutDatas) {
         this.actions = actionLayoutDatas;
     }
@@ -220,6 +222,7 @@ public class CollectionLayoutData
      *     Set programmatically by framework after reading in from XML.
      * </p>
      */
+    @Override
     @XmlTransient
     public CollectionLayoutDataOwner getOwner() {
         return owner;

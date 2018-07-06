@@ -32,7 +32,7 @@ import org.apache.isis.core.metamodel.services.ServicesInjectorAware;
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
-)
+        )
 public class ServiceRegistryDefault implements ServiceRegistry, ServicesInjectorAware {
 
 

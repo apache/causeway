@@ -57,16 +57,16 @@ import org.apache.isis.viewer.wicket.ui.util.Links;
 public class BookmarkedPagesPanel extends PanelAbstract<BookmarkedPagesModel> {
 
     private static final long serialVersionUID = 1L;
-    
+
     private static final String ID_BOOKMARK_LIST = "bookmarkList";
     private static final String ID_BOOKMARKS_HELP_TEXT = "helpText";
     private static final String ID_BOOKMARKED_PAGE_LINK = "bookmarkedPageLink";
     private static final String ID_CLEAR_BOOKMARK_LINK = "clearBookmarkLink";
     private static final String ID_BOOKMARKED_PAGE_ITEM = "bookmarkedPageItem";
     private static final String ID_BOOKMARKED_PAGE_TITLE = "bookmarkedPageTitle";
-    
+
     private static final String ID_BOOKMARKED_PAGE_ICON = "bookmarkedPageImage";
-    
+
     private static final String CLEAR_BOOKMARKS = "clearBookmarks";
 
 
@@ -109,7 +109,7 @@ public class BookmarkedPagesPanel extends PanelAbstract<BookmarkedPagesModel> {
             }
         };
         // allow to be updated by AjaxLink
-        container.setOutputMarkupId(true); 
+        container.setOutputMarkupId(true);
         add(container);
 
         final AjaxLink<Void> clearAllBookmarksLink = new AjaxLink<Void>(CLEAR_BOOKMARKS){
@@ -146,7 +146,7 @@ public class BookmarkedPagesPanel extends PanelAbstract<BookmarkedPagesModel> {
                     final AjaxLink<Object> clearBookmarkLink = new AjaxLink<Object>(ID_CLEAR_BOOKMARK_LINK) {
 
                         private static final long serialVersionUID = 1L;
-                        
+
                         @Override
                         public void onClick(AjaxRequestTarget target) {
                             bookmarkedPagesModel.remove(node);
@@ -155,7 +155,7 @@ public class BookmarkedPagesPanel extends PanelAbstract<BookmarkedPagesModel> {
                             }
                             target.add(container, clearAllBookmarksLink);
                         }
-                        
+
                     };
                     if(node.getDepth() == 0) {
                         clearBookmarkLink.add(new CssClassAppender("clearBookmark"));
@@ -163,7 +163,7 @@ public class BookmarkedPagesPanel extends PanelAbstract<BookmarkedPagesModel> {
                         clearBookmarkLink.setEnabled(true);
                     }
                     item.add(clearBookmarkLink);
-                    
+
                     PageParameters pageParameters = node.getPageParameters();
                     final AbstractLink link = Links.newBookmarkablePageLink(ID_BOOKMARKED_PAGE_LINK, pageParameters, pageClass);
 
@@ -205,18 +205,18 @@ public class BookmarkedPagesPanel extends PanelAbstract<BookmarkedPagesModel> {
     protected Component addHelpText(final BookmarkedPagesModel bookmarkedPagesModel) {
 
         IModel<String> helpTextModel = new AbstractReadOnlyModel<String>() {
-			private static final long serialVersionUID = -2445813533787596379L;
+            private static final long serialVersionUID = -2445813533787596379L;
 
-			@Override
+            @Override
             public String getObject() {
                 return bookmarkedPagesModel.isEmpty() ? "You have no bookmarks!" : "";
             }
         };
 
         Label helpText = new Label(ID_BOOKMARKS_HELP_TEXT, helpTextModel) {
-			private static final long serialVersionUID = -8364098044839077580L;
+            private static final long serialVersionUID = -8364098044839077580L;
 
-			@Override
+            @Override
             protected void onConfigure() {
                 super.onConfigure();
 

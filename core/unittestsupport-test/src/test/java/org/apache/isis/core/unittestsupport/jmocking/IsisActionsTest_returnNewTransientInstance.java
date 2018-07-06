@@ -36,8 +36,8 @@ import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 public class IsisActionsTest_returnNewTransientInstance {
 
     // we can't use the 'real' DomainObjectConainter because applib depends on this module, not vice versa
-    // but it doesn't matter; we are just testing the action (of the expectation), not the object on which 
-    // we add the expectation 
+    // but it doesn't matter; we are just testing the action (of the expectation), not the object on which
+    // we add the expectation
     public static interface MyDomainObjectContainer {
         <T> T newTransientInstance(Class<T> t);
 
@@ -64,15 +64,15 @@ public class IsisActionsTest_returnNewTransientInstance {
                 ignoring(mockContainer);
             }
         });
-        
+
         // is allowed (and executed)
         MyCustomer o = mockContainer.newTransientInstance(MyCustomer.class);
         assertThat(o, is(not(nullValue())));
-        
+
         // is ignored
         mockContainer.persistIfNotAlready(o);
     }
-    
+
 
     private static <X> Matcher<Class<X>> anySubclassOf(final Class<X> cls) {
         return new TypeSafeMatcher<Class<X>>() {

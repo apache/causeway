@@ -48,7 +48,7 @@ public abstract class AbstractUiEvent<S> extends EventObject {
     private static Object sourceElseDummy(final Object source) {
         return source != null ? source : new Object();
     }
-    
+
 
     // -- source
 
@@ -65,7 +65,7 @@ public abstract class AbstractUiEvent<S> extends EventObject {
         this.source = source;
     }
 
-    
+
 
     // -- userData
     /**
@@ -85,14 +85,14 @@ public abstract class AbstractUiEvent<S> extends EventObject {
     public void put(Object key, Object value) {
         userData.put(key, value);
     }
-    
+
 
     private final static ToString<AbstractUiEvent<?>> toString = ObjectContracts
-    		.toString("source", AbstractUiEvent::getSource);
-    
+            .toString("source", AbstractUiEvent::getSource);
+
     @Override
     public String toString() {
-    	return toString.toString(this);
+        return toString.toString(this);
     }
 
 }

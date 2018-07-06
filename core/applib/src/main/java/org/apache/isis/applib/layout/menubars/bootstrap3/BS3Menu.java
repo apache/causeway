@@ -35,11 +35,11 @@ import org.apache.isis.commons.internal.collections._Lists;
 @XmlType(
         name = "menu"
         , propOrder = {
-            "named",
-            "cssClassFa",
-            "sections"
+                "named",
+                "cssClassFa",
+                "sections"
         }
-)
+        )
 public class BS3Menu implements Menu, Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -54,6 +54,7 @@ public class BS3Menu implements Menu, Serializable {
 
     private String named;
 
+    @Override
     @XmlElement(required = true)
     public String getNamed() {
         return named;

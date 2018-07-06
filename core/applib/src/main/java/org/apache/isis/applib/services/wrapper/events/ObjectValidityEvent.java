@@ -25,7 +25,7 @@ import org.apache.isis.applib.Identifier;
  * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents a check as to whether the current values of the
  * properties/collections of an object are valid (for example, prior to saving
  * that object).
- * 
+ *
  * <p>
  * If {@link #getReason()} is not <tt>null</tt> then provides the reason why the
  * object is invalid, otherwise ok.

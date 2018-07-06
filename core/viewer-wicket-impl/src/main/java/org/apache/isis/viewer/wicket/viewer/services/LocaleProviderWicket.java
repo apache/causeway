@@ -36,7 +36,7 @@ import org.apache.isis.applib.services.i18n.LocaleProvider;
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
-)
+        )
 public class LocaleProviderWicket implements LocaleProvider {
 
     public static final Logger LOG = LoggerFactory.getLogger(LocaleProviderWicket.class);

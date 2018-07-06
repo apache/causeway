@@ -78,6 +78,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
 
     private final static Logger LOG = LoggerFactory.getLogger(CommandExecutorServiceDefault.class);
 
+    @Override
     @Programmatic
     public void executeCommand(
             final CommandExecutorService.SudoPolicy sudoPolicy,
@@ -151,72 +152,72 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
 
             final Timestamp startedAt = currentExecution != null
                     ? currentExecution.getStartedAt()
-                    : clockService.nowAsJavaSqlTimestamp();
+                            : clockService.nowAsJavaSqlTimestamp();
 
-            commandWithDto.setStartedAt(startedAt);
+                    commandWithDto.setStartedAt(startedAt);
 
-            final CommandDto dto = commandWithDto.asDto();
+                    final CommandDto dto = commandWithDto.asDto();
 
-            final MemberDto memberDto = dto.getMember();
-            final String memberId = memberDto.getMemberIdentifier();
+                    final MemberDto memberDto = dto.getMember();
+                    final String memberId = memberDto.getMemberIdentifier();
 
-            final OidsDto oidsDto = CommandDtoUtils.targetsFor(dto);
-            final List<OidDto> targetOidDtos = oidsDto.getOid();
+                    final OidsDto oidsDto = CommandDtoUtils.targetsFor(dto);
+                    final List<OidDto> targetOidDtos = oidsDto.getOid();
 
-            final InteractionType interactionType = memberDto.getInteractionType();
-            if(interactionType == InteractionType.ACTION_INVOCATION) {
+                    final InteractionType interactionType = memberDto.getInteractionType();
+                    if(interactionType == InteractionType.ACTION_INVOCATION) {
 
-                final ActionDto actionDto = (ActionDto) memberDto;
+                        final ActionDto actionDto = (ActionDto) memberDto;
 
-                for (OidDto targetOidDto : targetOidDtos) {
+                        for (OidDto targetOidDto : targetOidDtos) {
 
-                    final ObjectAdapter targetAdapter = adapterFor(targetOidDto);
-                    final ObjectAction objectAction = findObjectAction(targetAdapter, memberId);
+                            final ObjectAdapter targetAdapter = adapterFor(targetOidDto);
+                            final ObjectAction objectAction = findObjectAction(targetAdapter, memberId);
 
-                    // we pass 'null' for the mixedInAdapter; if this action _is_ a mixin then
-                    // it will switch the targetAdapter to be the mixedInAdapter transparently
-                    final ObjectAdapter[] argAdapters = argAdaptersFor(actionDto);
-                    final ObjectAdapter resultAdapter = objectAction.execute(
-                            targetAdapter, null, argAdapters, InteractionInitiatedBy.FRAMEWORK);
+                            // we pass 'null' for the mixedInAdapter; if this action _is_ a mixin then
+                            // it will switch the targetAdapter to be the mixedInAdapter transparently
+                            final ObjectAdapter[] argAdapters = argAdaptersFor(actionDto);
+                            final ObjectAdapter resultAdapter = objectAction.execute(
+                                    targetAdapter, null, argAdapters, InteractionInitiatedBy.FRAMEWORK);
 
-                    // flush any Isis PersistenceCommands pending
-                    // (else might get transient objects for the return value)
-                    transactionService.flushTransaction();
+                            // flush any Isis PersistenceCommands pending
+                            // (else might get transient objects for the return value)
+                            transactionService.flushTransaction();
 
-                    //
-                    // for the result adapter, we could alternatively have used...
-                    // (priorExecution populated by the push/pop within the interaction object)
-                    //
-                    // final Interaction.Execution priorExecution = backgroundInteraction.getPriorExecution();
-                    // Object unused = priorExecution.getReturned();
-                    //
+                            //
+                            // for the result adapter, we could alternatively have used...
+                            // (priorExecution populated by the push/pop within the interaction object)
+                            //
+                            // final Interaction.Execution priorExecution = backgroundInteraction.getPriorExecution();
+                            // Object unused = priorExecution.getReturned();
+                            //
 
-                    // REVIEW: this doesn't really make sense if >1 action
-                    if(resultAdapter != null) {
-                        Bookmark resultBookmark = CommandUtil.bookmarkFor(resultAdapter);
-                        commandWithDto.setResult(resultBookmark);
+                            // REVIEW: this doesn't really make sense if >1 action
+                            if(resultAdapter != null) {
+                                Bookmark resultBookmark = CommandUtil.bookmarkFor(resultAdapter);
+                                commandWithDto.setResult(resultBookmark);
+                            }
+                        }
+                    } else {
+
+                        final PropertyDto propertyDto = (PropertyDto) memberDto;
+
+                        for (OidDto targetOidDto : targetOidDtos) {
+
+                            final Bookmark bookmark = Bookmark.from(targetOidDto);
+                            final Object targetObject = bookmarkService.lookup(bookmark);
+
+                            final ObjectAdapter targetAdapter = adapterFor(targetObject);
+
+                            final OneToOneAssociation property = findOneToOneAssociation(targetAdapter, memberId);
+
+                            final ObjectAdapter newValueAdapter = newValueAdapterFor(propertyDto);
+
+                            property.set(targetAdapter, newValueAdapter, InteractionInitiatedBy.FRAMEWORK);
+
+                            // there is no return value for property modifications.
+                        }
                     }
-                }
-            } else {
-
-                final PropertyDto propertyDto = (PropertyDto) memberDto;
-
-                for (OidDto targetOidDto : targetOidDtos) {
-
-                    final Bookmark bookmark = Bookmark.from(targetOidDto);
-                    final Object targetObject = bookmarkService.lookup(bookmark);
-
-                    final ObjectAdapter targetAdapter = adapterFor(targetObject);
-
-                    final OneToOneAssociation property = findOneToOneAssociation(targetAdapter, memberId);
-
-                    final ObjectAdapter newValueAdapter = newValueAdapterFor(propertyDto);
-
-                    property.set(targetAdapter, newValueAdapter, InteractionInitiatedBy.FRAMEWORK);
-
-                    // there is no return value for property modifications.
-                }
-            }
 
         } catch (RuntimeException ex) {
 
@@ -248,19 +249,19 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
             // capture
             commandWithDto.setStartedAt(
                     priorExecution != null
-                            ? priorExecution.getStartedAt()
+                    ? priorExecution.getStartedAt()
                             : clockService.nowAsJavaSqlTimestamp());
         }
 
         final Timestamp completedAt =
                 priorExecution != null
-                        ? priorExecution.getCompletedAt()
+                ? priorExecution.getCompletedAt()
                         : clockService.nowAsJavaSqlTimestamp();  // close enough...
-        commandWithDto.setCompletedAt(completedAt);
+                commandWithDto.setCompletedAt(completedAt);
 
-        if(exceptionIfAny != null) {
-            commandWithDto.setException(Throwables.getStackTraceAsString(exceptionIfAny));
-        }
+                if(exceptionIfAny != null) {
+                    commandWithDto.setException(Throwables.getStackTraceAsString(exceptionIfAny));
+                }
     }
 
     // //////////////////////////////////////
@@ -326,12 +327,12 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
         final List<ParamDto> params = paramDtosFrom(actionDto);
         final List<ObjectAdapter> args = Lists.newArrayList(
                 params.stream()
-                        .map(paramDto -> {
-                            final Object arg = CommonDtoUtils.getValue(paramDto);
-                            return adapterFor(arg);
-                        })
-                        .collect(Collectors.toList())
-        );
+                .map(paramDto -> {
+                    final Object arg = CommonDtoUtils.getValue(paramDto);
+                    return adapterFor(arg);
+                })
+                .collect(Collectors.toList())
+                );
         return args.toArray(new ObjectAdapter[]{});
     }
 

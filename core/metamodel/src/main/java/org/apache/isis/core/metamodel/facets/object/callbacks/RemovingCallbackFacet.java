@@ -21,11 +21,11 @@ package org.apache.isis.core.metamodel.facets.object.callbacks;
 
 /**
  * Represents the mechanism to inform the object that it about to be deleted.
- * 
+ *
  * <p>
  * In the standard Apache Isis Programming Model, this is represented by a
  * <tt>deleting</tt> method.
- * 
+ *
  * @see RemovedCallbackFacet
  */
 

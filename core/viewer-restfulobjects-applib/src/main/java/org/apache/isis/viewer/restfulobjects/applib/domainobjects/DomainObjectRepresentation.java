@@ -94,7 +94,7 @@ public class DomainObjectRepresentation extends DomainRepresentation  {
         return getLinkWithRel(Rel.PERSIST);
     }
 
-    
+
     /**
      * Isis extension.
      */
@@ -117,9 +117,9 @@ public class DomainObjectRepresentation extends DomainRepresentation  {
     private JsonRepresentation getMembersOfType(String memberTypeOf) {
         final JsonRepresentation members = getRepresentation("members");
         return JsonRepresentation.newMap().mapPut(
-        		members.streamMapEntries()
-        		.filter(havingMemberTypeOf(memberTypeOf))
-        		.collect(Collectors.toList()) );
+                members.streamMapEntries()
+                .filter(havingMemberTypeOf(memberTypeOf))
+                .collect(Collectors.toList()) );
     }
 
     private static Predicate<Map.Entry<String, JsonRepresentation>> havingMemberTypeOf(final String memberTypeOf) {

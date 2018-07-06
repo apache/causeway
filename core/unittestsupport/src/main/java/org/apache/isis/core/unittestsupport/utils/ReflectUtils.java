@@ -52,16 +52,16 @@ public class ReflectUtils {
         };
     }
 
-    public static final Predicate<? super Field> persistentMappedBy = 
-    	(Field f) -> {
-            final Persistent annotation = f.getAnnotation(Persistent.class);
-            return annotation!=null && !_Strings.isNullOrEmpty(annotation.mappedBy());
-        };
+    public static final Predicate<? super Field> persistentMappedBy =
+            (Field f) -> {
+                final Persistent annotation = f.getAnnotation(Persistent.class);
+                return annotation!=null && !_Strings.isNullOrEmpty(annotation.mappedBy());
+            };
 
-    public static Predicate<? super Method> withEntityParameter() {
-        return (Method m) -> {
-                final Class<?> parameterType = m.getParameterTypes()[0];
-                return parameterType.isAnnotationPresent(PersistenceCapable.class); };
-    }
+            public static Predicate<? super Method> withEntityParameter() {
+                return (Method m) -> {
+                    final Class<?> parameterType = m.getParameterTypes()[0];
+                    return parameterType.isAnnotationPresent(PersistenceCapable.class); };
+            }
 
 }

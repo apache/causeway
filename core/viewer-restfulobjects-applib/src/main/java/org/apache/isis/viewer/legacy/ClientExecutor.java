@@ -34,88 +34,88 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 
 /**
- * Compatibility layer, legacy of deprecated resteasy client API. 
- * 
+ * Compatibility layer, legacy of deprecated resteasy client API.
+ *
  */
 public interface ClientExecutor {
 
-	ClientRequest createRequest(UriBuilder uriBuilder);
-	WebTarget webTarget(URI baseUri);
+    ClientRequest createRequest(UriBuilder uriBuilder);
+    WebTarget webTarget(URI baseUri);
 
-	static ClientExecutor of(final Client client) {
-		return new ClientExecutor() {
+    static ClientExecutor of(final Client client) {
+        return new ClientExecutor() {
 
-			@Override
-			public ClientRequest createRequest(UriBuilder uriBuilder) {
-				
-				return new ClientRequest() {
-					
-					final WebTarget target = client.target(uriBuilder);
-										
-					final List<MediaType> accept = new ArrayList<>();
-					final List<Map.Entry<String, String>> header = new ArrayList<>();
-					
-					private Entity<String> payload;
+            @Override
+            public ClientRequest createRequest(UriBuilder uriBuilder) {
 
-					// TODO [andi-huber] just a wild guess
-					private String method = "get";
+                return new ClientRequest() {
 
-					@Override
-					public String getHttpMethod() {
-						return method;
-					}
-					
-					@Override
-					public void setHttpMethod(String method) {
-						this.method = method;
-					}
-					
-					@Override
-					public void accept(MediaType mediaType) {
-						accept.add(mediaType);
-					}
-					
-					@Override
-					public void header(String headerName, String value) {
-						header.add(new AbstractMap.SimpleEntry<String, String>(headerName, value));
-					}
-					
-					@Override
-					public void addQueryParameter(String param, String arg) {
-						target.queryParam(param, arg);
-					}
-					
-					@Override
-					public void jsonPayload(String jsonString) {
-						payload = Entity.json(jsonString);
-					}
-					
-					@Override
-					public Response execute() {
-						final Builder builder = target.request();
-						
-						accept.stream()
-							.forEach(builder::accept);
-						header.stream()
-							.forEach(e->builder.header(e.getKey(), e.getValue()));
-						
-						final Invocation invocation = payload==null 
-								? builder.build(method)
-								: builder.build(method, payload);  
-						
-						return invocation.invoke();
-					}
+                    final WebTarget target = client.target(uriBuilder);
 
-				};
-			}
+                    final List<MediaType> accept = new ArrayList<>();
+                    final List<Map.Entry<String, String>> header = new ArrayList<>();
 
-			@Override
-			public WebTarget webTarget(URI baseUri) {
-				return client.target(baseUri);
-			}
-			
-		};
-	}
-	
+                    private Entity<String> payload;
+
+                    // TODO [andi-huber] just a wild guess
+                    private String method = "get";
+
+                    @Override
+                    public String getHttpMethod() {
+                        return method;
+                    }
+
+                    @Override
+                    public void setHttpMethod(String method) {
+                        this.method = method;
+                    }
+
+                    @Override
+                    public void accept(MediaType mediaType) {
+                        accept.add(mediaType);
+                    }
+
+                    @Override
+                    public void header(String headerName, String value) {
+                        header.add(new AbstractMap.SimpleEntry<String, String>(headerName, value));
+                    }
+
+                    @Override
+                    public void addQueryParameter(String param, String arg) {
+                        target.queryParam(param, arg);
+                    }
+
+                    @Override
+                    public void jsonPayload(String jsonString) {
+                        payload = Entity.json(jsonString);
+                    }
+
+                    @Override
+                    public Response execute() {
+                        final Builder builder = target.request();
+
+                        accept.stream()
+                        .forEach(builder::accept);
+                        header.stream()
+                        .forEach(e->builder.header(e.getKey(), e.getValue()));
+
+                        final Invocation invocation = payload==null
+                                ? builder.build(method)
+                                        : builder.build(method, payload);
+
+                                return invocation.invoke();
+                    }
+
+                };
+            }
+
+            @Override
+            public WebTarget webTarget(URI baseUri) {
+                return client.target(baseUri);
+            }
+
+        };
+    }
+
 
 }

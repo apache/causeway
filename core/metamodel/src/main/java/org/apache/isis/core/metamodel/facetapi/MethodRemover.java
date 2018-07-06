@@ -33,7 +33,7 @@ public interface MethodRemover {
      * Locate all methods (that the implementation should somehow know about)
      * that match the criteria and remove them from the implementation's list so
      * that they are not considered for subsequent scans.
-     * 
+     *
      * @param methodScope
      *            - whether looking for <tt>static</tt> (class) or
      *            instance-level methods.
@@ -45,7 +45,7 @@ public interface MethodRemover {
      * Locate all methods (that the implementation should somehow know about)
      * that match the criteria and remove them from the implementation's list so
      * that they are not considered for subsequent scans.
-     * 
+     *
      * @param methodScope
      *            - whether looking for <tt>static</tt> (class) or
      *            instance-level methods.

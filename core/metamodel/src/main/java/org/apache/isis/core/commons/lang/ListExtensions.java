@@ -69,9 +69,9 @@ public final class ListExtensions {
         list.addAll(Arrays.asList(optionValues));
         return list;
     }
-    
+
     // //////////////////////////////////////
-    
+
     public static <T> List<T> mutableCopy(final List<T> input) {
         return Lists.newArrayList(input != null? input: Collections.<T>emptyList());
     }
@@ -84,7 +84,7 @@ public final class ListExtensions {
         extend(list, insertionPoint);
         list.add(insertionPoint, elementToInsert);
     }
-    
+
     public static <T> void adjust(final List<T> list, final int requiredLength) {
         extend(list, requiredLength);
         if(list.size() > requiredLength) {
@@ -100,11 +100,11 @@ public final class ListExtensions {
 
     public static <T> Collection<T> filtered(final List<Object> extendee, final Class<T> type) {
         return Collections2.transform(
-                    Collections2.filter(extendee, ClassPredicates.isOfType(type)),
+                Collections2.filter(extendee, ClassPredicates.isOfType(type)),
                 ClassFunctions.castTo(type));
     }
 
-    
+
 
 
 }

@@ -30,32 +30,32 @@ import org.apache.isis.applib.fixturescripts.events.FixturesInstallingEvent;
  * In separate class because {@link QueryResultsCache} itself is request-scoped
  */
 @DomainService(
-		nature = NatureOfService.DOMAIN,
-		menuOrder = "" + Integer.MAX_VALUE
-		)
+        nature = NatureOfService.DOMAIN,
+        menuOrder = "" + Integer.MAX_VALUE
+        )
 public class QueryResultsCacheControlInternal extends AbstractSubscriber implements QueryResultCacheControl {
 
-	@PostConstruct
-	@Override
-	public void postConstruct() {
+    @PostConstruct
+    @Override
+    public void postConstruct() {
 
-		super.postConstruct();
+        super.postConstruct();
 
-		eventBusService.addEventListener(FixturesInstallingEvent.class, ev->{
-			fixturesInstalling = true;
-		});
+        eventBusService.addEventListener(FixturesInstallingEvent.class, ev->{
+            fixturesInstalling = true;
+        });
 
-		eventBusService.addEventListener(FixturesInstalledEvent.class, ev->{
-			fixturesInstalling = false;
-		});
+        eventBusService.addEventListener(FixturesInstalledEvent.class, ev->{
+            fixturesInstalling = false;
+        });
 
-	}
+    }
 
-	private boolean fixturesInstalling;
+    private boolean fixturesInstalling;
 
-	@Programmatic
-	@Override
-	public boolean isFixturesInstalling() {
-		return fixturesInstalling;
-	}
+    @Programmatic
+    @Override
+    public boolean isFixturesInstalling() {
+        return fixturesInstalling;
+    }
 }

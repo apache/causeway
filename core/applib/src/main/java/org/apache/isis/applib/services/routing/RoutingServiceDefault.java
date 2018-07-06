@@ -29,7 +29,7 @@ import org.apache.isis.applib.services.homepage.HomePageProviderService;
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
-)
+        )
 public class RoutingServiceDefault implements RoutingService {
 
     @SuppressWarnings("unused")

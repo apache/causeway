@@ -44,7 +44,7 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVis
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 
 public class ObjectSpecIdFacetDerivedFromClassNameFactory extends FacetFactoryAbstract implements
-        MetaModelValidatorRefiner {
+MetaModelValidatorRefiner {
 
     public static final String ISIS_REFLECTOR_VALIDATOR_EXPLICIT_OBJECT_TYPE_KEY =
             "isis.reflector.validator.explicitObjectType";

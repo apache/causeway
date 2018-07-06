@@ -25,23 +25,23 @@ import org.apache.isis.commons.internal.base._Reduction;
 
 class Util {
 
-	final static class LowestCommonSuperclassFinder {
+    final static class LowestCommonSuperclassFinder {
 
-		private final _Reduction<Class<?>> reduction = _Reduction.of((common, next) -> {
-			Class<?> refine = common;
-			while(!refine.isAssignableFrom(next)) {
-				refine = refine.getSuperclass();
-			}
-			return refine;
-		});
+        private final _Reduction<Class<?>> reduction = _Reduction.of((common, next) -> {
+            Class<?> refine = common;
+            while(!refine.isAssignableFrom(next)) {
+                refine = refine.getSuperclass();
+            }
+            return refine;
+        });
 
-		public void collect(Object pojo) {
-			reduction.accept(pojo.getClass());
-		}
+        public void collect(Object pojo) {
+            reduction.accept(pojo.getClass());
+        }
 
-		public Optional<Class<?>> getLowestCommonSuperclass() {
-			return reduction.getResult();
-		}
-	}
+        public Optional<Class<?>> getLowestCommonSuperclass() {
+            return reduction.getResult();
+        }
+    }
 
 }

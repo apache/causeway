@@ -162,7 +162,7 @@ public abstract class GridSystemServiceAbstract<G extends org.apache.isis.applib
 
         final boolean valid =
                 validateAndNormalize(
-                    grid, domainClass);
+                        grid, domainClass);
         if (valid) {
             overwriteFacets(grid, domainClass);
             if(LOG.isDebugEnabled()) {

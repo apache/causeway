@@ -183,7 +183,7 @@ public class Identifier implements Comparable<Identifier> {
 
     /**
      * Convenience method.
-     * 
+     *
      * @return
      */
     public boolean isPropertyOrCollection() {
@@ -240,8 +240,8 @@ public class Identifier implements Comparable<Identifier> {
     private void appendParameterNamesTo(final StringBuilder buf) {
         buf.append('(');
         buf.append(
-        		_NullSafe.stream(parameterNames)
-        		.collect(Collectors.joining(","))	);
+                _NullSafe.stream(parameterNames)
+                .collect(Collectors.joining(","))	);
         buf.append(')');
     }
 
@@ -346,7 +346,7 @@ public class Identifier implements Comparable<Identifier> {
 
     /**
      * Factory method.
-     * 
+     *
      * @see #toIdentityString(int)
      */
     public static Identifier fromIdentityString(final String asString) {
@@ -406,8 +406,8 @@ class NameUtils {
 
         char previousCharacter;
         char character = Character.toUpperCase(name.charAt(0));// ensure first
-                                                               // character is
-                                                               // upper case
+        // character is
+        // upper case
         naturalName.append(character);
         char nextCharacter = name.charAt(1);
 

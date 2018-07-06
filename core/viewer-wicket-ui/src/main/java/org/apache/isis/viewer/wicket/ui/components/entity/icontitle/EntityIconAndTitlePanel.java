@@ -83,22 +83,22 @@ public class EntityIconAndTitlePanel extends PanelAbstract<ObjectAdapterModel> {
         buildGui();
         super.onBeforeRender();
     }
-    
+
     private void buildGui() {
         addOrReplaceLinkWrapper();
-        
+
         if(isTitleSuppressed()) {
             // bit of a hack... allows us to suppress the title using CSS
-       		add(new CssClassAppender("inlinePrompt"));
+            add(new CssClassAppender("inlinePrompt"));
         }
 
         setOutputMarkupId(true);
     }
-    
+
     private boolean isTitleSuppressed() {
-    	return getModel().isInlinePrompt()
-    			//XXX ISIS-1699 never hide titles of object references in tables
-    			&& !getModel().getRenderingHint().isInTable();
+        return getModel().isInlinePrompt()
+                //XXX ISIS-1699 never hide titles of object references in tables
+                && !getModel().getRenderingHint().isInTable();
     }
 
     private void addOrReplaceLinkWrapper() {
@@ -114,7 +114,7 @@ public class EntityIconAndTitlePanel extends PanelAbstract<ObjectAdapterModel> {
 
         final AbstractLink link = createIconAndTitle(adapter);
         entityLinkWrapper.addOrReplace(link);
-        
+
         return entityLinkWrapper;
     }
 
@@ -147,7 +147,7 @@ public class EntityIconAndTitlePanel extends PanelAbstract<ObjectAdapterModel> {
 
     private AbstractLink createDynamicallyVisibleLink() {
         final PageParameters pageParameters = getModel().getPageParametersWithoutUiHints();
-        
+
         final Class<? extends Page> pageClass = getPageClassRegistry().getPageClass(PageType.ENTITY);
 
         return new BookmarkablePageLink<Void>(ID_ENTITY_LINK, pageClass, pageParameters) {
@@ -176,7 +176,7 @@ public class EntityIconAndTitlePanel extends PanelAbstract<ObjectAdapterModel> {
     private int abbreviateTo(ObjectAdapterModel model, String titleString) {
         if(model.getRenderingHint().isInStandaloneTableTitleColumn()) {
             return getSettings().getMaxTitleLengthInStandaloneTables();
-        } 
+        }
         if(model.getRenderingHint().isInParentedTableTitleColumn()) {
             return getSettings().getMaxTitleLengthInParentedTables();
         }
@@ -185,7 +185,7 @@ public class EntityIconAndTitlePanel extends PanelAbstract<ObjectAdapterModel> {
 
     protected Image newImage(final String id, final ObjectAdapter adapter) {
         final ResourceReference imageResource = imageCache.resourceReferenceFor(adapter);
-         
+
         final Image image = new Image(id, imageResource) {
             private static final long serialVersionUID = 1L;
             @Override
@@ -202,7 +202,7 @@ public class EntityIconAndTitlePanel extends PanelAbstract<ObjectAdapterModel> {
         return contextAdapterMementoIfAny != null? contextAdapterMementoIfAny.getObjectAdapter(ConcurrencyChecking.NO_CHECK,
                 isisSessionFactory.getCurrentSession().getPersistenceSession(), isisSessionFactory.getSpecificationLoader()): null;
     }
-    
+
     static String abbreviated(final String str, final int maxLength) {
         int length = str.length();
         if (length <= maxLength) {
@@ -211,8 +211,8 @@ public class EntityIconAndTitlePanel extends PanelAbstract<ObjectAdapterModel> {
         return maxLength <= 3 ? "" : str.substring(0, maxLength - 3) + "...";
     }
 
-    
-    
+
+
     // ///////////////////////////////////////////////////////////////////
     // Convenience
     // ///////////////////////////////////////////////////////////////////
@@ -238,6 +238,7 @@ public class EntityIconAndTitlePanel extends PanelAbstract<ObjectAdapterModel> {
 
     @com.google.inject.Inject
     private WicketViewerSettings settings;
+    @Override
     protected WicketViewerSettings getSettings() {
         return settings;
     }

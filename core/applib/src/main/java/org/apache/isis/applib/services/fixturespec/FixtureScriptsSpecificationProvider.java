@@ -23,7 +23,7 @@ import org.apache.isis.applib.fixturescripts.FixtureScripts;
 
 /**
  * Rather than subclassing {@link FixtureScripts} class, you can instead implement this interface as a service.
- * 
+ *
  * <p>
  *     The framework will automatically instantiate {@link FixtureScriptsDefault} as a fallback, and use the
  *     {@link FixtureScriptsSpecification} obtained from <i>this</i> service to configure itself.

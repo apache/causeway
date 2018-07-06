@@ -64,17 +64,17 @@ public class AssociatedWithActionsHelper implements Serializable {
 
         return FluentIterable.from(objectActions)
                 .filter(ObjectAction.Predicates.associatedWithAndWithCollectionParameterFor(
-                            collection
-                ))
+                        collection
+                        ))
                 .toList();
     }
 
     private ObjectSpecification getObjectSpecification(final IsisSessionFactory isisSessionFactory) {
         final ObjectAdapterMemento parentOam = collectionModel.getParentObjectAdapterMemento();
         final ObjectAdapter parentAdapter = parentOam.getObjectAdapter(
-                                                AdapterManager.ConcurrencyChecking.NO_CHECK,
-                                                isisSessionFactory.getCurrentSession().getPersistenceSession(),
-                                                isisSessionFactory.getSpecificationLoader());
+                AdapterManager.ConcurrencyChecking.NO_CHECK,
+                isisSessionFactory.getCurrentSession().getPersistenceSession(),
+                isisSessionFactory.getSpecificationLoader());
         return parentAdapter.getSpecification();
     }
 

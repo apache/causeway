@@ -83,10 +83,10 @@ public class ObjectPropertyReprRenderer extends AbstractObjectMemberReprRenderer
 
     private Object addValue(final LinkFollowSpecs linkFollower) {
         final ObjectAdapter valueAdapter = objectMember.get(objectAdapter, getInteractionInitiatedBy());
-        
+
         // use the runtime type if we have a value, else the compile time type of the member otherwise
         final ObjectSpecification spec = valueAdapter != null? valueAdapter.getSpecification(): objectMember.getSpecification();
-        
+
         final ValueFacet valueFacet = spec.getFacet(ValueFacet.class);
         if (valueFacet != null) {
             String format = null;
@@ -126,11 +126,11 @@ public class ObjectPropertyReprRenderer extends AbstractObjectMemberReprRenderer
         } else {
             final TitleFacet titleFacet = spec.getFacet(TitleFacet.class);
             final String title = titleFacet.title(valueAdapter);
-            
+
             final LinkBuilder valueLinkBuilder = DomainObjectReprRenderer.newLinkToBuilder(rendererContext, Rel.VALUE, valueAdapter).withTitle(title);
             if(eagerlyRender) {
                 final DomainObjectReprRenderer renderer = new DomainObjectReprRenderer(rendererContext, linkFollower, JsonRepresentation.newMap()
-                );
+                        );
                 renderer.with(valueAdapter);
                 if(mode.isEventSerialization()) {
                     renderer.asEventSerialization();

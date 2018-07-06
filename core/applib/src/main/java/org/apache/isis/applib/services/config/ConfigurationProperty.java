@@ -39,14 +39,14 @@ import org.apache.isis.commons.internal.collections._Lists;
                 "key",
                 "value"
         }
-)
+        )
 @DomainObject(
         editing = Editing.DISABLED,
         objectType = "isisApplib.ConfigurationProperty"
-)
+        )
 @DomainObjectLayout(
         paged = 999
-)
+        )
 public class ConfigurationProperty implements Comparable<ConfigurationProperty> {
 
     public ConfigurationProperty(){}
@@ -88,8 +88,8 @@ public class ConfigurationProperty implements Comparable<ConfigurationProperty> 
     public static class Util {
 
         private static final List<String> PROTECTED_KEYS =
-        		_Lists.of("password", "apiKey", "authToken");
-                
+                _Lists.of("password", "apiKey", "authToken");
+
 
         private Util(){}
 

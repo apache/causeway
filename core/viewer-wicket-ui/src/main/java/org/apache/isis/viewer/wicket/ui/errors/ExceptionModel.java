@@ -37,7 +37,7 @@ public class ExceptionModel extends ModelAbstract<List<StackTraceDetail>> {
     private static final long serialVersionUID = 1L;
 
     private static final String MAIN_MESSAGE_IF_NOT_RECOGNIZED = "Sorry, an unexpected error occurred.";
-    
+
     private List<StackTraceDetail> stackTraceDetailList;
     private List<List<StackTraceDetail>> stackTraceDetailLists;
     private boolean recognized;

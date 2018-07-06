@@ -59,8 +59,8 @@ public class MixinFacetForDomainObjectAnnotation extends MixinFacetAbstract {
                         }
                         final Class<?> constructorType = constructorTypes[0];
                         return new MixinFacetForDomainObjectAnnotation(
-                                        candidateMixinType, domainObject.mixinMethod(), constructorType, facetHolder,
-                                        servicesInjector);
+                                candidateMixinType, domainObject.mixinMethod(), constructorType, facetHolder,
+                                servicesInjector);
                     }
                     // else
                     return null;

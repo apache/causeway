@@ -39,17 +39,17 @@ public class JUnitRuleMockery2Test_mockAnnotatedWithOne_sadCase {
     private Collaborator collaborator;
 
     @ClassUnderTest
-	private CollaboratingUsingConstructorInjection collaborating;
+    private CollaboratingUsingConstructorInjection collaborating;
 
     // no longer necessary :-)
-//    @Before
-//	public void setUp() throws Exception {
-//    	collaborating = (CollaboratingUsingConstructorInjection) context.getClassUnderTest();
-//	}
-    
+    //    @Before
+    //	public void setUp() throws Exception {
+    //    	collaborating = (CollaboratingUsingConstructorInjection) context.getClassUnderTest();
+    //	}
+
     @Ignore("This isn't actually possible to test, because the test is actually thrown by the rule, which is further up the callstack than the test method")    @Test(expected=AssertionError.class)
     public void invocationOnCollaboratorIsIgnored() {
-    	collaborating.dontCollaborateWithCollaborator();
+        collaborating.dontCollaborateWithCollaborator();
     }
 
 

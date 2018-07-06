@@ -24,28 +24,28 @@ import java.util.stream.Collectors;
 import org.apache.isis.commons.internal.base._Strings;
 
 public final class Enums {
-    
+
     private Enums(){}
 
     public static String getFriendlyNameOf(Enum<?> anEnum) {
         return getFriendlyNameOf(anEnum.name());
     }
-    
+
     public static String getFriendlyNameOf(String anEnumName) {
-    	return _Strings.splitThenStream(anEnumName, "_")
-		    	.map(_Strings::lower)
-		    	.map(_Strings::capitalize)
-		    	.collect(Collectors.joining(" "));
+        return _Strings.splitThenStream(anEnumName, "_")
+                .map(_Strings::lower)
+                .map(_Strings::capitalize)
+                .collect(Collectors.joining(" "));
     }
 
-    
+
     public static String getEnumNameFromFriendly(String anEnumFriendlyName) {
-    	return _Strings.splitThenStream(anEnumFriendlyName, " ")
-    	    	.map(_Strings::upper)
-    	    	.collect(Collectors.joining("_"));
+        return _Strings.splitThenStream(anEnumFriendlyName, " ")
+                .map(_Strings::upper)
+                .collect(Collectors.joining("_"));
     }
 
-    
+
     public static String enumToHttpHeader(final Enum<?> anEnum) {
         return enumNameToHttpHeader(anEnum.name());
     }

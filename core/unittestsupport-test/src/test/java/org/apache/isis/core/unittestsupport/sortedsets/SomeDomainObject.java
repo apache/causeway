@@ -28,7 +28,7 @@ public class SomeDomainObject {
     private SortedSet<SomeDomainObject> someSortedSet = new TreeSet<SomeDomainObject>();
 
     //private Set<SomeDomainObject> someSet = new HashSet<SomeDomainObject>();
-    
+
     //private List<SomeDomainObject> someList = new ArrayList<SomeDomainObject>();
 
 

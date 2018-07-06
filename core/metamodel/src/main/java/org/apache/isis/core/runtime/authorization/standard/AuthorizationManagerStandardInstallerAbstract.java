@@ -27,8 +27,8 @@ import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManagerInstaller;
 
 public abstract class AuthorizationManagerStandardInstallerAbstract
-        extends InstallerAbstract
-        implements AuthorizationManagerInstaller {
+extends InstallerAbstract
+implements AuthorizationManagerInstaller {
 
     public AuthorizationManagerStandardInstallerAbstract(
             final String name,

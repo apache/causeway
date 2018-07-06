@@ -76,7 +76,7 @@ public class JdoVersionAnnotationFacetFactory extends FacetFactoryAbstract imple
                 if(!declaresVersionAnnotation(objectSpec)) {
                     return;
                 }
-                
+
                 ObjectSpecification superclassSpec = objectSpec.superclass();
                 while(superclassSpec != null) {
                     if(declaresVersionAnnotation(superclassSpec)) {
@@ -92,7 +92,7 @@ public class JdoVersionAnnotationFacetFactory extends FacetFactoryAbstract imple
 
             private boolean declaresVersionAnnotation(ObjectSpecification objectSpec) {
                 return Annotations.getDeclaredAnnotation(objectSpec.getCorrespondingClass(), Version.class)!=null;
-            }                
+            }
         };
     }
 

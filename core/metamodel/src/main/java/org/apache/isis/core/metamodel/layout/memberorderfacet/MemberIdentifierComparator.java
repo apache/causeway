@@ -28,7 +28,7 @@ import org.apache.isis.core.metamodel.facets.FacetedMethod;
 
 /**
  * Compares {@link FacetedMethod}) by {@link FacetedMethod#getIdentifier()}
- * 
+ *
  */
 public class MemberIdentifierComparator implements Comparator<IdentifiedHolder>, Serializable {
 

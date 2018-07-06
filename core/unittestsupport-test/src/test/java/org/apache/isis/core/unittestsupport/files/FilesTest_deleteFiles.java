@@ -41,7 +41,7 @@ public class FilesTest_deleteFiles {
 
     @Mock
     private Deleter deleter;
-    
+
     @Test
     public void test() throws IOException {
         final File cusIdxFile = new File("xml/objects/CUS.xml");
@@ -49,15 +49,15 @@ public class FilesTest_deleteFiles {
         final File cus2File = new File("xml/objects/CUS/2.xml");
         context.checking(new Expectations() {
             {
-            	oneOf(deleter).deleteFile(with(equalsFile(cusIdxFile)));
-            	oneOf(deleter).deleteFile(with(equalsFile(cus1File)));
-            	oneOf(deleter).deleteFile(with(equalsFile(cus2File)));
+                oneOf(deleter).deleteFile(with(equalsFile(cusIdxFile)));
+                oneOf(deleter).deleteFile(with(equalsFile(cus1File)));
+                oneOf(deleter).deleteFile(with(equalsFile(cus2File)));
             }
         });
-        
+
         Files.deleteFiles(new File("xml/objects"), Files.filterFileNameExtension(".xml"), Recursion.DO_RECURSE, deleter);
     }
-    
+
 
     private static Matcher<File> equalsFile(final File file) throws IOException {
         final String canonicalPath = file.getCanonicalPath();
@@ -79,5 +79,5 @@ public class FilesTest_deleteFiles {
         };
     }
 
-    
+
 }

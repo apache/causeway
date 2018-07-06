@@ -26,7 +26,7 @@ import org.apache.isis.commons.internal.base._Casts;
 
 /**
  * Adapter to make it easy to write {@link Specification}s.
- * 
+ *
  * <p>
  * Provides two main features:
  * <ul>
@@ -35,7 +35,7 @@ import org.apache.isis.commons.internal.base._Casts;
  * <li>second, checks for nulls (with a null either being ignore or again
  * constituting a failure)
  * </ul>
- * 
+ *
  * <p>
  * Implementation note: inspired by (borrowed code from) Hamcrest's
  * <tt>TypeSafeMatcher</tt>.
@@ -90,16 +90,17 @@ public abstract class AbstractSpecification2<T> implements Specification2 {
      * Checks not null and is correct type, and delegates to
      * {@link #satisfiesTranslatableSafely(Object)}.
      */
+    @Override
     public TranslatableString satisfiesTranslatable(final Object obj) {
         if (obj == null) {
             return nullability == Nullability.IGNORE_IF_NULL
                     ? null
-                    : TranslatableString.tr("Cannot be null");
+                            : TranslatableString.tr("Cannot be null");
         }
         if (!expectedType.isInstance(obj)) {
             return typeChecking == TypeChecking.IGNORE_INCORRECT_TYPE
                     ? null
-                    : TranslatableString.tr("Incorrect type");
+                            : TranslatableString.tr("Incorrect type");
         }
         final T objAsT = _Casts.uncheckedCast(obj);
         return satisfiesTranslatableSafely(objAsT);

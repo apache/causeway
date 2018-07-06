@@ -29,7 +29,7 @@ import java.util.List;
 import org.apache.isis.commons.internal._Constants;
 
 /**
- * <p>Provides utilities for manipulating and examining 
+ * <p>Provides utilities for manipulating and examining
  * <code>Throwable</code> objects.</p>
  *
  * @author Daniel L. Rall
@@ -42,23 +42,23 @@ import org.apache.isis.commons.internal._Constants;
  */
 // portions copied in from commons-lang 2.6
 public class ExceptionUtils {
-    
+
     /**
      * <p>The names of methods commonly used to access a wrapped exception.</p>
      */
     private static String[] CAUSE_METHOD_NAMES = {
-        "getCause",
-        "getNextException",
-        "getTargetException",
-        "getException",
-        "getSourceException",
-        "getRootCause",
-        "getCausedByException",
-        "getNested",
-        "getLinkedException",
-        "getNestedException",
-        "getLinkedCause",
-        "getThrowable",
+            "getCause",
+            "getNextException",
+            "getTargetException",
+            "getException",
+            "getSourceException",
+            "getRootCause",
+            "getCausedByException",
+            "getNested",
+            "getLinkedException",
+            "getNestedException",
+            "getLinkedCause",
+            "getThrowable",
     };
 
     /**
@@ -75,7 +75,7 @@ public class ExceptionUtils {
         }
         THROWABLE_CAUSE_METHOD = causeMethod;
     }
-    
+
     /**
      * <p>
      * Public constructor allows an instance of <code>ExceptionUtils</code> to be created, although that is not
@@ -90,7 +90,7 @@ public class ExceptionUtils {
     /**
      * <p>Introspects the <code>Throwable</code> to obtain the cause.</p>
      *
-     * <p>The method searches for methods with specific names that return a 
+     * <p>The method searches for methods with specific names that return a
      * <code>Throwable</code> object. This will pick up most wrapping exceptions.
      *
      * <p>The default list searched for are:</p>
@@ -104,7 +104,7 @@ public class ExceptionUtils {
      *  <li><code>getCausedByException()</code></li>
      *  <li><code>getNested()</code></li>
      * </ul>
-     * 
+     *
      * <p>In the absence of any such method, the object is inspected for a
      * <code>detail</code> field assignable to a <code>Throwable</code>.</p>
      *
@@ -138,7 +138,7 @@ public class ExceptionUtils {
 
     /**
      * <p>Finds a <code>Throwable</code> for known types.</p>
-     * 
+     *
      * <p>Uses <code>instanceof</code> checks to examine the exception,
      * looking for well known types which could contain chained or
      * wrapped exceptions.</p>
@@ -183,7 +183,7 @@ public class ExceptionUtils {
             return null;
         }
     }
-    
+
     /**
      * <p>Finds a <code>Throwable</code> by field name.</p>
      *
@@ -220,7 +220,7 @@ public class ExceptionUtils {
     public static boolean isThrowableNested() {
         return THROWABLE_CAUSE_METHOD != null;
     }
-    
+
     /**
      * <p>Checks whether this <code>Throwable</code> class can store a cause.</p>
      *

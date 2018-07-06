@@ -29,8 +29,8 @@ public class PropertyDomainEventFacetForPropertyAnnotation extends PropertyDomai
 
     public PropertyDomainEventFacetForPropertyAnnotation(
             final Class<? extends PropertyDomainEvent<?, ?>> eventType,
-            final PropertyOrCollectionAccessorFacet getterFacet,
-            final ServicesInjector servicesInjector, final SpecificationLoader specificationLoader, final FacetHolder holder) {
+                    final PropertyOrCollectionAccessorFacet getterFacet,
+                    final ServicesInjector servicesInjector, final SpecificationLoader specificationLoader, final FacetHolder holder) {
         super(eventType, getterFacet, holder, servicesInjector, specificationLoader);
     }
 

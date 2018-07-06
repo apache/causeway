@@ -51,7 +51,7 @@ import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 
 public class ObjectAdapterMementoProviderForReferenceParamOrPropertyAutoComplete
-        extends ObjectAdapterMementoProviderAbstract {
+extends ObjectAdapterMementoProviderAbstract {
 
     private static final long serialVersionUID = 1L;
 

@@ -42,7 +42,7 @@ public interface TableColumnOrderService {
     @DomainService(
             nature = NatureOfService.DOMAIN,
             menuOrder = "" + Integer.MAX_VALUE
-    )
+            )
     public static class Default implements TableColumnOrderService {
 
         @Override

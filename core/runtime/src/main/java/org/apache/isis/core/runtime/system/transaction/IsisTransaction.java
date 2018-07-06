@@ -48,7 +48,7 @@ import com.google.common.collect.Lists;
 /**
  * Used by the {@link IsisTransactionManager} to captures a set of changes to be
  * applied.
- * 
+ *
  * <p>
  * Note that methods such as <tt>flush()</tt>, <tt>commit()</tt> and
  * <tt>abort()</tt> are not part of the API. The place to control transactions
@@ -75,7 +75,7 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
     public enum State {
         /**
          * Started, still in progress.
-         * 
+         *
          * <p>
          * May {@link IsisTransaction#flush() flush},
          * {@link IsisTransaction#commit() commit} or
@@ -84,20 +84,20 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
         IN_PROGRESS(TransactionState.IN_PROGRESS),
         /**
          * Started, but has hit an exception.
-         * 
+         *
          * <p>
          * May not {@link IsisTransaction#flush()} or
          * {@link IsisTransaction#commit() commit} (will throw an
          * {@link IllegalStateException}), but can only
          * {@link IsisTransaction#markAsAborted() abort}.
-         * 
+         *
          * <p>
          * Similar to <tt>setRollbackOnly</tt> in EJBs.
          */
         MUST_ABORT(TransactionState.MUST_ABORT),
         /**
          * Completed, having successfully committed.
-         * 
+         *
          * <p>
          * May not {@link IsisTransaction#flush()} or
          * {@link IsisTransaction#markAsAborted() abort}.
@@ -107,7 +107,7 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
         COMMITTED(TransactionState.COMMITTED),
         /**
          * Completed, having aborted.
-         * 
+         *
          * <p>
          * May not {@link IsisTransaction#flush()},
          * {@link IsisTransaction#commit() commit} or
@@ -117,7 +117,7 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
         ABORTED(TransactionState.ABORTED);
 
         public final TransactionState transactionState;
-        
+
         State(TransactionState transactionState){
             this.transactionState = transactionState;
         }
@@ -162,11 +162,11 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
 
     private final UUID interactionId;
     private final int sequence;
-//    private final AuthenticationSession authenticationSession;
+    //    private final AuthenticationSession authenticationSession;
 
     private final List<PersistenceCommand> persistenceCommands = _Lists.newArrayList();
     private final IsisTransactionManager transactionManager;
-//    private final MessageBroker messageBroker;
+    //    private final MessageBroker messageBroker;
     private final PublishingServiceInternal publishingServiceInternal;
     private final AuditingServiceInternal auditingServiceInternal;
 
@@ -182,13 +182,13 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
 
         this.interactionId = interactionId;
         this.sequence = sequence;
-//        this.authenticationSession = authenticationSession;
+        //        this.authenticationSession = authenticationSession;
 
         final PersistenceSessionServiceInternalDefault persistenceSessionService = servicesInjector
                 .lookupServiceElseFail(PersistenceSessionServiceInternalDefault.class);
         this.transactionManager = persistenceSessionService.getTransactionManager();
 
-//        this.messageBroker = authenticationSession.getMessageBroker();
+        //        this.messageBroker = authenticationSession.getMessageBroker();
         this.publishingServiceInternal = servicesInjector.lookupServiceElseFail(PublishingServiceInternal.class);
         this.auditingServiceInternal = servicesInjector.lookupServiceElseFail(AuditingServiceInternal.class);
 
@@ -201,6 +201,7 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
 
     // -- transactionId
 
+    @Override
     @Programmatic
     public final UUID getTransactionId() {
         return interactionId;
@@ -219,7 +220,7 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
         return sequence;
     }
 
-    
+
     private final CountDownLatch countDownLatch = new CountDownLatch(1);
 
     // -- state
@@ -233,7 +234,7 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
     private void setState(final State state) {
         this.state = state;
         if(state.isComplete()) {
-        	countDownLatch.countDown();
+            countDownLatch.countDown();
         }
     }
 
@@ -319,6 +320,7 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
 
     // -- flush
 
+    @Override
     public final void flush() {
 
         // have removed THIS guard because we hit a situation where a xactn is aborted
@@ -360,7 +362,7 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
      * </table>
      */
     private void doFlush() {
-        
+
         //
         // it's possible that in executing these commands that more will be created.
         // so we keep flushing until no more are available (ISIS-533)
@@ -392,10 +394,10 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
                 }
             }
         } while(!persistenceCommands.isEmpty());
-        
+
     }
 
-    
+
 
     // -- preCommit, commit
 
@@ -457,7 +459,7 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
     /**
      * Indicate that the transaction must be aborted, and that there is
      * an unhandled exception to be rendered somehow.
-     * 
+     *
      * <p>
      * If the cause is subsequently rendered by code higher up the stack, then the
      * cause can be {@link #clearAbortCause() cleared}.  Note that this keeps the transaction in a state of
@@ -471,7 +473,7 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
         setState(State.MUST_ABORT);
         this.abortCause = abortCause;
     }
-    
+
     public IsisException getAbortCause() {
         return abortCause;
     }
@@ -509,29 +511,29 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
 
     // -- getMessageBroker
 
-//    /**
-//     * The {@link org.apache.isis.core.commons.authentication.MessageBroker} for this transaction.
-//     * 
-//     * <p>
-//     * Injected in constructor
-//     *
-//     * @deprecated - obtain the {@link org.apache.isis.core.commons.authentication.MessageBroker} instead from the {@link AuthenticationSession}.
-//     */
-//    public MessageBroker getMessageBroker() {
-//        return messageBroker;
-//    }
-    
+    //    /**
+    //     * The {@link org.apache.isis.core.commons.authentication.MessageBroker} for this transaction.
+    //     *
+    //     * <p>
+    //     * Injected in constructor
+    //     *
+    //     * @deprecated - obtain the {@link org.apache.isis.core.commons.authentication.MessageBroker} instead from the {@link AuthenticationSession}.
+    //     */
+    //    public MessageBroker getMessageBroker() {
+    //        return messageBroker;
+    //    }
+
     // -- countDownLatch
 
     /**
      * Returns a latch that allows threads to wait on. The latch count drops to zero once this transaction completes.
-     * 
+     *
      */
-	public CountDownLatch countDownLatch() {
-		return countDownLatch;
-	}
+    public CountDownLatch countDownLatch() {
+        return countDownLatch;
+    }
 
-    
+
 
 }
 

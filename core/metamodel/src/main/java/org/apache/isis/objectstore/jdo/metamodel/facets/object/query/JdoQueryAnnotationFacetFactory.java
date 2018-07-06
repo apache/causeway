@@ -60,7 +60,7 @@ public class JdoQueryAnnotationFacetFactory extends FacetFactoryAbstract impleme
 
         final Queries namedQueriesAnnotation = Annotations.getAnnotation(cls, Queries.class);
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
-        
+
         if (namedQueriesAnnotation != null) {
             FacetUtil.addFacet(new JdoQueriesFacetAnnotation(
                     namedQueriesAnnotation.value(), facetHolder));
@@ -80,16 +80,16 @@ public class JdoQueryAnnotationFacetFactory extends FacetFactoryAbstract impleme
             final IsisConfiguration configuration) {
 
         final boolean validateFromClause = configuration.getBoolean(
-                                ISIS_REFLECTOR_VALIDATOR_JDOQL_FROM_CLAUSE_KEY,
-                                ISIS_REFLECTOR_VALIDATOR_JDOQL_FROM_CLAUSE_DEFAULT);
+                ISIS_REFLECTOR_VALIDATOR_JDOQL_FROM_CLAUSE_KEY,
+                ISIS_REFLECTOR_VALIDATOR_JDOQL_FROM_CLAUSE_DEFAULT);
         if (validateFromClause) {
             final MetaModelValidator queryFromValidator = new MetaModelValidatorVisiting(new VisitorForFromClause(this));
             metaModelValidator.add(queryFromValidator);
         }
 
         final boolean validateVariablesClause = configuration.getBoolean(
-                                ISIS_REFLECTOR_VALIDATOR_JDOQL_VARIABLES_CLAUSE_KEY,
-                                ISIS_REFLECTOR_VALIDATOR_JDOQL_VARIABLES_CLAUSE_DEFAULT);
+                ISIS_REFLECTOR_VALIDATOR_JDOQL_VARIABLES_CLAUSE_KEY,
+                ISIS_REFLECTOR_VALIDATOR_JDOQL_VARIABLES_CLAUSE_DEFAULT);
         if (validateVariablesClause) {
             final MetaModelValidator queryFromValidator = new MetaModelValidatorVisiting(new VisitorForVariablesClause(this));
             metaModelValidator.add(queryFromValidator);
@@ -109,6 +109,7 @@ public class JdoQueryAnnotationFacetFactory extends FacetFactoryAbstract impleme
         return matcher.matches() ? matcher.group(1) :  null;
     }
 
+    @Override
     protected SpecificationLoader getSpecificationLoader() {
         return super.getSpecificationLoader();
     }

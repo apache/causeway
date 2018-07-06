@@ -32,16 +32,16 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
  * of their {@link TextField} (as constructed in {@link ScalarPanelTextFieldAbstract#createTextFieldForRegular(String)}).
  */
 public class TextFieldValueModel<T extends Serializable> extends Model<T> {
-    
+
     private static final long serialVersionUID = 1L;
 
     public interface ScalarModelProvider {
         ScalarModel getModel();
         AdapterManager getAdapterManager();
     }
-    
+
     private final ScalarModelProvider scalarModelProvider;
-    
+
     public TextFieldValueModel(ScalarModelProvider scalarModelProvider) {
         this.scalarModelProvider = scalarModelProvider;
     }

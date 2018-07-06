@@ -25,63 +25,63 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 
 /**
- * Compatibility layer, legacy of deprecated resteasy client API. 
- * 
+ * Compatibility layer, legacy of deprecated resteasy client API.
+ *
  */
 public class RestEasyLegacy {
 
-	public static String getEntityAsStringFrom(Response response) {
-		
-		final Object result = response.getEntity();
-		
-		if(result == null)
-			return null;
-		
-		if(result instanceof String) {
-			return (String) result;
-		}
-		
-		// TODO [andi-huber] just a wild guess
-		return response.readEntity(String.class);
+    public static String getEntityAsStringFrom(Response response) {
 
-		// legacy code ...
+        final Object result = response.getEntity();
+
+        if(result == null)
+            return null;
+
+        if(result instanceof String) {
+            return (String) result;
+        }
+
+        // TODO [andi-huber] just a wild guess
+        return response.readEntity(String.class);
+
+        // legacy code ...
         // final ClientResponse<?> clientResponse = (ClientResponse<?>) response;
         // return clientResponse.getEntity(String.class);
-	}
+    }
 
-	public static void setReturnTypeToString(Response response) {
+    public static void setReturnTypeToString(Response response) {
 
-		// TODO [andi-huber] why is this needed at all?
+        // TODO [andi-huber] why is this needed at all?
 
-		// legacy code ...
+        // legacy code ...
         // final BaseClientResponse<String> restEasyResponse = (BaseClientResponse<String>) response;
         // restEasyResponse.setReturnType(String.class);
-		
-		System.err.println("WARN RestEasyLegacy - setReturnTypeToString(Response) not implemented!");
-		
-	}
 
-	@SuppressWarnings("unchecked")
-	public static <T> T proxy(WebTarget webTarget, Class<T> clazz) {
-		
-		// legacy of
-		// final org.jboss.resteasy.client.jaxrs.ResteasyWebTarget target = 
-		//		(org.jboss.resteasy.client.jaxrs.ResteasyWebTarget) webTarget;
-		// return target.proxy(clazz);
-		
-		try {
-			// [andi-huber]	resort to reflection, since we want to get rid of resteasy legacy
-			// first step is to remove compile time dependencies
-			
-			final Method proxyMethod = 
-					webTarget.getClass().getMethod("proxy", new Class<?>[]{Class.class});
-			return (T) proxyMethod.invoke(webTarget, clazz);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		throw new NotSupportedException("proxy not supported by this JAX-RS implementation");
-		
-	}
+        System.err.println("WARN RestEasyLegacy - setReturnTypeToString(Response) not implemented!");
+
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> T proxy(WebTarget webTarget, Class<T> clazz) {
+
+        // legacy of
+        // final org.jboss.resteasy.client.jaxrs.ResteasyWebTarget target =
+        //		(org.jboss.resteasy.client.jaxrs.ResteasyWebTarget) webTarget;
+        // return target.proxy(clazz);
+
+        try {
+            // [andi-huber]	resort to reflection, since we want to get rid of resteasy legacy
+            // first step is to remove compile time dependencies
+
+            final Method proxyMethod =
+                    webTarget.getClass().getMethod("proxy", new Class<?>[]{Class.class});
+            return (T) proxyMethod.invoke(webTarget, clazz);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        throw new NotSupportedException("proxy not supported by this JAX-RS implementation");
+
+    }
 
 }

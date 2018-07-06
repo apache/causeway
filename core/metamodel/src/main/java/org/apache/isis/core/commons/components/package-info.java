@@ -21,9 +21,9 @@
  * Defines a {@link org.apache.isis.core.commons.components.Component}
  * architecture, along with factories (called {@link org.apache.isis.core.commons.components.Installer}s)
  * to install (or create) those components.
- * 
+ *
  * <p>
- * There are three subinterfaces of 
+ * There are three subinterfaces of
  * {@link org.apache.isis.core.commons.components.Component}, for three different
  * scopes:
  * <ul>
@@ -31,7 +31,7 @@
  * <li><p> {@link org.apache.isis.core.commons.components.SessionScopedComponent session-scoped} </p></li>
  * <li><p> {@link org.apache.isis.core.commons.components.TransactionScopedComponent transaction-scoped} </p></li>
  * </ul>
- * 
+ *
  * <p>
  * Many {@link org.apache.isis.core.commons.components.Component}s may also be injectable,
  * meaning that they know hot to inject themselves to a candidate object &quot;if appropriate&quot;.

@@ -34,8 +34,8 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVis
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 
 public abstract class MethodPrefixBasedFacetFactoryAbstract
-        extends FacetFactoryAbstract
-        implements MethodPrefixBasedFacetFactory {
+extends FacetFactoryAbstract
+implements MethodPrefixBasedFacetFactory {
 
     public static final String ISIS_REFLECTOR_VALIDATOR_NO_PARAMS_ONLY_KEY =
             "isis.reflector.validator.noParamsOnly";
@@ -52,7 +52,7 @@ public abstract class MethodPrefixBasedFacetFactoryAbstract
         VALIDATE,
         DONT_VALIDATE
     }
-    
+
     public MethodPrefixBasedFacetFactoryAbstract(final List<FeatureType> featureTypes, final OrphanValidation orphanValidation, final String... prefixes) {
         super(featureTypes);
         this.orphanValidation = orphanValidation;
@@ -89,17 +89,17 @@ public abstract class MethodPrefixBasedFacetFactoryAbstract
                                     objectAction.getParameterCount() > 0 && noParamsOnly &&
                                     (Objects.equals(prefix, MethodPrefixConstants.HIDE_PREFIX) || Objects.equals(prefix, MethodPrefixConstants.DISABLE_PREFIX))
                                     ? " (note that such methods must have no parameters, '"
-                                            + ISIS_REFLECTOR_VALIDATOR_NO_PARAMS_ONLY_KEY
-                                            + "' config property)"
+                                    + ISIS_REFLECTOR_VALIDATOR_NO_PARAMS_ONLY_KEY
+                                    + "' config property)"
                                     : "";
 
-                            String message = "%s#%s: has prefix %s, is probably intended as a supporting method for a property, collection or action%s.  If the method is intended to be an action, then rename and use @ActionLayout(named=\"...\") or ignore completely using @Programmatic";
-                            validationFailures.add(
-                                    message,
-                                    objectSpec.getIdentifier().getClassName(),
-                                    actionId,
-                                    prefix,
-                                    explanation);
+                                    String message = "%s#%s: has prefix %s, is probably intended as a supporting method for a property, collection or action%s.  If the method is intended to be an action, then rename and use @ActionLayout(named=\"...\") or ignore completely using @Programmatic";
+                                    validationFailures.add(
+                                            message,
+                                            objectSpec.getIdentifier().getClassName(),
+                                            actionId,
+                                            prefix,
+                                            explanation);
                         }
                     }
                 }

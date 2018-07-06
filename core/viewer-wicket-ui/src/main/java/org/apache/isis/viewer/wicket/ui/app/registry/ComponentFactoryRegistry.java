@@ -31,7 +31,7 @@ import org.apache.isis.viewer.wicket.ui.ComponentType;
 
 /**
  * API for finding registered {@link ComponentFactory}s.
- * 
+ *
  * <p>
  * Ultimately all requests to locate {@link ComponentFactory}s are routed
  * through to an object implementing this interface.
@@ -56,7 +56,7 @@ public interface ComponentFactoryRegistry {
      * {@link #createComponent(ComponentType, String, IModel) Creates} the
      * relevant {@link Component} for the provided arguments, and adds to the
      * provided {@link MarkupContainer}; the wicket id is as specified.
-     * 
+     *
      * <p>
      * If none can be found, will fail fast.
      */
@@ -65,7 +65,7 @@ public interface ComponentFactoryRegistry {
     /**
      * As per {@link #createComponent(ComponentType, String, IModel)}, but with
      * the wicket id derived from the {@link ComponentType}.
-     * 
+     *
      * @see #createComponent(ComponentType, String, IModel)
      */
     Component createComponent(ComponentType componentType, IModel<?> model);
@@ -74,7 +74,7 @@ public interface ComponentFactoryRegistry {
      * Create the {@link Component} matching the specified {@link ComponentType}
      * and {@link IModel} to the provided {@link MarkupContainer}; the id is
      * specified explicitly.
-     * 
+     *
      * <p>
      * If none can be found, will fail fast.
      */

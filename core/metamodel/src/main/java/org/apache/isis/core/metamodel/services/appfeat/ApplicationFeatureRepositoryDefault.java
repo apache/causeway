@@ -61,7 +61,7 @@ import org.apache.isis.core.metamodel.specloader.specimpl.ContributeeMember;
         nature = NatureOfService.DOMAIN,
         repositoryFor = ApplicationFeature.class,
         menuOrder = "" + Integer.MAX_VALUE
-)
+        )
 public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRepository {
 
     // -- caches
@@ -71,7 +71,7 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
     private final SortedMap<ApplicationFeatureId, ApplicationFeature> propertyFeatures = Maps.newTreeMap();
     private final SortedMap<ApplicationFeatureId, ApplicationFeature> collectionFeatures = Maps.newTreeMap();
     private final SortedMap<ApplicationFeatureId, ApplicationFeature> actionFeatures = Maps.newTreeMap();
-    
+
 
 
     // -- init
@@ -92,7 +92,7 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
                 "eagerly".equalsIgnoreCase(configuredValue);
     }
 
-    
+
 
 
     // -- initializeIfRequired
@@ -386,7 +386,7 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
         final String className = spec.getFullIdentifier();
         return className.startsWith("java") || className.startsWith("org.joda");
     }
-    
+
 
     // -- packageFeatures, classFeatures, memberFeatures
     @Programmatic
@@ -421,7 +421,7 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
         return memberFeatures.get(featureId);
     }
 
-    
+
 
     // -- allFeatures, allPackages, allClasses, allMembers
     @Programmatic
@@ -476,7 +476,7 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
         initializeIfRequired();
         return actionFeatures.values();
     }
-    
+
 
     // -- packageNames, packageNamesContainingClasses, classNamesContainedIn, memberNamesOf
     @Override @Programmatic
@@ -496,7 +496,7 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
                         Iterables.filter(
                                 packages,
                                 ApplicationFeature.Predicates.packageContainingClasses(memberType, this)
-                        ),
+                                ),
                         ApplicationFeature.Functions.GET_FQN));
     }
 
@@ -548,10 +548,10 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
         final SortedSet<ApplicationFeatureId> featureIds = cls.membersOf(memberType);
         return Lists.newArrayList(
                 Iterables.transform(featureIds, ApplicationFeatureId.Functions.GET_MEMBER_NAME)
-        );
+                );
     }
 
-    
+
 
     //region  > services (injected)
 
@@ -567,7 +567,7 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
     @javax.inject.Inject
     ApplicationFeatureFactory applicationFeatureFactory;
 
-    
+
 
 
 }

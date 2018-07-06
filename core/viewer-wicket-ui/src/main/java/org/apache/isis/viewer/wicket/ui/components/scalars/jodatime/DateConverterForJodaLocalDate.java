@@ -31,7 +31,7 @@ import org.joda.time.format.DateTimeFormatter;
  * string value to the date value, only a single pattern is used.
  */
 public class DateConverterForJodaLocalDate extends DateConverterForJodaAbstract<LocalDate> {
-    
+
     private static final long serialVersionUID = 1L;
 
     public DateConverterForJodaLocalDate(WicketViewerSettings settings, int adjustBy) {

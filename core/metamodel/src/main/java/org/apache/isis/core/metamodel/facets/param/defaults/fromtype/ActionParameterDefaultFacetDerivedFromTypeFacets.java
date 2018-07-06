@@ -35,7 +35,7 @@ public class ActionParameterDefaultFacetDerivedFromTypeFacets extends ActionDefa
 
     /**
      * Return the defaults.
-     * 
+     *
      * <p>
      * Note that we get the defaults fresh each time in case the defaults might
      * conceivably change.

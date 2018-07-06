@@ -41,7 +41,7 @@ import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
-)
+        )
 public class HomePageProviderServiceDefault implements HomePageProviderService {
 
     @SuppressWarnings("unused")
@@ -83,7 +83,7 @@ public class HomePageProviderServiceDefault implements HomePageProviderService {
                         serviceAdapter,
                         InteractionInitiatedBy.USER,
                         Where.ANYWHERE
-                );
+                        );
         if (usability.isVetoed()) {
             return  null;
         }

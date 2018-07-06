@@ -94,13 +94,13 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract {
                 .filter(domainEvent -> domainEvent != CollectionDomainEvent.Default.class)
                 .findFirst()
                 .map(domainEvent ->
-                        (CollectionDomainEventFacetAbstract)
-                                new CollectionDomainEventFacetForCollectionAnnotation(
-                                        domainEvent, servicesInjector, getSpecificationLoader(), holder))
+                (CollectionDomainEventFacetAbstract)
+                new CollectionDomainEventFacetForCollectionAnnotation(
+                        domainEvent, servicesInjector, getSpecificationLoader(), holder))
                 .orElse(
                         new CollectionDomainEventFacetDefault(
                                 CollectionDomainEvent.Default.class, servicesInjector, getSpecificationLoader(), holder)
-                );
+                        );
         if(!CollectionDomainEvent.Noop.class.isAssignableFrom(collectionDomainEventFacet.getEventType())) {
             FacetUtil.addFacet(collectionDomainEventFacet);
         }
@@ -130,7 +130,7 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract {
                 replacementFacet = new CollectionAddToFacetForDomainEventFromCollectionAnnotation(
                         collectionDomainEventFacet.getEventType(), getterFacet, collectionAddToFacet, collectionDomainEventFacet, holder, servicesInjector);
             } else
-            // default
+                // default
             {
                 replacementFacet = new CollectionAddToFacetForDomainEventFromDefault(
                         collectionDomainEventFacet.getEventType(), getterFacet, collectionAddToFacet, collectionDomainEventFacet, holder, servicesInjector);
@@ -147,7 +147,7 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract {
             if(collectionDomainEventFacet instanceof CollectionDomainEventFacetForCollectionAnnotation) {
                 replacementFacet = new CollectionRemoveFromFacetForDomainEventFromCollectionAnnotation(collectionDomainEventFacet.getEventType(), getterFacet, collectionRemoveFromFacet, collectionDomainEventFacet, servicesInjector, holder);
             } else
-            // default
+                // default
             {
                 replacementFacet = new CollectionRemoveFromFacetForDomainEventFromDefault(collectionDomainEventFacet.getEventType(), getterFacet, collectionRemoveFromFacet, collectionDomainEventFacet, servicesInjector, holder);
             }

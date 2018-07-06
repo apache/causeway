@@ -95,7 +95,7 @@ public class Interaction implements HasTransactionId {
     public void setTransactionId(final UUID transactionId) {
         this.transactionId = transactionId;
     }
-    
+
 
     // -- push/pop/current/get/clear Execution(s)
 
@@ -271,7 +271,7 @@ public class Interaction implements HasTransactionId {
     public void clear() {
         executionGraphs.clear();
     }
-    
+
 
     // -- next (programmatic)
 
@@ -325,7 +325,7 @@ public class Interaction implements HasTransactionId {
         return next.get();
     }
 
-    
+
 
     /**
      * Represents an action invocation/property edit as a node in a call-stack execution graph, with sub-interactions
@@ -356,7 +356,7 @@ public class Interaction implements HasTransactionId {
             this.targetMember = targetMember;
             this.targetClass = targetClass;
         }
-        
+
 
         // -- via constructor: interaction, interactionType, memberId, target, targetMember, targetClass
 
@@ -400,7 +400,7 @@ public class Interaction implements HasTransactionId {
             return targetMember;
         }
 
-        
+
 
         // -- parent, children
 
@@ -433,7 +433,7 @@ public class Interaction implements HasTransactionId {
         public List<Execution<?,?>> getChildren() {
             return Collections.unmodifiableList(children);
         }
-        
+
 
 
         // -- event
@@ -461,7 +461,7 @@ public class Interaction implements HasTransactionId {
         public void setEvent(final E event) {
             this.event = event;
         }
-        
+
 
         // -- startedAt, completedAt
 
@@ -497,7 +497,7 @@ public class Interaction implements HasTransactionId {
             syncMetrics(When.AFTER, completedAt);
         }
 
-        
+
 
         // -- returned, threw (properties)
 
@@ -541,7 +541,7 @@ public class Interaction implements HasTransactionId {
         }
 
 
-        
+
 
         // -- dto (property)
 
@@ -569,7 +569,7 @@ public class Interaction implements HasTransactionId {
             this.dto = executionDto;
         }
 
-        
+
 
         // -- helpers (syncMetrics)
 
@@ -637,7 +637,7 @@ public class Interaction implements HasTransactionId {
             private static PeriodDto timingsFor(final MetricsDto metricsDto) {
                 return MemberExecutionDtoUtils.timingsFor(metricsDto);
             }
-            
+
 
             abstract void syncMetrics(
                     final Execution<?, ?> teExecution,
@@ -654,7 +654,7 @@ public class Interaction implements HasTransactionId {
             when.syncMetrics(this, timestamp, numberObjectsLoaded, numberObjectsDirtied);
         }
 
-        
+
 
     }
 

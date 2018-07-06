@@ -29,39 +29,39 @@ import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.plugins.classdiscovery.ClassDiscovery;
 
 /**
- * 
+ *
  * Package private helper class. Finds PersistenceCapable types.
  *
  */
 class PersistenceCapableTypeFinder {
 
-	static Set<Class<?>> find(ClassDiscovery discovery) {
+    static Set<Class<?>> find(ClassDiscovery discovery) {
 
-		final Set<Class<?>> types = new LinkedHashSet<>();
+        final Set<Class<?>> types = new LinkedHashSet<>();
 
-		discovery.getTypesAnnotatedWith(PersistenceCapable.class).stream()
-		.forEach(type->{
+        discovery.getTypesAnnotatedWith(PersistenceCapable.class).stream()
+        .forEach(type->{
 
-			if(type.isAnnotation()) {
-				
-				final Class<? extends Annotation> annotatedAnnotation = _Casts.uncheckedCast(type);
-				
-				// We have an annotation (annotatedAnnotation), that is annotated with @PersistenceCapable,
-				// this requires special treatment: 
-				// Search for any classes annotated with annotatedAnnotation.
-				
-				discovery.getTypesAnnotatedWith(annotatedAnnotation).stream()
-				.filter(x->!x.isAnnotation())
-				.forEach(types::add);
+            if(type.isAnnotation()) {
 
-			} else {
+                final Class<? extends Annotation> annotatedAnnotation = _Casts.uncheckedCast(type);
 
-				types.add(type);
+                // We have an annotation (annotatedAnnotation), that is annotated with @PersistenceCapable,
+                // this requires special treatment:
+                // Search for any classes annotated with annotatedAnnotation.
 
-			}	
-		});
+                discovery.getTypesAnnotatedWith(annotatedAnnotation).stream()
+                .filter(x->!x.isAnnotation())
+                .forEach(types::add);
 
-		return types;
-	}
+            } else {
+
+                types.add(type);
+
+            }
+        });
+
+        return types;
+    }
 
 }

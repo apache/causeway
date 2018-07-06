@@ -38,7 +38,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
  * A root {@link ObjectAdapter adapter} along with aggregated {@link ObjectAdapter adapters}
  * for any of its {@link OneToManyAssociation collection}s that are currently present in
  * the {@link AdapterManager map}s.
- * 
+ *
  * <p>
  * Used for &quot;impact analysis&quot; when persisting transient root objects; all aggregated adapters
  * must also be persisted.
@@ -47,7 +47,7 @@ public class RootAndCollectionAdapters implements Iterable<ObjectAdapter> {
 
     private final ObjectAdapter parentAdapter;
     private final RootOid rootAdapterOid;
-    
+
     private final Map<OneToManyAssociation, ObjectAdapter> collectionAdapters = Maps.newLinkedHashMap();
 
     public RootAndCollectionAdapters(
@@ -84,14 +84,14 @@ public class RootAndCollectionAdapters implements Iterable<ObjectAdapter> {
 
     /**
      * Corresponding adapter for each collection (values).
-     * 
+     *
      * @see #getCollections()
      */
     public ObjectAdapter getCollectionAdapter(final OneToManyAssociation otma) {
         return collectionAdapters.get(otma);
     }
 
-    
+
     ////////////////////////////////////////////////////////////////////////
     // Helpers
     ////////////////////////////////////////////////////////////////////////

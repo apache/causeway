@@ -56,7 +56,7 @@ import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 public class StandaloneCollectionPanel extends PanelAbstract<EntityCollectionModel>
-        implements CollectionCountProvider, CollectionSelectorProvider, BulkActionsProvider, ActionPromptProvider {
+implements CollectionCountProvider, CollectionSelectorProvider, BulkActionsProvider, ActionPromptProvider {
 
     private static final long serialVersionUID = 1L;
 
@@ -132,11 +132,12 @@ public class StandaloneCollectionPanel extends PanelAbstract<EntityCollectionMod
 
     // -- ActionPromptModalWindowProvider
 
+    @Override
     public ActionPromptModalWindow getActionPrompt() {
         return actionPromptModalWindow;
     }
 
-    
+
 
     // -- BulkActionsProvider
 
@@ -197,7 +198,7 @@ public class StandaloneCollectionPanel extends PanelAbstract<EntityCollectionMod
 
     }
 
-    
+
 
 
 
@@ -209,7 +210,7 @@ public class StandaloneCollectionPanel extends PanelAbstract<EntityCollectionMod
         return selectorDropdownPanel;
     }
 
-    
+
 
     // -- CollectionCountProvider
 
@@ -219,6 +220,6 @@ public class StandaloneCollectionPanel extends PanelAbstract<EntityCollectionMod
         return model.getCount();
     }
 
-    
+
 
 }

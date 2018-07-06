@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory;
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
-)
+        )
 public class SwaggerServiceDefault implements SwaggerService {
 
     @SuppressWarnings("unused")
@@ -49,16 +49,16 @@ public class SwaggerServiceDefault implements SwaggerService {
 
     @PostConstruct
     public void init(final Map<String,String> properties) {
-    	
-    	// ----------------------------------------------------------------------------------------------------------
-    	// TODO [ahuber] this initialization must be done once before accessing _Resource.prependContextPathIfPresent
-    	// could be done anywhere during bootstrapping
-    	final String restfulPath = 
-    			_NullSafe.getOrDefault(properties, KEY_RESTFUL_BASE_PATH, KEY_RESTFUL_BASE_PATH_DEFAULT);
-    	_Resource.putRestfulPath(restfulPath); 
-    	// ----------------------------------------------------------------------------------------------------------
-    	
-    	this.basePath = _Resource.prependContextPathIfPresent(restfulPath);
+
+        // ----------------------------------------------------------------------------------------------------------
+        // TODO [ahuber] this initialization must be done once before accessing _Resource.prependContextPathIfPresent
+        // could be done anywhere during bootstrapping
+        final String restfulPath =
+                _NullSafe.getOrDefault(properties, KEY_RESTFUL_BASE_PATH, KEY_RESTFUL_BASE_PATH_DEFAULT);
+        _Resource.putRestfulPath(restfulPath);
+        // ----------------------------------------------------------------------------------------------------------
+
+        this.basePath = _Resource.prependContextPathIfPresent(restfulPath);
     }
 
     @Programmatic

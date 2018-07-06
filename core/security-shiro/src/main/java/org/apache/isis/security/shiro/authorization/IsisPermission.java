@@ -33,6 +33,7 @@ public class IsisPermission extends WildcardPermission {
     private static final Pattern PATTERN = Pattern.compile("([!]?)([^/]+)[/](.+)");
 
     private static ThreadLocal<Map<String,List<IsisPermission>>> VETOING_PERMISSIONS = new ThreadLocal<Map<String,List<IsisPermission>>>() {
+        @Override
         protected java.util.Map<String,List<IsisPermission>> initialValue() { return Maps.newTreeMap(); }
     };
 
@@ -68,7 +69,7 @@ public class IsisPermission extends WildcardPermission {
 
     private boolean veto;
     private String permissionGroup;
-    
+
     public IsisPermission() {
     }
 
@@ -79,7 +80,7 @@ public class IsisPermission extends WildcardPermission {
     public IsisPermission(String wildcardString) {
         super(wildcardString);
     }
-    
+
     @Override
     protected void setParts(String wildcardString, boolean caseSensitive) {
         Matcher matcher = PATTERN.matcher(wildcardString);
@@ -88,10 +89,10 @@ public class IsisPermission extends WildcardPermission {
             permissionGroup = matcher.group(2);
             super.setParts(matcher.group(3), caseSensitive);
         } else {
-            super.setParts(wildcardString, caseSensitive);    
+            super.setParts(wildcardString, caseSensitive);
         }
     }
-    
+
     @Override
     public boolean implies(Permission p) {
         if(veto) {

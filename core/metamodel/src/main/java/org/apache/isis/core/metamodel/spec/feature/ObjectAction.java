@@ -5,9 +5,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -70,7 +70,7 @@ public interface ObjectAction extends ObjectMember {
      * invoked upon.
      */
     ObjectSpecification getOnType();
-    
+
 
     // -- getType, isPrototype
 
@@ -78,7 +78,7 @@ public interface ObjectAction extends ObjectMember {
 
     boolean isPrototype();
 
-    
+
 
     // -- ReturnType
     /**
@@ -92,7 +92,7 @@ public interface ObjectAction extends ObjectMember {
      */
     boolean hasReturn();
 
-    
+
 
     // -- execute, executeWithRuleChecking
 
@@ -121,7 +121,7 @@ public interface ObjectAction extends ObjectMember {
             ObjectAdapter[] parameters,
             final InteractionInitiatedBy interactionInitiatedBy);
 
-    
+
 
     // -- isProposedArgumentSetValid
 
@@ -133,7 +133,7 @@ public interface ObjectAction extends ObjectMember {
             ObjectAdapter[] proposedArguments,
             final InteractionInitiatedBy interactionInitiatedBy);
 
-    
+
 
     // -- Parameters (declarative)
 
@@ -175,7 +175,7 @@ public interface ObjectAction extends ObjectMember {
      */
     ObjectActionParameter getParameterByName(String paramName);
 
-    
+
 
     // -- Parameters (per instance)
 
@@ -192,7 +192,7 @@ public interface ObjectAction extends ObjectMember {
             final ObjectAdapter target,
             final InteractionInitiatedBy interactionInitiatedBy);
 
-    
+
 
     // -- setupBulkActionInvocationContext
     /**
@@ -202,7 +202,7 @@ public interface ObjectAction extends ObjectMember {
             final ObjectAdapter targetAdapter);
 
 
-    
+
 
     // -- Util
     public static final class Util {
@@ -225,21 +225,21 @@ public interface ObjectAction extends ObjectMember {
         }
 
         public static SemanticsOf semanticsOf(final ObjectAction objectAction) {
-        	return objectAction.getSemantics();
+            return objectAction.getSemantics();
         }
-        
+
         public static boolean isAreYouSureSemantics(final ObjectAction objectAction) {
-        	return semanticsOf(objectAction).isAreYouSure();
+            return semanticsOf(objectAction).isAreYouSure();
         }
-        
+
         public static boolean isNonIdempotent(ObjectAction objectAction) {
-        	return !semanticsOf(objectAction).isIdempotentInNature();
-    	}
-        
+            return !semanticsOf(objectAction).isIdempotentInNature();
+        }
+
         public static boolean isNoParameters(ObjectAction objectAction) {
-        	return objectAction.getParameterCount()==0;
-		}
-        
+            return objectAction.getParameterCount()==0;
+        }
+
         public static boolean returnsBlobOrClob(final ObjectAction objectAction) {
             final ObjectSpecification returnType = objectAction.getReturnType();
             if (returnType != null) {
@@ -306,9 +306,9 @@ public interface ObjectAction extends ObjectMember {
 
             @SuppressWarnings({ "unchecked" })
             Predicate<ObjectAction> predicate = com.google.common.base.Predicates
-                    .and(ObjectAction.Predicates.memberOrderNotAssociationOf(adapterSpec),
-                            ObjectAction.Predicates.dynamicallyVisible(adapter, InteractionInitiatedBy.USER, Where.ANYWHERE),
-                            ObjectAction.Predicates.notBulkOnly(), ObjectAction.Predicates.excludeWizardActions(adapterSpec));
+            .and(ObjectAction.Predicates.memberOrderNotAssociationOf(adapterSpec),
+                    ObjectAction.Predicates.dynamicallyVisible(adapter, InteractionInitiatedBy.USER, Where.ANYWHERE),
+                    ObjectAction.Predicates.notBulkOnly(), ObjectAction.Predicates.excludeWizardActions(adapterSpec));
 
             final List<ObjectAction> userActions = adapterSpec.getObjectActions(actionType, Contributed.INCLUDED,
                     predicate);
@@ -346,8 +346,8 @@ public interface ObjectAction extends ObjectMember {
 
             @SuppressWarnings({ "unchecked" })
             Predicate<ObjectAction> predicate = com.google.common.base.Predicates
-                    .and(ObjectAction.Predicates.memberOrderOf(association), ObjectAction.Predicates.notBulkOnly(),
-                            ObjectAction.Predicates.excludeWizardActions(objectSpecification));
+            .and(ObjectAction.Predicates.memberOrderOf(association), ObjectAction.Predicates.notBulkOnly(),
+                    ObjectAction.Predicates.excludeWizardActions(objectSpecification));
 
             final List<ObjectAction> userActions = objectSpecification.getObjectActions(type, Contributed.INCLUDED,
                     predicate);
@@ -370,7 +370,7 @@ public interface ObjectAction extends ObjectMember {
         }
     }
 
-    
+
 
     // -- Predicates
 
@@ -391,9 +391,9 @@ public interface ObjectAction extends ObjectMember {
             return com.google.common.base.Predicates.and(
                     new AssociatedWith(collection),
                     new HasParameterMatching(
-                        new ObjectActionParameter.Predicates.CollectionParameter(collectionTypeOfSpec)
-                    )
-            );
+                            new ObjectActionParameter.Predicates.CollectionParameter(collectionTypeOfSpec)
+                            )
+                    );
         }
 
         public static class AssociatedWith implements Predicate<ObjectAction> {
@@ -417,7 +417,7 @@ public interface ObjectAction extends ObjectMember {
                 }
                 final String memberOrderNameLowerCase = associatedMemberName.toLowerCase();
                 return memberName != null && Objects.equal(memberName.toLowerCase(), memberOrderNameLowerCase) ||
-                       memberId   != null && Objects.equal(memberId.toLowerCase(), memberOrderNameLowerCase);
+                        memberId   != null && Objects.equal(memberId.toLowerCase(), memberOrderNameLowerCase);
             }
         }
 
@@ -537,16 +537,16 @@ public interface ObjectAction extends ObjectMember {
         public static Predicate<ObjectAction> memberOrderNotAssociationOf(final ObjectSpecification adapterSpec) {
 
             final List<ObjectAssociation> associations = adapterSpec.getAssociations(Contributed.INCLUDED);
-            
+
             final List<String> associationNames = _NullSafe.stream(associations)
-            		.map(ObjectAssociation::getName)
-            		.map(_Strings::lower)
-            		.collect(Collectors.toList());
-            		
-            final List<String> associationIds = _NullSafe.stream(associations) 
-            		.map(ObjectAssociation::getId)
-            		.map(_Strings::lower)
-            		.collect(Collectors.toList());
+                    .map(ObjectAssociation::getName)
+                    .map(_Strings::lower)
+                    .collect(Collectors.toList());
+
+            final List<String> associationIds = _NullSafe.stream(associations)
+                    .map(ObjectAssociation::getId)
+                    .map(_Strings::lower)
+                    .collect(Collectors.toList());
 
             return new Predicate<ObjectAction>() {
 
@@ -566,6 +566,6 @@ public interface ObjectAction extends ObjectMember {
         }
     }
 
-    
+
 
 }

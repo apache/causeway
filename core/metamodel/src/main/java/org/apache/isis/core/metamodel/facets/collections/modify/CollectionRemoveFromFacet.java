@@ -25,7 +25,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 
 /**
  * Remove object to a collection.
- * 
+ *
  * <p>
  * In the standard Apache Isis Programming Model, corresponds to invoking the
  * <tt>removeFromXxx</tt> support method for an action.

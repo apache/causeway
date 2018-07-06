@@ -81,7 +81,7 @@ public abstract class PanelAbstract<T extends IModel<?>> extends Panel {
 
     /**
      * For subclasses
-     * 
+     *
      * @return
      */
     protected Component addOrReplace(final ComponentType componentType, final IModel<?> model) {
@@ -119,7 +119,7 @@ public abstract class PanelAbstract<T extends IModel<?>> extends Panel {
     /**
      * The underlying {@link AuthenticationSession Isis session} wrapped in the
      * {@link #getWebSession() Wicket session}.
-     * 
+     *
      * @return
      */
     public AuthenticationSession getAuthenticationSession() {
@@ -135,11 +135,11 @@ public abstract class PanelAbstract<T extends IModel<?>> extends Panel {
         return ((ComponentFactoryRegistryAccessor) getApplication()).getComponentFactoryRegistry();
     }
 
-    
+
     // /////////////////////////////////////////////////
     // *Provider impl.
     // /////////////////////////////////////////////////
-    
+
     /**
      * Helper method that looks up a domain service by type
      *

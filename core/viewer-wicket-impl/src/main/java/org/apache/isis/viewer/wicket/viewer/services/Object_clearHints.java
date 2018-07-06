@@ -45,12 +45,12 @@ public class Object_clearHints {
             domainEvent = ActionDomainEvent.class,
             semantics = SemanticsOf.IDEMPOTENT,
             commandPersistence = CommandPersistence.NOT_PERSISTED
-    )
+            )
     @ActionLayout(
             contributed = Contributed.AS_ACTION,
             cssClassFa = "fa-circle-o",
             position = ActionLayout.Position.PANEL_DROPDOWN
-    )
+            )
     @MemberOrder(name = "datanucleusIdLong", sequence = "400.1")
     public Object act() {
         if (getHintStoreUsingWicketSession() != null) {
@@ -67,7 +67,7 @@ public class Object_clearHints {
     private HintStoreUsingWicketSession getHintStoreUsingWicketSession() {
         return hintStore instanceof HintStoreUsingWicketSession
                 ? (HintStoreUsingWicketSession) hintStore
-                : null;
+                        : null;
     }
 
     @javax.inject.Inject

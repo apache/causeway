@@ -28,22 +28,22 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 
 /**
  * Mechanism for determining whether this object should be disabled.
- * 
+ *
  * <p>
  * Even though all the properties of an object may themselves be enabled, there
  * could be reasons to disable the object.
- * 
+ *
  * <p>
  * In the standard Apache Isis Programming Model, typically corresponds to the
  * <tt>disabled</tt> method.
- * 
+ *
  * @see ImmutableFacet
  */
 public interface DisabledObjectFacet extends Facet, DisablingInteractionAdvisor {
 
     /**
      * Clone this facet onto another {@link FacetHolder}.
-     * 
+     *
      * <p>
      * Introduced to allow this facet to be installed onto the
      * {@link ObjectSpecification}, and then copied down onto each of the spec's

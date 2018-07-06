@@ -27,7 +27,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
  * Represents a place in the graph to be navigated; really just wraps an object
  * and an XML Element in its XML document. Also provides the capability to
  * extract the corresponding XSD element (associated with each XML element).
- * 
+ *
  * The XML element (its children) is mutated as the graph of objects is
  * navigated.
  */

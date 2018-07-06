@@ -55,7 +55,7 @@ import com.google.common.collect.Lists;
  * just adds a validator
  */
 public class JaxbFacetFactory extends FacetFactoryAbstract
-            implements MetaModelValidatorRefiner {
+implements MetaModelValidatorRefiner {
 
     public static final String ISIS_REFLECTOR_VALIDATOR_JAXB_VIEW_MODEL_NOT_ABSTRACT =
             "isis.reflector.validator.jaxbViewModelNotAbstract";
@@ -80,15 +80,15 @@ public class JaxbFacetFactory extends FacetFactoryAbstract
     public JaxbFacetFactory() {
         super(FeatureType.OBJECTS_AND_PROPERTIES);
     }
-    
+
     // -- CLASS CONTEXT
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
-    	processXmlJavaTypeAdapter(processClassContext);
-    	processXmlAccessorTypeFacet(processClassContext);
+        processXmlJavaTypeAdapter(processClassContext);
+        processXmlAccessorTypeFacet(processClassContext);
     }
-    
+
     private void processXmlJavaTypeAdapter(final ProcessClassContext processClassContext) {
         final Class<?> cls = processClassContext.getCls();
 
@@ -96,14 +96,14 @@ public class JaxbFacetFactory extends FacetFactoryAbstract
         if(annotation == null) {
             return;
         }
-        
+
         final FacetHolder holder = processClassContext.getFacetHolder();
         final XmlJavaTypeAdapterFacetDefault facet = new XmlJavaTypeAdapterFacetDefault(holder,
                 annotation.value(), getSpecificationLoader());
 
         FacetUtil.addFacet(facet);
     }
-    
+
     private void processXmlAccessorTypeFacet(final ProcessClassContext processClassContext) {
         final Class<?> cls = processClassContext.getCls();
 
@@ -111,26 +111,26 @@ public class JaxbFacetFactory extends FacetFactoryAbstract
         if(annotation == null) {
             return;
         }
-        
+
         final FacetHolder holder = processClassContext.getFacetHolder();
-        final XmlAccessorTypeFacetDefault facet = 
-        		new XmlAccessorTypeFacetDefault(holder, annotation.value());
+        final XmlAccessorTypeFacetDefault facet =
+                new XmlAccessorTypeFacetDefault(holder, annotation.value());
 
         FacetUtil.addFacet(facet);
     }
-    
+
     // -- METHOD CONTEXT
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-    	
-    	//[ahuber] accessType not yet used, but could be in future extensions
-    	final Optional<XmlAccessorTypeFacet> accessorTypeFacet = 
-    			Optional.ofNullable(processMethodContext.getFacetHolder().getFacet(XmlAccessorTypeFacet.class));
-    	final XmlAccessType accessType = accessorTypeFacet
-    			.map(facet->facet.value())
-    			.orElse(XmlAccessType.PUBLIC_MEMBER); // the annotation's default value
-    	// ---
+
+        //[ahuber] accessType not yet used, but could be in future extensions
+        final Optional<XmlAccessorTypeFacet> accessorTypeFacet =
+                Optional.ofNullable(processMethodContext.getFacetHolder().getFacet(XmlAccessorTypeFacet.class));
+        final XmlAccessType accessType = accessorTypeFacet
+                .map(facet->facet.value())
+                .orElse(XmlAccessType.PUBLIC_MEMBER); // the annotation's default value
+        // ---
 
         processXmlJavaTypeAdapter(processMethodContext, accessType);
         processXmlTransient(processMethodContext, accessType);
@@ -144,7 +144,7 @@ public class JaxbFacetFactory extends FacetFactoryAbstract
         if(annotation == null) {
             return;
         }
-        
+
         final FacetHolder holder = processMethodContext.getFacetHolder();
         final XmlJavaTypeAdapterFacetDefault facet = new XmlJavaTypeAdapterFacetDefault(holder,
                 annotation.value(), getSpecificationLoader());
@@ -165,8 +165,8 @@ public class JaxbFacetFactory extends FacetFactoryAbstract
 
         FacetUtil.addFacet(facet);
     }
-    
-    // -- 
+
+    // --
 
     @Override
     public void refineMetaModelValidator(
@@ -300,6 +300,7 @@ public class JaxbFacetFactory extends FacetFactoryAbstract
             this.jodaType = jodaType;
         }
 
+        @Override
         void validate(
                 final ObjectSpecification objectSpec,
                 final OneToOneAssociation property,
@@ -372,8 +373,8 @@ public class JaxbFacetFactory extends FacetFactoryAbstract
                 if(constructor.getParameterTypes().length == 0) {
                     if (!Modifier.isPublic(constructor.getModifiers())) {
                         validationFailures
-                                .add("JAXB view model '%s' has a no-arg constructor, however it is not public",
-                                        objectSpec.getFullIdentifier());
+                        .add("JAXB view model '%s' has a no-arg constructor, however it is not public",
+                                objectSpec.getFullIdentifier());
                     }
                     return;
                 }

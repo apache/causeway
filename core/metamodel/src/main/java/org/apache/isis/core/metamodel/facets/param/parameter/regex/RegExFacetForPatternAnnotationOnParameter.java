@@ -46,8 +46,8 @@ public class RegExFacetForPatternAnnotationOnParameter extends RegExFacetAbstrac
                 .filter(pattern -> Strings.emptyToNull(pattern.regexp()) != null)
                 .findFirst()
                 .map(pattern ->
-                        new RegExFacetForPatternAnnotationOnParameter(
-                                pattern.regexp(), pattern.flags(), pattern.message(), holder))
+                new RegExFacetForPatternAnnotationOnParameter(
+                        pattern.regexp(), pattern.flags(), pattern.message(), holder))
                 .orElse(null);
     }
 

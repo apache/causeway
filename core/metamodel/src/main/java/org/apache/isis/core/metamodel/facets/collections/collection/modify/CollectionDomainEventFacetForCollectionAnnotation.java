@@ -39,7 +39,7 @@ public class CollectionDomainEventFacetForCollectionAnnotation extends Collectio
 
     public CollectionDomainEventFacetForCollectionAnnotation(
             final Class<? extends CollectionDomainEvent<?, ?>> eventType,
-            final ServicesInjector servicesInjector, final SpecificationLoader specificationLoader, final FacetHolder holder) {
+                    final ServicesInjector servicesInjector, final SpecificationLoader specificationLoader, final FacetHolder holder) {
         super(eventType, holder, servicesInjector, specificationLoader);
     }
 

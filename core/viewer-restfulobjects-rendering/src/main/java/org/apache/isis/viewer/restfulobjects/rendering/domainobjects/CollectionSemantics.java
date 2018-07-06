@@ -22,7 +22,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 
 public enum CollectionSemantics {
 
-    SET("addToSet"), 
+    SET("addToSet"),
     LIST("addToList");
 
     private final String addToKey;

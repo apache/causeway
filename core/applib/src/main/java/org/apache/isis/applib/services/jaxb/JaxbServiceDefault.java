@@ -35,7 +35,7 @@ import org.apache.isis.schema.utils.jaxbadapters.PersistentEntityAdapter;
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
-)
+        )
 public class JaxbServiceDefault extends JaxbService.Simple {
 
     @Override
@@ -48,7 +48,7 @@ public class JaxbServiceDefault extends JaxbService.Simple {
                 // go around the loop again, so can properly deserialize the contents
                 DomainObjectList list = (DomainObjectList) pojo;
                 JAXBContext jaxbContextForList = jaxbContextFor(list);
-                
+
                 return internalFromXml(jaxbContextForList, xml, unmarshallerProperties);
             }
 

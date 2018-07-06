@@ -42,9 +42,10 @@ import org.apache.isis.schema.utils.jaxbadapters.JavaSqlTimestampXmlGregorianCal
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
-)
+        )
 public class ContentMappingServiceForCommandDto implements ContentMappingService {
 
+    @Override
     @Programmatic
     public Object map(Object object, final List<MediaType> acceptableMediaTypes) {
         final boolean supported = Util.isSupported(CommandDto.class, acceptableMediaTypes);
@@ -104,9 +105,10 @@ public class ContentMappingServiceForCommandDto implements ContentMappingService
             // specify quite a high priority since custom processors will probably want to run after this one
             // (but can choose to run before if they wish)
             menuOrder = "1000"
-    )
+            )
     public static class CopyOverFromCommand implements CommandDtoProcessorService {
 
+        @Override
         public CommandDto process(final Command command, CommandDto commandDto) {
 
             // for some reason this isn't being persisted initially, so patch it in.  TODO: should fix this

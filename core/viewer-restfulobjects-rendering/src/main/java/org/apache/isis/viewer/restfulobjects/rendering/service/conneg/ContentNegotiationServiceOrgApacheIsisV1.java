@@ -50,7 +50,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationSer
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + (Integer.MAX_VALUE - 10)
-)
+        )
 public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiationServiceAbstract {
 
     /**
@@ -102,6 +102,7 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
      * Domain object is returned as a map with the RO 1.0 representation as a special '$$ro' property
      * within that map.
      */
+    @Override
     public Response.ResponseBuilder buildResponse(
             final RepresentationService.Context2 rendererContext,
             final ObjectAdapter objectAdapter) {
@@ -135,6 +136,7 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
     /**
      * Individual property of an object is not supported.
      */
+    @Override
     @Programmatic
     public Response.ResponseBuilder buildResponse(
             final RepresentationService.Context2 rendererContext,
@@ -147,6 +149,7 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
      * Individual (parented) collection of an object is returned as a list with the RO representation
      * as an object in the list with a single property named '$$ro'
      */
+    @Override
     @Programmatic
     public Response.ResponseBuilder buildResponse(
             final RepresentationService.Context2 rendererContext,
@@ -188,6 +191,7 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
     /**
      * Action prompt is not supported.
      */
+    @Override
     @Programmatic
     public Response.ResponseBuilder buildResponse(
             final RepresentationService.Context2 rendererContext,
@@ -204,6 +208,7 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
      * action invocations returning a list will be rendered as a list with the RO v1.0 representation as a map object
      * with a single '$$ro' property (similar to {@link #buildResponse(RepresentationService.Context2, ObjectAndCollection)})
      */
+    @Override
     @Programmatic
     public Response.ResponseBuilder buildResponse(
             final RepresentationService.Context2 rendererContext,
@@ -231,35 +236,35 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
 
         final ActionResultRepresentation.ResultType resultType = objectAndActionInvocation.determineResultType();
         switch (resultType) {
-            case DOMAIN_OBJECT:
+        case DOMAIN_OBJECT:
 
-                rootRepresentation = JsonRepresentation.newMap();
-                appendObjectTo(rendererContext, returnedAdapter, rootRepresentation);
+            rootRepresentation = JsonRepresentation.newMap();
+            appendObjectTo(rendererContext, returnedAdapter, rootRepresentation);
 
-                break;
+            break;
 
-            case LIST:
+        case LIST:
 
-                rootRepresentation = JsonRepresentation.newArray();
+            rootRepresentation = JsonRepresentation.newArray();
 
-                final CollectionFacet collectionFacet = returnType.getFacet(CollectionFacet.class);
-                final Collection<ObjectAdapter> collectionAdapters = collectionFacet.collection(returnedAdapter);
-                appendIterableTo(rendererContext, collectionAdapters, rootRepresentation);
+            final CollectionFacet collectionFacet = returnType.getFacet(CollectionFacet.class);
+            final Collection<ObjectAdapter> collectionAdapters = collectionFacet.collection(returnedAdapter);
+            appendIterableTo(rendererContext, collectionAdapters, rootRepresentation);
 
-                // $$ro representation will be an object in the list with a single property named "$$ro"
-                if(!suppressRO) {
-                    JsonRepresentation $$roContainerRepresentation = JsonRepresentation.newMap();
-                    rootRepresentation.arrayAdd($$roContainerRepresentation);
-                    $$roContainerRepresentation.mapPut("$$ro", $$roRepresentation);
-                }
+            // $$ro representation will be an object in the list with a single property named "$$ro"
+            if(!suppressRO) {
+                JsonRepresentation $$roContainerRepresentation = JsonRepresentation.newMap();
+                rootRepresentation.arrayAdd($$roContainerRepresentation);
+                $$roContainerRepresentation.mapPut("$$ro", $$roRepresentation);
+            }
 
-                break;
+            break;
 
-            case SCALAR_VALUE:
-            case VOID:
+        case SCALAR_VALUE:
+        case VOID:
 
-                // not supported
-                return null;
+            // not supported
+            return null;
         }
 
         final Response.ResponseBuilder responseBuilder =
@@ -269,9 +274,9 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
         // set appropriate Content-Type
         responseBuilder.type(
                 resultType == ActionResultRepresentation.ResultType.DOMAIN_OBJECT
-                        ? CONTENT_TYPE_OAI_V1_OBJECT
+                ? CONTENT_TYPE_OAI_V1_OBJECT
                         : CONTENT_TYPE_OAI_V1_LIST
-        );
+                );
 
         return responseBuilder(responseBuilder);
     }
@@ -336,7 +341,7 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
             final JsonRepresentation propertyRepresentation = JsonRepresentation.newMap();
             final ObjectPropertyReprRenderer renderer =
                     new ObjectPropertyReprRenderer(rendererContext, null, property.getId(), propertyRepresentation)
-                        .asStandalone();
+                    .asStandalone();
             renderer.with(new ObjectAndProperty(objectAdapter, property));
 
             final JsonRepresentation propertyValueRepresentation = renderer.render();

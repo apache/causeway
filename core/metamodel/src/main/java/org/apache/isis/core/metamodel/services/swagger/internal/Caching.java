@@ -30,17 +30,17 @@ enum Caching {
     USER_INFO {
         @Override public void withHeaders(final Response response) {
             response
-                    .header("Cache-Control",
-                            new IntegerProperty()
-                                    ._default(3600));
+            .header("Cache-Control",
+                    new IntegerProperty()
+                    ._default(3600));
         }
     },
     NON_EXPIRING {
         @Override public void withHeaders(final Response response) {
             response
-                    .header("Cache-Control",
-                            new IntegerProperty()
-                                    ._default(86400).description(Util.roSpec("2.13")));
+            .header("Cache-Control",
+                    new IntegerProperty()
+                    ._default(86400).description(Util.roSpec("2.13")));
         }
     };
 

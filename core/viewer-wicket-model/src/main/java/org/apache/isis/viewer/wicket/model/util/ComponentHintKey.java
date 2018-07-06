@@ -67,8 +67,8 @@ public class ComponentHintKey implements Serializable {
 
     public String getKey() {
         return fullKey != null
-                    ? fullKey
-                    :  keyFor(component != null? component : componentProvider.get(), keyName);
+                ? fullKey
+                        :  keyFor(component != null? component : componentProvider.get(), keyName);
     }
 
     protected String keyFor(final Component component, final String keyName) {
@@ -123,9 +123,9 @@ public class ComponentHintKey implements Serializable {
 
     public static ComponentHintKey noop() {
         return new ComponentHintKey(null, null, null, null) {
-			private static final long serialVersionUID = 1L;
+            private static final long serialVersionUID = 1L;
 
-			@Override
+            @Override
             public String getKey() {
                 return null;
             }

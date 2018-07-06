@@ -84,7 +84,7 @@ import com.google.common.collect.Maps;
 
 
 public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
-        implements MetaModelValidatorRefiner, PostConstructMethodCache {
+implements MetaModelValidatorRefiner, PostConstructMethodCache {
 
     private final MetaModelValidatorForValidationFailures autoCompleteInvalid = new MetaModelValidatorForValidationFailures();
     private final MetaModelValidatorForMixinTypes mixinTypeValidator = new MetaModelValidatorForMixinTypes("@DomainObject#nature=MIXIN");
@@ -299,9 +299,9 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
 
             final List<DomainObject> mixinDomainObjects =
                     domainObjects.stream()
-                        .filter(domainObject -> domainObject.nature() == Nature.MIXIN)
-                        .filter(domainObject -> mixinTypeValidator.ensureMixinType(cls))
-                        .collect(Collectors.toList());
+                    .filter(domainObject -> domainObject.nature() == Nature.MIXIN)
+                    .filter(domainObject -> mixinTypeValidator.ensureMixinType(cls))
+                    .collect(Collectors.toList());
 
             final MixinFacet mixinFacet = MixinFacetForDomainObjectAnnotation.create(mixinDomainObjects, cls, facetHolder, servicesInjector);
             FacetUtil.addFacet(mixinFacet);
@@ -332,127 +332,127 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
     private void processLifecycleEventCreated(final List<DomainObject> domainObjects, final FacetHolder holder) {
 
         domainObjects.stream()
-                .map(DomainObject::createdLifecycleEvent)
-                .filter(lifecycleEvent ->
-                    EventUtil.eventTypeIsPostable(
-                            lifecycleEvent,
-                            ObjectCreatedEvent.Noop.class,
-                            ObjectCreatedEvent.Default.class,
-                            "isis.reflector.facet.domainObjectAnnotation.createdLifecycleEvent.postForDefault",
-                            getConfiguration())
+        .map(DomainObject::createdLifecycleEvent)
+        .filter(lifecycleEvent ->
+        EventUtil.eventTypeIsPostable(
+                lifecycleEvent,
+                ObjectCreatedEvent.Noop.class,
+                ObjectCreatedEvent.Default.class,
+                "isis.reflector.facet.domainObjectAnnotation.createdLifecycleEvent.postForDefault",
+                getConfiguration())
                 )
-                .findFirst()
-                .map(lifecycleEvent -> new CreatedLifecycleEventFacetForDomainObjectAnnotation(
-                        holder, lifecycleEvent, getSpecificationLoader()))
-                .ifPresent(FacetUtil::addFacet);
+        .findFirst()
+        .map(lifecycleEvent -> new CreatedLifecycleEventFacetForDomainObjectAnnotation(
+                holder, lifecycleEvent, getSpecificationLoader()))
+        .ifPresent(FacetUtil::addFacet);
     }
 
     private void processLifecycleEventLoaded(final List<DomainObject> domainObjects, final FacetHolder holder) {
 
         domainObjects.stream()
-                .map(DomainObject::loadedLifecycleEvent)
-                .filter(lifecycleEvent ->
-                        EventUtil.eventTypeIsPostable(
-                                lifecycleEvent,
-                                ObjectLoadedEvent.Noop.class,
-                                ObjectLoadedEvent.Default.class,
-                                "isis.reflector.facet.domainObjectAnnotation.loadedLifecycleEvent.postForDefault",
-                                getConfiguration())
+        .map(DomainObject::loadedLifecycleEvent)
+        .filter(lifecycleEvent ->
+        EventUtil.eventTypeIsPostable(
+                lifecycleEvent,
+                ObjectLoadedEvent.Noop.class,
+                ObjectLoadedEvent.Default.class,
+                "isis.reflector.facet.domainObjectAnnotation.loadedLifecycleEvent.postForDefault",
+                getConfiguration())
                 )
-                .findFirst()
-                .map(lifecycleEvent -> new LoadedLifecycleEventFacetForDomainObjectAnnotation(
-                        holder, lifecycleEvent, getSpecificationLoader()))
-                .ifPresent(FacetUtil::addFacet);
+        .findFirst()
+        .map(lifecycleEvent -> new LoadedLifecycleEventFacetForDomainObjectAnnotation(
+                holder, lifecycleEvent, getSpecificationLoader()))
+        .ifPresent(FacetUtil::addFacet);
     }
 
     private void processLifecycleEventPersisting(final List<DomainObject> domainObjects, final FacetHolder holder) {
 
         domainObjects.stream()
-                .map(DomainObject::persistingLifecycleEvent)
-                .filter(lifecycleEvent ->
-                        EventUtil.eventTypeIsPostable(
-                                lifecycleEvent,
-                                ObjectPersistingEvent.Noop.class,
-                                ObjectPersistingEvent.Default.class,
-                                "isis.reflector.facet.domainObjectAnnotation.persistingLifecycleEvent.postForDefault",
-                                getConfiguration())
+        .map(DomainObject::persistingLifecycleEvent)
+        .filter(lifecycleEvent ->
+        EventUtil.eventTypeIsPostable(
+                lifecycleEvent,
+                ObjectPersistingEvent.Noop.class,
+                ObjectPersistingEvent.Default.class,
+                "isis.reflector.facet.domainObjectAnnotation.persistingLifecycleEvent.postForDefault",
+                getConfiguration())
                 )
-                .findFirst()
-                .map(lifecycleEvent -> new PersistingLifecycleEventFacetForDomainObjectAnnotation(
-                        holder, lifecycleEvent, getSpecificationLoader()))
-                .ifPresent(FacetUtil::addFacet);
+        .findFirst()
+        .map(lifecycleEvent -> new PersistingLifecycleEventFacetForDomainObjectAnnotation(
+                holder, lifecycleEvent, getSpecificationLoader()))
+        .ifPresent(FacetUtil::addFacet);
     }
 
     private void processLifecycleEventPersisted(final List<DomainObject> domainObjects, final FacetHolder holder) {
 
         domainObjects.stream()
-                .map(DomainObject::persistedLifecycleEvent)
-                .filter(lifecycleEvent ->
-                        EventUtil.eventTypeIsPostable(
-                                lifecycleEvent,
-                                ObjectPersistedEvent.Noop.class,
-                                ObjectPersistedEvent.Default.class,
-                                "isis.reflector.facet.domainObjectAnnotation.persistedLifecycleEvent.postForDefault",
-                                getConfiguration())
+        .map(DomainObject::persistedLifecycleEvent)
+        .filter(lifecycleEvent ->
+        EventUtil.eventTypeIsPostable(
+                lifecycleEvent,
+                ObjectPersistedEvent.Noop.class,
+                ObjectPersistedEvent.Default.class,
+                "isis.reflector.facet.domainObjectAnnotation.persistedLifecycleEvent.postForDefault",
+                getConfiguration())
                 )
-                .findFirst()
-                .map(lifecycleEvent -> new PersistedLifecycleEventFacetForDomainObjectAnnotation(
-                        holder, lifecycleEvent, getSpecificationLoader()))
-                .ifPresent(FacetUtil::addFacet);
+        .findFirst()
+        .map(lifecycleEvent -> new PersistedLifecycleEventFacetForDomainObjectAnnotation(
+                holder, lifecycleEvent, getSpecificationLoader()))
+        .ifPresent(FacetUtil::addFacet);
     }
 
     private void processLifecycleEventRemoving(final List<DomainObject> domainObjects, final FacetHolder holder) {
 
         domainObjects.stream()
-                .map(DomainObject::removingLifecycleEvent)
-                .filter(lifecycleEvent ->
-                        EventUtil.eventTypeIsPostable(
-                                lifecycleEvent,
-                                ObjectRemovingEvent.Noop.class,
-                                ObjectRemovingEvent.Default.class,
-                                "isis.reflector.facet.domainObjectAnnotation.removingLifecycleEvent.postForDefault",
-                                getConfiguration())
+        .map(DomainObject::removingLifecycleEvent)
+        .filter(lifecycleEvent ->
+        EventUtil.eventTypeIsPostable(
+                lifecycleEvent,
+                ObjectRemovingEvent.Noop.class,
+                ObjectRemovingEvent.Default.class,
+                "isis.reflector.facet.domainObjectAnnotation.removingLifecycleEvent.postForDefault",
+                getConfiguration())
                 )
-                .findFirst()
-                .map(lifecycleEvent -> new RemovingLifecycleEventFacetForDomainObjectAnnotation(
-                        holder, lifecycleEvent, getSpecificationLoader()))
-                .ifPresent(FacetUtil::addFacet);
+        .findFirst()
+        .map(lifecycleEvent -> new RemovingLifecycleEventFacetForDomainObjectAnnotation(
+                holder, lifecycleEvent, getSpecificationLoader()))
+        .ifPresent(FacetUtil::addFacet);
     }
 
     private void processLifecycleEventUpdated(final List<DomainObject> domainObjects, final FacetHolder holder) {
 
         domainObjects.stream()
-                .map(DomainObject::updatedLifecycleEvent)
-                .filter(lifecycleEvent ->
-                        EventUtil.eventTypeIsPostable(
-                                lifecycleEvent,
-                                ObjectUpdatedEvent.Noop.class,
-                                ObjectUpdatedEvent.Default.class,
-                                "isis.reflector.facet.domainObjectAnnotation.updatedLifecycleEvent.postForDefault",
-                                getConfiguration())
+        .map(DomainObject::updatedLifecycleEvent)
+        .filter(lifecycleEvent ->
+        EventUtil.eventTypeIsPostable(
+                lifecycleEvent,
+                ObjectUpdatedEvent.Noop.class,
+                ObjectUpdatedEvent.Default.class,
+                "isis.reflector.facet.domainObjectAnnotation.updatedLifecycleEvent.postForDefault",
+                getConfiguration())
                 )
-                .findFirst()
-                .map(lifecycleEvent -> new UpdatedLifecycleEventFacetForDomainObjectAnnotation(
-                        holder, lifecycleEvent, getSpecificationLoader()))
-                .ifPresent(FacetUtil::addFacet);
+        .findFirst()
+        .map(lifecycleEvent -> new UpdatedLifecycleEventFacetForDomainObjectAnnotation(
+                holder, lifecycleEvent, getSpecificationLoader()))
+        .ifPresent(FacetUtil::addFacet);
     }
 
     private void processLifecycleEventUpdating(final List<DomainObject> domainObjects, final FacetHolder holder) {
 
         domainObjects.stream()
-                .map(DomainObject::updatingLifecycleEvent)
-                .filter(lifecycleEvent ->
-                        EventUtil.eventTypeIsPostable(
-                                lifecycleEvent,
-                                ObjectUpdatingEvent.Noop.class,
-                                ObjectUpdatingEvent.Default.class,
-                                "isis.reflector.facet.domainObjectAnnotation.updatingLifecycleEvent.postForDefault",
-                                getConfiguration())
+        .map(DomainObject::updatingLifecycleEvent)
+        .filter(lifecycleEvent ->
+        EventUtil.eventTypeIsPostable(
+                lifecycleEvent,
+                ObjectUpdatingEvent.Noop.class,
+                ObjectUpdatingEvent.Default.class,
+                "isis.reflector.facet.domainObjectAnnotation.updatingLifecycleEvent.postForDefault",
+                getConfiguration())
                 )
-                .findFirst()
-                .map(lifecycleEvent -> new UpdatingLifecycleEventFacetForDomainObjectAnnotation(
-                        holder, lifecycleEvent, getSpecificationLoader()))
-                .ifPresent(FacetUtil::addFacet);
+        .findFirst()
+        .map(lifecycleEvent -> new UpdatingLifecycleEventFacetForDomainObjectAnnotation(
+                holder, lifecycleEvent, getSpecificationLoader()))
+        .ifPresent(FacetUtil::addFacet);
     }
 
     // //////////////////////////////////////
@@ -494,10 +494,10 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
                     }
                     validationFailures.add(
                             "%s: cannot have two entities with same object type (@Discriminator, @DomainObject(objectType=...), @ObjectType or @PersistenceCapable(schema=...)); %s " +
-                            "has same value (%s).",
-                            existingSpec.getFullIdentifier(),
-                            otherSpec.getFullIdentifier(),
-                            objectSpecId);
+                                    "has same value (%s).",
+                                    existingSpec.getFullIdentifier(),
+                                    otherSpec.getFullIdentifier(),
+                                    objectSpecId);
                 }
             }
 
@@ -525,6 +525,7 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
 
     private final Map<Class<?>, Optional<Method>> postConstructMethods = Maps.newHashMap();
 
+    @Override
     public Method postConstructMethodFor(final Object pojo) {
         return MethodFinderUtils.findAnnotatedMethod(pojo, PostConstruct.class, postConstructMethods);
     }

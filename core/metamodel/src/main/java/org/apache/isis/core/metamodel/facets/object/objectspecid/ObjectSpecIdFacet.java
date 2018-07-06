@@ -27,7 +27,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecId;
  * Identifies the type of entity, such that OIDs are self-describing.
  */
 public interface ObjectSpecIdFacet extends Facet {
-    
+
     ObjectSpecId value();
 
 }

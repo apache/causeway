@@ -35,11 +35,13 @@ public abstract class AppManifestAbstract2 extends AppManifestAbstract implement
         this.module = builder.getModule();
     }
 
+    @Override
     @Programmatic
     public Module getModule() {
         return module;
     }
 
+    @Override
     @Programmatic
     public FixtureScript getRefDataSetupFixture() {
         return new FixtureScript() {
@@ -56,6 +58,7 @@ public abstract class AppManifestAbstract2 extends AppManifestAbstract implement
         };
     }
 
+    @Override
     @Programmatic
     public FixtureScript getTeardownFixture() {
         return new FixtureScript() {

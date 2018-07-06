@@ -54,7 +54,7 @@ public abstract class AppManifestAbstract implements AppManifest {
 
         // note uses this.fixtures, so must come afterwards...
         this.configurationProperties = createConfigurationProperties(
-                builder.getAllPropertyResources(), 
+                builder.getAllPropertyResources(),
                 builder.getAllIndividualConfigProps(),
                 builder.getAllFallbackConfigProps(),
                 this.fixtureClasses);
@@ -104,15 +104,15 @@ public abstract class AppManifestAbstract implements AppManifest {
         for (PropertyResource propertyResource : propertyResources) {
             propertyResource.loadPropsInto(props);
         }
-        
+
         individualConfigProps.forEach(props::put);
-        
+
         if(!fixtures.isEmpty()) {
             props.put("isis.persistor.datanucleus.install-fixtures", "true");
         }
-        
+
         fallbackConfigProps.forEach((k, v)->props.computeIfAbsent(k, __->v));
-        
+
         overrideConfigurationProperties(props);
         return props;
     }
@@ -227,8 +227,8 @@ public abstract class AppManifestAbstract implements AppManifest {
             return self();
         }
 
-		@SuppressWarnings("unchecked") // at least type-safety applies
-		public B withFixtureScripts(final Class<? extends FixtureScript>... fixtures) {
+        @SuppressWarnings("unchecked") // at least type-safety applies
+        public B withFixtureScripts(final Class<? extends FixtureScript>... fixtures) {
             return withFixtureScripts(Arrays.asList(fixtures));
         }
 
@@ -255,7 +255,7 @@ public abstract class AppManifestAbstract implements AppManifest {
         Map<String,String> getAllIndividualConfigProps() {
             return getIndividualConfigProps();
         }
-        
+
         Map<String,String> getAllFallbackConfigProps() {
             return getFallbackConfigProps();
         }

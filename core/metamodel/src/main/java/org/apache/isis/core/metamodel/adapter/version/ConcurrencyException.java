@@ -24,11 +24,11 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 
 public class ConcurrencyException extends IsisException {
-    
+
     private static final long serialVersionUID = 1L;
 
     private static String buildMessage(String currentUser, Oid oid, Version staleVersion, Version datastoreVersion) {
-        
+
         final StringBuilder buf = new StringBuilder();
         buf.append(currentUser != null? currentUser + " " : "");
         buf.append(" attempted to update ").append(oid.enStringNoVersion());
@@ -40,7 +40,7 @@ public class ConcurrencyException extends IsisException {
             buf.append(" at ").append(datastoreVersion.getTime());
         }
         buf.append(" [").append(staleVersion.getSequence()).append(" vs ").append(datastoreVersion.getSequence()).append("]");
-        
+
         return buf.toString();
     }
 
@@ -58,6 +58,6 @@ public class ConcurrencyException extends IsisException {
     public Oid getOid() {
         return oid;
     }
-    
+
 
 }

@@ -82,7 +82,7 @@ public class ActionParameterDefaultsFacetViaMethodFactory extends MethodPrefixBa
             if (defaultMethod == null) {
                 continue;
             }
-            
+
             processMethodContext.removeMethod(defaultMethod);
 
             final FacetedMethod facetedMethod = processMethodContext.getFacetHolder();
@@ -101,12 +101,12 @@ public class ActionParameterDefaultsFacetViaMethodFactory extends MethodPrefixBa
      * search successively for the default method, trimming number of param types each loop
      */
     private static Method findDefaultNumMethod(ProcessMethodContext processMethodContext, int n) {
-        
+
         final Method actionMethod = processMethodContext.getMethod();
         final List<Class<?>> paramTypes = ListExtensions.mutableCopy(actionMethod.getParameterTypes());
-        
+
         final int numParamTypes = paramTypes.size();
-        
+
         for(int i=0; i< numParamTypes+1; i++) {
             final Method method = findDefaultNumMethod(processMethodContext, n, paramTypes.toArray(new Class<?>[]{}));
             if(method != null) {

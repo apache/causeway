@@ -24,40 +24,40 @@ import java.util.stream.Stream;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 
 /**
- * Represents a navigable chain of parent nodes starting at the current node. 
- * 
+ * Represents a navigable chain of parent nodes starting at the current node.
+ *
  * @since 2.0.0
  *
  */
 public interface WhereAmIModel {
 
-	public final static String CONFIG_KEY_IS_WHERE_AM_I_FEATURE_ENABLED = "isis.viewer.whereAmI.enabled";
-	public final static String CONFIG_KEY_MAX_NAVIGABLE_PARENT_CHAIN_LENGTH = "isis.viewer.whereAmI.maxParentChainLength";
-	
-	public final static boolean IS_WHERE_AM_I_FEATURE_ENABLED_DEFAULT = true;
-	public final static int MAX_NAVIGABLE_PARENT_CHAIN_LENGTH_DEFAULT = 64;
-	
-	
-	public static WhereAmIModel of(EntityModel startOfChain) {
-		return new WhereAmIModelDefault(startOfChain);
-	}
+    public final static String CONFIG_KEY_IS_WHERE_AM_I_FEATURE_ENABLED = "isis.viewer.whereAmI.enabled";
+    public final static String CONFIG_KEY_MAX_NAVIGABLE_PARENT_CHAIN_LENGTH = "isis.viewer.whereAmI.maxParentChainLength";
 
-	/**
-	 * The navigable parent chain requires a minimum length of 2 in order to be shown.
-	 * @return whether the where-am-I hint should be shown or hidden
-	 */
-	public boolean isShowWhereAmI();
-	
-	/**
-	 * Streams the linked nodes of this model's navigable parent chain in reverse order.
-	 * @return reversed order stream of linked parent nodes, which does not include the start node
-	 */
-	public Stream<EntityModel> streamParentChainReversed();
-	
-	/**
-	 *  
-	 * @return the immutable start node of the navigable parent chain
-	 */
-	public EntityModel getStartOfChain();
-	
+    public final static boolean IS_WHERE_AM_I_FEATURE_ENABLED_DEFAULT = true;
+    public final static int MAX_NAVIGABLE_PARENT_CHAIN_LENGTH_DEFAULT = 64;
+
+
+    public static WhereAmIModel of(EntityModel startOfChain) {
+        return new WhereAmIModelDefault(startOfChain);
+    }
+
+    /**
+     * The navigable parent chain requires a minimum length of 2 in order to be shown.
+     * @return whether the where-am-I hint should be shown or hidden
+     */
+    public boolean isShowWhereAmI();
+
+    /**
+     * Streams the linked nodes of this model's navigable parent chain in reverse order.
+     * @return reversed order stream of linked parent nodes, which does not include the start node
+     */
+    public Stream<EntityModel> streamParentChainReversed();
+
+    /**
+     *
+     * @return the immutable start node of the navigable parent chain
+     */
+    public EntityModel getStartOfChain();
+
 }

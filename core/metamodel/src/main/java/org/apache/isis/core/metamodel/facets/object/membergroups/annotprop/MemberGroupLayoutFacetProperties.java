@@ -33,16 +33,16 @@ public class MemberGroupLayoutFacetProperties extends MemberGroupLayoutFacetAbst
     public MemberGroupLayoutFacetProperties(
             final Properties properties,
             FacetHolder holder) {
-        super(asColumnSpans(properties), 
-                asListWithDefaultGroup(asGroupList(properties, "left")), 
-                asList(asGroupList(properties, "middle")), 
-                asList(asGroupList(properties, "right")), 
+        super(asColumnSpans(properties),
+                asListWithDefaultGroup(asGroupList(properties, "left")),
+                asList(asGroupList(properties, "middle")),
+                asList(asGroupList(properties, "right")),
                 holder);
     }
 
     static ColumnSpans asColumnSpans(Properties properties) {
         String columnSpansStr = properties.getProperty("columnSpans");
-        
+
         if(columnSpansStr == null) {
             return null;
         }
@@ -59,13 +59,13 @@ public class MemberGroupLayoutFacetProperties extends MemberGroupLayoutFacetAbst
             return _Strings.emptyArray;
         }
 
-        return 
-        _Strings.splitThenStream(property, ",")
-        .map(_Strings::trim)
-        .filter(_Strings::isNotEmpty)
-        .collect(Collectors.toCollection(ArrayList::new)) // array list for fast to-array conversion
-        .toArray(_Strings.emptyArray);
-        
+        return
+                _Strings.splitThenStream(property, ",")
+                .map(_Strings::trim)
+                .filter(_Strings::isNotEmpty)
+                .collect(Collectors.toCollection(ArrayList::new)) // array list for fast to-array conversion
+                .toArray(_Strings.emptyArray);
+
 
     }
 }

@@ -23,11 +23,11 @@ import org.apache.isis.core.metamodel.facets.SingleStringValueFacet;
 
 /**
  * Indicates that this property is part of the business key.
- * 
+ *
  * <p>
  * In the standard Apache Isis Programming Model, corresponds to annotating the
  * property with the <tt>@BusinessKey</tt> annotation.
- * 
+ *
  * <p>
  * TODO: not yet implemented by the framework or any viewer.
  */

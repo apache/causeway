@@ -53,7 +53,7 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
 
     /**
      * Returns the name of this parameter.
-     * 
+     *
      * <p>
      * Because Java's reflection API does not allow us to access the code name
      * of the parameter, we have to do figure out the name of the parameter
@@ -83,7 +83,7 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
      * method) for the parameter.
      */
     boolean hasAutoComplete();
-    
+
     /**
      * Returns a list of possible references/values for this parameter, which the
      * user can choose from, based on the input search argument.
@@ -93,8 +93,8 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
             final String searchArg,
             final InteractionInitiatedBy interactionInitiatedBy);
 
-    
-    
+
+
     int getAutoCompleteMinLength();
     /**
      * Whether there are any choices provided (eg <tt>choicesXxx</tt> supporting
@@ -114,10 +114,10 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
 
     ObjectAdapter getDefault(ObjectAdapter adapter);
 
-    
+
     /**
      * Whether proposed value for this parameter is valid.
-     * 
+     *
      * @param adapter
      * @param proposedValue
      * @param interactionInitiatedBy
@@ -127,7 +127,7 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
             final ObjectAdapter adapter,
             final Object proposedValue,
             final InteractionInitiatedBy interactionInitiatedBy);
- 
+
 
     public static class Functions {
         public static final Function<ObjectActionParameter, String> GET_NAME = new Function<ObjectActionParameter, String>() {

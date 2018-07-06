@@ -18,10 +18,10 @@
  */
 
 /**
- * Provides a {@link org.apache.isis.core.commons.factory.InstanceUtil utility} 
- * class for instantiating classes, ensuring that 
+ * Provides a {@link org.apache.isis.core.commons.factory.InstanceUtil utility}
+ * class for instantiating classes, ensuring that
  * they are assignable from a specified interface (if supplied).
- * 
+ *
  * <p>
  * Used in various places throughout the framework, and specifically by
  * {@link org.apache.isis.core.commons.components.Installer} implementations.

@@ -107,12 +107,12 @@ abstract class ModuleOrBuilderAbstract<B extends ModuleOrBuilderAbstract<B>> {
     }
 
     public B withConfigurationProperties(final Map<String,String> configurationProperties) {
-    	configurationProperties.forEach(this::withConfigurationProperty);
+        configurationProperties.forEach(this::withConfigurationProperty);
         return self();
     }
-    
+
     public B withFallbackConfigurationProperties(final Map<String,String> fallbackConfigurationProperties) {
-    	fallbackConfigurationProperties.forEach(this::withFallbackConfigurationProperty);
+        fallbackConfigurationProperties.forEach(this::withFallbackConfigurationProperty);
         return self();
     }
 
@@ -156,16 +156,16 @@ abstract class ModuleOrBuilderAbstract<B extends ModuleOrBuilderAbstract<B>> {
         return self();
     }
 
-    @XmlTransient 
+    @XmlTransient
     public Map<String,String> getIndividualConfigProps() {
         return individualConfigProps;
     }
-    
+
     public B withFallbackConfigurationProperty(final String key, final String value) {
-    	fallbackConfigProps.put(key, value);
+        fallbackConfigProps.put(key, value);
         return self();
     }
-    
+
     @XmlTransient
     public Map<String,String> getFallbackConfigProps() {
         return fallbackConfigProps;
@@ -175,11 +175,11 @@ abstract class ModuleOrBuilderAbstract<B extends ModuleOrBuilderAbstract<B>> {
     public List<PropertyResource> getPropertyResources() {
         return propertyResources;
     }
-    
+
     // -- HELPER
-    
-	protected B self() {
-    	return _Casts.uncheckedCast(this);
+
+    protected B self() {
+        return _Casts.uncheckedCast(this);
     }
 
 }

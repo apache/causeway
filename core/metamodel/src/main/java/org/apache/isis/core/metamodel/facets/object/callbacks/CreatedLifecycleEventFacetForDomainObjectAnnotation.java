@@ -34,10 +34,11 @@ public class CreatedLifecycleEventFacetForDomainObjectAnnotation extends SingleC
     public CreatedLifecycleEventFacetForDomainObjectAnnotation(
             final FacetHolder holder,
             final Class<? extends ObjectCreatedEvent<?>> value,
-            final SpecificationLoader specificationLoader) {
+                    final SpecificationLoader specificationLoader) {
         super(type(), holder, value, specificationLoader);
     }
 
+    @Override
     public Class<? extends AbstractLifecycleEvent<?>> getEventType() {
         //noinspection unchecked
         return eventType();

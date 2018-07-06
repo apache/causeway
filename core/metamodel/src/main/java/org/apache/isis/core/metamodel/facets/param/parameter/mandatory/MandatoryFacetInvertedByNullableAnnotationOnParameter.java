@@ -31,7 +31,7 @@ import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFace
 
 /**
  * Derived by presence of an {@link Nullable} annotation on parameter.
- * 
+ *
  * <p>
  * This implementation indicates that the {@link FacetHolder} is <i>not</i>
  * mandatory, as per {@link #isInvertedSemantics()}.

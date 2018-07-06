@@ -59,17 +59,19 @@ import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationSer
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
-)
+        )
 public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNegotiationService {
 
     private boolean strictAcceptChecking;
 
+    @Override
     @PostConstruct
     public void init(final Map<String, String> properties) {
         final String strictAcceptCheckingStr = properties.get("isis.viewer.restfulobjects.strictAcceptChecking");
         this.strictAcceptChecking = "true".equalsIgnoreCase(strictAcceptCheckingStr);
     }
 
+    @Override
     @PreDestroy
     public void shutdown() {
     }
@@ -133,12 +135,12 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
 
         final ObjectPropertyReprRenderer renderer = new ObjectPropertyReprRenderer(rendererContext);
         renderer.with(objectAndProperty)
-                .usingLinkTo(rendererContext.getAdapterLinkTo());
+        .usingLinkTo(rendererContext.getAdapterLinkTo());
 
         if(objectAndProperty instanceof ObjectAndProperty2) {
             final ObjectAndProperty2 objectAndProperty2 = (ObjectAndProperty2) objectAndProperty;
             renderer
-                .withMemberMode(objectAndProperty2.getMemberReprMode());
+            .withMemberMode(objectAndProperty2.getMemberReprMode());
 
         }
 
@@ -171,7 +173,7 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
         final ObjectCollectionReprRenderer renderer =
                 new ObjectCollectionReprRenderer(rendererContext, null, null, representation);
         renderer.with(objectAndCollection)
-                .usingLinkTo(rendererContext.getAdapterLinkTo());
+        .usingLinkTo(rendererContext.getAdapterLinkTo());
 
         if(objectAndCollection instanceof ObjectAndCollection2) {
             final ObjectAndCollection2 objectAndCollection2 = (ObjectAndCollection2) objectAndCollection;
@@ -192,8 +194,8 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
 
         final ObjectActionReprRenderer renderer = new ObjectActionReprRenderer(rendererContext);
         renderer.with(objectAndAction)
-                .usingLinkTo(rendererContext.getAdapterLinkTo())
-                .asStandalone();
+        .usingLinkTo(rendererContext.getAdapterLinkTo())
+        .asStandalone();
 
         final ResponseBuilder responseBuilder = Responses.ofOk(renderer, Caching.NONE);
 
@@ -321,7 +323,7 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
         final CollectionFacet collectionFacet = returnType.getFacet(CollectionFacet.class);
         return collectionFacet != null
                 ? collectionFacet.collection(returnedAdapter)
-                : null;
+                        : null;
     }
 
     /**
@@ -335,7 +337,7 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
         final ActionResultReprRenderer renderer =
                 new ActionResultReprRenderer(rendererContext, null, objectAndActionInvocation.getSelfLink(), representation);
         renderer.with(objectAndActionInvocation)
-                .using(rendererContext.getAdapterLinkTo());
+        .using(rendererContext.getAdapterLinkTo());
 
         final ResponseBuilder responseBuilder = Responses.ofOk(renderer, Caching.NONE, rootRepresentation);
         Responses.addLastModifiedAndETagIfAvailable(responseBuilder, objectAndActionInvocation.getObjectAdapter().getVersion());

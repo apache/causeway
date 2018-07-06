@@ -35,9 +35,9 @@ public interface XmlSnapshotService {
     public interface Snapshot {
         public Document getXmlDocument();
         public Document getXsdDocument();
-        
-        public String getXmlDocumentAsString();    
-        public String getXsdDocumentAsString();    
+
+        public String getXmlDocumentAsString();
+        public String getXsdDocumentAsString();
     }
 
     public interface Builder {
@@ -45,7 +45,7 @@ public interface XmlSnapshotService {
         public void includePathAndAnnotation(final String path, final String annotation);
         public XmlSnapshotService.Snapshot build();
     }
-    
+
     public static class Exception extends RuntimeException {
 
         private static final long serialVersionUID = 1L;
@@ -91,7 +91,7 @@ public interface XmlSnapshotService {
      */
     @Programmatic
     public Element getChildElement(final Element el, final String tagname);
-    
+
     /**
      * Convenience method to obtain value of child text node.
      */

@@ -38,7 +38,7 @@ public class RecreatableObjectFacetForRecreatableDomainObjectInterface extends R
         final RecreatableDomainObject viewModel = (RecreatableDomainObject)pojo;
         viewModel.__isis_recreate(memento);
     }
-    
+
     @Override
     public String memento(final Object pojo) {
         final RecreatableDomainObject recreatableDomainObject = (RecreatableDomainObject)pojo;

@@ -23,7 +23,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 public final class SpecUtils {
-    
+
     private SpecUtils(){}
 
     public static ObjectSpecification getSpecificationFor(
@@ -32,8 +32,8 @@ public final class SpecUtils {
         ObjectSpecification objectSpec = specificationLoader.lookupBySpecId(objectSpecId);
         if(objectSpec != null) {
             return objectSpec;
-        } 
-        
+        }
+
         // attempt to load directly.
         return specificationLoader.loadSpecification(objectSpecId.asString());
     }

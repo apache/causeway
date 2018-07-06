@@ -42,7 +42,7 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.IsisConverterLocator;
 public abstract class ObjectAdapterMementoProviderAbstract extends ChoiceProvider<ObjectAdapterMemento> {
 
     private static final long serialVersionUID = 1L;
-    
+
     protected static final String NULL_PLACEHOLDER = "$$_isis_null_$$";
     private static final String NULL_DISPLAY_TEXT = "";
 
@@ -53,7 +53,7 @@ public abstract class ObjectAdapterMementoProviderAbstract extends ChoiceProvide
         this.scalarModel = scalarModel;
         this.wicketViewerSettings = wicketViewerSettings;
     }
-    
+
     @Override
     public String getDisplayValue(final ObjectAdapterMemento choice) {
         if (choice == null) {
@@ -66,7 +66,7 @@ public abstract class ObjectAdapterMementoProviderAbstract extends ChoiceProvide
         final IConverter<Object> converter = findConverter(objectAdapter);
         return converter != null
                 ? converter.convertToString(objectAdapter.getObject(), getLocale())
-                : objectAdapter.titleString(null);
+                        : objectAdapter.titleString(null);
     }
 
     protected Locale getLocale() {
@@ -84,7 +84,7 @@ public abstract class ObjectAdapterMementoProviderAbstract extends ChoiceProvide
 
     @Override
     public void query(final String term, final int page, final org.wicketstuff.select2.Response<ObjectAdapterMemento> response) {
-        
+
         final List<ObjectAdapterMemento> mementos = Lists.newArrayList(obtainMementos(term));
         // if not mandatory, and the list doesn't contain null already, then add it in.
         if(!scalarModel.isRequired() && !mementos.contains(null)) {

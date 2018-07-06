@@ -25,7 +25,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 
 /**
  * Obtain autocompletion for each of the parameters of the action.
- * 
+ *
  * <p>
  * In the standard Apache Isis Programming Model, corresponds to invoking the
  * <tt>autoCompleteNXxx(..., String)</tt> support method for an action (where N is the 0-based

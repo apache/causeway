@@ -15,71 +15,71 @@ import org.apache.isis.core.plugins.classdiscovery.ClassDiscovery;
 import org.reflections.Reflections;
 
 /**
- * 
+ *
  * package private utility class
  *
  */
 class ReflectDiscovery implements ClassDiscovery {
-	
-	private final Reflections reflections;
-	
-	// -- CONSTRUCTORS
-	
-	public static ReflectDiscovery of(List<String> packagePrefixes) {
-		return new ReflectDiscovery(packagePrefixes);
-	}
 
-	public static ReflectDiscovery of(String packageNamePrefix) {
-		return new ReflectDiscovery(packageNamePrefix);
-	}
-	
-	public static ReflectDiscovery of(final Object... params) {
-		return new ReflectDiscovery(params);
-	}
-	
-	// -- HIDDEN CONSTRUCTOR
-	
-	private ReflectDiscovery(final Object... params) {
-		this.reflections = new Reflections(params);
-	}
-	
-	// -- IMPLEMENTATION
+    private final Reflections reflections;
 
-	@Override @NotNull
-	public Set<Class<?>> getTypesAnnotatedWith(Class<? extends Annotation> annotation) {
-		
-		Objects.requireNonNull(annotation);
+    // -- CONSTRUCTORS
 
-		// ensure unique entries
-		return streamTypesAnnotatedWith(annotation).collect(Collectors.toCollection(HashSet::new));
-	}
+    public static ReflectDiscovery of(List<String> packagePrefixes) {
+        return new ReflectDiscovery(packagePrefixes);
+    }
 
-	@Override @NotNull
-	public <T> Set<Class<? extends T>> getSubTypesOf(Class<T> type) {
-		
-		Objects.requireNonNull(type);
-		
-		// ensure unique entries
-		return streamSubTypesOf(type).collect(Collectors.toCollection(HashSet::new));
-	}
-	
-	// -- HELPER
-	
-	
-	private Stream<Class<?>> streamTypesAnnotatedWith(Class<? extends Annotation> annotation) {
-		
-		// ensure non-null elements
-		return _NullSafe.stream(reflections.getTypesAnnotatedWith(annotation))
-				.filter(_NullSafe::isPresent);
-	}
+    public static ReflectDiscovery of(String packageNamePrefix) {
+        return new ReflectDiscovery(packageNamePrefix);
+    }
 
-	private <T> Stream<Class<? extends T>> streamSubTypesOf(final Class<T> type) {
-		
-		// ensure non-null elements
-		return _NullSafe.stream(reflections.getSubTypesOf(type))
-				.filter(_NullSafe::isPresent);
-	}
+    public static ReflectDiscovery of(final Object... params) {
+        return new ReflectDiscovery(params);
+    }
+
+    // -- HIDDEN CONSTRUCTOR
+
+    private ReflectDiscovery(final Object... params) {
+        this.reflections = new Reflections(params);
+    }
+
+    // -- IMPLEMENTATION
+
+    @Override @NotNull
+    public Set<Class<?>> getTypesAnnotatedWith(Class<? extends Annotation> annotation) {
+
+        Objects.requireNonNull(annotation);
+
+        // ensure unique entries
+        return streamTypesAnnotatedWith(annotation).collect(Collectors.toCollection(HashSet::new));
+    }
+
+    @Override @NotNull
+    public <T> Set<Class<? extends T>> getSubTypesOf(Class<T> type) {
+
+        Objects.requireNonNull(type);
+
+        // ensure unique entries
+        return streamSubTypesOf(type).collect(Collectors.toCollection(HashSet::new));
+    }
+
+    // -- HELPER
 
 
-	
+    private Stream<Class<?>> streamTypesAnnotatedWith(Class<? extends Annotation> annotation) {
+
+        // ensure non-null elements
+        return _NullSafe.stream(reflections.getTypesAnnotatedWith(annotation))
+                .filter(_NullSafe::isPresent);
+    }
+
+    private <T> Stream<Class<? extends T>> streamSubTypesOf(final Class<T> type) {
+
+        // ensure non-null elements
+        return _NullSafe.stream(reflections.getSubTypesOf(type))
+                .filter(_NullSafe::isPresent);
+    }
+
+
+
 }

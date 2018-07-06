@@ -95,7 +95,7 @@ s     */
     enum CssClassFaPosition {
         LEFT, RIGHT
     }
-    
+
     // //////////////////////////////////////
 
     /**

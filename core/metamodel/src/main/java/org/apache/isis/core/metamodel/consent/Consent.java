@@ -33,11 +33,11 @@ public interface Consent {
 
     /**
      * Why consent is being vetoed.
-     * 
+     *
      * <p>
      * Will be non-<tt>null</tt> and non-empty if vetoed. Will be <tt>null</tt>
      * (<i>not</i> the empty string) if this is consent is is allowed.
-     * 
+     *
      * <p>
      * Will correspond to the {@link InteractionResult#getReason() reason} in
      * the contained {@link #getInteractionResult() InteractionResult} (if one
@@ -47,7 +47,7 @@ public interface Consent {
 
     /**
      * Description of the interaction that this consent represents.
-     * 
+     *
      * <p>
      * May be <tt>null</tt>.
      */
@@ -56,7 +56,7 @@ public interface Consent {
     /**
      * Allows the description of the interaction to which this consent relates
      * to be specified or refined.
-     * 
+     *
      * @param description
      * @return this consent
      */
@@ -64,9 +64,9 @@ public interface Consent {
 
     /**
      * The {@link InteractionResult} that created this {@link Consent}.
-     * 
+     *
      * @return - may be <tt>null</tt> if created as a legacy {@link Consent}.
-     * 
+     *
      */
     public InteractionResult getInteractionResult();
 

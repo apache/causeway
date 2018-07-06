@@ -38,7 +38,7 @@ public class Allow extends ConsentAbstract {
      * Called by DnD viewer; we should instead find a way to put the calling
      * logic into {@link Facet}s so that it is available for use by other
      * viewers.
-     * 
+     *
      * @see Veto
      * @deprecated
      * @param reasonVeteod

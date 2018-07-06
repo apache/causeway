@@ -94,7 +94,7 @@ public class FixturesInstallerFromConfiguration extends FixturesInstallerAbstrac
         boolean hasFixtures() {
             return fixtures != null && fixtures.length != 0;
         }
-        
+
 
         // -- fixturePrefix
 
@@ -111,7 +111,7 @@ public class FixturesInstallerFromConfiguration extends FixturesInstallerAbstrac
 
             this.fixturePrefix = fixturePrefix;
         }
-        
+
 
 
     }

@@ -69,8 +69,8 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
     }
 
     private static enum Mode {
-        REGULAR, 
-        PERSIST_LINK_ARGUMENTS, 
+        REGULAR,
+        PERSIST_LINK_ARGUMENTS,
         UPDATE_PROPERTIES_LINK_ARGUMENTS,
         EVENT_SERIALIZATION;
 
@@ -81,7 +81,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         public boolean isPersistLinkArgs() {
             return this == PERSIST_LINK_ARGUMENTS;
         }
-        
+
         public boolean isUpdatePropertiesLinkArgs() {
             return this == UPDATE_PROPERTIES_LINK_ARGUMENTS;
         }
@@ -135,7 +135,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         addMediaTypeParams(X_RO_DOMAIN_TYPE, domainTypeHref);
         return this;
     }
-    
+
     @Override
     public JsonRepresentation render() {
 
@@ -146,7 +146,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         final boolean isService = objectAdapter.getSpecification().isService();
 
         if (!(mode.isArgs())) {
-            
+
             // self, extensions.oid
             if (objectAdapter.representsPersistent()) {
                 if (includesSelf) {
@@ -154,11 +154,11 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
                 }
                 getExtensions().mapPut("oid", getOidStr());
             }
-            
+
             // title
             final String title = objectAdapter.titleString(null);
             representation.mapPut("title", title);
-            
+
             // serviceId or instance Id
             if (isService) {
                 representation.mapPut("serviceId", ServiceUtil.id(objectAdapter.getObject()));
@@ -168,7 +168,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
                 if (domainType != null) {
                     representation.mapPut("domainType", domainType);
                     representation.mapPut("instanceId", instanceId);
-                    
+
                 }
             }
         }
@@ -270,7 +270,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
     }
 
     private DomainObjectReprRenderer withMembers(final ObjectAdapter objectAdapter) {
-        final JsonRepresentation appendTo = 
+        final JsonRepresentation appendTo =
                 mode.isUpdatePropertiesLinkArgs() ? representation : JsonRepresentation.newMap();
         final List<ObjectAssociation> associations = objectAdapter.getSpecification().getAssociations(Contributed.INCLUDED);
 
@@ -322,8 +322,8 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
             final JsonRepresentation propertyValueRepresentation = renderer.render();
             final JsonRepresentation propertyRepr = rendererContext.objectPropertyValuesOnly()
                     ? propertyValueRepresentation.getRepresentation("value")
-                    : propertyValueRepresentation;
-            members.mapPut(assoc.getId(), propertyRepr);
+                            : propertyValueRepresentation;
+                    members.mapPut(assoc.getId(), propertyRepr);
         }
     }
 
@@ -365,7 +365,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
                 continue;
             }
             final LinkFollowSpecs linkFollowSpecs = getLinkFollowSpecs().follow("members["+action.getId()+"]");
-            
+
             final ObjectActionReprRenderer renderer = new ObjectActionReprRenderer(getRendererContext(), linkFollowSpecs, action.getId(), JsonRepresentation.newMap());
 
             renderer.with(new ObjectAndAction(objectAdapter, action)).usingLinkTo(linkToBuilder);

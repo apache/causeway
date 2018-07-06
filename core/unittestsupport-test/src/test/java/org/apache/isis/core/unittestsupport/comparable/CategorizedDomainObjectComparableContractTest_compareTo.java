@@ -25,18 +25,18 @@ public class CategorizedDomainObjectComparableContractTest_compareTo extends Com
     protected List<List<CategorizedDomainObject>> orderedTuples() {
         return listOf(
                 listOf(
-                        newObject(null, null), 
-                        newObject(1, null), 
-                        newObject(1, null), 
+                        newObject(null, null),
+                        newObject(1, null),
+                        newObject(1, null),
                         newObject(2, null)
-                        ), 
+                        ),
                 listOf(
-                        newObject(1, null), 
-                        newObject(1, 1), 
-                        newObject(1, 1), 
+                        newObject(1, null),
+                        newObject(1, 1),
+                        newObject(1, 1),
                         newObject(1, 2)
                         )
-            );
+                );
     }
 
     private CategorizedDomainObject newObject(Integer category, Integer subcategory) {

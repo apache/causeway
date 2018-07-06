@@ -57,7 +57,7 @@ public class LocalizerForIsis extends Localizer {
             final Locale locale,
             final String style,
             final IModel<String> defaultValue)
-            throws MissingResourceException {
+                    throws MissingResourceException {
 
         final String translated = translate(key, component);
         if(!Strings.isNullOrEmpty(translated) && !translated.equals(key)) {
@@ -73,24 +73,24 @@ public class LocalizerForIsis extends Localizer {
             return translate(key, context);
         } else {
             return getIsisSessionFactory().doInSession(new Callable<String>() {
-                    @Override
-                    public String call() throws Exception {
-                        return translate(key, context);
-                    }
-                });
+                @Override
+                public String call() throws Exception {
+                    return translate(key, context);
+                }
+            });
         }
     }
 
     private Class<?> determineContextClassElse(final Component component, final Class<?> fallback) {
         return component != null
                 ? determineContextClass(component)
-                : fallback;
+                        : fallback;
     }
 
     private Class<? > determineContextClass(final Component component) {
         // special case
         if(component instanceof org.wicketstuff.select2.Select2Choice ||
-           component instanceof org.wicketstuff.select2.Select2MultiChoice) {
+                component instanceof org.wicketstuff.select2.Select2MultiChoice) {
             return component.getClass();
         }
         final Component parentComponent = pageElseSignificantParentOf(component);

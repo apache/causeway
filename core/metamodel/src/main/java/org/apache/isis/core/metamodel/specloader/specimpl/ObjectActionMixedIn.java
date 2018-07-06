@@ -120,6 +120,7 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
         return mixedInType;
     }
 
+    @Override
     public int getParameterCount() {
         return mixinAction.getParameterCount();
     }
@@ -146,9 +147,9 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
 
             final ObjectActionParameterMixedIn mixedInParameter =
                     mixinParameter.getPeer().getFeatureType() == FeatureType.ACTION_PARAMETER_SCALAR
-                            ? new OneToOneActionParameterMixedIn(mixinParameter, this)
+                    ? new OneToOneActionParameterMixedIn(mixinParameter, this)
                             : new OneToManyActionParameterMixedIn(mixinParameter, this);
-            mixedInParameters.add(mixedInParameter);
+                    mixedInParameters.add(mixedInParameter);
         }
         return mixedInParameters;
     }
@@ -237,7 +238,7 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
     protected FacetHolder getFacetHolder() {
         return facetHolder;
     }
-    
+
 
     /* (non-Javadoc)
      * @see org.apache.isis.core.metamodel.specloader.specimpl.ObjectMemberAbstract#getIdentifier()

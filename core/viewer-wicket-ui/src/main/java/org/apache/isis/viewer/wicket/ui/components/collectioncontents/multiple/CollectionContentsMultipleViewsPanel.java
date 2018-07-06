@@ -45,7 +45,7 @@ import java.util.List;
  * view for a backing {@link EntityCollectionModel}.
  */
 public class CollectionContentsMultipleViewsPanel
-        extends PanelAbstract<EntityCollectionModel> implements CollectionCountProvider {
+extends PanelAbstract<EntityCollectionModel> implements CollectionCountProvider {
 
     private static final long serialVersionUID = 1L;
 
@@ -71,11 +71,11 @@ public class CollectionContentsMultipleViewsPanel
 
         final ComponentHintKey selectedItemSessionAttribute =
                 entityModel != null
-                        ? ComponentHintKey.<String>create(this, EntityCollectionModel.HINT_KEY_SELECTED_ITEM)
+                ? ComponentHintKey.<String>create(this, EntityCollectionModel.HINT_KEY_SELECTED_ITEM)
                         : null;
 
-        selectorHelper = new CollectionSelectorHelper(
-                model, getComponentFactoryRegistry(), selectedItemSessionAttribute);
+                selectorHelper = new CollectionSelectorHelper(
+                        model, getComponentFactoryRegistry(), selectedItemSessionAttribute);
     }
 
     /**

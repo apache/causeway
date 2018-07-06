@@ -39,11 +39,11 @@ public class BookmarkHolder_lookup {
     @Action(
             domainEvent = ActionDomainEvent.class,
             semantics = SemanticsOf.SAFE
-    )
+            )
     @ActionLayout(
             contributed = Contributed.AS_ACTION,
             cssClassFa = "fa-bookmark"
-    )
+            )
     public Object act() {
         return bookmarkService.lookup(bookmarkHolder);
     }

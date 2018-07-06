@@ -60,7 +60,7 @@ public class BigDecimalDerivedFromJdoColumnAnnotationFacetFactory extends FacetF
         if(BigDecimal.class != processMethodContext.getMethod().getReturnType()) {
             return;
         }
-        
+
         final FacetedMethod holder = processMethodContext.getFacetHolder();
 
         BigDecimalValueFacet existingFacet = (BigDecimalValueFacet) holder.getFacet(BigDecimalValueFacet.class);
@@ -75,7 +75,7 @@ public class BigDecimalDerivedFromJdoColumnAnnotationFacetFactory extends FacetF
                 FacetUtil.addFacet(facet);
             }
         } else {
-            
+
             // obtain the existing facet's length and scale, to use as defaults if none are specified on the @Column
             // this will mean a metamodel validation exception will only be fired later (see #refineMetaModelValidator)
             // if there was an *explicit* value defined on the @Column annotation that is incompatible with existing.
@@ -85,7 +85,7 @@ public class BigDecimalDerivedFromJdoColumnAnnotationFacetFactory extends FacetF
                 existingLength = existingFacet.getLength();
                 existingScale = existingFacet.getScale();
             }
-            
+
             Integer length = valueElseDefaults(jdoColumnAnnotation.length(), existingLength, DEFAULT_LENGTH);
             Integer scale = valueElseDefaults(jdoColumnAnnotation.scale(), existingScale, DEFAULT_SCALE);
             final BigDecimalValueFacet facet = new BigDecimalFacetDerivedFromJdoColumn(holder, length, scale);
@@ -96,9 +96,9 @@ public class BigDecimalDerivedFromJdoColumnAnnotationFacetFactory extends FacetF
     private final static Integer valueElseDefaults(final int value, final Integer underlying, int defaultVal) {
         return value != -1
                 ? value
-                : underlying != null
-                    ? underlying
-                    : defaultVal;
+                        : underlying != null
+                        ? underlying
+                                : defaultVal;
     }
 
 
@@ -117,21 +117,21 @@ public class BigDecimalDerivedFromJdoColumnAnnotationFacetFactory extends FacetF
             }
 
             private void validate(ObjectSpecification objectSpec, ValidationFailures validationFailures) {
-                
+
                 // only consider persistent entities
                 final JdoPersistenceCapableFacet pcFacet = objectSpec.getFacet(JdoPersistenceCapableFacet.class);
                 if(pcFacet==null || pcFacet.getIdentityType() == IdentityType.NONDURABLE) {
                     return;
                 }
-                
+
                 final List<ObjectAssociation> associations = objectSpec.getAssociations(Contributed.EXCLUDED, ObjectAssociation.Predicates.PROPERTIES);
                 for (ObjectAssociation association : associations) {
-                    
+
                     // skip checks if annotated with JDO @NotPersistent
                     if(association.containsDoOpFacet(JdoNotPersistentFacet.class)) {
                         return;
                     }
-                    
+
                     validateBigDecimalValueFacet(association, validationFailures);
                 }
             }
@@ -141,14 +141,14 @@ public class BigDecimalDerivedFromJdoColumnAnnotationFacetFactory extends FacetF
                 if(facet == null) {
                     return;
                 }
-                
+
                 BigDecimalValueFacet underlying = (BigDecimalValueFacet) facet.getUnderlyingFacet();
                 if(underlying == null) {
                     return;
-                } 
-                
+                }
+
                 if(facet instanceof BigDecimalFacetDerivedFromJdoColumn) {
-                    
+
                     if(underlying instanceof BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotation) {
 
                         if(notNullButNotEqual(facet.getLength(), underlying.getLength())) {
@@ -156,7 +156,7 @@ public class BigDecimalDerivedFromJdoColumnAnnotationFacetFactory extends FacetF
                                     "%s: @javax.jdo.annotations.Column(length=...) different from @javax.validation.constraint.Digits(...); should equal the sum of its integer and fraction attributes",
                                     association.getIdentifier().toClassAndNameIdentityString());
                         }
-    
+
                         if(notNullButNotEqual(facet.getScale(), underlying.getScale())) {
                             validationFailures.add(
                                     "%s: @javax.jdo.annotations.Column(scale=...) different from @javax.validation.constraint.Digits(fraction=...)",
@@ -172,5 +172,5 @@ public class BigDecimalDerivedFromJdoColumnAnnotationFacetFactory extends FacetF
         };
     }
 
-    
+
 }

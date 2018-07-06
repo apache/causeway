@@ -67,7 +67,7 @@ public class ActionParameterAutoCompleteFacetViaMethod extends ActionParameterAu
     public List<Method> getMethods() {
         return Collections.singletonList(method);
     }
-    
+
     @Override
     public Intent getIntent(final Method method) {
         return Intent.CHOICES_OR_AUTOCOMPLETE;
@@ -97,8 +97,8 @@ public class ActionParameterAutoCompleteFacetViaMethod extends ActionParameterAu
                 ObjectAdapter.Util.visibleAdapters(
                         collectionAdapter,
                         interactionInitiatedBy);
-        final List<Object> visibleObjects = 
-        		_Lists.transform(visibleAdapters, ObjectAdapter.Functions.getObject());
+        final List<Object> visibleObjects =
+                _Lists.transform(visibleAdapters, ObjectAdapter.Functions.getObject());
 
         final ObjectSpecification parameterSpec = getSpecification(parameterType);
         return CollectionUtils.getCollectionAsObjectArray(visibleObjects, parameterSpec, getAdapterManager());

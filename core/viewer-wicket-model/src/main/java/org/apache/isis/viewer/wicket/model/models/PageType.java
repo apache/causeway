@@ -23,7 +23,7 @@ package org.apache.isis.viewer.wicket.model.models;
 
 /**
  * Enumerates the different types of pages that can be rendered.
- * 
+ *
  * <p>
  * Is used by {@link PageClassRegistry} to lookup the concrete page to render
  * different types of pages. This allows the large-scale structure of page
@@ -34,9 +34,9 @@ public enum PageType {
     SIGN_UP,
     SIGN_UP_VERIFY,
     PASSWORD_RESET,
-    HOME, 
-    ABOUT, 
-    ENTITY, 
+    HOME,
+    ABOUT,
+    ENTITY,
     ACTION_PROMPT,
     STANDALONE_COLLECTION,
     VALUE,

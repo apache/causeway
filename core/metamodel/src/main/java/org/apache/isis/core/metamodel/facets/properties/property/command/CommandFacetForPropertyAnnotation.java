@@ -52,26 +52,26 @@ public class CommandFacetForPropertyAnnotation extends CommandFacetAbstract {
 
                     final Class<? extends CommandDtoProcessor> processorClass =
                             property != null ? property.commandDtoProcessor() : null;
-                    final CommandDtoProcessor processor = newProcessorElseNull(processorClass);
+                            final CommandDtoProcessor processor = newProcessorElseNull(processorClass);
 
-                    if(processor != null) {
-                        command = CommandReification.ENABLED;
-                    }
-                    switch (command) {
-                    case AS_CONFIGURED:
-                        switch (setting) {
-                        case NONE:
-                            return null;
-                        default:
-                            return (CommandFacet)new CommandFacetForPropertyAnnotationAsConfigured(commandPersistence,
-                                    commandExecuteIn, Enablement.ENABLED, holder, servicesInjector);
-                        }
-                    case DISABLED:
-                        return null;
-                    case ENABLED:
-                        return new CommandFacetForPropertyAnnotation(commandPersistence, commandExecuteIn, Enablement.ENABLED, holder, processor, servicesInjector);
-                    }
-                    throw new IllegalStateException("command '" + command + "' not recognised");
+                            if(processor != null) {
+                                command = CommandReification.ENABLED;
+                            }
+                            switch (command) {
+                            case AS_CONFIGURED:
+                                switch (setting) {
+                                case NONE:
+                                    return null;
+                                default:
+                                    return (CommandFacet)new CommandFacetForPropertyAnnotationAsConfigured(commandPersistence,
+                                            commandExecuteIn, Enablement.ENABLED, holder, servicesInjector);
+                                }
+                            case DISABLED:
+                                return null;
+                            case ENABLED:
+                                return new CommandFacetForPropertyAnnotation(commandPersistence, commandExecuteIn, Enablement.ENABLED, holder, processor, servicesInjector);
+                            }
+                            throw new IllegalStateException("command '" + command + "' not recognised");
                 })
                 .orElseGet(() -> {
                     switch (setting) {

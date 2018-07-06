@@ -33,7 +33,7 @@ import org.apache.isis.viewer.restfulobjects.applib.util.UrlEncodingUtils;
 
 /**
  * Configures the body, query string etc of a {@link ClientRequest}.
- * 
+ *
  * <p>
  * Needed because, unfortunately, {@link ClientRequest} does not seem to allow
  * the query string to be set directly (only
@@ -44,8 +44,8 @@ import org.apache.isis.viewer.restfulobjects.applib.util.UrlEncodingUtils;
 public class ClientRequestConfigurer {
 
     public static ClientRequestConfigurer create(
-    		final ClientExecutor executor, 
-    		final String uriTemplate) 
+            final ClientExecutor executor,
+            final String uriTemplate)
     {
         final UriBuilder uriBuilder = UriBuilderPlugin.get().uriTemplate(uriTemplate);
         final ClientRequest clientRequest = executor.createRequest(uriBuilder);
@@ -81,7 +81,7 @@ public class ClientRequestConfigurer {
 
     /**
      * Used when creating a request with arguments to execute.
-     * 
+     *
      * <p>
      * Typical flow is:
      * <ul>
@@ -150,15 +150,15 @@ public class ClientRequestConfigurer {
      * {@link RestfulHttpMethod#setUpArgs(ClientRequestConfigurer, JsonRepresentation)}
      */
     public ClientRequestConfigurer queryArgs(final JsonRepresentation requestArgs) {
-    	
-    	requestArgs.streamMapEntries()
-    	.forEach(entry->{
-    		final String param = entry.getKey();
+
+        requestArgs.streamMapEntries()
+        .forEach(entry->{
+            final String param = entry.getKey();
             final JsonRepresentation argRepr = entry.getValue();
             final String arg = UrlEncodingUtils.urlEncode(argRepr.asArg());
             clientRequest.addQueryParameter(param, arg);
-    	});
-    	
+        });
+
         return this;
     }
 

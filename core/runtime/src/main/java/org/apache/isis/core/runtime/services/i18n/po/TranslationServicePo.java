@@ -38,7 +38,7 @@ import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
-)
+        )
 public class TranslationServicePo implements TranslationService {
 
     public static Logger LOG = LoggerFactory.getLogger(TranslationServicePo.class);
@@ -61,22 +61,22 @@ public class TranslationServicePo implements TranslationService {
     @PostConstruct
     public void init(final Map<String,String> config) {
 
-    	final String translationMode = config.get(KEY_PO_MODE);
-    	
+        final String translationMode = config.get(KEY_PO_MODE);
+
         final boolean translationDisabled = TranslationService.Mode.DISABLED.matches(translationMode);
         if(translationDisabled) {
             // switch to disabled mode
-        	po = new PoDisabled(this);
-        	return;
+            po = new PoDisabled(this);
+            return;
         }
-    	
+
         if(getLocaleProvider() == null || getTranslationsResolver() == null) {
             // remain in write mode
             return;
         }
 
         final boolean prototypeOrTest = isPrototypeOrTest();
-        
+
         final boolean forceRead = TranslationService.Mode.READ.matches(translationMode);
 
         if(prototypeOrTest && !forceRead) {
@@ -99,7 +99,7 @@ public class TranslationServicePo implements TranslationService {
     public void shutdown() {
         po.shutdown();
     }
-    
+
 
 
     @Override

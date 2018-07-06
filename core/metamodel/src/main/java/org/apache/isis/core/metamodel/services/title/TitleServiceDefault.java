@@ -30,7 +30,7 @@ import org.apache.isis.core.metamodel.services.persistsession.PersistenceSession
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
-)
+        )
 public class TitleServiceDefault implements TitleService {
 
     @Programmatic

@@ -27,8 +27,8 @@ import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSem
 public class Jdk8LocalDateTimeValueFacetUsingSemanticsProviderFactory extends ValueFacetUsingSemanticsProviderFactory<LocalDateTime> {
 
     public Jdk8LocalDateTimeValueFacetUsingSemanticsProviderFactory() {
-     // as per inherited DateTimeValueSemanticsProvider#facetType
-        super(); 
+        // as per inherited DateTimeValueSemanticsProvider#facetType
+        super();
     }
 
     @Override

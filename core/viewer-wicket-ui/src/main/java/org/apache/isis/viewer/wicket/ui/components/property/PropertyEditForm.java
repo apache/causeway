@@ -64,16 +64,16 @@ class PropertyEditForm extends PromptFormAbstract<ScalarModel> {
     private ScalarPanelAbstract2 newParamPanel(final WebMarkupContainer container, final IModel<?> model) {
 
         final Component component = getComponentFactoryRegistry()
-                        .addOrReplaceComponent(container, ComponentType.SCALAR_NAME_AND_VALUE, model);
+                .addOrReplaceComponent(container, ComponentType.SCALAR_NAME_AND_VALUE, model);
         final ScalarPanelAbstract2 paramPanel =
                 component instanceof ScalarPanelAbstract2
-                        ? (ScalarPanelAbstract2) component
+                ? (ScalarPanelAbstract2) component
                         : null;
-        if (paramPanel != null) {
-            paramPanel.setOutputMarkupId(true);
-            paramPanel.notifyOnChange(this);
-        }
-        return paramPanel;
+                if (paramPanel != null) {
+                    paramPanel.setOutputMarkupId(true);
+                    paramPanel.notifyOnChange(this);
+                }
+                return paramPanel;
     }
 
     @Override
@@ -104,6 +104,7 @@ class PropertyEditForm extends PromptFormAbstract<ScalarModel> {
         super.onCancelSubmitted(target);
     }
 
+    @Override
     protected FormExecutorStrategy<ScalarModel> getFormExecutorStrategy() {
         ScalarModel scalarModel = getScalarModel();
         return new PropertyFormExecutorStrategy(scalarModel);

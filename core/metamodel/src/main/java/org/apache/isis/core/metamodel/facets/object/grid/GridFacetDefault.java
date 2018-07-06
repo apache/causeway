@@ -29,8 +29,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public class GridFacetDefault
-            extends FacetAbstract
-            implements GridFacet {
+extends FacetAbstract
+implements GridFacet {
 
     private static final Logger LOG = LoggerFactory.getLogger(GridFacetDefault.class);
 
@@ -57,6 +57,7 @@ public class GridFacetDefault
         this.gridService = gridService;
     }
 
+    @Override
     public Grid getGrid() {
         if (!gridService.supportsReloading() && this.grid != null) {
             return this.grid;

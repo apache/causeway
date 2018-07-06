@@ -41,14 +41,14 @@ public class MustSatisfySpecificationFacetForPropertyAnnotation extends MustSati
         List<Specification> specifications = properties.stream()
                 .map(Property::mustSatisfy)
                 .flatMap(classes ->
-                        Arrays.stream(classes)
-                              .map(MustSatisfySpecificationFacetAbstract::newSpecificationElseNull)
-                              .filter(Objects::nonNull)
-                )
+                Arrays.stream(classes)
+                .map(MustSatisfySpecificationFacetAbstract::newSpecificationElseNull)
+                .filter(Objects::nonNull)
+                        )
                 .collect(Collectors.toList());
         return specifications.size() > 0
                 ? new MustSatisfySpecificationFacetForPropertyAnnotation(specifications, holder, servicesInjector)
-                : null;
+                        : null;
     }
 
     private MustSatisfySpecificationFacetForPropertyAnnotation(final List<Specification> specifications, final FacetHolder holder, final ServicesInjector servicesInjector) {

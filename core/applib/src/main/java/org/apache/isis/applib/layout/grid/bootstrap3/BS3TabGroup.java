@@ -34,10 +34,10 @@ import org.apache.isis.commons.internal.collections._Lists;
 @XmlType(
         name = "tabGroup"
         , propOrder = {
-            "tabs",
-            "metadataError"
+                "tabs",
+                "metadataError"
         }
-)
+        )
 public class BS3TabGroup extends BS3ElementAbstract implements BS3TabOwner {
 
     private static final long serialVersionUID = 1L;
@@ -82,6 +82,7 @@ public class BS3TabGroup extends BS3ElementAbstract implements BS3TabOwner {
     private List<BS3Tab> tabs = _Lists.newArrayList();
 
     // no wrapper; required=false because may be auto-generated
+    @Override
     @XmlElement(name = "tab", required = false)
     public List<BS3Tab> getTabs() {
         return tabs;

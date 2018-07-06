@@ -32,7 +32,7 @@ import org.apache.isis.core.metamodel.facets.object.parseable.InvalidEntryExcept
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 
-public class JavaSqlTimeStampValueSemanticsProvider 
+public class JavaSqlTimeStampValueSemanticsProvider
 extends TimeStampValueSemanticsProviderAbstract<java.sql.Timestamp> {
 
     public static final boolean isAPropertyDefaultFacet() {

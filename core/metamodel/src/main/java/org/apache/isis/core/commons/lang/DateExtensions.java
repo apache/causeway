@@ -24,7 +24,7 @@ import java.util.Date;
 
 
 public final class DateExtensions {
-    
+
     private DateExtensions(){}
 
     public static String asTimestamp(final Date date) {

@@ -93,7 +93,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
      */
     List<ObjectActionParameter> parameters;
 
-    
+
 
     // -- constructors
 
@@ -103,7 +103,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
         super(facetedMethod, FeatureType.ACTION, servicesInjector);
     }
 
-    
+
 
     // -- ReturnType, OnType, Actions (set)
     /**
@@ -146,7 +146,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
         return facet != null? facet.value(): SemanticsOf.NON_IDEMPOTENT;
     }
 
-    
+
 
     // -- Type
     @Override
@@ -161,7 +161,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
         }
         return ActionType.USER;
     }
-    
+
 
     // -- Parameters
 
@@ -173,7 +173,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
 
     /**
      * Build lazily by {@link #getParameters()}.
-     * 
+     *
      * <p>
      * Although this is lazily loaded, the method is also <tt>synchronized</tt>
      * so there shouldn't be any thread race conditions.
@@ -204,10 +204,10 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
             // previously we threw an exception here if the specification represented a collection.  No longer!
             final ObjectActionParameter parameter =
                     paramPeer.getFeatureType() == FeatureType.ACTION_PARAMETER_SCALAR
-                            ? new OneToOneActionParameterDefault(paramNum, this, paramPeer)
+                    ? new OneToOneActionParameterDefault(paramNum, this, paramPeer)
                             : new OneToManyActionParameterDefault(paramNum, this, paramPeer);
 
-            parameters.add(parameter);
+                    parameters.add(parameter);
         }
         return parameters;
     }
@@ -266,7 +266,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
         return parameters.get(position);
     }
 
-    
+
 
     // -- visable, usable
 
@@ -283,7 +283,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
             Where where) {
         return new ActionUsabilityContext(targetObjectAdapter, this, getIdentifier(), interactionInitiatedBy, where);
     }
-    
+
 
     // -- validate
 
@@ -315,7 +315,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
                 final ValidityContext<?> ic =
                         actionParameters.get(i).createProposedArgumentInteractionContext(
                                 objectAdapter, proposedArguments, i, interactionInitiatedBy
-                        );
+                                );
                 InteractionUtils.isValidResultSet(getParameter(i), ic, resultSet);
             }
         }
@@ -339,7 +339,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
                 interactionInitiatedBy);
     }
 
-    
+
 
     // -- executeWithRuleChecking, execute
 
@@ -407,7 +407,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
     }
 
 
-    
+
 
     // -- defaults
 
@@ -482,7 +482,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
     }
 
 
-    
+
 
     // -- choices
 
@@ -604,18 +604,18 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
         final CommandDtoServiceInternal commandDtoServiceInternal = getCommandDtoService();
         final List<ObjectAdapter> commandTargetAdapters =
                 commandTargetAdaptersHolder.get() != null
-                        ? commandTargetAdaptersHolder.get()
+                ? commandTargetAdaptersHolder.get()
                         : Collections.singletonList(targetAdapter);
 
-        final CommandDto dto = commandDtoServiceInternal.asCommandDto(
-                commandTargetAdapters, this, argumentAdapters);
+                final CommandDto dto = commandDtoServiceInternal.asCommandDto(
+                        commandTargetAdapters, this, argumentAdapters);
 
-        setupCommandDtoAndExecutionContext(dto);
+                setupCommandDtoAndExecutionContext(dto);
 
     }
 
 
-    
+
 
     // -- toString
 
@@ -639,7 +639,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
         return sb.toString();
     }
 
-    
+
 
     // -- services (lookup)
 
@@ -648,7 +648,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
         return lookupService(org.apache.isis.applib.services.actinvoc.ActionInvocationContext.class);
     }
 
-    
+
 
 
 }

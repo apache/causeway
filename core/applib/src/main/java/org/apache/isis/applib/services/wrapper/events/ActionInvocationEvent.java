@@ -24,11 +24,11 @@ import org.apache.isis.applib.Identifier;
 /**
  * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents a check as to whether a particular argument for an action is valid
  * or not.
- * 
+ *
  * <p>
  * If {@link #getReason()} is not <tt>null</tt> then provides the reason why the
  * set of arguments are invalid; otherwise the arguments are valid.
- * 
+ *
  * <p>
  * Called after each of the {@link ActionArgumentEvent}s.
  */

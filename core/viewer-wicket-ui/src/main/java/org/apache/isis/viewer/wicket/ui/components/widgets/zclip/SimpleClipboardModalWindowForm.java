@@ -21,9 +21,9 @@ import org.apache.isis.viewer.wicket.ui.panels.FormAbstract;
 public class SimpleClipboardModalWindowForm extends FormAbstract<String> {
 
     private static final long serialVersionUID = 1L;
-    
+
     public SimpleClipboardModalWindowForm(String id) {
         super(id);
     }
-    
+
 }

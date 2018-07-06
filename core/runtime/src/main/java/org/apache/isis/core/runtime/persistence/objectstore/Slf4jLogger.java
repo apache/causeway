@@ -24,9 +24,9 @@ import org.slf4j.LoggerFactory;
 
 
 public abstract class Slf4jLogger {
-    
+
     public static final String PROPERTY_ROOT = "isis.logging.";
-    
+
     enum LogLevel {
         TRACE,
         DEBUG,
@@ -63,21 +63,21 @@ public abstract class Slf4jLogger {
 
     protected void doLog(Logger logger, LogLevel level, String format, Object... argArray) {
         switch (level) {
-            case TRACE:
-                logger.trace(format, argArray);
-                break;
-            case DEBUG:
-                logger.debug(format, argArray);
-                break;
-            case INFO:
-                logger.info(format, argArray);
-                break;
-            case WARN:
-                logger.warn(format, argArray);
-                break;
-            case ERROR:
-                logger.error(format, argArray);
-                break;
+        case TRACE:
+            logger.trace(format, argArray);
+            break;
+        case DEBUG:
+            logger.debug(format, argArray);
+            break;
+        case INFO:
+            logger.info(format, argArray);
+            break;
+        case WARN:
+            logger.warn(format, argArray);
+            break;
+        case ERROR:
+            logger.error(format, argArray);
+            break;
         }
     }
 

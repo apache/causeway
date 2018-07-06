@@ -48,7 +48,7 @@ import org.slf4j.LoggerFactory;
  * must be annotated using {@link Programmatic}.
  * </p>
  */
-public class PersistenceSessionFactory4 implements 
+public class PersistenceSessionFactory4 implements
 PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstalledFlag {
 
     private static final Logger LOG = LoggerFactory.getLogger(PersistenceSessionFactory4.class);
@@ -162,15 +162,16 @@ PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstalledFlag {
         if(!isInitialized()) {
             return;
         }
-    	if(applicationComponents != null) {
-    		applicationComponents.shutdown();
+        if(applicationComponents != null) {
+            applicationComponents.shutdown();
             applicationComponents = null;
-    	}
+        }
     }
 
     /**
      * Called by {@link org.apache.isis.core.runtime.system.session.IsisSessionFactory#openSession(AuthenticationSession)}.
      */
+    @Override
     @Programmatic
     public PersistenceSession createPersistenceSession(
             final ServicesInjector servicesInjector,

@@ -5,9 +5,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -91,63 +91,65 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
 
         final ActionLink link =
                 new ActionLink(linkId, actionModel, action) {
-                    private static final long serialVersionUID = 1L;
+            private static final long serialVersionUID = 1L;
 
-                    protected void doOnClick(final AjaxRequestTarget target) {
+            @Override
+            protected void doOnClick(final AjaxRequestTarget target) {
 
-                        if(toggledMementosProviderIfAny != null) {
+                if(toggledMementosProviderIfAny != null) {
 
-                            final PersistenceSession persistenceSession = getIsisSessionFactory()
-                                    .getCurrentSession().getPersistenceSession();
-                            final SpecificationLoader specificationLoader =
-                                    getIsisSessionFactory().getSpecificationLoader();
+                    final PersistenceSession persistenceSession = getIsisSessionFactory()
+                            .getCurrentSession().getPersistenceSession();
+                    final SpecificationLoader specificationLoader =
+                            getIsisSessionFactory().getSpecificationLoader();
 
-                            final List<ObjectAdapterMemento> selectedMementos =
-                                    toggledMementosProviderIfAny.getToggles();
+                    final List<ObjectAdapterMemento> selectedMementos =
+                            toggledMementosProviderIfAny.getToggles();
 
-                            final ImmutableList<Object> selectedPojos = FluentIterable.from(selectedMementos)
-                                    .transform(new Function<ObjectAdapterMemento, Object>() {
-                                        @Nullable @Override
-                                        public Object apply(@Nullable final ObjectAdapterMemento input) {
-                                            if(input == null) {
-                                                return null;
-                                            }
-                                            final ObjectAdapter objectAdapter = input.getObjectAdapter(
-                                                    AdapterManager.ConcurrencyChecking.NO_CHECK,
-                                                    persistenceSession, specificationLoader);
-                                            return objectAdapter != null ? objectAdapter.getObject() : null;
-                                        }
-                                    })
-                                    .filter(Predicates.notNull())
-                                    .toList();
-
-                            final ActionPrompt actionPrompt = ActionParameterDefaultsFacetFromAssociatedCollection.withSelected(
-                                    selectedPojos,
-                                    new ActionParameterDefaultsFacetFromAssociatedCollection.SerializableRunnable<ActionPrompt>() {
-                                        public ActionPrompt call() {
-                                            return performOnClick(target);
-                                        }
+                    final ImmutableList<Object> selectedPojos = FluentIterable.from(selectedMementos)
+                            .transform(new Function<ObjectAdapterMemento, Object>() {
+                                @Nullable @Override
+                                public Object apply(@Nullable final ObjectAdapterMemento input) {
+                                    if(input == null) {
+                                        return null;
                                     }
-                            );
-                            if(actionPrompt != null) {
-                                actionPrompt.setOnClose(new ActionPrompt.CloseHandler() {
-                                    @Override
-                                    public void close(final AjaxRequestTarget target) {
-                                        toggledMementosProviderIfAny.clearToggles(target);
-                                    }
-                                });
+                                    final ObjectAdapter objectAdapter = input.getObjectAdapter(
+                                            AdapterManager.ConcurrencyChecking.NO_CHECK,
+                                            persistenceSession, specificationLoader);
+                                    return objectAdapter != null ? objectAdapter.getObject() : null;
+                                }
+                            })
+                            .filter(Predicates.notNull())
+                            .toList();
+
+                    final ActionPrompt actionPrompt = ActionParameterDefaultsFacetFromAssociatedCollection.withSelected(
+                            selectedPojos,
+                            new ActionParameterDefaultsFacetFromAssociatedCollection.SerializableRunnable<ActionPrompt>() {
+                                @Override
+                                public ActionPrompt call() {
+                                    return performOnClick(target);
+                                }
                             }
-
-                        } else {
-                            performOnClick(target);
-                        }
+                            );
+                    if(actionPrompt != null) {
+                        actionPrompt.setOnClose(new ActionPrompt.CloseHandler() {
+                            @Override
+                            public void close(final AjaxRequestTarget target) {
+                                toggledMementosProviderIfAny.clearToggles(target);
+                            }
+                        });
                     }
 
-                    private ActionPrompt performOnClick(final AjaxRequestTarget target) {
-                        return ActionLinkFactoryAbstract.this.onClick(this, target);
-                    }
+                } else {
+                    performOnClick(target);
+                }
+            }
 
-                };
+            private ActionPrompt performOnClick(final AjaxRequestTarget target) {
+                return ActionLinkFactoryAbstract.this.onClick(this, target);
+            }
+
+        };
 
         link.add(new CssClassAppender("noVeil"));
         return link;
@@ -243,7 +245,7 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
                                             return new EntityPage(targetAdapter, null);
                                         }
                                     }
-                            );
+                                    );
 
                     getIsisSessionFactory().getCurrentSession().getPersistenceSession().getTransactionManager().flushTransaction();
 
@@ -287,7 +289,7 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
     private InlinePromptContext determineInlinePromptContext() {
         return scalarModelForAssociationIfAny != null
                 ? scalarModelForAssociationIfAny.getInlinePromptContext()
-                : null;
+                        : null;
     }
 
 
@@ -309,6 +311,6 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
         return IsisContext.getSessionFactory();
     }
 
-    
+
 
 }

@@ -38,7 +38,7 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel
  * A page used for resetting the password of an user.
  */
 public class PasswordResetPage extends AccountManagementPageAbstract {
-    
+
     private static final long serialVersionUID = 1L;
 
     private static final String ID_CONTENT_PANEL = "passwordResetPanel";

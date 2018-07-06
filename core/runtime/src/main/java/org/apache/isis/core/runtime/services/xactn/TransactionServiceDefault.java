@@ -34,7 +34,7 @@ import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
-)
+        )
 public class TransactionServiceDefault implements TransactionService {
 
 
@@ -75,7 +75,7 @@ public class TransactionServiceDefault implements TransactionService {
                 persistenceSessionServiceInternal.abortTransaction();
                 final Transaction currentTransaction = currentTransaction();
                 if(currentTransaction instanceof IsisTransaction) {
-                	((IsisTransaction)currentTransaction).clearAbortCause();
+                    ((IsisTransaction)currentTransaction).clearAbortCause();
                 }
                 break;
             }
@@ -93,11 +93,11 @@ public class TransactionServiceDefault implements TransactionService {
     public Transaction currentTransaction() {
         return persistenceSessionServiceInternal.currentTransaction();
     }
-    
-	@Override
-	public CountDownLatch currentTransactionLatch() {
-    	return persistenceSessionServiceInternal.currentTransactionLatch(); 
-	}
+
+    @Override
+    public CountDownLatch currentTransactionLatch() {
+        return persistenceSessionServiceInternal.currentTransactionLatch();
+    }
 
     @Override
     public TransactionState getTransactionState() {

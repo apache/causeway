@@ -70,7 +70,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
-)
+        )
 public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
 
     public static final String TNS = "http://isis.apache.org/applib/layout/grid/bootstrap3";
@@ -177,9 +177,9 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
         final Map<String, ObjectAction> objectActionById =
                 ObjectMember.Util.mapById(
                         FluentIterable
-                            .from(objectSpec.getObjectActions(Contributed.INCLUDED))
-                            .filter((Predicate) ObjectAction.Predicates.notBulkOnly())
-                            .toList());
+                        .from(objectSpec.getObjectActions(Contributed.INCLUDED))
+                        .filter((Predicate) ObjectAction.Predicates.notBulkOnly())
+                        .toList());
 
         final BS3Grid bs3Grid = (BS3Grid) grid;
 
@@ -404,13 +404,13 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
                             }
                         })
                         .filter(Predicates.<OneToOneAssociation>notNull())
-                );
+                        );
 
                 Collections.sort(associations, ObjectMember.Comparators.byMemberOrderSequence());
                 addPropertiesTo(fieldSet,
                         FluentIterable.from(associations)
-                                      .transform(ObjectAssociation.Functions.toId())
-                                      .toList(),
+                        .transform(ObjectAssociation.Functions.toId())
+                        .toList(),
                         propertyLayoutDataById);
             }
 
@@ -442,7 +442,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
                     })
                     .toSortedList(ObjectMember.Comparators.byMemberOrderSequence())
 
-            );
+                    );
             final ImmutableList<String> sortedMissingCollectionIds = FluentIterable.from(sortedCollections)
                     .transform(ObjectAssociation.Functions.toId()).toList();
             final BS3TabGroup bs3TabGroup = tabGroupForUnreferencedCollectionsRef.get();
@@ -466,12 +466,12 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
 
         List<ObjectAction> sortedPossiblyMissingActions = Lists.newArrayList(
                 FluentIterable.from(possiblyMissingActionIds)
-                        .transform(new Function<String, ObjectAction>() {
-                            @Nullable @Override public ObjectAction apply(@Nullable final String actionId) {
-                                return objectActionById.get(actionId);
-                            }
-                        })
-                        .toSortedList(ObjectMember.Comparators.byMemberOrderSequence()));
+                .transform(new Function<String, ObjectAction>() {
+                    @Nullable @Override public ObjectAction apply(@Nullable final String actionId) {
+                        return objectActionById.get(actionId);
+                    }
+                })
+                .toSortedList(ObjectMember.Comparators.byMemberOrderSequence()));
 
         List<String> sortedPossiblyMissingActionIds =
                 FluentIterable.from(sortedPossiblyMissingActions)
@@ -507,7 +507,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
                         owner = position == ActionLayout.Position.PANEL ||
                                 position == ActionLayout.Position.PANEL_DROPDOWN
                                 ? propertyLayoutData.getOwner()
-                                : propertyLayoutData;
+                                        : propertyLayoutData;
                     } else {
                         position = ActionLayout.Position.BELOW;
                         owner = propertyLayoutData;

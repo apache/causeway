@@ -30,26 +30,30 @@ import org.apache.isis.commons.internal.collections._Maps;
 @XmlTransient // ignore this class
 public abstract class MenuBarsAbstract implements MenuBars, Serializable {
 
-	private static final long serialVersionUID = 1L;
-	
+    private static final long serialVersionUID = 1L;
+
     private String tnsAndSchemaLocation;
 
+    @Override
     @Programmatic
     @XmlTransient
     public String getTnsAndSchemaLocation() {
         return tnsAndSchemaLocation;
     }
 
+    @Override
     @Programmatic
     public void setTnsAndSchemaLocation(final String tnsAndSchemaLocation) {
         this.tnsAndSchemaLocation = tnsAndSchemaLocation;
     }
 
+    @Override
     @Programmatic
     @XmlTransient
     public LinkedHashMap<String, ServiceActionLayoutData> getAllServiceActionsByObjectTypeAndId() {
         final LinkedHashMap<String, ServiceActionLayoutData> serviceActionsByObjectTypeAndId = _Maps.newLinkedHashMap();
         visit(new MenuBars.Visitor() {
+            @Override
             public void visit(final ServiceActionLayoutData serviceActionLayoutData) {
                 serviceActionsByObjectTypeAndId.put(serviceActionLayoutData.getObjectTypeAndId(), serviceActionLayoutData);
             }

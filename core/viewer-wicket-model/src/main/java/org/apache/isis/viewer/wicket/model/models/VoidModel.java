@@ -42,9 +42,9 @@ public class VoidModel extends ModelAbstract<Void> {
 
     private ActionModel actionModelHint;
     /**
-     * The {@link ActionModel model} of the {@link ObjectAction action} 
+     * The {@link ActionModel model} of the {@link ObjectAction action}
      * that generated this {@link VoidModel}.
-     * 
+     *
      * @see #setActionHint(ActionModel)
      */
     public ActionModel getActionModelHint() {
@@ -52,7 +52,7 @@ public class VoidModel extends ModelAbstract<Void> {
     }
     /**
      * Called by action.
-     * 
+     *
      * @see #getActionModelHint()
      */
     public void setActionHint(ActionModel actionModelHint) {

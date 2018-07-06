@@ -52,14 +52,15 @@ public abstract class XmlSnapshotServiceAbstract implements XmlSnapshotService {
             transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
             transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
             transformer.transform(streamSource, result);
-            
+
             final Node node = result.getNode();
             return (Document) node;
         } catch (TransformerException e) {
             throw new XmlSnapshotService.Exception(e);
         }
     }
-    
+
+    @Override
     @SuppressWarnings("unchecked")
     public <T> T getChildElementValue(final Element el, final String tagname, final Class<T> expectedCls) {
         final Element chldEl = getChildElement(el, tagname);
@@ -115,6 +116,7 @@ public abstract class XmlSnapshotServiceAbstract implements XmlSnapshotService {
                 "Datatype of '" + dataType + "' for element '" + tagname + "' not recognized");
     }
 
+    @Override
     public Element getChildElement(final Element el, final String tagname) {
         NodeList elementsByTagName = el.getElementsByTagName(tagname);
         final int length = elementsByTagName.getLength();
@@ -124,7 +126,8 @@ public abstract class XmlSnapshotServiceAbstract implements XmlSnapshotService {
         final Element item = (Element) elementsByTagName.item(0);
         return item;
     }
-    
+
+    @Override
     public String getChildTextValue(final Element el) {
         final NodeList childNodes = el.getChildNodes();
         if(childNodes.getLength() !=1 || !(childNodes.item(0) instanceof Text)) {

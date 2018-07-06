@@ -25,7 +25,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetAbstract.Hiding;
 /**
  * Mix-in interface for facets that can advise as to whether a member should be
  * hidden.
- * 
+ *
  * @see DisablingInteractionAdvisor
  * @see ValidatingInteractionAdvisor
  */
@@ -34,7 +34,7 @@ public interface HidingInteractionAdvisor extends InteractionAdvisorFacet, Hidin
     /**
      * Whether the rule represented by this facet hides the member to which it
      * applies.
-     * 
+     *
      * <p>
      * Implementations should use the provided {@link InteractionContext} to
      * determine whether they declare the object/member is hidden. They must

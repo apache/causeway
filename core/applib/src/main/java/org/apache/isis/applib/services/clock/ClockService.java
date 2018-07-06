@@ -37,9 +37,9 @@ import org.apache.isis.applib.clock.Clock;
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
-)
+        )
 public class ClockService {
-    
+
     @Programmatic
     public LocalDate now() {
         return Clock.getTimeAsLocalDate();

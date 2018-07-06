@@ -27,11 +27,11 @@ import org.apache.isis.core.metamodel.adapter.version.Version;
 
 
 /**
- * An immutable identifier for either a root object (subtype {@link RootOid}) or 
+ * An immutable identifier for either a root object (subtype {@link RootOid}) or
  * a parented collection (subtype {@link ParentedCollectionOid}).
- * 
+ *
  * <p>
- * Note that value objects (strings, ints, {@link Value}s etc) do not have an {@link Oid}. 
+ * Note that value objects (strings, ints, {@link Value}s etc) do not have an {@link Oid}.
  */
 public interface Oid extends Encodable {
 
@@ -41,15 +41,15 @@ public interface Oid extends Encodable {
     String enString();
 
     String enStringNoVersion();
-    
+
     Version getVersion();
 
     void setVersion(Version version);
 
     /**
-     * Flags whether this OID is for a transient (not-yet-persisted) object, 
+     * Flags whether this OID is for a transient (not-yet-persisted) object,
      * or a view model object, or for a persistent object.
-     * 
+     *
      * <p>
      * In the case of an {@link ParentedCollectionOid}, is determined by the state
      * of its {@link ParentedCollectionOid#getRootOid() root}'s {@link RootOid#isTransient() state}.
@@ -57,19 +57,19 @@ public interface Oid extends Encodable {
     boolean isTransient();
 
     boolean isViewModel();
-    
+
     boolean isPersistent();
 
     public static enum State {
-        PERSISTENT("P"), 
+        PERSISTENT("P"),
         TRANSIENT("T"),
         VIEWMODEL("V");
-        
+
         private final String code;
         private State(final String code) {
             this.code = code;
         }
-        
+
         public boolean isTransient() {
             return this == TRANSIENT;
         }
@@ -91,31 +91,31 @@ public interface Oid extends Encodable {
 
         public static State from(final Bookmark.ObjectState objectState) {
             switch (objectState) {
-                case VIEW_MODEL:
-                    return VIEWMODEL;
-                case TRANSIENT:
-                    return TRANSIENT;
-                case PERSISTENT:
-                    return PERSISTENT;
-                default:
-                	throw _Exceptions.unmatchedCase(objectState);
+            case VIEW_MODEL:
+                return VIEWMODEL;
+            case TRANSIENT:
+                return TRANSIENT;
+            case PERSISTENT:
+                return PERSISTENT;
+            default:
+                throw _Exceptions.unmatchedCase(objectState);
             }
         }
         public Bookmark.ObjectState asBookmarkObjectState() {
             switch (this) {
-                case VIEWMODEL:
-                    return Bookmark.ObjectState.VIEW_MODEL;
-                case TRANSIENT:
-                    return Bookmark.ObjectState.TRANSIENT;
-                case PERSISTENT:
-                    return Bookmark.ObjectState.PERSISTENT;
-                default:
-                	throw _Exceptions.unmatchedCase(this);
+            case VIEWMODEL:
+                return Bookmark.ObjectState.VIEW_MODEL;
+            case TRANSIENT:
+                return Bookmark.ObjectState.TRANSIENT;
+            case PERSISTENT:
+                return Bookmark.ObjectState.PERSISTENT;
+            default:
+                throw _Exceptions.unmatchedCase(this);
             }
         }
     }
 
 
 
-    
+
 }

@@ -48,7 +48,7 @@ public class IsisAjaxPagingNavigator extends BootstrapAjaxPagingNavigator {
     protected AbstractLink newPagingNavigationIncrementLink(String id, IPageable pageable, int increment) {
         return new IsisAjaxPagingNavigationIncrementLink(id, pageable, increment);
     }
-    
+
     @Override
     protected PagingNavigation newNavigation(String id, IPageable pageable, IPagingLabelProvider labelProvider) {
         return new IsisAjaxPagingNavigation(id, pageable, labelProvider);

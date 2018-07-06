@@ -101,7 +101,7 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
     public void addComponentFactories(final ComponentFactoryList componentFactories) {
 
         addComponentFactoriesActingAsSelectors(componentFactories);
-        
+
         addComponentFactoriesUsingServiceLoader(componentFactories);
 
         addBuiltInComponentFactories(componentFactories);
@@ -125,13 +125,13 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
     protected void addComponentFactoriesUsingServiceLoader(final ComponentFactoryList componentFactories) {
 
         _Plugin.loadAll(ComponentFactory.class).forEach(componentFactories::add);
-        
-// same as ...
-//        final ServiceLoader<ComponentFactory> serviceLoader = ServiceLoader.load(ComponentFactory.class);
-//
-//        for (final ComponentFactory componentFactory : serviceLoader) {
-//            componentFactories.add(componentFactory);
-//        }
+
+        // same as ...
+        //        final ServiceLoader<ComponentFactory> serviceLoader = ServiceLoader.load(ComponentFactory.class);
+        //
+        //        for (final ComponentFactory componentFactory : serviceLoader) {
+        //            componentFactories.add(componentFactory);
+        //        }
     }
 
     private void addBuiltInComponentFactories(final ComponentFactoryList componentFactories) {
@@ -152,7 +152,7 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
         addComponentFactoriesForBreadcrumbs(componentFactories);
         addComponentFactoriesForPageHeader(componentFactories);
         addComponentFactoriesForPageFooter(componentFactories);
-        
+
         addComponentFactoriesForUnknown(componentFactories);
     }
 
@@ -180,10 +180,10 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
 
     protected void addComponentFactoriesForEntityCollectionContents(final ComponentFactoryList componentFactories) {
         componentFactories.add(new CollectionContentsAsAjaxTablePanelFactory());
-        
+
         // // work-in-progress
         // componentFactories.add(new CollectionContentsAsIconsPanelFactory());
-        
+
         componentFactories.add(new CollectionContentsAsSummaryFactory());
     }
 
@@ -193,18 +193,18 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
     }
 
     protected void addComponentFactoriesForValue(final ComponentFactoryList componentFactories) {
-    	componentFactories.add(MarkupPanelFactories.standalone());
-    	componentFactories.add(TreePanelFactories.standalone());
+        componentFactories.add(MarkupPanelFactories.standalone());
+        componentFactories.add(TreePanelFactories.standalone());
         componentFactories.add(new StandaloneValuePanelFactory());
     }
 
     protected void addComponentFactoriesForScalar(final ComponentFactoryList componentFactories) {
 
-    	componentFactories.add(TreePanelFactories.parented());
-    	
+        componentFactories.add(TreePanelFactories.parented());
+
         componentFactories.add(new ReferencePanelFactory());
         componentFactories.add(MarkupPanelFactories.parented());
-        
+
         componentFactories.add(new BooleanPanelFactory());
         componentFactories.add(new BytePanelFactory());
         componentFactories.add(new ShortPanelFactory());
@@ -217,7 +217,7 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
         componentFactories.add(new StringPanelFactory());
 
         // work-in-progress
-        // componentFactories.add(new JavaAwtImagePanelFactory()); 
+        // componentFactories.add(new JavaAwtImagePanelFactory());
         componentFactories.add(new JavaUtilDatePanelFactory());
         componentFactories.add(new JavaSqlTimestampPanelFactory());
         componentFactories.add(new JavaSqlDatePanelFactory());
@@ -228,9 +228,9 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
         componentFactories.add(new IsisPercentagePanelFactory());
         componentFactories.add(new IsisPasswordPanelFactory());
 
-        componentFactories.add(new IsisBlobPanelFactory()); 
-        componentFactories.add(new IsisClobPanelFactory()); 
-        
+        componentFactories.add(new IsisBlobPanelFactory());
+        componentFactories.add(new IsisClobPanelFactory());
+
         componentFactories.add(new JavaMathBigIntegerPanelFactory());
         componentFactories.add(new JavaMathBigDecimalPanelFactory());
         componentFactories.add(new UuidPanelFactory());
@@ -238,8 +238,8 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
         componentFactories.add(new JodaLocalDatePanelFactory());
         componentFactories.add(new JodaLocalDateTimePanelFactory());
         componentFactories.add(new JodaDateTimePanelFactory());
-        
-        componentFactories.add(new Jdk8OffsetDateTimePanelFactory());	
+
+        componentFactories.add(new Jdk8OffsetDateTimePanelFactory());
         componentFactories.add(new Jdk8LocalDatePanelFactory());
         componentFactories.add(new Jdk8LocalDateTimePanelFactory());
 
@@ -247,7 +247,7 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
 
         // or for choices
         componentFactories.add(new ValueChoicesSelect2PanelFactory());
-        
+
     }
 
     protected void addComponentFactoriesForEntityLink(final ComponentFactoryList componentFactories) {

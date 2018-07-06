@@ -35,30 +35,30 @@ final class BookmarkTreeNodeComparator implements Comparator<BookmarkTreeNode> {
 
     @Override
     public int compare(BookmarkTreeNode o1, BookmarkTreeNode o2) {
-        
+
         final PageType pageType1 = o1.getPageType();
         final PageType pageType2 = o2.getPageType();
-        
+
         final int pageTypeComparison = pageType1.compareTo(pageType2);
         if(pageTypeComparison != 0) {
             return pageTypeComparison;
         }
-        
+
         final RootOid oid1 = o1.getOidNoVer();
         final RootOid oid2 = o2.getOidNoVer();
-        
+
         // sort by entity type
         final String className1 = classNameOf(oid1);
         final String className2 = classNameOf(oid2);
-        
+
         final int classNameComparison = className1.compareTo(className2);
         if(classNameComparison != 0) {
             return classNameComparison;
         }
-        
+
         final String title1 = o1.getTitle();
         final String title2 = o2.getTitle();
-        
+
         return title1.compareTo(title2);
     }
 

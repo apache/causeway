@@ -39,10 +39,10 @@ public class ImageResourceServerside extends ResourceAbstract {
         URL resource = Resources.getResource(getClass(), "SimpleObject.png");
         byte[] bytes = Resources.toByteArray(resource);
 
-//        Response.ResponseBuilder response = Response.ok(file);
-//        response.header("Content-Disposition",
-//                "attachment; filename=SimpleObject.png");
-//        return response.build();
+        //        Response.ResponseBuilder response = Response.ok(file);
+        //        response.header("Content-Disposition",
+        //                "attachment; filename=SimpleObject.png");
+        //        return response.build();
 
         return Response.ok(bytes).build();
 

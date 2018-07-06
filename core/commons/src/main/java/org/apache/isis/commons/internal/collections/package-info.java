@@ -18,10 +18,10 @@
  */
 /**
  * <h1>Internal API</h1>
- * Internal classes, contributing to the internal proprietary API. 
+ * Internal classes, contributing to the internal proprietary API.
  * These may be changed or removed without notice!
  * <p>
- * <b>WARNING</b>: 
+ * <b>WARNING</b>:
  * Do NOT use any of the classes provided by this package!
  * </p>
  */

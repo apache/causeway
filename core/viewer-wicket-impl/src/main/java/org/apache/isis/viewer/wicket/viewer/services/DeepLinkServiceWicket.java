@@ -45,7 +45,7 @@ import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
-)
+        )
 public class DeepLinkServiceWicket implements DeepLinkService {
 
     @Programmatic

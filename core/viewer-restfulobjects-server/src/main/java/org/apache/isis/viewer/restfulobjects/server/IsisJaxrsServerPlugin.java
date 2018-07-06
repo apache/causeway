@@ -5,22 +5,22 @@ import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpS
 
 public interface IsisJaxrsServerPlugin {
 
-	// -- INTERFACE
+    // -- INTERFACE
 
-	public Object newRestfulObjectsJaxbWriterForXml();
+    public Object newRestfulObjectsJaxbWriterForXml();
 
-	public HttpStatusCode getFailureStatusCodeIfAny(Throwable ex);
-	
-	// -- LOOKUP
+    public HttpStatusCode getFailureStatusCodeIfAny(Throwable ex);
 
-	public static IsisJaxrsServerPlugin get() {
-		return _Plugin.getOrElse(IsisJaxrsServerPlugin.class, 
-				ambiguousPlugins->{
-					throw _Plugin.ambiguityNonRecoverable(IsisJaxrsServerPlugin.class, ambiguousPlugins); 
-				}, 
-				()->{
-					throw _Plugin.absenceNonRecoverable(IsisJaxrsServerPlugin.class);
-				});
-	}
+    // -- LOOKUP
+
+    public static IsisJaxrsServerPlugin get() {
+        return _Plugin.getOrElse(IsisJaxrsServerPlugin.class,
+                ambiguousPlugins->{
+                    throw _Plugin.ambiguityNonRecoverable(IsisJaxrsServerPlugin.class, ambiguousPlugins);
+                },
+                ()->{
+                    throw _Plugin.absenceNonRecoverable(IsisJaxrsServerPlugin.class);
+                });
+    }
 
 }

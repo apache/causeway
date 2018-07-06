@@ -36,18 +36,20 @@ public class IsisClobMapping extends SingleFieldMultiMapping {
 
     public IsisClobMapping() {
     }
-    
+
     @Override
     public Class<?> getJavaType() {
         return org.apache.isis.applib.value.Clob.class;
     }
 
+    @Override
     public void initialize(AbstractMemberMetaData mmd, Table container, ClassLoaderResolver clr)
     {
         super.initialize(mmd, container, clr);
         addColumns();
     }
 
+    @Override
     public void initialize(RDBMSStoreManager storeMgr, String type)
     {
         super.initialize(storeMgr, type);
@@ -61,17 +63,19 @@ public class IsisClobMapping extends SingleFieldMultiMapping {
         addColumns(ClassNameConstants.JAVA_LANG_STRING); // chars
     }
 
+    @Override
     public Object getValueForDatastoreMapping(NucleusContext nucleusCtx, int index, Object value)
     {
         Clob clob = ((Clob)value);
         switch (index) {
-            case 0: return clob.getName();
-            case 1: return clob.getMimeType().getBaseType();
-            case 2: return clob.getChars();
+        case 0: return clob.getName();
+        case 1: return clob.getMimeType().getBaseType();
+        case 2: return clob.getChars();
         }
         throw new IndexOutOfBoundsException();
     }
 
+    @Override
     public void setObject(ExecutionContext ec, PreparedStatement preparedStmt, int[] exprIndex, Object value)
     {
         Clob clob = ((Clob)value);
@@ -85,7 +89,8 @@ public class IsisClobMapping extends SingleFieldMultiMapping {
             getDatastoreMapping(2).setObject(preparedStmt, exprIndex[2], clob.getChars().toString());
         }
     }
-    
+
+    @Override
     public Object getObject(ExecutionContext ec, ResultSet resultSet, int[] exprIndex)
     {
         try

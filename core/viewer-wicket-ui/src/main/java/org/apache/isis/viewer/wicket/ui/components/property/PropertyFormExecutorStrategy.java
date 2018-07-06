@@ -43,19 +43,23 @@ public class PropertyFormExecutorStrategy implements FormExecutorStrategy<Scalar
     }
 
 
+    @Override
     public ObjectAdapter obtainTargetAdapter() {
         return model.getParentEntityModel().load();
     }
 
+    @Override
     public String getReasonInvalidIfAny() {
         return this.model.getReasonInvalidIfAny();
     }
 
 
+    @Override
     public void onExecuteAndProcessResults(final AjaxRequestTarget target) {
         // no-op
     }
 
+    @Override
     public ObjectAdapter obtainResultAdapter() {
         ObjectAdapter targetAdapter = obtainTargetAdapter();
 
@@ -68,6 +72,7 @@ public class PropertyFormExecutorStrategy implements FormExecutorStrategy<Scalar
     }
 
 
+    @Override
     public void redirectTo(
             final ObjectAdapter resultAdapter,
             final AjaxRequestTarget target) {
@@ -82,7 +87,7 @@ public class PropertyFormExecutorStrategy implements FormExecutorStrategy<Scalar
                                 return new EntityPage(resultAdapter, null);
                             }
                         }
-                );
+                        );
 
         final RequestCycle requestCycle = RequestCycle.get();
         requestCycle.setResponsePage(entityPage);

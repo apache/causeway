@@ -146,8 +146,8 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
             final AuthenticationSession authenticationSession,
             final PersistenceManagerFactory jdoPersistenceManagerFactory,
             final FixturesInstalledFlag fixturesInstalledFlag) {
-    	
-    	super(servicesInjector, authenticationSession, jdoPersistenceManagerFactory, fixturesInstalledFlag);
+
+        super(servicesInjector, authenticationSession, jdoPersistenceManagerFactory, fixturesInstalledFlag);
     }
 
     // -- open
@@ -255,7 +255,7 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
         return command;
     }
 
-    
+
 
     // -- close
 
@@ -307,7 +307,7 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
         } catch(final Throwable ex) {
             // ignore
             LOG.error(
-                "close: failed to close JDO persistenceManager; continuing to avoid memory leakage");
+                    "close: failed to close JDO persistenceManager; continuing to avoid memory leakage");
         }
 
         try {
@@ -386,7 +386,7 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
     }
 
 
-    
+
 
     // -- QuerySubmitter impl, findInstancesInTransaction
     @Override
@@ -548,7 +548,7 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
         if (Modifier.isAbstract(cls.getModifiers())) {
             throw new IsisException("Cannot create an instance of an abstract class: " + cls);
         }
-        
+
         final Object newInstance;
         try {
             newInstance = cls.newInstance();
@@ -619,7 +619,7 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
         event.setSource(pojo);
         eventBusService.post(event);
     }
-    
+
 
 
 
@@ -628,12 +628,12 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
     /**
      * Determine if the object store has been initialized with its set of start
      * up objects.
-     * 
+     *
      * <p>
      * This method is called only once after the init has been called. If this flag
      * returns <code>false</code> the framework will run the fixtures to
      * initialise the persistor.
-     * 
+     *
      * <p>
      * Returns the cached value of {@link #isFixturesInstalled()
      * whether fixtures are installed} from the
@@ -642,7 +642,7 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
      * This caching is important because if we've determined, for a given run,
      * that fixtures are not installed, then we don't want to change our mind by
      * asking the object store again in another session.
-     * 
+     *
      * @see FixturesInstalledFlag
      */
     @Override
@@ -744,7 +744,7 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
     }
 
 
-    
+
 
     // -- loadPersistentPojo
 
@@ -842,7 +842,7 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
         return objectSpec.getCorrespondingClass();
     }
 
-    
+
 
     // -- lazilyLoaded
 
@@ -856,7 +856,7 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
     }
 
 
-    
+
 
     // -- refreshRootInTransaction, refreshRoot, resolve
 
@@ -919,7 +919,7 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
         refreshRootInTransaction(adapter);
     }
 
-    
+
 
     // -- makePersistent
 
@@ -1002,12 +1002,12 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
 
 
     // -- ObjectPersistor impl
-    
+
     private void makePersistent(final ObjectAdapter adapter) {
         makePersistentInTransaction(adapter);
     }
 
-    
+
     private void remove(final ObjectAdapter adapter) {
         destroyObjectInTransaction(adapter);
     }
@@ -1034,7 +1034,7 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
         });
     }
 
-    
+
 
     // -- newXxxCommand
     /**
@@ -1076,7 +1076,7 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
         }
         return new DataNucleusDeleteObjectCommand(adapter, persistenceManager);
     }
-    
+
 
     // -- execute
     @Override
@@ -1096,7 +1096,7 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
         }
         persistenceManager.flush();
     }
-    
+
 
     // -- getAggregateRoot, remappedFrom
 
@@ -1196,7 +1196,7 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
      * Fail early if any problems.
      */
     private void ensureMapsConsistent(final Oid oid) {
-    	Objects.requireNonNull(oid);
+        Objects.requireNonNull(oid);
 
         final ObjectAdapter adapter = oidAdapterMap.getAdapter(oid);
         if (adapter == null) {
@@ -1242,7 +1242,7 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
                     + mapName
                     + ": provided adapter's OID: " + adapterOid + "; but no adapter found in map");
         }
-        
+
         ensureThatArg(
                 adapter, is(adapterAccordingToMap),
                 ()->"mismatch in "
@@ -1250,9 +1250,9 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
                         + ": provided adapter's OID: " + adapterOid + ", \n"
                         + "but map's adapter's OID was: " + adapterAccordingToMap.getOid());
     }
-  
 
-	@Override
+
+    @Override
     public ObjectAdapter adapterForAny(RootOid rootOid) {
 
         final ObjectSpecId specId = rootOid.getObjectSpecId();
@@ -1287,7 +1287,7 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
             }
         }
     }
-    
+
     @Override
     public Map<RootOid, ObjectAdapter> adaptersFor(final List<RootOid> rootOids) {
         return adaptersFor(rootOids, ConcurrencyChecking.NO_CHECK);
@@ -1353,7 +1353,7 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
      * know that the oid does indeed represent an object you know exists.
      * </p>
      */
-    @Override 
+    @Override
     public ObjectAdapter adapterFor(final RootOid rootOid) {
         return adapterFor(rootOid, ConcurrencyChecking.NO_CHECK);
     }
@@ -1451,7 +1451,7 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
                 final Version recreatedVersion = recreatedOid.getVersion();
                 if(recreatedVersion != null && (
                         originalVersion == null ||
-                                recreatedVersion.different(originalVersion))
+                        recreatedVersion.different(originalVersion))
                         ) {
                     if(LOG.isDebugEnabled()) {
                         LOG.debug("updating version in oid, on {} ({}) to ({})", originalOid, originalVersion, recreatedVersion);
@@ -1852,14 +1852,14 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
     }
 
 
-    
+
 
 
     // -- TransactionManager delegate methods
     protected IsisTransaction getCurrentTransaction() {
         return transactionManager.getCurrentTransaction();
     }
-    
+
 
     // -- FrameworkSynchronizer delegate methods
 
@@ -1968,25 +1968,25 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
         final ViewModelFacet recreatableObjectFacet = spec.getFacet(ViewModelFacet.class);
         final String identifier =
                 recreatableObjectFacet != null
-                        ? recreatableObjectFacet.memento(pojo)
+                ? recreatableObjectFacet.memento(pojo)
                         : newIdentifierFor(pojo, type);
 
-        return newRootId(spec, identifier, type);
+                return newRootId(spec, identifier, type);
     }
 
     private String newIdentifierFor(final Object pojo, final Type type) {
         return type == Type.TRANSIENT
                 ? UUID.randomUUID().toString()
-                : JdoObjectIdSerializer.toOidIdentifier(getPersistenceManager().getObjectId(pojo));
+                        : JdoObjectIdSerializer.toOidIdentifier(getPersistenceManager().getObjectId(pojo));
     }
 
     private RootOid newRootId(final ObjectSpecification spec, final String identifier, final Type type) {
         final Oid.State state =
                 spec.containsDoOpFacet(ViewModelFacet.class)
-                        ? Oid.State.VIEWMODEL
+                ? Oid.State.VIEWMODEL
                         : type == Type.TRANSIENT
                         ? Oid.State.TRANSIENT
-                        : Oid.State.PERSISTENT;
+                                : Oid.State.PERSISTENT;
         final ObjectSpecId objectSpecId = spec.getSpecId();
         return new RootOid(objectSpecId, identifier, state);
     }
@@ -1995,7 +1995,7 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
         final Class<?> pojoClass = pojo.getClass();
         return getSpecificationLoader().loadSpecification(pojoClass);
     }
-    
+
 
 
     /**
@@ -2127,7 +2127,7 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
     }
 
 
-    
+
 
     // -- DomainObjectServices impl
 

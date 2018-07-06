@@ -44,7 +44,7 @@ public abstract class ComponentFactoryAbstract implements ComponentFactory {
     public ComponentFactoryAbstract(final ComponentType componentType, final String name) {
         this(componentType, name, null);
     }
-    
+
     public ComponentFactoryAbstract(final ComponentType componentType, @SuppressWarnings("rawtypes") Class componentClass) {
         this(componentType, null, componentClass);
     }
@@ -66,7 +66,7 @@ public abstract class ComponentFactoryAbstract implements ComponentFactory {
     /**
      * Applies if {@link #getComponentType()} matches; disregards the provided
      * {@link IModel}.
-     * 
+     *
      * @see #appliesTo(IModel)
      */
     @Override

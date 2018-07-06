@@ -44,7 +44,7 @@ import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
         requiresProject = true,
         requiresDependencyResolution = ResolutionScope.COMPILE,
         requiresDependencyCollection = ResolutionScope.COMPILE
-)
+        )
 public class IsisMojoXsd extends IsisMojoAbstract {
 
     protected IsisMojoXsd() {
@@ -79,7 +79,7 @@ public class IsisMojoXsd extends IsisMojoAbstract {
     @Override
     protected void doExecute(
             final ContextForMojo context, final IsisSessionFactory isisSessionFactory)
-            throws MojoFailureException, IOException {
+                    throws MojoFailureException, IOException {
 
         final JaxbService jaxbService = isisSessionFactory.getServicesInjector().lookupService(JaxbService.class);
 

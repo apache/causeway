@@ -58,11 +58,13 @@ public class ServicesInstallerFromConfigurationAndAnnotation extends ServicesIns
     }
 
 
+    @Override
     public void init() {
         servicesInstallerFromConfiguration.init();
         servicesInstallerFromAnnotation.init();
     }
 
+    @Override
     public void shutdown() {
         servicesInstallerFromConfiguration.shutdown();
         servicesInstallerFromAnnotation.shutdown();

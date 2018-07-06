@@ -32,7 +32,7 @@ import org.datanucleus.enhancement.Persistable;
 import com.google.common.collect.Lists;
 
 public abstract class PersistenceQueryProcessorAbstract<T extends PersistenceQuery>
-        implements PersistenceQueryProcessor<T> {
+implements PersistenceQueryProcessor<T> {
 
 
     final PersistenceSession4 persistenceSession;
@@ -50,8 +50,8 @@ public abstract class PersistenceQueryProcessorAbstract<T extends PersistenceQue
     protected List<ObjectAdapter> loadAdapters(final List<?> pojos) {
         final List<ObjectAdapter> adapters = Lists.newArrayList();
         for (final Object pojo : pojos) {
-        	// ought not to be necessary, however for some queries it seems that the 
-        	// lifecycle listener is not called
+            // ought not to be necessary, however for some queries it seems that the
+            // lifecycle listener is not called
             ObjectAdapter adapter;
             if(pojo instanceof Persistable) {
                 // an entity

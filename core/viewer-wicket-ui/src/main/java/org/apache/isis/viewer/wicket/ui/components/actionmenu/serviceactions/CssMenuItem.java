@@ -95,7 +95,7 @@ class CssMenuItem implements Serializable {
             cssMenuItem.setDescription(descriptionIfAny);
             return this;
         }
-        
+
         /**
          * @see CssMenuItem#requiresImmediateConfirmation
          * @param requiresImmediateConfirmation
@@ -271,28 +271,28 @@ class CssMenuItem implements Serializable {
     private void setEnabled(final boolean enabled) {
         this.enabled = enabled;
     }
-    
+
     /**
-     * A menu action with no parameters AND an are-you-sure semantics 
+     * A menu action with no parameters AND an are-you-sure semantics
      * does require an immediate confirmation dialog.
      * <br/>
      * Others don't.
      * @return
      */
     public boolean requiresImmediateConfirmation() {
-		return requiresImmediateConfirmation;
-	}
-    
+        return requiresImmediateConfirmation;
+    }
+
     /**
-     * A menu action with no parameters AND an are-you-sure semantics 
+     * A menu action with no parameters AND an are-you-sure semantics
      * does require an immediate confirmation dialog.
      * <br/>
      * Others don't.
      * @param requiresImmediateConfirmation
      */
     public void setRequiresImmediateConfirmation(boolean requiresImmediateConfirmation) {
-		this.requiresImmediateConfirmation = requiresImmediateConfirmation;
-	}
+        this.requiresImmediateConfirmation = requiresImmediateConfirmation;
+    }
 
     public void setReturnsBlobOrClob(boolean blobOrClob) {
         this.blobOrClob = blobOrClob;
@@ -351,7 +351,7 @@ class CssMenuItem implements Serializable {
      */
     Builder newSubMenuItem(ServiceAndAction serviceAndAction) {
 
-    	final EntityModel targetEntityModel = serviceAndAction.serviceEntityModel;
+        final EntityModel targetEntityModel = serviceAndAction.serviceEntityModel;
         final ObjectAction objectAction = serviceAndAction.objectAction;
         final boolean separator = serviceAndAction.separator;
         final ServiceActionLinkFactory actionLinkFactory = serviceAndAction.linkAndLabelFactory;
@@ -364,19 +364,19 @@ class CssMenuItem implements Serializable {
 
         // check visibility
         final Consent visibility = objectAction.isVisible(
-                                        serviceAdapter,
-                                        InteractionInitiatedBy.USER,
-                                        ActionModel.WHERE_FOR_ACTION_INVOCATION);
+                serviceAdapter,
+                InteractionInitiatedBy.USER,
+                ActionModel.WHERE_FOR_ACTION_INVOCATION);
         if (visibility.isVetoed()) {
             return null;
         }
 
         // check usability
         final Consent usability = objectAction.isUsable(
-                                        serviceAdapter,
-                                        InteractionInitiatedBy.USER,
-                                        ActionModel.WHERE_FOR_ACTION_INVOCATION
-        );
+                serviceAdapter,
+                InteractionInitiatedBy.USER,
+                ActionModel.WHERE_FOR_ACTION_INVOCATION
+                );
         final String reasonDisabledIfAny = usability.getReason();
 
         final DescribedAsFacet describedAsFacet = objectAction.getFacet(DescribedAsFacet.class);
@@ -397,8 +397,8 @@ class CssMenuItem implements Serializable {
                 .describedAs(descriptionIfAny)
                 .enabled(reasonDisabledIfAny)
                 .requiresImmediateConfirmation(
-                		ObjectAction.Util.isAreYouSureSemantics(objectAction) &&
-                		ObjectAction.Util.isNoParameters(objectAction))
+                        ObjectAction.Util.isAreYouSureSemantics(objectAction) &&
+                        ObjectAction.Util.isNoParameters(objectAction))
                 .returnsBlobOrClob(ObjectAction.Util.returnsBlobOrClob(objectAction))
                 .prototyping(objectAction.isPrototype())
                 .requiresSeparator(separator)

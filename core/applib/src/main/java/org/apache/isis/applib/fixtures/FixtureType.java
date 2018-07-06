@@ -17,19 +17,19 @@
  *  under the License.
  */
 
-    package org.apache.isis.applib.fixtures;
+package org.apache.isis.applib.fixtures;
 
 /**
  * Enumerates the different types of {@link InstallableFixture fixture}s
  * supported.
- * 
+ *
  * @see InstallableFixture#getType()
  */
 public enum FixtureType {
     /**
      * A fixture that installs data (either reference data or operational data)
      * into an object store.
-     * 
+     *
      * <p>
      * Some object stores are in-memory only, in which case these will always
      * want fixtures of this type to be installed. However, for object stores
@@ -40,7 +40,7 @@ public enum FixtureType {
     DOMAIN_OBJECTS,
     /**
      * A fixture that does not installs data into the object store.
-     * 
+     *
      * <p>
      * Fixtures of this type are always installed. Typical examples are:
      * <ul>

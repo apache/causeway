@@ -25,17 +25,17 @@ import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 
 /**
  * The response to provide as a result of interpreting the response;
- * either to show a {@link #toPage(PageAbstract) page}, or to {@link #withHandler(IRequestHandler) redirect} to a 
+ * either to show a {@link #toPage(PageAbstract) page}, or to {@link #withHandler(IRequestHandler) redirect} to a
  * handler (eg a download).
  */
 public class ActionResultResponse {
-    
+
     private final ActionResultResponseHandlingStrategy handlingStrategy;
     private final IRequestHandler handler;
     private final PageAbstract page;
     private final AjaxRequestTarget target;
     private final URL url;
-    
+
     public static ActionResultResponse withHandler(IRequestHandler handler) {
         return new ActionResultResponse(
                 ActionResultResponseHandlingStrategy.SCHEDULE_HANDLER, handler, null, null, null);
@@ -49,9 +49,9 @@ public class ActionResultResponse {
                 ActionResultResponseHandlingStrategy.OPEN_URL_IN_BROWSER, null, null, target, url);
     }
     private ActionResultResponse(
-            final ActionResultResponseHandlingStrategy strategy, 
-            final IRequestHandler handler, 
-            final PageAbstract page, 
+            final ActionResultResponseHandlingStrategy strategy,
+            final IRequestHandler handler,
+            final PageAbstract page,
             final AjaxRequestTarget target,
             final URL url) {
         handlingStrategy = strategy;

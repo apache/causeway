@@ -30,7 +30,7 @@ public class DomainServicesListReprRenderer extends ListReprRenderer {
         super(resourceContext, linkFollower, representation);
     }
 
-    
+
     @Override
     public JsonRepresentation render() {
         super.render();

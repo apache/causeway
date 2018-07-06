@@ -35,7 +35,7 @@ public abstract class CollectionDomainEvent<S,T> extends AbstractDomainEvent<S> 
     public static class Default extends CollectionDomainEvent<Object, Object> {
         private static final long serialVersionUID = 1L;
     }
-    
+
 
     // -- Noop class
 
@@ -46,7 +46,7 @@ public abstract class CollectionDomainEvent<S,T> extends AbstractDomainEvent<S> 
     public static class Noop extends CollectionDomainEvent<Object, Object> {
         private static final long serialVersionUID = 1L;
     }
-    
+
 
     // -- Doop class
 
@@ -57,7 +57,7 @@ public abstract class CollectionDomainEvent<S,T> extends AbstractDomainEvent<S> 
     public static class Doop extends CollectionDomainEvent<Object, Object> {
         private static final long serialVersionUID = 1L;
     }
-    
+
 
 
     // -- constructor
@@ -72,7 +72,7 @@ public abstract class CollectionDomainEvent<S,T> extends AbstractDomainEvent<S> 
     public CollectionDomainEvent() {
     }
 
-    
+
 
     // -- value
     private T value;
@@ -90,7 +90,7 @@ public abstract class CollectionDomainEvent<S,T> extends AbstractDomainEvent<S> 
     public void setValue(T value) {
         this.value = value;
     }
-    
+
 
     // -- Of
     public static enum Of {
@@ -128,20 +128,20 @@ public abstract class CollectionDomainEvent<S,T> extends AbstractDomainEvent<S> 
         this.of = of;
     }
 
-    
-    
-    private final static ToString<CollectionDomainEvent<?,?>> toString = 
-    		ObjectContracts.<CollectionDomainEvent<?,?>>
-		    toString("source", CollectionDomainEvent::getSource)
-		    .thenToString("identifier", CollectionDomainEvent::getIdentifier)
-		    .thenToString("eventPhase", CollectionDomainEvent::getEventPhase)
-		    .thenToString("of", CollectionDomainEvent::getOf) 
-		    .thenToString("value", CollectionDomainEvent::getValue)
-		    ;
+
+
+    private final static ToString<CollectionDomainEvent<?,?>> toString =
+            ObjectContracts.<CollectionDomainEvent<?,?>>
+    toString("source", CollectionDomainEvent::getSource)
+    .thenToString("identifier", CollectionDomainEvent::getIdentifier)
+    .thenToString("eventPhase", CollectionDomainEvent::getEventPhase)
+    .thenToString("of", CollectionDomainEvent::getOf)
+    .thenToString("value", CollectionDomainEvent::getValue)
+    ;
 
     @Override
     public String toString() {
-    	return toString.toString(this);
+        return toString.toString(this);
     }
 
 }

@@ -38,7 +38,7 @@ public class IsisPrettyPrintingProcessor implements DecoratorProcessor<Marshalle
     public Marshaller decorate(final Marshaller target, final PrettyPrinting annotation, final Class type, final Annotation[] annotations, final MediaType mediaType) {
         return shouldPrettyPrint()
                 ? doDecorate(target, annotation, type, annotations, mediaType)
-                : target;
+                        : target;
     }
 
     protected boolean shouldPrettyPrint() {

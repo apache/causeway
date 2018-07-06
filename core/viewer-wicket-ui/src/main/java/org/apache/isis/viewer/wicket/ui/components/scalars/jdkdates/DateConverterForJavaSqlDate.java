@@ -30,7 +30,7 @@ import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 
 public class DateConverterForJavaSqlDate extends DateConverterForJavaAbstract<java.sql.Date> {
     private static final long serialVersionUID = 1L;
-    
+
     public DateConverterForJavaSqlDate(WicketViewerSettings settings, int adjustBy) {
         this(settings.getDatePattern(), settings.getDatePattern(), adjustBy);
     }
@@ -67,5 +67,5 @@ public class DateConverterForJavaSqlDate extends DateConverterForJavaAbstract<ja
         return adjusted;
     }
 
-    
+
 }

@@ -29,9 +29,9 @@ public class CollaboratingUsingConstructorInjection {
     public void collaborateWithCollaborator() {
         collaborator.doOtherStuff();
     }
-    
+
     public void dontCollaborateWithCollaborator() {
-        
+
     }
-    
+
 }

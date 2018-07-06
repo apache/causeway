@@ -30,9 +30,9 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.DateConverterAbstract
 import java.util.Locale;
 
 abstract class DateConverterForJodaAbstract<T> extends DateConverterAbstract<T> {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     DateConverterForJodaAbstract(Class<T> cls, String datePattern, String dateTimePattern, int adjustBy) {
         super(cls, datePattern, dateTimePattern, adjustBy);
     }

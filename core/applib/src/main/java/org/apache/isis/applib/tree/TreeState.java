@@ -23,10 +23,10 @@ import java.util.Set;
 
 public interface TreeState extends Serializable {
 
-	public static TreeState rootCollapsed() {
-		return new TreeState_Default();
-	}
+    public static TreeState rootCollapsed() {
+        return new TreeState_Default();
+    }
 
-	public Set<TreePath> getExpandedNodePaths();
-	
+    public Set<TreePath> getExpandedNodePaths();
+
 }

@@ -34,10 +34,11 @@ public class UpdatingLifecycleEventFacetForDomainObjectAnnotation extends Single
     public UpdatingLifecycleEventFacetForDomainObjectAnnotation(
             final FacetHolder holder,
             final Class<? extends ObjectUpdatingEvent<?>> value,
-            final SpecificationLoader specificationLoader) {
+                    final SpecificationLoader specificationLoader) {
         super(type(), holder, value, specificationLoader);
     }
 
+    @Override
     public Class<? extends ObjectUpdatingEvent<?>> getEventType() {
         //noinspection unchecked
         return eventType();

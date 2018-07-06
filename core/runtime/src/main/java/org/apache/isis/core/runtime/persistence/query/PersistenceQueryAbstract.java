@@ -28,7 +28,7 @@ public abstract class PersistenceQueryAbstract implements PersistenceQuery {
 
     protected final long start;
     protected final long count;
-    
+
     private final ObjectSpecification specification;
 
     public PersistenceQueryAbstract(
@@ -36,7 +36,7 @@ public abstract class PersistenceQueryAbstract implements PersistenceQuery {
             final long... range) {
         this.start = range.length > 0 ? range[0]:0;
         this.count = range.length > 1 ? range[1]:0;
-        
+
         this.specification = specification;
         // nothing to do
     }
@@ -45,6 +45,7 @@ public abstract class PersistenceQueryAbstract implements PersistenceQuery {
      * The start index into the set table
      * @return
      */
+    @Override
     public long getStart() {
         return start;
     }
@@ -53,10 +54,11 @@ public abstract class PersistenceQueryAbstract implements PersistenceQuery {
     /**
      * The number of items to return, starting at {@link #getStart()}
      */
+    @Override
     public long getCount() {
         return count;
     }
-    
+
 
     @Override
     public ObjectSpecification getSpecification() {
@@ -95,6 +97,6 @@ public abstract class PersistenceQueryAbstract implements PersistenceQuery {
         return result;
     }
 
-    
+
 
 }

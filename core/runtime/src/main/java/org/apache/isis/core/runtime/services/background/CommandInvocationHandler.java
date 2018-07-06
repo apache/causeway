@@ -41,33 +41,33 @@ import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificati
 import org.apache.isis.schema.cmd.v1.CommandDto;
 
 class CommandInvocationHandler<T> implements InvocationHandler {
-	
-	private final BackgroundCommandService backgroundCommandService;
-	private final T target;
-	private final Object mixedInIfAny;
-	private final SpecificationLoader specificationLoader;
+
+    private final BackgroundCommandService backgroundCommandService;
+    private final T target;
+    private final Object mixedInIfAny;
+    private final SpecificationLoader specificationLoader;
     private final CommandDtoServiceInternal commandDtoServiceInternal;
     private final CommandContext commandContext;
-	private final Supplier<AdapterManager> adapterManagerSupplier;
+    private final Supplier<AdapterManager> adapterManagerSupplier;
 
-	CommandInvocationHandler(
-			BackgroundCommandService backgroundCommandService, 
-			T target,
-			Object mixedInIfAny,
-			SpecificationLoader specificationLoader, 
-		    CommandDtoServiceInternal commandDtoServiceInternal,
-		    CommandContext commandContext,
-			Supplier<AdapterManager> adapterManagerSupplier) {
-		this.backgroundCommandService = requires(backgroundCommandService, "backgroundCommandService");
-		this.target = requires(target, "target");
-		this.mixedInIfAny = mixedInIfAny;
-		this.specificationLoader = requires(specificationLoader, "specificationLoader");
-		this.commandDtoServiceInternal = requires(commandDtoServiceInternal, "commandDtoServiceInternal");
-		this.commandContext = requires(commandContext, "commandContext");
-		this.adapterManagerSupplier = requires(adapterManagerSupplier, "adapterManagerSupplier");
-	}
+    CommandInvocationHandler(
+            BackgroundCommandService backgroundCommandService,
+            T target,
+            Object mixedInIfAny,
+            SpecificationLoader specificationLoader,
+            CommandDtoServiceInternal commandDtoServiceInternal,
+            CommandContext commandContext,
+            Supplier<AdapterManager> adapterManagerSupplier) {
+        this.backgroundCommandService = requires(backgroundCommandService, "backgroundCommandService");
+        this.target = requires(target, "target");
+        this.mixedInIfAny = mixedInIfAny;
+        this.specificationLoader = requires(specificationLoader, "specificationLoader");
+        this.commandDtoServiceInternal = requires(commandDtoServiceInternal, "commandDtoServiceInternal");
+        this.commandContext = requires(commandContext, "commandContext");
+        this.adapterManagerSupplier = requires(adapterManagerSupplier, "adapterManagerSupplier");
+    }
 
-	@Override
+    @Override
     public Object invoke(
             final Object proxied,
             final Method proxyMethod,
@@ -117,18 +117,18 @@ class CommandInvocationHandler<T> implements InvocationHandler {
                 commandDtoServiceInternal.asCommandDto(targetList, action, argAdapters);
 
         backgroundCommandService
-        	.schedule(dto, command, domainObjectClassName, targetActionName, targetArgs);
+        .schedule(dto, command, domainObjectClassName, targetActionName, targetArgs);
 
         return null;
     }
-	
-	// -- HELPER
+
+    // -- HELPER
 
     private AdapterManager getAdapterManager() {
-		return adapterManagerSupplier.get();
-	}
+        return adapterManagerSupplier.get();
+    }
 
-	private ObjectAction findMixedInAction(final ObjectAction action, final Object domainObject) {
+    private ObjectAction findMixedInAction(final ObjectAction action, final Object domainObject) {
         final String actionId = action.getId();
         final ObjectSpecification domainSpec = getAdapterManager().adapterFor(domainObject).getSpecification();
         List<ObjectAction> objectActions = domainSpec.getObjectActions(Contributed.INCLUDED);
@@ -149,17 +149,17 @@ class CommandInvocationHandler<T> implements InvocationHandler {
         final AdapterManager adapterManager = getAdapterManager();
         return CommandUtil.adaptersFor(args, adapterManager);
     }
-    
+
     private ObjectSpecificationDefault getJavaSpecificationOfOwningClass(final Method method) {
         return getJavaSpecification(method.getDeclaringClass());
     }
-    
+
     private ObjectSpecificationDefault getJavaSpecification(final Class<?> cls) {
         final ObjectSpecification objectSpec = getSpecification(cls);
         if (!(objectSpec instanceof ObjectSpecificationDefault)) {
             throw new UnsupportedOperationException(
-                "Only Java is supported "
-                + "(specification is '" + objectSpec.getClass().getCanonicalName() + "')");
+                    "Only Java is supported "
+                            + "(specification is '" + objectSpec.getClass().getCanonicalName() + "')");
         }
         return (ObjectSpecificationDefault) objectSpec;
     }
@@ -167,6 +167,6 @@ class CommandInvocationHandler<T> implements InvocationHandler {
     private ObjectSpecification getSpecification(final Class<?> type) {
         return specificationLoader.loadSpecification(type);
     }
-    
+
 
 }

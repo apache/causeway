@@ -34,11 +34,11 @@ import org.apache.isis.core.runtime.authentication.standard.SimpleSession;
 /**
  * Creates a session suitable for {@link org.apache.isis.core.metamodel.deployment.DeploymentCategory#PROTOTYPING}
  * mode.
- * 
+ *
  * <p>
  * The format of the {@value ExplorationAuthenticatorConstants#USERS} key should
  * be:
- * 
+ *
  * <pre>
  * &lt;:userName&gt; [:&lt;role&gt;[|&lt;role&gt;]...], &lt;userName&gt;...
  * </pre>
@@ -58,7 +58,7 @@ public class ExplorationAuthenticator extends AuthenticatorAbstract {
         }
     }
 
-    
+
 
     private List<SimpleSession> parseUsers(final String users) {
         final List<SimpleSession> registeredUsers = new ArrayList<SimpleSession>();

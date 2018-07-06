@@ -36,7 +36,7 @@ public class ParentDomainObject {
     public void setChildren(final SortedSet<ChildDomainObject> children) {
         this.children = children;
     }
-    
+
     public void addToChildren(final ChildDomainObject child) {
         // check for no-op
         if (child == null || getChildren().contains(child)) {
@@ -58,7 +58,7 @@ public class ParentDomainObject {
         child.setParent(null);
         getChildren().remove(child);
     }
-    
+
     // }}
 
 

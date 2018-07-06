@@ -42,12 +42,12 @@ import org.apache.isis.objectstore.jdo.datanucleus.JDOStateManagerForIsis.Hint;
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "0" // initialize first, so available for any services that persist objects in their @PostConstruct
-)
+        )
 public class EventBusServiceJdo extends EventBusServiceDefault {
 
     /**
      * skip if called in any way by way of the {@link JDOStateManagerForIsis5}.
-     * 
+     *
      * <p>
      * The {@link JDOStateManagerForIsis5} sets a {@link JDOStateManagerForIsis5#hint threadlocal}
      * if it has been called.
@@ -57,7 +57,7 @@ public class EventBusServiceJdo extends EventBusServiceDefault {
     protected boolean skip(Object event) {
         return JDOStateManagerForIsis.hint.get() != Hint.NONE;
     }
-    
+
 
 }
 

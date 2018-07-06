@@ -46,16 +46,16 @@ import static org.junit.Assert.fail;
 /**
  * Use as a <tt>@Rule</tt>, meaning that the <tt>@RunWith(JMock.class)</tt> can
  * be ignored.
- * 
+ *
  * <pre>
  * public class MyTest {
- * 
+ *
  *     &#064;Rule
  *     public final Junit4Mockery2 context = Junit4Mockery2.createFor(Mode.INTERFACES);
- * 
+ *
  * }
  * </pre>
- * 
+ *
  * <p>
  * The class also adds some convenience methods, and uses a factory method to
  * make it explicit whether the context can mock only interfaces or interfaces
@@ -75,15 +75,15 @@ public class JUnitRuleMockery2 extends JUnit4Mockery implements MethodRule {
         return jUnitRuleMockery2;
     }
 
-    
+
     /**
      * Annotate the field that references the class under test;
-     * is automatically instantiated and autowired by this class, 
+     * is automatically instantiated and autowired by this class,
      * accessible to the test using {@link JUnitRuleMockery2#getClassUnderTest()}.
      */
     @Retention(RUNTIME)
     @Target(FIELD)
-	public static @interface ClassUnderTest {}
+    public static @interface ClassUnderTest {}
 
     /**
      * Annotate fields annotated with {@link Mock}, to indicate that they should be set up
@@ -91,7 +91,7 @@ public class JUnitRuleMockery2 extends JUnit4Mockery implements MethodRule {
      */
     @Retention(RUNTIME)
     @Target(FIELD)
-	public static @interface Ignoring {}
+    public static @interface Ignoring {}
 
     /**
      * Annotate fields annotated with {@link Mock}, to indicate that they should be set up
@@ -99,7 +99,7 @@ public class JUnitRuleMockery2 extends JUnit4Mockery implements MethodRule {
      */
     @Retention(RUNTIME)
     @Target(FIELD)
-	public static @interface Allowing {}
+    public static @interface Allowing {}
 
     /**
      * Annotate fields annotated with {@link Mock}, to indicate that they should be set up
@@ -107,7 +107,7 @@ public class JUnitRuleMockery2 extends JUnit4Mockery implements MethodRule {
      */
     @Retention(RUNTIME)
     @Target(FIELD)
-	public static @interface Never {}
+    public static @interface Never {}
 
     /**
      * Annotate fields annotated with {@link Mock}, to indicate that they should be set up
@@ -115,7 +115,7 @@ public class JUnitRuleMockery2 extends JUnit4Mockery implements MethodRule {
      */
     @Retention(RUNTIME)
     @Target(FIELD)
-	public static @interface One {}
+    public static @interface One {}
 
 
     /**
@@ -124,25 +124,26 @@ public class JUnitRuleMockery2 extends JUnit4Mockery implements MethodRule {
      */
     @Retention(RUNTIME)
     @Target(FIELD)
-	public static @interface Checking {
-    	Class<? extends ExpectationsOn> value() default ExpectationsOn.class;
+    public static @interface Checking {
+        Class<? extends ExpectationsOn> value() default ExpectationsOn.class;
     }
 
     public static enum Mode {
         INTERFACES_ONLY, INTERFACES_AND_CLASSES;
     }
 
-	private final MyMockomatic mockomatic = new MyMockomatic(this);
-	private final MutablePicoContainer container = new PicoBuilder().withConstructorInjection().withSetterInjection().build();
-	private Class<?> cutType;
+    private final MyMockomatic mockomatic = new MyMockomatic(this);
+    private final MutablePicoContainer container = new PicoBuilder().withConstructorInjection().withSetterInjection().build();
+    private Class<?> cutType;
 
     private JUnitRuleMockery2() {
     }
 
+    @Override
     public Statement apply(final Statement base, final FrameworkMethod method, final Object target) {
         return new Statement() {
 
-			@Override
+            @Override
             public void evaluate() throws Throwable {
                 prepare(target);
                 base.evaluate();
@@ -160,7 +161,7 @@ public class JUnitRuleMockery2 extends JUnit4Mockery implements MethodRule {
                         container.addComponent(mock);
                     }
                     container.addComponent(cutType);
-                    
+
                     final Object cut = container.getComponent(cutType);
                     cutField.setAccessible(true);
                     cutField.set(target, cut);
@@ -168,7 +169,7 @@ public class JUnitRuleMockery2 extends JUnit4Mockery implements MethodRule {
                 } else {
                     cutType = null;
                 }
-                
+
             }
 
             private void assertOnlyOneJMockContextIn(final List<Field> allFields) {
@@ -187,7 +188,7 @@ public class JUnitRuleMockery2 extends JUnit4Mockery implements MethodRule {
             protected Field locateClassUnderTestFieldIfAny(final List<Field> allFields) {
                 Field cutField = null;
                 for (final Field field : allFields) {
-                	if(field.getAnnotation(ClassUnderTest.class) != null) {
+                    if(field.getAnnotation(ClassUnderTest.class) != null) {
                         if (null != cutField) {
                             fail("Test class should only have one field annotated with @ClassUnderTest, found " + cutField.getName() + " and " + field.getName());
                         }
@@ -205,13 +206,13 @@ public class JUnitRuleMockery2 extends JUnit4Mockery implements MethodRule {
 
 
     public <T> T getClassUnderTest() {
-    	if(cutType == null) {
-    		throw new IllegalStateException("No field annotated @ClassUnderTest was found");
-    	}
-    	return _Casts.uncheckedCast( container.getComponent(cutType) );
+        if(cutType == null) {
+            throw new IllegalStateException("No field annotated @ClassUnderTest was found");
+        }
+        return _Casts.uncheckedCast( container.getComponent(cutType) );
     }
 
-    
+
     /**
      * Ignoring any interaction with the mock; an allowing/ignoring mock will be
      * returned in turn.
@@ -259,50 +260,50 @@ public class JUnitRuleMockery2 extends JUnit4Mockery implements MethodRule {
         }
     }
 
-    
+
     /**
      * Require one interaction
-     * @return 
+     * @return
      */
-	public Object oneOf(final Object mock) {
+    public Object oneOf(final Object mock) {
         checking(new Expectations() {
             {
                 oneOf(mock);
             }
         });
         return mock;
-	}
-	
+    }
+
     /**
      * Require one interaction
      * @return
-     * @deprecated use {@link #oneOf(Object)} instead 
+     * @deprecated use {@link #oneOf(Object)} instead
      */
-	@Deprecated
-	public Object one(final Object mock) {
+    @Deprecated
+    public Object one(final Object mock) {
         return oneOf(mock);
-	}
+    }
 
     public static class ExpectationsOn<T> extends Expectations {
-    	public ExpectationsOn(Object mock) {
-    		this.mockObj = _Casts.uncheckedCast( mock );
-    	}
-    	private T mockObj;
-    	public T mock() {
-    		return mockObj;
-    	}
+        public ExpectationsOn(Object mock) {
+            this.mockObj = _Casts.uncheckedCast( mock );
+        }
+        private T mockObj;
+        public T mock() {
+            return mockObj;
+        }
     }
-    
-    public <T> T checking(T mock, Class<? extends ExpectationsOn<T>> expectationsClass) {
-		try {
-			Constructor<? extends ExpectationsOn<T>> constructor = expectationsClass.getConstructor(Object.class);
-			ExpectationsOn<T> expectations = constructor.newInstance(mock);
-			checking(expectations);
-			return mock;
-		} catch (Exception e) {
-			throw new AssertionFailedError("Unable to instantiate expectations class '" + expectationsClass.getName() + "'");
-		}
-	}
 
-    
+    public <T> T checking(T mock, Class<? extends ExpectationsOn<T>> expectationsClass) {
+        try {
+            Constructor<? extends ExpectationsOn<T>> constructor = expectationsClass.getConstructor(Object.class);
+            ExpectationsOn<T> expectations = constructor.newInstance(mock);
+            checking(expectations);
+            return mock;
+        } catch (Exception e) {
+            throw new AssertionFailedError("Unable to instantiate expectations class '" + expectationsClass.getName() + "'");
+        }
+    }
+
+
 }

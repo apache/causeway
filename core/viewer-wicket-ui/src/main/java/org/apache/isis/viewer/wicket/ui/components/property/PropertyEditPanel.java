@@ -131,7 +131,7 @@ public class PropertyEditPanel extends PanelAbstract<ScalarModel> {
     ///////////////////////////////////////////////////////
     // Dependencies (from context)
     ///////////////////////////////////////////////////////
-    
+
     protected MessageBroker getMessageBroker() {
         return getAuthenticationSession().getMessageBroker();
     }

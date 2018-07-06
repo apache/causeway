@@ -33,7 +33,7 @@ public final class SystemConstants {
     /**
      * Key used to lookup {@link DeploymentType} (eg via command line) in
      * {@link IsisConfiguration}.
-     * 
+     *
      * <p>
      * Use {@link DeploymentType#lookup(String)} to decode.
      */

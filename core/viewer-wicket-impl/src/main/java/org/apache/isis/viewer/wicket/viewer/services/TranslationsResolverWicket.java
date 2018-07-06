@@ -50,7 +50,7 @@ import org.apache.isis.viewer.wicket.viewer.IsisWicketApplication;
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
-)
+        )
 public class TranslationsResolverWicket implements TranslationsResolver {
 
     public static Logger LOG = LoggerFactory.getLogger(TranslationsResolverWicket.class);
@@ -94,12 +94,12 @@ public class TranslationsResolverWicket implements TranslationsResolver {
         final ImmutableList<String> strings = charSource.readLines();
         return Collections.unmodifiableList(
                 Lists.newArrayList(
-                Iterables.filter(strings, new Predicate<String>() {
-                    @Override
-                    public boolean apply(final String input) {
-                        return input != null && nonEmpty.matcher(input).matches();
-                    }
-                })));
+                        Iterables.filter(strings, new Predicate<String>() {
+                            @Override
+                            public boolean apply(final String input) {
+                                return input != null && nonEmpty.matcher(input).matches();
+                            }
+                        })));
     }
 
     protected IsisWicketApplication getIsisWicketApplication() {

@@ -8,22 +8,22 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 public interface PersistenceSessionFactory {
 
-	// -- INTERFACE
+    // -- INTERFACE
 
-	PersistenceSession createPersistenceSession(ServicesInjector servicesInjector,
-			AuthenticationSession authenticationSession);
+    PersistenceSession createPersistenceSession(ServicesInjector servicesInjector,
+            AuthenticationSession authenticationSession);
 
-	void init(SpecificationLoader specificationLoader);
+    void init(SpecificationLoader specificationLoader);
 
-	boolean isInitialized();
-	
-	void shutdown();
-	
-	// -- FACTORY
+    boolean isInitialized();
 
-	static PersistenceSessionFactory of(ConfigurationServiceInternal configuration) {
-		return IsisJdoRuntimePlugin.get().getPersistenceSessionFactory(configuration);
-	}
+    void shutdown();
+
+    // -- FACTORY
+
+    static PersistenceSessionFactory of(ConfigurationServiceInternal configuration) {
+        return IsisJdoRuntimePlugin.get().getPersistenceSessionFactory(configuration);
+    }
 
 
 }

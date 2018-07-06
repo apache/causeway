@@ -17,9 +17,9 @@
 package org.apache.isis.applib.services;
 
 /**
- * Mix-in interface for objects (usually created by service implementations) that are be persistable, 
+ * Mix-in interface for objects (usually created by service implementations) that are be persistable,
  * and so can be associated with a username, usually of the user that has performed some operation.
- * 
+ *
  * <p>
  * Other services can then use this username as a means to contributed actions/collections to render such additional
  * information relating to the activities of the user.
@@ -28,4 +28,4 @@ public interface HasUsername {
 
     public String getUsername();
 
-}    
+}

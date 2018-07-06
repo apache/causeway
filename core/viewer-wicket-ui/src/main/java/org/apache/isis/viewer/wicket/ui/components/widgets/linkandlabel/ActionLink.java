@@ -63,25 +63,25 @@ public abstract class ActionLink extends AjaxLink<ObjectAdapter> implements IAja
         final boolean useIndicatorForNoArgAction = getSettings().isUseIndicatorForNoArgAction();
         this.indicatorAppenderIfAny =
                 useIndicatorForNoArgAction
-                        ? new AjaxIndicatorAppender()
+                ? new AjaxIndicatorAppender()
                         : null;
 
-        if(this.indicatorAppenderIfAny != null) {
-            this.add(this.indicatorAppenderIfAny);
-        }
+                if(this.indicatorAppenderIfAny != null) {
+                    this.add(this.indicatorAppenderIfAny);
+                }
 
-        // trivial optimization; also store the objectAction if it is available (saves looking it up)
-        objectAction = action;
+                // trivial optimization; also store the objectAction if it is available (saves looking it up)
+                objectAction = action;
 
-        // this returns non-null if the action is no-arg and returns a URL or a Blob or a Clob.
-        // Otherwise can use default handling
-        // TODO: the method looks at the actual compile-time return type;
-        // TODO: cannot see a way to check at runtime what is returned.
-        // TODO: see https://issues.apache.org/jira/browse/ISIS-1264 for further detail.
-        ajaxDeferredBehaviourIfAny = determineDeferredBehaviour();
-        if(ajaxDeferredBehaviourIfAny != null) {
-            this.add(ajaxDeferredBehaviourIfAny);
-        }
+                // this returns non-null if the action is no-arg and returns a URL or a Blob or a Clob.
+                // Otherwise can use default handling
+                // TODO: the method looks at the actual compile-time return type;
+                // TODO: cannot see a way to check at runtime what is returned.
+                // TODO: see https://issues.apache.org/jira/browse/ISIS-1264 for further detail.
+                ajaxDeferredBehaviourIfAny = determineDeferredBehaviour();
+                if(ajaxDeferredBehaviourIfAny != null) {
+                    this.add(ajaxDeferredBehaviourIfAny);
+                }
     }
 
     @Override
@@ -106,7 +106,7 @@ public abstract class ActionLink extends AjaxLink<ObjectAdapter> implements IAja
     public ObjectAction getObjectAction() {
         return objectAction != null
                 ? objectAction
-                : (objectAction = getActionModel().getActionMemento().getAction(getSpecificationLoader()));
+                        : (objectAction = getActionModel().getActionMemento().getAction(getSpecificationLoader()));
     }
 
 
@@ -157,6 +157,7 @@ public abstract class ActionLink extends AjaxLink<ObjectAdapter> implements IAja
         return getActionModel().isVisible();
     }
 
+    @Override
     @Programmatic
     public boolean isEnabled() {
         return determineIfEnabled();
@@ -184,10 +185,11 @@ public abstract class ActionLink extends AjaxLink<ObjectAdapter> implements IAja
         Buttons.fixDisabledState(this, tag);
     }
 
+    @Override
     public String getAjaxIndicatorMarkupId() {
         return this.indicatorAppenderIfAny != null
                 ? this.indicatorAppenderIfAny.getMarkupId()
-                : null;
+                        : null;
     }
 
 
@@ -238,14 +240,14 @@ public abstract class ActionLink extends AjaxLink<ObjectAdapter> implements IAja
                 protected IRequestHandler getRequestHandler() {
                     final ObjectAdapter resultAdapter = actionModel.execute();
                     final Object value = resultAdapter!=null ? resultAdapter.getObject() : null;
-                    
+
                     final IRequestHandler handler = ActionModel.downloadHandler(value);
-                    
+
                     //ISIS-1619, prevent clients from caching the response content
-                    return isNonIdempotent(actionModel) 
-                    		? enforceNoCacheOnClientSide(handler)
-                    		: handler                    		
-                    		;
+                    return isNonIdempotent(actionModel)
+                            ? enforceNoCacheOnClientSide(handler)
+                                    : handler
+                                    ;
                 }
             };
         }
@@ -257,9 +259,9 @@ public abstract class ActionLink extends AjaxLink<ObjectAdapter> implements IAja
         return action.getParameterCount() == 0 &&
                 action.getReturnType() != null &&
                 (
-                		action.getReturnType().getCorrespondingClass() == java.net.URL.class ||
-                		action.getReturnType().getCorrespondingClass() == LocalResourcePath.class
-                )
+                        action.getReturnType().getCorrespondingClass() == java.net.URL.class ||
+                        action.getReturnType().getCorrespondingClass() == LocalResourcePath.class
+                        )
                 ;
     }
 
@@ -267,28 +269,28 @@ public abstract class ActionLink extends AjaxLink<ObjectAdapter> implements IAja
     private static boolean isNoArgReturnTypeDownload(final ObjectAction action) {
         return action.getParameterCount() == 0 && action.getReturnType() != null &&
                 (action.getReturnType().getCorrespondingClass() == org.apache.isis.applib.value.Blob.class ||
-                        action.getReturnType().getCorrespondingClass() == org.apache.isis.applib.value.Clob.class);
+                action.getReturnType().getCorrespondingClass() == org.apache.isis.applib.value.Clob.class);
     }
-    
+
     private static boolean isNonIdempotent(ActionModel actionModel) {
-		final ObjectAction objectAction = actionModel.getActionMemento()
-        		.getAction(actionModel.getSpecificationLoader());
-		return ObjectAction.Util.isNonIdempotent(objectAction);
-	}
-    
+        final ObjectAction objectAction = actionModel.getActionMemento()
+                .getAction(actionModel.getSpecificationLoader());
+        return ObjectAction.Util.isNonIdempotent(objectAction);
+    }
+
     // -- CLIENT SIDE CACHING ASPECTS ...
-	
+
     private static IRequestHandler enforceNoCacheOnClientSide(IRequestHandler downloadHandler){
-    	if(downloadHandler==null)
-    		return downloadHandler;
-		
-		if(downloadHandler instanceof ResourceStreamRequestHandler) 
-			((ResourceStreamRequestHandler) downloadHandler)
-				.setCacheDuration(Duration.seconds(0));
-		
-		return downloadHandler;
-	}
-    
+        if(downloadHandler==null)
+            return downloadHandler;
+
+        if(downloadHandler instanceof ResourceStreamRequestHandler)
+            ((ResourceStreamRequestHandler) downloadHandler)
+            .setCacheDuration(Duration.seconds(0));
+
+        return downloadHandler;
+    }
+
     // --
 
 }

@@ -27,11 +27,11 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
 /**
  * The mechanism by which the value of the property can be set.
- * 
+ *
  * <p>
  * In the standard Apache Isis Programming Model, corresponds to invoking the
  * mutator method for a property.
- * 
+ *
  * @see PropertyOrCollectionAccessorFacet
  * @see org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacet
  * @see org.apache.isis.core.metamodel.facets.properties.update.init.PropertyInitializationFacet

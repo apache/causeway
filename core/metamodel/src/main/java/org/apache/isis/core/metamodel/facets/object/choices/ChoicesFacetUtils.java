@@ -28,7 +28,7 @@ public class ChoicesFacetUtils {
     }
 
     /**
-     * 
+     *
      * @deprecated - use {@link ChoicesFacet.Util}
      */
     @Deprecated

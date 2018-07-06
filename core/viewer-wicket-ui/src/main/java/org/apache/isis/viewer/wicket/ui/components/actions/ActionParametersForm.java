@@ -108,13 +108,13 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
         }
         final ScalarPanelAbstract2 paramPanel =
                 component instanceof ScalarPanelAbstract2
-                        ? (ScalarPanelAbstract2) component
+                ? (ScalarPanelAbstract2) component
                         : null;
-        if (paramPanel != null) {
-            paramPanel.setOutputMarkupId(true);
-            paramPanel.notifyOnChange(this);
-        }
-        return paramPanel;
+                if (paramPanel != null) {
+                    paramPanel.setOutputMarkupId(true);
+                    paramPanel.notifyOnChange(this);
+                }
+                return paramPanel;
     }
 
     @Override

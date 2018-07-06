@@ -25,11 +25,11 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 
 /**
  * Provides a set of auto-complete choices for a property.
- * 
+ *
  * <p>
  * Viewers would typically represent this as a drop-down list box for the
  * property.
- * 
+ *
  * <p>
  * In the standard Apache Isis Programming Model, corresponds to the
  * <tt>autoCompletexx</tt> supporting method for the property with accessor

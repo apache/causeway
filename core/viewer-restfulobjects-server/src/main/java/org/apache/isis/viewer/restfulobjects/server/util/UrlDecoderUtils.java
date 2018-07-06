@@ -29,7 +29,7 @@ public final class UrlDecoderUtils {
     }
 
     public static final String URL_ENCODING_CHAR_SET = "UTF-8";
-    
+
     public static String urlDecode(final String oidStr) {
         try {
             return URLDecoder.decode(oidStr, URL_ENCODING_CHAR_SET);

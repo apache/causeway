@@ -37,14 +37,14 @@ public class NamedFacetForPropertyLayoutAnnotation extends NamedFacetAbstract {
                 .filter(propertyLayout -> Strings.emptyToNull(propertyLayout.named()) != null)
                 .findFirst()
                 .map(propertyLayout -> new NamedFacetForPropertyLayoutAnnotation(
-                                            propertyLayout.named(), propertyLayout.namedEscaped(), holder))
+                        propertyLayout.named(), propertyLayout.namedEscaped(), holder))
                 .orElse(null);
     }
 
     private NamedFacetForPropertyLayoutAnnotation(
-        final String value,
-        final boolean escaped,
-        final FacetHolder holder) {
+            final String value,
+            final boolean escaped,
+            final FacetHolder holder) {
 
         super(value, escaped, holder);
     }

@@ -26,15 +26,15 @@ import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollect
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public class CollectionRemoveFromFacetForDomainEventFromDefault extends
-        CollectionRemoveFromFacetForDomainEventFromAbstract {
+CollectionRemoveFromFacetForDomainEventFromAbstract {
 
     public CollectionRemoveFromFacetForDomainEventFromDefault(
             final Class<? extends CollectionDomainEvent<?, ?>> eventType,
-            final PropertyOrCollectionAccessorFacet getterFacet,
-            final CollectionRemoveFromFacet collectionRemoveFromFacet,
-            final CollectionDomainEventFacetAbstract collectionInteractionFacet,
-            final ServicesInjector servicesInjector,
-            final FacetHolder holder) {
+                    final PropertyOrCollectionAccessorFacet getterFacet,
+                    final CollectionRemoveFromFacet collectionRemoveFromFacet,
+                    final CollectionDomainEventFacetAbstract collectionInteractionFacet,
+                    final ServicesInjector servicesInjector,
+                    final FacetHolder holder) {
         super(eventType, getterFacet, collectionRemoveFromFacet, collectionInteractionFacet, servicesInjector, holder);
     }
 

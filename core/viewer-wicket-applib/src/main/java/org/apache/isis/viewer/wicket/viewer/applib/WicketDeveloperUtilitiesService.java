@@ -39,11 +39,11 @@ public class WicketDeveloperUtilitiesService {
             restrictTo = RestrictTo.PROTOTYPING,
             hidden = Where.EVERYWHERE,
             semantics = SemanticsOf.IDEMPOTENT
-    )
+            )
     public void resetI18nCache() {
         Application.get()
-                .getResourceSettings()
-                .getLocalizer().clearCache();
+        .getResourceSettings()
+        .getLocalizer().clearCache();
 
     }
 }

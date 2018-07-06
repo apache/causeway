@@ -106,7 +106,7 @@ public class CollectionContentsAsSummary extends PanelAbstract<EntityCollectionM
             addItem(item, ID_MAX, summary.getMax());
         }
     }
-    
+
     public static class Summary {
 
         private BigDecimal sum = BigDecimal.ZERO;
@@ -136,7 +136,7 @@ public class CollectionContentsAsSummary extends PanelAbstract<EntityCollectionM
                     values.add(null);
                     continue;
                 }
-                
+
                 nonNullCount++;
                 BigDecimal value = (BigDecimal) valueObj;
                 sum = sum.add(value);
@@ -146,7 +146,7 @@ public class CollectionContentsAsSummary extends PanelAbstract<EntityCollectionM
             }
             average = nonNullCount != 0 ? sum.divide(BigDecimal.valueOf(nonNullCount), 2, RoundingMode.HALF_UP) : null;
         }
-        
+
         public String getPropertyName() {
             return propertyName;
         }
@@ -171,18 +171,19 @@ public class CollectionContentsAsSummary extends PanelAbstract<EntityCollectionM
         public List<Number> getValuesAsNumbers() {
             return asNumbers(getValues());
         }
-        
+
         private static List<Number> asNumbers(List<BigDecimal> values) {
             return Lists.newArrayList(Iterables.transform(values, BIGDECIMAL_TO_NUMBER));
         }
 
         private static final com.google.common.base.Function<BigDecimal, Number> BIGDECIMAL_TO_NUMBER = new com.google.common.base.Function<BigDecimal, Number>(){
+            @Override
             public Number apply(BigDecimal value) {
                 return value;
             }
         };
 
-        
+
     }
 
     private void addItem(AbstractItem item, String id, BigDecimal amt) {

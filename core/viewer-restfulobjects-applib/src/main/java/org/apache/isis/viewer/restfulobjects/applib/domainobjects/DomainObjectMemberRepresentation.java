@@ -23,7 +23,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 /**
  * Represents the members within the {@link DomainObjectRepresentation}'s <tt>members</tt>
  * map.
- * 
+ *
  * <p>
  * Do not confuse with the subclasses of {@link AbstractObjectMemberRepresentation}, which
  * are standalone representations in their own right.
@@ -42,9 +42,9 @@ public class DomainObjectMemberRepresentation extends DomainRepresentation  {
     }
 
     /**
-     * The reason this member cannot be modified (if property or collection) or 
+     * The reason this member cannot be modified (if property or collection) or
      * invoked (if action).
-     * 
+     *
      * <p>
      * If null, then is not disabled.
      */

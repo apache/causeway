@@ -32,48 +32,48 @@ import org.apache.wicket.model.Model;
  */
 public class TreePanel extends ScalarPanelTextFieldParseableAbstract {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public TreePanel(final String id, final ScalarModel scalarModel) {
-		super(id, scalarModel);
-	}
+    public TreePanel(final String id, final ScalarModel scalarModel) {
+        super(id, scalarModel);
+    }
 
-	@Override
-	protected String getScalarPanelType() {
-		return "treePanel";
-	}
+    @Override
+    protected String getScalarPanelType() {
+        return "treePanel";
+    }
 
-	@Override
-	protected MarkupContainer createScalarIfRegularFormGroup() {
+    @Override
+    protected MarkupContainer createScalarIfRegularFormGroup() {
 
-		if(getModel().isEditMode()) {
-			// fallback to text editor
-			return super.createScalarIfRegularFormGroup();
-		}
+        if(getModel().isEditMode()) {
+            // fallback to text editor
+            return super.createScalarIfRegularFormGroup();
+        }
 
-		final Component treeComponent = createTreeComponent("scalarValueContainer");
+        final Component treeComponent = createTreeComponent("scalarValueContainer");
 
-		getTextField().setLabel(Model.of(getModel().getName()));
+        getTextField().setLabel(Model.of(getModel().getName()));
 
-		final FormGroup formGroup = new FormGroup(ID_SCALAR_IF_REGULAR, getTextField());
-		formGroup.add(treeComponent);
+        final FormGroup formGroup = new FormGroup(ID_SCALAR_IF_REGULAR, getTextField());
+        formGroup.add(treeComponent);
 
-		final String labelCaption = getRendering().getLabelCaption(getTextField());
-		final Label scalarName = createScalarName(ID_SCALAR_NAME, labelCaption);
-		formGroup.add(scalarName);
+        final String labelCaption = getRendering().getLabelCaption(getTextField());
+        final Label scalarName = createScalarName(ID_SCALAR_NAME, labelCaption);
+        formGroup.add(scalarName);
 
-		return formGroup;
-	}
+        return formGroup;
+    }
 
-	@Override
-	protected Component createComponentForCompact() {
-		return createTreeComponent(ID_SCALAR_IF_COMPACT);
-	}
+    @Override
+    protected Component createComponentForCompact() {
+        return createTreeComponent(ID_SCALAR_IF_COMPACT);
+    }
 
-	// -- HELPER
+    // -- HELPER
 
-	private Component createTreeComponent(String id) {
-		return IsisToWicketTreeAdapter.adapt(id, getModel());
-	}
+    private Component createTreeComponent(String id) {
+        return IsisToWicketTreeAdapter.adapt(id, getModel());
+    }
 
 }

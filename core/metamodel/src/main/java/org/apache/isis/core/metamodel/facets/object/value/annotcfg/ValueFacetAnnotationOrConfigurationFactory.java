@@ -42,7 +42,7 @@ import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProv
 
 /**
  * Processes the {@link Value} annotation.
- * 
+ *
  * <p>
  * As a result, will always install the following facets:
  * <ul>

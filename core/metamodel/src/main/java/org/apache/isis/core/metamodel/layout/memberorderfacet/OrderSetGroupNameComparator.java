@@ -26,7 +26,7 @@ import org.apache.isis.core.metamodel.layout.DeweyOrderSet;
 
 /**
  * Compares by (simple) group name of each {@link OrderSet}.
- * 
+ *
  * <p>
  * Note that it only makes sense to use this comparator for {@link OrderSet}s
  * that are known to have the same parent {@link OrderSet}s.

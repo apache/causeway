@@ -31,7 +31,7 @@ import org.apache.isis.core.metamodel.facets.all.named.NamedFacetInferred;
 
 /**
  * Sets up {@link org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet} and also an {@link org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet}, along with a number of supporting facets that are based on the action's name.
- * 
+ *
  * <p>
  * In addition a {@link NamedFacet} is inferred from the name.
  *

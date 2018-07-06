@@ -33,7 +33,7 @@ import org.apache.isis.applib.services.guice.GuiceBeanProvider;
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
-)
+        )
 public class GuiceBeanProviderWicket implements GuiceBeanProvider {
 
     @Programmatic

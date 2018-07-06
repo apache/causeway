@@ -41,7 +41,7 @@ public final class JdoPropertyUtils {
      * <p>
      * Returns the {@link OneToOneAssociation} if there is precisely one; else
      * <tt>null</tt>.
-     * 
+     *
      * @see JdoPrimaryKeyPropertyPredicate
      */
     public static OneToOneAssociation getPrimaryKeyPropertyFor(final ObjectSpecification objectSpec) {
@@ -51,7 +51,7 @@ public final class JdoPropertyUtils {
     public static boolean hasPrimaryKeyProperty(final ObjectSpecification objectSpec) {
         return getPrimaryKeyPropertyFor(objectSpec) != null;
     }
-    
+
     private static OneToOneAssociation getPropertyFor(final ObjectSpecification objSpec, final String annotationName, final Predicate<ObjectAssociation> predicate) {
         if (objSpec == null || !objSpec.containsFacet(JdoPersistenceCapableFacet.class)) {
             return null;

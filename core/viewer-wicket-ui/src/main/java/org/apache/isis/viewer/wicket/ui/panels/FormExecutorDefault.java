@@ -68,7 +68,7 @@ import org.apache.isis.viewer.wicket.ui.errors.JGrowlUtil;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 
 public final class FormExecutorDefault<M extends BookmarkableModel<ObjectAdapter> & ParentEntityModelProvider>
-        implements FormExecutor {
+implements FormExecutor {
 
     private static final Logger LOG = LoggerFactory.getLogger(FormExecutorDefault.class);
 
@@ -162,8 +162,8 @@ public final class FormExecutorDefault<M extends BookmarkableModel<ObjectAdapter
             onExecuteAndProcessResults(targetIfAny);
 
             if (resultDiffersOrAlwaysRedirect(targetAdapter, resultAdapter) ||
-                hasBlobsOrClobs(page)                                       ||
-                targetIfAny == null                                             ) {
+                    hasBlobsOrClobs(page)                                       ||
+                    targetIfAny == null                                             ) {
 
                 redirectTo(resultAdapter, targetIfAny);
 
@@ -281,27 +281,27 @@ public final class FormExecutorDefault<M extends BookmarkableModel<ObjectAdapter
         // we therefore force a re-forward (unless is declared as unchanging).
         final Object hasBlobsOrClobs = page.visitChildren(IsisBlobOrClobPanelAbstract.class,
                 new IVisitor<IsisBlobOrClobPanelAbstract, Object>() {
-                    @Override
-                    public void component(final IsisBlobOrClobPanelAbstract object, final IVisit<Object> visit) {
-                        if (!isUnchanging(object)) {
-                            visit.stop(true);
-                        }
-                    }
+            @Override
+            public void component(final IsisBlobOrClobPanelAbstract object, final IVisit<Object> visit) {
+                if (!isUnchanging(object)) {
+                    visit.stop(true);
+                }
+            }
 
-                    private boolean isUnchanging(final IsisBlobOrClobPanelAbstract object) {
-                        final ScalarModel scalarModel = (ScalarModel) object.getModel();
-                        final UnchangingFacet unchangingFacet = scalarModel.getFacet(UnchangingFacet.class);
-                        return unchangingFacet != null && unchangingFacet.value();
-                    }
+            private boolean isUnchanging(final IsisBlobOrClobPanelAbstract object) {
+                final ScalarModel scalarModel = (ScalarModel) object.getModel();
+                final UnchangingFacet unchangingFacet = scalarModel.getFacet(UnchangingFacet.class);
+                return unchangingFacet != null && unchangingFacet.value();
+            }
 
-                });
+        });
         return hasBlobsOrClobs != null;
     }
 
     private static String asStr(final Bookmark bookmark) {
         return bookmark instanceof HintStore.BookmarkWithHintId
                 ? ((HintStore.BookmarkWithHintId) bookmark).toStringUsingHintId()
-                : bookmark.toString();
+                        : bookmark.toString();
     }
 
     private void forwardOnConcurrencyException(
@@ -312,17 +312,17 @@ public final class FormExecutorDefault<M extends BookmarkableModel<ObjectAdapter
         // but trying to preserve them seems to cause the 302 redirect to be swallowed somehow
         final EntityPage entityPage =
 
-        // disabling concurrency checking after the layout XML (grid) feature
-        // was throwing an exception when rebuild grid after invoking action
-        // not certain why that would be the case, but think it should be
-        // safe to simply disable while recreating the page to re-render back to user.
-        AdapterManager.ConcurrencyChecking.executeWithConcurrencyCheckingDisabled(
-                new Callable<EntityPage>() {
-                    @Override public EntityPage call() throws Exception {
-                        return new EntityPage(targetAdapter, ex);
-                    }
-                }
-        );
+                // disabling concurrency checking after the layout XML (grid) feature
+                // was throwing an exception when rebuild grid after invoking action
+                // not certain why that would be the case, but think it should be
+                // safe to simply disable while recreating the page to re-render back to user.
+                AdapterManager.ConcurrencyChecking.executeWithConcurrencyCheckingDisabled(
+                        new Callable<EntityPage>() {
+                            @Override public EntityPage call() throws Exception {
+                                return new EntityPage(targetAdapter, ex);
+                            }
+                        }
+                        );
 
         // force any changes in state etc to happen now prior to the redirect;
         // in the case of an object being returned, this should cause our page mementos
@@ -346,7 +346,7 @@ public final class FormExecutorDefault<M extends BookmarkableModel<ObjectAdapter
                 if (component.getOutputMarkupId() && !(component instanceof Page)) {
                     List<Component> listToAddTo =
                             shouldRedraw(component)
-                                    ? componentsToRedraw
+                            ? componentsToRedraw
                                     : componentsNotToRedraw;
                     listToAddTo.add(component);
                 }
@@ -358,12 +358,12 @@ public final class FormExecutorDefault<M extends BookmarkableModel<ObjectAdapter
                 // get removed after they've been added to target.
                 // so.. still getting WARN log messages from XmlPartialPageUpdate
 
-//                final Page page = component.findParent(Page.class);
-//                if(page == null) {
-//                    // as per logic in XmlPartialPageUpdate, this has already been
-//                    // removed from page so don't attempt to redraw it
-//                    return false;
-//                }
+                //                final Page page = component.findParent(Page.class);
+                //                if(page == null) {
+                //                    // as per logic in XmlPartialPageUpdate, this has already been
+                //                    // removed from page so don't attempt to redraw it
+                //                    return false;
+                //                }
 
                 final Object defaultModel = component.getDefaultModel();
                 if (!(defaultModel instanceof ScalarModel)) {

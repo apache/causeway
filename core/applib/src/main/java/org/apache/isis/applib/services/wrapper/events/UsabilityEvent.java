@@ -24,11 +24,11 @@ import org.apache.isis.applib.Identifier;
 /**
  * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents a check to determine whether a member of an object is usable or
  * has been disabled.
- * 
+ *
  * <p>
  * If {@link #getReason()} is <tt>null</tt>, then is usable; otherwise is
  * disabled.
- * 
+ *
  * @see AccessEvent
  * @see VisibilityEvent
  * @see ValidityEvent

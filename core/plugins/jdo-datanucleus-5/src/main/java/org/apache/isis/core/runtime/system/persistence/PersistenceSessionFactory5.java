@@ -48,7 +48,7 @@ import org.slf4j.LoggerFactory;
  * must be annotated using {@link Programmatic}.
  * </p>
  */
-public class PersistenceSessionFactory5 
+public class PersistenceSessionFactory5
 implements PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstalledFlag {
 
     private static final Logger LOG = LoggerFactory.getLogger(PersistenceSessionFactory5.class);
@@ -162,10 +162,10 @@ implements PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstal
         if(!isInitialized()) {
             return;
         }
-    	if(applicationComponents != null) {
-    		applicationComponents.shutdown();
+        if(applicationComponents != null) {
+            applicationComponents.shutdown();
             applicationComponents = null;
-    	}
+        }
     }
 
     /**

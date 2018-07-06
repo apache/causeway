@@ -44,7 +44,7 @@ import org.apache.isis.objectstore.jdo.metamodel.facets.object.persistencecapabl
 import org.datanucleus.identity.DatastoreId;
 
 public final class JdoObjectIdSerializer {
-    
+
     private static final char SEPARATOR = '_';
 
     private JdoObjectIdSerializer(){}
@@ -69,10 +69,10 @@ public final class JdoObjectIdSerializer {
             return "i" + SEPARATOR + jdoOid;
         }
         if(jdoOid instanceof javax.jdo.identity.StringIdentity) {
-            return "s" + SEPARATOR + jdoOid; 
+            return "s" + SEPARATOR + jdoOid;
         }
         if(jdoOid instanceof javax.jdo.identity.LongIdentity) {
-            return "l" + SEPARATOR + jdoOid; 
+            return "l" + SEPARATOR + jdoOid;
         }
         if(jdoOid instanceof javax.jdo.identity.ObjectIdentity) {
             final javax.jdo.identity.ObjectIdentity id = (ObjectIdentity) jdoOid;
@@ -80,7 +80,7 @@ public final class JdoObjectIdSerializer {
             // UUID support
             if(keyAsObject instanceof UUID) {
                 final UUID uuid = (UUID) keyAsObject;
-                return "u" + SEPARATOR + uuid.toString(); 
+                return "u" + SEPARATOR + uuid.toString();
             }
         }
 
@@ -127,13 +127,13 @@ public final class JdoObjectIdSerializer {
             }
         }
 
-        // the JDO spec (5.4.3) requires that OIDs are serializable toString and 
+        // the JDO spec (5.4.3) requires that OIDs are serializable toString and
         // recreatable through the constructor
         return jdoOid.getClass().getName() + SEPARATOR + jdoOid.toString();
     }
 
     private static List<String> dnPrefixes = Arrays.asList("S", "I", "L", "M", "B");
-    
+
     public static Object toJdoObjectId(final RootOid oid) {
 
         final String idStr = oid.getIdentifier();

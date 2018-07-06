@@ -86,8 +86,8 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
 
         final DomainServicesListReprRenderer renderer = new DomainServicesListReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());
         renderer.usingLinkToBuilder(new DomainServiceLinkTo())
-            .includesSelf()
-            .with(serviceAdapters);
+        .includesSelf()
+        .with(serviceAdapters);
 
         return Responses.ofOk(renderer, Caching.ONE_DAY).build();
     }
@@ -115,8 +115,8 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
     @GET
     @Path("/{serviceId}")
     @Produces({
-            MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR,
-            MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT, RestfulMediaType.APPLICATION_XML_ERROR
+        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR,
+        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT, RestfulMediaType.APPLICATION_XML_ERROR
     })
     //TODO proprietary @PrettyPrinting
     public Response service(@PathParam("serviceId") final String serviceId) {
@@ -126,8 +126,8 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
 
         final DomainObjectReprRenderer renderer = new DomainObjectReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());
         renderer.usingLinkToBuilder(new DomainServiceLinkTo())
-            .with(serviceAdapter)
-            .includesSelf();
+        .with(serviceAdapter)
+        .includesSelf();
 
         return Responses.ofOk(renderer, Caching.ONE_DAY).build();
     }
@@ -156,8 +156,8 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
     @GET
     @Path("/{serviceId}/actions/{actionId}")
     @Produces({
-            MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_ACTION, RestfulMediaType.APPLICATION_JSON_ERROR,
-            MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_ACTION, RestfulMediaType.APPLICATION_XML_ERROR
+        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_ACTION, RestfulMediaType.APPLICATION_JSON_ERROR,
+        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_ACTION, RestfulMediaType.APPLICATION_XML_ERROR
     })
     //TODO proprietary @PrettyPrinting
     public Response actionPrompt(@PathParam("serviceId") final String serviceId, @PathParam("actionId") final String actionId) {
@@ -192,8 +192,8 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
     @GET
     @Path("/{serviceId}/actions/{actionId}/invoke")
     @Produces({
-            MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR,
-            MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
+        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR,
+        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
     })
     //TODO proprietary @PrettyPrinting
     public Response invokeActionQueryOnly(
@@ -208,7 +208,7 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
         setCommandExecutor(Command.Executor.USER);
 
         final JsonRepresentation arguments = getResourceContext().getQueryStringAsJsonRepr();
-        
+
         final ObjectAdapter serviceAdapter = getServiceAdapter(serviceId);
         final DomainResourceHelper helper = newDomainResourceHelper(serviceAdapter);
 
@@ -221,8 +221,8 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
     @Path("/{serviceId}/actions/{actionId}/invoke")
     @Consumes({ MediaType.WILDCARD }) // to save the client having to specify a Content-Type: application/json
     @Produces({
-            MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR,
-            MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
+        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR,
+        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
     })
     //TODO proprietary @PrettyPrinting
     public Response invokeActionIdempotent(
@@ -234,7 +234,7 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
         setCommandExecutor(Command.Executor.USER);
 
         final JsonRepresentation arguments = getResourceContext().getQueryStringAsJsonRepr();
-        
+
         final ObjectAdapter serviceAdapter = getServiceAdapter(serviceId);
         final DomainResourceHelper helper = newDomainResourceHelper(serviceAdapter);
 
@@ -246,8 +246,8 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
     @Path("/{serviceId}/actions/{actionId}/invoke")
     @Consumes({ MediaType.WILDCARD }) // to save the client having to specify a Content-Type: application/json
     @Produces({
-            MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR,
-            MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
+        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR,
+        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
     })
     //TODO proprietary @PrettyPrinting
     public Response invokeAction(@PathParam("serviceId") final String serviceId, @PathParam("actionId") final String actionId, final InputStream body) {
@@ -256,7 +256,7 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
         setCommandExecutor(Command.Executor.USER);
 
         final JsonRepresentation arguments = getResourceContext().getQueryStringAsJsonRepr();
-        
+
         final ObjectAdapter serviceAdapter = getServiceAdapter(serviceId);
         final DomainResourceHelper helper = newDomainResourceHelper(serviceAdapter);
 

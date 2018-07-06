@@ -55,7 +55,7 @@ public abstract class FormComponentPanelAbstract<T> extends FormComponentPanel<T
 
     /**
      * For subclasses
-     * 
+     *
      * @return
      */
     protected Component addOrReplace(final ComponentType componentType, final IModel<?> model) {
@@ -90,7 +90,7 @@ public abstract class FormComponentPanelAbstract<T> extends FormComponentPanel<T
         Components.permanentlyHide(container, ids);
     }
 
-    
+
     // ///////////////////////////////////////////////////////////////////
     // Hint support
     // ///////////////////////////////////////////////////////////////////
@@ -108,7 +108,7 @@ public abstract class FormComponentPanelAbstract<T> extends FormComponentPanel<T
             return (UiHintContainer) model;
         }
         // otherwise, go up the UI component hierarchy
-        return hintContainerOf(getParent()); 
+        return hintContainerOf(getParent());
     }
 
     // ///////////////////////////////////////////////////////////////////

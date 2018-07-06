@@ -39,14 +39,14 @@ public class NamedFacetForParameterLayoutAnnotation extends NamedFacetAbstract {
                 .filter(parameterLayout -> Strings.emptyToNull(parameterLayout.named()) != null)
                 .findFirst()
                 .map(parameterLayout -> new NamedFacetForParameterLayoutAnnotation(
-                                                parameterLayout.named(), parameterLayout.namedEscaped(), holder))
+                        parameterLayout.named(), parameterLayout.namedEscaped(), holder))
                 .orElse(null);
     }
 
     private NamedFacetForParameterLayoutAnnotation(
-        final String value,
-        final boolean escaped,
-        final FacetHolder holder) {
+            final String value,
+            final boolean escaped,
+            final FacetHolder holder) {
 
         super(value, escaped, holder);
     }

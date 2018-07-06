@@ -46,7 +46,7 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 
 public abstract class ActionDomainEventFacetAbstract
-        extends SingleClassValueFacetAbstract implements ActionDomainEventFacet {
+extends SingleClassValueFacetAbstract implements ActionDomainEventFacet {
 
     private final TranslationService translationService;
     private final String translationContext;
@@ -59,9 +59,9 @@ public abstract class ActionDomainEventFacetAbstract
 
     public ActionDomainEventFacetAbstract(
             final Class<? extends ActionDomainEvent<?>> eventType,
-            final FacetHolder holder,
-            final ServicesInjector servicesInjector,
-            final SpecificationLoader specificationLoader) {
+                    final FacetHolder holder,
+                    final ServicesInjector servicesInjector,
+                    final SpecificationLoader specificationLoader) {
         super(type(), holder, eventType, specificationLoader);
 
         this.translationService = servicesInjector.lookupService(TranslationService.class);

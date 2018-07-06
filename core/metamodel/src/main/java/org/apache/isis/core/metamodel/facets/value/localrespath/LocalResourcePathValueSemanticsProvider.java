@@ -30,7 +30,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 
-public class LocalResourcePathValueSemanticsProvider 
+public class LocalResourcePathValueSemanticsProvider
 extends ValueSemanticsProviderAndFacetAbstract<LocalResourcePath> implements LocalResourcePathValueFacet {
 
 
@@ -51,7 +51,7 @@ extends ValueSemanticsProviderAndFacetAbstract<LocalResourcePath> implements Loc
     }
 
     public LocalResourcePathValueSemanticsProvider(final FacetHolder holder, final ServicesInjector context) {
-        super(type(), holder, LocalResourcePath.class, 
+        super(type(), holder, LocalResourcePath.class,
                 TYPICAL_LENGTH, MAX_LENGTH, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE,
                 context);
     }
@@ -64,14 +64,14 @@ extends ValueSemanticsProviderAndFacetAbstract<LocalResourcePath> implements Loc
     protected LocalResourcePath doParse(final Object context, final String entry) {
         if (entry.trim().equals("")) {
             return null;
-        } 
-    
+        }
+
         try {
             return new LocalResourcePath(entry);
         } catch (final InvalidPathException ex) {
             throw new IllegalArgumentException("Not parseable as a LocalResourcePath ('" + entry + "')", ex);
         }
-    
+
     }
 
     @Override

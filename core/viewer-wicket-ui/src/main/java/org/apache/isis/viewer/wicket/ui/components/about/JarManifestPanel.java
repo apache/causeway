@@ -61,6 +61,7 @@ public class JarManifestPanel extends Panel {
         add(container);
     }
 
+    @Override
     public void renderHead(final IHeaderResponse response) {
         PanelUtil.renderHead(response, this.getClass());
     }

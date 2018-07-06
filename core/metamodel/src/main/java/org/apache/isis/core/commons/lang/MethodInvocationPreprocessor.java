@@ -34,7 +34,7 @@ import org.apache.isis.commons.internal.collections._Collections;
 /**
  * Utility for method invocation pre-processing.
  * <p>
- * For a given array of parameters, we intercept and adapt those, 
+ * For a given array of parameters, we intercept and adapt those,
  * that are not compatible with the expected target parameter type.
  * </p>
  * <p>
@@ -43,72 +43,72 @@ import org.apache.isis.commons.internal.collections._Collections;
  */
 public class MethodInvocationPreprocessor {
 
-	public static Object invoke(Method method, Object targetPojo, Object[] executionParameters) 
-			throws IllegalAccessException, InvocationTargetException {
+    public static Object invoke(Method method, Object targetPojo, Object[] executionParameters)
+            throws IllegalAccessException, InvocationTargetException {
 
-		if (_NullSafe.isEmpty(executionParameters)) {
-			return method.invoke(targetPojo, executionParameters);
-		}
-		
-		final Class<?>[] parameterTypes = method.getParameterTypes();
-		final Object[] adaptedExecutionParameters = new Object[executionParameters.length]; 
-		
-		int i=0;
-		
-		for(Object param : executionParameters) {
-			adaptedExecutionParameters[i] = adapt(param, parameterTypes[i]);
-			++i;
-		}
-		
-		return method.invoke(targetPojo, adaptedExecutionParameters);
-	}
+        if (_NullSafe.isEmpty(executionParameters)) {
+            return method.invoke(targetPojo, executionParameters);
+        }
 
-	// -- OBJECT ADAPTER
-	
-	/**
-	 * Replaces obj (if required) to be conform with the parameterType
-	 * @param obj
-	 * @param parameterType
-	 * @return
-	 */
-	
-	private static Object adapt(Object obj, Class<?> parameterType) {
+        final Class<?>[] parameterTypes = method.getParameterTypes();
+        final Object[] adaptedExecutionParameters = new Object[executionParameters.length];
 
-		if(obj==null) {
-			return null;
-		}
-		
-		if(_Arrays.isArrayType(parameterType)) {
-			final Class<?> componentType = _Arrays.inferComponentTypeIfAny(parameterType);
-			if(componentType==null) {
-				return obj;
-			}
-			@SuppressWarnings("rawtypes") final List list = (List)obj;
-			return _Arrays.toArray(_Casts.uncheckedCast(list), componentType);
-		}
-		
-		// allow no side effects on Collection arguments
-		if(Collection.class.equals(parameterType)) {
-			return _Collections.asUnmodifiableCollection((List<?>)obj);
-		}
-		
-		// allow no side effects on List arguments
-		if(List.class.equals(parameterType)) {
-			return _Collections.asUnmodifiableList((List<?>)obj);
-		}
+        int i=0;
 
-		// adapt as Set (unmodifiable)
-		if(Set.class.equals(parameterType)) {
-			return _Collections.asUnmodifiableSet((List<?>)obj);
-		}
-		
-		// adapt as SortedSet (unmodifiable)
-		if(SortedSet.class.equals(parameterType)) {
-			return _Collections.asUnmodifiableSortedSet((List<?>)obj);
-		}
-		
-		return obj;
-	}
-	
+        for(Object param : executionParameters) {
+            adaptedExecutionParameters[i] = adapt(param, parameterTypes[i]);
+            ++i;
+        }
+
+        return method.invoke(targetPojo, adaptedExecutionParameters);
+    }
+
+    // -- OBJECT ADAPTER
+
+    /**
+     * Replaces obj (if required) to be conform with the parameterType
+     * @param obj
+     * @param parameterType
+     * @return
+     */
+
+    private static Object adapt(Object obj, Class<?> parameterType) {
+
+        if(obj==null) {
+            return null;
+        }
+
+        if(_Arrays.isArrayType(parameterType)) {
+            final Class<?> componentType = _Arrays.inferComponentTypeIfAny(parameterType);
+            if(componentType==null) {
+                return obj;
+            }
+            @SuppressWarnings("rawtypes") final List list = (List)obj;
+            return _Arrays.toArray(_Casts.uncheckedCast(list), componentType);
+        }
+
+        // allow no side effects on Collection arguments
+        if(Collection.class.equals(parameterType)) {
+            return _Collections.asUnmodifiableCollection((List<?>)obj);
+        }
+
+        // allow no side effects on List arguments
+        if(List.class.equals(parameterType)) {
+            return _Collections.asUnmodifiableList((List<?>)obj);
+        }
+
+        // adapt as Set (unmodifiable)
+        if(Set.class.equals(parameterType)) {
+            return _Collections.asUnmodifiableSet((List<?>)obj);
+        }
+
+        // adapt as SortedSet (unmodifiable)
+        if(SortedSet.class.equals(parameterType)) {
+            return _Collections.asUnmodifiableSortedSet((List<?>)obj);
+        }
+
+        return obj;
+    }
+
 
 }

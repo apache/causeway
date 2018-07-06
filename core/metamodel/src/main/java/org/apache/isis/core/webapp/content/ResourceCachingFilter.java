@@ -42,10 +42,10 @@ import org.apache.isis.commons.internal.exceptions._Exceptions.FluentException;
  * Adapted from {@link http
  * ://www.digitalsanctuary.com/tech-blog/java/jboss/setting
  * -cache-headers-from-jboss.html}
- * 
+ *
  * <p>
  * Usage:
- * 
+ *
  * <pre>
  * &lt;filter>
  *   &lt;filter-name>ResourceCachingFilter&lt;/filter-name>
@@ -99,7 +99,7 @@ public class ResourceCachingFilter implements Filter {
     /**
      * Attribute set on {@link HttpServletRequest} if the filter has been
      * applied.
-     * 
+     *
      * <p>
      * This is intended to inform other filters.
      */
@@ -108,7 +108,7 @@ public class ResourceCachingFilter implements Filter {
     /**
      * To allow other filters to ask whether a request is mapped to the resource
      * caching filter.
-     * 
+     *
      * <p>
      * For example, the <tt>IsisSessionFilter</tt> uses this in order to skip
      * any session handling.
@@ -167,10 +167,10 @@ public class ResourceCachingFilter implements Filter {
     /**
      * Initializes the Servlet filter with the cache time and sets up the
      * unchanging headers.
-     * 
+     *
      * @param pConfig
      *            the config
-     * 
+     *
      * @see javax.servlet.Filter#init(javax.servlet.FilterConfig)
      */
     @Override
@@ -194,19 +194,19 @@ public class ResourceCachingFilter implements Filter {
 
     /**
      * Do filter.
-     * 
+     *
      * @param servletRequest
      *            the request
      * @param servletResponse
      *            the response
      * @param chain
      *            the chain
-     * 
+     *
      * @throws IOException
      *             Signals that an I/O exception has occurred.
      * @throws ServletException
      *             the servlet exception
-     * 
+     *
      * @see javax.servlet.Filter#doFilter(javax.servlet.ServletRequest,
      *      javax.servlet.ServletResponse, javax.servlet.FilterChain)
      */
@@ -228,42 +228,42 @@ public class ResourceCachingFilter implements Filter {
             httpResponse.addHeader(EXPIRES_HEADER, httpDateFormat.format(new Date(now + (this.cacheTime.longValue() * MILLISECONDS_IN_SECOND))));
         }
         httpRequest.setAttribute(REQUEST_ATTRIBUTE, true);
-        
+
         // try to suppress java.io.IOException of kind 'client connection abort'
-        // 1) the TCP protocol (by design) does not provide a means to check, whether a 
+        // 1) the TCP protocol (by design) does not provide a means to check, whether a
         //    connection has been closed by the client
-        // 2) the exception thrown and the exception message text are specific to the 
+        // 2) the exception thrown and the exception message text are specific to the
         //    servlet-engine implementation, so we can only guess here
         try {
-        	chain.doFilter(servletRequest, servletResponse);
+            chain.doFilter(servletRequest, servletResponse);
         } catch (IOException e) {
-        	FluentException.of(e)
-        	.suppressIf(this::isConnectionAbortException);
-		}
+            FluentException.of(e)
+            .suppressIf(this::isConnectionAbortException);
+        }
     }
 
     /**
      * Destroy all humans!
-     * 
+     *
      * @see javax.servlet.Filter#destroy()
      */
     @Override
     public void destroy() {
     }
-    
+
     // -- HELPER
-    
+
     private boolean isConnectionAbortException(IOException e) {
-    	// tomcat 9
-    	if(e.getMessage().contains("An established connection was aborted by the software in your host machine")) {
-    		return true;
-    	}
-    	// payara 4
-    	if(e.getMessage().contains("Connection is closed")) {
-    		return true;
-    	}
-    	
-    	return false;
+        // tomcat 9
+        if(e.getMessage().contains("An established connection was aborted by the software in your host machine")) {
+            return true;
+        }
+        // payara 4
+        if(e.getMessage().contains("Connection is closed")) {
+            return true;
+        }
+
+        return false;
     }
 
 }

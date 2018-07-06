@@ -38,7 +38,7 @@ public abstract class ObjectPersistingEvent<S> extends AbstractLifecycleEvent<S>
             return "ObjectPersistingEvent$Default{source=" + getSource() + "}";
         }
     }
-    
+
 
     // -- Noop class
 
@@ -49,7 +49,7 @@ public abstract class ObjectPersistingEvent<S> extends AbstractLifecycleEvent<S>
     public static class Noop extends ObjectPersistingEvent<Object> {
         private static final long serialVersionUID = 1L;
     }
-    
+
 
     // -- Doop class
 
@@ -60,7 +60,7 @@ public abstract class ObjectPersistingEvent<S> extends AbstractLifecycleEvent<S>
     public static class Doop extends ObjectPersistingEvent<Object> {
         private static final long serialVersionUID = 1L;
     }
-    
+
 
     public ObjectPersistingEvent() {
     }

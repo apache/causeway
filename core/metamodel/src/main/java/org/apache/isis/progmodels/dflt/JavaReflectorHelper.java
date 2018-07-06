@@ -33,12 +33,12 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 
 public final class JavaReflectorHelper  {
-    
+
     @SuppressWarnings("unused")
     private static final Logger LOG = LoggerFactory.getLogger(JavaReflectorHelper.class);
 
     private JavaReflectorHelper(){}
-    
+
     public static SpecificationLoader createObjectReflector(
             final IsisConfiguration configuration,
             final ProgrammingModel programmingModel,
@@ -51,7 +51,7 @@ public final class JavaReflectorHelper  {
             metaModelRefiner.refineProgrammingModel(programmingModel, configuration);
             metaModelRefiner.refineMetaModelValidator(metaModelValidator, configuration);
         }
-        
+
         // the programming model is itself also a MetaModelValidatorRefiner
         if(!metaModelRefiners.contains(programmingModel)) {
             programmingModel.refineMetaModelValidator(metaModelValidator, configuration);

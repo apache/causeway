@@ -60,7 +60,7 @@ public class AuthenticatedWebSessionForIsis extends AuthenticatedWebSession impl
 
     private final BookmarkedPagesModel bookmarkedPagesModel = new BookmarkedPagesModel();
     private final BreadcrumbModel breadcrumbModel = new BreadcrumbModel();
-    
+
     private AuthenticationSession authenticationSession;
 
     public AuthenticatedWebSessionForIsis(final Request request) {
@@ -110,7 +110,7 @@ public class AuthenticatedWebSessionForIsis extends AuthenticatedWebSession impl
 
         SessionLoggingService.CausedBy causedBy = RequestCycle.get() != null
                 ? SessionLoggingService.CausedBy.USER
-                : SessionLoggingService.CausedBy.SESSION_EXPIRATION;
+                        : SessionLoggingService.CausedBy.SESSION_EXPIRATION;
 
         String userName = null;
         if (authenticationSession != null) {
@@ -165,40 +165,40 @@ public class AuthenticatedWebSessionForIsis extends AuthenticatedWebSession impl
     // /////////////////////////////////////////////////
     // *Provider impl.
     // /////////////////////////////////////////////////
-    
+
     private void log(
             final SessionLoggingService.Type type,
             final String username,
             final SessionLoggingService.CausedBy causedBy) {
-    	
-    	
-    	final IsisSessionFactory isisSessionFactory = getIsisSessionFactoryIfAny();
+
+
+        final IsisSessionFactory isisSessionFactory = getIsisSessionFactoryIfAny();
         final SessionLoggingService sessionLoggingService = getSessionLoggingService();
-        	
-    	final Runnable loggingTask = ()->{
+
+        final Runnable loggingTask = ()->{
             // use hashcode as session identifier, to avoid re-binding http sessions if using Session#getId()
             int sessionHashCode = System.identityHashCode(AuthenticatedWebSessionForIsis.this);
-            sessionLoggingService.log(type, username, Clock.getTimeAsDateTime().toDate(), causedBy, Integer.toString(sessionHashCode));        		
-    	};
-    	
-    	if(isisSessionFactory!=null) {
-    		isisSessionFactory.doInSession(loggingTask);
-    	} else {
-    		loggingTask.run();
-    	}
-        
+            sessionLoggingService.log(type, username, Clock.getTimeAsDateTime().toDate(), causedBy, Integer.toString(sessionHashCode));
+        };
+
+        if(isisSessionFactory!=null) {
+            isisSessionFactory.doInSession(loggingTask);
+        } else {
+            loggingTask.run();
+        }
+
     }
 
     protected @NotNull SessionLoggingService getSessionLoggingService() {
-    	try {
-    		final SessionLoggingService service = getIsisSessionFactory().getServicesInjector()
-    				.lookupService(SessionLoggingService.class);
-    		return (service!=null) ? service : new SessionLoggingService.Stderr();
-    	} catch (Exception e) {
-    		// fallback to System.err
-    		return new SessionLoggingService.Stderr(); 
-		}
-    	
+        try {
+            final SessionLoggingService service = getIsisSessionFactory().getServicesInjector()
+                    .lookupService(SessionLoggingService.class);
+            return (service!=null) ? service : new SessionLoggingService.Stderr();
+        } catch (Exception e) {
+            // fallback to System.err
+            return new SessionLoggingService.Stderr();
+        }
+
     }
 
     @Override
@@ -206,19 +206,19 @@ public class AuthenticatedWebSessionForIsis extends AuthenticatedWebSession impl
         // do nothing here because this will lead to problems with Shiro
         // see https://issues.apache.org/jira/browse/ISIS-1018
     }
-    
+
     // -- HELPER
 
     private IsisSessionFactory getIsisSessionFactory() {
         return IsisContext.getSessionFactory();
     }
-    
+
     private IsisSessionFactory getIsisSessionFactoryIfAny() {
-    	try { 
-    		return getIsisSessionFactory();
-    	} catch (Exception e) {
-    		return null;
-		}
+        try {
+            return getIsisSessionFactory();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
 

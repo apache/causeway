@@ -64,7 +64,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 /**
- * 
+ *
  */
 public abstract class IsisComponentProvider {
 
@@ -112,7 +112,7 @@ public abstract class IsisComponentProvider {
         return configuration;
     }
 
-    
+
 
     // -- helpers (appManifest)
 
@@ -122,7 +122,7 @@ public abstract class IsisComponentProvider {
         // that contains only services.
         putConfigurationProperty(
                 SystemConstants.APP_MANIFEST_KEY, appManifest.getClass().getName()
-        );
+                );
     }
 
     private void findAndRegisterTypes(final AppManifest appManifest) {
@@ -149,7 +149,7 @@ public abstract class IsisComponentProvider {
             return annotation.nature() == Nature.MIXIN;
         })
         .forEach(mixinTypes::add);
-        
+
         // add in any explicitly registered services...
         domainServiceTypes.addAll(appManifest.getAdditionalServices());
 
@@ -160,12 +160,12 @@ public abstract class IsisComponentProvider {
 
         // for a tiny bit of efficiency, we append a '.' to each package name here, outside the loops
         List<String> packagesWithDotSuffix =
-            FluentIterable.from(moduleAndFrameworkPackages).transform(new Function<String, String>() {
-                @Nullable @Override
-                public String apply(@Nullable final String s) {
-                    return s != null ? s + "." : null;
-                }
-            }).toList();
+                FluentIterable.from(moduleAndFrameworkPackages).transform(new Function<String, String>() {
+                    @Nullable @Override
+                    public String apply(@Nullable final String s) {
+                        return s != null ? s + "." : null;
+                    }
+                }).toList();
 
         registry.setDomainServiceTypes(within(packagesWithDotSuffix, domainServiceTypes));
         registry.setPersistenceCapableTypes(within(packagesWithDotSuffix, persistenceCapableTypes));
@@ -282,7 +282,7 @@ public abstract class IsisComponentProvider {
         this.configuration.add(key, value);
     }
 
-    
+
 
     // -- provideAuth*
 
@@ -294,7 +294,7 @@ public abstract class IsisComponentProvider {
         return authorizationManager;
     }
 
-    
+
 
     // -- provideServiceInjector
 
@@ -302,7 +302,7 @@ public abstract class IsisComponentProvider {
         return new ServicesInjector(services, configuration);
     }
 
-    
+
 
     // -- provideSpecificationLoader
 
@@ -338,6 +338,6 @@ public abstract class IsisComponentProvider {
 
 
 
-    
+
 
 }

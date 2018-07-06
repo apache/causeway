@@ -68,7 +68,7 @@ public class CollectionMemento implements Serializable {
     /**
      * Only applies to parented collections, being the id of the collection in
      * the parent (eg <tt>lineItems</tt>).
-     * 
+     *
      * <p>
      * Will return <tt>null</tt> otherwise.
      */

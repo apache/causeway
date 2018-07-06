@@ -26,7 +26,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 
 public final class StackTraceListView extends ListView<StackTraceDetail> {
-    
+
     private static final long serialVersionUID = 1L;
     private final String idLine;
 

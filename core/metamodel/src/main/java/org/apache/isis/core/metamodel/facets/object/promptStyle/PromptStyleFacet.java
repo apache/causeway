@@ -27,6 +27,7 @@ import org.apache.isis.core.metamodel.facets.SingleValueFacet;
  */
 public interface PromptStyleFacet extends SingleValueFacet<PromptStyle> {
 
+    @Override
     PromptStyle value();
 
 }

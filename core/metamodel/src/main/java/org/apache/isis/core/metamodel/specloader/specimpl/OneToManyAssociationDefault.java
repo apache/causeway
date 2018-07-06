@@ -87,7 +87,7 @@ public class OneToManyAssociationDefault extends ObjectAssociationAbstract imple
         return new CollectionUsabilityContext(ownerAdapter, getIdentifier(), interactionInitiatedBy, where);
     }
 
-    
+
 
     // -- Validate Add
     // Not API
@@ -116,7 +116,7 @@ public class OneToManyAssociationDefault extends ObjectAssociationAbstract imple
         return InteractionUtils.isValidResult(this, validityContext);
     }
 
-    
+
 
     // -- Validate Remove
     private ValidityContext<?> createValidateRemoveInteractionContext(
@@ -125,7 +125,7 @@ public class OneToManyAssociationDefault extends ObjectAssociationAbstract imple
             final InteractionInitiatedBy interactionInitiatedBy) {
         return new CollectionRemoveFromContext(
                 ownerAdapter, getIdentifier(), proposedToRemoveAdapter, interactionInitiatedBy
-        );
+                );
     }
 
     @Override
@@ -150,7 +150,7 @@ public class OneToManyAssociationDefault extends ObjectAssociationAbstract imple
         return !isNotPersisted();
     }
 
-    
+
 
     // -- get, isEmpty, add, clear
 
@@ -177,7 +177,7 @@ public class OneToManyAssociationDefault extends ObjectAssociationAbstract imple
         return facet.size(collection) == 0;
     }
 
-    
+
 
     // -- add, clear
 
@@ -225,7 +225,7 @@ public class OneToManyAssociationDefault extends ObjectAssociationAbstract imple
         }
     }
 
-    
+
 
     // -- defaults
     @Override
@@ -237,7 +237,7 @@ public class OneToManyAssociationDefault extends ObjectAssociationAbstract imple
     public void toDefault(final ObjectAdapter ownerAdapter) {
     }
 
-    
+
 
     // -- choices & autoComplete
 
@@ -253,7 +253,7 @@ public class OneToManyAssociationDefault extends ObjectAssociationAbstract imple
         return false;
     }
 
-    
+
     @Override
     public boolean hasAutoComplete() {
         return false;
@@ -266,13 +266,13 @@ public class OneToManyAssociationDefault extends ObjectAssociationAbstract imple
             final InteractionInitiatedBy interactionInitiatedBy) {
         return new ObjectAdapter[0];
     }
-    
+
     @Override
     public int getAutoCompleteMinLength() {
         return 0; // n/a
     }
 
-    
+
 
     // -- toString
 
@@ -286,7 +286,7 @@ public class OneToManyAssociationDefault extends ObjectAssociationAbstract imple
         return str.toString();
     }
 
-    
+
 
 
 }

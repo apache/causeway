@@ -54,7 +54,7 @@ public class OidAdapterHashMap implements Iterable<Oid>, SessionScopedComponent 
         adapterByOidMap.clear();
     }
 
-    
+
 
     // -- add, remove
     /**
@@ -75,7 +75,7 @@ public class OidAdapterHashMap implements Iterable<Oid>, SessionScopedComponent 
 
     /**
      * Remove the adapter for the given oid
-     * 
+     *
      * @return <tt>true</tt> if an adapter was removed.
      */
     public boolean remove(final Oid oid) {
@@ -83,7 +83,7 @@ public class OidAdapterHashMap implements Iterable<Oid>, SessionScopedComponent 
         return adapterByOidMap.remove(oid) != null;
     }
 
-    
+
 
     // -- getAdapter, iterator
     /**
@@ -98,7 +98,7 @@ public class OidAdapterHashMap implements Iterable<Oid>, SessionScopedComponent 
         return adapterByOidMap.keySet().iterator();
     }
 
-    
+
 
 
 }

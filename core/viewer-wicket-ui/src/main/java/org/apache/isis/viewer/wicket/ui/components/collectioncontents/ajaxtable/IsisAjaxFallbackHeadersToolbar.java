@@ -42,7 +42,7 @@ public class IsisAjaxFallbackHeadersToolbar<S> extends IsisAjaxHeadersToolbar<S>
         table.setOutputMarkupId(true);
         this.stateLocator = stateLocator;
     }
-    
+
     @Override
     protected void onInitialize() {
         super.onInitialize();
@@ -52,21 +52,21 @@ public class IsisAjaxFallbackHeadersToolbar<S> extends IsisAjaxHeadersToolbar<S>
 
     @Override
     protected WebMarkupContainer newSortableHeader(final String borderId, final S property,
-        final ISortStateLocator<S> locator)
+            final ISortStateLocator<S> locator)
     {
         return new IsisAjaxFallbackOrderByBorder<S>(borderId, table, property, locator/*, getAjaxCallListener()*/);
     }
 
-//    /**
-//     * Returns a decorator that will be used to decorate ajax links used in sortable headers
-//     * 
-//     * @return decorator or null for none
-//     */
-//    protected IAjaxCallListener getAjaxCallListener()
-//    {
-//        return null;
-//    }
-    
+    //    /**
+    //     * Returns a decorator that will be used to decorate ajax links used in sortable headers
+    //     *
+    //     * @return decorator or null for none
+    //     */
+    //    protected IAjaxCallListener getAjaxCallListener()
+    //    {
+    //        return null;
+    //    }
+
     // //////////////////////////////////////
 
     void honourSortOrderHints() {

@@ -56,7 +56,7 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
         public boolean isArguments() {
             return this == ARGUMENTS;
         }
-        
+
         public boolean isEventSerialization() {
             return this == EVENT_SERIALIZATION;
         }
@@ -74,7 +74,7 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
 
     /**
      * Not for rendering, but is the key that the representation being rendered will be held under.
-     * 
+     *
      * <p>
      * Used to determine whether to follow links; only populated for {@link Mode#INLINE inline} Mode.
      */
@@ -92,7 +92,7 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
         this.memberId = memberId;
         this.where = where;
     }
-    
+
     protected String getMemberId() {
         return memberId;
     }
@@ -143,7 +143,7 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
     /**
      * Indicates that the representation was produced as the result of a
      * resource that mutated the state.
-     * 
+     *
      * <p>
      * The effect of this is to suppress the link to self.
      */
@@ -244,7 +244,7 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
         if (mutatorSpec.arguments.isOne()) {
             final JsonRepresentation repr = JsonRepresentation.newMap();
             repr.mapPut("value", NullNode.getInstance()); // force a null into
-                                                          // the map
+            // the map
             return repr;
         }
         // overridden by actions
@@ -260,7 +260,7 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
 
         final LinkFollowSpecs membersLinkFollower = getLinkFollowSpecs();
         final LinkFollowSpecs detailsLinkFollower = membersLinkFollower.follow("links");
-        
+
         // create a temporary map that looks the same as the member map we'll be following
         final JsonRepresentation memberMap = JsonRepresentation.newMap();
         memberMap.mapPut(getMemberId(), representation);

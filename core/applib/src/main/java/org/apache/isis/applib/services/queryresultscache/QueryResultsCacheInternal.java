@@ -27,21 +27,21 @@ import org.slf4j.LoggerFactory;
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
-)
+        )
 @RequestScoped
 public class QueryResultsCacheInternal implements QueryResultsCache, WithTransactionScope {
 
     private static final Logger LOG = LoggerFactory.getLogger(QueryResultsCacheInternal.class);
-    
+
     private final Map<Key, Value<?>> cache = _Maps.newHashMap();
 
     @Programmatic
     @Override
     public <T> T execute(
-    		final Callable<T> callable, 
-    		final Class<?> callingClass, 
-    		final String methodName, 
-    		final Object... keys) {
+            final Callable<T> callable,
+            final Class<?> callingClass,
+            final String methodName,
+            final Object... keys) {
         if(control.isFixturesInstalling()) {
             try {
                 return callable.call();
@@ -94,7 +94,7 @@ public class QueryResultsCacheInternal implements QueryResultsCache, WithTransac
     private <T> Value<T> get(final Class<?> callingClass, final String methodName, final Object... keys) {
         return get(new Key(callingClass, methodName, keys));
     }
-    
+
     @Programmatic
     @SuppressWarnings("unchecked")
     private <T> Value<T> get(final Key cacheKey) {
@@ -110,9 +110,9 @@ public class QueryResultsCacheInternal implements QueryResultsCache, WithTransac
     }
 
     private static void logHitOrMiss(final Key cacheKey, final Value<?> cacheValue) {
-        if(!LOG.isDebugEnabled()) { 
-            return; 
-        } 
+        if(!LOG.isDebugEnabled()) {
+            return;
+        }
         LOG.debug("{}: {}", (cacheValue != null ? "HIT" : "MISS"), cacheKey.toString());
     }
 

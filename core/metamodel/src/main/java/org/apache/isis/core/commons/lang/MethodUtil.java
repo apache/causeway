@@ -27,7 +27,7 @@ import java.util.List;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
 
 public class MethodUtil {
-    
+
     private MethodUtil(){}
 
     public static void invoke(final List<Method> methods, final Object object) {
@@ -40,11 +40,11 @@ public class MethodUtil {
      * Searches the supplied array of methods for specific method and returns
      * it, also removing it from supplied array if found (by setting to
      * <tt>null</tt>).
-     * 
+     *
      * <p>
      * Any methods that do not meet the search criteria are left in the array of
      * methods.
-     * 
+     *
      * <p>
      * The search algorithm is as specified in
      * {@link MethodUtil#findMethodIndex(List, MethodScope, String, Class, Class[])}.
@@ -62,7 +62,7 @@ public class MethodUtil {
     /**
      * Searches the supplied array of methods for specific method and returns
      * its index, otherwise returns <tt>-1</tt>.
-     * 
+     *
      * <p>
      * The search algorithm is:
      * <ul>
@@ -79,37 +79,37 @@ public class MethodUtil {
             if (methods.get(i) == null) {
                 continue;
             }
-    
+
             final Method method = methods.get(i);
             final int modifiers = method.getModifiers();
-    
+
             // check for public modifier
             if (!Modifier.isPublic(modifiers)) {
                 continue;
             }
-    
+
             // check for static modifier
             if (!inScope(method, methodScope)) {
                 continue;
             }
-    
+
             // check for name
             if (!method.getName().equals(name)) {
                 continue;
             }
-    
+
             // check for return type
             if (returnType != null && returnType != method.getReturnType()) {
                 continue;
             }
-    
+
             // check params (if required)
             if (paramTypes != null) {
                 final Class<?>[] parameterTypes = method.getParameterTypes();
                 if (paramTypes.length != parameterTypes.length) {
                     continue;
                 }
-    
+
                 for (int c = 0; c < paramTypes.length; c++) {
                     if ((paramTypes[c] != null) && (paramTypes[c] != parameterTypes[c])) {
                         continue method;
@@ -130,11 +130,11 @@ public class MethodUtil {
     /**
      * Searches the supplied array of methods for all specific methods and
      * returns them, also removing them from supplied array if found.
-     * 
+     *
      * <p>
      * Any methods that do not meet the search criteria are left in the array of
      * methods.
-     * 
+     *
      * <p>
      * The search algorithm is:
      * <ul>
@@ -144,7 +144,7 @@ public class MethodUtil {
      * <li>has the specified number of parameters</li>
      * </ul>
      * If the returnType is specified as null then the return type is ignored.
-     * 
+     *
      * @param forClass
      * @param name
      * @param returnType
@@ -160,9 +160,9 @@ public class MethodUtil {
             final Class<?> returnType,
             final boolean canBeVoid,
             final int paramCount) {
-    
+
         final List<Method> validMethods = new ArrayList<Method>();
-    
+
         for (int i = 0; i < methods.size(); i++) {
             final Method method = methods.get(i);
             if (method == null) {
@@ -172,13 +172,13 @@ public class MethodUtil {
             if (!inScope(method, forClass)) {
                 continue;
             }
-    
+
             final boolean goodPrefix = method.getName().startsWith(prefix);
-    
+
             final boolean goodCount = method.getParameterTypes().length == paramCount;
             final Class<?> type = method.getReturnType();
             final boolean goodReturn = ClassExtensions.isCompatibleAsReturnType(returnType, canBeVoid, type);
-    
+
             if (goodPrefix && goodCount && goodReturn) {
                 validMethods.add(method);
                 methods.set(i, null);

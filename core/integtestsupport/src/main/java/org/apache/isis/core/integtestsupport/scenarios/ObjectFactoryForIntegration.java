@@ -31,16 +31,20 @@ import cucumber.runtime.CucumberException;
 public class ObjectFactoryForIntegration implements ObjectFactory {
     private final Map<Class<?>, Object> instances = _Maps.newHashMap();
 
+    @Override
     public void start() { }
 
+    @Override
     public void stop() {
         this.instances.clear();
     }
 
+    @Override
     public boolean addClass(Class<?> clazz) {
         return true;
     }
 
+    @Override
     public <T> T getInstance(Class<T> type) {
         T instance = type.cast(this.instances.get(type));
         if (instance == null) {

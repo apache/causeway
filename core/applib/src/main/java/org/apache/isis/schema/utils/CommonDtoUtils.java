@@ -62,13 +62,13 @@ public final class CommonDtoUtils {
     // -- PARAM_DTO_TO_NAME, PARAM_DTO_TO_TYPE
 
     public static final Function<ParamDto, String> PARAM_DTO_TO_NAME = ParamDto::getName;
-    public static final Function<ParamDto, ValueType> PARAM_DTO_TO_TYPE = ParamDto::getType; 
+    public static final Function<ParamDto, ValueType> PARAM_DTO_TO_TYPE = ParamDto::getType;
 
     // -- asValueType
     private final static Map<Class<?>, ValueType> valueTypeByClass =
-    		_Maps.unmodifiableEntries(
-    				entry(String.class, ValueType.STRING),
-    				entry(String.class, ValueType.STRING),
+            _Maps.unmodifiableEntries(
+                    entry(String.class, ValueType.STRING),
+                    entry(String.class, ValueType.STRING),
                     entry(byte.class, ValueType.BYTE),
                     entry(Byte.class, ValueType.BYTE),
                     entry(short.class, ValueType.SHORT),
@@ -107,7 +107,7 @@ public final class CommonDtoUtils {
         // assume reference otherwise
         return ValueType.REFERENCE;
     }
-    
+
 
     // -- newValueDto, setValueOn
 
@@ -247,16 +247,16 @@ public final class CommonDtoUtils {
         case REFERENCE: {
             final Bookmark bookmark = val instanceof Bookmark
                     ? (Bookmark) val
-                    : bookmarkService!=null ? bookmarkService.bookmarkFor(val) : null;
+                            : bookmarkService!=null ? bookmarkService.bookmarkFor(val) : null;
 
-            if (bookmark != null) {
-                OidDto argValue = bookmark.toOidDto();
-                valueDto.setReference(argValue);
-            }
-            return valueDto;
+                            if (bookmark != null) {
+                                OidDto argValue = bookmark.toOidDto();
+                                valueDto.setReference(argValue);
+                            }
+                            return valueDto;
         }
         case BLOB: {
-        	
+
             final Blob blob = (Blob) val;
             if(blob != null) {
                 final BlobDto blobDto = new BlobDto();
@@ -282,7 +282,7 @@ public final class CommonDtoUtils {
             return null;
         }
         default:
-        	throw _Exceptions.unmatchedCase(valueType);
+            throw _Exceptions.unmatchedCase(valueType);
         }
     }
 
@@ -299,16 +299,16 @@ public final class CommonDtoUtils {
         }
         return collectionDto;
     }
-    
+
 
     // -- getValue (from valueDto)
 
     public static <T> T getValue(
             final ValueDto valueDto,
             final ValueType valueType) {
-    	return _Casts.uncheckedCast(getValueAsObject(valueDto, valueType));
+        return _Casts.uncheckedCast(getValueAsObject(valueDto, valueType));
     }
-    
+
     private static Object getValueAsObject(
             final ValueDto valueDto,
             final ValueType valueType) {
@@ -350,7 +350,7 @@ public final class CommonDtoUtils {
         case ENUM:
             final EnumDto enumDto = valueDto.getEnum();
             final String enumType = enumDto.getEnumType();
-            @SuppressWarnings("rawtypes") 
+            @SuppressWarnings("rawtypes")
             final Class<? extends Enum> enumClass = loadClassElseThrow(enumType);
             return Enum.valueOf(_Casts.uncheckedCast(enumClass), enumDto.getEnumName());
         case REFERENCE:
@@ -366,7 +366,7 @@ public final class CommonDtoUtils {
         case VOID:
             return null;
         default:
-        	throw _Exceptions.unmatchedCase(valueType);
+            throw _Exceptions.unmatchedCase(valueType);
         }
     }
 
@@ -374,17 +374,17 @@ public final class CommonDtoUtils {
         try {
             return _Casts.uncheckedCast(_Context.loadClassAndInitialize(className));
         } catch (ClassNotFoundException e) {
-        	
-        	// [ahuber] fallback to pre 2.0.0 behavior, not sure if needed  
-        	try {
-				return _Casts.uncheckedCast(Class.forName(className));
-			} catch (ClassNotFoundException e1) {
-				throw new RuntimeException(e);
-			}
+
+            // [ahuber] fallback to pre 2.0.0 behavior, not sure if needed
+            try {
+                return _Casts.uncheckedCast(Class.forName(className));
+            } catch (ClassNotFoundException e1) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
-    
+
 
     // -- newValueWithTypeDto
 
@@ -402,7 +402,7 @@ public final class CommonDtoUtils {
         return valueWithTypeDto;
     }
 
-    
+
 
     // -- getValue (from ValueWithTypeDto)
 
@@ -415,7 +415,7 @@ public final class CommonDtoUtils {
     }
 
 
-    
+
 
 
     // -- newParamDto
@@ -443,7 +443,7 @@ public final class CommonDtoUtils {
 
         return paramDto;
     }
-    
+
 
     // -- getValue (from ParamDto)
 
@@ -455,7 +455,7 @@ public final class CommonDtoUtils {
         return CommonDtoUtils.getValue(paramDto, parameterType);
     }
 
-    
+
 
     public static String getMapValue(final MapDto mapDto, final String key) {
         if(mapDto == null) {
@@ -481,9 +481,9 @@ public final class CommonDtoUtils {
     }
 
     private static Optional<MapDto.Entry> entryIfAnyFor(final MapDto mapDto, final String key) {
-    	return mapDto.getEntry().stream()
-    	.filter(entry->Objects.equals(entry.getKey(), key))
-    	.findFirst();
+        return mapDto.getEntry().stream()
+                .filter(entry->Objects.equals(entry.getKey(), key))
+                .findFirst();
     }
 
 }

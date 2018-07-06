@@ -23,8 +23,8 @@ import org.apache.isis.core.metamodel.interactions.ActionArgValidityContext;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 
 public abstract class ObjectActionParameterMixedInAbstract
-        extends ObjectActionParameterAbstract
-        implements ObjectActionParameterMixedIn {
+extends ObjectActionParameterAbstract
+implements ObjectActionParameterMixedIn {
 
     private final ObjectActionParameter mixinParameter;
     private final ObjectActionMixedIn mixedInAction;
@@ -47,6 +47,7 @@ public abstract class ObjectActionParameterMixedInAbstract
                 interactionInitiatedBy);
     }
 
+    @Override
     protected ObjectAdapter targetForDefaultOrChoices(final ObjectAdapter mixedInAdapter) {
         return mixinAdapterFor(mixedInAdapter);
     }

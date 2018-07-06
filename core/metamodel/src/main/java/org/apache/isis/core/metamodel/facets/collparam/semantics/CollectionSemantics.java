@@ -25,48 +25,48 @@ import java.util.Set;
 import java.util.SortedSet;
 
 public enum CollectionSemantics {
-	
-	ARRAY(true),
-	
-	COLLECTION_INTERFACE(true),
-	
-	LIST_IMPLEMENTATION, 
-	LIST_INTERFACE(true),
-	
-    SORTED_SET_IMPLEMENTATION, 
+
+    ARRAY(true),
+
+    COLLECTION_INTERFACE(true),
+
+    LIST_IMPLEMENTATION,
+    LIST_INTERFACE(true),
+
+    SORTED_SET_IMPLEMENTATION,
     SORTED_SET_INTERFACE(true),
-    
+
     SET_IMPLEMENTATION,
     SET_INTERFACE(true),
-    
+
     OTHER_IMPLEMENTATION
     ;
-	
-	final boolean isSupportedInterfaceForActionParameters;
-	
-	private CollectionSemantics() {
-		this(false);
-	}
-	
-    private CollectionSemantics(boolean isSupportedInterfaceForActionParameters) {
-		this.isSupportedInterfaceForActionParameters = isSupportedInterfaceForActionParameters;
-	}
 
-	public static CollectionSemantics of(final Class<?> accessorReturnType) {
+    final boolean isSupportedInterfaceForActionParameters;
+
+    private CollectionSemantics() {
+        this(false);
+    }
+
+    private CollectionSemantics(boolean isSupportedInterfaceForActionParameters) {
+        this.isSupportedInterfaceForActionParameters = isSupportedInterfaceForActionParameters;
+    }
+
+    public static CollectionSemantics of(final Class<?> accessorReturnType) {
         if (!Collection.class.isAssignableFrom(accessorReturnType)) {
             return ARRAY;
         }
         if (Collection.class.equals(accessorReturnType)) {
-        	return COLLECTION_INTERFACE;
+            return COLLECTION_INTERFACE;
         }
         if (List.class.isAssignableFrom(accessorReturnType)) {
             return List.class.equals(accessorReturnType) ? LIST_INTERFACE : LIST_IMPLEMENTATION;
         }
         if (SortedSet.class.isAssignableFrom(accessorReturnType)) {
-        	return SortedSet.class.equals(accessorReturnType) ? SORTED_SET_INTERFACE : SORTED_SET_IMPLEMENTATION;
+            return SortedSet.class.equals(accessorReturnType) ? SORTED_SET_INTERFACE : SORTED_SET_IMPLEMENTATION;
         }
         if (Set.class.isAssignableFrom(accessorReturnType)) {
-        	return Set.class.equals(accessorReturnType) ? SET_INTERFACE : SET_IMPLEMENTATION;
+            return Set.class.equals(accessorReturnType) ? SET_INTERFACE : SET_IMPLEMENTATION;
         }
         return OTHER_IMPLEMENTATION;
     }
@@ -91,7 +91,7 @@ public enum CollectionSemantics {
     public boolean isSortedSet() {
         return this == SORTED_SET_IMPLEMENTATION || this == SORTED_SET_INTERFACE;
     }
-    
+
     /**
      * {@link Set} (but not {@link SortedSet}) is assignable from the corresponding class.
      */
@@ -105,7 +105,7 @@ public enum CollectionSemantics {
     public boolean isAnySet() {
         return isSortedSet() || isUnorderedSet();
     }
-    
+
     /**
      * For example, {@link Queue}, or some other 3rd party implementation of
      * {@link Collection}.
@@ -119,7 +119,7 @@ public enum CollectionSemantics {
     }
 
     public boolean isSupportedInterfaceForActionParameters() {
-    	return isSupportedInterfaceForActionParameters;
+        return isSupportedInterfaceForActionParameters;
     }
 
 }

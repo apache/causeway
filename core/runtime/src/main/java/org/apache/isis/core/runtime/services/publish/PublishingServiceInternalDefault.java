@@ -53,7 +53,7 @@ import org.apache.isis.core.runtime.services.changes.ChangedObjectsServiceIntern
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
-)
+        )
 @RequestScoped
 public class PublishingServiceInternalDefault implements PublishingServiceInternal {
 
@@ -111,6 +111,7 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
 
 
 
+    @Override
     @Programmatic
     public void publishAction(
             final Interaction.Execution execution) {
@@ -194,6 +195,6 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
     @javax.inject.Inject
     MetricsService metricsService;
 
-    
+
 
 }

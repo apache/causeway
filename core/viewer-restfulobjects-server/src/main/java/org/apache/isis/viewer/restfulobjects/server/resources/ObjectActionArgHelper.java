@@ -31,7 +31,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 
 /**
- * Utility class that encapsulates the logic for parsing arguments to be invoked by an 
+ * Utility class that encapsulates the logic for parsing arguments to be invoked by an
  * {@link org.apache.isis.core.metamodel.spec.feature.ObjectAction}.
  */
 public class ObjectActionArgHelper {
@@ -66,7 +66,7 @@ public class ObjectActionArgHelper {
                 final ObjectActionParameter parameter = parameters.get(i);
                 final Object argPojo = argAdapter!=null?argAdapter.getObject():null;
                 final String reasonNotValid = parameter.isValid(objectAdapter, argPojo, InteractionInitiatedBy.USER
-                );
+                        );
                 if (reasonNotValid != null) {
                     argRepr.mapPut("invalidReason", reasonNotValid);
                     valid = false;
@@ -100,25 +100,25 @@ public class ObjectActionArgHelper {
         .map(Map.Entry::getKey)
         .filter(argName->!argName.startsWith("x-ro"))
         .forEach(argName->{
-        	if (action.getParameterById(argName) == null) {
+            if (action.getParameterById(argName) == null) {
                 String reason = String.format("Argument '%s' found but no such parameter", argName);
                 arguments.mapPut("x-ro-invalidReason", reason);
                 throw RestfulObjectsApplicationException.createWithBody(RestfulResponse.HttpStatusCode.BAD_REQUEST, arguments, reason);
             }
         });
-        
-// legacy of ...        
-//        for (final Map.Entry<String, JsonRepresentation> arg : arguments.streamMap()) {
-//            final String argName = arg.getKey();
-//            if(argName.startsWith("x-ro")) {
-//                continue;
-//            }
-//            if (action.getParameterById(argName) == null) {
-//                String reason = String.format("Argument '%s' found but no such parameter", argName);
-//                arguments.mapPut("x-ro-invalidReason", reason);
-//                throw RestfulObjectsApplicationException.createWithBody(RestfulResponse.HttpStatusCode.BAD_REQUEST, arguments, reason);
-//            }
-//        }
+
+        // legacy of ...
+        //        for (final Map.Entry<String, JsonRepresentation> arg : arguments.streamMap()) {
+        //            final String argName = arg.getKey();
+        //            if(argName.startsWith("x-ro")) {
+        //                continue;
+        //            }
+        //            if (action.getParameterById(argName) == null) {
+        //                String reason = String.format("Argument '%s' found but no such parameter", argName);
+        //                arguments.mapPut("x-ro-invalidReason", reason);
+        //                throw RestfulObjectsApplicationException.createWithBody(RestfulResponse.HttpStatusCode.BAD_REQUEST, arguments, reason);
+        //            }
+        //        }
 
         // ensure that an argument value has been provided for all non-optional
         // parameters

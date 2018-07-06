@@ -77,7 +77,7 @@ import com.google.common.collect.Maps;
 public class ActionModel extends BookmarkableModel<ObjectAdapter> implements FormExecutorContext {
 
     private static final long serialVersionUID = 1L;
-    
+
     private static final OidMarshaller OID_MARSHALLER = OidMarshaller.INSTANCE;
 
     private static final String NULL_ARG = "$nullArg$";
@@ -112,31 +112,31 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
 
     /**
      * Factory method for creating {@link PageParameters}.
-     * 
+     *
      * see {@link #ActionModel(PageParameters, SpecificationLoader)}
      */
     public static PageParameters createPageParameters(
             final ObjectAdapter adapter, final ObjectAction objectAction, final ConcurrencyChecking concurrencyChecking) {
-        
+
         final PageParameters pageParameters = PageParametersUtils.newPageParameters();
 
         final String oidStr = concurrencyChecking == ConcurrencyChecking.CHECK?
                 adapter.getOid().enString():
-                adapter.getOid().enStringNoVersion();
-        PageParameterNames.OBJECT_OID.addStringTo(pageParameters, oidStr);
-        
-        final ActionType actionType = objectAction.getType();
-        PageParameterNames.ACTION_TYPE.addEnumTo(pageParameters, actionType);
-        
-        final ObjectSpecification actionOnTypeSpec = objectAction.getOnType();
-        if (actionOnTypeSpec != null) {
-            PageParameterNames.ACTION_OWNING_SPEC.addStringTo(pageParameters, actionOnTypeSpec.getFullIdentifier());
-        }
-        
-        final String actionId = determineActionId(objectAction);
-        PageParameterNames.ACTION_ID.addStringTo(pageParameters, actionId);
-        
-        return pageParameters;
+                    adapter.getOid().enStringNoVersion();
+                PageParameterNames.OBJECT_OID.addStringTo(pageParameters, oidStr);
+
+                final ActionType actionType = objectAction.getType();
+                PageParameterNames.ACTION_TYPE.addEnumTo(pageParameters, actionType);
+
+                final ObjectSpecification actionOnTypeSpec = objectAction.getOnType();
+                if (actionOnTypeSpec != null) {
+                    PageParameterNames.ACTION_OWNING_SPEC.addStringTo(pageParameters, actionOnTypeSpec.getFullIdentifier());
+                }
+
+                final String actionId = determineActionId(objectAction);
+                PageParameterNames.ACTION_ID.addStringTo(pageParameters, actionId);
+
+                return pageParameters;
     }
 
 
@@ -201,6 +201,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
         return pageParameters;
     }
 
+    @Override
     public PageParameters getPageParameters() {
         return getPageParametersWithoutUiHints();
     }
@@ -210,7 +211,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
     public String getTitle() {
         final ObjectAdapter adapter = getTargetAdapter();
         final ObjectAction objectAction = getAction();
-        
+
         final StringBuilder buf = new StringBuilder();
         final ObjectAdapter[] argumentsAsArray = getArgumentsAsArray();
         for(final ObjectAdapter argumentAdapter: argumentsAsArray) {
@@ -232,11 +233,11 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
     // helpers
     //////////////////////////////////////////////////
 
-    
+
     private static String titleOf(final ObjectAdapter argumentAdapter) {
         return argumentAdapter!=null?argumentAdapter.titleString(null):"";
     }
-    
+
     private static String abbreviated(final String str, final int maxLength) {
         return str.length() < maxLength ? str : str.substring(0, maxLength - 3) + "...";
     }
@@ -370,7 +371,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
         if(adapter == null) {
             return NULL_ARG;
         }
-        
+
         final ObjectSpecification objSpec = adapter.getSpecification();
         if(objSpec.isEncodeable()) {
             final EncodableFacet encodeable = objSpec.getFacet(EncodableFacet.class);
@@ -384,12 +385,12 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
         if(NULL_ARG.equals(encoded)) {
             return null;
         }
-        
+
         if(objSpec.isEncodeable()) {
             final EncodableFacet encodeable = objSpec.getFacet(EncodableFacet.class);
             return encodeable.fromEncodedString(encoded);
         }
-        
+
         try {
             final RootOid oid = RootOid.deStringEncoded(encoded);
             return getPersistenceSession().adapterFor(oid);
@@ -409,7 +410,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
 
     public ActionArgumentModel getArgumentModel(final ActionParameterMemento apm) {
         final int i = apm.getNumber();
-		ActionArgumentModel actionArgumentModel = arguments.get(i);
+        ActionArgumentModel actionArgumentModel = arguments.get(i);
         if (actionArgumentModel == null) {
             actionArgumentModel = new ScalarModel(entityModel, apm);
             final int number = actionArgumentModel.getParameterMemento().getNumber();
@@ -432,10 +433,10 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
 
     @Override
     protected ObjectAdapter load() {
-        
+
         // from getObject()/reExecute
         detach(); // force re-execute
-        
+
         // TODO: think we need another field to determine if args have been populated.
         final ObjectAdapter results = executeAction();
 
@@ -520,10 +521,10 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
     }
 
     public ObjectAdapter[] getArgumentsAsArray() {
-    	if(this.arguments.size() < getAction().getParameterCount()) {
-    		primeArgumentModels();
-    	}
-    	
+        if(this.arguments.size() < getAction().getParameterCount()) {
+            primeArgumentModels();
+        }
+
         final ObjectAction objectAction = getAction();
         final ObjectAdapter[] arguments = new ObjectAdapter[objectAction.getParameterCount()];
         for (int i = 0; i < arguments.length; i++) {
@@ -533,6 +534,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
         return arguments;
     }
 
+    @Override
     public void reset() {
     }
 
@@ -597,7 +599,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
         }
         return null;
     }
-    
+
     private static IResourceStream resourceStreamFor(final Blob blob) {
         final IResourceStream resourceStream = new AbstractResourceStream() {
 
@@ -627,13 +629,13 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
 
     private static IRequestHandler handlerFor(final IResourceStream resourceStream, final NamedWithMimeType namedWithMimeType) {
         final ResourceStreamRequestHandler handler =
-            new ResourceStreamRequestHandler(resourceStream, namedWithMimeType.getName());
+                new ResourceStreamRequestHandler(resourceStream, namedWithMimeType.getName());
         handler.setContentDisposition(ContentDisposition.ATTACHMENT);
         return handler;
     }
 
     // //////////////////////////////////////
-    
+
     public List<ActionParameterMemento> primeArgumentModels() {
         final ObjectAction objectAction = getAction();
 
@@ -642,14 +644,14 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
         for (final ActionParameterMemento apm : mementos) {
             getArgumentModel(apm);
         }
-        
+
         return mementos;
     }
 
-    
+
     private static List<ActionParameterMemento> buildParameterMementos(final List<ObjectActionParameter> parameters) {
         final List<ActionParameterMemento> parameterMementoList =
-        		_Lists.transform(parameters, ObjectAdapterMemento.Functions.fromActionParameter());
+                _Lists.transform(parameters, ObjectAdapterMemento.Functions.fromActionParameter());
         // we copy into a new array list otherwise we get lazy evaluation =
         // reference to a non-serializable object
         return Lists.newArrayList(parameterMementoList);
@@ -700,6 +702,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
     /**
      * Further hint, to support inline prompts...
      */
+    @Override
     public InlinePromptContext getInlinePromptContext() {
         return inlinePromptContext;
     }

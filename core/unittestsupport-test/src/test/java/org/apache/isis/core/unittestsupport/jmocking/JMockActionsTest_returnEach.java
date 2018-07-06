@@ -49,7 +49,7 @@ public class JMockActionsTest_returnEach {
         assertThat(new ClassUnderTestForReturnEach(collaborator).prependAndRead("bar"), is("bar 2"));
         assertThat(new ClassUnderTestForReturnEach(collaborator).prependAndRead("baz"), is("baz 3"));
     }
-    
+
     public interface CollaboratorForReturnEach {
         public int readValue();
     }

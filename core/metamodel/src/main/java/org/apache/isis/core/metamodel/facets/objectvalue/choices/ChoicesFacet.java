@@ -33,8 +33,8 @@ public interface ChoicesFacet extends Facet {
             final ObjectAdapter adapter,
             final InteractionInitiatedBy interactionInitiatedBy);
 
-    
-    
+
+
     public static class Util {
 
         private Util() {

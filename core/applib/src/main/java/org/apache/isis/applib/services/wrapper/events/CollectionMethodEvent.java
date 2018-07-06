@@ -44,10 +44,10 @@ public class CollectionMethodEvent extends AccessEvent {
     /**
      * The collection object (an instance of a <tt>List</tt> or a <tt>Set</tt>
      * etc) that is the originator of this event.
-     * 
+     *
      * <p>
      * The owning domain object is available using {@link #getDomainObject()}.
-     * 
+     *
      * @see #getDomainObject()
      */
     @Override
@@ -58,7 +58,7 @@ public class CollectionMethodEvent extends AccessEvent {
     /**
      * The owner of the collection (an instance of
      * <tt>Customer/tt> or <tt>Order</tt>, say).
-     * 
+     *
      * @see #getSource()
      */
     public Object getDomainObject() {
@@ -68,7 +68,7 @@ public class CollectionMethodEvent extends AccessEvent {
     /**
      * The name of the method invoked on this collection, for example
      * <tt>isEmpty</tt>.
-     * 
+     *
      * @return
      */
     public String getMethodName() {

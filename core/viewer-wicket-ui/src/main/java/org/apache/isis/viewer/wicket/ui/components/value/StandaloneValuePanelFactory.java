@@ -33,7 +33,7 @@ import org.apache.isis.viewer.wicket.ui.ComponentType;
 public class StandaloneValuePanelFactory extends ComponentFactoryAbstract {
 
     private static final long serialVersionUID = 1L;
-    
+
     public StandaloneValuePanelFactory() {
         super(ComponentType.VALUE, StandaloneValuePanel.class);
     }

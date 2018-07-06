@@ -34,13 +34,13 @@ import javax.persistence.spi.ProviderUtil;
 import javax.resource.NotSupportedException;
 
 /**
- * [ahuber] still work in progress, some information given here might be wrong ... <br/><br/> 
- * 
+ * [ahuber] still work in progress, some information given here might be wrong ... <br/><br/>
+ *
  * Implements a PersistenceProvider that does nothing.
  * <p>
- * Note: the axon framework on JEE requires at least a dummy persistence unit. 
+ * Note: the axon framework on JEE requires at least a dummy persistence unit.
  * This requires that the {@code web.xml} includes a {@code persistence-context-ref} entry as follows:
- * 
+ *
  * <pre>{@code
  * <persistence-context-ref>
  *     <persistence-context-ref-name>org.axonframework.common.jpa.ContainerManagedEntityManagerProvider/entityManager</persistence-context-ref-name>
@@ -50,65 +50,65 @@ import javax.resource.NotSupportedException;
  * </pre>
  * </p>
  * <p>
- * A {@code META_INF/persistence.xml} that declares the 'noop' persistence-unit 
- * is bundled with this module. 
+ * A {@code META_INF/persistence.xml} that declares the 'noop' persistence-unit
+ * is bundled with this module.
  * </p>
- * 
+ *
  * @since 2.0.0
  *
  */
-@SuppressWarnings("rawtypes") 
+@SuppressWarnings("rawtypes")
 public class PersistenceUnitNoopProvider implements javax.persistence.spi.PersistenceProvider{
 
-	@Override
-	public EntityManagerFactory createEntityManagerFactory(String emName, Map map) {
-		return noopEntityManagerFactory();
-	}
+    @Override
+    public EntityManagerFactory createEntityManagerFactory(String emName, Map map) {
+        return noopEntityManagerFactory();
+    }
 
-	@Override
-	public EntityManagerFactory createContainerEntityManagerFactory(PersistenceUnitInfo info, Map map) {
-		return noopEntityManagerFactory();
-	}
+    @Override
+    public EntityManagerFactory createContainerEntityManagerFactory(PersistenceUnitInfo info, Map map) {
+        return noopEntityManagerFactory();
+    }
 
-	@Override
-	public void generateSchema(PersistenceUnitInfo info, Map map) {
-		throw notSupported();	
-	}
+    @Override
+    public void generateSchema(PersistenceUnitInfo info, Map map) {
+        throw notSupported();
+    }
 
-	@Override
-	public boolean generateSchema(String persistenceUnitName, Map map) {
-		throw notSupported();
-	}
+    @Override
+    public boolean generateSchema(String persistenceUnitName, Map map) {
+        throw notSupported();
+    }
 
-	@Override
-	public ProviderUtil getProviderUtil() {
-		throw notSupported();
-	}
+    @Override
+    public ProviderUtil getProviderUtil() {
+        throw notSupported();
+    }
 
-	// -- HELPER
+    // -- HELPER
 
-	private static RuntimeException notSupported() {
-		return new RuntimeException(
-				new NotSupportedException("This PersistenceProvider is just a dummy."));
-	}
-	
-	private EntityManagerFactory noopEntityManagerFactory() {
-		return new EntityManagerFactory() {
-			@Override public EntityManager createEntityManager() {	return null; }
-			@Override public EntityManager createEntityManager(Map map) { return null; }
-			@Override public EntityManager createEntityManager(SynchronizationType synchronizationType) { return null;	}
-			@Override public EntityManager createEntityManager(SynchronizationType synchronizationType, Map map) { return null;	}
-			@Override public CriteriaBuilder getCriteriaBuilder() { return null; }
-			@Override public Metamodel getMetamodel() { return null; }
-			@Override public boolean isOpen() {	return false; }
-			@Override public void close() {	}
-			@Override public Map<String, Object> getProperties() { return null;	}
-			@Override public Cache getCache() { return null; }
-			@Override public PersistenceUnitUtil getPersistenceUnitUtil() {	return null; }
-			@Override public void addNamedQuery(String name, Query query) {	}
-			@Override public <T> T unwrap(Class<T> cls) { return null; }
-			@Override public <T> void addNamedEntityGraph(String graphName, EntityGraph<T> entityGraph) { }
-		};
-	}
-	
+    private static RuntimeException notSupported() {
+        return new RuntimeException(
+                new NotSupportedException("This PersistenceProvider is just a dummy."));
+    }
+
+    private EntityManagerFactory noopEntityManagerFactory() {
+        return new EntityManagerFactory() {
+            @Override public EntityManager createEntityManager() {	return null; }
+            @Override public EntityManager createEntityManager(Map map) { return null; }
+            @Override public EntityManager createEntityManager(SynchronizationType synchronizationType) { return null;	}
+            @Override public EntityManager createEntityManager(SynchronizationType synchronizationType, Map map) { return null;	}
+            @Override public CriteriaBuilder getCriteriaBuilder() { return null; }
+            @Override public Metamodel getMetamodel() { return null; }
+            @Override public boolean isOpen() {	return false; }
+            @Override public void close() {	}
+            @Override public Map<String, Object> getProperties() { return null;	}
+            @Override public Cache getCache() { return null; }
+            @Override public PersistenceUnitUtil getPersistenceUnitUtil() {	return null; }
+            @Override public void addNamedQuery(String name, Query query) {	}
+            @Override public <T> T unwrap(Class<T> cls) { return null; }
+            @Override public <T> void addNamedEntityGraph(String graphName, EntityGraph<T> entityGraph) { }
+        };
+    }
+
 }

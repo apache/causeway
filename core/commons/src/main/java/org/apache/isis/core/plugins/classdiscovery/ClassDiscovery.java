@@ -25,31 +25,31 @@ import java.util.Set;
 
 /**
  * Provides search-methods on class hierarchies.
- * 
+ *
  * @since 2.0.0
  */
 public interface ClassDiscovery {
 
-	//TODO missing java-doc
-	public Set<Class<?>> getTypesAnnotatedWith(Class<? extends Annotation> annotation);
-	
-	//TODO missing java-doc
-	public <T> Set<Class<? extends T>> getSubTypesOf(Class<T> type);
-	
-	public static ClassDiscovery empty() {
-		
-		return new ClassDiscovery() {
-			
-			@Override
-			public Set<Class<?>> getTypesAnnotatedWith(Class<? extends Annotation> annotation) {
-				return Collections.emptySet();
-			}
-			
-			@Override
-			public <T> Set<Class<? extends T>> getSubTypesOf(Class<T> type) {
-				return Collections.emptySet();
-			}
-		};
-	}
-	
+    //TODO missing java-doc
+    public Set<Class<?>> getTypesAnnotatedWith(Class<? extends Annotation> annotation);
+
+    //TODO missing java-doc
+    public <T> Set<Class<? extends T>> getSubTypesOf(Class<T> type);
+
+    public static ClassDiscovery empty() {
+
+        return new ClassDiscovery() {
+
+            @Override
+            public Set<Class<?>> getTypesAnnotatedWith(Class<? extends Annotation> annotation) {
+                return Collections.emptySet();
+            }
+
+            @Override
+            public <T> Set<Class<? extends T>> getSubTypesOf(Class<T> type) {
+                return Collections.emptySet();
+            }
+        };
+    }
+
 }

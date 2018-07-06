@@ -41,7 +41,7 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 
 public abstract class Parser<T> {
-	
+
     public T valueOf(final List<String> str) {
         if (str == null) {
             return null;
@@ -241,13 +241,13 @@ public abstract class Parser<T> {
                     return Collections.emptyList();
                 }
                 return _Strings.splitThenStream(str, ",")
-                		.collect(Collectors.toList());
+                        .collect(Collectors.toList());
             }
 
             @Override
             public String asString(final List<String> strings) {
                 return _NullSafe.stream(strings)
-                		.collect(Collectors.joining(","));
+                        .collect(Collectors.joining(","));
             }
         };
     }
@@ -286,18 +286,18 @@ public abstract class Parser<T> {
                 if (str == null || str.isEmpty()) {
                     return Collections.emptyList();
                 }
-                
+
                 return _Strings.splitThenStream(str, ",")
-	                .map(PathNode::split)
-	        		.collect(Collectors.toList());
+                        .map(PathNode::split)
+                        .collect(Collectors.toList());
             }
 
             @Override
             public String asString(final List<List<String>> listOfLists) {
-            	
-            	return _NullSafe.stream(listOfLists)
-	            	.map(listOfStrings->_NullSafe.stream(listOfStrings).collect(Collectors.joining(".")))
-	            	.collect(Collectors.joining(","));
+
+                return _NullSafe.stream(listOfLists)
+                        .map(listOfStrings->_NullSafe.stream(listOfStrings).collect(Collectors.joining(".")))
+                        .collect(Collectors.joining(","));
             }
         };
     }
@@ -308,7 +308,7 @@ public abstract class Parser<T> {
             @Override
             public String[] valueOf(final List<String> strings) {
                 if (strings == null) {
-                	return _Constants.emptyStringArray;
+                    return _Constants.emptyStringArray;
                 }
                 if (strings.size() == 1) {
                     // special case processing to handle comma-separated values
@@ -320,7 +320,7 @@ public abstract class Parser<T> {
             @Override
             public String[] valueOf(final String[] strings) {
                 if (strings == null) {
-                	return _Constants.emptyStringArray;
+                    return _Constants.emptyStringArray;
                 }
                 if (strings.length == 1) {
                     // special case processing to handle comma-separated values
@@ -334,16 +334,16 @@ public abstract class Parser<T> {
                 if (str == null) {
                     return _Constants.emptyStringArray;
                 }
-                
+
                 return _Strings.splitThenStream(str, ",")
-                .collect(Collectors.toList())
-                .toArray(_Constants.emptyStringArray);
+                        .collect(Collectors.toList())
+                        .toArray(_Constants.emptyStringArray);
             }
 
             @Override
             public String asString(final String[] strings) {
                 return _NullSafe.stream(strings)
-                		.collect(Collectors.joining(","));
+                        .collect(Collectors.joining(","));
             }
         };
     }
@@ -356,22 +356,22 @@ public abstract class Parser<T> {
                 if (str == null) {
                     return Collections.emptyList();
                 }
-                
+
                 return _Strings.splitThenStream(str, ",")
-                		.map(MediaType::valueOf)
+                        .map(MediaType::valueOf)
                         .collect(Collectors.toList());
             }
 
             @Override
             public String asString(final List<MediaType> listOfMediaTypes) {
-            	
-            	return _NullSafe.stream(listOfMediaTypes)
-            			.map(MediaType::toString)
-                		.collect(Collectors.joining(","));
+
+                return _NullSafe.stream(listOfMediaTypes)
+                        .map(MediaType::toString)
+                        .collect(Collectors.joining(","));
             }
         };
     }
-    
+
     @Deprecated // [ahuber] MediaType is in standard API! proposing removal
     public static Parser<List<com.google.common.net.MediaType>> forListOfGuavaMediaTypes() {
         return new Parser<List<com.google.common.net.MediaType>>() {
@@ -409,10 +409,10 @@ public abstract class Parser<T> {
         return new Parser<String>(){
 
             private final static String WEAK_PREFIX="W/";
-            
+
             @Override
             public String valueOf(String str) {
-                if(str == null) { 
+                if(str == null) {
                     return null;
                 }
                 return null;
@@ -424,9 +424,9 @@ public abstract class Parser<T> {
                 return null;
             }};
     }
-    
+
     // -- HELPER
-    
-    
+
+
 
 }

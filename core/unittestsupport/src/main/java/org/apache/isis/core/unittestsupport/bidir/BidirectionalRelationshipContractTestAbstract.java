@@ -49,9 +49,9 @@ import org.hamcrest.Matchers;
 public abstract class BidirectionalRelationshipContractTestAbstract extends AbstractApplyToAllContractTest implements Instantiators {
 
     private final InstantiatorMap instantiatorMap;
-    
+
     protected BidirectionalRelationshipContractTestAbstract(
-            final String packagePrefix, 
+            final String packagePrefix,
             Map<Class<?>, Instantiator> instantiatorsByClass) {
         super(packagePrefix);
         instantiatorMap = new InstantiatorMap(instantiatorsByClass);
@@ -60,9 +60,9 @@ public abstract class BidirectionalRelationshipContractTestAbstract extends Abst
     @Override
     protected void applyContractTest(Class<?> entityType) {
         final Set<Field> mappedByFields = streamAllFields(entityType)
-        		.filter(ReflectUtils.persistentMappedBy)
-        		.collect(toHashSet());
-        		
+                .filter(ReflectUtils.persistentMappedBy)
+                .collect(toHashSet());
+
         for (Field mappedByField : mappedByFields) {
             final Parent p = new Parent();
             p.entityType = entityType;
@@ -76,7 +76,7 @@ public abstract class BidirectionalRelationshipContractTestAbstract extends Abst
             }
         }
     }
-    
+
     private void process(Parent p) {
 
         // mappedBy
@@ -86,12 +86,12 @@ public abstract class BidirectionalRelationshipContractTestAbstract extends Abst
         // getMethod
         final String getMethod = StringUtils.methodNamed("get", p.childField);
         final Set<Method> getMethods = streamAllMethods(p.entityType)
-        		.filter(withConcreteMethodNamed(getMethod))
-        		.collect(toHashSet());
-        		
+                .filter(withConcreteMethodNamed(getMethod))
+                .collect(toHashSet());
+
         assertThat(p.desc() + ": no unique getXxx() method:" + getMethods , getMethods.size(), is(greaterThan(0)));
         p.getMethod = CollectUtils.firstIn(getMethods);
-        
+
         final Child c = new Child();
 
         final Class<?> returnType = p.getMethod.getReturnType();
@@ -99,11 +99,11 @@ public abstract class BidirectionalRelationshipContractTestAbstract extends Abst
             // addToMethod
             final String addToMethod = StringUtils.methodNamed("addTo", p.childField);
             final Set<Method> addToMethods = streamAllMethods(p.entityType)
-            		.filter(withConcreteMethodNamed(addToMethod))
-            		.filter(withMethodParametersCount(1))
-            		.filter(withEntityParameter())
-            		.collect(toHashSet());
-                    
+                    .filter(withConcreteMethodNamed(addToMethod))
+                    .filter(withMethodParametersCount(1))
+                    .filter(withEntityParameter())
+                    .collect(toHashSet());
+
             if(addToMethods.size() != 1) {
                 // just skip
                 out.println("no addToXxx() method in parent");
@@ -114,10 +114,10 @@ public abstract class BidirectionalRelationshipContractTestAbstract extends Abst
             // removeFromMethod
             final String removeFromMethod = StringUtils.methodNamed("removeFrom", p.childField);
             final Set<Method> removeFromMethods = streamAllMethods(p.entityType)
-            		.filter(withConcreteMethodNamed(removeFromMethod))
-            		.filter(withMethodParametersCount(1))
-            		.filter(withEntityParameter())
-            		.collect(toHashSet());
+                    .filter(withConcreteMethodNamed(removeFromMethod))
+                    .filter(withMethodParametersCount(1))
+                    .filter(withEntityParameter())
+                    .collect(toHashSet());
 
             if(removeFromMethods.size() != 1) {
                 // just skip
@@ -129,35 +129,35 @@ public abstract class BidirectionalRelationshipContractTestAbstract extends Abst
             // child's entityType
             final Class<?> addToParameterType = p.addToMethod.getParameterTypes()[0];
             final Class<?> removeFromParameterType = p.removeFromMethod.getParameterTypes()[0];
-            
+
             assertThat(p.desc() + ": " + p.addToMethod.getName() + " and " + p.removeFromMethod.getName() + " should have the same parameter type",
                     addToParameterType == removeFromParameterType, is(true));
-        
+
             c.entityType = addToParameterType;
         } else {
-            
+
             // modify
             String modifyMethod = StringUtils.methodNamed("modify", p.childField);
             final Set<Method> modifyMethods = streamAllMethods(p.entityType)
-            		.filter(withConcreteMethodNamed(modifyMethod))
-            		.filter(withMethodParametersCount(1))
-            		.filter(withEntityParameter())
-            		.collect(toHashSet());
-            
+                    .filter(withConcreteMethodNamed(modifyMethod))
+                    .filter(withMethodParametersCount(1))
+                    .filter(withEntityParameter())
+                    .collect(toHashSet());
+
             if(modifyMethods.size() != 1) {
                 // just skip
                 out.println("no modifyXxx() method in parent");
                 return;
             }
             p.modifyMethod = CollectUtils.firstIn(modifyMethods);
-            
+
             // clear
             String clearMethod = StringUtils.methodNamed("clear", p.childField);
             final Set<Method> clearMethods = streamAllMethods(p.entityType)
-            		.filter(withConcreteMethodNamed(clearMethod))
-            		.filter(withMethodParametersCount(0))
-            		.collect(toHashSet());
-            
+                    .filter(withConcreteMethodNamed(clearMethod))
+                    .filter(withMethodParametersCount(0))
+                    .collect(toHashSet());
+
             if(clearMethods.size() != 1) {
                 // just skip
                 out.println("no clearXxx() method in parent");
@@ -168,7 +168,7 @@ public abstract class BidirectionalRelationshipContractTestAbstract extends Abst
             // child's entityType
             c.entityType = p.modifyMethod.getParameterTypes()[0];
         }
-        
+
         final Instantiator parentInstantiator = instantiatorFor(p.entityType);
         if(parentInstantiator == null) {
             out.println("no instantiator for " + p.entityType.getName());
@@ -181,28 +181,28 @@ public abstract class BidirectionalRelationshipContractTestAbstract extends Abst
             // just skip
             return;
         }
-        
+
         process(p, c);
     }
 
     private static Predicate<Method> withConcreteMethodNamed(final String methodName) {
-    	return (Method m) -> {
-    		if(m==null || !methodName.equals(m.getName())){
-    			return false;
-    		}
-    		return !m.isSynthetic() && !Modifier.isAbstract(m.getModifiers());
-    	};
+        return (Method m) -> {
+            if(m==null || !methodName.equals(m.getName())){
+                return false;
+            }
+            return !m.isSynthetic() && !Modifier.isAbstract(m.getModifiers());
+        };
     }
 
-    
+
     private Instantiator instantiatorFor(final Class<?> cls) {
         Instantiator instantiator = instantiatorMap.get(cls);
         if(instantiator != null) {
             return instantiator;
         }
-        
+
         instantiator = doInstantiatorFor(cls);
-        
+
         instantiator = instantiatorMap.put(cls, instantiator);
         return instantiator != Instantiator.NOOP? instantiator: null;
     }
@@ -217,12 +217,12 @@ public abstract class BidirectionalRelationshipContractTestAbstract extends Abst
     }
 
     private void process(Parent p, Child c) {
-        
+
         // mappedBy field
         final Set<Field> parentFields = streamAllFields(c.entityType)
-        		.filter(withName(p.mappedBy))
-        		.filter(withTypeAssignableFrom(p.entityType))
-        		.collect(toHashSet());
+                .filter(withName(p.mappedBy))
+                .filter(withTypeAssignableFrom(p.entityType))
+                .collect(toHashSet());
 
         assertThat(c.entityType.getName()+  ": could not locate '" + p.mappedBy + "' field, returning supertype of " + p.entityType.getSimpleName() +", (as per @Persistent(mappedBy=...) in parent "+ p.entityType.getSimpleName()+")", parentFields.size(), is(1));
         c.parentField = CollectUtils.firstIn(parentFields);
@@ -230,36 +230,36 @@ public abstract class BidirectionalRelationshipContractTestAbstract extends Abst
         // getter
         String getterMethod = StringUtils.methodNamed("get", c.parentField);
         final Set<Method> getterMethods = streamAllMethods(c.entityType)
-        		.filter(withConcreteMethodNamed(getterMethod))
-        		.filter(withMethodParametersCount(0))
-        		.filter(withReturnTypeAssignableFrom(p.entityType))
-        		.collect(toHashSet());
-        		
+                .filter(withConcreteMethodNamed(getterMethod))
+                .filter(withMethodParametersCount(0))
+                .filter(withReturnTypeAssignableFrom(p.entityType))
+                .collect(toHashSet());
+
         assertThat(p.descRel(c) +": could not locate getter " + getterMethod + "() returning supertype of " + p.entityType.getSimpleName(), getterMethods.size(), is(1));
         c.getMethod = CollectUtils.firstIn(getterMethods);
 
         // modify
         String modifyMethod = StringUtils.methodNamed("modify", c.parentField);
         final Set<Method> modifyMethods = streamAllMethods(c.entityType)
-        		.filter(withConcreteMethodNamed(modifyMethod))
-        		.filter(withMethodParametersCount(1))
-        		.filter(withParametersAssignableFrom(p.entityType))
-        		.collect(toHashSet());
-        		
+                .filter(withConcreteMethodNamed(modifyMethod))
+                .filter(withMethodParametersCount(1))
+                .filter(withParametersAssignableFrom(p.entityType))
+                .collect(toHashSet());
+
         if(modifyMethods.size() != 1) {
             // just skip
             out.println("no modifyXxx() method in child");
             return;
         }
         c.modifyMethod = CollectUtils.firstIn(modifyMethods);
-        
+
         // clear
         String clearMethod = StringUtils.methodNamed("clear", c.parentField);
         final Set<Method> clearMethods = streamAllMethods(c.entityType)
-        		.filter(withConcreteMethodNamed(clearMethod))
-        		.filter(withMethodParametersCount(0))
-        		.collect(toHashSet());
-        		
+                .filter(withConcreteMethodNamed(clearMethod))
+                .filter(withMethodParametersCount(0))
+                .collect(toHashSet());
+
         if(clearMethods.size() != 1) {
             // just skip
             out.println("no clearXxx() method in child");
@@ -286,7 +286,7 @@ public abstract class BidirectionalRelationshipContractTestAbstract extends Abst
         try {
             if(p.addToMethod != null) {
                 // 1:m
-                
+
                 // add
                 oneToManyParentAddTo(p, c);
                 oneToManyParentAddToWhenAlreadyChild(p, c);
@@ -294,11 +294,11 @@ public abstract class BidirectionalRelationshipContractTestAbstract extends Abst
                 oneToManyChildModify(p, c);
                 oneToManyChildModifyWhenAlreadyParent(p, c);
                 oneToManyChildModifyWhenNull(p, c);
-                
+
                 // move (update)
                 oneToManyChildModifyToNewParent(p, c);
                 oneToManyChildModifyToExistingParent(p, c);
-                
+
                 // delete
                 oneToManyParentRemoveFrom(p, c);
                 oneToManyParentRemoveFromWhenNotAssociated(p, c);
@@ -315,17 +315,17 @@ public abstract class BidirectionalRelationshipContractTestAbstract extends Abst
                 oneToOneChildModify(p, c);
                 oneToOneChildModifyWhenAlreadyParent(p, c);
                 oneToOneChildModifyWhenNull(p, c);
-                
+
                 // move (update)
                 oneToOneChildModifyToNewParent(p, c);
                 oneToOneChildModifyToExistingParent(p, c);
-                
+
                 // delete
                 oneToOneParentClear(p, c);
                 oneToOneChildClear(p, c);
                 oneToOneChildClearWhenNotAssociated(p, c);
             }
-            
+
         } finally {
             out.decrementIndent();
         }
@@ -335,12 +335,12 @@ public abstract class BidirectionalRelationshipContractTestAbstract extends Abst
     ////////////////
     // 1:m
     ////////////////
-    
+
     private void oneToManyParentAddTo(Parent p, Child c) {
 
         final String methodDesc = "oneToManyParentAddTo";
         out.println(methodDesc);
-        
+
         // given
         Object parent1 = p.newParent(this);
         Object child1 = c.newChild(this);
@@ -364,7 +364,7 @@ public abstract class BidirectionalRelationshipContractTestAbstract extends Abst
 
         // given
         p.addToChildren(parent1, child1);
-        
+
         // when
         p.addToChildren(parent1, child1);
 
@@ -372,7 +372,7 @@ public abstract class BidirectionalRelationshipContractTestAbstract extends Abst
         assertThat(assertDesc(p,c,methodDesc,"parent still contains child"), p.getChildren(parent1), Matchers.containsInAnyOrder(child1));
         assertThat(assertDesc(p,c,methodDesc,"child still references parent"), c.getParent(child1), is(parent1));
     }
-    
+
     private void oneToManyParentAddToWhenNull(Parent p, Child c) {
 
         final String methodDesc = "oneToManyParentAddToWhenNull";
@@ -387,7 +387,7 @@ public abstract class BidirectionalRelationshipContractTestAbstract extends Abst
         // then
         assertThat(assertDesc(p,c,methodDesc,"parent does not have any children"), p.getChildren(parent1).isEmpty(), is(true));
     }
-    
+
     private void oneToManyChildModify(Parent p, Child c) {
 
         final String methodDesc = "oneToManyChildModify";
@@ -415,7 +415,7 @@ public abstract class BidirectionalRelationshipContractTestAbstract extends Abst
         Object child1 = c.newChild(this);
 
         c.modifyParent(child1, parent1);
-        
+
         // when
         c.modifyParent(child1, parent1);
 
@@ -435,11 +435,11 @@ public abstract class BidirectionalRelationshipContractTestAbstract extends Abst
 
         // when
         c.modifyParent(child1, null);
-        
+
         // then
         assertThat(assertDesc(p,c,methodDesc,"child does not reference any parent"), c.getParent(child1), is(nullValue()));
     }
-    
+
 
     private void oneToManyChildModifyToNewParent(Parent p, Child c) {
 
@@ -451,10 +451,10 @@ public abstract class BidirectionalRelationshipContractTestAbstract extends Abst
         Object parent2 = p.newParent(this);
         Object child1 = c.newChild(this);
         Object child2 = c.newChild(this);
-        
+
         p.addToChildren(parent1, child1);
         p.addToChildren(parent2, child2);
-        
+
         // when
         c.modifyParent(child1, parent2);
 
@@ -464,7 +464,7 @@ public abstract class BidirectionalRelationshipContractTestAbstract extends Abst
         assertThat(assertDesc(p,c,methodDesc,"child 1 now references parent 2"), c.getParent(child1), is(parent2));
         assertThat(assertDesc(p,c,methodDesc,"child 2 still references parent 2"), c.getParent(child2), is(parent2));
     }
-    
+
     private void oneToManyChildModifyToExistingParent(Parent p, Child c) {
 
         final String methodDesc = "oneToManyChildModifyToExistingParent";
@@ -475,13 +475,13 @@ public abstract class BidirectionalRelationshipContractTestAbstract extends Abst
         Object parent2 = p.newParent(this);
         Object child1 = c.newChild(this);
         Object child2 = c.newChild(this);
-        
+
         p.addToChildren(parent1, child1);
         p.addToChildren(parent2, child2);
-        
+
         // when
         c.modifyParent(child1, parent1);
-        
+
         // then
         assertThat(assertDesc(p,c,methodDesc,"parent 1 still contains child 1"), p.getChildren(parent1), Matchers.containsInAnyOrder(child1));
         assertThat(assertDesc(p,c,methodDesc,"parent 2 still contains child 2"), p.getChildren(parent2), Matchers.containsInAnyOrder(child2));
@@ -497,9 +497,9 @@ public abstract class BidirectionalRelationshipContractTestAbstract extends Abst
         // given
         Object parent1 = p.newParent(this);
         Object child1 = c.newChild(this);
-        
+
         p.addToChildren(parent1, child1);
-        
+
         // when
         p.removeFromChildren(parent1, child1);
 
@@ -516,9 +516,9 @@ public abstract class BidirectionalRelationshipContractTestAbstract extends Abst
         // given
         Object parent1 = p.newParent(this);
         Object child1 = c.newChild(this);
-        
+
         p.addToChildren(parent1, child1);
-        
+
         // when
         p.removeFromChildren(parent1, null);
 
@@ -526,7 +526,7 @@ public abstract class BidirectionalRelationshipContractTestAbstract extends Abst
         assertThat(assertDesc(p,c,methodDesc,"parent still contains child"), p.getChildren(parent1), Matchers.containsInAnyOrder(child1));
         assertThat(assertDesc(p,c,methodDesc,"child still references parent"), c.getParent(child1), is(parent1));
     }
-    
+
     private void oneToManyParentRemoveFromWhenNotAssociated(Parent p, Child c) {
 
         final String methodDesc = "oneToManyParentRemoveFromWhenNotAssociated";
@@ -536,28 +536,28 @@ public abstract class BidirectionalRelationshipContractTestAbstract extends Abst
         Object parent1 = p.newParent(this);
         Object child1 = c.newChild(this);
         Object child2 = c.newChild(this);
-        
+
         p.addToChildren(parent1, child1);
-        
+
         // when
         p.removeFromChildren(parent1, child2);
-        
+
         // then
         assertThat(assertDesc(p,c,methodDesc,"parent still contains child"), p.getChildren(parent1), Matchers.containsInAnyOrder(child1));
         assertThat(assertDesc(p,c,methodDesc,"child still references parent"), c.getParent(child1), is(parent1));
     }
-    
+
     private void oneToManyChildClear(Parent p, Child c) {
-        
+
         final String methodDesc = "oneToManyChildClear";
         out.println(methodDesc);
 
         // given
         Object parent1 = p.newParent(this);
         Object child1 = c.newChild(this);
-        
+
         p.addToChildren(parent1, child1);
-        
+
         // when
         c.clearParent(child1);
 
@@ -574,7 +574,7 @@ public abstract class BidirectionalRelationshipContractTestAbstract extends Abst
         // given
         Object parent1 = p.newParent(this);
         Object child1 = c.newChild(this);
-        
+
         // when
         c.clearParent(child1);
 
@@ -584,13 +584,13 @@ public abstract class BidirectionalRelationshipContractTestAbstract extends Abst
     }
 
 
-    
+
     ////////////////
     // 1:1
     ////////////////
-    
+
     private void oneToOneParentModify(Parent p, Child c) {
-        
+
         final String methodDesc = "oneToOneParentModify";
         out.println(methodDesc);
 
@@ -607,7 +607,7 @@ public abstract class BidirectionalRelationshipContractTestAbstract extends Abst
     }
 
     private void oneToOneParentModifyWhenAlreadyChild(Parent p, Child c) {
-        
+
         final String methodDesc = "oneToOneParentModifyWhenAlreadyChild";
         out.println(methodDesc);
 
@@ -616,7 +616,7 @@ public abstract class BidirectionalRelationshipContractTestAbstract extends Abst
         Object child1 = c.newChild(this);
 
         p.modifyChild(parent1, child1);
-        
+
         // when
         p.modifyChild(parent1, child1);
 
@@ -624,7 +624,7 @@ public abstract class BidirectionalRelationshipContractTestAbstract extends Abst
         assertThat(assertDesc(p,c,methodDesc,"parent still references child"), p.getChild(parent1), is(child1));
         assertThat(assertDesc(p,c,methodDesc,"child still references parent"), c.getParent(child1), is(parent1));
     }
-    
+
     private void oneToOneParentModifyWhenNull(Parent p, Child c) {
 
         final String methodDesc = "oneToOneParentModifyWhenNull";
@@ -639,12 +639,12 @@ public abstract class BidirectionalRelationshipContractTestAbstract extends Abst
         // then
         assertThat(assertDesc(p,c,methodDesc,"parent still references child"), p.getChild(parent1), is(nullValue()));
     }
-    
+
     private void oneToOneChildModify(Parent p, Child c) {
 
         final String methodDesc = "oneToOneChildModify";
         out.println(methodDesc);
-        
+
         // given
         Object parent1 = p.newParent(this);
         Object child1 = c.newChild(this);
@@ -667,7 +667,7 @@ public abstract class BidirectionalRelationshipContractTestAbstract extends Abst
         Object child1 = c.newChild(this);
 
         c.modifyParent(child1, parent1);
-        
+
         // when
         c.modifyParent(child1, parent1);
 
@@ -687,14 +687,14 @@ public abstract class BidirectionalRelationshipContractTestAbstract extends Abst
 
         // when
         c.modifyParent(child1, null);
-        
+
         // then
         assertThat(assertDesc(p,c,methodDesc,"child still has no parent"), c.getParent(child1), is(nullValue()));
     }
-    
+
 
     private void oneToOneChildModifyToNewParent(Parent p, Child c) {
-        
+
         final String methodDesc = "oneToOneChildModifyToNewParent";
         out.println(methodDesc);
 
@@ -703,10 +703,10 @@ public abstract class BidirectionalRelationshipContractTestAbstract extends Abst
         Object parent2 = p.newParent(this);
         Object child1 = c.newChild(this);
         Object child2 = c.newChild(this);
-        
+
         p.modifyChild(parent1, child1);
         p.modifyChild(parent2, child2);
-        
+
         // when
         c.modifyParent(child1, parent2);
 
@@ -716,9 +716,9 @@ public abstract class BidirectionalRelationshipContractTestAbstract extends Abst
         assertThat(assertDesc(p,c,methodDesc,"child 1 now references parent 2"), c.getParent(child1), is(parent2));
         assertThat(assertDesc(p,c,methodDesc,"child 2, as a side-effect, no longer references parent 2"), c.getParent(child2), is(nullValue()));
     }
-    
+
     private void oneToOneChildModifyToExistingParent(Parent p, Child c) {
-        
+
         final String methodDesc = "oneToOneChildModifyToExistingParent";
         out.println(methodDesc);
 
@@ -727,13 +727,13 @@ public abstract class BidirectionalRelationshipContractTestAbstract extends Abst
         Object parent2 = p.newParent(this);
         Object child1 = c.newChild(this);
         Object child2 = c.newChild(this);
-        
+
         p.modifyChild(parent1, child1);
         p.modifyChild(parent2, child2);
-        
+
         // when
         c.modifyParent(child1, parent1);
-        
+
         // then
         assertThat(assertDesc(p,c,methodDesc,"parent 1 still references child 1"), p.getChild(parent1), is(child1));
         assertThat(assertDesc(p,c,methodDesc,"parent 2 still references child 2"), p.getChild(parent2), is(child2));
@@ -749,9 +749,9 @@ public abstract class BidirectionalRelationshipContractTestAbstract extends Abst
         // given
         Object parent1 = p.newParent(this);
         Object child1 = c.newChild(this);
-        
+
         p.modifyChild(parent1, child1);
-        
+
         // when
         p.clearChild(parent1);
 
@@ -760,18 +760,18 @@ public abstract class BidirectionalRelationshipContractTestAbstract extends Abst
         assertThat(assertDesc(p,c,methodDesc,"child no longer references parent"), c.getParent(child1), is(nullValue()));
     }
 
-    
+
     private void oneToOneChildClear(Parent p, Child c) {
-        
+
         final String methodDesc = "oneToOneChildClear";
         out.println(methodDesc);
 
         // given
         Object parent1 = p.newParent(this);
         Object child1 = c.newChild(this);
-        
+
         p.modifyChild(parent1, child1);
-        
+
         // when
         c.clearParent(child1);
 
@@ -781,14 +781,14 @@ public abstract class BidirectionalRelationshipContractTestAbstract extends Abst
     }
 
     private void oneToOneChildClearWhenNotAssociated(Parent p, Child c) {
-        
+
         final String methodDesc = "oneToOneChildClearWhenNotAssociated";
         out.println(methodDesc);
 
         // given
         Object parent1 = p.newParent(this);
         Object child1 = c.newChild(this);
-        
+
         // when
         c.clearParent(child1);
 

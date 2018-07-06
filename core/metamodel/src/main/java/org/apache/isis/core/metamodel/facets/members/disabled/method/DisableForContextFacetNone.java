@@ -31,7 +31,7 @@ public class DisableForContextFacetNone extends DisableForContextFacetAbstract {
 
     /**
      * The reason this object is disabled, or <tt>null</tt> otherwise.
-     * 
+     *
      * <p>
      * Always returns <tt>null</tt>.
      */

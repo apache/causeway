@@ -72,7 +72,7 @@ public class PublishedObjectsDefault implements PublishedObjects {
         this.numberObjectPropertiesModified = numberObjectPropertiesModified;
         this.changesByAdapter = changesByAdapter;
     }
-    
+
 
 
     // -- transactionId, completedAt, user
@@ -102,7 +102,7 @@ public class PublishedObjectsDefault implements PublishedObjects {
     public String getUsername() {
         return userName;
     }
-    
+
 
     // -- dto
     /**
@@ -114,7 +114,7 @@ public class PublishedObjectsDefault implements PublishedObjects {
     public ChangesDto getDto() {
         return dto != null ? dto : (dto = newDto());
     }
-    
+
 
     // -- numberLoaded, numberCreated, numberUpdated, numberDeleted, numberObjectPropertiesModified
 
@@ -163,11 +163,11 @@ public class PublishedObjectsDefault implements PublishedObjects {
                 Multimaps.invertFrom(
                         Multimaps.forMap(valueByKey),
                         ArrayListMultimap.<T, S>create()
-                ).asMap()
-        );
+                        ).asMap()
+                );
     }
 
-    
+
 
 
     // -- newDto, newObjectsDto, newChangesDto
@@ -229,7 +229,7 @@ public class PublishedObjectsDefault implements PublishedObjects {
     }
 
 
-    
+
 
 
 }

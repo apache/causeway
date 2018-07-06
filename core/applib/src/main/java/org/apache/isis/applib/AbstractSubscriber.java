@@ -35,7 +35,7 @@ import org.apache.isis.applib.services.xactn.TransactionService;
  */
 @DomainServiceLayout(
         menuOrder = "1"
-)
+        )
 public abstract class AbstractSubscriber {
 
     @PostConstruct
@@ -50,19 +50,19 @@ public abstract class AbstractSubscriber {
 
     @javax.inject.Inject
     protected MessageService messageService;
-    
+
     @javax.inject.Inject
     protected TitleService titleService;
-    
+
     @javax.inject.Inject
     protected RepositoryService repositoryService;
-    
+
     @javax.inject.Inject
     protected FactoryService factoryService;
-    
+
     @javax.inject.Inject
     protected UserService userService;
-    
+
     @javax.inject.Inject
     protected TransactionService transactionService;
 

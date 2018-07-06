@@ -205,7 +205,7 @@ public abstract class FixtureScripts extends AbstractService {
     }
 
     // -- init
-    
+
     @Programmatic
     @PostConstruct
     public void init() {
@@ -231,7 +231,7 @@ public abstract class FixtureScripts extends AbstractService {
             if(!packageName.startsWith(getPackagePrefix())) {
                 // redundant check if ClassDiscoveryService2 in use because already filtered out
                 continue;
-            } 
+            }
             final FixtureScript fs = newFixtureScript(fixtureScriptCls);
             if(fs != null) {
                 fixtureScripts.add(fs);
@@ -240,10 +240,10 @@ public abstract class FixtureScripts extends AbstractService {
         Collections.sort(fixtureScripts, new Comparator<FixtureScript>() {
             @Override
             public int compare(final FixtureScript o1, final FixtureScript o2) {
-            	return Comparator
-            				.comparing(FixtureScript::getFriendlyName)
-            				.thenComparing(FixtureScript::getQualifiedName)
-            				.compare(o1, o2);
+                return Comparator
+                        .comparing(FixtureScript::getFriendlyName)
+                        .thenComparing(FixtureScript::getQualifiedName)
+                        .compare(o1, o2);
             }
         });
         return fixtureScripts;
@@ -264,15 +264,15 @@ public abstract class FixtureScripts extends AbstractService {
             if(!template.isDiscoverable()) {
                 return null;
             }
-            
+
             final FixtureScript instance = factoryService.instantiate(fixtureScriptCls);
             instance.setParentPath(template.getParentPath());
-            
+
             return instance;
-            
+
             //Legacy of ...
             //return container.newViewModelInstance(fixtureScriptCls, mementoFor(template));
-            
+
         } catch(final Exception ex) {
             // ignore if does not have a no-arg constructor or cannot be instantiated
             return null;
@@ -299,20 +299,20 @@ public abstract class FixtureScripts extends AbstractService {
     // -- runFixtureScript (prototype action)
 
     /**
-     * To make this action usable in the UI, override either {@link #choices0RunFixtureScript()} or 
+     * To make this action usable in the UI, override either {@link #choices0RunFixtureScript()} or
      * {@link #autoComplete0RunFixtureScript(String)} with <tt>public</tt> visibility</tt>.
      */
     @Action(
-        restrictTo = RestrictTo.PROTOTYPING
-    )
+            restrictTo = RestrictTo.PROTOTYPING
+            )
     @MemberOrder(sequence="10")
     public List<FixtureResult> runFixtureScript(
-            final FixtureScript fixtureScript, 
+            final FixtureScript fixtureScript,
             @ParameterLayout(
                     named="Parameters",
                     describedAs="Script-specific parameters (if any).  The format depends on the script implementation (eg key=value, CSV, JSON, XML etc)",
                     multiLine = 10
-            )
+                    )
             @Parameter(optionality = Optionality.OPTIONAL)
             final String parameters) {
 
@@ -330,14 +330,14 @@ public abstract class FixtureScripts extends AbstractService {
         return getFixtureScriptList();
     }
     protected List<FixtureScript> autoComplete0RunFixtureScript(final @MinLength(1) String arg) {
-    	
-    	final Predicate<String> contains = str -> str != null && str.contains(arg);
-    	
-    	return _NullSafe.stream(getFixtureScriptList())
-	    	.filter(script->{
-	    		return contains.test(script.getFriendlyName()) || contains.test(script.getLocalName());
-	    	})
-	    	.collect(Collectors.toList());
+
+        final Predicate<String> contains = str -> str != null && str.contains(arg);
+
+        return _NullSafe.stream(getFixtureScriptList())
+                .filter(script->{
+                    return contains.test(script.getFriendlyName()) || contains.test(script.getLocalName());
+                })
+                .collect(Collectors.toList());
     }
     public String disableRunFixtureScript() {
         return getFixtureScriptList().isEmpty()? "No fixture scripts found under package '" + getPackagePrefix() + "'": null;
@@ -358,6 +358,7 @@ public abstract class FixtureScripts extends AbstractService {
             runFixtureScript(fixtureScriptList[0], null);
         } else {
             runFixtureScript(new FixtureScript() {
+                @Override
                 protected void execute(ExecutionContext executionContext) {
                     FixtureScript[] fixtureScripts = fixtureScriptList;
                     for (FixtureScript fixtureScript : fixtureScripts) {
@@ -398,9 +399,9 @@ public abstract class FixtureScripts extends AbstractService {
     public FixtureScript.ExecutionContext newExecutionContext(final String parameters) {
         final ExecutionParameters executionParameters =
                 executionParametersService != null
-                        ? executionParametersService.newExecutionParameters(parameters)
+                ? executionParametersService.newExecutionParameters(parameters)
                         : new ExecutionParameters(parameters);
-        return FixtureScript.ExecutionContext.create(executionParameters, this);
+                return FixtureScript.ExecutionContext.create(executionParameters, this);
     }
 
     // -- hooks
@@ -423,19 +424,19 @@ public abstract class FixtureScripts extends AbstractService {
 
     @XmlRootElement(name = "fixtureScript")
     public static class FixtureScriptMemento {
-    	private String path;
-		public String getPath() { return path; }
-		public void setPath(String path) { this.path = path; }
+        private String path;
+        public String getPath() { return path; }
+        public void setPath(String path) { this.path = path; }
     }
 
     String mementoFor(final FixtureScript fs) {
-    	final FixtureScriptMemento memento = new FixtureScriptMemento();
-    	memento.setPath(fs.getParentPath());
-    	return jaxbService.toXml(memento);
+        final FixtureScriptMemento memento = new FixtureScriptMemento();
+        memento.setPath(fs.getParentPath());
+        return jaxbService.toXml(memento);
     }
-    
+
     void initOf(final String xml, final FixtureScript fs) {
-    	final FixtureScriptMemento memento = jaxbService.fromXml(FixtureScriptMemento.class, xml);
+        final FixtureScriptMemento memento = jaxbService.fromXml(FixtureScriptMemento.class, xml);
         fs.setParentPath(memento.getPath());
     }
 
@@ -450,13 +451,13 @@ public abstract class FixtureScripts extends AbstractService {
             // continue
         } else {
             switch(getNonPersistedObjectsStrategy()) {
-                case PERSIST:
-                    transactionService.flushTransaction();
-                    break;
-                case IGNORE:
-                    return null;
-                default:
-                	throw _Exceptions.unmatchedCase(getNonPersistedObjectsStrategy());
+            case PERSIST:
+                transactionService.flushTransaction();
+                break;
+            case IGNORE:
+                return null;
+            default:
+                throw _Exceptions.unmatchedCase(getNonPersistedObjectsStrategy());
             }
         }
         final FixtureResult fixtureResult = new FixtureResult();
@@ -476,8 +477,8 @@ public abstract class FixtureScripts extends AbstractService {
     // -- injected services
 
     @javax.inject.Inject
-    FactoryService factoryService; 
-    
+    FactoryService factoryService;
+
     @javax.inject.Inject
     TitleService titleService;
 

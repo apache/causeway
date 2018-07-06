@@ -49,10 +49,10 @@ public class Jdk8LocalDateTimeValueSemanticsProvider extends ValueSemanticsProvi
 
     /**
      * Introduced to allow BDD tests to provide a different format string "mid-flight".
-     * 
+     *
      * <p>
      * REVIEW: This seems only to have any effect if 'propertyType' is set to 'date'.
-     * 
+     *
      * @see #setTitlePatternOverride(String)
      * @deprecated - because 'propertyType' parameter is never used
      */
@@ -66,28 +66,28 @@ public class Jdk8LocalDateTimeValueSemanticsProvider extends ValueSemanticsProvi
     public static void setTitlePatternOverride(final String pattern) {
         OVERRIDE_TITLE_PATTERN.set(pattern);
     }
-    
+
     /**
      * Key to indicate how LocalDateTime should be parsed/rendered.
-     * 
+     *
      * <p>
      * eg:
      * <pre>
      * isis.value.format.datetime=iso
      * </pre>
-     * 
+     *
      * <p>
-     * A pre-determined list of values is available, specifically 'iso_encoding', 'iso' and 'medium' (see 
+     * A pre-determined list of values is available, specifically 'iso_encoding', 'iso' and 'medium' (see
      * {@link #NAMED_TITLE_FORMATTERS}).  Alternatively,  can also specify a mask, eg <tt>dd-MMM-yyyy</tt>.
-     * 
-     * @see #NAMED_TITLE_FORMATTERS  
+     *
+     * @see #NAMED_TITLE_FORMATTERS
      */
     public final static String CFG_FORMAT_KEY = ConfigurationConstants.ROOT + "value.format.datetime";
-    
-    
+
+
     /**
      * Keys represent the values which can be configured, and which are used for the rendering of dates.
-     * 
+     *
      */
     private static Map<String, TimeFormatter> NAMED_TITLE_FORMATTERS = Maps.newHashMap();
     static {
@@ -97,7 +97,7 @@ public class Jdk8LocalDateTimeValueSemanticsProvider extends ValueSemanticsProvi
         NAMED_TITLE_FORMATTERS.put("medium", formatterOf(DateTimeFormat.forStyle("MM")));
         NAMED_TITLE_FORMATTERS.put("short", formatterOf(DateTimeFormat.forStyle("SS")));
     }
-    
+
     private final static ThreadLocal<String> OVERRIDE_TITLE_PATTERN = new ThreadLocal<String>() {
         @Override
         protected String initialValue() {
@@ -105,7 +105,7 @@ public class Jdk8LocalDateTimeValueSemanticsProvider extends ValueSemanticsProvi
         }
     };
 
-    
+
     private final static List<TimeParser> PARSE_FORMATTERS = Lists.newArrayList();
     static {
         PARSE_FORMATTERS.add(parserOf(DateTimeFormat.forStyle("LL")));
@@ -119,16 +119,16 @@ public class Jdk8LocalDateTimeValueSemanticsProvider extends ValueSemanticsProvi
         return Jdk8LocalDateTimeValueFacet.class;
     }
 
-	// no default
+    // no default
     private static final LocalDateTime DEFAULT_VALUE = null;
 
-    private final TimeParser encodingParser = Jdk8LocalDateTimeUtil.parserOf(ISODateTimeFormat.dateHourMinuteSecondMillis()); 
+    private final TimeParser encodingParser = Jdk8LocalDateTimeUtil.parserOf(ISODateTimeFormat.dateHourMinuteSecondMillis());
     private final TimeFormatter encodingFormatter = Jdk8LocalDateTimeUtil.formatterOf(ISODateTimeFormat.dateHourMinuteSecondMillis());
-    
+
     private TimeFormatter titleStringFormatter;
     private String titleStringFormatNameOrPattern;
 
-    
+
     // //////////////////////////////////////
     // constructor
     // //////////////////////////////////////
@@ -155,12 +155,12 @@ public class Jdk8LocalDateTimeValueSemanticsProvider extends ValueSemanticsProvi
     private void updateTitleStringFormatter(String titleStringFormatNameOrPattern) {
         titleStringFormatter = NAMED_TITLE_FORMATTERS.get(titleStringFormatNameOrPattern);
         if (titleStringFormatter == null) {
-            titleStringFormatter = 
-            		DateTimeFormatter.ofPattern(titleStringFormatNameOrPattern)::format;
+            titleStringFormatter =
+                    DateTimeFormatter.ofPattern(titleStringFormatNameOrPattern)::format;
         }
-        this.titleStringFormatNameOrPattern = titleStringFormatNameOrPattern; 
+        this.titleStringFormatNameOrPattern = titleStringFormatNameOrPattern;
     }
-    
+
 
     // //////////////////////////////////////////////////////////////////
     // Parsing
@@ -172,7 +172,7 @@ public class Jdk8LocalDateTimeValueSemanticsProvider extends ValueSemanticsProvi
             final Object context) {
 
         updateTitleStringFormatterIfOverridden();
-        
+
         LocalDateTime contextDateTime = (LocalDateTime) context;
 
         final String dateString = entry.trim().toUpperCase();
@@ -187,11 +187,11 @@ public class Jdk8LocalDateTimeValueSemanticsProvider extends ValueSemanticsProvi
 
     private void updateTitleStringFormatterIfOverridden() {
         final String overridePattern = OVERRIDE_TITLE_PATTERN.get();
-        if (overridePattern == null || 
-            titleStringFormatNameOrPattern.equals(overridePattern)) {
+        if (overridePattern == null ||
+                titleStringFormatNameOrPattern.equals(overridePattern)) {
             return;
-        } 
-        
+        }
+
         // (re)create format
         updateTitleStringFormatter(overridePattern);
     }
@@ -199,7 +199,7 @@ public class Jdk8LocalDateTimeValueSemanticsProvider extends ValueSemanticsProvi
     private LocalDateTime parseDateTime(final String dateStr, final Object original) {
         return Jdk8LocalDateTimeUtil.parseDate(dateStr, PARSE_FORMATTERS);
     }
-    
+
 
     // ///////////////////////////////////////////////////////////////////////////
     // TitleProvider
@@ -218,8 +218,8 @@ public class Jdk8LocalDateTimeValueSemanticsProvider extends ValueSemanticsProvi
     public String titleStringWithMask(final Object value, final String usingMask) {
         final LocalDateTime dateTime = (LocalDateTime) value;
         return Jdk8LocalDateTimeUtil.titleString(
-        		DateTimeFormatter.ofPattern(usingMask)::format, 
-        		dateTime);
+                DateTimeFormatter.ofPattern(usingMask)::format,
+                dateTime);
     }
 
 
@@ -247,7 +247,7 @@ public class Jdk8LocalDateTimeValueSemanticsProvider extends ValueSemanticsProvi
     }
 
     private synchronized LocalDateTime parse(final String data) {
-        return encodingParser.apply(data); 
+        return encodingParser.apply(data);
     }
 
     // //////////////////////////////////////////////////////////////////
@@ -266,7 +266,7 @@ public class Jdk8LocalDateTimeValueSemanticsProvider extends ValueSemanticsProvi
 
 
     // //////////////////////////////////////
-    
+
     @Override
     public String toString() {
         return "Jdk8LocalDateTimeValueSemanticsProvider: " + titleStringFormatter;

@@ -50,63 +50,63 @@ import org.slf4j.LoggerFactory;
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
-)
+        )
 public class ConfigurationServiceDefault implements ConfigurationService {
-	
-	private final Logger LOG = LoggerFactory.getLogger(ConfigurationServiceDefault.class);
+
+    private final Logger LOG = LoggerFactory.getLogger(ConfigurationServiceDefault.class);
 
     private final Map<String, String> properties = _Maps.newHashMap();
 
     @Programmatic
     @PostConstruct
     public void init(final Map<String,String> properties) {
-    	Objects.requireNonNull(properties);
-    	Objects.requireNonNull(configurationServiceInternal);
-    	
-    	// [ahuber] not sure which of the two to has precedence ...
-    	final Map<String, String> a = properties;
-    	final Map<String, String> b = configurationServiceInternal.asMap();
-        
+        Objects.requireNonNull(properties);
+        Objects.requireNonNull(configurationServiceInternal);
+
+        // [ahuber] not sure which of the two to has precedence ...
+        final Map<String, String> a = properties;
+        final Map<String, String> b = configurationServiceInternal.asMap();
+
         // ... so we report if there is a clash in configured values
         {
-        	Set<String> potentialClashKeys = _Sets.intersect(a.keySet(), b.keySet());
-        	
-        	long clashCount = potentialClashKeys.stream()
-        	.filter(key->{
-        		if(!Objects.equals(a.get(key), b.get(key))){
-        			
-        			LOG.warn(String.format("config value clash, having two versions for key '%s': '%s' <--> '%s'", 
-        					key, ""+a.get(key), ""+b.get(key)	));
-        		
-        			return true;
-        		}
-        		return false;
-        	})
-        	.count();
-        	
-        	if(clashCount>0) {
-        		LOG.error("===================================================================");
-        		LOG.error(" config clashes detected, likely a framework bug");
-        		LOG.error("===================================================================");
-        	}
-        	
+            Set<String> potentialClashKeys = _Sets.intersect(a.keySet(), b.keySet());
+
+            long clashCount = potentialClashKeys.stream()
+                    .filter(key->{
+                        if(!Objects.equals(a.get(key), b.get(key))){
+
+                            LOG.warn(String.format("config value clash, having two versions for key '%s': '%s' <--> '%s'",
+                                    key, ""+a.get(key), ""+b.get(key)	));
+
+                            return true;
+                        }
+                        return false;
+                    })
+                    .count();
+
+            if(clashCount>0) {
+                LOG.error("===================================================================");
+                LOG.error(" config clashes detected, likely a framework bug");
+                LOG.error("===================================================================");
+            }
+
         }
-        
+
         this.properties.putAll(a);
         this.properties.putAll(b);
-        
-                
+
+
     }
 
     @Programmatic
     @Override
     public SortedSet<ConfigurationProperty> allProperties() {
         final SortedSet<ConfigurationProperty> kv = new TreeSet<>();
-        
+
         properties.entrySet().stream()
         .map(this::toConfigurationProperty)
         .forEach(kv::add);
-        
+
         return java.util.Collections.unmodifiableSortedSet(kv);
     }
 
@@ -131,11 +131,11 @@ public class ConfigurationServiceDefault implements ConfigurationService {
 
     @javax.inject.Inject
     ConfigurationServiceInternal configurationServiceInternal;
-    
+
     // -- HELPER
-    
+
     private ConfigurationProperty toConfigurationProperty(Map.Entry<String, String> entry) {
-    	return new ConfigurationProperty(entry.getKey(), entry.getValue());
+        return new ConfigurationProperty(entry.getKey(), entry.getValue());
     }
 
 }

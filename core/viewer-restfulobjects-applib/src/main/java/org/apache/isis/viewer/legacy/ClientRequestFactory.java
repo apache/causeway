@@ -21,30 +21,30 @@ package org.apache.isis.viewer.legacy;
 import java.net.URI;
 
 /**
- * Compatibility layer, legacy of deprecated resteasy client API. 
- * 
+ * Compatibility layer, legacy of deprecated resteasy client API.
+ *
  */
 public interface ClientRequestFactory {
 
-	<T> T createProxy(Class<T> clazz);
+    <T> T createProxy(Class<T> clazz);
 
-	URI getBase();
+    URI getBase();
 
-	static ClientRequestFactory of(final ClientExecutor clientExecutor, final URI baseUri) {
-		
-		return new ClientRequestFactory() {
+    static ClientRequestFactory of(final ClientExecutor clientExecutor, final URI baseUri) {
 
-			@Override
-			public <T> T createProxy(Class<T> clazz) {
-				return RestEasyLegacy.proxy(clientExecutor.webTarget(baseUri), clazz);
-			}
+        return new ClientRequestFactory() {
 
-			@Override
-			public URI getBase() {
-				return baseUri;
-			}
-			
-		};
-	}
+            @Override
+            public <T> T createProxy(Class<T> clazz) {
+                return RestEasyLegacy.proxy(clientExecutor.webTarget(baseUri), clazz);
+            }
+
+            @Override
+            public URI getBase() {
+                return baseUri;
+            }
+
+        };
+    }
 
 }

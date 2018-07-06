@@ -58,7 +58,7 @@ public class ValuePropertyFactory {
     private final Map<Class<?>, Factory> propertyFactoryByClass = Maps.newHashMap();
 
     public static interface Factory extends Supplier<Property> {};
-    
+
     public ValuePropertyFactory() {
 
         propertyFactoryByClass.put(boolean.class, BooleanProperty::new);
@@ -100,10 +100,10 @@ public class ValuePropertyFactory {
 
         propertyFactoryByClass.put(byte[].class, ByteArrayProperty::new);
         propertyFactoryByClass.put(org.apache.isis.applib.value.Blob.class, ByteArrayProperty::new);
-        
+
         // add propertyFactories from plugins
-        discoverValueProperties().visitEntries(propertyFactoryByClass::put);        
-        
+        discoverValueProperties().visitEntries(propertyFactoryByClass::put);
+
     }
 
     public Property newProperty(Class<?> cls) {
@@ -133,16 +133,16 @@ public class ValuePropertyFactory {
 
         return null;
     }
-    
+
     // -- HELPER
-    
+
     private static ValuePropertyCollector discoverValueProperties() {
-	    final Set<ValuePropertyPlugin> plugins = _Plugin.loadAll(ValuePropertyPlugin.class);
-	    final ValuePropertyCollector collector = ValuePropertyPlugin.collector();
-	    plugins.forEach(plugin->{
-	    	plugin.plugin(collector);
-	    });
-	    return collector;
+        final Set<ValuePropertyPlugin> plugins = _Plugin.loadAll(ValuePropertyPlugin.class);
+        final ValuePropertyCollector collector = ValuePropertyPlugin.collector();
+        plugins.forEach(plugin->{
+            plugin.plugin(collector);
+        });
+        return collector;
     }
 
 }

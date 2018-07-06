@@ -32,7 +32,7 @@ public final class ReflectorConstants {
     /**
      * Key used to lookup implementation of {@link ProgrammingModel} in
      * {@link IsisConfiguration}.
-     * 
+     *
      * @see #FACET_FACTORY_INCLUDE_CLASS_NAME_LIST
      * @see #FACET_FACTORY_EXCLUDE_CLASS_NAME_LIST
      */
@@ -51,7 +51,7 @@ public final class ReflectorConstants {
      * Key used to lookup comma-separated list of {@link FacetFactory}s to
      * include (over and above those specified by
      * {@link #PROGRAMMING_MODEL_FACETS_CLASS_NAME}.
-     * 
+     *
      * @see #PROGRAMMING_MODEL_FACETS_CLASS_NAME
      * @see #FACET_FACTORY_EXCLUDE_CLASS_NAME_LIST
      */
@@ -61,7 +61,7 @@ public final class ReflectorConstants {
      * Key used to lookup comma-separated list of {@link FacetFactory}s to
      * exclude (that might otherwise be included specified by the
      * {@link #PROGRAMMING_MODEL_FACETS_CLASS_NAME}.
-     * 
+     *
      * @see #PROGRAMMING_MODEL_FACETS_CLASS_NAME
      * @see #FACET_FACTORY_INCLUDE_CLASS_NAME_LIST
      */

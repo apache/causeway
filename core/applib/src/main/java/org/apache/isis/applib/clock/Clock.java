@@ -32,12 +32,12 @@ import org.apache.isis.applib.fixtures.FixtureClock;
 
 /**
  * Provides a mechanism to get (and possible to set) the current time.
- * 
+ *
  * <p>
  * The clock is used primarily by the temporal value classes, and is accessed by
  * the NOF as a singleton. The actual implementation used can be configured at
  * startup, but once specified the clock instance cannot be changed.
- * 
+ *
  * <p>
  * Unless another {@link Clock} implementation has been installed, the first
  * call to {@link #getInstance()} will instantiate an implementation that just
@@ -51,12 +51,12 @@ public abstract class Clock {
 
     /**
      * Returns the (singleton) instance of {@link Clock}.
-     * 
+     *
      * <p>
      * Unless it has been otherwise created, will lazily instantiate an
      * implementation that just delegate to the computer's own system clock (as
      * per {@link System#currentTimeMillis()}.
-     * 
+     *
      * @return
      */
     public final static Clock getInstance() {
@@ -75,7 +75,7 @@ public abstract class Clock {
 
     /**
      * The time as the number of millseconds since the epoch.
-     * 
+     *
      * @see Date#getTime()
      */
     public static long getTime() {
@@ -112,7 +112,7 @@ public abstract class Clock {
 
     /**
      * Allows subclasses to remove their implementation.
-     * 
+     *
      * @return whether a clock was removed.
      */
     protected static boolean remove() {
@@ -130,7 +130,7 @@ public abstract class Clock {
 
     /**
      * The current time since midnight, January 1, 1970 UTC.
-     * 
+     *
      * <p>
      * Measured in milliseconds, modeled after (and possibly implemented by)
      * {@link System#currentTimeMillis()}.

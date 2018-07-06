@@ -120,7 +120,7 @@ public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract {
                 final Object titlePart = component.getTitleEvaluator().value(targetAdapter.getObject());
                 if (titlePart == null) {
                     continue;
-                } 
+                }
                 // ignore context, if provided
                 final ObjectAdapter titlePartAdapter = adapterManager.adapterFor(titlePart);
                 if(Objects.equal(contextAdapter, titlePartAdapter)) {

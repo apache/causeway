@@ -23,7 +23,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 
 public interface MarkupValueFacet extends Facet {
-	String markupValue(ObjectAdapter object);
+    String markupValue(ObjectAdapter object);
     ObjectAdapter createValue(ObjectAdapter object, String html);
 
 }

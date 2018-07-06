@@ -33,7 +33,7 @@ import org.apache.isis.core.unittestsupport.AbstractApplyToAllContractTest;
 /**
  * Ensure that subclasses do not inadvertently override an <tt>injectXxx()</tt> method that
  * is defined in a superclass.
- * 
+ *
  * <p>
  * Doing this will result in the subclass's field being populated, but the superclass's field not
  * (leading to possible {@link NullPointerException}s).
@@ -48,9 +48,9 @@ public abstract class InjectServiceMethodMustBeFinalContractTestAbstract extends
     @Override
     protected void applyContractTest(Class<?> entityType) {
         final Set<Method> injectMethods = _Reflect.streamAllMethods(entityType)
-        		.filter(withPrefix("inject"))
-        		.collect(toHashSet());
-        
+                .filter(withPrefix("inject"))
+                .collect(toHashSet());
+
         for (Method injectMethod : injectMethods) {
             try {
                 final String desc = desc(entityType, injectMethod);
@@ -68,7 +68,7 @@ public abstract class InjectServiceMethodMustBeFinalContractTestAbstract extends
                 desc(entityType, injectMethod) + " must be final",
                 Modifier.isFinal(injectMethod.getModifiers()), is(true));
     }
-    
+
     private String desc(Class<?> entityType, Method injectMethod) {
         return entityType.getSimpleName() + "#" + injectMethod.getName() + "(...)";
     }

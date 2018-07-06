@@ -35,67 +35,67 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * 
+ *
  * A CDI inject extension @see <a href="https://docs.jboss.org/weld/reference/latest/en-US/html/extend.html">weld</a>,
- * that lets CDI ignore certain Beans we declare tabu. 
+ * that lets CDI ignore certain Beans we declare tabu.
  * <p>
- * This extension is registered as a service provider by creating a file named 
- * {@code META-INF/services/javax.enterprise.inject.spi.Extension}, 
+ * This extension is registered as a service provider by creating a file named
+ * {@code META-INF/services/javax.enterprise.inject.spi.Extension},
  * which contains the name of this extension class.
  * </p>
- * 
+ *
  * <p>
- * Beans declared tabu are managed (meaning instantiation and dependency injection) 
+ * Beans declared tabu are managed (meaning instantiation and dependency injection)
  * by Isis itself. All other Beans are allowed to be managed by CDI.
  * </p>
- * 
+ *
  *
  */
 public final class IsisCDIBeanScanInterceptor implements Extension {
-	
-	private static final Logger log = LoggerFactory.getLogger(IsisCDIBeanScanInterceptor.class);
 
-	/**
-	 * Declaration of Beans that are managed by Isis and should be ignored by CDI. 
-	 * (in addition to those that have the @DomainService annotation)
-	 */
-	private static final List<Predicate<Class<?>>> tabu = new ArrayList<>();
-	{
-		tabu.add(MetricsService.class::equals);
-		tabu.add(ExceptionRecognizer.class::isAssignableFrom);
-	}
-	
-	void beforeBeanDiscovery(@Observes BeforeBeanDiscovery event) {
-		log.info("beginning the scanning process");
-	}
+    private static final Logger log = LoggerFactory.getLogger(IsisCDIBeanScanInterceptor.class);
 
-	<T> void processAnnotatedType(@Observes ProcessAnnotatedType<T> event) {
+    /**
+     * Declaration of Beans that are managed by Isis and should be ignored by CDI.
+     * (in addition to those that have the @DomainService annotation)
+     */
+    private static final List<Predicate<Class<?>>> tabu = new ArrayList<>();
+    {
+        tabu.add(MetricsService.class::equals);
+        tabu.add(ExceptionRecognizer.class::isAssignableFrom);
+    }
 
-		final Class<?> clazz = event.getAnnotatedType().getJavaClass();
-		final String className = clazz.getName();
-		
-		if(isTabu(clazz, event)) {
-			log.debug("veto type: " + className);
-			event.veto();
-		} else {
-			log.debug("allowing type: " + className);
-		}
-	}
+    void beforeBeanDiscovery(@Observes BeforeBeanDiscovery event) {
+        log.info("beginning the scanning process");
+    }
 
-	void afterBeanDiscovery(@Observes AfterBeanDiscovery event) {
-		log.info("finished the scanning process");
-	}
-	
-	// -- HELPER
-	
-	private boolean isTabu(Class<?> clazz, ProcessAnnotatedType<?> event) {
-		if(event.getAnnotatedType().isAnnotationPresent(DomainService.class))
-			return true;
-		for(Predicate<Class<?>> isTabu : tabu) {
-			if(isTabu.test(clazz))
-				return true;
-		}
-		return false;
-	}
+    <T> void processAnnotatedType(@Observes ProcessAnnotatedType<T> event) {
+
+        final Class<?> clazz = event.getAnnotatedType().getJavaClass();
+        final String className = clazz.getName();
+
+        if(isTabu(clazz, event)) {
+            log.debug("veto type: " + className);
+            event.veto();
+        } else {
+            log.debug("allowing type: " + className);
+        }
+    }
+
+    void afterBeanDiscovery(@Observes AfterBeanDiscovery event) {
+        log.info("finished the scanning process");
+    }
+
+    // -- HELPER
+
+    private boolean isTabu(Class<?> clazz, ProcessAnnotatedType<?> event) {
+        if(event.getAnnotatedType().isAnnotationPresent(DomainService.class))
+            return true;
+        for(Predicate<Class<?>> isTabu : tabu) {
+            if(isTabu.test(clazz))
+                return true;
+        }
+        return false;
+    }
 
 }

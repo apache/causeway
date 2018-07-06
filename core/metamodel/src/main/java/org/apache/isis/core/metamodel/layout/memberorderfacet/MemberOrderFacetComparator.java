@@ -30,7 +30,7 @@ public class MemberOrderFacetComparator implements Comparator<MemberOrderFacet> 
     public MemberOrderFacetComparator(boolean ensureInSameGroup) {
         this.ensureInSameGroup = ensureInSameGroup;
     }
-    
+
     @Override
     public int compare(final MemberOrderFacet m1, final MemberOrderFacet m2) {
         if (m1 == null && m2 == null) {
@@ -47,7 +47,7 @@ public class MemberOrderFacetComparator implements Comparator<MemberOrderFacet> 
         if (ensureInSameGroup && !m1.name().equals(m2.name())) {
             throw new IllegalArgumentException("Not in same group");
         }
-        
+
         return _Comparators.deweyOrderCompare(m1.sequence(), m2.sequence());
 
     }

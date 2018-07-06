@@ -54,7 +54,7 @@ public class RootOid implements TypedOid, Serializable {
     private Version version;
 
     private int cachedHashCode;
-    
+
 
     // -- Constructor, factory methods
     public static RootOid createTransient(final ObjectSpecId objectSpecId, final String identifier) {
@@ -137,7 +137,7 @@ public class RootOid implements TypedOid, Serializable {
         cacheState();
     }
 
-    
+
 
     // -- Encodeable
     public RootOid(final DataInputExtended input) throws IOException {
@@ -156,7 +156,7 @@ public class RootOid implements TypedOid, Serializable {
     }
 
 
-    
+
 
     // -- deString'able, enString
     public static RootOid deStringEncoded(final String urlEncodedOidStr) {
@@ -177,9 +177,10 @@ public class RootOid implements TypedOid, Serializable {
     public String enStringNoVersion() {
         return OID_MARSHALLER.marshalNoVersion(this);
     }
-    
+
 
     // -- Properties
+    @Override
     public ObjectSpecId getObjectSpecId() {
         return objectSpecId;
     }
@@ -203,10 +204,11 @@ public class RootOid implements TypedOid, Serializable {
         return state.isPersistent();
     }
 
-    
+
 
     // -- Version
 
+    @Override
     public Version getVersion() {
         return version;
     }
@@ -215,7 +217,7 @@ public class RootOid implements TypedOid, Serializable {
     public void setVersion(final Version version) {
         this.version = version;
     }
-    
+
 
     // -- asBookmark, asOidDto
     public Bookmark asBookmark() {
@@ -240,7 +242,7 @@ public class RootOid implements TypedOid, Serializable {
         return oidDto;
     }
 
-    
+
 
     // -- equals, hashCode
 
@@ -274,7 +276,7 @@ public class RootOid implements TypedOid, Serializable {
         return cachedHashCode;
     }
 
-    
+
 
     // -- toString
     @Override
@@ -283,6 +285,6 @@ public class RootOid implements TypedOid, Serializable {
     }
 
 
-    
+
 
 }

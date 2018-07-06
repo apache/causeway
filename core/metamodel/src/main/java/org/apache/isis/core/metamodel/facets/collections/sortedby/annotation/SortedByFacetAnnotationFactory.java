@@ -36,7 +36,7 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVis
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 
 /**
- * There is no check that the value is a {@link Comparator}; instead this is done through 
+ * There is no check that the value is a {@link Comparator}; instead this is done through
  * the {@link #refineMetaModelValidator(MetaModelValidatorComposite, IsisConfiguration)}.
  */
 public class SortedByFacetAnnotationFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner {

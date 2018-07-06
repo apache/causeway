@@ -36,7 +36,7 @@ public abstract class InstallerAbstract implements Installer {
     /**
      * Subclasses should pass in the type defined as a constant in the
      * subinterface of Installer.
-     * 
+     *
      * <p>
      * For example, <tt>PersistenceMechanismInstaller</tt> has a constant
      * <tt>PersistenceMechanismInstaller#TYPE</tt>. Any implementation of
@@ -59,7 +59,7 @@ public abstract class InstallerAbstract implements Installer {
     public IsisConfiguration getConfiguration() {
         return isisConfiguration;
     }
-    
+
 
     // -- init, shutdown
 
@@ -77,7 +77,7 @@ public abstract class InstallerAbstract implements Installer {
         // no-op implementation, subclasses may override!
     }
 
-    
+
 
     // -- helpers (for subclasses)
 
@@ -97,6 +97,6 @@ public abstract class InstallerAbstract implements Installer {
         return Collections.unmodifiableList(arrayList);
     }
 
-    
+
 
 }

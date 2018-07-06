@@ -33,9 +33,9 @@ public class DomainServiceLinkTo extends DomainObjectLinkTo {
 
     @Override
     public LinkBuilder builder(final Rel rel) {
-        final LinkBuilder linkBuilder = LinkBuilder.newBuilder(rendererContext, 
-                relElseDefault(rel).andParam("serviceId", serviceId), 
-                RepresentationType.DOMAIN_OBJECT, 
+        final LinkBuilder linkBuilder = LinkBuilder.newBuilder(rendererContext,
+                relElseDefault(rel).andParam("serviceId", serviceId),
+                RepresentationType.DOMAIN_OBJECT,
                 linkRef(new StringBuilder()).toString());
         linkBuilder.withTitle(objectAdapter.titleString());
         return linkBuilder;

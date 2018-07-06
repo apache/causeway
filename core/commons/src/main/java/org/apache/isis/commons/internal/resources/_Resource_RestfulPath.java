@@ -21,23 +21,23 @@
 package org.apache.isis.commons.internal.resources;
 
 /**
- * 
+ *
  * package private helper class to store application scoped context-path (if any)
  *
  */
 class _Resource_RestfulPath extends _Resource_Path {
 
-	public _Resource_RestfulPath(String contextPath) {
-		super(contextPath);
-	}
-	
-	public String getRestfulPath() {
-		return path;
-	}
+    public _Resource_RestfulPath(String contextPath) {
+        super(contextPath);
+    }
 
-	@Override
-	protected String resourceName() {
-		return "restful-path";
-	}
-	
+    public String getRestfulPath() {
+        return path;
+    }
+
+    @Override
+    protected String resourceName() {
+        return "restful-path";
+    }
+
 }

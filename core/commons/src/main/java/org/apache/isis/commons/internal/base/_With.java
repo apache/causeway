@@ -36,208 +36,208 @@ import javax.annotation.Nullable;
  * Provides shortcuts for common 'Optional' idioms.
  * </p>
  * <p>
- * <b>WARNING</b>: Do <b>NOT</b> use any of the classes provided by this package! <br/> 
+ * <b>WARNING</b>: Do <b>NOT</b> use any of the classes provided by this package! <br/>
  * These may be changed or removed without notice!
  * </p>
- * 
+ *
  * @since 2.0.0
  */
 public final class _With<T> {
 
-	private _With() { }
-	
-	// -- OPTION IDIOMS
-	
-	/**
-	 * Equivalent to {@code Optional.ofNullable(obj).orElse(orElse);}
-	 * @param obj (nullable)
-	 * @param orElse (nullable)
-	 * @return {@code obj!=null ? obj : orElse}
-	 */
-	public static <X> X ifPresentElse(@Nullable X obj, @Nullable X orElse) {
-		return obj!=null ? obj : orElse;	
-	}
-	
-	/**
-	 * Equivalent to {@code Optional.ofNullable(obj).orElseGet(elseGet);} 
-	 * @param obj (nullable)
-	 * @param elseGet
-	 * @return {@code obj!=null ? obj : elseGet.get()}
-	 */
-	public static <X> X ifPresentElseGet(@Nullable X obj, Supplier<X> elseGet) {
-		return obj!=null ? obj : requires(elseGet, "elseGet").get();
-	}
-	
-	/**
-	 * Equivalent to {@code Optional.ofNullable(obj).orElseThrow(elseThrow);}
-	 * @param obj (nullable)
-	 * @param elseThrow
-	 * @return {@code obj!=null ? obj : throw( elseThrow.get() )}
-	 * @throws E
-	 */
-	public static <X, E extends Exception> X ifPresentElseThrow(
-			@Nullable X obj, 
-			Supplier<E> elseThrow) 
-			throws E {
-		if(obj!=null) {
-			return obj;	
-		}
-		throw requires(elseThrow, "elseThrow").get();
-	}
-	
-	// -- CONSUMER IDIOMS
-	
-	/**
-	 * Unary identity operator that passes {@code obj} to {@code consumer}.
-	 * @param obj (nullable)
-	 * @param consumer
-	 * @return {@code obj}
-	 */
-	public static <X> X accept(@Nullable X obj, Consumer<X> consumer) {
-		requires(consumer, "consumer").accept(obj);
-		return obj;
-	}
-	
-	/**
-	 * Unary identity operator that passes {@code obj} to {@code ifPresent} if {@code obj} is present.   
-	 * @param obj (nullable)
-	 * @param ifPresent
-	 * @return {@code obj}
-	 */
-	public static <X> X acceptIfPresent(@Nullable X obj, Consumer<X> ifPresent) {
-		if(obj!=null) {
-			requires(ifPresent, "ifPresent").accept(obj);	
-		}
-		return obj;
-	}
-	
-	/**
-	 * Unary identity operator that passes {@code obj} to {@code ifPresent} if {@code obj} is present, 
-	 * runs the specified {@code elseRun} otherwise.
-	 * @param obj (nullable)
-	 * @param ifPresent
-	 * @param elseRun
-	 * @return {@code obj}
-	 */
-	public static <X> X acceptIfPresentElseRun(@Nullable X obj, Consumer<X> ifPresent, Runnable elseRun) {
-		if(obj!=null) {
-			requires(ifPresent, "ifPresent").accept(obj);	
-		} else {
-			requires(elseRun, "elseRun").run();
-		}
-		return obj;
-	}
-	
-	/**
-	 * Unary identity operator that passes {@code obj} to {@code ifPresent} if {@code obj} is present, 
-	 * throws the specified Exception provided by {@code elseThrow} otherwise.
-	 * @param obj (nullable)
-	 * @param ifPresent
-	 * @param elseThrow
-	 * @return {@code obj!=null ? obj : throw( elseThrow.get() ) }
-	 * @throws E
-	 */
-	public static <X, E extends Exception> X acceptIfPresentElseThrow(
-			@Nullable X obj, Consumer<X> ifPresent, Supplier<E> elseThrow)
-			throws E {
-		
-		if(obj!=null) {
-			requires(ifPresent, "ifPresent").accept(obj);	
-		} else {
-			throw requires(elseThrow, "elseThrow").get();
-		}
-		return obj;
-	}
-	
-	// -- SUPPLIER IDIOMS
-	
-	/**
-	 * @param obj (nullable)
-	 * @param supplier
-	 * @return {@code obj!=null ? obj : supplier.get()}
-	 */
-	public static <X> X computeIfAbsent(@Nullable X obj, Supplier<X> supplier) {
-		return obj!=null ? obj : requires(supplier, "supplier").get();	
-	}
-	
-	// -- MAPPING IDIOMS
-	
-	/**
-	 * Equivalent to {@code Optional.ofNullable(obj).map(mapper).orElse(orElse);}
-	 * @param obj (nullable)
-	 * @param mapper
-	 * @param orElse (nullable)
-	 * @return {@code obj!=null ? mapper.apply(obj) : orElse}
-	 */
-	public static <X, R> R mapIfPresentElse(@Nullable X obj, Function<X, R> mapper, @Nullable R orElse) {
-		return obj!=null ? requires(mapper, "mapper").apply(obj) : orElse;	
-	}
-	
-	/**
-	 * Equivalent to {@code Optional.ofNullable(obj).map(mapper).orElseGet(elseGet);} 
-	 * @param obj (nullable)
-	 * @param mapper
-	 * @param elseGet
-	 * @return {@code obj!=null ? mapper.apply(obj) : elseGet.get()}
-	 */
-	public static <X, R> R mapIfPresentElseGet(@Nullable X obj, Function<X, R> mapper, Supplier<R> elseGet) {
-		return obj!=null ? requires(mapper, "mapper").apply(obj) : requires(elseGet, "elseGet").get();
-	}
-	
-	/**
-	 * Equivalent to {@code Optional.ofNullable(obj).map(mapper).orElseThrow(elseThrow);}
-	 * @param obj (nullable)
-	 * @param mapper
-	 * @param elseThrow
-	 * @return {@code obj!=null ? mapper.apply(obj) : throw( elseThrow.get() )}
-	 * @throws E
-	 */
-	public static <X, R, E extends Exception> R mapIfPresentElseThrow(
-			@Nullable X obj, 
-			Function<X, R> mapper, 
-			Supplier<E> elseThrow) 
-			throws E {
-		if(obj!=null) {
-			return requires(mapper, "mapper").apply(obj);	
-		}
-		throw requires(elseThrow, "elseThrow").get();
-	}
-	
-	// -- PARAMETER NON-NULL CHECK
-	
-	public static <T> T requires(@Nullable T obj, String paramName) {
+    private _With() { }
+
+    // -- OPTION IDIOMS
+
+    /**
+     * Equivalent to {@code Optional.ofNullable(obj).orElse(orElse);}
+     * @param obj (nullable)
+     * @param orElse (nullable)
+     * @return {@code obj!=null ? obj : orElse}
+     */
+    public static <X> X ifPresentElse(@Nullable X obj, @Nullable X orElse) {
+        return obj!=null ? obj : orElse;
+    }
+
+    /**
+     * Equivalent to {@code Optional.ofNullable(obj).orElseGet(elseGet);}
+     * @param obj (nullable)
+     * @param elseGet
+     * @return {@code obj!=null ? obj : elseGet.get()}
+     */
+    public static <X> X ifPresentElseGet(@Nullable X obj, Supplier<X> elseGet) {
+        return obj!=null ? obj : requires(elseGet, "elseGet").get();
+    }
+
+    /**
+     * Equivalent to {@code Optional.ofNullable(obj).orElseThrow(elseThrow);}
+     * @param obj (nullable)
+     * @param elseThrow
+     * @return {@code obj!=null ? obj : throw( elseThrow.get() )}
+     * @throws E
+     */
+    public static <X, E extends Exception> X ifPresentElseThrow(
+            @Nullable X obj,
+            Supplier<E> elseThrow)
+                    throws E {
+        if(obj!=null) {
+            return obj;
+        }
+        throw requires(elseThrow, "elseThrow").get();
+    }
+
+    // -- CONSUMER IDIOMS
+
+    /**
+     * Unary identity operator that passes {@code obj} to {@code consumer}.
+     * @param obj (nullable)
+     * @param consumer
+     * @return {@code obj}
+     */
+    public static <X> X accept(@Nullable X obj, Consumer<X> consumer) {
+        requires(consumer, "consumer").accept(obj);
+        return obj;
+    }
+
+    /**
+     * Unary identity operator that passes {@code obj} to {@code ifPresent} if {@code obj} is present.
+     * @param obj (nullable)
+     * @param ifPresent
+     * @return {@code obj}
+     */
+    public static <X> X acceptIfPresent(@Nullable X obj, Consumer<X> ifPresent) {
+        if(obj!=null) {
+            requires(ifPresent, "ifPresent").accept(obj);
+        }
+        return obj;
+    }
+
+    /**
+     * Unary identity operator that passes {@code obj} to {@code ifPresent} if {@code obj} is present,
+     * runs the specified {@code elseRun} otherwise.
+     * @param obj (nullable)
+     * @param ifPresent
+     * @param elseRun
+     * @return {@code obj}
+     */
+    public static <X> X acceptIfPresentElseRun(@Nullable X obj, Consumer<X> ifPresent, Runnable elseRun) {
+        if(obj!=null) {
+            requires(ifPresent, "ifPresent").accept(obj);
+        } else {
+            requires(elseRun, "elseRun").run();
+        }
+        return obj;
+    }
+
+    /**
+     * Unary identity operator that passes {@code obj} to {@code ifPresent} if {@code obj} is present,
+     * throws the specified Exception provided by {@code elseThrow} otherwise.
+     * @param obj (nullable)
+     * @param ifPresent
+     * @param elseThrow
+     * @return {@code obj!=null ? obj : throw( elseThrow.get() ) }
+     * @throws E
+     */
+    public static <X, E extends Exception> X acceptIfPresentElseThrow(
+            @Nullable X obj, Consumer<X> ifPresent, Supplier<E> elseThrow)
+                    throws E {
+
+        if(obj!=null) {
+            requires(ifPresent, "ifPresent").accept(obj);
+        } else {
+            throw requires(elseThrow, "elseThrow").get();
+        }
+        return obj;
+    }
+
+    // -- SUPPLIER IDIOMS
+
+    /**
+     * @param obj (nullable)
+     * @param supplier
+     * @return {@code obj!=null ? obj : supplier.get()}
+     */
+    public static <X> X computeIfAbsent(@Nullable X obj, Supplier<X> supplier) {
+        return obj!=null ? obj : requires(supplier, "supplier").get();
+    }
+
+    // -- MAPPING IDIOMS
+
+    /**
+     * Equivalent to {@code Optional.ofNullable(obj).map(mapper).orElse(orElse);}
+     * @param obj (nullable)
+     * @param mapper
+     * @param orElse (nullable)
+     * @return {@code obj!=null ? mapper.apply(obj) : orElse}
+     */
+    public static <X, R> R mapIfPresentElse(@Nullable X obj, Function<X, R> mapper, @Nullable R orElse) {
+        return obj!=null ? requires(mapper, "mapper").apply(obj) : orElse;
+    }
+
+    /**
+     * Equivalent to {@code Optional.ofNullable(obj).map(mapper).orElseGet(elseGet);}
+     * @param obj (nullable)
+     * @param mapper
+     * @param elseGet
+     * @return {@code obj!=null ? mapper.apply(obj) : elseGet.get()}
+     */
+    public static <X, R> R mapIfPresentElseGet(@Nullable X obj, Function<X, R> mapper, Supplier<R> elseGet) {
+        return obj!=null ? requires(mapper, "mapper").apply(obj) : requires(elseGet, "elseGet").get();
+    }
+
+    /**
+     * Equivalent to {@code Optional.ofNullable(obj).map(mapper).orElseThrow(elseThrow);}
+     * @param obj (nullable)
+     * @param mapper
+     * @param elseThrow
+     * @return {@code obj!=null ? mapper.apply(obj) : throw( elseThrow.get() )}
+     * @throws E
+     */
+    public static <X, R, E extends Exception> R mapIfPresentElseThrow(
+            @Nullable X obj,
+            Function<X, R> mapper,
+            Supplier<E> elseThrow)
+                    throws E {
+        if(obj!=null) {
+            return requires(mapper, "mapper").apply(obj);
+        }
+        throw requires(elseThrow, "elseThrow").get();
+    }
+
+    // -- PARAMETER NON-NULL CHECK
+
+    public static <T> T requires(@Nullable T obj, String paramName) {
         if (obj == null) {
             throw new NullPointerException(String.format("Parameter '%s' is required to be non-null.", paramName));
         }
         return obj;
     }
-	
-	// -- CONVENIENT CONSTRUCTORS
-	
-	public static <X> ArrayList<X> arrayList(Consumer<ArrayList<X>> consumer) {
-		return accept(new ArrayList<>(), consumer);
-	}
-	
-	public static <X> HashSet<X> hashSet(Consumer<HashSet<X>> consumer) {
-		return accept(new HashSet<>(), consumer);
-	}
-	
-	public static <X> TreeSet<X> treeSet(Consumer<TreeSet<X>> consumer) {
-		return accept(new TreeSet<>(), consumer);
-	}
-	
-	public static <K, V> HashMap<K, V> hashMap(Consumer<HashMap<K, V>> consumer) {
-		return accept(new HashMap<K, V>(), consumer);
-	}
-	
-	public static <K, V> TreeMap<K, V> treeMap(Consumer<TreeMap<K, V>> consumer) {
-		return accept(new TreeMap<K, V>(), consumer);
-	}
-	
-	public static StringBuilder stringBuilder(Consumer<StringBuilder> consumer) {
-		return accept(new StringBuilder(), consumer);
-	}
-	
-	
+
+    // -- CONVENIENT CONSTRUCTORS
+
+    public static <X> ArrayList<X> arrayList(Consumer<ArrayList<X>> consumer) {
+        return accept(new ArrayList<>(), consumer);
+    }
+
+    public static <X> HashSet<X> hashSet(Consumer<HashSet<X>> consumer) {
+        return accept(new HashSet<>(), consumer);
+    }
+
+    public static <X> TreeSet<X> treeSet(Consumer<TreeSet<X>> consumer) {
+        return accept(new TreeSet<>(), consumer);
+    }
+
+    public static <K, V> HashMap<K, V> hashMap(Consumer<HashMap<K, V>> consumer) {
+        return accept(new HashMap<K, V>(), consumer);
+    }
+
+    public static <K, V> TreeMap<K, V> treeMap(Consumer<TreeMap<K, V>> consumer) {
+        return accept(new TreeMap<K, V>(), consumer);
+    }
+
+    public static StringBuilder stringBuilder(Consumer<StringBuilder> consumer) {
+        return accept(new StringBuilder(), consumer);
+    }
+
+
 
 }

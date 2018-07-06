@@ -21,12 +21,12 @@
  * Provides an {@link org.apache.isis.core.commons.resource.ResourceStreamSource abstraction}
  * over {@link java.io.InputStream}s for accessing
  * resources.
- * 
+ *
  * <p>
  * The principle usage is to allow the easy searching of a single resource (eg
  * <tt>isis.properties</tt> file) in {@link org.apache.isis.core.commons.resource.ResourceStreamSourceContextLoaderClassPath multiple}
- * {@link org.apache.isis.core.commons.resource.ResourceStreamSourceCurrentClassClassPath locations} 
- * and {@link org.apache.isis.core.commons.resource.ResourceStreamSourceFileSystem technologies} 
+ * {@link org.apache.isis.core.commons.resource.ResourceStreamSourceCurrentClassClassPath locations}
+ * and {@link org.apache.isis.core.commons.resource.ResourceStreamSourceFileSystem technologies}
  * on the classpath through
  * the use of a {@link org.apache.isis.core.commons.resource.ResourceStreamSourceChainOfResponsibility composite}
  * pattern.

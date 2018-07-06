@@ -41,12 +41,12 @@ import org.apache.isis.commons.internal.collections._Lists;
 @DomainService(
         nature = NatureOfService.VIEW_MENU_ONLY,
         objectType = "isisApplib.MetaModelServicesMenu"
-)
+        )
 @DomainServiceLayout(
         named = "Prototyping",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY,
         menuOrder = "500.500"
-)
+        )
 public class MetaModelServicesMenu {
 
     public static abstract class ActionDomainEvent extends IsisApplibModule.ActionDomainEvent<MetaModelServicesMenu> { private static final long serialVersionUID = 1L; }
@@ -69,11 +69,11 @@ public class MetaModelServicesMenu {
             domainEvent = DownloadMetaModelEvent.class,
             semantics = SemanticsOf.SAFE,
             restrictTo = RestrictTo.PROTOTYPING
-    )
+            )
     @ActionLayout(
             cssClassFa = "fa-download",
             named = "Download Meta Model (CSV)"
-    )
+            )
     @MemberOrder(sequence="500.500.1")
     public Clob downloadMetaModel(
             @ParameterLayout(named = ".csv file name")
@@ -126,16 +126,16 @@ public class MetaModelServicesMenu {
                 row.getMemberName(),
                 row.getNumParams(),
                 row.isContributed() ? "Y" : "",
-                row.getContributedBy(),
-                row.isMixedIn() ? "Y" : "",
-                row.getMixin(),
-                row.getHidden(),
-                row.getDisabled(),
-                row.getChoices(),
-                row.getAutoComplete(),
-                row.getDefault(),
-                row.getValidate())
-        	.collect(Collectors.joining(","));
+                        row.getContributedBy(),
+                        row.isMixedIn() ? "Y" : "",
+                                row.getMixin(),
+                                row.getHidden(),
+                                row.getDisabled(),
+                                row.getChoices(),
+                                row.getAutoComplete(),
+                                row.getDefault(),
+                                row.getValidate())
+                .collect(Collectors.joining(","));
     }
 
 

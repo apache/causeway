@@ -24,7 +24,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 
 /**
  * Clear all objects from a collection.
- * 
+ *
  * <p>
  * In the standard Apache Isis Programming Model, corresponds to either invoking
  * the <tt>clearXxx</tt> support method, or just invoking <tt>clear</tt> on the

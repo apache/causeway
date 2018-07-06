@@ -24,7 +24,7 @@ import org.apache.isis.core.metamodel.facets.MarkerFacet;
 /**
  * Indicates that the (no-arg) action (on a domain service) to be invoked automatically
  * and the contents used for the home page.
- * 
+ *
  * <p>
  * In the standard Apache Isis Programming Model, typically corresponds to
  * applying the <tt>@HomePage</tt> annotation at the class level.

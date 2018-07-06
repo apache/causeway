@@ -41,14 +41,14 @@ public class MustSatisfySpecificationFacetForParameterAnnotation extends MustSat
         List<Specification> specifications = parameters.stream()
                 .map(Parameter::mustSatisfy)
                 .flatMap(classes ->
-                        Arrays.stream(classes)
-                                .map(MustSatisfySpecificationFacetAbstract::newSpecificationElseNull)
-                                .filter(Objects::nonNull)
-                )
+                Arrays.stream(classes)
+                .map(MustSatisfySpecificationFacetAbstract::newSpecificationElseNull)
+                .filter(Objects::nonNull)
+                        )
                 .collect(Collectors.toList());
         return specifications.size() > 0
                 ? new MustSatisfySpecificationFacetForParameterAnnotation(specifications, holder, servicesInjector)
-                : null;
+                        : null;
     }
 
     private MustSatisfySpecificationFacetForParameterAnnotation(

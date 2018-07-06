@@ -31,70 +31,70 @@ import org.junit.jupiter.api.extension.ExtensionContext;
 import org.slf4j.event.Level;
 
 /**
- * Base class for integration tests for the JUnit 5 Jupiter Engine, 
+ * Base class for integration tests for the JUnit 5 Jupiter Engine,
  * uses a {@link Module} to bootstrap, rather than an {@link AppManifest}.
- * 
+ *
  * @since 2.0.0
  */
 @ExtendWith(IntegrationTestJupiter.HeadlessTransactionRule.class)
 public abstract class IntegrationTestJupiter extends HeadlessWithBootstrappingAbstract {
 
-	public static class HeadlessTransactionRule implements AfterEachCallback, BeforeEachCallback {
+    public static class HeadlessTransactionRule implements AfterEachCallback, BeforeEachCallback {
 
-		@Override
-		public void beforeEach(ExtensionContext context) throws Exception {
-			final IntegrationTestJupiter testInstance = testInstance(context);
-			testInstance.bootstrapAndSetupIfRequired();
-		}
+        @Override
+        public void beforeEach(ExtensionContext context) throws Exception {
+            final IntegrationTestJupiter testInstance = testInstance(context);
+            testInstance.bootstrapAndSetupIfRequired();
+        }
 
-		@Override
-		public void afterEach(ExtensionContext context) throws Exception {
+        @Override
+        public void afterEach(ExtensionContext context) throws Exception {
 
-			try {
-				final IsisSystem isft = IsisSystem.get();
-				isft.getService(HeadlessTransactionSupport.class).endTransaction();
-			} catch(final Exception e) {
-				Util.handleTransactionContextException(e);
-			} finally {
-				final IntegrationTestJupiter testInstance = testInstance(context);
-				testInstance.tearDownAllModules();
-			}
-		}
+            try {
+                final IsisSystem isft = IsisSystem.get();
+                isft.getService(HeadlessTransactionSupport.class).endTransaction();
+            } catch(final Exception e) {
+                Util.handleTransactionContextException(e);
+            } finally {
+                final IntegrationTestJupiter testInstance = testInstance(context);
+                testInstance.tearDownAllModules();
+            }
+        }
 
-		// -- HELPER
-		private IntegrationTestJupiter testInstance(ExtensionContext context) {
-			final IntegrationTestJupiter testInstance = (IntegrationTestJupiter) context.getTestInstance().get();
-			return testInstance;
-		}
+        // -- HELPER
+        private IntegrationTestJupiter testInstance(ExtensionContext context) {
+            final IntegrationTestJupiter testInstance = (IntegrationTestJupiter) context.getTestInstance().get();
+            return testInstance;
+        }
 
-	}
+    }
 
-	protected IntegrationTestJupiter(final Module module) {
-		this(new LogConfig(Level.INFO), module);
-	}
+    protected IntegrationTestJupiter(final Module module) {
+        this(new LogConfig(Level.INFO), module);
+    }
 
-	protected IntegrationTestJupiter(
-			final LogConfig logConfig,
-			final Module module) {
-		super(logConfig, 
-				Util.moduleBuilder(module)
-				.withHeadlessTransactionSupport()
-				.withIntegrationTestConfigFallback()
-				.build() );
-	}
+    protected IntegrationTestJupiter(
+            final LogConfig logConfig,
+            final Module module) {
+        super(logConfig,
+                Util.moduleBuilder(module)
+                .withHeadlessTransactionSupport()
+                .withIntegrationTestConfigFallback()
+                .build() );
+    }
 
-	@Override
-	protected void bootstrapAndSetupIfRequired() {
+    @Override
+    protected void bootstrapAndSetupIfRequired() {
 
-		super.bootstrapAndSetupIfRequired();
+        super.bootstrapAndSetupIfRequired();
 
-		log("### TEST: " + this.getClass().getCanonicalName());
-	}
+        log("### TEST: " + this.getClass().getCanonicalName());
+    }
 
-	@Override
-	protected void tearDownAllModules() {
+    @Override
+    protected void tearDownAllModules() {
 
-		super.tearDownAllModules();
-	}
+        super.tearDownAllModules();
+    }
 
 }

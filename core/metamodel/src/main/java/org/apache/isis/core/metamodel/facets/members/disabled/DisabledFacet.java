@@ -27,7 +27,7 @@ import org.apache.isis.core.metamodel.interactions.DisablingInteractionAdvisor;
 
 /**
  * Disable a property, collection or action.
- * 
+ *
  * <p>
  * In the standard Apache Isis Programming Model, corresponds to annotating the
  * member with <tt>@Disabled</tt>.

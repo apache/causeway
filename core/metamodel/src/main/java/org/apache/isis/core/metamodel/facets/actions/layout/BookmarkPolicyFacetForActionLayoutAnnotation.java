@@ -47,7 +47,7 @@ public class BookmarkPolicyFacetForActionLayoutAnnotation extends BookmarkPolicy
                     }
                     throw new IllegalStateException("bookmarkPolicy '" + bookmarkPolicy + "' not recognised");
                 }
-                )
+                        )
                 .orElse(null);
     }
 

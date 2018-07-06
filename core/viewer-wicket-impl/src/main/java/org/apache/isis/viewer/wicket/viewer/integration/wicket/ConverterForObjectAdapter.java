@@ -61,7 +61,7 @@ public class ConverterForObjectAdapter implements IConverter<ObjectAdapter> {
 
         return oid.enString();
     }
-    
+
 
 
     // //////////////////////////////////////////////////////////

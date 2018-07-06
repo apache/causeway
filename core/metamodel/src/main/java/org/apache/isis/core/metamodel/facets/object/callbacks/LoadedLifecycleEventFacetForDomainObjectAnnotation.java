@@ -33,10 +33,11 @@ public class LoadedLifecycleEventFacetForDomainObjectAnnotation extends SingleCl
     public LoadedLifecycleEventFacetForDomainObjectAnnotation(
             final FacetHolder holder,
             final Class<? extends ObjectLoadedEvent<?>> value,
-            final SpecificationLoader specificationLoader) {
+                    final SpecificationLoader specificationLoader) {
         super(type(), holder, value, specificationLoader);
     }
 
+    @Override
     public Class<? extends ObjectLoadedEvent<?>> getEventType() {
         //noinspection unchecked
         return eventType();

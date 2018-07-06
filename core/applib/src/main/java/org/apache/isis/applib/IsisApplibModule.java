@@ -23,39 +23,39 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "module")
 public class IsisApplibModule extends ModuleAbstract {
 
-	// -- UI EVENT CLASSES
+    // -- UI EVENT CLASSES
 
-	public abstract static class TitleUiEvent<S>
-	extends org.apache.isis.applib.events.ui.TitleUiEvent<S> { 
-		private static final long serialVersionUID = 1L;
-	}
+    public abstract static class TitleUiEvent<S>
+    extends org.apache.isis.applib.events.ui.TitleUiEvent<S> {
+        private static final long serialVersionUID = 1L;
+    }
 
-	public abstract static class IconUiEvent<S>
-	extends org.apache.isis.applib.events.ui.IconUiEvent<S> { 
-		private static final long serialVersionUID = 1L;
-	}
+    public abstract static class IconUiEvent<S>
+    extends org.apache.isis.applib.events.ui.IconUiEvent<S> {
+        private static final long serialVersionUID = 1L;
+    }
 
-	public abstract static class CssClassUiEvent<S>
-	extends org.apache.isis.applib.events.ui.CssClassUiEvent<S> { 
-		private static final long serialVersionUID = 1L;
-	}
+    public abstract static class CssClassUiEvent<S>
+    extends org.apache.isis.applib.events.ui.CssClassUiEvent<S> {
+        private static final long serialVersionUID = 1L;
+    }
 
-	// -- DOMAIN EVENT CLASSES
+    // -- DOMAIN EVENT CLASSES
 
-	public abstract static class ActionDomainEvent<S>
-	extends org.apache.isis.applib.events.domain.ActionDomainEvent<S> {
-		private static final long serialVersionUID = 1L;
-	}
+    public abstract static class ActionDomainEvent<S>
+    extends org.apache.isis.applib.events.domain.ActionDomainEvent<S> {
+        private static final long serialVersionUID = 1L;
+    }
 
-	public abstract static class CollectionDomainEvent<S,T> 
-	extends org.apache.isis.applib.events.domain.CollectionDomainEvent<S,T> {
-		private static final long serialVersionUID = 1L;
-	}
+    public abstract static class CollectionDomainEvent<S,T>
+    extends org.apache.isis.applib.events.domain.CollectionDomainEvent<S,T> {
+        private static final long serialVersionUID = 1L;
+    }
 
-	public abstract static class PropertyDomainEvent<S,T>
-	extends org.apache.isis.applib.events.domain.PropertyDomainEvent<S,T> {
-		private static final long serialVersionUID = 1L;
-	}
+    public abstract static class PropertyDomainEvent<S,T>
+    extends org.apache.isis.applib.events.domain.PropertyDomainEvent<S,T> {
+        private static final long serialVersionUID = 1L;
+    }
 
 
 

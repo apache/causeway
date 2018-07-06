@@ -59,7 +59,7 @@ public final class FacetUtil {
     /**
      * Attaches the {@link Facet} to its {@link Facet#getFacetHolder() facet
      * holder}.
-     * 
+     *
      * @return <tt>true</tt> if a non-<tt>null</tt> facet was added,
      *         <tt>false</tt> otherwise.
      */
@@ -82,7 +82,7 @@ public final class FacetUtil {
     /**
      * Attaches each {@link Facet} to its {@link Facet#getFacetHolder() facet
      * holder}.
-     * 
+     *
      * @return <tt>true</tt> if any facets were added, <tt>false</tt> otherwise.
      */
     public static boolean addFacets(final Facet[] facets) {
@@ -96,7 +96,7 @@ public final class FacetUtil {
     /**
      * Attaches each {@link Facet} to its {@link Facet#getFacetHolder() facet
      * holder}.
-     * 
+     *
      * @return <tt>true</tt> if any facets were added, <tt>false</tt> otherwise.
      */
     public static boolean addFacets(final List<Facet> facetList) {
@@ -113,7 +113,7 @@ public final class FacetUtil {
      */
     public static Class<? extends Facet>[] getFacetTypes(final Map<Class<? extends Facet>, Facet> facetsByClass) {
         return _Casts.uncheckedCast(
-        		facetsByClass.keySet().toArray(_Constants.emptyClasses)	);
+                facetsByClass.keySet().toArray(_Constants.emptyClasses)	);
     }
 
     /**
@@ -171,7 +171,7 @@ public final class FacetUtil {
         final Class<? extends Facet>[] facetTypes = source.getFacetTypes();
         for (Class<? extends Facet> facetType : facetTypes) {
             //TODO [ahuber] unused because of expected side effects?
-			final Facet facet = source.getFacet(facetType);
+            final Facet facet = source.getFacet(facetType);
 
         }
         List<Facet> facets = source.getFacets(com.google.common.base.Predicates.<Facet>alwaysTrue());

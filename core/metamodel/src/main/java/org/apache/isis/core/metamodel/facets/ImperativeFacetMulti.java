@@ -26,7 +26,7 @@ public interface ImperativeFacetMulti extends ImperativeFacet {
     /**
      * Associate an additional method, to be returned from
      * {@link ImperativeFacet#getMethods()}.
-     * 
+     *
      * @param method
      */
     public void addMethod(final Method method);

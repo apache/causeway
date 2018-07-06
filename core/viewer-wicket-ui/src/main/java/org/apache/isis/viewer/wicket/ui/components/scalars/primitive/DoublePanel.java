@@ -38,7 +38,7 @@ public class DoublePanel extends ScalarPanelTextFieldNumeric<Double> {
     public DoublePanel(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel, Double.class, DoubleConverter.INSTANCE);
     }
-    
+
     @Override
     protected AbstractTextComponent<Double> createTextFieldForRegular(final String id) {
         final TextFieldValueModel<Double> textFieldValueModel = new TextFieldValueModel<>(this);

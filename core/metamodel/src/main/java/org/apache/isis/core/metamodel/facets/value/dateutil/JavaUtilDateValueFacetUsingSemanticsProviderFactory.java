@@ -28,8 +28,8 @@ public class JavaUtilDateValueFacetUsingSemanticsProviderFactory extends ValueFa
 
     public JavaUtilDateValueFacetUsingSemanticsProviderFactory() {
         super(); // as per inherited
-                                     // TimeValueSemanticsProvider#facetType
-                                     // (inherited)
+        // TimeValueSemanticsProvider#facetType
+        // (inherited)
     }
 
     @Override

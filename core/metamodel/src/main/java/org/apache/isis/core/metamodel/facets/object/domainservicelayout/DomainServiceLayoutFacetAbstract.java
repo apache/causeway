@@ -26,8 +26,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 
 public abstract class DomainServiceLayoutFacetAbstract
-            extends FacetAbstract
-            implements DomainServiceLayoutFacet {
+extends FacetAbstract
+implements DomainServiceLayoutFacet {
 
     public static Class<? extends Facet> type() {
         return DomainServiceLayoutFacet.class;
@@ -42,10 +42,12 @@ public abstract class DomainServiceLayoutFacetAbstract
         this.menuOrder = menuOrder;
     }
 
+    @Override
     public DomainServiceLayout.MenuBar getMenuBar() {
         return menuBar;
     }
 
+    @Override
     public String getMenuOrder() {
         return menuOrder;
     }

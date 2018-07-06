@@ -49,13 +49,13 @@ public class ExecutionParameters {
         final Map<String, String> keyValues = _Maps.newLinkedHashMap();
         if (parameters != null) {
             try {
-            	_Strings.splitThenStream(parameters, "\n")
-            	.forEach(line->{
+                _Strings.splitThenStream(parameters, "\n")
+                .forEach(line->{
                     final Matcher matcher = keyEqualsValuePattern.matcher(line);
                     if (matcher.matches()) {
                         keyValues.put(matcher.group(1).trim(), matcher.group(2).trim());
                     }
-            	});
+                });
             } catch (final Exception e) {
                 // ignore, shouldn't happen
             }
@@ -72,11 +72,11 @@ public class ExecutionParameters {
     }
 
     public <T> T getParameterAsT(final String parameterName, final Class<T> cls) {
-    	return _Casts.uncheckedCast(getParameterAsObject(parameterName, cls));
+        return _Casts.uncheckedCast(getParameterAsObject(parameterName, cls));
     }
-    
+
     protected Object getParameterAsObject(final String parameterName, final Class<?> cls) {
-    	final Object value;
+        final Object value;
         if (Enum.class.isAssignableFrom(cls)) {
             Class<?> enumClass = cls;
             value = getParameterAsEnum(parameterName, _Casts.uncheckedCast(enumClass));
@@ -107,7 +107,7 @@ public class ExecutionParameters {
         } else if (cls == String.class) {
             value = getParameter(parameterName);
         } else {
-        	value = null;
+            value = null;
         }
         return value;
     }

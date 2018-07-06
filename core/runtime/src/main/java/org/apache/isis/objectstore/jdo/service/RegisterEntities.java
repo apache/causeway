@@ -55,7 +55,7 @@ public class RegisterEntities {
     public Set<String> getEntityTypes() {
         return entityTypes;
     }
-    
+
 
     public RegisterEntities(final SpecificationLoader specificationLoader) {
         this.specificationLoader = specificationLoader;
@@ -87,7 +87,7 @@ public class RegisterEntities {
     private static boolean ignore(final Class<?> entityType) {
         try {
             if(entityType.isAnonymousClass() || entityType.isLocalClass() || entityType.isMemberClass() ||
-               entityType.isInterface() || entityType.isAnnotation()) {
+                    entityType.isInterface() || entityType.isAnnotation()) {
                 return true;
             }
             final PersistenceCapable persistenceCapable = entityType.getAnnotation(PersistenceCapable.class);

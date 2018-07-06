@@ -46,158 +46,158 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * For command-reification depends on an implementation of 
+ * For command-reification depends on an implementation of
  * {@link org.apache.isis.applib.services.background.BackgroundCommandService} to
  * be configured.
  */
 @DomainService(
-		nature = NatureOfService.DOMAIN,
-		menuOrder = "" + Integer.MAX_VALUE
-		)
+        nature = NatureOfService.DOMAIN,
+        menuOrder = "" + Integer.MAX_VALUE
+        )
 public class BackgroundServiceDefault implements BackgroundService {
-	
-	static final Logger LOG = LoggerFactory.getLogger(BackgroundServiceDefault.class);
 
-	// only used if there is no BackgroundCommandService
-	private static class BuiltinExecutor {
-		/*
-		 * For the fixed thread-pool let there be 1-4 concurrent threads,
-		 * limited by the number of available (logical) processor cores.
-		 * 
-		 * Note: Future improvements might make these values configurable, 
-		 * but for now lets try to be reasonably nice here.
-		 * 
-		 */
-		private final int minThreadCount = 1; 
-		private final int maxThreadCount = 4;
+    static final Logger LOG = LoggerFactory.getLogger(BackgroundServiceDefault.class);
 
-		private final int threadCount =
-				Math.max(minThreadCount, 
-						Math.min(maxThreadCount,
-								Runtime.getRuntime().availableProcessors()));
+    // only used if there is no BackgroundCommandService
+    private static class BuiltinExecutor {
+        /*
+         * For the fixed thread-pool let there be 1-4 concurrent threads,
+         * limited by the number of available (logical) processor cores.
+         *
+         * Note: Future improvements might make these values configurable,
+         * but for now lets try to be reasonably nice here.
+         *
+         */
+        private final int minThreadCount = 1;
+        private final int maxThreadCount = 4;
 
-		public final ExecutorService backgroundExecutorService = 
-				Executors.newFixedThreadPool(threadCount);
+        private final int threadCount =
+                Math.max(minThreadCount,
+                        Math.min(maxThreadCount,
+                                Runtime.getRuntime().availableProcessors()));
 
-		public void shutdown() {
-			backgroundExecutorService.shutdownNow();
-		}	
-	}
-	
-	private BuiltinExecutor builtinExecutor; // only used if there is no BackgroundCommandService
-	
-	private boolean usesBuiltinExecutor() {
-		return backgroundCommandService==null;
-	}
+        public final ExecutorService backgroundExecutorService =
+                Executors.newFixedThreadPool(threadCount);
 
-	@Programmatic
-	@PostConstruct
-	public void init(Map<String,String> props) {
-		if(usesBuiltinExecutor()) {
-			builtinExecutor = new BuiltinExecutor();
-		}
-	}
+        public void shutdown() {
+            backgroundExecutorService.shutdownNow();
+        }
+    }
 
-	@Programmatic
-	@PreDestroy
-	public void shutdown() {
-		if(builtinExecutor!=null) {
-			builtinExecutor.shutdown();
-		}
-	}
+    private BuiltinExecutor builtinExecutor; // only used if there is no BackgroundCommandService
 
-	ObjectSpecification getSpecification(final Class<?> type) {
-		return specificationLoader.loadSpecification(type);
-	}
+    private boolean usesBuiltinExecutor() {
+        return backgroundCommandService==null;
+    }
 
-	// //////////////////////////////////////
+    @Programmatic
+    @PostConstruct
+    public void init(Map<String,String> props) {
+        if(usesBuiltinExecutor()) {
+            builtinExecutor = new BuiltinExecutor();
+        }
+    }
 
-	@Programmatic
-	@Override
-	public <T> T execute(final T domainObject) {
-		final Class<T> cls = uncheckedCast(domainObject.getClass());
-		final InvocationHandler methodHandler = newMethodHandler(domainObject, null);
-		return newProxy(cls, null, methodHandler);
-	}
+    @Programmatic
+    @PreDestroy
+    public void shutdown() {
+        if(builtinExecutor!=null) {
+            builtinExecutor.shutdown();
+        }
+    }
 
-	@Override
-	public <T> T executeMixin(Class<T> mixinClass, Object mixedIn) {
-		final T mixin = factoryService.mixin(mixinClass, mixedIn);
-		final InvocationHandler methodHandler = newMethodHandler(mixin, mixedIn);
-		return newProxy(mixinClass, mixedIn, methodHandler);
-	}
+    ObjectSpecification getSpecification(final Class<?> type) {
+        return specificationLoader.loadSpecification(type);
+    }
 
-	private <T> T newProxy(
-			final Class<T> cls,
-			final Object mixedInIfAny,
-			final InvocationHandler methodHandler) {
+    // //////////////////////////////////////
 
-		final Class<?>[] interfaces = ArrayExtensions.combine(
-				cls.getInterfaces(), 
-				new Class<?>[] { ProxyEnhanced.class }); 
+    @Programmatic
+    @Override
+    public <T> T execute(final T domainObject) {
+        final Class<T> cls = uncheckedCast(domainObject.getClass());
+        final InvocationHandler methodHandler = newMethodHandler(domainObject, null);
+        return newProxy(cls, null, methodHandler);
+    }
 
-		final boolean initialize = mixedInIfAny!=null;
+    @Override
+    public <T> T executeMixin(Class<T> mixinClass, Object mixedIn) {
+        final T mixin = factoryService.mixin(mixinClass, mixedIn);
+        final InvocationHandler methodHandler = newMethodHandler(mixin, mixedIn);
+        return newProxy(mixinClass, mixedIn, methodHandler);
+    }
 
+    private <T> T newProxy(
+            final Class<T> cls,
+            final Object mixedInIfAny,
+            final InvocationHandler methodHandler) {
 
-		final Class<?>[] constructorArgTypes = initialize ? new Class<?>[] {mixedInIfAny.getClass()} : _Constants.emptyClasses;
-		final Object[] constructorArgs = initialize ? new Object[] {mixedInIfAny} : _Constants.emptyObjects;
+        final Class<?>[] interfaces = ArrayExtensions.combine(
+                cls.getInterfaces(),
+                new Class<?>[] { ProxyEnhanced.class });
 
-		final ProxyFactory<T> proxyFactory = ProxyFactory.builder(cls)
-				.interfaces(interfaces)
-				.constructorArgTypes(constructorArgTypes)
-				.build();
-
-		return initialize 
-				? proxyFactory.createInstance(methodHandler, constructorArgs)  
-						: proxyFactory.createInstance(methodHandler, false)
-						;
-	}
-
-	/**
-	 *
-	 * @param target - the object that is proxied, either a domain object or a mixin around a domain object
-	 * @param mixedInIfAny - if target is a mixin, then this is the domain object that is mixed-in to.
-	 */
-	private <T> InvocationHandler newMethodHandler(final T target, final Object mixedInIfAny) {
-
-		if(usesBuiltinExecutor()) {
-			return new ForkingInvocationHandler<T>(target, mixedInIfAny, builtinExecutor.backgroundExecutorService);
-		}
-
-		return new CommandInvocationHandler<T>(
-				backgroundCommandService, 
-				target, 
-				mixedInIfAny, 
-				specificationLoader,
-				commandDtoServiceInternal,
-				commandContext,
-				this::getAdapterManager);
-
-	}
+        final boolean initialize = mixedInIfAny!=null;
 
 
-	// //////////////////////////////////////
+        final Class<?>[] constructorArgTypes = initialize ? new Class<?>[] {mixedInIfAny.getClass()} : _Constants.emptyClasses;
+        final Object[] constructorArgs = initialize ? new Object[] {mixedInIfAny} : _Constants.emptyObjects;
 
-	@javax.inject.Inject
-	private BackgroundCommandService backgroundCommandService;
+        final ProxyFactory<T> proxyFactory = ProxyFactory.builder(cls)
+                .interfaces(interfaces)
+                .constructorArgTypes(constructorArgTypes)
+                .build();
 
-	@javax.inject.Inject
-	private CommandDtoServiceInternal commandDtoServiceInternal;
+        return initialize
+                ? proxyFactory.createInstance(methodHandler, constructorArgs)
+                        : proxyFactory.createInstance(methodHandler, false)
+                        ;
+    }
 
-	@javax.inject.Inject
-	private CommandContext commandContext;
+    /**
+     *
+     * @param target - the object that is proxied, either a domain object or a mixin around a domain object
+     * @param mixedInIfAny - if target is a mixin, then this is the domain object that is mixed-in to.
+     */
+    private <T> InvocationHandler newMethodHandler(final T target, final Object mixedInIfAny) {
 
-	@javax.inject.Inject
-	private FactoryService factoryService;
+        if(usesBuiltinExecutor()) {
+            return new ForkingInvocationHandler<T>(target, mixedInIfAny, builtinExecutor.backgroundExecutorService);
+        }
 
-	@javax.inject.Inject
-	private SpecificationLoader specificationLoader;
+        return new CommandInvocationHandler<T>(
+                backgroundCommandService,
+                target,
+                mixedInIfAny,
+                specificationLoader,
+                commandDtoServiceInternal,
+                commandContext,
+                this::getAdapterManager);
 
-	@javax.inject.Inject
-	private IsisSessionFactory isisSessionFactory;
+    }
 
-	protected AdapterManager getAdapterManager() {
-		return isisSessionFactory.getCurrentSession().getPersistenceSession();
-	}
+
+    // //////////////////////////////////////
+
+    @javax.inject.Inject
+    private BackgroundCommandService backgroundCommandService;
+
+    @javax.inject.Inject
+    private CommandDtoServiceInternal commandDtoServiceInternal;
+
+    @javax.inject.Inject
+    private CommandContext commandContext;
+
+    @javax.inject.Inject
+    private FactoryService factoryService;
+
+    @javax.inject.Inject
+    private SpecificationLoader specificationLoader;
+
+    @javax.inject.Inject
+    private IsisSessionFactory isisSessionFactory;
+
+    protected AdapterManager getAdapterManager() {
+        return isisSessionFactory.getCurrentSession().getPersistenceSession();
+    }
 
 }

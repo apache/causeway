@@ -41,7 +41,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.service.conneg.ContentNeg
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
-)
+        )
 public class RepresentationServiceContentNegotiator implements RepresentationService {
 
 

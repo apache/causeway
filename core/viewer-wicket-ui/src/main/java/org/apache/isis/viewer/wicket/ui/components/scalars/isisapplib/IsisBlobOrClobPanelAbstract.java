@@ -61,10 +61,10 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
 
 
     private static final long serialVersionUID = 1L;
-    
+
     @SuppressWarnings("unused")
     private static final Logger LOG = LoggerFactory.getLogger(IsisBlobOrClobPanelAbstract.class);
-    
+
     private static final String ID_SCALAR_IF_REGULAR = "scalarIfRegular";
     private static final String ID_SCALAR_IF_REGULAR_DOWNLOAD = "scalarIfRegularDownload";
     private static final String ID_FILE_NAME = "fileName";
@@ -81,17 +81,17 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
     private Label fileNameLabel;
 
     protected enum InputFieldVisibility {
-            VISIBLE, NOT_VISIBLE
-        }
+        VISIBLE, NOT_VISIBLE
+    }
 
     @Override
     protected FormGroup createComponentForRegular() {
         fileUploadField = createFileUploadField(ID_SCALAR_VALUE);
         fileUploadField.setLabel(Model.of(getModel().getName()));
-        
+
         final FormGroup scalarIfRegularFormGroup = new FormGroup(ID_SCALAR_IF_REGULAR, fileUploadField);
         scalarIfRegularFormGroup.add(fileUploadField);
-    
+
         final Label scalarName = new Label(ID_SCALAR_NAME, getModel().getName());
         scalarIfRegularFormGroup.add(scalarName);
 
@@ -103,13 +103,14 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
         } else {
             Components.permanentlyHide(scalarIfRegularFormGroup, ID_IMAGE);
         }
-        
+
         updateFileNameLabel(ID_FILE_NAME, scalarIfRegularFormGroup);
         updateDownloadLink(ID_SCALAR_IF_REGULAR_DOWNLOAD, scalarIfRegularFormGroup);
 
         return scalarIfRegularFormGroup;
     }
 
+    @Override
     protected Component getScalarValueComponent() {
         return fileUploadField;
     }
@@ -190,44 +191,47 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
 
     // //////////////////////////////////////
 
+    @Override
     protected void onInitializeWhenViewMode() {
         updateRegularFormComponents(InputFieldVisibility.NOT_VISIBLE);
     }
 
+    @Override
     protected void onInitializeWhenDisabled(final String disableReason) {
         updateRegularFormComponents(InputFieldVisibility.NOT_VISIBLE);
     }
 
+    @Override
     protected void onInitializeWhenEnabled() {
         updateRegularFormComponents(InputFieldVisibility.VISIBLE);
     }
 
     private FileUploadField createFileUploadField(String componentId) {
         final BootstrapFileInputField fileUploadField = new BootstrapFileInputField(componentId, new IModel<List<FileUpload>>() {
-    
+
             private static final long serialVersionUID = 1L;
-    
+
             @Override
             public void setObject(final List<FileUpload> fileUploads) {
                 if (fileUploads == null || fileUploads.isEmpty()) {
                     return;
                 }
-                
+
                 final T blob = getBlobOrClobFrom(fileUploads);
 
                 final ObjectAdapter adapter = getPersistenceSession().adapterFor(blob);
                 getModel().setObject(adapter);
             }
-    
+
             @Override
             public void detach() {
             }
-    
+
             @Override
             public List<FileUpload> getObject() {
                 return null;
             }
-            
+
         });
         fileUploadField.getConfig().showUpload(false).mainClass("input-group-sm");
         return fileUploadField;
@@ -248,7 +252,7 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
     private void updateRegularFormComponents(final InputFieldVisibility visibility) {
         MarkupContainer formComponent = (MarkupContainer) getComponentForRegular();
         formComponent.get(ID_SCALAR_VALUE).setVisible(visibility == InputFieldVisibility.VISIBLE);
-        
+
         addAcceptFilterTo(formComponent.get(ID_SCALAR_VALUE));
         fileNameLabel = updateFileNameLabel(ID_FILE_NAME, formComponent);
 
@@ -266,23 +270,23 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
         }
     }
 
-	private String getAcceptFilter(){
-		return scalarModel.getFileAccept();
-	}
-	
-	private void addAcceptFilterTo(Component component){
-		final String filter = getAcceptFilter();
-		if(filter==null || filter.isEmpty())
-			return; // ignore
-		class AcceptAttributeModel extends Model<String> {
-			private static final long serialVersionUID = 1L;
-			@Override
-			public String getObject() {
-				return filter;
-			}
-		}
-		component.add(new AttributeModifier("accept", new AcceptAttributeModel()));
-	}
+    private String getAcceptFilter(){
+        return scalarModel.getFileAccept();
+    }
+
+    private void addAcceptFilterTo(Component component){
+        final String filter = getAcceptFilter();
+        if(filter==null || filter.isEmpty())
+            return; // ignore
+        class AcceptAttributeModel extends Model<String> {
+            private static final long serialVersionUID = 1L;
+            @Override
+            public String getObject() {
+                return filter;
+            }
+        }
+        component.add(new AttributeModifier("accept", new AcceptAttributeModel()));
+    }
 
 
     private Label updateFileNameLabel(String idFileName, MarkupContainer formComponent) {
@@ -304,10 +308,10 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
     private void updateClearLink(InputFieldVisibility visibility) {
         final MarkupContainer formComponent = (MarkupContainer) getComponentForRegular();
         formComponent.setOutputMarkupId(true); // enable ajax link
-    
+
         final AjaxLink<Void> ajaxLink = new AjaxLink<Void>(ID_SCALAR_IF_REGULAR_CLEAR){
             private static final long serialVersionUID = 1L;
-    
+
             @Override
             public void onClick(AjaxRequestTarget target) {
                 setEnabled(false);
@@ -319,7 +323,7 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
         };
         ajaxLink.setOutputMarkupId(true);
         formComponent.addOrReplace(ajaxLink);
-    
+
         final T blobOrClob = getBlobOrClobFromModel();
         formComponent.get(ID_SCALAR_IF_REGULAR_CLEAR).setVisible(blobOrClob != null && visibility == InputFieldVisibility.VISIBLE);
     }

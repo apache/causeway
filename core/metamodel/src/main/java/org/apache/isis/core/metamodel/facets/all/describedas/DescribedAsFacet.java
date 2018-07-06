@@ -23,7 +23,7 @@ import org.apache.isis.core.metamodel.facets.SingleStringValueFacet;
 
 /**
  * Describes a class, a property, collection, an action or an action parameter.
- * 
+ *
  * <p>
  * In the standard Apache Isis Programming Model, corresponds to annotating the
  * member with <tt>@DescribedAs</tt>.

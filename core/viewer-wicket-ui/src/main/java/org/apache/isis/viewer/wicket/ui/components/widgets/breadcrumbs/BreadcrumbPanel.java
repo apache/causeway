@@ -46,7 +46,7 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 public class BreadcrumbPanel extends PanelAbstract<IModel<Void>> {
 
     private static final long serialVersionUID = 1L;
-    
+
     private static final String ID_BREADCRUMBS = "breadcrumbs";
     /**
      * A configuration setting which value determines whether the breadcrumbs should be available in the footer
@@ -57,14 +57,14 @@ public class BreadcrumbPanel extends PanelAbstract<IModel<Void>> {
     public BreadcrumbPanel(String id) {
         super(id);
     }
-    
+
     @Override
     protected void onInitialize() {
         super.onInitialize();
-        
+
         final BreadcrumbModelProvider session = (BreadcrumbModelProvider) getSession();
         final BreadcrumbModel breadcrumbModel = session.getBreadcrumbModel();
-        
+
         final IModel<EntityModel> entityModel = new Model<>();
         ChoiceProvider<EntityModel> choiceProvider = new ChoiceProvider<EntityModel>() {
 
@@ -106,7 +106,7 @@ public class BreadcrumbPanel extends PanelAbstract<IModel<Void>> {
                                 return id != null;
                             }
                         })
-                );
+                        );
                 response.addAll(checkedList);
             }
 
@@ -119,31 +119,31 @@ public class BreadcrumbPanel extends PanelAbstract<IModel<Void>> {
         final Select2Choice<EntityModel> breadcrumbChoice = new Select2Choice<>(ID_BREADCRUMBS, entityModel, choiceProvider);
 
         breadcrumbChoice.add(
-            new AjaxFormComponentUpdatingBehavior("change"){
-    
-                private static final long serialVersionUID = 1L;
-    
-                @Override
-                protected void onUpdate(AjaxRequestTarget target) {
-                    final String oidStr = breadcrumbChoice.getInput();
-                    final EntityModel selectedModel = breadcrumbModel.lookup(oidStr);
-                    if(selectedModel == null) {
-                        final MessageBroker messageBroker = getIsisSessionFactory().getCurrentSession()
-                                .getAuthenticationSession().getMessageBroker();
-                        messageBroker.addWarning("Cannot find object");
-                        String feedbackMsg = JGrowlUtil.asJGrowlCalls(messageBroker);
-                        target.appendJavaScript(feedbackMsg);
-                        breadcrumbModel.remove(oidStr);
-                        return;
+                new AjaxFormComponentUpdatingBehavior("change"){
+
+                    private static final long serialVersionUID = 1L;
+
+                    @Override
+                    protected void onUpdate(AjaxRequestTarget target) {
+                        final String oidStr = breadcrumbChoice.getInput();
+                        final EntityModel selectedModel = breadcrumbModel.lookup(oidStr);
+                        if(selectedModel == null) {
+                            final MessageBroker messageBroker = getIsisSessionFactory().getCurrentSession()
+                                    .getAuthenticationSession().getMessageBroker();
+                            messageBroker.addWarning("Cannot find object");
+                            String feedbackMsg = JGrowlUtil.asJGrowlCalls(messageBroker);
+                            target.appendJavaScript(feedbackMsg);
+                            breadcrumbModel.remove(oidStr);
+                            return;
+                        }
+                        setResponsePage(EntityPage.class, selectedModel.getPageParametersWithoutUiHints());
                     }
-                    setResponsePage(EntityPage.class, selectedModel.getPageParametersWithoutUiHints());
-                }
-            });
-        
+                });
+
         final Settings settings = breadcrumbChoice.getSettings();
         settings.setMinimumInputLength(0);
         settings.setWidth("100%");
-        
+
         addOrReplace(breadcrumbChoice);
     }
 

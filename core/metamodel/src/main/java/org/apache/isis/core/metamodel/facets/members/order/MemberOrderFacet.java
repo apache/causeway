@@ -24,11 +24,11 @@ import org.apache.isis.core.metamodel.facets.MultipleValueFacet;
 /**
  * The preferred mechanism for determining the order in which the members of the
  * object should be rendered.
- * 
+ *
  * <p>
  * In the standard Apache Isis Programming Model, corresponds to annotating each
  * of the member methods with the <tt>@MemberOrder</tt>.
- * 
+ *
  * @see MemberOrderFacet
  */
 public interface MemberOrderFacet extends MultipleValueFacet {

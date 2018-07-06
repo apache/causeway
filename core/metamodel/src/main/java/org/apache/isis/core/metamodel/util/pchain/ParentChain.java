@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
- 
+
 package org.apache.isis.core.metamodel.util.pchain;
 
 import java.util.LinkedHashSet;
@@ -27,57 +27,57 @@ import java.util.stream.Stream;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 /**
- * Represents a unidirectionally linked ordered set of POJOs (chain), where the chain 
- * starts at startNode. Each subsequent node is linked via de-referencing a 
+ * Represents a unidirectionally linked ordered set of POJOs (chain), where the chain
+ * starts at startNode. Each subsequent node is linked via de-referencing a
  * singular field (or no-arg method) that is annotated with {@code @Parent}.
  * <br/>
- * 
+ *
  * startNode --@Parent--&gt; node2 --@Parent--&gt; node3 ...
- * 
+ *
  * @since 2.0.0
  *
  */
 public interface ParentChain {
-	
-	public static ParentChain of(Function<Class<?>, ObjectSpecification> specificationLookup){
-		return new ParentChainDefault(specificationLookup);
-	}
-	
-	/**
-	 * Returns the parent node of this {@code node} or {@code null} if {@code node} has no parent.
-	 * @param node
-	 * @return
-	 */
-	public Object parentOf(Object node);
-	
-	/**
-	 * Returns a Stream of nodes that are chained together by parent references. <br/> 
-	 * The {@code startNode} is excluded from the Stream.  <br/><br/>
-	 * The chain stops either because there is no more resolvable parent,<br/>
-	 * or we reached the {@code maxChainLength},<br/>
-	 * or we reached a node that is already part of the chain.
-	 * 
-	 * @param startNode
-	 * @param maxChainLength maximum length of the chain returned 
-	 * @return
-	 */
-	public default Stream<Object> streamParentChainOf(Object startNode, int maxChainLength){
-		final Set<Object> chain = new LinkedHashSet<>();
-		
-		Object next = startNode;
-		
-		chain.add(startNode); // for infinite loop detection
-		
-		while((next = parentOf(next))!=null) {
-			final boolean doContinue = chain.add(next); // stops if the we get to a node we already traversed before
-			if(!doContinue)
-				break;
-			if(chain.size()>=maxChainLength)
-				break;
-		}
-		
-		return chain.stream().skip(1);
-	}
 
-	
+    public static ParentChain of(Function<Class<?>, ObjectSpecification> specificationLookup){
+        return new ParentChainDefault(specificationLookup);
+    }
+
+    /**
+     * Returns the parent node of this {@code node} or {@code null} if {@code node} has no parent.
+     * @param node
+     * @return
+     */
+    public Object parentOf(Object node);
+
+    /**
+     * Returns a Stream of nodes that are chained together by parent references. <br/>
+     * The {@code startNode} is excluded from the Stream.  <br/><br/>
+     * The chain stops either because there is no more resolvable parent,<br/>
+     * or we reached the {@code maxChainLength},<br/>
+     * or we reached a node that is already part of the chain.
+     *
+     * @param startNode
+     * @param maxChainLength maximum length of the chain returned
+     * @return
+     */
+    public default Stream<Object> streamParentChainOf(Object startNode, int maxChainLength){
+        final Set<Object> chain = new LinkedHashSet<>();
+
+        Object next = startNode;
+
+        chain.add(startNode); // for infinite loop detection
+
+        while((next = parentOf(next))!=null) {
+            final boolean doContinue = chain.add(next); // stops if the we get to a node we already traversed before
+            if(!doContinue)
+                break;
+            if(chain.size()>=maxChainLength)
+                break;
+        }
+
+        return chain.stream().skip(1);
+    }
+
+
 }

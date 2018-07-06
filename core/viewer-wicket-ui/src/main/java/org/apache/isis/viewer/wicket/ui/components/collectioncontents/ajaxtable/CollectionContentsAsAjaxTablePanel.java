@@ -62,7 +62,7 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
  * collection of entity}s rendered using {@link AjaxFallbackDefaultDataTable}.
  */
 public class CollectionContentsAsAjaxTablePanel
-        extends PanelAbstract<EntityCollectionModel> implements CollectionCountProvider {
+extends PanelAbstract<EntityCollectionModel> implements CollectionCountProvider {
 
     private static final long serialVersionUID = 1L;
 
@@ -74,7 +74,7 @@ public class CollectionContentsAsAjaxTablePanel
     public CollectionContentsAsAjaxTablePanel(final String id, final EntityCollectionModel model) {
         super(id, model);
     }
-    
+
     @Override
     protected void onInitialize() {
         super.onInitialize();
@@ -173,18 +173,18 @@ public class CollectionContentsAsAjaxTablePanel
 
         final Where whereContext =
                 getModel().isParented()
-                    ? Where.PARENTED_TABLES
-                    : Where.STANDALONE_TABLES;
-        
-        final ObjectSpecification parentSpecIfAny = 
-                getModel().isParented() 
-                    ? getModel().getParentObjectAdapterMemento().getObjectAdapter(ConcurrencyChecking.NO_CHECK,
-                        getPersistenceSession(), getSpecificationLoader()).getSpecification()
-                    : null;
+                ? Where.PARENTED_TABLES
+                        : Where.STANDALONE_TABLES;
 
-        @SuppressWarnings("unchecked")
-        final Predicate<ObjectAssociation> predicate = com.google.common.base.Predicates
-                .and(ObjectAssociation.Predicates.PROPERTIES, new Predicate<ObjectAssociation>() {
+        final ObjectSpecification parentSpecIfAny =
+                getModel().isParented()
+                ? getModel().getParentObjectAdapterMemento().getObjectAdapter(ConcurrencyChecking.NO_CHECK,
+                        getPersistenceSession(), getSpecificationLoader()).getSpecification()
+                        : null;
+
+                        @SuppressWarnings("unchecked")
+                        final Predicate<ObjectAssociation> predicate = com.google.common.base.Predicates
+                        .and(ObjectAssociation.Predicates.PROPERTIES, new Predicate<ObjectAssociation>() {
                             @Override
                             public boolean apply(final ObjectAssociation association) {
                                 final List<Facet> facets = association.getFacets(new Predicate<Facet>() {
@@ -201,35 +201,35 @@ public class CollectionContentsAsAjaxTablePanel
                                 return true;
                             }
                         },
-                        associationDoesNotReferenceParent(parentSpecIfAny));
-        
-        final List<? extends ObjectAssociation> propertyList = typeOfSpec.getAssociations(Contributed.INCLUDED,
-                predicate);
-        final Map<String, ObjectAssociation> propertyById = Maps.newLinkedHashMap();
-        for (final ObjectAssociation property : propertyList) {
-            propertyById.put(property.getId(), property);
-        }
-        List<String> propertyIds = Lists.newArrayList(propertyById.keySet());
+                                associationDoesNotReferenceParent(parentSpecIfAny));
 
-        // optional SPI to reorder
-        final List<TableColumnOrderService> tableColumnOrderServices =
-                getServicesInjector().lookupServices(TableColumnOrderService.class);
+                        final List<? extends ObjectAssociation> propertyList = typeOfSpec.getAssociations(Contributed.INCLUDED,
+                                predicate);
+                        final Map<String, ObjectAssociation> propertyById = Maps.newLinkedHashMap();
+                        for (final ObjectAssociation property : propertyList) {
+                            propertyById.put(property.getId(), property);
+                        }
+                        List<String> propertyIds = Lists.newArrayList(propertyById.keySet());
 
-        for (final TableColumnOrderService tableColumnOrderService : tableColumnOrderServices) {
-            final List<String> propertyReorderedIds = reordered(tableColumnOrderService, propertyIds);
-            if(propertyReorderedIds != null) {
-                propertyIds = propertyReorderedIds;
-                break;
-            }
-        }
+                        // optional SPI to reorder
+                        final List<TableColumnOrderService> tableColumnOrderServices =
+                                getServicesInjector().lookupServices(TableColumnOrderService.class);
 
-        for (final String propertyId : propertyIds) {
-            final ObjectAssociation property = propertyById.get(propertyId);
-            if(property != null) {
-                final ColumnAbstract<ObjectAdapter> nopc = createObjectAdapterPropertyColumn(property);
-                columns.add(nopc);
-            }
-        }
+                        for (final TableColumnOrderService tableColumnOrderService : tableColumnOrderServices) {
+                            final List<String> propertyReorderedIds = reordered(tableColumnOrderService, propertyIds);
+                            if(propertyReorderedIds != null) {
+                                propertyIds = propertyReorderedIds;
+                                break;
+                            }
+                        }
+
+                        for (final String propertyId : propertyIds) {
+                            final ObjectAssociation property = propertyById.get(propertyId);
+                            if(property != null) {
+                                final ColumnAbstract<ObjectAdapter> nopc = createObjectAdapterPropertyColumn(property);
+                                columns.add(nopc);
+                            }
+                        }
     }
 
     private List<String> reordered(

@@ -51,7 +51,7 @@ import org.apache.isis.core.metamodel.services.configinternal.ConfigurationServi
  * </p>
  */
 public class IsisConfigurationDefault implements ConfigurationServiceInternal {
-    
+
     private static final Logger LOG = LoggerFactory.getLogger(IsisConfigurationDefault.class);
     private final ResourceStreamSource resourceStreamSource;
     private final Properties properties = new Properties();
@@ -107,7 +107,7 @@ public class IsisConfigurationDefault implements ConfigurationServiceInternal {
          */
         EXCEPTION
     }
-    
+
     /**
      * Add the properties from an existing Properties object.
      */
@@ -118,10 +118,10 @@ public class IsisConfigurationDefault implements ConfigurationServiceInternal {
             addPerPolicy((String) key, (String) value, containsPolicy);
         }
     }
-    
+
     /**
      * Adds a key-value pair to this set of properties; if the key exists in the configuration then will be ignored.
-     * 
+     *
      * <p>
      * @see #addPerPolicy(String, String, ContainsPolicy)
      * @see #put(String, String)
@@ -133,7 +133,7 @@ public class IsisConfigurationDefault implements ConfigurationServiceInternal {
 
     /**
      * Adds a key-value pair to this set of properties; if the key exists in the configuration then will be replaced.
-     * 
+     *
      * <p>
      * @see #add(String, String)
      * @see #addPerPolicy(String, String, ContainsPolicy)
@@ -146,7 +146,7 @@ public class IsisConfigurationDefault implements ConfigurationServiceInternal {
     /**
      * Adds a key-value pair to this set of properties; if the key exists in the configuration then the
      * {@link ContainsPolicy} will be applied.
-     * 
+     *
      * @see #add(String, String)
      * @see #put(String, String)
      */
@@ -209,7 +209,7 @@ public class IsisConfigurationDefault implements ConfigurationServiceInternal {
      * Gets the boolean value for the specified name where no value or 'on' will
      * result in true being returned; anything gives false. If no boolean
      * property is specified with this name then false is returned.
-     * 
+     *
      * @param name
      *            the property name
      */
@@ -222,7 +222,7 @@ public class IsisConfigurationDefault implements ConfigurationServiceInternal {
      * Gets the boolean value for the specified name. If no property is
      * specified with this name then the specified default boolean value is
      * returned.
-     * 
+     *
      * @param name
      *            the property name
      * @param defaultValue
@@ -248,7 +248,7 @@ public class IsisConfigurationDefault implements ConfigurationServiceInternal {
     /**
      * Gets the color for the specified name. If no color property is specified
      * with this name then null is returned.
-     * 
+     *
      * @param name
      *            the property name
      */
@@ -260,7 +260,7 @@ public class IsisConfigurationDefault implements ConfigurationServiceInternal {
     /**
      * Gets the color for the specified name. If no color property is specified
      * with this name then the specified default color is returned.
-     * 
+     *
      * @param name
      *            the property name
      * @param defaultValue
@@ -280,7 +280,7 @@ public class IsisConfigurationDefault implements ConfigurationServiceInternal {
     /**
      * Gets the font for the specified name. If no font property is specified
      * with this name then null is returned.
-     * 
+     *
      * @param name
      *            the property name
      */
@@ -292,7 +292,7 @@ public class IsisConfigurationDefault implements ConfigurationServiceInternal {
     /**
      * Gets the font for the specified name. If no font property is specified
      * with this name then the specified default font is returned.
-     * 
+     *
      * @param name
      *            the property name
      * @param defaultValue
@@ -312,7 +312,7 @@ public class IsisConfigurationDefault implements ConfigurationServiceInternal {
     /**
      * Gets the number value for the specified name. If no property is specified
      * with this name then 0 is returned.
-     * 
+     *
      * @param name
      *            the property name
      */
@@ -324,7 +324,7 @@ public class IsisConfigurationDefault implements ConfigurationServiceInternal {
     /**
      * Gets the number value for the specified name. If no property is specified
      * with this name then the specified default number value is returned.
-     * 
+     *
      * @param name
      *            the property name
      * @param defaultValue
@@ -503,6 +503,6 @@ public class IsisConfigurationDefault implements ConfigurationServiceInternal {
         }
         return list;
     }
-    
+
 
 }

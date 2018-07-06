@@ -30,7 +30,7 @@ public class MetaModelInvalidException extends IllegalStateException {
         super(concatenate(validationErrors));
         this.validationErrors = validationErrors;
     }
-    
+
     public Set<String> getValidationErrors() {
         return validationErrors;
     }

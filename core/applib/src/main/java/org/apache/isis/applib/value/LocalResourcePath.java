@@ -35,13 +35,13 @@ public final class LocalResourcePath implements Serializable {
     private final String path;
 
     public LocalResourcePath(final String path) throws IllegalArgumentException {
-    	
-    	validate(path); // may throw IllegalArgumentException
-    	
+
+        validate(path); // may throw IllegalArgumentException
+
         this.path = (path != null) ? path : "";
     }
 
-	@Nonnull
+    @Nonnull
     public Object getValue() {
         return path;
     }
@@ -50,7 +50,7 @@ public final class LocalResourcePath implements Serializable {
     public String getPath() {
         return path;
     }
-    
+
     @Override
     public String toString() {
         return "LocalResourcePath [path=" + path + "]";
@@ -58,32 +58,32 @@ public final class LocalResourcePath implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
-    	if(obj==null)
-    		return false;
-    	
-    	return (obj instanceof LocalResourcePath) ?	isEqualTo((LocalResourcePath)obj) : false;
-    }
-    
-    public boolean isEqualTo(LocalResourcePath other) {
-    	if(other==null)
-    		return false;
-    	
-    	return this.getPath().equals(other.getPath());
-    }
-    
-    // -- HELPER
-    
-    private void validate(String path) throws IllegalArgumentException {
-    	if(path==null)
-    		return;
+        if(obj==null)
+            return false;
 
-		try {
-			// used for syntax testing
-			new java.net.URI("http://localhost/"+path);
-		} catch (URISyntaxException e) {
-			throw new IllegalArgumentException("the given local path has an invalid syntax: '"+path+"'", e);
-		}
-    	
-	}
+        return (obj instanceof LocalResourcePath) ?	isEqualTo((LocalResourcePath)obj) : false;
+    }
+
+    public boolean isEqualTo(LocalResourcePath other) {
+        if(other==null)
+            return false;
+
+        return this.getPath().equals(other.getPath());
+    }
+
+    // -- HELPER
+
+    private void validate(String path) throws IllegalArgumentException {
+        if(path==null)
+            return;
+
+        try {
+            // used for syntax testing
+            new java.net.URI("http://localhost/"+path);
+        } catch (URISyntaxException e) {
+            throw new IllegalArgumentException("the given local path has an invalid syntax: '"+path+"'", e);
+        }
+
+    }
 
 }

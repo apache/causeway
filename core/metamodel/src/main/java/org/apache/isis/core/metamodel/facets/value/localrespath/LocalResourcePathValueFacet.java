@@ -24,7 +24,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 
 public interface LocalResourcePathValueFacet extends Facet {
-	LocalResourcePath localResourcePathValue(ObjectAdapter object);
+    LocalResourcePath localResourcePathValue(ObjectAdapter object);
 
     ObjectAdapter createValue(LocalResourcePath value);
 

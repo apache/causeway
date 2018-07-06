@@ -73,7 +73,7 @@ public class IsisComponentProviderUsingInstallers extends IsisComponentProvider 
         super(appManifest, configuration, authenticationManager, authorizationManager);
     }
 
-    
+
 
     // -- constructor helpers (factories)
 
@@ -108,7 +108,7 @@ public class IsisComponentProviderUsingInstallers extends IsisComponentProvider 
     }
 
 
-    
+
 
     /**
      * Looks up authorization and authentication implementations.
@@ -139,11 +139,11 @@ public class IsisComponentProviderUsingInstallers extends IsisComponentProvider 
             this.isisConfiguration = isisConfiguration;
 
             final List<String> installerClassNames = Lists.newArrayList(
-                "org.apache.isis.core.security.authentication.BypassAuthenticationManagerInstaller", // bypass
-                "org.apache.isis.security.shiro.authentication.ShiroAuthenticationManagerInstaller", // shiro
-                "org.apache.isis.core.security.authorization.BypassAuthorizationManagerInstaller",   // bypass
-                "org.apache.isis.security.shiro.authorization.ShiroAuthorizationManagerInstaller"    // shiro
-            );
+                    "org.apache.isis.core.security.authentication.BypassAuthenticationManagerInstaller", // bypass
+                    "org.apache.isis.security.shiro.authentication.ShiroAuthenticationManagerInstaller", // shiro
+                    "org.apache.isis.core.security.authorization.BypassAuthorizationManagerInstaller",   // bypass
+                    "org.apache.isis.security.shiro.authorization.ShiroAuthorizationManagerInstaller"    // shiro
+                    );
 
             for (String className : installerClassNames) {
                 if (className.length() == 0 || className.startsWith("#")) {
@@ -171,7 +171,7 @@ public class IsisComponentProviderUsingInstallers extends IsisComponentProvider 
             }
         }
 
-        
+
 
         // -- framework
 
@@ -191,7 +191,7 @@ public class IsisComponentProviderUsingInstallers extends IsisComponentProvider 
                     SystemConstants.AUTHORIZATION_DEFAULT);
         }
 
-        
+
 
         // -- helpers
         @SuppressWarnings("unchecked")
@@ -232,7 +232,7 @@ public class IsisComponentProviderUsingInstallers extends IsisComponentProvider 
             return installer;
         }
 
-        
+
 
     }
 }

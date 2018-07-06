@@ -35,6 +35,7 @@ class ImposteriserUsingCodegenPlugin implements Imposteriser {
     }
 
 
+    @Override
     public boolean canImposterise(Class<?> mockedType) {
 
         if(mockedType.isInterface()) {
@@ -42,10 +43,11 @@ class ImposteriserUsingCodegenPlugin implements Imposteriser {
         }
 
         return !mockedType.isPrimitive() &&
-               !Modifier.isFinal(mockedType.getModifiers()) &&
-               !toStringMethodIsFinal(mockedType);
+                !Modifier.isFinal(mockedType.getModifiers()) &&
+                !toStringMethodIsFinal(mockedType);
     }
-    
+
+    @Override
     public <T> T imposterise(final Invokable mockObject, final Class<T> mockedType, Class<?>... ancilliaryTypes) {
         if (!canImposterise(mockedType)) {
             throw new IllegalArgumentException(mockedType.getName() + " cannot be imposterized (either a primitive, or a final type or has final toString method)");
@@ -55,16 +57,16 @@ class ImposteriserUsingCodegenPlugin implements Imposteriser {
             return reflectionImposteriser.imposterise(mockObject, mockedType, ancilliaryTypes);
         }
 
-            
+
         final ProxyFactory<T> factory = ProxyFactory.builder(mockedType)
-    	.interfaces(ancilliaryTypes)
-    	.build();
+                .interfaces(ancilliaryTypes)
+                .build();
 
         final boolean initialize = false;
-        
+
         return factory.createInstance(
-        		(obj, method, args)->mockObject.invoke(new Invocation(obj, method, args)), 
-        		initialize);
+                (obj, method, args)->mockObject.invoke(new Invocation(obj, method, args)),
+                initialize);
     }
 
     // //////////////////////////////////////
@@ -73,7 +75,7 @@ class ImposteriserUsingCodegenPlugin implements Imposteriser {
         try {
             Method toString = type.getMethod("toString");
             return Modifier.isFinal(toString.getModifiers());
-            
+
         }
         catch (SecurityException e) {
             throw new IllegalStateException("not allowed to reflect on toString method", e);
@@ -82,5 +84,5 @@ class ImposteriserUsingCodegenPlugin implements Imposteriser {
             throw new Error("no public toString method found", e);
         }
     }
-    
+
 }

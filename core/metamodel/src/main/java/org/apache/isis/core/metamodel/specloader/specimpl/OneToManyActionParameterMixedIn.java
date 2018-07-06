@@ -22,8 +22,8 @@ import org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSeman
 import org.apache.isis.core.metamodel.spec.feature.OneToManyActionParameter;
 
 public class OneToManyActionParameterMixedIn
-        extends ObjectActionParameterMixedInAbstract
-        implements OneToManyActionParameter {
+extends ObjectActionParameterMixedInAbstract
+implements OneToManyActionParameter {
 
     public OneToManyActionParameterMixedIn(
             final ObjectActionParameterAbstract mixinParameter,

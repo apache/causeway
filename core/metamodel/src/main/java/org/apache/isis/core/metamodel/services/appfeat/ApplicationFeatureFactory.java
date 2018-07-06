@@ -25,7 +25,7 @@ import org.apache.isis.applib.services.factory.FactoryService;
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
-)
+        )
 public class ApplicationFeatureFactory {
 
     public ApplicationFeature newApplicationFeature() {

@@ -25,14 +25,14 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 public abstract class TextFieldAbstract<T> extends TextField<T> {
 
     private static final long serialVersionUID = 1L;
-    
+
     protected final ScalarModel scalarModel;
 
     public TextFieldAbstract(final String id, final IModel<T> model, final Class<T> type, final ScalarModel scalarModel) {
         super(id, model, type);
         this.scalarModel = scalarModel;
     }
-    
+
     protected abstract IConverter<T> getConverterFor(final ScalarModel scalarModel);
 
 }

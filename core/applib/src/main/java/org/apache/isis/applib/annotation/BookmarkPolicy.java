@@ -23,7 +23,7 @@ import javax.xml.bind.annotation.XmlType;
 
 @XmlType(
         namespace = "http://isis.apache.org/applib/layout/component"
-)
+        )
 public enum BookmarkPolicy {
     /**
      * Can be bookmarked, and is a top-level 'root' (or parent) bookmark.

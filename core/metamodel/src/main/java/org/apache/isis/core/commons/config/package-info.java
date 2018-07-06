@@ -19,22 +19,22 @@
 
 /**
  * Defines the {@link org.apache.isis.core.commons.config.IsisConfiguration}
- * which collects an immutable set of configuration options (like a hashmap), 
+ * which collects an immutable set of configuration options (like a hashmap),
  * along with a number of supporting classes.
- * 
+ *
  * <p>
  * Chief among these supporting classes is {@link org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder},
- * which holds a (mutable) collection of properties and is used to build an 
- * {@link org.apache.isis.core.commons.config.IsisConfiguration}.  The 
+ * which holds a (mutable) collection of properties and is used to build an
+ * {@link org.apache.isis.core.commons.config.IsisConfiguration}.  The
  * {@link org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder} and
  * {@link org.apache.isis.core.commons.config.IsisConfiguration} types form
  * an mutable/immutable pair (cf {@link java.lang.StringBuilder} / {@link java.lang.String}).
- * 
+ *
  * <p>
  * The {@link org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder} is used
  * by {@link org.apache.isis.core.commons.components.InstallerAbstract}, an
- * implementation of {@link org.apache.isis.core.commons.components.Installer} 
+ * implementation of {@link org.apache.isis.core.commons.components.Installer}
  * that allows the configuration to be added to as each component is
- * installed. 
+ * installed.
  */
 package org.apache.isis.core.commons.config;

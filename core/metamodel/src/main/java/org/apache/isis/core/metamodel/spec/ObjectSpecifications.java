@@ -40,24 +40,24 @@ public final class ObjectSpecifications {
 
         final MemberGroupLayoutFacet facet = objSpec.getFacet(MemberGroupLayoutFacet.class);
         final List<String> leftColumnGroupNames = Lists.newArrayList(groupNamesToOrder);
-        
+
         // not expected to happen
         if(facet == null) {
             return leftColumnGroupNames;
         }
-        
+
         if(hint == Hint.MIDDLE) {
             return facet.getColumnSpans().getMiddle()>0? facet.getMiddle(): Collections.<String>emptyList();
         }
         if(hint == Hint.RIGHT) {
             return facet.getColumnSpans().getRight()>0? facet.getRight(): Collections.<String>emptyList();
         }
-        
-        // else left; per the requested order, including any groups not mentioned in either list, 
+
+        // else left; per the requested order, including any groups not mentioned in either list,
         // but excluding any groups in the middle or right columns
         final List<String> groupNamedInRequiredOrder = facet.getLeft();
         final List<String> order = order(leftColumnGroupNames, groupNamedInRequiredOrder);
-        
+
         if(facet.getColumnSpans().getMiddle() > 0) {
             order.removeAll(facet.getMiddle());
         }
@@ -76,7 +76,7 @@ public final class ObjectSpecifications {
                 valuesToOrder.add(i++, memberGroup);
             }
         }
-        
+
         return valuesToOrder;
     }
 

@@ -50,7 +50,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Holds the state for the specified object in serializable form.
- * 
+ *
  * <p>
  * This object is {@link Serializable} and can be passed over the network
  * easily. Also for a persistent objects only the reference's {@link Oid}s are
@@ -78,7 +78,7 @@ public class Memento implements Serializable {
         LOG.debug("created memento for {}", this);
     }
 
-    
+
     ////////////////////////////////////////////////
     // createData
     ////////////////////////////////////////////////
@@ -184,7 +184,7 @@ public class Memento implements Serializable {
     protected Data getData() {
         return data;
     }
-    
+
     ////////////////////////////////////////////////
     // recreateObject
     ////////////////////////////////////////////////
@@ -193,21 +193,21 @@ public class Memento implements Serializable {
         if (data == null) {
             return null;
         }
-        final ObjectSpecification spec = 
+        final ObjectSpecification spec =
                 getSpecificationLoader().loadSpecification(data.getClassName());
 
         ObjectAdapter adapter;
-        
+
         final Oid oid = getOid();
-		if (spec.isParentedOrFreeCollection()) {
+        if (spec.isParentedOrFreeCollection()) {
 
             final Object recreatedPojo = getPersistenceSession().instantiateAndInjectServices(spec);
-        	adapter = getPersistenceSession().mapRecreatedPojo(oid, recreatedPojo);
+            adapter = getPersistenceSession().mapRecreatedPojo(oid, recreatedPojo);
             populateCollection(adapter, (CollectionData) data);
-            
+
         } else {
-        	Assert.assertTrue("oid must be a RootOid representing an object because spec is not a collection and cannot be a value", oid instanceof RootOid);
-        	RootOid typedOid = (RootOid) oid;
+            Assert.assertTrue("oid must be a RootOid representing an object because spec is not a collection and cannot be a value", oid instanceof RootOid);
+            RootOid typedOid = (RootOid) oid;
 
             // remove adapter if already in the adapter manager maps, because
             // otherwise would (as a side-effect) update the version to that of the current.
@@ -247,58 +247,58 @@ public class Memento implements Serializable {
             final StandaloneData standaloneData = (StandaloneData) data;
             return standaloneData.getAdapter();
         }
-        
+
         // reference to entity
-        
+
         Oid oid = data.getOid();
         Assert.assertTrue("can only create a reference to an entity", oid instanceof RootOid);
-        
-		final RootOid rootOid = (RootOid) oid;
+
+        final RootOid rootOid = (RootOid) oid;
         final ObjectAdapter referencedAdapter = getPersistenceSession().adapterFor(rootOid);
 
         if (data instanceof ObjectData) {
             if (rootOid.isTransient()) {
-        		updateObject(referencedAdapter, data);
-        	}
+                updateObject(referencedAdapter, data);
+            }
         }
         return referencedAdapter;
     }
 
-    
+
     ////////////////////////////////////////////////
     // helpers
     ////////////////////////////////////////////////
-    
+
     private void updateObject(final ObjectAdapter adapter, final Data data) {
         final Object oid = adapter.getOid();
         if (oid != null && !oid.equals(data.getOid())) {
             throw new IllegalArgumentException("This memento can only be used to update the ObjectAdapter with the Oid " + data.getOid() + " but is " + oid);
-        } 
+        }
         if (!(data instanceof ObjectData)) {
             throw new IsisException("Expected an ObjectData but got " + data.getClass());
         }
-        
+
         updateFieldsAndResolveState(adapter, data);
-        
+
         if (LOG.isDebugEnabled()) {
             LOG.debug("object updated {}", adapter.getOid());
         }
     }
 
     private void updateFieldsAndResolveState(final ObjectAdapter objectAdapter, final Data data) {
-        
+
         boolean dataIsTransient = data.getOid().isTransient();
-        
+
         if (!dataIsTransient) {
             updateFields(objectAdapter, data);
             objectAdapter.getOid().setVersion(data.getOid().getVersion());
         } else if (objectAdapter.isTransient() && dataIsTransient) {
             updateFields(objectAdapter, data);
-            
+
         } else if (objectAdapter.isParentedCollection()) {
             // this branch is kind-a wierd, I think it's to handle aggregated adapters.
             updateFields(objectAdapter, data);
-            
+
         } else {
             final ObjectData od = (ObjectData) data;
             if (od.containsField()) {
@@ -382,7 +382,7 @@ public class Memento implements Serializable {
             }
         }
     }
-    
+
 
 
     // ///////////////////////////////////////////////////////////////

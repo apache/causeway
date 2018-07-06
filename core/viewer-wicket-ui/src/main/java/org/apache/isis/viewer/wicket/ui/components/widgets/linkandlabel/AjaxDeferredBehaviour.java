@@ -51,9 +51,9 @@ public abstract class AjaxDeferredBehaviour extends AbstractAjaxBehavior {
 
         public abstract String javascriptFor(AjaxDeferredBehaviour deferredBehaviour, String url);
     }
-    
+
     private final OpenUrlStrategy openUrlStrategy;
-    
+
     protected AjaxDeferredBehaviour(final OpenUrlStrategy openUrlStrategy) {
         this.openUrlStrategy = openUrlStrategy;
     }

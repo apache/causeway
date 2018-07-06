@@ -33,6 +33,6 @@
         xmlns = {
                 @javax.xml.bind.annotation.XmlNs(
                         namespaceURI = "http://isis.apache.org/applib/layout/links", prefix = "lnk")
-}
-)
+        }
+        )
 package org.apache.isis.applib.layout.links;

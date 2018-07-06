@@ -27,24 +27,24 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 
 /**
  * Mechanism for determining whether this object is should be hidden.
- * 
+ *
  * <p>
  * Even though all the properties of an object may themselves be visible, there
  * could be reasons to hide the object.
  * </p>
- * 
+ *
  * <p>
  * In the standard Apache Isis Programming Model, typically corresponds to the
  * <tt>hidden</tt> method.
  * </p>
- * 
+ *
  * @see org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet
  */
 public interface HiddenObjectFacet extends Facet, HidingInteractionAdvisor {
 
     /**
      * Clone this facet onto another {@link FacetHolder}.
-     * 
+     *
      * <p>
      * Introduced to allow this facet to be installed onto the
      * {@link ObjectSpecification}, and then copied down onto each of the spec's

@@ -105,7 +105,7 @@ public abstract class AbstractDomainEvent<S> extends java.util.EventObject {
     public void setEventPhase(Phase phase) {
         this.phase = phase;
     }
-    
+
 
     // -- source (downcast to S)
     @Override
@@ -120,7 +120,7 @@ public abstract class AbstractDomainEvent<S> extends java.util.EventObject {
     public void setSource(S source) {
         this.source = source;
     }
-    
+
 
     // -- identifier
     /**
@@ -137,7 +137,7 @@ public abstract class AbstractDomainEvent<S> extends java.util.EventObject {
     public void setIdentifier(final Identifier identifier) {
         this.identifier = identifier;
     }
-    
+
 
     // -- hide, isHidden
     private boolean hidden;
@@ -151,7 +151,7 @@ public abstract class AbstractDomainEvent<S> extends java.util.EventObject {
     public void hide() {
         this.hidden = true;
     }
-    
+
 
     // -- disable, isDisabled, getDisabledReason, getDisabledReasonTranslatable
     private String disabledReason;
@@ -189,7 +189,7 @@ public abstract class AbstractDomainEvent<S> extends java.util.EventObject {
     public void disable(final TranslatableString reason) {
         this.disabledReasonTranslatable = reason;
     }
-    
+
 
     // -- invalidate, isInvalid, getInvalidityReason, getInvalidityReasonTranslatable
     private String invalidatedReason;
@@ -227,7 +227,7 @@ public abstract class AbstractDomainEvent<S> extends java.util.EventObject {
         this.invalidatedReasonTranslatable = reason;
     }
 
-    
+
 
     // -- veto
     /**
@@ -246,26 +246,26 @@ public abstract class AbstractDomainEvent<S> extends java.util.EventObject {
     @Programmatic
     public void veto(final String reason, final Object... args) {
         switch (getEventPhase()) {
-            case HIDE:
-                hide();
-                break;
-            case DISABLE:
-                if(reason == null) {
-                    throw new IllegalArgumentException("Reason must be non-null");
-                }
-                disable(String.format(reason, args));
-                break;
-            case VALIDATE:
-                if(reason == null) {
-                    throw new IllegalArgumentException("Reason must be non-null");
-                }
-                invalidate(String.format(reason, args));
-                break;
-            case EXECUTED:
-            case EXECUTING:
-            	break;
-            default:
-            	throw _Exceptions.unmatchedCase(getEventPhase());
+        case HIDE:
+            hide();
+            break;
+        case DISABLE:
+            if(reason == null) {
+                throw new IllegalArgumentException("Reason must be non-null");
+            }
+            disable(String.format(reason, args));
+            break;
+        case VALIDATE:
+            if(reason == null) {
+                throw new IllegalArgumentException("Reason must be non-null");
+            }
+            invalidate(String.format(reason, args));
+            break;
+        case EXECUTED:
+        case EXECUTING:
+            break;
+        default:
+            throw _Exceptions.unmatchedCase(getEventPhase());
         }
     }
     /**
@@ -283,23 +283,23 @@ public abstract class AbstractDomainEvent<S> extends java.util.EventObject {
     @Programmatic
     public void veto(final TranslatableString translatableReason) {
         switch (getEventPhase()) {
-            case HIDE:
-                hide();
-                break;
-            case DISABLE:
-                disable(translatableReason);
-                break;
-            case VALIDATE:
-                invalidate(translatableReason);
-                break;
-            case EXECUTED:
-            case EXECUTING:
-            	break;
-            default:
-            	throw _Exceptions.unmatchedCase(getEventPhase());
+        case HIDE:
+            hide();
+            break;
+        case DISABLE:
+            disable(translatableReason);
+            break;
+        case VALIDATE:
+            invalidate(translatableReason);
+            break;
+        case EXECUTED:
+        case EXECUTING:
+            break;
+        default:
+            throw _Exceptions.unmatchedCase(getEventPhase());
         }
     }
-    
+
 
     // -- userData
     /**
@@ -319,17 +319,17 @@ public abstract class AbstractDomainEvent<S> extends java.util.EventObject {
     public void put(Object key, Object value) {
         userData.put(key, value);
     }
-    
-    private final static ToString<AbstractDomainEvent<?>> toString = 
-    		ObjectContracts.<AbstractDomainEvent<?>>
-    		toString("source", AbstractDomainEvent::getSource)
-    		.thenToString("identifier", AbstractDomainEvent::getIdentifier)
-			.thenToString("eventPhase", AbstractDomainEvent::getEventPhase)
-    		;
-    
+
+    private final static ToString<AbstractDomainEvent<?>> toString =
+            ObjectContracts.<AbstractDomainEvent<?>>
+    toString("source", AbstractDomainEvent::getSource)
+    .thenToString("identifier", AbstractDomainEvent::getIdentifier)
+    .thenToString("eventPhase", AbstractDomainEvent::getEventPhase)
+    ;
+
     @Override
     public String toString() {
-    	return toString.toString(this);
+        return toString.toString(this);
     }
 
 

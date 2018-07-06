@@ -51,23 +51,23 @@ import org.apache.isis.commons.internal.collections._Lists;
  */
 @XmlRootElement(
         name = "col"
-)
+        )
 @XmlType(
         name = "col"
         , propOrder = {
-            "sizeSpans",
-            "domainObject",
-            "actions",
-            "rows",
-            "tabGroups",
-            "fieldSets",
-            "collections",
-            "metadataError"
+                "sizeSpans",
+                "domainObject",
+                "actions",
+                "rows",
+                "tabGroups",
+                "fieldSets",
+                "collections",
+                "metadataError"
         }
-)
+        )
 public class BS3Col extends BS3RowContent
-        implements ActionLayoutDataOwner, BS3TabGroupOwner, BS3RowOwner, FieldSetOwner, HasCssId,
-        CollectionLayoutDataOwner, DomainObjectLayoutDataOwner {
+implements ActionLayoutDataOwner, BS3TabGroupOwner, BS3RowOwner, FieldSetOwner, HasCssId,
+CollectionLayoutDataOwner, DomainObjectLayoutDataOwner {
 
     private static final long serialVersionUID = 1L;
 
@@ -78,6 +78,7 @@ public class BS3Col extends BS3RowContent
     /**
      * As per &lt;div id=&quot;...&quot;&gt;...&lt;/div&gt; : must be unique across entire page.
      */
+    @Override
     @XmlAttribute(required = false)
     public String getId() {
         return id;
@@ -145,11 +146,13 @@ public class BS3Col extends BS3RowContent
     /**
      * Whether to show the object's icon and title.
      */
+    @Override
     @XmlElementRef(type=DomainObjectLayoutData.class, name="domainObject", required = false)
     public DomainObjectLayoutData getDomainObject() {
         return domainObject;
     }
 
+    @Override
     public void setDomainObject(final DomainObjectLayoutData domainObjectLayoutData) {
         this.domainObject = domainObjectLayoutData;
     }
@@ -172,11 +175,13 @@ public class BS3Col extends BS3RowContent
     private List<ActionLayoutData> actions = _Lists.newArrayList();
 
     // no wrapper
+    @Override
     @XmlElementRef(type = ActionLayoutData.class, name = "action", required = false)
     public List<ActionLayoutData> getActions() {
         return actions;
     }
 
+    @Override
     public void setActions(final List<ActionLayoutData> actions) {
         this.actions = actions;
     }
@@ -186,6 +191,7 @@ public class BS3Col extends BS3RowContent
     private List<BS3Row> rows = _Lists.newArrayList();
 
     // no wrapper
+    @Override
     @XmlElement(name = "row", required = false)
     public List<BS3Row> getRows() {
         return rows;
@@ -200,6 +206,7 @@ public class BS3Col extends BS3RowContent
     private List<BS3TabGroup> tabGroups = _Lists.newArrayList();
 
     // no wrapper
+    @Override
     @XmlElement(name = "tabGroup", required = false)
     public List<BS3TabGroup> getTabGroups() {
         return tabGroups;
@@ -214,6 +221,7 @@ public class BS3Col extends BS3RowContent
     private List<FieldSet> fieldSets = _Lists.newArrayList();
 
     // no wrapper
+    @Override
     @XmlElementRef(type=FieldSet.class, name = "fieldSet", required = false)
     public List<FieldSet> getFieldSets() {
         return fieldSets;
@@ -228,6 +236,7 @@ public class BS3Col extends BS3RowContent
     private List<CollectionLayoutData> collections = _Lists.newArrayList();
 
     // no wrapper
+    @Override
     @XmlElementRef(type=CollectionLayoutData.class, name = "collection", required = false)
     public List<CollectionLayoutData> getCollections() {
         return collections;

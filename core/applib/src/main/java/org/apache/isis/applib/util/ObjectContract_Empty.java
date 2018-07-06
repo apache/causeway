@@ -26,69 +26,69 @@ import org.apache.isis.applib.util.ObjectContracts.ObjectContract;
 
 /**
  * Package private default implementation for an empty ObjectContract.
- *  
+ *
  * @since 2.0.0
  */
 class ObjectContract_Empty<T> implements ObjectContract<T> {
-	
-	private final static String UNDEFINED_CONTRACT = "object's contract is not defined (empty)";
-	
-	private Function<Object, String> valueToStringFunction;
 
-	public ObjectContract_Empty(Class<T> objectClass) {
+    private final static String UNDEFINED_CONTRACT = "object's contract is not defined (empty)";
 
-	}
+    private Function<Object, String> valueToStringFunction;
 
-	@Override
-	public int compare(T obj, T other) {
-		throw undefined();
-	}
+    public ObjectContract_Empty(Class<T> objectClass) {
 
-	@Override
-	public boolean equals(T obj, Object other) {
-		throw undefined();
-	}
+    }
 
-	@Override
-	public int hashCode(T obj) {
-		throw undefined(); 
-	}
+    @Override
+    public int compare(T obj, T other) {
+        throw undefined();
+    }
 
-	@Override
-	public String toString(T obj) {
-		return UNDEFINED_CONTRACT;
-	}
+    @Override
+    public boolean equals(T obj, Object other) {
+        throw undefined();
+    }
 
-	// -- WITHER FOR VALUE TO STRING FUNCTION
-	
-	@Override
-	public ObjectContract<T> withValueToStringFunction(Function<Object, String> valueToStringFunction) {
-		this.valueToStringFunction = valueToStringFunction;
-		return this;
-	}
+    @Override
+    public int hashCode(T obj) {
+        throw undefined();
+    }
 
-	// -- COMPOSITION
-	
-	@Override
-	public <U> ObjectContract<T> thenUse(String propertyLabel, Function<? super T, ? extends U> getter,
-			Comparator<? super U> valueComparator) {
-		
-		final ObjectContract_Impl<T> contract = new ObjectContract_Impl<T>(
-				Equality.checkEquals(getter), 
-				Hashing.hashing(getter), 
-				ToString.toString(propertyLabel, getter), 
-				Comparator.comparing(getter, valueComparator));
-		
-		contract.valueToStringFunction = this.valueToStringFunction;
-		
-		return contract;
-	}
-	
-	// -- HELPER
-	
-	private final static IllegalArgumentException undefined() {
-		return new IllegalArgumentException(UNDEFINED_CONTRACT);
-	}
+    @Override
+    public String toString(T obj) {
+        return UNDEFINED_CONTRACT;
+    }
 
-	
+    // -- WITHER FOR VALUE TO STRING FUNCTION
+
+    @Override
+    public ObjectContract<T> withValueToStringFunction(Function<Object, String> valueToStringFunction) {
+        this.valueToStringFunction = valueToStringFunction;
+        return this;
+    }
+
+    // -- COMPOSITION
+
+    @Override
+    public <U> ObjectContract<T> thenUse(String propertyLabel, Function<? super T, ? extends U> getter,
+            Comparator<? super U> valueComparator) {
+
+        final ObjectContract_Impl<T> contract = new ObjectContract_Impl<T>(
+                Equality.checkEquals(getter),
+                Hashing.hashing(getter),
+                ToString.toString(propertyLabel, getter),
+                Comparator.comparing(getter, valueComparator));
+
+        contract.valueToStringFunction = this.valueToStringFunction;
+
+        return contract;
+    }
+
+    // -- HELPER
+
+    private final static IllegalArgumentException undefined() {
+        return new IllegalArgumentException(UNDEFINED_CONTRACT);
+    }
+
+
 }

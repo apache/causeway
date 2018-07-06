@@ -21,20 +21,20 @@ package org.apache.isis.applib;
 
 /**
  * Indicates that the persistence of an object failed.
- * 
+ *
  * <p>
  * This exception is intended to represent an unexpected and non-recoverable condition (eg a unique/primary key/
  * foreign key constaint has been violated), and so is a subclass of {@link NonRecoverableException}.
  * Throwing this exception will therefore result in (some sort of) error page being displayed
  * to the user.
- * 
+ *
  * @see NonRecoverableException
  * @see RecoverableException
  */
 public class PersistFailedException extends NonRecoverableException {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     public PersistFailedException(final String msg) {
         super(msg);
     }

@@ -47,8 +47,8 @@ public class MetaModelValidatorToCheckModuleExtent extends MetaModelValidatorCom
     @Override
     public void validate(final ValidationFailures validationFailures) {
         boolean check = specificationLoader.getConfiguration()
-                            .getBoolean(ISIS_REFLECTOR_CHECK_MODULE_EXTENT_KEY,
-                                    ISIS_REFLECTOR_CHECK_MODULE_EXTENT_DEFAULT);
+                .getBoolean(ISIS_REFLECTOR_CHECK_MODULE_EXTENT_KEY,
+                        ISIS_REFLECTOR_CHECK_MODULE_EXTENT_DEFAULT);
         if(!check) {
             return;
         }
@@ -121,8 +121,8 @@ public class MetaModelValidatorToCheckModuleExtent extends MetaModelValidatorCom
                         String csv = Joiner.on(",").join(domainObjectClassNames);
                         validationFailures.add(
                                 "Domain objects discovered in package '%s' are not in the set of modules obtained from "
-                                + "the AppManifest's top-level module '%s'.  Classes are: %s",
-                                pkg, topLevelModule.getClass().getName(), csv);
+                                        + "the AppManifest's top-level module '%s'.  Classes are: %s",
+                                        pkg, topLevelModule.getClass().getName(), csv);
                     }
                 }
             }

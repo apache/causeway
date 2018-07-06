@@ -25,49 +25,49 @@ import java.util.Iterator;
 import javax.annotation.Nullable;
 
 /**
- * 
+ *
  * package private mixin for utility class {@link _Strings}
  *
  */
 final class _Strings_SplitIterator {
-	
-	public static Iterator<String> splitIterator(@Nullable final String x, final String delimiter){
-		if(_Strings.isEmpty(delimiter))
-			throw new IllegalArgumentException("a non empty delimiter is required");
-		if(_Strings.isEmpty(x))
-			return Collections.<String>emptyIterator();
-		final int dlen = delimiter.length();
-		return new Iterator<String>() {
-			private int p=0, q=-1;
-			
-			private String next = _next();
-			
-			private String _next() {
-				if(q==-2)
-					return null;
-				q = x.indexOf(delimiter, p);
-				if(q>-1) {
-					final int p0 = p; p=q+dlen; 
-					return x.substring(p0, q);
-				}
-				q = -2; // terminal
-				return x.substring(p, x.length());
-			}
-			
-			@Override
-			public boolean hasNext() {
-				return next!=null;
-			}
-			
-			@Override
-			public String next() {
-				try { 
-					return next; 
-				} finally { 
-					next=_next(); 
-				}
-			}
-		};
-	}
-	
+
+    public static Iterator<String> splitIterator(@Nullable final String x, final String delimiter){
+        if(_Strings.isEmpty(delimiter))
+            throw new IllegalArgumentException("a non empty delimiter is required");
+        if(_Strings.isEmpty(x))
+            return Collections.<String>emptyIterator();
+        final int dlen = delimiter.length();
+        return new Iterator<String>() {
+            private int p=0, q=-1;
+
+            private String next = _next();
+
+            private String _next() {
+                if(q==-2)
+                    return null;
+                q = x.indexOf(delimiter, p);
+                if(q>-1) {
+                    final int p0 = p; p=q+dlen;
+                    return x.substring(p0, q);
+                }
+                q = -2; // terminal
+                return x.substring(p, x.length());
+            }
+
+            @Override
+            public boolean hasNext() {
+                return next!=null;
+            }
+
+            @Override
+            public String next() {
+                try {
+                    return next;
+                } finally {
+                    next=_next();
+                }
+            }
+        };
+    }
+
 }

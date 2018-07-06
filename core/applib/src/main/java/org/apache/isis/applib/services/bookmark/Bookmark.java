@@ -29,7 +29,7 @@ import org.apache.isis.schema.common.v1.OidDto;
 
 /**
  * String representation of any persistent object managed by the framework.
- * 
+ *
  * <p>
  * Analogous to the <tt>RootOid</tt>.
  */
@@ -119,7 +119,7 @@ public class Bookmark implements Serializable {
             case PERSISTENT:
                 return ObjectState.PERSISTENT;
             default:
-            	throw _Exceptions.unmatchedCase(objectState);
+                throw _Exceptions.unmatchedCase(objectState);
             }
         }
 
@@ -157,13 +157,13 @@ public class Bookmark implements Serializable {
     public String getObjectType() {
         return objectType;
     }
-    
+
     public String getIdentifier() {
         return identifier;
     }
-    
-    
-    
+
+
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -197,7 +197,7 @@ public class Bookmark implements Serializable {
 
     /**
      * The canonical form of the {@link Bookmark}, that is &quot;{@link #getObjectType() objectType}{@value #SEPARATOR}{@link #getIdentifier()}&quot;.
-     * 
+     *
      * <p>
      * This is parseable by the {@link #Bookmark(String) string constructor}.
      */

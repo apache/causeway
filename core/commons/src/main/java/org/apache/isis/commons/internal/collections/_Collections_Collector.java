@@ -30,51 +30,51 @@ import java.util.function.Supplier;
 import java.util.stream.Collector;
 
 /**
- * 
+ *
  * package private mixin for utility class {@link _Collections}
- * 
+ *
  * Collector for Collections.
  *
  */
 class _Collections_Collector<T, C extends Collection<T>> implements Collector<T, C, C> {
 
-	private final Supplier<C> supplier;
-	private final Function<C, C> finisher;
-	
-	_Collections_Collector(Supplier<C> supplier, Function<C, C> finisher) {
-		this.supplier = Objects.requireNonNull(supplier);
-		this.finisher = Objects.requireNonNull(finisher);
-	}
+    private final Supplier<C> supplier;
+    private final Function<C, C> finisher;
 
-	@Override
-	public Supplier<C> supplier() {
-		return supplier;
-	}
+    _Collections_Collector(Supplier<C> supplier, Function<C, C> finisher) {
+        this.supplier = Objects.requireNonNull(supplier);
+        this.finisher = Objects.requireNonNull(finisher);
+    }
 
-	@Override
-	public BiConsumer<C, T> accumulator() {
-		return Collection::add;
-	}
+    @Override
+    public Supplier<C> supplier() {
+        return supplier;
+    }
 
-	@Override
-	public BinaryOperator<C> combiner() {
-		return (left, right) -> { left.addAll(right); return left; };
-	}
+    @Override
+    public BiConsumer<C, T> accumulator() {
+        return Collection::add;
+    }
 
-	@Override
-	public Function<C, C> finisher() {
-		return finisher;
-	}
+    @Override
+    public BinaryOperator<C> combiner() {
+        return (left, right) -> { left.addAll(right); return left; };
+    }
 
-	@Override
-	public Set<Characteristics> characteristics() {
-		return Collections.emptySet();
-	}
+    @Override
+    public Function<C, C> finisher() {
+        return finisher;
+    }
 
-	
+    @Override
+    public Set<Characteristics> characteristics() {
+        return Collections.emptySet();
+    }
+
+
 }
 
 
-	
-	
+
+
 

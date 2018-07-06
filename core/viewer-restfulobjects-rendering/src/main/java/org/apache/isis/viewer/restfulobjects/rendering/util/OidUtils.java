@@ -45,7 +45,7 @@ public final class OidUtils {
         return oidStr != null ? OID_MARSHALLER.splitInstanceId(oidStr): null;
     }
 
-    
+
     public static String getOidStr(final ObjectAdapter objectAdapter) {
         final Oid oid = objectAdapter.getOid();
         if (!(oid instanceof RootOid)) {

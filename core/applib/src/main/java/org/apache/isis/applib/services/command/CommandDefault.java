@@ -42,11 +42,12 @@ public class CommandDefault implements Command {
         setExecutor(Executor.OTHER);
     }
 
-    
+
 
     // -- actionIdentifier (property)
 
     private String actionIdentifier;
+    @Override
     public String getMemberIdentifier() {
         return actionIdentifier;
     }
@@ -56,11 +57,12 @@ public class CommandDefault implements Command {
         this.actionIdentifier = actionIdentifier;
     }
 
-    
+
 
     // -- targetClass (property)
 
     private String targetClass;
+    @Override
     public String getTargetClass() {
         return targetClass;
     }
@@ -70,40 +72,42 @@ public class CommandDefault implements Command {
         this.targetClass = targetClass;
     }
 
-    
+
 
     // -- targetAction (property)
 
     private String targetAction;
+    @Override
     public String getTargetAction() {
         return targetAction;
     }
-    
+
     @Override
     public void setTargetAction(String targetAction) {
         this.targetAction = targetAction;
     }
 
-    
+
 
     // -- arguments (property)
 
     private String arguments;
+    @Override
     public String getArguments() {
         return arguments;
     }
-    
+
     @Override
     public void setArguments(String arguments) {
         this.arguments = arguments;
     }
-    
-    
+
+
 
     // -- memento (property)
 
     private String memento;
-    
+
     @Override
     public String getMemento() {
         return memento;
@@ -112,12 +116,13 @@ public class CommandDefault implements Command {
     public void setMemento(String memento) {
         this.memento = memento;
     }
-    
-    
+
+
 
     // -- target (property)
 
     private Bookmark target;
+    @Override
     public Bookmark getTarget() {
         return target;
     }
@@ -126,11 +131,12 @@ public class CommandDefault implements Command {
         this.target = target;
     }
 
-    
+
 
     // -- timestamp (property)
 
     private Timestamp timestamp;
+    @Override
     public Timestamp getTimestamp() {
         return timestamp;
     }
@@ -140,7 +146,7 @@ public class CommandDefault implements Command {
         this.timestamp = timestamp;
     }
 
-    
+
 
     // -- startedAt (property)
 
@@ -154,7 +160,7 @@ public class CommandDefault implements Command {
         this.startedAt = startedAt;
     }
 
-    
+
 
     // -- completedAt (property)
 
@@ -170,11 +176,12 @@ public class CommandDefault implements Command {
         this.completedAt = completed;
     }
 
-    
+
 
     // -- user (property)
 
     private String user;
+    @Override
     public String getUser() {
         return user;
     }
@@ -184,7 +191,7 @@ public class CommandDefault implements Command {
         this.user = user;
     }
 
-    
+
 
     // -- actionDomainEvent (peek/pop/flush)
 
@@ -208,6 +215,7 @@ public class CommandDefault implements Command {
         return !actionDomainEvents.isEmpty() ? actionDomainEvents.removeLast() : null;
     }
 
+    @Override
     @Programmatic
     public List<ActionDomainEvent<?>> flushActionDomainEvents() {
         final List<ActionDomainEvent<?>> events =
@@ -216,12 +224,12 @@ public class CommandDefault implements Command {
         return events;
     }
 
-    
+
 
     // -- executor (property)
 
     private Executor executor;
-    
+
     @Override
     public Executor getExecutor() {
         return executor;
@@ -235,7 +243,7 @@ public class CommandDefault implements Command {
         this.executor = nature;
     }
 
-    
+
 
     // -- executionType (property)
 
@@ -255,12 +263,12 @@ public class CommandDefault implements Command {
     }
 
 
-    
+
 
     // -- parent (property)
 
     private Command parent;
-    
+
     @Override
     public Command getParent() {
         return parent;
@@ -271,13 +279,13 @@ public class CommandDefault implements Command {
         this.parent = parent;
     }
 
-    
-    
+
+
 
     // -- result (property)
 
     private Bookmark result;
-    
+
     @Override
     public Bookmark getResult() {
         return result;
@@ -287,12 +295,12 @@ public class CommandDefault implements Command {
         this.result = result;
     }
 
-    
+
 
     // -- exceptionStackTrace (property)
 
     private String exceptionStackTrace;
-    
+
     @Override
     public String getException() {
         return exceptionStackTrace;
@@ -301,13 +309,13 @@ public class CommandDefault implements Command {
     public void setException(final String exceptionStackTrace) {
         this.exceptionStackTrace = exceptionStackTrace;
     }
-    
-    
+
+
 
     // -- transactionId (property)
 
     private UUID transactionId;
-    
+
     @Override
     public UUID getTransactionId() {
         return transactionId;
@@ -316,40 +324,42 @@ public class CommandDefault implements Command {
     public void setTransactionId(UUID transactionId) {
         this.transactionId = transactionId;
     }
-    
 
-    
+
+
 
     // -- persistence
 
     private CommandPersistence persistence;
-    
+
     @Override
     public CommandPersistence getPersistence() {
         return persistence;
     }
-    
+
     @Override
     public void setPersistence(CommandPersistence persistence) {
-        this.persistence = persistence; 
+        this.persistence = persistence;
     }
 
-    
+
 
     // -- persistHint
 
     private boolean persistHint;
-    
+
+    @Override
     public boolean isPersistHint() {
         return persistHint;
     }
-    
+
+    @Override
     public void setPersistHint(boolean persistHint) {
         this.persistHint = persistHint;
     }
 
 
-    
+
 
     // -- next
 
@@ -368,24 +378,24 @@ public class CommandDefault implements Command {
         return next.get();
     }
 
-    
+
 
     // -- toString
 
     private final static ToString<CommandDefault> toString = ObjectContracts
-    		.toString("startedAt", CommandDefault::getStartedAt)
-    		.thenToString("user", CommandDefault::getUser)
-			.thenToString("memberIdentifier", CommandDefault::getMemberIdentifier) 
-			.thenToString("target", CommandDefault::getTarget) 
-			.thenToString("transactionId", CommandDefault::getTransactionId);
-    		
-    
+            .toString("startedAt", CommandDefault::getStartedAt)
+            .thenToString("user", CommandDefault::getUser)
+            .thenToString("memberIdentifier", CommandDefault::getMemberIdentifier)
+            .thenToString("target", CommandDefault::getTarget)
+            .thenToString("transactionId", CommandDefault::getTransactionId);
+
+
     @Override
     public String toString() {
-    	return toString.toString(this);
+        return toString.toString(this);
     }
 
-    
+
 
 
 }

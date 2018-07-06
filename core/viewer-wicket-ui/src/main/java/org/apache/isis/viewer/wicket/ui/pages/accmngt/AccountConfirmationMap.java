@@ -29,126 +29,126 @@ import org.apache.wicket.util.time.Time;
  */
 public class AccountConfirmationMap extends MostRecentlyUsedMap<String, Object>
 {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public static final MetaDataKey<AccountConfirmationMap> KEY = new MetaDataKey<AccountConfirmationMap>() {
-	};
+    public static final MetaDataKey<AccountConfirmationMap> KEY = new MetaDataKey<AccountConfirmationMap>() {
+    };
 
-	/**
-	 * The actual object that is stored as a value of the map. It wraps the email and
-	 * assigns it a creation time.
-	 */
-	private static class Value
-	{
-		/** the original email to store */
-		private String email;
+    /**
+     * The actual object that is stored as a value of the map. It wraps the email and
+     * assigns it a creation time.
+     */
+    private static class Value
+    {
+        /** the original email to store */
+        private String email;
 
-		/** the time when this email is stored */
-		private Time creationTime;
-	}
+        /** the time when this email is stored */
+        private Time creationTime;
+    }
 
-	/**
-	 * The duration of time before a {@link Value} is considered as expired
-	 */
-	private final Duration lifetime;
+    /**
+     * The duration of time before a {@link Value} is considered as expired
+     */
+    private final Duration lifetime;
 
-	/**
-	 * Construct.
-	 * 
-	 * @param maxEntries
-	 *            how much entries this map can contain
-	 * @param lifetime
-	 *            the duration of time to keep an entry in the map before considering it expired
-	 */
-	public AccountConfirmationMap(int maxEntries, Duration lifetime)
-	{
-		super(maxEntries);
+    /**
+     * Construct.
+     *
+     * @param maxEntries
+     *            how much entries this map can contain
+     * @param lifetime
+     *            the duration of time to keep an entry in the map before considering it expired
+     */
+    public AccountConfirmationMap(int maxEntries, Duration lifetime)
+    {
+        super(maxEntries);
 
-		this.lifetime = lifetime;
-	}
+        this.lifetime = lifetime;
+    }
 
-	@Override
-	protected synchronized boolean removeEldestEntry(java.util.Map.Entry<String, Object> eldest)
-	{
-		boolean removed = super.removeEldestEntry(eldest);
-		if (removed == false)
-		{
-			Value value = (Value)eldest.getValue();
-			if (value != null)
-			{
-				Duration elapsedTime = Time.now().subtract(value.creationTime);
-				if (lifetime.lessThanOrEqual(elapsedTime))
-				{
-					removedValue = value.email;
-					removed = true;
-				}
-			}
-		}
-		return removed;
-	}
+    @Override
+    protected synchronized boolean removeEldestEntry(java.util.Map.Entry<String, Object> eldest)
+    {
+        boolean removed = super.removeEldestEntry(eldest);
+        if (removed == false)
+        {
+            Value value = (Value)eldest.getValue();
+            if (value != null)
+            {
+                Duration elapsedTime = Time.now().subtract(value.creationTime);
+                if (lifetime.lessThanOrEqual(elapsedTime))
+                {
+                    removedValue = value.email;
+                    removed = true;
+                }
+            }
+        }
+        return removed;
+    }
 
-	@Override
-	public String put(String key, Object email)
-	{
-		if (!(email instanceof String))
-		{
-			throw new IllegalArgumentException(AccountConfirmationMap.class.getSimpleName() +
-				" can store only instances of " + String.class.getSimpleName() + ": " + email);
-		}
+    @Override
+    public String put(String key, Object email)
+    {
+        if (!(email instanceof String))
+        {
+            throw new IllegalArgumentException(AccountConfirmationMap.class.getSimpleName() +
+                    " can store only instances of " + String.class.getSimpleName() + ": " + email);
+        }
 
-		Value value = new Value();
-		value.creationTime = Time.now();
-		value.email = (String)email;
+        Value value = new Value();
+        value.creationTime = Time.now();
+        value.email = (String)email;
 
-		Value oldValue;
-		synchronized (this)
-		{
-			oldValue = (Value)super.put(key, value);
-		}
+        Value oldValue;
+        synchronized (this)
+        {
+            oldValue = (Value)super.put(key, value);
+        }
 
-		return oldValue != null ? oldValue.email : null;
-	}
+        return oldValue != null ? oldValue.email : null;
+    }
 
-	@Override
-	public String get(Object key)
-	{
-		String result = null;
-		Value value;
-		synchronized (this)
-		{
-			value = (Value)super.get(key);
-		}
-		if (value != null)
-		{
-			Duration elapsedTime = Time.now().subtract(value.creationTime);
-			if (lifetime.greaterThan(elapsedTime))
-			{
-				result = value.email;
-			}
-			else
-			{
-				// expired, remove it
-				remove(key);
-			}
-		}
-		return result;
-	}
+    @Override
+    public String get(Object key)
+    {
+        String result = null;
+        Value value;
+        synchronized (this)
+        {
+            value = (Value)super.get(key);
+        }
+        if (value != null)
+        {
+            Duration elapsedTime = Time.now().subtract(value.creationTime);
+            if (lifetime.greaterThan(elapsedTime))
+            {
+                result = value.email;
+            }
+            else
+            {
+                // expired, remove it
+                remove(key);
+            }
+        }
+        return result;
+    }
 
-	@Override
-	public String remove(Object key)
-	{
-		Value removedValue;
-		synchronized (this)
-		{
-			removedValue = (Value)super.remove(key);
-		}
+    @Override
+    public String remove(Object key)
+    {
+        Value removedValue;
+        synchronized (this)
+        {
+            removedValue = (Value)super.remove(key);
+        }
 
-		return removedValue != null ? removedValue.email : null;
-	}
+        return removedValue != null ? removedValue.email : null;
+    }
 
-	@Override
-	public void putAll(Map<? extends String, ?> m)
-	{
-		throw new UnsupportedOperationException();
-	}
+    @Override
+    public void putAll(Map<? extends String, ?> m)
+    {
+        throw new UnsupportedOperationException();
+    }
 }

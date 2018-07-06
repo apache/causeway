@@ -25,7 +25,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetAbstract.Disabling;
 /**
  * Mix-in interface for facets that can advise as to whether a member should be
  * disabled.
- * 
+ *
  * @see ValidatingInteractionAdvisor
  * @see HidingInteractionAdvisor
  */
@@ -34,7 +34,7 @@ public interface DisablingInteractionAdvisor extends InteractionAdvisorFacet, Di
     /**
      * Whether the rule represented by this facet disables the member to which
      * it applies.
-     * 
+     *
      * <p>
      * Implementations should use the provided {@link InteractionContext} to
      * determine whether they disable the member from being modified or used.

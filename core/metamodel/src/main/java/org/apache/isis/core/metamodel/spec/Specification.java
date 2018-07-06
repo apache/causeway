@@ -27,15 +27,15 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 
 /**
  * Base interface for elements of the metamodel.
- * 
+ *
  * <p>
  * The most significant subinterfaces of this are {@link ObjectSpecification}
  * and {@link ObjectFeature} (which brings in {@link ObjectMember} and
  * {@link ObjectActionParameter}.
- * 
+ *
  * <p>
  * Introduces so that viewers can deal with abstract Instances of said.
- * 
+ *
  */
 public interface Specification extends IdentifiedHolder {
 

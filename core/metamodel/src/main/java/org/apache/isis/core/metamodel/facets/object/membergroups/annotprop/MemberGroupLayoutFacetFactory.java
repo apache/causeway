@@ -54,7 +54,7 @@ public class MemberGroupLayoutFacetFactory extends FacetFactoryAbstract implemen
 
     private MemberGroupLayoutFacet create(final ProcessClassContext processClassContext) {
         final FacetHolder holder = processClassContext.getFacetHolder();
-        
+
         final Class<?> cls = processClassContext.getCls();
 
         final MemberGroupLayout mglAnnot = Annotations.getAnnotation(cls, MemberGroupLayout.class);
@@ -90,7 +90,7 @@ public class MemberGroupLayoutFacetFactory extends FacetFactoryAbstract implemen
                     // ignore; may want a gap, or there may just not be any properties to put in this column.
                     // validationFailures.add("%s MemberGroupLayout: middle (property) column is non-zero for ColumnSpans (%s), but no groups have been listed", objectSpec.getIdentifier().getClassName(), columnSpans.name());
                 }
-                
+
                 if(columnSpans.getRight() == 0 && !right.isEmpty()) {
                     validationFailures.add(
                             "%s: @MemberGroupLayout: right (property) column is 0 for ColumnSpans (%s), but groups have been listed (%s).  NB: ColumnSpans may have been defaulted if could not be parsed.", objectSpec.getIdentifier().getClassName(), columnSpans.name(), right);
@@ -99,7 +99,7 @@ public class MemberGroupLayoutFacetFactory extends FacetFactoryAbstract implemen
                     // ignore; may want a gap, or there may just not be any properties to put in this column.
                     // validationFailures.add("%s MemberGroupLayout: right (property) column is non-zero for ColumnSpans (%s), but no groups have been listed", objectSpec.getIdentifier().getClassName(), columnSpans.name());
                 }
-                
+
                 if(columnSpans.getCollections() == 0 && numCollections>0) {
                     validationFailures.add(
                             "%s: @MemberGroupLayout: collections column is 0 for ColumnSpans (%s), but there are (up to) %d visible collections",
@@ -113,7 +113,7 @@ public class MemberGroupLayoutFacetFactory extends FacetFactoryAbstract implemen
                         Contributed.EXCLUDED, com.google.common.base.Predicates.and(
                                 ObjectAssociation.Predicates.staticallyVisible(Where.OBJECT_FORMS),
                                 ObjectAssociation.Predicates.COLLECTIONS )
-                );
+                        );
                 return objectCollections.size();
             }
 

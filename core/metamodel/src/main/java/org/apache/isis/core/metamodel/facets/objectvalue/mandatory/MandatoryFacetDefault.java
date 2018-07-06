@@ -23,12 +23,12 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 /**
  * Whether a property or a parameter is mandatory (not optional).
- * 
+ *
  * <p>
  * For a mandatory property, the object cannot be saved/updated without the
  * value being provided. For a mandatory parameter, the action cannot be invoked
  * without the value being provided.
- * 
+ *
  * <p>
  * In the standard Apache Isis Programming Model, specify mandatory by
  * <i>omitting</i> the <tt>@Optional</tt> annotation.

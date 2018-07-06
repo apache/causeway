@@ -25,7 +25,7 @@ import org.apache.isis.viewer.wicket.model.models.PageType;
 
 /**
  * Specify the pages to use for each {@link PageType}.
- * 
+ *
  * <p>
  * The <tt>PageClassListDefault</tt> default implementation returns pages that
  * all inherit from {@link PageAbstract} and which (by component markup

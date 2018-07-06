@@ -44,11 +44,11 @@ public class ChoicesFacetForDomainObjectAnnotation extends ChoicesFacetFromBound
                 .filter(bounding -> bounding != Bounding.NOT_SPECIFIED)
                 .findFirst()
                 .map(bounding -> bounding == Bounding.BOUNDED
-                        ? new ChoicesFacetForDomainObjectAnnotation(
-                                facetHolder, deploymentCategory,
-                                authenticationSessionProvider, persistenceSessionServiceInternal)
+                ? new ChoicesFacetForDomainObjectAnnotation(
+                        facetHolder, deploymentCategory,
+                        authenticationSessionProvider, persistenceSessionServiceInternal)
                         : null
-                ).orElse(null);
+                        ).orElse(null);
     }
 
     private ChoicesFacetForDomainObjectAnnotation(

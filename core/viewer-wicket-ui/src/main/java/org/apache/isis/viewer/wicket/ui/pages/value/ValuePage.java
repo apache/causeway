@@ -38,25 +38,25 @@ public class ValuePage extends PageAbstract {
     private static final long serialVersionUID = 1L;
 
     private static final String ID_ACTION_NAME = "actionName";
-    
+
     /**
      * For use with {@link Component#setResponsePage(org.apache.wicket.Page)}
      */
     public ValuePage(final ValueModel valueModel) {
         this(valueModel, actionNameFrom(valueModel));
-        
+
     }
 
-    
+
     private ValuePage(ValueModel valueModel, String actionName) {
         super(PageParametersUtils.newPageParameters(), actionName, ComponentType.VALUE);
-        
+
         themeDiv.addOrReplace(new Label(ID_ACTION_NAME, actionName));
 
         addChildComponents(themeDiv, valueModel);
 
         addBookmarkedPages(themeDiv);
-        
+
     }
 
     private static String actionNameFrom(final ValueModel valueModel) {
@@ -64,7 +64,7 @@ public class ValuePage extends PageAbstract {
         if(actionModel != null) {
             return actionModel.getActionMemento().getAction(valueModel.getSpecificationLoader()).getName();
         }
-        return "Results"; // fallback, probably not required because hint should always exist on the model. 
+        return "Results"; // fallback, probably not required because hint should always exist on the model.
     }
 
 }

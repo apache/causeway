@@ -23,10 +23,10 @@ import org.apache.isis.core.metamodel.facets.SingleIntValueFacet;
 
 /**
  * The amount to adjust a date by when rendered.
- * 
+ *
  * <p>
  * Intended to be used by the viewer as a rendering hint.
- * 
+ *
  * <p>
  * In the standard Apache Isis Programming Model, corresponds to the
  * <tt>@RenderedAdjusted</tt> annotation.

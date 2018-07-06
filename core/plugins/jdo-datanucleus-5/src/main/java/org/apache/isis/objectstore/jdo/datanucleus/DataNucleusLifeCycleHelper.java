@@ -24,37 +24,37 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.datanucleus.enhancer.EnhancementHelper;
 
 /**
- * 
+ *
  * Purges any state associated with DataNucleus.
  * <br/><br/>
  * (requires datanucleus-core 4 or 5 >= 5.1.5)
- * 
+ *
  * @since 2.0.0
  *
  */
 public class DataNucleusLifeCycleHelper {
-	
+
     //private static final Logger LOG = LoggerFactory.getLogger(DataNucleusLifeCycleHelper.class);
 
-	public static void cleanUp(PersistenceManagerFactory persistenceManagerFactory) {
-		
-		try {
-			
-			final ClassLoader cl = IsisContext.getClassLoader();
-			
-			persistenceManagerFactory.close();
-			
-			// for info, on why we do this see
-			// https://github.com/datanucleus/datanucleus-core/issues/272
-			EnhancementHelper.getInstance().unregisterClasses(cl);
-			
-			// cleanup thread locals
-			JDOStateManagerForIsis.hint.remove();
-			
-		} catch (Exception e) {
-			// ignore, since it only affects re-deploy-ability, which is nice to have but not critical
-		}
+    public static void cleanUp(PersistenceManagerFactory persistenceManagerFactory) {
 
-	}
+        try {
+
+            final ClassLoader cl = IsisContext.getClassLoader();
+
+            persistenceManagerFactory.close();
+
+            // for info, on why we do this see
+            // https://github.com/datanucleus/datanucleus-core/issues/272
+            EnhancementHelper.getInstance().unregisterClasses(cl);
+
+            // cleanup thread locals
+            JDOStateManagerForIsis.hint.remove();
+
+        } catch (Exception e) {
+            // ignore, since it only affects re-deploy-ability, which is nice to have but not critical
+        }
+
+    }
 
 }

@@ -55,13 +55,14 @@ import com.google.common.collect.Lists;
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
-)
+        )
 public class MetaModelServiceDefault implements MetaModelService {
 
     @SuppressWarnings("unused")
     private final static Logger LOG = LoggerFactory.getLogger(MetaModelServiceDefault.class);
 
 
+    @Override
     @Programmatic
     public Class<?> fromObjectType(final String objectType) {
         if(objectType == null) {
@@ -98,6 +99,7 @@ public class MetaModelServiceDefault implements MetaModelService {
 
 
 
+    @Override
     @Programmatic
     public List<DomainMember> export() {
 
@@ -201,10 +203,10 @@ public class MetaModelServiceDefault implements MetaModelService {
             return Sort.UNKNOWN;
         }
         throw new IllegalArgumentException(String.format(
-                "Unable to determine what sort of domain object this is: '%s'. Originating domainType: '%s'", 
+                "Unable to determine what sort of domain object this is: '%s'. Originating domainType: '%s'",
                 objectSpec.getFullIdentifier(),
                 domainType.getName()
-        		));
+                ));
     }
 
     @Override
@@ -220,19 +222,19 @@ public class MetaModelServiceDefault implements MetaModelService {
 
         final Class<?> domainType;
         switch (mode) {
-            case RELAXED:
-                try {
-                    domainType = this.fromObjectType(bookmark.getObjectType());
-                } catch (Exception e) {
-                    return Sort.UNKNOWN;
-                }
-                break;
-
-            case STRICT:
-                // fall through to...
-            default:
+        case RELAXED:
+            try {
                 domainType = this.fromObjectType(bookmark.getObjectType());
-                break;
+            } catch (Exception e) {
+                return Sort.UNKNOWN;
+            }
+            break;
+
+        case STRICT:
+            // fall through to...
+        default:
+            domainType = this.fromObjectType(bookmark.getObjectType());
+            break;
         }
         return sortOf(domainType, mode);
     }

@@ -35,7 +35,7 @@ public abstract class MandatoryFacetAbstract extends MarkerFacetAbstract impleme
     public static Class<? extends Facet> type() {
         return MandatoryFacet.class;
     }
-    
+
     public enum Semantics {
         REQUIRED,
         OPTIONAL;
@@ -69,7 +69,7 @@ public abstract class MandatoryFacetAbstract extends MarkerFacetAbstract impleme
             return false;
         }
     }
-    
+
     @Override
     public boolean isInvertedSemantics() {
         return this.semantics == Semantics.OPTIONAL;

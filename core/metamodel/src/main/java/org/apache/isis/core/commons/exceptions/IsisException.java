@@ -25,9 +25,9 @@ import java.text.MessageFormat;
  * General exception raised by the framework, typically a system exception.
  */
 public class IsisException extends RuntimeException {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     public IsisException() {
     }
 

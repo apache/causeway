@@ -92,7 +92,7 @@ public @interface DomainObject {
 
     /**
      * Indicates that the class has a bounded, or finite, set of instances.
-     * 
+     *
      * <p>
      *     Takes precedence over auto-complete.
      * </p>

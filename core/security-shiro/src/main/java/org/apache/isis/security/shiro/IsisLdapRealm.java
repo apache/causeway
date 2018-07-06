@@ -282,7 +282,7 @@ public class IsisLdapRealm extends JndiLdapRealm {
     private void addPermIfFound(
             SearchResult group, Set<String> permissions,
             Set<String> extractedAttributeP, Set<String> permissionByAttributeP)
-            throws NamingException {
+                    throws NamingException {
         final NamingEnumeration<? extends Attribute> attributeEnum = group.getAttributes().getAll();
         Map<String, Set<String>> keyValues = Maps.newHashMap();
         while (attributeEnum.hasMore()) {

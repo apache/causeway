@@ -30,7 +30,7 @@ import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 
 public class PasswordValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<Password> implements
-    PasswordValueFacet {
+PasswordValueFacet {
 
     public static Class<? extends Facet> type() {
         return PasswordValueFacet.class;

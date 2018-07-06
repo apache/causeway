@@ -33,7 +33,7 @@ import org.apache.isis.core.plugins.eventbus.EventBusPlugin.EventListener;
 /**
  * A service implementing an Event Bus, allowing arbitrary events to be posted and
  * subscribed to.
- *  
+ *
  * <p>
  *      Only domain services (not domain entities or view models) should be registered; only they are guaranteed to be
  *      instantiated and resident in memory.
@@ -87,7 +87,7 @@ public abstract class EventBusService {
     @Programmatic
     @PostConstruct
     public void init(final Map<String, String> properties) {
-    	hasPosted = false; // reset state
+        hasPosted = false; // reset state
     }
 
     @Programmatic
@@ -96,7 +96,7 @@ public abstract class EventBusService {
         teardownEventBus();
     }
 
-    
+
 
     // -- register, unregister
 
@@ -183,12 +183,12 @@ public abstract class EventBusService {
         // intentionally no-op
     }
 
-    
+
 
     // -- subscribers
 
     private final Set<Object> subscribers = _Sets.newConcurrentHashSet();
-	
+
 
     /**
      * Returns an immutable snapshot of the current subscribers.
@@ -199,7 +199,7 @@ public abstract class EventBusService {
     }
 
     // -- post
-    
+
     private boolean hasPosted;
 
     /**
@@ -225,20 +225,20 @@ public abstract class EventBusService {
      * Lazily populated in {@link #getEventBusImplementation()} as result of the first {@link #post(Object)}.
      */
     protected EventBusPlugin eventBusImplementation;
-    
+
     public <T> EventListener<T> addEventListener(final Class<T> targetType, Consumer<T> onEvent) {
-    	return Optional.ofNullable(getEventBusImplementation())
-    			.map(impl->impl.addEventListener(targetType, onEvent))
-    			.orElse(null);
-	}
+        return Optional.ofNullable(getEventBusImplementation())
+                .map(impl->impl.addEventListener(targetType, onEvent))
+                .orElse(null);
+    }
 
     public <T> void removeEventListener(EventListener<T> eventListener) {
-    	// do not trigger setupEventBus() 
-    	if(eventBusImplementation!=null) {
-    		eventBusImplementation.removeEventListener(eventListener);
-    	}
-	}
-    
+        // do not trigger setupEventBus()
+        if(eventBusImplementation!=null) {
+            eventBusImplementation.removeEventListener(eventListener);
+        }
+    }
+
     /**
      * Lazily populates the event bus for the current {@link #getSubscribers() subscribers}.
      */
@@ -296,7 +296,7 @@ public abstract class EventBusService {
         this.eventBusImplementation = null;
     }
 
-    
+
 
     // -- hook methods (newEventBus, skip)
 
@@ -319,7 +319,7 @@ public abstract class EventBusService {
 
 
 
-    
+
 
 
 }

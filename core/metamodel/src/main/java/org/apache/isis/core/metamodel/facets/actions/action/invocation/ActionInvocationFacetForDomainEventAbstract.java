@@ -83,11 +83,11 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
 public abstract class ActionInvocationFacetForDomainEventAbstract
-        extends ActionInvocationFacetAbstract
-        implements ImperativeFacet {
+extends ActionInvocationFacetAbstract
+implements ImperativeFacet {
 
     @SuppressWarnings("unused")
-	private final static Logger LOG = LoggerFactory.getLogger(ActionInvocationFacetForDomainEventAbstract.class);
+    private final static Logger LOG = LoggerFactory.getLogger(ActionInvocationFacetForDomainEventAbstract.class);
 
     private final Method method;
     private final ObjectSpecification onType;
@@ -104,11 +104,11 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
 
     public ActionInvocationFacetForDomainEventAbstract(
             final Class<? extends ActionDomainEvent<?>> eventType,
-            final Method method,
-            final ObjectSpecification onType,
-            final ObjectSpecification returnType,
-            final FacetHolder holder,
-            final ServicesInjector servicesInjector) {
+                    final Method method,
+                    final ObjectSpecification onType,
+                    final ObjectSpecification returnType,
+                    final FacetHolder holder,
+                    final ServicesInjector servicesInjector) {
         super(holder);
         this.eventType = eventType;
         this.method = method;
@@ -165,7 +165,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
 
                     }
                 }
-        );
+                );
         return holder[0];
     }
 
@@ -188,7 +188,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
 
         final ObjectAdapter returnedAdapter;
         if( command.getExecutor() == Command.Executor.USER &&
-            command.getExecuteIn() == org.apache.isis.applib.annotation.CommandExecuteIn.BACKGROUND) {
+                command.getExecuteIn() == org.apache.isis.applib.annotation.CommandExecuteIn.BACKGROUND) {
 
             // deal with background commands
 
@@ -274,28 +274,28 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
                         return ObjectAdapter.Util.unwrap(resultAdapterPossiblyCloned);
 
                     } catch (Exception e) {
-                    	
-                    	final Consumer<RecoverableException> recovery = recoverableException->{
-                    		
-                    		if (!getTransactionState().canCommit()) {
-		                        // something severe has happened to the underlying transaction;
-		                        // so escalate this exception to be non-recoverable
-		                        final Throwable recoverableExceptionCause = recoverableException.getCause();
-		                        Throwable nonRecoverableCause = recoverableExceptionCause != null
-		                                ? recoverableExceptionCause
-		                                : recoverableException;
-		
-		                        // trim to first 300 chars
-		                        final String message = trim(nonRecoverableCause.getMessage(), 300);
-		
-		                        throw new NonRecoverableException(message, nonRecoverableCause);
-                    		}
+
+                        final Consumer<RecoverableException> recovery = recoverableException->{
+
+                            if (!getTransactionState().canCommit()) {
+                                // something severe has happened to the underlying transaction;
+                                // so escalate this exception to be non-recoverable
+                                final Throwable recoverableExceptionCause = recoverableException.getCause();
+                                Throwable nonRecoverableCause = recoverableExceptionCause != null
+                                        ? recoverableExceptionCause
+                                                : recoverableException;
+
+                                // trim to first 300 chars
+                                final String message = trim(nonRecoverableCause.getMessage(), 300);
+
+                                throw new NonRecoverableException(message, nonRecoverableCause);
+                            }
                         };
-                    	
-                    	return ThrowableExtensions.handleInvocationException(e, method.getName(), recovery);
-					}
-                    
-                    
+
+                        return ThrowableExtensions.handleInvocationException(e, method.getName(), recovery);
+                    }
+
+
                 }
             };
 
@@ -303,8 +303,8 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
             interaction.execute(callable, execution);
 
             // handle any exceptions
-            final Interaction.Execution<ActionInvocationDto, ?> priorExecution = 
-            		_Casts.uncheckedCast(interaction.getPriorExecution());
+            final Interaction.Execution<ActionInvocationDto, ?> priorExecution =
+                    _Casts.uncheckedCast(interaction.getPriorExecution());
 
             final Exception executionExceptionIfAny = priorExecution.getThrew();
 
@@ -312,7 +312,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
 
             if(executionExceptionIfAny != null) {
                 throw executionExceptionIfAny instanceof RuntimeException
-                        ? ((RuntimeException)executionExceptionIfAny)
+                ? ((RuntimeException)executionExceptionIfAny)
                         : new RuntimeException(executionExceptionIfAny);
             }
 
@@ -331,13 +331,13 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
             final PublishedActionFacet publishedActionFacet = getIdentified().getFacet(PublishedActionFacet.class);
             if (publishedActionFacet != null) {
 
-            	//TODO not used
-//                final IdentifiedHolder identifiedHolder = getIdentified();
-//                final List<ObjectAdapter> parameterAdapters = Arrays.asList(argumentAdapters);
+                //TODO not used
+                //                final IdentifiedHolder identifiedHolder = getIdentified();
+                //                final List<ObjectAdapter> parameterAdapters = Arrays.asList(argumentAdapters);
 
                 getPublishingServiceInternal().publishAction(
                         priorExecution
-                );
+                        );
             }
         }
 
@@ -375,7 +375,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
 
     protected Object invokeMethodElseFromCache(
             final ObjectAdapter targetAdapter, final ObjectAdapter[] arguments)
-            throws IllegalAccessException, InvocationTargetException {
+                    throws IllegalAccessException, InvocationTargetException {
 
         final Object[] executionParameters = new Object[arguments.length];
         for (int i = 0; i < arguments.length; i++) {
@@ -390,8 +390,8 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
             final QueryResultsCache queryResultsCache = getQueryResultsCache();
             final Object[] targetPojoPlusExecutionParameters = ArrayExtensions.appendT(executionParameters, targetPojo);
             return queryResultsCache.execute(
-            		()->MethodInvocationPreprocessor.invoke(method, targetPojo, executionParameters),
-            		targetPojo.getClass(), method.getName(), targetPojoPlusExecutionParameters);
+                    ()->MethodInvocationPreprocessor.invoke(method, targetPojo, executionParameters),
+                    targetPojo.getClass(), method.getName(), targetPojoPlusExecutionParameters);
 
         } else {
             return MethodInvocationPreprocessor.invoke(method, targetPojo, executionParameters);
@@ -453,7 +453,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
             if(getRepositoryService().isPersistent(domainObject)) {
                 BookmarkService bookmarkService = getBookmarkService();
                 Bookmark bookmark = bookmarkService.bookmarkFor(domainObject);
-               command.setResult(bookmark);
+                command.setResult(bookmark);
             }
             break;
         default:

@@ -23,45 +23,45 @@ package org.apache.isis.commons.internal.resources;
 import org.apache.isis.commons.internal.base._Strings;
 
 /**
- * 
+ *
  * package private abstract helper class to store application scoped path objects
  * <br/><br/>
- * 
- * Implementation Note: Empty paths are represented by absence of this resource, 
- * hence empty paths are not allowed (will throw an IllegalArgumentException on 
- * attempted construction)   
+ *
+ * Implementation Note: Empty paths are represented by absence of this resource,
+ * hence empty paths are not allowed (will throw an IllegalArgumentException on
+ * attempted construction)
  *
  */
 abstract class _Resource_Path {
 
-	protected final String path;
-	
-	protected abstract String resourceName();
+    protected final String path;
 
-	public _Resource_Path(String contextPath) {
-		
-		if(_Strings.isEmpty(contextPath))
-			throw new IllegalArgumentException(resourceName()+" can not be empty");
-		
-		contextPath = contextPath.trim();
-		
-		if(_Strings.isEmpty(contextPath))
-			throw new IllegalArgumentException(resourceName()+" can not be empty");
-		
-		while(contextPath.startsWith("/")) {
-			contextPath = contextPath.substring(1);
-		}
-		
-		while(contextPath.endsWith("/")) {
-			contextPath = contextPath.substring(0, contextPath.length()-1);
-		}
-		
-		contextPath = _Strings.condenseWhitespaces(contextPath, " ");
-		
-		if(contextPath.indexOf(' ')>-1)
-			throw new IllegalArgumentException(resourceName()+" can not contain any white-spaces");
-		
-		this.path = contextPath;
-	}
-	
+    protected abstract String resourceName();
+
+    public _Resource_Path(String contextPath) {
+
+        if(_Strings.isEmpty(contextPath))
+            throw new IllegalArgumentException(resourceName()+" can not be empty");
+
+        contextPath = contextPath.trim();
+
+        if(_Strings.isEmpty(contextPath))
+            throw new IllegalArgumentException(resourceName()+" can not be empty");
+
+        while(contextPath.startsWith("/")) {
+            contextPath = contextPath.substring(1);
+        }
+
+        while(contextPath.endsWith("/")) {
+            contextPath = contextPath.substring(0, contextPath.length()-1);
+        }
+
+        contextPath = _Strings.condenseWhitespaces(contextPath, " ");
+
+        if(contextPath.indexOf(' ')>-1)
+            throw new IllegalArgumentException(resourceName()+" can not contain any white-spaces");
+
+        this.path = contextPath;
+    }
+
 }

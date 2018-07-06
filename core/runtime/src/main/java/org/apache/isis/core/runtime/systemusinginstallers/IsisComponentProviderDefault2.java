@@ -42,7 +42,7 @@ public class IsisComponentProviderDefault2 extends IsisComponentProvider  {
     private IsisComponentProviderDefault2(
             final IsisConfigurationDefault configuration,
             final AppManifest appManifest
-    ) {
+            ) {
         this(configuration, appManifest,
                 // integration tests ignore appManifest for authentication and authorization.
                 authenticationManagerWithBypass(configuration),
@@ -54,11 +54,11 @@ public class IsisComponentProviderDefault2 extends IsisComponentProvider  {
             final AppManifest appManifest,
             final AuthenticationManager authenticationManager,
             final AuthorizationManager authorizationManager
-    ) {
+            ) {
         super(appManifest, configuration, authenticationManager, authorizationManager);
     }
 
-    
+
 
     // -- constructor helpers (factories)
     /**
@@ -68,7 +68,7 @@ public class IsisComponentProviderDefault2 extends IsisComponentProvider  {
     private static IsisConfigurationDefault elseDefault(final IsisConfiguration configuration) {
         return configuration != null
                 ? (IsisConfigurationDefault) configuration
-                : new IsisConfigurationDefault(ResourceStreamSourceContextLoaderClassPath.create("config"));
+                        : new IsisConfigurationDefault(ResourceStreamSourceContextLoaderClassPath.create("config"));
     }
 
     /**
@@ -79,7 +79,7 @@ public class IsisComponentProviderDefault2 extends IsisComponentProvider  {
         authenticationManager.addAuthenticator(new AuthenticatorBypass(configuration));
         return authenticationManager;
     }
-    
+
 
 
 }

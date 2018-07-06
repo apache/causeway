@@ -51,21 +51,21 @@ import com.google.common.collect.Sets;
 /**
  * Instantiates the service, taking into account whether the service is annotated with
  * {@link RequestScoped} or not.
- * 
+ *
  * <p>
- * For regular (non-annotated, global, singleton) services, this class simply instantiates 
+ * For regular (non-annotated, global, singleton) services, this class simply instantiates
  * the object.  This is then held as a singleton by Isis.
- * 
+ *
  * <p>
- * For annotated, request-scoped services, this class instantiates a (singleton) proxy object 
+ * For annotated, request-scoped services, this class instantiates a (singleton) proxy object
  * that internally uses a threadlocal to dispatch to the actual service object, one per thread.
  * The proxy additionally implements {@link RequestScopedService} interface, allowing the
  * system to initialize the proxy for the thread with every request, and tear down afterwards.
- * 
+ *
  * <p>
  * Doing the thread-local stuff within the service proxy means that, for the rest of Isis,
  * services can continue to be considered to be singletons.
- * 
+ *
  * <p>
  * <b>Note</b>: there is one limitation to using proxies, namely that field-level injection into
  * request-scoped services is not (yet) supported.
@@ -129,92 +129,92 @@ public final class ServiceInstantiator {
 
     // //////////////////////////////////////
 
-    
+
     private static <T> T instantiateSingleton(final Class<T> cls) {
         return instantiate(cls);
     }
-    
+
     // //////////////////////////////////////
-    
-     
+
+
     private <T> T instantiateRequestScopedProxy(final Class<T> cls) {
-    	
-    	final Class<?>[] interfaces = ArrayExtensions.combine(
-				cls.getInterfaces(), 
-				new Class<?>[] { RequestScopedService.class, ProxyEnhanced.class });
-    	
+
+        final Class<?>[] interfaces = ArrayExtensions.combine(
+                cls.getInterfaces(),
+                new Class<?>[] { RequestScopedService.class, ProxyEnhanced.class });
+
         final ProxyFactory<T> proxyFactory = ProxyFactory.builder(cls)
-        		.interfaces(interfaces)
-        		.build(); 
+                .interfaces(interfaces)
+                .build();
 
         final InvocationHandler handler = new InvocationHandler() {
 
-        	// Allow serviceByThread to be propagated from the thread that starts the request 
-        	// to any child-threads, hence InheritableThreadLocal.
-        	private InheritableThreadLocal<T> serviceByThread = new InheritableThreadLocal<>();
+            // Allow serviceByThread to be propagated from the thread that starts the request
+            // to any child-threads, hence InheritableThreadLocal.
+            private InheritableThreadLocal<T> serviceByThread = new InheritableThreadLocal<>();
 
-        	@Override
-        	public Object invoke(final Object proxied, final Method proxyMethod, final Object[] args) 
-        			throws Throwable {
+            @Override
+            public Object invoke(final Object proxied, final Method proxyMethod, final Object[] args)
+                    throws Throwable {
 
-        		cacheMethodsIfNecessary(cls);
+                cacheMethodsIfNecessary(cls);
 
-        		if(proxyMethod.getName().equals("__isis_startRequest")) {
+                if(proxyMethod.getName().equals("__isis_startRequest")) {
 
-        			T service = instantiate(cls);
-        			serviceByThread.set(service);
+                    T service = instantiate(cls);
+                    serviceByThread.set(service);
 
-        			ServicesInjector servicesInjector = (ServicesInjector) args[0];
-        			servicesInjector.injectServicesInto(service);
+                    ServicesInjector servicesInjector = (ServicesInjector) args[0];
+                    servicesInjector.injectServicesInto(service);
 
-        			return null;
+                    return null;
 
-        		} else if(proxyMethod.getName().equals("__isis_postConstruct")) {
+                } else if(proxyMethod.getName().equals("__isis_postConstruct")) {
 
-        			final T service = serviceByThread.get();
+                    final T service = serviceByThread.get();
 
-        			callPostConstructIfPresent(service);
+                    callPostConstructIfPresent(service);
 
-        			return null;
+                    return null;
 
-        		} else if(proxyMethod.getName().equals("__isis_preDestroy")) {
+                } else if(proxyMethod.getName().equals("__isis_preDestroy")) {
 
-        			final T service = serviceByThread.get();
+                    final T service = serviceByThread.get();
 
-        			callPreDestroyIfPresent(service);
+                    callPreDestroyIfPresent(service);
 
-        			return null;
+                    return null;
 
-        		} else if(proxyMethod.getName().equals("__isis_endRequest")) {
+                } else if(proxyMethod.getName().equals("__isis_endRequest")) {
 
-        			serviceByThread.set(null);
-        			return null;
+                    serviceByThread.set(null);
+                    return null;
 
-        		} else if(proxyMethod.getName().equals("hashCode") && proxyMethod.getParameterTypes().length == 0) {
+                } else if(proxyMethod.getName().equals("hashCode") && proxyMethod.getParameterTypes().length == 0) {
 
-        			final T service = serviceByThread.get();
-        			return service != null? service.hashCode(): this.hashCode();
+                    final T service = serviceByThread.get();
+                    return service != null? service.hashCode(): this.hashCode();
 
-        		} else if(proxyMethod.getName().equals("equals") && proxyMethod.getParameterTypes().length == 1 && proxyMethod.getParameterTypes()[0] == Object.class) {
+                } else if(proxyMethod.getName().equals("equals") && proxyMethod.getParameterTypes().length == 1 && proxyMethod.getParameterTypes()[0] == Object.class) {
 
-        			final T service = serviceByThread.get();
-        			return service != null? service.equals(args[0]): this.equals(args[0]);
+                    final T service = serviceByThread.get();
+                    return service != null? service.equals(args[0]): this.equals(args[0]);
 
-        		} else if(proxyMethod.getName().equals("toString") && proxyMethod.getParameterTypes().length == 0) {
+                } else if(proxyMethod.getName().equals("toString") && proxyMethod.getParameterTypes().length == 0) {
 
-        			final T service = serviceByThread.get();
-        			return service != null? service.toString(): this.toString();
+                    final T service = serviceByThread.get();
+                    return service != null? service.toString(): this.toString();
 
-        		} else {
-        			T service = serviceByThread.get();
-        			if(service == null) {
-        				// shouldn't happen...
-        				throw new IllegalStateException("No service of type " + cls + " is available on this ");
-        			}
-        			final Object proxiedReturn = proxyMethod.invoke(service, args);
-        			return proxiedReturn;
-        		}
-        	}
+                } else {
+                    T service = serviceByThread.get();
+                    if(service == null) {
+                        // shouldn't happen...
+                        throw new IllegalStateException("No service of type " + cls + " is available on this ");
+                    }
+                    final Object proxiedReturn = proxyMethod.invoke(service, args);
+                    return proxiedReturn;
+                }
+            }
 
         };
 
@@ -290,15 +290,15 @@ public final class ServiceInstantiator {
 
             final Class<?>[] parameterTypes = method.getParameterTypes();
             switch (parameterTypes.length) {
-                case 0:
-                    break;
-                case 1:
-                    if (Map.class != parameterTypes[0]) {
-                        throw new RuntimeException("@PostConstruct method must be no-arg or 1-arg accepting java.util.Map; method is: " + serviceClass.getName() + "#" + method.getName());
-                    }
-                    break;
-                default:
+            case 0:
+                break;
+            case 1:
+                if (Map.class != parameterTypes[0]) {
                     throw new RuntimeException("@PostConstruct method must be no-arg or 1-arg accepting java.util.Map; method is: " + serviceClass.getName() + "#" + method.getName());
+                }
+                break;
+            default:
+                throw new RuntimeException("@PostConstruct method must be no-arg or 1-arg accepting java.util.Map; method is: " + serviceClass.getName() + "#" + method.getName());
             }
             postConstructMethod = method;
         }
@@ -317,10 +317,10 @@ public final class ServiceInstantiator {
 
             final Class<?>[] parameterTypes = method.getParameterTypes();
             switch(parameterTypes.length) {
-                case 0:
-                    break;
-                default:
-                    throw new RuntimeException("@PreDestroy method must be no-arg; method is: " + serviceClass.getName() + "#" + method.getName());
+            case 0:
+                break;
+            default:
+                throw new RuntimeException("@PreDestroy method must be no-arg; method is: " + serviceClass.getName() + "#" + method.getName());
             }
             preDestroyMethod = method;
         }
@@ -334,7 +334,7 @@ public final class ServiceInstantiator {
     }
 
     // //////////////////////////////////////
-    
+
     private static <T> T instantiate(final Class<T> cls) {
         try {
             return cls.newInstance();

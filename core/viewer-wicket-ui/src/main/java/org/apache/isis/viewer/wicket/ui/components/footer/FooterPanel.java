@@ -40,9 +40,9 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
  */
 public class FooterPanel extends PanelAbstract<Model<String>> {
 
-	private static final long serialVersionUID = 1L;
-	
-	private static final String ID_BREADCRUMBS = "breadcrumbs";
+    private static final long serialVersionUID = 1L;
+
+    private static final String ID_BREADCRUMBS = "breadcrumbs";
     private static final String ID_ABOUT_LINK = "aboutLink";
     private static final String ID_ABOUT_MESSAGE = "aboutMessage";
     private static final String ID_THEME_PICKER = "themePicker";
@@ -68,12 +68,12 @@ public class FooterPanel extends PanelAbstract<Model<String>> {
     private void addBreadcrumbs() {
 
         boolean showBreadcrumbs = getConfiguration().getBoolean(
-                                    BreadcrumbPanel.SHOW_BREADCRUMBS_KEY, BreadcrumbPanel.SHOW_BREADCRUMBS_DEFAULT);
+                BreadcrumbPanel.SHOW_BREADCRUMBS_KEY, BreadcrumbPanel.SHOW_BREADCRUMBS_DEFAULT);
         final Component breadcrumbPanel =
                 showBreadcrumbs
-                        ? new BreadcrumbPanel(ID_BREADCRUMBS)
+                ? new BreadcrumbPanel(ID_BREADCRUMBS)
                         : new EmptyPanel(ID_BREADCRUMBS).setVisible(false);
-        addOrReplace(breadcrumbPanel);
+                addOrReplace(breadcrumbPanel);
     }
 
     @Override
@@ -81,14 +81,14 @@ public class FooterPanel extends PanelAbstract<Model<String>> {
         super.onConfigure();
 
         final boolean showFooter = getConfiguration().getBoolean(
-        		WicketViewerSettings.KEY_WICKET_VIEWER_SHOW_FOOTER, 
-        		WicketViewerSettings.WICKET_VIEWER_SHOW_FOOTER_DEFAULT);
-        
+                WicketViewerSettings.KEY_WICKET_VIEWER_SHOW_FOOTER,
+                WicketViewerSettings.WICKET_VIEWER_SHOW_FOOTER_DEFAULT);
+
         if(!showFooter) {
-        	setVisible(false);
-        	return;
+            setVisible(false);
+            return;
         }
-        
+
         PageParameters parameters = getPage().getPageParameters();
         setVisible(parameters.get(PageParametersUtils.ISIS_NO_FOOTER_PARAMETER_NAME).isNull());
     }

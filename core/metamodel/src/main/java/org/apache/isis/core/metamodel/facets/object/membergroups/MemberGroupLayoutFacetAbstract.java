@@ -38,20 +38,20 @@ public abstract class MemberGroupLayoutFacetAbstract extends FacetAbstract imple
     public static Class<? extends Facet> type() {
         return MemberGroupLayoutFacet.class;
     }
-    
+
     protected static List<String> asListWithDefaultGroup(final String[] value) {
-        return value == null || value.length == 0 
-                ? Arrays.asList(MemberGroupLayoutFacet.DEFAULT_GROUP) 
-                : Arrays.asList(value);
+        return value == null || value.length == 0
+                ? Arrays.asList(MemberGroupLayoutFacet.DEFAULT_GROUP)
+                        : Arrays.asList(value);
     }
 
     protected static List<String> asList(final String[] value) {
         return Arrays.asList(value);
     }
-    
+
     public MemberGroupLayoutFacetAbstract(
             final ColumnSpans columns,
-            final List<String> left, final List<String> middle, final List<String> right, 
+            final List<String> left, final List<String> middle, final List<String> right,
             FacetHolder holder) {
         super(type(), holder, Derivation.NOT_DERIVED);
         this.columns = columns != null? columns: ColumnSpans.asSpans(4,0,0,8);

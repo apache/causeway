@@ -32,13 +32,13 @@ import org.apache.isis.core.commons.resource.ResourceStreamSource;
 /**
  * Immutable set of properties representing the configuration of the running
  * system.
- * 
+ *
  * <p>
  * The {@link IsisConfiguration} is one part of a mutable/immutable pair pattern
  * (cf {@link String} and {@link StringBuilder}). What this means is, as
  * components are loaded they can discover their own configuration resources.
  * These are added to {@link IsisConfigurationBuilder}.
- * 
+ *
  * <p>
  * Thus the {@link IsisConfiguration} held by different components may vary, but
  * with each being a possible superset of the previous.
@@ -50,7 +50,7 @@ public interface IsisConfiguration extends ApplicationScopedComponent {
      * the specified prefix. The names of the new properties will have the
      * prefixed stripped. This is similar to the {@link #getProperties(String)}
      * method, except the property names have their prefixes removed.
-     * 
+     *
      * @see #getProperties(String)
      */
     @Programmatic
@@ -60,7 +60,7 @@ public interface IsisConfiguration extends ApplicationScopedComponent {
      * Gets the boolean value for the specified name where no value or 'on' will
      * result in true being returned; anything gives false. If no boolean
      * property is specified with this name then false is returned.
-     * 
+     *
      * @param name
      *            the property name
      */
@@ -71,7 +71,7 @@ public interface IsisConfiguration extends ApplicationScopedComponent {
      * Gets the boolean value for the specified name. If no property is
      * specified with this name then the specified default boolean value is
      * returned.
-     * 
+     *
      * @param name
      *            the property name
      * @param defaultValue
@@ -83,7 +83,7 @@ public interface IsisConfiguration extends ApplicationScopedComponent {
     /**
      * Gets the color for the specified name. If no color property is specified
      * with this name then null is returned.
-     * 
+     *
      * @param name
      *            the property name
      */
@@ -93,7 +93,7 @@ public interface IsisConfiguration extends ApplicationScopedComponent {
     /**
      * Gets the color for the specified name. If no color property is specified
      * with this name then the specified default color is returned.
-     * 
+     *
      * @param name
      *            the property name
      * @param defaultValue
@@ -105,7 +105,7 @@ public interface IsisConfiguration extends ApplicationScopedComponent {
     /**
      * Gets the font for the specified name. If no font property is specified
      * with this name then null is returned.
-     * 
+     *
      * @param name
      *            the property name
      */
@@ -115,7 +115,7 @@ public interface IsisConfiguration extends ApplicationScopedComponent {
     /**
      * Gets the font for the specified name. If no font property is specified
      * with this name then the specified default font is returned.
-     * 
+     *
      * @param name
      *            the property name
      * @param defaultValue
@@ -127,7 +127,7 @@ public interface IsisConfiguration extends ApplicationScopedComponent {
     /**
      * Returns a list of entries for the single configuration property with the
      * specified name.
-     * 
+     *
      * <p>
      * If there is no matching property then returns an empty array.
      */
@@ -144,7 +144,7 @@ public interface IsisConfiguration extends ApplicationScopedComponent {
     /**
      * Gets the number value for the specified name. If no property is specified
      * with this name then 0 is returned.
-     * 
+     *
      * @param name
      *            the property name
      */
@@ -154,7 +154,7 @@ public interface IsisConfiguration extends ApplicationScopedComponent {
     /**
      * Gets the number value for the specified name. If no property is specified
      * with this name then the specified default number value is returned.
-     * 
+     *
      * @param name
      *            the property name
      * @param defaultValue
@@ -169,7 +169,7 @@ public interface IsisConfiguration extends ApplicationScopedComponent {
      * same as in the original, ie the prefix is not removed. This is similar to
      * the {@link #createSubset(String)} method except the names of the
      * properties are not altered when copied.
-     * 
+     *
      * @see #createSubset(String)
      */
     @Programmatic

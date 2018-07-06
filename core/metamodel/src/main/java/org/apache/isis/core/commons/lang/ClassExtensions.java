@@ -65,7 +65,7 @@ public final class ClassExtensions {
 
     public static String getSuperclass(final Class<?> extendee) {
         final Class<?> superType = extendee.getSuperclass();
-    
+
         if (superType == null) {
             return null;
         }
@@ -78,8 +78,8 @@ public final class ClassExtensions {
 
     public static boolean isJavaClass(final Class<?> extendee) {
         final String className = extendee.getName();
-        return className.startsWith(ClassUtil.JAVA_CLASS_PREFIX) || 
-               extendee.getName().startsWith("sun.");
+        return className.startsWith(ClassUtil.JAVA_CLASS_PREFIX) ||
+                extendee.getName().startsWith("sun.");
     }
 
     static Class<?> implementingClassOrNull(final Class<?> extendee, final Class<?> requiredClass, final Class<?> constructorParamType) {
@@ -154,11 +154,11 @@ public final class ClassExtensions {
         if (canBeVoid && (type == void.class)) {
             return true;
         }
-    
+
         if (type.isPrimitive()) {
             return returnTypeExtendee.isAssignableFrom(ClassUtil.wrapperClasses.get(type));
         }
-    
+
         return (returnTypeExtendee.isAssignableFrom(type));
     }
 

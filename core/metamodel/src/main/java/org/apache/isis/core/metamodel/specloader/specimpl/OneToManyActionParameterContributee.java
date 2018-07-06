@@ -23,8 +23,8 @@ import org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSeman
 import org.apache.isis.core.metamodel.spec.feature.OneToManyActionParameter;
 
 public class OneToManyActionParameterContributee
-        extends ObjectActionParameterContributeeAbstract
-        implements OneToManyActionParameter {
+extends ObjectActionParameterContributeeAbstract
+implements OneToManyActionParameter {
 
     public OneToManyActionParameterContributee(
             final ObjectAdapter serviceAdapter,

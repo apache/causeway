@@ -65,14 +65,14 @@ public class IsisLogOnExceptionFilter implements Filter {
     private static void logRequestUrl(ServletRequest request, Exception e) {
         if(!(request instanceof HttpServletRequest)) {
             return;
-        } 
+        }
         final HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         final StringBuffer buf = httpServletRequest.getRequestURL();
         final String queryString = httpServletRequest.getQueryString();
         if(queryString != null) {
             buf.append('?').append(queryString);
         }
-        
+
         LOG.error("Request caused {}: {}", e.getClass().getName(), buf.toString(), e);
     }
 }

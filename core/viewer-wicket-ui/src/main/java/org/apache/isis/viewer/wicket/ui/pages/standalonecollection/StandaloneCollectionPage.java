@@ -51,6 +51,6 @@ public class StandaloneCollectionPage extends PageAbstract {
         if(actionModel != null) {
             return actionModel.getActionMemento().getAction(actionModel.getSpecificationLoader()).getName();
         }
-        return "Results"; // fallback, probably not required because hint should always exist on the model. 
+        return "Results"; // fallback, probably not required because hint should always exist on the model.
     }
 }

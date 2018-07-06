@@ -70,8 +70,8 @@ public class SnapshotServer {
         extension = prop.getProperty(prefix + "extension", "txt");
 
         try( final ServerSocket server = new ServerSocket(port) ) {
-        
-        	while (true) {
+
+            while (true) {
                 try {
                     final Socket s = server.accept();
 
@@ -92,12 +92,12 @@ public class SnapshotServer {
                     LOG4J.error("failed to log", e);
                 }
             }
-        	
+
         } catch (final IOException e) {
             LOG4J.error("failed to start server", e);
             return;
         }
 
-        
+
     }
 }

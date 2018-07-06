@@ -44,7 +44,7 @@ public class ObjectSpecIdFacetForJdoPersistenceCapableAnnotation extends ObjectS
     }
 
     private ObjectSpecIdFacetForJdoPersistenceCapableAnnotation(final String value,
-                                                                final FacetHolder holder) {
+            final FacetHolder holder) {
         super(value, holder);
     }
 }

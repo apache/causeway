@@ -61,7 +61,7 @@ public class PropertyAccessorFacetViaAccessorFactory extends PropertyOrCollectio
                         getSpecificationLoader(),
                         getAuthenticationSessionProvider(),
                         adapterManager
-                ));
+                        ));
     }
 
     // ///////////////////////////////////////////////////////

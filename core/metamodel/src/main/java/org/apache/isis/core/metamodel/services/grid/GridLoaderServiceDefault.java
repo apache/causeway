@@ -47,7 +47,7 @@ import com.google.common.io.Resources;
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
-)
+        )
 public class GridLoaderServiceDefault implements GridLoaderService {
 
     private static final Logger LOG = LoggerFactory.getLogger(GridLoaderServiceDefault.class);
@@ -64,9 +64,9 @@ public class GridLoaderServiceDefault implements GridLoaderService {
     @PostConstruct
     public void init(){
         final Class<?>[] pageImplementations =
-        		_NullSafe.stream(gridSystemServices)
-        		.map(GridSystemService::gridImplementation)
-        		.collect(_Arrays.toArray(Class.class));
+                _NullSafe.stream(gridSystemServices)
+                .map(GridSystemService::gridImplementation)
+                .collect(_Arrays.toArray(Class.class));
         try {
             jaxbContext = JAXBContext.newInstance(pageImplementations);
         } catch (JAXBException e) {
@@ -130,7 +130,7 @@ public class GridLoaderServiceDefault implements GridLoaderService {
                 // shouldn't occur, indicates that initialization failed to locate any GridSystemService implementations.
                 return null;
             }
-            
+
             final Grid grid = (Grid) jaxbService.fromXml(jaxbContext, xml);
             grid.setDomainClass(domainClass);
             if(supportsReloading()) {

@@ -23,6 +23,6 @@
         xmlns = {
                 @javax.xml.bind.annotation.XmlNs(
                         namespaceURI = "http://isis.apache.org/viewer/restfulobjects/server/mappers/entity", prefix = "ro")
-}
-)
+        }
+        )
 package org.apache.isis.viewer.restfulobjects.server.mappers.entity;

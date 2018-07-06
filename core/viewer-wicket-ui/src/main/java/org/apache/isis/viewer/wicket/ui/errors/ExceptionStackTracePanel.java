@@ -51,7 +51,7 @@ public class ExceptionStackTracePanel extends Panel {
     private static final String ID_MAIN_MESSAGE = "mainMessage";
 
     private static final String ID_EXCEPTION_DETAIL_DIV = "exceptionDetailDiv";
-    
+
     private static final String ID_TICKET_MARKUP = "ticketMarkup";
 
     private static final String ID_STACK_TRACE_ELEMENT = "stackTraceElement";
@@ -62,14 +62,15 @@ public class ExceptionStackTracePanel extends Panel {
 
     public class ExternalImageUrl extends WebComponent {
 
-		private static final long serialVersionUID = -3556235292216447710L;
+        private static final long serialVersionUID = -3556235292216447710L;
 
-		public ExternalImageUrl(String id, String imageUrl) {
+        public ExternalImageUrl(String id, String imageUrl) {
             super(id);
             add(new AttributeModifier("src", new Model<>(imageUrl)));
             setVisible(!(imageUrl==null || imageUrl.equals("")));
         }
 
+        @Override
         protected void onComponentTag(ComponentTag tag) {
             super.onComponentTag(tag);
             checkComponentTag(tag, "img");
@@ -82,57 +83,57 @@ public class ExceptionStackTracePanel extends Panel {
         final Ticket ticket = exceptionModel.getTicket();
         final String mainMessage =
                 ticket != null && ticket.getUserMessage() != null
-                        ? ticket.getUserMessage()
+                ? ticket.getUserMessage()
                         : exceptionModel.getMainMessage();
 
-        final Label label = new Label(ID_MAIN_MESSAGE, mainMessage);
+                final Label label = new Label(ID_MAIN_MESSAGE, mainMessage);
 
-        // to avoid potential XSS attacks, no longer escape model strings
-        // (risk is low but could just happen: error message being rendered might accidentally or deliberately contain rogue Javascript)
-        // label.setEscapeModelStrings(false);
-        add(label);
+                // to avoid potential XSS attacks, no longer escape model strings
+                // (risk is low but could just happen: error message being rendered might accidentally or deliberately contain rogue Javascript)
+                // label.setEscapeModelStrings(false);
+                add(label);
 
-        
-        final String ticketMarkup = ticket != null ? ticket.getMarkup(): null;
-        if(ticketMarkup == null) {
-        	Components.permanentlyHide(this, ID_TICKET_MARKUP);
-        } else {
-        	add(new MarkupComponent(ID_TICKET_MARKUP, Model.of(ticket.getMarkup())));
-        }
 
-        final boolean suppressExceptionDetail =
-                exceptionModel.isAuthorizationException() ||
-                exceptionModel.isRecognized() ||
-                (ticket != null && ticket.getStackTracePolicy() == Ticket.StackTracePolicy.HIDE);
-        if(suppressExceptionDetail) {
-            Components.permanentlyHide(this, ID_EXCEPTION_DETAIL_DIV);
-        } else {
-                MarkupContainer container = new WebMarkupContainer(ID_EXCEPTION_DETAIL_DIV) {
-                private static final long serialVersionUID = 1L;
-                @Override
-                public void renderHead(IHeaderResponse response) {
-                    response.render(JavaScriptReferenceHeaderItem.forReference(DIV_TOGGLE_JS));
+                final String ticketMarkup = ticket != null ? ticket.getMarkup(): null;
+                if(ticketMarkup == null) {
+                    Components.permanentlyHide(this, ID_TICKET_MARKUP);
+                } else {
+                    add(new MarkupComponent(ID_TICKET_MARKUP, Model.of(ticket.getMarkup())));
                 }
-            };
-            container.add(new StackTraceListView(ID_STACK_TRACE_ELEMENT, ExceptionStackTracePanel.ID_LINE, exceptionModel.getStackTrace()));
-            add(container);
-        }
 
-        final BreadcrumbModelProvider session = (BreadcrumbModelProvider) getSession();
-        final BreadcrumbModel breadcrumbModel = session.getBreadcrumbModel();
-        final EntityModel entityModel = breadcrumbModel.getMostRecentlyVisited();
+                final boolean suppressExceptionDetail =
+                        exceptionModel.isAuthorizationException() ||
+                        exceptionModel.isRecognized() ||
+                        (ticket != null && ticket.getStackTracePolicy() == Ticket.StackTracePolicy.HIDE);
+                if(suppressExceptionDetail) {
+                    Components.permanentlyHide(this, ID_EXCEPTION_DETAIL_DIV);
+                } else {
+                    MarkupContainer container = new WebMarkupContainer(ID_EXCEPTION_DETAIL_DIV) {
+                        private static final long serialVersionUID = 1L;
+                        @Override
+                        public void renderHead(IHeaderResponse response) {
+                            response.render(JavaScriptReferenceHeaderItem.forReference(DIV_TOGGLE_JS));
+                        }
+                    };
+                    container.add(new StackTraceListView(ID_STACK_TRACE_ELEMENT, ExceptionStackTracePanel.ID_LINE, exceptionModel.getStackTrace()));
+                    add(container);
+                }
 
-        final Class<? extends Page> pageClass;
-        final PageParameters pageParameters;
-        if (entityModel != null) {
-            pageClass = pageClassRegistry.getPageClass(PageType.ENTITY);
-            pageParameters = entityModel.getPageParameters();
-        } else {
-            pageParameters = null;
-            pageClass = HomePage.class;
-        }
-        final AbstractLink link = Links.newBookmarkablePageLink("continueButton", pageParameters, pageClass);
-        add(link);
+                final BreadcrumbModelProvider session = (BreadcrumbModelProvider) getSession();
+                final BreadcrumbModel breadcrumbModel = session.getBreadcrumbModel();
+                final EntityModel entityModel = breadcrumbModel.getMostRecentlyVisited();
+
+                final Class<? extends Page> pageClass;
+                final PageParameters pageParameters;
+                if (entityModel != null) {
+                    pageClass = pageClassRegistry.getPageClass(PageType.ENTITY);
+                    pageParameters = entityModel.getPageParameters();
+                } else {
+                    pageParameters = null;
+                    pageClass = HomePage.class;
+                }
+                final AbstractLink link = Links.newBookmarkablePageLink("continueButton", pageParameters, pageClass);
+                add(link);
 
     }
 

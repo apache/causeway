@@ -35,18 +35,20 @@ public class IsisBlobMapping extends SingleFieldMultiMapping {
 
     public IsisBlobMapping() {
     }
-    
+
     @Override
     public Class<?> getJavaType() {
         return org.apache.isis.applib.value.Blob.class;
     }
 
+    @Override
     public void initialize(AbstractMemberMetaData mmd, Table container, ClassLoaderResolver clr)
     {
         super.initialize(mmd, container, clr);
         addColumns();
     }
 
+    @Override
     public void initialize(RDBMSStoreManager storeMgr, String type)
     {
         super.initialize(storeMgr, type);
@@ -62,17 +64,19 @@ public class IsisBlobMapping extends SingleFieldMultiMapping {
     }
 
 
+    @Override
     public Object getValueForDatastoreMapping(NucleusContext nucleusCtx, int index, Object value)
     {
         Blob blob = ((Blob)value);
         switch (index) {
-            case 0: return blob.getName();
-            case 1: return blob.getMimeType().getBaseType();
-            case 2: return blob.getBytes();
+        case 0: return blob.getName();
+        case 1: return blob.getMimeType().getBaseType();
+        case 2: return blob.getBytes();
         }
         throw new IndexOutOfBoundsException();
     }
 
+    @Override
     public void setObject(ExecutionContext ec, PreparedStatement preparedStmt, int[] exprIndex, Object value)
     {
         Blob blob = ((Blob)value);
@@ -95,7 +99,8 @@ public class IsisBlobMapping extends SingleFieldMultiMapping {
             getDatastoreMapping(2).setObject(preparedStmt, exprIndex[2], blob.getBytes());
         }
     }
-    
+
+    @Override
     public Object getObject(ExecutionContext ec, ResultSet resultSet, int[] exprIndex)
     {
         try

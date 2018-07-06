@@ -78,12 +78,12 @@ public class ActionParameterChoicesFacetViaMethodFactory extends MethodPrefixBas
         for (int i = 0; i < paramTypes.length; i++) {
 
             final Class<?> arrayOfParamType = (Array.newInstance(paramTypes[i], 0)).getClass();
-            
+
             final Method choicesMethod = findChoicesNumMethodReturning(processMethodContext, i);
             if (choicesMethod == null) {
                 continue;
             }
-            
+
             processMethodContext.removeMethod(choicesMethod);
 
             final FacetedMethod facetedMethod = processMethodContext.getFacetHolder();
@@ -96,7 +96,7 @@ public class ActionParameterChoicesFacetViaMethodFactory extends MethodPrefixBas
             final FacetedMethodParameter paramAsHolder = parameters.get(i);
             FacetUtil.addFacet(new ActionParameterChoicesFacetViaMethod(choicesMethod, arrayOfParamType, paramAsHolder,
                     getDeploymentCategory(), getSpecificationLoader(), getAuthenticationSessionProvider(), adapterManager
-            ));
+                    ));
         }
     }
 
@@ -104,17 +104,17 @@ public class ActionParameterChoicesFacetViaMethodFactory extends MethodPrefixBas
      * search successively for the default method, trimming number of param types each loop
      */
     private static Method findChoicesNumMethodReturning(final ProcessMethodContext processMethodContext, final int n) {
-        
+
         final Method actionMethod = processMethodContext.getMethod();
         final List<Class<?>> paramTypes = ListExtensions.mutableCopy(actionMethod.getParameterTypes());
-        
+
         final Class<?> arrayOfParamType = (Array.newInstance(paramTypes.get(n), 0)).getClass();
-        
+
         final int numParamTypes = paramTypes.size();
-        
+
         for(int i=0; i< numParamTypes+1; i++) {
             Method method;
-            
+
             method = findChoicesNumMethodReturning(processMethodContext, n, paramTypes.toArray(new Class<?>[]{}), arrayOfParamType);
             if(method != null) {
                 return method;
@@ -123,7 +123,7 @@ public class ActionParameterChoicesFacetViaMethodFactory extends MethodPrefixBas
             if(method != null) {
                 return method;
             }
-            
+
             // remove last, and search again
             if(!paramTypes.isEmpty()) {
                 paramTypes.remove(paramTypes.size()-1);
@@ -134,7 +134,7 @@ public class ActionParameterChoicesFacetViaMethodFactory extends MethodPrefixBas
     }
 
 
-    
+
     private static Method findChoicesNumMethodReturning(final ProcessMethodContext processMethodContext, final int n, Class<?>[] paramTypes, final Class<?> returnType) {
         final Class<?> cls = processMethodContext.getCls();
         final Method actionMethod = processMethodContext.getMethod();

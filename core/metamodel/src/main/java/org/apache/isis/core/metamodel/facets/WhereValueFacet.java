@@ -25,5 +25,5 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 public interface WhereValueFacet extends Facet {
 
     public Where where();
-    
+
 }

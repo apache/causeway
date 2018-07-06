@@ -24,13 +24,13 @@ import java.io.Serializable;
 public abstract class ConsentAbstract implements Serializable, Consent {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
 
     /**
      * Factory method.
-     * 
+     *
      * <p>
      * Used extensively by the DnD viewer.
      */
@@ -56,7 +56,7 @@ public abstract class ConsentAbstract implements Serializable, Consent {
     }
 
     /**
-     * 
+     *
      * @param interactionResult
      *            - if <tt>null</tt> then defaults to an {@link #isAllowed()
      *            allowing} {@link Consent}.
@@ -70,7 +70,7 @@ public abstract class ConsentAbstract implements Serializable, Consent {
      * {@link InteractionResult}) to create an {@link Consent}, specifying a
      * {@link #getDescription() description} of the event and the
      * {@link #getReason() reason} (if any) that the consent is vetoed.
-     * 
+     *
      * @param description
      *            - a description of the event to which this consent relates
      * @param reason
@@ -107,7 +107,7 @@ public abstract class ConsentAbstract implements Serializable, Consent {
     /**
      * Returns <tt>true</tt> if this object is giving permission (if the
      * {@link #getReason() reason} is <tt>null</tt> or empty.
-     * 
+     *
      * @see #getReason()
      */
     @Override
@@ -117,7 +117,7 @@ public abstract class ConsentAbstract implements Serializable, Consent {
 
     /**
      * Returns true if this object is NOT giving permission.
-     * 
+     *
      * @see #isAllowed()
      */
     @Override
@@ -128,7 +128,7 @@ public abstract class ConsentAbstract implements Serializable, Consent {
     /**
      * Underlying {@link InteractionResult} that created this {@link Consent}
      * (may be <tt>null</tt>).
-     * 
+     *
      */
     @Override
     public InteractionResult getInteractionResult() {
@@ -137,13 +137,13 @@ public abstract class ConsentAbstract implements Serializable, Consent {
 
     /**
      * Description of the action allowed by this event.
-     * 
+     *
      * <p>
      * (Previously, {@link Allow} consents overloaded the {@link #getReason()
      * reason} property with a description of the event. This has now been
      * changed so that a non-<tt>null</tt> reason always implies a {@link Veto}.
      * This property captures the description.
-     * 
+     *
      * @return
      */
     @Override

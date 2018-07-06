@@ -79,12 +79,14 @@ public abstract class GridAbstract implements Grid {
 
     private boolean normalized;
 
+    @Override
     @Programmatic
     @XmlTransient
     public boolean isNormalized() {
         return normalized;
     }
 
+    @Override
     @Programmatic
     public void setNormalized(final boolean normalized) {
         this.normalized = normalized;
@@ -141,11 +143,13 @@ public abstract class GridAbstract implements Grid {
     }
 
 
+    @Override
     @Programmatic
     @XmlTransient
     public LinkedHashMap<String, PropertyLayoutData> getAllPropertiesById() {
         final LinkedHashMap<String, PropertyLayoutData> propertiesById = _Maps.newLinkedHashMap();
         visit(new BS3Grid.VisitorAdapter() {
+            @Override
             public void visit(final PropertyLayoutData propertyLayoutData) {
                 propertiesById.put(propertyLayoutData.getId(), propertyLayoutData);
             }
@@ -154,6 +158,7 @@ public abstract class GridAbstract implements Grid {
     }
 
 
+    @Override
     @Programmatic
     @XmlTransient
     public LinkedHashMap<String, CollectionLayoutData> getAllCollectionsById() {
@@ -169,6 +174,7 @@ public abstract class GridAbstract implements Grid {
     }
 
 
+    @Override
     @Programmatic
     @XmlTransient
     public LinkedHashMap<String, ActionLayoutData> getAllActionsById() {

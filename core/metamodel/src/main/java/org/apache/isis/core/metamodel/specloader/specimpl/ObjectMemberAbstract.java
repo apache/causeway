@@ -76,7 +76,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
     private final SpecificationLoader specificationLoader;
     private final ServicesInjector servicesInjector;
     private final PersistenceSessionServiceInternal persistenceSessionServiceInternal;
-    
+
 
     protected ObjectMemberAbstract(
             final FacetedMethod facetedMethod,
@@ -113,7 +113,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         return featureType;
     }
 
-    
+
 
     // -- Facets
 
@@ -175,13 +175,13 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         getFacetHolder().removeFacet(facetType);
     }
 
-    
+
 
     // -- Name, Description, Help (convenience for facets)
     /**
      * Return the default label for this member. This is based on the name of
      * this member.
-     * 
+     *
      * @see #getId()
      */
     @Override
@@ -209,7 +209,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         return facet.value();
     }
 
-    
+
 
     // -- Hidden (or visible)
     /**
@@ -222,10 +222,10 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
      * provided as API for symmetry with interactions (such as
      * {@link AccessContext} accesses) have no corresponding vetoing methods.
      */
-     protected abstract VisibilityContext<?> createVisibleInteractionContext(
-             final ObjectAdapter targetObjectAdapter,
-             final InteractionInitiatedBy interactionInitiatedBy,
-             final Where where);
+    protected abstract VisibilityContext<?> createVisibleInteractionContext(
+            final ObjectAdapter targetObjectAdapter,
+            final InteractionInitiatedBy interactionInitiatedBy,
+            final Where where);
 
 
 
@@ -258,7 +258,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         final VisibilityContext<?> ic = createVisibleInteractionContext(target, interactionInitiatedBy, where);
         return InteractionUtils.isVisibleResult(this, ic);
     }
-    
+
 
     // -- Disabled (or enabled)
     /**
@@ -296,7 +296,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         return InteractionUtils.isUsableResult(this, ic);
     }
 
-    
+
 
     // -- isAssociation, isAction
     @Override
@@ -318,7 +318,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
     public boolean isOneToOneAssociation() {
         return featureType.isProperty();
     }
-    
+
 
     // -- mixinAdapterFor
     /**
@@ -366,14 +366,14 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         final int indexOfSeparator = singularName.lastIndexOf(separator);
         return occursNotAtEnd(singularName, indexOfSeparator)
                 ? singularName.substring(indexOfSeparator + 1)
-                : singularName;
+                        : singularName;
     }
 
     private static boolean occursNotAtEnd(final String singularName, final int indexOfUnderscore) {
         return indexOfUnderscore != -1 && indexOfUnderscore != singularName.length() - 1;
     }
 
-    
+
 
     // -- toString
 
@@ -382,7 +382,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         return String.format("id=%s,name='%s'", getId(), getName());
     }
 
-    
+
 
     // -- Dependencies
 
@@ -414,7 +414,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         return lookupService(CommandDtoServiceInternal.class);
     }
 
-    
+
 
     // -- command (setup)
 
@@ -489,6 +489,6 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         }
     }
 
-    
+
 
 }

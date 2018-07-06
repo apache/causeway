@@ -24,11 +24,11 @@ import org.apache.isis.applib.Identifier;
 /**
  * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents a check as to whether a particular object to be removed from a
  * collection is valid or not.
- * 
+ *
  * <p>
  * If {@link #getReason()} is not <tt>null</tt> then provides the reason why the
  * object is invalid; otherwise the object is valid.
- * 
+ *
  * @see CollectionAddToEvent
  *
  */

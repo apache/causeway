@@ -24,7 +24,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 /**
  * Indicates that this class is either a view model (for the UI/application layer) or a recreatable domain object of
  * some sort (for the domain layer, that is: an external or synthetic entity).
- * 
+ *
  * <p>
  * In the standard Apache Isis Programming Model, corresponds to
  * applying either {@link org.apache.isis.applib.annotation.ViewModel} annotation or

@@ -159,11 +159,11 @@ public abstract class ReprRendererAbstract<R extends ReprRendererAbstract<R, T>,
         final LinkBuilder linkBuilder = DomainTypeReprRenderer.newLinkToBuilder(getRendererContext(), rel, objectSpec);
         JsonRepresentation link = linkBuilder.build();
         getLinks().arrayAdd(link);
-        
+
         final LinkFollowSpecs linkFollower = getLinkFollowSpecs().follow("links");
         if (linkFollower.matches(link)) {
             final DomainTypeReprRenderer renderer = new DomainTypeReprRenderer(getRendererContext(), linkFollower, JsonRepresentation.newMap())
-                .with(objectSpec);
+                    .with(objectSpec);
             link.mapPut("value", renderer.render());
         }
 

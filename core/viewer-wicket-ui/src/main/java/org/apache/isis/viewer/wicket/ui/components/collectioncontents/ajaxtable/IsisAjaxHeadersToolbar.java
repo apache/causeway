@@ -73,7 +73,7 @@ public class IsisAjaxHeadersToolbar<S> extends AbstractToolbar
 
     /**
      * Constructor
-     * 
+     *
      * @param <T>
      *            the column data type
      * @param table
@@ -188,7 +188,7 @@ public class IsisAjaxHeadersToolbar<S> extends AbstractToolbar
     /**
      * Factory method for sortable header components. A sortable header component must have id of
      * <code>headerId</code> and conform to markup specified in <code>HeadersToolbar.html</code>
-     * 
+     *
      * @param headerId
      *            header component id
      * @param property
@@ -198,7 +198,7 @@ public class IsisAjaxHeadersToolbar<S> extends AbstractToolbar
      * @return created header component
      */
     protected WebMarkupContainer newSortableHeader(final String headerId, final S property,
-        final ISortStateLocator<S> locator)
+            final ISortStateLocator<S> locator)
     {
         return new OrderByBorder<S>(headerId, property, locator)
         {

@@ -24,7 +24,7 @@ import org.apache.isis.commons.internal.context._Plugin;
  * Common interface for all Event Bus implementations.
  *
  * <p>
- *     Defines a plug-able SPI to the 
+ *     Defines a plug-able SPI to the
  *     {@link org.apache.isis.applib.services.eventbus.EventBusService},
  *     to allow alternative implementations of in-memory event bus to be used.
  * </p>
@@ -32,56 +32,56 @@ import org.apache.isis.commons.internal.context._Plugin;
  */
 public interface EventBusPlugin {
 
-	/**
-	 * For {@link org.apache.isis.applib.services.eventbus.EventBusService} to call on
-	 * {@link org.apache.isis.applib.services.eventbus.EventBusService#register(Object)}.
-	 */
-	void register(Object domainService);
+    /**
+     * For {@link org.apache.isis.applib.services.eventbus.EventBusService} to call on
+     * {@link org.apache.isis.applib.services.eventbus.EventBusService#register(Object)}.
+     */
+    void register(Object domainService);
 
-	/**
-	 * For {@link org.apache.isis.applib.services.eventbus.EventBusService} to call on
-	 * {@link org.apache.isis.applib.services.eventbus.EventBusService#unregister(Object)}.
-	 */
-	void unregister(Object domainService);
+    /**
+     * For {@link org.apache.isis.applib.services.eventbus.EventBusService} to call on
+     * {@link org.apache.isis.applib.services.eventbus.EventBusService#unregister(Object)}.
+     */
+    void unregister(Object domainService);
 
-	/**
-	 * For {@link org.apache.isis.applib.services.eventbus.EventBusService} to call on
-	 * {@link org.apache.isis.applib.services.eventbus.EventBusService#post(Object)}.
-	 */
-	void post(Object event);
-	
-	/**
-	 * Programmatically adds an event listener (wrapping the specified Consumer {@code onEvent})
-	 * to the event-bus.
-	 * @param onEvent
-	 * @return an EventListener instance 
-	 * @since 2.0.0
-	 */
-	<T> EventListener<T> addEventListener(final Class<T> targetType, Consumer<T> onEvent);
-	
-	/**
-	 * Removes the {@code eventListener} from the event-bus.
-	 * @param eventListener
-	 * @since 2.0.0
-	 */
-	<T> void removeEventListener(EventListener<T> eventListener);
-	
-	// -- EVENT LISTENER
-	
-	public static interface EventListener<T> {
-    	public void on(T event);
+    /**
+     * For {@link org.apache.isis.applib.services.eventbus.EventBusService} to call on
+     * {@link org.apache.isis.applib.services.eventbus.EventBusService#post(Object)}.
+     */
+    void post(Object event);
+
+    /**
+     * Programmatically adds an event listener (wrapping the specified Consumer {@code onEvent})
+     * to the event-bus.
+     * @param onEvent
+     * @return an EventListener instance
+     * @since 2.0.0
+     */
+    <T> EventListener<T> addEventListener(final Class<T> targetType, Consumer<T> onEvent);
+
+    /**
+     * Removes the {@code eventListener} from the event-bus.
+     * @param eventListener
+     * @since 2.0.0
+     */
+    <T> void removeEventListener(EventListener<T> eventListener);
+
+    // -- EVENT LISTENER
+
+    public static interface EventListener<T> {
+        public void on(T event);
     }
 
-	// -- PLUGIN LOOKUP
+    // -- PLUGIN LOOKUP
 
-	public static EventBusPlugin get() {
-		return _Plugin.getOrElse(EventBusPlugin.class, 
-				ambiguousPlugins->{
-					throw _Plugin.ambiguityNonRecoverable(EventBusPlugin.class, ambiguousPlugins); 
-				}, 
-				()->{
-					throw _Plugin.absenceNonRecoverable(EventBusPlugin.class);
-				});
-	}
+    public static EventBusPlugin get() {
+        return _Plugin.getOrElse(EventBusPlugin.class,
+                ambiguousPlugins->{
+                    throw _Plugin.ambiguityNonRecoverable(EventBusPlugin.class, ambiguousPlugins);
+                },
+                ()->{
+                    throw _Plugin.absenceNonRecoverable(EventBusPlugin.class);
+                });
+    }
 
 }

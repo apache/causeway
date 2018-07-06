@@ -126,7 +126,7 @@ public class RepresentationWalker {
 
     /**
      * The entity returned from the previous walk.
-     * 
+     *
      * <p>
      * Will return null if the previous walk returned an error.
      */
@@ -140,7 +140,7 @@ public class RepresentationWalker {
 
     /**
      * The response returned from the previous walk.
-     * 
+     *
      * <p>
      * Once a walk/performed has been attempted, is guaranteed to return a
      * non-null value. (Conversely, will return <tt>null</tt> immediately after
@@ -161,7 +161,7 @@ public class RepresentationWalker {
 
     /**
      * The exception (if any) that occurred from the previous walk.
-     * 
+     *
      * <p>
      * Will only ever be populated if {@link #getError()} is non-null.
      */

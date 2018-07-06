@@ -44,7 +44,7 @@ public class FixtureResultList {
         this.fixtureScripts = fixtureScripts;
         this.executionContext = executionContext;
     }
-    
+
 
 
     // -- list of FixtureResults
@@ -103,7 +103,7 @@ public class FixtureResultList {
         return Collections.unmodifiableList(list);
     }
 
-    
+
 
     // -- nextItemFor
 
@@ -118,7 +118,7 @@ public class FixtureResultList {
         return "item-"+atomicInteger.incrementAndGet();
     }
 
-    
+
 
 
     // -- lookup
@@ -138,9 +138,9 @@ public class FixtureResultList {
         return _Casts.uncheckedCast(object);
     }
 
-    
 
-    // -- injected services 
+
+    // -- injected services
 
     /**
      * Injected in {@link #FixtureResultList(FixtureScripts, org.apache.isis.applib.fixturescripts.FixtureScript.ExecutionContext) constructor}.
@@ -150,5 +150,5 @@ public class FixtureResultList {
      * Injected in {@link #FixtureResultList(FixtureScripts, org.apache.isis.applib.fixturescripts.FixtureScript.ExecutionContext) constructor}.
      */
     private final FixtureScript.ExecutionContext executionContext;
-    
+
 }

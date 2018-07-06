@@ -25,8 +25,8 @@ import org.apache.isis.commons.internal.collections._Collections;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 
 public abstract class PropertyOrCollectionIdentifyingFacetFactoryAbstract
-        extends MethodPrefixBasedFacetFactoryAbstract
-        implements PropertyOrCollectionIdentifyingFacetFactory {
+extends MethodPrefixBasedFacetFactoryAbstract
+implements PropertyOrCollectionIdentifyingFacetFactory {
 
 
     public PropertyOrCollectionIdentifyingFacetFactoryAbstract(final List<FeatureType> featureTypes, final String... prefixes) {

@@ -87,7 +87,7 @@ public class ActionChoicesFacetViaMethod extends ActionChoicesFacetAbstract impl
             throw new DomainModelException(String.format(
                     "Expected an array of collections (Object[]) containing choices for all parameters, "
                             + "but got %s instead. Perhaps the parameter number is missing?",
-                    objectOrCollection));
+                            objectOrCollection));
         }
         final Object[] options = (Object[]) objectOrCollection;
         final Object[][] results = new Object[options.length][];
@@ -116,8 +116,8 @@ public class ActionChoicesFacetViaMethod extends ActionChoicesFacetAbstract impl
                 ObjectAdapter.Util.visibleAdapters(
                         collectionAdapter,
                         interactionInitiatedBy);
-        final List<Object> filteredObjects = 
-        		_Lists.transform(visibleAdapters, ObjectAdapter.Functions.getObject());
+        final List<Object> filteredObjects =
+                _Lists.transform(visibleAdapters, ObjectAdapter.Functions.getObject());
 
         final ObjectSpecification parameterSpec = getSpecification(parameterType);
         return CollectionUtils.getCollectionAsObjectArray(filteredObjects, parameterSpec, getAdapterManager());

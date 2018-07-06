@@ -28,8 +28,8 @@ import org.apache.isis.applib.fixturescripts.PersonaWithBuilderScript;
 import org.apache.isis.commons.internal.collections._Lists;
 
 public class PersonaEnumPersistAll<E extends Enum<E> & PersonaWithBuilderScript<T,F>, T, F extends BuilderScriptAbstract<T,F>>
-        extends FixtureScript
-        implements FixtureScriptWithExecutionStrategy {
+extends FixtureScript
+implements FixtureScriptWithExecutionStrategy {
 
     private final Class<E> personaEnumClass;
 

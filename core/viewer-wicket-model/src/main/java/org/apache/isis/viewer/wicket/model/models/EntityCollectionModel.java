@@ -59,13 +59,13 @@ import org.apache.wicket.Component;
  * Model representing a collection of entities, either {@link Type#STANDALONE
  * standalone} (eg result of invoking an action) or {@link Type#PARENTED
  * parented} (contents of the collection of an entity).
- * 
+ *
  * <p>
  * So that the model is {@link Serializable}, the {@link ObjectAdapter}s within
  * the collection are stored as {@link ObjectAdapterMemento}s.
  */
 public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> implements LinksProvider,
-        UiHintContainer {
+UiHintContainer {
 
     private static final long serialVersionUID = 1L;
 
@@ -77,7 +77,7 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
     public enum Type {
         /**
          * A simple list of object mementos, eg the result of invoking an action
-         * 
+         *
          * <p>
          * This deals with both persisted and transient objects.
          */
@@ -88,42 +88,42 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
                 final boolean bulkLoad = entityCollectionModel.getPersistenceSession().getConfiguration()
                         .getBoolean(KEY_BULK_LOAD, false);
                 final Iterable<ObjectAdapter> values = bulkLoad
-                                ? loadInBulk(entityCollectionModel)
+                        ? loadInBulk(entityCollectionModel)
                                 : loadOneByOne(entityCollectionModel);
-                return _Lists.newArrayList(values);
+                        return _Lists.newArrayList(values);
             }
 
             private Iterable<ObjectAdapter> loadInBulk(final EntityCollectionModel model) {
 
                 final PersistenceSession persistenceSession = model.getPersistenceSession();
-                
+
                 final List<RootOid> rootOids =
-                		_Lists.transform(model.mementoList, ObjectAdapterMemento.Functions.toOid());
+                        _Lists.transform(model.mementoList, ObjectAdapterMemento.Functions.toOid());
 
                 final Map<RootOid, ObjectAdapter> adaptersByOid = persistenceSession.adaptersFor(rootOids);
                 final Collection<ObjectAdapter> adapterList = adaptersByOid.values();
                 return _NullSafe.stream(adapterList)
-                		.filter(_NullSafe::isPresent)
-                    	.collect(Collectors.toList());
+                        .filter(_NullSafe::isPresent)
+                        .collect(Collectors.toList());
             }
 
             private Iterable<ObjectAdapter> loadOneByOne(final EntityCollectionModel model) {
                 return _NullSafe.stream(model.mementoList)
-                	.map(ObjectAdapterMemento.Functions.fromMemento(
-                                        ConcurrencyChecking.NO_CHECK,
-                                        model.getPersistenceSession(),
-                                        model.getSpecificationLoader()))
-                	.filter(_NullSafe::isPresent)
-                	.collect(Collectors.toList());
+                        .map(ObjectAdapterMemento.Functions.fromMemento(
+                                ConcurrencyChecking.NO_CHECK,
+                                model.getPersistenceSession(),
+                                model.getSpecificationLoader()))
+                        .filter(_NullSafe::isPresent)
+                        .collect(Collectors.toList());
             }
 
             @Override
             void setObject(final EntityCollectionModel entityCollectionModel, final List<ObjectAdapter> list) {
-            	
-            	entityCollectionModel.mementoList = _NullSafe.stream(list)
-	            	.map(ObjectAdapterMemento.Functions.toMemento())
-	            	.filter(_NullSafe::isPresent)
-	            	.collect(Collectors.toList());
+
+                entityCollectionModel.mementoList = _NullSafe.stream(list)
+                        .map(ObjectAdapterMemento.Functions.toMemento())
+                        .filter(_NullSafe::isPresent)
+                        .collect(Collectors.toList());
             }
 
             @Override
@@ -154,14 +154,14 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
         PARENTED {
             @Override
             List<ObjectAdapter> load(final EntityCollectionModel entityCollectionModel) {
-            	
+
                 final ObjectAdapter adapter = entityCollectionModel.getParentObjectAdapterMemento().getObjectAdapter(
                         ConcurrencyChecking.NO_CHECK, entityCollectionModel.getPersistenceSession(),
                         entityCollectionModel.getSpecificationLoader());
-                
+
                 final OneToManyAssociation collection = entityCollectionModel.collectionMemento.getCollection(
                         entityCollectionModel.getSpecificationLoader());
-                
+
                 final ObjectAdapter collectionAsAdapter = collection.get(adapter, InteractionInitiatedBy.USER);
 
                 final List<Object> objectList = asIterable(collectionAsAdapter);
@@ -174,9 +174,9 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
                     Collections.sort(objectList, comparator);
                 }
 
-                final List<ObjectAdapter> adapterList = 
-                		_Lists.transform(objectList, 
-                				ObjectAdapter.Functions.adapterForUsing( entityCollectionModel.getPersistenceSession() )); 
+                final List<ObjectAdapter> adapterList =
+                        _Lists.transform(objectList,
+                                ObjectAdapter.Functions.adapterForUsing( entityCollectionModel.getPersistenceSession() ));
 
                 return adapterList;
             }
@@ -225,7 +225,7 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
 
         public abstract EntityModel.RenderingHint renderingHint();
     }
-    
+
 
     /**
      * Factory.
@@ -233,22 +233,22 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
     public static EntityCollectionModel createStandalone(
             final ObjectAdapter collectionAsAdapter,
             final IsisSessionFactory sessionFactory) {
-    	
-    	final PersistenceSession persistenceSession = sessionFactory.getCurrentSession().getPersistenceSession();
-    	
-    	// dynamically determine the spec of the elements
-        // (ie so a List<Object> can be rendered according to the runtime type of its elements, 
+
+        final PersistenceSession persistenceSession = sessionFactory.getCurrentSession().getPersistenceSession();
+
+        // dynamically determine the spec of the elements
+        // (ie so a List<Object> can be rendered according to the runtime type of its elements,
         // rather than the compile-time type
         final LowestCommonSuperclassFinder lowestCommonSuperclassFinder = new LowestCommonSuperclassFinder();
-    	
-    	final List<ObjectAdapterMemento> mementoList = streamElementsOf(collectionAsAdapter) // pojos
-   	    	.peek(lowestCommonSuperclassFinder::collect)
-   			.map(ObjectAdapterMemento.Functions.fromPojo(persistenceSession))
-	    	.collect(Collectors.toList());
+
+        final List<ObjectAdapterMemento> mementoList = streamElementsOf(collectionAsAdapter) // pojos
+                .peek(lowestCommonSuperclassFinder::collect)
+                .map(ObjectAdapterMemento.Functions.fromPojo(persistenceSession))
+                .collect(Collectors.toList());
 
         final ObjectSpecification elementSpec = lowestCommonSuperclassFinder.getLowestCommonSuperclass()
-        		.map(sessionFactory.getSpecificationLoader()::loadSpecification)
-        		.orElse(collectionAsAdapter.getElementSpecification());
+                .map(sessionFactory.getSpecificationLoader()::loadSpecification)
+                .orElse(collectionAsAdapter.getElementSpecification());
 
         final Class<?> elementType;
         int pageSize = PAGE_SIZE_DEFAULT_FOR_STANDALONE;
@@ -258,17 +258,17 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
         } else {
             elementType = Object.class;
         }
-        
+
         return new EntityCollectionModel(elementType, mementoList, pageSize);
     }
 
     /**
-     * The {@link ActionModel model} of the {@link ObjectAction action} 
+     * The {@link ActionModel model} of the {@link ObjectAction action}
      * that generated this {@link EntityCollectionModel}.
-     * 
+     *
      * <p>
      * Populated only for {@link Type#STANDALONE standalone} collections.
-     * 
+     *
      * @see #setActionHint(ActionModel)
      */
     public ActionModel getActionModelHint() {
@@ -276,7 +276,7 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
     }
     /**
      * Called only for {@link Type#STANDALONE standalone} collections.
-     * 
+     *
      * @see #getActionModelHint()
      */
     public void setActionHint(ActionModel actionModelHint) {
@@ -362,7 +362,7 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
 
         this.toggledMementosList = _Lists.newArrayList();
     }
-    
+
 
     private OneToManyAssociation collectionFor(
             final ObjectAdapterMemento parentObjectAdapterMemento,
@@ -398,11 +398,11 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
     public int getPageSize() {
         return pageSize;
     }
-    
+
     /**
      * The name of the collection (if has an entity, ie, if
      * {@link #isParented() is parented}.)
-     * 
+     *
      * <p>
      * If {@link #isStandalone()}, returns the {@link PluralFacet} of the {@link #getTypeOfSpecification() specification}
      * (eg 'Customers').
@@ -421,7 +421,7 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
     public CollectionLayoutData getLayoutData() {
         return entityModel != null
                 ? entityModel.getCollectionLayoutData()
-                : null;
+                        : null;
     }
 
     @Override
@@ -441,14 +441,14 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
         super.setObject(list);
         type.setObject(this, list);
     }
-    
+
     /**
      * Not API, but to refresh the model list.
      */
     public void setObjectList(ObjectAdapter resultAdapter) {
-    	this.mementoList = streamElementsOf(resultAdapter)
-	        .map(ObjectAdapterMemento.Functions.fromPojo(getPersistenceSession()))
-			.collect(Collectors.toList());
+        this.mementoList = streamElementsOf(resultAdapter)
+                .map(ObjectAdapterMemento.Functions.fromPojo(getPersistenceSession()))
+                .collect(Collectors.toList());
     }
 
     /**
@@ -479,18 +479,18 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
     private static Stream<Object> streamElementsOf(final ObjectAdapter resultAdapter) {
         return _NullSafe.stream(asIterable(resultAdapter));
     }
-    
-    
+
+
     public void toggleSelectionOn(ObjectAdapter selectedAdapter) {
         ObjectAdapterMemento selectedAsMemento = ObjectAdapterMemento.createOrNull(selectedAdapter);
-        
+
         // try to remove; if couldn't, then mustn't have been in there, in which case add.
         boolean removed = toggledMementosList.remove(selectedAsMemento);
         if(!removed) {
             toggledMementosList.add(selectedAsMemento);
         }
     }
-    
+
     public List<ObjectAdapterMemento> getToggleMementosList() {
         return Collections.unmodifiableList(_Lists.newArrayList(this.toggledMementosList));
     }

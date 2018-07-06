@@ -20,42 +20,42 @@ package org.apache.isis.viewer.restfulobjects.applib;
 
 public enum Rel {
 
-    SELF(RelDefinition.IANA, "self"), 
-    DESCRIBEDBY(RelDefinition.IANA, "describedby"), 
-    UP(RelDefinition.IANA,"up"), 
+    SELF(RelDefinition.IANA, "self"),
+    DESCRIBEDBY(RelDefinition.IANA, "describedby"),
+    UP(RelDefinition.IANA,"up"),
     PREVIOUS(RelDefinition.IANA,"previous"),
     NEXT(RelDefinition.IANA,"next"),
-    HELP(RelDefinition.IANA,"help"), 
+    HELP(RelDefinition.IANA,"help"),
     ICON(RelDefinition.IANA,"icon"),
 
     // Restful Objects namespace
-    ACTION(RelDefinition.RO_SPEC, "action"), 
-    ACTION_PARAM(RelDefinition.RO_SPEC, "action-param"), 
-    ADD_TO(RelDefinition.RO_SPEC, "add-to"), 
-    ATTACHMENT(RelDefinition.RO_SPEC, "attachment"), 
+    ACTION(RelDefinition.RO_SPEC, "action"),
+    ACTION_PARAM(RelDefinition.RO_SPEC, "action-param"),
+    ADD_TO(RelDefinition.RO_SPEC, "add-to"),
+    ATTACHMENT(RelDefinition.RO_SPEC, "attachment"),
     CHOICE(RelDefinition.RO_SPEC, "choice"),
-    CLEAR(RelDefinition.RO_SPEC, "clear"), 
-    COLLECTION(RelDefinition.RO_SPEC, "collection"), 
-    DEFAULT(RelDefinition.RO_SPEC, "default"), 
-    DELETE(RelDefinition.RO_SPEC, "delete"), 
-    DETAILS(RelDefinition.RO_SPEC, "details"), 
+    CLEAR(RelDefinition.RO_SPEC, "clear"),
+    COLLECTION(RelDefinition.RO_SPEC, "collection"),
+    DEFAULT(RelDefinition.RO_SPEC, "default"),
+    DELETE(RelDefinition.RO_SPEC, "delete"),
+    DETAILS(RelDefinition.RO_SPEC, "details"),
     DOMAIN_TYPE(RelDefinition.RO_SPEC, "domain-type"),
-    DOMAIN_TYPES(RelDefinition.RO_SPEC, "domain-types"), 
-    ELEMENT(RelDefinition.RO_SPEC, "element"), 
-    ELEMENT_TYPE(RelDefinition.RO_SPEC, "element-type"), 
-    INVOKE(RelDefinition.RO_SPEC, "invoke"), 
-    MODIFY(RelDefinition.RO_SPEC, "modify"), 
-    PERSIST(RelDefinition.RO_SPEC, "persist"), 
-    PROPERTY(RelDefinition.RO_SPEC, "property"), 
-    REMOVE_FROM(RelDefinition.RO_SPEC, "remove-from"), 
-    RETURN_TYPE(RelDefinition.RO_SPEC, "return-type"), 
-    SERVICE(RelDefinition.RO_SPEC, "service"), 
-    SERVICES(RelDefinition.RO_SPEC, "services"), 
-    UPDATE(RelDefinition.RO_SPEC, "update"), 
-    USER(RelDefinition.RO_SPEC, "user"), 
-    VALUE(RelDefinition.RO_SPEC, "value"), 
-    VERSION(RelDefinition.RO_SPEC, "version"), 
-    
+    DOMAIN_TYPES(RelDefinition.RO_SPEC, "domain-types"),
+    ELEMENT(RelDefinition.RO_SPEC, "element"),
+    ELEMENT_TYPE(RelDefinition.RO_SPEC, "element-type"),
+    INVOKE(RelDefinition.RO_SPEC, "invoke"),
+    MODIFY(RelDefinition.RO_SPEC, "modify"),
+    PERSIST(RelDefinition.RO_SPEC, "persist"),
+    PROPERTY(RelDefinition.RO_SPEC, "property"),
+    REMOVE_FROM(RelDefinition.RO_SPEC, "remove-from"),
+    RETURN_TYPE(RelDefinition.RO_SPEC, "return-type"),
+    SERVICE(RelDefinition.RO_SPEC, "service"),
+    SERVICES(RelDefinition.RO_SPEC, "services"),
+    UPDATE(RelDefinition.RO_SPEC, "update"),
+    USER(RelDefinition.RO_SPEC, "user"),
+    VALUE(RelDefinition.RO_SPEC, "value"),
+    VERSION(RelDefinition.RO_SPEC, "version"),
+
 
     // implementation specific
     CONTRIBUTED_BY(RelDefinition.IMPL, "contributed-by"),
@@ -82,9 +82,9 @@ public enum Rel {
      */
     public String andParam(String paramName, String paramValue) {
         return getName() +
-                (relDef.canAddParams() 
-                 ?";" + paramName + "=" + "\"" + paramValue + "\""
-                 :"");
+                (relDef.canAddParams()
+                        ?";" + paramName + "=" + "\"" + paramValue + "\""
+                                :"");
     }
 
     public boolean matches(Rel otherRel) {

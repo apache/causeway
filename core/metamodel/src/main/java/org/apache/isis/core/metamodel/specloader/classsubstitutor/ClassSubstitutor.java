@@ -46,13 +46,13 @@ public class ClassSubstitutor {
         ignore("javassist.util.proxy.MethodHandler");
 
     }
-    
+
 
     // -- getClass(Class)
 
     public Class<?> getClass(final Class<?> cls) {
-    	
-    	if (cls == null) {
+
+        if (cls == null) {
             return null;
         }
 
@@ -82,7 +82,7 @@ public class ClassSubstitutor {
         return cls;
     }
 
-    
+
 
     // -- helpers
 
@@ -118,7 +118,7 @@ public class ClassSubstitutor {
         return classesToIgnore.contains(cls) || classNamesToIgnore.contains(cls.getCanonicalName());
     }
 
-    
+
 
 
 }

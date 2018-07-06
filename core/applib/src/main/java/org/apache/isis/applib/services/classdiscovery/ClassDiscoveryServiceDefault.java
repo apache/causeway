@@ -41,34 +41,34 @@ import org.apache.isis.core.plugins.classdiscovery.ClassDiscoveryPlugin;
  * </p>
  */
 @DomainService(
-		nature = NatureOfService.DOMAIN,
-		menuOrder = "" + Integer.MAX_VALUE
-		)
+        nature = NatureOfService.DOMAIN,
+        menuOrder = "" + Integer.MAX_VALUE
+        )
 public class ClassDiscoveryServiceDefault
-extends AbstractService 
+extends AbstractService
 implements ClassDiscoveryService {
 
-	@Programmatic
-	@Override
-	public <T> Set<Class<? extends T>> findSubTypesOfClasses(Class<T> type, String packageNamePrefix) {
+    @Programmatic
+    @Override
+    public <T> Set<Class<? extends T>> findSubTypesOfClasses(Class<T> type, String packageNamePrefix) {
 
-		if(type == FixtureScript.class) {
-			return getFixtureScriptTypes();
-		}
+        if(type == FixtureScript.class) {
+            return getFixtureScriptTypes();
+        }
 
-		// no appManifest or not asking for FixtureScripts
-		return ClassDiscoveryPlugin.get().discoverFullscan(packageNamePrefix).getSubTypesOf(type);
-	}
+        // no appManifest or not asking for FixtureScripts
+        return ClassDiscoveryPlugin.get().discoverFullscan(packageNamePrefix).getSubTypesOf(type);
+    }
 
-	// -- HELPER
+    // -- HELPER
 
-	private static <T> Set<Class<? extends T>> getFixtureScriptTypes() {
-		Set<?> fixtureScriptTypes = AppManifest.Registry.instance().getFixtureScriptTypes();
-		if (fixtureScriptTypes != null) {
-			return _Casts.uncheckedCast(fixtureScriptTypes);
-		}
-		return Collections.emptySet();
-	}
+    private static <T> Set<Class<? extends T>> getFixtureScriptTypes() {
+        Set<?> fixtureScriptTypes = AppManifest.Registry.instance().getFixtureScriptTypes();
+        if (fixtureScriptTypes != null) {
+            return _Casts.uncheckedCast(fixtureScriptTypes);
+        }
+        return Collections.emptySet();
+    }
 
 
 }

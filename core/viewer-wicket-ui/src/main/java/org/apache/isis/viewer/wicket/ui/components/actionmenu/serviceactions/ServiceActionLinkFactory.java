@@ -42,7 +42,7 @@ class ServiceActionLinkFactory extends ActionLinkFactoryAbstract {
             final ObjectAction objectAction,
             final String linkId,
             final ToggledMementosProvider toggledMementosProviderIfAny) {
-        
+
         ObjectAdapter objectAdapter = this.targetEntityModel.load(ConcurrencyChecking.NO_CHECK);
 
         final AbstractLink link = newLink(linkId, objectAction, toggledMementosProviderIfAny);

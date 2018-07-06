@@ -31,7 +31,7 @@ import org.apache.isis.viewer.wicket.ui.pages.login.WicketSignInPage;
  * A page for self-registering a new user after confirmation of her email account.
  */
 public class RegistrationFormPage extends AccountManagementPageAbstract {
-    
+
     private static final long serialVersionUID = 1L;
 
     @com.google.inject.Inject

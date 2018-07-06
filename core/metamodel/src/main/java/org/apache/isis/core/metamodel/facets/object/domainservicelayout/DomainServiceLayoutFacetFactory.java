@@ -53,29 +53,29 @@ public class DomainServiceLayoutFacetFactory extends FacetFactoryAbstract {
 
         final String domainServiceMenuOrder =
                 domainService != null && !domainService.menuOrder().equals("" + (Integer.MAX_VALUE - 100))
-                        ? domainService.menuOrder()
+                ? domainService.menuOrder()
                         : null;
-        final String domainServiceLayoutMenuOrder =domainServiceLayouts.stream()
-                .map(DomainServiceLayout::menuOrder)
-                .filter(menuOrder -> !menuOrder.equals("" + (Integer.MAX_VALUE - 100)))
-                .findFirst()
-                .orElse(null);
+                final String domainServiceLayoutMenuOrder =domainServiceLayouts.stream()
+                        .map(DomainServiceLayout::menuOrder)
+                        .filter(menuOrder -> !menuOrder.equals("" + (Integer.MAX_VALUE - 100)))
+                        .findFirst()
+                        .orElse(null);
 
-        final String menuOrder = DomainServiceMenuOrder.minimumOf(domainServiceLayoutMenuOrder, domainServiceMenuOrder);
+                final String menuOrder = DomainServiceMenuOrder.minimumOf(domainServiceLayoutMenuOrder, domainServiceMenuOrder);
 
-        DomainServiceLayout.MenuBar menuBar =
-                domainServiceLayouts.stream()
-                    .map(DomainServiceLayout::menuBar)
-                    .filter(mb -> mb != DomainServiceLayout.MenuBar.NOT_SPECIFIED)
-                    .findFirst()
-                    .orElse(DomainServiceLayout.MenuBar.PRIMARY);
+                DomainServiceLayout.MenuBar menuBar =
+                        domainServiceLayouts.stream()
+                        .map(DomainServiceLayout::menuBar)
+                        .filter(mb -> mb != DomainServiceLayout.MenuBar.NOT_SPECIFIED)
+                        .findFirst()
+                        .orElse(DomainServiceLayout.MenuBar.PRIMARY);
 
-        FacetUtil.addFacet(
-                new DomainServiceLayoutFacetAnnotation(
-                        facetHolder,
-                        menuBar, menuOrder));
+                FacetUtil.addFacet(
+                        new DomainServiceLayoutFacetAnnotation(
+                                facetHolder,
+                                menuBar, menuOrder));
 
-        FacetUtil.addFacet(NamedFacetForDomainServiceLayoutAnnotation.create(domainServiceLayouts, facetHolder));
+                FacetUtil.addFacet(NamedFacetForDomainServiceLayoutAnnotation.create(domainServiceLayouts, facetHolder));
     }
 
     private static String coalesce(final String... reasons) {

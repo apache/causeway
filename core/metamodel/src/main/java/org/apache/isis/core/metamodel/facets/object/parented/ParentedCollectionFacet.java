@@ -27,7 +27,7 @@ import org.apache.isis.core.metamodel.facets.MarkerFacet;
 /**
  * Indicates that this class is parented, that is, wholly contained within a
  * larger object.
- * 
+ *
  * <p>
  * There is (now) only one class of object that is parented, namely internal collections.
  *

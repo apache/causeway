@@ -23,7 +23,7 @@ import org.apache.isis.applib.annotation.*;
 @DomainObject(
         nature = Nature.VIEW_MODEL,
         objectType = "isisApplib.FixtureResult"
-)
+        )
 @ViewModelLayout(paged=500)
 public class FixtureResult {
 
@@ -42,7 +42,7 @@ public class FixtureResult {
         this.fixtureScriptClassName = fixtureScriptClassName;
     }
 
-    
+
 
     // -- fixtureScriptQualifiedName (programmatic)
 
@@ -57,7 +57,7 @@ public class FixtureResult {
         this.fixtureScriptQualifiedName = fixtureScriptQualifiedName;
     }
 
-    
+
 
     // -- key (property)
 
@@ -73,7 +73,7 @@ public class FixtureResult {
         this.key = key;
     }
 
-    
+
 
     // -- object (property)
 
@@ -89,7 +89,7 @@ public class FixtureResult {
         this.object = object;
     }
 
-    
+
 
     // -- className (derived property)
 
@@ -100,13 +100,13 @@ public class FixtureResult {
         return object != null? object.getClass().getName(): null;
     }
 
-    
+
 
     // -- injected services
 
     @javax.inject.Inject
     FixtureScripts fixtureScripts;
 
-    
+
 
 }

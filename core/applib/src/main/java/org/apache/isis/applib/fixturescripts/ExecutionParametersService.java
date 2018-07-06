@@ -37,7 +37,7 @@ import org.apache.isis.applib.annotation.Programmatic;
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
-)
+        )
 public class ExecutionParametersService {
 
     @Programmatic

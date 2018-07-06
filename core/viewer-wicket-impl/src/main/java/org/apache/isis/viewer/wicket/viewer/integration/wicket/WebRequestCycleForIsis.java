@@ -84,7 +84,7 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
 
     @Override
     public synchronized void onBeginRequest(RequestCycle requestCycle) {
-        
+
         if (!Session.exists()) {
             return;
         }
@@ -140,7 +140,7 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
                 // an abort will cause the exception to be thrown.
                 getTransactionManager().endTransaction();
             } catch(Exception ex) {
-                // will redirect to error page after this, 
+                // will redirect to error page after this,
                 // so make sure there is a new transaction ready to go.
                 if(getTransactionManager().getCurrentTransaction().getState().isComplete()) {
                     getTransactionManager().startTransaction();
@@ -152,7 +152,7 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
                         return;
                     }
                 }
-                
+
                 // shouldn't return null given that we're in a session ...
                 PageProvider errorPageProvider = errorPageProviderFor(ex);
                 throw new RestartResponseException(errorPageProvider, RedirectPolicy.ALWAYS_REDIRECT);
@@ -232,10 +232,10 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
         // avoid infinite redirect loops
         RedirectPolicy redirectPolicy = ex instanceof PageExpiredException
                 ? RedirectPolicy.NEVER_REDIRECT
-                : RedirectPolicy.ALWAYS_REDIRECT;
-        return errorPageProvider != null 
+                        : RedirectPolicy.ALWAYS_REDIRECT;
+        return errorPageProvider != null
                 ? new RenderPageRequestHandler(errorPageProvider, redirectPolicy)
-                : null;
+                        : null;
     }
 
     private IRequestHandler respondGracefully(final RequestCycle cycle) {
@@ -253,8 +253,8 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
         final String translatedPrefix = translate("Action no longer available");
         final String message = translatedSuffixIfAny != null
                 ? String.format("%s (%s)", translatedPrefix, translatedSuffixIfAny)
-                : translatedPrefix;
-        getMessageBroker().addMessage(message);
+                        : translatedPrefix;
+                getMessageBroker().addMessage(message);
     }
 
     private String translate(final String text) {
@@ -270,7 +270,7 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
     }
 
     // special case handling for PageExpiredException, otherwise infinite loop
-    private final static ExceptionRecognizerForType pageExpiredExceptionRecognizer = 
+    private final static ExceptionRecognizerForType pageExpiredExceptionRecognizer =
             new ExceptionRecognizerForType(PageExpiredException.class, new Function<String,String>(){
                 @Override
                 public String apply(String input) {
@@ -295,7 +295,7 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
         }
         String recognizedMessageIfAny = new ExceptionRecognizerComposite(exceptionRecognizers).recognize(ex);
         ExceptionModel exceptionModel = ExceptionModel.create(recognizedMessageIfAny, ex);
-        
+
         return isSignedIn() ? new ErrorPage(exceptionModel) : newSignInPage(exceptionModel);
     }
 
@@ -331,7 +331,7 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
 
     /**
      * TODO: this is very hacky...
-     * 
+     *
      * <p>
      * Matters should improve once ISIS-299 gets implemented...
      */
@@ -354,7 +354,7 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
     protected ServicesInjector getServicesInjector() {
         return getIsisSessionFactory().getServicesInjector();
     }
-    
+
     protected IsisTransactionManager getTransactionManager() {
         return getIsisSessionFactory().getCurrentSession().getPersistenceSession().getTransactionManager();
     }
@@ -381,7 +381,7 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
     }
 
 
-    
+
 
     // -- Dependencies (from wicket)
 
@@ -389,6 +389,6 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
         return AuthenticatedWebSession.get();
     }
 
-    
+
 
 }

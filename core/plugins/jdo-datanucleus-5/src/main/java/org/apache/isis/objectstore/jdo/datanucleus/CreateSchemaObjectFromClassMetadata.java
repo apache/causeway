@@ -49,7 +49,7 @@ public class CreateSchemaObjectFromClassMetadata implements MetaDataListener, Da
     protected Map<String, String> getProperties() {
         return properties;
     }
-    
+
 
     // -- loaded (API)
 
@@ -68,10 +68,10 @@ public class CreateSchemaObjectFromClassMetadata implements MetaDataListener, Da
         final String url = properties.get("javax.jdo.option.ConnectionURL");
         final String userName = properties.get("javax.jdo.option.ConnectionUserName");
         final String password = getConnectionPassword();
-        
+
         if(Strings.isNullOrEmpty(driverName) || Strings.isNullOrEmpty(url)) {
-        	LOG.warn("Unable to create schema due to missing configuration javax.jdo.option.Connection*");
-        	return;
+            LOG.warn("Unable to create schema due to missing configuration javax.jdo.option.Connection*");
+            return;
         }
 
         try {
@@ -93,7 +93,7 @@ public class CreateSchemaObjectFromClassMetadata implements MetaDataListener, Da
         }
 
     }
-    
+
 
     // -- skip, exec, schemaNameFor
 
@@ -165,7 +165,7 @@ public class CreateSchemaObjectFromClassMetadata implements MetaDataListener, Da
         }
         return schemaName;
     }
-    
+
 
     // -- helpers: closeSafely, getConnectionPassword
     protected void closeSafely(final AutoCloseable connection) {
@@ -177,8 +177,8 @@ public class CreateSchemaObjectFromClassMetadata implements MetaDataListener, Da
             }
         }
     }
-        
-    // copied and adapted from org.datanucleus.store.AbstractStoreManager.getConnectionPassword()    
+
+    // copied and adapted from org.datanucleus.store.AbstractStoreManager.getConnectionPassword()
     /**
      * Convenience accessor for the password to use for the connection.
      * Will perform decryption if the persistence property "datanucleus.ConnectionPasswordDecrypter" has
@@ -186,7 +186,7 @@ public class CreateSchemaObjectFromClassMetadata implements MetaDataListener, Da
      * @return Password
      */
     private String getConnectionPassword() {
-    	String password = properties.get("javax.jdo.option.ConnectionPassword");
+        String password = properties.get("javax.jdo.option.ConnectionPassword");
         if (password != null)
         {
             String decrypterName = properties.get("datanucleus.ConnectionPasswordDecrypter");
@@ -207,15 +207,15 @@ public class CreateSchemaObjectFromClassMetadata implements MetaDataListener, Da
             }
         }
         return password;
-	}    
-    
+    }
+
 
     // -- injected dependencies
     @Override
     public void setDataNucleusProperties(final Map<String, String> properties) {
         this.properties = properties;
     }
-    
+
 
 
 }

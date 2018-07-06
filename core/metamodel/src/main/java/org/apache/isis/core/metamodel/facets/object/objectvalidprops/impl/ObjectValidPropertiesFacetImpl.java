@@ -31,9 +31,9 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 public class ObjectValidPropertiesFacetImpl extends ObjectValidPropertiesFacetAbstract {
 
     // REVIEW: should provide this rendering context, rather than hardcoding.
-    // the net effect currently is that class members annotated with 
+    // the net effect currently is that class members annotated with
     // @Hidden(where=Where.ANYWHERE) or @Disabled(where=Where.ANYWHERE) will indeed
-    // be hidden/disabled, but will be visible/enabled (perhaps incorrectly) 
+    // be hidden/disabled, but will be visible/enabled (perhaps incorrectly)
     // for any other value for Where
     private final Where where = Where.ANYWHERE;
 

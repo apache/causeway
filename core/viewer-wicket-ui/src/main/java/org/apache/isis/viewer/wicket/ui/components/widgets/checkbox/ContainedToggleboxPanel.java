@@ -38,7 +38,7 @@ public class ContainedToggleboxPanel extends PanelAbstract<Model<Boolean>> {
     private static final String ID_TOGGLEBOX = "togglebox";
 
     private final AjaxCheckBox checkbox;
-//    private final List<Component> componentsToRerender = Lists.newArrayList();
+    //    private final List<Component> componentsToRerender = Lists.newArrayList();
 
     public ContainedToggleboxPanel(final String id) {
         super(id);
@@ -47,7 +47,7 @@ public class ContainedToggleboxPanel extends PanelAbstract<Model<Boolean>> {
         add(markupContainer);
         final Form<Object> form = new Form<Object>(ID_FORM);
         markupContainer.add(form);
-        
+
         checkbox = new AjaxCheckBox(ID_TOGGLEBOX, Model.of(false)) {
             private static final long serialVersionUID = 1L;
 
@@ -60,10 +60,10 @@ public class ContainedToggleboxPanel extends PanelAbstract<Model<Boolean>> {
     }
 
 
-//    public void addComponentToRerender(final Component component) {
-//        component.setOutputMarkupPlaceholderTag(true);
-//        componentsToRerender.add(component);
-//    }
+    //    public void addComponentToRerender(final Component component) {
+    //        component.setOutputMarkupPlaceholderTag(true);
+    //        componentsToRerender.add(component);
+    //    }
 
     /**
      * Hook method for (typically anonymous) subclasses to override.
@@ -72,13 +72,13 @@ public class ContainedToggleboxPanel extends PanelAbstract<Model<Boolean>> {
     }
 
     /**
-     * Programmatic toggling. 
-     * @param target 
+     * Programmatic toggling.
+     * @param target
      */
     public void toggle(AjaxRequestTarget target) {
         checkbox.setModelObject(!checkbox.getModelObject());
         final boolean checkboxValue = checkbox.getModelObject();
         onSubmit(target);
     }
-    
+
 }

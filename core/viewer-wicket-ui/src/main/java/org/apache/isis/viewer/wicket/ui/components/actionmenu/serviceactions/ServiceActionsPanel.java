@@ -65,15 +65,15 @@ public class ServiceActionsPanel extends Panel {
                 listItem.add(topMenu);
                 List<CssMenuItem> subMenuItems = ServiceActionUtil.withSeparators(menuItem);
 
-// fake data to test multi-level menus
-//                if (menuItem.getName().equals("ToDos")) {
-//                    CssMenuItem fakeItem = menuItem.newSubMenuItem("Fake item").build();
-//
-//                    fakeItem.newSubMenuItem("Fake item 1").link(new ExternalLink("menuLink", "http://abv.bg")).build();
-//                    CssMenuItem fakeMenu12 = fakeItem.newSubMenuItem("Fake item 2").link(new ExternalLink("menuLink", "http://google.com")).build();
-//
-//                    fakeMenu12.newSubMenuItem("Fake item 2.1").link(new ExternalLink("menuLink", "http://web.de")).build();
-//                }
+                // fake data to test multi-level menus
+                //                if (menuItem.getName().equals("ToDos")) {
+                //                    CssMenuItem fakeItem = menuItem.newSubMenuItem("Fake item").build();
+                //
+                //                    fakeItem.newSubMenuItem("Fake item 1").link(new ExternalLink("menuLink", "http://abv.bg")).build();
+                //                    CssMenuItem fakeMenu12 = fakeItem.newSubMenuItem("Fake item 2").link(new ExternalLink("menuLink", "http://google.com")).build();
+                //
+                //                    fakeMenu12.newSubMenuItem("Fake item 2.1").link(new ExternalLink("menuLink", "http://web.de")).build();
+                //                }
 
                 ListView<CssMenuItem> subMenuItemsView = new ListView<CssMenuItem>("subMenuItems", subMenuItems) {
                     @Override
@@ -93,31 +93,31 @@ public class ServiceActionsPanel extends Panel {
                 final List<CssMenuItem> childItems = menuItem.getSubMenuItems();
                 final String cssForServices = Joiner.on(" ").join(
                         FluentIterable.from(childItems)
-                                .transform(new Function<CssMenuItem, String>() {
-                                    @Nullable @Override public String apply(final CssMenuItem input) {
-                                        final String actionIdentifier = input.getActionIdentifier();
-                                        if (actionIdentifier != null) {
-                                            // busrules-busrulesobjects-findbyname
-                                            final String actionId = CssClassAppender.asCssStyle(actionIdentifier);
-                                            final int i = actionId.lastIndexOf("-");
-                                            // busrules-busrulesobjects
-                                            return i == -1 ? actionId : actionId.substring(0, i);
-                                        } else {
-                                            return null;
-                                        }
-                                    }
-                                })
-                                .filter(new Predicate<String>() {
-                                    @Override public boolean apply(@Nullable final String input) {
-                                        return input != null;
-                                    }
-                                })
-                                .transform(new Function<String, String>() {
-                                    @Override public String apply(final String input) {
-                                        return "isis-" + input;
-                                    }
-                                })
-                                .toSet());
+                        .transform(new Function<CssMenuItem, String>() {
+                            @Nullable @Override public String apply(final CssMenuItem input) {
+                                final String actionIdentifier = input.getActionIdentifier();
+                                if (actionIdentifier != null) {
+                                    // busrules-busrulesobjects-findbyname
+                                    final String actionId = CssClassAppender.asCssStyle(actionIdentifier);
+                                    final int i = actionId.lastIndexOf("-");
+                                    // busrules-busrulesobjects
+                                    return i == -1 ? actionId : actionId.substring(0, i);
+                                } else {
+                                    return null;
+                                }
+                            }
+                        })
+                        .filter(new Predicate<String>() {
+                            @Override public boolean apply(@Nullable final String input) {
+                                return input != null;
+                            }
+                        })
+                        .transform(new Function<String, String>() {
+                            @Override public String apply(final String input) {
+                                return "isis-" + input;
+                            }
+                        })
+                        .toSet());
                 listItem.add(new CssClassAppender(cssForServices));
 
                 topMenu.add(subMenuItemsView);

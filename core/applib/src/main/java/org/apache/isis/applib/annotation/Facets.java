@@ -28,7 +28,7 @@ import java.lang.annotation.Target;
 /**
  * Indicates that the class has additional facets, and specifies the how to
  * obtain the <tt>FacetFactory</tt> to manufacture them.
- * 
+ *
  * <p>
  * At least one named factory (as per {@link #facetFactoryNames()}) or one class
  * factory (as per {@link #facetFactoryClasses()}) should be specified.
@@ -40,7 +40,7 @@ public @interface Facets {
     /**
      * Array of fully qualified names of classes each implementing
      * <tt>org.apache.isis.metamodel.facets.FacetFactory</tt>.
-     * 
+     *
      * <p>
      * Either the array provided by this method or by
      * {@link #facetFactoryClasses()} should be non-empty.
@@ -50,7 +50,7 @@ public @interface Facets {
     /**
      * Array of {@link Class}s, each indicating a class implementing
      * <tt>org.apache.isis.metamodel.facets.FacetFactory</tt>.
-     * 
+     *
      * <p>
      * Either the array provided by this method or by
      * {@link #facetFactoryNames()} should be non-empty.

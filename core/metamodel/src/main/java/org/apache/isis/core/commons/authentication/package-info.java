@@ -18,13 +18,13 @@
  */
 
 /**
- * Defines the {@link org.apache.isis.core.commons.authentication.AuthenticationSession} 
+ * Defines the {@link org.apache.isis.core.commons.authentication.AuthenticationSession}
  * interface that represent a user's session identifier once they have logged on.
- * 
+ *
  * <p>
  * The {@link org.apache.isis.core.commons.authentication.AuthenticationSession}
  * broadly corresponds to the <tt>UserMemento</tt> and <tt>RoleMemento</tt>
- * that are defined in the applib.  An {@link org.apache.isis.core.commons.authentication.AuthenticationSession} 
+ * that are defined in the applib.  An {@link org.apache.isis.core.commons.authentication.AuthenticationSession}
  * is required in order to interact with the rest of the framework.
  */
 package org.apache.isis.core.commons.authentication;

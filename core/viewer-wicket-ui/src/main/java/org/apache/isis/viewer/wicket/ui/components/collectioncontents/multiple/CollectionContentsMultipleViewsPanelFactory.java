@@ -35,7 +35,7 @@ public class CollectionContentsMultipleViewsPanelFactory extends ComponentFactor
     private static final long serialVersionUID = 1L;
 
     public CollectionContentsMultipleViewsPanelFactory() {
-        super(ComponentType.COLLECTION_CONTENTS, 
+        super(ComponentType.COLLECTION_CONTENTS,
                 CollectionContentsMultipleViewsPanel.class);
     }
 

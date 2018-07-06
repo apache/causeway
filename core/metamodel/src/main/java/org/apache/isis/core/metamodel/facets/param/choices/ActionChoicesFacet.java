@@ -25,7 +25,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 
 /**
  * Obtain choices for each of the parameters of the action.
- * 
+ *
  * <p>
  * In the standard Apache Isis Programming Model, corresponds to invoking the
  * <tt>choicesXxx</tt> support method for an action.
