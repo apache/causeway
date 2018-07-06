@@ -33,62 +33,62 @@ import org.apache.isis.core.runtime.system.session.IsisSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
 /**
- * Provides static access to current context's singletons 
- * {@link MetaModelInvalidException} and {@link IsisSessionFactory}.  
+ * Provides static access to current context's singletons
+ * {@link MetaModelInvalidException} and {@link IsisSessionFactory}.
  */
 public interface IsisContext {
 
-	/**
-	 * Populated only if the meta-model was found to be invalid.
-	 * @return null, if there is none
-	 */
-	public static MetaModelInvalidException getMetaModelInvalidExceptionIfAny() {
-		return _Context.getIfAny(MetaModelInvalidException.class);
-	}
-
-	/**
-	 * 
-	 * @return Isis's session factory
-	 * @throws IllegalStateException if IsisSessionFactory not initialized
-	 */
-	// Implementation Note: Populated only by {@link IsisSessionFactoryBuilder}.
-	public static IsisSessionFactory getSessionFactory() {
-		return _Context.getOrThrow(
-				IsisSessionFactory.class, 
-				()->new IllegalStateException(
-						"internal error: should have been populated by IsisSessionFactoryBuilder") );
-	}
-
-	/**
-	 * 
-	 * @return Isis's default class loader
-	 */
-	public static ClassLoader getClassLoader() {
-		return _Context.getDefaultClassLoader();
-	}
-	
-	// -- LIFE-CYCLING
-    
     /**
-     * Destroys this context and clears any state associated with it. 
-     * It marks the end of IsisContext's life-cycle. Subsequent calls have no effect. 
+     * Populated only if the meta-model was found to be invalid.
+     * @return null, if there is none
+     */
+    public static MetaModelInvalidException getMetaModelInvalidExceptionIfAny() {
+        return _Context.getIfAny(MetaModelInvalidException.class);
+    }
+
+    /**
+     *
+     * @return Isis's session factory
+     * @throws IllegalStateException if IsisSessionFactory not initialized
+     */
+    // Implementation Note: Populated only by {@link IsisSessionFactoryBuilder}.
+    public static IsisSessionFactory getSessionFactory() {
+        return _Context.getOrThrow(
+                IsisSessionFactory.class,
+                ()->new IllegalStateException(
+                        "internal error: should have been populated by IsisSessionFactoryBuilder") );
+    }
+
+    /**
+     *
+     * @return Isis's default class loader
+     */
+    public static ClassLoader getClassLoader() {
+        return _Context.getDefaultClassLoader();
+    }
+
+    // -- LIFE-CYCLING
+
+    /**
+     * Destroys this context and clears any state associated with it.
+     * It marks the end of IsisContext's life-cycle. Subsequent calls have no effect.
      */
     public static void clear() {
-    	_Context.clear();
-    	resetLogging();
+        _Context.clear();
+        resetLogging();
     }
-    
+
     // -- CONVENIENT SHORTCUTS
-    
+
     /**
      * @return framework's current PersistenceSession (if any)
      * @throws IllegalStateException if IsisSessionFactory not initialized
      */
     public static Optional<PersistenceSession> getPersistenceSession() {
         return Optional.ofNullable(getSessionFactory().getCurrentSession())
-        		.map(IsisSession::getPersistenceSession);
+                .map(IsisSession::getPersistenceSession);
     }
-    
+
     /**
      * @return framework's IsisConfiguration
      * @throws IllegalStateException if IsisSessionFactory not initialized
@@ -112,43 +112,43 @@ public interface IsisContext {
     public static ServicesInjector getServicesInjector() {
         return getSessionFactory().getServicesInjector();
     }
-    
+
     public static void dumpConfig() {
 
-    	final IsisConfiguration configuration;
-    	try {
-    		configuration = getConfiguration();	
-    	} catch (Exception e) {
-    		// ignore
-    		return;
-    	}
-    	
-		final Map<String, String> map = new TreeMap<>(configuration.asMap());
+        final IsisConfiguration configuration;
+        try {
+            configuration = getConfiguration();
+        } catch (Exception e) {
+            // ignore
+            return;
+        }
 
-		System.out.println("=============================================");
-		System.out.println("=                ISIS 2.0.0                 =");
-		System.out.println("=============================================");
-		map.forEach((k,v)->{
-			System.out.println(k+" -> "+v);
-		});
-		System.out.println("=============================================");
-	}
+        final Map<String, String> map = new TreeMap<>(configuration.asMap());
 
-	// -- HELPER
+        System.out.println("=============================================");
+        System.out.println("=                ISIS 2.0.0                 =");
+        System.out.println("=============================================");
+        map.forEach((k,v)->{
+            System.out.println(k+" -> "+v);
+        });
+        System.out.println("=============================================");
+    }
 
-	/**
-	 * TODO [andi-huber] not sure if required, initial idea was to force log4j
-	 * re-configuration on an undeploy/deploy cycle
-	 */
-	static void resetLogging() {
-		try {
-			org.apache.log4j.BasicConfigurator.resetConfiguration();
-			org.apache.log4j.Logger.getRootLogger().removeAllAppenders();
-		} catch (Exception e) {
-			// at least we tried
-		}
-	}
-	
-	
+    // -- HELPER
+
+    /**
+     * TODO [andi-huber] not sure if required, initial idea was to force log4j
+     * re-configuration on an undeploy/deploy cycle
+     */
+    static void resetLogging() {
+        try {
+            org.apache.log4j.BasicConfigurator.resetConfiguration();
+            org.apache.log4j.Logger.getRootLogger().removeAllAppenders();
+        } catch (Exception e) {
+            // at least we tried
+        }
+    }
+
+
 
 }

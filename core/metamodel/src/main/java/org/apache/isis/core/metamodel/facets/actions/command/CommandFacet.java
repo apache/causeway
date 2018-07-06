@@ -29,7 +29,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 /**
  * Indicates that details of the action should be available as a
  * {@link Command} object, if possible.
- * 
+ *
  * <p>
  * In the standard Apache Isis Programming Model, corresponds to annotating the
  * action method using <tt>@Command</tt>.
@@ -37,16 +37,16 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 public interface CommandFacet extends Facet {
 
     public CommandPersistence persistence();
-    
+
     public CommandExecuteIn executeIn();
-    
+
     /**
      * Indicates that the action to which this {@link Facet} is
      * attached should <i>not</i> be treated as an action.
-     * 
+     *
      * <p>
-     * Exists to allow implementations that configure all actions to be treated as 
-     * commands, but which can then be disabled for selected actions (eg using 
+     * Exists to allow implementations that configure all actions to be treated as
+     * commands, but which can then be disabled for selected actions (eg using
      * {@link Action#command()}).
      */
     public boolean isDisabled();

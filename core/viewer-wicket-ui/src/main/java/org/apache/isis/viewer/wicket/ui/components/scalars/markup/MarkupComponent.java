@@ -28,48 +28,48 @@ import org.apache.wicket.markup.parser.XmlTag.TagType;
 import org.apache.wicket.model.IModel;
 
 public class MarkupComponent extends WebComponent {
-	
-	private static final long serialVersionUID = 1L;
 
-	public MarkupComponent(final String id, IModel<?> model){
-		super(id, model);
-	}
+    private static final long serialVersionUID = 1L;
 
-	@Override
-	public void onComponentTagBody(final MarkupStream markupStream, final ComponentTag openTag){
-		replaceComponentTagBody(markupStream, openTag, extractHtmlOrElse(getDefaultModelObject(), ""));
-	}
+    public MarkupComponent(final String id, IModel<?> model){
+        super(id, model);
+    }
 
-	@Override
-	protected void onComponentTag(ComponentTag tag)	{
-		super.onComponentTag(tag);
-		tag.setType(TagType.OPEN);
-	}
-	
-	// -- HELPER
-	
-	private CharSequence extractHtmlOrElse(Object modelObject, final String fallback) {
-		
-		if(modelObject==null) {
-			return fallback;
-		}
-		
-		if(modelObject instanceof ObjectAdapter) {
-			
-			final ObjectAdapter objAdapter = (ObjectAdapter) modelObject;
-			
-			if(objAdapter.getObject()==null)
-				return fallback;
-			
-			final Object value = objAdapter.getObject();
-			
-			if(!(value instanceof Markup))
-				return fallback;
-			
-			return ((Markup)value).asString();	
-		}
-		
-		return modelObject.toString();
-		
-	}
+    @Override
+    public void onComponentTagBody(final MarkupStream markupStream, final ComponentTag openTag){
+        replaceComponentTagBody(markupStream, openTag, extractHtmlOrElse(getDefaultModelObject(), ""));
+    }
+
+    @Override
+    protected void onComponentTag(ComponentTag tag)	{
+        super.onComponentTag(tag);
+        tag.setType(TagType.OPEN);
+    }
+
+    // -- HELPER
+
+    private CharSequence extractHtmlOrElse(Object modelObject, final String fallback) {
+
+        if(modelObject==null) {
+            return fallback;
+        }
+
+        if(modelObject instanceof ObjectAdapter) {
+
+            final ObjectAdapter objAdapter = (ObjectAdapter) modelObject;
+
+            if(objAdapter.getObject()==null)
+                return fallback;
+
+            final Object value = objAdapter.getObject();
+
+            if(!(value instanceof Markup))
+                return fallback;
+
+            return ((Markup)value).asString();
+        }
+
+        return modelObject.toString();
+
+    }
 }

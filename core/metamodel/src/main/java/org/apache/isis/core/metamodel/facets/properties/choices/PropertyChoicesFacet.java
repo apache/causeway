@@ -26,16 +26,16 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 /**
  * Provides a set of choices for a property.
- * 
+ *
  * <p>
  * Viewers would typically represent this as a drop-down list box for the
  * property.
- * 
+ *
  * <p>
  * In the standard Apache Isis Programming Model, corresponds to the
  * <tt>choicesXxx</tt> supporting method for the property with accessor
  * <tt>getXxx</tt>.
- * 
+ *
  * <p>
  * Note: an alternative mechanism may be to use the <tt>@Bounded</tt> annotation
  * against the referenced class.

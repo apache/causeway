@@ -31,23 +31,23 @@ import org.apache.isis.applib.annotation.Programmatic;
 
 
 /**
- * Service that provides a number of workarounds when using JDO/DataNucleus.<br/><br/> 
- * 
+ * Service that provides a number of workarounds when using JDO/DataNucleus.<br/><br/>
+ *
  * 1.x to 2.x Migration Notes: JDO API version specific query methods have been removed.<br/>
- * Instead you may want to use IsisJdoSupport_v3_1 or IsisJdoSupport_v3_2 as provided by Isis' 
- * core plugins for JDO.  
- * 
+ * Instead you may want to use IsisJdoSupport_v3_1 or IsisJdoSupport_v3_2 as provided by Isis'
+ * core plugins for JDO.
+ *
  */
 public interface IsisJdoSupport {
 
     /**
      * Force a reload (corresponding to the JDO <tt>PersistenceManager</tt>'s <tt>refresh()</tt> method)
      * of a domain objects.
-     * 
+     *
      * <p>
-     * In fact, this may just reset the lazy-load state of the domain object, but the effect is the same: 
+     * In fact, this may just reset the lazy-load state of the domain object, but the effect is the same:
      * to cause the object's state to be reloaded from the database.
-     * 
+     *
      * <p>
      * The particular example that led to this method being added was a 1:m bidirectional relationship,
      * analogous to <tt>Customer <-> * Order</tt>.  Persisting the child <tt>Order</tt> object did not cause
@@ -57,10 +57,10 @@ public interface IsisJdoSupport {
      */
     @Programmatic
     <T> T refresh(T domainObject);
-    
+
     @Programmatic
     void ensureLoaded(Collection<?> collectionOfDomainObjects);
-    
+
     @Programmatic
     PersistenceManager getJdoPersistenceManager();
 
@@ -72,18 +72,18 @@ public interface IsisJdoSupport {
 
     /**
      * Force the deletion of all instances of the specified class.
-     * 
+     *
      * <p>
      * Note: this is intended primarily for testing purposes, eg clearing existing data as part of
      * installing fixtures.  It will generate a <tt>SQL DELETE</tt> for each instance.  To perform
-     * a bulk deletion with a single <tt>SQL DELETE</tt>, use {@link #executeUpdate(String)}.  
-     * 
+     * a bulk deletion with a single <tt>SQL DELETE</tt>, use {@link #executeUpdate(String)}.
+     *
      * <p>
      * Implementation note: It can occasionally be the case that Isis' internal adapter for the domain object is
-     * still in memory.  JDO/DataNucleus seems to bump up the version of the object prior to its deletion, 
+     * still in memory.  JDO/DataNucleus seems to bump up the version of the object prior to its deletion,
      * which under normal circumstances would cause Isis to throw a concurrency exception.  Therefore
      * To prevent this from happening (ie to <i>force</i> the deletion of all instances), concurrency checking
-     * is temporarily disabled while this method is performed. 
+     * is temporarily disabled while this method is performed.
      */
     @Programmatic
     void deleteAll(Class<?>... pcClasses);

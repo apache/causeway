@@ -133,7 +133,7 @@ public class IsisSystemBootstrapper {
         final AppManifest appManifestFromPreviously = isftAppManifest.get();
         return haveSameModules(appManifest, appManifestFromPreviously)
                 ? SystemState.BOOTSTRAPPED_SAME_MODULES
-                : SystemState.BOOTSTRAPPED_DIFFERENT_MODULES;
+                        : SystemState.BOOTSTRAPPED_DIFFERENT_MODULES;
     }
 
     static boolean haveSameModules(
@@ -146,19 +146,19 @@ public class IsisSystemBootstrapper {
 
     private static IsisSystem setupSystem(final AppManifest2 appManifest2) {
 
-        final IsisSystem isft = 
+        final IsisSystem isft =
                 IsisSystem.builder()
-                        .withLoggingAt(org.apache.log4j.Level.INFO)
-                        .with(appManifest2)
-        				.build();
-        
+                .withLoggingAt(org.apache.log4j.Level.INFO)
+                .with(appManifest2)
+                .build();
+
         isft.setUpSystem();
 
         // save both the system and the manifest
         // used to bootstrap the system onto thread-local
         IsisSystem.set(isft);
         isftAppManifest.set(appManifest2);
-        
+
         return isft;
     }
 

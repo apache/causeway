@@ -39,7 +39,7 @@ import images.Images;
 /**
  * Caches images loaded either from the same package as the specified object, or from the <tt>images</tt> package (using the {@link Images} otherwise.
  * class).
- * 
+ *
  * <p>
  * Searches for a fixed set of suffixes: <code>png, gif, jpeg, jpg, svg</code>.
  */
@@ -47,7 +47,7 @@ import images.Images;
 public class ImageResourceCacheClassPath implements ImageResourceCache {
 
     private static final long serialVersionUID = 1L;
-    
+
     private static final List<String> IMAGE_SUFFICES = Arrays.asList("png", "gif", "jpeg", "jpg", "svg");
     private static final String FALLBACK_IMAGE = "Default.png";
 

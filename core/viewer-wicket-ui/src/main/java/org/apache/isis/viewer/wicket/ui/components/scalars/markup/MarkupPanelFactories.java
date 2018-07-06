@@ -33,70 +33,70 @@ import org.apache.wicket.model.IModel;
  * {@link ComponentFactory} for {@link MarkupPanel}.
  */
 public class MarkupPanelFactories {
-	
-	// -- PARENTED
 
-	static class Parented extends ComponentFactoryAbstract {
-		private static final long serialVersionUID = 1L;
+    // -- PARENTED
 
-		public Parented() {
-			super(ComponentType.SCALAR_NAME_AND_VALUE, MarkupPanel.class);
-		}
-		
-		@Override
-		public ApplicationAdvice appliesTo(final IModel<?> model) {
-			if (!(model instanceof ScalarModel))
-				return ApplicationAdvice.DOES_NOT_APPLY;
+    static class Parented extends ComponentFactoryAbstract {
+        private static final long serialVersionUID = 1L;
 
-			final ScalarModel scalarModel = (ScalarModel) model;
+        public Parented() {
+            super(ComponentType.SCALAR_NAME_AND_VALUE, MarkupPanel.class);
+        }
 
-			if(!scalarModel.isScalarTypeAnyOf(org.apache.isis.applib.value.Markup.class)) 
-				return ApplicationAdvice.DOES_NOT_APPLY;
+        @Override
+        public ApplicationAdvice appliesTo(final IModel<?> model) {
+            if (!(model instanceof ScalarModel))
+                return ApplicationAdvice.DOES_NOT_APPLY;
 
-			return appliesIf( !scalarModel.hasChoices() );
-		}
-		
-		@Override
-		public final Component createComponent(final String id, final IModel<?> model) {
-			return new MarkupPanel(id, (ScalarModel) model);
-		}
-	}
-	
-	// -- STANDALONE
+            final ScalarModel scalarModel = (ScalarModel) model;
 
-	static class Standalone extends ComponentFactoryAbstract {
-		private static final long serialVersionUID = 1L;
+            if(!scalarModel.isScalarTypeAnyOf(org.apache.isis.applib.value.Markup.class))
+                return ApplicationAdvice.DOES_NOT_APPLY;
 
-		public Standalone() {
-			super(ComponentType.VALUE, StandaloneMarkupPanel.class);
-		}
-		
-		@Override
-		public ApplicationAdvice appliesTo(final IModel<?> model) {
-			if (!(model instanceof ValueModel))
-				return ApplicationAdvice.DOES_NOT_APPLY;
-			final ValueModel valueModel = (ValueModel) model;
-			final ObjectAdapter adapter = valueModel.getObject();
-			if(adapter==null || adapter.getObject()==null)
-				return ApplicationAdvice.DOES_NOT_APPLY;
+            return appliesIf( !scalarModel.hasChoices() );
+        }
 
-			return appliesIf( adapter.getObject() instanceof Markup );
-		}
-		
-		@Override
-		public final Component createComponent(final String id, final IModel<?> model) {
-			return new StandaloneMarkupPanel(id, (ValueModel) model);
-		}
-	}
+        @Override
+        public final Component createComponent(final String id, final IModel<?> model) {
+            return new MarkupPanel(id, (ScalarModel) model);
+        }
+    }
 
-	// -- CONSTRUCTION
-	
-	public static ComponentFactory parented() {
-		return new Parented();
-	}
-	
-	public static ComponentFactory standalone() {
-		return new Standalone();
-	}
+    // -- STANDALONE
+
+    static class Standalone extends ComponentFactoryAbstract {
+        private static final long serialVersionUID = 1L;
+
+        public Standalone() {
+            super(ComponentType.VALUE, StandaloneMarkupPanel.class);
+        }
+
+        @Override
+        public ApplicationAdvice appliesTo(final IModel<?> model) {
+            if (!(model instanceof ValueModel))
+                return ApplicationAdvice.DOES_NOT_APPLY;
+            final ValueModel valueModel = (ValueModel) model;
+            final ObjectAdapter adapter = valueModel.getObject();
+            if(adapter==null || adapter.getObject()==null)
+                return ApplicationAdvice.DOES_NOT_APPLY;
+
+            return appliesIf( adapter.getObject() instanceof Markup );
+        }
+
+        @Override
+        public final Component createComponent(final String id, final IModel<?> model) {
+            return new StandaloneMarkupPanel(id, (ValueModel) model);
+        }
+    }
+
+    // -- CONSTRUCTION
+
+    public static ComponentFactory parented() {
+        return new Parented();
+    }
+
+    public static ComponentFactory standalone() {
+        return new Standalone();
+    }
 
 }

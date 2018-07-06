@@ -26,20 +26,20 @@ import org.apache.isis.commons.internal.context._Context;
  */
 @Deprecated
 public class ScenarioExecutionScope {
-    
+
     public final static ScenarioExecutionScope UNIT = new ScenarioExecutionScope(ScenarioExecutionForUnit.class);
     public final static ScenarioExecutionScope INTEGRATION = new ScenarioExecutionScope("org.apache.isis.core.integtestsupport.scenarios.ScenarioExecutionForIntegration");
-    
+
     private final Class<? extends ScenarioExecution> scenarioExecutionClass;
 
     public ScenarioExecutionScope(Class<? extends ScenarioExecution> scenarioExecutionClass) {
         this.scenarioExecutionClass = scenarioExecutionClass;
     }
-    
+
     @SuppressWarnings("unchecked")
     public ScenarioExecutionScope(String scenarioExecutionClassName) {
         try {
-            this.scenarioExecutionClass = (Class<? extends ScenarioExecution>) 
+            this.scenarioExecutionClass = (Class<? extends ScenarioExecution>)
                     _Context.loadClass(scenarioExecutionClassName);
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);

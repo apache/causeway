@@ -27,8 +27,8 @@ public class JavaSqlTimeValueFacetUsingSemanticsProviderFactory extends ValueFac
 
     public JavaSqlTimeValueFacetUsingSemanticsProviderFactory() {
         super(); // as per inherited
-                                     // TimeValueSemanticsProvider#facetType
-                                     // (inherited)
+        // TimeValueSemanticsProvider#facetType
+        // (inherited)
     }
 
     @Override

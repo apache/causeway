@@ -33,7 +33,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 public interface ImageResourceCache extends Serializable {
 
     ResourceReference resourceReferenceFor(ObjectAdapter adapter);
-    
+
     ResourceReference resourceReferenceForSpec(ObjectSpecification objectSpecification);
 
 }

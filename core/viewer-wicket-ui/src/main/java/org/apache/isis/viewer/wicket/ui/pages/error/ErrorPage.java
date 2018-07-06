@@ -87,10 +87,10 @@ public class ErrorPage extends PageAbstract {
 
     protected List<String> transform(final List<StackTraceDetail> stackTrace) {
         return Lists.transform(stackTrace, new Function<StackTraceDetail, String>() {
-                    @Nullable @Override public String apply(final StackTraceDetail stackTraceDetail) {
-                        return stackTraceDetail.getLine();
-                    }
-                });
+            @Nullable @Override public String apply(final StackTraceDetail stackTraceDetail) {
+                return stackTraceDetail.getLine();
+            }
+        });
     }
 
 }

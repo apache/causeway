@@ -30,7 +30,7 @@ public class PropertyValidateFacetNone extends PropertyValidateFacetAbstract {
 
     /**
      * Returns <tt>null</tt>, ie property is valid.
-     * 
+     *
      * <p>
      * Subclasses should override as required.
      */

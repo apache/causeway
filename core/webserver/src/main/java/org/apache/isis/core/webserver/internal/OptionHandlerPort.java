@@ -18,7 +18,7 @@
  */
 
 /**
- * 
+ *
  */
 package org.apache.isis.core.webserver.internal;
 

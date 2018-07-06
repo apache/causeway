@@ -49,7 +49,7 @@ public class JdoDatastoreIdentityAnnotationFacetFactory extends FacetFactoryAbst
             return;
         }
         IdGeneratorStrategy strategyAttribute = annotation.strategy();
-        
+
         FacetUtil.addFacet(new JdoDatastoreIdentityFacetAnnotation(
                 strategyAttribute, processClassContext.getFacetHolder()));
         return;

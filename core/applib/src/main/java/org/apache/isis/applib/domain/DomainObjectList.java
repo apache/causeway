@@ -45,31 +45,31 @@ import org.apache.isis.schema.utils.jaxbadapters.PersistentEntitiesAdapter;
                 "elementObjectType",
                 "objects"
         }
-)
+        )
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
         objectType = "isisApplib.DomainObjectList",
         editing = Editing.DISABLED,
         nature = Nature.VIEW_MODEL
-)
+        )
 @DomainObjectLayout(
         titleUiEvent = DomainObjectList.TitleUiEvent.class,
         iconUiEvent = DomainObjectList.IconUiEvent.class,
         cssClassUiEvent = DomainObjectList.CssClassUiEvent.class
-)
+        )
 public class DomainObjectList {
 
     // -- ui event classes
     public static class TitleUiEvent extends IsisApplibModule.TitleUiEvent<DomainObjectList>{ private static final long serialVersionUID = 1L; }
     public static class IconUiEvent extends IsisApplibModule.IconUiEvent<DomainObjectList>{ private static final long serialVersionUID = 1L; }
     public static class CssClassUiEvent extends IsisApplibModule.CssClassUiEvent<DomainObjectList>{ private static final long serialVersionUID = 1L; }
-    
+
 
     // -- domain event classes
     public static abstract class PropertyDomainEvent<T> extends IsisApplibModule.PropertyDomainEvent<DomainObjectList, T> { private static final long serialVersionUID = 1L; }
     public static abstract class CollectionDomainEvent<T> extends IsisApplibModule.CollectionDomainEvent<DomainObjectList, T> { private static final long serialVersionUID = 1L; }
     public static abstract class ActionDomainEvent extends IsisApplibModule.ActionDomainEvent<DomainObjectList> { private static final long serialVersionUID = 1L; }
-    
+
 
     // -- constructors
     public DomainObjectList() {
@@ -86,14 +86,14 @@ public class DomainObjectList {
         this.actionId = actionId;
         this.actionArguments = actionArguments;
     }
-    
+
 
     // -- title
     private String title;
     public String title() {
         return title;
     }
-    
+
 
     // -- property: elementObjectType
     public static class ElementObjectTypeDomainEvent extends PropertyDomainEvent<String> { private static final long serialVersionUID = 1L; }
@@ -102,11 +102,11 @@ public class DomainObjectList {
     @Property(
             domainEvent = ElementObjectTypeDomainEvent.class,
             editing = Editing.DISABLED
-    )
+            )
     public String getElementObjectType() {
         return elementObjectType;
     }
-    
+
 
     // -- property: actionOwningType
     public static class ActionOwningTypeDomainEvent extends PropertyDomainEvent<String> { private static final long serialVersionUID = 1L; }
@@ -117,11 +117,11 @@ public class DomainObjectList {
             domainEvent = ActionOwningTypeDomainEvent.class,
             optionality = Optionality.OPTIONAL,
             editing = Editing.DISABLED
-    )
+            )
     public String getActionOwningType() {
         return actionOwningType;
     }
-    
+
 
     // -- property: actionId
     public static class ActionIdDomainEvent extends PropertyDomainEvent<String> { private static final long serialVersionUID = 1L; }
@@ -132,11 +132,11 @@ public class DomainObjectList {
             domainEvent = ActionIdDomainEvent.class,
             optionality = Optionality.OPTIONAL,
             editing = Editing.DISABLED
-    )
+            )
     public String getActionId() {
         return actionId;
     }
-    
+
 
     // -- property: actionArguments
     public static class ActionArgumentsDomainEvent extends PropertyDomainEvent<String> { private static final long serialVersionUID = 1L; }
@@ -147,11 +147,11 @@ public class DomainObjectList {
             domainEvent = ActionArgumentsDomainEvent.class,
             optionality = Optionality.OPTIONAL,
             editing = Editing.DISABLED
-    )
+            )
     public String getActionArguments() {
         return actionArguments;
     }
-    
+
 
     // -- collection: objects
     public static class ObjectsDomainEvent extends CollectionDomainEvent<Object> { private static final long serialVersionUID = 1L; }
@@ -162,7 +162,7 @@ public class DomainObjectList {
     @Collection(
             domainEvent = ObjectsDomainEvent.class,
             editing = Editing.DISABLED
-    )
+            )
     public List<Object> getObjects() {
         return objects;
     }
@@ -170,6 +170,6 @@ public class DomainObjectList {
     public void setObjects(final List<Object> objects) {
         this.objects = objects;
     }
-    
+
 
 }

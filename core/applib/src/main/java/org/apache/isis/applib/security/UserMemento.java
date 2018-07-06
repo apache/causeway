@@ -56,14 +56,14 @@ public final class UserMemento {
         this.name = name;
         this.roles.addAll(roles);
     }
-    
+
 
     // -- title
     public String title() {
         return name;
     }
 
-    
+
 
     // -- name, NameType
 
@@ -92,14 +92,14 @@ public final class UserMemento {
 
     }
 
-    
+
 
     // -- isCurrentUser
     /**
      * Determine if the specified name is this user.
-     * 
+     *
      * <p>
-     * 
+     *
      * @return true if the names match (is case sensitive).
      */
     public boolean isCurrentUser(final String userName) {
@@ -109,7 +109,7 @@ public final class UserMemento {
         return name.equals(userName);
     }
 
-    
+
 
     // -- roles
     private final List<RoleMemento> roles = new ArrayList<RoleMemento>();
@@ -124,8 +124,8 @@ public final class UserMemento {
 
     /**
      * Determines if the user fulfills the specified role.
-     *  
-     * @param role  the role to search for, regular expressions are allowed 
+     *
+     * @param role  the role to search for, regular expressions are allowed
      */
     public boolean hasRole(final RoleMemento role) {
         return hasRole(role.getName());
@@ -144,7 +144,7 @@ public final class UserMemento {
         return false;
     }
 
-    
+
 
     // -- toString
     @Override
@@ -156,6 +156,6 @@ public final class UserMemento {
         return "User [name=" + getName() + ",roles=" + buf.toString() + "]";
     }
 
-    
+
 
 }

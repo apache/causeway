@@ -40,7 +40,7 @@ public class TypeOfFacetOnCollectionFromCollectionAnnotation extends TypeOfFacet
                 .filter(typeOf -> typeOf != Object.class)
                 .findFirst()
                 .map(typeOf ->
-                        new TypeOfFacetOnCollectionFromCollectionAnnotation(typeOf, facetHolder, specificationLoader))
+                new TypeOfFacetOnCollectionFromCollectionAnnotation(typeOf, facetHolder, specificationLoader))
                 .orElse(null);
     }
 

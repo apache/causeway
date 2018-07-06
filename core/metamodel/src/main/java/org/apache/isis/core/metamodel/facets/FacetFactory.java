@@ -77,6 +77,7 @@ public interface FacetFactory {
          *     This isn't necessarily the same as the {@link java.lang.reflect.Method#getDeclaringClass() declaring class} of the {@link #getMethod() method}; the method might have been inherited.
          * </p>
          */
+        @Override
         public Class<?> getCls() {
             return super.getCls();
         }
@@ -115,15 +116,15 @@ public interface FacetFactory {
     /**
      * The {@link FeatureType feature type}s that this facet factory can create
      * {@link Facet}s for.
-     * 
+     *
      * <p>
      * Used by the Java5 Reflector's <tt>ProgrammingModel</tt> to reduce the
      * number of {@link FacetFactory factory}s that are queried when building up
      * the meta-model.
      */
     List<FeatureType> getFeatureTypes();
-    
-    
+
+
     // //////////////////////////////////////
     // process class
     // //////////////////////////////////////
@@ -166,7 +167,7 @@ public interface FacetFactory {
      * Process the class, and return the correctly setup annotation if present.
      */
     void process(ProcessClassContext processClassContext);
-    
+
     // //////////////////////////////////////
     // process method
     // //////////////////////////////////////

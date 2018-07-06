@@ -70,7 +70,7 @@ import org.apache.isis.core.wrapper.proxy.ProxyCreator;
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
-)
+        )
 public class WrapperFactoryDefault implements WrapperFactory {
 
     private final List<InteractionListener> listeners = new ArrayList<InteractionListener>();
@@ -304,8 +304,8 @@ public class WrapperFactoryDefault implements WrapperFactory {
     @javax.inject.Inject
     AuthenticationSessionProvider authenticationSessionProvider;
 
-//    @javax.inject.Inject
-//    SpecificationLoader specificationLoader;
+    //    @javax.inject.Inject
+    //    SpecificationLoader specificationLoader;
 
     @javax.inject.Inject
     PersistenceSessionServiceInternal persistenceSessionServiceInternal;

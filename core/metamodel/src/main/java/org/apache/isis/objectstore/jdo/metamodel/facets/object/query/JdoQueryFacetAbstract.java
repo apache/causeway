@@ -31,7 +31,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 
 public class JdoQueryFacetAbstract extends FacetAbstract implements
-        JdoQueryFacet {
+JdoQueryFacet {
 
     public static Class<? extends Facet> type() {
         return JdoQueryFacet.class;
@@ -50,6 +50,7 @@ public class JdoQueryFacetAbstract extends FacetAbstract implements
         }
     }
 
+    @Override
     public List<JdoNamedQuery> getNamedQueries() {
         return Collections.unmodifiableList(namedQueries);
     }

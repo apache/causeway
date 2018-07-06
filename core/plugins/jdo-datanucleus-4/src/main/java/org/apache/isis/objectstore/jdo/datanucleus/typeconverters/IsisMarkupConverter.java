@@ -30,14 +30,14 @@ public class IsisMarkupConverter implements TypeConverter<Markup, String>{
     public String toDatastoreType(final Markup memberValue) {
         return memberValue != null
                 ? memberValue.asString()
-                : null;
+                        : null;
     }
 
     @Override
     public Markup toMemberType(final String datastoreValue) {
         return datastoreValue != null
                 ? new Markup(datastoreValue)
-                : null;
+                        : null;
     }
 
 }

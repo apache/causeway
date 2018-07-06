@@ -27,7 +27,7 @@ import org.apache.isis.core.runtime.authentication.standard.AuthenticationManage
 
 /**
  * For testing purposes, request corresponding to a {@link LogonFixture}.
- * 
+ *
  * <p>
  * Understood directly by {@link AuthenticationManagerStandard}.
  */

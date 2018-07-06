@@ -93,7 +93,7 @@ public class IsisSessionFactoryBuilder {
         return appManifest;
     }
 
-    
+
 
     // -- buildSessionFactory
 
@@ -135,7 +135,7 @@ public class IsisSessionFactoryBuilder {
                     DeploymentCategoryProvider.class, new DeploymentCategoryProviderDefault(deploymentCategory));
             servicesInjector.addFallbackIfRequired(ConfigurationServiceInternal.class, configuration);
 
-            
+
             // fixtureScripts
             servicesInjector.addFallbackIfRequired(FixtureScripts.class, new FixtureScriptsDefault());
 
@@ -221,7 +221,7 @@ public class IsisSessionFactoryBuilder {
                             _Context.putSingleton(MetaModelInvalidException.class, ex);
                         }
                     }
-            );
+                    );
 
 
         } catch (final IsisSystemException ex) {
@@ -236,13 +236,13 @@ public class IsisSessionFactoryBuilder {
         return ListExtensions.filtered(Arrays.asList(possibleRefiners), MetaModelRefiner.class);
     }
 
-    
+
 
     // region > metaModel validity
     public boolean isMetaModelValid() {
         return IsisContext.getMetaModelInvalidExceptionIfAny() == null;
     }
-    
+
 
 
 }

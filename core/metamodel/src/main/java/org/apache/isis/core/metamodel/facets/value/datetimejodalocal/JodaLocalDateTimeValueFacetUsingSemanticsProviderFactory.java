@@ -27,8 +27,8 @@ import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSem
 public class JodaLocalDateTimeValueFacetUsingSemanticsProviderFactory extends ValueFacetUsingSemanticsProviderFactory<LocalDateTime> {
 
     public JodaLocalDateTimeValueFacetUsingSemanticsProviderFactory() {
-     // as per inherited DateTimeValueSemanticsProvider#facetType
-        super(); 
+        // as per inherited DateTimeValueSemanticsProvider#facetType
+        super();
     }
 
     @Override

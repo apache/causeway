@@ -25,47 +25,47 @@ import java.io.Writer;
 /**
  * <h1>- internal use only -</h1>
  * <p>
- * A collection of commonly used constants. 
+ * A collection of commonly used constants.
  * </p>
  * <p>
- * <b>WARNING</b>: Do <b>NOT</b> use any of the classes provided by this package! <br/> 
+ * <b>WARNING</b>: Do <b>NOT</b> use any of the classes provided by this package! <br/>
  * These may be changed or removed without notice!
  * </p>
- * 
+ *
  * @since 2.0.0
  */
 public final class _Constants {
 
-	private _Constants(){}
-	
-	/**
-	 * Convenient e.g. for reflective invocation
-	 */
-	public static final Object[] emptyObjects = new Object[0];
+    private _Constants(){}
 
-	/**
-	 * Convenient e.g. for reflective invocation
-	 */
-	@SuppressWarnings("rawtypes")
-	public static final Class[] emptyClasses = new Class[0];
-	
-	/**
-	 * Convenient e.g. for toArray conversions
-	 */
-	public static final String[] emptyStringArray = new String[0];
-	
-	/**
-	 * empty array of byte
-	 */
-	public static final byte[] emptyBytes = new byte[0];
+    /**
+     * Convenient e.g. for reflective invocation
+     */
+    public static final Object[] emptyObjects = new Object[0];
 
-	/**
-	 * writer that does nothing
-	 */
-	public static final Writer nopWriter = new Writer() {
-			@Override public void write(char[] cbuf, int off, int len) throws IOException { }
-			@Override public void flush() throws IOException { }
-			@Override public void close() throws IOException { }
-	};
-	
+    /**
+     * Convenient e.g. for reflective invocation
+     */
+    @SuppressWarnings("rawtypes")
+    public static final Class[] emptyClasses = new Class[0];
+
+    /**
+     * Convenient e.g. for toArray conversions
+     */
+    public static final String[] emptyStringArray = new String[0];
+
+    /**
+     * empty array of byte
+     */
+    public static final byte[] emptyBytes = new byte[0];
+
+    /**
+     * writer that does nothing
+     */
+    public static final Writer nopWriter = new Writer() {
+        @Override public void write(char[] cbuf, int off, int len) throws IOException { }
+        @Override public void flush() throws IOException { }
+        @Override public void close() throws IOException { }
+    };
+
 }

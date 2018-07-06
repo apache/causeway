@@ -44,10 +44,10 @@ import org.apache.isis.commons.internal.collections._Lists;
 @XmlType(
         name = "tab"
         , propOrder = {
-            "name",
-            "rows"
+                "name",
+                "rows"
         }
-)
+        )
 public class BS3Tab extends BS3ElementAbstract implements BS3RowOwner {
 
     private static final long serialVersionUID = 1L;
@@ -66,6 +66,7 @@ public class BS3Tab extends BS3ElementAbstract implements BS3RowOwner {
     private List<BS3Row> rows = _Lists.newArrayList();
 
     // no wrapper
+    @Override
     @XmlElement(name = "row", required = true)
     public List<BS3Row> getRows() {
         return rows;

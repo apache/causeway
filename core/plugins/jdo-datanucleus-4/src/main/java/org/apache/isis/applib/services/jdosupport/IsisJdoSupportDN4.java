@@ -61,9 +61,9 @@ import com.google.common.collect.Maps;
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
-)
+        )
 public class IsisJdoSupportDN4 implements IsisJdoSupport_v3_1 {
-    
+
     @Programmatic
     @Override
     public <T> T refresh(final T domainObject) {
@@ -88,7 +88,7 @@ public class IsisJdoSupportDN4 implements IsisJdoSupport_v3_1 {
             final Object connectionObj = dataStoreConnection.getNativeConnection();
             if(!(connectionObj instanceof java.sql.Connection)) {
                 return null;
-            } 
+            }
             final java.sql.Connection connection = (java.sql.Connection) connectionObj;
             return executeSql(connection, sql);
         } finally {
@@ -104,7 +104,7 @@ public class IsisJdoSupportDN4 implements IsisJdoSupport_v3_1 {
             final Object connectionObj = dataStoreConnection.getNativeConnection();
             if(!(connectionObj instanceof java.sql.Connection)) {
                 return null;
-            } 
+            }
             final java.sql.Connection connection = (java.sql.Connection) connectionObj;
             return executeUpdate(connection, sql);
         } finally {
@@ -127,7 +127,7 @@ public class IsisJdoSupportDN4 implements IsisJdoSupport_v3_1 {
                 }
                 rows.add(row);
             }
-            
+
         } catch (final SQLException ex) {
             throw new ObjectPersistenceException("Failed to executeSql: " + sql, ex);
         }
@@ -136,10 +136,10 @@ public class IsisJdoSupportDN4 implements IsisJdoSupport_v3_1 {
     }
 
     private static int executeUpdate(final java.sql.Connection connection, final String sql) {
-        
+
         try(Statement statement = connection.createStatement()){
             return statement.executeUpdate(sql);
-            
+
         } catch (final SQLException ex) {
             throw new ObjectPersistenceException("Failed to executeSql: " + sql, ex);
         }
@@ -153,7 +153,7 @@ public class IsisJdoSupportDN4 implements IsisJdoSupport_v3_1 {
         for (final Class<?> pcClass : pcClasses) {
             final Extent<?> extent = getJdoPersistenceManager().getExtent(pcClass);
             final List<Object> instances = Lists.newArrayList(extent.iterator());
-            
+
             // temporarily disable concurrency checking while this method is performed
             try {
                 ConcurrencyChecking.executeWithConcurrencyCheckingDisabled((Callable<Void>) () -> {

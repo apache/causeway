@@ -36,7 +36,7 @@ import org.apache.isis.core.metamodel.specloader.InjectorMethodEvaluatorDefault;
 
 /**
  * Designed to simply filter out any synthetic methods.
- * 
+ *
  * <p>
  * Does not add any {@link Facet}s.
  */
@@ -69,7 +69,7 @@ public class RemoveMethodsFacetFactory extends FacetFactoryAbstract {
         final Method[] methods = typeToIgnore.getMethods();
         for (final Method method : methods) {
             javaLangObjectMethodsToIgnore
-                    .add(new RemoveMethodsFacetFactory.MethodAndParameterTypes(method.getName(), method.getParameterTypes()));
+            .add(new RemoveMethodsFacetFactory.MethodAndParameterTypes(method.getName(), method.getParameterTypes()));
         }
 
     }

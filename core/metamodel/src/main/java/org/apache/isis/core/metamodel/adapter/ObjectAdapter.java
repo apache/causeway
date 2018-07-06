@@ -69,7 +69,7 @@ public interface ObjectAdapter extends Instance {
     /**
      * Returns the title to display this object with, usually obtained from
      * the wrapped {@link #getObject() domain object}.
-     * 
+     *
      * @deprecated - use {@link #titleString(ObjectAdapter)}
      */
     @Deprecated
@@ -78,7 +78,7 @@ public interface ObjectAdapter extends Instance {
     /**
      * Returns the title to display this object with, rendered within the context
      * of some other adapter.
-     * 
+     *
      * <p>
      * @see TitleFacet#title(ObjectAdapter, ObjectAdapter)
      */
@@ -87,22 +87,22 @@ public interface ObjectAdapter extends Instance {
     /**
      * Return an {@link Instance} of the specified {@link Specification} with
      * respect to this {@link ObjectAdapter}.
-     * 
+     *
      * <p>
      * If called with {@link ObjectSpecification}, then just returns
      * <tt>this</tt>). If called for other subinterfaces, then should provide an
      * appropriate {@link Instance} implementation.
-     * 
+     *
      * <p>
      * Designed to be called in a double-dispatch design from
      * {@link Specification#getInstance(ObjectAdapter)}.
-     * 
+     *
      * <p>
      * Note: this method will throw an {@link UnsupportedOperationException}
      * unless the extended <tt>PojoAdapterXFactory</tt> is configured. (That is,
      * only <tt>PojoAdapterX</tt> provides support for this; the regular
      * <tt>PojoAdapter</tt> does not currently.
-     * 
+     *
      * @return
      */
     Instance getInstance(Specification specification);
@@ -116,30 +116,30 @@ public interface ObjectAdapter extends Instance {
 
     /**
      * For (stand-alone) collections, returns the element type.
-     * 
+     *
      * <p>
      * For owned (aggregated) collections, the element type can be determined
      * from the <tt>TypeOfFacet</tt> associated with the
      * <tt>ObjectAssociation</tt> representing the collection.
-     * 
+     *
      * @see #setElementSpecificationProvider(ElementSpecificationProvider)
      */
     ObjectSpecification getElementSpecification();
 
     /**
      * For (stand-alone) collections, returns the element type.
-     * 
+     *
      * @see #getElementSpecification()
      */
     void setElementSpecificationProvider(ElementSpecificationProvider elementSpecificationProvider);
 
-    
-    
-    
+
+
+
     /**
      * Returns the name of an icon to use if this object is to be displayed
      * graphically.
-     * 
+     *
      * <p>
      * May return <code>null</code> if no icon is specified.
      */
@@ -148,7 +148,7 @@ public interface ObjectAdapter extends Instance {
     /**
      * Checks the version of this adapter to make sure that it does not differ
      * from the specified version.
-     * 
+     *
      * @throws ConcurrencyException
      *             if the specified version differs from the version held this
      *             adapter.
@@ -156,13 +156,13 @@ public interface ObjectAdapter extends Instance {
     void checkLock(Version version);
 
     /**
-     * The object's unique {@link Oid}. 
-     * 
+     * The object's unique {@link Oid}.
+     *
      * <p>
      * This id allows the object to added to, stored by,
      * and retrieved from the object store.  Objects can be looked up by their
      * {@link Oid} from the {@link AdapterManager}.
-     * 
+     *
      * <p>
      * Note that standalone value objects ("foobar", or 5, or a date),
      * are not mapped and have a <tt>null</tt> oid.
@@ -170,8 +170,8 @@ public interface ObjectAdapter extends Instance {
     Oid getOid();
 
     /**
-     * Since {@link Oid}s are now immutable, it is the reference from the 
-     * {@link ObjectAdapter} to its {@link Oid} that must now be updated. 
+     * Since {@link Oid}s are now immutable, it is the reference from the
+     * {@link ObjectAdapter} to its {@link Oid} that must now be updated.
      */
     void replaceOid(Oid persistedOid);
 
@@ -470,13 +470,13 @@ public interface ObjectAdapter extends Instance {
     }
 
     public static class Functions {
-        
+
         private Functions(){}
 
         public static Function<ObjectAdapter, Object> getObject() {
-        	return Util::unwrap;
+            return Util::unwrap;
         }
-        
+
         @Deprecated
         public static com.google.common.base.Function<ObjectAdapter, Object> get_Object() {
             return new com.google.common.base.Function<ObjectAdapter, Object>() {
@@ -486,11 +486,11 @@ public interface ObjectAdapter extends Instance {
                 }
             };
         }
-        
+
         public static Function<Object, ObjectAdapter> adapterForUsing(final AdapterManager adapterManager) {
-        	return adapterManager::adapterFor;
+            return adapterManager::adapterFor;
         }
-        
+
         @Deprecated
         public static com.google.common.base.Function<Object, ObjectAdapter> adapter_ForUsing(final AdapterManager adapterManager) {
             return new com.google.common.base.Function<Object, ObjectAdapter>() {

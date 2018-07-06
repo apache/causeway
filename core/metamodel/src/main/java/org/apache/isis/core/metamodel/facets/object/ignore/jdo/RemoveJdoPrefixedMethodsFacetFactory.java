@@ -33,7 +33,7 @@ public class RemoveJdoPrefixedMethodsFacetFactory extends FacetFactoryAbstract {
     public RemoveJdoPrefixedMethodsFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
     }
-    
+
     @Override
     public void process(ProcessClassContext context) {
         Class<?> cls = context.getCls();

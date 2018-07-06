@@ -78,14 +78,14 @@ public class FixturesInstallerDelegate {
         return Collections.unmodifiableList(fixtures);
     }
 
-    
+
 
     // -- installFixtures
 
     /**
      * Installs all {{@link #addFixture(Object) added fixtures} fixtures (ie as
      * returned by {@link #getFixtures()}).
-     * 
+     *
      * <p>
      * The set of fixtures (as per {@link #getFixtures()}) is <i>not</i> cleared
      * after installation; the intention being to allow the
@@ -144,7 +144,7 @@ public class FixturesInstallerDelegate {
 
     /**
      * Obtain any child fixtures for this fixture.
-     * 
+     *
      * @param fixture
      */
     private List<Object> getFixtures(final Object fixture) {
@@ -180,7 +180,7 @@ public class FixturesInstallerDelegate {
         return true;
     }
 
-    
+
 
     // -- logonFixture
 
@@ -197,7 +197,7 @@ public class FixturesInstallerDelegate {
 
     /**
      * The {@link LogonFixture}, if any.
-     * 
+     *
      * <p>
      * Used to automatically logon if in {@link DeploymentType#SERVER_PROTOTYPE} mode.
      */
@@ -214,7 +214,7 @@ public class FixturesInstallerDelegate {
         }
     }
 
-    
+
 
     // -- dependencies (derived)
 
@@ -234,6 +234,6 @@ public class FixturesInstallerDelegate {
         return getPersistenceSession().getTransactionManager();
     }
 
-    
+
 
 }

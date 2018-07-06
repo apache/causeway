@@ -20,9 +20,9 @@ package org.apache.isis.core.metamodel;
 
 public class JdoMetamodelUtil {
 
-	public static boolean isPersistenceEnhanced(Class<?> cls) {
-		
-		return IsisJdoMetamodelPlugin.get().isPersistenceEnhanced(cls);
-	}
+    public static boolean isPersistenceEnhanced(Class<?> cls) {
+
+        return IsisJdoMetamodelPlugin.get().isPersistenceEnhanced(cls);
+    }
 
 }

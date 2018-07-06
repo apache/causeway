@@ -77,12 +77,12 @@ public class ClobValueSemanticsProvider extends ValueSemanticsProviderAndFacetAb
     // //////////////////////////////////////////////////////////////////
     // DefaultsProvider
     // //////////////////////////////////////////////////////////////////
-    
+
     @Override
     public DefaultsProvider<Clob> getDefaultsProvider() {
         return null;
     }
-    
+
     // //////////////////////////////////////////////////////////////////
     // EncoderDecoder
     // //////////////////////////////////////////////////////////////////
@@ -107,7 +107,7 @@ public class ClobValueSemanticsProvider extends ValueSemanticsProviderAndFacetAb
         }
     }
 
-    
+
     // /////// toString ///////
 
     @Override

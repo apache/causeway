@@ -31,56 +31,56 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
  * exception of the type provided in the constructor
  * and, if found anywhere in the causal chain,
  * then returns a non-null message indicating that the exception has been recognized.
- * 
+ *
  * <p>
  * If a messaging-parsing {@link Function} is provided through the constructor,
  * then the message can be altered.  Otherwise the exception's {@link Throwable#getMessage() message} is returned as-is.
  */
 public class ExceptionRecognizerForType extends ExceptionRecognizerAbstract {
-	
-	protected final static Predicate<Throwable> ofTypeExcluding(final Class<? extends Throwable> exceptionType, final String... messages) {
+
+    protected final static Predicate<Throwable> ofTypeExcluding(final Class<? extends Throwable> exceptionType, final String... messages) {
         return ofType(exceptionType).and(excluding(messages));
     }
 
     protected final static Predicate<Throwable> ofTypeIncluding(final Class<? extends Throwable> exceptionType, final String... messages) {
         return ofType(exceptionType).and(including(messages));
     }
-    
+
     protected final static Predicate<Throwable> ofType(final Class<? extends Throwable> exceptionType) {
         return input->exceptionType.isAssignableFrom(input.getClass());
     }
-    
+
     /**
      * A {@link Predicate} that {@link Predicate#apply(Object) applies} only if the message(s)
      * supplied do <i>NOT</i> appear in the {@link Throwable} or any of its {@link Throwable#getCause() cause}s
      * (recursively).
-     * 
+     *
      * <p>
      * Intended to prevent too eager matching of an overly general exception type.
      */
     protected final static Predicate<Throwable> excluding(final String... messages) {
         return input->{
-                final List<Throwable> causalChain = _Exceptions.getCausalChain(input);
-                for (String message : messages) {
-                    for (Throwable throwable : causalChain) {
-                        final String throwableMessage = throwable.getMessage();
-                        if(throwableMessage != null && throwableMessage.contains(message)) {
-                            return false;
-                        }
-                        if(throwable instanceof JDODataStoreException) {
-                            final JDODataStoreException jdoDataStoreException = (JDODataStoreException) throwable;
-                            final Throwable[] nestedExceptions = jdoDataStoreException.getNestedExceptions();
-                            for (Throwable nestedException : nestedExceptions) {
-                                final String nestedThrowableMessage = nestedException.getMessage();
-                                if(nestedThrowableMessage != null && nestedThrowableMessage.contains(message)) {
-                                    return false;
-                                }
+            final List<Throwable> causalChain = _Exceptions.getCausalChain(input);
+            for (String message : messages) {
+                for (Throwable throwable : causalChain) {
+                    final String throwableMessage = throwable.getMessage();
+                    if(throwableMessage != null && throwableMessage.contains(message)) {
+                        return false;
+                    }
+                    if(throwable instanceof JDODataStoreException) {
+                        final JDODataStoreException jdoDataStoreException = (JDODataStoreException) throwable;
+                        final Throwable[] nestedExceptions = jdoDataStoreException.getNestedExceptions();
+                        for (Throwable nestedException : nestedExceptions) {
+                            final String nestedThrowableMessage = nestedException.getMessage();
+                            if(nestedThrowableMessage != null && nestedThrowableMessage.contains(message)) {
+                                return false;
                             }
                         }
                     }
                 }
-                return true;
-            };
+            }
+            return true;
+        };
 
     }
 
@@ -88,57 +88,57 @@ public class ExceptionRecognizerForType extends ExceptionRecognizerAbstract {
      * A {@link Predicate} that {@link Predicate#apply(Object) applies} only if at least one of the message(s)
      * supplied <i>DO</i> appear in the {@link Throwable} or any of its {@link Throwable#getCause() cause}s
      * (recursively).
-     * 
+     *
      * <p>
      * Intended to prevent more precise matching of a specific general exception type.
      */
     protected final static Predicate<Throwable> including(final String... messages) {
         return input->{
-                final List<Throwable> causalChain = _Exceptions.getCausalChain(input);
-                for (String message : messages) {
-                    for (Throwable throwable : causalChain) {
-                        final String throwableMessage = throwable.getMessage();
-                        if(throwableMessage != null && throwableMessage.contains(message)) {
-                            return true;
-                        }
+            final List<Throwable> causalChain = _Exceptions.getCausalChain(input);
+            for (String message : messages) {
+                for (Throwable throwable : causalChain) {
+                    final String throwableMessage = throwable.getMessage();
+                    if(throwableMessage != null && throwableMessage.contains(message)) {
+                        return true;
                     }
                 }
-                return false;
-            };
+            }
+            return false;
+        };
     }
 
     public ExceptionRecognizerForType(
-    		Category category, 
-    		final Class<? extends Exception> exceptionType, 
-    		final Function<String,String> messageParser) {
+            Category category,
+            final Class<? extends Exception> exceptionType,
+            final Function<String,String> messageParser) {
         this(category, ofType(exceptionType), messageParser);
     }
-    
+
     public ExceptionRecognizerForType(
-    		Category category, 
-    		final Predicate<Throwable> predicate, 
-    		final Function<String,String> messageParser) {
+            Category category,
+            final Predicate<Throwable> predicate,
+            final Function<String,String> messageParser) {
         super(category, predicate, messageParser);
     }
-    
+
     public ExceptionRecognizerForType(Category category, Class<? extends Exception> exceptionType) {
         this(category, exceptionType, null);
     }
 
     public ExceptionRecognizerForType(
-    		final Class<? extends Exception> exceptionType, 
-    		final Function<String,String> messageParser) {
+            final Class<? extends Exception> exceptionType,
+            final Function<String,String> messageParser) {
         this(Category.OTHER, exceptionType, messageParser);
     }
 
     public ExceptionRecognizerForType(
-    		final Predicate<Throwable> predicate, 
-    		final Function<String,String> messageParser) {
+            final Predicate<Throwable> predicate,
+            final Function<String,String> messageParser) {
         this(Category.OTHER, predicate, messageParser);
     }
 
     public ExceptionRecognizerForType(Class<? extends Exception> exceptionType) {
         this(Category.OTHER, exceptionType);
     }
-	
+
 }

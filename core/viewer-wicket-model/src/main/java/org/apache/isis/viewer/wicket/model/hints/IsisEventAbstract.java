@@ -33,16 +33,16 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
  * </p>
  */
 public abstract class IsisEventAbstract {
-    
+
     private final AjaxRequestTarget target;
-    
+
     public IsisEventAbstract(AjaxRequestTarget target) {
         this.target = target;
     }
 
     /**
      * The {@link AjaxRequestTarget target}, if any, that caused this event to be generated.
-     * 
+     *
      * <p>
      * Typically populated, but not always...
      */

@@ -44,21 +44,21 @@ public final class MethodFinderUtils {
      * Returns a specific public methods that: have the specified prefix; have
      * the specified return type (or some subtype), and has the
      * specified number of parameters.
-     * 
+     *
      * <p>
      * If the returnType is specified as null then the return type is ignored.
      * If void.class is passed in, then searches for void methods.
-     * 
+     *
      * <p>
      * If the parameter type array is null, is also not checked.
      */
     public static Method findMethod(
-            final Class<?> type, 
-            final MethodScope methodScope, 
-            final String name, 
-            final Class<?> returnType, 
+            final Class<?> type,
+            final MethodScope methodScope,
+            final String name,
+            final Class<?> returnType,
             final Class<?>[] paramTypes) {
-        
+
         Method method;
         try {
             method = type.getMethod(name, paramTypes);

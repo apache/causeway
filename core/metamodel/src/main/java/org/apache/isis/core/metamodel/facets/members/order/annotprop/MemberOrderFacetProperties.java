@@ -45,5 +45,5 @@ public class MemberOrderFacetProperties extends MemberOrderFacetAbstract {
     private MemberOrderFacetProperties(final String name, final String sequence, final TranslationService translationService, final FacetHolder holder) {
         super(name, sequence, translationService, holder);
     }
-    
+
 }

@@ -45,14 +45,14 @@ public class Persistable_datanucleusVersionTimestamp {
     @Action(
             domainEvent = ActionDomainEvent.class,
             semantics = SemanticsOf.SAFE
-    )
+            )
     @ActionLayout(
             contributed = Contributed.AS_ASSOCIATION
-    )
+            )
     @PropertyLayout(
             named = "Version",
             hidden = Where.ALL_TABLES
-    )
+            )
     @MemberOrder(name = "Metadata", sequence = "800.2")
     public java.sql.Timestamp prop() {
         final Object version = JDOHelper.getVersion(persistable);

@@ -39,7 +39,7 @@ public abstract class AbstractApplyToAllContractTest {
 
     protected final ClassDiscovery discovery;
     protected IndentPrinter out;
-    
+
     protected AbstractApplyToAllContractTest(
             final String packagePrefix) {
         discovery = ClassDiscoveryPlugin.get().discover(packagePrefix);
@@ -50,7 +50,7 @@ public abstract class AbstractApplyToAllContractTest {
         this.out = new IndentPrinter(out);
         return this;
     }
-    
+
     public AbstractApplyToAllContractTest withLoggingTo(PrintStream out) {
         this.out = new IndentPrinter(new PrintWriter(out));
         return this;
@@ -58,7 +58,7 @@ public abstract class AbstractApplyToAllContractTest {
 
     @Test
     public void searchAndTest() throws Exception {
-        
+
         Set<Class<?>> entityTypes =
                 new TreeSet<>(new Comparator<Class<?>>() {
                     @Override
@@ -67,7 +67,7 @@ public abstract class AbstractApplyToAllContractTest {
                     }
                 });
         entityTypes.addAll(findTypes());
-        
+
         for (Class<?> entityType : entityTypes) {
             out.println(entityType.getName());
             out.incrementIndent();
@@ -82,7 +82,7 @@ public abstract class AbstractApplyToAllContractTest {
 
     /**
      * By default, finds all entity types (ie annotated with {@link PersistenceCapable}).
-     * 
+     *
      * <p>
      * Can be overridden if need be.
      */
@@ -92,6 +92,6 @@ public abstract class AbstractApplyToAllContractTest {
 
     protected abstract void applyContractTest(Class<?> entityType);
 
-    
-    
+
+
 }

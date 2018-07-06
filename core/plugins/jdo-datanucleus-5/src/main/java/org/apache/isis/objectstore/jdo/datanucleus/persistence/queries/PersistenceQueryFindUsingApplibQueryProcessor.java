@@ -39,24 +39,25 @@ import org.apache.isis.core.runtime.system.persistence.PersistenceSession5;
 import org.apache.isis.objectstore.jdo.datanucleus.metamodel.JdoPropertyUtils;
 
 public class PersistenceQueryFindUsingApplibQueryProcessor extends PersistenceQueryProcessorAbstract<PersistenceQueryFindUsingApplibQueryDefault> {
-    
+
     private static final Logger LOG = LoggerFactory.getLogger(PersistenceQueryFindUsingApplibQueryProcessor.class);
 
     public PersistenceQueryFindUsingApplibQueryProcessor(final PersistenceSession5 persistenceSession) {
         super(persistenceSession);
     }
 
+    @Override
     public List<ObjectAdapter> process(final PersistenceQueryFindUsingApplibQueryDefault persistenceQuery) {
         final String queryName = persistenceQuery.getQueryName();
         final ObjectSpecification objectSpec = persistenceQuery.getSpecification();
-        
+
         final List<?> results;
         if((objectSpec.getFullIdentifier() + "#pk").equals(queryName)) {
             results = getResultsPk(persistenceQuery);
         } else {
             results = getResults(persistenceQuery);
         }
-        
+
         return loadAdapters(results);
     }
 
@@ -78,7 +79,7 @@ public class PersistenceQueryFindUsingApplibQueryProcessor extends PersistenceQu
 
         // http://www.datanucleus.org/servlet/jira/browse/NUCCORE-1103
         jdoQuery.addExtension("datanucleus.multivaluedFetch", "none");
-        
+
         if (LOG.isDebugEnabled()) {
             LOG.debug("{} # {} ( {} )", cls.getName(), queryName, filter);
         }
@@ -92,7 +93,7 @@ public class PersistenceQueryFindUsingApplibQueryProcessor extends PersistenceQu
     }
 
     private List<?> getResults(final PersistenceQueryFindUsingApplibQueryDefault persistenceQuery) {
-        
+
         final String queryName = persistenceQuery.getQueryName();
         final Map<String, Object> argumentsByParameterName = unwrap(
                 persistenceQuery.getArgumentsAdaptersByParameterName());
@@ -101,18 +102,18 @@ public class PersistenceQueryFindUsingApplibQueryProcessor extends PersistenceQu
 
         final Class<?> cls = objectSpec.getCorrespondingClass();
         final Query<?> jdoQuery = persistenceSession.newJdoNamedQuery(cls, queryName);
-        
+
         // http://www.datanucleus.org/servlet/jira/browse/NUCCORE-1103
         jdoQuery.addExtension("datanucleus.multivaluedFetch", "none");
-        
+
         if(persistenceQuery.hasRange()) {
             jdoQuery.setRange(persistenceQuery.getStart(), persistenceQuery.getEnd());
         }
-        
+
         if (LOG.isDebugEnabled()) {
             LOG.debug("{} # {} ( {} )", cls.getName(), queryName, argumentsByParameterName);
         }
-        
+
         try {
             final List<?> results = (List<?>) jdoQuery.executeWithMap(argumentsByParameterName);
             if(results == null) {
@@ -120,7 +121,7 @@ public class PersistenceQueryFindUsingApplibQueryProcessor extends PersistenceQu
             }
             final List<?> resultsToReturn =
                     cardinality == QueryCardinality.MULTIPLE
-                            ? results
+                    ? results
                             : firstIfAnyOf(results);
             return Lists.newArrayList(resultsToReturn);
         } finally {
@@ -131,7 +132,7 @@ public class PersistenceQueryFindUsingApplibQueryProcessor extends PersistenceQu
     private List<?> firstIfAnyOf(final List<?> results) {
         return results.isEmpty()
                 ? Collections.emptyList()
-                : results.subList(0, 1);
+                        : results.subList(0, 1);
     }
 
     private static Map<String, Object> unwrap(final Map<String, ObjectAdapter> argumentAdaptersByParameterName) {

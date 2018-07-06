@@ -49,10 +49,10 @@ public class JodaLocalDateTimeValueSemanticsProvider extends ValueSemanticsProvi
 
     /**
      * Introduced to allow BDD tests to provide a different format string "mid-flight".
-     * 
+     *
      * <p>
      * REVIEW: This seems only to have any effect if 'propertyType' is set to 'date'.
-     * 
+     *
      * @see #setTitlePatternOverride(String)
      * @deprecated - because 'propertyType' parameter is never used
      */
@@ -66,28 +66,28 @@ public class JodaLocalDateTimeValueSemanticsProvider extends ValueSemanticsProvi
     public static void setTitlePatternOverride(final String pattern) {
         OVERRIDE_TITLE_PATTERN.set(pattern);
     }
-    
+
     /**
      * Key to indicate how LocalDateTime should be parsed/rendered.
-     * 
+     *
      * <p>
      * eg:
      * <pre>
      * isis.value.format.datetime=iso
      * </pre>
-     * 
+     *
      * <p>
-     * A pre-determined list of values is available, specifically 'iso_encoding', 'iso' and 'medium' (see 
+     * A pre-determined list of values is available, specifically 'iso_encoding', 'iso' and 'medium' (see
      * {@link #NAMED_TITLE_FORMATTERS}).  Alternatively,  can also specify a mask, eg <tt>dd-MMM-yyyy</tt>.
-     * 
-     * @see #NAMED_TITLE_FORMATTERS  
+     *
+     * @see #NAMED_TITLE_FORMATTERS
      */
     public final static String CFG_FORMAT_KEY = ConfigurationConstants.ROOT + "value.format.datetime";
-    
-    
+
+
     /**
      * Keys represent the values which can be configured, and which are used for the rendering of dates.
-     * 
+     *
      */
     private static Map<String, DateTimeFormatter> NAMED_TITLE_FORMATTERS = Maps.newHashMap();
     static {
@@ -97,7 +97,7 @@ public class JodaLocalDateTimeValueSemanticsProvider extends ValueSemanticsProvi
         NAMED_TITLE_FORMATTERS.put("medium", DateTimeFormat.forStyle("MM"));
         NAMED_TITLE_FORMATTERS.put("short", DateTimeFormat.forStyle("SS"));
     }
-    
+
     private final static ThreadLocal<String> OVERRIDE_TITLE_PATTERN = new ThreadLocal<String>() {
         @Override
         protected String initialValue() {
@@ -105,7 +105,7 @@ public class JodaLocalDateTimeValueSemanticsProvider extends ValueSemanticsProvi
         }
     };
 
-    
+
     private final static List<DateTimeFormatter> PARSE_FORMATTERS = Lists.newArrayList();
     static {
         PARSE_FORMATTERS.add(DateTimeFormat.forStyle("LL"));
@@ -114,7 +114,7 @@ public class JodaLocalDateTimeValueSemanticsProvider extends ValueSemanticsProvi
         PARSE_FORMATTERS.add(ISODateTimeFormat.basicDateTimeNoMillis());
         PARSE_FORMATTERS.add(ISODateTimeFormat.basicDateTime());
     }
-    
+
 
 
     public static Class<? extends Facet> type() {
@@ -127,11 +127,11 @@ public class JodaLocalDateTimeValueSemanticsProvider extends ValueSemanticsProvi
 
 
     private final DateTimeFormatter encodingFormatter = ISODateTimeFormat.dateHourMinuteSecondMillis();
-    
+
     private DateTimeFormatter titleStringFormatter;
     private String titleStringFormatNameOrPattern;
 
-    
+
     // //////////////////////////////////////
     // constructor
     // //////////////////////////////////////
@@ -160,9 +160,9 @@ public class JodaLocalDateTimeValueSemanticsProvider extends ValueSemanticsProvi
         if (titleStringFormatter == null) {
             titleStringFormatter = DateTimeFormat.forPattern(titleStringFormatNameOrPattern);
         }
-        this.titleStringFormatNameOrPattern = titleStringFormatNameOrPattern; 
+        this.titleStringFormatNameOrPattern = titleStringFormatNameOrPattern;
     }
-    
+
 
     // //////////////////////////////////////////////////////////////////
     // Parsing
@@ -174,7 +174,7 @@ public class JodaLocalDateTimeValueSemanticsProvider extends ValueSemanticsProvi
             final Object context) {
 
         updateTitleStringFormatterIfOverridden();
-        
+
         LocalDateTime contextDateTime = (LocalDateTime) context;
 
         final String dateString = entry.trim().toUpperCase();
@@ -189,11 +189,11 @@ public class JodaLocalDateTimeValueSemanticsProvider extends ValueSemanticsProvi
 
     private void updateTitleStringFormatterIfOverridden() {
         final String overridePattern = OVERRIDE_TITLE_PATTERN.get();
-        if (overridePattern == null || 
-            titleStringFormatNameOrPattern.equals(overridePattern)) {
+        if (overridePattern == null ||
+                titleStringFormatNameOrPattern.equals(overridePattern)) {
             return;
-        } 
-        
+        }
+
         // (re)create format
         updateTitleStringFormatter(overridePattern);
     }
@@ -201,7 +201,7 @@ public class JodaLocalDateTimeValueSemanticsProvider extends ValueSemanticsProvi
     private LocalDateTime parseDateTime(final String dateStr, final Object original) {
         return JodaLocalDateTimeUtil.parseDate(dateStr, PARSE_FORMATTERS);
     }
-    
+
 
     // ///////////////////////////////////////////////////////////////////////////
     // TitleProvider
@@ -267,7 +267,7 @@ public class JodaLocalDateTimeValueSemanticsProvider extends ValueSemanticsProvi
 
 
     // //////////////////////////////////////
-    
+
     @Override
     public String toString() {
         return "JodaLocalDateTimeValueSemanticsProvider: " + titleStringFormatter;

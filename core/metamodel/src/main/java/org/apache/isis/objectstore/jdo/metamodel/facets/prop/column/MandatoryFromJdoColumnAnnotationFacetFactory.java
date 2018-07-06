@@ -66,12 +66,12 @@ public class MandatoryFromJdoColumnAnnotationFacetFactory extends FacetFactoryAb
         final Column annotation = Annotations.getAnnotation(processMethodContext.getMethod(), Column.class);
 
         final FacetedMethod holder = processMethodContext.getFacetHolder();
-        
+
         final MandatoryFacet existingFacet = holder.getFacet(MandatoryFacet.class);
         if(existingFacet != null) {
-            
+
             if (existingFacet instanceof OptionalFacetDerivedFromJdoPrimaryKeyAnnotation) {
-                // do not replace this facet; 
+                // do not replace this facet;
                 // we must keep an optional facet here for different reasons
                 return;
             }
@@ -81,29 +81,29 @@ public class MandatoryFromJdoColumnAnnotationFacetFactory extends FacetFactoryAb
                 return;
             }
         }
-        
+
         boolean required = whetherRequired(processMethodContext, annotation);
         MandatoryFacet facet = annotation != null
-                ? new MandatoryFacetDerivedFromJdoColumn(holder, required) 
-                : new MandatoryFacetInferredFromAbsenceOfJdoColumn(holder, required);
-                
-        
-        // as a side-effect, will chain any existing facets.
-        // we'll exploit this fact for meta-model validation (see #refineMetaModelValidator(), below)
-        FacetUtil.addFacet(facet);
-        
-        // however, if a @Column was explicitly provided, and the underlying facet 
-        // was the simple MandatoryFacetDefault (from an absence of @Optional or @Mandatory),
-        // then don't chain, simply replace.
-        if(facet instanceof MandatoryFacetDerivedFromJdoColumn && facet.getUnderlyingFacet() instanceof MandatoryFacetDefault) {
-            facet.setUnderlyingFacet(null);
-        }
+                ? new MandatoryFacetDerivedFromJdoColumn(holder, required)
+                        : new MandatoryFacetInferredFromAbsenceOfJdoColumn(holder, required);
+
+
+                // as a side-effect, will chain any existing facets.
+                // we'll exploit this fact for meta-model validation (see #refineMetaModelValidator(), below)
+                FacetUtil.addFacet(facet);
+
+                // however, if a @Column was explicitly provided, and the underlying facet
+                // was the simple MandatoryFacetDefault (from an absence of @Optional or @Mandatory),
+                // then don't chain, simply replace.
+                if(facet instanceof MandatoryFacetDerivedFromJdoColumn && facet.getUnderlyingFacet() instanceof MandatoryFacetDefault) {
+                    facet.setUnderlyingFacet(null);
+                }
     }
 
     private static boolean whetherRequired(final ProcessMethodContext processMethodContext, final Column annotation) {
 
         final String allowsNull = annotation != null ? annotation.allowsNull() : null;
-        
+
         if(Strings.isNullOrEmpty(allowsNull)) {
             final Class<?> returnType = processMethodContext.getMethod().getReturnType();
             // per JDO spec
@@ -128,20 +128,20 @@ public class MandatoryFromJdoColumnAnnotationFacetFactory extends FacetFactoryAb
             }
 
             private void validate(ObjectSpecification objectSpec, ValidationFailures validationFailures) {
-                
+
                 final JdoPersistenceCapableFacet pcFacet = objectSpec.getFacet(JdoPersistenceCapableFacet.class);
                 if(pcFacet==null || pcFacet.getIdentityType() == IdentityType.NONDURABLE) {
                     return;
                 }
-                
+
                 final List<ObjectAssociation> associations = objectSpec.getAssociations(Contributed.EXCLUDED, ObjectAssociation.Predicates.PROPERTIES);
                 for (ObjectAssociation association : associations) {
-                    
+
                     // skip checks if annotated with JDO @NotPersistent
                     if(association.containsDoOpFacet(JdoNotPersistentFacet.class)) {
                         return;
                     }
-                    
+
                     validateMandatoryFacet(association, validationFailures);
                 }
             }
@@ -152,8 +152,8 @@ public class MandatoryFromJdoColumnAnnotationFacetFactory extends FacetFactoryAb
                 MandatoryFacet underlying = (MandatoryFacet) facet.getUnderlyingFacet();
                 if(underlying == null) {
                     return;
-                } 
-                
+                }
+
                 if(facet instanceof MandatoryFacetDerivedFromJdoColumn) {
 
                     if(association.isNotPersisted()) {
@@ -166,7 +166,7 @@ public class MandatoryFromJdoColumnAnnotationFacetFactory extends FacetFactoryAb
                     if(underlying.isInvertedSemantics() == facet.isInvertedSemantics()) {
                         return;
                     }
-                    
+
                     if(underlying.isInvertedSemantics()) {
                         // ie @Optional
                         validationFailures.add("%s: incompatible usage of Isis' @Optional annotation and @javax.jdo.annotations.Column; use just @javax.jdo.annotations.Column(allowNulls=\"...\")", association.getIdentifier().toClassAndNameIdentityString());
@@ -174,9 +174,9 @@ public class MandatoryFromJdoColumnAnnotationFacetFactory extends FacetFactoryAb
                         validationFailures.add("%s: incompatible Isis' default of required/optional properties vs JDO; add @javax.jdo.annotations.Column(allowNulls=\"...\")", association.getIdentifier().toClassAndNameIdentityString());
                     }
                 }
-                
+
                 if(facet instanceof MandatoryFacetInferredFromAbsenceOfJdoColumn) {
-                    
+
                     if(association.isNotPersisted()) {
                         // nothing to do.
                         return;
@@ -195,5 +195,5 @@ public class MandatoryFromJdoColumnAnnotationFacetFactory extends FacetFactoryAb
             }
         };
     }
-    
+
 }

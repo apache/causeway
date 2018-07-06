@@ -35,40 +35,40 @@ import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProv
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 @SuppressWarnings("rawtypes")
-public class TreeNodeValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<TreeNode> 
+public class TreeNodeValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<TreeNode>
 implements TreeNodeValueFacet {
 
-	private static final int TYPICAL_LENGTH = 0;
+    private static final int TYPICAL_LENGTH = 0;
 
-	private static Class<? extends Facet> type() {
-		return TreeNodeValueFacet.class;
-	}
+    private static Class<? extends Facet> type() {
+        return TreeNodeValueFacet.class;
+    }
 
-	private static final TreeNode DEFAULT_VALUE = null;
-	private static final Class<TreeNode> VALUE_TYPE = TreeNode.class;
-	
-	 /**
+    private static final TreeNode DEFAULT_VALUE = null;
+    private static final Class<TreeNode> VALUE_TYPE = TreeNode.class;
+
+    /**
      * Required because implementation of {@link Parser} and
      * {@link EncoderDecoder}.
      */
     public TreeNodeValueSemanticsProvider() {
         this(null, null);
     }
-    
-	public TreeNodeValueSemanticsProvider(final FacetHolder holder, final ServicesInjector context) {
-        super(type(), holder, VALUE_TYPE, TYPICAL_LENGTH, null, Immutability.IMMUTABLE, 
-        		EqualByContent.NOT_HONOURED, DEFAULT_VALUE, context);
+
+    public TreeNodeValueSemanticsProvider(final FacetHolder holder, final ServicesInjector context) {
+        super(type(), holder, VALUE_TYPE, TYPICAL_LENGTH, null, Immutability.IMMUTABLE,
+                EqualByContent.NOT_HONOURED, DEFAULT_VALUE, context);
     }
 
-	@Override
-	public String titleString(final Object object) {
-		return object != null ? ((TreeNode<?>)object).toString() : "[null]"; //TODO implement
-	}
+    @Override
+    public String titleString(final Object object) {
+        return object != null ? ((TreeNode<?>)object).toString() : "[null]"; //TODO implement
+    }
 
-	@Override
-	public String titleStringWithMask(final Object value, final String usingMask) {
-		return titleString(value);
-	}
+    @Override
+    public String titleStringWithMask(final Object value, final String usingMask) {
+        return titleString(value);
+    }
 
     // //////////////////////////////////////////////////////////////////
     // Parser
@@ -82,56 +82,56 @@ implements TreeNodeValueFacet {
     // //////////////////////////////////////////////////////////////////
     // DefaultsProvider
     // //////////////////////////////////////////////////////////////////
-    
+
     @Override
     public DefaultsProvider<TreeNode> getDefaultsProvider() {
         return null;
     }
-	
-	// //////////////////////////////////////////////////////////////////
-	// EncoderDecoder
-	// //////////////////////////////////////////////////////////////////
 
-	@Override
-	protected String doEncode(final Object object) {
-		TreeNode<?> treeNode = (TreeNode<?>)object;
-		
-		final Memento memento = newMemento();
-		memento.put("primaryValue", treeNode.getValue());
-		memento.put("adapterClass", treeNode.getTreeAdapterClass());
-		memento.put("treeState", treeNode.getTreeState());
-		return memento.asString(); 
-	}
+    // //////////////////////////////////////////////////////////////////
+    // EncoderDecoder
+    // //////////////////////////////////////////////////////////////////
 
-	@SuppressWarnings("unchecked")
-	@Override
-	protected TreeNode<?> doRestore(final String input) {
-		final Memento memento = parseMemento(input);
-		return LazyTreeNode.of(
-				memento.get("primaryValue", Object.class), 
-				memento.get("adapterClass", Class.class),
-				memento.get("treeState", TreeState.class));
-	}
+    @Override
+    protected String doEncode(final Object object) {
+        TreeNode<?> treeNode = (TreeNode<?>)object;
 
-	// /////// toString ///////
+        final Memento memento = newMemento();
+        memento.put("primaryValue", treeNode.getValue());
+        memento.put("adapterClass", treeNode.getTreeAdapterClass());
+        memento.put("treeState", treeNode.getTreeState());
+        return memento.asString();
+    }
 
-	@Override
-	public String toString() {
-		return "TreeNodeValueSemanticsProvider";
-	}
-	
-	// -- HELPER
-	
-	private _Mementos.Memento newMemento(){
-		final UrlEncodingService codec = getServicesInjector().lookupService(UrlEncodingService.class);
-		final SerializingAdapter serializer = getServicesInjector().lookupService(SerializingAdapter.class);
-		return _Mementos.create(codec, serializer);
-	}
-	
-	private _Mementos.Memento parseMemento(String input){
-		final UrlEncodingService codec = getServicesInjector().lookupService(UrlEncodingService.class);
-		final SerializingAdapter serializer = getServicesInjector().lookupService(SerializingAdapter.class);
-		return _Mementos.parse(codec, serializer, input);
-	}
+    @SuppressWarnings("unchecked")
+    @Override
+    protected TreeNode<?> doRestore(final String input) {
+        final Memento memento = parseMemento(input);
+        return LazyTreeNode.of(
+                memento.get("primaryValue", Object.class),
+                memento.get("adapterClass", Class.class),
+                memento.get("treeState", TreeState.class));
+    }
+
+    // /////// toString ///////
+
+    @Override
+    public String toString() {
+        return "TreeNodeValueSemanticsProvider";
+    }
+
+    // -- HELPER
+
+    private _Mementos.Memento newMemento(){
+        final UrlEncodingService codec = getServicesInjector().lookupService(UrlEncodingService.class);
+        final SerializingAdapter serializer = getServicesInjector().lookupService(SerializingAdapter.class);
+        return _Mementos.create(codec, serializer);
+    }
+
+    private _Mementos.Memento parseMemento(String input){
+        final UrlEncodingService codec = getServicesInjector().lookupService(UrlEncodingService.class);
+        final SerializingAdapter serializer = getServicesInjector().lookupService(SerializingAdapter.class);
+        return _Mementos.parse(codec, serializer, input);
+    }
 
 }

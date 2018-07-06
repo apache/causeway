@@ -121,6 +121,7 @@ public class EntityLinksSelectorPanel extends PanelAbstract<EntityModel>  {
     /**
      * Build UI only after added to parent.
      */
+    @Override
     public void onInitialize() {
         super.onInitialize();
         ComponentFactory componentFactory = getComponentFactoryRegistry().findComponentFactoryElseFailFast(getComponentType(), getModel());

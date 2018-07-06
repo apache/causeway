@@ -31,7 +31,7 @@ import org.apache.isis.viewer.wicket.ui.panels.HasDynamicallyVisibleContent;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 
-public class TabPanel extends PanelAbstract<EntityModel> 
+public class TabPanel extends PanelAbstract<EntityModel>
 implements HasUiHintDisambiguator, HasDynamicallyVisibleContent {
 
     private static final long serialVersionUID = 1L;
@@ -56,6 +56,7 @@ implements HasUiHintDisambiguator, HasDynamicallyVisibleContent {
      * when tabs are rendered, they don't distinguish within the path hierarchy: even if on different tabs, the first
      * panel will have the same Wicket path hierarchy.  This property allows us to distinguish.
      */
+    @Override
     public String getHintDisambiguator() {
         return bs3Tab.getName();
     }

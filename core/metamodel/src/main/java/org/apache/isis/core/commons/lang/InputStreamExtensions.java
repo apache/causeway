@@ -36,7 +36,7 @@ public final class InputStreamExtensions {
      * <p>
      * This method buffers the input internally, so there is no need to use a
      * <code>BufferedInputStream</code>.
-     * 
+     *
      * @param extendee
      *            the <code>InputStream</code> to read from
      * @param output

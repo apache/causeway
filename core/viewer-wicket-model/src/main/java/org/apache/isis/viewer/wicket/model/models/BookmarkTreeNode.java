@@ -48,7 +48,7 @@ public class BookmarkTreeNode implements Serializable {
     private final RootOid oidNoVer;
     private final String oidNoVerStr;
     private final PageType pageType;
-    
+
     private String title;
     private PageParameters pageParameters;
 
@@ -58,21 +58,21 @@ public class BookmarkTreeNode implements Serializable {
     }
 
     private BookmarkTreeNode(
-            final BookmarkableModel<?> bookmarkableModel, 
+            final BookmarkableModel<?> bookmarkableModel,
             final int depth) {
         pageParameters = bookmarkableModel.getPageParametersWithoutUiHints();
         RootOid oid = oidFrom(pageParameters);
         this.oidNoVerStr = OID_MARSHALLER.marshalNoVersion(oid);
         this.oidNoVer = OID_MARSHALLER.unmarshal(oidNoVerStr, RootOid.class);
-        
+
         // replace oid with the noVer equivalent.
         PageParameterNames.OBJECT_OID.removeFrom(pageParameters);
         PageParameterNames.OBJECT_OID.addStringTo(pageParameters, getOidNoVerStr());
-        
+
         this.title = bookmarkableModel.getTitle();
         this.pageType = bookmarkableModel instanceof EntityModel ? PageType.ENTITY : PageType.ACTION_PROMPT;
         this.depth = depth;
-        
+
     }
 
     public RootOid getOidNoVer() {
@@ -102,51 +102,51 @@ public class BookmarkTreeNode implements Serializable {
         children.add(childNode);
         return childNode;
     }
-    
+
     /**
      * Whether or not the provided {@link BookmarkableModel} matches that contained
      * within this node, or any of its children.
-     * 
+     *
      * <p>
      * If it does, then the matched node's title is updated to that of the provided
      * {@link BookmarkableModel}.
-     * 
+     *
      * <p>
-     * The {@link PageParameters} (used for matching) is 
+     * The {@link PageParameters} (used for matching) is
      * {@link BookmarkableModel#getPageParameters() obtained} from the {@link BookmarkableModel}.
-     * 
+     *
      * @return - whether the provided candidate is found or was added to this node's tree.
      */
     public boolean matches(BookmarkableModel<?> candidateBookmarkableModel) {
-    	if(candidateBookmarkableModel instanceof EntityModel) {
-    		if(this.pageType != PageType.ENTITY) { 
-    			return false; 
-			}
-			return matchAndUpdateTitleFor((EntityModel) candidateBookmarkableModel);
-    	} else if(candidateBookmarkableModel instanceof ActionModel) {
-    		if(this.pageType != PageType.ACTION_PROMPT) { 
-    			return false; 
-			}
-			return matchFor((ActionModel) candidateBookmarkableModel);
-    	} else {
-    		return false;
-    	}
+        if(candidateBookmarkableModel instanceof EntityModel) {
+            if(this.pageType != PageType.ENTITY) {
+                return false;
+            }
+            return matchAndUpdateTitleFor((EntityModel) candidateBookmarkableModel);
+        } else if(candidateBookmarkableModel instanceof ActionModel) {
+            if(this.pageType != PageType.ACTION_PROMPT) {
+                return false;
+            }
+            return matchFor((ActionModel) candidateBookmarkableModel);
+        } else {
+            return false;
+        }
     }
 
     /**
      * Whether or not the provided {@link EntityModel} matches that contained
      * within this node, or any of its children.
-     * 
+     *
      * <p>
      * If it does match, then the matched node's title is updated to that of the provided
      * {@link EntityModel}.
-     * 
+     *
      * @return - whether the provided candidate is found or was added to this node's tree.
      */
-	private boolean matchAndUpdateTitleFor(final EntityModel candidateEntityModel) {
-		
-		// match only on the oid string
-		final String candidateOidStr = oidStrFrom(candidateEntityModel);
+    private boolean matchAndUpdateTitleFor(final EntityModel candidateEntityModel) {
+
+        // match only on the oid string
+        final String candidateOidStr = oidStrFrom(candidateEntityModel);
         boolean inGraph = Objects.equal(this.oidNoVerStr, candidateOidStr);
         if(inGraph) {
             this.setTitle(candidateEntityModel.getTitle());
@@ -157,46 +157,46 @@ public class BookmarkTreeNode implements Serializable {
             for(BookmarkTreeNode childNode: this.getChildren()) {
                 inGraph = childNode.matches(candidateEntityModel) || inGraph; // evaluate each
             }
-            
+
             if(!inGraph) {
                 inGraph = addToGraphIfParented(candidateEntityModel);
             }
         }
         return inGraph;
-	}
-	
+    }
+
     /**
      * Whether or not the provided {@link ActionModel} matches that contained
      * within this node (taking into account the action's arguments).
-     * 
+     *
      * If it does match, then the matched node's title is updated to that of the provided
      * {@link ActionModel}.
      * <p>
-     * 
+     *
      * @return - whether the provided candidate is found or was added to this node's tree.
      */
-	private boolean matchFor(final ActionModel candidateActionModel) {
-		
-		// check if target object of the action is the same (the oid str)
-		final String candidateOidStr = oidStrFrom(candidateActionModel);
-		if(!Objects.equal(this.oidNoVerStr, candidateOidStr)) {
-			return false;
-		}
-		
-		// check if args same
+    private boolean matchFor(final ActionModel candidateActionModel) {
+
+        // check if target object of the action is the same (the oid str)
+        final String candidateOidStr = oidStrFrom(candidateActionModel);
+        if(!Objects.equal(this.oidNoVerStr, candidateOidStr)) {
+            return false;
+        }
+
+        // check if args same
         List<String> thisArgs = PageParameterNames.ACTION_ARGS.getListFrom(pageParameters);
         PageParameters candidatePageParameters = candidateActionModel.getPageParameters();
         List<String> candidateArgs = PageParameterNames.ACTION_ARGS.getListFrom(candidatePageParameters);
         if(!Objects.equal(thisArgs, candidateArgs)) {
-        	return false;
+            return false;
         }
 
         // ok, a match
-		return true;
-	}
+        return true;
+    }
 
     private boolean addToGraphIfParented(BookmarkableModel<?> candidateBookmarkableModel) {
-        
+
         boolean whetherAdded = false;
         // TODO: this ought to be move into a responsibility of BookmarkableModel, perhaps, rather than downcasting
         if(candidateBookmarkableModel instanceof EntityModel) {
@@ -207,7 +207,7 @@ public class BookmarkTreeNode implements Serializable {
                 final ObjectAdapter possibleParentAdapter = objectAssoc.get(candidateAdapter, InteractionInitiatedBy.USER);
                 if(possibleParentAdapter == null) {
                     continue;
-                } 
+                }
                 final Oid possibleParentOid = possibleParentAdapter.getOid();
                 if(possibleParentOid == null) {
                     continue;
@@ -233,13 +233,13 @@ public class BookmarkTreeNode implements Serializable {
         return depth;
     }
 
-    
+
     // //////////////////////////////////////
 
     public PageParameters getPageParameters() {
         return pageParameters;
     }
-    
+
     // //////////////////////////////////////
 
     public static RootOid oidFrom(final PageParameters pageParameters) {

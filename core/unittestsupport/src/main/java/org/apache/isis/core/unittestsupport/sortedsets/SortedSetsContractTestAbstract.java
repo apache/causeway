@@ -39,9 +39,9 @@ public abstract class SortedSetsContractTestAbstract extends AbstractApplyToAllC
     @Override
     protected void applyContractTest(Class<?> entityType) {
         final Set<Field> collectionFields = _Reflect.streamAllFields(entityType)
-        		.filter(withTypeAssignableTo(Collection.class))
-        		.collect(toHashSet());
-        		
+                .filter(withTypeAssignableTo(Collection.class))
+                .collect(toHashSet());
+
         for (Field collectionField : collectionFields) {
             try {
                 final String desc = desc(entityType, collectionField);
@@ -56,10 +56,10 @@ public abstract class SortedSetsContractTestAbstract extends AbstractApplyToAllC
 
     private void process(Class<?> entityType, Field collectionField) {
         assertThat(
-                desc(entityType, collectionField) + " must be a SortedSet", 
+                desc(entityType, collectionField) + " must be a SortedSet",
                 _Reflect.withTypeAssignableTo(SortedSet.class).test(collectionField), is(true));
     }
-    
+
     private String desc(Class<?> entityType, Field collectionField) {
         return entityType.getSimpleName() + "#" + collectionField.getName();
     }

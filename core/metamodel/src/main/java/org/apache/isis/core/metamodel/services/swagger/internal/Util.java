@@ -95,11 +95,11 @@ public final class Util {
 
     static Predicate<ObjectAssociation> associationsWith(final SwaggerService.Visibility visibility) {
         return new Predicate<ObjectAssociation>() {
-          @Override
-          public boolean apply(final ObjectAssociation objectAssociation) {
-              return !visibility.isPublic() || isVisibleForPublic(objectAssociation);
-          }
-      };
+            @Override
+            public boolean apply(final ObjectAssociation objectAssociation) {
+                return !visibility.isPublic() || isVisibleForPublic(objectAssociation);
+            }
+        };
     }
 
     static List<OneToOneAssociation> propertiesOf(

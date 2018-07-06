@@ -25,14 +25,14 @@ import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFac
 /**
  * Represents an {@link ObjectSpecification}, as determined by
  * an {@link ObjectSpecIdFacet}.
- * 
+ *
  * <p>
  * Has value semantics.
  */
 public final class ObjectSpecId implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
     private final String specId;
 
     public static ObjectSpecId of(String specId) {
@@ -47,7 +47,7 @@ public final class ObjectSpecId implements Serializable {
     public String asString() {
         return specId;
     }
-    
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -77,6 +77,6 @@ public final class ObjectSpecId implements Serializable {
     public String toString() {
         return asString();
     }
-    
-    
+
+
 }

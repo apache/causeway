@@ -22,7 +22,7 @@ package org.apache.isis.applib;
 /**
  * Convenience super class for view models that wish to interact with the
  * container.
- * 
+ *
  * <p>
  * Subclassing is NOT mandatory; the methods in this superclass can be pushed
  * down into domain objects and another superclass used if required.
@@ -36,9 +36,9 @@ public abstract class AbstractViewModel implements ViewModel {
 
     @Override
     public abstract String viewModelMemento();
-    
+
     @Override
     public abstract void viewModelInit(final String memento);
-    
+
 }
 

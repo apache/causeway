@@ -19,15 +19,15 @@
 
 /**
  * The application library defines the annotations, interfaces and
- * supporting utilities that are part of the overall Apache Isis 
- * Programming Model. 
- * 
+ * supporting utilities that are part of the overall Apache Isis
+ * Programming Model.
+ *
  * <p>
  * This package contains adapter classes which can optionally be used for
  * {@link org.apache.isis.applib.AbstractDomainObject entities}, for
  * {@link org.apache.isis.applib.AbstractService domain services} and for
  * {@link org.apache.isis.applib.AbstractFactoryAndRepository repositories}.
- * 
+ *
  * <p>
  * In addition, it contains a {@link org.apache.isis.applib.Identifier class}
  * that represents the identifier of an object or object member, used for

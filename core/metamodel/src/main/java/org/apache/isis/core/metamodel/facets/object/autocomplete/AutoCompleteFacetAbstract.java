@@ -79,20 +79,20 @@ public abstract class AutoCompleteFacetAbstract extends FacetAbstract implements
 
         final ObjectAdapter resultAdapter =
                 getPublishingServiceInternal().withPublishingSuppressed(new PublishingServiceInternal.Block<ObjectAdapter>() {
-            @Override
-            public ObjectAdapter exec() {
-                final Object list = invoke();
-                return adapterManager.adapterFor(list);
-            }
+                    @Override
+                    public ObjectAdapter exec() {
+                        final Object list = invoke();
+                        return adapterManager.adapterFor(list);
+                    }
 
-            private Object invoke()  {
-                try {
-                    return repositoryMethod.invoke(getRepository(), search);
-                } catch (IllegalAccessException | InvocationTargetException e) {
-                    return Collections.emptyList();
-                }
-            }
-        });
+                    private Object invoke()  {
+                        try {
+                            return repositoryMethod.invoke(getRepository(), search);
+                        } catch (IllegalAccessException | InvocationTargetException e) {
+                            return Collections.emptyList();
+                        }
+                    }
+                });
 
         // check a collection was returned
         if(CollectionFacet.Utils.getCollectionFacetFromSpec(resultAdapter) == null) {

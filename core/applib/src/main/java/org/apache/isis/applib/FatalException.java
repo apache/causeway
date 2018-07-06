@@ -22,20 +22,20 @@ package org.apache.isis.applib;
 /**
  * Indicates that an unexpected, non-recoverable (fatal) exception has occurred within
  * the application logic.
- * 
+ *
  * <p>
  * Throwing this exception will (dependent on the viewer) result in some sort of an error page being displayed to the user.
  *
  * <p>
  * Note that this exception has identical semantics to {@link NonRecoverableException}, and can be considered a
  * synonym.
- * 
+ *
  * @see RecoverableException
  * @see ApplicationException
  * @see NonRecoverableException
  */
 public class FatalException extends NonRecoverableException {
-    
+
     private static final long serialVersionUID = 1L;
 
     public FatalException(final String msg) {

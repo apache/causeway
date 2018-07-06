@@ -28,13 +28,13 @@ import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormatter;
 
 public class DateConverterForJodaDateTime extends DateConverterForJodaAbstract<DateTime> {
-    
+
     private static final long serialVersionUID = 1L;
 
     public DateConverterForJodaDateTime(WicketViewerSettings settings, int adjustBy) {
         super(DateTime.class, settings.getDatePattern(), settings.getDateTimePattern(), adjustBy);
     }
-    
+
     @Override
     protected DateTime minusDays(DateTime value, int adjustBy) {
         return value.minusDays(adjustBy);

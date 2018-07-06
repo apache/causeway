@@ -35,7 +35,7 @@ public class ServiceInitializer {
 
     private final Map<String, String> props;
 
-    private Map<Object, Method> postConstructMethodsByService = Maps.newLinkedHashMap(); 
+    private Map<Object, Method> postConstructMethodsByService = Maps.newLinkedHashMap();
     private Map<Object, Method> preDestroyMethodsByService = Maps.newLinkedHashMap();
 
     public ServiceInitializer(
@@ -48,14 +48,14 @@ public class ServiceInitializer {
     // -- validate
 
     public void validate() {
-        
+
         for (final Object service : services) {
             LOG.debug("checking for @PostConstruct and @PostDestroy methods on {}", service.getClass().getName());
             final Method[] methods = service.getClass().getMethods();
 
             // @PostConstruct
             for (final Method method : methods) {
-                
+
                 final PostConstruct postConstructAnnotation = method.getAnnotation(PostConstruct.class);
                 if(postConstructAnnotation == null) {
                     continue;
@@ -64,7 +64,7 @@ public class ServiceInitializer {
                 if(existing != null) {
                     throw new RuntimeException("Found more than one @PostConstruct method; service is: " + service.getClass().getName() + ", found " + existing.getName() + " and " + method.getName());
                 }
-                
+
                 final Class<?>[] parameterTypes = method.getParameterTypes();
                 switch(parameterTypes.length) {
                 case 0:
@@ -79,7 +79,7 @@ public class ServiceInitializer {
                 }
                 postConstructMethodsByService.put(service, method);
             }
-            
+
             // @PreDestroy
             for (final Method method : methods) {
                 final PreDestroy preDestroyAnnotation = method.getAnnotation(PreDestroy.class);
@@ -90,7 +90,7 @@ public class ServiceInitializer {
                 if(existing != null) {
                     throw new RuntimeException("Found more than one @PreDestroy method; service is: " + service.getClass().getName() + ", found " + existing.getName() + " and " + method.getName());
                 }
-                
+
                 final Class<?>[] parameterTypes = method.getParameterTypes();
                 switch(parameterTypes.length) {
                 case 0:
@@ -99,11 +99,11 @@ public class ServiceInitializer {
                     throw new RuntimeException("@PreDestroy method must be no-arg; method is: " + service.getClass().getName() + "#" + method.getName());
                 }
                 preDestroyMethodsByService.put(service, method);
-            }               
+            }
         }
 
     }
-    
+
 
     // -- postConstruct
 
@@ -121,9 +121,9 @@ public class ServiceInitializer {
                 LOG.debug(
                         "... calling @PostConstruct method: " + service.getClass().getName() + ": " + method.getName());
             }
-            
+
             final int numParams = method.getParameterTypes().length;
-            
+
             // unlike shutdown, we don't swallow exceptions; would rather fail early
             try {
                 if(numParams == 0) {
@@ -133,8 +133,8 @@ public class ServiceInitializer {
                 }
             } catch(Exception ex) {
                 LOG.error(String.format(
-                            "@PostConstruct on %s#%s: failed",
-                            service.getClass().getName(), method.getName()),
+                        "@PostConstruct on %s#%s: failed",
+                        service.getClass().getName(), method.getName()),
                         ex);
                 if(firstExceptionIfAny == null) {
                     firstExceptionIfAny = ex;
@@ -146,7 +146,7 @@ public class ServiceInitializer {
         }
     }
 
-    
+
 
     // -- preDestroy
 
@@ -161,7 +161,7 @@ public class ServiceInitializer {
             if(LOG.isDebugEnabled()) {
                 LOG.debug("... calling @PreDestroy method: {}: {}", service.getClass().getName(), method.getName());
             }
-            
+
             try {
                 MethodExtensions.invoke(method, service);
             } catch(Exception ex) {
@@ -173,6 +173,6 @@ public class ServiceInitializer {
         }
     }
 
-    
+
 
 }

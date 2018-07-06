@@ -26,7 +26,7 @@ import org.hamcrest.TypeSafeMatcher;
 
 /**
  * Hamcrest {@link Matcher} implementations.
- * 
+ *
  */
 public final class IsisMatchers {
 

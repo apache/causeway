@@ -33,8 +33,8 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 public abstract class PropertyOrCollectionAccessorFacetAbstract
-        extends FacetAbstract
-        implements PropertyOrCollectionAccessorFacet {
+extends FacetAbstract
+implements PropertyOrCollectionAccessorFacet {
 
     private final ObjectSpecification onType;
     private final AdapterManager adapterManager;

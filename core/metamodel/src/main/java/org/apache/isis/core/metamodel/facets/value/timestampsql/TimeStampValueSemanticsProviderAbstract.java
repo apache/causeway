@@ -37,7 +37,7 @@ abstract class TimeStampValueSemanticsProviderAbstract<T> extends ValueSemantics
     private static final int TYPICAL_LENGTH = 25;
 
     protected static void initFormats(final Map<String, DateFormat> formats) {
-        formats.put(ISO_ENCODING_FORMAT, createDateEncodingFormat("yyyyMMdd'T'HHmmssSSS")); 
+        formats.put(ISO_ENCODING_FORMAT, createDateEncodingFormat("yyyyMMdd'T'HHmmssSSS"));
         formats.put("short", DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.LONG));
     }
 
@@ -79,6 +79,7 @@ abstract class TimeStampValueSemanticsProviderAbstract<T> extends ValueSemantics
         return dateFormat;
     }
 
+    @Override
     protected List<DateFormat> formatsToTry() {
         final List<DateFormat> formats = new ArrayList<DateFormat>();
 

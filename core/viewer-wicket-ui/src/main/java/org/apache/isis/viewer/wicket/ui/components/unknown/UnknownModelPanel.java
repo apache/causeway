@@ -64,7 +64,7 @@ public class UnknownModelPanel extends PanelAbstract<IModel<?>> {
                 buf.append("objectAdapter is NULL");
             }
         }
-        
+
     }
 
 }

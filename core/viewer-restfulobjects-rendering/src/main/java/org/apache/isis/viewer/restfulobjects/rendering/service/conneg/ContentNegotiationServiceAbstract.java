@@ -41,14 +41,17 @@ import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationSer
 
 public abstract class ContentNegotiationServiceAbstract implements ContentNegotiationService {
 
+    @Override
     @Programmatic
     @PostConstruct
     public void init(Map<String, String> properties) {}
 
+    @Override
     @Programmatic
     @PreDestroy
     public void shutdown() {}
 
+    @Override
     @Programmatic
     public Response.ResponseBuilder buildResponse(
             final RepresentationService.Context2 renderContext2,
@@ -56,6 +59,7 @@ public abstract class ContentNegotiationServiceAbstract implements ContentNegoti
         return null;
     }
 
+    @Override
     @Programmatic
     public Response.ResponseBuilder buildResponse(
             final RepresentationService.Context2 renderContext2,
@@ -63,6 +67,7 @@ public abstract class ContentNegotiationServiceAbstract implements ContentNegoti
         return null;
     }
 
+    @Override
     @Programmatic
     public Response.ResponseBuilder buildResponse(
             final RepresentationService.Context2 renderContext2,
@@ -70,6 +75,7 @@ public abstract class ContentNegotiationServiceAbstract implements ContentNegoti
         return null;
     }
 
+    @Override
     @Programmatic
     public Response.ResponseBuilder buildResponse(
             final RepresentationService.Context2 renderContext2,
@@ -77,6 +83,7 @@ public abstract class ContentNegotiationServiceAbstract implements ContentNegoti
         return null;
     }
 
+    @Override
     @Programmatic
     public Response.ResponseBuilder buildResponse(
             final RepresentationService.Context2 renderContext2,

@@ -34,12 +34,12 @@ public class JUnitRuleMockery2Test_autoWiring_sadCase_noClassUnderTest {
     private Collaborator collaborator;
 
     // @ClassUnderTest
-	@SuppressWarnings("unused")
-	private CollaboratingUsingConstructorInjection collaborating;
+    @SuppressWarnings("unused")
+    private CollaboratingUsingConstructorInjection collaborating;
 
     @Test(expected=IllegalStateException.class)
     public void cannotFindClassUnderTest() {
-    	context.getClassUnderTest();
+        context.getClassUnderTest();
     }
 
 }

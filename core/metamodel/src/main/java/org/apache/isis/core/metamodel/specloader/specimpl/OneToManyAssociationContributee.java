@@ -44,14 +44,14 @@ public class OneToManyAssociationContributee extends OneToManyAssociationDefault
 
     private final Object servicePojo;
     private final ObjectAction serviceAction;
-    
+
 
     /**
      * Hold facets rather than delegate to the contributed action (different types might
      * use layout metadata to position the contributee in different ways)
      */
     private final FacetHolder facetHolder = new FacetHolderImpl();
-    
+
     private final Identifier identifier;
 
     private static ObjectSpecification typeOfSpec(
@@ -65,7 +65,7 @@ public class OneToManyAssociationContributee extends OneToManyAssociationDefault
         Class<? extends Object> cls = actionTypeOfFacet != null? actionTypeOfFacet.value(): Object.class;
         return specificationLookup.loadSpecification(cls);
     }
-    
+
     public OneToManyAssociationContributee(
             final Object servicePojo,
             final ObjectActionDefault serviceAction,
@@ -108,8 +108,8 @@ public class OneToManyAssociationContributee extends OneToManyAssociationDefault
 
     private DisabledFacet disabledFacet() {
         final DisabledFacet originalFacet = facetHolder.getFacet(DisabledFacet.class);
-        if( originalFacet != null && 
-            originalFacet.where() == Where.ANYWHERE) {
+        if( originalFacet != null &&
+                originalFacet.where() == Where.ANYWHERE) {
             return originalFacet;
         }
         // ensure that the contributed association is always disabled
@@ -166,7 +166,7 @@ public class OneToManyAssociationContributee extends OneToManyAssociationDefault
         return facetHolder;
     }
 
-    
+
 
     private ObjectAdapter getServiceAdapter() {
         return getPersistenceSessionService().adapterFor(servicePojo);
@@ -179,6 +179,6 @@ public class OneToManyAssociationContributee extends OneToManyAssociationDefault
         return getServiceAdapter().getSpecification();
     }
 
-    
+
 
 }

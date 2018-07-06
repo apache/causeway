@@ -41,10 +41,10 @@ import org.apache.isis.commons.internal.collections._Lists;
 @XmlType(
         name = "row"
         , propOrder = {
-            "cols"
-            , "metadataError"
+                "cols"
+                , "metadataError"
         }
-)
+        )
 public class BS3Row extends BS3ElementAbstract implements HasCssId, BS3RowContentOwner {
 
     private static final long serialVersionUID = 1L;
@@ -55,6 +55,7 @@ public class BS3Row extends BS3ElementAbstract implements HasCssId, BS3RowConten
     /**
      * As per &lt;div id=&quot;...&quot;&gt;...&lt;/div&gt; : must be unique across entire page.
      */
+    @Override
     @XmlAttribute(required = false)
     public String getId() {
         return id;
@@ -70,9 +71,9 @@ public class BS3Row extends BS3ElementAbstract implements HasCssId, BS3RowConten
 
     // no wrapper
     @XmlElementRefs({
-            @XmlElementRef(type = BS3Col.class, name="col", required = true),
-            @XmlElementRef(type = BS3ClearFixVisible.class,  name="clearFixVisible", required = false),
-            @XmlElementRef(type = BS3ClearFixHidden.class,  name="clearFixHidden", required = false)
+        @XmlElementRef(type = BS3Col.class, name="col", required = true),
+        @XmlElementRef(type = BS3ClearFixVisible.class,  name="clearFixVisible", required = false),
+        @XmlElementRef(type = BS3ClearFixHidden.class,  name="clearFixHidden", required = false)
     })
     public List<BS3RowContent> getCols() {
         return cols;

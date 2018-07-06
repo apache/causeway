@@ -39,9 +39,9 @@ import org.apache.isis.applib.services.error.Ticket;
  */
 public class SimpleTicket implements Ticket {
 
-	private static final long serialVersionUID = 4900947111894407314L;
-	
-	private final String reference;
+    private static final long serialVersionUID = 4900947111894407314L;
+
+    private final String reference;
     private final String userMessage;
     private final String details;
     private final StackTracePolicy stackTracePolicy;
@@ -112,23 +112,23 @@ public class SimpleTicket implements Ticket {
     }
 
     @Override
-	public String getMarkup() {
-    	return
-    	"<p>" + 
-    	ifPresentMap(getDetails(), s->"<h3>" + htmlEscape(s) + "</h3>") +
-    	ifPresentMap(getKittenUrl(), s->"<img src=\"" + s + "\"></img>") +
-    	"</p>" + 
-    	ifPresentMap(getReference(), s-> 
-			"<p><h4>Please quote reference: <span>" + htmlEscape(s) + "</span></h4></p>")
-    	;
-	}
-    
+    public String getMarkup() {
+        return
+                "<p>" +
+                ifPresentMap(getDetails(), s->"<h3>" + htmlEscape(s) + "</h3>") +
+                ifPresentMap(getKittenUrl(), s->"<img src=\"" + s + "\"></img>") +
+                "</p>" +
+                ifPresentMap(getReference(), s->
+                "<p><h4>Please quote reference: <span>" + htmlEscape(s) + "</span></h4></p>")
+                ;
+    }
+
     protected static String ifPresentMap(String x, UnaryOperator<String> operator) {
-    	return isEmpty(x) ? "" : operator.apply(x);
+        return isEmpty(x) ? "" : operator.apply(x);
     }
-    
+
     protected static String htmlEscape(String source) {
-    	return com.google.common.html.HtmlEscapers.htmlEscaper().escape(source);
+        return com.google.common.html.HtmlEscapers.htmlEscaper().escape(source);
     }
-    
+
 }

@@ -36,7 +36,7 @@ import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
         requiresProject = true,
         requiresDependencyResolution = ResolutionScope.COMPILE,
         requiresDependencyCollection = ResolutionScope.COMPILE
-)
+        )
 public class IsisMojoValidate extends IsisMojoAbstract {
 
     private final MetaModelProcessor metaModelProcessor;
@@ -49,7 +49,7 @@ public class IsisMojoValidate extends IsisMojoAbstract {
     protected void doExecute(
             final ContextForMojo context,
             final IsisSessionFactory isisSessionFactory)
-            throws MojoFailureException {
+                    throws MojoFailureException {
         final SpecificationLoader specificationLoader =
                 isisSessionFactory.getSpecificationLoader();
         metaModelProcessor.process(context, specificationLoader);
@@ -61,7 +61,7 @@ public class IsisMojoValidate extends IsisMojoAbstract {
         @Override
         public void process(
                 final Context context, final SpecificationLoader specificationLoader)
-                throws MojoFailureException {
+                        throws MojoFailureException {
 
             final ValidationFailures validationFailures = specificationLoader.validate();
 

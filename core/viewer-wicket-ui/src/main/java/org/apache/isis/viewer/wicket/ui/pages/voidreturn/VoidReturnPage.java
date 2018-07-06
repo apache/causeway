@@ -45,18 +45,18 @@ public class VoidReturnPage extends PageAbstract {
         super(PageParametersUtils.newPageParameters(), actionName, ComponentType.VOID_RETURN);
 
         themeDiv.addOrReplace(new Label(ID_ACTION_NAME, actionName));
-        
+
         addChildComponents(themeDiv, model);
 
         addBookmarkedPages(themeDiv);
     }
-    
+
     private static String actionNameFrom(final VoidModel model) {
         ActionModel actionModel = model.getActionModelHint();
         if(actionModel != null) {
             return actionModel.getActionMemento().getAction(model.getSpecificationLoader()).getName();
         }
-        return "Results"; // fallback, probably not required because hint should always exist on the model. 
+        return "Results"; // fallback, probably not required because hint should always exist on the model.
     }
 
 }

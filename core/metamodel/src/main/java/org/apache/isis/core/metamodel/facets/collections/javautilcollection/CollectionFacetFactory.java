@@ -58,9 +58,9 @@ public class CollectionFacetFactory extends FacetFactoryAbstract {
             final Class<?> collectionElementType = collectionElementType(cls);
             typeOfFacet =
                     collectionElementType != Object.class
-                            ? new TypeOfFacetInferredFromGenerics(collectionElementType, facetHolder, getSpecificationLoader())
+                    ? new TypeOfFacetInferredFromGenerics(collectionElementType, facetHolder, getSpecificationLoader())
                             : new TypeOfFacetDefaultToObject(facetHolder, getSpecificationLoader());
-            facetHolder.addFacet(typeOfFacet);
+                    facetHolder.addFacet(typeOfFacet);
         }
 
         final CollectionFacet collectionFacet = new JavaCollectionFacet(facetHolder, adapterManager);

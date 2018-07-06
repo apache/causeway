@@ -48,7 +48,7 @@ public class OneToOneAssociationContributee extends OneToOneAssociationDefault i
      * use layout metadata to position the contributee in different ways)
      */
     private final FacetHolder facetHolder = new FacetHolderImpl();
-    
+
     private final Identifier identifier;
 
     public OneToOneAssociationContributee(
@@ -90,8 +90,8 @@ public class OneToOneAssociationContributee extends OneToOneAssociationDefault i
 
     private DisabledFacet disabledFacet() {
         final DisabledFacet originalFacet = facetHolder.getFacet(DisabledFacet.class);
-        if( originalFacet != null && 
-            originalFacet.where() == Where.ANYWHERE) {
+        if( originalFacet != null &&
+                originalFacet.where() == Where.ANYWHERE) {
             return originalFacet;
         }
         // ensure that the contributed association is always disabled
@@ -155,6 +155,6 @@ public class OneToOneAssociationContributee extends OneToOneAssociationDefault i
         return getServiceAdapter().getSpecification();
     }
 
-    
+
 
 }

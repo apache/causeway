@@ -89,8 +89,8 @@ public class ActionParameterChoicesFacetViaMethod extends ActionParameterChoices
                 ObjectAdapter.Util.visibleAdapters(
                         objectAdapter,
                         interactionInitiatedBy);
-        final List<Object> visibleObjects = 
-        		_Lists.transform(visibleAdapters, ObjectAdapter.Functions.getObject());
+        final List<Object> visibleObjects =
+                _Lists.transform(visibleAdapters, ObjectAdapter.Functions.getObject());
 
         final ObjectSpecification parameterSpec = getSpecification(parameterType);
         return CollectionUtils.getCollectionAsObjectArray(visibleObjects, parameterSpec, getAdapterManager());

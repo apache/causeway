@@ -25,15 +25,15 @@ class Parent {
     Field childField;
     String mappedBy;
     Method getMethod;
-    
+
     // for 1:m
     Method addToMethod;
     Method removeFromMethod;
-    
+
     // if 1:1
     Method modifyMethod;
     Method clearMethod;
-    
+
     Collection<?> getChildren(Object parent) throws RuntimeException {
         try {
             return (Collection<?>) getMethod.invoke(parent);
@@ -76,7 +76,7 @@ class Parent {
             throw new RuntimeException(e);
         }
     }
-    
+
     String desc() {
         return entityType.getName()+"#"+childField.getName();
     }
@@ -84,7 +84,7 @@ class Parent {
         final boolean oneToMany = addToMethod != null;
         return entityType.getSimpleName() + "#" + childField.getName() + " 1:" + (oneToMany?"m":"1") + " "+ c.entityType.getSimpleName() + "#" + c.parentField.getName();
     }
-    
+
     Object newParent(Instantiators instantiators) {
         return instantiators.newInstance(entityType);
     }

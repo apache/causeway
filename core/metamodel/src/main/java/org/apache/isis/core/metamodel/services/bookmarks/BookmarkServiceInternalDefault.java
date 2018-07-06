@@ -56,10 +56,11 @@ import com.google.common.collect.Maps;
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
-)
+        )
 public class BookmarkServiceInternalDefault implements BookmarkService, SerializingAdapter {
 
 
+    @Override
     @Programmatic
     public Object lookup(
             final BookmarkHolder bookmarkHolder,
@@ -174,75 +175,75 @@ public class BookmarkServiceInternalDefault implements BookmarkService, Serializ
     }
 
     // -- SERIALIZING ADAPTER IMPLEMENTATION
-    
+
     @Override
-	public <T> T read(Class<T> cls, Serializable value) {
-    	
-    	if(Bookmark.class.equals(cls)) {
-    		return _Casts.uncheckedCast(value);
-    	}
-		
-		if(Bookmark.class.isAssignableFrom(value.getClass())) {
-			final Bookmark valueBookmark = (Bookmark) value;
-			return _Casts.uncheckedCast(lookup(valueBookmark));
-		}
-		
-		return _Casts.uncheckedCast(value);
-	}
-	
-	@Override
-	public Serializable write(Object value) {
+    public <T> T read(Class<T> cls, Serializable value) {
+
+        if(Bookmark.class.equals(cls)) {
+            return _Casts.uncheckedCast(value);
+        }
+
+        if(Bookmark.class.isAssignableFrom(value.getClass())) {
+            final Bookmark valueBookmark = (Bookmark) value;
+            return _Casts.uncheckedCast(lookup(valueBookmark));
+        }
+
+        return _Casts.uncheckedCast(value);
+    }
+
+    @Override
+    public Serializable write(Object value) {
         if(isPredefinedSerializable(value.getClass())) {
             return (Serializable) value;
         } else {
             final Bookmark valueBookmark = bookmarkFor(value);
-            return valueBookmark;	
+            return valueBookmark;
         }
-	}
-
-	// -- HELPER
-	
-    private final static Set<Class<? extends Serializable>> serializableFinalTypes = _Sets.of(
-    		String.class, String[].class,
-    		Class.class, Class[].class,
-    		Boolean.class, boolean.class, Boolean[].class, boolean[].class, 
-    		Byte.class, byte.class, Byte[].class, byte[].class,
-    		Short.class, short.class, Short[].class, short[].class,
-    		Integer.class, int.class, Integer[].class, int[].class,
-    		Long.class, long.class, Long[].class, long[].class,
-    		Float.class, float.class, Float[].class, float[].class,
-    		Double.class, double.class, Double[].class, double[].class
-    );
-    
-    private final static List<Class<? extends Serializable>> serializableTypes = _Lists.of(
-    		BigDecimal.class,
-    		BigInteger.class,
-    		java.util.Date.class,
-    		java.sql.Date.class,
-    		Enum.class,
-    		Bookmark.class,
-    		TreeState.class
-    );
-    
-    private static boolean isPredefinedSerializable(final Class<?> cls) {
-    	if(!Serializable.class.isAssignableFrom(cls)) {
-    		return false;
-    	}
-    	//[ahuber] any non-scalar values could be problematic, so we are careful with wild-cards here
-    	if(cls.getName().startsWith("java.time.")) {
-    		return true;
-    	}
-    	if(cls.getName().startsWith("org.joda.time.")) {
-    		return true;
-    	}
-    	if(serializableFinalTypes.contains(cls)) {
-    		return true;
-    	}
-    	return serializableTypes.stream().anyMatch(t->t.isAssignableFrom(cls));
     }
-	
-	// -- INJECTION
-	
+
+    // -- HELPER
+
+    private final static Set<Class<? extends Serializable>> serializableFinalTypes = _Sets.of(
+            String.class, String[].class,
+            Class.class, Class[].class,
+            Boolean.class, boolean.class, Boolean[].class, boolean[].class,
+            Byte.class, byte.class, Byte[].class, byte[].class,
+            Short.class, short.class, Short[].class, short[].class,
+            Integer.class, int.class, Integer[].class, int[].class,
+            Long.class, long.class, Long[].class, long[].class,
+            Float.class, float.class, Float[].class, float[].class,
+            Double.class, double.class, Double[].class, double[].class
+            );
+
+    private final static List<Class<? extends Serializable>> serializableTypes = _Lists.of(
+            BigDecimal.class,
+            BigInteger.class,
+            java.util.Date.class,
+            java.sql.Date.class,
+            Enum.class,
+            Bookmark.class,
+            TreeState.class
+            );
+
+    private static boolean isPredefinedSerializable(final Class<?> cls) {
+        if(!Serializable.class.isAssignableFrom(cls)) {
+            return false;
+        }
+        //[ahuber] any non-scalar values could be problematic, so we are careful with wild-cards here
+        if(cls.getName().startsWith("java.time.")) {
+            return true;
+        }
+        if(cls.getName().startsWith("org.joda.time.")) {
+            return true;
+        }
+        if(serializableFinalTypes.contains(cls)) {
+            return true;
+        }
+        return serializableTypes.stream().anyMatch(t->t.isAssignableFrom(cls));
+    }
+
+    // -- INJECTION
+
     @javax.inject.Inject
     PersistenceSessionServiceInternal persistenceSessionServiceInternal;
 
@@ -251,5 +252,5 @@ public class BookmarkServiceInternalDefault implements BookmarkService, Serializ
 
     @Inject
     ServiceRegistry serviceRegistry;
-    
+
 }

@@ -34,12 +34,12 @@ import org.apache.isis.commons.internal.resources._Resource;
 @DomainService(
         nature = NatureOfService.VIEW_MENU_ONLY,
         objectType = "isisApplib.SwaggerServiceMenu"
-)
+        )
 @DomainServiceLayout(
         named = "Prototyping",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY,
         menuOrder = "500.600"
-)
+        )
 public class SwaggerServiceMenu {
 
     public static abstract class ActionDomainEvent extends IsisApplibModule.ActionDomainEvent<SwaggerServiceMenu> { private static final long serialVersionUID = 1L; }
@@ -49,10 +49,10 @@ public class SwaggerServiceMenu {
             semantics = SemanticsOf.SAFE,
             domainEvent = OpenSwaggerUiDomainEvent.class,
             restrictTo = RestrictTo.PROTOTYPING
-    )
+            )
     @ActionLayout(
             cssClassFa = "fa-external-link"
-    )
+            )
     @MemberOrder(sequence="500.600.1")
     public LocalResourcePath openSwaggerUi() {
         return new LocalResourcePath("/swagger-ui/index.html");
@@ -64,13 +64,13 @@ public class SwaggerServiceMenu {
             semantics = SemanticsOf.SAFE,
             domainEvent = OpenSwaggerUiDomainEvent.class,
             restrictTo = RestrictTo.PROTOTYPING
-    )
+            )
     @ActionLayout(
             cssClassFa = "fa-external-link"
-    )
+            )
     @MemberOrder(sequence="500.600.2")
     public LocalResourcePath openRestApi() {
-    	return new LocalResourcePath("/"+_Resource.getRestfulPathIfAny()+"/");
+        return new LocalResourcePath("/"+_Resource.getRestfulPathIfAny()+"/");
     }
 
     public static class DownloadSwaggerSpecDomainEvent extends ActionDomainEvent { private static final long serialVersionUID = 1L; }
@@ -79,10 +79,10 @@ public class SwaggerServiceMenu {
             semantics = SemanticsOf.SAFE,
             domainEvent = DownloadSwaggerSpecDomainEvent.class,
             restrictTo = RestrictTo.PROTOTYPING
-    )
+            )
     @ActionLayout(
             cssClassFa = "fa-download"
-    )
+            )
     @MemberOrder(sequence="500.600.3")
     public Clob downloadSwaggerSchemaDefinition(
             @ParameterLayout(named = "Filename")
@@ -106,4 +106,4 @@ public class SwaggerServiceMenu {
 
     @javax.inject.Inject
     SwaggerService swaggerService;
-}    
+}

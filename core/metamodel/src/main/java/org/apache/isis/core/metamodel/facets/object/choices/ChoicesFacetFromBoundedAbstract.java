@@ -46,19 +46,19 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 /**
  * A fixed number of choices because the number of instances of this class is bounded.
- * 
+ *
  * <p>
  * Typically viewers will interpret this information by displaying all instances
  * of the class in a drop-down list box or similar widget.
- * 
+ *
  * <p>
  * In the standard Apache Isis Programming Model, corresponds to annotating the
  * member with {@link org.apache.isis.applib.annotation.Bounded Bounded} annotation
  * or implementing the {@link Bounded} marker interface.
  */
 public abstract class ChoicesFacetFromBoundedAbstract
-        extends FacetAbstract
-        implements ChoicesFacet, DisablingInteractionAdvisor, ValidatingInteractionAdvisor {
+extends FacetAbstract
+implements ChoicesFacet, DisablingInteractionAdvisor, ValidatingInteractionAdvisor {
 
     public static Class<? extends Facet> type() {
         return ChoicesFacet.class;
@@ -92,13 +92,13 @@ public abstract class ChoicesFacetFromBoundedAbstract
         if(target == null) {
             return null;
         }
-        
+
         // ensure that the target is of the correct type
         if(!(getFacetHolder() instanceof ObjectSpecification)) {
             // should never be the case
             return null;
         }
-        
+
         final ObjectSpecification objectSpec = getObjectSpecification();
         return objectSpec == target.getSpecification()? null: "Invalid type";
     }
@@ -130,10 +130,10 @@ public abstract class ChoicesFacetFromBoundedAbstract
 
         final List<ObjectAdapter> adapters =
                 ObjectAdapter.Util.visibleAdapters(allInstancesAdapter, interactionInitiatedBy);
-        
+
         return _NullSafe.stream(adapters)
-	        .map(ObjectAdapter.Functions.getObject()) // pojos
-	        .collect(_Arrays.toArray(Object.class, _NullSafe.size(adapters)));
+                .map(ObjectAdapter.Functions.getObject()) // pojos
+                .collect(_Arrays.toArray(Object.class, _NullSafe.size(adapters)));
     }
 
     protected DeploymentCategory getDeploymentCategory() {

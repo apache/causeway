@@ -66,19 +66,19 @@ public final class JsonMapper {
         }
     }
 
-        private static ObjectMapper createObjectMapper(PrettyPrinting prettyPrinting) {
-            final ObjectMapper objectMapper = new ObjectMapper();
-            final SimpleModule jsonModule = new SimpleModule("json", new Version(1, 0, 0, null, "org.apache", "isis"));
-            jsonModule.addDeserializer(JsonRepresentation.class, new JsonRepresentationDeserializer());
-            jsonModule.addSerializer(JsonRepresentation.class, new JsonRepresentationSerializer());
-            objectMapper.registerModule(jsonModule);
+    private static ObjectMapper createObjectMapper(PrettyPrinting prettyPrinting) {
+        final ObjectMapper objectMapper = new ObjectMapper();
+        final SimpleModule jsonModule = new SimpleModule("json", new Version(1, 0, 0, null, "org.apache", "isis"));
+        jsonModule.addDeserializer(JsonRepresentation.class, new JsonRepresentationDeserializer());
+        jsonModule.addSerializer(JsonRepresentation.class, new JsonRepresentationSerializer());
+        objectMapper.registerModule(jsonModule);
 
-            if (prettyPrinting == PrettyPrinting.ENABLE) {
-                objectMapper.configure(SerializationFeature.INDENT_OUTPUT, true);
-            }
-            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-            return objectMapper;
+        if (prettyPrinting == PrettyPrinting.ENABLE) {
+            objectMapper.configure(SerializationFeature.INDENT_OUTPUT, true);
         }
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        return objectMapper;
+    }
 
     private static Map<PrettyPrinting, JsonMapper> instanceByConfig = new ConcurrentHashMap();
 
@@ -116,7 +116,7 @@ public final class JsonMapper {
     }
 
     public <T> T read(final Response response, final Class<T> requiredType) throws JsonParseException, JsonMappingException, IOException {
-    	final String entity = RestEasyLegacy.getEntityAsStringFrom(response);
+        final String entity = RestEasyLegacy.getEntityAsStringFrom(response);
         if (entity == null) {
             return null;
         }

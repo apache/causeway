@@ -21,7 +21,7 @@ package org.apache.isis.applib.adapters;
 
 /**
  * Provides a mechanism for encoding/decoding objects.
- * 
+ *
  * <p>
  * This interface is used in two complementary ways:
  * <ul>
@@ -33,14 +33,14 @@ package org.apache.isis.applib.adapters;
  * <li>Alternatively, an implementor of this interface can be nominated in the
  * {@link org.apache.isis.applib.annotation.Encodable} annotation, allowing a
  * class that needs to be encodeable to indicate how it can be encoded/decoded.</li>
- * 
+ *
  * <p>
  * Whatever the class that implements this interface, it must also expose either
  * a <tt>public</tt> no-arg constructor, or (for implementations that also are
  * <tt>Facet</tt>s) a <tt>public</tt> constructor that accepts a single
  * <tt>FacetHolder</tt>. This constructor allows the framework to instantiate
  * the object reflectively.
- * 
+ *
  * @see Parser
  * @see DefaultsProvider
  * @see ValueSemanticsProvider
@@ -49,7 +49,7 @@ public interface EncoderDecoder<T> {
 
     /**
      * Returns the provided object as an encoded string.
-     * 
+     *
      * <p>
      * Even if the class is self-encodeable, note that this method is always
      * called on a new instance of the object created via the no-arg
@@ -60,10 +60,10 @@ public interface EncoderDecoder<T> {
 
     /**
      * Converts an encoded string to an instance of the object.
-     * 
+     *
      * <p>
      * Note that here the implementing class is acting as a factory for itself.
-     * 
+     *
      * @see #toEncodedString(% toEncode)
      */
     T fromEncodedString(String encodedString);

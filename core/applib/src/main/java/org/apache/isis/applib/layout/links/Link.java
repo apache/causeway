@@ -26,14 +26,14 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
 @XmlType(
-    name = "link"
-    , propOrder = {
-        "rel"
-        , "method"
-        , "href"
-        , "type"
-    }
-)
+        name = "link"
+        , propOrder = {
+                "rel"
+                , "method"
+                , "href"
+                , "type"
+        }
+        )
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Link implements Serializable {
 

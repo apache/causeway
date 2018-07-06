@@ -147,7 +147,7 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
                 replacementFacet = new PropertySetterFacetForDomainEventFromPropertyAnnotation(
                         propertyDomainEventFacet.getEventType(), getterFacet, setterFacet, propertyDomainEventFacet, holder, servicesInjector);
             } else
-            // default
+                // default
             {
                 replacementFacet = new PropertySetterFacetForDomainEventFromDefault(
                         propertyDomainEventFacet.getEventType(), getterFacet, setterFacet, propertyDomainEventFacet, holder, servicesInjector);
@@ -164,7 +164,7 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
                 replacementFacet = new PropertyClearFacetForDomainEventFromPropertyAnnotation(
                         propertyDomainEventFacet.getEventType(), getterFacet, clearFacet, propertyDomainEventFacet, holder, servicesInjector);
             } else
-            // default
+                // default
             {
                 replacementFacet = new PropertyClearFacetForDomainEventFromDefault(
                         propertyDomainEventFacet.getEventType(), getterFacet, clearFacet, propertyDomainEventFacet, holder, servicesInjector);
@@ -290,14 +290,14 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
                 MandatoryFacetInvertedByNullableAnnotationOnProperty.create(nullableAnnotation, method, holder);
         FacetUtil.addFacet(facet2);
         conflictingOptionalityValidator.flagIfConflict(
-                    facet2, "Conflicting @Nullable with other optionality annotation");
+                facet2, "Conflicting @Nullable with other optionality annotation");
 
         // search for @Property(optional=...)
         final List<Property> properties = Annotations.getAnnotations(method, Property.class);
         final MandatoryFacet facet3 = MandatoryFacetForPropertyAnnotation.create(properties, method, holder);
         FacetUtil.addFacet(facet3);
         conflictingOptionalityValidator.flagIfConflict(
-                    facet3, "Conflicting Property#optionality with other optionality annotation");
+                facet3, "Conflicting Property#optionality with other optionality annotation");
     }
 
     void processRegEx(final ProcessMethodContext processMethodContext) {

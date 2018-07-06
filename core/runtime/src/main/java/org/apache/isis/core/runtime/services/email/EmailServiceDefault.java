@@ -47,7 +47,7 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
-)
+        )
 public class EmailServiceDefault implements EmailService {
 
     private static final Logger LOG = LoggerFactory.getLogger(EmailServiceDefault.class);
@@ -94,6 +94,7 @@ public class EmailServiceDefault implements EmailService {
     /**
      * Loads responsive email templates borrowed from http://zurb.com/ink/templates.php (Basic)
      */
+    @Override
     @PostConstruct
     @Programmatic
     public void init() {
@@ -175,7 +176,7 @@ public class EmailServiceDefault implements EmailService {
 
     @Override
     public boolean send(final List<String> toList, final List<String> ccList, final List<String> bccList, final String subject, final String body,
-                        final DataSource... attachments) {
+            final DataSource... attachments) {
 
         try {
             final ImageHtmlEmail email = new ImageHtmlEmail();
@@ -262,9 +263,9 @@ public class EmailServiceDefault implements EmailService {
     static String[] actually(final List<String> original, final String overrideIfAny) {
         final List<String> addresses = Strings.isNullOrEmpty(overrideIfAny)
                 ? original == null
-                    ? Collections.<String>emptyList()
-                    : original
-                : Collections.singletonList(overrideIfAny);
+                ? Collections.<String>emptyList()
+                        : original
+                        : Collections.singletonList(overrideIfAny);
         return addresses.toArray(new String[addresses.size()]);
     }
 

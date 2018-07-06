@@ -35,12 +35,12 @@ public interface ObjectActionContainer {
 
     /**
      * Get the action object represented by the specified identity string.
-     * 
+     *
      * <p>
      * The identity string can be either fully specified with parameters (as per
      * {@link Identifier#toNameParmsIdentityString()} or in abbreviated form (
      * {@link Identifier#toNameIdentityString()}).
-     * 
+     *
      * @see #getObjectAction(String)
      */
     ObjectAction getObjectAction(ActionType type, String id);
@@ -48,12 +48,12 @@ public interface ObjectActionContainer {
     /**
      * Get the action object represented by the specified identity string,
      * irrespective of {@link ActionType}.
-     * 
+     *
      * <p>
      * The identity string can be either fully specified with parameters (as per
      * {@link Identifier#toNameParmsIdentityString()} or in abbreviated form (
      * {@link Identifier#toNameIdentityString()}).
-     * 
+     *
      * @see #getObjectAction(ActionType, String)
      */
     ObjectAction getObjectAction(String id);

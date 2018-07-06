@@ -38,7 +38,7 @@ public interface Hierarchical {
     /**
      * Determines if this specification represents the same specification, or a
      * subclass, of the specified specification.
-     * 
+     *
      * <p>
      * <tt>subSpec.isOfType(superSpec)</tt> is equivalent to
      * {@link Class#isAssignableFrom(Class) Java's}

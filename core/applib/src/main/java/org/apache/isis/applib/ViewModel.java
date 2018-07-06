@@ -36,14 +36,14 @@ public interface ViewModel {
      * <p>
      * Typically this will be the identifier of a backing domain entity, but it could also be an arbitrary string,
      * for example a bunch of JSON.
-     * 
+     *
      * <p>
      * This method is called by the framework in order that the view model may be recreated subsequently
      * through {@link #viewModelInit(String)}.
      */
     @Programmatic
     public String viewModelMemento();
-    
+
     /**
      * Used to re-initialize a view model with a memento obtained from {@link #viewModelMemento()}.
      */

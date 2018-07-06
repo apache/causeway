@@ -31,7 +31,7 @@ public abstract class FacetAbstract implements Facet {
         DERIVED,
         NOT_DERIVED
     }
-    
+
     private Facet underlyingFacet;
 
     private final Class<? extends Facet> facetType;
@@ -41,7 +41,7 @@ public abstract class FacetAbstract implements Facet {
     /**
      * Populated in {@link #setFacetHolder(FacetHolder)} if the provided holder
      * implements {@link IdentifiedHolder}.
-     * 
+     *
      * <p>
      * Otherwise is <tt>null</tt>.
      */
@@ -120,7 +120,7 @@ public abstract class FacetAbstract implements Facet {
 
     /**
      * Assume implementation is <i>not</i> a no-op.
-     * 
+     *
      * <p>
      * No-op implementations should override and return <tt>true</tt>.
      */
@@ -132,7 +132,7 @@ public abstract class FacetAbstract implements Facet {
     /**
      * Default implementation of this method that returns <tt>true</tt>, ie
      * should replace (none {@link #isNoop() no-op} implementations.
-     * 
+     *
      * <p>
      * Implementations that don't wish to replace none no-op implementations
      * should override and return <tt>false</tt>.

@@ -44,10 +44,10 @@ import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
  * Ensures that every action that has a collection parameter has a choices facet for that parameter.
  */
 public class ActionChoicesForCollectionParameterFacetFactory extends FacetFactoryAbstract
-            implements MetaModelValidatorRefiner {
+implements MetaModelValidatorRefiner {
 
     public static final String ISIS_REFLECTOR_VALIDATOR_ACTION_COLLECTION_PARAMETER_CHOICES_KEY =
-                                                    "isis.reflector.validator.actionCollectionParameterChoices";
+            "isis.reflector.validator.actionCollectionParameterChoices";
     public static final boolean ISIS_REFLECTOR_VALIDATOR_ACTION_COLLECTION_PARAMETER_CHOICES_DEFAULT = true;
 
     public ActionChoicesForCollectionParameterFacetFactory() {
@@ -107,25 +107,25 @@ public class ActionChoicesForCollectionParameterFacetFactory extends FacetFactor
                             final ObjectActionParameter parameter,
                             final int paramNum,
                             final ValidationFailures validationFailures) {
-                    	
-                    	
-                    	final CollectionSemanticsFacet collectionSemantics = 
-                    			parameter.getFacet(CollectionSemanticsFacet.class);
-                    	if (collectionSemantics != null) {
-                            // Violation if there are action parameter types that are assignable 
-                        	// from java.util.Collection but are not of  
+
+
+                        final CollectionSemanticsFacet collectionSemantics =
+                                parameter.getFacet(CollectionSemanticsFacet.class);
+                        if (collectionSemantics != null) {
+                            // Violation if there are action parameter types that are assignable
+                            // from java.util.Collection but are not of
                             // exact type List, Set, SortedSet or Collection.
-                    		if(!collectionSemantics.value().isSupportedInterfaceForActionParameters()) {
-                    			validationFailures.add(
+                            if(!collectionSemantics.value().isSupportedInterfaceForActionParameters()) {
+                                validationFailures.add(
                                         "Collection action parameter found that is not exactly one "
-                                        + "of the following supported types: "
-                                        + "List, Set, SortedSet, Collection or Array.  "
-                                        + "Class: %s action: %s parameter %d",
-                                        objectSpec.getFullIdentifier(), objectAction.getName(), paramNum);
-                        		return;	
-                    		}
+                                                + "of the following supported types: "
+                                                + "List, Set, SortedSet, Collection or Array.  "
+                                                + "Class: %s action: %s parameter %d",
+                                                objectSpec.getFullIdentifier(), objectAction.getName(), paramNum);
+                                return;
+                            }
                         }
-                    	
+
                         final ActionParameterChoicesFacet choicesFacet =
                                 parameter.getFacet(ActionParameterChoicesFacet.class);
                         final ActionParameterAutoCompleteFacet autoCompleteFacet =
@@ -141,9 +141,9 @@ public class ActionChoicesForCollectionParameterFacetFactory extends FacetFactor
 
                         validationFailures.add(
                                 "Collection action parameter found without supporting "
-                                + "choices or autoComplete facet.  "
-                                + "Class: %s action: %s parameter %d",
-                                objectSpec.getFullIdentifier(), objectAction.getName(), paramNum);
+                                        + "choices or autoComplete facet.  "
+                                        + "Class: %s action: %s parameter %d",
+                                        objectSpec.getFullIdentifier(), objectAction.getName(), paramNum);
                     }
                 });
         metaModelValidator.add(validator);

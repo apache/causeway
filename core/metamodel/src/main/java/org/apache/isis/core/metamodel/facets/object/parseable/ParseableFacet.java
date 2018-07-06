@@ -31,7 +31,7 @@ public interface ParseableFacet extends MultipleValueFacet {
 
     /**
      * Parses a text entry made by a user and sets the domain object's value.
-     * 
+     *
      * <p>
      * Equivalent to <tt>Parser#parseTextEntry(Object, String)</tt>, though may
      * be implemented through some other mechanism.
@@ -44,7 +44,7 @@ public interface ParseableFacet extends MultipleValueFacet {
     /**
      * A title for the object that is valid but which may be easier to edit than
      * the title provided by a {@link TitleFacet}.
-     * 
+     *
      * <p>
      * The idea here is that the viewer can display a parseable title for an
      * existing object when, for example, the user initially clicks in the

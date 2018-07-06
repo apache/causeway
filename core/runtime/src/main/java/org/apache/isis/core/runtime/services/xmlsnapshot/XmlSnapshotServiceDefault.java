@@ -39,16 +39,16 @@ import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
-)
+        )
 public class XmlSnapshotServiceDefault extends XmlSnapshotServiceAbstract {
 
     static class XmlSnapshotServiceDefaultBuilder implements XmlSnapshotService.Builder{
-        
+
         private final XmlSnapshotBuilder builder;
         public XmlSnapshotServiceDefaultBuilder(final Object domainObject) {
             builder = new XmlSnapshotBuilder(domainObject);
         }
-        
+
         @Override
         public void includePath(String path) {
             builder.includePath(path);
@@ -59,6 +59,7 @@ public class XmlSnapshotServiceDefault extends XmlSnapshotServiceAbstract {
             builder.includePathAndAnnotation(path, annotation);
         }
 
+        @Override
         public XmlSnapshotService.Snapshot build() {
             XmlSnapshot xmlSnapshot = builder.build();
             return xmlSnapshot;
@@ -77,7 +78,7 @@ public class XmlSnapshotServiceDefault extends XmlSnapshotServiceAbstract {
 
     /**
      * Creates a builder that allows a custom snapshot - traversing additional associated
-     * properties or collections (using {@link Builder#includePath(String)} and 
+     * properties or collections (using {@link Builder#includePath(String)} and
      * {@link Builder#includePathAndAnnotation(String, String)}) - to be created.
      */
     @Programmatic
@@ -86,7 +87,7 @@ public class XmlSnapshotServiceDefault extends XmlSnapshotServiceAbstract {
         return new XmlSnapshotServiceDefaultBuilder(domainObject);
     }
 
-    
+
     // //////////////////////////////////////
 
 

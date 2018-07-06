@@ -36,8 +36,8 @@ import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 /**
  * Attach to any Ajax button that might trigger a notification (ie calls
  * {@link MessageBroker#addMessage(String)}, {@link MessageBroker#addWarning(String)},
- * {@link MessageBroker#setApplicationError(String)} or throws an {@link RecoverableException}). 
- * 
+ * {@link MessageBroker#setApplicationError(String)} or throws an {@link RecoverableException}).
+ *
  * <p>
  * Attach using the standard Wicket code:
  * <pre>

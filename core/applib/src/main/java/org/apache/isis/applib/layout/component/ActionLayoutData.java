@@ -41,18 +41,18 @@ import org.apache.isis.applib.layout.links.Link;
  */
 @XmlRootElement(
         name = "action"
-)
+        )
 @XmlType(
-    name = "action"
-    , propOrder = {
-        "named"
-        , "describedAs"
-        , "metadataError"
-        , "link"
-    }
-)
+        name = "action"
+        , propOrder = {
+                "named"
+                , "describedAs"
+                , "metadataError"
+                , "link"
+        }
+        )
 public class ActionLayoutData implements Serializable, Owned<ActionLayoutDataOwner>, HasCssClass, HasCssClassFa,
-        HasDescribedAs, HasHidden, HasNamed, HasBookmarking {
+HasDescribedAs, HasHidden, HasNamed, HasBookmarking {
 
     private static final long serialVersionUID = 1L;
 
@@ -232,6 +232,7 @@ public class ActionLayoutData implements Serializable, Owned<ActionLayoutDataOwn
      *     Set programmatically by framework after reading in from XML.
      * </p>
      */
+    @Override
     @XmlTransient
     public ActionLayoutDataOwner getOwner() {
         return owner;

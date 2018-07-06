@@ -36,7 +36,7 @@ public class PromptStyleConfiguration {
     private static PromptStyle parse(final String value) {
         return value != null && value.trim().equalsIgnoreCase(PromptStyle.DIALOG.name())
                 ? PromptStyle.DIALOG
-                : PromptStyle.INLINE;
+                        : PromptStyle.INLINE;
     }
 
 }

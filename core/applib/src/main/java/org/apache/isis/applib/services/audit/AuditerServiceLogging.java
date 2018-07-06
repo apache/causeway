@@ -34,7 +34,7 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
-)
+        )
 public class AuditerServiceLogging implements AuditerService {
 
     private static final Logger LOG = LoggerFactory.getLogger(AuditerServiceLogging.class);
@@ -59,7 +59,7 @@ public class AuditerServiceLogging implements AuditerService {
 
         String auditMessage =
                 interactionId + "," + sequence + ": " +
-                target.toString() + " by " + user + ", " + propertyName + ": " + preValue + " -> " + postValue;
+                        target.toString() + " by " + user + ", " + propertyName + ": " + preValue + " -> " + postValue;
         LOG.debug(auditMessage);
     }
 

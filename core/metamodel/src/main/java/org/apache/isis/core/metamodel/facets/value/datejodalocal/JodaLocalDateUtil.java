@@ -34,7 +34,7 @@ import org.apache.isis.core.metamodel.facets.value.JodaFunctions;
 public final class JodaLocalDateUtil  {
 
     private JodaLocalDateUtil(){}
-    
+
     static LocalDate parseDate(
             final String dateStr,
             List<DateTimeFormatter> parseFormatters) {
@@ -45,7 +45,7 @@ public final class JodaLocalDateUtil  {
         return parsedDate;
     }
 
-    
+
     private static LocalDate parseDate(String dateStr, Iterable<DateTimeFormatter> formatters) {
         for(DateTimeFormatter formatter: formatters) {
             try {

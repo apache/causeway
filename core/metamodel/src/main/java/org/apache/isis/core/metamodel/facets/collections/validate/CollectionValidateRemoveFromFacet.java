@@ -25,7 +25,7 @@ import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
 
 /**
  * Validate that an object can be removed to a collection.
- * 
+ *
  * <p>
  * In the standard Apache Isis Programming Model, corresponds to invoking the
  * <tt>validateRemoveFromXxx</tt> support method for a collection.

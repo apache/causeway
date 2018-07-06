@@ -35,7 +35,7 @@ public class UnknownModelPanelFactory implements ComponentFactory {
     public ApplicationAdvice appliesTo(ComponentType componentType, IModel<?> model) {
         return ApplicationAdvice.APPLIES;
     }
-    
+
     @Override
     public Component createComponent(final String id, final IModel<?> model) {
         return new UnknownModelPanel(id, model);

@@ -26,18 +26,18 @@ import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
 public class IsisAjaxFallbackOrderByBorder<T> extends AjaxFallbackOrderByBorder<T> {
 
     private static final long serialVersionUID = 1L;
-    
+
     private final T sortProperty;
     private final IsisAjaxFallbackDataTable<?, ?> dataTable;
 
     private final ISortStateLocator<T> stateLocator;
-    
+
     public IsisAjaxFallbackOrderByBorder(
-    		String id, 
-    		IsisAjaxFallbackDataTable<?, ?> dataTable, 
-    		T sortProperty, 
-    		ISortStateLocator<T> stateLocator
-    		/* removed in wicket 8, IAjaxCallListener ajaxCallListener*/) {
+            String id,
+            IsisAjaxFallbackDataTable<?, ?> dataTable,
+            T sortProperty,
+            ISortStateLocator<T> stateLocator
+            /* removed in wicket 8, IAjaxCallListener ajaxCallListener*/) {
         super(id, sortProperty, stateLocator/* removed in wicket 8, ajaxCallListener*/);
         this.dataTable = dataTable;
         this.stateLocator = stateLocator;
@@ -53,10 +53,10 @@ public class IsisAjaxFallbackOrderByBorder<T> extends AjaxFallbackOrderByBorder<
         if(uiHintContainer == null) {
             return;
         }
-        
+
         final ISortState<T> state = stateLocator.getSortState();
         final SortOrder order = state.getPropertySortOrder(sortProperty);
-        
+
         dataTable.setSortOrderHintAndBroadcast(order, sortProperty.toString(), target);
         dataTable.setPageNumberHintAndBroadcast(target);
     }
@@ -66,9 +66,9 @@ public class IsisAjaxFallbackOrderByBorder<T> extends AjaxFallbackOrderByBorder<
     {
         super.onSortChanged();
         // UI hint & event broadcast in onAjaxClick
-        dataTable.setCurrentPage(0); 
+        dataTable.setCurrentPage(0);
     }
-    
+
     public UiHintContainer getUiHintContainer() {
         return UiHintContainer.Util.hintContainerOf(dataTable);
     }

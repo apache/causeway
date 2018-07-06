@@ -28,12 +28,12 @@ import java.lang.annotation.Target;
 /**
  * Indicates that an property, collection or action is to be called
  * programmatically and should be ignored from the metamodel.
- * 
+ *
  * <p>
  * For example, it may be a helper method that needs to be <tt>public</tt> but
  * that doesn't conform to the requirements of an action (for example, invalid
  * parameter types).
- * 
+ *
  * <p>
  * It can also be added to a type, meaning that the type is ignored from the metamodel.
  * This is intended as a &quot;get out of jail&quot; for any classes from unit tests, say,

@@ -54,14 +54,14 @@ public abstract class MandatoryFacetForPropertyAnnotation extends MandatoryFacet
                 .findFirst()
                 .map(optionality -> {
                     switch (optionality) {
-                        case DEFAULT:
-                            // do nothing here; instead will rely on MandatoryFromJdoColumnAnnotationFacetFactory to perform
-                            // the remaining processing
-                            return null;
-                        case MANDATORY:
-                            return new MandatoryFacetForPropertyAnnotation.Required(holder);
-                        case OPTIONAL:
-                            return new MandatoryFacetForPropertyAnnotation.Optional(holder);
+                    case DEFAULT:
+                        // do nothing here; instead will rely on MandatoryFromJdoColumnAnnotationFacetFactory to perform
+                        // the remaining processing
+                        return null;
+                    case MANDATORY:
+                        return new MandatoryFacetForPropertyAnnotation.Required(holder);
+                    case OPTIONAL:
+                        return new MandatoryFacetForPropertyAnnotation.Optional(holder);
                     }
                     throw new IllegalStateException("optionality '" + optionality + "' not recognised");
                 })

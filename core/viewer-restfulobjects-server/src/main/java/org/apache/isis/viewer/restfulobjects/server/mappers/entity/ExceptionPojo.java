@@ -25,15 +25,15 @@ import javax.xml.bind.annotation.XmlType;
 
 @XmlRootElement(
         name = "exception"
-)
+        )
 @XmlType(
         name = "exception"
         , propOrder = {
-            "httpStatusCode",
-            "message",
-            "detail",
-    }
-)
+                "httpStatusCode",
+                "message",
+                "detail",
+        }
+        )
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ExceptionPojo {
 

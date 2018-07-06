@@ -54,7 +54,7 @@ public class ObjectSpecificationOnStandaloneList extends ObjectSpecificationAbst
         this.specId = new ObjectSpecId(getCorrespondingClass().getName());
     }
 
-    
+
 
     // -- Introspection
 
@@ -70,11 +70,11 @@ public class ObjectSpecificationOnStandaloneList extends ObjectSpecificationAbst
         FacetUtil.addFacet(new NamedFacetOnStandaloneList(NAME, this));
         FacetUtil.addFacet(new PluralFacetOnStandaloneList(NAME, this));
         FacetUtil.addFacet(new DescribedAsFacetOnStandaloneList(DESCRIBED_AS, this));
-         FacetUtil.addFacet(new ObjectSpecIdFacetOnStandaloneList(specId, this));
+        FacetUtil.addFacet(new ObjectSpecIdFacetOnStandaloneList(specId, this));
         // don't install anything for NotPersistableFacet
     }
 
-    
+
 
     // -- isXxx
 
@@ -102,7 +102,7 @@ public class ObjectSpecificationOnStandaloneList extends ObjectSpecificationAbst
         return false;
     }
 
-    
+
 
     // -- Associations
     /**
@@ -114,7 +114,7 @@ public class ObjectSpecificationOnStandaloneList extends ObjectSpecificationAbst
         return null;
     }
 
-    
+
 
     // -- Title and Icon
 
@@ -128,7 +128,7 @@ public class ObjectSpecificationOnStandaloneList extends ObjectSpecificationAbst
         return ICON_NAME;
     }
 
-    
+
 
     // -- Object Actions
     /**
@@ -156,7 +156,7 @@ public class ObjectSpecificationOnStandaloneList extends ObjectSpecificationAbst
     }
 
 
-    
+
 
 
 }

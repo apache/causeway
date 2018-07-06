@@ -22,12 +22,12 @@ package org.apache.isis.core.commons.lang;
 import com.google.common.base.Predicate;
 
 /**
- * 
+ *
  * @deprecated [ahuber] use $String::isNotEmpty instead
  */
 @Deprecated
 final class StringPredicates {
-    
+
     public static final Predicate<String> NOT_EMPTY = new Predicate<String>() {
         @Override
         public boolean apply(String input) {

@@ -46,7 +46,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
  * property of JDO Object Store's own
  * {@link JdoNamedQuery} value object</li>
  * </ul>
- * 
+ *
  * <p>
  * Optional attributes of the {@link Query} annotation are not currently mapped.
  */

@@ -23,7 +23,7 @@ import org.apache.isis.applib.Identifier;
 
 /**
  * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents a check to determine whether a proposed change is valid.
- * 
+ *
  * <p>
  * Multiple subclasses, including:
  * <ul>
@@ -33,11 +33,11 @@ import org.apache.isis.applib.Identifier;
  * <li>checking all arguments for an action invocation</li>
  * <li>checking all properties for an object before saving</li>
  * </ul>
- * 
+ *
  * <p>
  * If {@link #getReason()} is <tt>null</tt>, then is usable; otherwise is
  * disabled.
- * 
+ *
  * @see AccessEvent
  * @see VisibilityEvent
  * @see UsabilityEvent
@@ -55,9 +55,9 @@ public abstract class ValidityEvent extends InteractionEvent implements Proposed
     public Object getSource() {
         return super.getSource();
     }
-    
+
     @Override
     public String getReasonMessage() {
-    	return String.format("Source: %s. %s", this.getSource(), super.getReasonMessage());
+        return String.format("Source: %s. %s", this.getSource(), super.getReasonMessage());
     }
 }

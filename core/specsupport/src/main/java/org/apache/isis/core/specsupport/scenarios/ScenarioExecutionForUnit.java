@@ -24,9 +24,9 @@ import org.jmock.internal.ExpectationBuilder;
 /**
  * An implementation of {@link ScenarioExecution} with which uses JMock to provide
  * all services.
- * 
+ *
  * <p>
- * Expectations can be {@link Mockery#checking(org.jmock.internal.ExpectationBuilder) set} 
+ * Expectations can be {@link Mockery#checking(org.jmock.internal.ExpectationBuilder) set}
  * and interactions {@link Mockery#assertIsSatisfied() verified} by accessing
  * the underlying {@link Mockery}.
  *
@@ -36,7 +36,7 @@ import org.jmock.internal.ExpectationBuilder;
 public class ScenarioExecutionForUnit extends ScenarioExecution {
 
     private final DomainServiceProviderMockery dspm;
-    
+
     public ScenarioExecutionForUnit() {
         this(new DomainServiceProviderMockery());
     }
@@ -53,20 +53,24 @@ public class ScenarioExecutionForUnit extends ScenarioExecution {
         return true;
     }
     /**
-     * Sets up an expectation against the underlying JMock {@link Mockery} 
+     * Sets up an expectation against the underlying JMock {@link Mockery}
      * (as wrapped by {@link DomainServiceProviderMockery}).
      */
+    @Override
     public void checking(ExpectationBuilder expectations) {
         dspm.mockery().checking(expectations);
     }
-    
+
+    @Override
     public void assertIsSatisfied() {
         dspm.assertIsSatisfied();
     }
-    
+
+    @Override
     public Sequence sequence(String name) {
         return dspm.mockery().sequence(name);
     }
+    @Override
     public States states(String name) {
         return dspm.mockery().states(name);
     }

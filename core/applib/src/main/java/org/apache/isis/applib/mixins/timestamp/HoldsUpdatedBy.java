@@ -20,4 +20,4 @@ public interface HoldsUpdatedBy {
 
     void setUpdatedBy(String updatedBy);
 
-}    
+}

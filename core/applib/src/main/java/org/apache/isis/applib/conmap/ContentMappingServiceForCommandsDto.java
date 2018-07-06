@@ -33,9 +33,10 @@ import org.apache.isis.schema.cmd.v1.CommandsDto;
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
-)
+        )
 public class ContentMappingServiceForCommandsDto implements ContentMappingService {
 
+    @Override
     @Programmatic
     public Object map(Object object, final List<MediaType> acceptableMediaTypes) {
         final boolean supported = Util.isSupported(CommandsDto.class, acceptableMediaTypes);

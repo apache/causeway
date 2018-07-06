@@ -113,8 +113,8 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
 
     private DisabledFacet disabledFacet() {
         final DisabledFacet originalFacet = facetHolder.getFacet(DisabledFacet.class);
-        if( originalFacet != null && 
-            originalFacet.where() == Where.ANYWHERE) {
+        if( originalFacet != null &&
+                originalFacet.where() == Where.ANYWHERE) {
             return originalFacet;
         }
         // ensure that the contributed association is always disabled
@@ -136,7 +136,7 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
                                 mixinAdapter, mixedInAdapter, new ObjectAdapter[0], interactionInitiatedBy);
                     }
                 }
-        );
+                );
     }
 
     @Override

@@ -24,7 +24,7 @@ import javax.activation.MimeType;
 public interface NamedWithMimeType {
 
     public String getName();
-    
+
     public MimeType getMimeType();
 
 }

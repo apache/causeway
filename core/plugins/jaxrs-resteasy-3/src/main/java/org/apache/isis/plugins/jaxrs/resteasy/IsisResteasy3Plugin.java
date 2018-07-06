@@ -12,23 +12,23 @@ import org.jboss.resteasy.spi.Failure;
 
 public class IsisResteasy3Plugin implements UriBuilderPlugin, IsisJaxrsServerPlugin {
 
-	@Override
-	public UriBuilder uriTemplate(String uriTemplate) {
-		return new ResteasyUriBuilder().uriTemplate(uriTemplate);
-	}
+    @Override
+    public UriBuilder uriTemplate(String uriTemplate) {
+        return new ResteasyUriBuilder().uriTemplate(uriTemplate);
+    }
 
-	@Override
-	public Object newRestfulObjectsJaxbWriterForXml() {
-		
-		return new RestfulObjectsJaxbWriterForXml();
-	}
+    @Override
+    public Object newRestfulObjectsJaxbWriterForXml() {
 
-	@Override
-	public HttpStatusCode getFailureStatusCodeIfAny(Throwable ex) {
-		
-		return (ex instanceof Failure) 
-				? RestfulResponse.HttpStatusCode.statusFor(((Failure)ex).getErrorCode())
-				: null;
-	}
+        return new RestfulObjectsJaxbWriterForXml();
+    }
+
+    @Override
+    public HttpStatusCode getFailureStatusCodeIfAny(Throwable ex) {
+
+        return (ex instanceof Failure)
+                ? RestfulResponse.HttpStatusCode.statusFor(((Failure)ex).getErrorCode())
+                        : null;
+    }
 
 }

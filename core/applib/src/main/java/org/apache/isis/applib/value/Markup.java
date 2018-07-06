@@ -24,32 +24,32 @@ import java.io.Serializable;
 import org.apache.isis.applib.annotation.Value;
 
 /**
- * Immutable value type holding pre-rendered HTML.    
- * 
+ * Immutable value type holding pre-rendered HTML.
+ *
  */
 @Value(semanticsProviderName = "org.apache.isis.core.metamodel.facets.value.markup.MarkupValueSemanticsProvider")
 public class Markup implements Serializable {
     private static final long serialVersionUID = 1L;
     private final String html;
-	
+
     public Markup() {
-		this(null);
-	}
-    
-    public Markup(String html) {
-		this.html = html!=null ? html : "";
-	}
-    
-    public String asString() {
-    	return html;
+        this(null);
     }
-    
+
+    public Markup(String html) {
+        this.html = html!=null ? html : "";
+    }
+
+    public String asString() {
+        return html;
+    }
+
     public boolean isEqualTo(final Markup other) {
         return other==null ? false : this.html.equals(other.html);
     }
 
     public String title() {
-    	return "Markup[length="+html.length()+"]";
+        return "Markup[length="+html.length()+"]";
     }
 
     @Override
@@ -58,7 +58,7 @@ public class Markup implements Serializable {
             return true;
         if (obj == null)
             return false;
-        if (getClass() != obj.getClass()) 
+        if (getClass() != obj.getClass())
             return false;
         return isEqualTo((Markup) obj);
     }
@@ -72,5 +72,5 @@ public class Markup implements Serializable {
     public String toString() {
         return "Markup[length="+html.length()+", html="+html+"]";
     }
-    
+
 }

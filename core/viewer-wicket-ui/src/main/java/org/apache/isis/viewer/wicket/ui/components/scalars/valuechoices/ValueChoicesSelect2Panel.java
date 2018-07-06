@@ -72,7 +72,7 @@ public class ValueChoicesSelect2Panel extends ScalarPanelSelect2Abstract impleme
     private List<ObjectAdapterMemento> getChoiceMementos(final ObjectAdapter[] argumentsIfAvailable) {
         final List<ObjectAdapter> choices =
                 scalarModel.getChoices(argumentsIfAvailable, getAuthenticationSession(), getDeploymentCategory());
-        
+
         return _Lists.transform(choices, ObjectAdapterMemento.Functions.fromAdapter());
     }
 
@@ -122,7 +122,7 @@ public class ValueChoicesSelect2Panel extends ScalarPanelSelect2Abstract impleme
         getComponentForRegular().add(new AttributeModifier("title", Model.of(titleAttribute)));
     }
 
-    
+
     // //////////////////////////////////////
 
 

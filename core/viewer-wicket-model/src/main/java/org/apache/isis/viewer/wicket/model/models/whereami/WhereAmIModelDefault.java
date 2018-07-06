@@ -29,87 +29,87 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 
 /**
- * 
+ *
  * @since 2.0.0
  *
  */
 class WhereAmIModelDefault implements WhereAmIModel {
 
-	private final LinkedList<Object> reversedChainOfParents = new LinkedList<>();
-	private final EntityModel startOfChain;
-	
-	private static boolean isWhereAmIEnabled = IS_WHERE_AM_I_FEATURE_ENABLED_DEFAULT;
-	private static int maxChainLength = MAX_NAVIGABLE_PARENT_CHAIN_LENGTH_DEFAULT;
-	private static int configHash = 0;
-	
-	public WhereAmIModelDefault(EntityModel startOfChain) {
-		this.startOfChain = startOfChain;
-		
-		overrideFromConfigIfNew(startOfChain.getPersistenceSession().getConfiguration());		
-		
-		final ObjectAdapter adapter = startOfChain.getObject();
-		final Object startNode = adapter.getObject();
-		
-		ParentChain.of(IsisContext.getSessionFactory().getSpecificationLoader()::loadSpecification)
-		.streamParentChainOf(startNode, maxChainLength)
-		.forEach(reversedChainOfParents::addFirst);
-	}
+    private final LinkedList<Object> reversedChainOfParents = new LinkedList<>();
+    private final EntityModel startOfChain;
 
-	@Override
-	public EntityModel getStartOfChain() {
-		return startOfChain;
-	}
-	
-	@Override
-	public boolean isShowWhereAmI() {
-		if(!isWhereAmIEnabled)
-			return false; // this will prevent rendering 
-		
-		return !reversedChainOfParents.isEmpty();
-	}
+    private static boolean isWhereAmIEnabled = IS_WHERE_AM_I_FEATURE_ENABLED_DEFAULT;
+    private static int maxChainLength = MAX_NAVIGABLE_PARENT_CHAIN_LENGTH_DEFAULT;
+    private static int configHash = 0;
 
-	@Override
-	public Stream<EntityModel> streamParentChainReversed() {
-		if(!isWhereAmIEnabled)
-			return Stream.empty(); //[ahuber] unexpected call, we could log a warning
-		
-		return reversedChainOfParents.stream()
-		.map(this::toEntityModel);
-	}
-	
-	// -- HELPER
+    public WhereAmIModelDefault(EntityModel startOfChain) {
+        this.startOfChain = startOfChain;
 
-	private EntityModel toEntityModel(Object domainObject) {
-		return new EntityModel(
-				startOfChain.getPersistenceSession()
-				.adapterFor(domainObject)	);
-	}
-	
-	private void overrideFromConfigIfNew(IsisConfiguration configuration) {
-		
-		//[ahuber] without evidence that this significantly improves performance, 
-		// (skipping 2 hash-table lookups) we use the smart update idiom here ...
-		//
-		// Note: Updates are expected to occur only once per application life-cycle,
-		// however this class might be loaded by a class-loader, that endures multiple
-		// application life-cycles. Chances of hash-collisions are simply neglected.
-		
-		// that's the hash of the object (we don't care about the actual config values)
-		// assuming that, we get a new (immutable) config instance each app's life-cycle:
-		final int newConfigHash = System.identityHashCode(configuration); 
-		if(newConfigHash == configHash)
-			return;
-		
-		configHash = newConfigHash;
-		
-		isWhereAmIEnabled = configuration.getBoolean(
-				CONFIG_KEY_IS_WHERE_AM_I_FEATURE_ENABLED,
-				IS_WHERE_AM_I_FEATURE_ENABLED_DEFAULT);
-		maxChainLength = configuration.getInteger(
-				CONFIG_KEY_MAX_NAVIGABLE_PARENT_CHAIN_LENGTH,
-				MAX_NAVIGABLE_PARENT_CHAIN_LENGTH_DEFAULT);
-		
-	}
+        overrideFromConfigIfNew(startOfChain.getPersistenceSession().getConfiguration());
 
-	
+        final ObjectAdapter adapter = startOfChain.getObject();
+        final Object startNode = adapter.getObject();
+
+        ParentChain.of(IsisContext.getSessionFactory().getSpecificationLoader()::loadSpecification)
+        .streamParentChainOf(startNode, maxChainLength)
+        .forEach(reversedChainOfParents::addFirst);
+    }
+
+    @Override
+    public EntityModel getStartOfChain() {
+        return startOfChain;
+    }
+
+    @Override
+    public boolean isShowWhereAmI() {
+        if(!isWhereAmIEnabled)
+            return false; // this will prevent rendering
+
+        return !reversedChainOfParents.isEmpty();
+    }
+
+    @Override
+    public Stream<EntityModel> streamParentChainReversed() {
+        if(!isWhereAmIEnabled)
+            return Stream.empty(); //[ahuber] unexpected call, we could log a warning
+
+        return reversedChainOfParents.stream()
+                .map(this::toEntityModel);
+    }
+
+    // -- HELPER
+
+    private EntityModel toEntityModel(Object domainObject) {
+        return new EntityModel(
+                startOfChain.getPersistenceSession()
+                .adapterFor(domainObject)	);
+    }
+
+    private void overrideFromConfigIfNew(IsisConfiguration configuration) {
+
+        //[ahuber] without evidence that this significantly improves performance,
+        // (skipping 2 hash-table lookups) we use the smart update idiom here ...
+        //
+        // Note: Updates are expected to occur only once per application life-cycle,
+        // however this class might be loaded by a class-loader, that endures multiple
+        // application life-cycles. Chances of hash-collisions are simply neglected.
+
+        // that's the hash of the object (we don't care about the actual config values)
+        // assuming that, we get a new (immutable) config instance each app's life-cycle:
+        final int newConfigHash = System.identityHashCode(configuration);
+        if(newConfigHash == configHash)
+            return;
+
+        configHash = newConfigHash;
+
+        isWhereAmIEnabled = configuration.getBoolean(
+                CONFIG_KEY_IS_WHERE_AM_I_FEATURE_ENABLED,
+                IS_WHERE_AM_I_FEATURE_ENABLED_DEFAULT);
+        maxChainLength = configuration.getInteger(
+                CONFIG_KEY_MAX_NAVIGABLE_PARENT_CHAIN_LENGTH,
+                MAX_NAVIGABLE_PARENT_CHAIN_LENGTH_DEFAULT);
+
+    }
+
+
 }

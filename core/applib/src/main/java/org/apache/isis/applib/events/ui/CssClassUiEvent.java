@@ -45,7 +45,7 @@ public abstract class CssClassUiEvent<S> extends AbstractUiEvent<S> {
         super(source);
     }
 
-    
+
 
     // -- Default class
     /**
@@ -57,7 +57,7 @@ public abstract class CssClassUiEvent<S> extends AbstractUiEvent<S> {
     public static class Default extends CssClassUiEvent<Object> {
         private static final long serialVersionUID = 1L;
     }
-    
+
 
     // -- Noop class
 
@@ -68,7 +68,7 @@ public abstract class CssClassUiEvent<S> extends AbstractUiEvent<S> {
     public static class Noop extends CssClassUiEvent<Object> {
         private static final long serialVersionUID = 1L;
     }
-    
+
 
     // -- Doop class
 
@@ -79,7 +79,7 @@ public abstract class CssClassUiEvent<S> extends AbstractUiEvent<S> {
     public static class Doop extends CssClassUiEvent<Object> {
         private static final long serialVersionUID = 1L;
     }
-    
+
 
     // -- cssClass
     private String cssClass;
@@ -97,6 +97,6 @@ public abstract class CssClassUiEvent<S> extends AbstractUiEvent<S> {
     public void setCssClass(final String cssClass) {
         this.cssClass = cssClass;
     }
-    
+
 
 }

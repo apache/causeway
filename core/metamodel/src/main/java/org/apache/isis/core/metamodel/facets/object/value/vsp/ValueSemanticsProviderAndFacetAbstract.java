@@ -53,7 +53,7 @@ public abstract class ValueSemanticsProviderAndFacetAbstract<T> extends FacetAbs
     private final boolean immutable;
     private final boolean equalByContent;
     private final T defaultValue;
-    
+
     public enum Immutability {
         IMMUTABLE,
         NOT_IMMUTABLE;
@@ -111,7 +111,7 @@ public abstract class ValueSemanticsProviderAndFacetAbstract<T> extends FacetAbs
 
     /**
      * The underlying class that has been adapted.
-     * 
+     *
      * <p>
      * Used to determine whether an empty string can be parsed, (for primitive
      * types a non-null entry is required, see {@link #mustHaveEntry()}), and
@@ -123,7 +123,7 @@ public abstract class ValueSemanticsProviderAndFacetAbstract<T> extends FacetAbs
 
     /**
      * We don't replace any (none no-op) facets.
-     * 
+     *
      * <p>
      * For example, if there is already a {@link PropertyDefaultFacet} then we
      * shouldn't replace it.
@@ -188,18 +188,18 @@ public abstract class ValueSemanticsProviderAndFacetAbstract<T> extends FacetAbs
      *            - the proposed new object, as a string representation to be
      *            parsed
      */
-    protected T doParse(Object context, String entry) { 
+    protected T doParse(Object context, String entry) {
         return doParse(entry, context);
-    } 
+    }
 
     // REVIEW: this method used to take Localization as a third param, could now inline
     protected T doParse(String entry, Object context) {
-        return doParse(context, entry); 
-    } 
+        return doParse(context, entry);
+    }
 
     /**
      * Whether a non-null entry is required, used by parsing.
-     * 
+     *
      * <p>
      * Adapters for primitives will return <tt>true</tt>.
      */

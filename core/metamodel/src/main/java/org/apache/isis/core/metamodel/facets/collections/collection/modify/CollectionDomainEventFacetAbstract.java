@@ -46,9 +46,9 @@ public abstract class CollectionDomainEventFacetAbstract extends SingleClassValu
 
     public CollectionDomainEventFacetAbstract(
             final Class<? extends CollectionDomainEvent<?, ?>> eventType,
-            final FacetHolder holder,
-            final ServicesInjector servicesInjector,
-            final SpecificationLoader specificationLoader) {
+                    final FacetHolder holder,
+                    final ServicesInjector servicesInjector,
+                    final SpecificationLoader specificationLoader) {
         super(CollectionDomainEventFacet.class, holder, eventType, specificationLoader);
 
         this.translationService = servicesInjector.lookupService(TranslationService.class);
@@ -102,7 +102,7 @@ public abstract class CollectionDomainEventFacetAbstract extends SingleClassValu
 
         final CollectionDomainEvent.Of of =
                 ic instanceof CollectionAddToContext
-                        ? CollectionDomainEvent.Of.ADD_TO
+                ? CollectionDomainEvent.Of.ADD_TO
                         : CollectionDomainEvent.Of.REMOVE_FROM;
 
         final CollectionDomainEvent<?, ?> event =

@@ -32,6 +32,7 @@ public final class InjectorMethodEvaluatorDefault implements InjectorMethodEvalu
 
     private final Map<Method, Map<Class<?>, Boolean>> isInjectorMethod = Maps.newConcurrentMap();
 
+    @Override
     public boolean isInjectorMethodFor(
             final Method method,
             final Class<?> serviceClass) {

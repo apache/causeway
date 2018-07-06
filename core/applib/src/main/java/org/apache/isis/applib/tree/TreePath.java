@@ -33,28 +33,28 @@ import javax.annotation.Nullable;
  */
 public interface TreePath extends Serializable {
 
-	/**
-	 * @param indexWithinSiblings
-	 * @return a new TreePath instance composed of this with one canonical path entry added
-	 */
-	public TreePath append(int indexWithinSiblings);
-	
-	/**
-	 * 
-	 * @return a new TreePath instance that represents the parent path of this
-	 */
-	public @Nullable TreePath getParentIfAny();
-	
-	public boolean isRoot();
-	
-	// -- CONSTRUCTION
-	
-	public static TreePath of(final int ... canonicalPath) {
-		return new TreePath_Default(canonicalPath);
-	}
+    /**
+     * @param indexWithinSiblings
+     * @return a new TreePath instance composed of this with one canonical path entry added
+     */
+    public TreePath append(int indexWithinSiblings);
 
-	public static TreePath root() {
-		return of(0);
-	}
-	
+    /**
+     *
+     * @return a new TreePath instance that represents the parent path of this
+     */
+    public @Nullable TreePath getParentIfAny();
+
+    public boolean isRoot();
+
+    // -- CONSTRUCTION
+
+    public static TreePath of(final int ... canonicalPath) {
+        return new TreePath_Default(canonicalPath);
+    }
+
+    public static TreePath root() {
+        return of(0);
+    }
+
 }

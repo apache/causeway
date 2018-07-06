@@ -39,7 +39,7 @@ import org.apache.isis.applib.services.acceptheader.AcceptHeaderService;
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
-)
+        )
 @RequestScoped
 public class AcceptHeaderServiceForRest implements AcceptHeaderService {
 
@@ -75,20 +75,20 @@ public class AcceptHeaderServiceForRest implements AcceptHeaderService {
 
             final List<MediaType> mediaTypes =
                     Lists.newArrayList(
-                        Lists.transform(acceptableMediaTypes, new Function<javax.ws.rs.core.MediaType, MediaType>() {
-                            @Nullable @Override
-                            public MediaType apply(
-                                    @Nullable
-                                    final javax.ws.rs.core.MediaType input) {
-                                if (input == null) {
-                                    return null;
+                            Lists.transform(acceptableMediaTypes, new Function<javax.ws.rs.core.MediaType, MediaType>() {
+                                @Nullable @Override
+                                public MediaType apply(
+                                        @Nullable
+                                        final javax.ws.rs.core.MediaType input) {
+                                    if (input == null) {
+                                        return null;
+                                    }
+                                    final MediaType mediaType = MediaType.create(input.getType(), input.getSubtype());
+                                    final SetMultimap<String, String> parameters = Multimaps.forMap(input.getParameters());
+                                    return mediaType.withParameters(parameters);
                                 }
-                                final MediaType mediaType = MediaType.create(input.getType(), input.getSubtype());
-                                final SetMultimap<String, String> parameters = Multimaps.forMap(input.getParameters());
-                                return mediaType.withParameters(parameters);
-                            }
-                        })
-                    );
+                            })
+                            );
             setMediaTypes(mediaTypes);
         }
     }
@@ -99,7 +99,7 @@ public class AcceptHeaderServiceForRest implements AcceptHeaderService {
         @Override
         public void filter(
                 final ContainerRequestContext requestContext, final ContainerResponseContext responseContext)
-                throws IOException {
+                        throws IOException {
             removeMediaTypes();
         }
     }

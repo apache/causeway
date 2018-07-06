@@ -38,8 +38,8 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 public class CollectionAccessorFacetViaAccessor
-        extends PropertyOrCollectionAccessorFacetAbstract
-        implements ImperativeFacet {
+extends PropertyOrCollectionAccessorFacetAbstract
+implements ImperativeFacet {
 
     private final Method method;
 

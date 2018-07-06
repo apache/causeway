@@ -27,7 +27,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 /**
  * Mechanism for clearing a property of an object (that is, setting it to
  * <tt>null</tt>).
- * 
+ *
  * <p>
  * In the standard Apache Isis Programming Model, typically corresponds to a
  * method named <tt>clearXxx</tt> (for a property <tt>getXxx</tt>). As a

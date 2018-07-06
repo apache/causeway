@@ -38,22 +38,22 @@ public class JUnitRuleMockery2Test_mockAnnotatedWithAllowing {
     private Collaborator collaborator;
 
     @ClassUnderTest
-	private CollaboratingUsingConstructorInjection collaborating;
+    private CollaboratingUsingConstructorInjection collaborating;
 
     // no longer necessary :-)
-//    @Before
-//	public void setUp() throws Exception {
-//    	collaborating = (CollaboratingUsingConstructorInjection) context.getClassUnderTest();
-//	}
-    
+    //    @Before
+    //	public void setUp() throws Exception {
+    //    	collaborating = (CollaboratingUsingConstructorInjection) context.getClassUnderTest();
+    //	}
+
     @Test
     public void invocationOnCollaboratorIsIgnored() {
-    	collaborating.collaborateWithCollaborator();
+        collaborating.collaborateWithCollaborator();
     }
 
     @Test
     public void lackOfInvocationOnCollaboratorIsIgnored() {
-    	collaborating.dontCollaborateWithCollaborator();
+        collaborating.dontCollaborateWithCollaborator();
     }
 
 

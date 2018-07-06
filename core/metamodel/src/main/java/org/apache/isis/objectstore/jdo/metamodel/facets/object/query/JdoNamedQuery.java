@@ -25,7 +25,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 /**
  * Value object that represents the information of a
  * {@link javax.jdo.annotations.Query}.
- * 
+ *
  * @see {@link JdoQueryFacet}.
  */
 public final class JdoNamedQuery {

@@ -46,25 +46,25 @@ public class SoapEndpointPublishingRule implements TestRule {
     }
 
     public SoapEndpointPublishingRule(Class<?>... endpointClasses) {
-    	this.soapEndpointSpecs = stream(endpointClasses)
-    			.map(SoapEndpointSpec::asSoapEndpointSpec)
-    			.collect(Collectors.toCollection(ArrayList::new));
+        this.soapEndpointSpecs = stream(endpointClasses)
+                .map(SoapEndpointSpec::asSoapEndpointSpec)
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     public SoapEndpointPublishingRule(final List<Class<?>> endpointClasses) {
-    	this.soapEndpointSpecs = stream(endpointClasses)
-    			.map(SoapEndpointSpec::asSoapEndpointSpec)
-    			.collect(Collectors.toCollection(ArrayList::new));
+        this.soapEndpointSpecs = stream(endpointClasses)
+                .map(SoapEndpointSpec::asSoapEndpointSpec)
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     public SoapEndpointPublishingRule(SoapEndpointSpec... soapEndpointSpecs) {
-    	this.soapEndpointSpecs = stream(soapEndpointSpecs)
-    			.collect(Collectors.toCollection(ArrayList::new));
+        this.soapEndpointSpecs = stream(soapEndpointSpecs)
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     public SoapEndpointPublishingRule(final Iterable<SoapEndpointSpec> soapEndpointSpecs) {
-    	this.soapEndpointSpecs = stream(soapEndpointSpecs)
-    			.collect(Collectors.toCollection(ArrayList::new));
+        this.soapEndpointSpecs = stream(soapEndpointSpecs)
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     @Override

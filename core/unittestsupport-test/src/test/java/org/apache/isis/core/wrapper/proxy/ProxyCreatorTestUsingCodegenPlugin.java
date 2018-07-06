@@ -29,12 +29,12 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class ProxyCreatorTestUsingCodegenPlugin {
-	
-	private ProxyCreator proxyCreator;
+
+    private ProxyCreator proxyCreator;
 
     @Before
     public void setUp() throws Exception {
-    	proxyCreator = new ProxyCreator();
+        proxyCreator = new ProxyCreator();
     }
 
     public static class Employee {
@@ -42,56 +42,56 @@ public class ProxyCreatorTestUsingCodegenPlugin {
         public String getName() {
             return name;
         }
-		public void setName(final String name) {
+        public void setName(final String name) {
             this.name = name;
         }
     }
-    
+
     private static class DelegatingInvocationHandlerForTest implements DelegatingInvocationHandler<Employee> {
-		private final Employee delegate = new Employee();
-		private final Set<String> invoked = new HashSet<>();
-		
-		@Override
-		public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-			invoked.add(method.getName());
-			return "hi";
-		}
+        private final Employee delegate = new Employee();
+        private final Set<String> invoked = new HashSet<>();
 
-		@Override
-		public Employee getDelegate() {
-			return delegate;
-		}
+        @Override
+        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+            invoked.add(method.getName());
+            return "hi";
+        }
 
-		@Override
-		public boolean isResolveObjectChangedEnabled() {
-			return false;
-		}
+        @Override
+        public Employee getDelegate() {
+            return delegate;
+        }
 
-		@Override
-		public void setResolveObjectChangedEnabled(boolean resolveObjectChangedEnabled) {
-		}
-		
-		public boolean wasInvoked(String methodName) {
-			return invoked.contains(methodName);
-		}
+        @Override
+        public boolean isResolveObjectChangedEnabled() {
+            return false;
+        }
+
+        @Override
+        public void setResolveObjectChangedEnabled(boolean resolveObjectChangedEnabled) {
+        }
+
+        public boolean wasInvoked(String methodName) {
+            return invoked.contains(methodName);
+        }
     }
-    
-	@Test
-	public void proxyShouldDelegateCalls() {
-		
-		final DelegatingInvocationHandlerForTest handler = new DelegatingInvocationHandlerForTest();		
-		final Employee proxyOfEmployee = proxyCreator.instantiateProxy(handler);
-		
-		Assert.assertNotNull(proxyOfEmployee);
-		
-		Assert.assertNotEquals(Employee.class.getName(), proxyOfEmployee.getClass().getName());
-		
-		Assert.assertFalse(handler.wasInvoked("getName"));
-		
-		Assert.assertEquals("hi", proxyOfEmployee.getName());
-		
-		Assert.assertTrue(handler.wasInvoked("getName"));
-		
-	}
+
+    @Test
+    public void proxyShouldDelegateCalls() {
+
+        final DelegatingInvocationHandlerForTest handler = new DelegatingInvocationHandlerForTest();
+        final Employee proxyOfEmployee = proxyCreator.instantiateProxy(handler);
+
+        Assert.assertNotNull(proxyOfEmployee);
+
+        Assert.assertNotEquals(Employee.class.getName(), proxyOfEmployee.getClass().getName());
+
+        Assert.assertFalse(handler.wasInvoked("getName"));
+
+        Assert.assertEquals("hi", proxyOfEmployee.getName());
+
+        Assert.assertTrue(handler.wasInvoked("getName"));
+
+    }
 
 }

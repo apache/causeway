@@ -43,12 +43,12 @@ public abstract class ImmutableFacetAbstract extends FacetAbstract implements Im
     public String disables(final UsabilityContext<? extends UsabilityEvent> ic) {
         final ObjectAdapter target = ic.getTarget();
         switch (ic.getInteractionType()) {
-            case PROPERTY_MODIFY:
-            case COLLECTION_ADD_TO:
-            case COLLECTION_REMOVE_FROM:
-                return disabledReason(target);
-            default:
-                return null;
+        case PROPERTY_MODIFY:
+        case COLLECTION_ADD_TO:
+        case COLLECTION_REMOVE_FROM:
+            return disabledReason(target);
+        default:
+            return null;
         }
     }
 

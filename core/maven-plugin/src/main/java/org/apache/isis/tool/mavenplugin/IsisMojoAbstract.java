@@ -51,6 +51,7 @@ public abstract class IsisMojoAbstract extends AbstractMojo {
     protected IsisMojoAbstract() {
     }
 
+    @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
 
         final ContextForMojo context = new ContextForMojo(mavenProject, getLog());
@@ -67,23 +68,23 @@ public abstract class IsisMojoAbstract extends AbstractMojo {
                 MetaModelInvalidException metaModelInvalidException = IsisContext
                         .getMetaModelInvalidExceptionIfAny();
                 Set<String> validationErrors = metaModelInvalidException.getValidationErrors();
-                    context.throwFailureException(validationErrors.size() + " meta-model problems found.", validationErrors);
+                context.throwFailureException(validationErrors.size() + " meta-model problems found.", validationErrors);
                 return;
             }
             final IsisSessionFactory isisSessionFactoryFinal = isisSessionFactory;
             isisSessionFactory.doInSession(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            doExecute(context, isisSessionFactoryFinal);
-                        } catch (IOException e) {
-                            ;
-                            // ignore
-                        } catch (MojoFailureException e) {
-                            throw new RuntimeException(e);
-                        }
+                @Override
+                public void run() {
+                    try {
+                        doExecute(context, isisSessionFactoryFinal);
+                    } catch (IOException e) {
+                        ;
+                        // ignore
+                    } catch (MojoFailureException e) {
+                        throw new RuntimeException(e);
                     }
-                });
+                }
+            });
 
         } catch(RuntimeException e) {
             if(e.getCause() instanceof MojoFailureException) {
@@ -101,7 +102,7 @@ public abstract class IsisMojoAbstract extends AbstractMojo {
     protected abstract void doExecute(
             final ContextForMojo context,
             final IsisSessionFactory isisSessionFactory)
-            throws MojoFailureException, IOException;
+                    throws MojoFailureException, IOException;
 
     // -- Context
     static class ContextForMojo implements MetaModelProcessor.Context {
@@ -159,6 +160,6 @@ public abstract class IsisMojoAbstract extends AbstractMojo {
             log.error("");
         }
     }
-    
+
 
 }

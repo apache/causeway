@@ -31,36 +31,36 @@ import javax.annotation.Nullable;
  * Casting Utilities
  * </p>
  * <p>
- * <b>WARNING</b>: Do <b>NOT</b> use any of the classes provided by this package! <br/> 
+ * <b>WARNING</b>: Do <b>NOT</b> use any of the classes provided by this package! <br/>
  * These may be changed or removed without notice!
  * </p>
- * 
+ *
  * @since 2.0.0
  */
 public final class _Casts {
 
-	private _Casts(){}
-	
-	@SuppressWarnings("unchecked")
-	public static <T> T uncheckedCast(@Nullable Object obj) {
-		return (T) obj;
-	}
+    private _Casts(){}
 
-	/**
-	 * Returns the casts of {@code value} to {@code cls}, or if this fails returns the result of {@code orElse}
-	 * @param value
-	 * @param cls
-	 * @param orElse
-	 * @return
-	 */
-	public static <T> T castToOrElseGet(@Nullable Object value, Class<T> cls, Supplier<T> orElse) {
+    @SuppressWarnings("unchecked")
+    public static <T> T uncheckedCast(@Nullable Object obj) {
+        return (T) obj;
+    }
 
-		try {
-			return requires(cls, "cls").cast(value);
-		} catch (Exception e) {
-			return requires(orElse, "orElse").get();	
-		}
-		
-	}
-	
+    /**
+     * Returns the casts of {@code value} to {@code cls}, or if this fails returns the result of {@code orElse}
+     * @param value
+     * @param cls
+     * @param orElse
+     * @return
+     */
+    public static <T> T castToOrElseGet(@Nullable Object value, Class<T> cls, Supplier<T> orElse) {
+
+        try {
+            return requires(cls, "cls").cast(value);
+        } catch (Exception e) {
+            return requires(orElse, "orElse").get();
+        }
+
+    }
+
 }

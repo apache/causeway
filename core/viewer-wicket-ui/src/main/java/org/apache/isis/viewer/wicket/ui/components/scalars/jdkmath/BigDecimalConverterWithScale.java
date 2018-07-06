@@ -28,13 +28,13 @@ import org.apache.wicket.util.convert.converter.BigDecimalConverter;
 
 /**
  * The {@link IConverter} implementation that our {@link BigDecimalTextField} delegates to for converting strings into
- * values. 
- * 
+ * values.
+ *
  * <p>
  * We reuse as much of Wicket's {@link BigDecimal} implementation as possible, but overriding where necessary.
  * Whereas Wicket's own {@link BigDecimalConverter} is (clearly?) intended as a singleton, we actually want multiple
  * instances, per scale.  The {@link JavaMathBigDecimalPanelFactory} actually takes care of handling this cache,
- * providing the {@link JavaMathBigDecimalPanel} with an appropriate underlying converter for it to delegate to. 
+ * providing the {@link JavaMathBigDecimalPanel} with an appropriate underlying converter for it to delegate to.
  */
 public class BigDecimalConverterWithScale extends BigDecimalConverter {
 
@@ -47,7 +47,7 @@ public class BigDecimalConverterWithScale extends BigDecimalConverter {
 
     private static final long serialVersionUID = 1L;
     private final Integer scale;
-    
+
     public BigDecimalConverterWithScale(final Integer scale) {
         this.scale = scale;
     }
@@ -61,9 +61,9 @@ public class BigDecimalConverterWithScale extends BigDecimalConverter {
         numberFormat.setGroupingUsed(false);
         return numberFormat;
     }
-    
+
     /**
-     * Forces trailing zeros to be rendered. 
+     * Forces trailing zeros to be rendered.
      */
     @Override
     public NumberFormat getNumberFormat(final Locale locale)
@@ -76,22 +76,22 @@ public class BigDecimalConverterWithScale extends BigDecimalConverter {
         }
         return numberFormat;
     }
-    
+
     @Override
     public BigDecimal convertToObject(String valueStr, Locale locale) throws ConversionException {
 
         DecimalFormat numberFormat = (DecimalFormat) getNumberFormat(locale);
         char groupingSeparator = numberFormat.getDecimalFormatSymbols().getGroupingSeparator();
-        
+
         if(valueStr.contains(""+groupingSeparator)) {
             // TODO: this is not actually shown; we see a generic error
             // need to configure the ConversionException somehow
             throw new ConversionException("Thousands separator '" + groupingSeparator + "' is not allowed in input");
         }
-        
+
         // could also throw an exception
         final BigDecimal bd = super.convertToObject(valueStr, locale);
-        
+
         if(this.scale != null) {
             if(bd.scale() > this.scale) {
                 // TODO: this is not actually shown; we see a generic error
@@ -99,7 +99,7 @@ public class BigDecimalConverterWithScale extends BigDecimalConverter {
                 throw new ConversionException("No more than " + this.scale + " digits can be entered after the decimal place");
             }
             try {
-                return bd != null ? bd.setScale(this.scale) : null; 
+                return bd != null ? bd.setScale(this.scale) : null;
             } catch(Exception ex) {
                 // TODO: this is not actually shown; we see a generic error
                 // need to configure the ConversionException somehow

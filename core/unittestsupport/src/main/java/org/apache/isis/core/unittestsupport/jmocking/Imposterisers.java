@@ -19,14 +19,14 @@ package org.apache.isis.core.unittestsupport.jmocking;
 import org.jmock.api.Imposteriser;
 
 public final class Imposterisers {
-	
-	private Imposterisers() {}
 
-	/**
-	 * @return framework's default Imposteriser instance 
-	 */
-	public static Imposteriser getDefault() {
-		return ImposteriserUsingCodegenPlugin.INSTANCE;
-	}
-	
+    private Imposterisers() {}
+
+    /**
+     * @return framework's default Imposteriser instance
+     */
+    public static Imposteriser getDefault() {
+        return ImposteriserUsingCodegenPlugin.INSTANCE;
+    }
+
 }

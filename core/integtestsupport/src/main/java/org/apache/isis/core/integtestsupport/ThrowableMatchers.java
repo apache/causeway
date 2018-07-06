@@ -30,10 +30,10 @@ public class ThrowableMatchers {
         return new TypeSafeMatcher<Throwable>() {
             @Override
             protected boolean matchesSafely(final Throwable throwable) {
-            	final List<Throwable> causalChain = _Exceptions.getCausalChain(throwable); // non null result
-            	
-            	// legacy of return !FluentIterable.from(causalChain).filter(type).isEmpty();
-            	
+                final List<Throwable> causalChain = _Exceptions.getCausalChain(throwable); // non null result
+
+                // legacy of return !FluentIterable.from(causalChain).filter(type).isEmpty();
+
                 return causalChain.stream().filter(t->t.getClass().equals(type)).findAny().isPresent();
             }
 

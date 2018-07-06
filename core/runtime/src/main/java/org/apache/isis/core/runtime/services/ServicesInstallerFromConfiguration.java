@@ -62,6 +62,7 @@ public class ServicesInstallerFromConfiguration extends ServicesInstallerAbstrac
     // //////////////////////////////////////
 
 
+    @Override
     public void init() {
         initIfRequired();
     }

@@ -159,7 +159,7 @@ public final class IsisConfigurationBuilder {
         primeWith(new PrimerForEnvironmentVariableISIS_OPTS());
     }
 
-    
+
 
     // -- addResourceStreamSource, addResourceStreamSources
 
@@ -178,7 +178,7 @@ public final class IsisConfigurationBuilder {
         }
     }
 
-    
+
 
     // -- addConfigurationResource
 
@@ -248,7 +248,7 @@ public final class IsisConfigurationBuilder {
     }
 
 
-    
+
 
     // -- add, put
 
@@ -269,7 +269,7 @@ public final class IsisConfigurationBuilder {
     }
 
 
-    
+
 
     // -- parseAndPrimeWith, primeWith
 
@@ -322,7 +322,7 @@ public final class IsisConfigurationBuilder {
         primer.prime(this);
     }
 
-    
+
 
     // -- getConfiguration, peekConfiguration, isLocked
 
@@ -352,12 +352,12 @@ public final class IsisConfigurationBuilder {
      * </p>
      */
     public IsisConfiguration peekConfiguration() {
-    	IsisConfigurationDefault cfg = new IsisConfigurationDefault(resourceStreamSourceChain);
-    	// no locking
-    	Properties props = new Properties();
-    	props.putAll(configuration.asMap());
-    	cfg.add(props, ContainsPolicy.OVERWRITE);    	
-    	return cfg;
+        IsisConfigurationDefault cfg = new IsisConfigurationDefault(resourceStreamSourceChain);
+        // no locking
+        Properties props = new Properties();
+        props.putAll(configuration.asMap());
+        cfg.add(props, ContainsPolicy.OVERWRITE);
+        return cfg;
     }
 
     private void ensureNotLocked() {
@@ -366,7 +366,7 @@ public final class IsisConfigurationBuilder {
         }
     }
 
-    
+
 
     // -- dumpResourcesToLog, toString
 
@@ -386,17 +386,17 @@ public final class IsisConfigurationBuilder {
         }
     }
 
-    private final static ToString<IsisConfigurationBuilder> toString = 
-    		ToString.<IsisConfigurationBuilder>
-    		toString("resourceStream", x->x.resourceStreamSourceChain)
-    		.thenToString("configResources", x->x.configurationResourcesFound)
-    		;
-    
+    private final static ToString<IsisConfigurationBuilder> toString =
+            ToString.<IsisConfigurationBuilder>
+    toString("resourceStream", x->x.resourceStreamSourceChain)
+    .thenToString("configResources", x->x.configurationResourcesFound)
+    ;
+
     @Override
     public String toString() {
-    	return toString.toString(this);
+        return toString.toString(this);
     }
 
-    
+
 
 }

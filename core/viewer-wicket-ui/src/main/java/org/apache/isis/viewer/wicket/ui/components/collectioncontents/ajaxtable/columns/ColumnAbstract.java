@@ -34,7 +34,7 @@ import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.
 /**
  * Represents a {@link AbstractColumn} within a
  * {@link AjaxFallbackDefaultDataTable}.
- * 
+ *
  * <p>
  * Part of the implementation of {@link CollectionContentsAsAjaxTablePanel}.
  */

@@ -47,17 +47,17 @@ public class DefaultHeadlessTransactionSupport implements HeadlessTransactionSup
 
         final State state = transaction.getState();
         switch(state) {
-            case COMMITTED:
-            case ABORTED:
-                startTransactionForUser(transactionManager);
-                break;
-            case IN_PROGRESS:
-                // nothing to do
-                break;
-            case MUST_ABORT:
-                throw new AssertionError("Transaction is in state of '" + state + "'");
-            default:
-                throw new AssertionError("Unknown transaction state '" + state + "'");
+        case COMMITTED:
+        case ABORTED:
+            startTransactionForUser(transactionManager);
+            break;
+        case IN_PROGRESS:
+            // nothing to do
+            break;
+        case MUST_ABORT:
+            throw new AssertionError("Transaction is in state of '" + state + "'");
+        default:
+            throw new AssertionError("Unknown transaction state '" + state + "'");
         }
 
     }
@@ -87,71 +87,71 @@ public class DefaultHeadlessTransactionSupport implements HeadlessTransactionSup
 
         final State state = transaction.getState();
         switch(state) {
-            case COMMITTED:
-                break;
-            case ABORTED:
-                break;
-            case IN_PROGRESS:
-                throw new AssertionError("Transaction is still in state of '" + state + "'");
-            case MUST_ABORT:
-                throw new AssertionError("Transaction is still in state of '" + state + "'");
-            default:
-                throw new AssertionError("Unknown transaction state '" + state + "'");
+        case COMMITTED:
+            break;
+        case ABORTED:
+            break;
+        case IN_PROGRESS:
+            throw new AssertionError("Transaction is still in state of '" + state + "'");
+        case MUST_ABORT:
+            throw new AssertionError("Transaction is still in state of '" + state + "'");
+        default:
+            throw new AssertionError("Unknown transaction state '" + state + "'");
         }
     }
 
-//    /**
-//     * Commits the transaction.
-//     *
-//     * @deprecated - ought to be using regular domain services rather than reaching into the framework
-//     */
-//    @Deprecated
-//    public void commitTran() {
-//        final IsisTransactionManager transactionManager = getTransactionManager();
-//        final IsisTransaction transaction = transactionManager.getCurrentTransaction();
-//        if(transaction == null) {
-//            throw new AssertionError("No transaction exists");
-//        }
-//        final State state = transaction.getState();
-//        switch(state) {
-//            case COMMITTED:
-//            case ABORTED:
-//            case MUST_ABORT:
-//                throw new AssertionError("Transaction is in state of '" + state + "'");
-//            case IN_PROGRESS:
-//                transactionManager.endTransaction();
-//                break;
-//            default:
-//                throw new AssertionError("Unknown transaction state '" + state + "'");
-//        }
-//    }
+    //    /**
+    //     * Commits the transaction.
+    //     *
+    //     * @deprecated - ought to be using regular domain services rather than reaching into the framework
+    //     */
+    //    @Deprecated
+    //    public void commitTran() {
+    //        final IsisTransactionManager transactionManager = getTransactionManager();
+    //        final IsisTransaction transaction = transactionManager.getCurrentTransaction();
+    //        if(transaction == null) {
+    //            throw new AssertionError("No transaction exists");
+    //        }
+    //        final State state = transaction.getState();
+    //        switch(state) {
+    //            case COMMITTED:
+    //            case ABORTED:
+    //            case MUST_ABORT:
+    //                throw new AssertionError("Transaction is in state of '" + state + "'");
+    //            case IN_PROGRESS:
+    //                transactionManager.endTransaction();
+    //                break;
+    //            default:
+    //                throw new AssertionError("Unknown transaction state '" + state + "'");
+    //        }
+    //    }
 
-//    /**
-//     * Aborts the transaction.
-//     *
-//     * @deprecated - ought to be using regular domain services rather than reaching into the framework
-//     */
-//    @Deprecated
-//    public void abortTran() {
-//        final IsisTransactionManager transactionManager = getTransactionManager();
-//        final IsisTransaction transaction = transactionManager.getCurrentTransaction();
-//        if(transaction == null) {
-//            throw new AssertionError("No transaction exists");
-//        }
-//        final State state = transaction.getState();
-//        switch(state) {
-//            case ABORTED:
-//                break;
-//            case COMMITTED:
-//                throw new AssertionError("Transaction is in state of '" + state + "'");
-//            case MUST_ABORT:
-//            case IN_PROGRESS:
-//                transactionManager.abortTransaction();
-//                break;
-//            default:
-//                throw new AssertionError("Unknown transaction state '" + state + "'");
-//        }
-//    }
+    //    /**
+    //     * Aborts the transaction.
+    //     *
+    //     * @deprecated - ought to be using regular domain services rather than reaching into the framework
+    //     */
+    //    @Deprecated
+    //    public void abortTran() {
+    //        final IsisTransactionManager transactionManager = getTransactionManager();
+    //        final IsisTransaction transaction = transactionManager.getCurrentTransaction();
+    //        if(transaction == null) {
+    //            throw new AssertionError("No transaction exists");
+    //        }
+    //        final State state = transaction.getState();
+    //        switch(state) {
+    //            case ABORTED:
+    //                break;
+    //            case COMMITTED:
+    //                throw new AssertionError("Transaction is in state of '" + state + "'");
+    //            case MUST_ABORT:
+    //            case IN_PROGRESS:
+    //                transactionManager.abortTransaction();
+    //                break;
+    //            default:
+    //                throw new AssertionError("Unknown transaction state '" + state + "'");
+    //        }
+    //    }
 
     // -- getService
 
@@ -165,14 +165,14 @@ public class DefaultHeadlessTransactionSupport implements HeadlessTransactionSup
     private IsisTransactionManager getTransactionManager() {
         return getPersistenceSession().getTransactionManager();
     }
-    
+
     private PersistenceSession getPersistenceSession() {
         return isisSessionFactory().getCurrentSession().getPersistenceSession();
     }
 
     private IsisSessionFactory isisSessionFactory() {
-    	return IsisContext.getSessionFactory();
+        return IsisContext.getSessionFactory();
     }
-    
+
 
 }

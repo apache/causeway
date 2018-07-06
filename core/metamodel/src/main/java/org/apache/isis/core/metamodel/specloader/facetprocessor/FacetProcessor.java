@@ -66,11 +66,11 @@ public class FacetProcessor implements ServicesInjectorAware {
 
     /**
      * All method prefixes to check in {@link #recognizes(Method)}.
-     * 
+     *
      * <p>
      * Derived from factories that implement
      * {@link MethodPrefixBasedFacetFactory}.
-     * 
+     *
      * <p>
      * If <tt>null</tt>, indicates that the cache hasn't been built.
      */
@@ -79,19 +79,19 @@ public class FacetProcessor implements ServicesInjectorAware {
     /**
      * All registered {@link FacetFactory factories} that implement
      * {@link MethodFilteringFacetFactory}.
-     * 
+     *
      * <p>
      * Used within {@link #recognizes(Method)}.
-     * 
+     *
      * <p>
      * If <tt>null</tt>, indicates that the cache hasn't been built.
      */
     private List<MethodFilteringFacetFactory> cachedMethodFilteringFactories;
-    
+
     /**
      * All registered {@link FacetFactory factories} that implement
      * {@link ContributeeMemberFacetFactory}.
-     * 
+     *
      * <p>
      * If <tt>null</tt>, indicates that the cache hasn't been built.
      */
@@ -100,10 +100,10 @@ public class FacetProcessor implements ServicesInjectorAware {
     /**
      * All registered {@link FacetFactory factories} that implement
      * {@link PropertyOrCollectionIdentifyingFacetFactory}.
-     * 
+     *
      * <p>
      * Used within {@link #recognizes(Method)}.
-     * 
+     *
      * <p>
      * If <tt>null</tt>, indicates that the cache hasn't been built.
      */
@@ -111,7 +111,7 @@ public class FacetProcessor implements ServicesInjectorAware {
 
     /**
      * ObjectFeatureType => List<FacetFactory>
-     * 
+     *
      * <p>
      * Lazily initialized, then cached. The lists remain in the same order that
      * the factories were {@link #registerFactory(FacetFactory) registered}.
@@ -155,7 +155,7 @@ public class FacetProcessor implements ServicesInjectorAware {
     /**
      * Appends to the supplied {@link Set} all of the {@link Method}s that may
      * represent a property or collection.
-     * 
+     *
      * <p>
      * Delegates to all known
      * {@link PropertyOrCollectionIdentifyingFacetFactory}s.
@@ -179,7 +179,7 @@ public class FacetProcessor implements ServicesInjectorAware {
      * Use the provided {@link MethodRemover} to have all known
      * {@link PropertyOrCollectionIdentifyingFacetFactory}s to remove all
      * property accessors, and append them to the supplied methodList.
-     * 
+     *
      * <p>
      * Intended to be called after {@link #findAndRemovePropertyAccessors(org.apache.isis.core.metamodel.facetapi.MethodRemover, java.util.List)} once only reference properties remain.
      */
@@ -194,7 +194,7 @@ public class FacetProcessor implements ServicesInjectorAware {
      * Use the provided {@link MethodRemover} to have all known
      * {@link PropertyOrCollectionIdentifyingFacetFactory}s to remove all
      * property accessors, and append them to the supplied methodList.
-     * 
+     *
      * @see PropertyOrCollectionIdentifyingFacetFactory#findAndRemoveCollectionAccessors(MethodRemover,
      *      List)
      */
@@ -208,7 +208,7 @@ public class FacetProcessor implements ServicesInjectorAware {
     /**
      * Whether this {@link Method method} is recognized by any of the
      * {@link FacetFactory}s.
-     * 
+     *
      * <p>
      * Typically this is when method has a specific prefix, such as
      * <tt>validate</tt> or <tt>hide</tt>. Specifically, it checks:
@@ -217,7 +217,7 @@ public class FacetProcessor implements ServicesInjectorAware {
      * {@link MethodPrefixBasedFacetFactory}</li>
      * <li>the method against any {@link MethodFilteringFacetFactory}</li>
      * </ul>
-     * 
+     *
      * <p>
      * The design of {@link MethodPrefixBasedFacetFactory} (whereby this facet
      * factory set does the work) is a slight performance optimization for when
@@ -245,13 +245,13 @@ public class FacetProcessor implements ServicesInjectorAware {
     /**
      * Attaches all facets applicable to the provided {@link FeatureType#OBJECT
      * object}) to the supplied {@link FacetHolder}.
-     * 
+     *
      * <p>
      * Delegates to {@link FacetFactory#process(org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext)} for each
      * appropriate factory.
-     * 
+     *
      * @see FacetFactory#process(ProcessClassContext)
-     * 
+     *
      * @param cls
      *            - class to process
      * @param facetHolder
@@ -271,11 +271,11 @@ public class FacetProcessor implements ServicesInjectorAware {
     /**
      * Attaches all facets applicable to the provided {@link FeatureType type of
      * feature} to the supplied {@link FacetHolder}.
-     * 
+     *
      * <p>
      * Delegates to {@link FacetFactory#process(org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext)} for each
      * appropriate factory.
-     * 
+     *
      * @param cls
      *            - class in which introspect; allowing the helper methods to be
      *            found is subclasses of that which the method was originally
@@ -302,7 +302,7 @@ public class FacetProcessor implements ServicesInjectorAware {
         }
     }
 
-    
+
     public void processMemberOrder(
             final ObjectMember facetHolder) {
         cacheContributeeMemberFacetFactoriesIfRequired();
@@ -316,18 +316,18 @@ public class FacetProcessor implements ServicesInjectorAware {
     /**
      * Attaches all facets applicable to the provided parameter to the supplied
      * {@link FacetHolder}.
-     * 
+     *
      * <p>
      * Delegates to {@link FacetFactory#processParams(ProcessParameterContext)}
      * for each appropriate factory.
-     * 
+     *
      * @see FacetFactory#processParams(ProcessParameterContext)
      *
      * @param introspectedClass
      * @param method
      *            - action method to process
      * @param paramNum
-*            - 0-based
+     *            - 0-based
      * @param methodRemover
      * @param facetedMethodParameter
      */
@@ -422,7 +422,7 @@ public class FacetProcessor implements ServicesInjectorAware {
             }
         }
     }
-    
+
     private synchronized void cachePropertyOrCollectionIdentifyingFacetFactoriesIfRequired() {
         if (cachedPropertyOrCollectionIdentifyingFactories != null) {
             return;
@@ -459,6 +459,6 @@ public class FacetProcessor implements ServicesInjectorAware {
         this.servicesInjector = servicesInjector;
     }
 
-    
+
 
 }

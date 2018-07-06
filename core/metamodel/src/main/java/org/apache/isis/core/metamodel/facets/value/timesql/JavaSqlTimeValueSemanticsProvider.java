@@ -37,7 +37,7 @@ import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 /**
  * Treats {@link java.sql.Time} as a time-only value type.
- * 
+ *
  */
 public class JavaSqlTimeValueSemanticsProvider extends TimeValueSemanticsProviderAbstract<java.sql.Time> {
     private static Map<String, DateFormat> formats = Maps.newHashMap();

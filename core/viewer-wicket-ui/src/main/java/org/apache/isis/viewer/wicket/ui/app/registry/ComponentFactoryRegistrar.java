@@ -30,12 +30,12 @@ import org.apache.isis.viewer.wicket.ui.ComponentType;
 
 /**
  * Defines an API for registering {@link ComponentFactory}s.
- * 
+ *
  * <p>
  * As used by {@link ComponentFactoryListDefault}.
  */
 public interface ComponentFactoryRegistrar {
-    
+
     public static class ComponentFactoryList implements Iterable<ComponentFactory> {
         private final List<ComponentFactory> componentFactories = Lists.newArrayList();
 

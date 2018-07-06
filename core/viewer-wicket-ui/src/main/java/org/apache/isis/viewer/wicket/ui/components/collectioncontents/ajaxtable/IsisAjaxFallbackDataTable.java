@@ -44,9 +44,9 @@ import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 public class IsisAjaxFallbackDataTable<T, S> extends DataTable<T, S> {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     static final String UIHINT_PAGE_NUMBER = "pageNumber";
 
     private final CollectionContentsSortableDataProvider dataProvider;
@@ -58,9 +58,9 @@ public class IsisAjaxFallbackDataTable<T, S> extends DataTable<T, S> {
     public IsisAjaxFallbackDataTable(
             final String id,
             final List<? extends IColumn<T, S>> columns,
-            final CollectionContentsSortableDataProvider dataProvider,
-            final int rowsPerPage,
-            final ObjectAdapterToggleboxColumn toggleboxColumn)
+                    final CollectionContentsSortableDataProvider dataProvider,
+                    final int rowsPerPage,
+                    final ObjectAdapterToggleboxColumn toggleboxColumn)
     {
         super(id, columns, (ISortableDataProvider<T, S>)dataProvider, rowsPerPage);
         this.dataProvider = dataProvider;
@@ -75,7 +75,7 @@ public class IsisAjaxFallbackDataTable<T, S> extends DataTable<T, S> {
         super.onInitialize();
         buildGui();
     }
-    
+
     private void buildGui() {
         headersToolbar = new IsisAjaxFallbackHeadersToolbar<>(this, this.dataProvider);
         addTopToolbar(headersToolbar);
@@ -129,7 +129,7 @@ public class IsisAjaxFallbackDataTable<T, S> extends DataTable<T, S> {
          */
         @Override
         public <T> Iterator<Item<T>> getItems(final IItemFactory<T> factory,
-            final Iterator<IModel<T>> newModels, Iterator<Item<T>> existingItems)
+                final Iterator<IModel<T>> newModels, Iterator<Item<T>> existingItems)
         {
             final Map<IModel<T>, Item<T>> modelToItem = Generics.newHashMap();
             while (existingItems.hasNext())
@@ -200,7 +200,7 @@ public class IsisAjaxFallbackDataTable<T, S> extends DataTable<T, S> {
         final UiHintContainer uiHintContainer = getUiHintContainer();
         if(uiHintContainer == null) {
             return;
-        } 
+        }
         uiHintContainer.setHint(this, IsisAjaxFallbackDataTable.UIHINT_PAGE_NUMBER, ""+getCurrentPage());
     }
 

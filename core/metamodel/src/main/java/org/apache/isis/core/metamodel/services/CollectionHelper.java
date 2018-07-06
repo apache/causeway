@@ -36,65 +36,65 @@ import java.util.stream.Stream;
 
 class CollectionHelper {
 
-	/**
-	 * If field is of type Collection<T> with generic type T present, then call action with the element type.
-	 * @param field
-	 * @param action
-	 */
-	static void ifIsCollectionWithGenericTypeThen(Field field, Consumer<Class<?>> action) {
-		
-		final Class<?> typeToBeInjected = field.getType();
-		
+    /**
+     * If field is of type Collection<T> with generic type T present, then call action with the element type.
+     * @param field
+     * @param action
+     */
+    static void ifIsCollectionWithGenericTypeThen(Field field, Consumer<Class<?>> action) {
+
+        final Class<?> typeToBeInjected = field.getType();
+
         if(Collection.class.isAssignableFrom(typeToBeInjected)) {
             final Type genericType = field.getGenericType();
             if(genericType instanceof ParameterizedType) {
                 final ParameterizedType parameterizedType = (ParameterizedType) genericType;
                 final Class<?> elementType = (Class<?>) parameterizedType.getActualTypeArguments()[0];
-                
+
                 action.accept(elementType);
             }
         }
-		
-	}
 
-	/**
-	 * Collects elements from stream into a collection that is compatible with the given typeOfCollection.
-	 * @param typeOfCollection
-	 * @param elementStream
-	 * @return
-	 * 
-	 * @throws IllegalArgumentException if the given typeOfCollection is not supported 
-	 */
-	static <T> Collection<T> collectIntoUnmodifiableCompatibleWithCollectionType (
-			Class<?> typeOfCollection, Stream<? extends T> elementStream) {
+    }
 
-		if(SortedSet.class.equals(typeOfCollection)) {
-			return Collections.unmodifiableSortedSet(
-					elementStream.collect(Collectors.<T, SortedSet<T>>toCollection(TreeSet::new))
-			);
-		}
-		
-		if(Set.class.equals(typeOfCollection)) {
-			return Collections.unmodifiableSet(
-					elementStream.collect(Collectors.<T, Set<T>>toCollection(HashSet::new))
-			);
-		}
-		
-		if(List.class.equals(typeOfCollection)) {
-			return Collections.unmodifiableList(
-					elementStream.collect(Collectors.<T, List<T>>toCollection(ArrayList::new))
-			);
-		}
-		
-		if(Collection.class.equals(typeOfCollection)) {
-			return Collections.unmodifiableCollection(
-					elementStream.collect(Collectors.toCollection(ArrayList::new))
-			);
-		}
-		
-		throw new IllegalArgumentException(
-				String.format("Can not collect into %s. Only List, Set, SortedSet and Collection are supported.",
-						typeOfCollection.getClass().getName()));
-	}
+    /**
+     * Collects elements from stream into a collection that is compatible with the given typeOfCollection.
+     * @param typeOfCollection
+     * @param elementStream
+     * @return
+     *
+     * @throws IllegalArgumentException if the given typeOfCollection is not supported
+     */
+    static <T> Collection<T> collectIntoUnmodifiableCompatibleWithCollectionType (
+            Class<?> typeOfCollection, Stream<? extends T> elementStream) {
+
+        if(SortedSet.class.equals(typeOfCollection)) {
+            return Collections.unmodifiableSortedSet(
+                    elementStream.collect(Collectors.<T, SortedSet<T>>toCollection(TreeSet::new))
+                    );
+        }
+
+        if(Set.class.equals(typeOfCollection)) {
+            return Collections.unmodifiableSet(
+                    elementStream.collect(Collectors.<T, Set<T>>toCollection(HashSet::new))
+                    );
+        }
+
+        if(List.class.equals(typeOfCollection)) {
+            return Collections.unmodifiableList(
+                    elementStream.collect(Collectors.<T, List<T>>toCollection(ArrayList::new))
+                    );
+        }
+
+        if(Collection.class.equals(typeOfCollection)) {
+            return Collections.unmodifiableCollection(
+                    elementStream.collect(Collectors.toCollection(ArrayList::new))
+                    );
+        }
+
+        throw new IllegalArgumentException(
+                String.format("Can not collect into %s. Only List, Set, SortedSet and Collection are supported.",
+                        typeOfCollection.getClass().getName()));
+    }
 
 }

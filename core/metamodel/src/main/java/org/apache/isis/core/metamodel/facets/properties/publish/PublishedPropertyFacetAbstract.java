@@ -24,7 +24,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.MarkerFacetAbstract;
 
 public abstract class PublishedPropertyFacetAbstract extends MarkerFacetAbstract
-        implements PublishedPropertyFacet {
+implements PublishedPropertyFacet {
 
     public static Class<? extends Facet> type() {
         return PublishedPropertyFacet.class;

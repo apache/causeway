@@ -95,10 +95,10 @@ public final class XmlSchema {
 
     /**
      * The base of the Uri in use. All namespaces are concatenated with this.
-     * 
+     *
      * The namespace string will be the concatenation of the plus the package
      * name of the class of the object being referenced.
-     * 
+     *
      * If not specified in the constructor, then {@link #DEFAULT_URI_PREFIX} is
      * used.
      */
@@ -118,7 +118,7 @@ public final class XmlSchema {
 
     /**
      * The URI of the application namespace.
-     * 
+     *
      * The value returned will be <code>null</code> until a {@link Snapshot} is
      * created.
      */
@@ -139,7 +139,7 @@ public final class XmlSchema {
     /**
      * Creates an element with the specified localName, in the appropriate
      * namespace for the NOS.
-     * 
+     *
      * If necessary the namespace definition is added to the root element of the
      * doc used to create the element. The element is not parented but to avoid
      * an error can only be added as a child of another element in the same doc.
@@ -230,7 +230,7 @@ public final class XmlSchema {
     /**
      * Creates an <code>xs:element</code> element to represent a collection of
      * application-defined extensions
-     * 
+     *
      * The returned element should be appended to <code>xs:sequence</code>
      * element of the xs:element representing the type of the owning object.
      */
@@ -266,7 +266,7 @@ public final class XmlSchema {
     /**
      * Adds an isis-extensions element and a complexType and sequence elements
      * underneath.
-     * 
+     *
      * <p>
      * Returns the sequence element so that it can be appended to.
      */
@@ -292,7 +292,7 @@ public final class XmlSchema {
     /**
      * Creates an <code>xs:element</code> element to represent a value field in
      * a class.
-     * 
+     *
      * The returned element should be appended to <code>xs:sequence</code>
      * element of the xs:element representing the type of the owning object.
      */
@@ -371,12 +371,12 @@ public final class XmlSchema {
             // name="%extensionClassShortName%"
             final Element xsExtensionElementElement = xsMeta.createXsElementElement(helper.docFor(parentElement), "x-" + shortName(extensionClass.getName()));
             xsExtensionElementElement.setAttribute("default", extensionObject.toString()); // the
-                                                                                           // value
+            // value
             xsExtensionElementElement.setAttribute("minOccurs", "0"); // doesn't
-                                                                      // need to
-                                                                      // appear
-                                                                      // in XML
-                                                                      // (and
+            // need to
+            // appear
+            // in XML
+            // (and
             // indeed won't)
             parentElement.appendChild(xsExtensionElementElement);
         }
@@ -537,14 +537,14 @@ public final class XmlSchema {
     }
 
     /**
-     * 
+     *
      * <pre>
      *     xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
      *     xsi:schemaLocation=&quot;http://isis.apache.org/ns/app/sdm.common.fixture.schemes.ao.communications ddd.xsd&quot;
      * </pre>
-     * 
+     *
      * Assumes that the URI has been specified.
-     * 
+     *
      * @param xmlDoc
      * @param fullyQualifiedClassName
      * @param schemaLocationFileName
@@ -581,7 +581,7 @@ public final class XmlSchema {
     /**
      * Adds a namespace using the supplied prefix and the supplied URI to the
      * root element of the document that is the parent of the supplied element.
-     * 
+     *
      * If the namespace declaration already exists but has a different URI
      * (shouldn't normally happen) overwrites with supplied URI.
      */

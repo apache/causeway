@@ -19,7 +19,7 @@ package org.apache.isis.core.unittestsupport.bidir;
 public class InstantiatorSimple implements Instantiator {
 
     public final Class<?> cls;
-    
+
     public InstantiatorSimple(Class<?> cls) {
         this.cls = cls;
     }

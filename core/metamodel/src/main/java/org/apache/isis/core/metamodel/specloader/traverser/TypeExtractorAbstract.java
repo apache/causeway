@@ -30,7 +30,7 @@ import java.util.List;
 /**
  * Abstract base class factoring out common functionality for helper methods
  * that extract parameterized types.
- * 
+ *
  */
 abstract class TypeExtractorAbstract implements Iterable<Class<?>> {
     private final Method method;

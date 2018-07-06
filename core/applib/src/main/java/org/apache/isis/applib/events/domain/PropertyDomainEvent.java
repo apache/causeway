@@ -35,7 +35,7 @@ public abstract class PropertyDomainEvent<S,T> extends AbstractDomainEvent<S> {
     public static class Default extends PropertyDomainEvent<Object, Object> {
         private static final long serialVersionUID = 1L;
     }
-    
+
 
     // -- Noop class
 
@@ -46,7 +46,7 @@ public abstract class PropertyDomainEvent<S,T> extends AbstractDomainEvent<S> {
     public static class Noop extends PropertyDomainEvent<Object, Object> {
         private static final long serialVersionUID = 1L;
     }
-    
+
 
     // -- Doop class
 
@@ -57,7 +57,7 @@ public abstract class PropertyDomainEvent<S,T> extends AbstractDomainEvent<S> {
     public static class Doop extends PropertyDomainEvent<Object, Object> {
         private static final long serialVersionUID = 1L;
     }
-    
+
 
     // -- constructors
 
@@ -88,7 +88,7 @@ public abstract class PropertyDomainEvent<S,T> extends AbstractDomainEvent<S> {
     public void setOldValue(T oldValue) {
         this.oldValue = oldValue;
     }
-    
+
 
     // -- newValue
     private T newValue;
@@ -105,20 +105,20 @@ public abstract class PropertyDomainEvent<S,T> extends AbstractDomainEvent<S> {
     public void setNewValue(T newValue) {
         this.newValue = newValue;
     }
-    
 
-    private final static ToString<PropertyDomainEvent<?,?>> toString = 
-    		ObjectContracts.<PropertyDomainEvent<?,?>>
-		    toString("source", PropertyDomainEvent::getSource)
-		    .thenToString("identifier", PropertyDomainEvent::getIdentifier)
-		    .thenToString("eventPhase", PropertyDomainEvent::getEventPhase)
-		    .thenToString("oldValue", PropertyDomainEvent::getOldValue) 
-		    .thenToString("newValue", PropertyDomainEvent::getNewValue)
-		    ;
+
+    private final static ToString<PropertyDomainEvent<?,?>> toString =
+            ObjectContracts.<PropertyDomainEvent<?,?>>
+    toString("source", PropertyDomainEvent::getSource)
+    .thenToString("identifier", PropertyDomainEvent::getIdentifier)
+    .thenToString("eventPhase", PropertyDomainEvent::getEventPhase)
+    .thenToString("oldValue", PropertyDomainEvent::getOldValue)
+    .thenToString("newValue", PropertyDomainEvent::getNewValue)
+    ;
 
     @Override
     public String toString() {
-    	return toString.toString(this);
+        return toString.toString(this);
     }
-    
+
 }

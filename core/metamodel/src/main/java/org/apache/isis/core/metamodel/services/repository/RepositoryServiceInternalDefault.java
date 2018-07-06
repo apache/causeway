@@ -46,7 +46,7 @@ import org.apache.isis.core.metamodel.services.persistsession.PersistenceSession
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
-)
+        )
 public class RepositoryServiceInternalDefault implements RepositoryService {
 
     private boolean autoFlush;
@@ -98,7 +98,7 @@ public class RepositoryServiceInternalDefault implements RepositoryService {
 
         return object;
     }
-    
+
     @Programmatic
     @Override
     public <T> T persistAndFlush(final T object) {
@@ -127,12 +127,12 @@ public class RepositoryServiceInternalDefault implements RepositoryService {
 
         persistenceSessionServiceInternal.remove(adapter);
     }
-    
+
     @Override
     @Programmatic
     public void removeAndFlush(final Object domainObject) {
         remove(domainObject);
-	transactionService.flushTransaction();
+        transactionService.flushTransaction();
     }
 
 
@@ -150,12 +150,12 @@ public class RepositoryServiceInternalDefault implements RepositoryService {
     // //////////////////////////////////////
 
     @Programmatic
-	@Override
-	public <T> List<T> allMatches(Class<T> ofType, final Predicate<? super T> predicate, long... range) {
-		return _NullSafe.stream(allInstances(ofType, range))
-				.filter(predicate)
-				.collect(Collectors.toCollection(ArrayList::new));
-	}
+    @Override
+    public <T> List<T> allMatches(Class<T> ofType, final Predicate<? super T> predicate, long... range) {
+        return _NullSafe.stream(allInstances(ofType, range))
+                .filter(predicate)
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
 
     @Programmatic
     @Override
@@ -170,7 +170,7 @@ public class RepositoryServiceInternalDefault implements RepositoryService {
         final List<ObjectAdapter> allMatching = persistenceSessionServiceInternal.allMatchingQuery(query);
         return ObjectAdapter.Util.unwrapT(allMatching);
     }
-    
+
 
     // //////////////////////////////////////
 

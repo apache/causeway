@@ -38,7 +38,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
-)
+        )
 public class UserServiceDefault implements UserService {
 
     @Programmatic
@@ -103,10 +103,10 @@ public class UserServiceDefault implements UserService {
 
     private final ThreadLocal<Stack<UserAndRoleOverrides>> overrides =
             new ThreadLocal<Stack<UserAndRoleOverrides>>() {
-                @Override protected Stack<UserAndRoleOverrides> initialValue() {
-                    return new Stack<>();
-                }
-            };
+        @Override protected Stack<UserAndRoleOverrides> initialValue() {
+            return new Stack<>();
+        }
+    };
 
 
     private void overrideUserAndRoles(final String user, final List<String> rolesIfAny) {
@@ -126,14 +126,14 @@ public class UserServiceDefault implements UserService {
         final Stack<UserAndRoleOverrides> userAndRoleOverrides = overrides.get();
         return !userAndRoleOverrides.empty()
                 ? userAndRoleOverrides.peek()
-                : null;
+                        : null;
     }
 
     private List<String> inheritRoles() {
         final UserAndRoleOverrides currentOverridesIfAny = currentOverridesIfAny();
         return currentOverridesIfAny != null
                 ? currentOverridesIfAny.getRoles()
-                : authenticationSessionProvider.getAuthenticationSession().getRoles();
+                        : authenticationSessionProvider.getAuthenticationSession().getRoles();
     }
 
     private static List<RoleMemento> asRoleMementos(final List<String> roles) {
@@ -150,7 +150,7 @@ public class UserServiceDefault implements UserService {
     @DomainService(
             nature = NatureOfService.DOMAIN,
             menuOrder = "" + Integer.MAX_VALUE
-    )
+            )
     public static class SudoServiceSpi implements SudoService.Spi {
 
         @Override

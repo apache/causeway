@@ -48,7 +48,7 @@ public final class LinkRepresentation extends JsonRepresentation {
         asObjectNode().put("rel", rel);
         return this;
     }
-    
+
     public LinkRepresentation withRel(Rel rel) {
         return withRel(rel.getName());
     }
@@ -96,11 +96,11 @@ public final class LinkRepresentation extends JsonRepresentation {
 
     /**
      * Returns the &quot;arguments&quot; json-property of the link (a map).
-     * 
+     *
      * <p>
      * If there is no &quot;arguments&quot; node, then as a convenience will
      * return an empty map.
-     * 
+     *
      * @return
      */
     public JsonRepresentation getArguments() {

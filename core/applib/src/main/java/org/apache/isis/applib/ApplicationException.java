@@ -23,30 +23,30 @@ import org.apache.isis.applib.services.i18n.TranslatableString;
 
 /**
  * Indicates that an exceptional condition/problem has occurred within the application's domain logic.
- * 
+ *
  * <p>
  * Throwing this exception is equivalent to calling {@link DomainObjectContainer#raiseError(String)}.
  * The framework will trap the error and display the exception message as a warning.
- * 
+ *
  * <p>
  * This exception should only be thrown for &quot;recoverable&quot; exceptions, that is, those which
  * could be anticipated by the application.  It should not be thrown for fatal, unanticipated exceptions.
- * 
+ *
  * <p>
  * The framework attempts to apply some heuristics; if the underlying Isis transaction has been aborted
  * (for example as the result of a problem persisting some data) but then the application attempts to
  * throw this exception, the exception will be promoted to a fatal exception.
- * 
+ *
  * <p>
  * Note that this exception has identical semantics to {@link RecoverableException}, and can be considered a
  * synonym.
- * 
+ *
  * @see RecoverableException
  * @see NonRecoverableException
  * @see FatalException
  */
 public class ApplicationException extends RecoverableException {
-    
+
     private static final long serialVersionUID = 1L;
 
     public ApplicationException(final String msg) {

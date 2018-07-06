@@ -133,7 +133,7 @@ public class WebServer {
 
     private static List<OptionHandler> standardHandlers() {
         return Lists.newArrayList(
-                   new OptionHandlerConfiguration(),
+                new OptionHandlerConfiguration(),
                 new OptionHandlerFixture(),
                 new OptionHandlerAppManifest(),
                 new OptionHandlerAdditionalProperty(),
@@ -142,14 +142,14 @@ public class WebServer {
                 new OptionHandlerHelp(),
                 new OptionHandlerPort(),
                 new OptionHandlerDeploymentTypeWebServer()
-        );
+                );
     }
 
     // REVIEW: hacky...
     private static String guessConfigDirectory() {
         return new File(ConfigurationConstants.WEBINF_FULL_DIRECTORY).exists() ?
                 ConfigurationConstants.WEBINF_FULL_DIRECTORY :
-                ConfigurationConstants.DEFAULT_CONFIG_DIRECTORY;
+                    ConfigurationConstants.DEFAULT_CONFIG_DIRECTORY;
     }
 
 
@@ -236,11 +236,11 @@ public class WebServer {
         final String contextPath = handler.getContextPath();
 
         final StringBuilder buf = new StringBuilder();
-        
+
         try(final Formatter formatter = new Formatter(buf)) {
-        	formatter.format("%s://%s:%d/%s", scheme, host, port, contextPath);
+            formatter.format("%s://%s:%d/%s", scheme, host, port, contextPath);
         }
-        
+
         return appendSlashIfRequired(buf).toString();
     }
 

@@ -22,9 +22,9 @@ import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 
 public interface DateConverterPlugin {
 
-	public DateConverter<?> converterForClassIfAny(
-			Class<?> cls, 
-			WicketViewerSettings wicketViewerSettings,
-			int adjustBy);
-	
+    public DateConverter<?> converterForClassIfAny(
+            Class<?> cls,
+            WicketViewerSettings wicketViewerSettings,
+            int adjustBy);
+
 }

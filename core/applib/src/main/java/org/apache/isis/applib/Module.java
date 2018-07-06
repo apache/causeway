@@ -107,9 +107,9 @@ public interface Module {
      * Optionally each module can define additional configuration properties.
      */
     Map<String,String> getIndividualConfigProps();
-    
+
     /**
-     * Optionally each module can define fallback configuration properties, 
+     * Optionally each module can define fallback configuration properties,
      * such that if not configured elsewhere provides values to fallback to.
      */
     Map<String, String> getFallbackConfigProps();
@@ -210,30 +210,30 @@ public interface Module {
         }
 
         static Map<String, String> transitiveIndividualConfigPropsOf(final Module module) {
-        	final Map<String, String> props = newLinkedHashMap();
-        			
-    		transitiveDependenciesOf(module).stream()
-        	.map(Module::getIndividualConfigProps)
-        	.forEach(props::putAll);
-        	
-        	return props;
+            final Map<String, String> props = newLinkedHashMap();
+
+            transitiveDependenciesOf(module).stream()
+            .map(Module::getIndividualConfigProps)
+            .forEach(props::putAll);
+
+            return props;
         }
-        
+
         static Map<String, String> transitiveFallbackConfigPropsOf(final Module module) {
-        	final Map<String, String> props = newLinkedHashMap();
-			
-    		transitiveDependenciesOf(module).stream()
-        	.map(Module::getFallbackConfigProps)
-        	.forEach(props::putAll);
-        	
-        	return props;
+            final Map<String, String> props = newLinkedHashMap();
+
+            transitiveDependenciesOf(module).stream()
+            .map(Module::getFallbackConfigProps)
+            .forEach(props::putAll);
+
+            return props;
         }
 
         static List<PropertyResource> transitivePropertyResourcesOf(final Module module) {
-        	return transitiveDependenciesOf(module).stream()
-        		.map(Module::getPropertyResources)
-            	.flatMap(List::stream)
-            	.collect(Collectors.toList());
+            return transitiveDependenciesOf(module).stream()
+                    .map(Module::getPropertyResources)
+                    .flatMap(List::stream)
+                    .collect(Collectors.toList());
         }
     }
 

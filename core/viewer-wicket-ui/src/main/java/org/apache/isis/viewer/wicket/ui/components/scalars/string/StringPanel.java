@@ -29,7 +29,7 @@ public class StringPanel extends ScalarPanelTextFieldParseableAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    
+
     public StringPanel(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel);
     }
@@ -40,5 +40,5 @@ public class StringPanel extends ScalarPanelTextFieldParseableAbstract {
     }
 
 
-    
+
 }

@@ -44,7 +44,7 @@ import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
-)
+        )
 @RequestScoped
 public class ChangedObjectsServiceInternal implements WithTransactionScope {
 
@@ -223,8 +223,8 @@ public class ChangedObjectsServiceInternal implements WithTransactionScope {
     @Programmatic
     public Set<Map.Entry<AdapterAndProperty, PreAndPostValues>> getChangedObjectProperties() {
         return changedObjectProperties != null
-                    ? changedObjectProperties
-                    : (changedObjectProperties = capturePostValuesAndDrain(enlistedObjectProperties));
+                ? changedObjectProperties
+                        : (changedObjectProperties = capturePostValuesAndDrain(enlistedObjectProperties));
     }
 
     private Set<Map.Entry<AdapterAndProperty, PreAndPostValues>> capturePostValuesAndDrain(final Map<AdapterAndProperty, PreAndPostValues> changedObjectProperties) {

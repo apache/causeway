@@ -44,10 +44,10 @@ public abstract class DomainRepresentation extends JsonRepresentation implements
 
     public LinkRepresentation getLinkWithRel(final Rel rel) {
 
-    	return getLinks().streamArrayElements(LinkRepresentation.class)
-    	.filter(linkRepr->rel.matches(linkRepr.getRel()))
-    	.findFirst()
-    	.orElse(null);
+        return getLinks().streamArrayElements(LinkRepresentation.class)
+                .filter(linkRepr->rel.matches(linkRepr.getRel()))
+                .findFirst()
+                .orElse(null);
     }
 
     public LinkRepresentation getLinkWithRel(final String rel) {

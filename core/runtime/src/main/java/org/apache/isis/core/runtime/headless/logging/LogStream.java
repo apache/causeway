@@ -40,8 +40,10 @@ public class LogStream extends OutputStream {
         this.level = level;
     }
 
+    @Override
     public void close() {}
 
+    @Override
     public void flush() {
         final String message = toString();
         switch (level) {
@@ -66,21 +68,25 @@ public class LogStream extends OutputStream {
         buf.delete(0, buf.length());
     }
 
+    @Override
     public void write(byte[] b) {
         String str = new String(b);
         this.buf.append(str);
     }
 
+    @Override
     public void write(byte[] b, int off, int len) {
         String str = new String(b, off, len);
         this.buf.append(str);
     }
 
+    @Override
     public void write(int b) {
         String str = Integer.toString(b);
         this.buf.append(str);
     }
 
+    @Override
     public String toString() {
         return buf.toString();
     }

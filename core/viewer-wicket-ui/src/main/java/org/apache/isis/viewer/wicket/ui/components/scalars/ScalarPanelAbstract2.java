@@ -247,7 +247,7 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
         scalarTypeContainer.addOrReplace(scalarIfCompact, scalarIfRegular);
 
         List<LinkAndLabel> linkAndLabels =
-                    LinkAndLabelUtil.asActionLinksForAssociation(this.scalarModel, getDeploymentCategory());
+                LinkAndLabelUtil.asActionLinksForAssociation(this.scalarModel, getDeploymentCategory());
 
         final InlinePromptConfig inlinePromptConfig = getInlinePromptConfig();
         if(inlinePromptConfig.isSupported()) {
@@ -305,7 +305,7 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
             }
         }
         if(scalarModel.getKind() == ScalarModel.Kind.PROPERTY &&
-           scalarModel.getMode() == EntityModel.Mode.VIEW     &&
+                scalarModel.getMode() == EntityModel.Mode.VIEW     &&
                 (scalarModel.getPromptStyle().isDialog() || !scalarModel.canEnterEditMode())) {
             getScalarValueComponent().add(new AttributeAppender("tabindex", "-1"));
         }
@@ -473,7 +473,7 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
 
     // ///////////////////////////////////////////////////////////////////
 
-    
+
     public enum Rendering {
         /**
          * Does not show labels, eg for use in tables
@@ -589,7 +589,7 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
 
         final Component editInlineLinkLabel = createInlinePromptComponent(ID_SCALAR_VALUE_INLINE_PROMPT_LABEL,
                 inlinePromptModel
-        );
+                );
         inlinePromptLink.add(editInlineLinkLabel);
 
         return inlinePromptLink;
@@ -625,11 +625,11 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
 
         inlinePromptLink.add(new AjaxEventBehavior("click") {
             /**
-			 * 
-			 */
-			private static final long serialVersionUID = -3034584614218331440L;
+             *
+             */
+            private static final long serialVersionUID = -3034584614218331440L;
 
-			@Override
+            @Override
             protected void onEvent(final AjaxRequestTarget target) {
 
                 scalarModel.toEditMode();
@@ -655,11 +655,11 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
 
         inlinePromptLink.add(new AjaxEventBehavior("click") {
             /**
-			 * 
-			 */
-			private static final long serialVersionUID = 2171203212348044948L;
+             *
+             */
+            private static final long serialVersionUID = 2171203212348044948L;
 
-			@Override
+            @Override
             protected void onEvent(final AjaxRequestTarget target) {
                 actionLink.onClick(target);
             }
@@ -694,8 +694,8 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
             final MarkupContainer scalarIfRegularFormGroup) {
 
         if(  scalarModel.canEnterEditMode() &&
-            (scalarModel.getPromptStyle().isDialog() ||
-            !getInlinePromptConfig().isSupported())) {
+                (scalarModel.getPromptStyle().isDialog() ||
+                        !getInlinePromptConfig().isSupported())) {
 
             final WebMarkupContainer editProperty = new WebMarkupContainer(ID_EDIT_PROPERTY);
             editProperty.setOutputMarkupId(true);
@@ -703,11 +703,12 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
 
             editProperty.add(new AjaxEventBehavior("click") {
                 /**
-				 * 
-				 */
-				private static final long serialVersionUID = -3561635292986591682L;
+                 *
+                 */
+                private static final long serialVersionUID = -3561635292986591682L;
 
-				protected void onEvent(AjaxRequestTarget target) {
+                @Override
+                protected void onEvent(AjaxRequestTarget target) {
 
                     final ActionPrompt prompt = ActionPromptProvider.Util
                             .getFrom(ScalarPanelAbstract2.this).getActionPrompt();
@@ -782,10 +783,10 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
                 return "label-none";
             case TOP:
                 return "label-top";
-			case DEFAULT:
-			case NOT_SPECIFIED:
-			default:
-				break;
+            case DEFAULT:
+            case NOT_SPECIFIED:
+            default:
+                break;
             }
         }
         return "label-left";

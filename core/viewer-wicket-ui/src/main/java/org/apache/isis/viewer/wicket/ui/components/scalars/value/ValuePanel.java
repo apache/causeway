@@ -27,7 +27,7 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldP
 /**
  * Panel for rendering any value types that do not have their own custom
  * {@link ScalarPanelAbstract2 panel} to render them.
- * 
+ *
  * <p>
  * This is a fallback panel; values are expected to be {@link Parser parseable}
  * (typically through the Isis' {@link Value} annotation.

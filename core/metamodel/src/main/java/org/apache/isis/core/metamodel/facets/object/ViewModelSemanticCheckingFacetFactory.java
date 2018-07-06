@@ -48,7 +48,7 @@ public class ViewModelSemanticCheckingFacetFactory extends FacetFactoryAbstract 
 
         // disable by default
         final boolean enable = getConfiguration().getBoolean(
-                                    "isis.reflector.facets.ViewModelSemanticCheckingFacetFactory.enable", false);
+                "isis.reflector.facets.ViewModelSemanticCheckingFacetFactory.enable", false);
         if(!enable) {
             return;
         }
@@ -84,7 +84,7 @@ public class ViewModelSemanticCheckingFacetFactory extends FacetFactoryAbstract 
                     DomainObject.class.getSimpleName(),
                     ViewModel.class.getSimpleName(),
                     RecreatableDomainObject.class.getSimpleName()
-            );
+                    );
         }
         if(implementsViewModel && annotatedWithDomainObjectLayout) {
             validator.addFailure(

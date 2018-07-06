@@ -36,7 +36,7 @@ import org.apache.isis.core.webapp.auth.AuthenticationSessionStrategyAbstract;
 /**
  * Implements a home-grown protocol, whereby the user id and roles are passed
  * using custom headers.
- * 
+ *
  * <p>
  * Does not bind the {@link AuthenticationSession} onto the {@link HttpSession}.
  */

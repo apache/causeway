@@ -30,7 +30,7 @@ import org.apache.isis.core.metamodel.methodutils.MethodScope;
 /**
  * Designed to simply filter out {@link Iterable#iterator()} method if it
  * exists.
- * 
+ *
  * <p>
  * Does not add any {@link Facet}s.
  */

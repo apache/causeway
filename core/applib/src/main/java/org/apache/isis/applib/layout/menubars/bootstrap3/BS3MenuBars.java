@@ -34,16 +34,16 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
  */
 @XmlRootElement(
         name = "menuBars"
-)
+        )
 @XmlType(
         name = "menuBars"
         , propOrder = {
-            "primary",
-            "secondary",
-            "tertiary",
-            "metadataError"
+                "primary",
+                "secondary",
+                "tertiary",
+                "metadataError"
         }
-)
+        )
 public class BS3MenuBars extends org.apache.isis.applib.layout.menubars.MenuBarsAbstract {
 
     private static final long serialVersionUID = 1L;
@@ -81,6 +81,7 @@ public class BS3MenuBars extends org.apache.isis.applib.layout.menubars.MenuBars
         this.tertiary = tertiary;
     }
 
+    @Override
     public BS3MenuBar menuBarFor(final DomainServiceLayout.MenuBar menuBar) {
         switch (menuBar) {
         case PRIMARY:
@@ -89,10 +90,10 @@ public class BS3MenuBars extends org.apache.isis.applib.layout.menubars.MenuBars
             return getSecondary();
         case TERTIARY:
             return getTertiary();
-		case NOT_SPECIFIED:
-			break;
-		default:
-			throw _Exceptions.unmatchedCase(menuBar);
+        case NOT_SPECIFIED:
+            break;
+        default:
+            throw _Exceptions.unmatchedCase(menuBar);
         }
         return null;
     }

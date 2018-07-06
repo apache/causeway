@@ -34,19 +34,19 @@ import org.apache.isis.applib.layout.links.Link;
  */
 @XmlRootElement(
         name = "domainObject"
-)
+        )
 @XmlType(
         name = "domainObject"
         , propOrder = {
-            "named"
-            , "describedAs"
-            , "plural"
-            , "metadataError"
-            , "link"
+                "named"
+                , "describedAs"
+                , "plural"
+                , "metadataError"
+                , "link"
         }
-)
+        )
 public class DomainObjectLayoutData implements Serializable, Owned<DomainObjectLayoutDataOwner>,
-        HasBookmarking, HasCssClass, HasCssClassFa, HasDescribedAs, HasNamed {
+HasBookmarking, HasCssClass, HasCssClassFa, HasDescribedAs, HasNamed {
 
     private static final long serialVersionUID = 1L;
 
@@ -195,6 +195,7 @@ public class DomainObjectLayoutData implements Serializable, Owned<DomainObjectL
      *     Set programmatically by framework after reading in from XML.
      * </p>
      */
+    @Override
     @XmlTransient
     public DomainObjectLayoutDataOwner getOwner() {
         return owner;

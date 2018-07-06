@@ -41,14 +41,14 @@ public class BookmarkedPagesModel extends ModelAbstract<List<BookmarkTreeNode>> 
     private static final int MAX_SIZE_DEFAULT_VALUE = 15;
 
     private final List<BookmarkTreeNode> rootNodes = Lists.newArrayList();
-    
+
     private transient PageParameters current;
 
     public void bookmarkPage(final BookmarkableModel<?> bookmarkableModel) {
 
         // hack: remove any garbage that might've got stored in 'rootNodes'
         cleanUpGarbage(rootNodes);
-        
+
         final PageParameters candidatePP = bookmarkableModel.getPageParametersWithoutUiHints();
         RootOid oid = BookmarkTreeNode.oidFrom(candidatePP);
         if(oid == null) {
@@ -139,13 +139,13 @@ public class BookmarkedPagesModel extends ModelAbstract<List<BookmarkTreeNode>> 
             rootNodes.remove(rootNode);
         }
     }
-    
+
     // //////////////////////////////////////
 
-    
+
     protected IsisConfiguration getConfiguration() {
         return getIsisSessionFactory().getConfiguration();
     }
 
-    
+
 }

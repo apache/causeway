@@ -46,7 +46,7 @@ public class PublishedObjectFacetForDomainObjectAnnotation extends PublishedObje
                     switch (publishing) {
                     case AS_CONFIGURED:
                         return setting == PublishObjectsConfiguration.NONE
-                                ? null
+                        ? null
                                 : (PublishedObjectFacet)new PublishedObjectFacetForDomainObjectAnnotationAsConfigured(holder)
                                 ;
                     case DISABLED:
@@ -54,13 +54,13 @@ public class PublishedObjectFacetForDomainObjectAnnotation extends PublishedObje
                     case ENABLED:
                         return new PublishedObjectFacetForDomainObjectAnnotation(holder);
                     case NOT_SPECIFIED:
-                    	throw _Exceptions.unexpectedCodeReach(); // case filtered out above 
+                        throw _Exceptions.unexpectedCodeReach(); // case filtered out above
                     }
                     throw new IllegalStateException("domainObject.publishing() not recognised, is " + publishing);
 
                 }).orElseGet(() -> setting == PublishObjectsConfiguration.NONE
                         ? null
-                        : new PublishedObjectFacetFromConfiguration(holder));
+                                : new PublishedObjectFacetFromConfiguration(holder));
 
     }
 

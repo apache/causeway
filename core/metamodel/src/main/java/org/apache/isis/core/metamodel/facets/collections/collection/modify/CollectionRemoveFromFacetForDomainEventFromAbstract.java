@@ -35,11 +35,11 @@ import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 
 public abstract class CollectionRemoveFromFacetForDomainEventFromAbstract
-    extends SingleValueFacetAbstract<Class<? extends CollectionDomainEvent<?,?>>>
-    implements CollectionRemoveFromFacet {
+extends SingleValueFacetAbstract<Class<? extends CollectionDomainEvent<?,?>>>
+implements CollectionRemoveFromFacet {
 
     public static Class<? extends Facet> type() {
-	    return CollectionRemoveFromFacet.class;
+        return CollectionRemoveFromFacet.class;
     }
 
     private final PropertyOrCollectionAccessorFacet getterFacet;
@@ -50,11 +50,11 @@ public abstract class CollectionRemoveFromFacetForDomainEventFromAbstract
 
     public CollectionRemoveFromFacetForDomainEventFromAbstract(
             final Class<? extends CollectionDomainEvent<?, ?>> eventType,
-            final PropertyOrCollectionAccessorFacet getterFacet,
-            final CollectionRemoveFromFacet collectionRemoveFromFacet,
-            final CollectionDomainEventFacetAbstract collectionDomainEventFacet,
-            final ServicesInjector servicesInjector,
-            final FacetHolder holder) {
+                    final PropertyOrCollectionAccessorFacet getterFacet,
+                    final CollectionRemoveFromFacet collectionRemoveFromFacet,
+                    final CollectionDomainEventFacetAbstract collectionDomainEventFacet,
+                    final ServicesInjector servicesInjector,
+                    final FacetHolder holder) {
         super(type(), eventType, holder);
         this.getterFacet = getterFacet;
         this.collectionRemoveFromFacet = collectionRemoveFromFacet;

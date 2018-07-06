@@ -28,8 +28,8 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.EmptyChoiceProvider;
 
 public class Select2MultiChoiceExt
-        extends Select2MultiChoice<ObjectAdapterMemento>
-        implements ChoiceExt {
+extends Select2MultiChoice<ObjectAdapterMemento>
+implements ChoiceExt {
 
     public static Select2MultiChoiceExt create(
             final String id,

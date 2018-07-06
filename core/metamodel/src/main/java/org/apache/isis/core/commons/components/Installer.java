@@ -24,11 +24,11 @@ import java.util.List;
 /**
  * A factory for a {@link Component}, defining that component's
  * {@link #getType() type} and its {@link #getName() name}.
- * 
+ *
  * <p>
  * The ({@link #getType() type}, {@link #getName() name}) is expected to be a
  * unique identifier of a component.
- * 
+ *
  * <p>
  * The <i>default runtime</i> (<tt>org.apache.isis.runtimes.dflt</tt> module),
  * which adopts a service locator design, uses the

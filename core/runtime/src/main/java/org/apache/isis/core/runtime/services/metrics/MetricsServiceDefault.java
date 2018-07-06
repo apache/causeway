@@ -36,7 +36,7 @@ import org.apache.isis.core.runtime.services.changes.ChangedObjectsServiceIntern
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
-)
+        )
 public class MetricsServiceDefault implements MetricsService, InstanceLifecycleListener, LoadLifecycleListener, WithTransactionScope {
 
     private AtomicInteger numberLoaded = new AtomicInteger(0);

@@ -27,66 +27,66 @@ import org.apache.isis.commons.internal.collections._Multimaps.SetMultimap;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 
 public interface ProgrammingModelPlugin {
-	
-	// -- CONTRACT
-	
-	/**
-	 * Guides the priority at which facet factories are registered.
-	 * There is no other use.
-	 */
-	public static enum FacetFactoryCategory {
-		// extend as needed ...
-		VALUE
-		;
-	}
-	
-	public static interface FactoryCollector {
-		
-		/**
-		 * 
-		 * @param factoryClass
-		 * @param category
-		 */
-	    public void addFactory(FacetFactory facetFactory, final FacetFactoryCategory category);
-	    
-	    /**
-	     * 
-	     * @param category
-	     * @return
-	     */
-	    public Set<FacetFactory> getFactories(FacetFactoryCategory category);
-	    
-	}
-	
-	public static FactoryCollector collector() {
-    	return new FactoryCollector() {
-			
-			final SetMultimap<FacetFactoryCategory, FacetFactory> factoriesByCategory =
-					_Multimaps.newSetMultimap();
 
-			@Override
-			public void addFactory(FacetFactory factory, FacetFactoryCategory category) {
-				Objects.requireNonNull(factory);
-				Objects.requireNonNull(category);
-				factoriesByCategory.putElement(category, factory);
-			}
+    // -- CONTRACT
 
-			@Override
-			public Set<FacetFactory> getFactories(final FacetFactoryCategory category) {
-				if(category==null) {
-					return Collections.emptySet();
-				}
-				return Collections.unmodifiableSet(
-						factoriesByCategory.getOrDefault(category, Collections.emptySet())	);
-						
-			}
-    	};
+    /**
+     * Guides the priority at which facet factories are registered.
+     * There is no other use.
+     */
+    public static enum FacetFactoryCategory {
+        // extend as needed ...
+        VALUE
+        ;
     }
-	
-	// -- INTERFACE 
-	
+
+    public static interface FactoryCollector {
+
+        /**
+         *
+         * @param factoryClass
+         * @param category
+         */
+        public void addFactory(FacetFactory facetFactory, final FacetFactoryCategory category);
+
+        /**
+         *
+         * @param category
+         * @return
+         */
+        public Set<FacetFactory> getFactories(FacetFactoryCategory category);
+
+    }
+
+    public static FactoryCollector collector() {
+        return new FactoryCollector() {
+
+            final SetMultimap<FacetFactoryCategory, FacetFactory> factoriesByCategory =
+                    _Multimaps.newSetMultimap();
+
+            @Override
+            public void addFactory(FacetFactory factory, FacetFactoryCategory category) {
+                Objects.requireNonNull(factory);
+                Objects.requireNonNull(category);
+                factoriesByCategory.putElement(category, factory);
+            }
+
+            @Override
+            public Set<FacetFactory> getFactories(final FacetFactoryCategory category) {
+                if(category==null) {
+                    return Collections.emptySet();
+                }
+                return Collections.unmodifiableSet(
+                        factoriesByCategory.getOrDefault(category, Collections.emptySet())	);
+
+            }
+        };
+    }
+
+    // -- INTERFACE
+
     public void plugin(FactoryCollector collector);
-    
-    // -- 
-	
+
+    // --
+
 }

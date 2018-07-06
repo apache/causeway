@@ -39,6 +39,7 @@ public class Jdk8OffsetDateTimePanel extends ScalarPanelTextFieldDatePickerAbstr
         init(new DateConverterForJdk8OffsetDateTime(getSettings(), getAdjustBy()));
     }
 
+    @Override
     protected AbstractTextComponent<OffsetDateTime> createTextFieldForRegular(final String id) {
         final TextFieldValueModel<OffsetDateTime> textFieldValueModel = new TextFieldValueModel<>(this);
         return new TextFieldWithDateTimePicker<>(id, textFieldValueModel, cls, converter);

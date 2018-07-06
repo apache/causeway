@@ -28,7 +28,7 @@ import org.apache.isis.applib.services.command.spi.CommandService;
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
-)
+        )
 public class CommandServiceDefault implements CommandService {
 
     @Programmatic

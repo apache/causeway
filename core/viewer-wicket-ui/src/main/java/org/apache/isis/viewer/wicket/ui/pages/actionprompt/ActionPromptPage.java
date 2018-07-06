@@ -60,11 +60,11 @@ public class ActionPromptPage extends PageAbstract {
     public ActionPromptPage(final PageParameters pageParameters, final ActionModel model) {
         super(pageParameters, model.getActionMemento().getAction(model.getSpecificationLoader()).getName(), ComponentType.ACTION_PROMPT);
         addChildComponents(themeDiv, model);
-        
+
         // no need to bookmark because the ActionParametersPanel will have done so for us
         addBookmarkedPages(themeDiv);
     }
-    
+
     private static ActionModel buildModel(
             final PageParameters pageParameters,
             final SpecificationLoader specificationLoader) {

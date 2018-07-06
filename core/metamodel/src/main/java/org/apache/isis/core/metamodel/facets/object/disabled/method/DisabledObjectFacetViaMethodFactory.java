@@ -40,7 +40,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
  * Installs the {@link DisabledObjectFacetViaMethod} on the
  * {@link ObjectSpecification}, and copies this facet onto each
  * {@link ObjectMember}.
- * 
+ *
  * <p>
  * This two-pass design is required because, at the time that the
  * {@link #process(org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext)

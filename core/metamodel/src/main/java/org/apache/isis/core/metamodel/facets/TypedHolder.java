@@ -25,7 +25,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 /**
  * A {@link FacetHolder} that also has a {@link ObjectSpecification type}.
- * 
+ *
  * <p>
  * Used to represent class members when building up the metamodel.
  */
@@ -44,7 +44,7 @@ public interface TypedHolder extends FacetHolder {
 
     /**
      * Type may not be known initially (eg {@link FeatureType#COLLECTION}s).
-     * 
+     *
      * <p>
      * For example, the accessor might return a raw type such as
      * <tt>java.util.List</tt>, rather than a generic one such as

@@ -22,19 +22,19 @@ import org.apache.wicket.util.string.Strings;
 import org.apache.isis.core.commons.authentication.MessageBroker;
 
 public class JGrowlUtil {
-    
+
     private JGrowlUtil(){}
 
     public static String asJGrowlCalls(final MessageBroker messageBroker) {
         final StringBuilder buf = new StringBuilder();
-        
+
         for (String info : messageBroker.getMessages()) {
             addJGrowlCall(info, "info", false, buf);
         }
         for (String warning : messageBroker.getWarnings()) {
             addJGrowlCall(warning, "warning", true, buf);
         }
-        
+
         final String error =  messageBroker.getApplicationError();
         if(error!=null) {
             addJGrowlCall(error, "danger", true, buf);
@@ -45,9 +45,9 @@ public class JGrowlUtil {
     private static void addJGrowlCall(final String origMsg, final String cssClassSuffix, boolean sticky, final StringBuilder buf) {
         final CharSequence escapedMsg = escape(origMsg);
         buf.append("$.growl(\"")
-            .append(escapedMsg)
-            .append("&#160;&#160;&#160;") // add some space so that the dismiss icon (x) doesn't overlap with the text
-            .append('"');
+        .append(escapedMsg)
+        .append("&#160;&#160;&#160;") // add some space so that the dismiss icon (x) doesn't overlap with the text
+        .append('"');
         buf.append(", {");
         buf.append("type: \"").append(cssClassSuffix).append('"');
         buf.append(", delay: " + (sticky ? "0" : "2000"));

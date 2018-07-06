@@ -25,17 +25,17 @@ public interface Facet {
 
     /**
      * The {@link FacetHolder holder} of this facet.
-     * 
+     *
      * @return
      */
     FacetHolder getFacetHolder();
 
     /**
      * Allows reparenting of Facet.
-     * 
+     *
      * <p>
      * Used by Facet decorators.
-     * 
+     *
      * @param facetHolder
      */
     public void setFacetHolder(FacetHolder facetHolder);
@@ -47,7 +47,7 @@ public interface Facet {
 
     /**
      * Sets underlying {@link Facet}, that is, creating a chain.
-     * 
+     *
      * <p>
      * Must be of the same {@link #facetType() type}.
      */
@@ -55,13 +55,13 @@ public interface Facet {
 
     /**
      * Determines the type of this facet to be stored under.
-     * 
+     *
      * <p>
      * The framework looks for {@link Facet}s of certain well-known facet types.
      * Each facet implementation must specify which type of facet it corresponds
      * to. This therefore allows the (rules of the) programming model to be
      * varied without impacting the rest of the framework.
-     * 
+     *
      * <p>
      * For example, the <tt>ActionInvocationFacet</tt> specifies the facet to
      * invoke an action. The typical implementation of this wraps a
@@ -75,7 +75,7 @@ public interface Facet {
     /**
      * Whether this facet implementation is derived (as opposed to explicit);
      * used to determine precedence.
-     * 
+     *
      * <p>
      * For example, we might derive the typical length of a property based on
      * its type; but if the typical length has been explicitly specified using

@@ -73,4 +73,4 @@ public interface SwaggerService {
     @Programmatic
     String generateSwaggerSpec(final Visibility visibility, final Format format);
 
-}    
+}

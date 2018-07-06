@@ -36,7 +36,7 @@ import org.apache.isis.viewer.wicket.model.models.EntityModel;
 public class BreadcrumbModel implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
     private static final int MAX_SIZE = 5;
 
     private static final OidMarshaller OID_MARSHALLER = OidMarshaller.INSTANCE;
@@ -44,7 +44,7 @@ public class BreadcrumbModel implements Serializable {
     private final Map<String, Bookmark> bookmarkByOidStr = Maps.newHashMap();
     private final Map<Bookmark, String> oidStrByBookmark = Maps.newHashMap();
     private final List<Bookmark> list = Lists.newArrayList();
-    
+
     public List<EntityModel> getList() {
         List<EntityModel> entityModels = Lists.newArrayList();
         for (Bookmark bookmark : list) {
@@ -80,7 +80,7 @@ public class BreadcrumbModel implements Serializable {
 
         remove(oidStr);
         addToStart(oidStr, entityModel);
-        
+
         trimTo(MAX_SIZE);
     }
 
@@ -112,7 +112,7 @@ public class BreadcrumbModel implements Serializable {
     private void trimTo(final int size) {
         if(list.size() <= size) {
             return;
-        } 
+        }
         final List<Bookmark> bookmarksToRemove = list.subList(size, list.size());
         for (final Bookmark bookmark : bookmarksToRemove) {
             final String oidStr = oidStrByBookmark.get(bookmark);

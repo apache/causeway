@@ -53,7 +53,7 @@ public class RemoveJdoEnhancementTypesFacetFactory extends FacetFactoryAbstract 
         final Method[] methods = typeToIgnore.getMethods();
         for (final Method method : methods) {
             jdoEnhancementmethodsToIgnore
-                    .add(new RemoveMethodsFacetFactory.MethodAndParameterTypes(method.getName(), method.getParameterTypes()));
+            .add(new RemoveMethodsFacetFactory.MethodAndParameterTypes(method.getName(), method.getParameterTypes()));
         }
     }
 

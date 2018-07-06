@@ -37,12 +37,12 @@ public class MetaModelValidatorVisiting extends MetaModelValidatorAbstract {
     public interface SummarizingVisitor extends Visitor {
         void summarize(ValidationFailures validationFailures);
     }
-    
+
     private final Visitor visitor;
     public MetaModelValidatorVisiting(final Visitor visitor) {
         this.visitor = visitor;
     }
-        
+
     @Override
     public final void validate(ValidationFailures validationFailures) {
 

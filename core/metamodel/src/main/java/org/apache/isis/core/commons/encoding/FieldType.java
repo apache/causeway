@@ -38,13 +38,13 @@ import org.slf4j.LoggerFactory;
 /**
  * Typesafe writing and reading of fields, providing some level of integrity
  * checking of encoded messages.
- * 
+ *
  * <p>
  * The {@link #write(DataOutputExtended, Object)} writes out field type and then
  * the data for that field type. The field type is represented by this
  * enumberation, with the {@link FieldType#getIdx() index} being what is written
  * to the stream (hence of type <tt>byte</tt> to keep small).
- * 
+ *
  * <p>
  * Conversely, the {@link #read(DataInputExtended)} reads the field type and
  * then the data for that field type.
@@ -1175,7 +1175,7 @@ public abstract class FieldType<T> {
 
     /**
      * Whether this implementation checks ordering in the stream.
-     * 
+     *
      * <p>
      * Broadly, the type safe ones do, the {@link Encodable} and
      * {@link Serializable} ones do not.

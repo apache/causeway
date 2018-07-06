@@ -54,6 +54,6 @@ public class BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotationFactory
         final int length = annotation.integer() + annotation.fraction();
         final int scale = annotation.fraction();
         return new BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotation(holder, length, scale);
-    }    
+    }
 
 }

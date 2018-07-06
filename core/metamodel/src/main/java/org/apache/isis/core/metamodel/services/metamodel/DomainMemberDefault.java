@@ -64,7 +64,7 @@ public class DomainMemberDefault implements DomainMember {
     private final MemberType memberType;
     private final ObjectMember member;
     private ObjectAction action;
-    
+
     DomainMemberDefault(ObjectSpecification spec, OneToOneAssociation property) {
         this.spec = spec;
         this.member = property;
@@ -76,7 +76,7 @@ public class DomainMemberDefault implements DomainMember {
         this.member = collection;
         this.memberType = MemberType.COLLECTION;
     }
-    
+
     DomainMemberDefault(ObjectSpecification spec, ObjectAction action) {
         this.spec = spec;
         this.member = this.action = action;
@@ -95,7 +95,7 @@ public class DomainMemberDefault implements DomainMember {
         final int lastDot = fullIdentifier.lastIndexOf(".");
         return lastDot>0 && lastDot < fullIdentifier.length()-1
                 ?fullIdentifier.substring(lastDot+1,fullIdentifier.length())
-                :fullIdentifier;
+                        :fullIdentifier;
     }
     @Override public String getPackageName() {
         final String fullIdentifier = spec.getFullIdentifier();
@@ -159,14 +159,14 @@ public class DomainMemberDefault implements DomainMember {
             }
             return !interpretations.isEmpty() ?
                     Joiner.on(";").join(interpretations) :
-                    interpretRowAndFacet(ActionChoicesFacet.class);
+                        interpretRowAndFacet(ActionChoicesFacet.class);
         }
     }
     @Override public String getAutoComplete() {
         if(memberType == MemberType.PROPERTY) {
             return interpretRowAndFacet(PropertyAutoCompleteFacet.class);
         } else if(memberType == MemberType.COLLECTION) {
-           return "";
+            return "";
         } else {
             final List<ObjectActionParameter> parameters = this.action.getParameters();
             final SortedSet<String> interpretations = Sets.newTreeSet();
@@ -200,8 +200,8 @@ public class DomainMemberDefault implements DomainMember {
             addIfNotEmpty(interpretRowAndFacet(CollectionValidateAddToFacet.class), interpretations);
             addIfNotEmpty(interpretRowAndFacet(CollectionValidateRemoveFromFacet.class), interpretations);
             return !interpretations.isEmpty()? Joiner.on(";").join(interpretations) : "";
-       } else {
-           return interpretRowAndFacet(ActionValidationFacet.class);
+        } else {
+            return interpretRowAndFacet(ActionValidationFacet.class);
         }
     }
 
@@ -210,13 +210,13 @@ public class DomainMemberDefault implements DomainMember {
         final Facet facet = member.getFacet(facetClass);
         return interpretFacet(facet);
     }
-    
+
     private static void addIfNotEmpty(final String str, final SortedSet<String> set) {
         if(!Strings.isNullOrEmpty(str)) {
             set.add(str);
         }
     }
-    
+
     private String interpret(final Class<? extends Facet> cls) {
         return interpretFacet(member.getFacet(cls));
     }
@@ -228,11 +228,11 @@ public class DomainMemberDefault implements DomainMember {
         if (facet instanceof ImperativeFacet) {
             ImperativeFacet imperativeFacet = (ImperativeFacet) facet;
             return imperativeFacet.getMethods().get(0).getName();
-        } 
+        }
         final String name = facet.getClass().getSimpleName();
         if (ignore(name)) {
             return "";
-        } 
+        }
         final String abbr = StringExtensions.toAbbreviation(name);
         return abbr.length()>0 ? abbr : name;
     }
@@ -243,11 +243,11 @@ public class DomainMemberDefault implements DomainMember {
 
     @Override
     public int compareTo(DomainMember o) {
-    	// legacy of ObjectContracts.compare(this, o, "classType,className,type desc,memberName");
+        // legacy of ObjectContracts.compare(this, o, "classType,className,type desc,memberName");
         return Comparator.comparing(DomainMember::getClassType)
-        		.thenComparing(DomainMember::getClassName)
-        		.thenComparing(DomainMember::getType, Comparator.reverseOrder()) // desc
-        		.thenComparing(DomainMember::getMemberName)
-        		.compare(this, o);
+                .thenComparing(DomainMember::getClassName)
+                .thenComparing(DomainMember::getType, Comparator.reverseOrder()) // desc
+                .thenComparing(DomainMember::getMemberName)
+                .compare(this, o);
     }
 }

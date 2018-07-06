@@ -49,7 +49,7 @@ public interface FacetHolder {
     /**
      * Whether there is a facet registered of the specified type that is not a
      * {@link Facet#isNoop() no-op}.
-     * 
+     *
      * <p>
      * Convenience; saves having to {@link #getFacet(Class)} and then check if
      * <tt>null</tt> and not a no-op.
@@ -64,7 +64,7 @@ public interface FacetHolder {
 
     /**
      * Returns all {@link Facet}s matching the specified {@link Predicate}.
-     * 
+     *
      * @param predicate
      * @return
      */
@@ -72,7 +72,7 @@ public interface FacetHolder {
 
     /**
      * Adds the facet, extracting its {@link Facet#facetType() type} as the key.
-     * 
+     *
      * <p>
      * If there are any facet of the same type, they will be overwritten
      * <i>provided</i> that either the {@link Facet} specifies to
@@ -84,7 +84,7 @@ public interface FacetHolder {
     /**
      * Adds the {@link MultiTypedFacet multi-typed facet}, extracting each of
      * its {@link MultiTypedFacet#facetTypes() types} as keys.
-     * 
+     *
      * <p>
      * If there are any facet of the same type, they will be overwritten
      * <i>provided</i> that either the {@link Facet} specifies to

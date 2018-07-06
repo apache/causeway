@@ -26,7 +26,7 @@ import org.apache.isis.core.commons.lang.StringExtensions;
 /**
  * Enumerates the different types of {@link Component}s that can be constructed
  * using {@link ComponentFactory}.
- * 
+ *
  * <p>
  * Some are fine-grained (such as {@link ComponentType#SCALAR_NAME_AND_VALUE}, a
  * panel to represent a single scalar property or parameter), but others are
@@ -35,7 +35,7 @@ import org.apache.isis.core.commons.lang.StringExtensions;
  */
 public enum ComponentType {
 
-    
+
     /**
      * About page text.
      */
@@ -46,7 +46,7 @@ public enum ComponentType {
     WELCOME,
     /**
      * List of services and their actions.
-     * 
+     *
      * <p>
      * Could be rendered using a JavaScript or DHTML menu, an accordion, or a
      * tree view.
@@ -137,7 +137,7 @@ public enum ComponentType {
     /**
      * A list of models, rendered as a list of links.
      */
-    BOOKMARKED_PAGES, 
+    BOOKMARKED_PAGES,
     /**
      * Place holder for a component used to represent an unknown model;
      * not used for matching, since the {@link ComponentFactory} implementation
@@ -158,7 +158,7 @@ public enum ComponentType {
     /**
      * Returns the {@link #name()} formatted as
      * {@link org.apache.isis.core.commons.lang.StringExtensions#toCamelCase(String) case}.
-     * 
+     *
      * <p>
      * For example, <tt>OBJECT_EDIT</tt> becomes <tt>objectEdit</tt>.
      */

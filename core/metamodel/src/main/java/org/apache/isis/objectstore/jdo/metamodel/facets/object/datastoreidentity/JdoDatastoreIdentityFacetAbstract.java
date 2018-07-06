@@ -26,7 +26,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 
 public abstract class JdoDatastoreIdentityFacetAbstract extends FacetAbstract implements
-        JdoDatastoreIdentityFacet {
+JdoDatastoreIdentityFacet {
 
 
     public static Class<? extends Facet> type() {
@@ -40,6 +40,7 @@ public abstract class JdoDatastoreIdentityFacetAbstract extends FacetAbstract im
         this.strategy = strategy;
     }
 
+    @Override
     public IdGeneratorStrategy getStrategy() {
         return strategy;
     }

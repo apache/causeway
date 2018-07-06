@@ -22,12 +22,12 @@ package org.apache.isis.core.commons.lang;
 import com.google.common.base.Function;
 
 /**
- * 
+ *
  * @deprecated [ahuber] use $String::upper and $String::lower instead
  */
 @Deprecated
 final class StringFunctions {
-    
+
     public static final Function<String,String> TRIM = new Function<String,String>(){
         @Override
         public String apply(String input) {
@@ -46,7 +46,7 @@ final class StringFunctions {
             }
         };
     }
-    
+
     public static Function<String, String> toUpperCase() {
         return new Function<String, String>() {
             @Override

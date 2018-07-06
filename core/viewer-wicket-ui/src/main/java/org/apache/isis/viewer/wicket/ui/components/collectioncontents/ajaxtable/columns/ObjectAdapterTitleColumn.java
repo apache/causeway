@@ -65,6 +65,6 @@ public class ObjectAdapterTitleColumn extends ColumnAbstract<ObjectAdapter> {
         return componentFactory.createComponent(id, model);
     }
 
-    
+
 
 }

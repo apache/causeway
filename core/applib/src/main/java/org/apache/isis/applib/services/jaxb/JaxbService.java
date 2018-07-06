@@ -188,12 +188,12 @@ public interface JaxbService {
                     try {
                         final Method getErrorsMethod = exClass.getMethod("getErrors");
                         errors = _Casts.uncheckedCast(getErrorsMethod.invoke(ex));
-                        
-                        annotationExceptionMessages = ": " + 
-                        _NullSafe.stream(errors)
+
+                        annotationExceptionMessages = ": " +
+                                _NullSafe.stream(errors)
                         .map(Exception::getMessage)
                         .collect(Collectors.joining("; "));
-                        
+
                     } catch (Exception e) {
                         // fall through if we hit any snags, and instead throw the more generic error message.
                     }
@@ -203,7 +203,7 @@ public interface JaxbService {
                                         + domainClass.getName() + "'; " + errors.size() + " error"
                                         + (errors.size() == 1? "": "s")
                                         + " reported" + (!errors
-                                        .isEmpty() ? annotationExceptionMessages : ""), ex);
+                                                .isEmpty() ? annotationExceptionMessages : ""), ex);
                     }
                 }
 
@@ -231,6 +231,7 @@ public interface JaxbService {
         protected void configure(final Marshaller marshaller) {
         }
 
+        @Override
         public Map<String,String> toXsd(final Object domainObject, final IsisSchemas isisSchemas) {
 
             try {

@@ -18,7 +18,7 @@ package org.apache.isis.core.unittestsupport.bidir;
 
 public interface Instantiator {
     Instantiator NOOP = new Instantiator() {
-        
+
         @Override
         public Object instantiate() {
             return null;

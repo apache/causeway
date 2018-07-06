@@ -43,7 +43,7 @@ import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
  * A {@link ColumnAbstract column} within a
  * {@link CollectionContentsAsAjaxTablePanel} representing a single property of the
  * provided {@link ObjectAdapter}.
- * 
+ *
  * <p>
  * Looks up the {@link ComponentFactory} to render the property from the
  * {@link ComponentFactoryRegistry}.
@@ -71,6 +71,7 @@ public final class ObjectAdapterPropertyColumn extends ColumnAbstract<ObjectAdap
         this.parentTypeName = parentTypeName;
     }
 
+    @Override
     public Component getHeader(final String componentId)
     {
         final Label label = new Label(componentId, getDisplayModel());

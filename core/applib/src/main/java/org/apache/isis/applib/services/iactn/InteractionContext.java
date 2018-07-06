@@ -35,7 +35,7 @@ import org.apache.isis.applib.annotation.Programmatic;
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
-)
+        )
 @RequestScoped
 public class InteractionContext {
 
@@ -52,7 +52,7 @@ public class InteractionContext {
     public Interaction getInteraction() {
         return interaction;
     }
-    
+
     /**
      * <b>NOT API</b>: intended to be called only by the framework.
      */

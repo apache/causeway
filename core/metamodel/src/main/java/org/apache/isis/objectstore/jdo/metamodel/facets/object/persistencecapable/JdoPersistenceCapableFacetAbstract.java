@@ -26,7 +26,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 
 public abstract class JdoPersistenceCapableFacetAbstract extends FacetAbstract implements
-        JdoPersistenceCapableFacet {
+JdoPersistenceCapableFacet {
 
     public static Class<? extends Facet> type() {
         return JdoPersistenceCapableFacet.class;
@@ -47,13 +47,16 @@ public abstract class JdoPersistenceCapableFacetAbstract extends FacetAbstract i
         this.identityType = identityType;
     }
 
+    @Override
     public IdentityType getIdentityType() {
         return identityType;
     }
 
+    @Override
     public String getSchema() {
         return schema;
     }
+    @Override
     public String getTable() {
         return table;
     }

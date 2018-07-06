@@ -35,9 +35,9 @@ import org.apache.isis.core.metamodel.JdoMetamodelUtil;
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
-)
+        )
 public class TimestampService implements
-        javax.jdo.listener.StoreLifecycleListener {
+javax.jdo.listener.StoreLifecycleListener {
 
     @PostConstruct
     public void open() {
@@ -49,6 +49,7 @@ public class TimestampService implements
         isisJdoSupport.getJdoPersistenceManager().removeInstanceLifecycleListener(this);
     }
 
+    @Override
     @Programmatic
     public void preStore (InstanceLifecycleEvent event) {
 
@@ -65,6 +66,7 @@ public class TimestampService implements
         }
     }
 
+    @Override
     @Programmatic
     public void postStore (InstanceLifecycleEvent event) {
         // no-op

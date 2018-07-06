@@ -39,7 +39,7 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldStringModel;
 public class MultiLineStringPanel extends ScalarPanelTextFieldParseableAbstract {
 
     private static final long serialVersionUID = 1L;
-    
+
     public MultiLineStringPanel(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel);
     }
@@ -69,6 +69,7 @@ public class MultiLineStringPanel extends ScalarPanelTextFieldParseableAbstract 
         return "textarea";
     }
 
+    @Override
     protected Component createInlinePromptComponent(
             final String id,
             final IModel<String> inlinePromptModel) {

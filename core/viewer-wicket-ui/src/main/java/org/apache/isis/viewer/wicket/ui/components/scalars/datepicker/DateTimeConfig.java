@@ -387,15 +387,15 @@ public class DateTimeConfig extends AbstractConfig {
         @Override
         public void serialize(TodayButton value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
             switch (value) {
-                case TRUE:
-                    jgen.writeBoolean(true);
-                    break;
-                case FALSE:
-                    jgen.writeBoolean(false);
-                    break;
-                case LINKED:
-                    jgen.writeString("linked");
-                    break;
+            case TRUE:
+                jgen.writeBoolean(true);
+                break;
+            case FALSE:
+                jgen.writeBoolean(false);
+                break;
+            case LINKED:
+                jgen.writeString("linked");
+                break;
             }
         }
     }

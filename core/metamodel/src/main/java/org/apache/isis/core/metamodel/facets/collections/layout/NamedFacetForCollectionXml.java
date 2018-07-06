@@ -38,9 +38,9 @@ public class NamedFacetForCollectionXml extends NamedFacetAbstract {
     }
 
     private NamedFacetForCollectionXml(
-        final String value,
-        final boolean escaped,
-        final FacetHolder holder) {
+            final String value,
+            final boolean escaped,
+            final FacetHolder holder) {
 
         super(value, escaped, holder);
     }

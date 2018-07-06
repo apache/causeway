@@ -25,11 +25,11 @@ import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
 
 /**
  * Validate that an object can be added to a collection.
- * 
+ *
  * <p>
  * In the standard Apache Isis Programming Model, corresponds to invoking the
  * <tt>validateAddToXxx</tt> support method for a collection.
- * 
+ *
  */
 public interface CollectionValidateAddToFacet extends Facet, ValidatingInteractionAdvisor {
 

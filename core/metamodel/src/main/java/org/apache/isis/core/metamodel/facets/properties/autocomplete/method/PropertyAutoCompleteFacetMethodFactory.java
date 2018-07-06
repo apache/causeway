@@ -63,7 +63,7 @@ public class PropertyAutoCompleteFacetMethodFactory extends MethodPrefixBasedFac
         final FacetHolder property = processMethodContext.getFacetHolder();
         FacetUtil.addFacet(new PropertyAutoCompleteFacetMethod(autoCompleteMethod, returnType, property,
                 getDeploymentCategory(), getSpecificationLoader(), getAuthenticationSessionProvider(), adapterManager
-        ));
+                ));
     }
 
     // ///////////////////////////////////////////////////////

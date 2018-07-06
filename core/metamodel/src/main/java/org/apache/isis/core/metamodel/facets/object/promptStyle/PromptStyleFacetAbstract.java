@@ -24,7 +24,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 public abstract class PromptStyleFacetAbstract extends FacetAbstract
-        implements PromptStyleFacet {
+implements PromptStyleFacet {
 
 
     public static Class<? extends Facet> type() {

@@ -26,10 +26,10 @@ import org.apache.isis.applib.clock.Clock;
 
 /**
  * This clock, for use by fixtures, can be set to specific time.
- * 
+ *
  * <p>
  * If not set it will provide the time provided by the system clock.
- * 
+ *
  * <p>
  * Note that - by design - it does not provide any mechanism to advance the time
  * (eg automatic ticking of the clock). That is, the time returned is always
@@ -50,10 +50,10 @@ public class FixtureClock extends Clock {
     /**
      * Configures the system to use a FixtureClock rather than the in-built
      * system clock. Can be called multiple times.
-     * 
+     *
      * <p>
      * Must call before any other call to {@link Clock#getInstance()}.
-     * 
+     *
      * @throws IllegalStateException
      *             if Clock singleton already initialized with some other
      *             implementation.
@@ -93,7 +93,7 @@ public class FixtureClock extends Clock {
 
     /**
      * Access via {@link Clock#getTime()}.
-     * 
+     *
      * <p>
      * Will just return the system time until {@link #setDate(int, int, int)} or
      * {@link #setTime(int, int)} (or one of the overloads) has been called.
@@ -112,7 +112,7 @@ public class FixtureClock extends Clock {
 
     /**
      * Sets the clock to epoch, that is midnight, 1 Jan 1970 UTC.
-     * 
+     *
      * <p>
      * This is typically called before either {@link #setDate(int, int, int)}
      * (so that time is set to midnight) and/or {@link #setTime(int, int)} (so
@@ -126,7 +126,7 @@ public class FixtureClock extends Clock {
     /**
      * Sets the hours and minutes as specified, and sets the seconds and
      * milliseconds to zero, but the date portion is left unchanged.
-     * 
+     *
      * @see #setDate(int, int, int)
      * @see #addTime(int, int)
      */
@@ -140,7 +140,7 @@ public class FixtureClock extends Clock {
 
     /**
      * Sets the date, but the time portion is left unchanged.
-     * 
+     *
      * @see #setTime(int, int)
      * @see #addDate(int, int, int)
      */
@@ -153,11 +153,11 @@ public class FixtureClock extends Clock {
 
     /**
      * Adjusts the time by the specified number of hours and minutes.
-     * 
+     *
      * <p>
      * Typically called after {@link #setTime(int, int)}, to move the clock
      * forward or perhaps back.
-     * 
+     *
      * @see #addDate(int, int, int)
      */
     public void addTime(final int hours, final int minutes) {
@@ -168,11 +168,11 @@ public class FixtureClock extends Clock {
 
     /**
      * Adjusts the time by the specified number of years, months or days.
-     * 
+     *
      * <p>
      * Typically called after {@link #setDate(int, int, int)}, to move the clock
      * forward or perhaps back.
-     * 
+     *
      * @see #addTime(int, int)
      */
     public void addDate(final int years, final int months, final int days) {

@@ -145,7 +145,7 @@ public class CollectionSelectorHelper implements Serializable {
         // else honour @CollectionLayout#renderEagerly
         return hasRenderEagerlyFacet(model) || model.isStandalone()
                 ? CollectionContentsAsAjaxTablePanelFactory.NAME
-                : CollectionContentsHiddenPanelFactory.NAME;
+                        : CollectionContentsHiddenPanelFactory.NAME;
 
     }
 
@@ -153,7 +153,7 @@ public class CollectionSelectorHelper implements Serializable {
         final EntityModel entityModel = this.model.getEntityModel();
         return entityModel != null
                 ? entityModel.getObjectAdapterMemento().asHintingBookmark()
-                : null;
+                        : null;
     }
 
     private static List<ComponentFactory> ordered(List<ComponentFactory> componentFactories) {
@@ -234,10 +234,10 @@ public class CollectionSelectorHelper implements Serializable {
         }
 
         final EntityCollectionModel entityCollectionModel = model;
-            final String fallback;
+        final String fallback;
         fallback = entityCollectionModel.isParented()
                 ? CollectionContentsHiddenPanelFactory.NAME
-                : CollectionContentsAsAjaxTablePanelFactory.NAME;
+                        : CollectionContentsAsAjaxTablePanelFactory.NAME;
         componentFactory = doFind(fallback);
         if(componentFactory == null) {
             throw new IllegalStateException(String.format(
@@ -267,6 +267,6 @@ public class CollectionSelectorHelper implements Serializable {
         return 0;
     }
 
-    
+
 
 }

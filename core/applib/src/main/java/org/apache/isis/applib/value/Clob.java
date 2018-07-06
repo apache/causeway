@@ -28,12 +28,12 @@ import javax.activation.MimeTypeParseException;
 
 public final class Clob implements NamedWithMimeType, Serializable {
 
-	private static final long serialVersionUID = 8694189924062378527L;
-	
-	private final String name;
+    private static final long serialVersionUID = 8694189924062378527L;
+
+    private final String name;
     private final MimeType mimeType;
     private final CharSequence chars;
-    
+
     public Clob(String name, String primaryType, String subType, char[] chars) {
         this(name, primaryType, subType, new String(chars));
     }
@@ -79,10 +79,12 @@ public final class Clob implements NamedWithMimeType, Serializable {
         }
     }
 
+    @Override
     public String getName() {
         return name;
     }
-    
+
+    @Override
     public MimeType getMimeType() {
         return mimeType;
     }
@@ -90,11 +92,11 @@ public final class Clob implements NamedWithMimeType, Serializable {
     public CharSequence getChars() {
         return chars;
     }
-    
+
     public void writeCharsTo(final Writer wr) throws IOException {
-    	if(wr!=null && chars!=null){
-    		wr.append(chars);
-    	}
+        if(wr!=null && chars!=null){
+            wr.append(chars);
+        }
     }
 
     @Override

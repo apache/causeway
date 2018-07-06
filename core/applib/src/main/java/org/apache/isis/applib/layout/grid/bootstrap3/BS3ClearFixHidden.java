@@ -31,10 +31,10 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlRootElement(
         name = "clearFixHidden"
-)
+        )
 @XmlType(
         name = "clearFixHidden"
-)
+        )
 public class BS3ClearFixHidden extends BS3ClearFix {
 
     private static final long serialVersionUID = 1L;

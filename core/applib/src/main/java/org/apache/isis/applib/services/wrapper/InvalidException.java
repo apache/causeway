@@ -25,9 +25,9 @@ import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
 /**
  * Superclass of exceptions which indicate an attempt to interact with an object
  * or member in a way that is invalid.
- * 
+ *
  * <p>
- * 
+ *
  */
 public class InvalidException extends InteractionException {
 

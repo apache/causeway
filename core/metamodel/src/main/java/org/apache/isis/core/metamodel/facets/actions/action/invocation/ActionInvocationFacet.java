@@ -27,7 +27,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 
 /**
  * Represents the mechanism by which the action should be invoked.
- * 
+ *
  * <p>
  * In the standard Apache Isis Programming Model, corresponds to invoking the
  * actual action method itself (a <tt>public</tt> method that does not represent

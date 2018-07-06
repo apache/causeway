@@ -64,7 +64,7 @@ public class MaxLengthDerivedFromJdoColumnAnnotationFacetFactory extends FacetFa
 
         if(String.class != processMethodContext.getMethod().getReturnType()) {
             return;
-        } 
+        }
 
         if (annotations.isEmpty()) {
             return;
@@ -75,16 +75,16 @@ public class MaxLengthDerivedFromJdoColumnAnnotationFacetFactory extends FacetFa
         }
 
         final FacetedMethod holder = processMethodContext.getFacetHolder();
-        
+
         MaxLengthFacet existingFacet = holder.getFacet(MaxLengthFacet.class);
-        
+
         final MaxLengthFacet facet = new MaxLengthFacetDerivedFromJdoColumn(annotation.length(), holder);
-        
+
         if(!existingFacet.isNoop()) {
             // will raise violation later
             facet.setUnderlyingFacet(existingFacet);
         }
-        
+
         FacetUtil.addFacet(facet);
     }
 
@@ -106,20 +106,20 @@ public class MaxLengthDerivedFromJdoColumnAnnotationFacetFactory extends FacetFa
             }
 
             private void validate(ObjectSpecification objectSpec, ValidationFailures validationFailures) {
-                
+
                 final JdoPersistenceCapableFacet pcFacet = objectSpec.getFacet(JdoPersistenceCapableFacet.class);
                 if(pcFacet==null || pcFacet.getIdentityType() == IdentityType.NONDURABLE) {
                     return;
                 }
-                
+
                 final List<ObjectAssociation> associations = objectSpec.getAssociations(Contributed.EXCLUDED, ObjectAssociation.Predicates.PROPERTIES);
                 for (ObjectAssociation association : associations) {
-                    
+
                     // skip checks if annotated with JDO @NotPersistent
                     if(association.containsDoOpFacet(JdoNotPersistentFacet.class)) {
                         return;
                     }
-                    
+
                     MaxLengthFacet facet = association.getFacet(MaxLengthFacet.class);
 
                     MaxLengthFacet underlying = (MaxLengthFacet) facet.getUnderlyingFacet();
@@ -147,5 +147,5 @@ public class MaxLengthDerivedFromJdoColumnAnnotationFacetFactory extends FacetFa
     }
 
 
-    
+
 }

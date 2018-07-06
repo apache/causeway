@@ -43,7 +43,7 @@ public final class FollowSpecUtil {
                         return PathNode.parse(input);
                     }
                 }
-                ));
+                        ));
             }
         }));
     }

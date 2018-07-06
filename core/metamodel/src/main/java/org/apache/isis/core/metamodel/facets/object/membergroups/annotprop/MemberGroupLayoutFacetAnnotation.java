@@ -29,10 +29,10 @@ public class MemberGroupLayoutFacetAnnotation extends MemberGroupLayoutFacetAbst
     public MemberGroupLayoutFacetAnnotation(
             final MemberGroupLayout memberGroupLayout,
             FacetHolder holder) {
-        super(ColumnSpans.asSpans(memberGroupLayout.columnSpans()), 
-                asListWithDefaultGroup(memberGroupLayout.left()), 
-                asList(memberGroupLayout.middle()), 
-                asList(memberGroupLayout.right()), 
+        super(ColumnSpans.asSpans(memberGroupLayout.columnSpans()),
+                asListWithDefaultGroup(memberGroupLayout.left()),
+                asList(memberGroupLayout.middle()),
+                asList(memberGroupLayout.right()),
                 holder);
     }
 }

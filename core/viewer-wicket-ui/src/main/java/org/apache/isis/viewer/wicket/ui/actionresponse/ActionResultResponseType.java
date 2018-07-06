@@ -119,7 +119,7 @@ public enum ActionResultResponseType {
             IRequestHandler handler = ActionModel.redirectHandler(value);
             return ActionResultResponse.withHandler(handler);
         }
-        
+
     },
     VOID {
         @Override
@@ -168,12 +168,12 @@ public enum ActionResultResponseType {
                 // not certain why that would be the case, but think it should be
                 // safe to simply disable while recreating the page to re-render back to user.
                 AdapterManager.ConcurrencyChecking.executeWithConcurrencyCheckingDisabled(
-                    new Callable<EntityPage>() {
-                        @Override public EntityPage call() throws Exception {
-                            return new EntityPage(actualAdapter, exIfAny);
+                        new Callable<EntityPage>() {
+                            @Override public EntityPage call() throws Exception {
+                                return new EntityPage(actualAdapter, exIfAny);
+                            }
                         }
-                    }
-            );
+                        );
 
         return ActionResultResponse.toPage(entityPage);
     }
@@ -182,7 +182,7 @@ public enum ActionResultResponseType {
     // //////////////////////////////////////
 
     public static ActionResultResponse determineAndInterpretResult(
-            final ActionModel model, 
+            final ActionModel model,
             final AjaxRequestTarget targetIfAny,
             final ObjectAdapter resultAdapter) {
         ActionResultResponseType arrt = determineFor(resultAdapter, targetIfAny);
@@ -190,7 +190,7 @@ public enum ActionResultResponseType {
     }
 
     private static ActionResultResponseType determineFor(
-            final ObjectAdapter resultAdapter, 
+            final ObjectAdapter resultAdapter,
             final AjaxRequestTarget targetIfAny) {
         if(resultAdapter == null) {
             return ActionResultResponseType.VOID;
@@ -198,17 +198,17 @@ public enum ActionResultResponseType {
         final ObjectSpecification resultSpec = resultAdapter.getSpecification();
         if (resultSpec.isNotCollection()) {
             if (resultSpec.getFacet(ValueFacet.class) != null) {
-                
+
                 final Object value = resultAdapter.getObject();
                 if(value instanceof Clob) {
                     return ActionResultResponseType.VALUE_CLOB;
-                } 
+                }
                 if(value instanceof Blob) {
                     return ActionResultResponseType.VALUE_BLOB;
-                } 
+                }
                 if(value instanceof java.net.URL) {
                     return targetIfAny != null? ActionResultResponseType.VALUE_URL_AJAX: ActionResultResponseType.VALUE_URL_NOAJAX;
-                } 
+                }
                 // else
                 return ActionResultResponseType.VALUE;
             } else {
@@ -230,7 +230,7 @@ public enum ActionResultResponseType {
         final Collection<Object> coll = (Collection<Object>) resultAdapter.getObject();
         return coll instanceof List
                 ? (List<Object>)coll
-                : Lists.<Object>newArrayList(coll);
+                        : Lists.<Object>newArrayList(coll);
     }
 
 

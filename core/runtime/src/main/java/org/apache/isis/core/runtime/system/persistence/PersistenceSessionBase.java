@@ -32,8 +32,8 @@ import org.slf4j.LoggerFactory;
 
 abstract class PersistenceSessionBase implements PersistenceSession {
 
-	// -- CONSTANTS
-	
+    // -- CONSTANTS
+
     protected static final Logger LOG = LoggerFactory.getLogger(PersistenceSession.class);
 
     // -- FIELDS
@@ -128,9 +128,9 @@ abstract class PersistenceSessionBase implements PersistenceSession {
         this.concurrencyCheckingGloballyEnabled = !concurrencyCheckingGloballyDisabled;
 
     }
-    
+
     // -- GETTERS
-    
+
     protected SpecificationLoader getSpecificationLoader() {
         return specificationLoader;
     }
@@ -153,7 +153,7 @@ abstract class PersistenceSessionBase implements PersistenceSession {
     public IsisTransactionManager getTransactionManager() {
         return transactionManager;
     }
-    
+
     /**
      * Only populated once {@link #open()}'d
      */
@@ -161,17 +161,17 @@ abstract class PersistenceSessionBase implements PersistenceSession {
     public PersistenceManager getPersistenceManager() {
         return persistenceManager;
     }
-    
+
     @Override
     public PersistenceManager pm() {
         return persistenceManager;
     }
-    
+
     @Override
     public IsisConfiguration getConfiguration() {
         return configuration;
     }
-    
+
     @Override
     public List<ObjectAdapter> getServices() {
         final List<Object> services = servicesInjector.getRegisteredServices();
@@ -185,14 +185,14 @@ abstract class PersistenceSessionBase implements PersistenceSession {
         }
         return serviceAdapters;
     }
-    
+
     // -- ENUMS
 
     protected enum Type {
         TRANSIENT,
         PERSISTENT
     }
-    
+
     protected enum Variant {
         TRANSIENT,
         VIEW_MODEL
@@ -201,7 +201,7 @@ abstract class PersistenceSessionBase implements PersistenceSession {
     protected enum State {
         NOT_INITIALIZED, OPEN, CLOSED
     }
-    
+
     // -- STATE
 
     protected State state;
@@ -222,9 +222,9 @@ abstract class PersistenceSessionBase implements PersistenceSession {
         }
         throw new IllegalStateException("State is: " + state + "; should be: " + stateRequired);
     }
-    
+
     // -- TRANSACTIONS
-    
+
     @Override
     public void startTransaction() {
         final javax.jdo.Transaction transaction = persistenceManager.currentTransaction();
@@ -273,5 +273,5 @@ abstract class PersistenceSessionBase implements PersistenceSession {
         return new ToString(this).toString();
     }
 
-    
+
 }

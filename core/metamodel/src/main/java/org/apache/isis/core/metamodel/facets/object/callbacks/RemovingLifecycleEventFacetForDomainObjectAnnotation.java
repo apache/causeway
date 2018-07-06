@@ -34,10 +34,11 @@ public class RemovingLifecycleEventFacetForDomainObjectAnnotation extends Single
     public RemovingLifecycleEventFacetForDomainObjectAnnotation(
             final FacetHolder holder,
             final Class<? extends ObjectRemovingEvent<?>> value,
-            final SpecificationLoader specificationLoader) {
+                    final SpecificationLoader specificationLoader) {
         super(type(), holder, value, specificationLoader);
     }
 
+    @Override
     public Class<? extends ObjectRemovingEvent<?>> getEventType() {
         //noinspection unchecked
         return eventType();

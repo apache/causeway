@@ -37,12 +37,12 @@ import org.hsqldb.util.DatabaseManagerSwing;
 @DomainService(
         nature = NatureOfService.VIEW_MENU_ONLY,
         objectType = "isisApplib.HsqlDbManagerMenu"
-)
+        )
 @DomainServiceLayout(
         named = "Prototyping",
         menuOrder = "500.800",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY
-)
+        )
 public class HsqlDbManagerMenu {
 
 
@@ -60,11 +60,11 @@ public class HsqlDbManagerMenu {
             semantics = SemanticsOf.SAFE,
             restrictTo = RestrictTo.PROTOTYPING,
             domainEvent = ActionDomainEvent.class
-    )
+            )
     @ActionLayout(
             named = "HSQL DB Manager",
             cssClassFa = "database"
-    )
+            )
     public void hsqlDbManager() {
         String[] args = {"--url", url, "--noexit" };
         DatabaseManagerSwing.main(args);
@@ -72,7 +72,7 @@ public class HsqlDbManagerMenu {
     public boolean hideHsqlDbManager() {
         try {
             // hsqldb is configured as optional in the applib's pom.xml
-        	_Context.loadClass(DatabaseManagerSwing.class.getCanonicalName());
+            _Context.loadClass(DatabaseManagerSwing.class.getCanonicalName());
         } catch (ClassNotFoundException e) {
             return true;
         }

@@ -91,12 +91,12 @@ public class ServicesInjector implements ApplicationScopedComponent {
     }
 
     public static ServicesInjector forTesting(
-    		final List<Object> services,
+            final List<Object> services,
             final IsisConfigurationDefault configuration,
             final InjectorMethodEvaluator injectorMethodEvaluator) {
         return new ServicesInjector(services, injectorMethodEvaluator, defaultAutowiring(configuration));
     }
-    
+
     private static IsisConfiguration defaultAutowiring(final IsisConfigurationDefault configuration) {
         configuration.put(KEY_SET_PREFIX, ""+true);
         configuration.put(KEY_INJECT_PREFIX, ""+false);
@@ -111,7 +111,7 @@ public class ServicesInjector implements ApplicationScopedComponent {
 
         this.injectorMethodEvaluator =
                 injectorMethodEvaluator != null
-                        ? injectorMethodEvaluator
+                ? injectorMethodEvaluator
                         : new InjectorMethodEvaluatorDefault();
 
         this.autowireSetters = configuration.getBoolean(KEY_SET_PREFIX, true);
@@ -178,9 +178,9 @@ public class ServicesInjector implements ApplicationScopedComponent {
             String id = ServiceUtil.id(service);
             servicesById.putElement(id, service);
         }
-        
+
         servicesById.forEach((serviceId, services)->{
-        	if(services.size() > 1) {
+            if(services.size() > 1) {
                 throw new IllegalStateException(
                         String.format("Service ids must be unique; serviceId '%s' is declared by domain services %s",
                                 serviceId, classNamesFor(services)));
@@ -189,15 +189,15 @@ public class ServicesInjector implements ApplicationScopedComponent {
     }
 
     private static String classNamesFor(Collection<Object> services) {
-    	return _NullSafe.stream(services)
-    			.map(Object::getClass)
-    			.map(Class::getName)
-    			.collect(Collectors.joining(", "));
+        return _NullSafe.stream(services)
+                .map(Object::getClass)
+                .map(Class::getName)
+                .collect(Collectors.joining(", "));
     }
 
     static boolean contains(final List<Object> services, final Class<?> serviceClass) {
-    	return _NullSafe.stream(services)
-    			.anyMatch(isOfType(serviceClass));
+        return _NullSafe.stream(services)
+                .anyMatch(isOfType(serviceClass));
     }
 
     /**
@@ -259,10 +259,10 @@ public class ServicesInjector implements ApplicationScopedComponent {
     }
 
     private void autowireViaFields(final Object object, final List<Object> services, final Class<?> cls) {
-    	
-    	_NullSafe.stream(fieldsByClassCache.computeIfAbsent(cls, __->cls.getDeclaredFields()))
-    	.filter(isAnnotatedForInjection())
-    	.forEach(field->autowire(object, field, services));
+
+        _NullSafe.stream(fieldsByClassCache.computeIfAbsent(cls, __->cls.getDeclaredFields()))
+        .filter(isAnnotatedForInjection())
+        .forEach(field->autowire(object, field, services));
 
         // recurse up the object's class hierarchy
         final Class<?> superclass = cls.getSuperclass();
@@ -285,19 +285,19 @@ public class ServicesInjector implements ApplicationScopedComponent {
 
         // inject matching services into a field of type Collection<T> if a generic type T is present
         final Class<?> elementType = _Collections.inferElementTypeIfAny(field);
-		if(elementType!=null) {
-			@SuppressWarnings("unchecked")
-			final Class<? extends Collection<Object>> collectionTypeToBeInjected =
-        			(Class<? extends Collection<Object>>) typeToBeInjected;
-        	
-        	 final Collection<Object> collectionOfServices = _NullSafe.stream(services)
-                      .filter(_NullSafe::isPresent)
-                      .filter(isOfType(elementType))
-                      .collect(_Collections.toUnmodifiableOfType(collectionTypeToBeInjected));
-             
-             invokeInjectorField(field, object, collectionOfServices);
-		}
-        
+        if(elementType!=null) {
+            @SuppressWarnings("unchecked")
+            final Class<? extends Collection<Object>> collectionTypeToBeInjected =
+            (Class<? extends Collection<Object>>) typeToBeInjected;
+
+            final Collection<Object> collectionOfServices = _NullSafe.stream(services)
+                    .filter(_NullSafe::isPresent)
+                    .filter(isOfType(elementType))
+                    .collect(_Collections.toUnmodifiableOfType(collectionTypeToBeInjected));
+
+            invokeInjectorField(field, object, collectionOfServices);
+        }
+
         for (final Object service : services) {
             final Class<?> serviceClass = service.getClass();
             if(typeToBeInjected.isAssignableFrom(serviceClass)) {
@@ -312,17 +312,17 @@ public class ServicesInjector implements ApplicationScopedComponent {
             final List<Object> services,
             final Class<?> cls,
             final String prefix) {
-    	
-    	_NullSafe.stream(methodsByClassCache.computeIfAbsent(cls, __->cls.getMethods()))
-    	.filter(nameStartsWith(prefix))
-    	.forEach(prefixedMethod->autowire(object, prefixedMethod, services));
+
+        _NullSafe.stream(methodsByClassCache.computeIfAbsent(cls, __->cls.getMethods()))
+        .filter(nameStartsWith(prefix))
+        .forEach(prefixedMethod->autowire(object, prefixedMethod, services));
     }
 
     private void autowire(
             final Object object,
             final Method prefixedMethod,
             final List<Object> services) {
-    	
+
         for (final Object service : services) {
             final Class<?> serviceClass = service.getClass();
             final boolean isInjectorMethod = injectorMethodEvaluator.isInjectorMethodFor(prefixedMethod, serviceClass);
@@ -437,25 +437,25 @@ public class ServicesInjector implements ApplicationScopedComponent {
     }
 
     private static void addAssignableTo(final Class<?> type, final List<Object> candidates, final List<Object> filteredServicesAndContainer) {
-    	_NullSafe.stream(candidates)
-    	.filter(isOfType(type))
-    	.forEach(filteredServicesAndContainer::add);
+        _NullSafe.stream(candidates)
+        .filter(isOfType(type))
+        .forEach(filteredServicesAndContainer::add);
     }
 
     // -- REFLECTIVE PREDICATES
-    
+
     private static final Predicate<Object> isOfType(final Class<?> cls) {
-    	return obj->cls.isAssignableFrom(obj.getClass());
+        return obj->cls.isAssignableFrom(obj.getClass());
     }
-    
+
     private static final Predicate<Method> nameStartsWith(final String prefix) {
         return method->method.getName().startsWith(prefix);
     }
-    
+
     private static final Predicate<Field> isAnnotatedForInjection() {
         return field->field.getAnnotation(javax.inject.Inject.class) != null;
     }
-    
+
     // -- CONVENIENCE LOOKUPS (singletons only, cached)
 
     private AuthenticationManager authenticationManager;
@@ -464,7 +464,7 @@ public class ServicesInjector implements ApplicationScopedComponent {
     public AuthenticationManager getAuthenticationManager() {
         return authenticationManager != null
                 ? authenticationManager
-                : (authenticationManager = lookupServiceElseFail(AuthenticationManager.class));
+                        : (authenticationManager = lookupServiceElseFail(AuthenticationManager.class));
     }
 
     private AuthorizationManager authorizationManager;
@@ -473,7 +473,7 @@ public class ServicesInjector implements ApplicationScopedComponent {
     public AuthorizationManager getAuthorizationManager() {
         return authorizationManager != null
                 ? authorizationManager
-                : (authorizationManager = lookupServiceElseFail(AuthorizationManager.class));
+                        : (authorizationManager = lookupServiceElseFail(AuthorizationManager.class));
     }
 
     private SpecificationLoader specificationLoader;
@@ -482,7 +482,7 @@ public class ServicesInjector implements ApplicationScopedComponent {
     public SpecificationLoader getSpecificationLoader() {
         return specificationLoader != null
                 ? specificationLoader
-                : (specificationLoader = lookupServiceElseFail(SpecificationLoader.class));
+                        : (specificationLoader = lookupServiceElseFail(SpecificationLoader.class));
     }
 
     private AuthenticationSessionProvider authenticationSessionProvider;
@@ -490,7 +490,7 @@ public class ServicesInjector implements ApplicationScopedComponent {
     public AuthenticationSessionProvider getAuthenticationSessionProvider() {
         return authenticationSessionProvider != null
                 ? authenticationSessionProvider
-                : (authenticationSessionProvider = lookupServiceElseFail(AuthenticationSessionProvider.class));
+                        : (authenticationSessionProvider = lookupServiceElseFail(AuthenticationSessionProvider.class));
     }
 
     private PersistenceSessionServiceInternal persistenceSessionServiceInternal;
@@ -498,7 +498,7 @@ public class ServicesInjector implements ApplicationScopedComponent {
     public PersistenceSessionServiceInternal getPersistenceSessionServiceInternal() {
         return persistenceSessionServiceInternal != null
                 ? persistenceSessionServiceInternal
-                : (persistenceSessionServiceInternal = lookupServiceElseFail(PersistenceSessionServiceInternal.class));
+                        : (persistenceSessionServiceInternal = lookupServiceElseFail(PersistenceSessionServiceInternal.class));
     }
 
     private ConfigurationServiceInternal configurationServiceInternal;
@@ -506,7 +506,7 @@ public class ServicesInjector implements ApplicationScopedComponent {
     public ConfigurationServiceInternal getConfigurationServiceInternal() {
         return configurationServiceInternal != null
                 ? configurationServiceInternal
-                : (configurationServiceInternal = lookupServiceElseFail(ConfigurationServiceInternal.class));
+                        : (configurationServiceInternal = lookupServiceElseFail(ConfigurationServiceInternal.class));
     }
 
     private DeploymentCategoryProvider deploymentCategoryProvider;
@@ -514,10 +514,10 @@ public class ServicesInjector implements ApplicationScopedComponent {
     public DeploymentCategoryProvider getDeploymentCategoryProvider() {
         return deploymentCategoryProvider != null
                 ? deploymentCategoryProvider
-                : (deploymentCategoryProvider = lookupServiceElseFail(DeploymentCategoryProvider.class));
+                        : (deploymentCategoryProvider = lookupServiceElseFail(DeploymentCategoryProvider.class));
     }
 
 
-    
+
 
 }

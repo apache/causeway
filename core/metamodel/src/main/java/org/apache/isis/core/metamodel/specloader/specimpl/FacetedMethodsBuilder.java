@@ -357,7 +357,7 @@ public class FacetedMethodsBuilder {
 
     /**
      * REVIEW: I'm not sure why we do two passes here.
-     * 
+     *
      * <p>
      * Perhaps it's important to skip helpers first. I doubt it, though.
      */
@@ -374,7 +374,7 @@ public class FacetedMethodsBuilder {
     private List<FacetedMethod> findActionFacetedMethods(
             final MethodScope methodScope,
             final RecognisedHelpersStrategy recognisedHelpersStrategy) {
-        
+
         if (LOG.isDebugEnabled()) {
             LOG.debug("  looking for action methods");
         }
@@ -411,7 +411,7 @@ public class FacetedMethodsBuilder {
 
     private FacetedMethod createActionFacetedMethod(
             final Method actionMethod) {
-        
+
         if (!isAllParamTypesValid(actionMethod)) {
             return null;
         }
@@ -440,8 +440,8 @@ public class FacetedMethodsBuilder {
     }
 
     private boolean representsAction(
-            final Method actionMethod, 
-            final MethodScope methodScope, 
+            final Method actionMethod,
+            final MethodScope methodScope,
             final RecognisedHelpersStrategy recognisedHelpersStrategy) {
 
         if (!MethodUtil.inScope(actionMethod, methodScope)) {
@@ -510,10 +510,10 @@ public class FacetedMethodsBuilder {
      * but appends to provided {@link List} (collecting parameter pattern).
      */
     private void findAndRemovePrefixedNonVoidMethods(
-            final MethodScope methodScope, 
-            final String prefix, 
-            final Class<?> returnType, 
-            final int paramCount, 
+            final MethodScope methodScope,
+            final String prefix,
+            final Class<?> returnType,
+            final int paramCount,
             final List<Method> methodListToAppendTo) {
         final List<Method> matchingMethods = findAndRemovePrefixedMethods(methodScope, prefix, returnType, false, paramCount);
         methodListToAppendTo.addAll(matchingMethods);
@@ -524,10 +524,10 @@ public class FacetedMethodsBuilder {
      * removing it from the {@link #methods array of methods} if found.
      */
     private List<Method> findAndRemovePrefixedMethods(
-            final MethodScope methodScope, 
-            final String prefix, 
-            final Class<?> returnType, 
-            final boolean canBeVoid, 
+            final MethodScope methodScope,
+            final String prefix,
+            final Class<?> returnType,
+            final boolean canBeVoid,
             final int paramCount) {
         return MethodUtil.removeMethods(methods, methodScope, prefix, returnType, canBeVoid, paramCount);
     }

@@ -28,63 +28,63 @@ import java.util.stream.IntStream;
  */
 class TreePath_Default implements TreePath {
 
-	private static final long serialVersionUID = 530511373409525896L;
-	private final int[] canonicalPath;
-	private final int hashCode;
+    private static final long serialVersionUID = 530511373409525896L;
+    private final int[] canonicalPath;
+    private final int hashCode;
 
-	TreePath_Default(int[] canonicalPath) {
-		Objects.requireNonNull(canonicalPath, "canonicalPath is required");
-		if(canonicalPath.length<1) {
-			throw new IllegalArgumentException("canonicalPath must not be empty");
-		}
-		this.canonicalPath = canonicalPath;
-		this.hashCode = Arrays.hashCode(canonicalPath);
-	}
+    TreePath_Default(int[] canonicalPath) {
+        Objects.requireNonNull(canonicalPath, "canonicalPath is required");
+        if(canonicalPath.length<1) {
+            throw new IllegalArgumentException("canonicalPath must not be empty");
+        }
+        this.canonicalPath = canonicalPath;
+        this.hashCode = Arrays.hashCode(canonicalPath);
+    }
 
-	@Override
-	public TreePath append(int indexWithinSiblings) {
-		final int[] newCanonicalPath = new int[canonicalPath.length+1];
-		System.arraycopy(canonicalPath, 0, newCanonicalPath, 0, canonicalPath.length);
-		newCanonicalPath[canonicalPath.length] = indexWithinSiblings;
-		return new TreePath_Default(newCanonicalPath);
-	}
-	
-	@Override
-	public TreePath getParentIfAny() {
-		if(isRoot()) {
-			return null;
-		}
-		final int[] newCanonicalPath = new int[canonicalPath.length-1];
-		System.arraycopy(canonicalPath, 0, newCanonicalPath, 0, canonicalPath.length-1);
-		return new TreePath_Default(newCanonicalPath);
-	}
-	
-	@Override
-	public boolean isRoot() {
-		return canonicalPath.length==1;
-	}
+    @Override
+    public TreePath append(int indexWithinSiblings) {
+        final int[] newCanonicalPath = new int[canonicalPath.length+1];
+        System.arraycopy(canonicalPath, 0, newCanonicalPath, 0, canonicalPath.length);
+        newCanonicalPath[canonicalPath.length] = indexWithinSiblings;
+        return new TreePath_Default(newCanonicalPath);
+    }
 
-	// -- OBJECT CONTRACTS
-	
-	@Override
-	public boolean equals(Object obj) {
-		if(obj instanceof TreePath_Default) {
-			final TreePath_Default other = (TreePath_Default) obj;
-			return Arrays.equals(canonicalPath, other.canonicalPath);
-		}
-		return false;
-	}
-	
-	@Override
-	public int hashCode() {
-		return hashCode;
-	}
-	
-	@Override
-	public String toString() {
-		return "/" + IntStream.of(canonicalPath)
-				.mapToObj(i->""+i)
-				.collect(Collectors.joining("/"));
-	}
-	
+    @Override
+    public TreePath getParentIfAny() {
+        if(isRoot()) {
+            return null;
+        }
+        final int[] newCanonicalPath = new int[canonicalPath.length-1];
+        System.arraycopy(canonicalPath, 0, newCanonicalPath, 0, canonicalPath.length-1);
+        return new TreePath_Default(newCanonicalPath);
+    }
+
+    @Override
+    public boolean isRoot() {
+        return canonicalPath.length==1;
+    }
+
+    // -- OBJECT CONTRACTS
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof TreePath_Default) {
+            final TreePath_Default other = (TreePath_Default) obj;
+            return Arrays.equals(canonicalPath, other.canonicalPath);
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return hashCode;
+    }
+
+    @Override
+    public String toString() {
+        return "/" + IntStream.of(canonicalPath)
+        .mapToObj(i->""+i)
+        .collect(Collectors.joining("/"));
+    }
+
 }

@@ -112,7 +112,7 @@ public class QueryDefault<T> extends QueryAbstract<T> {
         this.count = count;
         return this;
     }
-    
+
     @Override
     public String getDescription() {
         return getQueryName() + " with " + getArgumentsByParameterName();

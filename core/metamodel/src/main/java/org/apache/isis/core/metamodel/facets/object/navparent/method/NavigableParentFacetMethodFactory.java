@@ -29,11 +29,11 @@ import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 
 /**
- * 
+ *
  * @since 2.0.0
  *
  * @deprecated according to proposed spec, <a href="https://issues.apache.org/jira/browse/ISIS-1816">ISIS-1816</a>
- * let's not introduce new 'keywords'. 
+ * let's not introduce new 'keywords'.
  */
 @Deprecated
 public class NavigableParentFacetMethodFactory extends MethodPrefixBasedFacetFactoryAbstract {
@@ -51,16 +51,16 @@ public class NavigableParentFacetMethodFactory extends MethodPrefixBasedFacetFac
         final Class<?> cls = processClassContext.getCls();
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
-        final Method method = 
-        		MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, NAVIGABLE_PARENT_PREFIX, Object.class, NO_PARAMETERS_TYPES);
+        final Method method =
+                MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, NAVIGABLE_PARENT_PREFIX, Object.class, NO_PARAMETERS_TYPES);
         if (method == null) {
             return;
         }
         processClassContext.removeMethod(method);
         try {
-			FacetUtil.addFacet(new NavigableParentFacetMethod(method, facetHolder));
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		}
+            FacetUtil.addFacet(new NavigableParentFacetMethod(method, facetHolder));
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
     }
 }

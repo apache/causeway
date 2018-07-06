@@ -24,11 +24,11 @@ import org.apache.isis.applib.Identifier;
 /**
  * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents a check to determine whether a member of an object is visible or
  * has been hidden.
- * 
+ *
  * <p>
  * If {@link #getReason()} is <tt>null</tt>, then is usable; otherwise is
  * invisible.
- * 
+ *
  * @see AccessEvent
  * @see UsabilityEvent
  * @see ValidityEvent

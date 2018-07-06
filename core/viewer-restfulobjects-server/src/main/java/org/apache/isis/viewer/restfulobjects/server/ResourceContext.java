@@ -129,14 +129,14 @@ public class ResourceContext implements RendererContext6 {
         init(representationType);
     }
 
-    
+
     void init(final RepresentationType representationType) {
         getQueryStringAsJsonRepr(); // force it to be cached
 
         // previously we checked for compatible accept headers here.
         // now, though, this is a responsibility of the various ContentNegotiationService implementations
         ensureDomainModelQueryParamSupported();
-        
+
         this.followLinks = Collections.unmodifiableList(getArg(RequestParameter.FOLLOW_LINKS));
     }
 
@@ -148,9 +148,9 @@ public class ResourceContext implements RendererContext6 {
         }
     }
 
-    
 
-    
+
+
 
     public HttpHeaders getHttpHeaders() {
         return httpHeaders;
@@ -165,7 +165,7 @@ public class ResourceContext implements RendererContext6 {
     }
 
     public JsonRepresentation getQueryStringAsJsonRepr() {
-        
+
         if (readQueryStringAsMap == null) {
             readQueryStringAsMap = requestArgsAsMap();
         }
@@ -176,7 +176,7 @@ public class ResourceContext implements RendererContext6 {
         final Map<String,String[]> params = httpServletRequest.getParameterMap();
 
         if(simpleQueryArgs(params)) {
-            // try to process regular params and build up JSON repr 
+            // try to process regular params and build up JSON repr
             final JsonRepresentation map = JsonRepresentation.newMap();
             for(String paramName: params.keySet()) {
                 String paramValue = params.get(paramName)[0];
@@ -324,7 +324,7 @@ public class ResourceContext implements RendererContext6 {
         final Oid oid = objectAdapter.getOid();
         return rendered.add(oid);
     }
-    
+
 
     // -- configuration settings
 
@@ -378,7 +378,7 @@ public class ResourceContext implements RendererContext6 {
     public boolean suppressMemberDisabledReason() {
         return getConfiguration().getBoolean("isis.viewer.restfulobjects.suppressMemberDisabledReason", SUPPRESS_MEMBER_DISABLED_REASON_DEFAULT);
     }
-    
+
 
 
     @Override

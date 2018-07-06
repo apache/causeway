@@ -24,7 +24,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 
 /**
  * The positioning of an action's button
- * 
+ *
  * <p>
  * In the standard Apache Isis Programming Model, corresponds to annotating each
  * of the member methods with the <tt>@ActionLayout</tt>.

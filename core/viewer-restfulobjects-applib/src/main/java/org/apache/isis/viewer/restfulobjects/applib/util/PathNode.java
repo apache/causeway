@@ -43,10 +43,10 @@ public class PathNode {
     public static List<String> split(String path) {
         List<String> parts = _Lists.newArrayList();
         String curr = null;
-        
+
         final List<String> chunks = _Strings.splitThenStream(path, ".")
-        		.collect(Collectors.toList());
-        
+                .collect(Collectors.toList());
+
         for (String part : chunks) {
             if(curr != null) {
                 if(part.contains("]")) {
@@ -61,7 +61,7 @@ public class PathNode {
             if(!part.contains("[")) {
                 parts.add(part);
                 continue;
-            } 
+            }
             if(part.contains("]")) {
                 parts.add(part);
             } else {
@@ -84,7 +84,7 @@ public class PathNode {
         final Map<String, String> criteria = _Maps.newHashMap();
         final String criteriaStr = nodeMatcher.group(3);
         if (criteriaStr != null) {
-        	
+
             for (final String criterium : Splitter.on(WHITESPACE).split(criteriaStr)) {
                 final Matcher keyValueMatcher = LIST_CRITERIA_SYNTAX.matcher(criterium);
                 if (keyValueMatcher.matches()) {

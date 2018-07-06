@@ -41,13 +41,13 @@ public class ActionParameterChoicesFacetDerivedFromChoicesFacetFactory extends F
         if(!getSpecificationLoader().loadSpecification(paramType).containsDoOpFacet(ChoicesFacet.class)) {
             return;
         }
-        
+
         // don't trample over any existing facets.
         final FacetedMethodParameter facetHolder = processParameterContext.getFacetHolder();
         if(facetHolder.containsDoOpFacet(ActionParameterChoicesFacet.class)) {
             return;
         }
-        
+
         FacetUtil.addFacet(new ActionParameterChoicesFacetDerivedFromChoicesFacet(
                 facetHolder,
                 getDeploymentCategory(), getSpecificationLoader(),

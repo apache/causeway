@@ -49,7 +49,7 @@ import de.agilecoders.wicket.core.markup.html.references.BootstrapJavaScriptRefe
  * A page being shown when the meta model validation has failed
  */
 public class MmvErrorPage extends WebPage {
-    
+
     private static final long serialVersionUID = 1L;
 
     private static final String ID_PAGE_TITLE = "pageTitle";
@@ -68,7 +68,7 @@ public class MmvErrorPage extends WebPage {
     @com.google.inject.Inject
     @Named("applicationCss")
     private String applicationCss;
-    
+
     /**
      * {@link com.google.inject.Inject Inject}ed when {@link #init() initialized}.
      */

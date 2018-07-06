@@ -18,19 +18,19 @@
  */
 
 /**
- * This package defines types that represent the 
+ * This package defines types that represent the
  * currently logged-in {@link org.apache.isis.applib.security.UserMemento user}
  * and their {@link org.apache.isis.applib.security.RoleMemento role}s.
- * 
+ *
  * <p>
  * Typically domain objects do not need to have any knowledge of <i>who</i>
  * is using them, because authorization is provided declaratively by the
  * framework and is type-based.  However, there are occasions; for example,
  * only an <tt>Employee</tt> and his superiors might be allowed to view their salary.
- * 
+ *
  * <p>
  * The types are suffixed &quot;Memento&quot; because they snapshot the user
- * and roles at the time that the user logs in, but are not updated after that 
+ * and roles at the time that the user logs in, but are not updated after that
  * point.
  */
 package org.apache.isis.applib.security;

@@ -22,23 +22,23 @@ import org.apache.isis.applib.services.i18n.TranslationService;
 
 class PoDisabled extends PoAbstract {
 
-	PoDisabled(TranslationServicePo translationServicePo) {
-		super(translationServicePo, TranslationService.Mode.DISABLED);
-	}
+    PoDisabled(TranslationServicePo translationServicePo) {
+        super(translationServicePo, TranslationService.Mode.DISABLED);
+    }
 
-	@Override
-	void shutdown() {
-		// nothing to do
-	}
+    @Override
+    void shutdown() {
+        // nothing to do
+    }
 
-	@Override
-	String translate(String context, String msgId) {
-		return msgId;
-	}
+    @Override
+    String translate(String context, String msgId) {
+        return msgId;
+    }
 
-	@Override
-	String translate(String context, String msgId, String msgIdPlural, int num) {
-		return msgId;
-	}
+    @Override
+    String translate(String context, String msgId, String msgIdPlural, int num) {
+        return msgId;
+    }
 
 }

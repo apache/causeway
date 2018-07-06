@@ -50,10 +50,10 @@ public interface ContentMappingService {
             }
             throw new IllegalArgumentException(
                     "Could not locate x-ro-domain-type parameter in any of the provided media types; got: " +
-                    		_NullSafe.stream(acceptableMediaTypes)
-                    		.filter(_NullSafe::isPresent)
-                    		.map(Object::toString)
-                    		.collect(Collectors.joining(", ")) );
+                            _NullSafe.stream(acceptableMediaTypes)
+                    .filter(_NullSafe::isPresent)
+                    .map(Object::toString)
+                    .collect(Collectors.joining(", ")) );
         }
 
         public static boolean isSupported(

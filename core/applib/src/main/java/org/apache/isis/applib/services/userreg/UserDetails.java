@@ -25,9 +25,9 @@ import java.io.Serializable;
  */
 public class UserDetails implements Serializable {
 
-	private static final long serialVersionUID = -7308102332765149525L;
-	
-	private String username;
+    private static final long serialVersionUID = -7308102332765149525L;
+
+    private String username;
     private String password;
     private String confirmPassword;
     private String emailAddress;

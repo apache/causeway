@@ -50,33 +50,33 @@ public final class ClassUtil {
         builtInClasses.put(cls.getName(), cls);
     }
 
-    static final Map<Class<?>, Object> defaultByPrimitiveClass = 
+    static final Map<Class<?>, Object> defaultByPrimitiveClass =
             MapUtil.asMap(
-                boolean.class, false,
-                byte.class, (byte)0,
-                short.class, (short)0,
-                int.class, 0,
-                long.class, 0L,
-                float.class, 0.0f,
-                double.class, 0.0,
-                char.class, (char)0
-            );
-    static Map<Class<?>, Class<?>> wrapperClasses = 
-        MapUtil.asMap(
-            // TODO: there is a better way of doing this in 1.6 using TypeMirror
-            boolean.class, Boolean.class,
-            byte.class, Byte.class,
-            char.class, Character.class,
-            short.class, Short.class,
-            int.class, Integer.class,
-            long.class, Long.class,
-            float.class, Float.class,
-            double.class, Double.class,
-            void.class, Void.class
-        );
-        
+                    boolean.class, false,
+                    byte.class, (byte)0,
+                    short.class, (short)0,
+                    int.class, 0,
+                    long.class, 0L,
+                    float.class, 0.0f,
+                    double.class, 0.0,
+                    char.class, (char)0
+                    );
+    static Map<Class<?>, Class<?>> wrapperClasses =
+            MapUtil.asMap(
+                    // TODO: there is a better way of doing this in 1.6 using TypeMirror
+                    boolean.class, Boolean.class,
+                    byte.class, Byte.class,
+                    char.class, Character.class,
+                    short.class, Short.class,
+                    int.class, Integer.class,
+                    long.class, Long.class,
+                    float.class, Float.class,
+                    double.class, Double.class,
+                    void.class, Void.class
+                    );
+
     static Map<Class<?>, Object> defaultByPrimitiveType = new HashMap<Class<?>, Object>();
-    
+
     static {
         defaultByPrimitiveType.put(byte.class, (byte) 0);
         defaultByPrimitiveType.put(short.class, (short) 0);
@@ -87,30 +87,30 @@ public final class ClassUtil {
         defaultByPrimitiveType.put(double.class, 0.0);
         defaultByPrimitiveType.put(boolean.class, false);
     }
-    
+
     public static Map<String, Class<?>> primitives = Maps.newHashMap();
 
     static {
         @SuppressWarnings({ "rawtypes" })
         final List<Class> primitiveClasses = Arrays.<Class> asList(
-                boolean.class, 
-                byte.class, 
-                short.class, 
-                int.class, 
-                long.class, 
-                float.class, 
-                double.class, 
+                boolean.class,
+                byte.class,
+                short.class,
+                int.class,
+                long.class,
+                float.class,
+                double.class,
                 char.class);
         for (final Class<?> cls : primitiveClasses) {
             primitives.put(cls.getName(), cls);
         }
     }
 
-    
+
     // //////////////////////////////////////
 
-    
-    
+
+
     private ClassUtil() {
     }
 

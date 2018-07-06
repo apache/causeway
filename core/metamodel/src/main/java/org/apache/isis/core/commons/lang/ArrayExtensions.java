@@ -72,7 +72,7 @@ public final class ArrayExtensions {
     }
 
     @SafeVarargs
-	public static <T> T[] combine(final T[]... arrays) {
+    public static <T> T[] combine(final T[]... arrays) {
         final List<T> combinedList = Lists.newArrayList();
         for (final T[] array : arrays) {
             Collections.addAll(combinedList, array);
@@ -94,7 +94,7 @@ public final class ArrayExtensions {
     }
 
     @SafeVarargs
-	public static <T> T coalesce(final T... objects) {
+    public static <T> T coalesce(final T... objects) {
         for (final T object : objects) {
             if (object != null) {
                 return object;

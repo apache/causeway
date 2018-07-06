@@ -34,31 +34,31 @@ import org.apache.isis.core.metamodel.specloader.specimpl.ObjectMemberAbstract;
  */
 class MixinInterceptor {
 
-	/**
-	 * If method originates from a mixin then we infer the intended name
-	 * from the mixin's class name.
-	 * 
-	 * @param method within the mixin type itself.
-	 * @return the intended name of the method
-	 */
-	static String intendedNameOf(Method method) {
+    /**
+     * If method originates from a mixin then we infer the intended name
+     * from the mixin's class name.
+     *
+     * @param method within the mixin type itself.
+     * @return the intended name of the method
+     */
+    static String intendedNameOf(Method method) {
 
-		final Class<?> declaringClass = method.getDeclaringClass();
-		final List<Mixin> mixins = Annotations.getAnnotations(declaringClass, Mixin.class);
-		final Optional<Mixin> mixinIfAny = mixins.stream().findFirst();
+        final Class<?> declaringClass = method.getDeclaringClass();
+        final List<Mixin> mixins = Annotations.getAnnotations(declaringClass, Mixin.class);
+        final Optional<Mixin> mixinIfAny = mixins.stream().findFirst();
 
-		if(mixinIfAny.isPresent()) {
-			final String methodName = method.getName();
-			final String mixinAnnotMethodName = mixinIfAny.get().method();
-			if(mixinAnnotMethodName.equals(methodName)) {
-    			final String mixinMethodName = ObjectMemberAbstract.deriveMemberNameFrom(method.getDeclaringClass().getName());
+        if(mixinIfAny.isPresent()) {
+            final String methodName = method.getName();
+            final String mixinAnnotMethodName = mixinIfAny.get().method();
+            if(mixinAnnotMethodName.equals(methodName)) {
+                final String mixinMethodName = ObjectMemberAbstract.deriveMemberNameFrom(method.getDeclaringClass().getName());
                 if(mixinMethodName!=null) {
                     return mixinMethodName;
                 }
-			}
-		}
-		// default behavior
-		return method.getName();
-	}
+            }
+        }
+        // default behavior
+        return method.getName();
+    }
 
 }

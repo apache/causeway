@@ -20,12 +20,12 @@ import java.util.SortedSet;
 
 /**
  * To ensure that different ({@link Comparable}) {@link ChildDomainObject}s
- * are not equivalent when placed into the {@link ParentDomainObject#getChildren() children} (a {@link SortedSet}.) 
+ * are not equivalent when placed into the {@link ParentDomainObject#getChildren() children} (a {@link SortedSet}.)
  */
 public class InstantiatorForChildDomainObject implements Instantiator {
 
     private int i;
-    
+
     @Override
     public Object instantiate() {
         final ChildDomainObject cdo = new ChildDomainObject();

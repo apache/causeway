@@ -30,16 +30,16 @@ import org.apache.isis.core.metamodel.layout.DeweyOrderSet;
 /**
  * Compares by {@link MemberOrderFacet} obtained from each {@link FacetedMethod}
  * ).
- * 
+ *
  * <p>
  * Will also compare {@link OrderSet}s; these are put after any
  * {@link FacetedMethod}s. If there is more than one OrderSet then these are
  * compared by an {@link OrderSetGroupNameComparator}.
- * 
+ *
  * <p>
  * If there is no annotation on either member, then will compare the members by
  * name instead.
- * 
+ *
  * <p>
  * Can specify if requires that members are in the same (group) name.
  */
@@ -48,7 +48,7 @@ public class MemberOrderComparator implements Comparator<Object> {
     private final MemberOrderFacetComparator memberOrderFacetComparator;
     private final MemberIdentifierComparator memberIdentifierComparator = new MemberIdentifierComparator();
     private final OrderSetGroupNameComparator orderSetComparator = new OrderSetGroupNameComparator(true);
-    
+
     public MemberOrderComparator(final boolean ensureGroupIsSame) {
         memberOrderFacetComparator = new MemberOrderFacetComparator(ensureGroupIsSame);
     }
@@ -78,7 +78,7 @@ public class MemberOrderComparator implements Comparator<Object> {
         final int memberOrderComparison = memberOrderFacetComparator.compare(m1, m2);
         if(memberOrderComparison != 0) {
             return memberOrderComparison;
-        } 
+        }
         return memberIdentifierComparator.compare(o1, o2);
     }
 

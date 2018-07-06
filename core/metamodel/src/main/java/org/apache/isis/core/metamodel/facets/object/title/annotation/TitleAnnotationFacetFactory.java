@@ -142,11 +142,11 @@ public class TitleAnnotationFacetFactory extends FacetFactoryAbstract implements
 
 
     /**
-     * Violation if there is a class that has both a <tt>title()</tt> method and also any non-inherited method 
+     * Violation if there is a class that has both a <tt>title()</tt> method and also any non-inherited method
      * annotated with <tt>@Title</tt>.
-     * 
+     *
      * <p>
-     * If there are only inherited methods annotated with <tt>@Title</tt> then this is <i>not</i> a violation; but 
+     * If there are only inherited methods annotated with <tt>@Title</tt> then this is <i>not</i> a violation; but
      * (from the implementation of {@link org.apache.isis.core.metamodel.facets.object.title.methods.TitleFacetViaMethodsFactory} the imperative <tt>title()</tt> method will take
      * precedence.
      */
@@ -162,13 +162,13 @@ public class TitleAnnotationFacetFactory extends FacetFactoryAbstract implements
                 if (titleMethod == null) {
                     return true;
                 }
-                
+
                 // determine if cls contains an @Title annotated method, not inherited from superclass
                 final Class<?> supClass = cls.getSuperclass();
                 if (supClass == null) {
                     return true;
                 }
-                
+
                 final List<Method> methods = methodsWithTitleAnnotation(cls);
                 final List<Method> superClassMethods = methodsWithTitleAnnotation(supClass);
                 if (methods.size() > superClassMethods.size()) {

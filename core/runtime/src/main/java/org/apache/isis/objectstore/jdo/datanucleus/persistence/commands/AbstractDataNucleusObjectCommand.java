@@ -25,20 +25,21 @@ import org.apache.isis.core.runtime.persistence.objectstore.transaction.Persiste
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommandContext;
 
 public abstract class AbstractDataNucleusObjectCommand extends PersistenceCommandAbstract {
-    
+
     private final PersistenceManager persistenceManager;
 
     AbstractDataNucleusObjectCommand(final ObjectAdapter adapter,
             final PersistenceManager persistenceManager) {
         super(adapter);
         this.persistenceManager = persistenceManager;
-        
+
     }
 
     protected PersistenceManager getPersistenceManager() {
         return persistenceManager;
     }
-    
+
+    @Override
     public abstract void execute(final PersistenceCommandContext context);
 
 }

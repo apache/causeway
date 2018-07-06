@@ -40,7 +40,7 @@ import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 public abstract class PropertyDomainEventFacetAbstract
-        extends SingleClassValueFacetAbstract implements PropertyDomainEventFacet {
+extends SingleClassValueFacetAbstract implements PropertyDomainEventFacet {
 
     private final DomainEventHelper domainEventHelper;
 
@@ -50,10 +50,10 @@ public abstract class PropertyDomainEventFacetAbstract
 
     public PropertyDomainEventFacetAbstract(
             final Class<? extends PropertyDomainEvent<?, ?>> eventType,
-            final PropertyOrCollectionAccessorFacet getterFacet,
-            final FacetHolder holder,
-            final ServicesInjector servicesInjector,
-            final SpecificationLoader specificationLoader) {
+                    final PropertyOrCollectionAccessorFacet getterFacet,
+                    final FacetHolder holder,
+                    final ServicesInjector servicesInjector,
+                    final SpecificationLoader specificationLoader) {
         super(PropertyDomainEventFacet.class, holder, eventType, specificationLoader);
         this.getterFacet = getterFacet;
 

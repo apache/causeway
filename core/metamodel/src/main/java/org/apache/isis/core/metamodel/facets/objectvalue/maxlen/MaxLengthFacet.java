@@ -26,7 +26,7 @@ import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
 /**
  * Whether the (string) property or a parameter's length must not exceed a
  * certain length.
- * 
+ *
  * <p>
  * In the standard Apache Isis Programming Model, corresponds to the
  * <tt>@MaxLength</tt> annotation.

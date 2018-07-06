@@ -54,7 +54,7 @@ public interface AdapterManager extends AdapterManagerBase {
         public static ConcurrencyChecking concurrencyCheckingFor(SemanticsOf actionSemantics) {
             return actionSemantics.isSafeInNature()
                     ? ConcurrencyChecking.NO_CHECK
-                    : ConcurrencyChecking.CHECK;
+                            : ConcurrencyChecking.CHECK;
         }
 
         /**
@@ -66,6 +66,7 @@ public interface AdapterManager extends AdapterManagerBase {
          * check if checking has been disabled.
          */
         private static ThreadLocal<ConcurrencyChecking> concurrencyChecking = new ThreadLocal<ConcurrencyChecking>(){
+            @Override
             protected ConcurrencyChecking initialValue() {
                 return CHECK;
             };

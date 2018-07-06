@@ -42,6 +42,7 @@ public class UuidPanel extends ScalarPanelTextFieldAbstract<UUID> {
         super(id, scalarModel, UUID.class);
     }
 
+    @Override
     protected AbstractTextComponent<UUID> createTextFieldForRegular(final String id) {
         final ScalarModel model = getModel();
         final TextFieldValueModel<UUID> textFieldValueModel = new TextFieldValueModel<>(this);

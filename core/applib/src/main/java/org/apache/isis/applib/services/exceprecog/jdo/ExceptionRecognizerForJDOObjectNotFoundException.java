@@ -24,9 +24,9 @@ public class ExceptionRecognizerForJDOObjectNotFoundException extends ExceptionR
 
     public ExceptionRecognizerForJDOObjectNotFoundException() {
         super(Category.NOT_FOUND,
-              javax.jdo.JDOObjectNotFoundException.class,
-              prefix("Unable to load object.  " +
-                   "Has it been deleted by someone else?"));
+                javax.jdo.JDOObjectNotFoundException.class,
+                prefix("Unable to load object.  " +
+                        "Has it been deleted by someone else?"));
     }
 
 }

@@ -94,10 +94,10 @@ public final class Responses {
 
         final Response.ResponseBuilder response =
                 of(RestfulResponse.HttpStatusCode.OK)
-                    .header("Date", dateFormat.format(now))
-                    .type(mediaType)
-                    .cacheControl(caching.getCacheControl())
-                    .entity(JsonWriterUtil.jsonFor(entityRepresentation));
+                .header("Date", dateFormat.format(now))
+                .type(mediaType)
+                .cacheControl(caching.getCacheControl())
+                .entity(JsonWriterUtil.jsonFor(entityRepresentation));
         return addLastModifiedAndETagIfAvailable(response, version);
     }
 

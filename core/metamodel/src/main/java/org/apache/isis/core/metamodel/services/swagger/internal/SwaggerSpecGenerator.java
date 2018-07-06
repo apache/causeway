@@ -44,16 +44,16 @@ public class SwaggerSpecGenerator {
         final Swagger swagger = generation.generate();
 
         switch (format) {
-            case JSON:
-                return Json.pretty(swagger);
-            case YAML:
-                try {
-                    return Yaml.pretty().writeValueAsString(swagger);
-                } catch (JsonProcessingException e) {
-                    throw new RuntimeException(e);
-                }
-            default:
-                throw new IllegalArgumentException("Unrecognized format: " + format);
+        case JSON:
+            return Json.pretty(swagger);
+        case YAML:
+            try {
+                return Yaml.pretty().writeValueAsString(swagger);
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+        default:
+            throw new IllegalArgumentException("Unrecognized format: " + format);
         }
     }
 

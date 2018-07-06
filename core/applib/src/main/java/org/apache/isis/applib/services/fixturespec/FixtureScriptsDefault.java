@@ -64,12 +64,12 @@ import org.apache.isis.applib.services.eventbus.EventBusService;
 @DomainService(
         nature = NatureOfService.VIEW_MENU_ONLY,
         objectType = "isisApplib.FixtureScriptsDefault"
-)
+        )
 @DomainServiceLayout(
         named="Prototyping",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY,
         menuOrder = "500.10"
-)
+        )
 public class FixtureScriptsDefault extends FixtureScripts {
 
     // -- constructor, init
@@ -85,6 +85,7 @@ public class FixtureScriptsDefault extends FixtureScripts {
     }
 
 
+    @Override
     @PostConstruct
     public void init() {
         if(fixtureScriptsSpecificationProvider == null) {
@@ -92,22 +93,22 @@ public class FixtureScriptsDefault extends FixtureScripts {
         }
         setSpecification(fixtureScriptsSpecificationProvider.getSpecification());
     }
-    
+
 
 
     // -- runFixtureScript (using choices as the drop-down policy)
     @Action(
             restrictTo = RestrictTo.PROTOTYPING
-    )
+            )
     @MemberOrder(sequence="10")
     @Override
     public List<FixtureResult> runFixtureScript(
             final FixtureScript fixtureScript,
             @ParameterLayout(
-                named = "Parameters",
-                describedAs =
-                        "Script-specific parameters (if any).  The format depends on the script implementation (eg key=value, CSV, JSON, XML etc)",
-                multiLine = 10)
+                    named = "Parameters",
+                    describedAs =
+                    "Script-specific parameters (if any).  The format depends on the script implementation (eg key=value, CSV, JSON, XML etc)",
+                    multiLine = 10)
             @Parameter(optionality = Optionality.OPTIONAL)
             final String parameters) {
         try {
@@ -152,23 +153,23 @@ public class FixtureScriptsDefault extends FixtureScripts {
         return super.validateRunFixtureScript(fixtureScript, parameters);
     }
 
-    
+
 
     // -- runFixtureScript (using autoComplete as drop-down policy)
     @Action(
             restrictTo = RestrictTo.PROTOTYPING
-    )
+            )
     @ActionLayout(
             named = "Run Fixture Script"
-    )
+            )
     @MemberOrder(sequence="10")
     public List<FixtureResult> runFixtureScriptWithAutoComplete(
             final FixtureScript fixtureScript,
             @ParameterLayout(
-                named = "Parameters",
-                describedAs =
-                        "Script-specific parameters (if any).  The format depends on the script implementation (eg key=value, CSV, JSON, XML etc)",
-                multiLine = 10)
+                    named = "Parameters",
+                    describedAs =
+                    "Script-specific parameters (if any).  The format depends on the script implementation (eg key=value, CSV, JSON, XML etc)",
+                    multiLine = 10)
             @Parameter(optionality = Optionality.OPTIONAL)
             final String parameters) {
         return this.runFixtureScript(fixtureScript, parameters);
@@ -193,16 +194,16 @@ public class FixtureScriptsDefault extends FixtureScripts {
     public String validateRunFixtureScriptWithAutoComplete(final FixtureScript fixtureScript, final String parameters) {
         return super.validateRunFixtureScript(fixtureScript, parameters);
     }
-    
+
 
     // -- recreateObjectsAndReturnFirst
 
     @Action(
             restrictTo = RestrictTo.PROTOTYPING
-    )
+            )
     @ActionLayout(
             cssClassFa="fa fa-refresh"
-    )
+            )
     @MemberOrder(sequence="20")
     public Object recreateObjectsAndReturnFirst() {
         Class<? extends FixtureScript> recreateScriptClass =  getSpecification().getRecreateScriptClass();
@@ -221,19 +222,19 @@ public class FixtureScriptsDefault extends FixtureScripts {
         return getSpecification().getRecreateScriptClass() == null;
     }
 
-    
+
 
     // -- helpers
     private boolean hideIfPolicyNot(final FixtureScriptsSpecification.DropDownPolicy requiredPolicy) {
         return fixtureScriptsSpecificationProvider == null || getSpecification().getRunScriptDropDownPolicy() != requiredPolicy;
     }
-    
+
 
     // -- injected services
     @javax.inject.Inject
     FixtureScriptsSpecificationProvider fixtureScriptsSpecificationProvider;
     @javax.inject.Inject
     EventBusService eventBusService;
-    
+
 
 }

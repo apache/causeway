@@ -27,7 +27,7 @@ import org.apache.isis.commons.internal.compare._Comparators;
 public class DomainServiceMenuOrder {
 
     private DomainServiceMenuOrder(){}
-	
+
     public static String orderOf(final Class<?> cls) {
         final DomainService domainService = cls.getAnnotation(DomainService.class);
         final DomainServiceLayout domainServiceLayout = cls.getAnnotation(DomainServiceLayout.class);
@@ -39,17 +39,17 @@ public class DomainServiceMenuOrder {
         return min!=null ? min : Constants.MENU_ORDER_DEFAULT;
     }
 
-	// -- HELPER
+    // -- HELPER
 
     public static String minimumOf(final String dslayoutOrder, final String dsOrder) {
         if(isUndefined(dslayoutOrder))
             return dsOrder;
         if(isUndefined(dsOrder))
             return dslayoutOrder;
-        
+
         return _Comparators.deweyOrderCompare(dslayoutOrder, dsOrder) < 0
-        		? dslayoutOrder 
-        		: dsOrder;
+                ? dslayoutOrder
+                        : dsOrder;
     }
 
     private static boolean isUndefined(final String str) {

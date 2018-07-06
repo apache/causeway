@@ -39,7 +39,7 @@ class DomainServiceProviderMockery implements DomainServiceProvider {
     private RepositoryService mockRepositoryService = null;
     private FactoryService mockFactoryService = null;
     private final Map<Class<?>, Object> mocks = Maps.newHashMap();
-    
+
     private Mockery context;
 
     private ScenarioExecution scenarioExecution;
@@ -69,12 +69,14 @@ class DomainServiceProviderMockery implements DomainServiceProvider {
                     allowing(mockFactoryService).instantiate(with(Expectations.<Class<?>>anything()));
                     will(new Action() {
 
+                        @Override
                         @SuppressWarnings("rawtypes")
                         public Object invoke(Invocation invocation) throws Throwable {
                             Class cls = (Class) invocation.getParameter(0);
                             return scenarioExecution.injectServices(cls.newInstance());
                         }
 
+                        @Override
                         public void describeTo(Description description) {
                             description.appendText("newTransientInstance");
                         }
@@ -131,7 +133,7 @@ class DomainServiceProviderMockery implements DomainServiceProvider {
     }
 
     /**
-     * not API 
+     * not API
      */
     void assertIsSatisfied() {
         mockery().assertIsSatisfied();

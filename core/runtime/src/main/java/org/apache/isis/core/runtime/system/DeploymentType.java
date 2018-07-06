@@ -41,7 +41,7 @@ public class DeploymentType {
 
     /**
      * Look up {@link DeploymentType} by their {@link #name()}.
-     * 
+     *
      * <p>
      * Can substitute <tt>'-'</tt> instead of <tt>'_'</tt>; for example
      * <tt>server_exploration</tt> will lookup the same as
@@ -95,7 +95,7 @@ public class DeploymentType {
     public String name() {
         return name;
     }
-    
+
     @Override
     public String toString() {
         return name();

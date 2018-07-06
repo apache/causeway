@@ -30,7 +30,7 @@ import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 
 public class DateConverterForJavaSqlTimestamp extends DateConverterForJavaAbstract<java.sql.Timestamp> {
     private static final long serialVersionUID = 1L;
-    
+
     public DateConverterForJavaSqlTimestamp(WicketViewerSettings settings, int adjustBy) {
         this(settings.getDatePattern(), settings.getTimestampPattern(), adjustBy);
     }

@@ -41,8 +41,8 @@ public class MetaModelValidatorToCheckObjectSpecIdsUnique extends MetaModelValid
     @Override
     public void validate(final ValidationFailures validationFailures) {
         boolean check = specificationLoader.getConfiguration()
-                            .getBoolean(ISIS_REFLECTOR_ENSURE_UNIQUE_OBJECT_IDS_KEY,
-                                        ISIS_REFLECTOR_ENSURE_UNIQUE_OBJECT_IDS_DEFAULT);
+                .getBoolean(ISIS_REFLECTOR_ENSURE_UNIQUE_OBJECT_IDS_KEY,
+                        ISIS_REFLECTOR_ENSURE_UNIQUE_OBJECT_IDS_DEFAULT);
         if(!check) {
             return;
         }
@@ -83,8 +83,8 @@ public class MetaModelValidatorToCheckObjectSpecIdsUnique extends MetaModelValid
             private String asCsv(final List<ObjectSpecification> specList) {
                 return Joiner.on(",").join(
                         FluentIterable.from(specList)
-                              .transform(ObjectSpecification.Functions.FULL_IDENTIFIER)
-                              .toList());
+                        .transform(ObjectSpecification.Functions.FULL_IDENTIFIER)
+                        .toList());
             }
 
         };

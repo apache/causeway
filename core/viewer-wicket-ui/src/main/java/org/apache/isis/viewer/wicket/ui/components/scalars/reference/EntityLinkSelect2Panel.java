@@ -35,7 +35,7 @@ class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAdapter> i
     public EntityLinkSelect2Panel(final String id, final ReferencePanel owningPanel) {
         super(id, owningPanel.getModel());
         this.owningPanel = owningPanel;
-        
+
         setType(ObjectAdapter.class);
     }
 

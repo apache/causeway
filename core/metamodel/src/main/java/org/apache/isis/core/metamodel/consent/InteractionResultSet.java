@@ -51,7 +51,7 @@ public class InteractionResultSet {
      * Vetoed if any of the {@link #add(InteractionResult) contained}
      * {@link InteractionResult}s are also {@link InteractionResult#isVetoing()
      * not empty}.
-     * 
+     *
      * @return
      */
     public boolean isVetoed() {
@@ -67,7 +67,7 @@ public class InteractionResultSet {
      * Returns the {@link Consent} corresponding to
      * {@link #getInteractionResult()}, or an {@link Allow} if there have been
      * no {@link InteractionResult}s {@link #add(InteractionResult) added}.
-     * 
+     *
      * @return
      */
     public Consent createConsent() {
@@ -80,12 +80,12 @@ public class InteractionResultSet {
 
     /**
      * Returns the &quot;best&quot; contained {@link InteractionResult}.
-     * 
+     *
      * <p>
      * This will be the first {@link InteractionResult} that has vetoed the
      * interaction, or the first {@link InteractionResult}
      * {@link #add(InteractionResult) added} if none have vetoed.
-     * 
+     *
      * @return
      */
     public InteractionResult getInteractionResult() {

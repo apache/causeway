@@ -53,7 +53,7 @@ public abstract class ExceptionMapperAbstract<T extends Throwable> implements Ex
                 new ExceptionPojo(
                         httpStatusCode.getStatusCode(), message,
                         detailIfRequired(httpStatusCode, ex)
-                );
+                        );
 
         return buildResponse(httpStatusCode, exceptionPojo);
     }
@@ -62,12 +62,12 @@ public abstract class ExceptionMapperAbstract<T extends Throwable> implements Ex
         final List<Throwable> chain = Throwables.getCausalChain(ex);
 
         RestfulResponse.HttpStatusCode statusCode;
-        
+
         statusCode = IsisJaxrsServerPlugin.get().getFailureStatusCodeIfAny(ex);
         if(statusCode!=null) {
-        	return statusCode;
+            return statusCode;
         }
-        
+
         if(!FluentIterable.from(chain).filter(RecoverableException.class).isEmpty()) {
             statusCode = RestfulResponse.HttpStatusCode.OK;
         } else if(ex instanceof HasHttpStatusCode) {
@@ -92,7 +92,7 @@ public abstract class ExceptionMapperAbstract<T extends Throwable> implements Ex
         return httpStatusCode == RestfulResponse.HttpStatusCode.NOT_FOUND ||
                 httpStatusCode == RestfulResponse.HttpStatusCode.OK
                 ? null
-                : new ExceptionDetail(ex);
+                        : new ExceptionDetail(ex);
     }
 
     private Response buildResponse(
@@ -103,8 +103,8 @@ public abstract class ExceptionMapperAbstract<T extends Throwable> implements Ex
         final List<MediaType> acceptableMediaTypes = httpHeaders.getAcceptableMediaTypes();
         final SerializationStrategy serializationStrategy =
                 acceptableMediaTypes.contains(MediaType.APPLICATION_XML_TYPE) ||
-                        acceptableMediaTypes.contains(RepresentationType.OBJECT_LAYOUT.getXmlMediaType())
-                        ? SerializationStrategy.XML
+                acceptableMediaTypes.contains(RepresentationType.OBJECT_LAYOUT.getXmlMediaType())
+                ? SerializationStrategy.XML
                         : SerializationStrategy.JSON;
 
         final String message = exceptionPojo.getMessage();

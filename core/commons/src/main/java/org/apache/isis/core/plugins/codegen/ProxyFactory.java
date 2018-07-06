@@ -22,56 +22,56 @@ import java.lang.reflect.InvocationHandler;
 
 /**
  * Generates dynamic classes and corresponding instances by rebasing a given 'base' class.
- *   
+ *
  * @since 2.0.0
  * @param <T> type of proxy objects this factory creates
  */
 public interface ProxyFactory<T> {
 
-	// -- INTERFACE
-	
-	/**
-	 * @param handler
-	 * @param initialize whether to call a constructor on object instantiation 
-	 * @return new proxy instance of type T
-	 * @throws IllegalArgumentException when using initialize=true and the number of 
-	 * constructorArgTypes specified while building this factory is greater than 0.
-	 */
-	public T createInstance(InvocationHandler handler, boolean initialize);
-	
-	/**
-	 * @param handler
-	 * @param constructorArgs passed to the constructor with matching signature on object instantiation
-	 * @return new proxy instance of type T (always uses a constructor)
-	 * @throws IllegalArgumentException if constructorArgs is null or empty or does not 
-	 * conform to the number of constructorArgTypes specified while building this factory.
-	 */
-	public T createInstance(InvocationHandler handler, Object[] constructorArgs);
-	
-	// -- BUILDER (uses plugin)
-	
-	public static class ProxyFactoryBuilder<T> {
-		private final Class<T> base;
-		private Class<?>[] interfaces;
-		private Class<?>[] constructorArgTypes;
-		private ProxyFactoryBuilder(Class<T> base) {
-			this.base = base;
-		}
-		public ProxyFactoryBuilder<T> interfaces(Class<?>[] interfaces) {
-			this.interfaces = interfaces;
-			return this;
-		}		
-		public ProxyFactoryBuilder<T> constructorArgTypes(Class<?>[] constructorArgTypes) {
-			this.constructorArgTypes = constructorArgTypes;
-			return this;
-		}
-		public ProxyFactory<T> build() {
-			return ProxyFactoryPlugin.get().factory(base, interfaces, constructorArgTypes);
-		}
-	}
-	
-	public static <T> ProxyFactoryBuilder<T> builder(Class<T> base) {
-		return new ProxyFactoryBuilder<T>(base);
-	} 
-	
+    // -- INTERFACE
+
+    /**
+     * @param handler
+     * @param initialize whether to call a constructor on object instantiation
+     * @return new proxy instance of type T
+     * @throws IllegalArgumentException when using initialize=true and the number of
+     * constructorArgTypes specified while building this factory is greater than 0.
+     */
+    public T createInstance(InvocationHandler handler, boolean initialize);
+
+    /**
+     * @param handler
+     * @param constructorArgs passed to the constructor with matching signature on object instantiation
+     * @return new proxy instance of type T (always uses a constructor)
+     * @throws IllegalArgumentException if constructorArgs is null or empty or does not
+     * conform to the number of constructorArgTypes specified while building this factory.
+     */
+    public T createInstance(InvocationHandler handler, Object[] constructorArgs);
+
+    // -- BUILDER (uses plugin)
+
+    public static class ProxyFactoryBuilder<T> {
+        private final Class<T> base;
+        private Class<?>[] interfaces;
+        private Class<?>[] constructorArgTypes;
+        private ProxyFactoryBuilder(Class<T> base) {
+            this.base = base;
+        }
+        public ProxyFactoryBuilder<T> interfaces(Class<?>[] interfaces) {
+            this.interfaces = interfaces;
+            return this;
+        }
+        public ProxyFactoryBuilder<T> constructorArgTypes(Class<?>[] constructorArgTypes) {
+            this.constructorArgTypes = constructorArgTypes;
+            return this;
+        }
+        public ProxyFactory<T> build() {
+            return ProxyFactoryPlugin.get().factory(base, interfaces, constructorArgTypes);
+        }
+    }
+
+    public static <T> ProxyFactoryBuilder<T> builder(Class<T> base) {
+        return new ProxyFactoryBuilder<T>(base);
+    }
+
 }

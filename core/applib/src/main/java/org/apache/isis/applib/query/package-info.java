@@ -20,10 +20,10 @@
 /**
  * This package defines the {@link org.apache.isis.applib.query.Query} interface
  * and supporting implementations.
- * 
+ *
  * <p>
  * The {@link org.apache.isis.applib.query.Query} concept is provided as a
- * standardized mechanism by which 
+ * standardized mechanism by which
  * {@link org.apache.isis.applib.AbstractFactoryAndRepository repositories}
  * or indeed any {@link org.apache.isis.applib.AbstractDomainObject domain object}
  * can submit.  Object store implementation are generally expected to support

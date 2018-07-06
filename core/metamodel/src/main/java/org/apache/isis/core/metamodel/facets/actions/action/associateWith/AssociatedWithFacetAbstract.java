@@ -28,8 +28,8 @@ import org.apache.isis.core.metamodel.facets.SingleStringValueFacetAbstract;
  * choices and defaults of parameters of the same type.
  */
 public abstract class AssociatedWithFacetAbstract
-        extends SingleStringValueFacetAbstract
-        implements AssociatedWithFacet {
+extends SingleStringValueFacetAbstract
+implements AssociatedWithFacet {
 
     public static Class<? extends Facet> type() {
         return AssociatedWithFacet.class;

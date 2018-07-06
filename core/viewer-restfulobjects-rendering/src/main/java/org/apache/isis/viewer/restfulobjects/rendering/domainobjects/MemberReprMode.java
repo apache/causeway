@@ -22,7 +22,7 @@ package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
  * Some representations may vary according to whether the member is to be represented for read
  * (render the state of the property or collection) or for write (render additional hypermedia controls to allow
  * the property to be modified/cleared, or the collection to be added to/removed from).
-*/
+ */
 public enum MemberReprMode {
     READ,
     WRITE;

@@ -25,9 +25,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
 abstract class DateConverterForJdk8Abstract<T> extends DateConverterAbstract<T> {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     DateConverterForJdk8Abstract(Class<T> cls, String datePattern, String dateTimePattern, int adjustBy) {
         super(cls, datePattern, dateTimePattern, adjustBy);
     }

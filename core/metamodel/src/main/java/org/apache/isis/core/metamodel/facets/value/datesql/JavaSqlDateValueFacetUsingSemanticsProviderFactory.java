@@ -27,8 +27,8 @@ import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSem
 public class JavaSqlDateValueFacetUsingSemanticsProviderFactory extends ValueFacetUsingSemanticsProviderFactory<Date> {
 
     public JavaSqlDateValueFacetUsingSemanticsProviderFactory() {
-        // as per inherited TimeValueSemanticsProvider#facetType 
-        super(); 
+        // as per inherited TimeValueSemanticsProvider#facetType
+        super();
     }
 
     @Override

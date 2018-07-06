@@ -37,11 +37,11 @@ public final class Blob implements NamedWithMimeType, Serializable {
      * </pre>
      */
     private static final long serialVersionUID = 5659679806709601263L;
-    
+
     private final MimeType mimeType;
     private final byte[] bytes;
     private final String name;
-    
+
     public Blob(String name, String primaryType, String subtype, byte[] bytes) {
         this(name, newMimeType(primaryType, subtype), bytes);
     }
@@ -75,14 +75,16 @@ public final class Blob implements NamedWithMimeType, Serializable {
         }
     }
 
+    @Override
     public String getName() {
         return name;
     }
-    
+
+    @Override
     public MimeType getMimeType() {
         return mimeType;
     }
-    
+
     public byte[] getBytes() {
         return bytes;
     }
@@ -93,17 +95,17 @@ public final class Blob implements NamedWithMimeType, Serializable {
      * @throws IOException
      */
     public void writeBytesTo(final OutputStream os) throws IOException {
-    	if(os==null) {
-    		return;
-    	}
-    	if(bytes!=null) {
-    		os.write(bytes);
-    	}
+        if(os==null) {
+            return;
+        }
+        if(bytes!=null) {
+            os.write(bytes);
+        }
     }
 
     @Override
     public String toString() {
         return getName() + " [" + getMimeType().getBaseType() + "]: " + getBytes().length + " bytes";
     }
-    
+
 }

@@ -52,7 +52,7 @@ import org.apache.isis.core.runtime.system.transaction.TransactionalClosure;
 import org.apache.isis.schema.ixn.v1.PropertyEditDto;
 
 public abstract class PropertySetterOrClearFacetForDomainEventAbstract
-        extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
+extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
 
     private final DomainEventHelper domainEventHelper;
 
@@ -68,12 +68,12 @@ public abstract class PropertySetterOrClearFacetForDomainEventAbstract
     public PropertySetterOrClearFacetForDomainEventAbstract(
             final Class<? extends Facet> facetType,
             final Class<? extends PropertyDomainEvent<?, ?>> eventType,
-            final PropertyOrCollectionAccessorFacet getterFacet,
-            final PropertySetterFacet setterFacet,
-            final PropertyClearFacet clearFacet,
-            final PropertyDomainEventFacetAbstract propertyDomainEventFacet,
-            final ServicesInjector servicesInjector,
-            final FacetHolder holder) {
+                    final PropertyOrCollectionAccessorFacet getterFacet,
+                    final PropertySetterFacet setterFacet,
+                    final PropertyClearFacet clearFacet,
+                    final PropertyDomainEventFacetAbstract propertyDomainEventFacet,
+                    final ServicesInjector servicesInjector,
+                    final FacetHolder holder) {
         super(facetType, eventType, holder);
         this.getterFacet = getterFacet;
         this.setterFacet = setterFacet;
@@ -168,7 +168,7 @@ public abstract class PropertySetterOrClearFacetForDomainEventAbstract
                         doSetOrClearProperty(style, owningProperty, targetAdapter, newValueAdapter, interactionInitiatedBy);
                     }
                 }
-        );
+                );
 
 
 
@@ -220,72 +220,72 @@ public abstract class PropertySetterOrClearFacetForDomainEventAbstract
                     new Interaction.PropertyEdit(interaction, propertyId, target, argValue, targetMember, targetClass);
             final Interaction.MemberExecutor<Interaction.PropertyEdit> executor =
                     new Interaction.MemberExecutor<Interaction.PropertyEdit>() {
-                        @Override
-                        public Object execute(final Interaction.PropertyEdit currentExecution) {
+                @Override
+                public Object execute(final Interaction.PropertyEdit currentExecution) {
 
-                            try {
+                    try {
 
-                                // update the current execution with the DTO (memento)
-                                final PropertyEditDto editDto =
-                                        getInteractionDtoServiceInternal().asPropertyEditDto(
-                                                owningProperty, targetAdapter, newValueAdapter);
-                                currentExecution.setDto(editDto);
-
-
-                                // set the startedAt (and update command if this is the top-most member execution)
-                                // (this isn't done within Interaction#execute(...) because it requires the DTO
-                                // to have been set on the current execution).
-                                final Timestamp startedAt = getClockService().nowAsJavaSqlTimestamp();
-                                execution.setStartedAt(startedAt);
-                                if(command.getStartedAt() == null) {
-                                    command.setStartedAt(startedAt);
-                                }
-
-                                // ... post the executing event
-                                final Object oldValue = getterFacet.getProperty(targetAdapter, interactionInitiatedBy);
-                                final Object newValue = ObjectAdapter.Util.unwrap(newValueAdapter);
-
-                                final PropertyDomainEvent<?, ?> event =
-                                        domainEventHelper.postEventForProperty(
-                                                AbstractDomainEvent.Phase.EXECUTING,
-                                                eventType(), null,
-                                                getIdentified(), targetAdapter,
-                                                oldValue, newValue);
+                        // update the current execution with the DTO (memento)
+                        final PropertyEditDto editDto =
+                                getInteractionDtoServiceInternal().asPropertyEditDto(
+                                        owningProperty, targetAdapter, newValueAdapter);
+                        currentExecution.setDto(editDto);
 
 
-                                // set event onto the execution
-                                currentExecution.setEvent(event);
-
-                                // invoke method
-                                style.invoke(PropertySetterOrClearFacetForDomainEventAbstract.this, owningProperty,
-                                        targetAdapter, newValueAdapter, interactionInitiatedBy);
-
-
-
-                                // reading the actual value from the target object, playing it safe...
-                                final Object actualNewValue = getterFacet.getProperty(targetAdapter, interactionInitiatedBy);
-                                if (!Objects.equal(oldValue, actualNewValue)) {
-
-                                    // ... post the executed event
-                                    domainEventHelper.postEventForProperty(
-                                            AbstractDomainEvent.Phase.EXECUTED,
-                                            eventType(), verify(event),
-                                            getIdentified(), targetAdapter,
-                                            oldValue, actualNewValue);
-                                }
-
-                                return null;
-
-                                //
-                                // REVIEW: the corresponding action has a whole bunch of error handling here.
-                                // we probably should do something similar...
-                                //
-
-                            } finally {
-
-                            }
+                        // set the startedAt (and update command if this is the top-most member execution)
+                        // (this isn't done within Interaction#execute(...) because it requires the DTO
+                        // to have been set on the current execution).
+                        final Timestamp startedAt = getClockService().nowAsJavaSqlTimestamp();
+                        execution.setStartedAt(startedAt);
+                        if(command.getStartedAt() == null) {
+                            command.setStartedAt(startedAt);
                         }
-                    };
+
+                        // ... post the executing event
+                        final Object oldValue = getterFacet.getProperty(targetAdapter, interactionInitiatedBy);
+                        final Object newValue = ObjectAdapter.Util.unwrap(newValueAdapter);
+
+                        final PropertyDomainEvent<?, ?> event =
+                                domainEventHelper.postEventForProperty(
+                                        AbstractDomainEvent.Phase.EXECUTING,
+                                        eventType(), null,
+                                        getIdentified(), targetAdapter,
+                                        oldValue, newValue);
+
+
+                        // set event onto the execution
+                        currentExecution.setEvent(event);
+
+                        // invoke method
+                        style.invoke(PropertySetterOrClearFacetForDomainEventAbstract.this, owningProperty,
+                                targetAdapter, newValueAdapter, interactionInitiatedBy);
+
+
+
+                        // reading the actual value from the target object, playing it safe...
+                        final Object actualNewValue = getterFacet.getProperty(targetAdapter, interactionInitiatedBy);
+                        if (!Objects.equal(oldValue, actualNewValue)) {
+
+                            // ... post the executed event
+                            domainEventHelper.postEventForProperty(
+                                    AbstractDomainEvent.Phase.EXECUTED,
+                                    eventType(), verify(event),
+                                    getIdentified(), targetAdapter,
+                                    oldValue, actualNewValue);
+                        }
+
+                        return null;
+
+                        //
+                        // REVIEW: the corresponding action has a whole bunch of error handling here.
+                        // we probably should do something similar...
+                        //
+
+                    } finally {
+
+                    }
+                }
+            };
 
             // sets up startedAt and completedAt on the execution, also manages the execution call graph
             interaction.execute(executor, execution);
@@ -298,7 +298,7 @@ public abstract class PropertySetterOrClearFacetForDomainEventAbstract
             final Exception executionExceptionIfAny = priorExecution.getThrew();
             if(executionExceptionIfAny != null) {
                 throw executionExceptionIfAny instanceof RuntimeException
-                        ? ((RuntimeException)executionExceptionIfAny)
+                ? ((RuntimeException)executionExceptionIfAny)
                         : new RuntimeException(executionExceptionIfAny);
             }
 

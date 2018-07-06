@@ -20,6 +20,6 @@
 /**
  * Defines {@link org.apache.isis.core.commons.exceptions.IsisException base class}
  * for exceptions raised either by Isis itself or by the domain model
- * running on top of Isis.  
+ * running on top of Isis.
  */
 package org.apache.isis.core.commons.exceptions;

@@ -31,7 +31,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 /**
  * Attached to {@link ObjectSpecification}s that represent a collection.
- * 
+ *
  * <p>
  * Factories of (implementations of this) facet should ensure that a
  * {@link TypeOfFacet} is also attached to the same facet holder. The

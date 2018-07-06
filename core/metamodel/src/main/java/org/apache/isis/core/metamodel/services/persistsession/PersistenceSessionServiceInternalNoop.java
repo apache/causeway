@@ -38,7 +38,7 @@ import org.apache.isis.core.runtime.system.transaction.TransactionalClosure;
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
-)
+        )
 public class PersistenceSessionServiceInternalNoop implements PersistenceSessionServiceInternal {
 
 
@@ -146,11 +146,11 @@ public class PersistenceSessionServiceInternalNoop implements PersistenceSession
     public Transaction currentTransaction() {
         throw new UnsupportedOperationException("Not supported by this implementation of PersistenceSessionServiceInternal");
     }
-    
-	@Override
-	public CountDownLatch currentTransactionLatch() {
-		throw new UnsupportedOperationException("Not supported by this implementation of PersistenceSessionServiceInternal");
-	}
+
+    @Override
+    public CountDownLatch currentTransactionLatch() {
+        throw new UnsupportedOperationException("Not supported by this implementation of PersistenceSessionServiceInternal");
+    }
 
     @Override
     public void remove(final ObjectAdapter adapter) {

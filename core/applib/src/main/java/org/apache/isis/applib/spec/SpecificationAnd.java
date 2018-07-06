@@ -23,15 +23,15 @@ import org.apache.isis.applib.util.ReasonBuffer;
 
 /**
  * Adapter to make it easy to perform boolean algebra on {@link Specification}s.
- * 
+ *
  * <p>
  * Subclasses represent the intersection of multiple {@link Specification}s. An
  * implementation should instantiate the {@link Specification}s to be satisfied
  * in its constructor.
- * 
+ *
  * <p>
  * For example:
- * 
+ *
  * <pre>
  * public class MilkAndSugarSpec extends SpecificationAnd {
  *     public MilkAndSugarSpec() {
@@ -39,7 +39,7 @@ import org.apache.isis.applib.util.ReasonBuffer;
  *     }
  * }
  * </pre>
- * 
+ *
  * @see SpecificationOr
  * @see SpecificationNot
  */

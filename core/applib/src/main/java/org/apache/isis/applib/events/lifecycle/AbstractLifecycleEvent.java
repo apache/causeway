@@ -52,13 +52,13 @@ public abstract class AbstractLifecycleEvent<S> extends EventObject {
     public void setSource(S source) {
         this.source = source;
     }
-    
+
 
     private final static ToString<AbstractLifecycleEvent<?>> toString = ObjectContracts
-    		.toString("source", AbstractLifecycleEvent::getSource);
-    
+            .toString("source", AbstractLifecycleEvent::getSource);
+
     @Override
     public String toString() {
-    	return toString.toString(this);
+        return toString.toString(this);
     }
 }

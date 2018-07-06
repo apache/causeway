@@ -144,21 +144,21 @@ public enum RepresentationType {
     private final Class<? extends JsonRepresentation> representationClass;
 
     private RepresentationType(
-    		final String jsonMediaTypeStr, 
-    		final String xmlMediaTypeStr, 
-    		final Class<? extends JsonRepresentation> representationClass) {
-    	
-        this(	jsonMediaTypeStr != null ? MediaTypes.parse(jsonMediaTypeStr) : null, 
-        		xmlMediaTypeStr != null ? MediaTypes.parse(xmlMediaTypeStr) : null, 
-        		representationClass
-        		);
+            final String jsonMediaTypeStr,
+            final String xmlMediaTypeStr,
+            final Class<? extends JsonRepresentation> representationClass) {
+
+        this(	jsonMediaTypeStr != null ? MediaTypes.parse(jsonMediaTypeStr) : null,
+                xmlMediaTypeStr != null ? MediaTypes.parse(xmlMediaTypeStr) : null,
+                        representationClass
+                );
     }
 
     private RepresentationType(
-    		final MediaType jsonMediaType, 
-    		final MediaType xmlMediaType, 
-    		final Class<? extends JsonRepresentation> representationClass) {
-    	
+            final MediaType jsonMediaType,
+            final MediaType xmlMediaType,
+            final Class<? extends JsonRepresentation> representationClass) {
+
         this.xmlMediaType = xmlMediaType;
         this.representationClass = representationClass;
         this.name = Enums.enumToCamelCase(this);
@@ -284,7 +284,7 @@ public enum RepresentationType {
      * with specified parameter.
      */
     public MediaType matchesXmlProfileWithParameter(
-        final List<MediaType> mediaTypes, final String parameterKey) {
+            final List<MediaType> mediaTypes, final String parameterKey) {
         for (MediaType mediaType : mediaTypes) {
             if(this.matchesXmlProfile(mediaType)) {
                 final String paramValue = mediaType.getParameters().get(parameterKey);

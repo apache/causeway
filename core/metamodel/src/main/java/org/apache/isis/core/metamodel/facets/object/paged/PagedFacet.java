@@ -25,7 +25,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
  * Mechanism for obtaining the page sizes for tables showing instances of a class.
  */
 public interface PagedFacet extends Facet {
-    
+
     int value();
-    
+
 }

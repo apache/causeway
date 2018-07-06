@@ -51,12 +51,12 @@ public class Persistable_downloadJdoMetadata {
             domainEvent = ActionDomainEvent.class,
             semantics = SemanticsOf.SAFE,
             restrictTo = RestrictTo.PROTOTYPING
-    )
+            )
     @ActionLayout(
             contributed = Contributed.AS_ACTION,
             cssClassFa = "fa-download",
             position = ActionLayout.Position.PANEL_DROPDOWN
-    )
+            )
     @MemberOrder(name = "datanucleusIdLong", sequence = "710.1")
     public Clob act(
             @ParameterLayout(named = "File name")

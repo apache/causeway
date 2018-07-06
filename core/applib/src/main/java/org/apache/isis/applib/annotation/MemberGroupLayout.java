@@ -32,16 +32,16 @@ import org.apache.isis.commons.internal.base._Strings;
 
 /**
  * Specifies the positioning of an entity's (groups of) properties and of its collections, on a page, column by column.
- * 
+ *
  * <p>
  * The left column and middle column determine the ordering of the entity's (groups of) properties.  The
  * value of the {@link #left() left} list and {@link #middle() middle} list specify the order
  * of the property groups (inferred from each property's {@link MemberOrder#name() MemberOrder.name} attribute.
- * 
+ *
  * <p>
  * The right column is for the entity's collections.  The order of this collections is simply as
  * determined by the collection's {@link MemberOrder#sequence() MemberOrder.sequence} attribute
- * 
+ *
  * <p>
  *     The recommended alternative is to use the <code>Xxx.layout.xml</code> file, where <code>Xxx</code> is the domain object name.
  * </p>
@@ -55,17 +55,17 @@ public @interface MemberGroupLayout {
      * The relative widths of the columns of members.
      */
     public static class ColumnSpans {
-        
+
         private final int left;
         private final int middle;
         private final int right;
         private final int collections;
-        
+
         public static ColumnSpans valueOf(String str) {
             try {
                 final List<Integer> list = _Strings.splitThenStream(str, ",")
-                    	.map(Integer::parseInt)
-                    	.collect(Collectors.toList());
+                        .map(Integer::parseInt)
+                        .collect(Collectors.toList());
                 return asSpans(list);
             } catch(RuntimeException ex) {
                 return null;
@@ -142,7 +142,7 @@ public @interface MemberGroupLayout {
 
     /**
      * Specify the spans of each of the columns.
-     * 
+     *
      * <p>
      * The sum of the spans is always 12.
      */
@@ -150,14 +150,14 @@ public @interface MemberGroupLayout {
 
     /**
      * Order of groups of properties as they appear in the left-most column of a webpage,
-     * grouped as they appear as the <tt>name</tt> attribute of the {@link MemberOrder} 
+     * grouped as they appear as the <tt>name</tt> attribute of the {@link MemberOrder}
      * annotation.
-     * 
+     *
      * <p>
-     * The order in this list determines the order that the property groups will be rendered.  
+     * The order in this list determines the order that the property groups will be rendered.
      * By convention any {@link MemberOrder} that does not have a {@link MemberOrder#name() name} is considered
      * to be in the default group, whose name is hard-coded as <i>General</i>.
-     * 
+     *
      * <p>
      * Equivalent to {@link MemberGroups#value()} annotation.
      */
@@ -165,7 +165,7 @@ public @interface MemberGroupLayout {
 
     /**
      * As {@link #left()}, but for the middle column in a page.
-     * 
+     *
      * <p>
      * If the value of this attribute is non-empty but the {@link #columnSpans()} specifies a zero size, then the
      * framework will not boot and will instead indicate a meta-model validation exception.
@@ -174,7 +174,7 @@ public @interface MemberGroupLayout {
 
     /**
      * As {@link #right()}, but for the right column in a page.
-     * 
+     *
      * <p>
      * If the value of this attribute is non-empty but the {@link #columnSpans()} specifies a zero size, then the
      * framework will not boot and will instead indicate a meta-model validation exception.

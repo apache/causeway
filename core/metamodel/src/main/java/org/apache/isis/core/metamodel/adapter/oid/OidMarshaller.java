@@ -35,7 +35,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
 /**
  * Factory for subtypes of {@link Oid}, based on their oid str.
- * 
+ *
  * <p>
  * Examples
  * <dl>
@@ -60,7 +60,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecId;
  * <dt>CUS:123~NME:2~CTY:LON$streets</dt>
  * <dd>collection of an aggregated object within aggregated object within root</dd>
  * </dl>
- * 
+ *
  * <p>
  * Separators:
  * <dl>
@@ -77,7 +77,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecId;
  * <dt>^</dt>
  * <dd>precedes version</dd>
  * </dl>
- * 
+ *
  * <p>
  * Note that # and ; were not chosen as separators to minimize noise when URL encoding OIDs.
  */
@@ -90,49 +90,49 @@ public final class OidMarshaller {
     // -- public constants
     public static final String VIEWMODEL_INDICATOR =
             Bookmark.ObjectState.VIEW_MODEL.getCode(); // "*"
-    
+
 
     // -- private constants
     private static final String TRANSIENT_INDICATOR =
             Bookmark.ObjectState.TRANSIENT.getCode() ; // "!"
 
-	private static final String SEPARATOR = ":";
-	private static final String SEPARATOR_NESTING = "~";
-	private static final String SEPARATOR_COLLECTION = "$";
-	private static final String SEPARATOR_VERSION = "^";
+    private static final String SEPARATOR = ":";
+    private static final String SEPARATOR_NESTING = "~";
+    private static final String SEPARATOR_COLLECTION = "$";
+    private static final String SEPARATOR_VERSION = "^";
 
-	private static final String WORD = "[^" + SEPARATOR + SEPARATOR_NESTING + SEPARATOR_COLLECTION + "\\" + SEPARATOR_VERSION + "#" + "]+";
-	private static final String DIGITS = "\\d+";
-	
-	private static final String WORD_GROUP = "(" + WORD + ")";
-	private static final String DIGITS_GROUP = "(" + DIGITS + ")";
-    
-	private static Pattern OIDSTR_PATTERN = 
+    private static final String WORD = "[^" + SEPARATOR + SEPARATOR_NESTING + SEPARATOR_COLLECTION + "\\" + SEPARATOR_VERSION + "#" + "]+";
+    private static final String DIGITS = "\\d+";
+
+    private static final String WORD_GROUP = "(" + WORD + ")";
+    private static final String DIGITS_GROUP = "(" + DIGITS + ")";
+
+    private static Pattern OIDSTR_PATTERN =
             Pattern.compile(
-            		"^(" +
-            		   "(" +
-            		     "([" + TRANSIENT_INDICATOR + VIEWMODEL_INDICATOR + "])?" +
-            		     WORD_GROUP + SEPARATOR + WORD_GROUP + 
-            		   ")" +
-            		   "(" + 
-            			 "(" + SEPARATOR_NESTING + WORD + SEPARATOR + WORD + ")*" + // nesting of aggregates
-            		   ")" +
-            		 ")" +
-    		 		 "(" + "[" + SEPARATOR_COLLECTION + "]" + WORD + ")?"  + // optional collection name
-    		 		 "(" + 
-    		 		     "[\\" + SEPARATOR_VERSION + "]" +  
-    		 		     DIGITS_GROUP +                    // optional version digit
-    		 		     SEPARATOR + WORD_GROUP + "?" +    // optional version user name 
-    		 		     SEPARATOR + DIGITS_GROUP + "?" +  // optional version UTC time
-    		 		 ")?" + 
-            		 "$");
-    
+                    "^(" +
+                            "(" +
+                            "([" + TRANSIENT_INDICATOR + VIEWMODEL_INDICATOR + "])?" +
+                            WORD_GROUP + SEPARATOR + WORD_GROUP +
+                            ")" +
+                            "(" +
+                            "(" + SEPARATOR_NESTING + WORD + SEPARATOR + WORD + ")*" + // nesting of aggregates
+                            ")" +
+                            ")" +
+                            "(" + "[" + SEPARATOR_COLLECTION + "]" + WORD + ")?"  + // optional collection name
+                            "(" +
+                            "[\\" + SEPARATOR_VERSION + "]" +
+                            DIGITS_GROUP +                    // optional version digit
+                            SEPARATOR + WORD_GROUP + "?" +    // optional version user name
+                            SEPARATOR + DIGITS_GROUP + "?" +  // optional version UTC time
+                            ")?" +
+                    "$");
+
 
     // -- join, split
     @Programmatic
     public String joinAsOid(String domainType, String instanceId) {
-	    return domainType + SEPARATOR + instanceId;
-	}
+        return domainType + SEPARATOR + instanceId;
+    }
 
     @Programmatic
     public String splitInstanceId(String oidStr) {
@@ -140,14 +140,14 @@ public final class OidMarshaller {
         return indexOfSeperator > 0? oidStr.substring(indexOfSeperator+1): null;
     }
 
-    
+
 
     // -- unmarshal
 
     @Programmatic
     @SuppressWarnings("unchecked")
-	public <T extends Oid> T unmarshal(String oidStr, Class<T> requestedType) {
-        
+    public <T extends Oid> T unmarshal(String oidStr, Class<T> requestedType) {
+
         final Matcher matcher = OIDSTR_PATTERN.matcher(oidStr);
         if (!matcher.matches()) {
             throw new IllegalArgumentException("Could not parse OID '" + oidStr + "'; should match pattern: " + OIDSTR_PATTERN.pattern());
@@ -162,10 +162,10 @@ public final class OidMarshaller {
         } else {
             state = State.PERSISTENT;
         }
-        
+
         final String rootObjectType = getGroup(matcher, 4);
         final String rootIdentifier = getGroup(matcher, 5);
-        
+
         final String aggregateOidPart = getGroup(matcher, 6);
         final List<AggregateOidPart> aggregateOidParts = Lists.newArrayList();
         final Splitter nestingSplitter = Splitter.on(SEPARATOR_NESTING);
@@ -184,9 +184,9 @@ public final class OidMarshaller {
         }
         final String collectionPart = getGroup(matcher, 8);
         final String collectionName = collectionPart != null ? collectionPart.substring(1) : null;
-        
+
         final String versionSequence = getGroup(matcher, 10);
-        final String versionUser = getGroup(matcher, 11); 
+        final String versionUser = getGroup(matcher, 11);
         final String versionUtcTimestamp = getGroup(matcher, 12);
         final Version version = Version.create(versionSequence, versionUser, versionUtcTimestamp);
 
@@ -199,7 +199,7 @@ public final class OidMarshaller {
             }
         } else {
             final String oidStrWithoutCollectionName = getGroup(matcher, 1);
-            
+
             final String parentOidStr = oidStrWithoutCollectionName + marshal(version);
 
             RootOid parentOid = this.unmarshal(parentOidStr, RootOid.class);
@@ -217,16 +217,17 @@ public final class OidMarshaller {
         }
         String objectType;
         String localId;
+        @Override
         public String toString() {
             return SEPARATOR_NESTING + objectType + SEPARATOR + localId;
         }
     }
-    
+
 
     private <T> void ensureCorrectType(String oidStr, Class<T> requestedType, final Class<? extends Oid> actualType) {
         if(!requestedType.isAssignableFrom(actualType)) {
             throw new IllegalArgumentException("OID '" + oidStr + "' does not represent a " +
-            actualType.getSimpleName());
+                    actualType.getSimpleName());
         }
     }
 
@@ -240,7 +241,7 @@ public final class OidMarshaller {
     }
 
 
-    
+
 
     // -- marshal
     @Programmatic
@@ -277,6 +278,6 @@ public final class OidMarshaller {
     private static String nullToEmpty(Object obj) {
         return obj == null? "": "" + obj;
     }
-    
+
 
 }

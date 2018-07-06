@@ -21,7 +21,7 @@
  * The {@link org.apache.isis.core.commons.ensure.Ensure} and {@link org.junit.Assert}
  * classes provide the ability to specify assertions about state,
  * throwing an exception ("fail early") if the assertion fails.
- * 
+ *
  * <p>
  * The {@link org.apache.isis.core.commons.ensure.Ensure} class
  * uses {@link org.hamcrest.Matcher Hamcrest matcher}s and is

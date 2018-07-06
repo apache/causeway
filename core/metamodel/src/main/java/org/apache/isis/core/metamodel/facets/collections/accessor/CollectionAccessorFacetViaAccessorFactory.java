@@ -36,7 +36,7 @@ import org.apache.isis.core.metamodel.services.persistsession.PersistenceSession
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public class CollectionAccessorFacetViaAccessorFactory
-        extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
+extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
 
     private static final String[] PREFIXES = { MethodPrefixConstants.GET_PREFIX };
 
@@ -62,7 +62,7 @@ public class CollectionAccessorFacetViaAccessorFactory
                         typeSpec, accessorMethod, holder,
                         getDeploymentCategory(), getConfiguration(), getSpecificationLoader(),
                         getAuthenticationSessionProvider(), adapterManager
-                ));
+                        ));
 
         FacetUtil.addFacet(CollectionSemanticsFacetDefault.forCollection(accessorMethod, holder));
     }
@@ -102,7 +102,7 @@ public class CollectionAccessorFacetViaAccessorFactory
 
         final List<Method> list =
                 methodRemover.removeMethods(MethodScope.OBJECT, MethodPrefixConstants.GET_PREFIX,
-                Collection.class, false, 0);
+                        Collection.class, false, 0);
         methodListToAppendTo.addAll(list);
     }
 

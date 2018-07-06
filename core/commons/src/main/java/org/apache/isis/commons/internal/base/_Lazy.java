@@ -29,51 +29,51 @@ import java.util.function.Supplier;
  * Supplier with memoization.
  * </p>
  * <p>
- * <b>WARNING</b>: Do <b>NOT</b> use any of the classes provided by this package! <br/> 
+ * <b>WARNING</b>: Do <b>NOT</b> use any of the classes provided by this package! <br/>
  * These may be changed or removed without notice!
  * </p>
- * 
+ *
  * @since 2.0.0
  */
 public final class _Lazy<T> implements Supplier<T> {
 
-	private final Supplier<? extends T> supplier;
-	private T value;
-	private boolean memoized;
+    private final Supplier<? extends T> supplier;
+    private T value;
+    private boolean memoized;
 
-	public static <T> _Lazy<T> of(Supplier<? extends T> supplier) {
-		return new _Lazy<T>(supplier);
-	}
-	
-	private _Lazy(Supplier<? extends T> supplier) {
-		this.supplier = requires(supplier, "supplier");
-	}
+    public static <T> _Lazy<T> of(Supplier<? extends T> supplier) {
+        return new _Lazy<T>(supplier);
+    }
 
-	public boolean isMemoized() {
-		return memoized;
-	}
+    private _Lazy(Supplier<? extends T> supplier) {
+        this.supplier = requires(supplier, "supplier");
+    }
 
-	/**
-	 * Clears the lazy's memoized value. Resets this lazy to its initial state.<br> 
-	 * isMemoized() = false;
-	 * 
-	 */
-	public void clear() {
-		this.memoized = false;
-		this.value = null;
-	}
+    public boolean isMemoized() {
+        return memoized;
+    }
 
-	/**
-	 * Evaluates this lazy value and memoizes it, when called the first time 
-	 * after initialization or clear().
-	 */
-	@Override
-	public T get() {
-		if(memoized) {
-			return value;
-		}
-		memoized=true;
-		return value = supplier.get();
-	}
+    /**
+     * Clears the lazy's memoized value. Resets this lazy to its initial state.<br>
+     * isMemoized() = false;
+     *
+     */
+    public void clear() {
+        this.memoized = false;
+        this.value = null;
+    }
+
+    /**
+     * Evaluates this lazy value and memoizes it, when called the first time
+     * after initialization or clear().
+     */
+    @Override
+    public T get() {
+        if(memoized) {
+            return value;
+        }
+        memoized=true;
+        return value = supplier.get();
+    }
 
 }

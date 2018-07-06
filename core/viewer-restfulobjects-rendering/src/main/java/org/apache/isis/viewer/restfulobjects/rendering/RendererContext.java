@@ -35,7 +35,7 @@ public interface RendererContext {
     AuthenticationSession getAuthenticationSession();
 
     IsisConfiguration getConfiguration();
-    
+
     PersistenceSession getPersistenceSession();
 
     /**
@@ -62,9 +62,9 @@ public interface RendererContext {
     /**
      * To avoid infinite loops when {@link Render.Type#EAGERLY eagerly} rendering graphs
      * of objects as {@link DomainObjectReprRenderer#asEventSerialization() events}.
-     * 
+     *
      * <p>
-     * @param objectAdapter - the object proposed to be rendered eagerly 
+     * @param objectAdapter - the object proposed to be rendered eagerly
      * @return whether this adapter has already been rendered (implying the caller should not render the value).
      */
     boolean canEagerlyRender(ObjectAdapter objectAdapter);

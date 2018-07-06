@@ -30,16 +30,16 @@ import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
-)
+        )
 public class AuthenticationSessionProviderDefault implements AuthenticationSessionProvider {
 
-     /**
-      * This class and {@link UserServiceDefault} both call each other, so the code below is carefully
-      * ordered to ensure no infinite loop.
-      *
-      * In particular, we check if there are overrides, and if so return a {@link SimpleSession} to represent those
-      * overrides.
-      */
+    /**
+     * This class and {@link UserServiceDefault} both call each other, so the code below is carefully
+     * ordered to ensure no infinite loop.
+     *
+     * In particular, we check if there are overrides, and if so return a {@link SimpleSession} to represent those
+     * overrides.
+     */
     @Programmatic
     @Override
     public AuthenticationSession getAuthenticationSession() {

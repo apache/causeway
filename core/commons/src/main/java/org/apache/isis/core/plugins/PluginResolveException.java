@@ -1,7 +1,7 @@
 package org.apache.isis.core.plugins;
 
 public class PluginResolveException extends RuntimeException {
-    
+
     private static final long serialVersionUID = 1L;
 
     public PluginResolveException(final String msg) {
@@ -9,9 +9,9 @@ public class PluginResolveException extends RuntimeException {
     }
 
     public PluginResolveException(final Throwable cause) {
-    	super(cause);
+        super(cause);
     }
-    
+
     public PluginResolveException(final String msg, final Throwable cause) {
         super(msg, cause);
     }

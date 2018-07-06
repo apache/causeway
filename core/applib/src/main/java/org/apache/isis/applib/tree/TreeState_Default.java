@@ -22,13 +22,13 @@ import java.util.HashSet;
 import java.util.Set;
 
 class TreeState_Default implements TreeState {
-	private static final long serialVersionUID = 7971539034663543462L;
-	
-	private final Set<TreePath> expandedNodes = new HashSet<>();
+    private static final long serialVersionUID = 7971539034663543462L;
 
-	@Override
-	public Set<TreePath> getExpandedNodePaths() {
-		return expandedNodes;
-	}
-	
+    private final Set<TreePath> expandedNodes = new HashSet<>();
+
+    @Override
+    public Set<TreePath> getExpandedNodePaths() {
+        return expandedNodes;
+    }
+
 }

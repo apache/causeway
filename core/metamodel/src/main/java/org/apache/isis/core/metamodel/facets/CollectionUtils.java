@@ -50,70 +50,70 @@ import com.google.common.collect.Sets;
 
 public final class CollectionUtils {
 
-	private CollectionUtils() {
-	}
+    private CollectionUtils() {
+    }
 
-	public static Object[] getCollectionAsObjectArray(final Object option, final ObjectSpecification spec, final AdapterManager adapterMap) {
-		final ObjectAdapter collection = adapterMap.adapterFor(option);
-		final CollectionFacet facet = CollectionFacet.Utils.getCollectionFacetFromSpec(collection);
-		final Object[] optionArray = new Object[facet.size(collection)];
-		int j = 0;
-		for (final ObjectAdapter nextElement : facet.iterable(collection)) {
-			optionArray[j++] = nextElement != null? nextElement.getObject(): null;
-		}
-		return optionArray;
-	}
+    public static Object[] getCollectionAsObjectArray(final Object option, final ObjectSpecification spec, final AdapterManager adapterMap) {
+        final ObjectAdapter collection = adapterMap.adapterFor(option);
+        final CollectionFacet facet = CollectionFacet.Utils.getCollectionFacetFromSpec(collection);
+        final Object[] optionArray = new Object[facet.size(collection)];
+        int j = 0;
+        for (final ObjectAdapter nextElement : facet.iterable(collection)) {
+            optionArray[j++] = nextElement != null? nextElement.getObject(): null;
+        }
+        return optionArray;
+    }
 
-	private final static Map<Class<?>, Function<Iterable<Object>, Object>> factoriesByType = _With.hashMap(
-			map-> {
-				// specific list implementations
-				map.put(CopyOnWriteArrayList.class, Lists::newCopyOnWriteArrayList);
-				map.put(LinkedList.class, _Lists::newLinkedList);
-				map.put(ArrayList.class, _Lists::newArrayList);
-				map.put(AbstractList.class, _Lists::newArrayList);
+    private final static Map<Class<?>, Function<Iterable<Object>, Object>> factoriesByType = _With.hashMap(
+            map-> {
+                // specific list implementations
+                map.put(CopyOnWriteArrayList.class, Lists::newCopyOnWriteArrayList);
+                map.put(LinkedList.class, _Lists::newLinkedList);
+                map.put(ArrayList.class, _Lists::newArrayList);
+                map.put(AbstractList.class, _Lists::newArrayList);
 
-				// specific set implementations
-				map.put(CopyOnWriteArraySet.class, Sets::newCopyOnWriteArraySet);
-				map.put(LinkedHashSet.class, _Sets::newLinkedHashSet);
-				map.put(HashSet.class, _Sets::newHashSet);
-				map.put(TreeSet.class, _Sets::newTreeSet);
-				map.put(AbstractSet.class, _Sets::newLinkedHashSet);
+                // specific set implementations
+                map.put(CopyOnWriteArraySet.class, Sets::newCopyOnWriteArraySet);
+                map.put(LinkedHashSet.class, _Sets::newLinkedHashSet);
+                map.put(HashSet.class, _Sets::newHashSet);
+                map.put(TreeSet.class, _Sets::newTreeSet);
+                map.put(AbstractSet.class, _Sets::newLinkedHashSet);
 
-				// interfaces
-				map.put(List.class, _Lists::newArrayList);
-				map.put(SortedSet.class, _Sets::newTreeSet);
-				map.put(Set.class, _Sets::newLinkedHashSet);
-				map.put(Collection.class, _Lists::newArrayList);
-			});
+                // interfaces
+                map.put(List.class, _Lists::newArrayList);
+                map.put(SortedSet.class, _Sets::newTreeSet);
+                map.put(Set.class, _Sets::newLinkedHashSet);
+                map.put(Collection.class, _Lists::newArrayList);
+            });
 
-	/**
-	 * Copies the iterable into the specified type.
-	 */
-	public static Object copyOf(final Iterable<Object> iterable, final Class<?> requiredType) {
+    /**
+     * Copies the iterable into the specified type.
+     */
+    public static Object copyOf(final Iterable<Object> iterable, final Class<?> requiredType) {
 
-		if(iterable == null) {
-			throw new IllegalArgumentException("Iterable must be provided");
-		}
-		if(requiredType == null) {
-			throw new IllegalArgumentException("RequiredType must be provided");
-		}
+        if(iterable == null) {
+            throw new IllegalArgumentException("Iterable must be provided");
+        }
+        if(requiredType == null) {
+            throw new IllegalArgumentException("RequiredType must be provided");
+        }
 
-		final Function<Iterable<Object>, Object> factory = factoriesByType.get(requiredType);
-		if(factory!=null) {
-			return factory.apply(iterable);
-		}
+        final Function<Iterable<Object>, Object> factory = factoriesByType.get(requiredType);
+        if(factory!=null) {
+            return factory.apply(iterable);
+        }
 
-		// array
-		if (requiredType.isArray()) {
-			Class<?> componentType = requiredType.getComponentType();
-			
-			@SuppressWarnings("rawtypes") Iterable rawIterable = iterable;
-			return _Arrays.toArray(_Casts.uncheckedCast(rawIterable), componentType);
-		}
+        // array
+        if (requiredType.isArray()) {
+            Class<?> componentType = requiredType.getComponentType();
 
-		// not recognized
-		return null;
+            @SuppressWarnings("rawtypes") Iterable rawIterable = iterable;
+            return _Arrays.toArray(_Casts.uncheckedCast(rawIterable), componentType);
+        }
 
-	}
+        // not recognized
+        return null;
+
+    }
 
 }

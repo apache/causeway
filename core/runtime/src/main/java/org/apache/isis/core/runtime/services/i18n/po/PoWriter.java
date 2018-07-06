@@ -109,9 +109,10 @@ class PoWriter extends PoAbstract {
         buf.append("\"Plural-Forms: nplurals=2; plural=n != 1;\\n\"").append("\n");
         buf.append("\n\n");
     }
-    
 
 
+
+    @Override
     public String translate(final String context, final String msgId) {
 
         if(msgId == null) {

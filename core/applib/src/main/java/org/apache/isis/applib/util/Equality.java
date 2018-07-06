@@ -9,31 +9,31 @@ import org.apache.isis.commons.internal.collections._Lists;
 
 /**
  * Fluent Object Equality Composition.
- * 
+ *
  * @param <T>
  * @since 2.0.0
  */
 public class Equality<T> {
 
-	public static <T> Equality<T> checkEquals(Function<? super T, ?> getter) {
-		Objects.requireNonNull(getter);
-		return new Equality<>(getter);
-	}
-	
-	private final List<Function<? super T, ?>> getters = _Lists.newArrayList();
+    public static <T> Equality<T> checkEquals(Function<? super T, ?> getter) {
+        Objects.requireNonNull(getter);
+        return new Equality<>(getter);
+    }
 
-	private Equality(Function<? super T, ?> getter) {
-		getters.add(getter);
-	}
-	
-	public Equality<T> thenCheckEquals(Function<? super T, ?> getter){
-		Objects.requireNonNull(getter);
-		getters.add(getter);
-		return this;
-	}
+    private final List<Function<? super T, ?>> getters = _Lists.newArrayList();
 
-	public boolean equals(T target, Object other){
-		if(target==null && other==null) {
+    private Equality(Function<? super T, ?> getter) {
+        getters.add(getter);
+    }
+
+    public Equality<T> thenCheckEquals(Function<? super T, ?> getter){
+        Objects.requireNonNull(getter);
+        getters.add(getter);
+        return this;
+    }
+
+    public boolean equals(T target, Object other){
+        if(target==null && other==null) {
             return true;
         }
         if(target==null || other==null) {
@@ -42,16 +42,16 @@ public class Equality<T> {
         if(target.getClass() != other.getClass()) {
             return false;
         }
-		final T o = _Casts.uncheckedCast(other);
-		
-		for(Function<? super T, ?> getter : getters) {
-			if(!Objects.equals(getter.apply(target), getter.apply(o)))
-				return false;
-		}
-		
-		return true;
-	}
+        final T o = _Casts.uncheckedCast(other);
 
-	
-	
+        for(Function<? super T, ?> getter : getters) {
+            if(!Objects.equals(getter.apply(target), getter.apply(o)))
+                return false;
+        }
+
+        return true;
+    }
+
+
+
 }

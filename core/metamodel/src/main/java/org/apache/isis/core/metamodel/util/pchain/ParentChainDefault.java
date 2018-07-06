@@ -24,26 +24,26 @@ import java.util.function.Function;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 class ParentChainDefault implements ParentChain {
-	
-	private final Function<Class<?>, ObjectSpecification> specificationLookup;
-	
-	ParentChainDefault(Function<Class<?>, ObjectSpecification> specificationLookup) {
-		this.specificationLookup = specificationLookup;
-	}
 
-	@Override
-	public Object parentOf(Object node) {
-		if(node==null)
-			return null;
-		
-		final Class<?> cls = node.getClass();
-		
-		final ObjectSpecification spec = specificationLookup.apply(cls);
-		
-		if(spec==null)
-			return null;
-		
-		return spec.getNavigableParent(node);
-	}
-	
+    private final Function<Class<?>, ObjectSpecification> specificationLookup;
+
+    ParentChainDefault(Function<Class<?>, ObjectSpecification> specificationLookup) {
+        this.specificationLookup = specificationLookup;
+    }
+
+    @Override
+    public Object parentOf(Object node) {
+        if(node==null)
+            return null;
+
+        final Class<?> cls = node.getClass();
+
+        final ObjectSpecification spec = specificationLookup.apply(cls);
+
+        if(spec==null)
+            return null;
+
+        return spec.getNavigableParent(node);
+    }
+
 }

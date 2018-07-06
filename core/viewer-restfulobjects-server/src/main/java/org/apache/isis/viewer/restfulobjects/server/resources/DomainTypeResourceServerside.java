@@ -111,8 +111,8 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
     @GET
     @Path("/{domainType}/layout")
     @Produces({
-            MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_LAYOUT_BS3,
-            MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_LAYOUT_BS3
+        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_LAYOUT_BS3,
+        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_LAYOUT_BS3
     })
     public Response layout(@PathParam("domainType") final String domainType) {
 
@@ -246,7 +246,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
     @Path("/{domainType}/type-actions/isSubtypeOf/invoke")
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_TYPE_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response domainTypeIsSubtypeOf(
-            @PathParam("domainType") final String domainType, 
+            @PathParam("domainType") final String domainType,
             @QueryParam("supertype") final String superTypeStr, // simple style
             @QueryParam("args") final String argsUrlEncoded // formal style
             ) {
@@ -276,7 +276,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
     @Path("/{domainType}/type-actions/isSupertypeOf/invoke")
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_TYPE_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response domainTypeIsSupertypeOf(
-            @PathParam("domainType") final String domainType, 
+            @PathParam("domainType") final String domainType,
             @QueryParam("subtype") final String subTypeStr, // simple style
             @QueryParam("args") final String argsUrlEncoded // formal style
             ) {

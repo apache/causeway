@@ -32,7 +32,7 @@ import org.apache.log4j.PatternLayout;
 public class IsisLoggingConfigurer {
 
     private final Level rootLoggerLevelIfFallback;
-    
+
     private boolean loggingSetup;
 
     public IsisLoggingConfigurer() {
@@ -46,7 +46,7 @@ public class IsisLoggingConfigurer {
 
     /**
      * As per {@link #configureLogging(String)}.
-     * 
+     *
      * <p>
      * The root logging level can also be adjusted using command line arguments.
      */
@@ -69,7 +69,7 @@ public class IsisLoggingConfigurer {
     /**
      * Sets up logging using either a logging file or (if cannot be found) some
      * sensible defaults.
-     * 
+     *
      * <p>
      * If a {@link LoggingConstants#LOGGING_CONFIG_FILE logging config file} can
      * be located in the provided directory, then that is used. Otherwise, will
@@ -110,7 +110,7 @@ public class IsisLoggingConfigurer {
             configureFallbackLogging();
         }
     }
-    
+
     private static void closeSafely(final Closeable closeable) {
         if (closeable != null) {
             try {

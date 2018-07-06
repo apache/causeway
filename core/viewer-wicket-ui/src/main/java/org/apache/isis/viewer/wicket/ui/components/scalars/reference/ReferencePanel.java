@@ -98,12 +98,12 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract implements PanelW
 
         final ScalarModel scalarModel = getModel();
         final String name = scalarModel.getName();
-        
+
         entitySimpleLink = (EntityLinkSimplePanel) getComponentFactoryRegistry().createComponent(ComponentType.ENTITY_LINK, getModel());
-        
+
         entitySimpleLink.setOutputMarkupId(true);
         entitySimpleLink.setLabel(Model.of(name));
-        
+
         final WebMarkupContainer labelIfCompact = new WebMarkupContainer(ID_SCALAR_IF_COMPACT);
         labelIfCompact.add(entitySimpleLink);
 
@@ -172,9 +172,9 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract implements PanelW
     protected IModel<String> obtainInlinePromptModel() {
         final IModel<ObjectAdapterMemento> model = select2.getModel();
         return new IModel<String>() {
-			private static final long serialVersionUID = 1L;
+            private static final long serialVersionUID = 1L;
 
-			@Override
+            @Override
             public String getObject() {
                 final ObjectAdapterMemento oam = model.getObject();
                 if(oam == null) {
@@ -230,7 +230,7 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract implements PanelW
         entityLink.add(new AttributeModifier("title", Model.of(disableReason)));
     }
 
-    
+
     // //////////////////////////////////////
     // syncWithInput
     // //////////////////////////////////////
@@ -258,7 +258,7 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract implements PanelW
             componentForRegular.addOrReplace(component);
 
             boolean inlinePrompt = (scalarModel.getPromptStyle().isInline() && scalarModel.canEnterEditMode()) ||
-                                    scalarModel.hasActionWithInlineAsIfEdit();
+                    scalarModel.hasActionWithInlineAsIfEdit();
             if(inlinePrompt) {
                 // bit of a hack... allows us to suppress the title using CSS
                 component.add(new CssClassAppender("inlinePrompt"));
@@ -325,13 +325,13 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract implements PanelW
             Components.permanentlyHide(entityLink, ID_AUTO_COMPLETE);
             // setSelect2(null); // this forces recreation next time around
         }
-        
+
     }
 
     // //////////////////////////////////////
     // setProviderAndCurrAndPending
     // //////////////////////////////////////
-    
+
     @Override
     protected ChoiceProvider<ObjectAdapterMemento> buildChoiceProvider(final ObjectAdapter[] argsIfAvailable) {
 
@@ -370,18 +370,18 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract implements PanelW
 
         }
     }
-    
-//TODO [ahuber ]not used, remove? 
-//    private boolean autoSelect() {
-//        final boolean disableAutoSelect = getConfiguration().getBoolean(KEY_DISABLE_DEPENDENT_CHOICE_AUTO_SELECTION, false);
-//        final boolean autoSelect = !disableAutoSelect;
-//        return autoSelect;
-//    }
+
+    //TODO [ahuber ]not used, remove?
+    //    private boolean autoSelect() {
+    //        final boolean disableAutoSelect = getConfiguration().getBoolean(KEY_DISABLE_DEPENDENT_CHOICE_AUTO_SELECTION, false);
+    //        final boolean autoSelect = !disableAutoSelect;
+    //        return autoSelect;
+    //    }
 
     // //////////////////////////////////////
     // getInput, convertInput
     // //////////////////////////////////////
-    
+
     // called by EntityLinkSelect2Panel
     String getInput() {
         final ObjectAdapter pendingElseCurrentAdapter = getModel().getPendingElseCurrentAdapter();
@@ -397,23 +397,23 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract implements PanelW
             // flush changes to pending
             ObjectAdapterMemento convertedInput =
                     select2.getConvertedInput();
-            
+
             getModel().setPending(convertedInput);
             if(select2 != null) {
                 select2.getModel().setObject(convertedInput);
             }
-            
+
             final ObjectAdapter adapter = convertedInput!=null?convertedInput.getObjectAdapter(ConcurrencyChecking.NO_CHECK,
                     getPersistenceSession(), getSpecificationLoader()):null;
             getModel().setObject(adapter);
         }
-    
+
         final ObjectAdapter pendingAdapter = getModel().getPendingAdapter();
         entityLink.setConvertedInput(pendingAdapter);
     }
 
 
-    
+
     // //////////////////////////////////////
 
     @Override
@@ -447,9 +447,9 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract implements PanelW
     // called by isEditableWithEitherAutoCompleteOrChoices
     private boolean hasObjectAutoComplete() {
         final ObjectSpecification typeOfSpecification = getModel().getTypeOfSpecification();
-        final AutoCompleteFacet autoCompleteFacet = 
+        final AutoCompleteFacet autoCompleteFacet =
                 (typeOfSpecification != null)? typeOfSpecification.getFacet(AutoCompleteFacet.class):null;
-        return autoCompleteFacet != null;
+                return autoCompleteFacet != null;
     }
 
 

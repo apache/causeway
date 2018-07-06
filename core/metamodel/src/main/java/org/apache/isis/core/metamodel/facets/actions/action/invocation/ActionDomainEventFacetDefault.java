@@ -28,7 +28,7 @@ public class ActionDomainEventFacetDefault extends ActionDomainEventFacetAbstrac
 
     public ActionDomainEventFacetDefault(
             final Class<? extends ActionDomainEvent<?>> eventType,
-            final ServicesInjector servicesInjector, final SpecificationLoader specificationLoader, final FacetHolder holder) {
+                    final ServicesInjector servicesInjector, final SpecificationLoader specificationLoader, final FacetHolder holder) {
         super(eventType, holder, servicesInjector, specificationLoader);
     }
 

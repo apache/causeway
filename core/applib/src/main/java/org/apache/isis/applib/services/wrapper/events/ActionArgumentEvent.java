@@ -24,11 +24,11 @@ import org.apache.isis.applib.Identifier;
 /**
  * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents a check as to whether a particular argument for an action is valid
  * or not.
- * 
+ *
  * <p>
  * If {@link #getReason()} is not <tt>null</tt> then provides the reason why the
  * argument is invalid; otherwise the argument is valid.
- * 
+ *
  * <p>
  * Called once per argument, and before {@link ActionInvocationEvent}.
  *
@@ -54,7 +54,7 @@ public class ActionArgumentEvent extends ValidityEvent {
 
     /**
      * The position (0-based) of the invalid argument.
-     * 
+     *
      * @return
      */
     public int getPosition() {
@@ -65,10 +65,10 @@ public class ActionArgumentEvent extends ValidityEvent {
     public Object getProposed() {
         return proposed;
     }
-    
+
     @Override
     public String getReasonMessage() {
-    	return String.format("Invalid action argument. Position: %s. Proposed value: %s. Reason: %s", this.getPosition(), this.getProposed(), super.getReasonMessage());
+        return String.format("Invalid action argument. Position: %s. Proposed value: %s. Reason: %s", this.getPosition(), this.getProposed(), super.getReasonMessage());
     }
-    
+
 }

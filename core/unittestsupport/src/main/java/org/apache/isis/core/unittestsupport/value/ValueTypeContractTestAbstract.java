@@ -103,15 +103,15 @@ public abstract class ValueTypeContractTestAbstract<T> {
             for (final T o2 : getObjectsWithSameValue()) {
                 assumeThat(o2 instanceof Comparable, is(true));
                 Comparable c2 = (Comparable)o2;
-                
+
                 assertThat(c1.compareTo(c2), is(0));
                 assertThat(c2.compareTo(c1), is(0));
             }
-            
+
             for (final T o2 : getObjectsWithDifferentValue()) {
                 assumeThat(o2 instanceof Comparable, is(true));
                 Comparable c2 = (Comparable)o2;
-                
+
                 final int x = c1.compareTo(c2);
                 final int y = c2.compareTo(c1);
                 assertThat(x, is(not(0)));

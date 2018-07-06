@@ -45,7 +45,7 @@ public class DescribedAsFacetOnMemberFactory extends FacetFactoryAbstract implem
     @Override
     public void process(ProcessContributeeMemberContext processMemberContext) {
     }
-    
+
 
 
     private DescribedAsFacet createFromAnnotationOnReturnTypeIfPossible(final ProcessMethodContext processMethodContext) {
@@ -53,7 +53,7 @@ public class DescribedAsFacetOnMemberFactory extends FacetFactoryAbstract implem
         final DescribedAsFacet returnTypeDescribedAsFacet = getDescribedAsFacet(returnType);
         return returnTypeDescribedAsFacet != null ? new DescribedAsFacetOnMemberDerivedFromType(returnTypeDescribedAsFacet, processMethodContext.getFacetHolder()) : null;
     }
-    
+
     private DescribedAsFacet getDescribedAsFacet(final Class<?> type) {
         final ObjectSpecification paramTypeSpec = getSpecificationLoader().loadSpecification(type);
         return paramTypeSpec.getFacet(DescribedAsFacet.class);

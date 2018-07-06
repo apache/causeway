@@ -32,124 +32,124 @@ import org.apache.isis.commons.internal.base._NullSafe;
 
 public interface TreeNode<T> {
 
-	// -- VALUE
+    // -- VALUE
 
-	public T getValue();
+    public T getValue();
 
-	// -- PARENT
+    // -- PARENT
 
-	public @Nullable TreeNode<T> getParentIfAny();
+    public @Nullable TreeNode<T> getParentIfAny();
 
-	// -- CHILDREN
+    // -- CHILDREN
 
-	public int getChildCount();
+    public int getChildCount();
 
-	public Stream<TreeNode<T>> streamChildren();
+    public Stream<TreeNode<T>> streamChildren();
 
-	// -- BASIC PREDICATES
+    // -- BASIC PREDICATES
 
-	public default boolean isRoot() {
-		return getParentIfAny() == null;
-	}
+    public default boolean isRoot() {
+        return getParentIfAny() == null;
+    }
 
-	public default boolean isLeaf() {
-		return getChildCount() == 0;
-	}
-	
-	// -- PATH INFO
-	
-	public TreePath getPositionAsPath();
+    public default boolean isLeaf() {
+        return getChildCount() == 0;
+    }
 
-	// -- COLLAPSE/EXPAND
-	
-	/**
-	 * @return this tree's shared state object, holding e.g. the collapse/expand state
-	 */
-	public TreeState getTreeState();
-	
-	public default boolean isExpanded(TreePath treePath) {
-		final Set<TreePath> expandedPaths = getTreeState().getExpandedNodePaths();
-		return expandedPaths.contains(treePath);
-	}
-	
-	/**
-	 * Adds {@code treePaths} to the set of expanded nodes, as held by this tree's shared state object. 
-	 * @param treePaths
-	 */
-	@Programmatic
-	public default void expand(TreePath ... treePaths) {
-		final Set<TreePath> expandedPaths = getTreeState().getExpandedNodePaths();
-		_NullSafe.stream(treePaths).forEach(expandedPaths::add);
-	}
-	
-	/**
-	 * Removes {@code treePaths} from the set of expanded nodes, as held by this tree's shared state object.
-	 * @param treePaths
-	 */
-	@Programmatic
-	public default void collapse(TreePath ... treePaths) {
-		final Set<TreePath> expandedPaths = getTreeState().getExpandedNodePaths();
-		_NullSafe.stream(treePaths).forEach(expandedPaths::remove);
-	}
-	
-	// -- CONSTRUCTION
+    // -- PATH INFO
 
-	/**
-	 * Convenient shortcut.
-	 * @param node
-	 * @param treeAdapterClass
-	 * @return new LazyTreeNode
-	 */
-	public static <T> TreeNode<T> lazy(T node, Class<? extends TreeAdapter<T>> treeAdapterClass) {
-		return LazyTreeNode.of(node, treeAdapterClass, TreeState.rootCollapsed());
-	}
+    public TreePath getPositionAsPath();
 
-	// -- PARENT NODE ITERATION
+    // -- COLLAPSE/EXPAND
 
-	public default Iterator<TreeNode<T>> iteratorHierarchyUp(){
-		return new TreeNode_iteratorHierarchyUp<>(this);
-	}
+    /**
+     * @return this tree's shared state object, holding e.g. the collapse/expand state
+     */
+    public TreeState getTreeState();
 
-	// -- PARENT NODE STREAMING
+    public default boolean isExpanded(TreePath treePath) {
+        final Set<TreePath> expandedPaths = getTreeState().getExpandedNodePaths();
+        return expandedPaths.contains(treePath);
+    }
 
-	public default Stream<TreeNode<T>> streamHierarchyUp(){
-		return StreamSupport.stream(
-				Spliterators.spliteratorUnknownSize(iteratorHierarchyUp(), Spliterator.ORDERED), 
-				false); // not parallel
-	}
+    /**
+     * Adds {@code treePaths} to the set of expanded nodes, as held by this tree's shared state object.
+     * @param treePaths
+     */
+    @Programmatic
+    public default void expand(TreePath ... treePaths) {
+        final Set<TreePath> expandedPaths = getTreeState().getExpandedNodePaths();
+        _NullSafe.stream(treePaths).forEach(expandedPaths::add);
+    }
 
-	// -- CHILD NODE ITERATION
+    /**
+     * Removes {@code treePaths} from the set of expanded nodes, as held by this tree's shared state object.
+     * @param treePaths
+     */
+    @Programmatic
+    public default void collapse(TreePath ... treePaths) {
+        final Set<TreePath> expandedPaths = getTreeState().getExpandedNodePaths();
+        _NullSafe.stream(treePaths).forEach(expandedPaths::remove);
+    }
 
-	public default Iterator<TreeNode<T>> iteratorDepthFirst(){
-		return new TreeNode_iteratorDepthFirst<>(this);
-	}
+    // -- CONSTRUCTION
 
-	public default Iterator<TreeNode<T>> iteratorBreadthFirst(){
-		return new TreeNode_iteratorBreadthFirst<>(this);
-	}
+    /**
+     * Convenient shortcut.
+     * @param node
+     * @param treeAdapterClass
+     * @return new LazyTreeNode
+     */
+    public static <T> TreeNode<T> lazy(T node, Class<? extends TreeAdapter<T>> treeAdapterClass) {
+        return LazyTreeNode.of(node, treeAdapterClass, TreeState.rootCollapsed());
+    }
 
-	// -- CHILD NODE STREAMING
+    // -- PARENT NODE ITERATION
 
-	public default Stream<TreeNode<T>> streamDepthFirst(){
-		return StreamSupport.stream(
-				Spliterators.spliteratorUnknownSize(iteratorDepthFirst(), Spliterator.ORDERED), 
-				false); // not parallel
-	}
+    public default Iterator<TreeNode<T>> iteratorHierarchyUp(){
+        return new TreeNode_iteratorHierarchyUp<>(this);
+    }
 
-	public default Stream<TreeNode<T>> streamBreadthFirst(){
-		return StreamSupport.stream(
-				Spliterators.spliteratorUnknownSize(iteratorBreadthFirst(), Spliterator.ORDERED), 
-				false); // not parallel
-	}
+    // -- PARENT NODE STREAMING
 
-	// -- LAZY NODE ADAPTING
+    public default Stream<TreeNode<T>> streamHierarchyUp(){
+        return StreamSupport.stream(
+                Spliterators.spliteratorUnknownSize(iteratorHierarchyUp(), Spliterator.ORDERED),
+                false); // not parallel
+    }
 
-	/**
-	 * @return
-	 */
-	// [ahuber] Implementation Note: a class rather than an instance, because otherwise 
-	// the adapter would need to be serializable for Wicket's trees to work correctly.
-	public Class<? extends TreeAdapter<T>> getTreeAdapterClass();
-	
+    // -- CHILD NODE ITERATION
+
+    public default Iterator<TreeNode<T>> iteratorDepthFirst(){
+        return new TreeNode_iteratorDepthFirst<>(this);
+    }
+
+    public default Iterator<TreeNode<T>> iteratorBreadthFirst(){
+        return new TreeNode_iteratorBreadthFirst<>(this);
+    }
+
+    // -- CHILD NODE STREAMING
+
+    public default Stream<TreeNode<T>> streamDepthFirst(){
+        return StreamSupport.stream(
+                Spliterators.spliteratorUnknownSize(iteratorDepthFirst(), Spliterator.ORDERED),
+                false); // not parallel
+    }
+
+    public default Stream<TreeNode<T>> streamBreadthFirst(){
+        return StreamSupport.stream(
+                Spliterators.spliteratorUnknownSize(iteratorBreadthFirst(), Spliterator.ORDERED),
+                false); // not parallel
+    }
+
+    // -- LAZY NODE ADAPTING
+
+    /**
+     * @return
+     */
+    // [ahuber] Implementation Note: a class rather than an instance, because otherwise
+    // the adapter would need to be serializable for Wicket's trees to work correctly.
+    public Class<? extends TreeAdapter<T>> getTreeAdapterClass();
+
 
 }

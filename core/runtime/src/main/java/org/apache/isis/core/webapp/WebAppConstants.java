@@ -68,8 +68,8 @@ public final class WebAppConstants {
     public static final String WEB_APP_DIR = "application.webapp.dir";
 
     /**
-     * Servlet context parameter name used to specify the location for property file 
-     * overloads. Property files in this location take precendence over property files 
+     * Servlet context parameter name used to specify the location for property file
+     * overloads. Property files in this location take precendence over property files
      * in other locations. Since the ResourceStreamSourceComposite is being used
      * property files from various locations are merged together. So only overloaded
      * properties (entries in the file) need to present.

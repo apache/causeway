@@ -83,7 +83,7 @@ public abstract class ValueSemanticsProviderAbstractTemporal<T> extends ValueSem
     protected static DateFormat createDateFormat(final String mask) {
         return new SimpleDateFormat(mask);
     }
-    
+
     /**
      * for encoding always use UTC.
      */
@@ -92,7 +92,7 @@ public abstract class ValueSemanticsProviderAbstractTemporal<T> extends ValueSem
         encodingFormat.setTimeZone(UTC_TIME_ZONE);
         return encodingFormat;
     }
- 
+
     private final DateFormat encodingFormat;
     protected DateFormat format;
     private String configuredFormat;
@@ -102,7 +102,7 @@ public abstract class ValueSemanticsProviderAbstractTemporal<T> extends ValueSem
      * Uses {@link #type()} as the facet type.
      */
     public ValueSemanticsProviderAbstractTemporal(final String propertyName, final FacetHolder holder, final Class<T> adaptedClass, final int typicalLength, final Immutability immutability, final EqualByContent equalByContent, final T defaultValue,
-                                                  final ServicesInjector context) {
+            final ServicesInjector context) {
         this(propertyName, type(), holder, adaptedClass, typicalLength, immutability, equalByContent, defaultValue, context);
     }
 
@@ -111,7 +111,7 @@ public abstract class ValueSemanticsProviderAbstractTemporal<T> extends ValueSem
      * {@link #type()}.
      */
     public ValueSemanticsProviderAbstractTemporal(final String propertyType, final Class<? extends Facet> facetType, final FacetHolder holder, final Class<T> adaptedClass, final int typicalLength, final Immutability immutability, final EqualByContent equalByContent, final T defaultValue,
-                                                  final ServicesInjector context) {
+            final ServicesInjector context) {
         super(facetType, holder, adaptedClass, typicalLength, null, immutability, equalByContent, defaultValue, context);
         configureFormats();
 
@@ -296,7 +296,7 @@ public abstract class ValueSemanticsProviderAbstractTemporal<T> extends ValueSem
         final Calendar cal = Calendar.getInstance();
         cal.setTimeZone(UTC_TIME_ZONE);
 
-        // TODO allow restoring of dates where datetime expected, and datetimes where date expected - to allow for changing of field types. 
+        // TODO allow restoring of dates where datetime expected, and datetimes where date expected - to allow for changing of field types.
         try {
             cal.setTime(parse(data));
             clearFields(cal);

@@ -20,15 +20,15 @@ package org.apache.isis.applib.services.exceprecog.jdo;
 
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType;
 
-public class ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException 
+public class ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException
 extends ExceptionRecognizerForType {
 
-	public ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException() {
-		super(Category.CONSTRAINT_VIOLATION,
-				ofTypeIncluding(
-						java.sql.SQLIntegrityConstraintViolationException.class, 
-						"unique constraint or index violation"),
-				prefix("Data already exists"));
-	}
+    public ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException() {
+        super(Category.CONSTRAINT_VIOLATION,
+                ofTypeIncluding(
+                        java.sql.SQLIntegrityConstraintViolationException.class,
+                        "unique constraint or index violation"),
+                prefix("Data already exists"));
+    }
 
 }

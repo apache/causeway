@@ -24,7 +24,7 @@ import org.apache.isis.core.metamodel.facets.MarkerFacetAbstract;
 
 
 public abstract class JdoNotPersistentFacetAbstract extends MarkerFacetAbstract implements
-        JdoNotPersistentFacet {
+JdoNotPersistentFacet {
 
     public static Class<? extends Facet> type() {
         return JdoNotPersistentFacet.class;

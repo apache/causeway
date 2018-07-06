@@ -38,9 +38,9 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerBase;
 
 public class IsisLifecycleListener2
-        implements AttachLifecycleListener, ClearLifecycleListener, CreateLifecycleListener, DeleteLifecycleListener,
-        DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLifecycleListener,
-        SuspendableListener {
+implements AttachLifecycleListener, ClearLifecycleListener, CreateLifecycleListener, DeleteLifecycleListener,
+DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLifecycleListener,
+SuspendableListener {
 
     /**
      * The internal contract between PersistenceSession and this class.
@@ -90,7 +90,7 @@ public class IsisLifecycleListener2
         persistenceSession.initializeMapAndCheckConcurrency(pojo);
     }
 
-	@Override
+    @Override
     public void preStore(InstanceLifecycleEvent event) {
         final Persistable pojo = Utils.persistenceCapableFor(event);
         persistenceSession.invokeIsisPersistingCallback(pojo);
@@ -166,7 +166,7 @@ public class IsisLifecycleListener2
         persistenceSession.ensureRootObject(pojo);
     }
 
-    
+
     // /////////////////////////////////////////////////////////
     // SuspendListener
     // /////////////////////////////////////////////////////////

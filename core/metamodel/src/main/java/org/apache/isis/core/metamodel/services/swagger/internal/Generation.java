@@ -113,7 +113,7 @@ class Generation {
         swagger.info(new Info()
                 .version("0.0.0") // TODO: provide some way of passing the name, version etc (some sort of SPI service?)
                 .title(visibility.name() + " API")
-        );
+                );
 
 
         appendRestfulObjectsSupportingPathsAndDefinitions();
@@ -232,107 +232,107 @@ class Generation {
 
         swagger.path("/",
                 new Path()
-                        .get(new Operation()
-                                .tag(tag)
-                                .description(Util.roSpec("5.1"))
-                                .produces("application/json")
-                                .produces("application/json;profile=urn:org.restfulobjects:repr-types/home-page")
-                                .response(200,
-                                        newResponse(Caching.NON_EXPIRING)
-                                                .description("OK")
-                                                .schema(newRefProperty("RestfulObjectsSupportingHomePageRepr"))
+                .get(new Operation()
+                        .tag(tag)
+                        .description(Util.roSpec("5.1"))
+                        .produces("application/json")
+                        .produces("application/json;profile=urn:org.restfulobjects:repr-types/home-page")
+                        .response(200,
+                                newResponse(Caching.NON_EXPIRING)
+                                .description("OK")
+                                .schema(newRefProperty("RestfulObjectsSupportingHomePageRepr"))
                                 )));
         addDefinition("RestfulObjectsSupportingHomePageRepr", newModel(Util.roSpec("5.2")));
 
         swagger.path("/user",
                 new Path()
-                        .get(new Operation()
-                                .tag(tag)
-                                .description(Util.roSpec("6.1"))
-                                .produces("application/json")
-                                .produces("application/json;profile=urn:org.restfulobjects:repr-types/user")
-                                .response(200,
-                                        newResponse(Caching.USER_INFO)
-                                                .description("OK")
-                                                .schema(newRefProperty("RestfulObjectsSupportingUserRepr"))
+                .get(new Operation()
+                        .tag(tag)
+                        .description(Util.roSpec("6.1"))
+                        .produces("application/json")
+                        .produces("application/json;profile=urn:org.restfulobjects:repr-types/user")
+                        .response(200,
+                                newResponse(Caching.USER_INFO)
+                                .description("OK")
+                                .schema(newRefProperty("RestfulObjectsSupportingUserRepr"))
                                 )));
         addDefinition("RestfulObjectsSupportingUserRepr",
                 newModel(Util.roSpec("6.2"))
-                        .property("userName", stringProperty())
-                        .property("roles", arrayOfStrings())
-                        .property("links", arrayOfLinks())
-                        .required("userName")
-                        .required("roles"));
+                .property("userName", stringProperty())
+                .property("roles", arrayOfStrings())
+                .property("links", arrayOfLinks())
+                .required("userName")
+                .required("roles"));
 
         swagger.path("/services",
                 new Path()
-                        .get(new Operation()
-                                .tag(tag)
-                                .description(Util.roSpec("7.1"))
-                                .produces("application/json")
-                                .produces("application/json;profile=urn:org.restfulobjects:repr-types/services")
-                                .response(200,
-                                        newResponse(Caching.USER_INFO)
-                                                .description("OK")
-                                                .schema(newRefProperty("RestfulObjectsSupportingServicesRepr"))
+                .get(new Operation()
+                        .tag(tag)
+                        .description(Util.roSpec("7.1"))
+                        .produces("application/json")
+                        .produces("application/json;profile=urn:org.restfulobjects:repr-types/services")
+                        .response(200,
+                                newResponse(Caching.USER_INFO)
+                                .description("OK")
+                                .schema(newRefProperty("RestfulObjectsSupportingServicesRepr"))
                                 )));
         addDefinition("RestfulObjectsSupportingServicesRepr",
                 newModel(Util.roSpec("7.2"))
-                        .property("value", arrayOfLinks())
-                        .required("userName")
-                        .required("roles"));
+                .property("value", arrayOfLinks())
+                .required("userName")
+                .required("roles"));
 
         swagger.path("/version",
                 new Path()
-                        .get(new Operation()
-                                .tag(tag)
-                                .description(Util.roSpec("8.1"))
-                                .produces("application/json")
-                                .produces("application/json;profile=urn:org.restfulobjects:repr-types/RestfulObjectsSupportingServicesRepr")
-                                .response(200,
-                                        newResponse(Caching.NON_EXPIRING)
-                                                .description("OK")
-                                                .schema(new ObjectProperty())
+                .get(new Operation()
+                        .tag(tag)
+                        .description(Util.roSpec("8.1"))
+                        .produces("application/json")
+                        .produces("application/json;profile=urn:org.restfulobjects:repr-types/RestfulObjectsSupportingServicesRepr")
+                        .response(200,
+                                newResponse(Caching.NON_EXPIRING)
+                                .description("OK")
+                                .schema(new ObjectProperty())
                                 )));
         swagger.addDefinition("RestfulObjectsSupportingServicesRepr",
                 newModel(Util.roSpec("8.2"))
-                        .property("specVersion", stringProperty())
-                        .property("implVersion", stringProperty())
-                        .property("optionalCapabilities",
-                                new ObjectProperty()
-                                        .property("blobsClobs", stringProperty())
-                                        .property("deleteObjects", stringProperty())
-                                        .property("domainModel", stringProperty())
-                                        .property("validateOnly", stringProperty())
-                                        .property("protoPersistentObjects", stringProperty())
+                .property("specVersion", stringProperty())
+                .property("implVersion", stringProperty())
+                .property("optionalCapabilities",
+                        new ObjectProperty()
+                        .property("blobsClobs", stringProperty())
+                        .property("deleteObjects", stringProperty())
+                        .property("domainModel", stringProperty())
+                        .property("validateOnly", stringProperty())
+                        .property("protoPersistentObjects", stringProperty())
                         )
-                        .required("userName")
-                        .required("roles"));
+                .required("userName")
+                .required("roles"));
     }
 
     void appendLinkModelDefinition() {
         swagger.addDefinition("LinkRepr",
                 new ModelImpl()
-                        .type("object")
-                        .property("rel", stringProperty().description("the relationship of the resource to this referencing resource"))
-                        .property("href", stringProperty().description("the hyperlink reference (URL) of the resource"))
-                        .property("title", stringProperty().description("title to render"))
-                        .property("method", stringPropertyEnum("GET", "POST", "PUT", "DELETE").description("HTTP verb to access"))
-                        .property("type", stringProperty().description("Content-Type recognized by the resource (for HTTP Accept header)"))
-                        .property("arguments", new ObjectProperty().description("Any arguments, to send as query strings or in body"))
-                        .property("value", stringProperty().description("the representation of the link if followed"))
-                        .required("rel")
-                        .required("href")
-                        .required("method")
-        );
+                .type("object")
+                .property("rel", stringProperty().description("the relationship of the resource to this referencing resource"))
+                .property("href", stringProperty().description("the hyperlink reference (URL) of the resource"))
+                .property("title", stringProperty().description("title to render"))
+                .property("method", stringPropertyEnum("GET", "POST", "PUT", "DELETE").description("HTTP verb to access"))
+                .property("type", stringProperty().description("Content-Type recognized by the resource (for HTTP Accept header)"))
+                .property("arguments", new ObjectProperty().description("Any arguments, to send as query strings or in body"))
+                .property("value", stringProperty().description("the representation of the link if followed"))
+                .required("rel")
+                .required("href")
+                .required("method")
+                );
 
         swagger.addDefinition("HrefRepr",
                 new ModelImpl()
-                        .type("object")
-                        .description("Abbreviated version of the Link resource, used primarily to reference non-value objects")
-                        .property("href", stringProperty().description("the hyperlink reference (URL) of the resource"))
-                        .required("href")
-        );
+                .type("object")
+                .description("Abbreviated version of the Link resource, used primarily to reference non-value objects")
+                .property("href", stringProperty().description("the hyperlink reference (URL) of the resource"))
+                .required("href")
+                );
 
     }
 
@@ -348,21 +348,21 @@ class Generation {
         final String tag = tagFor(serviceId, "> services");
         path.get(
                 new Operation()
-                        .tag(tag)
-                        .description(Util.roSpec("15.1"))
-                        .produces("application/json")
-                        .produces("application/json;profile=urn:org.restfulobjects:repr-types/object")
-                        .response(200,
-                                newResponse(Caching.TRANSACTIONAL)
-                                        .description("OK")
-                                        .schema(newRefProperty(serviceModelDefinition)))
-        );
+                .tag(tag)
+                .description(Util.roSpec("15.1"))
+                .produces("application/json")
+                .produces("application/json;profile=urn:org.restfulobjects:repr-types/object")
+                .response(200,
+                        newResponse(Caching.TRANSACTIONAL)
+                        .description("OK")
+                        .schema(newRefProperty(serviceModelDefinition)))
+                );
 
         final ModelImpl model =
                 newModel(Util.roSpec("15.1.2") + ": representation of " + serviceId)
-                        .property("title", stringProperty())
-                        .property("serviceId", stringProperty()._default(serviceId))
-                        .property("members", new ObjectProperty());
+                .property("title", stringProperty())
+                .property("serviceId", stringProperty()._default(serviceId))
+                .property("members", new ObjectProperty());
 
         addDefinition(serviceModelDefinition, model);
     }
@@ -378,15 +378,15 @@ class Generation {
         final Operation operation = new Operation();
         path.get(operation);
         operation
-                .tag(tag)
-                .description(Util.roSpec("14.1"))
-                .parameter(
-                        new PathParameter()
-                                .name("objectId")
-                                .type("string"))
-                .produces("application/json;profile=urn:org.apache.isis/v1")
-                .produces("application/json;profile=urn:org.apache.isis/v1;suppress=true")
-                .produces("application/json;profile=urn:org.restfulobjects:repr-types/object");
+        .tag(tag)
+        .description(Util.roSpec("14.1"))
+        .parameter(
+                new PathParameter()
+                .name("objectId")
+                .type("string"))
+        .produces("application/json;profile=urn:org.apache.isis/v1")
+        .produces("application/json;profile=urn:org.apache.isis/v1;suppress=true")
+        .produces("application/json;profile=urn:org.restfulobjects:repr-types/object");
 
 
         // per https://github.com/swagger-api/swagger-spec/issues/146, swagger 2.0 doesn't support multiple
@@ -396,24 +396,24 @@ class Generation {
         if (false) {
             operation.response(200,
                     newResponse(Caching.TRANSACTIONAL)
-                            .description("if Accept: application/json;profile=urn:org.restfulobjects:repr-types/object")
-                            .schema(newRefProperty(restfulObjectsModelDefinition)));
+                    .description("if Accept: application/json;profile=urn:org.restfulobjects:repr-types/object")
+                    .schema(newRefProperty(restfulObjectsModelDefinition)));
 
             final ModelImpl roSpecModel =
                     newModel(Util.roSpec("14.4") + ": representation of " + objectType)
-                            .property("title", stringProperty())
-                            .property("domainType", stringProperty()._default(objectType))
-                            .property("instanceId", stringProperty())
-                            .property("members", new ObjectProperty());
+                    .property("title", stringProperty())
+                    .property("domainType", stringProperty()._default(objectType))
+                    .property("instanceId", stringProperty())
+                    .property("members", new ObjectProperty());
             swagger.addDefinition(restfulObjectsModelDefinition, roSpecModel);
         }
 
         final String isisModelDefinition = objectType + "Repr";
         operation
-                .response(200,
-                        newResponse(Caching.TRANSACTIONAL)
-                                .description(objectType + " , if Accept: application/json;profile=urn:org.apache.isis/v1")
-                                .schema(newRefProperty(isisModelDefinition)));
+        .response(200,
+                newResponse(Caching.TRANSACTIONAL)
+                .description(objectType + " , if Accept: application/json;profile=urn:org.apache.isis/v1")
+                .schema(newRefProperty(isisModelDefinition)));
 
         final ModelImpl isisModel = new ModelImpl();
         addDefinition(isisModelDefinition, isisModel);
@@ -428,18 +428,18 @@ class Generation {
 
         serviceMembers.property(actionId,
                 new ObjectProperty()
-                        .property("id", stringPropertyEnum(actionId))
-                        .property("memberType", stringPropertyEnum("action"))
-                        .property("links",
-                                new ObjectProperty()
-                                        .property("rel", stringPropertyEnum( String.format(
-                                                "urn:org.restfulobjects:rels/details;action=%s", actionId)))
-                                        .property("href", stringPropertyEnum(String.format(
-                                                "actions/%s", actionId))))
-                        .property("method", stringPropertyEnum("GET"))
-                        .property("type", stringPropertyEnum(
-                                "application/json;profile=urn:org.restfulobjects:repr-types/object-action"))
-        );
+                .property("id", stringPropertyEnum(actionId))
+                .property("memberType", stringPropertyEnum("action"))
+                .property("links",
+                        new ObjectProperty()
+                        .property("rel", stringPropertyEnum( String.format(
+                                "urn:org.restfulobjects:rels/details;action=%s", actionId)))
+                        .property("href", stringPropertyEnum(String.format(
+                                "actions/%s", actionId))))
+                .property("method", stringPropertyEnum("GET"))
+                .property("type", stringPropertyEnum(
+                        "application/json;profile=urn:org.restfulobjects:repr-types/object-action"))
+                );
     }
 
     void appendServiceActionInvokePath(
@@ -456,12 +456,12 @@ class Generation {
         final String tag = tagFor(serviceId, "> services");
         final Operation invokeOperation =
                 new Operation()
-                        .tag(tag)
-                        .description(Util.roSpec("19.1") + ": (invoke) resource of " + serviceId + "#" + actionId)
-                        .produces("application/json;profile=urn:org.apache.isis/v1")
-                        .produces("application/json;profile=urn:org.apache.isis/v1;suppress=true")
-                        .produces("application/json;profile=urn:org.restfulobjects:repr-types/object")
-                        .produces("application/json;profile=urn:org.restfulobjects:repr-types/action-result")
+                .tag(tag)
+                .description(Util.roSpec("19.1") + ": (invoke) resource of " + serviceId + "#" + actionId)
+                .produces("application/json;profile=urn:org.apache.isis/v1")
+                .produces("application/json;profile=urn:org.apache.isis/v1;suppress=true")
+                .produces("application/json;profile=urn:org.restfulobjects:repr-types/object")
+                .produces("application/json;profile=urn:org.restfulobjects:repr-types/action-result")
                 ;
 
         final SemanticsOf semantics = serviceAction.getSemantics();
@@ -470,12 +470,12 @@ class Generation {
 
             for (final ObjectActionParameter parameter : parameters) {
                 invokeOperation
-                        .parameter(
-                                new QueryParameter()
-                                        .name(parameter.getId())
-                                        .description(Util.roSpec("2.9.1") + (!Strings.isNullOrEmpty(parameter.getDescription())? (": " + parameter.getDescription()) : ""))
-                                        .required(false)
-                                        .type("string")
+                .parameter(
+                        new QueryParameter()
+                        .name(parameter.getId())
+                        .description(Util.roSpec("2.9.1") + (!Strings.isNullOrEmpty(parameter.getDescription())? (": " + parameter.getDescription()) : ""))
+                        .required(false)
+                        .type("string")
                         );
             }
             if(!parameters.isEmpty()) {
@@ -495,7 +495,7 @@ class Generation {
 
             final ModelImpl bodyParam =
                     new ModelImpl()
-                            .type("object");
+                    .type("object");
             for (final ObjectActionParameter parameter : parameters) {
 
                 final Property valueProperty;
@@ -504,26 +504,26 @@ class Generation {
                 valueProperty = stringProperty();
 
                 bodyParam
-                        .property(parameter.getId(),
-                                new ObjectProperty()
-                                        .property("value", valueProperty)
+                .property(parameter.getId(),
+                        new ObjectProperty()
+                        .property("value", valueProperty)
                         );
             }
 
             invokeOperation
-                    .consumes("application/json")
-                    .parameter(
-                            new BodyParameter()
-                                    .name("body")
-                                    .schema(bodyParam));
+            .consumes("application/json")
+            .parameter(
+                    new BodyParameter()
+                    .name("body")
+                    .schema(bodyParam));
 
         }
 
         invokeOperation
-                .response(
-                        200, new Response()
-                                .description(serviceId + "#" + actionId + " , if Accept: application/json;profile=urn:org.apache.isis/v1")
-                                .schema(actionReturnTypeFor(serviceAction))
+        .response(
+                200, new Response()
+                .description(serviceId + "#" + actionId + " , if Accept: application/json;profile=urn:org.apache.isis/v1")
+                .schema(actionReturnTypeFor(serviceAction))
                 );
     }
 
@@ -540,22 +540,22 @@ class Generation {
         final String tag = tagFor(objectType, null);
         final Operation collectionOperation =
                 new Operation()
-                        .tag(tag)
-                        .description(Util.roSpec("17.1") + ": resource of " + objectType + "#" + collectionId)
-                        .parameter(
-                                new PathParameter()
-                                        .name("objectId")
-                                        .type("string"))
-                        .produces("application/json;profile=urn:org.apache.isis/v1")
-                        .produces("application/json;profile=urn:org.apache.isis/v1;suppress=true")
-                        .produces("application/json;profile=urn:org.restfulobjects:repr-types/object-collection");
+                .tag(tag)
+                .description(Util.roSpec("17.1") + ": resource of " + objectType + "#" + collectionId)
+                .parameter(
+                        new PathParameter()
+                        .name("objectId")
+                        .type("string"))
+                .produces("application/json;profile=urn:org.apache.isis/v1")
+                .produces("application/json;profile=urn:org.apache.isis/v1;suppress=true")
+                .produces("application/json;profile=urn:org.restfulobjects:repr-types/object-collection");
 
         path.get(collectionOperation);
         collectionOperation
-                .response(
-                        200, new Response()
-                                .description(objectType + "#" + collectionId + " , if Accept: application/json;profile=urn:org.apache.isis/v1")
-                                .schema(modelFor(collection))
+        .response(
+                200, new Response()
+                .description(objectType + "#" + collectionId + " , if Accept: application/json;profile=urn:org.apache.isis/v1")
+                .schema(modelFor(collection))
                 );
     }
 
@@ -573,15 +573,15 @@ class Generation {
         final String tag = tagFor(objectType, null);
         final Operation invokeOperation =
                 new Operation()
-                        .tag(tag)
-                        .description(Util.roSpec("19.1") + ": (invoke) resource of " + objectType + "#" + actionId)
-                        .parameter(
-                                new PathParameter()
-                                        .name("objectId")
-                                        .type("string"))
-                        .produces("application/json;profile=urn:org.apache.isis/v1")
-                        .produces("application/json;profile=urn:org.apache.isis/v1;suppress=true")
-                        .produces("application/json;profile=urn:org.restfulobjects:repr-types/action-result");
+                .tag(tag)
+                .description(Util.roSpec("19.1") + ": (invoke) resource of " + objectType + "#" + actionId)
+                .parameter(
+                        new PathParameter()
+                        .name("objectId")
+                        .type("string"))
+                .produces("application/json;profile=urn:org.apache.isis/v1")
+                .produces("application/json;profile=urn:org.apache.isis/v1;suppress=true")
+                .produces("application/json;profile=urn:org.restfulobjects:repr-types/action-result");
 
         final SemanticsOf semantics = objectAction.getSemantics();
         if(semantics.isSafeInNature()) {
@@ -589,12 +589,12 @@ class Generation {
 
             for (final ObjectActionParameter parameter : parameters) {
                 invokeOperation
-                        .parameter(
-                                new QueryParameter()
-                                        .name(parameter.getId())
-                                        .description(Util.roSpec("2.9.1") + (!Strings.isNullOrEmpty(parameter.getDescription())? (": " + parameter.getDescription()) : ""))
-                                        .required(false)
-                                        .type("string")
+                .parameter(
+                        new QueryParameter()
+                        .name(parameter.getId())
+                        .description(Util.roSpec("2.9.1") + (!Strings.isNullOrEmpty(parameter.getDescription())? (": " + parameter.getDescription()) : ""))
+                        .required(false)
+                        .type("string")
                         );
             }
             if(!parameters.isEmpty()) {
@@ -614,32 +614,32 @@ class Generation {
 
             final ModelImpl bodyParam =
                     new ModelImpl()
-                            .type("object");
+                    .type("object");
             for (final ObjectActionParameter parameter : parameters) {
 
                 final ObjectSpecification specification = parameter.getSpecification();
                 final Property valueProperty = specification.isValue() ? modelFor(specification) : refToLinkModel() ;
                 bodyParam
-                        .property(parameter.getId(),
-                                new ObjectProperty()
-                                        .property("value", valueProperty)
+                .property(parameter.getId(),
+                        new ObjectProperty()
+                        .property("value", valueProperty)
                         );
             }
 
             invokeOperation
-                    .consumes("application/json")
-                    .parameter(
-                            new BodyParameter()
-                                    .name("body")
-                                    .schema(bodyParam));
+            .consumes("application/json")
+            .parameter(
+                    new BodyParameter()
+                    .name("body")
+                    .schema(bodyParam));
 
         }
 
         invokeOperation
-                .response(
-                        200, new Response()
-                                .description(objectType + "#" + actionId)
-                                .schema(actionReturnTypeFor(objectAction))
+        .response(
+                200, new Response()
+                .description(objectType + "#" + actionId)
+                .schema(actionReturnTypeFor(objectAction))
                 );
     }
 
@@ -672,8 +672,8 @@ class Generation {
         final ArrayProperty arrayProperty = new ArrayProperty();
         if(objectSpecification != null && objectSpecification.getCorrespondingClass() != Object.class) {
             arrayProperty
-                    .description("List of " + objectTypeFor(objectSpecification))
-                    .items(modelFor(objectSpecification));
+            .description("List of " + objectTypeFor(objectSpecification))
+            .items(modelFor(objectSpecification));
         } else {
             arrayProperty.items(new ObjectProperty());
         }
@@ -726,8 +726,8 @@ class Generation {
         final String className = objectSpecification.getFullIdentifier();
 
         model
-                .type("object")
-                .description(String.format("%s (%s)", objectType, className));
+        .type("object")
+        .description(String.format("%s (%s)", objectType, className));
 
         for (OneToOneAssociation objectProperty : objectProperties) {
             model.property(
@@ -740,7 +740,7 @@ class Generation {
             model.property(
                     objectCollection.getId(),
                     arrayPropertyOf(elementSpec)
-            );
+                    );
         }
     }
 

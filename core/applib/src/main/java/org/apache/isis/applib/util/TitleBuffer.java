@@ -92,7 +92,7 @@ public class TitleBuffer {
 
     /**
      * Creates a new {@link org.apache.isis.applib.util.TitleBuffer}, containing the title of the specified object.
-     * 
+     *
      * <p>
      *     Note: this method only obtains the title using either <tt>title()</tt> or <tt>toString()</tt>; it doesn't
      *     honour other mechanisms for specifying the title, such as {@link org.apache.isis.applib.annotation.Title}
@@ -136,7 +136,7 @@ public class TitleBuffer {
     }
 
     /**
-     * 
+     *
      */
     public TitleBuffer append(final int number) {
         append(String.valueOf(number));
@@ -195,7 +195,7 @@ public class TitleBuffer {
     /**
      * Appends a space (if there is already some text in this title object) and
      * then the specified text.
-     * 
+     *
      * @return a reference to the called object (itself).
      */
     public TitleBuffer append(final String text) {
@@ -267,7 +267,7 @@ public class TitleBuffer {
      * Appends the joiner text, a space, and the text to the text of this
      * {@link org.apache.isis.applib.util.TitleBuffer}. If no text yet exists in the object then the joiner
      * text and space are omitted.
-     * 
+     *
      * @return a reference to the called object (itself).
      */
     public TitleBuffer append(final String joiner, final String text) {
@@ -288,7 +288,7 @@ public class TitleBuffer {
      * Append a space to the text of this TitleString object if, and only if,
      * there is some existing text i.e., a space is only added to existing text
      * and will not create a text entry consisting of only one space.
-     * 
+     *
      * @return a reference to the called object (itself).
      */
     public TitleBuffer appendSpace() {
@@ -307,7 +307,7 @@ public class TitleBuffer {
      * Concatenate the the title value (the result of calling an objects label()
      * method) to this TitleString object. If the value is null the no text is
      * added.
-     * 
+     *
      * @param object
      *            the ObjectAdapter to get a title from
      * @return a reference to the called object (itself).
@@ -350,7 +350,7 @@ public class TitleBuffer {
     /**
      * Concatenate the specified text on to the end of the text of this
      * {@link org.apache.isis.applib.util.TitleBuffer}.
-     * 
+     *
      * @param text
      *            text to append
      * @return a reference to the called object (itself).
@@ -364,7 +364,7 @@ public class TitleBuffer {
      * Concatenate the joiner text and the text to the text of this {@link org.apache.isis.applib.util.TitleBuffer}
      * object. If no text yet exists in the object then the joiner text is
      * omitted.
-     * 
+     *
      * @return a reference to the called object (itself).
      */
     public TitleBuffer concat(final String joiner, final String text) {
@@ -438,7 +438,7 @@ public class TitleBuffer {
      * Truncates this title so it has a maximum number of words. Spaces are used
      * to determine words, thus two spaces in a title will cause two words to be
      * mistakenly identified.
-     * 
+     *
      * @param noWords
      *            the number of words to show
      * @return a reference to the called object (itself).
@@ -458,7 +458,7 @@ public class TitleBuffer {
         }
         if (pos < title.length()) {
             title.setLength(pos - 1); // string.delete(pos - 1,
-                                      // string.length());
+            // string.length());
             title.append("...");
         }
         return this;

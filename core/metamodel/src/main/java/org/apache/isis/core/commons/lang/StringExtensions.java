@@ -30,7 +30,7 @@ import org.apache.isis.commons.internal.base._Strings;
 import com.google.common.base.Strings;
 
 public final class StringExtensions {
-    
+
     private StringExtensions() {}
 
     // ////////////////////////////////////////////////////////////
@@ -43,7 +43,7 @@ public final class StringExtensions {
      * "NextAvailableDate" is returned as "Next Available Date".
      */
     public static String asNaturalName2(String name) {
-    	return _Strings.asNaturalName2.apply(name);
+        return _Strings.asNaturalName2.apply(name);
     }
 
     public static String asNaturalName(final String extendee) {
@@ -71,8 +71,8 @@ public final class StringExtensions {
         }
         final StringBuffer s = new StringBuffer(name.length() - startingPosition);
         for (int j = startingPosition; j < name.length(); j++) { // process
-                                                                 // english name
-                                                                 // - add spaces
+            // english name
+            // - add spaces
             if ((j > startingPosition) && isStartOfNewWord(name.charAt(j), name.charAt(j - 1))) {
                 s.append(' ');
             }
@@ -97,7 +97,7 @@ public final class StringExtensions {
         while (t.hasMoreTokens()) {
             final String token = t.nextToken();
             b.append(token.substring(0, 1).toUpperCase()); // replace spaces
-                                                           // with
+            // with
             // camelCase
             b.append(token.substring(1));
         }
@@ -112,7 +112,7 @@ public final class StringExtensions {
         while (t.hasMoreTokens()) {
             final String token = t.nextToken();
             b.append(token.substring(0, 1).toUpperCase()); // replace spaces
-                                                           // with camelCase
+            // with camelCase
             b.append(token.substring(1).toLowerCase());
         }
         return b.toString();
@@ -131,7 +131,7 @@ public final class StringExtensions {
     // ////////////////////////////////////////////////////////////
 
     public static String capitalize(final String extendee) {
-    	return _Strings.capitalize(extendee);
+        return _Strings.capitalize(extendee);
     }
 
     /**
@@ -179,7 +179,7 @@ public final class StringExtensions {
 
     /**
      * Converts any <tt>\n</tt> to <tt>line.separator</tt>
-     * 
+     *
      * @param extendee
      * @return
      */
@@ -239,18 +239,18 @@ public final class StringExtensions {
 
     /**
      * Condenses any whitespace to a single character
-     * 
+     *
      * @param extendee
      * @return
      */
     public static String normalized(@javax.annotation.Nullable final String extendee) {
-    	return _Strings.asNormalized.apply(extendee);
+        return _Strings.asNormalized.apply(extendee);
     }
 
     public static String removePrefix(final String extendee, final String prefix) {
-        return extendee.startsWith(prefix) 
-                ? extendee.substring(prefix.length()) 
-                : extendee;
+        return extendee.startsWith(prefix)
+                ? extendee.substring(prefix.length())
+                        : extendee;
     }
 
     public static String enumTitle(String enumName) {
@@ -274,7 +274,7 @@ public final class StringExtensions {
         return buf.toString();
     }
 
-    
+
     // //////////////////////////////////////
     // copied in from Apache Commons
     // //////////////////////////////////////
@@ -312,43 +312,43 @@ public final class StringExtensions {
      * as the first set of lowercase letters and the name is characters from,
      * and including, the first upper case letter. If no upper case letter is
      * found then an empty string is returned.
-     * 
+     *
      * <p>
      * Calling this method with the following Java names will produce these
      * results:
-     * 
+     *
      * <pre>
      *                     getCarRegistration        -&gt; CarRegistration
      *                     CityMayor -&gt; CityMayor
      *                     isReady -&gt; Ready
      * </pre>
-     * 
+     *
      */
     public static String asJavaBaseName(final String javaName) {
         int pos = 0;
-    
+
         // find first upper case character
         final int len = javaName.length();
-    
+
         while ((pos < len) && (javaName.charAt(pos) != '_') && Character.isLowerCase(javaName.charAt(pos))) {
             pos++;
         }
-    
+
         if (pos >= len) {
             return "";
         }
-    
+
         if (javaName.charAt(pos) == '_') {
             pos++;
         }
-    
+
         if (pos >= len) {
             return "";
         }
-    
+
         final String baseName = javaName.substring(pos);
         final char firstChar = baseName.charAt(0);
-    
+
         if (Character.isLowerCase(firstChar)) {
             return Character.toUpperCase(firstChar) + baseName.substring(1);
         } else {

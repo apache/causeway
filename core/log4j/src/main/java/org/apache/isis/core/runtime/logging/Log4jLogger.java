@@ -21,9 +21,9 @@ package org.apache.isis.core.runtime.logging;
 
 
 public abstract class Log4jLogger {
-    
+
     public static final String PROPERTY_ROOT = "isis.logging.";
-    
+
     private org.apache.log4j.Logger logger;
     private final org.apache.log4j.Level level;
 

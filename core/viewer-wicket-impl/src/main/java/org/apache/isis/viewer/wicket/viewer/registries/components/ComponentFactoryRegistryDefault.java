@@ -72,7 +72,7 @@ public class ComponentFactoryRegistryDefault implements ComponentFactoryRegistry
      * Registers the provided set of component factories.
      */
     protected void registerComponentFactories(final ComponentFactoryRegistrar componentFactoryRegistrar) {
-        
+
         final ComponentFactoryList componentFactories = new ComponentFactoryList();
         componentFactoryRegistrar.addComponentFactories(componentFactories);
 
@@ -100,7 +100,7 @@ public class ComponentFactoryRegistryDefault implements ComponentFactoryRegistry
     // Public API
     // ///////////////////////////////////////////////////////
 
-    
+
     @Override
     public Component addOrReplaceComponent(final MarkupContainer markupContainer, final ComponentType componentType, final IModel<?> model) {
         final Component component = createComponent(componentType, model);

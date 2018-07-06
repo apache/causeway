@@ -24,15 +24,15 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProviderFactory;
 
 public class MarkupValueFacetUsingSemanticsProviderFactory extends ValueFacetUsingSemanticsProviderFactory<Markup> {
-	
-	@Override
-	public void process(final ProcessClassContext processClassContext) {
-		final Class<?> type = processClassContext.getCls();
-		final FacetHolder holder = processClassContext.getFacetHolder();
 
-		if (type != Markup.class) {
-			return;
-		}
-		addFacets(new MarkupValueSemanticsProvider(holder, getContext()));
-	}
+    @Override
+    public void process(final ProcessClassContext processClassContext) {
+        final Class<?> type = processClassContext.getCls();
+        final FacetHolder holder = processClassContext.getFacetHolder();
+
+        if (type != Markup.class) {
+            return;
+        }
+        addFacets(new MarkupValueSemanticsProvider(holder, getContext()));
+    }
 }

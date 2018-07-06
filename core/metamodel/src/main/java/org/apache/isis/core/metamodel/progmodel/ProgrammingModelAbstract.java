@@ -133,11 +133,11 @@ public abstract class ProgrammingModelAbstract implements ProgrammingModel {
             }
         }
         switch (position){
-            case BEGINNING:
-                facetFactoryInstancesOrClasses.add(0, facetFactoryInstanceOrClass);
-                break;
-            case END:
-                facetFactoryInstancesOrClasses.add(facetFactoryInstanceOrClass);
+        case BEGINNING:
+            facetFactoryInstancesOrClasses.add(0, facetFactoryInstanceOrClass);
+            break;
+        case END:
+            facetFactoryInstancesOrClasses.add(facetFactoryInstanceOrClass);
         }
     }
 

@@ -33,30 +33,30 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 @DomainService(
         nature = NatureOfService.VIEW_MENU_ONLY,
         objectType = "isisApplib.ConfigurationServiceMenu"
-)
+        )
 @DomainServiceLayout(
         menuBar = DomainServiceLayout.MenuBar.TERTIARY,
         menuOrder = "500.900"
-)
+        )
 public class ConfigurationServiceMenu {
 
-    public static abstract class ActionDomainEvent 
-    extends IsisApplibModule.ActionDomainEvent<ConfigurationServiceMenu> { 
-    	private static final long serialVersionUID = 1L; 
+    public static abstract class ActionDomainEvent
+    extends IsisApplibModule.ActionDomainEvent<ConfigurationServiceMenu> {
+        private static final long serialVersionUID = 1L;
     }
-    
-    public static class AllConfigurationPropertiesDomainEvent 
-    extends ActionDomainEvent { 
-    	private static final long serialVersionUID = 1L; 
+
+    public static class AllConfigurationPropertiesDomainEvent
+    extends ActionDomainEvent {
+        private static final long serialVersionUID = 1L;
     }
 
     @Action(
             domainEvent = AllConfigurationPropertiesDomainEvent.class,
             semantics = SemanticsOf.SAFE
-    )
+            )
     @ActionLayout(
             cssClassFa = "fa-wrench"
-    )
+            )
     @MemberOrder(sequence = "500.900.1")
     public Set<ConfigurationProperty> configuration(){
         return configurationService.allProperties();

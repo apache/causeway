@@ -26,7 +26,7 @@ import org.apache.isis.core.commons.lang.StringExtensions;
 
 /**
  * Loads the properties from the ContextClassLoader.
- * 
+ *
  * <p>
  * If this class is on the system class path, then the class loader obtained
  * from this.getClassLoader() won't be able to load resources from the

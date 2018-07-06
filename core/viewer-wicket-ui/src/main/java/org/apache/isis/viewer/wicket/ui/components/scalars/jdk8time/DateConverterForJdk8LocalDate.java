@@ -29,7 +29,7 @@ import org.apache.wicket.util.convert.ConversionException;
  * string value to the date value, only a single pattern is used.
  */
 public class DateConverterForJdk8LocalDate extends DateConverterForJdk8Abstract<LocalDate> {
-    
+
     private static final long serialVersionUID = 1L;
 
     public DateConverterForJdk8LocalDate(WicketViewerSettings settings, int adjustBy) {
@@ -54,7 +54,7 @@ public class DateConverterForJdk8LocalDate extends DateConverterForJdk8Abstract<
             throw new ConversionException(String.format("Cannot convert '%s' into a date/time", value), ex);
         }
     }
-    
+
 
 
     @Override

@@ -73,7 +73,7 @@ public class IsisTransactionManager implements SessionScopedComponent {
         return persistenceSession;
     }
 
-    
+
 
 
     // -- open, close
@@ -92,7 +92,7 @@ public class IsisTransactionManager implements SessionScopedComponent {
         }
         session = null;
     }
-    
+
 
     // -- current transaction (if any)
     /**
@@ -106,14 +106,14 @@ public class IsisTransactionManager implements SessionScopedComponent {
         return transactionLevel;
     }
 
-    
+
 
 
     // -- Transactional Execution
     /**
      * Run the supplied {@link Runnable block of code (closure)} in a
      * {@link IsisTransaction transaction}.
-     * 
+     *
      * <p>
      * If a transaction is in progress, then
      * uses that. Otherwise will {@link #startTransaction() start} a transaction
@@ -203,7 +203,7 @@ public class IsisTransactionManager implements SessionScopedComponent {
         return getCurrentTransaction() != null && !getCurrentTransaction().getState().isComplete();
     }
 
-    
+
 
     // -- startTransaction
 
@@ -250,7 +250,7 @@ public class IsisTransactionManager implements SessionScopedComponent {
         }
     }
 
-    
+
 
     // -- flushTransaction
     public boolean flushTransaction() {
@@ -265,18 +265,18 @@ public class IsisTransactionManager implements SessionScopedComponent {
         return false;
     }
 
-    
+
 
     // -- endTransaction, abortTransaction
     /**
-     * Ends the transaction if nesting level is 0 (but will abort the transaction instead, 
+     * Ends the transaction if nesting level is 0 (but will abort the transaction instead,
      * even if nesting level is not 0, if an {@link IsisTransaction#getAbortCause() abort cause}
      * has been {@link IsisTransaction#setAbortCause(IsisException) set}.
-     * 
+     *
      * <p>
      * If in the process of committing the transaction an exception is thrown, then this will
      * be handled and will abort the transaction instead.
-     * 
+     *
      * <p>
      * If an abort cause has been set (or an exception occurs), then will throw this
      * exception in turn.
@@ -465,12 +465,12 @@ public class IsisTransactionManager implements SessionScopedComponent {
         }
     }
 
-    
+
 
     // -- addCommand
     public void addCommand(final PersistenceCommand command) {
         getCurrentTransaction().addCommand(command);
     }
-    
+
 
 }

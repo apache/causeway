@@ -62,7 +62,7 @@ public class ProxyCreator {
             return proxyFactory.createInstance(handler, false);
         }
     }
-    
+
     // -- HELPER
 
     private <T> ProxyFactory<T> proxyFactoryFor(final Class<T> toProxyClass) {
@@ -76,21 +76,21 @@ public class ProxyCreator {
 
     private <T> ProxyFactory<T> createProxyFactoryFor(final Class<T> toProxyClass) {
 
-    	final Class<?>[] interfaces = ArrayExtensions.combine(
+        final Class<?>[] interfaces = ArrayExtensions.combine(
                 toProxyClass.getInterfaces(),
-                new Class<?>[] { ProxyEnhanced.class, WrappingObject.class }); 
-    	
+                new Class<?>[] { ProxyEnhanced.class, WrappingObject.class });
+
         final ProxyFactory<T> proxyFactory = ProxyFactory.builder(toProxyClass)
-        		.interfaces(interfaces)
-        		.build();
+                .interfaces(interfaces)
+                .build();
 
         return proxyFactory;
     }
 
     @SuppressWarnings("unchecked")
     private static <T> T createInstanceForInterface(
-    		final Class<T> base, final InvocationHandler handler, final Class<?>... auxiliaryTypes) {
+            final Class<T> base, final InvocationHandler handler, final Class<?>... auxiliaryTypes) {
         return (T) Proxy.newProxyInstance(base.getClassLoader(), _Arrays.combine(base, auxiliaryTypes) , handler);
     }
-    
+
 }

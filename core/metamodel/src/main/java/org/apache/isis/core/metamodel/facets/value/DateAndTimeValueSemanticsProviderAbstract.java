@@ -88,6 +88,7 @@ public abstract class DateAndTimeValueSemanticsProviderAbstract<T> extends Value
         return "JavaDateTimeValueSemanticsProvider: " + format;
     }
 
+    @Override
     protected List<DateFormat> formatsToTry() {
         List<DateFormat> formats = new ArrayList<DateFormat>();
 

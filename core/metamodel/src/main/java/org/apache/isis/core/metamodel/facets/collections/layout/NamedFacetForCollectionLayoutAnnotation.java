@@ -32,18 +32,18 @@ public class NamedFacetForCollectionLayoutAnnotation extends NamedFacetAbstract 
     public static NamedFacet create(List<CollectionLayout> collectionLayouts, FacetHolder holder) {
 
         return collectionLayouts.stream()
-                    .filter(collectionLayout -> Strings.emptyToNull(collectionLayout.named()) != null)
-                    .findFirst()
-                    .map(collectionLayout ->
-                            new NamedFacetForCollectionLayoutAnnotation(
-                                    collectionLayout.named(), collectionLayout.namedEscaped(), holder))
-                    .orElse(null);
+                .filter(collectionLayout -> Strings.emptyToNull(collectionLayout.named()) != null)
+                .findFirst()
+                .map(collectionLayout ->
+                new NamedFacetForCollectionLayoutAnnotation(
+                        collectionLayout.named(), collectionLayout.namedEscaped(), holder))
+                .orElse(null);
     }
 
     private NamedFacetForCollectionLayoutAnnotation(
-        final String value,
-        final boolean escaped,
-        final FacetHolder holder) {
+            final String value,
+            final boolean escaped,
+            final FacetHolder holder) {
 
         super(value, escaped, holder);
     }

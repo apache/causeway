@@ -86,7 +86,7 @@ class JaxbUtil2 {
             final String resourceName,
             final Charset charset,
             final Class<T> dtoClass) throws IOException {
-        final String s = _Resource.loadAsString(contextClass, resourceName, charset); 
+        final String s = _Resource.loadAsString(contextClass, resourceName, charset);
         return fromXml(new StringReader(s), dtoClass);
     }
 

@@ -43,7 +43,7 @@ public class SwaggerSpecResource {
     @GET
     @Consumes({ MediaType.WILDCARD, MediaType.APPLICATION_JSON, "text/yaml" })
     @Produces({
-            MediaType.APPLICATION_JSON, "text/yaml"
+        MediaType.APPLICATION_JSON, "text/yaml"
     })
     public String swaggerPrivate() {
         return swagger(SwaggerService.Visibility.PRIVATE);
@@ -53,7 +53,7 @@ public class SwaggerSpecResource {
     @GET
     @Consumes({ MediaType.WILDCARD, MediaType.APPLICATION_JSON, "text/yaml" })
     @Produces({
-            MediaType.APPLICATION_JSON, "text/yaml"
+        MediaType.APPLICATION_JSON, "text/yaml"
     })
     public String swaggerPrototyping() {
         return swagger(SwaggerService.Visibility.PRIVATE_WITH_PROTOTYPING);
@@ -63,7 +63,7 @@ public class SwaggerSpecResource {
     @GET
     @Consumes({ MediaType.WILDCARD, MediaType.APPLICATION_JSON, "text/yaml" })
     @Produces({
-            MediaType.APPLICATION_JSON, "text/yaml"
+        MediaType.APPLICATION_JSON, "text/yaml"
     })
     public String swaggerPublic() {
         return swagger(SwaggerService.Visibility.PUBLIC);
@@ -86,7 +86,7 @@ public class SwaggerSpecResource {
         final MediaType textYaml = new MediaType("text", "yaml");
         for (MediaType acceptableMediaType : acceptableMediaTypes) {
             if (acceptableMediaType.isCompatible(applYaml) ||
-                acceptableMediaType.isCompatible(textYaml)) {
+                    acceptableMediaType.isCompatible(textYaml)) {
                 return SwaggerService.Format.YAML;
             }
         }

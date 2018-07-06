@@ -23,7 +23,7 @@ import java.lang.reflect.Method;
 
 /**
  * A {@link FacetFactory} which filters out arbitrary {@link Method method}s.
- * 
+ *
  * <p>
  * Used by Java5 Reflector's <tt>ProgrammingModel#recognizes(Method)</tt>.
  */

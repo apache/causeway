@@ -23,7 +23,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 public abstract class XmlTransientFacetAbstract
-        extends FacetAbstract implements XmlTransientFacet {
+extends FacetAbstract implements XmlTransientFacet {
 
     public static Class<XmlTransientFacet> type() {
         return XmlTransientFacet.class;

@@ -202,7 +202,7 @@ public class DomainResourceHelper {
         representationServiceContext = new RepresentationServiceContextAdapter(resourceContext, adapterLinkTo);
 
         adapterLinkTo.usingUrlBase(this.resourceContext)
-                     .with(this.objectAdapter);
+        .with(this.objectAdapter);
 
         representationService = lookupService(RepresentationService.class);
         transactionService = lookupService(TransactionService.class);

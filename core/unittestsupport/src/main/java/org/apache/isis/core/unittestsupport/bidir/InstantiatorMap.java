@@ -32,7 +32,7 @@ class InstantiatorMap  {
     }
 
     Instantiator put(Class<?> cls, Instantiator instantiator) {
-        
+
         if(instantiator != null) {
             // check it works instantiator
             try {
@@ -44,9 +44,9 @@ class InstantiatorMap  {
         } else {
             instantiator = Instantiator.NOOP;
         }
-        
+
         instantiatorMap.put(cls, instantiator);
-        
+
         return instantiator;
     }
 

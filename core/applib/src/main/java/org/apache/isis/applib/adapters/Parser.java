@@ -22,7 +22,7 @@ package org.apache.isis.applib.adapters;
 /**
  * Provides a mechanism for parsing and rendering string representations of
  * objects.
- * 
+ *
  * <p>
  * Specifically, this interface embodies three related capabilties:
  * <ul>
@@ -30,7 +30,7 @@ package org.apache.isis.applib.adapters;
  * <li>to provide a string representation of the object, for use as its title.
  * <li>to indicate the typical length of such a string representation.
  * </ul>
- * 
+ *
  * <p>
  * For custom-written (as opposed to third-party) value types, the ability for
  * the {@link Parser} to provide a title responsibilities overlap with other
@@ -39,18 +39,18 @@ package org.apache.isis.applib.adapters;
  * implementation of {@link Parser} would just delegate to the value type itself
  * to obtain the title (ie invoking the <tt>title()</tt> method directly rather
  * than having the framework do this).
- * 
+ *
  * <p>
  * Similarly, the ability to return a typical length also overlaps with the
  * {@link TypicalLength} annotation; which is why {@link TypicalLength} cannot
  * be applied to types, only to properties and parameters.
- * 
+ *
  * <p>
  * For third-party value types, eg {@see http://timeandmoney.sourceforge.net/
  * Time-and-Money} there is no ability to write <tt>title()</tt> methods or
  * annotated with {@link TypicalLength}; so this is the main reason that this
  * interface has to deal with titles and lengths.
- * 
+ *
  * <p>
  * This interface is used in two complementary ways:
  * <ul>
@@ -62,14 +62,14 @@ package org.apache.isis.applib.adapters;
  * <li>Alternatively, an implementor of this interface can be nominated in the
  * {@link org.apache.isis.applib.annotation.Parseable} annotation, allowing a
  * class that needs to be parseable to indicate how it can be parsed.</li>
- * 
+ *
  * <p>
  * Whatever the class that implements this interface, it must also expose either
  * a <tt>public</tt> no-arg constructor, or (for implementations that also are
  * <tt>Facet</tt>s) a <tt>public</tt> constructor that accepts a single
  * <tt>FacetHolder</tt>. This constructor allows the framework to instantiate
  * the object reflectively.
- * 
+ *
  * @see DefaultsProvider
  * @see EncoderDecoder
  * @see ValueSemanticsProvider
@@ -78,7 +78,7 @@ public interface Parser<T> {
 
     /**
      * Parses a string to an instance of the object.
-     * 
+     *
      * <p>
      * Note that here the implementing class is acting as a factory for itself.
      * @param contextPojo

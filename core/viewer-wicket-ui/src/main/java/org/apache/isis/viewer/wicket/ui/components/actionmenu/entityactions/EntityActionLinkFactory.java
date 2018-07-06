@@ -47,7 +47,7 @@ public final class EntityActionLinkFactory extends ActionLinkFactoryAbstract {
             final ToggledMementosProvider toggledMementosProviderIfAny) {
 
         final ObjectAdapter objectAdapter = this.targetEntityModel.load(ConcurrencyChecking.NO_CHECK);
-        
+
         final Boolean persistent = objectAdapter.representsPersistent();
         if (!persistent) {
             throw new IllegalArgumentException(String.format(
@@ -66,7 +66,7 @@ public final class EntityActionLinkFactory extends ActionLinkFactoryAbstract {
         //     return null;
         // }
 
-        
+
         final AbstractLink link = newLink(linkId, objectAction, toggledMementosProviderIfAny);
 
         // similarly for whether disabled, done at point of rendering

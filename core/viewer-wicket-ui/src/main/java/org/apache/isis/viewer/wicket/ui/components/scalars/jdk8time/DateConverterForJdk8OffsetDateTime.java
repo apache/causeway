@@ -30,63 +30,63 @@ import org.apache.wicket.util.convert.ConversionException;
 
 public class DateConverterForJdk8OffsetDateTime extends DateConverterForJdk8Abstract<OffsetDateTime> {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public DateConverterForJdk8OffsetDateTime(WicketViewerSettings settings, int adjustBy) {
-		super(OffsetDateTime.class, settings.getDatePattern(), settings.getDateTimePattern(), adjustBy);
-	}
+    public DateConverterForJdk8OffsetDateTime(WicketViewerSettings settings, int adjustBy) {
+        super(OffsetDateTime.class, settings.getDatePattern(), settings.getDateTimePattern(), adjustBy);
+    }
 
-	@Override
-	protected OffsetDateTime minusDays(OffsetDateTime value, int adjustBy) {
-		return value.minusDays(adjustBy);
-	}
+    @Override
+    protected OffsetDateTime minusDays(OffsetDateTime value, int adjustBy) {
+        return value.minusDays(adjustBy);
+    }
 
-	@Override
-	protected OffsetDateTime plusDays(OffsetDateTime value, int adjustBy) {
-		return value.plusDays(adjustBy);
-	}
+    @Override
+    protected OffsetDateTime plusDays(OffsetDateTime value, int adjustBy) {
+        return value.plusDays(adjustBy);
+    }
 
-	@Override
-	protected OffsetDateTime convert(String value) throws ConversionException {
+    @Override
+    protected OffsetDateTime convert(String value) throws ConversionException {
 
-		return OffsetDateTime.of(
-				convertToLocal(value),
-				defaultOffset()
-				);
+        return OffsetDateTime.of(
+                convertToLocal(value),
+                defaultOffset()
+                );
 
-	}
+    }
 
-	@Override
-	protected String toString(OffsetDateTime value, DateTimeFormatter dateTimeFormatter) {
-		return value.format(dateTimeFormatter);
-	}
+    @Override
+    protected String toString(OffsetDateTime value, DateTimeFormatter dateTimeFormatter) {
+        return value.format(dateTimeFormatter);
+    }
 
-	// -- HELPER
+    // -- HELPER
 
-	private LocalDateTime convertToLocal(String value) throws ConversionException {
-		try {
-			return getFormatterForDateTimePattern8().parse(value, LocalDateTime::from);
-		} catch(Exception ex) {
+    private LocalDateTime convertToLocal(String value) throws ConversionException {
+        try {
+            return getFormatterForDateTimePattern8().parse(value, LocalDateTime::from);
+        } catch(Exception ex) {
 
-			try {
+            try {
 
-				return LocalDateTime.of(
-						getFormatterForDatePattern8().parse(value, LocalDate::from),
-						LocalTime.of(0, 0)	);
+                return LocalDateTime.of(
+                        getFormatterForDatePattern8().parse(value, LocalDate::from),
+                        LocalTime.of(0, 0)	);
 
-			} catch(Exception ex2) {
+            } catch(Exception ex2) {
 
-				throw new ConversionException(
-						String.format(
-								"Cannot convert '%s' into a date/time using pattern '%s' or '%s'", 
-								value, dateTimePattern, datePattern), 
-						ex2	);
-			}
-		}
-	}
+                throw new ConversionException(
+                        String.format(
+                                "Cannot convert '%s' into a date/time using pattern '%s' or '%s'",
+                                value, dateTimePattern, datePattern),
+                        ex2	);
+            }
+        }
+    }
 
-	private ZoneOffset defaultOffset() {
-		return OffsetDateTime.now().getOffset();
+    private ZoneOffset defaultOffset() {
+        return OffsetDateTime.now().getOffset();
 
-	}
+    }
 }

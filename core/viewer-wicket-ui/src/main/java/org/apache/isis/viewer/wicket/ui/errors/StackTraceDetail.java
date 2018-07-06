@@ -21,7 +21,7 @@ package org.apache.isis.viewer.wicket.ui.errors;
 import java.io.Serializable;
 
 public class StackTraceDetail implements Serializable {
-    
+
     private static final long serialVersionUID = 1L;
 
     public static StackTraceDetail exceptionClassName(Throwable cause) {
@@ -35,15 +35,15 @@ public class StackTraceDetail implements Serializable {
     public static StackTraceDetail element(StackTraceElement el) {
         StringBuilder buf = new StringBuilder();
         buf .append("    ")
-            .append(el.getClassName())
-            .append("#")
-            .append(el.getMethodName())
-            .append("(")
-            .append(el.getFileName())
-            .append(":")
-            .append(el.getLineNumber())
-            .append(")\n")
-            ;
+        .append(el.getClassName())
+        .append("#")
+        .append(el.getMethodName())
+        .append("(")
+        .append(el.getFileName())
+        .append(":")
+        .append(el.getLineNumber())
+        .append(")\n")
+        ;
         return new StackTraceDetail(StackTraceDetail.Type.STACKTRACE_ELEMENT, buf.toString());
     }
 
@@ -63,7 +63,7 @@ public class StackTraceDetail implements Serializable {
     }
     private final Type type;
     private final String line;
-    
+
     public StackTraceDetail(Type type, String line) {
         this.type = type;
         this.line = line;

@@ -32,16 +32,16 @@ import com.google.common.collect.Lists;
 
 @XmlRootElement(
         name = "exceptionDetail"
-)
+        )
 @XmlType(
         name = "exceptionDetail"
         , propOrder = {
-            "className",
-            "message",
-            "stackTrace",
-            "causedBy"
+                "className",
+                "message",
+                "stackTrace",
+                "causedBy"
         }
-)
+        )
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ExceptionDetail {
 

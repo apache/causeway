@@ -23,7 +23,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 
 /**
  * Represents an instance of some element of the meta-model.
- * 
+ *
  * <p>
  * Currently the only sub-interface is {@link ObjectAdapter}. However, the
  * intention is for associations, actions and action parameters to also inherit

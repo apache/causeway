@@ -28,12 +28,12 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorCom
 /**
  * Provides the ability for components to inform/alter/adjust/refine the metamodel;
  * specifically, the {@link MetaModelValidator}.
- * 
+ *
  * @see MetaModelRefiner
  */
 public interface MetaModelValidatorRefiner {
 
     @Programmatic
     void refineMetaModelValidator(MetaModelValidatorComposite metaModelValidator, IsisConfiguration configuration);
-    
+
 }

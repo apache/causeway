@@ -61,8 +61,8 @@ public class ObjectAdapterAccessHelper {
     public OneToOneAssociation getPropertyThatIsVisibleForIntent(
             final String propertyId, final Intent intent) {
 
-    	//[ahuber] unused, any side-effects?
-        final Where where = rendererContext.getWhere();  
+        //[ahuber] unused, any side-effects?
+        final Where where = rendererContext.getWhere();
 
         final ObjectAssociation association;
         try {
@@ -83,10 +83,10 @@ public class ObjectAdapterAccessHelper {
 
     public OneToManyAssociation getCollectionThatIsVisibleForIntent(
             final String collectionId, final Intent intent) {
-    	
-    	//[ahuber] unused, any side-effects?
+
+        //[ahuber] unused, any side-effects?
         final Where where = rendererContext.getWhere();
-        
+
         final ObjectAssociation association;
         try {
             final ObjectSpecification specification = objectAdapter.getSpecification();
@@ -105,7 +105,7 @@ public class ObjectAdapterAccessHelper {
     public ObjectAction getObjectActionThatIsVisibleForIntent(
             final String actionId, final Intent intent) {
 
-    	//[ahuber] unused, any side-effects?
+        //[ahuber] unused, any side-effects?
         final Where where = rendererContext.getWhere();
 
         final ObjectAction action;
@@ -136,7 +136,7 @@ public class ObjectAdapterAccessHelper {
         if (intent.isMutate()) {
             final Consent usabilityConsent = objectMember.isUsable(
                     objectAdapter, InteractionInitiatedBy.USER, where
-            );
+                    );
             if (usabilityConsent.isVetoed()) {
                 throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.FORBIDDEN,
                         usabilityConsent.getReason());

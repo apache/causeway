@@ -27,16 +27,16 @@ import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public class ActionInvocationFacetForDomainEventFromActionAnnotation
-        extends ActionInvocationFacetForDomainEventAbstract {
+extends ActionInvocationFacetForDomainEventAbstract {
 
     public ActionInvocationFacetForDomainEventFromActionAnnotation(
             final Class<? extends ActionDomainEvent<?>> eventType,
-            final Method method,
-            final ObjectSpecification onType,
-            final ObjectSpecification returnType,
-            final FacetHolder holder,
-            final ServicesInjector servicesInjector) {
+                    final Method method,
+                    final ObjectSpecification onType,
+                    final ObjectSpecification returnType,
+                    final FacetHolder holder,
+                    final ServicesInjector servicesInjector) {
         super(eventType, method, onType, returnType, holder, servicesInjector
-        );
+                );
     }
 }

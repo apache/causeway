@@ -45,16 +45,16 @@ import com.google.common.collect.Lists;
  */
 public class TertiaryActionsPanel extends Panel {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public TertiaryActionsPanel(String id, List<CssMenuItem> menuItems) {
+    public TertiaryActionsPanel(String id, List<CssMenuItem> menuItems) {
         super(id);
         addLogoutLink(this);
         final List<CssMenuItem> subMenuItems = flatten(menuItems);
         final ListView<CssMenuItem> subMenuItemsView = new ListView<CssMenuItem>("subMenuItems", subMenuItems) {
-			private static final long serialVersionUID = 1L;
+            private static final long serialVersionUID = 1L;
 
-			@Override
+            @Override
             protected void populateItem(ListItem<CssMenuItem> listItem) {
                 CssMenuItem subMenuItem = listItem.getModelObject();
                 if (subMenuItem.hasSubMenuItems()) {
@@ -66,9 +66,9 @@ public class TertiaryActionsPanel extends Panel {
         };
 
         WebComponent divider = new WebComponent("divider") {
-			private static final long serialVersionUID = 1L;
+            private static final long serialVersionUID = 1L;
 
-			@Override
+            @Override
             protected void onConfigure() {
                 super.onConfigure();
 
@@ -91,9 +91,9 @@ public class TertiaryActionsPanel extends Panel {
     private void addLogoutLink(MarkupContainer themeDiv) {
         Link<Void> logoutLink = new Link<Void>("logoutLink") {
 
-			private static final long serialVersionUID = 1L;
+            private static final long serialVersionUID = 1L;
 
-			@Override
+            @Override
             public void onClick() {
                 getSession().invalidate();
                 setResponsePage(getSignInPage());

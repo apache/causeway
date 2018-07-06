@@ -33,7 +33,7 @@ import org.apache.isis.viewer.wicket.ui.panels.PromptFormPanelAbstract;
  * </p>
  */
 public class PropertyEditFormPanel
-        extends PromptFormPanelAbstract<ScalarModel> {
+extends PromptFormPanelAbstract<ScalarModel> {
 
     private static final long serialVersionUID = 1L;
 

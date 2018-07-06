@@ -25,7 +25,7 @@ import org.apache.isis.schema.cmd.v1.PropertyDto;
  * Convenience adapter for command processors for property edits.
  */
 public abstract class CommandDtoProcessorForPropertyAbstract
-        implements CommandDtoProcessor {
+implements CommandDtoProcessor {
     protected CommandDto asDto(final CommandWithDto commandWithDto) {
         return commandWithDto.asDto();
     }

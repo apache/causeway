@@ -28,7 +28,7 @@ public abstract class SimpleFixtureScript extends FixtureScript {
     }
 
     /**
-     * Initializes a {@link Discoverability#NON_DISCOVERABLE} fixture, with 
+     * Initializes a {@link Discoverability#NON_DISCOVERABLE} fixture, with
      * {@link #getFriendlyName()} and {@link #getLocalName()} derived from the class name.
      *
      * <p>

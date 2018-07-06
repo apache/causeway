@@ -43,11 +43,12 @@ import org.apache.isis.commons.internal.base._Strings;
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
-)
+        )
 public class ExceptionRecognizerCompositeForJdoObjectStore extends ExceptionRecognizerComposite {
 
     public static final String KEY_DISABLE = "isis.services.ExceptionRecognizerCompositeForJdoObjectStore.disable";
 
+    @Override
     @Programmatic
     @PostConstruct
     public void init(Map<String,String> properties) {

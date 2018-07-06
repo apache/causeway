@@ -35,28 +35,28 @@ public class JUnitRuleMockery2Test_mockAnnotatedWithChecking {
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
     public static class ExpectCall extends ExpectationsOn<Collaborator> {
-    	public ExpectCall(Object mock) {
-			super(mock);
-		}
-	{
-    	oneOf(mock()).doOtherStuff();
-    }}
+        public ExpectCall(Object mock) {
+            super(mock);
+        }
+        {
+            oneOf(mock()).doOtherStuff();
+        }}
 
     @Checking(ExpectCall.class)
     @Mock
     private Collaborator collaborator;
 
     @ClassUnderTest
-	private CollaboratingUsingConstructorInjection collaborating;
+    private CollaboratingUsingConstructorInjection collaborating;
 
     // no longer necessary :-)
-//    @Before
-//	public void setUp() throws Exception {
-//    	collaborating = (CollaboratingUsingConstructorInjection) context.getClassUnderTest();
-//	}
-    
+    //    @Before
+    //	public void setUp() throws Exception {
+    //    	collaborating = (CollaboratingUsingConstructorInjection) context.getClassUnderTest();
+    //	}
+
     @Test
     public void invocationOnCollaboratorIsIgnored() {
-    	collaborating.collaborateWithCollaborator();
+        collaborating.collaborateWithCollaborator();
     }
 }

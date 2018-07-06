@@ -19,6 +19,6 @@ package org.apache.isis.viewer.wicket.model.hints;
 public interface HasUiHintDisambiguator {
 
     String getHintDisambiguator();
-    
+
 
 }

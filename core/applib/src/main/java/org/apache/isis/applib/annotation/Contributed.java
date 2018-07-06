@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlType(
         namespace = "http://isis.apache.org/applib/layout/component"
-)
+        )
 public enum Contributed {
     /**
      * Default: contributed as both an action and also (if takes a single argument and has safe semantics) as an association

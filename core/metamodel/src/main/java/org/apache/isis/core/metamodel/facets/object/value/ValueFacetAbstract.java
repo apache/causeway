@@ -95,7 +95,7 @@ public abstract class ValueFacetAbstract extends MultipleValueFacetAbstract impl
         // facets themselves reference this value's holder.
 
         facetHolder.addFacet((Facet) this); // add just ValueFacet.class
-                                            // initially.
+        // initially.
 
         // we used to add aggregated here, but this was wrong.
         // An immutable value is not aggregated, it is shared.

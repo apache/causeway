@@ -36,21 +36,21 @@ import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
  * @since 2.0.0
  */
 class ForkingInvocationHandler<T> implements InvocationHandler {
-	
-	private final T target;
-	private final Object mixedInIfAny;
-	private final ExecutorService backgroundExecutorService;
 
-	ForkingInvocationHandler(
-			T target,
-			Object mixedInIfAny,
-			ExecutorService backgroundExecutorService ) {
-		this.target = requires(target, "target");
-		this.mixedInIfAny = mixedInIfAny;
-		this.backgroundExecutorService = requires(backgroundExecutorService, "backgroundExecutorService");
-	}
+    private final T target;
+    private final Object mixedInIfAny;
+    private final ExecutorService backgroundExecutorService;
 
-	@Override
+    ForkingInvocationHandler(
+            T target,
+            Object mixedInIfAny,
+            ExecutorService backgroundExecutorService ) {
+        this.target = requires(target, "target");
+        this.mixedInIfAny = mixedInIfAny;
+        this.backgroundExecutorService = requires(backgroundExecutorService, "backgroundExecutorService");
+    }
+
+    @Override
     public Object invoke(
             final Object proxied,
             final Method proxyMethod,
@@ -67,37 +67,37 @@ class ForkingInvocationHandler<T> implements InvocationHandler {
         } else {
             domainObject = mixedInIfAny;
         }
-        
+
         final Optional<IsisSession> currentSession = Optional.ofNullable(IsisContext.getSessionFactory())
-    		.map(IsisSessionFactory::getCurrentSession);
-        
+                .map(IsisSessionFactory::getCurrentSession);
+
         final AuthenticationSession authSession = currentSession
-			.map(IsisSession::getAuthenticationSession)
-			.orElse(new InitialisationSession());
-        
+                .map(IsisSession::getAuthenticationSession)
+                .orElse(new InitialisationSession());
+
         final CountDownLatch countDownLatch = currentSession
-    		.map(IsisSession::getCurrentTransaction)
-    		.map(IsisTransaction::countDownLatch)
-    		.orElse(new CountDownLatch(0));
-        
+                .map(IsisSession::getCurrentTransaction)
+                .map(IsisTransaction::countDownLatch)
+                .orElse(new CountDownLatch(0));
+
         backgroundExecutorService.submit(()->{
-        	
-        	try {
-        		countDownLatch.await(); // wait for current transaction of the calling thread to complete
-        		
-        		IsisContext.getSessionFactory().doInSession(
-        			()->proxyMethod.invoke(domainObject, args), 
-        			authSession	);
-        		
-        	} catch (Exception e) {
-        		// log in caller's context        		
-        		BackgroundServiceDefault.LOG.error(
-        				String.format("Background execution of action '%s' on object '%s' failed.", 
-        						proxyMethod.getName(),
-        						domainObject.getClass().getName()),
-        				e);
-			}
-    	}); 
+
+            try {
+                countDownLatch.await(); // wait for current transaction of the calling thread to complete
+
+                IsisContext.getSessionFactory().doInSession(
+                        ()->proxyMethod.invoke(domainObject, args),
+                        authSession	);
+
+            } catch (Exception e) {
+                // log in caller's context
+                BackgroundServiceDefault.LOG.error(
+                        String.format("Background execution of action '%s' on object '%s' failed.",
+                                proxyMethod.getName(),
+                                domainObject.getClass().getName()),
+                        e);
+            }
+        });
 
         return null;
     }

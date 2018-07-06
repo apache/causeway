@@ -98,7 +98,7 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
             final LinkBuilder valueLinkBuilder = DomainObjectReprRenderer.newLinkToBuilder(rendererContext, Rel.VALUE, elementAdapter);
             if(eagerlyRender) {
                 final DomainObjectReprRenderer renderer = new DomainObjectReprRenderer(getRendererContext(), followHref, JsonRepresentation.newMap()
-                );
+                        );
                 renderer.with(elementAdapter);
                 if(mode.isEventSerialization()) {
                     renderer.asEventSerialization();

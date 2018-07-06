@@ -33,50 +33,50 @@ import java.util.stream.Collector;
 import org.apache.isis.commons.internal.base._Casts;
 
 /**
- * 
+ *
  * package private mixin for utility class {@link _Arrays}
- * 
+ *
  * Collector for Arrays.
  *
  */
 class _Arrays_CollectorUnknownSize<T> implements Collector<T, List<T>, T[]> {
-	
-	private final Class<T> componentType;
-	
-	_Arrays_CollectorUnknownSize(Class<T> componentType) {
-		this.componentType = componentType;
-	}
 
-	@Override
-	public Supplier<List<T>> supplier() {
-		return ArrayList::new;
-	}
+    private final Class<T> componentType;
 
-	@Override
-	public BiConsumer<List<T>, T> accumulator() {
-		return List::add;
-	}
+    _Arrays_CollectorUnknownSize(Class<T> componentType) {
+        this.componentType = componentType;
+    }
 
-	@Override
-	public BinaryOperator<List<T>> combiner() {
-		return (left, right) -> { left.addAll(right); return left; };
-	}
+    @Override
+    public Supplier<List<T>> supplier() {
+        return ArrayList::new;
+    }
 
-	@Override
-	public Function<List<T>, T[]> finisher() {
-		final T[] arg = _Casts.uncheckedCast(Array.newInstance(componentType, 0));
-		return list->list.toArray(arg);
-	}
+    @Override
+    public BiConsumer<List<T>, T> accumulator() {
+        return List::add;
+    }
 
-	@Override
-	public Set<Characteristics> characteristics() {
-		return Collections.emptySet();
-	}
-	
-	
+    @Override
+    public BinaryOperator<List<T>> combiner() {
+        return (left, right) -> { left.addAll(right); return left; };
+    }
+
+    @Override
+    public Function<List<T>, T[]> finisher() {
+        final T[] arg = _Casts.uncheckedCast(Array.newInstance(componentType, 0));
+        return list->list.toArray(arg);
+    }
+
+    @Override
+    public Set<Characteristics> characteristics() {
+        return Collections.emptySet();
+    }
+
+
 }
 
 
-	
-	
+
+
 

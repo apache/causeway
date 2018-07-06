@@ -21,7 +21,7 @@ package org.apache.isis.core.commons.lang;
 import com.google.common.base.Predicate;
 
 public final class ClassPredicates {
-    
+
     private ClassPredicates(){}
 
     public static final <T> Predicate<Object> isOfType(final Class<T> type) {

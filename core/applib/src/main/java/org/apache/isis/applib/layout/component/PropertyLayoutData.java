@@ -40,7 +40,7 @@ import org.apache.isis.commons.internal.collections._Lists;
  */
 @XmlRootElement(
         name = "property"
-)
+        )
 @XmlType(
         name = "property"
         , propOrder = {
@@ -50,12 +50,12 @@ import org.apache.isis.commons.internal.collections._Lists;
                 , "metadataError"
                 , "link"
         }
-)
+        )
 public class PropertyLayoutData
-        implements ActionLayoutDataOwner,
-                   Serializable,
-                   Owned<FieldSet>,
-                   HasCssClass, HasDescribedAs, HasHidden, HasNamed  {
+implements ActionLayoutDataOwner,
+Serializable,
+Owned<FieldSet>,
+HasCssClass, HasDescribedAs, HasHidden, HasNamed  {
 
     private static final long serialVersionUID = 1L;
 
@@ -255,11 +255,13 @@ public class PropertyLayoutData
     private List<ActionLayoutData> actions = _Lists.newArrayList();
 
     // no wrapper
+    @Override
     @XmlElement(name = "action", required = false)
     public List<ActionLayoutData> getActions() {
         return actions;
     }
 
+    @Override
     public void setActions(List<ActionLayoutData> actionLayoutDatas) {
         this.actions = actionLayoutDatas;
     }
@@ -273,6 +275,7 @@ public class PropertyLayoutData
      *     Set programmatically by framework after reading in from XML.
      * </p>
      */
+    @Override
     @XmlTransient
     public FieldSet getOwner() {
         return owner;

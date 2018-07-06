@@ -72,7 +72,7 @@ public interface RepositoryService {
      */
     @Programmatic
     <T> T persist(T domainObject);
-    
+
     /**
      * Persist the specified object (or do nothing if already persistent) and flushes changes to the database.
      *
@@ -145,7 +145,7 @@ public interface RepositoryService {
      */
     @Programmatic
     <T> List<T> allMatches(final Class<T> ofType, final Predicate<? super T> predicate, long... range);
-    
+
     /**
      * Returns all the instances that match the given {@link Query}.
      *
@@ -179,7 +179,7 @@ public interface RepositoryService {
      */
     @Programmatic
     <T> T uniqueMatch(final Class<T> ofType, final Predicate<T> predicate);
-    
+
     /**
      * Find the only instance that matches the provided query.
      *

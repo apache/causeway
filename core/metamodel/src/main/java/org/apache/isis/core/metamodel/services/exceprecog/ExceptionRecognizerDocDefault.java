@@ -37,9 +37,9 @@ import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
-)
+        )
 public class ExceptionRecognizerDocDefault
-        implements ExceptionRecognizer {
+implements ExceptionRecognizer {
 
 
     // -- init, shutdown
@@ -59,16 +59,16 @@ public class ExceptionRecognizerDocDefault
         recognizer.shutdown();
     }
 
-    
+
 
     static class ExceptionRecognizerForConcurrencyException
-            extends ExceptionRecognizerForType {
+    extends ExceptionRecognizerForType {
         public ExceptionRecognizerForConcurrencyException() {
             super(Category.CONCURRENCY, ConcurrencyException.class, prefix("Another user has just changed this data"));
         }
     }
-    static class ExceptionRecognizerForRecoverableException 
-    	extends ExceptionRecognizerForType {
+    static class ExceptionRecognizerForRecoverableException
+    extends ExceptionRecognizerForType {
         public ExceptionRecognizerForRecoverableException() {
             super(Category.CLIENT_ERROR, RecoverableException.class);
         }
@@ -79,7 +79,7 @@ public class ExceptionRecognizerDocDefault
             new ExceptionRecognizerComposite(
                     new ExceptionRecognizerForConcurrencyException(),
                     new ExceptionRecognizerForRecoverableException()
-            );
+                    );
 
     /**
      * Framework-provided implementation of {@link ExceptionRecognizer},

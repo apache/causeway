@@ -91,6 +91,7 @@ public class CollectionSelectorPanel extends PanelAbstract<EntityCollectionModel
     /**
      * Build UI only after added to parent.
      */
+    @Override
     public void onInitialize() {
         super.onInitialize();
         addDropdown();
@@ -151,7 +152,7 @@ public class CollectionSelectorPanel extends PanelAbstract<EntityCollectionModel
                             final EntityModel entityModel = entityCollectionModel.getEntityModel();
                             return entityModel != null
                                     ? entityModel.getObjectAdapterMemento().asHintingBookmark()
-                                    : null;
+                                            : null;
                         }
 
                         @Override

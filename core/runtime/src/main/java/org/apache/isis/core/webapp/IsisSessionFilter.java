@@ -68,11 +68,11 @@ public class IsisSessionFilter implements Filter {
      * assume 'restricted' handling.
      */
     public static final String LOGON_PAGE_KEY = "logonPage";
-    
-    
+
+
     /**
      * Init parameter key for what should be done if no session was found.
-     * 
+     *
      * <p>
      * Valid values are:
      * <ul>
@@ -96,7 +96,7 @@ public class IsisSessionFilter implements Filter {
     /**
      * Init parameter key to read the restricted list of paths (if
      * {@link #WHEN_NO_SESSION_KEY} is for {@link WhenNoSession#RESTRICTED}).
-     * 
+     *
      * <p>
      * The servlets mapped to these paths are expected to be able to deal with
      * there being no session. Typically they will be logon pages.
@@ -111,12 +111,12 @@ public class IsisSessionFilter implements Filter {
     /**
      * Init parameter key for which extensions should be ignored (typically,
      * mappings for other viewers within the webapp context).
-     * 
+     *
      * <p>
      * It can also be used to specify ignored static resources (though putting
      * the {@link ResourceCachingFilter} first in the <tt>web.xml</tt>
      * accomplishes the same thing).
-     * 
+     *
      * <p>
      * The value is expected as a comma separated list.
      */
@@ -251,7 +251,7 @@ public class IsisSessionFilter implements Filter {
             if (whenNoSessionStr != null) {
                 throw new IllegalStateException(String.format(
                         "The init-param '%s' is only provided for backwards compatibility; "
-                        + "remove if the init-param '%s' has been specified", LOGON_PAGE_KEY, WHEN_NO_SESSION_KEY));
+                                + "remove if the init-param '%s' has been specified", LOGON_PAGE_KEY, WHEN_NO_SESSION_KEY));
             } else {
                 // default whenNotAuthenticated and allow access through to the logonPage
                 whenNotAuthenticated = WhenNoSession.RESTRICTED;
@@ -293,7 +293,7 @@ public class IsisSessionFilter implements Filter {
         }
         return Lists.newArrayList();
     }
-    
+
 
     @Override
     public void destroy() {
@@ -321,7 +321,7 @@ public class IsisSessionFilter implements Filter {
             }
 
             if (requestIsIgnoreExtension(this, httpServletRequest) ||
-                ResourceCachingFilter.isCachedResource(httpServletRequest)) {
+                    ResourceCachingFilter.isCachedResource(httpServletRequest)) {
                 chain.doFilter(request, response);
                 return;
             }

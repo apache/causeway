@@ -51,7 +51,7 @@ public class AuditableFacetForDomainObjectAnnotation extends AuditableFacetAbstr
                     case NOT_SPECIFIED:
                         return new AuditableFacetForDomainObjectAnnotationAsConfigured(holder);
                     default:
-                    	throw _Exceptions.unmatchedCase(domainObject.auditing());
+                        throw _Exceptions.unmatchedCase(domainObject.auditing());
                     }
                 })
                 .orElse(new AuditableFacetFromConfiguration(holder));

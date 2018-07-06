@@ -26,8 +26,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 
 public abstract class DomainServiceFacetAbstract
-            extends FacetAbstract
-            implements DomainServiceFacet {
+extends FacetAbstract
+implements DomainServiceFacet {
 
     public static Class<? extends Facet> type() {
         return DomainServiceFacet.class;
@@ -45,10 +45,12 @@ public abstract class DomainServiceFacetAbstract
         this.natureOfService = natureOfService;
     }
 
+    @Override
     public Class<?> getRepositoryFor() {
         return repositoryFor;
     }
 
+    @Override
     public NatureOfService getNatureOfService() {
         return natureOfService;
     }

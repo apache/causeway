@@ -37,7 +37,7 @@ public class PermissionToRoleMapperFromIni implements PermissionToRoleMapper {
     public PermissionToRoleMapperFromIni(Ini ini) {
         Map<String,String> section = ini.getSection(IniRealm.ROLES_SECTION_NAME);
         this.permissionsByRole = Maps.transformEntries(section, new EntryTransformer<String,String,List<String>>() {
-            
+
             @Override
             public List<String> transformEntry(String key, String value) {
                 return Lists.newArrayList(PermissionUtils.toPermissionStrings(value));

@@ -44,7 +44,7 @@ public class ObjectSpecIdFacetForDomainObjectAnnotation extends ObjectSpecIdFace
     }
 
     private ObjectSpecIdFacetForDomainObjectAnnotation(final String value,
-                                                      final FacetHolder holder) {
+            final FacetHolder holder) {
         super(value, holder);
     }
 }

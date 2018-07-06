@@ -36,7 +36,7 @@ public final class Files {
     }
 
     /**
-     * 
+     *
      * @param directoryName
      *            directory to start deleting from
      * @param filePrefix

@@ -57,25 +57,25 @@ import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 @AuthorizeInstantiation("org.apache.isis.viewer.wicket.roles.USER")
 public class EntityPage extends PageAbstract {
 
-	private static final long serialVersionUID = 144368606134796079L;
-	private static final CssResourceReference WHERE_AM_I_CSS = 
-			new CssResourceReference(EntityPage.class, "EntityPage.css");
+    private static final long serialVersionUID = 144368606134796079L;
+    private static final CssResourceReference WHERE_AM_I_CSS =
+            new CssResourceReference(EntityPage.class, "EntityPage.css");
 
     private final EntityModel model;
     private final String titleString;
 
     /**
-     * Called reflectively, in support of 
+     * Called reflectively, in support of
      * {@link BookmarkablePageLink bookmarkable} links.
      */
     public EntityPage(final PageParameters pageParameters) {
         this(pageParameters, createEntityModel(pageParameters));
     }
-    
+
     @Override
     public void renderHead(IHeaderResponse response) {
-    	super.renderHead(response);
-    	response.render(CssHeaderItem.forReference(WHERE_AM_I_CSS));
+        super.renderHead(response);
+        response.render(CssHeaderItem.forReference(WHERE_AM_I_CSS));
     }
 
     /**
@@ -194,7 +194,7 @@ public class EntityPage extends PageAbstract {
         themeDiv.addOrReplace(entityPageContainer);
 
         addWhereAmIIfShown(entityPageContainer, WhereAmIModel.of(model));
-        
+
         addChildComponents(entityPageContainer, model);
 
         // bookmarks and breadcrumbs
@@ -202,37 +202,37 @@ public class EntityPage extends PageAbstract {
         addBreadcrumbIfShown(model);
 
         addBookmarkedPages(entityPageContainer);
-        
-        
+
+
     }
 
     protected DeploymentCategory getDeploymentCategory() {
         return getIsisSessionFactory().getDeploymentCategory();
     }
-    
+
     protected void addWhereAmIIfShown(
-    		WebMarkupContainer entityPageContainer, 
-    		WhereAmIModel whereAmIModel) 
+            WebMarkupContainer entityPageContainer,
+            WhereAmIModel whereAmIModel)
     {
-    	
-    	final WebMarkupContainer whereAmIContainer = 
-    			new WebMarkupContainer("whereAmI-container");
-    	entityPageContainer.addOrReplace(whereAmIContainer);
-    	
-    	if(!whereAmIModel.isShowWhereAmI()) {
-    		whereAmIContainer.setVisible(false);
-    		return;
-    	}
-    	
-    	final RepeatingView listItems = new RepeatingView("whereAmI-items");
-    	
-    	whereAmIModel.streamParentChainReversed().forEach(entityModel->
-    		listItems.add(new EntityIconAndTitlePanel(listItems.newChildId(), entityModel))	
-		);
-    	
-    	listItems.add(new Label(listItems.newChildId(), whereAmIModel.getStartOfChain().getTitle()));
-    	
-    	whereAmIContainer.addOrReplace(listItems);
-    	
-	}
+
+        final WebMarkupContainer whereAmIContainer =
+                new WebMarkupContainer("whereAmI-container");
+        entityPageContainer.addOrReplace(whereAmIContainer);
+
+        if(!whereAmIModel.isShowWhereAmI()) {
+            whereAmIContainer.setVisible(false);
+            return;
+        }
+
+        final RepeatingView listItems = new RepeatingView("whereAmI-items");
+
+        whereAmIModel.streamParentChainReversed().forEach(entityModel->
+        listItems.add(new EntityIconAndTitlePanel(listItems.newChildId(), entityModel))
+                );
+
+        listItems.add(new Label(listItems.newChildId(), whereAmIModel.getStartOfChain().getTitle()));
+
+        whereAmIContainer.addOrReplace(listItems);
+
+    }
 }

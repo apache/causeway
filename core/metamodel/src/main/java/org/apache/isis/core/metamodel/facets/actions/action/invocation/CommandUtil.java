@@ -80,7 +80,7 @@ public class CommandUtil {
         final Oid oid = adapter.getOid();
         if(!(oid instanceof RootOid)) {
             return null;
-        } 
+        }
         final RootOid rootOid = (RootOid) oid;
         return rootOid.asBookmark();
     }
@@ -102,9 +102,9 @@ public class CommandUtil {
     }
 
     public static ObjectAdapter[] adaptersFor(final Object[] args, final AdapterManager adapterManager) {
-    	return _NullSafe.stream(args)
-	    	.map(ObjectAdapter.Functions.adapterForUsing(adapterManager))
-	    	.collect(_Arrays.toArray(ObjectAdapter.class, _NullSafe.size(args)));
+        return _NullSafe.stream(args)
+                .map(ObjectAdapter.Functions.adapterForUsing(adapterManager))
+                .collect(_Arrays.toArray(ObjectAdapter.class, _NullSafe.size(args)));
     }
 
 }

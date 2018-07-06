@@ -81,8 +81,8 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
     @Path("/{domainType}")
     @Consumes({ MediaType.WILDCARD })
     @Produces({
-            MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR,
-            MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT, RestfulMediaType.APPLICATION_XML_ERROR
+        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR,
+        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT, RestfulMediaType.APPLICATION_XML_ERROR
     })
     public Response persist(@PathParam("domainType") String domainType, final InputStream object) {
 
@@ -131,8 +131,8 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
     @Path("/{domainType}/{instanceId}")
     @Consumes({ MediaType.WILDCARD })
     @Produces({
-            MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR,
-            MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT, RestfulMediaType.APPLICATION_XML_ERROR
+        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR,
+        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT, RestfulMediaType.APPLICATION_XML_ERROR
     })
     //TODO deprecated non standard @PrettyPrinting
     public Response object(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId) {
@@ -149,8 +149,8 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
     @Path("/{domainType}/{instanceId}")
     @Consumes({ MediaType.WILDCARD })
     @Produces({
-            MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR,
-            MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT, RestfulMediaType.APPLICATION_XML_ERROR
+        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR,
+        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT, RestfulMediaType.APPLICATION_XML_ERROR
     })
     //TODO deprecated non standard @PrettyPrinting
     public Response object(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, final InputStream object) {
@@ -249,7 +249,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
     @Path("/{domainType}/{instanceId}/image")
     @Consumes({ MediaType.WILDCARD })
     @Produces({
-            "image/png"
+        "image/png"
     })
     public Response image(
             @PathParam("domainType")
@@ -267,7 +267,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         final byte[] bytes = iconKey.toBytes();
         return bytes != null
                 ? Response.ok(bytes).build()
-                : Response.status(Response.Status.NOT_FOUND).build();
+                        : Response.status(Response.Status.NOT_FOUND).build();
     }
 
     @Override
@@ -275,8 +275,8 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
     @Path("/{domainType}/{instanceId}/object-layout")
     @Consumes({ MediaType.WILDCARD })
     @Produces({
-            MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_LAYOUT_BS3,
-            MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_LAYOUT_BS3
+        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_LAYOUT_BS3,
+        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_LAYOUT_BS3
     })
     //TODO deprecated non standard  @PrettyPrinting
     public Response layout(
@@ -291,8 +291,8 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         final SerializationStrategy serializationStrategy =
                 acceptableMediaTypes.contains(MediaType.APPLICATION_XML_TYPE) ||
                 acceptableMediaTypes.contains(RepresentationType.OBJECT_LAYOUT.getXmlMediaType())
-                    ? SerializationStrategy.XML
-                    : SerializationStrategy.JSON;
+                ? SerializationStrategy.XML
+                        : SerializationStrategy.JSON;
 
         final ObjectSpecification objectSpec = getSpecificationLoader().lookupBySpecId(ObjectSpecId.of(domainType));
         final GridFacet gridFacet = objectSpec.getFacet(GridFacet.class);
@@ -321,8 +321,8 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
                         Rel.ELEMENT.getName(),
                         RestfulHttpMethod.GET.getJavaxRsMethod(),
                         getResourceContext().urlFor(
-                            "objects/" + domainType + "/" + instanceId
-                        ),
+                                "objects/" + domainType + "/" + instanceId
+                                ),
                         RepresentationType.DOMAIN_OBJECT.getJsonMediaType().toString());
                 domainObjectLayoutData.setLink(link);
             }
@@ -333,8 +333,8 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
                         Rel.ACTION.getName(),
                         RestfulHttpMethod.GET.getJavaxRsMethod(),
                         getResourceContext().urlFor(
-                            "objects/" + domainType + "/" + instanceId + "/actions/" + actionLayoutData.getId()
-                        ),
+                                "objects/" + domainType + "/" + instanceId + "/actions/" + actionLayoutData.getId()
+                                ),
                         RepresentationType.OBJECT_ACTION.getJsonMediaType().toString());
                 actionLayoutData.setLink(link);
             }
@@ -345,8 +345,8 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
                         Rel.PROPERTY.getName(),
                         RestfulHttpMethod.GET.getJavaxRsMethod(),
                         getResourceContext().urlFor(
-                            "objects/" + domainType + "/" + instanceId + "/properties/" + propertyLayoutData.getId()
-                        ),
+                                "objects/" + domainType + "/" + instanceId + "/properties/" + propertyLayoutData.getId()
+                                ),
                         RepresentationType.OBJECT_PROPERTY.getJsonMediaType().toString());
                 propertyLayoutData.setLink(link);
             }
@@ -357,8 +357,8 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
                         Rel.COLLECTION.getName(),
                         RestfulHttpMethod.GET.getJavaxRsMethod(),
                         getResourceContext().urlFor(
-                            "objects/" + domainType + "/" + instanceId + "/collections/" + collectionLayoutData.getId()
-                        ),
+                                "objects/" + domainType + "/" + instanceId + "/collections/" + collectionLayoutData.getId()
+                                ),
                         RepresentationType.OBJECT_COLLECTION.getJsonMediaType().toString());
                 collectionLayoutData.setLink(link);
             }
@@ -374,8 +374,8 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
     @Path("/{domainType}/{instanceId}/properties/{propertyId}")
     @Consumes({ MediaType.WILDCARD })
     @Produces({
-            MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_JSON_ERROR,
-            MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_XML_ERROR
+        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_JSON_ERROR,
+        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_XML_ERROR
     })
     //TODO deprecated non standard @PrettyPrinting
     public Response propertyDetails(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("propertyId") final String propertyId) {
@@ -387,7 +387,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         return helper.propertyDetails(
                 propertyId,
                 MemberReprMode.READ
-        );
+                );
     }
 
     @Override
@@ -395,8 +395,8 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
     @Path("/{domainType}/{instanceId}/properties/{propertyId}")
     @Consumes({ MediaType.WILDCARD })
     @Produces({
-            MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_JSON_ERROR,
-            MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_XML_ERROR
+        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_JSON_ERROR,
+        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_XML_ERROR
     })
     public Response modifyProperty(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("propertyId") final String propertyId, final InputStream body) {
         init(Where.OBJECT_FORMS, RepresentationService.Intent.NOT_APPLICABLE);
@@ -426,7 +426,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         return helper.propertyDetails(
                 propertyId,
                 MemberReprMode.WRITE
-        );
+                );
     }
 
     @Override
@@ -434,8 +434,8 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
     @Path("/{domainType}/{instanceId}/properties/{propertyId}")
     @Consumes({ MediaType.WILDCARD })
     @Produces({
-            MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_JSON_ERROR,
-            MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_XML_ERROR
+        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_JSON_ERROR,
+        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_XML_ERROR
     })
     public Response clearProperty(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("propertyId") final String propertyId) {
         init(Where.OBJECT_FORMS, RepresentationService.Intent.NOT_APPLICABLE);
@@ -459,7 +459,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         return helper.propertyDetails(
                 propertyId,
                 MemberReprMode.WRITE
-        );
+                );
     }
 
     @Override
@@ -476,8 +476,8 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
     @Path("/{domainType}/{instanceId}/collections/{collectionId}")
     @Consumes({ MediaType.WILDCARD })
     @Produces({
-            MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_JSON_ERROR,
-            MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_XML_ERROR
+        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_JSON_ERROR,
+        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_XML_ERROR
     })
     // TODO deprecated non standard  @PrettyPrinting
     public Response accessCollection(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("collectionId") final String collectionId) {
@@ -493,8 +493,8 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
     @Path("/{domainType}/{instanceId}/collections/{collectionId}")
     @Consumes({ MediaType.WILDCARD })
     @Produces({
-            MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_JSON_ERROR,
-            MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_XML_ERROR
+        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_JSON_ERROR,
+        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_XML_ERROR
     })
     public Response addToSet(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("collectionId") final String collectionId, final InputStream body) {
         init(Where.PARENTED_TABLES, RepresentationService.Intent.NOT_APPLICABLE);
@@ -530,8 +530,8 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
     @Path("/{domainType}/{instanceId}/collections/{collectionId}")
     @Consumes({ MediaType.WILDCARD })
     @Produces({
-            MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_JSON_ERROR,
-            MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_XML_ERROR
+        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_JSON_ERROR,
+        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_XML_ERROR
     })
     public Response addToList(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("collectionId") final String collectionId, final InputStream body) {
         init(Where.PARENTED_TABLES, RepresentationService.Intent.NOT_APPLICABLE);
@@ -567,8 +567,8 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
     @Path("/{domainType}/{instanceId}/collections/{collectionId}")
     @Consumes({ MediaType.WILDCARD })
     @Produces({
-            MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_JSON_ERROR,
-            MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_XML_ERROR
+        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_JSON_ERROR,
+        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_XML_ERROR
     })
     public Response removeFromCollection(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("collectionId") final String collectionId) {
         init(Where.PARENTED_TABLES, RepresentationService.Intent.NOT_APPLICABLE);
@@ -603,8 +603,8 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
     @Path("/{domainType}/{instanceId}/actions/{actionId}")
     @Consumes({ MediaType.WILDCARD })
     @Produces({
-            MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_ACTION, RestfulMediaType.APPLICATION_JSON_ERROR,
-            MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_ACTION, RestfulMediaType.APPLICATION_XML_ERROR
+        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_ACTION, RestfulMediaType.APPLICATION_JSON_ERROR,
+        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_ACTION, RestfulMediaType.APPLICATION_XML_ERROR
     })
     //TODO deprecated non standard @PrettyPrinting
     public Response actionPrompt(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("actionId") final String actionId) {
@@ -640,8 +640,8 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
     @Path("/{domainType}/{instanceId}/actions/{actionId}/invoke")
     @Consumes({ MediaType.WILDCARD })
     @Produces({
-            MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR,
-            MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
+        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR,
+        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
     })
     //TODO deprecated non standard @PrettyPrinting
     public Response invokeActionQueryOnly(
@@ -669,8 +669,8 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
     @Path("/{domainType}/{instanceId}/actions/{actionId}/invoke")
     @Consumes({ MediaType.WILDCARD })
     @Produces({
-            MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR,
-            MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
+        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR,
+        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
     })
     //TODO deprecated non standard @PrettyPrinting
     public Response invokeActionIdempotent(
@@ -684,7 +684,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         setCommandExecutor(Command.Executor.USER);
 
         final JsonRepresentation arguments = getResourceContext().getQueryStringAsJsonRepr();
-        
+
         final ObjectAdapter objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
         final DomainResourceHelper helper = newDomainResourceHelper(objectAdapter);
 
@@ -696,8 +696,8 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
     @Path("/{domainType}/{instanceId}/actions/{actionId}/invoke")
     @Consumes({ MediaType.WILDCARD })
     @Produces({
-            MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR,
-            MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
+        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR,
+        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
     })
     //TODO deprecated non standard @PrettyPrinting
     public Response invokeAction(
@@ -711,7 +711,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         setCommandExecutor(Command.Executor.USER);
 
         final JsonRepresentation arguments = getResourceContext().getQueryStringAsJsonRepr();
-        
+
         final ObjectAdapter objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
         final DomainResourceHelper helper = newDomainResourceHelper(objectAdapter);
 

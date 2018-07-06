@@ -15,133 +15,137 @@ import org.reflections.vfs.Vfs;
 import com.google.common.collect.Lists;
 
 /**
- * 
+ *
  * package private utility class
  *
  */
 class ReflectManifest {
 
-	/*
-	 * If this static reference survives ApplicationScope life-cycles, thats ok.
-	 * List once initialized is quasi immutable. 
-	 */
-	private final static List<Vfs.UrlType> urlTypes = new ArrayList<>();
-	
-	public static void prepareDiscovery() {
-		Vfs.setDefaultURLTypes(getUrlTypes());
-	}
+    /*
+     * If this static reference survives ApplicationScope life-cycles, thats ok.
+     * List once initialized is quasi immutable.
+     */
+    private final static List<Vfs.UrlType> urlTypes = new ArrayList<>();
 
-	// -- 
+    public static void prepareDiscovery() {
+        Vfs.setDefaultURLTypes(getUrlTypes());
+    }
 
-	private static List<Vfs.UrlType> getUrlTypes() {
-		
-		if(urlTypes.isEmpty()) {
-			urlTypes.add(new EmptyIfFileEndingsUrlType(".pom", ".jnilib", "QTJava.zip"));
-			urlTypes.add(new JettyConsoleUrlType());
-			urlTypes.addAll(Arrays.asList(Vfs.DefaultUrlTypes.values()));
-		}
+    // --
 
-		return urlTypes;
-	}
+    private static List<Vfs.UrlType> getUrlTypes() {
 
-	// -- HELPER
+        if(urlTypes.isEmpty()) {
+            urlTypes.add(new EmptyIfFileEndingsUrlType(".pom", ".jnilib", "QTJava.zip"));
+            urlTypes.add(new JettyConsoleUrlType());
+            urlTypes.addAll(Arrays.asList(Vfs.DefaultUrlTypes.values()));
+        }
 
-	private static class EmptyIfFileEndingsUrlType implements Vfs.UrlType {
+        return urlTypes;
+    }
 
-		private final List<String> fileEndings;
+    // -- HELPER
 
-		private EmptyIfFileEndingsUrlType(final String... fileEndings) {
-			this.fileEndings = Lists.newArrayList(fileEndings);
-		}
+    private static class EmptyIfFileEndingsUrlType implements Vfs.UrlType {
 
-		public boolean matches(URL url) {
-			final String protocol = url.getProtocol();
-			final String externalForm = url.toExternalForm();
-			if (!protocol.equals("file")) {
-				return false;
-			}
-			for (String fileEnding : fileEndings) {
-				if (externalForm.endsWith(fileEnding))
-					return true;
-			}
-			return false;
-		}
+        private final List<String> fileEndings;
 
-		public Vfs.Dir createDir(final URL url) throws Exception {
-			return emptyVfsDir(url);
-		}
+        private EmptyIfFileEndingsUrlType(final String... fileEndings) {
+            this.fileEndings = Lists.newArrayList(fileEndings);
+        }
 
-		private static Vfs.Dir emptyVfsDir(final URL url) {
-			return new Vfs.Dir() {
-				@Override
-				public String getPath() {
-					return url.toExternalForm();
-				}
+        @Override
+        public boolean matches(URL url) {
+            final String protocol = url.getProtocol();
+            final String externalForm = url.toExternalForm();
+            if (!protocol.equals("file")) {
+                return false;
+            }
+            for (String fileEnding : fileEndings) {
+                if (externalForm.endsWith(fileEnding))
+                    return true;
+            }
+            return false;
+        }
 
-				@Override
-				public Iterable<Vfs.File> getFiles() {
-					return Collections.emptyList();
-				}
+        @Override
+        public Vfs.Dir createDir(final URL url) throws Exception {
+            return emptyVfsDir(url);
+        }
 
-				@Override
-				public void close() {
-					//
-				}
-			};
-		}
-	}
+        private static Vfs.Dir emptyVfsDir(final URL url) {
+            return new Vfs.Dir() {
+                @Override
+                public String getPath() {
+                    return url.toExternalForm();
+                }
 
-	private static class JettyConsoleUrlType implements Vfs.UrlType {
-		public boolean matches(URL url) {
-			final String protocol = url.getProtocol();
-			final String externalForm = url.toExternalForm();
-			final boolean matches = protocol.equals("file") && externalForm.contains("jetty-console") && externalForm.contains("-any-") && externalForm.endsWith("webapp/WEB-INF/classes/");
-			return matches;
-		}
+                @Override
+                public Iterable<Vfs.File> getFiles() {
+                    return Collections.emptyList();
+                }
 
-		public Vfs.Dir createDir(final URL url) throws Exception {
-			return new SystemDir(getFile(url));
-		}
+                @Override
+                public void close() {
+                    //
+                }
+            };
+        }
+    }
 
-		/**
-		 * try to get {@link java.io.File} from url
-		 *
-		 * <p>
-		 *     Copied from {@link Vfs} (not publicly accessible)
-		 * </p>
-		 */
-		static java.io.File getFile(URL url) {
-			java.io.File file;
-			String path;
+    private static class JettyConsoleUrlType implements Vfs.UrlType {
+        @Override
+        public boolean matches(URL url) {
+            final String protocol = url.getProtocol();
+            final String externalForm = url.toExternalForm();
+            final boolean matches = protocol.equals("file") && externalForm.contains("jetty-console") && externalForm.contains("-any-") && externalForm.endsWith("webapp/WEB-INF/classes/");
+            return matches;
+        }
 
-			try {
-				path = url.toURI().getSchemeSpecificPart();
-				if ((file = new java.io.File(path)).exists()) return file;
-			} catch (URISyntaxException e) {
-			}
+        @Override
+        public Vfs.Dir createDir(final URL url) throws Exception {
+            return new SystemDir(getFile(url));
+        }
 
-			try {
-				path = URLDecoder.decode(url.getPath(), "UTF-8");
-				if (path.contains(".jar!")) path = path.substring(0, path.lastIndexOf(".jar!") + ".jar".length());
-				if ((file = new java.io.File(path)).exists()) return file;
+        /**
+         * try to get {@link java.io.File} from url
+         *
+         * <p>
+         *     Copied from {@link Vfs} (not publicly accessible)
+         * </p>
+         */
+        static java.io.File getFile(URL url) {
+            java.io.File file;
+            String path;
 
-			} catch (UnsupportedEncodingException e) {
-			}
+            try {
+                path = url.toURI().getSchemeSpecificPart();
+                if ((file = new java.io.File(path)).exists()) return file;
+            } catch (URISyntaxException e) {
+            }
 
-			try {
-				path = url.toExternalForm();
-				if (path.startsWith("jar:")) path = path.substring("jar:".length());
-				if (path.startsWith("file:")) path = path.substring("file:".length());
-				if (path.contains(".jar!")) path = path.substring(0, path.indexOf(".jar!") + ".jar".length());
-				if ((file = new java.io.File(path)).exists()) return file;
+            try {
+                path = URLDecoder.decode(url.getPath(), "UTF-8");
+                if (path.contains(".jar!")) path = path.substring(0, path.lastIndexOf(".jar!") + ".jar".length());
+                if ((file = new java.io.File(path)).exists()) return file;
 
-				path = path.replace("%20", " ");
-				if ((file = new java.io.File(path)).exists()) return file;
+            } catch (UnsupportedEncodingException e) {
+            }
 
-			} catch (Exception e) {
-			}
+            try {
+                path = url.toExternalForm();
+                if (path.startsWith("jar:")) path = path.substring("jar:".length());
+                if (path.startsWith("file:")) path = path.substring("file:".length());
+                if (path.contains(".jar!")) path = path.substring(0, path.indexOf(".jar!") + ".jar".length());
+                if ((file = new java.io.File(path)).exists()) return file;
 
-			return null;
-		}
-	}
+                path = path.replace("%20", " ");
+                if ((file = new java.io.File(path)).exists()) return file;
+
+            } catch (Exception e) {
+            }
+
+            return null;
+        }
+    }
 }

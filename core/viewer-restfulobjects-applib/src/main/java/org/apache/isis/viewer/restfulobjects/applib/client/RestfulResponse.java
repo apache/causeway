@@ -155,10 +155,10 @@ public class RestfulResponse<T> {
 
         // public static final int SC_UNPROCESSABLE_ENTITY = 422;
         public final static HttpStatusCode VALIDATION_FAILED = new HttpStatusCode(422, new StatusTypeImpl(422, Family.CLIENT_ERROR, "Validation failed"));
-        
+
         // public static final int SC_LOCKED = 423;
         // public static final int SC_FAILED_DEPENDENCY = 424;
-        
+
         public final static HttpStatusCode PRECONDITION_HEADER_MISSING = new HttpStatusCode(428, new StatusTypeImpl(428, Family.CLIENT_ERROR, "Precondition header missing"));
 
         public final static HttpStatusCode INTERNAL_SERVER_ERROR = new HttpStatusCode(500, Status.INTERNAL_SERVER_ERROR);
@@ -354,10 +354,10 @@ public class RestfulResponse<T> {
     /**
      * Convenience that recasts this response as wrapping some other
      * representation.
-     * 
+     *
      * <p>
      * This would typically be as the results of a content type being an
-     * error rather than a representation returned on success.  
+     * error rather than a representation returned on success.
      */
     @SuppressWarnings("unchecked")
     public <Q extends JsonRepresentation> RestfulResponse<Q> wraps(Class<Q> cls) {

@@ -43,8 +43,8 @@ public abstract class MemberOrderFacetAbstract extends MultipleValueFacetAbstrac
             final TranslationService translationService,
             final FacetHolder holder) {
         this(translatedValueElse(name, "", translationService, holder),
-             sequence,
-             holder);
+                sequence,
+                holder);
     }
 
     public MemberOrderFacetAbstract(
@@ -86,6 +86,7 @@ public abstract class MemberOrderFacetAbstract extends MultipleValueFacetAbstrac
         return name;
     }
 
+    @Override
     public String untranslatedName() {
         return originalName;
     }

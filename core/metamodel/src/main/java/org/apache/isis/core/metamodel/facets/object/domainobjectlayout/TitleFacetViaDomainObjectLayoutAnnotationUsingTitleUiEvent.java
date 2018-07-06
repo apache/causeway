@@ -77,10 +77,10 @@ public class TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent extends 
 
     public TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent(
             final Class<? extends TitleUiEvent<?>> titleUiEventClass,
-            final TranslationService translationService,
-            final String translationContext,
-            final EventBusService eventBusService,
-            final FacetHolder holder) {
+                    final TranslationService translationService,
+                    final String translationContext,
+                    final EventBusService eventBusService,
+                    final FacetHolder holder) {
         super(holder);
         this.titleUiEventClass = titleUiEventClass;
         this.translationService = translationService;

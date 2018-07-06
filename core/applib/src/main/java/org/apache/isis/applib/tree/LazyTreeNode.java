@@ -28,108 +28,108 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 @Value(semanticsProviderName="org.apache.isis.core.metamodel.facets.value.treenode.TreeNodeValueSemanticsProvider")
 public class LazyTreeNode<T> implements TreeNode<T> {
-	
-	private final TreeState sharedState;
-	private final T value;
-	private final Class<? extends TreeAdapter<T>> treeAdapterClass;
-	private final _Lazy<TreeAdapter<T>> treeAdapter = _Lazy.of(this::newTreeAdapter);
-	private final _Lazy<TreePath> treePath = _Lazy.of(this::resolveTreePath);
-	
-	public static <T> TreeNode<T> of(T value, Class<? extends TreeAdapter<T>> treeAdapterClass, TreeState sharedState) {
-		return new LazyTreeNode<T>(value, treeAdapterClass, sharedState);
-	}
-	
-	protected LazyTreeNode(T value, Class<? extends TreeAdapter<T>> treeAdapterClass, TreeState sharedState) {
-		this.value = Objects.requireNonNull(value);
-		this.treeAdapterClass = Objects.requireNonNull(treeAdapterClass);
-		this.sharedState = sharedState;
-	}
 
-	@Override
-	public T getValue() {
-		return value;
-	}
+    private final TreeState sharedState;
+    private final T value;
+    private final Class<? extends TreeAdapter<T>> treeAdapterClass;
+    private final _Lazy<TreeAdapter<T>> treeAdapter = _Lazy.of(this::newTreeAdapter);
+    private final _Lazy<TreePath> treePath = _Lazy.of(this::resolveTreePath);
 
-	@Override
-	public TreeNode<T> getParentIfAny() {
-		return treeAdapter().parentOf(getValue())
-				.map(this::toTreeNode)
-				.orElse(null);
-	}
+    public static <T> TreeNode<T> of(T value, Class<? extends TreeAdapter<T>> treeAdapterClass, TreeState sharedState) {
+        return new LazyTreeNode<T>(value, treeAdapterClass, sharedState);
+    }
 
-	@Override
-	public int getChildCount() {
-		return treeAdapter().childCountOf(value);
-	}
+    protected LazyTreeNode(T value, Class<? extends TreeAdapter<T>> treeAdapterClass, TreeState sharedState) {
+        this.value = Objects.requireNonNull(value);
+        this.treeAdapterClass = Objects.requireNonNull(treeAdapterClass);
+        this.sharedState = sharedState;
+    }
 
-	@Override
-	public Stream<TreeNode<T>> streamChildren() {
-		if(isLeaf()) {
-			return Stream.empty();
-		}
-		return treeAdapter().childrenOf(value)
-				.map(this::toTreeNode);
-	}
+    @Override
+    public T getValue() {
+        return value;
+    }
 
-	@Override
-	public Class<? extends TreeAdapter<T>> getTreeAdapterClass() {
-		return treeAdapterClass;
-	}
-	
-	@Override
-	public TreePath getPositionAsPath() {
-		return treePath.get();
-	}
-	
-	@Override
-	public TreeState getTreeState() {
-		return sharedState;
-	}
-	
-	// -- HELPER
-	
-	private TreeAdapter<T> newTreeAdapter() {
-		try {
-			return treeAdapterClass.newInstance();
-		} catch (InstantiationException | IllegalAccessException e) {
-			throw new IllegalArgumentException(
-					String.format("failed to instantiate TreeAdapter '%s'", treeAdapterClass.getName()), e);
-		}
-	}
+    @Override
+    public TreeNode<T> getParentIfAny() {
+        return treeAdapter().parentOf(getValue())
+                .map(this::toTreeNode)
+                .orElse(null);
+    }
 
-	private TreeAdapter<T> treeAdapter() {
-		return treeAdapter.get();
-	}
-	
-	private TreeNode<T> toTreeNode(T value){
-		return of(value, getTreeAdapterClass(), sharedState);
-	}
+    @Override
+    public int getChildCount() {
+        return treeAdapter().childCountOf(value);
+    }
 
-	private TreePath resolveTreePath() {
-		final TreeNode<T> parent = getParentIfAny();
-		if(parent==null) {
-			return TreePath.root();
-		}
-		return parent.getPositionAsPath().append(indexWithinSiblings(parent));
-	}
-	
-	/*
-	 * @return zero based index
-	 */
-	private int indexWithinSiblings(TreeNode<T> parent) {
-		final LongAdder indexOneBased = new LongAdder();
-		
-		boolean found = parent.streamChildren()
-		.peek(__->indexOneBased.increment())
-		.anyMatch(sibling->this.equals(sibling));
-		
-		if(!found) {
-			throw _Exceptions.unexpectedCodeReach();
-		}
-		
-		return indexOneBased.intValue()-1;
-	}
+    @Override
+    public Stream<TreeNode<T>> streamChildren() {
+        if(isLeaf()) {
+            return Stream.empty();
+        }
+        return treeAdapter().childrenOf(value)
+                .map(this::toTreeNode);
+    }
+
+    @Override
+    public Class<? extends TreeAdapter<T>> getTreeAdapterClass() {
+        return treeAdapterClass;
+    }
+
+    @Override
+    public TreePath getPositionAsPath() {
+        return treePath.get();
+    }
+
+    @Override
+    public TreeState getTreeState() {
+        return sharedState;
+    }
+
+    // -- HELPER
+
+    private TreeAdapter<T> newTreeAdapter() {
+        try {
+            return treeAdapterClass.newInstance();
+        } catch (InstantiationException | IllegalAccessException e) {
+            throw new IllegalArgumentException(
+                    String.format("failed to instantiate TreeAdapter '%s'", treeAdapterClass.getName()), e);
+        }
+    }
+
+    private TreeAdapter<T> treeAdapter() {
+        return treeAdapter.get();
+    }
+
+    private TreeNode<T> toTreeNode(T value){
+        return of(value, getTreeAdapterClass(), sharedState);
+    }
+
+    private TreePath resolveTreePath() {
+        final TreeNode<T> parent = getParentIfAny();
+        if(parent==null) {
+            return TreePath.root();
+        }
+        return parent.getPositionAsPath().append(indexWithinSiblings(parent));
+    }
+
+    /*
+     * @return zero based index
+     */
+    private int indexWithinSiblings(TreeNode<T> parent) {
+        final LongAdder indexOneBased = new LongAdder();
+
+        boolean found = parent.streamChildren()
+                .peek(__->indexOneBased.increment())
+                .anyMatch(sibling->this.equals(sibling));
+
+        if(!found) {
+            throw _Exceptions.unexpectedCodeReach();
+        }
+
+        return indexOneBased.intValue()-1;
+    }
 
 
-	
+
 }

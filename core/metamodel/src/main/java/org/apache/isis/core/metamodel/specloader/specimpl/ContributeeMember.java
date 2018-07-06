@@ -29,7 +29,7 @@ public interface ContributeeMember extends ObjectMember {
 
 
     class Predicates {
-        
+
         private Predicates(){}
 
         /**
@@ -38,7 +38,7 @@ public interface ContributeeMember extends ObjectMember {
         public static <T extends ObjectMember> Predicate<T> regularElse(final Contributed contributed) {
             return com.google.common.base.Predicates.or(regular(), is(contributed));
         }
-        
+
         public static <T extends ObjectMember> Predicate<T> regular() {
             return new Predicate<T>() {
                 @Override

@@ -38,7 +38,7 @@ public class IsisAjaxPagingNavigation extends AjaxPagingNavigation {
     public IsisAjaxPagingNavigation(String id, IPageable pageable) {
         super(id, pageable);
     }
-    
+
     @Override
     protected Link<?> newPagingNavigationLink(String id, IPageable pageable, long pageIndex) {
         return new IsisAjaxPagingNavigationLink(id, pageable, pageIndex);

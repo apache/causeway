@@ -40,102 +40,102 @@ import org.apache.isis.applib.services.error.ErrorReportingService;
  */
 public class EmailTicket extends SimpleTicket {
 
-	// -- MAILTO VALUE TYPE
-	
-	public static class MailTo implements Serializable {
-		
-		private static final long serialVersionUID = -817872853109724987L;
+    // -- MAILTO VALUE TYPE
 
-		public static class MailToBuilder {
-			private final MailTo mailTo = new MailTo();
-			public MailTo build() {
-				return mailTo;
-			}
-			public MailToBuilder linkName(String linkName) {
-				mailTo.linkName = linkName;
-				return this;
-			}
-			public MailToBuilder receiver(String receiver) {
-				mailTo.receiver = receiver;
-				return this;
-			}
-			public MailToBuilder subject(String subject) {
-				mailTo.subject = subject;
-				return this;
-			}
-			public MailToBuilder body(String body) {
-				mailTo.body = body;
-				return this;
-			}
-		}
-		
-		public static MailToBuilder builder() {
-			return new MailToBuilder();
-		}
-		
-		private String linkName = "Email";
-		private String receiver = "no-one@nowhere";
-		private String subject = "[Module-Name] Unexpected Error (#ref)";
-		private String body = "empty body";
-		
-		public String toHtmlLink() {
-			return String.format("<a href=\"mailto:%s?subject=%s&body=%s\">%s</a>",
-					receiver,
-					htmlEscape(subject),
-					htmlEscape(body),
-					linkName
-					);
-		}
-		
-	    // -- STACKTRACE FORMATTING
-	    
-		public static String mailBodyOf(ErrorDetails errorDetails) {
-			return "Stacktrace:%0D%0A=================%0D%0A" + 
-				stream(errorDetails.getStackTraceDetailPerCause())
-				.map(MailTo::causeToString)
-				.collect(Collectors.joining("%0D%0A%0D%0A"))
-			;
-		}
-		
-		private static String causeToString(List<String> list) {
-			return "Cause%0D%0A------------%0D%0A" + 
-				stream(list)
-				.map(entry->String.format("# %s", entry))
-				.collect(Collectors.joining("%0D%0A"))
-			;
-		}
-		
-		
-	}
-	
-	// TICKET IMPL
+    public static class MailTo implements Serializable {
 
-	private static final long serialVersionUID = -748973805361941912L;
-	private MailTo mailTo;
-	
-	public EmailTicket(
-			MailTo mailTo, 
-			String reference, 
-			String userMessage, 
-			String details,
-			StackTracePolicy stackTracePolicy,
-			String kittenUrl) {
-		super(reference, userMessage, details, stackTracePolicy, kittenUrl);
-		this.mailTo = mailTo;
-	}
+        private static final long serialVersionUID = -817872853109724987L;
+
+        public static class MailToBuilder {
+            private final MailTo mailTo = new MailTo();
+            public MailTo build() {
+                return mailTo;
+            }
+            public MailToBuilder linkName(String linkName) {
+                mailTo.linkName = linkName;
+                return this;
+            }
+            public MailToBuilder receiver(String receiver) {
+                mailTo.receiver = receiver;
+                return this;
+            }
+            public MailToBuilder subject(String subject) {
+                mailTo.subject = subject;
+                return this;
+            }
+            public MailToBuilder body(String body) {
+                mailTo.body = body;
+                return this;
+            }
+        }
+
+        public static MailToBuilder builder() {
+            return new MailToBuilder();
+        }
+
+        private String linkName = "Email";
+        private String receiver = "no-one@nowhere";
+        private String subject = "[Module-Name] Unexpected Error (#ref)";
+        private String body = "empty body";
+
+        public String toHtmlLink() {
+            return String.format("<a href=\"mailto:%s?subject=%s&body=%s\">%s</a>",
+                    receiver,
+                    htmlEscape(subject),
+                    htmlEscape(body),
+                    linkName
+                    );
+        }
+
+        // -- STACKTRACE FORMATTING
+
+        public static String mailBodyOf(ErrorDetails errorDetails) {
+            return "Stacktrace:%0D%0A=================%0D%0A" +
+                    stream(errorDetails.getStackTraceDetailPerCause())
+            .map(MailTo::causeToString)
+            .collect(Collectors.joining("%0D%0A%0D%0A"))
+            ;
+        }
+
+        private static String causeToString(List<String> list) {
+            return "Cause%0D%0A------------%0D%0A" +
+                    stream(list)
+            .map(entry->String.format("# %s", entry))
+            .collect(Collectors.joining("%0D%0A"))
+            ;
+        }
+
+
+    }
+
+    // TICKET IMPL
+
+    private static final long serialVersionUID = -748973805361941912L;
+    private MailTo mailTo;
+
+    public EmailTicket(
+            MailTo mailTo,
+            String reference,
+            String userMessage,
+            String details,
+            StackTracePolicy stackTracePolicy,
+            String kittenUrl) {
+        super(reference, userMessage, details, stackTracePolicy, kittenUrl);
+        this.mailTo = mailTo;
+    }
 
     @Override
-	public String getMarkup() {
-    	return
-    			"<p>" + 
-    			ifPresentMap(getDetails(), s->"<h3>" + htmlEscape(s) + "</h3>") +
-    			ifPresentMap(getKittenUrl(), s->"<img src=\"" + s + "\"></img>") +
-    			"</p>" + 
-    			ifPresentMap(getReference(), s-> 
-    			"<p><h4>Please report this error: <span>" + mailTo.toHtmlLink() + "</span></h4></p>")
-    			;
-	}
-    
+    public String getMarkup() {
+        return
+                "<p>" +
+                ifPresentMap(getDetails(), s->"<h3>" + htmlEscape(s) + "</h3>") +
+                ifPresentMap(getKittenUrl(), s->"<img src=\"" + s + "\"></img>") +
+                "</p>" +
+                ifPresentMap(getReference(), s->
+                "<p><h4>Please report this error: <span>" + mailTo.toHtmlLink() + "</span></h4></p>")
+                ;
+    }
 
-    
+
+
 }

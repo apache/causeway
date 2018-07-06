@@ -51,7 +51,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationSer
         nature = NatureOfService.DOMAIN,
         // in effect, is the relative priority (lower numbers have higher priority)
         menuOrder = "" + (Integer.MAX_VALUE - 20)
-)
+        )
 public class ContentNegotiationServiceXRoDomainType extends ContentNegotiationServiceAbstract {
 
     public static final String X_RO_DOMAIN_TYPE = "x-ro-domain-type";

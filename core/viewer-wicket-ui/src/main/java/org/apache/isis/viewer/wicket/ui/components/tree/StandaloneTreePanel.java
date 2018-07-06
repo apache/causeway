@@ -24,13 +24,13 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
 public class StandaloneTreePanel extends PanelAbstract<ValueModel> {
 
-	private static final long serialVersionUID = 1L;
-	private static final String ID_TREE = "tree";
+    private static final long serialVersionUID = 1L;
+    private static final String ID_TREE = "tree";
 
-	public StandaloneTreePanel(final String id, final ValueModel valueModel) {
-		super(id, valueModel);
-		add(IsisToWicketTreeAdapter.adapt(ID_TREE, valueModel));
-	}
+    public StandaloneTreePanel(final String id, final ValueModel valueModel) {
+        super(id, valueModel);
+        add(IsisToWicketTreeAdapter.adapt(ID_TREE, valueModel));
+    }
 
 
 }

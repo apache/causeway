@@ -71,7 +71,7 @@ public final class CommandDtoUtils {
             final Class<?> contextClass,
             final String resourceName,
             final Charset charset) throws IOException {
-        
+
         final String s = _Resource.loadAsString(contextClass, resourceName, charset);
         return fromXml(new StringReader(s));
     }
@@ -92,7 +92,7 @@ public final class CommandDtoUtils {
         }
     }
 
-    
+
 
     public static OidsDto targetsFor(final CommandDto dto) {
         OidsDto targets = dto.getTargets();

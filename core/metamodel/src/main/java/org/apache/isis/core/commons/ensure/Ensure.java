@@ -35,7 +35,7 @@ public final class Ensure {
 
     /**
      * To ensure that the provided assertion is true
-     * 
+     *
      * @throws IllegalArgumentException
      */
     public static void ensure(final String expectation, final boolean expression) {
@@ -46,11 +46,11 @@ public final class Ensure {
 
     /**
      * To ensure that the provided argument is correct.
-     * 
+     *
      * @see #ensureThatArg(Object, Matcher, String)
      * @see #ensureThatState(Object, Matcher, String)
      * @see #ensureThatContext(Object, Matcher)
-     * 
+     *
      * @throws IllegalArgumentException
      *             if matcher does not {@link Matcher#matches(Object) match}.
      */
@@ -64,11 +64,11 @@ public final class Ensure {
 
     /**
      * To ensure that the provided argument is correct.
-     * 
+     *
      * @see #ensureThatArg(Object, Matcher)
      * @see #ensureThatState(Object, Matcher, String)
      * @see #ensureThatContext(Object, Matcher)
-     * 
+     *
      * @throws IllegalArgumentException
      *             if matcher does not {@link Matcher#matches(Object) match}.
      */
@@ -85,15 +85,15 @@ public final class Ensure {
         }
         return arg;
     }
-    
+
     /**
      * To ensure that the current state of this object (instance fields) is
      * correct.
-     * 
+     *
      * @see #ensureThatArg(Object, Matcher)
      * @see #ensureThatContext(Object, Matcher)
      * @see #ensureThatState(Object, Matcher, String)
-     * 
+     *
      * @throws IllegalStateException
      *             if matcher does not {@link Matcher#matches(Object) match}.
      */
@@ -107,11 +107,11 @@ public final class Ensure {
     /**
      * To ensure that the current state of this object (instance fields) is
      * correct.
-     * 
+     *
      * @see #ensureThatArg(Object, Matcher)
      * @see #ensureThatContext(Object, Matcher)
      * @see #ensureThatState(Object, Matcher)
-     * 
+     *
      * @throws IllegalStateException
      *             if matcher does not {@link Matcher#matches(Object) match}.
      */
@@ -124,11 +124,11 @@ public final class Ensure {
 
     /**
      * To ensure that the current context (<tt>IsisContext</tt>) is correct.
-     * 
+     *
      * @see #ensureThatArg(Object, Matcher)
      * @see #ensureThatState(Object, Matcher)
      * @see #ensureThatContext(Object, Matcher, String)
-     * 
+     *
      * @throws IllegalThreadStateException
      *             if matcher does not {@link Matcher#matches(Object) match}.
      */
@@ -141,11 +141,11 @@ public final class Ensure {
 
     /**
      * To ensure that the current context (<tt>IsisContext</tt>) is correct.
-     * 
+     *
      * @see #ensureThatArg(Object, Matcher)
      * @see #ensureThatState(Object, Matcher)
      * @see #ensureThatContext(Object, Matcher, String)
-     * 
+     *
      * @throws IllegalThreadStateException
      *             if matcher does not {@link Matcher#matches(Object) match}.
      */

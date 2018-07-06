@@ -27,58 +27,58 @@ import org.datanucleus.query.typesafe.TypesafeQuery;
 
 
 /**
- * Service that provide a number of workarounds when using JDO/DataNucleus. 
+ * Service that provide a number of workarounds when using JDO/DataNucleus.
  */
 public interface IsisJdoSupport_v3_1 extends org.apache.isis.applib.services.jdosupport.IsisJdoSupport {
 
-	/**
-	 * To perform the most common use-case of executing a (type-safe) query against the specified class,
-	 * filtering using the provided {@link BooleanExpression}, then automatically cloning the returned list
-	 * and closing the query.
-	 *
-	 * <p>
-	 *     Typical usage:
-	 *     <pre>
-	 *          final QToDoItem q = QToDoItem.candidate();
-	 *          return executeQuery(ToDoItem.class,
-	 *                              q.atPath.eq(atPath).and(
-	 *                              q.description.indexOf(description).gt(0))
-	 *                              );
-	 *     </pre>
-	 * </p>
-	 */
-	@Programmatic
-	<T> List<T> executeQuery(final Class<T> cls, final BooleanExpression booleanExpression);
+    /**
+     * To perform the most common use-case of executing a (type-safe) query against the specified class,
+     * filtering using the provided {@link BooleanExpression}, then automatically cloning the returned list
+     * and closing the query.
+     *
+     * <p>
+     *     Typical usage:
+     *     <pre>
+     *          final QToDoItem q = QToDoItem.candidate();
+     *          return executeQuery(ToDoItem.class,
+     *                              q.atPath.eq(atPath).and(
+     *                              q.description.indexOf(description).gt(0))
+     *                              );
+     *     </pre>
+     * </p>
+     */
+    @Programmatic
+    <T> List<T> executeQuery(final Class<T> cls, final BooleanExpression booleanExpression);
 
-	/**
-	 * To perform a common use-case of executing a (type-safe) query against the specified class,
-	 * filtering a unique match using the provided {@link BooleanExpression}, then returning
-	 * the result and closing the query.
-	 *
-	 * <p>
-	 *     Typical usage:
-	 *     <pre>
-	 *          final QToDoItem q = QToDoItem.candidate();
-	 *          return executeQueryUnique(ToDoItem.class,
-	 *                              q.atPath.eq(atPath).and(
-	 *                              q.description.eq(description))
-	 *                              );
-	 *     </pre>
-	 * </p>
-	 */
-	@Programmatic
-	<T> T executeQueryUnique(final Class<T> cls, final BooleanExpression booleanExpression);
+    /**
+     * To perform a common use-case of executing a (type-safe) query against the specified class,
+     * filtering a unique match using the provided {@link BooleanExpression}, then returning
+     * the result and closing the query.
+     *
+     * <p>
+     *     Typical usage:
+     *     <pre>
+     *          final QToDoItem q = QToDoItem.candidate();
+     *          return executeQueryUnique(ToDoItem.class,
+     *                              q.atPath.eq(atPath).and(
+     *                              q.description.eq(description))
+     *                              );
+     *     </pre>
+     * </p>
+     */
+    @Programmatic
+    <T> T executeQueryUnique(final Class<T> cls, final BooleanExpression booleanExpression);
 
-	/**
-	 * To support the execution of type-safe queries using DataNucleus' lower-level APIs
-	 * (eg for group by and so on).
-	 *
-	 * <p>
-	 *     Responsibility for cloning any result sets and closing the query is the responsibility
-	 *     of the caller.
-	 * </p>
-	 */
-	@Programmatic
-	<T> TypesafeQuery<T> newTypesafeQuery(Class<T> cls);
-	
+    /**
+     * To support the execution of type-safe queries using DataNucleus' lower-level APIs
+     * (eg for group by and so on).
+     *
+     * <p>
+     *     Responsibility for cloning any result sets and closing the query is the responsibility
+     *     of the caller.
+     * </p>
+     */
+    @Programmatic
+    <T> TypesafeQuery<T> newTypesafeQuery(Class<T> cls);
+
 }

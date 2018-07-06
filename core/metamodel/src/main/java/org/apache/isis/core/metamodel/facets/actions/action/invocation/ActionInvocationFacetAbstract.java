@@ -24,8 +24,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 public abstract class ActionInvocationFacetAbstract
-        extends FacetAbstract
-        implements ActionInvocationFacet {
+extends FacetAbstract
+implements ActionInvocationFacet {
 
     public static Class<? extends Facet> type() {
         return ActionInvocationFacet.class;

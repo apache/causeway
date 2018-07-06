@@ -54,7 +54,7 @@ public class IsisConfigurationForJdoIntegTests extends IsisConfigurationDefault 
 
     /**
      * Adds a number of standard properties for in-memory integration tests (check the source code for the full list).
-     * 
+     *
      * <p>
      * If these defaults are not suitable, just add a different value.
      */
@@ -64,7 +64,7 @@ public class IsisConfigurationForJdoIntegTests extends IsisConfigurationDefault 
 
     /**
      * Adds a number of standard properties for in-memory integration tests (check the source code for the full list).
-     * 
+     *
      * <p>
      * If these defaults are not suitable, just add a different value.
      */

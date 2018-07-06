@@ -25,12 +25,13 @@ import org.apache.isis.core.metamodel.facets.SingleValueFacet;
 /**
  * Indicates that the action (entity or service) can also be used as a bulk
  * action against collections of objects.
- * 
+ *
  * <p>
  * In the standard Apache Isis Programming Model, corresponds to annotating the
  * action method using <tt>@Bulk</tt>.
  */
 public interface BulkFacet extends SingleValueFacet<InvokeOn> {
 
+    @Override
     public InvokeOn value();
 }

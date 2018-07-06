@@ -114,12 +114,12 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
                     .filter(domainEvent -> domainEvent != ActionDomainEvent.Default.class)
                     .findFirst()
                     .map(domainEvent ->
-                            (ActionDomainEventFacetAbstract) new ActionDomainEventFacetForActionAnnotation(
-                                    domainEvent, servicesInjector, getSpecificationLoader(), holder))
+                    (ActionDomainEventFacetAbstract) new ActionDomainEventFacetForActionAnnotation(
+                            domainEvent, servicesInjector, getSpecificationLoader(), holder))
                     .orElse(
                             new ActionDomainEventFacetDefault(
                                     ActionDomainEvent.Default.class, servicesInjector, getSpecificationLoader(), holder)
-                    );
+                            );
 
             if(EventUtil.eventTypeIsPostable(
                     actionDomainEventFacet.getEventType(),
@@ -137,14 +137,14 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
                 actionInvocationFacet = new ActionInvocationFacetForDomainEventFromActionAnnotation(
                         actionDomainEventFacet.getEventType(), actionMethod, typeSpec, returnSpec, holder,
                         servicesInjector
-                );
+                        );
             } else
-            // default
+                // default
             {
                 actionInvocationFacet = new ActionInvocationFacetForDomainEventFromDefault(
                         actionDomainEventFacet.getEventType(), actionMethod, typeSpec, returnSpec, holder,
                         servicesInjector
-                );
+                        );
             }
             FacetUtil.addFacet(actionInvocationFacet);
 

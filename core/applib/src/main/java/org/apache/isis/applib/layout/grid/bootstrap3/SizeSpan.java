@@ -29,7 +29,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(
         name = "sizeSpan"
         , propOrder = {}
-)
+        )
 public class SizeSpan implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -94,10 +94,10 @@ public class SizeSpan implements Serializable {
             buf.append(" ");
         }
         buf.append("col-")
-           .append(size.toCssClassFragment())
-           .append("-")
-           .append(offset != null && offset ? "offset-": "")
-           .append(span);
+        .append(size.toCssClassFragment())
+        .append("-")
+        .append(offset != null && offset ? "offset-": "")
+        .append(span);
         return buf;
     }
 }

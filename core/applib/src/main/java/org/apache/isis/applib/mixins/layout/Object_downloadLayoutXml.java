@@ -30,40 +30,40 @@ import org.apache.isis.commons.internal.base._Strings;
 
 @Mixin(method="act")
 public class Object_downloadLayoutXml {
-	
+
     private final Object object;
 
     public Object_downloadLayoutXml(final Object object) {
         this.object = object;
     }
 
-    public static class ActionDomainEvent 
+    public static class ActionDomainEvent
     extends org.apache.isis.applib.IsisApplibModule.ActionDomainEvent<Object_downloadLayoutXml> {
-    	private static final long serialVersionUID = 1L;
+        private static final long serialVersionUID = 1L;
     }
 
     @Action(
             domainEvent = ActionDomainEvent.class,
             semantics = SemanticsOf.SAFE,
             restrictTo = RestrictTo.PROTOTYPING
-    )
+            )
     @ActionLayout(
             contributed = Contributed.AS_ACTION,
             cssClassFa = "fa-download",
             position = ActionLayout.Position.PANEL_DROPDOWN
-    )
+            )
     @MemberOrder(name = "datanucleusIdLong", sequence = "700.1")
     public Object act(
             @ParameterLayout(named = "File name")
             final String fileName,
             final LayoutService.Style style) {
-    	
+
         final String xml = layoutService.toXml(object.getClass(), style);
-        
+
         return new Clob(
-        		_Strings.asFileNameWithExtension(fileName, style.name().toLowerCase() + ".xml"), 
-        		"text/xml", 
-        		xml);
+                _Strings.asFileNameWithExtension(fileName, style.name().toLowerCase() + ".xml"),
+                "text/xml",
+                xml);
     }
 
     public String default0Act() {

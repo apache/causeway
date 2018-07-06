@@ -41,8 +41,8 @@ public interface MenuBarsResource {
      */
     @GET
     @Produces({
-            MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_JSON_LAYOUT_MENUBARS,
-            MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_LAYOUT_MENUBARS
+        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_JSON_LAYOUT_MENUBARS,
+        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_LAYOUT_MENUBARS
     })
     public Response menuBars();
 

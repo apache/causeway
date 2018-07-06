@@ -39,22 +39,22 @@ import org.apache.isis.applib.layout.links.Link;
  */
 @XmlRootElement(
         name = "serviceAction"
-)
+        )
 @XmlType(
-    name = "serviceAction"
-    , propOrder = {
-        "objectType"
-        , "id"
-        , "named"
-        , "namedEscaped"
-        , "bookmarking"
-        , "cssClass"
-        , "cssClassFa"
-        , "describedAs"
-        , "metadataError"
-        , "link"
-    }
-)
+        name = "serviceAction"
+        , propOrder = {
+                "objectType"
+                , "id"
+                , "named"
+                , "namedEscaped"
+                , "bookmarking"
+                , "cssClass"
+                , "cssClassFa"
+                , "describedAs"
+                , "metadataError"
+                , "link"
+        }
+        )
 public class ServiceActionLayoutData implements Serializable {
 
 

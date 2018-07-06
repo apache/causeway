@@ -63,22 +63,22 @@ public class EventBusPluginForAxon extends EventBusImplementationAbstract {
         simpleEventBus.publish(GenericEventMessage.asEventMessage(event));
     }
 
-	@Override
-	public <T> EventBusPlugin.EventListener<T> addEventListener(
-			final Class<T> targetType, 
-			final Consumer<T> onEvent) {
-		
-		final AxonEventListener<T> eventListener = new AxonEventListener<T>(targetType, onEvent);
-		simpleEventBus.subscribe(eventListener.proxy());
-		return eventListener;
-	}
+    @Override
+    public <T> EventBusPlugin.EventListener<T> addEventListener(
+            final Class<T> targetType,
+            final Consumer<T> onEvent) {
 
-	@Override
-	public <T> void removeEventListener(EventBusPlugin.EventListener<T> eventListener) {
-		if(eventListener instanceof AxonEventListener) {
-			simpleEventBus.unsubscribe(((AxonEventListener<T>)eventListener).proxy());	
-		}
-	}
+        final AxonEventListener<T> eventListener = new AxonEventListener<T>(targetType, onEvent);
+        simpleEventBus.subscribe(eventListener.proxy());
+        return eventListener;
+    }
+
+    @Override
+    public <T> void removeEventListener(EventBusPlugin.EventListener<T> eventListener) {
+        if(eventListener instanceof AxonEventListener) {
+            simpleEventBus.unsubscribe(((AxonEventListener<T>)eventListener).proxy());
+        }
+    }
 
     @Override
     protected AbstractDomainEvent<?> asDomainEvent(final Object event) {
@@ -86,7 +86,7 @@ public class EventBusPluginForAxon extends EventBusImplementationAbstract {
             // this seems to be the case on error
 
             @SuppressWarnings("rawtypes")
-			final GenericEventMessage genericEventMessage = (GenericEventMessage) event;
+            final GenericEventMessage genericEventMessage = (GenericEventMessage) event;
             final Object payload = genericEventMessage.getPayload();
             return asDomainEventIfPossible(payload);
         }
@@ -96,45 +96,45 @@ public class EventBusPluginForAxon extends EventBusImplementationAbstract {
     }
 
     // -- HELPER
-    
+
     /**
      * Wraps a Consumer as EventBusImplementation.EventListener with the given targetType.
      * @param <T>
      * @since 2.0.0
      */
     static class AxonEventListener<T> implements EventBusPlugin.EventListener<T> {
-    	private final Consumer<T> eventConsumer;
-		private final EventListenerProxy proxy;
-    	private AxonEventListener(final Class<T> targetType, final Consumer<T> eventConsumer) {
-			this.eventConsumer = Objects.requireNonNull(eventConsumer);
-			this.proxy = new EventListenerProxy() {
-				@SuppressWarnings("unchecked")
-				@Override
-				public void handle(@SuppressWarnings("rawtypes") EventMessage event) {
-					final Object payload = event.getPayload();
-					if(payload==null) {
-						return;
-					}
-					if(targetType.isAssignableFrom(event.getPayloadType())){
-						on((T)event.getPayload());	
-					}
-				}
-				@Override
-				public Class<?> getTargetType() {
-					return targetType;
-				}
-			};
-		}
-		@Override
-    	public void on(T event) {
-    		eventConsumer.accept(event);
-    	}
-    	public EventListenerProxy proxy() {
-    		return proxy;
-    	}
-    	
+        private final Consumer<T> eventConsumer;
+        private final EventListenerProxy proxy;
+        private AxonEventListener(final Class<T> targetType, final Consumer<T> eventConsumer) {
+            this.eventConsumer = Objects.requireNonNull(eventConsumer);
+            this.proxy = new EventListenerProxy() {
+                @SuppressWarnings("unchecked")
+                @Override
+                public void handle(@SuppressWarnings("rawtypes") EventMessage event) {
+                    final Object payload = event.getPayload();
+                    if(payload==null) {
+                        return;
+                    }
+                    if(targetType.isAssignableFrom(event.getPayloadType())){
+                        on((T)event.getPayload());
+                    }
+                }
+                @Override
+                public Class<?> getTargetType() {
+                    return targetType;
+                }
+            };
+        }
+        @Override
+        public void on(T event) {
+            eventConsumer.accept(event);
+        }
+        public EventListenerProxy proxy() {
+            return proxy;
+        }
+
     }
-    
+
     private AxonEventListenerAdapter adapterFor(final Object domainService) {
         AxonEventListenerAdapter annotationEventListenerAdapter = listenerAdapterByDomainService.get(domainService);
         if (annotationEventListenerAdapter == null) {
@@ -143,7 +143,7 @@ public class EventBusPluginForAxon extends EventBusImplementationAbstract {
         }
         return annotationEventListenerAdapter;
     }
-    
+
     private AbstractDomainEvent<?> asDomainEventIfPossible(final Object event) {
         if (event instanceof AbstractDomainEvent)
             return (AbstractDomainEvent<?>) event;

@@ -26,13 +26,13 @@ public final class IsisActions {
 
     private IsisActions() {
     }
-    
+
     public static Action injectInto() {
         return InjectIntoJMockAction.injectInto();
     }
 
     @SafeVarargs
-	public static <T> Action returnEach(final T... values) {
+    public static <T> Action returnEach(final T... values) {
         return JMockActions.returnEach(values);
     }
 
@@ -42,12 +42,12 @@ public final class IsisActions {
 
     public static Action returnNewTransientInstance() {
         return new Action(){
-    
+
             @Override
             public void describeTo(Description description) {
                 description.appendText("new transient instance");
             }
-    
+
             @Override
             public Object invoke(Invocation invocation) throws Throwable {
                 Class<?> cls = (Class<?>) invocation.getParameter(0);

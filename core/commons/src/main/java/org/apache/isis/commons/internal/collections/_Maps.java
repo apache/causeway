@@ -34,85 +34,85 @@ import java.util.stream.Stream;
  * Common Map creation idioms.
  * </p>
  * <p>
- * <b>WARNING</b>: Do <b>NOT</b> use any of the classes provided by this package! <br/> 
+ * <b>WARNING</b>: Do <b>NOT</b> use any of the classes provided by this package! <br/>
  * These may be changed or removed without notice!
  * </p>
- * 
+ *
  * @since 2.0.0
  */
 public final class _Maps {
 
-	private _Maps(){}
-	
-	// -- UNMODIFIABLE MAP
-	
-	public static <K, V> Map<K, V> unmodifiable(K k1, V v1) {
-		final LinkedHashMap<K, V> mapPreservingOrder = newLinkedHashMap();
-		mapPreservingOrder.put(k1, v1);
-		return Collections.unmodifiableMap(mapPreservingOrder);
-	}
-	
-	public static <K, V> Map<K, V> unmodifiable(K k1, V v1, K k2, V v2) {
-		final LinkedHashMap<K, V> mapPreservingOrder = newLinkedHashMap();
-		mapPreservingOrder.put(k1, v1);
-		mapPreservingOrder.put(k2, v2);
-		return Collections.unmodifiableMap(mapPreservingOrder);
-	}
-	
-	public static <K, V> Map<K, V> unmodifiable(K k1, V v1, K k2, V v2, K k3, V v3) {
-		final LinkedHashMap<K, V> mapPreservingOrder = newLinkedHashMap();
-		mapPreservingOrder.put(k1, v1);
-		mapPreservingOrder.put(k2, v2);
-		mapPreservingOrder.put(k3, v3);
-		return Collections.unmodifiableMap(mapPreservingOrder);
-	}
-	
-	public static <K, V> Map<K, V> unmodifiable(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4) {
-		final LinkedHashMap<K, V> mapPreservingOrder = newLinkedHashMap();
-		mapPreservingOrder.put(k1, v1);
-		mapPreservingOrder.put(k2, v2);
-		mapPreservingOrder.put(k3, v3);
-		mapPreservingOrder.put(k4, v4);
-		return Collections.unmodifiableMap(mapPreservingOrder);
-	}
-	
-	@SafeVarargs
-	public static <K, V> Map<K, V> unmodifiableEntries(Map.Entry<? extends K,? extends V>... entries) {
-		Objects.requireNonNull(entries); // don't accept null elements
-		if(entries.length==0) {
-			return Collections.emptyMap();
-		}
-		
-		final LinkedHashMap<K, V> mapPreservingOrder = newLinkedHashMap();
-		
-		Stream.of(entries)
-		.forEach(entry->mapPreservingOrder.put(entry.getKey(), entry.getValue()));
-		
-		return Collections.unmodifiableMap(mapPreservingOrder);
-	}
-	
-	public static <K, V> Map.Entry<K, V> entry(K k, V v){
-		return new AbstractMap.SimpleEntry<K, V>(k, v);
-	}
-	
-	// -- HASH MAP
-	
-	public static <K, V> HashMap<K, V> newHashMap() {
-		return new HashMap<K, V>();
-	}
+    private _Maps(){}
 
-	// -- LINKED HASH MAP
-	
-	public static <K, V> LinkedHashMap<K, V> newLinkedHashMap() {
-		return new LinkedHashMap<K, V>();
-	}
-	
-	// -- CONCURRENT HASH MAP 
-	
-	public static <K, V> ConcurrentHashMap<K, V> newConcurrentHashMap() {
-		return new ConcurrentHashMap<K, V>();
-	}
-	
-	// --
-	
+    // -- UNMODIFIABLE MAP
+
+    public static <K, V> Map<K, V> unmodifiable(K k1, V v1) {
+        final LinkedHashMap<K, V> mapPreservingOrder = newLinkedHashMap();
+        mapPreservingOrder.put(k1, v1);
+        return Collections.unmodifiableMap(mapPreservingOrder);
+    }
+
+    public static <K, V> Map<K, V> unmodifiable(K k1, V v1, K k2, V v2) {
+        final LinkedHashMap<K, V> mapPreservingOrder = newLinkedHashMap();
+        mapPreservingOrder.put(k1, v1);
+        mapPreservingOrder.put(k2, v2);
+        return Collections.unmodifiableMap(mapPreservingOrder);
+    }
+
+    public static <K, V> Map<K, V> unmodifiable(K k1, V v1, K k2, V v2, K k3, V v3) {
+        final LinkedHashMap<K, V> mapPreservingOrder = newLinkedHashMap();
+        mapPreservingOrder.put(k1, v1);
+        mapPreservingOrder.put(k2, v2);
+        mapPreservingOrder.put(k3, v3);
+        return Collections.unmodifiableMap(mapPreservingOrder);
+    }
+
+    public static <K, V> Map<K, V> unmodifiable(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4) {
+        final LinkedHashMap<K, V> mapPreservingOrder = newLinkedHashMap();
+        mapPreservingOrder.put(k1, v1);
+        mapPreservingOrder.put(k2, v2);
+        mapPreservingOrder.put(k3, v3);
+        mapPreservingOrder.put(k4, v4);
+        return Collections.unmodifiableMap(mapPreservingOrder);
+    }
+
+    @SafeVarargs
+    public static <K, V> Map<K, V> unmodifiableEntries(Map.Entry<? extends K,? extends V>... entries) {
+        Objects.requireNonNull(entries); // don't accept null elements
+        if(entries.length==0) {
+            return Collections.emptyMap();
+        }
+
+        final LinkedHashMap<K, V> mapPreservingOrder = newLinkedHashMap();
+
+        Stream.of(entries)
+        .forEach(entry->mapPreservingOrder.put(entry.getKey(), entry.getValue()));
+
+        return Collections.unmodifiableMap(mapPreservingOrder);
+    }
+
+    public static <K, V> Map.Entry<K, V> entry(K k, V v){
+        return new AbstractMap.SimpleEntry<K, V>(k, v);
+    }
+
+    // -- HASH MAP
+
+    public static <K, V> HashMap<K, V> newHashMap() {
+        return new HashMap<K, V>();
+    }
+
+    // -- LINKED HASH MAP
+
+    public static <K, V> LinkedHashMap<K, V> newLinkedHashMap() {
+        return new LinkedHashMap<K, V>();
+    }
+
+    // -- CONCURRENT HASH MAP
+
+    public static <K, V> ConcurrentHashMap<K, V> newConcurrentHashMap() {
+        return new ConcurrentHashMap<K, V>();
+    }
+
+    // --
+
 }

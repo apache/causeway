@@ -22,6 +22,6 @@ package org.apache.isis.core.metamodel.facets.value.treenode;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 
 public interface TreeNodeValueFacet extends Facet {
-	
+
 
 }

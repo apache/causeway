@@ -51,6 +51,7 @@ public class ServiceActionsModel extends ModelAbstract<List<ObjectAdapter>> {
         return menuBar;
     }
 
+    @Override
     protected List<ObjectAdapter> load() {
         return Lists.newArrayList(Iterables.filter(getServiceAdapters(), with(menuBar)));
     }
@@ -62,7 +63,7 @@ public class ServiceActionsModel extends ModelAbstract<List<ObjectAdapter>> {
                 final DomainServiceLayoutFacet facet = input.getSpecification().getFacet
                         (DomainServiceLayoutFacet.class);
                 return (facet != null && facet.getMenuBar() == menuBar) ||
-                       (facet == null && menuBar == DomainServiceLayout.MenuBar.PRIMARY);
+                        (facet == null && menuBar == DomainServiceLayout.MenuBar.PRIMARY);
             }
         };
     }

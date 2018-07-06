@@ -27,9 +27,9 @@ public interface HintStore {
 
     public static class BookmarkWithHintId extends Bookmark {
 
-		private static final long serialVersionUID = -459431279406553124L;
-		
-		private final String hintId;
+        private static final long serialVersionUID = -459431279406553124L;
+
+        private final String hintId;
 
         public BookmarkWithHintId(final Bookmark bookmark, final String hintId) {
             super(bookmark.toString());

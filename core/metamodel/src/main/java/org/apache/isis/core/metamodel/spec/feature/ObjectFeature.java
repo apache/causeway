@@ -26,7 +26,7 @@ import org.apache.isis.core.metamodel.spec.Specification;
 /**
  * A specification representing a non-{@link FeatureType#OBJECT object}, that
  * therefore has an underlying type (the type of the property, collection)
- * 
+ *
  * <p>
  * For a property or action parameter, is the type. For a collection is the
  * element type. For an action it is always <tt>null</tt>.
@@ -43,7 +43,7 @@ public interface ObjectFeature extends Specification {
     /**
      * Return the name for this member - the field or action. This is based on
      * the name of this member.
-     * 
+     *
      * @see #getIdentifier()
      */
     String getName();
@@ -51,7 +51,7 @@ public interface ObjectFeature extends Specification {
     /**
      * Returns a description of how the member is used - this complements the
      * help text.
-     * 
+     *
      * @see #getHelp()
      */
     @Override
@@ -59,7 +59,7 @@ public interface ObjectFeature extends Specification {
 
     /**
      * The specification of the underlying type.
-     * 
+     *
      * <p>
      * For example:
      * <ul>

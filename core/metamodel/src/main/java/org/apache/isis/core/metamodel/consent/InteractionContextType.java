@@ -23,7 +23,7 @@ import org.apache.isis.core.metamodel.interactions.InteractionContext;
 
 /**
  * Powertype for the {@link InteractionContext} hierarchy.
- * 
+ *
  */
 public enum InteractionContextType {
 
@@ -90,7 +90,7 @@ public enum InteractionContextType {
     /**
      * Whether this particular proposed argument for an action invocation is
      * valid (or if it is in fact invalid).
-     * 
+     *
      * <p>
      * For example, ensuring that a regular expression match or number range is
      * correct.
@@ -98,7 +98,7 @@ public enum InteractionContextType {
     ACTION_PROPOSED_ARGUMENT("Proposed argument"),
     /**
      * Invoking (or attempting to invoke) an action.
-     * 
+     *
      * <p>
      * Even if each of the {@link #ACTION_PROPOSED_ARGUMENT proposed arguments}
      * are valid, it may not be possible to invoke the action if there the

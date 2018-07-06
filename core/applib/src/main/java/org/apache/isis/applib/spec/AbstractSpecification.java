@@ -23,7 +23,7 @@ import java.lang.reflect.Method;
 
 /**
  * Adapter to make it easy to write {@link Specification}s.
- * 
+ *
  * <p>
  * Provides two main features:
  * <ul>
@@ -32,7 +32,7 @@ import java.lang.reflect.Method;
  * <li>second, checks for nulls (with a null either being ignore or again
  * constituting a failure)
  * </ul>
- * 
+ *
  * <p>
  * Implementation note: inspired by (borrowed code from) Hamcrest's
  * <tt>TypeSafeMatcher</tt>.
@@ -97,7 +97,7 @@ public abstract class AbstractSpecification<T> implements Specification {
     /**
      * If <tt>null</tt> then satisfied, otherwise is reason why the
      * specification is not satisfied.
-     * 
+     *
      * <p>
      * Subclasses should implement this. The item will already have been checked
      * for the specific type and will never be null.

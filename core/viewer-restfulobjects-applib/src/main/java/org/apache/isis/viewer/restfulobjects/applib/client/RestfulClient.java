@@ -49,7 +49,7 @@ public class RestfulClient {
     private final ClientExecutor executor;
     private final ClientRequestFactory clientRequestFactory;
 
-    
+
     /**
      * Using {@link javax.ws.rs.client.Client}.
      */

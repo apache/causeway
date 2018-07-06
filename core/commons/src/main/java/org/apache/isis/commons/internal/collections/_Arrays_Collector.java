@@ -31,69 +31,69 @@ import java.util.stream.Collector;
 import org.apache.isis.commons.internal.base._Casts;
 
 /**
- * 
+ *
  * package private mixin for utility class {@link _Arrays}
- * 
+ *
  * Collector for Arrays.
  *
  */
 class _Arrays_Collector<T> implements Collector<T, _Arrays_Collector.FastList<T>, T[]> {
-	
-	private final Class<T> componentType;
-	private final int size;
-	
-	_Arrays_Collector(Class<T> componentType, int size) {
-		this.componentType = componentType;
-		this.size = size;
-	}
 
-	@Override
-	public Supplier<FastList<T>> supplier() {
-		return ()->new FastList<>(componentType, size);
-	}
+    private final Class<T> componentType;
+    private final int size;
 
-	@Override
-	public BiConsumer<FastList<T>, T> accumulator() {
-		return FastList::add;
-	}
+    _Arrays_Collector(Class<T> componentType, int size) {
+        this.componentType = componentType;
+        this.size = size;
+    }
 
-	@Override
-	public BinaryOperator<FastList<T>> combiner() {
-		return (a,b)->a.addAll(b);
-	}
+    @Override
+    public Supplier<FastList<T>> supplier() {
+        return ()->new FastList<>(componentType, size);
+    }
 
-	@Override
-	public Function<FastList<T>, T[]> finisher() {
-		return list->list.buffer;
-	}
+    @Override
+    public BiConsumer<FastList<T>, T> accumulator() {
+        return FastList::add;
+    }
 
-	@Override
-	public Set<Characteristics> characteristics() {
-		return Collections.emptySet();
-	}
+    @Override
+    public BinaryOperator<FastList<T>> combiner() {
+        return (a,b)->a.addAll(b);
+    }
 
-	// -- HELPER
-	
-	static final class FastList<T> {
-		private final T[] buffer;
-		private int offset=0;
-		
-		public FastList(Class<T> componentType, int size) {
-			this.buffer = _Casts.uncheckedCast(Array.newInstance(componentType, size));
-		}
-		public void add(T x){
-			buffer[offset++]=x;
-		}
-		public FastList<T> addAll(FastList<T> x){
-			System.arraycopy(x.buffer, 0, buffer, offset, x.offset);
-			return this;
-		}
-	}
-	
-	
+    @Override
+    public Function<FastList<T>, T[]> finisher() {
+        return list->list.buffer;
+    }
+
+    @Override
+    public Set<Characteristics> characteristics() {
+        return Collections.emptySet();
+    }
+
+    // -- HELPER
+
+    static final class FastList<T> {
+        private final T[] buffer;
+        private int offset=0;
+
+        public FastList(Class<T> componentType, int size) {
+            this.buffer = _Casts.uncheckedCast(Array.newInstance(componentType, size));
+        }
+        public void add(T x){
+            buffer[offset++]=x;
+        }
+        public FastList<T> addAll(FastList<T> x){
+            System.arraycopy(x.buffer, 0, buffer, offset, x.offset);
+            return this;
+        }
+    }
+
+
 }
 
 
-	
-	
+
+
 

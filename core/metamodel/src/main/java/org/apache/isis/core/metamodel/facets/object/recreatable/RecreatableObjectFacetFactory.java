@@ -49,7 +49,7 @@ import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 import com.google.common.collect.Maps;
 
 public class RecreatableObjectFacetFactory extends FacetFactoryAbstract
-        implements MetaModelValidatorRefiner, PostConstructMethodCache {
+implements MetaModelValidatorRefiner, PostConstructMethodCache {
 
     public RecreatableObjectFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
@@ -96,7 +96,7 @@ public class RecreatableObjectFacetFactory extends FacetFactoryAbstract
         final PostConstructMethodCache postConstructMethodCache = this;
         return annotation != null
                 ? new RecreatableObjectFacetForXmlRootElementAnnotation(holder, servicesInjector, postConstructMethodCache)
-                : null;
+                        : null;
     }
 
     // //////////////////////////////////////
@@ -113,9 +113,9 @@ public class RecreatableObjectFacetFactory extends FacetFactoryAbstract
                     validationFailures.add(
                             "%s: has multiple incompatible annotations/interfaces indicating that " +
                                     "it is a recreatable object of some sort (%s and %s)",
-                            objectSpec.getFullIdentifier(),
-                            facet.getClass().getSimpleName(),
-                            underlyingFacet.getClass().getSimpleName());
+                                    objectSpec.getFullIdentifier(),
+                                    facet.getClass().getSimpleName(),
+                                    underlyingFacet.getClass().getSimpleName());
                 }
                 return true;
             }
@@ -127,6 +127,7 @@ public class RecreatableObjectFacetFactory extends FacetFactoryAbstract
 
     private final Map<Class<?>, Optional<Method>> postConstructMethods = Maps.newHashMap();
 
+    @Override
     public Method postConstructMethodFor(final Object pojo) {
         return MethodFinderUtils.findAnnotatedMethod(pojo, PostConstruct.class, postConstructMethods);
     }

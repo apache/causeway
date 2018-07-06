@@ -113,8 +113,8 @@ public class PropertyAutoCompleteFacetMethod extends PropertyAutoCompleteFacetAb
                 ObjectAdapter.Util.visibleAdapters(
                         collectionAdapter,
                         interactionInitiatedBy);
-        final List<Object> filteredObjects = 
-        		_Lists.transform(visibleAdapters, ObjectAdapter.Functions.getObject());
+        final List<Object> filteredObjects =
+                _Lists.transform(visibleAdapters, ObjectAdapter.Functions.getObject());
 
         final ObjectSpecification propertySpec = getSpecification(propertyType);
         return CollectionUtils.getCollectionAsObjectArray(filteredObjects, propertySpec, getAdapterManager());

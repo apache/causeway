@@ -51,8 +51,8 @@ public class IsisConverterLocator {
      * @return The best converter for the object adapter's type
      */
     public static IConverter<Object> findConverter(
-    		final ObjectAdapter objectAdapter, 
-    		final WicketViewerSettings wicketViewerSettings) {
+            final ObjectAdapter objectAdapter,
+            final WicketViewerSettings wicketViewerSettings) {
 
         final ObjectSpecification objectSpecification = objectAdapter.getSpecification();
 
@@ -70,42 +70,42 @@ public class IsisConverterLocator {
 
         final RenderedAdjustedFacet renderedAdjustedFacet = objectSpecification.getFacet(RenderedAdjustedFacet.class);
         final int adjustBy = renderedAdjustedFacet != null ? renderedAdjustedFacet.value() : 0;
-        
+
         if (java.util.Date.class == correspondingClass) {
             return _Casts.uncheckedCast(new DateConverterForJavaUtilDate(wicketViewerSettings, adjustBy));
-        } 
+        }
         if (java.sql.Date.class == correspondingClass) {
-        	return _Casts.uncheckedCast(new DateConverterForJavaSqlDate(wicketViewerSettings, adjustBy));
-        } 
+            return _Casts.uncheckedCast(new DateConverterForJavaSqlDate(wicketViewerSettings, adjustBy));
+        }
         if (org.joda.time.LocalDate.class == correspondingClass) {
-        	return _Casts.uncheckedCast(new DateConverterForJodaLocalDate(wicketViewerSettings, adjustBy));
+            return _Casts.uncheckedCast(new DateConverterForJodaLocalDate(wicketViewerSettings, adjustBy));
         }
         if (org.joda.time.LocalDateTime.class == correspondingClass) {
-        	return _Casts.uncheckedCast(new DateConverterForJodaLocalDateTime(wicketViewerSettings, adjustBy));
+            return _Casts.uncheckedCast(new DateConverterForJodaLocalDateTime(wicketViewerSettings, adjustBy));
         }
         if (org.joda.time.DateTime.class == correspondingClass) {
-        	return _Casts.uncheckedCast(new DateConverterForJodaDateTime(wicketViewerSettings, adjustBy));
-        } 
+            return _Casts.uncheckedCast(new DateConverterForJodaDateTime(wicketViewerSettings, adjustBy));
+        }
         if (java.sql.Timestamp.class == correspondingClass) {
-        	return _Casts.uncheckedCast(new DateConverterForJavaSqlTimestamp(wicketViewerSettings, adjustBy));
-        } 
+            return _Casts.uncheckedCast(new DateConverterForJavaSqlTimestamp(wicketViewerSettings, adjustBy));
+        }
         {
-        	// data converter plugins (if any)
-        	
-	        DateConverter<?> converter = _Plugin.loadAll(DateConverterPlugin.class).stream()
-			.map(plugin->plugin.converterForClassIfAny(correspondingClass, wicketViewerSettings, adjustBy))
-			.filter(_NullSafe::isPresent)
-			.findAny()
-			.orElse(null);
-	        
-	        if(converter!=null) {
-	        	return _Casts.uncheckedCast(converter);
-	        }
-        
+            // data converter plugins (if any)
+
+            DateConverter<?> converter = _Plugin.loadAll(DateConverterPlugin.class).stream()
+                    .map(plugin->plugin.converterForClassIfAny(correspondingClass, wicketViewerSettings, adjustBy))
+                    .filter(_NullSafe::isPresent)
+                    .findAny()
+                    .orElse(null);
+
+            if(converter!=null) {
+                return _Casts.uncheckedCast(converter);
+            }
+
         }
         if (java.math.BigInteger.class == correspondingClass) {
-        	return _Casts.uncheckedCast(new BigIntegerConverter());
-        } 
+            return _Casts.uncheckedCast(new BigIntegerConverter());
+        }
         if (java.math.BigDecimal.class == correspondingClass) {
             final BigDecimalValueFacet facet = objectSpecification.getFacet(BigDecimalValueFacet.class);
             Integer scale = null;
@@ -113,8 +113,8 @@ public class IsisConverterLocator {
                 scale = facet.getScale();
             }
             return _Casts.uncheckedCast(new BigDecimalConverterWithScale(scale).forViewMode());
-        } 
-        
+        }
+
         if(Application.exists()) {
             final IConverterLocator converterLocator = Application.get().getConverterLocator();
             return _Casts.uncheckedCast(converterLocator.getConverter(correspondingClass));

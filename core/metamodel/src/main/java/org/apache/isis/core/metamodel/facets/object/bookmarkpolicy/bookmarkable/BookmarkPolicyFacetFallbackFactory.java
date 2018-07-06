@@ -63,7 +63,7 @@ public class BookmarkPolicyFacetFallbackFactory extends FacetFactoryAbstract imp
             @Override
             public boolean visit(ObjectSpecification objectSpec, ValidationFailures validationFailures) {
                 final Class<?> cls = objectSpec.getCorrespondingClass();
-                
+
                 final List<ObjectAction> objectActions = objectSpec.getObjectActions(Contributed.EXCLUDED);
                 for (final ObjectAction objectAction : objectActions) {
                     final BookmarkPolicyFacet bookmarkFacet = objectAction.getFacet(BookmarkPolicyFacet.class);
@@ -72,10 +72,10 @@ public class BookmarkPolicyFacetFallbackFactory extends FacetFactoryAbstract imp
                     }
                     final ActionSemanticsFacet semanticsFacet = objectAction.getFacet(ActionSemanticsFacet.class);
                     if(semanticsFacet == null || semanticsFacet.isNoop() || !semanticsFacet.value().isSafeInNature()) {
-                      validationFailures.add(
-                          "%s: action is bookmarkable but action semantics are not explicitly indicated as being safe.  " +
-                          "Either add @Action(semantics=SemanticsOf.SAFE) or @Action(semantics=SemanticsOf.SAFE_AND_REQUEST_CACHEABLE), or remove @ActionLayout(bookmarking=...).",
-                      objectAction.getIdentifier().toClassAndNameIdentityString());
+                        validationFailures.add(
+                                "%s: action is bookmarkable but action semantics are not explicitly indicated as being safe.  " +
+                                        "Either add @Action(semantics=SemanticsOf.SAFE) or @Action(semantics=SemanticsOf.SAFE_AND_REQUEST_CACHEABLE), or remove @ActionLayout(bookmarking=...).",
+                                        objectAction.getIdentifier().toClassAndNameIdentityString());
                     }
                 }
                 return true;

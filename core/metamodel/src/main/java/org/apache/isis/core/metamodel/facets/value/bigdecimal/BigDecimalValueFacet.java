@@ -25,7 +25,7 @@ public interface BigDecimalValueFacet extends Facet {
 
     /**
      * Maximum length of digits for this decimal (in other words, its precision).
-     * 
+     *
      * <p>
      * For example:
      * <ul>
@@ -46,7 +46,7 @@ public interface BigDecimalValueFacet extends Facet {
 
     /**
      * The number of digits to the right of the decimal place (fractional part) for this decimal.
-     * 
+     *
      * <p>
      * For example:
      * <ul>

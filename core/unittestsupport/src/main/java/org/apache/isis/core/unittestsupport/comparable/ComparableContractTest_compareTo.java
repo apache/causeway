@@ -28,7 +28,7 @@ public abstract class ComparableContractTest_compareTo<T extends Comparable<T>> 
     /**
      * Return an array of tuples; each tuple should consist of 4 elements, whereby
      * item0  < item1 = item2 < item3
-     * 
+     *
      * Typically item0 should be null valued (if supported by the impl).
      */
     protected abstract List<List<T>> orderedTuples();

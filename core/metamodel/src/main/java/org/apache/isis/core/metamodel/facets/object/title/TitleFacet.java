@@ -27,11 +27,11 @@ import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
 /**
  * Mechanism for obtaining the title of an instance of a class, used to label
  * the instance in the viewer (usually alongside an icon representation).
- * 
+ *
  * <p>
  * In the standard Apache Isis Programming Model, typically corresponds to a
  * method named <tt>title</tt>.
- * 
+ *
  * @see IconFacet
  * @see PluralFacet
  */
@@ -44,7 +44,7 @@ public interface TitleFacet extends Facet {
 
     /**
      * Provide a title for the target object, in the context of the context object.
-     * 
+     *
      * <p>
      * For example, if the title is of an object within a parented collection, then the
      * context object would be the parent.  Thus, the title might be shortened so that it does not

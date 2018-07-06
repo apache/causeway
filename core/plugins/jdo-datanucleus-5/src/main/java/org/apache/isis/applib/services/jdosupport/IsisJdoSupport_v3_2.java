@@ -27,9 +27,9 @@ import javax.jdo.query.BooleanExpression;
 import org.apache.isis.applib.annotation.Programmatic;
 
 /**
- * Service that provide a number of workarounds when using JDO/DataNucleus. 
+ * Service that provide a number of workarounds when using JDO/DataNucleus.
  */
-public interface IsisJdoSupport_v3_2 extends org.apache.isis.applib.services.jdosupport.IsisJdoSupport 
+public interface IsisJdoSupport_v3_2 extends org.apache.isis.applib.services.jdosupport.IsisJdoSupport
 {
 
     /**

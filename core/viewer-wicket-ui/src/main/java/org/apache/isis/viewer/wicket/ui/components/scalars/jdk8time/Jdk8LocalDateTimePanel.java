@@ -39,6 +39,7 @@ public class Jdk8LocalDateTimePanel extends ScalarPanelTextFieldDatePickerAbstra
         init(new DateConverterForJdk8LocalDateTime(getSettings(), getAdjustBy()));
     }
 
+    @Override
     protected AbstractTextComponent<LocalDateTime> createTextFieldForRegular(final String id) {
         final TextFieldValueModel<LocalDateTime> textFieldValueModel = new TextFieldValueModel<>(this);
         return new TextFieldWithDateTimePicker<>(id, textFieldValueModel, cls, converter);
@@ -48,5 +49,5 @@ public class Jdk8LocalDateTimePanel extends ScalarPanelTextFieldDatePickerAbstra
     protected String getScalarPanelType() {
         return "jdk8LocalDateTimePanel";
     }
-    
+
 }

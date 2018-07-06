@@ -137,6 +137,7 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
         return scalarIfRegularFormGroup;
     }
 
+    @Override
     protected Component getScalarValueComponent() {
         return textField;
     }
@@ -183,6 +184,7 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
      * Overrides default to use a fragment, allowing the inner rendering to switch between a simple span
      * or a textarea
      */
+    @Override
     protected Component createInlinePromptComponent(
             final String id,
             final IModel<String> inlinePromptModel) {
@@ -245,7 +247,7 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
     /**
      * Mandatory hook method to build the component to render the model when in
      * {@link Rendering#COMPACT compact} format.
-     * 
+     *
      * <p>
      * This default implementation uses a {@link Label}, however it may be overridden if required.
      */
@@ -343,6 +345,7 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
 
     @com.google.inject.Inject
     WicketViewerSettings settings;
+    @Override
     protected WicketViewerSettings getSettings() {
         return settings;
     }

@@ -30,15 +30,15 @@ import org.apache.isis.core.metamodel.specloader.specimpl.ContributeeMember;
 public interface ContributeeMemberFacetFactory extends FacetFactory {
 
     class ProcessContributeeMemberContext extends AbstractProcessContext<ObjectMember>
-            implements ProcessContextWithMetadataProperties<ObjectMember> {
-        
+    implements ProcessContextWithMetadataProperties<ObjectMember> {
+
         public ProcessContributeeMemberContext(
                 final ObjectMember facetHolder) {
             super(facetHolder);
         }
 
     }
-    
+
     /**
      * Sort the member, and return the correctly setup annotation if present.
      */

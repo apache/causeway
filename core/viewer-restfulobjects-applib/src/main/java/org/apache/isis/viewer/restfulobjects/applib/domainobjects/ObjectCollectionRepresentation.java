@@ -26,7 +26,7 @@ public class ObjectCollectionRepresentation extends AbstractObjectMemberRepresen
     public ObjectCollectionRepresentation(final JsonNode jsonNode) {
         super(jsonNode);
     }
-    
+
     public JsonRepresentation getValue() {
         return getArray("value").ensureArray();
     }

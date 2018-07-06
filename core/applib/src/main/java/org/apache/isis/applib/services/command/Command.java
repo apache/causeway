@@ -79,12 +79,12 @@ public interface Command extends HasTransactionId {
     String getUser();
     /**
      * <b>NOT API</b>: intended to be called only by the framework.
-     * 
+     *
      * <p>
      * Implementation notes: set when the Isis PersistenceSession is opened.
      */
     void setUser(String user);
-    
+
 
     // -- timestamp (property)
 
@@ -94,32 +94,32 @@ public interface Command extends HasTransactionId {
     Timestamp getTimestamp();
     /**
      * <b>NOT API</b>: intended to be called only by the framework.
-     * 
+     *
      * <p>
      * Implementation notes: set when the Isis PersistenceSession is opened.  Uses the applib {@link Clock}.
      */
     void setTimestamp(Timestamp timestamp);
 
-    
+
 
     // -- target (property)
 
     /**
      * {@link Bookmark} of the target object (entity or service) on which this action was performed.
-     * 
+     *
      * <p>
      * Will only be populated if a {@link BookmarkService} has been configured.
      */
     Bookmark getTarget();
     /**
      * <b>NOT API</b>: intended to be called only by the framework.
-     * 
+     *
      * <p>
      * Implementation notes: set when the action is invoked (in the ActionInvocationFacet).
      */
     void setTarget(Bookmark target);
 
-    
+
 
     // -- memberIdentifier (property)
 
@@ -131,14 +131,14 @@ public interface Command extends HasTransactionId {
 
     /**
      * <b>NOT API</b>: intended to be called only by the framework.
-     * 
+     *
      * <p>
      * Implementation notes: set when the action is invoked (in <tt>ActionInvocationFacet</tt>) or in
      * property edited (in <tt>PropertySetterFacet</tt>).
      */
     void setMemberIdentifier(String memberIdentifier);
 
-    
+
 
     // -- targetClass (property)
 
@@ -149,13 +149,13 @@ public interface Command extends HasTransactionId {
 
     /**
      * <b>NOT API</b>: intended to be called only by the framework.
-     * 
+     *
      * <p>
      * Implementation notes: set when the action is invoked (in the <tt>ActionInvocationFacet</t>).
      */
     void setTargetClass(String targetClass);
 
-    
+
 
     // -- targetAction (property)
 
@@ -167,17 +167,17 @@ public interface Command extends HasTransactionId {
      * </p>
      */
     String getTargetAction();
-    
+
     /**
      * <b>NOT API</b>: intended to be called only by the framework.
-     * 
+     *
      * <p>
      * Implementation notes: set when the action is invoked (in the <tt>ActionInvocationFacet</tt>) or property edited
      * (in the <tt>PropertySetterOrClearFacet</tt>).
      */
     void setTargetAction(String targetAction);
 
-    
+
 
     // -- arguments (property)
 
@@ -185,16 +185,16 @@ public interface Command extends HasTransactionId {
      * A human-friendly description of the arguments with which the action was invoked.
      */
     String getArguments();
-    
+
     /**
      * <b>NOT API</b>: intended to be called only by the framework.
-     * 
+     *
      * <p>
      * Implementation notes: set when the action is invoked (in the <tt>ActionInvocationFacet</tt>).
      */
     void setArguments(final String arguments);
 
-    
+
 
     // -- memento (property)
 
@@ -202,26 +202,26 @@ public interface Command extends HasTransactionId {
      * A formal (XML or similar) specification of the action to invoke/being invoked.
      */
     String getMemento();
-    
+
     /**
      * <b>NOT API</b>: intended to be called only by the framework.
-     * 
+     *
      * <p>
      * Implementation notes: set when the action is invoked (in the <tt>ActionInvocationFacet</tt>).
      */
     void setMemento(final String memento);
 
-    
+
 
     // -- executeIn (property)
 
     /**
-     * The mechanism by which this command is to be executed, either synchronously &quot;in the 
+     * The mechanism by which this command is to be executed, either synchronously &quot;in the
      * {@link CommandExecuteIn#FOREGROUND foreground}&quot; or is to be executed asynchronously &quot;in the
      * {@link CommandExecuteIn#BACKGROUND background}&quot; through the {@link BackgroundCommandService}.
      */
     CommandExecuteIn getExecuteIn();
-    
+
     /**
      * <b>NOT API</b>: intended to be called only by the framework.
      */
@@ -255,7 +255,7 @@ public interface Command extends HasTransactionId {
     @Programmatic
     List<ActionDomainEvent<?>> flushActionDomainEvents();
 
-    
+
 
     // -- executor (property)
 
@@ -276,12 +276,12 @@ public interface Command extends HasTransactionId {
 
     /**
      * The (current) executor of this command.
-     * 
+     *
      * <p>
      * Note that (even for implementations of {@link BackgroundCommandService} that persist {@link Command}s), this
      * property is never (likely to be) persisted, because it is always updated to indicate how the command is
      * currently being executed.
-     * 
+     *
      * <p>
      * If the {@link #getExecutor() executor} matches the required {@link #getExecuteIn() execution policy}, then the
      * command actually is executed.  The combinations are:
@@ -291,17 +291,17 @@ public interface Command extends HasTransactionId {
      * <li>executor = BACKGROUND, executeIn = FOREGROUND, then ignore</li>
      * <li>executor = BACKGROUND, executeIn = BACKGROUND, then execute, update the command with result</li>
      * </ul>
-     * 
+     *
      */
     Executor getExecutor();
 
-    
+
     /**
      * <b>NOT API</b>: intended to be called only by the framework.
      */
     void setExecutor(final Executor executor);
 
-    
+
 
     // -- startedAt (property)
 
@@ -319,7 +319,7 @@ public interface Command extends HasTransactionId {
      * {@link Interaction.Execution#getStartedAt()}.
      */
     Timestamp getStartedAt();
-    
+
     /**
      * <b>NOT API</b>: intended to be called only by the framework.
      *
@@ -335,7 +335,7 @@ public interface Command extends HasTransactionId {
      */
     void setStartedAt(Timestamp startedAt);
 
-    
+
 
     // -- completedAt (property, deprecated)
 
@@ -353,7 +353,7 @@ public interface Command extends HasTransactionId {
      * {@link Interaction.Execution#getCompletedAt()}.
      */
     Timestamp getCompletedAt();
-    
+
     /**
      * <b>NOT API</b>: intended to be called only by the framework.
      *
@@ -368,7 +368,7 @@ public interface Command extends HasTransactionId {
      */
     void setCompletedAt(Timestamp completedAt);
 
-    
+
 
     // -- parent (property)
 
@@ -383,7 +383,7 @@ public interface Command extends HasTransactionId {
      */
     void setParent(final Command parent);
 
-    
+
 
     // -- exception (property, deprecated)
 
@@ -406,7 +406,7 @@ public interface Command extends HasTransactionId {
      */
     void setException(String stackTrace);
 
-    
+
 
     // -- result (property, deprecated)
 
@@ -423,46 +423,46 @@ public interface Command extends HasTransactionId {
      * See also  {@link Interaction#getCurrentExecution()} and  {@link org.apache.isis.applib.services.iactn.Interaction.Execution#getReturned()}.
      */
     Bookmark getResult();
-    
+
     /**
      * <b>NOT API</b>: intended to be called only by the framework.
      */
     void setResult(Bookmark resultBookmark);
 
-    
+
 
     // -- persistence (property)
 
     /**
      * Whether this command should ultimately be persisted (if the configured {@link BackgroundCommandService} supports
      * it) or not.
-     * 
+     *
      * <p>
      * If the action to be executed has been annotated with the {@link Action#command()} attribute
      * then (unless its {@link Action#commandPersistence()} persistence} attribute has been set to a different value
      * than its default of {@link org.apache.isis.applib.annotation.CommandPersistence#PERSISTED persisted}), the
      * {@link Command} object will be persisted.
-     * 
+     *
      * <p>
      * However, it is possible to prevent the {@link Command} object from ever being persisted by setting the
      * {@link org.apache.isis.applib.annotation.Action#commandPersistence() persistence} attribute to
      * {@link org.apache.isis.applib.annotation.CommandPersistence#NOT_PERSISTED}, or it can be set to
      * {@link org.apache.isis.applib.annotation.CommandPersistence#IF_HINTED}, meaning it is dependent
-     * on whether {@link #setPersistHint(boolean) a hint has been set} by some other means.  
+     * on whether {@link #setPersistHint(boolean) a hint has been set} by some other means.
      *
      * <p>
-     * For example, a {@link BackgroundCommandService} implementation that creates persisted background commands ought 
+     * For example, a {@link BackgroundCommandService} implementation that creates persisted background commands ought
      * associate them (via its {@link Command#getParent() parent}) to an original persisted
      * {@link Command}.  The hinting mechanism allows the service to suggest that the parent command be persisted so
      * that the app can then provide a mechanism to find all child background commands for that original parent command.
      */
     CommandPersistence getPersistence();
-    
+
     /**
      * <b>NOT API</b>: intended to be called only by the framework.
      */
     void setPersistence(final CommandPersistence persistence);
-    
+
 
     // -- persistHint (programmatic)
 
@@ -472,18 +472,18 @@ public interface Command extends HasTransactionId {
      */
     @Programmatic
     boolean isPersistHint();
-    
+
     /**
      * Hint that this {@link Command} should be persisted, if possible.
-     * 
+     *
      * <p>
-     * <b>NOT API</b>: intended to be called only by the framework.  
-     * 
+     * <b>NOT API</b>: intended to be called only by the framework.
+     *
      * @see #getPersistence()
      */
     @Programmatic
     void setPersistHint(boolean persistHint);
-    
+
 
     // -- next (programmatic, deprecated)
 
@@ -496,6 +496,6 @@ public interface Command extends HasTransactionId {
     @Programmatic
     int next(final String sequenceAbbr);
 
-    
+
 
 }

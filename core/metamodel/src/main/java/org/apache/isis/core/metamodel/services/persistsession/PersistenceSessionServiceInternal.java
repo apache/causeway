@@ -47,7 +47,7 @@ public interface PersistenceSessionServiceInternal extends AdapterManager {
     @Programmatic
     ObjectAdapter createViewModelInstance(ObjectSpecification spec, String memento);
 
-    
+
 
     // -- retrieve
 
@@ -88,7 +88,7 @@ public interface PersistenceSessionServiceInternal extends AdapterManager {
     @Programmatic
     Bookmark bookmarkFor(Class<?> cls, String identifier);
 
-    
+
 
     // -- beginTran, flush, commit, currentTransaction
 
@@ -121,9 +121,9 @@ public interface PersistenceSessionServiceInternal extends AdapterManager {
 
     @Programmatic
     Transaction currentTransaction();
-    
+
     @Programmatic
-	CountDownLatch currentTransactionLatch();
+    CountDownLatch currentTransactionLatch();
 
     @Programmatic
     TransactionState getTransactionState();
@@ -132,7 +132,7 @@ public interface PersistenceSessionServiceInternal extends AdapterManager {
 
     /**
      * Provided by the <tt>PersistenceSession</tt> when used by framework.
-     * 
+     *
      * <p>
      * Called by <tt>DomainObjectContainerDefault</tt> and also by
      * <tt>DomainObjectInvocationHandler#handleSaveMethod()</tt>.
@@ -143,14 +143,14 @@ public interface PersistenceSessionServiceInternal extends AdapterManager {
     /**
      * Provided by <tt>UpdateNotifier</tt> and <tt>PersistenceSession</tt> when
      * used by framework.
-     * 
+     *
      * <p>
      * Called by <tt>DomainObjectContainerDefault</tt>.
      */
     @Programmatic
     void remove(ObjectAdapter adapter);
 
-    
+
 
     // -- allMatchingQuery, firstMatchingQuery
     /**

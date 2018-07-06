@@ -23,7 +23,7 @@ import org.apache.isis.applib.Identifier;
 
 /**
  * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents an access (reading) of a property.
- * 
+ *
  * <p>
  * Analogous to {@link PropertyModifyEvent}, however the {@link #getReason()}
  * will always be <tt>null</tt>. (If access is not allowed then a

@@ -32,51 +32,51 @@ import org.apache.wicket.model.Model;
  */
 public class MarkupPanel extends ScalarPanelTextFieldParseableAbstract {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public MarkupPanel(final String id, final ScalarModel scalarModel) {
-		super(id, scalarModel);
-	}
+    public MarkupPanel(final String id, final ScalarModel scalarModel) {
+        super(id, scalarModel);
+    }
 
-	@Override
-	protected String getScalarPanelType() {
-		return "markupPanel";
-	}
+    @Override
+    protected String getScalarPanelType() {
+        return "markupPanel";
+    }
 
-	@Override
-	protected MarkupContainer createScalarIfRegularFormGroup() {
-		
-		if(getModel().isEditMode()) {
-			// fallback to text editor
-			return super.createScalarIfRegularFormGroup();
-		}
-		
-		final MarkupComponent markupComponent = createMarkupComponent("scalarValueContainer");
-				
-		getTextField().setLabel(Model.of(getModel().getName()));
+    @Override
+    protected MarkupContainer createScalarIfRegularFormGroup() {
 
-		final FormGroup formGroup = new FormGroup(ID_SCALAR_IF_REGULAR, getTextField());
-		formGroup.add(markupComponent);
+        if(getModel().isEditMode()) {
+            // fallback to text editor
+            return super.createScalarIfRegularFormGroup();
+        }
 
-		final String labelCaption = getRendering().getLabelCaption(getTextField());
-		final Label scalarName = createScalarName(ID_SCALAR_NAME, labelCaption);
+        final MarkupComponent markupComponent = createMarkupComponent("scalarValueContainer");
 
-		formGroup.add(scalarName);
+        getTextField().setLabel(Model.of(getModel().getName()));
 
-		return formGroup;
-	}
-	
+        final FormGroup formGroup = new FormGroup(ID_SCALAR_IF_REGULAR, getTextField());
+        formGroup.add(markupComponent);
+
+        final String labelCaption = getRendering().getLabelCaption(getTextField());
+        final Label scalarName = createScalarName(ID_SCALAR_NAME, labelCaption);
+
+        formGroup.add(scalarName);
+
+        return formGroup;
+    }
+
     @Override
     protected Component createComponentForCompact() {
-    	return createMarkupComponent(ID_SCALAR_IF_COMPACT);
+        return createMarkupComponent(ID_SCALAR_IF_COMPACT);
     }
-    
+
     // -- HELPER
-    
+
     private MarkupComponent createMarkupComponent(String id) {
-    	MarkupComponent markupComponent = new MarkupComponent(id, getModel());
-		markupComponent.setEnabled(false);
-		return markupComponent;
+        MarkupComponent markupComponent = new MarkupComponent(id, getModel());
+        markupComponent.setEnabled(false);
+        return markupComponent;
     }
 
 }

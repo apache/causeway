@@ -100,6 +100,7 @@ public abstract class DateValueSemanticsProviderAbstract<T> extends ValueSemanti
         return dateFormat;
     }
 
+    @Override
     protected List<DateFormat> formatsToTry() {
         List<DateFormat> formats = new ArrayList<DateFormat>();
 

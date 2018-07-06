@@ -36,20 +36,20 @@ public class Dto_downloadXml {
         this.dto = dto;
     }
 
-    public static class ActionDomainEvent 
+    public static class ActionDomainEvent
     extends org.apache.isis.applib.IsisApplibModule.ActionDomainEvent<Dto_downloadXml> {
-    	private static final long serialVersionUID = 1L; 
+        private static final long serialVersionUID = 1L;
     }
 
     @Action(
             domainEvent = ActionDomainEvent.class,
             semantics = SemanticsOf.SAFE,
             restrictTo = RestrictTo.PROTOTYPING
-    )
+            )
     @ActionLayout(
             contributed = Contributed.AS_ACTION,
             cssClassFa = "fa-download"
-    )
+            )
     @MemberOrder(sequence = "500.1")
     public Object act(
             @ParameterLayout(named = "File name")

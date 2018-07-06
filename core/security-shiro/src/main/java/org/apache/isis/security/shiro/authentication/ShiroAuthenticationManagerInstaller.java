@@ -28,7 +28,7 @@ import org.apache.isis.core.runtime.authentication.standard.Authenticator;
 import org.apache.isis.security.shiro.ShiroAuthenticatorOrAuthorizor;
 
 public class ShiroAuthenticationManagerInstaller
-        extends AuthenticationManagerStandardInstallerAbstractForDfltRuntime {
+extends AuthenticationManagerStandardInstallerAbstractForDfltRuntime {
 
     public static String NAME = "shiro";
 

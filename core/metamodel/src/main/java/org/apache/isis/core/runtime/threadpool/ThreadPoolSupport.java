@@ -36,9 +36,9 @@ import org.slf4j.LoggerFactory;
 
 /**
  * ThreadPoolSupport is application-scoped, meaning ThreadPoolSupport is closed on
- * application's end of life-cycle. 
+ * application's end of life-cycle.
  * <br/><br/>
- * Implementation Note: ThreadPoolSupport::close is triggered by _Context.clear() 
+ * Implementation Note: ThreadPoolSupport::close is triggered by _Context.clear()
  * when application shuts down.
  *
  */
@@ -50,7 +50,7 @@ public final class ThreadPoolSupport implements AutoCloseable {
     private final ThreadPoolExecutor executor;
 
     private ThreadPoolSupport() {
-    	
+
         group = new ThreadGroup(ThreadPoolSupport.class.getName());
 
         final int corePoolSize = Runtime.getRuntime().availableProcessors();
@@ -107,14 +107,14 @@ public final class ThreadPoolSupport implements AutoCloseable {
             throw new RuntimeException(e);
         }
     }
-    
+
     public static ThreadPoolSupport getInstance() {
-    	return _Context.computeIfAbsent(ThreadPoolSupport.class, __-> new ThreadPoolSupport());
+        return _Context.computeIfAbsent(ThreadPoolSupport.class, __-> new ThreadPoolSupport());
     }
 
-	@Override
-	public void close() throws Exception {
-		executor.shutdown();
-	}
-    
+    @Override
+    public void close() throws Exception {
+        executor.shutdown();
+    }
+
 }

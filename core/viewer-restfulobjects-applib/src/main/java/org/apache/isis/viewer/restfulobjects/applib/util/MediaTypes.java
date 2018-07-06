@@ -28,46 +28,46 @@ import org.apache.isis.commons.internal.base._Strings;
 
 public class MediaTypes {
 
-	/**
-	 * Same as {@code MediaType.valueOf(type)}, but with fallback in case {@code MediaType.valueOf(type)}
-	 * throws an IllegalArgumentException.
-	 * <br/><br/>
-	 * 
-	 * The fallback is to retry with some special characters replaces in String {@code type}.
-	 * 
-	 * @param type
-	 * @return
-	 */
-	public static MediaType parse(String type) {
+    /**
+     * Same as {@code MediaType.valueOf(type)}, but with fallback in case {@code MediaType.valueOf(type)}
+     * throws an IllegalArgumentException.
+     * <br/><br/>
+     *
+     * The fallback is to retry with some special characters replaces in String {@code type}.
+     *
+     * @param type
+     * @return
+     */
+    public static MediaType parse(String type) {
 
-		if(type==null)
-			return MediaType.valueOf(null); 
-		
-		try {
-			
-			return MediaType.valueOf(type);
-			
-		} catch (IllegalArgumentException e) {
+        if(type==null)
+            return MediaType.valueOf(null);
 
-			
-			List<String> chunks = _Strings.splitThenStream(type, ";")
-			.collect(Collectors.toList());
-			
-			final StringBuilder sb = new StringBuilder(); 
-			sb.append(chunks.get(0));
-			
-			if(chunks.size()>1) {
-				chunks.stream()
-				.skip(1)
-				.map(chunk->chunk.replace(":", "..").replace("/", "."))
-				.forEach(chunk->sb.append(';').append(chunk));
-			}
+        try {
 
-			return MediaType.valueOf(sb.toString());
-			
-		}
-		
-		
-	}
+            return MediaType.valueOf(type);
+
+        } catch (IllegalArgumentException e) {
+
+
+            List<String> chunks = _Strings.splitThenStream(type, ";")
+                    .collect(Collectors.toList());
+
+            final StringBuilder sb = new StringBuilder();
+            sb.append(chunks.get(0));
+
+            if(chunks.size()>1) {
+                chunks.stream()
+                .skip(1)
+                .map(chunk->chunk.replace(":", "..").replace("/", "."))
+                .forEach(chunk->sb.append(';').append(chunk));
+            }
+
+            return MediaType.valueOf(sb.toString());
+
+        }
+
+
+    }
 
 }

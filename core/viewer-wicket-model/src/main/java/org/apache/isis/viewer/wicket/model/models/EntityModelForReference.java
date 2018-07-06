@@ -58,6 +58,7 @@ public class EntityModelForReference implements ObjectAdapterModel {
         return contextAdapterIfAny;
     }
 
+    @Override
     public void setContextAdapterIfAny(ObjectAdapterMemento contextAdapterIfAny) {
         this.contextAdapterIfAny = contextAdapterIfAny;
     }
@@ -67,6 +68,7 @@ public class EntityModelForReference implements ObjectAdapterModel {
         return renderingHint;
     }
 
+    @Override
     public void setRenderingHint(final EntityModel.RenderingHint renderingHint) {
         this.renderingHint = renderingHint;
     }

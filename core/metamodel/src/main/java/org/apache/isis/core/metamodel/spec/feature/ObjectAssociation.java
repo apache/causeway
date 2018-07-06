@@ -63,6 +63,7 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
      * For example, if this is an {@link OneToOneAssociation}, then returns the
      * referenced object.
      */
+    @Override
     ObjectAdapter get(final ObjectAdapter owner, final InteractionInitiatedBy interactionInitiatedBy);
 
     /**
@@ -131,7 +132,7 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
 
     public static class Functions {
         private Functions(){}
-        
+
         public static Function<ObjectAssociation, String> toName() {
             return new Function<ObjectAssociation, String>() {
                 @Override
@@ -150,7 +151,7 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
             };
         }
     }
-    
+
     // //////////////////////////////////////////////////////
     // Predicates
     // //////////////////////////////////////////////////////
@@ -169,7 +170,7 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
             @Override
             public boolean apply(final ObjectAssociation association) {
                 return association.isOneToOneAssociation() &&
-                       !association.getSpecification().containsDoOpFacet(ValueFacet.class);
+                        !association.getSpecification().containsDoOpFacet(ValueFacet.class);
             }
         };
         public final static Predicate<ObjectAssociation> COLLECTIONS = new Predicate<ObjectAssociation>() {
@@ -200,7 +201,7 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
         }
 
     }
-    
+
 
     // //////////////////////////////////////////////////////
     // Comparators
@@ -219,8 +220,8 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
                     final MemberOrderFacet o1Facet = o1.getFacet(MemberOrderFacet.class);
                     final MemberOrderFacet o2Facet = o2.getFacet(MemberOrderFacet.class);
                     return o1Facet == null? +1:
-                            o2Facet == null? -1:
-                                    deweyOrderComparator.compare(o1Facet.sequence(), o2Facet.sequence());
+                        o2Facet == null? -1:
+                            deweyOrderComparator.compare(o1Facet.sequence(), o2Facet.sequence());
                 }
             };
         }
@@ -233,7 +234,7 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
 
     public static class Util {
         private Util(){}
-        
+
         public static Map<String, List<ObjectAssociation>> groupByMemberOrderName(
                 final List<ObjectAssociation> associations) {
             Map<String, List<ObjectAssociation>> associationsByGroup = Maps.newHashMap();

@@ -40,7 +40,7 @@ public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
     public static class Default extends ActionDomainEvent<Object> {
         private static final long serialVersionUID = 1L;
     }
-    
+
 
     // -- Noop class
 
@@ -51,7 +51,7 @@ public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
     public static class Noop extends ActionDomainEvent<Object> {
         private static final long serialVersionUID = 1L;
     }
-    
+
 
     // -- Doop class
 
@@ -62,7 +62,7 @@ public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
     public static class Doop extends ActionDomainEvent<Object> {
         private static final long serialVersionUID = 1L;
     }
-    
+
 
 
     /**
@@ -95,7 +95,7 @@ public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
     public void setCommand(Command command) {
         this.command = command;
     }
-    
+
 
     // -- actionSemantics
     public SemanticsOf getSemantics() {
@@ -119,7 +119,7 @@ public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
         this.actionSemantics = actionSemantics;
     }
 
-    
+
 
     // -- parameterNames
     private List<String> parameterNames;
@@ -129,7 +129,7 @@ public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
     public void setParameterNames(final List<String> parameterNames) {
         this.parameterNames = parameterNames;
     }
-    
+
 
     // -- parameterTypes
     private List<Class<?>> parameterTypes;
@@ -140,7 +140,7 @@ public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
     public void setParameterTypes(final List<Class<?>> parameterTypes) {
         this.parameterTypes = parameterTypes;
     }
-    
+
 
 
     // region > mixedIn
@@ -176,7 +176,7 @@ public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
     public void setArguments(List<Object> arguments) {
         this.arguments = arguments;
     }
-    
+
 
     // -- returnValue
     /**
@@ -202,18 +202,18 @@ public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
     public void setReturnValue(final Object returnValue) {
         this.returnValue = returnValue;
     }
-    
 
-    
+
+
     private final static ToString<ActionDomainEvent<?>> toString = ObjectContracts.<ActionDomainEvent<?>>
-    		toString("source", ActionDomainEvent::getSource)
-    		.thenToString("identifier", ActionDomainEvent::getIdentifier)
-    		.thenToString("eventPhase", ActionDomainEvent::getEventPhase)
-    		;
-    
+    toString("source", ActionDomainEvent::getSource)
+    .thenToString("identifier", ActionDomainEvent::getIdentifier)
+    .thenToString("eventPhase", ActionDomainEvent::getEventPhase)
+    ;
+
     @Override
     public String toString() {
-    	return toString.toString(this);
+        return toString.toString(this);
     }
 
 

@@ -35,7 +35,7 @@ public class JavaMathBigDecimalPanelFactory extends ComponentFactoryScalarAbstra
 
     private static final long serialVersionUID = 1L;
 
-    
+
     public JavaMathBigDecimalPanelFactory() {
         super(JavaMathBigDecimalPanel.class, java.math.BigDecimal.class);
     }
@@ -46,9 +46,9 @@ public class JavaMathBigDecimalPanelFactory extends ComponentFactoryScalarAbstra
         return new JavaMathBigDecimalPanel(id, scalarModel, converter);
     }
 
-    
+
     // //////////////////////////////////////
-    
+
     private final BigDecimalConverterWithScale converterForNullScale = new BigDecimalConverterWithScale(null);
     private final Map<Integer, BigDecimalConverterWithScale> converterByScale = new ConcurrentHashMap<>();
 
@@ -56,7 +56,7 @@ public class JavaMathBigDecimalPanelFactory extends ComponentFactoryScalarAbstra
         final Integer scale = scalarModel.getScale();
         if(scale == null) {
             return converterForNullScale;
-        } 
+        }
         BigDecimalConverterWithScale bigDecimalConverter = converterByScale.get(scale);
         if(bigDecimalConverter == null) {
             bigDecimalConverter = new BigDecimalConverterWithScale(scale);

@@ -40,14 +40,14 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
 
 /**
- * Represents the currently executing scenario, allowing information to be shared 
+ * Represents the currently executing scenario, allowing information to be shared
  * between Cucumber step definitions (for unit- or integration- scoped), and also for
  * integration tests.
- * 
+ *
  * <p>
  * Two types of information are available:
  * <ul>
- * <li>First, there are the domain services, provided using the {@link #service(Class) method}.  
+ * <li>First, there are the domain services, provided using the {@link #service(Class) method}.
  * If running at unit-scope, then these will most likely be mocked services (and not all services
  * will necessarily be available).  If running at integration-scope, then these will most likely
  * be real instances, eg wired to the backend database.</li>
@@ -55,20 +55,20 @@ import com.google.common.collect.Maps;
  * step definitions (either unit- or integration-scoped), such that information can be passed
  * between steps in a decoupled fashion.
  * </ul>
- * 
+ *
  * <p>
- * When instantiated, this object binds itself to the current thread (using a {@link ThreadLocal}).  
- * 
+ * When instantiated, this object binds itself to the current thread (using a {@link ThreadLocal}).
+ *
  * <p>
  * Subclasses may tailor the world for specific types of tests; for example the
- * <tt>IntegrationScenarioExecution</tt> provides additional support for fixtures and 
+ * <tt>IntegrationScenarioExecution</tt> provides additional support for fixtures and
  * transaction management, used both by integration-scoped specs and by integration tests.
  *
  * @deprecated - to be removed in 2.0, will support BDD for integration tests only
  */
 @Deprecated
 public abstract class ScenarioExecution {
-    
+
     private static ThreadLocal<ScenarioExecution> current = new ThreadLocal<ScenarioExecution>();
 
     public static ScenarioExecution peek() {
@@ -79,7 +79,7 @@ public abstract class ScenarioExecution {
         final ScenarioExecution execution = current.get();
         if(execution == null) {
             fail();
-        } 
+        }
         return execution;
     }
 
@@ -88,7 +88,7 @@ public abstract class ScenarioExecution {
 
     protected final DomainServiceProvider dsp;
     private final ScenarioExecutionScope scope;
-    
+
     protected ScenarioExecution(final DomainServiceProvider dsp, ScenarioExecutionScope scope) {
         this.dsp = dsp;
         this.scope = scope;
@@ -105,7 +105,7 @@ public abstract class ScenarioExecution {
     /**
      * Returns a domain service of the specified type, ensuring that
      * it is available.
-     * 
+     *
      * @throws IllegalStateException if not available
      */
     public <T> T service(Class<T> cls) {
@@ -113,8 +113,8 @@ public abstract class ScenarioExecution {
         if(service == null) {
             throw new IllegalStateException(
                     "No service of type "
-                    + cls.getSimpleName()
-                    + " available");
+                            + cls.getSimpleName()
+                            + " available");
         }
         return service;
     }
@@ -145,19 +145,19 @@ public abstract class ScenarioExecution {
         dsp.replaceService(original, replacement);
     }
 
-//    /**
-//     * Convenience method, returning the {@link DomainObjectContainer},
-//     * first ensuring that it is available.
-//     * 
-//     * @throws IllegalStateException if not available
-//     */
-//    public DomainObjectContainer container() {
-//        return service(DomainObjectContainer.class);
-//    }
+    //    /**
+    //     * Convenience method, returning the {@link DomainObjectContainer},
+    //     * first ensuring that it is available.
+    //     *
+    //     * @throws IllegalStateException if not available
+    //     */
+    //    public DomainObjectContainer container() {
+    //        return service(DomainObjectContainer.class);
+    //    }
 
-    
+
     /**
-     * Returns the  {@link WrapperFactory} if one {@link #service(Class) is available}, 
+     * Returns the  {@link WrapperFactory} if one {@link #service(Class) is available},
      * otherwise returns a {@link WrapperFactory#NOOP no-op} implementation.
      */
     public WrapperFactory wrapperFactory() {
@@ -169,7 +169,7 @@ public abstract class ScenarioExecution {
 
     /**
      * Key for objects stored by steps in the scenario.
-     * 
+     *
      * <p>
      * Objects can be identified in a variety of manners:
      * <ul>
@@ -177,10 +177,10 @@ public abstract class ScenarioExecution {
      * <li>a named object provides only its id; for example 'OXF-TOPMODEL-001'</li>
      * <li>a typed object provides only its type; for example 'the lease'.</li>
      * </ul>
-     * 
+     *
      * <p>
      * Because of the second rule, the id should be unique in and of itself.
-     * 
+     *
      * <p>
      * The expectation is that scenarios will use the first form (fully qualified) the first time that an
      * object is introduced within a scenario.  Thereafter either of the other forms may be used.
@@ -247,7 +247,7 @@ public abstract class ScenarioExecution {
 
     private final Map<VariableId, Object> objectByVariableId = Maps.newLinkedHashMap();
     private final Map<String, Object> objectsById = Maps.newLinkedHashMap();
-    
+
     private final Map<String, Object> mostRecent = Maps.newHashMap();
 
     public void putVar(String type, String id, Object value) {
@@ -278,10 +278,10 @@ public abstract class ScenarioExecution {
 
     /**
      * Retrieve an variable previously used in the scenario.
-     * 
+     *
      * <p>
      * Must specify type and/or id.
-     * 
+     *
      * @see VariableId - for rules on what constitutes an identifier.
      */
     public Object getVar(String type, String id) {
@@ -291,7 +291,7 @@ public abstract class ScenarioExecution {
             if(value != null) {
                 mostRecent.put(type, value);
                 return value;
-            } 
+            }
             throw new IllegalStateException("No such " + variableId);
         }
         if(type != null && id == null) {
@@ -301,7 +301,7 @@ public abstract class ScenarioExecution {
             final Object value = objectsById.get(id);
             if(value != null) {
                 mostRecent.put(type, value);
-            } 
+            }
             return value;
         }
         throw new IllegalArgumentException("Must specify type and/or id");
@@ -319,11 +319,11 @@ public abstract class ScenarioExecution {
 
     /**
      * Whether this implementation supports mocks.
-     * 
+     *
      * <p>
      * This default implementation returns <tt>false</tt>, meaning that the methods to
-     * support mocking ({@link #checking(ExpectationBuilder)}, {@link #assertIsSatisfied()}, 
-     * {@link #sequence(String)} and {@link #states(String)}) may not be called.  However, 
+     * support mocking ({@link #checking(ExpectationBuilder)}, {@link #assertIsSatisfied()},
+     * {@link #sequence(String)} and {@link #states(String)}) may not be called.  However,
      * the {@link ScenarioExecutionForUnit} overrides this and does support mocking.
      */
     public boolean supportsMocks() {
@@ -336,63 +336,63 @@ public abstract class ScenarioExecution {
      * <p>
      * By default, mocks are not supported.  However, {@link ScenarioExecutionForUnit} overrides this
      * method and does support mocking (delegating to an underlying JMock {@link Mockery}).
-     * 
+     *
      * <p>
      * Subclasses of this class tailored to supporting integration specs/tests should do nothing
      */
     public void checking(ExpectationBuilder expectations) {
         throw new IllegalStateException("Mocks are not supported");
     }
-    
+
     /**
      * Install expectations on mock domain services (if appropriate).
      *
      * <p>
      * By default, mocks are not supported.  To reduce clutter in tests, this method is a no-op
      * and will silently do nothing if called when mocks are not supported.
-     * 
+     *
      * <p>
-     * The {@link ScenarioExecutionForUnit} overrides this method and does support mocking, delegating 
+     * The {@link ScenarioExecutionForUnit} overrides this method and does support mocking, delegating
      * to an underlying JMock {@link Mockery}).  Not only will it assert all existing interactions
-     * have been satisfied, it also resets mocks/expectations for the next interaction. 
+     * have been satisfied, it also resets mocks/expectations for the next interaction.
      */
     public void assertIsSatisfied() {
     }
-    
+
     /**
      * Define {@link Sequence} in a (JMock) interaction  (if appropriaate).
      *
      * <p>
      * By default, mocks are not supported.  However, {@link ScenarioExecutionForUnit} overrides this
      * method and does support mocking (delegating to an underlying JMock {@link Mockery}).
-     * 
+     *
      * <p>
      * Subclasses of this class tailored to supporting integration specs/tests should do nothing
      */
     public Sequence sequence(String name) {
         throw new IllegalStateException("Mocks are not supported");
     }
-    
+
     /**
      * Define {@link States} in a (JMock) interaction (if appropriaate).
      *
      * <p>
      * By default, mocks are not supported.  However, {@link ScenarioExecutionForUnit} overrides this
      * method and does support mocking (delegating to an underlying JMock {@link Mockery}).
-     * 
+     *
      * <p>
      * Subclasses of this class tailored to supporting integration specs/tests should do nothing
      */
     public States states(String name) {
         throw new IllegalStateException("Mocks are not supported");
     }
-    
+
     // //////////////////////////////////////
 
     /**
-     * Install arbitrary fixtures, eg before an integration tests or as part of a 
+     * Install arbitrary fixtures, eg before an integration tests or as part of a
      * Cucumber step definitions or hook.
-     * 
+     *
      * <p>
      * This implementation is a no-op, but subclasses of this class tailored to
      * supporting integration specs/tests are expected to override.
@@ -440,7 +440,7 @@ public abstract class ScenarioExecution {
 
     /**
      * For Cucumber hooks to call, performing transaction management around each step.
-     * 
+     *
      * <p>
      * This implementation is a no-op, but subclasses of this class tailored to
      * supporting integration specs are expected to override.  (Integration tests can use
@@ -452,7 +452,7 @@ public abstract class ScenarioExecution {
 
     /**
      * For Cucumber hooks to call, performing transaction management around each step.
-     * 
+     *
      * <p>
      * This implementation is a no-op, but subclasses of this class tailored to
      * supporting integration specs are expected to override.  (Integration tests can use
@@ -477,10 +477,10 @@ public abstract class ScenarioExecution {
                     final Object service = service(serviceClass);
                     method.invoke(obj, service);
                 }
-//                if(method.getName().startsWith("set") && serviceClass == DomainObjectContainer.class) {
-//                    final Object container = container();
-//                    method.invoke(obj, container);
-//                }
+                //                if(method.getName().startsWith("set") && serviceClass == DomainObjectContainer.class) {
+                //                    final Object container = container();
+                //                    method.invoke(obj, container);
+                //                }
             }
             autowireViaFields(obj, obj.getClass());
 

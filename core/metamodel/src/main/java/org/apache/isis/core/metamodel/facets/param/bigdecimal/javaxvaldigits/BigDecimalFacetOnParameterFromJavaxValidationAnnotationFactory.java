@@ -42,7 +42,7 @@ public class BigDecimalFacetOnParameterFromJavaxValidationAnnotationFactory exte
 
         final Method method = processParameterContext.getMethod();
         final int paramNum = processParameterContext.getParamNum();
-        
+
         if(BigDecimal.class != method.getParameterTypes()[paramNum]) {
             return;
         }
@@ -58,5 +58,5 @@ public class BigDecimalFacetOnParameterFromJavaxValidationAnnotationFactory exte
         final int scale = annotation.fraction();
         return new BigDecimalFacetOnParameterFromJavaxValidationDigitsAnnotation(holder, length, scale);
     }
-    
+
 }

@@ -25,7 +25,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 
 public abstract class AuditableFacetAbstract extends FacetAbstract implements
-        AuditableFacet {
+AuditableFacet {
 
     public static Class<? extends Facet> type() {
         return AuditableFacet.class;
@@ -41,7 +41,7 @@ public abstract class AuditableFacetAbstract extends FacetAbstract implements
     }
 
     private final Enablement enablement;
-    
+
     public AuditableFacetAbstract(final FacetHolder facetHolder, final Enablement enablement) {
         super(AuditableFacetAbstract.type(), facetHolder, Derivation.NOT_DERIVED);
         this.enablement = enablement;

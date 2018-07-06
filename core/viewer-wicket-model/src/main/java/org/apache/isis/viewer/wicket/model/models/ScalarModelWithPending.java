@@ -28,18 +28,18 @@ import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 
 /**
  * For widgets that use a <tt>org.wicketstuff.select2.Select2Choice</tt>;
- * synchronizes the {@link Model} of the <tt>Select2Choice</tt>  
+ * synchronizes the {@link Model} of the <tt>Select2Choice</tt>
  * with the parent {@link ScalarModel}, allowing also for pending values.
  */
 public interface ScalarModelWithPending extends Serializable {
-    
+
     public ObjectAdapterMemento getPending();
     public void setPending(ObjectAdapterMemento pending);
-    
+
     public ScalarModel getScalarModel();
-    
+
     static class Util {
-        
+
         private static final Logger LOG = LoggerFactory.getLogger(ScalarModelWithPending.Util.class);
 
         public static IModel<ObjectAdapterMemento> createModel(final ScalarModel model) {
@@ -79,8 +79,8 @@ public interface ScalarModelWithPending extends Serializable {
                                 LOG.debug("setting to pending: {}", ownerPending.toString());
                                 ownerScalarModel.setObject(
                                         ownerPending.getObjectAdapter(
-                                            ConcurrencyChecking.NO_CHECK,
-                                            ownerScalarModel.getPersistenceSession(), ownerScalarModel.getSpecificationLoader()));
+                                                ConcurrencyChecking.NO_CHECK,
+                                                ownerScalarModel.getPersistenceSession(), ownerScalarModel.getSpecificationLoader()));
                             }
                         }
                     }

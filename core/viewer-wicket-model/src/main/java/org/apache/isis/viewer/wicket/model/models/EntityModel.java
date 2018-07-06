@@ -51,7 +51,7 @@ import org.apache.isis.viewer.wicket.model.util.ComponentHintKey;
 
 /**
  * Backing model to represent a {@link ObjectAdapter}.
- * 
+ *
  * <p>
  * So that the model is {@link Serializable}, the {@link ObjectAdapter} is
  * stored as a {@link ObjectAdapterMemento}.
@@ -141,7 +141,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements Obj
         }
     }
 
-	public enum Mode {
+    public enum Mode {
         VIEW,EDIT
     }
 
@@ -226,7 +226,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements Obj
     // BookmarkableModel
     //////////////////////////////////////////////////
 
-    
+
     @Override
     public PageParameters getPageParameters() {
         PageParameters pageParameters = createPageParameters(getObject());
@@ -274,6 +274,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements Obj
         return getObject().titleString(null);
     }
 
+    @Override
     public boolean hasAsRootPolicy() {
         return hasBookmarkPolicy(BookmarkPolicy.AS_ROOT);
     }
@@ -286,7 +287,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements Obj
         final BookmarkPolicyFacet facet = getBookmarkPolicyFacetIfAny();
         return facet != null && facet.value() == policy;
     }
-    
+
     private BookmarkPolicyFacet getBookmarkPolicyFacetIfAny() {
         final ObjectSpecId specId = getObjectAdapterMemento().getObjectSpecId();
         final ObjectSpecification objectSpec = getSpecificationLoader().lookupBySpecId(specId);
@@ -307,6 +308,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements Obj
      * Overridable for submodels (eg {@link ScalarModel}) that know the type of
      * the adapter without there being one.
      */
+    @Override
     public ObjectSpecification getTypeOfSpecification() {
         if (adapterMemento == null) {
             return null;
@@ -325,13 +327,13 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements Obj
     /**
      * Not Wicket API, but used by <tt>EntityPage</tt> to do eager loading
      * when rendering after post-and-redirect.
-     * @return 
+     * @return
      */
     public ObjectAdapter load(ConcurrencyChecking concurrencyChecking) {
         if (adapterMemento == null) {
             return null;
         }
-        
+
         final ObjectAdapter objectAdapter =
                 adapterMemento.getObjectAdapter(concurrencyChecking, getPersistenceSession(), getSpecificationLoader());
         return objectAdapter;
@@ -341,7 +343,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements Obj
     /**
      * Callback from {@link #getObject()}, defaults to loading the object
      * using {@link ConcurrencyChecking#CHECK strict} checking.
-     * 
+     *
      * <p>
      * If non-strict checking is required, then just call {@link #load(ConcurrencyChecking)} with an
      * argument of {@link ConcurrencyChecking#NO_CHECK} first.
@@ -365,7 +367,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements Obj
             final SpecificationLoader specificationLoader) {
         super.setObject(
                 memento != null
-                        ? memento.getObjectAdapter(ConcurrencyChecking.CHECK, persistenceSession, specificationLoader)
+                ? memento.getObjectAdapter(ConcurrencyChecking.CHECK, persistenceSession, specificationLoader)
                         : null);
         adapterMemento = memento;
     }
@@ -413,25 +415,30 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements Obj
     // //////////////////////////////////////////////////////////
 
 
+    @Override
     public RenderingHint getRenderingHint() {
         return renderingHint;
     }
+    @Override
     public void setRenderingHint(RenderingHint renderingHint) {
         this.renderingHint = renderingHint;
     }
 
+    @Override
     public ObjectAdapterMemento getContextAdapterIfAny() {
         return contextAdapterIfAny;
     }
-    
+
     /**
      * Used as a hint when the {@link #getRenderingHint()} is {@link RenderingHint#PARENTED_TITLE_COLUMN},
      * provides a context adapter to obtain the title.
      */
+    @Override
     public void setContextAdapterIfAny(ObjectAdapterMemento contextAdapterIfAny) {
         this.contextAdapterIfAny = contextAdapterIfAny;
     }
-    
+
+    @Override
     public Mode getMode() {
         return mode;
     }
@@ -500,7 +507,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements Obj
     // //////////////////////////////////////////////////////////
     // Pending
     // //////////////////////////////////////////////////////////
-    
+
     private static final class PendingModel extends Model<ObjectAdapterMemento> {
         private static final long serialVersionUID = 1L;
 
@@ -514,7 +521,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements Obj
          * The new value (could be set to null; hasPending is used to distinguish).
          */
         private ObjectAdapterMemento pending;
-        
+
 
         public PendingModel(EntityModel entityModel) {
             this.entityModel = entityModel;
@@ -544,8 +551,8 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements Obj
             final ObjectAdapterMemento memento = getObject();
             return memento != null
                     ? memento.getObjectAdapter(ConcurrencyChecking.NO_CHECK,
-                                entityModel.getPersistenceSession(), entityModel.getSpecificationLoader())
-                    : null;
+                            entityModel.getPersistenceSession(), entityModel.getSpecificationLoader())
+                            : null;
         }
 
         public ObjectAdapter getPendingElseCurrentAdapter() {
@@ -555,13 +562,13 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements Obj
         public ObjectAdapterMemento getPending() {
             return pending;
         }
-        
+
         public void setPending(ObjectAdapterMemento selectedAdapterMemento) {
             this.pending = selectedAdapterMemento;
             hasPending=true;
         }
     }
-    
+
 
     public ObjectAdapter getPendingElseCurrentAdapter() {
         return pendingModel.getPendingElseCurrentAdapter();
@@ -570,7 +577,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements Obj
     public ObjectAdapter getPendingAdapter() {
         return pendingModel.getPendingAdapter();
     }
-    
+
     public ObjectAdapterMemento getPending() {
         return pendingModel.getPending();
     }
@@ -616,7 +623,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements Obj
     /**
      * In order that <tt>IsisAjaxFallbackDataTable</tt> can use a
      * <tt>ReuseIfModelsEqualStrategy</tt> to preserve any concurrency exception
-     * information in original model. 
+     * information in original model.
      */
     @Override
     public boolean equals(Object obj) {
@@ -635,7 +642,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements Obj
         return true;
 
     }
-    
+
 
 
 }

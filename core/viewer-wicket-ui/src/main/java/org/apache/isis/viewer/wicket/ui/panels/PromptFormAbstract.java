@@ -57,15 +57,15 @@ import org.apache.wicket.util.string.AppendingStringBuffer;
 import com.google.common.collect.Lists;
 
 public abstract class PromptFormAbstract<T extends BookmarkableModel<ObjectAdapter>
-                                                    & ParentEntityModelProvider
-                                                    & IModel<ObjectAdapter>
-                                                    & FormExecutorContext>
-        extends FormAbstract<ObjectAdapter>
-        implements ScalarModelSubscriber2 {
+& ParentEntityModelProvider
+& IModel<ObjectAdapter>
+& FormExecutorContext>
+extends FormAbstract<ObjectAdapter>
+implements ScalarModelSubscriber2 {
 
-	private static final long serialVersionUID = 1L;
-	
-	private static final String ID_OK_BUTTON = "okButton";
+    private static final long serialVersionUID = 1L;
+
+    private static final String ID_OK_BUTTON = "okButton";
     public static final String ID_CANCEL_BUTTON = "cancelButton";
 
     private static final String ID_FEEDBACK = "feedback";
@@ -115,7 +115,7 @@ public abstract class PromptFormAbstract<T extends BookmarkableModel<ObjectAdapt
     protected AjaxButton addOkButton() {
 
         AjaxButton okButton = settings.isUseIndicatorForFormSubmit()
-        ? new IndicatingAjaxButton(ID_OK_BUTTON, new ResourceModel("okLabel")) {
+                ? new IndicatingAjaxButton(ID_OK_BUTTON, new ResourceModel("okLabel")) {
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -177,9 +177,9 @@ public abstract class PromptFormAbstract<T extends BookmarkableModel<ObjectAdapt
 
         if (formExecutorContext.getPromptStyle().isInlineOrInlineAsIfEdit()) {
             cancelButton.add(new FireOnEscapeKey() {
-				private static final long serialVersionUID = 1L;
+                private static final long serialVersionUID = 1L;
 
-				@Override
+                @Override
                 protected void respond(final AjaxRequestTarget target) {
                     onCancelSubmitted(target);
                 }
@@ -236,16 +236,16 @@ public abstract class PromptFormAbstract<T extends BookmarkableModel<ObjectAdapt
             completePrompt(target);
 
             okButton.send(target.getPage(), Broadcast.EXACT, newCompletedEvent(target, form));
-            //TODO as of Wicket-8 we (for lack of a better solution) silently ignore java.lang.IllegalArgumentException: 
+            //TODO as of Wicket-8 we (for lack of a better solution) silently ignore java.lang.IllegalArgumentException:
             // 'Cannot update component because its page is not the same as the one this handler has been created for.'
-            
+
             try {
-            	target.add(form);
+                target.add(form);
             } catch (IllegalArgumentException cause) {
-            	FluentException.of(cause)
-            	.suppressIfMessageContains("Cannot update component because its page is not the same");
-			} 
-                        
+                FluentException.of(cause)
+                .suppressIfMessageContains("Cannot update component because its page is not the same");
+            }
+
         }
 
     }
@@ -348,9 +348,9 @@ public abstract class PromptFormAbstract<T extends BookmarkableModel<ObjectAdapt
     }
 
     static abstract class FireOnEscapeKey extends AbstractDefaultAjaxBehavior {
-		private static final long serialVersionUID = 1L;
-		
-		private static final String PRE_JS =
+        private static final long serialVersionUID = 1L;
+
+        private static final String PRE_JS =
                 "" + "$(document).ready( function() { \n"
                         + "  $(document).bind('keyup', function(evt) { \n"
                         + "    if (evt.keyCode == 27) { \n";

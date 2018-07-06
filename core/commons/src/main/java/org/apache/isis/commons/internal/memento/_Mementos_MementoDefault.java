@@ -42,90 +42,91 @@ import org.apache.isis.commons.internal.memento._Mementos.Memento;
 import org.apache.isis.commons.internal.memento._Mementos.SerializingAdapter;
 
 /**
- * 
+ *
  * package private mixin for utility class {@link _Mementos}
- * 
+ *
  * Memento default implementation.
  *
  */
 class _Mementos_MementoDefault implements _Mementos.Memento {
-	
-	private final EncoderDecoder codec;
-	private final SerializingAdapter serializer;
-	
-	private final Map<String, Serializable> valuesByKey;
-	
-	_Mementos_MementoDefault(EncoderDecoder codec, SerializingAdapter serializer) {
-		this(codec, serializer, _Maps.newHashMap());
-	}
-	
-	private _Mementos_MementoDefault(
-			EncoderDecoder codec,
-			SerializingAdapter serializer,
-			Map<String, Serializable> valuesByKey) {
-		
-		this.codec = Objects.requireNonNull(codec);
-		this.serializer = Objects.requireNonNull(serializer);
-		this.valuesByKey = Objects.requireNonNull(valuesByKey);
-	}
 
-	@Override
-	public Memento put(String name, Object value) {
-		if(value==null) {
-			return this; //no-op, there is no point in storing null values
-		}
-		Objects.requireNonNull(name);
-		valuesByKey.put(name, serializer.write(value));
-		return this;
-	}
+    private final EncoderDecoder codec;
+    private final SerializingAdapter serializer;
 
-	@Override
-	public <T> T get(String name, Class<T> cls) {
-		final Serializable value = valuesByKey.get(name);
-		if(value==null) {
-			return null;
-		}
-		return serializer.read(cls, value);
-	}
+    private final Map<String, Serializable> valuesByKey;
 
-	@Override
-	public Set<String> keySet() {
-		return _Sets.unmodifiable(valuesByKey.keySet());
-	}
-	
-	@Override
-	public String asString() {
-		final ByteArrayOutputStream os = new ByteArrayOutputStream(16*1024); // 16k initial size
-		try(ObjectOutputStream oos = new ObjectOutputStream(os)){
-			oos.writeObject(valuesByKey); // write the entire map to the byte-buffer
-		} catch (Exception e) {
-			throw new IllegalArgumentException("failed to serialize memento", e);
-		}
-		return codec.encode(os.toByteArray()); // convert bytes from byte-buffer to encoded string
-	}
+    _Mementos_MementoDefault(EncoderDecoder codec, SerializingAdapter serializer) {
+        this(codec, serializer, _Maps.newHashMap());
+    }
 
-	// -- PARSER
-	
-	static Memento parse(EncoderDecoder codec, SerializingAdapter serializer, @Nullable String str) {
-		Objects.requireNonNull(codec);
-		if(_NullSafe.isEmpty(str)) {
-			return null;
-		}
-		try(ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(codec.decode(str))) {
-			//override ObjectInputStream's classloading
-			protected Class<?> resolveClass(ObjectStreamClass desc)
-			        throws IOException, ClassNotFoundException
-		    {
-		        String name = desc.getName();
-		        return Class.forName(name, false, _Context.getDefaultClassLoader());
-		    }
-		}) {
-			// read in the entire map
-			final Map<String, Serializable> valuesByKey = _Casts.uncheckedCast(ois.readObject());
-			return new _Mementos_MementoDefault(codec, serializer, valuesByKey);
-		} catch (Exception e) {
-			throw new IllegalArgumentException("failed to parse memento from serialized string", e);
-		} 
-	}
-		
+    private _Mementos_MementoDefault(
+            EncoderDecoder codec,
+            SerializingAdapter serializer,
+            Map<String, Serializable> valuesByKey) {
+
+        this.codec = Objects.requireNonNull(codec);
+        this.serializer = Objects.requireNonNull(serializer);
+        this.valuesByKey = Objects.requireNonNull(valuesByKey);
+    }
+
+    @Override
+    public Memento put(String name, Object value) {
+        if(value==null) {
+            return this; //no-op, there is no point in storing null values
+        }
+        Objects.requireNonNull(name);
+        valuesByKey.put(name, serializer.write(value));
+        return this;
+    }
+
+    @Override
+    public <T> T get(String name, Class<T> cls) {
+        final Serializable value = valuesByKey.get(name);
+        if(value==null) {
+            return null;
+        }
+        return serializer.read(cls, value);
+    }
+
+    @Override
+    public Set<String> keySet() {
+        return _Sets.unmodifiable(valuesByKey.keySet());
+    }
+
+    @Override
+    public String asString() {
+        final ByteArrayOutputStream os = new ByteArrayOutputStream(16*1024); // 16k initial size
+        try(ObjectOutputStream oos = new ObjectOutputStream(os)){
+            oos.writeObject(valuesByKey); // write the entire map to the byte-buffer
+        } catch (Exception e) {
+            throw new IllegalArgumentException("failed to serialize memento", e);
+        }
+        return codec.encode(os.toByteArray()); // convert bytes from byte-buffer to encoded string
+    }
+
+    // -- PARSER
+
+    static Memento parse(EncoderDecoder codec, SerializingAdapter serializer, @Nullable String str) {
+        Objects.requireNonNull(codec);
+        if(_NullSafe.isEmpty(str)) {
+            return null;
+        }
+        try(ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(codec.decode(str))) {
+            //override ObjectInputStream's classloading
+            @Override
+            protected Class<?> resolveClass(ObjectStreamClass desc)
+                    throws IOException, ClassNotFoundException
+            {
+                String name = desc.getName();
+                return Class.forName(name, false, _Context.getDefaultClassLoader());
+            }
+        }) {
+            // read in the entire map
+            final Map<String, Serializable> valuesByKey = _Casts.uncheckedCast(ois.readObject());
+            return new _Mementos_MementoDefault(codec, serializer, valuesByKey);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("failed to parse memento from serialized string", e);
+        }
+    }
+
 }

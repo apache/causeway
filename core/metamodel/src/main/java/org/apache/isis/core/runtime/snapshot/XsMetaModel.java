@@ -33,14 +33,14 @@ public final class XsMetaModel {
     /**
      * URI representing the namespace of the in-built xmlns namespace as defined
      * by w3.org.
-     * 
+     *
      * The NamespaceManager will not allow any namespaces with this URI to be
      * added.
      */
     public static final String W3_ORG_XMLNS_URI = "http://www.w3.org/2000/xmlns/";
     /**
      * Namespace prefix for {@link W3_ORG_XMLNS_URI}.
-     * 
+     *
      * The NamespaceManager will not allow any namespace to use this prefix.
      */
     public static final String W3_ORG_XMLNS_PREFIX = "xmlns";
@@ -50,7 +50,7 @@ public final class XsMetaModel {
     public static final String W3_ORG_XS_URI = "http://www.w3.org/2001/XMLSchema";
     /**
      * Namespace prefix for {@link W3_ORG_XS_URI}.
-     * 
+     *
      * The NamespaceManager will not allow any namespace to use this prefix.
      */
     public static final String W3_ORG_XS_PREFIX = "xs";
@@ -60,7 +60,7 @@ public final class XsMetaModel {
     public static final String W3_ORG_XSI_URI = "http://www.w3.org/2001/XMLSchema-instance";
     /**
      * Namespace prefix for {@link W3_ORG_XSI_URI}.
-     * 
+     *
      * The NamespaceManager will not allow any namespace to use this prefix.
      */
     public static final String W3_ORG_XSI_PREFIX = "xsi";
@@ -75,7 +75,7 @@ public final class XsMetaModel {
     /**
      * Creates an &lt;xs:schema&gt; element for the document to the provided
      * element, attaching to root of supplied Xsd doc.
-     * 
+     *
      * In addition:
      * <ul>
      * <li>the elementFormDefault is set
@@ -158,7 +158,7 @@ public final class XsMetaModel {
     /**
      * Adds <code>xs:attribute ref="isis:xxx" default="yyy"</code> element, and
      * appends to specified parent XSD element.
-     * 
+     *
      * The last parameter determines whether to use <code>fixed="yyy"</code>
      * rather than <code>default="yyy"</code>.
      */
@@ -192,7 +192,7 @@ public final class XsMetaModel {
     /**
      * returns child <code>xs:complexType</code> element allowing mixed content
      * for supplied parent XSD element, creating and appending if necessary.
-     * 
+     *
      * <p>
      * The supplied element is presumed to be one for which
      * <code>xs:complexType</code> is valid as a child (eg
@@ -206,7 +206,7 @@ public final class XsMetaModel {
      * returns child <code>xs:complexType</code> element, optionally allowing
      * mixed content, for supplied parent XSD element, creating and appending if
      * necessary.
-     * 
+     *
      * <p>
      * The supplied element is presumed to be one for which
      * <code>xs:complexType</code> is valid as a child (eg
@@ -223,7 +223,7 @@ public final class XsMetaModel {
     /**
      * returns child <code>xs:sequence</code> element for supplied parent XSD
      * element, creating and appending if necessary.
-     * 
+     *
      * The supplied element is presumed to be one for which
      * <code>xs:simpleContent</code> is valid as a child (eg
      * <code>xs:complexType</code>).
@@ -235,7 +235,7 @@ public final class XsMetaModel {
     /**
      * returns child <code>xs:choice</code> element for supplied parent XSD
      * element, creating and appending if necessary.
-     * 
+     *
      * The supplied element is presumed to be one for which
      * <code>xs:simpleContent</code> is valid as a child (eg
      * <code>xs:complexType</code>).
@@ -271,7 +271,7 @@ public final class XsMetaModel {
     /**
      * returns child <code>xs:simpleContent</code> element for supplied parent
      * XSD element, creating and appending if necessary.
-     * 
+     *
      * The supplied element is presumed to be one for which
      * <code>xs:simpleContent</code> is valid as a child (eg
      * <code>xs:complexType</code>).
@@ -284,7 +284,7 @@ public final class XsMetaModel {
      * returns child <code>xs:extension</code> element for supplied parent XSD
      * element, creating and appending if nec; also sets the <code>base</code>
      * attribute.
-     * 
+     *
      * The supplied element is presumed to be one for which
      * <code>xs:extension</code> is valid as a child (eg
      * <code>xs:complexType</code>).

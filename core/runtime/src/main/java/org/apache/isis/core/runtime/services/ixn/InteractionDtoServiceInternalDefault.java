@@ -48,7 +48,7 @@ import org.apache.isis.schema.utils.InteractionDtoUtils;
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
-)
+        )
 public class InteractionDtoServiceInternalDefault implements InteractionDtoServiceInternal {
 
 
@@ -83,7 +83,7 @@ public class InteractionDtoServiceInternalDefault implements InteractionDtoServi
                 nextEventSequence, targetBookmark, targetTitle,
                 actionDto.getMemberIdentifier(),
                 parameterDtos, currentUser
-        );
+                );
     }
 
     @Override @Programmatic
@@ -128,7 +128,7 @@ public class InteractionDtoServiceInternalDefault implements InteractionDtoServi
                 nextEventSequence, targetBookmark, targetTitle,
                 propertyDto.getMemberIdentifier(),
                 newValue, currentUser
-        );
+                );
     }
 
     @javax.inject.Inject

@@ -28,7 +28,7 @@ public class CollectionDomainEventFacetDefault extends CollectionDomainEventFace
 
     public CollectionDomainEventFacetDefault(
             final Class<? extends CollectionDomainEvent<?, ?>> eventType,
-            final ServicesInjector servicesInjector, final SpecificationLoader specificationLoader, final FacetHolder holder) {
+                    final ServicesInjector servicesInjector, final SpecificationLoader specificationLoader, final FacetHolder holder) {
         super(eventType, holder, servicesInjector, specificationLoader);
     }
 

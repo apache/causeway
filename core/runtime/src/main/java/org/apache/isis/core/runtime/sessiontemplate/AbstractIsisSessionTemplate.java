@@ -40,7 +40,7 @@ import org.apache.isis.schema.utils.CommonDtoUtils;
 public abstract class AbstractIsisSessionTemplate {
 
     /**
-     * Sets up an {@link IsisSession} then passes along any calling framework's context. 
+     * Sets up an {@link IsisSession} then passes along any calling framework's context.
      */
     public void execute(final AuthenticationSession authSession, final Object context) {
         try {
@@ -54,7 +54,7 @@ public abstract class AbstractIsisSessionTemplate {
     }
 
     // //////////////////////////////////////
-    
+
     /**
      * Either override {@link #doExecute(Object)} (this method) or alternatively override
      * {@link #doExecuteWithTransaction(Object)}.
@@ -130,7 +130,7 @@ public abstract class AbstractIsisSessionTemplate {
     protected final ObjectAdapter adapterFor(final RootOid rootOid) {
         return getPersistenceSession().adapterFor(rootOid);
     }
-    
+
     // //////////////////////////////////////
 
 

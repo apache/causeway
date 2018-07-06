@@ -28,10 +28,10 @@ import org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupLayo
 public class MemberGroupLayoutFacetFallback extends MemberGroupLayoutFacetAbstract {
 
     public MemberGroupLayoutFacetFallback(final FacetHolder holder) {
-        super(null, 
+        super(null,
                 Arrays.asList(DEFAULT_GROUP),
-                Collections.<String>emptyList(), 
-                Collections.<String>emptyList(), 
+                Collections.<String>emptyList(),
+                Collections.<String>emptyList(),
                 holder);
     }
 

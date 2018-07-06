@@ -42,428 +42,428 @@ import org.apache.wicket.model.Model;
 
 class IsisToWicketTreeAdapter {
 
-	public static EntityTree adapt(String id, ValueModel valueModel) {
-		return new EntityTree(id, toITreeProvider(valueModel), toIModelRepresentingCollapseExpandState(valueModel));
-	}
+    public static EntityTree adapt(String id, ValueModel valueModel) {
+        return new EntityTree(id, toITreeProvider(valueModel), toIModelRepresentingCollapseExpandState(valueModel));
+    }
 
-	public static EntityTree adapt(String id, ScalarModel scalarModel) {
-		return new EntityTree(id, toITreeProvider(scalarModel), toIModelRepresentingCollapseExpandState(scalarModel));
-	}
-	
-	// -- RENDERING
-	
-	/**
-	 * Wicket's Tree Component implemented for Isis
-	 */
-	private static class EntityTree extends NestedTree<TreeModel> {
+    public static EntityTree adapt(String id, ScalarModel scalarModel) {
+        return new EntityTree(id, toITreeProvider(scalarModel), toIModelRepresentingCollapseExpandState(scalarModel));
+    }
 
-		private static final long serialVersionUID = 1L;
+    // -- RENDERING
 
-		public EntityTree(
-				String id, 
-				ITreeProvider<TreeModel> provider, 
-				TreeExpansionModel collapseExpandState) {
-			super(id, provider, collapseExpandState);
-			add(new WindowsTheme()); // TODO not required if Isis provides it's own css styles for tree-nodes
-		}
-		
-		/**
-		 * To use a custom component for the representation of a node's content we override this method.
-		 */
-		@Override
-		protected Component newContentComponent(String id, IModel<TreeModel> node) {
-			final TreeModel treeModel = node.getObject();
-			final Component entityIconAndTitle = new EntityIconAndTitlePanel(id, treeModel);
-			return entityIconAndTitle;
-		}
-		
-		/**
-		 * To hardcode Node's <pre>AjaxFallbackLink.isEnabledInHierarchy()->true</pre> we override this method.
-		 */
-		@Override
-		public Component newNodeComponent(String id, IModel<TreeModel> model) {
-			
-			final Node<TreeModel> node =  new Node<TreeModel>(id, this, model) {
-				private static final long serialVersionUID = 1L;
-				
-				@Override
-				protected Component createContent(String id, IModel<TreeModel> model) {
-					return EntityTree.this.newContentComponent(id, model);
-				}
-				
-				@Override
-				protected MarkupContainer createJunctionComponent(String id) {
-					
-					final Node<TreeModel> node = this;
-					final Runnable toggleExpandCollapse = (Runnable & Serializable) this::toggle;
-					
-					return new AjaxFallbackLink<Void>(id) {
-						private static final long serialVersionUID = 1L;
-						
-						@Override
-						public void onClick(Optional<AjaxRequestTarget> target) {
-							toggleExpandCollapse.run();
-						}
+    /**
+     * Wicket's Tree Component implemented for Isis
+     */
+    private static class EntityTree extends NestedTree<TreeModel> {
 
-						@Override
-						public boolean isEnabled() {
-							return EntityTree.this.getProvider().hasChildren(node.getModelObject());
-						}
-						
-						@Override
-						public boolean isEnabledInHierarchy() {
-							return true; // hardcoded -> true
-						}
-						
-					};
-				}
-				
-			};
-			
-			node.setOutputMarkupId(true);
-			
-			return node;
-			
-		}
-		
-		/**
-		 * To utilize the custom TreeExpansionModel for deciding a node's collapse/expand state,
-		 * we override this method.
-		 */
-		@Override
-		public State getState(TreeModel t) {
-			final TreeExpansionModel treeExpansionModel = (TreeExpansionModel) getModel();  
-			return treeExpansionModel.contains(t.getTreePath()) ? State.EXPANDED : State.COLLAPSED;
-		}
-		
-		/**
-		 * To utilize the custom TreeExpansionModel for hooking into a node's expand event,
-		 * we override this method.
-		 */
-		@Override
-		public void expand(TreeModel t) {
-			final TreeExpansionModel treeExpansionModel = (TreeExpansionModel) getModel();
-			treeExpansionModel.onExpand(t);
-			super.expand(t);
-		}
-		
-		/**
-		 * To utilize the custom TreeExpansionModel for hooking into a node's collapse event,
-		 * we override this method.
-		 */
-		@Override
-		public void collapse(TreeModel t) {
-			final TreeExpansionModel treeExpansionModel = (TreeExpansionModel) getModel();
-			treeExpansionModel.onCollapse(t);
-			super.collapse(t);
-		}
-		
-	}
-	
-	// -- ISIS' TREE-MODEL
-	
-	/**
-	 * Extending the EntityModel to also provide a TreePath.
-	 */
-	private static class TreeModel extends EntityModel {
-		private static final long serialVersionUID = 8916044984628849300L;
-		
-		private final TreePath treePath;
+        private static final long serialVersionUID = 1L;
 
-		public TreeModel(TreePath treePath) {
-			super((ObjectAdapter)null);
-			this.treePath = treePath;
-		}
-		
-		public TreeModel(ObjectAdapter adapter, TreePath treePath) {
-			super(Objects.requireNonNull(adapter));
-			this.treePath = treePath;
-		}
-		
-		public TreePath getTreePath() {
-			return treePath;
-		}
-		
-		public boolean isTreePathModelOnly() {
-			return getObject()==null;
-		}
-		
-	}
-	
-	// -- ISIS' TREE ADAPTER (FOR TREES OF TREE-MODEL NODES) 
-	
-	/**
-	 *  TreeAdapter for TreeModel nodes. 
-	 */
-	@SuppressWarnings({"rawtypes", "unchecked"})
-	private static class TreeModelTreeAdapter implements TreeAdapter<TreeModel>, Serializable {
-		private static final long serialVersionUID = 1L;
-		
-		private final Class<? extends TreeAdapter> treeAdapterClass;
-		private transient TreeAdapter wrappedTreeAdapter;
-		
-		private TreeModelTreeAdapter(Class<? extends TreeAdapter> treeAdapterClass) {
-			this.treeAdapterClass = treeAdapterClass;
-		}
-		
-		private TreeAdapter wrappedTreeAdapter() {
-			if(wrappedTreeAdapter!=null) {
-				return wrappedTreeAdapter;
-			}
-			try {
-				final FactoryService factoryService = IsisContext.getServicesInjector()
-						.lookupService(FactoryService.class);
-				return wrappedTreeAdapter = factoryService.instantiate(treeAdapterClass);
-			} catch (Exception e) {
-				throw new RuntimeException("failed to instantiate tree adapter", e);
-			}
-		}
+        public EntityTree(
+                String id,
+                ITreeProvider<TreeModel> provider,
+                TreeExpansionModel collapseExpandState) {
+            super(id, provider, collapseExpandState);
+            add(new WindowsTheme()); // TODO not required if Isis provides it's own css styles for tree-nodes
+        }
 
-		@Override
-		public Optional<TreeModel> parentOf(TreeModel treeModel) {
-			if(treeModel==null) {
-				return Optional.empty();
-			}
-			return wrappedTreeAdapter().parentOf(unwrap(treeModel))
-					.map(pojo->wrap(pojo, treeModel.getTreePath().getParentIfAny())); 
-		}
+        /**
+         * To use a custom component for the representation of a node's content we override this method.
+         */
+        @Override
+        protected Component newContentComponent(String id, IModel<TreeModel> node) {
+            final TreeModel treeModel = node.getObject();
+            final Component entityIconAndTitle = new EntityIconAndTitlePanel(id, treeModel);
+            return entityIconAndTitle;
+        }
 
-		@Override
-		public int childCountOf(TreeModel treeModel) {
-			if(treeModel==null) {
-				return 0;
-			}
-			return wrappedTreeAdapter().childCountOf(unwrap(treeModel));
-		}
+        /**
+         * To hardcode Node's <pre>AjaxFallbackLink.isEnabledInHierarchy()->true</pre> we override this method.
+         */
+        @Override
+        public Component newNodeComponent(String id, IModel<TreeModel> model) {
 
-		@Override
-		public Stream<TreeModel> childrenOf(TreeModel treeModel) {
-			if(treeModel==null) {
-				return Stream.empty();
-			}
-			return wrappedTreeAdapter().childrenOf(unwrap(treeModel))
-					.map(newPojoToTreeModelMapper(treeModel));
-		}
-		
-		private TreeModel wrap(Object pojo, TreePath treePath) {
-			Objects.requireNonNull(pojo);
-			return new TreeModel(persistenceSession().adapterFor(pojo), treePath);
-		}
-		
-		private Object unwrap(TreeModel model) {
-			Objects.requireNonNull(model);
-			return model.getObject().getObject();
-		}
-		
-		private PersistenceSession persistenceSession() {
-			return IsisContext.getPersistenceSession().orElse(null);
-		}
-		
-		private Function<Object, TreeModel> newPojoToTreeModelMapper(TreeModel parent) {
-			return _Functions.indexAwareToFunction((indexWithinSiblings, pojo)->
-				wrap(pojo, parent.getTreePath().append(indexWithinSiblings)));
-		}
-		
-	}
-	
-	// -- WICKET'S TREE PROVIDER (FOR TREES OF TREE-MODEL NODES)
+            final Node<TreeModel> node =  new Node<TreeModel>(id, this, model) {
+                private static final long serialVersionUID = 1L;
 
-	/**
-	 * Wicket's ITreeProvider implemented for Isis
-	 */
-	private static class TreeModelTreeProvider implements ITreeProvider<TreeModel> {
+                @Override
+                protected Component createContent(String id, IModel<TreeModel> model) {
+                    return EntityTree.this.newContentComponent(id, model);
+                }
 
-		private static final long serialVersionUID = 1L;
-		
-		/**
-		 * tree's root
-		 */
-		private final TreeModel primaryValue;
-		private final TreeModelTreeAdapter treeAdapter;
+                @Override
+                protected MarkupContainer createJunctionComponent(String id) {
 
-		private TreeModelTreeProvider(TreeModel primaryValue, TreeModelTreeAdapter treeAdapter) {
-			this.primaryValue = primaryValue;
-			this.treeAdapter = treeAdapter;
-		}
+                    final Node<TreeModel> node = this;
+                    final Runnable toggleExpandCollapse = (Runnable & Serializable) this::toggle;
 
-		@Override
-		public void detach() {
-		}
+                    return new AjaxFallbackLink<Void>(id) {
+                        private static final long serialVersionUID = 1L;
 
-		@Override
-		public Iterator<? extends TreeModel> getRoots() {
-			return _Lists.singleton(primaryValue).iterator();
-		}
+                        @Override
+                        public void onClick(Optional<AjaxRequestTarget> target) {
+                            toggleExpandCollapse.run();
+                        }
 
-		@Override
-		public boolean hasChildren(TreeModel node) {
-			return treeAdapter.childCountOf(node)>0;
-		}
+                        @Override
+                        public boolean isEnabled() {
+                            return EntityTree.this.getProvider().hasChildren(node.getModelObject());
+                        }
 
-		@Override
-		public Iterator<? extends TreeModel> getChildren(TreeModel node) {
-			return treeAdapter.childrenOf(node).iterator();
-		}
+                        @Override
+                        public boolean isEnabledInHierarchy() {
+                            return true; // hardcoded -> true
+                        }
 
-		@Override
-		public IModel<TreeModel> model(final TreeModel treeModel) {
-			return treeModel.isTreePathModelOnly() 
-					? Model.of(treeModel)
-					: new LoadableDetachableTreeModel(treeModel);
-		}
-		
-	}
-	
-	/**
-	 * @param model
-	 * @return Wicket's ITreeProvider
-	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private static ITreeProvider<TreeModel> toITreeProvider(ModelAbstract<ObjectAdapter> model) {
-		
-		final TreeNode treeNode = (TreeNode) model.getObject().getObject();
-		final Class<? extends TreeAdapter> treeAdapterClass = treeNode.getTreeAdapterClass();
-		final TreeModelTreeAdapter wrappingTreeAdapter = new TreeModelTreeAdapter(treeAdapterClass);
-		
-		return new TreeModelTreeProvider(
-				wrappingTreeAdapter.wrap(treeNode.getValue(), treeNode.getPositionAsPath()), 
-				wrappingTreeAdapter);		
-	}
-	
-	// -- WICKET'S LOADABLE/DETACHABLE MODEL FOR TREE-MODEL NODES 
-	
-	/**
-	 * Wicket's loadable/detachable model for TreeModel nodes. 
-	 */
-	private static class LoadableDetachableTreeModel extends LoadableDetachableModel<TreeModel> {
-		private static final long serialVersionUID = 1L;
+                    };
+                }
 
-		private final RootOid id;
-		private final TreePath treePath;
-		private final int hashCode;
+            };
 
-		public LoadableDetachableTreeModel(TreeModel tModel) {
-			super(tModel);
-			this.treePath = tModel.getTreePath();
-			this.id = (RootOid) tModel.getObject().getOid();
-			this.hashCode = Objects.hash(id.hashCode(), treePath.hashCode());
-		}
+            node.setOutputMarkupId(true);
 
-		/*
-		 * loads EntityModel using Oid (id)
-		 */
-		@Override
-		protected TreeModel load() {
-			
-			final PersistenceSession persistenceSession = IsisContext.getPersistenceSession()
-					.orElseThrow(()->new RuntimeException(new IllegalStateException(
-							String.format("Tree creation: missing a PersistenceSession to recreate TreeModel "
-									+ "from Oid: '%s'", id)))
-					);
-			
-			final ObjectAdapter objAdapter = persistenceSession.adapterFor(id);
-			if(objAdapter==null) {
-				throw new NoSuchElementException(
-						String.format("Tree creation: could not recreate TreeModel from Oid: '%s'", id)); 
-			}
-			
-			final Object pojo = objAdapter.getObject();
-			if(pojo==null) {
-				throw new NoSuchElementException(
-						String.format("Tree creation: could not recreate Pojo from Oid: '%s'", id)); 
-			}
-			
-			return new TreeModel(objAdapter, treePath);
-		}
+            return node;
 
-		/*
-		 * Important! Models must be identifiable by their contained object. Also IDs must be
-		 * unique within a tree structure.
-		 */
-		@Override
-		public boolean equals(Object obj) {
-			if (obj instanceof LoadableDetachableTreeModel) {
-				final LoadableDetachableTreeModel other = (LoadableDetachableTreeModel) obj;
-				return treePath.equals(other.treePath) && id.equals(other.id);
-			}
-			return false;
-		}
+        }
 
-		/*
-		 * Important! Models must be identifiable by their contained object.
-		 */
-		@Override
-		public int hashCode() {
-			return hashCode;
-		}
-	}
+        /**
+         * To utilize the custom TreeExpansionModel for deciding a node's collapse/expand state,
+         * we override this method.
+         */
+        @Override
+        public State getState(TreeModel t) {
+            final TreeExpansionModel treeExpansionModel = (TreeExpansionModel) getModel();
+            return treeExpansionModel.contains(t.getTreePath()) ? State.EXPANDED : State.COLLAPSED;
+        }
 
-	// -- COLLAPSE/EXPAND
-	
-	/**
-	 * 
-	 * @param model
-	 * @return Wicket's model for collapse/expand state
-	 */
-	@SuppressWarnings({ "rawtypes" })
-	private static TreeExpansionModel toIModelRepresentingCollapseExpandState(ModelAbstract<ObjectAdapter> model) {
-		final TreeNode treeNode = (TreeNode) model.getObject().getObject();
-		final TreeState treeState = treeNode.getTreeState();
-		return TreeExpansionModel.of(treeState.getExpandedNodePaths());
-	}
-	
-	/**
-	 * Wicket's model for collapse/expand state
-	 */
-	private static class TreeExpansionModel implements IModel<Set<TreeModel>> {
-		private static final long serialVersionUID = 648152234030889164L;
+        /**
+         * To utilize the custom TreeExpansionModel for hooking into a node's expand event,
+         * we override this method.
+         */
+        @Override
+        public void expand(TreeModel t) {
+            final TreeExpansionModel treeExpansionModel = (TreeExpansionModel) getModel();
+            treeExpansionModel.onExpand(t);
+            super.expand(t);
+        }
 
-		public static TreeExpansionModel of(Set<TreePath> expandedTreePaths) {
-			return new TreeExpansionModel(expandedTreePaths);
-		}
+        /**
+         * To utilize the custom TreeExpansionModel for hooking into a node's collapse event,
+         * we override this method.
+         */
+        @Override
+        public void collapse(TreeModel t) {
+            final TreeExpansionModel treeExpansionModel = (TreeExpansionModel) getModel();
+            treeExpansionModel.onCollapse(t);
+            super.collapse(t);
+        }
 
-		/**
-		 * Happens on user interaction via UI.
-		 * @param t
-		 */
-		public void onExpand(TreeModel t) {
-			expandedTreePaths.add(t.getTreePath());
-		}
-		
-		/**
-		 * Happens on user interaction via UI.
-		 * @param t
-		 */
-		public void onCollapse(TreeModel t) {
-			expandedTreePaths.remove(t.getTreePath());
-		}
+    }
 
-		public boolean contains(TreePath treePath) {
-			return expandedTreePaths.contains(treePath);
-		}
+    // -- ISIS' TREE-MODEL
 
-		private final Set<TreePath> expandedTreePaths;
-		private final Set<TreeModel> expandedNodes; 
-		
-		private TreeExpansionModel(Set<TreePath> expandedTreePaths) {
-			this.expandedTreePaths = expandedTreePaths;
-			this.expandedNodes = expandedTreePaths.stream()
-			.map(tPath->new TreeModel(tPath))
-			.collect(Collectors.toSet());
-		}
+    /**
+     * Extending the EntityModel to also provide a TreePath.
+     */
+    private static class TreeModel extends EntityModel {
+        private static final long serialVersionUID = 8916044984628849300L;
 
-		@Override
-		public Set<TreeModel> getObject() {
-			return expandedNodes;
-		}
-		
-		@Override
-		public String toString() {
-			return "{" + expandedTreePaths.stream()
-					.map(TreePath::toString)
-					.collect(Collectors.joining(", ")) + "}";
-		}
+        private final TreePath treePath;
 
-	}
-	
+        public TreeModel(TreePath treePath) {
+            super((ObjectAdapter)null);
+            this.treePath = treePath;
+        }
+
+        public TreeModel(ObjectAdapter adapter, TreePath treePath) {
+            super(Objects.requireNonNull(adapter));
+            this.treePath = treePath;
+        }
+
+        public TreePath getTreePath() {
+            return treePath;
+        }
+
+        public boolean isTreePathModelOnly() {
+            return getObject()==null;
+        }
+
+    }
+
+    // -- ISIS' TREE ADAPTER (FOR TREES OF TREE-MODEL NODES)
+
+    /**
+     *  TreeAdapter for TreeModel nodes.
+     */
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    private static class TreeModelTreeAdapter implements TreeAdapter<TreeModel>, Serializable {
+        private static final long serialVersionUID = 1L;
+
+        private final Class<? extends TreeAdapter> treeAdapterClass;
+        private transient TreeAdapter wrappedTreeAdapter;
+
+        private TreeModelTreeAdapter(Class<? extends TreeAdapter> treeAdapterClass) {
+            this.treeAdapterClass = treeAdapterClass;
+        }
+
+        private TreeAdapter wrappedTreeAdapter() {
+            if(wrappedTreeAdapter!=null) {
+                return wrappedTreeAdapter;
+            }
+            try {
+                final FactoryService factoryService = IsisContext.getServicesInjector()
+                        .lookupService(FactoryService.class);
+                return wrappedTreeAdapter = factoryService.instantiate(treeAdapterClass);
+            } catch (Exception e) {
+                throw new RuntimeException("failed to instantiate tree adapter", e);
+            }
+        }
+
+        @Override
+        public Optional<TreeModel> parentOf(TreeModel treeModel) {
+            if(treeModel==null) {
+                return Optional.empty();
+            }
+            return wrappedTreeAdapter().parentOf(unwrap(treeModel))
+                    .map(pojo->wrap(pojo, treeModel.getTreePath().getParentIfAny()));
+        }
+
+        @Override
+        public int childCountOf(TreeModel treeModel) {
+            if(treeModel==null) {
+                return 0;
+            }
+            return wrappedTreeAdapter().childCountOf(unwrap(treeModel));
+        }
+
+        @Override
+        public Stream<TreeModel> childrenOf(TreeModel treeModel) {
+            if(treeModel==null) {
+                return Stream.empty();
+            }
+            return wrappedTreeAdapter().childrenOf(unwrap(treeModel))
+                    .map(newPojoToTreeModelMapper(treeModel));
+        }
+
+        private TreeModel wrap(Object pojo, TreePath treePath) {
+            Objects.requireNonNull(pojo);
+            return new TreeModel(persistenceSession().adapterFor(pojo), treePath);
+        }
+
+        private Object unwrap(TreeModel model) {
+            Objects.requireNonNull(model);
+            return model.getObject().getObject();
+        }
+
+        private PersistenceSession persistenceSession() {
+            return IsisContext.getPersistenceSession().orElse(null);
+        }
+
+        private Function<Object, TreeModel> newPojoToTreeModelMapper(TreeModel parent) {
+            return _Functions.indexAwareToFunction((indexWithinSiblings, pojo)->
+            wrap(pojo, parent.getTreePath().append(indexWithinSiblings)));
+        }
+
+    }
+
+    // -- WICKET'S TREE PROVIDER (FOR TREES OF TREE-MODEL NODES)
+
+    /**
+     * Wicket's ITreeProvider implemented for Isis
+     */
+    private static class TreeModelTreeProvider implements ITreeProvider<TreeModel> {
+
+        private static final long serialVersionUID = 1L;
+
+        /**
+         * tree's root
+         */
+        private final TreeModel primaryValue;
+        private final TreeModelTreeAdapter treeAdapter;
+
+        private TreeModelTreeProvider(TreeModel primaryValue, TreeModelTreeAdapter treeAdapter) {
+            this.primaryValue = primaryValue;
+            this.treeAdapter = treeAdapter;
+        }
+
+        @Override
+        public void detach() {
+        }
+
+        @Override
+        public Iterator<? extends TreeModel> getRoots() {
+            return _Lists.singleton(primaryValue).iterator();
+        }
+
+        @Override
+        public boolean hasChildren(TreeModel node) {
+            return treeAdapter.childCountOf(node)>0;
+        }
+
+        @Override
+        public Iterator<? extends TreeModel> getChildren(TreeModel node) {
+            return treeAdapter.childrenOf(node).iterator();
+        }
+
+        @Override
+        public IModel<TreeModel> model(final TreeModel treeModel) {
+            return treeModel.isTreePathModelOnly()
+                    ? Model.of(treeModel)
+                            : new LoadableDetachableTreeModel(treeModel);
+        }
+
+    }
+
+    /**
+     * @param model
+     * @return Wicket's ITreeProvider
+     */
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    private static ITreeProvider<TreeModel> toITreeProvider(ModelAbstract<ObjectAdapter> model) {
+
+        final TreeNode treeNode = (TreeNode) model.getObject().getObject();
+        final Class<? extends TreeAdapter> treeAdapterClass = treeNode.getTreeAdapterClass();
+        final TreeModelTreeAdapter wrappingTreeAdapter = new TreeModelTreeAdapter(treeAdapterClass);
+
+        return new TreeModelTreeProvider(
+                wrappingTreeAdapter.wrap(treeNode.getValue(), treeNode.getPositionAsPath()),
+                wrappingTreeAdapter);
+    }
+
+    // -- WICKET'S LOADABLE/DETACHABLE MODEL FOR TREE-MODEL NODES
+
+    /**
+     * Wicket's loadable/detachable model for TreeModel nodes.
+     */
+    private static class LoadableDetachableTreeModel extends LoadableDetachableModel<TreeModel> {
+        private static final long serialVersionUID = 1L;
+
+        private final RootOid id;
+        private final TreePath treePath;
+        private final int hashCode;
+
+        public LoadableDetachableTreeModel(TreeModel tModel) {
+            super(tModel);
+            this.treePath = tModel.getTreePath();
+            this.id = (RootOid) tModel.getObject().getOid();
+            this.hashCode = Objects.hash(id.hashCode(), treePath.hashCode());
+        }
+
+        /*
+         * loads EntityModel using Oid (id)
+         */
+        @Override
+        protected TreeModel load() {
+
+            final PersistenceSession persistenceSession = IsisContext.getPersistenceSession()
+                    .orElseThrow(()->new RuntimeException(new IllegalStateException(
+                            String.format("Tree creation: missing a PersistenceSession to recreate TreeModel "
+                                    + "from Oid: '%s'", id)))
+                            );
+
+            final ObjectAdapter objAdapter = persistenceSession.adapterFor(id);
+            if(objAdapter==null) {
+                throw new NoSuchElementException(
+                        String.format("Tree creation: could not recreate TreeModel from Oid: '%s'", id));
+            }
+
+            final Object pojo = objAdapter.getObject();
+            if(pojo==null) {
+                throw new NoSuchElementException(
+                        String.format("Tree creation: could not recreate Pojo from Oid: '%s'", id));
+            }
+
+            return new TreeModel(objAdapter, treePath);
+        }
+
+        /*
+         * Important! Models must be identifiable by their contained object. Also IDs must be
+         * unique within a tree structure.
+         */
+        @Override
+        public boolean equals(Object obj) {
+            if (obj instanceof LoadableDetachableTreeModel) {
+                final LoadableDetachableTreeModel other = (LoadableDetachableTreeModel) obj;
+                return treePath.equals(other.treePath) && id.equals(other.id);
+            }
+            return false;
+        }
+
+        /*
+         * Important! Models must be identifiable by their contained object.
+         */
+        @Override
+        public int hashCode() {
+            return hashCode;
+        }
+    }
+
+    // -- COLLAPSE/EXPAND
+
+    /**
+     *
+     * @param model
+     * @return Wicket's model for collapse/expand state
+     */
+    @SuppressWarnings({ "rawtypes" })
+    private static TreeExpansionModel toIModelRepresentingCollapseExpandState(ModelAbstract<ObjectAdapter> model) {
+        final TreeNode treeNode = (TreeNode) model.getObject().getObject();
+        final TreeState treeState = treeNode.getTreeState();
+        return TreeExpansionModel.of(treeState.getExpandedNodePaths());
+    }
+
+    /**
+     * Wicket's model for collapse/expand state
+     */
+    private static class TreeExpansionModel implements IModel<Set<TreeModel>> {
+        private static final long serialVersionUID = 648152234030889164L;
+
+        public static TreeExpansionModel of(Set<TreePath> expandedTreePaths) {
+            return new TreeExpansionModel(expandedTreePaths);
+        }
+
+        /**
+         * Happens on user interaction via UI.
+         * @param t
+         */
+        public void onExpand(TreeModel t) {
+            expandedTreePaths.add(t.getTreePath());
+        }
+
+        /**
+         * Happens on user interaction via UI.
+         * @param t
+         */
+        public void onCollapse(TreeModel t) {
+            expandedTreePaths.remove(t.getTreePath());
+        }
+
+        public boolean contains(TreePath treePath) {
+            return expandedTreePaths.contains(treePath);
+        }
+
+        private final Set<TreePath> expandedTreePaths;
+        private final Set<TreeModel> expandedNodes;
+
+        private TreeExpansionModel(Set<TreePath> expandedTreePaths) {
+            this.expandedTreePaths = expandedTreePaths;
+            this.expandedNodes = expandedTreePaths.stream()
+                    .map(tPath->new TreeModel(tPath))
+                    .collect(Collectors.toSet());
+        }
+
+        @Override
+        public Set<TreeModel> getObject() {
+            return expandedNodes;
+        }
+
+        @Override
+        public String toString() {
+            return "{" + expandedTreePaths.stream()
+            .map(TreePath::toString)
+            .collect(Collectors.joining(", ")) + "}";
+        }
+
+    }
+
 }

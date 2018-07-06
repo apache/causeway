@@ -31,8 +31,8 @@ import org.apache.isis.core.metamodel.facets.collections.javautilcollection.Coll
 /**
  * All {@link CollectionUtils collection types} are intrinsically
  * {@link ParentedCollectionFacet parented}.
- * 
- * <p> 
+ *
+ * <p>
  * Must be registered in the {@link ProgrammingModel} after
  * {@link CollectionFacetFactory}.
  */

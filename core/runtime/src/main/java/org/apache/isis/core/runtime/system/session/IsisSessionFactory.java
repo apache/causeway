@@ -69,7 +69,7 @@ import com.google.common.collect.Lists;
  * </p>
  */
 public class IsisSessionFactory
-        implements ApplicationScopedComponent, AppManifestProvider {
+implements ApplicationScopedComponent, AppManifestProvider {
 
     @SuppressWarnings("unused")
     private final static Logger LOG = LoggerFactory.getLogger(IsisSessionFactory.class);
@@ -101,12 +101,13 @@ public class IsisSessionFactory
         this.appManifest = appManifest;
     }
 
+    @Override
     @Programmatic
     public AppManifest getAppManifest() {
         return appManifest;
     }
 
-    
+
 
     // -- constructServices, destroyServicesAndShutdown
 
@@ -161,7 +162,7 @@ public class IsisSessionFactory
             final TitleService titleService = servicesInjector.lookupServiceElseFail(TitleService.class);
             for (Object service : copyOfServices) {
                 @SuppressWarnings("unused")
-				final String unused = titleService.titleOf(service);
+                final String unused = titleService.titleOf(service);
             }
 
             // (previously we took a protective copy to avoid a concurrent modification exception,
@@ -172,7 +173,7 @@ public class IsisSessionFactory
                     final Object[] enumConstants = correspondingClass.getEnumConstants();
                     for (Object enumConstant : enumConstants) {
                         @SuppressWarnings("unused")
-						final String unused = titleService.titleOf(enumConstant);
+                        final String unused = titleService.titleOf(enumConstant);
                     }
                 }
             }
@@ -232,7 +233,7 @@ public class IsisSessionFactory
         specificationLoader.shutdown();
     }
 
-    
+
 
     // -- logonFixture
 
@@ -283,7 +284,7 @@ public class IsisSessionFactory
 
     @Programmatic
     public IsisSession getCurrentSession() {
-    	return currentSession.get();
+        return currentSession.get();
     }
 
     private IsisTransactionManager getCurrentSessionTransactionManager() {
@@ -373,7 +374,7 @@ public class IsisSessionFactory
         }
     }
 
-    
+
 
     // -- component accessors
     /**
@@ -404,7 +405,7 @@ public class IsisSessionFactory
 
     /**
      * Derived from {@link #getServicesInjector()}.
-     * 
+     *
      * @deprecated - use {@link #getServicesInjector()} instead.
      */
     @Programmatic
@@ -454,6 +455,6 @@ public class IsisSessionFactory
     }
 
 
-    
+
 
 }

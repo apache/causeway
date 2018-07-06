@@ -26,11 +26,11 @@ import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefault
 
 /**
  * Indicates that this class has a default.
- * 
+ *
  * <p>
  * The mechanism for providing a default will vary by the applib. In the Java
  * applib, this is done by implementing the DefaultProvider interface.
- * 
+ *
  * <p>
  * The rest of the framework does not used this directly, but instead we infer
  * {@link PropertyDefaultFacet} and {@link ActionDefaultsFacet} from the
@@ -40,7 +40,7 @@ public interface DefaultedFacet extends MarkerFacet {
 
     /**
      * The default (as a pojo, not a {@link ObjectAdapter}).
-     * 
+     *
      * @return
      */
     Object getDefault();

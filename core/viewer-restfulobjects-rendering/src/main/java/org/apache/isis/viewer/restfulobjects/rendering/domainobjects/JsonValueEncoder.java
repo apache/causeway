@@ -71,17 +71,18 @@ public final class JsonValueEncoder {
 
         public List<ObjectSpecId> getSpecIds() {
             return Lists.newArrayList(Iterables.transform(Arrays.asList(classes), new Function<Class<?>, ObjectSpecId>() {
+                @Override
                 public ObjectSpecId apply(Class<?> cls) {
                     return new ObjectSpecId(cls.getName());
                 }
             }));
         }
-        
+
         /**
          * The value, otherwise <tt>null</tt>.
          */
         public abstract ObjectAdapter asAdapter(JsonRepresentation repr, String format);
-        
+
         public Object appendValueAndFormat(ObjectAdapter objectAdapter, String format, JsonRepresentation repr, boolean suppressExtensions) {
             final Object value = unwrapAsObjectElseNullNode(objectAdapter);
             repr.mapPut("value", value);
@@ -93,9 +94,9 @@ public final class JsonValueEncoder {
             return objectAdapter.getObject();
         }
     }
-    
+
     private static Map<ObjectSpecId, JsonValueConverter> converterBySpec = Maps.newLinkedHashMap();
-    
+
     private static void putConverter(JsonValueConverter jvc) {
         final List<ObjectSpecId> specIds = jvc.getSpecIds();
         for (ObjectSpecId specId : specIds) {
@@ -109,7 +110,7 @@ public final class JsonValueEncoder {
             public ObjectAdapter asAdapter(JsonRepresentation repr, String format) {
                 if (repr.isString()) {
                     return adapterFor(repr.asString());
-                } 
+                }
                 return null;
             }
             @Override
@@ -131,7 +132,7 @@ public final class JsonValueEncoder {
             public ObjectAdapter asAdapter(JsonRepresentation repr, String format) {
                 if (repr.isBoolean()) {
                     return adapterFor(repr.asBoolean());
-                } 
+                }
                 return null;
             }
             @Override
@@ -147,7 +148,7 @@ public final class JsonValueEncoder {
                 return obj;
             }
         });
-        
+
         putConverter(new JsonValueConverter("int", "byte", byte.class, Byte.class){
             @Override
             public ObjectAdapter asAdapter(JsonRepresentation repr, String format) {
@@ -178,7 +179,7 @@ public final class JsonValueEncoder {
                 return obj;
             }
         });
-        
+
         putConverter(new JsonValueConverter("int", "short", short.class, Short.class){
             @Override
             public ObjectAdapter asAdapter(JsonRepresentation repr, String format) {
@@ -209,7 +210,7 @@ public final class JsonValueEncoder {
                 return obj;
             }
         });
-        
+
         putConverter(new JsonValueConverter("int", "int", int.class, Integer.class){
             @Override
             public ObjectAdapter asAdapter(JsonRepresentation repr, String format) {
@@ -240,7 +241,7 @@ public final class JsonValueEncoder {
                 return obj;
             }
         });
-        
+
         putConverter(new JsonValueConverter("int", "long", long.class, Long.class){
             @Override
             public ObjectAdapter asAdapter(JsonRepresentation repr, String format) {
@@ -271,7 +272,7 @@ public final class JsonValueEncoder {
                 return obj;
             }
         });
-        
+
         putConverter(new JsonValueConverter("decimal", "float", float.class, Float.class){
             @Override
             public ObjectAdapter asAdapter(JsonRepresentation repr, String format) {
@@ -305,7 +306,7 @@ public final class JsonValueEncoder {
                 return obj;
             }
         });
-        
+
         putConverter(new JsonValueConverter("decimal", "double", double.class, Double.class){
             @Override
             public ObjectAdapter asAdapter(JsonRepresentation repr, String format) {
@@ -342,7 +343,7 @@ public final class JsonValueEncoder {
                 return obj;
             }
         });
-        
+
         putConverter(new JsonValueConverter(null, "char", char.class, Character.class){
             @Override
             public ObjectAdapter asAdapter(JsonRepresentation repr, String format) {
@@ -375,7 +376,7 @@ public final class JsonValueEncoder {
                 return obj;
             }
         });
-        
+
         putConverter(new JsonValueConverter("big-integer(18)", "javamathbiginteger", BigInteger.class){
             @Override
             public ObjectAdapter asAdapter(JsonRepresentation repr, String format) {
@@ -409,7 +410,7 @@ public final class JsonValueEncoder {
                 return obj;
             }
         });
-        
+
         putConverter(new JsonValueConverter("big-decimal", "javamathbigdecimal", BigDecimal.class){
             @Override
             public ObjectAdapter asAdapter(JsonRepresentation repr, String format) {
@@ -497,7 +498,7 @@ public final class JsonValueEncoder {
                     ISODateTimeFormat.basicDateTime().withZoneUTC(),
                     JsonRepresentation.yyyyMMddTHHmmssZ.withZoneUTC()
                     );
-            
+
             @Override
             public ObjectAdapter asAdapter(JsonRepresentation repr, String format) {
                 if (repr.isString()) {
@@ -530,15 +531,15 @@ public final class JsonValueEncoder {
         });
 
         putConverter(new JsonValueConverter("date-time", "jodadatetime", DateTime.class){
-            
+
             final List<DateTimeFormatter> formatters = Arrays.asList(
                     ISODateTimeFormat.dateTimeNoMillis().withZoneUTC(),
                     ISODateTimeFormat.dateTime().withZoneUTC(),
                     ISODateTimeFormat.basicDateTimeNoMillis().withZoneUTC(),
                     ISODateTimeFormat.basicDateTime().withZoneUTC(),
                     JsonRepresentation.yyyyMMddTHHmmssZ.withZoneUTC()
-            );
-            
+                    );
+
             @Override
             public ObjectAdapter asAdapter(JsonRepresentation repr, String format) {
                 if (repr.isString()) {
@@ -571,7 +572,7 @@ public final class JsonValueEncoder {
         });
 
         putConverter(new JsonValueConverter("date-time", "javautildate", java.util.Date.class){
-            
+
             final List<DateTimeFormatter> formatters = Arrays.asList(
                     ISODateTimeFormat.dateTimeNoMillis().withZoneUTC(),
                     ISODateTimeFormat.dateTime().withZoneUTC(),
@@ -613,7 +614,7 @@ public final class JsonValueEncoder {
         });
 
         putConverter(new JsonValueConverter("date", "javasqldate", java.sql.Date.class){
-            
+
             final List<DateTimeFormatter> formatters = Arrays.asList(
                     ISODateTimeFormat.date().withZoneUTC(),
                     ISODateTimeFormat.basicDate().withZoneUTC(),
@@ -652,13 +653,13 @@ public final class JsonValueEncoder {
         });
 
         putConverter(new JsonValueConverter("time", "javasqltime", java.sql.Time.class){
-            
+
             final List<DateTimeFormatter> formatters = Arrays.asList(
-                        ISODateTimeFormat.hourMinuteSecond().withZoneUTC(),
-                        ISODateTimeFormat.basicTimeNoMillis().withZoneUTC(),
-                        ISODateTimeFormat.basicTime().withZoneUTC(),
-                        JsonRepresentation._HHmmss.withZoneUTC()
-            );
+                    ISODateTimeFormat.hourMinuteSecond().withZoneUTC(),
+                    ISODateTimeFormat.basicTimeNoMillis().withZoneUTC(),
+                    ISODateTimeFormat.basicTime().withZoneUTC(),
+                    JsonRepresentation._HHmmss.withZoneUTC()
+                    );
             @Override
             public ObjectAdapter asAdapter(JsonRepresentation repr, String format) {
                 if (repr.isString()) {
@@ -692,7 +693,7 @@ public final class JsonValueEncoder {
         });
 
         putConverter(new JsonValueConverter("utc-millisec", "javasqltimestamp", java.sql.Timestamp.class){
-            
+
             @Override
             public ObjectAdapter asAdapter(JsonRepresentation repr, String format) {
                 if (repr.isLong()) {
@@ -763,7 +764,7 @@ public final class JsonValueEncoder {
         if(asAdapter != null) {
             return asAdapter;
         }
-        
+
         // last attempt
         if (argValueRepr.isString()) {
             final String argStr = argValueRepr.asString();
@@ -793,7 +794,7 @@ public final class JsonValueEncoder {
             return value;
         }
     }
-    
+
     public static Object asObject(final ObjectAdapter objectAdapter, final String format) {
         if (objectAdapter == null) {
             throw new IllegalArgumentException("objectAdapter cannot be null");
@@ -803,8 +804,8 @@ public final class JsonValueEncoder {
         final JsonValueConverter jvc = converterBySpec.get(objectSpec.getSpecId());
         if(jvc != null) {
             return jvc.asObject(objectAdapter, format);
-        } 
-        
+        }
+
         // else
         final EncodableFacet encodableFacet = objectSpec.getFacet(EncodableFacet.class);
         if (encodableFacet == null) {

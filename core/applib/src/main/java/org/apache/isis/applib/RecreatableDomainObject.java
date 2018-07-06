@@ -37,13 +37,13 @@ public interface RecreatableDomainObject {
      * <p>
      * Typically this will be the identifier of a backing domain entity, but it could also be an arbitrary string,
      * for example a bunch of JSON.
-     * 
+     *
      * <p>
      * This method is called by the framework in order that the view model may be recreated subsequently
      * through {@link #__isis_recreate(String)}.
      */
     public String __isis_memento();
-    
+
     /**
      * Used to recreate a recreatable object with a memento obtained from {@link #__isis_recreate(String)}.
      */

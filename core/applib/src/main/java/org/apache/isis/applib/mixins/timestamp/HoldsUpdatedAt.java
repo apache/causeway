@@ -20,4 +20,4 @@ public interface HoldsUpdatedAt {
 
     void setUpdatedAt(java.sql.Timestamp updatedAt);
 
-}    
+}

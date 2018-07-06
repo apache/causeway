@@ -50,7 +50,7 @@ public class HomePageFacetAnnotationFactory extends FacetFactoryAbstract impleme
         final HomePage annotation = Annotations.getAnnotation(processMethodContext.getMethod(), HomePage.class);
         if (annotation == null) {
             return;
-        } 
+        }
         final FacetedMethod facetHolder = processMethodContext.getFacetHolder();
         FacetUtil.addFacet(new HomePageFacetAnnotation(facetHolder));
     }
@@ -67,19 +67,19 @@ public class HomePageFacetAnnotationFactory extends FacetFactoryAbstract impleme
         return new MetaModelValidatorVisiting.SummarizingVisitor() {
 
             private final List<String> annotated = Lists.newArrayList();
-            
+
             @Override
             public boolean visit(ObjectSpecification objectSpec, ValidationFailures validationFailures) {
                 final List<ObjectAction> objectActions = objectSpec.getObjectActions(Contributed.EXCLUDED);
                 for (ObjectAction objectAction : objectActions) {
                     if(objectAction.containsFacet(HomePageFacet.class)) {
                         final String fullIdentifier = objectAction.getIdentifier().toClassAndNameIdentityString();
-                        
+
                         // TODO: it would good to flag if the facet is found on any non-services, however
                         // ObjectSpecification.isService(...) can only be trusted once a PersistenceSession exists.
                         // this ought to be improved upon at some point...
                         annotated.add(fullIdentifier);
-                        
+
                     }
                 }
                 return true; // keep searching
@@ -93,8 +93,8 @@ public class HomePageFacetAnnotationFactory extends FacetFactoryAbstract impleme
                         others.remove(actionId);
                         final String nonServiceNamesStr = Joiner.on(", ").join(others);
                         validationFailures.add(
-                            "%s: other actions also specified as home page: %s ",
-                            actionId, nonServiceNamesStr);
+                                "%s: other actions also specified as home page: %s ",
+                                actionId, nonServiceNamesStr);
                     }
                 }
             }

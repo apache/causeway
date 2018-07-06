@@ -51,7 +51,7 @@ import static java.util.regex.Pattern.quote;
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
-)
+        )
 public class EmailNotificationServiceDefault implements EmailNotificationService {
 
     private static final Logger LOG = LoggerFactory.getLogger(EmailNotificationServiceDefault.class);
@@ -64,7 +64,7 @@ public class EmailNotificationServiceDefault implements EmailNotificationService
 
     private String passwordResetTemplate;
     private String emailVerificationTemplate;
-    
+
 
     // -- init
 
@@ -73,6 +73,7 @@ public class EmailNotificationServiceDefault implements EmailNotificationService
     /**
      * Loads responsive email templates borrowed from http://zurb.com/ink/templates.php (Basic)
      */
+    @Override
     @PostConstruct
     @Programmatic
     public void init() {
@@ -96,7 +97,7 @@ public class EmailNotificationServiceDefault implements EmailNotificationService
         }
     }
 
-    
+
 
     // -- isConfigured
 
@@ -106,7 +107,7 @@ public class EmailNotificationServiceDefault implements EmailNotificationService
         return emailService != null && emailService.isConfigured();
     }
 
-    
+
 
     // -- send
 
@@ -127,7 +128,7 @@ public class EmailNotificationServiceDefault implements EmailNotificationService
         return sendEmail(passwordResetEvent, body);
     }
 
-    
+
 
     // -- helper methods for send(...)
 
@@ -171,12 +172,12 @@ public class EmailNotificationServiceDefault implements EmailNotificationService
         return message;
     }
 
-    
+
 
     // -- dependencies
 
     @javax.inject.Inject
     private EmailService emailService;
-    
+
 
 }

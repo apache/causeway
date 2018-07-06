@@ -29,17 +29,17 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 /**
  * A {@link FacetFactory} implementation that is able to identify a property or
  * collection.
- * 
+ *
  * <p>
  * For example, a <i>getter</i> method is most commonly used to represent either
  * a property (value or reference) or a collection, with the return type
  * indicating which.
- * 
+ *
  * <p>
  * Used by the Java5 Reflector's <tt>ProgrammingModel</tt> to determine which
  * facet factories to ask whether a {@link Method} represents a property or a
  * collection.
- * 
+ *
  */
 public interface PropertyOrCollectionIdentifyingFacetFactory extends FacetFactory {
 
@@ -48,7 +48,7 @@ public interface PropertyOrCollectionIdentifyingFacetFactory extends FacetFactor
      * {@link Method} possibly represents the accessor of either a
      * {@link ValueAssociation value property}, {@link OneToOneAssociation
      * reference property} or a {@link OneToManyAssociation collection}.
-     * 
+     *
      * <p>
      * For example, if a method name has a prefix of <tt>get</tt> or
      * alternatively has a prefix of <tt>is</tt> and returns a <tt>boolean</tt>,

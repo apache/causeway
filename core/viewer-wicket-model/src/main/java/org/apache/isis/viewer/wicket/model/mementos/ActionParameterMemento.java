@@ -29,7 +29,7 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 /**
  * {@link Serializable} representation of a {@link ObjectActionParameter parameter}
  * of a {@link ObjectAction}.
- * 
+ *
  * @see ActionMemento
  */
 public class ActionParameterMemento implements Serializable {
@@ -53,8 +53,8 @@ public class ActionParameterMemento implements Serializable {
     }
 
     private ActionParameterMemento(
-            final ActionMemento actionMemento, 
-            final int number, 
+            final ActionMemento actionMemento,
+            final int number,
             final ObjectActionParameter actionParameter) {
         this.actionMemento = actionMemento;
         this.number = number;

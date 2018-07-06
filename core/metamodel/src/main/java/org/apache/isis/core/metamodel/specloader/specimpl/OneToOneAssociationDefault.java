@@ -66,7 +66,7 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
                 getSpecification(servicesInjector.getSpecificationLoader(), facetedMethod.getType()),
                 servicesInjector);
     }
-    
+
     protected OneToOneAssociationDefault(
             final FacetedMethod facetedMethod,
             final ObjectSpecification objectSpec,
@@ -91,7 +91,7 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
         return new PropertyUsabilityContext(ownerAdapter, getIdentifier(), interactionInitiatedBy, where);
     }
 
-    
+
 
     // -- Validity
     private ValidityContext<?> createValidateInteractionContext(
@@ -117,11 +117,11 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
         final ValidityContext<?> validityContext =
                 createValidateInteractionContext(
                         ownerAdapter, proposedToReferenceAdapter, interactionInitiatedBy
-                );
+                        );
         return InteractionUtils.isValidResult(this, validityContext);
     }
 
-    
+
 
     // -- init
     @Override
@@ -132,7 +132,7 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
         }
     }
 
-    
+
 
     // -- Access (get, isEmpty)
 
@@ -152,22 +152,22 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
     }
 
     // REVIEW: UNUSED
-//TODO [ahuber] remove?    
-//    private PropertyAccessContext createAccessInteractionContext(
-//            final ObjectAdapter ownerAdapter,
-//            final InteractionInitiatedBy interactionInitiatedBy) {
-//        final ObjectAdapter referencedAdapter = get(ownerAdapter, interactionInitiatedBy);
-//        return new PropertyAccessContext(
-//                ownerAdapter, getIdentifier(), referencedAdapter, interactionInitiatedBy
-//        );
-//    }
+    //TODO [ahuber] remove?
+    //    private PropertyAccessContext createAccessInteractionContext(
+    //            final ObjectAdapter ownerAdapter,
+    //            final InteractionInitiatedBy interactionInitiatedBy) {
+    //        final ObjectAdapter referencedAdapter = get(ownerAdapter, interactionInitiatedBy);
+    //        return new PropertyAccessContext(
+    //                ownerAdapter, getIdentifier(), referencedAdapter, interactionInitiatedBy
+    //        );
+    //    }
 
     @Override
     public boolean isEmpty(final ObjectAdapter ownerAdapter, final InteractionInitiatedBy interactionInitiatedBy) {
         return get(ownerAdapter, interactionInitiatedBy) == null;
     }
 
-    
+
 
     // -- Set
     @Override
@@ -232,7 +232,7 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
         facet.clearProperty(this, ownerAdapter, interactionInitiatedBy);
     }
 
-    
+
 
     // -- defaults
     @Override
@@ -264,7 +264,7 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
         }
     }
 
-    
+
 
     // -- choices and autoComplete
     @Override
@@ -285,8 +285,8 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
                 getSpecificationLoader(),
                 interactionInitiatedBy);
         List<ObjectAdapter> adapters = _NullSafe.stream(pojoOptions)
-        		.map( ObjectAdapter.Functions.adapterForUsing(getPersistenceSessionService()) )
-        		.collect(Collectors.toList());
+                .map( ObjectAdapter.Functions.adapterForUsing(getPersistenceSessionService()) )
+                .collect(Collectors.toList());
         return adapters.toArray(new ObjectAdapter[]{});
     }
 
@@ -321,7 +321,7 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
         return propertyAutoCompleteFacet != null? propertyAutoCompleteFacet.getMinLength(): MinLengthUtil.MIN_LENGTH_DEFAULT;
     }
 
-    
+
 
     /**
      * Internal API
@@ -367,7 +367,7 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
         str.append("type", getSpecification().getShortIdentifier());
         return str.toString();
     }
-    
+
 
 
 }

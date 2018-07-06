@@ -27,7 +27,7 @@ import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
 /**
  * Indicates that the {@link FacetFactory} works by recognizing methods with a
  * certain prefix (or prefixes).
- * 
+ *
  * <p>
  * Used by {@link FacetProcessor#recognizes(java.lang.reflect.Method)}.
  */

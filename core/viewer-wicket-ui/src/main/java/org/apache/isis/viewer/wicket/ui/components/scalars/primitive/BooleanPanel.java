@@ -82,6 +82,7 @@ public class BooleanPanel extends ScalarPanelAbstract2 {
         return scalarIfRegularFormGroup;
     }
 
+    @Override
     protected Component getScalarValueComponent() {
         return checkBox;
     }
@@ -101,9 +102,9 @@ public class BooleanPanel extends ScalarPanelAbstract2 {
         return InlinePromptConfig.supportedAndHide(
                 scalarModel.getMode() == EntityModel.Mode.EDIT || scalarModel.hasActionWithInlineAsIfEdit() ||
                 scalarModel.getKind() == ScalarModel.Kind.PARAMETER
-                        ? this.checkBox
+                ? this.checkBox
                         : null
-        );
+                );
     }
 
     @Override
@@ -167,7 +168,7 @@ public class BooleanPanel extends ScalarPanelAbstract2 {
         };
         checkBox.setOutputMarkupId(true);
         checkBox.setEnabled(false); // will be enabled before rendering if
-                                    // required
+        // required
 
         // must prime the underlying model if this is a primitive boolean
         final ObjectSpecification objectSpecification = getModel().getTypeOfSpecification();

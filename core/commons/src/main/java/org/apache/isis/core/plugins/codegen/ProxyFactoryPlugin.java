@@ -24,23 +24,23 @@ import org.apache.isis.commons.internal.context._Plugin;
 
 public interface ProxyFactoryPlugin {
 
-	// -- INTERFACE
-	
-	public <T> ProxyFactory<T> factory(
-			Class<T> base, 
-			@Nullable Class<?>[] interfaces, 
-			@Nullable Class<?>[] constructorArgTypes);
-	
-	
-	// -- LOOKUP
-	
-	public static ProxyFactoryPlugin get() {
-		return _Plugin.getOrElse(ProxyFactoryPlugin.class, 
-				ambiguousPlugins->{
-					return _Plugin.pickAnyAndWarn(ProxyFactoryPlugin.class, ambiguousPlugins);
-				}, 
-				()->{
-					throw _Plugin.absenceNonRecoverable(ProxyFactoryPlugin.class);
-				}); 
-	}
+    // -- INTERFACE
+
+    public <T> ProxyFactory<T> factory(
+            Class<T> base,
+            @Nullable Class<?>[] interfaces,
+            @Nullable Class<?>[] constructorArgTypes);
+
+
+    // -- LOOKUP
+
+    public static ProxyFactoryPlugin get() {
+        return _Plugin.getOrElse(ProxyFactoryPlugin.class,
+                ambiguousPlugins->{
+                    return _Plugin.pickAnyAndWarn(ProxyFactoryPlugin.class, ambiguousPlugins);
+                },
+                ()->{
+                    throw _Plugin.absenceNonRecoverable(ProxyFactoryPlugin.class);
+                });
+    }
 }

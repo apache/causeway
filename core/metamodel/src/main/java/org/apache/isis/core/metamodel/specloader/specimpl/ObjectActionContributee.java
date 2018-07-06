@@ -49,7 +49,7 @@ public class ObjectActionContributee extends ObjectActionDefault implements Cont
     private final ObjectActionDefault serviceAction;
     private final int contributeeParam;
     private final ObjectSpecification contributeeType;
-    
+
     /**
      * Hold facets rather than delegate to the contributed action (different types might
      * use layout metadata to position the contributee in different ways)
@@ -57,7 +57,7 @@ public class ObjectActionContributee extends ObjectActionDefault implements Cont
     private final FacetHolder facetHolder = new FacetHolderImpl();
 
 
-    
+
     private final Identifier identifier;
 
     public ObjectActionContributee(
@@ -88,6 +88,7 @@ public class ObjectActionContributee extends ObjectActionDefault implements Cont
         return contributeeType;
     }
 
+    @Override
     public int getParameterCount() {
         return serviceAction.getParameterCount() - 1;
     }
@@ -134,14 +135,14 @@ public class ObjectActionContributee extends ObjectActionDefault implements Cont
 
             final ObjectActionParameterContributee contributedParam =
                     serviceParameter.getPeer().getFeatureType() == FeatureType.ACTION_PARAMETER_SCALAR
-                            ? new OneToOneActionParameterContributee(
-                                    getServiceAdapter(), serviceParameter, contributeeParamNum, this)
+                    ? new OneToOneActionParameterContributee(
+                            getServiceAdapter(), serviceParameter, contributeeParamNum, this)
                             : new OneToManyActionParameterContributee(
                                     getServiceAdapter(), serviceParameter, contributeeParamNum, this);
 
-            contributeeParameters.add(contributedParam);
+                            contributeeParameters.add(contributedParam);
 
-            contributeeParamNum++;
+                            contributeeParamNum++;
         }
         return contributeeParameters;
     }
@@ -181,7 +182,8 @@ public class ObjectActionContributee extends ObjectActionDefault implements Cont
                 interactionInitiatedBy);
         return removeElementFromArray(serviceChoices, contributeeParam, new ObjectAdapter[][]{});
     }
-        
+
+    @Override
     public Consent isProposedArgumentSetValid(
             final ObjectAdapter contributee,
             final ObjectAdapter[] proposedArguments,
@@ -212,7 +214,7 @@ public class ObjectActionContributee extends ObjectActionDefault implements Cont
     // //////////////////////////////////////
     // FacetHolder
     // //////////////////////////////////////
-    
+
     @Override
     public Class<? extends Facet>[] getFacetTypes() {
         return facetHolder.getFacetTypes();
@@ -222,7 +224,7 @@ public class ObjectActionContributee extends ObjectActionDefault implements Cont
     public <T extends Facet> T getFacet(Class<T> cls) {
         return facetHolder.getFacet(cls);
     }
-    
+
     @Override
     public boolean containsFacet(Class<? extends Facet> facetType) {
         return facetHolder.containsFacet(facetType);
@@ -247,7 +249,7 @@ public class ObjectActionContributee extends ObjectActionDefault implements Cont
     public void addFacet(MultiTypedFacet facet) {
         facetHolder.addFacet(facet);
     }
-    
+
     @Override
     public void removeFacet(Facet facet) {
         facetHolder.removeFacet(facet);
@@ -258,9 +260,9 @@ public class ObjectActionContributee extends ObjectActionDefault implements Cont
         facetHolder.removeFacet(facetType);
     }
 
-    
+
     // //////////////////////////////////////
-    
+
     /* (non-Javadoc)
      * @see org.apache.isis.core.metamodel.specloader.specimpl.ObjectMemberAbstract#getIdentifier()
      */
@@ -268,7 +270,7 @@ public class ObjectActionContributee extends ObjectActionDefault implements Cont
     public Identifier getIdentifier() {
         return identifier;
     }
-    
+
     // //////////////////////////////////////
 
     static <T> T[] addElementToArray(T[] array, final int n, final T element, final T[] type) {

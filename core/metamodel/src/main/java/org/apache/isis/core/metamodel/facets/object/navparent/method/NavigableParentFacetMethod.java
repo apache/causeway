@@ -27,27 +27,27 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.navparent.NavigableParentFacetAbstract;
 
 /**
- * 
+ *
  * @since 2.0.0
  *
  */
 public class NavigableParentFacetMethod extends NavigableParentFacetAbstract {
 
-	private final MethodHandle methodHandle;
-	
-	public NavigableParentFacetMethod(final Method method, final FacetHolder holder) throws IllegalAccessException {
-		super(holder);
-		this.methodHandle = Reflect.handleOf(method);
-	}
+    private final MethodHandle methodHandle;
 
-	@Override
-	public Object navigableParent(Object object) {
-		try {
-			return methodHandle.invoke(object);
-		} catch (final Throwable ex) {
-			return null;
-		}
-	}
-	
+    public NavigableParentFacetMethod(final Method method, final FacetHolder holder) throws IllegalAccessException {
+        super(holder);
+        this.methodHandle = Reflect.handleOf(method);
+    }
+
+    @Override
+    public Object navigableParent(Object object) {
+        try {
+            return methodHandle.invoke(object);
+        } catch (final Throwable ex) {
+            return null;
+        }
+    }
+
 
 }

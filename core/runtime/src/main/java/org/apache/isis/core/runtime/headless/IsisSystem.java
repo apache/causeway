@@ -166,7 +166,7 @@ public class IsisSystem {
         this.authenticationRequestIfAny = authenticationRequestIfAny;
     }
 
-    
+
 
     // -- level
     private org.apache.log4j.Level level = org.apache.log4j.Level.INFO;
@@ -182,7 +182,7 @@ public class IsisSystem {
         this.level = level;
     }
 
-    
+
 
     // -- setup (also componentProvider)
 
@@ -216,7 +216,7 @@ public class IsisSystem {
             componentProvider = new IsisComponentProviderDefault(
                     appManifestIfAny,
                     configurationOverride
-            );
+                    );
 
             final IsisSessionFactoryBuilder isisSessionFactoryBuilder = new IsisSessionFactoryBuilder(componentProvider, DeploymentCategory.PRODUCTION, appManifestIfAny);
 

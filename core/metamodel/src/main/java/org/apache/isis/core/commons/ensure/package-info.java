@@ -21,10 +21,10 @@
  * Provides an infrastructure for encoding {@link org.apache.isis.core.commons.encoding.Encodable}
  * into an {@link org.apache.isis.core.commons.encoding.DataOutputExtended output stream}
  * or from an {@link org.apache.isis.core.commons.encoding.DataInputExtended input stream}.
- * 
+ *
  * <p>
  * This is primarily for remoting (marshalling objects across the wire) but
  * is also used in various other places, including the creation of
- * mementos (to capture state at a point in time). 
+ * mementos (to capture state at a point in time).
  */
 package org.apache.isis.core.commons.ensure;

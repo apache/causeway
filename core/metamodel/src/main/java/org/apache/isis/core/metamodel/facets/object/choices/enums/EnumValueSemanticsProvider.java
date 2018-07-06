@@ -41,7 +41,7 @@ public class EnumValueSemanticsProvider<T extends Enum<T>> extends ValueSemantic
     private static Class<? extends Facet> type() {
         return EnumFacet.class;
     }
-    
+
     private static <T> T defaultFor(final Class<T> adaptedClass) {
         return adaptedClass.getEnumConstants()[0];
     }
@@ -70,10 +70,10 @@ public class EnumValueSemanticsProvider<T extends Enum<T>> extends ValueSemantic
 
     public EnumValueSemanticsProvider(final FacetHolder holder, final Class<T> adaptedClass, final ServicesInjector context) {
         super(
-                type(), holder,  adaptedClass, 
+                type(), holder,  adaptedClass,
                 maxLengthFor(adaptedClass),
                 maxLengthFor(adaptedClass), Immutability.IMMUTABLE,
-                EqualByContent.HONOURED, 
+                EqualByContent.HONOURED,
                 defaultFor(adaptedClass),
                 context);
 

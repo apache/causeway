@@ -22,22 +22,22 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
- * Compatibility layer, legacy of deprecated resteasy client API. 
- * 
+ * Compatibility layer, legacy of deprecated resteasy client API.
+ *
  */
 public interface ClientRequest {
 
-	void accept(MediaType mediaType);
+    void accept(MediaType mediaType);
 
-	void header(String headerName, String value);
+    void header(String headerName, String value);
 
-	void setHttpMethod(String httpMethod);
-	String getHttpMethod();
-	
-	void addQueryParameter(String param, String arg);
-	
-	void jsonPayload(String jsonString);
+    void setHttpMethod(String httpMethod);
+    String getHttpMethod();
 
-	Response execute();
+    void addQueryParameter(String param, String arg);
+
+    void jsonPayload(String jsonString);
+
+    Response execute();
 
 }

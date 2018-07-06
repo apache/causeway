@@ -29,25 +29,25 @@ import javax.annotation.Nullable;
  * Provides some ordering algorithms.
  * </p>
  * <p>
- * <b>WARNING</b>: Do <b>NOT</b> use any of the classes provided by this package! <br/> 
+ * <b>WARNING</b>: Do <b>NOT</b> use any of the classes provided by this package! <br/>
  * These may be changed or removed without notice!
  * </p>
- * 
+ *
  * @since 2.0.0
  */
 public final class _Comparators {
 
-	private _Comparators(){}
-	
-	private static final String DEWEY_SEPERATOR = ".";
-	
-	public static int deweyOrderCompare(
-    		@Nullable final String sequence1, 
-    		@Nullable final String sequence2) {
-		return _Comparators_SequenceCompare.compareNullLast(sequence1, sequence2, DEWEY_SEPERATOR);
-	}
-	
-	public static final Comparator<String> deweyOrderComparator = _Comparators::deweyOrderCompare;
+    private _Comparators(){}
 
-	
+    private static final String DEWEY_SEPERATOR = ".";
+
+    public static int deweyOrderCompare(
+            @Nullable final String sequence1,
+            @Nullable final String sequence2) {
+        return _Comparators_SequenceCompare.compareNullLast(sequence1, sequence2, DEWEY_SEPERATOR);
+    }
+
+    public static final Comparator<String> deweyOrderComparator = _Comparators::deweyOrderCompare;
+
+
 }

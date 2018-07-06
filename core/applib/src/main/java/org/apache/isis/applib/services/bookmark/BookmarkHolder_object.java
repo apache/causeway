@@ -39,10 +39,10 @@ public class BookmarkHolder_object {
     @Action(
             semantics = SemanticsOf.SAFE,
             domainEvent = BookmarkHolder_object.ActionDomainEvent.class
-    )
+            )
     @ActionLayout(
-        contributed = Contributed.AS_ASSOCIATION
-    )
+            contributed = Contributed.AS_ASSOCIATION
+            )
     public Object prop() {
         return bookmarkService.lookup(bookmarkHolder);
     }

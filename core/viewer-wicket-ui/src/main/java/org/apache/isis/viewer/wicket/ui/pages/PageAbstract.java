@@ -121,7 +121,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     private static final String ID_BOOKMARKED_PAGES = "bookmarks";
 
     private static final String ID_ACTION_PROMPT_MODAL_WINDOW = "actionPromptModalWindow";
-    
+
     private static final String ID_PAGE_TITLE = "pageTitle";
 
     private static final String ID_FAVICON = "favicon";
@@ -151,7 +151,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     @com.google.inject.Inject(optional = true)
     @Named("applicationCss")
     private String applicationCss;
-    
+
     /**
      * {@link com.google.inject.Inject Inject}ed when {@link #init() initialized}.
      *///
@@ -184,7 +184,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
         try {
             // for breadcrumbs support
             getSession().bind();
-            
+
             setTitle(title);
 
             add(new Favicon(ID_FAVICON));
@@ -197,27 +197,27 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
 
             boolean devUtilitiesEnabled = getApplication().getDebugSettings().isDevelopmentUtilitiesEnabled();
             Component debugBar = devUtilitiesEnabled
-                                        ? newDebugBar("debugBar")
-                                        : new EmptyPanel("debugBar").setVisible(false);
-            add(debugBar);
+                    ? newDebugBar("debugBar")
+                            : new EmptyPanel("debugBar").setVisible(false);
+                    add(debugBar);
 
-            MarkupContainer header = createPageHeader("header");
-            themeDiv.add(header);
+                    MarkupContainer header = createPageHeader("header");
+                    themeDiv.add(header);
 
-            MarkupContainer footer = createPageFooter("footer");
-            themeDiv.add(footer);
+                    MarkupContainer footer = createPageFooter("footer");
+                    themeDiv.add(footer);
 
-            addActionPromptModalWindow(themeDiv);
+                    addActionPromptModalWindow(themeDiv);
 
-            this.childComponentIds = Collections.unmodifiableList(Arrays.asList(childComponentIds));
+                    this.childComponentIds = Collections.unmodifiableList(Arrays.asList(childComponentIds));
 
-            // ensure that all collected JavaScript contributions are loaded at the page footer
-            add(new HeaderResponseContainer("footerJS", "footerJS"));
+                    // ensure that all collected JavaScript contributions are loaded at the page footer
+                    add(new HeaderResponseContainer("footerJS", "footerJS"));
 
         } catch(final RuntimeException ex) {
 
             LOG.error("Failed to construct page, going back to sign in page", ex);
-            
+
             // REVIEW: similar code in WebRequestCycleForIsis
             final  List<ExceptionRecognizer> exceptionRecognizers = getServicesInjector().lookupServices(ExceptionRecognizer.class);
             final String recognizedMessageIfAny = new ExceptionRecognizerComposite(exceptionRecognizers).recognize(ex);
@@ -225,7 +225,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
 
             getSession().invalidate();
             getSession().clear();
-            
+
             // for the WicketSignInPage to render
             EXCEPTION.set(exceptionModel);
 
@@ -282,7 +282,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
 
     @Override
     public void renderHead(final IHeaderResponse response) {
-        
+
         super.renderHead(response);
 
         response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(getApplication().getJavaScriptLibrarySettings().getJQueryReference())));
@@ -326,10 +326,10 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
             }
         }
         String javaScript = markupId != null
-            ? String.format("Wicket.Event.publish(Isis.Topic.FOCUS_FIRST_PROPERTY, '%s')", markupId)
-            : "Wicket.Event.publish(Isis.Topic.FOCUS_FIRST_PROPERTY)";
+                ? String.format("Wicket.Event.publish(Isis.Topic.FOCUS_FIRST_PROPERTY, '%s')", markupId)
+                        : "Wicket.Event.publish(Isis.Topic.FOCUS_FIRST_PROPERTY)";
 
-        response.render(OnDomReadyHeaderItem.forScript(javaScript));
+                response.render(OnDomReadyHeaderItem.forScript(javaScript));
 
     }
 
@@ -374,7 +374,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
 
     /**
      * As provided in the {@link #PageAbstract(org.apache.wicket.request.mapper.parameter.PageParameters, String, org.apache.isis.viewer.wicket.ui.ComponentType...)} constructor}.
-     * 
+     *
      * <p>
      * This superclass doesn't do anything with this property directly, but
      * requiring it to be provided enforces standardization of the
@@ -386,10 +386,10 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
 
     /**
      * For subclasses to call.
-     * 
+     *
      * <p>
      * Should be called in the subclass' constructor.
-     * 
+     *
      * @param model
      *            - used to find the best matching {@link ComponentFactory} to
      *            render the model.
@@ -416,28 +416,28 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
         boolean showBookmarks = isShowBookmarks();
         Component bookmarks = showBookmarks
                 ? getComponentFactoryRegistry().createComponent(ComponentType.BOOKMARKED_PAGES, ID_BOOKMARKED_PAGES, getBookmarkedPagesModel())
-                : new EmptyPanel(ID_BOOKMARKED_PAGES).setVisible(false);
-        container.add(bookmarks);
+                        : new EmptyPanel(ID_BOOKMARKED_PAGES).setVisible(false);
+                container.add(bookmarks);
 
-        bookmarks.add(new Behavior() {
-            @Override
-            public void onConfigure(Component component) {
-                super.onConfigure(component);
+                bookmarks.add(new Behavior() {
+                    @Override
+                    public void onConfigure(Component component) {
+                        super.onConfigure(component);
 
-                PageParameters parameters = getPageParameters();
-                component.setVisible(parameters.get(PageParametersUtils.ISIS_NO_HEADER_PARAMETER_NAME).isNull());
-            }
-        });
+                        PageParameters parameters = getPageParameters();
+                        component.setVisible(parameters.get(PageParametersUtils.ISIS_NO_HEADER_PARAMETER_NAME).isNull());
+                    }
+                });
     }
 
     private boolean isShowBookmarks() {
         return getConfiguration() .getBoolean(
-                        BookmarkedPagesPanel.SHOW_BOOKMARKS_KEY, BookmarkedPagesPanel.SHOW_BOOKMARKS_DEFAULT);
+                BookmarkedPagesPanel.SHOW_BOOKMARKS_KEY, BookmarkedPagesPanel.SHOW_BOOKMARKS_DEFAULT);
     }
 
     protected boolean isShowBreadcrumbs() {
         return getConfiguration() .getBoolean(
-                        BreadcrumbPanel.SHOW_BREADCRUMBS_KEY, BreadcrumbPanel.SHOW_BREADCRUMBS_DEFAULT);
+                BreadcrumbPanel.SHOW_BREADCRUMBS_KEY, BreadcrumbPanel.SHOW_BREADCRUMBS_DEFAULT);
     }
 
     protected void bookmarkPageIfShown(final BookmarkableModel<?> model) {
@@ -462,19 +462,20 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     // ///////////////////////////////////////////////////////////////////
     // ActionPromptModalWindowProvider
     // ///////////////////////////////////////////////////////////////////
-    
+
     private ActionPromptModalWindow actionPromptModalWindow;
 
+    @Override
     public ActionPrompt getActionPrompt() {
         return actionPromptModalWindow;
     }
 
     private void addActionPromptModalWindow(final MarkupContainer parent) {
-        actionPromptModalWindow = ActionPromptModalWindow.newModalWindow(ID_ACTION_PROMPT_MODAL_WINDOW); 
+        actionPromptModalWindow = ActionPromptModalWindow.newModalWindow(ID_ACTION_PROMPT_MODAL_WINDOW);
         parent.addOrReplace(actionPromptModalWindow);
     }
 
-    
+
     // ///////////////////////////////////////////////////////////////////
     // UI Hint
     // ///////////////////////////////////////////////////////////////////
@@ -483,6 +484,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
      * Propagates all {@link org.apache.isis.viewer.wicket.model.hints.IsisEventLetterAbstract letter} events down to
      * all child components, wrapped in an {@link org.apache.isis.viewer.wicket.model.hints.IsisEnvelopeEvent envelope} event.
      */
+    @Override
     public void onEvent(final org.apache.wicket.event.IEvent<?> event) {
         final Object payload = event.getPayload();
         if(payload instanceof IsisEventLetterAbstract) {
@@ -491,7 +493,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
             send(this, Broadcast.BREADTH, broadcastEv);
         }
     }
-    
+
 
 
     // -- getComponentFactoryRegistry (Convenience)
@@ -499,10 +501,10 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
         final ComponentFactoryRegistryAccessor cfra = (ComponentFactoryRegistryAccessor) getApplication();
         return cfra.getComponentFactoryRegistry();
     }
-    
 
 
-    // -- injected (application-scope) 
+
+    // -- injected (application-scope)
 
     // REVIEW: can't inject because not serializable.
     protected IsisSessionFactory getIsisSessionFactory() {
@@ -517,7 +519,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
         return getIsisSessionFactory().getServicesInjector();
     }
 
-    
+
 
     // -- derived from injected components (session-scope)
 
@@ -529,7 +531,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
         return getIsisSessionFactory().getCurrentSession().getAuthenticationSession();
     }
 
-    
+
 
 
 }

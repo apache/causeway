@@ -44,7 +44,7 @@ public final class ObjectAdapterToggleboxColumn extends ColumnAbstract<ObjectAda
     public ObjectAdapterToggleboxColumn() {
         this(null, null);
     }
-    
+
     public ObjectAdapterToggleboxColumn(
             final OnSelectionHandler onSelectionHandler,
             final OnConcurrencyExceptionHandler onConcurrencyExceptionHandler) {
@@ -62,7 +62,7 @@ public final class ObjectAdapterToggleboxColumn extends ColumnAbstract<ObjectAda
     public void setOnSelectionHandler(OnSelectionHandler onSelectionHandler) {
         this.onSelectionHandler = onSelectionHandler;
     }
-    
+
 
     // -- OnConcurrencyExceptionHandler
 
@@ -74,12 +74,12 @@ public final class ObjectAdapterToggleboxColumn extends ColumnAbstract<ObjectAda
     public void setOnConcurrencyExceptionHandler(OnConcurrencyExceptionHandler onConcurrencyExceptionHandler) {
         this.onConcurrencyExceptionHandler = onConcurrencyExceptionHandler;
     }
-    
+
 
 
     @Override
     public Component getHeader(String componentId) {
-        
+
         final ContainedToggleboxPanel toggle = new ContainedToggleboxPanel(componentId) {
             private static final long serialVersionUID = 1L;
             @Override
@@ -94,8 +94,8 @@ public final class ObjectAdapterToggleboxColumn extends ColumnAbstract<ObjectAda
         return toggle;
     }
 
-    private final List<ContainedToggleboxPanel> rowToggles = Lists.newArrayList(); 
-            
+    private final List<ContainedToggleboxPanel> rowToggles = Lists.newArrayList();
+
     @Override
     public void populateItem(final Item<ICellPopulator<ObjectAdapter>> cellItem, final String componentId, final IModel<ObjectAdapter> rowModel) {
 
@@ -108,7 +108,7 @@ public final class ObjectAdapterToggleboxColumn extends ColumnAbstract<ObjectAda
         if(concurrencyExceptionIfAny != null) {
             row.add(new CssClassAppender("reloaded-after-concurrency-exception"));
         }
-        
+
         final ContainedToggleboxPanel toggle = new ContainedToggleboxPanel(componentId) {
             private static final long serialVersionUID = 1L;
             @Override
@@ -127,7 +127,7 @@ public final class ObjectAdapterToggleboxColumn extends ColumnAbstract<ObjectAda
                     if(onConcurrencyExceptionHandler != null) {
                         onConcurrencyExceptionHandler.onConcurrencyException(this, selectedAdapter, ex, target);
                     }
-                    
+
                     entityModel.setException(ex);
                 }
             }

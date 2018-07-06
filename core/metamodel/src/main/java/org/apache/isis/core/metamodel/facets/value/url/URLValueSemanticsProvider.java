@@ -49,7 +49,7 @@ public class URLValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbs
     }
 
     public URLValueSemanticsProvider(final FacetHolder holder, final ServicesInjector context) {
-        super(type(), holder, java.net.URL.class, 
+        super(type(), holder, java.net.URL.class,
                 TYPICAL_LENGTH, MAX_LENGTH, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE,
                 context);
     }
@@ -62,7 +62,7 @@ public class URLValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbs
     protected java.net.URL doParse(final Object context, final String entry) {
         if (entry.trim().equals("")) {
             return null;
-        } 
+        }
         {
             try {
                 return new java.net.URL(entry);

@@ -35,9 +35,9 @@ import org.apache.isis.commons.internal.collections._Lists;
 @XmlType(
         name = "section"
         , propOrder = {
-            "serviceActions"
+                "serviceActions"
         }
-)
+        )
 public class BS3MenuSection implements MenuSection, Serializable, ServiceActionLayoutDataOwner {
 
     private static final long serialVersionUID = 1L;

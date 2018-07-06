@@ -25,14 +25,14 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldAbstract;
 
 final class UuidTextField extends TextFieldAbstract<UUID> {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     private final UuidConverter converter;
 
     UuidTextField(
             final String id, final IModel<UUID> model, final Class<UUID> type,
-            final ScalarModel scalarModel, 
+            final ScalarModel scalarModel,
             final UuidConverter converter) {
         super(id, model, type, scalarModel);
         this.converter = converter;
@@ -43,10 +43,11 @@ final class UuidTextField extends TextFieldAbstract<UUID> {
     public <C> IConverter<C> getConverter(Class<C> type) {
         if (type != UUID.class) {
             return super.getConverter(type);
-        } 
+        }
         return (IConverter<C>) getConverterFor(scalarModel);
     }
 
+    @Override
     protected IConverter<UUID> getConverterFor(ScalarModel scalarModel) {
         return converter;
     }

@@ -25,14 +25,14 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldAbstract;
 
 final class BigDecimalTextField extends TextFieldAbstract<BigDecimal> {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     private final BigDecimalConverterWithScale converter;
 
     BigDecimalTextField(
-            final String id, final IModel<BigDecimal> model, final Class<BigDecimal> type, 
-            final ScalarModel scalarModel, 
+            final String id, final IModel<BigDecimal> model, final Class<BigDecimal> type,
+            final ScalarModel scalarModel,
             final BigDecimalConverterWithScale converter) {
         super(id, model, type, scalarModel);
         this.converter = converter;
@@ -43,10 +43,11 @@ final class BigDecimalTextField extends TextFieldAbstract<BigDecimal> {
     public <C> IConverter<C> getConverter(Class<C> type) {
         if (type != BigDecimal.class) {
             return super.getConverter(type);
-        } 
+        }
         return (IConverter<C>) getConverterFor(scalarModel);
     }
 
+    @Override
     protected IConverter<BigDecimal> getConverterFor(ScalarModel scalarModel) {
         if(scalarModel.isEditMode()) {
             return converter.forEditMode();

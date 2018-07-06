@@ -72,7 +72,7 @@ public class ServicesInstallerFromAnnotation extends ServicesInstallerAbstract {
      * </p>
      */
     public final static String PACKAGE_PREFIX_STANDARD = Joiner.on(",").join(AppManifest.Registry.FRAMEWORK_PROVIDED_SERVICES);
-    
+
 
     // -- constructor, fields
 
@@ -88,7 +88,7 @@ public class ServicesInstallerFromAnnotation extends ServicesInstallerAbstract {
         super(NAME, isisConfiguration);
         this.serviceInstantiator = serviceInstantiator;
     }
-    
+
 
     // -- packagePrefixes
     private String packagePrefixes;
@@ -103,10 +103,11 @@ public class ServicesInstallerFromAnnotation extends ServicesInstallerAbstract {
     public void withPackagePrefixes(final String... packagePrefixes) {
         this.packagePrefixes = Joiner.on(",").join(packagePrefixes);
     }
-    
+
 
     // -- init, shutdown
 
+    @Override
     public void init() {
         initIfRequired();
     }
@@ -139,11 +140,12 @@ public class ServicesInstallerFromAnnotation extends ServicesInstallerAbstract {
         }
     }
 
+    @Override
     @PreDestroy
     public void shutdown() {
     }
 
-    
+
 
     // -- helpers
 
@@ -180,7 +182,7 @@ public class ServicesInstallerFromAnnotation extends ServicesInstallerAbstract {
         };
     }
 
-    
+
 
     // -- getServices (API)
 
@@ -199,7 +201,7 @@ public class ServicesInstallerFromAnnotation extends ServicesInstallerAbstract {
         }
         return services;
     }
-    
+
 
     // -- appendServices
 
@@ -211,9 +213,9 @@ public class ServicesInstallerFromAnnotation extends ServicesInstallerAbstract {
         Set<Class<?>> domainServiceTypes = AppManifest.Registry.instance().getDomainServiceTypes();
         if(domainServiceTypes == null) {
             // if no appManifest
-        	final ClassDiscovery discovery = ClassDiscoveryPlugin.get().discover(packagePrefixList);
-        	
-        	domainServiceTypes = discovery.getTypesAnnotatedWith(DomainService.class);
+            final ClassDiscovery discovery = ClassDiscoveryPlugin.get().discover(packagePrefixList);
+
+            domainServiceTypes = discovery.getTypesAnnotatedWith(DomainService.class);
         }
 
         final List<Class<?>> domainServiceClasses = Lists.newArrayList(Iterables.filter(domainServiceTypes, instantiatable()));
@@ -229,7 +231,7 @@ public class ServicesInstallerFromAnnotation extends ServicesInstallerAbstract {
         }
     }
 
-    
+
 
     // -- helpers: nameOf, asList
 
@@ -245,21 +247,21 @@ public class ServicesInstallerFromAnnotation extends ServicesInstallerAbstract {
     private static List<String> asList(final String csv) {
         return Lists.newArrayList(Iterables.transform(Splitter.on(",").split(csv), trim()));
     }
-    
+
 
     // -- domain events
     public static abstract class PropertyDomainEvent<T>
-            extends org.apache.isis.applib.events.domain.PropertyDomainEvent<ServicesInstallerFromAnnotation, T> {
+    extends org.apache.isis.applib.events.domain.PropertyDomainEvent<ServicesInstallerFromAnnotation, T> {
     }
 
     public static abstract class CollectionDomainEvent<T>
-            extends org.apache.isis.applib.events.domain.CollectionDomainEvent<ServicesInstallerFromAnnotation, T> {
+    extends org.apache.isis.applib.events.domain.CollectionDomainEvent<ServicesInstallerFromAnnotation, T> {
     }
 
     public static abstract class ActionDomainEvent
-            extends org.apache.isis.applib.events.domain.ActionDomainEvent<ServicesInstallerFromAnnotation> {
+    extends org.apache.isis.applib.events.domain.ActionDomainEvent<ServicesInstallerFromAnnotation> {
     }
-    
+
 
     // -- getTypes (API)
 
@@ -268,6 +270,6 @@ public class ServicesInstallerFromAnnotation extends ServicesInstallerAbstract {
         return listOf(List.class); // ie List<Object.class>, of services
     }
 
-    
+
 
 }

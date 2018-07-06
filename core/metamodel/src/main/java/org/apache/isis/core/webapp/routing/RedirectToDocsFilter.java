@@ -36,13 +36,13 @@ import org.slf4j.LoggerFactory;
  * This filter attempts to ensure that would-be users of the framework are
  * directed to the bundled documentation, rather than just hitting the REST API
  * (ie the json viewer).
- * 
+ *
  * <p>
  * Specifically, if the request is to "/" but the Accept header is anything
  * other than "application/json" (eg is set to "text/html" and suggesting that
  * the user is using a browser to access the webapp) then the filter redirects
  * to /index.html (the documentation pages).
- * 
+ *
  * <p>
  * Only if the Accept header is set to application/json is the request allowed
  * to continue through.

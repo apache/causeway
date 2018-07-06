@@ -30,9 +30,9 @@ public interface CommandService {
      */
     @Programmatic
     Command create();
-    
+
     /**
-     * Hint for this implementation to eagerly persist the {@link Command}s if possible; influences the behaviour 
+     * Hint for this implementation to eagerly persist the {@link Command}s if possible; influences the behaviour
      * of actions annotated to execute in the {@link org.apache.isis.applib.annotation.CommandExecuteIn#BACKGROUND}.
      */
     @Programmatic

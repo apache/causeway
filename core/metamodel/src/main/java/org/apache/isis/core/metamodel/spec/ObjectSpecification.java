@@ -57,7 +57,7 @@ import com.google.common.base.Function;
 /**
  * Represents an entity or value (cf {@link java.lang.Class}) within the
  * metamodel.
- * 
+ *
  * <p>
  * As specifications are cyclic (specifically a class will reference its
  * subclasses, which in turn reference their superclass) they need be created
@@ -114,29 +114,29 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
 
     /**
      * Returns the (unique) spec Id, as per the {@link ObjectSpecIdFacet}.
-     * 
+     *
      * <p>
      * This will typically be the value of the {@link DomainObject#objectType()} annotation attribute.
      * If none has been specified then will default to the fully qualified class name (with
      * {@link ClassSubstitutor class name substituted} if necessary to allow for runtime bytecode enhancement.
-     * 
+     *
      * <p>
      * The {@link ObjectSpecification} can be retrieved using {@link SpecificationLoader#lookupBySpecId(ObjectSpecId)}.
      */
     ObjectSpecId getSpecId();
-    
+
     /**
      * Returns an (immutable) "full" identifier for this specification.
-     * 
+     *
      * <p>
      * This will be the fully qualified name of the Class object that this
      * object represents (i.e. it includes the package name).
      */
     String getFullIdentifier();
-    
+
     /**
      * Returns an (immutable) "short" identifier for this specification.
-     * 
+     *
      * <p>
      * This will be the class name without the package; any text up to and
      * including the last period is removed.
@@ -145,7 +145,7 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
 
     /**
      * Returns the (singular) name for objects of this specification.
-     * 
+     *
      * <p>
      * Corresponds to the {@link NamedFacet#value()} of {@link NamedFacet}; is
      * not necessarily immutable.
@@ -154,7 +154,7 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
 
     /**
      * Returns the plural name for objects of this specification.
-     * 
+     *
      * <p>
      * Corresponds to the {@link PluralFacet#value() value} of
      * {@link PluralFacet}; is not necessarily immutable.
@@ -163,7 +163,7 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
 
     /**
      * Returns the description, if any, of the specification.
-     * 
+     *
      * <p>
      * Corresponds to the {@link DescribedAsFacet#value()) value} of
      * {@link DescribedAsFacet}; is not necessarily immutable.
@@ -173,7 +173,7 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
 
     /**
      * Returns a help string or lookup reference, if any, of the specification.
-     * 
+     *
      * <p>
      * Corresponds to the {@link HelpFacet#value()) value} of {@link HelpFacet};
      * is not necessarily immutable.
@@ -182,11 +182,11 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
 
     /**
      * Returns the title string for the specified object.
-     * 
+     *
      * <p>
      * Corresponds to the {@link TitleFacet#title(ObjectAdapter)} ) value} of
      * {@link TitleFacet}; is not necessarily immutable.
-     * 
+     *
      * @deprecated use {@link #getTitle(ObjectAdapter, ObjectAdapter)}
      */
     @Deprecated
@@ -195,7 +195,7 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
     /**
      * Returns the title to display of target adapter, rendered within the context
      * of some other adapter (if any).
-     * 
+     *
      * <p>
      * @see TitleFacet#title(ObjectAdapter, ObjectAdapter)
      */
@@ -203,15 +203,15 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
 
     /**
      * Returns the name of an icon to use for the specified object.
-     * 
+     *
      * <p>
      * Corresponds to the {@link IconFacet#iconName(ObjectAdapter)) icon name}
      * returned by the {@link IconFacet}; is not necessarily immutable.
      */
     String getIconName(ObjectAdapter object);
-    
+
     /**
-     * Returns this object's navigable parent, if any. 
+     * Returns this object's navigable parent, if any.
      * @param object
      * @return
      * @since 2.0.0
@@ -280,29 +280,29 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
 
     /**
      * Determines if the object represents an value or object.
-     * 
+     *
      * <p>
      * In effect, means that it doesn't have the {@link CollectionFacet}, and
      * therefore will return NOT {@link #isParentedOrFreeCollection()}
-     * 
+     *
      * @see #isParentedOrFreeCollection().
      */
     boolean isNotCollection();
 
     /**
      * Determines if objects of this type are a parented (internal) or free-standing (external) collection.
-     * 
+     *
      * <p>
      * In effect, means has got {@link CollectionFacet}, and therefore will
      * return NOT {@link #isNotCollection()}.
-     * 
+     *
      * @see #isNotCollection()
      */
     boolean isParentedOrFreeCollection();
 
     /**
      * Determines if objects of this type are values.
-     * 
+     *
      * <p>
      * In effect, means has got {@link ValueFacet}.
      */
@@ -310,7 +310,7 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
 
     /**
      * Determines if objects of this type are parented (a parented collection, or an aggregated entity).
-     * 
+     *
      * <p>
      * In effect, means has got {@link ParentedCollectionFacet}.
      */
@@ -318,7 +318,7 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
 
     /**
      * Determines if objects of this type are either values or aggregated.
-     * 
+     *
      * @see #isValue()
      * @see #isParented()
      */
@@ -327,7 +327,7 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
     /**
      * Determines if objects of this type can be set up from a text entry
      * string.
-     * 
+     *
      * <p>
      * In effect, means has got a {@link ParseableFacet}.
      */
@@ -335,7 +335,7 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
 
     /**
      * Determines if objects of this type can be converted to a data-stream.
-     * 
+     *
      * <p>
      * In effect, means has got {@link EncodableFacet}.
      */
@@ -360,11 +360,11 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
     /**
      * Whether or not this specification represents a domain service (as opposed
      * to a domain entity or a value etc).
-     * 
+     *
      * <p>
      * <b>WARNING</b>: this only returns <tt>true</tt> once the metamodel has been
      * fully built, and a <tt>PersistenceSession</tt> has been opened.  This should
-     * probably be improved upon; for now, beware... 
+     * probably be improved upon; for now, beware...
      */
     boolean isService();
 
@@ -382,5 +382,5 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
     boolean isPersistenceCapable();
     boolean isPersistenceCapableOrViewModel();
 
-	
+
 }

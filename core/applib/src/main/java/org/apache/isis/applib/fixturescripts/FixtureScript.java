@@ -51,9 +51,9 @@ import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 
 @ViewModelLayout(named="Script")
-public abstract class FixtureScript 
-        extends AbstractViewModel 
-        implements InstallableFixture {
+public abstract class FixtureScript
+extends AbstractViewModel
+implements InstallableFixture {
 
     protected static final String PATH_SEPARATOR = "/";
 
@@ -92,8 +92,8 @@ public abstract class FixtureScript
      * @param discoverability - whether this fixture script can be rendered as a choice to execute through {@link org.apache.isis.applib.fixturescripts.FixtureScripts#runFixtureScript(FixtureScript, String)}}.
      */
     public FixtureScript(
-            final String friendlyName, 
-            final String localName, 
+            final String friendlyName,
+            final String localName,
             final Discoverability discoverability) {
         this(friendlyName, localName, discoverability, /* no tracing */ null);
     }
@@ -114,7 +114,7 @@ public abstract class FixtureScript
 
         withTracing(printStream);
     }
-    
+
     protected String localNameElseDerived(final String str) {
         return str != null ? str : _Strings.asLowerDashed.apply(friendlyNameElseDerived(str));
     }
@@ -123,7 +123,7 @@ public abstract class FixtureScript
         return str != null ? str : _Strings.asNaturalName2.apply(getClass().getSimpleName());
     }
 
-    
+
 
     // -- tracing
 
@@ -146,7 +146,7 @@ public abstract class FixtureScript
         return withTracing(System.out);
     }
 
-    
+
 
     // -- viewModel impl
 
@@ -162,7 +162,7 @@ public abstract class FixtureScript
         fixtureScripts.initOf(mementoStr, this);
     }
 
-    
+
 
     // -- qualifiedName
 
@@ -171,12 +171,12 @@ public abstract class FixtureScript
         return getParentPath() + getLocalName();
     }
 
-    
+
 
     // -- friendlyName (property)
 
     private String friendlyName;
-    
+
     @Title
     @PropertyLayout(hidden = Where.EVERYWHERE)
     public String getFriendlyName() {
@@ -186,7 +186,7 @@ public abstract class FixtureScript
         this.friendlyName = friendlyName;
     }
 
-    
+
 
     // -- localName
 
@@ -203,12 +203,12 @@ public abstract class FixtureScript
         this.localName = localName;
     }
 
-    
+
 
     // -- parentPath
 
     private String parentPath;
-    
+
     /**
      * Path of the parent of this script (if any), with trailing {@value #PATH_SEPARATOR}.
      */
@@ -221,7 +221,7 @@ public abstract class FixtureScript
         this.parentPath = parentPath;
     }
 
-    
+
 
     // -- discoverability
 
@@ -248,7 +248,7 @@ public abstract class FixtureScript
     /**
      * Whether this fixture script is {@link Discoverability discoverable} (in other words
      * whether it will be listed to be run in the {@link FixtureScripts#runFixtureScript(FixtureScript, String) run fixture script} action.
-     * 
+     *
      * <p>
      * By default {@link DiscoverableFixtureScript}s are {@link Discoverability#DISCOVERABLE discoverable}, all other
      * {@link FixtureScript}s are {@link Discoverability#NON_DISCOVERABLE not}.  This can be overridden in the
@@ -265,7 +265,7 @@ public abstract class FixtureScript
         return this;
     }
 
-    
+
 
     // -- ExecutionContext
 
@@ -558,7 +558,7 @@ public abstract class FixtureScript
          */
         @Programmatic
         public <T extends FixtureScript> T executeChildT(final FixtureScript callingFixtureScript, final T childFixtureScript) {
-             return executeChildT(callingFixtureScript, null, childFixtureScript);
+            return executeChildT(callingFixtureScript, null, childFixtureScript);
         }
 
         /**
@@ -641,7 +641,7 @@ public abstract class FixtureScript
                 return childFixtureScript;
 
             default:
-            	throw _Exceptions.unmatchedCase("Execution strategy: '%s' not recognized", executionStrategy);
+                throw _Exceptions.unmatchedCase("Execution strategy: '%s' not recognized", executionStrategy);
             }
         }
 
@@ -703,7 +703,7 @@ public abstract class FixtureScript
             return Collections.unmodifiableList(previouslyExecuted);
         }
 
-        
+
 
         /**
          * used and populated only if the {@link FixtureScripts.MultipleExecutionStrategy#EXECUTE_ONCE_BY_CLASS}
@@ -717,7 +717,7 @@ public abstract class FixtureScript
          */
         private final Map<FixtureScript, FixtureScript> fixtureScriptByValue = _Maps.newLinkedHashMap();
 
-        
+
 
         // -- tracing
 
@@ -754,7 +754,7 @@ public abstract class FixtureScript
             traceHighwatermark = Math.max(key.length(), traceHighwatermark);
             return pad(key, roundup(traceHighwatermark, 20));
         }
-        
+
 
         private static String pad(final String str, final int padTo) {
             return _Strings.padEnd(str, padTo, ' ');
@@ -781,7 +781,7 @@ public abstract class FixtureScript
 
     }
 
-    
+
 
     // -- defaultParam, checkParam
     protected <T> T defaultParam(final String parameterName, final ExecutionContext ec, final T defaultValue) {
@@ -855,7 +855,7 @@ public abstract class FixtureScript
     private String uppercase(final String parameterName) {
         return parameterName.substring(0, 1).toUpperCase() + parameterName.substring(1);
     }
-    
+
 
     // -- run (entry point for FixtureScripts service to call)
 
@@ -887,7 +887,7 @@ public abstract class FixtureScript
         return null;
     }
 
-    
+
 
 
     // -- execute (API for subclasses to implement)
@@ -902,7 +902,7 @@ public abstract class FixtureScript
     @Programmatic
     protected abstract void execute(final ExecutionContext executionContext);
 
-    
+
 
     // -- (legacy) InstallableFixture impl
 
@@ -911,13 +911,14 @@ public abstract class FixtureScript
     public FixtureType getType() {
         return FixtureType.DOMAIN_OBJECTS;
     }
-    
+
+    @Override
     @Programmatic
     public final void install() {
         run(null);
     }
 
-    
+
 
     // -- helpers (for subclasses)
 
@@ -925,7 +926,7 @@ public abstract class FixtureScript
      * Returns the first non-null value; for convenience of subclass implementations
      */
     @SafeVarargs
-	protected static <T> T coalesce(final T... ts) {
+    protected static <T> T coalesce(final T... ts) {
         for (final T t : ts) {
             if(t != null) return t;
         }
@@ -964,7 +965,7 @@ public abstract class FixtureScript
         transactionService.nextTransaction();
     }
 
-    
+
 
 
     // -- helpers (local)
@@ -973,7 +974,7 @@ public abstract class FixtureScript
     String pathWith(final String subkey) {
         return (getQualifiedName() != null? getQualifiedName() + PATH_SEPARATOR: "") +  subkey;
     }
-    
+
 
     // -- injected services
 
@@ -1002,5 +1003,5 @@ public abstract class FixtureScript
     protected SessionManagementService sessionManagementService;
 
 
-    
+
 }

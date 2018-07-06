@@ -23,7 +23,7 @@ import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFac
 
 
 public class ObjectSpecIdFacetInferredFromJdoDiscriminatorValueAnnotation extends
-        ObjectSpecIdFacetAbstract {
+ObjectSpecIdFacetAbstract {
 
     public ObjectSpecIdFacetInferredFromJdoDiscriminatorValueAnnotation(final String value,
             final FacetHolder holder) {

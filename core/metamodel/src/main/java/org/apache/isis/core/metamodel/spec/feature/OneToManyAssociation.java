@@ -72,11 +72,11 @@ public interface OneToManyAssociation extends ObjectAssociation, OneToManyFeatur
     /**
      * Determines if the specified element can be removed from the collection
      * field, represented as a {@link Consent}.
-     * 
+     *
      * <p>
      * If allowed the {@link #removeElement(ObjectAdapter, ObjectAdapter, InteractionInitiatedBy)
      * remove} method can be called with the same parameters.
-     * 
+     *
      * @see #removeElement(ObjectAdapter, ObjectAdapter, InteractionInitiatedBy)
      */
     Consent isValidToRemove(

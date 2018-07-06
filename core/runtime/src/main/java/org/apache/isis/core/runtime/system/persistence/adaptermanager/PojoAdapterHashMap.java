@@ -71,7 +71,7 @@ public class PojoAdapterHashMap implements Iterable<ObjectAdapter>, SessionScope
             LOG.debug("finalizing hash of pojos");
         }
     }
-    
+
 
     // -- open, close
 
@@ -86,7 +86,7 @@ public class PojoAdapterHashMap implements Iterable<ObjectAdapter>, SessionScope
         adapterByPojoMap.clear();
     }
 
-    
+
 
     // -- add, remove
 
@@ -104,7 +104,7 @@ public class PojoAdapterHashMap implements Iterable<ObjectAdapter>, SessionScope
         adapterByPojoMap.remove(key(object.getObject()));
     }
 
-    
+
 
     // -- getAdapter, containsPojo
 
@@ -116,7 +116,7 @@ public class PojoAdapterHashMap implements Iterable<ObjectAdapter>, SessionScope
         return adapterByPojoMap.get(key(pojo));
     }
 
-    
+
 
     // -- iterator, key
     @Override
@@ -128,7 +128,7 @@ public class PojoAdapterHashMap implements Iterable<ObjectAdapter>, SessionScope
         return new IdentityHashKey(pojo);
     }
 
-    
+
 
 
 }

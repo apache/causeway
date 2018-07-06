@@ -119,8 +119,8 @@ public class FacetedMethod extends TypedHolderDefault implements IdentifiedHolde
 
             final FeatureType featureType =
                     org.apache.isis.core.metamodel.specloader.CollectionUtils
-                            .isParamCollection(parameterType, genericParameterType)
-                            ? FeatureType.ACTION_PARAMETER_COLLECTION
+                    .isParamCollection(parameterType, genericParameterType)
+                    ? FeatureType.ACTION_PARAMETER_COLLECTION
                             : FeatureType.ACTION_PARAMETER_SCALAR;
 
             final FacetedMethodParameter fmp = new FacetedMethodParameter(featureType, declaringType, actionMethod, parameterType);
@@ -135,7 +135,7 @@ public class FacetedMethod extends TypedHolderDefault implements IdentifiedHolde
 
                 TypeOfFacet typeOfFacet = TypeOfFacet.Util
                         .inferFromGenericParamType(fmp, parameterType, genericParameterType,
-                        specificationLoader);
+                                specificationLoader);
 
                 if(typeOfFacet == null ) {
                     if (_Arrays.isArrayType(parameterType)) {
@@ -184,7 +184,7 @@ public class FacetedMethod extends TypedHolderDefault implements IdentifiedHolde
      * The {@link Class} that owns this {@link Method} (as per
      * {@link Class#getMethods()}, returning the {@link Method}s both of this
      * class and of its superclasses).
-     * 
+     *
      * <p>
      * Note: we don't call this the 'declaring type' because
      * {@link Class#getDeclaredMethods()} does not return methods from

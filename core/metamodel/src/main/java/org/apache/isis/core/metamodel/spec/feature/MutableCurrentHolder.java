@@ -25,7 +25,7 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 /**
  * Mix-in interface for {@link ObjectAction}s that reference or otherwise
  * contain a 'current' value that moreover can be changed.
- * 
+ *
  * <p>
  * Examples include {@link OneToOneAssociation properties} and
  * {@link OneToOneActionParameter action parameter}s (but not
@@ -38,7 +38,7 @@ public interface MutableCurrentHolder extends CurrentHolder {
      * Updates the referenced {@link ObjectAdapter} for the owning
      * {@link ObjectAdapter} with the new value provided, or clears the
      * reference if null.
-     * 
+     *
      * <p>
      * For example, if this is a {@link OneToOneAssociation}, then updates the
      * object referenced .

@@ -19,7 +19,7 @@
 
 /**
  * Authorization API..
- * 
+ *
  * <p>
  * Used in two different ways:
  * <ul>

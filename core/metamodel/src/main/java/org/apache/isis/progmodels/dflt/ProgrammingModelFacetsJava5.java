@@ -5,9 +5,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -178,9 +178,9 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
 
     public ProgrammingModelFacetsJava5(final DeprecatedPolicy deprecatedPolicy) {
         super(deprecatedPolicy);
-        
+
         final FactoryCollector factoriesFromPlugins = discoverFactories();
-        
+
         // must be first, so any Facets created can be replaced by other
         // FacetFactorys later.
         addFactory(new FallbackFacetFactory());
@@ -226,16 +226,16 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(new PropertyChoicesFacetViaMethodFactory());
         addFactory(new PropertyAutoCompleteFacetMethodFactory());
         addFactory(new PropertyDefaultFacetViaMethodFactory());
-        
+
         // collections
         addFactory(new CollectionAccessorFacetViaAccessorFactory());
         addFactory(new CollectionClearFacetFactory());
         addFactory(new CollectionAddToRemoveFromAndValidateFacetFactory());
-        
+
         addFactory(new SortedByFacetAnnotationFactory());
 
         // actions
-        
+
         addFactory(new ActionValidationFacetViaMethodFactory());
         addFactory(new ActionChoicesFacetViaMethodFactory());
         addFactory(new ActionParameterChoicesFacetViaMethodFactory());
@@ -244,12 +244,12 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(new ActionParameterDefaultsFacetViaMethodFactory());
 
         // members in general
-        
+
         addFactory(new DisableForSessionFacetViaMethodFactory());
         addFactory(new DisableForContextFacetViaMethodFactory());
-        
+
         addFactory(new HideForSessionFacetViaMethodFactory());
-        
+
         addFactory(new HideForContextFacetViaMethodFactory());
 
         addFactory(new CreatedCallbackFacetFactory());
@@ -261,10 +261,10 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
 
         addFactory(new ValidateObjectFacetMethodFactory());
         addFactory(new ObjectValidPropertiesFacetImplFactory());
-        
+
 
         addFactory(new MemberOrderFacetFactory());
-        
+
         addFactory(new MemberGroupLayoutFacetFactory());
 
         addFactory(new BookmarkPolicyFacetFallbackFactory());
@@ -274,7 +274,7 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(new PropertyDefaultFacetDerivedFromTypeFactory());
         addFactory(new ActionParameterDefaultFacetDerivedFromTypeFactory());
 
-        
+
         addFactory(new DescribedAsFacetOnMemberFactory());
         addFactory(new DescribedAsFacetOnParameterAnnotationElseDerivedFromTypeFactory());
 
@@ -284,7 +284,7 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(new NotContributedFacetDerivedFromDomainServiceFacetFactory());
         addFactory(new NotInServiceMenuFacetDerivedFromDomainServiceFacetFactory());
 
-        
+
         // must come after CssClassFacetOnMemberFactory
         addFactory(new CssClassFacetOnActionFromConfiguredRegexFactory());
 
@@ -331,13 +331,13 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
 
         addFactory(new DomainServiceLayoutFacetFactory());
         addFactory(new DomainObjectLayoutFacetFactory());
-        
+
         // must come after MultiLine
         addFactory(new PropertyLayoutFacetFactory());
         addFactory(new ParameterLayoutFacetFactory());
         addFactory(new ActionLayoutFacetFactory());
         addFactory(new CollectionLayoutFacetFactory());
-        
+
 
         // must come after any facets that install titles
         addFactory(new TypicalLengthFacetOnPropertyDerivedFromTypeFacetFactory());
@@ -382,7 +382,7 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(new PasswordValueFacetUsingSemanticsProviderFactory());
         addFactory(new PercentageValueFacetUsingSemanticsProviderFactory());
         addFactory(new ImageValueFacetUsingSemanticsProviderFactory());
-        
+
         // jodatime values
         addFactory(new JodaLocalDateValueFacetUsingSemanticsProviderFactory());
         addFactory(new JodaLocalDateTimeValueFacetUsingSemanticsProviderFactory());
@@ -392,10 +392,10 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(new Jdk8LocalDateValueFacetUsingSemanticsProviderFactory());
         addFactory(new Jdk8OffsetDateTimeValueFacetUsingSemanticsProviderFactory());
         addFactory(new Jdk8LocalDateTimeValueFacetUsingSemanticsProviderFactory());
-        
-        // plugin value factories 
+
+        // plugin value factories
         factoriesFromPlugins.getFactories(FacetFactoryCategory.VALUE).forEach(this::addFactory);
-        
+
         // written to not trample over TypeOf if already installed
         addFactory(new CollectionFacetFactory());
         // must come after CollectionFacetFactory
@@ -424,19 +424,19 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
     @Override
     public List<ObjectSpecificationPostProcessor> getPostProcessors() {
         return Lists.<ObjectSpecificationPostProcessor>newArrayList(
-            new ActionCollectionParameterDefaultsAndChoicesPostProcessor()
-        );
+                new ActionCollectionParameterDefaultsAndChoicesPostProcessor()
+                );
     }
-    
+
     // -- HELPER
-    
+
     private static FactoryCollector discoverFactories() {
-	    final Set<ProgrammingModelPlugin> plugins = _Plugin.loadAll(ProgrammingModelPlugin.class);
-	    final FactoryCollector collector = ProgrammingModelPlugin.collector();
-	    plugins.forEach(plugin->{
-	    	plugin.plugin(collector);
-	    });
-	    return collector;
+        final Set<ProgrammingModelPlugin> plugins = _Plugin.loadAll(ProgrammingModelPlugin.class);
+        final FactoryCollector collector = ProgrammingModelPlugin.collector();
+        plugins.forEach(plugin->{
+            plugin.plugin(collector);
+        });
+        return collector;
     }
-    
+
 }

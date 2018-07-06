@@ -38,7 +38,8 @@ public class IsisBlobPanel extends IsisBlobOrClobPanelAbstract<Blob> {
         super(id, model);
     }
 
-    
+
+    @Override
     protected Blob getBlobOrClobFrom(final List<FileUpload> fileUploads) {
         final FileUpload fileUpload = fileUploads.get(0);
         final String contentType = fileUpload.getContentType();
@@ -48,6 +49,7 @@ public class IsisBlobPanel extends IsisBlobOrClobPanelAbstract<Blob> {
         return blob;
     }
 
+    @Override
     protected IResource newResource(final Blob blob) {
         return new ByteArrayResource(blob.getMimeType().getBaseType(), blob.getBytes(), blob.getName());
     }

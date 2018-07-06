@@ -47,9 +47,9 @@ public class ValueModel extends ModelAbstract<ObjectAdapter> {
 
     private ActionModel actionModelHint;
     /**
-     * The {@link ActionModel model} of the {@link ObjectAction action} 
+     * The {@link ActionModel model} of the {@link ObjectAction action}
      * that generated this {@link ValueModel}.
-     * 
+     *
      * @see #setActionHint(ActionModel)
      */
     public ActionModel getActionModelHint() {
@@ -57,7 +57,7 @@ public class ValueModel extends ModelAbstract<ObjectAdapter> {
     }
     /**
      * Called by action.
-     * 
+     *
      * @see #getActionModelHint()
      */
     public void setActionHint(ActionModel actionModelHint) {

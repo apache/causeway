@@ -37,7 +37,7 @@ public final class Helper {
     /**
      * Utility method that returns just the class's name for the supplied fully
      * qualified class name.
-     * 
+     *
      * cf 'basename' in Unix.
      */
     String classNameFor(final String fullyQualifiedClassName) {
@@ -53,7 +53,7 @@ public final class Helper {
      * Utility method that returns the package name for the supplied fully
      * qualified class name, or <code>default</code> if the class is in no
      * namespace / in the default namespace.
-     * 
+     *
      * cf 'dirname' in Unix.
      */
     String packageNameFor(final String fullyQualifiedClassName) {
@@ -62,14 +62,14 @@ public final class Helper {
             return fullyQualifiedClassName.substring(0, fullNameLastPeriodIdx);
         } else {
             return "default"; // TODO: should provide a better way to specify
-                              // namespace.
+            // namespace.
         }
     }
 
     /**
      * Returns the root element for the element by looking up the owner document
      * for the element, and from that its document element.
-     * 
+     *
      * If no document element exists, just returns the supplied document.
      */
     Element rootElementFor(final Element element) {

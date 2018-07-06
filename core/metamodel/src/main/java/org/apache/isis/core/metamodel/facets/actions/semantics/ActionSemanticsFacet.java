@@ -24,7 +24,7 @@ import org.apache.isis.core.metamodel.facets.SingleValueFacet;
 
 /**
  * Represents the semantics of an action.
- * 
+ *
  * <p>
  * Specifically, whether it is safe, idempotent or non-idempotent.
  */

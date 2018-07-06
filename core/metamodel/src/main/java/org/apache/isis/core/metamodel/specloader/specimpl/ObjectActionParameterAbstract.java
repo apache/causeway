@@ -278,7 +278,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
         }
     }
 
-    
+
 
     // -- AutoComplete
 
@@ -310,7 +310,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
         if (adapters.size() == 0 && ChoicesFacetUtils.hasChoices(getSpecification())) {
             addAllInstancesForType(adapters);
         }
-        */
+         */
         return adapters.toArray(new ObjectAdapter[0]);
     }
 
@@ -320,7 +320,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
         return facet != null? facet.getMinLength(): MinLengthUtil.MIN_LENGTH_DEFAULT;
     }
 
-    
+
 
     // -- Choices
 
@@ -336,10 +336,10 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
             final ObjectAdapter[] argumentsIfAvailable,
             final InteractionInitiatedBy interactionInitiatedBy) {
         final List<ObjectAdapter> argListIfAvailable = ListExtensions.mutableCopy(argumentsIfAvailable);
-        
+
         final ObjectAdapter target = targetForDefaultOrChoices(adapter);
         final List<ObjectAdapter> args = argsForDefaultOrChoices(adapter, argListIfAvailable);
-        
+
         return findChoices(target, args, interactionInitiatedBy);
     }
 
@@ -360,29 +360,29 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
             }
         }
         // now incorporated into above choices processing (BoundedFacet is no more)
-        /* 
+        /*
            if (adapters.size() == 0 && BoundedFacetUtils.isBoundedSet(getSpecification())) {
             addAllInstancesForType(adapters);
         }
-        */
+         */
         return adapters.toArray(new ObjectAdapter[adapters.size()]);
     }
 
-    
+
 
     // -- Defaults
 
     @Override
     public ObjectAdapter getDefault(final ObjectAdapter adapter) {
-        
+
         final ObjectAdapter target = targetForDefaultOrChoices(adapter);
         final List<ObjectAdapter> args = argsForDefaultOrChoices(adapter, null);
-        
+
         return findDefault(target, args);
     }
 
     private ObjectAdapter findDefault(
-            final ObjectAdapter target, 
+            final ObjectAdapter target,
             final List<ObjectAdapter> args) {
         final ActionParameterDefaultsFacet defaultsFacet = getFacet(ActionParameterDefaultsFacet.class);
         if (defaultsFacet != null) {
@@ -413,7 +413,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
         return argumentsIfAvailable;
     }
 
-    
+
     // helpers
     static void checkChoicesOrAutoCompleteType(
             final SpecificationLoader specificationLookup,
@@ -424,15 +424,15 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
             if(object == null) {
                 continue;
             }
-            
-            // check type, but wrap first 
+
+            // check type, but wrap first
             // (eg we treat int.class and java.lang.Integer.class as compatible with each other)
             final Class<? extends Object> choiceClass = object.getClass();
             final Class<?> paramClass = paramSpec.getCorrespondingClass();
-            
+
             final Class<? extends Object> choiceWrappedClass = ClassExtensions.asWrappedIfNecessary(choiceClass);
             final Class<? extends Object> paramWrappedClass = ClassExtensions.asWrappedIfNecessary(paramClass);
-            
+
             final ObjectSpecification choiceWrappedSpec = specificationLookup.loadSpecification(choiceWrappedClass);
             final ObjectSpecification paramWrappedSpec = specificationLookup.loadSpecification(paramWrappedClass);
 
@@ -441,7 +441,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
             if (!choiceWrappedSpec.isOfType(paramWrappedSpec)) {
                 throw new DomainModelException(String.format(
                         "Type incompatible with parameter type; expected %s, but was %s",
-                                paramSpec.getFullIdentifier(), choiceClass.getName()));
+                        paramSpec.getFullIdentifier(), choiceClass.getName()));
             }
         }
     }
@@ -458,7 +458,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
         }
     }
 
-    
+
 
     // -- Validation
 
@@ -494,7 +494,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
         final ObjectAdapter[] argumentAdapters = arguments(proposedValueAdapter);
         final ValidityContext<?> ic = createProposedArgumentInteractionContext(
                 objectAdapter, argumentAdapters, getNumber(), interactionInitiatedBy
-        );
+                );
 
         final InteractionResultSet buf = new InteractionResultSet();
         InteractionUtils.isValidResultSet(this, ic, buf);
@@ -518,7 +518,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
         return arguments;
     }
 
-    
+
 
     // -- Dependencies (from parent)
 
@@ -534,6 +534,6 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
         return parentAction.getPersistenceSessionService();
     }
 
-    
+
 
 }

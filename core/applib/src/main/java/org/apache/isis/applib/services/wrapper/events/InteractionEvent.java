@@ -27,7 +27,7 @@ import org.apache.isis.applib.Identifier;
 /**
  * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents an interaction with a domain object or a particular feature
  * (property, collection, action) of a domain object.
- * 
+ *
  * <p>
  * Many of the interactions are checks for {@link VisibilityEvent visibility},
  * {@link UsabilityEvent usability} and {@link ValidityEvent validity}.
@@ -57,12 +57,12 @@ public abstract class InteractionEvent extends EventObject {
     /**
      * The {@link Identifier} of the feature of the object being interacted
      * with.
-     * 
+     *
      * <p>
      * Will be consistent with the subclass of {@link InteractionEvent}. So for
      * example a {@link PropertyModifyEvent} will have an {@link Identifier}
      * that identifies the property being modified.
-     * 
+     *
      * @return
      */
     public Identifier getIdentifier() {
@@ -71,7 +71,7 @@ public abstract class InteractionEvent extends EventObject {
 
     /**
      * As per {@link #getClassName()}, but naturalized.
-     * 
+     *
      * @see #getIdentifier
      */
     public String getClassName() {
@@ -90,7 +90,7 @@ public abstract class InteractionEvent extends EventObject {
     /**
      * Convenience method that returns the {@link Identifier#getMemberName()
      * member name} of the {@link #getIdentifier() identifier}.
-     * 
+     *
      * @see #getIdentifier
      */
     public String getMemberName() {
@@ -122,39 +122,39 @@ public abstract class InteractionEvent extends EventObject {
     /**
      * The reason, if any, that this interaction may have been vetoed or
      * otherwise disallowed.
-     * 
+     *
      * <p>
      * Intended to be {@link #setExecuteIn(String) set} as a result of consulting
      * one of the facets.
-     * 
+     *
      * @return
      */
     public String getReason() {
         return reason;
     }
-    
+
     /**
      * The reason message, if any, that this interaction may have been vetoed or
      * otherwise disallowed.
-     * 
+     *
      * <p>
      * This message should be overridden by subclasses for containing the Reason, the Identifier and any other relevant context information.
-     * 
+     *
      * @return
      */
     public String getReasonMessage() {
-    	if (this.getIdentifier() != null) {
-    	return String.format("Reason: %s. Identifier: %s", this.getReason(), this.getIdentifier());
-    } else {
-    	return String.format("Reason: %s", this.getReason());
-    }
+        if (this.getIdentifier() != null) {
+            return String.format("Reason: %s. Identifier: %s", this.getReason(), this.getIdentifier());
+        } else {
+            return String.format("Reason: %s", this.getReason());
+        }
     }
 
     /**
      * The class of the (first) advisor, if any, that provided the
      * {@link #getReason() reason} that this interaction is {@link #isVeto()
      * vetoed}.
-     * 
+     *
      * @return
      */
     public Class<?> getAdvisorClass() {
@@ -175,7 +175,7 @@ public abstract class InteractionEvent extends EventObject {
      * Whether this interaction has been vetoed (meaning that
      * {@link #getReason()} and {@link #getAdvisorClass()} will both be non-
      * <tt>null</tt> and the {@link #getReason() reason} non-empty.)
-     * 
+     *
      * <p>
      * The interpretation of this depends on the subclass:
      * <ul>

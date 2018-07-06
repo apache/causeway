@@ -46,6 +46,7 @@ public class JavaMathBigDecimalPanel extends ScalarPanelTextFieldNumeric<BigDeci
         this.converter = converter;
     }
 
+    @Override
     protected AbstractTextComponent<BigDecimal> createTextFieldForRegular(final String id) {
         final ScalarModel model = getModel();
         final TextFieldValueModel<BigDecimal> textFieldValueModel = new TextFieldValueModel<>(this);

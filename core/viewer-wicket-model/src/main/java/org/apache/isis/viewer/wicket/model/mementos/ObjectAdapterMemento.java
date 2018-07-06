@@ -135,7 +135,7 @@ public class ObjectAdapterMemento implements Serializable {
                     final SpecificationLoader specificationLoader) {
                 final List<Object> listOfPojos =
                         _Lists.transform(oam.list, Functions.toPojo(persistenceSession, specificationLoader));
-                        
+
                 return ObjectAdapter.Functions.adapterForUsing(persistenceSession).apply(listOfPojos);
             }
 
@@ -235,11 +235,11 @@ public class ObjectAdapterMemento implements Serializable {
                 try {
                     final ObjectAdapter adapter = persistenceSession.adapterFor(oid, concurrencyChecking);
                     return adapter;
-                    
+
                 } finally {
                     // a side-effect of AdapterManager#adapterFor(...) is that it will update the oid
                     // with the correct version, even when there is a concurrency exception
-                    // we copy this updated oid string into our memento so that, if we retry, 
+                    // we copy this updated oid string into our memento so that, if we retry,
                     // we will succeed second time around
 
                     oam.persistentOidStr = oid.enString();
@@ -299,7 +299,7 @@ public class ObjectAdapterMemento implements Serializable {
             public int hashCode(ObjectAdapterMemento oam) {
                 return oam.transientMemento.hashCode();
             }
-            
+
             @Override
             public String toString(final ObjectAdapterMemento oam) {
                 return oam.transientMemento.toString();
@@ -327,7 +327,7 @@ public class ObjectAdapterMemento implements Serializable {
 
         public abstract boolean equals(ObjectAdapterMemento oam, ObjectAdapterMemento other);
         public abstract int hashCode(ObjectAdapterMemento objectAdapterMemento);
-        
+
         public abstract String toString(ObjectAdapterMemento adapterMemento);
 
         public abstract void resetVersion(
@@ -349,7 +349,7 @@ public class ObjectAdapterMemento implements Serializable {
      * Populated only if {@link #getSort() sort} is {@link Sort#SCALAR scalar}
      */
     @SuppressWarnings("unused")
-	private String titleHint;
+    private String titleHint;
 
     /**
      * The current value, if {@link Type#ENCODEABLE}; will be <tt>null</tt> otherwise.
@@ -358,7 +358,7 @@ public class ObjectAdapterMemento implements Serializable {
      * Also, populated only if {@link #getSort() sort} is {@link Sort#SCALAR scalar}
      */
     private String encodableValue;
-    
+
     /**
      * The current value, if {@link Type#PERSISTENT}, will be <tt>null</tt> otherwise.
      *
@@ -422,7 +422,7 @@ public class ObjectAdapterMemento implements Serializable {
     }
 
     private void init(final ObjectAdapter adapter) {
-        
+
         final ObjectSpecification specification = adapter.getSpecification();
 
         final EncodableFacet encodableFacet = specification.getFacet(EncodableFacet.class);
@@ -432,7 +432,7 @@ public class ObjectAdapterMemento implements Serializable {
             type = Type.ENCODEABLE;
             return;
         }
-        
+
         final RootOid oid = (RootOid) adapter.getOid();
         if (oid.isTransient()) {
             transientMemento = new Memento(adapter);
@@ -476,12 +476,12 @@ public class ObjectAdapterMemento implements Serializable {
         Bookmark bookmark = asBookmark();
         return hintId != null && bookmark != null
                 ? new HintStore.BookmarkWithHintId(bookmark, hintId)
-                : bookmark;
+                        : bookmark;
     }
 
     /**
      * Lazily looks up {@link ObjectAdapter} if required.
-     * 
+     *
      * <p>
      * For transient objects, be aware that calling this method more than once
      * will cause the underlying {@link ObjectAdapter} to be recreated,
@@ -498,7 +498,7 @@ public class ObjectAdapterMemento implements Serializable {
 
     /**
      * Updates the memento if the adapter's state has changed.
-     * 
+     *
      * @param adapter
      */
     public void setAdapter(final ObjectAdapter adapter) {
@@ -562,17 +562,17 @@ public class ObjectAdapterMemento implements Serializable {
     //////////////////////////////////////////////////
     // Functions
     //////////////////////////////////////////////////
-    
-    
+
+
     public final static class Functions {
 
         private Functions() {
         }
 
         public static Function<ObjectAction, ActionMemento> fromAction() {
-        	return ActionMemento::new;
+            return ActionMemento::new;
         }
-        
+
         @Deprecated
         public static com.google.common.base.Function<ObjectAction, ActionMemento> from_Action() {
             return new com.google.common.base.Function<ObjectAction, ActionMemento>() {
@@ -582,9 +582,9 @@ public class ObjectAdapterMemento implements Serializable {
                 }
             };
         }
-        
+
         public static Function<ObjectActionParameter, ActionParameterMemento> fromActionParameter() {
-        	return ActionParameterMemento::new;
+            return ActionParameterMemento::new;
         }
 
         @Deprecated
@@ -596,11 +596,11 @@ public class ObjectAdapterMemento implements Serializable {
                 }
             };
         }
-        
+
         public static Function<Object, ObjectAdapterMemento> fromPojo(final AdapterManager adapterManager) {
-        	return pojo->ObjectAdapterMemento.createOrNull( adapterManager.adapterFor(pojo) );
+            return pojo->ObjectAdapterMemento.createOrNull( adapterManager.adapterFor(pojo) );
         }
-        
+
         @Deprecated
         public static com.google.common.base.Function<Object, ObjectAdapterMemento> from_Pojo(final AdapterManager adapterManager) {
             return new com.google.common.base.Function<Object, ObjectAdapterMemento>() {
@@ -611,9 +611,9 @@ public class ObjectAdapterMemento implements Serializable {
                 }
             };
         }
-        
+
         public static Function<ObjectAdapter, ObjectAdapterMemento> fromAdapter() {
-        	return ObjectAdapterMemento::createOrNull;
+            return ObjectAdapterMemento::createOrNull;
         }
 
         @Deprecated
@@ -625,23 +625,23 @@ public class ObjectAdapterMemento implements Serializable {
                 }
             };
         }
-        
+
         public static Function<ObjectAdapterMemento, ObjectAdapter> fromMemento(
                 final ConcurrencyChecking concurrencyChecking,
                 final PersistenceSession persistenceSession,
                 final SpecificationLoader specificationLoader) {
-        	
-        	return memento->{
-        		 try {
-                     return memento.getObjectAdapter(concurrencyChecking, persistenceSession, specificationLoader);
-                 } catch (ObjectNotFoundException e) {
-                     // this can happen if for example the object is not visible (due to the security tenanted facet)
-                     return null;
-                 }
-        	};
-    	}
 
-        @Deprecated        
+            return memento->{
+                try {
+                    return memento.getObjectAdapter(concurrencyChecking, persistenceSession, specificationLoader);
+                } catch (ObjectNotFoundException e) {
+                    // this can happen if for example the object is not visible (due to the security tenanted facet)
+                    return null;
+                }
+            };
+        }
+
+        @Deprecated
         public static com.google.common.base.Function<ObjectAdapterMemento, ObjectAdapter> from_Memento(
                 final ConcurrencyChecking concurrencyChecking,
                 final PersistenceSession persistenceSession,
@@ -658,9 +658,9 @@ public class ObjectAdapterMemento implements Serializable {
                 }
             };
         }
-        
+
         public static Function<ObjectAdapter, ObjectAdapterMemento> toMemento() {
-           return ObjectAdapterMemento::createOrNull;
+            return ObjectAdapterMemento::createOrNull;
         }
 
         @Deprecated
@@ -671,24 +671,24 @@ public class ObjectAdapterMemento implements Serializable {
                 public ObjectAdapterMemento apply(ObjectAdapter from) {
                     return ObjectAdapterMemento.createOrNull(from);
                 }
-                
+
             };
         }
-        
+
         public static Function<ObjectAdapterMemento, Object> toPojo(
                 final PersistenceSession persistenceSession,
                 final SpecificationLoader specificationLoader) {
-        	return input->{
-        		 if(input == null) {
-                     return null;
-                 }
-                 final ObjectAdapter objectAdapter = input
-                         .getObjectAdapter(ConcurrencyChecking.NO_CHECK, persistenceSession, specificationLoader);
-                 if(objectAdapter == null) {
-                     return null;
-                 }
-                 return objectAdapter.getObject();
-        	}; 
+            return input->{
+                if(input == null) {
+                    return null;
+                }
+                final ObjectAdapter objectAdapter = input
+                        .getObjectAdapter(ConcurrencyChecking.NO_CHECK, persistenceSession, specificationLoader);
+                if(objectAdapter == null) {
+                    return null;
+                }
+                return objectAdapter.getObject();
+            };
         }
 
         @Deprecated
@@ -711,17 +711,17 @@ public class ObjectAdapterMemento implements Serializable {
         }
 
         public static Function<ObjectAdapterMemento, RootOid> toOid() {
-        	return objectAdapterMemento->RootOid.create(objectAdapterMemento.asBookmark());
+            return objectAdapterMemento->RootOid.create(objectAdapterMemento.asBookmark());
         }
-        
+
         @Deprecated
         public static com.google.common.base.Function<ObjectAdapterMemento, RootOid> to_Oid() {
             return new com.google.common.base.Function<ObjectAdapterMemento, RootOid>() {
-                                @Override
-                                public RootOid apply(final ObjectAdapterMemento objectAdapterMemento) {
-                                    return RootOid.create(objectAdapterMemento.asBookmark());
-                                }
-                            };
+                @Override
+                public RootOid apply(final ObjectAdapterMemento objectAdapterMemento) {
+                    return RootOid.create(objectAdapterMemento.asBookmark());
+                }
+            };
         }
     }
 

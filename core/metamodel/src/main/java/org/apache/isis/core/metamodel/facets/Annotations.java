@@ -50,7 +50,7 @@ import org.apache.isis.core.metamodel.methodutils.MethodScope;
 import com.google.common.collect.Lists;
 
 public final class Annotations  {
-    
+
     private Annotations() {}
 
     /**
@@ -117,7 +117,7 @@ public final class Annotations  {
 
 
     static class AnnotationAndDepth<T extends Annotation>
-            implements Comparable<AnnotationAndDepth<T>> {
+    implements Comparable<AnnotationAndDepth<T>> {
         AnnotationAndDepth(final T annotation, final int depth) {
             this.annotation = annotation;
             this.depth = depth;
@@ -216,10 +216,10 @@ public final class Annotations  {
 
         // if meta-annotation
         //if(annotationType.getAnnotation(Meta.class) != null) {
-            final Annotation[] annotationsOnAnnotation = annotationType.getAnnotations();
-            for (final Annotation annotationOnAnnotation : annotationsOnAnnotation) {
-                appendWithDepth(annotationOnAnnotation, annotationClass, annotationAndDepths, depth+1, visited);
-            }
+        final Annotation[] annotationsOnAnnotation = annotationType.getAnnotations();
+        for (final Annotation annotationOnAnnotation : annotationsOnAnnotation) {
+            appendWithDepth(annotationOnAnnotation, annotationClass, annotationAndDepths, depth+1, visited);
+        }
         //}
     }
 
@@ -358,7 +358,7 @@ public final class Annotations  {
 
     /**
      * Searches for all no-arg methods or fields with a specified title, returning an
-     * {@link Evaluator} object that wraps either. Will search up hierarchy also, 
+     * {@link Evaluator} object that wraps either. Will search up hierarchy also,
      * including implemented interfaces.
      */
     public static <T extends Annotation> List<Evaluator<T>> getEvaluators(
@@ -366,106 +366,106 @@ public final class Annotations  {
             final Class<T> annotationClass) {
         final List<Evaluator<T>> evaluators = Lists.newArrayList();
         visitEvaluators(cls, annotationClass, evaluators::add);
-        
+
         // search implemented interfaces
         final Class<?>[] interfaces = cls.getInterfaces();
         for (final Class<?> iface : interfaces) {
-        	visitEvaluators(iface, annotationClass, evaluators::add);
+            visitEvaluators(iface, annotationClass, evaluators::add);
         }
-        
+
         return evaluators;
     }
-    
+
     /**
-     * Starting from the current class {@code cls}, we search down the inheritance 
-     * hierarchy (super class, super super class, ...), until we find 
+     * Starting from the current class {@code cls}, we search down the inheritance
+     * hierarchy (super class, super super class, ...), until we find
      * the first class that has at least a field or no-arg method with {@code annotationClass} annotation.
      * <br/>
-     * In this hierarchy traversal, implemented interfaces are not processed.      
+     * In this hierarchy traversal, implemented interfaces are not processed.
      * @param cls
      * @param annotationClass
      * @param filter
-     * @return list of {@link Evaluator} that wraps each annotated member found on the class where 
+     * @return list of {@link Evaluator} that wraps each annotated member found on the class where
      * the search stopped, or an empty list if no such {@code annotationClass} annotation found.
-     * 
+     *
      * @since 2.0.0
      */
     public static <T extends Annotation> List<Evaluator<T>> firstEvaluatorsInHierarchyHaving(
             final Class<?> cls,
             final Class<T> annotationClass,
             final Predicate<Evaluator<T>> filter) {
-    	
-    	 final List<Evaluator<T>> evaluators = Lists.newArrayList();
-    	 visitEvaluatorsWhile(cls, annotationClass, __->evaluators.isEmpty(), evaluator->{
-    		 if(filter.test(evaluator)) {
-    			 evaluators.add(evaluator);
-    		 }
-    	 });
-         
-         return evaluators;
+
+        final List<Evaluator<T>> evaluators = Lists.newArrayList();
+        visitEvaluatorsWhile(cls, annotationClass, __->evaluators.isEmpty(), evaluator->{
+            if(filter.test(evaluator)) {
+                evaluators.add(evaluator);
+            }
+        });
+
+        return evaluators;
     }
 
     private static <T extends Annotation> void visitEvaluators(
-    		final Class<?> cls,
+            final Class<?> cls,
             final Class<T> annotationClass,
             final Consumer<Evaluator<T>> visitor) {
-    	visitEvaluatorsWhile(cls, annotationClass, __->true, visitor);
+        visitEvaluatorsWhile(cls, annotationClass, __->true, visitor);
     }
-    
+
     private static <T extends Annotation> void visitEvaluatorsWhile(
             final Class<?> cls,
             final Class<T> annotationClass,
             Predicate<Class<?>> filter,
             final Consumer<Evaluator<T>> visitor) {
-    	
-    	if(!filter.test(cls))
-    		return; // stop visitation
-    	
-    	visitMethodEvaluators(cls, annotationClass, visitor);
-    	visitFieldEvaluators(cls, annotationClass, visitor);
-        
+
+        if(!filter.test(cls))
+            return; // stop visitation
+
+        visitMethodEvaluators(cls, annotationClass, visitor);
+        visitFieldEvaluators(cls, annotationClass, visitor);
+
         // search super-classes
         final Class<?> superclass = cls.getSuperclass();
         if (superclass != null) {
-        	visitEvaluatorsWhile(superclass, annotationClass, filter, visitor);
+            visitEvaluatorsWhile(superclass, annotationClass, filter, visitor);
         }
 
     }
-    
+
     @SuppressWarnings({ "rawtypes", "unchecked" })
-	private static <T extends Annotation> void visitMethodEvaluators(
+    private static <T extends Annotation> void visitMethodEvaluators(
             final Class<?> cls,
             final Class<T> annotationClass,
             final Consumer<Evaluator<T>> visitor) {
-    	
-    	for (Method method : cls.getDeclaredMethods()) {
+
+        for (Method method : cls.getDeclaredMethods()) {
             if(MethodScope.OBJECT.matchesScopeOf(method) &&
                     method.getParameterTypes().length == 0) {
                 final Annotation annotation = method.getAnnotation(annotationClass);
                 if(annotation != null) {
-                	visitor.accept(new MethodEvaluator(method, annotation));
+                    visitor.accept(new MethodEvaluator(method, annotation));
                 }
             }
         }
     }
-    
+
     @SuppressWarnings({ "rawtypes", "unchecked" })
-	private static <T extends Annotation> void visitFieldEvaluators(
+    private static <T extends Annotation> void visitFieldEvaluators(
             final Class<?> cls,
             final Class<T> annotationClass,
             final Consumer<Evaluator<T>> visitor) {
-    	
-    	for (final Field field: cls.getDeclaredFields()) {
+
+        for (final Field field: cls.getDeclaredFields()) {
             final Annotation annotation = field.getAnnotation(annotationClass);
             if(annotation != null) {
-            	visitor.accept(new FieldEvaluator(field, annotation));
+                visitor.accept(new FieldEvaluator(field, annotation));
             }
         }
     }
 
     public static abstract class Evaluator<T extends Annotation> {
         private final T annotation;
-    	private MethodHandle mh;  
+        private MethodHandle mh;
 
         protected Evaluator(final T annotation) {
             this.annotation = annotation;
@@ -477,22 +477,22 @@ public final class Annotations  {
 
         protected abstract MethodHandle createMethodHandle() throws IllegalAccessException;
         protected abstract String name();
-        
+
         public Object value(final Object obj) {
-        	if(mh==null) {
-        		try {
-					mh = createMethodHandle();
-				} catch (IllegalAccessException e) {
-					throw new MetaModelException("illegal access of " + name(), e);
-				}
-        	}
-        	
-        	try {
-				return mh.invoke(obj);
-			} catch (Throwable e) {
-				return ThrowableExtensions.handleInvocationException(e, name());
-			}
- 
+            if(mh==null) {
+                try {
+                    mh = createMethodHandle();
+                } catch (IllegalAccessException e) {
+                    throw new MetaModelException("illegal access of " + name(), e);
+                }
+            }
+
+            try {
+                return mh.invoke(obj);
+            } catch (Throwable e) {
+                return ThrowableExtensions.handleInvocationException(e, name());
+            }
+
         }
     }
 
@@ -503,31 +503,31 @@ public final class Annotations  {
             super(annotation);
             this.method = method;
         }
-        
+
         @Override
         protected String name() {
-        	return method.getName();
+            return method.getName();
         }
 
-//        public Object value(final Object obj)  {
-//            try {
-//                return method.invoke(obj);
-//            } catch (final InvocationTargetException e) {
-//                ThrowableExtensions.throwWithinIsisException(e, "Exception executing " + method);
-//                return null;
-//            } catch (final IllegalAccessException e) {
-//                throw new MetaModelException("illegal access of " + method, e);
-//            }
-//        }
+        //        public Object value(final Object obj)  {
+        //            try {
+        //                return method.invoke(obj);
+        //            } catch (final InvocationTargetException e) {
+        //                ThrowableExtensions.throwWithinIsisException(e, "Exception executing " + method);
+        //                return null;
+        //            } catch (final IllegalAccessException e) {
+        //                throw new MetaModelException("illegal access of " + method, e);
+        //            }
+        //        }
 
         public Method getMethod() {
             return method;
         }
 
-		@Override
-		protected MethodHandle createMethodHandle() throws IllegalAccessException {
-			return Reflect.handleOf(method);
-		}
+        @Override
+        protected MethodHandle createMethodHandle() throws IllegalAccessException {
+            return Reflect.handleOf(method);
+        }
     }
 
     public static class FieldEvaluator<T extends Annotation> extends Evaluator<T> {
@@ -537,40 +537,40 @@ public final class Annotations  {
             super(annotation);
             this.field = field;
         }
-        
+
         @Override
         protected String name() {
-        	return field.getName();
+            return field.getName();
         }
 
         @Override
-		protected MethodHandle createMethodHandle() throws IllegalAccessException {
-			return Reflect.handleOf(field);
-		}
-        
-//        public Object value(final Object obj)  {
-//            try {
-//                field.setAccessible(true);
-//                return field.get(obj);
-//            } catch (final IllegalAccessException e) {
-//                throw new MetaModelException("illegal access of " + field, e);
-//            }
-//        }
+        protected MethodHandle createMethodHandle() throws IllegalAccessException {
+            return Reflect.handleOf(field);
+        }
+
+        //        public Object value(final Object obj)  {
+        //            try {
+        //                field.setAccessible(true);
+        //                return field.get(obj);
+        //            } catch (final IllegalAccessException e) {
+        //                throw new MetaModelException("illegal access of " + field, e);
+        //            }
+        //        }
 
         public Field getField() {
             return field;
         }
-        
+
         public Optional<Method> getGetter(Class<?> originatingClass) {
-			try {
-        		return Optional.ofNullable(
-        				Reflect.getGetter(originatingClass, field.getName())	);
-			} catch (IntrospectionException e) {
-				e.printStackTrace();
-			}
-        	return Optional.empty();
+            try {
+                return Optional.ofNullable(
+                        Reflect.getGetter(originatingClass, field.getName())	);
+            } catch (IntrospectionException e) {
+                e.printStackTrace();
+            }
+            return Optional.empty();
         }
-        
+
     }
 
     private static List<Class<?>> fieldAnnotationClasses = Collections.unmodifiableList(
@@ -586,8 +586,8 @@ public final class Annotations  {
                     XmlJavaTypeAdapter.class,
                     XmlTransient.class,
                     javax.jdo.annotations.Column.class
-            )
-    );
+                    )
+            );
     private static boolean shouldSearchForField(final Class<?> annotationClass) {
         return fieldAnnotationClasses.contains(annotationClass);
     }
@@ -620,7 +620,7 @@ public final class Annotations  {
     /**
      * Searches for annotation on provided method, and if not found for any
      * inherited methods up from the superclass.
-     * 
+     *
      * <p>
      * Added to allow bytecode-mangling libraries such as CGLIB to be supported.
      */
@@ -662,7 +662,7 @@ public final class Annotations  {
     /**
      * Searches for parameter annotations on provided method, and if not found
      * for any inherited methods up from the superclass.
-     * 
+     *
      * <p>
      * Added to allow bytecode-mangling libraries such as CGLIB to be supported.
      */

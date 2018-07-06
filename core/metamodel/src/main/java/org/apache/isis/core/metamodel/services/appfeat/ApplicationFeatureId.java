@@ -60,12 +60,12 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
     // -- factory methods
     public static ApplicationFeatureId newFeature(final ApplicationFeatureType featureType, final String fullyQualifiedName) {
         switch (featureType) {
-            case PACKAGE:
-                return newPackage(fullyQualifiedName);
-            case CLASS:
-                return newClass(fullyQualifiedName);
-            case MEMBER:
-                return newMember(fullyQualifiedName);
+        case PACKAGE:
+            return newPackage(fullyQualifiedName);
+        case CLASS:
+            return newClass(fullyQualifiedName);
+        case MEMBER:
+            return newMember(fullyQualifiedName);
         }
         throw new IllegalArgumentException("Unknown feature type " + featureType);
     }
@@ -121,7 +121,7 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
     public static ApplicationFeatureId parseEncoded(final String encodedString) {
         return new ApplicationFeatureId(base64UrlDecode(encodedString));
     }
-    
+
 
     // //////////////////////////////////////
 
@@ -145,7 +145,7 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
         type.init(this, fullyQualifiedName);
     }
 
-    
+
 
     // //////////////////////////////////////
 
@@ -159,7 +159,7 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
         buf.append(getFullyQualifiedName());
         return buf.toString();
     }
-    
+
 
     // //////////////////////////////////////
 
@@ -178,7 +178,7 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
         return buf.toString();
     }
 
-    
+
 
     // -- objectSpecId (property)
 
@@ -197,7 +197,7 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
         return ObjectSpecId.of(buf.toString());
     }
 
-    
+
 
     // //////////////////////////////////////
 
@@ -207,7 +207,7 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
     public ApplicationFeatureType getType() {
         return type;
     }
-    
+
 
     // //////////////////////////////////////
 
@@ -222,7 +222,7 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
     void setPackageName(final String packageName) {
         this.packageName = packageName;
     }
-    
+
 
     // //////////////////////////////////////
 
@@ -238,7 +238,7 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
     void setClassName(final String className) {
         this.className = className;
     }
-    
+
 
     // //////////////////////////////////////
 
@@ -253,7 +253,7 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
     void setMemberName(final String memberName) {
         this.memberName = memberName;
     }
-    
+
 
     // //////////////////////////////////////
 
@@ -286,7 +286,7 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
         }
     }
 
-    
+
 
     // //////////////////////////////////////
 
@@ -300,7 +300,7 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
         final String classFqn = this.getPackageName() + "." + getClassName();
         return newClass(classFqn);
     }
-    
+
 
     // //////////////////////////////////////
 
@@ -328,7 +328,7 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
 
 
 
-    
+
 
     // //////////////////////////////////////
 
@@ -353,7 +353,7 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
         };
 
     }
-    
+
 
     // //////////////////////////////////////
 
@@ -388,7 +388,7 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
             };
         }
     }
-    
+
 
     // //////////////////////////////////////
 
@@ -407,7 +407,7 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
             }
         }
     }
-    
+
 
     // //////////////////////////////////////
 
@@ -439,7 +439,7 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
         }
         return parentIds;
     }
-    
+
 
     // //////////////////////////////////////
 
@@ -471,10 +471,10 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
             });
     private final static Ordering<ApplicationFeatureId> applicationFeatureIdOrdering =
             byType
-                    .compound(byPackageName)
-                    .compound(byClassName)
-                    .compound(byMemberName)
-                    .nullsFirst();
+            .compound(byPackageName)
+            .compound(byClassName)
+            .compound(byMemberName)
+            .nullsFirst();
 
 
     @Override
@@ -524,24 +524,24 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
 
         final Objects.ToStringHelper stringHelper = Objects.toStringHelper(this);
         switch (type) {
-            case PACKAGE:
-                stringHelper.add("type", getType());
-                stringHelper.add("packageName", getPackageName());
-                return stringHelper.toString();
-            case CLASS:
-                stringHelper.add("type", getType());
-                stringHelper.add("packageName", getPackageName());
-                stringHelper.add("className", getClassName());
-                return stringHelper.toString();
-            case MEMBER:
-                stringHelper.add("type", getType());
-                stringHelper.add("packageName", getPackageName());
-                stringHelper.add("memberName", getMemberName());
-                return stringHelper.toString();
+        case PACKAGE:
+            stringHelper.add("type", getType());
+            stringHelper.add("packageName", getPackageName());
+            return stringHelper.toString();
+        case CLASS:
+            stringHelper.add("type", getType());
+            stringHelper.add("packageName", getPackageName());
+            stringHelper.add("className", getClassName());
+            return stringHelper.toString();
+        case MEMBER:
+            stringHelper.add("type", getType());
+            stringHelper.add("packageName", getPackageName());
+            stringHelper.add("memberName", getMemberName());
+            return stringHelper.toString();
         }
         throw new IllegalStateException("Unknown feature type " + type);
     }
 
-    
+
 
 }

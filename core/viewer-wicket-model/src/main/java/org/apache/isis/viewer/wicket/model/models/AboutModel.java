@@ -25,7 +25,7 @@ package org.apache.isis.viewer.wicket.model.models;
 public class AboutModel extends ModelAbstract<String> {
 
     private static final long serialVersionUID = 1L;
-    
+
     public AboutModel(String message) {
         super();
         setObject(message);

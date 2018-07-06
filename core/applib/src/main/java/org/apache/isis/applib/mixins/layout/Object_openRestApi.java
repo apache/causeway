@@ -38,35 +38,35 @@ public class Object_openRestApi {
         this.object = object;
     }
 
-    public static class ActionDomainEvent 
+    public static class ActionDomainEvent
     extends org.apache.isis.applib.IsisApplibModule.ActionDomainEvent<Object_openRestApi> {
-    	private static final long serialVersionUID = 1L;
+        private static final long serialVersionUID = 1L;
     }
 
     @Action(
             domainEvent = ActionDomainEvent.class,
             semantics = SemanticsOf.SAFE,
             restrictTo = RestrictTo.PROTOTYPING
-    )
+            )
     @ActionLayout(
             contributed = Contributed.AS_ACTION,
             cssClassFa = "fa-external-link",
             position = ActionLayout.Position.PANEL_DROPDOWN
-    )
+            )
     @MemberOrder(name = "datanucleusIdLong", sequence = "750.1")
     public LocalResourcePath act() {
         Bookmark bookmark = bookmarkService.bookmarkFor(object);
-        
+
         return new LocalResourcePath(String.format(
                 "/%s/objects/%s/%s",
-            	_Resource.getRestfulPathIfAny(),
+                _Resource.getRestfulPathIfAny(),
                 bookmark.getObjectType(),
                 bookmark.getIdentifier()));
     }
 
     @javax.inject.Inject
     BookmarkService bookmarkService;
-    
+
     @javax.inject.Inject
     SwaggerService swaggerService;
 

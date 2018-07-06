@@ -33,8 +33,8 @@ import org.apache.isis.core.metamodel.facets.FacetFactory;
  * Enumerates the features that a particular Facet can be applied to.
  *
  * <p>
- * The class-level feature processing is typically performed by {@link FacetFactory}s 
- * pertaining to {@link #OBJECT}, performed before the processing of class members.  
+ * The class-level feature processing is typically performed by {@link FacetFactory}s
+ * pertaining to {@link #OBJECT}, performed before the processing of class members.
  *
  */
 public enum FeatureType {
@@ -86,7 +86,7 @@ public enum FeatureType {
             return null;
         }
     };
-    
+
     public final static List<FeatureType> COLLECTIONS_ONLY = ImmutableList.of(COLLECTION);
     public final static List<FeatureType> COLLECTIONS_AND_ACTIONS = ImmutableList.of(COLLECTION, ACTION);
     public final static List<FeatureType> ACTIONS_ONLY = ImmutableList.of(ACTION);

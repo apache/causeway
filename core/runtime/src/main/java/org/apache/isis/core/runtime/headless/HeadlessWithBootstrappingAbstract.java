@@ -88,10 +88,10 @@ public abstract class HeadlessWithBootstrappingAbstract extends HeadlessAbstract
 
         final Module moduleToUse =
                 !Strings.isNullOrEmpty(moduleFqcn)
-                        ? InstanceUtil.createInstance(moduleFqcn, Module.class)
+                ? InstanceUtil.createInstance(moduleFqcn, Module.class)
                         : module;
-        this.isisSystemBootstrapper =
-                new IsisSystemBootstrapper(logConfig, moduleToUse);
+                this.isisSystemBootstrapper =
+                        new IsisSystemBootstrapper(logConfig, moduleToUse);
     }
 
 

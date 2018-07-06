@@ -35,7 +35,7 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 public class ActionMemento implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
     private final ObjectSpecId owningType;
     private final ActionType actionType;
     private final String nameParmsId;
@@ -56,9 +56,9 @@ public class ActionMemento implements Serializable {
     }
 
     private ActionMemento(
-            final ObjectSpecId owningSpecId, 
-            final ActionType actionType, 
-            final String nameParmsId, 
+            final ObjectSpecId owningSpecId,
+            final ActionType actionType,
+            final String nameParmsId,
             final ObjectAction action) {
         this.owningType = owningSpecId;
         this.actionType = actionType;
@@ -66,7 +66,7 @@ public class ActionMemento implements Serializable {
         this.action = action;
         this.actionSemantics = action.getSemantics();
     }
-    
+
     public ObjectSpecId getOwningType() {
         return owningType;
     }

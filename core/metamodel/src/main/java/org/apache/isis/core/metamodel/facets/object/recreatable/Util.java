@@ -26,6 +26,6 @@ class Util {
     static DisabledFacetAbstract.Semantics inferSemanticsFrom(final ViewModelFacet facet) {
         return facet.isImplicitlyImmutable() ?
                 DisabledFacetAbstract.Semantics.DISABLED :
-                DisabledFacetAbstract.Semantics.ENABLED;
+                    DisabledFacetAbstract.Semantics.ENABLED;
     }
 }

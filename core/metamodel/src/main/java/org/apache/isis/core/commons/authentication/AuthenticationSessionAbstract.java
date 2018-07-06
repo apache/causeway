@@ -73,7 +73,7 @@ public abstract class AuthenticationSessionAbstract implements AuthenticationSes
         // nothing to do
     }
 
-    
+
 
     // -- encode
 
@@ -84,7 +84,7 @@ public abstract class AuthenticationSessionAbstract implements AuthenticationSes
         output.writeUTF(validationCode);
     }
 
-    
+
 
     // -- User Name
 
@@ -98,7 +98,7 @@ public abstract class AuthenticationSessionAbstract implements AuthenticationSes
         return Objects.equal(userName, getUserName());
     }
 
-    
+
 
     // -- Roles
 
@@ -110,7 +110,7 @@ public abstract class AuthenticationSessionAbstract implements AuthenticationSes
         return Collections.unmodifiableList(roles);
     }
 
-    
+
 
     // -- Validation Code
 
@@ -119,7 +119,7 @@ public abstract class AuthenticationSessionAbstract implements AuthenticationSes
         return validationCode;
     }
 
-    
+
 
     // -- Attributes
 
@@ -133,7 +133,7 @@ public abstract class AuthenticationSessionAbstract implements AuthenticationSes
         attributeByName.put(attributeName, attribute);
     }
 
-    
+
 
     // -- MessageBroker
 
@@ -142,7 +142,7 @@ public abstract class AuthenticationSessionAbstract implements AuthenticationSes
         return messageBroker;
     }
 
-    
+
 
     // -- createUserMemento
 
@@ -155,7 +155,7 @@ public abstract class AuthenticationSessionAbstract implements AuthenticationSes
         return new UserMemento(getUserName(), roles);
     }
 
-    
+
 
     // -- toString
 
@@ -164,6 +164,6 @@ public abstract class AuthenticationSessionAbstract implements AuthenticationSes
         return new ToString(this).append("name", getUserName()).append("code", getValidationCode()).toString();
     }
 
-    
+
 
 }

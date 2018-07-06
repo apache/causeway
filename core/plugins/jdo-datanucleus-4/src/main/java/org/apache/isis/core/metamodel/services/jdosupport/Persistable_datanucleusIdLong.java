@@ -46,14 +46,14 @@ public class Persistable_datanucleusIdLong {
     @Action(
             domainEvent = ActionDomainEvent.class,
             semantics = SemanticsOf.SAFE
-    )
+            )
     @ActionLayout(
             contributed = Contributed.AS_ASSOCIATION
-    )
+            )
     @PropertyLayout(
             named = "Id",
             hidden = Where.ALL_TABLES
-    )
+            )
     @MemberOrder(name = "Metadata", sequence = "800.1")
     public Long prop() {
         final Object objectId = JDOHelper.getObjectId(persistable);

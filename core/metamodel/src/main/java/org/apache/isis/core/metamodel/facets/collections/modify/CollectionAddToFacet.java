@@ -25,7 +25,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 
 /**
  * Add object to a collection.
- * 
+ *
  * <p>
  * In the standard Apache Isis Programming Model, corresponds to invoking the
  * <tt>addToXxx</tt> support method for a collection.

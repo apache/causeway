@@ -41,10 +41,10 @@ public abstract class PrototypeFacetAbstract extends MarkerFacetAbstract impleme
 
     @Override
     public String hides(
-        final VisibilityContext<? extends VisibilityEvent> ic) {
+            final VisibilityContext<? extends VisibilityEvent> ic) {
         return getDeploymentCategory().isProduction()
                 ? "Prototyping action not visible in production mode"
-                : null;
+                        : null;
     }
 
     protected DeploymentCategory getDeploymentCategory() {

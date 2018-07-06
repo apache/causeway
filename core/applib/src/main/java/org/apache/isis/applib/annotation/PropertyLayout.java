@@ -70,7 +70,7 @@ public @interface PropertyLayout {
      * A flag indicating whether the value of {@linkplain #named()} should be HTML escaped or not.
      */
     boolean namedEscaped() default true;
-    
+
     Navigable navigable() default Navigable.NOT_SPECIFIED;
 
     /**

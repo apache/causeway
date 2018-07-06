@@ -33,76 +33,76 @@ import org.apache.wicket.model.IModel;
  * {@link ComponentFactory} for {@link MarkupPanel}.
  */
 public class TreePanelFactories {
-	
-	// -- PARENTED
 
-	static class Parented extends ComponentFactoryAbstract {
-		private static final long serialVersionUID = 1L;
+    // -- PARENTED
 
-		public Parented() {
-			super(ComponentType.SCALAR_NAME_AND_VALUE, TreePanel.class);
-		}
-		
-		@Override
-		public ApplicationAdvice appliesTo(final IModel<?> model) {
-			if (!(model instanceof ScalarModel)) {
-				return ApplicationAdvice.DOES_NOT_APPLY;
-			}
+    static class Parented extends ComponentFactoryAbstract {
+        private static final long serialVersionUID = 1L;
 
-			final ScalarModel scalarModel = (ScalarModel) model;
+        public Parented() {
+            super(ComponentType.SCALAR_NAME_AND_VALUE, TreePanel.class);
+        }
 
-			if(!scalarModel.isScalarTypeSubtypingAnyOf(org.apache.isis.applib.tree.TreeNode.class)) {
-				return ApplicationAdvice.DOES_NOT_APPLY;
-			}
+        @Override
+        public ApplicationAdvice appliesTo(final IModel<?> model) {
+            if (!(model instanceof ScalarModel)) {
+                return ApplicationAdvice.DOES_NOT_APPLY;
+            }
 
-			return appliesIf( !scalarModel.hasChoices() );
-		}
-		
-		@Override
-		public final Component createComponent(final String id, final IModel<?> model) {
-			
-			return new TreePanel(id, (ScalarModel) model);
-		}
-	}
-	
-	// -- STANDALONE
+            final ScalarModel scalarModel = (ScalarModel) model;
 
-	static class Standalone extends ComponentFactoryAbstract {
-		private static final long serialVersionUID = 1L;
+            if(!scalarModel.isScalarTypeSubtypingAnyOf(org.apache.isis.applib.tree.TreeNode.class)) {
+                return ApplicationAdvice.DOES_NOT_APPLY;
+            }
 
-		public Standalone() {
-			super(ComponentType.VALUE, StandaloneTreePanel.class);
-		}
-		
-		@Override
-		public ApplicationAdvice appliesTo(final IModel<?> model) {
-			if (!(model instanceof ValueModel)) {
-				return ApplicationAdvice.DOES_NOT_APPLY;
-			}
-			
-			final ValueModel valueModel = (ValueModel) model;
-			final ObjectAdapter adapter = valueModel.getObject();
-			if(adapter==null || adapter.getObject()==null) {
-				return ApplicationAdvice.DOES_NOT_APPLY;
-			}
+            return appliesIf( !scalarModel.hasChoices() );
+        }
 
-			return appliesIf( adapter.getObject() instanceof org.apache.isis.applib.tree.TreeNode );
-		}
-		
-		@Override
-		public final Component createComponent(final String id, final IModel<?> model) {
-			return new StandaloneTreePanel(id, (ValueModel) model);
-		}
-	}
+        @Override
+        public final Component createComponent(final String id, final IModel<?> model) {
 
-	// -- CONSTRUCTION
-	
-	public static ComponentFactory parented() {
-		return new Parented();
-	}
-	
-	public static ComponentFactory standalone() {
-		return new Standalone();
-	}
+            return new TreePanel(id, (ScalarModel) model);
+        }
+    }
+
+    // -- STANDALONE
+
+    static class Standalone extends ComponentFactoryAbstract {
+        private static final long serialVersionUID = 1L;
+
+        public Standalone() {
+            super(ComponentType.VALUE, StandaloneTreePanel.class);
+        }
+
+        @Override
+        public ApplicationAdvice appliesTo(final IModel<?> model) {
+            if (!(model instanceof ValueModel)) {
+                return ApplicationAdvice.DOES_NOT_APPLY;
+            }
+
+            final ValueModel valueModel = (ValueModel) model;
+            final ObjectAdapter adapter = valueModel.getObject();
+            if(adapter==null || adapter.getObject()==null) {
+                return ApplicationAdvice.DOES_NOT_APPLY;
+            }
+
+            return appliesIf( adapter.getObject() instanceof org.apache.isis.applib.tree.TreeNode );
+        }
+
+        @Override
+        public final Component createComponent(final String id, final IModel<?> model) {
+            return new StandaloneTreePanel(id, (ValueModel) model);
+        }
+    }
+
+    // -- CONSTRUCTION
+
+    public static ComponentFactory parented() {
+        return new Parented();
+    }
+
+    public static ComponentFactory standalone() {
+        return new Standalone();
+    }
 
 }

@@ -78,14 +78,14 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         this.persistenceSession = persistenceSession;
         this.specificationLoader = specificationLoader;
         this.authenticationSession = authenticationSession;
-        
+
         if (pojo instanceof ObjectAdapter) {
             throw new IsisException("Adapter can't be used to adapt an adapter: " + pojo);
         }
         this.pojo = pojo;
         this.oid = oid;
     }
-    
+
 
     // -- getSpecification
 
@@ -104,7 +104,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         return specification;
     }
 
-    
+
 
     // -- getObject, replacePojo
     @Override
@@ -121,7 +121,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
     public void replacePojo(final Object pojo) {
         this.pojo = pojo;
     }
-    
+
 
     // -- getOid, replaceOid
     @Override
@@ -131,10 +131,10 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
 
     @Override
     public void replaceOid(Oid persistedOid) {
-        Objects.requireNonNull(oid); // values have no oid, so cannot be replaced 
+        Objects.requireNonNull(oid); // values have no oid, so cannot be replaced
         this.oid = persistedOid;
     }
-    
+
 
     // -- isParentedCollection, isValue
 
@@ -148,7 +148,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         return oid == null;
     }
 
-    
+
 
     // -- isTransient, representsPersistent, isDestroyed
 
@@ -202,7 +202,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         }
         return false;
     }
-    
+
 
     // -- getAggregateRoot
     @Override
@@ -214,7 +214,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         return persistenceSession.getAggregateRoot(collectionOid);
     }
 
-    
+
 
     // -- getVersion, setVersion, checkLock
 
@@ -234,15 +234,15 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
             getAggregateRoot().checkLock(otherVersion);
             return;
         }
-        
+
         Oid thisOid = getOid();
         final Version thisVersion = thisOid.getVersion();
-        
+
         // check for exception, but don't throw if suppressed through thread-local
-        if(thisVersion != null && 
-           otherVersion != null && 
-           thisVersion.different(otherVersion)) {
-            
+        if(thisVersion != null &&
+                otherVersion != null &&
+                thisVersion.different(otherVersion)) {
+
             if(AdapterManager.ConcurrencyChecking.isCurrentlyEnabled()) {
                 LOG.info("concurrency conflict detected on {} ({})", thisOid, otherVersion);
                 final String currentUser = authenticationSession.getUserName();
@@ -270,12 +270,12 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         return version == null || otherVersion == null || otherVersion.different(version);
     }
 
-    
+
 
     // -- titleString
     /**
      * Returns the title from the underlying business object.
-     * 
+     *
      * <p>
      * If the object has not yet been resolved the specification will be asked
      * for a unresolved title, which could of been persisted by the persistence
@@ -304,7 +304,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         }
         final ObjectSpecification specification = getSpecification();
         String title = specification.getTitle(contextAdapterIfAny, this);
-        
+
         if (title == null) {
             title = getDefaultTitle();
         }
@@ -389,7 +389,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         }
         return "S"; // standalone adapter (value)
     }
-    
+
 
     // -- iconName
 
@@ -401,7 +401,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         return getSpecification().getIconName(this);
     }
 
-    
+
 
     // -- elementSpecification
 
@@ -425,7 +425,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
     public void setElementSpecificationProvider(final ElementSpecificationProvider elementSpecificationProvider) {
         this.elementSpecificationProvider = elementSpecificationProvider;
     }
-    
+
 
     // -- getInstance (unsupported for this impl)
 
@@ -437,6 +437,6 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         throw new UnsupportedOperationException();
     }
 
-    
+
 
 }

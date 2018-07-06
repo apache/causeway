@@ -33,7 +33,7 @@ public abstract class BookmarkableModel<T> extends ModelAbstract<T>  {
         super(t);
     }
 
-    
+
     /**
      * So can be bookmarked / added to <tt>BookmarkedPagesModel</tt>.
      */
@@ -42,7 +42,7 @@ public abstract class BookmarkableModel<T> extends ModelAbstract<T>  {
     public abstract PageParameters getPageParametersWithoutUiHints();
 
     public abstract boolean hasAsRootPolicy();
-    
+
     public abstract String getTitle();
 
 }

@@ -30,20 +30,20 @@ import java.util.concurrent.Callable;
  * available for use; no further configuration is required.
  */
 public interface QueryResultsCache {
-	
-	// -- KEY
 
-	public static class Key {
+    // -- KEY
+
+    public static class Key {
         private final Class<?> callingClass;
         private final String methodName;
         private final Object[] keys;
-        
+
         public Key(Class<?> callingClass, String methodName, Object... keys) {
             this.callingClass = callingClass;
             this.methodName = methodName;
             this.keys = keys;
         }
-        
+
         public Class<?> getCallingClass() {
             return callingClass;
         }
@@ -53,7 +53,7 @@ public interface QueryResultsCache {
         public Object[] getKeys() {
             return keys;
         }
-        
+
         @Override
         public boolean equals(Object obj) {
             if (this == obj)
@@ -85,7 +85,7 @@ public interface QueryResultsCache {
             // ok, matches
             return true;
         }
-        
+
         @Override
         public int hashCode() {
             final int prime = 31;
@@ -101,9 +101,9 @@ public interface QueryResultsCache {
             return callingClass.getName() + "#" + methodName  + Arrays.toString(keys);
         }
     }
-	
-	// -- VALUE
-    
+
+    // -- VALUE
+
     public static class Value<T> {
         private T result;
         public Value(T result) {
@@ -113,11 +113,11 @@ public interface QueryResultsCache {
             return result;
         }
     }
-    
+
     // -- INTERFACE
 
-	public <T> T execute(Callable<T> callable, Class<?> callingClass, String methodName, Object... keys);
+    public <T> T execute(Callable<T> callable, Class<?> callingClass, String methodName, Object... keys);
 
-	public void resetForNextTransaction();
-	
+    public void resetForNextTransaction();
+
 }

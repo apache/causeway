@@ -54,22 +54,22 @@ import org.apache.isis.schema.utils.CommonDtoUtils;
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
-)
+        )
 public class CommandDtoServiceInternalDefault implements CommandDtoServiceInternal {
 
-//    private final MementoServiceDefault mementoService;
-//
-//    public CommandDtoServiceInternalDefault() {
-//        this(new MementoServiceDefault());
-//    }
-//
-//    CommandDtoServiceInternalDefault(MementoServiceDefault mementoService) {
-//        this.mementoService = mementoService.withNoEncoding();
-//    }
-    
+    //    private final MementoServiceDefault mementoService;
+    //
+    //    public CommandDtoServiceInternalDefault() {
+    //        this(new MementoServiceDefault());
+    //    }
+    //
+    //    CommandDtoServiceInternalDefault(MementoServiceDefault mementoService) {
+    //        this.mementoService = mementoService.withNoEncoding();
+    //    }
+
     // //////////////////////////////////////
 
-    
+
     @Programmatic
     @PostConstruct
     public void init(Map<String,String> props) {
@@ -78,23 +78,23 @@ public class CommandDtoServiceInternalDefault implements CommandDtoServiceIntern
     // //////////////////////////////////////
 
 
-//    private ObjectSpecificationDefault getJavaSpecificationOfOwningClass(final Method method) {
-//        return getJavaSpecification(method.getDeclaringClass());
-//    }
+    //    private ObjectSpecificationDefault getJavaSpecificationOfOwningClass(final Method method) {
+    //        return getJavaSpecification(method.getDeclaringClass());
+    //    }
 
-//    private ObjectSpecificationDefault getJavaSpecification(final Class<?> cls) {
-//        final ObjectSpecification objectSpec = getSpecification(cls);
-//        if (!(objectSpec instanceof ObjectSpecificationDefault)) {
-//            throw new UnsupportedOperationException(
-//                "Only Java is supported "
-//                + "(specification is '" + objectSpec.getClass().getCanonicalName() + "')");
-//        }
-//        return (ObjectSpecificationDefault) objectSpec;
-//    }
+    //    private ObjectSpecificationDefault getJavaSpecification(final Class<?> cls) {
+    //        final ObjectSpecification objectSpec = getSpecification(cls);
+    //        if (!(objectSpec instanceof ObjectSpecificationDefault)) {
+    //            throw new UnsupportedOperationException(
+    //                "Only Java is supported "
+    //                + "(specification is '" + objectSpec.getClass().getCanonicalName() + "')");
+    //        }
+    //        return (ObjectSpecificationDefault) objectSpec;
+    //    }
 
-//    private ObjectSpecification getSpecification(final Class<?> type) {
-//        return specificationLoader.loadSpecification(type);
-//    }
+    //    private ObjectSpecification getSpecification(final Class<?> type) {
+    //        return specificationLoader.loadSpecification(type);
+    //    }
 
 
     // //////////////////////////////////////
@@ -228,7 +228,7 @@ public class CommandDtoServiceInternalDefault implements CommandDtoServiceIntern
         return isisSessionFactory.getCurrentSession().getPersistenceSession();
     }
 
-    
+
 
 
 }

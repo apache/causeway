@@ -58,11 +58,11 @@ class DeweyOrderUtil  {
         }
         final Iterable<Parsed<V>> parsedIter = Iterables.transform(keys,
                 new Function<Map.Entry<String,V>, Parsed<V>>() {
-                    @Override
-                    public Parsed<V> apply(Map.Entry<String,V> input) {
-                        return new Parsed(input);
-                    }
-                });
+            @Override
+            public Parsed<V> apply(Map.Entry<String,V> input) {
+                return new Parsed(input);
+            }
+        });
 
         final SortedSet<Parsed<V>> parseds = Sets.newTreeSet(parsedIter);
         final Iterable<Map.Entry<String, V>> transform = Iterables.transform(parseds, DeweyOrderUtil.<V>toMapEntry());

@@ -131,21 +131,21 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             __isis_wrappedMethod = WrappingObject.class.getMethod("__isis_wrapped", new Class[]{});
             __isis_executionMode = WrappingObject.class.getMethod("__isis_executionMode", new Class[]{});
 
-    		_NullSafe.stream(IsisJdoMetamodelPlugin.get().getMethodsProvidedByEnhancement())
-	    		.map(Method::getName)
-	    		.forEach(jdoMethodsProvidedByEnhancement::add);
-    		
-// legacy of ...            
-//            dnPersistableMethods.addAll(
-//                    Lists.newArrayList(
-//                            Iterables.transform(
-//                                    Arrays.asList(Persistable.class.getDeclaredMethods()),
-//                                    new Function<Method, String>() {
-//                                        @Override
-//                                        public String apply(final Method input) {
-//                                            return input.getName();
-//                                        }
-//                                    })));
+            _NullSafe.stream(IsisJdoMetamodelPlugin.get().getMethodsProvidedByEnhancement())
+            .map(Method::getName)
+            .forEach(jdoMethodsProvidedByEnhancement::add);
+
+            // legacy of ...
+            //            dnPersistableMethods.addAll(
+            //                    Lists.newArrayList(
+            //                            Iterables.transform(
+            //                                    Arrays.asList(Persistable.class.getDeclaredMethods()),
+            //                                    new Function<Method, String>() {
+            //                                        @Override
+            //                                        public String apply(final Method input) {
+            //                                            return input.getName();
+            //                                        }
+            //                                    })));
 
         } catch (final NoSuchMethodException nsme) {
             throw new IllegalStateException(
@@ -212,11 +212,11 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             }
 
             final OneToOneAssociation otoa = (OneToOneAssociation) objectMember;
-            
+
             if (intent == Intent.ACCESSOR) {
                 return handleGetterMethodOnProperty(targetAdapter, args, otoa);
             }
-            
+
             if (intent == Intent.MODIFY_PROPERTY || intent == Intent.INITIALIZATION) {
                 return handleSetterMethodOnProperty(targetAdapter, args, otoa);
             }
@@ -509,7 +509,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             final OneToManyAssociation otma) {
         return collectionToLookup instanceof WrappingObject
                 ? collectionToLookup
-                : proxy.proxy(collectionToLookup, memberName, this, otma);
+                        : proxy.proxy(collectionToLookup, memberName, this, otma);
     }
 
     private Map<?, ?> lookupWrappingObject(
@@ -518,7 +518,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             final OneToManyAssociation otma) {
         return mapToLookup instanceof WrappingObject
                 ? mapToLookup
-                : proxy.proxy(mapToLookup, memberName, this, otma);
+                        : proxy.proxy(mapToLookup, memberName, this, otma);
     }
 
     // /////////////////////////////////////////////////////////////////
@@ -701,7 +701,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
 
     /**
      * REVIEW: ideally should provide some way to allow to caller to indicate the 'where' context.  Having
-     * a hard-coded value like this is an approximation. 
+     * a hard-coded value like this is an approximation.
      */
     private final Where where = Where.ANYWHERE;
 
@@ -718,7 +718,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             final ObjectMember objectMember) {
         final InteractionResult interactionResult = objectMember.isUsable(targetObjectAdapter,
                 getInteractionInitiatedBy(), where
-        ).getInteractionResult();
+                ).getInteractionResult();
         notifyListenersAndVetoIfRequired(interactionResult);
     }
 
@@ -765,7 +765,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     private ObjectMember locateAndCheckMember(final Method method) {
         final ObjectSpecificationDefault objectSpecificationDefault = getJavaSpecificationOfOwningClass(method);
         final ObjectMember member = objectSpecificationDefault.getMember(method);
-        
+
         if (member == null) {
             final String methodName = method.getName();
             throw new UnsupportedOperationException("Method '" + methodName + "' being invoked does not correspond to any of the object's fields or actions.");

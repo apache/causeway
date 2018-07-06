@@ -73,9 +73,9 @@ public class PersistenceQueryFindUsingApplibQueryDefault extends PersistenceQuer
     }
 
     public long getEnd() {
-        // we default to Integer.MAX_VALUE because HSQLDB blows up 
-        // (with a ClassCastException from Long to Integer) 
-        // if we return Long.MAX_VALUE 
+        // we default to Integer.MAX_VALUE because HSQLDB blows up
+        // (with a ClassCastException from Long to Integer)
+        // if we return Long.MAX_VALUE
         return getCount() != 0? getStart() + getCount(): Integer.MAX_VALUE;
     }
 

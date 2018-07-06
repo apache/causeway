@@ -52,7 +52,7 @@ public class HomePage extends PageAbstract {
 
     public HomePage(final PageParameters parameters) {
         super(parameters, null);
-        
+
         addChildComponents(themeDiv, null);
         buildGui();
 
@@ -62,7 +62,7 @@ public class HomePage extends PageAbstract {
     private void buildGui() {
         final ObjectAndAction objectAndAction = lookupHomePageAction();
         if(objectAndAction != null) {
-            Components.permanentlyHide(themeDiv, ComponentType.WELCOME); 
+            Components.permanentlyHide(themeDiv, ComponentType.WELCOME);
             final ActionModel actionModel = ActionModel.create(new EntityModel(objectAndAction.objectAdapter), objectAndAction.action);
             final FormExecutorDefault<ActionModel> formExecutor =
                     new FormExecutorDefault<>( new ActionFormExecutorStrategy(actionModel));
@@ -85,7 +85,7 @@ public class HomePage extends PageAbstract {
         ObjectAdapter objectAdapter;
         ObjectAction action;
     }
-    
+
     private ObjectAndAction lookupHomePageAction() {
         final List<ObjectAdapter> serviceAdapters = getPersistenceSession().getServices();
         for (final ObjectAdapter serviceAdapter : serviceAdapters) {
@@ -120,7 +120,7 @@ public class HomePage extends PageAbstract {
                         serviceAdapter,
                         InteractionInitiatedBy.USER,
                         Where.ANYWHERE
-        );
+                        );
         if (usability.isVetoed()) {
             return  null;
         }

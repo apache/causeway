@@ -59,7 +59,7 @@ public class ImmutableFacetForDomainObjectAnnotation extends ImmutableFacetAbstr
 
                         return setting == EditingObjectsConfiguration.FALSE
                                 ? (ImmutableFacet) new ImmutableFacetForDomainObjectAnnotationAsConfigured(disabledReason, holder)
-                                : null;
+                                        : null;
                     case DISABLED:
                         return new ImmutableFacetForDomainObjectAnnotation(disabledReason, holder);
                     case ENABLED:
@@ -68,9 +68,9 @@ public class ImmutableFacetForDomainObjectAnnotation extends ImmutableFacetAbstr
                     throw new IllegalStateException("domainObject.editing() not recognised, is " + domainObject.editing());
                 })
                 .orElseGet(() -> setting == EditingObjectsConfiguration.FALSE
-                        ? new ImmutableFacetFromConfiguration("Disabled", holder)
+                ? new ImmutableFacetFromConfiguration("Disabled", holder)
                         : null
-                );
+                        );
     }
 
     public ImmutableFacetForDomainObjectAnnotation(final String reason, final FacetHolder holder) {
@@ -82,7 +82,7 @@ public class ImmutableFacetForDomainObjectAnnotation extends ImmutableFacetAbstr
     public String disabledReason(final ObjectAdapter targetAdapter) {
         return !Strings.isNullOrEmpty(reason)
                 ? reason
-                : super.disabledReason(targetAdapter);
+                        : super.disabledReason(targetAdapter);
     }
 
     @Override

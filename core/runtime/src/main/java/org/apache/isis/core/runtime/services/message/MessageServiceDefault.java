@@ -30,7 +30,7 @@ import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + (Integer.MAX_VALUE - 1)  // ie before the Noop impl in metamodel
-)
+        )
 public class MessageServiceDefault implements MessageService {
 
     @Override

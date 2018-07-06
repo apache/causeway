@@ -125,29 +125,29 @@ public class Col extends PanelAbstract<EntityModel> implements HasDynamicallyVis
         // (rendering depends on whether also showing the icon/title)
         final List<ActionLayoutData> actionLayoutDatas = bs3Col.getActions();
         final List<ObjectAction> visibleActions =
-            FluentIterable.from(actionLayoutDatas)
-                    .filter(new Predicate<ActionLayoutData>() {
-                        @Override public boolean apply(final ActionLayoutData actionLayoutData) {
-                            return actionLayoutData.getMetadataError() == null;
-                        }
-                    })
-                    .transform(new Function<ActionLayoutData, ObjectAction>() {
-                        @Nullable @Override public ObjectAction apply(@Nullable final ActionLayoutData actionLayoutData) {
-                            return getModel().getTypeOfSpecification().getObjectAction(actionLayoutData.getId());
-                        }
-                    })
-                    .filter(Predicates.<ObjectAction>notNull())
-                    //
-                    // visibility needs to be determined at point of rendering, by ActionLink itself
-                    //
-                    //.filter(new Predicate<ObjectAction>() {
-                    //    @Override public boolean apply(@Nullable final ObjectAction objectAction) {
-                    //        final Consent visibility = objectAction
-                    //                .isVisible(getModel().getObject(), InteractionInitiatedBy.USER, Where.OBJECT_FORMS);
-                    //        return visibility.isAllowed();
-                    //    }
-                    //})
-                    .toList();
+                FluentIterable.from(actionLayoutDatas)
+                .filter(new Predicate<ActionLayoutData>() {
+                    @Override public boolean apply(final ActionLayoutData actionLayoutData) {
+                        return actionLayoutData.getMetadataError() == null;
+                    }
+                })
+                .transform(new Function<ActionLayoutData, ObjectAction>() {
+                    @Nullable @Override public ObjectAction apply(@Nullable final ActionLayoutData actionLayoutData) {
+                        return getModel().getTypeOfSpecification().getObjectAction(actionLayoutData.getId());
+                    }
+                })
+                .filter(Predicates.<ObjectAction>notNull())
+                //
+                // visibility needs to be determined at point of rendering, by ActionLink itself
+                //
+                //.filter(new Predicate<ObjectAction>() {
+                //    @Override public boolean apply(@Nullable final ObjectAction objectAction) {
+                //        final Consent visibility = objectAction
+                //                .isVisible(getModel().getObject(), InteractionInitiatedBy.USER, Where.OBJECT_FORMS);
+                //        return visibility.isAllowed();
+                //    }
+                //})
+                .toList();
         final List<LinkAndLabel> entityActionLinks =
                 LinkAndLabelUtil.asActionLinksForAdditionalLinksPanel(getModel(), visibleActions, null);
 
@@ -177,14 +177,14 @@ public class Col extends PanelAbstract<EntityModel> implements HasDynamicallyVis
         // tab groups
         final List<BS3TabGroup> tabGroupsWithNonEmptyTabs =
                 FluentIterable.from(bs3Col.getTabGroups())
-                        .filter(new Predicate<BS3TabGroup>() {
-                            @Override public boolean apply(@Nullable final BS3TabGroup bs3TabGroup) {
-                                final List<BS3Tab> bs3TabsWithRows = _NullSafe.stream(bs3TabGroup.getTabs())
-                                                .filter(BS3Tab.Predicates.notEmpty())
-                                                .collect(Collectors.toList());
-                                return !bs3TabsWithRows.isEmpty();
-                            }
-                        }).toList();
+                .filter(new Predicate<BS3TabGroup>() {
+                    @Override public boolean apply(@Nullable final BS3TabGroup bs3TabGroup) {
+                        final List<BS3Tab> bs3TabsWithRows = _NullSafe.stream(bs3TabGroup.getTabs())
+                                .filter(BS3Tab.Predicates.notEmpty())
+                                .collect(Collectors.toList());
+                        return !bs3TabsWithRows.isEmpty();
+                    }
+                }).toList();
         if(!tabGroupsWithNonEmptyTabs.isEmpty()) {
             final RepeatingViewWithDynamicallyVisibleContent tabGroupRv =
                     new RepeatingViewWithDynamicallyVisibleContent(ID_TAB_GROUPS);
@@ -254,19 +254,19 @@ public class Col extends PanelAbstract<EntityModel> implements HasDynamicallyVis
         // collections
         final List<CollectionLayoutData> collections =
                 FluentIterable.from(bs3Col.getCollections()).filter(
-                    new Predicate<CollectionLayoutData>() {
-                        @Override
-                        public boolean apply(final CollectionLayoutData collectionLayoutData) {
-                            return collectionLayoutData.getMetadataError() == null;
-                        }
-                    }).toList();
+                        new Predicate<CollectionLayoutData>() {
+                            @Override
+                            public boolean apply(final CollectionLayoutData collectionLayoutData) {
+                                return collectionLayoutData.getMetadataError() == null;
+                            }
+                        }).toList();
         if(!collections.isEmpty()) {
             final RepeatingViewWithDynamicallyVisibleContent collectionRv =
                     new RepeatingViewWithDynamicallyVisibleContent(ID_COLLECTIONS);
 
             final EntityModel entityModel = getModel();
             final CollectionLayoutData snapshot = entityModel.getCollectionLayoutData();
-            
+
             for (CollectionLayoutData collection : collections) {
 
                 final String id = collectionRv.newChildId();
@@ -283,10 +283,10 @@ public class Col extends PanelAbstract<EntityModel> implements HasDynamicallyVis
             }
             div.add(collectionRv);
             visible = visible || collectionRv.isVisible();
-            
+
             //XXX ISIS-1698 restore original state after trampling over
             entityModel.setCollectionLayoutData(snapshot);
-            
+
         } else {
             Components.permanentlyHide(div, ID_COLLECTIONS);
         }

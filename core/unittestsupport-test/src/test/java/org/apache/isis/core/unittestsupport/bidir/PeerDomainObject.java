@@ -62,7 +62,7 @@ public abstract class PeerDomainObject {
     // }}
 
 
-    
+
     // {{ Previous (property)
     private PeerDomainObject previous;
 
@@ -73,7 +73,7 @@ public abstract class PeerDomainObject {
     public void setPrevious(final PeerDomainObject previous) {
         this.previous = previous;
     }
-    
+
     public void modifyPrevious(final PeerDomainObject previous) {
         PeerDomainObject currentPrevious = getPrevious();
         // check for no-op

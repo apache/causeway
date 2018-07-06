@@ -53,7 +53,7 @@ public abstract class ScalarPanelTextFieldDatePickerAbstract<T extends Serializa
 
     /**
      * Expected to be in subclasses' constructor.
-     * 
+     *
      * <p>
      * Is not passed into constructor only to allow subclass to read from injected {@link #getSettings()}.
      */
@@ -66,6 +66,7 @@ public abstract class ScalarPanelTextFieldDatePickerAbstract<T extends Serializa
         return facet != null? facet.value(): 0;
     }
 
+    @Override
     protected TextField<T> createTextField(final String id) {
         return new TextFieldWithDateTimePicker<>(id, newTextFieldValueModel(), cls, converter);
     }
@@ -76,6 +77,7 @@ public abstract class ScalarPanelTextFieldDatePickerAbstract<T extends Serializa
         return "date";
     }
 
+    @Override
     protected Component createComponentForCompact() {
         Fragment compactFragment = getCompactFragment(CompactType.SPAN);
         final Label label = new Label(ID_SCALAR_IF_COMPACT, newTextFieldValueModel()) {
@@ -87,17 +89,18 @@ public abstract class ScalarPanelTextFieldDatePickerAbstract<T extends Serializa
         label.setEnabled(false);
 
         // adding an amount because seemed to truncate in tables in certain circumstances
-        final int lengthAdjust = 
-                getLengthAdjustHint() != null ? getLengthAdjustHint() : 1; 
-        final String dateTimePattern = converter.getDateTimePattern(getLocale());
-        final int length = dateTimePattern.length() + lengthAdjust; 
-        label.add(new AttributeModifier("size", Model.of("" + length)));
+        final int lengthAdjust =
+                getLengthAdjustHint() != null ? getLengthAdjustHint() : 1;
+                final String dateTimePattern = converter.getDateTimePattern(getLocale());
+                final int length = dateTimePattern.length() + lengthAdjust;
+                label.add(new AttributeModifier("size", Model.of("" + length)));
 
-        compactFragment.add(label);
+                compactFragment.add(label);
 
-        return label;
+                return label;
     }
 
+    @Override
     protected IModel<String> obtainInlinePromptModel() {
         return new Model<String>() {
             @Override public String getObject() {
@@ -105,9 +108,9 @@ public abstract class ScalarPanelTextFieldDatePickerAbstract<T extends Serializa
                 final T value = object != null ? (T) object.getObject() : null;
                 final String str =
                         value != null
-                                ? converter.convertToString(value, getLocaleProvider().getLocale())
+                        ? converter.convertToString(value, getLocaleProvider().getLocale())
                                 : null;
-                return str;
+                        return str;
             }
         };
     }
@@ -120,9 +123,10 @@ public abstract class ScalarPanelTextFieldDatePickerAbstract<T extends Serializa
     }
 
 
-    
+
     @com.google.inject.Inject
     WicketViewerSettings settings;
+    @Override
     protected WicketViewerSettings getSettings() {
         return settings;
     }

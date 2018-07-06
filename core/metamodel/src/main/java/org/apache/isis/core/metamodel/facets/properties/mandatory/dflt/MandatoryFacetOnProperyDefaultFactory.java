@@ -31,7 +31,7 @@ import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
 /**
  * Simply installs a {@link MandatoryFacetDefault} onto all properties and
  * parameters.
- * 
+ *
  * <p>
  * The idea is that this {@link FacetFactory} is included early on in the
  * {@link FacetProcessor}, but other {@link MandatoryFacet} implementations

@@ -46,18 +46,18 @@ public abstract class EventBusImplementationAbstract implements EventBusPlugin {
 
         final AbstractDomainEvent.Phase phase = domainEvent.getEventPhase();
         if(phase==null) {
-        	throw new RuntimeException(exception);
+            throw new RuntimeException(exception);
         }
         switch (phase) {
-            case HIDE:
-            case DISABLE:
-            case VALIDATE:
-                veto(exception, domainEvent, phase);
-                break;
-            case EXECUTING:
-            case EXECUTED:
-                abort(exception, phase);
-                throw new RuntimeException(exception);
+        case HIDE:
+        case DISABLE:
+        case VALIDATE:
+            veto(exception, domainEvent, phase);
+            break;
+        case EXECUTING:
+        case EXECUTED:
+            abort(exception, phase);
+            throw new RuntimeException(exception);
         }
     }
 

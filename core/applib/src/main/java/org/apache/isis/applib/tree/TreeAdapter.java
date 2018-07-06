@@ -23,10 +23,10 @@ import java.util.stream.Stream;
 
 public interface TreeAdapter<T> {
 
-	public Optional<T> parentOf(T value);
-	
-	public int childCountOf(T value);
-	
-	public Stream<T> childrenOf(T value);
-	
+    public Optional<T> parentOf(T value);
+
+    public int childCountOf(T value);
+
+    public Stream<T> childrenOf(T value);
+
 }

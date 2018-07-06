@@ -31,7 +31,7 @@ import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
  * Creates {@link Component}s of a specified {@link ComponentType}, optionally
  * {@link #appliesTo(ComponentType, IModel) dependent on} the provided
  * {@link IModel model}.
- * 
+ *
  * <p>
  * This interface is at the very heart of the Wicket Objects' model, being an
  * usage of the chain-of-responsibility design pattern. The available
@@ -49,8 +49,8 @@ public interface ComponentFactory extends Serializable {
     ComponentType getComponentType();
 
     public enum ApplicationAdvice {
-        APPLIES(true, false), 
-        APPLIES_EXCLUSIVELY(true, true), 
+        APPLIES(true, false),
+        APPLIES_EXCLUSIVELY(true, true),
         DOES_NOT_APPLY(false, false);
         private final boolean applies;
         private final boolean exclusively;
@@ -71,7 +71,7 @@ public interface ComponentFactory extends Serializable {
         public boolean exclusively() {
             return exclusively;
         }
-        
+
         public static final ApplicationAdvice appliesIf(final boolean b) {
             return b ? ApplicationAdvice.APPLIES : ApplicationAdvice.DOES_NOT_APPLY;
         }
@@ -86,7 +86,7 @@ public interface ComponentFactory extends Serializable {
     /**
      * Creates component, with id being derived from the
      * {@link #getComponentType() component type} for this factory.
-     * 
+     *
      * @param model
      * @return
      */

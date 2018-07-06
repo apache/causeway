@@ -81,5 +81,5 @@ public interface Ticket extends Serializable {
     /**
      * Returns a Html representation of this ticket.
      */
-	public String getMarkup();
+    public String getMarkup();
 }

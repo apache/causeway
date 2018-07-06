@@ -40,7 +40,7 @@ public class ImmutableFacetFromConfiguration extends ImmutableFacetAbstract {
     public String disabledReason(final ObjectAdapter targetAdapter) {
         return !Strings.isNullOrEmpty(reason)
                 ? reason
-                : super.disabledReason(targetAdapter);
+                        : super.disabledReason(targetAdapter);
     }
 
     @Override

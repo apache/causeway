@@ -49,7 +49,7 @@ public abstract class AuthenticationManagerStandardInstallerAbstract extends Ins
 
     /**
      * Hook method
-     * 
+     *
      * @return
      */
     protected abstract List<Authenticator> createAuthenticators();

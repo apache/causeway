@@ -36,7 +36,7 @@ import org.apache.isis.core.webapp.WebAppConstants;
  * Returns a valid {@link AuthenticationSession} through a number of mechanisms;
  * supports caching of the {@link AuthenticationSession} onto the
  * {@link HttpSession}.
- * 
+ *
  * <p>
  * The session is looked-up as follows:
  * <ul>

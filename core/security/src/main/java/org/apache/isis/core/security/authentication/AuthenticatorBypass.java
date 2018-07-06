@@ -25,7 +25,7 @@ import org.apache.isis.core.runtime.authentication.standard.AuthenticatorAbstrac
 
 /**
  * Implementation that bypasses authentication.
- * 
+ *
  * <p>
  * Intended for testing use only.
  */

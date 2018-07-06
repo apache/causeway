@@ -32,7 +32,7 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 
 class SpecificationCacheDefault {
-    
+
     private final Map<String, ObjectSpecification> specByClassName = Maps.newHashMap();
     private Map<ObjectSpecId, String> classNameBySpecId;
 
@@ -44,7 +44,7 @@ class SpecificationCacheDefault {
         specByClassName.put(className, spec);
         recache(spec);
     }
-    
+
 
     public void clear() {
         specByClassName.clear();
@@ -104,7 +104,7 @@ class SpecificationCacheDefault {
         }
         classNameBySpecId.put(spec.getSpecId(), spec.getCorrespondingClass().getName());
     }
-    
+
     boolean isInitialized() {
         return classNameBySpecId != null;
     }

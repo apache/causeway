@@ -82,7 +82,7 @@ public class PageClassListDefault implements PageClassList {
     protected Class<? extends Page> getStandaloneCollectionPageClass() {
         return StandaloneCollectionPage.class;
     }
-    
+
     /**
      * For subclassing if required.
      */
@@ -96,7 +96,7 @@ public class PageClassListDefault implements PageClassList {
     protected Class<? extends Page> getVoidReturnPageClass() {
         return VoidReturnPage.class;
     }
-    
+
     /**
      * For subclassing if required.
      */

@@ -45,7 +45,7 @@ public abstract class HiddenFacetAbstractImpl extends HiddenFacetAbstract {
         if(!where().includes(whereContext)) {
             return null;
         }
-        
+
         return "Always hidden";
     }
 

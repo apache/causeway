@@ -39,7 +39,7 @@ public abstract class TitleUiEvent<S> extends AbstractUiEvent<S> {
     public static class Default extends TitleUiEvent<Object> {
         private static final long serialVersionUID = 1L;
     }
-    
+
 
     // -- Noop class
 
@@ -50,7 +50,7 @@ public abstract class TitleUiEvent<S> extends AbstractUiEvent<S> {
     public static class Noop extends TitleUiEvent<Object> {
         private static final long serialVersionUID = 1L;
     }
-    
+
 
     // -- Doop class
 
@@ -61,7 +61,7 @@ public abstract class TitleUiEvent<S> extends AbstractUiEvent<S> {
     public static class Doop extends TitleUiEvent<Object> {
         private static final long serialVersionUID = 1L;
     }
-    
+
 
     // -- constructors
     /**
@@ -79,7 +79,7 @@ public abstract class TitleUiEvent<S> extends AbstractUiEvent<S> {
         super(source);
     }
 
-    
+
 
     // -- title
     private String title;
@@ -101,7 +101,7 @@ public abstract class TitleUiEvent<S> extends AbstractUiEvent<S> {
     public void setTitle(final String title) {
         this.title = title;
     }
-    
+
 
     // -- translatableTitle
     private TranslatableString translatableTitle;
@@ -124,6 +124,6 @@ public abstract class TitleUiEvent<S> extends AbstractUiEvent<S> {
     public void setTranslatableTitle(final TranslatableString translatableTitle) {
         this.translatableTitle = translatableTitle;
     }
-    
+
 
 }

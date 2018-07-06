@@ -32,7 +32,7 @@ import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 public class RecreatableObjectFacetForDomainObjectAnnotation extends
-        RecreatableObjectFacetDeclarativeInitializingAbstract {
+RecreatableObjectFacetDeclarativeInitializingAbstract {
 
     public static ViewModelFacet create(
             final List<DomainObject> domainObjects,

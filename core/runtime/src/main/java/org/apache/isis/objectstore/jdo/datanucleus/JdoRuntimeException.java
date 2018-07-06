@@ -30,5 +30,5 @@ public class JdoRuntimeException extends RuntimeException {
         super(arg0);
     }
 
-    
+
 }

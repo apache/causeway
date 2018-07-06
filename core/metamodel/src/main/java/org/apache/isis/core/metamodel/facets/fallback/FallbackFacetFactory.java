@@ -38,7 +38,7 @@ import org.apache.isis.core.metamodel.facets.TypedHolder;
 /**
  * Central point for providing some kind of default for any {@link Facet}s
  * required by the Apache Isis framework itself.
- * 
+ *
  */
 public class FallbackFacetFactory extends FacetFactoryAbstract {
 

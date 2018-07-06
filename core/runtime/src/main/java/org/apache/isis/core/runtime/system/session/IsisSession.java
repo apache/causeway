@@ -32,10 +32,10 @@ import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 /**
  * Analogous to (and in essence a wrapper for) a JDO <code>PersistenceManager</code>;
  * holds the current set of components for a specific execution context (such as on a thread).
- * 
+ *
  * <p>
  * The <code>IsisContext</code> class is responsible for locating the current execution context.
- * 
+ *
  * @see IsisSessionFactory
  */
 public class IsisSession implements SessionScopedComponent {
@@ -54,7 +54,7 @@ public class IsisSession implements SessionScopedComponent {
         this.authenticationSession = authenticationSession;
         this.persistenceSession = persistenceSession;
     }
-    
+
 
     // -- open, close
     void open() {
@@ -70,7 +70,7 @@ public class IsisSession implements SessionScopedComponent {
         }
     }
 
-    
+
 
 
     // -- AuthenticationSession
@@ -81,7 +81,7 @@ public class IsisSession implements SessionScopedComponent {
     public AuthenticationSession getAuthenticationSession() {
         return authenticationSession;
     }
-    
+
 
     // -- Persistence Session
     /**
@@ -91,7 +91,7 @@ public class IsisSession implements SessionScopedComponent {
         return persistenceSession;
     }
 
-    
+
 
     // -- transaction
 
@@ -103,7 +103,7 @@ public class IsisSession implements SessionScopedComponent {
         return getTransactionManager().getCurrentTransaction();
     }
 
-    
+
 
     // -- toString
     @Override
@@ -114,13 +114,13 @@ public class IsisSession implements SessionScopedComponent {
         asString.append("transaction", getCurrentTransaction());
         return asString.toString();
     }
-    
+
 
     // -- Dependencies (from constructor)
 
     private IsisTransactionManager getTransactionManager() {
         return getPersistenceSession().getTransactionManager();
     }
-    
+
 
 }

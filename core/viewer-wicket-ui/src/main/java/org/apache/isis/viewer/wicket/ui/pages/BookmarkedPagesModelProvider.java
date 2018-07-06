@@ -24,7 +24,7 @@ import org.apache.isis.viewer.wicket.model.models.BookmarkedPagesModel;
 
 
 public interface BookmarkedPagesModelProvider  {
-    
+
     BookmarkedPagesModel getBookmarkedPagesModel();
 
 }

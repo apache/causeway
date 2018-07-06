@@ -21,9 +21,9 @@ package org.apache.isis.viewer.restfulobjects.applib;
 import org.apache.isis.viewer.restfulobjects.applib.client.ClientRequestConfigurer;
 
 public enum RestfulHttpMethod {
-    GET(javax.ws.rs.HttpMethod.GET, ArgStrategy.QUERY_STRING), 
-    PUT(javax.ws.rs.HttpMethod.PUT, ArgStrategy.BODY), 
-    DELETE(javax.ws.rs.HttpMethod.DELETE, ArgStrategy.QUERY_STRING), 
+    GET(javax.ws.rs.HttpMethod.GET, ArgStrategy.QUERY_STRING),
+    PUT(javax.ws.rs.HttpMethod.PUT, ArgStrategy.BODY),
+    DELETE(javax.ws.rs.HttpMethod.DELETE, ArgStrategy.QUERY_STRING),
     POST(javax.ws.rs.HttpMethod.POST, ArgStrategy.BODY);
 
     private enum ArgStrategy {
@@ -71,7 +71,7 @@ public enum RestfulHttpMethod {
      * well as the {@link ClientRequest}, but that's because the
      * {@link ClientRequest} does not allow us to setup raw query strings (only
      * query name/arg pairs)
-     * 
+     *
      * @param clientRequestConfigurer
      * @param requestArgs
      */

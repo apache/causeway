@@ -34,7 +34,7 @@ public class ChildDomainObject implements Comparable<ChildDomainObject> {
     }
     // }}
 
-    
+
     // {{ Parent (property)
     private ParentDomainObject parent;
 

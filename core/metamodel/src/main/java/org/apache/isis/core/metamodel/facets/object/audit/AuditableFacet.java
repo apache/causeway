@@ -30,9 +30,9 @@ public interface AuditableFacet extends Facet {
     /**
      * Indicates that the object to which this {@link Facet} is
      * attached should <i>not</i> be treated as being audited.
-     * 
+     *
      * <p>
-     * Exists to allow implementations that configure auditing for all objects, but which 
+     * Exists to allow implementations that configure auditing for all objects, but which
      * can then be disabled for selected objects (eg using {@link Audited#disabled()} ).
      */
     public boolean isDisabled();

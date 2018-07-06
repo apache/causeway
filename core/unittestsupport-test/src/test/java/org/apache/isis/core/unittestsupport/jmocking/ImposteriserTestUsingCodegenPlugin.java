@@ -49,8 +49,8 @@ public class ImposteriserTestUsingCodegenPlugin {
 
     private Invokable invokable;
     @SuppressWarnings("unused")
-	private Invocation invocation;
-    
+    private Invocation invocation;
+
     @Before
     public void setUp() throws Exception {
         invokable = new Invokable() {
@@ -70,7 +70,7 @@ public class ImposteriserTestUsingCodegenPlugin {
     }
 
     // //////////////////////////////////////
-    
+
     @Test
     public void canLoadCodegenPlugin() throws MalformedURLException, ClassNotFoundException, InstantiationException, IllegalAccessException {
         Assert.assertNotNull(ProxyFactoryPlugin.get());
@@ -243,12 +243,12 @@ public class ImposteriserTestUsingCodegenPlugin {
 
         URL jarURL = jarFile.toURI().toURL();
         try(URLClassLoader loader = new URLClassLoader(new URL[]{jarURL})){
-			Class<?> typeInSignedJar = loader.loadClass("TypeInSignedJar");
-			
-			assertTrue(imposteriser.canImposterise(typeInSignedJar));
-			Object o = imposteriser.imposterise(new VoidAction(), typeInSignedJar);
-			
-			assertTrue(typeInSignedJar.isInstance(o));
+            Class<?> typeInSignedJar = loader.loadClass("TypeInSignedJar");
+
+            assertTrue(imposteriser.canImposterise(typeInSignedJar));
+            Object o = imposteriser.imposterise(new VoidAction(), typeInSignedJar);
+
+            assertTrue(typeInSignedJar.isInstance(o));
         }
     }
 

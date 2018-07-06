@@ -23,7 +23,7 @@ import org.apache.isis.applib.Identifier;
 
 /**
  * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents an access (reading) of an object's title.
- * 
+ *
  * <p>
  * The {@link #getReason()} will always be <tt>null</tt>; access is always
  * allowed.

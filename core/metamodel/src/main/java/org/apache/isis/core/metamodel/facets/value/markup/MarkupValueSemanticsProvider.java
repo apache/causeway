@@ -30,15 +30,15 @@ import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public class MarkupValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<Markup> implements MarkupValueFacet {
 
-	private static final int TYPICAL_LENGTH = 0;
+    private static final int TYPICAL_LENGTH = 0;
 
-	private static Class<? extends Facet> type() {
-		return MarkupValueFacet.class;
-	}
+    private static Class<? extends Facet> type() {
+        return MarkupValueFacet.class;
+    }
 
-	private static final Markup DEFAULT_VALUE = null;
-	
-	 /**
+    private static final Markup DEFAULT_VALUE = null;
+
+    /**
      * Required because implementation of {@link Parser} and
      * {@link EncoderDecoder}.
      */
@@ -46,30 +46,30 @@ public class MarkupValueSemanticsProvider extends ValueSemanticsProviderAndFacet
         this(null, null);
     }
 
-	public MarkupValueSemanticsProvider(final FacetHolder holder, final ServicesInjector context) {
+    public MarkupValueSemanticsProvider(final FacetHolder holder, final ServicesInjector context) {
         super(type(), holder, Markup.class, TYPICAL_LENGTH, null, Immutability.IMMUTABLE, EqualByContent.NOT_HONOURED, DEFAULT_VALUE, context);
     }
-	
+
     // //////////////////////////////////////////////////////////////////
     // Parser
     // //////////////////////////////////////////////////////////////////
 
     @Override
     protected Markup doParse(final Object context, final String html) {
-    	return doRestore(html);        
+        return doRestore(html);
     }
 
-	@Override
-	public String titleString(final Object object) {
-		return object != null? ((Markup)object).asString(): "[null]";
-	}
+    @Override
+    public String titleString(final Object object) {
+        return object != null? ((Markup)object).asString(): "[null]";
+    }
 
-	@Override
-	public String titleStringWithMask(final Object value, final String usingMask) {
-		return titleString(value);
-	}
+    @Override
+    public String titleStringWithMask(final Object value, final String usingMask) {
+        return titleString(value);
+    }
 
-	// //////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////////
     // MarkupValueFacet
     // //////////////////////////////////////////////////////////////////
 
@@ -88,26 +88,26 @@ public class MarkupValueSemanticsProvider extends ValueSemanticsProviderAndFacet
         return getAdapterManager().adapterFor(markup);
     }
 
-	// //////////////////////////////////////////////////////////////////
-	// EncoderDecoder
-	// //////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////////
+    // EncoderDecoder
+    // //////////////////////////////////////////////////////////////////
 
-	@Override
-	protected String doEncode(final Object object) {
-		Markup markup = (Markup)object;
-		return markup.asString();
-	}
+    @Override
+    protected String doEncode(final Object object) {
+        Markup markup = (Markup)object;
+        return markup.asString();
+    }
 
-	@Override
-	protected Markup doRestore(final String html) {
-		return new Markup(html);
-	}
+    @Override
+    protected Markup doRestore(final String html) {
+        return new Markup(html);
+    }
 
-	// /////// toString ///////
+    // /////// toString ///////
 
-	@Override
-	public String toString() {
-		return "MarkupValueSemanticsProvider";
-	}
+    @Override
+    public String toString() {
+        return "MarkupValueSemanticsProvider";
+    }
 
 }

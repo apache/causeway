@@ -56,20 +56,20 @@ public class Dto_downloadXsd {
         }
     }
 
-    public static class ActionDomainEvent 
+    public static class ActionDomainEvent
     extends org.apache.isis.applib.IsisApplibModule.ActionDomainEvent<Dto_downloadXsd> {
-    	private static final long serialVersionUID = 1L; 
+        private static final long serialVersionUID = 1L;
     }
 
     @Action(
             domainEvent = ActionDomainEvent.class,
             semantics = SemanticsOf.SAFE,
             restrictTo = RestrictTo.PROTOTYPING
-    )
+            )
     @ActionLayout(
             contributed = Contributed.AS_ACTION,
             cssClassFa = "fa-download"
-    )
+            )
     @MemberOrder(sequence = "500.2")
     public Object act(
             @ParameterLayout(named = "File name")

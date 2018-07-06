@@ -85,17 +85,17 @@ public class IsisMoneyMapping extends SingleFieldMultiMapping {
 
         final Money m = ((Money) value);
         switch (index) {
-            case 0:
-                return m.longValue();
-            case 1:
-                return m.getCurrency();
+        case 0:
+            return m.longValue();
+        case 1:
+            return m.getCurrency();
         }
         throw new IndexOutOfBoundsException("Wrong index: " + index);
     }
 
     @Override
     public void setObject(final ExecutionContext ec, final PreparedStatement preparedStmt, final int[] exprIndex,
-                          final Object value) {
+            final Object value) {
 
         if (value instanceof Money) {
             final Money m = ((Money) value);

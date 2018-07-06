@@ -124,9 +124,9 @@ public class DomainEventHelper {
     @SuppressWarnings("unchecked")
     static <S> ActionDomainEvent<S> newActionDomainEvent(
             final Class<? extends ActionDomainEvent<S>> type,
-            final Identifier identifier,
-            final S source,
-            final Object... arguments) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+                    final Identifier identifier,
+                    final S source,
+                    final Object... arguments) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 
         final Constructor<?>[] constructors = type.getConstructors();
 
@@ -169,9 +169,9 @@ public class DomainEventHelper {
     private static List<Object> asList(final Object[] arguments) {
         return arguments != null
                 ? Arrays.asList(arguments)
-                : Collections.emptyList();
+                        : Collections.emptyList();
     }
-    
+
 
     // -- postEventForProperty, newPropertyInteraction
     public PropertyDomainEvent<?, ?> postEventForProperty(
@@ -215,10 +215,10 @@ public class DomainEventHelper {
     @SuppressWarnings("unchecked")
     static <S,T> PropertyDomainEvent<S,T> newPropertyDomainEvent(
             final Class<? extends PropertyDomainEvent<S, T>> type,
-            final Identifier identifier,
-            final S source,
-            final T oldValue,
-            final T newValue) throws NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException  {
+                    final Identifier identifier,
+                    final S source,
+                    final T oldValue,
+                    final T newValue) throws NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException  {
 
         final Constructor<?>[] constructors = type.getConstructors();
 
@@ -260,7 +260,7 @@ public class DomainEventHelper {
 
         throw new NoSuchMethodException(type.getName()+".<init>(? super " + source.getClass().getName() + ", " + Identifier.class.getName() + ", java.lang.Object, java.lang.Object)");
     }
-    
+
 
     // -- postEventForCollection, newCollectionDomainEvent
 
@@ -296,13 +296,13 @@ public class DomainEventHelper {
     @SuppressWarnings("unchecked")
     <S, T> CollectionDomainEvent<S, T> newCollectionDomainEvent(
             final Class<? extends CollectionDomainEvent<S, T>> type,
-            final AbstractDomainEvent.Phase phase,
-            final Identifier identifier,
-            final S source,
-            final CollectionDomainEvent.Of of,
-            final T value)
-            throws NoSuchMethodException, SecurityException, InstantiationException,
-            IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+                    final AbstractDomainEvent.Phase phase,
+                    final Identifier identifier,
+                    final S source,
+                    final CollectionDomainEvent.Of of,
+                    final T value)
+                            throws NoSuchMethodException, SecurityException, InstantiationException,
+                            IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 
         final Constructor<?>[] constructors = type.getConstructors();
 
@@ -390,7 +390,7 @@ public class DomainEventHelper {
         throw new NoSuchMethodException(type.getName()+".<init>(? super " + source.getClass().getName() + ", " + Identifier.class.getName() + ", java.lang.Object)");
     }
 
-    
+
 
 
     // -- eventBusService
@@ -401,6 +401,6 @@ public class DomainEventHelper {
         return this.servicesInjector.lookupService(EventBusService.class);
     }
 
-    
+
 
 }

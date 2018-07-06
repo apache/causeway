@@ -23,10 +23,10 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 public class SimpleClipboardModalWindowPanel extends PanelAbstract<Model<String>> {
 
     private static final long serialVersionUID = 1L;
-    
+
     public SimpleClipboardModalWindowPanel(String id) {
         super(id);
     }
-    
-    
+
+
 }

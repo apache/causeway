@@ -38,16 +38,17 @@ public class PersistenceQueryFindAllInstancesProcessor extends PersistenceQueryP
         super(persistenceSession);
     }
 
+    @Override
     public List<ObjectAdapter> process(final PersistenceQueryFindAllInstances persistenceQuery) {
 
         final ObjectSpecification specification = persistenceQuery.getSpecification();
-        
+
         Class<?> cls = specification.getCorrespondingClass();
         final Query<?> jdoQuery = persistenceSession.newJdoQuery(cls);
-        
+
         // http://www.datanucleus.org/servlet/jira/browse/NUCCORE-1103
         jdoQuery.addExtension("datanucleus.multivaluedFetch", "none");
-        
+
         if (LOG.isDebugEnabled()) {
             LOG.debug("allInstances(): class={}", specification.getFullIdentifier());
         }

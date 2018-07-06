@@ -38,7 +38,7 @@ import org.apache.isis.commons.internal.collections._Lists;
  */
 @XmlRootElement(
         name = "fieldSet"
-)
+        )
 @XmlType(
         name = "fieldSet"
         , propOrder = {
@@ -47,11 +47,11 @@ import org.apache.isis.commons.internal.collections._Lists;
                 , "properties"
                 , "metadataError"
         }
-)
+        )
 public class FieldSet
-        implements MemberRegion<FieldSetOwner>,
-                   ActionLayoutDataOwner,
-                   Serializable {
+implements MemberRegion<FieldSetOwner>,
+ActionLayoutDataOwner,
+Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -138,11 +138,13 @@ public class FieldSet
     private List<ActionLayoutData> actions = _Lists.newArrayList();
 
     // no wrapper
+    @Override
     @XmlElement(name = "action", required = false)
     public List<ActionLayoutData> getActions() {
         return actions;
     }
 
+    @Override
     public void setActions(List<ActionLayoutData> actionLayoutDatas) {
         this.actions = actionLayoutDatas;
     }
@@ -170,6 +172,7 @@ public class FieldSet
      *     Set programmatically by framework after reading in from XML.
      * </p>
      */
+    @Override
     @XmlTransient
     public FieldSetOwner getOwner() {
         return owner;

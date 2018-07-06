@@ -24,9 +24,9 @@ import org.wicketstuff.select2.Response;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 
 public class EmptyChoiceProvider extends ChoiceProvider<ObjectAdapterMemento> {
-	private static final long serialVersionUID = 1L;
-	
-	public static final EmptyChoiceProvider INSTANCE = new EmptyChoiceProvider();
+    private static final long serialVersionUID = 1L;
+
+    public static final EmptyChoiceProvider INSTANCE = new EmptyChoiceProvider();
 
     @Override
     public String getDisplayValue(ObjectAdapterMemento object) {

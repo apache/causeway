@@ -29,7 +29,7 @@ import org.apache.isis.core.runtime.authentication.standard.Authenticator;
 
 /**
  * Run Isis with open access.
- * 
+ *
  * To install, use
  * <pre>
  * isis.authentication=none

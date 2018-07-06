@@ -53,6 +53,7 @@ public abstract class ScalarPanelTextFieldNumeric<T extends Serializable> extend
         this.converter = converter;
     }
 
+    @Override
     protected Component createComponentForCompact() {
         Fragment compactFragment = getCompactFragment(CompactType.SPAN);
         final Label label = new Label(ID_SCALAR_IF_COMPACT, newTextFieldValueModel()) {
@@ -68,6 +69,7 @@ public abstract class ScalarPanelTextFieldNumeric<T extends Serializable> extend
         return label;
     }
 
+    @Override
     protected IModel<String> obtainInlinePromptModel() {
         return new Model<String>(){
             @Override public String getObject() {
@@ -75,9 +77,9 @@ public abstract class ScalarPanelTextFieldNumeric<T extends Serializable> extend
                 final T value = object != null ? (T) object.getObject() : null;
                 final String str =
                         value != null
-                                ? converter.convertToString(value, getLocaleProvider().getLocale())
+                        ? converter.convertToString(value, getLocaleProvider().getLocale())
                                 : null;
-                return str;
+                        return str;
             }
         };
 

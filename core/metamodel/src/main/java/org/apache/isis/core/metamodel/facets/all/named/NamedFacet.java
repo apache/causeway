@@ -23,7 +23,7 @@ import org.apache.isis.core.metamodel.facets.MultipleValueFacet;
 
 /**
  * The name of a class, a property, collection, an action or a parameter.
- * 
+ *
  * <p>
  * In the standard Apache Isis Programming Model, corresponds to annotating the
  * member with <tt>@Named</tt>.

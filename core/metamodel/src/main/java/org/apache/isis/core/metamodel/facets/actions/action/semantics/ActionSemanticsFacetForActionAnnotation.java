@@ -38,7 +38,7 @@ public class ActionSemanticsFacetForActionAnnotation extends ActionSemanticsFace
                 .filter(semanticsOf -> semanticsOf != SemanticsOf.NOT_SPECIFIED)
                 .findFirst()
                 .map(semanticsOf ->
-                        (ActionSemanticsFacet)new ActionSemanticsFacetForActionAnnotation(semanticsOf, holder))
+                (ActionSemanticsFacet)new ActionSemanticsFacetForActionAnnotation(semanticsOf, holder))
                 .orElse(new ActionSemanticsFacetFallbackToNonIdempotent(holder));
     }
 

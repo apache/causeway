@@ -67,8 +67,8 @@ public final class ChangesDtoUtils {
             final Class<?> contextClass,
             final String resourceName,
             final Charset charset) throws IOException {
-    	
-    	final String s = _Resource.loadAsString(contextClass, resourceName, charset);
+
+        final String s = _Resource.loadAsString(contextClass, resourceName, charset);
         return fromXml(new StringReader(s));
     }
 
@@ -87,7 +87,7 @@ public final class ChangesDtoUtils {
             throw new RuntimeException(e);
         }
     }
-    
+
 
 
 
@@ -96,6 +96,6 @@ public final class ChangesDtoUtils {
         out.println(toXml(changesDto));
     }
 
-    
+
 
 }

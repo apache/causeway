@@ -24,7 +24,7 @@ import org.apache.isis.core.metamodel.facets.SingleClassValueFacetAbstract;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 public abstract class XmlJavaTypeAdapterFacetAbstract
-        extends SingleClassValueFacetAbstract implements XmlJavaTypeAdapterFacet {
+extends SingleClassValueFacetAbstract implements XmlJavaTypeAdapterFacet {
 
     public static Class<XmlJavaTypeAdapterFacet> type() {
         return XmlJavaTypeAdapterFacet.class;

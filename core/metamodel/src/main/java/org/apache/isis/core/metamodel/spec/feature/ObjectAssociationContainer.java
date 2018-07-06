@@ -30,7 +30,7 @@ public interface ObjectAssociationContainer {
     /**
      * Get the field object representing the field with the specified field
      * identifier.
-     * 
+     *
      * Throw a {@link ObjectSpecificationException} if no such association
      * exists.
      */
@@ -51,11 +51,11 @@ public interface ObjectAssociationContainer {
 
     /**
      * Return all {@link ObjectAssociation}s matching the supplied filter.
-     * 
+     *
      * To get the statically visible fields (where any invisible and
      * unauthorised fields have been removed) use
      * <tt>ObjectAssociationFilters#staticallyVisible(...)</tt>
-     * 
+     *
      * @see Predicates
      */
     List<ObjectAssociation> getAssociations(Contributed contributed, Predicate<ObjectAssociation> predicate);
@@ -69,7 +69,7 @@ public interface ObjectAssociationContainer {
     /**
      * All {@link ObjectAssociation association}s that represents
      * {@link OneToManyAssociation collections}.
-     * 
+     *
      * @return
      */
     List<OneToManyAssociation> getCollections(Contributed contributed);

@@ -46,7 +46,7 @@ public @interface Mixin {
      *     This makes it easier to avoid silly spelling mistakes in supporting methods, with the name of the member
      *     in essence specified in only just one place, namely the mixin class' name.
      * </p>
-     * 
+     *
      * <p>
      *     If not specified, then the default value {@link #DEFAULT_METHOD_NAME} is used instead.
      * </p>

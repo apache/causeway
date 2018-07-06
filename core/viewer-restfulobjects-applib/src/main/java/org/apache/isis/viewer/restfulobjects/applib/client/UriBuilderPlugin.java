@@ -6,20 +6,20 @@ import org.apache.isis.commons.internal.context._Plugin;
 
 public interface UriBuilderPlugin {
 
-	// -- INTERFACE
-	
-	public UriBuilder uriTemplate(String uriTemplate);
-	
-	// -- LOOKUP
-	
-	public static UriBuilderPlugin get() {
-		return _Plugin.getOrElse(UriBuilderPlugin.class, 
-				ambiguousPlugins->{
-					throw _Plugin.ambiguityNonRecoverable(UriBuilderPlugin.class, ambiguousPlugins); 
-				}, 
-				()->{
-					throw _Plugin.absenceNonRecoverable(UriBuilderPlugin.class);
-				});
-	}
-	
+    // -- INTERFACE
+
+    public UriBuilder uriTemplate(String uriTemplate);
+
+    // -- LOOKUP
+
+    public static UriBuilderPlugin get() {
+        return _Plugin.getOrElse(UriBuilderPlugin.class,
+                ambiguousPlugins->{
+                    throw _Plugin.ambiguityNonRecoverable(UriBuilderPlugin.class, ambiguousPlugins);
+                },
+                ()->{
+                    throw _Plugin.absenceNonRecoverable(UriBuilderPlugin.class);
+                });
+    }
+
 }

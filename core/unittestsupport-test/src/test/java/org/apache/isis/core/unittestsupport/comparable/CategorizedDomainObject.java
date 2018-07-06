@@ -20,7 +20,7 @@ import com.google.common.collect.Ordering;
 
 
 public class CategorizedDomainObject implements Comparable<CategorizedDomainObject> {
-    
+
     private Integer category;
 
     public Integer getCategory() {
@@ -31,8 +31,8 @@ public class CategorizedDomainObject implements Comparable<CategorizedDomainObje
         this.category = category;
     }
 
-    
-    
+
+
     private Integer subcategory;
 
     public Integer getSubcategory() {
@@ -43,8 +43,8 @@ public class CategorizedDomainObject implements Comparable<CategorizedDomainObje
         this.subcategory = subcategory;
     }
 
-    
-    
+
+
     @Override
     public int compareTo(CategorizedDomainObject other) {
         return ORDER_BY_CATEGORY.compound(ORDER_BY_SUBCATEGORY).compare(this, other);
@@ -56,13 +56,13 @@ public class CategorizedDomainObject implements Comparable<CategorizedDomainObje
             return Ordering.natural().nullsFirst().compare(left.getCategory(), right.getCategory());
         }
     };
-    
+
     private static Ordering<CategorizedDomainObject> ORDER_BY_SUBCATEGORY = new Ordering<CategorizedDomainObject>() {
         @Override
         public int compare(CategorizedDomainObject left, CategorizedDomainObject right) {
             return Ordering.natural().nullsFirst().compare(left.getSubcategory(), right.getSubcategory());
         }
-        
+
     };
 
 
