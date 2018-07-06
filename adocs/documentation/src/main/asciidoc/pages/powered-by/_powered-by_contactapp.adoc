@@ -12,7 +12,7 @@ This app originated out of our users' need to quickly look up different employee
 At the same time the app managers would need to be able to easily edit or add to the existing contact information.
 We decided to create different Contact Groups consisting of multiple Contacts, each with their role within the group.
 
-image:http://i.imgur.com/j0x7bw8.png[width="97%"]
+image:https://github.com/incodehq/contactapp/blob/master/docs/contactapp-backend-benoit-foure.png[width="97%"]
 
 == Apache Isis with Ionic
 
@@ -22,15 +22,7 @@ since this allowed us to rapidly develop the required backend application and su
 mobile application could connect. We found that it worked together quite well, and with part of the team
 behind http://github.com/estatio/estatio[Estatio] we were able to create an app that is clear to use and manage.
 
-image:http://i.imgur.com/ETKG6Xe.png[width="32%"]
-
-and:
-
-image:http://i.imgur.com/zMX6OYq.png[width="32%"]
-
-and:
-
-image:http://i.imgur.com/qhXhKiu.png[width="32%"]
+image:https://github.com/incodehq/contactapp/blob/master/docs/contactapp-frontend.png[width="97%"]
 
 As our first Apache Isis app making use of mobile technologies it opens the doors for more to follow.
 Ionic has proven easy to learn and build apps with, and has a helpful community.  Meanwhile we've used
