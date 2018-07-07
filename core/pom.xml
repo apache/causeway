@@ -2295,7 +2295,6 @@ ${license.additional-notes}
                 </plugins>
             </build>
         </profile>
-        <profile>
 
         <profile>
 
