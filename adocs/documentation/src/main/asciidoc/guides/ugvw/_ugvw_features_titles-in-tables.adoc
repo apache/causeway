@@ -50,7 +50,7 @@ public class Order {
 }
 ----
 
-In this case, if we view a `Customer` with its collection of `Order`s, then in that parented collection's table the customer's property will be automatically excluded from the title of the `Order` (but it would show the product).  Conversely, if a `Product` is viewed then its collection of `Order`s would suppress product (but would show the customer).
+In this case, if we view a `Customer` with its collection of ``Order``s, then in that parented collection's table the customer's property will be automatically excluded from the title of the `Order` (but it would show the product).  Conversely, if a `Product` is viewed then its collection of ``Order``s would suppress product (but would show the customer).
 
 [TIP]
 ====

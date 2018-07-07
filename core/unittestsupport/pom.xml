@@ -94,7 +94,6 @@
             <!-- provided by plugins -->
             <scope>provided</scope>
         </dependency>
-
     </dependencies>
 
 </project>

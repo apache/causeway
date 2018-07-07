@@ -2102,7 +2102,6 @@ ${license.additional-notes}
             </dependency>
 
 
-
             <!-- JAX-RS API -->
             <dependency>
                 <groupId>org.jboss.spec.javax.ws.rs</groupId>
@@ -2257,7 +2256,6 @@ ${license.additional-notes}
             </build>
         </profile>
 
-
         <profile>
             <id>deploy-local</id>
             <activation>
@@ -2298,17 +2296,38 @@ ${license.additional-notes}
             </build>
         </profile>
         <profile>
-            <!-- 
-	    this profile allows builds to be deployed to an inhouse nexus repo. 
-            export NEXUS_USERNAME=... 
-	    export NEXUS_PASSWORD=... 
-	    export NEXUS_REPO_URL=... 
-            export REVISION=... 
-	    mvn clean deploy \ 
-	       -Drevision=$REVISION \
-	       -Dnexus-deploy \ 
-	       -s .m2/settings.xml \ 
-	       -Dnexus-deploy.repositoryUrl=$NEXUS_REPO_URL
+
+        <profile>
+
+            <!--
+            this profile allows builds to be deployed to an inhouse nexus repo.
+
+            export NEXUS_USERNAME=...
+            export NEXUS_PASSWORD=...
+            export NEXUS_REPO_URL=...
+
+            export REVISION=...
+
+            mvn clean deploy \
+                 -Drevision=$REVISION \
+                 -Dnexus-deploy \
+                 -s .m2/settings.xml \
+                 -Dnexus-deploy.repositoryUrl=$NEXUS_REPO_URL
+
+            with .m2/settings.xml as:
+
+            <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+                      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                      xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+              <servers>
+                <server>
+                  <id>nexus-deploy.serverId</id>
+                  <username>${env.NEXUS_USERNAME}</username>
+                  <password>${env.NEXUS_PASSWORD}</password>
+                </server>
+              </servers>
+            </settings>
+
             -->
             <id>nexus-deploy</id>
                 <activation>
@@ -2340,6 +2359,7 @@ ${license.additional-notes}
                 </repository>
             </distributionManagement>
         </profile>
+		
         <profile>
             <id>owasp</id>
             <activation>

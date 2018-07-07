@@ -99,5 +99,6 @@
             <artifactId>isis-core-unittestsupport</artifactId>
             <scope>test</scope>
         </dependency>
+
     </dependencies>
 </project>

@@ -27,7 +27,7 @@
     </parent>
 
     <artifactId>simpleapp-module-simple</artifactId>
-    <name>SimpleApp Simple Module</name>
+    <name>Apache Isis App - SimpleApp Simple Module</name>
 
     <properties>
         <isis-maven-plugin.validate.appManifest>

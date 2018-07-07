@@ -27,7 +27,7 @@
     </parent>
 
     <artifactId>simpleapp-webapp</artifactId>
-    <name>SimpleApp Webapp</name>
+    <name>Apache Isis App - SimpleApp Webapp</name>
 
     <description>This assemblies and runs both the Wicket viewer and the Restfulobjects viewer in a single webapp configured to run using the datanucleus object store.</description>
 
