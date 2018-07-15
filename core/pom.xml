@@ -495,7 +495,7 @@
                             <exclude>**/*.svg</exclude>
                             <exclude>**/*.json</exclude>
                             <exclude>**/*.min.js</exclude>
-                            
+
                             <exclude>**/MANIFEST.MF</exclude>
                             <exclude>**/*.ucd</exclude>
                             <exclude>**/*.ucls</exclude>
@@ -503,7 +503,7 @@
                             <exclude>**/xml/objects/**</exclude>
                             <exclude>**/test.data</exclude>
                             <exclude>**/fixture-data/**</exclude>
-                            
+
                             <exclude>**/application.js</exclude>
 
                             <exclude>**/jquery.zclip.js</exclude>
@@ -513,9 +513,9 @@
                             <exclude>**/bootstrap-datetimepicker.min.css</exclude>
                             <exclude>**/bootstrap-datetimepicker.css</exclude>
                             <exclude>**/select2-bootstrap.css</exclude>
-                            
+
                             <exclude>**/wicket-xhtml1.4-strict.dtd</exclude>
-                            
+
                             <exclude>**/src/main/appended-resources/supplemental-models.xml</exclude>
                             <exclude>**/datanucleus.log</exclude>
                             <exclude>**/gradle/wrapper/gradle-wrapper.properties</exclude>
@@ -525,6 +525,10 @@
                             <exclude>**/translations**.po</exclude>
                             <exclude>**/integtests/translations.pot</exclude>
                             <exclude>**/intellij/launch/*.xml</exclude>
+
+                            <exclude>**/swagger-ui/**</exclude>
+
+                            <exclude>**/META-INF/services/**</exclude>
                         </excludes>
                         <licenses>
                           <license implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
