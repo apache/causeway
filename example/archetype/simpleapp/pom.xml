@@ -21,7 +21,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.apache.isis.archetype</groupId>
     <artifactId>simpleapp-archetype</artifactId>
-    <version>1.16.3-SNAPSHOT</version>
+    <version>${revision}</version>
     <packaging>maven-archetype</packaging>
     <name>simpleapp-archetype</name>
     <build>
@@ -73,6 +73,7 @@
         <relativePath>../../../core/pom.xml</relativePath>
     </parent>
     <properties>
+        <revision>2.0.0-M1-SNAPSHOT</revision>
         <archetype.test.skip>true</archetype.test.skip>
     </properties>
 </project>
