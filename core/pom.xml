@@ -2177,6 +2177,23 @@ ${license.additional-notes}
             <artifactId>jmock-junit4</artifactId>
             <scope>test</scope>
         </dependency>
+	<dependency>
+  	    <groupId>org.powermock</groupId>
+  	    <artifactId>powermock-module-junit4</artifactId>
+  	    <version>1.6.6</version>
+  	    <scope>test</scope>
+	</dependency>
+	<dependency>
+  	    <groupId>org.mockito</groupId>
+  	    <artifactId>mockito-all</artifactId>
+  	    <version>1.10.19</version>
+  	    <scope>test</scope>
+	</dependency>
+	<dependency>
+  	    <groupId>com.diffblue</groupId>
+  	    <artifactId>deeptestutils</artifactId>
+  	    <version>1.2.0</version>
+	</dependency>
     </dependencies>
 
 	<profiles>
