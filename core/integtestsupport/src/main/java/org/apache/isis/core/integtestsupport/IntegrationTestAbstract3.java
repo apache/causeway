@@ -18,12 +18,6 @@
  */
 package org.apache.isis.core.integtestsupport;
 
-import org.apache.isis.applib.AppManifest;
-import org.apache.isis.applib.Module;
-import org.apache.isis.core.runtime.headless.HeadlessTransactionSupport;
-import org.apache.isis.core.runtime.headless.HeadlessWithBootstrappingAbstract;
-import org.apache.isis.core.runtime.headless.IsisSystem;
-import org.apache.isis.core.runtime.headless.logging.LogConfig;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -32,6 +26,13 @@ import org.junit.rules.MethodRule;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
 import org.slf4j.event.Level;
+
+import org.apache.isis.applib.AppManifest;
+import org.apache.isis.applib.Module;
+import org.apache.isis.core.runtime.headless.HeadlessTransactionSupport;
+import org.apache.isis.core.runtime.headless.HeadlessWithBootstrappingAbstract;
+import org.apache.isis.core.runtime.headless.IsisSystem;
+import org.apache.isis.core.runtime.headless.logging.LogConfig;
 
 /**
  * Reworked base class for integration tests, uses a {@link Module} to bootstrap, rather than an {@link AppManifest}.
@@ -50,7 +51,7 @@ public abstract class IntegrationTestAbstract3 extends HeadlessWithBootstrapping
     @Rule
     public IntegrationTestAbstract3.IsisTransactionRule isisTransactionRule = new IntegrationTestAbstract3.IsisTransactionRule();
 
-    private static class IsisTransactionRule implements MethodRule {
+    private static class IsisTransactionRule extends TransactionRuleAbstract implements MethodRule {
 
         @Override
         public Statement apply(final Statement base, final FrameworkMethod method, final Object target) {
@@ -66,7 +67,7 @@ public abstract class IntegrationTestAbstract3 extends HeadlessWithBootstrapping
                         final IsisSystem isft = IsisSystem.get();
                         isft.getService(HeadlessTransactionSupport.class).endTransaction();
                     } catch(final Exception e) {
-                        Util.handleTransactionContextException(e);
+                        handleTransactionContextException(e);
                     }
                 }
 
@@ -82,7 +83,7 @@ public abstract class IntegrationTestAbstract3 extends HeadlessWithBootstrapping
             final LogConfig logConfig,
             final Module module) {
         super(logConfig,
-                Util.moduleBuilder(module)
+                ModuleBuilder.create(module)
                 .withHeadlessTransactionSupport()
                 .withIntegrationTestConfigFallback()
                 .build() );

@@ -33,7 +33,7 @@ import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction.State;
 
 @DomainService(nature=NatureOfService.DOMAIN)
-public class DefaultHeadlessTransactionSupport implements HeadlessTransactionSupport {
+public class HeadlessTransactionSupportDefault implements HeadlessTransactionSupport {
 
     @Override
     public void beginTransaction() {

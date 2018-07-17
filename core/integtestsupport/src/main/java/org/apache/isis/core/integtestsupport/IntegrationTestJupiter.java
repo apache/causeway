@@ -18,17 +18,18 @@
  */
 package org.apache.isis.core.integtestsupport;
 
+import org.junit.jupiter.api.extension.AfterEachCallback;
+import org.junit.jupiter.api.extension.BeforeEachCallback;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.extension.ExtensionContext;
+import org.slf4j.event.Level;
+
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.Module;
 import org.apache.isis.core.runtime.headless.HeadlessTransactionSupport;
 import org.apache.isis.core.runtime.headless.HeadlessWithBootstrappingAbstract;
 import org.apache.isis.core.runtime.headless.IsisSystem;
 import org.apache.isis.core.runtime.headless.logging.LogConfig;
-import org.junit.jupiter.api.extension.AfterEachCallback;
-import org.junit.jupiter.api.extension.BeforeEachCallback;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.api.extension.ExtensionContext;
-import org.slf4j.event.Level;
 
 /**
  * Base class for integration tests for the JUnit 5 Jupiter Engine,
@@ -39,7 +40,7 @@ import org.slf4j.event.Level;
 @ExtendWith(IntegrationTestJupiter.HeadlessTransactionRule.class)
 public abstract class IntegrationTestJupiter extends HeadlessWithBootstrappingAbstract {
 
-    public static class HeadlessTransactionRule implements AfterEachCallback, BeforeEachCallback {
+    public static class HeadlessTransactionRule extends TransactionRuleAbstract implements AfterEachCallback, BeforeEachCallback {
 
         @Override
         public void beforeEach(ExtensionContext context) throws Exception {
@@ -54,7 +55,7 @@ public abstract class IntegrationTestJupiter extends HeadlessWithBootstrappingAb
                 final IsisSystem isft = IsisSystem.get();
                 isft.getService(HeadlessTransactionSupport.class).endTransaction();
             } catch(final Exception e) {
-                Util.handleTransactionContextException(e);
+                handleTransactionContextException(e);
             } finally {
                 final IntegrationTestJupiter testInstance = testInstance(context);
                 testInstance.tearDownAllModules();
@@ -77,7 +78,7 @@ public abstract class IntegrationTestJupiter extends HeadlessWithBootstrappingAb
             final LogConfig logConfig,
             final Module module) {
         super(logConfig,
-                Util.moduleBuilder(module)
+                ModuleBuilder.create(module)
                 .withHeadlessTransactionSupport()
                 .withIntegrationTestConfigFallback()
                 .build() );

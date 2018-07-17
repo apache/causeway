@@ -19,63 +19,18 @@
 
 package org.apache.isis.core.integtestsupport;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import org.apache.isis.applib.AppManifest;
-import org.apache.isis.applib.Module;
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.services.jdosupport.IsisJdoSupport;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.integtestsupport.components.DefaultHeadlessTransactionSupport;
 import org.apache.isis.core.runtime.headless.IsisSystem;
 
-class Util {
+public abstract class TransactionRuleAbstract {
 
-    // -- MODULE BUILDER
-
-    public static class ModuleBuilder {
-        final Module module;
-        private ModuleBuilder(Module module) {
-            this.module = module;
-        }
-        public Module build() {
-            return module;
-        }
-        /**
-         * Registers DefaultHeadlessTransactionSupport as an additional service.
-         */
-        public ModuleBuilder withHeadlessTransactionSupport() {
-            module.getAdditionalServices().add(DefaultHeadlessTransactionSupport.class);
-            return this;
-        }
-        /**
-         * Adds default fallback configuration values for integration tests,
-         * without overriding any existing key value pairs.
-         */
-        public ModuleBuilder withIntegrationTestConfigFallback() {
-            final Map<String, String> integrationTestDefaultConfig = new HashMap<>();
-            AppManifest.Util.withJavaxJdoRunInMemoryProperties(integrationTestDefaultConfig);
-            AppManifest.Util.withDataNucleusProperties(integrationTestDefaultConfig);
-            AppManifest.Util.withIsisIntegTestProperties(integrationTestDefaultConfig);
-
-            integrationTestDefaultConfig.forEach((k, v)->{
-                module.getFallbackConfigProps().computeIfAbsent(k, __->v);
-            });
-            return this;
-        }
-    }
-
-    public static ModuleBuilder moduleBuilder(Module module) {
-        return new ModuleBuilder(module);
-    }
-
-    // -- HANDLING EXCEPTIONS
-
-    public static void handleTransactionContextException(Exception e) throws Exception {
+    void handleTransactionContextException(Exception e) throws Exception {
         // determine if underlying cause is an applib-defined exception,
         final RecoverableException recoverableException =
                 determineIfRecoverableException(e);
@@ -147,8 +102,6 @@ class Util {
         }
         return recoverableException;
     }
-
-
 
 
 }
