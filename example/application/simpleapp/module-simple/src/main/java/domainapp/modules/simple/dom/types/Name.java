@@ -5,13 +5,15 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import javax.jdo.annotations.Column;
+
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.spec.AbstractSpecification2;
 
-// @Column(length = Name.MAX_LEN) // requires DN 5.x
+@Column(length = Name.MAX_LEN)
 @Property(mustSatisfy = Name.NoExclamationMarks.class, maxLength = Name.MAX_LEN)
 @Parameter(mustSatisfy = Name.NoExclamationMarks.class, maxLength = Name.MAX_LEN)
 @ParameterLayout(named = "Name")
@@ -20,6 +22,7 @@ import org.apache.isis.applib.spec.AbstractSpecification2;
 public @interface Name {
 
     int MAX_LEN = 40;
+
     class NoExclamationMarks extends AbstractSpecification2<String> {
 
         @Override

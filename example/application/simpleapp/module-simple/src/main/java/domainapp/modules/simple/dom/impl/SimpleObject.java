@@ -24,7 +24,6 @@ import javax.jdo.annotations.VersionStrategy;
 import com.google.common.collect.ComparisonChain;
 
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Auditing;
 import org.apache.isis.applib.annotation.CommandReification;
 import org.apache.isis.applib.annotation.DomainObject;
@@ -53,7 +52,7 @@ import lombok.AccessLevel;
 public class SimpleObject implements Comparable<SimpleObject> {
 
 
-    @javax.jdo.annotations.Column(allowsNull = "false", length = Name.MAX_LEN)
+    @javax.jdo.annotations.Column(allowsNull = "false")
     @lombok.Getter @lombok.Setter @lombok.NonNull
     @Title(prepend = "Object: ")
     @Name private String name;
