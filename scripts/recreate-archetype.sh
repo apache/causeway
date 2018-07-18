@@ -63,8 +63,8 @@ for a in .project .classpath .settings bin .idea neo4j_DB target-ide; do /bin/fi
 /bin/find . -name "*.log" -exec rm {} \;
 /bin/find . -name "pom.xml.*" -exec rm {} \;
 
-echo "mvn archetype:create-from-project ..."
-mvn org.apache.maven.plugins:maven-archetype-plugin:3.0.1:create-from-project
+echo "mvn -Drevision=$ISISREL archetype:create-from-project ..."
+mvn -Drevision=$ISISREL org.apache.maven.plugins:maven-archetype-plugin:3.0.1:create-from-project
 
 echo "copy over Dockerfile since seems to be excluded for some reason ... "
 mkdir -p target/generated-sources/archetype/src/main/resources/archetype-resources/webapp/src/main/resources/docker
@@ -91,4 +91,4 @@ git commit -m "$JIRA: recreating $ISISCPN archetype"
 
 echo "building the newly created archetype ..."
 cd ../../archetype/$ISISCPN
-mvn clean install
+mvn -Drevision=$ISISREL clean install
