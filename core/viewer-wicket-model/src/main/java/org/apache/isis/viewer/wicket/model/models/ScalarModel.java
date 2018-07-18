@@ -26,6 +26,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.google.common.collect.Lists;
+
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.internal.base._NullSafe;
@@ -59,8 +61,6 @@ import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
 import org.apache.isis.viewer.wicket.model.mementos.SpecUtils;
-
-import com.google.common.collect.Lists;
 
 /**
  * Represents a scalar of an entity, either a {@link Kind#PROPERTY property} or
@@ -789,10 +789,10 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
                 .anyMatch(fullName::equals);
     }
 
-    public boolean isScalarTypeSubtypingAnyOf(final Class<?>... requiredClass) {
+    public boolean isScalarTypeSubtypeOf(final Class<?> requiredClass) {
         final Class<?> scalarType = getTypeOfSpecification().getCorrespondingClass();
         return _NullSafe.stream(requiredClass)
-                .anyMatch(scalarType::isAssignableFrom);
+                .anyMatch(x -> x.isAssignableFrom(scalarType));
     }
 
     public String getObjectAsString() {

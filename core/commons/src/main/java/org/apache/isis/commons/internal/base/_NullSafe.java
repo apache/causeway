@@ -57,10 +57,14 @@ public final class _NullSafe {
         return array!=null ? Stream.of(array) : Stream.empty();
     }
 
+    public static <T> Stream<T> stream(final T nullable) {
+        return nullable != null ? Stream.of(nullable) : Stream.empty();
+    }
+
     /**
      * If {@code collection} is {@code null} returns the empty stream,
      * otherwise returns a stream of the collection's elements.
-     * @param collection
+     * @param coll
      * @return non-null stream object
      */
     public static <T> Stream<T> stream(final Collection<T> coll){
@@ -80,7 +84,7 @@ public final class _NullSafe {
     /**
      * If {@code iterator} is {@code null} returns the empty stream,
      * otherwise returns a stream of the iterator's elements.
-     * @param collection
+     * @param iterator
      * @return non-null stream object
      */
     public static <T> Stream<T> stream(final Iterator<T> iterator){

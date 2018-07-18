@@ -19,6 +19,9 @@
 
 package org.apache.isis.viewer.wicket.ui.components.tree;
 
+import org.apache.wicket.Component;
+import org.apache.wicket.model.IModel;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.models.ValueModel;
@@ -26,8 +29,6 @@ import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupPanel;
-import org.apache.wicket.Component;
-import org.apache.wicket.model.IModel;
 
 /**
  * {@link ComponentFactory} for {@link MarkupPanel}.
@@ -51,7 +52,7 @@ public class TreePanelFactories {
 
             final ScalarModel scalarModel = (ScalarModel) model;
 
-            if(!scalarModel.isScalarTypeSubtypingAnyOf(org.apache.isis.applib.tree.TreeNode.class)) {
+            if(!scalarModel.isScalarTypeSubtypeOf(org.apache.isis.applib.tree.TreeNode.class)) {
                 return ApplicationAdvice.DOES_NOT_APPLY;
             }
 
