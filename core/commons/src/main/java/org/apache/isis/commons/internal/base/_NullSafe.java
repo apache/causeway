@@ -57,6 +57,16 @@ public final class _NullSafe {
         return array!=null ? Stream.of(array) : Stream.empty();
     }
 
+    /**
+     * If {@code nullable} is {@code null} returns the empty stream,
+     * otherwise returns a Stream containing the single element {@code nullable}.
+     * <p>
+     * Note: this method signature only matches if none of the other stream(?) methods match.
+     * </p>
+     * 
+     * @param nullable
+     * @return non-null stream object
+     */
     public static <T> Stream<T> stream(final T nullable) {
         return nullable != null ? Stream.of(nullable) : Stream.empty();
     }

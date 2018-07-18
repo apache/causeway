@@ -75,7 +75,7 @@ public final class _Sets {
     }
 
     /**
-     * Copies all elements into a new unmodifiable List.
+     * Copies all elements into a new unmodifiable Set.
      * @param elements
      * @return non null
      */

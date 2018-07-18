@@ -91,7 +91,7 @@ public class _Multimaps {
         public void putElement(K1 key, K2 subkey, V value);
 
         /**
-         * Get the element-map by {@code key}, then within the element-map looks up to {@code subkey}.
+         * Get the element-map by {@code key}, then within the element-map looks up {@code subkey}.
          * @param key
          * @param subkey
          * @return null if no such element exists
