@@ -285,7 +285,8 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
         final FacetHolder holder = processMethodContext.getFacetHolder();
 
         // check for @Nullable
-        final Nullable nullableAnnotation = Annotations.getAnnotation(method, Nullable.class);
+        final List<Nullable> nullableAnnotations = Annotations.getAnnotations(method, Nullable.class);
+        final Nullable nullableAnnotation = nullableAnnotations.isEmpty() ? null : nullableAnnotations.get(0);
         final MandatoryFacet facet2 =
                 MandatoryFacetInvertedByNullableAnnotationOnProperty.create(nullableAnnotation, method, holder);
         FacetUtil.addFacet(facet2);

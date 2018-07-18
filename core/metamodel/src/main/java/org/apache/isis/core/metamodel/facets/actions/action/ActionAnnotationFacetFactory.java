@@ -22,6 +22,8 @@ package org.apache.isis.core.metamodel.facets.actions.action;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import com.google.common.base.Strings;
+
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.applib.services.HasTransactionId;
@@ -57,8 +59,6 @@ import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.members.order.annotprop.MemberOrderFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.util.EventUtil;
-
-import com.google.common.base.Strings;
 
 public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
 
@@ -291,7 +291,8 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
 
         // check for @Action(associateWith=...)
 
-        final Action action = Annotations.getAnnotation(method, Action.class);
+        final List<Action> actions = Annotations.getAnnotations(method, Action.class);
+        final Action action = actions.isEmpty() ? null : actions.get(0);
         if (action != null) {
             final String associateWith = action.associateWith();
             if(!Strings.isNullOrEmpty(associateWith)) {

@@ -36,6 +36,8 @@ import javax.validation.constraints.Pattern;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import com.google.common.collect.Lists;
+
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
@@ -46,8 +48,6 @@ import org.apache.isis.core.commons.lang.ThrowableExtensions;
 import org.apache.isis.core.commons.reflection.Reflect;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
-
-import com.google.common.collect.Lists;
 
 public final class Annotations  {
 
@@ -226,6 +226,10 @@ public final class Annotations  {
     /**
      * Searches for annotation on provided method, and if not found for any
      * inherited methods up from the superclass.
+     *
+     * <p>
+     *     WARN: this method does NOT search for meta-annotations; use {@link #getAnnotations(Class, Class)} for that.
+     * </p>
      */
     public static <T extends Annotation> T getAnnotation(
             final Method method,

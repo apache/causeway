@@ -19,6 +19,7 @@
 package org.apache.isis.core.metamodel.facets.properties.bigdecimal.javaxvaldigits;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import javax.validation.constraints.Digits;
 
@@ -42,7 +43,8 @@ public class BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotationFactory
             return;
         }
 
-        final Digits annotation = Annotations.getAnnotation(processMethodContext.getMethod(), Digits.class);
+        final List<Digits> annotations = Annotations.getAnnotations(processMethodContext.getMethod(), Digits.class);
+        final Digits annotation = annotations.isEmpty() ? null : annotations.get(0);
         if (annotation == null) {
             return;
         }

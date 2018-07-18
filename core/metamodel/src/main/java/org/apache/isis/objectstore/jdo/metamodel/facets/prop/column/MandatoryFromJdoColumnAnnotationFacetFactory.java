@@ -63,7 +63,7 @@ public class MandatoryFromJdoColumnAnnotationFacetFactory extends FacetFactoryAb
             return;
         }
 
-        final Column annotation = Annotations.getAnnotation(processMethodContext.getMethod(), Column.class);
+        final List<Column> annotations = Annotations.getAnnotations(processMethodContext.getMethod(), Column.class);
 
         final FacetedMethod holder = processMethodContext.getFacetHolder();
 
@@ -82,22 +82,23 @@ public class MandatoryFromJdoColumnAnnotationFacetFactory extends FacetFactoryAb
             }
         }
 
+        final Column annotation = annotations.isEmpty() ? null : annotations.get(0);
         boolean required = whetherRequired(processMethodContext, annotation);
         MandatoryFacet facet = annotation != null
                 ? new MandatoryFacetDerivedFromJdoColumn(holder, required)
                         : new MandatoryFacetInferredFromAbsenceOfJdoColumn(holder, required);
 
 
-                // as a side-effect, will chain any existing facets.
-                // we'll exploit this fact for meta-model validation (see #refineMetaModelValidator(), below)
-                FacetUtil.addFacet(facet);
+        // as a side-effect, will chain any existing facets.
+        // we'll exploit this fact for meta-model validation (see #refineMetaModelValidator(), below)
+        FacetUtil.addFacet(facet);
 
-                // however, if a @Column was explicitly provided, and the underlying facet
-                // was the simple MandatoryFacetDefault (from an absence of @Optional or @Mandatory),
-                // then don't chain, simply replace.
-                if(facet instanceof MandatoryFacetDerivedFromJdoColumn && facet.getUnderlyingFacet() instanceof MandatoryFacetDefault) {
-                    facet.setUnderlyingFacet(null);
-                }
+        // however, if a @Column was explicitly provided, and the underlying facet
+        // was the simple MandatoryFacetDefault (from an absence of @Optional or @Mandatory),
+        // then don't chain, simply replace.
+        if(facet instanceof MandatoryFacetDerivedFromJdoColumn && facet.getUnderlyingFacet() instanceof MandatoryFacetDefault) {
+            facet.setUnderlyingFacet(null);
+        }
     }
 
     private static boolean whetherRequired(final ProcessMethodContext processMethodContext, final Column annotation) {
