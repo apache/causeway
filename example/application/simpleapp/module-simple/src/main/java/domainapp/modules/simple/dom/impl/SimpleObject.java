@@ -52,7 +52,6 @@ import lombok.AccessLevel;
 public class SimpleObject implements Comparable<SimpleObject> {
 
 
-    @javax.jdo.annotations.Column(allowsNull = "false")
     @lombok.Getter @lombok.Setter @lombok.NonNull
     @Title(prepend = "Object: ")
     @Name private String name;

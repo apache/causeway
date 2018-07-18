@@ -13,7 +13,7 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.spec.AbstractSpecification2;
 
-@Column(length = Name.MAX_LEN)
+@Column(length = Name.MAX_LEN, allowsNull = "false")
 @Property(mustSatisfy = Name.NoExclamationMarks.class, maxLength = Name.MAX_LEN)
 @Parameter(mustSatisfy = Name.NoExclamationMarks.class, maxLength = Name.MAX_LEN)
 @ParameterLayout(named = "Name")
