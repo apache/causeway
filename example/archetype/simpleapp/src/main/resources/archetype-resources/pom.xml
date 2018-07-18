@@ -26,11 +26,11 @@
   </parent>
   <groupId>${groupId}</groupId>
   <artifactId>${artifactId}</artifactId>
-  <version>${version}</version>
+  <version>${revision}</version>
   <name>Apache Isis App - SimpleApp Parent</name>
   <packaging>pom</packaging>
   <properties>
-    <revision>0.0.1-SNAPSHOT</revision>
+    <revision>${version}</revision>
     <isis.version>2.0.0-M1</isis.version>
     <lombok.version>[1.18,)</lombok.version>
     <compiler-plugin.source>1.8</compiler-plugin.source>

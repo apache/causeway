@@ -122,7 +122,16 @@ println "updating ${resourcePomXmlFile.path}"
 
 def resourcePomXml = new XmlSlurper(false,false).parseText(resourcePomXmlFile.text)
 
-resourcePomXml.properties.revision='0.0.1-SNAPSHOT'
+
+// this looks weird, but trust me, it's correct
+
+// version is set to the (in-effect) hard-coded string '${revision}'.  This is resolved when the app generated
+// from the archetype is built, eg with mvn -Drevision=...; it will fall back to the properties/revision.
+resourcePomXml.version='${revision}'
+// the properties.revision, meanwhile, is set to the version that is prompted for when the
+// app is first generated from the archetype
+resourcePomXml.properties.revision='${version}'
+
 resourcePomXml.properties['isis.version']=isis_version
 
 resourcePomXmlFile.text = withLicense(resourcePomXml)
