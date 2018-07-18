@@ -21,14 +21,14 @@
  */
 package domainapp.modules.simple.integtests;
 
-import org.apache.isis.core.integtestsupport.IntegrationTestAbstract3;
+import org.apache.isis.core.integtestsupport.IntegrationTestJupiter;
 
 import domainapp.modules.simple.SimpleModule;
 
-public abstract class SimpleModuleIntegTestAbstract extends IntegrationTestAbstract3 {
+public abstract class SimpleModuleIntegTestAbstract extends IntegrationTestJupiter {
 
     public SimpleModuleIntegTestAbstract() {
-        super(new SimpleModule().withConfigurationProperty("isis.objects.editing","false"));
+        super(new SimpleModule().withConfigurationProperty("isis.objects.editing", "false"));
     }
 
 

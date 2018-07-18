@@ -26,7 +26,7 @@
     </parent>
 
     <artifactId>${artifactId}</artifactId>
-    <name>SimpleApp Application</name>
+    <name>Apache Isis App - SimpleApp Application</name>
 
     <description>This defines the application (manifest) and runs application-level fixtures and integration (smoke) tests</description>
 
