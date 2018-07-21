@@ -26,7 +26,7 @@
   </parent>
   <groupId>${groupId}</groupId>
   <artifactId>${artifactId}</artifactId>
-  <version>${revision}</version>
+  <version>${version}</version>
   <name>Apache Isis App - SimpleApp Parent</name>
   <packaging>pom</packaging>
   <properties>
@@ -99,23 +99,23 @@
       <dependency>
         <groupId>${groupId}</groupId>
         <artifactId>${rootArtifactId}-module-simple</artifactId>
-        <version>${version}</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>${groupId}</groupId>
         <artifactId>${rootArtifactId}-module-simple</artifactId>
-        <version>${version}</version>
+        <version>${project.version}</version>
         <type>test-jar</type>
       </dependency>
       <dependency>
         <groupId>${groupId}</groupId>
         <artifactId>${rootArtifactId}-application</artifactId>
-        <version>${version}</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>${groupId}</groupId>
         <artifactId>${rootArtifactId}-webapp</artifactId>
-        <version>${version}</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>org.projectlombok</groupId>

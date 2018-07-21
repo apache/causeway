@@ -10,6 +10,7 @@ import java.lang.annotation.Target;
 
 import javax.jdo.annotations.Column;
 
+import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Property;
@@ -17,7 +18,7 @@ import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.spec.AbstractSpecification2;
 
 @Column(length = Name.MAX_LEN, allowsNull = "false")
-@Property(mustSatisfy = Name.NoExclamationMarks.class, maxLength = Name.MAX_LEN)
+@Property(editing = Editing.DISABLED, mustSatisfy = Name.NoExclamationMarks.class, maxLength = Name.MAX_LEN)
 @Parameter(mustSatisfy = Name.NoExclamationMarks.class, maxLength = Name.MAX_LEN)
 @ParameterLayout(named = "Name")
 @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })

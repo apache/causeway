@@ -21,6 +21,7 @@
  */
 package domainapp.modules.simple.dom.impl;
 
+import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.VersionStrategy;
 
@@ -31,20 +32,17 @@ import org.apache.isis.applib.annotation.Auditing;
 import org.apache.isis.applib.annotation.CommandReification;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
-import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.annotation.Title;
-import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
 
 import domainapp.modules.simple.dom.types.Name;
+import domainapp.modules.simple.dom.types.Notes;
 
 @javax.jdo.annotations.PersistenceCapable(identityType=IdentityType.DATASTORE, schema = "simple")
-@javax.jdo.annotations.DatastoreIdentity(strategy=javax.jdo.annotations.IdGeneratorStrategy.IDENTITY, column="id")
+@javax.jdo.annotations.DatastoreIdentity(strategy=IdGeneratorStrategy.IDENTITY, column="id")
 @javax.jdo.annotations.Version(strategy= VersionStrategy.DATE_TIME, column="version")
 @javax.jdo.annotations.Unique(name="SimpleObject_name_UNQ", members = {"name"})
 @DomainObject(auditing = Auditing.ENABLED)
@@ -52,15 +50,15 @@ import domainapp.modules.simple.dom.types.Name;
 @lombok.RequiredArgsConstructor
 public class SimpleObject implements Comparable<SimpleObject> {
 
+    public String title() {
+        return "Object: " + getName();
+    }
 
     @lombok.Getter @lombok.Setter @lombok.NonNull
-    @Title(prepend = "Object: ")
     @Name private String name;
 
-    @javax.jdo.annotations.Column(allowsNull = "true", length = 4000)
     @lombok.Getter @lombok.Setter
-    @Property(editing = Editing.ENABLED)
-    private String notes;
+    @Notes private String notes;
 
 
     @Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "name")
@@ -73,35 +71,27 @@ public class SimpleObject implements Comparable<SimpleObject> {
         return getName();
     }
 
-    public TranslatableString validate0UpdateName(final String name) {
-        return name != null && name.contains("!") ? TranslatableString.tr("Exclamation mark is not allowed") : null;
-    }
-
 
     @Action(semantics = SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE)
     public void delete() {
         final String title = titleService.titleOf(this);
         messageService.informUser(String.format("'%s' deleted", title));
-        repositoryService.remove(this);
+        repositoryService.removeAndFlush(this);
     }
 
-
-
-    // -- toString, compareTo
     @Override
     public String toString() {
         return getName();
     }
 
+    @Override
     public int compareTo(final SimpleObject other) {
         return ComparisonChain.start()
                 .compare(this.getName(), other.getName())
                 .result();
     }
-    //endregion
 
 
-    // -- injected services
     @javax.inject.Inject
     @javax.jdo.annotations.NotPersistent
     RepositoryService repositoryService;
@@ -113,6 +103,5 @@ public class SimpleObject implements Comparable<SimpleObject> {
     @javax.inject.Inject
     @javax.jdo.annotations.NotPersistent
     MessageService messageService;
-    //endregion
 
 }
