@@ -220,6 +220,35 @@
                 </plugins>
             </build>
         </profile>
+
+        <!--
+        using:
+        mvn -s .m2/settings.xml -D deploy-to-tomcat tomcat7:deploy-only
+         -->
+        <profile>
+            <id>deploy-to-tomcat</id>
+            <activation>
+                <property>
+                    <name>deploy-to-tomcat</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.tomcat.maven</groupId>
+                        <artifactId>tomcat7-maven-plugin</artifactId>
+                        <version>2.2</version>
+                        <configuration>
+                            <url>http://localhost:8080/manager/text</url>
+                            <server>tomcat-server</server>
+                            <path>/ROOT</path>
+                            <warFile>${project.build.directory}/${maven-war-plugin.warName}.war</warFile>
+                            <update>true</update>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
     </profiles>
 
 </project>
