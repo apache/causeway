@@ -416,7 +416,9 @@ popd
 [source,bash]
 ----
 mvn install -Dmavenmixin-docker -D docker-plugin.imageName=test/simpleapp
-docker container run -p 8080:8080 -d test/simpleapp
+docker container run -p 8080:8080 --name simpleapp -d test/simpleapp
+
+#winpty docker exec -it simpleapp bash
 ----
 +
 [NOTE]
@@ -444,8 +446,13 @@ The Kitematic UI tool is handy for viewing and interacting with running containe
 ====
 
 
-In each case, check the about page and confirm has been built against non-SNAPSHOT versions of the Apache Isis jars.
+To tidy up, kill and remove the container:
 
+[source,bash]
+----
+docker container kill simpleapp
+docker container rm simpleapp
+----
 
 [[__cgcom_cutting-a-release_releasing-the-simpleapp-archetype_create-the-archetype]]
 === Recreate the archetype
