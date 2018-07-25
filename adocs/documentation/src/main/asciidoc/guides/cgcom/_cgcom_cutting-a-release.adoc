@@ -318,13 +318,14 @@ This requires `gpg` v2.1 or later.
 
 
 
-[[__cgcom_cutting-a-release_releasing-the-archetypes]]
-== Releasing the Archetypes
+[[__cgcom_cutting-a-release_releasing-the-simpleapp-archetype]]
+== Releasing `simpleapp` archetype
 
 The Apache Isis archetypes are reverse engineered from example applications.
 Once reverse engineered, the source is checked into git (replacing any earlier version of the archetype) and released.
 
 There are currently two archetypes, `simpleapp` and `helloworld`.
+In this section we release `simpleapp`, in the following xref:cgcom.adoc#__cgcom_cutting-a-release_releasing-the-helloworld-archetype[section] we release `helloworld`.
 
 [NOTE]
 ====
@@ -335,10 +336,6 @@ However, `maven-archetype-plugin:2.4` only uses `mvn.bat`; this causes the `arch
 The fix is simple: just copy `mvn.cmd` to `mvn.bat`.
 ====
 
-
-[[__cgcom_cutting-a-release_releasing-the-archetypes_simpleapp_setup-environment-variables]]
-=== Releasing `simpleapp` archetype
-
 Switch to the directory containing the `simpleapp` example:
 
 [source,bash]
@@ -346,8 +343,8 @@ Switch to the directory containing the `simpleapp` example:
 cd ../example/application/simpleapp
 ----
 
-[[__cgcom_cutting-a-release_releasing-the-archetypes_simpleapp_setup-environment-variables]]
-==== Setup environment variables
+[[__cgcom_cutting-a-release_releasing-the-simpleapp-archetype_setup-environment-variables]]
+=== Setup environment variables
 
 Set additional environment variables for the `simpleapp-archetype` artifact:
 
@@ -365,8 +362,8 @@ env | grep ISIS | sort
 Usually this is the same as `$ISISREL`.
 
 
-[[__cgcom_cutting-a-release_releasing-the-archetypes_simpleapp_check-the-example-app]]
-==== Check the example app
+[[__cgcom_cutting-a-release_releasing-the-simpleapp-archetype_check-the-example-app]]
+=== Check the example app
 
 Double check that the app:
 
@@ -451,8 +448,8 @@ The Kitematic UI tool is handy for viewing and interacting with running containe
 In each case, check the about page and confirm has been built against non-SNAPSHOT versions of the Apache Isis jars.
 
 
-[[__cgcom_cutting-a-release_releasing-the-archetypes_simpleapp_create-the-archetype]]
-==== Create the archetype
+[[__cgcom_cutting-a-release_releasing-the-simpleapp-archetype_create-the-archetype]]
+=== Recreate the archetype
 
 Make sure you are in the correct directory and environment variables are correct.
 
@@ -475,8 +472,8 @@ The script automatically commits changes; if you wish use `git log` and
 `git diff` (or a tool such as SourceTree) to review changes made.
 
 
-[[__cgcom_cutting-a-release_releasing-the-archetypes_simpleapp_deploy]]
-==== Deploy
+[[__cgcom_cutting-a-release_releasing-the-simpleapp-archetype_deploy]]
+=== Deploy
 
 Previously the release procedures used `mvn release:prepare` and `mvn release:perform`.
 These are however not compatible with `${revision}` that we now use https://maven.apache.org/maven-ci-friendly.html[for CI/CD].
@@ -504,8 +501,8 @@ This requires `gpg` v2.1 or later.
 
 
 
-[[__cgcom_cutting-a-release_releasing-the-archetypes_simpleapp_post-prepare-sanity-check]]
-==== Post-prepare sanity check
+[[__cgcom_cutting-a-release_releasing-the-simpleapp-archetype_post-prepare-sanity-check]]
+=== Post-prepare sanity check
 
 _In a different session_, create a new app from the archetype.
 First set up environment variables:
@@ -544,10 +541,10 @@ mvn -pl webapp jetty:run              # runs as mvn jetty plugin
 
 
 
-[[__cgcom_cutting-a-release_releasing-the-archetypes_helloworld_setup-environment-variables]]
-=== Releasing `helloworld` archetype
+[[__cgcom_cutting-a-release_releasing-the-helloworld-archetype]]
+== Releasing `helloworld` archetype
 
-We now repeat the procedure for the `helloworld` example app.
+We now repeat the archetype release procedure, this time for the `helloworld` example app.
 
 Start by switching to the directory containing the `helloworld` example:
 
@@ -556,8 +553,8 @@ Start by switching to the directory containing the `helloworld` example:
 cd ../../../example/application/helloworld
 ----
 
-[[__cgcom_cutting-a-release_releasing-the-archetypes_helloworld_setup-environment-variables]]
-==== Setup environment variables
+[[__cgcom_cutting-a-release_releasing-the-helloworld-archetype_setup-environment-variables]]
+=== Setup environment variables
 
 Update additional environment variables for the `helloworld-archetype` artifact:
 
@@ -573,8 +570,8 @@ env | grep ISIS | sort
 ----
 
 
-[[__cgcom_cutting-a-release_releasing-the-archetypes_helloworld_check-the-example-app]]
-==== Check the example app
+[[__cgcom_cutting-a-release_releasing-the-helloworld-archetype_check-the-example-app]]
+=== Check the example app
 
 Check that the app:
 
@@ -620,8 +617,8 @@ This too should be accessed at link:http://localhost:8080[localhost:8080].
 In each case, check the about page and confirm has been built against non-SNAPSHOT versions of the Apache Isis jars.
 
 
-[[__cgcom_cutting-a-release_releasing-the-archetypes_helloworld_create-the-archetype]]
-==== Create the archetype
+[[__cgcom_cutting-a-release_releasing-the-helloworld-archetype_create-the-archetype]]
+=== Recreate the archetype
 
 Make sure you are in the correct directory and environment variables are correct.
 
@@ -644,8 +641,8 @@ The script automatically commits changes; if you wish use `git log` and
 `git diff` (or a tool such as SourceTree) to review changes made.
 
 
-[[__cgcom_cutting-a-release_releasing-the-archetypes_helloworld_deploy]]
-==== Deploy
+[[__cgcom_cutting-a-release_releasing-the-helloworld-archetype_deploy]]
+=== Deploy
 
 Previously the release procedures used `mvn release:prepare` and `mvn release:perform`.
 These are however not compatible with `${revision}` that we now use https://maven.apache.org/maven-ci-friendly.html[for CI/CD].
@@ -673,8 +670,8 @@ This requires `gpg` v2.1 or later.
 
 
 
-[[__cgcom_cutting-a-release_releasing-the-archetypes_helloworld_post-prepare-sanity-check]]
-==== Post-prepare sanity check
+[[__cgcom_cutting-a-release_releasing-the-helloworld-archetype_post-prepare-sanity-check]]
+=== Post-prepare sanity check
 
 _In a different session_, create a new app from the archetype.
 First set up environment variables:
