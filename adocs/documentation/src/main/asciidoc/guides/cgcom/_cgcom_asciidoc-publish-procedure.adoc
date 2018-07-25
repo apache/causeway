@@ -60,7 +60,7 @@ This deletes the entire content of `contents`, and replaces with the content und
 
 [TIP]
 ====
-If you have checked out the `isis-site.git` repo into some other directory (relative to `isis.site.git), then this can be overridden by specifying `-Disis-site.dir=...` when calling `mvn`.
+If you have checked out the `isis-site.git` repo into some other directory (relative to `isis.site.git`), then this can be overridden by specifying `-Disis-site.dir=...` when calling `mvn`.
 ====
 
 

@@ -53,7 +53,6 @@ For example:
 
 [source,bash]
 ----
-cd core
 export ISISTMP=/c/tmp                               # <1>
 export ISISDEV=2.0.0-M2-SNAPSHOT
 export ISISREL=2.0.0-M1
