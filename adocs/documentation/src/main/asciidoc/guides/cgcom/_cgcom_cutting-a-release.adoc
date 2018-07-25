@@ -59,7 +59,7 @@ export ISISREL=2.0.0-M1
 export ISISRC=RC1
 export ISISBRANCH=release-$ISISREL-$ISISRC
 export ISISJIRA=ISIS-9999                           # <2>
-export CATALINA_HOME=/c/java/apache-tomcat-8.0.30   # <3>
+export CATALINA_HOME=/c/java/apache-tomcat-9.0.10   # <3>
 
 env | grep ISIS | sort
 ----
@@ -149,7 +149,7 @@ Change all of these to the release version, using:
 sed -i -E "s|<revision>[^<]+<|<revision>${ISISREL}<|g" core/pom.xml
 sed -i -E "s|<revision>[^<]+<|<revision>${ISISREL}<|g" example/application/simpleapp/pom.xml
 sed -i -E "s|<revision>[^<]+<|<revision>${ISISREL}<|g" example/application/helloworld/pom.xml
-commit -am "ISISJIRA: bumps revision property across all pom.xml's to ${ISISREL}"
+git commit -am "ISISJIRA: bumps revision property across all pom.xml's to ${ISISREL}"
 ----
 
 After release, there is a similar step at the end to set to the next development SNAPSHOT.
@@ -772,7 +772,7 @@ In the root of the Apache Isis repo, we do this for all three ``pom.xml``s with:
 sed -i -E "s|<revision>[^<]+<|<revision>${ISISDEV}<|g" core/pom.xml
 sed -i -E "s|<revision>[^<]+<|<revision>${ISISDEV}<|g" example/application/simpleapp/pom.xml
 sed -i -E "s|<revision>[^<]+<|<revision>${ISISDEV}<|g" example/application/helloworld/pom.xml
-commit -am "ISISJIRA: bumps revision property across all pom.xml's to ${ISISDEV}"
+git commit -am "ISISJIRA: bumps revision property across all pom.xml's to ${ISISDEV}"
 ----
 
 
