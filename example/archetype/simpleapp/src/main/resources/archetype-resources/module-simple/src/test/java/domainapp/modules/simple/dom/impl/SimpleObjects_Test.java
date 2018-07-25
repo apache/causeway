@@ -31,7 +31,6 @@ import org.jmock.auto.Mock;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.core.unittestsupport.jmocking.JMockActions;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
@@ -39,18 +38,14 @@ import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+//TODO [ahuber] this test is still on JUnit 4 because it uses org.junit.Rule, 
+//which no longer exists with JUnit 5
 public class SimpleObjects_Test {
 
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
     @Mock
-<<<<<<< HEAD:example/archetype/simpleapp/src/main/resources/archetype-resources/module-simple/src/test/java/domainapp/modules/simple/dom/impl/SimpleObjects_Test.java
-=======
-    ServiceRegistry mockServiceRegistry;
-    
-    @Mock
->>>>>>> dev/2.0.0-M1:example/archetype/simpleapp/src/main/resources/archetype-resources/module-simple/src/test/java/domainapp/modules/simple/dom/impl/SimpleObjectRepository_Test.java
     RepositoryService mockRepositoryService;
 
     SimpleObjects simpleObjects;

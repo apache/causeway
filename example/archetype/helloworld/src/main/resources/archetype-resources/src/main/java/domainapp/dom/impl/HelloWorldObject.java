@@ -32,16 +32,14 @@ import org.apache.isis.applib.annotation.Auditing;
 import org.apache.isis.applib.annotation.CommandReification;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
-import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.Parameter;
-import org.apache.isis.applib.annotation.ParameterLayout;
-import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
+
+import domainapp.dom.types.Name;
+import domainapp.dom.types.Notes;
 
 @javax.jdo.annotations.PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "${artifactId}" )
 @javax.jdo.annotations.DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
@@ -55,25 +53,22 @@ public class HelloWorldObject implements Comparable<HelloWorldObject> {
         this.name = name;
     }
 
-    @javax.jdo.annotations.Column(allowsNull = "false", length = 40)
-    @Property(editing = Editing.DISABLED)
-    @Title(prepend = "Object: ")
-    private String name;
+    public String title() {
+        return "Object: " + getName();
+    }
+
+    @Name private String name;
     public String getName() { return name; }
     public void setName(final String name) { this.name = name; }
 
-    @javax.jdo.annotations.Column(allowsNull = "true", length = 4000)
-    @Property(editing = Editing.ENABLED)
-    private String notes;
+    @Notes private String notes;
     public String getNotes() { return notes; }
     public void setNotes(final String notes) { this.notes = notes; }
 
 
     @Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED)
     public HelloWorldObject updateName(
-            @Parameter(maxLength = 40)
-            @ParameterLayout(named = "Name")
-            final String name) {
+            @Name final String name) {
         setName(name);
         return this;
     }
@@ -102,17 +97,16 @@ public class HelloWorldObject implements Comparable<HelloWorldObject> {
     }
 
 
-    @javax.jdo.annotations.NotPersistent
     @javax.inject.Inject
+    @javax.jdo.annotations.NotPersistent
     RepositoryService repositoryService;
 
-    @javax.jdo.annotations.NotPersistent
     @javax.inject.Inject
+    @javax.jdo.annotations.NotPersistent
     TitleService titleService;
 
-    @javax.jdo.annotations.NotPersistent
     @javax.inject.Inject
+    @javax.jdo.annotations.NotPersistent
     MessageService messageService;
-
 
 }

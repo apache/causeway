@@ -116,23 +116,23 @@
             <dependency>
                 <groupId>org.apache.isis.example.application</groupId>
                 <artifactId>simpleapp-module-simple</artifactId>
-                <version>${revision}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.example.application</groupId>
                 <artifactId>simpleapp-module-simple</artifactId>
-                <version>${revision}</version>
+                <version>${project.version}</version>
                 <type>test-jar</type>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.example.application</groupId>
                 <artifactId>simpleapp-application</artifactId>
-                <version>${revision}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.example.application</groupId>
                 <artifactId>simpleapp-webapp</artifactId>
-                <version>${revision}</version>
+                <version>${project.version}</version>
             </dependency>
 
             <!-- lombok -->
