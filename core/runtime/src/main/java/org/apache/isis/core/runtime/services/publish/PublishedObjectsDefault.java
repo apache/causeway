@@ -33,7 +33,6 @@ import com.google.common.collect.Multimaps;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.PublishingChangeKind;
-import org.apache.isis.applib.annotation.PublishedObject;
 import org.apache.isis.applib.services.RepresentsInteractionMemberExecution;
 import org.apache.isis.applib.services.publish.PublishedObjects;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
