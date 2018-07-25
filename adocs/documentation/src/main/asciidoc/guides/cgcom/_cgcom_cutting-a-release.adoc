@@ -55,8 +55,8 @@ For example:
 ----
 cd core
 export ISISTMP=/c/tmp                               # <1>
-export ISISDEV=2.1.0-SNAPSHOT
-export ISISREL=2.0.0
+export ISISDEV=2.0.0-M2-SNAPSHOT
+export ISISREL=2.0.0-M1
 export ISISRC=RC1
 export ISISBRANCH=release-$ISISREL-$ISISRC
 export ISISJIRA=ISIS-9999                           # <2>
@@ -73,10 +73,7 @@ Obviously, alter `$ISISDEV` and `$ISISREL` as required, and bump `$ISISRC` for r
 
 [IMPORTANT]
 ====
-Note that the branch name is *not* the same any of the eventual tag names (eg `isis-2.0.0` or `simpleapp-archetype-2.0.0`).
-
-If they did have the same name, then what would happen is that the `maven-release-plugin` would checkout the (HEAD of the) branch and thus upload a SNAPSHOT to the snapshot repository.
-What it should of course do is checkout the tag and then upload that to the release staging repository.
+Note that the branch name is intentionally *not* the same any of the eventual tag names (eg `isis-2.0.0-M1` or `simpleapp-archetype-2.0.0-M1`).
 ====
 
 
@@ -95,21 +92,21 @@ git pull --ff-only
 git checkout -b $ISISBRANCH
 ----
 
-All release preparation is done locally; if we are successful, this branch will be merged back into master.
+The release is performed on a branch; if we are successful, this branch will be merged back into master.
 
 
 Double check that the version number of the parent pom should reflect the branch name that you are now on (with a `-SNAPSHOT` suffix).
-his will normally have been done already during earlier development; but confirm that it has been updated.
+This will normally have been done already during earlier development; but confirm that it has been updated.
 If it has not, make the change.
 
 Double check that the version number of the core POM (`core/pom.xml`) should reflect the branch name that you are now on.
-For example, if releasing version `2.0.0`, the POM should read:
+For example, if releasing version `2.0.0-M1`, the POM should read:
 
 [source,xml]
 ----
 <groupId>org.apache.isis.core</groupId>
 <artifactId>isis</artifactId>
-<version>2.0.0-SNAPSHOT</version>
+<version>2.0.0-M1-SNAPSHOT</version>
 ----
 
 Also, check that there are no snapshot dependencies:
@@ -125,6 +122,38 @@ The only mention of `SNAPSHOT` should be for the Isis modules about to be releas
 ====
 Obviously, don't update Apache Isis' `SNAPSHOT` references; these get updated by the `mvn release:prepare` command we run later.
 ====
+
+
+
+[[__cgcom_cutting-a-release_bump-revision-to-ISISREL]]
+== Bump `revision` property to `$ISISREL`
+
+Previously we used the `maven-release-plugin` which took responsibility for bumping the `<version>` from -SNAPSHOT to release, and then onto the next -SNAPSHOT.
+However, this plugin does not seem to be compatible with the support for `${revision}` property introduced in Maven 3.5.0 in order https://maven.apache.org/maven-ci-friendly.html[to support CI/CD use cases]; at least we couldn't make it work.
+
+So, instead, we perform the edit of ${revision}` manually before.
+
+In the three `pom.xml` files (for `core` and the two archetypes) the property is defined:
+
+[source,xml]
+----
+<properties>
+    <revision>2.0.0-M1-SNAPSHOT</revision>
+    ...
+</properties>
+----
+
+Change all of these to the release version, using:
+
+[source,bash]
+----
+sed -i -E "s|<revision>[^<]+<|<revision>${ISISREL}<|g" core/pom.xml
+sed -i -E "s|<revision>[^<]+<|<revision>${ISISREL}<|g" example/application/simpleapp/pom.xml
+sed -i -E "s|<revision>[^<]+<|<revision>${ISISREL}<|g" example/application/helloworld/pom.xml
+commit -am "ISISJIRA: bumps revision property across all pom.xml's to ${ISISREL}"
+----
+
+After release, there is a similar step at the end to set to the next development SNAPSHOT.
 
 
 
@@ -260,148 +289,39 @@ mvn clean install -o
 ----
 
 
-[[__cgcom_cutting-a-release_releasing-core_release-prepare-dry-run]]
-=== Release prepare "dry run"
+[[__cgcom_cutting-a-release_releasing-core_deploy]]
+=== Deploy
 
-Most of the work is done using the `mvn release:prepare` goal.
-Since this makes a lot of changes, we run it first in "dry run" mode; only if that works do we run the goal for real.
+Previously the release procedures used `mvn release:prepare` and `mvn release:perform`.
+These are however not compatible with `${revision}` that we now use https://maven.apache.org/maven-ci-friendly.html[for CI/CD].
 
-Run the dry-run as follows:
+We therefore just use `mvn deploy` directly, activating the (inherited) `apache-release` profile that, amongst other things, brings in the `gpg` plugin for code signing.
 
-[source,bash]
-----
-mvn release:prepare -P apache-release -D dryRun=true \
-    -DreleaseVersion=$ISISREL \
-    -Dtag=$ISISART-$ISISREL \
-    -DdevelopmentVersion=$ISISDEV
-----
-
-You may be prompted for the gpg passphrase.
-
-[NOTE]
-====
-Experiments in using `--batch-mode -Dgpg.passphrase=&quot;...&quot;` to fully automate this didn't work; for more info, see http://maven.apache.org/plugins/maven-gpg-plugin/sign-mojo.html[here] (maven release plugin docs) and http://maven.apache.org/maven-release/maven-release-plugin/examples/non-interactive-release.html[here] (maven gpg plugin docs).
-====
-
-
-
-[[__cgcom_cutting-a-release_releasing-core_release-prepare-proper]]
-=== Release prepare "proper"
-
-Assuming this completes successfully, re-run the command, but without the `dryRun` flag and specifying `resume=false` (to ignore the generated `release.properties` file that gets generated as a side-effect of using `git`).
-You can also set the `skipTests` flag since they would have been run during the previous dry run:
+To build and deploy and tag, we use:
 
 [source,bash]
 ----
-mvn release:prepare -P apache-release -D resume=false -DskipTests=true \
-        -DreleaseVersion=$ISISREL \
-        -Dtag=$ISISART-$ISISREL \
-        -DdevelopmentVersion=$ISISDEV
+mvn -P apache-release \
+    clean deploy      \
+    -Dgpg.passphrase="this is not really my passphrase"
+
+git tag $ISISART-$ISISREL
 ----
 
+using your own GPG passphrase, of course.
 
-[TIP]
+
+[IMPORTANT]
 ====
-If there are any snags at this stage, then explicitly delete the generated `release.properties` file first before trying again.
+This requires `gpg` v2.1 or later.
 ====
-
-
-
-
-[[__cgcom_cutting-a-release_releasing-core_post-prepare-sanity-check]]
-=== Post-prepare sanity check
-
-You should end up with artifacts in your local repo with the new version (eg `2.0.0-M1`).  This is a good time to do some quick sanity checks; nothing has yet been uploaded:
-
-* unzip the source-release ZIP and check it builds.
-* Inspect the `DEPENDENCIES` file, and check it looks correct.
-
-These steps can be performed using the following script:
-
-[source]
-----
-rm -rf $ISISTMP/$ISISART-$ISISREL
-mkdir $ISISTMP/$ISISART-$ISISREL
-
-if [ "$ISISCOR" == "Y" ]; then
-    ZIPDIR="$M2_REPO/repository/org/apache/isis/core/$ISISART/$ISISREL"
-else
-    ZIPDIR="$M2_REPO/repository/org/apache/isis/$ISISCPT/$ISISART/$ISISREL"
-fi
-echo "cp \"$ZIPDIR/$ISISART-$ISISREL-source-release.zip\" $ISISTMP/$ISISART-$ISISREL/."
-cp "$ZIPDIR/$ISISART-$ISISREL-source-release.zip" $ISISTMP/$ISISART-$ISISREL/.
-
-pushd $ISISTMP/$ISISART-$ISISREL
-unzip $ISISART-$ISISREL-source-release.zip
-
-cd $ISISART-$ISISREL
-mvn clean install
-
-cat DEPENDENCIES
-
-popd
-----
-
-
-[[__cgcom_cutting-a-release_releasing-core_release-perform-upload]]
-=== Release perform (Upload)
-
-Once the release has been built locally, it should be uploaded for voting.
-This is done by deploying the Maven artifacts to a staging directory (this includes the source release ZIP file which will be voted upon).
-
-The Apache staging repository runs on Nexus server, hosted at https://repository.apache.org[repository.apache.org].
-The process of uploading will create a staging repository that is associated with the host (IP address) performing the release.
-Once the repository is staged, the newly created staging repository is "closed" in order to make it available to others.
-
-Use:
-
-[source,bash]
-----
-mvn release:perform -P apache-release \
-    -DworkingDirectory=$ISISTMP/$ISISART-$ISISREL/checkout
-----
-
-The custom `workingDirectory` prevents file path issues if releasing on Windows.
-The command checks out the codebase from the tag, then builds the artifacts, then uploads them to the Apache staging repository:
-
-[source,bash]
-----
-...
-[INFO] --- maven-release-plugin:2.3.2:perform (default-cli) @ isis ---
-[INFO] Performing a LOCAL checkout from scm:git:file:///C:\APACHE\isis-git-rw\co
-re
-[INFO] Checking out the project to perform the release ...
-[INFO] Executing: cmd.exe /X /C "git clone --branch release-2.0.0-M1 file:///C:\APACHE\isis-git-rw\core C:\APACHE\isis-git-rw\core\target\checkout"
-[INFO] Working directory: C:\APACHE\isis-git-rw\core\target
-[INFO] Performing a LOCAL checkout from scm:git:file:///C:\APACHE\isis-git-rw
-[INFO] Checking out the project to perform the release ...
-[INFO] Executing: cmd.exe /X /C "git clone --branch release-2.0.0-M1 file:///C:\APACHE\isis-git-rw C:\APACHE\isis-git-rw\core\target\checkout"
-[INFO] Working directory: C:\APACHE\isis-git-rw\core\target
-[INFO] Executing: cmd.exe /X /C "git ls-remote file:///C:\APACHE\isis-git-rw"
-[INFO] Working directory: C:\Users\ADMINI~1\AppData\Local\Temp
-[INFO] Executing: cmd.exe /X /C "git fetch file:///C:\APACHE\isis-git-rw"
-[INFO] Working directory: C:\APACHE\isis-git-rw\core\target\checkout
-[INFO] Executing: cmd.exe /X /C "git checkout release-2.0.0-M1"
-[INFO] Working directory: C:\APACHE\isis-git-rw\core\target\checkout
-[INFO] Executing: cmd.exe /X /C "git ls-files"
-[INFO] Working directory: C:\APACHE\isis-git-rw\core\target\checkout
-[INFO] Invoking perform goals in directory C:\APACHE\isis-git-rw\core\target\checkout\core
-[INFO] Executing goals 'deploy'...
-...
-----
-
-You may (again) be prompted for gpg passphrase.
-All being well this command will complete successfully.
-Given that it is uploading code artifacts, it could take a while to complete.
-
-
 
 
 
 [[__cgcom_cutting-a-release_releasing-the-archetypes]]
 == Releasing the Archetypes
 
-Apache Isis archetypes are reverse engineered from example applications.
+The Apache Isis archetypes are reverse engineered from example applications.
 Once reverse engineered, the source is checked into git (replacing any earlier version of the archetype) and released.
 
 There are currently two archetypes, `simpleapp` and `helloworld`.
@@ -448,25 +368,7 @@ Usually this is the same as `$ISISREL`.
 [[__cgcom_cutting-a-release_releasing-the-archetypes_simpleapp_check-the-example-app]]
 ==== Check the example app
 
-Update the parent `pom.xml` to reference the _released_ version of Apache Isis core, eg:
-
-[source,xml]
-----
-<properties>
-    <isis.version>2.0.0-M1</isis.version>
-    ...
-</properties>
-----
-
-
-[NOTE]
-====
-Previously at this point we used to check for and fix any missing license header notices; however it doesn't make sense for the archetype to include the Apache rat-plugin, so this has been removed.
-====
-
-
-
-Finally, double check that the app
+Double check that the app:
 
 * builds:
 +
@@ -573,27 +475,37 @@ The script automatically commits changes; if you wish use `git log` and
 `git diff` (or a tool such as SourceTree) to review changes made.
 
 
-[[__cgcom_cutting-a-release_releasing-the-archetypes_simpleapp_release-prepare]]
-=== Release prepare
+[[__cgcom_cutting-a-release_releasing-the-archetypes_simpleapp_deploy]]
+==== Deploy
 
-Switch to the *archetype* directory and execute the `release:prepare`:
+Previously the release procedures used `mvn release:prepare` and `mvn release:perform`.
+These are however not compatible with `${revision}` that we now use https://maven.apache.org/maven-ci-friendly.html[for CI/CD].
 
-[source]
+We therefore just use `mvn deploy` directly, activating the (inherited) `apache-release` profile that, amongst other things, brings in the `gpg` plugin for code signing.
+
+To build and deploy and tag, we use:
+
+[source,bash]
 ----
-cd ../../../example/archetype/$ISISCPN
-rm -rf $ISISTMP/checkout
-mvn release:prepare -P apache-release \
-                -DreleaseVersion=$ISISREL \
-                -DdevelopmentVersion=$ISISDEV \
-                -Dtag=$ISISART-$ISISREL
+mvn -P apache-release \
+    clean deploy      \
+    -Dgpg.passphrase="this is not really my passphrase"
+
+git tag $ISISART-$ISISREL
 ----
+
+using your own GPG passphrase, of course.
+
+
+[IMPORTANT]
+====
+This requires `gpg` v2.1 or later.
+====
 
 
 
 [[__cgcom_cutting-a-release_releasing-the-archetypes_simpleapp_post-prepare-sanity-check]]
 ==== Post-prepare sanity check
-
-This is a good point to test the archetype; nothing has yet been uploaded.
 
 _In a different session_, create a new app from the archetype.
 First set up environment variables:
@@ -632,20 +544,6 @@ mvn -pl webapp jetty:run              # runs as mvn jetty plugin
 
 
 
-[[__cgcom_cutting-a-release_releasing-the-archetypes_simplapp_release-perform-upload]]
-==== Release Perform (upload)
-
-Back in the original session (in the *archetype* directory, `example/archetype/$ISISCPN`), execute `release:perform`:
-
-[source]
-----
-mvn release:perform -P apache-release \
-                -DworkingDirectory=$ISISTMP/checkout
-----
-
-This will upload the artifacts to the ASF Nexus repository.
-
-
 [[__cgcom_cutting-a-release_releasing-the-archetypes_helloworld_setup-environment-variables]]
 === Releasing `helloworld` archetype
 
@@ -678,18 +576,7 @@ env | grep ISIS | sort
 [[__cgcom_cutting-a-release_releasing-the-archetypes_helloworld_check-the-example-app]]
 ==== Check the example app
 
-Update the parent `pom.xml` to reference the _released_ version of Apache Isis core, eg:
-
-[source,xml]
-----
-<properties>
-    <isis.version>2.0.0-M1</isis.version>
-    ...
-</properties>
-----
-
-
-Finally, double check that the app
+Check that the app:
 
 * builds:
 +
@@ -757,27 +644,37 @@ The script automatically commits changes; if you wish use `git log` and
 `git diff` (or a tool such as SourceTree) to review changes made.
 
 
-[[__cgcom_cutting-a-release_releasing-the-archetypes_helloworld_release-prepare]]
-=== Release prepare
+[[__cgcom_cutting-a-release_releasing-the-archetypes_helloworld_deploy]]
+==== Deploy
 
-Switch to the *archetype* directory and execute the `release:prepare`:
+Previously the release procedures used `mvn release:prepare` and `mvn release:perform`.
+These are however not compatible with `${revision}` that we now use https://maven.apache.org/maven-ci-friendly.html[for CI/CD].
 
-[source]
+We therefore just use `mvn deploy` directly, activating the (inherited) `apache-release` profile that, amongst other things, brings in the `gpg` plugin for code signing.
+
+To build and deploy and tag, we use:
+
+[source,bash]
 ----
-cd ../../../example/archetype/$ISISCPN
-rm -rf $ISISTMP/checkout
-mvn release:prepare -P apache-release \
-                -DreleaseVersion=$ISISREL \
-                -DdevelopmentVersion=$ISISDEV \
-                -Dtag=$ISISART-$ISISREL
+mvn -P apache-release \
+    clean deploy      \
+    -Dgpg.passphrase="this is not really my passphrase"
+
+git tag $ISISART-$ISISREL
 ----
+
+using your own GPG passphrase, of course.
+
+
+[IMPORTANT]
+====
+This requires `gpg` v2.1 or later.
+====
 
 
 
 [[__cgcom_cutting-a-release_releasing-the-archetypes_helloworld_post-prepare-sanity-check]]
 ==== Post-prepare sanity check
-
-This is a good point to test the archetype; nothing has yet been uploaded.
 
 _In a different session_, create a new app from the archetype.
 First set up environment variables:
@@ -816,24 +713,10 @@ mvn jetty:run
 
 
 
-[[__cgcom_cutting-a-release_releasing-the-archetypes_simplapp_release-perform-upload]]
-==== Release Perform (upload)
-
-Back in the original session (in the *archetype* directory, `example/archetype/$ISISCPN`), execute `release:perform`:
-
-[source]
-----
-mvn release:perform -P apache-release \
-                -DworkingDirectory=$ISISTMP/checkout
-----
-
-This will upload the artifacts to the ASF Nexus repository.
-
-
 [[__cgcom_cutting-a-release_check-close-staging-repo]]
 == Check/Close Staging Repo
 
-The `mvn release:perform` commands will have put release artifacts for both `core` and the `simpleapp` archetype into a newly created staging repository on the ASF Nexus repository server.
+The `mvn deploy` commands will have uploaded release artifacts for both `core` and the `simpleapp` archetype into a newly created staging repository on the ASF Nexus repository server.
 
 Log onto http://repository.apache.org[repository.apache.org] (using your ASF LDAP account):
 
@@ -876,6 +759,25 @@ Use `gpg --keyserver hkp://pgp.mit.edu --recv-keys nnnnnnnn` to confirm that the
 Unfortunately, Nexus does not seem to allow subkeys to be used for signing. See xref:../cgcom/cgcom.adoc#_cgcom_key-generation[Key Generation] for more details.
 ====
 
+
+
+
+
+[[__cgcom_cutting-a-release_bump-revision-to-ISISDEV]]
+== Bump `revision` property to `$ISISDEV`
+
+At the beginning of the release process we bumped the `revision` property to the release version, ie `${ISISREL}`.
+With the release now deployed we now need to bump the revision up to the next development version, ie `${ISISDEV}.
+
+In the root of the Apache Isis repo, we do this for all three ``pom.xml``s with:
+
+[source,bash]
+----
+sed -i -E "s|<revision>[^<]+<|<revision>${ISISDEV}<|g" core/pom.xml
+sed -i -E "s|<revision>[^<]+<|<revision>${ISISDEV}<|g" example/application/simpleapp/pom.xml
+sed -i -E "s|<revision>[^<]+<|<revision>${ISISDEV}<|g" example/application/helloworld/pom.xml
+commit -am "ISISJIRA: bumps revision property across all pom.xml's to ${ISISDEV}"
+----
 
 
 [[__cgcom_cutting-a-release_push-branches]]
