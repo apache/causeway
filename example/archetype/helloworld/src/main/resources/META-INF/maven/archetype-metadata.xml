@@ -42,6 +42,12 @@
       </includes>
     </fileSet>
     <fileSet filtered="true" encoding="UTF-8">
+      <directory>.m2</directory>
+      <includes>
+        <include>**/*.xml</include>
+      </includes>
+    </fileSet>
+    <fileSet filtered="true" encoding="UTF-8">
       <directory></directory>
       <includes>
         <include>logging-dn-enhance.properties</include>
