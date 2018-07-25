@@ -33,6 +33,8 @@ import com.google.common.collect.Multimaps;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.PublishingChangeKind;
+import org.apache.isis.applib.annotation.PublishedObject;
+import org.apache.isis.applib.services.RepresentsInteractionMemberExecution;
 import org.apache.isis.applib.services.publish.PublishedObjects;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
@@ -45,7 +47,7 @@ import org.apache.isis.schema.utils.jaxbadapters.JavaSqlTimestampXmlGregorianCal
 /**
  * Captures which objects were created, updated or deleted in the course of a transaction.
  */
-public class PublishedObjectsDefault implements PublishedObjects {
+public class PublishedObjectsDefault implements PublishedObjects, RepresentsInteractionMemberExecution {
 
     // -- constructor, fields
     private UUID transactionUuid;
@@ -74,8 +76,7 @@ public class PublishedObjectsDefault implements PublishedObjects {
     }
 
 
-
-    // -- transactionId, completedAt, user
+    // -- transactionId, sequence completedAt, user
     @Programmatic
     @Override
     public UUID getTransactionId() {
@@ -88,6 +89,12 @@ public class PublishedObjectsDefault implements PublishedObjects {
     @Override
     public void setTransactionId(final UUID transactionId) {
         this.transactionUuid = transactionId;
+    }
+
+    @Programmatic
+    @Override
+    public int getSequence() {
+        return sequence;
     }
 
     /**
