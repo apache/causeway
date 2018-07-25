@@ -149,7 +149,7 @@ Change all of these to the release version, using:
 sed -i -E "s|<revision>[^<]+<|<revision>${ISISREL}<|g" core/pom.xml
 sed -i -E "s|<revision>[^<]+<|<revision>${ISISREL}<|g" example/application/simpleapp/pom.xml
 sed -i -E "s|<revision>[^<]+<|<revision>${ISISREL}<|g" example/application/helloworld/pom.xml
-git commit -am "ISISJIRA: bumps revision property across all pom.xml's to ${ISISREL}"
+git commit -am "${ISISJIRA}: bumps revision property across all pom.xml's to ${ISISREL}"
 ----
 
 After release, there is a similar step at the end to set to the next development SNAPSHOT.
@@ -779,7 +779,7 @@ In the root of the Apache Isis repo, we do this for all three ``pom.xml``s with:
 sed -i -E "s|<revision>[^<]+<|<revision>${ISISDEV}<|g" core/pom.xml
 sed -i -E "s|<revision>[^<]+<|<revision>${ISISDEV}<|g" example/application/simpleapp/pom.xml
 sed -i -E "s|<revision>[^<]+<|<revision>${ISISDEV}<|g" example/application/helloworld/pom.xml
-git commit -am "ISISJIRA: bumps revision property across all pom.xml's to ${ISISDEV}"
+git commit -am "${ISISJIRA}: bumps revision property across all pom.xml's to ${ISISDEV}"
 ----
 
 
