@@ -152,7 +152,7 @@ sed -i -E "s|<revision>[^<]+<|<revision>${ISISREL}<|g" example/application/hello
 git commit -am "${ISISJIRA}: bumps revision property across all pom.xml's to ${ISISREL}"
 ----
 
-After release, there is a similar step at the end to set to the next development SNAPSHOT.
+After release, there is a xref:cgcom.adoc#__cgcom_cutting-a-release_bump-revision-to-ISISDEV[similar step at the end] to update to the next development `SNAPSHOT`.
 
 
 
@@ -775,7 +775,7 @@ Unfortunately, Nexus does not seem to allow subkeys to be used for signing. See 
 == Bump `revision` property to `$ISISDEV`
 
 At the beginning of the release process we bumped the `revision` property to the release version, ie `${ISISREL}`.
-With the release now deployed we now need to bump the revision up to the next development version, ie `${ISISDEV}.
+With the release now deployed we now need to bump the revision up to the next development version, ie `${ISISDEV}`.
 
 In the root of the Apache Isis repo, we do this for all three ``pom.xml``s with:
 
