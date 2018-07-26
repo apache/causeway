@@ -87,7 +87,7 @@ To build Apache Isis core, first clean out the local repository cache:
 
 [source]
 ----
-rm -rf ~/m2/repository/org/apache/isis
+rm -rf ~/.m2/repository/org/apache/isis
 ----
 
 and then build using:
