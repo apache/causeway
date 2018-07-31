@@ -335,7 +335,7 @@ org.apache.isis.applib.fixturescripts
         execute(...) and executeChild(...) - use ExecutionContext#executeChild(FixtureScript, String, FixtureScript)} instead
         executeIfNotAlready(FixtureScript) - removed; this shouldn't have had public visibility.
         lookup(String, Class<T>) - use ExecutionContext#lookup(...) instead
-        run(String) - no longer publically available (internal API for FixtureScripts to call).
+        run(String) - no longer publicly available (internal API for FixtureScripts to call).
 
     FixtureScripts.java - remove deprecated constructors;
 
