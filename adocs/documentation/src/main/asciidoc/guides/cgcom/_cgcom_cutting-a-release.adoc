@@ -149,10 +149,10 @@ Change all of these to the release version, using:
 sed -i -E "s|<revision>[^<]+<|<revision>${ISISREL}<|g" core/pom.xml
 sed -i -E "s|<revision>[^<]+<|<revision>${ISISREL}<|g" example/application/simpleapp/pom.xml
 sed -i -E "s|<revision>[^<]+<|<revision>${ISISREL}<|g" example/application/helloworld/pom.xml
-git commit -am "ISISJIRA: bumps revision property across all pom.xml's to ${ISISREL}"
+git commit -am "${ISISJIRA}: bumps revision property across all pom.xml's to ${ISISREL}"
 ----
 
-After release, there is a similar step at the end to set to the next development SNAPSHOT.
+After release, there is a xref:cgcom.adoc#__cgcom_cutting-a-release_bump-revision-to-ISISDEV[similar step at the end] to update to the next development `SNAPSHOT`.
 
 
 
@@ -305,6 +305,7 @@ mvn -P apache-release \
     -Dgpg.passphrase="this is not really my passphrase"
 
 git tag $ISISART-$ISISREL
+git tag $ISISART-$ISISREL-$ISISRC
 ----
 
 using your own GPG passphrase, of course.
@@ -416,7 +417,9 @@ popd
 [source,bash]
 ----
 mvn install -Dmavenmixin-docker -D docker-plugin.imageName=test/simpleapp
-docker container run -p 8080:8080 -d test/simpleapp
+docker container run -p 8080:8080 --name simpleapp -d test/simpleapp
+
+#winpty docker exec -it simpleapp bash
 ----
 +
 [NOTE]
@@ -444,15 +447,20 @@ The Kitematic UI tool is handy for viewing and interacting with running containe
 ====
 
 
-In each case, check the about page and confirm has been built against non-SNAPSHOT versions of the Apache Isis jars.
+To tidy up, kill and remove the container:
 
+[source,bash]
+----
+docker container kill simpleapp
+docker container rm simpleapp
+----
 
 [[__cgcom_cutting-a-release_releasing-the-simpleapp-archetype_create-the-archetype]]
 === Recreate the archetype
 
 Make sure you are in the correct directory and environment variables are correct.
 
-To recreate the *simpleapp* archetype:
+To recreate the *simpleapp* archetype, first ensure in the correct directory:
 
 [source,bash]
 ----
@@ -460,48 +468,20 @@ cd example/application/simpleapp
 env | grep ISIS | sort
 ----
 
-Then, run the script:
+Then, run the script (which also builds the archetype once generated) and switch to the archetype's directory:
 
 [source,bash]
 ----
 sh ../../../scripts/recreate-archetype.sh $ISISJIRA
+cd `pwd|sed 's/application/archetype/'`
 ----
 
 The script automatically commits changes; if you wish use `git log` and
 `git diff` (or a tool such as SourceTree) to review changes made.
 
 
-[[__cgcom_cutting-a-release_releasing-the-simpleapp-archetype_deploy]]
-=== Deploy
-
-Previously the release procedures used `mvn release:prepare` and `mvn release:perform`.
-These are however not compatible with `${revision}` that we now use https://maven.apache.org/maven-ci-friendly.html[for CI/CD].
-
-We therefore just use `mvn deploy` directly, activating the (inherited) `apache-release` profile that, amongst other things, brings in the `gpg` plugin for code signing.
-
-To build and deploy and tag, we use:
-
-[source,bash]
-----
-mvn -P apache-release \
-    clean deploy      \
-    -Dgpg.passphrase="this is not really my passphrase"
-
-git tag $ISISART-$ISISREL
-----
-
-using your own GPG passphrase, of course.
-
-
-[IMPORTANT]
-====
-This requires `gpg` v2.1 or later.
-====
-
-
-
-[[__cgcom_cutting-a-release_releasing-the-simpleapp-archetype_post-prepare-sanity-check]]
-=== Post-prepare sanity check
+[[__cgcom_cutting-a-release_releasing-the-simpleapp-archetype_sanity-check]]
+=== Sanity check
 
 _In a different session_, create a new app from the archetype.
 First set up environment variables:
@@ -537,6 +517,40 @@ cd myapp
 mvn clean install -o
 mvn -pl webapp jetty:run              # runs as mvn jetty plugin
 ----
+
+
+[[__cgcom_cutting-a-release_releasing-the-simpleapp-archetype_deploy]]
+=== Deploy
+
+Back in the original session, we upload (deploy) the archetype to the staging repository.
+
+[NOTE]
+====
+Previously we used `mvn release:prepare` and `mvn release:perform` to do this.
+However not compatible with `${revision}` that we now use https://maven.apache.org/maven-ci-friendly.html[for CI/CD].
+We therefore now just use `mvn deploy` directly, activating the (inherited) `apache-release` profile that, amongst other things, brings in the `gpg` plugin for code signing.
+====
+
+To build and deploy and tag, we use:
+
+[source,bash]
+----
+mvn -P apache-release \
+    clean deploy      \
+    -Dgpg.passphrase="this is not really my passphrase"
+
+git tag $ISISART-$ISISREL
+git tag $ISISART-$ISISREL-$ISISRC
+----
+
+using your own GPG passphrase, of course.
+
+
+[IMPORTANT]
+====
+This requires `gpg` v2.1 or later.
+====
+
 
 
 
@@ -629,48 +643,21 @@ cd example/application/helloworld
 env | grep ISIS | sort
 ----
 
-Then, run the script:
+Then, run the script (which also builds the archetype once generated) and then switch to the archetype's directory:
 
 [source,bash]
 ----
 sh ../../../scripts/recreate-archetype.sh $ISISJIRA
+cd `pwd|sed 's/application/archetype/'`
 ----
 
-The script automatically commits changes; if you wish use `git log` and
-`git diff` (or a tool such as SourceTree) to review changes made.
-
-
-[[__cgcom_cutting-a-release_releasing-the-helloworld-archetype_deploy]]
-=== Deploy
-
-Previously the release procedures used `mvn release:prepare` and `mvn release:perform`.
-These are however not compatible with `${revision}` that we now use https://maven.apache.org/maven-ci-friendly.html[for CI/CD].
-
-We therefore just use `mvn deploy` directly, activating the (inherited) `apache-release` profile that, amongst other things, brings in the `gpg` plugin for code signing.
-
-To build and deploy and tag, we use:
-
-[source,bash]
-----
-mvn -P apache-release \
-    clean deploy      \
-    -Dgpg.passphrase="this is not really my passphrase"
-
-git tag $ISISART-$ISISREL
-----
-
-using your own GPG passphrase, of course.
-
-
-[IMPORTANT]
-====
-This requires `gpg` v2.1 or later.
-====
+The script automatically commits its changes.
+If you wish use `git log` and `git diff` (or a tool such as SourceTree) to review changes made.
 
 
 
-[[__cgcom_cutting-a-release_releasing-the-helloworld-archetype_post-prepare-sanity-check]]
-=== Post-prepare sanity check
+[[__cgcom_cutting-a-release_releasing-the-helloworld-archetype_sanity-check]]
+=== Sanity check
 
 _In a different session_, create a new app from the archetype.
 First set up environment variables:
@@ -706,6 +693,31 @@ cd myapp
 mvn clean install -o
 mvn jetty:run
 ----
+
+[[__cgcom_cutting-a-release_releasing-the-helloworld-archetype_deploy]]
+=== Deploy
+
+Back in the original session, we upload (deploy) the archetype to the staging repository.
+
+To build and deploy and tag, we use:
+
+[source,bash]
+----
+mvn -P apache-release \
+    clean deploy      \
+    -Dgpg.passphrase="this is not really my passphrase"
+
+git tag $ISISART-$ISISREL
+git tag $ISISART-$ISISREL-$ISISRC
+----
+
+using your own GPG passphrase, of course.
+
+
+[IMPORTANT]
+====
+This requires `gpg` v2.1 or later.
+====
 
 
 
@@ -763,7 +775,7 @@ Unfortunately, Nexus does not seem to allow subkeys to be used for signing. See 
 == Bump `revision` property to `$ISISDEV`
 
 At the beginning of the release process we bumped the `revision` property to the release version, ie `${ISISREL}`.
-With the release now deployed we now need to bump the revision up to the next development version, ie `${ISISDEV}.
+With the release now deployed we now need to bump the revision up to the next development version, ie `${ISISDEV}`.
 
 In the root of the Apache Isis repo, we do this for all three ``pom.xml``s with:
 
@@ -772,7 +784,7 @@ In the root of the Apache Isis repo, we do this for all three ``pom.xml``s with:
 sed -i -E "s|<revision>[^<]+<|<revision>${ISISDEV}<|g" core/pom.xml
 sed -i -E "s|<revision>[^<]+<|<revision>${ISISDEV}<|g" example/application/simpleapp/pom.xml
 sed -i -E "s|<revision>[^<]+<|<revision>${ISISDEV}<|g" example/application/helloworld/pom.xml
-git commit -am "ISISJIRA: bumps revision property across all pom.xml's to ${ISISDEV}"
+git commit -am "${ISISJIRA}: bumps revision property across all pom.xml's to ${ISISDEV}"
 ----
 
 

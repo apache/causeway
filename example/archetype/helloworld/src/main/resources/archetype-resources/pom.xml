@@ -139,15 +139,11 @@
     </dependency>
     <dependency>
       <groupId>org.apache.isis.core</groupId>
-      <artifactId>isis-core-plugins-eventbus-guava</artifactId>
+      <artifactId>isis-core-plugins-eventbus-axon</artifactId>
     </dependency>
     <dependency>
       <groupId>org.apache.isis.core</groupId>
       <artifactId>isis-core-plugins-jaxrs-resteasy-3</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.hsqldb</groupId>
-      <artifactId>hsqldb</artifactId>
     </dependency>
     <dependency>
       <groupId>org.hsqldb</groupId>
@@ -182,6 +178,64 @@
               <source>${compiler-plugin.source}</source>
               <target>${compiler-plugin.target}</target>
               <compilerArgument/>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>skinny-war</id>
+      <activation>
+        <property>
+          <name>skinny-war</name>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-war-plugin</artifactId>
+            <version>${maven-war-plugin.version}</version>
+            <configuration>
+              <warName>${maven-war-plugin.warName}</warName>
+              <packagingExcludes>%regex[WEB-INF/lib/(?!common-A|common-B).*.jar]</packagingExcludes>
+              <archive>
+                <manifest>
+                  <addClasspath>false</addClasspath>
+                </manifest>
+                <manifestEntries>
+                  <Build-Time>${maven.build.timestamp}</Build-Time>
+                  <Build-Host>${agent.name}</Build-Host>
+                  <Build-User>${user.name}</Build-User>
+                  <Build-Maven>Maven ${maven.version}</Build-Maven>
+                  <Build-Java>${java.version}</Build-Java>
+                  <Build-OS>${os.name}</Build-OS>
+                  <Build-Label>${project.version}</Build-Label>
+                </manifestEntries>
+              </archive>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>deploy-to-tomcat</id>
+      <activation>
+        <property>
+          <name>deploy-to-tomcat</name>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.tomcat.maven</groupId>
+            <artifactId>tomcat7-maven-plugin</artifactId>
+            <version>2.2</version>
+            <configuration>
+              <url>http://localhost:8080/manager/text</url>
+              <server>tomcat-server</server>
+              <path>/ROOT</path>
+              <warFile>${project.build.directory}/${maven-war-plugin.warName}.war</warFile>
+              <update>true</update>
             </configuration>
           </plugin>
         </plugins>
