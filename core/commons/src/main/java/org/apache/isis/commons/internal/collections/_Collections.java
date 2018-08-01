@@ -19,6 +19,8 @@
 
 package org.apache.isis.commons.internal.collections;
 
+import static org.apache.isis.commons.internal.base._With.requires;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -29,7 +31,6 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -203,7 +204,7 @@ public final class _Collections {
      */
     public static <T> Collector<T, ?, ? extends Collection<T>> toUnmodifiableOfType(Class<?> typeOfCollection) {
 
-        Objects.requireNonNull(typeOfCollection);
+        requires(typeOfCollection, "typeOfCollection");
 
         if(SortedSet.class.equals(typeOfCollection)) {
             return toUnmodifiableSortedSet();

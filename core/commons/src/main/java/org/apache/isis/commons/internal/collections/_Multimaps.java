@@ -19,13 +19,14 @@
 
 package org.apache.isis.commons.internal.collections;
 
+import static org.apache.isis.commons.internal.base._With.requires;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 import java.util.function.Supplier;
 
@@ -102,8 +103,8 @@ public class _Multimaps {
     public static <K, V> ListMultimap<K, V> newListMultimap(
             final Supplier<Map<K, List<V>>> mapFactory,
             final Supplier<List<V>> elementCollectionFactory){
-        Objects.requireNonNull(mapFactory);
-        Objects.requireNonNull(elementCollectionFactory);
+        requires(mapFactory, "mapFactory");
+        requires(elementCollectionFactory, "elementCollectionFactory");
 
         return new ListMultimap<K, V>() {
 
@@ -134,8 +135,8 @@ public class _Multimaps {
     public static <K, V> SetMultimap<K, V> newSetMultimap(
             final Supplier<Map<K, Set<V>>> mapFactory,
             final Supplier<Set<V>> elementCollectionFactory){
-        Objects.requireNonNull(mapFactory);
-        Objects.requireNonNull(elementCollectionFactory);
+        requires(mapFactory, "mapFactory");
+        requires(elementCollectionFactory, "elementCollectionFactory");
 
         return new SetMultimap<K, V>() {
 
@@ -166,8 +167,8 @@ public class _Multimaps {
     public static <K1, K2, V> MapMultimap<K1, K2, V> newMapMultimap(
             final Supplier<Map<K1, Map<K2, V>>> mapFactory,
             final Supplier<Map<K2, V>> elementMapFactory){
-        Objects.requireNonNull(mapFactory);
-        Objects.requireNonNull(elementMapFactory);
+        requires(mapFactory, "mapFactory");
+        requires(elementMapFactory, "elementMapFactory");
 
         return new MapMultimap<K1, K2, V>() {
 

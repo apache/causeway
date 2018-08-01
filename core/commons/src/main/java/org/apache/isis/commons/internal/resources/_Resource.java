@@ -44,6 +44,12 @@ public final class _Resource {
 
     // -- CLASS PATH RESOURCE LOADING
 
+    /**
+     * Returns the resource with path {@code resourceName} relative to {@code contextClass} as an InputStream.
+     * @param contextClass
+     * @param resourceName
+     * @return An input stream for reading the resource, or null if the resource could not be found.
+     */
     public static InputStream load(Class<?> contextClass, String resourceName) {
 
         requires(contextClass, "contextClass");
@@ -55,6 +61,15 @@ public final class _Resource {
                 .getResourceAsStream(absoluteResourceName);
     }
 
+    /**
+     * Returns the resource with path {@code resourceName} relative to {@code contextClass} as a String
+     * conforming to the given {@code charset}.
+     * @param contextClass
+     * @param resourceName
+     * @param charset
+     * @return The resource as a String, or null if the resource could not be found.
+     * @throws IOException
+     */
     public static String loadAsString(Class<?> contextClass, String resourceName, Charset charset) throws IOException {
         final InputStream is = load(contextClass, resourceName);
         return _Strings.ofBytes(_Bytes.of(is), charset);
