@@ -1,5 +1,20 @@
 
+for 2.0.0-M2
 
+
+remove:
+- @MemberGroupLayout
+- contributed domain services (use mixins instead)
+
+to change:
+- automatically wrap domain services (perhaps behind a config property)
+- automatically infer \@Programmatic for all \@DomainService(nature=DOMAIN)
+
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+the stuff below here was working notes for 2.0.0-M1, not necessarily up to date.
 
 
 TO REMOVE:
@@ -25,18 +40,19 @@ org.apache.isis.applib.services.memento  (19 usages found)
 
 
 Also for 2.0.0, new features/deprecations:
-    automatically wrap domain services (perhaps behind a config property)
-    automatically infer \@Programmatic for all \@DomainService(nature=DOMAIN)
     deprecate use of guava predicates, but don't remove (too big a change, weren't deprecated previously)
     deprecate FixtureScripts service with view to removing from applib ... the framework provides an implementation by default
     get rid of automatic initialization of fields (perhaps behind a config property)
     deprecate the Apache Isis' DateTime classes for removal in the future) ... and probably all of the custom value types, subclasses of Magnitude
-    flag to make @Action mandatory, @Programmatic the default
     merge metamodel and runtime
     remove *Installer
 
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+1.16.2
+- flag to make @Action mandatory, @Programmatic the default
 
 
 OTHER STUFF:
@@ -189,128 +205,6 @@ org.apache.isis.applib
         PropertyDomainEvent  - the N arg constructors (just use the 0-arg ones)
 
 
-
-org.apache.isis.applib.annotation
-
-    ActionInteraction.java  - entire annotation, use @Action(domainEvent=...)
-    CollectionInteraction.java - entire annotation, use @Collection(domainEvent=...)
-    PostsActionInvokedEvent.java - entire annotation, use @Action(domainEvent=...) instead
-    PostsCollectionAddedToEvent.java - entire annotation, use @Collection(domainEvent=...) instead.
-    PostsCollectionRemovedFromEvent.java - entire annotation, use @Collection(domainEvent=...) instead.
-    PostsPropertyChangedEvent.java - entire annotation, use @Property(domainEvent=...) instead.
-    PropertyInteraction.java - entire annotation, use @Property(domainEvent=...) instead.
-
-    Action.java
-        publishingPayloadFactory()  - attribute; use the simpler PublisherService SPI instead
-    DomainObject.java
-        publishingPayloadFactory() - attribute, use the simpler PublisherService SPI instead
-    PublishedAction.java - entire annotation, use @Action(publishing=...) instead
-    PublishedObject.java - entire annotation, use @DomainObject(publishing=...) instead
-    PublishingPayloadFactoryForAction.java - entire annotation, replaced with simpler PublisherService SPI
-    PublishingPayloadFactoryForObject.java - entire annotation, replaced with simpler PublisherService SPI
-
-
-    AutoComplete.java - entire annotation, use @DomainObject(autoComplete...=...)
-
-    Bookmarkable.java - entire annotation, use @DomainObjectLayout(bookmarking=...)
-
-    Bulk.java - entire annotation, use @Action(invokeOn=...)
-    Bulk.InteractionContext - entire service, use ActionInvocationContext service instead
-
-    Command.java - entire annotation, use @Action(command=...) instead
-
-    Disabled.java - entire annotation, use @Property(editingDisabledReason=...) instead
-    Hidden.java - entire annotation, use @Property(hidden=...), @Collection(hidden=...), @Action(hidden=...)
-
-    ActionSemantics.java  - entire annotation, use @Action(semantics=...)
-    Idempotent.java - entire annotation, use @Action(semantics=...) instead.
-    QueryOnly.java - entire annotation, use @Action(semantics=...) instead.
-
-    ActionOrder.java - entire annotation, use @MemberOrder instead
-    FieldOrder.java - entire annotation, use @MemberOrder instead
-
-    Aggregated.java - entire annotation, not supported internally
-
-    Audited.java - entire annotation, use @DomainObject(audited=...)
-
-    Bounded.java - entire annotation, use @DomainObject(bounded=...)
-
-    CollectionLayout.java
-        render() - use @CollectionLayout(defaultView=...) instead
-    RenderType.java - supporting enum for @Render annotation
-    Render.java - entire annotation, use @CollectionLayout(defaultView=...) instead
-    Resolve.java - entire annotation, use @CollectionLayout(defaultView=...) instead
-
-    CssClass.java - entire annotation, use @XxxLayout(cssClass=...) instead, where Xxx is Property, Collection, Action, Parameter, DomainObject, ViewModel
-    CssClassFa.java - entire annotation, use @XxxLayout(cssClass=...) instead, where Xxx is Property, Collection, Action, Parameter, DomainObject, ViewModel
-
-    Debug.java - entire annotation, use @Action#(restrictTo=...) instead
-    Exploration.java - entire annotation, use @Action(restrictTo=....) instead
-    Prototype.java  - entire annotation, use @Action(restrictTo=....) instead
-
-    DescribedAs.java - entire annotation, use @XxxLayout(describedAs=...) instead
-
-    Ignore.java - entire annotation, use @Programmatic instead.
-
-    Immutable.java - entire annotation, use @DomainObject(editing=...) instead
-
-    Mask.java - entire annotation, not supported by either Wicket viewer or RO viewer
-    MaxLength.java - entire annotation, use @Property(maxLength=...) and @Parameter(maxLength=...)
-    MultiLine.java - entire annotation, use @PropertyLayout(multiLine=...) and @ParameterLayout(multiLine=...) instead.
-    Named.java - entire annotation, use @XxxLayout(named=...) instead, where Xxx is Property, Collection, Action, Parameter, DomainObject, ViewModel
-    Plural.java - entire annotation, use @DomainObjectLayout(plural=...) instead
-
-    MemberGroups.java - entire annotation, use Xxx.layout.xml instead
-
-    MustSatisfy.java - entire annotation, use @Property(mustSatisfy=....) or @Parameter(mustSatisfy=...) instead
-
-    RegEx.java - entire annotation, use @Property(regexPatternFlags=...) or @Parameter(regexPatternFlags=...) instead;
-
-
-    RenderedAsDayBefore.java - entire annotation, use @PropertyLayout(renderedAsDayBefore=...) and @ParameterLayout(renderedAsDayBefore=...)
-
-    Paged.java - entire annotation, use @DomainObjectLayout(paged=...) or @CollectionLayout(paged=...) instead.
-    SortedBy.java - entire annotation, use @CollectionLayout(sortedBy=...) instead
-
-    TypicalLength.java - entire annotation, use @PropertyLayout(typicalLength=...) instead.
-
-
-    TypeOf.java - entire annotation, use @Collection(typeOf=...) or @Action(typeOf=...) instead.
-
-
-    Mandatory.java - entire annotation, use @Property(optionality=...) and @Parameter(optionality=...), or @javax.annotations.Nullable
-    Optional.java - entire annotation, use @Property(optionality=...) and @Parameter(optionality=...), or @javax.annotations.Nullable
-
-
-    NotInServiceMenu.java - entire annotation, use @DomainService(nature=...) or mixins instead.
-
-    NotContributed.java - entire annotation, use @DomainService(nature=...) or mixins instead.
-
-    NotPersisted.java - entire annotation, use @Property(notPersisted=...) instead
-
-    NotPersistable.java - entire annotation, not supported and does nothing
-
-    Parameter.java
-        minLength() attribute; not supported.  For autocomplete, use @MinLength annotation.
-
-    ObjectType.java - entire annotation, use @DomainObject(objectType=...) or @javax.jdo.annotations.Discriminator instead.
-
-    When.java - entire enum, no replacement (believe is unused within the framwork)
-
-
-
-org.apache.isis.applib.marker - remove these marker interfaces (tend to use annotations in preference)
-
-    Auditable.java
-    Bounded.java
-
-    NotPersistable.java
-    ProgramPersistable.java
-
-    AlwaysImmutable.java
-    ImmutableOncePersisted.java
-    ImmutableUntilPersisted.java
-    NeverImmutable.java
 
 
 

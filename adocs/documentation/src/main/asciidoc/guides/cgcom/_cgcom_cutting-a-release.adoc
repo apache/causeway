@@ -823,9 +823,12 @@ Once the artifacts have been uploaded, you can call a vote.
 In all cases, votes last for 72 hours and require a +3 (binding) vote from members.
 
 [[__cgcom_cutting-a-release_voting-start-voting-thread]]
-=== Start voting thread on link:mailto:&#100;e&#118;&#x40;&#x69;&#x73;&#x69;&#115;&#x2e;&#x61;p&#97;&#x63;&#104;e&#46;&#111;&#114;g[&#100;e&#118;&#x40;&#x69;&#x73;&#x69;&#115;&#x2e;&#x61;p&#97;&#x63;&#104;e&#46;&#111;&#114;g]
+=== Start voting thread on dev mailing list
 
-The following boilerplate is for a release of the Apache Isis Core. Adapt as required:
+That is, link:mailto:dev@apache.isis.org[]
+
+The following boilerplate is for a release of the Apache Isis Core.
+Adapt as required:
 
 Use the following subject, eg:
 
