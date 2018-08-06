@@ -19,6 +19,8 @@ The most significant domain service removed is `DomainObjectContainer`.
 
 
 
+
+
 == New Feature
 
 * link:https://issues.apache.org/jira/browse/ISIS-1969[ISIS-1969] - Distribute Isis as a Docker image, with the libraries in Tomcat's lib/ folder (skinny wars)

@@ -9,11 +9,96 @@
 
 
 
-
 [[__migration-notes_1.15.0-to-1.16.0_meta-annotations]]
 == Meta annotations
 
-TODO: document
+Most of the Apache Isis annotations can now be associated with meta-annotations.
+Coupled with the fact that DataNucleus 5.x also supports meta annotations, this therefore allows a degree of reuse.
+
+For example, instead of:
+
+[source,java]
+----
+@Column(length=30)
+@Property(regex=...)
+@Getter @Setter
+private String name;
+
+public Customer updateName(
+    @Parameter(maxLength=30, regex=...)
+    String name ) {
+    setName(name);
+}
+----
+
+we can instead define a `@Name` annotation:
+
+
+[source,java]
+----
+@Column(length=30)
+@Property(regex=...)
+@Parameter(maxLength=30, regex=...)
+public @interface @Name {}
+----
+
+and then use this annotation:
+
+[source,java]
+----
+@Name
+@Getter @Setter
+private String name;
+
+public Customer updateName(
+    @Name
+    String name ) {
+    setName(name);
+}
+----
+
+The full list of Apache Isis annotations that can be used in meta-annotations is shown in the table below.
+
+.Apache Isis annotations that can be used in meta-annotations
+[cols="1a,1a,1a", options="header"]
+|===
+
+|
+| Domain layer
+| UI layer
+
+
+|domain service
+|xref:../guides/rgant/rgant.adoc#_rgant-DomainService[@DomainService]
+|xref:../guides/rgant/rgant.adoc#_rgant-DomainServiceLayout[@DomainServiceLayout]
+
+|domain object
+|xref:../guides/rgant/rgant.adoc#_rgant-DomainObject[@DomainObject] +
+xref:../guides/rgant/rgant.adoc#_rgant-ViewModel[@ViewModel] +
+xref:../guides/rgant/rgant.adoc#_rgant-MemberGroupLayout[@MemberGroupLayout]
+
+|xref:../guides/rgant/rgant.adoc#_rgant-DomainObjectLayout[@DomainObjectLayout] +
+xref:../guides/rgant/rgant.adoc#_rgant-ViewModelLayout[@ViewModelLayout]
+
+| Action
+
+|xref:../guides/rgant/rgant.adoc#_rgant-Action[@Action]
+|xref:../guides/rgant/rgant.adoc#_rgant-ActionLayout[@ActionLayout]
+
+|action parameter
+|xref:../guides/rgant/rgant.adoc#_rgant-Parameter[@Parameter]
+|xref:../guides/rgant/rgant.adoc#_rgant-ParameterLayout[@ParameterLayout]
+
+
+|property
+|xref:../guides/rgant/rgant.adoc#_rgant-Property[@Property]
+|xref:../guides/rgant/rgant.adoc#_rgant-PropertyLayout[@PropertyLayout]
+
+|collection
+|xref:../guides/rgant/rgant.adoc#_rgant-Collection[@Collection]
+|xref:../guides/rgant/rgant.adoc#_rgant-CollectionLayout[@CollectionLayout]
+
+|===
 
 
 
