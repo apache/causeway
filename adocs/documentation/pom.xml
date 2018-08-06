@@ -52,10 +52,10 @@
 
         <build.dir>${project.basedir}/target/site</build.dir>
 
-	<!-- expected isis-site to be checked out to /c/ASF/isis/isis-site, vs /c/github/apache/isis -->
-        <isis-site-latest.dir>../../../../../ASF/isis/isis-site/latest</isis-site-latest.dir>
-        <isis-site-content.dir>../../../../../ASF/isis/isis-site/content</isis-site-content.dir>
-        <isis-site-search.dir>../../../../../ASF/isis/isis-site/search</isis-site-search.dir>
+	<!-- expects 'isis-site' to be checked out to the same parent directory as 'isis-master' -->
+        <isis-site-latest.dir>../../../isis-site/latest</isis-site-latest.dir>
+        <isis-site-content.dir>../../../isis-site/content</isis-site-content.dir>
+        <isis-site-search.dir>../../../isis-site/search</isis-site-search.dir>
         <message>updating content (built from adocs/documentation in isis.git repo)</message>
     </properties>
 
