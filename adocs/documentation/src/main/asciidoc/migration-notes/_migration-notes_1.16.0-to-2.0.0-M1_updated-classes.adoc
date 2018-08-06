@@ -32,10 +32,34 @@ PropertyDomainEvent
 |N-arg constructor
 |removed; just use the 0-arg ones
 
-|FixtureScript.
-ExecutionContext
+|FixtureScript
 |`asKeyValueMap(String)`
 |Removed; this shouldn't have had public visibility.
+
+|FixtureScript
+|`execute(...)`
+`executeChild(...)`
+`executeIfNotAlready(...)`
+`run(...)`
+|All removed or no longer public; use `FixtureScript.ExecutionContext#executeChild(...)` instead.
+
+|FixtureScript
+|`lookup(...)`
+|Removed; use `FixtureScript.ExecutionContext#lookup(...)` instead.
+
+|FixtureScript.
+ExecutionContext
+|`add(...)`
+|Removed; use `addResult(...)` instead.
+
+|FixtureScripts
+|deprecated constructors
+|Removed
+
+|FixtureScripts.
+MultipleExecutionStrategy
+|`IGNORE`
+|Removed, use `EXECUTE_ONCE_PER_CLASS` instead
 
 |===
 

@@ -189,24 +189,8 @@ DONE (REMOVED):
 
     remove explorationXxx() prefix
 
-org.apache.isis.applib
 
 
-
-
-    IsisApplibModule.java
-        ActionDomainEvent - the N-arg constructors (just use the 0-arg ones)
-        CollectionDomainEvent - the N arg constructors (just use the 0-arg ones)
-        PropertyDomainEvent  - the N arg constructors (just use the 0-arg ones)
-
-
-
-
-
-
-org.apache.isis.applib.filter
-
-    - entire package of Filter classes; use guava Predicate instead.
 
 
 org.apache.isis.applib.clock
@@ -214,22 +198,8 @@ org.apache.isis.applib.clock
         getTimeAsCalendar()
         getTimeAsDate()
 
-org.apache.isis.applib.fixturescripts
-    FixtureScript.ExecutionContext - various methods to simplify API
-        add(...) - use addResult(...) instead
-        asKeyValueMap(String) - removed; this shouldn't have had public visibility.
 
-    FixtureScript - various methods to simplify API
-        execute(...) and executeChild(...) - use ExecutionContext#executeChild(FixtureScript, String, FixtureScript)} instead
-        executeIfNotAlready(FixtureScript) - removed; this shouldn't have had public visibility.
-        lookup(String, Class<T>) - use ExecutionContext#lookup(...) instead
-        run(String) - no longer publically available (internal API for FixtureScripts to call).
-
-    FixtureScripts.java - remove deprecated constructors;
-
-    FixtureScripts.MultipleExecutionStrategy#IGNORE removed, replaced by EXECUTE_ONCE_BY_CLASS
-
-
+		
 org.apache.isis.applib.services.actinvoc
     ActionInvocationContext.java -remove unused constructors
 
