@@ -191,11 +191,6 @@ DONE (REMOVED):
 
 org.apache.isis.applib
 
-    AbstractContainedObject.java - entire class
-    AbstractDomainObject.java  - entire class
-    AbstractFactoryAndRepository.java  - entire class
-
-    AbstractHomePageDashboardService - entire class
 
 
 
@@ -203,7 +198,6 @@ org.apache.isis.applib
         ActionDomainEvent - the N-arg constructors (just use the 0-arg ones)
         CollectionDomainEvent - the N arg constructors (just use the 0-arg ones)
         PropertyDomainEvent  - the N arg constructors (just use the 0-arg ones)
-
 
 
 

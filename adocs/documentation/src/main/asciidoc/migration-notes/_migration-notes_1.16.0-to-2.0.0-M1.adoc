@@ -6,99 +6,11 @@
 
 
 
+include::_migration-notes_1.16.0-to-2.0.0-M1_meta-annotations.adoc[leveloffset=+1]
 
 
 
-[[__migration-notes_1.15.0-to-1.16.0_meta-annotations]]
-== Meta annotations
 
-Most of the Apache Isis annotations can now be associated with meta-annotations.
-Coupled with the fact that DataNucleus 5.x also supports meta annotations, this therefore allows a degree of reuse.
-
-For example, instead of:
-
-[source,java]
-----
-@Column(length=30)
-@Property(regex=...)
-@Getter @Setter
-private String name;
-
-public Customer updateName(
-    @Parameter(maxLength=30, regex=...)
-    String name ) {
-    setName(name);
-}
-----
-
-we can instead define a `@Name` annotation:
-
-
-[source,java]
-----
-@Column(length=30)
-@Property(regex=...)
-@Parameter(maxLength=30, regex=...)
-public @interface @Name {}
-----
-
-and then use this annotation:
-
-[source,java]
-----
-@Name
-@Getter @Setter
-private String name;
-
-public Customer updateName(
-    @Name
-    String name ) {
-    setName(name);
-}
-----
-
-The full list of Apache Isis annotations that can be used in meta-annotations is shown in the table below.
-
-.Apache Isis annotations that can be used in meta-annotations
-[cols="1a,1a,1a", options="header"]
-|===
-
-|
-| Domain layer
-| UI layer
-
-
-|domain service
-|xref:../guides/rgant/rgant.adoc#_rgant-DomainService[@DomainService]
-|xref:../guides/rgant/rgant.adoc#_rgant-DomainServiceLayout[@DomainServiceLayout]
-
-|domain object
-|xref:../guides/rgant/rgant.adoc#_rgant-DomainObject[@DomainObject] +
-xref:../guides/rgant/rgant.adoc#_rgant-ViewModel[@ViewModel] +
-xref:../guides/rgant/rgant.adoc#_rgant-MemberGroupLayout[@MemberGroupLayout]
-
-|xref:../guides/rgant/rgant.adoc#_rgant-DomainObjectLayout[@DomainObjectLayout] +
-xref:../guides/rgant/rgant.adoc#_rgant-ViewModelLayout[@ViewModelLayout]
-
-| Action
-
-|xref:../guides/rgant/rgant.adoc#_rgant-Action[@Action]
-|xref:../guides/rgant/rgant.adoc#_rgant-ActionLayout[@ActionLayout]
-
-|action parameter
-|xref:../guides/rgant/rgant.adoc#_rgant-Parameter[@Parameter]
-|xref:../guides/rgant/rgant.adoc#_rgant-ParameterLayout[@ParameterLayout]
-
-
-|property
-|xref:../guides/rgant/rgant.adoc#_rgant-Property[@Property]
-|xref:../guides/rgant/rgant.adoc#_rgant-PropertyLayout[@PropertyLayout]
-
-|collection
-|xref:../guides/rgant/rgant.adoc#_rgant-Collection[@Collection]
-|xref:../guides/rgant/rgant.adoc#_rgant-CollectionLayout[@CollectionLayout]
-
-|===
 
 
 
@@ -111,13 +23,13 @@ Other enums have been extended (where necessary) to also have a `NOT_SPECIFIED` 
 In all cases `NOT_SPECIFIED` is the new default.
 
 
-
+.Updated annotations
 [cols="1a,1a,3a", options="header"]
 |===
 
 | Annotation
-| Modified attribute
-| Change
+| Updated attribute
+| Nature of change
 
 .7+|xref:../guides/rgant/rgant.adoc#_rgant-Action[`@Action`]
 
@@ -272,6 +184,9 @@ Defaults to `NOT_SPECIFIED`.
 [[__migration-notes_1.15.0-to-1.16.0_removed-annotations]]
 == Removed annotations/attributes
 
+The following annotations, or attributes of annotations, have been removed
+
+.Removed annotations/attributes
 [cols="1l,1l,3a", options="header"]
 |===
 
@@ -583,6 +498,9 @@ DayBefore
 [[__migration-notes_1.15.0-to-1.16.0_removed-interfaces]]
 == Removed interfaces
 
+The following interfaces have been removed.
+
+.Removed interfaces
 [cols="1a,3a", options="header"]
 |===
 
@@ -624,3 +542,83 @@ DayBefore
 
 |===
 
+
+[[__migration-notes_1.15.0-to-1.16.0_updated-classes]]
+== Updated classes
+
+The following classes have been removed.
+
+.Updated classes
+[cols="2l,2a,3a", options="header"]
+|===
+
+| Updated class
+| Method
+| Nature of change
+
+|IsisAppModule.
+ActionDomainEvent
+|N-arg constructor
+|removed; just use the 0-arg ones
+
+|IsisAppModule.
+CollectionDomainEvent
+|N-arg constructor
+|removed; just use the 0-arg ones
+
+|IsisAppModule.
+PropertyDomainEvent
+|N-arg constructor
+|removed; just use the 0-arg ones
+
+|FixtureScript.
+ExecutionContext
+|`asKeyValueMap(String)`
+|Removed; this shouldn't have had public visibility.
+
+|===
+
+
+
+[[__migration-notes_1.15.0-to-1.16.0_removed--classes]]
+== Removed classes
+
+The following adapter classes have been removed.
+
+.Removed adapter classes
+[cols="1l,3a", options="header"]
+|===
+
+| Removed class
+| Replaced with
+
+|AbstractContainedObject
+| No replacement.
+
+|AbstractDomainObject
+| No replacement.
+
+|AbstractFactoryAndRepository
+| No replacement.
+
+|AbstractHomePageDashboardService
+| No replacement.
+
+|===
+
+Also, all classes and interfaces in `org.apache.isis.applib.filter` have been removed.
+Instead, the `java.util.Predicate<T>` interface is used.
+
+For example, `RepositoryService#allMatches(...)` method, which allows client-side filtering of results (typically during prototyping), now has the signature:
+
+[source,java]
+----
+public interface RepositoryService {
+    ...
+    <T> List<T> allMatches(
+                    final Class<T> ofType,
+                    final Predicate<? super T> predicate,
+                    long... range);
+
+}
+----
