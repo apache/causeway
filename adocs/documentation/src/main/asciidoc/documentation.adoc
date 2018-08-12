@@ -5,18 +5,6 @@
 :_imagesdir: images/
 :notoc:
 
-
-pass:[<div class="extended-quote-first"><p>]Perfection is finally attained not when there is no longer anything to add but when there is no longer anything to take away.
-pass:[</p></div>]
-
-pass:[<div class="extended-quote-attribution"><p>]-- Antoine de Saint-Exupery
-pass:[</p></div>]
-
-pass:[<br/>]
-
-
-
-
 [.documentation-page]
 --
 
@@ -25,34 +13,29 @@ pass:[<br/>]
 
 | *What is Apache Isis?*
 
-* link:guides/ugfun/ugfun.html#_ugfun_getting-started_helloworld-archetype[Hello World archetype^]
 * *link:pages/isis-in-pictures/isis-in-pictures.html[Apache Isis in pictures^]*
 * link:pages/common-use-cases/common-use-cases.html[Common Use Cases^]
-* link:pages/powered-by/powered-by.html[Powered by Apache Isis^]
 * link:pages/how-isis-works/how-isis-works.html[How Apache Isis Works^] image:{_imagesdir}tv_show-25.png[width="25px" link="pages/how-isis-works/how-isis-works.html"]
+* Learning more: link:pages/screencasts/screencasts.html[Screencasts^] image:{_imagesdir}tv_show-25.png[width="25px" link="./pages/screencasts/screencasts.html"] + link:pages/tg/tg.html[Tutorials^]
+
+|*Releases:*
+
+* link:release-notes/release-notes.html[Release Notes^]
+* link:migration-notes/migration-notes.html[Migration Notes^]
 
 
-|*Learning More*
+|*Developer Resources:*
 
-* link:guides/ugfun/ugfun.html#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype^]
-* link:pages/screencasts/screencasts.html[Screencasts^] image:{_imagesdir}tv_show-25.png[width="25px" link="./pages/screencasts/screencasts.html"]
-* link:pages/tg/tg.html[Tutorials^]
-
-
-
-|*Resources:*
-
-* *link:pages/cheat-sheet/cheat-sheet.html[Cheat Sheet^]*
-* link:pages/icons/icons.html[Icons^]
-
-*3rd-party modules (not ASF)*
-
-* http://platform.incode.org[Incode Platform^]
+* *link:pages/cheat-sheet/cheat-sheet.html[Cheat Sheet^]* + *link:guides/htg.html[Hints-n-Tips^]*
+* Getting started: link:guides/ugfun/ugfun.html#_ugfun_getting-started_helloworld-archetype[Hello-World archetype^]
+* Getting started+: link:guides/ugfun/ugfun.html#_ugfun_getting-started_simpleapp-archetype[Simple-App archetype^]
+* How to get link:pages/icons/icons.html[Icons^]
+* Extension modules: http://platform.incode.org[Incode Platform^] footnoteref:[ASF,Not an Apache Software Foundation project.]
 
 
 |===
 
-
+***
 [cols="1a,1a,1a",frame="none", grid="none"]
 |===
 
@@ -78,7 +61,7 @@ pass:[<br/>]
 
 
 
-|*"Supporting" Guides:*
+|*Get involved!*
 
 * *link:guides/dg/dg.html[Developers' Guide^]*
 ** link:guides/dg/dg.html#_dg_ide_intellij[IntelliJ^] + link:guides/dg/dg.html#_dg_ide_eclipse[Eclipse^]
@@ -88,26 +71,16 @@ pass:[<br/>]
 * link:guides/cgcom/cgcom.html[Committers' Guide^]
 ** link:guides/cgcom/cgcom.html#_cgcom_cutting-a-release[Cutting^] + link:guides/cgcom/cgcom.html#_cgcom_verifying-releases[Verifying^]
 
-* *link:guides/htg.html[Hints-n-Tips^]*
+* For bug-reports and feature-requests see: *link:https://issues.apache.org/jira/secure/RapidBoard.jspa?rapidView=87[Kanban board^]* (JIRA)
 
 
 |===
 
 
 
-
+***
 [cols="1a,1a,1a",frame="none", grid="none"]
 |===
-
-|*Releases:*
-
-* link:release-notes/release-notes.html[Release Notes^]
-* link:migration-notes/migration-notes.html[Migration Notes^]
-
-*Get involved!*
-
-* Our *link:https://issues.apache.org/jira/secure/RapidBoard.jspa?rapidView=87[Kanban board^]* maps out the JIRA issues we are looking to tackle in the next few releases
-
 
 
 |*Going Deeper:*
@@ -115,20 +88,21 @@ pass:[<br/>]
 * link:pages/articles-and-presentations/articles-and-presentations.html[Articles, Conferences, Podcasts^]
 * link:pages/books/books.html[Books^]
 * link:guides/ugfun/resources/core-concepts/Pawson-Naked-Objects-thesis.pdf[Naked Objects PhD thesis^] (Pawson)
+* https://cwiki.apache.org/confluence/display/ISIS/Index[Apache Isis Wiki^]
 
+|*Who uses Apache Isis?*
 
+* link:pages/powered-by/powered-by.html[Powered By^]
 
-|*Example Apps (not ASF):*
+|*Example Apps:*
 
-* http://github.com/estatio/estatio[Estatio^]
-* http://github.com/isisaddons/isis-app-todoapp[TodoApp^]
-* http://github.com/isisaddons/isis-app-kitchensink[Kitchensink^]
-* http://github.com/isisaddons/isis-app-neoapp[Neo4J Example^]
-* http://github.com/isisaddons/isis-app-quickstart[Quickstart^]
-
-tools (not ASF):
-
-* http://github.com/isisaddons/isis-app-simpledsl[Isis DSL Example^]
+* https://github.com/estatio/estatio[Estatio^] footnoteref:[ASF,Not an Apache Software Foundation project.]
+* https://github.com/isisaddons/isis-app-todoapp[TodoApp^] footnoteref:[ASF]
+* https://github.com/isisaddons/isis-app-kitchensink[Kitchensink^] footnoteref:[ASF]
+* https://github.com/isisaddons/isis-app-neoapp[Neo4J Example^] footnoteref:[ASF]
+* https://github.com/isisaddons/isis-app-quickstart[Quickstart^] footnoteref:[ASF]
+* https://github.com/isisaddons/isis-app-simpledsl[Isis DSL Example^] footnoteref:[ASF]
+* https://github.com/andi-huber/isis-2-demo[Demo Showcase]footnoteref:[ASF]
 
 |====
 
