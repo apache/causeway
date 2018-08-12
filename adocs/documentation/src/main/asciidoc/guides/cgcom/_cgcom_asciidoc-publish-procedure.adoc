@@ -116,23 +116,34 @@ This does the following:
 
 * deletes everything under `content` (except `content/versions`)
 * generates documentation and copies to `content/versions/SNAPSHOT`
++
+Including fixing up line endings, standardizing on unix-style LFs.
 * copies over current home page (`index.html`)
 * reinstates `content/*` with the contents of `content/versions/current`
 
-It also fixes up line endings, standardizing on unix-style LFs.
+In other words, the effect of running `publish.sh` is in essence to overwrite `content/versions/SNAPSHOT` and to overwrite `index.html`, but leave everything else as it is.
 
-In other words, the effect of running `publish.sh` is in essence to overwrite `SNAPSHOT` and to overwrite `index.html`.
+[NOTE]
+====
+The version on the header of each generated document is hard-coded in the `adocs/template/document.html.erb` file.
 
-To publish a new release, therefore:
+This should therefore be updated whenever working on a new release.
+====
 
-* run `publish.sh` first time to update `content/versions/SNAPSHOT`
+=== New release
+
+When a new release is published, we therefore need to do a little extra work:
+
+* run `publish.sh` a first time
++
+This will  update `content/versions/SNAPSHOT`
 * delete `content/versions/current`
 * rename `content/versions/SNAPSHOT` to `content/versions/current`
 * run `publish.sh` a second time.
 +
 This has the effect of "promoting" `content/versions/current` to `content/*`
 
-* (optionally) copy `content/versions/current` to `content/versions/N.N.N`
+* (optionally) also copy `content/versions/current` to `content/versions/N.N.N`
 +
 where `N.N.N` is the release number
 
