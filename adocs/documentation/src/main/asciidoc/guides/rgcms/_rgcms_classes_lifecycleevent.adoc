@@ -25,7 +25,7 @@ Impl'n (g: a:)
 |xref:../rgcms/rgcms.adoc#_rgcms_classes_lifecycleevent_AbstractLifecycleEvent[`o.a.i.applib.` +
 `AbstractLifecycleEvent`]
 |``o.a.i.core`` +
-``services.eventbus`` +
+``events.lifecycle`` +
 ``isis-core-applib``
 |(abstract class)
 |Superclass of the other lifecycle events, listed below in this table.
@@ -34,7 +34,7 @@ Impl'n (g: a:)
 |xref:../rgcms/rgcms.adoc#_rgcms_classes_lifecycleevent_ObjectCreatedDomainEvent[`o.a.i.applib.` +
 `ObjectCreatedEvent`]
 |``o.a.i.core`` +
-``services.eventbus`` +
+``events.lifecycle`` +
 ``isis-core-applib``
 |(abstract class). +
 `ObjectCreatedEvent.Default` is the concrete implementation that is used.
@@ -45,7 +45,7 @@ Impl'n (g: a:)
 |xref:../rgcms/rgcms.adoc#_rgcms_classes_lifecycleevent_ObjectLoadedDomainEvent[`o.a.i.applib.` +
 `ObjectLoadedEvent`]
 |``o.a.i.core`` +
-``services.eventbus`` +
+``events.lifecycle`` +
 ``isis-core-applib``
 |(abstract class). +
 `ObjectLoadedEvent.Default` is the concrete implementation that is used.
@@ -55,7 +55,7 @@ Impl'n (g: a:)
 |xref:../rgcms/rgcms.adoc#_rgcms_classes_lifecycleevent_ObjectPersistedDomainEvent[`o.a.i.applib.` +
 `ObjectPersistedEvent`]
 |``o.a.i.core`` +
-``services.eventbus`` +
+``events.lifecycle`` +
 ``isis-core-applib``
 |(abstract class). +
 `ObjectPersistedEvent.Default` is the concrete implementation that is used.
@@ -66,7 +66,7 @@ Impl'n (g: a:)
 |xref:../rgcms/rgcms.adoc#_rgcms_classes_lifecycleevent_ObjectPersistingDomainEvent[`o.a.i.applib.` +
 `ObjectPersistingEvent`]
 |``o.a.i.core`` +
-``services.eventbus`` +
+``events.lifecycle`` +
 ``isis-core-applib``
 |(abstract class). +
 `ObjectPersistingEvent.Default` is the concrete implementation that is used.
@@ -77,7 +77,7 @@ Impl'n (g: a:)
 |xref:../rgcms/rgcms.adoc#_rgcms_classes_lifecycleevent_ObjectRemovingDomainEvent[`o.a.i.applib.` +
 `ObjectRemovingEvent`]
 |``o.a.i.core`` +
-``services.eventbus`` +
+``events.lifecycle`` +
 ``isis-core-applib``
 |(abstract class). +
 `ObjectRemovingEvent.Default` is the concrete implementation that is used.
@@ -88,7 +88,7 @@ Impl'n (g: a:)
 |xref:../rgcms/rgcms.adoc#_rgcms_classes_lifecycleevent_ObjectUpdatedDomainEvent[`o.a.i.applib.` +
 `ObjectUpdatedEvent`]
 |``o.a.i.core`` +
-``services.eventbus`` +
+``events.lifecycle`` +
 ``isis-core-applib``
 |(abstract class). +
 `ObjectUpdatedEvent.Default` is the concrete implementation that is used.
@@ -100,7 +100,7 @@ This is done either explicitly when the current transaction is flushed using the
 |xref:../rgcms/rgcms.adoc#_rgcms_classes_lifecycleevent_ObjectUpdatingDomainEvent[`o.a.i.applib.` +
 `ObjectUpdatingEvent`]
 |``o.a.i.core`` +
-``services.eventbus`` +
+``events.lifecycle`` +
 ``isis-core-applib``
 |(abstract class). +
 `ObjectUpdatingEvent.Default` is the concrete implementation that is used.

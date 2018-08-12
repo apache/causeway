@@ -58,7 +58,7 @@ where in turn:
 public final class ToDoAppDomainModule {
     private ToDoAppDomainModule(){}
     public abstract static class PropertyDomainEvent<S,T>
-            extends org.apache.isis.applib.services.eventbus.PropertyDomainEvent<S,T> {
+            extends org.apache.isis.applib.events.domain.PropertyDomainEvent<S,T> {
         ...
     }
     ...

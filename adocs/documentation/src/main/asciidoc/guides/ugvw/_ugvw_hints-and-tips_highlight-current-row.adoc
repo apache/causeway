@@ -23,7 +23,7 @@ cssClassUiEvent = DemoObject.CssClassUiEvent.class
 public class DemoObject ... {
 
 public static class CssClassUiEvent
-extends org.apache.isis.applib.services.eventbus.CssClassUiEvent<DemoObject> {}
+extends org.apache.isis.applib.events.ui.CssClassUiEvent<DemoObject> {}
 ...
 }
 ----

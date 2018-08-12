@@ -5,32 +5,28 @@ for 2.0.0-M2
 remove:
 - @MemberGroupLayout
 - contributed domain services (use mixins instead)
+- org.apache.isis.applib.clock
+  - Clock singleton
+- SwitchUserService
+- AbstractFixtureSusa
+- org.apache.isis.core.runtime.services.eventbus.adapter.EventBusImplementationForGuava
+
+- org.apache.isis.applib.services.memento  (19 usages found)
+  - MementoService.java - remove entire service (previously to support view models, but now @ViewModel and JAXB)
 
 to change:
 - automatically wrap domain services (perhaps behind a config property)
 - automatically infer \@Programmatic for all \@DomainService(nature=DOMAIN)
 
 
+support for legacy implementation of UrlEncodingService
+- as an automatic fallback; has changed to use with compression by default.
+
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 the stuff below here was working notes for 2.0.0-M1, not necessarily up to date.
 
-
-TO REMOVE:
-
-
-org.apache.isis.core.runtime.services.eventbus.adapter.EventBusImplementationForGuava
-
-
-org.apache.isis.applib.clock
-    Clock
-
-
-
-
-org.apache.isis.applib.services.memento  (19 usages found)
-    MementoService.java - remove entire service (previously to support view models, but now @ViewModel and JAXB)
 
 
 
@@ -40,7 +36,7 @@ org.apache.isis.applib.services.memento  (19 usages found)
 
 
 Also for 2.0.0, new features/deprecations:
-    deprecate use of guava predicates, but don't remove (too big a change, weren't deprecated previously)
+    
     deprecate FixtureScripts service with view to removing from applib ... the framework provides an implementation by default
     get rid of automatic initialization of fields (perhaps behind a config property)
     deprecate the Apache Isis' DateTime classes for removal in the future) ... and probably all of the custom value types, subclasses of Magnitude
@@ -58,10 +54,6 @@ Also for 2.0.0, new features/deprecations:
 OTHER STUFF:
 
 
-
-
-SwitchUserService
-AbstractFixtureSusa
 
 
 

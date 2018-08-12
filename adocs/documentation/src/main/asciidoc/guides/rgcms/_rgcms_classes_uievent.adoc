@@ -26,7 +26,7 @@ Impl'n (g: a:)
 |xref:../rgcms/rgcms.adoc#_rgcms_classes_uievent_TitleUiEvent[`o.a.i.applib.` +
 `TitleUiEvent`]
 |``o.a.i.core`` +
-``services.eventbus`` +
+``events.ui`` +
 ``isis-core-applib``
 |(abstract class). +
 `TitleUiEvent.Default` is the concrete implementation used if no `@DomainObjectLayout#titleUiEvent` attribute is specified
@@ -35,7 +35,7 @@ Impl'n (g: a:)
 |xref:../rgcms/rgcms.adoc#_rgcms_classes_uievent_IconUiEvent[`o.a.i.applib.` +
 `IconUiEvent`]
 |``o.a.i.core`` +
-``services.eventbus`` +
+``events.ui`` +
 ``isis-core-applib``
 |(abstract class). +
 `IconUiEvent.Default` is the concrete implementation used if no `@DomainObjectLayout#iconUiEvent` attribute is specified
@@ -44,7 +44,7 @@ Impl'n (g: a:)
 |xref:../rgcms/rgcms.adoc#_rgcms_classes_uievent_CssClassUiEvent[`o.a.i.applib.` +
 `CssClassUiEvent`]
 |``o.a.i.core`` +
-``services.eventbus`` +
+``events.ui`` +
 ``isis-core-applib``
 |(abstract class). +
 `CssClassUiEvent.Default` is the concrete implementation used if no `@DomainObjectLayout#cssClassUiEvent` attribute is specified

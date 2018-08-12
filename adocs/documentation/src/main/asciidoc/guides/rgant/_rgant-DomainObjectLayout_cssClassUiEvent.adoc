@@ -43,7 +43,7 @@ For example:
 )
 public class ToDoItemDto {
     public static class CssClassUiEvent
-        extends org.apache.isis.applib.services.eventbus.CssClassUiEvent<ToDoItemDto> { }
+        extends org.apache.isis.applib.events.ui.CssClassUiEvent<ToDoItemDto> { }
     ...
 }
 ----

@@ -33,7 +33,7 @@ For example:
 )
 public class ToDoItem {
     public static class LoadedEvent
-        extends org.apache.isis.applib.services.eventbus.ObjectLoadedEvent<ToDoItem> { }
+        extends org.apache.isis.applib.events.lifecycle.ObjectLoadedEvent<ToDoItem> { }
     ...
 }
 ----
