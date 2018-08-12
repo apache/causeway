@@ -223,7 +223,7 @@ public final class _Bytes {
 
     // -- SPECIAL COMPOSITES
 
-    // using naming convention asX .. encode / ofX .. decode
+    // using naming convention asX../ofX..
 
     public final static BytesOperator asUrlBase64 = operator()
             .andThen(bytes->encodeToBase64(Base64.getUrlEncoder(), bytes));

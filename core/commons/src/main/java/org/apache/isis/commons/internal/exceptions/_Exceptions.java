@@ -23,6 +23,7 @@ import static org.apache.isis.commons.internal.base._With.requires;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -69,7 +70,7 @@ public final class _Exceptions {
      * @return
      */
     public static final IllegalArgumentException unmatchedCase(String format, @Nullable Object _case) {
-        requires(format, "format");
+        Objects.requireNonNull(format);
         return new IllegalArgumentException(String.format(format, _case));
     }
 
@@ -96,8 +97,9 @@ public final class _Exceptions {
      *    return 0;
      *}</pre>
      *
+     * @return
      */
-    public static void throwNotImplemented() {
+    public static IllegalStateException throwNotImplemented() {
         throw notImplemented();
     }
 

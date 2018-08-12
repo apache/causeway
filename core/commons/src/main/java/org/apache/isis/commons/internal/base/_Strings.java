@@ -266,15 +266,12 @@ public final class _Strings {
      * @throws {@link IllegalArgumentException} if {@code separator} is empty
      */
     public static Stream<String> splitThenStream(@Nullable final String input, final String separator) {
-        if(isEmpty(separator)) {
+        if(isEmpty(separator))
             throw new IllegalArgumentException("a non empty separator is required");
-        }
-        if(isEmpty(input)) {
+        if(isEmpty(input))
             return Stream.of();
-        }
-        if(!input.contains(separator)) {
+        if(!input.contains(separator))
             return Stream.of(input);
-        }
 
         return StreamSupport.stream(
                 Spliterators.spliteratorUnknownSize(splitIterator(input, separator), Spliterator.ORDERED),

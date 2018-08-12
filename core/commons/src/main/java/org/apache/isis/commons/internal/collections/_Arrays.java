@@ -19,10 +19,9 @@
 
 package org.apache.isis.commons.internal.collections;
 
-import static org.apache.isis.commons.internal.base._With.requires;
-
 import java.lang.reflect.Array;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.stream.Collector;
 
 import javax.annotation.Nullable;
@@ -76,7 +75,7 @@ public final class _Arrays {
      * @return
      */
     public static <T> Collector<T,?,T[]> toArray(final Class<T> componentType, final int length){
-        requires(componentType, "componentType");
+        Objects.requireNonNull(componentType);
         return new _Arrays_Collector<T>(componentType, length);
     }
 
@@ -86,7 +85,7 @@ public final class _Arrays {
      * @return
      */
     public static <T> Collector<T,?,T[]> toArray(final Class<T> componentType){
-        requires(componentType, "componentType");
+        Objects.requireNonNull(componentType);
         return new _Arrays_CollectorUnknownSize<T>(componentType);
     }
 
@@ -100,7 +99,7 @@ public final class _Arrays {
      */
     @SafeVarargs
     public static <T> T[] combine(T first, @Nullable  T... rest) {
-        requires(first, "first");
+        Objects.requireNonNull(first);
         final int restLength = _NullSafe.size(rest);
         final T[] all = _Casts.uncheckedCast(Array.newInstance(first.getClass(), restLength+1));
         all[0] = first;
@@ -141,7 +140,7 @@ public final class _Arrays {
      *     have been copied (non-null)
      */
     public static <T> T[] toArray(@Nullable final Collection<? extends T> collection, final Class<T> componentType) {
-        requires(componentType, "componentType");
+        Objects.requireNonNull(componentType);
         return _NullSafe.stream(collection)
                 .collect(toArray(componentType, collection!=null ? collection.size() : 0));
     }
@@ -155,7 +154,7 @@ public final class _Arrays {
      *     have been copied (non-null)
      */
     public static <T> T[] toArray(@Nullable final Iterable<? extends T> iterable, final Class<T> componentType) {
-        requires(componentType, "componentType");
+        Objects.requireNonNull(componentType);
         if(iterable!=null && (iterable instanceof Collection)) {
             return toArray((Collection<? extends T>) iterable, componentType);
         }

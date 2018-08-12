@@ -30,23 +30,12 @@ import java.util.Set;
  */
 public interface ClassDiscovery {
 
-    /**
-     * Searches this application's class path for any classes that are annotated with {@code annotation}.
-     * @param annotation
-     * @return non-null set of discovered classes
-     */
+    //TODO missing java-doc
     public Set<Class<?>> getTypesAnnotatedWith(Class<? extends Annotation> annotation);
 
-    /**
-     * Searches this application's class path for any classes that are subclass to {@code type}.
-     * @param type
-     * @return non-null set of discovered classes
-     */
+    //TODO missing java-doc
     public <T> Set<Class<? extends T>> getSubTypesOf(Class<T> type);
 
-    /**
-     * @return an instance of {@code ClassDiscovery} that always returns empty search result
-     */
     public static ClassDiscovery empty() {
 
         return new ClassDiscovery() {

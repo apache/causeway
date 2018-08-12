@@ -19,13 +19,12 @@
 
 package org.apache.isis.commons.internal.collections;
 
-import static org.apache.isis.commons.internal.base._With.requires;
-
 import java.util.AbstractMap;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
 
@@ -79,7 +78,7 @@ public final class _Maps {
 
     @SafeVarargs
     public static <K, V> Map<K, V> unmodifiableEntries(Map.Entry<? extends K,? extends V>... entries) {
-        requires(entries, "entries"); // don't accept null elements
+        Objects.requireNonNull(entries); // don't accept null elements
         if(entries.length==0) {
             return Collections.emptyMap();
         }

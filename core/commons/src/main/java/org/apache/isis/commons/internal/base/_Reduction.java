@@ -16,8 +16,7 @@
  */
 package org.apache.isis.commons.internal.base;
 
-import static org.apache.isis.commons.internal.base._With.requires;
-
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.BinaryOperator;
 import java.util.function.Consumer;
@@ -69,7 +68,7 @@ public final class _Reduction<T> implements Consumer<T> {
     }
 
     private _Reduction(@Nullable T identity, BinaryOperator<T> accumulator, boolean initialized) {
-        requires(accumulator, "accumulator");
+        Objects.requireNonNull(accumulator);
         this.initialized = initialized;
         this.result = identity;
         this.accumulator = accumulator;

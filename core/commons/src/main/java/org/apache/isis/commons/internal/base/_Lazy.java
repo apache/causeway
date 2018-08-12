@@ -49,9 +49,6 @@ public final class _Lazy<T> implements Supplier<T> {
         this.supplier = requires(supplier, "supplier");
     }
 
-    /**
-     * @return whether this lazy got initialized and holds a memoized value
-     */
     public boolean isMemoized() {
         return memoized;
     }

@@ -19,10 +19,9 @@
 
 package org.apache.isis.commons.internal.collections;
 
-import static org.apache.isis.commons.internal.base._With.requires;
-
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.BinaryOperator;
@@ -43,8 +42,8 @@ class _Collections_Collector<T, C extends Collection<T>> implements Collector<T,
     private final Function<C, C> finisher;
 
     _Collections_Collector(Supplier<C> supplier, Function<C, C> finisher) {
-        this.supplier = requires(supplier, "supplier");
-        this.finisher = requires(finisher, "finisher");
+        this.supplier = Objects.requireNonNull(supplier);
+        this.finisher = Objects.requireNonNull(finisher);
     }
 
     @Override
