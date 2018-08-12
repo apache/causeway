@@ -19,12 +19,13 @@
 
 package org.apache.isis.commons.internal.collections;
 
+import static org.apache.isis.commons.internal.base._With.requires;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
-import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
@@ -60,7 +61,7 @@ public final class _Sets {
      * @return non null
      */
     public static <T> Set<T> singleton(T element) {
-        Objects.requireNonNull(element); // don't accept null element
+        requires(element, "element"); // don't accept null element
         return Collections.singleton(element);
     }
 
@@ -81,7 +82,7 @@ public final class _Sets {
      */
     @SafeVarargs
     public static <T> Set<T> of(T ... elements) {
-        Objects.requireNonNull(elements); // don't accept null as argument
+        requires(elements, "elements");// don't accept null as argument
         if(elements.length==0) {
             return Collections.emptySet();
         }

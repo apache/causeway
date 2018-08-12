@@ -19,13 +19,14 @@
 
 package org.apache.isis.commons.internal.collections;
 
+import static org.apache.isis.commons.internal.base._With.requires;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -66,7 +67,7 @@ public final class _Lists {
      * @return non null
      */
     public static <T> List<T> singleton(T element) {
-        Objects.requireNonNull(element); // don't accept null element
+        requires(element, "element"); // don't accept null element
         return Collections.singletonList(element);
     }
 
@@ -87,7 +88,7 @@ public final class _Lists {
      */
     @SafeVarargs
     public static <T> List<T> of(T ... elements) {
-        Objects.requireNonNull(elements); // don't accept null as argument
+        requires(elements, "elements"); // don't accept null as argument
         if(elements.length==0) {
             return Collections.emptyList();
         }
@@ -150,7 +151,7 @@ public final class _Lists {
         if(input==null) {
             return Collections.emptyList();
         }
-        Objects.requireNonNull(mapper);
+        requires(mapper, "mapper");
         return input.stream()
                 .map(mapper)
                 .collect(Collectors.toList());

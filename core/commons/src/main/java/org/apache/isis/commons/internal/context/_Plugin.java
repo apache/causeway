@@ -19,22 +19,24 @@
 
 package org.apache.isis.commons.internal.context;
 
+import static org.apache.isis.commons.internal.base._With.requires;
+
 import java.io.File;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.Objects;
 import java.util.ServiceLoader;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.plugins.PluginResolveException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * <h1>- internal use only -</h1>
@@ -68,7 +70,7 @@ public final class _Plugin {
      * @return non null
      */
     public static <S> Set<S> loadAll(Class<S> service){
-        Objects.requireNonNull(service);
+        requires(service, "service");
 
         ServiceLoader<S> loader = ServiceLoader.load(service, _Context.getDefaultClassLoader());
 

@@ -19,6 +19,8 @@
 
 package org.apache.isis.commons.internal.memento;
 
+import static org.apache.isis.commons.internal.base._With.requires;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -27,7 +29,6 @@ import java.io.ObjectOutputStream;
 import java.io.ObjectStreamClass;
 import java.io.Serializable;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 
 import javax.annotation.Nullable;
@@ -64,9 +65,9 @@ class _Mementos_MementoDefault implements _Mementos.Memento {
             SerializingAdapter serializer,
             Map<String, Serializable> valuesByKey) {
 
-        this.codec = Objects.requireNonNull(codec);
-        this.serializer = Objects.requireNonNull(serializer);
-        this.valuesByKey = Objects.requireNonNull(valuesByKey);
+        this.codec = requires(codec, "codec");
+        this.serializer = requires(serializer, "serializer");
+        this.valuesByKey = requires(valuesByKey, "valuesByKey");
     }
 
     @Override
@@ -74,7 +75,7 @@ class _Mementos_MementoDefault implements _Mementos.Memento {
         if(value==null) {
             return this; //no-op, there is no point in storing null values
         }
-        Objects.requireNonNull(name);
+        requires(name, "name");
         valuesByKey.put(name, serializer.write(value));
         return this;
     }
@@ -107,12 +108,12 @@ class _Mementos_MementoDefault implements _Mementos.Memento {
     // -- PARSER
 
     static Memento parse(EncoderDecoder codec, SerializingAdapter serializer, @Nullable String str) {
-        Objects.requireNonNull(codec);
+        requires(codec, "codec");
         if(_NullSafe.isEmpty(str)) {
             return null;
         }
         try(ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(codec.decode(str))) {
-            //override ObjectInputStream's classloading
+            //override ObjectInputStream's class-loading
             @Override
             protected Class<?> resolveClass(ObjectStreamClass desc)
                     throws IOException, ClassNotFoundException

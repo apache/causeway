@@ -26,7 +26,6 @@ import static org.apache.isis.commons.internal.base._With.requires;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -209,7 +208,7 @@ public final class _Context {
         if(!alreadyRegistered || override) {
             // let writes to the map be atomic
             synchronized (singletonMap) {
-                singletonMap.put(toKey(ClassLoader.class), Objects.requireNonNull(classLoader, "classLoader required"));
+                singletonMap.put(toKey(ClassLoader.class), requires(classLoader, "classLoader"));
             }
         }
     }

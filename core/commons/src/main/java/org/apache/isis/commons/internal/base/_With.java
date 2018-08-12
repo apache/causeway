@@ -205,6 +205,13 @@ public final class _With<T> {
 
     // -- PARAMETER NON-NULL CHECK
 
+    /**
+     * Allows for convenient named parameter non-null-check.
+     * @param obj target for the non-null-check
+     * @param paramName to use for the exception message, when the non-null-check fails 
+     * @return {@code obj!=null ? obj : throw NullPointerException}
+     * @throws NullPointerException if {@code obj} is {@code null}
+     */
     public static <T> T requires(@Nullable T obj, String paramName) {
         if (obj == null) {
             throw new NullPointerException(String.format("Parameter '%s' is required to be non-null.", paramName));
@@ -214,28 +221,68 @@ public final class _With<T> {
 
     // -- CONVENIENT CONSTRUCTORS
 
-    public static <X> ArrayList<X> arrayList(Consumer<ArrayList<X>> consumer) {
-        return accept(new ArrayList<>(), consumer);
+    /**
+     * Allows for single line instantiation and initialization of an Object.
+     * @param factory
+     * @param initializer
+     * @return a new Object as provided by {@code factory} after calling the {@code initializer} on it
+     */
+    public static <T> T create(Supplier<T> factory, Consumer<T> initializer) {
+        return accept(factory.get(), initializer);
+    }
+    
+    /**
+     * Allows for single line instantiation and initialization of an ArrayList.
+     * @param initializer
+     * @return a new ArrayList after calling the {@code initializer} on it
+     */
+    public static <X> ArrayList<X> arrayList(Consumer<ArrayList<X>> initializer) {
+        return create(ArrayList::new, initializer);
     }
 
-    public static <X> HashSet<X> hashSet(Consumer<HashSet<X>> consumer) {
-        return accept(new HashSet<>(), consumer);
+    /**
+     * Allows for single line instantiation and initialization of a HashSet.
+     * @param initializer
+     * @return a new HashSet after calling the {@code initializer} on it
+     */
+    public static <X> HashSet<X> hashSet(Consumer<HashSet<X>> initializer) {
+        return create(HashSet::new, initializer);
     }
 
-    public static <X> TreeSet<X> treeSet(Consumer<TreeSet<X>> consumer) {
-        return accept(new TreeSet<>(), consumer);
+    /**
+     * Allows for single line instantiation and initialization of a TreeSet.
+     * @param initializer
+     * @return a new TreeSet after calling the {@code initializer} on it
+     */
+    public static <X> TreeSet<X> treeSet(Consumer<TreeSet<X>> initializer) {
+        return create(TreeSet::new, initializer);
     }
 
-    public static <K, V> HashMap<K, V> hashMap(Consumer<HashMap<K, V>> consumer) {
-        return accept(new HashMap<K, V>(), consumer);
+    /**
+     * Allows for single line instantiation and initialization of a HashMap.
+     * @param initializer
+     * @return a new HashMap after calling the {@code initializer} on it
+     */
+    public static <K, V> HashMap<K, V> hashMap(Consumer<HashMap<K, V>> initializer) {
+        return accept(new HashMap<K, V>(), initializer);
     }
 
-    public static <K, V> TreeMap<K, V> treeMap(Consumer<TreeMap<K, V>> consumer) {
-        return accept(new TreeMap<K, V>(), consumer);
+    /**
+     * Allows for single line instantiation and initialization of a TreeMap.
+     * @param initializer
+     * @return a new TreeMap after calling the {@code initializer} on it
+     */
+    public static <K, V> TreeMap<K, V> treeMap(Consumer<TreeMap<K, V>> initializer) {
+        return accept(new TreeMap<K, V>(), initializer);
     }
 
-    public static StringBuilder stringBuilder(Consumer<StringBuilder> consumer) {
-        return accept(new StringBuilder(), consumer);
+    /**
+     * Allows for single line instantiation and initialization of a StringBuilder.
+     * @param initializer
+     * @return a new StringBuilder after calling the {@code initializer} on it
+     */
+    public static StringBuilder stringBuilder(Consumer<StringBuilder> initializer) {
+        return create(StringBuilder::new, initializer);
     }
 
 
