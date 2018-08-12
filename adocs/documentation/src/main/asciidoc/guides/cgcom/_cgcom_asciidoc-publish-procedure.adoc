@@ -149,11 +149,11 @@ where `N.N.N` is the release number
 
 Ensure in doing this that the dropdown for the home page correctly references the versions.
 
-When ready, commit and push the changes (in the `isis-site.git` directory, of course):
+When ready, then stage, commit and push the changes (in the `isis-site.git` directory, of course):
 
 [source,bash]
 ----
-git commit -m "ISIS-nnnn: updating docs"
+git commit -am "ISIS-nnnn: updating docs"
 git push
 ----
 

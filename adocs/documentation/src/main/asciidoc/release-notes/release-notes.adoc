@@ -24,10 +24,13 @@ This table summarises all releases of Apache Isis to date.
 | xref:release-notes.adoc#_release-notes_2.0.0-M1[2.0.0-M1]
 | 31-07-2018
 | First milestone release for Apache Isis 2.0.0: Java 8 support, DataNucleus 5.1, Wicket 8, meta-annotations, breadcrumbs
-| XXX
-| XXX
-| XXX
-| https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=XXXXXX[Release notes for 2.0.0-M1]
+| 6
+| 55
+
++ 4 tasks
++ 13 sub-tasks
+| 22
+| https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12342392[Release notes for 2.0.0-M1]
 
 | xref:release-notes.adoc#_release-notes_1.16.2[1.16.2]
 | 05-03-2018
