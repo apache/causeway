@@ -8,7 +8,7 @@
 
 The main focus for Apache Isis 1.11.0 is on the REST API and on view models using JAXB:
 
-* the xref:../guides/ugvro/ugvro.adoc#[Restful Objects viewer] now supports simplified
+* the link:https://isis.apache.org/versions/1.11.0/guides/ugvro/ugvro.html#[Restful Objects viewer] now supports simplified
 representations intended to make it easier to write custom Javascript (and other) clients that consume the REST API;
 these are obtained using the HTTP Accept header.  There is also support for link:http://swagger.io[Swagger] spec files
 so that the REST API can be more easily explored and tested. +

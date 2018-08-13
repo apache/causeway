@@ -197,13 +197,13 @@ msgstr "Ich heisse {firstName} {lastName}."
 then the translation would be: "Ich heisse James Bond".
 
 
-The same class is used in xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer[`DomainObjectContainer`] so that you can raise translatable info, warning and error messages; each of the relevant methods are overloaded.
+The same class is used in xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_MessageService[`MessageService`] so that you can raise translatable info, warning and error messages; each of the relevant methods are overloaded.
 
 For example:
 
 [source,java]
 ----
-public interface DomainObjectContainer {
+public interface MessageService {
     void informUser(String message);
     void informUser(
         TranslatableMessage message,

@@ -73,9 +73,9 @@ public class Customer {
 For objects that are already persisted, the service is automatically injected just after the object is rehydrated by
 JDO/DataNucleus.
 
-For transient objects (instantiated programmatically), the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_FactoryService[`FactoryService`]'s ``instantiate()`` method (or the deprecated xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer[`DomainObjectContainer`]'s ``newTransientInstance()`` method) will automatically inject the services.
+For transient objects (instantiated programmatically), the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_FactoryService[`FactoryService#instantiate(...)`] or the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_RepositoryService[`RepositoryService#instantiate(...)`]'s will automatically inject the services.
 
-Alternatively the object can be instantiated simply using `new`, then services injected using xref:../rgsvc/rgsvc.adoc#_rgsvc_metadata-api_ServiceRegistry[`ServiceRegistry`]'s ``injectServicesInto(...)`` method (or the deprecated xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer[`DomainObjectContainer`]'s ``injectServicesInto(...)`` method).
+Alternatively the object can be instantiated simply using `new`, then services injected using xref:../rgsvc/rgsvc.adoc#_rgsvc_metadata-api_ServiceRegistry[`ServiceRegistry`]'s ``injectServicesInto(...)`` method.
 
 
 
@@ -98,7 +98,7 @@ xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_GridSystemService[`GridSy
 xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_RoutingService[`RoutingService`].
 ====
 
-For example, suppose you wanted to provide your own implementation of xref:../rgsvc/rgsvc.adoc#_rgsvc_api_LocaleProvider[`LocaleProvider`].
+For example, suppose you wanted to provide your own implementation of xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_LocaleProvider[`LocaleProvider`].
 Here's how:
 
 [source,java]

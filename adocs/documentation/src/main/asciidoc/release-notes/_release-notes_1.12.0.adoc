@@ -18,11 +18,11 @@ similar to the action prompt dialogs; in a future release we hope to support "in
 Another notable change in this release include various new domain services.
 Some of these are in support of the file-based layouts functionality, others including new access into Apache Isis' metamodel.
 (Some of these new services were originally part of the (non-ASF) link:http://www.isisaddons.org[Isis Addons]).
-In addition, the xref:../guides/rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer[`DomainObjectContainer`] service has been deprecated, replaced by a number of fine-grained services (such as xref:../guides/rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-api_RepositoryService[`RepositoryService`] and xref:../guides/rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_MessageService[`MessageService`]).
+In addition, the link:https://isis.apache.org/versions/1.12.0/guides/rgsvc/rgsvc.html#_rgsvc_core-domain-api_DomainObjectContainer[`DomainObjectContainer`] service has been deprecated, replaced by a number of fine-grained services (such as link:https://isis.apache.org/versions/1.12.0/guides/rgsvc/rgsvc.html#_rgsvc_persistence-layer-api_RepositoryService[`RepositoryService`] and link:https://isis.apache.org/versions/1.12.0/guides/rgsvc/rgsvc.html#_rgsvc_application-layer-api_MessageService[`MessageService`]).
 
 The release also includes a number of new mixins, to automatically surface in the UI an entity's id, version (if any), and to download the layout XML and rebuild the metamodel for a given domain entity.
 There is also a mixin to clear any UI hints (part of the file-based layouts functionality).
-In all cases these mixins can be hidden using either security or by writing a xref:../guides/rgcms/rgcms.adoc#_rgcms_classes_super_AbstractSubscriber[subscriber] to veto the visibility of the corresponding domain event.
+In all cases these mixins can be hidden using either security or by writing a link:https://isis.apache.org/versions/1.12.0/guides/rgcms/rgcms.html#_rgcms_classes_super_AbstractSubscriber[subscriber] to veto the visibility of the corresponding domain event.
 
 
 
@@ -30,43 +30,43 @@ In all cases these mixins can be hidden using either security or by writing a xr
 
 == New Feature
 
-* link:https://issues.apache.org/jira/browse/ISIS-1351[ISIS-1351] - Extend xref:../guides/rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_ConfigurationService[`ConfigurationService`] to list all configuration properties in the UI
-* link:https://issues.apache.org/jira/browse/ISIS-1325[ISIS-1325] - New xref:../guides/rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_SessionManagementService[`SessionManagementService`]
+* link:https://issues.apache.org/jira/browse/ISIS-1351[ISIS-1351] - Extend link:https://isis.apache.org/versions/1.12.0/guides/rgsvc/rgsvc.html#_rgsvc_core-domain-api_ConfigurationService[`ConfigurationService`] to list all configuration properties in the UI
+* link:https://issues.apache.org/jira/browse/ISIS-1325[ISIS-1325] - New link:https://isis.apache.org/versions/1.12.0/guides/rgsvc/rgsvc.html#_rgsvc_application-layer-api_SessionManagementService[`SessionManagementService`]
 * link:https://issues.apache.org/jira/browse/ISIS-1317[ISIS-1317] - Allow single domain object class to be invalidated through a mixin.
-* link:https://issues.apache.org/jira/browse/ISIS-1313[ISIS-1313] - Enhancement to xref:../guides/rgmvn/rgmvn.adoc#_rgmvn_xsd[xsd] goal of the isis-maven-plugin to ignore/include the Isis common schemas.
-* link:https://issues.apache.org/jira/browse/ISIS-1292[ISIS-1292] - Extend xref:../guides/rgsvc/rgsvc.adoc#_rgsvc_metadata-api_MetamodelService[`MetaModelService`] to surface packages, classes etc (as used by the security module).
-* link:https://issues.apache.org/jira/browse/ISIS-993[ISIS-993] - Show different object members on multiple tabs (xref:../guides/ugvw/ugvw.adoc#_ugvw_layout_file-based[dynamic XML layouts])
+* link:https://issues.apache.org/jira/browse/ISIS-1313[ISIS-1313] - Enhancement to link:https://isis.apache.org/versions/1.12.0/guides/rgmvn/rgmvn.html#_rgmvn_xsd[xsd] goal of the isis-maven-plugin to ignore/include the Isis common schemas.
+* link:https://issues.apache.org/jira/browse/ISIS-1292[ISIS-1292] - Extend link:https://isis.apache.org/versions/1.12.0/guides/rgsvc/rgsvc.html#_rgsvc_metadata-api_MetamodelService[`MetaModelService`] to surface packages, classes etc (as used by the security module).
+* link:https://issues.apache.org/jira/browse/ISIS-993[ISIS-993] - Show different object members on multiple tabs (link:https://isis.apache.org/versions/1.12.0/guides/ugvw/ugvw.html#_ugvw_layout_file-based[dynamic XML layouts])
 * link:https://issues.apache.org/jira/browse/ISIS-784[ISIS-784] - Change Wicket viewer to get rid of edit mode, instead allow individual fields to be edited by clicking on them (similar to the way that JIRA works).
 
 
 == Improvement
 
 * link:https://issues.apache.org/jira/browse/ISIS-1333[ISIS-1333] - Remove self-host profile from the archetype
-* link:https://issues.apache.org/jira/browse/ISIS-1332[ISIS-1332] - Factor out a xref:../guides/rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_HintStore[`HintStore`] service, so that this is pluggable.
+* link:https://issues.apache.org/jira/browse/ISIS-1332[ISIS-1332] - Factor out a link:https://isis.apache.org/versions/1.12.0/guides/rgsvc/rgsvc.html#_rgsvc_presentation-layer-spi_HintStore[`HintStore`] service, so that this is pluggable.
 * link:https://issues.apache.org/jira/browse/ISIS-1330[ISIS-1330] - Add CSS classes for table cells and for collections to make it easier to fine tune pages using CSS.
 * link:https://issues.apache.org/jira/browse/ISIS-1329[ISIS-1329] - Extend hint support for "show all"
 * link:https://issues.apache.org/jira/browse/ISIS-1327[ISIS-1327] - Change the view mode of the select2 (value drop down) to be a simple text field.
-* link:https://issues.apache.org/jira/browse/ISIS-1324[ISIS-1324] - Allow multiple different views of same collection in a layout (xref:../guides/ugvw/ugvw.adoc#_ugvw_layout_file-based[dynamic XML layouts])
-* link:https://issues.apache.org/jira/browse/ISIS-1323[ISIS-1323] - Deprecate @CollectionLayout#renderType, since is duplicated by xref:../guides/rgant/rgant.adoc#_rgant-CollectionLayout_defaultView[`@CollectionLayout#defaultView()`]
+* link:https://issues.apache.org/jira/browse/ISIS-1324[ISIS-1324] - Allow multiple different views of same collection in a layout (link:https://isis.apache.org/versions/1.12.0/guides/ugvw/ugvw.html#_ugvw_layout_file-based[dynamic XML layouts])
+* link:https://issues.apache.org/jira/browse/ISIS-1323[ISIS-1323] - Deprecate @CollectionLayout#renderType, since is duplicated by link:https://isis.apache.org/versions/1.12.0/guides/rgant/rgant.html#_rgant-CollectionLayout_defaultView[`@CollectionLayout#defaultView()`]
 * link:https://issues.apache.org/jira/browse/ISIS-1322[ISIS-1322] - Mixins not exposing the mixedin object in events (for subscribers to veto).
-* link:https://issues.apache.org/jira/browse/ISIS-1321[ISIS-1321] - Extend xref:../guides/rgsvc/rgsvc.adoc#_rgsvc_metadata-api_MetamodelService[`MetaModelService`] to allow CSV of metamodel to be downloaded.
-* link:https://issues.apache.org/jira/browse/ISIS-1320[ISIS-1320] - Move xref:../guides/rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_ContentMappingService[`ContentMappingService`] to applib (and simplify)
-* link:https://issues.apache.org/jira/browse/ISIS-1312[ISIS-1312] - Improve xref:../guides/rgsvc/rgsvc.adoc#_rgsvc_integration-api_JaxbService[`JaxbServiceDefault#xsd(...)`] to correctly reference the Isis common schema imports.
+* link:https://issues.apache.org/jira/browse/ISIS-1321[ISIS-1321] - Extend link:https://isis.apache.org/versions/1.12.0/guides/rgsvc/rgsvc.html#_rgsvc_metadata-api_MetamodelService[`MetaModelService`] to allow CSV of metamodel to be downloaded.
+* link:https://issues.apache.org/jira/browse/ISIS-1320[ISIS-1320] - Move link:https://isis.apache.org/versions/1.12.0/guides/rgsvc/rgsvc.html#_rgsvc_presentation-layer-spi_ContentMappingService[`ContentMappingService`] to applib (and simplify)
+* link:https://issues.apache.org/jira/browse/ISIS-1312[ISIS-1312] - Improve link:https://isis.apache.org/versions/1.12.0/guides/rgsvc/rgsvc.html#_rgsvc_integration-api_JaxbService[`JaxbServiceDefault#xsd(...)`] to correctly reference the Isis common schema imports.
 * link:https://issues.apache.org/jira/browse/ISIS-1300[ISIS-1300] - Allow the enablement of the WicketSource plugin to be configurable, and disabled by default
-* link:https://issues.apache.org/jira/browse/ISIS-1299[ISIS-1299] - xref:../guides/rgant/rgant.adoc#_rgant-ViewModel[`@ViewModel`] and xref:../guides/rgant/rgant.adoc#_rgant-XmlRootElement[`@XmlRootElement`] view models should automatically support isCloneable.
+* link:https://issues.apache.org/jira/browse/ISIS-1299[ISIS-1299] - link:https://isis.apache.org/versions/1.12.0/guides/rgant/rgant.html#_rgant-ViewModel[`@ViewModel`] and link:https://isis.apache.org/versions/1.12.0/guides/rgant/rgant.html#_rgant-XmlRootElement[`@XmlRootElement`] view models should automatically support isCloneable.
 * link:https://issues.apache.org/jira/browse/ISIS-1298[ISIS-1298] - Fix deprecated annotation use for ViewModel.Cloneable#clone
 * link:https://issues.apache.org/jira/browse/ISIS-1295[ISIS-1295] - Run integration tests using thread-local, to allow "complete" tests that also exercise, eg Quartz jobs.
 * link:https://issues.apache.org/jira/browse/ISIS-1240[ISIS-1240] - Derive icon from service when not provided
-* link:https://issues.apache.org/jira/browse/ISIS-1239[ISIS-1239] - For wicket ui, use a cookie or similar to remember the hint from last time (xref:../guides/ugvw/ugvw.adoc#_ugvw_layout_file-based[dynamic XML layouts])
-* link:https://issues.apache.org/jira/browse/ISIS-1228[ISIS-1228] - Reorganizing/splitting out xref:../guides/rgant/rgant.adoc#_rgant-DomainObjectContainer[`@DomainObjectContainer`] service.
-* link:https://issues.apache.org/jira/browse/ISIS-1048[ISIS-1048] - Make view model URLs more secure, eg through a private key (xref:../guides/rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_UrlEncodingService[`UrlEncodingService`]).
-* link:https://issues.apache.org/jira/browse/ISIS-1037[ISIS-1037] - Support layout.xml as well as layout.json (xref:../guides/ugvw/ugvw.adoc#_ugvw_layout_file-based[dynamic XML layouts])
+* link:https://issues.apache.org/jira/browse/ISIS-1239[ISIS-1239] - For wicket ui, use a cookie or similar to remember the hint from last time (link:https://isis.apache.org/versions/1.12.0/guides/ugvw/ugvw.html#_ugvw_layout_file-based[dynamic XML layouts])
+* link:https://issues.apache.org/jira/browse/ISIS-1228[ISIS-1228] - Reorganizing/splitting out link:https://isis.apache.org/versions/1.12.0/guides/rgant/rgant.html#_rgant-DomainObjectContainer[`@DomainObjectContainer`] service.
+* link:https://issues.apache.org/jira/browse/ISIS-1048[ISIS-1048] - Make view model URLs more secure, eg through a private key (link:https://isis.apache.org/versions/1.12.0/guides/rgsvc/rgsvc.html#_rgsvc_presentation-layer-spi_UrlEncodingService[`UrlEncodingService`]).
+* link:https://issues.apache.org/jira/browse/ISIS-1037[ISIS-1037] - Support layout.xml as well as layout.json (link:https://isis.apache.org/versions/1.12.0/guides/ugvw/ugvw.html#_ugvw_layout_file-based[dynamic XML layouts])
 * link:https://issues.apache.org/jira/browse/ISIS-806[ISIS-806] - In Wicket viewer, shouldn't be possible to invoke an action if editing a form.
 
 
 == Bug
 
-* link:https://issues.apache.org/jira/browse/ISIS-1348[ISIS-1348] - Bug with xref:../guides/ugtst/ugtst.adoc#_ugtst_unit-test-support_soap-fake-server-junit-rule[SoapEndpointPublishingRule] when multiple endpoints.
+* link:https://issues.apache.org/jira/browse/ISIS-1348[ISIS-1348] - Bug with link:https://isis.apache.org/versions/1.12.0/guides/ugtst/ugtst.html#_ugtst_unit-test-support_soap-fake-server-junit-rule[SoapEndpointPublishingRule] when multiple endpoints.
 * link:https://issues.apache.org/jira/browse/ISIS-1347[ISIS-1347] - Missing annotation in SimpleObject
 * link:https://issues.apache.org/jira/browse/ISIS-1346[ISIS-1346] - ActionInvocationContext isn't populated properly
 * link:https://issues.apache.org/jira/browse/ISIS-1342[ISIS-1342] - The metamodel validation error page doesn't reliably render itself if there are errors.
@@ -74,8 +74,8 @@ In all cases these mixins can be hidden using either security or by writing a xr
 * link:https://issues.apache.org/jira/browse/ISIS-1340[ISIS-1340] - Rebuild metamodel mixin action isn't working reliably
 * link:https://issues.apache.org/jira/browse/ISIS-1328[ISIS-1328] - Bookmark hints are not being honoured
 * link:https://issues.apache.org/jira/browse/ISIS-1319[ISIS-1319] - Input dialog for action label for mandatory parameter not shown when the parameter is an view model
-* link:https://issues.apache.org/jira/browse/ISIS-1318[ISIS-1318] - contributed actions/mixins breaks publishing; also flush any pending actions to be published as the result of doing a wrapped action via the xref:../guides/rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_WrapperFactory[`WrapperFactory`]
-* link:https://issues.apache.org/jira/browse/ISIS-1315[ISIS-1315] - Can't generate xref:../guides/rgmvn/rgmvn.adoc#_rgmvn_swagger[swagger] specs, where actions are contributed.
+* link:https://issues.apache.org/jira/browse/ISIS-1318[ISIS-1318] - contributed actions/mixins breaks publishing; also flush any pending actions to be published as the result of doing a wrapped action via the link:https://isis.apache.org/versions/1.12.0/guides/rgsvc/rgsvc.html#_rgsvc_application-layer-api_WrapperFactory[`WrapperFactory`]
+* link:https://issues.apache.org/jira/browse/ISIS-1315[ISIS-1315] - Can't generate link:https://isis.apache.org/versions/1.12.0/guides/rgmvn/rgmvn.html#_rgmvn_swagger[swagger] specs, where actions are contributed.
 * link:https://issues.apache.org/jira/browse/ISIS-1314[ISIS-1314] - Filename parameter label missing for DTO mixins
 * link:https://issues.apache.org/jira/browse/ISIS-1311[ISIS-1311] - Mixins for Persistable metadata causes exception when rendering.
 * link:https://issues.apache.org/jira/browse/ISIS-1310[ISIS-1310] - DomainObjectContainer#titleOf(..) does not resolve @Title annotated on private field

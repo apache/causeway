@@ -62,34 +62,34 @@ The full list of Apache Isis annotations that can be used in meta-annotations is
 
 
 |domain service
-|link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-DomainService[@DomainService]
-|link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-DomainServiceLayout[@DomainServiceLayout]
+|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-DomainService[@DomainService]
+|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-DomainServiceLayout[@DomainServiceLayout]
 
 |domain object
-|link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-DomainObject[@DomainObject] +
-link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-ViewModel[@ViewModel] +
-link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-MemberGroupLayout[@MemberGroupLayout]
+|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-DomainObject[@DomainObject] +
+link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-ViewModel[@ViewModel] +
+link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-MemberGroupLayout[@MemberGroupLayout]
 
-|link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-DomainObjectLayout[@DomainObjectLayout] +
-link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-ViewModelLayout[@ViewModelLayout]
+|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-DomainObjectLayout[@DomainObjectLayout] +
+link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-ViewModelLayout[@ViewModelLayout]
 
 | Action
 
-|link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-Action[@Action]
-|link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-ActionLayout[@ActionLayout]
+|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-Action[@Action]
+|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-ActionLayout[@ActionLayout]
 
 |action parameter
-|link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-Parameter[@Parameter]
-|link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-ParameterLayout[@ParameterLayout]
+|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-Parameter[@Parameter]
+|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-ParameterLayout[@ParameterLayout]
 
 
 |property
-|link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-Property[@Property]
-|link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-PropertyLayout[@PropertyLayout]
+|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-Property[@Property]
+|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-PropertyLayout[@PropertyLayout]
 
 |collection
-|link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-Collection[@Collection]
-|link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-CollectionLayout[@CollectionLayout]
+|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-Collection[@Collection]
+|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-CollectionLayout[@CollectionLayout]
 
 |===
 

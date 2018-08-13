@@ -112,6 +112,4 @@ If using the xref:../ugvw/ugvw.adoc#[Wicket viewer], the `ToDoItemBulkUpdate` vi
 
 == Related Services
 
-The xref:../rgsvc/rgsvc.adoc#_rgsvc_api_ActionInteractionContext[`ActionInteractionContext`] service allows xref:../rgant/rgant.adoc#_rgant-Action_invokeOn[bulk actions] to co-ordinate with each other.
-
 The xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-api_QueryResultsCache[`QueryResultsCache`] is useful for caching the results of expensive method calls.

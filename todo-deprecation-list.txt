@@ -22,26 +22,50 @@ to change:
 support for legacy implementation of UrlEncodingService
 - as an automatic fallback; has changed to use with compression by default.
 
+inline paraname8 from incode platform
+
+remove isis-core-wicket-applib 
+- contains only WicketDeveloperUtilitiesService, which is hidden anyway and seems to not be required.
+
+update .xsd for layout, make render optional and deprecated.    
+   
+- deprecate FixtureScripts service with view to removing from applib ... the framework provides an implementation by default
+- get rid of automatic initialization of fields (perhaps behind a config property)
+- deprecate the Apache Isis' DateTime classes for removal in the future) ... and probably all of the custom value types, subclasses of Magnitude
+- merge metamodel and runtime
+- remove *Installer
+
+move ContentMappingServiceForCommandDto and ContentMappingServiceForCommandsDto from applib.conmap to applib.services.conmap.commands
+
+IsisContext:
+- remove this, causes a stack trace...
+
+    // -- HELPER
+
+    /**
+     * TODO [andi-huber] not sure if required, initial idea was to force log4j
+     * re-configuration on an undeploy/deploy cycle
+     */
+    static void resetLogging() {
+        try {
+            org.apache.log4j.BasicConfigurator.resetConfiguration();
+            org.apache.log4j.Logger.getRootLogger().removeAllAppenders();
+        } catch (Exception e) {
+            // at least we tried
+        }
+    }
+
+TitleFacetViaAnnotation may not work if on a field, due to DN lazy loading.
+
+
+remove AbstractService from applib.
+remove AbstractViewModel from applib.
+
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 the stuff below here was working notes for 2.0.0-M1, not necessarily up to date.
 
-
-
-
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-
-Also for 2.0.0, new features/deprecations:
-    
-    deprecate FixtureScripts service with view to removing from applib ... the framework provides an implementation by default
-    get rid of automatic initialization of fields (perhaps behind a config property)
-    deprecate the Apache Isis' DateTime classes for removal in the future) ... and probably all of the custom value types, subclasses of Magnitude
-    merge metamodel and runtime
-    remove *Installer
 
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -52,14 +76,6 @@ Also for 2.0.0, new features/deprecations:
 
 
 OTHER STUFF:
-
-
-
-
-
-inline paraname8 from incode platform
-
-
 
 PublishingServiceInternalDefault
 
@@ -77,16 +93,11 @@ not thread-safe:
             suppress = false;
         }
     }
-
-
-
     
-~~~
-
-combine isis-core-wicket-applib with isis-core-applib
+~~~~~~~~
 
 
-update .xsd for layout, make render optional and deprecated.    
+
 
 
 
@@ -345,3 +356,5 @@ org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationServiceFor
 
 
 ObjectFixtureService + supporting classes
+
+

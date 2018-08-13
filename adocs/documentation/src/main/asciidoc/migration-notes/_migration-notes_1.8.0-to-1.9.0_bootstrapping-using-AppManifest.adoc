@@ -9,7 +9,7 @@
 Apache Isis 1.9.0 provides a simplified programmatic way of bootstrapping the application, that also unifies bootstrapping for integration tests.
 
 For now this new bootstrapping mechanism is optional (you don't have to change your code), but it may become mandatory in future releases.
-The xref:../guides/ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype] has been updated to use this new mechanism.
+The link:https://isis.apache.org/versions/1.9.0/guides/ugfun/ugfun.html#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype] has been updated to use this new mechanism.
 
 The instructions below assume that your application is structured as per the simpleapp archetype.  Adjust accordingly.
 
@@ -129,7 +129,7 @@ For example, the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s s
 
 [TIP]
 ====
-For details of the usages of the other methods in this interface, see the xref:../guides/rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[reference guide] documentation.
+For details of the usages of the other methods in this interface, see the link:https://isis.apache.org/versions/1.9.0/guides/rgcms/rgcms.html#_rgcms_classes_AppManifest-bootstrapping[reference guide] documentation.
 ====
 
 

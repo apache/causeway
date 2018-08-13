@@ -22,8 +22,7 @@ public class AuditingServiceInternal {
     public void audit();                    // <2>
 }
 ----
-<1> minor performance optimization as to whether any auditing services are actually enabled; checks to see if any
-xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditerService[`AuditerService`] are enabled.
+<1> minor performance optimization as to whether any auditing services are actually enabled; checks to see if any xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditerService[`AuditerService`] are enabled.
 <2> uses the xref:../rgfis/rgfis.adoc#_rgfis_persistence-layer_ChangedObjectsServiceInternal[`ChangedObjectsServiceInternal`] to obtain details of the changed properties, then call the configured xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditerService[`AuditerService`](s).
 
 The service implementation is `o.a.i.c.r.s.auditing.AuditingServiceInternal`.
@@ -32,10 +31,7 @@ The service implementation is `o.a.i.c.r.s.auditing.AuditingServiceInternal`.
 
 == Registering the Service
 
-Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the
-`AppManifest` to xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' default
-implementation of `AuditingServiceInternal` class is automatically registered (it is annotated with `@DomainService`)
-so no further configuration is required.
+Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the `AppManifest` to xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' default implementation of `AuditingServiceInternal` class is automatically registered (it is annotated with `@DomainService`) so no further configuration is required.
 
 
 == Related Classes

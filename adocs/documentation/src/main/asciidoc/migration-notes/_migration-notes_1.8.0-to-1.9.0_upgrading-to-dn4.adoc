@@ -8,7 +8,7 @@
 
 Apache Isis 1.9.0 updates to DataNucleus 4.0.0, which requires some changes (simplifications) to the Maven configuration.
 
-If you starting a new app then you can start from the xref:../guides/ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype]; its Maven configuration has been updated.
+If you starting a new app then you can start from the link:https://isis.apache.org/versions/1.9.0/guides/ugfun/ugfun.html#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype]; its Maven configuration has been updated.
 
 If you have an existing Apache Isis app that you want to upgrade, then you'll need to make some changes.
 

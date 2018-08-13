@@ -7,19 +7,16 @@
 
 
 
-The lifecycle callback methods notify a domain entity about its interaction within the persistence lifecycle.  For example, the entity is notified immediately prior to being persisted, or when it is about to be updated.
+The lifecycle callback methods notify a domain entity about its interaction within the persistence lifecycle.
+For example, the entity is notified immediately prior to being persisted, or when it is about to be updated.
 
 [WARNING]
 ====
-Note that these callbacks are fired by Apache Isis rather than JDO.  In the future we may deprecate them because there are better mechanisms available using listeners/subscribers:
-
-* in Isis 1.9.0 and earlier, you may therefore want to consider using the JDO API directly to set up a lifecycle
-listener; see xref:../rgcms/rgcms.adoc#_rgcms_methods_lifecycle_jdo-api[here] for further discussion.
-
-* alternatively, you can use a subscriber for the xref:../rgcms/rgcms.adoc#_rgcms_classes_lifecycleevent[lifecycle event]s fired in Isis.
+Note that these callbacks are fired by Apache Isis rather than JDO.
+In the future we may deprecate them because there are better mechanisms available using a subscriber for the xref:../rgcms/rgcms.adoc#_rgcms_classes_lifecycleevent[lifecycle event]s.
 ====
 
-The lifecycle callback methods supported by Isis are:
+The lifecycle callback methods supported by Apache Isis are:
 
 .Lifecycle methods (partial support)
 [cols="1,4a", options="header"]
@@ -29,7 +26,7 @@ The lifecycle callback methods supported by Isis are:
 |Description
 
 |xref:../rgcms/rgcms.adoc#_rgcms_methods_lifecycle_created[`created()`]
-|called when an object has just been created using xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer[`newTransientInstance()`]
+|called when an object has just been created using xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_FactoryService[`FactoryService#instantiate(..)`] or xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_RepositoryService[`RepositoryService#instantiate(...)`]
 
 |xref:../rgcms/rgcms.adoc#_rgcms_methods_lifecycle_loaded[`loaded()`]
 |called when a (persistent) object has just been loaded from the object store.
@@ -51,39 +48,6 @@ The lifecycle callback methods supported by Isis are:
 
 |xref:../rgcms/rgcms.adoc#_rgcms_methods_lifecycle_updating[`updating()`]
 |called when a (persistent) object is just about to be updated in the object store
-
-|===
-
-
-
-Some lifecycle methods have been deprecated:
-
-.Deprecated lifecycle methods
-[cols="1,4a", options="header"]
-|===
-
-|Method
-|Notes
-
-|`deleted()`
-|Replaced by xref:../rgcms/rgcms.adoc#_rgcms_methods_lifecycle_removed[`removed()`]
-
-|`deleting()`
-|Replaced by xref:../rgcms/rgcms.adoc#_rgcms_methods_lifecycle_removing[`removing()`]
-
-|`loading()`
-|callback for when the (persistent) object is just about to be loaded from the object store. +
-
-[WARNING]
-====
-This method is never called.
-====
-
-|`saved()`
-|Replaced by xref:../rgcms/rgcms.adoc#_rgcms_methods_lifecycle_persisted[`persisted()`]
-
-|`saving()`
-|Replaced by xref:../rgcms/rgcms.adoc#_rgcms_methods_lifecycle_persisting[`persisting()`]
 
 |===
 

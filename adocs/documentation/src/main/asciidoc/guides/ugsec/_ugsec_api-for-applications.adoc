@@ -8,16 +8,16 @@
 
 Generally speaking your domain objects (or more generally your application) should be agnostic of the user/roles that are interacting with them; applying security permissions is the responsibility of the framework.
 
-Still, on very rare occasion you may have a need, in which case you can either use Apache Isis' `DomainObjectContainer` API or you can reach further down the stack and use the JEE Servlet API.
+Still, on very rare occasion you may have a need, in which case you can either use Apache Isis' `UserService` API or you can reach further down the stack and use the JEE Servlet API.
 
 
-== `DomainObjectContainer` API
+== `UserService` API
 
-The xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer[`DomainObjectContainer`] service exposes the following API:
+The xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_UserService[`UserService`] service exposes the following API:
 
 [source,java]
 ----
-final UserMemento user = container.getUser();
+final UserMemento user = userService.getUser();
 final List<RoleMemento> roles = user.getRoles();
 for (RoleMemento role : roles) {
     String roleName = role.getName();
@@ -44,7 +44,8 @@ If using the Wicket viewer, then note there will also be another role which is u
 
 == Servlet API
 
-On occasion you may find it necessary to reach below Isis and to the underlying servlet API.  For example, the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s togglz module (non-ASF) has a requirement to do this in order to expose its embedded togglz web console.  (
+On occasion you may find it necessary to reach below Apache Isis and to the underlying servlet API.
+For example, the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s togglz module (non-ASF) has a requirement to do this in order to expose its embedded togglz web console.  (
 
 [TIP]
 ====

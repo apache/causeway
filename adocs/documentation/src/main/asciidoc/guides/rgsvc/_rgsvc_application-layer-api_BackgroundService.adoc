@@ -5,8 +5,7 @@
 :_imagesdir: images/
 
 
-The `BackgroundService2` domain service (and its various supertypes), and also the companion
-xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_BackgroundCommandService[`BackgroundCommandService2`] SPI service, enable commands to be persisted such that they may be invoked in the background.
+The `BackgroundService2` domain service (and its various supertypes), and also the companion xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_BackgroundCommandService[`BackgroundCommandService2`] SPI service, enable commands to be persisted such that they may be invoked in the background.
 
 The `BackgroundService2` is responsible for capturing a memento representing the command in a typesafe way, and persisting it rather than executing it directly.
 
@@ -18,9 +17,7 @@ The persistence delegates the persistence of the memento to an appropriate imple
 One such implementation of `BackgroundCommandService` is provided by (non-ASF) http://github.com/isisaddons/isis-module-command[Isis addons' command] module.
 
 The persisting of commands is only half the story; there needs to be a separate process to read the commands and execute them.
-The `BackgroundCommandExecution` abstract class (discussed
-xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_BackgroundService_BackgroundCommandExecution[below]) provides infrastructure to do this;
-the concrete implementation of this class depends on the configured `BackgroundCommandService` (in order to query for the persisted (background) ``Command``s.
+The `BackgroundCommandExecution` abstract class (discussed xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_BackgroundService_BackgroundCommandExecution[below]) provides infrastructure to do this; the concrete implementation of this class depends on the configured `BackgroundCommandService` (in order to query for the persisted (background) ``Command``s.
 
 
 

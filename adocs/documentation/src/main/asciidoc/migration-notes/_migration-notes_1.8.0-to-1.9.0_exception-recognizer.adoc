@@ -6,9 +6,9 @@
 
 
 
-The `ExceptionRecognizerCompositeForJdoObjectStore` service (an implementation of the xref:../guides/rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_ExceptionRecognizer[`ExceptionRecognizer`] SPI) recognizes certain expected exceptions thrown by the JDO objectstore (for example, violations of uniqueness) and converts them into meaningful messages for the end-user.
+The `ExceptionRecognizerCompositeForJdoObjectStore` service (an implementation of the link:https://isis.apache.org/versions/1.9.0/guides/rgsvc/rgsvc.html#_rgsvc_presentation-layer-spi_ExceptionRecognizer[`ExceptionRecognizer`] SPI) recognizes certain expected exceptions thrown by the JDO objectstore (for example, violations of uniqueness) and converts them into meaningful messages for the end-user.
 
-Prior to 1.9.0 this implementation was _not_ annotated with xref:../guides/rgant/rgant.adoc#_rgant-DomainService[`@DomainService`] and thus needed to be explicitly registered in `isis.properties`.
+Prior to 1.9.0 this implementation was _not_ annotated with link:https://isis.apache.org/versions/1.9.0/guides/rgant/rgant.html#_rgant-DomainService[`@DomainService`] and thus needed to be explicitly registered in `isis.properties`.
 
 In 1.9.0 the service has been annotated with `@DomainService` meaning that:
 
@@ -32,7 +32,7 @@ public class EstatioIntegTestBuilder extends IsisSystemForTest.Builder {
 
 If you fail to do this you will get an exception to the effect of duplicate service Ids being registered.
 
-Now that the `ExceptionRecognizerCompositeForJdoObjectStore` no longer needs to be explicitly registered, you might (very rarely) require the opposite situation, namely to disable the service.  As this can't be done by just removing it from `isis.properties`, you instead can set a new xref:../guides/rgcfg/rgcfg.adoc#_rgcfg_configuring-core[configuration property] `isis.services.ExceptionRecognizerCompositeForJdoObjectStore.disable`:
+Now that the `ExceptionRecognizerCompositeForJdoObjectStore` no longer needs to be explicitly registered, you might (very rarely) require the opposite situation, namely to disable the service.  As this can't be done by just removing it from `isis.properties`, you instead can set a new link:https://isis.apache.org/versions/1.9.0/guides/rgcfg/rgcfg.html#_rgcfg_configuring-core[configuration property] `isis.services.ExceptionRecognizerCompositeForJdoObjectStore.disable`:
 
 [source,ini]
 ----

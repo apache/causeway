@@ -12,18 +12,13 @@ It also shows how to instantiate xref:../ugfun/ugfun.adoc#_ugfun_building-blocks
 [NOTE]
 ====
 The main domain services used are xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-api_RepositoryService[`RepositoryService`] and xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_FactoryService[`FactoryService`].
-These (and some other services) replace the now deprecated xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer[`DomainObjectContainer`].
 ====
 
 
 include::_ugfun_crud_instantiating.adoc[leveloffset=+1]
-
 include::_ugfun_crud_persisting.adoc[leveloffset=+1]
-
 include::_ugfun_crud_finding.adoc[leveloffset=+1]
-
 include::_ugfun_crud_updating.adoc[leveloffset=+1]
-
 include::_ugfun_crud_deleting.adoc[leveloffset=+1]
 
 

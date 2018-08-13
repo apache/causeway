@@ -174,4 +174,10 @@ image::{_imagesdir}reference-layout/4-0-8-0.png[width="720px",link="{_imagesdir}
 
 == Other Annotations
 
-All the layout annotations (eg `@Regex` and `@Named`) have been deprecated, instead replaced by the various `XxxLayout` annotations: xref:../rgant/rgant.adoc#_rgant-ActionLayout, [`@ActionLayout`] xref:../rgant/rgant.adoc#_rgant-CollectionLayout[`@CollectionLayout`],  xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout[`@DomainObjectLayout`],  xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout[`@DomainServiceLayout`],  xref:../rgant/rgant.adoc#_rgant-ParameterLayout[`@ParameterLayout`], xref:../rgant/rgant.adoc#_rgant-PropertyLayout[`@PropertyLayout`], and xref:../rgant/rgant.adoc#_rgant-ViewModelLayout[`@ViewModelLayout`]
+Layout semantics can also be specified using the various `XxxLayout` annotations:
+
+* for domain services: xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout[`@DomainServiceLayout`]
+* for domain objects: xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout[`@DomainObjectLayout`] and xref:../rgant/rgant.adoc#_rgant-ViewModelLayout[`@ViewModelLayout`]
+* for actions: xref:../rgant/rgant.adoc#_rgant-ActionLayout, [`@ActionLayout`] and xref:../rgant/rgant.adoc#_rgant-ParameterLayout[`@ParameterLayout`]
+* for properties: xref:../rgant/rgant.adoc#_rgant-PropertyLayout[`@PropertyLayout`]
+* for collections: xref:../rgant/rgant.adoc#_rgant-CollectionLayout[`@CollectionLayout`]

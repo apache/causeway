@@ -21,7 +21,8 @@ public void init() { ... }     <2>
 <1> It is not necessary to annotate the method with xref:../rgant/rgant.adoc#_rgant-Programmatic[`@Programmatic`]; it will be automatically excluded from the Apache Isis metamodel.
 <2> the method can have any name, but must have `public` visibility.
 
-In the form shown above the method accepts no arguments.  Alternatively - for domain services only, not view models - the method can accept a parameter of type `Map<String,String>`:
+In the form shown above the method accepts no arguments.
+Alternatively - for domain services only, not view models - the method can accept a parameter of type `Map<String,String>`:
 
 [source,java]
 ----
@@ -29,40 +30,15 @@ In the form shown above the method accepts no arguments.  Alternatively - for do
 @Programmatic
 public void init(Map<String,String> properties) { ... }
 ----
-Isis uses argument to pass in the configuration properties read from all xref:../rgcfg/rgcfg.adoc#_rgcfg_configuration-files[configuration files]:
+Apache Isis uses argument to pass in the configuration properties read from all xref:../rgcfg/rgcfg.adoc#_rgcfg_configuration-files[configuration files]:
 
 [TIP]
 ====
-Alternatively, you could inject xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer[`DomainObjectContainer`] into the service and read configuration properties using `DomainObjectContainer#getProperty(...)` and related methods.  Note that when using this latter API only those configuration properties prefixes `application.` key are provided.
+Alternatively, you could inject xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_ConfigurationService[`ConfigurationService`] into the service and read configuration properties using `ConfigurationService#getProperty(...)` and related methods.
+However, be aware when using this latter API that only those configuration properties keys with an `application.` prefix are provided.
 ====
 
-A common use case is for domain services that interact with the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`].  For example:
-
-[source,java]
-----
-@DomainService(nature=NatureOfService.DOMAIN)
-public class MySubscribingService {
-    @PostConstruct
-    public void postConstruct() {
-        eventBusService.register(this);
-    }
-    @PreDestroy
-    public void preDestroy() {
-        eventBusService.unregister(this);
-    }
-    ...
-    @javax.inject.Inject
-    EventBusService eventBusService;
-}
-----
-
-[TIP]
-====
-In this particular use case, it is generally simpler to just subclass from xref:../rgcms/rgcms.adoc#_rgcms_classes_super_AbstractSubscriber[`AbstractSubscriber`].
-====
-
-
-Other use cases include obtaining connections to external datasources, eg subscribing to an ActiveMQ router, say, or initializing/cleaning up a background scheduler such as Quartz.
+Use cases include obtaining connections to external datasources, eg subscribing to an ActiveMQ router, say, or initializing/cleaning up a background scheduler such as Quartz.
 
 
 

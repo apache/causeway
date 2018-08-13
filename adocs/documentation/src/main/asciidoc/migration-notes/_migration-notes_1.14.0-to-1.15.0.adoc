@@ -27,13 +27,13 @@ aggregates dependencies for running as a webapp
 brings in a dependency on `isis-core-webserver` (to run the application from the command line using `org.apache.isis.WebServer`).
 This is defined in a profile which is actived only when running under the Intellij IDE.
 
-The xref:../ugfun/ugfun.adoc#_ugfun_getting-started_helloworld-archetype[HelloWorld] and xref:../ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp] archetypes both make use of these new aggregators.
+The link:https://isis.apache.org/versions/1.15.0/ugfun/ugfun.html#_ugfun_getting-started_helloworld-archetype[HelloWorld] and link:https://isis.apache.org/versions/1.15.0/ugfun/ugfun.html#_ugfun_getting-started_simpleapp-archetype[SimpleApp] archetypes both make use of these new aggregators.
 
 
 [[_migration-notes_1.14.0-to-1.15.0_ISIS-1528]]
 == Rename of isis-viewer-wicket artifacts (link:https://issues.apache.org/jira/browse/ISIS-1528[ISIS-1528])
 
-The `<groupId>` and `<artifactId>` of the xref:../guides/ugvw/ugvw.adoc#[Wicket viewer] have been made consistent with other artifacts:
+The `<groupId>` and `<artifactId>` of the link:https://isis.apache.org/versions/1.15.0/guides/ugvw/ugvw.html#[Wicket viewer] have been made consistent with other artifacts:
 
 * the `<groupId>` has been changed from `org.apache.isis.viewer` to `org.apache.isis.core`
 * the `<artifactId>` has been changed from `isis-viewer-wicket-???` to `isis-core-viewer-wicket-???`
@@ -66,8 +66,8 @@ Domain services fall into three categories:
 * framework services: defined within the applib with a default implementation provided by the framework itself.
 
 As described
-xref:../guides/ugbtb/ugbtb.adoc#_ugbtb_hints-and-tips_replacing-default-service-implementations[here], it is possible to override framework services so that the framework uses the replacement implementation.
-Previously this required explicitly setting either xref:../guides/rgant/rgant.adoc#_rgant-DomainService_menuOrder[`@DomainService#menuOrder()`] or xref:../guides/rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`].
+link:https://isis.apache.org/versions/1.15.0/guides/ugbtb/ugbtb.html#_ugbtb_hints-and-tips_replacing-default-service-implementations[here], it is possible to override framework services so that the framework uses the replacement implementation.
+Previously this required explicitly setting either link:https://isis.apache.org/versions/1.15.0/guides/rgant/rgant.html#_rgant-DomainService_menuOrder[`@DomainService#menuOrder()`] or link:https://isis.apache.org/versions/1.15.0/guides/rgant/rgant.html#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`].
 
 In 1.15.0, the default value for `menuOrder` has been set to a value lower than that of the framework-provided implementations, and so will a custom implementation will always take precedence over the framework implementations without having to remember to also set `menuOrder`.
 
@@ -78,18 +78,18 @@ A small change (made in (link:https://issues.apache.org/jira/browse/ISIS-1688[IS
 [[_migration-notes_1.14.0-to-1.15.0_ISIS-1504]]
 == Metamodel validators (link:https://issues.apache.org/jira/browse/ISIS-1504[ISIS-1504], link:https://issues.apache.org/jira/browse/ISIS-1622[ISIS-1622], link:https://issues.apache.org/jira/browse/ISIS-1669[ISIS-1669])
 
-The metamodel validator has been extended with several new checks relating to xref:../ugfun.adoc#_ugfun_programming-model_view-models_jaxb[JAXB view models]:
+The metamodel validator has been extended with several new checks relating to link:https://isis.apache.org/versions/1.15.0/ugfun.html#_ugfun_programming-model_view-models_jaxb[JAXB view models]:
 
 * that the view model can be instantiated:
 ** has a public, no-arg constructor
 ** is not abstract
 ** is not a member inner class (nested static class is ok)
-* that JODA datetimes are annotated with the xref:../ugfun/ugfun.adoc#_ugfun_programming-model_view-models_jaxb_joda-datatypes[appropriate implementation] of a JAXB `XmlAdapter`
-* that for references to persistent entities, that those persistent entities are annotated to use xref:../ugfun/ugfun.adoc#_ugfun_programming-model_view-models_jaxb_referencing-domain-entities[`PersistentEntityAdapter`] as their JAXB adapter.
+* that JODA datetimes are annotated with the link:https://isis.apache.org/versions/1.15.0/ugfun/ugfun.html#_ugfun_programming-model_view-models_jaxb_joda-datatypes[appropriate implementation] of a JAXB `XmlAdapter`
+* that for references to persistent entities, that those persistent entities are annotated to use link:https://isis.apache.org/versions/1.15.0/ugfun/ugfun.html#_ugfun_programming-model_view-models_jaxb_referencing-domain-entities[`PersistentEntityAdapter`] as their JAXB adapter.
 
 \... in other words, that the view model can be instantiated.
 
-These checks are enabled by default but can be disabled with a xref:../rgcfg.adoc#__rgcfg_configuring-core_metamodel-validation[configuration property] if required.
+These checks are enabled by default but can be disabled with a link:https://isis.apache.org/versions/1.15.0/rgcfg.html#__rgcfg_configuring-core_metamodel-validation[configuration property] if required.
 
 
 [[_migration-notes_1.14.0-to-1.15.0_ISIS-1613]]
@@ -115,7 +115,7 @@ log4j.additivity.org.apache.wicket.page.XmlPartialPageUpdate=false
 
 Bootstrapping the application can now be accomplished with less boilerplate, both for the regular webapp and in integration tests.
 
-For more information, see the xref:../ugtst/ugtst.adoc#_ugtst_integ-test-support_bootstrapping[testing guide] and xref:../rgcms/rgcms.adoc#__rgcms_classes_AppManifest-bootstrapping_bootstrapping_AppManifestAbstract[reference guide for classes/methods/schema].
+For more information, see the link:https://isis.apache.org/versions/1.15.0/ugtst/ugtst.html#_ugtst_integ-test-support_bootstrapping[testing guide] and link:https://isis.apache.org/versions/1.15.0/rgcms/rgcms.html#__rgcms_classes_AppManifest-bootstrapping_bootstrapping_AppManifestAbstract[reference guide for classes/methods/schema].
 
 
 
@@ -134,7 +134,7 @@ You should therefore inspect all properties of your view models and ensure that 
 [[_migration-notes_1.14.0-to-1.15.0_ISIS-1595]]
 == Fix to config variable (link:https://issues.apache.org/jira/browse/ISIS-1595[ISIS-1595])
 
-The configuration property xref:../guides/rgcfg/rgcfg.adoc#__rgcfg_configuring-core_metamodel-validation[ `isis.reflector.validator.jdoqlVariablesClause`] was incorrectly named `variablesClause`.
+The configuration property link:https://isis.apache.org/versions/1.15.0/guides/rgcfg/rgcfg.html#__rgcfg_configuring-core_metamodel-validation[ `isis.reflector.validator.jdoqlVariablesClause`] was incorrectly named `variablesClause`.
 This has now been corrected.
 
 Any applications that used this configuration property should be updated.

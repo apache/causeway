@@ -5,14 +5,8 @@
 :_imagesdir: images/
 
 
-Subclass of xref:../rgcms/rgcms.adoc#_rgcms_classes_lifecycleevent_AbstractLifecycleEvent[`AbstractLifecycleEvent`], broadcast when an object is about to be deleted from the database using the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer_object-persistence-api[`DomainObjectContainer`]'s
-`#remove(...)` method.
+Subclass of xref:../rgcms/rgcms.adoc#_rgcms_classes_lifecycleevent_AbstractLifecycleEvent[`AbstractLifecycleEvent`], broadcast when an object is about to be deleted from the database using the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_RepositoryService[`RepositoryService`]'s `#remove(...)` method.
 
 
-`ObjectRemovingEvent.Default` is the concrete implementation that is used.
-
-[NOTE]
-====
-In the future this may be generalized to allow arbitrary subclasses to be broadcast, see ISIS-803.
-====
+`ObjectRemovingEvent.Default` is the implementation that is used by default, but this can be overridden using xref:../rgant/rgant.adoc#_rgant_DomainObject_removingLifecycleEvent[`@DomainObject#removingLifecycleEvent()`].
 

@@ -13,7 +13,7 @@ There have also been several improvements in the ability to tab around the UI.
 The version of Apache Wicket has also been upgraded from `6.x` to `7.x`.
 
 Most applications written against v1.14.x should run against v1.15.0 with few if any changes.
-That said, we do recommend that you read and keep in mind the xref:../migration-notes/migration-notes.adoc#_migration-notes_1.14.0-to-1.15.0[migration notes] when you upgrade your app.
+That said, we do recommend that you read and keep in mind the link:https://isis.apache.org/versions/1.15.0/migration-notes/migration-notes.html#_migration-notes_1.14.0-to-1.15.0[migration notes] when you upgrade your app.
 
 [NOTE]
 ====

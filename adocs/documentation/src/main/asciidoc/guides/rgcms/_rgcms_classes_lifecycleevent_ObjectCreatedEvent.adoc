@@ -6,13 +6,10 @@
 
 
 
-Subclass of xref:../rgcms/rgcms.adoc#_rgcms_classes_lifecycleevent_AbstractLifecycleEvent[`AbstractLifecycleEvent`], broadcast when an object is first instantiated using the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer_object-creation-api[`DomainObjectContainer`]'s
-`#newTransientInstance(...)` method.
+Subclass of xref:../rgcms/rgcms.adoc#_rgcms_classes_lifecycleevent_AbstractLifecycleEvent[`AbstractLifecycleEvent`], broadcast when an object is first instantiated using the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_FactoryService[`FactoryServuce`]'s
+`#instantiate(...)` method.
 
-`ObjectCreatedEvent.Default` is the concrete implementation that is used.
+`ObjectCreatedEvent.Default` is the implementation that is used by default, but this can be overridden using xref:../rgant/rgant.adoc#_rgant_DomainObject_createdLifecycleEvent[`@DomainObject#createdLifecycleEvent()`].
 
-[NOTE]
-====
-In the future this may be generalized to allow arbitrary subclasses to be broadcast, see ISIS-803.
-====
+
 

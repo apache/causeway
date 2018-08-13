@@ -6,103 +6,80 @@
 
 
 
-Most applications written against v1.12.x should run against v1.13.0 with few if any changes.  That said, this release
-has removed a small number of features that were dependent on internal APIs, and some configuration properties are
-now removed/unsupported.  We therefore do recommend that you read and keep in mind these notes when you upgrade your app.
+Most applications written against v1.12.x should run against v1.13.0 with few if any changes.
+That said, this release has removed a small number of features that were dependent on internal APIs, and some configuration properties are
+now removed/unsupported.
+We therefore do recommend that you read and keep in mind these notes when you upgrade your app.
 
-If you *do* encounter any difficulties then let us know via the xref:../support.adoc#[users mailing list], so we can
+If you *do* encounter any difficulties then let us know via the link:https://isis.apache.org/versions/1.13.0/support.html#[users mailing list], so we can
 support you and document issues here.
 
 
 == Command changes
 
-The main feature in `1.13.0` is the xref:../guides/rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_InteractionContext[`InteractionContext`] domain service
-to represent an action invocation/property edit, with the re-positioning of
-xref:../guides/rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_CommandContext[`CommandContext`] to represent the _intention_ to invoke an action/edit a
-property.  You can read more about this design in the reference guide on domain services, in the
-xref:../guides/rgsvc/rgsvc.adoc#__rgsvc_intro_commands-and-events[commands and events] section.
+The main feature in `1.13.0` is the link:https://isis.apache.org/versions/1.13.0/guides/rgsvc/rgsvc.html#_rgsvc_application-layer-api_InteractionContext[`InteractionContext`] domain service to represent an action invocation/property edit, with the re-positioning of link:https://isis.apache.org/versions/1.13.0/guides/rgsvc/rgsvc.html#_rgsvc_application-layer-api_CommandContext[`CommandContext`] to represent the _intention_ to invoke an action/edit a property.
+You can read more about this design in the reference guide on domain services, in the link:https://isis.apache.org/versions/1.13.0/guides/rgsvc/rgsvc.html#__rgsvc_intro_commands-and-events[commands and events] section.
 
-This refactoring completely overhauls the structure of the XML mementos passed to
-xref:../guides/rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`] (to persist) and to
-xref:../guides/rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_BackgroundCommandService[`BackgroundCommandService`] (to invoke persisted commands in the
-background).  If you are using these services then ensure that there are no pending commands at the point at which you
-cut-over.  If you have any code that makes assumptions on the format of the XML, it will also need to be rewritten.
-Note that the XML which is persisted henceforth is well-defined and any future changes to it will be backward
-compatible; see xref:../guides/rgcms/rgcms.adoc#_rgcms_schema[schema reference guide].  In fact, there are three schema: for commands
-(`cmd.xsd`), inteactions (`ixn.xsd`) and for changes (`chg.xsd`).  These replace the earlier `aim.xsd` schema (which
-was an amalgam of `cmd.xsd` and `ixn.xsd`).
+This refactoring completely overhauls the structure of the XML mementos passed to link:https://isis.apache.org/versions/1.13.0/guides/rgsvc/rgsvc.html#_rgsvc_application-layer-spi_CommandService[`CommandService`] (to persist) and to link:https://isis.apache.org/versions/1.13.0/guides/rgsvc/rgsvc.html#_rgsvc_application-layer-spi_BackgroundCommandService[`BackgroundCommandService`] (to invoke persisted commands in the background).
+If you are using these services then ensure that there are no pending commands at the point at which you cut-over.
+If you have any code that makes assumptions on the format of the XML, it will also need to be rewritten.
+Note that the XML which is persisted henceforth is well-defined and any future changes to it will be backward compatible; see link:https://isis.apache.org/versions/1.13.0/guides/rgcms/rgcms.html#_rgcms_schema[schema reference guide].
+In fact, there are three schema: for commands (`cmd.xsd`), inteactions (`ixn.xsd`) and for changes (`chg.xsd`).
+These replace the earlier `aim.xsd` schema (which was an amalgam of `cmd.xsd` and `ixn.xsd`).
 
 The reworked `CommandService` now properly supports property edits in the exact same way as action invocations.
 
 As a side-effect of this work, note also that:
 
 * the `CommandService#startTransaction(...)` SPI is *NO LONGER CALLED* by the framework.
-
-* the `BackgroundService#asActionInvocationMemento(...)` (not formally part of the API) is also no longer called by the
-framework; moreover the default implementation now throws an exception to this effect.
+* the `BackgroundService#asActionInvocationMemento(...)` (not formally part of the API) is also no longer called by the framework; moreover the default implementation now throws an exception to this effect.
 
 
 == Auditing
 
-The xref:../guides/rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditingService[`AuditingService`] SPI service has been deprecated, instead replaced
-by the xref:../guides/rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditerService[`AuditerService`].
+The link:https://isis.apache.org/versions/1.13.0/guides/rgsvc/rgsvc.html#_rgsvc_persistence-layer-spi_AuditingService[`AuditingService`] SPI service has been deprecated, instead replaced by the link:https://isis.apache.org/versions/1.13.0/guides/rgsvc/rgsvc.html#_rgsvc_persistence-layer-spi_AuditerService[`AuditerService`].
 
-There can be more than one implementation of this new SPI, and a framework-provided implementation
-(`AuditerServiceLogging`) will log to a file.  The (non-ASF) link:http://platform.incode.org[Incode Platform^]'s audit module also implements the new SPI.
+There can be more than one implementation of this new SPI, and a framework-provided implementation (`AuditerServiceLogging`) will log to a file.
+The (non-ASF) link:http://platform.incode.org[Incode Platform^]'s audit module also implements the new SPI.
 
 
 == Publishing
 
-The xref:../guides/rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublishingService[`PublishingService`] SPI service and its supporting
-xref:../guides/rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_EventSerializer[`EventSerializer`] domain service, have both deprecated, instead
-replaced by the xref:../guides/rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`].
+The link:https://isis.apache.org/versions/1.13.0/guides/rgsvc/rgsvc.html#_rgsvc_persistence-layer-spi_PublishingService[`PublishingService`] SPI service and its supporting link:https://isis.apache.org/versions/1.13.0/guides/rgsvc/rgsvc.html#_rgsvc_persistence-layer-spi_EventSerializer[`EventSerializer`] domain service, have both deprecated, instead replaced by the link:https://isis.apache.org/versions/1.13.0/guides/rgsvc/rgsvc.html#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`].
 
-There can be more than one implementation of this new SPI, and a framework-provided implementation
-(`PublisherServiceLogging`) will log to a file.  The (non-ASF) link:http://platform.incode.org[Incode Platform^]'s publishmq module also implements the new SPI.
+There can be more than one implementation of this new SPI, and a framework-provided implementation (`PublisherServiceLogging`) will log to a file.
+The (non-ASF) link:http://platform.incode.org[Incode Platform^]'s publishmq module also implements the new SPI.
 
-The new service also supports the notion of published property edits; the new
-xref:../guides/rgant/rgant.adoc#_rgant-Property_publishing[`@Property#publishing()`] annotation attribute can be used to specify.  The `
-isis.services.publish.properties` configuration property can be used to specify a fallback default for properties where
-the attribute is not set explicitly.
+The new service also supports the notion of published property edits; the new link:https://isis.apache.org/versions/1.13.0/guides/rgant/rgant.html#_rgant-Property_publishing[`@Property#publishing()`] annotation attribute can be used to specify.
+The ` isis.services.publish.properties` configuration property can be used to specify a fallback default for properties where the attribute is not set explicitly.
 
-Conversely, neither the xref:../guides/rgant/rgant.adoc#_rgant-Action_publishingPayloadFactory[`@Action#publishingPayloadFactory()`]
-nor the xref:../guides/rgant/rgant.adoc#_rgant-DomainObject_publishingPayloadFactory[`@DomainObject#publishingPayloadFactory()`] are
-supported by `PublisherService`; instead the consumers of the events are expected to callback for any additional
-information, eg using xref:../guides/ugvro/ugvro.adoc#[Resful Objects] viewer.
+Conversely, neither the link:https://isis.apache.org/versions/1.13.0/guides/rgant/rgant.html#_rgant-Action_publishingPayloadFactory[`@Action#publishingPayloadFactory()`] nor the link:https://isis.apache.org/versions/1.13.0/guides/rgant/rgant.html#_rgant-DomainObject_publishingPayloadFactory[`@DomainObject#publishingPayloadFactory()`] are supported by `PublisherService`; instead the consumers of the events are expected to callback for any additional information, eg using link:https://isis.apache.org/versions/1.13.0/guides/ugvro/ugvro.html#[Resful Objects] viewer.
 
 
 == Auto-logout
 
-The new configuration property `isis.authentication.shiro.autoLogoutIfAlreadyAuthenticated` (documented more fully in
-the  xref:../guides/ugsec/ugsec.adoc#_ugsec_configuring-isis-to-use-shiro[security guide]) is by default set to false, thereby
-disabling auto-logout behaviour that is believed to be the root cause of some exceptions thrown by the
-xref:../guides/ugvro/ugvro.adoc#[Restful Objects viewer] during a race condition.  The *previous behaviour can be re-enabled* by setting
-to `true`.
+The new configuration property `isis.authentication.shiro.autoLogoutIfAlreadyAuthenticated` (documented more fully in the  link:https://isis.apache.org/versions/1.13.0/guides/ugsec/ugsec.html#_ugsec_configuring-isis-to-use-shiro[security guide]) is by default set to false, thereby disabling auto-logout behaviour that is believed to be the root cause of some exceptions thrown by the link:https://isis.apache.org/versions/1.13.0/guides/ugvro/ugvro.html#[Restful Objects viewer] during a race condition.
+The *previous behaviour can be re-enabled* by setting to `true`.
 
 
 == Safe 'rememberMe' cookies
 
-Apache Isis leverages link:http://wicket.apache.org[Apache Wicket]'s rememberMe support which holds remembered
-user/passwords in an encrypted cookie.
+Apache Isis leverages link:http://wicket.apache.org[Apache Wicket]'s rememberMe support which holds remembered user/passwords in an encrypted cookie.
 
-If a hard-coded and publicly known value were to be used (as was the case prior to `1.13.0`), then it would be
-possible for rememberMe user/password to be intercepted and decrypted, possibly compromising access.  The
-`isis.viewer.wicket.rememberMe.encryptionKey` configuration property therefore allows a private key to be specified,
-baked into the application.
+If a hard-coded and publicly known value were to be used (as was the case prior to `1.13.0`), then it would be possible for rememberMe user/password to be intercepted and decrypted, possibly compromising access.
+The `isis.viewer.wicket.rememberMe.encryptionKey` configuration property therefore allows a private key to be specified, baked into the application.
 
-If no value is set then (for safety) a random UUID will be used as the encryption key.  (The net effect of this
-fallback behaviour is that 'rememberMe' will work, but only until the webapp is restarted (after which the end-user
-will have to log in again).
+If no value is set then (for safety) a random UUID will be used as the encryption key.
+(The net effect of this fallback behaviour is that 'rememberMe' will work, but only until the webapp is restarted (after which the end-user will have to log in again).
 
-Related, the `isis.viewer.wicket.suppressRememberMe` configuration property has been replaced by
-`isis.viewer.wicket.rememberMe.suppress` (though the old configuration property is still supported).
+Related, the `isis.viewer.wicket.suppressRememberMe` configuration property has been replaced by `isis.viewer.wicket.rememberMe.suppress` (though the old configuration property is still supported).
 
 
 == Custom programming models
 
 In previous releases the `isis.reflector.facets` configuration property could be used to specify a new implementation
 of the (internal) `ProgrammingModel` API.  This configuration property is no longer supported.  See the
-xref:../guides/ugbtb/ugbtb.adoc#_ugbtb_programming-model_finetuning[beyond the basics] guide for an alternative broadly equivalent
+link:https://isis.apache.org/versions/1.13.0/guides/ugbtb/ugbtb.html#_ugbtb_programming-model_finetuning[beyond the basics] guide for an alternative broadly equivalent
 approach.
 
 
@@ -110,7 +87,7 @@ approach.
 == injectXxx() no longer supported
 
 Apache Isis automatically injects domain services into other domain objects, supporting the
-xref:../guides/rgant/rgant.adoc#_rgant-Inject[`@Inject`] annotation, also injection to `set...()` setter methods and finally injection
+link:https://isis.apache.org/versions/1.13.0/guides/rgant/rgant.html#_rgant-Inject[`@Inject`] annotation, also injection to `set...()` setter methods and finally injection
 into `inject...()` methods.  This last method is now no longer supported by default.  It can be re-enabled if necessary
 using the `isis.services.injector.injectPrefix` configuration property.
 
@@ -135,7 +112,7 @@ in use, then the app will fail-fast and refuse to start.
 == ApplicationFeatureRepository
 
 The `isis.services.applicationFeatures.init` configuration property is used to control whether the
-xref:../guides/rgsvc/rgsvc.adoc#_rgsvc_metadata-api_ApplicationFeatureRepository[`ApplicationFeatureRepository`] domain service lazily or
+link:https://isis.apache.org/versions/1.13.0/guides/rgsvc/rgsvc.html#_rgsvc_metadata-api_ApplicationFeatureRepository[`ApplicationFeatureRepository`] domain service lazily or
 eagerly initializes itself based on the framework's internal metamodel.
 
 Previously this service eagerly initialized itself, causing the framework to have to traverse the domain object
@@ -150,7 +127,7 @@ There are two sets of changes relating to integration tests.
 
 === Builder
 
-The `IsisSystemForTest.Builder` class is used to xref:../guides/ugtst/ugtst.adoc#_ugtst_integ-test-support_bootstrapping[bootstrap integration tests].
+The `IsisSystemForTest.Builder` class is used to link:https://isis.apache.org/versions/1.13.0/guides/ugtst/ugtst.html#_ugtst_integ-test-support_bootstrapping[bootstrap integration tests].
 
 A number of the clauses within this class have been removed:
 
@@ -161,11 +138,11 @@ so this builder method is redundant.
 
 * `with(ProgrammingModel programmingModel)` +
 +
-Instead, use `AppManifest#getConfiguration()` to xref:../guides/ugbtb/ugbtb.adoc#_ugbtb_programming-model_finetuning[include/exclude facets]
+Instead, use `AppManifest#getConfiguration()` to link:https://isis.apache.org/versions/1.13.0/guides/ugbtb/ugbtb.html#_ugbtb_programming-model_finetuning[include/exclude facets]
 
 * `with(MetaModelValidator metaModelValidator)` +
 +
-Instead, use `AppManifest#getConfiguration()` to specify a xref:../guides/ugbtb/ugbtb.adoc#_ugbtb_programming-model_custom-validator[custom validator].
+Instead, use `AppManifest#getConfiguration()` to specify a link:https://isis.apache.org/versions/1.13.0/guides/ugbtb/ugbtb.html#_ugbtb_programming-model_custom-validator[custom validator].
 
 * `withServicesIn(String... packagePrefixes)` and `withServices(Object... services)` +
 +
@@ -215,50 +192,41 @@ public class DomainAppSystemInitializer {
 
 == web.xml
 
-In the xref:../guides/ugbtb/ugbtb.adoc#_ugbtb_web-xml[`web.xml`], the "isis.viewers" context-param is now ignored.  Instead the
-`viewer_wicket.properties` and `viewer_restfulobjects.properties` will both be loaded if present (but neither need be present).
+In the link:https://isis.apache.org/versions/1.13.0/guides/ugbtb/ugbtb.html#_ugbtb_web-xml[`web.xml`], the "isis.viewers" context-param is now ignored.
+Instead the `viewer_wicket.properties` and `viewer_restfulobjects.properties` will both be loaded if present (but neither need be present).
 
 
 
 == `HasTransactionId` mixin
 
-The xref:../guides/rgcms/rgcms.adoc#_rgcms_classes_mixins_HasTransactionId[`HasTransactionId`] mixin interface has subtly changed its
-meaning (and is now somewhat mis-named).  Prior to `1.13.0`, this identifier was the GUID of the Isis transaction in
-which the object was created.  As of `1.13.0`, this identifier actually is for the request/interaction (as per the new
-xref:../guides/rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_InteractionContext[`InteractionContext`] service) in which the object was created.
+The link:https://isis.apache.org/versions/1.13.0/guides/rgcms/rgcms.html#_rgcms_classes_mixins_HasTransactionId[`HasTransactionId`] mixin interface has subtly changed its meaning (and is now somewhat mis-named).  Prior to `1.13.0`, this identifier was the GUID of the Isis transaction in which the object was created.  As of `1.13.0`, this identifier actually is for the request/interaction (as per the new link:https://isis.apache.org/versions/1.13.0/guides/rgsvc/rgsvc.html#_rgsvc_application-layer-api_InteractionContext[`InteractionContext`] service) in which the object was created.
 
 
 
 == Notable new features
 
-The following are new features so do not impact in themselves impact any migration effort, but you may wish to start
-taking advantage of once you have upgraded.
+The following are new features so do not impact in themselves impact any migration effort, but you may wish to start taking advantage of once you have upgraded.
 
-* `@Nullable` annotation +
+* `@Nullable` annotation
 +
-The xref:../guides/rgant/rgant.adoc#_rgant-Nullable[`@Nullable`] annotation can now be used to specify the optionality of properties
-and parameters.
+The link:https://isis.apache.org/versions/1.13.0/guides/rgant/rgant.html#_rgant-Nullable[`@Nullable`] annotation can now be used to specify the optionality of properties and parameters.
 
-* `ActionDomainEvent` for mixins +
+* `ActionDomainEvent` for mixins
 +
-Previously it was not possible to discover the mixed-in domain object when an `ActionDomainEvent` was raised by a
-mixin action.  This is now possible, through the xref:../guides/rgcms/rgcms.adoc#_rgcms_classes_domainevent_ActionDomainEvent[`mixedIn()`] method.
+Previously it was not possible to discover the mixed-in domain object when an `ActionDomainEvent` was raised by a mixin action.
+This is now possible, through the link:https://isis.apache.org/versions/1.13.0/guides/rgcms/rgcms.html#_rgcms_classes_domainevent_ActionDomainEvent[`mixedIn()`] method.
 
-* `Blob` and `Clob` file types +
+* `Blob` and `Clob` file types
 +
-The xref:../guides/rgant/rgant.adoc#_rgant-Property_fileAccept[`@Property#fileAccept()`] and
-xref:../guides/rgant/rgant.adoc#_rgant-Parameter-fileAccept[`@Parameter#fileAccept()`] annotation attributes can be used to hint at
-the file type to upload for a blob or clob.
+The link:https://isis.apache.org/versions/1.13.0/guides/rgant/rgant.html#_rgant-Property_fileAccept[`@Property#fileAccept()`] and link:https://isis.apache.org/versions/1.13.0/guides/rgant/rgant.html#_rgant-Parameter-fileAccept[`@Parameter#fileAccept()`] annotation attributes can be used to hint at the file type to upload for a blob or clob.
 
-* Live reloading +
+* Live reloading
 +
-The `isis.viewer.wicket.liveReloadUrl` configuration property allows live reloading of objects if the layout is updated,
-reducing feedback times.  Further guidance on setting this up can be found
-xref:../guides/dg/dg.adoc#__dg_ide_intellij_advanced_gradle-liveReload[here].
+The `isis.viewer.wicket.liveReloadUrl` configuration property allows live reloading of objects if the layout is updated, reducing feedback times.
+Further guidance on setting this up can be found link:https://isis.apache.org/versions/1.13.0/guides/dg/dg.html#__dg_ide_intellij_advanced_gradle-liveReload[here].
 
-* Docker support +
+* Docker support
 +
-The `overrides.properties` configuration file, if present, is loaded last as the configuration property file, with
-its contents overriding any previously defined configuration properties.  This simple idea makes it easy to create Docker
-container images; see xref:../guides/ugbtb/ugbtb.adoc#_ugbtb_deployment_docker[here] for further discussion.
+The `overrides.properties` configuration file, if present, is loaded last as the configuration property file, with its contents overriding any previously defined configuration properties.
+This simple idea makes it easy to create Docker container images; see link:https://isis.apache.org/versions/1.13.0/guides/ugbtb/ugbtb.html#_ugbtb_deployment_docker[here] for further discussion.
 

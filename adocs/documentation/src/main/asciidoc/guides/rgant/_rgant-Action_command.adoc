@@ -280,7 +280,8 @@ If `command` is `DISABLED` or does not otherwise apply due to the action's decla
 
 For persisted commands, the `commandExecuteIn()` attribute determines whether the `Command` should be executed in the foreground (the default) or executed in the background.
 
-Background execution means that the command is not executed immediately, but is available for a configured xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_BackgroundCommandService[`BackgroundCommandService`] to execute, eg by way of an in-memory scheduler such as Quartz.  See xref:../ugbtb/ugbtb.adoc#_ugbtb_headless-access_BackgroundCommandExecution[here] for further information on this topic.
+Background execution means that the command is not executed immediately, but is available for a configured xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_BackgroundCommandService[`BackgroundCommandService`] to execute, eg by way of an in-memory scheduler such as Quartz.
+See xref:../ugbtb/ugbtb.adoc#_ugbtb_headless-access_BackgroundCommandExecution[here] for further information on this topic.
 
 For example:
 
