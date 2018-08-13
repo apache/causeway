@@ -62,34 +62,34 @@ The full list of Apache Isis annotations that can be used in meta-annotations is
 
 
 |domain service
-|xref:../guides/rgant/rgant.adoc#_rgant-DomainService[@DomainService]
-|xref:../guides/rgant/rgant.adoc#_rgant-DomainServiceLayout[@DomainServiceLayout]
+|link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-DomainService[@DomainService]
+|link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-DomainServiceLayout[@DomainServiceLayout]
 
 |domain object
-|xref:../guides/rgant/rgant.adoc#_rgant-DomainObject[@DomainObject] +
-xref:../guides/rgant/rgant.adoc#_rgant-ViewModel[@ViewModel] +
-xref:../guides/rgant/rgant.adoc#_rgant-MemberGroupLayout[@MemberGroupLayout]
+|link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-DomainObject[@DomainObject] +
+link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-ViewModel[@ViewModel] +
+link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-MemberGroupLayout[@MemberGroupLayout]
 
-|xref:../guides/rgant/rgant.adoc#_rgant-DomainObjectLayout[@DomainObjectLayout] +
-xref:../guides/rgant/rgant.adoc#_rgant-ViewModelLayout[@ViewModelLayout]
+|link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-DomainObjectLayout[@DomainObjectLayout] +
+link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-ViewModelLayout[@ViewModelLayout]
 
 | Action
 
-|xref:../guides/rgant/rgant.adoc#_rgant-Action[@Action]
-|xref:../guides/rgant/rgant.adoc#_rgant-ActionLayout[@ActionLayout]
+|link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-Action[@Action]
+|link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-ActionLayout[@ActionLayout]
 
 |action parameter
-|xref:../guides/rgant/rgant.adoc#_rgant-Parameter[@Parameter]
-|xref:../guides/rgant/rgant.adoc#_rgant-ParameterLayout[@ParameterLayout]
+|link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-Parameter[@Parameter]
+|link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-ParameterLayout[@ParameterLayout]
 
 
 |property
-|xref:../guides/rgant/rgant.adoc#_rgant-Property[@Property]
-|xref:../guides/rgant/rgant.adoc#_rgant-PropertyLayout[@PropertyLayout]
+|link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-Property[@Property]
+|link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-PropertyLayout[@PropertyLayout]
 
 |collection
-|xref:../guides/rgant/rgant.adoc#_rgant-Collection[@Collection]
-|xref:../guides/rgant/rgant.adoc#_rgant-CollectionLayout[@CollectionLayout]
+|link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-Collection[@Collection]
+|link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-CollectionLayout[@CollectionLayout]
 
 |===
 

@@ -22,7 +22,7 @@ datanucleus.
 PublishingService.
 serializedForm
 |`PublishingService` has been removed.
-Use xref:../guides/rgsvc/rgsvc.adoc#_rgsvc_api_PublisherService[`PublisherService`] instead.
+Use link:../versions/2.0.0-M1/guides/rgsvc/rgsvc.html#_rgsvc_api_PublisherService[`PublisherService`] instead.
 
 |===
 

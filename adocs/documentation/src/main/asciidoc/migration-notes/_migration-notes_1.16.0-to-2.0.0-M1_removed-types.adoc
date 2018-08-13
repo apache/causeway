@@ -66,11 +66,11 @@ The following interfaces have been removed.
 
 |`Auditable` +
 (JDO applib)
-|xref:../guides/rgant/rgant.adoc#_rgant_DomainObject_audited[`@DomainObject#auditing()`]
+|link:../versions/2.0.0-M1/guides/rgant/rgant.adoc#_rgant_DomainObject_audited[`@DomainObject#auditing()`]
 
 |`Bounded` +
 (JDO applib)
-|xref:../guides/rgant/rgant.adoc#_rgant_DomainObject_bounding[`@DomainObject#bounding()`]
+|link:../versions/2.0.0-M1/guides/rgant/rgant.adoc#_rgant_DomainObject_bounding[`@DomainObject#bounding()`]
 
 |`NotPersistable` +
 (JDO applib)

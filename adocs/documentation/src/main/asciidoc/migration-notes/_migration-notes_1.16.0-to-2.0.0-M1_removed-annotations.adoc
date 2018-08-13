@@ -20,16 +20,16 @@ The following annotations, or attributes of annotations, have been removed
 
 |@Action
 |publishingPayloadFactory()
-|Removed, use the simpler xref:../guides/rgsvc/rgsvc.adoc#PublisherService[PublisherService] SPI instead.
+|Removed, use the simpler link:../versions/2.0.0-M1/guides/rgsvc/rgsvc.html#PublisherService[PublisherService] SPI instead.
 
 
 |@ActionInteraction
 |
-|xref:../guides/rgant/rgant.adoc#_rgant_Action_domainEvent[`@Action#domainEvent()`]
+|link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Action_domainEvent[`@Action#domainEvent()`]
 
 |@ActionOrder
 |
-|xref:../guides/rgant/rgant.adoc#_rgant_MemberOrder[`@MemberOrder()`]
+|link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_MemberOrder[`@MemberOrder()`]
 
 |@Aggregated
 |
@@ -38,111 +38,111 @@ The following annotations, or attributes of annotations, have been removed
 |@Auditable
 (JDO applib)
 |
-|xref:../guides/rgant/rgant.adoc#_rgant_DomainObject_audited[`@DomainObject#auditing()`]
+|link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_DomainObject_audited[`@DomainObject#auditing()`]
 
 |@Audited
 |
-|xref:../guides/rgant/rgant.adoc#_rgant_DomainObject_audited[`@DomainObject#auditing()`]
+|link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_DomainObject_audited[`@DomainObject#auditing()`]
 
 |@AutoComplete
 |
-|xref:../guides/rgant/rgant.adoc#_rgant_DomainObject_autoComplete[`@DomainObject#autoComplete()`]
+|link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_DomainObject_autoComplete[`@DomainObject#autoComplete()`]
 
 |@ActionSemantics
 |
-|xref:../guides/rgant/rgant.adoc#_rgant_Action_semantics[`@Action#semantics()`]
+|link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Action_semantics[`@Action#semantics()`]
 
 |@Bookmarkable
 |
-|xref:../guides/rgant/rgant.adoc#_rgant_DomainObject_bookmarking[`@DomainObject#bookmarking()`]
+|link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_DomainObject_bookmarking[`@DomainObject#bookmarking()`]
 
 |@Bounded
 |
-|xref:../guides/rgant/rgant.adoc#_rgant_DomainObject_bounding[`@DomainObject#bounding()`]
+|link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_DomainObject_bounding[`@DomainObject#bounding()`]
 
 |@Bulk
 |
-|xref:../guides/rgant/rgant.adoc#_rgant_Action_invokeOn[`@Action#invokeOn()`]
+|link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Action_invokeOn[`@Action#invokeOn()`]
 
-Similarly, the `Bulk.InteractionContext` domain service is replaced with the xref:../guides/rgsvc/rgsvc.adoc#ActionInvocationContext[ActionInvocationContext] domain service.
+Similarly, the `Bulk.InteractionContext` domain service is replaced with the link:../versions/2.0.0-M1/guides/rgsvc/rgsvc.html#ActionInvocationContext[ActionInvocationContext] domain service.
 
 
 |@Collection
 | notPersisted
-| Removed, replaced with xref:../guides/rgant/rgant.adoc#_rgant_Collection_mementoSerialization[`@Collection#mementoSerialization()`]
+| Removed, replaced with link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Collection_mementoSerialization[`@Collection#mementoSerialization()`]
 
 |@CollectionInteraction
 |
-| xref:../guides/rgant/rgant.adoc#_rgant_Collection_domainEvent[`@Collection
+| link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Collection_domainEvent[`@Collection
 #domainEvent()`]
 
 |@CollectionLayout
 |render()
-|xref:../guides/rgant/rgant.adoc#_rgant_CollectionLayout_defaultView[`@CollectionLayout#defaultView()`]
+|link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_CollectionLayout_defaultView[`@CollectionLayout#defaultView()`]
 
 |@Command
 |
-|xref:../guides/rgant/rgant.adoc#_rgant_Action_command[`@Action#command()`]
+|link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Action_command[`@Action#command()`]
 
 |@CssClass
 |
-|Either xref:../guides/rgant/rgant.adoc#_rgant_ActionLayout_cssClass[`@ActionLayout#cssClass()`], xref:../guides/rgant/rgant.adoc#_rgant_PropertyLayout_cssClass[`@PropertyLayout#cssClass()`], xref:../guides/rgant/rgant.adoc#_rgant_CollectionLayout_cssClass[`@CollectionLayout#cssClass()`], xref:../guides/rgant/rgant.adoc#_rgant_ParameterLayout_cssClass[`@ParameterLayout#cssClass()`], xref:../guides/rgant/rgant.adoc#_rgant_DomainObjectLayout_cssClass[`@DomainObjectLayout#cssClass()`] or xref:../guides/rgant/rgant.adoc#_rgant_ViewModelLayout_cssClass[`@ViewModelLayout#cssClass()`].
+|Either link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_ActionLayout_cssClass[`@ActionLayout#cssClass()`], link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_PropertyLayout_cssClass[`@PropertyLayout#cssClass()`], link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_CollectionLayout_cssClass[`@CollectionLayout#cssClass()`], link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_ParameterLayout_cssClass[`@ParameterLayout#cssClass()`], link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_DomainObjectLayout_cssClass[`@DomainObjectLayout#cssClass()`] or link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_ViewModelLayout_cssClass[`@ViewModelLayout#cssClass()`].
 
 |@CssClassFa
 |
-|Either xref:../guides/rgant/rgant.adoc#_rgant_ActionLayout_cssClassFa[`@ActionLayout#cssClassFa()`], xref:../guides/rgant/rgant.adoc#_rgant_DomainObjectLayout_cssClassFa[`@DomainObjectLayout#cssClassFa()`] or xref:../guides/rgant/rgant.adoc#_rgant_ViewModelLayout_cssClassFa[`@ViewModelLayout#cssClassFa()`].
+|Either link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_ActionLayout_cssClassFa[`@ActionLayout#cssClassFa()`], link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_DomainObjectLayout_cssClassFa[`@DomainObjectLayout#cssClassFa()`] or link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_ViewModelLayout_cssClassFa[`@ViewModelLayout#cssClassFa()`].
 
 |@Debug
 |
-|xref:../guides/rgant/rgant.adoc#_rgant_Action_restrictTo[`@Action#restrictTo()`]
+|link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Action_restrictTo[`@Action#restrictTo()`]
 
 |@DescribedAs
 |
-|Either xref:../guides/rgant/rgant.adoc#_rgant_ActionLayout_describedAs[`@ActionLayout#describedAs()`], xref:../guides/rgant/rgant.adoc#_rgant_PropertyLayout_describedAs[`@PropertyLayout#describedAs()`], xref:../guides/rgant/rgant.adoc#_rgant_CollectionLayout_describedAs[`@CollectionLayout#describedAs()`], xref:../guides/rgant/rgant.adoc#_rgant_ParameterLayout_describedAs[`@ParameterLayout#describedAs()`], xref:../guides/rgant/rgant.adoc#_rgant_DomainObjectLayout_describedAs[`@DomainObjectLayout#describedAs()`] or xref:../guides/rgant/rgant.adoc#_rgant_ViewModelLayout_describedAs[`@ViewModelLayout#describedAs()`].
+|Either link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_ActionLayout_describedAs[`@ActionLayout#describedAs()`], link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_PropertyLayout_describedAs[`@PropertyLayout#describedAs()`], link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_CollectionLayout_describedAs[`@CollectionLayout#describedAs()`], link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_ParameterLayout_describedAs[`@ParameterLayout#describedAs()`], link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_DomainObjectLayout_describedAs[`@DomainObjectLayout#describedAs()`] or link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_ViewModelLayout_describedAs[`@ViewModelLayout#describedAs()`].
 
 |@Disabled
 |
-|xref:../guides/rgant/rgant.adoc#_rgant_Property_editingDisabledReason[`@Property#editingDisabledReason()`]
+|link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Property_editingDisabledReason[`@Property#editingDisabledReason()`]
 
 .2+|@DomainObject
 |bounded
-|Deleted (was a boolean attribute), replaced by xref:../guides/rgant/rgant.adoc#_rgant_DomainObject_bounding[`@Property#bounding`]
+|Deleted (was a boolean attribute), replaced by link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_DomainObject_bounding[`@Property#bounding`]
 
 |publishingPayloadFactory
-|Removed, use the simpler xref:../guides/rgsvc/rgsvc.adoc#PublisherService[PublisherService] SPI instead.
+|Removed, use the simpler link:../versions/2.0.0-M1/guides/rgsvc/rgsvc.html#PublisherService[PublisherService] SPI instead.
 
 
 
 |@Exploration
 |
-|xref:../guides/rgant/rgant.adoc#_rgant_Action_restrictTo[`@Action#restrictTo()`]
+|link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Action_restrictTo[`@Action#restrictTo()`]
 
 |@FieldOrder
 |
-|xref:../guides/rgant/rgant.adoc#_rgant_MemberOrder[`@MemberOrder()`]
+|link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_MemberOrder[`@MemberOrder()`]
 
 |@Hidden
 |
-|For actions by either xref:../guides/rgant/rgant.adoc#_rgant_Action_hidden[`@Action#hidden()`] or xref:../guides/rgant/rgant.adoc#_rgant_ActionLayout_hidden[`@ActionLayout#hidden()`], for properties by either xref:../guides/rgant/rgant.adoc#_rgant_Property_hidden[`@Property#hidden()`] or xref:../guides/rgant/rgant.adoc#_rgant_PropertyLayout_hidden[`@PropertyLayout#hidden()`], for collections by either xref:../guides/rgant/rgant.adoc#_rgant_Collection_hidden[`@Collection#hidden()`] or xref:../guides/rgant/rgant.adoc#_rgant_CollectionLayout_hidden[`@CollectionLayout#hidden()`].
+|For actions by either link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Action_hidden[`@Action#hidden()`] or link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_ActionLayout_hidden[`@ActionLayout#hidden()`], for properties by either link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Property_hidden[`@Property#hidden()`] or link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_PropertyLayout_hidden[`@PropertyLayout#hidden()`], for collections by either link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Collection_hidden[`@Collection#hidden()`] or link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_CollectionLayout_hidden[`@CollectionLayout#hidden()`].
 
 |@Idempotent
 |
-|xref:../guides/rgant/rgant.adoc#_rgant_Action_semantics[`@Action#semantics()`]
+|link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Action_semantics[`@Action#semantics()`]
 
 |@Ignore
 |
-|xref:../guides/rgant/rgant.adoc#_rgant_Programmatic[`@Programmatic`]
+|link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Programmatic[`@Programmatic`]
 
 |@Immutable
 |
-|xref:../guides/rgant/rgant.adoc#_rgant_DomainObject_editing[`@DomainObject#editing()`]
+|link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_DomainObject_editing[`@DomainObject#editing()`]
 
 |@Mandatory
 |
-|Either xref:../guides/rgant/rgant.adoc#_rgant_Property_optionality[`@Property#optionality()`] or xref:../guides/rgant/rgant.adoc#_rgant_Parameter_optionality[`@Parameter#optionality()`].
+|Either link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Property_optionality[`@Property#optionality()`] or link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Parameter_optionality[`@Parameter#optionality()`].
 
-For properties, can also use xref:../guides/rgant/rgant.adoc#_rgant_Column_allowsNull[`@Column#allowsNull()`]
-Can also use xref:../guides/rgant/rgant.adoc#_rgant_Nullable[`@Nullable`] for either properties or parameters.
+For properties, can also use link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Column_allowsNull[`@Column#allowsNull()`]
+Can also use link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Nullable[`@Nullable`] for either properties or parameters.
 
 |@Mask
 |
@@ -150,47 +150,47 @@ Can also use xref:../guides/rgant/rgant.adoc#_rgant_Nullable[`@Nullable`] for ei
 
 |@MaxLength
 |
-|Either xref:../guides/rgant/rgant.adoc#_rgant_Property_maxLength[`@Property#maxLength()`] or xref:../guides/rgant/rgant.adoc#_rgant_Parameter_maxLength[`@Parameter#maxLength()`].
+|Either link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Property_maxLength[`@Property#maxLength()`] or link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Parameter_maxLength[`@Parameter#maxLength()`].
 
-For properties, can also use xref:../guides/rgant/rgant.adoc#_rgant_Column_length[`@Column#length()`]
+For properties, can also use link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Column_length[`@Column#length()`]
 
 |@MemberGroups
 |
-|xref:../guides/ugvw/ugvw.adoc#_ugvw_layout_file-based[.layout.xml] file instead.
+|link:../versions/2.0.0-M1/guides/ugvw/ugvw.html#_ugvw_layout_file-based[.layout.xml] file instead.
 
 |@MultiLine
 |
-|Either xref:../guides/rgant/rgant.adoc#_rgant_PropertyLayout_multiLine[`@PropertyLayout#multiLine()`] or xref:../guides/rgant/rgant.adoc#_rgant_ParameterLayout_multiLine[`@ParameterLayout#multiLine()`].
+|Either link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_PropertyLayout_multiLine[`@PropertyLayout#multiLine()`] or link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_ParameterLayout_multiLine[`@ParameterLayout#multiLine()`].
 
 |@MustSatisfy
 |
-|Either xref:../guides/rgant/rgant.adoc#_rgant_Property_mustSatisfy[`@Property#mustSatisfy()`] or xref:../guides/rgant/rgant.adoc#_rgant_Parameter_mustSatisfy[`@Parameter#mustSatisfy()`].
+|Either link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Property_mustSatisfy[`@Property#mustSatisfy()`] or link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Parameter_mustSatisfy[`@Parameter#mustSatisfy()`].
 
 |@NotPersisted
 |
-|xref:../guides/rgant/rgant.adoc#_rgant_Property_notPersisted[`@Property#notPersisted()`].
+|link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Property_notPersisted[`@Property#notPersisted()`].
 
 |@Optional
 |
-|Either xref:../guides/rgant/rgant.adoc#_rgant_Property_optionality[`@Property#optionality()`] or xref:../guides/rgant/rgant.adoc#_rgant_Parameter_optionality[`@Parameter#optionality()`].
+|Either link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Property_optionality[`@Property#optionality()`] or link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Parameter_optionality[`@Parameter#optionality()`].
 
-For properties, can also use xref:../guides/rgant/rgant.adoc#_rgant_Column_allowsNull[`@Column#allowsNull()`]
-Can also use xref:../guides/rgant/rgant.adoc#_rgant_Nullable[`@Nullable`] for either properties or parameters.
+For properties, can also use link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Column_allowsNull[`@Column#allowsNull()`]
+Can also use link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Nullable[`@Nullable`] for either properties or parameters.
 
 |@Named
 |
-|Either xref:../guides/rgant/rgant.adoc#_rgant_ActionLayout_named[`@ActionLayout#named()`], xref:../guides/rgant/rgant.adoc#_rgant_PropertyLayout_named[`@PropertyLayout#named()`], xref:../guides/rgant/rgant.adoc#_rgant_CollectionLayout_named[`@CollectionLayout#named()`], xref:../guides/rgant/rgant.adoc#_rgant_ParameterLayout_named[`@ParameterLayout#named()`], xref:../guides/rgant/rgant.adoc#_rgant_DomainObjectLayout_named[`@DomainObjectLayout#named()`] or xref:../guides/rgant/rgant.adoc#_rgant_ViewModelLayout_named[`@ViewModelLayout#named()`].
+|Either link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_ActionLayout_named[`@ActionLayout#named()`], link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_PropertyLayout_named[`@PropertyLayout#named()`], link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_CollectionLayout_named[`@CollectionLayout#named()`], link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_ParameterLayout_named[`@ParameterLayout#named()`], link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_DomainObjectLayout_named[`@DomainObjectLayout#named()`] or link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_ViewModelLayout_named[`@ViewModelLayout#named()`].
 
 |@NotInServiceMenu
 |
-|xref:../guides/rgant/rgant.adoc#_rgant_DomainService_nature[`@DomainService#nature()`]
+|link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_DomainService_nature[`@DomainService#nature()`]
 
 Specify nature of `VIEW_CONTRIBUTIONS_ONLY`.
-Alternatively, use a xref:../guides/rgant/rgant.adoc#_rgant_Mixin[mixin].
+Alternatively, use a link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Mixin[mixin].
 
 |@NotContributed
 |
-|xref:../guides/rgant/rgant.adoc#_rgant_DomainService_nature[`@DomainService#nature()`]
+|link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_DomainService_nature[`@DomainService#nature()`]
 
 Specify nature of `VIEW_MENU_ONLY`.
 
@@ -200,125 +200,125 @@ Specify nature of `VIEW_MENU_ONLY`.
 
 |@ObjectType
 |
-|Removed, xref:../guides/rgant/rgant.adoc#_rgant_DomainObject_objectType[`@DomainObject#objectType()`] or xref:../guides/rgant/rgant.adoc#_rgant_DomainService_objectType[`@DomainService#objectType()`]
+|Removed, link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_DomainObject_objectType[`@DomainObject#objectType()`] or link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_DomainService_objectType[`@DomainService#objectType()`]
 
 Alternatively, for domain entities either:
 
-* the xref:../guides/rgant/rgant.adoc#_rgant_Discriminator[`@Discriminator`] annotation can be specified; the value is used as the object type, or
-* the xref:../guides/rgant/rgant.adoc#_rgant_PersistenceCapable_schema[`@PersistenceCapable#schema()`] can be specified; the value is used as the concatenated with the class name to create a two part object type.
+* the link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Discriminator[`@Discriminator`] annotation can be specified; the value is used as the object type, or
+* the link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_PersistenceCapable_schema[`@PersistenceCapable#schema()`] can be specified; the value is used as the concatenated with the class name to create a two part object type.
 
 |@Parameter
 |minLength()
 |Never implemented internally in Isis 1.x so no replacement.
 
-Note that the xref:../guides/rgant/rgant.adoc#_rgant_MinLength[`@MinLength`] annotation is for use with autocomplete supporting methods (specifying the minimum number of characters to enter before an auto-complete search is performed).
+Note that the link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_MinLength[`@MinLength`] annotation is for use with autocomplete supporting methods (specifying the minimum number of characters to enter before an auto-complete search is performed).
 
 
 |@Paged
 |
-|Either xref:../guides/rgant/rgant.adoc#_rgant_CollectionLayout_paged[`@CollectionLayout#paged()`] (for parented collections), or xref:../guides/rgant/rgant.adoc#_rgant_DomainObject_paged[`@DomainObject#paged()`] (for standalone collections)
+|Either link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_CollectionLayout_paged[`@CollectionLayout#paged()`] (for parented collections), or link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_DomainObject_paged[`@DomainObject#paged()`] (for standalone collections)
 
 |@ParameterLayout
 | renderedAsDayBefore
-|Deleted (was a boolean attribute), replaced by xref:../guides/rgant/rgant.adoc#_rgant_ParameterLayout_renderDay[`@ParameterLayout#renderDay`].
+|Deleted (was a boolean attribute), replaced by link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_ParameterLayout_renderDay[`@ParameterLayout#renderDay`].
 
 
 |@Plural
 |
-|xref:../guides/rgant/rgant.adoc#_rgant_DomainObjectLayout_plural[`@DomainObjectLayout#plural()`]
+|link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_DomainObjectLayout_plural[`@DomainObjectLayout#plural()`]
 
 |@PostsAction
 InvokedEvent
 |
-| xref:../guides/rgant/rgant.adoc#_rgant_Action_domainEvent[`@Action#domainEvent()`]
+| link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Action_domainEvent[`@Action#domainEvent()`]
 
 |@PostsCollection
 AddedToEvent
 |
-|xref:../guides/rgant/rgant.adoc#_rgant_Collection_domainEvent[`@Collection#domainEvent()`]
+|link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Collection_domainEvent[`@Collection#domainEvent()`]
 
 |@PostsCollection
 RemovedFromEvent
 |
-|xref:../guides/rgant/rgant.adoc#_rgant_Collection_domainEvent[`@Collection#domainEvent()`]
+|link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Collection_domainEvent[`@Collection#domainEvent()`]
 
 |@PostsProperty
 ChangedEvent
 |
-| xref:../guides/rgant/rgant.adoc#_rgant_Property_domainEvent[`@Property#domainEvent()`]
+| link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Property_domainEvent[`@Property#domainEvent()`]
 
 |@Property
 | notPersisted
-| Removed, replaced with xref:../guides/rgant/rgant.adoc#_rgant_Collection_mementoSerialization[`@Collection#mementoSerialization()`]
+| Removed, replaced with link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Collection_mementoSerialization[`@Collection#mementoSerialization()`]
 
 |@PropertyInteraction
 |
-| xref:../guides/rgant/rgant.adoc#_rgant_Property_domainEvent[`@Property#domainEvent()`]
+| link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Property_domainEvent[`@Property#domainEvent()`]
 
 .2+|@PropertyLayout
 | renderedAsDayBefore
-|Deleted (was a boolean attribute), replaced by xref:../guides/rgant/rgant.adoc#_rgant_PropertyLayout_renderDay[`@PropertyLayout#renderDay`].
+|Deleted (was a boolean attribute), replaced by link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_PropertyLayout_renderDay[`@PropertyLayout#renderDay`].
 
 | unchanging
-| Deleted (was a boolean attribute), replaced by by xref:../guides/rgant/rgant.adoc#_rgant_PropertyLayout_repainting[`@PropertyLayout#repainting`].
+| Deleted (was a boolean attribute), replaced by by link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_PropertyLayout_repainting[`@PropertyLayout#repainting`].
 
 
 |@Prototype
 |
-|xref:../guides/rgant/rgant.adoc#_rgant_Action_restrictTo[`@Action#restrictTo()`]
+|link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Action_restrictTo[`@Action#restrictTo()`]
 
 |@PublishedAction
 |
-|Removed, use xref:../guides/rgant/rgant.adoc#_rgant-Action_publishing[@Action#publishing()]
+|Removed, use link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-Action_publishing[@Action#publishing()]
 
 |@PublishedObject
 |
-|Removed, use xref:../guides/rgant/rgant.adoc#_rgant-DomainObject_publishing[@DomainObject#publishing()]
+|Removed, use link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-DomainObject_publishing[@DomainObject#publishing()]
 
 |@PublishingPayload
 FactoryForAction
 |
-|Removed, use the simpler xref:../guides/rgsvc/rgsvc.adoc#PublisherService[PublisherService] SPI instead.
+|Removed, use the simpler link:../versions/2.0.0-M1/guides/rgsvc/rgsvc.html#PublisherService[PublisherService] SPI instead.
 
 |PublishingPayload
 FactoryForObject
 |
-|Removed, use the simpler xref:../guides/rgsvc/rgsvc.adoc#PublisherService[PublisherService] SPI instead.
+|Removed, use the simpler link:../versions/2.0.0-M1/guides/rgsvc/rgsvc.html#PublisherService[PublisherService] SPI instead.
 
 |@QueryOnly
 |
-|xref:../guides/rgant/rgant.adoc#_rgant_Action_semantics[`@Action#semantics()`]
+|link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Action_semantics[`@Action#semantics()`]
 
 |@Regex
 |
-|Either xref:../guides/rgant/rgant.adoc#_rgant_Property_regexPattern[`@Property#regexPattern()`] or xref:../guides/rgant/rgant.adoc#_rgant_Parameter_regexPattern[`@Parameter#regexPattern()`].
+|Either link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Property_regexPattern[`@Property#regexPattern()`] or link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Parameter_regexPattern[`@Parameter#regexPattern()`].
 
 |@Render
 |
-|xref:../guides/rgant/rgant.adoc#_rgant_CollectionLayout_defaultView[`@CollectionLayout#defaultView()`]
+|link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_CollectionLayout_defaultView[`@CollectionLayout#defaultView()`]
 
 Supporting `RenderType` enum also removed.
 
 |@RenderedAs
 DayBefore
 |
-|Either xref:../guides/rgant/rgant.adoc#_rgant_Property_renderDay[`@Property#renderDay()`] or xref:../guides/rgant/rgant.adoc#_rgant_Parameter_renderDay[`@Parameter#renderDay()`].
+|Either link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Property_renderDay[`@Property#renderDay()`] or link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Parameter_renderDay[`@Parameter#renderDay()`].
 
 |@Resolve
 |
-|xref:../guides/rgant/rgant.adoc#_rgant_CollectionLayout_defaultView[`@CollectionLayout#defaultView()`]
+|link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_CollectionLayout_defaultView[`@CollectionLayout#defaultView()`]
 
 |@SortedBy
 |
-|xref:../guides/rgant/rgant.adoc#_rgant_CollectionLayout_sortedBy[`@CollectionLayout#sortedBy()`]
+|link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_CollectionLayout_sortedBy[`@CollectionLayout#sortedBy()`]
 
 |@TypeOf
 |
-|Either xref:../guides/rgant/rgant.adoc#_rgant_CollectionLayout_typeOf[`@CollectionLayout#typeOf()`] (for parented collections), or xref:../guides/rgant/rgant.adoc#_rgant_ActionLayout_typeOf[`@ActionLayout#typeOf()`] (for actions returning a standalone collection).
+|Either link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_CollectionLayout_typeOf[`@CollectionLayout#typeOf()`] (for parented collections), or link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_ActionLayout_typeOf[`@ActionLayout#typeOf()`] (for actions returning a standalone collection).
 
 |@TypicalLength
 |
-|xref:../guides/rgant/rgant.adoc#_rgant_PropertyLayout_typicalLength[`@PropertyLayout#typicalLength()`].
+|link:../versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_PropertyLayout_typicalLength[`@PropertyLayout#typicalLength()`].
 
 
 |===
