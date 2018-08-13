@@ -11,7 +11,7 @@
 The following adapter classes have been removed.
 
 .Removed adapter classes
-[cols=3a,3a", options="header"]
+[cols="3a,3a", options="header"]
 |===
 
 | Removed class
@@ -58,7 +58,7 @@ public interface RepositoryService {
 The following interfaces have been removed.
 
 .Removed interfaces
-[cols="1a,3a", options="header"]
+[cols="3a,3a", options="header"]
 |===
 
 | Removed interface
