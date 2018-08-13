@@ -11,16 +11,16 @@ The following configuration properties are no longer recognised.
 
 
 .Removed configuration properties
-[cols="2l,4a", options="header"]
+[cols="3a,3a", options="header"]
 |===
 
 | Configuration property
 | Description
 
-|isis.persistor.
-datanucleus.
-PublishingService.
-serializedForm
+|`isis.persistor. +
+datanucleus. +
+PublishingService. +
+serializedForm`
 |`PublishingService` has been removed.
 Use link:https://isis.apache.org/versions/2.0.0-M1/guides/rgsvc/rgsvc.html#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`] instead.
 

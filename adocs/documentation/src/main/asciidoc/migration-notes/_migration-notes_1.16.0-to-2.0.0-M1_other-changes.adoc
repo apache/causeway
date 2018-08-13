@@ -83,7 +83,7 @@ The plugin architecture uses the JDK `ServiceLoader` API, whereby a Maven module
 The plugin interface types themselves are defined in various of the Maven modules, broadly depending on what consumes them.
 
 .Plugin types
-[cols="1l,1l,3a,3a", options="header"]
+[cols="2a,4a,4a,3a", options="header"]
 |===
 
 | Defined in
@@ -91,21 +91,20 @@ The plugin interface types themselves are defined in various of the Maven module
 | Used for
 | Implementations
 
-|isis-core-commons
-|o.a.i.core.plugins.
-classdiscovery.
-ClassDiscoveryPlugin
+.3+|`isis-core-commons`
+|`o.a.i.core.plugins. +
+classdiscovery. +
+ClassDiscoveryPlugin`
 
 |Obtain a plugin to finding types on the classpath with certain characteristics, eg annotated with certain annotations
 
-Include only one implementation on classpath,
+Include only one implementation on classpath.
 
-|`ClassDiscoveryPluginUsingReflections` uses the `org.reflections` open source library
+|`ClassDiscoveryPluginUsingReflections` uses the `org.reflections` open source library (which depends in turn on guava).
 
-|isis-core-commons
-|o.a.i.core.plugins.
-codegen.
-ProxyFactoryPlugin
+|`o.a.i.core.plugins. +
+codegen. +
+ProxyFactoryPlugin`
 |Obtain a plugin acting as a factory to proxy types (as used by the `WrapperFactory` domain service).
 
 Include only one implementation on classpath,
@@ -116,16 +115,16 @@ ProxyFactoryPluginUsingByteBuddy` (using ByteBuddy)
 `o.a.i.core.plugins.codegen.
 ProxyFactoryPluginUsingJavassist` (using Javassist).
 
-|isis-core-commons
-|o.a.i.core.plugins.
-eventbus.
-EventBusPlugin
+
+
+
+|`o.a.i.core.plugins. +
+eventbus. +
+EventBusPlugin`
 
 |Obtain a plugin for finding event bus implementations.
 
 This removes the need to explicitly specify the implementation using the `isis.services.eventbus.implementation` config property; it can be left as simply "auto".
-
-
 
 |`o.a.i.core.plugins.eventbus.
 EventBusPluginForAxon` (using Axon Framework)
@@ -134,10 +133,10 @@ EventBusPluginForAxon` (using Axon Framework)
 EventBusPluginForGuava` (using Guava)
 
 
-|isis-core-metamodel
-|org.apache.isis.core.
-metamodel.progmodel.
-ProgrammingModelPlugin
+.3+|`isis-core-metamodel`
+|`org.apache.isis.core. +
+metamodel.progmodel. +
+ProgrammingModelPlugin`
 |Obtain plugins that can provide implementations of Isis' own `FacetFactory` SPI (which is used to build up the metamodel).
 
 There can be multiple implementations on the classpath.
@@ -145,11 +144,10 @@ There can be multiple implementations on the classpath.
 |`org.apache.isis.progmodels.
 plugins.ProgrammingModelIsisTimePlugin` (in `metamodel-legacy`) contributes facet factories for the applib value types that have been moved to applib-legacy.
 
-|isis-core-metamodel
-|org.apache.isis.core.
-metamodel.services.
-swagger.internal.
-ValuePropertyPlugin
+|`org.apache.isis.core. +
+metamodel.services. +
+swagger.internal. +
+ValuePropertyPlugin`
 |Obtain plugins that can provide implementations of Isis' own `ValuePropertyFactory` SPI (which is used to build up Swagger representations).
 
 There can be multiple implementations on the classpath.
@@ -159,10 +157,10 @@ services.swagger.plugins.
 IsisTimeValuePropertyPlugin` (in `metamodel-legacy`)
 contributes factories for the applib value types that have been moved to applib-legacy.
 
-|isis-core-metamodel
-|o.a.i.core.
-metamodel.
-IsisJdoMetamodelPlugin
+
+|`o.a.i.core. +
+metamodel. +
+IsisJdoMetamodelPlugin`
 |Decouples the metamodel module from a particular implementation of DataNucleus.
 
 Include only one implementation on classpath,
@@ -172,10 +170,10 @@ Include only one implementation on classpath,
 `o.a.i.plugins.jdo.dn5.IsisJdoSupportPlugin5`
 
 
-|isis-core-runtime
-|o.a.i.core.
-metamodel.
-IsisJdoRuntimePlugin
+|`isis-core-runtime`
+|`o.a.i.core. +
+metamodel. +
+IsisJdoRuntimePlugin`
 |Decouples the runtime module from a particular implementation of DataNucleus.
 
 Include only one implementation on classpath,
@@ -185,39 +183,40 @@ Include only one implementation on classpath,
 `o.a.i.plugins.jdo.dn5.IsisJdoSupportPlugin5`
 
 
-|isis-core-viewer-restfulobjects-applib
-|o.a.i.viewer.
-restfulobjects.
-applib.client.
-UriBuilderPlugin
+|`isis-core-viewer-restfulobjects-applib`
+|`o.a.i.viewer. +
+restfulobjects. +
+applib.client. +
+UriBuilderPlugin`
 |Plugin to obtain a `UriBuilder` to create uri templates.
 
 Include only one implementation on classpath,
 
-|`o.a.i.plugins.
+|`o.a.i.plugins. +
 jaxrs.resteasy.IsisResteasy3Plugin`
 
 or
 
-`o.a.i.plugins.
+`o.a.i.plugins. +
 jaxrs.resteasy.IsisResteasy4Plugin`
 
 
-|isis-core-viewer-restfulobjects-server
-|o.a.i.viewer.
-restfulobjects.
-server.
-IsisJaxrsServerPlugin
+
+|`isis-core-viewer-restfulobjects-server`
+|`o.a.i.viewer. +
+restfulobjects. +
+server. +
+IsisJaxrsServerPlugin`
 |Plugin to configure the JAX-RS runtime.
 
 Include only one implementation on classpath.
 
-|`o.a.i.plugins.
+|`o.a.i.plugins. +
 jaxrs.resteasy.IsisResteasy3Plugin`
 
 or
 
-`o.a.i.plugins.
+`o.a.i.plugins. +
 jaxrs.resteasy.IsisResteasy4Plugin`
 
 

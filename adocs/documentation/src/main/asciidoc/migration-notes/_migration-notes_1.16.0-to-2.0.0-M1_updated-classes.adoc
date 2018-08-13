@@ -10,54 +10,54 @@
 The following classes have been updated.
 
 .Updated classes
-[cols="2l,2a,3a", options="header"]
+[cols="3a,3a,3a", options="header"]
 |===
 
 | Updated class
 | Method
 | Nature of change
 
-|IsisAppModule.
-ActionDomainEvent
+|`IsisAppModule. +
+ActionDomainEvent`
 |N-arg constructor
 |removed; just use the 0-arg ones
 
-|IsisAppModule.
-CollectionDomainEvent
+|`IsisAppModule. +
+CollectionDomainEvent`
 |N-arg constructor
 |removed; just use the 0-arg ones
 
-|IsisAppModule.
-PropertyDomainEvent
+|`IsisAppModule. +
+PropertyDomainEvent`
 |N-arg constructor
 |removed; just use the 0-arg ones
 
-|FixtureScript
+|`FixtureScript`
 |`asKeyValueMap(String)`
 |Removed; this shouldn't have had public visibility.
 
-|FixtureScript
+|`FixtureScript`
 |`execute(...)`
 `executeChild(...)`
 `executeIfNotAlready(...)`
 `run(...)`
-|All removed or no longer public; use `FixtureScript.ExecutionContext#executeChild(...)` instead.
+|All removed or no longer public; use ``FixtureScript.ExecutionContext``'s `#executeChild(...)` instead.
 
-|FixtureScript
+|`FixtureScript`
 |`lookup(...)`
 |Removed; use `FixtureScript.ExecutionContext#lookup(...)` instead.
 
-|FixtureScript.
-ExecutionContext
+|`FixtureScript. +
+ExecutionContext`
 |`add(...)`
 |Removed; use `addResult(...)` instead.
 
-|FixtureScripts
+|`FixtureScripts`
 |deprecated constructors
 |Removed
 
-|FixtureScripts.
-MultipleExecutionStrategy
+|`FixtureScripts. +
+MultipleExecutionStrategy`
 |`IGNORE`
 |Removed, use `EXECUTE_ONCE_PER_CLASS` instead
 

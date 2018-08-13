@@ -11,22 +11,22 @@
 The following adapter classes have been removed.
 
 .Removed adapter classes
-[cols="1l,3a", options="header"]
+[cols=3a,3a", options="header"]
 |===
 
 | Removed class
 | Replaced with
 
-|AbstractContainedObject
+|`AbstractContainedObject`
 | No replacement.
 
-|AbstractDomainObject
+|`AbstractDomainObject`
 | No replacement.
 
-|AbstractFactoryAndRepository
+|`AbstractFactoryAndRepository`
 | No replacement.
 
-|AbstractHomePageDashboardService
+|`AbstractHomePageDashboardService`
 | No replacement.
 
 |===
