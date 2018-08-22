@@ -84,17 +84,22 @@ public class PersistenceSessionFactory implements ApplicationScopedComponent, Fi
     private DataNucleusApplicationComponents createDataNucleusApplicationComponents(
             final IsisConfiguration configuration, final SpecificationLoader specificationLoader) {
 
+        final RegisterEntities registerEntities = new RegisterEntities(configuration.asMap());
+
+        return createDataNucleusApplicationComponents(configuration, specificationLoader, registerEntities);
+    }
+
+    private DataNucleusApplicationComponents createDataNucleusApplicationComponents(
+            final IsisConfiguration configuration,
+            final SpecificationLoader specificationLoader, final RegisterEntities registerEntities) {
+        final Set<String> classesToBePersisted = registerEntities.getEntityTypes();
+
         if (applicationComponents == null || applicationComponents.isStale()) {
 
-            final IsisConfiguration jdoObjectstoreConfig = configuration.createSubset(
-                    JDO_OBJECTSTORE_CONFIG_PREFIX);
-
+            final IsisConfiguration jdoObjectstoreConfig = configuration.createSubset(JDO_OBJECTSTORE_CONFIG_PREFIX);
             final IsisConfiguration dataNucleusConfig = configuration.createSubset(DATANUCLEUS_CONFIG_PREFIX);
             final Map<String, String> datanucleusProps = dataNucleusConfig.asMap();
             addDataNucleusPropertiesIfRequired(datanucleusProps);
-
-            final RegisterEntities registerEntities = new RegisterEntities(configuration.asMap(), specificationLoader);
-            final Set<String> classesToBePersisted = registerEntities.getEntityTypes();
 
             applicationComponents = new DataNucleusApplicationComponents(jdoObjectstoreConfig, specificationLoader,
                     datanucleusProps, classesToBePersisted);
