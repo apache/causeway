@@ -163,7 +163,6 @@ public class IsisSessionFactoryBuilder {
             // instantiate the IsisSessionFactory
             isisSessionFactory = new IsisSessionFactory(deploymentCategory, servicesInjector, appManifest);
 
-
             // now, add the IsisSessionFactory itself into ServicesInjector, so it can be @javax.inject.Inject'd
             // into any internal domain services
             servicesInjector.addFallbackIfRequired(IsisSessionFactory.class, isisSessionFactory);
@@ -177,8 +176,6 @@ public class IsisSessionFactoryBuilder {
             // ... and make IsisSessionFactory available via the IsisContext static for those places where we cannot
             // yet inject.
             IsisContext.setSessionFactory(isisSessionFactory);
-
-
 
             // time to initialize...
             specificationLoader.init();
@@ -203,10 +200,11 @@ public class IsisSessionFactoryBuilder {
             authenticationManager.init(deploymentCategory);
             authorizationManager.init(deploymentCategory);
 
-            persistenceSessionFactory.init(specificationLoader);
+            persistenceSessionFactory.init(configuration);
+
+            persistenceSessionFactory.catalogNamedQueries(specificationLoader);
 
             isisSessionFactory.constructServices();
-
 
             isisSessionFactory.doInSession(
                     new Runnable() {

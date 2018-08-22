@@ -72,8 +72,31 @@ public class PersistenceSessionFactory implements ApplicationScopedComponent, Fi
     private DataNucleusApplicationComponents applicationComponents;
 
     @Programmatic
-    public void init(final SpecificationLoader specificationLoader) {
-        this.applicationComponents = createDataNucleusApplicationComponents(configuration, specificationLoader);
+    public void init(final IsisConfigurationDefault configuration) {
+        final RegisterEntities registerEntities = new RegisterEntities(configuration.asMap());
+        final Set<String> classesToBePersisted = registerEntities.getEntityTypes();
+
+        if (shouldCreate(this.applicationComponents)) {
+
+            final IsisConfiguration jdoObjectstoreConfig = this.configuration.createSubset(JDO_OBJECTSTORE_CONFIG_PREFIX);
+            final IsisConfiguration dataNucleusConfig = this.configuration.createSubset(DATANUCLEUS_CONFIG_PREFIX);
+            final Map<String, String> datanucleusProps = dataNucleusConfig.asMap();
+            addDataNucleusPropertiesIfRequired(datanucleusProps);
+
+            DataNucleusApplicationComponents applicationComponents1 = new DataNucleusApplicationComponents(
+                    jdoObjectstoreConfig,
+                    datanucleusProps, classesToBePersisted);
+
+            this.applicationComponents = applicationComponents1;
+
+        }
+    }
+
+    @Programmatic
+    public void catalogNamedQueries(final SpecificationLoader specificationLoader) {
+        final RegisterEntities registerEntities = new RegisterEntities(configuration.asMap());
+        final Set<String> classesToBePersisted = registerEntities.getEntityTypes();
+        DataNucleusApplicationComponents.catalogNamedQueries(classesToBePersisted, specificationLoader);
     }
 
     @Programmatic
@@ -81,33 +104,8 @@ public class PersistenceSessionFactory implements ApplicationScopedComponent, Fi
         return this.applicationComponents != null;
     }
 
-    private DataNucleusApplicationComponents createDataNucleusApplicationComponents(
-            final IsisConfiguration configuration, final SpecificationLoader specificationLoader) {
-
-        final RegisterEntities registerEntities = new RegisterEntities(configuration.asMap());
-
-        return createDataNucleusApplicationComponents(configuration, specificationLoader, registerEntities);
-    }
-
-    private DataNucleusApplicationComponents createDataNucleusApplicationComponents(
-            final IsisConfiguration configuration,
-            final SpecificationLoader specificationLoader, final RegisterEntities registerEntities) {
-        final Set<String> classesToBePersisted = registerEntities.getEntityTypes();
-
-        if (applicationComponents == null || applicationComponents.isStale()) {
-
-            final IsisConfiguration jdoObjectstoreConfig = configuration.createSubset(JDO_OBJECTSTORE_CONFIG_PREFIX);
-            final IsisConfiguration dataNucleusConfig = configuration.createSubset(DATANUCLEUS_CONFIG_PREFIX);
-            final Map<String, String> datanucleusProps = dataNucleusConfig.asMap();
-            addDataNucleusPropertiesIfRequired(datanucleusProps);
-
-            applicationComponents = new DataNucleusApplicationComponents(jdoObjectstoreConfig,
-                    datanucleusProps, classesToBePersisted);
-
-            DataNucleusApplicationComponents.catalogNamedQueries(classesToBePersisted, specificationLoader);
-        }
-
-        return applicationComponents;
+    private boolean shouldCreate(final DataNucleusApplicationComponents applicationComponents) {
+        return applicationComponents == null || applicationComponents.isStale();
     }
 
     private static void addDataNucleusPropertiesIfRequired(
