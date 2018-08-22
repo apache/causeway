@@ -103,6 +103,8 @@ public class PersistenceSessionFactory implements ApplicationScopedComponent, Fi
 
             applicationComponents = new DataNucleusApplicationComponents(jdoObjectstoreConfig, specificationLoader,
                     datanucleusProps, classesToBePersisted);
+
+            DataNucleusApplicationComponents.catalogNamedQueries(classesToBePersisted, specificationLoader);
         }
 
         return applicationComponents;

@@ -84,7 +84,6 @@ public class DataNucleusApplicationComponents implements ApplicationScopedCompon
     private final SpecificationLoader specificationLoader;
     private final Map<String, String> datanucleusProps;
     
-    private Map<String, JdoNamedQuery> namedQueryByName;
     private PersistenceManagerFactory persistenceManagerFactory;
 
     public DataNucleusApplicationComponents(
@@ -98,16 +97,10 @@ public class DataNucleusApplicationComponents implements ApplicationScopedCompon
         this.persistableClassNameSet = persistableClassNameSet;
         this.jdoObjectstoreConfig = configuration;
 
-        initialize();
-        
+        persistenceManagerFactory = createPmfAndSchemaIfRequired(this.persistableClassNameSet, this.datanucleusProps);
+
         // for JRebel plugin
         instance = this;
-    }
-
-    private void initialize() {
-        persistenceManagerFactory = createPmfAndSchemaIfRequired(persistableClassNameSet, datanucleusProps);
-
-        namedQueryByName = catalogNamedQueries(persistableClassNameSet, specificationLoader);
     }
 
     private static boolean isSchemaAwareStoreManager(Map<String,String> datanucleusProps) {
