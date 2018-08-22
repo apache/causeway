@@ -101,7 +101,7 @@ public class PersistenceSessionFactory implements ApplicationScopedComponent, Fi
             final Map<String, String> datanucleusProps = dataNucleusConfig.asMap();
             addDataNucleusPropertiesIfRequired(datanucleusProps);
 
-            applicationComponents = new DataNucleusApplicationComponents(jdoObjectstoreConfig, specificationLoader,
+            applicationComponents = new DataNucleusApplicationComponents(jdoObjectstoreConfig,
                     datanucleusProps, classesToBePersisted);
 
             DataNucleusApplicationComponents.catalogNamedQueries(classesToBePersisted, specificationLoader);

@@ -81,17 +81,14 @@ public class DataNucleusApplicationComponents implements ApplicationScopedCompon
 
     private final Set<String> persistableClassNameSet;
     private final IsisConfiguration jdoObjectstoreConfig;
-    private final SpecificationLoader specificationLoader;
     private final Map<String, String> datanucleusProps;
     
     private PersistenceManagerFactory persistenceManagerFactory;
 
     public DataNucleusApplicationComponents(
             final IsisConfiguration configuration,
-            final SpecificationLoader specificationLoader,
             final Map<String, String> datanucleusProps,
             final Set<String> persistableClassNameSet) {
-        this.specificationLoader = specificationLoader;
 
         this.datanucleusProps = datanucleusProps;
         this.persistableClassNameSet = persistableClassNameSet;
