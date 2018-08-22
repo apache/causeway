@@ -39,7 +39,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.AppManifest;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 public class RegisterEntities {
 
@@ -53,15 +52,13 @@ public class RegisterEntities {
 
     //region > entityTypes
     private final Set<String> entityTypes = Sets.newLinkedHashSet();
-    private final SpecificationLoader specificationLoader;
 
     public Set<String> getEntityTypes() {
         return entityTypes;
     }
     //endregion
 
-    public RegisterEntities(final Map<String, String> configuration, final SpecificationLoader specificationLoader) {
-        this.specificationLoader = specificationLoader;
+    public RegisterEntities(final Map<String, String> configuration) {
 
         Set<Class<?>> persistenceCapableTypes = AppManifest.Registry.instance().getPersistenceCapableTypes();
 
@@ -164,11 +161,6 @@ public class RegisterEntities {
         };
     }
 
-    // //////////////////////////////////////
-
-    SpecificationLoader getSpecificationLoader() {
-        return specificationLoader;
-    }
 
 
 }
