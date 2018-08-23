@@ -441,7 +441,7 @@ public class IsisWicketApplication
     }
 
     protected List<Future<Object>> startBackgroundInitializationThreads() {
-        return ThreadPoolSupport.invokeAll(Lists.newArrayList(
+        return ThreadPoolSupport.invokeAll(
                 new Callable<Object>() {
                     @Override
                     public Object call() throws Exception {
@@ -481,7 +481,7 @@ public class IsisWicketApplication
                         return null;
                     }
                 }
-        ));
+        );
     }
 
     /**

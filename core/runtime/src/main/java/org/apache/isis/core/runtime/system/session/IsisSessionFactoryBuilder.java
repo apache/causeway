@@ -22,6 +22,9 @@ package org.apache.isis.core.runtime.system.session;
 import java.io.File;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Future;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,6 +54,7 @@ import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactoryMetamodelRefiner;
 import org.apache.isis.core.runtime.systemusinginstallers.IsisComponentProvider;
 import org.apache.isis.core.runtime.systemusinginstallers.IsisComponentProviderDefault2;
+import org.apache.isis.core.runtime.threadpool.ThreadPoolSupport;
 
 public class IsisSessionFactoryBuilder {
 
@@ -177,30 +181,48 @@ public class IsisSessionFactoryBuilder {
             // yet inject.
             IsisContext.setSessionFactory(isisSessionFactory);
 
-            // time to initialize...
-            specificationLoader.init();
 
-            // we need to do this before checking if the metamodel is valid.
-            //
-            // eg ActionChoicesForCollectionParameterFacetFactory metamodel validator requires a runtime...
-            // at o.a.i.core.metamodel.specloader.specimpl.ObjectActionContributee.getServiceAdapter(ObjectActionContributee.java:287)
-            // at o.a.i.core.metamodel.specloader.specimpl.ObjectActionContributee.determineParameters(ObjectActionContributee.java:138)
-            // at o.a.i.core.metamodel.specloader.specimpl.ObjectActionDefault.getParameters(ObjectActionDefault.java:182)
-            // at o.a.i.core.metamodel.facets.actions.action.ActionChoicesForCollectionParameterFacetFactory$1.validate(ActionChoicesForCollectionParameterFacetFactory.java:85)
-            // at o.a.i.core.metamodel.facets.actions.action.ActionChoicesForCollectionParameterFacetFactory$1.visit(ActionChoicesForCollectionParameterFacetFactory.java:76)
-            // at o.a.i.core.metamodel.specloader.validator.MetaModelValidatorVisiting.validate(MetaModelValidatorVisiting.java:47)
-            //
-            // also, required so that can still call isisSessionFactory#doInSession
-            //
-            // eg todoapp has a custom UserSettingsThemeProvider that is called when rendering any page
-            // (including the metamodel invalid page)
-            // at o.a.i.core.runtime.system.session.IsisSessionFactory.doInSession(IsisSessionFactory.java:327)
-            // at todoapp.webapp.UserSettingsThemeProvider.getActiveTheme(UserSettingsThemeProvider.java:36)
+            final List<Future<Object>> futures = ThreadPoolSupport.invokeAll(
+                    new Callable<Object>() {
+                        @Override
+                        public Object call() {
 
-            authenticationManager.init(deploymentCategory);
-            authorizationManager.init(deploymentCategory);
+                            // time to initialize...
+                            specificationLoader.init();
 
-            persistenceSessionFactory.init(configuration);
+                            // we need to do this before checking if the metamodel is valid.
+                            //
+                            // eg ActionChoicesForCollectionParameterFacetFactory metamodel validator requires a runtime...
+                            // at o.a.i.core.metamodel.specloader.specimpl.ObjectActionContributee.getServiceAdapter(ObjectActionContributee.java:287)
+                            // at o.a.i.core.metamodel.specloader.specimpl.ObjectActionContributee.determineParameters(ObjectActionContributee.java:138)
+                            // at o.a.i.core.metamodel.specloader.specimpl.ObjectActionDefault.getParameters(ObjectActionDefault.java:182)
+                            // at o.a.i.core.metamodel.facets.actions.action.ActionChoicesForCollectionParameterFacetFactory$1.validate(ActionChoicesForCollectionParameterFacetFactory.java:85)
+                            // at o.a.i.core.metamodel.facets.actions.action.ActionChoicesForCollectionParameterFacetFactory$1.visit(ActionChoicesForCollectionParameterFacetFactory.java:76)
+                            // at o.a.i.core.metamodel.specloader.validator.MetaModelValidatorVisiting.validate(MetaModelValidatorVisiting.java:47)
+                            //
+                            // also, required so that can still call isisSessionFactory#doInSession
+                            //
+                            // eg todoapp has a custom UserSettingsThemeProvider that is called when rendering any page
+                            // (including the metamodel invalid page)
+                            // at o.a.i.core.runtime.system.session.IsisSessionFactory.doInSession(IsisSessionFactory.java:327)
+                            // at todoapp.webapp.UserSettingsThemeProvider.getActiveTheme(UserSettingsThemeProvider.java:36)
+
+                            authenticationManager.init(deploymentCategory);
+                            authorizationManager.init(deploymentCategory);
+
+                            return null;
+                        }
+                    },
+                    new Callable<Object>() {
+                        @Override public Object call() {
+                            persistenceSessionFactory.init(configuration);
+                            return null;
+                        }
+                    }
+            );
+
+            ThreadPoolSupport.join(futures);
+
 
             persistenceSessionFactory.catalogNamedQueries(specificationLoader);
 

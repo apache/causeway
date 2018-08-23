@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.runtime.threadpool;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Callable;
@@ -99,4 +100,17 @@ public final class ThreadPoolSupport {
             throw new RuntimeException(e);
         }
     }
+    public static List<Future<Object>> invokeAll(final Callable<Object>... callables) {
+        return invokeAll(Arrays.asList(callables));
+    }
+    public static List<Future<Object>> invokeSerial(final Callable<Object>... callables) {
+        List<Future<Object>> futures = Lists.newArrayList();
+        for (Callable<Object> callable : callables) {
+            List<Future<Object>> x = invokeAll(callable);
+            join(x);
+            futures.addAll(x);
+        }
+        return futures;
+    }
+
 }
