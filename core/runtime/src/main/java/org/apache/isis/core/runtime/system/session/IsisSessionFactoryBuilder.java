@@ -221,8 +221,7 @@ public class IsisSessionFactoryBuilder {
                     }
             );
 
-            ThreadPoolSupport.join(futures);
-
+            ThreadPoolSupport.joinGatherFailures(futures);
 
             persistenceSessionFactory.catalogNamedQueries(specificationLoader);
 

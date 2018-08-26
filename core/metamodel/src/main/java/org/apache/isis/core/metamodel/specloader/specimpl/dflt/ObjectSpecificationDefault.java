@@ -103,7 +103,6 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     }
 
 
-
     //endregion
 
     //region > introspectTypeHierarchyAndMembers

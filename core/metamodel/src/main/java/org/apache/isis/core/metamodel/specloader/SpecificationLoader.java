@@ -20,7 +20,10 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Future;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
@@ -40,6 +43,7 @@ import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.ClassUtil;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
+import org.apache.isis.core.metamodel.facets.MethodRemoverConstants;
 import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader;
@@ -58,7 +62,9 @@ import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificati
 import org.apache.isis.core.metamodel.specloader.specimpl.standalonelist.ObjectSpecificationOnStandaloneList;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
+import org.apache.isis.core.runtime.threadpool.ThreadPoolSupport;
 import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;
+import org.apache.isis.progmodels.dflt.ProgrammingModelForObjectSpecIdFacet;
 
 /**
  * Builds the meta-model.
@@ -93,6 +99,8 @@ public class SpecificationLoader implements ApplicationScopedComponent {
     private final ProgrammingModel programmingModel;
     private final FacetProcessor facetProcessor;
 
+    FacetProcessor facetProcessorObjectSpecId;
+
     private final IsisConfiguration configuration;
     private final ServicesInjector servicesInjector;
 
@@ -100,6 +108,13 @@ public class SpecificationLoader implements ApplicationScopedComponent {
     private final SpecificationCacheDefault cache = new SpecificationCacheDefault();
     private final List<LayoutMetadataReader> layoutMetadataReaders;
     private final PostProcessor postProcessor;
+
+    enum State {
+        NOT_INITIALIZED,
+        CACHING,
+        INTROSPECTING
+    }
+
 
     public SpecificationLoader(
             final IsisConfiguration configuration,
@@ -118,6 +133,8 @@ public class SpecificationLoader implements ApplicationScopedComponent {
         this.postProcessor = new PostProcessor(programmingModel, servicesInjector);
 
         this.layoutMetadataReaders = layoutMetadataReaders;
+
+        this.state = State.NOT_INITIALIZED;
     }
 
     @Override
@@ -132,7 +149,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
 
     //region > init
 
-    private boolean initialized = false;
+    private State state;
 
     /**
      * Initializes and wires up, and primes the cache based on any service
@@ -152,34 +169,78 @@ public class SpecificationLoader implements ApplicationScopedComponent {
         }
 
         // initialize subcomponents
-        programmingModel.init();
+        this.programmingModel.init();
         facetProcessor.init();
+
+        ProgrammingModel programmingModelForObjectSpecId = new ProgrammingModelForObjectSpecIdFacet(configuration);
+        facetProcessorObjectSpecId = new FacetProcessor(programmingModelForObjectSpecId) {
+            @Override
+            public void injectDependenciesInto(final FacetFactory factory) {
+                // no-op... otherwise hit an exception in the other thread, but don't (yet) know why.
+            }
+        };
+        programmingModelForObjectSpecId.init();
+        facetProcessorObjectSpecId.init();
+
         postProcessor.init();
         metaModelValidator.init(this);
+
+
+        state = State.CACHING;
 
         loadSpecificationsForServices();
         loadSpecificationsForMixins();
         cacheBySpecId();
 
-        initialized = true;
+        state = State.INTROSPECTING;
+
+        final Collection<ObjectSpecification> objectSpecifications = allSpecifications();
+
+        final List<Callable<Object>> callables = Lists.newArrayList();
+        for (final ObjectSpecification specification : objectSpecifications) {
+            Callable<Object> callable = new Callable<Object>() {
+                @Override
+                public Object call() {
+                    introspectIfRequired(specification);
+                    return null;
+                }
+            };
+            callables.add(callable);
+        }
+        List<Future<Object>> futures = ThreadPoolSupport.invokeAll(callables);
+        ThreadPoolSupport.joinGatherFailures(futures);
+
     }
 
     private void loadSpecificationsForServices() {
-        for (final Class<?> serviceClass : allServiceClasses()) {
+        final Properties metadataProperties = new Properties();
+
+        List<Class<?>> classes = allServiceClasses();
+        for (final Class<?> serviceClass : classes) {
             final DomainService domainService = serviceClass.getAnnotation(DomainService.class);
             final NatureOfService nature = domainService != null ? domainService.nature() : NatureOfService.DOMAIN;
             // will 'markAsService'
-            internalLoadSpecification(serviceClass, nature);
+            ObjectSpecification objectSpecification = internalLoadSpecification(serviceClass, nature);
+
+            facetProcessorObjectSpecId.process(
+                    serviceClass, metadataProperties,
+                    MethodRemoverConstants.NULL, objectSpecification);
         }
     }
 
     private void loadSpecificationsForMixins() {
+        final Properties metadataProperties = new Properties();
+
         final Set<Class<?>> mixinTypes = AppManifest.Registry.instance().getMixinTypes();
         if(mixinTypes == null) {
             return;
         }
         for (final Class<?> mixinType : mixinTypes) {
-            internalLoadSpecification(mixinType);
+            ObjectSpecification objectSpecification = internalLoadSpecification(mixinType);
+            facetProcessorObjectSpecId.process(
+                    mixinType, metadataProperties,
+                    MethodRemoverConstants.NULL, objectSpecification);
+
         }
     }
 
@@ -196,10 +257,6 @@ public class SpecificationLoader implements ApplicationScopedComponent {
         cache.setCacheBySpecId(specById);
     }
 
-    @Programmatic
-    public boolean isInitialized() {
-        return initialized;
-    }
 
 
     //endregion
@@ -210,7 +267,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
     public void shutdown() {
         LOG.info("shutting down {}", this);
 
-        initialized = false;
+        state = State.NOT_INITIALIZED;
 
         cache.clear();
     }
@@ -436,6 +493,10 @@ public class SpecificationLoader implements ApplicationScopedComponent {
      * Originally introduced to support {@link AutoCompleteFacet}.
      */
     private ObjectSpecification introspectIfRequired(final ObjectSpecification spec) {
+
+        if(state != State.INTROSPECTING) {
+            return spec;
+        }
 
         final ObjectSpecificationAbstract specSpi = (ObjectSpecificationAbstract)spec;
         final ObjectSpecificationAbstract.IntrospectionState introspectionState = specSpi.getIntrospectionState();

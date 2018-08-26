@@ -26,6 +26,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.RejectedExecutionHandler;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -50,7 +51,7 @@ public final class ThreadPoolSupport {
         final int maximumPoolSize = Runtime.getRuntime().availableProcessors();
         final int keepAliveTimeSecs = 5;
 
-        final int queueCapacity = 25;
+        final int queueCapacity = 200;
         final BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<>(queueCapacity);
 
         executor = new ThreadPoolExecutor(
@@ -63,7 +64,14 @@ public final class ThreadPoolSupport {
                     public Thread newThread(final Runnable r) {
                         return new Thread(group, r);
                     }
-                });
+                }, new RejectedExecutionHandler() {
+            @Override
+            public void rejectedExecution(final Runnable r, final ThreadPoolExecutor executor) {
+                int i;
+                i=1;
+
+            }
+        });
     }
 
     public static List<Object> join(final List<Future<Object>> futures) {
@@ -75,7 +83,38 @@ public final class ThreadPoolSupport {
         try{
             final List<Object> returnValues = Lists.newArrayList();
             for (Future<Object> future : futures) {
-                returnValues.add(join(future));
+                Object result;
+                try {
+                    result = future.get();
+                } catch (InterruptedException | ExecutionException e) {
+                    // ignore
+                    result = null;
+                }
+                returnValues.add(result);
+            }
+            return returnValues;
+        } finally {
+            final long t1 = System.currentTimeMillis();
+            LOG.info("join'ing {} tasks: waited {} milliseconds ", futures.size(), (t1-t0));
+        }
+    }
+
+    public static List<Object> joinGatherFailures(final List<Future<Object>> futures) {
+        if (futures == null) {
+            return null;
+        }
+
+        final long t0 = System.currentTimeMillis();
+        try{
+            final List<Object> returnValues = Lists.newArrayList();
+            for (Future<Object> future : futures) {
+                final Object result;
+                try {
+                    result = future.get();
+                } catch (InterruptedException | ExecutionException e) {
+                    throw new RuntimeException(e);
+                }
+                returnValues.add(result);
             }
             return returnValues;
         } finally {
@@ -89,8 +128,8 @@ public final class ThreadPoolSupport {
             return future.get();
         } catch (InterruptedException | ExecutionException e) {
             // ignore
+            return null;
         }
-        return null;
     }
 
     public static List<Future<Object>> invokeAll(final List<Callable<Object>> callables) {
