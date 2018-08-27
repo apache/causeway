@@ -16,9 +16,9 @@
  */
 package org.apache.isis.applib.services.layout;
 
-import org.apache.isis.applib.annotation.MemberGroupLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.layout.grid.Grid;
 
 public interface LayoutService {
 
@@ -49,7 +49,7 @@ public interface LayoutService {
          * and unused/empty regions are removed/trimmed.
          * <p/>
          * <p>
-         * It should be possible to remove any {@link MemberOrder} and {@link MemberGroupLayout} annotations but
+         * It should be possible to remove any {@link MemberOrder} annotation but
          * any layout annotations would need to be retained.
          * </p>
          */

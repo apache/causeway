@@ -49,6 +49,7 @@ import org.apache.isis.commons.internal.base._Strings;
 @Inherited
 @Target({ ElementType.TYPE, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
+@Deprecated
 public @interface MemberGroupLayout {
 
     /**

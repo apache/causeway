@@ -19,7 +19,6 @@ package org.apache.isis.applib.services.grid;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
-import org.apache.isis.applib.annotation.MemberGroupLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.PropertyLayout;
@@ -63,7 +62,7 @@ public interface GridService {
      *
      * <p>
      *     If a &quot;normalized&quot; grid is persisted as the <code>layout.xml</code>, then the expectation is that
-     *     the {@link MemberOrder} and {@link MemberGroupLayout} annotations can be removed from the domain class
+     *     the {@link MemberOrder} annotation can be removed from the domain class
      *     because the binding of properties/collections/actions will be within the XML.  However, the layout
      *     annotations ({@link DomainObjectLayout}, {@link ActionLayout}, {@link PropertyLayout} and
      *     {@link CollectionLayout}) (if present) will continue to be used to provide additional layout metadata.  Of
@@ -81,7 +80,7 @@ public interface GridService {
      *
      * <p>
      *     If a &quot;completed&quot; grid is persisted as the <code>layout.xml</code>, then there should be no need
-     *     for any of the layout annotations, nor the {@link MemberOrder} or {@link MemberGroupLayout} annotations,
+     *     for any of the layout annotations, nor the {@link MemberOrder} annotations,
      *     to be required in the domain class itself.
      * </p>
      */
@@ -95,7 +94,6 @@ public interface GridService {
      *     If a &quot;minimal&quot; grid is persisted as the <code>layout.xml</code>, then the expectation is that
      *     most of the layout annotations ({@link DomainObjectLayout}, {@link ActionLayout}, {@link PropertyLayout},
      *     {@link CollectionLayout}, but also {@link MemberOrder}) will still be retained in the domain class code.
-     *     The only annotation that can be removed and is no longer used {@link MemberGroupLayout}.
      * </p>
      *
      * @param grid
