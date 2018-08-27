@@ -46,7 +46,7 @@
     <inceptionYear>2010</inceptionYear>
 
     <properties>
-        <revision>2.0.0-M1</revision>
+        <revision>2.0.0-M2</revision>
 
         <jar-plugin.automaticModuleName>org.apache.isis.core</jar-plugin.automaticModuleName>
         <git-plugin.propertiesDir>org/apache/isis/core</git-plugin.propertiesDir>
@@ -92,7 +92,7 @@
         
         <!-- Isis Datanucleus JDO Plugin dn5 -->
 
-	<dn5-jdo-api.version>3.2.0-m7</dn5-jdo-api.version>
+	    <dn5-jdo-api.version>3.2.0-m7</dn5-jdo-api.version>
         <dn5-core.version>5.1.6</dn5-core.version>
         <dn5-api-jdo.version>5.1.4</dn5-api-jdo.version>
         <dn5-jdo-query.version>5.0.4</dn5-jdo-query.version>
