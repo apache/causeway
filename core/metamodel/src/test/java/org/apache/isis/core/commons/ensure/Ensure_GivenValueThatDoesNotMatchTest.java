@@ -29,39 +29,19 @@ import org.junit.Test;
 public class Ensure_GivenValueThatDoesNotMatchTest {
 
     @Test
-    public void whenCallEnsureThatArgShouldThrowIllegalArgumentException() {
-        try {
-            Ensure.ensureThatArg("foo", is(nullValue()));
-            fail();
-        } catch (final IllegalArgumentException ex) {
-            assertThat(ex.getMessage(), is("illegal argument, expected: is null"));
-        }
-    }
-
-    @Test
     public void whenCallEnsureThatArgOverloadedShouldThrowIllegalArgumentExceptionUsingSuppliedMessage() {
         try {
-            Ensure.ensureThatArg("foo", is(nullValue()), "my message");
+            Ensure.ensureThatArg("foo", is(nullValue())::matches, "my message");
             fail();
         } catch (final IllegalArgumentException ex) {
             assertThat(ex.getMessage(), is("my message"));
-        }
-    }
-
-    @Test
-    public void whenCallEnsureThatStateShouldThrowIllegalStateException() {
-        try {
-            Ensure.ensureThatState("foo", is(nullValue()));
-            fail();
-        } catch (final IllegalStateException ex) {
-            assertThat(ex.getMessage(), is("illegal argument, expected: is null"));
         }
     }
 
     @Test
     public void whenCallEnsureThatStateOverloadedShouldThrowIllegalStateExceptionUsingSuppliedMessage() {
         try {
-            Ensure.ensureThatState("foo", is(nullValue()), "my message");
+            Ensure.ensureThatState("foo", is(nullValue())::matches, "my message");
             fail();
         } catch (final IllegalStateException ex) {
             assertThat(ex.getMessage(), is("my message"));
@@ -69,19 +49,9 @@ public class Ensure_GivenValueThatDoesNotMatchTest {
     }
 
     @Test
-    public void whenCallEnsureThatContextShouldThrowIllegalThreadStateException() {
-        try {
-            Ensure.ensureThatContext("foo", is(nullValue()));
-            fail();
-        } catch (final IllegalThreadStateException ex) {
-            assertThat(ex.getMessage(), is("illegal argument, expected: is null"));
-        }
-    }
-
-    @Test
     public void whenCallEnsureThatContextOverloadedShouldThrowIllegalThreadStateExceptionUsingSuppliedMessage() {
         try {
-            Ensure.ensureThatContext("foo", is(nullValue()), "my message");
+            Ensure.ensureThatContext("foo", is(nullValue())::matches, "my message");
             fail();
         } catch (final IllegalThreadStateException ex) {
             assertThat(ex.getMessage(), is("my message"));

@@ -32,42 +32,28 @@ public class Ensure_GivenValueThatDoesMatchTest {
     @Test
     public void whenCallEnsureThatArgThenShouldReturnOriginalObject() {
         final String object = "foo";
-        final String returnedObject = Ensure.ensureThatArg(object, is(not(nullValue(String.class))));
+        final String returnedObject = Ensure.ensureThatArg(object, is(not(nullValue(String.class)))::matches, ()->"some message");
         assertThat(returnedObject, sameInstance(object));
     }
 
     @Test
     public void whenCallEnsureThatArgWithOverloadedShouldReturnOriginalObject() {
         final String object = "foo";
-        final String returnedObject = Ensure.ensureThatArg(object, is(not(nullValue(String.class))), "some message");
-        assertThat(returnedObject, sameInstance(object));
-    }
-
-    @Test
-    public void whenCallEnsureThatStateThenShouldReturnOriginalObject() {
-        final String object = "foo";
-        final String returnedObject = Ensure.ensureThatState(object, is(not(nullValue(String.class))));
+        final String returnedObject = Ensure.ensureThatArg(object, is(not(nullValue(String.class)))::matches, "some message");
         assertThat(returnedObject, sameInstance(object));
     }
 
     @Test
     public void whenCallEnsureThatStateWithOverloadedShouldReturnOriginalObject() {
         final String object = "foo";
-        final String returnedObject = Ensure.ensureThatState(object, is(not(nullValue(String.class))), "some message");
-        assertThat(returnedObject, sameInstance(object));
-    }
-
-    @Test
-    public void whenCallEnsureThatContextThenShouldReturnOriginalObject() {
-        final String object = "foo";
-        final String returnedObject = Ensure.ensureThatContext(object, is(not(nullValue(String.class))));
+        final String returnedObject = Ensure.ensureThatState(object, is(not(nullValue(String.class)))::matches, "some message");
         assertThat(returnedObject, sameInstance(object));
     }
 
     @Test
     public void whenCallEnsureThatContextWithOverloadedShouldReturnOriginalObject() {
         final String object = "foo";
-        final String returnedObject = Ensure.ensureThatContext(object, is(not(nullValue(String.class))), "some message");
+        final String returnedObject = Ensure.ensureThatContext(object, is(not(nullValue(String.class)))::matches, "some message");
         assertThat(returnedObject, sameInstance(object));
     }
 

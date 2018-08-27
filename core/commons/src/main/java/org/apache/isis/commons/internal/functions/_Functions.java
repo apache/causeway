@@ -34,7 +34,7 @@ import java.util.function.Supplier;
  *
  * @since 2.0.0
  */
-public class _Functions {
+public final class _Functions {
 
     // -- INDEX AWARE
 
