@@ -1584,13 +1584,6 @@ ${license.additional-notes}
                 <version>${guava.version}</version>
             </dependency>
             
-            <!-- Axon -->
-            <dependency>
-                <groupId>org.axonframework</groupId>
-                <artifactId>axon-core</artifactId>
-                <version>${axon-core.version}</version>
-            </dependency>
-
             <!-- Logging -->
             <dependency>
               <groupId>org.slf4j</groupId>

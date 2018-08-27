@@ -58,6 +58,7 @@
 		<dependency>
 			<groupId>org.axonframework</groupId>
 			<artifactId>axon-core</artifactId>
+			<version>${axon-core.version}</version>
 		</dependency>
 
 		<dependency>
@@ -65,6 +66,9 @@
 			<artifactId>isis-core-runtime</artifactId>
 			<scope>compile</scope>
 		</dependency>
+
+		<!-- TESTS -->
+		
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>isis-core-runtime</artifactId>
