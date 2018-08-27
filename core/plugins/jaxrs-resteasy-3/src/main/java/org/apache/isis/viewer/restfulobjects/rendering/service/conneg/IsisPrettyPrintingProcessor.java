@@ -22,7 +22,7 @@ import javax.ws.rs.core.MediaType;
 import javax.xml.bind.Marshaller;
 
 import org.jboss.resteasy.annotations.DecorateTypes;
-import org.jboss.resteasy.spi.interception.DecoratorProcessor;
+import org.jboss.resteasy.spi.DecoratorProcessor;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
@@ -35,7 +35,7 @@ public class IsisPrettyPrintingProcessor implements DecoratorProcessor<Marshalle
     public static final String KEY_PRETTY_PRINT = "isis.services." + ContentNegotiationServiceXRoDomainType.class.getSimpleName() + ".prettyPrint";
 
     @Override
-    public Marshaller decorate(final Marshaller target, final PrettyPrinting annotation, final Class type, final Annotation[] annotations, final MediaType mediaType) {
+    public Marshaller decorate(final Marshaller target, final PrettyPrinting annotation, @SuppressWarnings("rawtypes") final Class type, final Annotation[] annotations, final MediaType mediaType) {
         return shouldPrettyPrint()
                 ? doDecorate(target, annotation, type, annotations, mediaType)
                         : target;
@@ -50,7 +50,7 @@ public class IsisPrettyPrintingProcessor implements DecoratorProcessor<Marshalle
         }
     }
 
-    protected Marshaller doDecorate(Marshaller target, PrettyPrinting annotation, Class type, Annotation[] annotations, MediaType mediaType) {
+    protected Marshaller doDecorate(Marshaller target, PrettyPrinting annotation, @SuppressWarnings("rawtypes") Class type, Annotation[] annotations, MediaType mediaType) {
         try {
             target.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
             return target;
