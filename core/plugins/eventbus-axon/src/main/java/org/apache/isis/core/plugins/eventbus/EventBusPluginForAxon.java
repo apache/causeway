@@ -16,19 +16,25 @@
  */
 package org.apache.isis.core.plugins.eventbus;
 
+import static java.util.Objects.requireNonNull;
+import static org.apache.isis.commons.internal.base._With.acceptIfPresent;
+
+import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
-import org.apache.isis.applib.events.domain.AbstractDomainEvent;
-import org.apache.isis.core.plugins.eventbus.EventBusPlugin;
-import org.apache.isis.core.runtime.services.eventbus.EventBusImplementationAbstract;
-import org.axonframework.domain.EventMessage;
-import org.axonframework.domain.GenericEventMessage;
+import org.axonframework.common.Registration;
+import org.axonframework.eventhandling.AnnotationEventListenerAdapter;
 import org.axonframework.eventhandling.EventListenerProxy;
+import org.axonframework.eventhandling.EventMessage;
+import org.axonframework.eventhandling.GenericEventMessage;
 import org.axonframework.eventhandling.SimpleEventBus;
-import org.axonframework.eventhandling.annotation.AnnotationEventListenerAdapter;
+
+import org.apache.isis.applib.events.domain.AbstractDomainEvent;
+import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.core.runtime.services.eventbus.EventBusImplementationAbstract;
+
 
 /**
  * A wrapper for an Axon {@link org.axonframework.eventhandling.SimpleEventBus},
@@ -42,22 +48,18 @@ public class EventBusPluginForAxon extends EventBusImplementationAbstract {
 
     @Override
     public void register(final Object domainService) {
-        simpleEventBus.subscribe(adapterFor(domainService));
+        final AxonEventListenerAdapter adapter = lookupOrCreateAdapterFor(domainService);
+        final Registration registrationHandle = simpleEventBus.subscribe(eventProcessorFor(adapter));
+        adapter.registration = registrationHandle;
     }
-
+    
     @Override
     public void unregister(final Object domainService) {
-        // Seems it's needed to be a no-op (See EventBusService).
-        // AxonSimpleEventBusAdapter.simpleEventBus.unsubscribe(AxonSimpleEventBusAdapter.adapterFor(domainService));
+        acceptIfPresent(lookupAdapterFor(domainService), adapter->{
+            acceptIfPresent(adapter.registration, Registration::cancel);
+        });
     }
 
-    /*
-     * Logic equivalent to Guava Event Bus.
-     *
-     * <p>
-     *     Despite that, event processing cannot be followed after an Exception is thrown.
-     * </p>
-     */
     @Override
     public void post(final Object event) {
         simpleEventBus.publish(GenericEventMessage.asEventMessage(event));
@@ -69,14 +71,19 @@ public class EventBusPluginForAxon extends EventBusImplementationAbstract {
             final Consumer<T> onEvent) {
 
         final AxonEventListener<T> eventListener = new AxonEventListener<T>(targetType, onEvent);
-        simpleEventBus.subscribe(eventListener.proxy());
+        final EventListenerProxy proxy = eventListener.proxy();
+        
+        final Registration registrationHandle = simpleEventBus.subscribe(eventProcessorFor(proxy));
+        eventListener.registration = registrationHandle;
+        
         return eventListener;
     }
 
     @Override
     public <T> void removeEventListener(EventBusPlugin.EventListener<T> eventListener) {
         if(eventListener instanceof AxonEventListener) {
-            simpleEventBus.unsubscribe(((AxonEventListener<T>)eventListener).proxy());
+            final AxonEventListener<T> listenerInstance = (AxonEventListener<T>) eventListener;
+            acceptIfPresent(listenerInstance.registration, Registration::cancel);
         }
     }
 
@@ -90,12 +97,40 @@ public class EventBusPluginForAxon extends EventBusImplementationAbstract {
             final Object payload = genericEventMessage.getPayload();
             return asDomainEventIfPossible(payload);
         }
-        // don't think this occurs with axon, but this is the original behaviour
+        // don't think this occurs with axon, but this is the original behavior
         // before the above change to detect GenericEventMessage
         return asDomainEventIfPossible(event);
     }
 
     // -- HELPER
+    
+    private Consumer<List<? extends EventMessage<?>>> eventProcessorFor(final EventListenerProxy proxy) {
+        return eventMessages->{
+            _NullSafe.stream(eventMessages)
+            .filter(proxy::canHandle)
+            .forEach(event->{
+                try {
+                    proxy.handle(event);
+                } catch (final Exception exception) {
+                    processException(exception, event);
+                }
+            });
+        };
+    }
+    
+    private Consumer<List<? extends EventMessage<?>>> eventProcessorFor(final AxonEventListenerAdapter adapter) {
+        return eventMessages->{
+            _NullSafe.stream(eventMessages)
+            .filter(adapter::canHandle)
+            .forEach(event->{
+                try {
+                    adapter.handle(event);
+                } catch (final Exception exception) {
+                    processException(exception, event);
+                }
+            });
+        };
+    }
 
     /**
      * Wraps a Consumer as EventBusImplementation.EventListener with the given targetType.
@@ -105,8 +140,10 @@ public class EventBusPluginForAxon extends EventBusImplementationAbstract {
     static class AxonEventListener<T> implements EventBusPlugin.EventListener<T> {
         private final Consumer<T> eventConsumer;
         private final EventListenerProxy proxy;
+        private Registration registration;
+        
         private AxonEventListener(final Class<T> targetType, final Consumer<T> eventConsumer) {
-            this.eventConsumer = Objects.requireNonNull(eventConsumer);
+            this.eventConsumer = requireNonNull(eventConsumer);
             this.proxy = new EventListenerProxy() {
                 @SuppressWarnings("unchecked")
                 @Override
@@ -135,8 +172,8 @@ public class EventBusPluginForAxon extends EventBusImplementationAbstract {
 
     }
 
-    private AxonEventListenerAdapter adapterFor(final Object domainService) {
-        AxonEventListenerAdapter annotationEventListenerAdapter = listenerAdapterByDomainService.get(domainService);
+    private AxonEventListenerAdapter lookupOrCreateAdapterFor(final Object domainService) {
+        AxonEventListenerAdapter annotationEventListenerAdapter = lookupAdapterFor(domainService);
         if (annotationEventListenerAdapter == null) {
             annotationEventListenerAdapter = new AxonEventListenerAdapter(domainService);
             listenerAdapterByDomainService.put(domainService, annotationEventListenerAdapter);
@@ -144,6 +181,10 @@ public class EventBusPluginForAxon extends EventBusImplementationAbstract {
         return annotationEventListenerAdapter;
     }
 
+    private AxonEventListenerAdapter lookupAdapterFor(final Object domainService) {
+        return listenerAdapterByDomainService.get(domainService);
+    }
+    
     private AbstractDomainEvent<?> asDomainEventIfPossible(final Object event) {
         if (event instanceof AbstractDomainEvent)
             return (AbstractDomainEvent<?>) event;
@@ -152,6 +193,8 @@ public class EventBusPluginForAxon extends EventBusImplementationAbstract {
     }
 
     class AxonEventListenerAdapter extends AnnotationEventListenerAdapter {
+
+        private Registration registration;
 
         public AxonEventListenerAdapter(final Object annotatedEventListener) {
             super(annotatedEventListener);
@@ -169,7 +212,5 @@ public class EventBusPluginForAxon extends EventBusImplementationAbstract {
             }
         }
     }
-
-
 
 }

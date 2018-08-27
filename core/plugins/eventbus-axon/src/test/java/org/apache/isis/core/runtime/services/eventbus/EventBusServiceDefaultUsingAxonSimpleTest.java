@@ -62,7 +62,7 @@ public class EventBusServiceDefaultUsingAxonSimpleTest {
 
         public static class Subscriber1 {
         	Type1 obj;
-        	@org.axonframework.eventhandling.annotation.EventHandler
+        	@org.axonframework.eventhandling.EventHandler
             public void on1(Type1 obj) {
                 this.obj = obj;
             }
@@ -70,7 +70,7 @@ public class EventBusServiceDefaultUsingAxonSimpleTest {
         
         public static class Subscriber2 {
         	Type1 obj;
-        	@org.axonframework.eventhandling.annotation.EventHandler
+        	@org.axonframework.eventhandling.EventHandler
             public void on2(Type1 obj) {
                 this.obj = obj;
             }
@@ -78,7 +78,7 @@ public class EventBusServiceDefaultUsingAxonSimpleTest {
         
         public static class Subscriber3 {
         	Type3 obj;
-        	@org.axonframework.eventhandling.annotation.EventHandler
+        	@org.axonframework.eventhandling.EventHandler
             public void on3(Type3 obj) {
                 this.obj = obj;
             }
