@@ -20,8 +20,8 @@
 package org.apache.isis.core.metamodel.consent;
 
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
-import static org.apache.isis.core.commons.matchers.IsisMatchers.nonEmptyString;
 
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 
 public class Veto extends ConsentAbstract {
@@ -39,7 +39,7 @@ public class Veto extends ConsentAbstract {
      *            - must not be <tt>null</tt>
      */
     public Veto(final String reasonVetoed) {
-        super(null, ensureThatArg(reasonVetoed, nonEmptyString()));
+        super(null, ensureThatArg(reasonVetoed, _Strings::isNotEmpty, "requires a non empty string"));
     }
 
     public Veto(final InteractionResult interactionResult) {

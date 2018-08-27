@@ -2134,15 +2134,16 @@ ${license.additional-notes}
     <dependencies>
         <!-- COMPILE DEPENDENCIES -->
         <dependency>
-            <groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest-library</artifactId>
-        </dependency>
-        <dependency>
           <groupId>org.slf4j</groupId>
           <artifactId>slf4j-api</artifactId>
         </dependency>
 
         <!-- TEST DEPENDENCIES -->
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-library</artifactId>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <!-- JUnit API for writing tests and extensions -->
             <groupId>org.junit.jupiter</groupId>

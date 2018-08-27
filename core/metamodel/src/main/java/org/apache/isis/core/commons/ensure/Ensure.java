@@ -19,14 +19,14 @@
 
 package org.apache.isis.core.commons.ensure;
 
+import static org.apache.isis.commons.internal.base._With.requires;
+
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-import org.hamcrest.Matcher;
-import org.hamcrest.StringDescription;
 
 /**
- * Uses the {@link Matcher Hamcrest API} as a means of verifying arguments and
- * so on.
+ * Utility for verifying arguments and so on.
  */
 public final class Ensure {
 
@@ -47,41 +47,22 @@ public final class Ensure {
     /**
      * To ensure that the provided argument is correct.
      *
-     * @see #ensureThatArg(Object, Matcher, String)
-     * @see #ensureThatState(Object, Matcher, String)
-     * @see #ensureThatContext(Object, Matcher)
-     *
      * @throws IllegalArgumentException
-     *             if matcher does not {@link Matcher#matches(Object) match}.
+     *             if predicate tests to false.
      */
-    public static <T> T ensureThatArg(final T object, final Matcher<T> matcher) {
-        if (!matcher.matches(object)) {
-            throw new IllegalArgumentException("illegal argument, expected: " + descriptionOf(matcher));
-        }
-        return object;
-    }
-
-
-    /**
-     * To ensure that the provided argument is correct.
-     *
-     * @see #ensureThatArg(Object, Matcher)
-     * @see #ensureThatState(Object, Matcher, String)
-     * @see #ensureThatContext(Object, Matcher)
-     *
-     * @throws IllegalArgumentException
-     *             if matcher does not {@link Matcher#matches(Object) match}.
-     */
-    public static <T> T ensureThatArg(final T arg, final Matcher<T> matcher, final String message) {
-        if (!matcher.matches(arg)) {
+    public static <T> T ensureThatArg(final T arg, final Predicate<T> predicate, final String message) {
+        requires(predicate, "predicate");
+        if (!predicate.test(arg)) {
             throw new IllegalArgumentException(message);
         }
         return arg;
     }
 
-    public static <T> T ensureThatArg(final T arg, final Matcher<T> matcher, final Supplier<String> message) {
-        if (!matcher.matches(arg)) {
-            throw new IllegalArgumentException(message.get());
+    public static <T> T ensureThatArg(final T arg, final Predicate<T> predicate, final Supplier<String> messageSupplier) {
+        requires(predicate, "predicate");
+        if (!predicate.test(arg)) {
+            requires(messageSupplier, "messageSupplier");
+            throw new IllegalArgumentException(messageSupplier.get());
         }
         return arg;
     }
@@ -90,33 +71,12 @@ public final class Ensure {
      * To ensure that the current state of this object (instance fields) is
      * correct.
      *
-     * @see #ensureThatArg(Object, Matcher)
-     * @see #ensureThatContext(Object, Matcher)
-     * @see #ensureThatState(Object, Matcher, String)
-     *
      * @throws IllegalStateException
-     *             if matcher does not {@link Matcher#matches(Object) match}.
+     *             if predicate tests to false.
      */
-    public static <T> T ensureThatState(final T field, final Matcher<T> matcher) {
-        if (!matcher.matches(field)) {
-            throw new IllegalStateException("illegal argument, expected: " + descriptionOf(matcher));
-        }
-        return field;
-    }
-
-    /**
-     * To ensure that the current state of this object (instance fields) is
-     * correct.
-     *
-     * @see #ensureThatArg(Object, Matcher)
-     * @see #ensureThatContext(Object, Matcher)
-     * @see #ensureThatState(Object, Matcher)
-     *
-     * @throws IllegalStateException
-     *             if matcher does not {@link Matcher#matches(Object) match}.
-     */
-    public static <T> T ensureThatState(final T field, final Matcher<T> matcher, final String message) {
-        if (!matcher.matches(field)) {
+    public static <T> T ensureThatState(final T field, final Predicate<T> predicate, final String message) {
+        requires(predicate, "predicate");
+        if (!predicate.test(field)) {
             throw new IllegalStateException(message);
         }
         return field;
@@ -125,42 +85,16 @@ public final class Ensure {
     /**
      * To ensure that the current context (<tt>IsisContext</tt>) is correct.
      *
-     * @see #ensureThatArg(Object, Matcher)
-     * @see #ensureThatState(Object, Matcher)
-     * @see #ensureThatContext(Object, Matcher, String)
-     *
      * @throws IllegalThreadStateException
-     *             if matcher does not {@link Matcher#matches(Object) match}.
+     *             if predicate tests to false.
      */
-    public static <T> T ensureThatContext(final T contextProperty, final Matcher<T> matcher) {
-        if (!matcher.matches(contextProperty)) {
-            throw new IllegalThreadStateException("illegal argument, expected: " + descriptionOf(matcher));
-        }
-        return contextProperty;
-    }
-
-    /**
-     * To ensure that the current context (<tt>IsisContext</tt>) is correct.
-     *
-     * @see #ensureThatArg(Object, Matcher)
-     * @see #ensureThatState(Object, Matcher)
-     * @see #ensureThatContext(Object, Matcher, String)
-     *
-     * @throws IllegalThreadStateException
-     *             if matcher does not {@link Matcher#matches(Object) match}.
-     */
-    public static <T> T ensureThatContext(final T contextProperty, final Matcher<T> matcher, final String message) {
-        if (!matcher.matches(contextProperty)) {
+    public static <T> T ensureThatContext(final T contextProperty, final Predicate<T> predicate, final String message) {
+        requires(predicate, "predicate");
+        if (!predicate.test(contextProperty)) {
             throw new IllegalThreadStateException(message);
         }
         return contextProperty;
     }
 
-    private static <T> String descriptionOf(final Matcher<T> matcher) {
-        final StringDescription stringDescription = new StringDescription();
-        matcher.describeTo(stringDescription);
-        final String description = stringDescription.toString();
-        return description;
-    }
 
 }

@@ -19,11 +19,11 @@
 
 package org.apache.isis.core.metamodel.facetapi;
 
-import org.apache.isis.core.commons.ensure.Ensure;
-import org.apache.isis.core.commons.matchers.IsisMatchers;
+import static org.apache.isis.commons.internal.base._With.requires;
 
-import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
-import static org.hamcrest.CoreMatchers.*;
+import java.util.Objects;
+
+import org.apache.isis.core.commons.ensure.Ensure;
 
 public abstract class FacetAbstract implements Facet {
 
@@ -47,13 +47,12 @@ public abstract class FacetAbstract implements Facet {
      */
     private IdentifiedHolder identifiedHolder;
 
-    @SuppressWarnings("unchecked")
     public FacetAbstract(
             final Class<? extends Facet> facetType,
             final FacetHolder holder,
             final Derivation derivation) {
-        this.facetType = ensureThatArg(facetType, is(not(nullValue(Class.class))));
-        setFacetHolder(ensureThatArg(holder, is(not(nullValue(FacetHolder.class)))));
+        this.facetType = requires(facetType, "facetType"); 
+        setFacetHolder(requires(holder, "holder"));
         this.derived = (derivation == Derivation.DERIVED);
     }
 
@@ -96,7 +95,10 @@ public abstract class FacetAbstract implements Facet {
                     throw new IllegalArgumentException("illegal argument, expected underlying facet (a multi-valued facet) to have equivalent to the facet type (or facet types) of this facet");
                 }
             } else {
-                Ensure.ensureThatArg(underlyingFacet.facetType(), IsisMatchers.classEqualTo(facetType));
+                Ensure.ensureThatArg(
+                        underlyingFacet.facetType(), 
+                        type->Objects.equals(type, facetType), 
+                        ()->String.format("type-missmatch: underlying facet's type '%s' must match this facet's type '%s'"));
             }
         }
         this.underlyingFacet = underlyingFacet;
