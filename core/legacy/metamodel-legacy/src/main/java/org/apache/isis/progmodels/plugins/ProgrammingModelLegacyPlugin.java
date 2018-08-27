@@ -17,6 +17,7 @@
 package org.apache.isis.progmodels.plugins;
 
 import org.apache.isis.core.metamodel.facets.object.encodeable.annotcfg.EncodableFacetAnnotationElseConfigurationFactory;
+import org.apache.isis.core.metamodel.facets.object.membergroups.annotprop.MemberGroupLayoutFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.parseable.annotcfg.ParseableFacetAnnotationElseConfigurationFactory;
 import org.apache.isis.core.metamodel.facets.value.date.DateValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.datetime.DateTimeValueFacetUsingSemanticsProviderFactory;
@@ -24,10 +25,12 @@ import org.apache.isis.core.metamodel.facets.value.time.TimeValueFacetUsingSeman
 import org.apache.isis.core.metamodel.facets.value.timestamp.TimeStampValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelPlugin;
 
-public class ProgrammingModelIsisTimePlugin implements ProgrammingModelPlugin {
+public class ProgrammingModelLegacyPlugin implements ProgrammingModelPlugin {
 
 	@Override
 	public void plugin(FactoryCollector collector) {
+	    
+	    collector.addFactory(new MemberGroupLayoutFacetFactory(), FacetFactoryCategory.VALUE);
 		
 		collector.addFactory(new DateValueFacetUsingSemanticsProviderFactory(), FacetFactoryCategory.VALUE);
 		collector.addFactory(new DateTimeValueFacetUsingSemanticsProviderFactory(), FacetFactoryCategory.VALUE);

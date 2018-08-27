@@ -32,17 +32,14 @@ import com.google.common.collect.Maps;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.WhereValueFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
-import org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupLayoutFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.layout.memberorderfacet.MemberOrderComparator;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.specimpl.ContributeeMember;
 import org.apache.isis.core.metamodel.util.DeweyOrderComparator;
 
 /**
@@ -234,6 +231,8 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
 
     public static class Util {
         private Util(){}
+        
+        public final static String LAYOUT_DEFAULT_GROUP = "General";
 
         public static Map<String, List<ObjectAssociation>> groupByMemberOrderName(
                 final List<ObjectAssociation> associations) {
@@ -258,7 +257,7 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
                     return;
                 }
             }
-            getFrom(associationsByGroup, MemberGroupLayoutFacet.DEFAULT_GROUP).add(association);
+            getFrom(associationsByGroup, LAYOUT_DEFAULT_GROUP).add(association);
         }
 
         private static List<ObjectAssociation> getFrom(Map<String, List<ObjectAssociation>> associationsByGroup, final String groupName) {

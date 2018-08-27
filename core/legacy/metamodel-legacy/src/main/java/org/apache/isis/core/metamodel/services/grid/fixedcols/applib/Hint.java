@@ -20,6 +20,7 @@ package org.apache.isis.core.metamodel.services.grid.fixedcols.applib;
 
 import org.apache.isis.applib.annotation.MemberGroupLayout;
 
+@Deprecated
 public enum Hint {
     LEFT,
     MIDDLE,

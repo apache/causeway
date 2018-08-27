@@ -24,9 +24,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Stream;
 
 import com.google.common.base.Function;
+import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Iterables;
@@ -39,8 +39,6 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
-import com.google.common.base.Predicate;
-
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.core.commons.lang.ClassExtensions;
@@ -65,7 +63,6 @@ import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceF
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
-import org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupLayoutFacet;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.core.metamodel.facets.object.navparent.NavigableParentFacet;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
@@ -93,7 +90,6 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
-import org.apache.isis.core.metamodel.util.pchain.ParentChain;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 
 public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implements ObjectSpecification {
@@ -817,16 +813,17 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
     protected List<ObjectAssociation> sortAssociations(final List<ObjectAssociation> associations) {
         final DeweyOrderSet orderSet = DeweyOrderSet.createOrderSet(associations);
-        final MemberGroupLayoutFacet memberGroupLayoutFacet = this.getFacet(MemberGroupLayoutFacet.class);
-
-        if(memberGroupLayoutFacet != null) {
-            final List<String> groupOrder = Lists.newArrayList();
-            groupOrder.addAll(memberGroupLayoutFacet.getLeft());
-            groupOrder.addAll(memberGroupLayoutFacet.getMiddle());
-            groupOrder.addAll(memberGroupLayoutFacet.getRight());
-
-            orderSet.reorderChildren(groupOrder);
-        }
+//TODO [ahuber] marked for removal (breaks legacy functionality) ...        
+//        final MemberGroupLayoutFacet memberGroupLayoutFacet = this.getFacet(MemberGroupLayoutFacet.class);
+//
+//        if(memberGroupLayoutFacet != null) {
+//            final List<String> groupOrder = Lists.newArrayList();
+//            groupOrder.addAll(memberGroupLayoutFacet.getLeft());
+//            groupOrder.addAll(memberGroupLayoutFacet.getMiddle());
+//            groupOrder.addAll(memberGroupLayoutFacet.getRight());
+//
+//            orderSet.reorderChildren(groupOrder);
+//        }
         final List<ObjectAssociation> orderedAssociations = Lists.newArrayList();
         sortAssociations(orderSet, orderedAssociations);
         return orderedAssociations;

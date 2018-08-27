@@ -20,6 +20,8 @@ package org.apache.isis.progmodels.dflt;
 import java.util.List;
 import java.util.Set;
 
+import com.google.common.collect.Lists;
+
 import org.apache.isis.commons.internal.context._Plugin;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facets.actions.action.ActionAnnotationFacetFactory;
@@ -80,7 +82,6 @@ import org.apache.isis.core.metamodel.facets.object.ignore.javalang.RemoveMethod
 import org.apache.isis.core.metamodel.facets.object.ignore.jdo.RemoveJdoEnhancementTypesFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.ignore.jdo.RemoveJdoPrefixedMethodsFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.immutable.immutableannot.CopyImmutableFacetOntoMembersFactory;
-import org.apache.isis.core.metamodel.facets.object.membergroups.annotprop.MemberGroupLayoutFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacetForMixinAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.navparent.annotation.NavigableParentAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.classname.ObjectSpecIdFacetDerivedFromClassNameFactory;
@@ -167,8 +168,6 @@ import org.apache.isis.core.metamodel.progmodel.ProgrammingModelAbstract;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelPlugin;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelPlugin.FacetFactoryCategory;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelPlugin.FactoryCollector;
-
-import com.google.common.collect.Lists;
 
 public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract {
 
@@ -262,10 +261,7 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(new ValidateObjectFacetMethodFactory());
         addFactory(new ObjectValidPropertiesFacetImplFactory());
 
-
         addFactory(new MemberOrderFacetFactory());
-
-        addFactory(new MemberGroupLayoutFacetFactory());
 
         addFactory(new BookmarkPolicyFacetFallbackFactory());
         addFactory(new HomePageFacetAnnotationFactory());

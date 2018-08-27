@@ -38,7 +38,6 @@ import com.google.common.collect.Sets;
 
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.MemberGroupLayout;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.layout.component.ActionLayoutData;
@@ -57,7 +56,6 @@ import org.apache.isis.applib.layout.grid.bootstrap3.Size;
 import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacet;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.core.metamodel.facets.members.order.annotprop.MemberOrderFacetAnnotation;
-import org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupLayoutFacet;
 import org.apache.isis.core.metamodel.services.grid.GridSystemServiceAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
@@ -100,27 +98,29 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
         final BS3Row propsRow = new BS3Row();
         bs3Grid.getRows().add(propsRow);
 
-        final MemberGroupLayoutFacet memberGroupLayoutFacet =
-                objectSpec.getFacet(MemberGroupLayoutFacet.class);
-        if(memberGroupLayoutFacet != null) {
-            // if have @MemberGroupLayout (or equally, a .layout.json file)
-            final MemberGroupLayout.ColumnSpans columnSpans = memberGroupLayoutFacet.getColumnSpans();
-            addFieldSetsToColumn(propsRow, columnSpans.getLeft(), memberGroupLayoutFacet.getLeft(), true);
-            addFieldSetsToColumn(propsRow, columnSpans.getMiddle(), memberGroupLayoutFacet.getMiddle(), false);
-            addFieldSetsToColumn(propsRow, columnSpans.getRight(), memberGroupLayoutFacet.getRight(), false);
-
-            final BS3Col col = new BS3Col();
-            final int collectionSpan = columnSpans.getCollections();
-            col.setUnreferencedCollections(true);
-            col.setSpan(collectionSpan > 0? collectionSpan: 12);
-            propsRow.getCols().add(col);
-
-            // will already be sorted per @MemberOrder
-            final List<OneToManyAssociation> collections = objectSpec.getCollections(Contributed.INCLUDED);
-            for (OneToManyAssociation collection : collections) {
-                col.getCollections().add(new CollectionLayoutData(collection.getId()));
-            }
-        } else {
+//TODO [ahuber] marked for removal (breaks legacy functionality) ...
+//        final MemberGroupLayoutFacet memberGroupLayoutFacet =
+//                objectSpec.getFacet(MemberGroupLayoutFacet.class);
+//        if(memberGroupLayoutFacet != null) {
+//            // if have @MemberGroupLayout (or equally, a .layout.json file)
+//            final MemberGroupLayout.ColumnSpans columnSpans = memberGroupLayoutFacet.getColumnSpans();
+//            addFieldSetsToColumn(propsRow, columnSpans.getLeft(), memberGroupLayoutFacet.getLeft(), true);
+//            addFieldSetsToColumn(propsRow, columnSpans.getMiddle(), memberGroupLayoutFacet.getMiddle(), false);
+//            addFieldSetsToColumn(propsRow, columnSpans.getRight(), memberGroupLayoutFacet.getRight(), false);
+//
+//            final BS3Col col = new BS3Col();
+//            final int collectionSpan = columnSpans.getCollections();
+//            col.setUnreferencedCollections(true);
+//            col.setSpan(collectionSpan > 0? collectionSpan: 12);
+//            propsRow.getCols().add(col);
+//
+//            // will already be sorted per @MemberOrder
+//            final List<OneToManyAssociation> collections = objectSpec.getCollections(Contributed.INCLUDED);
+//            for (OneToManyAssociation collection : collections) {
+//                col.getCollections().add(new CollectionLayoutData(collection.getId()));
+//            }
+//        } else 
+        {
 
             // if no layout hints other than @MemberOrder
             addFieldSetsToColumn(propsRow, 4, Arrays.asList("General"), true);
