@@ -45,11 +45,6 @@
     <script src='lib/marked.js' type='text/javascript'></script>
     <script src='lib/swagger-oauth.js' type='text/javascript'></script>
 
-    <!-- Some basic translations -->
-    <!-- <script src='lang/translator.js' type='text/javascript'></script> -->
-    <!-- <script src='lang/ru.js' type='text/javascript'></script> -->
-    <!-- <script src='lang/en.js' type='text/javascript'></script> -->
-
     <script type="text/javascript">
     $(function () {
       var url = document.getElementById("input_baseUrl").selectedOptions[0].value;
@@ -94,10 +89,6 @@
         showOperationIds: false
       });
 
-
-      // don't automatically load; let the developer change the user/password if required
-      // window.swaggerUi.load();
-
       function log() {
         if ('console' in window) {
           console.log.apply(console, arguments);
@@ -105,14 +96,6 @@
       }
 
       function addApiKeyAuthorization(){
-        /*
-        var key = encodeURIComponent($('#input_apiKey')[0].value);
-        if(key && key.trim() != "") {
-            var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization("api_key", key, "query");
-            window.swaggerUi.api.clientAuthorizations.add("api_key", apiKeyAuth);
-            log("added key " + key);
-        }
-        */
         var username = document.getElementById("input_user").value;
         var password = document.getElementById("input_pass").value;
         if(username && username.trim() != "" && password && password.trim() != "") {
@@ -124,15 +107,6 @@
         }
       }
 
-      // if you have an apiKey you would like to pre-populate on the page for demonstration purposes...
-        /*
-      $('#input_apiKey').change(addApiKeyAuthorization);
-      */
-
-      /*
-        var apiKey = "myApiKeyXXXX123456789";
-        $('#input_apiKey').val(apiKey);
-      */
       $('#input_user').val("sven");
       $('#input_pass').val("pass");
 
@@ -152,15 +126,15 @@
 				API Select:
 
                 <select id="input_baseUrl" name="baseUrl" style="height: 26px;">
-                    <option id="private" label="private" value="../../${restful}/swagger/private">private</option>
-                    <option id="public" label="public" value="../../${restful}/swagger/public">public</option>
-                    <option id="prototyping" label="prototyping" value="../../${restful}/swagger/prototyping">prototyping</option>
+                    <option id="private" label="private" value="${restful-base}/swagger/private">private</option>
+                    <option id="public" label="public" value="${restful-base}/swagger/public">public</option>
+                    <option id="prototyping" label="prototyping" value="${restful-base}/swagger/prototyping">prototyping</option>
                 </select>
             </div>
             <div class='input' style="display:none;"><input placeholder="api_key" id="input_apiKey" name="apiKey" type="text"/></div>
             <div class='input'><a id="explore" href="#" data-sw-translate>Reload</a></div>
             
-            <a href="../${restful}/" target="blank" title="You might need to login.">Direct API Link</a>
+            <a href="${restful-base}/" target="blank" title="You might need to login.">Direct API Link</a>
             
         </form>
 

@@ -62,8 +62,9 @@ public class ResourceServlet extends HttpServlet {
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         
-        final String restfulPath = ifPresentElse(_Resource.getRestfulPathIfAny(), "restful"); 
-        templateVariables = new ResourceServlet_HtmlTemplateVariables(pair("restful", restfulPath));
+        final String restfulPath = ifPresentElse(_Resource.getRestfulPathIfAny(), "restful");
+        final String restfulBase = _Resource.prependContextPathIfPresent(restfulPath);
+        templateVariables = new ResourceServlet_HtmlTemplateVariables(pair("restful-base", restfulBase));
     }
 
     @Override
