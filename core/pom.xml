@@ -46,7 +46,7 @@
     <inceptionYear>2010</inceptionYear>
 
     <properties>
-        <revision>2.0.0-M2</revision>
+        <revision>2.0.0-M2-SNAPSHOT</revision>
 
         <jar-plugin.automaticModuleName>org.apache.isis.core</jar-plugin.automaticModuleName>
         <git-plugin.propertiesDir>org/apache/isis/core</git-plugin.propertiesDir>
