@@ -401,13 +401,15 @@
                 <enabled>true</enabled>
             </snapshots>
         </repository>
+        
+        <!--
         <repository>
             <id>datanucleus-nightly</id>
             <url>http://www.datanucleus.org/downloads/maven2-nightly/</url>
             <snapshots>
               <enabled>true</enabled>
             </snapshots>
-        </repository>
+        </repository>-->
 
         <!-- required for RestEasy -->
         <repository>
@@ -2224,11 +2226,10 @@ ${license.additional-notes}
                         <!-- goal:testCompile binds to phase:test-compile -->
                     </plugin>
     
-                    <!-- pre-release, requires java 9+ -->
                     <plugin>
                         <groupId>org.jvnet.jaxb2.maven2</groupId>
                         <artifactId>maven-jaxb2-plugin</artifactId>
-                        <version>0.14.0-SNAPSHOT</version>
+                        <version>0.14.0</version>
                         <configuration>
                             <removeOldOutput>true</removeOldOutput>
                             <episode>true</episode>
