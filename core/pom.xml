@@ -145,7 +145,6 @@
         <jackson.version>2.8.0</jackson.version>
         <gson.version>2.7</gson.version>
         <swagger-core.version>1.5.9</swagger-core.version>
-        <webjars-servlet-2.x.version>1.5</webjars-servlet-2.x.version>
 
         <hsqldb.version>2.3.4</hsqldb.version>
         <log4jdbc-remix.version>0.2.7</log4jdbc-remix.version>
@@ -2122,12 +2121,6 @@ ${license.additional-notes}
                         <artifactId>commons-lang3</artifactId>
                     </exclusion>
                 </exclusions>
-            </dependency>
-
-            <dependency>
-                <groupId>org.webjars</groupId>
-                <artifactId>webjars-servlet-2.x</artifactId>
-                <version>${webjars-servlet-2.x.version}</version>
             </dependency>
 
         </dependencies>
