@@ -24,11 +24,13 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.annotation.WebFilter;
 
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 
+@WebFilter(servletNames= {"RestfulObjectsRestEasyDispatcher"})
 public class IsisTransactionFilterForRestfulObjects implements Filter {
 
     @Override

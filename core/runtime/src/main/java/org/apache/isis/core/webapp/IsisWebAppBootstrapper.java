@@ -112,7 +112,7 @@ public class IsisWebAppBootstrapper implements ServletContextListener {
     }
 
     /**
-     * publis so can also be used by Wicket viewer.
+     * public so can also be used by Wicket viewer.
      */
     public static IsisConfigurationBuilder obtainConfigBuilderFrom(final ServletContext servletContext) {
         final IsisConfigurationBuilder isisConfigurationBuilder = lookupIsisConfigurationBuilder(servletContext);
