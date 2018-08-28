@@ -108,10 +108,15 @@ class Generation {
 
     Swagger generate() {
         this.swagger = new Swagger();
+        
+        final String swaggerVersionInfo = 
+                String.format("swagger.io (%s)", 
+                        Swagger.class.getPackage().getImplementationVersion()
+                        );
 
         swagger.basePath(basePath);
         swagger.info(new Info()
-                .version("0.0.0") // TODO: provide some way of passing the name, version etc (some sort of SPI service?)
+                .version(swaggerVersionInfo)
                 .title(visibility.name() + " API")
                 );
 
