@@ -20,6 +20,7 @@
 package org.apache.isis.core.webapp.content;
 
 import static org.apache.isis.commons.internal.base._Strings.pair;
+import static org.apache.isis.commons.internal.base._Strings.prefix;
 import static org.apache.isis.commons.internal.base._With.ifPresentElse;
 import static org.apache.isis.commons.internal.base._With.ifPresentElseGet;
 
@@ -51,20 +52,22 @@ import org.apache.isis.core.commons.lang.StringExtensions;
 @WebServlet(
         urlPatterns = { 
                 "*.css", "*.png", "*.jpg", "*.jpeg", "*.gif", "*.svg", "*.js", "*.html", "*.swf" }
-)
+        )
 public class ResourceServlet extends HttpServlet {
 
     private static final Logger LOG = LoggerFactory.getLogger(ResourceServlet.class);
     private static final long serialVersionUID = 1L;
     private ResourceServlet_HtmlTemplateVariables templateVariables;
-    
+
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        
+
         final String restfulPath = ifPresentElse(_Resource.getRestfulPathIfAny(), "restful");
         final String restfulBase = _Resource.prependContextPathIfPresent(restfulPath);
-        templateVariables = new ResourceServlet_HtmlTemplateVariables(pair("restful-base", restfulBase));
+        templateVariables = new ResourceServlet_HtmlTemplateVariables(
+                pair("restful-base", prefix(restfulBase, "/"))
+                );
     }
 
     @Override
@@ -76,7 +79,7 @@ public class ResourceServlet extends HttpServlet {
     protected void doGet(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
         processRequest(request, response);
     }
-    
+
     // -- HELPER
 
     private void processRequest(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
@@ -86,10 +89,10 @@ public class ResourceServlet extends HttpServlet {
         final InputStream is = ifPresentElseGet(
                 ResourceUtil.getResourceAsStream(request), // try to load from file-system first 
                 ()->ResourceUtil.getResourceAsStream(servletPath)); // otherwise, try to load from class-path  
-        
+
         if (is != null) {
             LOG.debug("request: {} loaded from classpath", servletPath );
-            
+
             try {
                 writeContentType(request, response);
                 processContent(is, request, response);
@@ -107,19 +110,19 @@ public class ResourceServlet extends HttpServlet {
             final HttpServletRequest request, 
             final HttpServletResponse response) 
                     throws IOException {
-        
+
         if(request.getServletPath().endsWith(".template.html")) {
-            
+
             final String templateContent = _Strings.ofBytes(_Bytes.of(is), StandardCharsets.UTF_8);
             final String htmlContent = templateVariables.applyTo(templateContent);
-                        
+
             response.getWriter().append(htmlContent);
-            
+
         } else {
-            
+
             // direct copy
             InputStreamExtensions.copyTo(is, response.getOutputStream());
-            
+
         }
     }
 
