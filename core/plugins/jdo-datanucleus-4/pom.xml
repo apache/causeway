@@ -79,38 +79,31 @@
 			<scope>compile</scope>
 		</dependency>
 
-		<!-- DataNucleus runtime dependencies -->
-		<!-- for why we use scope=runtime see 
-			https://stackoverflow.com/questions/877949/conflicting-versions-of-datanucleus-enhancer-in-a-maven-google-app-engine-projec -->
+		<!-- DataNucleus -->
 		<dependency>
 			<groupId>org.datanucleus</groupId>
 			<artifactId>datanucleus-core</artifactId>
 			<version>${dn4-core.version}</version>
-			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.datanucleus</groupId>
 			<artifactId>datanucleus-api-jdo</artifactId>
 			<version>${dn4-api-jdo.version}</version>
-			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.datanucleus</groupId>
 			<artifactId>datanucleus-jdo-query</artifactId>
 			<version>${dn4-jdo-query.version}</version>
-			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.datanucleus</groupId>
 			<artifactId>datanucleus-rdbms</artifactId>
 			<version>${dn4-rdbms.version}</version>
-			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.datanucleus</groupId>
 			<artifactId>datanucleus-jodatime</artifactId>
 			<version>${dn4-jodatime.version}</version>
-			<scope>runtime</scope>
 		</dependency>
 
 		<!-- Core Runtime -->
