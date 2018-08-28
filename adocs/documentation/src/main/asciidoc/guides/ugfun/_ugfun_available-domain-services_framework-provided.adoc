@@ -35,7 +35,7 @@ Commands/Interactions/Background/Auditing/Publishing/Profiling:
 * xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditerService[`AuditerService`] (SPI)
 * xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_BackgroundService[`BackgroundService`]
 * xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_BackgroundCommandService[`BackgroundCommandService`] (SPI)
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublishererService`] (SPI)
+* xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`] (SPI)
 * xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-api_MetricsService[`MetricsService`]
 
 
