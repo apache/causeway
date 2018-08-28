@@ -24,6 +24,7 @@ import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
 import static org.apache.isis.commons.internal.base._With.requires;
 
 import java.nio.charset.Charset;
+import java.util.Map;
 import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.function.UnaryOperator;
@@ -61,6 +62,14 @@ public final class _Strings {
      * (a duplicate of in {@link _Constants.emptyStringArray} )
      */
     public final static String[] emptyArray = new String[0];
+    
+    // -- PAIR OF STRINGS
+    
+    public static interface KeyValuePair extends Map.Entry<String, String> { }
+    
+    public static KeyValuePair pair(final String key, final String value){
+        return _Strings_KeyValuePair.of(key, value);
+    }
 
     // -- BASIC PREDICATES
 

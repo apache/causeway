@@ -152,15 +152,15 @@
 				API Select:
 
                 <select id="input_baseUrl" name="baseUrl" style="height: 26px;">
-                    <option id="private" label="private" value="../../restful/swagger/private">private</option>
-                    <option id="public" label="public" value="../../restful/swagger/public">public</option>
-                    <option id="prototyping" label="prototyping" value="../../restful/swagger/prototyping">prototyping</option>
+                    <option id="private" label="private" value="../../${restful}/swagger/private">private</option>
+                    <option id="public" label="public" value="../../${restful}/swagger/public">public</option>
+                    <option id="prototyping" label="prototyping" value="../../${restful}/swagger/prototyping">prototyping</option>
                 </select>
             </div>
             <div class='input' style="display:none;"><input placeholder="api_key" id="input_apiKey" name="apiKey" type="text"/></div>
             <div class='input'><a id="explore" href="#" data-sw-translate>Reload</a></div>
             
-            <a href="../restful/" target="blank" title="You might need to login.">Direct API Link</a>
+            <a href="../${restful}/" target="blank" title="You might need to login.">Direct API Link</a>
             
         </form>
 

@@ -33,67 +33,18 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.annotation.WebFilter;
+import javax.servlet.annotation.WebInitParam;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.isis.commons.internal.exceptions._Exceptions.FluentException;
 
-/**
- * Adapted from {@link http
- * ://www.digitalsanctuary.com/tech-blog/java/jboss/setting
- * -cache-headers-from-jboss.html}
- *
- * <p>
- * Usage:
- *
- * <pre>
- * &lt;filter>
- *   &lt;filter-name>ResourceCachingFilter&lt;/filter-name>
- *   &lt;filter-class>org.apache.isis.core.webapp.content.ResourceCachingFilter&lt;/filter-class>
- *   &lt;init-param>
- *     &lt;param-name>CacheTime&lt;/param-name>
- *     &lt;param-value>86400&lt;/param-value>
- *   &lt;/init-param>
- * &lt;/filter>
- * ...
- * &lt;filter-mapping>
- *   &lt;filter-name>ResourceCachingFilter&lt;/filter-name>
- *   &lt;url-pattern>*.css&lt;/url-pattern>
- * &lt;/filter-mapping>
- * &lt;filter-mapping>
- *   &lt;filter-name>ResourceCachingFilter&lt;/filter-name>
- *   &lt;url-pattern>*.png&lt;/url-pattern>
- * &lt;/filter-mapping>
- * &lt;filter-mapping>
- *   &lt;filter-name>ResourceCachingFilter&lt;/filter-name>
- *   &lt;url-pattern>*.jpg&lt;/url-pattern>
- * &lt;/filter-mapping>
- * &lt;filter-mapping>
- *   &lt;filter-name>ResourceCachingFilter&lt;/filter-name>
- *   &lt;url-pattern>*.jpeg&lt;/url-pattern>
- * &lt;/filter-mapping>
- * &lt;filter-mapping>
- *   &lt;filter-name>ResourceCachingFilter&lt;/filter-name>
- *   &lt;url-pattern>*.gif&lt;/url-pattern>
- * &lt;/filter-mapping>
- * &lt;filter-mapping>
- *   &lt;filter-name>ResourceCachingFilter&lt;/filter-name>
- *   &lt;url-pattern>*.svg&lt;/url-pattern>
- * &lt;/filter-mapping>
- * &lt;filter-mapping>
- *   &lt;filter-name>ResourceCachingFilter&lt;/filter-name>
- *   &lt;url-pattern>*.js&lt;/url-pattern>
- * &lt;/filter-mapping>
- * &lt;filter-mapping>
- *   &lt;filter-name>ResourceCachingFilter&lt;/filter-name>
- *   &lt;url-pattern>*.html&lt;/url-pattern>
- * &lt;/filter-mapping>
- * &lt;filter-mapping>
- *   &lt;filter-name>ResourceCachingFilter&lt;/filter-name>
- *   &lt;url-pattern>*.swf&lt;/url-pattern>
- * &lt;/filter-mapping>
- * </pre>
- */
+@WebFilter(
+        initParams = { @WebInitParam(name = "CacheTime", value = "86400") }, 
+        urlPatterns = { 
+                "*.css", "*.png", "*.jpg", "*.jpeg", "*.gif", "*.svg", "*.js", "*.html", "*.swf" }
+)
 public class ResourceCachingFilter implements Filter {
 
     /**

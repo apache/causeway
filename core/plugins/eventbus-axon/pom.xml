@@ -59,6 +59,10 @@
 			<groupId>org.axonframework</groupId>
 			<artifactId>axon-core</artifactId>
 			<version>${axon-core.version}</version>
+			<!-- <classifier>ee-compat</classifier> 
+			seems not available yet
+			see https://github.com/AxonFramework/AxonFramework/issues/534
+			-->
 		</dependency>
 
 		<dependency>

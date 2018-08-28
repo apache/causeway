@@ -19,13 +19,14 @@
 
 package org.apache.isis.core.commons.lang;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.isis.commons.internal.context._Context;
 
-/**
- * Adapted from Ibatis Common, now with some additional guava stuff.
- */
 public class ResourceUtil {
 
     private ResourceUtil(){}
@@ -59,6 +60,22 @@ public class ResourceUtil {
         try {
             return ClassLoader.getSystemResourceAsStream(resource);
         } catch (final NullPointerException ignore) {
+            return null;
+        }
+    }
+    
+    /**
+     * @param request
+     * @return real-path resource from file-system, if any
+     */
+    public static InputStream getResourceAsStream(final HttpServletRequest request) {
+        final String realPath = request.getSession().getServletContext().getRealPath(request.getServletPath());
+        if (realPath == null) {
+            return null;
+        }
+        try {
+            return new FileInputStream(realPath);
+        } catch (final FileNotFoundException e) {
             return null;
         }
     }

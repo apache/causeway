@@ -19,12 +19,17 @@
 
 package org.apache.isis.core.webapp.content;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import static org.apache.isis.commons.internal.base._Strings.pair;
+import static org.apache.isis.commons.internal.base._With.ifPresentElse;
+import static org.apache.isis.commons.internal.base._With.ifPresentElseGet;
+
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -32,14 +37,34 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.isis.commons.internal.base._Bytes;
+import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.resources._Resource;
 import org.apache.isis.core.commons.lang.InputStreamExtensions;
 import org.apache.isis.core.commons.lang.ResourceUtil;
 import org.apache.isis.core.commons.lang.StringExtensions;
 
+/**
+ * Serves static web-resources by class-path or file-system lookup.
+ * Also handles HTML-templates, where template's placeholders get replaced by their values.
+ */
+@WebServlet(
+        urlPatterns = { 
+                "*.css", "*.png", "*.jpg", "*.jpeg", "*.gif", "*.svg", "*.js", "*.html", "*.swf" }
+)
 public class ResourceServlet extends HttpServlet {
 
     private static final Logger LOG = LoggerFactory.getLogger(ResourceServlet.class);
     private static final long serialVersionUID = 1L;
+    private ResourceServlet_HtmlTemplateVariables templateVariables;
+    
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+        
+        final String restfulPath = ifPresentElse(_Resource.getRestfulPathIfAny(), "restful"); 
+        templateVariables = new ResourceServlet_HtmlTemplateVariables(pair("restful", restfulPath));
+    }
 
     @Override
     protected void doPost(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
@@ -50,32 +75,51 @@ public class ResourceServlet extends HttpServlet {
     protected void doGet(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
         processRequest(request, response);
     }
+    
+    // -- HELPER
 
     private void processRequest(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
         final String servletPath = StringExtensions.stripLeadingSlash(request.getServletPath());
         LOG.debug("request: {}", servletPath);
 
-        // try to load from filesystem
-        final InputStream is2 = getRealPath(request);
-        if (is2 != null) {
-            LOG.debug("request: {} loaded from filesystem", servletPath);
-            writeContentType(request, response);
-            InputStreamExtensions.copyTo(is2, response.getOutputStream());
-            is2.close();
-            return;
-        }
-
-        // otherwise, try to load from classpath
-        final InputStream is = ResourceUtil.getResourceAsStream(servletPath);
+        final InputStream is = ifPresentElseGet(
+                ResourceUtil.getResourceAsStream(request), // try to load from file-system first 
+                ()->ResourceUtil.getResourceAsStream(servletPath)); // otherwise, try to load from class-path  
+        
         if (is != null) {
             LOG.debug("request: {} loaded from classpath", servletPath );
-            writeContentType(request, response);
-            InputStreamExtensions.copyTo(is, response.getOutputStream());
-            is.close();
-            return;
+            
+            try {
+                writeContentType(request, response);
+                processContent(is, request, response);
+                return;
+            } finally {
+                is.close();    
+            }
         }
 
         LOG.warn("failed to load resource from classpath or file system: {}", servletPath);
+    }
+
+    private void processContent(
+            final InputStream is, 
+            final HttpServletRequest request, 
+            final HttpServletResponse response) 
+                    throws IOException {
+        
+        if(request.getServletPath().endsWith(".template.html")) {
+            
+            final String templateContent = _Strings.ofBytes(_Bytes.of(is), StandardCharsets.UTF_8);
+            final String htmlContent = templateVariables.applyTo(templateContent);
+                        
+            response.getWriter().append(htmlContent);
+            
+        } else {
+            
+            // direct copy
+            InputStreamExtensions.copyTo(is, response.getOutputStream());
+            
+        }
     }
 
     private static void writeContentType(final HttpServletRequest request, final HttpServletResponse response) {
@@ -108,15 +152,4 @@ public class ResourceServlet extends HttpServlet {
         return null;
     }
 
-    private FileInputStream getRealPath(final HttpServletRequest request) {
-        final String realPath = request.getSession().getServletContext().getRealPath(request.getServletPath());
-        if (realPath == null) {
-            return null;
-        }
-        try {
-            return new FileInputStream(realPath);
-        } catch (final FileNotFoundException e) {
-            return null;
-        }
-    }
 }
