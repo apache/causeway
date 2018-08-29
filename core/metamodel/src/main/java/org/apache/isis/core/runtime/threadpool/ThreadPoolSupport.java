@@ -26,11 +26,13 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.RejectedExecutionHandler;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import com.google.common.base.Function;
+import com.google.common.collect.FluentIterable;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
 import org.slf4j.Logger;
@@ -40,38 +42,32 @@ public final class ThreadPoolSupport {
 
     private static final Logger LOG = LoggerFactory.getLogger(ThreadPoolSupport.class);
 
-    public static ThreadGroup group;
+    private final static int KEEP_ALIVE_TIME_SECS = 5;
+    private final static int QUEUE_CAPACITY = 5000;
 
-    public static ThreadPoolExecutor executor   ;
+    private static final ThreadGroup group;
+    private static final BlockingQueue<Runnable> workQueue;
+    private static final ThreadPoolExecutor executor   ;
 
     static {
         group = new ThreadGroup(ThreadPoolSupport.class.getName());
+        workQueue = new LinkedBlockingQueue<>(QUEUE_CAPACITY);
 
         final int corePoolSize = Runtime.getRuntime().availableProcessors();
         final int maximumPoolSize = Runtime.getRuntime().availableProcessors();
-        final int keepAliveTimeSecs = 5;
-
-        final int queueCapacity = 200;
-        final BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<>(queueCapacity);
 
         executor = new ThreadPoolExecutor(
                 corePoolSize,
                 maximumPoolSize,
-                keepAliveTimeSecs, TimeUnit.SECONDS,
+                KEEP_ALIVE_TIME_SECS,
+                TimeUnit.SECONDS,
                 workQueue,
                 new ThreadFactory() {
                     @Override
                     public Thread newThread(final Runnable r) {
                         return new Thread(group, r);
                     }
-                }, new RejectedExecutionHandler() {
-            @Override
-            public void rejectedExecution(final Runnable r, final ThreadPoolExecutor executor) {
-                int i;
-                i=1;
-
-            }
-        });
+                });
     }
 
     public static List<Object> join(final List<Future<Object>> futures) {
@@ -95,7 +91,9 @@ public final class ThreadPoolSupport {
             return returnValues;
         } finally {
             final long t1 = System.currentTimeMillis();
-            LOG.info("join'ing {} tasks: waited {} milliseconds ", futures.size(), (t1-t0));
+            if(LOG.isInfoEnabled()) {
+                LOG.info("join'ing {} tasks: waited {} milliseconds ", futures.size(), (t1-t0));
+            }
         }
     }
 
@@ -133,8 +131,39 @@ public final class ThreadPoolSupport {
     }
 
     public static List<Future<Object>> invokeAll(final List<Callable<Object>> callables) {
+        final long queuedAt = System.currentTimeMillis();
         try {
-            return executor.invokeAll(callables);
+            ImmutableList<Callable<Object>> timedCallables =
+                    FluentIterable.from(callables).transform(
+                        new Function<Callable<Object>, Callable<Object>>() {
+                            @Override
+                            public Callable<Object> apply(final Callable<Object> callable) {
+                                return new Callable<Object>() {
+                                    @Override
+                                    public Object call() throws Exception {
+
+                                        final long startedAt = System.currentTimeMillis();
+                                        if(LOG.isDebugEnabled()) {
+                                            LOG.debug("START: workQueue.size: {}, waited for: {}ms, {}",
+                                                    workQueue.size(),
+                                                    startedAt - queuedAt,
+                                                    callable.toString());
+                                        }
+                                        try {
+                                            return callable.call();
+                                        } finally {
+                                            final long completedAt = System.currentTimeMillis();
+                                            if(LOG.isDebugEnabled()) {
+                                                LOG.debug("END: completed in: {}ms, {}",
+                                                        completedAt - startedAt,
+                                                        callable.toString());
+                                            }
+                                        }
+                                    }
+                                };
+                            }
+                        }).toList();
+            return executor.invokeAll(timedCallables);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }

@@ -204,6 +204,11 @@ public class SpecificationLoader implements ApplicationScopedComponent {
                     introspectIfRequired(specification);
                     return null;
                 }
+                public String toString() {
+                    return String.format(
+                            "introspectIfRequired(\"%s\")",
+                            specification.getFullIdentifier());
+                }
             };
             callables.add(callable);
         }

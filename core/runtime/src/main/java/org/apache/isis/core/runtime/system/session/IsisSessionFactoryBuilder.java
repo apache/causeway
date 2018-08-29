@@ -55,6 +55,9 @@ import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory
 import org.apache.isis.core.runtime.systemusinginstallers.IsisComponentProvider;
 import org.apache.isis.core.runtime.systemusinginstallers.IsisComponentProviderDefault2;
 import org.apache.isis.core.runtime.threadpool.ThreadPoolSupport;
+import org.apache.isis.schema.utils.ChangesDtoUtils;
+import org.apache.isis.schema.utils.CommandDtoUtils;
+import org.apache.isis.schema.utils.InteractionDtoUtils;
 
 public class IsisSessionFactoryBuilder {
 
@@ -212,13 +215,48 @@ public class IsisSessionFactoryBuilder {
 
                             return null;
                         }
+                        public String toString() {
+                            return "SpecificationLoader#init()";
+                        }
+
                     },
                     new Callable<Object>() {
                         @Override public Object call() {
                             persistenceSessionFactory.init(configuration);
                             return null;
                         }
+                        public String toString() {
+                            return "persistenceSessionFactory#init(...)";
+                        }
+                    },
+                    new Callable<Object>() {
+                        @Override public Object call() throws Exception {
+                            ChangesDtoUtils.init();
+                            return null;
+                        }
+                        public String toString() {
+                            return "ChangesDtoUtils.init()";
+                        }
+                    },
+                    new Callable<Object>() {
+                        @Override public Object call() throws Exception {
+                            InteractionDtoUtils.init();
+                            return null;
+                        }
+                        public String toString() {
+                            return "InteractionDtoUtils.init()";
+                        }
+                    },
+                    new Callable<Object>() {
+                        @Override public Object call() throws Exception {
+                            CommandDtoUtils.init();
+                            return null;
+                        }
+                        public String toString() {
+                            return "CommandDtoUtils.init()";
+                        }
                     }
+
             );
 
             ThreadPoolSupport.joinGatherFailures(futures);

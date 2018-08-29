@@ -91,9 +91,6 @@ import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.threadpool.ThreadPoolSupport;
 import org.apache.isis.core.webapp.IsisWebAppBootstrapper;
 import org.apache.isis.core.webapp.WebAppConstants;
-import org.apache.isis.schema.utils.ChangesDtoUtils;
-import org.apache.isis.schema.utils.CommandDtoUtils;
-import org.apache.isis.schema.utils.InteractionDtoUtils;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettingsAccessor;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
@@ -448,12 +445,18 @@ public class IsisWicketApplication
                         configureWebJars();
                         return null;
                     }
+                    public String toString() {
+                        return "configureWebJars()";
+                    }
                 },
                 new Callable<Object>() {
                     @Override
                     public Object call() throws Exception {
                         configureWicketBootstrap();
                         return null;
+                    }
+                    public String toString() {
+                        return "configureWicketBootstrap()";
                     }
                 },
                 new Callable<Object>() {
@@ -462,23 +465,8 @@ public class IsisWicketApplication
                         configureWicketSelect2();
                         return null;
                     }
-                },
-                new Callable<Object>() {
-                    @Override public Object call() throws Exception {
-                        ChangesDtoUtils.init();
-                        return null;
-                    }
-                },
-                new Callable<Object>() {
-                    @Override public Object call() throws Exception {
-                        InteractionDtoUtils.init();
-                        return null;
-                    }
-                },
-                new Callable<Object>() {
-                    @Override public Object call() throws Exception {
-                        CommandDtoUtils.init();
-                        return null;
+                    public String toString() {
+                        return "configureWicketSelect2()";
                     }
                 }
         );
