@@ -132,7 +132,7 @@ public final class _Reflect {
      */
     public static Stream<Method> streamAllMethods(@Nullable Class<?> type) {
         return streamTypeHierarchy(type)
-                .filter(Object.class::equals) // do not process Object class.
+                .filter(t->!t.equals(Object.class)) // do not process Object class.
                 .flatMap(_Reflect::streamMethods);
     }
 
