@@ -1,0 +1,360 @@
+
+for 2.0.0-M2
+
+
+remove:
+- @MemberGroupLayout
+- contributed domain services (use mixins instead)
+- org.apache.isis.applib.clock
+  - Clock singleton
+- SwitchUserService
+- AbstractFixtureSusa
+- org.apache.isis.core.runtime.services.eventbus.adapter.EventBusImplementationForGuava
+
+- org.apache.isis.applib.services.memento  (19 usages found)
+  - MementoService.java - remove entire service (previously to support view models, but now @ViewModel and JAXB)
+
+to change:
+- automatically wrap domain services (perhaps behind a config property)
+- automatically infer \@Programmatic for all \@DomainService(nature=DOMAIN)
+
+
+support for legacy implementation of UrlEncodingService
+- as an automatic fallback; has changed to use with compression by default.
+
+inline paraname8 from incode platform
+
+remove isis-core-wicket-applib 
+- contains only WicketDeveloperUtilitiesService, which is hidden anyway and seems to not be required.
+
+update .xsd for layout, make render optional and deprecated.    
+   
+- deprecate FixtureScripts service with view to removing from applib ... the framework provides an implementation by default
+- get rid of automatic initialization of fields (perhaps behind a config property)
+- deprecate the Apache Isis' DateTime classes for removal in the future) ... and probably all of the custom value types, subclasses of Magnitude
+- merge metamodel and runtime
+- remove *Installer
+
+move ContentMappingServiceForCommandDto and ContentMappingServiceForCommandsDto from applib.conmap to applib.services.conmap.commands
+
+IsisContext:
+- remove this, causes a stack trace...
+
+    // -- HELPER
+
+    /**
+     * TODO [andi-huber] not sure if required, initial idea was to force log4j
+     * re-configuration on an undeploy/deploy cycle
+     */
+    static void resetLogging() {
+        try {
+            org.apache.log4j.BasicConfigurator.resetConfiguration();
+            org.apache.log4j.Logger.getRootLogger().removeAllAppenders();
+        } catch (Exception e) {
+            // at least we tried
+        }
+    }
+
+TitleFacetViaAnnotation may not work if on a field, due to DN lazy loading.
+
+
+remove AbstractService from applib.
+remove AbstractViewModel from applib.
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+the stuff below here was working notes for 2.0.0-M1, not necessarily up to date.
+
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+1.16.2
+- flag to make @Action mandatory, @Programmatic the default
+
+
+OTHER STUFF:
+
+PublishingServiceInternalDefault
+
+not thread-safe:
+
+    boolean suppress;
+
+    @Programmatic
+    @Override
+    public <T> T withPublishingSuppressed(final Block<T> block) {
+        try {
+            suppress = true;
+            return block.exec();
+        } finally {
+            suppress = false;
+        }
+    }
+    
+~~~~~~~~
+
+
+
+
+
+
+
+link:https://issues.apache.org/jira/browse/ISIS-743[ISIS-743] - @NotPersistable annotation
+
+
+
+
+*************************************************************************
+
+PROPOSE TO RETAIN:
+
+
+Below is the code currently deprecated in the applib, but I propose to retain even in 2.0.0 (on the grounds that a replacement for them is not fully designed):
+org.apache.isis.applib.adapters  - custom value type support
+
+
+org.apache.isis.applib.annotation
+
+    Encodable.java - entire annotation, part of custom value types support
+    Parseable.java - entire annotation, part of custom value types support
+
+
+org.apache.isis.applib.fixtures  - "legacy" fixture support package ... by and large can use FixtureScripts (though not sure if there's feature parity in all cases)
+    AbstractFixture.java
+    AbstractFixtureSusa.java
+    BaseFixture.java
+    CompositeFixture.java
+    DateFixture.java
+    LogonFixture.java
+org.apache.isis.applib.fixtures.switchuser
+    SwitchUserService.java
+    SwitchUserServiceAware.java
+
+
+
+
+org.apache.isis.applib.services.command
+    Command.java  - methods that pertain to the execution of the command and its completion (for that, use Interaction) [suggest we retain for now]
+        getCompletedAt()
+        getException()
+        getResult()
+        getStartedAt()
+        next(String)
+        setCompletedAt(Timestamp)
+        setStartedAt(Timestamp)
+        flushActionDomainEvents()
+        peekActionDomainEvent()
+        popActionDomainEvent()
+        pushActionDomainEvent(ActionDomainEvent<?>)  (
+
+    MemberGroupsLayout.java - retain
+
+
+
+
+*************************************************************************
+
+DEPRECATED:
+
+    deprecate support for contributed services (use mixins instead)
+
+
+DONE (ADDED)
+
+    new support for JSR-303 @Pattern annotation (http://beanvalidation.org/1.0/spec/, chapter 6) ... replaces @RegEx
+
+
+DONE (MOVED)
+
+    org.apache.isis.applib.events        - moved to services.wrapper.events.  (Still useful as provide context for exceptions, for a "transcript" framework).
+    org.apache.isis.applib.events.system - move to fixturescripts.events.
+    org.apache.isis.applib.conmap.ContentMappingService to applib.services.conmap
+
+
+DONE (REMOVED):
+
+    make AppManifest mandatory
+
+    removed support for Xxx.layout.json
+    - "reflector.layoutMetadataReaders" config prop
+
+    removed support for static method prefixes
+    * "notInServiceMenu"
+    * "named"
+    * "plural"
+    * "alwaysHide"
+    * "protect"
+    * "description"
+    * "optional"
+
+    remove explorationXxx() prefix
+
+
+
+
+
+org.apache.isis.applib.clock
+    Clock.java -
+        getTimeAsCalendar()
+        getTimeAsDate()
+
+
+		
+org.apache.isis.applib.services.actinvoc
+    ActionInvocationContext.java -remove unused constructors
+
+
+org.apache.isis.applib.services.audit  (2 usages found)
+    AuditingService3.java - remove entire service, use AuditerService instead
+
+
+org.apache.isis.applib.services.background  (10 usages found)
+    ActionInvocationMemento.java - remove entire class, use InteractionDto and CommandDto are used internally instead
+    BackgroundCommandService.java - remove methods using AIM, instead keep those using CommandDto (in BackgroundCommandService2)
+    BackgroundService.java
+        asActionInvocationMemento(Method, Object, Object[]) - remove this internal API, no longer called by framework
+
+    Remove support for legacy persisted commands (beginning "<memento>...")
+
+
+
+org.apache.isis.applib.services.bookmark  (8 usages found)
+    BookmarkService2.java - pull up its methods into BookmarkService supertype, and delete
+
+
+org.apache.isis.applib.services.classdiscovery
+    ClassDiscoveryService2.java , pull up its methods into ClassDiscoveryService supertype, and delete
+
+
+
+org.apache.isis.applib.services.command.spi
+    CommandService.java
+        startTransaction(Command, UUID) - no longer required to do anything, so remove
+
+
+
+
+org.apache.isis.applib.services.command
+    Command2.java  - methods for working with interaction events (remove with those event types)
+        flushActionInteractionEvents()
+        peekActionInteractionEvent()
+        popActionInteractionEvent()
+        pushActionInteractionEvent(ActionInteractionEvent<?>)
+
+org.apache.isis.applib.services.command
+    Command3 rolled up into Command
+
+
+org.apache.isis.applib.services.eventbus
+    AbstractInteractionEvent.java - remove
+    ActionInteractionEvent.java - remove
+    ActionInvokedEvent.java - remove
+    CollectionAddedToEvent.java - remove
+    CollectionInteractionEvent.java - remove
+    CollectionRemovedFromEvent.java  - remove
+    PropertyChangedEvent.java - remove
+    PropertyInteractionEvent.java - remove
+
+
+org.apache.isis.applib.services.exceprecog
+
+    rolls ExceptionRecognizer2 up into ExceptionRecognizer
+
+
+org.apache.isis.applib.services.metamodel
+    MetaModelService2.java and MetaModelService3 - pulled up to MetaModelService supertype
+
+
+
+
+org.apache.isis.applib.services.publish - remove classes pertaining to original PublishingService (payload factories etc).
+    EventMetadata.java - remove class
+    EventType.java - remove class
+    EventPayload.java - remove class
+    EventPayloadForActionInvocation.java - remove class
+    EventPayloadForObjectChanged.java - remove class
+
+    PublishedEventStateType.java - remove class
+    PublishingService.java - remove domain service interface
+    StatusMessageMessageType.java - remove class
+
+org.apache.isis.applib.services.registry
+    ServiceRegistry2 - roll up to ServiceRegistry
+
+
+
+
+org.apache.isis.applib.services.settings
+    SettingTypes.java - remove, used only by 3rd party code (incode platform settings module)
+
+org.apache.isis.applib.services.wrapper
+    WrapperObject.java
+        save() and wrapped() - remove to avoid name clashes, use __isis_Xxx() methods instead
+
+
+org.apache.isis.applib.snapshot
+    Snapshottable.java - remove, since unused
+
+
+org.apache.isis.applib.value
+    DateTime.java
+        longValue() - use #millisSinceEpoch()
+    Time.java
+        longValue() - use #millisSinceEpoch()
+
+
+org.apache.isis.applib
+
+    DomainObjectContainer.java
+    - titleOf       ... use TitleService#titleOf(...) instead
+    - iconNameOf    ... use TitleService#iconNameOf(...) instead
+    - flush()       ... use TransactionService#flushTransaction instead
+    - informUser, warnUser, raiseError ... use MessageService
+    - getUser                          ... use UserService
+    - getProperty, getPropertyNames    ... use ConfigurationService
+    - injectServicesInto, lookupService, lookupServices   ... use ServicesRegistry
+    - newTransientInstance - use FactoryService#instantiate
+    - newAggregatedInstance - no replacement
+    - newPersistentInstance - no replacement
+    - newInstance - no replacement
+    - mixin - use FactoryService#mixin
+    - isPersistent, persistIfNotAlready, removeIfNotAlready - use RepositoryService instead
+
+
+org.apache.isis.objectstore.jdo.applib.service
+    DomainChangeJdoAbstract.java
+        - deleted, not replacement (used only by incode platform)
+        - https://github.com/apache/isis/blob/rel/isis-1.15.1/core/applib/src/main/java/org/apache/isis/objectstore/jdo/applib/service/DomainChangeJdoAbstract.java
+    JdoColumnLength.java
+        - ditto
+        - https://github.com/apache/isis/blob/rel/isis-1.15.1/core/applib/src/main/java/org/apache/isis/objectstore/jdo/applib/service/JdoColumnLength.java
+    Util.java
+        - ditto
+        - https://github.com/apache/isis/blob/rel/isis-1.15.1/core/applib/src/main/java/org/apache/isis/objectstore/jdo/applib/service/Util.java
+
+
+org.apache.isis.core.objectstore.jdo.applib.annotations - remove package entirely
+    Auditable.java - use @DomainObject(audited=...) instead.
+org.apache.isis.objectstore.jdo.applib
+    Auditable.java interface - use @DomainObject(audited=...) instead.
+
+
+org.apache.isis.objectstore.jdo.applib.service.support
+    IsisJdoSupport.java - replaced by org.apache.isis.applib.services.jdosupport.IsisJdoSupport
+
+
+
+org.apache.isis.viewer.restfulobjects.rendering.service.conmap.ContentMappingService
+    - replaced by non-applib
+
+org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationServiceForRestfulObjects
+    - unused
+
+
+
+ObjectFixtureService + supporting classes
+
+
