@@ -20,9 +20,12 @@ package org.apache.isis.commons.internal.base;
 
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Spliterator;
+import java.util.Spliterators;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -99,13 +102,34 @@ public final class _NullSafe {
      */
     public static <T> Stream<T> stream(final Iterator<T> iterator){
         return iterator!=null
-                ? StreamSupport.stream(toIterable(iterator).spliterator(), false) //not parallel
+                ? StreamSupport.stream(
+                        Spliterators.spliteratorUnknownSize(iterator, Spliterator.ORDERED), 
+                        false) //not parallel
                         : Stream.empty();
     }
-
-    // [ahuber] not public, since one time use of iterator only!
-    private static <T> Iterable<T> toIterable(final Iterator<T> iterator){
-        return ()->iterator;
+    
+    /**
+     * If {@code enumeration} is {@code null} returns the empty stream,
+     * otherwise returns a stream of the enumeration's elements.
+     * @param enumeration
+     * @return non-null stream object
+     */
+    public static <T> Stream<T> stream(final Enumeration<T> enumeration){
+        return enumeration!=null
+                ? stream(toIterator(enumeration))
+                        : Stream.empty();
+    }
+    
+    // [ahuber] not public, since one time use of enumeration only!
+    private static <T> Iterator<T> toIterator(final Enumeration<T> e){
+        return new Iterator<T>() {
+            public T next() {
+                return e.nextElement();
+            }
+            public boolean hasNext() {
+                return e.hasMoreElements();
+            }
+        };
     }
 
 
