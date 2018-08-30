@@ -37,8 +37,7 @@ import org.slf4j.LoggerFactory;
  * Introduced to render web.xml listener configurations obsolete.
  * <p> 
  * Acts as the single application entry-point when running within a Servlet context.
- * Delegates the bootstrapping to appropriate 'bootstrappers' that are discovered 
- * on the class-path. 
+ * Installs WebModules on the ServletContext when discovered on the class-path. 
  * </p>   
  *  
  * @since 2.0.0
@@ -59,7 +58,7 @@ public class IsisWebAppContextListener implements ServletContextListener {
         final ServletContext context = event.getServletContext();
         
         WebModule.discoverWebModules()
-        .filter(module->module.isAvailable(context))
+        .filter(module->module.isAvailable(context)) // filter those WebModules that are applicable
         .forEach(module->addListener(context, module));
         
         activeListeners.forEach(listener->listener.contextInitialized(event));
@@ -73,12 +72,12 @@ public class IsisWebAppContextListener implements ServletContextListener {
     
     // -- HELPER
     
-    private void addListener(ServletContext context, WebModule provider) {
-        LOG.info(String.format("ServletContext: adding '%s'", provider.getName()));
+    private void addListener(ServletContext context, WebModule module) {
+        LOG.info(String.format("ServletContext: adding '%s'", module.getName()));
         try {
-            acceptIfPresent(provider.init(context), activeListeners::add);
+            acceptIfPresent(module.init(context), activeListeners::add);
         } catch (ServletException e) {
-            LOG.error(String.format("Failed to add '%s' to the ServletContext.", provider.getName()), e);
+            LOG.error(String.format("Failed to add '%s' to the ServletContext.", module.getName()), e);
         }  
     }
     

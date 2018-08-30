@@ -32,7 +32,7 @@ public interface WebModule {
     // -- INTERFACE
 
     /**
-     * @return (display-) name of this provider
+     * @return (display-) name of this module
      */
     public String getName();
     
@@ -44,15 +44,14 @@ public interface WebModule {
     
     /**
      * @param ctx ServletContext
-     * @return whether this provider is available on the class-path and also applicable 
+     * @return whether this module is available (on the class-path) and also applicable 
      */
     public boolean isAvailable(ServletContext ctx);
     
     // -- DISCOVERY 
     
     /**
-     * Searches the class-path for 'bootstrappers'. 
-     * @return stream of 'bootstrappers'
+     * @return Stream of 'known' WebModules, whether applicable or not is not decided here 
      */
     static Stream<WebModule> discoverWebModules() {
         
