@@ -77,11 +77,11 @@ public class IsisWebAppContextListener implements ServletContextListener {
     // -- HELPER
     
     private void addListener(ServletContext context, WebModule module) {
-        LOG.info(String.format("ServletContext: adding '%s'", module.getName()));
+        LOG.info(String.format("Setup ServletContext, adding WebModule '%s'", module.getName()));
         try {
             acceptIfPresent(module.init(context), activeListeners::add);
         } catch (ServletException e) {
-            LOG.error(String.format("Failed to add '%s' to the ServletContext.", module.getName()), e);
+            LOG.error(String.format("Failed to add WebModule '%s' to the ServletContext.", module.getName()), e);
         }  
     }
     

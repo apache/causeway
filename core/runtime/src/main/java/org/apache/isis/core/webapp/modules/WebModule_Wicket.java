@@ -43,7 +43,7 @@ final class WebModule_Wicket implements WebModule  {
 
     @Override
     public String getName() {
-        return "Wicket WebFilter";
+        return "Wicket";
     }
 
     @Override

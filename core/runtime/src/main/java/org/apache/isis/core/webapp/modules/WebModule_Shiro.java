@@ -44,7 +44,7 @@ final class WebModule_Shiro implements WebModule  {
 
     @Override
     public String getName() {
-        return "Shiro WebListener & WebFilter";
+        return "Shiro";
     }
 
     @Override

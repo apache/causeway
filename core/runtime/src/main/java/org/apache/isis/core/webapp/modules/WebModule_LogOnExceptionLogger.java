@@ -46,7 +46,7 @@ final class WebModule_LogOnExceptionLogger implements WebModule  {
 
     @Override
     public String getName() {
-        return "Wicket WebFilter";
+        return "LogOn Exception Logger";
     }
 
     @Override

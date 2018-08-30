@@ -32,7 +32,7 @@ final class WebModule_NoWicket implements WebModule  {
     
     @Override
     public String getName() {
-        return "No-Wicket WebListener";
+        return "No-Wicket";
     }
 
     @Override

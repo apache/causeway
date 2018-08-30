@@ -44,7 +44,7 @@ final class WebModule_RestEasy implements WebModule  {
     
     @Override
     public String getName() {
-        return "RestEasy WebListener";
+        return "RestEasy";
     }
 
     @Override
