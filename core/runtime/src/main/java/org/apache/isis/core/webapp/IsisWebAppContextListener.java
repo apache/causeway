@@ -19,9 +19,12 @@
 package org.apache.isis.core.webapp;
 
 import static org.apache.isis.commons.internal.base._With.acceptIfPresent;
+import static org.apache.isis.commons.internal.context._Context.setDefaultClassLoader;
+import static org.apache.isis.commons.internal.resources._Resource.putContextPathIfPresent;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
@@ -54,16 +57,31 @@ public class IsisWebAppContextListener implements ServletContextListener {
     
     private final List<ServletContextListener> activeListeners = new ArrayList<>();
 
-    // -- IMPLEMENTATION
+    // -- INTERFACE IMPLEMENTATION
     
     @Override
     public void contextInitialized(ServletContextEvent event) {
         
-        final ServletContext context = event.getServletContext();
+        final ServletContext servletContext = event.getServletContext();
         
-        WebModule.discoverWebModules()
-        .filter(module->module.isAvailable(context)) // filter those WebModules that are applicable
-        .forEach(module->addListener(context, module));
+        setDefaultClassLoader(this.getClass().getClassLoader(), true);
+        
+        // setting up context specific properties before bootstrapping
+        putContextPathIfPresent(servletContext.getContextPath());
+
+        // phase 1
+        final List<WebModule> webModules =
+                 WebModule.discoverWebModules()
+                 .peek(module->module.prepare(servletContext)) // prepare context
+                 .collect(Collectors.toList());
+
+        // put the list of viewer names "isis.viewers" into a context parameter
+        WebModule.ContextUtil.commitViewers(servletContext); 
+        
+        // phase 2
+        webModules.stream()
+        .filter(module->module.isApplicable(servletContext)) // filter those WebModules that are applicable
+        .forEach(module->addListener(servletContext, module));
         
         activeListeners.forEach(listener->listener.contextInitialized(event));
     }
@@ -92,6 +110,5 @@ public class IsisWebAppContextListener implements ServletContextListener {
             LOG.error(String.format("Failed to shutdown WebListener '%s'.", listener.getClass().getName()), e);
         }
     }
-    
 
 }

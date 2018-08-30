@@ -28,23 +28,24 @@ import org.apache.isis.core.webapp.IsisWebAppBootstrapper;
  * Package private mixin for WebModule implementing WebModule.
  * @since 2.0.0
  */
-final class WebModule_NoWicket implements WebModule  {
+final class WebModule_FallbackBootstrapper implements WebModule  {
     
     @Override
     public String getName() {
-        return "No-Wicket";
+        return "Fallback Bootstrapper";
     }
 
     @Override
     public ServletContextListener init(ServletContext ctx) throws ServletException {
         ctx.setInitParameter("deploymentType", "SERVER_PROTOTYPE");
-        ctx.setInitParameter("isis.viewers", "restfulobjects");
         return ctx.createListener(IsisWebAppBootstrapper.class);
     }
 
     @Override
-    public boolean isAvailable(ServletContext ctx) {
-        // not required if the Wicket viewer is in use.
-        return !new WebModule_Wicket().isAvailable(ctx);
+    public boolean isApplicable(ServletContext ctx) {
+        // not required if another bootstrapper module is on the context 
+        // e.g. the Wicket module
+        return ctx.getAttribute("bootstrapper")!=null;
     }
+    
 }

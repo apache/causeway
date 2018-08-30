@@ -18,6 +18,7 @@
  */
 package org.apache.isis.core.webapp.modules;
 
+import static java.util.Objects.requireNonNull;
 import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
 import static org.apache.isis.commons.internal.base._Strings.prefix;
 import static org.apache.isis.commons.internal.base._Strings.suffix;
@@ -40,10 +41,36 @@ final class WebModule_Wicket implements WebModule  {
             "org.apache.wicket.protocol.http.WicketFilter";
 
     private final static String WICKET_FILTER_NAME = "WicketFilter";
+    
+    private String pathConfigValue;
+    private String modeConfigValue;
+    private String appConfigValue;
 
     @Override
     public String getName() {
         return "Wicket";
+    }
+    
+    @Override
+    public void prepare(ServletContext ctx) {
+        
+        if(!isApplicable(ctx)) {
+            return;
+        }
+        
+        pathConfigValue = 
+                ContextUtil.getConfigOrDefault(ctx, "isis.viewer.wicket.basePath", "/wicket");
+        
+        modeConfigValue = 
+                ContextUtil.getConfigOrDefault(ctx, "isis.viewer.wicket.mode", "deployment");
+        
+        appConfigValue = 
+                ContextUtil.getConfigOrDefault(ctx, "isis.viewer.wicket.app", 
+                        "org.apache.isis.viewer.wicket.viewer.IsisWicketApplication");
+        
+        ContextUtil.registerBootstrapper(ctx, this);
+        ContextUtil.registerViewer(ctx, "wicket");
+        ContextUtil.registerProtectedPath(ctx, suffix(prefix(pathConfigValue, "/"), "/") + "*" );
     }
 
     @Override
@@ -75,7 +102,7 @@ final class WebModule_Wicket implements WebModule  {
     }
 
     @Override
-    public boolean isAvailable(ServletContext ctx) {
+    public boolean isApplicable(ServletContext ctx) {
         try {
             getDefaultClassLoader().loadClass(WICKET_FILTER_CLASS_NAME);
             return true;
@@ -94,18 +121,16 @@ final class WebModule_Wicket implements WebModule  {
     }
 
     private String getWicketPath() {
-        // TODO[ISIS-1895] should be provided by a config value
-        return "wicket";
+        return requireNonNull(pathConfigValue, "This web-module needs to be prepared first.");
     }
 
     private String getWicketMode() {
-        // TODO[ISIS-1895] should be provided by a config value
-        return "development";
+        return requireNonNull(modeConfigValue, "This web-module needs to be prepared first.");
     }
 
     private String getApplicationClassName() {
-        // TODO[ISIS-1895] should be provided by a config value
-        return "domainapp.webapp.DomainApplication";
+        return requireNonNull(appConfigValue, "This web-module needs to be prepared first.");
+
     }
 
 }

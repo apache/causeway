@@ -46,12 +46,10 @@ final class WebModule_Shiro implements WebModule  {
     public String getName() {
         return "Shiro";
     }
-
+    
     @Override
     public ServletContextListener init(ServletContext ctx) throws ServletException {
         
-        ctx.setInitParameter("isis.viewers", "wicket,restfulobjects");
-
         final Filter filter;
         try {
             final Class<?> filterClass = getDefaultClassLoader().loadClass(SHIRO_FILTER_CLASS_NAME);
@@ -81,7 +79,7 @@ final class WebModule_Shiro implements WebModule  {
     }
 
     @Override
-    public boolean isAvailable(ServletContext ctx) {
+    public boolean isApplicable(ServletContext ctx) {
         try {
             getDefaultClassLoader().loadClass(SHIRO_LISTENER_CLASS_NAME);
             return true;

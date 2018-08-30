@@ -19,6 +19,7 @@
 
 package org.apache.isis.commons.internal.resources;
 
+import static org.apache.isis.commons.internal.base._With.ifPresentElseThrow;
 import static org.apache.isis.commons.internal.base._With.requires;
 
 import java.io.IOException;
@@ -128,6 +129,19 @@ public final class _Resource {
     }
 
     /**
+     * 
+     * @return restful-path resource as stored previously by {@link #putRestfulPath(String)}
+     *  or throws if resource not found
+     * @throws NullPointerException if resource not found
+     */
+    public final static String getRestfulPathOrThrow() {
+        return ifPresentElseThrow(getRestfulPathIfAny(), 
+                ()->new NullPointerException(
+                        "Could not find BasePath for the REST Service "
+                        + "config value on the context."));
+    }
+    
+    /**
      * Stores the {@code restfulPath} as an application scoped resource-object.
      * @param restfulPath
      * @throws IllegalArgumentException if the restfulPath is empty or is the root-path.
@@ -162,6 +176,8 @@ public final class _Resource {
         }
         return name;
     }
+
+    
 
 
 }

@@ -18,13 +18,13 @@
  */
 package org.apache.isis.core.webapp.modules;
 
+import static java.util.Objects.requireNonNull;
 import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
 import static org.apache.isis.commons.internal.base._Strings.prefix;
 import static org.apache.isis.commons.internal.base._Strings.suffix;
-import static org.apache.isis.commons.internal.base._With.ifPresentElse;
 import static org.apache.isis.commons.internal.context._Context.getDefaultClassLoader;
 import static org.apache.isis.commons.internal.exceptions._Exceptions.unexpectedCodeReach;
-import static org.apache.isis.commons.internal.resources._Resource.getRestfulPathIfAny;
+import static org.apache.isis.commons.internal.resources._Resource.putRestfulPath;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextListener;
@@ -37,14 +37,39 @@ import javax.servlet.ServletException;
  */
 final class WebModule_RestEasy implements WebModule  {
     
+    public static final String KEY_RESTFUL_BASE_PATH = "isis.viewer.restfulobjects.basePath";
+    public static final String KEY_RESTFUL_BASE_PATH_DEFAULT = "/restful";
+    
     private final static String RESTEASY_BOOTSTRAPPER = 
             "org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap";
     
     private final static String RESTEASY_DISPATCHER = "RestfulObjectsRestEasyDispatcher";
     
+    String restfulPathConfigValue;
+    
     @Override
     public String getName() {
         return "RestEasy";
+    }
+    
+    @Override
+    public void prepare(ServletContext ctx) {
+        
+        if(!isApplicable(ctx)) {
+            return;
+        }
+        
+        // try to fetch restfulPath from config else fallback to default
+        final String restfulPath = 
+                ContextUtil.getConfigOrDefault(ctx, KEY_RESTFUL_BASE_PATH, KEY_RESTFUL_BASE_PATH_DEFAULT); 
+                
+        putRestfulPath(restfulPath);
+        
+        this.restfulPathConfigValue = restfulPath; // store locally for reuse
+        
+        // register this module as a viewer
+        ContextUtil.registerViewer(ctx, "restfulobjects");
+        ContextUtil.registerProtectedPath(ctx, suffix(prefix(restfulPath, "/"), "/") + "*" );
     }
 
     @Override
@@ -72,7 +97,7 @@ final class WebModule_RestEasy implements WebModule  {
     }
 
     @Override
-    public boolean isAvailable(ServletContext ctx) {
+    public boolean isApplicable(ServletContext ctx) {
         try {
             getDefaultClassLoader().loadClass(RESTEASY_BOOTSTRAPPER);
             return true;
@@ -88,10 +113,12 @@ final class WebModule_RestEasy implements WebModule  {
     }
 
     private String getRestfulPath() {
-        final String restfulPath = ifPresentElse(getRestfulPathIfAny(), "restful");
-        final String restfulPathEnclosedWithSlashes = suffix(prefix(restfulPath, "/"), "/");
+        requireNonNull(restfulPathConfigValue, "This web-module needs to be prepared first.");
+        final String restfulPathEnclosedWithSlashes = suffix(prefix(restfulPathConfigValue, "/"), "/");
         return restfulPathEnclosedWithSlashes;
     }
     
+    
+
     
 }

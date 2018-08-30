@@ -32,9 +32,51 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.function.Function;
 
+import com.google.common.base.Joiner;
+import com.google.common.collect.Sets;
+import com.google.common.io.Resources;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.google.inject.Module;
+
+import org.apache.wicket.Application;
+import org.apache.wicket.Component;
+import org.apache.wicket.ConverterLocator;
+import org.apache.wicket.IConverterLocator;
+import org.apache.wicket.Page;
+import org.apache.wicket.RuntimeConfigurationType;
+import org.apache.wicket.SharedResources;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.AjaxRequestTarget.IListener;
+import org.apache.wicket.authentication.IAuthenticationStrategy;
+import org.apache.wicket.authentication.strategy.DefaultAuthenticationStrategy;
+import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
+import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
+import org.apache.wicket.core.request.mapper.MountedMapper;
+import org.apache.wicket.devutils.debugbar.DebugBar;
+import org.apache.wicket.devutils.debugbar.InspectorDebugPanel;
+import org.apache.wicket.devutils.debugbar.PageSizeDebugPanel;
+import org.apache.wicket.devutils.debugbar.SessionSizeDebugPanel;
+import org.apache.wicket.devutils.debugbar.VersionDebugContributor;
+import org.apache.wicket.devutils.diskstore.DebugDiskDataStore;
+import org.apache.wicket.guice.GuiceComponentInjector;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.ResourceAggregator;
+import org.apache.wicket.markup.head.filter.JavaScriptFilteredIntoFooterHeaderResponse;
+import org.apache.wicket.markup.html.IHeaderContributor;
+import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.request.cycle.IRequestCycleListener;
+import org.apache.wicket.request.cycle.PageRequestHandlerTracker;
+import org.apache.wicket.request.cycle.RequestCycleListenerCollection;
+import org.apache.wicket.request.resource.CssResourceReference;
+import org.apache.wicket.settings.DebugSettings;
+import org.apache.wicket.settings.RequestCycleSettings;
+import org.apache.wicket.util.time.Duration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.wicketstuff.select2.ApplicationSettings;
+
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.commons.internal.resources._Resource;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
@@ -78,49 +120,6 @@ import org.apache.isis.viewer.wicket.viewer.integration.wicket.ConverterForObjec
 import org.apache.isis.viewer.wicket.viewer.integration.wicket.ConverterForObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.viewer.integration.wicket.WebRequestCycleForIsis;
 import org.apache.isis.viewer.wicket.viewer.settings.IsisResourceSettings;
-import org.apache.wicket.Application;
-import org.apache.wicket.Component;
-import org.apache.wicket.ConverterLocator;
-import org.apache.wicket.IConverterLocator;
-import org.apache.wicket.Page;
-import org.apache.wicket.RuntimeConfigurationType;
-import org.apache.wicket.SharedResources;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.AjaxRequestTarget.IListener;
-import org.apache.wicket.authentication.IAuthenticationStrategy;
-import org.apache.wicket.authentication.strategy.DefaultAuthenticationStrategy;
-import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
-import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
-import org.apache.wicket.core.request.mapper.MountedMapper;
-import org.apache.wicket.devutils.debugbar.DebugBar;
-import org.apache.wicket.devutils.debugbar.InspectorDebugPanel;
-import org.apache.wicket.devutils.debugbar.PageSizeDebugPanel;
-import org.apache.wicket.devutils.debugbar.SessionSizeDebugPanel;
-import org.apache.wicket.devutils.debugbar.VersionDebugContributor;
-import org.apache.wicket.devutils.diskstore.DebugDiskDataStore;
-import org.apache.wicket.guice.GuiceComponentInjector;
-import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.ResourceAggregator;
-import org.apache.wicket.markup.head.filter.JavaScriptFilteredIntoFooterHeaderResponse;
-import org.apache.wicket.markup.html.IHeaderContributor;
-import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.request.cycle.IRequestCycleListener;
-import org.apache.wicket.request.cycle.PageRequestHandlerTracker;
-import org.apache.wicket.request.cycle.RequestCycleListenerCollection;
-import org.apache.wicket.request.resource.CssResourceReference;
-import org.apache.wicket.settings.DebugSettings;
-import org.apache.wicket.settings.RequestCycleSettings;
-import org.apache.wicket.util.time.Duration;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.wicketstuff.select2.ApplicationSettings;
-
-import com.google.common.base.Joiner;
-import com.google.common.collect.Sets;
-import com.google.common.io.Resources;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.google.inject.Module;
 
 import de.agilecoders.wicket.core.Bootstrap;
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.BootstrapBaseBehavior;
@@ -335,8 +334,6 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
         try {
             super.init();
 
-            _Context.setDefaultClassLoader(this.getClass().getClassLoader(), true);
-
             futures = startBackgroundInitializationThreads();
 
             String isisConfigDir = getServletContext().getInitParameter("isis.config.dir");
@@ -349,8 +346,6 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
 
             final IsisConfigurationBuilder isisConfigurationBuilder = obtainConfigBuilder();
             isisConfigurationBuilder.addDefaultConfigurationResourcesAndPrimers();
-
-            _Resource.putContextPathIfPresent(getServletContext().getContextPath());
 
             final IsisConfigurationDefault configuration = isisConfigurationBuilder.getConfiguration();
 
@@ -863,7 +858,7 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
                     final IsisConfigurationDefault isisConfiguration) {
                 return new IsisInjectModule(deploymentCategory, isisConfiguration);
             }
-
+            
             // //////////////////////////////////////
 
 

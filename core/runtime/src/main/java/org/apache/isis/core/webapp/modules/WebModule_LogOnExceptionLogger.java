@@ -19,18 +19,16 @@
 package org.apache.isis.core.webapp.modules;
 
 import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
-import static org.apache.isis.commons.internal.base._Strings.prefix;
-import static org.apache.isis.commons.internal.base._Strings.suffix;
-import static org.apache.isis.commons.internal.base._With.ifPresentElse;
 import static org.apache.isis.commons.internal.context._Context.getDefaultClassLoader;
 import static org.apache.isis.commons.internal.exceptions._Exceptions.unexpectedCodeReach;
-import static org.apache.isis.commons.internal.resources._Resource.getRestfulPathIfAny;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterRegistration.Dynamic;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
+
+import org.apache.isis.commons.internal.collections._Arrays;
 
 /**
  * Package private mixin for WebModule implementing WebModule.
@@ -66,13 +64,13 @@ final class WebModule_LogOnExceptionLogger implements WebModule  {
             return null; // filter was already registered somewhere else (eg web.xml)
         }
 
-        reg.addMappingForUrlPatterns(null, true, getUrlPatterns() ); // filter is forced last
+        reg.addMappingForUrlPatterns(null, true, getProtectedUrlPatterns(ctx) ); // filter is forced last
 
         return null; // does not provide a listener
     }
 
     @Override
-    public boolean isAvailable(ServletContext ctx) {
+    public boolean isApplicable(ServletContext ctx) {
         try {
             getDefaultClassLoader().loadClass(LOGONLOGGER_FILTER_CLASS_NAME);
             return true;
@@ -83,29 +81,12 @@ final class WebModule_LogOnExceptionLogger implements WebModule  {
 
     // -- HELPER
     
-    private String[] getUrlPatterns() {
-        return new String[] {
-                getRestfulUrlPattern(),
-                getWicketUrlPattern()
-            };
+    private String[] getProtectedUrlPatterns(ServletContext ctx) {
+        return ContextUtil.streamProtectedPaths(ctx)
+        .collect(_Arrays.toArray(String.class));
     }
 
-    private String getWicketUrlPattern() {
-        final String wicketPath = getWicketPath();
-        final String wicketPathEnclosedWithSlashes = suffix(prefix(wicketPath, "/"), "/");
-        return wicketPathEnclosedWithSlashes + "*";
-    }
 
-    private String getWicketPath() {
-        // TODO[ISIS-1895] should be provided by a config value
-        return "wicket";
-    }
-
-    private String getRestfulUrlPattern() {
-        final String restfulPath = ifPresentElse(getRestfulPathIfAny(), "restful");
-        final String restfulPathEnclosedWithSlashes = suffix(prefix(restfulPath, "/"), "/");
-        return restfulPathEnclosedWithSlashes + "*";
-    }
     
 
 }
