@@ -45,7 +45,7 @@ final class WebModule_FallbackBootstrapper implements WebModule  {
     public boolean isApplicable(ServletContext ctx) {
         // not required if another bootstrapper module is on the context 
         // e.g. the Wicket module
-        return ctx.getAttribute("bootstrapper")!=null;
+        return !ContextUtil.hasBootstrapper(ctx);
     }
     
 }

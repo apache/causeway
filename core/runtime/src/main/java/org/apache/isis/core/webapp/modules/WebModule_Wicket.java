@@ -54,7 +54,7 @@ final class WebModule_Wicket implements WebModule  {
     @Override
     public void prepare(ServletContext ctx) {
         
-        if(!isApplicable(ctx)) {
+        if(!isAvailable()) {
             return;
         }
         
@@ -103,6 +103,12 @@ final class WebModule_Wicket implements WebModule  {
 
     @Override
     public boolean isApplicable(ServletContext ctx) {
+        return isAvailable();
+    }
+
+    // -- HELPER
+    
+    private static boolean isAvailable() {
         try {
             getDefaultClassLoader().loadClass(WICKET_FILTER_CLASS_NAME);
             return true;
@@ -110,8 +116,6 @@ final class WebModule_Wicket implements WebModule  {
             return false;
         }
     }
-
-    // -- HELPER
 
     private String getUrlPattern() {
         final String wicketPath = getWicketPath();
