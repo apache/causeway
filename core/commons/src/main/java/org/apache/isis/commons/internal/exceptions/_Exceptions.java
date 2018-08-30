@@ -19,8 +19,10 @@
 
 package org.apache.isis.commons.internal.exceptions;
 
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
 import static org.apache.isis.commons.internal.base._With.requires;
 
+import java.io.PrintStream;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -31,7 +33,6 @@ import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
 
-import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.functions._Functions;
 
@@ -139,9 +140,23 @@ public final class _Exceptions {
         if(ex==null) {
             return Stream.empty();
         }
-        return _NullSafe.stream(ex.getStackTrace())
+        return stream(ex.getStackTrace())
                 .map(StackTraceElement::toString)
                 .limit(maxLines);
+    }
+
+    /**
+     * Dumps the current thread's stack-trace onto the given {@code writer}.
+     * @param writer
+     * @param skipLines
+     * @param maxLines
+     */
+    public static void dumpStackTrace(PrintStream writer, int skipLines, int maxLines) {
+        stream(Thread.currentThread().getStackTrace())
+        .map(StackTraceElement::toString)
+        .skip(skipLines)
+        .limit(maxLines)
+        .forEach(writer::println);
     }
 
     // -- CAUSAL CHAIN
@@ -277,9 +292,6 @@ public final class _Exceptions {
             uncheckedConsumer(checkedConsumer).accept(obj);
         }
     }
-
-
-
 
 
 }
