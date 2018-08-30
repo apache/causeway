@@ -32,8 +32,8 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebListener;
 
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.core.commons.config.IsisConfigurationDefault;
-import org.apache.isis.core.webapp.IsisWebAppBootstrapper;
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.webapp.IsisWebAppConfigProvider;
 import org.apache.isis.core.webapp.IsisWebAppContextListener;
 
 /**
@@ -181,11 +181,10 @@ public interface WebModule {
             requires(key, "key");
             requires(defaultValue, "defaultValue");
             
-            final IsisConfigurationDefault webXmlConfig = 
-                    IsisWebAppBootstrapper.lookupIsisConfigurationBuilder(ctx)
-                    .getConfiguration();
+            final IsisConfiguration webXmlConfig = 
+                    IsisWebAppConfigProvider.getInstance().peekConfiguration(ctx);
             
-            return ifPresentElse(webXmlConfig.getProperty(key), defaultValue);
+            return ifPresentElse(webXmlConfig.getString(key), defaultValue);
         }
         
         

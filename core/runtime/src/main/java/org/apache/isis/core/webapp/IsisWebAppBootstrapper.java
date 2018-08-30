@@ -32,18 +32,13 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.config.NotFoundPolicy;
 import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
-import org.apache.isis.core.commons.resource.ResourceStreamSourceContextLoaderClassPath;
-import org.apache.isis.core.commons.resource.ResourceStreamSourceCurrentClassClassPath;
-import org.apache.isis.core.commons.resource.ResourceStreamSourceFileSystem;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.runtime.logging.IsisLoggingConfigurer;
 import org.apache.isis.core.runtime.runner.IsisInjectModule;
-import org.apache.isis.core.runtime.runner.opts.OptionHandlerInitParameters;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.SystemConstants;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactoryBuilder;
-import org.apache.isis.core.webapp.config.ResourceStreamSourceForWebInf;
 
 /**
  * Initialize the {@link IsisSessionFactoryBuilder} when the web application starts, and
@@ -83,7 +78,8 @@ public class IsisWebAppBootstrapper implements ServletContextListener {
             final String webInfDir = servletContext.getRealPath("/WEB-INF");
             loggingConfigurer.configureLogging(webInfDir, new String[0]);
 
-            final IsisConfigurationBuilder isisConfigurationBuilder = obtainIsisConfigurationBuilder(servletContext);
+            final IsisConfigurationBuilder isisConfigurationBuilder = 
+                    IsisWebAppConfigProvider.getInstance().getConfigurationBuilder(servletContext);
             isisConfigurationBuilder.addDefaultConfigurationResourcesAndPrimers();
 
             final DeploymentType deploymentType = determineDeploymentType(servletContext, isisConfigurationBuilder);
@@ -105,51 +101,6 @@ public class IsisWebAppBootstrapper implements ServletContextListener {
             throw e;
         }
         LOG.info("server started");
-    }
-
-    protected IsisConfigurationBuilder obtainIsisConfigurationBuilder(final ServletContext servletContext) {
-        return obtainConfigBuilderFrom(servletContext);
-    }
-
-    /**
-     * public so can also be used by Wicket viewer.
-     */
-    public static IsisConfigurationBuilder obtainConfigBuilderFrom(final ServletContext servletContext) {
-        final IsisConfigurationBuilder isisConfigurationBuilder = lookupIsisConfigurationBuilder(servletContext);
-        isisConfigurationBuilder.primeWith(new OptionHandlerInitParameters(servletContext));
-
-        addResourceStreamSources(servletContext, isisConfigurationBuilder);
-        return isisConfigurationBuilder;
-    }
-
-    public static IsisConfigurationBuilder lookupIsisConfigurationBuilder(final ServletContext servletContext) {
-        IsisConfigurationBuilder isisConfigurationBuilder =
-                (IsisConfigurationBuilder) servletContext.getAttribute(WebAppConstants.CONFIGURATION_BUILDER_KEY);
-        if(isisConfigurationBuilder == null) {
-            isisConfigurationBuilder = new IsisConfigurationBuilder();
-        }
-        return isisConfigurationBuilder;
-    }
-
-    private static void addResourceStreamSources(
-            final ServletContext servletContext,
-            final IsisConfigurationBuilder isisConfigurationBuilder) {
-
-
-        // will load either from WEB-INF, from the classpath or from config directory.
-        final String configLocation = servletContext.getInitParameter(WebAppConstants.CONFIG_DIR_PARAM);
-        if ( configLocation != null ) {
-            LOG.info("Config override location: {}", configLocation );
-            isisConfigurationBuilder.addResourceStreamSource(ResourceStreamSourceFileSystem.create(configLocation));
-        } else {
-            LOG.info("Config override location: No override location configured" );
-
-            isisConfigurationBuilder.addResourceStreamSource(ResourceStreamSourceContextLoaderClassPath.create());
-            isisConfigurationBuilder.addResourceStreamSource(new ResourceStreamSourceCurrentClassClassPath());
-            isisConfigurationBuilder.addResourceStreamSource(new ResourceStreamSourceForWebInf(servletContext));
-        }
-
-
     }
 
     /**

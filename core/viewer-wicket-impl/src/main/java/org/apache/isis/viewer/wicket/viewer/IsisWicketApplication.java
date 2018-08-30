@@ -90,7 +90,7 @@ import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.threadpool.ThreadPoolSupport;
-import org.apache.isis.core.webapp.IsisWebAppBootstrapper;
+import org.apache.isis.core.webapp.IsisWebAppConfigProvider;
 import org.apache.isis.core.webapp.WebAppConstants;
 import org.apache.isis.schema.utils.ChangesDtoUtils;
 import org.apache.isis.schema.utils.CommandDtoUtils;
@@ -631,7 +631,8 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
     protected IsisConfigurationBuilder obtainConfigBuilder() {
         return isisConfigurationBuilder != null
                 ? isisConfigurationBuilder
-                        : (isisConfigurationBuilder = IsisWebAppBootstrapper.obtainConfigBuilderFrom(getServletContext()));
+                        : (isisConfigurationBuilder = IsisWebAppConfigProvider.getInstance()
+                            .getConfigurationBuilder(getServletContext()));
     }
 
     // //////////////////////////////////////

@@ -66,19 +66,25 @@ public class IsisWebAppContextListener implements ServletContextListener {
         
         setDefaultClassLoader(this.getClass().getClassLoader(), true);
         
-        // setting up context specific properties before bootstrapping
+        final IsisWebAppConfigProvider configProvider = new IsisWebAppConfigProvider();
+        IsisWebAppConfigProvider.register(configProvider);
+        
+        // phase 1 - setting up context specific properties before bootstrapping
+        
         putContextPathIfPresent(servletContext.getContextPath());
 
-        // phase 1
         final List<WebModule> webModules =
                  WebModule.discoverWebModules()
                  .peek(module->module.prepare(servletContext)) // prepare context
                  .collect(Collectors.toList());
 
         // put the list of viewer names "isis.viewers" into a context parameter
-        WebModule.ContextUtil.commitViewers(servletContext); 
+        WebModule.ContextUtil.commitViewers(servletContext);
+        // invalidate config such that next IsisConfigurationBuilder that gets obtained is reinitialized
+        configProvider.invalidate(servletContext);  
         
-        // phase 2
+        // phase 2 - initializing the ServletContext
+        
         webModules.stream()
         .filter(module->module.isApplicable(servletContext)) // filter those WebModules that are applicable
         .forEach(module->addListener(servletContext, module));
