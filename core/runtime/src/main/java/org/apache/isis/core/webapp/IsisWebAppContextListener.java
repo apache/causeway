@@ -36,7 +36,7 @@ import org.apache.isis.core.webapp.modules.WebModule;
 
 /**
  * 
- * Introduced to render web.xml listener configurations obsolete.
+ * Introduced to render web.xml Filter/Listener/Servlet configurations obsolete.
  * <p> 
  * Acts as the single application entry-point for setting up the 
  * ServletContext programmatically.

@@ -20,14 +20,17 @@ package org.apache.isis.core.webapp.modules;
 
 import java.util.stream.Stream;
 
+import javax.servlet.Filter;
+import javax.servlet.Servlet;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebListener;
 
 import org.apache.isis.core.webapp.IsisWebAppContextListener;
 
 /**
- * Introduced to render web.xml listener configurations obsolete.
+ * Introduced to render web.xml Filter/Listener/Servlet configurations obsolete.
  * <p>
  * WebModule instances are used by the {@link IsisWebAppContextListener} to setup 
  * the ServletContext programmatically.
@@ -45,7 +48,8 @@ public interface WebModule {
     public String getName();
     
     /**
-     * Sets the WebListener up and registers it with the given ServletContext {@code ctx}.
+     * Sets this WebModule's {@link Filter}s, {@link Servlet}s or {@link WebListener}s 
+     * up and registers them with the given {@link ServletContext} {@code ctx}.
      * @param ctx ServletContext
      */
     public ServletContextListener init(ServletContext ctx) throws ServletException;
