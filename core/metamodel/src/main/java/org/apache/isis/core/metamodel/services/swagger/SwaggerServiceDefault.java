@@ -18,6 +18,8 @@
  */
 package org.apache.isis.core.metamodel.services.swagger;
 
+import static org.apache.isis.commons.internal.base._Strings.prefix;
+
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
@@ -49,7 +51,7 @@ public class SwaggerServiceDefault implements SwaggerService {
 
         final String restfulPath = _Resource.getRestfulPathOrThrow(); 
         
-        this.basePath = _Resource.prependContextPathIfPresent(restfulPath);
+        this.basePath = prefix(_Resource.prependContextPathIfPresent(restfulPath), "/");
     }
 
     @Programmatic

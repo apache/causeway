@@ -70,7 +70,6 @@ public class IsisWebAppContextListener implements ServletContextListener {
         IsisWebAppConfigProvider.register(configProvider);
         
         // phase 1 - setting up context specific properties before bootstrapping
-        
         putContextPathIfPresent(servletContext.getContextPath());
 
         final List<WebModule> webModules =

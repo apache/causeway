@@ -69,7 +69,7 @@ import org.apache.isis.core.webapp.content.ResourceCachingFilter;
         @WebInitParam(
                 name="whenNoSession", // what to do if no session was found ...
                 value="auto"), // ... 401 and a basic authentication challenge if request originates from web browser
-        @WebInitParam(name="passThru", value="/restful/swagger")
+        @WebInitParam(name="passThru", value="/restful/swagger") //TODO[ISIS-1895] the restful path is configured elsewhere
 })
 public class IsisSessionFilter implements Filter {
 
