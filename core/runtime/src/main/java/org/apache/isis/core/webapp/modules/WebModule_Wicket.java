@@ -16,15 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.webapp;
+package org.apache.isis.core.webapp.modules;
 
 import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
 import static org.apache.isis.commons.internal.base._Strings.prefix;
 import static org.apache.isis.commons.internal.base._Strings.suffix;
-import static org.apache.isis.commons.internal.base._With.ifPresentElse;
 import static org.apache.isis.commons.internal.context._Context.getDefaultClassLoader;
 import static org.apache.isis.commons.internal.exceptions._Exceptions.unexpectedCodeReach;
-import static org.apache.isis.commons.internal.resources._Resource.getRestfulPathIfAny;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterRegistration.Dynamic;
@@ -36,13 +34,12 @@ import javax.servlet.ServletException;
  * Package private mixin for WebModule implementing WebModule.
  * @since 2.0.0
  */
-final class WebModule_LogOnExceptionLogger implements WebModule  {
+final class WebModule_Wicket implements WebModule  {
 
-    private final static String LOGONLOGGER_FILTER_CLASS_NAME = 
-            "org.apache.isis.core.webapp.diagnostics.IsisLogOnExceptionFilter";
+    private final static String WICKET_FILTER_CLASS_NAME = 
+            "org.apache.wicket.protocol.http.WicketFilter";
 
-    private final static String LOGONLOGGER_FILTER_NAME = "IsisLogOnExceptionFilter";
-
+    private final static String WICKET_FILTER_NAME = "WicketFilter";
 
     @Override
     public String getName() {
@@ -51,22 +48,28 @@ final class WebModule_LogOnExceptionLogger implements WebModule  {
 
     @Override
     public ServletContextListener init(ServletContext ctx) throws ServletException {
+        ctx.setInitParameter("isis.viewers", "wicket,restfulobjects");
 
         final Filter filter;
         try {
-            final Class<?> filterClass = getDefaultClassLoader().loadClass(LOGONLOGGER_FILTER_CLASS_NAME);
+            final Class<?> filterClass = getDefaultClassLoader().loadClass(WICKET_FILTER_CLASS_NAME);
             filter = ctx.createFilter(uncheckedCast(filterClass));
         } catch (ClassNotFoundException e) {
             // guarded against by isAvailable()
             throw unexpectedCodeReach();
         }
 
-        final Dynamic reg = ctx.addFilter(LOGONLOGGER_FILTER_NAME, filter);
+        final Dynamic reg = ctx.addFilter(WICKET_FILTER_NAME, filter);
         if(reg==null) {
             return null; // filter was already registered somewhere else (eg web.xml)
         }
 
-        reg.addMappingForUrlPatterns(null, true, getUrlPatterns() ); // filter is forced last
+        final String urlPattern = getUrlPattern();
+
+        reg.setInitParameter("applicationClassName", getApplicationClassName());
+        reg.setInitParameter("filterMappingUrlPattern", urlPattern);
+        reg.setInitParameter("configuration", getWicketMode()); 
+        reg.addMappingForUrlPatterns(null, true, urlPattern);
 
         return null; // does not provide a listener
     }
@@ -74,7 +77,7 @@ final class WebModule_LogOnExceptionLogger implements WebModule  {
     @Override
     public boolean isAvailable(ServletContext ctx) {
         try {
-            getDefaultClassLoader().loadClass(LOGONLOGGER_FILTER_CLASS_NAME);
+            getDefaultClassLoader().loadClass(WICKET_FILTER_CLASS_NAME);
             return true;
         } catch (Exception e) {
             return false;
@@ -82,18 +85,12 @@ final class WebModule_LogOnExceptionLogger implements WebModule  {
     }
 
     // -- HELPER
-    
-    private String[] getUrlPatterns() {
-        return new String[] {
-                getRestfulUrlPattern(),
-                getWicketUrlPattern()
-            };
-    }
 
-    private String getWicketUrlPattern() {
+    private String getUrlPattern() {
         final String wicketPath = getWicketPath();
         final String wicketPathEnclosedWithSlashes = suffix(prefix(wicketPath, "/"), "/");
-        return wicketPathEnclosedWithSlashes + "*";
+        final String urlPattern = wicketPathEnclosedWithSlashes + "*";
+        return urlPattern;
     }
 
     private String getWicketPath() {
@@ -101,11 +98,14 @@ final class WebModule_LogOnExceptionLogger implements WebModule  {
         return "wicket";
     }
 
-    private String getRestfulUrlPattern() {
-        final String restfulPath = ifPresentElse(getRestfulPathIfAny(), "restful");
-        final String restfulPathEnclosedWithSlashes = suffix(prefix(restfulPath, "/"), "/");
-        return restfulPathEnclosedWithSlashes + "*";
+    private String getWicketMode() {
+        // TODO[ISIS-1895] should be provided by a config value
+        return "development";
     }
-    
+
+    private String getApplicationClassName() {
+        // TODO[ISIS-1895] should be provided by a config value
+        return "domainapp.webapp.DomainApplication";
+    }
 
 }

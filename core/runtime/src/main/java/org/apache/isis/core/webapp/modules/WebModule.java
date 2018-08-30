@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.webapp;
+package org.apache.isis.core.webapp.modules;
 
 import java.util.stream.Stream;
 
@@ -24,7 +24,15 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
+import org.apache.isis.core.webapp.IsisWebAppContextListener;
+
 /**
+ * Introduced to render web.xml listener configurations obsolete.
+ * <p>
+ * WebModule instances are used by the {@link IsisWebAppContextListener} to setup 
+ * the ServletContext programmatically.
+ * </p>
+ * 
  * @since 2.0.0
  */
 public interface WebModule {
@@ -55,12 +63,17 @@ public interface WebModule {
      */
     static Stream<WebModule> discoverWebModules() {
         
+        //TODO [ahuber] instead of providing a static list of modules, modules could be discovered on 
+        // the class-path (in case we have plugins that provide such modules).
+        // We need yet to decide a mechanism, that enforces a certain ordering of these modules, since
+        // this influences the order in which filters are processed.
+        
         return Stream.of(
-                new WebModule_Shiro(),
+                new WebModule_Shiro(), // filters before all others
                 new WebModule_Wicket(),
                 new WebModule_NoWicket(), // not required if the Wicket viewer is in use
                 new WebModule_RestEasy(), // default REST provider
-                new WebModule_LogOnExceptionLogger() // log any logon exceptions
+                new WebModule_LogOnExceptionLogger() // log any logon exceptions, filters after all others
                 );
     }
     

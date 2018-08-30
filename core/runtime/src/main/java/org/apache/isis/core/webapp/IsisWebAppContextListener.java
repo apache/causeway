@@ -32,12 +32,16 @@ import javax.servlet.annotation.WebListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.isis.core.webapp.modules.WebModule;
+
 /**
  * 
  * Introduced to render web.xml listener configurations obsolete.
  * <p> 
- * Acts as the single application entry-point when running within a Servlet context.
- * Installs WebModules on the ServletContext when discovered on the class-path. 
+ * Acts as the single application entry-point for setting up the 
+ * ServletContext programmatically.
+ * </p><p> 
+ * Installs {@link WebModule}s on the ServletContext. 
  * </p>   
  *  
  * @since 2.0.0

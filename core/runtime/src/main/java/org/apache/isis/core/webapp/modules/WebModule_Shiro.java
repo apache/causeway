@@ -16,82 +16,78 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.webapp;
+package org.apache.isis.core.webapp.modules;
 
 import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
-import static org.apache.isis.commons.internal.base._Strings.prefix;
-import static org.apache.isis.commons.internal.base._Strings.suffix;
-import static org.apache.isis.commons.internal.base._With.ifPresentElse;
 import static org.apache.isis.commons.internal.context._Context.getDefaultClassLoader;
 import static org.apache.isis.commons.internal.exceptions._Exceptions.unexpectedCodeReach;
-import static org.apache.isis.commons.internal.resources._Resource.getRestfulPathIfAny;
 
+import javax.servlet.Filter;
+import javax.servlet.FilterRegistration.Dynamic;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
 /**
  * Package private mixin for WebModule implementing WebModule.
- * 
  * @since 2.0.0
  */
-final class WebModule_RestEasy implements WebModule  {
+final class WebModule_Shiro implements WebModule  {
+
+    private final static String SHIRO_LISTENER_CLASS_NAME = 
+            "org.apache.shiro.web.env.EnvironmentLoaderListener";
+
+    private final static String SHIRO_FILTER_CLASS_NAME = 
+            "org.apache.shiro.web.servlet.ShiroFilter";
     
-    private final static String RESTEASY_BOOTSTRAPPER = 
-            "org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap";
-    
-    private final static String RESTEASY_DISPATCHER = "RestfulObjectsRestEasyDispatcher";
-    
+    private final static String SHIRO_FILTER_NAME = "ShiroFilter";
+
     @Override
     public String getName() {
-        return "RestEasy WebListener";
+        return "Shiro WebListener & WebFilter";
     }
 
     @Override
     public ServletContextListener init(ServletContext ctx) throws ServletException {
         
-        //  used by RestEasy to determine the JAX-RS resources and other related configuration
-        ctx.setInitParameter(
-                "javax.ws.rs.Application", 
-                "org.apache.isis.viewer.restfulobjects.server.RestfulObjectsApplication");
-        
-        ctx.setInitParameter("resteasy.servlet.mapping.prefix", getRestfulPath());
-        
-        ctx.addServlet(RESTEASY_DISPATCHER, 
-                "org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher");
-        ctx.getServletRegistration(RESTEASY_DISPATCHER)
-        .addMapping(getUrlPattern());
+        ctx.setInitParameter("isis.viewers", "wicket,restfulobjects");
+
+        final Filter filter;
+        try {
+            final Class<?> filterClass = getDefaultClassLoader().loadClass(SHIRO_FILTER_CLASS_NAME);
+            filter = ctx.createFilter(uncheckedCast(filterClass));
+        } catch (ClassNotFoundException e) {
+            // guarded against by isAvailable()
+            throw unexpectedCodeReach();
+        }
+
+        final Dynamic reg = ctx.addFilter(SHIRO_FILTER_NAME, filter);
+        if(reg==null) {
+            return null; // filter was already registered somewhere else (eg web.xml)
+        }
+
+        final String urlPattern = "/*";
+
+        reg.addMappingForUrlPatterns(null, false, urlPattern); // filter is forced first
         
         try {
-            final Class<?> listenerClass = getDefaultClassLoader().loadClass(RESTEASY_BOOTSTRAPPER);
+            final Class<?> listenerClass = getDefaultClassLoader().loadClass(SHIRO_LISTENER_CLASS_NAME);
             return ctx.createListener(uncheckedCast(listenerClass));
         } catch (ClassNotFoundException e) {
             // guarded against by isAvailable()
             throw unexpectedCodeReach();
         }
+      
     }
 
     @Override
     public boolean isAvailable(ServletContext ctx) {
         try {
-            getDefaultClassLoader().loadClass(RESTEASY_BOOTSTRAPPER);
+            getDefaultClassLoader().loadClass(SHIRO_LISTENER_CLASS_NAME);
             return true;
         } catch (Exception e) {
             return false;
         }
     }
-    
-    // -- HELPER
-    
-    private String getUrlPattern() {
-        return getRestfulPath() + "*";
-    }
 
-    private String getRestfulPath() {
-        final String restfulPath = ifPresentElse(getRestfulPathIfAny(), "restful");
-        final String restfulPathEnclosedWithSlashes = suffix(prefix(restfulPath, "/"), "/");
-        return restfulPathEnclosedWithSlashes;
-    }
-    
-    
 }
