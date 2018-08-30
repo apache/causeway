@@ -26,9 +26,12 @@ import static org.apache.isis.commons.internal.context._Context.getDefaultClassL
 import static org.apache.isis.commons.internal.exceptions._Exceptions.unexpectedCodeReach;
 import static org.apache.isis.commons.internal.resources._Resource.putRestfulPath;
 
+import javax.servlet.FilterRegistration.Dynamic;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
+
+import org.apache.isis.core.webapp.IsisSessionFilter;
 
 /**
  * Package private mixin for WebModule implementing WebModule.
@@ -74,8 +77,32 @@ final class WebModule_RestEasy implements WebModule  {
 
     @Override
     public ServletContextListener init(ServletContext ctx) throws ServletException {
+
+        // add IsisSessionFilter
+        {
+            final Dynamic filter = ctx.addFilter("IsisSessionFilterForRestfulObjects", IsisSessionFilter.class);
+
+            // this is mapped to the entire application; 
+            // however the IsisSessionFilter will 
+            // "notice" if the session filter has already been
+            // executed for the request pipeline, and if so will do nothing
+            filter.addMappingForServletNames(null, true, RESTEASY_DISPATCHER); 
+            
+            filter.setInitParameter(
+                    "authenticationSessionStrategy", 
+                    "org.apache.isis.viewer.restfulobjects.server.authentication.AuthenticationSessionStrategyBasicAuth");
+            filter.setInitParameter(
+                    "whenNoSession", // what to do if no session was found ...
+                    "auto"); // ... 401 and a basic authentication challenge if request originates from web browser
+            filter.setInitParameter(
+                    "passThru", 
+                    getRestfulPath()+"swagger"); 
+            
+        }
+
+        // add RestEasy
         
-        //  used by RestEasy to determine the JAX-RS resources and other related configuration
+        // used by RestEasy to determine the JAX-RS resources and other related configuration
         ctx.setInitParameter(
                 "javax.ws.rs.Application", 
                 "org.apache.isis.viewer.restfulobjects.server.RestfulObjectsApplication");
@@ -94,6 +121,7 @@ final class WebModule_RestEasy implements WebModule  {
             // guarded against by isAvailable()
             throw unexpectedCodeReach();
         }
+
     }
 
     @Override

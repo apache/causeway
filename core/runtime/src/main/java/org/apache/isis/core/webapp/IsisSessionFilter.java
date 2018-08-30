@@ -32,8 +32,6 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.annotation.WebFilter;
-import javax.servlet.annotation.WebInitParam;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -57,20 +55,20 @@ import org.apache.isis.core.webapp.content.ResourceCachingFilter;
  * 
  * authenticate user, set up an Isis session
  */
-@WebFilter(
-        servletNames={"RestfulObjectsRestEasyDispatcher"}, // this is mapped to the entire application; 
-            // however the IsisSessionFilter will 
-            // "notice" if the session filter has already been
-            // executed for the request pipeline, and if so will do nothing
-        initParams={
-        @WebInitParam(
-                name="authenticationSessionStrategy", 
-                value="org.apache.isis.viewer.restfulobjects.server.authentication.AuthenticationSessionStrategyBasicAuth"), // authentication required for REST
-        @WebInitParam(
-                name="whenNoSession", // what to do if no session was found ...
-                value="auto"), // ... 401 and a basic authentication challenge if request originates from web browser
-        @WebInitParam(name="passThru", value="/restful/swagger") //TODO[ISIS-1895] the restful path is configured elsewhere
-})
+//@WebFilter(
+//        servletNames={"RestfulObjectsRestEasyDispatcher"}, // this is mapped to the entire application; 
+//            // however the IsisSessionFilter will 
+//            // "notice" if the session filter has already been
+//            // executed for the request pipeline, and if so will do nothing
+//        initParams={
+//        @WebInitParam(
+//                name="authenticationSessionStrategy", 
+//                value="org.apache.isis.viewer.restfulobjects.server.authentication.AuthenticationSessionStrategyBasicAuth"), // authentication required for REST
+//        @WebInitParam(
+//                name="whenNoSession", // what to do if no session was found ...
+//                value="auto"), // ... 401 and a basic authentication challenge if request originates from web browser
+//        @WebInitParam(name="passThru", value="/restful/swagger") //TODO[ISIS-1895] the restful path is configured elsewhere
+//})
 public class IsisSessionFilter implements Filter {
 
     /**
