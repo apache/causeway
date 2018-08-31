@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.webapp;
 
+import static org.apache.isis.commons.internal._Constants.emptyStringArray;
+
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -76,7 +78,7 @@ public class IsisWebAppBootstrapper implements ServletContextListener {
             final ServletContext servletContext = servletContextEvent.getServletContext();
 
             final String webInfDir = servletContext.getRealPath("/WEB-INF");
-            loggingConfigurer.configureLogging(webInfDir, new String[0]);
+            loggingConfigurer.configureLogging(webInfDir, emptyStringArray);
 
             final IsisConfigurationBuilder isisConfigurationBuilder = 
                     IsisWebAppConfigProvider.getInstance().getConfigurationBuilder(servletContext);
@@ -135,7 +137,7 @@ public class IsisWebAppBootstrapper implements ServletContextListener {
             return deploymentTypeStr;
         }
 
-        deploymentTypeStr = isisConfigurationBuilder.peekConfiguration().getString(SystemConstants.DEPLOYMENT_TYPE_KEY);
+        deploymentTypeStr = isisConfigurationBuilder.peekAt(SystemConstants.DEPLOYMENT_TYPE_KEY);
         if (deploymentTypeStr != null) {
             return deploymentTypeStr;
         }
