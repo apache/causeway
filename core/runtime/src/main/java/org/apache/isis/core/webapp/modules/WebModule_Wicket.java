@@ -27,6 +27,9 @@ import static org.apache.isis.commons.internal.exceptions._Exceptions.unexpected
 
 import javax.servlet.Filter;
 import javax.servlet.FilterRegistration.Dynamic;
+
+import org.apache.isis.core.webapp.IsisWebAppConfigProvider;
+
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
@@ -58,14 +61,16 @@ final class WebModule_Wicket implements WebModule  {
             return;
         }
         
+        final IsisWebAppConfigProvider configProvider = IsisWebAppConfigProvider.getInstance();
+        
         pathConfigValue = 
-                ContextUtil.getConfigOrDefault(ctx, "isis.viewer.wicket.basePath", "/wicket");
+                configProvider.peekAtOrDefault(ctx, "isis.viewer.wicket.basePath", "/wicket");
         
         modeConfigValue = 
-                ContextUtil.getConfigOrDefault(ctx, "isis.viewer.wicket.mode", "deployment");
+                configProvider.peekAtOrDefault(ctx, "isis.viewer.wicket.mode", "deployment");
         
         appConfigValue = 
-                ContextUtil.getConfigOrDefault(ctx, "isis.viewer.wicket.app", 
+                configProvider.peekAtOrDefault(ctx, "isis.viewer.wicket.app", 
                         "org.apache.isis.viewer.wicket.viewer.IsisWicketApplication");
         
         ContextUtil.registerBootstrapper(ctx, this);

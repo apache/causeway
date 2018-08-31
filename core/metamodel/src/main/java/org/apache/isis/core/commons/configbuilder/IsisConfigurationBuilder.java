@@ -366,7 +366,9 @@ public final class IsisConfigurationBuilder {
         }
     }
 
-
+    public String peekAt(String key) {
+        return configuration.getString(key);
+    }
 
     // -- dumpResourcesToLog, toString
 
@@ -396,7 +398,5 @@ public final class IsisConfigurationBuilder {
     public String toString() {
         return toString.toString(this);
     }
-
-
 
 }

@@ -19,11 +19,12 @@
 
 package org.apache.isis.viewer.wicket.viewer;
 
+import static java.util.Objects.requireNonNull;
+
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.ServiceLoader;
 import java.util.Set;
 import java.util.UUID;
@@ -33,21 +34,18 @@ import java.util.concurrent.Future;
 import java.util.function.Function;
 
 import com.google.common.base.Joiner;
-import com.google.common.collect.Sets;
 import com.google.common.io.Resources;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 
 import org.apache.wicket.Application;
-import org.apache.wicket.Component;
 import org.apache.wicket.ConverterLocator;
 import org.apache.wicket.IConverterLocator;
 import org.apache.wicket.Page;
 import org.apache.wicket.RuntimeConfigurationType;
 import org.apache.wicket.SharedResources;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.AjaxRequestTarget.IListener;
 import org.apache.wicket.authentication.IAuthenticationStrategy;
 import org.apache.wicket.authentication.strategy.DefaultAuthenticationStrategy;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
@@ -187,7 +185,7 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
     private final IsisLoggingConfigurer loggingConfigurer = new IsisLoggingConfigurer();
 
     /**
-     * Convenience locator, downcasts inherited functionality.
+     * Convenience locator, down-casts inherited functionality.
      */
     public static IsisWicketApplication get() {
         return (IsisWicketApplication) AuthenticatedWebApplication.get();
@@ -229,20 +227,13 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
      * {@link com.google.inject.Inject Inject}ed when {@link #init() initialized}.
      */
     @com.google.inject.Inject
-    private IsisConfiguration configuration;
-
-    /**
-     * {@link com.google.inject.Inject Inject}ed when {@link #init() initialized}.
-     */
-    @com.google.inject.Inject
     private DeploymentCategory deploymentCategory;
 
     @com.google.inject.Inject
     private WicketViewerSettings settings;
 
-
-    private boolean determiningConfigurationType;
-    private DeploymentTypeWicketAbstract deploymentType;
+    private IsisConfigurationDefault isisConfiguration;
+    private final IsisWicketApplication_Experimental experimental;
 
 
     // /////////////////////////////////////////////////
@@ -250,6 +241,7 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
     // /////////////////////////////////////////////////
 
     public IsisWicketApplication() {
+        experimental = new IsisWicketApplication_Experimental(this);
     }
 
 
@@ -266,10 +258,29 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
         setResourceSettings(new IsisResourceSettings(this));
 
         // this doesn't seem to accomplish anything
-        // addListenerToStripRemovedComponentsFromAjaxTargetResponse();
+        // experimental.addListenerToStripRemovedComponentsFromAjaxTargetResponse();
 
+        // --- prepare the configuration prior to init()
+        
+        isisConfiguration = prepareConfiguration();
+        deploymentType = determineDeploymentType(isisConfiguration);
+        
         super.internalInit();
 
+    }
+    
+    private IsisConfigurationDefault prepareConfiguration() {
+        
+        final String isisConfigDir = getServletContext().getInitParameter("isis.config.dir");
+        configureLogging(isisConfigDir);
+        
+        final IsisConfigurationBuilder isisConfigurationBuilder = IsisWebAppConfigProvider.getInstance()
+                .getConfigurationBuilder(getServletContext());
+        isisConfigurationBuilder.addDefaultConfigurationResourcesAndPrimers();
+
+        final IsisConfigurationDefault configuration = isisConfigurationBuilder.getConfiguration();
+        
+        return configuration;
     }
 
     private static AjaxRequestTarget decorate(final AjaxRequestTarget ajaxRequestTarget) {
@@ -285,44 +296,6 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
         return application;
     }
 
-    // idea here is to avoid XmlPartialPageUpdate spitting out warnings, eg:
-    //
-    // 13:08:36,642  [XmlPartialPageUpdate qtp1988859660-18 WARN ]  Component '[AjaxLink [Component id = copyLink]]' with markupid: 'copyLink94c' not rendered because it was already removed from page
-    //  13:08:36,642  [XmlPartialPageUpdate qtp1988859660-18 WARN ]  Component '[SimpleClipboardModalWindow [Component id = simpleClipboardModalWindow]]' with markupid: 'simpleClipboardModalWindow94e' not rendered because it was already removed from page
-    // 13:08:36,643  [XmlPartialPageUpdate qtp1988859660-18 WARN ]  Component '[AjaxFallbackLink [Component id = link]]' with markupid: 'link951' not rendered because it was already removed from page
-    // 13:08:36,643  [XmlPartialPageUpdate qtp1988859660-18 WARN ]  Component '[AjaxFallbackLink [Component id = link]]' with markupid: 'link952' not rendered because it was already removed from page
-    // 13:08:36,655  [XmlPartialPageUpdate qtp1988859660-18 WARN ]  Component '[AjaxLink [Component id = clearBookmarkLink]]' with markupid: 'clearBookmarkLink953' not rendered because it was already removed from page
-    //
-    // however, doesn't seem to work (even though the provided map is mutable).
-    // must be some other sort of side-effect which causes the enqueued component(s) to be removed from page between
-    // this listener firing and XmlPartialPageUpdate actually attempting to render the change components
-    //
-    private boolean addListenerToStripRemovedComponentsFromAjaxTargetResponse() {
-        return getAjaxRequestTargetListeners().add(new IListener(){
-
-            @Override
-            public void onBeforeRespond(Map<String, Component> map, AjaxRequestTarget target) {
-
-                System.out.println("=====================================");
-                System.out.println("=== on before respond");
-                System.out.println("map="+map);
-                System.out.println("=====================================");
-                System.out.println("=== removals");
-                map.entrySet().removeIf(entry->{
-                    final Component component = entry.getValue();
-                    final Page page = component.findParent(Page.class);
-                    if(page==null) {
-                        System.out.println("id: "+entry.getKey()+": page="+page);
-                    }
-                    return page==null;
-                });
-
-                System.out.println("=====================================");
-
-            }
-        });
-    }
-
     /**
      * Initializes the application; in particular, bootstrapping the Isis
      * backend, and initializing the {@link ComponentFactoryRegistry} to be used
@@ -336,21 +309,11 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
 
             futures = startBackgroundInitializationThreads();
 
-            String isisConfigDir = getServletContext().getInitParameter("isis.config.dir");
-
-            configureLogging(isisConfigDir);
+            final IsisConfigurationDefault configuration = requireNonNull(isisConfiguration, 
+                    "Configuration must be prepared prior to init().");
 
             getRequestCycleSettings().setRenderStrategy(RequestCycleSettings.RenderStrategy.REDIRECT_TO_RENDER);
-
             getResourceSettings().setParentFolderPlaceholder("$up$");
-
-            final IsisConfigurationBuilder isisConfigurationBuilder = obtainConfigBuilder();
-            isisConfigurationBuilder.addDefaultConfigurationResourcesAndPrimers();
-
-            final IsisConfigurationDefault configuration = isisConfigurationBuilder.getConfiguration();
-
-            DeploymentTypeWicketAbstract deploymentType =
-                    determineDeploymentType(configuration.getString("isis.deploymentType"));
 
             RequestCycleListenerCollection requestCycleListeners = getRequestCycleListeners();
             IRequestCycleListener requestCycleListenerForIsis = newWebRequestCycleForIsis();
@@ -387,7 +350,7 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
             filterJavascriptContributions();
 
             configureWicketSourcePluginIfNecessary();
-
+            
             // TODO ISIS-987 Either make the API better (no direct access to the map) or use DB records
             int maxEntries = 1000;
             setMetaData(AccountConfirmationMap.KEY, new AccountConfirmationMap(maxEntries, Duration.days(1)));
@@ -439,7 +402,7 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
             ThreadPoolSupport.join(futures);
         }
     }
-
+    
     protected List<Future<Object>> startBackgroundInitializationThreads() {
         return ThreadPoolSupport.getInstance().invokeAll(_Lists.<Callable<Object>>of(
 
@@ -501,7 +464,9 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
     }
 
     protected void configureWicketSourcePluginIfNecessary() {
-        if(isWicketSourcePluginEnabled(this.configuration)) {
+        final IsisConfigurationDefault configuration = requireNonNull(isisConfiguration, 
+                "Configuration must be prepared prior to init().");
+        if(isWicketSourcePluginEnabled(configuration)) {
             configureWicketSourcePlugin();
         }
     }
@@ -587,52 +552,25 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
     /**
      * Made protected visibility for easy (informal) pluggability.
      */
-    protected void determineDeploymentTypeIfRequired() {
-        if(deploymentType != null) {
-            return;
-        }
-
-        determiningConfigurationType = true;
-        try {
-            final IsisConfigurationBuilder isisConfigurationBuilder = obtainConfigBuilder();
-
-            final IsisConfiguration configuration = isisConfigurationBuilder.peekConfiguration();
-            String deploymentTypeFromConfig = configuration.getString("isis.deploymentType");
-            deploymentType = determineDeploymentType(deploymentTypeFromConfig);
-        } finally {
-            determiningConfigurationType = false;
-        }
-    }
-
-    /**
-     * Made protected visibility for easy (informal) pluggability.
-     */
-    protected DeploymentTypeWicketAbstract determineDeploymentType(String deploymentTypeFromConfig) {
-        final DeploymentTypeWicketAbstract prototype = new WicketServerPrototype();
-        final DeploymentTypeWicketAbstract deployment = new WicketServer();
-
-        if(deploymentTypeFromConfig != null) {
-            final DeploymentType deploymentType = DeploymentType.lookup(deploymentTypeFromConfig);
-            return !deploymentType.getDeploymentCategory().isProduction()
-                    ? prototype
-                            : deployment;
+    protected DeploymentTypeWicketAbstract determineDeploymentType(IsisConfigurationDefault configuration) {
+        
+        //TODO[ahuber] we need to get rid of this static processing, 
+        // once wicket is only one of multiple viewer options 
+        final String deploymentTypeConfigValue = configuration.getString("isis.deploymentType");
+        final String wicketModeConfigValue = configuration.getString("isis.viewer.wicket.mode");
+        
+        final boolean isPrototype;
+        
+        if(wicketModeConfigValue!=null) {
+            isPrototype = "development".equalsIgnoreCase(wicketModeConfigValue);
+        } else if(deploymentTypeConfigValue!=null) {
+            final DeploymentType deploymentType = DeploymentType.lookup(deploymentTypeConfigValue);
+            isPrototype = !deploymentType.getDeploymentCategory().isProduction();
         } else {
-            return usesDevelopmentConfig()
-                    ? prototype
-                            : deployment;
+            isPrototype = false; // defaulting to production
         }
-    }
-
-
-    // //////////////////////////////////////
-
-    private IsisConfigurationBuilder isisConfigurationBuilder;
-
-    protected IsisConfigurationBuilder obtainConfigBuilder() {
-        return isisConfigurationBuilder != null
-                ? isisConfigurationBuilder
-                        : (isisConfigurationBuilder = IsisWebAppConfigProvider.getInstance()
-                            .getConfigurationBuilder(getServletContext()));
+        
+        return isPrototype ? new WicketServerPrototype() : new WicketServer();
     }
 
     // //////////////////////////////////////
@@ -650,16 +588,7 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
      * Made protected visibility for easy (informal) pluggability.
      */
     protected void buildCssBundle() {
-        // get the css for all components built by component factories
-        final Set<CssResourceReference> references = cssResourceReferencesForAllComponents();
-
-        // some additional special cases.
-        addSpecialCasesToCssBundle(references);
-
-        // create the bundle
-        getResourceBundles().addCssBundle(
-                IsisWicketApplication.class, "isis-wicket-viewer-bundle.css",
-                references.toArray(new CssResourceReference[]{}));
+        experimental.buildCssBundle();
     }
 
     /**
@@ -698,280 +627,268 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
                             Collections.<CssResourceReference>emptyList();
             };
 
+    // //////////////////////////////////////
 
-            protected Set<CssResourceReference> cssResourceReferencesForAllComponents() {
-                // TODO mgrigorov: ISIS-537 temporary disabled to not mess up with Bootstrap styles
-                //        Collection<ComponentFactory> componentFactories = getComponentFactoryRegistry().listComponentFactories();
-                return Sets.newLinkedHashSet(
-                        //                Iterables.concat(
-                        //                        Iterables.transform(
-                        //                                componentFactories,
-                        //                                getCssResourceReferences))
-                        );
+    /**
+     * filters Javascript header contributions so rendered to bottom of page.
+     *
+     * <p>
+     * Factored out for easy (informal) pluggability.
+     * </p>
+     */
+    protected void filterJavascriptContributions() {
+
+        setHeaderResponseDecorator(response -> {
+            return new ResourceAggregator(new JavaScriptFilteredIntoFooterHeaderResponse(response, "footerJS"));
+        });
+
+        //[ahuber] no longer supported since wicket 8
+        //		setHeaderResponseDecorator(new IHeaderResponseDecorator()
+        //		{
+        //			@Override
+        //			public IHeaderResponse decorate(IHeaderResponse response)
+        //			{
+        //				// use this header resource decorator to load all JavaScript resources in the page
+        //				// footer (after </body>)
+        //				return new JavaScriptFilteredIntoFooterHeaderResponse(response, "footerJS");
+        //			}
+        //		});
+    }
+
+    // //////////////////////////////////////
+
+    /**
+     * Map entity and action to provide prettier URLs.
+     *
+     * <p>
+     * Factored out for easy (informal) pluggability.
+     * </p>
+     */
+    protected void mountPages() {
+
+        mountPage("/signin", PageType.SIGN_IN);
+        mountPage("/signup", PageType.SIGN_UP);
+        mountPage("/signup/verify", PageType.SIGN_UP_VERIFY);
+        mountPage("/password/reset", PageType.PASSWORD_RESET);
+
+        mountPage("/entity/#{objectOid}", PageType.ENTITY);
+
+        // nb: action mount cannot contain {actionArgs}, because the default
+        // parameters encoder doesn't seem to be able to handle multiple args
+        mountPage("/action/${objectOid}/${actionOwningSpec}/${actionId}/${actionType}", PageType.ACTION_PROMPT);
+
+        mountPage("/logout", WicketLogoutPage.class);
+    }
+
+    protected void mountPage(final String mountPath, final PageType pageType) {
+        final Class<? extends Page> pageClass = this.pageClassRegistry.getPageClass(pageType);
+        mount(new MountedMapper(mountPath, pageClass));
+    }
+
+
+    // //////////////////////////////////////
+
+    private void logError(String validationError) {
+        log(validationError);
+    }
+
+    private static void logBanner() {
+        String msg = "################################################ ISIS METAMODEL VALIDATION ERRORS ################################################################";
+        log(msg);
+    }
+
+    private static void log(String msg) {
+        System.err.println(msg);
+        LOG.error(msg);
+    }
+
+    // //////////////////////////////////////
+
+    /**
+     * Whether Wicket tags should be stripped from the markup, as specified by configuration settings..
+     *
+     * <p>
+     * If the <tt>isis.viewer.wicket.stripWicketTags</tt> is set, then this is used, otherwise the default is to strip
+     * the tags because they may break some CSS rules.
+     */
+    private boolean determineStripWicketTags(IsisConfiguration configuration) {
+        final boolean strip = configuration.getBoolean(STRIP_WICKET_TAGS_KEY, STRIP_WICKET_TAGS_DEFAULT);
+        return strip;
+    }
+
+    // //////////////////////////////////////
+
+    /**
+     * Whether the Ajax debug should be shown, as specified by configuration settings.
+     *
+     * <p>
+     * If the <tt>isis.viewer.wicket.ajaxDebugMode</tt> is set, then this is used, otherwise the default is to disable.
+     */
+    private boolean determineAjaxDebugModeEnabled(IsisConfiguration configuration) {
+        final boolean debugModeEnabled = configuration.getBoolean(AJAX_DEBUG_MODE_KEY, AJAX_DEBUG_MODE_DEFAULT);
+        return debugModeEnabled;
+    }
+
+    /**
+     * Whether the Wicket source plugin should be enabled, as specified by configuration settings.
+     *
+     * <p>
+     * If the <tt>isis.viewer.wicket.wicketSourcePlugin</tt> is set, then this is used, otherwise the default is to disable.
+     */
+    private boolean isWicketSourcePluginEnabled(IsisConfiguration configuration) {
+        final boolean pluginEnabled = configuration.getBoolean(WICKET_SOURCE_PLUGIN_KEY, WICKET_SOURCE_PLUGIN_DEFAULT);
+        return pluginEnabled;
+    }
+
+    // //////////////////////////////////////
+
+    @Override
+    protected void onDestroy() {
+        try {
+            if (isisSessionFactory != null) {
+                isisSessionFactory.destroyServicesAndShutdown();
             }
+            getServletContext().setAttribute(WebAppConstants.ISIS_SESSION_FACTORY, null);
+            super.onDestroy();
+            IsisContext.clear();
+        } catch(final RuntimeException ex) {
+            // symmetry with #init()
+            LOG.error("Failed to destroy", ex);
+            throw ex;
+        }
+    }
 
-            // //////////////////////////////////////
+    // //////////////////////////////////////
 
-            /**
-             * filters Javascript header contributions so rendered to bottom of page.
-             *
-             * <p>
-             * Factored out for easy (informal) pluggability.
-             * </p>
-             */
-            protected void filterJavascriptContributions() {
+    private DeploymentTypeWicketAbstract deploymentType;
+    
+    @Override
+    public RuntimeConfigurationType getConfigurationType() {
+        requireNonNull(deploymentType, 
+                "Applications needs to be prepared before accessing this field.");
+        return deploymentType.getConfigurationType();
+    }
+    
+    // //////////////////////////////////////
 
-                setHeaderResponseDecorator(response -> {
-                    return new ResourceAggregator(new JavaScriptFilteredIntoFooterHeaderResponse(response, "footerJS"));
-                });
+    protected IsisInjectModule newIsisModule(
+            final DeploymentCategory deploymentCategory,
+            final IsisConfigurationDefault isisConfiguration) {
+        return new IsisInjectModule(deploymentCategory, isisConfiguration);
+    }
 
-                //[ahuber] no longer supported since wicket 8
-                //		setHeaderResponseDecorator(new IHeaderResponseDecorator()
-                //		{
-                //			@Override
-                //			public IHeaderResponse decorate(IHeaderResponse response)
-                //			{
-                //				// use this header resource decorator to load all JavaScript resources in the page
-                //				// footer (after </body>)
-                //				return new JavaScriptFilteredIntoFooterHeaderResponse(response, "footerJS");
-                //			}
-                //		});
-            }
-
-            // //////////////////////////////////////
-
-            /**
-             * Map entity and action to provide prettier URLs.
-             *
-             * <p>
-             * Factored out for easy (informal) pluggability.
-             * </p>
-             */
-            protected void mountPages() {
-
-                mountPage("/signin", PageType.SIGN_IN);
-                mountPage("/signup", PageType.SIGN_UP);
-                mountPage("/signup/verify", PageType.SIGN_UP_VERIFY);
-                mountPage("/password/reset", PageType.PASSWORD_RESET);
-
-                mountPage("/entity/#{objectOid}", PageType.ENTITY);
-
-                // nb: action mount cannot contain {actionArgs}, because the default
-                // parameters encoder doesn't seem to be able to handle multiple args
-                mountPage("/action/${objectOid}/${actionOwningSpec}/${actionId}/${actionType}", PageType.ACTION_PROMPT);
-
-                mountPage("/logout", WicketLogoutPage.class);
-            }
-
-            protected void mountPage(final String mountPath, final PageType pageType) {
-                final Class<? extends Page> pageClass = this.pageClassRegistry.getPageClass(pageType);
-                mount(new MountedMapper(mountPath, pageClass));
-            }
+    // //////////////////////////////////////
 
 
-            // //////////////////////////////////////
+    protected void initWicketComponentInjection(final Injector injector) {
+        getComponentInstantiationListeners().add(new GuiceComponentInjector(this, injector, false));
+    }
 
-            private void logError(String validationError) {
-                log(validationError);
-            }
+    // /////////////////////////////////////////////////
+    // Wicket Hooks
+    // /////////////////////////////////////////////////
 
-            private static void logBanner() {
-                String msg = "################################################ ISIS METAMODEL VALIDATION ERRORS ################################################################";
-                log(msg);
-            }
+    /**
+     * Installs a {@link AuthenticatedWebSessionForIsis custom implementation}
+     * of Wicket's own {@link AuthenticatedWebSession}, effectively associating
+     * the Wicket session with the Isis's equivalent session object.
+     *
+     * <p>
+     * In general, it shouldn't be necessary to override this method.
+     */
+    @Override
+    protected Class<? extends AuthenticatedWebSession> getWebSessionClass() {
+        return AuthenticatedWebSessionForIsis.class;
+    }
 
-            private static void log(String msg) {
-                System.err.println(msg);
-                LOG.error(msg);
-            }
+    /**
+     * Installs a {@link ConverterLocator} preconfigured with a number of
+     * implementations to support Isis specific objects.
+     */
+    @Override
+    protected IConverterLocator newConverterLocator() {
+        final ConverterLocator converterLocator = new ConverterLocator();
+        converterLocator.set(ObjectAdapter.class, new ConverterForObjectAdapter());
+        converterLocator.set(ObjectAdapterMemento.class, new ConverterForObjectAdapterMemento());
+        return converterLocator;
+    }
 
-            // //////////////////////////////////////
+    // /////////////////////////////////////////////////
+    // Component Factories
+    // /////////////////////////////////////////////////
 
-            /**
-             * Whether Wicket tags should be stripped from the markup, as specified by configuration settings..
-             *
-             * <p>
-             * If the <tt>isis.viewer.wicket.stripWicketTags</tt> is set, then this is used, otherwise the default is to strip
-             * the tags because they may break some CSS rules.
-             */
-            private boolean determineStripWicketTags(IsisConfiguration configuration) {
-                final boolean strip = configuration.getBoolean(STRIP_WICKET_TAGS_KEY, STRIP_WICKET_TAGS_DEFAULT);
-                return strip;
-            }
+    @Override
+    public final ComponentFactoryRegistry getComponentFactoryRegistry() {
+        return componentFactoryRegistry;
+    }
 
-            // //////////////////////////////////////
+    // /////////////////////////////////////////////////
+    // Page Registry
+    // /////////////////////////////////////////////////
 
-            /**
-             * Whether the Ajax debug should be shown, as specified by configuration settings.
-             *
-             * <p>
-             * If the <tt>isis.viewer.wicket.ajaxDebugMode</tt> is set, then this is used, otherwise the default is to disable.
-             */
-            private boolean determineAjaxDebugModeEnabled(IsisConfiguration configuration) {
-                final boolean debugModeEnabled = configuration.getBoolean(AJAX_DEBUG_MODE_KEY, AJAX_DEBUG_MODE_DEFAULT);
-                return debugModeEnabled;
-            }
+    /**
+     * Access to other page types.
+     *
+     * <p>
+     * Non-final only for testing purposes; should not typically be overridden.
+     */
+    @Override
+    public PageClassRegistry getPageClassRegistry() {
+        return pageClassRegistry;
+    }
 
-            /**
-             * Whether the Wicket source plugin should be enabled, as specified by configuration settings.
-             *
-             * <p>
-             * If the <tt>isis.viewer.wicket.wicketSourcePlugin</tt> is set, then this is used, otherwise the default is to disable.
-             */
-            private boolean isWicketSourcePluginEnabled(IsisConfiguration configuration) {
-                final boolean pluginEnabled = configuration.getBoolean(WICKET_SOURCE_PLUGIN_KEY, WICKET_SOURCE_PLUGIN_DEFAULT);
-                return pluginEnabled;
-            }
+    /**
+     * Delegates to the {@link #getPageClassRegistry() PageClassRegistry}.
+     */
+    @Override
+    public Class<? extends Page> getHomePage() {
+        return getPageClassRegistry().getPageClass(PageType.HOME);
+    }
 
-            // //////////////////////////////////////
+    /**
+     * Delegates to the {@link #getPageClassRegistry() PageClassRegistry}.
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public Class<? extends WebPage> getSignInPageClass() {
+        return (Class<? extends WebPage>) getPageClassRegistry().getPageClass(PageType.SIGN_IN);
+    }
 
-            @Override
-            protected void onDestroy() {
-                try {
-                    if (isisSessionFactory != null) {
-                        isisSessionFactory.destroyServicesAndShutdown();
-                    }
-                    getServletContext().setAttribute(WebAppConstants.ISIS_SESSION_FACTORY, null);
-                    super.onDestroy();
-                    IsisContext.clear();
-                } catch(final RuntimeException ex) {
-                    // symmetry with #init()
-                    LOG.error("Failed to destroy", ex);
-                    throw ex;
-                }
-            }
+    /**
+     * Delegates to the {@link #getPageClassRegistry() PageClassRegistry}.
+     */
+    @SuppressWarnings("unchecked")
+    public Class<? extends WebPage> getSignUpPageClass() {
+        return (Class<? extends WebPage>) getPageClassRegistry().getPageClass(PageType.SIGN_UP);
+    }
 
-            // //////////////////////////////////////
+    /**
+     * Delegates to the {@link #getPageClassRegistry() PageClassRegistry}.
+     */
+    @SuppressWarnings("unchecked")
+    public Class<? extends WebPage> getSignUpVerifyPageClass() {
+        return (Class<? extends WebPage>) getPageClassRegistry().getPageClass(PageType.SIGN_UP_VERIFY);
+    }
 
-            @Override
-            public RuntimeConfigurationType getConfigurationType() {
-                if(determiningConfigurationType) {
-                    // avoiding an infinite loop; have already passed through here once before
-                    // this time around, just delegate to web-inf
-                    return super.getConfigurationType();
-                }
-                determineDeploymentTypeIfRequired();
-                return deploymentType.getConfigurationType();
-            }
+    /**
+     * Delegates to the {@link #getPageClassRegistry() PageClassRegistry}.
+     */
+    @SuppressWarnings("unchecked")
+    public Class<? extends WebPage> getForgotPasswordPageClass() {
+        return (Class<? extends WebPage>) getPageClassRegistry().getPageClass(PageType.PASSWORD_RESET);
+    }
 
-            protected IsisInjectModule newIsisModule(
-                    final DeploymentCategory deploymentCategory,
-                    final IsisConfigurationDefault isisConfiguration) {
-                return new IsisInjectModule(deploymentCategory, isisConfiguration);
-            }
-            
-            // //////////////////////////////////////
+    public AuthenticationSession getAuthenticationSession() {
+        return isisSessionFactory.getCurrentSession().getAuthenticationSession();
+    }
 
+    public DeploymentCategory getDeploymentCategory() {
+        return deploymentCategory;
+    }
 
-            protected void initWicketComponentInjection(final Injector injector) {
-                getComponentInstantiationListeners().add(new GuiceComponentInjector(this, injector, false));
-            }
-
-            // /////////////////////////////////////////////////
-            // Wicket Hooks
-            // /////////////////////////////////////////////////
-
-            /**
-             * Installs a {@link AuthenticatedWebSessionForIsis custom implementation}
-             * of Wicket's own {@link AuthenticatedWebSession}, effectively associating
-             * the Wicket session with the Isis's equivalent session object.
-             *
-             * <p>
-             * In general, it shouldn't be necessary to override this method.
-             */
-            @Override
-            protected Class<? extends AuthenticatedWebSession> getWebSessionClass() {
-                return AuthenticatedWebSessionForIsis.class;
-            }
-
-            /**
-             * Installs a {@link ConverterLocator} preconfigured with a number of
-             * implementations to support Isis specific objects.
-             */
-            @Override
-            protected IConverterLocator newConverterLocator() {
-                final ConverterLocator converterLocator = new ConverterLocator();
-                converterLocator.set(ObjectAdapter.class, new ConverterForObjectAdapter());
-                converterLocator.set(ObjectAdapterMemento.class, new ConverterForObjectAdapterMemento());
-                return converterLocator;
-            }
-
-            // /////////////////////////////////////////////////
-            // Component Factories
-            // /////////////////////////////////////////////////
-
-            @Override
-            public final ComponentFactoryRegistry getComponentFactoryRegistry() {
-                return componentFactoryRegistry;
-            }
-
-            // /////////////////////////////////////////////////
-            // Page Registry
-            // /////////////////////////////////////////////////
-
-            /**
-             * Access to other page types.
-             *
-             * <p>
-             * Non-final only for testing purposes; should not typically be overridden.
-             */
-            @Override
-            public PageClassRegistry getPageClassRegistry() {
-                return pageClassRegistry;
-            }
-
-            /**
-             * Delegates to the {@link #getPageClassRegistry() PageClassRegistry}.
-             */
-            @Override
-            public Class<? extends Page> getHomePage() {
-                return getPageClassRegistry().getPageClass(PageType.HOME);
-            }
-
-            /**
-             * Delegates to the {@link #getPageClassRegistry() PageClassRegistry}.
-             */
-            @SuppressWarnings("unchecked")
-            @Override
-            public Class<? extends WebPage> getSignInPageClass() {
-                return (Class<? extends WebPage>) getPageClassRegistry().getPageClass(PageType.SIGN_IN);
-            }
-
-            /**
-             * Delegates to the {@link #getPageClassRegistry() PageClassRegistry}.
-             */
-            @SuppressWarnings("unchecked")
-            public Class<? extends WebPage> getSignUpPageClass() {
-                return (Class<? extends WebPage>) getPageClassRegistry().getPageClass(PageType.SIGN_UP);
-            }
-
-            /**
-             * Delegates to the {@link #getPageClassRegistry() PageClassRegistry}.
-             */
-            @SuppressWarnings("unchecked")
-            public Class<? extends WebPage> getSignUpVerifyPageClass() {
-                return (Class<? extends WebPage>) getPageClassRegistry().getPageClass(PageType.SIGN_UP_VERIFY);
-            }
-
-            /**
-             * Delegates to the {@link #getPageClassRegistry() PageClassRegistry}.
-             */
-            @SuppressWarnings("unchecked")
-            public Class<? extends WebPage> getForgotPasswordPageClass() {
-                return (Class<? extends WebPage>) getPageClassRegistry().getPageClass(PageType.PASSWORD_RESET);
-            }
-
-            public AuthenticationSession getAuthenticationSession() {
-                return isisSessionFactory.getCurrentSession().getAuthenticationSession();
-            }
-
-            public DeploymentCategory getDeploymentCategory() {
-                return deploymentCategory;
-            }
-
-            @Override
-            public WicketViewerSettings getSettings() {
-                return settings;
-            }
+    @Override
+    public WicketViewerSettings getSettings() {
+        return settings;
+    }
 
 }

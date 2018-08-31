@@ -32,6 +32,7 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
 import org.apache.isis.core.webapp.IsisSessionFilter;
+import org.apache.isis.core.webapp.IsisWebAppConfigProvider;
 
 /**
  * Package private mixin for WebModule implementing WebModule.
@@ -64,7 +65,8 @@ final class WebModule_RestEasy implements WebModule  {
         
         // try to fetch restfulPath from config else fallback to default
         final String restfulPath = 
-                ContextUtil.getConfigOrDefault(ctx, KEY_RESTFUL_BASE_PATH, KEY_RESTFUL_BASE_PATH_DEFAULT); 
+                IsisWebAppConfigProvider.getInstance()
+                .peekAtOrDefault(ctx, KEY_RESTFUL_BASE_PATH, KEY_RESTFUL_BASE_PATH_DEFAULT);
                 
         putRestfulPath(restfulPath);
         

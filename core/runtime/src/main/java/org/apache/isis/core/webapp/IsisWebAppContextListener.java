@@ -61,16 +61,16 @@ public class IsisWebAppContextListener implements ServletContextListener {
     
     @Override
     public void contextInitialized(ServletContextEvent event) {
-        
+
         final ServletContext servletContext = event.getServletContext();
         
+        LOG.info("=== PHASE 1 === Setting up ServletContext parameters");
+        
         setDefaultClassLoader(this.getClass().getClassLoader(), true);
+        putContextPathIfPresent(servletContext.getContextPath());
         
         final IsisWebAppConfigProvider configProvider = new IsisWebAppConfigProvider();
         IsisWebAppConfigProvider.register(configProvider);
-        
-        // phase 1 - setting up context specific properties before bootstrapping
-        putContextPathIfPresent(servletContext.getContextPath());
 
         final List<WebModule> webModules =
                  WebModule.discoverWebModules()
@@ -82,13 +82,15 @@ public class IsisWebAppContextListener implements ServletContextListener {
         // invalidate config such that next IsisConfigurationBuilder that gets obtained is reinitialized
         configProvider.invalidate(servletContext);  
         
-        // phase 2 - initializing the ServletContext
+        LOG.info("=== PHASE 2 === Initializing the ServletContext");
         
         webModules.stream()
         .filter(module->module.isApplicable(servletContext)) // filter those WebModules that are applicable
         .forEach(module->addListener(servletContext, module));
         
         activeListeners.forEach(listener->listener.contextInitialized(event));
+        
+        LOG.info("=== DONE === ServletContext initialized.");
     }
 
     @Override

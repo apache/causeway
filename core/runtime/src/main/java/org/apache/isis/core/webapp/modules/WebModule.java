@@ -19,8 +19,6 @@
 package org.apache.isis.core.webapp.modules;
 
 import static org.apache.isis.commons.internal.base._Strings.isEmpty;
-import static org.apache.isis.commons.internal.base._With.ifPresentElse;
-import static org.apache.isis.commons.internal.base._With.requires;
 
 import java.util.stream.Stream;
 
@@ -32,8 +30,6 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebListener;
 
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.webapp.IsisWebAppConfigProvider;
 import org.apache.isis.core.webapp.IsisWebAppContextListener;
 
 /**
@@ -168,23 +164,6 @@ public interface WebModule {
         public static Stream<String> streamProtectedPaths(ServletContext ctx) {
             final String list = (String) ctx.getAttribute("isis.protected");
             return _Strings.splitThenStream(list, ",");
-        }
-
-        /**
-         * Try to fetch the value from config stored under {@code key} else fallback to {@code defaultValue}
-         * @param ctx
-         * @param key
-         * @param defaultValue
-         * @return non-null
-         */
-        public static String getConfigOrDefault(ServletContext ctx, String key, String defaultValue) {
-            requires(key, "key");
-            requires(defaultValue, "defaultValue");
-            
-            final IsisConfiguration webXmlConfig = 
-                    IsisWebAppConfigProvider.getInstance().peekConfiguration(ctx);
-            
-            return ifPresentElse(webXmlConfig.getString(key), defaultValue);
         }
         
         

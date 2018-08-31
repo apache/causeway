@@ -18,6 +18,8 @@
  */
 package org.apache.isis.core.webapp;
 
+import static org.apache.isis.commons.internal.base._With.ifPresentElse;
+import static org.apache.isis.commons.internal.base._With.requires;
 import static org.apache.isis.commons.internal.context._Context.getOrThrow;
 import static org.apache.isis.commons.internal.context._Context.putSingleton;
 
@@ -26,7 +28,6 @@ import javax.servlet.ServletContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceContextLoaderClassPath;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceCurrentClassClassPath;
@@ -53,27 +54,19 @@ public class IsisWebAppConfigProvider {
     
     /**
      * If available reuses the IsisConfigurationBuilder instance that is already on the ServletContext or
-     * creates a new one. 
+     * creates a new one and puts it on the ServletContext.
      * 
      * @param servletContext
      * @return
      */
-    public IsisConfigurationBuilder getConfigurationBuilder(final ServletContext servletContext) {
+    public synchronized IsisConfigurationBuilder getConfigurationBuilder(final ServletContext servletContext) {
         IsisConfigurationBuilder isisConfigurationBuilder =
                 (IsisConfigurationBuilder) servletContext.getAttribute(WebAppConstants.CONFIGURATION_BUILDER_KEY);
         if(isisConfigurationBuilder == null) {
             isisConfigurationBuilder = newIsisConfigurationBuilder(servletContext);
+            servletContext.setAttribute(WebAppConstants.CONFIGURATION_BUILDER_KEY, isisConfigurationBuilder);
         }
         return isisConfigurationBuilder;
-    }
-    
-    /**
-     * Shortcut for {@code getConfigurationBuilder(servletContext).peekConfiguration()}
-     * @param servletContext
-     * @return a configuration copy
-     */
-    public IsisConfiguration peekConfiguration(final ServletContext servletContext) {
-        return getConfigurationBuilder(servletContext).peekConfiguration();
     }
 
     /**
@@ -86,6 +79,24 @@ public class IsisWebAppConfigProvider {
         isisConfigurationBuilder.primeWith(new OptionHandlerInitParameters(servletContext));
         addResourceStreamSources(servletContext, isisConfigurationBuilder);
         return isisConfigurationBuilder;
+    }
+    
+    // -- PEEKING
+    
+    /**
+     * Try to fetch the value from config stored under {@code key} else fallback to {@code defaultValue}
+     * @param servletContext
+     * @param key
+     * @param defaultValue
+     * @return non-null
+     */
+    public String peekAtOrDefault(ServletContext servletContext, String key, String defaultValue) {
+        requires(servletContext, "servletContext");
+        requires(key, "key");
+        requires(defaultValue, "defaultValue");
+        
+        final String configValue = getConfigurationBuilder(servletContext).peekAt(key);
+        return ifPresentElse(configValue, defaultValue);
     }
     
     // -- LOOKUP
