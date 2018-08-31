@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.concurrent.Callable;
 
 import com.google.common.base.Objects;
+import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 
 import org.slf4j.Logger;
@@ -34,11 +35,8 @@ import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.annotation.InvokedOn;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
-
-import com.google.common.base.Predicate;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.commons.internal._Constants;
-import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
