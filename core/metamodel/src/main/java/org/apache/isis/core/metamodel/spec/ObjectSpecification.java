@@ -171,17 +171,17 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
      */
     String getHelp();
 
-    /**
-     * Returns the title string for the specified object.
-     *
-     * <p>
-     * Corresponds to the {@link TitleFacet#title(ObjectAdapter)} ) value} of
-     * {@link TitleFacet}; is not necessarily immutable.
-     *
-     * @deprecated use {@link #getTitle(ObjectAdapter, ObjectAdapter)}
-     */
-    @Deprecated
-    String getTitle(ObjectAdapter adapter);
+//    /**
+//     * Returns the title string for the specified object.
+//     *
+//     * <p>
+//     * Corresponds to the {@link TitleFacet#title(ObjectAdapter)} ) value} of
+//     * {@link TitleFacet}; is not necessarily immutable.
+//     *
+//     * @deprecated use {@link #getTitle(ObjectAdapter, ObjectAdapter)}
+//     */
+//    @Deprecated
+//    String getTitle(ObjectAdapter adapter);
 
     /**
      * Returns the title to display of target adapter, rendered within the context

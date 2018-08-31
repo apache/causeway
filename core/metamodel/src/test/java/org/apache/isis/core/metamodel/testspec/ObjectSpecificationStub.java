@@ -255,11 +255,6 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     }
 
     @Override
-    public String getTitle(final ObjectAdapter targetAdapter) {
-        return getTitle(null, targetAdapter);
-    }
-
-    @Override
     public String getTitle(
             final ObjectAdapter contextAdapterIfAny,
             final ObjectAdapter targetAdapter) {

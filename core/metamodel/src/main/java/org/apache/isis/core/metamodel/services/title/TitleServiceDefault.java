@@ -39,7 +39,7 @@ public class TitleServiceDefault implements TitleService {
         final ObjectAdapter objectAdapter = adapterManager.adapterFor(unwrapped(domainObject));
         final boolean destroyed = objectAdapter.isDestroyed();
         if(!destroyed) {
-            return objectAdapter.getSpecification().getTitle(objectAdapter);
+            return objectAdapter.getSpecification().getTitle(null, objectAdapter);
         } else {
             return "[DELETED]";
         }

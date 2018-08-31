@@ -39,6 +39,7 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.core.commons.lang.ClassExtensions;
@@ -338,8 +339,6 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         }
     }
 
-
-
     // -- Introspection (part 2)
 
     public void updateFromFacetValues() {
@@ -350,15 +349,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         cssClassFacet = getFacet(CssClassFacet.class);
     }
 
-
-
-
     // -- Title, Icon
-
-    @Override
-    public String getTitle(final ObjectAdapter targetAdapter) {
-        return getTitle(null, targetAdapter);
-    }
 
     @Override
     public String getTitle(
@@ -366,7 +357,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             ObjectAdapter targetAdapter) {
         if (titleFacet != null) {
             final String titleString = titleFacet.title(contextAdapterIfAny, targetAdapter);
-            if (titleString != null && !titleString.equals("")) {
+            if (!_Strings.isEmpty(titleString)) {
                 return titleString;
             }
         }

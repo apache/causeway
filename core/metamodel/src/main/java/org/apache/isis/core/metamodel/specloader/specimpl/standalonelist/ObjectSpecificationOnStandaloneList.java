@@ -114,21 +114,17 @@ public class ObjectSpecificationOnStandaloneList extends ObjectSpecificationAbst
         return null;
     }
 
-
-
     // -- Title and Icon
-
+    
     @Override
-    public String getTitle(final ObjectAdapter object) {
-        return ((FreeStandingList) object.getObject()).titleString();
+    public String getTitle(ObjectAdapter contextAdapterIfAny, ObjectAdapter targetAdapter) {
+        return ((FreeStandingList) targetAdapter.getObject()).titleString();
     }
 
     @Override
     public String getIconName(final ObjectAdapter object) {
         return ICON_NAME;
     }
-
-
 
     // -- Object Actions
     /**
