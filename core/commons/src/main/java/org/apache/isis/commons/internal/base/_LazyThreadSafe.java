@@ -26,7 +26,7 @@ import java.util.function.Supplier;
 /**
  * <h1>- internal use only -</h1>
  * <p>
- * (non-thread-safe) Supplier with memoization.
+ * Thread-safe Supplier with memoization.
  * </p>
  * <p>
  * <b>WARNING</b>: Do <b>NOT</b> use any of the classes provided by this package! <br/>
@@ -35,23 +35,24 @@ import java.util.function.Supplier;
  *
  * @since 2.0.0
  */
-public final class _Lazy<T> implements Supplier<T> {
+public final class _LazyThreadSafe<T> implements Supplier<T> {
 
     private final Supplier<? extends T> supplier;
     private T value;
     private boolean memoized;
 
     /**
-     * Concurrent calls to this lazy's get() method might result in concurrent calls to the 
+     * Thread-safe variant to {@link _Lazy#of(Supplier)}.
+     * Concurrent calls to this lazy's get() method will never result in concurrent calls to the 
      * specified {@code supplier}. 
      * @param supplier
-     * @return an (non-thread-safe) instance of _Lacy that initializes with the specified {@code supplier}
+     * @return an (thread-safe) instance of _Lacy that initializes with the specified {@code supplier}
      */
-    public static <T> _Lazy<T> of(Supplier<? extends T> supplier) {
-        return new _Lazy<T>(supplier);
+    public static <T> _LazyThreadSafe<T> of(Supplier<? extends T> supplier) {
+        return new _LazyThreadSafe<T>(supplier);
     }
 
-    private _Lazy(Supplier<? extends T> supplier) {
+    private _LazyThreadSafe(Supplier<? extends T> supplier) {
         this.supplier = requires(supplier, "supplier");
     }
 
@@ -59,7 +60,9 @@ public final class _Lazy<T> implements Supplier<T> {
      * @return whether this lazy got initialized and holds a memoized value
      */
     public boolean isMemoized() {
-        return memoized;
+        synchronized (this) {
+            return memoized;    
+        }
     }
 
     /**
@@ -68,8 +71,10 @@ public final class _Lazy<T> implements Supplier<T> {
      *
      */
     public void clear() {
-        this.memoized = false;
-        this.value = null;
+        synchronized (this) {
+            this.memoized = false;
+            this.value = null;
+        }
     }
 
     /**
@@ -78,11 +83,13 @@ public final class _Lazy<T> implements Supplier<T> {
      */
     @Override
     public T get() {
-        if(memoized) {
-            return value;
+        synchronized (this) {
+            if(memoized) {
+                return value;
+            }
+            memoized=true;
+            return value = supplier.get();    
         }
-        memoized=true;
-        return value = supplier.get();
     }
 
 }
