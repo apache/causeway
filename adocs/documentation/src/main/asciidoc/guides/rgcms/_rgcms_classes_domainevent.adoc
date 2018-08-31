@@ -26,7 +26,7 @@ Impl'n (g: a:)
 |xref:../rgcms/rgcms.adoc#_rgcms_classes_domainevent_AbstractDomainEvent[`o.a.i.applib.` +
 `AbstractDomainEvent`]
 |``o.a.i.core`` +
-``services.eventbus`` +
+``events.domain`` +
 ``isis-core-applib``
 |(abstract class)
 |Superclass of the other domain events, listed below in this table.
@@ -35,7 +35,7 @@ Impl'n (g: a:)
 |xref:../rgcms/rgcms.adoc#_rgcms_classes_domainevent_ActionDomainEvent[`o.a.i.applib.` +
 `ActionDomainEvent`]
 |``o.a.i.core`` +
-``services.eventbus`` +
+``events.domain`` +
 ``isis-core-applib``
 |(abstract class). +
 `ActionDomainEvent.Default` is the concrete implementation used if no `@Action#domainEvent` attribute is specified
@@ -45,7 +45,7 @@ Impl'n (g: a:)
 |xref:../rgcms/rgcms.adoc#_rgcms_classes_domainevent_CollectionDomainEvent[`o.a.i.applib.` +
 `CollectionDomainEvent`]
 |``o.a.i.core`` +
-``services.eventbus`` +
+``events.domain`` +
 ``isis-core-applib``
 |(abstract class). +
 `CollectionDomainEvent.Default` is the concrete implementation used if no `@Collection#domainEvent` attribute
@@ -56,7 +56,7 @@ is specified.
 |xref:../rgcms/rgcms.adoc#_rgcms_classes_domainevent_PropertyDomainEvent[`o.a.i.applib.` +
 `PropertyDomainEvent`]
 |``o.a.i.core`` +
-``services.eventbus`` +
+``events.domain`` +
 ``isis-core-applib``
 |(abstract class). +
 `PropertyDomainEvent.Default` is the concrete implementation used if no `@Propert#domainEvent` attribute is specified

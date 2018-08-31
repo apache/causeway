@@ -8,12 +8,14 @@
 
 The `@javax.jdo.annotation.PrimaryKey` annotation is used by JDO/DataNucleus to indicate that a property is used as the primary key for an entity with application-managed identity.
 
-Apache Isis also uses this annotation in a very minimal way: to ensure that the framework's own logic to initialize newly instantiated objects (eg using xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer[`DomainObjectContainer#newTransientInstance(...)`] does not touch the primary key, and also to ensure that the primary key property is always disabled (read-only).
+Apache Isis also uses this annotation in a very minimal way: to ensure that the framework's own logic to initialize newly instantiated objects (eg using xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_FactoryService[`FactoryService#instantiate(...)`] does not touch the primary key, and also to ensure that the primary key property is always disabled (read-only).
 
 [NOTE]
 ====
-Isis parses the `@NotPersistent` annotation from the Java source code; it does not query the JDO metamodel.  This means that it the `@NotPersistent` annotation must be used rather than the equivalent `<field>` link:http://www.datanucleus.org/products/accessplatform_4_0/jdo/application_identity.html[XML metadata].
+Isis parses the `@NotPersistent` annotation from the Java source code; it does not query the JDO metamodel.
+This means that it the `@NotPersistent` annotation must be used rather than the equivalent `<field>` link:http://www.datanucleus.org/products/accessplatform_4_0/jdo/application_identity.html[XML metadata].
 
-Moreover, while JDO/DataNucleus will recognize annotations on either the field or the getter method, Apache Isis (currently) only inspects the getter method.  Therefore ensure that the annotation is placed there.
+Moreover, while JDO/DataNucleus will recognize annotations on either the field or the getter method, Apache Isis (currently) only inspects the getter method.
+Therefore ensure that the annotation is placed there.
 ====
 

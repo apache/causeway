@@ -24,10 +24,10 @@ public class ToDoAppDashboardService  {
     )
     @HomePage
     public ToDoAppDashboard lookup() {
-        return container.injectServicesInto(new ToDoAppDashboard());
+        return serviceRegistry.injectServicesInto(new ToDoAppDashboard());
     }
     @Inject
-    private DomainObjectContainer container;
+    ServiceRegistry serviceRegistry;
 }
 ----
 

@@ -6,8 +6,8 @@
 
 
 
-The `FixtureScriptsSpecificationProvider` SPI service is an alternative to subclassing the xref:../guides/rgcms/rgcms.adoc#_rgcms_classes_super_FixtureScripts[`FixtureScripts`] domain service.  The logic that would normally be in the subclass moves to the provider service instead, and the framework instantiates a fallback default instance, xref:../guides/rgsvc/rgsvc.adoc#_rgsvc_testing_FixtureScripts[`FixtureScriptsDefault`].
+The `FixtureScriptsSpecificationProvider` SPI service is an alternative to subclassing the link:https://isis.apache.org/versions/1.9.0/guides/rgcms/rgcms.html#_rgcms_classes_super_FixtureScripts[`FixtureScripts`] domain service.  The logic that would normally be in the subclass moves to the provider service instead, and the framework instantiates a fallback default instance, link:https://isis.apache.org/versions/1.9.0/guides/rgsvc/rgsvc.html#_rgsvc_testing_FixtureScripts[`FixtureScriptsDefault`].
 
 This new design is optional; if you continue to provide your own subclass then everything will continue as before.  However the new design is more flexible and involves less code.
 
-See xref:../guides/ugtst/ugtst.adoc#_ugtst_fixture-scripts_api-and-usage[user guide] for further discussion.
+See link:https://isis.apache.org/versions/1.9.0/guides/ugtst/ugtst.html#_ugtst_fixture-scripts_api-and-usage[user guide] for further discussion.

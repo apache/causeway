@@ -27,7 +27,6 @@
         <version>${revision}</version>
     </parent>
 
-    <groupId>org.apache.isis.core</groupId>
     <artifactId>isis-webdocker</artifactId>
     <name>Apache Isis WebDocker</name>
 

@@ -209,7 +209,7 @@ This JDO query definitions are used in the `ToDoItemRepositoryImplUsingJdoql` se
 public class ToDoItemRepositoryImplUsingJdoql implements ToDoItemRepositoryImpl {
     @Programmatic
     public List<ToDoItem> findByAtPathAndCategory(final String atPath, final Category category) {
-        return container.allMatches(
+        return repositoryService.allMatches(
                 new QueryDefault<>(ToDoItem.class,
                         "findByAtPathAndCategory",                              // <1>
                         "atPath", atPath,                                       // <2>
@@ -217,13 +217,14 @@ public class ToDoItemRepositoryImplUsingJdoql implements ToDoItemRepositoryImpl 
     }
     ...
     @javax.inject.Inject
-    DomainObjectContainer container;
+    RepositoryService repositoryService;
 }
 ----
 <1> corresponds to the "findByAtPathAndCategory" JDO named query
 <2> provide argument for the `atPath` parameter.
 The pattern is parameter, argument, parameter, argument, ... and so on.
-<3> provide argument for the `category` parameter.  The pattern is parameter, argument, parameter, argument, ... and so on.
+<3> provide argument for the `category` parameter.
+The pattern is parameter, argument, parameter, argument, ... and so on.
 
 Other JDOQL named queries (not shown) follow the exact same pattern.
 
@@ -259,7 +260,7 @@ The default implementation of this domain service supports the following configu
 `disableAutoFlush`
 |`true`,`false` +
 (`false`)
-|Whether the `RepositoryService` (or `DomainObjectContainer` that delegates to it) should automatically flush pending changes prior to querying (via `allMatches()`, `firstMatch()` and so on).
+|Whether the `RepositoryService` should automatically flush pending changes prior to querying (via `allMatches()`, `firstMatch()` and so on).
 
 |===
 

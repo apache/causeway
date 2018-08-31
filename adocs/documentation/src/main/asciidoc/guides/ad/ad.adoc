@@ -1,0 +1,364 @@
+[[ad]]
+= Architecture and Design
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../../
+:_imagesdir: images/
+:numbered:
+:generate_pdf:
+
+
+This guide describes the internal architecture and design of the framework.
+
+[[__ad_modules]]
+== Maven modules
+
+[monotree]
+----
+> adocs/
+>> documentation/
+>> template/
+> core/               # see 'core', below
+> example/            # see 'archetypes', below
+> scripts/
+----
+
+
+=== core
+
+The core modules ....
+
+All of these have the same Maven `groupId`, namely `org.apache.isis.core`.
+
+[monotree]
+----
+> core/
+>> .m2/                              # used in gitlab CI
+>> applib/                           # isis-core-applib
+>> commons/                          # isis-core-commons
+>> integtestsupport/                 # isis-core-integtestsupport
+>> legacy/                           # legacy, see below
+>> log4j/                            # isis-core-log4j
+>> maven-plugin/                     # see 'maven plugins', below
+>> mavendeps/                        # see 'mavendeps', below
+>> plugins/                          # see 'plugins', below
+>> runtime/                          # isis-core-runtime
+>> schema/                           # isis-core-schema
+>> security/                         # isis-core-security
+>> security-shiro/                   # isis-core-security-shiro
+>> specsupport/                      # isis-core-specsupport
+>> unittestsupport/                  # isis-core-unittestsupport
+>> unittestsupport-test/             # isis-core-unittestsupport-test
+>> viewer-restfulobjects-applib/     # isis-core-viewer-restfulobjects-applib
+>> viewer-restfulobjects-rendering/  # isis-core-viewer-restfulobjects-rendering
+>> viewer-restfulobjects-server/     # isis-core-viewer-restfulobjects-server
+>> viewer-wicket-applib/             # isis-core-viewer-wicket-applib
+>> viewer-wicket-impl/               # isis-core-viewer-wicket-impl
+>> viewer-wicket-model/              # isis-core-viewer-wicket-model
+>> viewer-wicket-ui/                 # isis-core-viewer-wicket-ui
+>> webdocker/                        # isis-webdocker
+>> webserver/                        # isis-core-webserver
+>> wrapper/                          # isis-core-wrapper
+----
+
+.core maven modules
+[cols="2a,4a", options="header"]
+|===
+
+| Module
+| Description
+
+| `isis-core-applib`
+| Core application library.
+
+| `isis-core-commons`
+| Commons library
+
+
+| `isis-core-integtestsupport`
+|
+
+| `isis-core-log4j`
+|
+
+| `isis-maven-plugin`
+|
+
+| `isis-core-metamodel`
+|
+
+| `isis-core-runtime`
+|
+
+| `isis-core-schema`
+|
+
+| `isis-core-security`
+|
+
+| `isis-core-security-shiro`
+|
+
+| `isis-core-specsupport`
+|
+
+| `isis-core-unittestsupport`
+|
+
+| `isis-core-unittestsupport-test`
+|
+
+| `isis-core-viewer-restfulobjects-applib`
+|
+
+| `isis-core-viewer-restfulobjects-rendering`
+|
+
+| `isis-core-viewer-restfulobjects-server`
+|
+
+| `isis-core-viewer-wicket-applib`
+|
+
+| `isis-core-viewer-wicket-impl`
+|
+
+| `isis-core-viewer-wicket-model`
+|
+
+| `isis-core-viewer-wicket-ui`
+|
+
+| `isis-webdocker`
+|
+
+| `isis-core-webserver`
+|
+
+| `isis-core-wrapper`
+|
+
+
+|===
+
+
+=== core/plugins
+
+The `core/plugins` modules ...
+
+All of these have the same Maven `groupId`, namely `org.apache.isis.core`.
+
+.Plugin Modules
+[monotree]
+----
+> core/
+>> plugins/
+>>> codegen-bytebuddy/      # isis-core-plugins-codegen-bytebuddy
+>>> codegen-javassist/      # isis-core-plugins-codegen-javassist
+>>> discovery-reflections/  # isis-core-plugins-discovery-reflections
+>>> eventbus-axon/          # isis-core-plugins-eventbus-axon
+>>> eventbus-guava/         # isis-core-plugins-eventbus-guava
+>>> jaxrs-resteasy-3/       # isis-core-plugins-jaxrs-resteasy-3
+>>> jaxrs-resteasy-4/       # isis-core-plugins-jaxrs-resteasy-4
+>>> jdo-datanucleus-4/      # isis-core-plugins-jdo-datanucleus-4
+>>> jdo-datanucleus-5/      # isis-core-plugins-jdo-datanucleus-5
+----
+
+.core/mavendeps maven modules
+[cols="2a,4a", options="header"]
+|===
+
+| Module
+| Description
+| `isis-core-plugins-codegen-bytebuddy`
+|
+
+| `isis-core-plugins-codegen-javassist`
+|
+
+| `isis-core-plugins-discovery-reflections`
+|
+
+| `isis-core-plugins-eventbus-axon`
+|
+
+| `isis-core-plugins-eventbus-guava`
+|
+
+| `isis-core-plugins-jaxrs-resteasy-3`
+|
+
+| `isis-core-plugins-jaxrs-resteasy-4`
+|
+
+| `isis-core-plugins-jdo-datanucleus-4`
+|
+
+| `isis-core-plugins-jdo-datanucleus-5`
+|
+
+|===
+
+
+=== core/mavendeps
+
+The `core/mavendeps` modules ...
+
+All of these have the same Maven `groupId`, namely `org.apache.isis.mavendeps`.
+
+.mavendeps Modules
+[monotree]
+----
+> core
+>> mavendeps/
+>>> isis-mavendeps-intellij/    # isis-mavendeps-intellij
+>>> isis-mavendeps-testing/     # isis-mavendeps-testing
+>>> isis-mavendeps-webapp/      # isis-mavendeps-webapp
+----
+
+.core/mavendeps maven modules
+[cols="2a,4a", options="header"]
+|===
+
+| Module
+| Description
+
+| `isis-mavendeps-intellij`
+| Defunct.
+
+| `isis-mavendeps-testing`
+|
+
+| `isis-mavendeps-webapp`
+|
+
+|===
+
+
+
+=== core/legacy
+
+The `core/legacy` modules ...
+
+All of these have the same Maven `groupId`, namely `org.apache.isis.core`.
+
+.Legacy Modules
+[monotree]
+----
+> core/
+>> legacy/
+>>> applib-legacy/              # isis-core-applib-legacy
+>>> integtestsupport-legacy/    # isis-core-integtestsupport-legacy
+>>> metamodel-legacy/           # isis-core-metamodel-legacy
+>>> runtime-legacy/             # isis-core-runtime-legacy
+>>> transition-1-2/             # isis-core-transition-1-2
+>>> unittestsupport-legacy/     # isis-core-unittestsupport-legacy
+>>> viewer-wicket-ui-legacy/    # isis-core-viewer-wicket-ui-legacy
+----
+
+
+[cols="2a,4a", options="header"]
+|===
+
+| Module
+| Description
+
+
+| `isis-core-applib-legacy`
+|
+
+| `isis-core-integtestsupport-legacy`
+|
+
+| `isis-core-metamodel-legacy`
+|
+
+| `isis-core-runtime-legacy`
+|
+
+| `isis-core-transition-1-2`
+|
+
+| `isis-core-unittestsupport-legacy`
+|
+
+| `isis-core-viewer-wicket-ui-legacy`
+|
+
+|===
+
+
+=== core/mavenplugins
+
+There is a single Maven plugin module.
+Its Maven `groupId` is `org.apache.isis.tools`.
+
+.Plugin Modules
+[monotree]
+----
+> core/
+>> maven-plugin/                # isis-maven-plugin
+----
+
+
+[cols="2a,4a", options="header"]
+|===
+| Module
+| Description
+
+| `isis-maven-plugin`
+|
+
+
+|===
+
+
+
+=== archetypes
+
+[monotree]
+----
+> example/
+>> application/
+>>> helloworld/     # org.apache.isis.example.application:helloworld
+>>> simpleapp/      # org.apache.isis.example.application:simpleapp
+>>>> application/   # org.apache.isis.example.application:simpleapp-application
+>>>> module-simple/ # org.apache.isis.example.application:simpleapp-module-simple
+>>>> webapp/        # org.apache.isis.example.application:simpleapp-webapp
+>> archetype/
+>>> helloworld/     # org.apache.isis.archetype:helloworld-archetype
+>>> simpleapp/      # org.apache.isis.archetype:simpleapp-archetype
+----
+
+[cols="2a,4a", options="header"]
+|===
+| Module
+| Description
+
+| `helloworld`
+|
+
+| `simpleapp`
+|
+
+| `simpleapp-application`
+|
+
+| `simpleapp-module-simple`
+|
+
+| `simpleapp-webapp`
+|
+
+| `helloworld-archetype`
+|
+
+| `simpleapp-archetype`
+|
+
+|===
+
+
+
+[[__ad_plugins]]
+== Plugins
+

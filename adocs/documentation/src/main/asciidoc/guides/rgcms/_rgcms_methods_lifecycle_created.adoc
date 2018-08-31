@@ -5,7 +5,7 @@
 :_imagesdir: images/
 
 
-The `created()` lifecycle callback method is called when an object has just been created using xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer[`newTransientInstance()`]
+The `created()` lifecycle callback method is called when an object has just been created using xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_RepositoryService[`RepositoryService#instantiate(...)`] or xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_FactoryService[`FactoryService#instantiate(...)`]
 
 
 [TIP]

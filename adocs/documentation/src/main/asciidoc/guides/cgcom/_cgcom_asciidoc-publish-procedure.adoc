@@ -28,72 +28,134 @@ The procedure assumes that two git repos (for https://github.com/apache/isis[isi
 
 [source]
 ----
-/APACHE/
-    isis/                       # checkout of isis.git
-        adocs/
-            documentation/
-                README.adoc     # this file you are reading right now
-                ...
-    isis-site/                  # checkout of isis-site.git
-        content/                # the published website
+/GITHUB/
+  apache/
+    isis/                       # <1>
+      adocs
+        documentation/
+          README.adoc
+          ...
+/ASF/
+  isis/
+    isis-site/                  # <2>
+      content/                  # <3>
 ----
+<1> checkout of isis.git
+<2> checkout of isis-site.git
+<3> the published website
 
-If this isn't the case, then it is possible to override the relative directory by passing in a system property to the mvn goal; see below.
-
-You also need to know that ASF's publishing script work from the 'asf-site' branch, NOT from the 'master' branch. Therefore, in the `isis.git` repo site:
+One oddity; ASF's script to upload the documentation to the web server checks out from the 'asf-site' branch, NOT from the 'master' branch.
+Therefore, in the `isis.git` repo site:
 
 [source,bash]
 ----
 git checkout asf-site
 ----
 
-== Publishing (full build)
 
-Back in the `adocs/documentation` directory of the main `isis-git.repo`, to copy the generated documents to the `isis-site.git` repo, run:
+== Preview
+
+To preview changes (ignoring PDFs), run:
 
 [source,bash]
 ----
-mvn clean package
+sh preview-html.sh
 ----
 
-This deletes the entire content of `contents`, and replaces with the content under `target/site`.  It also fixes up line endings, standardizing on unix-style LFs.
+This will update the documentation and start a (Python) webserver so that the documents can be viewed.
 
-[TIP]
-====
-If you have checked out the `isis-site.git` repo into some other directory (relative to `isis.site.git`), then this can be overridden by specifying `-Disis-site.dir=...` when calling `mvn`.
-====
+If you want to also view the PDFs, use:
+
+[source,bash]
+----
+sh preview-pdf.sh
+----
+
+There's generally little point in doing this, however.
 
 
-To copy and to also commit the generated documents to the `isis-site.git` repo , run:
+== Publishing (full build)
+
+The `content` directory for the published website contains not only the "current version" of the docs, but also has an archive of older versions of the document from earlier releases:
+
+[source]
+----
+/ASF/
+  isis/
+    isis-site/
+      content/                  # <1>
+        index.html              # <2>
+        *                       # <3>
+        versions/
+          current/              # <4>
+          SNAPSHOT/             # <5>
+          ...                   # <6>
+          latest/               # <7>
+----
+<1> the published website
+<2> home page.
+This has a drop-down to access older versions of the documentation, but most links are through to the "current version"
+<3> documentation for the current release version
+<4> also holds documentation for the current release version
+<5> documentation for the next snapshot version, ie work-in-progress
+<6> other versions, by version number (eg `1.16.2`, `1.16.1`, etc)
+<7> not checked into git, this is a working directory that contains the results of the latest publication build.
+This is an implementation detail actually, so this directory need not be considered further.
+
+The earlier versions of the documentation are (obviously) not recreated when the documentation is published, only the current version is updated.
+
+To publish the current version of the documents, switch to the  `adocs/documentation` directory of the main `isis-git.repo`.
+Then run:
 
 [source,bash]
 ----
 sh publish.sh "ISIS-nnnn: a custom commit message"
 ----
 
-Behind the scenes this just calls `mvn clean install -Dmessage=...`.
+This does the following:
 
-It's also possible to omit the message, in which case `publish.sh` will reuse the most recent commit message from the main `isis.git` repo.
+* deletes everything under `content` (except `content/versions`)
+* generates documentation and copies to `content/versions/SNAPSHOT`
++
+Including fixing up line endings, standardizing on unix-style LFs.
+* copies over current home page (`index.html`)
+* reinstates `content/*` with the contents of `content/versions/current`
 
-Pushing the commits (in the `isis-site.git` directory, of course) will publishing the changes:
+In other words, the effect of running `publish.sh` is in essence to overwrite `content/versions/SNAPSHOT` and to overwrite `index.html`, but leave everything else as it is.
+
+[NOTE]
+====
+The version on the header of each generated document is hard-coded in the `adocs/template/document.html.erb` file.
+
+This should therefore be updated whenever working on a new release.
+====
+
+=== New release
+
+When a new release is published, we therefore need to do a little extra work:
+
+* run `publish.sh` a first time
++
+This will  update `content/versions/SNAPSHOT`
+* delete `content/versions/current`
+* rename `content/versions/SNAPSHOT` to `content/versions/current`
+* run `publish.sh` a second time.
++
+This has the effect of "promoting" `content/versions/current` to `content/*`
+
+* (optionally) also copy `content/versions/current` to `content/versions/N.N.N`
++
+where `N.N.N` is the release number
+
+Ensure in doing this that the dropdown for the home page correctly references the versions.
+
+When ready, then stage, commit and push the changes (in the `isis-site.git` directory, of course):
 
 [source,bash]
 ----
+git commit -am "ISIS-nnnn: updating docs"
 git push
 ----
 
-Double check at http://isis.apache.org[isis.apache.org].
 
 
-
-
-== Publishing (partial build)
-
-If none of the guides have been changed, and if you have run the full rebuild recently, then you can skip the generation of PDFs using:
-
-[source,bash]
-----
-mvn install -Dskip.pdf -D"ISIS-nnnn: a custom commit message"
-----
-
-The `clean` goal *must not* be included though (else all the guides will disappear from the site content).

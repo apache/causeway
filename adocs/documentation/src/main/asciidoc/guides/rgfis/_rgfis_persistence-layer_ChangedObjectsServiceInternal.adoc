@@ -5,11 +5,8 @@
 :_imagesdir: images/
 
 
-The `ChangedObjectsServiceInternal` class is an (internal) request-scoped domain service that is
-responsible for collecting the details of all changes to domain objects within an interaction.  This is then used by
-various other  (internal) domain services, notably
-xref:../rgfis/rgfis.adoc#_rgfis_persistence-layer_AuditingServiceInternal[`AuditingServiceInternal`] and
-xref:../rgfis/rgfis.adoc#_rgfis_persistence-layer_PublishingServiceInternal[`PublishingServiceInternal`].
+The `ChangedObjectsServiceInternal` class is an (internal) request-scoped domain service that is responsible for collecting the details of all changes to domain objects within an interaction.
+This is then used by various other  (internal) domain services, notably xref:../rgfis/rgfis.adoc#_rgfis_persistence-layer_AuditingServiceInternal[`AuditingServiceInternal`] and xref:../rgfis/rgfis.adoc#_rgfis_persistence-layer_PublishingServiceInternal[`PublishingServiceInternal`].
 
 
 
@@ -55,15 +52,10 @@ The service implementation is `o.a.i.c.r.s.changes.ChangedObjectsServiceInternal
 
 == Registering the Service
 
-Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the
-`AppManifest` to xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' default
-implementation of `ChangedObjectsServiceInternal` class is automatically registered (it is annotated with `@DomainService`)
-so no further configuration is required.
+Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the `AppManifest` to xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' default implementation of `ChangedObjectsServiceInternal` class is automatically registered (it is annotated with `@DomainService`) so no further configuration is required.
 
 
 
 == Related Classes
 
-Both the xref:../rgfis/rgfis.adoc#_rgfis_persistence-layer_AuditingServiceInternal[`AuditingServiceInternal`] and
-xref:../rgfis/rgfis.adoc#_rgfis_persistence-layer_PublishingServiceInternal[`PublishingServiceInternal`] (internal) domain services query
-this object.
+Both the xref:../rgfis/rgfis.adoc#_rgfis_persistence-layer_AuditingServiceInternal[`AuditingServiceInternal`] and xref:../rgfis/rgfis.adoc#_rgfis_persistence-layer_PublishingServiceInternal[`PublishingServiceInternal`] (internal) domain services query this object.

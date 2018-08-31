@@ -43,18 +43,6 @@ It also lists their corresponding implementation, either a default implementatio
 ``o.a.i.core`` +
 ``isis-core-runtime``
 |The ``ConfigurationServiceMenu`` exposes the ``allConfigurationProperties`` action in the user interface. +
-+
-Supercedes methods in xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer[`DomainObjectContainer`].
-
-
-|xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer[`o.a.i.applib` +
-`DomainObjectContainer`]
-|Miscellaneous functions, eg obtain title of object.
-|`DomainObjectContainer-` +
-`Default` +
-``o.a.i.core`` +
-``isis-core-metamodel``
-|
 
 
 |xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`o.a.i.applib.` +
@@ -78,7 +66,7 @@ Supercedes methods in xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObje
 ``Default`` +
 ``o.a.i.core`` +
 ``isis-core-metamodel``
-|Supercedes methods in xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer[`DomainObjectContainer`].
+|
 
 
 
@@ -103,7 +91,7 @@ Supercedes methods in xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObje
 ``Default`` +
 ``o.a.i.core`` +
 ``isis-core-metamodel``
-|Supercedes methods in xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer[`DomainObjectContainer`].
+|
 
 
 
@@ -122,7 +110,6 @@ Key:
 
 include::_rgsvc_core-domain-api_ClockService.adoc[leveloffset=+1]
 include::_rgsvc_core-domain-api_ConfigurationService.adoc[leveloffset=+1]
-include::_rgsvc_core-domain-api_DomainObjectContainer.adoc[leveloffset=+1]
 include::_rgsvc_core-domain-api_EventBusService.adoc[leveloffset=+1]
 include::_rgsvc_core-domain-api_FactoryService.adoc[leveloffset=+1]
 include::_rgsvc_core-domain-api_Scratchpad.adoc[leveloffset=+1]

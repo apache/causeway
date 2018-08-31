@@ -52,10 +52,11 @@
 
         <build.dir>${project.basedir}/target/site</build.dir>
 
-	<!-- expects 'isis-site' to be checked out to the same parent directory as 'isis-master' -->
-        <isis-site-latest.dir>../../../isis-site/latest</isis-site-latest.dir>
-        <isis-site-content.dir>../../../isis-site/content</isis-site-content.dir>
-        <isis-site-search.dir>../../../isis-site/search</isis-site-search.dir>
+	    <!-- expects isis-site to be checked out to /c/ASF/isis/isis-site, vs /c/github/apache/isis -->
+        <isis-site.dir>../../../../../ASF/isis/isis-site</isis-site.dir>
+        <isis-site-latest.dir>${isis-site.dir}/latest</isis-site-latest.dir>
+        <isis-site-content.dir>${isis-site.dir}/content</isis-site-content.dir>
+        <isis-site-search.dir>${isis-site.dir}/search</isis-site-search.dir>
         <message>updating content (built from adocs/documentation in isis.git repo)</message>
     </properties>
 
@@ -224,7 +225,7 @@
                                         <delete includeemptydirs="true">
                                             <fileset dir="${isis-site-latest.dir}" includes="**/*"/>
                                         </delete>
-
+p
                                         <echo message=""/>
                                         <echo message=""/>
                                         <mkdir 
@@ -415,7 +416,7 @@
                                         <echo message=""/>
                                         <echo message="TO COMPLETE:"/>
                                         <echo message=""/>
-                                        <echo message="   cd ../../../isis-site"/>
+                                        <echo message="   cd ${isis-site.dir}"/>
                                         <echo message="   sh preview.sh"/>
                                         <echo message="   git commit -am 'some message'"/>
                                         <echo message="   git push"/>

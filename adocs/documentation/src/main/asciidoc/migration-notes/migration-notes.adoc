@@ -10,6 +10,7 @@ Consult these notes when migrating to new versions of the framework.
 
 
 
+include::_migration-notes_1.16.0-to-2.0.0-M1.adoc[leveloffset=+1]
 include::_migration-notes_1.15.0-to-1.16.0.adoc[leveloffset=+1]
 include::_migration-notes_1.14.0-to-1.15.0.adoc[leveloffset=+1]
 include::_migration-notes_1.13.0-to-1.14.0.adoc[leveloffset=+1]

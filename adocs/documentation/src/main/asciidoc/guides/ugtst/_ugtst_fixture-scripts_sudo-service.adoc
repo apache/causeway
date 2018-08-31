@@ -57,5 +57,5 @@ toDoItem = sudoService.sudo(username,
         });
 ----
 
-Behind the scenes the `SudoService` simply talks to the `DomainObjectContainer` to override the user returned by the `getUser()` API.
+Behind the scenes the `SudoService` simply talks to the `UserService` to override the user returned by the `getUser()` API.
 It is possible to override both users and roles.

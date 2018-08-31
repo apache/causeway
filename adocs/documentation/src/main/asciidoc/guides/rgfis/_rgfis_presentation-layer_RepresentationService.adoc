@@ -9,15 +9,18 @@
 
 The `RepresentationService` is the main plug-in point for the xref:../ugvro/ugvro.adoc#[RestfulObjects viewer] to generate representations.
 
-The default implementation generates representations according to the link:http://restfulobjects.org[Restful Objects spec] v1.0.  However, it also delegates to the xref:../rgfis/rgfis.adoc#_rgfis_presentation-layer_ContentNegotiationService[`ContentNegotiationService`] which provides a mechanism for altering representations according to the HTTP `Accept` header.
+The default implementations ultimately generate representations according to the link:http://restfulobjects.org[Restful Objects spec] v1.0.
+However, it also delegates to the xref:../rgfis/rgfis.adoc#_rgfis_presentation-layer_ContentNegotiationService[`ContentNegotiationService`] which provides a mechanism for altering representations according to the HTTP `Accept` header.
+This allows more flexible representations to be generated for REST clients that (perhaps through their use of a certain Javascript library, say) expect, or at least works best with, a certain style of representation.
 
-The principal motivation is to allow more flexible representations to be generated for REST clients that (perhaps through their use of a certain Javascript library, say) expect, or at least works best with, a certain style of representation.
-
-In all there are three domain services that can influence the representations generated: this service, xref:../rgfis/rgfis.adoc#_rgfis_presentation-layer_ContentNegotiationService[`ContentNegotiationService`]and the xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_ContentMappingService[`ContentMappingService`].  The diagram below shows how these collaborate:
+In all there are three domain services that can influence the representations generated: this service, xref:../rgfis/rgfis.adoc#_rgfis_presentation-layer_ContentNegotiationService[`ContentNegotiationService`] and the xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_ContentMappingService[`ContentMappingService`].
+The diagram below shows how these collaborate:
 
 image::{_imagesdir}RepresentationService/service-collaborations.png[width="700px",link="{_imagesdir}RepresentationService/service-collaborations.png"]
 
-The `RepresentationServiceForRestfulObjects` is the default implementation of this service; likewise `ContentNegotiationServiceXRoDomainType` is the default implementation of the `ContentNegotiationService`.  If you inspect the source code you'll see that the default implementation of this service's primary responsibility is to generate the default Restful Objects representations.  Therefore, if you what you want to do is to generate a _different _representation then in many cases replacing either this service _or_ the `ContentNegotiationService` will be equivalent (you'll notice that their SPIs are very similar).
+The `RepresentationServiceContentNegotiator` is the default implementation of the top-level `RepresentationService`, and it delegates to list of injecting `ContentNegotiationService` services.
+Using a chain of responsibility pattern, it returns the first non-null representation.
+For their part, the implementations of `ContentNegotiationService` use the HTTP Accept header to determine if they should render any representation or just return null.
 
 
 == SPI
@@ -50,11 +53,11 @@ public interface RepresentationService {
     }
 }
 ----
-<1> representation of a single object, as per section 14.4 of the RO spec, v1.0
-<2> representation of a single property of an object, as per section 16.4 of the RO spec v1.0
-<3> representation of a single collection of an object, as per section 17.5 of the RO spec v1.0
-<4> representation of a single action (prompt) of an object, as per section 18.2 of the RO spec v1.0
-<5> representation of the results of a single action invocation, as per section 19.5 of the RO spec v1.0
+<1> representation of a single object, eg as per section 14.4 of the RO spec, v1.0
+<2> representation of a single property of an object, eg as per section 16.4 of the RO spec v1.0
+<3> representation of a single collection of an object, eg as per section 17.5 of the RO spec v1.0
+<4> representation of a single action (prompt) of an object, eg as per section 18.2 of the RO spec v1.0
+<5> representation of the results of a single action invocation, eg as per section 19.5 of the RO spec v1.0
 
 These methods provide:
 
@@ -75,18 +78,15 @@ ie `MemberReprMode`
 
 == Implementation
 
-As discussed in the introduction, the framework provides a default implementation, `o.a.i.v.ro.rendering.service.RepresentationServiceContentNegotiator`.   This delegates to xref:../rgfis/rgfis.adoc#_rgfis_presentation-layer_ContentNegotiationService[`ContentNegotiationService`] to generate an alternative representation; but if none is provided then it falls back on generating the representations as defined in the link:http://restfulobjects.org[Restful Objects spec] v1.0.
+As discussed in the introduction, the framework provides a default implementation, `o.a.i.v.ro.rendering.service.RepresentationServiceContentNegotiator`.
+This delegates to xref:../rgfis/rgfis.adoc#_rgfis_presentation-layer_ContentNegotiationService[`ContentNegotiationService`] to generate an alternative representation; but if none is provided then it falls back on generating the representations as defined in the link:http://restfulobjects.org[Restful Objects spec] v1.0.
 
-To use an alternative implementation, use
-xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
-in the xref:../rgsvc/rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
+To use an alternative implementation, use xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:../rgsvc/rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
 
 
 == Registering the Services
 
-Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the
-`AppManifest` to xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' default implementation of `RepresentationService` service is automatically registered and injected (it is annotated with `@DomainService`) so no further configuration is required.
-
+Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the `AppManifest` to xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' default implementation of `RepresentationService` service is automatically registered and injected (it is annotated with `@DomainService`) so no further configuration is required.
 
 
 

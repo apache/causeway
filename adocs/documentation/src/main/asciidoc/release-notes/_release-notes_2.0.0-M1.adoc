@@ -1,0 +1,141 @@
+[[_release-notes_2.0.0-M1]]
+= 2.0.0-M1
+:notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
+:_basedir: ../
+:_imagesdir: images/
+:toc: right
+
+
+
+
+This is the first milestone release for Apache Isis 2.0
+
+Apache Isis 2.0 upgrades the framework to require Java 8 and above, and along the way upgrades DataNucleus ORM to 5.1 and Wicket to 8.0.
+
+Notable new features include support for meta-annotations (both Apache Isis annotations and DataNucleus).
+
+Features deprecated in Apache Isis 1.x (most notably, domain services and annotations) have been removed.
+The most significant domain service removed is `DomainObjectContainer`.
+
+
+
+
+
+== New Feature
+
+* link:https://issues.apache.org/jira/browse/ISIS-1969[ISIS-1969] - Distribute Isis as a Docker image, with the libraries in Tomcat's lib/ folder (skinny wars)
+* link:https://issues.apache.org/jira/browse/ISIS-1809[ISIS-1809] - Convenience adapter implementations of UrlEncodingService
+* link:https://issues.apache.org/jira/browse/ISIS-1740[ISIS-1740] - New Feature: Where am I
+* link:https://issues.apache.org/jira/browse/ISIS-1726[ISIS-1726] - Support DataNucleus meta annotations for @PersistenceCapable.
+* link:https://issues.apache.org/jira/browse/ISIS-1632[ISIS-1632] - Support meta annotations for @Property/@Collection/@Action + @XxxLayout
+* link:https://issues.apache.org/jira/browse/ISIS-1056[ISIS-1056] - [DUPLICATE] Support user-defined annotations (as per Spring and JSR-303 etc).
+
+
+== Improvement
+
+* link:https://issues.apache.org/jira/browse/ISIS-1961[ISIS-1961] - ResourceCachingFilter: Suppress 'client connection abort' exceptions.
+* link:https://issues.apache.org/jira/browse/ISIS-1959[ISIS-1959] - Update to Wicket 8
+* link:https://issues.apache.org/jira/browse/ISIS-1958[ISIS-1958] - Integration Tests: HSQL-DB is forced upon users
+* link:https://issues.apache.org/jira/browse/ISIS-1956[ISIS-1956] - Remove dependencies on guava from unittestsupport
+* link:https://issues.apache.org/jira/browse/ISIS-1955[ISIS-1955] - Allow for ErrorReportingService Tickets to render arbitrary HTML
+* link:https://issues.apache.org/jira/browse/ISIS-1954[ISIS-1954] - JUnit 5 support
+* link:https://issues.apache.org/jira/browse/ISIS-1950[ISIS-1950] - Add a ByteBuddy plugin implementing proxy-factory mechanics
+* link:https://issues.apache.org/jira/browse/ISIS-1949[ISIS-1949] - Make proxy-factory mechanics a plugin (Javassist)
+* link:https://issues.apache.org/jira/browse/ISIS-1948[ISIS-1948] - Remove Javassist as a dependency
+* link:https://issues.apache.org/jira/browse/ISIS-1942[ISIS-1942] - New Facet: XmlAccessorTypeFacet
+* link:https://issues.apache.org/jira/browse/ISIS-1935[ISIS-1935] - Remove the requirement for event-bus plugins to implement QueryResultCacheControl
+* link:https://issues.apache.org/jira/browse/ISIS-1932[ISIS-1932] - Consolidation of Collection Utility classes
+* link:https://issues.apache.org/jira/browse/ISIS-1931[ISIS-1931] - ServicesInjector: Reduce Heap Pollution
+* link:https://issues.apache.org/jira/browse/ISIS-1930[ISIS-1930] - PersistenceSession: Reduce Heap Pollution
+* link:https://issues.apache.org/jira/browse/ISIS-1928[ISIS-1928] - Don't log ERROR if fail to authenticate (INFO is enough)
+* link:https://issues.apache.org/jira/browse/ISIS-1911[ISIS-1911] - TranslationServicePo: new config option to disable the service
+* link:https://issues.apache.org/jira/browse/ISIS-1910[ISIS-1910] - Rename IsisJdoSupport0 back to its original name
+* link:https://issues.apache.org/jira/browse/ISIS-1906[ISIS-1906] - Programming Model: @Parent needs replacement
+* link:https://issues.apache.org/jira/browse/ISIS-1904[ISIS-1904] - gitlab setup, supporting CI/CD builds with externalized version
+* link:https://issues.apache.org/jira/browse/ISIS-1897[ISIS-1897] - applib: the new ObjectContracts needs backward compatibility
+* link:https://issues.apache.org/jira/browse/ISIS-1896[ISIS-1896] - Swagger-UI: provide a link for convenient login to restful API
+* link:https://issues.apache.org/jira/browse/ISIS-1891[ISIS-1891] - Make jax-rs provider (resteasy) a plugin
+* link:https://issues.apache.org/jira/browse/ISIS-1881[ISIS-1881] - Package swagger-ui web-content with metamodel module
+* link:https://issues.apache.org/jira/browse/ISIS-1846[ISIS-1846] - Code deduplication (new Internal API)
+* link:https://issues.apache.org/jira/browse/ISIS-1844[ISIS-1844] - API cleanup: make any unchecked casts explicit
+* link:https://issues.apache.org/jira/browse/ISIS-1843[ISIS-1843] - remove occurences of Thread.currentThread().getContextClassLoader()
+* link:https://issues.apache.org/jira/browse/ISIS-1842[ISIS-1842] - API cleanup: add generic type arguments where missing
+* link:https://issues.apache.org/jira/browse/ISIS-1830[ISIS-1830] - Eliminate dependence on any JDK internal APIs (jdeps JDK 9)
+* link:https://issues.apache.org/jira/browse/ISIS-1827[ISIS-1827] - Remove dependencies on guava from isis-core-applib (public API)
+* link:https://issues.apache.org/jira/browse/ISIS-1823[ISIS-1823] - Config property for disabling footer entirly
+* link:https://issues.apache.org/jira/browse/ISIS-1818[ISIS-1818] - new config property: max navigable parent chain length
+* link:https://issues.apache.org/jira/browse/ISIS-1817[ISIS-1817] - new config property that allows to disable the where-am-i feature
+* link:https://issues.apache.org/jira/browse/ISIS-1779[ISIS-1779] - Transition to JAX-RS 2.0 Client API
+* link:https://issues.apache.org/jira/browse/ISIS-1775[ISIS-1775] - Context-Path support for SwaggerService
+* link:https://issues.apache.org/jira/browse/ISIS-1763[ISIS-1763] - Change @DomainObject#bounded (a boolean) to @DomainObject#bounding (an enum)
+* link:https://issues.apache.org/jira/browse/ISIS-1762[ISIS-1762] - Java 8+ Miscellaneous Utilities
+* link:https://issues.apache.org/jira/browse/ISIS-1756[ISIS-1756] - JEE Support - proper life-cycling
+* link:https://issues.apache.org/jira/browse/ISIS-1755[ISIS-1755] - JEE Support - let CDI ignore certain beans
+* link:https://issues.apache.org/jira/browse/ISIS-1753[ISIS-1753] - Plugable support for guava and axon event bus implementation.
+* link:https://issues.apache.org/jira/browse/ISIS-1744[ISIS-1744] - Update DataNucleus to the latest version (5.1.5 or later)
+* link:https://issues.apache.org/jira/browse/ISIS-1742[ISIS-1742] - Remove deprecated annotations, methods etc.
+* link:https://issues.apache.org/jira/browse/ISIS-1727[ISIS-1727] - Minor internal refactorings from upgrade to JDK 8
+* link:https://issues.apache.org/jira/browse/ISIS-1725[ISIS-1725] - Simplify bootstrapping logic by requiring an AppManifest to be supplied, remoev cfg property
+* link:https://issues.apache.org/jira/browse/ISIS-1724[ISIS-1724] - Remove JDO applib's IsisJdoSupport
+* link:https://issues.apache.org/jira/browse/ISIS-1723[ISIS-1723] - Remove JDO applib's Auditable interface and @Auditable annotation
+* link:https://issues.apache.org/jira/browse/ISIS-1683[ISIS-1683] - Move org.apache.isis.applib.services.timestamp.Timestampable to mixins.timestamp
+* link:https://issues.apache.org/jira/browse/ISIS-1682[ISIS-1682] - Move org.apache.isis.applib.services.layout.Object_downloadLayoutXml mixins out of services.layout and into mixins.layout
+* link:https://issues.apache.org/jira/browse/ISIS-1681[ISIS-1681] - Move wrapper factory events (eg org.apache.isis.applib.events.AccessEvent) to subpackage of services.wrapper
+* link:https://issues.apache.org/jira/browse/ISIS-1680[ISIS-1680] - Move event classes (eg org.apache.isis.applib.services.eventbus.AbstractDomainEvent) out of services.eventbus and into applib.events (subpackages thereof)
+* link:https://issues.apache.org/jira/browse/ISIS-1679[ISIS-1679] - Move org.apache.isis.applib.services.dto.Dto to org.apache.isis.applib.mixins
+
+
+== Bug
+
+* link:https://issues.apache.org/jira/browse/ISIS-1963[ISIS-1963] - Wicket UI: IllegalArgumentExceptions after persistent field update using AJAX
+* link:https://issues.apache.org/jira/browse/ISIS-1957[ISIS-1957] - ServiceInjector fails to handle Generic Types in target fields of type List
+* link:https://issues.apache.org/jira/browse/ISIS-1946[ISIS-1946] - Running with o.a.i.WebServer throws exception due to empty context path.
+* link:https://issues.apache.org/jira/browse/ISIS-1941[ISIS-1941] - [NOT A PROBLEM] Metamodel: XmlJavaTypeAdapterFacetFactory broken somehow
+* link:https://issues.apache.org/jira/browse/ISIS-1940[ISIS-1940] - MultiSelect Action Invocation throws IllegalArgumentException
+* link:https://issues.apache.org/jira/browse/ISIS-1939[ISIS-1939] - Internal API: Memento deserialization requires proper class-loader
+* link:https://issues.apache.org/jira/browse/ISIS-1929[ISIS-1929] - Skinny WAR Redeployment: Isis Core Plugins might not be resolved
+* link:https://issues.apache.org/jira/browse/ISIS-1887[ISIS-1887] - Metamodel: restore java.sql.Timestamp support
+* link:https://issues.apache.org/jira/browse/ISIS-1880[ISIS-1880] - LocalResourcePath: new value type for local URLs
+* link:https://issues.apache.org/jira/browse/ISIS-1870[ISIS-1870] - Fix JUnit Tests previously not picked up by surefire
+* link:https://issues.apache.org/jira/browse/ISIS-1869[ISIS-1869] - Surefire does not pick up all relevant tests
+* link:https://issues.apache.org/jira/browse/ISIS-1868[ISIS-1868] - Eclipse fails to build the schema module
+* link:https://issues.apache.org/jira/browse/ISIS-1866[ISIS-1866] - Metamodel: 38 JUnit Test Failures
+* link:https://issues.apache.org/jira/browse/ISIS-1865[ISIS-1865] - Wicket-Impl: Some JUnit tests are failing
+* link:https://issues.apache.org/jira/browse/ISIS-1852[ISIS-1852] - Iterating over query result list with parallelStream produces next exception
+* link:https://issues.apache.org/jira/browse/ISIS-1821[ISIS-1821] - Metadata validation failure when no @Nullable is present
+* link:https://issues.apache.org/jira/browse/ISIS-1736[ISIS-1736] - ConfigurationServiceDefault is inconsistent
+* link:https://issues.apache.org/jira/browse/ISIS-1721[ISIS-1721] - Isis should optionally not override the default values of entities.
+* link:https://issues.apache.org/jira/browse/ISIS-1599[ISIS-1599] - "Set" interface does not work as an action parameter's collection type
+* link:https://issues.apache.org/jira/browse/ISIS-1531[ISIS-1531] - Possible memory leak
+* link:https://issues.apache.org/jira/browse/ISIS-1506[ISIS-1506] - tomcat shutdown - threads in PARK state
+* link:https://issues.apache.org/jira/browse/ISIS-1172[ISIS-1172] - Logo in wicket viewer should be calculated relative to context root
+
+
+== Dependency upgrade
+
+* link:https://issues.apache.org/jira/browse/ISIS-1276[ISIS-1276] - Update DN to 5.1.x (from DN 4.1.x)
+
+== Task
+
+* link:https://issues.apache.org/jira/browse/ISIS-1903[ISIS-1903] - Update helloworld/simpleapp for Isis version 2
+* link:https://issues.apache.org/jira/browse/ISIS-1871[ISIS-1871] - Pull changes, that do not conflict with DN-4, from M2 into M1
+* link:https://issues.apache.org/jira/browse/ISIS-1828[ISIS-1828] - Jdeps analysis of core code-base In preparation for Java 9+
+* link:https://issues.apache.org/jira/browse/ISIS-1810[ISIS-1810] - Release tasks for 2.0.0-M1
+
+== Sub-task
+
+* link:https://issues.apache.org/jira/browse/ISIS-1951[ISIS-1951] - Move objenesis dependency to plugin codegen-javassist
+* link:https://issues.apache.org/jira/browse/ISIS-1915[ISIS-1915] - Migration Notes: We have core plugins now
+* link:https://issues.apache.org/jira/browse/ISIS-1909[ISIS-1909] - Migration Notes: Moved and Deprecated Classes
+* link:https://issues.apache.org/jira/browse/ISIS-1908[ISIS-1908] - Mirgation Notes: swagger-ui is now packed with metamodel
+* link:https://issues.apache.org/jira/browse/ISIS-1907[ISIS-1907] - Migration Notes: Apply workaround for DN plugins
+* link:https://issues.apache.org/jira/browse/ISIS-1893[ISIS-1893] - fix mvn build issues
+* link:https://issues.apache.org/jira/browse/ISIS-1890[ISIS-1890] - configure surefire for all new plugins
+* link:https://issues.apache.org/jira/browse/ISIS-1889[ISIS-1889] - Backport datanucleus specific commits from M2 into M1.
+* link:https://issues.apache.org/jira/browse/ISIS-1886[ISIS-1886] - Port QueryResultCache back into applib
+* link:https://issues.apache.org/jira/browse/ISIS-1885[ISIS-1885] - Re-invent ObjectContracts' JUnit Tests
+* link:https://issues.apache.org/jira/browse/ISIS-1819[ISIS-1819] - Documentation (guide) of where-am-i feature
+* link:https://issues.apache.org/jira/browse/ISIS-1816[ISIS-1816] - Specify framework's behavior if multiple @Parent annotations or parent() methods are resolved in the object's hierarchy
+* link:https://issues.apache.org/jira/browse/ISIS-1754[ISIS-1754] - JEE Support - Investigate Class Loading on Payara 4.1.2
+
+

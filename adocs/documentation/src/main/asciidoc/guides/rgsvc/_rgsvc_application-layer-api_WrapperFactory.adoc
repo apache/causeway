@@ -105,7 +105,7 @@ public class CustomerAgent {
         try {
             wrappedOrder.refund();
         } catch(InteractionException ex) {          // <1>
-            container.raiseError(ex.getMessage());  // <2>
+            messageService.raiseError(ex.getMessage());  // <2>
             return;
         }
     }
@@ -113,7 +113,7 @@ public class CustomerAgent {
     @Inject
     WrapperFactory wrapperFactory;
     @Inject
-    DomainObjectContainer container;
+    MessageService messageService;
 }
 ----
 <1> if any constraints on the `Order`'s `refund()` action would be violated, then ...

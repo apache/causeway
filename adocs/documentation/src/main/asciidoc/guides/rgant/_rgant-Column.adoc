@@ -19,7 +19,7 @@ Moreover, while JDO/DataNucleus will recognize annotations on either the field o
 This section identifies which attributes of `@Column` are recognized and used by Apache Isis.
 
 
-
+[[_rgant-Column_allowsNull]]
 == Nullability
 
 The `allowsNull()` attribute is used to specify if a property is mandatory or is optional.
@@ -42,6 +42,7 @@ In the vast majority of cases you should be fine just to add the `@Column#allows
 
 
 
+[[_rgant-Column_length]]
 == Length for ``String``s
 
 The `length()` attribute is used to specify the length of `java.lang.String` property types as they map to `varchar(n)` columns.
@@ -66,6 +67,7 @@ Isis also provides xref:../rgant/rgant.adoc#_rgant-Property_maxLength[`@Property
 
 
 
+[[_rgant-Column_length-scale]]
 == Length/scale for ``BigDecimal``s
 
 
@@ -81,18 +83,21 @@ public class Customer {
     public void setTotalOrdersToDate(BigDecimal totalOrdersToDate) { ... }
 ----
 
-For ``BigDecimal``s it is also possible to specify the xref:../rgant/rgant.adoc#_rgant-Digits[`@Digits`] annotation, whose form is `@Digits(integer, fraction)`.  There is a subtle difference here: while `@Column#scale()` corresponds to `@Digits#fraction()`, the value of `@Column#length()` (ie the precision) is actually the _sum_ of the `@Digits`' `integer()` and `fraction()` parts.
+For ``BigDecimal``s it is also possible to specify the xref:../rgant/rgant.adoc#\_rgant-Digits[`@Digits`] annotation, whose form is `@Digits(integer, fraction)`.
+There is a subtle difference here: while `@Column#scale()` corresponds to `@Digits#fraction()`, the value of `@Column#length()` (ie the precision) is actually the __sum__ of the `@Digits`' `integer()` and `fraction()` parts.
 
 If both are specified, Apache Isis will check when it initializes for any contradictions, and will fail-fast with an appropriate error message in the log if there are.
 
 
 
 
+[[_rgant-Column_hints-and-tips]]
 == Hints and Tips
 
 This seems to be a good place to describe some additional common mappings that use `@Column`.  Unlike the sections above, the attributes specified in these hints and tips aren't actually part of Apache Isis metamodel.
 
 
+[[_rgant-Column_hints-and-tips_mapping-foreign-keys]]
 === Mapping foreign keys
 
 The `name()` attribute can be used to override the name of the column.  References to other objects are generally mapped as foreign key columns.  If there are multiple references to a given type, then you will want to override the name that JDO/DataNucleus would otherwise default.
@@ -114,7 +119,8 @@ public class PartyRelationship {
 
 
 
-== Mapping ``Blob``s and ``Clob``s
+[[_rgant-Column_hints-and-tips_mapping-blobs-and-clobs]]
+=== Mapping ``Blob``s and ``Clob``s
 
 Isis provides custom value types for xref:../rgcms/rgcms.adoc#_rgcms_classes_value-types_Blob[`Blob`]s and xref:../rgcms/rgcms.adoc#_rgcms_classes_value-types_Clob[`Clob`]s.  These value types have multiple internal fields, meaning that they corresponding to multiple columns in the database.  Mapping this correctly requires using  `@Column` within JDO's `@Persistent` annotation.
 

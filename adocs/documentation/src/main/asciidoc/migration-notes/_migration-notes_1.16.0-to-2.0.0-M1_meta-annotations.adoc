@@ -1,0 +1,97 @@
+[[_migration-notes_1.16.0-to-2.0.0-M1_meta-annotations]]
+= Meta annotations
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../
+:_imagesdir: images/
+
+
+Most of the Apache Isis annotations can now be associated with meta-annotations.
+Coupled with the fact that DataNucleus 5.x also supports meta annotations, this therefore allows a degree of reuse.
+
+For example, instead of:
+
+[source,java]
+----
+@Column(length=30)
+@Property(regex=...)
+@Getter @Setter
+private String name;
+
+public Customer updateName(
+    @Parameter(maxLength=30, regex=...)
+    String name ) {
+    setName(name);
+}
+----
+
+we can instead define a `@Name` annotation:
+
+
+[source,java]
+----
+@Column(length=30)
+@Property(regex=...)
+@Parameter(maxLength=30, regex=...)
+public @interface @Name {}
+----
+
+and then use this annotation:
+
+[source,java]
+----
+@Name
+@Getter @Setter
+private String name;
+
+public Customer updateName(
+    @Name
+    String name ) {
+    setName(name);
+}
+----
+
+The full list of Apache Isis annotations that can be used in meta-annotations is shown in the table below.
+
+.Apache Isis annotations that can be used in meta-annotations
+[cols="1a,1a,1a", options="header"]
+|===
+
+|
+| Domain layer
+| UI layer
+
+
+|domain service
+|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-DomainService[@DomainService]
+|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-DomainServiceLayout[@DomainServiceLayout]
+
+|domain object
+|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-DomainObject[@DomainObject] +
+link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-ViewModel[@ViewModel] +
+link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-MemberGroupLayout[@MemberGroupLayout]
+
+|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-DomainObjectLayout[@DomainObjectLayout] +
+link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-ViewModelLayout[@ViewModelLayout]
+
+| Action
+
+|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-Action[@Action]
+|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-ActionLayout[@ActionLayout]
+
+|action parameter
+|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-Parameter[@Parameter]
+|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-ParameterLayout[@ParameterLayout]
+
+
+|property
+|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-Property[@Property]
+|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-PropertyLayout[@PropertyLayout]
+
+|collection
+|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-Collection[@Collection]
+|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-CollectionLayout[@CollectionLayout]
+
+|===
+
+
+

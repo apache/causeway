@@ -11,24 +11,24 @@ interaction.  A command now represents the _intention_ to interact with the appl
 to edit a property.  This is captured as a JAXB DTO.  An interaction on the other hand captures the fact that a
 command has been performed.  Interactions are also captured as DTOs.  Interactions can include sub-interactions,
 representing the fact that an action can invoke another action by way of the
-xref:../guides/rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_WrapperFactory[`WrapperFactory`].
+link:https://isis.apache.org/versions/1.13.0/guides/rgsvc/rgsvc.html#_rgsvc_application-layer-api_WrapperFactory[`WrapperFactory`].
 
-The existing xref:../guides/rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditingService[`AuditingService`] and
-xref:../guides/rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublishingService[`PublishingService`] SPI services have both been deprecated, instead
-replaced by xref:../guides/rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditerService[`AuditerService`] and
-xref:../guides/rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`].  It is now possible to have multiple implementations
+The existing link:https://isis.apache.org/versions/1.13.0/guides/rgsvc/rgsvc.html#_rgsvc_persistence-layer-spi_AuditingService[`AuditingService`] and
+link:https://isis.apache.org/versions/1.13.0/guides/rgsvc/rgsvc.html#_rgsvc_persistence-layer-spi_PublishingService[`PublishingService`] SPI services have both been deprecated, instead
+replaced by link:https://isis.apache.org/versions/1.13.0/guides/rgsvc/rgsvc.html#_rgsvc_persistence-layer-spi_AuditerService[`AuditerService`] and
+link:https://isis.apache.org/versions/1.13.0/guides/rgsvc/rgsvc.html#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`].  It is now possible to have multiple implementations
 of each.
 
 The (non-ASF) link:http://platform.incode.org[Incode Platform^]'s auditing module has been reworked to
-implement xref:../guides/rgsvc/rgsvc.adoc#_rgsvc_spi_AuditService[`AuditService`], while the new (non-ASF) link:http://platform.incode.org[Incode Platform^]'s publishmq module implements
-xref:../guides/rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`] to publish interaction events to an ActiveMQ bus (and
+implement link:https://isis.apache.org/versions/1.13.0/guides/rgsvc/rgsvc.html#_rgsvc_spi_AuditService[`AuditService`], while the new (non-ASF) link:http://platform.incode.org[Incode Platform^]'s publishmq module implements
+link:https://isis.apache.org/versions/1.13.0/guides/rgsvc/rgsvc.html#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`] to publish interaction events to an ActiveMQ bus (and
 to allow such events to be replayed if necessary).
 
 The release also includes a great deal of internal refactorings and simplifications.
 
 Most applications written against v1.12.x should run against v1.13.0 with few if any changes.  That said, this release
 has removed a small number of features that were dependent on internal APIs, and some configuration properties are
-now removed/unsupported.  We therefore do recommend that you read and keep in mind the xref:../migration-notes/migration-notes.adoc#_migration-notes_1.12.0-to-1.13.0[migration notes] when you upgrade your app.
+now removed/unsupported.  We therefore do recommend that you read and keep in mind the link:https://isis.apache.org/versions/1.13.0/migration-notes/migration-notes.html#_migration-notes_1.12.0-to-1.13.0[migration notes] when you upgrade your app.
 
 
 

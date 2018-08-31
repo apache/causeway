@@ -42,7 +42,7 @@ For example:
 )
 public class ToDoItem {
     public static class PersistingEvent
-        extends org.apache.isis.applib.services.eventbus.ObjectPersistingEvent<ToDoItem> { }
+        extends org.apache.isis.applib.events.lifecycle.ObjectPersistingEvent<ToDoItem> { }
     ...
 }
 ----

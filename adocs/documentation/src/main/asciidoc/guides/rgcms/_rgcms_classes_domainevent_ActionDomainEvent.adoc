@@ -10,11 +10,8 @@ Subclass of xref:../rgcms/rgcms.adoc#_rgcms_classes_domainevent_AbstractDomainEv
 The class has a number of responsibilities (in addition to those it inherits):
 
 * capture the target object being interacted with
-
 * capture the arguments for each of the action's parameters
-
 * provide selected metadata about the action parameters from the metamodel (names, types)
-
 * link back to the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_CommandContext[`CommandContext`] service's `Command` object
 
 The class itself is instantiated automatically by the framework whenever interacting with a rendered object's action.

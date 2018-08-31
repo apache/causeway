@@ -7,7 +7,7 @@
 
 
 
-Apache Isis 1.9.0 provides various new "under-the-cover" features, such as `AppManifest` for simplified bootstrapping, and content negotiation support within xref:../guides/ugvro/ugvro.adoc#[RestfulObjects viewer].  It also updates the DataNucleus version to DN 4.1.x.
+Apache Isis 1.9.0 provides various new "under-the-cover" features, such as `AppManifest` for simplified bootstrapping, and content negotiation support within link:https://isis.apache.org/versions/1.9.0/guides/ugvro/ugvro.html#[RestfulObjects viewer].  It also updates the DataNucleus version to DN 4.1.x.
 
 This release was also the first to include the updated Asciidoc website.
 

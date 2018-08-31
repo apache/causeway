@@ -49,12 +49,6 @@ There generally is no need to change this from its default.
 It holds the set of packages to search so that DataNucleus builds its metamodel eagerly rather than lazily.
 
 
-|`isis.persistor.` +
-`datanucleus.` +
-`PublishingService.` +
-`serializedForm`
-| zipped
-|(`PublishingService` is deprecated, and therefore so is this property).
 
 |===
 

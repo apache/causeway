@@ -20,7 +20,7 @@ Finally, a new `TableColumnOrderService` to allow column order to be fine-tuned.
 The release also has a number of bug fixes.
 
 Most applications written against v1.13.x should run against v1.14.0 with few if any changes.
-That said, we do recommend that you read and keep in mind the xref:../migration-notes/migration-notes.adoc#_migration-notes_1.13.0-to-1.14.0[migration notes] when you upgrade your app.
+That said, we do recommend that you read and keep in mind the link:https://isis.apache.org/versions/1.14.0/migration-notes/migration-notes.html#_migration-notes_1.13.0-to-1.14.0[migration notes] when you upgrade your app.
 
 
 

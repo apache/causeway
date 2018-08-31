@@ -20,30 +20,6 @@ Impl'n (g: a:)
 |Notes
 
 
-|xref:../rgcms/rgcms.adoc#_rgcms_classes_super_AbstractContainedObject[`o.a.i.applib.` +
-`AbstractContainedObject`]
-|``o.a.i.core`` +
-``isis-core-applib``
-|(abstract class)
-|
-
-
-|xref:../rgcms/rgcms.adoc#_rgcms_classes_super_AbstractDomainObject[`o.a.i.applib.` +
-`AbstractDomainObject`]
-|``o.a.i.core`` +
-``isis-core-applib``
-|(abstract class)
-|
-
-
-|xref:../rgcms/rgcms.adoc#_rgcms_classes_super_AbstractFactoryAndRepository[`o.a.i.applib.` +
-`AbstractFactoryAndRepository`]
-|``o.a.i.core`` +
-``isis-core-applib``
-|(abstract class)
-|
-
-
 |xref:../rgcms/rgcms.adoc#_rgcms_classes_super_AbstractService[`o.a.i.applib.` +
 `AbstractService`]
 |``o.a.i.core`` +
@@ -83,7 +59,7 @@ Impl'n (g: a:)
 |``o.a.i.core`` +
 ``isis-core-applib``
 |(abstract class). +
-`FixtureScriptsDefault` is a default implementation that is used when the alternative xref:../rgsvc/rgsvc.adoc#_rgsvc_api_FixtureScriptsSpecificationProvider[`FixtureScriptsSpecificationProvider`] is provided
+`FixtureScriptsDefault` is a default implementation that is used when the alternative xref:../rgsvc/rgsvc.adoc#_rgsvc_testing_FixtureScriptsSpecificationProvider[`FixtureScriptsSpecificationProvider`] is provided
   (and no other implementation of `FixtureScripts` was found).
 |depends on: +
 `ClassDiscoveryService`
@@ -94,9 +70,6 @@ Impl'n (g: a:)
 
 
 
-include::_rgcms_classes_super_AbstractContainedObject.adoc[leveloffset=+1]
-include::_rgcms_classes_super_AbstractDomainObject.adoc[leveloffset=+1]
-include::_rgcms_classes_super_AbstractFactoryAndRepository.adoc[leveloffset=+1]
 include::_rgcms_classes_super_AbstractService.adoc[leveloffset=+1]
 include::_rgcms_classes_super_AbstractSubscriber.adoc[leveloffset=+1]
 include::_rgcms_classes_super_AbstractViewModel.adoc[leveloffset=+1]

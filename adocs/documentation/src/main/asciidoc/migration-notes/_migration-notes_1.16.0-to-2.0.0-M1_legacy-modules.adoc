@@ -1,0 +1,233 @@
+[[_migration-notes_1.16.0-to-2.0.0-M1_legacy-modules]]
+= Legacy Modules
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../
+:_imagesdir: images/
+
+
+
+Deprecated types have been moved into new "legacy" modules.
+ For example, applib types have been moved into `org.apache.isis.core:isis-core-applib-legacy` module.
+Generally speaking these types remain in the same package; in some cases they have been renamed.
+
+[WARNING]
+====
+These modules will be removed for the final release of 2.0.0.
+====
+
+
+
+== applib-legacy
+
+Deprecated types have been moved into a new `org.apache.isis.core:isis-core-applib-legacy` module.
+
+The most significant type that has been deprecated is the `DomainObjectContainer` type, but there are several others also.
+
+.Legacy types under `org.apache.isis.applib`
+[cols="3a,3a,3a", options="header"]
+|===
+
+| Package
+| Type
+| Use instead
+
+|`o.a.i.applib`
+|`DomainObjectContainer`
+|Use `RepositoryService`, `FactoryService`, `UserService`, `MessageService` instead etc.
+
+.2+|`o.a.i.applib. +
+annotation`
+|`Encodable`
+|No replacement
+
+
+|`Parseable`
+|No replacement
+
+.5+|`o.a.i.applib. +
+fixtures`
+|`AbstractFixture`
+|Use `FixtureScript` instead
+
+
+|`AbstractFixtureSusa`
+|Use fixture with injected `SudoService`
+
+
+|`BaseFixture`
+|Derive from `FixtureScript`
+
+
+|`DateFixture`
+|Use `TickingClockFixture` instead
+
+
+|`SwitchUserFixture`
+|Use fixture with injected `SudoService` instead
+
+
+.2+|o.a.i.applib.
+switchuser
+|SwitchUserService
+|`SudoService`
+
+
+|`SwitchUserServiceAware`
+|No replacement
+
+.2+|`o.a.i.applib. +
+layout.component`
+|`CollectionLayoutData_legacy`
+|Renamed from `CollectionLayoutData`, provides trivial utility functions.
+No replacement.
+
+|`FieldSetData_legacy`
+|Renamed from `FieldSet`, provides trivial utility functions.
+No replacement.
+
+
+.2+|`o.a.i.applib. +
+services.background`
+|`BackgroundCommandService2`
+|Use `BackgroundCommandService` instead
+
+
+|`BackgroundService2`
+|Use `BackgroundService` instead
+
+.2+|`o.a.i.applib. +
+services.exceprecog`
+|`ExceptionRecognizer +
+AbstractLegacy`
+|Copy of the 1.16.x version of `ExceptionRecognizerAbstract`, with the original dependency on guava.
+Refactor to use the new `ExceptionRecognizerAbstract` (which uses Java 8 predicates etc. instead)
+
+
+|`ExceptionRecognizer +
+ForTypeLegacy`
+|Copy of the 1.16.x version of  `ExceptionRecognizerForType`, but with the original dependency on guava.
+Replace with the new `ExceptionRecognizerForType` which uses Java 8 predicates etc.
+
+|`o.a.i.applib. +
+services.memento`
+|`MementoService`
+|No replacement.
+Originally provided as a utility to view models that implemented `ViewModel` interface (as opposed to the newer approaches of annotating with `@ViewModel` or as a JAXB DTO class.
+
+Note that the framework-provided implementation, `MementoServiceDefault`, has been moved out to the corresponding `runtime-legacy` module.
+
+|`o.a.i.applib. +
+services.repository`
+|`RepositoryServiceLegacy`
+|Copy of the 1.16.x version of `RepositoryService`, with the original dependency on guava.
+Refactor to use the new `RepositoryService` (which uses Java 8 predicates etc. instead).
+
+Note that the framework-provided implementation, `RepositoryServiceLegacyInternalDefault`, has been moved out to the corresponding `metamodel-legacy` module.
+
+|`o.a.i.applib. +
+services.urlencoding`
+|`UrlEncodingService +
+UsingBaseEncoding +
+WithSupportForLargeUrlsAbstract`
+|The `UrlEncodingServiceWithCompression` (provided as the default implementation by the core framework) can be used in most cases.
+
+
+|`o.a.i.applib. +
+util`
+|`ObjectContractsLegacy`
+|Copy of the 1.16.x version of `ObjectContracts`, which heavily uses reflection.
+Use `ObjectContracts` instead.
+This provides a new API that does not require reflection and instead encourages a different coding style, but does also still support the old API.
+
+.3+|`o.a.i.applib. +
+value`
+|`Date` +
+`DateTime`
+|Use JDK8 `LocalDate`, `LocalDateTime` or Joda `DateTime` or `LocalDate` or `LocalDateTime`
+
+
+|`Time`
+|Use JDK8 `LocalTime` or Joda `LocalTime`
+
+
+|`Timestamp`
+|Use `java.sql.Timestamp` or JDK8 `DateTime` or Joda `DateTime` instead
+
+|===
+
+
+
+See also `transition-1-2` module, below, for further discussion of background services.
+
+
+== integtestsupport-legacy
+
+.Legacy types under `org.apache.isis.applib`
+[cols="3a,3a,3a", options="header"]
+|===
+
+| Package
+| Type
+| Use instead
+
+.3+|`o.a.i.core. +
+integtestsupport`
+|`IntegrationTestAbstract`
+|Use `IntegrationTestAbstract3` instead
+
+
+|`IntegrationTestAbstract2`
+|Use `IntegrationTestAbstract3` instead
+
+
+|`IsisSystemForTest`
+|Helper class used only by other classes in this module.
+No replacement.
+
+|`o.a.i.core. +
+integtestsupport. +
+scenarios`
+|`ScenarioExecutionForIntegration`
+|Subclass spec "glue" from `HeadlessWithBootstrappingAbstract` (the common superclass of `IntegrationTestAbstract3`) instead, and inject services into glue.
+
+
+|===
+
+
+== unittestupport-legacy
+
+TODO
+
+== transition-1-2
+
+TODO
+
+
+== metamodel-legacy
+
+Contains facet factories (which build up the metamodel) for these types moved from applib to applib-legacy:
+
+* `Encodeable` and `Parseable` interfaces
+* `Date`, `DateTime`, `Time` and `Timestamp` value types
+
+It provides contains an implementation of `ProgrammingModelPlugin` interface which is used to register these facet factories in a pluggable fashion.
+
+Similarly, it also provides implementations of the `ValuePropertyPlugin` interface which aggregate the set of value types, used for the swagger UI support.
+
+
+Finally, it also contains these framework-provided service implementations:
+
+* `DomainObjectContainerDefault` (for `DomainObjectContainer`)
+
+* `RepositoryServiceLegacyInternalDefault` (for `RepositoryServiceLegacy`)
+
+
+
+== runtime-legacy
+
+TODO
+
+
+== viewer-wicket-ui-legacy
+
+TODO

@@ -63,7 +63,7 @@ It also lists their corresponding implementation, either a default implementatio
 ``Default`` +
 ``o.a.i.core`` +
 ``isis-core-metamodel``
-|Supercedes methods in xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer[`DomainObjectContainer`].
+|
 
 
 

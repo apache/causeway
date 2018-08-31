@@ -8,7 +8,7 @@
 [.documentation-page]
 --
 
-[cols="1a,1a,1a",frame="none", grid="none"]
+[cols="1a,1a,1a",frame="none", grid="none", stripe="none"]
 |===
 
 | *What is Apache Isis?*
@@ -16,7 +16,7 @@
 * *link:pages/isis-in-pictures/isis-in-pictures.html[Apache Isis in pictures^]*
 * link:pages/common-use-cases/common-use-cases.html[Common Use Cases^]
 * link:pages/how-isis-works/how-isis-works.html[How Apache Isis Works^] image:{_imagesdir}tv_show-25.png[width="25px" link="pages/how-isis-works/how-isis-works.html"]
-* Learning more: link:pages/screencasts/screencasts.html[Screencasts^] image:{_imagesdir}tv_show-25.png[width="25px" link="./pages/screencasts/screencasts.html"] + link:pages/tg/tg.html[Tutorials^]
+* Learning more: link:pages/screencasts/screencasts.html[Screencasts^] image:{_imagesdir}tv_show-25.png[width="25px" link="./pages/screencasts/screencasts.html"] & link:pages/tg/tg.html[Tutorials^]
 
 |*Releases:*
 
@@ -26,17 +26,17 @@
 
 |*Developer Resources:*
 
-* *link:pages/cheat-sheet/cheat-sheet.html[Cheat Sheet^]* + *link:guides/htg.html[Hints-n-Tips^]*
-* Getting started: link:guides/ugfun/ugfun.html#_ugfun_getting-started_helloworld-archetype[Hello-World archetype^]
-* Getting started+: link:guides/ugfun/ugfun.html#_ugfun_getting-started_simpleapp-archetype[Simple-App archetype^]
+* *link:pages/cheat-sheet/cheat-sheet.html[Cheat Sheet^]* & *link:guides/htg.html[Hints-n-Tips^]*
+* link:guides/ugfun/ugfun.html#_ugfun_getting-started_helloworld-archetype[Hello-World archetype^]
+* link:guides/ugfun/ugfun.html#_ugfun_getting-started_simpleapp-archetype[Simple-App archetype^]
 * How to get link:pages/icons/icons.html[Icons^]
-* Extension modules: http://platform.incode.org[Incode Platform^] footnoteref:[ASF,Not an Apache Software Foundation project.]
+* Extension modules: http://platform.incode.org[Incode Platform^] footnoteref:[ASF, Not Apache Software Foundation projects.]
 
 
 |===
 
 ***
-[cols="1a,1a,1a",frame="none", grid="none"]
+[cols="1a,1a,1a",frame="none", grid="none", stripes="none"]
 |===
 
 |*User Guides:*
@@ -64,14 +64,15 @@
 |*Get involved!*
 
 * *link:guides/dg/dg.html[Developers' Guide^]*
-** link:guides/dg/dg.html#_dg_ide_intellij[IntelliJ^] + link:guides/dg/dg.html#_dg_ide_eclipse[Eclipse^]
+** link:guides/dg/dg.html#_dg_ide_intellij[IntelliJ^] & link:guides/dg/dg.html#_dg_ide_eclipse[Eclipse^]
 ** link:guides/dg/dg.html#_dg_contributing[Pull requests^]
-** link:guides/dg/dg.html#_dg_asciidoc-syntax[Asciidoc syntax^]
 
 * link:guides/cgcom/cgcom.html[Committers' Guide^]
-** link:guides/cgcom/cgcom.html#_cgcom_cutting-a-release[Cutting^] + link:guides/cgcom/cgcom.html#_cgcom_verifying-releases[Verifying^]
+** link:guides/cgcom/cgcom.html#_cgcom_cutting-a-release[Cutting^] & link:guides/cgcom/cgcom.html#_cgcom_verifying-releases[Verifying^]
 
-* For bug-reports and feature-requests see: *link:https://issues.apache.org/jira/secure/RapidBoard.jspa?rapidView=87[Kanban board^]* (JIRA)
+* link:guides/ad/ad.html[Architecture & Design^]
+
+3+|For bug reports and feature requests see: *link:https://issues.apache.org/jira/secure/RapidBoard.jspa?rapidView=87[Kanban board^]* (JIRA)
 
 
 |===
@@ -79,7 +80,7 @@
 
 
 ***
-[cols="1a,1a,1a",frame="none", grid="none"]
+[cols="1a,1a,1a",frame="none", grid="none", stripes="none"]
 |===
 
 
@@ -97,13 +98,19 @@
 |*Example Apps:*
 
 * https://github.com/estatio/estatio[Estatio^] footnoteref:[ASF,Not an Apache Software Foundation project.]
+* https://github.com/incodehq/contactapp[ContactApp^] footnoteref:[ASF]
+* https://github.com/incodehq/ecpcrm[ECP CRM^] footnoteref:[ASF]
 * https://github.com/isisaddons/isis-app-todoapp[TodoApp^] footnoteref:[ASF]
 * https://github.com/isisaddons/isis-app-kitchensink[Kitchensink^] footnoteref:[ASF]
-* https://github.com/isisaddons/isis-app-neoapp[Neo4J Example^] footnoteref:[ASF]
+* https://github.com/incodehq/incode-examples[Incode Domain Examples^] footnoteref:[ASF]
+* https://github.com/incodehq/incode-camel[Incode Camel App^] footnoteref:[ASF]
 * https://github.com/isisaddons/isis-app-quickstart[Quickstart^] footnoteref:[ASF]
-* https://github.com/isisaddons/isis-app-simpledsl[Isis DSL Example^] footnoteref:[ASF]
-* https://github.com/andi-huber/isis-2-demo[Demo Showcase]footnoteref:[ASF]
+* https://github.com/andi-huber/isis-2-demo[Isis 2.x Demo Showcase]footnoteref:[ASF]
 
+*Experiments:*
+
+* https://github.com/isisaddons/isis-app-neoapp[Neo4J Example^] footnoteref:[ASF]
+* https://github.com/isisaddons/isis-app-simpledsl[Isis DSL Example^] footnoteref:[ASF]
 |====
 
 
