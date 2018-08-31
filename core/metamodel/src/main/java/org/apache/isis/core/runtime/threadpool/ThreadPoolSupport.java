@@ -130,12 +130,12 @@ public final class ThreadPoolSupport implements AutoCloseable {
      * @param futures
      * @return list of computation results.
      */
-    public static List<Object> join(final List<Future<Object>> futures) {
+    public static List<Object> join(@Nullable final List<Future<Object>> futures) {
         if (futures == null) {
             return null;
         }
-
-        final long t0 = System.currentTimeMillis();
+        
+        final long t0 = System.nanoTime();
         try{
             final List<Object> returnValues = _Lists.newArrayList();
             for (Future<Object> future : futures) {
@@ -143,8 +143,8 @@ public final class ThreadPoolSupport implements AutoCloseable {
             }
             return returnValues;
         } finally {
-            final long t1 = System.currentTimeMillis();
-            LOG.info("join'ing {} tasks: waited {} milliseconds ", futures.size(), (t1-t0));
+            final long t1 = System.nanoTime();
+            LOG.info("join'ing {} tasks: waited {} milliseconds ", futures.size(), 0.000_001 * (t1-t0));
         }
     }
 
