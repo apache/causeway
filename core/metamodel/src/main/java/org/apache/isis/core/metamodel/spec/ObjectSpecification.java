@@ -68,15 +68,6 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
 
     public final static List<ObjectSpecification> EMPTY_LIST = Collections.emptyList();
 
-    @Deprecated
-    public final static Function<ObjectSpecification, String> FUNCTION_FULLY_QUALIFIED_CLASS_NAME = Functions.FULL_IDENTIFIER;
-
-    @Deprecated
-    public final static Comparator<ObjectSpecification> COMPARATOR_FULLY_QUALIFIED_CLASS_NAME = Comparators.FULLY_QUALIFIED_CLASS_NAME;
-
-    @Deprecated
-    public final static Comparator<ObjectSpecification> COMPARATOR_SHORT_IDENTIFIER_IGNORE_CASE = Comparators.SHORT_IDENTIFIER_IGNORE_CASE;
-
     ObjectMember getMember(String memberId);
 
     class Comparators{
