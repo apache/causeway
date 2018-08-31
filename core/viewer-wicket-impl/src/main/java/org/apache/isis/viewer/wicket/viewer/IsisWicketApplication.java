@@ -89,7 +89,6 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.threadpool.ThreadPoolSupport;
 import org.apache.isis.core.webapp.IsisWebAppConfigProvider;
-import org.apache.isis.core.webapp.WebAppConstants;
 import org.apache.isis.schema.utils.ChangesDtoUtils;
 import org.apache.isis.schema.utils.CommandDtoUtils;
 import org.apache.isis.schema.utils.InteractionDtoUtils;
@@ -329,9 +328,6 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
             initWicketComponentInjection(injector);
 
             injector.injectMembers(this); // populates this.isisSessionFactory
-
-            getServletContext().setAttribute(WebAppConstants.ISIS_SESSION_FACTORY, this.isisSessionFactory);
-
 
             if (requestCycleListenerForIsis instanceof WebRequestCycleForIsis) {
                 WebRequestCycleForIsis webRequestCycleForIsis = (WebRequestCycleForIsis) requestCycleListenerForIsis;
@@ -748,7 +744,6 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
             if (isisSessionFactory != null) {
                 isisSessionFactory.destroyServicesAndShutdown();
             }
-            getServletContext().setAttribute(WebAppConstants.ISIS_SESSION_FACTORY, null);
             super.onDestroy();
             IsisContext.clear();
         } catch(final RuntimeException ex) {

@@ -22,7 +22,6 @@ package org.apache.isis.core.webapp;
 import org.apache.isis.applib.fixtures.LogonFixture;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.runtime.system.DeploymentType;
-import org.apache.isis.core.runtime.system.session.IsisSessionFactoryBuilder;
 
 public final class WebAppConstants {
 
@@ -44,12 +43,6 @@ public final class WebAppConstants {
     public static final String CONFIGURATION_BUILDER_KEY = "isis.configurationBuilder";
 
     /**
-     * Key under which the {@link IsisSessionFactoryBuilder} is bound as a servlet context
-     * attribute ( <tt>ServletContext#getAttribute(String)</tt>).
-     */
-    public final static String ISIS_SESSION_FACTORY = WebAppConstants.class.getPackage().getName() + ".isisSessionFactory";
-
-    /**
      * Key under which the {@link AuthenticationSession} is bound as a session
      * attribute ( <tt>HttpSession#getAttribute(String)</tt>).
      */
@@ -69,7 +62,7 @@ public final class WebAppConstants {
 
     /**
      * Servlet context parameter name used to specify the location for property file
-     * overloads. Property files in this location take precendence over property files
+     * overloads. Property files in this location take precedence over property files
      * in other locations. Since the ResourceStreamSourceComposite is being used
      * property files from various locations are merged together. So only overloaded
      * properties (entries in the file) need to present.

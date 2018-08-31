@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.HttpHeaders;
@@ -46,9 +45,9 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
-import org.apache.isis.core.webapp.WebAppConstants;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulRequest.DomainModel;
@@ -64,7 +63,7 @@ public class ResourceContext implements RendererContext6 {
     private final HttpHeaders httpHeaders;
     private final UriInfo uriInfo;
     private final Request request;
-    private final Providers providers;
+    //not used ... private final Providers providers;
     private final HttpServletRequest httpServletRequest;
     private final HttpServletResponse httpServletResponse;
     private final SecurityContext securityContext;
@@ -102,7 +101,7 @@ public class ResourceContext implements RendererContext6 {
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         this.httpHeaders = httpHeaders;
-        this.providers = providers;
+        //not used ... this.providers = providers;
         this.uriInfo = uriInfo;
         this.request = request;
         this.where = where;
@@ -113,8 +112,7 @@ public class ResourceContext implements RendererContext6 {
 
         this.securityContext = securityContext;
 
-        final ServletContext servletContext = httpServletRequest.getServletContext();
-        final IsisSessionFactory isisSessionFactory = (IsisSessionFactory)servletContext.getAttribute(WebAppConstants.ISIS_SESSION_FACTORY);
+        final IsisSessionFactory isisSessionFactory = IsisContext.getSessionFactory(); 
 
         this.servicesInjector = isisSessionFactory.getServicesInjector();
         this.configuration = isisSessionFactory.getConfiguration();

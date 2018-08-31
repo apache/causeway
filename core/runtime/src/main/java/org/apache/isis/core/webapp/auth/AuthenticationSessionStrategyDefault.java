@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.webapp.auth;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -29,6 +28,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.exploration.AuthenticationRequestExploration;
 import org.apache.isis.core.runtime.fixtures.authentication.AuthenticationRequestLogonFixture;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.webapp.WebAppConstants;
 
@@ -70,9 +70,10 @@ public class AuthenticationSessionStrategyDefault extends AuthenticationSessionS
         }
 
         // otherwise, look for LogonFixture and try to authenticate
-        final ServletContext servletContext = getServletContext(httpServletRequest);
-        final IsisSessionFactory sessionFactory = (IsisSessionFactory) servletContext.getAttribute(WebAppConstants.ISIS_SESSION_FACTORY);
-        if (sessionFactory == null) {
+        final IsisSessionFactory sessionFactory;
+        try {
+            sessionFactory = IsisContext.getSessionFactory();
+        } catch (Exception e) {
             // not expected to happen (is set up either by IsisWebAppBootstrapper or in IsisWicketApplication).
             return null;
         }

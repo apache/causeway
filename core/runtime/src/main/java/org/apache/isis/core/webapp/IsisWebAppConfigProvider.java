@@ -77,6 +77,7 @@ public class IsisWebAppConfigProvider {
     protected IsisConfigurationBuilder newIsisConfigurationBuilder(final ServletContext servletContext) {
         IsisConfigurationBuilder isisConfigurationBuilder = new IsisConfigurationBuilder();
         isisConfigurationBuilder.primeWith(new OptionHandlerInitParameters(servletContext));
+        addServletContextConstants(servletContext, isisConfigurationBuilder);
         addResourceStreamSources(servletContext, isisConfigurationBuilder);
         return isisConfigurationBuilder;
     }
@@ -120,10 +121,17 @@ public class IsisWebAppConfigProvider {
     
     // -- HELPER
 
+    private static void addServletContextConstants(
+            final ServletContext servletContext,
+            final IsisConfigurationBuilder isisConfigurationBuilder) {
+        
+        final String webappDir = servletContext.getRealPath("/");
+        isisConfigurationBuilder.add(WebAppConstants.WEB_APP_DIR, webappDir);
+    }
+    
     private static void addResourceStreamSources(
             final ServletContext servletContext,
             final IsisConfigurationBuilder isisConfigurationBuilder) {
-
 
         // will load either from WEB-INF, from the class-path or from config directory.
         final String configLocation = servletContext.getInitParameter(WebAppConstants.CONFIG_DIR_PARAM);
