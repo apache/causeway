@@ -43,13 +43,6 @@ public interface ObjectAssociationContainer {
     List<ObjectAssociation> getAssociations(Contributed contributed);
 
     /**
-     * Returns all {@link ObjectAssociation} ({@link Contributed#INCLUDED including contributed actions})
-     * that match the supplied filter.
-     */
-    @Deprecated
-    List<ObjectAssociation> getAssociations(Predicate<ObjectAssociation> predicate);
-
-    /**
      * Return all {@link ObjectAssociation}s matching the supplied filter.
      *
      * To get the statically visible fields (where any invisible and

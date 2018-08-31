@@ -611,9 +611,8 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         return isAbstract;
     }
 
-
-
     // -- Associations
+    
     @Override
     public List<ObjectAssociation> getAssociations(final Contributed contributed) {
         // the "contributed.isIncluded()" guard is required because we cannot do this too early;
@@ -706,12 +705,6 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             }
         }
         return null;
-    }
-
-    @Deprecated
-    @Override
-    public List<ObjectAssociation> getAssociations(Predicate<ObjectAssociation> predicate) {
-        return getAssociations(Contributed.INCLUDED, predicate);
     }
 
     @Override
