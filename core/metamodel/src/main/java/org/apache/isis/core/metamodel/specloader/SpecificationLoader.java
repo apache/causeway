@@ -22,8 +22,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.ws.rs.HEAD;
-
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -84,7 +82,7 @@ import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;
  * </p>
  *
  */
-public class SpecificationLoader implements ApplicationScopedComponent {
+public final class SpecificationLoader implements ApplicationScopedComponent {
 
     private final static Logger LOG = LoggerFactory.getLogger(SpecificationLoader.class);
 
@@ -116,16 +114,6 @@ public class SpecificationLoader implements ApplicationScopedComponent {
         this.facetProcessor = new FacetProcessor(programmingModel);
         this.postProcessor = new PostProcessor(programmingModel, servicesInjector);
     }
-
-    @Override
-    protected void finalize() throws Throwable {
-        super.finalize();
-        LOG.info("finalizing reflector factory", this);
-    }
-
-
-
-
 
     // -- init
 
@@ -195,9 +183,6 @@ public class SpecificationLoader implements ApplicationScopedComponent {
         return initialized;
     }
 
-
-
-
     // -- shutdown
 
     @Programmatic
@@ -208,8 +193,6 @@ public class SpecificationLoader implements ApplicationScopedComponent {
 
         cache.clear();
     }
-
-
 
     // -- invalidateCache
 
@@ -245,8 +228,6 @@ public class SpecificationLoader implements ApplicationScopedComponent {
         cache.recache(newSpec);
     }
 
-
-
     // -- validation
 
     private ValidationFailures validationFailures;
@@ -267,9 +248,6 @@ public class SpecificationLoader implements ApplicationScopedComponent {
         }
         return validationFailures;
     }
-
-
-
 
     // -- loadSpecification, loadSpecifications
 
@@ -493,8 +471,6 @@ public class SpecificationLoader implements ApplicationScopedComponent {
         return cache.allSpecifications();
     }
 
-
-
     // -- getServiceClasses, isServiceClass
 
     @Programmatic
@@ -515,8 +491,6 @@ public class SpecificationLoader implements ApplicationScopedComponent {
         return this.servicesInjector.isRegisteredService(cls);
     }
 
-
-
     // -- loaded
     /**
      * Whether this class has been loaded.
@@ -534,8 +508,6 @@ public class SpecificationLoader implements ApplicationScopedComponent {
         return cache.get(fullyQualifiedClassName) != null;
     }
 
-
-
     // -- lookupBySpecId
     @Programmatic
     public ObjectSpecification lookupBySpecId(ObjectSpecId objectSpecId) {
@@ -546,9 +518,6 @@ public class SpecificationLoader implements ApplicationScopedComponent {
         }
         return objectSpecification;
     }
-
-
-
 
     @Programmatic
     public IsisConfiguration getConfiguration() {
