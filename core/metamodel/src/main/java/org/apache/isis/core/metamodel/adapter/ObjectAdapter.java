@@ -200,8 +200,7 @@ public interface ObjectAdapter extends Instance {
 
     public final class Util {
 
-        private Util() {
-        }
+        private Util() {}
 
         public static Object unwrap(final ObjectAdapter adapter) {
             return adapter != null ? adapter.getObject() : null;
@@ -475,16 +474,6 @@ public interface ObjectAdapter extends Instance {
 
         public static Function<ObjectAdapter, Object> getObject() {
             return Util::unwrap;
-        }
-
-        @Deprecated
-        public static com.google.common.base.Function<ObjectAdapter, Object> get_Object() {
-            return new com.google.common.base.Function<ObjectAdapter, Object>() {
-                @Override
-                public Object apply(ObjectAdapter input) {
-                    return Util.unwrap(input);
-                }
-            };
         }
 
         public static Function<Object, ObjectAdapter> adapterForUsing(final AdapterManager adapterManager) {

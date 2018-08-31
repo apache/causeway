@@ -18,8 +18,6 @@ package org.apache.isis.core.metamodel.spec;
 
 import java.util.List;
 
-import com.google.common.collect.Lists;
-
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 
 /**

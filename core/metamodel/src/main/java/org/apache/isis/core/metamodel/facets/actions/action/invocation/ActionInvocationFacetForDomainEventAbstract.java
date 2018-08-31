@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.actions.action.invocation;
 
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.Timestamp;
@@ -27,6 +29,12 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
+
+import com.google.common.base.Strings;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.RecoverableException;
@@ -76,11 +84,6 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.specloader.specimpl.MixedInMember2;
 import org.apache.isis.core.runtime.system.transaction.TransactionalClosure;
 import org.apache.isis.schema.ixn.v1.ActionInvocationDto;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
 
 public abstract class ActionInvocationFacetForDomainEventAbstract
 extends ActionInvocationFacetAbstract
@@ -503,7 +506,9 @@ implements ImperativeFacet {
                             interactionInitiatedBy);
             final Object visibleObjects =
                     CollectionUtils.copyOf(
-                            Lists.transform(visibleAdapters, ObjectAdapter.Functions.get_Object()),
+                            stream(visibleAdapters)
+                            .map(ObjectAdapter.Functions.getObject())
+                            .collect(Collectors.toList()),
                             method.getReturnType());
             if (visibleObjects != null) {
                 return getPersistenceSessionServiceInternal().adapterFor(visibleObjects);
