@@ -22,7 +22,6 @@ import javax.annotation.Nullable;
 
 import org.apache.isis.core.metamodel.IsisJdoMetamodelPlugin;
 import org.apache.isis.core.metamodel.IsisJdoRuntimePlugin;
-import org.apache.isis.core.metamodel.services.configinternal.ConfigurationServiceInternal;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory5;
 
@@ -42,8 +41,8 @@ public class IsisJdoSupportPlugin5 implements IsisJdoMetamodelPlugin, IsisJdoRun
     }
 
     @Override
-    public PersistenceSessionFactory getPersistenceSessionFactory(ConfigurationServiceInternal isisConfiguration) {
-        return new PersistenceSessionFactory5(isisConfiguration);
+    public PersistenceSessionFactory getPersistenceSessionFactory(/*ConfigurationServiceInternal isisConfiguration*/) {
+        return new PersistenceSessionFactory5(/*isisConfiguration*/);
     }
 
 }

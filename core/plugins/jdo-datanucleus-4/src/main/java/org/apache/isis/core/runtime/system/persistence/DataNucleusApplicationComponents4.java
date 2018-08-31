@@ -25,6 +25,17 @@ import java.util.Set;
 import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManagerFactory;
 
+import com.google.common.base.Joiner;
+import com.google.common.collect.Maps;
+
+import org.datanucleus.PersistenceNucleusContext;
+import org.datanucleus.PropertyNames;
+import org.datanucleus.api.jdo.JDOPersistenceManagerFactory;
+import org.datanucleus.metadata.MetaDataListener;
+import org.datanucleus.metadata.MetaDataManager;
+import org.datanucleus.store.StoreManager;
+import org.datanucleus.store.schema.SchemaAwareStoreManager;
+
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.factory.InstanceUtil;
@@ -36,16 +47,6 @@ import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusLifeCycleHelper;
 import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusPropertiesAware;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.query.JdoNamedQuery;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.query.JdoQueryFacet;
-import org.datanucleus.PersistenceNucleusContext;
-import org.datanucleus.PropertyNames;
-import org.datanucleus.api.jdo.JDOPersistenceManagerFactory;
-import org.datanucleus.metadata.MetaDataListener;
-import org.datanucleus.metadata.MetaDataManager;
-import org.datanucleus.store.StoreManager;
-import org.datanucleus.store.schema.SchemaAwareStoreManager;
-
-import com.google.common.base.Joiner;
-import com.google.common.collect.Maps;
 
 public class DataNucleusApplicationComponents4 implements ApplicationScopedComponent {
 
@@ -82,33 +83,23 @@ public class DataNucleusApplicationComponents4 implements ApplicationScopedCompo
 
     private final Set<String> persistableClassNameSet;
     private final IsisConfiguration jdoObjectstoreConfig;
-    private final SpecificationLoader specificationLoader;
     private final Map<String, String> datanucleusProps;
 
-    private Map<String, JdoNamedQuery> namedQueryByName;
     private PersistenceManagerFactory persistenceManagerFactory;
 
     public DataNucleusApplicationComponents4(
             final IsisConfiguration configuration,
-            final SpecificationLoader specificationLoader,
             final Map<String, String> datanucleusProps,
             final Set<String> persistableClassNameSet) {
-        this.specificationLoader = specificationLoader;
 
         this.datanucleusProps = datanucleusProps;
         this.persistableClassNameSet = persistableClassNameSet;
         this.jdoObjectstoreConfig = configuration;
 
-        initialize();
+        persistenceManagerFactory = createPmfAndSchemaIfRequired(this.persistableClassNameSet, this.datanucleusProps);
 
         // for JRebel plugin
         instance = this;
-    }
-
-    private void initialize() {
-        persistenceManagerFactory = createPmfAndSchemaIfRequired(persistableClassNameSet, datanucleusProps);
-
-        namedQueryByName = catalogNamedQueries(persistableClassNameSet);
     }
 
     /**
@@ -251,8 +242,9 @@ public class DataNucleusApplicationComponents4 implements ApplicationScopedCompo
         properties.putAll(props);
         return properties;
     }
-
-    private Map<String, JdoNamedQuery> catalogNamedQueries(Set<String> persistableClassNames) {
+    
+    static Map<String, JdoNamedQuery> catalogNamedQueries(
+            Set<String> persistableClassNames, final SpecificationLoader specificationLoader) {
         final Map<String, JdoNamedQuery> namedQueryByName = Maps.newHashMap();
         for (final String persistableClassName: persistableClassNames) {
             final ObjectSpecification spec = specificationLoader.loadSpecification(persistableClassName);

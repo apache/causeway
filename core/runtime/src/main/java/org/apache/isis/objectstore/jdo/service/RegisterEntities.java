@@ -18,6 +18,7 @@
  */
 package org.apache.isis.objectstore.jdo.service;
 
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -25,14 +26,13 @@ import javax.jdo.annotations.PersistenceCapable;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.AppManifest;
+import org.apache.isis.commons.internal.base._LazyThreadSafe;
 import org.apache.isis.core.metamodel.JdoMetamodelUtil;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 public class RegisterEntities {
 
@@ -45,20 +45,17 @@ public class RegisterEntities {
     @Deprecated
     public final static String PACKAGE_PREFIX_KEY = "isis.persistor.datanucleus.RegisterEntities.packagePrefix";
 
-    // //////////////////////////////////////
-
-
-    // -- entityTypes
-    private final Set<String> entityTypes = Sets.newLinkedHashSet();
-    private final SpecificationLoader specificationLoader;
+    private final _LazyThreadSafe<Set<String>> entityTypes = _LazyThreadSafe.of(this::findEntityTypes);
 
     public Set<String> getEntityTypes() {
-        return entityTypes;
+        return entityTypes.get();
     }
 
+    // -- HELPER
 
-    public RegisterEntities(final SpecificationLoader specificationLoader) {
-        this.specificationLoader = specificationLoader;
+    private Set<String> findEntityTypes() {
+        
+        Set<String> entityTypes = new LinkedHashSet<String>();
 
         Set<Class<?>> persistenceCapableTypes = AppManifest.Registry.instance().getPersistenceCapableTypes();
 
@@ -74,13 +71,15 @@ public class RegisterEntities {
             if(!JdoMetamodelUtil.isPersistenceEnhanced(persistenceCapableType)) {
                 classNamesNotEnhanced.add(persistenceCapableType.getCanonicalName());
             }
-            this.entityTypes.add(persistenceCapableType.getCanonicalName());
+            entityTypes.add(persistenceCapableType.getCanonicalName());
         }
 
         if(!classNamesNotEnhanced.isEmpty()) {
             final String classNamesNotEnhancedStr = Joiner.on("\n* ").join(classNamesNotEnhanced);
             throw new IllegalStateException("Non-enhanced @PersistenceCapable classes found, will abort.  The classes in error are:\n\n* " + classNamesNotEnhancedStr + "\n\nDid the DataNucleus enhancer run correctly?\n");
         }
+        
+        return entityTypes;
     }
 
 
@@ -97,9 +96,5 @@ public class RegisterEntities {
         }
     }
 
-
-    SpecificationLoader getSpecificationLoader() {
-        return specificationLoader;
-    }
 
 }

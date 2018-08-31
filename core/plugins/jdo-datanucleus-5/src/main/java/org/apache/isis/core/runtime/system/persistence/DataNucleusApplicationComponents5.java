@@ -82,33 +82,23 @@ public class DataNucleusApplicationComponents5 implements ApplicationScopedCompo
 
     private final Set<String> persistableClassNameSet;
     private final IsisConfiguration jdoObjectstoreConfig;
-    private final SpecificationLoader specificationLoader;
     private final Map<String, String> datanucleusProps;
 
-    private Map<String, JdoNamedQuery> namedQueryByName;
     private PersistenceManagerFactory persistenceManagerFactory;
 
     public DataNucleusApplicationComponents5(
             final IsisConfiguration configuration,
-            final SpecificationLoader specificationLoader,
             final Map<String, String> datanucleusProps,
             final Set<String> persistableClassNameSet) {
-        this.specificationLoader = specificationLoader;
 
         this.datanucleusProps = datanucleusProps;
         this.persistableClassNameSet = persistableClassNameSet;
         this.jdoObjectstoreConfig = configuration;
 
-        initialize();
+        persistenceManagerFactory = createPmfAndSchemaIfRequired(this.persistableClassNameSet, this.datanucleusProps);
 
         // for JRebel plugin
         instance = this;
-    }
-
-    private void initialize() {
-        persistenceManagerFactory = createPmfAndSchemaIfRequired(persistableClassNameSet, datanucleusProps);
-
-        namedQueryByName = catalogNamedQueries(persistableClassNameSet);
     }
 
     /**
@@ -252,7 +242,8 @@ public class DataNucleusApplicationComponents5 implements ApplicationScopedCompo
         return properties;
     }
 
-    private Map<String, JdoNamedQuery> catalogNamedQueries(Set<String> persistableClassNames) {
+    static Map<String, JdoNamedQuery> catalogNamedQueries(
+            Set<String> persistableClassNames, final SpecificationLoader specificationLoader) {
         final Map<String, JdoNamedQuery> namedQueryByName = Maps.newHashMap();
         for (final String persistableClassName: persistableClassNames) {
             final ObjectSpecification spec = specificationLoader.loadSpecification(persistableClassName);

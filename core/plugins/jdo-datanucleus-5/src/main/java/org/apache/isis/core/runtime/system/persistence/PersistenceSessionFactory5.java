@@ -24,20 +24,20 @@ import java.util.Set;
 
 import javax.jdo.PersistenceManagerFactory;
 
-import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.components.ApplicationScopedComponent;
-import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.services.configinternal.ConfigurationServiceInternal;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.runtime.persistence.FixturesInstalledFlag;
-import org.apache.isis.objectstore.jdo.datanucleus.JDOStateManagerForIsis;
-import org.apache.isis.objectstore.jdo.service.RegisterEntities;
 import org.datanucleus.PropertyNames;
 import org.datanucleus.api.jdo.JDOPersistenceManagerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.components.ApplicationScopedComponent;
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.runtime.persistence.FixturesInstalledFlag;
+import org.apache.isis.objectstore.jdo.datanucleus.JDOStateManagerForIsis;
+import org.apache.isis.objectstore.jdo.service.RegisterEntities;
 
 /**
  *
@@ -53,11 +53,11 @@ implements PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstal
 
     private static final Logger LOG = LoggerFactory.getLogger(PersistenceSessionFactory5.class);
 
-    private final ConfigurationServiceInternal configuration;
-
-    public PersistenceSessionFactory5(final ConfigurationServiceInternal isisConfiguration) {
-        this.configuration = isisConfiguration;
-    }
+//    private final ConfigurationServiceInternal configuration;
+//
+//    public PersistenceSessionFactory5(final ConfigurationServiceInternal isisConfiguration) {
+//        this.configuration = isisConfiguration;
+//    }
 
     public static final String JDO_OBJECTSTORE_CONFIG_PREFIX = "isis.persistor.datanucleus";  // specific to the JDO objectstore
     public static final String DATANUCLEUS_CONFIG_PREFIX = "isis.persistor.datanucleus.impl"; // reserved for datanucleus' own config props
@@ -67,8 +67,8 @@ implements PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstal
 
     @Programmatic
     @Override
-    public void init(final SpecificationLoader specificationLoader) {
-        this.applicationComponents = createDataNucleusApplicationComponents(configuration, specificationLoader);
+    public void init(final IsisConfigurationDefault configuration) {
+        this.applicationComponents = createDataNucleusApplicationComponents(configuration);
     }
 
     @Programmatic
@@ -78,9 +78,12 @@ implements PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstal
     }
 
     private DataNucleusApplicationComponents5 createDataNucleusApplicationComponents(
-            final IsisConfiguration configuration, final SpecificationLoader specificationLoader) {
+            final IsisConfiguration configuration) {
 
-        if (applicationComponents == null || applicationComponents.isStale()) {
+        final RegisterEntities registerEntities = new RegisterEntities();
+        final Set<String> classesToBePersisted = registerEntities.getEntityTypes();
+        
+        if (shouldCreate(this.applicationComponents)) {
 
             final IsisConfiguration jdoObjectstoreConfig = configuration.createSubset(
                     JDO_OBJECTSTORE_CONFIG_PREFIX);
@@ -89,14 +92,18 @@ implements PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstal
             final Map<String, String> datanucleusProps = dataNucleusConfig.asMap();
             addDataNucleusPropertiesIfRequired(datanucleusProps);
 
-            final RegisterEntities registerEntities = new RegisterEntities(specificationLoader);
-            final Set<String> classesToBePersisted = registerEntities.getEntityTypes();
-
-            applicationComponents = new DataNucleusApplicationComponents5(jdoObjectstoreConfig, specificationLoader,
-                    datanucleusProps, classesToBePersisted);
+            DataNucleusApplicationComponents5 applicationComponents1 = 
+                    new DataNucleusApplicationComponents5(jdoObjectstoreConfig,
+                            datanucleusProps, classesToBePersisted);
+            
+            this.applicationComponents = applicationComponents1;
         }
 
         return applicationComponents;
+    }
+    
+    private boolean shouldCreate(final DataNucleusApplicationComponents5 applicationComponents) {
+        return applicationComponents == null || applicationComponents.isStale();
     }
 
     private static void addDataNucleusPropertiesIfRequired(

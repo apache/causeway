@@ -17,10 +17,9 @@
 package org.apache.isis.core.runtime.system.persistence;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.IsisJdoRuntimePlugin;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.services.configinternal.ConfigurationServiceInternal;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 public interface PersistenceSessionFactory {
 
@@ -29,7 +28,7 @@ public interface PersistenceSessionFactory {
     PersistenceSession createPersistenceSession(ServicesInjector servicesInjector,
             AuthenticationSession authenticationSession);
 
-    void init(SpecificationLoader specificationLoader);
+    void init(IsisConfigurationDefault configuration);
 
     boolean isInitialized();
 
@@ -37,8 +36,8 @@ public interface PersistenceSessionFactory {
 
     // -- FACTORY
 
-    static PersistenceSessionFactory of(ConfigurationServiceInternal configuration) {
-        return IsisJdoRuntimePlugin.get().getPersistenceSessionFactory(configuration);
+    static PersistenceSessionFactory of(/*ConfigurationServiceInternal configuration*/) {
+        return IsisJdoRuntimePlugin.get().getPersistenceSessionFactory(/*configuration*/);
     }
 
 
