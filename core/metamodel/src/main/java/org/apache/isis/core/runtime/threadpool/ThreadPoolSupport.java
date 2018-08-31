@@ -54,9 +54,16 @@ public final class ThreadPoolSupport implements AutoCloseable {
     private static final Logger LOG = LoggerFactory.getLogger(ThreadPoolSupport.class);
 
     private final ThreadGroup group;
-    private final ThreadPoolExecutor executor;
+    private final ThreadPoolExecutor concurrentExecutor;
     private final ThreadPoolExecutor sequentialExecutor;
 
+    /**
+     * @return the application-scoped singleton ThreadPoolSupport instance
+     */
+    public static ThreadPoolSupport getInstance() {
+        return _Context.computeIfAbsent(ThreadPoolSupport.class, __-> new ThreadPoolSupport());
+    }
+    
     private ThreadPoolSupport() {
 
         group = new ThreadGroup(ThreadPoolSupport.class.getName());
@@ -72,7 +79,7 @@ public final class ThreadPoolSupport implements AutoCloseable {
                 ()->new LinkedBlockingQueue<>(queueCapacity);
         
         
-        executor = new ThreadPoolExecutor(
+        concurrentExecutor = new ThreadPoolExecutor(
                 corePoolSize,
                 maximumPoolSize,
                 keepAliveTimeSecs, TimeUnit.SECONDS,
@@ -85,7 +92,44 @@ public final class ThreadPoolSupport implements AutoCloseable {
                 threadFactory);
         
     }
+    
+    /*
+     * Implementation Note: triggered by _Context.clear() when application shuts down.
+     */
+    @Override
+    public void close() throws Exception {
+        try {
+            concurrentExecutor.shutdown();
+        } finally {
+            // in case the previous throws, continue execution here
+            sequentialExecutor.shutdown();            
+        }
+    }
 
+    /**
+     * Executes specified {@code callables} on the default executor.  
+     * See {@link ThreadPoolExecutor#invokeAll(java.util.Collection)}
+     * @param callables nullable
+     * @return non-null
+     */
+    public List<Future<Object>> invokeAll(@Nullable final List<Callable<Object>> callables) {
+        return invokeAll(concurrentExecutor, callables);
+    }
+
+    /**
+     * Executes specified {@code callables} on the sequential executor in sequence, one by one.
+     * @param callables nullable
+     * @return non-null
+     */
+    public List<Future<Object>> invokeAllSequential(@Nullable final List<Callable<Object>> callables) {
+        return invokeAll(sequentialExecutor, callables);
+    }
+    
+    /**
+     * Waits if necessary for the computation to complete. (Suppresses checked exceptions.)
+     * @param futures
+     * @return list of computation results.
+     */
     public static List<Object> join(final List<Future<Object>> futures) {
         if (futures == null) {
             return null;
@@ -104,6 +148,11 @@ public final class ThreadPoolSupport implements AutoCloseable {
         }
     }
 
+    /**
+     * Waits if necessary for the computation to complete. (Suppresses checked exceptions.)
+     * @param future
+     * @return the computation result
+     */
     public static Object join(final Future<Object> future) {
         try {
             return future.get();
@@ -113,13 +162,9 @@ public final class ThreadPoolSupport implements AutoCloseable {
         return null;
     }
 
-    /**
-     * Executes specified {@code callables} on the default executor.  
-     * See {@link ThreadPoolExecutor#invokeAll(java.util.Collection)}
-     * @param callables nullable
-     * @return non-null
-     */
-    public List<Future<Object>> invokeAll(@Nullable final List<Callable<Object>> callables) {
+    // -- HELPER
+    
+    private List<Future<Object>> invokeAll(ThreadPoolExecutor executor, @Nullable final List<Callable<Object>> callables) {
         if(isEmpty(callables)) {
             return Collections.emptyList();
         }
@@ -127,36 +172,6 @@ public final class ThreadPoolSupport implements AutoCloseable {
             return executor.invokeAll(callables);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
-        }
-    }
-
-    /**
-     * Executes specified {@code callables} on the sequential executor in sequence, one by one.
-     * @param callables nullable
-     * @return non-null
-     */
-    public List<Future<Object>> invokeAllSequential(@Nullable final List<Callable<Object>> callables) {
-        if(isEmpty(callables)) {
-            return Collections.emptyList();
-        }
-        try {
-            return sequentialExecutor.invokeAll(callables);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-    }
-    
-    public static ThreadPoolSupport getInstance() {
-        return _Context.computeIfAbsent(ThreadPoolSupport.class, __-> new ThreadPoolSupport());
-    }
-
-    @Override
-    public void close() throws Exception {
-        try {
-            executor.shutdown();
-        } finally {
-            // in case the previous throws, continue execution here
-            sequentialExecutor.shutdown();            
         }
     }
 
