@@ -124,7 +124,7 @@
                                     <updatePomFile>true</updatePomFile>
                                     <pomElements>
                                         <parent>resolve</parent>
-                                        <profile>resolve</profile>
+                                        <profiles>resolve</profiles>
                                     </pomElements>
                                 </configuration>
                             </execution>
