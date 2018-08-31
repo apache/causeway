@@ -198,13 +198,6 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
     Object getNavigableParent(Object object);
 
     /**
-     *
-     * @deprecated - use {@link #getCssClass(org.apache.isis.core.metamodel.adapter.ObjectAdapter)}.
-     */
-    @Deprecated
-    String getCssClass();
-
-    /**
      * Returns the CSS class name to use for the specified object.
      *
      * <p>

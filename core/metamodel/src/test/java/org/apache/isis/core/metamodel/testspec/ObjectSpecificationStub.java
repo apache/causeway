@@ -189,11 +189,6 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
 	}
     
     @Override
-    public String getCssClass() {
-        return null;
-    }
-
-    @Override
     public String getCssClass(final ObjectAdapter reference) {
         return null;
     }

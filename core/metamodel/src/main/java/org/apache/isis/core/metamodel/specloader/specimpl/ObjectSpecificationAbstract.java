@@ -377,17 +377,10 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
                         : navigableParentFacet.navigableParent(object);
     }
 
-    @Deprecated
-    @Override
-    public String getCssClass() {
-        return getCssClass(null);
-    }
-
     @Override
     public String getCssClass(final ObjectAdapter reference) {
         return cssClassFacet == null ? null : cssClassFacet.cssClass(reference);
     }
-
 
 
     // -- Hierarchical
