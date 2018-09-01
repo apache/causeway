@@ -33,7 +33,13 @@ stages:
 build-package-push:
   stage: build-package-push
   script:
-    - echo "REVISION=$REVISION"
+    - echo ""
+    - echo ""
+    - echo ""
+    - echo "$REVISION"
+    - echo ""
+    - echo ""
+    - echo ""
     - cd core
     - >
       mvn -s .m2/settings.xml \
@@ -44,6 +50,13 @@ build-package-push:
           -Dnexus-deploy.repositoryUrl=$NEXUS_REPO_URL \
           $CORE_ADDITIONAL_OPTS
     - cd ..
+    - echo ""
+    - echo ""
+    - echo ""
+    - echo "$REVISION"
+    - echo ""
+    - echo ""
+    - echo ""
 
 #
 # remainder commented out for now, see: https://gitlab.com/gitlab-org/gitlab-runner/issues/3552
