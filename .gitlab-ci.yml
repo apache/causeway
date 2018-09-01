@@ -44,28 +44,40 @@ build-package-push:
           -Dnexus-deploy.repositoryUrl=$NEXUS_REPO_URL \
           $CORE_ADDITIONAL_OPTS
     - cd ..
-    - cd example/application/$APP_NAME
-    - >
-      mvn --batch-mode \
-          install \
-          -Drevision=$REVISION \
-          -Disis.version=$REVISION \
-          $CORE_ADDITIONAL_OPTS \
-          -Dmavenmixin-docker \
-          -Ddocker-plugin.imageName=$DOCKER_REGISTRY_NAME/$DOCKER_REGISTRY_USERNAME/$APP_NAME
-    - >
-      mvn -s .m2/settings.xml \
-          --batch-mode \
-          docker:push@push-image-tagged \
-          -pl webapp \
-          -Drevision=$REVISION \
-          -Disis.version=$REVISION \
-          -DskipTests \
-          -Dskip.isis-swagger \
-          -Dmavenmixin-docker \
-          -Ddocker-plugin.imageName=$DOCKER_REGISTRY_NAME/$DOCKER_REGISTRY_USERNAME/$APP_NAME \
-          -Ddocker-plugin.serverId=docker-registry \
-          -Ddocker.registryUrl=$DOCKER_REGISTRY_URL
-    - cd ../../..
 
+#
+# remainder commented out for now, see: https://gitlab.com/gitlab-org/gitlab-runner/issues/3552
+#
+# it's possible that the mvn command to build the Docker image is failing ... it seems to get stuck.
+# maybe the background stuff is deadlocking?
+# then, the CI job for reporting the failure/uploading artifacts then hangs.
+# if that's correct, then commenting this out is a problem because we're masking an error on our side.
+#
+# on the other hand, I can't reproduce this issue locally.
+#
 
+#    - cd example/application/$APP_NAME
+#    - >
+#      mvn --batch-mode \
+#          install \
+#          -Drevision=$REVISION \
+#          -Disis.version=$REVISION \
+#          $CORE_ADDITIONAL_OPTS \
+#          -Dmavenmixin-docker \
+#          -Ddocker-plugin.imageName=$DOCKER_REGISTRY_NAME/$DOCKER_REGISTRY_USERNAME/$APP_NAME
+#    - >
+#      mvn -s .m2/settings.xml \
+#          --batch-mode \
+#          docker:push@push-image-tagged \
+#          -pl webapp \
+#          -Drevision=$REVISION \
+#          -Disis.version=$REVISION \
+#          -DskipTests \
+#          -Dskip.isis-swagger \
+#          -Dmavenmixin-docker \
+#          -Ddocker-plugin.imageName=$DOCKER_REGISTRY_NAME/$DOCKER_REGISTRY_USERNAME/$APP_NAME \
+#          -Ddocker-plugin.serverId=docker-registry \
+#          -Ddocker.registryUrl=$DOCKER_REGISTRY_URL
+#    - cd ../../..
+#
+#
