@@ -33,8 +33,10 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid;
 
 /**
  * A map of the objects' identities and the adapters' of the objects.
+ * @deprecated https://issues.apache.org/jira/browse/ISIS-1976
  */
-public class OidAdapterHashMap implements Iterable<Oid>, SessionScopedComponent {
+@Deprecated
+class OidAdapterHashMap implements Iterable<Oid>, SessionScopedComponent {
 
     private static final Logger LOG = LoggerFactory.getLogger(OidAdapterHashMap.class);
     public static final int DEFAULT_OID_ADAPTER_MAP_SIZE = 100;
