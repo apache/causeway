@@ -69,18 +69,22 @@ public class ObjectAdapterContext {
         }
     }
 
+    @Deprecated // don't expose caching
     public boolean containsAdapterForPojo(Object pojo) {
         return pojoAdapterMap.containsPojo(pojo);
     }
     
+    @Deprecated // don't expose caching
     public ObjectAdapter lookupAdapterByPojo(Object pojo) {
         return pojoAdapterMap.getAdapter(pojo);
     }
 
+    @Deprecated // don't expose caching
     public ObjectAdapter lookupAdapterById(Oid oid) {
         return oidAdapterMap.getAdapter(oid);
     }
 
+    @Deprecated // don't expose caching
     public void addAdapter(ObjectAdapter adapter) {
         if(adapter==null) {
             return; // nothing to do
@@ -92,6 +96,7 @@ public class ObjectAdapterContext {
         pojoAdapterMap.add(adapter.getObject(), adapter);
     }
     
+    @Deprecated // don't expose caching
     public void removeAdapter(ObjectAdapter adapter) {
         if(adapter==null) {
             return; // nothing to do

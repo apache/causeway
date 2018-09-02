@@ -356,7 +356,6 @@ public interface ObjectAdapter extends Instance {
     }
 
     boolean isTransient();
-
     boolean representsPersistent();
     boolean isDestroyed();
 
