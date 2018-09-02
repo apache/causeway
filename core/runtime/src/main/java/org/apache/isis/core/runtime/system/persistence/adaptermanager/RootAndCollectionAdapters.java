@@ -43,7 +43,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
  * Used for &quot;impact analysis&quot; when persisting transient root objects; all aggregated adapters
  * must also be persisted.
  */
-public class RootAndCollectionAdapters implements Iterable<ObjectAdapter> {
+class RootAndCollectionAdapters implements Iterable<ObjectAdapter> {
 
     private final ObjectAdapter parentAdapter;
     private final RootOid rootAdapterOid;
