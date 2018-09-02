@@ -19,9 +19,8 @@
 
 package org.apache.isis.core.runtime.persistence.adapter;
 
-import java.util.Objects;
-
 import org.datanucleus.enhancement.Persistable;
+//import org.datanucleus.enhancement.Persistable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,7 +42,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.Specification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSession4;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 
 public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
 
@@ -53,16 +52,17 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
 
     private final AuthenticationSession authenticationSession;
     private final SpecificationLoader specificationLoader;
-    private final PersistenceSession4 persistenceSession;
+    private final PersistenceSession persistenceSession;
 
     /**
      * can be {@link #replacePojo(Object) replace}d.
      */
     private Object pojo;
+    
     /**
      * can be {@link #replaceOid(Oid) replace}d.
      */
-    private Oid oid;
+    private final Oid oid;
 
     /**
      * only for standalone or parented collections.
@@ -74,7 +74,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
             final Oid oid,
             final AuthenticationSession authenticationSession,
             final SpecificationLoader specificationLoader,
-            final PersistenceSession4 persistenceSession) {
+            final PersistenceSession persistenceSession) {
 
         this.persistenceSession = persistenceSession;
         this.specificationLoader = specificationLoader;
@@ -130,13 +130,6 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         return oid;
     }
 
-    @Override
-    public void replaceOid(Oid persistedOid) {
-        Objects.requireNonNull(oid); // values have no oid, so cannot be replaced
-        this.oid = persistedOid;
-    }
-
-
     // -- isParentedCollection, isValue
 
     @Override
@@ -148,8 +141,6 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
     public boolean isValue() {
         return oid == null;
     }
-
-
 
     // -- isTransient, representsPersistent, isDestroyed
 
@@ -438,6 +429,9 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         throw new UnsupportedOperationException();
     }
 
-
+    @Override
+    public ObjectAdapter withOid(RootOid newOid) {
+        return new PojoAdapter(pojo, newOid, authenticationSession, specificationLoader, persistenceSession);
+    }
 
 }

@@ -110,8 +110,8 @@ import org.apache.isis.core.runtime.persistence.objectstore.transaction.Persiste
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindAllInstances;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
 import org.apache.isis.core.runtime.services.RequestScopedService;
+import org.apache.isis.core.runtime.system.persistence.adaptermanager.ObjectAdapterContext;
 import org.apache.isis.core.runtime.system.persistence.adaptermanager.ObjectAdapterLegacy;
-import org.apache.isis.core.runtime.system.persistence.adaptermanager.ObjectAdapterLegacy.ObjectAdapterContext;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.system.transaction.TransactionalClosure;
@@ -985,18 +985,6 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
         return adapter.isParentedCollection();
     }
 
-
-    // -- ObjectPersistor impl
-
-    private void makePersistent(final ObjectAdapter adapter) {
-        makePersistentInTransaction(adapter);
-    }
-
-
-    private void remove(final ObjectAdapter adapter) {
-        destroyObjectInTransaction(adapter);
-    }
-
     // -- destroyObjectInTransaction
 
     /**
@@ -1018,8 +1006,6 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
             }
         });
     }
-
-
 
     // -- newXxxCommand
     /**
@@ -1112,7 +1098,7 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
     public ObjectAdapter getAdapterFor(final Object pojo) {
         Objects.requireNonNull(pojo);
 
-        return objectAdapterContext.lookupPojoAdapter(pojo);  
+        return objectAdapterContext.lookupAdapterByPojo(pojo);  
     }
 
     @Override
@@ -1120,7 +1106,7 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
         Objects.requireNonNull(oid);
         ensureMapsConsistent(oid);
 
-        return objectAdapterContext.lookupOidAdapter(oid);
+        return objectAdapterContext.lookupAdapterById(oid);
     }
 
 
@@ -1182,7 +1168,7 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
     private void ensureMapsConsistent(final Oid oid) {
         Objects.requireNonNull(oid);
 
-        final ObjectAdapter adapter = objectAdapterContext.lookupOidAdapter(oid);
+        final ObjectAdapter adapter = objectAdapterContext.lookupAdapterById(oid);
         if (adapter == null) {
             return;
         }
@@ -1192,7 +1178,7 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
 
     private void ensurePojoAdapterMapConsistent(final ObjectAdapter adapter) {
         final Object adapterPojo = adapter.getObject();
-        final ObjectAdapter adapterAccordingToMap = objectAdapterContext.lookupPojoAdapter(adapterPojo);
+        final ObjectAdapter adapterAccordingToMap = objectAdapterContext.lookupAdapterByPojo(adapterPojo);
 
         if(adapterPojo == null) {
             // nothing to check
@@ -1203,7 +1189,7 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
 
     private void ensureOidAdapterMapConsistent(final ObjectAdapter adapter) {
         final Oid adapterOid = adapter.getOid();
-        final ObjectAdapter adapterAccordingToMap = objectAdapterContext.lookupOidAdapter(adapterOid);
+        final ObjectAdapter adapterAccordingToMap = objectAdapterContext.lookupAdapterById(adapterOid);
 
         if(adapterOid == null) {
             // nothing to check
@@ -1700,7 +1686,7 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
 
         Assert.assertNotNull(adapter);
         final Object pojo = adapter.getObject();
-        Assert.assertFalse("POJO Map already contains object", pojo, objectAdapterContext.containsPojoAdapter(pojo));
+        Assert.assertFalse("POJO Map already contains object", pojo, objectAdapterContext.containsAdapterForPojo(pojo));
 
         if (LOG.isDebugEnabled()) {
             // don't interact with the underlying object because may be a ghost

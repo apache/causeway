@@ -33,6 +33,7 @@ import org.apache.isis.core.commons.lang.MethodUtil;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.ParentedCollectionOid;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -169,11 +170,11 @@ public interface ObjectAdapter extends Instance {
      */
     Oid getOid();
 
-    /**
-     * Since {@link Oid}s are now immutable, it is the reference from the
-     * {@link ObjectAdapter} to its {@link Oid} that must now be updated.
-     */
-    void replaceOid(Oid persistedOid);
+//    /**
+//     * Since {@link Oid}s are now immutable, it is the reference from the
+//     * {@link ObjectAdapter} to its {@link Oid} that must now be updated.
+//     */
+//    void replaceOid(Oid persistedOid);
 
     /**
      * Returns either itself (if this is a root) or the parented collections, the
@@ -490,6 +491,14 @@ public interface ObjectAdapter extends Instance {
             };
         }
     }
+
+    /**
+     * 
+     * @param persistedRootOid
+     * @return a copy of this adapter, having a new RootOid 
+     * @since 2.0.0-M2
+     */
+    ObjectAdapter withOid(RootOid newOid);
 
 
 }
