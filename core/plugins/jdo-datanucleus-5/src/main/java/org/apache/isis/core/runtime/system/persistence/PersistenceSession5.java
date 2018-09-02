@@ -1236,6 +1236,9 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
     }
 
 
+    /**
+     * foreign refs: 1
+     */
     @Override
     public ObjectAdapter adapterForAny(RootOid rootOid) {
 
@@ -1272,6 +1275,9 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
         }
     }
 
+    /**
+     * foreign refs: 1
+     */
     @Override
     public Map<RootOid, ObjectAdapter> adaptersFor(final List<RootOid> rootOids) {
         return adaptersFor(rootOids, ConcurrencyChecking.NO_CHECK);
@@ -1336,6 +1342,8 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
      * This method  will <i>always</i> return an object, possibly indicating it is persistent; so make sure that you
      * know that the oid does indeed represent an object you know exists.
      * </p>
+     * 
+     * foreign refs: 4
      */
     @Override
     public ObjectAdapter adapterFor(final RootOid rootOid) {
@@ -1369,6 +1377,9 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
      * value.  This allows the client to retry if they wish.
      *
      * @throws {@link org.apache.isis.core.runtime.persistence.ObjectNotFoundException} if the object does not exist.
+     * 
+     * foreign refs: 0
+     * 
      */
     @Override
     public ObjectAdapter adapterFor(
@@ -1465,6 +1476,7 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
 
     /**
      * {@inheritDoc}
+     * foreign refs: ~90
      */
     @Override
     public ObjectAdapter adapterFor(final Object pojo) {
@@ -1484,6 +1496,7 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
 
     /**
      * {@inheritDoc}
+     * foreign refs: 2
      */
     @Override
     public ObjectAdapter adapterFor(final Object pojo, final ObjectAdapter parentAdapter, final OneToManyAssociation collection) {

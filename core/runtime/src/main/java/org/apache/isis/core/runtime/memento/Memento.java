@@ -22,14 +22,14 @@ package org.apache.isis.core.runtime.memento;
 import java.io.Serializable;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.commons.ensure.Assert;
-import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
@@ -39,14 +39,11 @@ import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySe
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.persistence.adaptermanager.ObjectAdapterLegacy;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Holds the state for the specified object in serializable form.
@@ -195,194 +192,11 @@ public class Memento implements Serializable {
         }
         final ObjectSpecification spec =
                 getSpecificationLoader().loadSpecification(data.getClassName());
-
-        ObjectAdapter adapter;
-
+        
         final Oid oid = getOid();
-        if (spec.isParentedOrFreeCollection()) {
 
-            final Object recreatedPojo = getPersistenceSession().instantiateAndInjectServices(spec);
-            adapter = getPersistenceSession().mapRecreatedPojo(oid, recreatedPojo);
-            populateCollection(adapter, (CollectionData) data);
-
-        } else {
-            Assert.assertTrue("oid must be a RootOid representing an object because spec is not a collection and cannot be a value", oid instanceof RootOid);
-            RootOid typedOid = (RootOid) oid;
-
-            // remove adapter if already in the adapter manager maps, because
-            // otherwise would (as a side-effect) update the version to that of the current.
-            adapter = getPersistenceSession().getAdapterFor(typedOid);
-            if(adapter != null) {
-                getPersistenceSession().removeAdapter(adapter);
-            }
-
-            // recreate an adapter for the original OID (with correct version)
-            adapter = getPersistenceSession().adapterFor(typedOid);
-
-            updateObject(adapter, data);
-        }
-
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("recreated object {}", adapter.getOid());
-        }
-        return adapter;
+        return ObjectAdapterLegacy.__Memento.recreateObject(spec, oid, data);
     }
-
-
-
-    private void populateCollection(final ObjectAdapter collectionAdapter, final CollectionData state) {
-        final ObjectAdapter[] initData = new ObjectAdapter[state.elements.length];
-        int i = 0;
-        for (final Data elementData : state.elements) {
-            initData[i++] = recreateReference(elementData);
-        }
-        final CollectionFacet facet = collectionAdapter.getSpecification().getFacet(CollectionFacet.class);
-        facet.init(collectionAdapter, initData);
-    }
-
-    private ObjectAdapter recreateReference(final Data data) {
-
-        // handle values
-        if (data instanceof StandaloneData) {
-            final StandaloneData standaloneData = (StandaloneData) data;
-            return standaloneData.getAdapter();
-        }
-
-        // reference to entity
-
-        Oid oid = data.getOid();
-        Assert.assertTrue("can only create a reference to an entity", oid instanceof RootOid);
-
-        final RootOid rootOid = (RootOid) oid;
-        final ObjectAdapter referencedAdapter = getPersistenceSession().adapterFor(rootOid);
-
-        if (data instanceof ObjectData) {
-            if (rootOid.isTransient()) {
-                updateObject(referencedAdapter, data);
-            }
-        }
-        return referencedAdapter;
-    }
-
-
-    ////////////////////////////////////////////////
-    // helpers
-    ////////////////////////////////////////////////
-
-    private void updateObject(final ObjectAdapter adapter, final Data data) {
-        final Object oid = adapter.getOid();
-        if (oid != null && !oid.equals(data.getOid())) {
-            throw new IllegalArgumentException("This memento can only be used to update the ObjectAdapter with the Oid " + data.getOid() + " but is " + oid);
-        }
-        if (!(data instanceof ObjectData)) {
-            throw new IsisException("Expected an ObjectData but got " + data.getClass());
-        }
-
-        updateFieldsAndResolveState(adapter, data);
-
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("object updated {}", adapter.getOid());
-        }
-    }
-
-    private void updateFieldsAndResolveState(final ObjectAdapter objectAdapter, final Data data) {
-
-        boolean dataIsTransient = data.getOid().isTransient();
-
-        if (!dataIsTransient) {
-            updateFields(objectAdapter, data);
-            objectAdapter.getOid().setVersion(data.getOid().getVersion());
-        } else if (objectAdapter.isTransient() && dataIsTransient) {
-            updateFields(objectAdapter, data);
-
-        } else if (objectAdapter.isParentedCollection()) {
-            // this branch is kind-a wierd, I think it's to handle aggregated adapters.
-            updateFields(objectAdapter, data);
-
-        } else {
-            final ObjectData od = (ObjectData) data;
-            if (od.containsField()) {
-                throw new IsisException("Resolve state (for " + objectAdapter + ") inconsistent with fact that data exists for fields");
-            }
-        }
-    }
-
-    private void updateFields(final ObjectAdapter object, final Data state) {
-        final ObjectData od = (ObjectData) state;
-        final List<ObjectAssociation> fields = object.getSpecification().getAssociations(Contributed.EXCLUDED);
-        for (final ObjectAssociation field : fields) {
-            if (field.isNotPersisted()) {
-                if (field.isOneToManyAssociation()) {
-                    continue;
-                }
-                if (field.containsFacet(PropertyOrCollectionAccessorFacet.class) && !field.containsFacet(PropertySetterFacet.class)) {
-                    LOG.debug("ignoring not-settable field {}", field.getName());
-                    continue;
-                }
-            }
-            updateField(object, od, field);
-        }
-    }
-
-    private void updateField(final ObjectAdapter objectAdapter, final ObjectData objectData, final ObjectAssociation objectAssoc) {
-        final Object fieldData = objectData.getEntry(objectAssoc.getId());
-
-        if (objectAssoc.isOneToManyAssociation()) {
-            updateOneToManyAssociation(objectAdapter, (OneToManyAssociation) objectAssoc, (CollectionData) fieldData);
-
-        } else if (objectAssoc.getSpecification().containsFacet(EncodableFacet.class)) {
-            final EncodableFacet facet = objectAssoc.getSpecification().getFacet(EncodableFacet.class);
-            final ObjectAdapter value = facet.fromEncodedString((String) fieldData);
-            ((OneToOneAssociation) objectAssoc).initAssociation(objectAdapter, value);
-
-        } else if (objectAssoc.isOneToOneAssociation()) {
-            updateOneToOneAssociation(objectAdapter, (OneToOneAssociation) objectAssoc, (Data) fieldData);
-        }
-    }
-
-    private void updateOneToManyAssociation(final ObjectAdapter objectAdapter, final OneToManyAssociation otma, final CollectionData collectionData) {
-        final ObjectAdapter collection = otma.get(objectAdapter, InteractionInitiatedBy.FRAMEWORK);
-        final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(collection);
-        final List<ObjectAdapter> original = _Lists.newArrayList();
-        for (final ObjectAdapter adapter : facet.iterable(collection)) {
-            original.add(adapter);
-        }
-
-        final Data[] elements = collectionData.elements;
-        for (final Data data : elements) {
-            final ObjectAdapter elementAdapter = recreateReference(data);
-            if (!facet.contains(collection, elementAdapter)) {
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug("  association {} changed, added {}", otma, elementAdapter.getOid());
-                }
-                otma.addElement(objectAdapter, elementAdapter, InteractionInitiatedBy.FRAMEWORK);
-            } else {
-                otma.removeElement(objectAdapter, elementAdapter, InteractionInitiatedBy.FRAMEWORK);
-            }
-        }
-
-        for (final ObjectAdapter element : original) {
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("  association {} changed, removed {}", otma, element.getOid());
-            }
-            otma.removeElement(objectAdapter, element, InteractionInitiatedBy.FRAMEWORK);
-        }
-    }
-
-    private void updateOneToOneAssociation(final ObjectAdapter objectAdapter, final OneToOneAssociation otoa, final Data assocData) {
-        if (assocData == null) {
-            otoa.initAssociation(objectAdapter, null);
-        } else {
-            final ObjectAdapter ref = recreateReference(assocData);
-            if (otoa.get(objectAdapter, InteractionInitiatedBy.FRAMEWORK) != ref) {
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug("  association {} changed to {}", otoa, ref.getOid());
-                }
-                otoa.initAssociation(objectAdapter, ref);
-            }
-        }
-    }
-
 
 
     // ///////////////////////////////////////////////////////////////
