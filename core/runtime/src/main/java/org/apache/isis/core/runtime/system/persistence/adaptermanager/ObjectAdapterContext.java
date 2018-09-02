@@ -32,6 +32,10 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 
+/**
+ *  
+ * @since 2.0.0-M2
+ */
 public class ObjectAdapterContext {
     private final PojoAdapterHashMap pojoAdapterMap = new PojoAdapterHashMap();
     private final OidAdapterHashMap oidAdapterMap = new OidAdapterHashMap();
@@ -75,6 +79,17 @@ public class ObjectAdapterContext {
 
     public ObjectAdapter lookupAdapterById(Oid oid) {
         return oidAdapterMap.getAdapter(oid);
+    }
+
+    public void addAdapter(ObjectAdapter adapter) {
+        if(adapter==null) {
+            return; // nothing to do
+        }
+        final Oid oid = adapter.getOid();
+        if (oid != null) { // eg. value objects don't have an Oid
+            oidAdapterMap.add(oid, adapter);
+        }
+        pojoAdapterMap.add(adapter.getObject(), adapter);
     }
     
     public void removeAdapter(ObjectAdapter adapter) {
@@ -146,7 +161,7 @@ public class ObjectAdapterContext {
         
         final ObjectAdapter adapterReplacement = adapter.withOid(persistedRootOid); 
         
-        replaceRootAdapter(persistedRootOid, adapterReplacement, rootAndCollectionAdapters);
+        replaceRootAdapter(adapterReplacement, rootAndCollectionAdapters);
         
         if (ObjectAdapterLegacy.LOG.isDebugEnabled()) {
             ObjectAdapterLegacy.LOG.debug("made persistent {}; was {}", adapterReplacement, transientRootOid);
@@ -154,12 +169,15 @@ public class ObjectAdapterContext {
     }
 
     private void replaceRootAdapter(
-            final RootOid persistedRootOid, 
             final ObjectAdapter adapterReplacement, 
             final RootAndCollectionAdapters rootAndCollectionAdapters) {
         
-        oidAdapterMap.add(persistedRootOid, adapterReplacement);
-        pojoAdapterMap.add(adapterReplacement.getObject(), adapterReplacement);
+        addAdapter(adapterReplacement);
+        
+        final RootOid persistedRootOid = (RootOid) adapterReplacement.getOid();
+        
+//        oidAdapterMap.add(persistedRootOid, adapterReplacement);
+//        pojoAdapterMap.add(adapterReplacement.getObject(), adapterReplacement);
 
         // associate the collection adapters with new Oids, and re-map
         ObjectAdapterLegacy.LOG.debug("replacing Oids for collection adapter(s) and re-adding into maps");
