@@ -144,7 +144,7 @@ public class ObjectAdapterLegacy {
             if (spec.isParentedOrFreeCollection()) {
 
                 final Object recreatedPojo = getPersistenceSession().instantiateAndInjectServices(spec);
-                adapter = getPersistenceSession().mapRecreatedPojo(oid, recreatedPojo);
+                adapter = getPersistenceSession().addRecreatedPojoToCache(oid, recreatedPojo);
                 populateCollection(adapter, (CollectionData) data);
 
             } else {
@@ -153,9 +153,9 @@ public class ObjectAdapterLegacy {
 
                 // remove adapter if already in the adapter manager maps, because
                 // otherwise would (as a side-effect) update the version to that of the current.
-                adapter = getPersistenceSession().getAdapterFor(typedOid);
+                adapter = getPersistenceSession().lookupAdapterFor(typedOid);
                 if(adapter != null) {
-                    getPersistenceSession().removeAdapter(adapter);
+                    getPersistenceSession().removeAdapterFromCache(adapter);
                 }
 
                 // recreate an adapter for the original OID (with correct version)

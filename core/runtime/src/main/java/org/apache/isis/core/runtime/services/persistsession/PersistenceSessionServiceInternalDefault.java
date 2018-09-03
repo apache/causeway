@@ -55,13 +55,13 @@ import org.apache.isis.core.runtime.system.transaction.TransactionalClosure;
 public class PersistenceSessionServiceInternalDefault implements PersistenceSessionServiceInternal {
 
     @Override
-    public ObjectAdapter getAdapterFor(Oid oid) {
-        return getPersistenceSession().getAdapterFor(oid);
+    public ObjectAdapter lookupAdapterFor(Oid oid) {
+        return getPersistenceSession().lookupAdapterFor(oid);
     }
 
     @Override
-    public ObjectAdapter getAdapterFor(final Object pojo) {
-        return getPersistenceSession().getAdapterFor(pojo);
+    public ObjectAdapter lookupAdapterFor(final Object pojo) {
+        return getPersistenceSession().lookupAdapterFor(pojo);
     }
 
     @Override
@@ -78,13 +78,13 @@ public class PersistenceSessionServiceInternalDefault implements PersistenceSess
     }
 
     @Override
-    public ObjectAdapter mapRecreatedPojo(Oid oid, Object recreatedPojo) {
-        return getPersistenceSession().mapRecreatedPojo(oid, recreatedPojo);
+    public ObjectAdapter addRecreatedPojoToCache(Oid oid, Object recreatedPojo) {
+        return getPersistenceSession().addRecreatedPojoToCache(oid, recreatedPojo);
     }
 
     @Override
-    public void removeAdapter(ObjectAdapter adapter) {
-        getPersistenceSession().removeAdapter(adapter);
+    public void removeAdapterFromCache(ObjectAdapter adapter) {
+        getPersistenceSession().removeAdapterFromCache(adapter);
     }
 
     @Override

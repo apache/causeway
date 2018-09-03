@@ -45,7 +45,7 @@ public class ConverterForObjectAdapter implements IConverter<ObjectAdapter> {
     @Override
     public ObjectAdapter convertToObject(final String value, final Locale locale) {
         final Oid oid = RootOid.deStringEncoded(value);
-        return getPersistenceSession().getAdapterFor(oid);
+        return getPersistenceSession().lookupAdapterFor(oid);
     }
 
     /**

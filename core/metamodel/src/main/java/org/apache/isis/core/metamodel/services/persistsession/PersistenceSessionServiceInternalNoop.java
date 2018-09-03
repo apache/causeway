@@ -43,7 +43,7 @@ public class PersistenceSessionServiceInternalNoop implements PersistenceSession
 
 
     @Override
-    public ObjectAdapter getAdapterFor(final Object pojo) {
+    public ObjectAdapter lookupAdapterFor(final Object pojo) {
         throw new UnsupportedOperationException("Not supported by this implementation of PersistenceSessionServiceInternal");
     }
 
@@ -56,12 +56,12 @@ public class PersistenceSessionServiceInternalNoop implements PersistenceSession
     }
 
     @Override
-    public ObjectAdapter mapRecreatedPojo(Oid oid, Object recreatedPojo) {
+    public ObjectAdapter addRecreatedPojoToCache(Oid oid, Object recreatedPojo) {
         throw new UnsupportedOperationException("Not supported by this implementation of PersistenceSessionServiceInternal");
     }
 
     @Override
-    public void removeAdapter(ObjectAdapter adapter) {
+    public void removeAdapterFromCache(ObjectAdapter adapter) {
         throw new UnsupportedOperationException("Not supported by this implementation of PersistenceSessionServiceInternal");
     }
 
@@ -71,7 +71,7 @@ public class PersistenceSessionServiceInternalNoop implements PersistenceSession
     }
 
     @Override
-    public ObjectAdapter getAdapterFor(Oid oid) {
+    public ObjectAdapter lookupAdapterFor(Oid oid) {
         throw new UnsupportedOperationException("Not supported by this implementation of PersistenceSessionServiceInternal");
     }
 

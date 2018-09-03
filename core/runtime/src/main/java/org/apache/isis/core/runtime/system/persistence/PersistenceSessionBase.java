@@ -194,7 +194,7 @@ abstract class PersistenceSessionBase implements PersistenceSession {
         final List<Object> services = servicesInjector.getRegisteredServices();
         final List<ObjectAdapter> serviceAdapters = _Lists.newArrayList();
         for (final Object servicePojo : services) {
-            ObjectAdapter serviceAdapter = getAdapterFor(servicePojo);
+            ObjectAdapter serviceAdapter = lookupAdapterFor(servicePojo);
             if(serviceAdapter == null) {
                 throw new IllegalStateException("ObjectAdapter for service " + servicePojo + " does not exist?!?");
             }

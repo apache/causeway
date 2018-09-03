@@ -664,7 +664,7 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
      *
      * <p>
      * That is, it retrieves the object identified by the specified {@link RootOid} from the object
-     * store, {@link AdapterManager#mapRecreatedPojo(org.apache.isis.core.metamodel.adapter.oid.Oid, Object) mapped by
+     * store, {@link AdapterManager#addRecreatedPojoToCache(org.apache.isis.core.metamodel.adapter.oid.Oid, Object) mapped by
      * the adapter manager}.
      *
      * <p>The cache should be checked first and, if the object is cached,
@@ -708,7 +708,7 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
 
         Objects.requireNonNull(oid);
 
-        final ObjectAdapter adapter = getAdapterFor(oid);
+        final ObjectAdapter adapter = lookupAdapterFor(oid);
         if (adapter != null) {
             return adapter;
         }
@@ -720,7 +720,7 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
                         LOG.debug("getObject; oid={}", oid);
 
                         final Object pojo = loadPersistentPojo(oid);
-                        return mapRecreatedPojo(oid, pojo);
+                        return addRecreatedPojoToCache(oid, pojo);
                     }
                 });
     }
@@ -833,7 +833,7 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
             return null;
         }
         final RootOid oid = createPersistentOrViewModelOid(pojo);
-        final ObjectAdapter adapter = mapRecreatedPojo(oid, pojo);
+        final ObjectAdapter adapter = addRecreatedPojoToCache(oid, pojo);
         return adapter;
     }
 
@@ -1075,10 +1075,10 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
     @Override
     public ObjectAdapter getAggregateRoot(final ParentedCollectionOid collectionOid) {
         final Oid rootOid = collectionOid.getRootOid();
-        ObjectAdapter rootadapter = getAdapterFor(rootOid);
+        ObjectAdapter rootadapter = lookupAdapterFor(rootOid);
         if(rootadapter == null) {
             final Oid parentOidNowPersisted = remappedFrom(rootOid);
-            rootadapter = getAdapterFor(parentOidNowPersisted);
+            rootadapter = lookupAdapterFor(parentOidNowPersisted);
         }
         return rootadapter;
     }
@@ -1094,14 +1094,14 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
     // -- AdapterManager implementation
 
     @Override
-    public ObjectAdapter getAdapterFor(final Object pojo) {
+    public ObjectAdapter lookupAdapterFor(final Object pojo) {
         Objects.requireNonNull(pojo);
 
         return objectAdapterContext.lookupAdapterByPojo(pojo);  
     }
 
     @Override
-    public ObjectAdapter getAdapterFor(final Oid oid) {
+    public ObjectAdapter lookupAdapterFor(final Oid oid) {
         Objects.requireNonNull(oid);
         ensureMapsConsistent(oid);
 
@@ -1112,7 +1112,7 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
     private ObjectAdapter existingOrValueAdapter(Object pojo) {
 
         // attempt to locate adapter for the pojo
-        ObjectAdapter adapter = getAdapterFor(pojo);
+        ObjectAdapter adapter = lookupAdapterFor(pojo);
         if (adapter != null) {
             return adapter;
         }
@@ -1269,12 +1269,12 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
         List<RootOid> notYetLoadedOids = _Lists.newArrayList();
         for (RootOid rootOid : rootOids) {
             // attempt to locate adapter for the Oid
-            ObjectAdapter adapter = getAdapterFor(rootOid);
+            ObjectAdapter adapter = lookupAdapterFor(rootOid);
             // handle view models or transient
             if (adapter == null) {
                 if (rootOid.isTransient() || rootOid.isViewModel()) {
                     final Object pojo = recreatePojoTransientOrViewModel(rootOid);
-                    adapter = mapRecreatedPojo(rootOid, pojo);
+                    adapter = addRecreatedPojoToCache(rootOid, pojo);
                     sync(concurrencyChecking, adapter, rootOid);
                 }
             }
@@ -1294,7 +1294,7 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
             if(pojo != null) {
                 ObjectAdapter adapter;
                 try {
-                    adapter = mapRecreatedPojo(rootOid, pojo);
+                    adapter = addRecreatedPojoToCache(rootOid, pojo);
                     adapterByOid.put(rootOid, adapter);
                 } catch(ObjectNotFoundException ex) {
                     throw ex; // just rethrow
@@ -1328,7 +1328,7 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
 
     /**
      * Either returns an existing {@link ObjectAdapter adapter} (as per
-     * {@link #getAdapterFor(Oid)}), otherwise re-creates an adapter with the
+     * {@link #lookupAdapterFor(Oid)}), otherwise re-creates an adapter with the
      * specified (persistent) {@link Oid}.
      *
      * <p>
@@ -1359,7 +1359,7 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
             final ConcurrencyChecking concurrencyChecking) {
 
         // attempt to locate adapter for the Oid
-        ObjectAdapter adapter = getAdapterFor(rootOid);
+        ObjectAdapter adapter = lookupAdapterFor(rootOid);
         if (adapter == null) {
             // else recreate
             try {
@@ -1369,7 +1369,7 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
                 } else {
                     pojo = loadPersistentPojo(rootOid);
                 }
-                adapter = mapRecreatedPojo(rootOid, pojo);
+                adapter = addRecreatedPojoToCache(rootOid, pojo);
             } catch(ObjectNotFoundException ex) {
                 throw ex; // just rethrow
             } catch(RuntimeException ex) {
@@ -1490,7 +1490,7 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
 
     /**
      * Either returns an existing {@link ObjectAdapter adapter} (as per
-     * {@link #getAdapterFor(Object)} or {@link #getAdapterFor(Oid)}), otherwise
+     * {@link #lookupAdapterFor(Object)} or {@link #lookupAdapterFor(Oid)}), otherwise
      * re-creates an adapter with the specified (persistent) {@link Oid}.
      *
      * <p>
@@ -1503,18 +1503,18 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
      * @param recreatedPojo - already known to the object store impl, or a service
      */
     @Override
-    public ObjectAdapter mapRecreatedPojo(final Oid oid, final Object recreatedPojo) {
+    public ObjectAdapter addRecreatedPojoToCache(final Oid oid, final Object recreatedPojo) {
 
         // attempt to locate adapter for the pojo
         // REVIEW: this check is possibly redundant because the pojo will most likely
         // have just been instantiated, so won't yet be in any maps
-        final ObjectAdapter adapterLookedUpByPojo = getAdapterFor(recreatedPojo);
+        final ObjectAdapter adapterLookedUpByPojo = lookupAdapterFor(recreatedPojo);
         if (adapterLookedUpByPojo != null) {
             return adapterLookedUpByPojo;
         }
 
         // attempt to locate adapter for the Oid
-        final ObjectAdapter adapterLookedUpByOid = getAdapterFor(oid);
+        final ObjectAdapter adapterLookedUpByOid = lookupAdapterFor(oid);
         if (adapterLookedUpByOid != null) {
             return adapterLookedUpByOid;
         }
@@ -1540,7 +1540,7 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
      * TODO: should do a cascade remove of any aggregated objects.
      */
     @Override
-    public void removeAdapter(final ObjectAdapter adapter) {
+    public void removeAdapterFromCache(final ObjectAdapter adapter) {
         ensureMapsConsistent(adapter);
 
         LOG.debug("removing adapter: {}", adapter);
@@ -1559,7 +1559,7 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
      */
     @Deprecated
     private void remapRecreatedPojo(ObjectAdapter adapter, final Object pojo) {
-        removeAdapter(adapter);
+        removeAdapterFromCache(adapter);
         adapter.replacePojo(pojo);
         mapAndInjectServices(adapter);
     }
@@ -1645,7 +1645,7 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
         final Version datastoreVersion = getVersionIfAny(pc);
 
         final RootOid originalOid;
-        ObjectAdapter adapter = getAdapterFor(pojo);
+        ObjectAdapter adapter = lookupAdapterFor(pojo);
         if (adapter != null) {
             ensureRootObject(pojo);
             originalOid = (RootOid) adapter.getOid();
@@ -1681,11 +1681,11 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
 
             // it appears to be possible that there is already an adapter for this Oid,
             // ie from ObjectStore#resolveImmediately()
-            adapter = getAdapterFor(originalOid);
+            adapter = lookupAdapterFor(originalOid);
             if (adapter != null) {
                 remapRecreatedPojo(adapter, pojo);
             } else {
-                adapter = mapRecreatedPojo(originalOid, pojo);
+                adapter = addRecreatedPojoToCache(originalOid, pojo);
 
                 CallbackFacet.Util.callCallback(adapter, LoadedCallbackFacet.class);
                 postLifecycleEventIfRequired(adapter, LoadedLifecycleEventFacet.class);
@@ -1769,7 +1769,7 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
      */
     @Override
     public void invokeIsisPersistingCallback(final Persistable pojo) {
-        final ObjectAdapter adapter = getAdapterFor(pojo);
+        final ObjectAdapter adapter = lookupAdapterFor(pojo);
         if (adapter == null) {
             // not expected.
             return;
@@ -1830,7 +1830,7 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
 
     @Override
     public void enlistUpdatingAndInvokeIsisUpdatingCallback(final Persistable pojo) {
-        ObjectAdapter adapter = getAdapterFor(pojo);
+        ObjectAdapter adapter = lookupAdapterFor(pojo);
         if (adapter == null) {
             // seen this happen in the case when a parent entity (LeaseItem) has a collection of children
             // objects (LeaseTerm) for which we haven't had a loaded callback fired and so are not yet

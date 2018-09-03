@@ -99,7 +99,7 @@ class RootAndCollectionAdapters implements Iterable<ObjectAdapter> {
     private void addCollectionAdapters(AdapterManager objectAdapterLookup) {
         for (final OneToManyAssociation otma : parentAdapter.getSpecification().getCollections(Contributed.EXCLUDED)) {
             final ParentedCollectionOid collectionOid = new ParentedCollectionOid((RootOid) rootAdapterOid, otma);
-            final ObjectAdapter collectionAdapter = objectAdapterLookup.getAdapterFor(collectionOid);
+            final ObjectAdapter collectionAdapter = objectAdapterLookup.lookupAdapterFor(collectionOid);
             if (collectionAdapter != null) {
                 // collection adapters are lazily created and so there may not be one.
                 addCollectionAdapter(otma, collectionAdapter);

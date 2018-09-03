@@ -77,11 +77,11 @@ public abstract class RecreatableObjectFacetDeclarativeInitializingAbstract exte
         final Set<String> mementoKeys = memento.keySet();
 
         // manually recreate the adapter in order to be able to query state via the metamodel
-        ObjectAdapter viewModelAdapter = adapterManager.getAdapterFor(viewModelPojo);
+        ObjectAdapter viewModelAdapter = adapterManager.lookupAdapterFor(viewModelPojo);
         if(viewModelAdapter == null) {
             final ObjectSpecification objectSpecification = specificationLoader.loadSpecification(viewModelPojo.getClass());
             final ObjectSpecId objectSpecId = objectSpecification.getSpecId();
-            viewModelAdapter = adapterManager.mapRecreatedPojo(new RootOid(objectSpecId, mementoStr, Oid.State.VIEWMODEL), viewModelPojo);
+            viewModelAdapter = adapterManager.addRecreatedPojoToCache(new RootOid(objectSpecId, mementoStr, Oid.State.VIEWMODEL), viewModelPojo);
         }
 
         final ObjectSpecification spec = viewModelAdapter.getSpecification();
@@ -131,7 +131,7 @@ public abstract class RecreatableObjectFacetDeclarativeInitializingAbstract exte
         // so... we create a temporary transient adapter, use it to wrap this adapter and interrogate this pojo,
         // then throw away that adapter (remove from the adapter map)
         boolean createdTemporaryAdapter = false;
-        ObjectAdapter viewModelAdapter = adapterManager.getAdapterFor(viewModelPojo);
+        ObjectAdapter viewModelAdapter = adapterManager.lookupAdapterFor(viewModelPojo);
         if(viewModelAdapter == null) {
 
             final ObjectSpecification objectSpecification =
@@ -139,7 +139,7 @@ public abstract class RecreatableObjectFacetDeclarativeInitializingAbstract exte
 
             final ObjectSpecId objectSpecId = objectSpecification.getSpecId();
             viewModelAdapter =
-                    adapterManager.mapRecreatedPojo(
+                    adapterManager.addRecreatedPojoToCache(
                             RootOid.create(objectSpecId, UUID.randomUUID().toString()),
                             viewModelPojo);
 
@@ -183,7 +183,7 @@ public abstract class RecreatableObjectFacetDeclarativeInitializingAbstract exte
             return memento.asString();
         } finally {
             if(createdTemporaryAdapter) {
-                adapterManager.removeAdapter(viewModelAdapter);
+                adapterManager.removeAdapterFromCache(viewModelAdapter);
             }
         }
     }

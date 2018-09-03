@@ -159,7 +159,7 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
                 allowing(mockDeploymentCategoryProvider).getDeploymentCategory();
                 will(returnValue(DeploymentCategory.PRODUCTION));
 
-                allowing(mockAdapterManager).getAdapterFor(employeeDO);
+                allowing(mockAdapterManager).lookupAdapterFor(employeeDO);
                 will(returnValue(mockEmployeeAdapter));
 
                 allowing(mockAdapterManager).adapterFor(employeeDO);

@@ -210,7 +210,7 @@ public class WrapperFactoryDefaultTest_wrappedObject {
                 allowing(mockAuthenticationSessionProvider).getAuthenticationSession();
                 will(returnValue(session));
 
-                allowing(mockAdapterManager).getAdapterFor(employeeDO);
+                allowing(mockAdapterManager).lookupAdapterFor(employeeDO);
                 will(returnValue(mockEmployeeAdapter));
 
                 allowing(mockAdapterManager).adapterFor(employeeDO);

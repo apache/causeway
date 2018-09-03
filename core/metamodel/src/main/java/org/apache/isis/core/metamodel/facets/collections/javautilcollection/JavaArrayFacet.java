@@ -57,7 +57,7 @@ public class JavaArrayFacet extends CollectionFacetAbstract {
         final Object[] array = array(collectionAdapter);
         final ArrayList<ObjectAdapter> objectCollection = new ArrayList<ObjectAdapter>(array.length);
         for (final Object element2 : array) {
-            final ObjectAdapter element = getAdapterManager().getAdapterFor(element2);
+            final ObjectAdapter element = getAdapterManager().lookupAdapterFor(element2);
             objectCollection.add(element);
         }
         return objectCollection;
@@ -69,7 +69,7 @@ public class JavaArrayFacet extends CollectionFacetAbstract {
     @Override
     public ObjectAdapter firstElement(final ObjectAdapter collectionAdapter) {
         final Object[] array = array(collectionAdapter);
-        return array.length > 0 ? getAdapterManager().getAdapterFor(array[0]) : null;
+        return array.length > 0 ? getAdapterManager().lookupAdapterFor(array[0]) : null;
     }
 
     /**

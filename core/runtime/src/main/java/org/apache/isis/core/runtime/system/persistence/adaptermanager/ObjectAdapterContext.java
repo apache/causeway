@@ -142,7 +142,7 @@ public class ObjectAdapterContext {
          *
          * <p>
          * Should only be called if the pojo is known not to be
-         * {@link #getAdapterFor(Object) mapped}, and for immutable value types
+         * {@link #lookupAdapterFor(Object) mapped}, and for immutable value types
          * referenced.
          */
         ObjectAdapter createStandaloneAdapter(Object pojo);
@@ -159,7 +159,7 @@ public class ObjectAdapterContext {
          *
          * <p>
          * Should only be called if the pojo is known not to be
-         * {@link #getAdapterFor(Object) mapped}.
+         * {@link #lookupAdapterFor(Object) mapped}.
          */
         ObjectAdapter createCollectionAdapter(Object pojo, ObjectAdapter parentAdapter, OneToManyAssociation otma);
     }
