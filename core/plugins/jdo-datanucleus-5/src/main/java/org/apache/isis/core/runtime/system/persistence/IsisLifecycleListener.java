@@ -34,7 +34,7 @@ import com.google.common.collect.Maps;
 
 import org.datanucleus.enhancement.Persistable;
 
-public class IsisLifecycleListener2
+public class IsisLifecycleListener
 implements AttachLifecycleListener, ClearLifecycleListener, CreateLifecycleListener, DeleteLifecycleListener,
 DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLifecycleListener,
 SuspendableListener {
@@ -51,12 +51,12 @@ SuspendableListener {
         void invokeIsisPersistingCallback(Persistable pojo);
         void enlistUpdatingAndInvokeIsisUpdatingCallback(Persistable pojo);
         void enlistDeletingAndInvokeIsisRemovingCallbackFacet(Persistable pojo);
-        //ObjectAdapter getAdapterFor(Persistable pojo);
+      //ObjectAdapter getAdapterFor(Persistable pojo);
     }
 
     private final PersistenceSessionLifecycleManagement persistenceSession;
 
-    public IsisLifecycleListener2(final PersistenceSessionLifecycleManagement persistenceSession) {
+    public IsisLifecycleListener(final PersistenceSessionLifecycleManagement persistenceSession) {
         this.persistenceSession = persistenceSession;
     }
 

@@ -126,7 +126,7 @@ import org.apache.isis.objectstore.jdo.datanucleus.persistence.spi.JdoObjectIdSe
  * identities} for each and every POJO that is being used by the framework.
  */
 public class PersistenceSession5 extends PersistenceSessionBase
-implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
+implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 
     private static final Logger LOG = LoggerFactory.getLogger(PersistenceSession5.class);
     private ObjectAdapterContext objectAdapterContext;
@@ -162,8 +162,8 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
 
         persistenceManager = jdoPersistenceManagerFactory.getPersistenceManager();
 
-        final IsisLifecycleListener2.PersistenceSessionLifecycleManagement psLifecycleMgmt = this;
-        final IsisLifecycleListener2 isisLifecycleListener = new IsisLifecycleListener2(psLifecycleMgmt);
+        final IsisLifecycleListener.PersistenceSessionLifecycleManagement psLifecycleMgmt = this;
+        final IsisLifecycleListener isisLifecycleListener = new IsisLifecycleListener(psLifecycleMgmt);
         persistenceManager.addInstanceLifecycleListener(isisLifecycleListener, (Class[]) null);
 
         persistenceQueryProcessorByClass.put(
