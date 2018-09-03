@@ -89,7 +89,7 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache {
 
     private ViewModelFacet create(final org.apache.isis.applib.annotation.ViewModel annotation, final FacetHolder holder) {
         final PostConstructMethodCache postConstructMethodCache = this;
-        return annotation != null ? new RecreatableObjectFacetForViewModelAnnotation(holder, getSpecificationLoader(), adapterManager, servicesInjector, postConstructMethodCache) : null;
+        return annotation != null ? new RecreatableObjectFacetForViewModelAnnotation(holder, getSpecificationLoader(), adapterProvider, servicesInjector, postConstructMethodCache) : null;
     }
 
     private ViewModelFacet create(final XmlRootElement annotation, final FacetHolder holder) {
@@ -136,9 +136,9 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache {
     @Override
     public void setServicesInjector(final ServicesInjector servicesInjector) {
         super.setServicesInjector(servicesInjector);
-        adapterManager = servicesInjector.getPersistenceSessionServiceInternal();
+        adapterProvider = servicesInjector.getPersistenceSessionServiceInternal();
     }
 
-    PersistenceSessionServiceInternal adapterManager;
+    PersistenceSessionServiceInternal adapterProvider;
 
 }

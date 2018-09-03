@@ -82,7 +82,7 @@ import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;
  * </p>
  *
  */
-public final class SpecificationLoader implements ApplicationScopedComponent {
+public class SpecificationLoader implements ApplicationScopedComponent {
 
     private final static Logger LOG = LoggerFactory.getLogger(SpecificationLoader.class);
 

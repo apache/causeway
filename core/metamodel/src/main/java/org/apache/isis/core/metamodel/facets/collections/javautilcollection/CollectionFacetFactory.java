@@ -63,7 +63,7 @@ public class CollectionFacetFactory extends FacetFactoryAbstract {
                     facetHolder.addFacet(typeOfFacet);
         }
 
-        final CollectionFacet collectionFacet = new JavaCollectionFacet(facetHolder, adapterManager);
+        final CollectionFacet collectionFacet = new JavaCollectionFacet(facetHolder, adapterProvider);
 
         facetHolder.addFacet(collectionFacet);
     }
@@ -72,7 +72,7 @@ public class CollectionFacetFactory extends FacetFactoryAbstract {
         final Class<?> cls = processClassContext.getCls();
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
-        final CollectionFacet collectionFacet = new JavaArrayFacet(facetHolder, adapterManager);
+        final CollectionFacet collectionFacet = new JavaArrayFacet(facetHolder, adapterProvider);
         facetHolder.addFacet(collectionFacet);
 
         final TypeOfFacet typeOfFacet =
@@ -93,9 +93,9 @@ public class CollectionFacetFactory extends FacetFactoryAbstract {
     @Override
     public void setServicesInjector(final ServicesInjector servicesInjector) {
         super.setServicesInjector(servicesInjector);
-        adapterManager = servicesInjector.getPersistenceSessionServiceInternal();
+        adapterProvider = servicesInjector.getPersistenceSessionServiceInternal();
     }
 
-    PersistenceSessionServiceInternal adapterManager;
+    PersistenceSessionServiceInternal adapterProvider;
 
 }

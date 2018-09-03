@@ -410,19 +410,26 @@ public interface ObjectAdapter extends Instance {
          * <li>if the method does not declare all parameters for arguments, then truncates arguments.
          * </ul>
          */
-        public static Object invokeAutofit(final Method method, final ObjectAdapter target, List<ObjectAdapter> argumentsIfAvailable, final AdapterManager adapterManager) {
+        public static Object invokeAutofit(
+                final Method method, 
+                final ObjectAdapter target, 
+                List<ObjectAdapter> argumentsIfAvailable, 
+                final ObjectAdapterProvider adapterProvider) {
+            
             final List<ObjectAdapter> args = _Lists.newArrayList();
             if(argumentsIfAvailable != null) {
                 args.addAll(argumentsIfAvailable);
             }
 
-            adjust(method, args, adapterManager);
+            adjust(method, args, adapterProvider);
 
             final ObjectAdapter[] argArray = args.toArray(new ObjectAdapter[]{});
             return invoke(method, target, argArray);
         }
 
-        private static void adjust(final Method method, final List<ObjectAdapter> args, final AdapterManager adapterManager) {
+        private static void adjust(
+                final Method method, final List<ObjectAdapter> args, final ObjectAdapterProvider adapterProvider) {
+            
             final Class<?>[] parameterTypes = method.getParameterTypes();
             ListExtensions.adjust(args, parameterTypes.length);
 
@@ -430,7 +437,7 @@ public interface ObjectAdapter extends Instance {
                 final Class<?> cls = parameterTypes[i];
                 if(args.get(i) == null && cls.isPrimitive()) {
                     final Object object = ClassExtensions.toDefault(cls);
-                    final ObjectAdapter adapter = adapterManager.adapterFor(object);
+                    final ObjectAdapter adapter = adapterProvider.adapterFor(object);
                     args.set(i, adapter);
                 }
             }
@@ -476,16 +483,16 @@ public interface ObjectAdapter extends Instance {
             return Util::unwrap;
         }
 
-        public static Function<Object, ObjectAdapter> adapterForUsing(final AdapterManager adapterManager) {
-            return adapterManager::adapterFor;
+        public static Function<Object, ObjectAdapter> adapterForUsing(final ObjectAdapterProvider adapterProvider) {
+            return adapterProvider::adapterFor;
         }
 
         @Deprecated
-        public static com.google.common.base.Function<Object, ObjectAdapter> adapter_ForUsing(final AdapterManager adapterManager) {
+        public static com.google.common.base.Function<Object, ObjectAdapter> adapter_ForUsing(final ObjectAdapterProvider adapterProvider) {
             return new com.google.common.base.Function<Object, ObjectAdapter>() {
                 @Override
                 public ObjectAdapter apply(final Object pojo) {
-                    return adapterManager.adapterFor(pojo);
+                    return adapterProvider.adapterFor(pojo);
                 }
             };
         }

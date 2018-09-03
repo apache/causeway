@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Objects;
 
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.PostConstructMethodCache;
@@ -37,7 +38,7 @@ RecreatableObjectFacetDeclarativeInitializingAbstract {
     public static ViewModelFacet create(
             final List<DomainObject> domainObjects,
             final SpecificationLoader specificationLoader,
-            final AdapterManager adapterManager,
+            final ObjectAdapterProvider adapterProvider,
             final ServicesInjector servicesInjector,
             final FacetHolder holder,
             final PostConstructMethodCache postConstructMethodCache) {
@@ -61,7 +62,7 @@ RecreatableObjectFacetDeclarativeInitializingAbstract {
                         }
                         return new RecreatableObjectFacetForDomainObjectAnnotation(
                                 holder,
-                                specificationLoader, adapterManager, servicesInjector, postConstructMethodCache);
+                                specificationLoader, adapterProvider, servicesInjector, postConstructMethodCache);
                     }
                     // shouldn't happen, the above switch should match all cases.
                     throw new IllegalArgumentException("nature of '" + nature + "' not recognized");
@@ -74,10 +75,10 @@ RecreatableObjectFacetDeclarativeInitializingAbstract {
     private RecreatableObjectFacetForDomainObjectAnnotation(
             final FacetHolder holder,
             final SpecificationLoader specificationLoader,
-            final AdapterManager adapterManager,
+            final ObjectAdapterProvider adapterProvider,
             final ServicesInjector servicesInjector,
             final PostConstructMethodCache postConstructMethodCache) {
-        super(holder, RecreationMechanism.INITIALIZES, specificationLoader, adapterManager, servicesInjector,
+        super(holder, RecreationMechanism.INITIALIZES, specificationLoader, adapterProvider, servicesInjector,
                 postConstructMethodCache);
     }
 

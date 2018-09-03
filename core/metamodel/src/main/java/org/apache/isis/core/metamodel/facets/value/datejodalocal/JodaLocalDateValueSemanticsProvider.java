@@ -261,7 +261,7 @@ public class JodaLocalDateValueSemanticsProvider extends ValueSemanticsProviderA
 
     @Override
     public final ObjectAdapter createValue(final LocalDate date) {
-        return getAdapterManager().adapterFor(date);
+        return getObjectAdapterProvider().adapterFor(date);
     }
 
 

@@ -35,7 +35,7 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.core.commons.lang.LocaleUtil;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -312,7 +312,7 @@ public abstract class ValueSemanticsProviderAndFacetAbstract<T> extends FacetAbs
     protected ObjectAdapter createAdapter(final Class<?> type, final Object object) {
         final ObjectSpecification specification = getSpecificationLoader().loadSpecification(type);
         if (specification.isNotCollection()) {
-            return getAdapterManager().adapterFor(object);
+            return getObjectAdapterProvider().adapterFor(object);
         } else {
             throw new UnknownTypeException("not an object, is this a collection?");
         }
@@ -333,7 +333,7 @@ public abstract class ValueSemanticsProviderAndFacetAbstract<T> extends FacetAbs
     /**
      * From {@link #getContext() context.}
      */
-    protected AdapterManager getAdapterManager() {
+    protected ObjectAdapterProvider getObjectAdapterProvider() {
         return context.getPersistenceSessionServiceInternal();
     }
 

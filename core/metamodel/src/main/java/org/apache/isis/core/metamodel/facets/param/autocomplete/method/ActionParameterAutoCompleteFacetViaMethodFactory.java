@@ -73,6 +73,7 @@ public class ActionParameterAutoCompleteFacetViaMethodFactory extends MethodPref
             final Class<?> paramType = params[i];
             final Class<?> arrayOfParamType = (Array.newInstance(paramType, 0)).getClass();
 
+            @SuppressWarnings("rawtypes")
             final Class[] returnTypes = { arrayOfParamType, List.class, Set.class, Collection.class };
             Method autoCompleteMethod = findAutoCompleteNumMethodReturning(processMethodContext, i, returnTypes);
             if (autoCompleteMethod == null) {

@@ -22,7 +22,7 @@ package org.apache.isis.core.metamodel.facets.object.encodeable.encoder;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
@@ -32,13 +32,13 @@ public class EncodableFacetUsingEncoderDecoder extends FacetAbstract implements 
 
     private final EncoderDecoder<?> encoderDecoder;
     private final ServicesInjector dependencyInjector;
-    private final AdapterManager adapterManager;
+    private final ObjectAdapterProvider adapterProvider;
 
-    public EncodableFacetUsingEncoderDecoder(final EncoderDecoder<?> encoderDecoder, final FacetHolder holder, final AdapterManager adapterManager, final ServicesInjector dependencyInjector) {
+    public EncodableFacetUsingEncoderDecoder(final EncoderDecoder<?> encoderDecoder, final FacetHolder holder, final ObjectAdapterProvider adapterProvider, final ServicesInjector dependencyInjector) {
         super(EncodableFacet.class, holder, Derivation.NOT_DERIVED);
         this.encoderDecoder = encoderDecoder;
         this.dependencyInjector = dependencyInjector;
-        this.adapterManager = adapterManager;
+        this.adapterProvider = adapterProvider;
     }
 
     // TODO: is this safe? really?
@@ -58,7 +58,7 @@ public class EncodableFacetUsingEncoderDecoder extends FacetAbstract implements 
         } else {
             getDependencyInjector().injectServicesInto(encoderDecoder);
             final Object decodedObject = encoderDecoder.fromEncodedString(encodedData);
-            return getAdapterManager().adapterFor(decodedObject);
+            return getObjectAdapterProvider().adapterFor(decodedObject);
         }
 
     }
@@ -83,8 +83,8 @@ public class EncodableFacetUsingEncoderDecoder extends FacetAbstract implements 
         return dependencyInjector;
     }
 
-    public AdapterManager getAdapterManager() {
-        return adapterManager;
+    public ObjectAdapterProvider getObjectAdapterProvider() {
+        return adapterProvider;
     }
 
 }

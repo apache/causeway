@@ -23,7 +23,7 @@ import java.util.List;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -43,8 +43,8 @@ public class ActionParameterChoicesFacetFromParentedCollection extends ActionPar
             final DeploymentCategory deploymentCategory,
             final SpecificationLoader specificationLoader,
             final AuthenticationSessionProvider authenticationSessionProvider,
-            final AdapterManager adapterManager) {
-        super(holder, deploymentCategory, specificationLoader, authenticationSessionProvider, adapterManager);
+            final ObjectAdapterProvider adapterProvider) {
+        super(holder, deploymentCategory, specificationLoader, authenticationSessionProvider, adapterProvider);
         this.otma = otma;
     }
 

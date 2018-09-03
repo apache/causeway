@@ -1945,6 +1945,11 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         return false;
     }
 
+    @Override
+    public AdapterManager adapterManager() {
+        return this;
+    }
+    
 }
 
 

@@ -55,7 +55,7 @@ ServicesInjectorAware {
     private DeploymentCategoryProvider deploymentCategoryProvider;
     private SpecificationLoader specificationLoader;
     private AuthenticationSessionProvider authenticationSessionProvider;
-    private PersistenceSessionServiceInternal adapterManager;
+    private PersistenceSessionServiceInternal adapterProvider;
 
     @Override
     public void postProcess(final ObjectSpecification objectSpecification) {
@@ -145,7 +145,7 @@ ServicesInjectorAware {
                     new ActionParameterChoicesFacetFromParentedCollection(
                             scalarOrCollectionParam, otma,
                             getDeploymentCategory(), specificationLoader,
-                            authenticationSessionProvider, adapterManager ));
+                            authenticationSessionProvider, adapterProvider ));
         }
     }
 
@@ -172,7 +172,7 @@ ServicesInjectorAware {
         deploymentCategoryProvider = servicesInjector.getDeploymentCategoryProvider();
         specificationLoader = servicesInjector.getSpecificationLoader();
         authenticationSessionProvider = servicesInjector.getAuthenticationSessionProvider();
-        adapterManager = servicesInjector.getPersistenceSessionServiceInternal();
+        adapterProvider = servicesInjector.getPersistenceSessionServiceInternal();
     }
 
 }

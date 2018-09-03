@@ -60,7 +60,7 @@ public class PropertyAccessorFacetViaAccessorFactory extends PropertyOrCollectio
                         getDeploymentCategory(), getConfiguration(),
                         getSpecificationLoader(),
                         getAuthenticationSessionProvider(),
-                        adapterManager
+                        adapterProvider
                         ));
     }
 
@@ -116,9 +116,9 @@ public class PropertyAccessorFacetViaAccessorFactory extends PropertyOrCollectio
 
     @Override public void setServicesInjector(final ServicesInjector servicesInjector) {
         super.setServicesInjector(servicesInjector);
-        adapterManager = servicesInjector.getPersistenceSessionServiceInternal();
+        adapterProvider = servicesInjector.getPersistenceSessionServiceInternal();
     }
 
-    PersistenceSessionServiceInternal adapterManager;
+    PersistenceSessionServiceInternal adapterProvider;
 
 }

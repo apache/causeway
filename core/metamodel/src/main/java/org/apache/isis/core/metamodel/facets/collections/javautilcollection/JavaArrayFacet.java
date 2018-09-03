@@ -19,46 +19,52 @@
 
 package org.apache.isis.core.metamodel.facets.collections.javautilcollection;
 
+import static org.apache.isis.commons.internal.base._NullSafe.isEmpty;
+
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacetAbstract;
 
 public class JavaArrayFacet extends CollectionFacetAbstract {
 
-    private final AdapterManager adapterManager;
+    private final ObjectAdapterProvider adapterProvider;
 
-    public JavaArrayFacet(final FacetHolder holder, final AdapterManager adapterManager) {
+    public JavaArrayFacet(final FacetHolder holder, final ObjectAdapterProvider adapterProvider) {
         super(holder);
-        this.adapterManager = adapterManager;
+        this.adapterProvider = adapterProvider;
     }
 
     /**
      * Expected to be called with a {@link ObjectAdapter} wrapping an array.
      */
     @Override
-    public void init(final ObjectAdapter collectionAdapter, final ObjectAdapter[] initData) {
+    public void init(final ObjectAdapter arrayAdapter, final ObjectAdapter[] initData) {
         final int length = initData.length;
         final Object[] array = new Object[length];
         for (int i = 0; i < length; i++) {
             array[i] = initData[i].getObject();
         }
-        collectionAdapter.replacePojo(array);
+        arrayAdapter.replacePojo(array);
     }
 
     /**
      * Expected to be called with a {@link ObjectAdapter} wrapping an array.
      */
     @Override
-    public Collection<ObjectAdapter> collection(final ObjectAdapter collectionAdapter) {
-        final Object[] array = array(collectionAdapter);
+    public Collection<ObjectAdapter> collection(final ObjectAdapter arrayAdapter) {
+        final Object[] array = pojoArray(arrayAdapter);
+        if(isEmpty(array)) {
+            return Collections.emptyList();
+        }
         final ArrayList<ObjectAdapter> objectCollection = new ArrayList<ObjectAdapter>(array.length);
-        for (final Object element2 : array) {
-            final ObjectAdapter element = getAdapterManager().lookupAdapterFor(element2);
-            objectCollection.add(element);
+        for (final Object element : array) {
+            final ObjectAdapter elementAdapter = getObjectAdapterProvider().adapterFor(element);
+            objectCollection.add(elementAdapter);
         }
         return objectCollection;
     }
@@ -67,29 +73,32 @@ public class JavaArrayFacet extends CollectionFacetAbstract {
      * Expected to be called with a {@link ObjectAdapter} wrapping an array.
      */
     @Override
-    public ObjectAdapter firstElement(final ObjectAdapter collectionAdapter) {
-        final Object[] array = array(collectionAdapter);
-        return array.length > 0 ? getAdapterManager().lookupAdapterFor(array[0]) : null;
+    public ObjectAdapter firstElement(final ObjectAdapter arrayAdapter) {
+        final Object[] array = pojoArray(arrayAdapter);
+        if(isEmpty(array)) {
+            return null;
+        }
+        return array.length > 0 ? getObjectAdapterProvider().adapterFor(array[0]) : null;
     }
 
     /**
      * Expected to be called with a {@link ObjectAdapter} wrapping an array.
      */
     @Override
-    public int size(final ObjectAdapter collectionAdapter) {
-        return array(collectionAdapter).length;
+    public int size(final ObjectAdapter arrayAdapter) {
+        return pojoArray(arrayAdapter).length;
     }
 
-    private Object[] array(final ObjectAdapter collectionAdapter) {
-        return (Object[]) collectionAdapter.getObject();
+    private Object[] pojoArray(final ObjectAdapter arrayAdapter) {
+        return (Object[]) arrayAdapter.getObject();
     }
 
     // /////////////////////////////////////////////////////
     // Dependencies (from constructor)
     // /////////////////////////////////////////////////////
 
-    private AdapterManager getAdapterManager() {
-        return adapterManager;
+    private ObjectAdapterProvider getObjectAdapterProvider() {
+        return adapterProvider;
     }
 
 }

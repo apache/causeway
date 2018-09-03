@@ -23,7 +23,7 @@ import com.google.common.base.Strings;
 
 import org.apache.isis.applib.annotation.Parseable;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacetAbstract;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParserUtil;
@@ -49,17 +49,17 @@ public class ParseableFacetAnnotation extends ParseableFacetAbstract {
             final Class<?> annotatedClass,
             final IsisConfiguration configuration,
             final FacetHolder holder,
-            final AdapterManager adapterManager,
+            final ObjectAdapterProvider adapterProvider,
             final ServicesInjector dependencyInjector) {
         this(parserName(annotatedClass, configuration), parserClass(annotatedClass), holder,
-                adapterManager, dependencyInjector);
+                adapterProvider, dependencyInjector);
     }
 
     private ParseableFacetAnnotation(
             final String candidateParserName,
             final Class<?> candidateParserClass,
             final FacetHolder holder,
-            final AdapterManager adapterManager,
+            final ObjectAdapterProvider adapterProvider,
             final ServicesInjector dependencyInjector) {
         super(candidateParserName, candidateParserClass, holder, dependencyInjector);
     }

@@ -91,7 +91,7 @@ public class ShortValueSemanticsProviderAbstract extends ValueSemanticsProviderA
 
     @Override
     public ObjectAdapter createValue(final Short value) {
-        return getAdapterManager().adapterFor(value);
+        return getObjectAdapterProvider().adapterFor(value);
     }
 
     @Override

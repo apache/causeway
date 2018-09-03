@@ -52,7 +52,7 @@ public class ActionParameterChoicesFacetDerivedFromChoicesFacetFactory extends F
                 facetHolder,
                 getDeploymentCategory(), getSpecificationLoader(),
                 getAuthenticationSessionProvider(),
-                adapterManager));
+                adapterProvider));
     }
 
     // /////////////////////////////////////////////
@@ -62,9 +62,9 @@ public class ActionParameterChoicesFacetDerivedFromChoicesFacetFactory extends F
     @Override
     public void setServicesInjector(final ServicesInjector servicesInjector) {
         super.setServicesInjector(servicesInjector);
-        adapterManager = servicesInjector.getPersistenceSessionServiceInternal();
+        adapterProvider = servicesInjector.getPersistenceSessionServiceInternal();
     }
 
-    PersistenceSessionServiceInternal adapterManager;
+    PersistenceSessionServiceInternal adapterProvider;
 
 }

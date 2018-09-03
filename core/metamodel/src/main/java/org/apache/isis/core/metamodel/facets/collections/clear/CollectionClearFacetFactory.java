@@ -61,11 +61,13 @@ public class CollectionClearFacetFactory extends MethodPrefixBasedFacetFactoryAb
         FacetUtil.addFacet(createCollectionClearFacet(method, getMethod, collection));
     }
 
-    private CollectionClearFacet createCollectionClearFacet(final Method clearMethodIfAny, final Method accessorMethod, final FacetHolder collection) {
+    private CollectionClearFacet createCollectionClearFacet(
+            final Method clearMethodIfAny, final Method accessorMethod, final FacetHolder collection) {
+        
         if (clearMethodIfAny != null) {
             return new CollectionClearFacetViaClearMethod(clearMethodIfAny, collection);
         } else {
-            return new CollectionClearFacetViaAccessor(accessorMethod, collection, adapterManager);
+            return new CollectionClearFacetViaAccessor(accessorMethod, collection, adapterProvider);
         }
     }
 
@@ -77,10 +79,10 @@ public class CollectionClearFacetFactory extends MethodPrefixBasedFacetFactoryAb
     @Override
     public void setServicesInjector(final ServicesInjector servicesInjector) {
         super.setServicesInjector(servicesInjector);
-        adapterManager = servicesInjector.getPersistenceSessionServiceInternal();
+        adapterProvider = servicesInjector.getPersistenceSessionServiceInternal();
     }
 
-    PersistenceSessionServiceInternal adapterManager;
+    PersistenceSessionServiceInternal adapterProvider;
 
 
 }

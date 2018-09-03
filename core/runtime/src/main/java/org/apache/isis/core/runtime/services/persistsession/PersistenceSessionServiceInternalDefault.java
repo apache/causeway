@@ -35,6 +35,7 @@ import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.xactn.Transaction;
 import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
@@ -55,38 +56,20 @@ import org.apache.isis.core.runtime.system.transaction.TransactionalClosure;
 public class PersistenceSessionServiceInternalDefault implements PersistenceSessionServiceInternal {
 
     @Override
-    public ObjectAdapter lookupAdapterFor(Oid oid) {
-        return getPersistenceSession().lookupAdapterFor(oid);
+    public ObjectAdapter adapterFor(Object domainObject) {
+        return getPersistenceSession().adapterFor(domainObject);
     }
 
     @Override
-    public ObjectAdapter lookupAdapterFor(final Object pojo) {
-        return getPersistenceSession().lookupAdapterFor(pojo);
+    public ObjectAdapter adapterFor(Object pojo, ObjectAdapter parentAdapter, OneToManyAssociation collection) {
+        return getPersistenceSession().adapterFor(pojo, parentAdapter, collection);
     }
-
+    
     @Override
-    public ObjectAdapter adapterFor(final Object pojo) {
-        return getPersistenceSession().adapterFor(pojo);
+    public AdapterManager adapterManager() {
+        return getPersistenceSession();
     }
-
-    @Override
-    public ObjectAdapter adapterFor(
-            final Object pojo,
-            final ObjectAdapter ownerAdapter,
-            final OneToManyAssociation collection) {
-        return getPersistenceSession().adapterFor(pojo, ownerAdapter, collection);
-    }
-
-    @Override
-    public ObjectAdapter addRecreatedPojoToCache(Oid oid, Object recreatedPojo) {
-        return getPersistenceSession().addRecreatedPojoToCache(oid, recreatedPojo);
-    }
-
-    @Override
-    public void removeAdapterFromCache(ObjectAdapter adapter) {
-        getPersistenceSession().removeAdapterFromCache(adapter);
-    }
-
+    
     @Override
     public void makePersistent(final ObjectAdapter adapter) {
         getPersistenceSession().makePersistentInTransaction(adapter);
@@ -236,5 +219,8 @@ public class PersistenceSessionServiceInternalDefault implements PersistenceSess
 
     @javax.inject.Inject
     IsisSessionFactory isisSessionFactory;
+
+
+
 
 }

@@ -38,8 +38,6 @@ import com.google.common.base.Strings;
 @Deprecated
 public class ParseableFacetAnnotationElseConfigurationFactory extends FacetFactoryAbstract {
 
-
-
     public ParseableFacetAnnotationElseConfigurationFactory() {
         super(FeatureType.OBJECTS_ONLY);
     }
@@ -55,7 +53,7 @@ public class ParseableFacetAnnotationElseConfigurationFactory extends FacetFacto
         // create from annotation, if present
         if (annotation != null) {
             final ParseableFacetAnnotation facet = new ParseableFacetAnnotation(cls, getConfiguration(), holder,
-                    adapterManager, servicesInjector);
+                    adapterProvider, servicesInjector);
             if (facet.isValid()) {
                 return facet;
             }
@@ -65,7 +63,7 @@ public class ParseableFacetAnnotationElseConfigurationFactory extends FacetFacto
         final String parserName = ParserUtil.parserNameFromConfiguration(cls, getConfiguration());
         if (!Strings.isNullOrEmpty(parserName)) {
             final ParseableFacetFromConfiguration facet = new ParseableFacetFromConfiguration(parserName, holder,
-                    servicesInjector, adapterManager);
+                    servicesInjector, adapterProvider);
             if (facet.isValid()) {
                 return facet;
             }
@@ -78,9 +76,9 @@ public class ParseableFacetAnnotationElseConfigurationFactory extends FacetFacto
     @Override
     public void setServicesInjector(final ServicesInjector servicesInjector) {
         super.setServicesInjector(servicesInjector);
-        adapterManager = servicesInjector.getPersistenceSessionServiceInternal();
+        adapterProvider = servicesInjector.getPersistenceSessionServiceInternal();
     }
 
-    PersistenceSessionServiceInternal adapterManager;
+    PersistenceSessionServiceInternal adapterProvider;
 
 }

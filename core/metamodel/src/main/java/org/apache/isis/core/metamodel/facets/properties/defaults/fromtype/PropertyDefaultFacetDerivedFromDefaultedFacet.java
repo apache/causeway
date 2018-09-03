@@ -20,21 +20,23 @@
 package org.apache.isis.core.metamodel.facets.properties.defaults.fromtype;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
 import org.apache.isis.core.metamodel.facets.object.defaults.DefaultedFacet;
+import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
 
 public class PropertyDefaultFacetDerivedFromDefaultedFacet extends FacetAbstract implements PropertyDefaultFacet {
 
     private final DefaultedFacet typeFacet;
-    private final AdapterManager adapterManager;
+    private final ObjectAdapterProvider adapterProvider;
 
-    public PropertyDefaultFacetDerivedFromDefaultedFacet(final DefaultedFacet typeFacet, final FacetHolder holder, final AdapterManager adapterManager) {
+    public PropertyDefaultFacetDerivedFromDefaultedFacet(
+            final DefaultedFacet typeFacet, final FacetHolder holder, final ObjectAdapterProvider adapterProvider) {
+        
         super(PropertyDefaultFacet.class, holder, Derivation.NOT_DERIVED);
         this.typeFacet = typeFacet;
-        this.adapterManager = adapterManager;
+        this.adapterProvider = adapterProvider;
     }
 
     @Override
@@ -46,15 +48,15 @@ public class PropertyDefaultFacetDerivedFromDefaultedFacet extends FacetAbstract
         if (typeFacetDefault == null) {
             return null;
         }
-        return getAdapterManager().adapterFor(typeFacetDefault);
+        return getObjectAdapterProvider().adapterFor(typeFacetDefault);
     }
 
     // /////////////////////////////////////////////////////
     // Dependencies (from constructor)
     // /////////////////////////////////////////////////////
 
-    public AdapterManager getAdapterManager() {
-        return adapterManager;
+    public ObjectAdapterProvider getObjectAdapterProvider() {
+        return adapterProvider;
     }
 
 }

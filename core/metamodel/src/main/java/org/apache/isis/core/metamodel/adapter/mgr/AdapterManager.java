@@ -24,26 +24,11 @@ import java.util.concurrent.Callable;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 
-public interface AdapterManager {
+public interface AdapterManager extends ObjectAdapterProvider {
 
-    /**
-     * @return standalone (value) or root adapter
-     */
-    @Programmatic
-    ObjectAdapter adapterFor(Object domainObject);
-
-    /**
-     * @return collection adapter.
-     */
-    @Programmatic
-    ObjectAdapter adapterFor(
-            final Object pojo,
-            final ObjectAdapter parentAdapter,
-            OneToManyAssociation collection);
-    
 
     enum ConcurrencyChecking {
         NO_CHECK,

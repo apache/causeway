@@ -70,7 +70,7 @@ public class TitleAnnotationFacetFactory extends FacetFactoryAbstract implements
 
         sort(evaluators);
         final List<TitleFacetViaTitleAnnotation.TitleComponent> titleComponents = Lists.transform(evaluators, TitleFacetViaTitleAnnotation.TitleComponent.FROM_EVALUATORS);
-        FacetUtil.addFacet(new TitleFacetViaTitleAnnotation(titleComponents, facetHolder, adapterManager));
+        FacetUtil.addFacet(new TitleFacetViaTitleAnnotation(titleComponents, facetHolder, adapterProvider));
     }
 
     public static void sort(final List<Annotations.Evaluator<Title>> evaluators) {
@@ -193,9 +193,9 @@ public class TitleAnnotationFacetFactory extends FacetFactoryAbstract implements
     @Override
     public void setServicesInjector(final ServicesInjector servicesInjector) {
         super.setServicesInjector(servicesInjector);
-        adapterManager = servicesInjector.getPersistenceSessionServiceInternal();
+        adapterProvider = servicesInjector.getPersistenceSessionServiceInternal();
     }
 
-    PersistenceSessionServiceInternal adapterManager;
+    PersistenceSessionServiceInternal adapterProvider;
 
 }

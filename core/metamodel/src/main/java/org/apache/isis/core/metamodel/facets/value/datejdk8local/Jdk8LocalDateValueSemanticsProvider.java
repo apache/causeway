@@ -260,7 +260,7 @@ public class Jdk8LocalDateValueSemanticsProvider extends ValueSemanticsProviderA
 
     @Override
     public final ObjectAdapter createValue(final LocalDate date) {
-        return getAdapterManager().adapterFor(date);
+        return getObjectAdapterProvider().adapterFor(date);
     }
 
 

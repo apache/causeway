@@ -61,7 +61,7 @@ public class PropertyDefaultFacetViaMethodFactory extends MethodPrefixBasedFacet
         processMethodContext.removeMethod(method);
 
         final FacetHolder property = processMethodContext.getFacetHolder();
-        FacetUtil.addFacet(new PropertyDefaultFacetViaMethod(method, property, getSpecificationLoader(), adapterManager));
+        FacetUtil.addFacet(new PropertyDefaultFacetViaMethod(method, property, getSpecificationLoader(), adapterProvider));
     }
 
     // ///////////////////////////////////////////////////////
@@ -72,9 +72,9 @@ public class PropertyDefaultFacetViaMethodFactory extends MethodPrefixBasedFacet
     @Override
     public void setServicesInjector(final ServicesInjector servicesInjector) {
         super.setServicesInjector(servicesInjector);
-        adapterManager = servicesInjector.getPersistenceSessionServiceInternal();
+        adapterProvider = servicesInjector.getPersistenceSessionServiceInternal();
     }
 
-    PersistenceSessionServiceInternal adapterManager;
+    PersistenceSessionServiceInternal adapterProvider;
 
 }

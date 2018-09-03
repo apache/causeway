@@ -24,7 +24,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacetAbstract;
@@ -32,12 +32,13 @@ import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefau
 public class ActionParameterDefaultsFacetViaMethod extends ActionParameterDefaultsFacetAbstract implements ImperativeFacet {
 
     private final Method method;
-    private final AdapterManager adapterManager;
+    private final ObjectAdapterProvider adapterProvider;
 
-    public ActionParameterDefaultsFacetViaMethod(final Method method, final FacetHolder holder, final AdapterManager adapterManager) {
+    public ActionParameterDefaultsFacetViaMethod(
+            final Method method, final FacetHolder holder, final ObjectAdapterProvider adapterProvider) {
         super(holder);
         this.method = method;
-        this.adapterManager = adapterManager;
+        this.adapterProvider = adapterProvider;
     }
 
     /**
@@ -56,7 +57,7 @@ public class ActionParameterDefaultsFacetViaMethod extends ActionParameterDefaul
 
     @Override
     public Object getDefault(final ObjectAdapter target, List<ObjectAdapter> argumentsIfAvailable) {
-        return ObjectAdapter.InvokeUtils.invokeAutofit(method, target, argumentsIfAvailable, getAdapterManager());
+        return ObjectAdapter.InvokeUtils.invokeAutofit(method, target, argumentsIfAvailable, getObjectAdapterProvider());
     }
 
 
@@ -70,8 +71,8 @@ public class ActionParameterDefaultsFacetViaMethod extends ActionParameterDefaul
     // Dependencies
     // /////////////////////////////////////////////////////////
 
-    protected AdapterManager getAdapterManager() {
-        return adapterManager;
+    protected ObjectAdapterProvider getObjectAdapterProvider() {
+        return adapterProvider;
     }
 
 }

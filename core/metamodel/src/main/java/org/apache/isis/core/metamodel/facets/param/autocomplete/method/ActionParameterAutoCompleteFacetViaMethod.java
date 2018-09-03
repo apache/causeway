@@ -27,7 +27,7 @@ import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -52,7 +52,7 @@ public class ActionParameterAutoCompleteFacetViaMethod extends ActionParameterAu
             final DeploymentCategory deploymentCategory,
             final SpecificationLoader specificationLookup,
             final AuthenticationSessionProvider authenticationSessionProvider,
-            final AdapterManager adapterManager) {
+            final ObjectAdapterProvider adapterManager) {
         super(holder, deploymentCategory, specificationLookup, authenticationSessionProvider, adapterManager);
         this.method = method;
         this.choicesType = choicesType;
@@ -88,7 +88,7 @@ public class ActionParameterAutoCompleteFacetViaMethod extends ActionParameterAu
         if (collectionOrArray == null) {
             return _Constants.emptyObjects;
         }
-        final ObjectAdapter collectionAdapter = getAdapterManager().adapterFor(collectionOrArray);
+        final ObjectAdapter collectionAdapter = getObjectAdapterProvider().adapterFor(collectionOrArray);
 
         final FacetedMethodParameter facetedMethodParameter = (FacetedMethodParameter) getFacetHolder();
         final Class<?> parameterType = facetedMethodParameter.getType();
@@ -101,7 +101,7 @@ public class ActionParameterAutoCompleteFacetViaMethod extends ActionParameterAu
                 _Lists.transform(visibleAdapters, ObjectAdapter.Functions.getObject());
 
         final ObjectSpecification parameterSpec = getSpecification(parameterType);
-        return CollectionUtils.getCollectionAsObjectArray(visibleObjects, parameterSpec, getAdapterManager());
+        return CollectionUtils.getCollectionAsObjectArray(visibleObjects, parameterSpec, getObjectAdapterProvider());
     }
 
     @Override

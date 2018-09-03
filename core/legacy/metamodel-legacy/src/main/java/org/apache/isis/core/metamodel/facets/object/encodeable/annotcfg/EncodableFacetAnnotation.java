@@ -23,7 +23,7 @@ import com.google.common.base.Strings;
 
 import org.apache.isis.applib.annotation.Encodable;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacetAbstract;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncoderDecoderUtil;
@@ -49,8 +49,8 @@ public class EncodableFacetAnnotation extends EncodableFacetAbstract {
         this(encoderDecoderName(annotatedClass, servicesInjector.getConfigurationServiceInternal()), encoderDecoderClass(annotatedClass), holder, servicesInjector.getPersistenceSessionServiceInternal(), servicesInjector);
     }
 
-    private EncodableFacetAnnotation(final String candidateEncoderDecoderName, final Class<?> candidateEncoderDecoderClass, final FacetHolder holder, final AdapterManager adapterManager, final ServicesInjector dependencyInjector) {
-        super(candidateEncoderDecoderName, candidateEncoderDecoderClass, holder, adapterManager, dependencyInjector);
+    private EncodableFacetAnnotation(final String candidateEncoderDecoderName, final Class<?> candidateEncoderDecoderClass, final FacetHolder holder, final ObjectAdapterProvider adapterProvider, final ServicesInjector dependencyInjector) {
+        super(candidateEncoderDecoderName, candidateEncoderDecoderClass, holder, adapterProvider, dependencyInjector);
     }
 
 }

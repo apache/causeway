@@ -25,28 +25,28 @@ import java.util.List;
 
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
+import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacetAbstract;
 
 public class PropertyDefaultFacetViaMethod extends PropertyDefaultFacetAbstract implements ImperativeFacet {
 
     private final Method method;
     private final SpecificationLoader specificationLoader;
-    private final AdapterManager adapterManager;
+    private final ObjectAdapterProvider adapterProvider;
 
     public PropertyDefaultFacetViaMethod(
             final Method method,
             final FacetHolder holder,
             final SpecificationLoader specificationLoader,
-            final AdapterManager adapterManager) {
+            final ObjectAdapterProvider adapterProvider) {
         super(holder);
         this.method = method;
         this.specificationLoader = specificationLoader;
-        this.adapterManager = adapterManager;
+        this.adapterProvider = adapterProvider;
     }
 
     /**
@@ -75,7 +75,7 @@ public class PropertyDefaultFacetViaMethod extends PropertyDefaultFacetAbstract 
     private ObjectAdapter createAdapter(final Class<?> type, final Object object) {
         final ObjectSpecification specification = getSpecificationLoader().loadSpecification(type);
         if (specification.isNotCollection()) {
-            return getAdapterManager().adapterFor(object);
+            return getObjectAdapterProvider().adapterFor(object);
         } else {
             throw new UnknownTypeException("not an object, is this a collection?");
         }
@@ -94,8 +94,8 @@ public class PropertyDefaultFacetViaMethod extends PropertyDefaultFacetAbstract 
         return specificationLoader;
     }
 
-    protected AdapterManager getAdapterManager() {
-        return adapterManager;
+    protected ObjectAdapterProvider getObjectAdapterProvider() {
+        return adapterProvider;
     }
 
 }

@@ -62,7 +62,7 @@ public class PropertyAutoCompleteFacetMethodFactory extends MethodPrefixBasedFac
 
         final FacetHolder property = processMethodContext.getFacetHolder();
         FacetUtil.addFacet(new PropertyAutoCompleteFacetMethod(autoCompleteMethod, returnType, property,
-                getDeploymentCategory(), getSpecificationLoader(), getAuthenticationSessionProvider(), adapterManager
+                getDeploymentCategory(), getSpecificationLoader(), getAuthenticationSessionProvider(), adapterProvider
                 ));
     }
 
@@ -74,9 +74,9 @@ public class PropertyAutoCompleteFacetMethodFactory extends MethodPrefixBasedFac
     @Override
     public void setServicesInjector(final ServicesInjector servicesInjector) {
         super.setServicesInjector(servicesInjector);
-        adapterManager = servicesInjector.getPersistenceSessionServiceInternal();
+        adapterProvider = servicesInjector.getPersistenceSessionServiceInternal();
     }
 
-    PersistenceSessionServiceInternal adapterManager;
+    PersistenceSessionServiceInternal adapterProvider;
 
 }
