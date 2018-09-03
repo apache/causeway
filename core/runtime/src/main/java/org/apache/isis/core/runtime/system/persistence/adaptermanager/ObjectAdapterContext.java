@@ -68,6 +68,8 @@ public class ObjectAdapterContext {
             ObjectAdapterLegacy.LOG.error("close: pojoAdapterMap#close() failed; continuing to avoid memory leakage");
         }
     }
+    
+    // -- CACHING
 
     @Deprecated // don't expose caching
     public boolean containsAdapterForPojo(Object pojo) {
@@ -107,6 +109,10 @@ public class ObjectAdapterContext {
         }
         pojoAdapterMap.remove(adapter);
     }
+    
+    // -- FACTORIES
+    
+    
     
     // ------------------------------------------------------------------------------------------------
     

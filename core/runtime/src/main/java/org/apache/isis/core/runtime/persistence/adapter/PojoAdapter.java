@@ -19,8 +19,6 @@
 
 package org.apache.isis.core.runtime.persistence.adapter;
 
-import org.datanucleus.enhancement.Persistable;
-//import org.datanucleus.enhancement.Persistable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,7 +56,6 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
      * can be {@link #replacePojo(Object) replace}d.
      */
     private Object pojo;
-    
     /**
      * can be {@link #replaceOid(Oid) replace}d.
      */
@@ -79,7 +76,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         this.persistenceSession = persistenceSession;
         this.specificationLoader = specificationLoader;
         this.authenticationSession = authenticationSession;
-
+        
         if (pojo instanceof ObjectAdapter) {
             throw new IsisException("Adapter can't be used to adapt an adapter: " + pojo);
         }
@@ -105,8 +102,6 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         return specification;
     }
 
-
-
     // -- getObject, replacePojo
     @Override
     public Object getObject() {
@@ -123,8 +118,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         this.pojo = pojo;
     }
 
-
-    // -- getOid, replaceOid
+    // -- getOid
     @Override
     public Oid getOid() {
         return oid;
@@ -143,22 +137,14 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
     }
 
     // -- isTransient, representsPersistent, isDestroyed
-
+    
     @Override
     public boolean isTransient() {
         if(getSpecification().isService() || getSpecification().isViewModel()) {
             // services and view models are treated as persistent objects
             return false;
         }
-        if (pojo instanceof Persistable) {
-            final Persistable pojo = (Persistable) this.pojo;
-            final boolean isPersistent = pojo.dnIsPersistent();
-            final boolean isDeleted = pojo.dnIsDeleted();
-            if (!isPersistent && !isDeleted) {
-                return true;
-            }
-        }
-        return false;
+        return persistenceSession.isTransient(pojo); 
     }
 
     @Override
@@ -167,16 +153,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
             // services and view models are treated as persistent objects
             return true;
         }
-        if (pojo instanceof Persistable) {
-            final Persistable pojo = (Persistable) this.pojo;
-            final boolean isPersistent = pojo.dnIsPersistent();
-            final boolean isDeleted = pojo.dnIsDeleted();
-            // REVIEW: should we also ensure !isDeleted ???
-            if (isPersistent) {
-                return true;
-            }
-        }
-        return false;
+        return persistenceSession.isRepresentingPersistent(pojo);
     }
 
     @Override
@@ -185,14 +162,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
             // services and view models are treated as persistent objects
             return false;
         }
-        if (pojo instanceof Persistable) {
-            final Persistable pojo = (Persistable) this.pojo;
-            final boolean isDeleted = pojo.dnIsDeleted();
-            if (isDeleted) {
-                return true;
-            }
-        }
-        return false;
+        return persistenceSession.isDestroyed(pojo);
     }
 
 
@@ -205,8 +175,6 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         ParentedCollectionOid collectionOid = (ParentedCollectionOid) oid;
         return persistenceSession.getAggregateRoot(collectionOid);
     }
-
-
 
     // -- getVersion, setVersion, checkLock
 

@@ -2017,6 +2017,42 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
         return getTransactionManager().flushTransaction();
     }
 
+    @Override
+    public boolean isTransient(Object pojo) {
+        if (pojo instanceof Persistable) {
+            final Persistable p = (Persistable) pojo;
+            final boolean isPersistent = p.dnIsPersistent();
+            final boolean isDeleted = p.dnIsDeleted();
+            if (!isPersistent && !isDeleted) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean isRepresentingPersistent(Object pojo) {
+        if (pojo instanceof Persistable) {
+            final Persistable p = (Persistable) pojo;
+            final boolean isPersistent = p.dnIsPersistent();
+            if (isPersistent) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean isDestroyed(Object pojo) {
+        if (pojo instanceof Persistable) {
+            final Persistable p = (Persistable) pojo;
+            final boolean isDeleted = p.dnIsDeleted();
+            if (isDeleted) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 }
 

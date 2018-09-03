@@ -59,7 +59,7 @@ public interface PersistenceSession extends AdapterManager, TransactionalResourc
 
 
     // -- INTERFACE DECLARATION
-
+    
     ObjectAdapter adapterFor(RootOid rootOid);
 
     ObjectAdapter adapterFor(RootOid oid, ConcurrencyChecking concurrencyChecking);
@@ -145,6 +145,10 @@ public interface PersistenceSession extends AdapterManager, TransactionalResourc
     void refreshRoot(ObjectAdapter adapter);
 
     void resolve(Object parent);
+    
+    boolean isTransient(Object pojo);
+    boolean isRepresentingPersistent(Object pojo);
+    boolean isDestroyed(Object pojo);
 
 
 

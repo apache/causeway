@@ -160,7 +160,7 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
         if (LOG.isDebugEnabled()) {
             LOG.debug("opening {}", this);
         }
-        
+
         objectAdapterContext = ObjectAdapterLegacy.openContext(servicesInjector);
 
         persistenceManager = jdoPersistenceManagerFactory.getPersistenceManager();
@@ -1093,7 +1093,7 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
     }
 
     // -- AdapterManager implementation
-    
+
     @Override
     public ObjectAdapter getAdapterFor(final Object pojo) {
         Objects.requireNonNull(pojo);
@@ -2009,6 +2009,44 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
     @Override
     public boolean flush() {
         return getTransactionManager().flushTransaction();
+    }
+
+
+    @Override
+    public boolean isTransient(Object pojo) {
+        if (pojo instanceof Persistable) {
+            final Persistable p = (Persistable) pojo;
+            final boolean isPersistent = p.dnIsPersistent();
+            final boolean isDeleted = p.dnIsDeleted();
+            if (!isPersistent && !isDeleted) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean isRepresentingPersistent(Object pojo) {
+        if (pojo instanceof Persistable) {
+            final Persistable p = (Persistable) pojo;
+            final boolean isPersistent = p.dnIsPersistent();
+            if (isPersistent) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean isDestroyed(Object pojo) {
+        if (pojo instanceof Persistable) {
+            final Persistable p = (Persistable) pojo;
+            final boolean isDeleted = p.dnIsDeleted();
+            if (isDeleted) {
+                return true;
+            }
+        }
+        return false;
     }
 
 
