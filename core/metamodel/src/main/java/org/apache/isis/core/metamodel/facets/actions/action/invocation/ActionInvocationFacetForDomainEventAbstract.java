@@ -62,6 +62,7 @@ import org.apache.isis.core.commons.lang.ArrayExtensions;
 import org.apache.isis.core.commons.lang.MethodInvocationPreprocessor;
 import org.apache.isis.core.commons.lang.ThrowableExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -202,7 +203,7 @@ implements ImperativeFacet {
                         "Unable to persist command for action '%s'; CommandService does not support persistent commands ",
                         actionId));
             }
-            returnedAdapter = getPersistenceSessionServiceInternal().adapterFor(command);
+            returnedAdapter = getObjectAdapterProvider().adapterFor(command);
 
         } else {
             // otherwise, go ahead and execute action in the 'foreground'
@@ -321,7 +322,7 @@ implements ImperativeFacet {
 
 
             final Object returnedPojo = priorExecution.getReturned();
-            returnedAdapter = persistenceSessionServiceInternal.adapterFor(returnedPojo);
+            returnedAdapter = getObjectAdapterProvider().adapterFor(returnedPojo);
 
             // sync DTO with result
             getInteractionDtoServiceInternal().updateResult(priorExecution.getDto(), owningAction, returnedPojo);
@@ -408,7 +409,7 @@ implements ImperativeFacet {
         // to remove boilerplate from the domain, we automatically clone the returned object if it is a view model.
 
         if (resultPojo != null) {
-            final ObjectAdapter resultAdapter = getPersistenceSessionServiceInternal().adapterFor(resultPojo);
+            final ObjectAdapter resultAdapter = getObjectAdapterProvider().adapterFor(resultPojo);
             return cloneIfViewModelElse(resultAdapter, resultAdapter);
         } else {
             // if void or null, attempt to clone the original target, else return null.
@@ -425,7 +426,7 @@ implements ImperativeFacet {
         final ViewModelFacet viewModelFacet = adapter.getSpecification().getFacet(ViewModelFacet.class);
         final Object clone = viewModelFacet.clone(adapter.getObject());
 
-        final ObjectAdapter clonedAdapter = getPersistenceSessionServiceInternal().adapterFor(clone);
+        final ObjectAdapter clonedAdapter = getObjectAdapterProvider().adapterFor(clone);
 
         // copy over TypeOfFacet if required
         final TypeOfFacet typeOfFacet = getFacetHolder().getFacet(TypeOfFacet.class);
@@ -511,7 +512,7 @@ implements ImperativeFacet {
                             .collect(Collectors.toList()),
                             method.getReturnType());
             if (visibleObjects != null) {
-                return getPersistenceSessionServiceInternal().adapterFor(visibleObjects);
+                return getObjectAdapterProvider().adapterFor(visibleObjects);
             }
 
             // would be null if unable to take a copy (unrecognized return type)
@@ -587,7 +588,10 @@ implements ImperativeFacet {
     // Dependencies (from constructor)
     // /////////////////////////////////////////////////////////
 
-
+    private ObjectAdapterProvider getObjectAdapterProvider() {
+        return persistenceSessionServiceInternal;
+    }
+    
     private PersistenceSessionServiceInternal getPersistenceSessionServiceInternal() {
         return persistenceSessionServiceInternal;
     }

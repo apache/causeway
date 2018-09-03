@@ -18,12 +18,16 @@
  */
 package org.apache.isis.core.runtime.system.persistence.adaptermanager;
 
+import java.util.UUID;
+import java.util.function.Function;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.ensure.IsisAssertException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.ParentedCollectionOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
@@ -47,14 +51,20 @@ public class ObjectAdapterContext {
     
     private final PojoAdapterHashMap pojoAdapterMap = new PojoAdapterHashMap();
     private final OidAdapterHashMap oidAdapterMap = new OidAdapterHashMap();
+    private final AdapterManager adapterManager; //FIXME[ISIS-1976] remove
     private final ServicesInjector servicesInjector;
+    private final SpecificationLoader specificationLoader;
     
     ObjectAdapterContext(
             ServicesInjector servicesInjector, 
             AuthenticationSession authenticationSession, 
             SpecificationLoader specificationLoader, 
             PersistenceSession persistenceSession) {
+        
+        this.adapterManager = persistenceSession;
         this.servicesInjector = servicesInjector;
+        this.specificationLoader = specificationLoader;
+        
         this.objectAdapterFactories = new ObjectAdapterContext_Factories(
                 authenticationSession, 
                 specificationLoader, 
@@ -191,6 +201,41 @@ public class ObjectAdapterContext {
         oidAdapterMap.add(adapter.getOid(), adapter);
     }
     
+    public ObjectSpecification specificationForViewModel(Object viewModelPojo) {
+        //FIXME[ISIS-1976]
+        // this is horrible, but there's a catch-22 here...
+        // we need an adapter in order to query the state of the object via the metamodel, on the other hand
+        // we can't create an adapter without the identifier, which is what we're trying to derive
+        // so... we create a temporary transient adapter, use it to wrap this adapter and interrogate this pojo,
+        // then throw away that adapter (remove from the adapter map)
+        final boolean[] createdTemporaryAdapter = {false};
+        final ObjectAdapter viewModelAdapter = adapterForViewModel(
+                viewModelPojo, 
+                (ObjectSpecId objectSpecId)->{
+                    createdTemporaryAdapter[0] = true;
+                    return RootOid.create(objectSpecId, UUID.randomUUID().toString()); });
+    
+        final ObjectSpecification spec = viewModelAdapter.getSpecification();
+        
+        if(createdTemporaryAdapter[0]) {
+            adapterManager.removeAdapterFromCache(viewModelAdapter);
+        }
+        return spec;
+    }
+
+    public ObjectAdapter adapterForViewModel(Object viewModelPojo, Function<ObjectSpecId, RootOid> rootOidFactory) {
+        ObjectAdapter viewModelAdapter = adapterManager.lookupAdapterFor(viewModelPojo);
+        if(viewModelAdapter == null) {
+            final ObjectSpecification objectSpecification = 
+                    specificationLoader.loadSpecification(viewModelPojo.getClass());
+            final ObjectSpecId objectSpecId = objectSpecification.getSpecId();
+            final RootOid newRootOid = rootOidFactory.apply(objectSpecId);
+
+            viewModelAdapter = adapterManager.addRecreatedPojoToCache(newRootOid, viewModelPojo);
+        }
+        return viewModelAdapter;
+    }
+    
     /**
      * was in PersisenceSessionX, temporarily moved here to successfully compile
      *
@@ -313,9 +358,6 @@ public class ObjectAdapterContext {
         final PropertyOrCollectionAccessorFacet accessor = association.getFacet(PropertyOrCollectionAccessorFacet.class);
         return accessor.getProperty(ownerAdapter, InteractionInitiatedBy.FRAMEWORK);
     }
-
-
-
 
 
 

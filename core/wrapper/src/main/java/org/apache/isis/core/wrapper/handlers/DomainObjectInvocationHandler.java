@@ -26,6 +26,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.wrapper.DisabledException;
 import org.apache.isis.applib.services.wrapper.HiddenException;
@@ -45,6 +48,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.IsisJdoMetamodelPlugin;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
@@ -67,9 +71,6 @@ import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionContribute
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 
 public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandlerDefault<T> {
 
@@ -683,7 +684,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     }
 
     private ObjectAdapter adapterFor(final Object obj) {
-        return obj != null ? getPersistenceSessionService().adapterFor(obj) : null;
+        return obj != null ? getObjectAdapterProvider().adapterFor(obj) : null;
     }
 
     private Object underlying(final Object arg) {
@@ -825,6 +826,10 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         return getAuthenticationSessionProvider().getAuthenticationSession();
     }
 
+    protected ObjectAdapterProvider getObjectAdapterProvider() {
+        return persistenceSessionServiceInternal;
+    }
+    
     protected PersistenceSessionServiceInternal getPersistenceSessionService() {
         return persistenceSessionServiceInternal;
     }

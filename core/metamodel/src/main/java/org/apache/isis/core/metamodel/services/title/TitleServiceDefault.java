@@ -25,6 +25,7 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 
 @DomainService(
@@ -36,7 +37,7 @@ public class TitleServiceDefault implements TitleService {
     @Programmatic
     @Override
     public String titleOf(final Object domainObject) {
-        final ObjectAdapter objectAdapter = adapterManager.adapterFor(unwrapped(domainObject));
+        final ObjectAdapter objectAdapter = getObjectAdapterProvider().adapterFor(unwrapped(domainObject));
         final boolean destroyed = objectAdapter.isDestroyed();
         if(!destroyed) {
             return objectAdapter.getSpecification().getTitle(null, objectAdapter);
@@ -48,12 +49,9 @@ public class TitleServiceDefault implements TitleService {
     @Programmatic
     @Override
     public String iconNameOf(final Object domainObject) {
-        final ObjectAdapter objectAdapter = adapterManager.adapterFor(unwrapped(domainObject));
+        final ObjectAdapter objectAdapter = getObjectAdapterProvider().adapterFor(unwrapped(domainObject));
         return objectAdapter.getSpecification().getIconName(objectAdapter);
     }
-
-
-
 
     // //////////////////////////////////////
 
@@ -63,8 +61,12 @@ public class TitleServiceDefault implements TitleService {
 
     // //////////////////////////////////////
 
+    private ObjectAdapterProvider getObjectAdapterProvider() {
+        return sessionServiceInternal;
+    }
+    
     @javax.inject.Inject
-    PersistenceSessionServiceInternal adapterManager;
+    PersistenceSessionServiceInternal sessionServiceInternal;
 
     @javax.inject.Inject
     WrapperFactory wrapperFactory;

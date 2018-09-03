@@ -29,6 +29,7 @@ import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -39,7 +40,6 @@ import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.core.metamodel.facets.fallback.FallbackFacetFactory;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
@@ -196,6 +196,6 @@ public class TitleAnnotationFacetFactory extends FacetFactoryAbstract implements
         adapterProvider = servicesInjector.getPersistenceSessionServiceInternal();
     }
 
-    PersistenceSessionServiceInternal adapterProvider;
+    ObjectAdapterProvider adapterProvider;
 
 }

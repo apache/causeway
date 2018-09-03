@@ -35,12 +35,11 @@ import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.xactn.Transaction;
 import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSession;
@@ -56,17 +55,7 @@ import org.apache.isis.core.runtime.system.transaction.TransactionalClosure;
 public class PersistenceSessionServiceInternalDefault implements PersistenceSessionServiceInternal {
 
     @Override
-    public ObjectAdapter adapterFor(Object domainObject) {
-        return getPersistenceSession().adapterFor(domainObject);
-    }
-
-    @Override
-    public ObjectAdapter adapterFor(Object pojo, ObjectAdapter parentAdapter, OneToManyAssociation collection) {
-        return getPersistenceSession().adapterFor(pojo, parentAdapter, collection);
-    }
-    
-    @Override
-    public AdapterManager adapterManager() {
+    public ObjectAdapterProvider getObjectAdapterProvider() {
         return getPersistenceSession();
     }
     
@@ -219,8 +208,5 @@ public class PersistenceSessionServiceInternalDefault implements PersistenceSess
 
     @javax.inject.Inject
     IsisSessionFactory isisSessionFactory;
-
-
-
 
 }

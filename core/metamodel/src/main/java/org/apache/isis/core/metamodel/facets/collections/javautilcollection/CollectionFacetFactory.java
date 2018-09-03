@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.facets.collections.javautilcollection;
 
 import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.commons.internal.collections._Collections;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
@@ -30,7 +31,6 @@ import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredF
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromGenerics;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 
 public class CollectionFacetFactory extends FacetFactoryAbstract {
 
@@ -96,6 +96,6 @@ public class CollectionFacetFactory extends FacetFactoryAbstract {
         adapterProvider = servicesInjector.getPersistenceSessionServiceInternal();
     }
 
-    PersistenceSessionServiceInternal adapterProvider;
+    ObjectAdapterProvider adapterProvider;
 
 }

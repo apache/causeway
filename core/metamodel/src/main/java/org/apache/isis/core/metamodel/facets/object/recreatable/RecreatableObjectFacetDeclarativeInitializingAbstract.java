@@ -43,7 +43,7 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 public abstract class RecreatableObjectFacetDeclarativeInitializingAbstract 
 extends RecreatableObjectFacetAbstract {
 
-    private final SpecificationLoader specificationLoader;
+    private final SpecificationLoader specificationLoader; //FIXME[ISIS-1976] remove
     private final ObjectAdapterProvider adapterProvider;
 
     public RecreatableObjectFacetDeclarativeInitializingAbstract(
@@ -71,7 +71,6 @@ extends RecreatableObjectFacetAbstract {
         final Set<String> mementoKeys = memento.keySet();
 
         final ObjectAdapter viewModelAdapter = adapterProvider.adapterForViewModel(
-                specificationLoader,
                 viewModelPojo, 
                 (ObjectSpecId objectSpecId)->
                     new RootOid(objectSpecId, mementoStr, Oid.State.VIEWMODEL)  );
@@ -102,7 +101,7 @@ extends RecreatableObjectFacetAbstract {
 
         final _Mementos.Memento memento = _Mementos.create(codec, serializer);
 
-        final ObjectSpecification spec = adapterProvider.specificationForViewModel(specificationLoader, viewModelPojo);
+        final ObjectSpecification spec = adapterProvider.specificationForViewModel(viewModelPojo);
         
         final List<OneToOneAssociation> properties = spec.getProperties(Contributed.EXCLUDED);
         for (OneToOneAssociation property : properties) {

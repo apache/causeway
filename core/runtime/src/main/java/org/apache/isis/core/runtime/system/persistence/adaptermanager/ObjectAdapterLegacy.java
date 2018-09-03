@@ -19,7 +19,6 @@
 package org.apache.isis.core.runtime.system.persistence.adaptermanager;
 
 import java.util.List;
-import java.util.function.Supplier;
 
 import com.google.common.collect.Lists;
 
@@ -77,10 +76,6 @@ public class ObjectAdapterLegacy {
                         specificationLoader, persistenceSession);
         objectAdapterContext.open();
         return objectAdapterContext;
-    }
-    
-    public static interface ObjectAdapterProvider extends Supplier<ObjectAdapter> {
-        
     }
     
     // -- CommandExecutorServiceDefault --------------------------------------------------------

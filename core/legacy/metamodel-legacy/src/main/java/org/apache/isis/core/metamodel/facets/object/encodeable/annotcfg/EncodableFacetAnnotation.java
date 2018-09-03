@@ -46,7 +46,9 @@ public class EncodableFacetAnnotation extends EncodableFacetAbstract {
     }
 
     public EncodableFacetAnnotation(final Class<?> annotatedClass, final FacetHolder holder, final ServicesInjector servicesInjector) {
-        this(encoderDecoderName(annotatedClass, servicesInjector.getConfigurationServiceInternal()), encoderDecoderClass(annotatedClass), holder, servicesInjector.getPersistenceSessionServiceInternal(), servicesInjector);
+        this(encoderDecoderName(annotatedClass, servicesInjector.getConfigurationServiceInternal()),
+                encoderDecoderClass(annotatedClass), holder, 
+                servicesInjector.getPersistenceSessionServiceInternal(), servicesInjector);
     }
 
     private EncodableFacetAnnotation(final String candidateEncoderDecoderName, final Class<?> candidateEncoderDecoderClass, final FacetHolder holder, final ObjectAdapterProvider adapterProvider, final ServicesInjector dependencyInjector) {

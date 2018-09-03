@@ -19,7 +19,10 @@
 
 package org.apache.isis.core.metamodel.facets.object.parseable.annotcfg;
 
+import com.google.common.base.Strings;
+
 import org.apache.isis.applib.annotation.Parseable;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -28,9 +31,6 @@ import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacetAbstract;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParserUtil;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
-
-import com.google.common.base.Strings;
 
 /**
  * @deprecated because {@link Parseable} was deprecated
@@ -79,6 +79,6 @@ public class ParseableFacetAnnotationElseConfigurationFactory extends FacetFacto
         adapterProvider = servicesInjector.getPersistenceSessionServiceInternal();
     }
 
-    PersistenceSessionServiceInternal adapterProvider;
+    ObjectAdapterProvider adapterProvider;
 
 }

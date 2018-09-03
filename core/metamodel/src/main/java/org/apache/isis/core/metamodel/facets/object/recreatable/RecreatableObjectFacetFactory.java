@@ -26,9 +26,12 @@ import java.util.Optional;
 import javax.annotation.PostConstruct;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.google.common.collect.Maps;
+
 import org.apache.isis.applib.RecreatableDomainObject;
 import org.apache.isis.applib.ViewModel;
 import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -40,13 +43,10 @@ import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.core.metamodel.facets.PostConstructMethodCache;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
-
-import com.google.common.collect.Maps;
 
 public class RecreatableObjectFacetFactory extends FacetFactoryAbstract
 implements MetaModelValidatorRefiner, PostConstructMethodCache {
@@ -139,6 +139,6 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache {
         adapterProvider = servicesInjector.getPersistenceSessionServiceInternal();
     }
 
-    PersistenceSessionServiceInternal adapterProvider;
+    ObjectAdapterProvider adapterProvider;
 
 }

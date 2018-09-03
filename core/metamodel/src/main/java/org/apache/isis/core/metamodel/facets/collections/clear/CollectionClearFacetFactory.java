@@ -22,6 +22,7 @@ package org.apache.isis.core.metamodel.facets.collections.clear;
 import java.lang.reflect.Method;
 
 import org.apache.isis.core.commons.lang.StringExtensions;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -31,7 +32,6 @@ import org.apache.isis.core.metamodel.facets.MethodPrefixConstants;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionClearFacet;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 
 public class CollectionClearFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
@@ -82,7 +82,7 @@ public class CollectionClearFacetFactory extends MethodPrefixBasedFacetFactoryAb
         adapterProvider = servicesInjector.getPersistenceSessionServiceInternal();
     }
 
-    PersistenceSessionServiceInternal adapterProvider;
+    ObjectAdapterProvider adapterProvider;
 
 
 }

@@ -166,8 +166,6 @@ public class OneToManyAssociationContributee extends OneToManyAssociationDefault
         return facetHolder;
     }
 
-
-
     private ObjectAdapter getServiceAdapter() {
         return getPersistenceSessionService().adapterFor(servicePojo);
     }

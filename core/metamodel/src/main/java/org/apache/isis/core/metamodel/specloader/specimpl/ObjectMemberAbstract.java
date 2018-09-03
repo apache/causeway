@@ -31,6 +31,7 @@ import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
@@ -330,7 +331,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         final ObjectSpecification objectSpecification = getSpecificationLoader().loadSpecification(mixinType);
         final MixinFacet mixinFacet = objectSpecification.getFacet(MixinFacet.class);
         final Object mixinPojo = mixinFacet.instantiate(mixedInAdapter.getObject());
-        return getPersistenceSessionService().adapterFor(mixinPojo);
+        return getObjectAdapterProvider().adapterFor(mixinPojo);
     }
 
     public static String determineNameFrom(final ObjectAction mixinAction) {
@@ -394,6 +395,10 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         return servicesInjector;
     }
 
+    protected ObjectAdapterProvider getObjectAdapterProvider() {
+        return getPersistenceSessionService();
+    }
+    
     public PersistenceSessionServiceInternal getPersistenceSessionService() {
         return persistenceSessionServiceInternal;
     }

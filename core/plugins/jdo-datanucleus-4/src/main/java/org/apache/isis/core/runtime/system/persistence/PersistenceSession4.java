@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.function.Function;
 
 import javax.jdo.FetchGroup;
 import javax.jdo.FetchPlan;
@@ -1946,8 +1947,13 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
     }
 
     @Override
-    public AdapterManager adapterManager() {
-        return this;
+    public ObjectSpecification specificationForViewModel(Object viewModelPojo) {
+        return objectAdapterContext.specificationForViewModel(viewModelPojo);
+    }
+
+    @Override
+    public ObjectAdapter adapterForViewModel(Object viewModelPojo, Function<ObjectSpecId, RootOid> rootOidFactory) {
+        return objectAdapterContext.adapterForViewModel(viewModelPojo, rootOidFactory);
     }
     
 }

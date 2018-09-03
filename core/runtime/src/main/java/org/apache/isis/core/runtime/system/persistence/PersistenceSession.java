@@ -27,6 +27,7 @@ import org.apache.isis.applib.services.bookmark.BookmarkService.FieldResetPolicy
 import org.apache.isis.core.commons.components.SessionScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.ParentedCollectionOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
@@ -59,6 +60,10 @@ public interface PersistenceSession extends AdapterManager, TransactionalResourc
 
 
     // -- INTERFACE DECLARATION
+    
+    default ObjectAdapterProvider getObjectAdapterProvider() {
+        return this;
+    }
     
     ObjectAdapter adapterFor(RootOid rootOid);
 
@@ -149,7 +154,6 @@ public interface PersistenceSession extends AdapterManager, TransactionalResourc
     boolean isTransient(Object pojo);
     boolean isRepresentingPersistent(Object pojo);
     boolean isDestroyed(Object pojo);
-
 
 
 }

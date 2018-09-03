@@ -29,11 +29,9 @@ import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.xactn.Transaction;
 import org.apache.isis.applib.services.xactn.TransactionState;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.runtime.system.transaction.TransactionalClosure;
 
 @DomainService(
@@ -43,15 +41,7 @@ import org.apache.isis.core.runtime.system.transaction.TransactionalClosure;
 public class PersistenceSessionServiceInternalNoop implements PersistenceSessionServiceInternal {
 
     @Override
-    public ObjectAdapter adapterFor(
-            final Object pojo,
-            final ObjectAdapter ownerAdapter,
-            final OneToManyAssociation collection) {
-        throw new UnsupportedOperationException("Not supported by this implementation of PersistenceSessionServiceInternal");
-    }
-
-    @Override
-    public ObjectAdapter adapterFor(final Object domainObject) {
+    public ObjectAdapterProvider getObjectAdapterProvider() {
         throw new UnsupportedOperationException("Not supported by this implementation of PersistenceSessionServiceInternal");
     }
 
@@ -157,10 +147,7 @@ public class PersistenceSessionServiceInternalNoop implements PersistenceSession
         throw new UnsupportedOperationException("Not supported by this implementation of PersistenceSessionServiceInternal");
     }
 
-    @Override
-    public AdapterManager adapterManager() {
-        throw _Exceptions.notImplemented();
-    }
+
 
 
 }

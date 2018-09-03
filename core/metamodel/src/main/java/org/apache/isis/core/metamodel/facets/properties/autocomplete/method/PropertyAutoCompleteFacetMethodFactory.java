@@ -22,6 +22,7 @@ package org.apache.isis.core.metamodel.facets.properties.autocomplete.method;
 import java.lang.reflect.Method;
 
 import org.apache.isis.core.commons.lang.StringExtensions;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -30,7 +31,6 @@ import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstra
 import org.apache.isis.core.metamodel.facets.MethodPrefixConstants;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 
 public class PropertyAutoCompleteFacetMethodFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
@@ -77,6 +77,6 @@ public class PropertyAutoCompleteFacetMethodFactory extends MethodPrefixBasedFac
         adapterProvider = servicesInjector.getPersistenceSessionServiceInternal();
     }
 
-    PersistenceSessionServiceInternal adapterProvider;
+    ObjectAdapterProvider adapterProvider;
 
 }

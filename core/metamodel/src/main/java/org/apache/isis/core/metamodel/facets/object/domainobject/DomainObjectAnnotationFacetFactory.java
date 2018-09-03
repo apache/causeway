@@ -26,6 +26,8 @@ import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
+import com.google.common.collect.Maps;
+
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.events.lifecycle.ObjectCreatedEvent;
@@ -79,8 +81,6 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVis
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 import org.apache.isis.core.metamodel.util.EventUtil;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
-
-import com.google.common.collect.Maps;
 
 
 public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
@@ -290,8 +290,12 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache {
 
         final PostConstructMethodCache postConstructMethodCache = this;
         final ViewModelFacet recreatableObjectFacet = RecreatableObjectFacetForDomainObjectAnnotation.create(
-                domainObjects, getSpecificationLoader(), persistenceSessionServiceInternal, servicesInjector,
-                facetHolder, postConstructMethodCache);
+                domainObjects, 
+                getSpecificationLoader(), 
+                persistenceSessionServiceInternal, 
+                servicesInjector,
+                facetHolder, 
+                postConstructMethodCache);
 
         if(recreatableObjectFacet != null) {
             FacetUtil.addFacet(recreatableObjectFacet);

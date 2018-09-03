@@ -165,7 +165,7 @@ public class OneToManyAssociationDefault extends ObjectAssociationAbstract imple
         if (collection == null) {
             return null;
         }
-        return getPersistenceSessionService().adapterFor(collection, ownerAdapter, this);
+        return getObjectAdapterProvider().adapterFor(collection, ownerAdapter, this);
     }
 
     @Override

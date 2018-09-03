@@ -118,7 +118,8 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
         private void addGetterFacet(final FacetHolder holder) {
             FacetUtil.addFacet(new PropertyOrCollectionAccessorFacetAbstract(mockOnType, holder, mockDeploymentCategoryProvider.getDeploymentCategory(),
                     mockConfiguration,
-                    mockSpecificationLoader, mockAuthenticationSessionProvider,
+                    mockSpecificationLoader, 
+                    mockAuthenticationSessionProvider,
                     mockPersistenceSessionServiceInternal
             ) {
                 @Override

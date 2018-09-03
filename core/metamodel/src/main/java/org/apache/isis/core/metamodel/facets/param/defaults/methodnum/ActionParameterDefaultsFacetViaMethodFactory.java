@@ -24,6 +24,7 @@ import java.util.List;
 
 import org.apache.isis.core.commons.lang.ListExtensions;
 import org.apache.isis.core.commons.lang.StringExtensions;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -36,7 +37,6 @@ import org.apache.isis.core.metamodel.facets.MethodPrefixConstants;
 import org.apache.isis.core.metamodel.facets.actions.defaults.ActionDefaultsFacet;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 
 /**
  * Sets up all the {@link Facet}s for an action in a single shot.
@@ -140,6 +140,6 @@ public class ActionParameterDefaultsFacetViaMethodFactory extends MethodPrefixBa
         adapterProvider = servicesInjector.getPersistenceSessionServiceInternal();
     }
 
-    PersistenceSessionServiceInternal adapterProvider;
+    ObjectAdapterProvider adapterProvider;
 
 }
