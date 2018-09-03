@@ -68,8 +68,6 @@ import org.apache.isis.core.metamodel.adapter.oid.ParentedCollectionOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.adapter.version.Version;
-import org.apache.isis.core.metamodel.facets.actcoll.typeof.ElementSpecificationProviderFromTypeOfFacet;
-import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedCallbackFacet;
@@ -103,7 +101,6 @@ import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
 import org.apache.isis.core.runtime.persistence.PojoRecreationException;
 import org.apache.isis.core.runtime.persistence.PojoRefreshException;
 import org.apache.isis.core.runtime.persistence.UnsupportedFindException;
-import org.apache.isis.core.runtime.persistence.adapter.PojoAdapter;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
@@ -237,13 +234,11 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
         final List<Object> registeredServices = servicesInjector.getRegisteredServices();
         for (final Object service : registeredServices) {
             final ObjectAdapter serviceAdapter = adapterFor(service);
-            remapAsPersistentIfRequired(serviceAdapter);
-        }
-    }
 
-    private void remapAsPersistentIfRequired(final ObjectAdapter serviceAdapter) {
-        if (serviceAdapter.getOid().isTransient()) {
-            objectAdapterContext.remapAsPersistent(serviceAdapter, null, this);
+            // remap as Persistent if required
+            if (serviceAdapter.getOid().isTransient()) {
+                objectAdapterContext.remapAsPersistent(serviceAdapter, null, this);
+            }
         }
     }
 

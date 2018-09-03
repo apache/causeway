@@ -27,7 +27,30 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 
-public interface AdapterManager extends AdapterManagerBase {
+public interface AdapterManager {
+    
+    /**
+     * Gets the {@link ObjectAdapter adapter} for the specified domain object if
+     * it exists in the identity map.
+     *
+     * <p>
+     * Provided by the <tt>AdapterManager</tt> when used by framework.
+     *
+     * @param pojo
+     *            - must not be <tt>null</tt>
+     * @return adapter, or <tt>null</tt> if doesn't exist.
+     */
+    @Programmatic
+    ObjectAdapter getAdapterFor(Object pojo);
+
+
+
+    /**
+     * Looks up or creates a standalone (value) or root adapter.
+     */
+    @Programmatic
+    ObjectAdapter adapterFor(Object domainObject);
+    
 
     /**
      * Gets the {@link ObjectAdapter adapter} for the {@link Oid} if it exists
