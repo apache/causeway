@@ -291,7 +291,6 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache {
         final PostConstructMethodCache postConstructMethodCache = this;
         final ViewModelFacet recreatableObjectFacet = RecreatableObjectFacetForDomainObjectAnnotation.create(
                 domainObjects, 
-                getSpecificationLoader(), 
                 persistenceSessionServiceInternal, 
                 servicesInjector,
                 facetHolder, 

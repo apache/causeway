@@ -24,20 +24,17 @@ import java.util.Objects;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.PostConstructMethodCache;
 import org.apache.isis.core.metamodel.facets.object.recreatable.RecreatableObjectFacetDeclarativeInitializingAbstract;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 public class RecreatableObjectFacetForDomainObjectAnnotation extends
 RecreatableObjectFacetDeclarativeInitializingAbstract {
 
     public static ViewModelFacet create(
             final List<DomainObject> domainObjects,
-            final SpecificationLoader specificationLoader,
             final ObjectAdapterProvider adapterProvider,
             final ServicesInjector servicesInjector,
             final FacetHolder holder,
@@ -61,8 +58,7 @@ RecreatableObjectFacetDeclarativeInitializingAbstract {
                             return null;
                         }
                         return new RecreatableObjectFacetForDomainObjectAnnotation(
-                                holder,
-                                specificationLoader, adapterProvider, servicesInjector, postConstructMethodCache);
+                                holder, adapterProvider, servicesInjector, postConstructMethodCache);
                     }
                     // shouldn't happen, the above switch should match all cases.
                     throw new IllegalArgumentException("nature of '" + nature + "' not recognized");
@@ -74,11 +70,10 @@ RecreatableObjectFacetDeclarativeInitializingAbstract {
 
     private RecreatableObjectFacetForDomainObjectAnnotation(
             final FacetHolder holder,
-            final SpecificationLoader specificationLoader,
             final ObjectAdapterProvider adapterProvider,
             final ServicesInjector servicesInjector,
             final PostConstructMethodCache postConstructMethodCache) {
-        super(holder, RecreationMechanism.INITIALIZES, specificationLoader, adapterProvider, servicesInjector,
+        super(holder, RecreationMechanism.INITIALIZES, adapterProvider, servicesInjector,
                 postConstructMethodCache);
     }
 

@@ -23,19 +23,17 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.PostConstructMethodCache;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 public class RecreatableObjectFacetForViewModelAnnotation extends
 RecreatableObjectFacetDeclarativeInitializingAbstract {
 
     public RecreatableObjectFacetForViewModelAnnotation(
             final FacetHolder holder,
-            final SpecificationLoader specificationLoader,
             final ObjectAdapterProvider adapterProvider,
             final ServicesInjector servicesInjector,
             final PostConstructMethodCache postConstructMethodCache) {
         super(holder, RecreationMechanism.INITIALIZES,
-                specificationLoader, adapterProvider, servicesInjector, postConstructMethodCache);
+                adapterProvider, servicesInjector, postConstructMethodCache);
     }
 
 }

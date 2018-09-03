@@ -89,7 +89,7 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache {
 
     private ViewModelFacet create(final org.apache.isis.applib.annotation.ViewModel annotation, final FacetHolder holder) {
         final PostConstructMethodCache postConstructMethodCache = this;
-        return annotation != null ? new RecreatableObjectFacetForViewModelAnnotation(holder, getSpecificationLoader(), adapterProvider, servicesInjector, postConstructMethodCache) : null;
+        return annotation != null ? new RecreatableObjectFacetForViewModelAnnotation(holder, adapterProvider, servicesInjector, postConstructMethodCache) : null;
     }
 
     private ViewModelFacet create(final XmlRootElement annotation, final FacetHolder holder) {

@@ -38,23 +38,19 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 public abstract class RecreatableObjectFacetDeclarativeInitializingAbstract 
 extends RecreatableObjectFacetAbstract {
 
-    private final SpecificationLoader specificationLoader; //FIXME[ISIS-1976] remove
     private final ObjectAdapterProvider adapterProvider;
 
     public RecreatableObjectFacetDeclarativeInitializingAbstract(
             final FacetHolder holder,
             final RecreationMechanism recreationMechanism,
-            final SpecificationLoader specificationLoader,
             final ObjectAdapterProvider adapterProvider,
             final ServicesInjector servicesInjector,
             final PostConstructMethodCache postConstructMethodCache) {
         super(holder, recreationMechanism, postConstructMethodCache, servicesInjector);
-        this.specificationLoader = specificationLoader;
         this.adapterProvider = adapterProvider;
     }
 
